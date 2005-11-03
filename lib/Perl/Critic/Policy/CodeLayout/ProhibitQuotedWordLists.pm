@@ -66,7 +66,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::CodeLayout::ProhibitQuotedWordLists;
+Perl::Critic::Policy::CodeLayout::ProhibitQuotedWordLists
 
 =head1 DESCRIPTION
 
