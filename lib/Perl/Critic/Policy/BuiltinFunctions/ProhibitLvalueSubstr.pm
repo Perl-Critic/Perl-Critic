@@ -1,3 +1,10 @@
+##################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##################################################################
+
 package Perl::Critic::Policy::BuiltinFunctions::ProhibitLvalueSubstr;
 
 use strict;
@@ -36,7 +43,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::BuiltinFunctions::ProhibitLValueSubstr
+Perl::Critic::Policy::BuiltinFunctions::ProhibitLvalueSubstr
 
 =head1 DESCRIPTION
 
