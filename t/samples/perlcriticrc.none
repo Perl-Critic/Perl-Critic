@@ -1,0 +1,55 @@
+##########################################################################
+# This sample file demonstrates how to disable a Perl::Critic policy.  Here,
+# all the policies are disabled, so with this configuration, Perl::Critic
+# will never report any violations.  Typically, you'll only want to disable
+# those policies that you absolutely object to.  For those that you agree
+# with, but don't want to strictly adhere to, you should assign them
+# a priority level rather than disabling them completely.  See the
+# perlcriticrc.levels file for an example with differnt priority levels.
+##########################################################################
+
+[-BuiltinFunctions::ProhibitLvalueSubstr]
+[-BuiltinFunctions::ProhibitSleepViaSelect]
+[-BuiltinFunctions::ProhibitStringyEval]
+[-BuiltinFunctions::RequireBlockGrep]
+[-BuiltinFunctions::RequireBlockMap]
+[-BuiltinFunctions::RequireGlobFunction]
+[-ClassHierarchies::ProhibitOneArgBless]
+[-CodeLayout::ProhibitHardTabs]
+[-CodeLayout::ProhibitParensWithBuiltins]
+[-CodeLayout::ProhibitQuotedWordLists]
+[-CodeLayout::RequireTrailingCommas]
+[-ControlStructures::ProhibitCascadingIfElse]
+[-ControlStructures::ProhibitCStyleForLoops]
+[-ControlStructures::ProhibitPostfixControls]
+[-ControlStructures::ProhibitUnlessBlocks]
+[-ControlStructures::ProhibitUntilBlocks]
+[-InputOutput::ProhibitBacktickOperators]
+[-InputOutput::ProhibitBarewordFileHandles]
+[-InputOutput::ProhibitOneArgSelect]
+[-Modules::ProhibitMultiplePackages]
+[-Modules::ProhibitSpecificModules]
+[-Modules::RequireExplicitPackage]
+[-Modules::RequireBarewordIncludes]
+[-Modules::RequireVersionVar]
+[-NamingConventions::ProhibitMixedCaseSubs]
+[-NamingConventions::ProhibitMixedCaseVars]
+[-RegularExpressions::RequireExtendedFormatting]
+[-RegularExpressions::RequireLineBoundaryMatching]
+[-Subroutines::ProhibitBuiltinHomonyms]
+[-Subroutines::ProhibitExplicitReturnUndef]
+[-Subroutines::ProhibitSubroutinePrototypes]
+[-TestingAndDebugging::RequirePackageStricture]
+[-TestingAndDebugging::RequirePackageWarnings]
+[-ValuesAndExpressions::ProhibitConstantPragma]
+[-ValuesAndExpressions::ProhibitEmptyQuotes]
+[-ValuesAndExpressions::ProhibitInterpolationOfLiterals]
+[-ValuesAndExpressions::ProhibitLeadingZeros]
+[-ValuesAndExpressions::ProhibitNoisyQuotes]
+[-ValuesAndExpressions::RequireInterpolationOfMetachars]
+[-ValuesAndExpressions::RequireNumberSeparators]
+[-ValuesAndExpressions::RequireQuotedHeredocTerminator]
+[-ValuesAndExpressions::RequireUpperCaseHeredocTerminator]
+[-Variables::ProhibitLocalVars]
+[-Variables::ProhibitPackageVars]
+[-Variables::ProhibitPunctuationVars]

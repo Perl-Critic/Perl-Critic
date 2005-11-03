@@ -1,0 +1,151 @@
+##########################################################################
+# This sample file demonstrates how to assign a custom priority level
+# for any or all Perl::Critic policies.  The default priority for each
+# policy is 1.  Setting the priority to a higher value here causes
+# Perl::Critic to overlook the Policy unless you explicitly ask it
+# to load Policies with a priority value less than or equal to a 
+# particular number.  You can have an arbitrary number of priority
+# levels, but two or three should probably suffice.  The priority
+# values here are arbitrary and just useful for testing.
+##########################################################################
+
+[BuiltinFunctions::ProhibitStringyEval]
+priority = 1
+
+[BuiltinFunctions::RequireBlockGrep]
+priority = 1
+
+[BuiltinFunctions::RequireBlockMap]
+priority = 1
+
+[CodeLayout::ProhibitParensWithBuiltins]
+priority = 2
+
+[ControlStructures::ProhibitCascadingIfElse]
+max_elsif = 2
+priority  = 3
+
+[ControlStructures::ProhibitPostfixControls]
+allow    = for if until while unless
+priority = 3
+
+[InputOutput::ProhibitBacktickOperators]
+priority = 4
+
+[Modules::ProhibitMultiplePackages]
+priority = 5
+
+[Modules::RequireBarewordIncludes]
+priority = 5
+
+[Modules::ProhibitSpecificModules]
+modules = Evil::Module SuperEvil::Module
+priority = 5
+
+[Modules::RequireExplicitPackage]
+exempt_scripts = 1
+priority = 5
+
+[NamingConventions::ProhibitMixedCaseSubs]
+priority = 6
+
+[NamingConventions::ProhibitMixedCaseVars]
+priority = 6
+
+[Subroutines::ProhibitBuiltinHomonyms]
+priority = 7
+
+[Subroutines::ProhibitExplicitReturnUndef]
+priority = 7
+
+[Subroutines::ProhibitSubroutinePrototypes]
+priority = 7
+
+[TestingAndDebugging::RequirePackageStricture]
+priority = 8
+
+[TestingAndDebugging::RequirePackageWarnings]
+priority = 8
+
+[ValuesAndExpressions::ProhibitConstantPragma]
+priority = 9
+
+[ValuesAndExpressions::ProhibitEmptyQuotes]
+priority = 9
+
+[ValuesAndExpressions::ProhibitInterpolationOfLiterals]
+priority = 9
+
+[ValuesAndExpressions::ProhibitLeadingZeros]
+priority = 9
+
+[ValuesAndExpressions::ProhibitNoisyQuotes]
+priority = 9
+
+[ValuesAndExpressions::RequireInterpolationOfMetachars]
+priority = 9
+
+[ValuesAndExpressions::RequireNumberSeparators]
+priority = 9
+
+[ValuesAndExpressions::RequireQuotedHeredocTerminator]
+priority = 9
+
+[ValuesAndExpressions::RequireUpperCaseHeredocTerminator]
+priority = 9
+
+#------------------------------------------------------------------------
+
+[Variables::ProhibitLocalVars]
+priority = 10
+
+[Variables::ProhibitPackageVars]
+priority = 10
+
+[Variables::ProhibitPunctuationVars]
+priority = 10
+
+[BuiltinFunctions::RequireGlobFunction]
+priority = 10
+
+[CodeLayout::ProhibitHardTabs]
+priority = 10
+
+[ControlStructures::ProhibitCStyleForLoops]
+priority = 10
+
+[ControlStructures::ProhibitUnlessBlocks]
+priority = 10
+
+[ControlStructures::ProhibitUntilBlocks]
+priority = 10
+
+[CodeLayout::RequireTrailingCommas]
+priority = 10
+
+[Modules::RequireVersionVar]
+priority = 10
+
+[CodeLayout::ProhibitQuotedWordLists]
+priority = 10
+
+[RegularExpressions::RequireExtendedFormatting]
+priority = 10
+
+[RegularExpressions::RequireLineBoundaryMatching]
+priority = 10
+
+[BuiltinFunctions::ProhibitLvalueSubstr]
+priority = 10
+
+[BuiltinFunctions::ProhibitSleepViaSelect]
+priority = 10
+
+[InputOutput::ProhibitOneArgSelect]
+priority = 10
+
+[ClassHierarchies::ProhibitOneArgBless]
+priority = 10
+
+[InputOutput::ProhibitBarewordFileHandles]
+priority = 10

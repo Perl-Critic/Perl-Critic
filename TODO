@@ -1,0 +1,24 @@
+######################################################################
+#                            Perl::Critic                            #
+#                          Version 0.13                           #
+#                       by Jeffrey R. Thalhammer                     #
+#                          <thaljef@cpan.org>                        #
+######################################################################
+
+POLICIES TO ADD:
+
+- Require labels for loops.
+- Require labels for loop breaks.
+- Require global variables to be localized
+- Prohibit 'no strict' (maybe)
+- Prohibit 'no warnings' (maybe)
+- Require fat commas for hashes
+
+NEW FEATURES:
+
+- Report safari sections instead of book page numbers.
+
+MISC:
+
+- Need test cases for perlcritc command-line interface.
+ 

@@ -1,0 +1,36 @@
+######################################################################
+#                            Perl::Critic                            #
+#                          Version 0.13                           #
+#                       by Jeffrey R. Thalhammer                     #
+#                          <thaljef@cpan.org>                        #
+######################################################################
+
+
+NOTICE
+
+    The Perl::Critic distribution contains a fairly large number
+    of modules.  And since it is still developing rapidly, some
+    of those modules may disappear or be renamed fron one release
+    to the next.  Therefore, I suggest removing any existing
+    installation of Perl::Critic before installing a new one.
+
+INSTALLATION
+
+     To install Perl::Critic with C<make> give the following 
+     commands to your favorite shell:
+
+         tar -zxf Perl-Critic-0.13.tar.gz
+         cd Perl-Critic-0.13
+         perl Makefile.PL
+         make
+         make test
+         make install 
+
+     Or if you prefer C<Module::Build>, try this:
+
+         tar -zxf Perl-Critic-0.13.tar.gz
+         cd Perl-Critic-0.13
+         perl Build.pl
+         ./Build
+         ./Build test
+         ./Build install 
