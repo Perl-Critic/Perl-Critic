@@ -1,4 +1,10 @@
-#use blib;
+##################################################################
+#     $URL$
+#    $Date$
+#   $Author$
+# $Revision$
+##################################################################
+
 use strict;
 use warnings;
 use Test::More tests => 149;
@@ -737,9 +743,9 @@ is( critique($policy, \$code), 0, $policy);
 #----------------------------------------------------------------
 
 $code = <<'END_PERL';
-'$Revision: 1.01 $'
+'$Revision$'
 '$Source: foo/bar $'
-'$Date: 10/23/2006 $'
+'$Date$'
 END_PERL
 
 $policy = 'Miscellanea::RequireRcsKeywords';
@@ -748,9 +754,9 @@ is( critique($policy, \$code), 0, $policy);
 #----------------------------------------------------------------
 
 $code = <<'END_PERL';
-q{$Revision: 1.01 $}
+q{$Revision$}
 q{$Source: foo/bar $}
-q{$Date: 10/23/2006 $}
+q{$Date$}
 END_PERL
 
 $policy = 'Miscellanea::RequireRcsKeywords';
@@ -759,8 +765,8 @@ is( critique($policy, \$code), 0, $policy);
 #----------------------------------------------------------------
 
 $code = <<'END_PERL';
-q{$Revision: 1.01 $}
-q{$Author: Jesus Christ $}
+q{$Revision$}
+q{$Author$}
 q{$Id: whatever $}
 END_PERL
 
