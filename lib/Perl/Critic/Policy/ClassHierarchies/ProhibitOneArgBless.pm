@@ -1,3 +1,10 @@
+#######################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+########################################################################
+
 package Perl::Critic::Policy::ClassHierarchies::ProhibitOneArgBless;
 
 use strict;
