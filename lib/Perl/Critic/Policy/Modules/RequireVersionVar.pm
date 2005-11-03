@@ -80,7 +80,7 @@ have to declare it like one of these:
 A common practice is to use the C<$Revision$> keyword to automatically
 define the C<$VERSION> variable like this:
 
-  our ($VERSION) = '$Revision: 1.01 $' =~ m{ \$Revision: \s+ (\S+) }x;
+  our ($VERSION) = '$Revision$' =~ m{ \$Revision: \s+ (\S+) }x;
 
 =head1 NOTES 
 
