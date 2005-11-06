@@ -36,8 +36,8 @@ exit $status;
 sub get_options {
 
     my %opts      = ();
-    my @opt_specs = qw(priority=s profile=s noprofile verbose=s
-                       force help|? man Version safari 
+    my @opt_specs = qw(priority=i profile=s noprofile verbose=s
+                       force help|? man Version safari top:i
                        include=s@ exclude=s@);
 
     Getopt::Long::Configure('no_ignore_case');
@@ -154,7 +154,8 @@ C<perlcritic> is a Perl source code analyzer.  It is the executable
 front-end to the L<Perl::Critic> engine, which attempts to identify
 awkward, hard to read, error-prone, or unconventional constructs in
 your code.  Most of the rules are based on Damian Conway's book B<Perl
-Best Practices>.  I highly recommend that you get a copy!
+Best Practices>, but can easily be configured or disabled to your
+liking.
 
 If you want to integrate perlcritic with your build process, the
 L<Test::Perl::Critic> module provides a nice interface that is
@@ -195,6 +196,16 @@ larger than 1 have "lower" priority.  Only Policies that have been
 configured with a priority value less than or equal to N will be
 loaded.  For a given C<-profile>, increasing N will result in more
 violations.  The default priority is 1.  See L<"CONFIGURATION"> for
+more information.
+
+=item -top [ N ]
+
+Directs perlcritic to report only the top C<N> Policy violations,
+ranked by their priority.  If C<N> is not specified, it defaults to
+20.  Each Policy has a default priority number ranging from one to
+five, based on the relative importance of the Policy.  Since this
+"importance" is rather subjective, you can redefine the priority for
+any Policy in the F<.perlcriticrc> file.  See L<"CONFIGURATION"> for
 more information.
 
 =item -include PATTERN
@@ -294,7 +305,7 @@ PERLCRITIC environment variable to explicitly point to a different
 configuration file in another location.  If none of these files exist,
 And the C<-profile> option is not given at the command-line,
 perlcritic defaults to loading all the Policies that are distributed
-with L<Perl::Critic>.
+with L<Perl::Cirtic>.
 
 The format of the configuration file is a series of named sections
 that contain key-value pairs separated by '='.  Comments should
