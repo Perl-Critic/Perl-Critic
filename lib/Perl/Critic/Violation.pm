@@ -47,6 +47,7 @@ sub import {
 
 
 sub new {
+    my ( $class, $desc, $expl, $loc ) = @_;
 
     #Check arguments to help out developers who might
     #be creating new Perl::Critic::Policy modules.
@@ -62,7 +63,6 @@ sub new {
     }
 
     #Create object
-    my ( $class, $desc, $expl, $loc ) = @_;
     my $self = bless {}, $class;
     $self->{_description} = $desc;
     $self->{_explanation} = $expl;
@@ -70,6 +70,14 @@ sub new {
     $self->{_policy}      = caller;
 
     return $self;
+}
+
+#---------------------------
+
+sub by_location {
+    # Intended for use by sort()
+    return (   ($a->{_location}->[0] || 0) <=> ($b->{_location}->[0] || 0)
+            || ($a->{_location}->[1] || 0) <=> ($b->{_location}->[1] || 0));
 }
 
 #---------------------------
@@ -213,6 +221,12 @@ an array of page numbers in PBB.
 
 Returns a two-element list containing the line and column number where the 
 violation occurred.
+
+=item by_location()
+
+If you need to sort Violations by location, use this handy routine:
+
+   @violations = sort Perl::Critic::Violation::by_location @violations;
 
 =item diagnostics( void )
 

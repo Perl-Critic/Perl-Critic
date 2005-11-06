@@ -21,9 +21,13 @@ my $expl = [161];
 
 #----------------------------------------------------------------------------
 
+sub applies_to {
+    return 'PPI::Token::Word';
+}
+
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-    $elem->isa('PPI::Token::Word') && $elem eq 'eval' || return;
+    return if !($elem eq 'eval');
     return if is_hash_key($elem);
 
     my $sib = $elem->snext_sibling() || return;

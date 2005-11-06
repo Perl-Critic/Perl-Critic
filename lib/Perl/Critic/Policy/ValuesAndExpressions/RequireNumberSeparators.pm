@@ -24,9 +24,12 @@ sub new {
     return $self;
 }
 
+sub applies_to {
+    return 'PPI::Token::Number';
+}
+
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-    $elem->isa('PPI::Token::Number') || return;
     my $min = $self->{_min};
 
     if ( abs _to_number($elem) >= $min && $elem =~ m{ \d{4,} }mx ) {

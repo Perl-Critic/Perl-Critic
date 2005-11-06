@@ -14,11 +14,12 @@ my $expl = [51];
 
 #---------------------------------------------------------------------------
 
+sub applies_to { 
+    return 'PPI::Token::Quote::Single', 'PPI::Token::Quote::Literal';
+}
+
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-    $elem->isa('PPI::Token::Quote::Single')
-      || $elem->isa('PPI::Token::Quote::Literal')
-      || return;
 
     if ( _has_interpolation($elem) ) {
         return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );

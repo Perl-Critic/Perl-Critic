@@ -21,9 +21,12 @@ my $expl = [97];
 
 #----------------------------------------------------------------------------
 
+sub applies_to {
+    return 'PPI::Structure::ForLoop';
+}
+
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-    $elem->isa('PPI::Structure::ForLoop') || return;
     if ( _is_cstyle($elem) ) {
         return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
     }

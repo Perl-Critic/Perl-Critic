@@ -104,9 +104,19 @@ sub critique {
     _unfix_shebang($doc);
 
     # Run engine, testing each Policy at each element
-    my $elems = $doc->find( 'PPI::Element' )   || return;   #Nothing to do!
-    my @pols  = @{ $self->policies() };  @pols || return;   #Nothing to do! 
-    return map { my $e = $_; map { $_->violates($e, $doc) } @pols } @{$elems};
+    my %types = (
+       'PPI::Document' => [$doc],
+       'PPI::Element'  => $doc->find( 'PPI::Element' ) || [],
+    );
+    my @violations;
+    my @pols  = @{ $self->policies() };  @pols || return;   #Nothing to do!
+    for my $pol ( @pols ) {
+        for my $type ( $pol->applies_to() ) {
+            $types{$type} ||= [ grep {$_->isa($type)} @{$types{'PPI::Element'}} ];
+            push @violations, map { $pol->violates($_, $doc) } @{$types{$type}};
+        }
+    }
+    return sort Perl::Critic::Violation::by_location @violations;
 }
 
 #----------------------------------------------------------------------------

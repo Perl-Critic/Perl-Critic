@@ -15,12 +15,12 @@ my $expl     = [53];
 
 #---------------------------------------------------------------------------
 
+sub applies_to {
+    return 'PPI::Token::Quote::Double', 'PPI::Token::Quote::Single';
+}
+
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-    $elem->isa('PPI::Token::Quote::Double')
-      || $elem->isa('PPI::Token::Quote::Single')
-      || return;
-
     if ( $elem =~ $noise_rx ) {
         return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
     }

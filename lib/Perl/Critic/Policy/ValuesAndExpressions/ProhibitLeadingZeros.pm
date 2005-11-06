@@ -15,9 +15,12 @@ my $expl       = [55];
 
 #---------------------------------------------------------------------------
 
+sub applies_to {
+    return 'PPI::Token::Number';
+}
+
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-    $elem->isa('PPI::Token::Number') || return;
     if ( $elem =~ $leading_rx ) {
         return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
     }

@@ -15,9 +15,12 @@ my $expl       = [64];
 
 #---------------------------------------------------------------------------
 
+sub applies_to {
+    return 'PPI::Token::HereDoc';
+}
+
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-    $elem->isa('PPI::Token::HereDoc') || return;
 
     if ( $elem !~ $heredoc_rx ) {
         return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );

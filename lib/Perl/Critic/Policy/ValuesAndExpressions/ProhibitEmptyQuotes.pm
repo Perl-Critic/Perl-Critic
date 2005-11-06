@@ -15,14 +15,15 @@ my $expl     = [53];
 
 #---------------------------------------------------------------------------
 
+sub applies_to {
+    return 'PPI::Token::Quote';
+}
+
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-    $elem->isa('PPI::Token::Quote') || return;
-
     if ( $elem =~ $empty_rx ) {
         return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
     }
-
     return;    #ok!
 }
 

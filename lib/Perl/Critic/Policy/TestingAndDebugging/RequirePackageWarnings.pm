@@ -15,17 +15,12 @@ my $expl = [431];
 
 #---------------------------------------------------------------------------
 
-sub new {
-    my ( $class, %args ) = @_;
-    my $self = bless {}, $class;
-    $self->{_tested} = 0;
-    return $self;
+sub applies_to {
+    return 'PPI::Document';
 }
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-    return if $self->{_tested};    # Only do this once
-    $self->{_tested} = 1;
 
     #Find first statement that isn't 'use', 'require', or 'package'
     my $nodes_ref = $doc->find('PPI::Statement') || return;

@@ -15,9 +15,12 @@ my $expl     = [44];
 
 #---------------------------------------------------------------------------
 
+sub applies_to {
+    return 'PPI::Statement::Variable';
+}
+
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-    $elem->isa('PPI::Statement::Variable') || return;
     if ( _has_mixed_case_vars($elem) ) {
         return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
     }

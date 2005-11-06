@@ -14,9 +14,12 @@ my $expl = [ 237 ];
 
 #----------------------------------------------------------------------------
 
+sub applies_to {
+    return 'PPI::Token::Regexp';
+}
+
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-    $elem->isa('PPI::Token::Regexp') || return;
 
     #Note: as of PPI 1.103, 'modifiers' is not part of the published
     #API.  I'm cheating by accessing it here directly.

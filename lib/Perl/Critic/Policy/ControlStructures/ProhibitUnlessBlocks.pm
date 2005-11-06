@@ -21,9 +21,12 @@ my $expl = [97];
 
 #----------------------------------------------------------------------------
 
+sub applies_to {
+    return 'PPI::Statement::Compound';
+}
+
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-    $elem->isa('PPI::Statement::Compound') || return;
     if ( $elem->first_element() eq 'unless' ) {
         return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
     }

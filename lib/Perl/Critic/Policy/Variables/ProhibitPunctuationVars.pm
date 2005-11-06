@@ -20,10 +20,12 @@ $exempt{'_'} = 1;                         #This is used with 'stat'
 
 #---------------------------------------------------------------------------
 
+sub applies_to {
+    return 'PPI::Token::Magic';
+}
+
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-    $elem->isa('PPI::Token::Magic') || return;
-
     if ( !exists $exempt{$elem} ) {
         return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
     }

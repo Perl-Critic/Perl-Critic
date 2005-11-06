@@ -17,6 +17,7 @@ $VERSION = eval $VERSION;    ## no critic
 
 sub new { return bless {}, shift }
 sub violates { _abstract_method() }
+sub applies_to { return qw(PPI::Element); }
 
 sub _abstract_method {
     my $method_name = ( caller 1 )[3];
@@ -86,6 +87,12 @@ example of such a Policy.
 
 C<violates()> is an abstract method and it will croak if you attempt
 to invoke it directly.  Your subclass B<must> override this method.
+
+=item applies_to()
+
+Returns a list of PPI classes that the policy cares about.  By
+default, the result is C<PPI::Element>.  Overriding this method in
+individual policies should lead to significant performance increases.
 
 =back
 

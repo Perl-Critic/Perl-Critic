@@ -15,10 +15,12 @@ my $tested = 0;
 
 #----------------------------------------------------------------------------
 
+sub applies_to {
+    return 'PPI::Document';
+}
+
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-    return if $tested;       #Only do this once !
-    $tested = 1;
 
     my $nodes_ref = $doc->find('PPI::Statement::Package') || return;
     my @matches = @{$nodes_ref} > 1 ? @{$nodes_ref}[ 1 .. $#{$nodes_ref} ] : ();

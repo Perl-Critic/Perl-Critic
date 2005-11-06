@@ -14,9 +14,13 @@ my $expl = [ 224 ];
 
 #--------------------------------------------------------------------------
 
+sub applies_to {
+    return 'PPI::Token::Word';
+}
+
 sub violates {
     my ($self, $elem, $doc) = @_;
-    $elem->isa('PPI::Token::Word') && $elem eq 'open' || return;
+    return if !($elem eq 'open');
     return if is_method_call($elem);
     return if is_hash_key($elem);
     

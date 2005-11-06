@@ -14,9 +14,13 @@ my $expl = [199];
 
 #---------------------------------------------------------------------------
 
+sub applies_to {
+    return 'PPI::Token::Word';
+}
+
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-    $elem->isa('PPI::Token::Word') && $elem eq 'return' || return;
+    return if !($elem eq 'return');  # PPI v1.103 doesn't support "ne"
     return if is_hash_key($elem);
 
     my $sib = $elem->snext_sibling() || return;

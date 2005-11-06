@@ -15,10 +15,12 @@ my $expl = [ 404 ];
 
 #---------------------------------------------------------------------------
 
+sub applies_to {
+    return 'PPI::Document';
+}
+
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-    return if $self->{_tested};  #Only do this once!
-    $self->{_tested} = 1;
 
     return if $doc->find_first( \&_wanted );
     

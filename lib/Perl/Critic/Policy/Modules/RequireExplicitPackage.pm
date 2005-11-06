@@ -26,10 +26,12 @@ sub new {
     return $self;
 }
 
+sub applies_to {
+    return 'PPI::Document';
+}
+
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-    return if $self->{_tested};    # Only do this once!
-    $self->{_tested} = 1;
 
     # You can configure this policy to exclude scripts
     return if $self->{_exempt_scripts} && _is_script($doc);

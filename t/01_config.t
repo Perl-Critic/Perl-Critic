@@ -12,6 +12,10 @@ use Test::More tests => 18;
 use List::MoreUtils qw(all none);
 use Perl::Critic;
 
+# common P::C testing tools
+use lib qw(t/tlib);
+use PerlCriticTestUtils qw();
+
 my $c = undef;
 my $samples_dir      = "t/samples";
 my $config_none      = "$samples_dir/perlcriticrc.none";
@@ -103,10 +107,8 @@ is(scalar @{$c->policies}, $total_policies - 1);
 # This little tweak to Perl::Critic::Config ensures that we
 # don't find the perlcriticrc file.
 
-{
-    no warnings 'redefine';
-    *Perl::Critic::Config::find_profile_path = sub { return };
-}
+PerlCriticTestUtils::block_perlcriticrc();
+
 
 $c = Perl::Critic->new();
 is(scalar @{$c->policies}, $total_policies);

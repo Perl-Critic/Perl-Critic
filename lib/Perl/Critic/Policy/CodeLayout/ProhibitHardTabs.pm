@@ -25,9 +25,13 @@ sub new {
     return $self;
 }
 
+sub applies_to {
+    return 'PPI::Token';
+}
+
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-    $elem->isa('PPI::Token') && $elem =~ m{ \t }mx || return;
+    $elem =~ m{ \t }mx || return;
 
     #Permit leading tabs, if allowed
     return if $self->{_allow_leading_tabs} && $elem->location->[1] == 1;

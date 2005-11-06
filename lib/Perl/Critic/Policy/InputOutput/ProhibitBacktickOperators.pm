@@ -14,14 +14,13 @@ my $desc = q{Backtick operator used};
 
 #----------------------------------------------------------------------------
 
+sub applies_to {
+    return 'PPI::Token::QuoteLike::Backtick', 'PPI::Token::QuoteLike::Command';
+}
+
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-    if (   $elem->isa('PPI::Token::QuoteLike::Backtick')
-        || $elem->isa('PPI::Token::QuoteLike::Command') )
-    {
-        return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
-    }
-    return;    #ok!
+    return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
 }
 
 1;

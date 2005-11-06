@@ -15,9 +15,12 @@ my $expl = [ 77, 78, 79 ];
 
 #---------------------------------------------------------------------------
 
+sub applies_to {
+    return 'PPI::Statement::Variable';
+}
+
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-    $elem->isa('PPI::Statement::Variable') || return;
     if ( $elem->type() eq 'local' && !_all_global_vars($elem) ) {
         return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
     }

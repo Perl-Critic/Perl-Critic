@@ -24,6 +24,7 @@ our @EXPORT =
      $SCOLON      $PIPE          &is_hash_key
      $QUOTE       $EMPTY         &is_method_call
      $SPACE                      &parse_arg_list                
+                                 &is_script
 );
 
 #---------------------------------------------------------------------------
@@ -185,6 +186,14 @@ sub _split_nodes_on_comma {
     return @nodes;
 }
 		    
+
+sub is_script {
+    my $doc = shift;
+    my $first_comment = $doc->find_first('PPI::Token::Comment') || return;
+    $first_comment->location()->[0] == 1 || return;
+    return $first_comment =~ m{ \A \#\! }mx;
+}
+
 1;
 
 __END__
@@ -250,6 +259,11 @@ method is a poor-man's parse tree of PPI nodes.  It's not bullet-proof
 because it doesn't respect precedence.  In general, I don't like the
 way this function works, so don't count on it to be stable (or even
 present).
+
+=item is_script( $document )
+
+Given a L<PPI::Document>, test if it starts with C<#!.*perl>.  If so,
+it is judged to be a script instead of a module.
 
 =back
 

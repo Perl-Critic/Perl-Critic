@@ -14,9 +14,12 @@ my $expl     = [44];
 
 #---------------------------------------------------------------------------
 
+sub applies_to {
+    return 'PPI::Statement::Sub';
+}
+
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-    $elem->isa('PPI::Statement::Sub') || return;
     if ( $elem->name() =~ $mixed_rx ) {
         return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
     }

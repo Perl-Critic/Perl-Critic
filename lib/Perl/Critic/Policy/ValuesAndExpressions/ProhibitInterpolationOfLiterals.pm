@@ -34,11 +34,12 @@ sub new {
 
 #---------------------------------------------------------------------------
 
+sub applies_to {
+    return 'PPI::Token::Quote::Double', 'PPI::Token::Quote::Interpolate';
+}
+
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-    $elem->isa('PPI::Token::Quote::Double')
-      || $elem->isa('PPI::Token::Quote::Interpolate')
-      || return;
 
     #Overlook allowed quote styles
     for my $allowed ( @{ $self->{_allow} } ) {

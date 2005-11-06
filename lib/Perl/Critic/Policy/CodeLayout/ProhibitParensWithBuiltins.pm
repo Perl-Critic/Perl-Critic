@@ -16,9 +16,12 @@ my $expl  = [13];
 
 #----------------------------------------------------------------------------
 
+sub applies_to {
+    return 'PPI::Token::Word';
+}
+
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-    $elem->isa('PPI::Token::Word') || return;
     return if exists $allow{"$elem"};
     if ( any { $elem eq $_ } @BUILTINS ) {
         if ( _sibling_is_list($elem) && !_is_object_method($elem) ) {

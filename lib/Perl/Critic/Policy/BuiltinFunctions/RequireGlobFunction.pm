@@ -22,9 +22,12 @@ my $expl    = [167];
 
 #----------------------------------------------------------------------------
 
+sub applies_to {
+    return 'PPI::Token::QuoteLike::Readline';
+}
+
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-    $elem->isa('PPI::Token::QuoteLike::Readline') || return;
     if ( $elem =~ $glob_rx ) {
         return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
     }

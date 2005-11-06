@@ -23,9 +23,12 @@ sub new {
     return $self;
 }
 
+sub applies_to {
+    return 'PPI::Structure::List';
+}
+
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-    $elem->isa('PPI::Structure::List') || return;
 
     #Don't worry about subroutine calls
     my $sib = $elem->sprevious_sibling() || return;

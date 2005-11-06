@@ -14,15 +14,10 @@ use Perl::Critic;
 my $code = undef;
 my %config = ();
 
-#---------------------------------------------------------------
-# If the user already has an existing perlcriticrc file, it will 
-# get in the way of these test.  This little tweak to ensures 
-# that we don't find the perlcriticrc file.
-
-{
-    no warnings 'redefine';
-    *Perl::Critic::Config::find_profile_path = sub { return };
-}
+# common P::C testing tools
+use lib qw(t/tlib);
+use PerlCriticTestUtils qw(critique);
+PerlCriticTestUtils::block_perlcriticrc();
 
 #----------------------------------------------------------------
 
@@ -245,11 +240,3 @@ END_PERL
 
 %config = (-force => 1);
 is( critique(\$code, \%config), 4);
-
-#----------------------------------------------------------------
-sub critique {
-    my ($code_ref, $config_ref) = @_;
-    my $c = Perl::Critic->new( %{$config_ref} );
-    my @v = $c->critique($code_ref);
-    return scalar @v;
-}

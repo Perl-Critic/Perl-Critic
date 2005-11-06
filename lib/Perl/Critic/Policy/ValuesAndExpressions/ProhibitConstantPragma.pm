@@ -14,9 +14,12 @@ my $expl = [55];
 
 #---------------------------------------------------------------------------
 
+sub applies_to {
+    return 'PPI::Statement::Include';
+}
+
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-    $elem->isa('PPI::Statement::Include') || return;
     if ( $elem->type() eq 'use' && $elem->pragma() eq 'constant' ) {
         return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
     }

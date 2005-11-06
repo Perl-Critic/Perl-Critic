@@ -14,9 +14,13 @@ my $expl  = [ 17 ];
 
 #----------------------------------------------------------------------------
 
+sub applies_to {
+    return 'PPI::Structure::List';
+}
+
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-    $elem->isa('PPI::Structure::List') && $elem =~ m{ \n }mx || return;
+    $elem =~ m{ \n }mx || return;
 
     #Is it an assignment of some kind?
     my $sib = $elem->sprevious_sibling() || return;

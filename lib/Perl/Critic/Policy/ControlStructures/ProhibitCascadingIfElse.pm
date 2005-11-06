@@ -31,9 +31,13 @@ sub new {
     return $self;
 }
 
+sub applies_to {
+    return 'PPI::Statement::Compound';
+}
+
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-    $elem->isa('PPI::Statement::Compound') && $elem->type() eq 'if' || return;
+    return if !($elem->type() eq 'if');
     if ( _count_elsifs($elem) > $self->{_max} ) {
         return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
     }

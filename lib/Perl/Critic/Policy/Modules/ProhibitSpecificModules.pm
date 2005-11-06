@@ -27,9 +27,12 @@ sub new {
     return $self;
 }
 
+sub applies_to {
+    return 'PPI::Statement::Include';
+}
+
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-    $elem->isa('PPI::Statement::Include') || return;
     if ( exists $self->{_evil_modules}->{ $elem->module() } ) {
         return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
     }

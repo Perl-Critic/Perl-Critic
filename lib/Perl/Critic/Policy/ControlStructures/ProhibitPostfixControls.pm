@@ -50,9 +50,13 @@ sub new {
     return $self;
 }
 
+sub applies_to {
+    return 'PPI::Token::Word';
+}
+
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-    $elem->isa('PPI::Token::Word') && exists $pages_of{$elem} || return;
+    return if !exists $pages_of{$elem};
     return if is_hash_key($elem);
 
     # Skip controls that are allowed

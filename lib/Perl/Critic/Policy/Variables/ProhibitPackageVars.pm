@@ -15,6 +15,10 @@ my $expl = [ 73, 75 ];
 
 #---------------------------------------------------------------------------
 
+sub applies_to {
+    return 'PPI::Token::Symbol', 'PPI::Statement::Variable', 'PPI::Statement::Include';
+}
+
 sub violates {
     my ( $self, $elem, $doc ) = @_;
 

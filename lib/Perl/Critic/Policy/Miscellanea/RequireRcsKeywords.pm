@@ -18,7 +18,6 @@ sub new {
     my ($class, %config) = @_;
     my $self = bless {}, $class;
     $self->{_keywords} = [ qw(Revision Source Date) ];
-    $self->{_tested} = 0;
 
     #Set configuration, if defined.
     if ( defined $config{keywords} ) {
@@ -28,11 +27,14 @@ sub new {
     return $self;
 }
 
+sub applies_to {
+    return 'PPI::Document';
+}
+
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-    return if $self->{_tested};  #Only do this once!
-    my @viols = ();
+    my @viols;
 
     my $nodes = $doc->find( \&_wanted );
     for my $keyword ( @{ $self->{_keywords} } ) {
@@ -42,15 +44,14 @@ sub violates {
 	}
     }
 
-    $self->{_tested} = 1;
     return @viols;
 }
 
 sub _wanted {
-  my ($doc, $elem) = @_;
-  return    $elem->isa('PPI::Token::Comment')
-         || $elem->isa('PPI::Token::Quote::Single')
-         || $elem->isa('PPI::Token::Quote::Literal');
+    my ($doc, $elem) = @_;
+    return    $elem->isa('PPI::Token::Comment')
+           || $elem->isa('PPI::Token::Quote::Single')
+           || $elem->isa('PPI::Token::Quote::Literal');
 }
 
 1;
