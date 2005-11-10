@@ -1,3 +1,10 @@
+#######################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+########################################################################
+
 package Perl::Critic::Policy::Variables::ProhibitPunctuationVars;
 
 use strict;
@@ -8,6 +15,8 @@ use base 'Perl::Critic::Policy';
 
 our $VERSION = '0.13';
 $VERSION = eval $VERSION;    ## no critic
+
+#---------------------------------------------------------------------------
 
 my $desc = q{Magic punctuation variable used};
 my $expl = [79];
@@ -20,9 +29,10 @@ $exempt{'_'} = 1;                         #This is used with 'stat'
 
 #---------------------------------------------------------------------------
 
-sub applies_to {
-    return 'PPI::Token::Magic';
-}
+sub priority   { return $PRIORITY_LOW }
+sub applies_to { return 'PPI::Token::Magic' }
+
+#---------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
@@ -35,6 +45,10 @@ sub violates {
 1;
 
 __END__
+
+#---------------------------------------------------------------------------
+
+=pod
 
 =head1 NAME
 
@@ -62,8 +76,12 @@ All the $n variables associated with regex captures are exempt too.
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
 
+=head1 COPYRIGHT
+
 Copyright (c) 2005 Jeffrey Ryan Thalhammer.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
 can be found in the LICENSE file included with this module.
+
+=cut

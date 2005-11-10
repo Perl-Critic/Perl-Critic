@@ -1,3 +1,10 @@
+#######################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+########################################################################
+
 package Perl::Critic::Policy::CodeLayout::ProhibitHardTabs;
 
 use strict;
@@ -14,6 +21,11 @@ my $expl = [20];
 
 #----------------------------------------------------------------------------
 
+sub priority   { return $PRIORITY_MEDIUM }
+sub applies_to { return 'PPI::Token' }
+
+#----------------------------------------------------------------------------
+
 sub new {
     my ( $class, %args ) = @_;
     my $self = bless {}, $class;
@@ -25,9 +37,7 @@ sub new {
     return $self;
 }
 
-sub applies_to {
-    return 'PPI::Token';
-}
+#----------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;

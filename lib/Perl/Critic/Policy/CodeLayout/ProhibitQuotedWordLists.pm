@@ -1,3 +1,10 @@
+#######################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+########################################################################
+
 package Perl::Critic::Policy::CodeLayout::ProhibitQuotedWordLists;
 
 use strict;
@@ -9,23 +16,28 @@ use base 'Perl::Critic::Policy';
 our $VERSION = '0.13';
 $VERSION = eval $VERSION;    ## no critic
 
+#---------------------------------------------------------------------------
+
 my $desc     = q{List of quoted literal words};
 my $expl     = q{Use 'qw()' instead};
+
+#---------------------------------------------------------------------------
+
+sub priority   { return $PRIORITY_LOW }
+sub applies_to { return 'PPI::Structure::List' }
 
 #---------------------------------------------------------------------------
 
 sub new {
     my ($class, %args) = @_;
     my $self = bless {}, $class;
-    
+
     #Set configuration if defined
     $self->{_min} = defined $args{min_elements} ? $args{min_elements} : 2;
     return $self;
 }
 
-sub applies_to {
-    return 'PPI::Structure::List';
-}
+#---------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;

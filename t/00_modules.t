@@ -5,10 +5,9 @@
 # $Revision$
 ##################################################################
 
-use blib;
 use strict;
 use warnings;
-use Test::More tests => 254;
+use Test::More tests => 344;
 use English qw(-no_match_vars);
 
 our $VERSION = '0.13';
@@ -20,7 +19,6 @@ my $obj = undef;
 
 use_ok('Perl::Critic');
 can_ok('Perl::Critic', 'new');
-can_ok('Perl::Critic', 'add_policy');
 can_ok('Perl::Critic', 'critique');
 
 #Set -profile to avoid messing with .perlcriticrc
@@ -32,11 +30,10 @@ is($obj->VERSION(), $VERSION);
 
 use_ok('Perl::Critic::Config');
 can_ok('Perl::Critic::Config', 'new');
+can_ok('Perl::Critic::Config', 'add_policy');
 can_ok('Perl::Critic::Config', 'find_profile_path');
-can_ok('Perl::Critic::Config', 'default_policies');
-can_ok('Perl::Critic::Config', 'optional_policies');
-can_ok('Perl::Critic::Config', 'all_policies');
-can_ok('Perl::Critic::Config', 'pbp_policies');
+can_ok('Perl::Critic::Config', 'site_policies');
+can_ok('Perl::Critic::Config', 'native_policies');
 
 #Set -profile to avoid messing with .perlcriticrc
 $obj = Perl::Critic::Config->new( -profile => 'NONE');
@@ -48,6 +45,8 @@ is($obj->VERSION(), $VERSION);
 use_ok('Perl::Critic::Policy');
 can_ok('Perl::Critic::Policy', 'new');
 can_ok('Perl::Critic::Policy', 'violates');
+can_ok('Perl::Critic::Policy', 'applies_to');
+can_ok('Perl::Critic::Policy', 'priority');
 
 $obj = Perl::Critic::Policy->new();
 isa_ok($obj, 'Perl::Critic::Policy');
@@ -69,13 +68,13 @@ is($obj->VERSION(), $VERSION);
 
 #---------------------------------------------------------------
 
-for my $mod ( Perl::Critic::Config::default_policies() ) {
-
-    $mod = "Perl::Critic::Policy::$mod";
+for my $mod ( Perl::Critic::Config::native_policies() ) {
 
     use_ok($mod);
     can_ok($mod, 'new');
     can_ok($mod, 'violates');
+    can_ok($mod, 'applies_to');
+    can_ok($mod, 'priority');
 
     $obj = $mod->new();
     isa_ok($obj, 'Perl::Critic::Policy');

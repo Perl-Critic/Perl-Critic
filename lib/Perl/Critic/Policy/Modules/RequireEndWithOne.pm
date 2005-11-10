@@ -1,3 +1,10 @@
+#######################################################################
+#      $URL: http://perlcritic.tigris.org/svn/perlcritic/trunk/Perl-Critic/lib/Perl/Critic/Policy.pm $
+#     $Date: 2005-11-05 18:53:26 -0800 (Sat, 05 Nov 2005) $
+#   $Author: thaljef $
+# $Revision: 26 $
+########################################################################
+
 package Perl::Critic::Policy::Modules::RequireEndWithOne;
 
 use strict;

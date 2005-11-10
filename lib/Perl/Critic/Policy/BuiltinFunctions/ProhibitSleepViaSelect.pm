@@ -16,14 +16,17 @@ use base 'Perl::Critic::Policy';
 our $VERSION = '0.13';
 $VERSION = eval $VERSION; ## no critic;
 
+#------------------------------------------------------------------------
+
 my $desc = q{'select' used to emmulate 'sleep'};
 my $expl = [168];
 
 #------------------------------------------------------------------------
 
-sub applies_to {
-    return 'PPI::Token::Word';
-}
+sub priority   { return $PRIORITY_HIGHEST  }
+sub applies_to { return 'PPI::Token::Word' }
+
+#------------------------------------------------------------------------
 
 sub violates {
     my ($self, $elem, $doc) = @_;
@@ -40,6 +43,8 @@ sub violates {
 1;
 
 __END__
+
+#------------------------------------------------------------------------
 
 =pod
 

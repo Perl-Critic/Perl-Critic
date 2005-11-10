@@ -5,7 +5,6 @@
 # $Revision$
 ##################################################################
 
-use blib;
 use strict;
 use warnings;
 use Test::More tests => 18;
@@ -21,8 +20,8 @@ my $samples_dir      = "t/samples";
 my $config_none      = "$samples_dir/perlcriticrc.none";
 my $config_all       = "$samples_dir/perlcriticrc.all";
 my $config_levels    = "$samples_dir/perlcriticrc.levels";
-my @default_policies = Perl::Critic::Config::default_policies();
-my $total_policies   = scalar @default_policies;
+my @all_policies     = Perl::Critic::Config::site_policies();
+my $total_policies   = scalar @all_policies;
 
 #--------------------------------------------------------------
 # Test all-off config
@@ -73,7 +72,7 @@ my %config_hash = (
 );
 
 $c = Perl::Critic->new( -profile => \%config_hash );
-is(scalar @{$c->policies}, $total_policies - 1);
+is(scalar @{$c->policies}, $total_policies - 2);
 
 #--------------------------------------------------------------
 # Test config as hash
@@ -85,7 +84,7 @@ my @config_array = (
 );
 
 $c = Perl::Critic->new( -profile => \@config_array );
-is(scalar @{$c->policies}, $total_policies - 1);
+is(scalar @{$c->policies}, $total_policies - 2);
 
 #--------------------------------------------------------------
 # Test config as string
@@ -99,7 +98,7 @@ keywords = Revision
 END_CONFIG
 
 $c = Perl::Critic->new( -profile => \$config_string );
-is(scalar @{$c->policies}, $total_policies - 1);
+is(scalar @{$c->policies}, $total_policies - 2);
 
 #--------------------------------------------------------------
 # Test default config.  If the user already has an existing

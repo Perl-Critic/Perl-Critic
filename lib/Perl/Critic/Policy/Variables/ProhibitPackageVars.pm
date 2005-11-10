@@ -1,3 +1,10 @@
+#######################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+########################################################################
+
 package Perl::Critic::Policy::Variables::ProhibitPackageVars;
 
 use strict;
@@ -10,14 +17,21 @@ use base 'Perl::Critic::Policy';
 our $VERSION = '0.13';
 $VERSION = eval $VERSION;    ## no critic
 
+#---------------------------------------------------------------------------
+
 my $desc = q{Package variable declared or used};
 my $expl = [ 73, 75 ];
 
 #---------------------------------------------------------------------------
 
+sub priority   { return $PRIORITY_MEDIUM }
 sub applies_to {
-    return 'PPI::Token::Symbol', 'PPI::Statement::Variable', 'PPI::Statement::Include';
+    return qw( PPI::Token::Symbol
+               PPI::Statement::Variable
+               PPI::Statement::Include );
 }
+
+#---------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
@@ -56,6 +70,10 @@ sub _all_upcase {
 1;
 
 __END__
+
+#---------------------------------------------------------------------------
+
+=pod
 
 =head1 NAME
 
@@ -103,8 +121,12 @@ L<Perl::Critic::Policy::Variables::ProhibitLocalVars>
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
 
+=head1 COPYRIGHT
+
 Copyright (c) 2005 Jeffrey Ryan Thalhammer.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
 can be found in the LICENSE file included with this module.
+
+=cut

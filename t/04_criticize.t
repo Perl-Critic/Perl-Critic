@@ -5,11 +5,12 @@
 # $Revision$
 ##################################################################
 
-use blib;
+#----------------------------------------------------------------#
+# !!! WARNING: Do not distribute Perl::Critic with this file !!! #
+#----------------------------------------------------------------#
+
 use strict;
 use warnings;
 use Test::More;
-
-eval 'use Test::Perl::Critic';
-plan skip_all => 'Test::Perl::Critic required to criticise code' if $@;
+use Test::Perl::Critic -profile => 't/samples/perlcriticrc';
 all_critic_ok('lib', 'bin');

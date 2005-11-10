@@ -1,3 +1,10 @@
+#######################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+########################################################################
+
 package Perl::Critic::Policy::Subroutines::ProhibitExplicitReturnUndef;
 
 use strict;
@@ -9,14 +16,17 @@ use base 'Perl::Critic::Policy';
 our $VERSION = '0.13';
 $VERSION = eval $VERSION;    ## no critic
 
+#---------------------------------------------------------------------------
+
 my $desc = q{'return' statement with explicit 'undef'};
-my $expl = [199];
+my $expl = [ 199 ];
 
 #---------------------------------------------------------------------------
 
-sub applies_to {
-    return 'PPI::Token::Word';
-}
+sub priority   { return $PRIORITY_HIGHEST }
+sub applies_to { return 'PPI::Token::Word' }
+
+#---------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
@@ -25,7 +35,7 @@ sub violates {
 
     my $sib = $elem->snext_sibling() || return;
     $sib->isa('PPI::Token::Word') && $sib eq 'undef' || return;
-    
+
     #Must be 'return undef'
     return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
 }
@@ -33,6 +43,10 @@ sub violates {
 1;
 
 __END__
+
+#---------------------------------------------------------------------------
+
+=pod
 
 =head1 NAME
 
@@ -98,8 +112,12 @@ discussion on error handling in chapter 13 of PBB.
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
 
+=head1 COPYRIGHT
+
 Copyright (c) 2005 Jeffrey Ryan Thalhammer.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
 can be found in the LICENSE file included with this module.
+
+=cut

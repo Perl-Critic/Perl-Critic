@@ -9,21 +9,28 @@ package Perl::Critic::Policy;
 
 use strict;
 use warnings;
+use Perl::Critic::Utils;
 
 our $VERSION = '0.13';
 $VERSION = eval $VERSION;    ## no critic
 
 #----------------------------------------------------------------------------
 
-sub new { return bless {}, shift }
-sub violates { _abstract_method() }
-sub applies_to { return qw(PPI::Element); }
+sub new        { return bless {}, shift    }
+sub applies_to { return qw(PPI::Element)   }
+sub priority   { return $PRIORITY_LOWEST   }
+sub violates   { return _abstract_method() }
+
+#----------------------------------------------------------------------------
 
 sub _abstract_method {
     my $method_name = ( caller 1 )[3];
     my ( $file, $line ) = ( caller 2 )[ 1, 2 ];
-    die "Can't call abstract method '$method_name' at $file line $line.\n";
+    die qq{Can't call abstract method '$method_name' at $file line $line.\n};
+    return;  #Should never get here.
 }
+
+#----------------------------------------------------------------------------
 
 1;
 
@@ -75,7 +82,7 @@ has been blessed into your subclass.
 
 Given a L<PPI::Element> and a L<PPI::Document>, returns one or more
 L<Perl::Critic::Violation> object if the C<$element> violates this
-policy.  If there are no violations, then it returns an empty list.
+Policy.  If there are no violations, then it returns an empty list.
 
 L<Perl::Critic> will call C<violates()> on every C<$element> in the
 C<$document>.  Some Policies may need to look at the entire
@@ -88,11 +95,23 @@ example of such a Policy.
 C<violates()> is an abstract method and it will croak if you attempt
 to invoke it directly.  Your subclass B<must> override this method.
 
-=item applies_to()
+=item applies_to( void )
 
 Returns a list of PPI classes that the policy cares about.  By
 default, the result is C<PPI::Element>.  Overriding this method in
 individual policies should lead to significant performance increases.
+
+=item severity( void )
+
+Returns a numeric value (1..5) indicating the severity of violating
+this Policy.  Polices that are widely expected or tend to prevent bugs
+should have a higher severity than those that are highly subjective or
+cosmetic in nature.  By default, it returns C<$SEVERITY_LOWEST>.  If
+your Policy warrants a higher severity, you should override this
+method to return a different value.  See the C<$SEVERITY> constants in
+L<Perl::Critic::Utils> for a list of possible values.  Users can also
+change the severity of your Policy according to their own beliefs
+using the f<.perlcriticrc> file.
 
 =back
 

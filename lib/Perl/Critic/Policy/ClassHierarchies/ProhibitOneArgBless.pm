@@ -16,21 +16,24 @@ use base 'Perl::Critic::Policy';
 our $VERSION = '0.13';
 $VERSION = eval $VERSION; ## no critic
 
+#--------------------------------------------------------------------------
+
 my $desc = q{One-argument 'bless' used};
 my $expl = [ 365 ];
 
 #--------------------------------------------------------------------------
 
-sub applies_to {
-    return 'PPI::Token::Word';
-}
+sub priority   { return $PRIORITY_HIGHEST }
+sub applies_to { return 'PPI::Token::Word' }
+
+#--------------------------------------------------------------------------
 
 sub violates {
     my ($self, $elem, $doc) = @_;
     return if !($elem eq 'bless');
     return if is_method_call($elem);
     return if is_hash_key($elem);
-    
+
     if( scalar parse_arg_list($elem) == 1 ) {
 	return Perl::Critic::Violation->new($desc, $expl, $elem->location() );
     }
@@ -38,6 +41,8 @@ sub violates {
 }
 
 1;
+
+#--------------------------------------------------------------------------
 
 __END__
 

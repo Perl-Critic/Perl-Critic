@@ -149,3 +149,18 @@ priority = 10
 
 [InputOutput::ProhibitBarewordFileHandles]
 priority = 10
+
+[Subroutines::RequireFinalReturn]
+priority = 10
+
+[Modules::RequireEndWithOne]
+priority = 10
+
+[Miscellanea::RequireRcsKeywords]
+priority = 10
+
+[InputOutput::ProhibitTwoArgOpen]
+priority = 10
+
+[CodeLayout::RequireTidyCode]
+priority = 10

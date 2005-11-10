@@ -1,3 +1,10 @@
+#######################################################################
+#      $URL: http://perlcritic.tigris.org/svn/perlcritic/trunk/Perl-Critic/lib/Perl/Critic/Policy.pm $
+#     $Date: 2005-11-05 18:53:26 -0800 (Sat, 05 Nov 2005) $
+#   $Author: thaljef $
+# $Revision: 26 $
+########################################################################
+
 package Perl::Critic::Policy::Subroutines::RequireFinalReturn;
 
 use strict;
@@ -9,14 +16,17 @@ use base 'Perl::Critic::Policy';
 our $VERSION = '0.13';
 $VERSION = eval $VERSION;    ## no critic
 
+#---------------------------------------------------------------------------
+
 my $desc = q{Subroutine does not end with return};
 my $expl = q{Implicit return values are confusing};
 
 #---------------------------------------------------------------------------
 
-sub applies_to {
-    return 'PPI::Statement::Sub';
-}
+sub priority   { return $PRIORITY_MEDIUM }
+sub applies_to { return 'PPI::Statement::Sub' }
+
+#---------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
@@ -33,10 +43,14 @@ sub violates {
     return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
 }
 
+#------------------------
+
 sub _block_is_empty {
     my ( $block ) = @_;
     return $block->schildren() == 0;
 }
+
+#------------------------
 
 sub _block_has_return {
     my ( $block ) = @_;
@@ -46,15 +60,19 @@ sub _block_has_return {
                      _is_compound_return($last));
 }
 
+#-------------------------
+
 sub _is_explicit_return {
     my ( $last ) = @_;
     return $last->isa('PPI::Statement::Break') &&
            $last =~ m/ \A return\b /xms;
 }
 
+#-------------------------
+
 sub _is_compound_return {
     my ( $last ) = @_;
- 
+
     if (!$last->isa('PPI::Statement::Compound')) {
         return; #fail
     }
@@ -84,6 +102,10 @@ sub _is_compound_return {
 1;
 
 __END__
+
+#---------------------------------------------------------------------------
+
+=pod
 
 =head1 NAME
 
@@ -132,8 +154,12 @@ foo ? 1 : bar ? 2 : 3>
 
 Chris Dolan <cdolan@cpan.org>
 
+=head1 COPYRIGHT
+
 Copyright (c) 2005 Chris Dolan.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
 can be found in the LICENSE file included with this module.
+
+=cut

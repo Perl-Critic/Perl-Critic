@@ -1,3 +1,10 @@
+#######################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+########################################################################
+
 package Perl::Critic::Policy::CodeLayout::RequireTidyCode;
 
 use strict;
@@ -10,14 +17,17 @@ use base 'Perl::Critic::Policy';
 our $VERSION = '0.13';
 $VERSION = eval $VERSION;    ## no critic
 
+#----------------------------------------------------------------------------
+
 my $desc = q{Code is not tidy};
 my $expl = [33];
 
 #----------------------------------------------------------------------------
 
-sub applies_to {
-    return 'PPI::Document';
-}
+sub priority   { return $PRIORITY_LOWEST }
+sub applies_to { return 'PPI::Document'  }
+
+#----------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
@@ -28,16 +38,12 @@ sub violates {
 
     my $source  = "$doc";
     my $dest    = $EMPTY;
-    my $logfile = $EMPTY;
-    my $errfile = $EMPTY;
     my $stderr  = $EMPTY;
 
     Perl::Tidy::perltidy(
         source      => \$source,
         destination => \$dest,
         stderr      => \$stderr,
-        logfile     => \$logfile,
-        errorfile   => \$errfile
     );
 
     if ($stderr) {

@@ -18,17 +18,24 @@ $VERSION = eval $VERSION;    ## no critic
 # Exported symbols here
 
 our @EXPORT =
-  qw(@BUILTINS    @GLOBALS       $TRUE
-     $COMMA       $DQUOTE        $FALSE
-     $COLON       $PERIOD        &find_keywords
-     $SCOLON      $PIPE          &is_hash_key
-     $QUOTE       $EMPTY         &is_method_call
-     $SPACE                      &parse_arg_list                
+  qw(@BUILTINS    @GLOBALS       $TRUE             $PRIORITY_HIGHEST
+     $COMMA       $DQUOTE        $FALSE            $PRIORITY_HIGH
+     $COLON       $PERIOD        &find_keywords    $PRIORITY_MEDIUM
+     $SCOLON      $PIPE          &is_hash_key      $PRIORITY_LOW
+     $QUOTE       $EMPTY         &is_method_call   $PRIORITY_LOWEST
+     $SPACE                      &parse_arg_list
                                  &is_script
 );
 
 #---------------------------------------------------------------------------
 
+our $PRIORITY_HIGHEST = 5;
+our $PRIORITY_HIGH    = 4;
+our $PRIORITY_MEDIUM  = 3;
+our $PRIORITY_LOW     = 2;
+our $PRIORITY_LOWEST  = 1;
+
+#---------------------------------------------------------------------------
 our $COMMA  = q{,};
 our $COLON  = q{:};
 our $SCOLON = q{;};
@@ -120,6 +127,8 @@ sub find_keywords {
     return @matches ? \@matches : undef;
 }
 
+#-------------------------------------------------------------------------
+
 sub is_hash_key {
     my $elem = shift;
 
@@ -136,11 +145,24 @@ sub is_hash_key {
     return 0;
 }
 
+#-------------------------------------------------------------------------
+
 sub is_method_call {
     my $elem = shift;
     my $sib = $elem->sprevious_sibling() || return;
     return $sib->isa('PPI::Token::Operator') && $sib eq q{->};
 }
+
+#-------------------------------------------------------------------------
+
+sub is_script {
+    my $doc = shift;
+    my $first_comment = $doc->find_first('PPI::Token::Comment') || return;
+    $first_comment->location()->[0] == 1 || return;
+    return $first_comment =~ m{ \A \#\! }mx;
+}
+
+#-------------------------------------------------------------------------
 
 sub parse_arg_list {
     my $elem = shift;
@@ -166,6 +188,8 @@ sub parse_arg_list {
     }
 }
 
+#---------------------------------
+
 sub _split_nodes_on_comma {
     my @nodes = ();
     my $i = 0;
@@ -175,8 +199,8 @@ sub _split_nodes_on_comma {
 	    next;
 	}
 
-	#Push onto current 'node stack', or create a new 'stack' 
-	if ( defined $nodes[$i] ) { 
+	#Push onto current 'node stack', or create a new 'stack'
+	if ( defined $nodes[$i] ) {
 	    push @{ $nodes[$i] }, $node;
 	}
 	else {
@@ -185,18 +209,14 @@ sub _split_nodes_on_comma {
     }
     return @nodes;
 }
-		    
 
-sub is_script {
-    my $doc = shift;
-    my $first_comment = $doc->find_first('PPI::Token::Comment') || return;
-    $first_comment->location()->[0] == 1 || return;
-    return $first_comment =~ m{ \A \#\! }mx;
-}
+#-------------------------------------------------------------------------
 
 1;
 
 __END__
+
+=pod
 
 =head1 NAME
 
@@ -287,7 +307,7 @@ L<English> module.  Also includes commonly-used global like C<%SIG>,
 C<%ENV>, and C<@ARGV>.  The list contains only the variable name,
 without the sigil.
 
-=item $COMMA 
+=item $COMMA
 
 =item $COLON
 
@@ -299,14 +319,30 @@ without the sigil.
 
 =item $PERIOD
 
-=item $PIPE 
+=item $PIPE
 
 =item $EMPTY
 
-These give clear names to commonly-used strings that can be hard to
-read when surrounded by quotes.
+=item $SPACE
 
-=item $TRUE 
+These character constants give clear names to commonly-used strings
+that can be hard to read when surrounded by quotes.
+
+=item $PRIORITY_HIGHEST
+
+=item $PRIORITY_HIGH
+
+=item $PRIORITY_MEDIUM
+
+=item $PRIORITY_LOW
+
+=item $PRIORITY_LOWEST
+
+These numeric constants define the relative priority of each Policy.
+The C<priority()> method of every Policy must return one of these
+values.
+
+=item $TRUE
 
 =item $FALSE
 
@@ -326,3 +362,5 @@ Copyright (c) 2005 Jeffrey Ryan Thalhammer.  All rights reserved.
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
 can be found in the LICENSE file included with this module.
+
+=cut

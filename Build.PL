@@ -25,6 +25,7 @@ my $builder = Module::Build->new(
 		     'Pod::PlainText'        => 0,
 		     'IO::String'            => 0,
 		     'String::Format'        => 1.13,
+                     'Module::Pluggable'     => 0,
 
 	            },
 

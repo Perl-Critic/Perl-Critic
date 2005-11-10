@@ -20,7 +20,7 @@ our $VERSION = '0.13';
 $VERSION = eval $VERSION;    ## no critic
 
 #----------------------------------------------------------------------------
-#
+
 sub new {
 
     my ( $class, %args ) = @_;
@@ -33,53 +33,39 @@ sub new {
     # Create and init object
     my $self = bless {}, $class;
     $self->{_force}    = $force;
-    $self->{_policies} = [];
 
-    # Read profile and add policies
+    # Create configuration from profile
     my $config = Perl::Critic::Config->new( %args );
-    while ( my ( $policy, $params ) = each %{$config} ) {
-        $self->add_policy( -policy => $policy, -config => $params );
-    }
+    $self->{_config} = $config;
+
     return $self;
 }
 
 #----------------------------------------------------------------------------
-#
+
+sub config {
+    my $self = shift;
+    return $self->{_config};
+}
+
+#----------------------------------------------------------------------------
+
 sub add_policy {
-
-    my ( $self, %args ) = @_;
-    my $module_name = $args{-policy} || return;
-    my $config      = $args{-config} || {};
-
-    #Qualify name if full module name not given
-    my $namespace = 'Perl::Critic::Policy';
-    if ( $module_name !~ m{ \A $namespace }mx ) {
-        $module_name = $namespace . q{::} . $module_name;
-    }
-
-    #Convert module name to file path.  I'm trying to do
-    #this in a portable way, but I'm not sure it actually is.
-    my $module_file = File::Spec->catfile( split q{::}, $module_name );
-    $module_file .= '.pm';
-
-    #Try to load module and instantiate
-    eval {
-        require $module_file;    ## no critic
-        my $policy = $module_name->new( %{$config} );
-        push @{ $self->{_policies} }, $policy;
-    };
-
-    #Failure to load is not fatal
-    if ($EVAL_ERROR) {
-        carp qq{Cannot load policy module $module_name: $EVAL_ERROR};
-        return;
-    }
-
-    return $self;
+    my ( $self, @args ) = @_;
+    #Delegate to Perl::Critic::Config
+    return $self->config()->add_policy( @args );
 }
 
 #----------------------------------------------------------------------------
-#
+
+sub policies {
+    my $self = shift;
+    #Delegate to Perl::Critic::Config
+    return $self->config()->policies();
+}
+
+#----------------------------------------------------------------------------
+
 sub critique {
     # Here we go!
     my ( $self, $source_code ) = @_;
@@ -119,10 +105,6 @@ sub critique {
     return sort Perl::Critic::Violation::by_location @violations;
 }
 
-#----------------------------------------------------------------------------
-#
-sub policies { $_[0]->{_policies} }
-
 #============================================================================
 #PRIVATE SUBS
 
@@ -154,8 +136,10 @@ sub _filter_code {
     continue {
         $pragma->delete();
     }
+
+    return 1;
 }
- 
+
 sub _unfix_shebang {
 
 
@@ -175,6 +159,8 @@ sub _unfix_shebang {
 
     my $fixin_rx = qr{^eval 'exec .* \$0 \${1\+"\$@"}'\s*[\r\n]\s*if.+;};
     if ( $first_stmnt =~ $fixin_rx ) { $first_stmnt->delete() }
+
+    return 1;
 }
 
 1;
@@ -314,6 +300,11 @@ returns an empty list.
 Returns a list containing references to all the Policy objects that
 have been loaded into this engine.  Objects will be in the order that
 they were loaded.
+
+=item config( void )
+
+Returns the Perl::Critic::Config object that was created for this
+Critic.  TODO: Should this really be a public method?
 
 =back
 

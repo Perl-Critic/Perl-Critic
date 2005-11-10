@@ -1,3 +1,10 @@
+#######################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+########################################################################
+
 package Perl::Critic::Policy::ValuesAndExpressions::RequireNumberSeparators;
 
 use strict;
@@ -9,8 +16,15 @@ use base 'Perl::Critic::Policy';
 our $VERSION = '0.13';
 $VERSION = eval $VERSION;    ## no critic
 
+#---------------------------------------------------------------------------
+
 my $desc = q{Long number not separated with underscores};
 my $expl = [55];
+
+#---------------------------------------------------------------------------
+
+sub priority   { return $PRIORITY_LOW }
+sub applies_to { return 'PPI::Token::Number' }
 
 #---------------------------------------------------------------------------
 
@@ -24,9 +38,7 @@ sub new {
     return $self;
 }
 
-sub applies_to {
-    return 'PPI::Token::Number';
-}
+#---------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
@@ -41,7 +53,8 @@ sub violates {
 sub _to_number {
     my $elem  = shift;
     my $value = "$elem";
-    return eval $value;    ## no critic
+    $value = eval $value;    ## no critic
+    return $value;
 }
 
 1;

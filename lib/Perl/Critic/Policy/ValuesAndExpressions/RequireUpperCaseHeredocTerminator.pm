@@ -1,3 +1,10 @@
+#######################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+########################################################################
+
 package Perl::Critic::Policy::ValuesAndExpressions::RequireUpperCaseHeredocTerminator;
 
 use strict;

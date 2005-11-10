@@ -1,3 +1,9 @@
+#######################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+########################################################################
 
 package Perl::Critic::Policy::ValuesAndExpressions::ProhibitInterpolationOfLiterals;
 

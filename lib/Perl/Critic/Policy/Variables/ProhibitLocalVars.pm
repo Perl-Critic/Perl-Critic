@@ -1,3 +1,10 @@
+#######################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+########################################################################
+
 package Perl::Critic::Policy::Variables::ProhibitLocalVars;
 
 use strict;
@@ -10,14 +17,17 @@ use base 'Perl::Critic::Policy';
 our $VERSION = '0.13';
 $VERSION = eval $VERSION;    ## no critic
 
+#---------------------------------------------------------------------------
+
 my $desc = q{Variable declared as 'local'};
 my $expl = [ 77, 78, 79 ];
 
 #---------------------------------------------------------------------------
 
-sub applies_to {
-    return 'PPI::Statement::Variable';
-}
+sub priority   { return $PRIORITY_LOW }
+sub applies_to { return 'PPI::Statement::Variable' }
+
+#---------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
@@ -26,6 +36,8 @@ sub violates {
     }
     return;    #ok!
 }
+
+#------------------------
 
 sub _all_global_vars {
 
@@ -39,6 +51,8 @@ sub _all_global_vars {
 1;
 
 __END__
+
+#---------------------------------------------------------------------------
 
 =pod
 

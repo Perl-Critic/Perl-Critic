@@ -1,3 +1,10 @@
+#######################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+########################################################################
+
 package Perl::Critic::Policy::CodeLayout::RequireTrailingCommas;
 
 use strict;
@@ -9,14 +16,17 @@ use base 'Perl::Critic::Policy';
 our $VERSION = '0.13';
 $VERSION = eval $VERSION;    ## no critic
 
+#----------------------------------------------------------------------------
+
 my $desc  = q{List declaration without trailing comma};
 my $expl  = [ 17 ];
 
 #----------------------------------------------------------------------------
 
-sub applies_to {
-    return 'PPI::Structure::List';
-}
+sub priority   { return $PRIORITY_LOWEST }
+sub applies_to { return 'PPI::Structure::List' }
+
+#----------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
@@ -25,7 +35,7 @@ sub violates {
     #Is it an assignment of some kind?
     my $sib = $elem->sprevious_sibling() || return;
     $sib->isa('PPI::Token::Operator') && $sib =~ m{ = }mx || return;
-    
+
     #List elements are children of an expression
     my $expr = $elem->schild(0) || return;
 
@@ -58,12 +68,12 @@ Conway suggests that all elements in a multi-line list should be
 separated by commas, including the last element.  This makes it a
 little easier to re-order the list by cutting and pasting.
 
-  my @list = ($foo, 
-	      $bar, 
+  my @list = ($foo,
+	      $bar,
 	      $baz);  #not ok
-    
-  my @list = ($foo, 
-	      $bar, 
+
+  my @list = ($foo,
+	      $bar,
 	      $baz,); #ok
 
 =head1 NOTES

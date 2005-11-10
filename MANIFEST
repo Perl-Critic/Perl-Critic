@@ -77,6 +77,7 @@ t/04_criticize.t
 t/05_utils.t
 t/98_pod-syntax.t
 t/99_pod-coverage.t
+t/samples/perlcriticrc
 t/samples/perlcriticrc.all
 t/samples/perlcriticrc.levels
 t/samples/perlcriticrc.none

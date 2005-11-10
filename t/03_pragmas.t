@@ -5,19 +5,24 @@
 # $Revision$
 ##################################################################
 
-use blib;
 use strict;
 use warnings;
 use Test::More tests => 11;
 use Perl::Critic;
 
-my $code = undef;
-my %config = ();
-
 # common P::C testing tools
 use lib qw(t/tlib);
 use PerlCriticTestUtils qw(critique);
 PerlCriticTestUtils::block_perlcriticrc();
+
+# Configure Critic not to load certain policies.  This
+# just make it a little easier to create test cases
+my $profile = { '-CodeLayout::RequireTidyCode'     => {},
+                '-Miscellanea::RequireRcsKeywords' => {},
+                '-Modules::RequireEndWithOne'      => {}
+};
+
+my $code = undef;
 
 #----------------------------------------------------------------
 
@@ -31,7 +36,7 @@ require 'some_library.pl';  ## no critic
 print $crap if $condition;  ## no critic
 END_PERL
 
-is( critique(\$code), 0);
+is( critique(\$code, {-profile => $profile} ), 0);
 
 #----------------------------------------------------------------
 
@@ -54,7 +59,7 @@ $baz = $nuts;
 
 END_PERL
 
-is( critique(\$code), 0);
+is( critique(\$code, {-profile => $profile} ), 0);
 
 #----------------------------------------------------------------
 
@@ -73,7 +78,7 @@ for my $foo (@list) {
 my $noisy = '!';
 END_PERL
 
-is( critique(\$code), 1);
+is( critique(\$code, {-profile => $profile} ), 1);
 
 #----------------------------------------------------------------
 
@@ -94,7 +99,7 @@ my $noisy = '!';
 
 END_PERL
 
-is( critique(\$code), 1);
+is( critique(\$code, {-profile => $profile} ), 1);
 
 #----------------------------------------------------------------
 
@@ -116,7 +121,7 @@ my $empty = '';
 
 END_PERL
 
-is( critique(\$code), 2);
+is( critique(\$code, {-profile => $profile} ), 2);
 
 #----------------------------------------------------------------
 
@@ -136,7 +141,7 @@ my $noisy = '!';
 my $empty = '';
 END_PERL
 
-is( critique(\$code), 0);
+is( critique(\$code, {-profile => $profile} ), 0);
 
 #----------------------------------------------------------------
 
@@ -153,7 +158,7 @@ my $empty = '';        ## no critic
 my $empty = '';        ## use critic
 END_PERL
 
-is( critique(\$code), 1);
+is( critique(\$code, {-profile => $profile} ), 1);
 
 #----------------------------------------------------------------
 
@@ -174,7 +179,7 @@ my $noisy = '!';
 my $empty = '';
 END_PERL
 
-is( critique(\$code), 4);
+is( critique(\$code, {-profile => $profile} ), 4);
 
 #----------------------------------------------------------------
 
@@ -196,8 +201,7 @@ my $noisy = '!';
 my $empty = '';
 END_PERL
 
-%config = (-force => 1);
-is( critique(\$code, \%config), 8);
+is( critique(\$code, {-profile => $profile, -force => 1 } ), 8);
 
 #----------------------------------------------------------------
 
@@ -216,8 +220,7 @@ my $noisy = '!';
 my $empty = '';
 END_PERL
 
-%config = (-force => 1);
-is( critique(\$code, \%config), 4);
+is( critique(\$code, {-profile => $profile, -force => 1 } ), 4);
 
 #----------------------------------------------------------------
 
@@ -238,5 +241,4 @@ my $noisy = '!';
 my $empty = '';
 END_PERL
 
-%config = (-force => 1);
-is( critique(\$code, \%config), 4);
+is( critique(\$code, {-profile => $profile, -force => 1 } ), 4);

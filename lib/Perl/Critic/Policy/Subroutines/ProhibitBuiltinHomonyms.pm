@@ -1,3 +1,10 @@
+#######################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+########################################################################
+
 package Perl::Critic::Policy::Subroutines::ProhibitBuiltinHomonyms;
 
 use strict;
@@ -10,15 +17,18 @@ use base 'Perl::Critic::Policy';
 our $VERSION = '0.13';
 $VERSION = eval $VERSION;    ## no critic
 
+#---------------------------------------------------------------------------
+
 my %allow = ( import => 1 );
 my $desc  = q{Subroutine name is a homonym for builtin function};
 my $expl  = [177];
 
 #---------------------------------------------------------------------------
 
-sub applies_to {
-    return 'PPI::Statement::Sub';
-}
+sub priority   { return $PRIORITY_MEDIUM }
+sub applies_to { return 'PPI::Statement::Sub' }
+
+#---------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
@@ -32,6 +42,10 @@ sub violates {
 1;
 
 __END__
+
+#---------------------------------------------------------------------------
+
+=pod
 
 =head1 NAME
 
@@ -53,8 +67,12 @@ for a list of built-ins.
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
 
+=head1 COPYRIGHT
+
 Copyright (c) 2005 Jeffrey Ryan Thalhammer.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
 can be found in the LICENSE file included with this module.
+
+=cut

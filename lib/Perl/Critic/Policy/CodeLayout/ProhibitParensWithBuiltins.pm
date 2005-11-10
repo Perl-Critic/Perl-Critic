@@ -1,3 +1,10 @@
+#######################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+########################################################################
+
 package Perl::Critic::Policy::CodeLayout::ProhibitParensWithBuiltins;
 
 use strict;
@@ -10,21 +17,24 @@ use base 'Perl::Critic::Policy';
 our $VERSION = '0.13';
 $VERSION = eval $VERSION;    ## no critic
 
+#----------------------------------------------------------------------------
+
 my %allow = ( my => 1, our => 1, local => 1, return => 1, );
 my $desc  = q{Builtin function called with parens};
 my $expl  = [13];
 
 #----------------------------------------------------------------------------
 
-sub applies_to {
-    return 'PPI::Token::Word';
-}
+sub priority   { return $PRIORITY_LOWEST }
+sub applies_to { return 'PPI::Token::Word' }
+
+#----------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
     return if exists $allow{"$elem"};
     if ( any { $elem eq $_ } @BUILTINS ) {
-        if ( _sibling_is_list($elem) && !_is_object_method($elem) ) {
+        if ( _sibling_is_list($elem) && ! _is_object_method($elem) ) {
             return Perl::Critic::Violation->new( $desc, $expl,
                 $elem->location() );
         }
@@ -47,6 +57,8 @@ sub _is_object_method {
 1;
 
 __END__
+
+=pod
 
 =head1 NAME
 
@@ -71,8 +83,12 @@ technically it is a named unary operator, not a function.
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
 
+=head1 COPYRIGHT
+
 Copyright (c) 2005 Jeffrey Ryan Thalhammer.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
 can be found in the LICENSE file included with this module.
+
+=cut

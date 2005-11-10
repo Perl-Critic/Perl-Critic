@@ -1,3 +1,10 @@
+#######################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+########################################################################
+
 package Perl::Critic::Policy::Modules::RequireVersionVar;
 
 use strict;
@@ -10,27 +17,32 @@ use base 'Perl::Critic::Policy';
 our $VERSION = '0.13';
 $VERSION = eval $VERSION;    ## no critic
 
+#---------------------------------------------------------------------------
+
 my $desc = q{No 'VERSION' variable found};
 my $expl = [ 404 ];
 
 #---------------------------------------------------------------------------
 
-sub applies_to {
-    return 'PPI::Document';
-}
+sub priority   { return $PRIORITY_LOW }
+sub applies_to { return 'PPI::Document' }
+
+#---------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
 
     return if $doc->find_first( \&_wanted );
-    
+
     #If we get here, then no $VERSION was found
     return Perl::Critic::Violation->new( $desc, $expl, [0,0] );
 }
 
 sub _wanted {
-    return  _our_VERSION(@_) || _vars_VERSION(@_)  || _package_VERSION(@_);
+    return  ( _our_VERSION(@_) || _vars_VERSION(@_)  || _package_VERSION(@_) );
 }
+
+#------------------
 
 sub _our_VERSION {
     my ($doc, $elem) = @_;
@@ -39,6 +51,8 @@ sub _our_VERSION {
     return any { $_ eq '$VERSION' } $elem->variables();  ## no critic
 }
 
+#------------------
+
 sub _vars_VERSION {
     my ($doc, $elem) = @_;
     $elem->isa('PPI::Statement::Include') || return 0;
@@ -46,16 +60,20 @@ sub _vars_VERSION {
     return $elem =~ m{ \$VERSION }mx; #Crude, but usually works
 }
 
+#------------------
+
 sub _package_VERSION {
     my ($doc, $elem) = @_;
     $elem->isa('PPI::Token::Symbol') || return 0;
     return $elem =~ m{ \A \$ \S+ ::VERSION \z }mx;
     #TODO: ensure that it is in _this_ package!
 }
-    
+
 1;
 
 __END__
+
+#---------------------------------------------------------------------------
 
 =pod
 

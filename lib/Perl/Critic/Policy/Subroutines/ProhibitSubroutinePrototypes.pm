@@ -1,3 +1,10 @@
+#######################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+########################################################################
+
 package Perl::Critic::Policy::Subroutines::ProhibitSubroutinePrototypes;
 
 use strict;
@@ -9,14 +16,17 @@ use base 'Perl::Critic::Policy';
 our $VERSION = '0.13';
 $VERSION = eval $VERSION;    ## no critic
 
+#---------------------------------------------------------------------------
+
 my $desc = q{Subroutine prototypes used};
 my $expl = [194];
 
 #---------------------------------------------------------------------------
 
-sub applies_to {
-    return 'PPI::Statement::Sub';
-}
+sub priority   { return $PRIORITY_HIGHEST }
+sub applies_to { return 'PPI::Statement::Sub' }
+
+#---------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
@@ -30,6 +40,10 @@ sub violates {
 
 __END__
 
+#---------------------------------------------------------------------------
+
+=pod
+
 =head1 NAME
 
 Perl::Critic::Policy::Subroutines::ProhibitSubroutinePrototypes
@@ -37,14 +51,18 @@ Perl::Critic::Policy::Subroutines::ProhibitSubroutinePrototypes
 =head1 DESCRIPTION
 
 Contrary to common belief, subroutine prototypes do not enable
-compile-time checks for proper arguments.  Don't use them.  
+compile-time checks for proper arguments.  Don't use them.
 
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+
+=head1 COPYRIGHT
 
 Copyright (c) 2005 Jeffrey Ryan Thalhammer.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
 can be found in the LICENSE file included with this module.
+
+=cut
