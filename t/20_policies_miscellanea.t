@@ -23,72 +23,65 @@ my %config;
 #----------------------------------------------------------------
 
 $code = <<'END_PERL';
-my $fooBAR;
-my ($fooBAR) = 'nuts';
-local $FooBar;
-our ($FooBAR);
+#just a comment
+$foo = "bar";
+$baz = qq{nuts};
 END_PERL
 
-$policy = 'NamingConventions::ProhibitMixedCaseVars';
-is( pcritique($policy, \$code), 4, $policy);
+$policy = 'Miscellanea::RequireRcsKeywords';
+is( pcritique($policy, \$code), 3, $policy);
 
 #----------------------------------------------------------------
 
 $code = <<'END_PERL';
-my ($foobar, $fooBAR);
-my (%foobar, @fooBAR, $foo);
-local ($foobar, $fooBAR);
-local (%foobar, @fooBAR, $foo);
-our ($foobar, $fooBAR);
-our (%foobar, @fooBAR, $foo);
+# $Revision$
+# $Source$
+# $Date$
 END_PERL
 
-$policy = 'NamingConventions::ProhibitMixedCaseVars';
-is( pcritique($policy, \$code), 6, $policy);
-
-#----------------------------------------------------------------
-
-$code = <<'END_PERL';
-my $foo_BAR;
-my $FOO_BAR;
-my $foo_bar;
-END_PERL
-
-$policy = 'NamingConventions::ProhibitMixedCaseVars';
+$policy = 'Miscellanea::RequireRcsKeywords';
 is( pcritique($policy, \$code), 0, $policy);
 
 #----------------------------------------------------------------
 
 $code = <<'END_PERL';
-my ($foo_BAR, $BAR_FOO);
-my ($foo_BAR, $BAR_FOO) = q(this, that);
-our (%FOO_BAR, @BAR_FOO);
-local ($FOO_BAR, %BAR_foo) = @_;
-my ($foo_bar, $foo);
+'$Revision$'
+'$Source: foo/bar $'
+'$Date$'
 END_PERL
 
-$policy = 'NamingConventions::ProhibitMixedCaseVars';
+$policy = 'Miscellanea::RequireRcsKeywords';
 is( pcritique($policy, \$code), 0, $policy);
 
 #----------------------------------------------------------------
 
 $code = <<'END_PERL';
-sub fooBAR {}
-sub FooBar {}
-sub Foo_Bar {}
-sub FOObar {}
+q{$Revision$}
+q{$Source: foo/bar $}
+q{$Date$}
 END_PERL
 
-$policy = 'NamingConventions::ProhibitMixedCaseSubs';
-is( pcritique($policy, \$code), 4, $policy);
+$policy = 'Miscellanea::RequireRcsKeywords';
+is( pcritique($policy, \$code), 0, $policy);
 
 #----------------------------------------------------------------
 
 $code = <<'END_PERL';
-sub foo_BAR {}
-sub foo_bar {}
-sub FOO_bar {}
+q{$Revision$}
+q{$Author$}
+q{$Id: whatever $}
 END_PERL
 
-$policy = 'NamingConventions::ProhibitMixedCaseSubs';
-is( pcritique($policy, \$code), 0, $policy);
+%config = (keywords => 'Revision Author Id');
+$policy = 'Miscellanea::RequireRcsKeywords';
+is( pcritique($policy, \$code, \%config), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+#nothing here!
+END_PERL
+
+%config = (keywords => 'Author Id');
+$policy = 'Miscellanea::RequireRcsKeywords';
+is( pcritique($policy, \$code, \%config), 2, $policy);
