@@ -10,11 +10,14 @@ package Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars;
 use strict;
 use warnings;
 use List::MoreUtils qw(any);
+use Perl::Critic::Utils;
 use Perl::Critic::Violation;
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '0.13';
 $VERSION = eval $VERSION;    ## no critic
+
+#---------------------------------------------------------------------------
 
 my $mixed_rx = qr/ [A-Z][a-z] | [a-z][A-Z]  /x;
 my $desc     = 'Mixed-case variable name(s)';
@@ -22,9 +25,10 @@ my $expl     = [44];
 
 #---------------------------------------------------------------------------
 
-sub applies_to {
-    return 'PPI::Statement::Variable';
-}
+sub severity   { return $SEVERITY_LOWEST }
+sub applies_to { return 'PPI::Statement::Variable' }
+
+#---------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
@@ -42,6 +46,8 @@ sub _has_mixed_case_vars {
 1;
 
 __END__
+
+#---------------------------------------------------------------------------
 
 =pod
 
@@ -74,8 +80,12 @@ L<Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseSubs>
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
 
+=head1 COPYRIGHT
+
 Copyright (c) 2005 Jeffrey Ryan Thalhammer.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
 can be found in the LICENSE file included with this module.
+
+=cut

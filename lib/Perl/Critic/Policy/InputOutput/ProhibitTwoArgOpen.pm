@@ -16,21 +16,24 @@ use base 'Perl::Critic::Policy';
 our $VERSION = '0.13';
 $VERSION = eval $VERSION; ## no critic
 
-my $desc = q{Two-argument 'select' used};
-my $expl = [224];
+#--------------------------------------------------------------------------
+
+my $desc = q{Two-argument 'open' used};
+my $expl = [ 207 ];
 
 #--------------------------------------------------------------------------
 
-sub applies_to {
-    return 'PPI::Token::Word';
-}
+sub severity   { return $SEVERITY_HIGH }
+sub applies_to { return 'PPI::Token::Word' }
+
+#--------------------------------------------------------------------------
 
 sub violates {
     my ($self, $elem, $doc) = @_;
     return if !($elem eq 'open');
     return if is_method_call($elem);
     return if is_hash_key($elem);
-    
+
     if( scalar parse_arg_list($elem) == 2 ) {
 	return Perl::Critic::Violation->new($desc, $expl, $elem->location() );
     }
@@ -40,6 +43,8 @@ sub violates {
 1;
 
 __END__
+
+#--------------------------------------------------------------------------
 
 =pod
 

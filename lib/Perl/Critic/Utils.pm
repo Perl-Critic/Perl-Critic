@@ -14,26 +14,26 @@ use base 'Exporter';
 our $VERSION = '0.13';
 $VERSION = eval $VERSION;    ## no critic
 
-#-------------------------------------------------------------------
+#---------------------------------------------------------------------------
 # Exported symbols here
 
 our @EXPORT =
-  qw(@BUILTINS    @GLOBALS       $TRUE             $PRIORITY_HIGHEST
-     $COMMA       $DQUOTE        $FALSE            $PRIORITY_HIGH
-     $COLON       $PERIOD        &find_keywords    $PRIORITY_MEDIUM
-     $SCOLON      $PIPE          &is_hash_key      $PRIORITY_LOW
-     $QUOTE       $EMPTY         &is_method_call   $PRIORITY_LOWEST
-     $SPACE                      &parse_arg_list
-                                 &is_script
+  qw(@BUILTINS   @GLOBALS    $TRUE             $SEVERITY_HIGHEST
+     $COMMA      $DQUOTE     $FALSE            $SEVERITY_HIGH
+     $COLON      $PERIOD     &find_keywords    $SEVERITY_MEDIUM
+     $SCOLON     $PIPE       &is_hash_key      $SEVERITY_LOW
+     $QUOTE      $EMPTY      &is_method_call   $SEVERITY_LOWEST
+     $SPACE                  &parse_arg_list
+                             &is_script
 );
 
 #---------------------------------------------------------------------------
 
-our $PRIORITY_HIGHEST = 5;
-our $PRIORITY_HIGH    = 4;
-our $PRIORITY_MEDIUM  = 3;
-our $PRIORITY_LOW     = 2;
-our $PRIORITY_LOWEST  = 1;
+our $SEVERITY_HIGHEST = 5;
+our $SEVERITY_HIGH    = 4;
+our $SEVERITY_MEDIUM  = 3;
+our $SEVERITY_LOW     = 2;
+our $SEVERITY_LOWEST  = 1;
 
 #---------------------------------------------------------------------------
 our $COMMA  = q{,};
@@ -328,19 +328,19 @@ without the sigil.
 These character constants give clear names to commonly-used strings
 that can be hard to read when surrounded by quotes.
 
-=item $PRIORITY_HIGHEST
+=item $SEVERITY_HIGHEST
 
-=item $PRIORITY_HIGH
+=item $SEVERITY_HIGH
 
-=item $PRIORITY_MEDIUM
+=item $SEVERITY_MEDIUM
 
-=item $PRIORITY_LOW
+=item $SEVERITY_LOW
 
-=item $PRIORITY_LOWEST
+=item $SEVERITY_LOWEST
 
-These numeric constants define the relative priority of each Policy.
-The C<priority()> method of every Policy must return one of these
-values.
+These numeric constants define the relative severity of violating each
+Policy. The C<severity()> method of every Policy must return one of
+these values.
 
 =item $TRUE
 

@@ -38,7 +38,7 @@ priority = 5
 [Modules::RequireBarewordIncludes]
 priority = 5
 
-[Modules::ProhibitSpecificModules]
+[Modules::ProhibitEvilModules]
 modules = Evil::Module SuperEvil::Module
 priority = 5
 

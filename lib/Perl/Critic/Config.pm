@@ -210,7 +210,7 @@ sub native_policies {
       Perl::Critic::Policy::InputOutput::ProhibitBarewordFileHandles
       Perl::Critic::Policy::InputOutput::ProhibitOneArgSelect
       Perl::Critic::Policy::Modules::ProhibitMultiplePackages
-      Perl::Critic::Policy::Modules::ProhibitSpecificModules
+      Perl::Critic::Policy::Modules::ProhibitEvilModules
       Perl::Critic::Policy::Modules::RequireExplicitPackage
       Perl::Critic::Policy::Modules::RequireBarewordIncludes
       Perl::Critic::Policy::Modules::RequireVersionVar

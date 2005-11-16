@@ -16,14 +16,17 @@ use base 'Perl::Critic::Policy';
 our $VERSION = '0.13';
 $VERSION = eval $VERSION;    ## no critic
 
+#----------------------------------------------------------------------------
+
 my $desc = q{Regular expression without '/x' flag};
 my $expl = [ 236 ];
 
 #----------------------------------------------------------------------------
 
-sub applies_to {
-    return 'PPI::Token::Regexp';
-}
+sub severity   { return $SEVERITY_LOW }
+sub applies_to { return 'PPI::Token::Regexp' }
+
+#----------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
@@ -40,6 +43,8 @@ sub violates {
 1;
 
 __END__
+
+#----------------------------------------------------------------------------
 
 =pod
 
@@ -65,7 +70,7 @@ comments into the pattern, thus making them much more readable.
           [^\\']*  #   followed by an non-special chars
        )*          #...repeated zero or more times
        '           # a closing single quote
-     }x; 
+     }x;
 
 =head1 NOTES
 

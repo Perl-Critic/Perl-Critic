@@ -102,7 +102,8 @@ sub critique {
             push @violations, map { $pol->violates($_, $doc) } @{$types{$type}};
         }
     }
-    return sort Perl::Critic::Violation::by_location @violations;
+
+    return Perl::Critic::Violation::sort_by_location( @violations );
 }
 
 #============================================================================

@@ -656,7 +656,7 @@ use Evil::Module qw(bad stuff);
 use Super::Evil::Module;
 END_PERL
 
-$policy = 'Modules::ProhibitSpecificModules';
+$policy = 'Modules::ProhibitEvilModules';
 %config = (modules => 'Evil::Module Super::Evil::Module');
 is( pcritique($policy, \$code, \%config), 2, $policy);
 
@@ -666,7 +666,7 @@ $code = <<'END_PERL';
 use Good::Module;
 END_PERL
 
-$policy = 'Modules::ProhibitSpecificModules';
+$policy = 'Modules::ProhibitEvilModules';
 %config = (modules => 'Evil::Module Super::Evil::Module');
 is( pcritique($policy, \$code, \%config), 0, $policy);
 

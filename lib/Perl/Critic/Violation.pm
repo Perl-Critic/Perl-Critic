@@ -45,6 +45,7 @@ sub import {
     return; #ok!
 }
 
+#----------------------------------------------------------------------------
 
 sub new {
     my ( $class, $desc, $expl, $loc ) = @_;
@@ -72,17 +73,24 @@ sub new {
     return $self;
 }
 
-#---------------------------
+#--------------------------
 
-sub by_location {
-    # Intended for use by sort()
-    return (   ($a->{_location}->[0] || 0) <=> ($b->{_location}->[0] || 0)
-            || ($a->{_location}->[1] || 0) <=> ($b->{_location}->[1] || 0));
+sub sort_by_location {
+    ref $_[0] || shift; #Can call as object or class method
+    return sort {    (($a->location->[0] || 0) <=> ($b->location->[0] || 0))
+                  || (($a->location->[1] || 0) <=> ($b->location->[1] || 0)) } @_
 }
 
 #---------------------------
 
-sub location { 
+sub sort_by_severity {
+    ref $_[0] || shift; #Can call as object or class method
+    return sort { ($a->policy->severity() || 0) <=> ($b->policy->severity() || 0) } @_;
+}
+
+#---------------------------
+
+sub location {
     my $self = shift;
     return $self->{_location};
 }
@@ -137,7 +145,7 @@ sub to_string {
 
 sub _mod2file {
     my $module = shift;
-    $module  =~ s{::}{/}mxg;         
+    $module  =~ s{::}{/}mxg;
     $module .= '.pm';
     return $INC{$module} || $EMPTY;
 }
@@ -149,9 +157,9 @@ sub _get_diagnostics {
     my $file = shift;
 
     # Extract POD out to a filehandle
-    my $handle = IO::String->new();         
+    my $handle = IO::String->new();
     my $parser = Pod::PlainText->new();
-    $parser->select('DESCRIPTION');    
+    $parser->select('DESCRIPTION');
     $parser->parse_from_file($file, $handle);
 
     # Slurp POD back in
@@ -208,7 +216,7 @@ and column number, in that order.
 
 =over 8
 
-=item description ( void )
+=item description( void )
 
 Returns a brief description of the policy that has been volated as a string.
 
@@ -222,11 +230,17 @@ an array of page numbers in PBB.
 Returns a two-element list containing the line and column number where the 
 violation occurred.
 
-=item by_location()
+=item sort_by_severity( @violation_objects )
+
+If you need to sort Violations by severity, use this handy routine:
+
+   @sorted = Perl::Critic::Violation::sort_by_severity(@violations);
+
+=item sort_by_location( @violation_objects )
 
 If you need to sort Violations by location, use this handy routine:
 
-   @violations = sort Perl::Critic::Violation::by_location @violations;
+   @sorted = Perl::Critic::Violation::sort_by_location(@violations);
 
 =item diagnostics( void )
 

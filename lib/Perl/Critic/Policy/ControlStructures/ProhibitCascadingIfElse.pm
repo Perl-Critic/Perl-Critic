@@ -16,8 +16,15 @@ use base 'Perl::Critic::Policy';
 our $VERSION = '0.13';
 $VERSION = eval $VERSION;    ## no critic
 
+#----------------------------------------------------------------------------
+
 my $desc = q{Cascading if-elsif chain};
 my $expl = [ 117, 118 ];
+
+#----------------------------------------------------------------------------
+
+sub severity   { return $SEVERITY_MEDIUM }
+sub applies_to { return 'PPI::Statement::Compound' }
 
 #----------------------------------------------------------------------------
 
@@ -31,9 +38,7 @@ sub new {
     return $self;
 }
 
-sub applies_to {
-    return 'PPI::Statement::Compound';
-}
+#----------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
@@ -53,6 +58,10 @@ sub _count_elsifs {
 1;
 
 __END__
+
+#----------------------------------------------------------------------------
+
+=pod
 
 =head1 NAME
 
@@ -95,10 +104,13 @@ the F<.perlcriticrc> file like this:
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
 
+=head1 COPYRIGHT
+
 Copyright (c) 2005 Jeffrey Ryan Thalhammer.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
 can be found in the LICENSE file included with this module.
 
+=cut
 

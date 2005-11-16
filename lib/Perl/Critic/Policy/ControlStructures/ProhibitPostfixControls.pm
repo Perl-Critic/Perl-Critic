@@ -16,6 +16,8 @@ use base 'Perl::Critic::Policy';
 our $VERSION = '0.13';
 $VERSION = eval $VERSION;    ## no critic
 
+#----------------------------------------------------------------------------
+
 my %pages_of = (
     if     => [ 93, 94 ],
     unless => [ 96, 97 ],
@@ -25,14 +27,19 @@ my %pages_of = (
 );
 
 my %exemptions = (
-    warn    => 1, 
-    die     => 1, 
+    warn    => 1,
+    die     => 1,
     carp    => 1,
-    croak   => 1,  
-    cluck   => 1, 
+    croak   => 1,
+    cluck   => 1,
     confess => 1,
     goto    => 1,
 );
+
+#----------------------------------------------------------------------------
+
+sub severity   { return $SEVERITY_LOW }
+sub applies_to { return 'PPI::Token::Word' }
 
 #----------------------------------------------------------------------------
 
@@ -50,9 +57,7 @@ sub new {
     return $self;
 }
 
-sub applies_to {
-    return 'PPI::Token::Word';
-}
+#----------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
@@ -65,7 +70,7 @@ sub violates {
     # Skip Compound variety (these are good)
     my $stmnt = $elem->statement() || return;
     return if $stmnt->isa('PPI::Statement::Compound');
-    
+
     #Handle special cases
     if ( $elem eq 'if' ) {
 	#Postfix 'if' allowed with loop breaks, or other
@@ -73,8 +78,7 @@ sub violates {
 	return if $stmnt->isa('PPI::Statement::Break');
 	return if defined $exemptions{ $stmnt->schild(0) };
     }
-	
-	
+
     # If we get here, it must be postfix.
     my $desc = qq{Postfix control '$elem' used};
     my $expl = $pages_of{$elem};

@@ -16,14 +16,17 @@ use base 'Perl::Critic::Policy';
 our $VERSION = '0.13';
 $VERSION = eval $VERSION;    ## no critic
 
+#----------------------------------------------------------------------------
+
 my $desc = q{'unless' block used};
 my $expl = [97];
 
 #----------------------------------------------------------------------------
 
-sub applies_to {
-    return 'PPI::Statement::Compound';
-}
+sub severity   { return $SEVERITY_LOW }
+sub applies_to { return 'PPI::Statement::Compound' }
+
+#----------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
@@ -36,6 +39,8 @@ sub violates {
 1;
 
 __END__
+
+#----------------------------------------------------------------------------
 
 =pod
 

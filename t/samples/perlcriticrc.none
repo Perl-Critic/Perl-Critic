@@ -30,7 +30,7 @@
 [-InputOutput::ProhibitOneArgSelect]
 [-InputOutput::ProhibitTwoArgOpen]
 [-Modules::ProhibitMultiplePackages]
-[-Modules::ProhibitSpecificModules]
+[-Modules::ProhibitEvilModules]
 [-Modules::RequireEndWithOne]
 [-Modules::RequireExplicitPackage]
 [-Modules::RequireBarewordIncludes]

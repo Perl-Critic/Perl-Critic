@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 344;
+use Test::More tests => 347;
 use English qw(-no_match_vars);
 
 our $VERSION = '0.13';
@@ -20,6 +20,8 @@ my $obj = undef;
 use_ok('Perl::Critic');
 can_ok('Perl::Critic', 'new');
 can_ok('Perl::Critic', 'critique');
+can_ok('Perl::Critic', 'policies');
+can_ok('Perl::Critic', 'add_policy');
 
 #Set -profile to avoid messing with .perlcriticrc
 $obj = Perl::Critic->new( -profile => 'NONE' );
@@ -30,6 +32,7 @@ is($obj->VERSION(), $VERSION);
 
 use_ok('Perl::Critic::Config');
 can_ok('Perl::Critic::Config', 'new');
+can_ok('Perl::Critic::Config', 'policies');
 can_ok('Perl::Critic::Config', 'add_policy');
 can_ok('Perl::Critic::Config', 'find_profile_path');
 can_ok('Perl::Critic::Config', 'site_policies');
@@ -46,7 +49,7 @@ use_ok('Perl::Critic::Policy');
 can_ok('Perl::Critic::Policy', 'new');
 can_ok('Perl::Critic::Policy', 'violates');
 can_ok('Perl::Critic::Policy', 'applies_to');
-can_ok('Perl::Critic::Policy', 'priority');
+can_ok('Perl::Critic::Policy', 'severity');
 
 $obj = Perl::Critic::Policy->new();
 isa_ok($obj, 'Perl::Critic::Policy');
@@ -74,7 +77,7 @@ for my $mod ( Perl::Critic::Config::native_policies() ) {
     can_ok($mod, 'new');
     can_ok($mod, 'violates');
     can_ok($mod, 'applies_to');
-    can_ok($mod, 'priority');
+    can_ok($mod, 'severity');
 
     $obj = $mod->new();
     isa_ok($obj, 'Perl::Critic::Policy');

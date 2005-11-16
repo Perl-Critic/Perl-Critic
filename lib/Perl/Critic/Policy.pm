@@ -18,7 +18,7 @@ $VERSION = eval $VERSION;    ## no critic
 
 sub new        { return bless {}, shift    }
 sub applies_to { return qw(PPI::Element)   }
-sub priority   { return $PRIORITY_LOWEST   }
+sub severity   { return $SEVERITY_LOWEST   }
 sub violates   { return _abstract_method() }
 
 #----------------------------------------------------------------------------

@@ -28,7 +28,7 @@
 [InputOutput::ProhibitBarewordFileHandles]
 [InputOutput::ProhibitOneArgSelect]
 [Modules::ProhibitMultiplePackages]
-[Modules::ProhibitSpecificModules]
+[Modules::ProhibitEvilModules]
 [Modules::RequireExplicitPackage]
 [Modules::RequireBarewordIncludes]
 [Modules::RequireVersionVar]

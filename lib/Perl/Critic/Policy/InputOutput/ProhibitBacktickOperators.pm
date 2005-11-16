@@ -16,14 +16,20 @@ use base 'Perl::Critic::Policy';
 our $VERSION = '0.13';
 $VERSION = eval $VERSION;    ## no critic
 
+#----------------------------------------------------------------------------
+
 my $expl = q{Use IPC::Open3 instead};
 my $desc = q{Backtick operator used};
 
 #----------------------------------------------------------------------------
 
+sub severity   { return $SEVERITY_LOW }
 sub applies_to {
-    return 'PPI::Token::QuoteLike::Backtick', 'PPI::Token::QuoteLike::Command';
+    return qw( PPI::Token::QuoteLike::Backtick
+               PPI::Token::QuoteLike::Command );
 }
+
+#----------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
@@ -33,6 +39,10 @@ sub violates {
 1;
 
 __END__
+
+#----------------------------------------------------------------------------
+
+=pod
 
 =head1 NAME
 
@@ -64,8 +74,12 @@ C<qx{}>.
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
 
+=head1 COPYRIGHT
+
 Copyright (c) 2005 Jeffrey Ryan Thalhammer.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
 can be found in the LICENSE file included with this module.
+
+=cut

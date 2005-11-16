@@ -17,14 +17,17 @@ use base 'Perl::Critic::Policy';
 our $VERSION = '0.13';
 $VERSION = eval $VERSION;    ## no critic
 
+#---------------------------------------------------------------------------
+
 my $desc   = q{Code before strictures are enabled};
 my $expl   = [429];
 
 #---------------------------------------------------------------------------
 
-sub applies_to {
-    return 'PPI::Document';
-}
+sub severity   { return $SEVERITY_HIGHEST }
+sub applies_to { return 'PPI::Document' }
+
+#---------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
@@ -61,6 +64,10 @@ sub violates {
 
 __END__
 
+#---------------------------------------------------------------------------
+
+=pod
+
 =head1 NAME
 
 Perl::Critic::Policy::TestingAndDebugging::RequirePackageStricture
@@ -88,3 +95,5 @@ Copyright (c) 2005 Jeffrey Ryan Thalhammer.  All rights reserved.
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
 can be found in the LICENSE file included with this module
+
+=cut

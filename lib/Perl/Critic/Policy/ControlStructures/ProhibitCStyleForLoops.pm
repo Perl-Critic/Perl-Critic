@@ -16,14 +16,17 @@ use base 'Perl::Critic::Policy';
 our $VERSION = '0.13';
 $VERSION = eval $VERSION;    ## no critic
 
+#----------------------------------------------------------------------------
+
 my $desc = q{C-style 'for' loop used};
 my $expl = [97];
 
 #----------------------------------------------------------------------------
 
-sub applies_to {
-    return 'PPI::Structure::ForLoop';
-}
+sub severity   { return $SEVERITY_LOW }
+sub applies_to { return 'PPI::Structure::ForLoop' }
+
+#----------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
@@ -44,6 +47,8 @@ sub _is_cstyle {
 
 __END__
 
+#----------------------------------------------------------------------------
+
 =pod
 
 =head1 NAME
@@ -59,7 +64,7 @@ C<..> operator is much more elegant and readable.
   for($i=0; $i<=$max; $i++){      #ick!
       do_something($i);
   }
-  
+
   for(0..$max){                   #very nice
     do_something($_);
   }

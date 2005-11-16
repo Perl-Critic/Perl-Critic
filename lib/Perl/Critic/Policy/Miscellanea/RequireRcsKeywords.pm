@@ -17,7 +17,14 @@ use base 'Perl::Critic::Policy';
 our $VERSION = '0.13';
 $VERSION = eval $VERSION;    ## no critic
 
+#---------------------------------------------------------------------------
+
 my $expl = [ 441 ];
+
+#---------------------------------------------------------------------------
+
+sub severity   { return $SEVERITY_LOW }
+sub applies_to { return 'PPI::Document' }
 
 #---------------------------------------------------------------------------
 
@@ -34,10 +41,7 @@ sub new {
     return $self;
 }
 
-sub applies_to {
-    return 'PPI::Document';
-}
-
+#---------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
@@ -65,6 +69,8 @@ sub _wanted {
 
 __END__
 
+#---------------------------------------------------------------------------
+
 =pod
 
 =head1 NAME
@@ -82,34 +88,26 @@ look like this:
   # $Revision$
   # $Source: /myproject/lib/foo.pm $
 
-A common practice is to use the C<$Revision$> keyword to automatically
+A common practice is to use the C<Revision> keyword to automatically
 define the C<$VERSION> variable like this:
 
   our ($VERSION) = '$Revision$' =~ m{ \$Revision: \s+ (\S+) }x;
 
 =head1 CONSTRUCTOR
 
-By default, this policy only requires the C<$Revision$>, C<$Source$>,
-and C<$Date$> keywords.  To specify alternate keywords, pass them into
-the constructor as a key-value pair, where the key is 'keywords' and
-the value is a whitespace delimited series of keywords (without the
+By default, this policy only requires the C<Revision>, C<Source>, and
+C<Date> keywords.  To specify alternate keywords, pass them into the
+constructor as a key-value pair, where the key is 'keywords' and the
+value is a whitespace delimited series of keywords (without the
 dollar-signs).  Or specify them in your F<.perlcriticrc> file like
 this:
 
   [Miscellanea::RequireRcsKeywords]
-  keywords = Revision Source Date Author Id 
+  keywords = Revision Source Date Author Id
 
 See the doumentation on RCS for a list of supported keywords.  Many
 source control systems are descended from RCS, so the keywords
 supported by CVS and Subversion are probably the same.
-
-=head1 NOTES 
-
-Not every system has source-control tools, so this policy is not
-loaded by default.  To have it loaded into Perl::Critic, put this in
-your F<.perlcriticrc> file:
-
-  [Miscellanea::RequireRcsKeywords]
 
 =head1 AUTHOR
 

@@ -17,14 +17,17 @@ use base 'Perl::Critic::Policy';
 our $VERSION = '0.13';
 $VERSION = eval $VERSION;    ## no critic
 
+#---------------------------------------------------------------------------
+
 my $desc = q{Code before warnings are enabled};
 my $expl = [431];
 
 #---------------------------------------------------------------------------
 
-sub applies_to {
-    return 'PPI::Document';
-}
+sub severity   { return $SEVERITY_HIGH }
+sub applies_to { return 'PPI::Document' }
+
+#---------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
@@ -60,6 +63,8 @@ sub violates {
 1;
 
 __END__
+
+#---------------------------------------------------------------------------
 
 =pod
 
