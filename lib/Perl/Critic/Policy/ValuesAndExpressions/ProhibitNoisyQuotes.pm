@@ -16,15 +16,21 @@ use base 'Perl::Critic::Policy';
 our $VERSION = '0.13';
 $VERSION = eval $VERSION;    ## no critic
 
+#---------------------------------------------------------------------------
+
 my $noise_rx = qr{\A ["|']  [^ \w () {} [\] <> ]{1,2}  ['|"] \z}x;
 my $desc     = q{Quotes used with a noisy string};
-my $expl     = [53];
+my $expl     = [ 53 ];
 
 #---------------------------------------------------------------------------
 
+sub severity   { return $SEVERITY_LOW }
 sub applies_to {
-    return 'PPI::Token::Quote::Double', 'PPI::Token::Quote::Single';
+    return qw(PPI::Token::Quote::Double
+              PPI::Token::Quote::Single);
 }
+
+#---------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
@@ -38,6 +44,8 @@ sub violates {
 
 __END__
 
+#---------------------------------------------------------------------------
+
 =pod
 
 =head1 NAME
@@ -48,7 +56,7 @@ Perl::Critic::Policy::ValuesAndExpressions::ProhibitNoisyQuotes
 
 Don't use quotes for one or two-character strings of non-alphanumeric
 characters (i.e. noise).  These tend to be hard to read.  For
-legibility, use C<q{}> or a named value.  However, braces, parens, and 
+legibility, use C<q{}> or a named value.  However, braces, parens, and
 brackets tend do to look better in quotes, so those are allowed.
 
   $str = join ',', @list;     #not ok

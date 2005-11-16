@@ -19,11 +19,11 @@ $VERSION = eval $VERSION;    ## no critic
 #---------------------------------------------------------------------------
 
 my $desc = q{Subroutine does not end with return};
-my $expl = q{Implicit return values are confusing};
+my $expl = [ 197 ];
 
 #---------------------------------------------------------------------------
 
-sub priority   { return $PRIORITY_MEDIUM }
+sub severity   { return $SEVERITY_MEDIUM }
 sub applies_to { return 'PPI::Statement::Sub' }
 
 #---------------------------------------------------------------------------

@@ -16,18 +16,22 @@ use base 'Perl::Critic::Policy';
 our $VERSION = '0.13';
 $VERSION = eval $VERSION;    ## no critic
 
+#---------------------------------------------------------------------------
+
 my $desc = q{String *may* require interpolation};
-my $expl = [51];
+my $expl = [ 51 ];
 
 #---------------------------------------------------------------------------
 
-sub applies_to { 
+sub severity   { return $SEVERITY_LOW }
+sub applies_to {
     return 'PPI::Token::Quote::Single', 'PPI::Token::Quote::Literal';
 }
 
+#---------------------------------------------------------------------------
+
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-
     if ( _has_interpolation($elem) ) {
         return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
     }
@@ -43,6 +47,10 @@ sub _has_interpolation {
 1;
 
 __END__
+
+#---------------------------------------------------------------------------
+
+=pod
 
 =head1 NAME
 
@@ -61,7 +69,7 @@ the string should be interpolated.
 
 Perl's own C<warnings> pragma also warns you about this.
 
-=head1 SEE ALSO 
+=head1 SEE ALSO
 
 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitInterpolationOfLiterals>
 
@@ -69,8 +77,12 @@ L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitInterpolationOfLiterals>
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
 
+=head1 COPYRIGHT
+
 Copyright (c) 2005 Jeffrey Ryan Thalhammer.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
 can be found in the LICENSE file included with this module.
+
+=cut

@@ -24,7 +24,7 @@ my $expl = [ 77, 78, 79 ];
 
 #---------------------------------------------------------------------------
 
-sub priority   { return $PRIORITY_LOW }
+sub severity   { return $SEVERITY_LOW }
 sub applies_to { return 'PPI::Statement::Variable' }
 
 #---------------------------------------------------------------------------

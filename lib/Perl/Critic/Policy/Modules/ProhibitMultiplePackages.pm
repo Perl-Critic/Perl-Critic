@@ -16,19 +16,20 @@ use base 'Perl::Critic::Policy';
 our $VERSION = '0.13';
 $VERSION = eval $VERSION;    ## no critic
 
+#----------------------------------------------------------------------------
+
 my $desc   = q{Multiple 'package' declarations};
 my $expl   = q{Limit to one per file};
-my $tested = 0;
 
 #----------------------------------------------------------------------------
 
-sub applies_to {
-    return 'PPI::Document';
-}
+sub severity   { return $SEVERITY_HIGH }
+sub applies_to { return 'PPI::Document' }
+
+#----------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-
     my $nodes_ref = $doc->find('PPI::Statement::Package') || return;
     my @matches = @{$nodes_ref} > 1 ? @{$nodes_ref}[ 1 .. $#{$nodes_ref} ] : ();
     return
@@ -39,6 +40,10 @@ sub violates {
 1;
 
 __END__
+
+#----------------------------------------------------------------------------
+
+=pod
 
 =head1 NAME
 
@@ -56,8 +61,12 @@ base.
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
 
+=head1 COPYRIGHT
+
 Copyright (c) 2005 Jeffrey Ryan Thalhammer.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
 can be found in the LICENSE file included with this module.
+
+=cut

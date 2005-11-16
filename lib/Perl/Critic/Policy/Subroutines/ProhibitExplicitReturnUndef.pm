@@ -23,7 +23,7 @@ my $expl = [ 199 ];
 
 #---------------------------------------------------------------------------
 
-sub priority   { return $PRIORITY_HIGHEST }
+sub severity   { return $SEVERITY_HIGHEST }
 sub applies_to { return 'PPI::Token::Word' }
 
 #---------------------------------------------------------------------------
@@ -65,14 +65,14 @@ wanted it to be false.
       my $file = shift;
       -f $file || return undef;  #file doesn't exist!
 
-      #Continue reading file... 
+      #Continue reading file...
   }
 
   #and later...
 
   if ( my @data = read_file($filename) ){
 
-      # if $filename doesn't exist, 
+      # if $filename doesn't exist,
       # @data will be (undef),
       # but I'll still be in here!
 
@@ -96,7 +96,7 @@ also false).
       my $file = shift;
       -f $file || return;  #DWIM!
 
-      #Continue reading file... 
+      #Continue reading file...
   }
 
 =head1 NOTES

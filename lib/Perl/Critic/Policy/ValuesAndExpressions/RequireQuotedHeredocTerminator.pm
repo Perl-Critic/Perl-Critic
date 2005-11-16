@@ -16,19 +16,21 @@ use base 'Perl::Critic::Policy';
 our $VERSION = '0.13';
 $VERSION = eval $VERSION;    ## no critic
 
+#---------------------------------------------------------------------------
+
 my $heredoc_rx = qr/ \A << ["|'] .* ['|"] \z /x;
 my $desc       = q{Heredoc terminator must be quoted};
 my $expl       = [62];
 
 #---------------------------------------------------------------------------
 
-sub applies_to {
-    return 'PPI::Token::HereDoc';
-}
+sub severity   { return $SEVERITY_MEDIUM }
+sub applies_to { return 'PPI::Token::HereDoc' }
+
+#---------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-
     if ( $elem !~ $heredoc_rx ) {
         return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
     }
@@ -38,6 +40,10 @@ sub violates {
 1;
 
 __END__
+
+#---------------------------------------------------------------------------
+
+=pod
 
 =head1 NAME
 
@@ -68,8 +74,12 @@ L<Perl::Critic::Policy::ValuesAndExpressions::RequireUpperCaseHeredocTerminator>
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
 
+=head1 COPYRIGHT
+
 Copyright (c) 2005 Jeffrey Ryan Thalhammer.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
 can be found in the LICENSE file included with this module.
+
+=cut

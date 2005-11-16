@@ -29,7 +29,7 @@ $exempt{'_'} = 1;                         #This is used with 'stat'
 
 #---------------------------------------------------------------------------
 
-sub priority   { return $PRIORITY_LOW }
+sub severity   { return $SEVERITY_LOW }
 sub applies_to { return 'PPI::Token::Magic' }
 
 #---------------------------------------------------------------------------
@@ -39,7 +39,7 @@ sub violates {
     if ( !exists $exempt{$elem} ) {
         return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
     }
-    return;                               #ok!
+    return;  #ok!
 }
 
 1;

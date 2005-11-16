@@ -16,13 +16,16 @@ use base 'Perl::Critic::Policy';
 our $VERSION = '0.13';
 $VERSION = eval $VERSION;    ## no critic
 
+#----------------------------------------------------------------------------
+
 my $expl = q{Use a bareword instead};
 
 #----------------------------------------------------------------------------
 
-sub applies_to {
-    return 'PPI::Statement::Include';
-}
+sub severity   { return $SEVERITY_HIGH }
+sub applies_to { return 'PPI::Statement::Include' }
+
+#----------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
@@ -40,6 +43,8 @@ sub violates {
 1;
 
 __END__
+
+#----------------------------------------------------------------------------
 
 =pod
 

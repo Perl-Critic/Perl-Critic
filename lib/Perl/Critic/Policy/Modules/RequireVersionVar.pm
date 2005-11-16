@@ -24,7 +24,7 @@ my $expl = [ 404 ];
 
 #---------------------------------------------------------------------------
 
-sub priority   { return $PRIORITY_LOW }
+sub severity   { return $SEVERITY_LOW }
 sub applies_to { return 'PPI::Document' }
 
 #---------------------------------------------------------------------------
@@ -87,7 +87,7 @@ Every Perl file (modules, libraries, and scripts) should have a
 C<$VERSION> variable.  The C<$VERSION> allows clients to insist on a
 particular revision of your file like this:
 
-  use SomeModule 2.4;  #Only loads version 2.4 
+  use SomeModule 2.4;  #Only loads version 2.4
 
 This Policy scans your file for any package variable named
 C<$VERSION>.  I'm assuming that you are using C<strict>, so you'll
@@ -96,13 +96,13 @@ have to declare it like one of these:
   our $VERSION = 1.01;
   $MyPackage::VERSION = 1.01;
   use vars qw($VERSION);
- 
+
 A common practice is to use the C<$Revision$> keyword to automatically
 define the C<$VERSION> variable like this:
 
   our ($VERSION) = '$Revision$' =~ m{ \$Revision: \s+ (\S+) }x;
 
-=head1 NOTES 
+=head1 NOTES
 
 Conway recommends using the C<version> pragma instead of raw numbers
 or 'v-strings.'  However, this Policy only insists that the

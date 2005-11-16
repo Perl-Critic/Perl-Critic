@@ -23,7 +23,7 @@ my $expl = [194];
 
 #---------------------------------------------------------------------------
 
-sub priority   { return $PRIORITY_HIGHEST }
+sub severity   { return $SEVERITY_HIGHEST }
 sub applies_to { return 'PPI::Statement::Sub' }
 
 #---------------------------------------------------------------------------

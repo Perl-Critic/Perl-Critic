@@ -24,7 +24,7 @@ my $expl = [ 73, 75 ];
 
 #---------------------------------------------------------------------------
 
-sub priority   { return $PRIORITY_MEDIUM }
+sub severity   { return $SEVERITY_MEDIUM }
 sub applies_to {
     return qw( PPI::Token::Symbol
                PPI::Statement::Variable
@@ -85,7 +85,7 @@ Conway suggests avoiding package variables completely, because they
 expose your internals to other packages.  Never use a package variable
 when a lexical variable will suffice.  If your package needs to keep
 some dynamic state, consider using an object or closures to keep the
-state private.  
+state private.
 
 This policy assumes that you're using C<strict vars> so that naked
 variable declarations are not package variables by default.  Thus, it

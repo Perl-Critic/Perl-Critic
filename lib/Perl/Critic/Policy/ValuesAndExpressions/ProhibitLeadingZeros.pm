@@ -16,15 +16,18 @@ use base 'Perl::Critic::Policy';
 our $VERSION = '0.13';
 $VERSION = eval $VERSION;    ## no critic
 
+#---------------------------------------------------------------------------
+
 my $leading_rx = qr{\A -? 0+ \d+ \z }x;
 my $desc       = q{Integer with leading zeros};
-my $expl       = [55];
+my $expl       = [ 55 ];
 
 #---------------------------------------------------------------------------
 
-sub applies_to {
-    return 'PPI::Token::Number';
-}
+sub severity   { return $SEVERITY_HIGHEST }
+sub applies_to { return 'PPI::Token::Number' }
+
+#---------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
@@ -37,6 +40,10 @@ sub violates {
 1;
 
 __END__
+
+#---------------------------------------------------------------------------
+
+=pod
 
 =head1 NAME
 
@@ -54,8 +61,12 @@ you really want, its better to use C<oct> and make it obvious.
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
 
+=head1 COPYRIGHT
+
 Copyright (c) 2005 Jeffrey Ryan Thalhammer.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
 can be found in the LICENSE file included with this module.
+
+=cut

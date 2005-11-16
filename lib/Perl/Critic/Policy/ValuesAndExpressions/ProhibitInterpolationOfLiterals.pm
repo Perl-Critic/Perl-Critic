@@ -16,8 +16,19 @@ use base 'Perl::Critic::Policy';
 our $VERSION = '0.13';
 $VERSION = eval $VERSION;    ## no critic
 
+#---------------------------------------------------------------------------
+
 my $desc = q{Useless interpolation of literal string};
 my $expl = [51];
+
+#---------------------------------------------------------------------------
+
+sub severity   { return $SEVERITY_LOW }
+
+sub applies_to {
+    return qw(PPI::Token::Quote::Double
+              PPI::Token::Quote::Interpolate);
+}
 
 #---------------------------------------------------------------------------
 
@@ -39,10 +50,6 @@ sub new {
 }
 
 #---------------------------------------------------------------------------
-
-sub applies_to {
-    return 'PPI::Token::Quote::Double', 'PPI::Token::Quote::Interpolate';
-}
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
@@ -67,6 +74,8 @@ sub _has_interpolation {
 1;
 
 __END__
+
+#---------------------------------------------------------------------------
 
 =pod
 

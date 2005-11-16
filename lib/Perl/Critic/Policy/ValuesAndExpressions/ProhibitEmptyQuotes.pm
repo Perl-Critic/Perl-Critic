@@ -16,15 +16,18 @@ use base 'Perl::Critic::Policy';
 our $VERSION = '0.13';
 $VERSION = eval $VERSION;    ## no critic
 
+#---------------------------------------------------------------------------
+
 my $empty_rx = qr{\A ["|'] \s* ['|"] \z}x;
 my $desc     = q{Quotes used with an empty string};
-my $expl     = [53];
+my $expl     = [ 53 ];
 
 #---------------------------------------------------------------------------
 
-sub applies_to {
-    return 'PPI::Token::Quote';
-}
+sub severity   { return $SEVERITY_LOW }
+sub applies_to { return 'PPI::Token::Quote' }
+
+#---------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
@@ -37,6 +40,10 @@ sub violates {
 1;
 
 __END__
+
+#---------------------------------------------------------------------------
+
+=pod
 
 =head1 NAME
 
@@ -61,7 +68,7 @@ like this.  Use the C<x> operator to repeat characters.
   $SPACE = q{ };
   $message = $SPACE x 5;  #best
 
-=head1 SEE ALSO 
+=head1 SEE ALSO
 
 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitNoisyStrings>
 
@@ -69,8 +76,12 @@ L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitNoisyStrings>
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
 
+=head1 COPYRIGHT
+
 Copyright (c) 2005 Jeffrey Ryan Thalhammer.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
 can be found in the LICENSE file included with this module.
+
+=cut

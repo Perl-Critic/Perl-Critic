@@ -25,7 +25,7 @@ my $expl  = [177];
 
 #---------------------------------------------------------------------------
 
-sub priority   { return $PRIORITY_MEDIUM }
+sub severity   { return $SEVERITY_MEDIUM }
 sub applies_to { return 'PPI::Statement::Sub' }
 
 #---------------------------------------------------------------------------

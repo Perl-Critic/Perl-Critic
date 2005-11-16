@@ -16,8 +16,15 @@ use base 'Perl::Critic::Policy';
 our $VERSION = '0.13';
 $VERSION = eval $VERSION;    ## no critic
 
+#----------------------------------------------------------------------------
+
 my $expl = q{Violates encapsulation};
 my $desc = q{Code not contained in explicit package};
+
+#----------------------------------------------------------------------------
+
+sub severity   { return $SEVERITY_HIGH  }
+sub applies_to { return 'PPI::Document' }
 
 #----------------------------------------------------------------------------
 
@@ -33,9 +40,7 @@ sub new {
     return $self;
 }
 
-sub applies_to {
-    return 'PPI::Document';
-}
+#----------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
@@ -59,6 +64,8 @@ sub _is_script {
 1;
 
 __END__
+
+#----------------------------------------------------------------------------
 
 =pod
 
