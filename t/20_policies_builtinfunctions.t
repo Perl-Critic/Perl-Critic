@@ -8,7 +8,6 @@
 use strict;
 use warnings;
 use Test::More tests => 23;
-use Perl::Critic::Config;
 use Perl::Critic;
 
 # common P::C testing tools

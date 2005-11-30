@@ -20,18 +20,8 @@ my $samples_dir      = "t/samples";
 my $config_none      = "$samples_dir/perlcriticrc.none";
 my $config_all       = "$samples_dir/perlcriticrc.all";
 my $config_levels    = "$samples_dir/perlcriticrc.levels";
-my @all_policies     = Perl::Critic::Config::site_policies();
+my @all_policies     = Perl::Critic::Config::native_policies();
 my $total_policies   = scalar @all_policies;
-
-#--------------------------------------------------------------
-# Test all-off config
-$c = Perl::Critic->new( -profile => $config_none);
-is(scalar @{$c->policies}, 0);
-
-#--------------------------------------------------------------
-# Test all-off config w/ priorities
-$c = Perl::Critic->new( -profile => $config_none, -priority => 2);
-is(scalar @{$c->policies}, 0);
 
 #--------------------------------------------------------------
 # Test all-on config
@@ -39,29 +29,36 @@ $c = Perl::Critic->new( -profile => $config_all);
 is(scalar @{$c->policies}, $total_policies);
 
 #--------------------------------------------------------------
-# Test all-on config w/ priorities
-$c = Perl::Critic->new( -profile => $config_all, -priority => 2);
+# Test all-on config w/ severity
+$c = Perl::Critic->new( -profile => $config_all);
 is(scalar @{$c->policies}, $total_policies);
 
 #--------------------------------------------------------------
-# Test config w/ multiple priority levels
-$c = Perl::Critic->new( -profile => $config_levels, -priority => 1);
-is(scalar @{$c->policies}, 3);
+# Test all-off config
+$c = Perl::Critic->new( -profile => $config_none);
+is(scalar @{$c->policies}, 0);
 
-$c = Perl::Critic->new( -profile => $config_levels, -priority => 2);
-is(scalar @{$c->policies}, 4);
+#--------------------------------------------------------------
+# Test all-off config w/ severity
+$c = Perl::Critic->new( -profile => $config_none, -severity => 2);
+is(scalar @{$c->policies}, 0);
 
-$c = Perl::Critic->new( -profile => $config_levels, -priority => 3);
-is(scalar @{$c->policies}, 6);
-
-$c = Perl::Critic->new( -profile => $config_levels, -priority => 4);
-is(scalar @{$c->policies}, 7);
-
-$c = Perl::Critic->new( -profile => $config_levels, -priority => 5);
-is(scalar @{$c->policies}, 11);
-
-$c = Perl::Critic->new( -profile => $config_levels, -priority => 99);
+#--------------------------------------------------------------
+# Test config w/ multiple severity levels
+$c = Perl::Critic->new( -profile => $config_levels, -severity => 1);
 is(scalar @{$c->policies}, $total_policies);
+
+$c = Perl::Critic->new( -profile => $config_levels, -severity => 2);
+is(scalar @{$c->policies}, 40);
+
+$c = Perl::Critic->new( -profile => $config_levels, -severity => 3);
+is(scalar @{$c->policies}, 30);
+
+$c = Perl::Critic->new( -profile => $config_levels, -severity => 4);
+is(scalar @{$c->policies}, 20);
+
+$c = Perl::Critic->new( -profile => $config_levels, -sverity => 5);
+is(scalar @{$c->policies}, 10);
 
 #--------------------------------------------------------------
 # Test config as hash
@@ -112,7 +109,7 @@ PerlCriticTestUtils::block_perlcriticrc();
 $c = Perl::Critic->new();
 is(scalar @{$c->policies}, $total_policies);
 
-$c = Perl::Critic->new( -priority => 2);
+$c = Perl::Critic->new( -severity => 1);
 is(scalar @{$c->policies}, $total_policies);
 
 #--------------------------------------------------------------

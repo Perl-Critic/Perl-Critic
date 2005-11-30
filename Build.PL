@@ -26,13 +26,15 @@ my $builder = Module::Build->new(
 		     'IO::String'            => 0,
 		     'String::Format'        => 1.13,
                      'Module::Pluggable'     => 0,
-
 	            },
 
   build_requires => {'Test::More'            => 0,
                     },
 
-  recommends     => {'Perl::Tidy'            => 0,},
+  recommends     => {'Perl::Tidy'            => 0,
+                     'Test::Perl::Critic'    => 0,
+                    },
+
   script_files   => ['bin/perlcritic'],
 );
 

@@ -23,7 +23,7 @@ my $expl = [ 236 ];
 
 #----------------------------------------------------------------------------
 
-sub severity   { return $SEVERITY_LOW }
+sub severity   { return $SEVERITY_MEDIUM }
 sub applies_to { return 'PPI::Token::Regexp' }
 
 #----------------------------------------------------------------------------

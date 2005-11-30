@@ -11,7 +11,6 @@ use strict;
 use warnings;
 use File::Spec;
 use Config::Tiny;
-use Module::Pluggable (search_path => ['Perl::Critic::Policy'], require => 1);
 use English qw(-no_match_vars);
 use List::MoreUtils qw(any none);
 use Perl::Critic::Utils;
@@ -20,8 +19,33 @@ use Carp qw(carp croak);
 our $VERSION = '0.13';
 $VERSION = eval $VERSION;    ## no critic
 
-#This finds all Perl::Critic::Policy::* modules and requires them.
-my @SITE_POLICIES = plugins();  #Imported from Module::Pluggable
+# Globals.  Ick!
+my $NAMESPACE = $EMPTY;
+my @SITE_POLICIES = ();
+
+#-------------------------------------------------------------------------
+
+sub import {
+
+    my ( $class, %args ) = @_;
+    $NAMESPACE = $args{-namespace} || 'Perl::Critic::Policy';
+
+    eval {
+        require Module::Pluggable;
+        Module::Pluggable->import( search_path => $NAMESPACE, require => 1);
+        @SITE_POLICIES = plugins();  #Exported by  Module::Pluggable
+    };
+
+
+    if ( $EVAL_ERROR ) {
+        croak qq{Can't load Policies from namespace '$NAMESPACE': $EVAL_ERROR};
+    }
+    elsif ( ! @SITE_POLICIES ) {
+        carp qq{No Policies found in namespace '$NAMESPACE'};
+    }
+
+    return 1;
+}
 
 #-------------------------------------------------------------------------
 
@@ -29,23 +53,40 @@ sub new {
 
     my ( $class, %args ) = @_;
     my $self = bless {}, $class;
-    $self->{_policies} = [];
+    $self->{_policies}  = [];
 
     # Set defaults
-    my $profile_path = $args{-profile}  || $EMPTY;
-    my $min_priority = $args{-priority} || 1;
-    my $excludes_ref = $args{-exclude}  || [];  #empty array
-    my $includes_ref = $args{-include}  || [];  #empty array
+    my $profile_path = $args{-profile}   || $EMPTY;
+    my $min_severity = $args{-severity}  || $SEVERITY_HIGHEST;
+    my $excludes_ref = $args{-exclude}   || [];  #empty array
+    my $includes_ref = $args{-include}   || [];  #empty array
+
 
     # Allow null config.  This is useful for testing
     return $self if $profile_path eq 'NONE';
 
     # Load user's profile, then filter and create Policies
     my $profile_ref = _load_profile( $profile_path ) || {};
-    while ( my ( $policy, $params ) = each %{ $profile_ref } ) {
+    my $merged_ref  = _merge_profile( $profile_ref );
+
+    while ( my ( $policy, $params ) = each %{ $merged_ref } ) {
+
+        # Screen against include and exclude patterns.
+        # Note that the exclusions have higher precedence.
         next if any  { $policy =~ m{ $_ }imx } @{ $excludes_ref };
         next if none { $policy =~ m{ $_ }imx } @{ $includes_ref };
-        next if ( $params->{priority} ||= 0 ) > $min_priority;
+
+        # Determine severity
+        # TODO: This is awkward to read.  Consider revising
+        my $default_severity = $policy->severity();
+        my $user_severity    = $params->{severity} || $default_severity;
+        next if $user_severity < $min_severity;
+
+        if ( $default_severity != $user_severity ) {
+            _redefine_severity( $policy, $user_severity );
+        }
+
+        # Finally, create Policy
         $self->add_policy( -policy => $policy, -config => $params );
     }
 
@@ -60,7 +101,7 @@ sub add_policy {
     my ( $self, %args ) = @_;
     my $policy      = $args{-policy} || return;
     my $config      = $args{-config} || {};
-    my $module_name = _long_name($policy);
+    my $module_name = _long_name($policy, $NAMESPACE);
 
     eval {
         my $policy_obj  = $module_name->new( %{$config} );
@@ -88,24 +129,33 @@ sub policies {
 sub _load_profile {
 
     my $profile = shift || $EMPTY;
-    my $ref_type = ref $profile;
+    my $ref_type = ref $profile || 'DEFAULT';
 
-    #Load profile in various ways
-    my $user_prefs  =  $ref_type eq 'SCALAR' ?  _load_from_string( $profile )
-                    :  $ref_type eq 'ARRAY'  ?  _load_from_array( $profile )
-                    :  $ref_type eq 'HASH'   ?  _load_from_hash( $profile )
-                    :                           _load_from_file( $profile );
+    my %handlers = (
+        SCALAR  => \&_load_from_string,
+        ARRAY   => \&_load_from_array,
+        HASH    => \&_load_from_hash,
+        DEFAULT => \&_load_from_file,
+    );
 
-    #Apply profile
-    my %final = ();
+    my $handler_ref = $handlers{$ref_type};
+    croak qq{Can't create Config from $ref_type} if ! $handler_ref;
+    return $handler_ref->($profile);
+}
+
+sub _merge_profile {
+
+    my $profile_ref = shift || {};
+
+    my %merged = ();
     for my $policy ( @SITE_POLICIES ) {
-        my $short_name = _short_name($policy);
-        next if exists $user_prefs->{"-$short_name"};
-        my $params = $user_prefs->{$short_name} || {};
-	$final{ $policy } = $params;
+        my $short_name = _short_name($policy, $NAMESPACE);
+        next if exists $profile_ref->{"-$short_name"};
+        my $params = $profile_ref->{$short_name} || {};
+	$merged{ $policy } = $params;
     }
 
-    return \%final;
+    return \%merged;
 }
 
 #------------------------------------------------------------------------
@@ -142,8 +192,7 @@ sub _load_from_hash {
 #-----------------------------------------------------------------------------
 
 sub _long_name {
-    my $module_name = shift;
-    my $namespace = 'Perl::Critic::Policy';
+    my ($module_name, $namespace) = @_;
     if ( $module_name !~ m{ \A $namespace }mx ) {
         $module_name = $namespace . q{::} . $module_name;
     }
@@ -151,10 +200,30 @@ sub _long_name {
 }
 
 sub _short_name {
-    my $module_name = shift;
-    my $namespace = 'Perl::Critic::Policy';
+    my ($module_name, $namespace) = @_;
     $module_name =~ s{\A $namespace ::}{}mx;
     return $module_name;
+}
+
+#----------------------------------------------------------------------------
+
+# This is a very sneaky way to override the default severity of each
+# policy.  To make it simple for Policy module developers to declare
+# the severity of their Policies, severity() is just a static method.
+# But we can't just assign to it like you would do with an accessor
+# method because it has no state.  Instead, we redefine with a new
+# static method that returns the value specified by the user
+# (i.e. from the .perlcriticrc).  I like this because it keeps the
+# severity data inside the Policy module where other clients can
+# easily access it (such as P::C::Violation).
+
+sub _redefine_severity {
+    my ( $policy, $severity ) = @_;
+    no strict 'refs';
+    no warnings 'redefine';
+    my $code_ref = eval "sub {return $severity}";  ## no critic
+    *{ $policy . '::severity' } = $code_ref;
+    return 1;
 }
 
 #----------------------------------------------------------------------------
@@ -173,7 +242,7 @@ sub find_profile_path {
 
     #Check usual environment vars
     for my $var (qw(HOME USERPROFILE HOMESHARE)) {
-        next if !defined $ENV{$var};
+        next if ! defined $ENV{$var};
         my $path = File::Spec->catfile( $ENV{$var}, $rc_file );
         return $path if -f $path;
     }
@@ -185,8 +254,9 @@ sub find_profile_path {
 #----------------------------------------------------------------------------
 
 sub site_policies {
-    return @SITE_POLICIES
+    return @SITE_POLICIES;
 }
+
 
 sub native_policies {
     return qw(
@@ -248,22 +318,22 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Config - Load Perl::Critic user-preferences
+Perl::Critic::Config - Find and load Perl::Critic user-preferences
 
 =head1 DESCRIPTION
 
 Perl::Critic::Config takes care of finding and processing
-user-preferences for L<Perl::Critic>.  The Config dictates which
+user-preferences for L<Perl::Critic>.  The Config object defines which
 Policy modules will be loaded into the Perl::Critic engine and how
-they should be configured.  You should never need to instantiate
-Perl::Critic::Config directly as the L<Perl::Critic> constructor will
-do it for you.
+they should be configured.  You should never really need to
+instantiate Perl::Critic::Config directly as the L<Perl::Critic>
+constructor will do it for you.
 
 =head1 CONSTRUCTOR
 
 =over 8
 
-=item new ( [ -profile => $FILE, -priority => $N, -include => \@PATTERNS, -exclude => \@PATTERNS ] )
+=item new ( [ -profile => $FILE, -severity => $N, -include => \@PATTERNS, -exclude => \@PATTERNS ] )
 
 Returns a reference to a new Perl::Critic::Config object, which is
 basically just a blessed hash of configuration parameters.  There
@@ -276,32 +346,30 @@ defined, Perl::Critic::Config attempts to find a F<.perlcriticrc>
 configuration file in the current directory, and then in your home
 directory.  Alternatively, you can set the C<PERLCRITIC> environment
 variable to point to a file in another location.  If a configuration
-file can't be found, or if C<$FILE> is an empty string, then it
-defaults to include all the Policy modules that ship with
-Perl::Critic. See L<"CONFIGURATION"> for more information.
+file can't be found, or if C<$FILE> is an empty string, then all the
+modules found in the Perl::Critic::Policy namespace will be loaded
+with their default configuration.  See L<"CONFIGURATION"> for more
+information.
 
-B<-priority> is the maximum priority value of Policies that should be
-added to the Perl::Critic::Config.  1 is the "highest" priority, and
-all numbers larger than 1 have "lower" priority. Once the
-user-preferences have been read from the C<-profile>, all Policies
-that are configured with a priority greater than C<$N> will be removed
-from this Config.  For a given C<-profile>, increasing C<$N> will
-result in more Policy violations.  The default C<-priority> is 1.  See
-L<"CONFIGURATION"> for more information.
+B<-severity> is the minimum severity level.  Only Policy modules that
+have a severity greater than C<$N> will be loaded into this Config.
+Severity values are integers ranging from 1 (least severe) to 5 (most
+severe).  The default is 5.  For a given C<-profile>, decreasing the
+C<-severity> will usually result in more Policy violations.  Users can
+redefine the severity level for any Policy in their F<.perlcriticrc>
+file.  See L<"CONFIGURATION"> for more information.
 
-B<-include> is a reference to a list of C<@PATTERNS>.  Once the
-user-preferences have been read from the C<-profile>, all Policies
-that do not match at least one C<m/$PATTERN/imx> will be removed
-from this Config.  Using the C<-include> option causes the <-priority>
-option to be ignored.
+B<-include> is a reference to a list of string C<@PATTERNS>.  Only
+Policies that match at least one C<m/$PATTERN/imx> will be loaded into
+this Config.  Using the C<-include> option causes the <-severity>
+option to be siltently ignored.
 
-B<-exclude> is a reference to a list of C<@PATTERNS>.  Once the
-user-preferences have been read from the C<-profile>, all Policies
-that match at least one C<m/$PATTERN/imx> will be removed from
-this Config.  Using the C<-exclude> option causes the <-priority>
-option to be ignored.  The C<-exclude> patterns are applied after the
-<-include> patterns, therefore, the C<-exclude> patterns take
-precedence.
+B<-exclude> is a reference to a list of string C<@PATTERNS>.  Any
+Policy that matches at least one C<m/$PATTERN/imx> will not be loaded
+into this Config.  Using the C<-exclude> option causes the <-severity>
+option to be siltently ignored.  The C<-exclude> patterns are applied
+before the <-include> patterns, therefore, the C<-exclude> patterns
+take precedence if a Policy happens to match both patterns.
 
 =back
 
@@ -311,11 +379,26 @@ precedence.
 
 =item add_policy( -policy => $policy_name, -config => \%config_hash )
 
-TODO: Document this mehtod
+Loads a Policy object and adds into this Config.  If the object
+cannot be instantiated, it will throw a warning and return a false
+value.  Otherwise, it returns a reference to this Config.  Arguments
+are key-value pairs as follows:
+
+B<-policy> is the name of a L<Perl::Critic::Policy> subclass
+module.  The C<'Perl::Critic::Policy'> portion of the name can be
+omitted for brevity.  This argument is required.
+
+B<-config> is an optional reference to a hash of Policy configuration
+parameters (Note that this is B<not> a Perl::Critic::Config object). The
+contents of this hash reference will be passed into to the constructor
+of the Policy module.  See the documentation in the relevant Policy
+module for a description of the arguments it supports.
 
 =item policies( void )
 
-TODO: Document this method
+Returns a list containing references to all the Policy objects that
+have been loaded into this Config.  Objects will be in the order that
+they were loaded.
 
 =back
 
@@ -354,9 +437,9 @@ Perl::Critic::Config will look for this file in the current directory
 first, and then in your home directory.  Alternatively, you can set
 the PERLCRITIC environment variable to explicitly point to a different
 file in another location.  If none of these files exist, and the
-C<-profile> option is not given to the constructor,
-Perl::Critic::Config defaults to inlucde all the policies that are
-shipped with Perl::Critic.
+C<-profile> option is not given to the constructor, then all the
+modules that are found in the Perl::Critic::Policy namespace will be
+loaded with their default configuration.
 
 The format of the configuration file is a series of named sections
 that contain key-value pairs separated by '='. Comments should
@@ -365,7 +448,7 @@ name-value pairs if you desire.  The general recipe is a series of
 blocks like this:
 
     [Perl::Critic::Policy::Category::PolicyName]
-    priority = 1
+    severity = 1
     arg1 = value1
     arg2 = value2
 
@@ -377,12 +460,14 @@ brevity, you can ommit the C<'Perl::Critic::Policy'> part of the
 module name.  All Policy modules must be a subclass of
 L<Perl::Critic::Policy>.
 
-C<priority> is the level of importance you wish to assign to this
-policy.  1 is the "highest" priority level, and all numbers greater
-than 1 have increasingly "lower" priority.  Only those policies with a
-priority less than or equal to the C<-priority> value given to the
-constructor will be loaded.  The priority can be an arbitrarily large
-positive integer.  If the priority is not defined, it defaults to 1.
+C<severity> is the level of importance you wish to assign to the
+Policy.  All Policy modules are defined with a default severity value
+ranging from 1 (least severe) to 5 (most severe).  However, you may
+disagree with the default severity and choose to give it a higher or
+lower severity, based on your own coding philosophy.
+Perl::Critic::Config will only load Policy modules that have a
+severity greater than the C<-severity> option that is given to the
+constructor.
 
 The remaining key-value pairs are configuration parameters for that
 specific Policy and will be passed into the constructor of the
@@ -391,39 +476,44 @@ modules do not support arguments, and those that do should have
 reasonable defaults.  See the documentation on the appropriate Policy
 module for more details.
 
-By default, all the policies that are distributed with Perl::Critic
-are added to the Config.  Rather than assign a priority level to a
-Policy, you can simply "turn off" a Policy by prepending a '-' to the
-name of the module in the config file.  In this manner, the Policy
-will never be loaded, regardless of the C<-priority> given to the
-constructor.
+By default, all the modules that are found in the Perl::Critic::Policy
+namespace are loaded into the Config.  Rather than assign a severity
+level to each Policy, you can simply "turn off" a Policy by prepending
+a '-' to the name of the module in your configuration file.  In this
+manner, the Policy will never be loaded, regardless of the
+C<-severity> given to the Perl::Critic::Config constructor.
 
 
 A simple configuration might look like this:
 
     #--------------------------------------------------------------
-    # These are really important, so always load them
+    # I think these are really important, so always load them
 
     [TestingAndDebugging::RequirePackageStricture]
-    priority = 1
+    severity = 5
 
     [TestingAndDebugging::RequirePackageWarnings]
-    priority = 1
+    severity = 5
 
     #--------------------------------------------------------------
-    # These are less important, so only load when asked
+    # I think these are less important, so only load when asked
 
     [Variables::ProhibitPackageVars]
-    priority = 2
+    severity = 2
 
     [ControlStructures::ProhibitPostfixControls]
-    priority = 2
+    allow = if unless  #A policy-specific configuration
+    severity = 2
 
     #--------------------------------------------------------------
-    # I do not agree with these, so never load them
+    # I do not agree with these at all, so never load them
 
     [-NamingConventions::ProhibitMixedCaseVars]
     [-NamingConventions::ProhibitMixedCaseSubs]
+
+    #--------------------------------------------------------------
+    # For all other Policies, I accept the default severity,
+    # so no additional configuration is required for them.
 
 =head1 AUTHOR
 

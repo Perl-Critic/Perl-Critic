@@ -23,7 +23,7 @@ my $expl = [ 51 ];
 
 #---------------------------------------------------------------------------
 
-sub severity   { return $SEVERITY_LOW }
+sub severity   { return $SEVERITY_LOWEST }
 sub applies_to {
     return 'PPI::Token::Quote::Single', 'PPI::Token::Quote::Literal';
 }

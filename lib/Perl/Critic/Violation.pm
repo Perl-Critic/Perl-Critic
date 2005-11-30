@@ -22,7 +22,7 @@ $VERSION = eval $VERSION;    ## no critic
 
 #Class variables...
 our $FORMAT = "%m at line %l, column %c. %e.\n"; #Default stringy format
-our %DIAGNOSTICS = ();  #Cache of diagnositc messages
+my %DIAGNOSTICS = ();  #Cache of diagnositc messages
 
 #----------------------------------------------------------------------------
 
@@ -156,16 +156,15 @@ sub _get_diagnostics {
 
     my $file = shift;
 
-    # Extract POD out to a filehandle
-    my $handle = IO::String->new();
-    my $parser = Pod::PlainText->new();
+    # Extract POD into a string
+    my $pod_string = $EMPTY;
+    my $handle     = IO::String->new( \$pod_string);
+    my $parser     = Pod::PlainText->new();
     $parser->select('DESCRIPTION');
     $parser->parse_from_file($file, $handle);
-
-    # Slurp POD back in
-    $handle->pos(0);                              #Rewind to the beginning.
-    <$handle>;                                    #Throw away header
-    return do { local $RS = undef; <$handle> };   #Slurp in the rest
+    #Remove header from documentation string.
+    $pod_string =~ s{ \A \s* DESCRIPTION \s* \n}{}mx;
+    return $pod_string;
 }
 
 1;
