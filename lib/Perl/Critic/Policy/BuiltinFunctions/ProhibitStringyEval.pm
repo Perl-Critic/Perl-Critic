@@ -23,7 +23,7 @@ my $expl = [161];
 
 #----------------------------------------------------------------------------
 
-sub priority   { return $PRIORITY_HIGH  }
+sub severity   { return $SEVERITY_HIGHEST  }
 sub applies_to { return 'PPI::Token::Word' }
 
 #----------------------------------------------------------------------------
