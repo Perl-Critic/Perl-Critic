@@ -36,7 +36,7 @@ require 'some_library.pl';  ## no critic
 print $crap if $condition;  ## no critic
 END_PERL
 
-is( critique(\$code, {-profile => $profile} ), 0);
+is( critique(\$code, {-profile => $profile, -severity => 1} ), 0);
 
 #----------------------------------------------------------------
 
@@ -59,7 +59,7 @@ $baz = $nuts;
 
 END_PERL
 
-is( critique(\$code, {-profile => $profile} ), 0);
+is( critique(\$code, {-profile => $profile, -severity => 1} ), 0);
 
 #----------------------------------------------------------------
 
@@ -78,7 +78,7 @@ for my $foo (@list) {
 my $noisy = '!';
 END_PERL
 
-is( critique(\$code, {-profile => $profile} ), 1);
+is( critique(\$code, {-profile => $profile, -severity => 1} ), 1);
 
 #----------------------------------------------------------------
 
@@ -99,7 +99,7 @@ my $noisy = '!';
 
 END_PERL
 
-is( critique(\$code, {-profile => $profile} ), 1);
+is( critique(\$code, {-profile => $profile, -severity => 1} ), 1);
 
 #----------------------------------------------------------------
 
@@ -121,7 +121,7 @@ my $empty = '';
 
 END_PERL
 
-is( critique(\$code, {-profile => $profile} ), 2);
+is( critique(\$code, {-profile => $profile, -severity => 1} ), 2);
 
 #----------------------------------------------------------------
 
@@ -141,7 +141,7 @@ my $noisy = '!';
 my $empty = '';
 END_PERL
 
-is( critique(\$code, {-profile => $profile} ), 0);
+is( critique(\$code, {-profile => $profile, -severity => 1} ), 0);
 
 #----------------------------------------------------------------
 
@@ -158,7 +158,7 @@ my $empty = '';        ## no critic
 my $empty = '';        ## use critic
 END_PERL
 
-is( critique(\$code, {-profile => $profile} ), 1);
+is( critique(\$code, {-profile => $profile, -severity => 1} ), 1);
 
 #----------------------------------------------------------------
 
@@ -179,7 +179,7 @@ my $noisy = '!';
 my $empty = '';
 END_PERL
 
-is( critique(\$code, {-profile => $profile} ), 4);
+is( critique(\$code, {-profile => $profile, -severity => 1} ), 4);
 
 #----------------------------------------------------------------
 
@@ -201,7 +201,9 @@ my $noisy = '!';
 my $empty = '';
 END_PERL
 
-is( critique(\$code, {-profile => $profile, -force => 1 } ), 8);
+is( critique(\$code, {-profile  => $profile,
+                      -severity => 1,
+                      -force    => 1 } ), 8);
 
 #----------------------------------------------------------------
 
@@ -220,7 +222,9 @@ my $noisy = '!';
 my $empty = '';
 END_PERL
 
-is( critique(\$code, {-profile => $profile, -force => 1 } ), 4);
+is( critique(\$code, {-profile  => $profile,
+                      -severity => 1,
+                      -force    => 1 } ), 4);
 
 #----------------------------------------------------------------
 
@@ -241,4 +245,6 @@ my $noisy = '!';
 my $empty = '';
 END_PERL
 
-is( critique(\$code, {-profile => $profile, -force => 1 } ), 4);
+is( critique(\$code, {-profile  => $profile,
+                      -severity => 1,
+                      -force    => 1 } ), 4);
