@@ -88,15 +88,13 @@ sub get_input {
 
 sub critique {
 
-    my $config = shift;
+    my ($config, @files) = @_;
     my $count = 0;
 
-    #Construct Critic
     my $critic = Perl::Critic->new( %{$config} );
-
-    for my $file (@_) {
-	my @violations = $critic->critique($file);
-        print_report($file, $config->{-verbose}, @violations);
+    for my $file ( @files ) {
+        my @violations = $critic->critique( $file );
+        render_report($file, $config, @violations);
         $count += scalar @violations;
     }
 
@@ -105,10 +103,14 @@ sub critique {
 
 #----------------------------------------------------------------
 
-sub print_report {
-    my ($file, $verbosity, @violations) = @_;
+sub render_report {
+
+    my ($file, $config, @violations) = @_;
+
     $file = -f $file ? $file : 'stdin';
-    $verbosity ||= @ARGV > 1 ? 3 : 2;
+    my $verbosity = $config{-verbosity} || @ARGV > 1 ? 3 : 2;
+    my $top = exists $config{-top} ? ($config{-top} || 20) : undef;
+
 
     my %FORMAT_OF = (
        1 => "%f:%l:%c:%m\n",
@@ -118,14 +120,21 @@ sub print_report {
        5 => "[%p] %m at line %l, column %c. %e.\n%d\n",
     );
 
-    my $fmt = $verbosity =~ m{ \A [+-]? \d+ \z }mx ? 
+    my $fmt = $verbosity =~ m{ \A [+-]? \d+ \z }mx ?
       ($FORMAT_OF{abs $verbosity} || $FORMAT_OF{2}) : _interpolate($verbosity);
     $fmt =~ s{\%f}{$file}mxg;  #HACK! Vilation objects don't know the file
 
     no warnings 'once'; #Ugh. It's tough to be a perfectionist.
     local $Perl::Critic::Violation::FORMAT = $fmt;  ## no critic
+
+    if( defined $top ) {
+        my @by_severity   = Perl::Critic::Violation::sort_by_severity( @violations );
+        my @top_offenders = ( reverse @by_severity )[0 .. $top]; #Slicing here
+        @violations = Perl::Critic::Violation::sort_by_location( @top_offenders );
+    }
+
     print @violations;
-    return 1;
+    return scalar @violations;
 }
 
 sub _interpolate {
