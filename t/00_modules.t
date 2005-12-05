@@ -10,7 +10,7 @@ use warnings;
 use Test::More tests => 493;
 use English qw(-no_match_vars);
 
-our $VERSION = '0.13';
+our $VERSION = '0.13_01';
 $VERSION = eval $VERSION;  ## pc:skip
 
 my $obj = undef;
