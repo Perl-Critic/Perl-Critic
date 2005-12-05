@@ -29,7 +29,7 @@ $exempt{'_'} = 1;                         #This is used with 'stat'
 
 #---------------------------------------------------------------------------
 
-sub severity   { return $SEVERITY_LOW }
+sub default_severity   { return $SEVERITY_LOW }
 sub applies_to { return 'PPI::Token::Magic' }
 
 #---------------------------------------------------------------------------

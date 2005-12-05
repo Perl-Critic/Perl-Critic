@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 347;
+use Test::More tests => 443;
 use English qw(-no_match_vars);
 
 our $VERSION = '0.13';
@@ -49,11 +49,24 @@ use_ok('Perl::Critic::Policy');
 can_ok('Perl::Critic::Policy', 'new');
 can_ok('Perl::Critic::Policy', 'violates');
 can_ok('Perl::Critic::Policy', 'applies_to');
-can_ok('Perl::Critic::Policy', 'severity');
+can_ok('Perl::Critic::Policy', 'default_severity');
+can_ok('Perl::Critic::Policy', 'get_severity');
+can_ok('Perl::Critic::Policy', 'set_severity');
 
 $obj = Perl::Critic::Policy->new();
 isa_ok($obj, 'Perl::Critic::Policy');
 is($obj->VERSION(), $VERSION);
+
+#Test default severity...
+is( $obj->default_severity(), 1 );
+is( $obj->get_severity(), 1 );
+
+#Change severity level...
+$obj->set_severity(3);
+
+#Test severity again...
+is( $obj->default_severity(), 1 ); #Still the same.
+is( $obj->get_severity(), 3 );     #Should have new value
 
 #---------------------------------------------------------------
 
@@ -77,7 +90,9 @@ for my $mod ( Perl::Critic::Config::native_policies() ) {
     can_ok($mod, 'new');
     can_ok($mod, 'violates');
     can_ok($mod, 'applies_to');
-    can_ok($mod, 'severity');
+    can_ok($mod, 'default_severity');
+    can_ok($mod, 'get_severity');
+    can_ok($mod, 'set_severity');
 
     $obj = $mod->new();
     isa_ok($obj, 'Perl::Critic::Policy');

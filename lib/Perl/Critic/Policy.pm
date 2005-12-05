@@ -16,10 +16,13 @@ $VERSION = eval $VERSION;    ## no critic
 
 #----------------------------------------------------------------------------
 
-sub new        { return bless {}, shift    }
-sub applies_to { return qw(PPI::Element)   }
-sub severity   { return $SEVERITY_LOWEST   }
-sub violates   { return _abstract_method() }
+sub new              { return bless {}, shift    }
+sub applies_to       { return qw(PPI::Element)   }
+sub violates         { return _abstract_method() }
+
+sub set_severity     { return $_[0]->{_severity} = $_[1] }
+sub get_severity     { return $_[0]->{_severity} || default_severity() }
+sub default_severity { return $SEVERITY_LOWEST }
 
 #----------------------------------------------------------------------------
 
@@ -36,6 +39,8 @@ sub _abstract_method {
 
 __END__
 
+#----------------------------------------------------------------------------
+
 =pod
 
 =head1 NAME
@@ -45,9 +50,10 @@ Perl::Critic::Policy - Base class for all Policy modules
 =head1 DESCRIPTION
 
 Perl::Critic::Policy is the abstract base class for all Policy
-objects.  Your job is to implement and override its methods in a
-subclass.  To work with the L<Perl::Critic> engine, your
-implementation must behave as described below.
+objects.  If you're developing your own Policies, your job is
+to implement and override its methods in a subclass.  To work with the
+L<Perl::Critic> engine, your implementation must behave as described
+below.
 
 =head1 IMPORTANT CHANGES
 
@@ -81,37 +87,47 @@ has been blessed into your subclass.
 =item violates( $element, $document )
 
 Given a L<PPI::Element> and a L<PPI::Document>, returns one or more
-L<Perl::Critic::Violation> object if the C<$element> violates this
+L<Perl::Critic::Violation> objects if the C<$element> violates this
 Policy.  If there are no violations, then it returns an empty list.
+If the Policy encounters an exception, then it should C<croak> with an
+error message and let the caller decide how to handle it.
 
-L<Perl::Critic> will call C<violates()> on every C<$element> in the
-C<$document>.  Some Policies may need to look at the entire
-C<$document> and probably only need to be executed once.  In that
-case, you should write C<violates()> so that it short-circuts if the
-Policy has already been executed.  See
-L<Perl::Critic::Policy::Modules::ProhibitUnpackagedCode> for an
-example of such a Policy.
-
-C<violates()> is an abstract method and it will croak if you attempt
-to invoke it directly.  Your subclass B<must> override this method.
+C<violates()> is an abstract method and it will abort if you attempt
+to invoke it directly.  It is the heart of all Policy modules, and
+your subclass B<must> override this method.
 
 =item applies_to( void )
 
-Returns a list of PPI classes that the policy cares about.  By
-default, the result is C<PPI::Element>.  Overriding this method in
-individual policies should lead to significant performance increases.
+Returns a list of the names of PPI classes that this Policy cares
+about.  By default, the result is C<PPI::Element>.  Overriding this
+method in Policy subclasses should lead to significant performance
+increases.
 
-=item severity( void )
+=item default_severity( void )
 
-Returns a numeric value (1..5) indicating the severity of violating
-this Policy.  Polices that are widely expected or tend to prevent bugs
-should have a higher severity than those that are highly subjective or
-cosmetic in nature.  By default, it returns C<$SEVERITY_LOWEST>.  If
-your Policy warrants a higher severity, you should override this
-method to return a different value.  See the C<$SEVERITY> constants in
-L<Perl::Critic::Utils> for a list of possible values.  Users can also
-change the severity of your Policy according to their own beliefs
-using the f<.perlcriticrc> file.
+Returns the default severity for violating this Policy.  See the
+C<$SEVERITY> constants in L<Perl::Critic::Utils> for an enumeration of
+possible severity values.  By default, this method returns
+C<$SEVERITY_LOWEST>.  Authors of Perl::Critic::Policy subclasses
+should override this method to return a value that they feel is
+appropriate for their Policy.  In general, Polices that are widely
+accepted or tend to prevent bugs should have a higher severity than
+those that are more subjective or cosmetic in nature.
+
+=item get_severity( void )
+
+Returns the severity of violating this Policy.  If the severity has
+not been explicitly defined by calling C<set_severity>, then the
+C<default_severity> is returned.  See the C<$SEVERITY> constants in
+L<Perl::Critic::Utils> for an enumeration of possible severity values.
+
+=item set_severity( $N )
+
+Sets the severity for violating this Policy.  Clients of
+Perl::Critic::Policy objects can call this method to assign a
+different severity to the Policy if they don't agree with the
+C<default_severity>.  See the C<$SEVERITY> constants in
+L<Perl::Critic::Utils> for an enumeration of possible values.
 
 =back
 

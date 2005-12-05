@@ -23,7 +23,7 @@ my $expl = [55];
 
 #---------------------------------------------------------------------------
 
-sub severity   { return $SEVERITY_LOW }
+sub default_severity   { return $SEVERITY_LOW }
 sub applies_to { return 'PPI::Token::Number' }
 
 #---------------------------------------------------------------------------

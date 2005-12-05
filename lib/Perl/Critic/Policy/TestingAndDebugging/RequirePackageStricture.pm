@@ -24,7 +24,7 @@ my $expl   = [429];
 
 #---------------------------------------------------------------------------
 
-sub severity   { return $SEVERITY_HIGHEST }
+sub default_severity   { return $SEVERITY_HIGHEST }
 sub applies_to { return 'PPI::Document' }
 
 #---------------------------------------------------------------------------

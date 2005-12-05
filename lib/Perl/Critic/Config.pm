@@ -71,22 +71,15 @@ sub new {
 
     while ( my ( $policy, $params ) = each %{ $merged_ref } ) {
 
-        # Screen against include and exclude patterns.
-        # Note that the exclusions have higher precedence.
+        # Filter against pattern matches
         next if any  { $policy =~ m{ $_ }imx } @{ $excludes_ref };
         next if none { $policy =~ m{ $_ }imx } @{ $includes_ref };
 
-        # Determine severity
-        # TODO: This is awkward to read.  Consider revising
-        my $default_severity = $policy->severity();
-        my $user_severity    = $params->{severity} || $default_severity;
-        next if $user_severity < $min_severity;
+        # Filter against severity limit
+        my $severity = $params->{severity} || $policy->default_severity();
+        next if $severity < $min_severity;
 
-        if ( $default_severity != $user_severity ) {
-            _redefine_severity( $policy, $user_severity );
-        }
-
-        # Finally, create Policy
+        # Finally, create Policy object
         $self->add_policy( -policy => $policy, -config => $params );
     }
 
@@ -100,11 +93,13 @@ sub add_policy {
 
     my ( $self, %args ) = @_;
     my $policy      = $args{-policy} || return;
-    my $config      = $args{-config} || {};
+    my $config_ref  = $args{-config} || {};
+    my $severity    = delete $config_ref->{severity};
     my $module_name = _long_name($policy, $NAMESPACE);
 
     eval {
-        my $policy_obj  = $module_name->new( %{$config} );
+        my $policy_obj  = $module_name->new( %{ $config_ref } );
+        if( $severity ){ $policy_obj->set_severity( $severity ) }
         push @{ $self->{_policies} }, $policy_obj;
     };
 
@@ -203,27 +198,6 @@ sub _short_name {
     my ($module_name, $namespace) = @_;
     $module_name =~ s{\A $namespace ::}{}mx;
     return $module_name;
-}
-
-#----------------------------------------------------------------------------
-
-# This is a very sneaky way to override the default severity of each
-# policy.  To make it simple for Policy module developers to declare
-# the severity of their Policies, severity() is just a static method.
-# But we can't just assign to it like you would do with an accessor
-# method because it has no state.  Instead, we redefine with a new
-# static method that returns the value specified by the user
-# (i.e. from the .perlcriticrc).  I like this because it keeps the
-# severity data inside the Policy module where other clients can
-# easily access it (such as P::C::Violation).
-
-sub _redefine_severity {
-    my ( $policy, $severity ) = @_;
-    no strict 'refs';
-    no warnings 'redefine';
-    my $code_ref = eval "sub {return $severity}";  ## no critic
-    *{ $policy . '::severity' } = $code_ref;
-    return 1;
 }
 
 #----------------------------------------------------------------------------

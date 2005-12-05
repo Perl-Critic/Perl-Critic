@@ -23,7 +23,7 @@ my $expl  = [ 17 ];
 
 #----------------------------------------------------------------------------
 
-sub priority   { return $PRIORITY_LOWEST }
+sub default_severity   { return $SEVERITY_LOWEST }
 sub applies_to { return 'PPI::Structure::List' }
 
 #----------------------------------------------------------------------------

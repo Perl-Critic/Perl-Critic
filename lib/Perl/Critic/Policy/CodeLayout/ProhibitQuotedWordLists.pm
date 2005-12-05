@@ -23,7 +23,7 @@ my $expl     = q{Use 'qw()' instead};
 
 #---------------------------------------------------------------------------
 
-sub priority   { return $PRIORITY_LOW }
+sub default_severity   { return $SEVERITY_LOW }
 sub applies_to { return 'PPI::Structure::List' }
 
 #---------------------------------------------------------------------------
