@@ -23,7 +23,7 @@ my $desc = q{Module does not end with '1;'};
 
 #----------------------------------------------------------------------------
 
-sub severity   { return $SEVERITY_HIGH }
+sub default_severity   { return $SEVERITY_HIGH }
 sub applies_to { return 'PPI::Document' }
 
 #----------------------------------------------------------------------------

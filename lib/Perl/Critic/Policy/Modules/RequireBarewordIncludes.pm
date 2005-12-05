@@ -22,7 +22,7 @@ my $expl = q{Use a bareword instead};
 
 #----------------------------------------------------------------------------
 
-sub severity   { return $SEVERITY_HIGHEST }
+sub default_severity   { return $SEVERITY_HIGHEST }
 sub applies_to { return 'PPI::Statement::Include' }
 
 #----------------------------------------------------------------------------

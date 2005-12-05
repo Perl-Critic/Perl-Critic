@@ -24,7 +24,7 @@ my $expl = [ 404 ];
 
 #---------------------------------------------------------------------------
 
-sub severity   { return $SEVERITY_LOW }
+sub default_severity   { return $SEVERITY_LOW }
 sub applies_to { return 'PPI::Document' }
 
 #---------------------------------------------------------------------------
