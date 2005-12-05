@@ -24,8 +24,8 @@ $VERSION = eval $VERSION;    ## no critic
 # Begin script
 
 my %opts       = get_options();
-my @input      = get_input( @ARGV );
-my %config     = map { ("-$_" => $opts{$_}) } keys %opts;
+my @input      = get_input(@ARGV);
+my %config     = map { ( "-$_" => $opts{$_} ) } keys %opts;
 my $violations = critique( \%config, @input );
 my $status     = $violations ? 2 : 0;
 exit $status;
@@ -37,25 +37,34 @@ sub get_options {
 
     my %opts      = ();
     my @opt_specs = qw(severity=i profile=s noprofile verbose=s
-                       force help|? man Version safari top:i
-                       include=s@ exclude=s@);
+      force help|? man Version Safari top:i
+      5 4 3 2 1 include=s@ exclude=s@);
 
     Getopt::Long::Configure('no_ignore_case');
-    GetOptions( \%opts, @opt_specs ) || pod2usage();        #Exits
+    GetOptions( \%opts, @opt_specs ) || pod2usage();    #Exits
 
-    if ( $opts{help} )    { pod2usage( -verbose => 0 )  }   #Exits
-    if ( $opts{man} )     { pod2usage( -verbose => 2 )  }   #Exits
-    if ( $opts{Version} ) { print "$VERSION\n"; exit 0; }   #Exits
+    if ( $opts{help} ) { pod2usage( -verbose => 0 ) }   #Exits
+    if ( $opts{man} )  { pod2usage( -verbose => 2 ) }   #Exits
+    if ( $opts{Version} ) { print "$VERSION\n"; exit 0; }    #Exits
 
     #Sanity checks
     if ( $opts{noprofile} && $opts{profile} ) {
         my $msg = 'Cannot use -noprofile with -profile';
-        pod2usage( -exitstatus => 1, -message => $msg );    #Exits
+        pod2usage( -exitstatus => 1, -message => $msg );     #Exits
     }
 
     #Warn users who might forget that -verbose requires a value
     if ( $opts{verbose} && $opts{verbose} !~ m{ (?: \d+ | %[fmlcdp] ) }mx ) {
-	warn qq{Warning: -verbose value '$opts{verbose}' looks odd.\n};
+        warn qq{Warning: -verbose value '$opts{verbose}' looks odd.\n};
+    }
+
+    #Convert severity shortcut options.  If multiple shortcuts
+    #are given, the lowest one wins, and -severity is ignored.
+    for ( 1 .. 5 ) {
+        if ( $opts{$_} ) {
+            $opts{severity} = $_;
+            last;
+        }
     }
 
     #Override profile, if -noprofile
@@ -69,10 +78,10 @@ sub get_options {
 
 sub get_input {
 
-    if ( @_ ) {
+    if (@_) {
 
         #Reading code from a file...
-        for (@_ ) { -f $_ || die qq{'$_' is not a file} }
+        for (@_) { -f $_ || die qq{'$_' is not a file} }
         return @_;
     }
     else {
@@ -88,13 +97,13 @@ sub get_input {
 
 sub critique {
 
-    my ($config, @files) = @_;
+    my ( $config, @files ) = @_;
     my $count = 0;
 
     my $critic = Perl::Critic->new( %{$config} );
-    for my $file ( @files ) {
-        my @violations = $critic->critique( $file );
-        render_report($file, $config, @violations);
+    for my $file (@files) {
+        my @violations = $critic->critique($file);
+        render_report( $file, $config, @violations );
         $count += scalar @violations;
     }
 
@@ -105,32 +114,34 @@ sub critique {
 
 sub render_report {
 
-    my ($file, $config, @violations) = @_;
+    my ( $file, $config, @violations ) = @_;
 
     $file = -f $file ? $file : 'stdin';
     my $verbosity = $config{-verbosity} || @ARGV > 1 ? 3 : 2;
-    my $top = exists $config{-top} ? ($config{-top} || 20) : undef;
-
+    my $top = exists $config{-top} ? ( $config{-top} || 20 ) : undef;
 
     my %FORMAT_OF = (
-       1 => "%f:%l:%c:%m\n",
-       2 => "%m at line %l, column %c. %e.\n",
-       3 => "%f: %m at line %l, column %c. %e.\n",
-       4 => "[%p] %m at line %l, column %c. %e.\n",
-       5 => "[%p] %m at line %l, column %c. %e.\n%d\n",
+        1 => "%f:%l:%c:%m\n",
+        2 => "%m at line %l, column %c. %e.\n",
+        3 => "%f: %m at line %l, column %c. %e.\n",
+        4 => "[%p] %m at line %l, column %c. %e.\n",
+        5 => "[%p] %m at line %l, column %c. %e.\n%d\n",
     );
 
-    my $fmt = $verbosity =~ m{ \A [+-]? \d+ \z }mx ?
-      ($FORMAT_OF{abs $verbosity} || $FORMAT_OF{2}) : _interpolate($verbosity);
-    $fmt =~ s{\%f}{$file}mxg;  #HACK! Vilation objects don't know the file
+    my $fmt =
+      $verbosity =~ m{ \A [+-]? \d+ \z }mx
+      ? ( $FORMAT_OF{ abs $verbosity } || $FORMAT_OF{2} )
+      : _interpolate($verbosity);
+    $fmt =~ s{\%f}{$file}mxg;    #HACK! Vilation objects don't know the file
 
-    no warnings 'once'; #Ugh. It's tough to be a perfectionist.
-    local $Perl::Critic::Violation::FORMAT = $fmt;  ## no critic
+    no warnings 'once';          #Ugh. It's tough to be a perfectionist.
+    local $Perl::Critic::Violation::FORMAT = $fmt;    ## no critic
 
-    if( defined $top ) {
-        my @by_severity   = Perl::Critic::Violation::sort_by_severity( @violations );
-        my @top_offenders = ( reverse @by_severity )[0 .. $top]; #Slicing here
-        @violations = Perl::Critic::Violation::sort_by_location( @top_offenders );
+    if ( defined $top ) {
+        my @by_severity =
+          Perl::Critic::Violation::sort_by_severity(@violations);
+        my @top_offenders = ( reverse @by_severity )[ 0 .. $top ]; #Slicing here
+        @violations = Perl::Critic::Violation::sort_by_location(@top_offenders);
     }
 
     print @violations;
@@ -138,9 +149,9 @@ sub render_report {
 }
 
 sub _interpolate {
-    my $literal = shift;
+    my $literal      = shift;
     my $interpolated = undef;
-    eval "\$interpolated = \"$literal\"";  ## no critic
+    eval "\$interpolated = \"$literal\"";                          ## no critic
     return $interpolated;
 }
 
@@ -174,6 +185,27 @@ liking.
 If you want to integrate perlcritic with your build process, the
 L<Test::Perl::Critic> module provides a nice interface that is
 suitable for test scripts.
+
+=head1 USAGE EXAMPLES
+
+Before getting into all the gory details, here are some common usage examples
+to get you started.
+
+  #Report only violations with highest severity
+  perlcritic MyModle.pm
+
+  #Include violations with slightly lower severity
+  perlcritic -4 MyModule.pm
+
+  #Include all violations, regardless of severity
+  perlcritic -1 MyModule.pm
+
+  #Report top 20 most severe violations
+  perlcritic -top MyModule.pm
+
+The examples above demonstrate how to control the severity level of
+L<Perl::Critic::Policy> violations that C<perlcritic> reports.  Each
+Policy has a pre-defined severity level.  But since...
 
 =head1 ARGUMENTS
 
@@ -211,6 +243,14 @@ For a given C<-profile>, decreasing the C<-severity> will usually
 result in more violations.  Users can redefine the C<severity> for any
 Policy in their F<.perlcriticrc> file.  See L<"CONFIGURATION"> for
 more information.
+
+=item -5 | -4 | -3 | -2 | -1
+
+These are shortcuts for setting the C<-severity> option.  For example
+C<"-5"> is equivalent to C<"-severity 5">.  Using one of these
+shortcuts causes the C<-severity> option to be silently ingored (if it
+is given).  If multiple shortcuts are specified, then the lowest one
+wins.
 
 =item -top [ N ]
 
@@ -283,7 +323,7 @@ The purpose of these formats is to provide some compatibility with
 editors that have an interface for parsing certain kinds of input. See
 L<"EDITOR INTEGRATION"> for more information about that.
 
-=item -safari
+=item -Safari
 
 Report "Perl Best Practice" citations as section numbers from
 L<http://safari.oreilly.com> instead of page numbers from the actual
