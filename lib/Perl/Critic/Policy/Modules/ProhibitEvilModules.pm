@@ -14,6 +14,11 @@ my $desc = q{Prohibited module used};
 
 #----------------------------------------------------------------------------
 
+sub default_severity ( return $SEVERITY_HIGHEST }
+sub applies_to { return 'PPI::Statement::Include' }
+
+#----------------------------------------------------------------------------
+
 sub new {
     my ( $class, %args ) = @_;
     my $self = bless {}, $class;
@@ -27,9 +32,7 @@ sub new {
     return $self;
 }
 
-sub applies_to {
-    return 'PPI::Statement::Include';
-}
+#----------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
@@ -42,6 +45,8 @@ sub violates {
 1;
 
 __END__
+
+#----------------------------------------------------------------------------
 
 =pod
 
@@ -59,8 +64,8 @@ insecure, or just don't like.
 
 This policy accepts an additional key-value pair in the C<new> method.
 The key should be 'modules' and the value is a string of
-space-delimited fully qualified module names.  These can be configured in the
-F<.perlcriticrc> file like this:
+space-delimited fully qualified module names.  These can be configured
+in the F<.perlcriticrc> file like this:
 
  [Modules::ProhibitEvilModules]
  modules = Getopt::Std  Autoload
