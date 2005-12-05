@@ -33,6 +33,7 @@ lib/Perl/Critic/Policy/Modules/RequireBarewordIncludes.pm
 lib/Perl/Critic/Policy/Modules/RequireEndWithOne.pm
 lib/Perl/Critic/Policy/Modules/RequireExplicitPackage.pm
 lib/Perl/Critic/Policy/Modules/RequireVersionVar.pm
+lib/Perl/Critic/Policy/NamingConventions/ProhibitAmbiguousNames.pm
 lib/Perl/Critic/Policy/NamingConventions/ProhibitMixedCaseSubs.pm
 lib/Perl/Critic/Policy/NamingConventions/ProhibitMixedCaseVars.pm
 lib/Perl/Critic/Policy/RegularExpressions/RequireExtendedFormatting.pm
@@ -84,7 +85,6 @@ t/20_policies_variables.t
 t/40_criticize.t
 t/98_pod-syntax.t
 t/99_pod-coverage.t
-t/samples/perlcriticrc
 t/samples/perlcriticrc.all
 t/samples/perlcriticrc.levels
 t/samples/perlcriticrc.none
