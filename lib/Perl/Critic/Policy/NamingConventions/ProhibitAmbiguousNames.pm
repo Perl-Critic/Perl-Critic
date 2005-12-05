@@ -88,9 +88,14 @@ sub violates {
         if ($symbols) {
             for my $symbol (@$symbols) {
 
-                # strip off sigil and any leading "Package::"
+                # Strip off sigil and any leading "Package::"
+                # Beware that punctuation vars may have no
+                # alphanumeric characters.
+
                 my ($name) = $symbol =~ m/ (\w+) \z /xms;
-                if ( $self->{_forbid}->{$name} ) {
+                next if ! defined $name;
+
+                if ( defined $self->{_forbid}->{$name} ) {
                     push @viols,
                       Perl::Critic::Violation->new( $desc, $expl,
                                                     $elem->location() );
