@@ -55,7 +55,7 @@ sub violates {
         $desc = q{perltidy had errors!!};
     }
 
-    if ( $source eq $dest ) {
+    if ( $source ne $dest ) {
         return Perl::Critic::Violation->new( $desc, $expl, [ 0, 0 ] );
     }
 
