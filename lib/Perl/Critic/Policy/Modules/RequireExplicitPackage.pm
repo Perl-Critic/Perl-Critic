@@ -31,7 +31,6 @@ sub applies_to { return 'PPI::Document' }
 sub new {
     my ( $class, %args ) = @_;
     my $self = bless {}, $class;
-    $self->{_tested} = 0;
 
     #Set config, if defined
     $self->{_exempt_scripts} =

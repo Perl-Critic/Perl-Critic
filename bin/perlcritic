@@ -98,10 +98,8 @@ sub critique {
 	my @violations = $critic->critique($file);
         print_report($file, $config->{-verbose}, @violations);
         $count += scalar @violations;
-
-	#HACK! This is so I can recycle the same $critic
-	for ( @{ $critic->policies() } ) { $_->{_tested} = 0 }
     }
+
     return $count;
 }
 
