@@ -121,19 +121,19 @@ $var = 01;
 $var = 010;
 $var = 001;
 $var = 0010;
-$var = 0.12;
+$var = 00.12;
 $var = 00.001;
 $var = -01;
 $var = -010;
 $var = -001;
 $var = -0010;
-$var = -0.12;
+$var = -00.12;
 $var = -00.001;
 $var = +01;
 $var = +010;
 $var = +001;
 $var = +0010;
-$var = +0.12;
+$var = +00.12;
 $var = +00.001;
 END_PERL
 
@@ -147,17 +147,23 @@ $var = 0;
 $var = 0.;
 $var = 10;
 $var = 0.0;
+$var = 0.11;
+$var = .011;
 $var = 10.0;
 $var = -0;
 $var = -0.;
 $var = -10;
 $var = -0.0;
-$var = -10.0;
+$var = -10.0
+$var = -0.11;
+$var = -.011;
 $var = +0;
 $var = +0.;
 $var = +10;
 $var = +0.0;
 $var = +10.0;
+$var = +0.11;
+$var = +.011;
 END_PERL
 
 $policy = 'ValuesAndExpressions::ProhibitLeadingZeros';
