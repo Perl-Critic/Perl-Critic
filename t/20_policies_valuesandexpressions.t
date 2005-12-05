@@ -121,34 +121,30 @@ $var = 01;
 $var = 010;
 $var = 001;
 $var = 0010;
-$var = 00.12;
-$var = 00.001;
 $var = -01;
 $var = -010;
 $var = -001;
 $var = -0010;
-$var = -00.12;
-$var = -00.001;
 $var = +01;
 $var = +010;
 $var = +001;
 $var = +0010;
-$var = +00.12;
-$var = +00.001;
 END_PERL
 
 $policy = 'ValuesAndExpressions::ProhibitLeadingZeros';
-is( pcritique($policy, \$code), 18, $policy);
+is( pcritique($policy, \$code), 12, $policy);
 
 #----------------------------------------------------------------
 
 $code = <<'END_PERL';
 $var = 0;
 $var = 0.;
+$var = .0;
 $var = 10;
 $var = 0.0;
+$var = 00.0;
+$var = 00;
 $var = 0.11;
-$var = .011;
 $var = 10.0;
 $var = -0;
 $var = -0.;
@@ -156,14 +152,19 @@ $var = -10;
 $var = -0.0;
 $var = -10.0
 $var = -0.11;
-$var = -.011;
 $var = +0;
 $var = +0.;
 $var = +10;
 $var = +0.0;
 $var = +10.0;
 $var = +0.11;
-$var = +.011;
+
+#These are legal, but PPI doesn't parse them correctly.
+#I will file a bug with Adam when I get the chance.
+
+#$var = +.011;
+#$var = .011;
+#$var = -.011;
 END_PERL
 
 $policy = 'ValuesAndExpressions::ProhibitLeadingZeros';
