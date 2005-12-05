@@ -3,9 +3,6 @@ use warnings;
 use English qw(-no_match_vars);
 use Test::More tests => 22;
 
-our $VERSION = '0.13';
-$VERSION = eval $VERSION;  ## no critic
-
 #---------------------------------------------------------------
 
 BEGIN
