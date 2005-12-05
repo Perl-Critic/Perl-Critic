@@ -250,6 +250,10 @@ Perl::Critic will analyze all code.  If set to a false value (which is
 the default) Perl::Critic will overlook code that is tagged with these
 comments.  See L<"BENDING THE RULES"> for more information.
 
+B<-config> is a reference to a L<Perl::Critic::Config> object.  If you
+have created your own Config for some reason, you can pass it in
+here instead of having Perl::Critic create one for you.
+
 =back
 
 =head1 METHODS
