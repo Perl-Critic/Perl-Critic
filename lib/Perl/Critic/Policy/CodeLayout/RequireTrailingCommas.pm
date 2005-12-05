@@ -41,7 +41,7 @@ sub violates {
 
     #Does the list have more than 1 element?
     my @children = $expr->schildren();
-    (grep { $_ eq $COMMA } @children) > 1 || return; 
+    return if @children <= 1;
 
     #Is the last element a comma?
     my $last = $children[-1] || return;
