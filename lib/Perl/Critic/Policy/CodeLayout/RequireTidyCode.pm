@@ -40,6 +40,9 @@ sub violates {
     my $dest    = $EMPTY;
     my $stderr  = $EMPTY;
 
+    # Perl::Tidy gets confused by @ARGV.
+    local @ARGV = ();  ## no critic
+
     Perl::Tidy::perltidy(
         source      => \$source,
         destination => \$dest,
