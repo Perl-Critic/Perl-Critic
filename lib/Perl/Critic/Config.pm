@@ -262,6 +262,7 @@ sub native_policies {
       Perl::Critic::Policy::Modules::RequireExplicitPackage
       Perl::Critic::Policy::Modules::RequireBarewordIncludes
       Perl::Critic::Policy::Modules::RequireVersionVar
+      Perl::Critic::Policy::NamingConventions::ProhibitAmbiguousNames
       Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseSubs
       Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars
       Perl::Critic::Policy::Subroutines::ProhibitExplicitReturnUndef

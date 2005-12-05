@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 484;
+use Test::More tests => 493;
 use English qw(-no_match_vars);
 
 our $VERSION = '0.13';
