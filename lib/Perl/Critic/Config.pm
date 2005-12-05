@@ -410,6 +410,21 @@ with Perl::Critic.  Does not include any third-party modules.
 
 =back
 
+=head1 ADVANCED USAGE
+
+All the Policy modules that ship with Perl::Critic are in the
+C<"Perl::Critic::Policy"> namespace.  To load modules from an alternate
+namespace, import Perl::Critic::Config using the C<-namespace> option
+like this:
+
+  use Perl::Critic::Config -namespace = 'Foo::Bar'; #Loads from Foo::Bar::*
+
+At the moment, only one alternate namespace may be specified.  Unless
+Policy module names are fully qualified, Perl::Critic::Config assumes
+that all Policies are in the specified namespace.  So if you want to
+use Policies from different namespaces, you will need to use the full
+module name in your f<.perlcriticrc> file.
+
 =head1 CONFIGURATION
 
 The default configuration file is called F<.perlcriticrc>.
