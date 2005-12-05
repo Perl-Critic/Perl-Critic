@@ -178,3 +178,6 @@ severity = 1
 
 [CodeLayout::RequireTidyCode]
 severity = 1
+
+[NamingConventions::ProhibitAmbiguousNames]
+severity = 1

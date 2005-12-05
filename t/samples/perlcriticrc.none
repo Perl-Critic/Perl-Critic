@@ -36,6 +36,7 @@
 [-Modules::RequireBarewordIncludes]
 [-Modules::RequireVersionVar]
 [-Miscellanea::RequireRcsKeywords]
+[-NamingConventions::ProhibitAmbiguousNames]
 [-NamingConventions::ProhibitMixedCaseSubs]
 [-NamingConventions::ProhibitMixedCaseVars]
 [-RegularExpressions::RequireExtendedFormatting]

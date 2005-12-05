@@ -32,6 +32,7 @@
 [Modules::RequireExplicitPackage]
 [Modules::RequireBarewordIncludes]
 [Modules::RequireVersionVar]
+[NamingConventions::ProhibitAmbiguousNames]
 [NamingConventions::ProhibitMixedCaseSubs]
 [NamingConventions::ProhibitMixedCaseVars]
 [RegularExpressions::RequireExtendedFormatting]
