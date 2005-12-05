@@ -244,6 +244,7 @@ sub native_policies {
       Perl::Critic::Policy::CodeLayout::ProhibitHardTabs
       Perl::Critic::Policy::CodeLayout::ProhibitParensWithBuiltins
       Perl::Critic::Policy::CodeLayout::ProhibitQuotedWordLists
+      Perl::Critic::Policy::CodeLayout::RequireTidyCode
       Perl::Critic::Policy::CodeLayout::RequireTrailingCommas
       Perl::Critic::Policy::ControlStructures::ProhibitCascadingIfElse
       Perl::Critic::Policy::ControlStructures::ProhibitCStyleForLoops
@@ -253,14 +254,18 @@ sub native_policies {
       Perl::Critic::Policy::InputOutput::ProhibitBacktickOperators
       Perl::Critic::Policy::InputOutput::ProhibitBarewordFileHandles
       Perl::Critic::Policy::InputOutput::ProhibitOneArgSelect
+      Perl::Critic::Policy::InputOutput::ProhibitTwoArgOpen
+      Perl::Critic::Policy::Miscellanea::RequireRcsKeywords
       Perl::Critic::Policy::Modules::ProhibitMultiplePackages
       Perl::Critic::Policy::Modules::ProhibitEvilModules
+      Perl::Critic::Policy::Modules::RequireEndWithOne
       Perl::Critic::Policy::Modules::RequireExplicitPackage
       Perl::Critic::Policy::Modules::RequireBarewordIncludes
       Perl::Critic::Policy::Modules::RequireVersionVar
       Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseSubs
       Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars
       Perl::Critic::Policy::Subroutines::ProhibitExplicitReturnUndef
+      Perl::Critic::Policy::Subroutines::RequireFinalReturn
       Perl::Critic::Policy::RegularExpressions::RequireExtendedFormatting
       Perl::Critic::Policy::RegularExpressions::RequireLineBoundaryMatching
       Perl::Critic::Policy::Subroutines::ProhibitBuiltinHomonyms

@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 443;
+use Test::More tests => 484;
 use English qw(-no_match_vars);
 
 our $VERSION = '0.13';
@@ -56,17 +56,6 @@ can_ok('Perl::Critic::Policy', 'set_severity');
 $obj = Perl::Critic::Policy->new();
 isa_ok($obj, 'Perl::Critic::Policy');
 is($obj->VERSION(), $VERSION);
-
-#Test default severity...
-is( $obj->default_severity(), 1 );
-is( $obj->get_severity(), 1 );
-
-#Change severity level...
-$obj->set_severity(3);
-
-#Test severity again...
-is( $obj->default_severity(), 1 ); #Still the same.
-is( $obj->get_severity(), 3 );     #Should have new value
 
 #---------------------------------------------------------------
 
