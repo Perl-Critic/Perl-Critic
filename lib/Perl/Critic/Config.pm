@@ -76,8 +76,8 @@ sub new {
         next if none { $policy =~ m{ $_ }imx } @{ $includes_ref };
 
         # Filter against severity limit
-        my $severity = $params->{severity} || $policy->default_severity();
-        next if $severity < $min_severity;
+        next if ( $params->{severity} || $policy->default_severity() )
+            < $min_severity;
 
         # Finally, create Policy object
         $self->add_policy( -policy => $policy, -config => $params );
@@ -94,7 +94,7 @@ sub add_policy {
     my ( $self, %args ) = @_;
     my $policy      = $args{-policy} || return;
     my $config_ref  = $args{-config} || {};
-    my $severity    = delete $config_ref->{severity};
+    my $severity    = $config_ref->{severity};
     my $module_name = _long_name($policy, $NAMESPACE);
 
     eval {
