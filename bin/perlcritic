@@ -61,7 +61,7 @@ sub get_options {
     #Convert severity shortcut options.  If multiple shortcuts
     #are given, the lowest one wins, and -severity is ignored.
     for ( 1 .. 5 ) {
-        if ( $opts{$_} ) {
+        if ( exists $opts{$_} ) {
             $opts{severity} = $_;
             last;
         }
@@ -69,10 +69,10 @@ sub get_options {
 
     #If -top is specified, force the severity to 1 so that
     #we report the leading offenders across all severity levels
-    if ( $opts{top} ) { $opts{severity} = 1 }
+    if ( exists $opts{top} ) { $opts{severity} = 1 }
 
     #Override profile, if -noprofile is specified
-    if ( $opts{noprofile} ) { $opts{profile} = $EMPTY }
+    if ( exists $opts{noprofile} ) { $opts{profile} = $EMPTY }
 
     #All good!
     return %opts;
@@ -126,11 +126,10 @@ sub render_report {
 
     my %FORMAT_OF = (
         1 => "%f:%l:%c:%m\n",
-        2 => "%m at line %l, column %c. %e.(Severity: %s)\n",
+        2 => "%m at line %l, column %c. %e. (Severity: %s)\n",
         3 => "%f: %m at line %l, column %c. %e. (Severity: %s)\n",
         4 => "[%p] %m at line %l, column %c. %e. (Severity: %s)\n",
         5 => "[%p] %m at line %l, column %c. %e.\n%d\n",
-        6 => "[%p] %m at line %l, column %c. %e.\n%d\n",
     );
 
     my $fmt =
@@ -141,11 +140,12 @@ sub render_report {
 
     no warnings 'once';          #Ugh. It's tough to be a perfectionist.
     local $Perl::Critic::Violation::FORMAT = $fmt;    ## no critic
+    #TODO: Make the FORMAT a class method instead of variable.
 
     if ( defined $top ) {
-        my @by_severity =
-          reverse Perl::Critic::Violation::sort_by_severity(@violations);
-        my @top_offenders = ( @by_severity )[ 0 .. $top-1 ];  #Slicing...
+        my $limit = @violations < $top ? $#violations : $top-1;
+        my @ranked = Perl::Critic::Violation::sort_by_severity(@violations);
+        my @top_offenders = ( reverse @ranked )[ 0 .. $limit ];  #Slicing...
         @violations = Perl::Critic::Violation::sort_by_location(@top_offenders);
     }
 
