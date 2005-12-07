@@ -19,7 +19,7 @@ $VERSION = eval $VERSION;    ## no critic
 #---------------------------------------------------------------------------
 
 my $desc = 'Ambiguous name for variable or subroutine';
-my $expl = [48];
+my $expl = [ 48 ];
 
 my @default_forbid =
     qw( last      contract
@@ -69,8 +69,10 @@ sub violates {
             # strip off any leading "Package::"
             my ($name) = $word =~ m/ (\w+) \z /xms;
             if ( $self->{_forbid}->{$name} ) {
-                return Perl::Critic::Violation->new( $desc, $expl,
-                                                     $elem->location() );
+                return Perl::Critic::Violation->new( $desc,
+                                                     $expl,
+                                                     $elem->location(),
+                                                     $self->get_severity(), );
             }
         }
         return;    # ok
