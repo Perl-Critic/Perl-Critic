@@ -32,7 +32,11 @@ sub applies_to { return 'PPI::Statement::Variable' }
 sub violates {
     my ( $self, $elem, $doc ) = @_;
     if ( $elem->type() eq 'local' && !_all_global_vars($elem) ) {
-        return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
+
+        return Perl::Critic::Violation->new( $desc,
+                                             $expl,
+                                             $elem->location(),
+                                             $self->get_severity(), );
     }
     return;    #ok!
 }

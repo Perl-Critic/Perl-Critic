@@ -20,11 +20,11 @@ $VERSION = eval $VERSION;    ## no critic
 
 my $heredoc_rx = qr{ \A << ["|']? [A-Z_]+ ['|"]? \z }x;
 my $desc       = q{Heredoc terminator must be in upper case};
-my $expl       = [64];
+my $expl       = [ 64 ];
 
 #---------------------------------------------------------------------------
 
-sub default_severity   { return $SEVERITY_LOW }
+sub default_severity { return $SEVERITY_LOW }
 sub applies_to { return 'PPI::Token::HereDoc' }
 
 #---------------------------------------------------------------------------
@@ -33,7 +33,11 @@ sub violates {
     my ( $self, $elem, $doc ) = @_;
 
     if ( $elem !~ $heredoc_rx ) {
-        return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
+
+        return Perl::Critic::Violation->new( $desc,
+                                             $expl,
+                                             $elem->location(),
+                                             $self->get_severity(), );
     }
     return;    #ok!
 }

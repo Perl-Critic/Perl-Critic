@@ -46,7 +46,11 @@ sub violates {
     #Is the last element a comma?
     my $last = $children[-1] || return;
     if ( ! ($last->isa('PPI::Token::Operator') &&  $last eq $COMMA) ) {
-	return Perl::Critic::Violation->new($desc, $expl, $last->location() );
+
+	return Perl::Critic::Violation->new( $desc,
+                                             $expl,
+                                             $last->location(),
+                                             $self->get_severity, );
     }
 
     return; #ok!

@@ -45,7 +45,11 @@ sub violates {
 
     #Permit leading tabs, if allowed
     return if $self->{_allow_leading_tabs} && $elem->location->[1] == 1;
-    return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
+
+    return Perl::Critic::Violation->new( $desc,
+                                         $expl,
+                                         $elem->location(),
+                                         $self->get_severity(), );
 }
 
 1;

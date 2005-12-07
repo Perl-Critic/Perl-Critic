@@ -19,12 +19,12 @@ $VERSION = eval $VERSION;    ## no critic
 
 #---------------------------------------------------------------------------
 
-my $desc   = q{Code before strictures are enabled};
-my $expl   = [429];
+my $desc = q{Code before strictures are enabled};
+my $expl = [ 429 ];
 
 #---------------------------------------------------------------------------
 
-sub default_severity   { return $SEVERITY_HIGHEST }
+sub default_severity { return $SEVERITY_HIGHEST }
 sub applies_to { return 'PPI::Document' }
 
 #---------------------------------------------------------------------------
@@ -55,7 +55,11 @@ sub violates {
 
     if ( $other_at <= $strict_at ) {
         my $loc = $other_stmnt->location();
-        return Perl::Critic::Violation->new( $desc, $expl, $loc );
+
+        return Perl::Critic::Violation->new( $desc,
+                                             $expl,
+                                             $loc,
+                                             $self->get_severity(), );
     }
     return;                            #ok!
 }

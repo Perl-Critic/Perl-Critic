@@ -19,11 +19,11 @@ $VERSION = eval $VERSION;    ## no critic
 #---------------------------------------------------------------------------
 
 my $desc = q{Long number not separated with underscores};
-my $expl = [55];
+my $expl = [ 55 ];
 
 #---------------------------------------------------------------------------
 
-sub default_severity   { return $SEVERITY_LOW }
+sub default_severity { return $SEVERITY_LOW }
 sub applies_to { return 'PPI::Token::Number' }
 
 #---------------------------------------------------------------------------
@@ -45,7 +45,11 @@ sub violates {
     my $min = $self->{_min};
 
     if ( abs _to_number($elem) >= $min && $elem =~ m{ \d{4,} }mx ) {
-        return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
+
+        return Perl::Critic::Violation->new( $desc,
+                                             $expl,
+                                             $elem->location(),
+                                             $self->get_severity(), );
     }
     return;    #ok!
 }

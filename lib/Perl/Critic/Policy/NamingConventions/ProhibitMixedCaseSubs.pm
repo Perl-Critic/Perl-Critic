@@ -24,7 +24,7 @@ my $expl     = [ 44 ];
 
 #---------------------------------------------------------------------------
 
-sub default_severity   { return $SEVERITY_LOWEST }
+sub default_severity { return $SEVERITY_LOWEST }
 sub applies_to { return 'PPI::Statement::Sub' }
 
 #---------------------------------------------------------------------------
@@ -32,7 +32,10 @@ sub applies_to { return 'PPI::Statement::Sub' }
 sub violates {
     my ( $self, $elem, $doc ) = @_;
     if ( $elem->name() =~ $mixed_rx ) {
-        return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
+        return Perl::Critic::Violation->new( $desc,
+                                             $expl,
+                                             $elem->location(),
+                                             $self->get_severity(), );
     }
     return;    #ok!
 }

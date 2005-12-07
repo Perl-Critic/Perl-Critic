@@ -33,7 +33,11 @@ sub applies_to {
 sub violates {
     my ( $self, $elem, $doc ) = @_;
     if ( _has_interpolation($elem) ) {
-        return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
+
+        return Perl::Critic::Violation->new( $desc,
+                                             $expl,
+                                             $elem->location(),
+                                             $self->get_severity(), );
     }
     return;    #ok;
 }

@@ -19,7 +19,7 @@ $VERSION = eval $VERSION;    ## no critic
 #----------------------------------------------------------------------------
 
 my $desc = q{C-style 'for' loop used};
-my $expl = [97];
+my $expl = [ 97 ];
 
 #----------------------------------------------------------------------------
 
@@ -31,7 +31,11 @@ sub applies_to { return 'PPI::Structure::ForLoop' }
 sub violates {
     my ( $self, $elem, $doc ) = @_;
     if ( _is_cstyle($elem) ) {
-        return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
+
+        return Perl::Critic::Violation->new( $desc,
+                                             $expl,
+                                             $elem->location(),
+                                             $self->get_severity(), );
     }
     return;    #ok!
 }

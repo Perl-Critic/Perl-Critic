@@ -35,7 +35,10 @@ sub violates {
     return if is_hash_key($elem);
 
     if ( 3 == grep {$_->[0] eq 'undef' } parse_arg_list($elem) ){
-	return Perl::Critic::Violation->new($desc, $expl, $elem->location() );
+	return Perl::Critic::Violation->new($desc,
+                                            $expl,
+                                            $elem->location(),
+                                            $self->get_severity(), );
     }
     return; #ok!
 }

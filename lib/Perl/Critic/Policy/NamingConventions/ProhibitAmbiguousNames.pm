@@ -97,8 +97,10 @@ sub violates {
 
                 if ( defined $self->{_forbid}->{$name} ) {
                     push @viols,
-                      Perl::Critic::Violation->new( $desc, $expl,
-                                                    $elem->location() );
+                      Perl::Critic::Violation->new( $desc,
+                                                    $expl,
+                                                    $elem->location(),
+                                                    $self->get_severity(), );
                 }
             }
         }

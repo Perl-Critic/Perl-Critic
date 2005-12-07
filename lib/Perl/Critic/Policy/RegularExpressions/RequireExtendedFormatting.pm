@@ -35,7 +35,11 @@ sub violates {
     #API.  I'm cheating by accessing it here directly.
 
     if ( ! defined $elem->{modifiers}->{x} ) {
-	return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
+
+	return Perl::Critic::Violation->new( $desc,
+                                             $expl,
+                                             $elem->location(),
+                                             $self->get_severity(), );
     }
     return; #ok!;
 }

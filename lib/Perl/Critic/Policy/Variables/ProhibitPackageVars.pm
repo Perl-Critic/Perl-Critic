@@ -40,7 +40,10 @@ sub violates {
         || _is_our_var($elem)
         || _is_vars_pragma($elem) )
     {
-        return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
+        return Perl::Critic::Violation->new( $desc,
+                                             $expl,
+                                             $elem->location(),
+                                             $self->get_severity(), );
     }
     return;    #ok!
 }

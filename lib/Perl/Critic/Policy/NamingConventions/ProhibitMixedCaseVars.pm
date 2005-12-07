@@ -21,7 +21,7 @@ $VERSION = eval $VERSION;    ## no critic
 
 my $mixed_rx = qr/ [A-Z][a-z] | [a-z][A-Z]  /x;
 my $desc     = 'Mixed-case variable name(s)';
-my $expl     = [44];
+my $expl     = [ 44 ];
 
 #---------------------------------------------------------------------------
 
@@ -33,7 +33,11 @@ sub applies_to { return 'PPI::Statement::Variable' }
 sub violates {
     my ( $self, $elem, $doc ) = @_;
     if ( _has_mixed_case_vars($elem) ) {
-        return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
+
+        return Perl::Critic::Violation->new( $desc,
+                                             $expl,
+                                             $elem->location(),
+                                             $self->get_severity(), );
     }
     return;    #ok!
 }

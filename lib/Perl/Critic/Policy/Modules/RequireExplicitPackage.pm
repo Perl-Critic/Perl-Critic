@@ -48,9 +48,12 @@ sub violates {
     return if $self->{_exempt_scripts} && _is_script($doc);
 
     my $match = $doc->find_first( sub { $_[1]->significant() } ) || return;
-    return
-      if $match->isa('PPI::Statement::Package');   #First statement is 'package'
-    return Perl::Critic::Violation->new( $desc, $expl, $match->location() );
+    return if $match->isa('PPI::Statement::Package');  #First is 'package'
+
+    return Perl::Critic::Violation->new( $desc,
+                                         $expl,
+                                         $match->location(),
+                                         $self->get_severity(), );
 }
 
 sub _is_script {

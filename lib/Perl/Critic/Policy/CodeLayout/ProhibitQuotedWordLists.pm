@@ -55,16 +55,24 @@ sub violates {
     my $count = 0;
     for my $child ( @children ) {
 	next if $child->isa('PPI::Token::Operator')  && $child eq $COMMA;
+
+        #All elements must be literal strings,
+        #of non-zero length, with no whitespace
+
 	return if ! _is_literal($child);
 	return if $child =~ m{ \s }mx;
+        return if $child eq $EMPTY;
 	$count++;
     }
 
     #Were there enough?
     return if $count < $self->{_min};
 
-    #If we get here, then all children were literals
-    return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
+    #If we get here, then all elements were literals
+    return Perl::Critic::Violation->new( $desc,
+                                         $expl,
+                                         $elem->location(),
+                                         $self->get_severity(), );
 }
 
 sub _is_literal {

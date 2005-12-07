@@ -20,7 +20,7 @@ $VERSION = eval $VERSION;    ## no critic
 #----------------------------------------------------------------------------
 
 my $desc = q{Code is not tidy};
-my $expl = [33];
+my $expl = [ 33 ];
 
 #----------------------------------------------------------------------------
 
@@ -56,7 +56,11 @@ sub violates {
     }
 
     if ( $source ne $dest ) {
-        return Perl::Critic::Violation->new( $desc, $expl, [ 0, 0 ] );
+
+        return Perl::Critic::Violation->new( $desc,
+                                             $expl,
+                                             [ 0, 0 ],
+                                             $self->get_severity(), );
     }
 
     return;    #ok!

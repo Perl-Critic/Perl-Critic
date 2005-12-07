@@ -44,7 +44,11 @@ sub violates {
     my ( $self, $elem, $doc ) = @_;
     return if !($elem->type() eq 'if');
     if ( _count_elsifs($elem) > $self->{_max} ) {
-        return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
+
+        return Perl::Critic::Violation->new( $desc,
+                                             $expl,
+                                             $elem->location(),
+                                             $self->get_severity(), );
     }
     return;    #ok!
 }

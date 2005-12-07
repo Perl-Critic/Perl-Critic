@@ -42,7 +42,10 @@ sub violates {
        return;
     }
 
-    return Perl::Critic::Violation->new( $desc, $expl, $match->location() );
+    return Perl::Critic::Violation->new( $desc,
+                                         $expl,
+                                         $match->location(),
+                                         $self->get_severity(), );
 }
 
 1;

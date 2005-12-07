@@ -19,7 +19,7 @@ $VERSION = eval $VERSION;    ## no critic
 #----------------------------------------------------------------------------
 
 my $desc = q{'unless' block used};
-my $expl = [97];
+my $expl = [ 97 ];
 
 #----------------------------------------------------------------------------
 
@@ -31,7 +31,11 @@ sub applies_to { return 'PPI::Statement::Compound' }
 sub violates {
     my ( $self, $elem, $doc ) = @_;
     if ( $elem->first_element() eq 'unless' ) {
-        return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
+
+        return Perl::Critic::Violation->new( $desc,
+                                             $expl,
+                                             $elem->location(),
+                                             $self->get_severity(), );
     }
     return;    #ok!
 }

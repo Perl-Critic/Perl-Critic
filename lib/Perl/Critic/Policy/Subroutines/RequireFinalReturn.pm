@@ -40,7 +40,11 @@ sub violates {
     if (_block_is_empty($block) || _block_has_return($block)) {
         return; # OK
     }
-    return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
+
+    return Perl::Critic::Violation->new( $desc,
+                                         $expl,
+                                         $elem->location(),
+                                         $self->get_severity(), );
 }
 
 #------------------------

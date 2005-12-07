@@ -19,11 +19,11 @@ $VERSION = eval $VERSION;    ## no critic
 #---------------------------------------------------------------------------
 
 my $desc = q{Subroutine prototypes used};
-my $expl = [194];
+my $expl = [ 194 ];
 
 #---------------------------------------------------------------------------
 
-sub default_severity   { return $SEVERITY_HIGHEST }
+sub default_severity { return $SEVERITY_HIGHEST }
 sub applies_to { return 'PPI::Statement::Sub' }
 
 #---------------------------------------------------------------------------
@@ -31,7 +31,11 @@ sub applies_to { return 'PPI::Statement::Sub' }
 sub violates {
     my ( $self, $elem, $doc ) = @_;
     if ( $elem->prototype() ) {
-        return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
+
+        return Perl::Critic::Violation->new( $desc,
+                                             $expl,
+                                             $elem->location(),
+                                             $self->get_severity(), );
     }
     return;    #ok!
 }

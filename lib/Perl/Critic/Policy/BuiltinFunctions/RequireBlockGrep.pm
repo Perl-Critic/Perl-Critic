@@ -39,7 +39,10 @@ sub violates {
     return if !$arg || $arg->isa('PPI::Structure::Block');
 
     #Must not be a block
-    return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
+    return Perl::Critic::Violation->new( $desc,
+                                         $expl,
+                                         $elem->location(),
+                                         $self->get_severity(), );
 }
 
 

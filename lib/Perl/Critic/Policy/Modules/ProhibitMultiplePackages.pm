@@ -33,8 +33,11 @@ sub violates {
     my $nodes_ref = $doc->find('PPI::Statement::Package') || return;
     my @matches = @{$nodes_ref} > 1 ? @{$nodes_ref}[ 1 .. $#{$nodes_ref} ] : ();
     return
-      map { Perl::Critic::Violation->new( $desc, $expl, $_->location() ) }
-      @matches;
+      map { Perl::Critic::Violation->new( $desc,
+                                          $expl,
+                                          $_->location(),
+                                          $self->get_severity(), )
+          } @matches;
 }
 
 1;

@@ -34,8 +34,12 @@ sub violates {
     #Note: as of PPI 1.103, 'modifiers' is not part of the published
     #API.  I'm cheating by accessing it here directly.
 
-    if ( ! defined $elem->{modifiers}->{m} ) {
-	return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
+    if ( ! defined $elem->{modifiers}->{'m'} ) {
+
+	return Perl::Critic::Violation->new( $desc,
+                                             $expl,
+                                             $elem->location(),
+                                             $self->get_severity(), );
     }
     return; #ok!;
 }

@@ -38,7 +38,11 @@ sub violates {
     $first = $first->[0] || return; #Ick!
 
     if( $first->isa('PPI::Token::Word') && !($first eq 'my') ) {
-	return Perl::Critic::Violation->new($desc, $expl, $elem->location() );
+
+	return Perl::Critic::Violation->new( $desc,
+                                             $expl,
+                                             $elem->location(),
+                                             $self->get_severity(), );
     }
     return; #ok!
 }

@@ -51,7 +51,11 @@ sub violates {
     for my $keyword ( @{ $self->{_keywords} } ) {
 	if ( (!$nodes) || none { $_ =~ m{ \$$keyword.*\$ }mx } @{$nodes} ) {
 	  my $desc = qq{RCS keyword '\$$keyword\$' not found};
-	  push @viols, Perl::Critic::Violation->new( $desc, $expl, [0,0] );
+
+	  push @viols, Perl::Critic::Violation->new( $desc,
+                                                     $expl,
+                                                     [0,0],
+                                                     $self->get_severity(), );
 	}
     }
 

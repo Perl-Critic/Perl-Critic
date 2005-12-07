@@ -32,7 +32,11 @@ sub applies_to { return 'PPI::Token::QuoteLike::Readline' }
 sub violates {
     my ( $self, $elem, $doc ) = @_;
     if ( $elem =~ $glob_rx ) {
-        return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
+
+        return Perl::Critic::Violation->new( $desc,
+                                             $expl,
+                                             $elem->location(),
+                                             $self->get_severity(), );
     }
     return;    #ok!
 }

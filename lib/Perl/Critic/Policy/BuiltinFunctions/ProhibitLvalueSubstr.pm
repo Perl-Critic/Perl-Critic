@@ -36,8 +36,12 @@ sub violates {
 
     my $sib = $elem;
     while ($sib = $sib->snext_sibling()) {
+
 	next if ! ( $sib->isa( 'PPI::Token::Operator') && $sib eq q{=} );
-	return Perl::Critic::Violation->new($desc, $expl, $sib->location() );
+	return Perl::Critic::Violation->new( $desc,
+                                             $expl,
+                                             $sib->location(),
+                                             $self->get_severity(), );
     }
     return; #ok!
 }

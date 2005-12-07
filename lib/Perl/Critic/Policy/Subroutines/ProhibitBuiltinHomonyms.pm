@@ -34,7 +34,11 @@ sub violates {
     my ( $self, $elem, $doc ) = @_;
     return if exists $allow{ $elem->name() };
     if ( any { $elem->name() eq $_ } @BUILTINS ) {
-        return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
+
+        return Perl::Critic::Violation->new( $desc,
+                                             $expl,
+                                             $elem->location(),
+                                             $self->get_severity(), );
     }
     return;    #ok!
 }

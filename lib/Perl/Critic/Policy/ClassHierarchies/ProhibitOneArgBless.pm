@@ -35,7 +35,11 @@ sub violates {
     return if is_hash_key($elem);
 
     if( scalar parse_arg_list($elem) == 1 ) {
-	return Perl::Critic::Violation->new($desc, $expl, $elem->location() );
+
+	return Perl::Critic::Violation->new( $desc,
+                                             $expl,
+                                             $elem->location(),
+                                             $self->get_severity(), );
     }
     return; #ok!
 }

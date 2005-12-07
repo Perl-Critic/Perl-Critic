@@ -24,7 +24,7 @@ my $expl = [ 404 ];
 
 #---------------------------------------------------------------------------
 
-sub default_severity   { return $SEVERITY_LOW }
+sub default_severity { return $SEVERITY_LOW }
 sub applies_to { return 'PPI::Document' }
 
 #---------------------------------------------------------------------------
@@ -35,7 +35,10 @@ sub violates {
     return if $doc->find_first( \&_wanted );
 
     #If we get here, then no $VERSION was found
-    return Perl::Critic::Violation->new( $desc, $expl, [0,0] );
+    return Perl::Critic::Violation->new( $desc,
+                                         $expl,
+                                         [0,0],
+                                         $self->get_severity(), );
 }
 
 sub _wanted {

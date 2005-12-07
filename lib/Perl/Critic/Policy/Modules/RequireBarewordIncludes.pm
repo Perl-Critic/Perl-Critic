@@ -34,7 +34,11 @@ sub violates {
     if( $child->isa('PPI::Token::Quote') ) {
 	my $type = $elem->type();
 	my $desc = qq{'$type' statement with library name as string};
-	return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
+
+	return Perl::Critic::Violation->new( $desc,
+                                             $expl,
+                                             $elem->location(),
+                                             $self->get_severity(), );
     }
     return; #ok!
 }

@@ -19,11 +19,11 @@ $VERSION = eval $VERSION;    ## no critic
 #---------------------------------------------------------------------------
 
 my $desc = q{Pragma 'constant' used};
-my $expl = [55];
+my $expl = [ 55 ];
 
 #---------------------------------------------------------------------------
 
-sub default_severity   { return $SEVERITY_HIGH }
+sub default_severity { return $SEVERITY_HIGH }
 sub applies_to { return 'PPI::Statement::Include' }
 
 #---------------------------------------------------------------------------
@@ -31,7 +31,11 @@ sub applies_to { return 'PPI::Statement::Include' }
 sub violates {
     my ( $self, $elem, $doc ) = @_;
     if ( $elem->type() eq 'use' && $elem->pragma() eq 'constant' ) {
-        return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
+
+        return Perl::Critic::Violation->new( $desc,
+                                             $expl,
+                                             $elem->location(),
+                                             $self->get_severity(), );
     }
     return;    #ok!
 }

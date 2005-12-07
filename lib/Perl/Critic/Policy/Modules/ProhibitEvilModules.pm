@@ -37,7 +37,11 @@ sub new {
 sub violates {
     my ( $self, $elem, $doc ) = @_;
     if ( exists $self->{_evil_modules}->{ $elem->module() } ) {
-        return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
+
+        return Perl::Critic::Violation->new( $desc,
+                                             $expl,
+                                             $elem->location(),
+                                             $self->get_severity, );
     }
     return;    #ok!
 }

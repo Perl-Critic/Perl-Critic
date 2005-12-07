@@ -35,8 +35,11 @@ sub violates {
     return if exists $allow{"$elem"};
     if ( any { $elem eq $_ } @BUILTINS ) {
         if ( _sibling_is_list($elem) && ! _is_object_method($elem) ) {
-            return Perl::Critic::Violation->new( $desc, $expl,
-                $elem->location() );
+
+            return Perl::Critic::Violation->new( $desc,
+                                                 $expl,
+                                                 $elem->location(),
+                                                 $self->get_severity(), );
         }
     }
     return;    #ok!

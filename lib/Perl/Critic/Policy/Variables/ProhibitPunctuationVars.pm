@@ -19,7 +19,7 @@ $VERSION = eval $VERSION;    ## no critic
 #---------------------------------------------------------------------------
 
 my $desc = q{Magic punctuation variable used};
-my $expl = [79];
+my $expl = [ 79 ];
 
 ## no critic
 my %exempt = ( '$_' => 1, '@_' => 1 );    #Can't live without these
@@ -29,7 +29,7 @@ $exempt{'_'} = 1;                         #This is used with 'stat'
 
 #---------------------------------------------------------------------------
 
-sub default_severity   { return $SEVERITY_LOW }
+sub default_severity { return $SEVERITY_LOW }
 sub applies_to { return 'PPI::Token::Magic' }
 
 #---------------------------------------------------------------------------
@@ -37,7 +37,11 @@ sub applies_to { return 'PPI::Token::Magic' }
 sub violates {
     my ( $self, $elem, $doc ) = @_;
     if ( !exists $exempt{$elem} ) {
-        return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
+
+        return Perl::Critic::Violation->new( $desc,
+                                             $expl,
+                                             $elem->location(),
+                                             $self->get_severity(), );
     }
     return;  #ok!
 }
