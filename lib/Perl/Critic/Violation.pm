@@ -86,7 +86,7 @@ sub sort_by_location {
 
 sub sort_by_severity {
     ref $_[0] || shift; #Can call as object or class method
-    return sort { ($a->policy->severity() || 0) <=> ($b->policy->severity() || 0) } @_;
+    return sort { ($a->severity() || 0) <=> ($b->severity() || 0) } @_;
 }
 
 #---------------------------
