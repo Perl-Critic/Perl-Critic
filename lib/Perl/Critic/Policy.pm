@@ -21,7 +21,7 @@ sub applies_to       { return qw(PPI::Element)   }
 sub violates         { return _abstract_method() }
 
 sub set_severity     { return $_[0]->{_severity} = $_[1] }
-sub get_severity     { return $_[0]->{_severity} || default_severity() }
+sub get_severity     { return $_[0]->{_severity} || $_[0]->default_severity() }
 sub default_severity { return $SEVERITY_LOWEST }
 
 #----------------------------------------------------------------------------
