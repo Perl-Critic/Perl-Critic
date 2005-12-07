@@ -48,12 +48,12 @@ sub import {
 #----------------------------------------------------------------------------
 
 sub new {
-    my ( $class, $desc, $expl, $loc ) = @_;
+    my ( $class, $desc, $expl, $loc, $sev ) = @_;
 
     #Check arguments to help out developers who might
     #be creating new Perl::Critic::Policy modules.
 
-    if ( @_ != 4 ) {
+    if ( @_ != 5 ) {
         my $msg = 'Wrong number of args to Violation->new()';
         croak $msg;
     }
@@ -68,6 +68,7 @@ sub new {
     $self->{_description} = $desc;
     $self->{_explanation} = $expl;
     $self->{_location}    = $loc;
+    $self->{_severity}    = $sev;
     $self->{_policy}      = caller;
 
     return $self;
@@ -97,7 +98,7 @@ sub location {
 
 #---------------------------
 
-sub diagnostics { 
+sub diagnostics {
     my $self = shift;
     my $pol = $self->policy();
     return $DIAGNOSTICS{$pol};
@@ -105,14 +106,14 @@ sub diagnostics {
 
 #---------------------------
 
-sub description { 
-    my $self = shift; 
+sub description {
+    my $self = shift;
     return $self->{_description};
 }
 
 #---------------------------
 
-sub explanation { 
+sub explanation {
     my $self = shift;
     my $expl = $self->{_explanation};
     if( ref $expl eq 'ARRAY' ) {
@@ -125,7 +126,14 @@ sub explanation {
 
 #---------------------------
 
-sub policy { 
+sub severity {
+    my $self = shift;
+    return $self->{_severity};
+}
+
+#---------------------------
+
+sub policy {
     my $self = shift;
     return $self->{_policy};
 }
@@ -134,9 +142,11 @@ sub policy {
 
 sub to_string {
     my $self = shift;
-    my %fspec = ( l => $self->location->[0], c => $self->location->[1],
-		  m => $self->description(), e => $self->explanation(),
-		  p => $self->policy(),      d => $self->diagnostics(), 
+    my %fspec = (
+         l => $self->location->[0], c => $self->location->[1],
+         m => $self->description(), e => $self->explanation(),
+         p => $self->policy(),      d => $self->diagnostics(),
+         s => $self->severity(),
     );
     return stringf($FORMAT, %fspec);
 }
