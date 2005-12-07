@@ -15,7 +15,7 @@ This is a test diagnostic.
 
 sub get_violation
 {
-   return Perl::Critic::Violation->new('', '', [0,0]);
+   return Perl::Critic::Violation->new('', '', [0,0], 0);
 }
 
 1;

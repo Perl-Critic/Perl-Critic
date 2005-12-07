@@ -67,7 +67,7 @@ can_ok('Perl::Critic::Violation', 'location');
 can_ok('Perl::Critic::Violation', 'policy');
 can_ok('Perl::Critic::Violation', 'to_string');
 
-$obj = Perl::Critic::Violation->new(undef, undef, []);
+$obj = Perl::Critic::Violation->new(undef, undef, [], undef);
 isa_ok($obj, 'Perl::Critic::Violation');
 is($obj->VERSION(), $VERSION);
 

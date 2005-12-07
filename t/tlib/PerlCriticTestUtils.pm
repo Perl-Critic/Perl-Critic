@@ -4,6 +4,7 @@ use warnings;
 use strict;
 use base 'Exporter';
 use Perl::Critic;
+use Perl::Critic::Config;
 our @EXPORT_OK = qw(pcritique critique);
 
 #---------------------------------------------------------------

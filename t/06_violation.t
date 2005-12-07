@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use English qw(-no_match_vars);
-use Test::More tests => 22;
+use Test::More tests => 23;
 
 #---------------------------------------------------------------
 
@@ -38,10 +38,11 @@ ok($EVAL_ERROR, 'new, bad arg');
 
 # accessors
 my $no_diagnostics_msg = qr/ \s* No [ ] diagnostics [ ] available \s* /xms;
-my $viol = Perl::Critic::Violation->new('Foo', 'Bar', [2,3]);
+my $viol = Perl::Critic::Violation->new( 'Foo', 'Bar', [2,3], 99, );
 is(       $viol->description(), 'Foo',       'description');
 is(       $viol->explanation(), 'Bar',       'explanation');
 is_deeply($viol->location(),    [2,3],       'location');
+is(       $viol->severity(),    99,          'severity');
 is(       $viol->policy(),      __PACKAGE__, 'policy');
 like($viol->diagnostics(), qr/ \A $no_diagnostics_msg \z /xms, 'diagnostics');
 
@@ -53,8 +54,8 @@ like($viol->diagnostics(), qr/ \A $no_diagnostics_msg \z /xms, 'diagnostics');
    like("$viol", $expect, 'stringify');
 }
 
-is(Perl::Critic::Violation->new('Foo', [28], [2,3])->explanation(), 'See page 28 of PBP', 'explanation');
-is(Perl::Critic::Violation->new('Foo', [28,30], [2,3])->explanation(), 'See pages 28,30 of PBP', 'explanation');
+is(Perl::Critic::Violation->new('Foo', [28], [2,3], 99)->explanation(), 'See page 28 of PBP', 'explanation');
+is(Perl::Critic::Violation->new('Foo', [28,30], [2,3], 99)->explanation(), 'See pages 28,30 of PBP', 'explanation');
 
 # import
 like(ViolationTest->get_violation()->diagnostics(),
@@ -73,6 +74,6 @@ my %l = (
    l2_10    => [2,10],
    l3_1     => [3,1],
 );
-my @v = map {Perl::Critic::Violation->new('', '', $_)} values %l;
+my @v = map {Perl::Critic::Violation->new('', '', $_, 0)} values %l;
 is_deeply([map {$_->location()} Perl::Critic::Violation->sort_by_location(@v)],
           [@l{qw(nothing no_line no_col l1_1 l1_10 l1_15 l2_1 l2_10 l3_1)}], 'sort_by_location');
