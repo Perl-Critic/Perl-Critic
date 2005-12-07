@@ -37,7 +37,10 @@ sub violates {
     $sib->isa('PPI::Token::Word') && $sib eq 'undef' || return;
 
     #Must be 'return undef'
-    return Perl::Critic::Violation->new( $desc, $expl, $elem->location() );
+    return Perl::Critic::Violation->new( $desc,
+                                         $expl,
+                                         $elem->location(),
+                                         $self->get_severity(), );
 }
 
 1;
