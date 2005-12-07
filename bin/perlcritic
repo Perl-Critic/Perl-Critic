@@ -67,7 +67,11 @@ sub get_options {
         }
     }
 
-    #Override profile, if -noprofile
+    #If -top is specified, force the severity to 1 so that
+    #we report the leading offenders across all severity levels
+    if ( $opts{top} ) { $opts{severity} = 1 }
+
+    #Override profile, if -noprofile is specified
     if ( $opts{noprofile} ) { $opts{profile} = $EMPTY }
 
     #All good!
@@ -188,8 +192,8 @@ suitable for test scripts.
 
 =head1 USAGE EXAMPLES
 
-Before getting into all the gory details, here are some common usage examples
-to get you started.
+Before getting into all the gory details, here are basic usage
+examples to get you started.
 
   #Report only violations with highest severity
   perlcritic MyModle.pm
@@ -205,7 +209,8 @@ to get you started.
 
 The examples above demonstrate how to control the severity level of
 L<Perl::Critic::Policy> violations that C<perlcritic> reports.  Each
-Policy has a pre-defined severity level.  But since...
+Policy has a pre-defined severity level, and by default, perlcritic
+only reports the most severe violations.
 
 =head1 ARGUMENTS
 
@@ -256,7 +261,8 @@ wins.
 
 Directs perlcritic to report only the top C<N> Policy violations,
 ranked by their severity.  If C<N> is not specified, it defaults to
-20.  Users can redefine the severity for any Policy in the
+20.  The C<-top> option causes any severity options to be silently
+ignored.  Users can redefine the severity for any Policy in the
 F<.perlcriticrc> file.  See L<"CONFIGURATION"> for more information.
 
 =item -include PATTERN
