@@ -144,7 +144,7 @@ sub render_report {
     if ( defined $top ) {
         my @by_severity =
           Perl::Critic::Violation::sort_by_severity(@violations);
-        my @top_offenders = ( reverse @by_severity )[ 0 .. $top ]; #Slicing here
+        my @top_offenders = ( reverse @by_severity )[ 0 .. $top-1 ];
         @violations = Perl::Critic::Violation::sort_by_location(@top_offenders);
     }
 
