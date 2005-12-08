@@ -5,7 +5,43 @@
 # $Revision$
 ########################################################################
 
-[0.13] Released on 051031
+[0.13_01]
+
+     Replaced 'priority' concept with 'severity'.  Now each Policy module
+     has a predefined severity level ranging from 1 to 5.  By default,
+     perlcritic only reports the most severe violations.  You can adjust
+     the severity threshold at the command line, and you can change
+     the severity for any Policy using the config file.
+
+     Chris implemented the applies_to() mechanism, which allows Policy
+     classes to declare the types of PPI elements that it wants to examine.
+     When traversing the document, Perl::Critic invokes the Policy only
+     for elements that are of the correct type.  This improves performance
+     by about 33%.
+
+     Perl::Critic now uses a Plugin architecture to automatically
+     discover Policy modules.  So if you have custom Policies, all you
+     have to do is install them in the Perl::Critic::Policy namespace --
+     no need to add anything to your .perlcriticrc file.  If you write
+     policies in a different namespace, you can configure that too.  See
+     the Perl::Critic::Config docs for details.
+
+     New Policies:
+     * Modules::RequireEndWithOne
+     * NamingConventions::ProhibitAmbiguousNames
+     * Subroutines::RequireFinalReturn
+     * TestingAndDebugging::ProhibitStrictureDisabling
+     * TestingAndDebugging::ProhibitWarningsDisabling
+     * ValuesAndExpressions::RequireCircumfixDerefs
+
+     Bug Fixes:
+     * 15101: Plugin architecture improves support for 3rd-party code
+     * 16319: Fixed incorrect PBP page number in ProhibitBarwordFilehandle
+     * 16321: Lists of empty quotes are now allowed by ProhibitQuotedWordLists
+     * 16288: Empty lists caused a fatal error RequireTrailingCommas
+     * 15653: Fixed false positive in OneArgSelect.
+     
+[0.13] Released on 051031 
 
      Production release of 0.12_03.  No code major changes.
 
