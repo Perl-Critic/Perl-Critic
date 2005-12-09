@@ -212,14 +212,15 @@ objects.
 
 =over 8
 
-=item new( $description, $explanation, $location )
+=item new( $description, $explanation, $location, $severity )
 
 Retruns a reference to a new C<Perl::Critic::Violation> object. The
 arguments are a description of the violation (as string), an
 explanation for the policy (as string) or a series of page numbers in
 PBB (as an ARRAY ref), and the location of the violation (as an ARRAY
 ref).  The C<$location> must have two elements, representing the line
-and column number, in that order.
+and column number, in that order.  The C<$severity> should be an
+integer ranging from 1 to 5.
 
 =back
 
@@ -233,13 +234,18 @@ Returns a brief description of the policy that has been volated as a string.
 
 =item explanation( void )
 
-Returns the explanation for this policy as a string or as reference to
+Returns an explanation of the policy as a string or as reference to
 an array of page numbers in PBB.
 
 =item location( void )
 
-Returns a two-element list containing the line and column number where the 
-violation occurred.
+Returns a two-element list containing the line and column number where
+this Violation occurred.
+
+=item severity( void )
+
+Returns the severity of this Violation as an integer ranging from 1 to
+5, where 5 is the "most" severe.
 
 =item sort_by_severity( @violation_objects )
 
