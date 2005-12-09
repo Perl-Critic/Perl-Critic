@@ -267,10 +267,13 @@ sub native_policies {
       Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars
       Perl::Critic::Policy::Subroutines::ProhibitExplicitReturnUndef
       Perl::Critic::Policy::Subroutines::RequireFinalReturn
+      Perl::Critic::Policy::References::RequireCircumfixDereferences
       Perl::Critic::Policy::RegularExpressions::RequireExtendedFormatting
       Perl::Critic::Policy::RegularExpressions::RequireLineBoundaryMatching
       Perl::Critic::Policy::Subroutines::ProhibitBuiltinHomonyms
       Perl::Critic::Policy::Subroutines::ProhibitSubroutinePrototypes
+      Perl::Critic::Policy::TestingAndDebugging::ProhibitStrictureDisabling
+      Perl::Critic::Policy::TestingAndDebugging::ProhibitWarningsDisabling
       Perl::Critic::Policy::TestingAndDebugging::RequirePackageStricture
       Perl::Critic::Policy::TestingAndDebugging::RequirePackageWarnings
       Perl::Critic::Policy::ValuesAndExpressions::ProhibitConstantPragma
