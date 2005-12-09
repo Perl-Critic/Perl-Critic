@@ -1,8 +1,8 @@
 #######################################################################
-#      $URL: http://perlcritic.tigris.org/svn/perlcritic/trunk/Perl-Critic/lib/Perl/Critic/Policy/TestingAndDebugging/RequirePackageStricture.pm $
-#     $Date: 2005-12-06 23:30:07 -0800 (Tue, 06 Dec 2005) $
-#   $Author: thaljef $
-# $Revision: 79 $
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
 ########################################################################
 
 package Perl::Critic::Policy::TestingAndDebugging::ProhibitWarningsDisabling;
