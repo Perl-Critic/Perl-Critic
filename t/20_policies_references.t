@@ -1,8 +1,8 @@
 ##################################################################
-#     $URL: http://perlcritic.tigris.org/svn/perlcritic/trunk/Perl-Critic/t/20_policies_inputoutput.t $
-#    $Date: 2005-11-15 22:42:33 -0800 (Tue, 15 Nov 2005) $
-#   $Author: thaljef $
-# $Revision: 44 $
+#     $URL$
+#    $Date$
+#   $Author$
+# $Revision$
 ##################################################################
 
 use strict;
