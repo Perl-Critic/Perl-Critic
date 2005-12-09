@@ -36,12 +36,15 @@ lib/Perl/Critic/Policy/Modules/RequireVersionVar.pm
 lib/Perl/Critic/Policy/NamingConventions/ProhibitAmbiguousNames.pm
 lib/Perl/Critic/Policy/NamingConventions/ProhibitMixedCaseSubs.pm
 lib/Perl/Critic/Policy/NamingConventions/ProhibitMixedCaseVars.pm
+lib/Perl/Critic/Policy/References/RequireCircumfixDereferences.pm
 lib/Perl/Critic/Policy/RegularExpressions/RequireExtendedFormatting.pm
 lib/Perl/Critic/Policy/RegularExpressions/RequireLineBoundaryMatching.pm
 lib/Perl/Critic/Policy/Subroutines/ProhibitBuiltinHomonyms.pm
 lib/Perl/Critic/Policy/Subroutines/ProhibitExplicitReturnUndef.pm
 lib/Perl/Critic/Policy/Subroutines/ProhibitSubroutinePrototypes.pm
 lib/Perl/Critic/Policy/Subroutines/RequireFinalReturn.pm
+lib/Perl/Critic/Policy/TestingAndDebugging/ProhibitStrictureDisabling.pm
+lib/Perl/Critic/Policy/TestingAndDebugging/ProhibitWarningsDisabling.pm
 lib/Perl/Critic/Policy/TestingAndDebugging/RequirePackageStricture.pm
 lib/Perl/Critic/Policy/TestingAndDebugging/RequirePackageWarnings.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitConstantPragma.pm
@@ -77,6 +80,7 @@ t/20_policies_inputoutput.t
 t/20_policies_miscellanea.t
 t/20_policies_modules.t
 t/20_policies_namingconventions.t
+t/20_policies_references.t
 t/20_policies_regularexpressions.t
 t/20_policies_subroutines.t
 t/20_policies_testinganddebugging.t
