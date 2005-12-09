@@ -5,15 +5,6 @@
 # $Revision$
 ########################################################################
 
-POLICIES TO ADD:
-
-- Require labels for loops.
-- Require labels for loop breaks.
-- Require global variables to be localized
-- Prohibit 'no strict' (maybe)
-- Prohibit 'no warnings' (maybe)
-- Require fat commas for hashes
-
 NEW FEATURES:
 
 - Report safari sections instead of book page numbers.
@@ -22,3 +13,75 @@ MISC:
 
 - Need test cases for perlcritc command-line interface.
  
+BUGS/LIMITATIONS:
+
+- Modules::RequireEndWithOne
+  - Doesn't notice when "## no critic" extends to the end of the file
+- Modules::RequireVersionVar
+  - Doesn't enforce three-part versions
+- NamingConventions::ProhibitAmbiguousNames
+  - Don't allow compound names with forbidden words, like "last_record"
+  - Allow forbidden words in RHS of variable declarations
+
+OTHER PBP POLICIES THAT SEEM FEASIBLE TO IMPLEMENT:
+
+- ValuesAndExpressions::ProhibitEscapedCharacters (p54)
+- ValuesAndExpressions::ProhibitCommaSeparatedStatements (p68)
+- ValuesAndExpressions::ProhibitMixedBooleanOperators (p70)
+- ValuesAndExpressions::RequireListParens (p71)
+- Variables::RequireInitializationForLocalVars (p78)
+- Variables::RequireLocalizedPunctuationVars (p81)
+- Variables::ProhibitMatchVars (p82)
+- Variables::RequireNegativeIndices (p88)
+- Variables::RequireLexicalForLoopIterator (p108)
+- Variables::ProhibitTopicChangeInListFunction (p114)
+- Documentation::RequireSections (p133, p138)
+  List the required the =head1 entries in an ordered list
+  Make that list overrideable in perlcriticrc
+- Documentation::RequirePodAtEnd (p139,p140)
+- Documentation::PodSpelling (p148)
+  Base it on Pod::Spell or Test::Spelling
+  Add a "=for stopwords" section for words to skip, as per Pod::Spell
+- BuiltinFunctions::RequireSimpleSortBlock (p149)
+  Only allow one statement in the sort block
+  Programmer can use a sort function or Schwartzian Transform
+- BuiltinFunctions::ProhibitReverseSortBlock (p152)
+  Don't allow first instance of $b to be before first instance of $a
+- Subroutines::ProhibitSubSigil (p175)
+- Subroutines::RequireArgUnpacking (p178)
+  Ensure that the first child of a sub is PPI::Statement::Variable
+- Subroutines::ProhibitManyArgs (p182)
+  If first PPI::Statement::Variable is a list "my", make sure is less than N elements
+  Otherwise make sure there are less than N PPI::Statement::Variables in a row at begin
+- InputOutput::RequireErrorChecking (p208)
+  Forbid open, print, close in void context
+- InputOutput::RequireBriefOpen (p209)
+  Make sure there's a close within N statements of an open, both with same lexical FH
+- InputOutput::ProhibitReadlineWithFor (p211)
+- InputOutput::ProhibitJoinedReadline (p213)
+- InputOutput::ProhibitExplicitStdin (p216)
+- InputOutput::RequireBracesOnPrintFilehandle (p217)
+- InputOutput::ProhibitInteractiveTest (p218)
+  Forbid -t operand
+- References::ProhibitMultipleSigils (p228) [DONE]
+- RegularExpressions::RequireBracesForMultiline (p242)
+- RegularExpressions::ProhibitUnusualDelimiters (p246)
+- RegularExpressions::ProhibitEscapedMetacharacters (p247)
+- RegularExpressions::ProhibitEnumeratedClasses (p248)
+  This will be avoided for ASCII-only code
+- RegularExpressions::ProhibitUnusedCapture (p252)
+  Look for LHS of regexp or use of $1, $2, ... before next regexp
+- RegularExpressions::ProhibitCaptureWithoutTest (p253)
+  $1, $2, ... must be inside conditional with no preceding regexp
+- RegularExpressions::ProhibitComplexRegexps (p261)
+  If regexp is longer than N characters/lines, require it be split into qr// pieces
+- RegularExpressions::ProhibitSingleCharAlternation (p265)
+  Not sure if this is easy or hard.  Need to look at what PPI emits for regexps.
+- RegularExpressions::ProhibitFixedStringMatches (p271)
+  Can't be qr/\s*\\A\s*\((?:\?:)?(?:\s*\w+\s*\|)*\s*\w+\s*\)\s*\\z/
+  or qr/\s*\\A\s*\w+\s*\\z/
+- ClassHierarchies::ProhibitExplicitISA (p360)
+- ClassHierarchies::ProhibitAutoload (p393)
+- TestingAndDebugging::ProhibitProlongedStrictureOverride (p443)
+- Miscellanea::ProhibitFormats (p449)
+- Miscellanea::ProhibitTies (p451)
