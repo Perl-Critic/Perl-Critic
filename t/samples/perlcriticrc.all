@@ -41,6 +41,7 @@
 [Subroutines::ProhibitAmpersandSigils]
 [Subroutines::ProhibitBuiltinHomonyms]
 [Subroutines::ProhibitExplicitReturnUndef]
+[Subroutines::ProhibitExcessComplexity]
 [Subroutines::ProhibitSubroutinePrototypes]
 [Subroutines::RequierFinalReturn]
 [TestingAndDebugging::ProhibitStrictureDisabling]

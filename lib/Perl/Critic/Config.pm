@@ -267,6 +267,7 @@ sub native_policies {
       Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars
       Perl::Critic::Policy::Subroutines::ProhibitAmpersandSigils
       Perl::Critic::Policy::Subroutines::ProhibitExplicitReturnUndef
+      Perl::Critic::Policy::Subroutines::ProhibitExcessComplexity
       Perl::Critic::Policy::Subroutines::ProhibitBuiltinHomonyms
       Perl::Critic::Policy::Subroutines::ProhibitSubroutinePrototypes
       Perl::Critic::Policy::Subroutines::RequireFinalReturn

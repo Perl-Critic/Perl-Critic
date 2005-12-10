@@ -193,3 +193,6 @@ severity = 1
 
 [Subroutines::ProhibitAmpersandSigils]
 severity = 1
+
+[Subroutines::ProhibitExcessComplexity]
+severity = 1
