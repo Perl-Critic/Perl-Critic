@@ -39,7 +39,9 @@ lib/Perl/Critic/Policy/NamingConventions/ProhibitMixedCaseVars.pm
 lib/Perl/Critic/Policy/References/RequireCircumfixDereferences.pm
 lib/Perl/Critic/Policy/RegularExpressions/RequireExtendedFormatting.pm
 lib/Perl/Critic/Policy/RegularExpressions/RequireLineBoundaryMatching.pm
+lib/Perl/Critic/Policy/Subroutines/ProhibitAmpersandSigils.pm
 lib/Perl/Critic/Policy/Subroutines/ProhibitBuiltinHomonyms.pm
+lib/Perl/Critic/Policy/Subroutines/ProhibitExcessComplexity.pm
 lib/Perl/Critic/Policy/Subroutines/ProhibitExplicitReturnUndef.pm
 lib/Perl/Critic/Policy/Subroutines/ProhibitSubroutinePrototypes.pm
 lib/Perl/Critic/Policy/Subroutines/RequireFinalReturn.pm
