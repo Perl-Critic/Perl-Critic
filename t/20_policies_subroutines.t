@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 17;
+use Test::More tests => 19;
 use Perl::Critic::Config;
 use Perl::Critic;
 
@@ -209,3 +209,32 @@ END_PERL
 
 $policy = 'Subroutines::RequireFinalReturn';
 is( pcritique($policy, \$code), 1, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+&function_call();
+&my_package::function_call();
+&function_call( $args );
+&my_package::function_call( %args );
+&function_call( &other_call( @foo ), @bar );
+&::function_call();
+END_PERL
+
+$policy = 'Subroutines::ProhibitAmpersandSigils';
+is( pcritique($policy, \$code), 7, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+function_call();
+my_package::function_call();
+function_call( $args );
+my_package::function_call( %args );
+function_call( other_call( @foo ), @bar );
+\&my_package::function_call;
+\&function_call;
+END_PERL
+
+$policy = 'Subroutines::ProhibitAmpersandSigils';
+is( pcritique($policy, \$code), 0, $policy);

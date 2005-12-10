@@ -42,6 +42,7 @@
 [-References::RequireCircumfixDereferences]
 [-RegularExpressions::RequireExtendedFormatting]
 [-RegularExpressions::RequireLineBoundaryMatching]
+[-Subroutines::ProhibitAmpersandSigils]
 [-Subroutines::ProhibitBuiltinHomonyms]
 [-Subroutines::ProhibitExplicitReturnUndef]
 [-Subroutines::ProhibitSubroutinePrototypes]
