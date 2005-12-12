@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 19;
+use Test::More tests => 21;
 use Perl::Critic::Config;
 use Perl::Critic;
 
@@ -238,3 +238,45 @@ END_PERL
 
 $policy = 'Subroutines::ProhibitAmpersandSigils';
 is( pcritique($policy, \$code), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+sub teest_sub {
+    if ( $foo && $bar || $baz ) {
+        open my $fh, '<', $file or die $!;
+    }
+    elsif ( $blah >>= some_function() ) {
+        return if $barf;
+    }
+    else {
+        $results = $condition ? 1 : 0;
+    }
+    croak unless $result;
+}
+END_PERL
+
+%config = ( max_mccabe => 9 );
+$policy = 'Subroutines::ProhibitExcessComplexity';
+is( pcritique($policy, \$code, \%config), 1, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+sub teest_sub {
+    if ( $foo && $bar || $baz ) {
+        open my $fh, '<', $file or die $!;
+    }
+    elsif ( $blah >>= some_function() ) {
+        return if $barf;
+    }
+    else {
+        $results = $condition ? 1 : 0;
+    }
+    croak unless $result;
+}
+END_PERL
+
+$policy = 'Subroutines::ProhibitExcessComplexity';
+is( pcritique($policy, \$code), 0, $policy);
+
