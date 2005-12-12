@@ -18,8 +18,8 @@ $VERSION = eval $VERSION;    ## no critic
 
 #----------------------------------------------------------------------------
 
-my $expl = q{Double-sigil dereference};
-my $desc = [ 456 ];
+my $desc = q{Double-sigil dereference};
+my $expl = [ 228 ];
 
 #----------------------------------------------------------------------------
 
