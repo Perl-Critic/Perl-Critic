@@ -30,6 +30,8 @@
      * Modules::RequireEndWithOne
      * NamingConventions::ProhibitAmbiguousNames
      * Subroutines::RequireFinalReturn
+     * Subroutines::ProhibitAmpersandSigils
+     * Subroutines::ProhibitExcessComplexity
      * TestingAndDebugging::ProhibitStrictureDisabling
      * TestingAndDebugging::ProhibitWarningsDisabling
      * ValuesAndExpressions::RequireCircumfixDerefs

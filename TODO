@@ -47,7 +47,7 @@ OTHER PBP POLICIES THAT SEEM FEASIBLE TO IMPLEMENT:
   Programmer can use a sort function or Schwartzian Transform
 - BuiltinFunctions::ProhibitReverseSortBlock (p152)
   Don't allow first instance of $b to be before first instance of $a
-- Subroutines::ProhibitSubSigil (p175)
+- Subroutines::ProhibitSubSigil (p175)  [DONE]
 - Subroutines::RequireArgUnpacking (p178)
   Ensure that the first child of a sub is PPI::Statement::Variable
 - Subroutines::ProhibitManyArgs (p182)
