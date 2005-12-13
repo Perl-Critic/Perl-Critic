@@ -43,13 +43,13 @@ sub violates {
     my @children = $expr->schildren();
     return if @children <= 1;
 
-    #Is the last element a comma?
-    my $last = $children[-1] || return;
-    if ( ! ($last->isa('PPI::Token::Operator') &&  $last eq $COMMA) ) {
+    #Is the final element a comma?
+    my $final = $children[-1] || return;
+    if ( ! ($final->isa('PPI::Token::Operator') && $final eq $COMMA) ) {
 
 	return Perl::Critic::Violation->new( $desc,
                                              $expl,
-                                             $last->location(),
+                                             $final->location(),
                                              $self->get_severity, );
     }
 

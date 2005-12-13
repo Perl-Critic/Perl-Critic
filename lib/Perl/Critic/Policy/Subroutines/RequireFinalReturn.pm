@@ -59,35 +59,35 @@ sub _block_is_empty {
 sub _block_has_return {
     my ( $block ) = @_;
     my @blockparts = $block->schildren();
-    my $last = $blockparts[-1];
-    return $last && (_is_explicit_return($last) ||
-                     _is_compound_return($last));
+    my $final = $blockparts[-1];
+    return $final && (_is_explicit_return($final) ||
+                     _is_compound_return($final));
 }
 
 #-------------------------
 
 sub _is_explicit_return {
-    my ( $last ) = @_;
-    return $last->isa('PPI::Statement::Break') &&
-           $last =~ m/ \A return\b /xms;
+    my ( $final ) = @_;
+    return $final->isa('PPI::Statement::Break') &&
+           $final =~ m/ \A return\b /xms;
 }
 
 #-------------------------
 
 sub _is_compound_return {
-    my ( $last ) = @_;
+    my ( $final ) = @_;
 
-    if (!$last->isa('PPI::Statement::Compound')) {
+    if (!$final->isa('PPI::Statement::Compound')) {
         return; #fail
     }
 
-    my $begin = $last->schild(0) || return; #fail
+    my $begin = $final->schild(0) || return; #fail
     if (!($begin->isa('PPI::Token::Word') && $begin eq 'if')) {
         return; #fail
     }
 
     my @blocks = grep {!$_->isa('PPI::Structure::Condition') &&
-                       !$_->isa('PPI::Token')} $last->schildren();
+                       !$_->isa('PPI::Token')} $final->schildren();
     # Sanity check:
     if (scalar grep {!$_->isa('PPI::Structure::Block')} @blocks) { 
         die 'Internal error: expected only conditions, blocks and tokens in the if statement';
