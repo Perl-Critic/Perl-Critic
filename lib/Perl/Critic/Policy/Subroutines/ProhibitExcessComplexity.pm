@@ -53,9 +53,10 @@ sub violates {
     my ( $self, $elem, $doc ) = @_;
     my $count = 1;
 
-    # Count up all the logic keywords
+    # Count up all the logic keywords, weed out hash keys
     my $keywords_ref = $elem->find('PPI::Token::Word') || [];
-    $count += grep { exists $logic_keywords{$_} }  @{ $keywords_ref };
+    my @filtered = grep { ! is_hash_key($_) } @{ $keywords_ref };
+    $count += grep { exists $logic_keywords{$_} } @filtered;
 
     # Count up all the logic operators
     my $operators_ref = $elem->find('PPI::Token::Operator') || [];
