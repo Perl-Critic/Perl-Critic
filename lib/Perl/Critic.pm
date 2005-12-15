@@ -401,11 +401,11 @@ Use 4-argument C<substr> instead of writing C<substr($foo, 2, 6) = $bar>
 
 =head2 L<Perl::Critic::Policy::BuiltinFunctions::ProhibitSleepViaSelect>
 
-Use L<Time::HiRes> instead of C<select(undef, undef, undef, .05)>
+Use L<Time::HiRes> instead of something like C<select(undef, undef, undef, .05)>
 
 =head2 L<Perl::Critic::Policy::BuiltinFunctions::ProhibitStringyEval>
 
-Write C<eval { my $foo; bar($foo) }> instead of C<eval "my $foo; bar($foo);">
+Write C<eval { my $foo; bar($foo) }> instead of C<eval "my $foo; bar($foo);">  
 
 =head2 L<Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep>
 
@@ -491,9 +491,9 @@ Put packages (especially subclasses) in separate files
 
 Write C<require Module> instead of C<require 'Module.pm'>
 
-=head2 L<Perl::Critic::Policy::Modules::ProhibitSpecificModules>
+=head2 L<Perl::Critic::Policy::Modules::ProhibitEvilModules>
 
-Don't use evil modules
+Ban modules that aren't blessed by your shop.
 
 =head2 L<Perl::Critic::Policy::Modules::RequireExplicitPackage>
 
@@ -503,13 +503,13 @@ Always make the C<package> explicit
 
 Give every module a C<$VERSION> number
 
-=head2 L<Perl::Critic::Policy::RegularExpressions::RequireLineBoundaryMatching>
+=head2 L<Perl::Critic::Policy::Modules::RequireEndWithOne>
 
-Always use the C</m> modifier with regular expressions
+End each module with an explicity C<1;> instead of some funky expression.
 
-=head2 L<Perl::Critic::Policy::RegularExpressions::RequireExtendedFormatting>
+=head2 L<Perl::Critic::Policy::NamingConventions::ProhibitAmbiguousNames>
 
-Always use the C</x> modifier with regular expressions
+Don't use vague variable or subroutine names like 'last' or 'record'.
 
 =head2 L<Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseSubs>
 
@@ -519,9 +519,29 @@ Write C<sub my_function{}> instead of C<sub MyFunction{}>
 
 Write C<$my_variable = 42> instead of C<$MyVariable = 42>
 
+=head2 L<Perl::Critic::Policy::RegularExpressions::RequireLineBoundaryMatching>
+
+Always use the C</m> modifier with regular expressions
+
+=head2 L<Perl::Critic::Policy::RegularExpressions::RequireExtendedFormatting>
+
+Always use the C</x> modifier with regular expressions
+
+=head2 L<Perl::Critic::Policy::References::ProhibitDoubleSigils>
+
+Write C<@{ $array_ref }> instead of C<@$array_ref>
+
+=head2 L<Perl::Critic::Policy::Subroutines::ProhibitAmpersandSigils>
+
+Don't call functions with a leading ampersand sigil.
+
 =head2 L<Perl::Critic::Policy::Subroutines::ProhibitBuiltinHomonyms>
 
 Don't declare your own C<open> function.
+
+=head2 L<Perl::Critic::Policy::Subroutines::ProhibitExcessComplexity>
+
+Minimize complexity by factoring code into smaller subroutines.
 
 =head2 L<Perl::Critic::Policy::Subroutines::ProhibitExplicitReturnUndef>
 
@@ -530,6 +550,18 @@ Return failure with bare C<return> instead of C<return undef>
 =head2 L<Perl::Critic::Policy::Subroutines::ProhibitSubroutinePrototypes>
 
 Don't write C<sub my_function (@@) {}>
+
+=head2 L<Perl::Critic::Policy::Subroutines::RequireFinalReturn>
+
+End every path through a subroutine with an explicit C<return> statement.
+
+=head2 L<Perl::Critic::Policy::TestingAndDebugging::ProhibitStrictureDisabling>
+
+Prohibit various flavors of C<no strict>
+
+=head2 L<Perl::Critic::Policy::TestingAndDebugging::ProhibitWarningsDisabling>
+
+Prohibit various flavors of C<no warnings>
 
 =head2 L<Perl::Critic::Policy::TestingAndDebugging::RequirePackageStricture>
 
