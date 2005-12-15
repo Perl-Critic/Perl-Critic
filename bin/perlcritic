@@ -67,9 +67,10 @@ sub get_options {
         }
     }
 
-    #If -top is specified, force the severity to 1 so that
-    #we report the leading offenders across all severity levels
-    if ( exists $opts{top} ) { $opts{severity} = 1 }
+    #If -top is specified, default the severity level to 1, unless an
+    #explicit severity is defined.  This provides us flexibility to
+    #report top-offenders across just some or all of the severity levels.
+    if ( exists $opts{top} ) { $opts{severity} ||= 1 }
 
     #Override profile, if -noprofile is specified
     if ( exists $opts{noprofile} ) { $opts{profile} = $EMPTY }
@@ -319,9 +320,10 @@ wins.
 
 Directs perlcritic to report only the top C<N> Policy violations,
 ranked by their severity.  If C<N> is not specified, it defaults to
-20.  The C<-top> option causes any severity options to be silently
-ignored.  Users can redefine the severity for any Policy in the
-F<.perlcriticrc> file.  See L<"CONFIGURATION"> for more information.
+20.  If the C<-severity> option (or one of the shortcuts) are not
+given, the C<-top> option implies that the severity level is 1. Users
+can redefine the severity for any Policy in the F<.perlcriticrc> file.
+See L<"CONFIGURATION"> for more information.
 
 =item -include PATTERN
 
