@@ -43,13 +43,16 @@ sub violates {
     # Perl::Tidy gets confused by @ARGV.
     local @ARGV = ();  ## no critic
 
-    Perl::Tidy::perltidy(
-        source      => \$source,
-        destination => \$dest,
-        stderr      => \$stderr,
-    );
+    # Trap Perl::Tidy errors, just in case it dies
+    eval {
+	Perl::Tidy::perltidy(
+	    source      => \$source,
+	    destination => \$dest,
+	    stderr      => \$stderr,
+       );
+    };
 
-    if ($stderr) {
+    if ($stderr || $EVAL_ERROR) {
 
         # Looks like perltidy had problems
         $desc = q{perltidy had errors!!};
