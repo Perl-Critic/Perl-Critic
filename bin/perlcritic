@@ -139,9 +139,10 @@ sub render_report {
       : _interpolate($verbosity);
     $fmt =~ s{\%f}{$file}mxg;    #HACK! Vilation objects don't know the file
 
-    no warnings 'once';          #Ugh. It's tough to be a perfectionist.
-    local $Perl::Critic::Violation::FORMAT = $fmt;    ## no critic
-    #TODO: Make the FORMAT a class method instead of variable.
+    ## no critic
+    no warnings 'once';
+    local $Perl::Critic::Violation::FORMAT = $fmt;
+    ## use critic
 
     if ( defined $top ) {
         my $limit = @violations < $top ? $#violations : $top-1;
