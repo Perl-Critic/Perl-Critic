@@ -9,7 +9,7 @@ package Perl::Critic::Policy::TestingAndDebugging::ProhibitWarningsDisabling;
 
 use strict;
 use warnings;
-use List::Util qw(first);
+use List::MoreUtils qw(all);
 use Perl::Critic::Utils;
 use Perl::Critic::Violation;
 use base 'Perl::Critic::Policy';
@@ -25,17 +25,19 @@ my $expl = [ 431 ];
 #---------------------------------------------------------------------------
 
 sub default_severity { return $SEVERITY_HIGH }
-sub applies_to { return 'PPI::Include' }
+sub applies_to { return 'PPI::Statement::Include' }
 
 #---------------------------------------------------------------------------
 
 sub new {
     my ($class, %args) = @_;
     my $self = bless {}, $class;
-    $self->{_allow} = [];
+    $self->{_allow} = {};
 
     if( defined $args{allow} ) {
-        $self->{_allow} = [ split m{\s+}mx, $args{allow} ];
+        for my $allowed ( split m{\W+}mx, lc $args{allow} ) {
+            $self->{_allow}->{$allowed} = 1;
+        }
     }
 
     return $self;
@@ -48,26 +50,21 @@ sub violates {
     my ( $self, $elem, $doc ) = @_;
     return if $elem->type() ne 'no' || $elem->pragma() ne 'warnings';
 
-    my $nodes_ref = $elem->find( \&_wanted );
-    if ( $nodes_ref && @{ $self->{_allow} } ) {
-        for my $node ( @{ $nodes_ref } ) {
-            return if any { $node =~ m{\b $_ \b}imx }  @{ $self->{_allow} };
-        }
-    }
+    #Arguments to 'no warnings' are usually a list of literals or a
+    #qw() list.  Rather than trying to parse the various PPI elements,
+    #I just use a regext to split the statement into words.  This is
+    #kinda lame, but it does the trick for now.
+
+    my $stmnt = $elem->statement() || return;
+    my @words = split m{ [^a-z]+ }mx, $stmnt;
+    @words = grep { $_ !~ m{ qw|no|warnings }mx } @words;
+    return if all { exists $self->{_allow}->{$_} } @words;
 
     #If we get here, then it must be a violation
     return Perl::Critic::Violation->new( $desc,
                                          $expl,
                                          $elem->location(),
                                          $self->get_severity(), );
-}
-
-#---------------------------------------------------------------------------
-
-sub _wanted {
-    my ($doc, $elem) = @_;
-    return    $elem->isa('PPI::Token::Quote')
-           || $elem->isa('PPI::Token::QuoteLike');
 }
 
 1;
