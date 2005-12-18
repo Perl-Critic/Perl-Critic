@@ -35,7 +35,7 @@
 [NamingConventions::ProhibitAmbiguousNames]
 [NamingConventions::ProhibitMixedCaseSubs]
 [NamingConventions::ProhibitMixedCaseVars]
-[References::RequireCircumfixDereferences]
+[References::ProhibitDoubleSigils]
 [RegularExpressions::RequireExtendedFormatting]
 [RegularExpressions::RequireLineBoundaryMatching]
 [Subroutines::ProhibitAmpersandSigils]

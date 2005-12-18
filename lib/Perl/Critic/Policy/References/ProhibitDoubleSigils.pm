@@ -5,7 +5,7 @@
 # $Revision$
 ########################################################################
 
-package Perl::Critic::Policy::References::RequireCircumfixDereferences;
+package Perl::Critic::Policy::References::ProhibitDoubleSigils;
 
 use strict;
 use warnings;
@@ -52,7 +52,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::References::RequireCircumfixDereferences
+Perl::Critic::Policy::References::ProhibitDoubleSigils
 
 =head1 DESCRIPTION
 

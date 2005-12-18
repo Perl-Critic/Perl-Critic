@@ -33,7 +33,7 @@ $some_ref = \$scalar;
 $some_ref = \&code;
 END_PERL
 
-$policy = 'References::RequireCircumfixDereferences';
+$policy = 'References::ProhibitDoubleSigils';
 is( pcritique($policy, \$code), 0, $policy);
 
 #----------------------------------------------------------------
@@ -48,5 +48,5 @@ $code = <<'END_PERL';
 %scalar = ( $$some_ref );
 END_PERL
 
-$policy = 'References::RequireCircumfixDereferences';
+$policy = 'References::ProhibitDoubleSigils';
 is( pcritique($policy, \$code), 6, $policy);

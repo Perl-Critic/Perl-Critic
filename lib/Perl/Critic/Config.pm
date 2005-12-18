@@ -271,7 +271,7 @@ sub native_policies {
       Perl::Critic::Policy::Subroutines::ProhibitBuiltinHomonyms
       Perl::Critic::Policy::Subroutines::ProhibitSubroutinePrototypes
       Perl::Critic::Policy::Subroutines::RequireFinalReturn
-      Perl::Critic::Policy::References::RequireCircumfixDereferences
+      Perl::Critic::Policy::References::ProhibitDoubleSigils
       Perl::Critic::Policy::RegularExpressions::RequireExtendedFormatting
       Perl::Critic::Policy::RegularExpressions::RequireLineBoundaryMatching
       Perl::Critic::Policy::TestingAndDebugging::ProhibitStrictureDisabling

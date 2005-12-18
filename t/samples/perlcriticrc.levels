@@ -182,7 +182,7 @@ severity = 1
 [NamingConventions::ProhibitAmbiguousNames]
 severity = 1
 
-[References::RequireCircumfixDereferences]
+[References::ProhibitDoubleSigils]
 severity = 1
 
 [TestingAndDebugging::ProhibitStrictureDisabling]
