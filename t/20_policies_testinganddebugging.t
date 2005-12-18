@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 12;
+use Test::More tests => 20;
 use Perl::Critic;
 
 # common P::C testing tools
@@ -123,10 +123,108 @@ is( pcritique($policy, \$code, \%config), 0, $policy);
 
 $code = <<'END_PERL';
 package foo;
+no strict "vars", "refs", "subs";
+END_PERL
+
+%config = (allow => 'vars refs subs');
+$policy = 'TestingAndDebugging::ProhibitStrictureDisabling';
+is( pcritique($policy, \$code, \%config), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+package foo;
 no strict "vars", "refs", 'subs';
 END_PERL
 
-%config = (allow => 'vars subs');
+%config = (allow => 'VARS SUBS'); #Note wrong case!
 $policy = 'TestingAndDebugging::ProhibitStrictureDisabling';
+is( pcritique($policy, \$code, \%config), 1, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+package foo;
+no strict qw(vars refs subs);
+END_PERL
+
+%config = (allow => 'VARS SUBS'); #Note wrong case!
+$policy = 'TestingAndDebugging::ProhibitStrictureDisabling';
+is( pcritique($policy, \$code, \%config), 1, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+package foo;
+no warnings;
+END_PERL
+
+$policy = 'TestingAndDebugging::ProhibitWarningsDisabling';
+is( pcritique($policy, \$code), 1, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+package foo;
+no warnings 'uninitialized', 'deprecated';
+END_PERL
+
+$policy = 'TestingAndDebugging::ProhibitWarningsDisabling';
+is( pcritique($policy, \$code), 1, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+package foo;
+no warnings qw(closure glob);
+END_PERL
+
+$policy = 'TestingAndDebugging::ProhibitWarningsDisabling';
+is( pcritique($policy, \$code), 1, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+package foo;
+no warnings qw(glob io once);
+END_PERL
+
+%config = (allow => 'iO Glob OnCe');
+$policy = 'TestingAndDebugging::ProhibitWarningsDisabling';
+is( pcritique($policy, \$code, \%config), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+package foo;
+no warnings "numeric", "pack", "portable";
+END_PERL
+
+%config = (allow => 'numeric,portable, pack'); #Funky config
+$policy = 'TestingAndDebugging::ProhibitWarningsDisabling';
+is( pcritique($policy, \$code, \%config), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+package foo;
+no warnings "numeric", "pack", 'portable';
+END_PERL
+
+#Note wrong case, funky config...
+%config = (allow => 'NumerIC;PORTABLE'); 
+$policy = 'TestingAndDebugging::ProhibitWarningsDisabling';
+is( pcritique($policy, \$code, \%config), 1, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+package foo;
+no warnings qw(numeric pack portable);
+END_PERL
+
+#Note wrong case, funky config...
+%config = (allow => 'paCK/PortablE'); 
+$policy = 'TestingAndDebugging::ProhibitWarningsDisabling';
 is( pcritique($policy, \$code, \%config), 1, $policy);
 
