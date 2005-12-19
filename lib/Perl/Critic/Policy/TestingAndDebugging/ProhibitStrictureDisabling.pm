@@ -52,7 +52,7 @@ sub violates {
 
     #Arguments to 'no strict' are usually a list of literals or a qw()
     #list.  Rather than trying to parse the various PPI elements, I
-    #just use a regext to split the statement into words.  This is
+    #just use a regex to split the statement into words.  This is
     #kinda lame, but it does the trick for now.
 
     my $stmnt = $elem->statement() || return;
@@ -80,6 +80,25 @@ __END__
 Perl::Critic::Policy::TestingAndDebugging::ProhibitStrictureDisabling
 
 =head1 DESCRIPTION
+
+There are good reasons for disabling certain kinds of strictures, But
+if you were wise enough to C<use strict> in the first place, then it
+doesn't make sense to disable it completely.  By default, any C<no
+strict> statement will violate this policy.  However, you can
+configure this Policy to allow certain types of strictures to be
+disabled (See L<Configuration>).  A bare C<no strict> statement will
+always raise a violation.
+
+=head1 CONSTRUCTOR
+
+This policy accepts one key-value pair in the constructor.  The key is
+'allow' and the value is a string of whitespace delimited stricture
+types that you want to permit.  These can be 'vars', 'subs' and/or
+'refs'.  Users of the Perl::Critic engine can configure this in their
+F<.perlcriticrc> file like this:
+
+  [TestingAndDebugging::ProhibitStrictureDisabling]
+  allow = vars subs refs
 
 =head1 SEE ALSO
 

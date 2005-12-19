@@ -81,6 +81,25 @@ Perl::Critic::Policy::TestingAndDebugging::ProhibitWarningsDisabling
 
 =head1 DESCRIPTION
 
+There are good reasons for disabling certain kinds of warnings.  But
+if you were wise enough to C<use warnings> in the first place, then it
+doesn't make sense to disable them completely.  By default, any C<no
+warnings> statement will violate this policy.  However, you can
+configure this Policy to allow certain types of warnings to be
+disabled (See L<Configuration>).  A bare C<no warnings> statement will
+always raise a violation.
+
+=head1 CONSTRUCTOR
+
+This policy accepts one key-value pair in the constructor.  The key is
+'allow' and the value is a string of whitespace delimited warning
+types that you are willing to disable.  See L<perllexwarn> for a list
+of possible warning types.  Users of the Perl::Critic engine can
+configure this in their F<.perlcriticrc> file like this:
+
+  [TestingAndDebugging::ProhibitWarningsDisabling]
+  allow = uninitialized once
+
 =head1 SEE ALSO
 
 L<Perl::Critic::Policy::TestingAndDebugging::RequirePackageWarnings>
