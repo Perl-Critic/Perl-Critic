@@ -309,9 +309,10 @@ capabilities, look at L<String::Format>. Valid escape characters are:
   %e        Explanation of violation or page numbers in PBP
   %d        Full diagnostic discussion of the violation
   %p        Name of the Policy module that created the violation
+  %s        Severity level of the violation
 
 Here are some examples:
-  
+
   $Perl::Critic::Violation::FORMAT = "%m at line %l, column %c.\n"; 
   #looks like "Mixed case variable name at line 6, column 23."
 

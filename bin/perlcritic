@@ -334,7 +334,7 @@ compact interface for selecting Policies at the command-line.  You can
 specify multiple C<-include> options and you can use it in conjunction
 with the C<-exclude> option.  Note that C<-exclude> takes precedence
 over C<-include> when a Policy matches both patterns.  Using
-C<-exclude> or C<-include> causes the C<-priority> settings to be
+C<-exclude> or C<-include> causes the C<-severity> settings to be
 silently ignored.
 
 =item -exclude PATTERN
@@ -345,7 +345,7 @@ compact interface for selecting Policies at the command-line. You can
 specify multiple C<-exclude> options and you can use it in conjunction
 with the C<-include> option.  Note that C<-exclude> takes precedence
 over C<-include> when a Policy matches both patterns.  Using
-C<-exclude> or C<-include> causes the C<-priority> settings to be
+C<-exclude> or C<-include> causes the C<-severity> settings to be
 silently ignored.
 
 =item -force
@@ -385,6 +385,7 @@ are:
   %e        Explanation of violation or page numbers in PBP
   %d        Full diagnostic discussion of the violation
   %p        Name of the Policy module that created the violation
+  %s        The severity level of the violation.
 
 The purpose of these formats is to provide some compatibility with
 editors that have an interface for parsing certain kinds of input. See
