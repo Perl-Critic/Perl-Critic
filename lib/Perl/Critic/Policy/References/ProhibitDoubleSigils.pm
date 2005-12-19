@@ -56,6 +56,16 @@ Perl::Critic::Policy::References::ProhibitDoubleSigils
 
 =head1 DESCRIPTION
 
+When dereferencing a reference, put braces around the reference to
+separate the sigils.  Especially for newbies, the braces eliminate any
+potential confusion about the relative precedence of the sigils.
+
+  push @$array_ref, 'foo', 'bar', 'baz';      #not ok
+  push @{ $array_ref }, 'foo', 'bar', 'baz';  #ok
+
+  foreach ( keys %$hash_ref ){}               #not ok
+  foreach ( keys %{ $hash_ref } ){}           #ok
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
