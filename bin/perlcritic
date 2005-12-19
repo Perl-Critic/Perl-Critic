@@ -247,7 +247,8 @@ liking.
 
 If you want to integrate perlcritic with your build process, the
 L<Test::Perl::Critic> module provides a nice interface that is
-suitable for test scripts.
+suitable for test scripts.  Win32 and ActvePerl users can find PPM
+distributions of Perl::Critic at L<http://theoryx5.uwinnipeg.ca/ppms/>.
 
 =head1 USAGE EXAMPLES
 
@@ -798,7 +799,7 @@ Next, enter the following command in the minibuffer:
 When the results are displayed, pressing [Enter] on any of the
 Violation messages will move the pointer to the relevant location
 within the file.  Type C<'Ctrl-h a compile'> for information about
-compile-mode. 
+compile-mode.
 
 =head2 VIM
 
@@ -820,6 +821,14 @@ If perlcritic has any errors itself, exits with status == 1.  If there
 are no errors, but perlcritic finds Policy violations in your source
 code, exits with status == 2.  If there were no errors and no
 violations were found, exits with status == 0.
+
+=head1 CONTRIBUTING TO THE CAUSE
+
+The repository for the Perl::Critic project is hosted at
+L<http://perlcritic.tigris.org>.  If you have ideas for new Policies
+or any other suggestions, you're welcome to join the project.  To
+subscribe to our mailing list, send a message to
+C<dev-subscribe@perlcritic.tigris.org>.
 
 =head1 BUGS
 
