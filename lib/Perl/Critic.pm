@@ -56,6 +56,7 @@ sub policies {
 #----------------------------------------------------------------------------
 
 sub critique {
+
     # Here we go!
     my ( $self, $source_code ) = @_;
 
@@ -63,37 +64,41 @@ sub critique {
     my $doc = PPI::Document->new($source_code);
 
     # Bail on error
-    if( ! defined $doc ) {
-	my $errstr = PPI::Document::errstr();
-	my $file = -f $source_code ? $source_code : 'stdin';
-	croak qq{Cannot parse code: $errstr of '$file'\n};
+    if ( !defined $doc ) {
+        my $errstr = PPI::Document::errstr();
+        my $file = -f $source_code ? $source_code : 'stdin';
+        die qq{Cannot parse code: $errstr of '$file'\n};
     }
 
     # Pre-index location of each node (for speed)
     $doc->index_locations();
 
-    # Filter exempt code, if desired
-    $self->{_force} ||  _filter_code($doc);
+    # keys of hash are line numbers to ignore for violations
+    my %is_line_disabled;
 
     # Remove the magic shebang fix
-    _unfix_shebang($doc);
+    %is_line_disabled = ( %is_line_disabled, _unfix_shebang($doc) );
 
-    # Run engine, testing each Policy at each element
-    my %types = (
-       'PPI::Document' => [$doc],
-       'PPI::Element'  => $doc->find( 'PPI::Element' ) || [],
-    );
-
-    my @violations;
-    my @pols  = @{ $self->policies() };  @pols || return;   #Nothing to do!
-    for my $pol ( @pols ) {
-        for my $type ( $pol->applies_to() ) {
-            $types{$type} ||= [ grep {$_->isa($type)} @{$types{'PPI::Element'}} ];
-            push @violations, map { $pol->violates($_, $doc) } @{$types{$type}};
-        }
+    # Filter exempt code, if desired
+    if ( !$self->{_force} ) {
+        %is_line_disabled = ( %is_line_disabled, _filter_code($doc) );
     }
 
-    return Perl::Critic::Violation::sort_by_location( @violations );
+    # Run engine, testing each Policy at each element
+    my %types = ( 'PPI::Document' => [$doc],
+                  'PPI::Element'  => $doc->find('PPI::Element') || [], );
+    my @violations;
+    my @pols = @{ $self->policies() };
+    @pols || return;    #Nothing to do!
+    for my $pol (@pols) {
+        for my $type ( $pol->applies_to() ) {
+            $types{$type}
+              ||= [ grep { $_->isa($type) } @{ $types{'PPI::Element'} } ];
+            push @violations, grep { !$is_line_disabled{ $_->location->[0] } }
+                map { $pol->violates( $_, $doc ) } @{ $types{$type} };
+        }
+    }
+    return Perl::Critic::Violation->sort_by_location(@violations);
 }
 
 #============================================================================
@@ -106,51 +111,68 @@ sub _filter_code {
     my $no_critic  = qr{\A \s* \#\# \s* no  \s+ critic}mx;
     my $use_critic = qr{\A \s* \#\# \s* use \s+ critic}mx;
 
+    my %disabled_lines;
+
   PRAGMA:
     for my $pragma ( grep { $_ =~ $no_critic } @{$nodes_ref} ) {
 
         #Handle single-line usage
         if ( my $sib = $pragma->sprevious_sibling() ) {
             if ( $sib->location->[0] == $pragma->location->[0] ) {
-                $sib->statement->delete();
+                $disabled_lines{ $pragma->location->[0] } = 1;
                 next PRAGMA;
             }
         }
 
+        # Handle multi-line usage This is either a "no critic" .. "use
+        # critic" region or a block where "no critic" persists to the
+        # end of the scope. The start is the always the "no critic".
+        # We have to search for the end.
+
+        my $start = $pragma;
+        my $end   = $pragma;
+
       SIB:
-        while ( my $sib = $pragma->next_sibling() ) {
-            my $ended = $sib->isa('PPI::Token::Comment') && $sib =~ $use_critic;
-            $sib->delete();    #$sib is undef now.
-            last SIB if $ended;
+        while ( my $sib = $end->next_sibling() ) {
+            $end = $sib; # keep track of last sibling encountered in this scope
+            last SIB
+              if $sib->isa('PPI::Token::Comment') && $sib =~ $use_critic;
+        }
+
+        # We either found an end or hit the end of the scope.
+        # Flag all intervening lines
+        for my $line ( $start->location->[0] .. $end->location->[0] ) {
+            $disabled_lines{$line} = 1;
         }
     }
-    continue {
-        $pragma->delete();
-    }
 
-    return 1;
+    return %disabled_lines;
 }
+
+#----------------------------------------------------------------------------
 
 sub _unfix_shebang {
 
-    # When you install a script using ExtUtils::MakeMaker or
-    # Module::Build, it inserts some magical code into the top of the
-    # file (just after the shebang).  This code allows people to call
-    # your script using a shell, like `sh my_script`.  Unfortunately,
-    # this code causes several Policy violations, so we just remove it.
+    #When you install a script using ExtUtils::MakeMaker or
+    #Module::Build, it inserts some magical code into the top of the
+    #file (just after the shebang).  This code allows people to call
+    #your script using a shell, like `sh my_script`.  Unfortunately,
+    #this code causes several Policy violations, so we just remove it.
 
-    my $doc = shift;
+    my $doc         = shift;
     my $first_stmnt = $doc->schild(0) || return;
 
-
-    # Different versions of MakeMaker and Build use slightly differnt
-    # shebang fixing strings.  This matches most of the ones I've found
-    # in my own Perl distribution, but it may not be bullet-proof.
+    #Different versions of MakeMaker and Build use slightly differnt
+    #shebang fixing strings.  This matches most of the ones I've found
+    #in my own Perl distribution, but it may not be bullet-proof.
 
     my $fixin_rx = qr{^eval 'exec .* \$0 \${1\+"\$@"}'\s*[\r\n]\s*if.+;};
-    if ( $first_stmnt =~ $fixin_rx ) { $first_stmnt->delete() }
+    if ( $first_stmnt =~ $fixin_rx ) {
+        my $line = $first_stmnt->location->[0];
+        return ( $line => 1, $line + 1 => 1 );
+    }
 
-    return 1;
+    return;
 }
 
 1;
@@ -201,7 +223,9 @@ new Policy modules that suit your own tastes.
 For a convenient command-line interface to Perl::Critic, see the
 documentation for L<perlcritic>.  If you want to integrate
 Perl::Critic with your build process, L<Test::Perl::Critic> provides
-an interface that is suitable for test scripts.
+an interface that is suitable for test scripts.  Win32 and ActvePerl
+users can find PPM distributions of Perl::Critic at
+L<http://theoryx5.uwinnipeg.ca/ppms/>.
 
 =head1 CONSTRUCTOR
 
@@ -317,10 +341,10 @@ start with '#' and can be placed on a separate line or after the
 name-value pairs if you desire.  The general recipe is a series of
 blocks like this:
 
-    [Perl::Critic::Policy::Category::PolicyName]
-    severity = 1
-    arg1 = value1
-    arg2 = value2
+  [Perl::Critic::Policy::Category::PolicyName]
+  severity = 1
+  arg1 = value1
+  arg2 = value2
 
 C<Perl::Critic::Policy::Category::PolicyName> is the full name of a
 module that implements the policy.  The Policy modules distributed
@@ -356,34 +380,34 @@ C<-severity> given to the Perl::Critic::Config constructor.
 
 A simple configuration might look like this:
 
-    #--------------------------------------------------------------
-    # I think these are really important, so always load them
+  #--------------------------------------------------------------
+  # I think these are really important, so always load them
 
-    [TestingAndDebugging::RequirePackageStricture]
-    severity = 5
+  [TestingAndDebugging::RequirePackageStricture]
+  severity = 5
 
-    [TestingAndDebugging::RequirePackageWarnings]
-    severity = 5
+  [TestingAndDebugging::RequirePackageWarnings]
+  severity = 5
 
-    #--------------------------------------------------------------
-    # I think these are less important, so only load when asked
+  #--------------------------------------------------------------
+  # I think these are less important, so only load when asked
 
-    [Variables::ProhibitPackageVars]
-    severity = 2
+  [Variables::ProhibitPackageVars]
+  severity = 2
 
-    [ControlStructures::ProhibitPostfixControls]
-    allow = if unless  #My custom configuration
-    severity = 2
+  [ControlStructures::ProhibitPostfixControls]
+  allow = if unless  #My custom configuration
+  severity = 2
 
-    #--------------------------------------------------------------
-    # I do not agree with these at all, so never load them
+  #--------------------------------------------------------------
+  # I do not agree with these at all, so never load them
 
-    [-NamingConventions::ProhibitMixedCaseVars]
-    [-NamingConventions::ProhibitMixedCaseSubs]
+  [-NamingConventions::ProhibitMixedCaseVars]
+  [-NamingConventions::ProhibitMixedCaseSubs]
 
-    #--------------------------------------------------------------
-    # For all other Policies, I accept the default severity,
-    # so no additional configuration is required for them.
+  #--------------------------------------------------------------
+  # For all other Policies, I accept the default severity,
+  # so no additional configuration is required for them.
 
 
 =head1 THE POLICIES
@@ -679,28 +703,6 @@ If you develop any new Policy modules, feel free to send them to
 <thaljef@cpan.org> and I'll be happy to put them into the Perl::Critic
 distribution.
 
-=head1 IMPORTANT CHANGES
-
-
-=head2 VERSION 0.14
-
-
-=head2 VERSION 0.11
-
-As new Policy modules were added to Perl::Critic, the overall
-performance started to deteriorate rapidly.  Since each module would
-traverse the document (several times for some modules), a lot of time
-was spent iterating over the same document nodes.  So starting in
-version 0.11, I have switched to a stream-based approach where the
-document is traversed once and every Policy module is tested at each
-node.  The result is roughly a 300% improvement.
-
-Unfortunately, Policy modules prior to version 0.11 won't be
-compatible.  Hopefully, few people have started creating their own
-Policy modules.  Converting them to the stream-based model is fairly
-easy, and actually results in somewhat cleaner code.  Look at the
-ControlStrucutres::* modules for some examples.
-
 =head1 PREREQUISITES
 
 Perl::Critic requires the following modules:
@@ -733,6 +735,14 @@ L<Test::Pod>
 L<Test::Pod::Coverage>
 
 L<Test::Perl::Critic>
+
+=head1 CONTRIBUTING TO THE CAUSE
+
+The repository for the Perl::Critic project is hosted at
+L<http://perlcritic.tigris.org>.  If you have ideas for new Policies
+or any other suggestions, you're welcome to join the project.  To
+subscribe to our mailing list, send a message to
+C<dev-subscribe@perlcritic.tigris.org>.
 
 =head1 BUGS
 
