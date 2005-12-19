@@ -19,7 +19,6 @@ PerlCriticTestUtils::block_perlcriticrc();
 # just make it a little easier to create test cases
 my $profile = { '-CodeLayout::RequireTidyCode'     => {},
                 '-Miscellanea::RequireRcsKeywords' => {},
-                '-Modules::RequireEndWithOne'      => {}
 };
 
 my $code = undef;
@@ -34,6 +33,8 @@ our $VERSION = 1.0;
 
 require 'some_library.pl';  ## no critic
 print $crap if $condition;  ## no critic
+
+1;
 END_PERL
 
 is( critique(\$code, {-profile => $profile, -severity => 1} ), 0);
@@ -56,7 +57,7 @@ print $crap if $condition;
 ## use critic
 
 $baz = $nuts;
-
+1;
 END_PERL
 
 is( critique(\$code, {-profile => $profile, -severity => 1} ), 0);
@@ -76,6 +77,8 @@ for my $foo (@list) {
 }
 
 my $noisy = '!';
+
+1;
 END_PERL
 
 is( critique(\$code, {-profile => $profile, -severity => 1} ), 1);
@@ -97,6 +100,7 @@ for my $foo (@list) {
 ## use critic
 my $noisy = '!';
 
+1;
 END_PERL
 
 is( critique(\$code, {-profile => $profile, -severity => 1} ), 1);
@@ -119,6 +123,7 @@ for my $foo (@list) {
 my $noisy = '!';
 my $empty = '';
 
+1;
 END_PERL
 
 is( critique(\$code, {-profile => $profile, -severity => 1} ), 2);
@@ -139,6 +144,8 @@ for my $foo (@list) {
 
 my $noisy = '!';
 my $empty = '';
+
+#No final '1;'
 END_PERL
 
 is( critique(\$code, {-profile => $profile, -severity => 1} ), 0);
@@ -156,6 +163,8 @@ $oct_num  = 033;       ## no critic
 my $noisy = '!';       ## no critic
 my $empty = '';        ## no critic
 my $empty = '';        ## use critic
+
+1;
 END_PERL
 
 is( critique(\$code, {-profile => $profile, -severity => 1} ), 1);
@@ -177,9 +186,11 @@ $long_int = 12345678;
 $oct_num  = 033;
 my $noisy = '!';
 my $empty = '';
+
+#No final '1;'
 END_PERL
 
-is( critique(\$code, {-profile => $profile, -severity => 1} ), 4);
+is( critique(\$code, {-profile => $profile, -severity => 1} ), 5);
 
 #----------------------------------------------------------------
 
@@ -194,16 +205,18 @@ $oct_num  = 033;       ## no critic
 my $noisy = '!';       ## no critic
 my $empty = '';        ## no critic
 
-## use critic
+## no critic
 $long_int = 12345678;
 $oct_num  = 033;
 my $noisy = '!';
 my $empty = '';
+
+#No final '1;'
 END_PERL
 
 is( critique(\$code, {-profile  => $profile,
                       -severity => 1,
-                      -force    => 1 } ), 8);
+                      -force    => 1 } ), 9);
 
 #----------------------------------------------------------------
 
@@ -214,12 +227,15 @@ use warnings;
 our $VERSION = 1.0;
 
 for my $foo (@list) {
+  ## no critic
   $long_int = 12345678;
   $oct_num  = 033;
 }
 
-my $noisy = '!';
-my $empty = '';
+my $noisy = '!'; ## no critic
+my $empty = '';  ## no critic
+
+1;
 END_PERL
 
 is( critique(\$code, {-profile  => $profile,
@@ -235,16 +251,18 @@ use warnings;
 our $VERSION = 1.0;
 
 for my $foo (@list) {
-  ## use critic
+  ## no critic
   $long_int = 12345678;
   $oct_num  = 033;
 }
 
-## use critic
+## no critic
 my $noisy = '!';
 my $empty = '';
+
+#No final '1;'
 END_PERL
 
 is( critique(\$code, {-profile  => $profile,
                       -severity => 1,
-                      -force    => 1 } ), 4);
+                      -force    => 1 } ), 5);
