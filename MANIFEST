@@ -36,7 +36,7 @@ lib/Perl/Critic/Policy/Modules/RequireVersionVar.pm
 lib/Perl/Critic/Policy/NamingConventions/ProhibitAmbiguousNames.pm
 lib/Perl/Critic/Policy/NamingConventions/ProhibitMixedCaseSubs.pm
 lib/Perl/Critic/Policy/NamingConventions/ProhibitMixedCaseVars.pm
-lib/Perl/Critic/Policy/References/RequireCircumfixDereferences.pm
+lib/Perl/Critic/Policy/References/ProhibitDoubleSigils.pm
 lib/Perl/Critic/Policy/RegularExpressions/RequireExtendedFormatting.pm
 lib/Perl/Critic/Policy/RegularExpressions/RequireLineBoundaryMatching.pm
 lib/Perl/Critic/Policy/Subroutines/ProhibitAmpersandSigils.pm
@@ -88,7 +88,6 @@ t/20_policies_subroutines.t
 t/20_policies_testinganddebugging.t
 t/20_policies_valuesandexpressions.t
 t/20_policies_variables.t
-t/40_criticize.t
 t/98_pod-syntax.t
 t/99_pod-coverage.t
 t/samples/perlcriticrc.all
