@@ -13,8 +13,8 @@
      the severity threshold at the command line, and you can change
      the severity for any Policy using the config file.
 
-     Chris implemented the applies_to() mechanism, which allows Policy
-     classes to declare the types of PPI elements that it wants to examine.
+     Chris implemented the applies_to() mechanism, which allows each Policy
+     class to declare the types of PPI elements that it wants to examine.
      When traversing the document, Perl::Critic invokes the Policy only
      for elements that are of the correct type.  This improves performance
      by about 33%.
@@ -29,12 +29,12 @@
      New Policies:
      * Modules::RequireEndWithOne
      * NamingConventions::ProhibitAmbiguousNames
+     * References::ProhibitDoubleSigils
      * Subroutines::RequireFinalReturn
      * Subroutines::ProhibitAmpersandSigils
      * Subroutines::ProhibitExcessComplexity
      * TestingAndDebugging::ProhibitStrictureDisabling
      * TestingAndDebugging::ProhibitWarningsDisabling
-     * ValuesAndExpressions::RequireCircumfixDerefs
 
      Bug Fixes:
      * 15101: Plugin architecture improves support for 3rd-party code
