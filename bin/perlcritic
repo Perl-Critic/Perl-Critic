@@ -26,8 +26,7 @@ $VERSION = eval $VERSION;    ## no critic
 
 my %opts       = get_options();
 my @input      = get_input(@ARGV);
-my %config     = map { ( "-$_" => $opts{$_} ) } keys %opts;
-my $violations = critique( \%config, @input );
+my $violations = critique(\%opts, @input);
 my $status     = $violations ? 2 : 0;
 exit $status;
 
@@ -75,8 +74,12 @@ sub get_options {
     #Override profile, if -noprofile is specified
     if ( exists $opts{noprofile} ) { $opts{profile} = $EMPTY }
 
-    #All good!
-    return %opts;
+    #I've adopted the convention of using key-value pairs for
+    #arguments to most functions.  And to increase legibility,
+    #I have also adopted the familiar command-line practice
+    #of denoting argument names with a leading dash (-).
+    my %dashed_opts = map { ( "-$_" => $opts{$_} ) } keys %opts;
+    return %dashed_opts;
 }
 
 #----------------------------------------------------------------
@@ -122,8 +125,8 @@ sub render_report {
 
     $file = -f $file ? $file : 'stdin';
     my $default_verbosity = @input > 1 ? 3 : 2; #@input is global
-    my $verbosity = $config{-verbose} || $default_verbosity;
-    my $top = exists $config{-top} ? ( $config{-top} || 20 ) : undef;
+    my $verbosity = $config->{-verbose} || $default_verbosity;
+    my $top = exists $config->{-top} ? ( $config->{-top} || 20 ) : undef;
 
     my %FORMAT_OF = (
         1 => "%f:%l:%c:%m\n",
