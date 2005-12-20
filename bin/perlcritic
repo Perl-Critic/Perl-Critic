@@ -133,7 +133,7 @@ sub render_report {
         2 => "%m at line %l, column %c. %e. (Severity: %s)\n",
         3 => "%f: %m at line %l, column %c. %e. (Severity: %s)\n",
         4 => "[%p] %m at line %l, column %c. %e. (Severity: %s)\n",
-        5 => "[%p] %m at line %l, column %c. %e.\n%d\n",
+        5 => "[%p] %m at line %l, column %c. %e. (Severity: %s)\n%d\n",
     );
 
     my $fmt =
