@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 27;
+use Test::More tests => 35;
 use List::MoreUtils qw(all none);
 use Perl::Critic::Utils;
 use Perl::Critic;
@@ -142,11 +142,33 @@ is(scalar @{$pols}, $matches);
 $pols = Perl::Critic->new( -include => \@in, -exclude => \@ex )->policies();
 ok( none {ref $_ =~ /block/imx} @{$pols} && all {ref $_ =~ /builtin/imx} @{$pols} );
 
+#--------------------------------------------------------------
+#Testing other private subs
 
+my $s = undef;
+$s = Perl::Critic::Config::_normalize_severity( 0 );
+is($s, $SEVERITY_LOWEST, "Normalizing severity");
 
+$s = Perl::Critic::Config::_normalize_severity( 10 );
+is($s, $SEVERITY_HIGHEST, "Normalizing severity");
 
+$s = Perl::Critic::Config::_normalize_severity( -1 );
+is($s, 1, "Normalizing severity");
 
+$s = Perl::Critic::Config::_normalize_severity( -10 );
+is($s, $SEVERITY_HIGHEST, "Normalizing severity");
 
+$s = Perl::Critic::Config::_normalize_severity( 1 );
+is($s, 1, "Normalizing severity");
+
+$s = Perl::Critic::Config::_normalize_severity( 5 );
+is($s, 5, "Normalizing severity");
+
+$s = Perl::Critic::Config::_normalize_severity( 2.4 );
+is($s, 2, "Normalizing severity");
+
+$s = Perl::Critic::Config::_normalize_severity( -3.8 );
+is($s, 3, "Normalizing severity");
 
 
 
