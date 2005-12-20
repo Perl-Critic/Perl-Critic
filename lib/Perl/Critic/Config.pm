@@ -99,14 +99,21 @@ sub add_policy {
 
     eval {
         my $policy_obj  = $module_name->new( %{ $config_ref } );
-        if( $severity ){ $policy_obj->set_severity( $severity ) }
-        push @{ $self->{_policies} }, $policy_obj;
+
+        if( defined $severity ) {
+	    my $normal_severity = _normalize_severity( $severity );
+	    $policy_obj->set_severity( $normal_severity );
+	}
+
+	push @{ $self->{_policies} }, $policy_obj;
     };
+
 
     if ($EVAL_ERROR) {
         carp qq{Failed to create polcy '$policy': $EVAL_ERROR};
-        return;
+        return;  #Not fatal!
     }
+
 
     return $self;
 }
@@ -200,6 +207,15 @@ sub _short_name {
     return $module_name;
 }
 
+#----------------------------------------------------------------------------
+
+sub _normalize_severity {
+    my $severity = abs int shift;
+    return $SEVERITY_HIGHEST if $severity > $SEVERITY_HIGHEST;
+    return $SEVERITY_LOWEST  if $severity < $SEVERITY_LOWEST;
+    return $severity;
+}
+    
 #----------------------------------------------------------------------------
 # Begin PUBLIC STATIC methods
 
