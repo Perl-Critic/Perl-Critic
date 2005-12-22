@@ -245,7 +245,7 @@ C<perlcritic> is a Perl source code analyzer.  It is the executable
 front-end to the L<Perl::Critic> engine, which attempts to identify
 awkward, hard to read, error-prone, or unconventional constructs in
 your code.  Most of the rules are based on Damian Conway's book B<Perl
-Best Practices>, but can easily be configured or disabled to your
+Best Practices>, but they can easily be configured or disabled to your
 liking.
 
 If you want to integrate perlcritic with your build process, the
@@ -255,25 +255,29 @@ distributions of Perl::Critic at L<http://theoryx5.uwinnipeg.ca/ppms/>.
 
 =head1 USAGE EXAMPLES
 
-Before getting into all the gory details, here are basic usage
+Before getting into all the gory details, here are some basic usage
 examples to get you started.
 
   #Report only violations with highest severity
-  perlcritic MyModle.pm
+  perlcritic YourModule.pm
+
+  #Same as above, but for all Perl files in directory
+  perlcritic YourDirectory
 
   #Include violations with slightly lower severity
-  perlcritic -4 MyModule.pm
+  perlcritic -4 YourModule.pm
 
   #Include all violations, regardless of severity
-  perlcritic -1 MyModule.pm
+  perlcritic -1 YourModule.pm
 
   #Report top 20 most severe violations
-  perlcritic -top MyModule.pm
+  perlcritic -top YourModule.pm
 
-The examples above demonstrate how to control the severity level of
-L<Perl::Critic::Policy> violations that C<perlcritic> reports.  Each
-Policy has a pre-defined severity level, and by default, perlcritic
-only reports the most severe violations.
+  #Report top 20 violations with severity >= 3
+  perlcritic -3 -top YourModule.pm
+
+  #Report only violations of Policies that match m/varaibles/ix
+  perlcritic -include variables YourModule.pm
 
 =head1 ARGUMENTS
 
@@ -287,7 +291,7 @@ are specified, then input is read from STDIN.
 Option names can be abbreviated to uniqueness and can be stated with
 singe or double dashes, and option values can be separated from the
 option name by a space or '=' (a la L<Getopt::Long>).  Option names
-are case-sensitive.
+are also case-sensitive.
 
 =over 8
 
@@ -319,7 +323,9 @@ These are shortcuts for setting the C<-severity> option.  For example
 C<"-5"> is equivalent to C<"-severity 5">.  Using one of these
 shortcuts causes the C<-severity> option to be silently ingored (if it
 is given).  If multiple shortcuts are specified, then the lowest one
-wins.
+wins.  NOTE: Be careful not to put one of the severity shortcut
+options immediately after the C<-top> option or perlcritic will
+interpet it as the number of violations to report.
 
 =item -top [ N ]
 
@@ -328,7 +334,10 @@ ranked by their severity.  If C<N> is not specified, it defaults to
 20.  If the C<-severity> option (or one of the shortcuts) are not
 given, the C<-top> option implies that the severity level is 1. Users
 can redefine the severity for any Policy in the F<.perlcriticrc> file.
-See L<"CONFIGURATION"> for more information.
+See L<"CONFIGURATION"> for more information.  NOTE: Be careful not to
+put one of the severity shortcut options immediately after the C<-top>
+option or perlcritic will interpet it as the number of violations to
+report.
 
 =item -include PATTERN
 
