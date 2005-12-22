@@ -34,7 +34,7 @@ sub new {
 
     #Set config, if defined
     $self->{_exempt_scripts} =
-      defined $args{exempt_scripts} ? $args{exempt_scripts} : 0;
+      defined $args{exempt_scripts} ? $args{exempt_scripts} : 1;
 
     return $self;
 }

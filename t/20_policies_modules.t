@@ -131,9 +131,9 @@ my $foo = 42;
 
 END_PERL
 
-%config = (exempt_scripts => 1);
+%config = (exempt_scripts => 0);
 $policy = 'Modules::RequireExplicitPackage';
-is( pcritique($policy, \$code, \%config), 0, $policy);
+is( pcritique($policy, \$code, \%config), 1, $policy);
 
 
 #----------------------------------------------------------------
@@ -144,7 +144,7 @@ package foo;
 $foo = $bar;
 END_PERL
 
-%config = (exempt_scripts => 1); 
+%config = (exempt_scripts => 0); 
 $policy = 'Modules::RequireExplicitPackage';
 is( pcritique($policy, \$code, \%config), 0, $policy);
 
