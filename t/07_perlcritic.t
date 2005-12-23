@@ -1,8 +1,8 @@
 ##################################################################
-#     $URL: http://perlcritic.tigris.org/svn/perlcritic/trunk/Perl-Critic/t/00_modules.t $
-#    $Date: 2005-12-13 16:46:24 -0800 (Tue, 13 Dec 2005) $
-#   $Author: thaljef $
-# $Revision: 121 $
+#     $URL$
+#    $Date$
+#   $Author$
+# $Revision$
 ##################################################################
 
 use strict;
