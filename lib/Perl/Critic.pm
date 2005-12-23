@@ -383,10 +383,10 @@ A simple configuration might look like this:
   #--------------------------------------------------------------
   # I think these are really important, so always load them
 
-  [TestingAndDebugging::RequirePackageStricture]
+  [TestingAndDebugging::RequireUseStrict]
   severity = 5
 
-  [TestingAndDebugging::RequirePackageWarnings]
+  [TestingAndDebugging::RequireUseWarnings]
   severity = 5
 
   #--------------------------------------------------------------
@@ -582,19 +582,19 @@ Don't write C<sub my_function (@@) {}> [Severity 5]
 
 End every path through a subroutine with an explicit C<return> statement. [Severity 4]
 
-=head2 L<Perl::Critic::Policy::TestingAndDebugging::ProhibitStrictureDisabling>
+=head2 L<Perl::Critic::Policy::TestingAndDebugging::ProhibitNoStrict>
 
 Prohibit various flavors of C<no strict> [Severity 5]
 
-=head2 L<Perl::Critic::Policy::TestingAndDebugging::ProhibitWarningsDisabling>
+=head2 L<Perl::Critic::Policy::TestingAndDebugging::ProhibitNoWarnings>
 
 Prohibit various flavors of C<no warnings> [Severity 4]
 
-=head2 L<Perl::Critic::Policy::TestingAndDebugging::RequirePackageStricture>
+=head2 L<Perl::Critic::Policy::TestingAndDebugging::RequireUseStrict>
 
 Always C<use strict> [Severity 5]
 
-=head2 L<Perl::Critic::Policy::TestingAndDebugging::RequirePackageWarnings>
+=head2 L<Perl::Critic::Policy::TestingAndDebugging::RequireUseWarnings>
 
 Always C<use warnings> [Severity 4]
 
