@@ -115,6 +115,7 @@ while ($condition) {
     redo if $condition;
     return if $condition;
     goto HELL if $condition;
+    exit if $condition;
 }
 
 die 'message' if $condition;
@@ -134,6 +135,9 @@ cluck if $condition;
 
 confess 'message' if $condition;
 confess if $condition;
+
+exit 0 if $condition;
+exit if $condition;
 
 END_PERL
 
