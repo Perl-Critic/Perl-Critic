@@ -45,10 +45,10 @@ lib/Perl/Critic/Policy/Subroutines/ProhibitExcessComplexity.pm
 lib/Perl/Critic/Policy/Subroutines/ProhibitExplicitReturnUndef.pm
 lib/Perl/Critic/Policy/Subroutines/ProhibitSubroutinePrototypes.pm
 lib/Perl/Critic/Policy/Subroutines/RequireFinalReturn.pm
-lib/Perl/Critic/Policy/TestingAndDebugging/ProhibitStrictureDisabling.pm
-lib/Perl/Critic/Policy/TestingAndDebugging/ProhibitWarningsDisabling.pm
-lib/Perl/Critic/Policy/TestingAndDebugging/RequirePackageStricture.pm
-lib/Perl/Critic/Policy/TestingAndDebugging/RequirePackageWarnings.pm
+lib/Perl/Critic/Policy/TestingAndDebugging/ProhibitNoStrict.pm
+lib/Perl/Critic/Policy/TestingAndDebugging/ProhibitNoWarnings.pm
+lib/Perl/Critic/Policy/TestingAndDebugging/RequireUseStrict.pm
+lib/Perl/Critic/Policy/TestingAndDebugging/RequireUseWarnings.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitConstantPragma.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitEmptyQuotes.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitInterpolationOfLiterals.pm
@@ -74,6 +74,7 @@ t/02_policy.t
 t/03_pragmas.t
 t/05_utils.t
 t/06_violation.t
+t/07_perlcritic.t
 t/20_policies_builtinfunctions.t
 t/20_policies_classhierarchies.t
 t/20_policies_codelayout.t
