@@ -694,14 +694,14 @@ solution before resorting to this feature.
 The modular design of Perl::Critic is intended to facilitate the
 addition of new Policies.  You'll need to have some understanding of
 L<PPI>, but most Policy modules are pretty straightforward and only
-require about 20 lines of code.  To create a new Policy, make a
-subclass of L<Perl::Critic::Policy> and override the C<violates()>
-method.  Perl::Critic will automatically detect all modules that are
-installed in the Perl::Critic::Policy namespace.
+require about 20 lines of code.  Please see the L<DEVELOPER.pod> file
+included in this distribution for a step-by-step demonstration of how
+to create new Policy modules.
 
 If you develop any new Policy modules, feel free to send them to
 <thaljef@cpan.org> and I'll be happy to put them into the Perl::Critic
-distribution.
+distribution.  Or if you'd like to work on the Perl::Critic project
+directly, check out our repository at L<http://perlcritic.tigris.org>.
 
 =head1 PREREQUISITES
 
