@@ -1,0 +1,15 @@
+############################################################################
+#This perlcriticrc file will configure Perl::Critic to run only with
+#Policies that are defined in Damian Conway's book "Perl Best
+#Practices".  So if you want to develop you code according to a pure
+#PBP standard, then you should copy this file to your ~/.perlcriticrc.
+############################################################################
+
+[-CodeLayout::ProhibitQuotedWordLists]
+[-InputOutput::ProhibitBacktickOperators]
+[-Modules::ProhibitMultiplePackages]
+[-Modules::ProhibitEvilModules]
+[-Modules::RequireBarewordIncludes]
+[-Modules::RequireEndWithOne]
+[-Modules::RequireExplicitPackage]
+[-Subroutines::ProhibitExcessComplexity]
