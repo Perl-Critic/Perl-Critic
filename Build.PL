@@ -9,6 +9,35 @@ use strict;
 use warnings;
 use Module::Build;
 
+warn <<'END_WARNING';
+###################################################
+# NOTICE! NOTICE! NOTICE! NOTICE! NOTICE! NOTICE! #
+#-------------------------------------------------#
+# In this version of Perl::Critic, some of        #
+# the Policy modules have been renamed to better  #
+# better reflect the intent of the Policy.  If    #
+# you have an older version of Perl::Critic       #
+# already installed, it will cause many of the    #
+# tests to fail and the new version will not work #
+# properly.                                       #
+#                                                 #
+# I strongly advise you to remove the current     #
+# version of Perl::Critic before proceeding with  #
+# this installation.  In most cases, this can be  #
+# done by deleting everything below the           #
+# Perl/Critic/Policy directory in your site_perl  #
+# location.                                       #
+#                                                 #
+# Also, if you have created a .perlcriticrc file, #
+# you will need to update it to match the new     #
+# Policy module names.                            #
+#                                                 #
+# Sorry for the inconvenience.                    #
+#                                                 #
+# -Jeff <thaljef@cpan.org>                        #
+###################################################
+END_WARNING
+
 my $builder = Module::Build->new(
 
   module_name    => 'Perl::Critic',
