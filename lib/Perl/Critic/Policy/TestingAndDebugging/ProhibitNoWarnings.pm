@@ -5,7 +5,7 @@
 # $Revision$
 ########################################################################
 
-package Perl::Critic::Policy::TestingAndDebugging::ProhibitStrictureDisabling;
+package Perl::Critic::Policy::TestingAndDebugging::ProhibitNoWarnings;
 
 use strict;
 use warnings;
@@ -19,12 +19,12 @@ $VERSION = eval $VERSION;    ## no critic
 
 #---------------------------------------------------------------------------
 
-my $desc = q{Stricture disabled};
-my $expl = [ 429 ];
+my $desc = q{Warnings disabled};
+my $expl = [ 431 ];
 
 #---------------------------------------------------------------------------
 
-sub default_severity { return $SEVERITY_HIGHEST }
+sub default_severity { return $SEVERITY_HIGH }
 sub applies_to { return 'PPI::Statement::Include' }
 
 #---------------------------------------------------------------------------
@@ -48,16 +48,16 @@ sub new {
 sub violates {
 
     my ( $self, $elem, $doc ) = @_;
-    return if $elem->type() ne 'no' || $elem->pragma() ne 'strict';
+    return if $elem->type() ne 'no' || $elem->pragma() ne 'warnings';
 
-    #Arguments to 'no strict' are usually a list of literals or a qw()
-    #list.  Rather than trying to parse the various PPI elements, I
-    #just use a regex to split the statement into words.  This is
+    #Arguments to 'no warnings' are usually a list of literals or a
+    #qw() list.  Rather than trying to parse the various PPI elements,
+    #I just use a regext to split the statement into words.  This is
     #kinda lame, but it does the trick for now.
 
     my $stmnt = $elem->statement() || return;
     my @words = split m{ [^a-z]+ }mx, $stmnt;
-    @words = grep { $_ !~ m{ qw|no|strict }mx } @words;
+    @words = grep { $_ !~ m{ qw|no|warnings }mx } @words;
     return if all { exists $self->{_allow}->{$_} } @words;
 
     #If we get here, then it must be a violation
@@ -77,32 +77,32 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::TestingAndDebugging::ProhibitStrictureDisabling
+Perl::Critic::Policy::TestingAndDebugging::ProhibitNoWarnings
 
 =head1 DESCRIPTION
 
-There are good reasons for disabling certain kinds of strictures, But
-if you were wise enough to C<use strict> in the first place, then it
-doesn't make sense to disable it completely.  By default, any C<no
-strict> statement will violate this policy.  However, you can
-configure this Policy to allow certain types of strictures to be
-disabled (See L<Configuration>).  A bare C<no strict> statement will
+There are good reasons for disabling certain kinds of warnings.  But
+if you were wise enough to C<use warnings> in the first place, then it
+doesn't make sense to disable them completely.  By default, any C<no
+warnings> statement will violate this policy.  However, you can
+configure this Policy to allow certain types of warnings to be
+disabled (See L<Configuration>).  A bare C<no warnings> statement will
 always raise a violation.
 
 =head1 CONSTRUCTOR
 
 This policy accepts one key-value pair in the constructor.  The key is
-'allow' and the value is a string of whitespace delimited stricture
-types that you want to permit.  These can be 'vars', 'subs' and/or
-'refs'.  Users of the Perl::Critic engine can configure this in their
-F<.perlcriticrc> file like this:
+'allow' and the value is a string of whitespace delimited warning
+types that you are willing to disable.  See L<perllexwarn> for a list
+of possible warning types.  Users of the Perl::Critic engine can
+configure this in their F<.perlcriticrc> file like this:
 
-  [TestingAndDebugging::ProhibitStrictureDisabling]
-  allow = vars subs refs
+  [TestingAndDebugging::ProhibitWarningsDisabling]
+  allow = uninitialized once
 
 =head1 SEE ALSO
 
-L<Perl::Critic::Policy::TestingAndDebugging::RequirePackageStricture>
+L<Perl::Critic::Policy::TestingAndDebugging::RequirePackageWarnings>
 
 =head1 AUTHOR
 

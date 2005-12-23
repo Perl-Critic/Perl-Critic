@@ -26,7 +26,7 @@ $foo = $bar;
 use warnings;
 END_PERL
 
-$policy = 'TestingAndDebugging::RequirePackageWarnings';
+$policy = 'TestingAndDebugging::RequireUseWarnings';
 is( pcritique($policy, \$code), 1, $policy);
 
 #----------------------------------------------------------------
@@ -35,7 +35,7 @@ $code = <<'END_PERL';
 $foo = $bar;
 END_PERL
 
-$policy = 'TestingAndDebugging::RequirePackageWarnings';
+$policy = 'TestingAndDebugging::RequireUseWarnings';
 is( pcritique($policy, \$code), 1, $policy);
 
 #----------------------------------------------------------------
@@ -45,7 +45,7 @@ use warnings;
 $foo = $bar;
 END_PERL
 
-$policy = 'TestingAndDebugging::RequirePackageWarnings';
+$policy = 'TestingAndDebugging::RequireUseWarnings';
 is( pcritique($policy, \$code), 0, $policy);
 
 #----------------------------------------------------------------
@@ -55,7 +55,7 @@ $foo = $bar;
 use strict;
 END_PERL
 
-$policy = 'TestingAndDebugging::RequirePackageStricture';
+$policy = 'TestingAndDebugging::RequireUseStrict';
 is( pcritique($policy, \$code), 1, $policy);
 
 #----------------------------------------------------------------
@@ -64,7 +64,7 @@ $code = <<'END_PERL';
 $foo = $bar;
 END_PERL
 
-$policy = 'TestingAndDebugging::RequirePackageStricture';
+$policy = 'TestingAndDebugging::RequireUseStrict';
 is( pcritique($policy, \$code), 1, $policy);
 
 #----------------------------------------------------------------
@@ -75,7 +75,7 @@ use strict;
 $foo = $bar;
 END_PERL
 
-$policy = 'TestingAndDebugging::RequirePackageStricture';
+$policy = 'TestingAndDebugging::RequireUseStrict';
 is( pcritique($policy, \$code), 0, $policy);
 
 #----------------------------------------------------------------
@@ -85,7 +85,7 @@ package foo;
 no strict;
 END_PERL
 
-$policy = 'TestingAndDebugging::ProhibitStrictureDisabling';
+$policy = 'TestingAndDebugging::ProhibitNoStrict';
 is( pcritique($policy, \$code), 1, $policy);
 
 #----------------------------------------------------------------
@@ -95,7 +95,7 @@ package foo;
 no strict 'refs', 'vars';
 END_PERL
 
-$policy = 'TestingAndDebugging::ProhibitStrictureDisabling';
+$policy = 'TestingAndDebugging::ProhibitNoStrict';
 is( pcritique($policy, \$code), 1, $policy);
 
 #----------------------------------------------------------------
@@ -105,7 +105,7 @@ package foo;
 no strict qw(vars refs subs);
 END_PERL
 
-$policy = 'TestingAndDebugging::ProhibitStrictureDisabling';
+$policy = 'TestingAndDebugging::ProhibitNoStrict';
 is( pcritique($policy, \$code), 1, $policy);
 
 #----------------------------------------------------------------
@@ -116,7 +116,7 @@ no strict qw(vars refs subs);
 END_PERL
 
 %config = (allow => 'vars refs subs');
-$policy = 'TestingAndDebugging::ProhibitStrictureDisabling';
+$policy = 'TestingAndDebugging::ProhibitNoStrict';
 is( pcritique($policy, \$code, \%config), 0, $policy);
 
 #----------------------------------------------------------------
@@ -127,7 +127,7 @@ no strict "vars", "refs", "subs";
 END_PERL
 
 %config = (allow => 'vars refs subs');
-$policy = 'TestingAndDebugging::ProhibitStrictureDisabling';
+$policy = 'TestingAndDebugging::ProhibitNoStrict';
 is( pcritique($policy, \$code, \%config), 0, $policy);
 
 #----------------------------------------------------------------
@@ -138,7 +138,7 @@ no strict "vars", "refs", 'subs';
 END_PERL
 
 %config = (allow => 'VARS SUBS'); #Note wrong case!
-$policy = 'TestingAndDebugging::ProhibitStrictureDisabling';
+$policy = 'TestingAndDebugging::ProhibitNoStrict';
 is( pcritique($policy, \$code, \%config), 1, $policy);
 
 #----------------------------------------------------------------
@@ -149,7 +149,7 @@ no strict qw(vars refs subs);
 END_PERL
 
 %config = (allow => 'VARS SUBS'); #Note wrong case!
-$policy = 'TestingAndDebugging::ProhibitStrictureDisabling';
+$policy = 'TestingAndDebugging::ProhibitNoStrict';
 is( pcritique($policy, \$code, \%config), 1, $policy);
 
 #----------------------------------------------------------------
@@ -159,7 +159,7 @@ package foo;
 no warnings;
 END_PERL
 
-$policy = 'TestingAndDebugging::ProhibitWarningsDisabling';
+$policy = 'TestingAndDebugging::ProhibitNoWarnings';
 is( pcritique($policy, \$code), 1, $policy);
 
 #----------------------------------------------------------------
@@ -169,7 +169,7 @@ package foo;
 no warnings 'uninitialized', 'deprecated';
 END_PERL
 
-$policy = 'TestingAndDebugging::ProhibitWarningsDisabling';
+$policy = 'TestingAndDebugging::ProhibitNoWarnings';
 is( pcritique($policy, \$code), 1, $policy);
 
 #----------------------------------------------------------------
@@ -179,7 +179,7 @@ package foo;
 no warnings qw(closure glob);
 END_PERL
 
-$policy = 'TestingAndDebugging::ProhibitWarningsDisabling';
+$policy = 'TestingAndDebugging::ProhibitNoWarnings';
 is( pcritique($policy, \$code), 1, $policy);
 
 #----------------------------------------------------------------
@@ -190,7 +190,7 @@ no warnings qw(glob io once);
 END_PERL
 
 %config = (allow => 'iO Glob OnCe');
-$policy = 'TestingAndDebugging::ProhibitWarningsDisabling';
+$policy = 'TestingAndDebugging::ProhibitNoWarnings';
 is( pcritique($policy, \$code, \%config), 0, $policy);
 
 #----------------------------------------------------------------
@@ -201,7 +201,7 @@ no warnings "numeric", "pack", "portable";
 END_PERL
 
 %config = (allow => 'numeric,portable, pack'); #Funky config
-$policy = 'TestingAndDebugging::ProhibitWarningsDisabling';
+$policy = 'TestingAndDebugging::ProhibitNoWarnings';
 is( pcritique($policy, \$code, \%config), 0, $policy);
 
 #----------------------------------------------------------------
@@ -213,7 +213,7 @@ END_PERL
 
 #Note wrong case, funky config...
 %config = (allow => 'NumerIC;PORTABLE'); 
-$policy = 'TestingAndDebugging::ProhibitWarningsDisabling';
+$policy = 'TestingAndDebugging::ProhibitNoWarnings';
 is( pcritique($policy, \$code, \%config), 1, $policy);
 
 #----------------------------------------------------------------
@@ -225,6 +225,6 @@ END_PERL
 
 #Note wrong case, funky config...
 %config = (allow => 'paCK/PortablE'); 
-$policy = 'TestingAndDebugging::ProhibitWarningsDisabling';
+$policy = 'TestingAndDebugging::ProhibitNoWarnings';
 is( pcritique($policy, \$code, \%config), 1, $policy);
 

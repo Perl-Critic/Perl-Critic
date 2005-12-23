@@ -68,10 +68,10 @@ severity = 4
 [Subroutines::ProhibitSubroutinePrototypes]
 severity = 4
 
-[TestingAndDebugging::RequirePackageStricture]
+[TestingAndDebugging::RequireUseStrict]
 severity = 4
 
-[TestingAndDebugging::RequirePackageWarnings]
+[TestingAndDebugging::RequireUseWarnings]
 severity = 4
 
 [ValuesAndExpressions::ProhibitConstantPragma]
@@ -185,10 +185,10 @@ severity = 1
 [References::ProhibitDoubleSigils]
 severity = 1
 
-[TestingAndDebugging::ProhibitStrictureDisabling]
+[TestingAndDebugging::ProhibitNoStrict]
 severity = 1
 
-[TestingAndDebugging::ProhibitWarningsDisabling]
+[TestingAndDebugging::ProhibitNoWarnings]
 severity = 1
 
 [Subroutines::ProhibitAmpersandSigils]

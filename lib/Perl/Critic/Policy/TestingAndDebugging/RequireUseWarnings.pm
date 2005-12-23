@@ -5,12 +5,12 @@
 # $Revision$
 ########################################################################
 
-package Perl::Critic::Policy::TestingAndDebugging::RequirePackageStricture;
+package Perl::Critic::Policy::TestingAndDebugging::RequireUseWarnings;
 
 use strict;
 use warnings;
-use List::Util qw(first);
 use Perl::Critic::Utils;
+use List::Util qw(first);
 use Perl::Critic::Violation;
 use base 'Perl::Critic::Policy';
 
@@ -19,12 +19,12 @@ $VERSION = eval $VERSION;    ## no critic
 
 #---------------------------------------------------------------------------
 
-my $desc = q{Code before strictures are enabled};
-my $expl = [ 429 ];
+my $desc = q{Code before warnings are enabled};
+my $expl = [431];
 
 #---------------------------------------------------------------------------
 
-sub default_severity { return $SEVERITY_HIGHEST }
+sub default_severity { return $SEVERITY_HIGH }
 sub applies_to { return 'PPI::Document' }
 
 #---------------------------------------------------------------------------
@@ -40,11 +40,11 @@ sub violates {
       }
       @{$nodes_ref};
 
-    #Find the first 'use strict' statement
+    #Find the first 'use warnings' statement
     my $strict_stmnt = first {
         $_->isa('PPI::Statement::Include')
           && $_->type()   eq 'use'
-          && $_->pragma() eq 'strict';
+          && $_->pragma() eq 'warnings';
       }
       @{$nodes_ref};
 
@@ -55,7 +55,6 @@ sub violates {
 
     if ( $other_at <= $strict_at ) {
         my $loc = $other_stmnt->location();
-
         return Perl::Critic::Violation->new( $desc,
                                              $expl,
                                              $loc,
@@ -74,19 +73,19 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::TestingAndDebugging::RequirePackageStricture
+Perl::Critic::Policy::TestingAndDebugging::RequireUseWarnings
 
 =head1 DESCRIPTION
 
-Using strictures is probably the single most effective way to improve
+Using warnings is probably the single most effective way to improve
 the quality of your code.  This policy requires that the C<'use
-strict'> statement must come before any other staments except
+warnings'> statement must come before any other staments except
 C<package>, C<require>, and other C<use> statements.  Thus, all the
 code in the entire package will be affected.
 
 =head1 SEE ALSO
 
-L<Perl::Critic::Policy::TestingAndDebugging::RequirePackageWarnings>
+L<Perl::Critic::Policy::TestingAndDebugging::RequirePackageStricture>
 
 =head1 AUTHOR
 

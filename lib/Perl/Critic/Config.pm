@@ -290,10 +290,10 @@ sub native_policies {
       Perl::Critic::Policy::References::ProhibitDoubleSigils
       Perl::Critic::Policy::RegularExpressions::RequireExtendedFormatting
       Perl::Critic::Policy::RegularExpressions::RequireLineBoundaryMatching
-      Perl::Critic::Policy::TestingAndDebugging::ProhibitStrictureDisabling
-      Perl::Critic::Policy::TestingAndDebugging::ProhibitWarningsDisabling
-      Perl::Critic::Policy::TestingAndDebugging::RequirePackageStricture
-      Perl::Critic::Policy::TestingAndDebugging::RequirePackageWarnings
+      Perl::Critic::Policy::TestingAndDebugging::ProhibitNoStrict
+      Perl::Critic::Policy::TestingAndDebugging::ProhibitNoWarnings
+      Perl::Critic::Policy::TestingAndDebugging::RequireUseStrict
+      Perl::Critic::Policy::TestingAndDebugging::RequireUseWarnings
       Perl::Critic::Policy::ValuesAndExpressions::ProhibitConstantPragma
       Perl::Critic::Policy::ValuesAndExpressions::ProhibitEmptyQuotes
       Perl::Critic::Policy::ValuesAndExpressions::ProhibitInterpolationOfLiterals
