@@ -21,14 +21,21 @@ use Perl::Critic;
 our $VERSION = '0.13_01';
 $VERSION = eval $VERSION;    ## no critic
 
-#---------------------------------------------------------------
-# Begin script
+my %options    = ();
+my @files      = ();
+my $violations = [];
+my $status     = undef;
 
-my %opts       = get_options();
-my @input      = get_input(@ARGV);
-my $violations = critique(\%opts, @input);
-my $status     = $violations ? 2 : 0;
-exit $status;
+#---------------------------------------------------------------
+# Begin script.  Only execute if not in a test harness
+
+if ( !$ENV{HARNESS_ACTIVE} ) {
+    %options    = get_options();
+    @files      = get_input(@ARGV);
+    $violations = critique(\%options, @files);
+    $status     = $violations ? 2 : 0;
+    exit $status;
+}
 
 #----------------------------------------------------------------
 # Begin subroutines
@@ -69,10 +76,16 @@ sub get_options {
     #If -top is specified, default the severity level to 1, unless an
     #explicit severity is defined.  This provides us flexibility to
     #report top-offenders across just some or all of the severity levels.
-    if ( exists $opts{top} ) { $opts{severity} ||= 1 }
+    #We also default the -top count to twenty if non is given
+    if ( exists $opts{top} ) {
+        $opts{severity} ||= 1;
+        $opts{top} ||= 20;
+    }
 
     #Override profile, if -noprofile is specified
-    if ( exists $opts{noprofile} ) { $opts{profile} = $EMPTY }
+    if ( exists $opts{noprofile} ) {
+        $opts{profile} = $EMPTY;
+    }
 
     #I've adopted the convention of using key-value pairs for
     #arguments to most functions.  And to increase legibility,
@@ -124,9 +137,9 @@ sub render_report {
     my ( $file, $config, @violations ) = @_;
 
     $file = -f $file ? $file : 'stdin';
-    my $default_verbosity = @input > 1 ? 3 : 2; #@input is global
+    my $default_verbosity = @files > 1 ? 3 : 2;  #@files is global!
     my $verbosity = $config->{-verbose} || $default_verbosity;
-    my $top = exists $config->{-top} ? ( $config->{-top} || 20 ) : undef;
+    my $top = $config->{-top};
 
     my %FORMAT_OF = (
         1 => "%f:%l:%c:%m\n",
