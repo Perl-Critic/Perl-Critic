@@ -33,8 +33,8 @@
      * Subroutines::RequireFinalReturn
      * Subroutines::ProhibitAmpersandSigils
      * Subroutines::ProhibitExcessComplexity
-     * TestingAndDebugging::ProhibitStrictureDisabling
-     * TestingAndDebugging::ProhibitWarningsDisabling
+     * TestingAndDebugging::ProhibitNoStrict
+     * TestingAndDebugging::ProhibitNoWarnings
 
      Bug Fixes:
      * 15101: Plugin architecture improves support for 3rd-party code
