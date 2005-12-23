@@ -1,6 +1,7 @@
 bin/perlcritic
 Build.PL
 Changes
+DEVELOPER.pod
 INSTALL
 lib/Perl/Critic.pm
 lib/Perl/Critic/Config.pm
