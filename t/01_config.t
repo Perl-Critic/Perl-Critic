@@ -124,22 +124,42 @@ is(scalar @{$c->policies}, $total_policies - 2);
 #Test pattern matching
 
 my (@in, @ex) = ();
+my $pc        = undef;
 my $pols      = [];
 my $matches   = 0;
 
-@in = qw(modules vars Regular); #Some assorted pattterns
-$pols = Perl::Critic->new( -include => \@in )->policies();
-$matches = grep { my $pol = ref $_; grep { $pol =~ /$_/imx} @in } @{ $pols };
-is(scalar @{$pols}, $matches);
+# In this test, we'll use a cusotm profile to deactivate some
+# policies, and then use the -include option to re-activate them.  So
+# the net result is that we should still end up with the all the
+# policies.
+
+my %profile = (
+  '-NamingConventions::ProhibitMixedCaseVars' => {},
+  '-NamingConventions::ProhibitMixedCaseSubs' => {},
+  '-Miscellanea::RequireRcsKeywords' => {},
+);
+
+@in = qw(mixedcase RCS);
+$pols = Perl::Critic->new( -severity => 1, -profile => \%profile, -include => \@in )->policies();
+is(scalar @{$pols}, $total_policies);
+
+
+# For this test, we'll load the default config, but deactivate some of
+# the policies using the -exclude option.  Then we make sure that none
+# of the remaining policies match the -exclude patterns.
 
 @ex = qw(quote mixed VALUES); #Some assorted pattterns
-$pols = Perl::Critic->new( -exclude => \@ex )->policies();
+$pols = Perl::Critic->new( -severity => 1, -exclude => \@ex )->policies();
 $matches = grep { my $pol = ref $_; grep { $pol !~ /$_/imx} @ex } @{ $pols };
 is(scalar @{$pols}, $matches);
 
+# In this test, we set -include and -exclude patterns to both match
+# some of the same policies.  The -exclude option should have
+# precendece.
+
 @in = qw(builtin); #Include BuiltinFunctions::*
 @ex = qw(block);   #Exclude RequireBlockGrep, RequireBlockMap
-$pols = Perl::Critic->new( -include => \@in, -exclude => \@ex )->policies();
+$pols = Perl::Critic->new( -severity => 1, -include => \@in, -exclude => \@ex )->policies();
 ok( none {ref $_ =~ /block/imx} @{$pols} && all {ref $_ =~ /builtin/imx} @{$pols} );
 
 #--------------------------------------------------------------

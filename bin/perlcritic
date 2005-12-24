@@ -354,25 +354,19 @@ report.
 
 =item -include PATTERN
 
-Directs perlcritic to load only Policy modules from your C<-profile>
-that match the regex C</PATTERN/imx>.  The idea here is to provide a
-compact interface for selecting Policies at the command-line.  You can
-specify multiple C<-include> options and you can use it in conjunction
-with the C<-exclude> option.  Note that C<-exclude> takes precedence
-over C<-include> when a Policy matches both patterns.  Using
-C<-exclude> or C<-include> causes the C<-severity> settings to be
-silently ignored.
+Forces perlcritic to report violations of all Policy modules that
+match the regex C</PATTERN/imx>.  You can specify multiple C<-include>
+options and you can use it in conjunction with the C<-exclude> option.
+Note that C<-exclude> takes precedence over C<-include> when a Policy
+matches both patterns.
 
 =item -exclude PATTERN
 
-Directs perlcritic to load Policy modules from your C<-profile> that
-do not match the regex C</PATTERN/imx>.  The idea here is to provide a
-compact interface for selecting Policies at the command-line. You can
-specify multiple C<-exclude> options and you can use it in conjunction
-with the C<-include> option.  Note that C<-exclude> takes precedence
-over C<-include> when a Policy matches both patterns.  Using
-C<-exclude> or C<-include> causes the C<-severity> settings to be
-silently ignored.
+Forces perlcritic to not report violations of any Policy modules that
+match the regex C</PATTERN/imx>.  You can specify multiple C<-exclude>
+options and you can use it in conjunction with the C<-include> option.
+Note that C<-exclude> takes precedence over C<-include> when a Policy
+matches both patterns.
 
 =item -force
 

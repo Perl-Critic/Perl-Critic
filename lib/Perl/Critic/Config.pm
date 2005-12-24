@@ -65,22 +65,43 @@ sub new {
     # Allow null config.  This is useful for testing
     return $self if $profile_path eq 'NONE';
 
-    # Load user's profile, then filter and create Policies
+    # Load user's profile.
     my $profile_ref = _load_profile( $profile_path ) || {};
-    my $merged_ref  = _merge_profile( $profile_ref );
 
-    while ( my ( $policy, $params ) = each %{ $merged_ref } ) {
+    # Apply logic to decide if Policy should be loaded
+    for my $policy ( @SITE_POLICIES ) {
 
-        # Filter against pattern matches
-        next if any  { $policy =~ m{ $_ }imx } @{ $excludes_ref };
-        next if none { $policy =~ m{ $_ }imx } @{ $includes_ref };
+        my $short_name = _short_name($policy, $NAMESPACE);
+        my $params     = $profile_ref->{$policy} || $profile_ref->{$short_name} || {};
 
-        # Filter against severity limit
-        next if ( $params->{severity} || $policy->default_severity() )
-            < $min_severity;
+        #Start by assuming the policy should be loaded
+        my $load_me = $TRUE;
 
-        # Finally, create Policy object
-        $self->add_policy( -policy => $policy, -config => $params );
+        #Don't load policy if it is negated in the profile
+        if ( exists $profile_ref->{"-$short_name"} ) {
+            $load_me = $FALSE;
+        }
+
+        #Don't load policy if it is below the severity threshold
+        my $severity = $params->{severity} || $policy->default_severity;
+        if ( $severity < $min_severity ) {
+            $load_me = $FALSE;
+        }
+
+        #Do load if policy matches one of the inclusions patterns
+        if (any { $policy =~ m{ $_ }imx } @{ $includes_ref } ) {
+            $load_me = $TRUE;
+        }
+
+        #But don't load if policy matches any of the exclusion patterns
+        if (any  { $policy =~ m{ $_ }imx } @{ $excludes_ref } ) {
+            $load_me = $FALSE;
+        }
+
+        #Now load (or not)
+        if( $load_me ){
+            $self->add_policy( -policy => $policy, -config => $params );
+        }
     }
 
     #All done!
@@ -143,21 +164,6 @@ sub _load_profile {
     my $handler_ref = $handlers{$ref_type};
     croak qq{Can't create Config from $ref_type} if ! $handler_ref;
     return $handler_ref->($profile);
-}
-
-sub _merge_profile {
-
-    my $profile_ref = shift || {};
-
-    my %merged = ();
-    for my $policy ( @SITE_POLICIES ) {
-        my $short_name = _short_name($policy, $NAMESPACE);
-        next if exists $profile_ref->{"-$short_name"};
-        my $params = $profile_ref->{$short_name} || {};
-	$merged{ $policy } = $params;
-    }
-
-    return \%merged;
 }
 
 #------------------------------------------------------------------------
