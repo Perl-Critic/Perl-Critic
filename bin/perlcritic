@@ -61,7 +61,14 @@ sub get_options {
 
     #Warn users who might forget that -verbose requires a value
     if ( $opts{verbose} && $opts{verbose} !~ m{ (?: \d+ | %[fmlcdp] ) }mx ) {
-        warn qq{Warning: -verbose value '$opts{verbose}' looks odd.\n};
+        warn qq{Warning: -verbose argument '$opts{verbose}' looks odd.\n};
+        warn qq{Perhaps you meant to say '-verbose 3 $opts{verbose}'\n};
+    }
+
+    #Warn if -top is negative.  They might have meant it as a severity
+    if ( $opts{top} && $opts{top} < 0 ) {
+        warn qq{Warning: -top argument '$opts{top}' is negative.\n};
+        warn qq{Perhaps you meant to say '$opts{top} -top'.\n};
     }
 
     #Convert severity shortcut options.  If multiple shortcuts
@@ -137,16 +144,17 @@ sub render_report {
     my ( $file, $config, @violations ) = @_;
 
     $file = -f $file ? $file : 'stdin';
-    my $default_verbosity = @files > 1 ? 3 : 2;  #@files is global!
+    my $default_verbosity = @files > 1 ? 4 : 3;  #@files is global!
     my $verbosity = $config->{-verbose} || $default_verbosity;
     my $top = $config->{-top};
 
     my %FORMAT_OF = (
         1 => "%f:%l:%c:%m\n",
         2 => "%m at line %l, column %c. %e. (Severity: %s)\n",
-        3 => "%f: %m at line %l, column %c. %e. (Severity: %s)\n",
-        4 => "[%p] %m at line %l, column %c. %e. (Severity: %s)\n",
-        5 => "[%p] %m at line %l, column %c. %e. (Severity: %s)\n%d\n",
+        3 => "%m at line %l, column %c near '%r'.  %e. (Severity: %s)\n",
+        4 => "%f: %m at line %l, column %c near '%r'.  %e. (Severity: %s)\n",
+        5 => "[%p] %m at line %l, column %c near '%r'.  %e. (Severity: %s)\n",
+        6 => "[%p] %m at line %l, column %c near '%r'.  %e. (Severity: %s)\n%d\n",
     );
 
     my $fmt =
@@ -271,19 +279,19 @@ distributions of Perl::Critic at L<http://theoryx5.uwinnipeg.ca/ppms/>.
 Before getting into all the gory details, here are some basic usage
 examples to get you started.
 
-  #Report only violations with highest severity
+  #Report only most severe violations (severity = 5)
   perlcritic YourModule.pm
 
   #Same as above, but for all Perl files in directory
   perlcritic YourDirectory
 
-  #Include violations with slightly lower severity
+  #Report slightly less severe violations too (severity >= 4)
   perlcritic -4 YourModule.pm
 
-  #Include all violations, regardless of severity
+  #Report all violations, regardless of severity (severity >= 1)
   perlcritic -1 YourModule.pm
 
-  #Report top 20 most severe violations
+  #Report top 20 most severe violations (severity >= 1)
   perlcritic -top YourModule.pm
 
   #Report top 20 violations with severity >= 3
@@ -303,7 +311,7 @@ are specified, then input is read from STDIN.
 
 Option names can be abbreviated to uniqueness and can be stated with
 singe or double dashes, and option values can be separated from the
-option name by a space or '=' (a la L<Getopt::Long>).  Option names
+option name by a space or '=' (as with L<Getopt::Long>).  Option names
 are also case-sensitive.
 
 =over 8
@@ -316,29 +324,28 @@ home directory.  See L<"CONFIGURATION"> for more information.
 
 =item -noprofile
 
-Directs perlcritic not to load any configuration file, thus defaulting
-to load all the Policy modules that are distributed with
-L<Perl::Critic>.
+Directs perlcritic not to load any configuration file, thus reverting
+to the default configuration for all Policies.
 
 =item -severity N
 
 Directs perlcritic to only report violations of Policies with a
-severity greater than <$N>.  Severity values are integers ranging from
-1 (least severe) to 5 (most severe).  The default C<-severity> is 5.
-For a given C<-profile>, decreasing the C<-severity> will usually
-result in more violations.  Users can redefine the C<severity> for any
-Policy in their F<.perlcriticrc> file.  See L<"CONFIGURATION"> for
-more information.
+severity greater than <N>.  Severity values are integers ranging from
+1 (least severe) to 5 (most severe).  The default is 5.  For a given
+C<-profile>, decreasing the C<-severity> will usually produce more
+violations.  Users can redefine the C<severity> for any Policy in
+their F<.perlcriticrc> file.  See L<"CONFIGURATION"> for more
+information.
 
 =item -5 | -4 | -3 | -2 | -1
 
 These are shortcuts for setting the C<-severity> option.  For example
-C<"-5"> is equivalent to C<"-severity 5">.  Using one of these
-shortcuts causes the C<-severity> option to be silently ingored (if it
-is given).  If multiple shortcuts are specified, then the lowest one
-wins.  NOTE: Be careful not to put one of the severity shortcut
-options immediately after the C<-top> option or perlcritic will
-interpet it as the number of violations to report.
+C<"-4"> is equivalent to C<"-severity 4">.  Using one of these
+shortcuts causes an explicit C<-severity> option to be silently
+ingored if it is given.  If multiple shortcuts are specified, then the
+lowest one wins.  NOTE: Be careful not to put one of the severity
+shortcut options immediately after the C<-top> option or perlcritic
+will interpet it as the number of violations to report.
 
 =item -top [ N ]
 
@@ -354,42 +361,61 @@ report.
 
 =item -include PATTERN
 
-Forces perlcritic to report violations of all Policy modules that
-match the regex C</PATTERN/imx>.  You can specify multiple C<-include>
-options and you can use it in conjunction with the C<-exclude> option.
-Note that C<-exclude> takes precedence over C<-include> when a Policy
+Directs perlcritic to report additional violations of all Policy
+modules that match the regex C</PATTERN/imx>.  Use this option to
+temporarily override your profile and/or the severity settings at the
+command-line.  For example:
+
+  perlcritic --include=layout my_file.pl
+
+This would cause perlcritic to report violations of all the
+C<CodeLayout::*> policies even if they have a severity level that is
+less than the default level of 5, or have been disabled in your
+F<.perlcriticrc> file.  You can specify multiple C<-include> options
+and you can use it in conjunction with the C<-exclude> option.  Note
+that C<-exclude> takes precedence over C<-include> when a Policy
 matches both patterns.
 
 =item -exclude PATTERN
 
-Forces perlcritic to not report violations of any Policy modules that
-match the regex C</PATTERN/imx>.  You can specify multiple C<-exclude>
-options and you can use it in conjunction with the C<-include> option.
-Note that C<-exclude> takes precedence over C<-include> when a Policy
-matches both patterns.
+Directs perlcritic to not report violations of any Policy modules that
+match the regex C</PATTERN/imx>.  Use this option to temporarily
+override your profile and/or the severity settings at the
+command-line.  For example:
+
+  perlcritic --exclude=strict my_file.pl
+
+This would cause perlcritic to not report violations of the
+C<RequireUseStrict> and C<ProhibitNoStrict> policies even though they
+have a severity level that is greater than 1.  You can specify
+multiple C<-exclude> options and you can use it in conjunction with
+the C<-include> option.  Note that C<-exclude> takes precedence over
+C<-include> when a Policy matches both patterns.
 
 =item -force
 
-Directs perlcritic not to observe the magical C<## no critic>
+Directs perlcritic to ignore the magical C<## no critic>
 pseudo-pragmas in the source code. See L<"BENDING THE RULES"> for more
 information.
 
 =item -verbose N | FORMAT
 
 Sets the verbosity level or format for reporting violations.  If given
-a number (N), perlcritic reports violations using one of the
-predefined formats described below.  If given a string (FORMAT), it is
-interpreted to be an actual format specification.  If the C<-verbose>
-option is not specified, it defaults to either 2 or 3, depending on
-whether multiple files were given as arguments to perlcritic.
+a number (C<N>), perlcritic reports violations using one of the
+predefined formats described below.  If given a string (C<FORMAT>), it
+is interpreted to be an actual format specification.  If the
+C<-verbose> option is not specified, it defaults to either 3 or 4,
+depending on whether multiple files were given as arguments to
+perlcritic.
 
   Verbosity     Format Specification
-  -----------   -------------------------------------------------
+  -----------   --------------------------------------------------------------------
   1             "%f:%l:%c:%m.\n"
-  2             "%m at line %l, column %c. %e.\n"
-  3             "%f: %m at line %l, column %c. %e.\n"
-  4             "[%p] %m at line %1, column %c. %e.\n"
-  5             "[%p] %m at line %1, column %c. %e.\n %d\n"
+  2             "%m at line %l, column %c. %e.(Severity: %s)\n"
+  3             "%m at line %l, column %c near '%r'. %e. (Severity: %s)\n",
+  4             "%f: %m at line %l, column %c near '%r'.  %e. (Severity: %s)\n"
+  5             "[%p] %m at line %l, column %c near '%r'.  %e. (Severity: %s)\n"
+  6             "[%p] %m at line %l, column %c near '%r'.  %e. (Severity: %s)\n%d\n"
 
 Formats are a combination of literal and escape characters similar to
 the way C<sprintf> works.  See L<String::Format> for a full
@@ -397,15 +423,16 @@ explanation of the formatting capabilities.  Valid escape characters
 are:
 
   Escape    Meaning
-  -------   -----------------------------------------------------
+  -------   ------------------------------------------------------------------------
   %m        Brief description of the violation
   %f        Name of the file where the violation occurred.
   %l        Line number where the violation occurred
   %c        Column number where the violation occurred
   %e        Explanation of violation or page numbers in PBP
   %d        Full diagnostic discussion of the violation
+  %r        The string of source code that caused the violation
   %p        Name of the Policy module that created the violation
-  %s        The severity level of the violation.
+  %s        The severity level of the violation
 
 The purpose of these formats is to provide some compatibility with
 editors that have an interface for parsing certain kinds of input. See
@@ -446,10 +473,10 @@ C<-profile> option is not given to the constructor, then all the
 modules that are found in the Perl::Critic::Policy namespace will be
 loaded with their default configuration.
 
-The format of the configuration file is a series of named sections
-that contain key-value pairs separated by '='. Comments should
-start with '#' and can be placed on a separate line or after the
-name-value pairs if you desire.  The general recipe is a series of
+The format of the configuration file is an series of INI-style
+sections that contain key-value pairs separated by '='. Comments
+should start with '#' and can be placed on a separate line or after
+the name-value pairs if you desire.  The general recipe is a series of
 blocks like this:
 
     [Perl::Critic::Policy::Category::PolicyName]
@@ -462,32 +489,25 @@ module that implements the policy.  The Policy modules distributed
 with Perl::Critic have been grouped into categories according to the
 table of contents in Damian Conway's book B<Perl Best Practices>. For
 brevity, you can ommit the C<'Perl::Critic::Policy'> part of the
-module name.  All Policy modules must be a subclass of
-L<Perl::Critic::Policy>.
+module name.
 
 C<severity> is the level of importance you wish to assign to the
 Policy.  All Policy modules are defined with a default severity value
 ranging from 1 (least severe) to 5 (most severe).  However, you may
 disagree with the default severity and choose to give it a higher or
 lower severity, based on your own coding philosophy.
-Perl::Critic::Config will only load Policy modules that have a
-severity greater than the C<-severity> option that is given to the
-constructor.
 
-The remaining key-value pairs are configuration parameters for that
-specific Policy and will be passed into the constructor of the
-L<Perl::Critic::Policy> subclass.  The constructors for most Policy
-modules do not support arguments, and those that do should have
-reasonable defaults.  See the documentation on the appropriate Policy
-module for more details.
+The remaining key-value pairs are configuration parameters that will
+be passed into the constructor of that Policy.  The constructors for
+most Policy modules do not support arguments, and those that do should
+have reasonable defaults.  See the documentation on the appropriate
+Policy module for more details.
 
-By default, all the modules that are found in the Perl::Critic::Policy
-namespace are loaded into the Config.  Rather than assign a severity
-level to each Policy, you can simply "turn off" a Policy by prepending
-a '-' to the name of the module in your configuration file.  In this
-manner, the Policy will never be loaded, regardless of the
-C<-severity> given to the Perl::Critic::Config constructor.
-
+Instead of redefining the severity for a given Policy, you can
+completely disable a Policy by prepending a '-' to the name of the
+module in your configuration file.  In this manner, the Policy will
+never be loaded, regardless of the C<-severity> given on the
+command line.
 
 A simple configuration might look like this:
 
@@ -520,6 +540,14 @@ A simple configuration might look like this:
     # For all other Policies, I accept the default severity,
     # so no additional configuration is required for them.
 
+A few sample configuration files are included in this distribution
+under the F<t/samples> directory. The F<perlcriticrc.none> file
+demonstrates how to disable Policy modules.  The
+F<perlcriticrc.levels> file demonstrates how to redefine the severity
+level for any given Policy module.  The F<perlcriticrc.pbp> file
+configures Perl::Critic to load only Policies described in Damian
+Conway's book "Perl Best Practices."
+
 =head1 THE POLICIES
 
 The following Policy modules are distributed with Perl::Critic.  The
@@ -527,8 +555,10 @@ Policy modules have been categorized according to the table of
 contents in Damian Conway's book B<Perl Best Practices>.  Since most
 coding standards take the form "do this..." or "don't do that...", I
 have adopted the convention of naming each module C<RequireSomething>
-or C<ProhibitSomething>.  See the documentation of each module for
-it's specific details.
+or C<ProhibitSomething>.  Each Policy is listed here with it's default
+severity.  If you don't agree with the default severity, you can
+change it in your F<.perlcriticrc> file.  See the documentation of
+each module for it's specific details.
 
 =head2 L<Perl::Critic::Policy::BuiltinFunctions::ProhibitLvalueSubstr>
 
@@ -756,9 +786,6 @@ Write C<$EVAL_ERROR> instead of C<$@> [Severity 2]
 
 =head1 BENDING THE RULES
 
-B<NOTE:> This feature changed in version 0.09 and is not backward
-compatible with earlier versions.
-
 Perl::Critic takes a hard-line approach to your code: either you
 comply or you don't.  In the real world, it is not always practical
 (or even possible) to fully comply with coding standards.  In such
@@ -786,7 +813,7 @@ certain lines or blocks of code by using pseudo-pragmas:
     }
 
 
-The C<"## no critic"> comments direct Perl::Critic to overlook the
+The C<"## no critic"> comments direct Perl::Critic to ignore the
 remaining lines of code until the end of the current block, or until a
 C<"## use critic"> comment is found (whichever comes first).  If the
 C<"## no critic"> comment is on the same line as a code statement,

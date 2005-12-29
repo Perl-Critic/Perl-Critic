@@ -23,7 +23,7 @@ my $expl = [ 441 ];
 
 #---------------------------------------------------------------------------
 
-sub default_severity   { return $SEVERITY_LOW }
+sub default_severity { return $SEVERITY_LOW }
 sub applies_to { return 'PPI::Document' }
 
 #---------------------------------------------------------------------------
@@ -45,20 +45,17 @@ sub new {
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-    my @viols;
+    my @viols = ();
 
     my $nodes = $doc->find( \&_wanted );
     for my $keyword ( @{ $self->{_keywords} } ) {
 	if ( (!$nodes) || none { $_ =~ m{ \$$keyword.*\$ }mx } @{$nodes} ) {
-	  my $desc = qq{RCS keyword '\$$keyword\$' not found};
-
-	  push @viols, Perl::Critic::Violation->new( $desc,
-                                                     $expl,
-                                                     [0,0],
-                                                     $self->get_severity(), );
+            my $sev  = $self->get_severity();
+            my $desc = qq{RCS keyword '\$$keyword\$' not found};
+            my $v = Perl::Critic::Violation->new( $desc, $expl, $doc, $sev );
+            push @viols, $v;
 	}
     }
-
     return @viols;
 }
 

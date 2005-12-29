@@ -19,7 +19,7 @@ $VERSION = eval $VERSION;    ## no critic
 #----------------------------------------------------------------------------
 
 my $desc = q{Expression form of 'grep'};
-my $expl = [169];
+my $expl = [ 169 ];
 
 #----------------------------------------------------------------------------
 
@@ -39,10 +39,8 @@ sub violates {
     return if !$arg || $arg->isa('PPI::Structure::Block');
 
     #Must not be a block
-    return Perl::Critic::Violation->new( $desc,
-                                         $expl,
-                                         $elem->location(),
-                                         $self->get_severity(), );
+    my $sev = $self->get_severity();
+    return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
 }
 
 

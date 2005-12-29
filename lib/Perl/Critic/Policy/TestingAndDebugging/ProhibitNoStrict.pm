@@ -61,10 +61,8 @@ sub violates {
     return if all { exists $self->{_allow}->{$_} } @words;
 
     #If we get here, then it must be a violation
-    return Perl::Critic::Violation->new( $desc,
-                                         $expl,
-                                         $elem->location(),
-                                         $self->get_severity(), );
+    my $sev = $self->get_severity();
+    return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
 }
 
 1;

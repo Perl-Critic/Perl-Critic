@@ -13,50 +13,55 @@ Developer - How to make new Perl::Critic::Policy modules
 
 =head1 DESCRIPTION
 
-This document describes how to make new L<Perl::Critic::Policy>
-modules by dissecting an existing Policy.  In this case, we'll be
-looking at L<Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep>
-which is relatively simple, but demonstrates all the ingredients that
-are found in every Policy module.
-
-After reading this, you should probably also look at the documentation
-for L<PPI> to better understand how you can navigate and manipulate
-the parse tree.
+This document describes how to create a new Policy module for
+L<Perl::Critic>.  It is intended for developers who wish to extend
+Perl::Critic to enforce their own custom coding standards.  Although
+the Perl::Critic distribution already includes a number of Policies
+based on Damian Conway's book "Perl Best Practices", Perl::Critic is
+not limited to his guidelines and can be used to enforce any practice,
+preference, or style that you want to follow.  In fact, you can even
+write Policies to enforce contradictory guidelines.  All you need to
+do is write a corresponding L<Perl::Critic::Policy> subclass, which
+may require as little as 10 lines of code..
 
 =head1 BACKGROUND
 
-In a nutshell, L<PPI> transforms a file of Perl source code into a
-Document Object Model.  Each token in the document is represented by
-various PPI object (for example, L<PPI::Token::Operator>,
-L<PPI::Token::Word>).  Likewise, these object are organized into a
-heirarchy of various types of structures (for example,
-L<PPI::Structure::Statement>, L<PPI::Structure::Subroutine>).  The root
-node of the heirarchy is the L<PPI::Document>.
+The heart of Perl::Critic is L<PPI>, which is a parser and lexer for
+Perl.  PPI transforms a file of Perl source code into a Document
+Object Model (DOM).  Each token in the document is represented by one
+of the various PPI classes (for example: L<PPI::Token::Operator>,
+L<PPI::Token::Word>).  The tokens are then organized into a hierarchy
+of structural classes (for example: L<PPI::Statement::Expression>,
+L<PPI::Structure::Subroutine>).  The root node of the hierarchy is the
+L<PPI::Document>.
 
-L<Perl::Critic> traverses each node in the Document, it invokes each
-of the Policies at the appropriate node.  The Policy inspects the
-node, looks at the surrounding nodes, or does whatever it wants.  If
-the Policy decides that that a coding standard has been violated, it
-creates and returns one or more L<Perl::Critic::Violation> objects.
-If there are no violations, then the Policy returns nothing.
+The L<Perl::Critic> engine traverses each node in the L<PPI::Document>
+tree and invokes each of the L<Perl::Critic::Policy> subclasses at the
+appropriate node.  The Policy can inspect the node, look at the
+surrounding nodes, and do whatever else it wants.  If the Policy
+decides that that a coding standard has been violated, it returns one
+or more L<Perl::Critic::Violation> objects.  If there are no
+violations, then the Policy returns nothing.
 
-The Policy module we will look at here is F<RequireBlockGrep.pm>.
-The goal of this Policy is to enforce that every call to C<grep> uses
-a block for the first argument and not an expression.  The reasons for
-this Policy are discussed in detail in "Perl Best Practices."
+So now that we understand the basic organization of PPI and
+Perl::Critic, lets examine one the existing Policy modules so we can
+see how this all works.  We will pick the F<RequireBlockGrep.pm>
+policy because it is relatively simple but demonstrates most of the
+important issues.  The goal of this Policy is to enforce that every
+call to C<grep> uses a block for the first argument and not an
+expression.  The reasons for this Policy are discussed in detail in
+"Perl Best Practices."
 
-  grep { /foo/ } @list;  #This is ok
-  grep /foo/, @list;     #This is not ok
+=head1 EXAMPLE POLICY
 
-=head1 EXAMPLE
-
-So now lets see how this all works.  First, your Policy module needs
-to have a name.  Perl::Critic will automatically discover all modules
-that are in the C<Perl::Critic::Policy> namespace.  Also, we've
-adopted the convention of grouping Policies into directories according
-to the table of contents in Conway's book "Perl Best Practices."
-Since the goal of this policy is to enforce the use of block arguments
-to C<grep>, we'll call it F<RequireBlockGrep.pm>.
+First, the Policy module needs to have a name.  Perl::Critic uses
+L<Module::Pluggable> to automatically discover all modules that are in
+the C<Perl::Critic::Policy> namespace.  Also, we've adopted the
+convention of grouping Policies into directories according to the
+table of contents in Conway's book "Perl Best Practices."  Since the
+goal of this policy is to enforce the use of block arguments to
+C<grep> and it comes from the "Builtin Functions" chapter of PBP, we
+call it "Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep".
 
   package Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep;
 
@@ -66,8 +71,8 @@ provides no-op implementations of the basic methods.  Our job is to
 override these methods to make them do something useful.
 
 Technically, C<use strict> and C<use warnings> are optional, but they
-are necessary to make Perl::Critic self-compliant.  And we don't
-want Perl::Critic to be a hypocrite, now do we?
+are necessary to make Perl::Critic self-compliant.  And we don't want
+Perl::Critic to be a hypocrite, now do we?
 
   use strict;
   use warnings;
@@ -75,10 +80,10 @@ want Perl::Critic to be a hypocrite, now do we?
   use Perl::Critic::Violation;
   use base 'Perl::Critic::Policy';
 
-This is a pretty standard way to declare a version number for you
-module, and it's also required for self-compliance.  But the
+This following is a pretty standard way to declare a version number
+for you module, and it's also required for self-compliance.  But the
 C<ProhibitStringyEval> policy doesn't approve of using C<eval> in this
-manner, so we attach the "##no critic" comments to tell Perl::Critic
+manner, so we attach the "## no critic" comments to tell Perl::Critic
 to overlook this line of code.
 
   our $VERSION = '0.13_01';
@@ -107,20 +112,26 @@ severity constants that you can use here.
 Next we define which types of PPI objects this Policy should be
 invoked on.  The applies_to() method returns a list of PPI package
 names.  As Perl::Critic traverses the document, it will call the
-C<violates()> method from this module whenever it encouters one of the
+C<violates()> method from this module whenever it encounters one of the
 PPI types that are given here.  In this case, we just want to test
 calls to C<grep>.  Since the token "grep" is a L<PPI::Token::Word>, we
 return that name from the C<applies_to()> method.
 
   sub applies_to { return 'PPI::Token::Word' }
 
+Until this point, we've been writing static methods.  However, we
+B<are> writing an object class.  L<Perl::Critic::Policy> provides a
+default constructor that simply returns a blessed hash reference.  So
+in most cases, you don't need to write your own constructor.  But if
+your Policy requires any special parameters, you can write a custom
+constructor that accepts those parameters.
 
 Now comes the interesting part.  The C<violates()> method does all the
 work.  It is always called with 2 arguments: a reference to the
 current node or "element" that Perl::Critic is traversing, and a
 reference to the entire PPI document. [And since this is an object
 method, there will be an additional argument that is a reference to
-this object (C<$self>), but you alreday knew that!]
+this object (C<$self>), but you already knew that!]
 
   sub violates {
       my ( $self, $elem, $doc ) = @_;
@@ -131,14 +142,14 @@ we declared back in the C<applies_to()> method.  However, we didn't
 specify exactly which "word" we were looking for.  Evaluating a PPI
 element in a string context returns the literal form of the code.  So
 we make sure that this PPI::Token::Word is, in fact, "grep".  If it's
-not, then we dont' need to bother examining it.
+not, then we don't' need to bother examining it.
 
     return if !($elem eq 'grep');
 
 The C<PPI::Token::Word> class is also used for barewords and methods
 called on object references.  It is possible for someone to declare a
-bareword hashkey as C<%hash = ( grep => 'foo' )>.  We don't want to
-test those types of elements beacause they don't represent function
+bareword hash key as C<%hash = ( grep => 'foo' )>.  We don't want to
+test those types of elements because they don't represent function
 calls to C<grep>.  So we use some handy utility functions from
 L<Perl::Critic::Utils> to make sure that this "grep" is actually in
 the right context.
@@ -156,7 +167,7 @@ whitespace, we use the C<snext_sibling()> to get the next code-sibling
     my $sib = $elem->snext_sibling() || return;
 
 In Perl, the parenthesis around argument lists are usually optional,
-and PPI packs the elements into a L<PPI::Structure::List> ojbect when
+and PPI packs the elements into a L<PPI::Structure::List> object when
 parens are used.  So if the sibling is a PPI::Structure::List, we pull
 out the first (significant) child of that list.  This child will be
 the first argument to C<grep>.  If parens were not used, then the
@@ -165,22 +176,21 @@ sibling itself is the first argument.
     my $arg = $sib->isa('PPI::Structure::List') ? $sib->schild(0) : $sib;
 
 Finally, we now have a reference to the first argument to C<grep>.  If
-that argument is a block (i.e. something in curly braces), then it will
-be a L<PPI::Structure::Block>, in which case our Policy is satisfied and
-we just return nothing.
+that argument is a block (i.e. something in curly braces), then it
+will be a L<PPI::Structure::Block>, in which case our Policy is
+satisfied and we just return nothing.
 
     return if !$arg || $arg->isa('PPI::Structure::Block');
 
-But if it is not a L<PPI::Strucutre::Block>, then we know that this
+But if it is not a L<PPI::Structure::Block>, then we know that this
 call to C<grep> must be using the expression form, and that violates
 our Policy.  So we create and return a new L<Perl::Critic::Violation>
-object, passing in the description, explanation, location, and
-severity of this violation.  And that's all there is to it!
+object, passing in the description, explanation, and severity of the
+violation, as well as a reference to the PPI element that caused the
+violation.  And that's all there is to it!
 
-    return Perl::Critic::Violation->new( $desc,
-                                         $expl,
-                                         $elem->location(),
-                                         $self->get_severity(), );
+    my $sev = $self->get_severity();
+    return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
   }
 
   1;
@@ -189,7 +199,7 @@ One last thing -- When you import Perl::Critic::Violation, it extracts
 the DESCRIPTION section from the POD in your Policy module.  That text
 can displayed in the diagnostic output when the Violations objects are
 string-ified.  So please include a DESCRIPTION section in the POD for
-your Policy.  It should succintcly describe the behavior and
+your Policy.  It should succinctly describe the behavior and
 motivation for your Policy and include a few examples of both good and
 bad code.
 

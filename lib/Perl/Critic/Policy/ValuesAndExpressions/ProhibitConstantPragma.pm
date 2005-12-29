@@ -31,11 +31,8 @@ sub applies_to { return 'PPI::Statement::Include' }
 sub violates {
     my ( $self, $elem, $doc ) = @_;
     if ( $elem->type() eq 'use' && $elem->pragma() eq 'constant' ) {
-
-        return Perl::Critic::Violation->new( $desc,
-                                             $expl,
-                                             $elem->location(),
-                                             $self->get_severity(), );
+        my $sev = $self->get_severity();
+        return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
     }
     return;    #ok!
 }

@@ -16,6 +16,7 @@ use Perl::Critic::Utils;
 use String::Format qw(stringf);
 use English qw(-no_match_vars);
 use overload q{""} => 'to_string';
+use UNIVERSAL qw(isa);
 
 our $VERSION = '0.13_01';
 $VERSION = eval $VERSION;    ## no critic
@@ -48,7 +49,7 @@ sub import {
 #----------------------------------------------------------------------------
 
 sub new {
-    my ( $class, $desc, $expl, $loc, $sev ) = @_;
+    my ( $class, $desc, $expl, $elem, $sev ) = @_;
 
     #Check arguments to help out developers who might
     #be creating new Perl::Critic::Policy modules.
@@ -58,8 +59,8 @@ sub new {
         croak $msg;
     }
 
-    if ( ref $_[3] ne 'ARRAY' ) {
-        my $msg = '3rd arg to Violation->new() must be ARRAY ref';
+    if ( ! isa( $_[3], 'PPI::Element' ) ) {
+        my $msg = '3rd arg to Violation->new() must be a PPI::Element';
         croak $msg;
     }
 
@@ -67,9 +68,13 @@ sub new {
     my $self = bless {}, $class;
     $self->{_description} = $desc;
     $self->{_explanation} = $expl;
-    $self->{_location}    = $loc;
     $self->{_severity}    = $sev;
     $self->{_policy}      = caller;
+    $self->{_location}    = $elem->location() || [0,0];
+
+    my $stmnt = $elem->statement() || $elem;
+    $self->{_source}      = $stmnt->content()  || $EMPTY;
+
 
     return $self;
 }
@@ -79,7 +84,7 @@ sub new {
 sub sort_by_location {
     ref $_[0] || shift; #Can call as object or class method
     #TODO: What if $a or $b are not Violation objects?
-    return sort {    (($a->location->[0] || 0) <=> ($b->location->[0] || 0))
+    return sort {   (($a->location->[0] || 0) <=> ($b->location->[0] || 0))
                  || (($a->location->[1] || 0) <=> ($b->location->[1] || 0)) } @_
 }
 
@@ -142,13 +147,22 @@ sub policy {
 
 #---------------------------
 
+sub source {
+     my $self = shift;
+     my $source = $self->{_source};
+     $source =~ m{\A ( [^\n]* ) }mx;
+     return $1;
+}
+
+#---------------------------
+
 sub to_string {
     my $self = shift;
     my %fspec = (
-         l => $self->location->[0], c => $self->location->[1],
-         m => $self->description(), e => $self->explanation(),
-         p => $self->policy(),      d => $self->diagnostics(),
-         s => $self->severity(),
+         'l' => $self->location->[0], 'c' => $self->location->[1],
+         'm' => $self->description(), 'e' => $self->explanation(),
+         'p' => $self->policy(),      'd' => $self->diagnostics(),
+         's' => $self->severity(),    'r' => $self->source(),
     );
     return stringf($FORMAT, %fspec);
 }
@@ -174,7 +188,8 @@ sub _get_diagnostics {
     my $parser     = Pod::PlainText->new();
     $parser->select('DESCRIPTION');
     $parser->parse_from_file($file, $handle);
-    #Remove header from documentation string.
+
+    # Remove header from documentation string.
     $pod_string =~ s{ \A \s* DESCRIPTION \s* \n}{}mx;
     return $pod_string;
 }
@@ -262,13 +277,19 @@ If you need to sort Violations by location, use this handy routine:
 =item diagnostics( void )
 
 This feature is experimental.  Returns a formatted string containing a
-full discussion of the motivation, and details of the Policy module
+full discussion of the motivation for and details of the Policy module
 that created this Violation.  This information is automatically
 extracted from the DESCRIPTION section of the Policy module's POD.
 
 =item policy( void )
 
-Returns the name of the Perl::Critic::Policy module that created this Violation.
+Returns the name of the Perl::Critic::Policy that created this Violation.
+
+=item source( void )
+
+Returns the string of source code that caused this exception.  If the
+code spans multiple lines (e.g. multi-line statements, subroutines or
+other blocks), then only the first line will be returned.
 
 =item to_string( void )
 
@@ -302,28 +323,33 @@ the way C<sprintf> works.  If you want to know the specific formatting
 capabilities, look at L<String::Format>. Valid escape characters are:
 
   Escape    Meaning
-  -------   -------------------------------------------------------
+  -------   ------------------------------------------------------------------------
   %m        Brief description of the violation
-  %l        Line number where the violation occured
-  %c        Column number where the violation occured
+  %f        Name of the file where the violation occurred.
+  %l        Line number where the violation occurred
+  %c        Column number where the violation occurred
   %e        Explanation of violation or page numbers in PBP
   %d        Full diagnostic discussion of the violation
+  %r        The string of source code that caused the violation
   %p        Name of the Policy module that created the violation
-  %s        Severity level of the violation
+  %s        The severity level of the violation
 
 Here are some examples:
 
-  $Perl::Critic::Violation::FORMAT = "%m at line %l, column %c.\n"; 
+  $Perl::Critic::Violation::FORMAT = "%m at line %l, column %c.\n";
   #looks like "Mixed case variable name at line 6, column 23."
 
-  $Perl::Critic::Violation::FORMAT = "%l:%c:%p\n"; 
+  $Perl::Critic::Violation::FORMAT = "%m near '%r'\n";
+  #looks like "Mixed case variable name near 'my $theGreatAnswer = 42;'"
+
+  $Perl::Critic::Violation::FORMAT = "%l:%c:%p\n";
   #looks like "6:23:NamingConventions::ProhibitMixedCaseVars"
 
-  $Perl::Critic::Violation::FORMAT = "%m at line %l. %e. \n%d\n"; 
+  $Perl::Critic::Violation::FORMAT = "%m at line %l. %e. \n%d\n";
   #looks like "Mixed case variable name at line 6.  See page 44 of PBP.
                     Conway's recommended naming convention is to use lower-case words
                     separated by underscores.  Well-recognized acronyms can be in ALL
-                    CAPS, but must be separated by underscores from other parts of the 
+                    CAPS, but must be separated by underscores from other parts of the
                     name."
 
 =head1 AUTHOR

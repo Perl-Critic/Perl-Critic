@@ -48,19 +48,16 @@ sub violates {
       }
       @{$nodes_ref};
 
-    $other_stmnt || return;    #Both of these...
-    $strict_stmnt ||= $other_stmnt;    #need to be defined
-    my $other_at  = $other_stmnt->location()->[0];
-    my $strict_at = $strict_stmnt->location()->[0];
+    $other_stmnt || return;        #Both of these...
+    $strict_stmnt ||= $other_stmnt;  #need to be defined
+    my $other_at  = $other_stmnt->location->[0];
+    my $strict_at = $strict_stmnt->location->[0];
 
     if ( $other_at <= $strict_at ) {
-        my $loc = $other_stmnt->location();
-        return Perl::Critic::Violation->new( $desc,
-                                             $expl,
-                                             $loc,
-                                             $self->get_severity(), );
+        my $sev = $self->get_severity();
+        return Perl::Critic::Violation->new($desc, $expl, $other_stmnt, $sev);
     }
-    return;                            #ok!
+    return; #ok!
 }
 
 1;

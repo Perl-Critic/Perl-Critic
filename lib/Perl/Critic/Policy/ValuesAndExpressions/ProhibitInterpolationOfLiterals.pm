@@ -60,11 +60,8 @@ sub violates {
     }
 
     if ( !_has_interpolation($elem) ) {
-
-        return Perl::Critic::Violation->new( $desc,
-                                             $expl,
-                                             $elem->location(),
-                                             $self->get_severity(), );
+        my $sev = $self->get_severity();
+        return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
     }
     return;    #ok!
 }

@@ -23,7 +23,7 @@ my $desc = q{Module does not end with '1;'};
 
 #----------------------------------------------------------------------------
 
-sub default_severity   { return $SEVERITY_HIGH }
+sub default_severity { return $SEVERITY_HIGH }
 sub applies_to { return 'PPI::Document' }
 
 #----------------------------------------------------------------------------
@@ -34,18 +34,19 @@ sub violates {
     return if is_script($doc);
 
     # Last statement should be just "1;"
-    my @significant = $doc->schildren();
-    @significant = grep {!$_->isa('PPI::Statement::End') && !$_->isa('PPI::Statement::Data')} @significant;
+    my @significant = grep { _is_code($_) } $doc->schildren();
     my $match = $significant[-1];
-    if ($match && (ref $match) eq 'PPI::Statement' && $match eq '1;')
-    {
-       return;
-    }
+    return if ($match && (ref $match) eq 'PPI::Statement' && $match eq '1;');
 
-    return Perl::Critic::Violation->new( $desc,
-                                         $expl,
-                                         $match->location(),
-                                         $self->get_severity(), );
+    # Must be a violation...
+    my $sev = $self->get_severity();
+    return Perl::Critic::Violation->new( $desc, $expl, $match, $sev );
+}
+
+sub _is_code {
+    my $elem = shift;
+    return ! (    $elem->isa('PPI::Statement::End')
+               || $elem->isa('PPI::Statement::Data'));
 }
 
 1;

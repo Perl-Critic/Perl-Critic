@@ -2,6 +2,7 @@ package ViolationTest;
 
 use warnings;
 use strict;
+use PPI::Document;
 use Perl::Critic::Violation;
 use Perl::Critic::Violation;  # this is duplicated for test coverage of repeated calls to import()
 
@@ -13,9 +14,11 @@ This is a test diagnostic.
 
 =cut
 
-sub get_violation
-{
-   return Perl::Critic::Violation->new('', '', [0,0], 0);
+sub get_violation {
+
+    my $code = 'Hello World;';
+    my $doc = PPI::Document->new(\$code);
+    return Perl::Critic::Violation->new('', '', $doc, 0);
 }
 
 1;

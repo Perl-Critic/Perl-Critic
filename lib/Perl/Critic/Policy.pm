@@ -33,8 +33,6 @@ sub _abstract_method {
     return;  #Should never get here.
 }
 
-#----------------------------------------------------------------------------
-
 1;
 
 __END__
@@ -50,26 +48,11 @@ Perl::Critic::Policy - Base class for all Policy modules
 =head1 DESCRIPTION
 
 Perl::Critic::Policy is the abstract base class for all Policy
-objects.  If you're developing your own Policies, your job is
-to implement and override its methods in a subclass.  To work with the
+objects.  If you're developing your own Policies, your job is to
+implement and override its methods in a subclass.  To work with the
 L<Perl::Critic> engine, your implementation must behave as described
-below.
-
-=head1 IMPORTANT CHANGES
-
-As new Policy modules were added to Perl::Critic, the overall
-performance started to deteriorate rapidily.  Since each module would
-traverse the document (several times for some modules), a lot of time
-was spent iterating over the same document nodes.  So starting in
-version 0.11, I have switched to a stream-based approach where the
-document is traversed once and every Policy module is tested at each
-node.  The result is roughly a 300% improvement, and the Perl::Critic
-engine will scale better as more Policies are added.
-
-Unfortunately, Policy modules prior to version 0.11 won't be
-compatible.  Converting them to the stream-based model is fairly easy,
-and it actually results in somewhat cleaner code.  Look at the
-ControlStrucutres::* modules for some good examples.
+below.  For a detailed explanation on how to make new Policy modules,
+see the L<DEVELOPER.pod> document included in this distribution.
 
 =head1 METHODS
 

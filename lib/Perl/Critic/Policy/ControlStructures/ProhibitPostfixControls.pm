@@ -83,11 +83,9 @@ sub violates {
     # If we get here, it must be postfix.
     my $desc = qq{Postfix control '$elem' used};
     my $expl = $pages_of{$elem};
+    my $sev = $self->get_severity();
 
-    return Perl::Critic::Violation->new( $desc,
-                                         $expl,
-                                         $elem->location(),
-                                         $self->get_severity(), );
+    return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
 }
 
 1;

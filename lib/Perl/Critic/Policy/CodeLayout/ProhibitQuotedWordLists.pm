@@ -18,12 +18,12 @@ $VERSION = eval $VERSION;    ## no critic
 
 #---------------------------------------------------------------------------
 
-my $desc     = q{List of quoted literal words};
-my $expl     = q{Use 'qw()' instead};
+my $desc = q{List of quoted literal words};
+my $expl = q{Use 'qw()' instead};
 
 #---------------------------------------------------------------------------
 
-sub default_severity   { return $SEVERITY_LOW }
+sub default_severity { return $SEVERITY_LOW }
 sub applies_to { return 'PPI::Structure::List' }
 
 #---------------------------------------------------------------------------
@@ -69,10 +69,8 @@ sub violates {
     return if $count < $self->{_min};
 
     #If we get here, then all elements were literals
-    return Perl::Critic::Violation->new( $desc,
-                                         $expl,
-                                         $elem->location(),
-                                         $self->get_severity(), );
+    my $sev = $self->get_severity();
+    return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
 }
 
 sub _is_literal {

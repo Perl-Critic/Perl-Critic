@@ -19,7 +19,7 @@ $VERSION = eval $VERSION; ## no critic;
 #----------------------------------------------------------------------------
 
 my $desc = q{Lvalue form of 'substr' used};
-my $expl = [165];
+my $expl = [ 165 ];
 
 #----------------------------------------------------------------------------
 
@@ -35,13 +35,10 @@ sub violates {
     return if is_hash_key($elem);
 
     my $sib = $elem;
+    my $sev = $self->get_severity();
     while ($sib = $sib->snext_sibling()) {
-
 	next if ! ( $sib->isa( 'PPI::Token::Operator') && $sib eq q{=} );
-	return Perl::Critic::Violation->new( $desc,
-                                             $expl,
-                                             $sib->location(),
-                                             $self->get_severity(), );
+	return Perl::Critic::Violation->new( $desc, $expl, $sib, $sev );
     }
     return; #ok!
 }

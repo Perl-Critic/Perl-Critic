@@ -7,7 +7,8 @@
 
 use strict;
 use warnings;
-use Test::More tests => 538;
+use PPI::Document;
+use Test::More tests => 539;
 use English qw(-no_match_vars);
 
 our $VERSION = '0.13_01';
@@ -64,10 +65,13 @@ can_ok('Perl::Critic::Violation', 'new');
 can_ok('Perl::Critic::Violation', 'explanation');
 can_ok('Perl::Critic::Violation', 'description');
 can_ok('Perl::Critic::Violation', 'location');
+can_ok('Perl::Critic::Violation', 'source');
 can_ok('Perl::Critic::Violation', 'policy');
 can_ok('Perl::Critic::Violation', 'to_string');
 
-$obj = Perl::Critic::Violation->new(undef, undef, [], undef);
+my $code = 'Hello World;';
+my $doc = PPI::Document->new(\$code);
+$obj = Perl::Critic::Violation->new(undef, undef, $doc, undef);
 isa_ok($obj, 'Perl::Critic::Violation');
 is($obj->VERSION(), $VERSION);
 

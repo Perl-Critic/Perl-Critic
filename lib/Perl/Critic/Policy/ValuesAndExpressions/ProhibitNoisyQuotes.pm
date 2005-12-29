@@ -24,7 +24,7 @@ my $expl     = [ 53 ];
 
 #---------------------------------------------------------------------------
 
-sub default_severity   { return $SEVERITY_LOW }
+sub default_severity { return $SEVERITY_LOW }
 sub applies_to {
     return qw(PPI::Token::Quote::Double
               PPI::Token::Quote::Single);
@@ -35,10 +35,8 @@ sub applies_to {
 sub violates {
     my ( $self, $elem, $doc ) = @_;
     if ( $elem =~ $noise_rx ) {
-        return Perl::Critic::Violation->new( $desc,
-                                             $expl,
-                                             $elem->location(),
-                                             $self->get_severity(), );
+        my $sev = $self->get_severity();
+        return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
     }
     return;    #ok!
 }
@@ -73,7 +71,7 @@ brackets tend do to look better in quotes, so those are allowed.
   $rbrace = ')';          #ok
   print '(', @list, ')';  #ok
 
-=head1 SEE ALSO 
+=head1 SEE ALSO
 
 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitEmptyQuotes>
 

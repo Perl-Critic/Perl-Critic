@@ -23,7 +23,7 @@ my $expl   = q{Limit to one per file};
 
 #----------------------------------------------------------------------------
 
-sub default_severity   { return $SEVERITY_HIGH }
+sub default_severity { return $SEVERITY_HIGH }
 sub applies_to { return 'PPI::Document' }
 
 #----------------------------------------------------------------------------
@@ -31,13 +31,10 @@ sub applies_to { return 'PPI::Document' }
 sub violates {
     my ( $self, $elem, $doc ) = @_;
     my $nodes_ref = $doc->find('PPI::Statement::Package') || return;
-    my @matches = @{$nodes_ref} > 1 ? @{$nodes_ref}[ 1 .. $#{$nodes_ref} ] : ();
-    return
-      map { Perl::Critic::Violation->new( $desc,
-                                          $expl,
-                                          $_->location(),
-                                          $self->get_severity(), )
-          } @matches;
+    my @matches = @{$nodes_ref} > 1 ? @{$nodes_ref}[ 1 .. $#{$nodes_ref} ] :();
+
+    my $sev = $self->get_severity();
+    return map {Perl::Critic::Violation->new($desc, $expl, $_, $sev)} @matches;
 }
 
 1;

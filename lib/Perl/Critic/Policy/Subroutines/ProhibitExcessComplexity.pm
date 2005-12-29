@@ -20,6 +20,8 @@ $VERSION = eval $VERSION;    ## no critic
 
 my $expl = q{Consider refactoring};
 
+## no critic - lots of funny strings here
+
 my %logic_ops = (
    '&&'  =>  1, '||'  => 1,
    '||=' =>  1, '&&=' => 1,
@@ -27,6 +29,8 @@ my %logic_ops = (
    'xor' =>  1, '?'   => 1,
    '<<=' =>  1, '>>=' => 1,
 );
+
+## use critic
 
 my %logic_keywords = (
    'if'   => 1, 'elsif'  => 1,
@@ -63,11 +67,9 @@ sub violates {
     $count += grep { exists $logic_ops{$_} }  @{ $operators_ref };
 
     if ( $count > $self->{_max_mccabe} ) {
-
+        my $sev = $self->get_severity();
         my $desc = qq{Subroutine with high complexity score ($count)};
-        return Perl::Critic::Violation->new( $desc, $expl,
-                                             $elem->location(),
-                                             $self->get_severity(), );
+        return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
     }
     return; #ok!
 }

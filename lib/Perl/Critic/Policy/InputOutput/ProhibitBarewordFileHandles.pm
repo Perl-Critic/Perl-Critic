@@ -23,7 +23,7 @@ my $expl = [ 202, 204 ];
 
 #--------------------------------------------------------------------------
 
-sub default_severity   { return $SEVERITY_HIGHEST }
+sub default_severity { return $SEVERITY_HIGHEST }
 sub applies_to { return 'PPI::Token::Word' }
 
 #--------------------------------------------------------------------------
@@ -38,11 +38,8 @@ sub violates {
     $first = $first->[0] || return; #Ick!
 
     if( $first->isa('PPI::Token::Word') && !($first eq 'my') ) {
-
-	return Perl::Critic::Violation->new( $desc,
-                                             $expl,
-                                             $elem->location(),
-                                             $self->get_severity(), );
+        my $sev = $self->get_severity();
+	return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
     }
     return; #ok!
 }

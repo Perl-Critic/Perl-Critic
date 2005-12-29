@@ -23,7 +23,7 @@ my $desc = q{Code not contained in explicit package};
 
 #----------------------------------------------------------------------------
 
-sub default_severity   { return $SEVERITY_HIGH  }
+sub default_severity { return $SEVERITY_HIGH  }
 sub applies_to { return 'PPI::Document' }
 
 #----------------------------------------------------------------------------
@@ -50,16 +50,15 @@ sub violates {
     my $match = $doc->find_first( sub { $_[1]->significant() } ) || return;
     return if $match->isa('PPI::Statement::Package');  #First is 'package'
 
-    return Perl::Critic::Violation->new( $desc,
-                                         $expl,
-                                         $match->location(),
-                                         $self->get_severity(), );
+    # Must be a violation...
+    my $sev = $self->get_severity();
+    return Perl::Critic::Violation->new( $desc, $expl, $match, $sev );
 }
 
 sub _is_script {
     my $doc = shift;
     my $first_comment = $doc->find_first('PPI::Token::Comment') || return;
-    $first_comment->location()->[0] == 1 || return;
+    $first_comment->location->[0] == 1 || return;
     return $first_comment =~ m{ \A \#\! }mx;
 }
 

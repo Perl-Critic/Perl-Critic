@@ -24,7 +24,7 @@ my $expl = [ 33 ];
 
 #----------------------------------------------------------------------------
 
-sub default_severity   { return $SEVERITY_LOWEST }
+sub default_severity { return $SEVERITY_LOWEST }
 sub applies_to { return 'PPI::Document'  }
 
 #----------------------------------------------------------------------------
@@ -40,8 +40,11 @@ sub violates {
     my $dest    = $EMPTY;
     my $stderr  = $EMPTY;
 
-    # Perl::Tidy gets confused by @ARGV.
-    local @ARGV = ();  ## no critic
+    # Perl::Tidy gets confused if @ARGV has arguments from
+    # another program.  Also, we need to override the
+    # stdout and stderr redirects that the user may have
+    # configured in their .perltidyrc file.
+    local @ARGV = qw(-nst -nse);  ## no critic
 
     # Trap Perl::Tidy errors, just in case it dies
     eval {
@@ -59,17 +62,16 @@ sub violates {
     }
 
     if ( $source ne $dest ) {
-
-        return Perl::Critic::Violation->new( $desc,
-                                             $expl,
-                                             [ 0, 0 ],
-                                             $self->get_severity(), );
+        my $sev = $self->get_severity();
+        return Perl::Critic::Violation->new( $desc, $expl, $doc, $sev );
     }
 
     return;    #ok!
 }
 
 1;
+
+#----------------------------------------------------------------------------
 
 __END__
 

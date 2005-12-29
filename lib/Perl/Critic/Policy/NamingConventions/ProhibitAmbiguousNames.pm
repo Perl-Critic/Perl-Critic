@@ -69,10 +69,8 @@ sub violates {
             # strip off any leading "Package::"
             my ($name) = $word =~ m/ (\w+) \z /xms;
             if ( $self->{_forbid}->{$name} ) {
-                return Perl::Critic::Violation->new( $desc,
-                                                     $expl,
-                                                     $elem->location(),
-                                                     $self->get_severity(), );
+                my $sev = $self->get_severity();
+                return Perl::Critic::Violation->new($desc, $expl, $elem, $sev);
             }
         }
         return;    # ok
@@ -88,7 +86,7 @@ sub violates {
 
         my $symbols = $elem->find('PPI::Token::Symbol');
         if ($symbols) {
-            for my $symbol (@$symbols) {
+            for my $symbol ( @{$symbols} ) {
 
                 # Strip off sigil and any leading "Package::"
                 # Beware that punctuation vars may have no
@@ -98,11 +96,8 @@ sub violates {
                 next if ! defined $name;
 
                 if ( defined $self->{_forbid}->{$name} ) {
-                    push @viols,
-                      Perl::Critic::Violation->new( $desc,
-                                                    $expl,
-                                                    $elem->location(),
-                                                    $self->get_severity(), );
+                    my $sev = $self->get_severity;
+                    push @viols, Perl::Critic::Violation->new($desc, $expl, $elem, $sev);
                 }
             }
         }

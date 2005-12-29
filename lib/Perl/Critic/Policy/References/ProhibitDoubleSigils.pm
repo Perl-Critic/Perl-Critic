@@ -34,10 +34,8 @@ sub violates {
 
     my $sib = $elem->snext_sibling || return;
     if ( ! $sib->isa('PPI::Structure::Block') ) {
-        return Perl::Critic::Violation->new( $desc,
-                                             $expl,
-                                             $elem->location(),
-                                             $self->get_severity(), );
+        my $sev = $self->get_severity();
+        return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
     }
     return; #ok!
 }

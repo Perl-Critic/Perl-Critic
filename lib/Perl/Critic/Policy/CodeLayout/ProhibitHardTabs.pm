@@ -17,11 +17,11 @@ our $VERSION = '0.13_01';
 $VERSION = eval $VERSION;    ## no critic
 
 my $desc = q{Hard tabs used};
-my $expl = [20];
+my $expl = [ 20 ];
 
 #----------------------------------------------------------------------------
 
-sub default_severity   { return $SEVERITY_MEDIUM }
+sub default_severity { return $SEVERITY_MEDIUM }
 sub applies_to { return 'PPI::Token' }
 
 #----------------------------------------------------------------------------
@@ -46,10 +46,9 @@ sub violates {
     #Permit leading tabs, if allowed
     return if $self->{_allow_leading_tabs} && $elem->location->[1] == 1;
 
-    return Perl::Critic::Violation->new( $desc,
-                                         $expl,
-                                         $elem->location(),
-                                         $self->get_severity(), );
+    #Must be a violation...
+    my $sev = $self->get_severity();
+    return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
 }
 
 1;

@@ -23,7 +23,7 @@ my $expl = [ 199 ];
 
 #---------------------------------------------------------------------------
 
-sub default_severity   { return $SEVERITY_HIGHEST }
+sub default_severity { return $SEVERITY_HIGHEST }
 sub applies_to { return 'PPI::Token::Word' }
 
 #---------------------------------------------------------------------------
@@ -36,11 +36,9 @@ sub violates {
     my $sib = $elem->snext_sibling() || return;
     $sib->isa('PPI::Token::Word') && $sib eq 'undef' || return;
 
-    #Must be 'return undef'
-    return Perl::Critic::Violation->new( $desc,
-                                         $expl,
-                                         $elem->location(),
-                                         $self->get_severity(), );
+    # Must be 'return undef'
+    my $sev = $self->get_severity();
+    return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
 }
 
 1;

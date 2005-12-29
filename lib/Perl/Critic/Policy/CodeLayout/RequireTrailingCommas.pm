@@ -23,7 +23,7 @@ my $expl  = [ 17 ];
 
 #----------------------------------------------------------------------------
 
-sub default_severity   { return $SEVERITY_LOWEST }
+sub default_severity { return $SEVERITY_LOWEST }
 sub applies_to { return 'PPI::Structure::List' }
 
 #----------------------------------------------------------------------------
@@ -46,11 +46,8 @@ sub violates {
     #Is the final element a comma?
     my $final = $children[-1] || return;
     if ( ! ($final->isa('PPI::Token::Operator') && $final eq $COMMA) ) {
-
-	return Perl::Critic::Violation->new( $desc,
-                                             $expl,
-                                             $final->location(),
-                                             $self->get_severity, );
+        my $sev = $self->get_severity();
+	return Perl::Critic::Violation->new( $desc, $expl, $final, $sev );
     }
 
     return; #ok!

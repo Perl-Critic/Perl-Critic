@@ -23,7 +23,7 @@ my $expl = [ 197 ];
 
 #---------------------------------------------------------------------------
 
-sub default_severity   { return $SEVERITY_HIGH }
+sub default_severity { return $SEVERITY_HIGH }
 sub applies_to { return 'PPI::Statement::Sub' }
 
 #---------------------------------------------------------------------------
@@ -41,10 +41,9 @@ sub violates {
         return; # OK
     }
 
-    return Perl::Critic::Violation->new( $desc,
-                                         $expl,
-                                         $elem->location(),
-                                         $self->get_severity(), );
+    # Must be a violation
+    my $sev = $self->get_severity();
+    return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
 }
 
 #------------------------

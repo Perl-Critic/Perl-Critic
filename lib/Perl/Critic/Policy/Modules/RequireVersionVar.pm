@@ -35,10 +35,8 @@ sub violates {
     return if $doc->find_first( \&_wanted );
 
     #If we get here, then no $VERSION was found
-    return Perl::Critic::Violation->new( $desc,
-                                         $expl,
-                                         [0,0],
-                                         $self->get_severity(), );
+    my $sev = $self->get_severity();
+    return Perl::Critic::Violation->new( $desc, $expl, $doc, $sev );
 }
 
 sub _wanted {

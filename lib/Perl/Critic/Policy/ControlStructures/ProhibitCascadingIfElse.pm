@@ -23,7 +23,7 @@ my $expl = [ 117, 118 ];
 
 #----------------------------------------------------------------------------
 
-sub default_severity   { return $SEVERITY_MEDIUM }
+sub default_severity { return $SEVERITY_MEDIUM }
 sub applies_to { return 'PPI::Statement::Compound' }
 
 #----------------------------------------------------------------------------
@@ -44,11 +44,8 @@ sub violates {
     my ( $self, $elem, $doc ) = @_;
     return if !($elem->type() eq 'if');
     if ( _count_elsifs($elem) > $self->{_max} ) {
-
-        return Perl::Critic::Violation->new( $desc,
-                                             $expl,
-                                             $elem->location(),
-                                             $self->get_severity(), );
+        my $sev = $self->get_severity();
+        return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
     }
     return;    #ok!
 }

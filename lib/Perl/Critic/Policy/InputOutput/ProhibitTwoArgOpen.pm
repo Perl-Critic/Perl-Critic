@@ -23,7 +23,7 @@ my $expl = [ 207 ];
 
 #--------------------------------------------------------------------------
 
-sub default_severity   { return $SEVERITY_HIGHEST }
+sub default_severity { return $SEVERITY_HIGHEST }
 sub applies_to { return 'PPI::Token::Word' }
 
 #--------------------------------------------------------------------------
@@ -35,11 +35,8 @@ sub violates {
     return if is_hash_key($elem);
 
     if( scalar parse_arg_list($elem) == 2 ) {
-
-	return Perl::Critic::Violation->new( $desc,
-                                             $expl,
-                                             $elem->location(),
-                                             $self->get_severity(), );
+        my $sev = $self->get_severity();
+	return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
     }
     return; #ok!
 }

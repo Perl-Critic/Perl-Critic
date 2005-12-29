@@ -23,7 +23,7 @@ my $expl = [ 97 ];
 
 #----------------------------------------------------------------------------
 
-sub default_severity   { return $SEVERITY_LOW }
+sub default_severity { return $SEVERITY_LOW }
 sub applies_to { return 'PPI::Statement::Compound' }
 
 #----------------------------------------------------------------------------
@@ -31,11 +31,8 @@ sub applies_to { return 'PPI::Statement::Compound' }
 sub violates {
     my ( $self, $elem, $doc ) = @_;
     if ( $elem->first_element() eq 'unless' ) {
-
-        return Perl::Critic::Violation->new( $desc,
-                                             $expl,
-                                             $elem->location(),
-                                             $self->get_severity(), );
+        my $sev = $self->get_severity();
+        return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
     }
     return;    #ok!
 }

@@ -25,7 +25,7 @@ my $expl     = [ 44 ];
 
 #---------------------------------------------------------------------------
 
-sub default_severity   { return $SEVERITY_LOWEST }
+sub default_severity { return $SEVERITY_LOWEST }
 sub applies_to { return 'PPI::Statement::Variable' }
 
 #---------------------------------------------------------------------------
@@ -33,11 +33,8 @@ sub applies_to { return 'PPI::Statement::Variable' }
 sub violates {
     my ( $self, $elem, $doc ) = @_;
     if ( _has_mixed_case_vars($elem) ) {
-
-        return Perl::Critic::Violation->new( $desc,
-                                             $expl,
-                                             $elem->location(),
-                                             $self->get_severity(), );
+        my $sev = $self->get_severity();
+        return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
     }
     return;    #ok!
 }

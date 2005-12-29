@@ -24,7 +24,7 @@ my $expl = [ 73, 75 ];
 
 #---------------------------------------------------------------------------
 
-sub default_severity   { return $SEVERITY_MEDIUM }
+sub default_severity { return $SEVERITY_MEDIUM }
 sub applies_to {
     return qw( PPI::Token::Symbol
                PPI::Statement::Variable
@@ -40,10 +40,8 @@ sub violates {
         || _is_our_var($elem)
         || _is_vars_pragma($elem) )
     {
-        return Perl::Critic::Violation->new( $desc,
-                                             $expl,
-                                             $elem->location(),
-                                             $self->get_severity(), );
+        my $sev = $self->get_severity();
+        return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
     }
     return;    #ok!
 }

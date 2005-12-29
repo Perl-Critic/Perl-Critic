@@ -24,7 +24,7 @@ my $expl     = [ 53 ];
 
 #---------------------------------------------------------------------------
 
-sub default_severity   { return $SEVERITY_LOW }
+sub default_severity { return $SEVERITY_LOW }
 sub applies_to { return 'PPI::Token::Quote' }
 
 #---------------------------------------------------------------------------
@@ -32,11 +32,8 @@ sub applies_to { return 'PPI::Token::Quote' }
 sub violates {
     my ( $self, $elem, $doc ) = @_;
     if ( $elem =~ $empty_rx ) {
-
-        return Perl::Critic::Violation->new( $desc,
-                                             $expl,
-                                             $elem->location(),
-                                             $self->get_severity(), );
+        my $sev = $self->get_severity();
+        return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
     }
     return;    #ok!
 }

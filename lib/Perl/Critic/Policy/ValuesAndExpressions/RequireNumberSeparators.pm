@@ -45,11 +45,8 @@ sub violates {
     my $min = $self->{_min};
 
     if ( abs _to_number($elem) >= $min && $elem =~ m{ \d{4,} }mx ) {
-
-        return Perl::Critic::Violation->new( $desc,
-                                             $expl,
-                                             $elem->location(),
-                                             $self->get_severity(), );
+        my $sev = $self->get_severity();
+        return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
     }
     return;    #ok!
 }

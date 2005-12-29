@@ -19,11 +19,11 @@ $VERSION = eval $VERSION;    ## no critic
 #----------------------------------------------------------------------------
 
 my $desc = q{Expression form of 'eval'};
-my $expl = [161];
+my $expl = [ 161 ];
 
 #----------------------------------------------------------------------------
 
-sub default_severity   { return $SEVERITY_HIGHEST  }
+sub default_severity { return $SEVERITY_HIGHEST }
 sub applies_to { return 'PPI::Token::Word' }
 
 #----------------------------------------------------------------------------
@@ -37,11 +37,9 @@ sub violates {
     my $arg = $sib->isa('PPI::Structure::List') ? $sib->schild(0) : $sib;
     return if !$arg || $arg->isa('PPI::Structure::Block');
 
-    #Must not be a block
-    return Perl::Critic::Violation->new( $desc,
-                                         $expl,
-                                         $elem->location(),
-                                         $self->get_severity(), );
+    # Must not be a block
+    my $sev = $self->get_severity();
+    return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
 }
 
 

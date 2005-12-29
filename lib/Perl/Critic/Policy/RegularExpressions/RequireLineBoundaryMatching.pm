@@ -23,7 +23,7 @@ my $expl = [ 237 ];
 
 #----------------------------------------------------------------------------
 
-sub default_severity   { return $SEVERITY_LOW }
+sub default_severity { return $SEVERITY_LOW }
 sub applies_to { return 'PPI::Token::Regexp' }
 
 #----------------------------------------------------------------------------
@@ -35,11 +35,8 @@ sub violates {
     #API.  I'm cheating by accessing it here directly.
 
     if ( ! defined $elem->{modifiers}->{'m'} ) {
-
-	return Perl::Critic::Violation->new( $desc,
-                                             $expl,
-                                             $elem->location(),
-                                             $self->get_severity(), );
+        my $sev = $self->get_severity();
+	return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
     }
     return; #ok!;
 }

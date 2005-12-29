@@ -333,7 +333,7 @@ Perl::Critic::Config takes care of finding and processing
 user-preferences for L<Perl::Critic>.  The Config object defines which
 Policy modules will be loaded into the Perl::Critic engine and how
 they should be configured.  You should never really need to
-instantiate Perl::Critic::Config directly as the L<Perl::Critic>
+instantiate Perl::Critic::Config directly becuase the Perl::Critic
 constructor will do it for you.
 
 =head1 CONSTRUCTOR
@@ -353,10 +353,9 @@ defined, Perl::Critic::Config attempts to find a F<.perlcriticrc>
 configuration file in the current directory, and then in your home
 directory.  Alternatively, you can set the C<PERLCRITIC> environment
 variable to point to a file in another location.  If a configuration
-file can't be found, or if C<$FILE> is an empty string, then all the
-modules found in the Perl::Critic::Policy namespace will be loaded
-with their default configuration.  See L<"CONFIGURATION"> for more
-information.
+file can't be found, or if C<$FILE> is an empty string, then all
+Policies will be loaded with their default configuration.  See
+L<"CONFIGURATION"> for more information.
 
 B<-severity> is the minimum severity level.  Only Policy modules that
 have a severity greater than C<$N> will be loaded into this Config.
@@ -366,17 +365,17 @@ C<-severity> will usually result in more Policy violations.  Users can
 redefine the severity level for any Policy in their F<.perlcriticrc>
 file.  See L<"CONFIGURATION"> for more information.
 
-B<-include> is a reference to a list of string C<@PATTERNS>.  Only
-Policies that match at least one C<m/$PATTERN/imx> will be loaded into
-this Config.  Using the C<-include> option causes the <-severity>
-option to be siltently ignored.
+B<-include> is a reference to a list of string C<@PATTERNS>.  Policies
+that match at least one C<m/$PATTERN/imx> will be loaded into this
+Config, irrespective of the severity settings.  You can use it in
+conjunction with the C<-exclude> option.  Note that C<-exclude> takes
+precedence over C<-include> when a Policy matches both patterns.
 
-B<-exclude> is a reference to a list of string C<@PATTERNS>.  Any
-Policy that matches at least one C<m/$PATTERN/imx> will not be loaded
-into this Config.  Using the C<-exclude> option causes the <-severity>
-option to be siltently ignored.  The C<-exclude> patterns are applied
-before the <-include> patterns, therefore, the C<-exclude> patterns
-take precedence if a Policy happens to match both patterns.
+B<-exclude> is a reference to a list of string C<@PATTERNS>.  Polices
+that match at least one C<m/$PATTERN/imx> will not be loaded into this
+Config, irrespective of the severity settings.  You can use it in
+conjunction with the C<-include> option.  Note that C<-exclude> takes
+precedence over C<-include> when a Policy matches both patterns.
 
 =back
 
@@ -449,7 +448,7 @@ like this:
 At the moment, only one alternate namespace may be specified.  Unless
 Policy module names are fully qualified, Perl::Critic::Config assumes
 that all Policies are in the specified namespace.  So if you want to
-use Policies from different namespaces, you will need to use the full
+use Policies from multiple namespaces, you will need to use the full
 module name in your f<.perlcriticrc> file.
 
 =head1 CONFIGURATION
@@ -479,32 +478,25 @@ module that implements the policy.  The Policy modules distributed
 with Perl::Critic have been grouped into categories according to the
 table of contents in Damian Conway's book B<Perl Best Practices>. For
 brevity, you can ommit the C<'Perl::Critic::Policy'> part of the
-module name.  All Policy modules must be a subclass of
-L<Perl::Critic::Policy>.
+module name.
 
 C<severity> is the level of importance you wish to assign to the
 Policy.  All Policy modules are defined with a default severity value
 ranging from 1 (least severe) to 5 (most severe).  However, you may
 disagree with the default severity and choose to give it a higher or
 lower severity, based on your own coding philosophy.
-Perl::Critic::Config will only load Policy modules that have a
-severity greater than the C<-severity> option that is given to the
-constructor.
 
-The remaining key-value pairs are configuration parameters for that
-specific Policy and will be passed into the constructor of the
-L<Perl::Critic::Policy> subclass.  The constructors for most Policy
-modules do not support arguments, and those that do should have
-reasonable defaults.  See the documentation on the appropriate Policy
-module for more details.
+The remaining key-value pairs are configuration parameters that will
+be passed into the constructor of that Policy.  The constructors for
+most Policy modules do not support arguments, and those that do should
+have reasonable defaults.  See the documentation on the appropriate
+Policy module for more details.
 
-By default, all the modules that are found in the Perl::Critic::Policy
-namespace are loaded into the Config.  Rather than assign a severity
-level to each Policy, you can simply "turn off" a Policy by prepending
-a '-' to the name of the module in your configuration file.  In this
-manner, the Policy will never be loaded, regardless of the
-C<-severity> given to the Perl::Critic::Config constructor.
-
+Instead of redefining the severity for a given Policy, you can
+completely disable a Policy by prepending a '-' to the name of the
+module in your configuration file.  In this manner, the Policy will
+never be loaded, regardless of the C<-severity> given to the
+Perl::Critic::Config constructor.
 
 A simple configuration might look like this:
 
@@ -536,6 +528,14 @@ A simple configuration might look like this:
     #--------------------------------------------------------------
     # For all other Policies, I accept the default severity,
     # so no additional configuration is required for them.
+
+A few sample configuration files are included in this distribution
+under the F<t/samples> directory. The F<perlcriticrc.none> file
+demonstrates how to disable Policy modules.  The
+F<perlcriticrc.levels> file demonstrates how to redefine the severity
+level for any given Policy module.  The F<perlcriticrc.pbp> file
+configures Perl::Critic to load only Policies described in Damian
+Conway's book "Perl Best Practices."
 
 =head1 AUTHOR
 

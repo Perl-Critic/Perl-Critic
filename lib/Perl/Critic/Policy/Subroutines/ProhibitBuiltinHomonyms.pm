@@ -25,7 +25,7 @@ my $expl  = [177];
 
 #---------------------------------------------------------------------------
 
-sub default_severity   { return $SEVERITY_HIGH }
+sub default_severity { return $SEVERITY_HIGH }
 sub applies_to { return 'PPI::Statement::Sub' }
 
 #---------------------------------------------------------------------------
@@ -34,11 +34,8 @@ sub violates {
     my ( $self, $elem, $doc ) = @_;
     return if exists $allow{ $elem->name() };
     if ( any { $elem->name() eq $_ } @BUILTINS ) {
-
-        return Perl::Critic::Violation->new( $desc,
-                                             $expl,
-                                             $elem->location(),
-                                             $self->get_severity(), );
+        my $sev = $self->get_severity();
+        return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
     }
     return;    #ok!
 }
