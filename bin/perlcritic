@@ -108,8 +108,11 @@ sub get_input {
 
     if (@_) {
 
-        #Reading code from files...
-        return all_code_files(@_);
+        #Reading code from files or dirs.  If argument is a file,
+        #then we process it as-is (even though it may not actually
+        #be Perl code).  If argument is a directory, recursively
+        #search the directory for files that look like Perl code.
+        return map { -d $_ ? all_code_files($_) : $_ } @_;
     }
     else {
 
