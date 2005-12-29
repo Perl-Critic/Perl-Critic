@@ -90,8 +90,8 @@ t/20_policies_subroutines.t
 t/20_policies_testinganddebugging.t
 t/20_policies_valuesandexpressions.t
 t/20_policies_variables.t
-t/98_pod-syntax.t
-t/99_pod-coverage.t
+t/98_pod_syntax.t
+t/99_pod_coverage.t
 t/samples/perlcritic.pbp
 t/samples/perlcriticrc.all
 t/samples/perlcriticrc.levels
