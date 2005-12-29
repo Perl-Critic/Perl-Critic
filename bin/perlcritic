@@ -333,7 +333,7 @@ to the default configuration for all Policies.
 =item -severity N
 
 Directs perlcritic to only report violations of Policies with a
-severity greater than <N>.  Severity values are integers ranging from
+severity greater than C<N>.  Severity values are integers ranging from
 1 (least severe) to 5 (most severe).  The default is 5.  For a given
 C<-profile>, decreasing the C<-severity> will usually produce more
 violations.  Users can redefine the C<severity> for any Policy in
