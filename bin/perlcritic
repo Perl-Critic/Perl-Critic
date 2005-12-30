@@ -18,7 +18,7 @@ use English qw(-no_match_vars);
 use Perl::Critic::Utils;
 use Perl::Critic;
 
-our $VERSION = '0.13_01';
+our $VERSION = '0.13_02';
 $VERSION = eval $VERSION;    ## no critic
 
 my %options    = ();

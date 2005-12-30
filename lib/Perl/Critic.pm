@@ -16,7 +16,7 @@ use Perl::Critic::Utils;
 use Carp;
 use PPI;
 
-our $VERSION = '0.13_01';
+our $VERSION = '0.13_02';
 $VERSION = eval $VERSION;    ## no critic
 
 #----------------------------------------------------------------------------

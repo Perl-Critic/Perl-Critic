@@ -5,7 +5,11 @@
 # $Revision$
 ########################################################################
 
-[0.13_01]
+[0.13_02]
+
+     Minor tweaks and documentation edits.
+
+[0.13_01] Released on 051228
 
      Replaced 'priority' concept with 'severity'.  Now each Policy module
      has a predefined severity level ranging from 1 to 5.  By default,
