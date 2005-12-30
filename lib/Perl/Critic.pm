@@ -699,6 +699,8 @@ If you develop any new Policy modules, feel free to send them to
 <thaljef@cpan.org> and I'll be happy to put them into the Perl::Critic
 distribution.  Or if you'd like to work on the Perl::Critic project
 directly, check out our repository at L<http://perlcritic.tigris.org>.
+To subscribe to our mailing list, send a message to
+C<dev-subscribe@perlcritic.tigris.org>.
 
 =head1 PREREQUISITES
 
@@ -732,14 +734,6 @@ L<Test::Pod>
 L<Test::Pod::Coverage>
 
 L<Test::Perl::Critic>
-
-=head1 CONTRIBUTING TO THE CAUSE
-
-The repository for the Perl::Critic project is hosted at
-L<http://perlcritic.tigris.org>.  If you have ideas for new Policies
-or any other suggestions, you're welcome to join the project.  To
-subscribe to our mailing list, send a message to
-C<dev-subscribe@perlcritic.tigris.org>.
 
 =head1 BUGS
 
