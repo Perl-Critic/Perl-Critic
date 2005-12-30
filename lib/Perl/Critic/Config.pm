@@ -16,7 +16,7 @@ use List::MoreUtils qw(any none);
 use Perl::Critic::Utils;
 use Carp qw(carp croak);
 
-our $VERSION = '0.13_02';
+our $VERSION = '0.13_03';
 $VERSION = eval $VERSION;    ## no critic
 
 # Globals.  Ick!

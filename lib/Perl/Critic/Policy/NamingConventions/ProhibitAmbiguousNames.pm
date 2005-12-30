@@ -13,7 +13,7 @@ use Perl::Critic::Violation;
 use Perl::Critic::Utils;
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '0.13_02';
+our $VERSION = '0.13_03';
 $VERSION = eval $VERSION;    ## no critic
 
 #---------------------------------------------------------------------------
