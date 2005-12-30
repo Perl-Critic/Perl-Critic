@@ -5,9 +5,20 @@
 # $Revision$
 ########################################################################
 
-[0.13_02]
+[0.13_03] Released on 051230
 
-     Minor tweaks and documentation edits.
+     perlcritic now prints 'source OK' if it doesn't find any
+     violations.  This gives folks a warm fuzzy feeling.
+
+     Tweaked some test cases that were failing on my Solaris
+     environment at work.
+
+[0.13_02] Released on 051229
+
+     Fixed Config to recognize fully-qualified module names in the
+     .perlcriticrc file.
+
+     Various documentation edits.
 
 [0.13_01] Released on 051228
 
