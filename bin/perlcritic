@@ -151,6 +151,11 @@ sub render_report {
     my $verbosity = $config->{-verbose} || $default_verbosity;
     my $top = $config->{-top};
 
+    if( ! @violations ){
+        print "$file source OK\n";
+        return;
+    }
+
     my %FORMAT_OF = (
         1 => "%f:%l:%c:%m\n",
         2 => "%m at line %l, column %c.  %e. (Severity: %s)\n",
