@@ -7,9 +7,10 @@
 
 use strict;
 use warnings;
-use Test::More tests => 35;
+use Test::More tests => 37;
 use List::MoreUtils qw(all none);
 use Perl::Critic::Utils;
+use Perl::Critic::Config;
 use Perl::Critic;
 
 # common P::C testing tools
@@ -98,6 +99,7 @@ is(scalar @{$c->policies}, $total_policies - 2);
 
 #--------------------------------------------------------------
 # Test config as array
+
 my @config_array = (
   q{ [-NamingConventions::ProhibitMixedCaseVars] },
   q{ [-NamingConventions::ProhibitMixedCaseSubs] },
@@ -110,6 +112,7 @@ is(scalar @{$c->policies}, $total_policies - 2);
 
 #--------------------------------------------------------------
 # Test config as string
+
 my $config_string = <<'END_CONFIG';
 [-NamingConventions::ProhibitMixedCaseVars]
 [-NamingConventions::ProhibitMixedCaseSubs]
@@ -118,6 +121,27 @@ keywords = Revision
 END_CONFIG
 
 $c = Perl::Critic->new( -profile => \$config_string, -severity => $SEVERITY_LOWEST );
+is(scalar @{$c->policies}, $total_policies - 2);
+
+#--------------------------------------------------------------
+# Test long policy names
+
+my $long_config_string = <<'END_CONFIG';
+[-Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars]
+[-Perl::Critic::Policy::References::ProhibitDoubleSigils]
+[Perl::Critic::Policy::Miscellanea::RequireRcsKeywords]
+keywords = Revision
+[-Perl::Critic::Policy::Modules::RequireEndWithOne]
+END_CONFIG
+
+$c = Perl::Critic->new( -profile => \$long_config_string, -severity => $SEVERITY_LOWEST );
+is(scalar @{$c->policies}, $total_policies - 3);
+
+#--------------------------------------------------------------
+# Test manual configuraion
+
+my $config = Perl::Critic::Config->new( -profile => \$config_string, -severity => $SEVERITY_LOWEST);
+$c = Perl::Critic->new( -config => $config );
 is(scalar @{$c->policies}, $total_policies - 2);
 
 #--------------------------------------------------------------

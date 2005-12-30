@@ -69,38 +69,38 @@ sub new {
     my $profile_ref = _load_profile( $profile_path ) || {};
 
     # Apply logic to decide if Policy should be loaded
-    for my $policy ( @SITE_POLICIES ) {
+    for my $policy_long ( @SITE_POLICIES ) {
 
-        my $short_name = _short_name($policy, $NAMESPACE);
-        my $params     = $profile_ref->{$policy} || $profile_ref->{$short_name} || {};
+        my $policy_short = _short_name($policy_long, $NAMESPACE);
+        my $params       = $profile_ref->{$policy_long} || $profile_ref->{$policy_short} || {};
 
         #Start by assuming the policy should be loaded
         my $load_me = $TRUE;
 
         #Don't load policy if it is negated in the profile
-        if ( exists $profile_ref->{"-$short_name"} ) {
+        if ( exists $profile_ref->{"-$policy_short"} || exists $profile_ref->{"-$policy_long"} ) {
             $load_me = $FALSE;
         }
 
         #Don't load policy if it is below the severity threshold
-        my $severity = $params->{severity} || $policy->default_severity;
+        my $severity = $params->{severity} || $policy_long->default_severity;
         if ( $severity < $min_severity ) {
             $load_me = $FALSE;
         }
 
         #Do load if policy matches one of the inclusions patterns
-        if (any { $policy =~ m{ $_ }imx } @{ $includes_ref } ) {
+        if (any { $policy_long =~ m{ $_ }imx } @{ $includes_ref } ) {
             $load_me = $TRUE;
         }
 
         #But don't load if policy matches any of the exclusion patterns
-        if (any  { $policy =~ m{ $_ }imx } @{ $excludes_ref } ) {
+        if (any  { $policy_long =~ m{ $_ }imx } @{ $excludes_ref } ) {
             $load_me = $FALSE;
         }
 
         #Now load (or not)
         if( $load_me ){
-            $self->add_policy( -policy => $policy, -config => $params );
+            $self->add_policy( -policy => $policy_long, -config => $params );
         }
     }
 
