@@ -5,6 +5,10 @@
 # $Revision$
 ########################################################################
 
+[0.13_04] Released on 051231
+
+     Moved DEVELOPER.pod file into the Perl/Critic dir.
+
 [0.13_03] Released on 051230
 
      perlcritic now prints 'source OK' if it doesn't find any

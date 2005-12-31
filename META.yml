@@ -1,7 +1,7 @@
 # http://module-build.sourceforge.net/META-spec.html
 #XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
 name:         Perl-Critic
-version:      0.13_03
+version:      0.13_04
 version_from: lib/Perl/Critic.pm
 installdirs:  site
 requires:
