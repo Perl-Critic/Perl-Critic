@@ -1,10 +1,10 @@
 bin/perlcritic
 Build.PL
 Changes
-DEVELOPER.pod
 INSTALL
 lib/Perl/Critic.pm
 lib/Perl/Critic/Config.pm
+lib/Perl/Critic/DEVELOPER.pod
 lib/Perl/Critic/Policy.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitLvalueSubstr.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitSleepViaSelect.pm
