@@ -52,7 +52,8 @@ objects.  If you're developing your own Policies, your job is to
 implement and override its methods in a subclass.  To work with the
 L<Perl::Critic> engine, your implementation must behave as described
 below.  For a detailed explanation on how to make new Policy modules,
-see the L<DEVELOPER.pod> document included in this distribution.
+please see the L<Perl::Critic::DEVELOPER> document included in this
+distribution.
 
 =head1 METHODS
 

@@ -9,7 +9,7 @@
 
 =head1 NAME
 
-Developer - How to make new Perl::Critic::Policy modules
+DEVELOPER - How to make new Perl::Critic::Policy modules
 
 =head1 DESCRIPTION
 

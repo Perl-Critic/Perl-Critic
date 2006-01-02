@@ -886,9 +886,9 @@ violations were found, exits with status == 0.
 The modular design of Perl::Critic is intended to facilitate the
 addition of new Policies.  You'll need to have some understanding of
 L<PPI>, but most Policy modules are pretty straightforward and only
-require about 20 lines of code.  Please see the L<DEVELOPER.pod> file
-included in this distribution for a step-by-step demonstration of how
-to create new Policy modules.
+require about 20 lines of code.  Please see the
+L<Perl::Critic::DEVELOPER> file included in this distribution for a
+step-by-step demonstration of how to create new Policy modules.
 
 If you develop any new Policy modules, feel free to send them to
 <thaljef@cpan.org> and I'll be happy to put them into the Perl::Critic
