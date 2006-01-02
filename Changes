@@ -5,9 +5,15 @@
 # $Revision$
 ########################################################################
 
+[0.13_05] Released on 060102
+
+     Final candidate for version 0.14
+
 [0.13_04] Released on 051231
 
      Moved DEVELOPER.pod file into the Perl/Critic dir.
+
+     More documentation edits.
 
 [0.13_03] Released on 051230
 

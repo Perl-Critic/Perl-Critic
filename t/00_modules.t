@@ -11,7 +11,7 @@ use PPI::Document;
 use Test::More tests => 539;
 use English qw(-no_match_vars);
 
-our $VERSION = '0.13_04';
+our $VERSION = '0.13_05';
 $VERSION = eval $VERSION;  ## pc:skip
 
 my $obj = undef;
