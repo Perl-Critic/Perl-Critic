@@ -108,6 +108,11 @@ sub get_input {
 
     if (@_) {
 
+        for ( grep { ! -e $_ } @_ ) {
+            my $msg = qq{No such file or directory: '$_'};
+            pod2usage( -exitstatus => 1, -message => $msg, -verbose => 0);
+        }
+
         #Reading code from files or dirs.  If argument is a file,
         #then we process it as-is (even though it may not actually
         #be Perl code).  If argument is a directory, recursively
