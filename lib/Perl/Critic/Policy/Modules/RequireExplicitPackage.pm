@@ -85,15 +85,13 @@ encapsulation and common decency require your module to keep its
 innards to itself.
 
 As for scripts, most people understand that the default package is
-C<main>, but it doesn't hurt to be explicit about it either.  But if
-you insist on omitting C<package main;> from your scripts, you can
-configure this policy to overlook any file that looks like a script,
-which is determined by looking for a shebang line at the top of the
-file.  To activate this behavior, add the following to your
-F<.perlcriticrc> file
+C<main>, so this Policy doesn't apply to files that begin with a perl
+shebang.  But it you want to require an explicit C<package>
+declaration in all files, including scripts, then add the following to
+your F<.perlcriticrc> file
 
   [Modules::RequireExplicitPackage]
-  exempt_scripts = 1
+  exempt_scripts = 0
 
 There are some valid reasons for not having a C<package> statement at
 all.  But make sure you understand them before assuming that you
