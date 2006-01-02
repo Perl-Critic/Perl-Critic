@@ -224,30 +224,29 @@ Perl::Critic::Utils - Utility subs and vars for Perl::Critic
 
 =head1 DESCRIPTION
 
-This module has exports several static subs and variables that are
-useful for developing L<Perl::Critic::Policy> subclasses.  Unless you
-are writing Policy modules, you probably don't care about this
-package.
+This module exports several static subs and variables that are useful
+for developing L<Perl::Critic::Policy> subclasses.  Unless you are
+writing Policy modules, you probably don't care about this package.
 
 =head1 EXPORTED SUBS
 
 =over 8
 
-=item find_keywords( $doc, $keyword );
+=item C<find_keywords( $doc, $keyword )>
 
 B<This function is deprecated!> Since version 0.11, every Policy is
 evaluated at each element of the document.  So you shouldn't need to
 go looking for a particular keyword.  I've left this function in place
 just in case you come across a particular need for it.
 
-Given L<PPI::Document> as C<$doc>, returns a reference to an array
+Given a L<PPI::Document> as C<$doc>, returns a reference to an array
 containing all the L<PPI::Token::Word> elements that match
 C<$keyword>.  This can be used to find any built-in function, method
 call, bareword, or reserved keyword.  It will not match variables,
 subroutine names, literal strings, numbers, or symbols.  If the
 document doesn't contain any matches, returns undef.
 
-=item is_hash_key( $element )
+=item C<is_hash_key( $element )>
 
 Given a L<PPI::Element>, returns true if the element is a hash key.
 PPI doesn't distinguish between regular barewords (like keywords or
@@ -260,15 +259,15 @@ is considered a hash key:
   $hash1{foo} = 1;
   %hash2 = (foo => 1);
 
-=item is_method_call( $element )
+=item C<is_method_call( $element )>
 
 Given a L<PPI::Element> that is presumed to be a function call (which
-is usually a L<PPI::Token::Word>, returns true if the function is a
+is usually a L<PPI::Token::Word>), returns true if the function is a
 method being called on some reference.  Baically, it just looks to see
 if the preceding operator is "->".  This is usefull for distinguishing
-static from object methods.
+static function calls from object method calls.
 
-=item parse_arg_list( $element )
+=item C<parse_arg_list( $element )>
 
 Given a L<PPI::Element> that is presumed to be a function call (which
 is usually a L<PPI::Token::Word>), splits the argument expressions
@@ -280,9 +279,9 @@ because it doesn't respect precedence.  In general, I don't like the
 way this function works, so don't count on it to be stable (or even
 present).
 
-=item is_script( $document )
+=item C<is_script( $document )>
 
-Given a L<PPI::Document>, test if it starts with C<#!.*perl>.  If so,
+Given a L<PPI::Document>, test if it starts with C</#!.*perl/>.  If so,
 it is judged to be a script instead of a module.
 
 =back
@@ -291,7 +290,7 @@ it is judged to be a script instead of a module.
 
 =over 8
 
-=item @BUILTINS
+=item C<@BUILTINS>
 
 This is a list of all the built-in functions provided by Perl 5.8.  I
 imagine this is useful for distinguishing native and non-native
@@ -300,51 +299,51 @@ maps each built-in function to the maximal number of arguments that it
 accepts.  I think this will help facilitate the lexing the children of
 L<PPI::Expression> objects.
 
-=item @GLOBALS
+=item C<@GLOBALS>
 
 This is a list of all the magic global variables provided by the
 L<English> module.  Also includes commonly-used global like C<%SIG>,
 C<%ENV>, and C<@ARGV>.  The list contains only the variable name,
 without the sigil.
 
-=item $COMMA
+=item C<$COMMA>
 
-=item $COLON
+=item C<$COLON>
 
-=item $SCOLON
+=item C<$SCOLON>
 
-=item $QUOTE
+=item C<$QUOTE>
 
-=item $DQUOTE
+=item C<$DQUOTE>
 
-=item $PERIOD
+=item C<$PERIOD>
 
-=item $PIPE
+=item C<$PIPE>
 
-=item $EMPTY
+=item C<$EMPTY>
 
-=item $SPACE
+=item C<$SPACE>
 
 These character constants give clear names to commonly-used strings
 that can be hard to read when surrounded by quotes.
 
-=item $SEVERITY_HIGHEST
+=item C<$SEVERITY_HIGHEST>
 
-=item $SEVERITY_HIGH
+=item C<$SEVERITY_HIGH>
 
-=item $SEVERITY_MEDIUM
+=item C<$SEVERITY_MEDIUM>
 
-=item $SEVERITY_LOW
+=item C<$SEVERITY_LOW>
 
-=item $SEVERITY_LOWEST
+=item C<$SEVERITY_LOWEST>
 
 These numeric constants define the relative severity of violating each
-Policy. The C<severity()> method of every Policy must return one of
-these values.
+L<Perl::Critic::Policy>.  The C<get_severity> and C<default_severity>
+methods of every Policy subclass must return one of these values.
 
-=item $TRUE
+=item C<$TRUE>
 
-=item $FALSE
+=item C<$FALSE>
 
 These are simple booleans. 1 and 0 respectively.  Be mindful of using these
 with string equality.  $FALSE ne $EMPTY.

@@ -217,7 +217,7 @@ L<http://theoryx5.uwinnipeg.ca/ppms/>.
 
 =over 8
 
-=item new ( [ -profile => $FILE, -severity => $N, -include => \@PATTERNS, -exclude => \@PATTERNS, -force => 1 ] )
+=item C<new( [ -profile => $FILE, -severity => $N, -include => \@PATTERNS, -exclude => \@PATTERNS, -force => 1 ] )>
 
 Returns a reference to a new Perl::Critic object.  Most arguments are
 just passed directly into L<Perl::Critic::Config>, but I have described
@@ -283,7 +283,7 @@ to be silently ignored.
 
 =over 8
 
-=item critique( $source_code )
+=item C<critique( $source_code )>
 
 Runs the C<$source_code> through the Perl::Critic engine using all the
 Policies that have been loaded into this engine.  If C<$source_code>
@@ -294,7 +294,7 @@ violation of the loaded Policies.  The list is sorted in the order
 that the Violations appear in the code.  If there are no violations,
 returns an empty list.
 
-=item add_policy( -policy => $policy_name, -config => \%config_hash )
+=item C<add_policy( -policy => $policy_name, -config => \%config_hash )>
 
 Loads Policy object and adds into this Critic.  If the object
 cannot be instantiated, it will throw a warning and return a false
@@ -310,15 +310,15 @@ contents of this hash reference will be passed into to the constructor
 of the Policy module.  See the documentation in the relevant Policy
 module for a description of the arguments it supports.
 
-=item policies( void )
+=item C<policies()>
 
 Returns a list containing references to all the Policy objects that
 have been loaded into this engine.  Objects will be in the order that
 they were loaded.
 
-=item config( void )
+=item C<config()>
 
-Returns the Perl::Critic::Config object that was created for this
+Returns the L<Perl::Critic::Config> object that was created for this
 Critic.
 
 =back

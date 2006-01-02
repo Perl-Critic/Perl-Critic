@@ -221,7 +221,7 @@ sub _normalize_severity {
     return $SEVERITY_LOWEST  if $severity < $SEVERITY_LOWEST;
     return $severity;
 }
-    
+
 #----------------------------------------------------------------------------
 # Begin PUBLIC STATIC methods
 
@@ -340,7 +340,7 @@ constructor will do it for you.
 
 =over 8
 
-=item new ( [ -profile => $FILE, -severity => $N, -include => \@PATTERNS, -exclude => \@PATTERNS ] )
+=item C<new( [ -profile => $FILE, -severity => $N, -include => \@PATTERNS, -exclude => \@PATTERNS ] )>
 
 Returns a reference to a new Perl::Critic::Config object, which is
 basically just a blessed hash of configuration parameters.  There
@@ -383,7 +383,7 @@ precedence over C<-include> when a Policy matches both patterns.
 
 =over 8
 
-=item add_policy( -policy => $policy_name, -config => \%config_hash )
+=item C<add_policy( -policy => $policy_name, -config => \%config_hash )>
 
 Loads a Policy object and adds into this Config.  If the object
 cannot be instantiated, it will throw a warning and return a false
@@ -400,7 +400,7 @@ contents of this hash reference will be passed into to the constructor
 of the Policy module.  See the documentation in the relevant Policy
 module for a description of the arguments it supports.
 
-=item policies( void )
+=item C<policies()>
 
 Returns a list containing references to all the Policy objects that
 have been loaded into this Config.  Objects will be in the order that
@@ -415,21 +415,21 @@ internally, but may be useful to you in some way.
 
 =over 8
 
-=item find_profile_path( void )
+=item C<find_profile_path()>
 
 Searches the C<PERLCRITIC> environment variable, the current
 directory, and you home directory (in that order) for a
 F<.perlcriticrc> file.  If the file is found, the full path is
 returned.  Otherwise, returns undef;
 
-=item site_policies( void )
+=item C<site_policies()>
 
 Returns a list of all the Policy modules that are currently installed
 in the Perl::Critic:Policy namespace.  These will include modules that
 are distributed with Perl::Critic plus any third-party modules that
 have been installed.
 
-=item native_policies( void )
+=item C<native_policies()>
 
 Returns a list of all the Policy modules that have been distributed
 with Perl::Critic.  Does not include any third-party modules.

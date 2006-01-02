@@ -59,7 +59,7 @@ distribution.
 
 =over 8
 
-=item new(key1 => value1, key2 => value2...)
+=item C<new(key1 => value1, key2 => value2 ... )>
 
 Returns a reference to a new subclass of Perl::Critic::Policy. If
 your Policy requires any special arguments, they should be passed
@@ -68,7 +68,7 @@ these in their config file.  Unless you override the C<new> method,
 the default method simply returns a reference to an empty hash that
 has been blessed into your subclass.
 
-=item violates( $element, $document )
+=item C<violates( $element, $document )>
 
 Given a L<PPI::Element> and a L<PPI::Document>, returns one or more
 L<Perl::Critic::Violation> objects if the C<$element> violates this
@@ -80,14 +80,14 @@ C<violates()> is an abstract method and it will abort if you attempt
 to invoke it directly.  It is the heart of all Policy modules, and
 your subclass B<must> override this method.
 
-=item applies_to( void )
+=item C<applies_to()>
 
 Returns a list of the names of PPI classes that this Policy cares
 about.  By default, the result is C<PPI::Element>.  Overriding this
 method in Policy subclasses should lead to significant performance
 increases.
 
-=item default_severity( void )
+=item C<default_severity()>
 
 Returns the default severity for violating this Policy.  See the
 C<$SEVERITY> constants in L<Perl::Critic::Utils> for an enumeration of
@@ -98,14 +98,14 @@ appropriate for their Policy.  In general, Polices that are widely
 accepted or tend to prevent bugs should have a higher severity than
 those that are more subjective or cosmetic in nature.
 
-=item get_severity( void )
+=item C<get_severity()>
 
 Returns the severity of violating this Policy.  If the severity has
 not been explicitly defined by calling C<set_severity>, then the
 C<default_severity> is returned.  See the C<$SEVERITY> constants in
 L<Perl::Critic::Utils> for an enumeration of possible severity values.
 
-=item set_severity( $N )
+=item C<set_severity( $N )>
 
 Sets the severity for violating this Policy.  Clients of
 Perl::Critic::Policy objects can call this method to assign a

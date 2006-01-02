@@ -209,10 +209,12 @@ Perl::Critic::Violation - Represents policy violations
   use PPI;
   use Perl::Critic::Violation;
 
-  my $loc  = $node->location();   #$node is a PPI::Node object
+  my $elem = $doc->child(0);      #$doc is a PPI::Document object
   my $desc = 'Offending code';    #Describe the violation
   my $expl = [1,45,67];           #Page numbers from PBB
-  my $vio  = Perl::Critic::Violation->new($desc, $expl, $loc);
+  my $sev  = 5;                   #Severity level of this violation
+
+  my $vio  = Perl::Critic::Violation->new($desc, $expl, $node, $sev);
 
 =head1 DESCRIPTION
 
@@ -227,15 +229,13 @@ objects.
 
 =over 8
 
-=item new( $description, $explanation, $location, $severity )
+=item C<new( $description, $explanation, $element, $severity )>
 
 Retruns a reference to a new C<Perl::Critic::Violation> object. The
 arguments are a description of the violation (as string), an
 explanation for the policy (as string) or a series of page numbers in
-PBB (as an ARRAY ref), and the location of the violation (as an ARRAY
-ref).  The C<$location> must have two elements, representing the line
-and column number, in that order.  The C<$severity> should be an
-integer ranging from 1 to 5.
+PBB (as an ARRAY ref), a reference to the L<PPI> element that caused
+the violation, and the severity of the violation (as an integer).
 
 =back
 
@@ -243,59 +243,60 @@ integer ranging from 1 to 5.
 
 =over 8
 
-=item description( void )
+=item C<description()>
 
 Returns a brief description of the policy that has been volated as a string.
 
-=item explanation( void )
+=item C<explanation()>
 
 Returns an explanation of the policy as a string or as reference to
 an array of page numbers in PBB.
 
-=item location( void )
+=item C<location()>
 
 Returns a two-element list containing the line and column number where
 this Violation occurred.
 
-=item severity( void )
+=item C<severity()>
 
 Returns the severity of this Violation as an integer ranging from 1 to
 5, where 5 is the "most" severe.
 
-=item sort_by_severity( @violation_objects )
+=item C<sort_by_severity( @violation_objects )>
 
 If you need to sort Violations by severity, use this handy routine:
 
    @sorted = Perl::Critic::Violation::sort_by_severity(@violations);
 
-=item sort_by_location( @violation_objects )
+=item C<sort_by_location( @violation_objects )>
 
 If you need to sort Violations by location, use this handy routine:
 
    @sorted = Perl::Critic::Violation::sort_by_location(@violations);
 
-=item diagnostics( void )
+=item C<diagnostics()>
 
-This feature is experimental.  Returns a formatted string containing a
-full discussion of the motivation for and details of the Policy module
-that created this Violation.  This information is automatically
-extracted from the DESCRIPTION section of the Policy module's POD.
+Returns a formatted string containing a full discussion of the
+motivation for and details of the Policy module that created this
+Violation.  This information is automatically extracted from the
+C<DESCRIPTION> section of the Policy module's POD.
 
-=item policy( void )
+=item C<policy()>
 
-Returns the name of the Perl::Critic::Policy that created this Violation.
+Returns the name of the L<Perl::Critic::Policy> that created this
+Violation.
 
-=item source( void )
+=item C<source()>
 
 Returns the string of source code that caused this exception.  If the
 code spans multiple lines (e.g. multi-line statements, subroutines or
 other blocks), then only the first line will be returned.
 
-=item to_string( void )
+=item C<to_string()>
 
 Returns a string repesentation of this violation.  The content of the
 string depends on the current value of the C<$FORMAT> package
-variable.  See C<"OVERLOADS"> for the details.
+variable.  See L<"OVERLOADS"> for the details.
 
 =back
 
@@ -303,27 +304,27 @@ variable.  See C<"OVERLOADS"> for the details.
 
 =over 8
 
-=item $Perl::Critic::Violation::FORMAT
+=item C<$Perl::Critic::Violation::FORMAT>
 
 Sets the format for all Violation objects when they are evaluated in
 string context.  The default is C<'%d at line %l, column %c. %e'>.
 See L<"OVERLOADS"> for formatting options.  If you want to change
-C<$FORMAT>, you should localize it first.
+C<$FORMAT>, you should probably localize it first.
 
 =back
 
 =head1 OVERLOADS
 
-Perl::Critic::Violation overloads the "" operator to produce neat
-little messages when evaluated in string context.  The format
-depends on the current value of the C<$FORMAT> package variable.
+Perl::Critic::Violation overloads the C<""> operator to produce neat
+little messages when evaluated in string context.  The format depends
+on the current value of the C<$FORMAT> package variable.
 
 Formats are a combination of literal and escape characters similar to
 the way C<sprintf> works.  If you want to know the specific formatting
 capabilities, look at L<String::Format>. Valid escape characters are:
 
   Escape    Meaning
-  -------   ------------------------------------------------------------------------
+  -------   -----------------------------------------------------------------
   %m        Brief description of the violation
   %f        Name of the file where the violation occurred.
   %l        Line number where the violation occurred
