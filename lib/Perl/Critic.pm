@@ -349,7 +349,7 @@ C<Perl::Critic::Policy::Category::PolicyName> is the full name of a
 module that implements the policy.  The Policy modules distributed
 with Perl::Critic have been grouped into categories according to the
 table of contents in Damian Conway's book B<Perl Best Practices>. For
-brevity, you can ommit the C<'Perl::Critic::Policy'> part of the
+brevity, you can omit the C<'Perl::Critic::Policy'> part of the
 module name.
 
 C<severity> is the level of importance you wish to assign to the
@@ -532,7 +532,7 @@ Give every module a C<$VERSION> number. [Severity 2]
 
 =head2 L<Perl::Critic::Policy::Modules::RequireEndWithOne>
 
-End each module with an explicity C<1;> instead of some funky expression. [Severity 4]
+End each module with an explicitly C<1;> instead of some funky expression. [Severity 4]
 
 =head2 L<Perl::Critic::Policy::NamingConventions::ProhibitAmbiguousNames>
 

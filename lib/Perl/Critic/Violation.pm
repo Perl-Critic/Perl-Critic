@@ -211,14 +211,14 @@ Perl::Critic::Violation - Represents policy violations
 
   my $elem = $doc->child(0);      #$doc is a PPI::Document object
   my $desc = 'Offending code';    #Describe the violation
-  my $expl = [1,45,67];           #Page numbers from PBB
+  my $expl = [1,45,67];           #Page numbers from PBP
   my $sev  = 5;                   #Severity level of this violation
 
   my $vio  = Perl::Critic::Violation->new($desc, $expl, $node, $sev);
 
 =head1 DESCRIPTION
 
-Perl::Critic::Violation is the generic represntation of an individual
+Perl::Critic::Violation is the generic representation of an individual
 Policy violation.  Its primary purpose is to provide an abstraction
 layer so that clients of L<Perl::Critic> don't have to know anything
 about L<PPI>.  The C<violations> method of all L<Perl::Critic::Policy>
@@ -231,10 +231,10 @@ objects.
 
 =item C<new( $description, $explanation, $element, $severity )>
 
-Retruns a reference to a new C<Perl::Critic::Violation> object. The
+Returns a reference to a new C<Perl::Critic::Violation> object. The
 arguments are a description of the violation (as string), an
 explanation for the policy (as string) or a series of page numbers in
-PBB (as an ARRAY ref), a reference to the L<PPI> element that caused
+PBP (as an ARRAY ref), a reference to the L<PPI> element that caused
 the violation, and the severity of the violation (as an integer).
 
 =back
@@ -245,12 +245,12 @@ the violation, and the severity of the violation (as an integer).
 
 =item C<description()>
 
-Returns a brief description of the policy that has been volated as a string.
+Returns a brief description of the policy that has been violated as a string.
 
 =item C<explanation()>
 
 Returns an explanation of the policy as a string or as reference to
-an array of page numbers in PBB.
+an array of page numbers in PBP.
 
 =item C<location()>
 
@@ -294,7 +294,7 @@ other blocks), then only the first line will be returned.
 
 =item C<to_string()>
 
-Returns a string repesentation of this violation.  The content of the
+Returns a string representation of this violation.  The content of the
 string depends on the current value of the C<$FORMAT> package
 variable.  See L<"OVERLOADS"> for the details.
 

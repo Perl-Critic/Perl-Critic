@@ -333,7 +333,7 @@ Perl::Critic::Config takes care of finding and processing
 user-preferences for L<Perl::Critic>.  The Config object defines which
 Policy modules will be loaded into the Perl::Critic engine and how
 they should be configured.  You should never really need to
-instantiate Perl::Critic::Config directly becuase the Perl::Critic
+instantiate Perl::Critic::Config directly because the Perl::Critic
 constructor will do it for you.
 
 =head1 CONSTRUCTOR
@@ -477,7 +477,7 @@ C<Perl::Critic::Policy::Category::PolicyName> is the full name of a
 module that implements the policy.  The Policy modules distributed
 with Perl::Critic have been grouped into categories according to the
 table of contents in Damian Conway's book B<Perl Best Practices>. For
-brevity, you can ommit the C<'Perl::Critic::Policy'> part of the
+brevity, you can omit the C<'Perl::Critic::Policy'> part of the
 module name.
 
 C<severity> is the level of importance you wish to assign to the

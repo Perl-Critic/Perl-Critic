@@ -274,7 +274,7 @@ perlcritic - Command-line interface to critique Perl source
   perlcritic [options] FILE1 [ FILE2 FILE3... ]  #Read from FILE(s)
   perlcritic [options] DIR1  [ DIR2  DIR3...  ]  #Read all files in DIR(s)
   perlcritic [options]                           #Read from STDIN
-  perlciritc -man                                #To see the manual
+  perlcritic -man                                #To see the manual
 
 =head1 DESCRIPTION
 
@@ -293,7 +293,7 @@ distributions of Perl::Critic at L<http://theoryx5.uwinnipeg.ca/ppms/>.
 =head1 USAGE EXAMPLES
 
 Before getting into all the gory details, here are some basic usage
-examples to get you started.
+examples to help get you started.
 
   #Report only most severe violations (severity = 5)
   perlcritic YourModule.pm
@@ -313,7 +313,7 @@ examples to get you started.
   #Report top 20 violations with severity >= 3
   perlcritic -3 -top YourModule.pm
 
-  #Report additional violations of Policies that match m/varaibles/ix
+  #Report additional violations of Policies that match m/variables/ix
   perlcritic -include variables YourModule.pm
 
 =head1 ARGUMENTS
@@ -358,10 +358,10 @@ information.
 These are shortcuts for setting the C<-severity> option.  For example
 C<"-4"> is equivalent to C<"-severity 4">.  Using one of these
 shortcuts causes an explicit C<-severity> option to be silently
-ingored if it is given.  If multiple shortcuts are specified, then the
+ignored if it is given.  If multiple shortcuts are specified, then the
 lowest one wins.  NOTE: Be careful not to put one of the severity
 shortcut options immediately after the C<-top> option or perlcritic
-will interpet it as the number of violations to report.
+will interpret it as the number of violations to report.
 
 =item -top [ N ]
 
@@ -372,7 +372,7 @@ given, the C<-top> option implies that the severity level is 1. Users
 can redefine the severity for any Policy in their F<.perlcriticrc> file.
 See L<"CONFIGURATION"> for more information.  NOTE: Be careful not to
 put one of the severity shortcut options immediately after the C<-top>
-option or perlcritic will interpet it as the number of violations to
+option or perlcritic will interpret it as the number of violations to
 report.
 
 =item -include PATTERN
@@ -506,7 +506,7 @@ C<Perl::Critic::Policy::Category::PolicyName> is the full name of a
 module that implements the policy.  The Policy modules distributed
 with Perl::Critic have been grouped into categories according to the
 table of contents in Damian Conway's book B<Perl Best Practices>. For
-brevity, you can ommit the C<'Perl::Critic::Policy'> part of the
+brevity, you can omit the C<'Perl::Critic::Policy'> part of the
 module name.
 
 C<severity> is the level of importance you wish to assign to the
@@ -688,7 +688,7 @@ Give every module a C<$VERSION> number. [Severity 2]
 
 =head2 L<Perl::Critic::Policy::Modules::RequireEndWithOne>
 
-End each module with an explicity C<1;> instead of some funky expression. [Severity 4]
+End each module with an explicitly C<1;> instead of some funky expression. [Severity 4]
 
 =head2 L<Perl::Critic::Policy::NamingConventions::ProhibitAmbiguousNames>
 

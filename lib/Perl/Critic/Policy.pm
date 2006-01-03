@@ -63,7 +63,7 @@ distribution.
 
 Returns a reference to a new subclass of Perl::Critic::Policy. If
 your Policy requires any special arguments, they should be passed
-in here as key-value paris.  Users of L<perlcritic> can specify
+in here as key-value pairs.  Users of L<perlcritic> can specify
 these in their config file.  Unless you override the C<new> method,
 the default method simply returns a reference to an empty hash that
 has been blessed into your subclass.
@@ -118,7 +118,7 @@ L<Perl::Critic::Utils> for an enumeration of possible values.
 =head1 DOCUMENTATION
 
 When your Policy module first C<use>s L<Perl::Critic::Violation>, it
-will try and extrace the DESCRIPTION section of your Policy module's
+will try and extract the DESCRIPTION section of your Policy module's
 POD.  This information is displayed by Perl::Critic if the verbosity
 level is set accordingly.  Therefore, please include a DESCRIPTION
 section in the POD for any Policy modules that you author.  Thanks.
