@@ -150,6 +150,7 @@ sub policy {
 sub source {
      my $self = shift;
      my $source = $self->{_source};
+     #Return the first line of code only.
      $source =~ m{\A ( [^\n]* ) }mx;
      return $1;
 }
