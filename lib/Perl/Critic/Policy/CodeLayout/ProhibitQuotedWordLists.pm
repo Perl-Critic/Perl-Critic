@@ -130,7 +130,7 @@ to "ProhibitQuotedWordLists" in your F<.perlcriticrc> file.
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
 
-Copyright (c) 2005 Jeffrey Ryan Thalhammer.  All rights reserved.
+Copyright (c) 2005-2006 Jeffrey Ryan Thalhammer.  All rights reserved.
 
 =head1 COPYRIGHT
 
