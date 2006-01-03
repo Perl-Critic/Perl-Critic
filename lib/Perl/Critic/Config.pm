@@ -340,7 +340,7 @@ constructor will do it for you.
 
 =over 8
 
-=item C<new( [ -profile => $FILE, -severity => $N, -include => \@PATTERNS, -exclude => \@PATTERNS ] )>
+=item C<new( [ -profile =E<gt> $FILE, -severity =E<gt> $N, -include =E<gt> \@PATTERNS, -exclude =E<gt> \@PATTERNS ] )>
 
 Returns a reference to a new Perl::Critic::Config object, which is
 basically just a blessed hash of configuration parameters.  There
@@ -383,7 +383,7 @@ precedence over C<-include> when a Policy matches both patterns.
 
 =over 8
 
-=item C<add_policy( -policy => $policy_name, -config => \%config_hash )>
+=item C<add_policy( -policy =E<gt> $policy_name, -config =E<gt> \%config_hash )>
 
 Loads a Policy object and adds into this Config.  If the object
 cannot be instantiated, it will throw a warning and return a false

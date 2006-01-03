@@ -217,7 +217,7 @@ L<http://theoryx5.uwinnipeg.ca/ppms/>.
 
 =over 8
 
-=item C<new( [ -profile => $FILE, -severity => $N, -include => \@PATTERNS, -exclude => \@PATTERNS, -force => 1 ] )>
+=item C<new( [ -profile =E<gt> $FILE, -severity =E<gt> $N, -include =E<gt> \@PATTERNS, -exclude =E<gt> \@PATTERNS, -force =E<gt> 1 ] )>
 
 Returns a reference to a new Perl::Critic object.  Most arguments are
 just passed directly into L<Perl::Critic::Config>, but I have described
@@ -294,7 +294,7 @@ violation of the loaded Policies.  The list is sorted in the order
 that the Violations appear in the code.  If there are no violations,
 returns an empty list.
 
-=item C<add_policy( -policy => $policy_name, -config => \%config_hash )>
+=item C<add_policy( -policy =E<gt> $policy_name, -config =E<gt> \%config_hash )>
 
 Loads Policy object and adds into this Critic.  If the object
 cannot be instantiated, it will throw a warning and return a false
