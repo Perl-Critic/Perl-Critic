@@ -360,20 +360,20 @@ C<"-4"> is equivalent to C<"-severity 4">.  Using one of these
 shortcuts causes an explicit C<-severity> option to be silently
 ignored if it is given.  If multiple shortcuts are specified, then the
 lowest one wins.  NOTE: Be careful not to put one of the severity
-shortcut options immediately after the C<-top> option or C<perlcritic>
+shortcut options immediately after the C<-top> flag or C<perlcritic>
 will interpret it as the number of violations to report.
 
 =item -top [ N ]
 
-Directs C<perlcritic> to report only the top C<N> Policy violations,
-ranked by their severity.  If C<N> is not specified, it defaults to
-20.  If the C<-severity> option (or one of the shortcuts) are not
-given, the C<-top> option implies that the severity level is 1. Users
-can redefine the severity for any Policy in their F<.perlcriticrc> file.
-See L<"CONFIGURATION"> for more information.  NOTE: Be careful not to
-put one of the severity shortcut options immediately after the C<-top>
-option or C<perlcritic> will interpret it as the number of violations to
-report.
+Directs C<perlcritic> to report only the top C<N> Policy violations in
+each file, ranked by their severity.  If C<N> is not specified, it
+defaults to 20.  If the C<-severity> option (or one of the shortcuts)
+is not explicitly given, the C<-top> option implies that the minimum
+severity level is 1. Users can redefine the severity for any Policy in
+their F<.perlcriticrc> file.  See L<"CONFIGURATION"> for more
+information.  NOTE: Be careful not to put one of the severity shortcut
+options immediately after the C<-top> flag or C<perlcritic> will
+interpret it as the number of violations to report.
 
 =item -include PATTERN
 
