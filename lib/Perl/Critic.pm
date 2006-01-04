@@ -274,8 +274,7 @@ comments.  See L<"BENDING THE RULES"> for more information.
 B<-config> is a reference to a L<Perl::Critic::Config> object.  If you
 have created your own Config object for some reason, you can pass it
 in here instead of having Perl::Critic create one for you.  Using the
-C<-config> option causes the C<-profile> and C<-noprofile> options
-to be silently ignored.
+C<-config> option causes all the other options to be silently ignored.
 
 =back
 
@@ -296,7 +295,7 @@ returns an empty list.
 
 =item C<add_policy( -policy =E<gt> $policy_name, -config =E<gt> \%config_hash )>
 
-Loads Policy object and adds into this Critic.  If the object
+Creates a Policy object and loads it into this Critic.  If the object
 cannot be instantiated, it will throw a warning and return a false
 value.  Otherwise, it returns a reference to this Critic.
 
@@ -305,10 +304,11 @@ module.  The C<'Perl::Critic::Policy'> portion of the name can be
 omitted for brevity.  This argument is required.
 
 B<-config> is an optional reference to a hash of Policy configuration
-parameters (Note that this is B<not> a Perl::Critic::Config object). The
-contents of this hash reference will be passed into to the constructor
-of the Policy module.  See the documentation in the relevant Policy
-module for a description of the arguments it supports.
+parameters.  Note that this is B<not> the same thing as a
+L<Perl::Critic::Config object>. The contents of this hash reference
+will be passed into to the constructor of the Policy module.  See the
+documentation in the relevant Policy module for a description of the
+arguments it supports.
 
 =item C<policies()>
 
@@ -318,8 +318,8 @@ they were loaded.
 
 =item C<config()>
 
-Returns the L<Perl::Critic::Config> object that was created for this
-Critic.
+Returns the L<Perl::Critic::Config> object that was created for or given
+to this Critic.
 
 =back
 
