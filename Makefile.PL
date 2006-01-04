@@ -10,6 +10,7 @@ use warnings;
 use ExtUtils::MakeMaker;
 
 warn <<'END_WARNING';
+
 ###################################################
 # NOTICE! NOTICE! NOTICE! NOTICE! NOTICE! NOTICE! #
 #-------------------------------------------------#
@@ -36,6 +37,7 @@ warn <<'END_WARNING';
 #                                                 #
 # -Jeff <thaljef@cpan.org>                        #
 ###################################################
+
 END_WARNING
 
 WriteMakefile( NAME           => 'Perl::Critic',
