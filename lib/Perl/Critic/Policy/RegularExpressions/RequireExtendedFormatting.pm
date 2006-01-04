@@ -24,7 +24,8 @@ my $expl = [ 236 ];
 #----------------------------------------------------------------------------
 
 sub default_severity { return $SEVERITY_MEDIUM }
-sub applies_to { return 'PPI::Token::Regexp' }
+sub applies_to { return qw(PPI::Token::Regexp::Match
+                           PPI::Token::Regexp::Substitute) }
 
 #----------------------------------------------------------------------------
 
