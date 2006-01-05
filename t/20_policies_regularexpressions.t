@@ -134,7 +134,13 @@ is( pcritique($policy, \$code), 16, $policy);
 
 $code = <<'END_PERL';
 my $string =~ tr/[A-Z]/[a-z]/;
+my $string =~ tr|[A-Z]|[a-z]|;
+my $string =~ tr{[A-Z]}{[a-z]};
+
 my $string =~ y/[A-Z]/[a-z]/;
+my $string =~ y|[A-Z]|[a-z]|;
+my $string =~ y{[A-Z]}{[a-z]};
+
 my $string =~ tr/[A-Z]/[a-z]/cds;
 my $string =~ y/[A-Z]/[a-z]/cds;
 END_PERL
@@ -146,7 +152,13 @@ is( pcritique($policy, \$code), 0, $policy);
 
 $code = <<'END_PERL';
 my $string =~ tr/[A-Z]/[a-z]/;
+my $string =~ tr|[A-Z]|[a-z]|;
+my $string =~ tr{[A-Z]}{[a-z]};
+
 my $string =~ y/[A-Z]/[a-z]/;
+my $string =~ y|[A-Z]|[a-z]|;
+my $string =~ y{[A-Z]}{[a-z]};
+
 my $string =~ tr/[A-Z]/[a-z]/cds;
 my $string =~ y/[A-Z]/[a-z]/cds;
 END_PERL
