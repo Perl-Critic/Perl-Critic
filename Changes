@@ -13,6 +13,8 @@
 
      More documentation edits.
 
+     Implemented workaround for failing pod_coverage tests.
+
      Bug Fixes:
      * 16906:  tr/// created false-postives with RegularExpression polices.
 
