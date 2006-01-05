@@ -6,7 +6,7 @@ use Perl::Critic::Utils;
 use Perl::Critic::Violation;
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '0.13_05';
+our $VERSION = '0.14';
 $VERSION = eval $VERSION;    ## no critic
 
 my $expl = q{Find an alternative module};

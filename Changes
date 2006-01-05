@@ -5,9 +5,16 @@
 # $Revision$
 ########################################################################
 
-[0.13_05] Released on 060102
+[0.14] Released on 060104
 
-     Final candidate for version 0.14
+     Official release.  No change from 0.13_05.
+
+[0.13_05] Not released
+
+     More documentation edits.
+
+     Bug Fixes:
+     * 16906:  tr/// created false-postives with RegularExpression polices.
 
 [0.13_04] Released on 051231
 

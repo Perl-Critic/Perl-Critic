@@ -11,7 +11,7 @@ use strict;
 use warnings;
 use base 'Exporter';
 
-our $VERSION = '0.13_05';
+our $VERSION = '0.14';
 $VERSION = eval $VERSION;    ## no critic
 
 #---------------------------------------------------------------------------
