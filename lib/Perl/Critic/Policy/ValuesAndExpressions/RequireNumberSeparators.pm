@@ -72,10 +72,10 @@ Perl::Critic::Policy::ValuesAndExpressions::RequireNumberSeparators
 
 =head1 DESCRIPTION
 
-Long numbers are be hard to read.  To improve legibility, Perl allows
-numbers to be split into groups of digits separated by underscores.
-This policy requires numbers sequences of more than three digits to be
-separated.
+Long numbers can be difficult to read.  To improve legibility, Perl
+allows numbers to be split into groups of digits separated by
+underscores.  This policy requires numbers sequences of more than
+three digits to be separated.
 
  $long_int = 123456789;   #not ok
  $long_int = 123_456_789; #ok
