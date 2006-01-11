@@ -686,6 +686,37 @@ smallest possible scope, or only on individual lines of code. If
 Perl::Critic complains about your code, try and find a compliant
 solution before resorting to this feature.
 
+=head1 IMPORTANT CHANGES
+
+Perl-Critic is evolving rapidly.  As such, some of the interfaces have
+changed in ways that are not backward-compatible.  This will probably
+concern you only if you're developing L<Perl::Critic::Policy> modules.
+
+=head2 VERSION 0.11
+
+Starting in version 0.11, the internal mechanics of Perl-Critic were
+rewritten so that only one traversal of the PPI document tree is
+required.  Unfortunately, this will break any custom Policy modules
+that you might have written for earlier versions.  Converting your
+policies to work with the new version is pretty easy and actually
+results in cleaner code.  See L<DEVELOPER.pod> for an up-to-date guide
+on creating Policy modules.
+
+=head2 VERSION 0.14
+
+Starting in version 0.14, the interface to L<Perl::Critic::Violation>
+changed.  This will also break any custom Policy modules that you
+might have written for ealier modules.  See L<DEVELOPER.pod> for an
+up-to-date guide on creating Policy modules.
+
+The notion of "priority" was also replaced with "severity" in version
+0.14.  Consequently, the default behavior of Perl::Critic is to only
+load the most "severe" Policy modules, rather than loading all of
+them.  This decision was based on user-feedback suggesting that
+Perl-Critic should be less "critical" for new users, and should steer
+them toward gradually increasing the strictness as they adopt better
+coding practices.
+
 =head1 EXTENDING THE CRITIC
 
 The modular design of Perl::Critic is intended to facilitate the
