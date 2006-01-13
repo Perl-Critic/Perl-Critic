@@ -233,7 +233,7 @@ L<http://theoryx5.uwinnipeg.ca/ppms/>.
 
 =over 8
 
-=item C<new( [ -profile =E<gt> $FILE, -severity =E<gt> $N, -include =E<gt> \@PATTERNS, -exclude =E<gt> \@PATTERNS, -force =E<gt> 1 ] )>
+=item C<new( -profile =E<gt> $FILE, -severity =E<gt> $N, -include =E<gt> \@PATTERNS, -exclude =E<gt> \@PATTERNS, -force =E<gt> 1 )>
 
 Returns a reference to a new Perl::Critic object.  Most arguments are
 just passed directly into L<Perl::Critic::Config>, but I have described
