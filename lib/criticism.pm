@@ -1,9 +1,17 @@
+#######################################################################
+#      $URL: http://perlcritic.tigris.org/svn/perlcritic/trunk/Perl-Critic/README $
+#     $Date: 2006-01-02 23:55:31 -0800 (Mon, 02 Jan 2006) $
+#   $Author: thaljef $
+# $Revision: 203 $
+########################################################################
+
 package criticism;
 
 use strict;
 use warnings;
 use Perl::Critic;
-use Carp;
+
+our $VERSION = $Perl::Critic::VERSION;
 
 #-----------------------------------------------------------------------------
 
@@ -12,7 +20,7 @@ my %severity_of = (
     stern  => 4,
     harsh  => 3,
     cruel  => 2,
-    brutal => 1
+    brutal => 1,
 );
 
 #-----------------------------------------------------------------------------
@@ -23,10 +31,11 @@ sub import {
     my $sev          = $severity_of{$mood || 'gentle'};
     my $critic       = Perl::Critic->new( -severity => $sev );
     my @violations   = $critic->critique($file);
-    if (@violations) { warn @violations and croak };
-    return 1;
+    if (@violations) { warn @violations };
+    return @violations ? 0 : 1;
 }
 
+1;
 
 __END__
 
@@ -50,9 +59,9 @@ criticism - Pragma to enforce coding style at compile-time
 =head1 DESCRIPTION
 
 This pragma runs your code through L<Perl::Critic> before every
-execution.  In practice, this isn't really feasible because it adds
-great deal of overhead at start up.  Unless you're really sick, you're
-better off using the L<perlcritic> command-line or
+execution.  In practice, this isn't really feasible because it adds a
+great deal of overhead at start-up.  Unless you're really sick, you're
+probably better off using the L<perlcritic> command-line or
 L<Test::Perl::Critic>.
 
 =head1 AUTHOR
