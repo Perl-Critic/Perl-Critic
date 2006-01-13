@@ -116,18 +116,34 @@ sub _filter_code {
   PRAGMA:
     for my $pragma ( grep { $_ =~ $no_critic } @{$nodes_ref} ) {
 
-        #Handle single-line usage
-        if ( my $sib = $pragma->sprevious_sibling() ) {
-            if ( $sib->location->[0] == $pragma->location->[0] ) {
-                $disabled_lines{ $pragma->location->[0] } = 1;
-                next PRAGMA;
+        my $parent = $pragma->parent();
+        my $grandparent = $parent ? $parent->parent() : undef;
+        my $sib = $pragma->sprevious_sibling();
+
+        # Handle single-line usage on simple statements
+        if ( $sib && $sib->location->[0] == $pragma->location->[0] ) {
+            $disabled_lines{ $pragma->location->[0] } = 1;
+            next PRAGMA;
+        }
+
+
+        # Handle single-line usage on compound statements
+        if ( ref $parent eq 'PPI::Structure::Block' ) {
+            if ( ref $grandparent eq 'PPI::Statement::Compound' ) {
+                if ( $parent->location->[0] == $pragma->location->[0] ) {
+                    $disabled_lines{ $grandparent->location->[0] } = 1;
+                    #$disabled_lines{ $parent->location->[0] } = 1;
+                    next PRAGMA;
+                }
             }
         }
 
-        # Handle multi-line usage This is either a "no critic" .. "use
-        # critic" region or a block where "no critic" persists to the
-        # end of the scope. The start is the always the "no critic".
-        # We have to search for the end.
+
+        # Handle multi-line usage.  This is either a "no critic" ..
+        # "use critic" region or a block where "no critic" persists
+        # until the end of the scope.  The start is the always the "no
+        # critic" which we already found.  So now we have to search
+        # for the end.
 
         my $start = $pragma;
         my $end   = $pragma;
