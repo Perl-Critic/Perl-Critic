@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 30;
+use Test::More tests => 33;
 use Perl::Critic::Config;
 use Perl::Critic;
 
@@ -128,7 +128,6 @@ $code = <<'END_PERL';
 use strict;
 use warnings;
 my $foo = 42;
-
 END_PERL
 
 %config = (exempt_scripts => 0);
@@ -284,6 +283,33 @@ is( pcritique($policy, \$code), 0, $policy);
 
 $code = <<'END_PERL';
 1; # final true value
+END_PERL
+
+$policy = 'Modules::RequireEndWithOne';
+is( pcritique($policy, \$code), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+1  ;   #With extra space.
+END_PERL
+
+$policy = 'Modules::RequireEndWithOne';
+is( pcritique($policy, \$code), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+  1  ;   #With extra space.
+END_PERL
+
+$policy = 'Modules::RequireEndWithOne';
+is( pcritique($policy, \$code), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+$foo = 2; 1;   #On same line..
 END_PERL
 
 $policy = 'Modules::RequireEndWithOne';
