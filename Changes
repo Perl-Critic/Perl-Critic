@@ -5,9 +5,12 @@
 # $Revision$
 ########################################################################
 
-[0.14] Released on 060104
+[0.14] Released on ??????
 
-     Official release.  No change from 0.13_05.
+     More documentation edits.
+
+     Bug Fixes:
+     * 15295: "## no critic" pragmas too aggresive on compound statements.
 
 [0.13_05] Not released
 
