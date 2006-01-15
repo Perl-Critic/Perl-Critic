@@ -225,9 +225,12 @@ also create new Policy modules that suit your own tastes.
 For a convenient command-line interface to Perl::Critic, see the
 documentation for L<perlcritic>.  If you want to integrate
 Perl::Critic with your build process, L<Test::Perl::Critic> provides
-an interface that is suitable for test scripts.  Win32 and ActvePerl
-users can find PPM distributions of Perl::Critic at
-L<http://theoryx5.uwinnipeg.ca/ppms/>.
+an interface that is suitable for test scripts.  For the ultimate
+convenience (at the expense of some flexibility) see the L<criticism>
+pragma.
+
+Win32 and ActvePerl users can find PPM distributions of Perl::Critic
+at L<http://theoryx5.uwinnipeg.ca/ppms/>.
 
 =head1 CONSTRUCTOR
 

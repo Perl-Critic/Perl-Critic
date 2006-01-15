@@ -286,8 +286,11 @@ liking.
 
 If you want to integrate C<perlcritic> with your build process, the
 L<Test::Perl::Critic> module provides a nice interface that is
-suitable for test scripts.  Win32 and ActvePerl users can find PPM
-distributions of Perl::Critic at L<http://theoryx5.uwinnipeg.ca/ppms/>.
+suitable for test scripts.  For ultimate convenience (at the expense
+of some flexibility) see the L<criticism> pragma.
+
+Win32 and ActvePerl users can find PPM distributions of Perl::Critic
+at L<http://theoryx5.uwinnipeg.ca/ppms/>.
 
 =head1 USAGE EXAMPLES
 
