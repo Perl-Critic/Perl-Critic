@@ -1,620 +1,548 @@
-Perl::Critic(3)       User Contributed Perl Documentation      Perl::Critic(3)
-
-
-
-NNAAMMEE
-       Perl::Critic - Critique Perl source code for style and standards
-
-SSYYNNOOPPSSIISS
-         use Perl::Critic;
-         my $file = shift;
-         my $critic = Perl::Critic->new();
-         my @violations = $critic->critique($file);
-         print @violations;
-
-DDEESSCCRRIIPPTTIIOONN
-       Perl::Critic is an extensible framework for creating and applying cod-
-       ing standards to Perl source code.  Essentially, it is a static source
-       code analysis engine.  Perl::Critic is distributed with a number of
-       Perl::Critic::Policy modules that attempt to enforce various coding
-       guidelines.  Most Policy modules are based on Damian Conway's book PPeerrll
-       BBeesstt PPrraaccttiicceess.  You can enable, disable, and customize those Polices
-       through the Perl::Critic interface.  You can also create new Policy
-       modules that suit your own tastes.
-
-       For a convenient command-line interface to Perl::Critic, see the docu-
-       mentation for perlcritic.  If you want to integrate Perl::Critic with
-       your build process, Test::Perl::Critic provides an interface that is
-       suitable for test scripts.  For the ultimate convenience (at the
-       expense of some flexibility) see the criticism pragma.
-
-       Win32 and ActvePerl users can find PPM distributions of Perl::Critic at
-       <http://theoryx5.uwinnipeg.ca/ppms/>.
-
-CCOONNSSTTRRUUCCTTOORR
-       "new( -profile => $FILE, -severity => $N, -include => \@PATTERNS,
-       -exclude => \@PATTERNS, -force => 1 )"
-               Returns a reference to a new Perl::Critic object.  Most argu-
-               ments are just passed directly into Perl::Critic::Config, but I
-               have described them here as well.  All arguments are optional
-               key-value pairs as follows:
-
-               --pprrooffiillee is a path to a configuration file. If $FILE is not
-               defined, Perl::Critic::Config attempts to find a _._p_e_r_l_c_r_i_t_i_c_r_c
-               configuration file in the current directory, and then in your
-               home directory.  Alternatively, you can set the "PERLCRITIC"
-               environment variable to point to a file in another location.
-               If a configuration file can't be found, or if $FILE is an empty
-               string, then all Policies will be loaded with their default
-               configuration.  See "CONFIGURATION" for more information.
-
-               --sseevveerriittyy is the minimum severity level.  Only Policy modules
-               that have a severity greater than $N will be loaded.  Severity
-               values are integers ranging from 1 (least severe) to 5 (most
-               severe).  The default is 5.  For a given "-profile", decreasing
-               the "-severity" will usually result in more Policy violations.
-               Users can redefine the severity level for any Policy in their
-               _._p_e_r_l_c_r_i_t_i_c_r_c file.  See "CONFIGURATION" for more information.
-
-               --iinncclluuddee is a reference to a list of string @PATTERNS.  Policy
-               modules that match at least one "m/$PATTERN/imx" will always be
-               loaded, irrespective of the severity settings.  For example:
-
-                 my $critic = Perl::Critic->new(-include => ['layout'] -severity => 4);
-
-               This would cause Perl::Critic to load all the "CodeLayout::*"
-               Policy modules even though they have a severity level that is
-               less than 4.  You can use "-include" in conjunction with the
-               "-exclude" option.  Note that "-exclude" takes precedence over
-               "-include" when a Policy matches both patterns.
-
-               --eexxcclluuddee is a reference to a list of string @PATTERNS.  Policy
-               modules that match at least one "m/$PATTERN/imx" will not be
-               loaded, irrespective of the severity settings.  For example:
-
-                 my $critic = Perl::Critic->new(-exclude => ['strict'] -severity => 1);
-
-               This would cause Perl::Critic to not load the "RequireUseS-
-               trict" and "ProhibitNoStrict" Policy modules even though they
-               have a severity level that is greater than 1.  You can use
-               "-exclude" in conjunction with the "-include" option.  Note
-               that "-exclude" takes precedence over "-include" when a Policy
-               matches both patterns.
-
-               --ffoorrccee controls whether Perl::Critic observes the magical ""##
-               no critic"" pseudo-pragmas in your code.  If set to a true
-               value, Perl::Critic will analyze all code.  If set to a false
-               value (which is the default) Perl::Critic will ignore code that
-               is tagged with these comments.  See "BENDING THE RULES" for
-               more information.
-
-               --ccoonnffiigg is a reference to a Perl::Critic::Config object.  If
-               you have created your own Config object for some reason, you
-               can pass it in here instead of having Perl::Critic create one
-               for you.  Using the "-config" option causes all the other
-               options to be silently ignored.
-
-MMEETTHHOODDSS
-       "critique( $source_code )"
-               Runs the $source_code through the Perl::Critic engine using all
-               the Policies that have been loaded into this engine.  If
-               $source_code is a scalar reference, then it is treated as
-               string of actual Perl code.  Otherwise, it is treated as a path
-               to a file containing Perl code.  Returns a list of
-               Perl::Critic::Violation objects for each violation of the
-               loaded Policies.  The list is sorted in the order that the Vio-
-               lations appear in the code.  If there are no violations,
-               returns an empty list.
-
-       "add_policy( -policy => $policy_name, -config => \%config_hash )"
-               Creates a Policy object and loads it into this Critic.  If the
-               object cannot be instantiated, it will throw a warning and
-               return a false value.  Otherwise, it returns a reference to
-               this Critic.
-
-               --ppoolliiccyy is the name of a Perl::Critic::Policy subclass module.
-               The 'Perl::Critic::Policy' portion of the name can be omitted
-               for brevity.  This argument is required.
-
-               --ccoonnffiigg is an optional reference to a hash of Policy configura-
-               tion parameters.  Note that this is nnoott the same thing as a
-               "Perl::Critic::Config object". The contents of this hash refer-
-               ence will be passed into to the constructor of the Policy mod-
-               ule.  See the documentation in the relevant Policy module for a
-               description of the arguments it supports.
-
-       "policies()"
-               Returns a list containing references to all the Policy objects
-               that have been loaded into this engine.  Objects will be in the
-               order that they were loaded.
-
-       "config()"
-               Returns the Perl::Critic::Config object that was created for or
-               given to this Critic.
-
-CCOONNFFIIGGUURRAATTIIOONN
-       The default configuration file is called _._p_e_r_l_c_r_i_t_i_c_r_c.  Perl::Critic
-       will look for this file in the current directory first, and then in
-       your home directory.  Alternatively, you can set the PERLCRITIC envi-
-       ronment variable to explicitly point to a different file in another
-       location.  If none of these files exist, and the "-profile" option is
-       not given to the constructor, then all the modules that are found in
-       the Perl::Critic::Policy namespace will be loaded with their default
-       configuration.
-
-       The format of the configuration file is a series of INI-style sections
-       that contain key-value pairs separated by '='. Comments should start
-       with '#' and can be placed on a separate line or after the name-value
-       pairs if you desire.  The general recipe is a series of blocks like
-       this:
-
-         [Perl::Critic::Policy::Category::PolicyName]
-         severity = 1
-         arg1 = value1
-         arg2 = value2
-
-       "Perl::Critic::Policy::Category::PolicyName" is the full name of a mod-
-       ule that implements the policy.  The Policy modules distributed with
-       Perl::Critic have been grouped into categories according to the table
-       of contents in Damian Conway's book PPeerrll BBeesstt PPrraaccttiicceess. For brevity,
-       you can omit the 'Perl::Critic::Policy' part of the module name.
-
-       "severity" is the level of importance you wish to assign to the Policy.
-       All Policy modules are defined with a default severity value ranging
-       from 1 (least severe) to 5 (most severe).  However, you may disagree
-       with the default severity and choose to give it a higher or lower
-       severity, based on your own coding philosophy.
-
-       The remaining key-value pairs are configuration parameters for that
-       will be passed into the constructor that Policy.  The constructors for
-       most Policy modules do not support arguments, and those that do should
-       have reasonable defaults.  See the documentation on the appropriate
-       Policy module for more details.
+NAME
+    Perl::Critic - Critique Perl source code for style and standards
+
+SYNOPSIS
+      use Perl::Critic;
+      my $file = shift;
+      my $critic = Perl::Critic->new();
+      my @violations = $critic->critique($file);
+      print @violations;
+
+DESCRIPTION
+    Perl::Critic is an extensible framework for creating and applying coding
+    standards to Perl source code. Essentially, it is a static source code
+    analysis engine. Perl::Critic is distributed with a number of
+    Perl::Critic::Policy modules that attempt to enforce various coding
+    guidelines. Most Policy modules are based on Damian Conway's book Perl
+    Best Practices. You can enable, disable, and customize those Polices
+    through the Perl::Critic interface. You can also create new Policy
+    modules that suit your own tastes.
+
+    For a convenient command-line interface to Perl::Critic, see the
+    documentation for perlcritic. If you want to integrate Perl::Critic with
+    your build process, Test::Perl::Critic provides an interface that is
+    suitable for test scripts. For the ultimate convenience (at the expense
+    of some flexibility) see the criticism pragma.
+
+    Win32 and ActvePerl users can find PPM distributions of Perl::Critic at
+    <http://theoryx5.uwinnipeg.ca/ppms/>.
+
+CONSTRUCTOR
+    "new( -profile => $FILE, -severity => $N, -include => \@PATTERNS,
+    -exclude => \@PATTERNS, -force => 1 )"
+            Returns a reference to a new Perl::Critic object. Most arguments
+            are just passed directly into Perl::Critic::Config, but I have
+            described them here as well. All arguments are optional
+            key-value pairs as follows:
+
+            -profile is a path to a configuration file. If $FILE is not
+            defined, Perl::Critic::Config attempts to find a .perlcriticrc
+            configuration file in the current directory, and then in your
+            home directory. Alternatively, you can set the "PERLCRITIC"
+            environment variable to point to a file in another location. If
+            a configuration file can't be found, or if $FILE is an empty
+            string, then all Policies will be loaded with their default
+            configuration. See "CONFIGURATION" for more information.
+
+            -severity is the minimum severity level. Only Policy modules
+            that have a severity greater than $N will be loaded. Severity
+            values are integers ranging from 1 (least severe) to 5 (most
+            severe). The default is 5. For a given "-profile", decreasing
+            the "-severity" will usually result in more Policy violations.
+            Users can redefine the severity level for any Policy in their
+            .perlcriticrc file. See "CONFIGURATION" for more information.
+
+            -include is a reference to a list of string @PATTERNS. Policy
+            modules that match at least one "m/$PATTERN/imx" will always be
+            loaded, irrespective of the severity settings. For example:
+
+              my $critic = Perl::Critic->new(-include => ['layout'] -severity => 4);
+
+            This would cause Perl::Critic to load all the "CodeLayout::*"
+            Policy modules even though they have a severity level that is
+            less than 4. You can use "-include" in conjunction with the
+            "-exclude" option. Note that "-exclude" takes precedence over
+            "-include" when a Policy matches both patterns.
+
+            -exclude is a reference to a list of string @PATTERNS. Policy
+            modules that match at least one "m/$PATTERN/imx" will not be
+            loaded, irrespective of the severity settings. For example:
+
+              my $critic = Perl::Critic->new(-exclude => ['strict'] -severity => 1);
+
+            This would cause Perl::Critic to not load the "RequireUseStrict"
+            and "ProhibitNoStrict" Policy modules even though they have a
+            severity level that is greater than 1. You can use "-exclude" in
+            conjunction with the "-include" option. Note that "-exclude"
+            takes precedence over "-include" when a Policy matches both
+            patterns.
+
+            -force controls whether Perl::Critic observes the magical ""##
+            no critic"" pseudo-pragmas in your code. If set to a true value,
+            Perl::Critic will analyze all code. If set to a false value
+            (which is the default) Perl::Critic will ignore code that is
+            tagged with these comments. See "BENDING THE RULES" for more
+            information.
+
+            -config is a reference to a Perl::Critic::Config object. If you
+            have created your own Config object for some reason, you can
+            pass it in here instead of having Perl::Critic create one for
+            you. Using the "-config" option causes all the other options to
+            be silently ignored.
+
+METHODS
+    "critique( $source_code )"
+            Runs the $source_code through the Perl::Critic engine using all
+            the Policies that have been loaded into this engine. If
+            $source_code is a scalar reference, then it is treated as string
+            of actual Perl code. Otherwise, it is treated as a path to a
+            file containing Perl code. Returns a list of
+            Perl::Critic::Violation objects for each violation of the loaded
+            Policies. The list is sorted in the order that the Violations
+            appear in the code. If there are no violations, returns an empty
+            list.
+
+    "add_policy( -policy => $policy_name, -config => \%config_hash )"
+            Creates a Policy object and loads it into this Critic. If the
+            object cannot be instantiated, it will throw a warning and
+            return a false value. Otherwise, it returns a reference to this
+            Critic.
+
+            -policy is the name of a Perl::Critic::Policy subclass module.
+            The 'Perl::Critic::Policy' portion of the name can be omitted
+            for brevity. This argument is required.
+
+            -config is an optional reference to a hash of Policy
+            configuration parameters. Note that this is not the same thing
+            as a "Perl::Critic::Config object". The contents of this hash
+            reference will be passed into to the constructor of the Policy
+            module. See the documentation in the relevant Policy module for
+            a description of the arguments it supports.
+
+    "policies()"
+            Returns a list containing references to all the Policy objects
+            that have been loaded into this engine. Objects will be in the
+            order that they were loaded.
+
+    "config()"
+            Returns the Perl::Critic::Config object that was created for or
+            given to this Critic.
+
+CONFIGURATION
+    The default configuration file is called .perlcriticrc. Perl::Critic
+    will look for this file in the current directory first, and then in your
+    home directory. Alternatively, you can set the PERLCRITIC environment
+    variable to explicitly point to a different file in another location. If
+    none of these files exist, and the "-profile" option is not given to the
+    constructor, then all the modules that are found in the
+    Perl::Critic::Policy namespace will be loaded with their default
+    configuration.
+
+    The format of the configuration file is a series of INI-style sections
+    that contain key-value pairs separated by '='. Comments should start
+    with '#' and can be placed on a separate line or after the name-value
+    pairs if you desire. The general recipe is a series of blocks like this:
+
+      [Perl::Critic::Policy::Category::PolicyName]
+      severity = 1
+      arg1 = value1
+      arg2 = value2
+
+    "Perl::Critic::Policy::Category::PolicyName" is the full name of a
+    module that implements the policy. The Policy modules distributed with
+    Perl::Critic have been grouped into categories according to the table of
+    contents in Damian Conway's book Perl Best Practices. For brevity, you
+    can omit the 'Perl::Critic::Policy' part of the module name.
+
+    "severity" is the level of importance you wish to assign to the Policy.
+    All Policy modules are defined with a default severity value ranging
+    from 1 (least severe) to 5 (most severe). However, you may disagree with
+    the default severity and choose to give it a higher or lower severity,
+    based on your own coding philosophy.
+
+    The remaining key-value pairs are configuration parameters for that will
+    be passed into the constructor that Policy. The constructors for most
+    Policy modules do not support arguments, and those that do should have
+    reasonable defaults. See the documentation on the appropriate Policy
+    module for more details.
+
+    Instead of redefining the severity for a given Policy, you can
+    completely disable a Policy by prepending a '-' to the name of the
+    module in your configuration file. In this manner, the Policy will never
+    be loaded, regardless of the "-severity" given to the Perl::Critic
+    constructor.
+
+    A simple configuration might look like this:
+
+      #--------------------------------------------------------------
+      # I think these are really important, so always load them
+
+      [TestingAndDebugging::RequireUseStrict]
+      severity = 5
+
+      [TestingAndDebugging::RequireUseWarnings]
+      severity = 5
+
+      #--------------------------------------------------------------
+      # I think these are less important, so only load when asked
+
+      [Variables::ProhibitPackageVars]
+      severity = 2
+
+      [ControlStructures::ProhibitPostfixControls]
+      allow = if unless  #My custom configuration
+      severity = 2
+
+      #--------------------------------------------------------------
+      # I do not agree with these at all, so never load them
+
+      [-NamingConventions::ProhibitMixedCaseVars]
+      [-NamingConventions::ProhibitMixedCaseSubs]
+
+      #--------------------------------------------------------------
+      # For all other Policies, I accept the default severity,
+      # so no additional configuration is required for them.
+
+    A few sample configuration files are included in this distribution under
+    the t/samples directory. The perlcriticrc.none file demonstrates how to
+    disable Policy modules. The perlcriticrc.levels file demonstrates how to
+    redefine the severity level for any given Policy module. The
+    perlcriticrc.pbp file configures Perl::Critic to load only Policies
+    described in Damian Conway's book "Perl Best Practice."
+
+THE POLICIES
+    The following Policy modules are distributed with Perl::Critic. The
+    Policy modules have been categorized according to the table of contents
+    in Damian Conway's book Perl Best Practices. Since most coding standards
+    take the form "do this..." or "don't do that...", I have adopted the
+    convention of naming each module "RequireSomething" or
+    "ProhibitSomething". Each Policy is listed here with it's default
+    severity. If you don't agree with the default severity, you can change
+    it in your .perlcriticrc file. See the documentation of each module for
+    it's specific details.
+
+  Perl::Critic::Policy::BuiltinFunctions::ProhibitLvalueSubstr
+    Use 4-argument "substr" instead of writing "substr($foo, 2, 6) = $bar"
+    [Severity 3]
+
+  Perl::Critic::Policy::BuiltinFunctions::ProhibitSleepViaSelect
+    Use Time::HiRes instead of something like "select(undef, undef, undef,
+    .05)" [Severity 5]
+
+  Perl::Critic::Policy::BuiltinFunctions::ProhibitStringyEval
+    Write "eval { my $foo; bar($foo) }" instead of "eval "my $foo;
+    bar($foo);"" [Severity 5]
+
+  Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep
+    Write "grep { $_ =~ /$pattern/ } @list" instead of "grep /$pattern/,
+    @list" [Severity 4]
+
+  Perl::Critic::Policy::BuiltinFunctions::RequireBlockMap
+    Write "map { $_ =~ /$pattern/ } @list" instead of "map /$pattern/,
+    @list" [Severity 4]
+
+  Perl::Critic::Policy::BuiltinFunctions::RequireGlobFunction
+    Use "glob q{*}" instead of <*> [Severity 5]
+
+  Perl::Critic::Policy::ClassHierarchies::ProhibitOneArgBless
+    Write "bless {}, $class;" instead of just "bless {};" [Severity 5]
 
-       Instead of redefining the severity for a given Policy, you can com-
-       pletely disable a Policy by prepending a '-' to the name of the module
-       in your configuration file.  In this manner, the Policy will never be
-       loaded, regardless of the "-severity" given to the Perl::Critic con-
-       structor.
+  Perl::Critic::Policy::CodeLayout::ProhibitHardTabs
+    Use spaces instead of tabs. [Severity 3]
 
-       A simple configuration might look like this:
+  Perl::Critic::Policy::CodeLayout::ProhibitParensWithBuiltins
+    Write "open $handle, $path" instead of "open($handle, $path)" [Severity
+    1]
 
-         #--------------------------------------------------------------
-         # I think these are really important, so always load them
+  Perl::Critic::Policy::CodeLayout::ProhibitQuotedWordLists
+    Write "qw(foo bar baz)" instead of "('foo', 'bar', 'baz')" [Severity 2]
 
-         [TestingAndDebugging::RequireUseStrict]
-         severity = 5
+  Perl::Critic::Policy::CodeLayout::RequireTidyCode
+    Must run code through perltidy. [Severity 1]
 
-         [TestingAndDebugging::RequireUseWarnings]
-         severity = 5
+  Perl::Critic::Policy::CodeLayout::RequireTrailingCommas
+    Put a comma at the end of every multi-line list declaration, including
+    the last one. [Severity 1]
 
-         #--------------------------------------------------------------
-         # I think these are less important, so only load when asked
+  Perl::Critic::Policy::ControlStructures::ProhibitCascadingIfElse
+    Don't write long "if-elsif-elsif-elsif-elsif...else" chains. [Severity
+    3]
 
-         [Variables::ProhibitPackageVars]
-         severity = 2
+  Perl::Critic::Policy::ControlStructures::ProhibitCStyleForLoops
+    Write "for(0..20)" instead of "for($i=0; $i<=20; $i++)" [Severity 2]
 
-         [ControlStructures::ProhibitPostfixControls]
-         allow = if unless  #My custom configuration
-         severity = 2
+  Perl::Critic::Policy::ControlStructures::ProhibitPostfixControls
+    Write "if($condition){ do_something() }" instead of "do_something() if
+    $condition" [Severity 2]
 
-         #--------------------------------------------------------------
-         # I do not agree with these at all, so never load them
+  Perl::Critic::Policy::ControlStructures::ProhibitUnlessBlocks
+    Write "if(! $condition)" instead of "unless($condition)" [Severity 2]
 
-         [-NamingConventions::ProhibitMixedCaseVars]
-         [-NamingConventions::ProhibitMixedCaseSubs]
+  Perl::Critic::Policy::ControlStructures::ProhibitUntilBlocks
+    Write "while(! $condition)" instead of "until($condition)" [Severity 2]
 
-         #--------------------------------------------------------------
-         # For all other Policies, I accept the default severity,
-         # so no additional configuration is required for them.
+  Perl::Critic::Policy::InputOutput::ProhibitBacktickOperators
+    Discourage stuff like "@files = `ls $directory`" [Severity 3]
 
-       A few sample configuration files are included in this distribution
-       under the _t_/_s_a_m_p_l_e_s directory. The _p_e_r_l_c_r_i_t_i_c_r_c_._n_o_n_e file demonstrates
-       how to disable Policy modules.  The _p_e_r_l_c_r_i_t_i_c_r_c_._l_e_v_e_l_s file demon-
-       strates how to redefine the severity level for any given Policy module.
-       The _p_e_r_l_c_r_i_t_i_c_r_c_._p_b_p file configures Perl::Critic to load only Policies
-       described in Damian Conway's book "Perl Best Practice."
+  Perl::Critic::Policy::InputOutput::ProhibitBarewordFileHandles
+    Write "open my $fh, q{<}, $filename;" instead of "open FH, q{<},
+    $filename;" [Severity 5]
 
-TTHHEE PPOOLLIICCIIEESS
-       The following Policy modules are distributed with Perl::Critic.  The
-       Policy modules have been categorized according to the table of contents
-       in Damian Conway's book PPeerrll BBeesstt PPrraaccttiicceess.  Since most coding stan-
-       dards take the form "do this..." or "don't do that...", I have adopted
-       the convention of naming each module "RequireSomething" or "Prohibit-
-       Something".  Each Policy is listed here with it's default severity.  If
-       you don't agree with the default severity, you can change it in your
-       _._p_e_r_l_c_r_i_t_i_c_r_c file.  See the documentation of each module for it's spe-
-       cific details.
+  Perl::Critic::Policy::InputOutput::ProhibitOneArgSelect
+    Never write "select($fh)" [Severity 4]
 
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::BBuuiillttiinnFFuunnccttiioonnss::::PPrroohhiibbiittLLvvaalluueeSSuubbssttrr
+  Perl::Critic::Policy::InputOutput::ProhibitTwoArgOpen
+    Write "open $fh, q{<}, $filename;" instead of "open $fh, "<$filename";"
+    [Severity 5]
 
-       Use 4-argument "substr" instead of writing "substr($foo, 2, 6) = $bar"
-       [Severity 3]
+  Perl::Critic::Policy::Miscellanea::RequireRcsKeywords
+    Put source-control keywords in every file. [Severity 2]
 
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::BBuuiillttiinnFFuunnccttiioonnss::::PPrroohhiibbiittSSlleeeeppVViiaaSSeelleecctt
+  Perl::Critic::Policy::Modules::ProhibitMultiplePackages
+    Put packages (especially subclasses) in separate files. [Severity 4]
 
-       Use Time::HiRes instead of something like "select(undef, undef, undef,
-       .05)" [Severity 5]
+  Perl::Critic::Policy::Modules::RequireBarewordIncludes
+    Write "require Module" instead of "require 'Module.pm'" [Severity 5]
 
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::BBuuiillttiinnFFuunnccttiioonnss::::PPrroohhiibbiittSSttrriinnggyyEEvvaall
+  Perl::Critic::Policy::Modules::ProhibitEvilModules
+    Ban modules that aren't blessed by your shop. [Severity 5]
 
-       Write "eval { my $foo; bar($foo) }" instead of "eval "my $foo;
-       bar($foo);"" [Severity 5]
+  Perl::Critic::Policy::Modules::RequireExplicitPackage
+    Always make the "package" explicit. [Severity 4]
 
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::BBuuiillttiinnFFuunnccttiioonnss::::RReeqquuiirreeBBlloocckkGGrreepp
+  Perl::Critic::Policy::Modules::RequireVersionVar
+    Give every module a $VERSION number. [Severity 2]
 
-       Write "grep { $_ =~ /$pattern/ } @list" instead of "grep /$pattern/,
-       @list" [Severity 4]
+  Perl::Critic::Policy::Modules::RequireEndWithOne
+    End each module with an explicitly "1;" instead of some funky
+    expression. [Severity 4]
 
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::BBuuiillttiinnFFuunnccttiioonnss::::RReeqquuiirreeBBlloocckkMMaapp
+  Perl::Critic::Policy::NamingConventions::ProhibitAmbiguousNames
+    Don't use vague variable or subroutine names like 'last' or 'record'.
+    [Severity 3]
 
-       Write "map { $_ =~ /$pattern/ } @list" instead of "map /$pattern/,
-       @list" [Severity 4]
+  Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseSubs
+    Write "sub my_function{}" instead of "sub MyFunction{}" [Severity 1]
 
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::BBuuiillttiinnFFuunnccttiioonnss::::RReeqquuiirreeGGlloobbFFuunnccttiioonn
+  Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars
+    Write "$my_variable = 42" instead of "$MyVariable = 42" [Severity 1]
 
-       Use "glob q{*}" instead of <*> [Severity 5]
+  Perl::Critic::Policy::References::ProhibitDoubleSigils
+    Write "@{ $array_ref }" instead of @$array_ref [Severity 2]
 
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::CCllaassssHHiieerraarrcchhiieess::::PPrroohhiibbiittOOnneeAArrggBBlleessss
+  Perl::Critic::Policy::RegularExpressions::RequireLineBoundaryMatching
+    Always use the "/m" modifier with regular expressions. [Severity 3]
 
-       Write "bless {}, $class;" instead of just "bless {};" [Severity 5]
+  Perl::Critic::Policy::RegularExpressions::RequireExtendedFormatting
+    Always use the "/x" modifier with regular expressions. [Severity 2]
 
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::CCooddeeLLaayyoouutt::::PPrroohhiibbiittHHaarrddTTaabbss
+  Perl::Critic::Policy::Subroutines::ProhibitAmpersandSigils
+    Don't call functions with a leading ampersand sigil. [Severity 2]
 
-       Use spaces instead of tabs. [Severity 3]
+  Perl::Critic::Policy::Subroutines::ProhibitBuiltinHomonyms
+    Don't declare your own "open" function. [Severity 4]
 
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::CCooddeeLLaayyoouutt::::PPrroohhiibbiittPPaarreennssWWiitthhBBuuiillttiinnss
+  Perl::Critic::Policy::Subroutines::ProhibitExcessComplexity
+    Minimize complexity by factoring code into smaller subroutines.
+    [Severity 3]
 
-       Write "open $handle, $path" instead of "open($handle, $path)" [Severity
-       1]
+  Perl::Critic::Policy::Subroutines::ProhibitExplicitReturnUndef
+    Return failure with bare "return" instead of "return undef" [Severity 5]
 
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::CCooddeeLLaayyoouutt::::PPrroohhiibbiittQQuuootteeddWWoorrddLLiissttss
+  Perl::Critic::Policy::Subroutines::ProhibitSubroutinePrototypes
+    Don't write "sub my_function (@@) {}" [Severity 5]
 
-       Write "qw(foo bar baz)" instead of "('foo', 'bar', 'baz')" [Severity 2]
+  Perl::Critic::Policy::Subroutines::RequireFinalReturn
+    End every path through a subroutine with an explicit "return" statement.
+    [Severity 4]
 
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::CCooddeeLLaayyoouutt::::RReeqquuiirreeTTiiddyyCCooddee
+  Perl::Critic::Policy::TestingAndDebugging::ProhibitNoStrict
+    Prohibit various flavors of "no strict" [Severity 5]
 
-       Must run code through perltidy. [Severity 1]
+  Perl::Critic::Policy::TestingAndDebugging::ProhibitNoWarnings
+    Prohibit various flavors of "no warnings" [Severity 4]
 
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::CCooddeeLLaayyoouutt::::RReeqquuiirreeTTrraaiilliinnggCCoommmmaass
+  Perl::Critic::Policy::TestingAndDebugging::RequireUseStrict
+    Always "use strict" [Severity 5]
 
-       Put a comma at the end of every multi-line list declaration, including
-       the last one. [Severity 1]
+  Perl::Critic::Policy::TestingAndDebugging::RequireUseWarnings
+    Always "use warnings" [Severity 4]
 
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::CCoonnttrroollSSttrruuccttuurreess::::PPrroohhiibbiittCCaassccaaddiinnggIIffEEllssee
+  Perl::Critic::Policy::ValuesAndExpressions::ProhibitConstantPragma
+    Don't " use constant $FOO =" 15 > [Severity 4]
 
-       Don't write long "if-elsif-elsif-elsif-elsif...else" chains. [Severity
-       3]
+  Perl::Critic::Policy::ValuesAndExpressions::ProhibitEmptyQuotes
+    Write "q{}" instead of '' [Severity 2]
 
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::CCoonnttrroollSSttrruuccttuurreess::::PPrroohhiibbiittCCSSttyylleeFFoorrLLooooppss
+  Perl::Critic::Policy::ValuesAndExpressions::ProhibitInterpolationOfLiterals
+    Always use single quotes for literal strings. [Severity 1]
 
-       Write "for(0..20)" instead of "for($i=0; $i<=20; $i++)" [Severity 2]
+  Perl::Critic::Policy::ValuesAndExpressions::ProhibitLeadingZeros
+    Write "oct(755)" instead of 0755 [Severity 5]
+
+  Perl::Critic::Policy::ValuesAndExpressions::ProhibitNoisyQuotes
+    Use "q{}" or "qq{}" instead of quotes for awkward-looking strings.
+    [Severity 2]
+
+  Perl::Critic::Policy::ValuesAndExpressions::RequireInterpolationOfMetachars
+    Warns that you might have used single quotes when you really wanted
+    double-quotes. [Severity 1]
+
+  Perl::Critic::Policy::ValuesAndExpressions::RequireNumberSeparators
+    Write " 141_234_397.0145 " instead of 141234397.0145 [Severity 2]
 
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::CCoonnttrroollSSttrruuccttuurreess::::PPrroohhiibbiittPPoossttffiixxCCoonnttrroollss
+  Perl::Critic::Policy::ValuesAndExpressions::RequireQuotedHeredocTerminator
+    Write " print <<'THE_END' " or " print <<"THE_END" " [Severity 3]
 
-       Write "if($condition){ do_something() }" instead of "do_something() if
-       $condition" [Severity 2]
+  Perl::Critic::Policy::ValuesAndExpressions::RequireUpperCaseHeredocTerminator
+    Write " <<'THE_END'; " instead of " <<'theEnd'; " [Severity 1]
 
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::CCoonnttrroollSSttrruuccttuurreess::::PPrroohhiibbiittUUnnlleessssBBlloocckkss
+  Perl::Critic::Policy::Variables::ProhibitLocalVars
+    Use "my" instead of "local", except when you have to. [Severity 2]
 
-       Write "if(! $condition)" instead of "unless($condition)" [Severity 2]
+  Perl::Critic::Policy::Variables::ProhibitPackageVars
+    Eliminate globals declared with "our" or "use vars" [Severity 3]
 
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::CCoonnttrroollSSttrruuccttuurreess::::PPrroohhiibbiittUUnnttiillBBlloocckkss
+  Perl::Critic::Policy::Variables::ProhibitPunctuationVars
+    Write $EVAL_ERROR instead of $@ [Severity 2]
 
-       Write "while(! $condition)" instead of "until($condition)" [Severity 2]
+BENDING THE RULES
+    Perl::Critic takes a hard-line approach to your code: either you comply
+    or you don't. In the real world, it is not always practical (or even
+    possible) to fully comply with coding standards. In such cases, it is
+    wise to show that you are knowingly violating the standards and that you
+    have a Damn Good Reason (DGR) for doing so.
 
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::IInnppuuttOOuuttppuutt::::PPrroohhiibbiittBBaacckkttiicckkOOppeerraattoorrss
+    To help with those situations, you can direct Perl::Critic to ignore
+    certain lines or blocks of code by using pseudo-pragmas:
 
-       Discourage stuff like "@files = `ls $directory`" [Severity 3]
+        require 'LegacyLibaray1.pl';  ## no critic
+        require 'LegacyLibrary2.pl';  ## no critic
 
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::IInnppuuttOOuuttppuutt::::PPrroohhiibbiittBBaarreewwoorrddFFiilleeHHaannddlleess
+        for my $element (@list) {
 
-       Write "open my $fh, q{<}, $filename;" instead of "open FH, q{<}, $file-
-       name;" [Severity 5]
+            ## no critic
 
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::IInnppuuttOOuuttppuutt::::PPrroohhiibbiittOOnneeAArrggSSeelleecctt
+            $foo = "";               #Violates 'ProhibitEmptyQuotes'
+            $barf = bar() if $foo;   #Violates 'ProhibitPostfixControls'
+            #Some more evil code...
 
-       Never write "select($fh)" [Severity 4]
+            ## use critic
 
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::IInnppuuttOOuuttppuutt::::PPrroohhiibbiittTTwwooAArrggOOppeenn
+            #Some good code...
+            do_something($_);
+        }
 
-       Write "open $fh, q{<}, $filename;" instead of "open $fh, "<$filename";"
-       [Severity 5]
+    The "## no critic" comments direct Perl::Critic to ignore the remaining
+    lines of code until the end of the current block, or until a "## use
+    critic" comment is found (whichever comes first). If the "## no critic"
+    comment is on the same line as a code statement, then only that line of
+    code is overlooked. To direct perlcritic to ignore the "## no critic"
+    comments, use the "-force" option.
 
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::MMiisscceellllaanneeaa::::RReeqquuiirreeRRccssKKeeyywwoorrddss
+    Use this feature wisely. "## no critic" should be used in the smallest
+    possible scope, or only on individual lines of code. If Perl::Critic
+    complains about your code, try and find a compliant solution before
+    resorting to this feature.
 
-       Put source-control keywords in every file. [Severity 2]
+IMPORTANT CHANGES
+    Perl-Critic is evolving rapidly. As such, some of the interfaces have
+    changed in ways that are not backward-compatible. This will probably
+    concern you only if you're developing Perl::Critic::Policy modules.
 
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::MMoodduulleess::::PPrroohhiibbiittMMuullttiipplleePPaacckkaaggeess
+  VERSION 0.11
+    Starting in version 0.11, the internal mechanics of Perl-Critic were
+    rewritten so that only one traversal of the PPI document tree is
+    required. Unfortunately, this will break any custom Policy modules that
+    you might have written for earlier versions. Converting your policies to
+    work with the new version is pretty easy and actually results in cleaner
+    code. See DEVELOPER.pod for an up-to-date guide on creating Policy
+    modules.
 
-       Put packages (especially subclasses) in separate files. [Severity 4]
+  VERSION 0.14
+    Starting in version 0.14, the interface to Perl::Critic::Violation
+    changed. This will also break any custom Policy modules that you might
+    have written for ealier modules. See DEVELOPER.pod for an up-to-date
+    guide on creating Policy modules.
 
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::MMoodduulleess::::RReeqquuiirreeBBaarreewwoorrddIInncclluuddeess
+    The notion of "priority" was also replaced with "severity" in version
+    0.14. Consequently, the default behavior of Perl::Critic is to only load
+    the most "severe" Policy modules, rather than loading all of them. This
+    decision was based on user-feedback suggesting that Perl-Critic should
+    be less "critical" for new users, and should steer them toward gradually
+    increasing the strictness as they adopt better coding practices.
 
-       Write "require Module" instead of "require 'Module.pm'" [Severity 5]
+EXTENDING THE CRITIC
+    The modular design of Perl::Critic is intended to facilitate the
+    addition of new Policies. You'll need to have some understanding of PPI,
+    but most Policy modules are pretty straightforward and only require
+    about 20 lines of code. Please see the Perl::Critic::DEVELOPER file
+    included in this distribution for a step-by-step demonstration of how to
+    create new Policy modules.
 
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::MMoodduulleess::::PPrroohhiibbiittEEvviillMMoodduulleess
+    If you develop any new Policy modules, feel free to send them to
+    <thaljef@cpan.org> and I'll be happy to put them into the Perl::Critic
+    distribution. Or if you'd like to work on the Perl::Critic project
+    directly, check out our repository at <http://perlcritic.tigris.org>. To
+    subscribe to our mailing list, send a message to
+    "dev-subscribe@perlcritic.tigris.org".
 
-       Ban modules that aren't blessed by your shop. [Severity 5]
+PREREQUISITES
+    Perl::Critic requires the following modules:
 
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::MMoodduulleess::::RReeqquuiirreeEExxpplliicciittPPaacckkaaggee
+    Config::Tiny
 
-       Always make the "package" explicit. [Severity 4]
+    File::Spec
 
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::MMoodduulleess::::RReeqquuiirreeVVeerrssiioonnVVaarr
+    IO::String
 
-       Give every module a $VERSION number. [Severity 2]
+    List::Util
 
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::MMoodduulleess::::RReeqquuiirreeEEnnddWWiitthhOOnnee
+    List::MoreUtils
 
-       End each module with an explicitly "1;" instead of some funky expres-
-       sion. [Severity 4]
+    Module::Pluggable
 
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::NNaammiinnggCCoonnvveennttiioonnss::::PPrroohhiibbiittAAmmbbiigguuoouussNNaammeess
+    PPI
 
-       Don't use vague variable or subroutine names like 'last' or 'record'.
-       [Severity 3]
+    Pod::Usage
 
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::NNaammiinnggCCoonnvveennttiioonnss::::PPrroohhiibbiittMMiixxeeddCCaasseeSSuubbss
+    Pod::PlainText
 
-       Write "sub my_function{}" instead of "sub MyFunction{}" [Severity 1]
+    String::Format
 
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::NNaammiinnggCCoonnvveennttiioonnss::::PPrroohhiibbiittMMiixxeeddCCaasseeVVaarrss
+    The following modules are optional, but recommended for complete
+    testing:
 
-       Write "$my_variable = 42" instead of "$MyVariable = 42" [Severity 1]
+    Test::Pod
 
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::RReeffeerreenncceess::::PPrroohhiibbiittDDoouubblleeSSiiggiillss
+    Test::Pod::Coverage
 
-       Write "@{ $array_ref }" instead of @$array_ref [Severity 2]
+    Test::Perl::Critic
 
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::RReegguullaarrEExxpprreessssiioonnss::::RReeqquuiirreeLLiinneeBBoouunnddaarryyMMaattcchhiinngg
+BUGS
+    Scrutinizing Perl code is hard for humans, let alone machines. If you
+    find any bugs, particularly false-positives or false-negatives from a
+    Perl::Critic::Policy, please submit them to
+    <http://rt.cpan.org/NoAuth/Bugs.html?Dist=Perl-Critic>. Thanks.
 
-       Always use the "/m" modifier with regular expressions. [Severity 3]
+CREDITS
+    Adam Kennedy - For creating PPI, the heart and soul of Perl::Critic.
 
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::RReegguullaarrEExxpprreessssiioonnss::::RReeqquuiirreeEExxtteennddeeddFFoorrmmaattttiinngg
+    Damian Conway - For writing Perl Best Practices
 
-       Always use the "/x" modifier with regular expressions. [Severity 2]
+    Giuseppe Maxia - For all the great ideas and enhancements.
 
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::SSuubbrroouuttiinneess::::PPrroohhiibbiittAAmmppeerrssaannddSSiiggiillss
+    Chris Dolan - For numerous bug reports and suggestions.
 
-       Don't call functions with a leading ampersand sigil. [Severity 2]
+    Sharon, my wife - For putting up with my all-night code sessions
 
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::SSuubbrroouuttiinneess::::PPrroohhiibbiittBBuuiillttiinnHHoommoonnyymmss
+AUTHOR
+    Jeffrey Ryan Thalhammer <thaljef@cpan.org>
 
-       Don't declare your own "open" function. [Severity 4]
+COPYRIGHT
+    Copyright (c) 2005-2006 Jeffrey Ryan Thalhammer. All rights reserved.
 
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::SSuubbrroouuttiinneess::::PPrroohhiibbiittEExxcceessssCCoommpplleexxiittyy
+    This program is free software; you can redistribute it and/or modify it
+    under the same terms as Perl itself. The full text of this license can
+    be found in the LICENSE file included with this module.
 
-       Minimize complexity by factoring code into smaller subroutines. [Sever-
-       ity 3]
-
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::SSuubbrroouuttiinneess::::PPrroohhiibbiittEExxpplliicciittRReettuurrnnUUnnddeeff
-
-       Return failure with bare "return" instead of "return undef" [Severity
-       5]
-
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::SSuubbrroouuttiinneess::::PPrroohhiibbiittSSuubbrroouuttiinneePPrroottoottyyppeess
-
-       Don't write "sub my_function (@@) {}" [Severity 5]
-
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::SSuubbrroouuttiinneess::::RReeqquuiirreeFFiinnaallRReettuurrnn
-
-       End every path through a subroutine with an explicit "return" state-
-       ment. [Severity 4]
-
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::TTeessttiinnggAAnnddDDeebbuuggggiinngg::::PPrroohhiibbiittNNooSSttrriicctt
-
-       Prohibit various flavors of "no strict" [Severity 5]
-
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::TTeessttiinnggAAnnddDDeebbuuggggiinngg::::PPrroohhiibbiittNNooWWaarrnniinnggss
-
-       Prohibit various flavors of "no warnings" [Severity 4]
-
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::TTeessttiinnggAAnnddDDeebbuuggggiinngg::::RReeqquuiirreeUUsseeSSttrriicctt
-
-       Always "use strict" [Severity 5]
-
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::TTeessttiinnggAAnnddDDeebbuuggggiinngg::::RReeqquuiirreeUUsseeWWaarrnniinnggss
-
-       Always "use warnings" [Severity 4]
-
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::VVaalluueessAAnnddEExxpprreessssiioonnss::::PPrroohhiibbiittCCoonnssttaannttPPrraaggmmaa
-
-       Don't " use constant $FOO =" 15 > [Severity 4]
-
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::VVaalluueessAAnnddEExxpprreessssiioonnss::::PPrroohhiibbiittEEmmppttyyQQuuootteess
-
-       Write "q{}" instead of '' [Severity 2]
-
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::VVaalluueessAAnnddEExxpprreessssiioonnss::::PPrroohhiibbiittIInntteerrppoollaattiioonnOOffLLiitt--
-       eerraallss
-
-       Always use single quotes for literal strings. [Severity 1]
-
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::VVaalluueessAAnnddEExxpprreessssiioonnss::::PPrroohhiibbiittLLeeaaddiinnggZZeerrooss
-
-       Write "oct(755)" instead of 0755 [Severity 5]
-
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::VVaalluueessAAnnddEExxpprreessssiioonnss::::PPrroohhiibbiittNNooiissyyQQuuootteess
-
-       Use "q{}" or "qq{}" instead of quotes for awkward-looking strings.
-       [Severity 2]
-
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::VVaalluueessAAnnddEExxpprreessssiioonnss::::RReeqquuiirreeIInntteerrppoollaa--
-       ttiioonnOOffMMeettaacchhaarrss
-
-       Warns that you might have used single quotes when you really wanted
-       double-quotes. [Severity 1]
-
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::VVaalluueessAAnnddEExxpprreessssiioonnss::::RReeqquuiirreeNNuummbbeerrSSeeppaarraattoorrss
-
-       Write " 141_234_397.0145 " instead of  141234397.0145  [Severity 2]
-
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::VVaalluueessAAnnddEExxpprreessssiioonnss::::RReeqquuiirreeQQuuootteeddHHeerreeddooccTTeerrmmii--
-       nnaattoorr
-
-       Write " print <<'THE_END' " or " print <<"THE_END" " [Severity 3]
-
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::VVaalluueessAAnnddEExxpprreessssiioonnss::::RReeqquuiirreeUUppppeerrCCaasseeHHeerreeddooccTTeerr--
-       mmiinnaattoorr
-
-       Write " <<'THE_END'; " instead of " <<'theEnd'; " [Severity 1]
-
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::VVaarriiaabblleess::::PPrroohhiibbiittLLooccaallVVaarrss
-
-       Use "my" instead of "local", except when you have to. [Severity 2]
-
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::VVaarriiaabblleess::::PPrroohhiibbiittPPaacckkaaggeeVVaarrss
-
-       Eliminate globals declared with "our" or "use vars" [Severity 3]
-
-       PPeerrll::::CCrriittiicc::::PPoolliiccyy::::VVaarriiaabblleess::::PPrroohhiibbiittPPuunnccttuuaattiioonnVVaarrss
-
-       Write $EVAL_ERROR instead of $@ [Severity 2]
-
-BBEENNDDIINNGG TTHHEE RRUULLEESS
-       Perl::Critic takes a hard-line approach to your code: either you comply
-       or you don't.  In the real world, it is not always practical (or even
-       possible) to fully comply with coding standards.  In such cases, it is
-       wise to show that you are knowingly violating the standards and that
-       you have a Damn Good Reason (DGR) for doing so.
-
-       To help with those situations, you can direct Perl::Critic to ignore
-       certain lines or blocks of code by using pseudo-pragmas:
-
-           require 'LegacyLibaray1.pl';  ## no critic
-           require 'LegacyLibrary2.pl';  ## no critic
-
-           for my $element (@list) {
-
-               ## no critic
-
-               $foo = "";               #Violates 'ProhibitEmptyQuotes'
-               $barf = bar() if $foo;   #Violates 'ProhibitPostfixControls'
-               #Some more evil code...
-
-               ## use critic
-
-               #Some good code...
-               do_something($_);
-           }
-
-       The "## no critic" comments direct Perl::Critic to ignore the remaining
-       lines of code until the end of the current block, or until a "## use
-       critic" comment is found (whichever comes first).  If the "## no
-       critic" comment is on the same line as a code statement, then only that
-       line of code is overlooked.  To direct perlcritic to ignore the "## no
-       critic" comments, use the "-force" option.
-
-       Use this feature wisely.  "## no critic" should be used in the smallest
-       possible scope, or only on individual lines of code. If Perl::Critic
-       complains about your code, try and find a compliant solution before
-       resorting to this feature.
-
-IIMMPPOORRTTAANNTT CCHHAANNGGEESS
-       Perl-Critic is evolving rapidly.  As such, some of the interfaces have
-       changed in ways that are not backward-compatible.  This will probably
-       concern you only if you're developing Perl::Critic::Policy modules.
-
-       VVEERRSSIIOONN 00..1111
-
-       Starting in version 0.11, the internal mechanics of Perl-Critic were
-       rewritten so that only one traversal of the PPI document tree is
-       required.  Unfortunately, this will break any custom Policy modules
-       that you might have written for earlier versions.  Converting your
-       policies to work with the new version is pretty easy and actually
-       results in cleaner code.  See DEVELOPER.pod for an up-to-date guide on
-       creating Policy modules.
-
-       VVEERRSSIIOONN 00..1144
-
-       Starting in version 0.14, the interface to Perl::Critic::Violation
-       changed.  This will also break any custom Policy modules that you might
-       have written for ealier modules.  See DEVELOPER.pod for an up-to-date
-       guide on creating Policy modules.
-
-       The notion of "priority" was also replaced with "severity" in version
-       0.14.  Consequently, the default behavior of Perl::Critic is to only
-       load the most "severe" Policy modules, rather than loading all of them.
-       This decision was based on user-feedback suggesting that Perl-Critic
-       should be less "critical" for new users, and should steer them toward
-       gradually increasing the strictness as they adopt better coding prac-
-       tices.
-
-EEXXTTEENNDDIINNGG TTHHEE CCRRIITTIICC
-       The modular design of Perl::Critic is intended to facilitate the addi-
-       tion of new Policies.  You'll need to have some understanding of PPI,
-       but most Policy modules are pretty straightforward and only require
-       about 20 lines of code.  Please see the Perl::Critic::DEVELOPER file
-       included in this distribution for a step-by-step demonstration of how
-       to create new Policy modules.
-
-       If you develop any new Policy modules, feel free to send them to <thal-
-       jef@cpan.org> and I'll be happy to put them into the Perl::Critic dis-
-       tribution.  Or if you'd like to work on the Perl::Critic project
-       directly, check out our repository at <http://perlcritic.tigris.org>.
-       To subscribe to our mailing list, send a message to "dev-sub-
-       scribe@perlcritic.tigris.org".
-
-PPRREERREEQQUUIISSIITTEESS
-       Perl::Critic requires the following modules:
-
-       Config::Tiny
-
-       File::Spec
-
-       IO::String
-
-       List::Util
-
-       List::MoreUtils
-
-       Module::Pluggable
-
-       PPI
-
-       Pod::Usage
-
-       Pod::PlainText
-
-       String::Format
-
-       The following modules are optional, but recommended for complete test-
-       ing:
-
-       Test::Pod
-
-       Test::Pod::Coverage
-
-       Test::Perl::Critic
-
-BBUUGGSS
-       Scrutinizing Perl code is hard for humans, let alone machines.  If you
-       find any bugs, particularly false-positives or false-negatives from a
-       Perl::Critic::Policy, please submit them to
-       <http://rt.cpan.org/NoAuth/Bugs.html?Dist=Perl-Critic>.  Thanks.
-
-CCRREEDDIITTSS
-       Adam Kennedy - For creating PPI, the heart and soul of Perl::Critic.
-
-       Damian Conway - For writing PPeerrll BBeesstt PPrraaccttiicceess
-
-       Giuseppe Maxia - For all the great ideas and enhancements.
-
-       Chris Dolan - For numerous bug reports and suggestions.
-
-       Sharon, my wife - For putting up with my all-night code sessions
-
-AAUUTTHHOORR
-       Jeffrey Ryan Thalhammer <thaljef@cpan.org>
-
-CCOOPPYYRRIIGGHHTT
-       Copyright (c) 2005-2006 Jeffrey Ryan Thalhammer.  All rights reserved.
-
-       This program is free software; you can redistribute it and/or modify it
-       under the same terms as Perl itself.  The full text of this license can
-       be found in the LICENSE file included with this module.
-
-
-
-perl v5.8.7                       2006-01-14                   Perl::Critic(3)
