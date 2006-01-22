@@ -18,9 +18,10 @@ $VERSION = eval $VERSION;    ## no critic
 
 #---------------------------------------------------------------------------
 
-my $mixed_rx = qr/ [A-Z][a-z] | [a-z][A-Z] /mx;
-my $desc     = 'Mixed-case variable name(s)';
-my $expl     = [ 44 ];
+my $package_rx = qr/ :: /mx;
+my $mixed_rx   = qr/ [A-Z][a-z] | [a-z][A-Z] /mx;
+my $desc       = 'Mixed-case variable name(s)';
+my $expl       = [ 44 ];
 
 #---------------------------------------------------------------------------
 
@@ -42,10 +43,12 @@ sub violates {
 sub _has_mixed_case_vars {
     my $elem = shift;
     for my $var ( $elem->variables() ) {
-        #Variables with fully qualified package names are
-        #exempt because we can't really be responsible for
-        #symbols that are defined in other packages.
-        next if $elem->type() eq 'local' && $var =~ m/::/mx;
+
+        #Variables with fully qualified package names are exempt
+        #because we can't really be responsible for symbols that
+        #are defined in other packages.
+
+        next if $elem->type() eq 'local' && $var =~ $package_rx;
         return 1 if $var =~ $mixed_rx;
     }
     return 0;
