@@ -49,6 +49,7 @@ sub _has_mixed_case_vars {
         next if $elem->type() eq 'local' && $var =~ m/::/mx;
         return 1 if $var =~ $mixed_rx;
     }
+    return 0;
 }
 
 1;
