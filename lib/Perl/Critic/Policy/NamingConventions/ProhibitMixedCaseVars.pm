@@ -18,6 +18,7 @@ $VERSION = eval $VERSION;    ## no critic
 
 #---------------------------------------------------------------------------
 
+my $mixed_rx = qr/ [A-Z][a-z] | [a-z][A-Z] /mx;
 my $desc     = 'Mixed-case variable name(s)';
 my $expl     = [ 44 ];
 
@@ -37,11 +38,9 @@ sub violates {
     return;    #ok!
 }
 
+
 sub _has_mixed_case_vars {
-
     my $elem = shift;
-    my $mixed_rx = qr/ [A-Z][a-z] | [a-z][A-Z] /mx;
-
     for my $var ( $elem->variables() ) {
         #Variables with fully qualified package names are
         #exempt because we can't really be responsible for
