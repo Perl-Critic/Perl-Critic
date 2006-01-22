@@ -52,6 +52,15 @@ $code = <<'END_PERL';
 my $foo_BAR;
 my $FOO_BAR;
 my $foo_bar;
+
+# These come from other packages,
+# so we can't really complain
+# about the naming convention.
+local $Other::Package::foo_BAR;
+$Other::Package::foo_BAR;
+local $Other::Package::fooBAR;
+$Some::Package::fooBAR;
+
 END_PERL
 
 $policy = 'NamingConventions::ProhibitMixedCaseVars';

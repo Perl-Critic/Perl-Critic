@@ -9,7 +9,6 @@ package Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars;
 
 use strict;
 use warnings;
-use List::MoreUtils qw(any);
 use Perl::Critic::Utils;
 use Perl::Critic::Violation;
 use base 'Perl::Critic::Policy';
@@ -19,7 +18,6 @@ $VERSION = eval $VERSION;    ## no critic
 
 #---------------------------------------------------------------------------
 
-my $mixed_rx = qr/ [A-Z][a-z] | [a-z][A-Z]  /x;
 my $desc     = 'Mixed-case variable name(s)';
 my $expl     = [ 44 ];
 
@@ -40,8 +38,17 @@ sub violates {
 }
 
 sub _has_mixed_case_vars {
+
     my $elem = shift;
-    return any { $_ =~ $mixed_rx } $elem->variables();
+    my $mixed_rx = qr/ [A-Z][a-z] | [a-z][A-Z] /mx;
+
+    for my $var ( $elem->variables() ) {
+        #Variables with fully qualified package names are
+        #exempt because we can't really be responsible for
+        #symbols that are defined in other packages.
+        next if $elem->type() eq 'local' && $var =~ m/::/mx;
+        return 1 if $var =~ $mixed_rx;
+    }
 }
 
 1;
