@@ -44,7 +44,7 @@ my $builder = Module::Build->new(
 
   module_name    => 'Perl::Critic',
   dist_author    => 'Jeffrey Thalhammer <thaljef@cpan.org>',
-  dist_abstract  => 'Critique Perl source for style and standards',
+  dist_abstract  => 'Critique Perl source code for best-practices',
   license        => 'perl',
 
   requires       => {'PPI'                   => 1.103,

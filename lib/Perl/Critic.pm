@@ -201,7 +201,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic - Critique Perl source code for style and standards
+Perl::Critic - Critique Perl source code for best-practices
 
 =head1 SYNOPSIS
 
