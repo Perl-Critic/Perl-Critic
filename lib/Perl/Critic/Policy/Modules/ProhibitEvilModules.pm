@@ -30,12 +30,13 @@ sub new {
     #Set config, if defined
     if ( defined $args{modules} ) {
         for my $module ( split m{ \s+ }mx, $args{modules} ) {
-            if ( $module =~ m{ \A [/] (.+) [/] \z }mx ) {
+            if ( $module =~ m{ \A [/] .+ [/] \z }mx ) {
+                # These are module name patterns (e.g. /Acme/)
                 my $pattern = eval "qr$module"; ## no critic;
                 push @{ $self->{_evil_modules_rx} }, $pattern;
             }
             else {
-                # These are literal module names
+                # These are literal module names (e.g. Acme::Foo)
                 $self->{_evil_modules}->{$module} = 1;
             }
         }
