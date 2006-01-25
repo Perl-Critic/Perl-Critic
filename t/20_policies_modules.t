@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 33;
+use Test::More tests => 35;
 use Perl::Critic::Config;
 use Perl::Critic;
 
@@ -167,6 +167,30 @@ END_PERL
 $policy = 'Modules::ProhibitEvilModules';
 %config = (modules => 'Evil::Module Super::Evil::Module');
 is( pcritique($policy, \$code, \%config), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+use Evil::Module qw(bad stuff);
+use Demonic::Module
+END_PERL
+
+$policy = 'Modules::ProhibitEvilModules';
+%config = (modules => '/Evil::/ /Demonic/');
+is( pcritique($policy, \$code, \%config), 2, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+use Evil::Module qw(bad stuff);
+use Super::Evil::Module;
+use Demonic::Module;
+use Acme::Foo;
+END_PERL
+
+$policy = 'Modules::ProhibitEvilModules';
+%config = (modules => '/Evil::/ Demonic::Module /Acme/');
+is( pcritique($policy, \$code, \%config), 4, $policy);
 
 #----------------------------------------------------------------
 

@@ -2,6 +2,7 @@ package Perl::Critic::Policy::Modules::ProhibitEvilModules;
 
 use strict;
 use warnings;
+use List::MoreUtils qw(any);
 use Perl::Critic::Utils;
 use Perl::Critic::Violation;
 use base 'Perl::Critic::Policy';
@@ -23,10 +24,20 @@ sub new {
     my ( $class, %args ) = @_;
     my $self = bless {}, $class;
 
+    $self->{_evil_modules}    = {};  #Hash
+    $self->{_evil_modules_rx} = [];  #Array
+
     #Set config, if defined
     if ( defined $args{modules} ) {
         for my $module ( split m{ \s+ }mx, $args{modules} ) {
-            $self->{_evil_modules}->{$module} = 1;
+            if ( $module =~ m{ \A [/] (.+) [/] \z }mx ) {
+                my $pattern = eval "qr$module"; ## no critic;
+                push @{ $self->{_evil_modules_rx} }, $pattern;
+            }
+            else {
+                # These are literal module names
+                $self->{_evil_modules}->{$module} = 1;
+            }
         }
     }
     return $self;
@@ -36,7 +47,11 @@ sub new {
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-    if ( exists $self->{_evil_modules}->{ $elem->module() } ) {
+    my $module = $elem->module() || return;
+
+    if ( exists $self->{_evil_modules}->{ $module } ||
+         any { $module =~ $_ } @{ $self->{_evil_modules_rx} } ) {
+
         my $sev = $self->get_severity();
         return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
     }
@@ -70,6 +85,18 @@ in the F<.perlcriticrc> file like this:
 
  [Modules::ProhibitEvilModules]
  modules = Getopt::Std  Autoload
+
+If any module name in your configuration is braced with slashes, it
+is interpreted as a regular expression.  So any module that matches
+C<m/$module_name/> will be forbidden.  For example:
+
+  [Modules::ProhibitEvilModules]
+  modules = /Acme::/
+
+would cause all modules that match C<m/Acme::/> to be forbidden.  You
+can add any of the C<imxs> switches to the end of the pattern, but
+beware that your pattern should not contain spaces, lest the parser
+will get confused.
 
 By default, there aren't any prohibited modules (although I can think
 of a few that should be).
