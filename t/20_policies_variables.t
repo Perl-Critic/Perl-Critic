@@ -42,6 +42,8 @@ local ($RS);
 local $INPUT_RECORD_SEPARATOR;
 local $PROGRAM_NAME;
 local ($EVAL_ERROR, $OS_ERROR);
+local $Other::Package::foo;
+local (@Other::Package::foo, $EVAL_ERROR);
 my  $var1 = 'foo';
 our $var2 = 'bar';
 local $SIG{HUP} \&handler;
