@@ -59,17 +59,25 @@ $code = <<'END_PERL';
 our $var1 = 'foo';
 our (%var2, %var3) = 'foo';
 our (%VAR4, $var5) = ();
+
 $Package::foo;
 @Package::list = ('nuts');
 %Package::hash = ('nuts');
+
 $::foo = $bar;
 @::foo = ($bar);
 %::foo = ();
-use vars qw($FOO $BAR);
+
+use vars qw($fooBar $baz);
+use vars qw($fooBar @EXPORT);
+use vars '$fooBar', "$baz";
+use vars '$fooBar', '@EXPORT';
+use vars ('$fooBar', '$baz');
+use vars ('$fooBar', '@EXPORT');
 END_PERL
 
 $policy = 'Variables::ProhibitPackageVars';
-is( pcritique($policy, \$code), 10, $policy);
+is( pcritique($policy, \$code), 15, $policy);
 
 #----------------------------------------------------------------
 
@@ -78,9 +86,22 @@ our $VAR1 = 'foo';
 our (%VAR2, %VAR3) = ();
 our $VERSION = '1.0';
 our @EXPORT = qw(some symbols);
+
+use vars qw($VERSION @EXPORT);
+use vars ('$VERSION, '@EXPORT');
+use vars  '$VERSION, '@EXPORT';
+
+#local $Foo::bar;
+#local @This::that;
+#local %This::that;
+#local $This::that{ 'key' };
+#local $This::that[ 1 ];
+#local (@Baz::bar, %Baz::foo);
+
 $Package::VERSION = '1.2';
 %Package::VAR = ('nuts');
 @Package::EXPORT = ();
+
 $::VERSION = '1.2';
 %::VAR = ('nuts');
 @::EXPORT = ();

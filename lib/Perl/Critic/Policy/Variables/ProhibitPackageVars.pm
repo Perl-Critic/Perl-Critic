@@ -61,7 +61,16 @@ sub _is_our_var {
 sub _is_vars_pragma {
     my $elem = shift;
     $elem->isa('PPI::Statement::Include') || return;
-    return $elem->pragma() eq 'vars';
+    $elem->pragma() eq 'vars' || return;
+
+    # Older Perls don't support the C<our> keyword, so we try to let
+    # people use the C<vars> pragma instead, but only if all the
+    # variable names are uppercase.  Since there are lots of ways to
+    # pass arguments to pragmas (e.g. "$foo" or qw($foo) ) we just use
+    # a regex to match things that look like variables names.
+
+    return $elem =~ m{ [@\$%&] ( [\w+] ) }mx
+        && $1    =~ m{[a-z]};
 }
 
 sub _all_upcase {
@@ -97,20 +106,16 @@ make reference to variable with a fully-qualified package name.
   our $foo            = 1;    #not ok
   use vars '$foo';            #not ok
   $foo = 1;                   #not allowed by 'strict'
-  local $foo = 1;             #bad taste, but ok.
+  local $foo = 1;             #bad taste, but technically ok.
+  use vars '$FOO';            #ok, because it's ALL CAPS
   my $foo = 1;                #ok
 
-In practice though, its not really practical prohibit all package
+In practice though, its not really practical to prohibit all package
 variables.  Common variables like C<$VERSION> and C<@EXPORT> need to
 be global, as do any variables that you want to Export.  To work
 around this, the Policy overlooks any variables that are in ALL_CAPS.
 This forces you to put all your expored variables in ALL_CAPS too, which
 seems to be the usual practice anyway.
-
-=head1 BUGS
-
-The exemption for ALL_CAPS variables doesn't work with the C<use vars>
-pragma.  I'll fix this at some point.
 
 =head1 SEE ALSO
 
