@@ -16,16 +16,19 @@ use File::Spec;
 use Getopt::Long;
 use English qw(-no_match_vars);
 use Perl::Critic::Utils;
-use Perl::Critic;
 
-our $VERSION = $Perl::Critic::VERSION;
+our $VERSION = 0.14;
+$VERSION = eval $VERSION;  ## no critic
+
+#----------------------------------------------------------------------------
+# Globals
 
 my %options    = ();
 my @files      = ();
 my $violations = [];
 my $status     = undef;
 
-#---------------------------------------------------------------
+#-----------------------------------------------------------------------------
 # Begin script.  Only execute if not in a test harness
 
 if ( !$ENV{HARNESS_ACTIVE} ) {
@@ -36,7 +39,7 @@ if ( !$ENV{HARNESS_ACTIVE} ) {
     exit $status;
 }
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 # Begin subroutines
 
 sub get_options {
@@ -101,7 +104,7 @@ sub get_options {
     return %dashed_opts;
 }
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 sub get_input {
 
@@ -127,24 +130,36 @@ sub get_input {
     }
 }
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 sub critique {
 
     my ( $config, @files ) = @_;
     my $count = 0;
 
-    my $critic = Perl::Critic->new( %{$config} );
-    for my $file (@files) {
-        my @violations = $critic->critique($file);
-        render_report( $file, $config, @violations );
-        $count += scalar @violations;
-    }
+    # Perl::Critic has lots of dependencies, so loading is delayed
+    # until it is really needed.  This hack reduces startup time for
+    # doing other things like getting the version number or dumping
+    # the man page. Arguably, those things are pretty rare, but hey,
+    # why not save a few seconds if you can.
 
+    eval {
+
+        require Perl::Critic;
+        my $critic = Perl::Critic->new( %{$config} );
+
+        for my $file (@files) {
+            my @violations = $critic->critique($file);
+            render_report( $file, $config, @violations );
+            $count += scalar @violations;
+        }
+    };
+
+    die $EVAL_ERROR if $EVAL_ERROR;
     return $count;
 }
 
-#----------------------------------------------------------------
+#------------------------------------------------------------------------------
 
 sub render_report {
 
@@ -176,12 +191,11 @@ sub render_report {
       $verbosity =~ m{ \A [+-]? \d+ \z }mx
       ? ( $FORMAT_OF{ abs $verbosity } || $FORMAT_OF{2} )
       : _interpolate($verbosity);
-    $fmt =~ s{\%f}{$file}mxg;    #HACK! Vilation objects don't know the file
+    $fmt =~ s{\%f}{$file}mxg;    #HACK! Violation objects don't know the file
 
-    ## no critic
-    no warnings 'once';
+
+    no warnings 'once';  ## no critic
     local $Perl::Critic::Violation::FORMAT = $fmt;
-    ## use critic
 
     if ( defined $top ) {
         my $limit = @violations < $top ? $#violations : $top-1;
@@ -194,7 +208,7 @@ sub render_report {
     return scalar @violations;
 }
 
-#---------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 sub all_code_files {
 
@@ -224,7 +238,7 @@ sub all_code_files {
     return @code_files;
 }
 
-#---------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 sub _is_perl {
 
@@ -270,10 +284,10 @@ C<perlcritic> - Command-line interface to critique Perl source
 
 =head1 SYNOPSIS
 
-  perlcritic [options] FILE1 [ FILE2 FILE3... ]  #Read from FILE(s)
-  perlcritic [options] DIR1  [ DIR2  DIR3...  ]  #Read all files in DIR(s)
-  perlcritic [options]                           #Read from STDIN
-  perlcritic -man                                #To see the manual
+  perlcritic [ -12345 | -severity number ] [ -noprofile | -profile file ]
+             [ -top [ number ]] [ -include pattern ] [ -exclude pattern ]
+             [ -verbose number | format ] [ -force ] [ -Version ]
+             [ -help ] [ -man ]   [ FILE | DIRECTORY ]
 
 =head1 DESCRIPTION
 
@@ -300,8 +314,11 @@ examples to help get you started.
   #Report only most severe violations (severity = 5)
   perlcritic YourModule.pm
 
-  #Same as above, but for all Perl files in directory
-  perlcritic YourDirectory
+  #Same as above, but read input from STDIN
+  perlcritic
+
+  #Recursively process all Perl files beneath directory
+  perlcritic /some/directory
 
   #Report slightly less severe violations too (severity >= 4)
   perlcritic -4 YourModule.pm
