@@ -70,7 +70,7 @@ sub _is_vars_pragma {
     # a regex to match things that look like variables names.
 
     return $elem =~ m{ [@\$%&] ( [\w+] ) }mx
-        && $1    =~ m{[a-z]};
+        && $1    =~ m{ [a-z] }mx;
 }
 
 sub _all_upcase {
