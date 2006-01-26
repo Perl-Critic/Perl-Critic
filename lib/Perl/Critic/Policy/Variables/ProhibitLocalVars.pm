@@ -19,6 +19,7 @@ $VERSION = eval $VERSION;    ## no critic
 
 #---------------------------------------------------------------------------
 
+my $package_rx = qr/::/mx;
 my $desc = q{Variable declared as 'local'};
 my $expl = [ 77, 78, 79 ];
 
@@ -44,6 +45,7 @@ sub _all_global_vars {
 
     my $elem = shift;
     for my $var ( $elem->variables() ) {
+        next if $var =~ $package_rx;
         return if none { $var =~ m{ \A [\$@%] $_  }mx } @GLOBALS;
     }
     return 1;
@@ -64,7 +66,7 @@ Perl::Critic::Policy::Variables::ProhibitLocalVars
 =head1 DESCRIPTION
 
 Since Perl 5, there are very few reasons to declare C<local>
-variables.  The only reasonable exceptions are Perl's magical global
+variables.  The most common exceptions are Perl's magical global
 variables.  If you do need to modify one of those global variables,
 you should localize it first.  You should also use the L<English>
 module to give those variables more meaningful names.
@@ -76,6 +78,15 @@ module to give those variables more meaningful names.
   local $INPUT_RECORD_SEPARATOR    #ok
   local $RS                        #ok
   local $/;                        #not ok
+
+=head1 NOTES
+
+If an external module uses package variables as it's interface, then
+using C<local> is actually a pretty sensible thing to do.  So
+Perl::Critic will not complain if you C<local>-ize variables with a
+fully quallified name such as C<$Some::Package::foo>.  However, if
+you're in a position to dictate the module's interface, I strongly
+suggest using accessor methods instead.
 
 =head1 SEE ALSO
 
