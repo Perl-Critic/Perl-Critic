@@ -13,7 +13,7 @@ requires:
     Module::Pluggable:             0
     Pod::PlainText:                0
     Pod::Usage:                    0
-    PPI:                           1.103
+    PPI:                           1.110
     String::Format:                1.13
     Test::More:                    0
 
