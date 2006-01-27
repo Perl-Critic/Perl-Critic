@@ -42,6 +42,8 @@ sub violates {
     return;  #ok!
 }
 
+#-----------------------------------------------------------------------------
+
 sub _is_use_english {
     my $elem = shift;
     $elem->isa('PPI::Statement::Include') || return;
