@@ -15,7 +15,6 @@ use Pod::Usage;
 use File::Spec;
 use Getopt::Long;
 use English qw(-no_match_vars);
-use Perl::Critic::Utils;
 
 our $VERSION = 0.14;
 $VERSION = eval $VERSION;  ## no critic
@@ -93,7 +92,7 @@ sub get_options {
 
     #Override profile, if -noprofile is specified
     if ( exists $opts{noprofile} ) {
-        $opts{profile} = $EMPTY;
+        $opts{profile} = q{};
     }
 
     #I've adopted the convention of using key-value pairs for
