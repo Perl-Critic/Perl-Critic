@@ -62,5 +62,6 @@
 [-ValuesAndExpressions::RequireQuotedHeredocTerminator]
 [-ValuesAndExpressions::RequireUpperCaseHeredocTerminator]
 [-Variables::ProhibitLocalVars]
+[-Variables::ProhibitMatchVars]
 [-Variables::ProhibitPackageVars]
 [-Variables::ProhibitPunctuationVars]

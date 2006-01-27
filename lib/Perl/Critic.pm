@@ -657,6 +657,10 @@ Write C< <<'THE_END'; > instead of C< <<'theEnd'; > [Severity 1]
 
 Use C<my> instead of C<local>, except when you have to. [Severity 2]
 
+=head2 L<Perl::Critic::Policy::Variables::ProhibitMatchVars>
+
+Avoid C<$`>, C<$&>, C<$'> and their English equivalents. [Severity 4]
+
 =head2 L<Perl::Critic::Policy::Variables::ProhibitPackageVars>
 
 Eliminate globals declared with C<our> or C<use vars> [Severity 3]

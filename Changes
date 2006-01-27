@@ -9,6 +9,9 @@
 
      More documentation edits.
 
+     New Policies:
+     * Variables::ProhibitMatchVars
+
      Bug Fixes:
      * 15295: "## no critic" pragmas too aggresive on compound statements.
 

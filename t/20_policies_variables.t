@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 8;
+use Test::More tests => 10;
 use Perl::Critic::Config;
 use Perl::Critic;
 
@@ -51,6 +51,34 @@ local $INC{$module} = $path;
 END_PERL
 
 $policy = 'Variables::ProhibitLocalVars';
+is( pcritique($policy, \$code), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+use English;
+ use English qw($PREMATCH) ; 
+use English qw($MATCH);
+use English qw($POSTMATCH);
+$`;
+$&;
+$';
+$PREMATCH;
+$MATCH;
+$POSTMATCH;
+END_PERL
+
+$policy = 'Variables::ProhibitMatchVars';
+is( pcritique($policy, \$code), 10, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+use English qw(-no_match_vars);
+use English qw($EVAL_ERROR);
+END_PERL
+
+$policy = 'Variables::ProhibitMatchVars';
 is( pcritique($policy, \$code), 0, $policy);
 
 #----------------------------------------------------------------

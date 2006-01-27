@@ -15,8 +15,6 @@ MISC:
  
 BUGS/LIMITATIONS:
 
-- Modules::RequireEndWithOne
-  - Doesn't notice when "## no critic" extends to the end of the file
 - Modules::RequireVersionVar
   - Doesn't enforce three-part versions
 - NamingConventions::ProhibitAmbiguousNames

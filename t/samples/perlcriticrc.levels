@@ -196,3 +196,6 @@ severity = 1
 
 [Subroutines::ProhibitExcessComplexity]
 severity = 1
+
+[Variables::ProhibitMatchVars]
+severity = 1

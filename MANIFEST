@@ -60,6 +60,7 @@ lib/Perl/Critic/Policy/ValuesAndExpressions/RequireNumberSeparators.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/RequireQuotedHeredocTerminator.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/RequireUpperCaseHeredocTerminator.pm
 lib/Perl/Critic/Policy/Variables/ProhibitLocalVars.pm
+lib/Perl/Critic/Policy/Variables/ProhibitMatchVars.pm
 lib/Perl/Critic/Policy/Variables/ProhibitPackageVars.pm
 lib/Perl/Critic/Policy/Variables/ProhibitPunctuationVars.pm
 lib/Perl/Critic/Utils.pm
