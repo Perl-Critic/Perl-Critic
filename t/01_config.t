@@ -7,8 +7,8 @@
 
 use strict;
 use warnings;
-use Test::More tests => 37;
-use List::MoreUtils qw(all none);
+use Test::More tests => 38;
+use List::MoreUtils qw(all any none);
 use Perl::Critic::Utils;
 use Perl::Critic::Config;
 use Perl::Critic;
@@ -20,8 +20,15 @@ PerlCriticTestUtils::block_perlcriticrc();
 
 my $c = undef;
 my $samples_dir       = 't/samples';
-my @all_policies      = Perl::Critic::Config::native_policies();
-my $total_policies    = scalar @all_policies;
+my @native_policies   = Perl::Critic::Config::native_policies();
+my @all_policies      = map {ref $_}
+                        @{ Perl::Critic->new(-severity => $SEVERITY_LOWEST)->policies };
+
+# Note that the user may have third-party policies installed, so the
+# reported number of policies may be higher than native_policies()
+my $have_third_party_policies = @all_policies > @native_policies;
+my $total_policies    = scalar $have_third_party_policies ?
+                               @all_policies : @native_policies;
 
 my $last_policy_count = 0;
 my $profile           = undef;
@@ -35,7 +42,7 @@ $last_policy_count = $total_policies + 1;
 for my $severity ($SEVERITY_LOWEST .. $SEVERITY_HIGHEST) {
     my $c = Perl::Critic->new( -severity => $severity);
     my $policy_count = scalar @{ $c->policies };
-    ok($policy_count < $last_policy_count);
+    cmp_ok($policy_count, '<', $last_policy_count, 'count native policies, severity '.$severity);
     $last_policy_count = $policy_count;
 }
 
@@ -48,7 +55,7 @@ $last_policy_count = $total_policies + 1;
 for my $severity ($SEVERITY_LOWEST .. $SEVERITY_HIGHEST) {
     my $c = Perl::Critic->new( -profile => $profile, -severity => $severity);
     my $policy_count = scalar @{ $c->policies };
-    ok($policy_count < $last_policy_count);
+    cmp_ok($policy_count, '<', $last_policy_count, 'count all policies, severity '.$severity);
     $last_policy_count = $policy_count;
 }
 
@@ -57,10 +64,14 @@ for my $severity ($SEVERITY_LOWEST .. $SEVERITY_HIGHEST) {
 # severity level should not affect the number of polices because we've
 # turned them all off in the config file.
 
-$profile = "$samples_dir/perlcriticrc.none";
-for my $severity (undef, $SEVERITY_LOWEST .. $SEVERITY_HIGHEST) {
-    my $c = Perl::Critic->new( -profile => $profile, -severity => $severity);
-    is(scalar @{ $c->policies }, 0);
+SKIP:
+{
+    skip('Third-party policies break these tests', 6) if ($have_third_party_policies);
+    $profile = "$samples_dir/perlcriticrc.none";
+    for my $severity (undef, $SEVERITY_LOWEST .. $SEVERITY_HIGHEST) {
+        my $c = Perl::Critic->new( -profile => $profile, -severity => $severity);
+        is_deeply($c->policies, [], 'no policies, severity '.($severity||'undef'));
+    }
 }
 
 #--------------------------------------------------------------
@@ -74,7 +85,7 @@ $profile = "$samples_dir/perlcriticrc.levels";
 for my $severity ( reverse $SEVERITY_LOWEST+1 .. $SEVERITY_HIGHEST ) {
     my $c = Perl::Critic->new( -profile => $profile, -severity => $severity);
     my $policy_count = scalar @{ $c->policies };
-    is( $policy_count, ($SEVERITY_HIGHEST - $severity + 1) * 10 );
+    is( $policy_count, ($SEVERITY_HIGHEST - $severity + 1) * 10, 'severity levels' );
 }
 
 #-------
@@ -82,7 +93,7 @@ for my $severity ( reverse $SEVERITY_LOWEST+1 .. $SEVERITY_HIGHEST ) {
 {
     my $c = Perl::Critic->new( -profile => $profile, -severity => $SEVERITY_LOWEST);
     my $policy_count = scalar @{ $c->policies };
-    ok( $policy_count >= ($SEVERITY_HIGHEST * 10) );
+    cmp_ok( $policy_count, '>=', ($SEVERITY_HIGHEST * 10), 'count highest severity');
 }
 
 #--------------------------------------------------------------
@@ -95,7 +106,7 @@ my %config_hash = (
 );
 
 $c = Perl::Critic->new( -profile => \%config_hash, -severity => $SEVERITY_LOWEST );
-is(scalar @{$c->policies}, $total_policies - 2);
+is(scalar @{$c->policies}, $total_policies - 2, 'config as hash');
 
 #--------------------------------------------------------------
 # Test config as array
@@ -108,7 +119,7 @@ my @config_array = (
 );
 
 $c = Perl::Critic->new( -profile => \@config_array, -severity => $SEVERITY_LOWEST );
-is(scalar @{$c->policies}, $total_policies - 2);
+is(scalar @{$c->policies}, $total_policies - 2, 'config as array');
 
 #--------------------------------------------------------------
 # Test config as string
@@ -121,7 +132,7 @@ keywords = Revision
 END_CONFIG
 
 $c = Perl::Critic->new( -profile => \$config_string, -severity => $SEVERITY_LOWEST );
-is(scalar @{$c->policies}, $total_policies - 2);
+is(scalar @{$c->policies}, $total_policies - 2, 'config as string');
 
 #--------------------------------------------------------------
 # Test long policy names
@@ -135,14 +146,14 @@ keywords = Revision
 END_CONFIG
 
 $c = Perl::Critic->new( -profile => \$long_config_string, -severity => $SEVERITY_LOWEST );
-is(scalar @{$c->policies}, $total_policies - 3);
+is(scalar @{$c->policies}, $total_policies - 3, 'long policy names');
 
 #--------------------------------------------------------------
 # Test manual configuraion
 
 my $config = Perl::Critic::Config->new( -profile => \$config_string, -severity => $SEVERITY_LOWEST);
 $c = Perl::Critic->new( -config => $config );
-is(scalar @{$c->policies}, $total_policies - 2);
+is(scalar @{$c->policies}, $total_policies - 2, 'manual config');
 
 #--------------------------------------------------------------
 #Test pattern matching
@@ -165,7 +176,7 @@ my %profile = (
 
 @in = qw(mixedcase RCS);
 $pols = Perl::Critic->new( -severity => 1, -profile => \%profile, -include => \@in )->policies();
-is(scalar @{$pols}, $total_policies);
+is(scalar @{$pols}, $total_policies, 'pattern matching');
 
 
 # For this test, we'll load the default config, but deactivate some of
@@ -175,16 +186,19 @@ is(scalar @{$pols}, $total_policies);
 @ex = qw(quote mixed VALUES); #Some assorted pattterns
 $pols = Perl::Critic->new( -severity => 1, -exclude => \@ex )->policies();
 $matches = grep { my $pol = ref $_; grep { $pol !~ /$_/imx} @ex } @{ $pols };
-is(scalar @{$pols}, $matches);
+is(scalar @{$pols}, $matches, 'pattern matching');
 
 # In this test, we set -include and -exclude patterns to both match
 # some of the same policies.  The -exclude option should have
 # precendece.
 
-@in = qw(builtin); #Include BuiltinFunctions::*
+@in = qw(builtinfunc); #Include BuiltinFunctions::*
 @ex = qw(block);   #Exclude RequireBlockGrep, RequireBlockMap
 $pols = Perl::Critic->new( -severity => 1, -include => \@in, -exclude => \@ex )->policies();
-ok( none {ref $_ =~ /block/imx} @{$pols} && all {ref $_ =~ /builtin/imx} @{$pols} );
+my @pol_names = map {ref $_} @{$pols};
+is_deeply( [grep {/block/imx} @pol_names], [], 'pattern match' );
+# This odd construct arises because "any" can't be used with parens without syntax error(!)
+ok( @{[any {/builtinfunc/imx} @pol_names]}, 'pattern match' );
 
 #--------------------------------------------------------------
 #Testing other private subs
