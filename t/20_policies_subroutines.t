@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 20;
+use Test::More tests => 22;
 use Perl::Critic::Config;
 use Perl::Critic;
 
@@ -284,5 +284,33 @@ sub teest_sub {
 END_PERL
 
 $policy = 'Subroutines::ProhibitExcessComplexity';
+is( pcritique($policy, \$code), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+Other::Package::_foo();
+Other::Package->_bar();
+Other::Package::_foo;
+Other::Package->_bar;
+$self->Other::Package::_baz();
+END_PERL
+
+$policy = 'Subroutines::ProtectPrivateSubs';
+is( pcritique($policy, \$code), 5, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+
+# This one should be illegal, but it is too hard to distinguish from
+# the next one, which is legal
+$pkg->_foo();
+
+$self->_bar();
+$self->SUPER::_foo();
+END_PERL
+
+$policy = 'Subroutines::ProtectPrivateSubs';
 is( pcritique($policy, \$code), 0, $policy);
 

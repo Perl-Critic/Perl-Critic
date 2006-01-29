@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 10;
+use Test::More tests => 12;
 use Perl::Critic::Config;
 use Perl::Critic;
 
@@ -187,5 +187,33 @@ my $line = $_;
 END_PERL
 
 $policy = 'Variables::ProhibitPunctuationVars';
+is( pcritique($policy, \$code), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+$Other::Package::_foo;
+@Other::Package::_bar;
+%Other::Package::_baz;
+&Other::Package::_quux;
+*Other::Package::_xyzzy;
+\$Other::Package::_foo;
+END_PERL
+
+$policy = 'Variables::ProtectPrivateVars';
+is( pcritique($policy, \$code), 6, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+$_foo;
+@_bar;
+%_baz;
+&_quux;
+\$_foo;
+$::_foo;
+END_PERL
+
+$policy = 'Variables::ProtectPrivateVars';
 is( pcritique($policy, \$code), 0, $policy);
 

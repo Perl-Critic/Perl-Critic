@@ -47,6 +47,7 @@
 [-Subroutines::ProhibitExplicitReturnUndef]
 [-Subroutines::ProhibitExcessComplexity]
 [-Subroutines::ProhibitSubroutinePrototypes]
+[-Subroutines::ProtectPrivateSubs]
 [-Subroutines::RequireFinalReturn]
 [-TestingAndDebugging::ProhibitNoStrict]
 [-TestingAndDebugging::ProhibitNoWarnings]
@@ -65,3 +66,5 @@
 [-Variables::ProhibitMatchVars]
 [-Variables::ProhibitPackageVars]
 [-Variables::ProhibitPunctuationVars]
+[-Variables::ProtectPrivateVars]
+

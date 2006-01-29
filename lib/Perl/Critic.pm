@@ -597,6 +597,10 @@ Return failure with bare C<return> instead of C<return undef> [Severity 5]
 
 Don't write C<sub my_function (@@) {}> [Severity 5]
 
+=head2 L<Perl::Critic::Policy::Subroutines::ProtectPrivateSubs>
+
+Prevent access to private subs in other packages [Severity 3]
+
 =head2 L<Perl::Critic::Policy::Subroutines::RequireFinalReturn>
 
 End every path through a subroutine with an explicit C<return> statement. [Severity 4]
@@ -668,6 +672,11 @@ Eliminate globals declared with C<our> or C<use vars> [Severity 3]
 =head2 L<Perl::Critic::Policy::Variables::ProhibitPunctuationVars>
 
 Write C<$EVAL_ERROR> instead of C<$@> [Severity 2]
+
+=head2 L<Perl::Critic::Policy::Variables::ProtectPrivateVars>
+
+Prevent access to private vars in other packages [Severity 3]
+
 
 =head1 BENDING THE RULES
 

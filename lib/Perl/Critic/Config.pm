@@ -268,8 +268,8 @@ sub native_policies {
       Perl::Critic::Policy::CodeLayout::ProhibitQuotedWordLists
       Perl::Critic::Policy::CodeLayout::RequireTidyCode
       Perl::Critic::Policy::CodeLayout::RequireTrailingCommas
-      Perl::Critic::Policy::ControlStructures::ProhibitCascadingIfElse
       Perl::Critic::Policy::ControlStructures::ProhibitCStyleForLoops
+      Perl::Critic::Policy::ControlStructures::ProhibitCascadingIfElse
       Perl::Critic::Policy::ControlStructures::ProhibitPostfixControls
       Perl::Critic::Policy::ControlStructures::ProhibitUnlessBlocks
       Perl::Critic::Policy::ControlStructures::ProhibitUntilBlocks
@@ -278,8 +278,8 @@ sub native_policies {
       Perl::Critic::Policy::InputOutput::ProhibitOneArgSelect
       Perl::Critic::Policy::InputOutput::ProhibitTwoArgOpen
       Perl::Critic::Policy::Miscellanea::RequireRcsKeywords
-      Perl::Critic::Policy::Modules::ProhibitMultiplePackages
       Perl::Critic::Policy::Modules::ProhibitEvilModules
+      Perl::Critic::Policy::Modules::ProhibitMultiplePackages
       Perl::Critic::Policy::Modules::RequireEndWithOne
       Perl::Critic::Policy::Modules::RequireExplicitPackage
       Perl::Critic::Policy::Modules::RequireBarewordIncludes
@@ -292,6 +292,7 @@ sub native_policies {
       Perl::Critic::Policy::Subroutines::ProhibitExcessComplexity
       Perl::Critic::Policy::Subroutines::ProhibitBuiltinHomonyms
       Perl::Critic::Policy::Subroutines::ProhibitSubroutinePrototypes
+      Perl::Critic::Policy::Subroutines::ProtectPrivateSubs
       Perl::Critic::Policy::Subroutines::RequireFinalReturn
       Perl::Critic::Policy::References::ProhibitDoubleSigils
       Perl::Critic::Policy::RegularExpressions::RequireExtendedFormatting
@@ -313,6 +314,7 @@ sub native_policies {
       Perl::Critic::Policy::Variables::ProhibitMatchVars
       Perl::Critic::Policy::Variables::ProhibitPackageVars
       Perl::Critic::Policy::Variables::ProhibitPunctuationVars
+      Perl::Critic::Policy::Variables::ProtectPrivateVars
     );
 }
 
