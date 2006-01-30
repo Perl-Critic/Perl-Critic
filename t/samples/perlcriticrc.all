@@ -24,6 +24,7 @@
 [ControlStructures::ProhibitPostfixControls]
 [ControlStructures::ProhibitUnlessBlocks]
 [ControlStructures::ProhibitUntilBlocks]
+[Documentation::RequirePodAtEnd]
 [InputOutput::ProhibitBacktickOperators]
 [InputOutput::ProhibitBarewordFileHandles]
 [InputOutput::ProhibitOneArgSelect]

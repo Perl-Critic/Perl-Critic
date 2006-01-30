@@ -23,6 +23,7 @@ lib/Perl/Critic/Policy/ControlStructures/ProhibitCStyleForLoops.pm
 lib/Perl/Critic/Policy/ControlStructures/ProhibitPostfixControls.pm
 lib/Perl/Critic/Policy/ControlStructures/ProhibitUnlessBlocks.pm
 lib/Perl/Critic/Policy/ControlStructures/ProhibitUntilBlocks.pm
+lib/Perl/Critic/Policy/Documentation/RequirePodAtEnd.pm
 lib/Perl/Critic/Policy/InputOutput/ProhibitBacktickOperators.pm
 lib/Perl/Critic/Policy/InputOutput/ProhibitBarewordFileHandles.pm
 lib/Perl/Critic/Policy/InputOutput/ProhibitOneArgSelect.pm
@@ -83,6 +84,7 @@ t/20_policies_builtinfunctions.t
 t/20_policies_classhierarchies.t
 t/20_policies_codelayout.t
 t/20_policies_controlstructures.t
+t/20_policies_documentation.t
 t/20_policies_inputoutput.t
 t/20_policies_miscellanea.t
 t/20_policies_modules.t

@@ -10,12 +10,14 @@
      More documentation edits.
 
      New Policies:
+     * Documentation::RequirePodAtEnd
      * Subroutines::ProtectPrivateSubs
      * Variables::ProhibitMatchVars
      * Variables::ProtectPrivateVars
 
      Bug Fixes:
      * 15295: "## no critic" pragmas too aggresive on compound statements.
+     * t/01_config.t failed in the presence of third-party policies
 
 [0.13_05] Not released
 

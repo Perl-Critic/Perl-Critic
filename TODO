@@ -38,7 +38,6 @@ OTHER PBP POLICIES THAT SEEM FEASIBLE TO IMPLEMENT:
 - Documentation::RequireSections (p133, p138)
   List the required the =head1 entries in an ordered list
   Make that list overrideable in perlcriticrc
-- Documentation::RequirePodAtEnd (p139, p140)
 - Documentation::PodSpelling (p148)
   Base it on Pod::Spell or Test::Spelling
   Add a "=for stopwords" section for words to skip, as per Pod::Spell

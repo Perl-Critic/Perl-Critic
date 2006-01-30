@@ -205,3 +205,6 @@ severity = 1
 
 [Variables::ProtectPrivateVars]
 severity = 1
+
+[Documentation::RequirePodAtEnd]
+severity = 1

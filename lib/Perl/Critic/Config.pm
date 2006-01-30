@@ -253,7 +253,7 @@ sub site_policies {
     return @SITE_POLICIES;
 }
 
-
+# This list must be in alphabetic order for the Config tests to pass
 sub native_policies {
     return qw(
       Perl::Critic::Policy::BuiltinFunctions::ProhibitLvalueSubstr
@@ -273,6 +273,7 @@ sub native_policies {
       Perl::Critic::Policy::ControlStructures::ProhibitPostfixControls
       Perl::Critic::Policy::ControlStructures::ProhibitUnlessBlocks
       Perl::Critic::Policy::ControlStructures::ProhibitUntilBlocks
+      Perl::Critic::Policy::Documentation::RequirePodAtEnd
       Perl::Critic::Policy::InputOutput::ProhibitBacktickOperators
       Perl::Critic::Policy::InputOutput::ProhibitBarewordFileHandles
       Perl::Critic::Policy::InputOutput::ProhibitOneArgSelect

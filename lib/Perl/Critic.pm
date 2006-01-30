@@ -509,6 +509,10 @@ Write C<if(! $condition)> instead of C<unless($condition)> [Severity 2]
 
 Write C<while(! $condition)> instead of C<until($condition)> [Severity 2]
 
+=head2 L<Perl::Critic::Policy::Documentation::RequirePodAtEnd>
+
+All POD should be after C<__END__> [Severity 1]
+
 =head2 L<Perl::Critic::Policy::InputOutput::ProhibitBacktickOperators>
 
 Discourage stuff like C<@files = `ls $directory`> [Severity 3]
