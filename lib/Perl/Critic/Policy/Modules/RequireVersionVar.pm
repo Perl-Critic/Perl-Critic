@@ -49,7 +49,7 @@ sub _our_VERSION {
     my ($doc, $elem) = @_;
     $elem->isa('PPI::Statement::Variable') || return 0;
     $elem->type() eq 'our' || return 0;
-    return any { $_ eq '$VERSION' } $elem->variables();
+    return any { $_ eq '$VERSION' } $elem->variables(); ## no critic
 }
 
 #------------------

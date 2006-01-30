@@ -52,7 +52,7 @@ sub _is_other_pkg_private_method {
     # look for structures like "Some::Package->_foo()"
     $elem =~ m{ \A _\w+ \z }xms || return;
     my $op = $elem->sprevious_sibling() || return;
-    $op eq "->" || return;
+    $op eq q{->} || return;
     my $pkg = $op->sprevious_sibling() || return;
     $pkg->isa('PPI::Token::Word') || return;
     return 1;
