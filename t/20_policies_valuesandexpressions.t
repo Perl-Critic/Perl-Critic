@@ -437,9 +437,9 @@ is( pcritique($policy, \$code), 1, $policy);
 #----------------------------------------------------------------
 
 $code = <<'END_PERL';
-print <<"QUOTE";
+print <<"QUOTE_1";
 Four score and seven years ago...
-QUOTE
+QUOTE_1
 END_PERL
 
 $policy = 'ValuesAndExpressions::RequireUpperCaseHeredocTerminator';

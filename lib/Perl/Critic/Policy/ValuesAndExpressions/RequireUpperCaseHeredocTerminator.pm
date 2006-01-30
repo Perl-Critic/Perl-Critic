@@ -18,7 +18,7 @@ $VERSION = eval $VERSION;    ## no critic
 
 #---------------------------------------------------------------------------
 
-my $heredoc_rx = qr{ \A << ["|']? [A-Z_]+ ['|"]? \z }x;
+my $heredoc_rx = qr{ \A << ["|']? [A-Z_] [A-Z0-9_]* ['|"]? \z }x;
 my $desc       = q{Heredoc terminator must be in upper case};
 my $expl       = [ 64 ];
 
@@ -53,9 +53,9 @@ Perl::Critic::Policy::ValuesAndExpressions::RequireUpperCaseHeredocTerminator
 
 =head1 DESCRIPTION
 
-For legibility, HEREDOC terminators should be all UPPER CASE letters, without
-any whitespace.  Conway also recommends using a standard prefix like "END_"
-but this policy doesn't enforce that.
+For legibility, HEREDOC terminators should be all UPPER CASE letters
+(and numbers), without any whitespace.  Conway also recommends using a
+standard prefix like "END_" but this policy doesn't enforce that.
 
   print <<'the End';  #not ok
   Hello World
