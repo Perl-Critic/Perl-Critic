@@ -12,3 +12,5 @@ Steps for adding a new Policy:
  * Add it to the POD in lib/Perl/Critic.pm
  * Add it to the POD in bin/perlcritic
  * Mention it in Changes
+ * svn add lib/Perl/Critic/Policy/[category]/[name].pm
+ * svn propset svn:keyword "HeadURL Author Revision Date" lib/Perl/Critic/Policy/[category]/[name].pm

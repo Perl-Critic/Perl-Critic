@@ -31,6 +31,9 @@ sub applies_to { return 'PPI::Statement::Sub' }
 sub violates {
     my ( $self, $elem, $doc ) = @_;
 
+    # skip BEGIN{} and INIT{} and END{} etc
+    $elem->isa('PPI::Statement::Scheduled') && return;
+
     my @blocks = grep {$_->isa('PPI::Structure::Block')} $elem->schildren();
     if (@blocks != 1) {  # sanity check
        die 'Internal error: subroutine should have exactly one block';

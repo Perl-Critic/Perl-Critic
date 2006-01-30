@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 22;
+use Test::More tests => 23;
 use Perl::Critic::Config;
 use Perl::Critic;
 
@@ -215,6 +215,26 @@ END_PERL
 
 $policy = 'Subroutines::RequireFinalReturn';
 is( pcritique($policy, \$code), 1, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+BEGIN {
+  print 'this should not need a return';
+}
+INIT {
+  print 'nor this';
+}
+CHECK {
+  print 'nor this';
+}
+END {
+  print 'nor this';
+}
+END_PERL
+
+$policy = 'Subroutines::RequireFinalReturn';
+is( pcritique($policy, \$code), 0, $policy);
 
 #----------------------------------------------------------------
 
