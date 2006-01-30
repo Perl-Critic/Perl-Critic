@@ -11,7 +11,7 @@ NEW FEATURES:
 
 MISC:
 
-- Need test cases for perlcritc command-line interface.
+- Need test cases for perlcritic command-line interface.
  
 BUGS/LIMITATIONS:
 
@@ -20,6 +20,9 @@ BUGS/LIMITATIONS:
 - NamingConventions::ProhibitAmbiguousNames
   - Don't allow compound names with forbidden words, like "last_record"
   - Allow forbidden words in RHS of variable declarations
+- Subroutines::ProtectPrivateSubs
+  - Doesn't forbid $pkg->_foo() because it can't tell the difference
+    between that and $self->_foo()
 
 OTHER PBP POLICIES THAT SEEM FEASIBLE TO IMPLEMENT:
 
@@ -29,14 +32,13 @@ OTHER PBP POLICIES THAT SEEM FEASIBLE TO IMPLEMENT:
 - ValuesAndExpressions::RequireListParens (p71)
 - Variables::RequireInitializationForLocalVars (p78)
 - Variables::RequireLocalizedPunctuationVars (p81)
-- Variables::ProhibitMatchVars (p82)
 - Variables::RequireNegativeIndices (p88)
 - Variables::RequireLexicalForLoopIterator (p108)
 - Variables::ProhibitTopicChangeInListFunction (p114)
 - Documentation::RequireSections (p133, p138)
   List the required the =head1 entries in an ordered list
   Make that list overrideable in perlcriticrc
-- Documentation::RequirePodAtEnd (p139,p140)
+- Documentation::RequirePodAtEnd (p139, p140)
 - Documentation::PodSpelling (p148)
   Base it on Pod::Spell or Test::Spelling
   Add a "=for stopwords" section for words to skip, as per Pod::Spell
@@ -45,7 +47,6 @@ OTHER PBP POLICIES THAT SEEM FEASIBLE TO IMPLEMENT:
   Programmer can use a sort function or Schwartzian Transform
 - BuiltinFunctions::ProhibitReverseSortBlock (p152)
   Don't allow first instance of $b to be before first instance of $a
-- Subroutines::ProhibitSubSigil (p175)  [DONE]
 - Subroutines::RequireArgUnpacking (p178)
   Ensure that the first child of a sub is PPI::Statement::Variable
 - Subroutines::ProhibitManyArgs (p182)
@@ -61,7 +62,6 @@ OTHER PBP POLICIES THAT SEEM FEASIBLE TO IMPLEMENT:
 - InputOutput::RequireBracesOnPrintFilehandle (p217)
 - InputOutput::ProhibitInteractiveTest (p218)
   Forbid -t operand
-- References::ProhibitMultipleSigils (p228) [DONE]
 - RegularExpressions::RequireBracesForMultiline (p242)
 - RegularExpressions::ProhibitUnusualDelimiters (p246)
 - RegularExpressions::ProhibitEscapedMetacharacters (p247)
