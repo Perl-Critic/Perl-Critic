@@ -1,21 +1,8 @@
-# http://module-build.sourceforge.net/META-spec.html
-#XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
-name:         Perl-Critic
-version:      0.14
-version_from: lib/Perl/Critic.pm
-installdirs:  site
-requires:
-    Config::Tiny:                  2
-    File::Spec:                    0
-    IO::String:                    0
-    List::MoreUtils:               0
-    List::Util:                    0
-    Module::Pluggable:             0
-    Pod::PlainText:                0
-    Pod::Usage:                    0
-    PPI:                           1.110
-    String::Format:                1.13
-    Test::More:                    0
-
-distribution_type: module
-generated_by: ExtUtils::MakeMaker version 6.17
+--- #YAML:1.0
+name: Perl-Critic
+version: 0.14
+author:
+  - Jeffrey Thalhammer <thaljef@cpan.org>
+abstract: Critique Perl source code for best-practices
+license: perl
+generated_by: Module::Build version 0.2611, without YAML.pm
