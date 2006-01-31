@@ -117,6 +117,7 @@ is( pcritique($policy, \$code), 0, $policy);
 
 $code = <<'END_PERL';
 sub foo { }
+sub bar;
 END_PERL
 
 $policy = 'Subroutines::RequireFinalReturn';

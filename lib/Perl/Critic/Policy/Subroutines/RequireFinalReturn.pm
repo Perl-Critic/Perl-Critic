@@ -35,9 +35,16 @@ sub violates {
     $elem->isa('PPI::Statement::Scheduled') && return;
 
     my @blocks = grep {$_->isa('PPI::Structure::Block')} $elem->schildren();
-    if (@blocks != 1) {  # sanity check
-       die 'Internal error: subroutine should have exactly one block';
+    if (@blocks > 1) {  
+       # sanity check
+       die 'Internal error: subroutine should have no more than one block';
     }
+    elsif (@blocks == 0) {
+       #Technically, subroutines don't have to have a block at all. In
+       # that case, its just a declaration so this policy doesn't really apply
+       return; # ok!
+    }
+       
 
     my ($block) = @blocks;
     if (_block_is_empty($block) || _block_has_return($block)) {
