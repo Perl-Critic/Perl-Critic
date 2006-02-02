@@ -44,7 +44,7 @@ if ( !$ENV{HARNESS_ACTIVE} ) {
 sub get_options {
 
     my %opts      = ();
-    my @opt_specs = qw(severity=i profile=s noprofile verbose=s force
+    my @opt_specs = qw(severity=i profile=s noprofile verbose=s force list
         help|? man Version Safari top:i 5 4 3 2 1 include=s@ exclude=s@);
 
     Getopt::Long::Configure('no_ignore_case');
@@ -53,6 +53,10 @@ sub get_options {
     if ( $opts{help}    ) { pod2usage( -verbose => 0 )  }   #Exits
     if ( $opts{man}     ) { pod2usage( -verbose => 2 )  }   #Exits
     if ( $opts{Version} ) { print "$VERSION\n"; exit 0; }   #Exits
+
+
+    #Handle special request to display severity levels
+    if ( $opts{list} ) { _severity_listing() && exit 0 }
 
     #Sanity checks
     if ( $opts{noprofile} && $opts{profile} ) {
@@ -262,11 +266,36 @@ sub _is_perl {
 }
 
 #-----------------------------------------------------------------------------
+
 sub _interpolate {
     my $literal      = shift;
     my $interpolated = undef;
     eval "\$interpolated = \"$literal\"";  ## no critic
     return $interpolated;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _severity_listing {
+
+    eval {
+
+        require Perl::Critic::Config;
+        Perl::Critic::Config->import();
+        my $config = Perl::Critic::Config->new(-severity => 1);
+        my @sorted = sort {ref $a cmp ref $b}  @{ $config->policies() };
+
+        for my $policy ( @sorted ) {
+            my $name = ref $policy;
+            $name =~ s/Perl::Critic::Policy:://g;
+            my $def_severity  = $policy->default_severity();
+            my $user_severity = $policy->get_severity();
+            printf "%-60.60s  %1d %1d\n", $name, $def_severity, $user_severity;
+        }
+    };
+
+    die $EVAL_ERROR if $EVAL_ERROR;
+    return 1;
 }
 
 1;
@@ -286,7 +315,7 @@ C<perlcritic> - Command-line interface to critique Perl source
   perlcritic [ -12345 | -severity number ] [ -noprofile | -profile file ]
              [ -top [ number ]] [ -include pattern ] [ -exclude pattern ]
              [ -verbose number | format ] [ -force ] [ -Version ]
-             [ -help ] [ -man ]   [ FILE | DIRECTORY ]
+             [ -list ] [ -help ] [ -man ]   [ FILE | DIRECTORY ]
 
 =head1 DESCRIPTION
 
@@ -474,6 +503,15 @@ are:
 The purpose of these formats is to provide some compatibility with
 editors that have an interface for parsing certain kinds of input. See
 L<"EDITOR INTEGRATION"> for more information about that.
+
+=item -list
+
+Displays a listing of all the L<Perl::Critic::Policy> modules that are
+found on this machine.  For each Policy, the default severity and
+user-defined severity is also shown.  If the user has not overidden
+the severity for a particular Policy in their F<.perlcriticrc> file,
+then the user-defined severity will be the same as the default
+severity.  No code will be analyzed when the C<-list> option is given.
 
 =item -Safari
 
