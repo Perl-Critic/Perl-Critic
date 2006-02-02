@@ -102,7 +102,7 @@ Perl::Critic::Policy::ControlStructures::ProhibitPostfixControls
 
 Conway discourages using postfix control structures (C<if>, C<for>,
 C<unless>, C<until>, C<while>).  The C<unless> and C<until> controls
-are particularly evil becuase the lead to double-negatives that are
+are particularly evil because the lead to double-negatives that are
 hard to comprehend.  The only tolerable usage of a postfix C<if> is
 when it follows a loop break such as C<last>, C<next>, C<redo>, or
 C<continue>.
