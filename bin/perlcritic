@@ -222,7 +222,7 @@ sub all_code_files {
         my $file = shift @queue;
         if ( -d $file ) {
             opendir my ($dh), $file or next;
-            my @newfiles = readdir $dh;
+            my @newfiles = sort readdir $dh;
             closedir $dh;
 
             @newfiles = File::Spec->no_upwards(@newfiles);
