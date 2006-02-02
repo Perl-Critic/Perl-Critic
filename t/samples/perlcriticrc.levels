@@ -208,3 +208,6 @@ severity = 1
 
 [Documentation::RequirePodAtEnd]
 severity = 1
+
+[ClassHierarchies::ProhibitExplicitISA]
+severity = 1

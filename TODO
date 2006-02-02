@@ -77,7 +77,6 @@ OTHER PBP POLICIES THAT SEEM FEASIBLE TO IMPLEMENT:
 - RegularExpressions::ProhibitFixedStringMatches (p271)
   Can't be qr/\s*\\A\s*\((?:\?:)?(?:\s*\w+\s*\|)*\s*\w+\s*\)\s*\\z/
   or qr/\s*\\A\s*\w+\s*\\z/
-- ClassHierarchies::ProhibitExplicitISA (p360)
 - ClassHierarchies::ProhibitAutoload (p393)
 - TestingAndDebugging::ProhibitProlongedStrictureOverride (p443)
 - Miscellanea::ProhibitFormats (p449)

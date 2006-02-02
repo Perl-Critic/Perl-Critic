@@ -1,13 +1,13 @@
 ##################################################################
-#     $URL$
-#    $Date$
+#      $URL$
+#     $Date$
 #   $Author$
 # $Revision$
 ##################################################################
 
 use strict;
 use warnings;
-use Test::More tests => 2;
+use Test::More tests => 4;
 use Perl::Critic::Config;
 use Perl::Critic;
 
@@ -46,4 +46,24 @@ my $self = bless( [], 'foo' );
 END_PERL
 
 $policy = 'ClassHierarchies::ProhibitOneArgBless';
+is( pcritique($policy, \$code), 0, $policy );
+
+#-----------------------------------------------------------------------------
+
+$code = <<'END_PERL';
+our @ISA = qw(Foo);
+push @ISA, 'Foo';
+@ISA = ('Foo');
+END_PERL
+
+$policy = 'ClassHierarchies::ProhibitExplicitISA';
+is( pcritique($policy, \$code), 3, $policy );
+#-----------------------------------------------------------------------------
+
+$code = <<'END_PERL';
+print @Foo::ISA;
+use base 'Foo';
+END_PERL
+
+$policy = 'ClassHierarchies::ProhibitExplicitISA';
 is( pcritique($policy, \$code), 0, $policy );

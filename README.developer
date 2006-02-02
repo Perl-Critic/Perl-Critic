@@ -14,3 +14,5 @@ Steps for adding a new Policy:
  * Mention it in Changes
  * svn add lib/Perl/Critic/Policy/[category]/[name].pm
  * svn propset svn:keyword "HeadURL Author Revision Date" lib/Perl/Critic/Policy/[category]/[name].pm
+
+ * Remove from TODO

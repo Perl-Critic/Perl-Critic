@@ -5,7 +5,12 @@
 # $Revision$
 ########################################################################
 
-[0.14] Released on ??????
+[0.14_01] Released on ??????
+
+     New Policies:
+     * ClassHierarchies::ProhibitExplicitISA
+
+[0.14] Released on 060129
 
      More documentation edits.
 

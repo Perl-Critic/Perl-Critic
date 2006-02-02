@@ -262,6 +262,7 @@ sub native_policies {
       Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep
       Perl::Critic::Policy::BuiltinFunctions::RequireBlockMap
       Perl::Critic::Policy::BuiltinFunctions::RequireGlobFunction
+      Perl::Critic::Policy::ClassHierarchies::ProhibitExplicitISA
       Perl::Critic::Policy::ClassHierarchies::ProhibitOneArgBless
       Perl::Critic::Policy::CodeLayout::ProhibitHardTabs
       Perl::Critic::Policy::CodeLayout::ProhibitParensWithBuiltins

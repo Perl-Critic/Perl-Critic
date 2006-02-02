@@ -12,6 +12,7 @@ lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitStringyEval.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/RequireBlockGrep.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/RequireBlockMap.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/RequireGlobFunction.pm
+lib/Perl/Critic/Policy/ClassHierarchies/ProhibitExplicitISA.pm
 lib/Perl/Critic/Policy/ClassHierarchies/ProhibitOneArgBless.pm
 lib/Perl/Critic/Policy/CodeLayout/ProhibitHardTabs.pm
 lib/Perl/Critic/Policy/CodeLayout/ProhibitParensWithBuiltins.pm

@@ -465,6 +465,10 @@ Write C<map { $_ =~ /$pattern/ } @list> instead of C<map /$pattern/, @list> [Sev
 
 Use C<glob q{*}> instead of <*> [Severity 5]
 
+=head2 L<Perl::Critic::Policy::ClassHierarchies::ProhibitExplicitISA>
+
+Employ C<use base> instead of C<@ISA> [Severity 3]
+
 =head2 L<Perl::Critic::Policy::ClassHierarchies::ProhibitOneArgBless>
 
 Write C<bless {}, $class;> instead of just C<bless {};> [Severity 5]
