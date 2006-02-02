@@ -56,7 +56,7 @@ sub get_options {
 
 
     #Handle special request to display severity levels
-    if ( $opts{list} ) { _severity_listing() && exit 0 }
+    if ( $opts{list} ) { _policy_listing() && exit 0 }
 
     #Sanity checks
     if ( $opts{noprofile} && $opts{profile} ) {
@@ -276,22 +276,34 @@ sub _interpolate {
 
 #-----------------------------------------------------------------------------
 
-sub _severity_listing {
+sub _policy_listing {
 
     eval {
 
         require Perl::Critic::Config;
         Perl::Critic::Config->import();
         my $config = Perl::Critic::Config->new(-severity => 1);
-        my @sorted = sort {ref $a cmp ref $b}  @{ $config->policies() };
+        my @policies = sort {ref $a cmp ref $b}  @{ $config->policies() };
 
-        for my $policy ( @sorted ) {
+        # Print header
+        my $header = sprintf "%-60.60s  %1s %1s", qw(PolicyName D U);
+        my $h_rule = q{-} x length $header;
+        print "$header\n";
+        print "$h_rule\n";
+
+        # Print body
+        for my $policy ( @policies ) {
             my $name = ref $policy;
-            $name =~ s/Perl::Critic::Policy:://g;
+            $name =~ s{\A Perl::Critic::Policy::}{}mxg;
             my $def_severity  = $policy->default_severity();
             my $user_severity = $policy->get_severity();
-            printf "%-60.60s  %1d %1d\n", $name, $def_severity, $user_severity;
+            printf "%-60.60s  %1s %1s\n", $name, $def_severity, $user_severity;
         }
+
+        # Print footer
+        print "$h_rule\n";
+        print "D = Default severity\n";
+        print "U = User-defined severity\n";
     };
 
     die $EVAL_ERROR if $EVAL_ERROR;
@@ -511,7 +523,9 @@ found on this machine.  For each Policy, the default severity and
 user-defined severity is also shown.  If the user has not overidden
 the severity for a particular Policy in their F<.perlcriticrc> file,
 then the user-defined severity will be the same as the default
-severity.  No code will be analyzed when the C<-list> option is given.
+severity.  This can be useful for discovering the Policy modules that
+you have available and tuning the severity levels in your
+F<.perlcriticrc> file.
 
 =item -Safari
 
