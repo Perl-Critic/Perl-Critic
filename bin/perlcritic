@@ -971,6 +971,15 @@ Then, you can run perlcritic on the current buffer with:
 Navigation and display instructions can be found under C<:help grep>.
 Someone with stronger Vim-fu may wish to convert this to a real macro.
 
+=head2 gVIM
+
+Fritz Mehner recently added support for C<perlcritic> to his fantastic
+gVIM plugin.  In addition to providing a very Perlish IDE, Fritz's
+plugin enables one-click access to C<perlcritic> and many other very
+useful utilities.  And all is seemlessly integrated into the
+editor. See L<http://lug.fh-swf.de/vim/vim-perl/screenshots-en.html>
+for complete details.
+
 =head1 EXIT STATUS
 
 If C<perlcritic> has any errors itself, exits with status == 1.  If there
