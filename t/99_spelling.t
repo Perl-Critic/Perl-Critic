@@ -23,7 +23,9 @@ Dolan
 HEREDOC
 HEREDOCs
 HEREDOCS
+IDE
 Maxia
+Mehner
 namespace
 namespaces
 PBP

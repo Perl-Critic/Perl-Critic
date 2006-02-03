@@ -976,7 +976,7 @@ Someone with stronger Vim-fu may wish to convert this to a real macro.
 Fritz Mehner recently added support for C<perlcritic> to his fantastic
 gVIM plugin.  In addition to providing a very Perlish IDE, Fritz's
 plugin enables one-click access to C<perlcritic> and many other very
-useful utilities.  And all is seemlessly integrated into the
+useful utilities.  And all is seamlessly integrated into the
 editor. See L<http://lug.fh-swf.de/vim/vim-perl/screenshots-en.html>
 for complete details.
 
