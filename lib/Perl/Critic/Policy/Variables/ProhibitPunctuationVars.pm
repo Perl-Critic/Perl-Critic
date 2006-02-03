@@ -58,7 +58,7 @@ Perl::Critic::Policy::Variables::ProhibitPunctuationVars
 =head1 DESCRIPTION
 
 Perl's vocabulary of punctuation variables such as C<$!>, C<$.>, and
-C<$^> are perhaps the leading cause of its repuation as inscrutable
+C<$^> are perhaps the leading cause of its reputation as inscrutable
 line noise.  The simple alternative is to use the L<English> module to
 give them clear names.
 

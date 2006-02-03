@@ -69,11 +69,11 @@ encourages people to write '*.pm' modules instead of the old-school
 
 =head1 NOTES
 
-This Policy is a replacement for 'ProhibitRequireStatements', which
+This Policy is a replacement for C<ProhibitRequireStatements>, which
 completely banned the use of C<require> for the sake of eliminating
 the old '*.pl' libraries from Perl4.  Upon further consideration, I
 realized that C<require> is quite useful and necessary to enable
-run-time loading.  Thus, 'RequireBarewordIncludes' does allow you to
+run-time loading.  Thus, C<RequireBarewordIncludes> does allow you to
 use C<require>, but still encourages you to write '*.pm' modules.
 
 Sometimes, you may want to load modules at run-time, but you don't

@@ -98,7 +98,7 @@ this:
 =head1 NOTES
 
 As it is currently written, this policy only works properly with
-decimal (base 10) numbers.  And it is obviouly biased toward Western
+decimal (base 10) numbers.  And it is obviously biased toward Western
 notation.  I'll try and address those issues in the future.
 
 =head1 AUTHOR

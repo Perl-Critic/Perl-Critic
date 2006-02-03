@@ -91,7 +91,7 @@ Perl::Critic::Policy::Subroutines::ProhibitExcessComplexity
 All else being equal, complicated code is more error-prone and more
 expensive to maintain than simpler code.  The first step towards
 managing complexity is to establish formal complexity metrics.  One
-such metric is the McCabe score, which describees the number of
+such metric is the McCabe score, which describes the number of
 possible paths through a subroutine.  This Policy approximates the
 McCabe score by summing the number of conditional statements and
 operators within a subroutine.  Research has shown that a McCabe score

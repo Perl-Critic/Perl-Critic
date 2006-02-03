@@ -106,7 +106,7 @@ this:
   [Miscellanea::RequireRcsKeywords]
   keywords = Revision Source Date Author Id
 
-See the doumentation on RCS for a list of supported keywords.  Many
+See the documentation on RCS for a list of supported keywords.  Many
 source control systems are descended from RCS, so the keywords
 supported by CVS and Subversion are probably the same.
 

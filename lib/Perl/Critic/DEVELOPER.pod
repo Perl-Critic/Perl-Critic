@@ -162,7 +162,7 @@ look at the nearby elements to see what kind of arguments are being
 passed to it.  Every PPI element is linked to its siblings, parent,
 and children (if it has any).  Since those siblings could just be
 whitespace, we use the C<snext_sibling()> to get the next code-sibling
-(the 's' in 'snext' stands for 'significant').
+(the 's' in C<snext_sibling> stands for 'significant').
 
     my $sib = $elem->snext_sibling() || return;
 
@@ -198,7 +198,7 @@ violation.  And that's all there is to it!
 One last thing -- When you import Perl::Critic::Violation, it extracts
 the DESCRIPTION section from the POD in your Policy module.  That text
 can displayed in the diagnostic output when the Violations objects are
-string-ified.  So please include a DESCRIPTION section in the POD for
+stringified.  So please include a DESCRIPTION section in the POD for
 your Policy.  It should succinctly describe the behavior and
 motivation for your Policy and include a few examples of both good and
 bad code.

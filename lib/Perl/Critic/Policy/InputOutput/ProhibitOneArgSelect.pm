@@ -55,11 +55,11 @@ Perl::Critic::Policy::InputOutput::ProhibitOneArgSelect
 
 =head1 DESCRIPTION
 
-Conway discurages the use of a raw C<select()> when setting
+Conway discourages the use of a raw C<select()> when setting
 autoflushes.  We'll extend that further by simply prohibiting the
-one-arg form of C<select()> entirely; if you really need it you should
-know when/where/why that is.  For performing autoflushes, Conway
-recommends the use of C<IO::Handle> instead.
+one-argument form of C<select()> entirely; if you really need it you
+should know when/where/why that is.  For performing autoflushes,
+Conway recommends the use of C<IO::Handle> instead.
 
   select((select($fh), $|=1)[0]);     # not ok
   select $fh;                         # not ok

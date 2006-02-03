@@ -60,10 +60,10 @@ Perl::Critic::Policy::ValuesAndExpressions::RequireInterpolationOfMetachars
 =head1 DESCRIPTION
 
 This policy warns you if you use single-quotes or C<q//> with a string
-that has unescaped metacharacters that may need interpoation. Its hard
+that has unescaped metacharacters that may need interpolation. Its hard
 to know for sure if a string really should be interpolated without
 looking into the symbol table.  This policy just makes an educated
-guess by looking for metachars and sigils which usually indicate that
+guess by looking for metacharacters and sigils which usually indicate that
 the string should be interpolated.
 
 =head1 NOTES

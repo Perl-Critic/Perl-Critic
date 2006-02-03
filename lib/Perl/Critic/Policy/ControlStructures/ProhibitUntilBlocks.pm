@@ -51,7 +51,7 @@ Perl::Critic::Policy::ControlStructures::ProhibitUntilBlocks
 
 =head1 DESCRIPTION
 
-Conway discourages using C<until> becuase it leads to double-negatives
+Conway discourages using C<until> because it leads to double-negatives
 that are hard to understand.  Instead, reverse the logic and use C<while>.
 
   until($condition)     { do_something() } #not ok
@@ -59,7 +59,7 @@ that are hard to understand.  Instead, reverse the logic and use C<while>.
   while( ! $condition)  { do_something() } #ok
 
 This Policy only covers the block-form of C<until>.  For the postfix
-variety, see 'ProhibitPostfixControls'.
+variety, see C<ProhibitPostfixControls>.
 
 =head1 SEE ALSO
 

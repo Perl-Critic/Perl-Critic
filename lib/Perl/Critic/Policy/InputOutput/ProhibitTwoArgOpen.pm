@@ -57,8 +57,9 @@ Perl::Critic::Policy::InputOutput::ProhibitTwoArgOpen
 
 The three-argument form of C<open> (introduced in Perl 5.6) prevents
 subtle bugs that occur when the filename starts with funny characters
-like '>' or '<'.  The L<IO::File> module provides a nice OO interface
-to filehanldes, which I think is more elegant anyway.
+like '>' or '<'.  The L<IO::File> module provides a nice
+object-oriented interface to filehandles, which I think is more
+elegant anyway.
 
   open( $fh, '>output.txt' );          # not ok
   open( $fh, q{>}, 'output.txt );      # ok

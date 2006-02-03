@@ -199,6 +199,8 @@ __END__
 
 =pod
 
+=for stopwords DGR INI-style
+
 =head1 NAME
 
 Perl::Critic - Critique Perl source code for best-practices
@@ -229,7 +231,7 @@ an interface that is suitable for test scripts.  For the ultimate
 convenience (at the expense of some flexibility) see the L<criticism>
 pragma.
 
-Win32 and ActvePerl users can find PPM distributions of Perl::Critic
+Win32 and ActivePerl users can find PPM distributions of Perl::Critic
 at L<http://theoryx5.uwinnipeg.ca/ppms/>.
 
 =head1 CONSTRUCTOR
@@ -746,7 +748,7 @@ on creating Policy modules.
 
 Starting in version 0.14, the interface to L<Perl::Critic::Violation>
 changed.  This will also break any custom Policy modules that you
-might have written for ealier modules.  See L<DEVELOPER.pod> for an
+might have written for earlier modules.  See L<DEVELOPER.pod> for an
 up-to-date guide on creating Policy modules.
 
 The notion of "priority" was also replaced with "severity" in version

@@ -59,7 +59,7 @@ Perl::Critic::Policy::ControlStructures::ProhibitCStyleForLoops
 =head1 DESCRIPTION
 
 The 3-part C<for> loop that Perl inherits from C is butt-ugly, and only
-really necessary if you need irregular counting.  The very Perl-ish
+really necessary if you need irregular counting.  The very Perlish
 C<..> operator is much more elegant and readable.
 
   for($i=0; $i<=$max; $i++){      #ick!

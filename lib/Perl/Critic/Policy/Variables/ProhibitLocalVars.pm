@@ -84,7 +84,7 @@ module to give those variables more meaningful names.
 If an external module uses package variables as it's interface, then
 using C<local> is actually a pretty sensible thing to do.  So
 Perl::Critic will not complain if you C<local>-ize variables with a
-fully quallified name such as C<$Some::Package::foo>.  However, if
+fully qualified name such as C<$Some::Package::foo>.  However, if
 you're in a position to dictate the module's interface, I strongly
 suggest using accessor methods instead.
 

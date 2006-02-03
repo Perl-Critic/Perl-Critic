@@ -64,7 +64,7 @@ Perl::Critic::Policy::CodeLayout::ProhibitHardTabs
 Putting hard tabs in your source code (or POD) is one of the worst
 things you can do to your co-workers and colleagues, especially if
 those tabs are anywhere other than a leading position.  Because
-various applications and devices represent tabs differnently, they can
+various applications and devices represent tabs differently, they can
 cause you code to look vastly different to other people.  Any decent
 editor can be configured to expand tabs into spaces.  L<Perl::Tidy>
 also does this for you.  

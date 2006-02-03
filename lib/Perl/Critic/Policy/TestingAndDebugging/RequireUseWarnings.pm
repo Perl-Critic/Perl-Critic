@@ -76,7 +76,7 @@ Perl::Critic::Policy::TestingAndDebugging::RequireUseWarnings
 
 Using warnings is probably the single most effective way to improve
 the quality of your code.  This policy requires that the C<'use
-warnings'> statement must come before any other staments except
+warnings'> statement must come before any other statements except
 C<package>, C<require>, and other C<use> statements.  Thus, all the
 code in the entire package will be affected.
 

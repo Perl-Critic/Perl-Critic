@@ -59,7 +59,7 @@ Perl::Critic::Policy::Subroutines::ProhibitAmpersandSigils
 =head1 DESCRIPTION
 
 Since Perl 5, the ampersand sigil is completely optional when invoking
-subroutines.  And it's easily confsued with the bitwise 'and' operator.
+subroutines.  And it's easily confused with the bitwise 'and' operator.
 
   @result = &some_function(); #Not ok
   @result = some_function();  #ok

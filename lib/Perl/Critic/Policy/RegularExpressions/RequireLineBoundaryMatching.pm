@@ -66,7 +66,7 @@ regex makes it behave as most people expect it should.
 
 =head1 NOTES
 
-For common regular expessions like e-mail addresses, phone numbers,
+For common regular expressions like e-mail addresses, phone numbers,
 dates, etc., have a look at the L<Regex::Common> module.  Also, be
 cautions about slapping modifier flags onto existing regular
 expressions, as they can drastically alter their meaning.  See
