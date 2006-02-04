@@ -55,29 +55,29 @@ sub get_options {
     if ( $opts{Version} ) { print "$VERSION\n"; exit 0; }   #Exits
 
 
-    #Handle special request to display severity levels
-    if ( $opts{list} ) { _policy_listing() && exit 0 }
+    # Handle special request to display a list of policies
+    if ( $opts{list} ) { print policy_listing(); exit 0; }  #Exits
 
-    #Sanity checks
+    # Sanity checks
     if ( $opts{noprofile} && $opts{profile} ) {
         my $msg = 'Cannot use -noprofile with -profile';
         pod2usage( -exitstatus => 1, -message => $msg );    #Exits
     }
 
-    #Warn users who might forget that -verbose requires a value
+    # Warn users who might forget that -verbose requires a value
     if ( $opts{verbose} && $opts{verbose} !~ m{ (?: \d+ | %[fmlcdp] ) }mx ) {
         warn qq{Warning: -verbose argument '$opts{verbose}' looks odd.\n};
         warn qq{Perhaps you meant to say '-verbose 3 $opts{verbose}'\n};
     }
 
-    #Warn if -top is negative.  They might have meant it as a severity
+    # Warn if -top is negative.  They might have meant it as a severity
     if ( $opts{top} && $opts{top} < 0 ) {
         warn qq{Warning: -top argument '$opts{top}' is negative.\n};
         warn qq{Perhaps you meant to say '$opts{top} -top'.\n};
     }
 
-    #Convert severity shortcut options.  If multiple shortcuts
-    #are given, the lowest one wins, and -severity is ignored.
+    # Convert severity shortcut options.  If multiple shortcuts
+    # are given, the lowest one wins, and -severity is ignored.
     for ( 1 .. 5 ) {
         if ( exists $opts{$_} ) {
             $opts{severity} = $_;
@@ -85,10 +85,10 @@ sub get_options {
         }
     }
 
-    #If -top is specified, default the severity level to 1, unless an
-    #explicit severity is defined.  This provides us flexibility to
-    #report top-offenders across just some or all of the severity levels.
-    #We also default the -top count to twenty if non is given
+    # If -top is specified, default the severity level to 1, unless an
+    # explicit severity is defined.  This provides us flexibility to
+    # report top-offenders across just some or all of the severity levels.
+    # We also default the -top count to twenty if non is given
     if ( exists $opts{top} ) {
         $opts{severity} ||= 1;
         $opts{top} ||= 20;
@@ -99,10 +99,10 @@ sub get_options {
         $opts{profile} = q{};
     }
 
-    #I've adopted the convention of using key-value pairs for
-    #arguments to most functions.  And to increase legibility,
-    #I have also adopted the familiar command-line practice
-    #of denoting argument names with a leading dash (-).
+    # I've adopted the convention of using key-value pairs for
+    # arguments to most functions.  And to increase legibility,
+    # I have also adopted the familiar command-line practice
+    # of denoting argument names with a leading dash (-).
     my %dashed_opts = map { ( "-$_" => $opts{$_} ) } keys %opts;
     return %dashed_opts;
 }
@@ -118,10 +118,10 @@ sub get_input {
             pod2usage( -exitstatus => 1, -message => $msg, -verbose => 0);
         }
 
-        #Reading code from files or dirs.  If argument is a file,
-        #then we process it as-is (even though it may not actually
-        #be Perl code).  If argument is a directory, recursively
-        #search the directory for files that look like Perl code.
+        # Reading code from files or dirs.  If argument is a file,
+        # then we process it as-is (even though it may not actually
+        # be Perl code).  If argument is a directory, recursively
+        # search the directory for files that look like Perl code.
         return map { -d $_ ? all_code_files($_) : $_ } @_;
     }
     else {
@@ -146,19 +146,15 @@ sub critique {
     # the man page. Arguably, those things are pretty rare, but hey,
     # why not save a few seconds if you can.
 
-    eval {
+    require Perl::Critic;
+    my $critic = Perl::Critic->new( %{$config} );
 
-        require Perl::Critic;
-        my $critic = Perl::Critic->new( %{$config} );
+    for my $file (@files) {
+      my @violations = $critic->critique($file);
+      render_report( $file, $config, @violations );
+      $count += scalar @violations;
+    }
 
-        for my $file (@files) {
-            my @violations = $critic->critique($file);
-            render_report( $file, $config, @violations );
-            $count += scalar @violations;
-        }
-    };
-
-    die $EVAL_ERROR if $EVAL_ERROR;
     return $count;
 }
 
@@ -276,38 +272,41 @@ sub _interpolate {
 
 #-----------------------------------------------------------------------------
 
-sub _policy_listing {
+sub policy_listing {
 
-    eval {
+    my $namespace = shift;
+    my @listing = ();
 
-        require Perl::Critic::Config;
-        Perl::Critic::Config->import();
-        my $config = Perl::Critic::Config->new(-severity => 1);
-        my @policies = sort {ref $a cmp ref $b}  @{ $config->policies() };
+    # Again, this require/import hack is just to delay loading of
+    # Perl::Critic until we absolutely have to.
 
-        # Print header
-        my $header = sprintf "%-60.60s  %1s %1s", qw(PolicyName D U);
-        my $h_rule = q{-} x length $header;
-        print "$header\n";
-        print "$h_rule\n";
+    require Perl::Critic::Config;
+    Perl::Critic::Config->import( -namespace => $namespace );
+    my $config = Perl::Critic::Config->new(-severity => 1);
+    my @policies = sort {ref $a cmp ref $b}  @{ $config->policies() };
 
-        # Print body
-        for my $policy ( @policies ) {
-            my $name = ref $policy;
-            $name =~ s{\A Perl::Critic::Policy::}{}mxg;
-            my $def_severity  = $policy->default_severity();
-            my $user_severity = $policy->get_severity();
-            printf "%-60.60s  %1s %1s\n", $name, $def_severity, $user_severity;
-        }
+    # Append header
+    my $format = '%-60.60s %1s %1s';
+    my $header = sprintf $format, qw(PolicyName D U);
+    my $h_rule = q{-} x length $header;
+    push @listing, "$header\n", "$h_rule\n";
 
-        # Print footer
-        print "$h_rule\n";
-        print "D = Default severity\n";
-        print "U = User-defined severity\n";
-    };
+    # Append body
+    for my $policy ( @policies ) {
+        my $name = ref $policy;
+        $name =~ s{\A Perl::Critic::Policy::}{}mxg;
+        my $def_sev  = $policy->default_severity();
+        my $user_sev = $policy->get_severity();
+        my $line = sprintf $format, $name, $def_sev, $user_sev;
+        push @listing, "$line\n";
+    }
 
-    die $EVAL_ERROR if $EVAL_ERROR;
-    return 1;
+    # Append footer
+    push @listing, "$h_rule\n";
+    push @listing, "D = Default severity\n";
+    push @listing, "U = User-defined severity\n";
+
+    return @listing;
 }
 
 1;
