@@ -8,13 +8,13 @@
 use strict;
 use warnings;
 use File::Spec;
-use Test::More tests => 27;
+use Test::More tests => 29;
 
 #-----------------------------------------------------------------------------
 #Load perlcritic like a library so we can test its subroutines
 
 my $perlcritic = File::Spec->catfile( qw(blib script perlcritic) );
-require $perlcritic;
+require $perlcritic;  ## no critic
 
 #-----------------------------------------------------------------------------
 
@@ -96,5 +96,10 @@ my @not_perl_files = qw(foo.doc foo.txt foo.conf foo);
 for (@not_perl_files){
         ok( !_is_perl($_), 'Is not perl' );
 }
+
+#-----------------------------------------------------------------------------
+
+ok( _interpolate( '\r%l\t%c\n' ) eq "\r%l\t%c\n", 'Interpolation' );
+ok( _interpolate( 'literal'    ) eq "literal",    'Interpolation' );
 
 #-----------------------------------------------------------------------------
