@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 5;
+use Test::More tests => 7;
 use Perl::Critic::Config;
 use Perl::Critic;
 
@@ -79,3 +79,47 @@ END_PERL
 
 $policy = 'Documentation::RequirePodAtEnd';
 is( pcritique($policy, \$code), 1, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+
+my $foo = 'bar';
+
+=for comment
+This is a one-line comment
+
+my $baz = 'nuts';
+
+__END__
+
+END_PERL
+
+$policy = 'Documentation::RequirePodAtEnd';
+is( pcritique($policy, \$code), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+
+sub foo {}
+
+=begin comment
+
+Multi-paragraph comment
+
+Mutli-paragrapm comment
+
+=end comment
+
+my $baz = 'nuts';
+
+__END__
+
+END_PERL
+
+$policy = 'Documentation::RequirePodAtEnd';
+is( pcritique($policy, \$code), 0, $policy);
+
+
+

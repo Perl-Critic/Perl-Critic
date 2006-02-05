@@ -35,6 +35,10 @@ sub violates {
     # No POD means no violation
     my $pod = $doc->find_first('PPI::Token::Pod') || return;
     my $end = $doc->find_first('PPI::Statement::End');
+
+    # Allow =for and =begin/end to be used as block comments
+    return if $pod =~ m{\A = (?: for|begin|end ) }mx;
+
     if ($end) {  # No __END__ means definite violation
         my $pod_loc = $pod->location();
         my $end_loc = $end->location();
@@ -64,8 +68,27 @@ Perl::Critic::Policy::Documentation::RequirePodAtEnd
 
 Perl stops processing code when it sees an C<__END__> statement.  So,
 to save processor cycles, it's more efficient to store all
-documentation after the C<__END__>.  This policy issues violations if
-any POD is found before an C<__END__>.
+documentation after the C<__END__>.  Also, writing all the POD in one
+place usually leads to a more cohesive document, rather than being
+forced to follow the layout of your code.  This policy issues
+violations if any POD is found before an C<__END__>.
+
+=head1 NOTES
+
+Some folks like to use C<=for>, and C<=begin>, and C<=end> tags to
+create block comments in-line with their code.  Since those tags aren't
+usually part of the documentation, this Policy does allows them to
+appear before the C<__END__> statement.
+
+  =begin comments
+
+  frobulate()
+  Accepts:  A list of things to frobulate
+  Returns:  True if succesful
+
+  =end comments
+
+  sub frobulate { ... }
 
 =head1 AUTHOR
 
