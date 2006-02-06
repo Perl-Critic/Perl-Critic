@@ -19,6 +19,7 @@ $VERSION = eval $VERSION;    ## no critic
 
 #---------------------------------------------------------------------------
 
+my $pod_rx = qr{\A = (?: for|begin|end ) }mx;
 my $desc = q{POD before __END__};
 my $expl = [139, 140];
 
@@ -33,12 +34,12 @@ sub violates {
     my ( $self, $elem, $doc ) = @_;
 
     # No POD means no violation
-    my $pod = $doc->find_first('PPI::Token::Pod') || return;
     my $end = $doc->find_first('PPI::Statement::End');
+    my $pods_ref = $doc->find('PPI::Token::Pod') || return;
 
-    # Allow =for and =begin/end to be used as block comments
-    return if $pod =~ m{\A = (?: for|begin|end ) }mx;
-
+    # Look for first POD tag that isn't =for, =begin, or =end
+    my $pod = first { $_ !~ $pod_rx} @{ $pods_ref } or return;
+ 
     if ($end) {  # No __END__ means definite violation
         my $pod_loc = $pod->location();
         my $end_loc = $end->location();

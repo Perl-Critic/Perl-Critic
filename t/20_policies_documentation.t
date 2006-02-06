@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Perl::Critic::Config;
 use Perl::Critic;
 
@@ -66,7 +66,41 @@ is( pcritique($policy, \$code), 0, $policy);
 
 $code = <<'END_PERL';
 
+=for comment
+This POD is ok
+=cut
+
+__END__
+
 =head1 Foo
+
+=cut
+END_PERL
+
+$policy = 'Documentation::RequirePodAtEnd';
+is( pcritique($policy, \$code), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+
+=for comment
+This POD is ok
+=cut
+
+=head1 Foo
+
+This POD is illegal
+
+=cut
+
+=begin comment
+
+This POD is ok
+
+This POD is also ok
+
+=end comment
 
 =cut
 
@@ -84,10 +118,10 @@ is( pcritique($policy, \$code), 1, $policy);
 
 $code = <<'END_PERL';
 
-my $foo = 'bar';
-
 =for comment
 This is a one-line comment
+
+=cut
 
 my $baz = 'nuts';
 
@@ -102,8 +136,6 @@ is( pcritique($policy, \$code), 0, $policy);
 
 $code = <<'END_PERL';
 
-sub foo {}
-
 =begin comment
 
 Multi-paragraph comment
@@ -112,7 +144,7 @@ Mutli-paragrapm comment
 
 =end comment
 
-my $baz = 'nuts';
+=cut
 
 __END__
 
@@ -120,6 +152,7 @@ END_PERL
 
 $policy = 'Documentation::RequirePodAtEnd';
 is( pcritique($policy, \$code), 0, $policy);
+
 
 
 
