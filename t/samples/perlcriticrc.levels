@@ -173,6 +173,12 @@ severity = 1
 [Miscellanea::RequireRcsKeywords]
 severity = 1
 
+[Miscellanea::ProhibitFormats]
+severity = 1
+
+[Miscellanea::ProhibitTies]
+severity = 1
+
 [InputOutput::ProhibitTwoArgOpen]
 severity = 1
 

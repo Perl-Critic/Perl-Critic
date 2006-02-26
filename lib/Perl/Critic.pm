@@ -326,7 +326,7 @@ omitted for brevity.  This argument is required.
 
 B<-config> is an optional reference to a hash of Policy configuration
 parameters.  Note that this is B<not> the same thing as a
-L<Perl::Critic::Config object>. The contents of this hash reference
+L<Perl::Critic::Config> object. The contents of this hash reference
 will be passed into to the constructor of the Policy module.  See the
 documentation in the relevant Policy module for a description of the
 arguments it supports.
@@ -535,6 +535,14 @@ Never write C<select($fh)> [Severity 4]
 
 Write C<open $fh, q{<}, $filename;> instead of C<open $fh, "<$filename";> [Severity 5]
 
+=head2 L<Perl::Critic::Policy::Miscellanea::ProhibitFormats>
+
+Do not use C<format>. [Severity 3]
+
+=head2 L<Perl::Critic::Policy::Miscellanea::ProhibitTies>
+
+Do not use C<tie>. [Severity 2]
+
 =head2 L<Perl::Critic::Policy::Miscellanea::RequireRcsKeywords>
 
 Put source-control keywords in every file. [Severity 2]
@@ -666,6 +674,10 @@ Write C< print <<'THE_END' > or C< print <<"THE_END" > [Severity 3]
 =head2 L<Perl::Critic::Policy::ValuesAndExpressions::RequireUpperCaseHeredocTerminator>
 
 Write C< <<'THE_END'; > instead of C< <<'theEnd'; > [Severity 1]
+
+=head2 L<Perl::Critic::Policy::Variables::ProhibitConditionalDeclarations>
+
+Do not write C< my $foo = $bar if $baz; > [Severity 5]
 
 =head2 L<Perl::Critic::Policy::Variables::ProhibitLocalVars>
 
