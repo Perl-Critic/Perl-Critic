@@ -32,18 +32,20 @@ sub violates {
     my ( $self, $elem, $doc ) = @_;
     $elem =~ m{ \n }mx || return;
 
-    #Is it an assignment of some kind?
+    # Is it an assignment of some kind?
     my $sib = $elem->sprevious_sibling() || return;
     $sib->isa('PPI::Token::Operator') && $sib =~ m{ = }mx || return;
 
-    #List elements are children of an expression
+    # List elements are children of an expression
     my $expr = $elem->schild(0) || return;
 
-    #Does the list have more than 1 element?
+    # Does the list have more than 1 element?
+    # This means list element, not PPI element.
     my @children = $expr->schildren();
-    return if @children <= 1;
+    return if 1 >= grep {    $_->isa('PPI::Token::Operator')
+                          && $_ eq $COMMA } @children;
 
-    #Is the final element a comma?
+    # Is the final element a comma?
     my $final = $children[-1] || return;
     if ( ! ($final->isa('PPI::Token::Operator') && $final eq $COMMA) ) {
         my $sev = $self->get_severity();

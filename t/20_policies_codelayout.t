@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 14;
+use Test::More tests => 15;
 use Perl::Critic::Config;
 use Perl::Critic;
 
@@ -183,6 +183,23 @@ $code = <<'END_PERL';
 	 $bar, 
 	 $baz,
 	);
+
+END_PERL
+
+$policy = 'CodeLayout::RequireTrailingCommas';
+is( pcritique($policy, \$code), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+$foo = ( 1 > 2 ?
+         $baz  :
+         $nuts );
+
+$bar = ( $condition1
+         && (    $condition2
+              || $condition3 )
+       );
 
 END_PERL
 

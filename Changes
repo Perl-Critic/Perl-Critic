@@ -7,6 +7,9 @@
 
 [0.14_01] Released on ??????
 
+     Bug Fixes:
+     * 17554: False positive in CodeLayout::RequireTrailingCommas
+
      New Policies:
      * ClassHierarchies::ProhibitExplicitISA
      * Variables::ProhibitConditionalDeclarations
