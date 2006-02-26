@@ -230,7 +230,7 @@ our ($foo, $baz) = 1 if $bar;
 
 END_PERL
 
-$policy = 'Variables::ProtectConditionalDeclarations';
+$policy = 'Variables::ProhibitConditionalDeclarations';
 is( pcritique($policy, \$code), 6, $policy);
 
 #----------------------------------------------------------------
@@ -246,7 +246,7 @@ our ($foo, $baz) = 1 unless $bar;
 
 END_PERL
 
-$policy = 'Variables::ProtectConditionalDeclarations';
+$policy = 'Variables::ProhibitConditionalDeclarations';
 is( pcritique($policy, \$code), 6, $policy);
 
 #----------------------------------------------------------------
@@ -262,7 +262,7 @@ our ($foo, $baz) = 1 while $bar;
 
 END_PERL
 
-$policy = 'Variables::ProtectConditionalDeclarations';
+$policy = 'Variables::ProhibitConditionalDeclarations';
 is( pcritique($policy, \$code), 6, $policy);
 
 #----------------------------------------------------------------
@@ -278,7 +278,7 @@ our ($foo, $baz) = 1 for @bar;
 
 END_PERL
 
-$policy = 'Variables::ProtectConditionalDeclarations';
+$policy = 'Variables::ProhibitConditionalDeclarations';
 is( pcritique($policy, \$code), 6, $policy);
 
 #----------------------------------------------------------------
@@ -294,7 +294,7 @@ our ($foo, $baz) = 1 foreach @bar;
 
 END_PERL
 
-$policy = 'Variables::ProtectConditionalDeclarations';
+$policy = 'Variables::ProhibitConditionalDeclarations';
 is( pcritique($policy, \$code), 6, $policy);
 
 #----------------------------------------------------------------
@@ -307,6 +307,6 @@ until (my $foo = $condition) { do_something() }
 unless (my $foo = $condition) { do_something() }
 END_PERL
 
-$policy = 'Variables::ProtectConditionalDeclarations';
+$policy = 'Variables::ProhibitConditionalDeclarations';
 is( pcritique($policy, \$code), 0, $policy);
 
