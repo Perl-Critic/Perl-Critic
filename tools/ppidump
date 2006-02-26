@@ -1,0 +1,47 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use PPI::Document;
+use PPI::Dumper;
+
+my $code = $ARGV[0] ? (-f $ARGV[0] ? shift : \shift) : \join q{}, <STDIN>;
+my $doc  = PPI::Document->new( $code );
+my $dump = PPI::Dumper->new( $doc, whitespace => 0 );
+$dump->print();
+
+__END__
+
+#-----------------------------------------------------------------------------
+
+=pod
+
+=head1 NAME
+
+ppidump - Dump Perl code as PPI structure
+
+=head1 SYNOPSIS
+
+  ppidump                     #Read from STDIN
+  ppidump MyModule.pm         #Read code from file
+  ppidump 'my $foo = $bar;'   #Read code as from string
+
+=head1 DESCRIPTION
+
+This is a simple tool for helping to develop Perl::Critic::Policy
+modules.  If you want to see how L<PPI> would parse a snippet of
+code, just feed it to C<ppidump>.
+
+=head1 AUTHOR
+
+Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+
+=head1 COPYRIGHT
+
+Copyright (c) 2005-2006 Jeffrey Ryan Thalhammer.  All rights reserved.
+
+This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.  The full text of this license
+can be found in the LICENSE file included with this module.
+
+=cut
