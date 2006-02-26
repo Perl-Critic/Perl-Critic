@@ -211,3 +211,6 @@ severity = 1
 
 [ClassHierarchies::ProhibitExplicitISA]
 severity = 1
+
+[Variables::ProhibitConditionalDeclarations]
+severity = 1

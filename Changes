@@ -9,6 +9,7 @@
 
      New Policies:
      * ClassHierarchies::ProhibitExplicitISA
+     * Variables::ProhibitConditionalDeclarations
 
 [0.14] Released on 060129
 

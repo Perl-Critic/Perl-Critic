@@ -64,6 +64,7 @@
 [-ValuesAndExpressions::RequireNumberSeparators]
 [-ValuesAndExpressions::RequireQuotedHeredocTerminator]
 [-ValuesAndExpressions::RequireUpperCaseHeredocTerminator]
+[-Variables::ProhibitConditionalDeclarations]
 [-Variables::ProhibitLocalVars]
 [-Variables::ProhibitMatchVars]
 [-Variables::ProhibitPackageVars]

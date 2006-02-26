@@ -13,3 +13,4 @@
 [-Modules::RequireEndWithOne]
 [-Modules::RequireExplicitPackage]
 [-Subroutines::ProhibitExcessComplexity]
+[-Variables::ProhibitConditionalDeclarations]

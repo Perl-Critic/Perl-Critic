@@ -312,6 +312,7 @@ sub native_policies {
       Perl::Critic::Policy::ValuesAndExpressions::RequireNumberSeparators
       Perl::Critic::Policy::ValuesAndExpressions::RequireQuotedHeredocTerminator
       Perl::Critic::Policy::ValuesAndExpressions::RequireUpperCaseHeredocTerminator
+      Perl::Critic::Policy::Variables::ProhibitConditionalDeclarations
       Perl::Critic::Policy::Variables::ProhibitLocalVars
       Perl::Critic::Policy::Variables::ProhibitMatchVars
       Perl::Critic::Policy::Variables::ProhibitPackageVars

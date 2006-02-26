@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 12;
+use Test::More tests => 18;
 use Perl::Critic::Config;
 use Perl::Critic;
 
@@ -215,5 +215,98 @@ $::_foo;
 END_PERL
 
 $policy = 'Variables::ProtectPrivateVars';
+is( pcritique($policy, \$code), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+my $foo = 1 if $bar;
+local $foo = 1 if $bar;
+our $foo = 1 if $bar;
+
+my ($foo, $baz) = @list if $bar;
+local ($foo, $baz) = @list if $bar;
+our ($foo, $baz) = 1 if $bar;
+
+END_PERL
+
+$policy = 'Variables::ProtectConditionalDeclarations';
+is( pcritique($policy, \$code), 6, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+my $foo = 1 unless $bar;
+local $foo = 1 unless $bar;
+our $foo = 1 unless $bar;
+
+my ($foo, $baz) = @list unless $bar;
+local ($foo, $baz) = @list unless $bar;
+our ($foo, $baz) = 1 unless $bar;
+
+END_PERL
+
+$policy = 'Variables::ProtectConditionalDeclarations';
+is( pcritique($policy, \$code), 6, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+my $foo = 1 while $bar;
+local $foo = 1 while $bar;
+our $foo = 1 while $bar;
+
+my ($foo, $baz) = @list while $bar;
+local ($foo, $baz) = @list while $bar;
+our ($foo, $baz) = 1 while $bar;
+
+END_PERL
+
+$policy = 'Variables::ProtectConditionalDeclarations';
+is( pcritique($policy, \$code), 6, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+my $foo = 1 for @bar;
+local $foo = 1 for @bar;
+our $foo = 1 for @bar;
+
+my ($foo, $baz) = @list for @bar;
+local ($foo, $baz) = @list for @bar;
+our ($foo, $baz) = 1 for @bar;
+
+END_PERL
+
+$policy = 'Variables::ProtectConditionalDeclarations';
+is( pcritique($policy, \$code), 6, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+my $foo = 1 foreach @bar;
+local $foo = 1 foreach @bar;
+our $foo = 1 foreach @bar;
+
+my ($foo, $baz) = @list foreach @bar;
+local ($foo, $baz) = @list foreach @bar;
+our ($foo, $baz) = 1 foreach @bar;
+
+END_PERL
+
+$policy = 'Variables::ProtectConditionalDeclarations';
+is( pcritique($policy, \$code), 6, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+for my $foo (@list) { do_something() }
+foreach my $foo (@list) { do_something() }
+while (my $foo $condition) { do_something() }
+until (my $foo = $condition) { do_something() }
+unless (my $foo = $condition) { do_something() }
+END_PERL
+
+$policy = 'Variables::ProtectConditionalDeclarations';
 is( pcritique($policy, \$code), 0, $policy);
 
