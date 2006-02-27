@@ -30,6 +30,7 @@
 [-InputOutput::ProhibitBacktickOperators]
 [-InputOutput::ProhibitBarewordFileHandles]
 [-InputOutput::ProhibitOneArgSelect]
+[-InputOutput::ProhibitReadlineInForLoop]
 [-InputOutput::ProhibitTwoArgOpen]
 [-Miscellanea::ProhibitFormats]
 [-Miscellanea::ProhibitTies]

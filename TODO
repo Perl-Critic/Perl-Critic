@@ -9,10 +9,6 @@ NEW FEATURES:
 
 - Report safari sections instead of book page numbers.
 
-MISC:
-
-- Need test cases for perlcritic command-line interface.
- 
 BUGS/LIMITATIONS:
 
 - Modules::RequireVersionVar
@@ -55,7 +51,6 @@ OTHER PBP POLICIES THAT SEEM FEASIBLE TO IMPLEMENT:
   Forbid open, print, close in void context
 - InputOutput::RequireBriefOpen (p209)
   Make sure there's a close within N statements of an open, both with same lexical FH
-- InputOutput::ProhibitReadlineWithFor (p211)
 - InputOutput::ProhibitJoinedReadline (p213)
 - InputOutput::ProhibitExplicitStdin (p216)
 - InputOutput::RequireBracesOnPrintFilehandle (p217)

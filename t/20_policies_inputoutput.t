@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 10;
+use Test::More tests => 12;
 use Perl::Critic::Config;
 use Perl::Critic;
 
@@ -157,4 +157,30 @@ open FH, '>', $output" or die;
 END_PERL
 
 $policy = 'InputOutput::ProhibitTwoArgOpen';
+is( pcritique($policy, \$code), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+for my $foo (<FH>) {}
+for $foo (<$fh>) {}
+for (<>) {}
+
+foreach my $foo (<FH>) {}
+foreach $foo (<$fh>) {}
+foreach (<>) {}
+END_PERL
+
+$policy = 'InputOutput::ProhibitReadlineInForLoop';
+is( pcritique($policy, \$code), 6, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+while( my $foo = <> ){}
+while( $foo = <> ){}
+while( <> ){}
+END_PERL
+
+$policy = 'InputOutput::ProhibitReadlineInForLoop';
 is( pcritique($policy, \$code), 0, $policy);

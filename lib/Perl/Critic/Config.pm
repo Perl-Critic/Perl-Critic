@@ -278,6 +278,7 @@ sub native_policies {
       Perl::Critic::Policy::InputOutput::ProhibitBacktickOperators
       Perl::Critic::Policy::InputOutput::ProhibitBarewordFileHandles
       Perl::Critic::Policy::InputOutput::ProhibitOneArgSelect
+      Perl::Critic::Policy::InputOutput::ProhibitReadlineInForLoop
       Perl::Critic::Policy::InputOutput::ProhibitTwoArgOpen
       Perl::Critic::Policy::Miscellanea::ProhibitFormats
       Perl::Critic::Policy::Miscellanea::ProhibitTies

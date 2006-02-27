@@ -531,6 +531,10 @@ Write C<open my $fh, q{<}, $filename;> instead of C<open FH, q{<}, $filename;> [
 
 Never write C<select($fh)> [Severity 4]
 
+=head2 L<Perl::Critic::Policy::InputOutput::ProhibitReadlineInForLoop>
+
+Write C<<while( $line = <> ){...}>> instead of C<<for(<>){...}>> [Severity 4]
+
 =head2 L<Perl::Critic::Policy::InputOutput::ProhibitTwoArgOpen>
 
 Write C<open $fh, q{<}, $filename;> instead of C<open $fh, "<$filename";> [Severity 5]

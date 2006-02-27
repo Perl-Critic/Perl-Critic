@@ -158,6 +158,9 @@ severity = 1
 [InputOutput::ProhibitOneArgSelect]
 severity = 1
 
+[InputOutput::ProhibitReadlineInForLoop]
+severity = 1
+
 [ClassHierarchies::ProhibitOneArgBless]
 severity = 1
 
