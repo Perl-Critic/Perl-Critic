@@ -65,7 +65,7 @@ sub get_options {
     }
 
     # Warn users who might forget that -verbose requires a value
-    if ( $opts{verbose} && $opts{verbose} !~ m{ (?: \d+ | %[fmlcdp] ) }mx ) {
+    if ( $opts{verbose} && $opts{verbose} !~ m{(?: \d+ | %[mflcedrps] )}mx ) {
         warn qq{Warning: -verbose argument '$opts{verbose}' looks odd.\n};
         warn qq{Perhaps you meant to say '-verbose 3 $opts{verbose}'\n};
     }
