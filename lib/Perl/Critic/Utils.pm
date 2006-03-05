@@ -136,18 +136,18 @@ my %PRECEDENCE_OF = (
   '->'  => 1,       '<'    => 10,      '||'  => 15,
   '++'  => 2,       '>'    => 10,      '..'  => 16,
   '--'  => 2,       '<='   => 10,      '...' => 17,
-  '**'  => 3,       '>='   => 10,      '?:'  => 18,
-  '!'   => 4,       'lt'   => 10,      '='   => 19,
-  '~'   => 4,       'gt'   => 10,      '+='  => 19,
-  '\\'  => 4,       'le'   => 10,      '-='  => 19,
-  '=~'  => 5,       'ge'   => 10,      '*='  => 19,
-  '!~'  => 5,       '=='   => 11,      ','   => 20,
-  '*'   => 6,       '!='   => 11,      '=>'  => 20,
-  '/'   => 6,       '<=>'  => 11,      'not' => 22,
-  '%'   => 6,       'eq'   => 11,      'and' => 23,
-  'x'   => 6,       'ne'   => 11,      'or'  => 24,
-  '+'   => 7,       'cmp'  => 11,      'xor' => 24,
-  '-'   => 7,       '&'    => 12,
+  '**'  => 3,       '>='   => 10,      '?'   => 18,
+  '!'   => 4,       'lt'   => 10,      ':'   => 18,
+  '~'   => 4,       'gt'   => 10,      '='   => 19,
+  '\\'  => 4,       'le'   => 10,      '+='  => 19,
+  '=~'  => 5,       'ge'   => 10,      '-='  => 19,
+  '!~'  => 5,       '=='   => 11,      '*='  => 19,
+  '*'   => 6,       '!='   => 11,      ','   => 20,
+  '/'   => 6,       '<=>'  => 11,      '=>'  => 20,
+  '%'   => 6,       'eq'   => 11,      'not' => 22,
+  'x'   => 6,       'ne'   => 11,      'and' => 23,
+  '+'   => 7,       'cmp'  => 11,      'or'  => 24,
+  '-'   => 7,       '&'    => 12,      'xor' => 24,
   '.'   => 7,       '|'    => 13,
   '<<'  => 8,       '^'    => 13,
   '>>'  => 8,       '&&'   => 14,
@@ -174,6 +174,7 @@ sub is_perl_builtin {
     my $elem = shift || return;
     return exists $BUILTINS{ $elem };
 }
+
 #-------------------------------------------------------------------------
 
 sub is_perl_global {
@@ -185,6 +186,7 @@ sub is_perl_global {
 
 sub precedence_of {
     my $elem = shift || return;
+    $elem->isa('PPI::Token::Operator') || return;
     my $p = $PRECEDENCE_OF{ $elem };
     warn qq{Precedence not defined for '$elem'} if ! defined $p;
     return $p;
@@ -299,8 +301,7 @@ writing Policy modules, you probably don't care about this package.
 
 B<DEPRECATED:> Since version 0.11, every Policy is evaluated at each
 element of the document.  So you shouldn't need to go looking for a
-particular keyword.  I've left this function in place just in case you
-come across a particular need for it.
+particular keyword.
 
 Given a L<PPI::Document> as C<$doc>, returns a reference to an array
 containing all the L<PPI::Token::Word> elements that match
