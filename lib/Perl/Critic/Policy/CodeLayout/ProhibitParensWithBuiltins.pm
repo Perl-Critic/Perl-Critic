@@ -85,14 +85,14 @@ sub violates {
 
         if ( _is_named_unary( $elem ) && $elem_after_parens ){
             my $p = precedence_of( $elem_after_parens );
-            return if defined $p && $p < 9;
+            return if defined $p  && $p < 9;
         }
 
         # EXCEPTION 2, If the function is 'greedy' and there is a
         # comma (or fat comma) right after the parens.
         # Example: print join($delim, @list), "\n";
 
-        if ( _is_greedy($elem) ){
+        if ( _is_greedy($elem) && $elem_after_parens ){
             return if _is_commalike( $elem_after_parens );
         }
 
