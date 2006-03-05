@@ -95,8 +95,7 @@ our @BUILTINS =
 );
 
 #Hashify
-my %BUILTINS = ();
-@BUILTINS{ @BUILTINS } = (1) x scalar @BUILTINS;
+my %BUILTINS = map { $_ => 1 } @BUILTINS;
 
 #---------------------------------------------------------------------------
 
@@ -127,8 +126,7 @@ our @GLOBALS =
 );
 
 #Hashify
-my %GLOBALS = ();
-@GLOBALS{ @GLOBALS } = (1) x scalar @GLOBALS;
+my %GLOBALS = map { $_ => 1 } @GLOBALS;
 
 #-------------------------------------------------------------------------
 
@@ -172,7 +170,8 @@ sub find_keywords {
 
 sub is_perl_builtin {
     my $elem = shift || return;
-    return exists $BUILTINS{ $elem };
+    my $name = $elem->isa('PPI::Statement::Sub') ? $elem->name() : $elem;
+    return exists $BUILTINS{ $name };
 }
 
 #-------------------------------------------------------------------------

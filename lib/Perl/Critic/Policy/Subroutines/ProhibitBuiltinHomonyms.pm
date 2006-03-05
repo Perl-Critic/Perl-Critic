@@ -11,7 +11,6 @@ use strict;
 use warnings;
 use Perl::Critic::Utils;
 use Perl::Critic::Violation;
-use List::MoreUtils qw(any);
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '0.14_01';
@@ -33,7 +32,7 @@ sub applies_to { return 'PPI::Statement::Sub' }
 sub violates {
     my ( $self, $elem, $doc ) = @_;
     return if exists $allow{ $elem->name() };
-    if ( any { $elem->name() eq $_ } @BUILTINS ) {
+    if ( is_perl_builtin( $elem ) ) {
         my $sev = $self->get_severity();
         return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
     }

@@ -11,7 +11,6 @@ use strict;
 use warnings;
 use Perl::Critic::Utils;
 use Perl::Critic::Violation;
-use List::MoreUtils qw(none);
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '0.14_01';
@@ -39,14 +38,15 @@ sub violates {
     return;    #ok!
 }
 
-#------------------------
+#---------------------------------------------------------------------------
 
 sub _all_global_vars {
 
     my $elem = shift;
     for my $var ( $elem->variables() ) {
         next if $var =~ $package_rx;
-        return if none { $var =~ m{ \A [\$@%] $_  }mx } @GLOBALS;
+        $var =~ s{ \A [\$@%] }{}mx; #Remove sigil
+        return if ! is_perl_global( $var );
     }
     return 1;
 }
