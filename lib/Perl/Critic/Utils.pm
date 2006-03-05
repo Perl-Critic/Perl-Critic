@@ -18,13 +18,15 @@ $VERSION = eval $VERSION;    ## no critic
 # Exported symbols here
 
 our @EXPORT =
-  qw(@BUILTINS   @GLOBALS    $TRUE             $SEVERITY_HIGHEST
-     $COMMA      $DQUOTE     $FALSE            $SEVERITY_HIGH
-     $COLON      $PERIOD     &find_keywords    $SEVERITY_MEDIUM
-     $SCOLON     $PIPE       &is_hash_key      $SEVERITY_LOW
-     $QUOTE      $EMPTY      &is_method_call   $SEVERITY_LOWEST
-     $SPACE                  &parse_arg_list
-                             &is_script
+  qw(@GLOBALS           $COMMA     &find_keywords    $SEVERITY_HIGHEST
+     @BUILTINS          $COLON     &is_hash_key      $SEVERITY_HIGH
+                        $SCOLON    &is_method_call   $SEVERITY_MEDIUM
+                        $QUOTE     &parse_arg_list   $SEVERITY_LOW
+                        $DQUOTE    &is_script        $SEVERITY_LOWEST
+                        $SPACE     &precedence_of
+                        $PIPE      &is_perl_builtin
+     $TRUE              $PERIOD    &is_perl_global
+     $FALSE             $EMPTY
 );
 
 #---------------------------------------------------------------------------
@@ -92,7 +94,13 @@ our @BUILTINS =
      exit        index            read      sleep        waitpid
 );
 
+#Hashify
+my %BUILTINS = ();
+@BUILTINS{ @BUILTINS } = (1) x scalar @BUILTINS;
+
 #---------------------------------------------------------------------------
+
+#TODO: Should this include punctuations vars?
 
 our @GLOBALS =
   qw(ACCUMULATOR                   INPLACE_EDIT
@@ -118,6 +126,39 @@ our @GLOBALS =
      INC ARGV
 );
 
+#Hashify
+my %GLOBALS = ();
+@GLOBALS{ @GLOBALS } = (1) x scalar @GLOBALS;
+
+#-------------------------------------------------------------------------
+
+my %PRECEDENCE_OF = (
+  '->'  => 1,       '<'    => 10,      '||'  => 15,
+  '++'  => 2,       '>'    => 10,      '..'  => 16,
+  '--'  => 2,       '<='   => 10,      '...' => 17,
+  '**'  => 3,       '>='   => 10,      '?:'  => 18,
+  '!'   => 4,       'lt'   => 10,      '='   => 19,
+  '~'   => 4,       'gt'   => 10,      '+='  => 19,
+  '\\'  => 4,       'le'   => 10,      '-='  => 19,
+  '=~'  => 5,       'ge'   => 10,      '*='  => 19,
+  '!~'  => 5,       '=='   => 11,      ','   => 20,
+  '*'   => 6,       '!='   => 11,      '=>'  => 20,
+  '/'   => 6,       '<=>'  => 11,      'not' => 22,
+  '%'   => 6,       'eq'   => 11,      'and' => 23,
+  'x'   => 6,       'ne'   => 11,      'or'  => 24,
+  '+'   => 7,       'cmp'  => 11,      'xor' => 24,
+  '-'   => 7,       '&'    => 12,
+  '.'   => 7,       '|'    => 13,
+  '<<'  => 8,       '^'    => 13,
+  '>>'  => 8,       '&&'   => 14,
+);
+
+#TODO: Add named unary operators at precdence == 9;
+
+#-------------------------------------------------------------------------
+
+our %UNARY_OPS = ();
+
 #-------------------------------------------------------------------------
 
 sub find_keywords {
@@ -125,6 +166,28 @@ sub find_keywords {
     my $nodes_ref = $doc->find('PPI::Token::Word') || return;
     my @matches = grep { $_ eq $keyword } @{$nodes_ref};
     return @matches ? \@matches : undef;
+}
+
+#-------------------------------------------------------------------------
+
+sub is_perl_builtin {
+    my $elem = shift;
+    return exists $BUILTINS{ $elem };
+}
+#-------------------------------------------------------------------------
+
+sub is_perl_global {
+    my $elem = shift;
+    return exists $GLOBALS{ $elem };
+}
+
+#-------------------------------------------------------------------------
+
+sub precedence_of {
+    my $elem = shift;
+    my $p = $PRECEDENCE_OF{ $elem } || 100;
+    warn qq{Precedence not defined for '$elem'} if ! defined $p;
+    return $p;
 }
 
 #-------------------------------------------------------------------------
@@ -234,10 +297,10 @@ writing Policy modules, you probably don't care about this package.
 
 =item C<find_keywords( $doc, $keyword )>
 
-B<This function is deprecated!> Since version 0.11, every Policy is
-evaluated at each element of the document.  So you shouldn't need to
-go looking for a particular keyword.  I've left this function in place
-just in case you come across a particular need for it.
+B<DEPRECATED:> Since version 0.11, every Policy is evaluated at each
+element of the document.  So you shouldn't need to go looking for a
+particular keyword.  I've left this function in place just in case you
+come across a particular need for it.
 
 Given a L<PPI::Document> as C<$doc>, returns a reference to an array
 containing all the L<PPI::Token::Word> elements that match
@@ -245,6 +308,24 @@ C<$keyword>.  This can be used to find any built-in function, method
 call, bareword, or reserved keyword.  It will not match variables,
 subroutine names, literal strings, numbers, or symbols.  If the
 document doesn't contain any matches, returns undef.
+
+=item C<is_perl_global( $element )>
+
+Given a L<PPI::Element> returns true if that element represents one of
+the global variables provided by the L<English> module, or one of the
+builtin global variables like C<%SIG>, C<%ENV>, or C<@ARGV>.
+
+=item C<is_perl_builtin( $element )>
+
+Given a L<PPI::Element> returns true if that element represents a call
+to any of the builtin functions defined in Perl 5.8.8
+
+=item C<precedence_of( $element )>
+
+Given a L<PPI::Element> that is presumed to be an operator, returns
+the precedence of the operator, where 1 is the highest precedence.  If
+the element is not a L<PPI::Token::Operator>, then it returns
+C<undef>.
 
 =item C<is_hash_key( $element )>
 
@@ -292,14 +373,15 @@ it is judged to be a script instead of a module.
 
 =item C<@BUILTINS>
 
+B<DEPRECATED:>  Use C<is_perl_builtin()> instead.
+
 This is a list of all the built-in functions provided by Perl 5.8.  I
 imagine this is useful for distinguishing native and non-native
-function calls.  In the future, I'm thinking of adding a hash that
-maps each built-in function to the maximal number of arguments that it
-accepts.  I think this will help facilitate the lexing the children of
-L<PPI::Expression> objects.
+function calls.
 
 =item C<@GLOBALS>
+
+B<DEPRECATED:>  Use C<is_perl_global()> instead.
 
 This is a list of all the magic global variables provided by the
 L<English> module.  Also includes commonly-used global like C<%SIG>,
