@@ -171,21 +171,21 @@ sub find_keywords {
 #-------------------------------------------------------------------------
 
 sub is_perl_builtin {
-    my $elem = shift;
+    my $elem = shift || return;
     return exists $BUILTINS{ $elem };
 }
 #-------------------------------------------------------------------------
 
 sub is_perl_global {
-    my $elem = shift;
+    my $elem = shift || return;
     return exists $GLOBALS{ $elem };
 }
 
 #-------------------------------------------------------------------------
 
 sub precedence_of {
-    my $elem = shift;
-    my $p = $PRECEDENCE_OF{ $elem } || 100;
+    my $elem = shift || return;
+    my $p = $PRECEDENCE_OF{ $elem };
     warn qq{Precedence not defined for '$elem'} if ! defined $p;
     return $p;
 }
