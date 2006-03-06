@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 35;
+use Test::More tests => 37;
 use Perl::Critic::Config;
 use Perl::Critic;
 
@@ -19,6 +19,16 @@ PerlCriticTestUtils::block_perlcriticrc();
 my $code ;
 my $policy;
 my %config;
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+#no package
+$some_code = $foo;
+END_PERL
+
+$policy = 'Modules::ProhibitMultiplePackages';
+is( pcritique($policy, \$code), 0, $policy);
 
 #----------------------------------------------------------------
 
@@ -40,6 +50,17 @@ $some_code = undef;
 END_PERL
 
 $policy = 'Modules::ProhibitMultiplePackages';
+is( pcritique($policy, \$code), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+require; #incomplete statement
+use;     #incomplete statement
+no;      #incomplete statement
+END_PERL
+
+$policy = 'Modules::RequireBarewordIncludes';
 is( pcritique($policy, \$code), 0, $policy);
 
 #----------------------------------------------------------------
