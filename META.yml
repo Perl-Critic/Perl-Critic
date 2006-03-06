@@ -49,6 +49,9 @@ provides:
   Perl::Critic::Policy::BuiltinFunctions::RequireGlobFunction:
     file: lib/Perl/Critic/Policy/BuiltinFunctions/RequireGlobFunction.pm
     version: 0.14_01
+  Perl::Critic::Policy::ClassHierarchies::ProhibitExplicitISA:
+    file: lib/Perl/Critic/Policy/ClassHierarchies/ProhibitExplicitISA.pm
+    version: 0.14_01
   Perl::Critic::Policy::ClassHierarchies::ProhibitOneArgBless:
     file: lib/Perl/Critic/Policy/ClassHierarchies/ProhibitOneArgBless.pm
     version: 0.14_01

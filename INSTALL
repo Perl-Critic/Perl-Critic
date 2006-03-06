@@ -18,8 +18,8 @@ INSTALLATION
      To install Perl::Critic with C<make> give the following 
      commands to your favorite shell:
 
-         tar -zxf Perl-Critic-0.14.tar.gz
-         cd Perl-Critic-0.14
+         tar -zxf Perl-Critic-0.14_01.tar.gz
+         cd Perl-Critic-0.14_01
          perl Makefile.PL
          make
          make test
@@ -27,8 +27,8 @@ INSTALLATION
 
      Or if you prefer C<Module::Build>, try this:
 
-         tar -zxf Perl-Critic-0.14.tar.gz
-         cd Perl-Critic-0.14
+         tar -zxf Perl-Critic-0.14_01.tar.gz
+         cd Perl-Critic-0.14_01
          perl Build.pl
          ./Build
          ./Build test
