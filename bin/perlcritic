@@ -16,7 +16,7 @@ use File::Spec;
 use Getopt::Long;
 use English qw(-no_match_vars);
 
-our $VERSION = 0.14_01;
+our $VERSION = 0.14_02;
 $VERSION = eval $VERSION;  ## no critic
 
 #----------------------------------------------------------------------------
