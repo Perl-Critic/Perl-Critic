@@ -130,6 +130,8 @@ my %GLOBALS = map { $_ => 1 } @GLOBALS;
 
 #-------------------------------------------------------------------------
 
+## no critic (lots of noisy strings here)
+
 my %PRECEDENCE_OF = (
   '->'  => 1,       '<'    => 10,      '||'  => 15,
   '++'  => 2,       '>'    => 10,      '..'  => 16,
@@ -151,7 +153,7 @@ my %PRECEDENCE_OF = (
   '>>'  => 8,       '&&'   => 14,
 );
 
-#TODO: Add named unary operators at precdence == 9;
+## use critic
 
 #-------------------------------------------------------------------------
 
