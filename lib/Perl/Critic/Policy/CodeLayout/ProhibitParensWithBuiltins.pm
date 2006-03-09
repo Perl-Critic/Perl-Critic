@@ -88,12 +88,14 @@ sub violates {
             return if defined $p  && $p < 9;
         }
 
-        # EXCEPTION 2, If the function is 'greedy' and there is a
-        # comma (or fat comma) right after the parens.
-        # Example: print join($delim, @list), "\n";
+        # EXCEPTION 2, If the function is 'greedy' and there is an
+        # operator immediately after the parens, and that operator
+        # has precedence greater than or eqaul to a comma.
+        # Example: join($delim, @list) . "\n";
 
         if ( _is_greedy($elem) && $elem_after_parens ){
-            return if _is_commalike( $elem_after_parens );
+            my $p = precedence_of( $elem_after_parens );
+            return if defined $p  && $p <= 20;
         }
 
         # EXCEPTION 3: If the first operator within the parens is '='
