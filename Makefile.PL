@@ -9,7 +9,7 @@ use strict;
 use warnings;
 use ExtUtils::MakeMaker;
 
-warn <<'END_WARNING';
+my $warning = <<'END_WARNING';
 
 ###################################################
 # NOTICE! NOTICE! NOTICE! NOTICE! NOTICE! NOTICE! #
@@ -39,6 +39,13 @@ warn <<'END_WARNING';
 ###################################################
 
 END_WARNING
+
+
+eval {
+    require Perl::Critic;
+    warn $warning if $Perl::Critic::VERSION < 0.14;
+};
+
 
 WriteMakefile( NAME           => 'Perl::Critic',
 	       AUTHOR         => 'Jeffrey Thalhammer <thaljef@cpan.org>',
