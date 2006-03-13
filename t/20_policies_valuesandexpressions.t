@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 28;
+use Test::More tests => 31;
 use Perl::Critic;
 
 # common P::C testing tools
@@ -444,3 +444,38 @@ END_PERL
 
 $policy = 'ValuesAndExpressions::RequireUpperCaseHeredocTerminator';
 is( pcritique($policy, \$code), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+next if not $finished || $foo < $bar;
+if( $foo && not $bar or $baz){ do_something() }
+this() and ! that() or the_other(); 
+END_PERL
+
+$policy = 'ValuesAndExpressions::ProhibitMixedBooleanOperators';
+is( pcritique($policy, \$code), 3, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+next if ! $finished || $foo < $bar;
+if( $foo && !$bar || $baz){ do_something() }
+this() && !that() || the_other(); 
+END_PERL
+
+$policy = 'ValuesAndExpressions::ProhibitMixedBooleanOperators';
+is( pcritique($policy, \$code), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+next if not $finished or $foo < $bar;
+if( $foo and not $bar or $baz){ do_something() }
+this() and not that() or the_other(); 
+END_PERL
+
+$policy = 'ValuesAndExpressions::ProhibitMixedBooleanOperators';
+is( pcritique($policy, \$code), 0, $policy);
+
+#----------------------------------------------------------------

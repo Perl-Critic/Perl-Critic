@@ -223,3 +223,6 @@ severity = 1
 
 [Variables::ProhibitConditionalDeclarations]
 severity = 1
+
+[ValuesAndExpressions::ProhibitMixedBooleanOperators]
+severity = 1

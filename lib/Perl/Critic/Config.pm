@@ -310,6 +310,7 @@ sub native_policies {
       Perl::Critic::Policy::ValuesAndExpressions::ProhibitEmptyQuotes
       Perl::Critic::Policy::ValuesAndExpressions::ProhibitInterpolationOfLiterals
       Perl::Critic::Policy::ValuesAndExpressions::ProhibitLeadingZeros
+      Perl::Critic::Policy::ValuesAndExpressions::ProhibitMixedBooleanOperators
       Perl::Critic::Policy::ValuesAndExpressions::ProhibitNoisyQuotes
       Perl::Critic::Policy::ValuesAndExpressions::RequireInterpolationOfMetachars
       Perl::Critic::Policy::ValuesAndExpressions::RequireNumberSeparators

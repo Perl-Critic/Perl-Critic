@@ -7,6 +7,9 @@
 
 [0.14_02] Released on ??????
 
+     New Policies:
+     * ValuesAndExpressions::ProhibitMixedBooleanOperators
+
 
 [0.14_01] Released on 060305
 

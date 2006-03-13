@@ -59,6 +59,7 @@
 [ValuesAndExpressions::ProhibitEmptyQuotes]
 [ValuesAndExpressions::ProhibitInterpolationOfLiterals]
 [ValuesAndExpressions::ProhibitLeadingZeros]
+[ValuesAndExpressions::ProhibitMixedBooleanOperators]
 [ValuesAndExpressions::ProhibitNoisyQuotes]
 [ValuesAndExpressions::RequireInterpolationOfMetachars]
 [ValuesAndExpressions::RequireNumberSeparators]

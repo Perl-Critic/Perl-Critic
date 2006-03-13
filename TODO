@@ -24,7 +24,6 @@ OTHER PBP POLICIES THAT SEEM FEASIBLE TO IMPLEMENT:
 
 - ValuesAndExpressions::ProhibitEscapedCharacters (p54)
 - ValuesAndExpressions::ProhibitCommaSeparatedStatements (p68)
-- ValuesAndExpressions::ProhibitMixedBooleanOperators (p70)
 - ValuesAndExpressions::RequireListParens (p71)
 - Variables::RequireInitializationForLocalVars (p78)
 - Variables::RequireLocalizedPunctuationVars (p81)
