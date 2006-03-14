@@ -63,6 +63,8 @@ Most people don't realize that a localized copy of a variable does not
 retain its original value.  Unless you initialize the variable when
 you C<local>-ize it, it defaults to C<undef>.  If you want the
 variable to retain its original value, just initialize it to itself.
+If you really do want the localized copy to be undef, then make it
+explicit.
 
   package Foo;
   $Bar = '42';
@@ -72,6 +74,7 @@ variable to retain its original value, just initialize it to itself.
   sub frobulate {
 
       local $Foo::Bar;              #not ok, local $Foo::Bar is 'undef'
+      local $Foo::Bar = undef;      #ok, local $Foo::Bar is obviously 'undef'
       local $Foo::Bar = $Foo::Bar;  #ok, local $Foo::Bar still equals '42'
 
   }
