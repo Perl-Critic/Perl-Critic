@@ -865,6 +865,10 @@ Always use single quotes for literal strings. [Severity 1]
 
 Write C<oct(755)> instead of C<0755> [Severity 5]
 
+=head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitMixedBooleanOperators>
+
+Write C< !$foo && $bar || $baz > instead of C< not $foo && $bar or $baz>
+
 =head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitNoisyQuotes>
 
 Use C<q{}> or C<qq{}> instead of quotes for awkward-looking strings. [Severity 2]
@@ -908,6 +912,11 @@ Write C<$EVAL_ERROR> instead of C<$@> [Severity 2]
 =head2 L<Perl::Critic::Policy::Variables::ProtectPrivateVars>
 
 Prevent access to private vars in other packages [Severity 3]
+
+=head2 L<Perl::Critic::Policy::Variables::RequireInitializationForLocalVars>
+
+Write C< local $foo = $bar; > instead of just C< local $foo; > [Severity 3]
+
 
 =head1 BENDING THE RULES
 
