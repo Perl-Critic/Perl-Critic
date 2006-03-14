@@ -71,3 +71,4 @@
 [Variables::ProhibitPackageVars]
 [Variables::ProhibitPunctuationVars]
 [Variables::ProtectPrivateVars]
+[Variables::RequireInitializationForLocalVars]

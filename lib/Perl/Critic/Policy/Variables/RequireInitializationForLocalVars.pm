@@ -1,0 +1,91 @@
+#######################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+########################################################################
+
+package Perl::Critic::Policy::Variables::RequireInitializationForLocalVars;
+
+use strict;
+use warnings;
+use Perl::Critic::Utils;
+use Perl::Critic::Violation;
+use base 'Perl::Critic::Policy';
+
+our $VERSION = '0.14_02';
+$VERSION = eval $VERSION;    ## no critic
+
+#---------------------------------------------------------------------------
+
+my $desc = q{'local' variable not initialized};
+my $expl = [ 78 ];
+
+#---------------------------------------------------------------------------
+
+sub default_severity { return $SEVERITY_MEDIUM }
+sub applies_to { return 'PPI::Statement::Variable' }
+
+#---------------------------------------------------------------------------
+
+sub violates {
+    my ( $self, $elem, $doc ) = @_;
+    if ( $elem->type() eq 'local' && !_is_initialized($elem) ) {
+        my $sev = $self->get_severity();
+        return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
+    }
+    return;    #ok!
+}
+
+#---------------------------------------------------------------------------
+
+sub _is_initialized {
+    my $elem = shift || return;
+    my $wanted = sub { $_[1]->isa('PPI::Token::Operator') && $_[1] eq q{=} };
+    return $elem->find( $wanted ) ? 1 : 0;
+}
+
+1;
+
+__END__
+
+#---------------------------------------------------------------------------
+
+=pod
+
+=head1 NAME
+
+Perl::Critic::Policy::Variables::RequireInitializationForLocalVars
+
+=head1 DESCRIPTION
+
+Most people don't realize that a localized copy of a variable does not
+retain its original value.  Unless you initialize the variable when
+you C<local>-ize it, it defaults to C<undef>.  If you want the
+variable to retain its original value, just initialize it to itself.
+
+  package Foo;
+  $Bar = '42';
+
+  package Baz;
+
+  sub frobulate {
+
+      local $Foo::Bar;              #not ok, local $Foo::Bar is 'undef'
+      local $Foo::Bar = $Foo::Bar;  #ok, local $Foo::Bar still equals '42'
+
+  }
+
+=head1 AUTHOR
+
+Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+
+=head1 COPYRIGHT
+
+Copyright (c) 2005-2006 Jeffrey Ryan Thalhammer.  All rights reserved.
+
+This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.  The full text of this license
+can be found in the LICENSE file included with this module.
+
+=cut

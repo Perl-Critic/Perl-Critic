@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 18;
+use Test::More tests => 20;
 use Perl::Critic::Config;
 use Perl::Critic;
 
@@ -308,5 +308,41 @@ unless (my $foo = $condition) { do_something() }
 END_PERL
 
 $policy = 'Variables::ProhibitConditionalDeclarations';
+is( pcritique($policy, \$code), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+
+local $foo;
+local ($foo, $bar);
+
+local $|;
+local ($|, $$);
+
+local $OUTPUT_RECORD_SEPARATOR;
+local ($OUTPUT_RECORD_SEPARATOR, $PROGRAM_NAME);
+
+END_PERL
+
+$policy = 'Variables::RequireInitializationForLocalVars';
+is( pcritique($policy, \$code), 6, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+
+local $foo = 'foo';
+local ($foo, $bar) = 'foo';       #Not right, but still passes
+local ($foo, $bar) = qw(foo bar);
+
+my $foo;
+my ($foo, $bar);
+our $bar
+our ($foo, $bar);
+
+END_PERL
+
+$policy = 'Variables::RequireInitializationForLocalVars';
 is( pcritique($policy, \$code), 0, $policy);
 

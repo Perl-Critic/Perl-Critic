@@ -127,7 +127,7 @@ sub get_input {
     else {
 
         #Reading code from STDIN
-        my $code_string = do { local $RS; <STDIN> };    #Slurping
+        my $code_string = do { local $RS = undef; <STDIN> };    #Slurping
         $code_string =~ m{ \S+ }mx || die 'Nothing to critique';
         return \$code_string;    #Convert to SCALAR ref for PPI
     }

@@ -9,6 +9,7 @@
 
      New Policies:
      * ValuesAndExpressions::ProhibitMixedBooleanOperators
+     * Variables::RequireInitializationForLocalVars
 
 
 [0.14_01] Released on 060305

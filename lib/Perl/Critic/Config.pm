@@ -322,6 +322,7 @@ sub native_policies {
       Perl::Critic::Policy::Variables::ProhibitPackageVars
       Perl::Critic::Policy::Variables::ProhibitPunctuationVars
       Perl::Critic::Policy::Variables::ProtectPrivateVars
+      Perl::Critic::Policy::Variables::RequireInitializationForLocalVars
     );
 }
 
