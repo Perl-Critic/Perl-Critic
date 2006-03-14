@@ -30,6 +30,7 @@
 [InputOutput::ProhibitBarewordFileHandles]
 [InputOutput::ProhibitOneArgSelect]
 [InputOutput::ProhibitReadlineInForLoop]
+[InputOutput::RequireBracedFileHandleWithPrint]
 [Miscellanea::ProhibitFormats]
 [Miscellanea::ProhibitTies]
 [Miscellanea::RequireRcsKeywords]

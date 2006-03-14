@@ -32,6 +32,7 @@
 [-InputOutput::ProhibitOneArgSelect]
 [-InputOutput::ProhibitReadlineInForLoop]
 [-InputOutput::ProhibitTwoArgOpen]
+[-InputOutput::RequireBracedFileHandleWithPrint]
 [-Miscellanea::ProhibitFormats]
 [-Miscellanea::ProhibitTies]
 [-Miscellanea::RequireRcsKeywords]

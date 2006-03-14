@@ -280,6 +280,7 @@ sub native_policies {
       Perl::Critic::Policy::InputOutput::ProhibitOneArgSelect
       Perl::Critic::Policy::InputOutput::ProhibitReadlineInForLoop
       Perl::Critic::Policy::InputOutput::ProhibitTwoArgOpen
+      Perl::Critic::Policy::InputOutput::RequireBracedFileHandleWithPrint
       Perl::Critic::Policy::Miscellanea::ProhibitFormats
       Perl::Critic::Policy::Miscellanea::ProhibitTies
       Perl::Critic::Policy::Miscellanea::RequireRcsKeywords

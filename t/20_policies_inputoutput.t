@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 12;
+use Test::More tests => 16;
 use Perl::Critic::Config;
 use Perl::Critic;
 
@@ -183,4 +183,64 @@ while( <> ){}
 END_PERL
 
 $policy = 'InputOutput::ProhibitReadlineInForLoop';
+is( pcritique($policy, \$code), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+
+print FH;
+print FH @list;
+print FH $foo, $bar;
+print( FH @list );
+print( FH $foo, $bar );
+
+END_PERL
+
+$policy = 'InputOutput::RequireBracedFileHandleWithPrint';
+is( pcritique($policy, \$code), 5, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+
+print $fh;
+print $fh @list;
+print $fh $foo, $bar;
+print( $fh @list );
+print( $fh $foo, $bar );
+
+END_PERL
+
+$policy = 'InputOutput::RequireBracedFileHandleWithPrint';
+is( pcritique($policy, \$code), 5, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+
+print {FH};
+print {FH} @list;
+print {FH} $foo, $bar;
+print( {FH} @list );
+print( {FH} $foo, $bar );
+
+END_PERL
+
+$policy = 'InputOutput::RequireBracedFileHandleWithPrint';
+is( pcritique($policy, \$code), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+
+print {$fh};
+print {$fh} @list;
+print {$fh} $foo, $bar;
+print( {$fh} @list );
+print( {$fh} $foo, $bar );
+
+END_PERL
+
+$policy = 'InputOutput::RequireBracedFileHandleWithPrint';
 is( pcritique($policy, \$code), 0, $policy);

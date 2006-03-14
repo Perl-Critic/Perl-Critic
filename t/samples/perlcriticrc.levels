@@ -229,3 +229,6 @@ severity = 1
 
 [Variables::RequireInitializationForLocalVars]
 severity = 1
+
+[InputOutput::RequireBracedFileHandleWithPrint]
+severity = 1
