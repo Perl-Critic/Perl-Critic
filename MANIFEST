@@ -30,6 +30,7 @@ lib/Perl/Critic/Policy/InputOutput/ProhibitBarewordFileHandles.pm
 lib/Perl/Critic/Policy/InputOutput/ProhibitOneArgSelect.pm
 lib/Perl/Critic/Policy/InputOutput/ProhibitReadlineInForLoop.pm
 lib/Perl/Critic/Policy/InputOutput/ProhibitTwoArgOpen.pm
+lib/Perl/Critic/Policy/InputOutput/RequireBracedFileHandleWithPrint.pm
 lib/Perl/Critic/Policy/Miscellanea/ProhibitFormats.pm
 lib/Perl/Critic/Policy/Miscellanea/ProhibitTies.pm
 lib/Perl/Critic/Policy/Miscellanea/RequireRcsKeywords.pm

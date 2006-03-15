@@ -51,7 +51,6 @@ OTHER PBP POLICIES THAT SEEM FEASIBLE TO IMPLEMENT:
   Make sure there's a close within N statements of an open, both with same lexical FH
 - InputOutput::ProhibitJoinedReadline (p213)
 - InputOutput::ProhibitExplicitStdin (p216)
-- InputOutput::RequireBracesOnPrintFilehandle (p217)
 - InputOutput::ProhibitInteractiveTest (p218)
   Forbid -t operand
 - RegularExpressions::RequireBracesForMultiline (p242)

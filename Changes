@@ -8,6 +8,7 @@
 [0.14_02] Released on ??????
 
      New Policies:
+     * InputOutput::RequireBracedFileHandelWithPrint
      * ValuesAndExpressions::ProhibitMixedBooleanOperators
      * Variables::RequireInitializationForLocalVars
 
