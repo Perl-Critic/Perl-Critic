@@ -189,7 +189,7 @@ is( pcritique($policy, \$code), 0, $policy);
 
 $code = <<'END_PERL';
 
-print FH;
+#print FH;             #Punt on this
 print FH @list;
 print FH $foo, $bar;
 print( FH @list );
@@ -198,13 +198,13 @@ print( FH $foo, $bar );
 END_PERL
 
 $policy = 'InputOutput::RequireBracedFileHandleWithPrint';
-is( pcritique($policy, \$code), 5, $policy);
+is( pcritique($policy, \$code), 4, $policy);
 
 #----------------------------------------------------------------
 
 $code = <<'END_PERL';
 
-print $fh;
+#print $fh;           #Punt on this
 print $fh @list;
 print $fh $foo, $bar;
 print( $fh @list );
@@ -213,7 +213,7 @@ print( $fh $foo, $bar );
 END_PERL
 
 $policy = 'InputOutput::RequireBracedFileHandleWithPrint';
-is( pcritique($policy, \$code), 5, $policy);
+is( pcritique($policy, \$code), 4, $policy);
 
 #----------------------------------------------------------------
 

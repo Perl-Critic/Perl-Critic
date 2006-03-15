@@ -539,6 +539,10 @@ Write C<<while( $line = <> ){...}>> instead of C<<for(<>){...}>> [Severity 4]
 
 Write C<open $fh, q{<}, $filename;> instead of C<open $fh, "<$filename";> [Severity 5]
 
+=head2 L<Perl::Critic::Policy::InputOutput::RequireBracedFileHandleWithPrint>
+
+Write C<print {$FH} $foo, $bar;> instead of C<print $FH $foo, $bar;> [Severity 1]
+
 =head2 L<Perl::Critic::Policy::Miscellanea::ProhibitFormats>
 
 Do not use C<format>. [Severity 3]
