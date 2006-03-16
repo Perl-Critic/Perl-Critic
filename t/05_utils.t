@@ -1,10 +1,7 @@
 use strict;
 use warnings;
 use PPI::Document;
-use Test::More tests => 31;
-
-our $VERSION = '0.13';
-$VERSION = eval $VERSION;  ## no critic
+use Test::More tests => 46;
 
 #---------------------------------------------------------------
 
@@ -21,8 +18,15 @@ can_ok('main', 'find_keywords');
 can_ok('main', 'is_hash_key');
 can_ok('main', 'is_method_call');
 can_ok('main', 'parse_arg_list');
+can_ok('main', 'is_perl_global');
+can_ok('main', 'is_perl_builtin');
+can_ok('main', 'precedence_of');
 can_ok('main', 'is_script');
+
 is($SPACE, ' ', 'character constants');
+is($SEVERITY_LOWEST, 1, 'severity constants');
+
+# These globals are deprecated.  Use function instead
 is((scalar grep {$_ eq 'grep'} @BUILTINS), 1, 'perl builtins');
 is((scalar grep {$_ eq 'OSNAME'} @GLOBALS), 1, 'perl globals');
 
@@ -30,10 +34,28 @@ is((scalar grep {$_ eq 'OSNAME'} @GLOBALS), 1, 'perl globals');
 #  find_keywords tests
 
 sub count_matches { my $val = shift; return defined $val ? scalar @$val : 0; }
-is(count_matches(find_keywords(PPI::Document->new(), 'return')), 0, 'find_keywords, no doc');
-is(count_matches(find_keywords(PPI::Document->new(\'sub foo { }'), 'return')), 0, 'find_keywords');
-is(count_matches(find_keywords(PPI::Document->new(\'sub foo { return 1; }'), 'return')), 1, 'find_keywords');
-is(count_matches(find_keywords(PPI::Document->new(\'sub foo { return 0 if @_; return 1; }'), 'return')), 2, 'find_keywords');
+sub make_doc { my $code = shift; return PPI::Document->new( ref $code ? $code : \$code); }
+
+{
+    my $doc = PPI::Document->new(); #Empty doc
+    is( count_matches( find_keywords($doc, 'return') ), 0, 'find_keywords, no doc' );
+
+    my $code = 'return;';
+    $doc = make_doc( $code );
+    is( count_matches( find_keywords($doc, 'return') ), 1, 'find_keywords, find 1');
+
+    $code = 'sub foo { }';
+    $doc = make_doc( $code );
+    is( count_matches( find_keywords($doc, 'return') ), 0, 'find_keywords, find 0');
+
+    $code = 'sub foo { return 1; }';
+    $doc = make_doc( $code );
+    is( count_matches( find_keywords($doc, 'return') ), 1, 'find_keywords, find 1');
+
+    $code = 'sub foo { return 0 if @_; return 1; }';
+    $doc = make_doc( $code );
+    is( count_matches( find_keywords($doc, 'return') ), 2, 'find_keywords, find 2');
+}
 
 ###########################
 #  is_hash_key tests
@@ -78,9 +100,67 @@ for my $code (@good) {
     $doc->index_locations();
     ok(is_script($doc), 'is_script, true');
 }
+
 for my $code (@bad) {
     my $doc = PPI::Document->new(\$code) || die;
     $doc->index_locations();
     ok(!is_script($doc), 'is_script, false');
+}
+
+############################
+# is_perl_builtin tests
+
+{
+    is(   is_perl_builtin('print'),  1, 'Is perl builtin function'     );
+    isnt( is_perl_builtin('foobar'), 1, 'Is not perl builtin function' );
+
+    my $code = 'sub print {}';
+    my $doc = make_doc( $code );
+    my $sub = $doc->find_first('Statement::Sub');
+    is( is_perl_builtin($sub), 1, 'Is perl builtin function (PPI)' );
+
+    $code = 'sub foobar {}';
+    $doc = make_doc( $code );
+    $sub = $doc->find_first('Statement::Sub');
+    isnt( is_perl_builtin($sub), 1, 'Is not perl builtin function (PPI)' );
+
+}
+
+############################
+# is_perl_global tests
+
+{
+    is(   is_perl_global('$OSNAME'),  1, 'Is perl global var'     );
+    isnt( is_perl_global('%FOOBAR'),  1, 'Is not perl global var' );
+
+    my $code = '$OSNAME';
+    my $doc  = make_doc($code);
+    my $var  = $doc->find_first('Token::Symbol');
+    is( is_perl_global($var), 1, 'Is perl global var (PPI)' );
+
+    $code = '%FOOBAR';
+    $doc  = make_doc($code);
+    $var  = $doc->find_first('Token::Symbol');
+    isnt( is_perl_global($var), 1, 'Is not perl global var (PPI)' );
+
+}
+
+############################
+# precedence_of tests
+
+{
+
+    cmp_ok( precedence_of('*'), '<', precedence_of('+'), 'Precedence' );
+
+    my $code1 = '8 + 5';
+    my $doc1  = make_doc($code1);
+    my $op1   = $doc1->find_first('Token::Operator');
+
+    my $code2 = '7 * 5';
+    my $doc2  = make_doc($code2);
+    my $op2   = $doc2->find_first('Token::Operator');
+
+    cmp_ok( precedence_of($op2), '<', precedence_of($op1), 'Precedence (PPI)' );
+
 }
 

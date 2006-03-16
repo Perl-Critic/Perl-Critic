@@ -45,7 +45,6 @@ sub _all_global_vars {
     my $elem = shift;
     for my $var ( $elem->variables() ) {
         next if $var =~ $package_rx;
-        $var =~ s{ \A [\$@%] }{}mx; #Remove sigil
         return if ! is_perl_global( $var );
     }
     return 1;

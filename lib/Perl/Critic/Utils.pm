@@ -180,17 +180,16 @@ sub is_perl_builtin {
 
 sub is_perl_global {
     my $elem = shift || return;
-    return exists $GLOBALS{ $elem };
+    my $var_name = "$elem"; #Convert Token::Symbol to string
+    $var_name =~ s{\A [\$@%] }{}mx;  #Chop off the sigil
+    return exists $GLOBALS{ $var_name };
 }
 
 #-------------------------------------------------------------------------
 
 sub precedence_of {
     my $elem = shift || return;
-    $elem->isa('PPI::Token::Operator') || return;
-    my $p = $PRECEDENCE_OF{ $elem };
-    warn qq{Precedence not defined for '$elem'} if ! defined $p;
-    return $p;
+    return $PRECEDENCE_OF{ ref $elem ? "$elem" : $elem };
 }
 
 #-------------------------------------------------------------------------
@@ -313,21 +312,24 @@ document doesn't contain any matches, returns undef.
 
 =item C<is_perl_global( $element )>
 
-Given a L<PPI::Element> returns true if that element represents one of
-the global variables provided by the L<English> module, or one of the
-builtin global variables like C<%SIG>, C<%ENV>, or C<@ARGV>.
+Given a L<PPI::Token::Symbol> or a string, returns true if that token
+represents one of the global variables provided by the L<English>
+module, or one of the builtin global variables like C<%SIG>, C<%ENV>,
+or C<@ARGV>.  The sigil on the symbol is ignored, so things like
+C<$ARGV> or C<$ENV> will still return true.
 
 =item C<is_perl_builtin( $element )>
 
-Given a L<PPI::Element> returns true if that element represents a call
-to any of the builtin functions defined in Perl 5.8.8
+Given a L<PPI::Token::Word> or a string, returns true if that token
+represents a call to any of the builtin functions defined in Perl
+5.8.8
 
 =item C<precedence_of( $element )>
 
-Given a L<PPI::Element> that is presumed to be an operator, returns
-the precedence of the operator, where 1 is the highest precedence.  If
-the element is not a L<PPI::Token::Operator>, then it returns
-C<undef>.
+Given a L<PPI::Token::Operator> or a string, returns the precedence of
+the operator, where 1 is the highest precedence.  Returns undef if the
+precedence can't be determined (which is usually because it is not an
+operator).
 
 =item C<is_hash_key( $element )>
 
