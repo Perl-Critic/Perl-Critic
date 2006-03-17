@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 16;
+use Test::More tests => 17;
 use Perl::Critic::Config;
 use Perl::Critic;
 
@@ -105,6 +105,15 @@ END_PERL
 
 $policy = 'InputOutput::ProhibitOneArgSelect';
 isnt( pcritique($policy, \$code), 1, '4 args' );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+sub select { }
+END_PERL
+
+$policy = 'InputOutput::ProhibitOneArgSelect';
+is( pcritique($policy, \$code), 0, 'RT Bug: #15653' );
 
 #----------------------------------------------------------------
 
