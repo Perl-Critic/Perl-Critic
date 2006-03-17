@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 use PPI::Document;
-use Test::More tests => 46;
+use Test::More tests => 49;
 
 #---------------------------------------------------------------
 
@@ -20,6 +20,7 @@ can_ok('main', 'is_method_call');
 can_ok('main', 'parse_arg_list');
 can_ok('main', 'is_perl_global');
 can_ok('main', 'is_perl_builtin');
+can_ok('main', 'is_subroutine_name');
 can_ok('main', 'precedence_of');
 can_ok('main', 'is_script');
 
@@ -164,3 +165,19 @@ for my $code (@bad) {
 
 }
 
+############################
+# is_subroutine_name tests
+
+{
+
+    my $code = 'sub foo {}';
+    my $doc  = make_doc( $code );
+    my $word = $doc->find_first( sub { $_[1] eq 'foo' } );
+    is( is_subroutine_name( $word ), 1, 'Is a subroutine name');
+
+    $code = '$bar = foo()';
+    $doc  = make_doc( $code );
+    $word = $doc->find_first( sub { $_[1] eq 'foo' } );
+    isnt( is_subroutine_name( $word ), 1, 'Is not a subroutine name');
+
+}
