@@ -18,15 +18,15 @@ $VERSION = eval $VERSION;    ## no critic
 # Exported symbols here
 
 our @EXPORT =
-  qw(@GLOBALS           $COMMA     &find_keywords    $SEVERITY_HIGHEST
-     @BUILTINS          $COLON     &is_hash_key      $SEVERITY_HIGH
-                        $SCOLON    &is_method_call   $SEVERITY_MEDIUM
-                        $QUOTE     &parse_arg_list   $SEVERITY_LOW
-                        $DQUOTE    &is_script        $SEVERITY_LOWEST
+  qw(@GLOBALS           $COMMA     &find_keywords       $SEVERITY_HIGHEST
+     @BUILTINS          $COLON     &is_hash_key         $SEVERITY_HIGH
+                        $SCOLON    &is_method_call      $SEVERITY_MEDIUM
+                        $QUOTE     &parse_arg_list      $SEVERITY_LOW
+                        $DQUOTE    &is_script           $SEVERITY_LOWEST
                         $SPACE     &precedence_of
                         $PIPE      &is_perl_builtin
      $TRUE              $PERIOD    &is_perl_global
-     $FALSE             $EMPTY
+     $FALSE             $EMPTY     &is_subroutine_name
 );
 
 #---------------------------------------------------------------------------
@@ -220,6 +220,15 @@ sub is_method_call {
 
 #-------------------------------------------------------------------------
 
+sub is_subroutine_name {
+    my $elem  = shift;
+    my $sib   = $elem->sprevious_sibling () || return;
+    my $stmnt = $elem->statement() || return;
+    return $stmnt->isa('PPI::Statement::Sub') && $sib eq 'sub';
+}
+
+#-------------------------------------------------------------------------
+
 sub is_script {
     my $doc = shift;
     my $first_comment = $doc->find_first('PPI::Token::Comment') || return;
@@ -351,6 +360,12 @@ is usually a L<PPI::Token::Word>), returns true if the function is a
 method being called on some reference.  Basically, it just looks to see
 if the preceding operator is "->".  This is useful for distinguishing
 static function calls from object method calls.
+
+=item C<is_subroutine_name( $element )>
+
+Given a L<PPI::Token::Word>, returns true if the element is the name
+of a suroutine declaration.  This is useful for distinguishing
+barewords and from function calls from subroutine declaraions.
 
 =item C<parse_arg_list( $element )>
 
