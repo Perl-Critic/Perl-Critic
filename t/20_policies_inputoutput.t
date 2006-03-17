@@ -190,6 +190,9 @@ is( pcritique($policy, \$code), 0, $policy);
 $code = <<'END_PERL';
 
 #print FH;             #Punt on this
+print FH "something" . "something else";
+print FH generate_report();
+print FH "something" if $DEBUG;
 print FH @list;
 print FH $foo, $bar;
 print( FH @list );
@@ -198,13 +201,16 @@ print( FH $foo, $bar );
 END_PERL
 
 $policy = 'InputOutput::RequireBracedFileHandleWithPrint';
-is( pcritique($policy, \$code), 4, $policy);
+is( pcritique($policy, \$code), 7, $policy);
 
 #----------------------------------------------------------------
 
 $code = <<'END_PERL';
 
 #print $fh;           #Punt on this
+print $fh "something" . "something else";
+print $fh generate_report();
+print $fh "something" if $DEBUG;
 print $fh @list;
 print $fh $foo, $bar;
 print( $fh @list );
@@ -213,17 +219,30 @@ print( $fh $foo, $bar );
 END_PERL
 
 $policy = 'InputOutput::RequireBracedFileHandleWithPrint';
-is( pcritique($policy, \$code), 4, $policy);
+is( pcritique($policy, \$code), 7, $policy);
 
 #----------------------------------------------------------------
 
 $code = <<'END_PERL';
 
+print "something" . "something else";
+print {FH} "something" . "something else";
+
+print generate_report();
+print {FH} generate_report();
+
 print {FH};
 print {FH} @list;
 print {FH} $foo, $bar;
+
+print @list;
+print $foo, $bar;
+
 print( {FH} @list );
 print( {FH} $foo, $bar );
+
+print( @list );
+print( $foo, $bar );
 
 END_PERL
 

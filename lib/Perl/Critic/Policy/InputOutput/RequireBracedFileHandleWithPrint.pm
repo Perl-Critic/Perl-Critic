@@ -47,6 +47,10 @@ sub violates {
     my $sib_2 = $sib_1->next_sibling() || return;
     my $sib_3 = $sib_2->next_sibling() || return;
 
+    # First token must be a symbol or bareword;
+    return if !(    $sib_1->isa('PPI::Token::Symbol')
+                 || $sib_1->isa('PPI::Token::Word') );
+
     # First token must not be a builtin function
     return if is_perl_builtin($sib_1);
 
