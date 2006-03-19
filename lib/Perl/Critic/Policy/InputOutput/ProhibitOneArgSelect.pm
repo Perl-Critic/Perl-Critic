@@ -31,6 +31,7 @@ sub applies_to { return 'PPI::Token::Word' }
 sub violates {
     my ($self, $elem, $doc) = @_;
     return if !($elem eq 'select');
+    return if is_subroutine_name($elem);
     return if is_method_call($elem);
     return if is_hash_key($elem);
 

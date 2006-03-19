@@ -35,6 +35,7 @@ sub violates {
     return if !($elem eq 'print');
     return if is_method_call($elem);
     return if is_hash_key($elem);
+    return if is_subroutine_name($elem);
 
     my $sib_1 = $elem->snext_sibling()  || return;
 

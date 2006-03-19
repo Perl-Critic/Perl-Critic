@@ -64,6 +64,8 @@ sub violates {
     my ( $self, $elem, $doc ) = @_;
     return if !exists $pages_of{$elem};
     return if is_hash_key($elem);
+    return if is_method_call($elem);
+    return if is_subroutine_name($elem);
 
     # Skip controls that are allowed
     return if exists $self->{_allow}{$elem};

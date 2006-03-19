@@ -44,7 +44,7 @@ sub violates {
        # that case, its just a declaration so this policy doesn't really apply
        return; # ok!
     }
-       
+
 
     my ($block) = @blocks;
     if (_block_is_empty($block) || _block_has_return($block)) {

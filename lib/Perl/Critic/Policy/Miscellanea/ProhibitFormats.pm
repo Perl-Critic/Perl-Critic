@@ -32,6 +32,7 @@ sub violates {
     my ( $self, $elem, $doc ) = @_;
     return if is_hash_key( $elem );
     return if is_method_call( $elem );
+    return if is_subroutine_name( $elem );
 
     if ( $elem eq 'format' ) {
         my $sev  = $self->get_severity();

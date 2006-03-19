@@ -33,6 +33,7 @@ sub violates {
     return if !($elem eq 'map');
     return if is_method_call($elem);
     return if is_hash_key($elem);
+    return if is_subroutine_name($elem);
 
     my $sib = $elem->snext_sibling() || return;
     my $arg = $sib->isa('PPI::Structure::List') ? $sib->schild(0) : $sib;

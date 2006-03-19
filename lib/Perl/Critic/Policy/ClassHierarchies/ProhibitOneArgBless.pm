@@ -33,6 +33,7 @@ sub violates {
     return if !($elem eq 'bless');
     return if is_method_call($elem);
     return if is_hash_key($elem);
+    return if is_subroutine_name($elem);
 
     if( scalar parse_arg_list($elem) == 1 ) {
         my $sev = $self->get_severity();

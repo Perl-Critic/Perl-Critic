@@ -20,7 +20,7 @@ $VERSION = eval $VERSION;    ## no critic
 
 my $glob_rx = qr{ [\*\?] }x;
 my $desc    = q{Glob written as <...>};
-my $expl    = [167];
+my $expl    = [ 167 ];
 
 #----------------------------------------------------------------------------
 

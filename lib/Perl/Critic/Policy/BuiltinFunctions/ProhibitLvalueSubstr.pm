@@ -33,6 +33,7 @@ sub violates {
     return if !($elem eq 'substr');
     return if is_method_call($elem);
     return if is_hash_key($elem);
+    return if is_subroutine_name($elem);
 
     my $sib = $elem;
     my $sev = $self->get_severity();

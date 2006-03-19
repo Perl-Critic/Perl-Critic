@@ -33,6 +33,7 @@ sub violates {
     return if !($elem eq 'select');
     return if is_method_call($elem);
     return if is_hash_key($elem);
+    return if is_subroutine_name($elem);
 
     if ( 3 == grep {$_->[0] eq 'undef' } parse_arg_list($elem) ){
         my $sev = $self->get_severity();
