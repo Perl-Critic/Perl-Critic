@@ -7,11 +7,13 @@
 
 [0.14_02] Released on ??????
 
+     Bug Fixes:
+     * 15653: False positive in OneArgSelect (fixed for real this time)
+
      New Policies:
      * InputOutput::RequireBracedFileHandelWithPrint
      * ValuesAndExpressions::ProhibitMixedBooleanOperators
      * Variables::RequireInitializationForLocalVars
-
 
 [0.14_01] Released on 060305
 

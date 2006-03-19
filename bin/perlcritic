@@ -463,10 +463,10 @@ command-line.  For example:
 
 This would cause C<perlcritic> to not report violations of the
 C<RequireUseStrict> and C<ProhibitNoStrict> policies even though they
-have a severity level that is greater than 1.  You can specify
-multiple C<-exclude> options and you can use it in conjunction with
-the C<-include> option.  Note that C<-exclude> takes precedence over
-C<-include> when a Policy matches both patterns.
+have the highest severity level.  You can specify multiple C<-exclude>
+options and you can use it in conjunction with the C<-include> option.
+Note that C<-exclude> takes precedence over C<-include> when a Policy
+matches both patterns.
 
 =item -force
 
@@ -1015,6 +1015,18 @@ are no errors, but C<perlcritic> finds Policy violations in your source
 code, exits with status == 2.  If there were no errors and no
 violations were found, exits with status == 0.
 
+=head1 THE L<Perl::Critic> PHILOSOPHY
+
+  Coding standards are deeply personal and highly subjective.  The
+  goal of L<Perl::Critic> is to help you write code that conforms with
+  a set of best practices.  Our primary goal is not to dictate what
+  those practices are, but rather, to implement the practices
+  discovered by others.  Ultimately, B<you> make the rules --
+  L<Perl::Critic> is merely tool for encouraging consistency.  If
+  there is a policy that you think is important or that we have
+  overlooked, we would be very grateful for contributions, or you can
+  simply load your own private set of policies into L<Perl::Critic>.
+
 =head1 EXTENDING THE CRITIC
 
 The modular design of Perl::Critic is intended to facilitate the
@@ -1040,15 +1052,15 @@ L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Perl-Critic>.  Thanks.
 
 =head1 CREDITS
 
-Adam Kennedy - For creating L<PPI>, the heart and soul of Perl::Critic.
+Adam Kennedy - For creating L<PPI>, the heart and soul of L<Perl::Critic>.
 
-Damian Conway - For writing B<Perl Best Practices>.
+Damian Conway - For writing B<Perl Best Practices>, finally :)
 
-Giuseppe Maxia - For all the great ideas and enhancements.
+Chris Dolan - For contributing the best features and Policy modules.
 
-Chris Dolan - For numerous bug reports and suggestions.
+Giuseppe Maxia - For all the great ideas and positive encouragement.
 
-Sharon, my wife - For putting up with my all-night code sessions.
+and Sharon, my wife - For putting up with my all-night code sessions.
 
 =head1 AUTHOR
 

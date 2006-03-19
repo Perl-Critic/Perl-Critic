@@ -379,9 +379,9 @@ ranging from 1 (least severe) to 5 (most severe).  However, you may
 disagree with the default severity and choose to give it a higher or
 lower severity, based on your own coding philosophy.
 
-The remaining key-value pairs are configuration parameters for that
-will be passed into the constructor that Policy.  The constructors for
-most Policy modules do not support arguments, and those that do should
+The remaining key-value pairs are configuration parameters that will
+be passed into the constructor for that Policy.  The constructors for
+most Policy objects do not support arguments, and those that do should
 have reasonable defaults.  See the documentation on the appropriate
 Policy module for more details.
 
@@ -786,6 +786,18 @@ Perl-Critic should be less "critical" for new users, and should steer
 them toward gradually increasing the strictness as they adopt better
 coding practices.
 
+=head1 THE L<Perl::Critic> PHILOSOPHY
+
+  Coding standards are deeply personal and highly subjective.  The
+  goal of L<Perl::Critic> is to help you write code that conforms with
+  a set of best practices.  Our primary goal is not to dictate what
+  those practices are, but rather, to implement the practices
+  discovered by others.  Ultimately, B<you> make the rules --
+  L<Perl::Critic> is merely tool for encouraging consistency.  If
+  there is a policy that you think is important or that we have
+  overlooked, we would be very grateful for contributions, or you can
+  simply load your own private set of policies into L<Perl::Critic>.
+
 =head1 EXTENDING THE CRITIC
 
 The modular design of Perl::Critic is intended to facilitate the
@@ -844,15 +856,15 @@ L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Perl-Critic>.  Thanks.
 
 =head1 CREDITS
 
-Adam Kennedy - For creating L<PPI>, the heart and soul of Perl::Critic.
+Adam Kennedy - For creating L<PPI>, the heart and soul of L<Perl::Critic>.
 
-Damian Conway - For writing B<Perl Best Practices>
+Damian Conway - For writing B<Perl Best Practices>, finally :)
 
-Giuseppe Maxia - For all the great ideas and enhancements.
+Chris Dolan - For contributing the best features and Policy modules.
 
-Chris Dolan - For numerous bug reports and suggestions.
+Giuseppe Maxia - For all the great ideas and positive encouragement.
 
-Sharon, my wife - For putting up with my all-night code sessions
+and Sharon, my wife - For putting up with my all-night code sessions.
 
 =head1 AUTHOR
 
