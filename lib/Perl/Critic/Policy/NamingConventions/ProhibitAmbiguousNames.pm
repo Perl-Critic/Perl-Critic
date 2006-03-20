@@ -68,7 +68,7 @@ sub violates {
 
             # strip off any leading "Package::"
             my ($name) = $word =~ m/ (\w+) \z /xms;
-            if ( $self->{_forbid}->{$name} ) {
+            if ( defined $name && $self->{_forbid}->{$name} ) {
                 my $sev = $self->get_severity();
                 return Perl::Critic::Violation->new($desc, $expl, $elem, $sev);
             }
