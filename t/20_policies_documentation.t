@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 8;
+use Test::More tests => 13;
 use Perl::Critic::Config;
 use Perl::Critic;
 
@@ -18,6 +18,7 @@ PerlCriticTestUtils::block_perlcriticrc();
 
 my $code;
 my $policy;
+my %config;
 
 #----------------------------------------------------------------
 
@@ -153,6 +154,127 @@ END_PERL
 $policy = 'Documentation::RequirePodAtEnd';
 is( pcritique($policy, \$code), 0, $policy);
 
+#----------------------------------------------------------------
 
+$code = <<'END_PERL';
+#!/usr/bin/perl
+print 'Hello World';
+END_PERL
+
+$policy = 'Documentation::RequirePodSections';
+is( pcritique($policy, \$code), 0, 'No POD');
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+#!/usr/bin/perl
+
+print 'Hello World';
+
+__END__
+
+=head1 NAME  
+
+Blah...
+
+=head1   DESCRIPTION  
+
+Blah...
+
+=head1 USAGE
+
+Blah...
+
+
+END_PERL
+
+$policy = 'Documentation::RequirePodSections';
+is( pcritique($policy, \$code), 10, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+#No shebang, this is a library
+#POD is inline with code too
+
+=head1 NAME  
+
+Blah...
+
+=head1  DESCRIPTION
+
+Blah...
+
+=cut
+
+print 'Hello World';
+
+=head1  SUBROUTINES/METHODS 
+
+Blah...
+
+=cut
+
+sub foobar {}
+
+=head1 AUTHOR
+
+Santa Claus
+
+=cut
+
+END_PERL
+
+$policy = 'Documentation::RequirePodSections';
+is( pcritique($policy, \$code), 8, $policy);
+
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+#No shebang, this is a library
+
+print 'Hello World';
+
+__END__
+
+=head1 MI NOMBRE
+
+Blah...
+
+=head1 EL DESCRIPCION
+
+Blah...
+
+=cut
+
+END_PERL
+
+%config = (lib_sections => 'mi nombre | el descripcion');
+$policy = 'Documentation::RequirePodSections';
+is( pcritique($policy, \$code, \%config), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+#!/usr/bin/perl
+
+__END__
+
+=head1 MI NOMBRE
+
+Blah...
+
+=head1 EL DESCRIPCION
+
+Blah...
+
+=cut
+
+END_PERL
+
+%config = (script_sections => 'mi nombre | el descripcion');
+$policy = 'Documentation::RequirePodSections';
+is( pcritique($policy, \$code, \%config), 0, $policy);
 
 

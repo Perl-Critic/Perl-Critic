@@ -27,6 +27,7 @@
 [ControlStructures::ProhibitUnlessBlocks]
 [ControlStructures::ProhibitUntilBlocks]
 [Documentation::RequirePodAtEnd]
+[Documentation::RequirePodSections]
 [InputOutput::ProhibitBacktickOperators]
 [InputOutput::ProhibitBarewordFileHandles]
 [InputOutput::ProhibitOneArgSelect]

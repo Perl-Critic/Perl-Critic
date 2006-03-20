@@ -235,3 +235,6 @@ severity = 1
 
 [ClassHierarchies::ProhibitAutoloading]
 severity = 1
+
+[Documentation::RequirePodSections]
+severity = 1

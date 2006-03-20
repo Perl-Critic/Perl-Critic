@@ -11,7 +11,7 @@ use Test::More;
 
 eval {
     require Test::Perl::Critic;
-    my @exclude = qw(Rcs Tidy);
+    my @exclude = qw(Rcs Tidy PodSections);
     Test::Perl::Critic->import( -severity => 1, -exclude => \@exclude);
 };
 

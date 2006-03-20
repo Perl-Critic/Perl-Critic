@@ -26,6 +26,7 @@ lib/Perl/Critic/Policy/ControlStructures/ProhibitPostfixControls.pm
 lib/Perl/Critic/Policy/ControlStructures/ProhibitUnlessBlocks.pm
 lib/Perl/Critic/Policy/ControlStructures/ProhibitUntilBlocks.pm
 lib/Perl/Critic/Policy/Documentation/RequirePodAtEnd.pm
+lib/Perl/Critic/Policy/Documentation/RequirePodSections.pm
 lib/Perl/Critic/Policy/InputOutput/ProhibitBacktickOperators.pm
 lib/Perl/Critic/Policy/InputOutput/ProhibitBarewordFileHandles.pm
 lib/Perl/Critic/Policy/InputOutput/ProhibitOneArgSelect.pm
@@ -104,9 +105,9 @@ t/20_policies_subroutines.t
 t/20_policies_testinganddebugging.t
 t/20_policies_valuesandexpressions.t
 t/20_policies_variables.t
+t/97_spelling.t
 t/98_pod_syntax.t
 t/99_pod_coverage.t
-t/99_spelling.t
 t/samples/perlcriticrc.all
 t/samples/perlcriticrc.levels
 t/samples/perlcriticrc.none

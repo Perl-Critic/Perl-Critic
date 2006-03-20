@@ -12,6 +12,7 @@
 
      New Policies:
      * ClassHierarchies::ProhibitAutoloading
+     * Documentation::RequirePodSections
      * InputOutput::RequireBracedFileHandelWithPrint
      * ValuesAndExpressions::ProhibitMixedBooleanOperators
      * Variables::RequireInitializationForLocalVars
