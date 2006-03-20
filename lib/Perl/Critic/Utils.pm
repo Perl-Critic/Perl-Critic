@@ -364,8 +364,8 @@ static function calls from object method calls.
 =item C<is_subroutine_name( $element )>
 
 Given a L<PPI::Token::Word>, returns true if the element is the name
-of a suroutine declaration.  This is useful for distinguishing
-barewords and from function calls from subroutine declaraions.
+of a subroutine declaration.  This is useful for distinguishing
+barewords and from function calls from subroutine declarations.
 
 =item C<parse_arg_list( $element )>
 

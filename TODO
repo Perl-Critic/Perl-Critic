@@ -29,9 +29,6 @@ OTHER PBP POLICIES THAT SEEM FEASIBLE TO IMPLEMENT:
 - Variables::RequireNegativeIndices (p88)
 - Variables::RequireLexicalForLoopIterator (p108)
 - Variables::ProhibitTopicChangeInListFunction (p114)
-- Documentation::RequireSections (p133, p138)
-  List the required the =head1 entries in an ordered list
-  Make that list overrideable in perlcriticrc
 - Documentation::PodSpelling (p148)
   Base it on Pod::Spell or Test::Spelling
   Add a "=for stopwords" section for words to skip, as per Pod::Spell
@@ -69,6 +66,5 @@ OTHER PBP POLICIES THAT SEEM FEASIBLE TO IMPLEMENT:
 - RegularExpressions::ProhibitFixedStringMatches (p271)
   Can't be qr/\s*\\A\s*\((?:\?:)?(?:\s*\w+\s*\|)*\s*\w+\s*\)\s*\\z/
   or qr/\s*\\A\s*\w+\s*\\z/
-- ClassHierarchies::ProhibitAutoload (p393)
 - TestingAndDebugging::ProhibitProlongedStrictureOverride (p443)
 

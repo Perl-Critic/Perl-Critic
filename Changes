@@ -5,17 +5,18 @@
 # $Revision$
 ########################################################################
 
-[0.14_02] Released on ??????
+[0.14_02] Released on 20060319
 
      Bug Fixes:
      * 15653: False positive in OneArgSelect (fixed for real this time)
 
      New Policies:
+     * ClassHierarchies::ProhibitAutoloading
      * InputOutput::RequireBracedFileHandelWithPrint
      * ValuesAndExpressions::ProhibitMixedBooleanOperators
      * Variables::RequireInitializationForLocalVars
 
-[0.14_01] Released on 060305
+[0.14_01] Released on 20060305
 
      Bug Fixes:
      * 14731: False positive: Builtin function called with parens
@@ -28,7 +29,7 @@
      * Miscellanea::ProhibitTies
      * Variables::ProhibitConditionalDeclarations
 
-[0.14] Released on 060129
+[0.14] Released on 20060129
 
      More documentation edits.
 
@@ -51,13 +52,13 @@
      Bug Fixes:
      * 16906:  tr/// created false-postives with RegularExpression polices.
 
-[0.13_04] Released on 051231
+[0.13_04] Released on 20051231
 
      Moved DEVELOPER.pod file into the Perl/Critic dir.
 
      More documentation edits.
 
-[0.13_03] Released on 051230
+[0.13_03] Released on 20051230
 
      perlcritic now prints 'source OK' if it doesn't find any
      violations.  This gives folks a warm fuzzy feeling.
@@ -65,14 +66,14 @@
      Tweaked some test cases that were failing on my Solaris
      environment at work.
 
-[0.13_02] Released on 051229
+[0.13_02] Released on 20051229
 
      Fixed Config to recognize fully-qualified module names in the
      .perlcriticrc file.
 
      Various documentation edits.
 
-[0.13_01] Released on 051228
+[0.13_01] Released on 20051228
 
      Replaced 'priority' concept with 'severity'.  Now each Policy module
      has a predefined severity level ranging from 1 to 5.  By default,
@@ -110,7 +111,7 @@
      * 16288: Empty lists caused a fatal error RequireTrailingCommas
      * 15653: Fixed false positive in OneArgSelect.
      
-[0.13] Released on 051031 
+[0.13] Released on 20051031 
 
      Production release of 0.12_03.  No code major changes.
 
@@ -203,7 +204,7 @@
      15031: Fixed spelling mistakes (and probably added some new ones).
      15233: Postfix 'if' is now allowed with 'die', 'croak', etc.
 
-[0.12] Released 051010
+[0.12] Released 20051010
 
      Redesigned the 'verbose' feature.  Now the output format 
      can be user-defined using a sprintf-like specification.
@@ -235,7 +236,7 @@
      * IO::String
      * Pod::PlainText
 
-[0.10] Released 051005
+[0.10] Released 20051005
 
      Fixed stupid bug in newest Policy modules.  They were returning
      PPI objects instead of Perl::Critic::Violation objects.  Doh!
@@ -248,7 +249,7 @@
      Put the Changes file in reverse-chronological order, so the most
      recent stuff is easy to find at the top of the file
 
-[0.09] Released 051004
+[0.09] Released 20051004
 
      Fixed several bugs:
      * 14810: Now you are allowed to create your own 'import' function,
@@ -275,7 +276,7 @@
      Changed the syntax for the magic comments.  Adam had the
      idea of using a pragma-like notation.  I liked it.
 
-[0.08_2] Released 050927
+[0.08_2] Released 20050927
 
      Fixed problems with Perl::Critic::Config that caused File::Spec
      to emit 'uninitialized value' warnings during the build.
@@ -306,7 +307,7 @@
      require those fancy Damian modules that don't seem to work on
      some older versions of Perl.
 
-[0.07] Released on 050921
+[0.07] Released on 20050921
 
      Fixed bugs in the ProhibitCascadingIfElse policy.  
 
@@ -334,7 +335,7 @@
      Added test cases to verify the configuration functionality.  These
      are not completely thorough and need more work.
 
-[0.06] Released on 050917
+[0.06] Released on 20050917
 
      Now called 'Perl::Critic'.  
 
@@ -344,23 +345,23 @@
 
      Added support for Module::Build.
 
-[0.05] Released on 050917
+[0.05] Released on 20050917
 
      End of 'Perl::Review' releases.  I have changed the name to
      'Perl::Critic' to avoid possible confusion with "The Perl Review"
      magazine.
 
-[0.04] Released on 050914
+[0.04] Released on 20050914
 
      Version 0.03 was a bust because I uploaded the wrong tarball to PAUSE.
 
-[0.03] Released on 050913.
+[0.03] Released on 20050913.
 
      Fixed some POD links.  
 
      Removed test cases for missing policy module.
 
-[0.02] Released on 050913.
+[0.02] Released on 20050913.
 
      Major overhaul based on feedback from Perl community.
 
@@ -374,7 +375,7 @@
      Gave perlreview a command-line interface and configuration file
      for selecting which Policy modules to use.
 
-[0.01] Released on 050816.
+[0.01] Released on 20050816.
 
      Initial version.
 

@@ -16,6 +16,7 @@
 [-BuiltinFunctions::RequireGlobFunction]
 [-ClassHierarchies::ProhibitExplicitISA]
 [-ClassHierarchies::ProhibitOneArgBless]
+[-ClassHierarchies::ProhibitAutoloading]
 [-CodeLayout::ProhibitHardTabs]
 [-CodeLayout::ProhibitParensWithBuiltins]
 [-CodeLayout::ProhibitQuotedWordLists]

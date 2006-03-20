@@ -232,3 +232,6 @@ severity = 1
 
 [InputOutput::RequireBracedFileHandleWithPrint]
 severity = 1
+
+[ClassHierarchies::ProhibitAutoloading]
+severity = 1

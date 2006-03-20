@@ -97,15 +97,15 @@ Perl::Critic::Policy::ValuesAndExpressions::ProhibitMixedBooleanOperators
 =head1 DESCRIPTION
 
 Conway advises against combining the low-precedence booleans ( C<and
-or not> ) with the high-precendence boolean operators ( C<&& || !> )
+or not> ) with the high-precedence boolean operators ( C<&& || !> )
 in the same expression.  Unless you fully understand the differences
-between the high and low-precendence operators, it is easy to
-misinterpet expressions that use both.  And even if you do understand
+between the high and low-precedence operators, it is easy to
+misinterpret expressions that use both.  And even if you do understand
 them, it is not always clear if the author actually intended it.
 
-next if not $foo || $bar;  #not ok
-next if !$foo || $bar;     #ok
-next if !( $foo || $bar ); #ok
+  next if not $foo || $bar;  #not ok
+  next if !$foo || $bar;     #ok
+  next if !( $foo || $bar ); #ok
 
 =head1 AUTHOR
 

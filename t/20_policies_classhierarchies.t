@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 4;
+use Test::More tests => 7;
 use Perl::Critic::Config;
 use Perl::Critic;
 
@@ -58,6 +58,7 @@ END_PERL
 
 $policy = 'ClassHierarchies::ProhibitExplicitISA';
 is( pcritique($policy, \$code), 3, $policy );
+
 #-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
@@ -66,4 +67,36 @@ use base 'Foo';
 END_PERL
 
 $policy = 'ClassHierarchies::ProhibitExplicitISA';
+is( pcritique($policy, \$code), 0, $policy );
+
+#-----------------------------------------------------------------------------
+
+$code = <<'END_PERL';
+sub AUTOLOAD {}
+END_PERL
+
+$policy = 'ClassHierarchies::ProhibitAutoloading';
+is( pcritique($policy, \$code), 1, $policy );
+
+#-----------------------------------------------------------------------------
+
+$code = <<'END_PERL';
+sub AUTOLOAD {
+     $foo, $bar = @_;
+     return $baz;
+}
+END_PERL
+
+$policy = 'ClassHierarchies::ProhibitAutoloading';
+is( pcritique($policy, \$code), 1, $policy );
+
+#-----------------------------------------------------------------------------
+
+$code = <<'END_PERL';
+sub autoload {}
+my $AUTOLOAD = 'foo';
+our @AUTOLOAD = qw(nuts);
+END_PERL
+
+$policy = 'ClassHierarchies::ProhibitAutoloading';
 is( pcritique($policy, \$code), 0, $policy );
