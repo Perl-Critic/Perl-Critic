@@ -18,7 +18,7 @@ use English qw(-no_match_vars);
 use overload q{""} => 'to_string';
 use UNIVERSAL qw(isa);
 
-our $VERSION = '0.14_02';
+our $VERSION = '0.15';
 $VERSION = eval $VERSION;    ## no critic
 
 #Class variables...

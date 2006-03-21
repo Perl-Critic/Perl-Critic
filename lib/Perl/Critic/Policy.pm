@@ -11,7 +11,7 @@ use strict;
 use warnings;
 use Perl::Critic::Utils;
 
-our $VERSION = '0.14_02';
+our $VERSION = '0.15';
 $VERSION = eval $VERSION;    ## no critic
 
 #----------------------------------------------------------------------------
