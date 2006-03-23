@@ -875,7 +875,7 @@ Write C<oct(755)> instead of C<0755> [Severity 5]
 
 =head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitMixedBooleanOperators>
 
-Write C< !$foo && $bar || $baz > instead of C< not $foo && $bar or $baz>
+Write C< !$foo && $bar || $baz > instead of C< not $foo && $bar or $baz> [Severity 4]
 
 =head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitNoisyQuotes>
 
