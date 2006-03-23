@@ -1,5 +1,5 @@
 NAME
-    Perl::Critic - Critique Perl source code for style and standards
+    Perl::Critic - Critique Perl source code for best-practices
 
 SYNOPSIS
       use Perl::Critic;
@@ -24,7 +24,7 @@ DESCRIPTION
     suitable for test scripts. For the ultimate convenience (at the expense
     of some flexibility) see the criticism pragma.
 
-    Win32 and ActvePerl users can find PPM distributions of Perl::Critic at
+    Win32 and ActivePerl users can find PPM distributions of Perl::Critic at
     <http://theoryx5.uwinnipeg.ca/ppms/>.
 
 CONSTRUCTOR
@@ -114,7 +114,7 @@ METHODS
 
             -config is an optional reference to a hash of Policy
             configuration parameters. Note that this is not the same thing
-            as a "Perl::Critic::Config object". The contents of this hash
+            as a Perl::Critic::Config object. The contents of this hash
             reference will be passed into to the constructor of the Policy
             module. See the documentation in the relevant Policy module for
             a description of the arguments it supports.
@@ -160,9 +160,9 @@ CONFIGURATION
     the default severity and choose to give it a higher or lower severity,
     based on your own coding philosophy.
 
-    The remaining key-value pairs are configuration parameters for that will
-    be passed into the constructor that Policy. The constructors for most
-    Policy modules do not support arguments, and those that do should have
+    The remaining key-value pairs are configuration parameters that will be
+    passed into the constructor for that Policy. The constructors for most
+    Policy objects do not support arguments, and those that do should have
     reasonable defaults. See the documentation on the appropriate Policy
     module for more details.
 
@@ -244,6 +244,9 @@ THE POLICIES
   Perl::Critic::Policy::BuiltinFunctions::RequireGlobFunction
     Use "glob q{*}" instead of <*> [Severity 5]
 
+  Perl::Critic::Policy::ClassHierarchies::ProhibitExplicitISA
+    Employ "use base" instead of @ISA [Severity 3]
+
   Perl::Critic::Policy::ClassHierarchies::ProhibitOneArgBless
     Write "bless {}, $class;" instead of just "bless {};" [Severity 5]
 
@@ -281,6 +284,12 @@ THE POLICIES
   Perl::Critic::Policy::ControlStructures::ProhibitUntilBlocks
     Write "while(! $condition)" instead of "until($condition)" [Severity 2]
 
+  Perl::Critic::Policy::Documentation::RequirePodAtEnd
+    All POD should be after "__END__" [Severity 1]
+
+  Perl::Critic::Policy::Documentation::RequirePodSections
+    Organize your POD into the customary sections. [Severity 2]
+
   Perl::Critic::Policy::InputOutput::ProhibitBacktickOperators
     Discourage stuff like "@files = `ls $directory`" [Severity 3]
 
@@ -291,9 +300,23 @@ THE POLICIES
   Perl::Critic::Policy::InputOutput::ProhibitOneArgSelect
     Never write "select($fh)" [Severity 4]
 
+  Perl::Critic::Policy::InputOutput::ProhibitReadlineInForLoop
+    Write "<while( $line = <" ){...}>> instead of "<for(<"){...}>> [Severity
+    4]
+
   Perl::Critic::Policy::InputOutput::ProhibitTwoArgOpen
     Write "open $fh, q{<}, $filename;" instead of "open $fh, "<$filename";"
     [Severity 5]
+
+  Perl::Critic::Policy::InputOutput::RequireBracedFileHandleWithPrint
+    Write "print {$FH} $foo, $bar;" instead of "print $FH $foo, $bar;"
+    [Severity 1]
+
+  Perl::Critic::Policy::Miscellanea::ProhibitFormats
+    Do not use "format". [Severity 3]
+
+  Perl::Critic::Policy::Miscellanea::ProhibitTies
+    Do not use "tie". [Severity 2]
 
   Perl::Critic::Policy::Miscellanea::RequireRcsKeywords
     Put source-control keywords in every file. [Severity 2]
@@ -352,6 +375,9 @@ THE POLICIES
   Perl::Critic::Policy::Subroutines::ProhibitSubroutinePrototypes
     Don't write "sub my_function (@@) {}" [Severity 5]
 
+  Perl::Critic::Policy::Subroutines::ProtectPrivateSubs
+    Prevent access to private subs in other packages [Severity 3]
+
   Perl::Critic::Policy::Subroutines::RequireFinalReturn
     End every path through a subroutine with an explicit "return" statement.
     [Severity 4]
@@ -380,6 +406,10 @@ THE POLICIES
   Perl::Critic::Policy::ValuesAndExpressions::ProhibitLeadingZeros
     Write "oct(755)" instead of 0755 [Severity 5]
 
+  Perl::Critic::Policy::ValuesAndExpressions::ProhibitMixedBooleanOperators
+    Write " !$foo && $bar || $baz " instead of " not $foo && $bar or $baz"
+    [Severity 4]
+
   Perl::Critic::Policy::ValuesAndExpressions::ProhibitNoisyQuotes
     Use "q{}" or "qq{}" instead of quotes for awkward-looking strings.
     [Severity 2]
@@ -397,14 +427,26 @@ THE POLICIES
   Perl::Critic::Policy::ValuesAndExpressions::RequireUpperCaseHeredocTerminator
     Write " <<'THE_END'; " instead of " <<'theEnd'; " [Severity 1]
 
+  Perl::Critic::Policy::Variables::ProhibitConditionalDeclarations
+    Do not write " my $foo = $bar if $baz; " [Severity 5]
+
   Perl::Critic::Policy::Variables::ProhibitLocalVars
     Use "my" instead of "local", except when you have to. [Severity 2]
+
+  Perl::Critic::Policy::Variables::ProhibitMatchVars
+    Avoid $`, $&, $' and their English equivalents. [Severity 4]
 
   Perl::Critic::Policy::Variables::ProhibitPackageVars
     Eliminate globals declared with "our" or "use vars" [Severity 3]
 
   Perl::Critic::Policy::Variables::ProhibitPunctuationVars
     Write $EVAL_ERROR instead of $@ [Severity 2]
+
+  Perl::Critic::Policy::Variables::ProtectPrivateVars
+    Prevent access to private vars in other packages [Severity 3]
+
+  Perl::Critic::Policy::Variables::RequireInitializationForLocalVars
+    Write "local $foo = $bar;" instead of just "local $foo;" [Severity 3]
 
 BENDING THE RULES
     Perl::Critic takes a hard-line approach to your code: either you comply
@@ -462,7 +504,7 @@ IMPORTANT CHANGES
   VERSION 0.14
     Starting in version 0.14, the interface to Perl::Critic::Violation
     changed. This will also break any custom Policy modules that you might
-    have written for ealier modules. See DEVELOPER.pod for an up-to-date
+    have written for earlier modules. See DEVELOPER.pod for an up-to-date
     guide on creating Policy modules.
 
     The notion of "priority" was also replaced with "severity" in version
@@ -471,6 +513,17 @@ IMPORTANT CHANGES
     decision was based on user-feedback suggesting that Perl-Critic should
     be less "critical" for new users, and should steer them toward gradually
     increasing the strictness as they adopt better coding practices.
+
+THE Perl::Critic PHILOSOPHY
+      Coding standards are deeply personal and highly subjective.  The
+      goal of L<Perl::Critic> is to help you write code that conforms with
+      a set of best practices.  Our primary goal is not to dictate what
+      those practices are, but rather, to implement the practices
+      discovered by others.  Ultimately, B<you> make the rules --
+      L<Perl::Critic> is merely tool for encouraging consistency.  If
+      there is a policy that you think is important or that we have
+      overlooked, we would be very grateful for contributions, or you can
+      simply load your own private set of policies into L<Perl::Critic>.
 
 EXTENDING THE CRITIC
     The modular design of Perl::Critic is intended to facilitate the
@@ -528,13 +581,13 @@ BUGS
 CREDITS
     Adam Kennedy - For creating PPI, the heart and soul of Perl::Critic.
 
-    Damian Conway - For writing Perl Best Practices
+    Damian Conway - For writing Perl Best Practices, finally :)
 
-    Giuseppe Maxia - For all the great ideas and enhancements.
+    Chris Dolan - For contributing the best features and Policy modules.
 
-    Chris Dolan - For numerous bug reports and suggestions.
+    Giuseppe Maxia - For all the great ideas and positive encouragement.
 
-    Sharon, my wife - For putting up with my all-night code sessions
+    and Sharon, my wife - For putting up with my all-night code sessions.
 
 AUTHOR
     Jeffrey Ryan Thalhammer <thaljef@cpan.org>
