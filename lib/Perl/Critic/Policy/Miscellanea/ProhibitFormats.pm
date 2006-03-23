@@ -36,7 +36,7 @@ sub violates {
 
     if ( $elem eq 'format' ) {
         my $sev  = $self->get_severity();
-        return Perl::Critic::Violation->new( $desc, $expl, $doc, $sev );
+        return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
     }
 
     return;  #ok!
