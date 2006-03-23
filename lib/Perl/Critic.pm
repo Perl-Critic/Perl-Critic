@@ -783,7 +783,7 @@ might have written for earlier modules.  See L<DEVELOPER.pod> for an
 up-to-date guide on creating Policy modules.
 
 The notion of "priority" was also replaced with "severity" in version
-0.15.  Consequently, the default behavior of Perl::Critic is to only
+0.14.  Consequently, the default behavior of Perl::Critic is to only
 load the most "severe" Policy modules, rather than loading all of
 them.  This decision was based on user-feedback suggesting that
 Perl-Critic should be less "critical" for new users, and should steer
