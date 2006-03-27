@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 13;
+use Test::More tests => 14;
 use Perl::Critic::Config;
 use Perl::Critic;
 
@@ -153,6 +153,19 @@ END_PERL
 
 $policy = 'Documentation::RequirePodAtEnd';
 is( pcritique($policy, \$code), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+=pod
+
+=head1 NO CODE IN HERE
+
+=cut
+END_PERL
+
+$policy = 'Documentation::RequirePodSections';
+is( pcritique($policy, \$code), 0, 'No code');
 
 #----------------------------------------------------------------
 

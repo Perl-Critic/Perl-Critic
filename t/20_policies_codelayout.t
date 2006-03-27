@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 20;
+use Test::More tests => 24;
 use Perl::Critic::Config;
 use Perl::Critic;
 
@@ -264,10 +264,75 @@ $bar = ( $condition1
               || $condition3 )
        );
 
+
+# These were reported as false-positives.
+# See http://rt.cpan.org/Ticket/Display.html?id=18297
+
+$median = ( $times[ int $array_size / 2 ] +
+            $times[(int $array_size / 2) - 1 ]) / 2;
+
+$median = ( $times[ int $array_size / 2 ] +
+            $times[ int $array_size / 2  - 1 ]) / 2;
+
+
+
 END_PERL
 
 $policy = 'CodeLayout::RequireTrailingCommas';
 is( pcritique($policy, \$code), 0, $policy);
+
+#-----------------------------------------------------------------------------
+
+$code = <<'END_PERL';
+$foo= 42;
+$bar   =56;
+$baz   =   67;
+END_PERL
+
+$policy = 'CodeLayout::RequireTidyCode';
+is( pcritique($policy, \$code), 1, 'Untidy code' );
+
+#-----------------------------------------------------------------------------
+
+$code = <<'END_PERL';
+#Only one trailing newline
+$foo = 42;
+$bar = 56;
+END_PERL
+
+$policy = 'CodeLayout::RequireTidyCode';
+is( pcritique($policy, \$code), 0, 'Tidy with one trailing newline' );
+
+#-----------------------------------------------------------------------------
+
+$code = <<'END_PERL';
+#Two trailing newlines
+$foo = 42;
+$bar = 56;
+
+END_PERL
+
+$policy = 'CodeLayout::RequireTidyCode';
+is( pcritique($policy, \$code), 0, 'Tidy with two trailing newlines' );
+
+#-----------------------------------------------------------------------------
+
+$code = <<'END_PERL';
+#Several trailing newlines
+$foo = 42;
+$bar = 56;
+
+   
+
+
+    
+  
+END_PERL
+
+
+
+$policy = 'CodeLayout::RequireTidyCode';
+is( pcritique($policy, \$code), 0, 'Tidy with several trailing newlines' );
 
 #----------------------------------------------------------------
 

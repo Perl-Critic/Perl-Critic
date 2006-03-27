@@ -38,21 +38,16 @@ sub violates {
 
     # Perl::Tidy seems to produce slightly different output, depeding
     # on the trailing whitespace in the input.  As best I can tell,
-    # Perl::Tidy will truncate more than 3 trailing newlines down to
-    # just 2, and if the input has no trailing newline, then it adds
-    # one.  But when you re-run it through Perl::Tidy here, that
-    # trailing newline gets lost, which causes the policy to insist
-    # that the code is not tidy.  This only occurs when Perl::Tidy is
-    # writing the output to a scalar, but does not occur when writing
-    # to a file.  I may investigate further, but for now, this seems
-    # to do the trick.
+    # Perl::Tidy will truncate any extra trailing newlines, and if the
+    # input has no trailing newline, then it adds one.  But when you
+    # re-run it through Perl::Tidy here, that final newline gets lost,
+    # which causes the policy to insist that the code is not tidy.
+    # This only occurs when Perl::Tidy is writing the output to a
+    # scalar, but does not occur when writing to a file.  I may
+    # investigate further, but for now, this seems to do the trick.
 
     my $source = "$doc";
-    my $last_2_chars = substr $source, -2, 2;
-    if( $last_2_chars eq qq{\n\n} ) {
-        chomp $source;
-    };
-
+    $source =~ s{ \s+ \Z}{\n}mx;
 
     my $dest    = $EMPTY;
     my $stderr  = $EMPTY;

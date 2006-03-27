@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 37;
+use Test::More tests => 38;
 use Perl::Critic::Config;
 use Perl::Critic;
 
@@ -284,6 +284,19 @@ END_PERL
 
 $policy = 'Modules::RequireVersionVar';
 is( pcritique($policy, \$code), 1, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+=pod
+
+=head1 NO CODE IN HERE
+
+=cut
+END_PERL
+
+$policy = 'Modules::RequireEndWithOne';
+is( pcritique($policy, \$code), 0, $policy);
 
 #----------------------------------------------------------------
 

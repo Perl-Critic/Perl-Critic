@@ -30,12 +30,11 @@ sub applies_to { return 'PPI::Document' }
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-
-    return if is_script($doc);
+    return if is_script($doc);   #Must be a library or module.
 
     # Last statement should be just "1;"
     my @significant = grep { _is_code($_) } $doc->schildren();
-    my $match = $significant[-1];
+    my $match = $significant[-1] || return;
     return if ($match &&
                (ref $match) eq 'PPI::Statement' &&
                $match =~  m{\A 1 \s* ; \z}mx );

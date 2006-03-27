@@ -49,6 +49,13 @@ sub new {
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
+
+    # This policy does not apply unless there is some real code in the
+    # file.  For example, if this file is just pure POD, then
+    # presumably this file is ancillary documentation and you can use
+    # whatever headings you want.
+    return if ! $doc->schild(0);
+
     my %found_sections = ();
     my @violations = ();
 
