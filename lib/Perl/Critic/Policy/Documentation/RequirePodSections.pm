@@ -179,8 +179,8 @@ POD section names.  These can be configured in the F<.perlcriticrc>
 file like this:
 
  [Documentation::RequirePodSections]
- lib_sections = NAME | SYNOPSIS | BUGS AND LIMITATIONS | AUTHOR
- bin_sections = NAME | USAGE | OPTIONS | EXIT STATUS | AUTHOR
+ lib_sections    = NAME | SYNOPSIS | BUGS AND LIMITATIONS | AUTHOR
+ script_sections = NAME | USAGE | OPTIONS | EXIT STATUS | AUTHOR
 
 =head1 LIMITATIONS
 

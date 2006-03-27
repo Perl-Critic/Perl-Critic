@@ -88,13 +88,16 @@ Perl::Critic::Policy::InputOutput::RequireBracedFileHandleWithPrint
 
 The C<print> function has a unique syntax that supports an optional
 file handle argument.  Conway suggests wrapping this argument in
-braces to make it visually stand out from the other arguments.
+braces to make it visually stand out from the other arguments.  When
+you put braces around any of the special package-level file handles
+like C<STDOUT>, C<STDERR>, and C<DATA>, you must the C<'*'> sigil or
+else it won't compile under C<use strict 'subs'>.
 
   print $FH   "Mary had a little lamb\n";  #not ok
   print {$FH} "Mary had a little lamb\n";  #ok
 
-  print STDERR   $foo, $bar, $baz;  #not ok
-  print {STDERR} $foo, $bar, $baz;  #ok
+  print   STDERR  $foo, $bar, $baz;  #won't compile under strict
+  print {*STDERR} $foo, $bar, $baz;  #ok
 
 =head1 AUTHOR
 
