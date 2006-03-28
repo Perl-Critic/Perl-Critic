@@ -96,8 +96,9 @@ else it won't compile under C<use strict 'subs'>.
   print $FH   "Mary had a little lamb\n";  #not ok
   print {$FH} "Mary had a little lamb\n";  #ok
 
-  print   STDERR  $foo, $bar, $baz;  #won't compile under strict
-  print {*STDERR} $foo, $bar, $baz;  #ok
+  print   STDERR   $foo, $bar, $baz;  #not ok
+  print  {STDERR}  $foo, $bar, $baz;  #won't compile under 'strict'
+  print {*STDERR}  $foo, $bar, $baz;  #perfect!
 
 =head1 AUTHOR
 
