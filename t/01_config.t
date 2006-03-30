@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 38;
+use Test::More tests => 46;
 use List::MoreUtils qw(all any none);
 use Perl::Critic::Utils;
 use Perl::Critic::Config;
@@ -36,13 +36,14 @@ my $profile           = undef;
 #--------------------------------------------------------------
 # Test default config.  Increasing the severity should yield
 # fewer and fewer policies.  The exact number will fluctuate
-# as we introduce new polices  and/or change their severity.
+# as we introduce new polices and/or change their severity.
 
 $last_policy_count = $total_policies + 1;
 for my $severity ($SEVERITY_LOWEST .. $SEVERITY_HIGHEST) {
     my $c = Perl::Critic->new( -severity => $severity);
     my $policy_count = scalar @{ $c->policies };
-    cmp_ok($policy_count, '<', $last_policy_count, 'count native policies, severity '.$severity);
+    my $test_name = "Count native policies, severity: $severity";
+    cmp_ok($policy_count, '<', $last_policy_count, $test_name);
     $last_policy_count = $policy_count;
 }
 
@@ -55,7 +56,8 @@ $last_policy_count = $total_policies + 1;
 for my $severity ($SEVERITY_LOWEST .. $SEVERITY_HIGHEST) {
     my $c = Perl::Critic->new( -profile => $profile, -severity => $severity);
     my $policy_count = scalar @{ $c->policies };
-    cmp_ok($policy_count, '<', $last_policy_count, 'count all policies, severity '.$severity);
+    my $test_name = "Count all policies, severity: $severity";
+    cmp_ok($policy_count, '<', $last_policy_count, $test_name);
     $last_policy_count = $policy_count;
 }
 
@@ -203,32 +205,54 @@ ok( @{[any {/builtinfunc/imx} @pol_names]}, 'pattern match' );
 #--------------------------------------------------------------
 #Testing other private subs
 
-my $s = undef;
-$s = Perl::Critic::Config::_normalize_severity( 0 );
-is($s, $SEVERITY_LOWEST, "Normalizing severity");
+{
+    my $s = undef;
+    $s = Perl::Critic::Config::_normalize_severity( 0 );
+    is($s, $SEVERITY_LOWEST, "Normalizing severity");
 
-$s = Perl::Critic::Config::_normalize_severity( 10 );
-is($s, $SEVERITY_HIGHEST, "Normalizing severity");
+    $s = Perl::Critic::Config::_normalize_severity( 10 );
+    is($s, $SEVERITY_HIGHEST, "Normalizing severity");
 
-$s = Perl::Critic::Config::_normalize_severity( -1 );
-is($s, 1, "Normalizing severity");
+    $s = Perl::Critic::Config::_normalize_severity( -1 );
+    is($s, 1, "Normalizing severity");
 
-$s = Perl::Critic::Config::_normalize_severity( -10 );
-is($s, $SEVERITY_HIGHEST, "Normalizing severity");
+    $s = Perl::Critic::Config::_normalize_severity( -10 );
+    is($s, $SEVERITY_HIGHEST, "Normalizing severity");
 
-$s = Perl::Critic::Config::_normalize_severity( 1 );
-is($s, 1, "Normalizing severity");
+    $s = Perl::Critic::Config::_normalize_severity( 1 );
+    is($s, 1, "Normalizing severity");
 
-$s = Perl::Critic::Config::_normalize_severity( 5 );
-is($s, 5, "Normalizing severity");
+    $s = Perl::Critic::Config::_normalize_severity( 5 );
+    is($s, 5, "Normalizing severity");
 
-$s = Perl::Critic::Config::_normalize_severity( 2.4 );
-is($s, 2, "Normalizing severity");
+    $s = Perl::Critic::Config::_normalize_severity( 2.4 );
+    is($s, 2, "Normalizing severity");
 
-$s = Perl::Critic::Config::_normalize_severity( -3.8 );
-is($s, 3, "Normalizing severity");
+    $s = Perl::Critic::Config::_normalize_severity( -3.8 );
+    is($s, 3, "Normalizing severity");
+}
 
+#--------------------------------------------------------------
 
+{
+    my $namespace = 'Perl::Critic::Policy';
+    my $valid_policy = 'Variables::ProhibitLocalVars';
+    ok( Perl::Critic::Config::_is_valid_policy( $valid_policy,    $namespace ) );
+    ok( Perl::Critic::Config::_is_valid_policy( "-$valid_policy", $namespace ) );
 
+    my $invalid_policy = 'Foo::Bar';
+    ok( ! Perl::Critic::Config::_is_valid_policy( $invalid_policy,    $namespace ) );
+    ok( ! Perl::Critic::Config::_is_valid_policy( "-$invalid_policy", $namespace ) );
+}
 
+#--------------------------------------------------------------
 
+{
+    my $namespace = 'Foo::Bar';
+    my $module_name = 'Baz::Nuts';
+    my $long_name = "${namespace}::$module_name";
+    is( Perl::Critic::Config::_long_name(  $module_name,  $namespace), $long_name   );
+    is( Perl::Critic::Config::_long_name(  $long_name,    $namespace), $long_name   );
+    is( Perl::Critic::Config::_short_name( $module_name,  $namespace), $module_name );
+    is( Perl::Critic::Config::_short_name( $long_name,    $namespace), $module_name );
+}

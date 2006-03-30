@@ -12,7 +12,8 @@ use Test::More;
 eval {
     require Test::Perl::Critic;
     my @exclude = qw(Rcs Tidy PodSections);
-    Test::Perl::Critic->import( -severity => 1, -exclude => \@exclude);
+    my %config = (-severity => 1, -exclude => \@exclude, -profile => 'NONE');
+    Test::Perl::Critic->import( %config );
 };
 
 plan skip_all => 'Test::Perl::Critic required to criticise code' if $@;

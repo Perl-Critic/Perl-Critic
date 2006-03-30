@@ -68,11 +68,14 @@ sub new {
     # Load user's profile.
     my $profile_ref = _load_profile( $profile_path ) || {};
 
+    # Smell-test the user's profile.
+    _screen_user_profile( $profile_ref, $NAMESPACE );
+
     # Apply logic to decide if Policy should be loaded
     for my $policy_long ( @SITE_POLICIES ) {
 
         my $policy_short = _short_name($policy_long, $NAMESPACE);
-        my $params       = $profile_ref->{$policy_long} || $profile_ref->{$policy_short} || {};
+        my $params = $profile_ref->{$policy_long} || $profile_ref->{$policy_short} || {};
 
         #Start by assuming the policy should be loaded
         my $load_me = $TRUE;
@@ -220,6 +223,24 @@ sub _normalize_severity {
     return $SEVERITY_HIGHEST if $severity > $SEVERITY_HIGHEST;
     return $SEVERITY_LOWEST  if $severity < $SEVERITY_LOWEST;
     return $severity;
+}
+
+#----------------------------------------------------------------------------
+
+sub _screen_user_profile {
+    my ($profile_ref, $namespace) = @_;
+    for my $policy_name ( sort keys %{ $profile_ref } ) {
+        next if _is_valid_policy( $policy_name, $namespace );
+        warn qq{Can't find policy module '$policy_name'\n};
+    }
+    return 1;
+}
+
+sub _is_valid_policy {
+    my ($policy_name, $namespace) = @_;
+    $policy_name =~ s{\A \s* -}{}mx;
+    $policy_name = _long_name($policy_name, $namespace);
+    return any { $policy_name eq $_ } @SITE_POLICIES;
 }
 
 #----------------------------------------------------------------------------

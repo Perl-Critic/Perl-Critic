@@ -128,7 +128,7 @@ sub get_input {
 
         #Reading code from STDIN
         my $code_string = do { local $RS = undef; <STDIN> };    #Slurping
-        $code_string =~ m{ \S+ }mx || die 'Nothing to critique';
+        $code_string =~ m{ \S+ }mx || die "Nothing to critique.\n";
         return \$code_string;    #Convert to SCALAR ref for PPI
     }
 }
@@ -138,7 +138,7 @@ sub get_input {
 sub critique {
 
     my ( $config, @files ) = @_;
-    my $count = 0;
+    @files || die "No perl files were found.\n";
 
     # Perl::Critic has lots of dependencies, so loading is delayed
     # until it is really needed.  This hack reduces startup time for
@@ -149,6 +149,7 @@ sub critique {
     require Perl::Critic;
     my $critic = Perl::Critic->new( %{$config} );
 
+    my $count = 0;
     for my $file (@files) {
       my @violations = $critic->critique($file);
       render_report( $file, $config, @violations );
