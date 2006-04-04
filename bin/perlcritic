@@ -14,6 +14,7 @@ use warnings;
 use Pod::Usage;
 use File::Spec;
 use Getopt::Long;
+use List::Util qw(first);
 use English qw(-no_match_vars);
 
 our $VERSION = 0.15;
@@ -113,8 +114,8 @@ sub get_input {
 
     if (@_) {
 
-        for ( grep { ! -e $_ } @_ ) {
-            my $msg = qq{No such file or directory: '$_'};
+        if ( my $nonexistant = first { ! -e $_ } @_ ) {
+            my $msg = qq{No such file or directory: '$nonexistant'};
             pod2usage( -exitstatus => 1, -message => $msg, -verbose => 0);
         }
 
