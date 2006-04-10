@@ -41,8 +41,8 @@ sub violates {
 
 sub _has_interpolation {
     my $elem = shift || return;
-    return $elem =~ m{ (?<!\\) [\$\@] \S+ }mx      #Contains unescaped $. or @.
-      || $elem   =~ m{ \\[tnrfae0xcNLuLUEQ] }mx;   #Containts escaped metachars
+    return $elem =~ m{ (?<!\\) [\$\@] \S{2,} }mx   #Contains unescaped $. or @.
+      || $elem   =~ m{ \\[tnrfae0xcNLuLUEQ]  }mx;  #Containts escaped metachars
 }
 
 1;

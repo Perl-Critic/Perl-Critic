@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 31;
+use Test::More tests => 32;
 use Perl::Critic;
 
 # common P::C testing tools
@@ -109,6 +109,20 @@ print "this is not $literal";
 print qq{this is not $literal};
 print "this is not literal\n";
 print qq{this is not literal\n};
+END_PERL
+
+$policy = 'ValuesAndExpressions::RequireInterpolationOfMetachars';
+is( pcritique($policy, \$code), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+$sigil_at_end_of_word = 'list@ scalar$';
+$sigil_at_end_of_word = 'scalar$ list@';
+$sigil_at_end_of_word = q(list@ scalar$);
+$sigil_at_end_of_word = q(scalar$ list@);
+%options = (  'foo=s@' => \@foo);  #Likde with Getopt::Long
+%options = ( q{foo=s@} => \@foo);  #Like with Getopt::Long
 END_PERL
 
 $policy = 'ValuesAndExpressions::RequireInterpolationOfMetachars';

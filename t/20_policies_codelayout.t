@@ -290,7 +290,9 @@ $baz   =   67;
 END_PERL
 
 $policy = 'CodeLayout::RequireTidyCode';
-is( pcritique($policy, \$code), 1, 'Untidy code' );
+my $has_perltidy = eval {require Perl::Tidy};
+my $expected_result = $has_perltidy ? 1 : 0;
+is( pcritique($policy, \$code), $expected_result, 'Untidy code' );
 
 #-----------------------------------------------------------------------------
 
