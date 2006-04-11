@@ -5,6 +5,18 @@
 # $Revision$
 ########################################################################
 
+[0.15_01] Released on ????????
+
+     Enhancements:
+     * Added diagnostic messages if the .perlcriticrc contains entries
+       for Policy modules that don't seem to exist
+
+     Bug Fixes:
+     * 18386: Bad example in POD for Documentation::RequirePodSections
+     * RequireInterpolationOfMetachars falsely hit strings like 'foo=s@'
+       which are commonly used with Getopt::Long.
+
+
 [0.15] Released on 20060326
 
      Production release.
