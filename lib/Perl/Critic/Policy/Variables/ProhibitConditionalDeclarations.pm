@@ -44,7 +44,8 @@ sub _is_conditional {
     return if ! $elem->isa('PPI::Token::Word');
     return if is_hash_key($elem);
     return if is_method_call($elem);
-    return any { $elem eq $_ } qw(if while foreach for until unless);
+    my @keywords = qw(if while foreach for until unless);
+    return any { $elem eq $_ } @keywords;
 }
 
 1;
