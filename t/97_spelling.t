@@ -18,6 +18,7 @@ all_pod_files_spelling_ok();
 __DATA__
 autoflushes
 CGI
+CPAN
 CVS
 Dolan
 HEREDOC
@@ -42,3 +43,4 @@ STDOUT
 TerMarsch
 Thalhammer
 TODO
+unblessed

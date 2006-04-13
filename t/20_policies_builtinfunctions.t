@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 23;
+use Test::More tests => 27;
 use Perl::Critic;
 
 # common P::C testing tools
@@ -248,3 +248,45 @@ END_PERL
 
 $policy = 'BuiltinFunctions::RequireGlobFunction';
 isnt( pcritique($policy, \$code), 1, 'I/O' );
+
+#-----------------------------------------------------------------------------
+
+$code = <<'END_PERL';
+isa($foo, $pkg);
+UNIVERSAL::isa($foo, $pkg);
+END_PERL
+
+$policy = 'BuiltinFunctions::ProhibitUniversalIsa';
+is( pcritique($policy, \$code), 2, 'UNIVERSAL::isa' );
+
+#-----------------------------------------------------------------------------
+
+$code = <<'END_PERL';
+use UNIVERSAL::isa;
+require UNIVERSAL::isa;
+$foo->isa($pkg);
+END_PERL
+
+$policy = 'BuiltinFunctions::ProhibitUniversalIsa';
+is( pcritique($policy, \$code), 0, 'UNIVERSAL::isa' );
+
+#-----------------------------------------------------------------------------
+
+$code = <<'END_PERL';
+can($foo, $funcname);
+UNIVERSAL::can($foo, $funcname);
+END_PERL
+
+$policy = 'BuiltinFunctions::ProhibitUniversalCan';
+is( pcritique($policy, \$code), 2, 'UNIVERSAL::can' );
+
+#-----------------------------------------------------------------------------
+
+$code = <<'END_PERL';
+use UNIVERSAL::can;
+require UNIVERSAL::can;
+$foo->can($funcname);
+END_PERL
+
+$policy = 'BuiltinFunctions::ProhibitUniversalCan';
+is( pcritique($policy, \$code), 0, 'UNIVERSAL::can' );

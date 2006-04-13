@@ -16,6 +16,9 @@
      * RequireInterpolationOfMetachars falsely hit strings like 'foo=s@'
        which are commonly used with Getopt::Long.
 
+     New Policies:
+     * BuiltinFunctions::ProhibitUniversalCan
+     * BuiltinFunctions::ProhibitUniversalIsa
 
 [0.15] Released on 20060326
 

@@ -238,3 +238,9 @@ severity = 1
 
 [Documentation::RequirePodSections]
 severity = 1
+
+[BuiltinFunctions::ProhibitUniversalCan]
+severity = 1
+
+[BuiltinFunctions::ProhibitUniversalIsa]
+severity = 1

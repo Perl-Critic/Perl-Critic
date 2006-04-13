@@ -455,6 +455,14 @@ Use L<Time::HiRes> instead of something like C<select(undef, undef, undef, .05)>
 
 Write C<eval { my $foo; bar($foo) }> instead of C<eval "my $foo; bar($foo);"> [Severity 5]
 
+=head2 L<Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalCan>
+
+Write C<eval { $foo->can($name) }> instead of C<UNIVERSAL::can($foo, $name)> [Severity 3]
+
+=head2 L<Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalIsa>
+
+Write C<eval { $foo->isa($pkg) }> instead of C<UNIVERSAL::isa($foo, $pkg)> [Severity 3]
+
 =head2 L<Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep>
 
 Write C<grep { $_ =~ /$pattern/ } @list> instead of C<grep /$pattern/, @list> [Severity 4]

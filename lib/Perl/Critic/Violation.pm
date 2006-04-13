@@ -16,7 +16,6 @@ use Perl::Critic::Utils;
 use String::Format qw(stringf);
 use English qw(-no_match_vars);
 use overload q{""} => 'to_string';
-use UNIVERSAL qw(isa);
 
 our $VERSION = '0.15_01';
 $VERSION = eval $VERSION;    ## no critic
@@ -59,7 +58,7 @@ sub new {
         croak $msg;
     }
 
-    if ( ! isa( $_[3], 'PPI::Element' ) ) {
+    if ( ! eval { $_[3]->isa( 'PPI::Element' ) } ) {
         my $msg = '3rd arg to Violation->new() must be a PPI::Element';
         croak $msg;
     }
