@@ -5,14 +5,18 @@
 # $Revision$
 ########################################################################
 
-[0.15_01] Released on ????????
+[0.15_01] Released on 20060414
 
      Enhancements:
      * Added diagnostic messages if the .perlcriticrc contains entries
-       for Policy modules that don't seem to exist
+       for Policy modules that don't seem to exist.
 
      Bug Fixes:
      * 18386: Bad example in POD for Documentation::RequirePodSections
+     * 18670 Test failure if Perl::Tidy is not installed 
+     * 18698: Policy idea ProhibitUniversalFunctions (see New Policies)
+     * ProhibitExplicitIsa now also catches a fully-qualified ISA
+       such as @Foo::Bar::ISA;  Thanks to Josh McAdams for the patch. 
      * RequireInterpolationOfMetachars falsely hit strings like 'foo=s@'
        which are commonly used with Getopt::Long.
 
