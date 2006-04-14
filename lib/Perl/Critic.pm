@@ -309,9 +309,11 @@ coding standards to Perl source code.  Essentially, it is a static
 source code analysis engine.  Perl::Critic is distributed with a
 number of L<Perl::Critic::Policy> modules that attempt to enforce
 various coding guidelines.  Most Policy modules are based on Damian
-Conway's book B<Perl Best Practices>.  You can enable, disable, and
-customize those Polices through the Perl::Critic interface.  You can
-also create new Policy modules that suit your own tastes.
+Conway's book B<Perl Best Practices>.  However, Perl::Critic is B<not>
+limited to PBP and will even support Policies that contradict Conway.
+You can enable, disable, and customize those Polices through the
+Perl::Critic interface.  You can also create new Policy modules that
+suit your own tastes.
 
 For a convenient command-line interface to Perl::Critic, see the
 documentation for L<perlcritic>.  If you want to integrate

@@ -338,8 +338,9 @@ C<perlcritic> is a Perl source code analyzer.  It is the executable
 front-end to the L<Perl::Critic> engine, which attempts to identify
 awkward, hard to read, error-prone, or unconventional constructs in
 your code.  Most of the rules are based on Damian Conway's book B<Perl
-Best Practices>, but they can easily be configured or disabled to your
-liking.
+Best Practices>.  However, C<perlcritic> is B<not> limited to
+enforcing PBP, and it will even support rules that contradict Conway.
+All rules can easily be configured or disabled to your liking.
 
 If you want to integrate C<perlcritic> with your build process, the
 L<Test::Perl::Critic> module provides a nice interface that is
