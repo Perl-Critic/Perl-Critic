@@ -11,7 +11,6 @@ use strict;
 use warnings;
 use File::Spec;
 use English qw(-no_match_vars);
-use List::MoreUtils qw(any);
 use Perl::Critic::Config;
 use Perl::Critic::Utils;
 use Carp;
