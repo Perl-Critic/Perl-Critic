@@ -8,9 +8,6 @@
 NEW FEATURES:
 
 - Report safari sections instead of book page numbers.
-- Allow ##no critic pseudo pragmas to disable specific policies.
-  Use a regex to match Policy names so that developers can
-  choose to disable entire families of Policies.
 
 BUGS/LIMITATIONS:
 
@@ -54,7 +51,7 @@ OTHER PBP POLICIES THAT SEEM FEASIBLE TO IMPLEMENT:
 - InputOutput::ProhibitInteractiveTest (p218)
   Forbid -t operand
 - Miscelanea::ProhibitObnoxiousComments
-  Forbid excessive hash marks e.g. ###This is a loud comment
+  Forbid excessive hash marks e.g. "#### This is a loud comment ####"
   Make the obnoxious pattern configurable
 - RegularExpressions::RequireBracesForMultiline (p242)
 - RegularExpressions::ProhibitUnusualDelimiters (p246)
