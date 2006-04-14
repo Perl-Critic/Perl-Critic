@@ -221,17 +221,17 @@ sub _parse_nocritic_import {
     # string doesn't match any known policy, a warning is given
 
     my ($nocritic_pragma, @site_policies) = @_;
-
-    my $no_critic = qr{\A \s* \#\# \s* no \s+ critic}mx;
-    my $import    = qr{ $no_critic \s+ ( [\w\s\d:]+ ) \s* \z}mx;  #Captures!
     my @disabled_policies = ();
 
-    if ( my ($import_string) = $nocritic_pragma =~ $import ) {
+    # The "import arguments" should look like regular code.
+    # So they might be a quoted list of literals, or a qw().
+    my $import_rx = qr{\A \s* \#\# \s* no \s+ critic \s* (.+?) \s* \z}mx;
 
-        # TODO: Should we allow commas as delimiters, or maybe
-        # something that looks like '## no critic qw(Foo Bar)' ??
+    if ( $nocritic_pragma =~ $import_rx ) {
+        my $import_string = $1;
 
-        for my $req ( split m{\s+}mx, $import_string ){
+        # By evaluating $import_string, we let perl do the parsing!
+        for my $req ( eval $import_string ){
             my @matches = grep { $_ =~ m/$req/imx } @site_policies;
 
             # Bark if the request doesn't seem valid
@@ -854,13 +854,13 @@ then only that line of code is overlooked.  To direct perlcritic to
 ignore the C<"## no critic"> comments, use the C<-force> option.
 
 By default, a bare C<"## no critic"> comment disables all the active
-Policies.  If you wish to disable only specific Policies, append the
-names of those Policies to the end of the comment.  For example, this
-would disable the ProhibitEmptyQuotes and ProhibitPostfixControls
-until the end of the block or until the next C<"## use critic">
-comment (which ever comes first):
+Policies.  If you wish to disable only specific Policies, add a list
+of Policies names just as you would for C<"no strict"> or C<"no
+warnings">.  For example, this would disable the ProhibitEmptyQuotes
+and ProhibitPostfixControls until the end of the block or until the
+next C<"## use critic"> comment (which ever comes first):
 
-  ## no critic EmptyQuotes PostfixControls
+  ## no critic qw(EmptyQuotes PostfixControls);
 
   $foo = "";                  #Now exempt from ValuesAndExpressions::ProhibitEmptyQuotes
   $barf = bar() if $foo;      #Now exempt ControlStructures::ProhibitPostfixControls
@@ -870,7 +870,7 @@ Since the Policy names are matched as regular expressions, you can
 abbreviate the Policy names or disable an entire family of Policies in
 one shot like this:
 
-  ## no critic NamingConventions
+  ## no critic 'NamingConventions';
 
   my $camelHumpVar = 'foo';  #Now exempt from NamingConventions::ProhibitMixedCaseVars
   sub camelHumpSub {}        #Now exempt from NamingConventions::ProhibitMixedCaseSubs

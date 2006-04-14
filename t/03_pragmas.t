@@ -351,7 +351,7 @@ use strict;
 use warnings;
 our $VERSION = 1.0;
 
-## no critic NoisyQuotes
+## no critic 'NoisyQuotes'
 my $noisy = '!';
 my $empty = '';
 eval $string;
@@ -369,7 +369,7 @@ use strict;
 use warnings;
 our $VERSION = 1.0;
 
-## no critic ValuesAndExpressions
+## no critic qw(ValuesAndExpressions)
 my $noisy = '!';
 my $empty = '';
 eval $string;
@@ -387,7 +387,7 @@ use strict;
 use warnings;
 our $VERSION = 1.0;
 
-## no critic Noisy Empty
+## no critic ('Noisy', 'Empty')
 my $noisy = '!';
 my $empty = '';
 eval $string;
@@ -405,7 +405,7 @@ use strict;
 use warnings;
 our $VERSION = 1.0;
 
-## no critic NOISY EMPTY EVAL
+## no critic qw(NOISY EMPTY EVAL)
 my $noisy = '!';
 my $empty = '';
 eval $string;
@@ -423,7 +423,7 @@ use strict;
 use warnings;
 our $VERSION = 1.0;
 
-## no critic Noisy Empty Eval
+## no critic qw(Noisy Empty Eval)
 my $noisy = '!';
 my $empty = '';
 eval $string;
@@ -446,7 +446,7 @@ use strict;
 use warnings;
 our $VERSION = 1.0;
 
-## no critic Critic::Policy
+## no critic "Critic::Policy"
 my $noisy = '!';
 my $empty = '';
 eval $string;
@@ -464,7 +464,7 @@ use strict;
 use warnings;
 our $VERSION = 1.0;
 
-## no critic Foo::Bar Baz Boom
+## no critic qw(Foo::Bar Baz Boom)
 my $noisy = '!';
 my $empty = '';
 eval $string;
