@@ -972,6 +972,37 @@ C<"## no critic"> comment is on the same line as a code statement,
 then only that line of code is overlooked.  To direct C<perlcritic> to
 ignore the C<"## no critic"> comments, use the C<-force> option.
 
+By default, a bare C<"## no critic"> comment disables all the active
+Policies.  If you wish to disable only specific Policies, append the
+names of those Policies to the end of the comment.  For example, this
+would disable the ProhibitEmptyQuotes and ProhibitPostfixControls
+until the end of the block or until the next C<"## use critic">
+comment (which ever comes first):
+
+  ## no critic EmptyQuotes PostfixControls
+
+  $foo = "";                  #Now exempt from ValuesAndExpressions::ProhibitEmptyQuotes
+  $barf = bar() if $foo;      #Now exempt ControlStructures::ProhibitPostfixControls
+  $long_int = 10000000000;    #Still subjected to ValuesAndExpression::RequireNumberSeparators
+
+Since the Policy names are matched as regular expressions, you can
+abbreviate the Policy names or disable an entire family of Policies in
+one shot like this:
+
+  ## no critic NamingConventions
+
+  my $camelHumpVar = 'foo';  #Now exempt from NamingConventions::ProhibitMixedCaseVars
+  sub camelHumpSub {}        #Now exempt from NamingConventions::ProhibitMixedCaseSubs
+
+Policy names must be space-delimited, and must all appear on the same
+line as the C<"## no critic">.  At the moment, the behavior of nested
+C<"## no critic"> comments is not defined.
+
+Use this feature wisely.  C<"## no critic"> should be used in the
+smallest possible scope, or only on individual lines of code. If
+Perl::Critic complains about your code, try and find a compliant
+solution before resorting to this feature.
+
 Use this feature wisely.  C<"## no critic"> should be used in the
 smallest possible scope, or only on individual lines of code. If
 Perl::Critic complains about your code, try and find a compliant

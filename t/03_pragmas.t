@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 14;
+use Test::More tests => 21;
 use Perl::Critic;
 
 # common P::C testing tools
@@ -169,7 +169,7 @@ my $empty = '';
 #No final '1;'
 END_PERL
 
-is( critique(\$code, {-profile => $profile, -severity => 1} ), 0);
+is( critique(\$code, {-profile => $profile, -severity => 1} ), 1);
 
 #----------------------------------------------------------------
 
@@ -342,3 +342,134 @@ unless ( $condition1
 END_PERL
 
 is( critique(\$code, {-profile  => $profile, -severity => 1 } ), 6);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+package FOO;
+use strict;
+use warnings;
+our $VERSION = 1.0;
+
+## no critic NoisyQuotes
+my $noisy = '!';
+my $empty = '';
+eval $string;
+
+1;
+END_PERL
+
+is( critique(\$code, {-profile  => $profile, -severity => 1 } ), 2);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+package FOO;
+use strict;
+use warnings;
+our $VERSION = 1.0;
+
+## no critic ValuesAndExpressions
+my $noisy = '!';
+my $empty = '';
+eval $string;
+
+1;
+END_PERL
+
+is( critique(\$code, {-profile  => $profile, -severity => 1 } ), 1);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+package FOO;
+use strict;
+use warnings;
+our $VERSION = 1.0;
+
+## no critic Noisy Empty
+my $noisy = '!';
+my $empty = '';
+eval $string;
+
+1;
+END_PERL
+
+is( critique(\$code, {-profile  => $profile, -severity => 1 } ), 1);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+package FOO;
+use strict;
+use warnings;
+our $VERSION = 1.0;
+
+## no critic NOISY EMPTY EVAL
+my $noisy = '!';
+my $empty = '';
+eval $string;
+
+1;
+END_PERL
+
+is( critique(\$code, {-profile  => $profile, -severity => 1 } ), 0);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+package FOO;
+use strict;
+use warnings;
+our $VERSION = 1.0;
+
+## no critic Noisy Empty Eval
+my $noisy = '!';
+my $empty = '';
+eval $string;
+
+## use critic
+my $noisy = '!';
+my $empty = '';
+eval $string;
+
+1;
+END_PERL
+
+is( critique(\$code, {-profile  => $profile, -severity => 1 } ), 3);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+package FOO;
+use strict;
+use warnings;
+our $VERSION = 1.0;
+
+## no critic Critic::Policy
+my $noisy = '!';
+my $empty = '';
+eval $string;
+
+1;
+END_PERL
+
+is( critique(\$code, {-profile  => $profile, -severity => 1 } ), 0);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+package FOO;
+use strict;
+use warnings;
+our $VERSION = 1.0;
+
+## no critic Foo::Bar Baz Boom
+my $noisy = '!';
+my $empty = '';
+eval $string;
+
+1;
+END_PERL
+
+is( critique(\$code, {-profile  => $profile, -severity => 1 } ), 3);

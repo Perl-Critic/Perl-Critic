@@ -11,6 +11,7 @@ use strict;
 use warnings;
 use File::Spec;
 use English qw(-no_match_vars);
+use List::MoreUtils qw(any);
 use Perl::Critic::Config;
 use Perl::Critic::Utils;
 use Carp;
@@ -81,23 +82,53 @@ sub critique {
 
     # Filter exempt code, if desired
     if ( !$self->{_force} ) {
-        %is_line_disabled = ( %is_line_disabled, _filter_code($doc) );
+        my @site_policies = $self->config->site_policies();
+        %is_line_disabled = ( %is_line_disabled, _filter_code($doc, @site_policies) );
     }
 
     # Run engine, testing each Policy at each element
-    my %types = ( 'PPI::Document' => [$doc],
-                  'PPI::Element'  => $doc->find('PPI::Element') || [], );
+    my %elements_of = ( 'PPI::Document' => [$doc],
+                        'PPI::Element'  => $doc->find('PPI::Element') || [], );
     my @violations;
     my @pols = @{ $self->policies() };
     @pols || return;    #Nothing to do!
-    for my $pol (@pols) {
+
+    for my $pol ( @pols ) {
         for my $type ( $pol->applies_to() ) {
-            $types{$type}
-              ||= [ grep { $_->isa($type) } @{ $types{'PPI::Element'} } ];
-            push @violations, grep { !$is_line_disabled{ $_->location->[0] } }
-                map { $pol->violates( $_, $doc ) } @{ $types{$type} };
+
+            # Gather up all the PPI elements that are of the
+            # type that this Policy wants.  By using ||=
+            # we only have to do this once, even though
+            # several Policies will probably all want the
+            # same types of PPI elements.
+
+            $elements_of{$type}
+              ||= [ grep {$_->isa($type)} @{ $elements_of{'PPI::Element'} } ];
+
+            # Now loop over each of the found elements and
+            # decide if the element is on a disabled line.
+            # This depends on the presence of a ##no critic
+            # comment that matches the name of this Policy.
+            # If the line is not disabled, then evaluate
+            # the element using the Policy.
+
+          ELEMENT:
+            for my $element ( @{ $elements_of{$type} } ) {
+
+                # Empty lists have an undef location.  I think
+                # this is a bug in PPI.  So here I'm just
+                # trying to avoid derefencing an undef value.
+                my $loc = $element->location();
+                my $line = defined $loc ? $loc->[0] : q{};
+
+                my $polname = ref $pol;
+                next ELEMENT if $is_line_disabled{$line}->{$polname};
+                next ELEMENT if $is_line_disabled{$line}->{ALL};
+                push @violations, $pol->violates( $element, $doc );
+            }
         }
     }
+
     return Perl::Critic::Violation->sort_by_location(@violations);
 }
 
@@ -106,23 +137,34 @@ sub critique {
 
 sub _filter_code {
 
-    my $doc        = shift;
+    my ($doc, @site_policies)= @_;;
     my $nodes_ref  = $doc->find('PPI::Token::Comment') || return;
     my $no_critic  = qr{\A \s* \#\# \s* no  \s+ critic}mx;
     my $use_critic = qr{\A \s* \#\# \s* use \s+ critic}mx;
-
     my %disabled_lines;
 
   PRAGMA:
     for my $pragma ( grep { $_ =~ $no_critic } @{$nodes_ref} ) {
 
+        # Parse out the list of Policy names after the
+        # 'no critic' pragma.  I'm thinking of this just
+        # like a an C<import> argument for real pragmas.
+        my @no_policies = _parse_nocritic_import($pragma, @site_policies);
+
+        # Grab surrounding nodes to determine the context.
+        # This determines whether the pragma applies to
+        # the current line or the block that follows.
         my $parent = $pragma->parent();
         my $grandparent = $parent ? $parent->parent() : undef;
         my $sib = $pragma->sprevious_sibling();
 
+
         # Handle single-line usage on simple statements
         if ( $sib && $sib->location->[0] == $pragma->location->[0] ) {
-            $disabled_lines{ $pragma->location->[0] } = 1;
+            my $line = $pragma->location->[0];
+            for my $policy ( @no_policies ) {
+                $disabled_lines{ $line }->{$policy} = 1;
+            }
             next PRAGMA;
         }
 
@@ -131,8 +173,10 @@ sub _filter_code {
         if ( ref $parent eq 'PPI::Structure::Block' ) {
             if ( ref $grandparent eq 'PPI::Statement::Compound' ) {
                 if ( $parent->location->[0] == $pragma->location->[0] ) {
-                    $disabled_lines{ $grandparent->location->[0] } = 1;
-                    #$disabled_lines{ $parent->location->[0] } = 1;
+                    my $line = $grandparent->location->[0];
+                    for my $policy ( @no_policies ) {
+                        $disabled_lines{ $line }->{$policy} = 1;
+                    }
                     next PRAGMA;
                 }
             }
@@ -152,13 +196,15 @@ sub _filter_code {
         while ( my $sib = $end->next_sibling() ) {
             $end = $sib; # keep track of last sibling encountered in this scope
             last SIB
-              if $sib->isa('PPI::Token::Comment') && $sib =~ $use_critic;
+                if $sib->isa('PPI::Token::Comment') && $sib =~ $use_critic;
         }
 
         # We either found an end or hit the end of the scope.
         # Flag all intervening lines
         for my $line ( $start->location->[0] .. $end->location->[0] ) {
-            $disabled_lines{$line} = 1;
+            for my $policy ( @no_policies ) {
+                $disabled_lines{ $line }->{$policy} = 1;
+            }
         }
     }
 
@@ -167,6 +213,50 @@ sub _filter_code {
 
 #----------------------------------------------------------------------------
 
+sub _parse_nocritic_import {
+
+    # This parses the "import arguments" for the C<## no critic>
+    # pseudo-pragma.  The "arguments" should be space
+    # delimited strings.  Each string is mapped to the set of
+    # actual policy names that is matches (as a regex).  If a
+    # string doesn't match any known policy, a warning is given
+
+    my ($nocritic_pragma, @site_policies) = @_;
+
+    my $no_critic = qr{\A \s* \#\# \s* no \s+ critic}mx;
+    my $import    = qr{ $no_critic \s+ ( [\w\s\d:]+ ) \s* \z}mx;  #Captures!
+    my @disabled_policies = ();
+
+    if ( my ($import_string) = $nocritic_pragma =~ $import ) {
+
+        # TODO: Should we allow commas as delimiters, or maybe
+        # something that looks like '## no critic qw(Foo Bar)' ??
+
+        for my $req ( split m{\s+}mx, $import_string ){
+            my @matches = grep { $_ =~ m/$req/imx } @site_policies;
+
+            # Bark if the request doesn't seem valid
+            if ( ! @matches ){
+                my $line = $nocritic_pragma->location()->[0];
+                warn qq{'no critic' with unknown policy '$req' at line $line\n};
+            }
+
+            # Add matches to the stack of disabled policies
+            push @disabled_policies, @matches;
+        }
+
+        # Return disabled polices.  If no matches were found,
+        # then this will be empty, which means the pragma
+        # will have no effect.
+        return @disabled_policies;
+    }
+
+    # No request was made, so default to disabling
+    # ALL the policies.
+    return qw(ALL);
+}
+
+#----------------------------------------------------------------------------
 sub _unfix_shebang {
 
     #When you install a script using ExtUtils::MakeMaker or
@@ -185,7 +275,7 @@ sub _unfix_shebang {
     my $fixin_rx = qr{^eval 'exec .* \$0 \${1\+"\$@"}'\s*[\r\n]\s*if.+;};
     if ( $first_stmnt =~ $fixin_rx ) {
         my $line = $first_stmnt->location->[0];
-        return ( $line => 1, $line + 1 => 1 );
+        return ( $line => {ALL => 1}, $line + 1 => {ALL => 1} );
     }
 
     return;
@@ -761,6 +851,32 @@ C<"## use critic"> comment is found (whichever comes first).  If the
 C<"## no critic"> comment is on the same line as a code statement,
 then only that line of code is overlooked.  To direct perlcritic to
 ignore the C<"## no critic"> comments, use the C<-force> option.
+
+By default, a bare C<"## no critic"> comment disables all the active
+Policies.  If you wish to disable only specific Policies, append the
+names of those Policies to the end of the comment.  For example, this
+would disable the ProhibitEmptyQuotes and ProhibitPostfixControls
+until the end of the block or until the next C<"## use critic">
+comment (which ever comes first):
+
+  ## no critic EmptyQuotes PostfixControls
+
+  $foo = "";                  #Now exempt from ValuesAndExpressions::ProhibitEmptyQuotes
+  $barf = bar() if $foo;      #Now exempt ControlStructures::ProhibitPostfixControls
+  $long_int = 10000000000;    #Still subjected to ValuesAndExpression::RequireNumberSeparators
+
+Since the Policy names are matched as regular expressions, you can
+abbreviate the Policy names or disable an entire family of Policies in
+one shot like this:
+
+  ## no critic NamingConventions
+
+  my $camelHumpVar = 'foo';  #Now exempt from NamingConventions::ProhibitMixedCaseVars
+  sub camelHumpSub {}        #Now exempt from NamingConventions::ProhibitMixedCaseSubs
+
+Policy names must be space-delimited, and must all appear on the same
+line as the C<"## no critic">.  At the moment, the behavior of nested
+C<"## no critic"> comments is not defined.
 
 Use this feature wisely.  C<"## no critic"> should be used in the
 smallest possible scope, or only on individual lines of code. If
