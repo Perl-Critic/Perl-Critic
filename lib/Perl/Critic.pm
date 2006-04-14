@@ -17,7 +17,7 @@ use Carp;
 use PPI;
 
 our $VERSION = '0.15_01';
-$VERSION = eval $VERSION;    ## no critic
+$VERSION = eval $VERSION;    ## no critic;
 
 #----------------------------------------------------------------------------
 
@@ -214,44 +214,18 @@ sub _filter_code {
 
 sub _parse_nocritic_import {
 
-    # This parses the "import arguments" for the C<## no critic>
-    # pseudo-pragma.  The "arguments" should be space
-    # delimited strings.  Each string is mapped to the set of
-    # actual policy names that is matches (as a regex).  If a
-    # string doesn't match any known policy, a warning is given
-
     my ($nocritic_pragma, @site_policies) = @_;
-    my @disabled_policies = ();
 
     # The "import arguments" should look like regular code.
-    # So they might be a quoted list of literals, or a qw().
-    my $import_rx = qr{\A \s* \#\# \s* no \s+ critic \s* (.+?) \s* \z}mx;
+    # So they might be a list of quoted literals, or a qw().
+    my $import_rx = qr{\A \s* \#\# \s* no \s+ critic \s+ ( [^;#]+ )}mx;
 
     if ( $nocritic_pragma =~ $import_rx ) {
-        my $import_string = $1;
-
-        # By evaluating $import_string, we let perl do the parsing!
-        for my $req ( eval $import_string ){
-            my @matches = grep { $_ =~ m/$req/imx } @site_policies;
-
-            # Bark if the request doesn't seem valid
-            if ( ! @matches ){
-                my $line = $nocritic_pragma->location()->[0];
-                warn qq{'no critic' with unknown policy '$req' at line $line\n};
-            }
-
-            # Add matches to the stack of disabled policies
-            push @disabled_policies, @matches;
-        }
-
-        # Return disabled polices.  If no matches were found,
-        # then this will be empty, which means the pragma
-        # will have no effect.
-        return @disabled_policies;
+        my @import = grep { defined $_ } eval $1; ## no critic qw(StringyEval)
+        return map { my $req = $_; grep {m/$req/imx} @site_policies } @import;
     }
 
-    # No request was made, so default to disabling
-    # ALL the policies.
+    # Default to disabling ALL policies.
     return qw(ALL);
 }
 
