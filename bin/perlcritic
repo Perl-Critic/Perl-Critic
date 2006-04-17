@@ -501,7 +501,7 @@ information.
 These are shortcuts for setting the C<-severity> option.  For example
 C<"-4"> is equivalent to C<"-severity 4">.  If multiple shortcuts are
 specified, then the lowest one wins.  If an explicit C<-severity>
-option is given, then all shorcut options are silently ignored.  NOTE:
+option is given, then all shortcut options are silently ignored.  NOTE:
 Be careful not to put one of the severity shortcut options immediately
 after the C<-top> flag or C<perlcritic> will interpret it as the
 number of violations to report.
