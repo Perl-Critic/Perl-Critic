@@ -31,8 +31,10 @@
 
      Miscellanea:
      * All spurrious options for `perlcritic` are now fatal.
+     * Changed several of the -verbose formats to be more readable.
      * Explicit -severity option now overrides -[12345] shortcuts instead
        of being the other way around.
+
 
 
 [0.15] Released on 20060326
