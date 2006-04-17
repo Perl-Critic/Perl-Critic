@@ -37,7 +37,7 @@ print $crap if $condition;  ## no critic
 1;
 END_PERL
 
-is( critique(\$code, {-profile => $profile, -severity => 1} ), 0);
+is( critique(\$code, {-profile => $profile, -severity => 1} ), 0, 'inline no-critic');
 
 #----------------------------------------------------------------
 
@@ -60,7 +60,7 @@ $baz = $nuts;
 1;
 END_PERL
 
-is( critique(\$code, {-profile => $profile, -severity => 1} ), 0);
+is( critique(\$code, {-profile => $profile, -severity => 1} ), 0, 'region no-critic');
 
 #----------------------------------------------------------------
 
@@ -81,7 +81,7 @@ my $noisy = '!';
 1;
 END_PERL
 
-is( critique(\$code, {-profile => $profile, -severity => 1} ), 1);
+is( critique(\$code, {-profile => $profile, -severity => 1} ), 1, 'scoped no-critic');
 
 #----------------------------------------------------------------
 
@@ -102,7 +102,7 @@ my $noisy = '!';
 1;
 END_PERL
 
-is( critique(\$code, {-profile => $profile, -severity => 1} ), 1);
+is( critique(\$code, {-profile => $profile, -severity => 1} ), 1, 'scoped no-critic');
 
 #----------------------------------------------------------------
 
@@ -124,7 +124,7 @@ my $noisy = '!';
 1;
 END_PERL
 
-is( critique(\$code, {-profile => $profile, -severity => 1} ), 1);
+is( critique(\$code, {-profile => $profile, -severity => 1} ), 1, 'region no-critic across a scope');
 
 #----------------------------------------------------------------
 
@@ -147,7 +147,7 @@ my $empty = '';
 1;
 END_PERL
 
-is( critique(\$code, {-profile => $profile, -severity => 1} ), 2);
+is( critique(\$code, {-profile => $profile, -severity => 1} ), 2, 'scoped region no-critic');
 
 #----------------------------------------------------------------
 
@@ -169,7 +169,7 @@ my $empty = '';
 #No final '1;'
 END_PERL
 
-is( critique(\$code, {-profile => $profile, -severity => 1} ), 1);
+is( critique(\$code, {-profile => $profile, -severity => 1} ), 0, 'unterminated no-critic across a scope');
 
 #----------------------------------------------------------------
 
@@ -188,7 +188,7 @@ my $empty = '';        ## use critic
 1;
 END_PERL
 
-is( critique(\$code, {-profile => $profile, -severity => 1} ), 1);
+is( critique(\$code, {-profile => $profile, -severity => 1} ), 1, 'inline use-critic');
 
 #----------------------------------------------------------------
 
@@ -211,7 +211,7 @@ my $empty = '';
 #No final '1;'
 END_PERL
 
-is( critique(\$code, {-profile => $profile, -severity => 1} ), 5);
+is( critique(\$code, {-profile => $profile, -severity => 1} ), 5, 'inline no-critic');
 
 #----------------------------------------------------------------
 
@@ -237,7 +237,7 @@ END_PERL
 
 is( critique(\$code, {-profile  => $profile,
                       -severity => 1,
-                      -force    => 1 } ), 9);
+                      -force    => 1 } ), 9, 'force option');
 
 #----------------------------------------------------------------
 
@@ -261,7 +261,7 @@ END_PERL
 
 is( critique(\$code, {-profile  => $profile,
                       -severity => 1,
-                      -force    => 1 } ), 4);
+                      -force    => 1 } ), 4, 'force option');
 
 #----------------------------------------------------------------
 
@@ -286,7 +286,7 @@ END_PERL
 
 is( critique(\$code, {-profile  => $profile,
                       -severity => 1,
-                      -force    => 1 } ), 5);
+                      -force    => 1 } ), 5, 'force option');
 
 #----------------------------------------------------------------
 # Check that '## no critic' on the top of a block doesn't extend
@@ -312,7 +312,7 @@ unless ( $condition1
 1;
 END_PERL
 
-is( critique(\$code, {-profile  => $profile, -severity => 1} ), 4);
+is( critique(\$code, {-profile  => $profile, -severity => 1} ), 4, 'RT bug 15295');
 
 #----------------------------------------------------------------
 # Check that '## no critic' on the top of a block doesn't extend
@@ -341,7 +341,7 @@ unless ( $condition1
 1;
 END_PERL
 
-is( critique(\$code, {-profile  => $profile, -severity => 1 } ), 6);
+is( critique(\$code, {-profile  => $profile, -severity => 1 } ), 6, 'RT bug 15295');
 
 #----------------------------------------------------------------
 
@@ -359,7 +359,7 @@ eval $string;
 1;
 END_PERL
 
-is( critique(\$code, {-profile  => $profile, -severity => 1 } ), 2);
+is( critique(\$code, {-profile  => $profile, -severity => 1 } ), 2, 'per-policy no-critic');
 
 #----------------------------------------------------------------
 
@@ -377,7 +377,7 @@ eval $string;
 1;
 END_PERL
 
-is( critique(\$code, {-profile  => $profile, -severity => 1 } ), 1);
+is( critique(\$code, {-profile  => $profile, -severity => 1 } ), 1, 'per-policy no-critic');
 
 #----------------------------------------------------------------
 
@@ -395,7 +395,7 @@ eval $string;
 1;
 END_PERL
 
-is( critique(\$code, {-profile  => $profile, -severity => 1 } ), 1);
+is( critique(\$code, {-profile  => $profile, -severity => 1 } ), 1, 'per-policy no-critic');
 
 #----------------------------------------------------------------
 
@@ -413,7 +413,7 @@ eval $string;
 1;
 END_PERL
 
-is( critique(\$code, {-profile  => $profile, -severity => 1 } ), 0);
+is( critique(\$code, {-profile  => $profile, -severity => 1 } ), 0, 'per-policy no-critic');
 
 #----------------------------------------------------------------
 
@@ -436,7 +436,7 @@ eval $string;
 1;
 END_PERL
 
-is( critique(\$code, {-profile  => $profile, -severity => 1 } ), 3);
+is( critique(\$code, {-profile  => $profile, -severity => 1 } ), 3, 'per-policy no-critic');
 
 #----------------------------------------------------------------
 
@@ -454,7 +454,7 @@ eval $string;
 1;
 END_PERL
 
-is( critique(\$code, {-profile  => $profile, -severity => 1 } ), 0);
+is( critique(\$code, {-profile  => $profile, -severity => 1 } ), 0, 'per-policy no-critic');
 
 #----------------------------------------------------------------
 
@@ -472,7 +472,7 @@ eval $string;
 1;
 END_PERL
 
-is( critique(\$code, {-profile  => $profile, -severity => 1 } ), 3);
+is( critique(\$code, {-profile  => $profile, -severity => 1 } ), 3, 'per-policy no-critic');
 
 #----------------------------------------------------------------
 
@@ -502,4 +502,4 @@ my $empty = '';   #Should find this
 1;
 END_PERL
 
-is( critique(\$code, {-profile  => $profile, -severity => 1 } ), 2);
+is( critique(\$code, {-profile  => $profile, -severity => 1 } ), 2, 'per-policy no-critic');
