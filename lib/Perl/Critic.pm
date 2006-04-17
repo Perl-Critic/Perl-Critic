@@ -93,6 +93,7 @@ sub critique {
     @pols || return;    #Nothing to do!
 
     for my $pol ( @pols ) {
+        my $polname = ref $pol;
         for my $type ( $pol->applies_to() ) {
 
             # Gather up all the PPI elements that are of the
@@ -114,13 +115,15 @@ sub critique {
           ELEMENT:
             for my $element ( @{ $elements_of{$type} } ) {
 
-                # Empty lists have an undef location.  I think
-                # this is a bug in PPI.  So here I'm just
-                # trying to avoid derefencing an undef value.
+                # Empty lists have an undef location.  This is an
+                # unresolved bug in PPI, documented here:
+                # http://sourceforge.net/mailarchive/forum.php?thread_id=9684490&forum_id=45571
+                # So here I'm just trying to avoid derefencing an
+                # undef value.
+
                 my $loc = $element->location();
                 my $line = defined $loc ? $loc->[0] : q{};
 
-                my $polname = ref $pol;
                 next ELEMENT if $is_line_disabled{$line}->{$polname};
                 next ELEMENT if $is_line_disabled{$line}->{ALL};
                 push @violations, $pol->violates( $element, $doc );
