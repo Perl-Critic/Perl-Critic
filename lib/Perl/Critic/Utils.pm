@@ -129,8 +129,7 @@ our @GLOBALS =
 my %GLOBALS = map { $_ => 1 } @GLOBALS;
 
 #-------------------------------------------------------------------------
-
-## no critic (lots of noisy strings here)
+## no critic 'ProhibitNoisyQuotes';
 
 my %PRECEDENCE_OF = (
   '->'  => 1,       '<'    => 10,      '||'  => 15,
@@ -154,7 +153,6 @@ my %PRECEDENCE_OF = (
 );
 
 ## use critic
-
 #-------------------------------------------------------------------------
 
 our %UNARY_OPS = ();

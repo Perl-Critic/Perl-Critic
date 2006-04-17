@@ -20,7 +20,7 @@ $VERSION = eval $VERSION;    ## no critic
 
 my $expl = q{Consider refactoring};
 
-## no critic - lots of funny strings here
+## no critic 'ProhibitNoisyQuotes';
 
 my %logic_ops = (
    '&&'  =>  1, '||'  => 1,

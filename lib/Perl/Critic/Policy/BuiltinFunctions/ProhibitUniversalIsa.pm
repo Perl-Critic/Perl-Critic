@@ -14,12 +14,12 @@ use Perl::Critic::Violation;
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '0.15_01';
-$VERSION = eval $VERSION;    ## no critic
+$VERSION = eval $VERSION;    ##no critic 'ProhibitStringyEval';
 
 #----------------------------------------------------------------------------
 
 my $desc = q{UNIVERSAL::isa should not be used as a function};
-my $expl = q{Use eval{$obj->isa($pkg)} instead};
+my $expl = q{Use eval{$obj->isa($pkg)} instead};  ##no critic 'RequireInterp';
 
 #----------------------------------------------------------------------------
 
