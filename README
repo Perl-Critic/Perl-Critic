@@ -14,9 +14,10 @@ DESCRIPTION
     analysis engine. Perl::Critic is distributed with a number of
     Perl::Critic::Policy modules that attempt to enforce various coding
     guidelines. Most Policy modules are based on Damian Conway's book Perl
-    Best Practices. You can enable, disable, and customize those Polices
-    through the Perl::Critic interface. You can also create new Policy
-    modules that suit your own tastes.
+    Best Practices. However, Perl::Critic is not limited to PBP and will
+    even support Policies that contradict Conway. You can enable, disable,
+    and customize those Polices through the Perl::Critic interface. You can
+    also create new Policy modules that suit your own tastes.
 
     For a convenient command-line interface to Perl::Critic, see the
     documentation for perlcritic. If you want to integrate Perl::Critic with
@@ -232,6 +233,14 @@ THE POLICIES
   Perl::Critic::Policy::BuiltinFunctions::ProhibitStringyEval
     Write "eval { my $foo; bar($foo) }" instead of "eval "my $foo;
     bar($foo);"" [Severity 5]
+
+  Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalCan
+    Write "eval { $foo-"can($name) }> instead of "UNIVERSAL::can($foo,
+    $name)" [Severity 3]
+
+  Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalIsa
+    Write "eval { $foo-"isa($pkg) }> instead of "UNIVERSAL::isa($foo, $pkg)"
+    [Severity 3]
 
   Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep
     Write "grep { $_ =~ /$pattern/ } @list" instead of "grep /$pattern/,
@@ -482,6 +491,33 @@ BENDING THE RULES
     code is overlooked. To direct perlcritic to ignore the "## no critic"
     comments, use the "-force" option.
 
+    By default, a bare "## no critic" comment disables all the active
+    Policies. If you wish to disable only specific Policies, add a list of
+    Policies names just as you would for "no strict" or ""no warnings"". For
+    example, this would disable the "ProhibitEmptyQuotes" and
+    "ProhibitPostfixControls" until the end of the block or until the next
+    "## use critic" comment (which ever comes first):
+
+      ## no critic qw(EmptyQuotes PostfixControls);
+
+      $foo = "";                  #Now exempt from ValuesAndExpressions::ProhibitEmptyQuotes
+      $barf = bar() if $foo;      #Now exempt ControlStructures::ProhibitPostfixControls
+      $long_int = 10000000000;    #Still subjected to ValuesAndExpression::RequireNumberSeparators
+
+    Since the Policy names are matched as regular expressions, you can
+    abbreviate the Policy names or disable an entire family of Policies in
+    one shot like this:
+
+      ## no critic 'NamingConventions';
+
+      my $camelHumpVar = 'foo';  #Now exempt from NamingConventions::ProhibitMixedCaseVars
+      sub camelHumpSub {}        #Now exempt from NamingConventions::ProhibitMixedCaseSubs
+
+    The import list must be valid Perl syntax (such as a list of quoted
+    literals or a qw() expression). The <"## no critic"> pragmas can be
+    nested, and Policies named by an inner pragma will be disabled along
+    with those already disabled an outer pragmas.
+
     Use this feature wisely. "## no critic" should be used in the smallest
     possible scope, or only on individual lines of code. If Perl::Critic
     complains about your code, try and find a compliant solution before
@@ -516,14 +552,14 @@ IMPORTANT CHANGES
 
 THE Perl::Critic PHILOSOPHY
       Coding standards are deeply personal and highly subjective.  The
-      goal of L<Perl::Critic> is to help you write code that conforms with
+      goal of Perl::Critic is to help you write code that conforms with
       a set of best practices.  Our primary goal is not to dictate what
       those practices are, but rather, to implement the practices
-      discovered by others.  Ultimately, B<you> make the rules --
-      L<Perl::Critic> is merely tool for encouraging consistency.  If
+      discovered by others.  Ultimately, you make the rules --
+      Perl::Critic is merely tool for encouraging consistency.  If
       there is a policy that you think is important or that we have
       overlooked, we would be very grateful for contributions, or you can
-      simply load your own private set of policies into L<Perl::Critic>.
+      simply load your own private set of policies into Perl::Critic.
 
 EXTENDING THE CRITIC
     The modular design of Perl::Critic is intended to facilitate the
