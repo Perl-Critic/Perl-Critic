@@ -121,12 +121,13 @@ sub critique {
                 # So here I'm just trying to avoid derefencing an
                 # undef value.
 
-                my $loc = $element->location();
-                my $line = defined $loc ? $loc->[0] : q{};
-
-                next ELEMENT if $is_line_disabled{$line}->{$polname};
-                next ELEMENT if $is_line_disabled{$line}->{ALL};
-                push @violations, $pol->violates( $element, $doc );
+                for my $violation ( $pol->violates( $element, $doc ) ) {
+                    my $loc = $violation->location();
+                    my $line = defined $loc ? $loc->[0] : q{};
+                    next ELEMENT if $is_line_disabled{$line}->{$polname};
+                    next ELEMENT if $is_line_disabled{$line}->{ALL};
+                    push @violations, $violation;
+                }
             }
         }
     }
