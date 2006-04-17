@@ -5,6 +5,12 @@
 # $Revision$
 ########################################################################
 
+[NEXT]
+     Enhancements:
+     * perlcritic's directory searching now skips backup files, such
+       as *.swp, *.bak and *~.  It also ignores version control system
+       directories, and the blib directory in module build directories.
+
 [0.15_01] Released on 20060414
 
      Enhancements:

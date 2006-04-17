@@ -1,4 +1,3 @@
-
 #!/usr/bin/perl
 
 #######################################################################
@@ -218,6 +217,7 @@ sub all_code_files {
     # to files that seem to be Perl source code.  This subroutine was
     # poached from Test::Perl::Critic.
 
+    my %skip_dir = map { ($_,1) } qw( CVS RCS .svn _darcs _blib );
     my @queue      = @_;
     my @code_files = ();
 
@@ -229,18 +229,30 @@ sub all_code_files {
             closedir $dh;
 
             @newfiles = File::Spec->no_upwards(@newfiles);
-            @newfiles = grep { $_ ne 'CVS' && $_ ne '.svn' }    @newfiles;
+            @newfiles = grep { !$skip_dir{$_} } @newfiles;
             push @queue, map { File::Spec->catfile($file, $_) } @newfiles;
         }
 
-        if ( -f $file && _is_perl($file) ) {
+        if ( (-f $file) && !_is_backup($file) && _is_perl($file) ) {
             push @code_files, $file;
         }
     }
     return @code_files;
 }
 
+
 #-----------------------------------------------------------------------------
+
+# Decide if it's some sort of backup file
+sub _is_backup {
+    local $_ = shift;
+
+    return 1 if /\.swp$/;
+    return 1 if /\.bak$/;
+    return 1 if /~$/;
+
+    return;
+}
 
 sub _is_perl {
 
