@@ -17,4 +17,4 @@ eval {
 };
 
 plan skip_all => 'Test::Perl::Critic required to criticise code' if $@;
-all_critic_ok('lib', 'bin');
+all_critic_ok();
