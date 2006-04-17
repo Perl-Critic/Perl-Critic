@@ -23,19 +23,28 @@ $VERSION = eval $VERSION;  ## no critic
 #----------------------------------------------------------------------------
 # Globals
 
-my %options    = ();
-my @files      = ();
-my $violations = [];
-my $status     = undef;
+my @files = ();
+my %FORMAT_OF = (
+    1 => "%f:%l:%c:%m\n",
+    2 => "%f: (%l:%c) %m\n",
+    3 => "%m at line %l, column %c.  %e.  (Severity: %s)\n",
+    4 => "%f: %m at line %l, column %c.  %e.  (Severity: %s)\n",
+    5 => "%m at line %l, near '%r'.  (Severity: %s)\n",
+    6 => "%f: %m at line %l near '%r'.  (Severity: %s)\n",
+    7 => "[%p] %m at line %l, column %c.  (Severity: %s)\n",
+    8 => "[%p] %m at line %l, near '%r'.  (Severity: %s)\n",
+    9 => "%m at line %l, column %l.\n  %p (Severity: %s)\n%d\n",
+   10 => "%m at line %l, near '%r'.\n  %p (Severity: %s)\n%d\n",
+);
 
 #-----------------------------------------------------------------------------
 # Begin script.  Only execute if not in a test harness
 
 if ( !$ENV{HARNESS_ACTIVE} ) {
-    %options    = get_options();
-    @files      = get_input(@ARGV);
-    $violations = critique(\%options, @files);
-    $status     = $violations ? 2 : 0;
+    my %options    = get_options();
+    @files         = get_input(@ARGV);
+    my $violations = critique(\%options, @files);
+    my $status     = $violations ? 2 : 0;
     exit $status;
 }
 
@@ -44,47 +53,15 @@ if ( !$ENV{HARNESS_ACTIVE} ) {
 
 sub get_options {
 
-    my %opts      = ();
-    my @opt_specs = qw(severity=i profile=s noprofile verbose=s force list
-        help|? man Version Safari top:i 5 4 3 2 1 include=s@ exclude=s@);
-
-    Getopt::Long::Configure('no_ignore_case');
-    GetOptions( \%opts, @opt_specs ) || pod2usage();        #Exits
-
-    if ( $opts{help}    ) { pod2usage( -verbose => 0 )  }   #Exits
-    if ( $opts{man}     ) { pod2usage( -verbose => 2 )  }   #Exits
-    if ( $opts{Version} ) { print "$VERSION\n"; exit 0; }   #Exits
-
-
-    # Handle special request to display a list of policies
-    if ( $opts{list} ) { print policy_listing(); exit 0; }  #Exits
-
-    # Sanity checks
-    if ( $opts{noprofile} && $opts{profile} ) {
-        my $msg = 'Cannot use -noprofile with -profile';
-        pod2usage( -exitstatus => 1, -message => $msg );    #Exits
-    }
-
-    # Warn users who might forget that -verbose requires a value
-    if ( $opts{verbose} && $opts{verbose} !~ m{(?: \d+ | %[mflcedrps] )}mx ) {
-        warn qq{Warning: -verbose argument '$opts{verbose}' looks odd.\n};
-        warn qq{Perhaps you meant to say '-verbose 3 $opts{verbose}'\n};
-    }
-
-    # Warn if -top is negative.  They might have meant it as a severity
-    if ( $opts{top} && $opts{top} < 0 ) {
-        warn qq{Warning: -top argument '$opts{top}' is negative.\n};
-        warn qq{Perhaps you meant to say '$opts{top} -top'.\n};
-    }
+    my %opts = _parse_command_line();
+    _dispatch_special_requests( %opts );
+    _validate_options( %opts );
 
     # Convert severity shortcut options.  If multiple shortcuts
-    # are given, the lowest one wins, and -severity is ignored.
-    for ( 1 .. 5 ) {
-        if ( exists $opts{$_} ) {
-            $opts{severity} = $_;
-            last;
-        }
-    }
+    # are given, the lowest one wins.  If an explicit -severity
+    # option has been given, then the shortcuts are ignored.
+    $opts{severity} ||=  first { exists $opts{$_} } (1 .. 5);
+
 
     # If -top is specified, default the severity level to 1, unless an
     # explicit severity is defined.  This provides us flexibility to
@@ -110,10 +87,102 @@ sub get_options {
 
 #-----------------------------------------------------------------------------
 
+sub _parse_command_line {
+
+    my %opts      = ();
+    my @opt_specs = qw(severity=i profile=s noprofile verbose=s force list
+        help|? man Version Safari top:i 5 4 3 2 1 include=s@ exclude=s@);
+
+    Getopt::Long::Configure('no_ignore_case');
+    GetOptions( \%opts, @opt_specs ) || pod2usage();           #Exits
+
+    return %opts;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _dispatch_special_requests {
+    my (%opts) = @_;
+    if ( $opts{help}    ) { pod2usage( -verbose => 0 )      }  #Exits
+    if ( $opts{man}     ) { pod2usage( -verbose => 2 )      }  #Exits
+    if ( $opts{Version} ) { print "$VERSION\n"; exit 0;     }  #Exits
+    if ( $opts{list}    ) { print policy_listing(); exit 0; }  #Exits
+
+    return 1;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _validate_options {
+    my (%opts) = @_;
+    my $msg = q{};
+
+
+    if ( $opts{noprofile} && $opts{profile} ) {
+        $msg .= qq{Warning: Can't use -noprofile with -profile option.\n};
+    }
+
+    if ( $opts{verbose} && $opts{verbose} !~ m{(?: \d+ | %[mflcedrps] )}mx){
+        $msg .= qq{Warning: -verbose arg '$opts{verbose}' looks odd.  };
+        $msg .= qq{Perhaps you meant to say '-verbose 3 $opts{verbose}'\n};
+    }
+
+    if ( exists $opts{top} && $opts{top} < 0 ) {
+        $msg .= qq{Warning: -top argument '$opts{top}' is negative.  };
+        $msg .= qq{Perhaps you meant to say '$opts{top} -top'.\n};
+    }
+
+    if (exists $opts{severity} && ($opts{severity}<1 || $opts{severity}>5)){
+        $msg .= qq{Warning: -severity arg '$opts{severity}' out of range.  };
+        $msg .= qq{Severities range from '1' (lowest) to '5' (highest).\n};
+    }
+
+
+    if ( $msg ) {
+        pod2usage( -exitstatus => 1, -message => $msg, -verbose => 0); #Exits
+    }
+
+
+    return 1;
+}
+
+#------------------------------------------------------------------------------
+
+sub _set_defaults {
+
+    my (%opts) = @_;
+
+    # Convert severity shortcut options.  If multiple shortcuts
+    # are given, the lowest one wins.  If an explicit -severity
+    # option has been given, then the shortcuts are ignored.
+    $opts{severity} ||=  first { exists $opts{$_} } (1 .. 5);
+
+
+    # If -top is specified, default the severity level to 1, unless an
+    # explicit severity is defined.  This provides us flexibility to
+    # report top-offenders across just some or all of the severity
+    # levels.  We also default the -top count to 20 if none is given
+    if ( exists $opts{top} ) {
+        $opts{severity} ||= 1;
+        $opts{top}      ||= 20;
+    }
+
+    # Override profile, if -noprofile is specified
+    if ( exists $opts{noprofile} ) {
+        $opts{profile} = q{};
+    }
+
+    return %opts;
+}
+
+#-----------------------------------------------------------------------------
+
 sub get_input {
 
     if (@_) {
 
+        # Test to make sure all the specified files or directories
+        # actually exist.  If any one of them is bogus, then die.
         if ( my $nonexistant = first { ! -e $_ } @_ ) {
             my $msg = qq{No such file or directory: '$nonexistant'};
             pod2usage( -exitstatus => 1, -message => $msg, -verbose => 0);
@@ -127,9 +196,10 @@ sub get_input {
     }
     else {
 
-        #Reading code from STDIN
-        my $code_string = do { local $RS = undef; <STDIN> };    #Slurping
-        $code_string =~ m{ \S+ }mx || die "Nothing to critique.\n";
+        # Reading code from STDIN.  All the code is slurped into
+        # a string.  PPI will barf if the string is just whitespace.
+        my $code_string = do { local $RS = undef; <STDIN> };
+        $code_string =~ m{ \S+ }mx || die qq{Nothing to critique.\n};
         return \$code_string;    #Convert to SCALAR ref for PPI
     }
 }
@@ -138,7 +208,7 @@ sub get_input {
 
 sub critique {
 
-    my ( $config, @files ) = @_;
+    my ( $opts, @files ) = @_;
     @files || die "No perl files were found.\n";
 
     # Perl::Critic has lots of dependencies, so loading is delayed
@@ -148,12 +218,12 @@ sub critique {
     # why not save a few seconds if you can.
 
     require Perl::Critic;
-    my $critic = Perl::Critic->new( %{$config} );
+    my $critic = Perl::Critic->new( %{$opts} );
 
     my $count = 0;
     for my $file (@files) {
       my @violations = $critic->critique($file);
-      render_report( $file, $config, @violations );
+      render_report( $file, $opts, @violations );
       $count += scalar @violations;
     }
 
@@ -164,46 +234,25 @@ sub critique {
 
 sub render_report {
 
-    my ( $file, $config, @violations ) = @_;
+    my ( $file, $opts_ref, @violations ) = @_;
 
-    $file = -f $file ? $file : 'stdin';
-    my $default_verbosity = @files > 1 ? 3 : 2;  #@files is global!
-    my $verbosity = $config->{-verbose} || $default_verbosity;
-    my $top = $config->{-top};
 
     if( ! @violations ){
         print "$file source OK\n";
         return;
     }
 
-    my %FORMAT_OF = (
-        1 => "%f:%l:%c:%m\n",
-        2 => "%m at line %l, column %c.  %e. (Severity: %s)\n",
-        3 => "%f: %m at line %l, column %c.  %e. (Severity: %s)\n",
-        4 => "%m near '%r'. (Severity: %s)\n",
-        5 => "%f: %m near '%r'. (Severity: %s)\n",
-        6 => "%m at line %l, column %c near '%r'.  %e. (Severity: %s)\n",
-        7 => "%f: %m at line %l, column %c near '%r'.  %e. (Severity: %s)\n",
-        8 => "[%p] %m at line %l, column %c near '%r'.  %e. (Severity: %s)\n",
-        9 => "[%p] %m at line %l, column %c near '%r'.  %e. (Severity: %s)\n%d\n",
-    );
 
-    my $fmt =
-      $verbosity =~ m{ \A [+-]? \d+ \z }mx
-      ? ( $FORMAT_OF{ abs $verbosity } || $FORMAT_OF{2} )
-      : _interpolate($verbosity);
-    $fmt =~ s{\%f}{$file}mxg;    #HACK! Violation objects don't know the file
-
-
-    no warnings 'once';  ## no critic
-    local $Perl::Critic::Violation::FORMAT = $fmt;
-
-    if ( defined $top ) {
-        my $limit = @violations < $top ? $#violations : $top-1;
-        my @ranked = Perl::Critic::Violation::sort_by_severity(@violations);
-        my @top_offenders = ( reverse @ranked )[ 0 .. $limit ];  #Slicing...
-        @violations = Perl::Critic::Violation::sort_by_location(@top_offenders);
+    if ( $opts_ref->{-top} ) {
+        @violations = _get_top_offenders( $opts_ref->{-top}, @violations );
     }
+
+
+    $file = -f $file ? $file : 'stdin';
+    my $default_verbosity = @files > 1 ? 4 : 3;  #@files is global!
+    my $fmt = _get_format( $opts_ref->{-verbose} || $default_verbosity );
+    $fmt =~ s{ \%f }{$file}mxg;  #HACK! Violation objects don't know the file
+    Perl::Critic::Violation::set_format( $fmt );
 
     print @violations;
     return scalar @violations;
@@ -242,25 +291,23 @@ sub all_code_files {
 
 
 #-----------------------------------------------------------------------------
-
 # Decide if it's some sort of backup file
+
 sub _is_backup {
-    local $_ = shift;
-
-    return 1 if /\.swp$/;
-    return 1 if /\.bak$/;
-    return 1 if /~$/;
-
+    my ($file) = @_;
+    return 1 if $file =~ m{ [.] swp \z}mx;
+    return 1 if $file =~ m{ [.] bak \z}mx;
+    return 1 if $file =~ m{  ~      \z}mx;
     return;
 }
 
+#-----------------------------------------------------------------------------
+# Returns true if the argument ends with a perl-ish file
+# extension, or if it has a shebang-line containing 'perl' This
+# subroutine was also poached from Test::Perl::Critic
+
 sub _is_perl {
-
-    # Returns true if the argument ends with a perl-ish file
-    # extension, or if it has a shebang-line containing 'perl' This
-    # subroutine was also poached from Test::Perl::Critic
-
-    my $file = shift;
+    my ($file) = @_;
 
     #Check filename extensions
     return 1 if $file =~ m{ [.] PL          \z}mx;
@@ -278,14 +325,34 @@ sub _is_perl {
 
 #-----------------------------------------------------------------------------
 
-sub _interpolate {
-    my $literal      = shift;
-    my $interpolated = undef;
-    eval "\$interpolated = \"$literal\"";  ## no critic
-    return $interpolated;
+sub _get_format {
+    my ( $verbosity ) = @_;
+    return $verbosity =~ m{ \A [+-]? \d+ \z }mx ? $FORMAT_OF{ abs $verbosity }
+                                                : _interpolate($verbosity);
 }
 
 #-----------------------------------------------------------------------------
+
+sub _interpolate {
+    my $literal      = shift;
+    return eval "\"$literal\"";  ## no critic 'StringyEval';
+}
+
+#-----------------------------------------------------------------------------
+
+sub _get_top_offenders {
+    my ( $top, @violations ) = @_;
+    return if !$top || $top < 0;
+    return if !@violations;
+
+    my $limit = @violations < $top ? $#violations : $top-1;
+    my @ranked = Perl::Critic::Violation::sort_by_severity(@violations);
+    my @top_offenders = ( reverse @ranked )[ 0 .. $limit ];  #Slicing...
+    return Perl::Critic::Violation::sort_by_location(@top_offenders);
+}
+
+#-----------------------------------------------------------------------------
+
 
 sub policy_listing {
 
@@ -432,12 +499,12 @@ information.
 =item -5 | -4 | -3 | -2 | -1
 
 These are shortcuts for setting the C<-severity> option.  For example
-C<"-4"> is equivalent to C<"-severity 4">.  Using one of these
-shortcuts causes an explicit C<-severity> option to be silently
-ignored if it is given.  If multiple shortcuts are specified, then the
-lowest one wins.  NOTE: Be careful not to put one of the severity
-shortcut options immediately after the C<-top> flag or C<perlcritic>
-will interpret it as the number of violations to report.
+C<"-4"> is equivalent to C<"-severity 4">.  If multiple shortcuts are
+specified, then the lowest one wins.  If an explicit C<-severity>
+option is given, then all shorcut options are silently ignored.  NOTE:
+Be careful not to put one of the severity shortcut options immediately
+after the C<-top> flag or C<perlcritic> will interpret it as the
+number of violations to report.
 
 =item -top [ N ]
 
@@ -496,21 +563,22 @@ Sets the verbosity level or format for reporting violations.  If given
 a number (C<N>), C<perlcritic> reports violations using one of the
 predefined formats described below.  If given a string (C<FORMAT>), it
 is interpreted to be an actual format specification.  If the
-C<-verbose> option is not specified, it defaults to either 2 or 3,
+C<-verbose> option is not specified, it defaults to either 3 or 4,
 depending on whether multiple files were given as arguments to
 C<perlcritic>.
 
   Verbosity     Format Specification
   -----------   --------------------------------------------------------------------
-  1             "%f:%l:%c:%m\n"
-  2             "%m at line %l, column %c.  %e. (Severity: %s)\n"
-  3             "%f: %m at line %l, column %c.  %e. (Severity: %s)\n"
-  4             "%m near '%r'. (Severity: %s)\n"
-  5             "%f: %m near '%r'. (Severity: %s)\n"
-  6             "%m at line %l, column %c near '%r'.  %e. (Severity: %s)\n"
-  7             "%f: %m at line %l, column %c near '%r'.  %e. (Severity: %s)\n"
-  8             "[%p] %m at line %l, column %c near '%r'.  %e. (Severity: %s)\n"
-  9             "[%p] %m at line %l, column %c near '%r'.  %e. (Severity: %s)\n%d\n"
+   1            "%f:%l:%c:%m\n",
+   2            "%f: (%l:%c) %m\n",
+   3            "%m at line %l, column %c.  %e.  (Severity: %s)\n",
+   4            "%f: %m at line %l, column %c.  %e.  (Severity: %s)\n",
+   5            "%m at line %l, near '%r'.  (Severity: %s)\n",
+   6            "%f: %m at line %l near '%r'.  (Severity: %s)\n",
+   7            "[%p] %m at line %l, column %c.  (Severity: %s)\n",
+   8            "[%p] %m at line %l, near '%r'.  (Severity: %s)\n",
+   9            "%m at line %l, column %l.\n  %p (Severity: %s)\n%d\n",
+  10            "%m at line %l, near '%r'.\n  %p (Severity: %s)\n%d\n"
 
 Formats are a combination of literal and escape characters similar to
 the way C<sprintf> works.  See L<String::Format> for a full
@@ -989,9 +1057,10 @@ ignore the C<"## no critic"> comments, use the C<-force> option.
 By default, a bare C<"## no critic"> comment disables all the active
 Policies.  If you wish to disable only specific Policies, add a list
 of Policies names just as you would for C<"no strict"> or C<"no
-warnings">.  For example, this would disable the ProhibitEmptyQuotes
-and ProhibitPostfixControls until the end of the block or until the
-next C<"## use critic"> comment (which ever comes first):
+warnings">.  For example, this would disable the
+C<ProhibitEmptyQuotes> and C<ProhibitPostfixControls> until the end of
+the block or until the next C<"## use critic"> comment (which ever
+comes first):
 
   ## no critic qw(EmptyQuotes PostfixControls);
 
@@ -1008,9 +1077,10 @@ one shot like this:
   my $camelHumpVar = 'foo';  #Now exempt from NamingConventions::ProhibitMixedCaseVars
   sub camelHumpSub {}        #Now exempt from NamingConventions::ProhibitMixedCaseSubs
 
-Policy names must be space-delimited, and must all appear on the same
-line as the C<"## no critic">.  At the moment, the behavior of nested
-C<"## no critic"> comments is not defined.
+The import list must be valid Perl syntax (such as a list of quoted
+literals or a qw() expression).  The <"## no critic"> pragmas can be
+nested, and Policies named by an inner pragma will be disabled along
+with those already disabled an outer pragmas.
 
 Use this feature wisely.  C<"## no critic"> should be used in the
 smallest possible scope, or only on individual lines of code. If

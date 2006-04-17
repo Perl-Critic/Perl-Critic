@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 21;
+use Test::More tests => 22;
 use Perl::Critic;
 
 # common P::C testing tools
@@ -473,3 +473,33 @@ eval $string;
 END_PERL
 
 is( critique(\$code, {-profile  => $profile, -severity => 1 } ), 3);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+package FOO;
+use strict;
+use warnings;
+our $VERSION = 1.0;
+
+## no critic qw(Noisy);
+my $noisy = '!';     #Should not find this
+my $empty = '';      #Should find this
+
+sub foo {
+
+   ## no critic qw(Empty);
+   my $nosiy = '!';  #Should not find this
+   my $empty = '';   #Should not find this
+   ## use critic;
+
+   return 1;
+}
+
+my $nosiy = '!';  #Should not find this
+my $empty = '';   #Should find this
+
+1;
+END_PERL
+
+is( critique(\$code, {-profile  => $profile, -severity => 1 } ), 2);

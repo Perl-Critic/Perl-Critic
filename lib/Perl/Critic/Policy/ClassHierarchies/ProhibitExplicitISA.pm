@@ -18,7 +18,7 @@ $VERSION = eval $VERSION; ## no critic
 
 #--------------------------------------------------------------------------
 
-my $desc = q{@ISA used instead of 'use base'}; ##no critic for @ in string
+my $desc = q{@ISA used instead of 'use base'}; ##no critic; #for @ in string
 my $expl = [ 360 ];
 
 #--------------------------------------------------------------------------
@@ -30,7 +30,7 @@ sub applies_to { return 'PPI::Token::Symbol' }
 
 sub violates {
     my ($self, $elem, $doc) = @_;
-    if( $elem eq q{@ISA} ) {  ##no critic for @ in string
+    if( $elem eq q{@ISA} ) {  ##no critic; #for @ in string
         my $sev = $self->get_severity();
 	return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
     }

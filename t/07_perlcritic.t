@@ -11,77 +11,84 @@ use File::Spec;
 use Test::More tests => 29;
 
 #-----------------------------------------------------------------------------
-#Load perlcritic like a library so we can test its subroutines
+# Load perlcritic like a library so we can test its subroutines.  If it is not
+# found in blib, then use the one in bin (for example, when using 'prove')
 
 my $perlcritic = File::Spec->catfile( qw(blib script perlcritic) );
+$perlcritic = File::Spec->catfile( qw(bin perlcritic) ) if ! -e $perlcritic;
 require $perlcritic;  ## no critic
 
 #-----------------------------------------------------------------------------
 
-local @ARGV = qw(-1 -2 -3 -4 -5);
-my %options = get_options();
-is( $options{-severity}, 1);
-
-local @ARGV = qw(-5 -3 -4 -1 -2);
-%options = get_options();
-is( $options{-severity}, 1);
-
-local @ARGV = qw();
-%options = get_options();
-is( $options{-severity}, undef);
-
-local @ARGV = qw(-2 -4 -severity 5);
-%options = get_options();
-is( $options{-severity}, 2);
-
-local @ARGV = qw(-severity 5 -2 -1); 
-%options = get_options();
-is( $options{-severity}, 1);
+local @ARGV = ();
+my %options = ();
 
 #-----------------------------------------------------------------------------
 
-local @ARGV = qw(-top); 
+@ARGV = qw(-1 -2 -3 -4 -5);
 %options = get_options();
 is( $options{-severity}, 1);
-is( $options{-top}, 20);
 
-local @ARGV = qw(-top 10); 
+@ARGV = qw(-5 -3 -4 -1 -2);
 %options = get_options();
 is( $options{-severity}, 1);
-is( $options{-top}, 10);
 
-local @ARGV = qw(-severity 4 -top); 
+@ARGV = qw();
+%options = get_options();
+is( $options{-severity}, undef);
+
+@ARGV = qw(-2 -3 -severity 4);
 %options = get_options();
 is( $options{-severity}, 4);
-is( $options{-top}, 20);
 
-local @ARGV = qw(-severity 4 -top 10); 
-%options = get_options();
-is( $options{-severity}, 4);
-is( $options{-top}, 10);
-
-local @ARGV = qw(-severity 5 -2 -top 5); 
+@ARGV = qw(-severity 2 -3 -4);
 %options = get_options();
 is( $options{-severity}, 2);
+
+#-----------------------------------------------------------------------------
+
+@ARGV = qw(-top);
+%options = get_options();
+is( $options{-severity}, 1);
+is( $options{-top}, 20);
+
+@ARGV = qw(-top 10);
+%options = get_options();
+is( $options{-severity}, 1);
+is( $options{-top}, 10);
+
+@ARGV = qw(-severity 4 -top);
+%options = get_options();
+is( $options{-severity}, 4);
+is( $options{-top}, 20);
+
+@ARGV = qw(-severity 4 -top 10);
+%options = get_options();
+is( $options{-severity}, 4);
+is( $options{-top}, 10);
+
+@ARGV = qw(-severity 5 -2 -top 5);
+%options = get_options();
+is( $options{-severity}, 5);
 is( $options{-top}, 5);
 
 #-----------------------------------------------------------------------------
 
-local @ARGV = qw(-noprofile); 
+@ARGV = qw(-noprofile);
 %options = get_options();
 is( $options{-profile}, q{});
 
-local @ARGV = qw(-profile foo); 
+@ARGV = qw(-profile foo);
 %options = get_options();
 is( $options{-profile}, 'foo');
 
 #-----------------------------------------------------------------------------
 
-local @ARGV = qw(-verbose 2); 
+@ARGV = qw(-verbose 2);
 %options = get_options();
 is( $options{-verbose}, 2);
 
-local @ARGV = qw(-verbose %l:%c:%m); 
+@ARGV = qw(-verbose %l:%c:%m);
 %options = get_options();
 is( $options{-verbose}, '%l:%c:%m');
 

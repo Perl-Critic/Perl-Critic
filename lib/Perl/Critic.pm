@@ -830,9 +830,10 @@ ignore the C<"## no critic"> comments, use the C<-force> option.
 By default, a bare C<"## no critic"> comment disables all the active
 Policies.  If you wish to disable only specific Policies, add a list
 of Policies names just as you would for C<"no strict"> or C<"no
-warnings">.  For example, this would disable the ProhibitEmptyQuotes
-and ProhibitPostfixControls until the end of the block or until the
-next C<"## use critic"> comment (which ever comes first):
+warnings">.  For example, this would disable the
+C<ProhibitEmptyQuotes> and C<ProhibitPostfixControls> until the end of
+the block or until the next C<"## use critic"> comment (which ever
+comes first):
 
   ## no critic qw(EmptyQuotes PostfixControls);
 
@@ -849,9 +850,10 @@ one shot like this:
   my $camelHumpVar = 'foo';  #Now exempt from NamingConventions::ProhibitMixedCaseVars
   sub camelHumpSub {}        #Now exempt from NamingConventions::ProhibitMixedCaseSubs
 
-Policy names must be space-delimited, and must all appear on the same
-line as the C<"## no critic">.  At the moment, the behavior of nested
-C<"## no critic"> comments is not defined.
+The import list must be valid Perl syntax (such as a list of quoted
+literals or a qw() expression).  The <"## no critic"> pragmas can be
+nested, and Policies named by an inner pragma will be disabled along
+with those already disabled an outer pragmas.
 
 Use this feature wisely.  C<"## no critic"> should be used in the
 smallest possible scope, or only on individual lines of code. If

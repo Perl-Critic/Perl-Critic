@@ -5,34 +5,35 @@
 # $Revision$
 ########################################################################
 
-[NEXT]
-     Enhancements:
-     * perlcritic's directory searching now skips backup files, such
-       as *.swp, *.bak and *~.  It also ignores version control system
-       directories, and the blib directory in module build directories.
 
-[0.15_01] Released on 20060414
+[0.15_01] Released on 20060416
 
      Enhancements:
      * Added diagnostic messages if the .perlcriticrc contains entries
        for Policy modules that don't seem to exist.
-
      * Now you can specify which policies to disable with the
        "## no critic" pseudo-pragmas.  This feature is still
        experimental.  See docs for details.
+     * perlcritic's directory searching now skips backup files, such
+       as *.swp, *.bak and *~.  It also ignores version control system
+       directories, and the blib directory in module build directories.
 
      Bug Fixes:
      * 18386: Bad example in POD for Documentation::RequirePodSections
      * 18670: Test failure if Perl::Tidy is not installed 
      * 18698: Policy idea ProhibitUniversalFunctions (see New Policies)
-     * ProhibitExplicitIsa now also catches a fully-qualified ISA
-       such as @Foo::Bar::ISA;  Thanks to Josh McAdams for the patch. 
      * RequireInterpolationOfMetachars falsely hit strings like 'foo=s@'
        which are commonly used with Getopt::Long.
 
      New Policies:
      * BuiltinFunctions::ProhibitUniversalCan
      * BuiltinFunctions::ProhibitUniversalIsa
+
+     Miscellanea:
+     * All spurrious options for `perlcritic` are now fatal.
+     * Explicit -severity option now overrides -[12345] shortcuts instead
+       of being the other way around.
+
 
 [0.15] Released on 20060326
 
