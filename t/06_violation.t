@@ -2,7 +2,7 @@ use strict;
 use warnings;
 use PPI::Document;
 use English qw(-no_match_vars);
-use Test::More tests => 27;
+use Test::More tests => 29;
 
 #-----------------------------------------------------------------------------
 
@@ -28,6 +28,8 @@ can_ok('Perl::Critic::Violation', 'description');
 can_ok('Perl::Critic::Violation', 'explanation');
 can_ok('Perl::Critic::Violation', 'source');
 can_ok('Perl::Critic::Violation', 'policy');
+can_ok('Perl::Critic::Violation', 'get_format');
+can_ok('Perl::Critic::Violation', 'set_format');
 can_ok('Perl::Critic::Violation', 'to_string');
 
 #-----------------------------------------------------------------------------
@@ -78,12 +80,12 @@ like(ViolationTest->get_violation()->diagnostics(),
 # Violation sorting
 
 SKIP: {
-	
+
 	#For reasons I don't yet understand these tests fail
 	#on my perl at work.  So for now, I just skip them.
-	skip( 'Broken on perls <= 5.6.1', 2 ) if $] <= 5.006001; 
+	skip( 'Broken on perls <= 5.6.1', 2 ) if $] <= 5.006001;
 
-$code = <<'END_PERL';	
+$code = <<'END_PERL';
 my $foo = 1; my $bar = 2;
 my $baz = 3;
 END_PERL
@@ -93,8 +95,8 @@ END_PERL
 	my @violations = map {Perl::Critic::Violation->new('', '', $_, 0)} $doc, @children;
 	my @sorted = Perl::Critic::Violation->sort_by_location( reverse @violations);
 	is_deeply(\@sorted, \@violations, 'sort_by_location');
-	
-	
+
+
 	my @severities = (5, 3, 4, 0, 2, 1);
 	@violations = map {Perl::Critic::Violation->new('', '', $doc, $_)} @severities;
 	@sorted = Perl::Critic::Violation->sort_by_severity( @violations );

@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 22;
+use Test::More tests => 25;
 use Perl::Critic;
 
 # common P::C testing tools
@@ -503,3 +503,63 @@ my $empty = '';   #Should find this
 END_PERL
 
 is( critique(\$code, {-profile  => $profile, -severity => 1 } ), 2, 'per-policy no-critic');
+
+#----------------------------------------------------------------
+# Most policies apply to a particular type of PPI::Element and usually
+# only return one Violation at a time.  But the next three cases
+# involve policies that apply to the whole document and can return
+# multiple violations at a time.  These tests make sure that the 'no
+# critic' pragmas are effective with those Policies
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+package FOO;
+
+#Code before 'use strict'
+my $foo = 'baz';  ## no critic
+my $bar = 42;  # Should find this
+
+use strict;
+use warnings;
+our $VERSION = 1.0;
+
+1;
+END_PERL
+
+is( critique(\$code, {-profile  => $profile} ), 1, 'no critic & RequireUseStrict');
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+package FOO;
+
+#Code before 'use warnings'
+my $foo = 'baz';  ## no critic
+my $bar = 42;  # Should find this
+
+use strict;
+use warnings;
+our $VERSION = 1.0;
+
+1;
+END_PERL
+
+is( critique(\$code, {-profile  => $profile} ), 1, 'no critic & RequireUseWarnings');
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+#Code before 'package' declaration
+my $foo = 'baz';  ## no critic
+my $bar = 42;  # Should find this
+
+package FOO;
+
+use strict;
+use warnings;
+our $VERSION = 1.0;
+
+1;
+END_PERL
+
+is( critique(\$code, {-profile  => $profile} ), 1, 'no critic & RequireExplicitPackage');

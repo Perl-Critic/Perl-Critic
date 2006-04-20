@@ -12,7 +12,6 @@ use warnings;
 use File::Spec;
 use English qw(-no_match_vars);
 use Perl::Critic::Config;
-use Perl::Critic::Utils;
 use Carp;
 use PPI;
 
@@ -67,68 +66,67 @@ sub critique {
     if ( !defined $doc ) {
         my $errstr = PPI::Document::errstr();
         my $file = -f $source_code ? $source_code : 'stdin';
-        die qq{Cannot parse code: $errstr of '$file'\n};
+        warn qq{Warning: Can't parse code: $errstr of '$file'\n};
+        return;
     }
 
     # Pre-index location of each node (for speed)
     $doc->index_locations();
 
-    # keys of hash are line numbers to ignore for violations
-    my %is_line_disabled;
-
-    # Remove the magic shebang fix
-    %is_line_disabled = ( %is_line_disabled, _unfix_shebang($doc) );
+    # Disable the magic shebang fix
+    my %is_line_disabled = _unfix_shebang($doc);
 
     # Filter exempt code, if desired
     if ( !$self->{_force} ) {
         my @site_policies = $self->config->site_policies();
-        %is_line_disabled = ( %is_line_disabled, _filter_code($doc, @site_policies) );
+        %is_line_disabled = ( %is_line_disabled,
+                              _filter_code($doc, @site_policies) );
     }
 
-    # Run engine, testing each Policy at each element
+
+    # Seed a hash of PPI elements.  Keys are PPI class names, and and
+    # values are arrayrefs containing all the instances of the class.
     my %elements_of = ( 'PPI::Document' => [$doc],
                         'PPI::Element'  => $doc->find('PPI::Element') || [], );
-    my @violations;
-    my @pols = @{ $self->policies() };
-    @pols || return;    #Nothing to do!
 
-    for my $pol ( @pols ) {
-        my $polname = ref $pol;
-        for my $type ( $pol->applies_to() ) {
 
-            # Gather up all the PPI elements that are of the
-            # type that this Policy wants.  By using ||=
-            # we only have to do this once, even though
-            # several Policies will probably all want the
-            # same types of PPI elements.
+    my @violations = ();
+    for my $policy ( @{ $self->policies() } ) {
+
+      TYPE:
+        for my $type ( $policy->applies_to() ) {
+
+            # Gather up all the PPI elements that are of the $type
+            # that this $policy wants.  Save them in a hash so we go
+            # only have to go searching for any given type once.
 
             $elements_of{$type}
               ||= [ grep {$_->isa($type)} @{ $elements_of{'PPI::Element'} } ];
 
-            # Now loop over each of the found elements and
-            # decide if the element is on a disabled line.
-            # This depends on the presence of a ##no critic
-            # comment that matches the name of this Policy.
-            # If the line is not disabled, then evaluate
-            # the element using the Policy.
-
           ELEMENT:
             for my $element ( @{ $elements_of{$type} } ) {
 
-                # Empty lists have an undef location.  This is an
-                # unresolved bug in PPI, documented here:
-                # http://sourceforge.net/mailarchive/forum.php?thread_id=9684490&forum_id=45571
-                # So here I'm just trying to avoid derefencing an
-                # undef value.
+                # Evaulate the policy on this $element.  A policy may
+                # return zero or more violations.  We only want the
+                # violations that occur on lines that have not been
+                # disabled.
 
-                for my $violation ( $pol->violates( $element, $doc ) ) {
+              VIOLATION:
+                for my $violation ( $policy->violates( $element, $doc ) ) {
+                    my $policy_name = ref $policy;
                     my $loc = $violation->location();
-                    my $line = defined $loc ? $loc->[0] : q{};
-                    next ELEMENT if $is_line_disabled{$line}->{$polname};
-                    next ELEMENT if $is_line_disabled{$line}->{ALL};
+                    my $line = defined $loc ? $loc->[0] : 0;  #See note [1]
+                    next VIOLATION if $is_line_disabled{$line}->{$policy_name};
+                    next VIOLATION if $is_line_disabled{$line}->{ALL};
                     push @violations, $violation;
                 }
             }
+
+            # [1] Empty lists have an undef location.  This is an
+            # unresolved bug in PPI, which is documented here:
+            # http://sourceforge.net/mailarchive/forum.php?thread_id=9684490&forum_id=45571
+            # So I'm just trying to avoid derefencing an undef value.
+
         }
     }
 
@@ -220,9 +218,13 @@ sub _parse_nocritic_import {
 
     my ($nocritic_pragma, @site_policies) = @_;
 
-    # The "import arguments" should look like regular code.
-    # So they might be a list of quoted literals, or a qw().
-    my $import_rx = qr{\A \s* \#\# \s* no \s+ critic \s+ ( [^;#]+ )}mx;
+    # The "import arguments" should look like regular code.  So they
+    # might be a list of quoted literals, or a qw().  To avoid
+    # evaluating dangerous code and to mantain backward compatibility,
+    # the import list is restricted to certain characters.
+
+    my $legals_rx = qr{ [\w:'"\s(),]+ }mx;  #Only these chars are allowed
+    my $import_rx = qr{\A \s* \#\# \s* no \s+ critic \s+ ( $legals_rx )}mx;
 
     if ( $nocritic_pragma =~ $import_rx ) {
         my @import = grep { defined $_ } eval $1; ## no critic qw(StringyEval)
@@ -251,10 +253,11 @@ sub _unfix_shebang {
 
     my $fixin_rx = qr{^eval 'exec .* \$0 \${1\+"\$@"}'\s*[\r\n]\s*if.+;};
     if ( $first_stmnt =~ $fixin_rx ) {
-        my $line = $first_stmnt->location->[0];
+        my $line = $first_stmnt->location()->[0];
         return ( $line => {ALL => 1}, $line + 1 => {ALL => 1} );
     }
 
+    #No magic shebang was found!
     return;
 }
 
@@ -831,13 +834,13 @@ C<"## no critic"> comment is on the same line as a code statement,
 then only that line of code is overlooked.  To direct perlcritic to
 ignore the C<"## no critic"> comments, use the C<-force> option.
 
-By default, a bare C<"## no critic"> comment disables all the active
-Policies.  If you wish to disable only specific Policies, add a list
-of Policies names just as you would for C<"no strict"> or C<"no
-warnings">.  For example, this would disable the
-C<ProhibitEmptyQuotes> and C<ProhibitPostfixControls> until the end of
-the block or until the next C<"## use critic"> comment (which ever
-comes first):
+A bare C<"## no critic"> comment disables all the active Policies.  If
+you wish to disable only specific Policies, add a list of Policy names
+as arguments just as you would for the C<"no strict"> or C<"no
+warnings"> pragmas.  For example, this would disable the
+C<ProhibitEmptyQuotes> and C<ProhibitPostfixControls> policies until
+the end of the block or until the next C<"## use critic"> comment
+(whichever comes first):
 
   ## no critic qw(EmptyQuotes PostfixControls);
 
@@ -845,40 +848,53 @@ comes first):
   $barf = bar() if $foo;      #Now exempt ControlStructures::ProhibitPostfixControls
   $long_int = 10000000000;    #Still subjected to ValuesAndExpression::RequireNumberSeparators
 
-Since the Policy names are matched as regular expressions, you can
-abbreviate the Policy names or disable an entire family of Policies in
-one shot like this:
+Since the Policy names are matched against the arguments as regular
+expressions, you can abbreviate the Policy names or disable an entire
+family of Policies in one shot like this:
 
   ## no critic 'NamingConventions';
 
   my $camelHumpVar = 'foo';  #Now exempt from NamingConventions::ProhibitMixedCaseVars
   sub camelHumpSub {}        #Now exempt from NamingConventions::ProhibitMixedCaseSubs
 
-The import list must be valid Perl syntax (such as a list of quoted
-literals or a qw() expression).  The <"## no critic"> pragmas can be
-nested, and Policies named by an inner pragma will be disabled along
-with those already disabled an outer pragmas.
+The argument list must be valid Perl syntax (such as a list of quoted
+literals or a C<qw()> expression).  The <"## no critic"> pragmas can
+be nested, and Policies named by an inner pragma will be disabled
+along with those already disabled an outer pragma.
 
 Use this feature wisely.  C<"## no critic"> should be used in the
-smallest possible scope, or only on individual lines of code. If
-Perl::Critic complains about your code, try and find a compliant
-solution before resorting to this feature.
+smallest possible scope, or only on individual lines of code. And you
+should always be as specific as possible about which policies you want
+to disable (i.e. never use a bare C<"## no critic">).  If Perl::Critic
+complains about your code, try and find a compliant solution before
+resorting to this feature.
 
 =head1 IMPORTANT CHANGES
 
 Perl-Critic is evolving rapidly.  As such, some of the interfaces have
-changed in ways that are not backward-compatible.  This will probably
-concern you only if you're developing L<Perl::Critic::Policy> modules.
+changed in ways that are not backward-compatible.  If you have been
+using an older version of Perl-Critic and/or you have been developing
+custom Policy modules, please read this section carefully.
 
-=head2 VERSION 0.11
+=head2 VERSION 0.16
 
-Starting in version 0.11, the internal mechanics of Perl-Critic were
-rewritten so that only one traversal of the PPI document tree is
-required.  Unfortunately, this will break any custom Policy modules
-that you might have written for earlier versions.  Converting your
-policies to work with the new version is pretty easy and actually
-results in cleaner code.  See L<DEVELOPER.pod> for an up-to-date guide
-on creating Policy modules.
+Starting in version 0.16, you can add a list Policy names as arguments
+to the C<"## no critic"> pseudo-pragma.  This feature allows you to
+disable specific policies.  The arguments must be valid Perl syntax,
+just as if this were a real pragma.  So if you have been in the habit
+of adding additional words after C<"no critic">, then those words
+might cause unexpected results.  If you want to append other stuff to
+the C<"## no critic"> comment, then terminate the pseudo-pragma with a
+semi-colon, and then start another comment.  For example:
+
+  #This may not work as expected.
+  $email = 'foo@bar.com';  ## no critic for literal '@'
+
+  #This will work.
+  $email = 'foo@bar.com';  ## no critic; #for literal '@'
+
+  #This is even better.
+  $email = 'foo@bar.com'; ## no critic qw(RequireInterpolation);
 
 =head2 VERSION 0.14
 
@@ -895,17 +911,28 @@ Perl-Critic should be less "critical" for new users, and should steer
 them toward gradually increasing the strictness as they adopt better
 coding practices.
 
+
+=head2 VERSION 0.11
+
+Starting in version 0.11, the internal mechanics of Perl-Critic were
+rewritten so that only one traversal of the PPI document tree is
+required.  Unfortunately, this will break any custom Policy modules
+that you might have written for earlier versions.  Converting your
+policies to work with the new version is pretty easy and actually
+results in cleaner code.  See L<DEVELOPER.pod> for an up-to-date guide
+on creating Policy modules.
+
 =head1 THE L<Perl::Critic> PHILOSOPHY
 
   Coding standards are deeply personal and highly subjective.  The
-  goal of Perl::Critic is to help you write code that conforms with
-  a set of best practices.  Our primary goal is not to dictate what
+  goal of Perl::Critic is to help you write code that conforms with a
+  set of best practices.  Our primary goal is not to dictate what
   those practices are, but rather, to implement the practices
   discovered by others.  Ultimately, you make the rules --
-  Perl::Critic is merely tool for encouraging consistency.  If
-  there is a policy that you think is important or that we have
-  overlooked, we would be very grateful for contributions, or you can
-  simply load your own private set of policies into Perl::Critic.
+  Perl::Critic is merely a tool for encouraging consistency.  If there
+  is a policy that you think is important or that we have overlooked,
+  we would be very grateful for contributions, or you can simply load
+  your own private set of policies into Perl::Critic.
 
 =head1 EXTENDING THE CRITIC
 
@@ -960,7 +987,7 @@ L<Test::Perl::Critic>
 
 Scrutinizing Perl code is hard for humans, let alone machines.  If you
 find any bugs, particularly false-positives or false-negatives from a
-Perl::Critic::Policy, please submit them to 
+Perl::Critic::Policy, please submit them to
 L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Perl-Critic>.  Thanks.
 
 =head1 CREDITS

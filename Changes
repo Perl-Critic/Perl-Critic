@@ -5,6 +5,23 @@
 # $Revision$
 ########################################################################
 
+[0.15_02] Released on ????????
+
+     Bug Fixes:
+     * Reimplemented the '##no critic' pragmas to have effect on the
+       line where the violation is reported, not on the line where
+       the candidate element lives.  This is because some policies
+       may report violations that are nowhere near the element that
+       is being evaluated.
+     * RequireUseStrict, RequireUseWarnings, and RequireExplcitPackage
+       all emit violations for _every_ statement that violates the
+       Policy.  This closes a loophole that allowed you to circumvent
+       the Policy by using '## no critic' on just the first statement
+       that violated the policy.
+     * Fixed the workaround for the magic shebang that is inserted
+       by EU::MM and M::B.  This had stopped working around version 13.
+     * Fixed -noprofile option on 'perlcritic'.  This also had stopped
+       working at some point.
 
 [0.15_01] Released on 20060416
 
