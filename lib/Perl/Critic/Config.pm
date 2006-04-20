@@ -56,14 +56,14 @@ sub new {
     $self->{_policies}  = [];
 
     # Set defaults
-    my $profile_path = $args{-profile}   || $EMPTY;
+    my $profile_path = $args{-profile};
     my $min_severity = $args{-severity}  || $SEVERITY_HIGHEST;
     my $excludes_ref = $args{-exclude}   || [];  #empty array
     my $includes_ref = $args{-include}   || [];  #empty array
 
 
     # Allow null config.  This is useful for testing
-    return $self if $profile_path eq 'NONE';
+    return $self if defined $profile_path && $profile_path eq 'NONE';
 
     # Load user's profile.
     my $profile_ref = _load_profile( $profile_path ) || {};
@@ -154,7 +154,8 @@ sub policies {
 
 sub _load_profile {
 
-    my $profile = shift || $EMPTY;
+    my ($profile) = (@_);
+    return {} if defined $profile && $profile eq $EMPTY;
     my $ref_type = ref $profile || 'DEFAULT';
 
     my %handlers = (
