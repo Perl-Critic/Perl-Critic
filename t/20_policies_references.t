@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 2;
+use Test::More tests => 3;
 use Perl::Critic::Config;
 use Perl::Critic;
 
@@ -50,3 +50,17 @@ END_PERL
 
 $policy = 'References::ProhibitDoubleSigils';
 is( pcritique($policy, \$code), 6, $policy);
+
+#----------------------------------------------------------------
+
+# PPI bug: multiplication is mistakenly interpreted as a glob.
+$code = <<'END_PERL';
+$value = $one*$two;
+END_PERL
+
+TODO: {
+   local $TODO = 'PPI bug -- multiplication misinterpreted as a glob';
+   $policy = 'References::ProhibitDoubleSigils';
+   is( pcritique($policy, \$code), 0, $policy);
+}
+
