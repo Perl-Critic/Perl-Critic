@@ -565,7 +565,8 @@ are:
   %e        Explanation of violation or page numbers in PBP
   %d        Full diagnostic discussion of the violation
   %r        The string of source code that caused the violation
-  %p        Name of the Policy module that created the violation
+  %P        Name of the Policy module that created the violation
+  %p        Name of the Policy without the Perl::Critic::Policy:: prefix
   %s        The severity level of the violation
 
 The purpose of these formats is to provide some compatibility with
