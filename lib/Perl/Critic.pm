@@ -12,6 +12,7 @@ use warnings;
 use File::Spec;
 use English qw(-no_match_vars);
 use Perl::Critic::Config;
+use Perl::Critic::Violation ();
 use Carp;
 use PPI;
 
@@ -22,9 +23,10 @@ $VERSION = eval $VERSION;    ## no critic;
 
 sub new {
     my ( $class, %args ) = @_;
-    my $self = bless {}, $class;
 
+    my $self = bless {}, $class;
     $self->{_force}  = $args{-force}  || 0;
+    $self->{_top}    = $args{-top}    || 0;
     $self->{_config} = $args{-config} || Perl::Critic::Config->new( %args );
     return $self;
 }
@@ -128,6 +130,17 @@ sub critique {
             # So I'm just trying to avoid derefencing an undef value.
 
         }
+    }
+
+    # If requested, rank violations by their severity and only return
+    # the top N violations.  This used to be handled by 'perlcritic'
+    # but I moved it into the library to give the Perl::Critic API
+    # more flexibility and functionality.
+
+    if ( @violations && (my $top = $self->{_top}) ) {
+        my $limit = @violations < $top ? $#violations : $top-1;
+        @violations = Perl::Critic::Violation::sort_by_severity(@violations);
+        @violations = ( reverse @violations )[ 0 .. $limit ];  #Slicing...
     }
 
     return Perl::Critic::Violation->sort_by_location(@violations);
@@ -310,7 +323,7 @@ at L<http://theoryx5.uwinnipeg.ca/ppms/>.
 
 =over 8
 
-=item C<new( -profile =E<gt> $FILE, -severity =E<gt> $N, -include =E<gt> \@PATTERNS, -exclude =E<gt> \@PATTERNS, -force =E<gt> 1 )>
+=item C<new( -profile =E<gt> $FILE, -severity =E<gt> $N, -include =E<gt> \@PATTERNS, -exclude =E<gt> \@PATTERNS, -top => N, -force =E<gt> 1 )>
 
 Returns a reference to a new Perl::Critic object.  Most arguments are
 just passed directly into L<Perl::Critic::Config>, but I have described
@@ -357,6 +370,10 @@ C<ProhibitNoStrict> Policy modules even though they have a severity
 level that is greater than 1.  You can use C<-exclude> in conjunction
 with the C<-include> option.  Note that C<-exclude> takes precedence
 over C<-include> when a Policy matches both patterns.
+
+B<-top> is the maximum number of Violations to return when ranked by
+their severity levels.  Violations are still returned in the order
+that they occur within the file.  This must be a positive integer
 
 B<-force> controls whether Perl::Critic observes the magical C<"## no
 critic"> pseudo-pragmas in your code.  If set to a true value,

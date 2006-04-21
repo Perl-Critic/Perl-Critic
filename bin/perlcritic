@@ -214,11 +214,6 @@ sub render_report {
     }
 
 
-    if ( $opts_ref->{-top} ) {
-        @violations = _get_top_offenders( $opts_ref->{-top}, @violations );
-    }
-
-
     $file = -f $file ? $file : 'stdin';
     my $default_verbosity = @files > 1 ? 4 : 3;  #@files is global!
     my $fmt = _get_format( $opts_ref->{-verbose} || $default_verbosity );
@@ -298,28 +293,15 @@ sub _is_perl {
 
 sub _get_format {
     my ( $verbosity ) = @_;
-    return $verbosity =~ m{ \A [+-]? \d+ \z }mx ? $FORMAT_OF{ abs $verbosity }
-                                                : _interpolate($verbosity);
+    my $is_integer = $verbosity =~ m{ \A [+-]? \d+ \z }mx;
+    return $is_integer ? $FORMAT_OF{abs $verbosity} : _interpolate($verbosity);
 }
 
 #-----------------------------------------------------------------------------
 
 sub _interpolate {
-    my $literal      = shift;
+    my ( $literal ) = @_;
     return eval "\"$literal\"";  ## no critic 'StringyEval';
-}
-
-#-----------------------------------------------------------------------------
-
-sub _get_top_offenders {
-    my ( $top, @violations ) = @_;
-    return if !$top || $top < 0;
-    return if !@violations;
-
-    my $limit = @violations < $top ? $#violations : $top-1;
-    my @ranked = Perl::Critic::Violation::sort_by_severity(@violations);
-    my @top_offenders = ( reverse @ranked )[ 0 .. $limit ];  #Slicing...
-    return Perl::Critic::Violation::sort_by_location(@top_offenders);
 }
 
 #-----------------------------------------------------------------------------
