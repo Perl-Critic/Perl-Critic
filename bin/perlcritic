@@ -17,7 +17,7 @@ use Getopt::Long;
 use List::Util qw(first);
 use English qw(-no_match_vars);
 
-our $VERSION = 0.15_01;
+our $VERSION = 0.15_02;
 $VERSION = eval $VERSION;  ## no critic
 
 #----------------------------------------------------------------------------

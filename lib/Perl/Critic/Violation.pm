@@ -17,7 +17,7 @@ use String::Format qw(stringf);
 use English qw(-no_match_vars);
 use overload q{""} => 'to_string';
 
-our $VERSION = '0.15_01';
+our $VERSION = '0.15_02';
 $VERSION = eval $VERSION;    ## no critic
 
 #Class variables...
