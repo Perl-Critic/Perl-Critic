@@ -71,3 +71,19 @@ OTHER PBP POLICIES THAT SEEM FEASIBLE TO IMPLEMENT:
   or qr/\s*\\A\s*\w+\s*\\z/
 - TestingAndDebugging::ProhibitProlongedStrictureOverride (p443)
 
+
+NON-PBP POLICIES WANTED:
+- BuiltInFunctions::RequireConstantSprintfFormat
+- BuiltInFunctions::RequireConstantUnpackFormat
+  http://home.earthlink.net/~josh.jore/new-warnings/slides/slide1.html
+- ControlStructures::ProhibitIncludeViaDo
+  Forbid C<do "foo.pl">
+  Not sure about this policy name...
+- CodingStyle::ProhibitNonASCII
+  Definitely low severity!
+  Only looks at code, not comments or POD
+- Miscellanea::RequireMinimumPerlVersion
+  Every module should have something like C<use 5.6.0>
+- Miscellanea::Prohibit5006isms
+  Low severity
+  Keep the code 5.005 compatible
