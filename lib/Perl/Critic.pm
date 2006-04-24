@@ -68,8 +68,7 @@ sub critique {
     if ( !defined $doc ) {
         my $errstr = PPI::Document::errstr();
         my $file = -f $source_code ? $source_code : 'stdin';
-        warn qq{Warning: Can't parse code: $errstr of '$file'\n};
-        return;
+        croak qq{Warning: Can't parse code: $errstr for '$file'};
     }
 
     # Pre-index location of each node (for speed)

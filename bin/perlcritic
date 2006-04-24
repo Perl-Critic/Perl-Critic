@@ -44,7 +44,7 @@ if ( !$ENV{HARNESS_ACTIVE} ) {
     my %options    = get_options();
     @files         = get_input(@ARGV);
     my $violations = critique(\%options, @files);
-    my $status     = $violations ? 2 : 0;
+    my $status     = defined $violations ? ( $violations ? 2 : 0 ) : 1;
     exit $status;
 }
 
@@ -175,7 +175,7 @@ sub get_input {
     }
 }
 
-#-----------------------------------------------------------------------------
+#------------------------------------------------------------------------------
 
 sub critique {
 
@@ -190,14 +190,20 @@ sub critique {
 
     require Perl::Critic;
     my $critic = Perl::Critic->new( %{$opts} );
+    my $count  = undef;
 
-    my $count = 0;
-    for my $file (@files) {
-      my @violations = $critic->critique($file);
-      render_report( $file, $opts, @violations );
-      $count += scalar @violations;
-    }
 
+    eval {
+
+        for my $file (@files) {
+            my @violations = $critic->critique($file);
+            render_report( $file, $opts, @violations );
+            $count += scalar @violations;
+        }
+    };
+
+
+    warn qq{$EVAL_ERROR} if $EVAL_ERROR;
     return $count;
 }
 
