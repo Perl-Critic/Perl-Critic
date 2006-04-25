@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 25;
+use Test::More tests => 27;
 use Perl::Critic;
 
 # common P::C testing tools
@@ -342,6 +342,41 @@ unless ( $condition1
 END_PERL
 
 is( critique(\$code, {-profile  => $profile, -severity => 1 } ), 6, 'RT bug 15295');
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+package FOO;
+use strict;
+use warnings;
+our $VERSION = 1.0;
+
+sub grep {  ## no critic;
+    return $foo;
+}
+
+sub grep { return $foo; } ## no critic
+1;
+END_PERL
+
+is( critique(\$code, {-profile  => $profile, -severity => 1} ), 0, 'no-critic on sub name');
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+package FOO;
+use strict;
+use warnings;
+our $VERSION = 1.0;
+
+sub grep {  ## no critic;
+   return undef; #Should find this!
+}
+
+1;
+END_PERL
+
+is( critique(\$code, {-profile  => $profile, -severity =>1 } ), 1, 'no-critic on sub name');
 
 #----------------------------------------------------------------
 

@@ -184,7 +184,8 @@ sub _filter_code {
 
         # Handle single-line usage on compound statements
         if ( ref $parent eq 'PPI::Structure::Block' ) {
-            if ( ref $grandparent eq 'PPI::Statement::Compound' ) {
+            if ( ref $grandparent eq 'PPI::Statement::Compound'
+                 || ref $grandparent eq 'PPI::Statement::Sub' ) {
                 if ( $parent->location->[0] == $pragma->location->[0] ) {
                     my $line = $grandparent->location->[0];
                     for my $policy ( @no_policies ) {
