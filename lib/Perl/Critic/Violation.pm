@@ -15,7 +15,7 @@ use Pod::PlainText;
 use Perl::Critic::Utils;
 use String::Format qw(stringf);
 use English qw(-no_match_vars);
-use overload q{""} => 'to_string';
+use overload ( q{""} => q{to_string}, cmp => q{_compare} );
 
 our $VERSION = '0.15_02';
 $VERSION = eval $VERSION;    ## no critic
@@ -174,6 +174,14 @@ sub to_string {
     );
     return stringf($FORMAT, %fspec);
 }
+
+#-----------------------------------------------------------------------------
+# Apparently, some perls do not implicitly stringify overloading
+# objects before doing a comparison.  This causes a couple of our
+# sorting tests to fail.  To work around this, we overload C<cmp> to
+# do it explicitly.
+
+sub _compare { return "$_[0]" cmp "$_[1]" }
 
 #-----------------------------------------------------------------------------
 
