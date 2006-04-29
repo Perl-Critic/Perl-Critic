@@ -8,7 +8,7 @@
 use strict;
 use warnings;
 use File::Spec;
-use Test::More tests => 29;
+use Test::More tests => 21;
 
 #-----------------------------------------------------------------------------
 # Load perlcritic like a library so we can test its subroutines.  If it is not
@@ -91,18 +91,6 @@ is( $options{-verbose}, 2);
 @ARGV = qw(-verbose %l:%c:%m);
 %options = get_options();
 is( $options{-verbose}, '%l:%c:%m');
-
-#-----------------------------------------------------------------------------
-
-my @perl_files = qw(foo.t foo.pm foo.pl foo.PL);
-for (@perl_files){
-        ok( _is_perl($_), 'Is perl' );
-}
-
-my @not_perl_files = qw(foo.doc foo.txt foo.conf foo);
-for (@not_perl_files){
-        ok( !_is_perl($_), 'Is not perl' );
-}
 
 #-----------------------------------------------------------------------------
 

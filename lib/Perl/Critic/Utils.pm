@@ -27,6 +27,7 @@ our @EXPORT =
                         $PIPE      &is_perl_builtin
      $TRUE              $PERIOD    &is_perl_global
      $FALSE             $EMPTY     &is_subroutine_name
+                                   &all_perl_files
 );
 
 #---------------------------------------------------------------------------
@@ -282,6 +283,72 @@ sub _split_nodes_on_comma {
     return @nodes;
 }
 
+#-----------------------------------------------------------------------------
+
+sub all_perl_files {
+
+    # Recursively searches a list of directories and returns the paths
+    # to files that seem to be Perl source code.  This subroutine was
+    # poached from Test::Perl::Critic.
+
+    my %skip_dir = map { ($_,1) } qw( CVS RCS .svn _darcs blib );
+    my @queue      = @_;
+    my @code_files = ();
+
+    while (@queue) {
+        my $file = shift @queue;
+        if ( -d $file ) {
+            opendir my ($dh), $file or next;
+            my @newfiles = sort readdir $dh;
+            closedir $dh;
+
+            @newfiles = File::Spec->no_upwards(@newfiles);
+            @newfiles = grep { !$skip_dir{$_} } @newfiles;
+            push @queue, map { File::Spec->catfile($file, $_) } @newfiles;
+        }
+
+        if ( (-f $file) && ! _is_backup($file) && _is_perl($file) ) {
+            push @code_files, $file;
+        }
+    }
+    return @code_files;
+}
+
+
+#-----------------------------------------------------------------------------
+# Decide if it's some sort of backup file
+
+sub _is_backup {
+    my ($file) = @_;
+    return 1 if $file =~ m{ [.] swp \z}mx;
+    return 1 if $file =~ m{ [.] bak \z}mx;
+    return 1 if $file =~ m{  ~ \z}mx;
+    return 1 if $file =~ m{ \A [#] .+ [#] \z}mx;
+    return;
+}
+
+#-----------------------------------------------------------------------------
+# Returns true if the argument ends with a perl-ish file
+# extension, or if it has a shebang-line containing 'perl' This
+# subroutine was also poached from Test::Perl::Critic
+
+sub _is_perl {
+    my ($file) = @_;
+
+    #Check filename extensions
+    return 1 if $file =~ m{ [.] PL          \z}mx;
+    return 1 if $file =~ m{ [.] p (?: l|m ) \z}mx;
+    return 1 if $file =~ m{ [.] t           \z}mx;
+
+    #Check for shebang
+    open my ($fh), '<', $file or return;
+    my $first = <$fh>;
+    close $fh;
+
+    return 1 if defined $first && ( $first =~ m{ \A \#!.*perl }mx );
+    return;
+}
+
 #-------------------------------------------------------------------------
 
 1;
@@ -381,6 +448,24 @@ present).
 
 Given a L<PPI::Document>, test if it starts with C</#!.*perl/>.  If so,
 it is judged to be a script instead of a module.
+
+=item C<all_perl_files( @directories )>
+
+Given a list of directories, recursively searches through all the
+directories (depth first) and returns a list of paths for all the
+files that are Perl code files.  Any administrative files for CVS or
+Subversion are skipped, as are things that look like temporary or
+backup files.
+
+A Perl code file is:
+
+=over 4
+
+=item * Any file that ends in F<.PL>, F<.pl>, F<.pm>, or F<.t>
+
+=item * Any file that has a first line with a shebang containing 'perl'
+
+=back
 
 =back
 

@@ -1,9 +1,9 @@
 use strict;
 use warnings;
 use PPI::Document;
-use Test::More tests => 49;
+use Test::More tests => 66;
 
-#---------------------------------------------------------------
+#---------------------------------------------------------------------------
 
 BEGIN
 {
@@ -11,7 +11,7 @@ BEGIN
     use_ok('Perl::Critic::Utils');
 }
 
-###########################
+#---------------------------------------------------------------------------
 #  export tests
 
 can_ok('main', 'find_keywords');
@@ -23,6 +23,7 @@ can_ok('main', 'is_perl_builtin');
 can_ok('main', 'is_subroutine_name');
 can_ok('main', 'precedence_of');
 can_ok('main', 'is_script');
+can_ok('main', 'all_perl_files');
 
 is($SPACE, ' ', 'character constants');
 is($SEVERITY_LOWEST, 1, 'severity constants');
@@ -31,7 +32,7 @@ is($SEVERITY_LOWEST, 1, 'severity constants');
 is((scalar grep {$_ eq 'grep'} @BUILTINS), 1, 'perl builtins');
 is((scalar grep {$_ eq 'OSNAME'} @GLOBALS), 1, 'perl globals');
 
-###########################
+#---------------------------------------------------------------------------
 #  find_keywords tests
 
 sub count_matches { my $val = shift; return defined $val ? scalar @$val : 0; }
@@ -58,7 +59,7 @@ sub make_doc { my $code = shift; return PPI::Document->new( ref $code ? $code : 
     is( count_matches( find_keywords($doc, 'return') ), 2, 'find_keywords, find 2');
 }
 
-###########################
+#---------------------------------------------------------------------------
 #  is_hash_key tests
 
 {
@@ -80,7 +81,7 @@ sub make_doc { my $code = shift; return PPI::Document->new( ref $code ? $code : 
    }
 }
 
-###########################
+#---------------------------------------------------------------------------
 #  is_script tests
 
 my @good = (
@@ -108,7 +109,7 @@ for my $code (@bad) {
     ok(!is_script($doc), 'is_script, false');
 }
 
-############################
+#---------------------------------------------------------------------------
 # is_perl_builtin tests
 
 {
@@ -127,7 +128,7 @@ for my $code (@bad) {
 
 }
 
-############################
+#---------------------------------------------------------------------------
 # is_perl_global tests
 
 {
@@ -146,7 +147,7 @@ for my $code (@bad) {
 
 }
 
-############################
+#---------------------------------------------------------------------------
 # precedence_of tests
 
 {
@@ -165,7 +166,7 @@ for my $code (@bad) {
 
 }
 
-############################
+#---------------------------------------------------------------------------
 # is_subroutine_name tests
 
 {
@@ -181,3 +182,43 @@ for my $code (@bad) {
     isnt( is_subroutine_name( $word ), 1, 'Is not a subroutine name');
 
 }
+
+
+#-----------------------------------------------------------------------------
+# Test _is_perl() subroutine.  This used to be part of `perlcritic` but I
+# moved it into the Utils module so it could be shared with Test::P::C
+
+{
+    for ( qw(foo.t foo.pm foo.pl foo.PL) ) {
+        ok( Perl::Critic::Utils::_is_perl($_), qq{Is perl: '$_'} );
+    }
+
+    for ( qw(foo.doc foo.txt foo.conf foo) ) {
+        ok( ! Perl::Critic::Utils::_is_perl($_), qq{Is not perl: '$_'} );
+    }
+}
+
+#-----------------------------------------------------------------------------
+# _is_backup() tests
+
+{
+    for ( qw( foo.swp foo.bak foo~ ), '#foo#' ) {
+        ok( Perl::Critic::Utils::_is_backup($_), qq{Is backup: '$_'} );
+    }
+
+    for ( qw( swp.pm Bak ~foo ) ) {
+        ok( ! Perl::Critic::Utils::_is_backup($_), qq{Is not backup: '$_'} );
+    }
+}
+
+#-----------------------------------------------------------------------------
+
+use lib qw(t/tlib);
+use Perl::Critic::Config;
+use PerlCriticTestUtils qw();
+PerlCriticTestUtils::block_perlcriticrc();
+
+
+my @native_policies = Perl::Critic::Config::native_policies();
+my @found_policies  = all_perl_files( 'lib/Perl/Critic/Policy' );
+is( scalar @found_policies, scalar @native_policies, 'Find all perl code');
