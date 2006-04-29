@@ -18,7 +18,7 @@ use List::Util qw(first);
 use English qw(-no_match_vars);
 use Perl::Critic::Utils;
 
-our $VERSION = 0.15_02;
+our $VERSION = 0.15_03;
 $VERSION = eval $VERSION;  ## no critic
 
 #----------------------------------------------------------------------------
