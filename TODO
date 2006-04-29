@@ -73,6 +73,7 @@ OTHER PBP POLICIES THAT SEEM FEASIBLE TO IMPLEMENT:
 
 
 NON-PBP POLICIES WANTED:
+
 - BuiltInFunctions::RequireConstantSprintfFormat
 - BuiltInFunctions::RequireConstantUnpackFormat
   http://home.earthlink.net/~josh.jore/new-warnings/slides/slide1.html
@@ -89,3 +90,20 @@ NON-PBP POLICIES WANTED:
   Keep the code 5.005 compatible
 - Modules::ProhibitAutomaticExport
   Forbid @EXPORT when use base 'Exporter';
+  Medium severity
+- VariablesAndExpressions::ProhibitQuotedHashKeys
+  Forbid quotes around hash keys, unless they are really needed.
+  Suggested by Adam Kennedy
+  Low severity
+
+REFACTORINGS and ENHANCEMENTS:
+
+- Move %FORMATS from `perlcritic` into Perl::Critic::Utils so that
+  Test::P::C can use them.  Use a subroutine instead of a package var.
+- Alias -verbose to -format option in Test::P::C.  Give it same
+  functionality as the -verbose option in `perlcritic`
+- Enhance P::C::critique() to accept file names, directories,
+  or code strings (as refs) just like `perlcritic` does now.
+- Possibly provide a simple functional API such as:
+     perl -MPerl::Critic -e 'critique(@_)' file1 file2
+  I'm not exactly sure why, but it seems cool.
