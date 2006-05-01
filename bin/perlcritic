@@ -957,7 +957,7 @@ C<ProhibitEmptyQuotes> and C<ProhibitPostfixControls> policies until
 the end of the block or until the next C<"## use critic"> comment
 (whichever comes first):
 
-  ## no critic qw(EmptyQuotes PostfixControls);
+  ## no critic qw(EmptyQuotes, PostfixControls);
 
   $foo = "";                  #Now exempt from ValuesAndExpressions::ProhibitEmptyQuotes
   $barf = bar() if $foo;      #Now exempt ControlStructures::ProhibitPostfixControls
@@ -972,10 +972,10 @@ family of Policies in one shot like this:
   my $camelHumpVar = 'foo';  #Now exempt from NamingConventions::ProhibitMixedCaseVars
   sub camelHumpSub {}        #Now exempt from NamingConventions::ProhibitMixedCaseSubs
 
-The argument list must be valid Perl syntax (such as a list of quoted
-literals or a C<qw()> expression).  The <"## no critic"> pragmas can
-be nested, and Policies named by an inner pragma will be disabled
-along with those already disabled an outer pragma.
+The argument list must be enclosed in parens and must contain one or
+more comma-separated barewords (e.g. don't use quotes).  The <"## no
+critic"> pragmas can be nested, and Policies named by an inner pragma
+will be disabled along with those already disabled an outer pragma.
 
 Use this feature wisely.  C<"## no critic"> should be used in the
 smallest possible scope, or only on individual lines of code. And you

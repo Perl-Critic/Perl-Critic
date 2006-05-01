@@ -229,19 +229,15 @@ sub _filter_code {
 
 sub _parse_nocritic_import {
 
-    my ($nocritic_pragma, @site_policies) = @_;
+    my ($pragma, @site_policies) = @_;
 
-    # The "import arguments" should look like regular code.  So they
-    # might be a list of quoted literals, or a qw().  To avoid
-    # evaluating dangerous code and to mantain backward compatibility,
-    # the import list is restricted to certain characters.
+    my $module    = qr{ [\w:]+ }mx;
+    my $qualifier = qr{ \( \s* ( $module \s* (?:,\s*$module)* ) \s* \) }mx;
+    my $no_critic = qr{ \A \s* \#\# \s* no \s+ critic \s* $qualifier }mx;
 
-    my $legals_rx = qr{ [\w:'"\s(),]+ }mx;  #Only these chars are allowed
-    my $import_rx = qr{\A \s* \#\# \s* no \s+ critic \s+ ( $legals_rx )}mx;
-
-    if ( $nocritic_pragma =~ $import_rx ) {
-        my @import = grep { defined $_ } eval $1; ## no critic qw(StringyEval)
-        return map { my $req = $_; grep {m/$req/imx} @site_policies } @import;
+    if ( my ($module_list) = $pragma =~ $no_critic ) {
+        my @modules = split m{ \s* , \s* }mx, $module_list;
+        return map { my $req = $_; grep {m/$req/imx} @site_policies } @modules;
     }
 
     # Default to disabling ALL policies.
@@ -859,7 +855,7 @@ C<ProhibitEmptyQuotes> and C<ProhibitPostfixControls> policies until
 the end of the block or until the next C<"## use critic"> comment
 (whichever comes first):
 
-  ## no critic qw(EmptyQuotes PostfixControls);
+  ## no critic (EmptyQuotes, PostfixControls)
 
   $foo = "";                  #Now exempt from ValuesAndExpressions::ProhibitEmptyQuotes
   $barf = bar() if $foo;      #Now exempt ControlStructures::ProhibitPostfixControls
@@ -869,15 +865,15 @@ Since the Policy names are matched against the arguments as regular
 expressions, you can abbreviate the Policy names or disable an entire
 family of Policies in one shot like this:
 
-  ## no critic 'NamingConventions';
+  ## no critic (NamingConventions)
 
   my $camelHumpVar = 'foo';  #Now exempt from NamingConventions::ProhibitMixedCaseVars
   sub camelHumpSub {}        #Now exempt from NamingConventions::ProhibitMixedCaseSubs
 
-The argument list must be valid Perl syntax (such as a list of quoted
-literals or a C<qw()> expression).  The <"## no critic"> pragmas can
-be nested, and Policies named by an inner pragma will be disabled
-along with those already disabled an outer pragma.
+The argument list must be enclosed in parens and must contain one or
+more comma-separated barewords (e.g. don't use quotes).  The <"## no
+critic"> pragmas can be nested, and Policies named by an inner pragma
+will be disabled along with those already disabled an outer pragma.
 
 Use this feature wisely.  C<"## no critic"> should be used in the
 smallest possible scope, or only on individual lines of code. And you
