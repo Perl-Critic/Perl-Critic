@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 18;
+use Test::More tests => 19;
 use Perl::Critic::Config;
 use Perl::Critic;
 
@@ -417,4 +417,19 @@ END_PERL
 
 $policy = 'ControlStructures::ProhibitUnreachableCode';
 is( pcritique($policy, \$code), 0, $policy);
+
+
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+
+exit;
+print; ## no critic(ProhibitUnreachableCode)
+print;
+
+END_PERL
+
+$policy = 'ControlStructures::ProhibitUnreachableCode';
+is( pcritique($policy, \$code), 1, $policy);
 
