@@ -9,33 +9,38 @@ use base 'Perl::Critic::Policy';
 our $VERSION = '0.15_03';
 $VERSION = eval $VERSION; ## no critic
 
-my %include_stmnt = (
+my %terminals = (
     'die'     => 1,
     'exit'    => 1,
     'croak'   => 1,
-    'confess' => 1
+    'confess' => 1,
 );
 
 my %conditionals = (
-    'if'     => 1,
-    'unless' => 1
+    'if'      => 1,
+    'unless'  => 1,
+    'foreach' => 1,
+    'while'   => 1,
+    'for'     => 1,
 );
 
 my %operators = (
     '&&'  => 1,
     '||'  => 1,
     'and' => 1,
-    'or'  => 1
+    'or'  => 1,
+    '?'   => 1,
 );
 
 #---------------------------------------------------------------------------
 
 my $desc = q{Unreachable code};
+my $expl = q{Consider removing it};
 
 #---------------------------------------------------------------------------
 
 sub default_severity { return $SEVERITY_HIGH }
-sub applies_to { return 'PPI::Token::Word', 'PPI::Statement' }
+sub applies_to { return 'PPI::Token::Word' }
 
 #----------------------------------------------------------------------------
 
@@ -45,44 +50,35 @@ sub violates {
     return if is_method_call($elem);
     return if is_subroutine_name($elem);
 
-  	return if !$elem->isa('PPI::Statement::Break') && !defined $include_stmnt{ $elem };
-
-    # Skip compound statements
     my $stmnt = $elem->statement() || return;
-    return if $stmnt->isa('PPI::Statement::Compound');
+    return if ( !exists $terminals{$elem} ) &&
+        ( !$stmnt->isa('PPI::Statement::Break') );
 
-    my $child_count = $stmnt->schildren() || return;
-    my $seen_elem = 0;
+    # Scan the enclosing statement for conditional keywords or logical
+    # operators.  If any are found, then this the folowing statements
+    # could _potentially_ be executed, so this policy is satisfied.
 
-    for my $child_idx ( 0 .. $child_count - 1 ) {
-        my $child = $stmnt->schild( $child_idx );
-
-        # We have seen the original element so operators are no longer permitted
-        if ($child eq $elem) {
-            $seen_elem = 1;
-            next;
-        }
-
-        # Allow flow-altering elements after an operator or if a conditional is present
-        return if $child->isa('PPI::Token::Operator') && exists $operators{ $child } && !$seen_elem;
-        return if exists $conditionals{ $child };
+    for my $child ( $stmnt->schildren() ) {
+        return if $child->isa('PPI::Token::Operator') && exists $operators{$child};
+        return if $child->isa('PPI::Token::Word') && exists $conditionals{$child};
     }
 
-    # Check statements following original element
+
+    # If we get here, then the statement contained an unconditional
+    # die or croak or return.  Then all the subsequent sibling
+    # statements are unreachable, except for those that have labels,
+    # which could be reached from anywhere using C<goto>.
+
+    my @viols = ();
     while ( $stmnt = $stmnt->snext_sibling() ) {
+        last if $stmnt->schildren() && $stmnt->schild( 0 )->isa('PPI::Token::Label');
+        next if $stmnt->isa('PPI::Statement::Sub');
 
-        # Subroutines are reachable from anywhere
-        if ( !$stmnt->isa('PPI::Statement::Sub') ) {
-            # If a label is present, it is possible to reach this code
-            return if $stmnt->schildren() && $stmnt->schild( 0 )->isa('PPI::Token::Label');
-            # For all other scenarios, this code is unreachable
-            my $sev = $self->get_severity();
-            return Perl::Critic::Violation->new( $desc, undef, $stmnt, $sev );
-        }
-
+        my $sev = $self->get_severity();
+        push @viols, return Perl::Critic::Violation->new( $desc, $expl, $stmnt, $sev );
     }
 
-    return;
+    return @viols;
 }
 
 1;

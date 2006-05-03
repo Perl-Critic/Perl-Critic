@@ -375,18 +375,24 @@ for (1..2) {
   do_something();
 }
 
-exit;
-FOO:
-do_something();
+{
+    exit;
+    FOO:
+    do_something();
+}
 
-die;
-BAR:
-do_something();
+{
+    die;
+    BAR:
+    do_something();
+}
 
-exit;
-sub d {}
-BAZ:
-print 123;
+{
+    exit;
+    sub d {}
+    BAZ:
+    print 123;
+}
 
 die;
 JAPH:
