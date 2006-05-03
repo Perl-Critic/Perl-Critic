@@ -1041,18 +1041,6 @@ policies to work with the new version is pretty easy and actually
 results in cleaner code.  See L<DEVELOPER.pod> for an up-to-date guide
 on creating Policy modules.
 
-=head1 THE L<Perl::Critic> PHILOSOPHY
-
-  Coding standards are deeply personal and highly subjective.  The
-  goal of Perl::Critic is to help you write code that conforms with a
-  set of best practices.  Our primary goal is not to dictate what
-  those practices are, but rather, to implement the practices
-  discovered by others.  Ultimately, you make the rules --
-  Perl::Critic is merely a tool for encouraging consistency.  If there
-  is a policy that you think is important or that we have overlooked,
-  we would be very grateful for contributions, or you can simply load
-  your own private set of policies into Perl::Critic.
-
 =head1 EDITOR INTEGRATION
 
 For ease-of-use, C<perlcritic> can be integrated with your favorite text
@@ -1108,14 +1096,14 @@ violations were found, exits with status == 0.
 =head1 THE L<Perl::Critic> PHILOSOPHY
 
   Coding standards are deeply personal and highly subjective.  The
-  goal of Perl::Critic is to help you write code that conforms with
-  a set of best practices.  Our primary goal is not to dictate what
+  goal of Perl::Critic is to help you write code that conforms with a
+  set of best practices.  Our primary goal is not to dictate what
   those practices are, but rather, to implement the practices
   discovered by others.  Ultimately, you make the rules --
-  Perl::Critic is merely tool for encouraging consistency.  If
-  there is a policy that you think is important or that we have
-  overlooked, we would be very grateful for contributions, or you can
-  simply load your own private set of policies into Perl::Critic.
+  Perl::Critic is merely a tool for encouraging consistency.  If there
+  is a policy that you think is important or that we have overlooked,
+  we would be very grateful for contributions, or you can simply load
+  your own private set of policies into Perl::Critic.
 
 =head1 EXTENDING THE CRITIC
 
