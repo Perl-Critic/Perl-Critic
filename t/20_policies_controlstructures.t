@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 16;
+use Test::More tests => 18;
 use Perl::Critic::Config;
 use Perl::Critic;
 
@@ -289,3 +289,112 @@ END_PERL
 
 $policy = 'ControlStructures::ProhibitUnlessBlocks';
 is( pcritique($policy, \$code), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+sub a {
+  return 123;
+  do_something();
+}
+
+sub b {
+  croak 'error';
+  do_something();
+}
+
+sub c {
+  confess 'error';
+  do_something();
+}
+
+for (1..2) {
+  next;
+  do_something();
+}
+
+for (1..2) {
+  last;
+  do_something();
+}
+
+for (1..2) {
+  redo;
+  do_something();
+}
+
+exit;
+do_something();
+
+die;
+do_something();
+
+exit;
+sub d {}
+print 123;
+
+die;
+print 456;
+FOO:
+
+END_PERL
+
+$policy = 'ControlStructures::ProhibitUnreachableCode';
+is( pcritique($policy, \$code), 10, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+sub a {
+  return 123 if $a == 1;
+  do_something();
+}
+
+sub b {
+  croak 'error' unless $b;
+  do_something();
+}
+
+sub c {
+  confess 'error' if $c != $d;
+  do_something();
+}
+
+for (1..2) {
+  next if $_ == 1;
+  do_something();
+}
+
+for (1..2) {
+  last if $_ == 2;
+  do_something();
+}
+
+for (1..2) {
+  redo if do_this($_);
+  do_something();
+}
+
+exit;
+FOO:
+do_something();
+
+die;
+BAR:
+do_something();
+
+exit;
+sub d {}
+BAZ:
+print 123;
+
+die;
+JAPH:
+sub e {}
+print 456;
+
+END_PERL
+
+$policy = 'ControlStructures::ProhibitUnreachableCode';
+is( pcritique($policy, \$code), 0, $policy);
+

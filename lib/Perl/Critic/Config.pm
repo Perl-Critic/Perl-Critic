@@ -298,6 +298,7 @@ sub native_policies {
       Perl::Critic::Policy::ControlStructures::ProhibitCascadingIfElse
       Perl::Critic::Policy::ControlStructures::ProhibitPostfixControls
       Perl::Critic::Policy::ControlStructures::ProhibitUnlessBlocks
+      Perl::Critic::Policy::ControlStructures::ProhibitUnreachableCode
       Perl::Critic::Policy::ControlStructures::ProhibitUntilBlocks
       Perl::Critic::Policy::Documentation::RequirePodAtEnd
       Perl::Critic::Policy::Documentation::RequirePodSections

@@ -5,7 +5,16 @@
 # $Revision$
 ########################################################################
 
-[0.15_02] Released on ????????
+[0.15_03] Released on ????????
+
+     Bug Fixes:
+     * The "## no critic" feature is now implemented without eval-ing
+       the code.  This keeps Perl::Critic pure and safe :)
+
+     New Policies:
+     * ControlStructures::ProhibitUnreachableCode
+
+[0.15_02] Released on 20060426
 
      Bug Fixes:
      * Reimplemented the '##no critic' pragmas to have effect on the

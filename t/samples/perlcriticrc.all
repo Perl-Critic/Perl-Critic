@@ -27,6 +27,7 @@
 [ControlStructures::ProhibitCascadingIfElse]
 [ControlStructures::ProhibitPostfixControls]
 [ControlStructures::ProhibitUnlessBlocks]
+[ControlStructures::ProhibitUnreachableCode]
 [ControlStructures::ProhibitUntilBlocks]
 [Documentation::RequirePodAtEnd]
 [Documentation::RequirePodSections]

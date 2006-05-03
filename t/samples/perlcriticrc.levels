@@ -244,3 +244,6 @@ severity = 1
 
 [BuiltinFunctions::ProhibitUniversalIsa]
 severity = 1
+
+[ControlStructures::ProhibitUnreachableCode]
+severity = 1

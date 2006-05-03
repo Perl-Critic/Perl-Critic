@@ -706,6 +706,10 @@ Write C<if($condition){ do_something() }> instead of C<do_something() if $condit
 
 Write C<if(! $condition)> instead of C<unless($condition)> [Severity 2]
 
+=head2 L<Perl::Critic::Policy::ControlStructures::ProhibitUnreachableCode>
+
+Don't write code after an unconditional C<die, exit, or next>.  [Severity 4]
+
 =head2 L<Perl::Critic::Policy::ControlStructures::ProhibitUntilBlocks>
 
 Write C<while(! $condition)> instead of C<until($condition)> [Severity 2]

@@ -5,7 +5,11 @@
 #PBP standard, then you should copy this file to your ~/.perlcriticrc.
 ############################################################################
 
+[-BuiltinFunctions::ProhibitUniversalCan]
+[-BuiltinFunctions::ProhibitUniversalIsa]
+[-ClassHierarchies::ProhibitExplicitISA]
 [-CodeLayout::ProhibitQuotedWordLists]
+[-ControlStructures::ProhibitUnreachableCode]
 [-InputOutput::ProhibitBacktickOperators]
 [-Modules::ProhibitMultiplePackages]
 [-Modules::ProhibitEvilModules]
