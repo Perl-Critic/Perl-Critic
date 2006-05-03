@@ -293,6 +293,11 @@ is( pcritique($policy, \$code), 0, $policy);
 #----------------------------------------------------------------
 
 $code = <<'END_PERL';
+{
+  exit;
+  use Foo::Bar;
+}
+
 sub a {
   return 123;
   do_something();
@@ -340,7 +345,7 @@ FOO:
 END_PERL
 
 $policy = 'ControlStructures::ProhibitUnreachableCode';
-is( pcritique($policy, \$code), 10, $policy);
+is( pcritique($policy, \$code), 11, $policy);
 
 #----------------------------------------------------------------
 
@@ -394,10 +399,19 @@ for (1..2) {
     print 123;
 }
 
-die;
-JAPH:
-sub e {}
-print 456;
+{
+    die;
+    JAPH:
+    sub e {}
+    print 456;
+}
+
+{
+    exit;
+    BEGIN {
+        print 123;
+    }
+}
 
 END_PERL
 
