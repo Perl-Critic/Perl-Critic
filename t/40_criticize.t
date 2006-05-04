@@ -11,8 +11,8 @@ use Test::More;
 
 eval {
     require Test::Perl::Critic;
-    my @exclude = qw(Rcs Tidy PodSections);
-    my %config = (-severity => 1, -exclude => \@exclude, -profile => 'NONE');
+    my @exclude = qw(RcsKeywords TidyCode PodSections);
+    my %config = (-severity => 1, -exclude => \@exclude, -profile => q{} );
     Test::Perl::Critic->import( %config );
 };
 

@@ -100,7 +100,7 @@ sub _is_compound_return {
     # Sanity check:
     if (scalar grep {!$_->isa('PPI::Structure::Block')} @blocks) { 
         die 'Internal error: expected only conditions, blocks and tokens in the if statement';
-        return; #fail
+        return; ## no critic (UnreachableCode)
     }
 
     for my $block (@blocks) {
@@ -158,10 +158,16 @@ C<return;> at the end of that subroutine solves the problem.
 
 The only exception allowed is an empty subroutine.
 
+=head1 LIMITATIONS
+
 We do not look for returns inside ternary operators.  That
 construction is too complicated to analyze right now.  Besides, a
 better form is the return outside of the ternary like this: C<return
 foo ? 1 : bar ? 2 : 3>
+
+Also, this policy doesn't allow you to terminate a subroutine with
+C<die>, C<exit>, C<croak>, or C<confess>.  We'll try and fix that in
+the future.
 
 =head1 AUTHOR
 

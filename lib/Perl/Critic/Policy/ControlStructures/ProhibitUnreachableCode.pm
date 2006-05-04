@@ -25,11 +25,11 @@ my %conditionals = (
 );
 
 my %operators = (
-    '&&'  => 1,
-    '||'  => 1,
-    'and' => 1,
-    'or'  => 1,
-    '?'   => 1,
+    q{&&}  => 1,
+    q{||}  => 1,
+    q{and} => 1,
+    q{or}  => 1,
+    q{?}   => 1,
 );
 
 #---------------------------------------------------------------------------
@@ -65,7 +65,7 @@ sub violates {
 
 
     # If we get here, then the statement contained an unconditional
-    # die or croak or return.  Then all the subsequent sibling
+    # die or exit or return.  Then all the subsequent sibling
     # statements are unreachable, except for those that have labels,
     # which could be reached from anywhere using C<goto>.
 
@@ -75,7 +75,7 @@ sub violates {
         next if $stmnt->isa('PPI::Statement::Sub');
 
         my $sev = $self->get_severity();
-        push @viols, return Perl::Critic::Violation->new( $desc, $expl, $stmnt, $sev );
+        push @viols, Perl::Critic::Violation->new( $desc, $expl, $stmnt, $sev );
     }
 
     return @viols;

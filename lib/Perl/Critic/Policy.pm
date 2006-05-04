@@ -30,7 +30,7 @@ sub _abstract_method {
     my $method_name = ( caller 1 )[3];
     my ( $file, $line ) = ( caller 2 )[ 1, 2 ];
     die qq{Can't call abstract method '$method_name' at $file line $line.\n};
-    return;  #Should never get here.
+    return; ## no critic (UnreachableCode)
 }
 
 1;

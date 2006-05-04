@@ -328,19 +328,27 @@ for (1..2) {
   do_something();
 }
 
-exit;
-do_something();
+{
+    exit;
+    do_something();
+}
 
-die;
-do_something();
 
-exit;
-sub d {}
-print 123;
+{
+    die;
+    do_something();
+}
+
+
+{
+    exit;
+    sub d {}
+    print 123;
+}
 
 die;
 print 456;
-FOO:
+FOO: print $baz;
 
 END_PERL
 
