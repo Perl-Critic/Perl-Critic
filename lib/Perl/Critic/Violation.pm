@@ -164,7 +164,9 @@ sub source {
 sub to_string {
     my $self = shift;
 
-    (my $short_policy = $self->policy()) =~ s/\A Perl::Critic::Policy:://xms;
+    my $short_policy = $self->policy();
+    $short_policy =~ s/ \A Perl::Critic::Policy:: //xms;
+
     my %fspec = (
          'l' => $self->location->[0], 'c' => $self->location->[1],
          'm' => $self->description(), 'e' => $self->explanation(),
@@ -180,6 +182,12 @@ sub to_string {
 # objects before doing a comparison.  This causes a couple of our
 # sorting tests to fail.  To work around this, we overload C<cmp> to
 # do it explicitly.
+#
+# 20060503 - More information:  This problem has been traced to
+# Test::Simple versions <= 0.60, not perl itself.  Upgrading to
+# Test::Simple v0.62 will fix the problem.  But rather than forcing
+# everyone to upgrade, I have decided to leave this workaround in
+# place.
 
 sub _compare { return "$_[0]" cmp "$_[1]" }
 
@@ -200,10 +208,10 @@ sub _get_diagnostics {
 
     # Extract POD into a string
     my $pod_string = $EMPTY;
-    my $handle     = IO::String->new( \$pod_string);
+    my $handle     = IO::String->new( \$pod_string );
     my $parser     = Pod::PlainText->new();
     $parser->select('DESCRIPTION');
-    $parser->parse_from_file($file, $handle);
+    $parser->parse_from_file( $file, $handle );
 
     # Remove header and trailing whitespace.
     $pod_string =~ s{ \A \s* DESCRIPTION \s* \n}{}mx;
