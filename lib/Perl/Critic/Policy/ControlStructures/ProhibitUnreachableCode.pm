@@ -58,16 +58,20 @@ sub violates {
     # operators.  If any are found, then this the folowing statements
     # could _potentially_ be executed, so this policy is satisfied.
 
+    # NOTE: When the first operand in an boolean expression is
+    # C<croak> or C<die>, etc., the second operand is technically
+    # unreachable.  But this policy doesn't catch that situation.
+
     for my $child ( $stmnt->schildren() ) {
         return if $child->isa('PPI::Token::Operator') && exists $operators{$child};
         return if $child->isa('PPI::Token::Word') && exists $conditionals{$child};
     }
 
-
     # If we get here, then the statement contained an unconditional
     # die or exit or return.  Then all the subsequent sibling
     # statements are unreachable, except for those that have labels,
-    # which could be reached from anywhere using C<goto>.
+    # which could be reached from anywhere using C<goto>.  Subroutine
+    # declarations are also exempt for the same reason.
 
     my @viols = ();
     while ( $stmnt = $stmnt->snext_sibling() ) {

@@ -88,9 +88,6 @@ NON-PBP POLICIES WANTED:
 - Miscellanea::Prohibit5006isms
   Low severity
   Keep the code 5.005 compatible
-- Modules::ProhibitAutomaticExport
-  Forbid @EXPORT when use base 'Exporter';
-  Medium severity
 - VariablesAndExpressions::ProhibitQuotedHashKeys
   Forbid quotes around hash keys, unless they are really needed.
   Suggested by Adam Kennedy

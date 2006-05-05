@@ -5,7 +5,7 @@
 # $Revision$
 ########################################################################
 
-[0.15_03] Released on ????????
+[0.15_03] Released on 20060507
 
      Bug Fixes:
      * The "## no critic" feature is now implemented without eval-ing
@@ -13,6 +13,7 @@
 
      New Policies:
      * ControlStructures::ProhibitUnreachableCode
+     * Modules::ProhibitAutomaticExportation
 
 [0.15_02] Released on 20060426
 

@@ -311,6 +311,7 @@ sub native_policies {
       Perl::Critic::Policy::Miscellanea::ProhibitFormats
       Perl::Critic::Policy::Miscellanea::ProhibitTies
       Perl::Critic::Policy::Miscellanea::RequireRcsKeywords
+      Perl::Critic::Policy::Modules::ProhibitAutomaticExportation
       Perl::Critic::Policy::Modules::ProhibitEvilModules
       Perl::Critic::Policy::Modules::ProhibitMultiplePackages
       Perl::Critic::Policy::Modules::RequireEndWithOne

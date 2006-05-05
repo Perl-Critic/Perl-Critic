@@ -20,7 +20,7 @@ $VERSION = eval $VERSION;    ## no critic
 #---------------------------------------------------------------------------
 
 my $desc = q{Symbols are exported by default};
-my $expl = q{Use '@EXPORT_OK' or '%EXPORT_TAGS' instead};
+my $expl = q{Use '@EXPORT_OK' or '%EXPORT_TAGS' instead};  ## no critic
 
 #---------------------------------------------------------------------------
 
@@ -54,7 +54,7 @@ sub _uses_exporter {
 
 sub _has_exports {
     my ($doc) = @_;
-    my $wanted = sub { _our_EXPORT(@_) || _vars_EXPORT(@_) || _package_EXPORT(@_) };
+    my $wanted = sub {_our_EXPORT(@_) || _vars_EXPORT(@_) || _package_EXPORT(@_)};
     return $doc->find_first( $wanted );
 }
 

@@ -17,6 +17,7 @@ $VERSION = eval $VERSION;    ## no critic
 #---------------------------------------------------------------------------
 # Exported symbols here
 
+## no critic (AutomaticExport)
 our @EXPORT =
   qw(@GLOBALS           $COMMA     &find_keywords       $SEVERITY_HIGHEST
      @BUILTINS          $COLON     &is_hash_key         $SEVERITY_HIGH
