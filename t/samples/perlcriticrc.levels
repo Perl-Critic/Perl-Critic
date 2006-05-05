@@ -247,3 +247,6 @@ severity = 1
 
 [ControlStructures::ProhibitUnreachableCode]
 severity = 1
+
+[Modules::ProhibitAutomaticExportation]
+severity = 1

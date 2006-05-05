@@ -11,6 +11,7 @@
 [-CodeLayout::ProhibitQuotedWordLists]
 [-ControlStructures::ProhibitUnreachableCode]
 [-InputOutput::ProhibitBacktickOperators]
+[-Modules::ProhibitAutomaticExportation]
 [-Modules::ProhibitMultiplePackages]
 [-Modules::ProhibitEvilModules]
 [-Modules::RequireBarewordIncludes]

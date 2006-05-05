@@ -39,6 +39,7 @@
 [Miscellanea::ProhibitFormats]
 [Miscellanea::ProhibitTies]
 [Miscellanea::RequireRcsKeywords]
+[Modules::ProhibitAutomaticExportation]
 [Modules::ProhibitMultiplePackages]
 [Modules::ProhibitEvilModules]
 [Modules::RequireExplicitPackage]
