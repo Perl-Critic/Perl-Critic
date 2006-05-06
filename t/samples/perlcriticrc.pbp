@@ -18,4 +18,5 @@
 [-Modules::RequireEndWithOne]
 [-Modules::RequireExplicitPackage]
 [-Subroutines::ProhibitExcessComplexity]
+[-ValuesAndExpressions::ProhibitVersionStrings]
 [-Variables::ProhibitConditionalDeclarations]

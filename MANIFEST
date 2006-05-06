@@ -69,6 +69,7 @@ lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitInterpolationOfLiterals.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitLeadingZeros.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitMixedBooleanOperators.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitNoisyQuotes.pm
+lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitVersionStrings.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/RequireInterpolationOfMetachars.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/RequireNumberSeparators.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/RequireQuotedHeredocTerminator.pm

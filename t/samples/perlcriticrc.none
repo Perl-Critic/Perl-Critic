@@ -71,6 +71,7 @@
 [-ValuesAndExpressions::ProhibitLeadingZeros]
 [-ValuesAndExpressions::ProhibitMixedBooleanOperators]
 [-ValuesAndExpressions::ProhibitNoisyQuotes]
+[-ValuesAndExpressions::ProhibitVersionStrings]
 [-ValuesAndExpressions::RequireInterpolationOfMetachars]
 [-ValuesAndExpressions::RequireNumberSeparators]
 [-ValuesAndExpressions::RequireQuotedHeredocTerminator]

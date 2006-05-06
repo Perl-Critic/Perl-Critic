@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 32;
+use Test::More tests => 35;
 use Perl::Critic;
 
 # common P::C testing tools
@@ -493,3 +493,47 @@ $policy = 'ValuesAndExpressions::ProhibitMixedBooleanOperators';
 is( pcritique($policy, \$code), 0, $policy);
 
 #----------------------------------------------------------------
+
+$code = <<'END_PERL';
+use 5.6.1;
+use v5.6.1;
+use Foo 1.2.3;
+use Foo v1.2.3;
+use Foo 1.2.3 qw(foo bar);
+use Foo v1.2.3 qw(foo bar);
+use Foo v1.2.3 ('foo', 'bar');
+END_PERL
+
+$policy = 'ValuesAndExpressions::ProhibitVersionStrings';
+is( pcritique($policy, \$code), 7, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+require 5.6.1;
+require v5.6.1;
+require Foo 1.2.3;
+require Foo v1.2.3;
+require Foo 1.2.3 qw(foo bar);
+require Foo v1.2.3 qw(foo bar);
+require Foo v1.2.3 ('foo', 'bar');
+END_PERL
+
+$policy = 'ValuesAndExpressions::ProhibitVersionStrings';
+is( pcritique($policy, \$code), 7, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+use 5.006_001;
+require 5.006_001;
+
+use Foo 1.0203;
+require Foo 1.0203;
+
+use Foo 1.0203 qw(foo bar);
+require Foo 1.0203 qw(foo bar);
+END_PERL
+
+$policy = 'ValuesAndExpressions::ProhibitVersionStrings';
+is( pcritique($policy, \$code), 0, $policy);
