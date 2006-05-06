@@ -86,8 +86,17 @@ NON-PBP POLICIES WANTED:
 - Miscellanea::RequireMinimumPerlVersion
   Every module should have something like C<use 5.6.0>
 - Miscellanea::Prohibit5006isms
-  Low severity
   Keep the code 5.005 compatible
+  Low severity
+- ValuesAndExpressions::ProhibitVersionStrings
+  Forbid C<use Foo 1.4.5> and C<use Foo v1.5>
+  These are not compatible with older Perls
+  Medium severity
+- Variables::ProhibitUseVars
+  Require C<our $foo> instead.
+  This contradicts Miscellanea::Prohibit5006isms
+  Maybe verify C<use 5.6> before applying this policy
+  Low severity
 - VariablesAndExpressions::ProhibitQuotedHashKeys
   Forbid quotes around hash keys, unless they are really needed.
   Suggested by Adam Kennedy
