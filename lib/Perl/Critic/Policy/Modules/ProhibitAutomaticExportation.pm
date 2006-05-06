@@ -99,6 +99,20 @@ Perl::Critic::Policy::Modules::ProhibitAutomaticExportation
 
 =head1 DESCRIPTION
 
+When using L<Exporter>, symbols placed in the C<@EXPORT> variable are
+automatically exported into the caller's namespace.  Although
+convenient, this practice is not polite, and may cause serious
+problems if the caller declares the same symbols.  The best practice
+is to place your symbols in C<@EXPORT_OK> or C<%EXPORT_TAGS> and let
+the caller choose exactly which symbols to export.
+
+  package Foo;
+
+  use base qw(Exporter);
+  our @EXPORT      = qw(&foo &bar);                  # not ok
+  our @EXPORT_OK   = qw(&foo &bar);                  # ok
+  our %EXPORT_TAGS = ( all => [ qw(&foo &bar) ] );   # ok
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
