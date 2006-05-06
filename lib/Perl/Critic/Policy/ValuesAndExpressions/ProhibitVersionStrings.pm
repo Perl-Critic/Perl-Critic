@@ -1,8 +1,8 @@
 #######################################################################
-#      $URL: http://perlcritic.tigris.org/svn/perlcritic/trunk/Perl-Critic/lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitConstantPragma.pm $
-#     $Date: 2006-04-28 23:36:18 -0700 (Fri, 28 Apr 2006) $
-#   $Author: thaljef $
-# $Revision: 396 $
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
 ########################################################################
 
 package Perl::Critic::Policy::ValuesAndExpressions::ProhibitVersionStrings;
