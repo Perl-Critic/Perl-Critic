@@ -53,3 +53,4 @@ RCS
 
 # Author-time tests
 40_criticize\.t$
+97_spelling\.t$

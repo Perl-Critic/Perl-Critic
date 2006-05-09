@@ -14,7 +14,7 @@ use List::Util qw(first);
 use Perl::Critic::Violation;
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '0.15_03';
+our $VERSION = '0.16';
 $VERSION = eval $VERSION;    ## no critic
 
 #---------------------------------------------------------------------------
@@ -93,12 +93,12 @@ code in the entire package will be affected.
 =head1 NOTES
 
 Up through version 0.15, this Policy only reported a violation for the
-first offending statement.  Starting in version 0.16, this Policy was
-modified to report a violation for every offending statement.  This
-change closes a loophole with the C<"## no critic"> pseudo-pragmas.
-But for old legacy code that doesn't use warnings, it produces B<a
-lot> of violations.  The best way to alleviate the problem is to
-organize your code like this.
+first offending statement.  Starting in version 0.15_03, this Policy
+was modified to report a violation for every offending statement.
+This change closes a loophole with the C<"## no critic">
+pseudo-pragmas.  But for old legacy code that doesn't use warnings, it
+produces B<a lot> of violations.  The best way to alleviate the
+problem is to organize your code like this.
 
   ## no critic 'RequireUseWarnings';
 

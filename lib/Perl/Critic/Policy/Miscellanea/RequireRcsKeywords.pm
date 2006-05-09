@@ -14,7 +14,7 @@ use Perl::Critic::Violation;
 use List::MoreUtils qw(none);
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '0.15_03';
+our $VERSION = '0.16';
 $VERSION = eval $VERSION;    ## no critic
 
 #---------------------------------------------------------------------------

@@ -18,7 +18,7 @@ use List::Util qw(first);
 use English qw(-no_match_vars);
 use Perl::Critic::Utils;
 
-our $VERSION = 0.15_03;
+our $VERSION = 0.16;
 $VERSION = eval $VERSION;  ## no critic
 
 #----------------------------------------------------------------------------
@@ -758,6 +758,10 @@ Do not use C<tie>. [Severity 2]
 
 Put source-control keywords in every file. [Severity 2]
 
+=head2 L<Perl::Critic::Policy::Modules::ProhibitAutomaticExportation>
+
+Export symbols via C<@EXPORT_OK> or C<%EXPORT_TAGS> instead of C<@EXPORT>.  [Severity 3]
+
 =head2 L<Perl::Critic::Policy::Modules::ProhibitMultiplePackages>
 
 Put packages (especially subclasses) in separate files. [Severity 4]
@@ -873,6 +877,10 @@ Write C< !$foo && $bar || $baz > instead of C< not $foo && $bar or $baz> [Severi
 =head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitNoisyQuotes>
 
 Use C<q{}> or C<qq{}> instead of quotes for awkward-looking strings. [Severity 2]
+
+=head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitVersionStrings>
+
+Don't use strings like C<v1.4> or C<1.4.5> when including other modules. [Severity 3]
 
 =head2 L<Perl::Critic::Policy::ValuesAndExpressions::RequireInterpolationOfMetachars>
 

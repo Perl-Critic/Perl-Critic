@@ -5,14 +5,28 @@
 # $Revision$
 ########################################################################
 
+[0.16]  Released on ????????
+
+      Production release.
+
+      Enhancements:
+      * Perl::Critic->critique() now accepts a PPI::Document as the
+        argument.  This feature creates an additional dependency on
+        Scalar::Util, but that shouldn't be a problem because it is
+        included with List::Util, which we already use.
+
+      Miscellanea:
+      * Increased PPI dependency from v1.110 to v1.112
+
 [0.15_03] Released on 20060507
 
      Bug Fixes:
      * The "## no critic" feature is now implemented without eval-ing
        the code.  This keeps Perl::Critic pure and safe :)
+     * 19082: Page number for AUTOLOAD is incorrect
 
      New Policies:
-     * ControlStructures::ProhibitUnreachableCode
+     * ControlStructures::ProhibitUnreachableCode (by Peter Guzis)
      * Modules::ProhibitAutomaticExportation
      * ValuesAndExpressions::ProhibitVersionStrings
 
@@ -54,8 +68,8 @@
        which are commonly used with Getopt::Long.
 
      New Policies:
-     * BuiltinFunctions::ProhibitUniversalCan
-     * BuiltinFunctions::ProhibitUniversalIsa
+     * BuiltinFunctions::ProhibitUniversalCan (by Chris Dolan)
+     * BuiltinFunctions::ProhibitUniversalIsa (by Chris Dolan)
 
      Miscellanea:
      * All spurrious options for `perlcritic` are now fatal.
@@ -80,7 +94,7 @@
      New Policies:
      * ClassHierarchies::ProhibitAutoloading
      * Documentation::RequirePodSections
-     * InputOutput::RequireBracedFileHandelWithPrint
+     * InputOutput::RequireBracedFileHandleWithPrint
      * ValuesAndExpressions::ProhibitMixedBooleanOperators
      * Variables::RequireInitializationForLocalVars
 

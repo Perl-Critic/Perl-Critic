@@ -30,7 +30,7 @@ DESCRIPTION
 
 CONSTRUCTOR
     "new( -profile => $FILE, -severity => $N, -include => \@PATTERNS,
-    -exclude => \@PATTERNS, -force => 1 )"
+    -exclude => \@PATTERNS, -top =" N, -force => 1 )>
             Returns a reference to a new Perl::Critic object. Most arguments
             are just passed directly into Perl::Critic::Config, but I have
             described them here as well. All arguments are optional
@@ -77,6 +77,11 @@ CONSTRUCTOR
             conjunction with the "-include" option. Note that "-exclude"
             takes precedence over "-include" when a Policy matches both
             patterns.
+
+            -top is the maximum number of Violations to return when ranked
+            by their severity levels. Violations are still returned in the
+            order that they occur within the file. This must be a positive
+            integer
 
             -force controls whether Perl::Critic observes the magical ""##
             no critic"" pseudo-pragmas in your code. If set to a true value,
@@ -290,6 +295,10 @@ THE POLICIES
   Perl::Critic::Policy::ControlStructures::ProhibitUnlessBlocks
     Write "if(! $condition)" instead of "unless($condition)" [Severity 2]
 
+  Perl::Critic::Policy::ControlStructures::ProhibitUnreachableCode
+    Don't write code after an unconditional "die, exit, or next". [Severity
+    4]
+
   Perl::Critic::Policy::ControlStructures::ProhibitUntilBlocks
     Write "while(! $condition)" instead of "until($condition)" [Severity 2]
 
@@ -329,6 +338,10 @@ THE POLICIES
 
   Perl::Critic::Policy::Miscellanea::RequireRcsKeywords
     Put source-control keywords in every file. [Severity 2]
+
+  Perl::Critic::Policy::Modules::ProhibitAutomaticExportation
+    Export symbols via @EXPORT_OK or %EXPORT_TAGS instead of @EXPORT.
+    [Severity 3]
 
   Perl::Critic::Policy::Modules::ProhibitMultiplePackages
     Put packages (especially subclasses) in separate files. [Severity 4]
@@ -423,6 +436,10 @@ THE POLICIES
     Use "q{}" or "qq{}" instead of quotes for awkward-looking strings.
     [Severity 2]
 
+  Perl::Critic::Policy::ValuesAndExpressions::ProhibitVersionStrings
+    Don't use strings like "v1.4" or 1.4.5 when including other modules.
+    [Severity 3]
+
   Perl::Critic::Policy::ValuesAndExpressions::RequireInterpolationOfMetachars
     Warns that you might have used single quotes when you really wanted
     double-quotes. [Severity 1]
@@ -491,51 +508,64 @@ BENDING THE RULES
     code is overlooked. To direct perlcritic to ignore the "## no critic"
     comments, use the "-force" option.
 
-    By default, a bare "## no critic" comment disables all the active
-    Policies. If you wish to disable only specific Policies, add a list of
-    Policies names just as you would for "no strict" or ""no warnings"". For
-    example, this would disable the "ProhibitEmptyQuotes" and
-    "ProhibitPostfixControls" until the end of the block or until the next
-    "## use critic" comment (which ever comes first):
+    A bare "## no critic" comment disables all the active Policies. If you
+    wish to disable only specific Policies, add a list of Policy names as
+    arguments just as you would for the "no strict" or ""no warnings""
+    pragmas. For example, this would disable the "ProhibitEmptyQuotes" and
+    "ProhibitPostfixControls" policies until the end of the block or until
+    the next "## use critic" comment (whichever comes first):
 
-      ## no critic qw(EmptyQuotes PostfixControls);
+      ## no critic (EmptyQuotes, PostfixControls)
 
       $foo = "";                  #Now exempt from ValuesAndExpressions::ProhibitEmptyQuotes
       $barf = bar() if $foo;      #Now exempt ControlStructures::ProhibitPostfixControls
       $long_int = 10000000000;    #Still subjected to ValuesAndExpression::RequireNumberSeparators
 
-    Since the Policy names are matched as regular expressions, you can
-    abbreviate the Policy names or disable an entire family of Policies in
-    one shot like this:
+    Since the Policy names are matched against the arguments as regular
+    expressions, you can abbreviate the Policy names or disable an entire
+    family of Policies in one shot like this:
 
-      ## no critic 'NamingConventions';
+      ## no critic (NamingConventions)
 
       my $camelHumpVar = 'foo';  #Now exempt from NamingConventions::ProhibitMixedCaseVars
       sub camelHumpSub {}        #Now exempt from NamingConventions::ProhibitMixedCaseSubs
 
-    The import list must be valid Perl syntax (such as a list of quoted
-    literals or a qw() expression). The <"## no critic"> pragmas can be
-    nested, and Policies named by an inner pragma will be disabled along
-    with those already disabled an outer pragmas.
+    The argument list must be enclosed in parens and must contain one or
+    more comma-separated barewords (e.g. don't use quotes). The <"## no
+    critic"> pragmas can be nested, and Policies named by an inner pragma
+    will be disabled along with those already disabled an outer pragma.
 
     Use this feature wisely. "## no critic" should be used in the smallest
-    possible scope, or only on individual lines of code. If Perl::Critic
+    possible scope, or only on individual lines of code. And you should
+    always be as specific as possible about which policies you want to
+    disable (i.e. never use a bare "## no critic"). If Perl::Critic
     complains about your code, try and find a compliant solution before
     resorting to this feature.
 
 IMPORTANT CHANGES
     Perl-Critic is evolving rapidly. As such, some of the interfaces have
-    changed in ways that are not backward-compatible. This will probably
-    concern you only if you're developing Perl::Critic::Policy modules.
+    changed in ways that are not backward-compatible. If you have been using
+    an older version of Perl-Critic and/or you have been developing custom
+    Policy modules, please read this section carefully.
 
-  VERSION 0.11
-    Starting in version 0.11, the internal mechanics of Perl-Critic were
-    rewritten so that only one traversal of the PPI document tree is
-    required. Unfortunately, this will break any custom Policy modules that
-    you might have written for earlier versions. Converting your policies to
-    work with the new version is pretty easy and actually results in cleaner
-    code. See DEVELOPER.pod for an up-to-date guide on creating Policy
-    modules.
+  VERSION 0.16
+    Starting in version 0.16, you can add a list Policy names as arguments
+    to the "## no critic" pseudo-pragma. This feature allows you to disable
+    specific policies. The arguments must be valid Perl syntax, just as if
+    this were a real pragma. So if you have been in the habit of adding
+    additional words after "no critic", then those words might cause
+    unexpected results. If you want to append other stuff to the "## no
+    critic" comment, then terminate the pseudo-pragma with a semi-colon, and
+    then start another comment. For example:
+
+      #This may not work as expected.
+      $email = 'foo@bar.com';  ## no critic for literal '@'
+
+      #This will work.
+      $email = 'foo@bar.com';  ## no critic; #for literal '@'
+
+      #This is even better.
+      $email = 'foo@bar.com'; ## no critic qw(RequireInterpolation);
 
   VERSION 0.14
     Starting in version 0.14, the interface to Perl::Critic::Violation
@@ -550,16 +580,25 @@ IMPORTANT CHANGES
     be less "critical" for new users, and should steer them toward gradually
     increasing the strictness as they adopt better coding practices.
 
+  VERSION 0.11
+    Starting in version 0.11, the internal mechanics of Perl-Critic were
+    rewritten so that only one traversal of the PPI document tree is
+    required. Unfortunately, this will break any custom Policy modules that
+    you might have written for earlier versions. Converting your policies to
+    work with the new version is pretty easy and actually results in cleaner
+    code. See DEVELOPER.pod for an up-to-date guide on creating Policy
+    modules.
+
 THE Perl::Critic PHILOSOPHY
       Coding standards are deeply personal and highly subjective.  The
-      goal of Perl::Critic is to help you write code that conforms with
-      a set of best practices.  Our primary goal is not to dictate what
+      goal of Perl::Critic is to help you write code that conforms with a
+      set of best practices.  Our primary goal is not to dictate what
       those practices are, but rather, to implement the practices
       discovered by others.  Ultimately, you make the rules --
-      Perl::Critic is merely tool for encouraging consistency.  If
-      there is a policy that you think is important or that we have
-      overlooked, we would be very grateful for contributions, or you can
-      simply load your own private set of policies into Perl::Critic.
+      Perl::Critic is merely a tool for encouraging consistency.  If there
+      is a policy that you think is important or that we have overlooked,
+      we would be very grateful for contributions, or you can simply load
+      your own private set of policies into Perl::Critic.
 
 EXTENDING THE CRITIC
     The modular design of Perl::Critic is intended to facilitate the

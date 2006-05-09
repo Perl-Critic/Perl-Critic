@@ -54,13 +54,15 @@ is( pcritique($policy, \$code), 6, $policy);
 #----------------------------------------------------------------
 
 # PPI bug: multiplication is mistakenly interpreted as a glob.
+#
+# Update 2006-05-08: As-of PPI v1.112, this seems to be fixed.
+# So this test is no longer a "TODO" test.
+
 $code = <<'END_PERL';
 $value = $one*$two;
 END_PERL
 
-TODO: {
-   local $TODO = 'PPI bug -- multiplication misinterpreted as a glob';
-   $policy = 'References::ProhibitDoubleSigils';
-   is( pcritique($policy, \$code), 0, $policy);
-}
+$policy = 'References::ProhibitDoubleSigils';
+is( pcritique($policy, \$code), 0, $policy);
+
 
