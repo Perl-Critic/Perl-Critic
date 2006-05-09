@@ -10,6 +10,7 @@ package Perl::Critic;
 use strict;
 use warnings;
 use File::Spec;
+use Scalar::Util qw(blessed);
 use English qw(-no_match_vars);
 use Perl::Critic::Config;
 use Perl::Critic::Violation ();
@@ -61,8 +62,11 @@ sub critique {
     # Here we go!
     my ( $self, $source_code ) = @_;
 
-    # Parse the code
-    my $doc = PPI::Document->new($source_code);
+    # $source_code can be a file name, or a reference to a
+    # PPI::Document, or a reference to a scalar containing source
+    # code.  In the last case, PPI handles the translation for us.
+    my $doc = ( blessed($source_code) && $source_code->isa('PPI::Document') ) ?
+        $source_code : PPI::Document->new($source_code);
 
     # Bail on error
     if ( !defined $doc ) {
@@ -393,11 +397,13 @@ C<-config> option causes all the other options to be silently ignored.
 Runs the C<$source_code> through the Perl::Critic engine using all the
 Policies that have been loaded into this engine.  If C<$source_code>
 is a scalar reference, then it is treated as string of actual Perl
-code.  Otherwise, it is treated as a path to a file containing Perl
-code.  Returns a list of L<Perl::Critic::Violation> objects for each
+code.  If C<$source_code> is a reference to an instance of
+L<PPI::Document>, then that instance is used directly.  Otherwise, it
+is treated as a path to a local file containing Perl code.  This
+method Returns a list of L<Perl::Critic::Violation> objects for each
 violation of the loaded Policies.  The list is sorted in the order
 that the Violations appear in the code.  If there are no violations,
-returns an empty list.
+this method returns an empty list.
 
 =item C<add_policy( -policy =E<gt> $policy_name, -config =E<gt> \%config_hash )>
 
@@ -656,6 +662,10 @@ Do not use C<tie>. [Severity 2]
 
 Put source-control keywords in every file. [Severity 2]
 
+=head2 L<Perl::Critic::Policy::Modules::ProhibitAutomaticExportation>
+
+Export symbols via C<@EXPORT_OK> or C<%EXPORT_TAGS> instead of C<@EXPORT>.  [Severity 3]
+
 =head2 L<Perl::Critic::Policy::Modules::ProhibitMultiplePackages>
 
 Put packages (especially subclasses) in separate files. [Severity 4]
@@ -771,6 +781,10 @@ Write C< !$foo && $bar || $baz > instead of C< not $foo && $bar or $baz> [Severi
 =head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitNoisyQuotes>
 
 Use C<q{}> or C<qq{}> instead of quotes for awkward-looking strings. [Severity 2]
+
+=head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitVersionStrings>
+
+Don't use strings like C<v1.4> or C<1.4.5> when including other modules. [Severity 3]
 
 =head2 L<Perl::Critic::Policy::ValuesAndExpressions::RequireInterpolationOfMetachars>
 
@@ -988,6 +1002,8 @@ L<PPI>
 L<Pod::Usage>
 
 L<Pod::PlainText>
+
+L<Scalar::Util>
 
 L<String::Format>
 

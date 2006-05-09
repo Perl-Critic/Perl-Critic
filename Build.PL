@@ -62,6 +62,7 @@ my $builder = Module::Build->new(
 	             'Pod::Usage'            => 0,
 		     'Pod::PlainText'        => 0,
 		     'IO::String'            => 0,
+                     'Scalar::Util'          => 0,
 		     'String::Format'        => 1.13,
                      'Module::Pluggable'     => 0,
 	            },
