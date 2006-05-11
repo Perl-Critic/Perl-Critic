@@ -148,7 +148,7 @@ not, then we don't' need to bother examining it.
 
 The C<PPI::Token::Word> class is also used for barewords and methods
 called on object references.  It is possible for someone to declare a
-bareword hash key as C<%hash = ( grep => 'foo' )>.  We don't want to
+bareword hash key as C<<%hash = ( grep => 'foo' )>>.  We don't want to
 test those types of elements because they don't represent function
 calls to C<grep>.  So we use some handy utility functions from
 L<Perl::Critic::Utils> to make sure that this "grep" is actually in
