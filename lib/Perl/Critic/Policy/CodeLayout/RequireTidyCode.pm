@@ -105,11 +105,9 @@ you're code hasn't been run through Perl::Tidy.
 
 =head1 NOTES
 
-Since L<Perl::Tidy> is not widely deployed, this is the only policy in
-the L<Perl::Critic> distribution that is not enabled by default.  To
-enable it, put this line in your F<.perlcriticrc> file:
-
- [CodeLayout::RequireTidyCode]
+L<Perl::Tidy> is not included in the Perl::Critic distribution.  The
+latest version of Perl::Tidy can be downloaded from CPAN.  If
+Perl::Tidy is not installed, this policy is silently ignored.
 
 =head1 SEE ALSO
 
