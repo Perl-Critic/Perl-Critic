@@ -236,9 +236,9 @@ sub _parse_nocritic_import {
     my ($pragma, @site_policies) = @_;
 
     my $module    = qr{ [\w:]+ }mx;
-    my $delim     = qr{ \s* (?: ,|\s ) \s* }mx;
+    my $delim     = qr{ \s* [,\s] \s* }mx;
     my $qw        = qr{ (?: qw )? }mx;
-    my $qualifier = qr{ \( \s* $qw ( $module \s* (?: $delim $module)* ) \s* \) }mx;
+    my $qualifier = qr{ $qw \( \s* ( $module \s* (?: $delim $module)* ) \s* \) }mx;
     my $no_critic = qr{ \A \s* \#\# \s* no \s+ critic \s* $qualifier }mx;
 
     if ( my ($module_list) = $pragma =~ $no_critic ) {
