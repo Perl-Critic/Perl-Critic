@@ -236,11 +236,13 @@ sub _parse_nocritic_import {
     my ($pragma, @site_policies) = @_;
 
     my $module    = qr{ [\w:]+ }mx;
-    my $qualifier = qr{ \( \s* ( $module \s* (?:,\s*$module)* ) \s* \) }mx;
+    my $delim     = qr{ \s* (?: ,|\s ) \s* }mx;
+    my $qw        = qr{ (?: qw )? }mx;
+    my $qualifier = qr{ \( \s* $qw ( $module \s* (?: $delim $module)* ) \s* \) }mx;
     my $no_critic = qr{ \A \s* \#\# \s* no \s+ critic \s* $qualifier }mx;
 
     if ( my ($module_list) = $pragma =~ $no_critic ) {
-        my @modules = split m{ \s* , \s* }mx, $module_list;
+        my @modules = split $delim, $module_list;
         return map { my $req = $_; grep {m/$req/imx} @site_policies } @modules;
     }
 
@@ -911,12 +913,11 @@ custom Policy modules, please read this section carefully.
 
 Starting in version 0.16, you can add a list Policy names as arguments
 to the C<"## no critic"> pseudo-pragma.  This feature allows you to
-disable specific policies.  The arguments must be valid Perl syntax,
-just as if this were a real pragma.  So if you have been in the habit
-of adding additional words after C<"no critic">, then those words
-might cause unexpected results.  If you want to append other stuff to
-the C<"## no critic"> comment, then terminate the pseudo-pragma with a
-semi-colon, and then start another comment.  For example:
+disable specific policies.  So if you have been in the habit of adding
+additional words after C<"no critic">, then those words might cause
+unexpected results.  If you want to append other stuff to the C<"## no
+critic"> comment, then terminate the pseudo-pragma with a semi-colon,
+and then start another comment.  For example:
 
   #This may not work as expected.
   $email = 'foo@bar.com';  ## no critic for literal '@'
@@ -925,7 +926,7 @@ semi-colon, and then start another comment.  For example:
   $email = 'foo@bar.com';  ## no critic; #for literal '@'
 
   #This is even better.
-  $email = 'foo@bar.com'; ## no critic qw(RequireInterpolation);
+  $email = 'foo@bar.com'; ## no critic (RequireInterpolation);
 
 =head2 VERSION 0.14
 
