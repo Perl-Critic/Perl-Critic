@@ -644,11 +644,11 @@ Write C<eval { my $foo; bar($foo) }> instead of C<eval "my $foo; bar($foo);"> [S
 
 =head2 L<Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalCan>
 
-Write C<eval { $foo->can($name) }> instead of C<UNIVERSAL::can($foo, $name)> [Severity 3]
+Write C<< eval { $foo->can($name) } >> instead of C<UNIVERSAL::can($foo, $name)> [Severity 3]
 
 =head2 L<Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalIsa>
 
-Write C<eval { $foo->isa($pkg) }> instead of C<UNIVERSAL::isa($foo, $pkg)> [Severity 3]
+Write C<< eval { $foo->isa($pkg) } >> instead of C<UNIVERSAL::isa($foo, $pkg)> [Severity 3]
 
 =head2 L<Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep>
 
@@ -736,11 +736,11 @@ Never write C<select($fh)> [Severity 4]
 
 =head2 L<Perl::Critic::Policy::InputOutput::ProhibitReadlineInForLoop>
 
-Write C<<while( $line = <> ){...}>> instead of C<<for(<>){...}>> [Severity 4]
+Write C<< while( $line = <> ){...} >> instead of C<< for(<>){...} >> [Severity 4]
 
 =head2 L<Perl::Critic::Policy::InputOutput::ProhibitTwoArgOpen>
 
-Write C<open $fh, q{<}, $filename;> instead of C<open $fh, "<$filename";> [Severity 5]
+Write C<< open $fh, q{<}, $filename; >> instead of C<< open $fh, "<$filename"; >> [Severity 5]
 
 =head2 L<Perl::Critic::Policy::InputOutput::RequireBracedFileHandleWithPrint>
 
@@ -856,7 +856,7 @@ Always C<use warnings> [Severity 4]
 
 =head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitConstantPragma>
 
-Don't C< use constant $FOO => 15 > [Severity 4]
+Don't C<< use constant $FOO => 15 >> [Severity 4]
 
 =head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitEmptyQuotes>
 
