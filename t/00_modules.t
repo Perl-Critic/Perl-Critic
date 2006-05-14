@@ -8,17 +8,13 @@
 use strict;
 use warnings;
 use PPI::Document;
-use Test::More tests => 711;  # Add 9 for each new policy created
+use Test::More tests => 710;  # Add 9 for each new policy created
 use English qw(-no_match_vars);
 
 our $VERSION = '0.16';
 $VERSION = eval $VERSION;  ## no critic
 
 my $obj = undef;
-
-#---------------------------------------------------------------
-
-ok( 0 ); #Fake failure;
 
 #---------------------------------------------------------------
 
