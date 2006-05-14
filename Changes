@@ -5,18 +5,18 @@
 # $Revision$
 ########################################################################
 
-[0.16]  Released on ????????
+[0.16]  Released on 20060514
 
-      Production release.
+     Production release.
 
-      Enhancements:
-      * Perl::Critic->critique() now accepts a PPI::Document as the
-        argument.  This feature creates an additional dependency on
-        Scalar::Util, but that shouldn't be a problem because it is
-        included with List::Util, which we already use.
+     Enhancements:
+     * Perl::Critic->critique() now accepts a PPI::Document as the
+       argument.  This feature creates an additional dependency on
+       Scalar::Util, but that shouldn't be a problem because it is
+       included with List::Util, which we already use.
 
-      Miscellanea:
-      * Increased PPI dependency from v1.110 to v1.112
+     Miscellanea:
+     * Increased PPI dependency from v1.110 to v1.112
 
 [0.15_03] Released on 20060507
 

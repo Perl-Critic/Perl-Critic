@@ -101,12 +101,13 @@ METHODS
             Runs the $source_code through the Perl::Critic engine using all
             the Policies that have been loaded into this engine. If
             $source_code is a scalar reference, then it is treated as string
-            of actual Perl code. Otherwise, it is treated as a path to a
-            file containing Perl code. Returns a list of
-            Perl::Critic::Violation objects for each violation of the loaded
-            Policies. The list is sorted in the order that the Violations
-            appear in the code. If there are no violations, returns an empty
-            list.
+            of actual Perl code. If $source_code is a reference to an
+            instance of PPI::Document, then that instance is used directly.
+            Otherwise, it is treated as a path to a local file containing
+            Perl code. This method Returns a list of Perl::Critic::Violation
+            objects for each violation of the loaded Policies. The list is
+            sorted in the order that the Violations appear in the code. If
+            there are no violations, this method returns an empty list.
 
     "add_policy( -policy => $policy_name, -config => \%config_hash )"
             Creates a Policy object and loads it into this Critic. If the
@@ -240,11 +241,11 @@ THE POLICIES
     bar($foo);"" [Severity 5]
 
   Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalCan
-    Write "eval { $foo-"can($name) }> instead of "UNIVERSAL::can($foo,
+    Write "eval { $foo->can($name) }" instead of "UNIVERSAL::can($foo,
     $name)" [Severity 3]
 
   Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalIsa
-    Write "eval { $foo-"isa($pkg) }> instead of "UNIVERSAL::isa($foo, $pkg)"
+    Write "eval { $foo->isa($pkg) }" instead of "UNIVERSAL::isa($foo, $pkg)"
     [Severity 3]
 
   Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep
@@ -319,8 +320,7 @@ THE POLICIES
     Never write "select($fh)" [Severity 4]
 
   Perl::Critic::Policy::InputOutput::ProhibitReadlineInForLoop
-    Write "<while( $line = <" ){...}>> instead of "<for(<"){...}>> [Severity
-    4]
+    Write "while( $line = <> ){...}" instead of "for(<>){...}" [Severity 4]
 
   Perl::Critic::Policy::InputOutput::ProhibitTwoArgOpen
     Write "open $fh, q{<}, $filename;" instead of "open $fh, "<$filename";"
@@ -417,7 +417,7 @@ THE POLICIES
     Always "use warnings" [Severity 4]
 
   Perl::Critic::Policy::ValuesAndExpressions::ProhibitConstantPragma
-    Don't " use constant $FOO =" 15 > [Severity 4]
+    Don't "use constant $FOO => 15" [Severity 4]
 
   Perl::Critic::Policy::ValuesAndExpressions::ProhibitEmptyQuotes
     Write "q{}" instead of '' [Severity 2]
@@ -551,12 +551,11 @@ IMPORTANT CHANGES
   VERSION 0.16
     Starting in version 0.16, you can add a list Policy names as arguments
     to the "## no critic" pseudo-pragma. This feature allows you to disable
-    specific policies. The arguments must be valid Perl syntax, just as if
-    this were a real pragma. So if you have been in the habit of adding
-    additional words after "no critic", then those words might cause
-    unexpected results. If you want to append other stuff to the "## no
-    critic" comment, then terminate the pseudo-pragma with a semi-colon, and
-    then start another comment. For example:
+    specific policies. So if you have been in the habit of adding additional
+    words after "no critic", then those words might cause unexpected
+    results. If you want to append other stuff to the ""## no critic""
+    comment, then terminate the pseudo-pragma with a semi-colon, and then
+    start another comment. For example:
 
       #This may not work as expected.
       $email = 'foo@bar.com';  ## no critic for literal '@'
@@ -565,7 +564,7 @@ IMPORTANT CHANGES
       $email = 'foo@bar.com';  ## no critic; #for literal '@'
 
       #This is even better.
-      $email = 'foo@bar.com'; ## no critic qw(RequireInterpolation);
+      $email = 'foo@bar.com'; ## no critic (RequireInterpolation);
 
   VERSION 0.14
     Starting in version 0.14, the interface to Perl::Critic::Violation
@@ -635,6 +634,8 @@ PREREQUISITES
     Pod::Usage
 
     Pod::PlainText
+
+    Scalar::Util
 
     String::Format
 
