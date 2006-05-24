@@ -9,6 +9,8 @@ package Perl::Critic;
 
 use strict;
 use warnings;
+use base qw(Exporter);
+
 use File::Spec;
 use Scalar::Util qw(blessed);
 use English qw(-no_match_vars);
@@ -17,14 +19,17 @@ use Perl::Critic::Violation ();
 use Carp;
 use PPI;
 
+#----------------------------------------------------------------------------
+
 our $VERSION = '0.17';
 $VERSION = eval $VERSION;    ## no critic;
+
+our @EXPORT_OK = qw(&critique);
 
 #----------------------------------------------------------------------------
 
 sub new {
     my ( $class, %args ) = @_;
-
     my $self = bless {}, $class;
     $self->{_force}  = $args{-force}  || 0;
     $self->{_top}    = $args{-top}    || 0;
@@ -59,12 +64,31 @@ sub policies {
 
 sub critique {
 
-    # Here we go!
-    my ( $self, $source_code ) = @_;
+    #-------------------------------------------------------------------
+    # This subroutine can be called as an object method or as a static
+    # function.  In the latter case, the first argument can be a
+    # hashref of configuration parameters that shall be used to create
+    # an object behind the scenes.  Note that this object does not
+    # persist.  In other words, it is not a singleton.  Here are some
+    # of the ways this subroutine might get called:
+    #
+    # #Object style...
+    # $critic->critique( $code );
+    #
+    # #Functional style...
+    # critique( $code );
+    # critique( {}, $code );
+    # critique( {-foo => bar}, $code );
+    #------------------------------------------------------------------
+
+    my ( $self, $source_code ) = @_ >= 2 ? @_ : ( {}, $_[0] );
+    $self = ref $self eq 'HASH' ? __PACKAGE__->new(%{ $self }) : $self;
+    return if ! $source_code;  # If no code, then nothing to do.
 
     # $source_code can be a file name, or a reference to a
     # PPI::Document, or a reference to a scalar containing source
     # code.  In the last case, PPI handles the translation for us.
+
     my $doc = ( blessed($source_code) && $source_code->isa('PPI::Document') ) ?
         $source_code : PPI::Document->new($source_code);
 
@@ -89,7 +113,7 @@ sub critique {
     }
 
 
-    # Seed a hash of PPI elements.  Keys are PPI class names, and and
+    # Seed a hash of PPI elements.  Keys are PPI class names, and the
     # values are arrayrefs containing all the instances of the class.
     my %elements_of = ( 'PPI::Document' => [$doc],
                         'PPI::Element'  => $doc->find('PPI::Element') || [], );
@@ -436,6 +460,26 @@ Returns the L<Perl::Critic::Config> object that was created for or given
 to this Critic.
 
 =back
+
+=head1 FUNCTIONAL INTERFACE
+
+For those folks who prefer to have a functional interface, The
+C<critique> method can be exported on request and called as a static
+function.  If the first argument is a hashref, its contents are used
+to construct a new Perl::Critic object internally.  The keys of that
+hash should be the same as those supported by the C<Perl::Critic::new>
+method.  Here are some examples:
+
+  use Perl::Critic qw(critique);
+
+  # Use default parameters...
+  @violations = critique( $some_file );
+
+  # Use custom parameters...
+  @violations = critique( {-severity => 2}, $some_file );
+
+None of the other object-methods are currently supported as static
+functions.  Sorry.
 
 =head1 CONFIGURATION
 

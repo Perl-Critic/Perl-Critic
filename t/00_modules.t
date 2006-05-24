@@ -8,7 +8,7 @@
 use strict;
 use warnings;
 use PPI::Document;
-use Test::More tests => 710;  # Add 9 for each new policy created
+use Test::More tests => 716;  # Add 9 for each new policy created
 use English qw(-no_match_vars);
 
 our $VERSION = '0.17';
@@ -17,6 +17,7 @@ $VERSION = eval $VERSION;  ## no critic
 my $obj = undef;
 
 #---------------------------------------------------------------
+# Test Perl::Critic module interface
 
 use_ok('Perl::Critic');
 can_ok('Perl::Critic', 'new');
@@ -30,6 +31,7 @@ isa_ok($obj, 'Perl::Critic');
 is($obj->VERSION(), $VERSION);
 
 #---------------------------------------------------------------
+# Test Perl::Critic::Config module interface
 
 use_ok('Perl::Critic::Config');
 can_ok('Perl::Critic::Config', 'new');
@@ -45,6 +47,7 @@ isa_ok($obj, 'Perl::Critic::Config');
 is($obj->VERSION(), $VERSION);
 
 #---------------------------------------------------------------
+# Test Perl::Critic::Policy module interface
 
 use_ok('Perl::Critic::Policy');
 can_ok('Perl::Critic::Policy', 'new');
@@ -59,6 +62,7 @@ isa_ok($obj, 'Perl::Critic::Policy');
 is($obj->VERSION(), $VERSION);
 
 #---------------------------------------------------------------
+# Test Perl::Critic::Violation module interface
 
 use_ok('Perl::Critic::Violation');
 can_ok('Perl::Critic::Violation', 'new');
@@ -69,13 +73,14 @@ can_ok('Perl::Critic::Violation', 'source');
 can_ok('Perl::Critic::Violation', 'policy');
 can_ok('Perl::Critic::Violation', 'to_string');
 
-my $code = 'Hello World;';
+my $code = q{print 'Hello World';};
 my $doc = PPI::Document->new(\$code);
 $obj = Perl::Critic::Violation->new(undef, undef, $doc, undef);
 isa_ok($obj, 'Perl::Critic::Violation');
 is($obj->VERSION(), $VERSION);
 
 #---------------------------------------------------------------
+# Test module interface for each Policy subclass
 
 for my $mod ( Perl::Critic::Config::native_policies() ) {
 
@@ -92,3 +97,16 @@ for my $mod ( Perl::Critic::Config::native_policies() ) {
     is($obj->VERSION(), $VERSION, "Version of $mod");
 }
 
+#---------------------------------------------------------------
+# Test functional interface to Perl::Critic
+
+Perl::Critic->import( qw(critique) );
+can_ok('main', 'critique');  #Export test
+
+# TODO: These tests are weak. They just verify that it doesn't
+# blow up, and that at least one violation is returned.
+ok( critique( \$code ), 'Functional style, no config' );
+ok( critique( {}, \$code ), 'Functional style, empty config' );
+ok( critique( {severity => 1}, \$code ), 'Functional style, with config');
+ok( !critique(), 'Functional style, no args at all');
+ok( !critique(undef, undef), 'Functional style, undef args');

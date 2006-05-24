@@ -88,6 +88,7 @@ sub get_format { return $FORMAT;         }
 sub sort_by_location {
     ref $_[0] || shift; #Can call as object or class method
     #TODO: What if $a or $b are not Violation objects?
+    return scalar @_ if ! wantarray;
     return sort {   (($a->location->[0] || 0) <=> ($b->location->[0] || 0))
                  || (($a->location->[1] || 0) <=> ($b->location->[1] || 0)) } @_
 }
@@ -97,6 +98,7 @@ sub sort_by_location {
 sub sort_by_severity {
     ref $_[0] || shift; #Can call as object or class method
     #TODO: What if $a or $b are not Violation objects?
+    return scalar @_ if ! wantarray;
     return sort { ($a->severity() || 0) <=> ($b->severity() || 0) } @_;
 }
 
