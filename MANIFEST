@@ -65,6 +65,7 @@ lib/Perl/Critic/Policy/TestingAndDebugging/RequireUseStrict.pm
 lib/Perl/Critic/Policy/TestingAndDebugging/RequireUseWarnings.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitConstantPragma.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitEmptyQuotes.pm
+lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitEscapedCharacters.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitInterpolationOfLiterals.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitLeadingZeros.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitMixedBooleanOperators.pm

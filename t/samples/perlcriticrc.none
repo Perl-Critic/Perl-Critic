@@ -67,6 +67,7 @@
 [-TestingAndDebugging::RequireUseWarnings]
 [-ValuesAndExpressions::ProhibitConstantPragma]
 [-ValuesAndExpressions::ProhibitEmptyQuotes]
+[-ValuesAndExpressions::ProhibitEscapedCharacters]
 [-ValuesAndExpressions::ProhibitInterpolationOfLiterals]
 [-ValuesAndExpressions::ProhibitLeadingZeros]
 [-ValuesAndExpressions::ProhibitMixedBooleanOperators]

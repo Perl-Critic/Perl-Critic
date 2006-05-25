@@ -253,3 +253,6 @@ severity = 1
 
 [ValuesAndExpressions::ProhibitVersionStrings]
 severity = 1
+
+[ValuesAndExpressions::ProhibitEscapedCharacters]
+severity = 1

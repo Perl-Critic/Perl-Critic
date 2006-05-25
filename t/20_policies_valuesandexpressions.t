@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 35;
+use Test::More tests => 37;
 use Perl::Critic;
 
 # common P::C testing tools
@@ -536,4 +536,28 @@ require Foo 1.0203 qw(foo bar);
 END_PERL
 
 $policy = 'ValuesAndExpressions::ProhibitVersionStrings';
+is( pcritique($policy, \$code), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+"\127\006\030Z";
+"\x7F\x06\x22Z";
+qq{\x7F\x06\x22Z};
+END_PERL
+
+$policy = 'ValuesAndExpressions::ProhibitEscapedCharacters';
+is( pcritique($policy, \$code), 3, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+"\t\r\n\\";
+"\N{DELETE}\N{ACKNOWLEDGE}\N{CANCEL}Z";
+"\"\'\0";
+'\x7f';
+q{\x7f};
+END_PERL
+
+$policy = 'ValuesAndExpressions::ProhibitEscapedCharacters';
 is( pcritique($policy, \$code), 0, $policy);

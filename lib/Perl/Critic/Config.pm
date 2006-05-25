@@ -337,6 +337,7 @@ sub native_policies {
       Perl::Critic::Policy::TestingAndDebugging::RequireUseWarnings
       Perl::Critic::Policy::ValuesAndExpressions::ProhibitConstantPragma
       Perl::Critic::Policy::ValuesAndExpressions::ProhibitEmptyQuotes
+      Perl::Critic::Policy::ValuesAndExpressions::ProhibitEscapedCharacters
       Perl::Critic::Policy::ValuesAndExpressions::ProhibitInterpolationOfLiterals
       Perl::Critic::Policy::ValuesAndExpressions::ProhibitLeadingZeros
       Perl::Critic::Policy::ValuesAndExpressions::ProhibitMixedBooleanOperators

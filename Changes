@@ -10,6 +10,9 @@
      Bug Fixes:
      Fixed bug in no-critic pragma parser.
 
+     New Policies:
+     * ValuesAndExpressions::ProhibitEscapedCharacters
+
 [0.16]  Released on 20060514
 
      Production release.

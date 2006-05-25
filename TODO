@@ -22,7 +22,6 @@ BUGS/LIMITATIONS:
 
 OTHER PBP POLICIES THAT SEEM FEASIBLE TO IMPLEMENT:
 
-- ValuesAndExpressions::ProhibitEscapedCharacters (p54)
 - ValuesAndExpressions::ProhibitCommaSeparatedStatements (p68)
 - ValuesAndExpressions::RequireListParens (p71)
 - Variables::RequireLocalizedPunctuationVars (p81)

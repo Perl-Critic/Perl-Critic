@@ -862,6 +862,10 @@ Don't C<< use constant $FOO => 15 >> [Severity 4]
 
 Write C<q{}> instead of C<''> [Severity 2]
 
+=head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitEscapedCharacters>
+
+Write C<"\N{DELETE}"> instead of C<"\x7F">, etc. [Severity 2]
+
 =head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitInterpolationOfLiterals>
 
 Always use single quotes for literal strings. [Severity 1]
