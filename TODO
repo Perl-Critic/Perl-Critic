@@ -87,10 +87,6 @@ NON-PBP POLICIES WANTED:
 - Miscellanea::Prohibit5006isms
   Keep the code 5.005 compatible
   Low severity
-- ValuesAndExpressions::ProhibitVersionStrings
-  Forbid C<use Foo 1.4.5> and C<use Foo v1.5>
-  These are not compatible with older Perls
-  Medium severity
 - Variables::ProhibitUseVars
   Require C<our $foo> instead.
   This contradicts Miscellanea::Prohibit5006isms
@@ -109,6 +105,3 @@ REFACTORINGS and ENHANCEMENTS:
   functionality as the -verbose option in `perlcritic`
 - Enhance P::C::critique() to accept file names, directories,
   or code strings (as refs) just like `perlcritic` does now.
-- Possibly provide a simple functional API such as:
-     perl -MPerl::Critic -e 'critique(@_)' file1 file2
-  I'm not exactly sure why, but it seems cool.
