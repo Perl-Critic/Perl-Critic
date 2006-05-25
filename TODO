@@ -24,6 +24,8 @@ OTHER PBP POLICIES THAT SEEM FEASIBLE TO IMPLEMENT:
 
 - ValuesAndExpressions::ProhibitCommaSeparatedStatements (p68)
 - ValuesAndExpressions::RequireListParens (p71)
+- ValuesAndExpressions::ProhibitScalarGrep (p71)
+  Look for grep in a scalar context and recommend any() instead
 - Variables::RequireLocalizedPunctuationVars (p81)
 - Variables::RequireNegativeIndices (p88)
 - Variables::RequireLexicalForLoopIterator (p108)
@@ -49,7 +51,7 @@ OTHER PBP POLICIES THAT SEEM FEASIBLE TO IMPLEMENT:
 - InputOutput::ProhibitExplicitStdin (p216)
 - InputOutput::ProhibitInteractiveTest (p218)
   Forbid -t operand
-- Miscelanea::ProhibitObnoxiousComments
+- Miscellanea::ProhibitObnoxiousComments
   Forbid excessive hash marks e.g. "#### This is a loud comment ####"
   Make the obnoxious pattern configurable
 - RegularExpressions::RequireBracesForMultiline (p242)
