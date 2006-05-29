@@ -314,23 +314,23 @@ sub native_policies {
       Perl::Critic::Policy::Modules::ProhibitAutomaticExportation
       Perl::Critic::Policy::Modules::ProhibitEvilModules
       Perl::Critic::Policy::Modules::ProhibitMultiplePackages
+      Perl::Critic::Policy::Modules::RequireBarewordIncludes
       Perl::Critic::Policy::Modules::RequireEndWithOne
       Perl::Critic::Policy::Modules::RequireExplicitPackage
-      Perl::Critic::Policy::Modules::RequireBarewordIncludes
       Perl::Critic::Policy::Modules::RequireVersionVar
       Perl::Critic::Policy::NamingConventions::ProhibitAmbiguousNames
       Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseSubs
       Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars
-      Perl::Critic::Policy::Subroutines::ProhibitAmpersandSigils
-      Perl::Critic::Policy::Subroutines::ProhibitExplicitReturnUndef
-      Perl::Critic::Policy::Subroutines::ProhibitExcessComplexity
-      Perl::Critic::Policy::Subroutines::ProhibitBuiltinHomonyms
-      Perl::Critic::Policy::Subroutines::ProhibitSubroutinePrototypes
-      Perl::Critic::Policy::Subroutines::ProtectPrivateSubs
-      Perl::Critic::Policy::Subroutines::RequireFinalReturn
       Perl::Critic::Policy::References::ProhibitDoubleSigils
       Perl::Critic::Policy::RegularExpressions::RequireExtendedFormatting
       Perl::Critic::Policy::RegularExpressions::RequireLineBoundaryMatching
+      Perl::Critic::Policy::Subroutines::ProhibitAmpersandSigils
+      Perl::Critic::Policy::Subroutines::ProhibitBuiltinHomonyms
+      Perl::Critic::Policy::Subroutines::ProhibitExcessComplexity
+      Perl::Critic::Policy::Subroutines::ProhibitExplicitReturnUndef
+      Perl::Critic::Policy::Subroutines::ProhibitSubroutinePrototypes
+      Perl::Critic::Policy::Subroutines::ProtectPrivateSubs
+      Perl::Critic::Policy::Subroutines::RequireFinalReturn
       Perl::Critic::Policy::TestingAndDebugging::ProhibitNoStrict
       Perl::Critic::Policy::TestingAndDebugging::ProhibitNoWarnings
       Perl::Critic::Policy::TestingAndDebugging::RequireUseStrict
