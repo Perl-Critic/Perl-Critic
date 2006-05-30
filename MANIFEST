@@ -82,6 +82,7 @@ lib/Perl/Critic/Policy/Variables/ProhibitPackageVars.pm
 lib/Perl/Critic/Policy/Variables/ProhibitPunctuationVars.pm
 lib/Perl/Critic/Policy/Variables/ProtectPrivateVars.pm
 lib/Perl/Critic/Policy/Variables/RequireInitializationForLocalVars.pm
+lib/Perl/Critic/PolicySummary.pod
 lib/Perl/Critic/Utils.pm
 lib/Perl/Critic/Violation.pm
 LICENSE
