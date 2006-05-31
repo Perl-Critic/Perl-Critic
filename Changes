@@ -12,6 +12,7 @@
 
      New Policies:
      * ValuesAndExpressions::ProhibitEscapedCharacters
+     * BuiltinFunctions::RequireSimpleSortBlock
 
 [0.16]  Released on 20060514
 

@@ -14,6 +14,7 @@ lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitUniversalIsa.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/RequireBlockGrep.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/RequireBlockMap.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/RequireGlobFunction.pm
+lib/Perl/Critic/Policy/BuiltinFunctions/RequireSimpleSortBlock.pm
 lib/Perl/Critic/Policy/ClassHierarchies/ProhibitAutoloading.pm
 lib/Perl/Critic/Policy/ClassHierarchies/ProhibitExplicitISA.pm
 lib/Perl/Critic/Policy/ClassHierarchies/ProhibitOneArgBless.pm

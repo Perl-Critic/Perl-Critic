@@ -286,6 +286,7 @@ sub native_policies {
       Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep
       Perl::Critic::Policy::BuiltinFunctions::RequireBlockMap
       Perl::Critic::Policy::BuiltinFunctions::RequireGlobFunction
+      Perl::Critic::Policy::BuiltinFunctions::RequireSimpleSortBlock
       Perl::Critic::Policy::ClassHierarchies::ProhibitAutoloading
       Perl::Critic::Policy::ClassHierarchies::ProhibitExplicitISA
       Perl::Critic::Policy::ClassHierarchies::ProhibitOneArgBless

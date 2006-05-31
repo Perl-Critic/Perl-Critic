@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 27;
+use Test::More tests => 29;
 use Perl::Critic;
 
 # common P::C testing tools
@@ -290,3 +290,24 @@ END_PERL
 
 $policy = 'BuiltinFunctions::ProhibitUniversalCan';
 is( pcritique($policy, \$code), 0, 'UNIVERSAL::can' );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+sort {my $aa = $foo{$a};my $b = $foo{$b};$a cmp $b} @list;
+END_PERL
+
+$policy = 'BuiltinFunctions::RequireSimpleSortBlock';
+is( pcritique($policy, \$code), 1, $policy );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+sort @list;
+sort {$a cmp $b;} @list;
+sort {$a->[0] <=> $b->[0] && $a->[1] <=> $b->[1]} @list;
+sort {bar($a,$b)} @list;
+END_PERL
+
+$policy = 'BuiltinFunctions::RequireSimpleSortBlock';
+is( pcritique($policy, \$code), 0, $policy );

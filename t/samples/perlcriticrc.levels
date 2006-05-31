@@ -256,3 +256,6 @@ severity = 1
 
 [ValuesAndExpressions::ProhibitEscapedCharacters]
 severity = 1
+
+[BuiltinFunctions::RequireSimpleSortBlock]
+severity = 1

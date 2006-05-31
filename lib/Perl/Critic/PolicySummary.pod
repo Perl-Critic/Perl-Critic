@@ -55,6 +55,10 @@ Write C<map { $_ =~ /$pattern/ } @list> instead of C<map /$pattern/, @list> [Sev
 
 Use C<glob q{*}> instead of <*> [Severity 5]
 
+=head2 L<Perl::Critic::Policy::BuiltinFunctions::RequireSimpleSortBlock>
+
+Sort blocks should have a single statement [Severity 3]
+
 =head2 L<Perl::Critic::Policy::ClassHierarchies::ProhibitExplicitISA>
 
 Employ C<use base> instead of C<@ISA> [Severity 3]
@@ -83,13 +87,13 @@ Must run code through L<perltidy>. [Severity 1]
 
 Put a comma at the end of every multi-line list declaration, including the last one. [Severity 1]
 
-=head2 L<Perl::Critic::Policy::ControlStructures::ProhibitCascadingIfElse>
-
-Don't write long "if-elsif-elsif-elsif-elsif...else" chains. [Severity 3]
-
 =head2 L<Perl::Critic::Policy::ControlStructures::ProhibitCStyleForLoops>
 
 Write C<for(0..20)> instead of C<for($i=0; $i<=20; $i++)> [Severity 2]
+
+=head2 L<Perl::Critic::Policy::ControlStructures::ProhibitCascadingIfElse>
+
+Don't write long "if-elsif-elsif-elsif-elsif...else" chains. [Severity 3]
 
 =head2 L<Perl::Critic::Policy::ControlStructures::ProhibitPostfixControls>
 
@@ -155,6 +159,10 @@ Put source-control keywords in every file. [Severity 2]
 
 Export symbols via C<@EXPORT_OK> or C<%EXPORT_TAGS> instead of C<@EXPORT>.  [Severity 3]
 
+=head2 L<Perl::Critic::Policy::Modules::ProhibitEvilModules>
+
+Ban modules that aren't blessed by your shop. [Severity 5]
+
 =head2 L<Perl::Critic::Policy::Modules::ProhibitMultiplePackages>
 
 Put packages (especially subclasses) in separate files. [Severity 4]
@@ -163,9 +171,9 @@ Put packages (especially subclasses) in separate files. [Severity 4]
 
 Write C<require Module> instead of C<require 'Module.pm'> [Severity 5]
 
-=head2 L<Perl::Critic::Policy::Modules::ProhibitEvilModules>
+=head2 L<Perl::Critic::Policy::Modules::RequireEndWithOne>
 
-Ban modules that aren't blessed by your shop. [Severity 5]
+End each module with an explicitly C<1;> instead of some funky expression. [Severity 4]
 
 =head2 L<Perl::Critic::Policy::Modules::RequireExplicitPackage>
 
@@ -174,10 +182,6 @@ Always make the C<package> explicit. [Severity 4]
 =head2 L<Perl::Critic::Policy::Modules::RequireVersionVar>
 
 Give every module a C<$VERSION> number. [Severity 2]
-
-=head2 L<Perl::Critic::Policy::Modules::RequireEndWithOne>
-
-End each module with an explicitly C<1;> instead of some funky expression. [Severity 4]
 
 =head2 L<Perl::Critic::Policy::NamingConventions::ProhibitAmbiguousNames>
 
@@ -195,13 +199,13 @@ Write C<$my_variable = 42> instead of C<$MyVariable = 42> [Severity 1]
 
 Write C<@{ $array_ref }> instead of C<@$array_ref> [Severity 2]
 
-=head2 L<Perl::Critic::Policy::RegularExpressions::RequireLineBoundaryMatching>
-
-Always use the C</m> modifier with regular expressions. [Severity 3]
-
 =head2 L<Perl::Critic::Policy::RegularExpressions::RequireExtendedFormatting>
 
 Always use the C</x> modifier with regular expressions. [Severity 2]
+
+=head2 L<Perl::Critic::Policy::RegularExpressions::RequireLineBoundaryMatching>
+
+Always use the C</m> modifier with regular expressions. [Severity 3]
 
 =head2 L<Perl::Critic::Policy::Subroutines::ProhibitAmpersandSigils>
 
