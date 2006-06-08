@@ -494,6 +494,20 @@ is( pcritique($policy, \$code), 0, $policy);
 
 #----------------------------------------------------------------
 
+## TODO: this is a failing test.  Uncomment this and increment the
+## test count above.
+
+#$code = <<'END_PERL';
+#$sub ||= sub {
+#   return 1 and 2;
+#};
+#END_PERL
+#
+#$policy = 'ValuesAndExpressions::ProhibitMixedBooleanOperators';
+#is( pcritique($policy, \$code), 0, $policy);
+
+#----------------------------------------------------------------
+
 $code = <<'END_PERL';
 use 5.6.1;
 use v5.6.1;
