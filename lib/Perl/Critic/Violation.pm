@@ -86,19 +86,25 @@ sub get_format { return $FORMAT;         }
 #-----------------------------------------------------------------------------
 
 sub sort_by_location {
-    ref $_[0] || shift; #Can call as object or class method
-    #TODO: What if $a or $b are not Violation objects?
-    return scalar @_ if ! wantarray;
+
+    ref $_[0] || shift;              #Can call as object or class method
+    return scalar @_ if ! wantarray; #In case we are called in scalar context
+
+    ## no critic qw(RequireSimpleSort);
+    ## TODO: What if $a and $b are not Violation objects?
     return sort {   (($a->location->[0] || 0) <=> ($b->location->[0] || 0))
-                 || (($a->location->[1] || 0) <=> ($b->location->[1] || 0)) } @_
+                 || (($a->location->[1] || 0) <=> ($b->location->[1] || 0)) } @_;
 }
 
 #-----------------------------------------------------------------------------
 
 sub sort_by_severity {
-    ref $_[0] || shift; #Can call as object or class method
-    #TODO: What if $a or $b are not Violation objects?
-    return scalar @_ if ! wantarray;
+
+    ref $_[0] || shift;              #Can call as object or class method
+    return scalar @_ if ! wantarray; #In case we are called in scalar context
+
+    ## no critic qw(RequireSimpleSort);
+    ## TODO: What if $a and $b are not Violation objects?
     return sort { ($a->severity() || 0) <=> ($b->severity() || 0) } @_;
 }
 
