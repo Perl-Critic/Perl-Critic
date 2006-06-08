@@ -292,7 +292,8 @@ sub all_perl_files {
     # to files that seem to be Perl source code.  This subroutine was
     # poached from Test::Perl::Critic.
 
-    my %skip_dir = map { ($_,1) } qw( CVS RCS .svn _darcs blib );
+    my %skip_dir = map { ($_,1) } qw( CVS RCS .svn _darcs {arch} .bzr
+                                      _build blib );
     my @queue      = @_;
     my @code_files = ();
 
