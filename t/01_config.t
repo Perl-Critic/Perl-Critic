@@ -10,7 +10,7 @@ use warnings;
 use Test::More tests => 46;
 use List::MoreUtils qw(all any none);
 use Perl::Critic::Utils;
-use Perl::Critic::Config;
+use Perl::Critic::Config -test => 1;
 use Perl::Critic;
 
 # common P::C testing tools

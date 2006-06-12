@@ -29,10 +29,12 @@ sub import {
 
     my ( $class, %args ) = @_;
     $NAMESPACE = $args{-namespace} || 'Perl::Critic::Policy';
+    my @search = $args{-test} ? grep {m/\bblib\b/xms} @INC : ();
 
     eval {
         require Module::Pluggable;
-        Module::Pluggable->import( search_path => $NAMESPACE, require => 1);
+        Module::Pluggable->import( search_path => $NAMESPACE, require => 1,
+                                   @search ? (search_dirs => \@search) : () );
         @SITE_POLICIES = plugins();  #Exported by  Module::Pluggable
     };
 
@@ -79,6 +81,13 @@ sub new {
 
         #Start by assuming the policy should be loaded
         my $load_me = $TRUE;
+
+        #Don't load policy if it does not comply with the current API
+        if ( !$policy_long->can('default_severity') || !$policy_long->can('applies_to') ) {
+            warn "Policy $policy_short does not comply with the current API, skipping";
+            $load_me = $FALSE;
+            next; # don't perform any other tests.  This one trumps the rest
+        }
 
         #Don't load policy if it is negated in the profile
         if ( exists $profile_ref->{"-$policy_short"} || exists $profile_ref->{"-$policy_long"} ) {
