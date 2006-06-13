@@ -33,7 +33,8 @@ sub import {
 
     eval {
         require Module::Pluggable;
-        Module::Pluggable->import( search_path => $NAMESPACE, require => 1,
+        Module::Pluggable->import( search_path => $NAMESPACE,
+                                   require => 1, inner => 0,
                                    @search ? (search_dirs => \@search) : () );
         @SITE_POLICIES = plugins();  #Exported by  Module::Pluggable
     };
@@ -284,7 +285,7 @@ sub site_policies {
     return @SITE_POLICIES;
 }
 
-# This list must be in alphabetic order for the Config tests to pass
+# This list should be in alphabetic order but it's no longer critical
 sub native_policies {
     return qw(
       Perl::Critic::Policy::BuiltinFunctions::ProhibitLvalueSubstr
