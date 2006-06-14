@@ -3,16 +3,23 @@
 #     $Date$
 #   $Author$
 # $Revision$
-########################################################################
+#######################################################################
 
-[0.17]  Released on ????????
+[0.17]  Released on 20060613
 
      Bug Fixes:
-     Fixed bug in no-critic pragma parser.
+     * 19836: Perl-Critic0.16 fails tests during install.  This was
+       caused by a bug in version 3.01 of Module::Pluggable.  See
+       http://rt.cpan.org/Ticket/Display.html?id=19857 for details.
+     * Fixed bug in no-critic pragma parser.
 
      New Policies:
      * ValuesAndExpressions::ProhibitEscapedCharacters
      * BuiltinFunctions::RequireSimpleSortBlock
+
+     Enhancements:
+     * Perl::Critic can export critique() as a static function.  This
+       may appeal to folks who dislike the object-oriented interface.
 
 [0.16]  Released on 20060514
 
