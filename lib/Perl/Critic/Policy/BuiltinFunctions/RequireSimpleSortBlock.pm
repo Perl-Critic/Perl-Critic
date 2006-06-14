@@ -40,7 +40,7 @@ sub violates {
     return if !$arg || !$arg->isa('PPI::Structure::Block');
 
     # If we get here, we found a sort with a block as the first arg
-    return if (1 >= $arg->children);
+    return if ( 1 >= $arg->schildren() );
 
     # more than one child statements
     my $sev = $self->get_severity();

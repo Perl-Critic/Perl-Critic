@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 29;
+use Test::More tests => 30;
 use Perl::Critic;
 
 # common P::C testing tools
@@ -307,6 +307,20 @@ sort @list;
 sort {$a cmp $b;} @list;
 sort {$a->[0] <=> $b->[0] && $a->[1] <=> $b->[1]} @list;
 sort {bar($a,$b)} @list;
+END_PERL
+
+$policy = 'BuiltinFunctions::RequireSimpleSortBlock';
+is( pcritique($policy, \$code), 0, $policy );
+
+#----------------------------------------------------------------
+# These are things I found in my Perl that caused some false-
+# positives because they have some extra whitespace in the block.
+
+$code = <<'END_PERL';
+sort { $a->[2] cmp $b->[2] } @dl;
+sort { $a->[0] <=> $b->[0] } @failed;
+sort{ $isopen{$a}->[0] <=> $isopen{$b}->[0] } @list;
+sort { -M $b <=> -M $a} @entries;
 END_PERL
 
 $policy = 'BuiltinFunctions::RequireSimpleSortBlock';
