@@ -675,8 +675,9 @@ and then start another comment.  For example:
 
 Starting in version 0.14, the interface to L<Perl::Critic::Violation>
 changed.  This will also break any custom Policy modules that you
-might have written for earlier modules.  See L<DEVELOPER.pod> for an
-up-to-date guide on creating Policy modules.
+might have written for earlier modules.  See
+L<Perl::Critic::DEVELOPER> for an up-to-date guide on creating Policy
+modules.
 
 The notion of "priority" was also replaced with "severity" in version
 0.14.  Consequently, the default behavior of Perl::Critic is to only
@@ -694,8 +695,8 @@ rewritten so that only one traversal of the PPI document tree is
 required.  Unfortunately, this will break any custom Policy modules
 that you might have written for earlier versions.  Converting your
 policies to work with the new version is pretty easy and actually
-results in cleaner code.  See L<DEVELOPER.pod> for an up-to-date guide
-on creating Policy modules.
+results in cleaner code.  See L<Perl::Critic::DEVELOPER> for an
+up-to-date guide on creating Policy modules.
 
 =head1 THE L<Perl::Critic> PHILOSOPHY
 
