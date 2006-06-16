@@ -9,7 +9,7 @@
 
 =head1 NAME
 
-DEVELOPER - How to make new Perl::Critic::Policy modules
+Perl::Critic::DEVELOPER - How to make new Perl::Critic::Policy modules
 
 =head1 DESCRIPTION
 
@@ -195,13 +195,13 @@ violation.  And that's all there is to it!
 
   1;
 
-One last thing -- When you import Perl::Critic::Violation, it extracts
+One last thing -- When you import L<Perl::Critic::Violation>, it extracts
 the DESCRIPTION section from the POD in your Policy module.  That text
 can displayed in the diagnostic output when the Violations objects are
 stringified.  So please include a DESCRIPTION section in the POD for
 your Policy.  It should succinctly describe the behavior and
 motivation for your Policy and include a few examples of both good and
-bad code.
+bad code.  Here's an example:
 
   =pod
 

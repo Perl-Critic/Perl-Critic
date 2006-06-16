@@ -349,7 +349,7 @@ at L<http://theoryx5.uwinnipeg.ca/ppms/>.
 
 =over 8
 
-=item C<new( -profile =E<gt> $FILE, -severity =E<gt> $N, -include =E<gt> \@PATTERNS, -exclude =E<gt> \@PATTERNS, -top => N, -force =E<gt> 1 )>
+=item C<< new( -profile => $FILE, -severity => $N, -include => \@PATTERNS, -exclude => \@PATTERNS, -top => N, -force => 1 ) >>
 
 Returns a reference to a new Perl::Critic object.  Most arguments are
 just passed directly into L<Perl::Critic::Config>, but I have described
@@ -478,6 +478,9 @@ method.  Here are some examples:
   # Use custom parameters...
   @violations = critique( {-severity => 2}, $some_file );
 
+  # As a one-liner
+  %> perl -MPerl::Critic=critique -e 'print critique(shift)' some_file.pm
+
 None of the other object-methods are currently supported as static
 functions.  Sorry.
 
@@ -486,7 +489,7 @@ functions.  Sorry.
 The default configuration file is called F<.perlcriticrc>.
 Perl::Critic will look for this file in the current directory first,
 and then in your home directory.  Alternatively, you can set the
-PERLCRITIC environment variable to explicitly point to a different
+C<PERLCRITIC> environment variable to explicitly point to a different
 file in another location.  If none of these files exist, and the
 C<-profile> option is not given to the constructor, then all the
 modules that are found in the Perl::Critic::Policy namespace will be
@@ -579,7 +582,7 @@ modules themselves.
 
 Perl::Critic takes a hard-line approach to your code: either you
 comply or you don't.  In the real world, it is not always practical
-(or even possible) to fully comply with coding standards.  In such
+(nor even possible) to fully comply with coding standards.  In such
 cases, it is wise to show that you are knowingly violating the
 standards and that you have a Damn Good Reason (DGR) for doing so.
 
@@ -612,7 +615,7 @@ ignore the C<"## no critic"> comments, use the C<-force> option.
 
 A bare C<"## no critic"> comment disables all the active Policies.  If
 you wish to disable only specific Policies, add a list of Policy names
-as arguments just as you would for the C<"no strict"> or C<"no
+as arguments, just as you would for the C<"no strict"> or C<"no
 warnings"> pragmas.  For example, this would disable the
 C<ProhibitEmptyQuotes> and C<ProhibitPostfixControls> policies until
 the end of the block or until the next C<"## use critic"> comment
@@ -634,7 +637,7 @@ family of Policies in one shot like this:
   sub camelHumpSub {}        #Now exempt from NamingConventions::ProhibitMixedCaseSubs
 
 The argument list must be enclosed in parens and must contain one or
-more comma-separated barewords (e.g. don't use quotes).  The <"## no
+more comma-separated barewords (e.g. don't use quotes).  The C<"## no
 critic"> pragmas can be nested, and Policies named by an inner pragma
 will be disabled along with those already disabled an outer pragma.
 
@@ -647,7 +650,7 @@ resorting to this feature.
 
 =head1 IMPORTANT CHANGES
 
-Perl-Critic is evolving rapidly.  As such, some of the interfaces have
+Perl-Critic is evolving rapidly, so some of the interfaces have
 changed in ways that are not backward-compatible.  If you have been
 using an older version of Perl-Critic and/or you have been developing
 custom Policy modules, please read this section carefully.
@@ -683,9 +686,9 @@ The notion of "priority" was also replaced with "severity" in version
 0.14.  Consequently, the default behavior of Perl::Critic is to only
 load the most "severe" Policy modules, rather than loading all of
 them.  This decision was based on user-feedback suggesting that
-Perl-Critic should be less "critical" for new users, and should steer
-them toward gradually increasing the strictness as they adopt better
-coding practices.
+Perl-Critic should be less critical for new users, and should steer
+them toward gradually increasing the strictness as they progressively
+adopt better coding practices.
 
 
 =head2 VERSION 0.11
@@ -720,7 +723,7 @@ L<Perl::Critic::DEVELOPER> file included in this distribution for a
 step-by-step demonstration of how to create new Policy modules.
 
 If you develop any new Policy modules, feel free to send them to
-<thaljef@cpan.org> and I'll be happy to put them into the Perl::Critic
+C<thaljef@cpan.org> and I'll be happy to put them into the Perl::Critic
 distribution.  Or if you'd like to work on the Perl::Critic project
 directly, check out our repository at L<http://perlcritic.tigris.org>.
 To subscribe to our mailing list, send a message to
@@ -758,8 +761,6 @@ testing:
 L<Test::Pod>
 
 L<Test::Pod::Coverage>
-
-L<Test::Perl::Critic>
 
 =head1 BUGS
 

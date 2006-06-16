@@ -394,7 +394,7 @@ information.
 
 =item -5 | -4 | -3 | -2 | -1
 
-These are shortcuts for setting the C<-severity> option.  For example
+These are shortcuts for setting the C<-severity> option.  For example,
 C<"-4"> is equivalent to C<"-severity 4">.  If multiple shortcuts are
 specified, then the lowest one wins.  If an explicit C<-severity>
 option is given, then all shortcut options are silently ignored.  NOTE:
@@ -449,7 +449,7 @@ matches both patterns.
 
 =item -force
 
-Directs C<perlcritic> to ignore the magical C<## no critic>
+Directs C<perlcritic> to ignore the magical C<"## no critic">
 pseudo-pragmas in the source code. See L<"BENDING THE RULES"> for more
 information.
 
@@ -536,14 +536,14 @@ Displays the version number of C<perlcritic> and exits.
 =head1 CONFIGURATION
 
 The default configuration file is called F<.perlcriticrc>.
-Perl::Critic::Config will look for this file in the current directory
-first, and then in your home directory.  Alternatively, you can set
-the C<PERLCRITIC> environment variable to explicitly point to a
-different file in another location.  If none of these files exist, and
-the C<-profile> option is not given on the command line, then all
+L<Perl::Critic::Config> will look for this file in the current
+directory first, and then in your home directory.  Alternatively, you
+can set the C<PERLCRITIC> environment variable to explicitly point to
+a different file in another location.  If none of these files exist,
+and the C<-profile> option is not given on the command line, then all
 Policies will be loaded with their default configuration.
 
-The format of the configuration file is an series of INI-style
+The format of the configuration file is a series of INI-style
 sections that contain key-value pairs separated by '='. Comments
 should start with '#' and can be placed on a separate line or after
 the name-value pairs if you desire.  The general recipe is a series of
@@ -684,7 +684,7 @@ family of Policies in one shot like this:
   sub camelHumpSub {}        #Now exempt from NamingConventions::ProhibitMixedCaseSubs
 
 The argument list must be enclosed in parens and must contain one or
-more comma-separated barewords (i.e. don't use quotes).  The <"## no
+more comma-separated barewords (i.e. don't use quotes).  The C<"## no
 critic"> pragmas can be nested, and Policies named by an inner pragma
 will be disabled along with those already disabled an outer pragma.
 
@@ -822,7 +822,7 @@ L<Perl::Critic::DEVELOPER> file included in this distribution for a
 step-by-step demonstration of how to create new Policy modules.
 
 If you develop any new Policy modules, feel free to send them to
-<thaljef@cpan.org> and I'll be happy to put them into the Perl::Critic
+C<thaljef@cpan.org> and I'll be happy to put them into the Perl::Critic
 distribution.  Or if you'd like to work on the Perl::Critic project
 directly, check out our repository at L<http://perlcritic.tigris.org>.
 To subscribe to our mailing list, send a message to
