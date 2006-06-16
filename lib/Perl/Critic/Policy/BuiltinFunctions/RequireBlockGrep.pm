@@ -7,6 +7,10 @@
 
 package Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep;
 
+# DEVELOPER NOTE: this module is used as an example in DEVELOPER.pod.
+# If you make changes in here, please reflect those changes in the
+# examples.
+
 use strict;
 use warnings;
 use Perl::Critic::Utils;

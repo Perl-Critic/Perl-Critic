@@ -81,7 +81,7 @@ Perl::Critic to be a hypocrite, now do we?
   use base 'Perl::Critic::Policy';
 
 This following is a pretty standard way to declare a version number
-for you module, and it's also required for self-compliance.  But the
+for your module, and it's also required for self-compliance.  But the
 C<ProhibitStringyEval> policy doesn't approve of using C<eval> in this
 manner, so we attach the "## no critic" comments to tell Perl::Critic
 to overlook this line of code.
@@ -99,50 +99,61 @@ page numbers in the "Perl Best Practices" book.
   my $desc = q{Expression form of 'grep'};
   my $expl = [169];
 
-Here we define the C<default_severity()> method, which should return a
+Most policies don't need to override the new() method provided by
+L<Perl::Critic::Policy>.  However, if your policy is configurable via
+F<.perlcriticrc> you will need to override the constructor to examine
+the C<%args> values.  See
+L<Perl::Critic::Policy::ControlStructures::ProhibitCascadingIfElse>
+for a simple example and
+L<Perl::Critic::Policy::Documentation::RequirePodSections> for a more
+complex example.
+
+Next we define the C<default_severity()> method, which should return a
 scalar value indicating the severity of violating this Policy.
 Severity values range from 1 to 5, where 5 is the "most severe."  In
 general, level 5 is reserved for things that are frequently misused
-and/or cause bugs.  Level 1 is for things that are highly subject and
+and/or cause bugs.  Level 1 is for things that are highly subjective or
 purely cosmetic.  The L<Perl::Critic::Utils> package exports several
 severity constants that you can use here.
 
   sub default_severity  { return $SEVERITY_HIGH }
 
-Next we define which types of PPI objects this Policy should be
-invoked on.  The applies_to() method returns a list of PPI package
-names.  As Perl::Critic traverses the document, it will call the
-C<violates()> method from this module whenever it encounters one of the
-PPI types that are given here.  In this case, we just want to test
-calls to C<grep>.  Since the token "grep" is a L<PPI::Token::Word>, we
-return that name from the C<applies_to()> method.
+Next we indicate what parts of the code this policy will analyze, like
+statements or variables or conditionals or POD.  These parts are
+specified as PPI classes like L<PPI::Statement>,
+L<PPI::Token::Symbol>, L<PPI::Structure::Conditional> or
+L<PPI::Token::Pod> respectively.  The applies_to() method returns a
+list of PPI package names.  (You can get that list of package names
+via C<perldoc PPI>.)  As Perl::Critic traverses the document, it will
+call the C<violates()> method from this module whenever it encounters
+one of the PPI types that are given here.  In this case, we just want
+to test calls to C<grep>.  Since the token "grep" is a
+L<PPI::Token::Word>, we return that name from the C<applies_to()>
+method.
 
   sub applies_to { return 'PPI::Token::Word' }
 
-Until this point, we've been writing static methods.  However, we
-B<are> writing an object class.  L<Perl::Critic::Policy> provides a
-default constructor that simply returns a blessed hash reference.  So
-in most cases, you don't need to write your own constructor.  But if
-your Policy requires any special parameters, you can write a custom
-constructor that accepts those parameters.
+Note that applies_to() is purely a performance enhancement -- if you
+want your policy to analyze every L<PPI::Element>, that's just fine.
 
 Now comes the interesting part.  The C<violates()> method does all the
 work.  It is always called with 2 arguments: a reference to the
-current node or "element" that Perl::Critic is traversing, and a
-reference to the entire PPI document. [And since this is an object
+current PPI element instance that Perl::Critic is traversing, and a
+reference to the entire PPI document. [And since this is an instance
 method, there will be an additional argument that is a reference to
 this object (C<$self>), but you already knew that!]
 
   sub violates {
       my ( $self, $elem, $doc ) = @_;
 
-Next, we do some tests to make sure we have the right "type" of
-element.  We know it will be a L<PPI::Token::Word> because that's what
-we declared back in the C<applies_to()> method.  However, we didn't
-specify exactly which "word" we were looking for.  Evaluating a PPI
-element in a string context returns the literal form of the code.  So
-we make sure that this PPI::Token::Word is, in fact, "grep".  If it's
-not, then we don't' need to bother examining it.
+The violates() method then often performs some tests to make sure we
+have the right "type" of element.  In our example, we know that the
+element will be a L<PPI::Token::Word> because that's what we declared
+back in the C<applies_to()> method.  However, we didn't specify
+exactly which "word" we were looking for.  Evaluating a PPI element in
+a string context returns the literal form of the code.  So we make
+sure that this PPI::Token::Word is, in fact, "grep".  If it's not,
+then we don't' need to bother examining it.
 
     return if !($elem eq 'grep');
 
@@ -156,8 +167,9 @@ the right context.
 
     return if is_method_call($elem);
     return if is_hash_key($elem);
+    return if is_subroutine_name($elem);
 
-Now that we know this element is a function call to C<grep>, we can
+Now that we know this element is a call to the C<grep> function, we can
 look at the nearby elements to see what kind of arguments are being
 passed to it.  Every PPI element is linked to its siblings, parent,
 and children (if it has any).  Since those siblings could just be
