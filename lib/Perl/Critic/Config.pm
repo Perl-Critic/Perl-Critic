@@ -144,7 +144,7 @@ sub add_policy {
 
 
     if ($EVAL_ERROR) {
-        carp qq{Failed to create polcy '$policy': $EVAL_ERROR};
+        carp qq{Failed to create policy '$policy': $EVAL_ERROR};
         return;  #Not fatal!
     }
 
