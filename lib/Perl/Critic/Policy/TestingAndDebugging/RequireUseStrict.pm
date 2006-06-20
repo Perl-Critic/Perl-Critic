@@ -44,6 +44,8 @@ sub violates {
 
     my @viols = ();
     for my $stmnt ( @{ $stmnts_ref } ) {
+        last if $stmnt->isa('PPI::Statement::End');
+        last if $stmnt->isa('PPI::Statement::Data');
         my $stmnt_line = $stmnt->location()->[0];
         if ( (! defined $strict_line) || ($stmnt_line < $strict_line) ) {
             my $sev = $self->get_severity();

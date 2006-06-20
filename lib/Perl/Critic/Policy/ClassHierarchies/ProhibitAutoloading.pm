@@ -18,7 +18,7 @@ $VERSION = eval $VERSION; ## no critic
 
 #--------------------------------------------------------------------------
 
-my $desc = q{ AUTOLOAD method declared };
+my $desc = q{AUTOLOAD method declared};
 my $expl = [ 393 ];
 
 #--------------------------------------------------------------------------

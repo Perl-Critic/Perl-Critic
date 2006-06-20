@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 26;
+use Test::More tests => 30;
 use Perl::Critic;
 
 # common P::C testing tools
@@ -48,6 +48,44 @@ END_PERL
 
 $policy = 'TestingAndDebugging::RequireUseWarnings';
 is( pcritique($policy, \$code), 1, 'no warnings at all');
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+$foo = $bar;
+
+#Should not find the rest of these
+
+__END__
+
+=head1 NAME
+
+Foo - A Foo factory class
+
+=cut
+
+END_PERL
+
+$policy = 'TestingAndDebugging::RequireUseWarnings';
+is( pcritique($policy, \$code), 1, 'no warnings at all, w/ END');
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+$foo = $bar;
+
+#Should not find the rest of these
+
+__DATA__
+
+Fred
+Barney
+Wilma
+
+END_PERL
+
+$policy = 'TestingAndDebugging::RequireUseWarnings';
+is( pcritique($policy, \$code), 1, 'no warnings at all, w/ DATA');
 
 #----------------------------------------------------------------
 
@@ -109,6 +147,44 @@ END_PERL
 
 $policy = 'TestingAndDebugging::RequireUseStrict';
 is( pcritique($policy, \$code), 1, 'no strict at all');
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+$foo = $bar;
+
+#Should not find the rest of these
+
+__END__
+
+=head1 NAME
+
+Foo - A Foo factory class
+
+=cut
+
+END_PERL
+
+$policy = 'TestingAndDebugging::RequireUseStrict';
+is( pcritique($policy, \$code), 1, 'no strict at all, w/ END');
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+$foo = $bar;
+
+#Should not find the rest of these
+
+__DATA__
+
+Fred
+Barney
+Wilma
+
+END_PERL
+
+$policy = 'TestingAndDebugging::RequireUseStrict';
+is( pcritique($policy, \$code), 1, 'no strict at all, w/ DATA');
 
 #----------------------------------------------------------------
 
