@@ -20,7 +20,7 @@ $VERSION = eval $VERSION;    ## no critic
 
 my $leading_rx = qr{\A [+-]? (?: 0+ _* )+ [1-9]}mx;
 my $desc       = q{Integer with leading zeros};
-my $expl       = [ 55 ];
+my $expl       = [ 58 ];
 
 #---------------------------------------------------------------------------
 
