@@ -556,10 +556,10 @@ A simple configuration might look like this:
     #--------------------------------------------------------------
     # I think these are really important, so always load them
 
-    [TestingAndDebugging::RequirePackageStricture]
+    [TestingAndDebugging::RequireUseStrict]
     severity = 5
 
-    [TestingAndDebugging::RequirePackageWarnings]
+    [TestingAndDebugging::RequireUseWarnings]
     severity = 5
 
     #--------------------------------------------------------------

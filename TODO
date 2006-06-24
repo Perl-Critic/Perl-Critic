@@ -11,6 +11,7 @@ NEW FEATURES:
 
 BUGS/LIMITATIONS:
 
+- Errors in .perlcriticrc are silent
 - Modules::RequireVersionVar
   - Doesn't enforce three-part versions
 - NamingConventions::ProhibitAmbiguousNames
