@@ -68,9 +68,9 @@ doesn't give compile-time warnings.
 
 =head1 SEE ALSO
 
-L<Perl::Critic::Policy::ControlStrucutres::ProhibitStringyGrep>
+L<Perl::Critic::Policy::ControlStrucutres::RequireBlockGrep>
 
-L<Perl::Critic::Policy::ControlStrucutres::ProhibitStringyMap>
+L<Perl::Critic::Policy::ControlStrucutres::RequireBlockMap>
 
 =head1 AUTHOR
 
