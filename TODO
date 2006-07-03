@@ -96,6 +96,11 @@ NON-PBP POLICIES WANTED:
   Forbid quotes around hash keys, unless they are really needed.
   Suggested by Adam Kennedy
   Low severity
+- Miscellanea::B::Lint
+  Create a compatibility layer for the B::Lint code analyzer
+  Make it very clear that this runs code and thus is a security hole
+- CodingStyle::ProhibitFunctionalNew
+  Good: "Foo::Bar->new", Bad: "new Foo::Bar"
 
 REFACTORINGS and ENHANCEMENTS:
 
