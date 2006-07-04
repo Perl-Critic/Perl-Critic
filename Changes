@@ -5,6 +5,22 @@
 # $Revision$
 #######################################################################
 
+[0.18]  Released on ????????
+
+     Bug Fixes:
+     * 14855: Home discovery is dangerously naive.
+     * 20060: Incorrect page numbers in ProhibitLeadingZeros
+       and RequireNumberSeparator policies.
+     * 20068: .perlrc file - inconsistent documentation
+     * 20254: "use vars qw(@EXPORT_OK)" not recognized
+
+     Enhancements:
+     * If File::HomeDir is available, we use it to locate the
+       .perlcriticrc file.  This should help make Perl::Critic
+       more portable to Win32 platforms.  If File::HomeDir is
+       not installed, we resort to looking at the usual
+       environment variables.
+
 [0.17]  Released on 20060613
 
      Bug Fixes:
