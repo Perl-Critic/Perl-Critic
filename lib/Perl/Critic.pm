@@ -21,7 +21,7 @@ use PPI;
 
 #----------------------------------------------------------------------------
 
-our $VERSION = '0.17';
+our $VERSION = '0.18';
 $VERSION = eval $VERSION;    ## no critic;
 
 our @EXPORT_OK = qw(&critique);
@@ -345,6 +345,12 @@ pragma.
 Win32 and ActivePerl users can find PPM distributions of Perl::Critic
 at L<http://theoryx5.uwinnipeg.ca/ppms/>.
 
+If you'd like to try L<Perl::Critic> before you install it, there is a
+web-service available at L<http://perlcritic.com>.  The web-service
+does not yet support all the configuration features that are available
+in the native Perl::Critic API, but it should give you a good idea
+of what it does.
+
 =head1 CONSTRUCTOR
 
 =over 8
@@ -431,7 +437,7 @@ violation of the loaded Policies.  The list is sorted in the order
 that the Violations appear in the code.  If there are no violations,
 this method returns an empty list.
 
-=item C<add_policy( -policy =E<gt> $policy_name, -config =E<gt> \%config_hash )>
+=item C<< add_policy( -policy => $policy_name, -config => \%config_hash ) >>
 
 Creates a Policy object and loads it into this Critic.  If the object
 cannot be instantiated, it will throw a warning and return a false

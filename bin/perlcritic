@@ -18,7 +18,7 @@ use List::Util qw(first);
 use English qw(-no_match_vars);
 use Perl::Critic::Utils;
 
-our $VERSION = 0.17;
+our $VERSION = 0.18;
 $VERSION = eval $VERSION;  ## no critic
 
 #----------------------------------------------------------------------------
@@ -325,6 +325,12 @@ of some flexibility) see the L<criticism> pragma.
 
 Win32 and ActivePerl users can find PPM distributions of Perl::Critic
 at L<http://theoryx5.uwinnipeg.ca/ppms/>.
+
+If you'd like to try L<Perl::Critic> before you install it, there is a
+web-service available at L<http://perlcritic.com>.  The web-service
+does not yet support all the configuration features that are available
+in the native Perl::Critic API, but it should give you a good idea
+of what it does.
 
 =head1 USAGE EXAMPLES
 
