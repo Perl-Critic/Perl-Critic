@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 46;
+use Test::More tests => 48;
 use Perl::Critic::Config;
 use Perl::Critic;
 
@@ -499,4 +499,24 @@ END_PERL
 $policy = 'Modules::ProhibitAutomaticExportation';
 is( pcritique($policy, \$code), 0, $policy);
 
+#----------------------------------------------------------------
 
+$code = <<'END_PERL';
+use base 'Exporter';
+use vars qw(@EXPORT_OK);
+@EXPORT_OK = qw(foo bar);
+END_PERL
+
+$policy = 'Modules::ProhibitAutomaticExportation';
+is( pcritique($policy, \$code), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+use base 'Exporter';
+use vars qw(@EXPORT_TAGS);
+%EXPORT_TAGS = ( foo => [ qw(baz bar) ] );
+END_PERL
+
+$policy = 'Modules::ProhibitAutomaticExportation';
+is( pcritique($policy, \$code), 0, $policy);

@@ -46,7 +46,7 @@ sub violates {
 sub _uses_exporter {
     my ($doc) = @_;
     my $includes_ref = $doc->find('PPI::Statement::Include') || return;
-    #This covers both C<use 'Exporter';> and C<use base 'Exporter';>
+    #This covers both C<use Exporter;> and C<use base 'Exporter';>
     return scalar grep { m/ \b Exporter \b/mx }  @{ $includes_ref };
 }
 
@@ -73,7 +73,7 @@ sub _vars_EXPORT {
     my ($doc, $elem) = @_;
     $elem->isa('PPI::Statement::Include') || return 0;
     $elem->pragma() eq 'vars' || return 0;
-    return $elem =~ m{ \@EXPORT }mx; #Crude, but usually works
+    return $elem =~ m{ \@EXPORT \b }mx; #Crude, but usually works
 }
 
 #------------------
