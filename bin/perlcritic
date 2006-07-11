@@ -171,6 +171,12 @@ sub get_input {
         # Reading code from STDIN.  All the code is slurped into
         # a string.  PPI will barf if the string is just whitespace.
         my $code_string = do { local $RS = undef; <STDIN> };
+
+        # Notice if STDIN was closed (pipe error, etc)
+        if ( ! defined $code_string ) {
+            $code_string = q{};
+        }
+
         $code_string =~ m{ \S+ }mx || die qq{Nothing to critique.\n};
         return \$code_string;    #Convert to SCALAR ref for PPI
     }
@@ -216,7 +222,10 @@ sub render_report {
 
 
     if( ! @violations ){
-        print "$file source OK\n";
+        if ( ! ref $file ) {
+            print "$file ";
+        }
+        print "source OK\n";
         return;
     }
 
