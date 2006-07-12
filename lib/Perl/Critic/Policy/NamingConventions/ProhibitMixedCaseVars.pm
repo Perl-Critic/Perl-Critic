@@ -42,14 +42,14 @@ sub violates {
 
 sub _has_mixed_case_vars {
     my $elem = shift;
-    for my $var ( $elem->variables() ) {
+    for my $variable_name ( $elem->variables() ) {
 
         #Variables with fully qualified package names are exempt
         #because we can't really be responsible for symbols that
         #are defined in other packages.
 
-        next if $elem->type() eq 'local' && $var =~ $package_rx;
-        return 1 if $var =~ $mixed_rx;
+        next if $elem->type() eq 'local' && $variable_name =~ $package_rx;
+        return 1 if $variable_name =~ $mixed_rx;
     }
     return 0;
 }
