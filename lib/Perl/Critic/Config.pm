@@ -22,6 +22,7 @@ $VERSION = eval $VERSION;    ## no critic
 # Globals.  Ick!
 my $NAMESPACE = $EMPTY;
 my @SITE_POLICIES = ();
+my $TEST_MODE = 0;
 
 #-------------------------------------------------------------------------
 
@@ -29,22 +30,27 @@ sub import {
 
     my ( $class, %args ) = @_;
     $NAMESPACE = $args{-namespace} || 'Perl::Critic::Policy';
-    my @search = $args{-test} ? grep {m/\bblib\b/xms} @INC : ();
+    $TEST_MODE ||= $args{-test};
 
     eval {
         require Module::Pluggable;
         Module::Pluggable->import( search_path => $NAMESPACE,
-                                   require => 1, inner => 0,
-                                   @search ? (search_dirs => \@search) : () );
+                                   require => 1, inner => 0 );
         @SITE_POLICIES = plugins();  #Exported by  Module::Pluggable
     };
-
 
     if ( $EVAL_ERROR ) {
         croak qq{Can't load Policies from namespace '$NAMESPACE': $EVAL_ERROR};
     }
     elsif ( ! @SITE_POLICIES ) {
         carp qq{No Policies found in namespace '$NAMESPACE'};
+    }
+
+    # In test mode, only load native policies, not third-party ones
+    if ( $TEST_MODE && grep {m/\bblib\b/xms} @INC ) {
+        require File::Spec;
+        my %files = map { $_ => File::Spec->catdir(split m/::/xms, $_) . '.pm' } @SITE_POLICIES;
+        @SITE_POLICIES = grep { $INC{$files{$_}} && $INC{$files{$_}} =~ m/\bblib\b/xms } @SITE_POLICIES;
     }
 
     return 1;

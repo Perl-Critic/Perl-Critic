@@ -10,7 +10,7 @@ use warnings;
 use Test::More tests => 51;
 use List::MoreUtils qw(all any none);
 use Perl::Critic::Utils;
-use Perl::Critic::Config -test => 1;
+use Perl::Critic::Config (-test => 1);
 use Perl::Critic;
 
 # common P::C testing tools
@@ -68,7 +68,7 @@ for my $severity ($SEVERITY_LOWEST .. $SEVERITY_HIGHEST) {
 
 SKIP:
 {
-    skip('Third-party policies break these tests', 6) if ($have_third_party_policies);
+    #skip('Third-party policies break these tests', 6) if ($have_third_party_policies);
     $profile = "$samples_dir/perlcriticrc.none";
     for my $severity (undef, $SEVERITY_LOWEST .. $SEVERITY_HIGHEST) {
         my $c = Perl::Critic->new( -profile => $profile, -severity => $severity);
@@ -86,7 +86,7 @@ $last_policy_count = 0;
 $profile = "$samples_dir/perlcriticrc.levels";
 SKIP:
 {
-    skip('Third-party policies break these tests', 4) if ($have_third_party_policies);
+    #skip('Third-party policies break these tests', 4) if ($have_third_party_policies);
     for my $severity ( reverse $SEVERITY_LOWEST+1 .. $SEVERITY_HIGHEST ) {
         my $c = Perl::Critic->new( -profile => $profile, -severity => $severity);
         my $policy_count = scalar @{ $c->policies };
@@ -98,7 +98,7 @@ SKIP:
 
 SKIP:
 {
-    skip('Third-party policies break these tests', 1) if ($have_third_party_policies);
+    #skip('Third-party policies break these tests', 1) if ($have_third_party_policies);
     my $c = Perl::Critic->new( -profile => $profile, -severity => $SEVERITY_LOWEST);
     my $policy_count = scalar @{ $c->policies };
     cmp_ok( $policy_count, '>=', ($SEVERITY_HIGHEST * 10), 'count highest severity');

@@ -8,6 +8,7 @@
 use strict;
 use warnings;
 use Test::More;
+use Perl::Critic::Config (-test => 1);
 
 eval {
     require Test::Perl::Critic;
