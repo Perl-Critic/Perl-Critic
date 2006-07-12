@@ -289,7 +289,7 @@ sub _find_home_dir {
     #Check usual environment vars
     for my $var (qw(HOME USERPROFILE HOMESHARE)) {
         next if ! defined $ENV{$var};
-        return $var if -d $var;
+        return $ENV{$var} if -d $ENV{$var};
     }
 
     #No home directory defined
