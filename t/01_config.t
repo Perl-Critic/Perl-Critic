@@ -84,15 +84,21 @@ SKIP:
 
 $last_policy_count = 0;
 $profile = "$samples_dir/perlcriticrc.levels";
-for my $severity ( reverse $SEVERITY_LOWEST+1 .. $SEVERITY_HIGHEST ) {
-    my $c = Perl::Critic->new( -profile => $profile, -severity => $severity);
-    my $policy_count = scalar @{ $c->policies };
-    is( $policy_count, ($SEVERITY_HIGHEST - $severity + 1) * 10, 'severity levels' );
+SKIP:
+{
+    skip('Third-party policies break these tests', 4) if ($have_third_party_policies);
+    for my $severity ( reverse $SEVERITY_LOWEST+1 .. $SEVERITY_HIGHEST ) {
+        my $c = Perl::Critic->new( -profile => $profile, -severity => $severity);
+        my $policy_count = scalar @{ $c->policies };
+        is( $policy_count, ($SEVERITY_HIGHEST - $severity + 1) * 10, 'severity levels' );
+    }
 }
 
 #-------
 
+SKIP:
 {
+    skip('Third-party policies break these tests', 1) if ($have_third_party_policies);
     my $c = Perl::Critic->new( -profile => $profile, -severity => $SEVERITY_LOWEST);
     my $policy_count = scalar @{ $c->policies };
     cmp_ok( $policy_count, '>=', ($SEVERITY_HIGHEST * 10), 'count highest severity');
