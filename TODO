@@ -101,6 +101,10 @@ NON-PBP POLICIES WANTED:
   Make it very clear that this runs code and thus is a security hole
 - CodingStyle::ProhibitFunctionalNew
   Good: "Foo::Bar->new", Bad: "new Foo::Bar"
+- VariablesAndExpressions::RequireConstantVersion (low severity)
+  and
+  VariablesAndExpressions::ProhibitComplexVersion (medium severity)
+  http://rt.cpan.org/Ticket/Display.html?id=20439
 
 REFACTORINGS and ENHANCEMENTS:
 
