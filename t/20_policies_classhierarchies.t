@@ -43,6 +43,7 @@ my $self = bless {}, 'foo';
 my $self = bless( {}, 'foo' );
 my $self = bless [], 'foo';
 my $self = bless( [], 'foo' );
+my $self = bless {} => 'foo';
 END_PERL
 
 $policy = 'ClassHierarchies::ProhibitOneArgBless';
