@@ -92,13 +92,18 @@
 ;;;
 ;;; 0.03
 ;;;   * compile.el integration. This makes for hotlink happiness.
-;;;   * Better sanity when starting the *perlcritic* buffer
+;;;   * Better sanity when starting the *perlcritic* buffer.
 ;;; 0.04
 ;;;   * Removed a roque file-level (setq perlcritic-top 1)
+;;;   * Moved cl library to compile-time.
+;;; 0.05
+;;;   * perlcritic-bin invocation now shown in output.
+;;;   * Fixed indentation
+;;;   * perlcritic-region is now interactive.
 
-;;; Copyright
+;;; Copyright and license
 ;;;
-;;;   Joshua ben Jore <jjore@cpan.org>
+;;;   2006 Joshua ben Jore <jjore@cpan.org>
 ;;;
 ;;;   This program is free software; you can redistribute it and/or
 ;;;   modify it under the same terms as Perl itself
@@ -118,7 +123,7 @@ whether your file can be saved when there are perlcritic warnings.
 This variable is automatically buffer-local and may be overridden on a
 per-file basis with File Variables."
   :type '(radio (const :tag "Require no warnings from perlcritic to save" t)
-        (const :tag "Allow warnings from perlcritic when saving" nil))
+		(const :tag "Allow warnings from perlcritic when saving" nil))
   :group 'perlcritic)
 (make-variable-buffer-local 'perlcritic-pass-required)
 
@@ -130,10 +135,10 @@ is a default for everything in Emacs.
 This variable is automatically buffer-local and may be overridden on a
 per-file basis with File Variables."
   :type '(radio (const :tag "Show only the most severe: 5" 5)
-        (const :tag "4" 4)
-        (const :tag "3" 3)
-        (const :tag "2" 2)
-        (const :tag "Show everything including the least severe: 1" 1))
+		(const :tag "4" 4)
+		(const :tag "3" 3)
+		(const :tag "2" 2)
+		(const :tag "Show everything including the least severe: 1" 1))
   :group 'perlcritic)
 (make-variable-buffer-local 'perlcritic-severity)
 
@@ -148,85 +153,108 @@ per-file basis with File Variables."
 
 
 
-
+; The Emacs Lisp manual says to do this with the cl library.
 (eval-when-compile (require 'cl))
+
 (defun perlcritic ()
   "Returns a either nil or t depending on whether the current buffer passes perlcritic's check."
   (interactive)
   (save-restriction
     (widen)
     (perlcritic-region (point-min) (point-max))))
+
 (defun perlcritic-region (start end)
   "Returns a either nil or t depending on whether the region passes perlcritic's check."
   
-                    ; Kill the *perlcritic* buffer so I can make a new one.
+  (interactive "r")
+
+  ; Kill the perlcritic buffer so I can make a new one.
   (let ((buf (get-buffer "*perlcritic*")))
     (if buf (kill-buffer buf)))
   
   (save-excursion
     (let ((src-buf (current-buffer))
-      (err-buf (get-buffer-create "*perlcritic*")))
+	  (err-buf (get-buffer-create "*perlcritic*")))
       
       (set-buffer src-buf)
-      ; Seriously. Is this the nicest way to call CALL-PROCESS-REGION
-      ; with variadic arguments? This blows!
-      (message "perlcritic...running")
-      (let ((rc (apply 'call-process-region
-               (append (list start end
-                   perlcritic-bin nil
-                   (list err-buf t)
-                   nil)
-             (loop for p in (list (perlcritic-severity)
-                          (perlcritic-top))
-                   unless (null p)
-                   appending p)))))
-    (message "perlcritic...done")
-    
-    (set-buffer err-buf)
-    (goto-char (point-min))
-    (if (and (numberp rc) (zerop rc))
-        (delete-matching-lines "source OK$"))
-    (let ((perlcritic-ok (and (numberp rc)
-                  (zerop rc)
-                  (zerop (buffer-size)))))
-      ; Either clean up or finish setting up my output.
-      (if perlcritic-ok
-          (kill-buffer err-buf)
-        ; Set up this buffer.
-        (set-buffer err-buf)
-        (insert "\n\n")
-        (goto-char (point-min))
-        (compilation-mode "perlcritic")
-        (set (make-local-variable 'perlcritic-buffer) src-buf)
-        (set (make-local-variable 'compilation-error-regexp-alist) perlcritic-compilation-error-regexp-alist)
-        (ad-activate #'compilation-find-file)
-        (display-buffer err-buf)
-        )
-      perlcritic-ok)))))
+      (let ((perlcritic-args (loop for p in (list
+					     ; !!! Add bin/perlcritic parameters here!
+					     (perlcritic-severity)
+					     (perlcritic-top))
+				   unless (null p)
+				   append p)))
+        ; Seriously. Is this the nicest way to call
+        ; CALL-PROCESS-REGION with variadic arguments? This blows!
+        ; (apply FUNCTION (append STATIC-PART DYNAMIC-PART))
+	(message "Perl critic...running")
+	(let ((rc (apply 'call-process-region
+			 (nconc (list start end
+				      perlcritic-bin nil
+				      (list err-buf t)
+				      nil)
+				perlcritic-args))))
+	  (message "Perl critic...done")
+	  
+	  (set-buffer err-buf)
+	  (if (and (numberp rc) (zerop rc))
+	      (delete-matching-lines "source OK$"))
+	  (let ((perlcritic-ok (and (numberp rc)
+				    (zerop rc)
+				    (zerop (buffer-size)))))
+	    ; Either clean up or finish setting up my output.
+	    (if perlcritic-ok
+		(kill-buffer err-buf)
+	      
+	      ; Set up the output buffer now I know it'll be used.  I
+	      ; scooped the guts out of compile-internal. It is
+	      ; CRITICAL that the errors start at least two lines from
+	      ; the top. compile.el normally assumes the first line is
+	      ; an informational `cd somedirectory' command and the
+	      ; second line shows the program's invocation.
+	      (set-buffer err-buf)
+	      (goto-char (point-min))
+	      (insert "\n")
+	      (insert (reduce (lambda (a b) (concat a " " b))
+			      (nconc (list perlcritic-bin)
+				     perlcritic-args))
+		      "\n")
+	      (goto-char (point-min))
+	      (compilation-mode "perlcritic")
+	      (set (make-local-variable 'perlcritic-buffer) src-buf)
+	      (set (make-local-variable 'compilation-error-regexp-alist) perlcritic-compilation-error-regexp-alist)
+	      (ad-activate #'compilation-find-file)
+	      (display-buffer err-buf))
+	    perlcritic-ok))))))
+
 (defun perlcritic-severity ()
   "Returns the appropriate parameters for invoking `perlcritic-bin'
 with the current severity"
   (cond ((stringp perlcritic-severity) (list "-severity" perlcritic-severity))
-    ((numberp perlcritic-severity) (list "-severity" (number-to-string perlcritic-severity)))
-    (t nil)))
+	((numberp perlcritic-severity) (list "-severity" (number-to-string perlcritic-severity)))
+	(t nil)))
 (defun perlcritic-top ()
   "TODO: document this"
   (cond ((stringp perlcritic-top) (list "-top" perlcritic-top))
-    ((numberp perlcritic-top) (list "-top" (number-to-string perlcritic-top)))
-    (t nil)))
+	((numberp perlcritic-top) (list "-top" (number-to-string perlcritic-top)))
+	(t nil)))
 
 
 
-;;; Blubber at line XY, column XY. Blubber. (Severity XY)
-(defvar perlcritic-compilation-error-regexp-alist
-  '(("^[^\n]* at line \\([0-9]+\\), column \\([0-9]+\\).[^\n]*(\\(Severity: [0-9]+\\))$" 3 1 2))
+;;; "Blubber at line XY, column XY. Blubber. (Severity XY)"
+;;;
+;;; compile.el requires that something be the "filename." I've tagged
+;;; the severity with that. It happens to make it get highlighted in
+;;; red. The following advice on COMPILATION-FIND-FILE makes sure that
+;;; the "filename" is getting ignored when perlcritic is using it.
+(defvar perlcritic-compilation-error-regexp-alist 
+  '(("^[^\n]* at line \\([0-9]+\\), column \\([0-9]+\\).[^\n]*(Severity: \\([0-9]+\\))$" 3 1 2))
   "Alist that specified how to match errors in perlcritic output.")
 (defadvice compilation-find-file (around perlcritic-find-file)
   "Lets perlcritic lookup into the buffer we just came from and don't
 require that the perl document exist in a file anywhere."
   (let ((debug-buffer (marker-buffer marker)))
     (if (local-variable-p 'perlcritic-buffer debug-buffer)
-    (setq ad-return-value perlcritic-buffer)
+	(setq ad-return-value perlcritic-buffer)
       ad-do-it)))
     
 
@@ -237,30 +265,32 @@ require that the perl document exist in a file anywhere."
 (defvar perlcritic-mode nil
   "Toggle `perlcritic-mode'")
 (make-variable-buffer-local 'perlcritic-mode)
+
 (defun perlcritic-write-hook ()
   "Check perlcritic during `write-file-hooks' for `perlcritic-mode'"
   (if perlcritic-mode
       (save-excursion
-    (widen)
-    (mark-whole-buffer)
-    (if perlcritic-pass-required
-        (not (perlcritic))
-      nil))
+	(widen)
+	(mark-whole-buffer)
+	(if perlcritic-pass-required
+	    (not (perlcritic))
+	  nil))
     nil))
 (defun perlcritic-mode (&optional arg)
   "Perl::Critic checking minor mode."
   (interactive "P")
   (setq perlcritic-mode
-    (if (null arg)
-        (not perlcritic-mode)
-      (> (prefix-numeric-value arg) 0)))
+	(if (null arg)
+	    (not perlcritic-mode)
+	  (> (prefix-numeric-value arg) 0)))
   (make-local-hook 'write-file-hooks)
   (if perlcritic-mode
       (add-hook 'write-file-hooks 'perlcritic-write-hook)
     (remove-hook 'write-file-hooks 'perlcritic-write-hook)))
 (if (not (assq 'perlcritic-mode minor-mode-alist))
     (setq minor-mode-alist
-      (cons '(perlcritic-mode " Critic")
-        minor-mode-alist)))
+	  (cons '(perlcritic-mode " Critic")
+		minor-mode-alist)))
 
 (provide 'perlcritic)
+
