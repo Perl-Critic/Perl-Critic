@@ -154,10 +154,10 @@ Perl::Critic::Policy::CodeLayout::ProhibitParensWithBuiltins
 
 =head1 DESCRIPTION
 
-Conway suggests that all built-in functions should be called without
-parenthesis around the argument list.  This reduces visual clutter and
+Conway suggests that all built-in functions be called without
+parentheses around the argument list.  This reduces visual clutter and
 disambiguates built-in functions from user functions.  Exceptions are
-made for C<my>, C<local>, and C<our> which require parenthesis when
+made for C<my>, C<local>, and C<our> which require parentheses when
 called with multiple arguments.
 
   open($handle, '>', $filename); #not ok

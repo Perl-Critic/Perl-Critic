@@ -103,9 +103,9 @@ C<m/$module_name/> will be forbidden.  For example:
 would cause all modules that match C<m/Acme::/> to be forbidden.  You
 can add any of the C<imxs> switches to the end of the pattern, but
 beware that your pattern should not contain spaces, lest the parser
-will get confused.
+get confused.
 
-By default, there aren't any prohibited modules (although I can think
+By default, there are no prohibited modules (although I can think
 of a few that should be).
 
 =head1 NOTES

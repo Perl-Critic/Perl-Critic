@@ -72,7 +72,7 @@ Perl::Critic::Policy::ControlStructures::ProhibitCascadingIfElse
 
 Long C<if-elsif> chains are hard to digest, especially if they are
 longer than a single page or screen.  If testing for equality, use a
-hash-lookup instead.  See L<Switch> for another approach.
+hash lookup instead.  See L<Switch> for another approach.
 
   if ($condition1) {         #ok
       $foo = 1;
@@ -93,7 +93,7 @@ hash-lookup instead.  See L<Switch> for another approach.
 =head1 CONSTRUCTOR
 
 This policy accepts an additional key-value pair in the C<new> method.
-The key should be 'max_elsif' and the value should be an integer
+The key should be C<max_elsif> and the value should be an integer
 indicating the maximum number of C<elsif> alternatives to allow.  The
 default is 2.  When using the L<Perl::Critic> engine, these can be
 configured in the F<.perlcriticrc> file like this:

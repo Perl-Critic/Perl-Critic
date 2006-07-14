@@ -52,8 +52,8 @@ Perl::Critic::Policy::BuiltinFunctions::RequireGlobFunction
 
 =head1 DESCRIPTION
 
-Conway discourages the use of the C<E<lt>..E<gt>> construct for globbing, as
-its heavily associated with I/O in most people's minds.  Instead, he recommends
+Conway discourages the use of the C< <..> > construct for globbing, as it is easily
+confused with the angle bracket file input operator.  Instead, he recommends
 the use of the C<glob()> function as it makes it much more obvious what you're
 attempting to do.
 

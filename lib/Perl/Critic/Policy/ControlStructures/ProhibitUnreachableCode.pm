@@ -104,11 +104,17 @@ L<Carp> are also included.
 
 Code is reachable if any of the following conditions are true:
 
-  * Flow-altering statement has a conditional attached to it
-  * Statement is on the right side of an operator C<&&>, C<||>, C<and>, or C<or>.
-  * Code is prefixed with a label (can potentially be reached via C<goto>)
-  * Code is a subroutine
-  *
+=over 4
+
+=item * Flow-altering statement has a conditional attached to it
+
+=item * Statement is on the right side of an operator C<&&>, C<||>, C<and>, or C<or>.
+
+=item * Code is prefixed with a label (can potentially be reached via C<goto>)
+
+=item * Code is a subroutine
+
+=back
 
 =head1 EXAMPLES
 

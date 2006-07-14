@@ -58,7 +58,7 @@ Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalIsa
   print UNIVERSAL::isa($obj, 'Foo::Bar') ? 'yes' : 'no';  #not ok
   print eval { $obj->isa('Foo::Bar') } ? 'yes' : 'no';    #ok
 
-As of Perl 5.9.3, the use of UNIVERSAL::isa as a function has been
+As of Perl 5.9.3, the use of C<UNIVERSAL::isa> as a function has been
 deprecated and the method form is preferred instead.  Formerly, the
 functional form was recommended because it gave valid results even
 when the object was C<undef> or an unblessed scalar.  However, the

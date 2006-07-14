@@ -67,7 +67,7 @@ those tabs are anywhere other than a leading position.  Because
 various applications and devices represent tabs differently, they can
 cause you code to look vastly different to other people.  Any decent
 editor can be configured to expand tabs into spaces.  L<Perl::Tidy>
-also does this for you.  
+also does this for you.
 
 This Policy catches all tabs in your source code, including POD, quotes,
 and HEREDOCS.  However, tabs in a leading position are allowed.  If you want

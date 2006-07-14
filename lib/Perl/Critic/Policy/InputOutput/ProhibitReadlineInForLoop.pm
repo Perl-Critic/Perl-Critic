@@ -54,7 +54,7 @@ Perl::Critic::Policy::InputOutput::ProhibitReadlineInForLoop
 =head1 DESCRIPTION
 
 Using the readline operator in a C<for> or C<foreach> loop is very
-inefficient.  The iteration list of the loop creates a list context,
+slow.  The iteration list of the loop creates a list context,
 which causes the readline operator to read the entire input stream
 before iteration even starts.  Instead, just use a C<while> loop,
 which only reads one line at a time.

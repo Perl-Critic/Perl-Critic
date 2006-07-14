@@ -59,7 +59,7 @@ Perl::Critic::Policy::BuiltinFunctions::ProhibitStringyEval
 
 =head1 DESCRIPTION
 
-The string form of eval is recompiled every time it is executed,
+The string form of C<eval> is recompiled every time it is executed,
 whereas the block form is only compiled once.  Also, the string form
 doesn't give compile-time warnings.
 

@@ -84,7 +84,7 @@ Perl::Critic::Policy::Modules::RequireVersionVar
 
 =head1 DESCRIPTION
 
-Every Perl file (modules, libraries, and scripts) should have a
+Every Perl file (modules, libraries, and programs) should have a
 C<$VERSION> variable.  The C<$VERSION> allows clients to insist on a
 particular revision of your file like this:
 

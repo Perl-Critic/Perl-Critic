@@ -57,9 +57,9 @@ Perl::Critic::Policy::BuiltinFunctions::ProhibitSleepViaSelect
 =head1 DESCRIPTION
 
 Conway discourages the use of C<select()> for performing non-integer
-sleeps.  Although its documented in L<perlfunc>, its something that
-generally requires the reader to RTFM to figure out what C<select()>
-is supposed to be doing.  Instead, Conway recommends that you use the
+sleeps.  Although documented in L<perlfunc>, it's something that
+generally requires the reader to read C<perldoc -f select> to figure out what it should be
+doing.  Instead, Conway recommends that you use the
 C<Time::HiRes> module when you want to sleep.
 
   select undef, undef, undef, 0.25;         # not ok

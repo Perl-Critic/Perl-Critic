@@ -91,11 +91,10 @@ Perl::Critic::Policy::CodeLayout::ProhibitQuotedWordLists
 
 =head1 DESCRIPTION
 
-Conway doesn't mention this, but I think C<qw()> is an underutilized
+Conway doesn't mention this, but I think C<qw()> is an underused
 feature of Perl.  Whenever you need to declare a list of one-word
-literals, the C<qw()> operator is wonderfully concise and saves you
-lots of keystrokes.  And using C<qw()> makes it easy to add to the
-list in the future.
+literals, the C<qw()> operator is wonderfully concise, and makes
+it easy to add to the list in the future.
 
   @list = ('foo', 'bar', 'baz');  #not ok
   @list = qw(foo bar baz);        #ok
@@ -103,7 +102,7 @@ list in the future.
 =head1 CONSTRUCTOR
 
 This Policy accepts an additional key-value pair in the constructor.
-The key must be 'min_elements' and the value is the minimum number of
+The key must be C<min_elements> and the value is the minimum number of
 elements in the list.  Lists with fewer elements will be overlooked by
 this Policy.  The default is 2.  Users of Perl::Critic can configure
 this in their F<.perlcriticrc> file like this:

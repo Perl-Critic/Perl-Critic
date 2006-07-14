@@ -63,7 +63,7 @@ Perl::Critic::Policy::BuiltinFunctions::RequireSimpleSortBlock
 
 Conway advises that sort functions should be simple.  Any complicated
 operations on list elements should be computed and cached (perhaps via
-a Schwartzian Transform) before the sort rather than computed inside
+a Schwartzian Transform) before the sort, rather than computed inside
 the sort block, because the sort block is called C<N log N> times
 instead of just C<N> times.
 

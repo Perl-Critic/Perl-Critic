@@ -59,7 +59,7 @@ Perl::Critic::Policy::BuiltinFunctions::RequireBlockMap
 
 =head1 DESCRIPTION
 
-The expression form of C<grep> and C<map> is awkward and hard to read.
+The expression forms of C<grep> and C<map> are awkward and hard to read.
 Use the block forms instead.
 
   @matches = grep   /pattern/,   @list;        #not ok
