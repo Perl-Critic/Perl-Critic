@@ -14,9 +14,9 @@ use Perl::Critic::Config (-test => 1);
 use Perl::Critic;
 
 # common P::C testing tools
-use lib qw(t/tlib);
-use PerlCriticTestUtils qw();
-PerlCriticTestUtils::block_perlcriticrc();
+
+use Perl::Critic::TestUtils qw();
+Perl::Critic::TestUtils::block_perlcriticrc();
 
 my $c = undef;
 my $samples_dir       = 't/samples';

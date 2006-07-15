@@ -213,10 +213,10 @@ for my $code (@bad) {
 
 #-----------------------------------------------------------------------------
 
-use lib qw(t/tlib);
+
 use Perl::Critic::Config;
-use PerlCriticTestUtils qw();
-PerlCriticTestUtils::block_perlcriticrc();
+use Perl::Critic::TestUtils qw();
+Perl::Critic::TestUtils::block_perlcriticrc();
 
 
 my @native_policies = Perl::Critic::Config::native_policies();

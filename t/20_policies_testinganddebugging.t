@@ -11,9 +11,9 @@ use Test::More tests => 30;
 use Perl::Critic;
 
 # common P::C testing tools
-use lib qw(t/tlib);
-use PerlCriticTestUtils qw(pcritique);
-PerlCriticTestUtils::block_perlcriticrc();
+
+use Perl::Critic::TestUtils qw(pcritique);
+Perl::Critic::TestUtils::block_perlcriticrc();
 
 my $code ;
 my $policy;

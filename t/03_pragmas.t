@@ -11,9 +11,9 @@ use Test::More tests => 28;
 use Perl::Critic;
 
 # common P::C testing tools
-use lib qw(t/tlib);
-use PerlCriticTestUtils qw(critique);
-PerlCriticTestUtils::block_perlcriticrc();
+
+use Perl::Critic::TestUtils qw(critique);
+Perl::Critic::TestUtils::block_perlcriticrc();
 
 # Configure Critic not to load certain policies.  This
 # just make it a little easier to create test cases

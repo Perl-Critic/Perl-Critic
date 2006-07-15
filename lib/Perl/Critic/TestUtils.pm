@@ -1,20 +1,23 @@
-package PerlCriticTestUtils;
+package Perl::Critic::TestUtils;
 
-use warnings;
 use strict;
+use warnings;
 use base 'Exporter';
 use Perl::Critic;
 use Perl::Critic::Config;
+
+our $VERSION = '0.18';
 our @EXPORT_OK = qw(pcritique critique);
 
 #---------------------------------------------------------------
-# If the user already has an existing perlcriticrc file, it will 
-# get in the way of these test.  This little tweak to ensures 
+# If the user already has an existing perlcriticrc file, it will
+# get in the way of these test.  This little tweak to ensures
 # that we don't find the perlcriticrc file.
 
 sub block_perlcriticrc {
-    no warnings 'redefine';
+    no warnings 'redefine';  ## no critic (ProhibitNoWarnings);
     *Perl::Critic::Config::find_profile_path = sub { return };
+    return 1;
 }
 
 #----------------------------------------------------------------
@@ -42,3 +45,41 @@ sub critique {
 
 
 1;
+
+__END__
+
+=pod
+
+=head1 NAME
+
+Perl::Critic::TestUtils - Utility functions for testing new Policies
+
+=head1 SYNOPSIS
+
+=head1 DESCRIPTION
+
+=head1 EXPORTS
+
+=over
+
+=item critique( $policy_name, $code_string_ref )
+
+=item pcritique( $policy_name, $string_ref, $config_ref )
+
+=item block_perlcriticrc()
+
+=back
+
+=head1 AUTHOR
+
+Chris Dolan <cdolan@cpan.org>
+
+=head1 COPYRIGHT
+
+Copyright (c) 2005-2006 Chris Dolan.  All rights reserved.
+
+This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.  The full text of this license
+can be found in the LICENSE file included with this module.
+
+=cut
