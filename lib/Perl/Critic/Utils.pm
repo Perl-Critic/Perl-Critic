@@ -18,18 +18,32 @@ $VERSION = eval $VERSION;    ## no critic
 # Exported symbols here
 
 ## no critic (AutomaticExport)
-our @EXPORT =
-  qw(@GLOBALS           $COMMA     &find_keywords       $SEVERITY_HIGHEST
-     @BUILTINS          $COLON     &is_hash_key         $SEVERITY_HIGH
-                        $SCOLON    &is_method_call      $SEVERITY_MEDIUM
-                        $QUOTE     &parse_arg_list      $SEVERITY_LOW
-                        $DQUOTE    &is_script           $SEVERITY_LOWEST
-                        $SPACE     &precedence_of
-                        $PIPE      &is_perl_builtin
-     $TRUE              $PERIOD    &is_perl_global
-     $FALSE             $EMPTY     &is_subroutine_name
-                                   &all_perl_files
+our @EXPORT = qw(
+    @GLOBALS    $COMMA      $SEVERITY_HIGHEST
+    @BUILTINS   $FATCOMMA   $SEVERITY_HIGH
+                $COLON      $SEVERITY_MEDIUM
+                $SCOLON     $SEVERITY_LOW
+                $QUOTE      $SEVERITY_LOWEST
+                $DQUOTE
+                $SPACE
+    $TRUE       $PIPE
+    $FALSE      $PERIOD
+                $EMPTY
+
+
+    &is_hash_key
+    &is_script
+    &is_perl_builtin
+    &is_perl_global
+    &is_subroutine_name
+    &is_method_call
+    &find_keywords
+    &parse_arg_list
+    &precedence_of
+    &all_perl_files
 );
+
+
 
 #---------------------------------------------------------------------------
 
@@ -40,17 +54,18 @@ our $SEVERITY_LOW     = 2;
 our $SEVERITY_LOWEST  = 1;
 
 #---------------------------------------------------------------------------
-our $COMMA  = q{,};
-our $COLON  = q{:};
-our $SCOLON = q{;};
-our $QUOTE  = q{'};
-our $DQUOTE = q{"};
-our $PERIOD = q{.};
-our $PIPE   = q{|};
-our $SPACE  = q{ };
-our $EMPTY  = q{};
-our $TRUE   = 1;
-our $FALSE  = 0;
+our $COMMA      = q{,};
+our $FATCOMMA   = q{=>};
+our $COLON      = q{:};
+our $SCOLON     = q{;};
+our $QUOTE      = q{'};
+our $DQUOTE     = q{"};
+our $PERIOD     = q{.};
+our $PIPE       = q{|};
+our $SPACE      = q{ };
+our $EMPTY      = q{};
+our $TRUE       = 1;
+our $FALSE      = 0;
 
 #---------------------------------------------------------------------------
 our @BUILTINS =
@@ -268,7 +283,8 @@ sub _split_nodes_on_comma {
     my @nodes = ();
     my $i = 0;
     for my $node (@_) {
-        if ( $node->isa('PPI::Token::Operator') && $node eq $COMMA ) {
+        if ( $node->isa('PPI::Token::Operator') &&
+                (($node eq $COMMA) || ($node eq $FATCOMMA)) ) {
 	    $i++; #Move forward to next 'node stack'
 	    next;
 	}
