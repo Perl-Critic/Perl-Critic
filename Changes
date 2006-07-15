@@ -5,7 +5,7 @@
 # $Revision$
 #######################################################################
 
-[0.18]  Released on ????????
+[0.18]  Released on 20060716
 
      Bug Fixes:
      * 14855: Home discovery is dangerously naive.
@@ -13,6 +13,8 @@
        and RequireNumberSeparator policies.
      * 20068: .perlrc file - inconsistent documentation
      * 20254: "use vars qw(@EXPORT_OK)" not recognized
+     * ProhibitOneArgBless now understands "bless {} => $class;"
+     * 'while' and 'until' are now part of the McCabe score.
 
      Enhancements:
      * If File::HomeDir is available, we use it to locate the
@@ -20,6 +22,19 @@
        more portable to Win32 platforms.  If File::HomeDir is
        not installed, we resort to looking at the usual
        environment variables.
+
+     Other Stuff:
+     * Added "perlcritic.el", which is a super-cool emacs minor-mode
+       that runs perl-critic on the current buffer and returns the
+       results in a sexy hot-linked "compiler" window.  You can run
+       it on demand, or have it run automatically every time you
+       save the buffer.  You can find this in the extras/ directory.
+       Thanks to Josh ben Jore for contributing this.
+
+     * Moved "Perl::Critic::TestUtils" into the installed build.  This
+       module is only used for unit-testing Perl::Critic, but we
+       are putting it in the installation so folks who want to
+       extend Perl::Critic can make use of it.
 
 [0.17]  Released on 20060613
 

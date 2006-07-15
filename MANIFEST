@@ -1,6 +1,7 @@
 bin/perlcritic
 Build.PL
 Changes
+extras/perlcritic.el
 INSTALL
 lib/Perl/Critic.pm
 lib/Perl/Critic/Config.pm
@@ -84,6 +85,7 @@ lib/Perl/Critic/Policy/Variables/ProhibitPunctuationVars.pm
 lib/Perl/Critic/Policy/Variables/ProtectPrivateVars.pm
 lib/Perl/Critic/Policy/Variables/RequireInitializationForLocalVars.pm
 lib/Perl/Critic/PolicySummary.pod
+lib/Perl/Critic/TestUtils.pm
 lib/Perl/Critic/Utils.pm
 lib/Perl/Critic/Violation.pm
 LICENSE
@@ -119,7 +121,6 @@ t/samples/perlcriticrc.all
 t/samples/perlcriticrc.levels
 t/samples/perlcriticrc.none
 t/samples/perlcriticrc.pbp
-t/tlib/PerlCriticTestUtils.pm
 t/tlib/ViolationTest.pm
 t/tlib/ViolationTest2.pm
 TODO
