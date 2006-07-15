@@ -33,8 +33,9 @@ my %logic_ops = (
 ## use critic
 
 my %logic_keywords = (
-   'if'   => 1, 'elsif'  => 1,
-   'else' => 1, 'unless' => 1,
+   'if'    => 1, 'elsif'  => 1,
+   'else'  => 1, 'unless' => 1,
+   'until' => 1, 'while'  => 1,
 );
 
 #---------------------------------------------------------------------------

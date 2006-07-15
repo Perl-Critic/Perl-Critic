@@ -269,7 +269,7 @@ is( pcritique($policy, \$code), 0, $policy);
 #----------------------------------------------------------------
 
 $code = <<'END_PERL';
-sub teest_sub {
+sub test_sub {
     if ( $foo && $bar || $baz ) {
         open my $fh, '<', $file or die $!;
     }
@@ -280,17 +280,20 @@ sub teest_sub {
         $results = $condition ? 1 : 0;
     }
     croak unless $result;
+
+    while( $condition ){ frobulate() }
+    until( $foo > $baz ){ blech() }
 }
 END_PERL
 
-%config = ( max_mccabe => 9 );
+%config = ( max_mccabe => 11 );
 $policy = 'Subroutines::ProhibitExcessComplexity';
 is( pcritique($policy, \$code, \%config), 1, $policy);
 
 #----------------------------------------------------------------
 
 $code = <<'END_PERL';
-sub teest_sub {
+sub test_sub {
     if ( $foo && $bar || $baz ) {
         open my $fh, '<', $file or die $!;
     }
