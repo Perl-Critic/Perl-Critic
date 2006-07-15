@@ -775,15 +775,12 @@ of code.
 
 =head2 EMACS
 
-Entering C<'Meta-x compile'> causes emacs to switch to compile-mode.
-Next, enter the following command in the minibuffer:
-
-  perlcritic -verbose 1 path/to/your/file
-
-When the results are displayed, pressing [Enter] on any of the
-Violation messages will move the pointer to the relevant location
-within the file.  Type C<'Ctrl-h a compile'> for information about
-compile-mode.
+Joshua ben Jore has authored a minor-mode for emacs that allows you to
+run perlcritic on the current region or buffer.  You can run it on
+demand, or configure it to run automatically when you save the buffer.
+The output appears in a hot-linked compiler buffer.  The code and
+installation instructions can be found in the F<extras> directory
+inside this distribution.
 
 =head2 VIM
 
