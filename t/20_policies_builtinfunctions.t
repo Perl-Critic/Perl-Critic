@@ -8,10 +8,8 @@
 use strict;
 use warnings;
 use Test::More tests => 30;
-use Perl::Critic;
 
 # common P::C testing tools
-
 use Perl::Critic::TestUtils qw(pcritique);
 Perl::Critic::TestUtils::block_perlcriticrc();
 

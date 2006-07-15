@@ -3,8 +3,9 @@ package Perl::Critic::TestUtils;
 use strict;
 use warnings;
 use base 'Exporter';
+use Perl::Critic::Config (-test => 1);
 use Perl::Critic;
-use Perl::Critic::Config;
+
 
 our $VERSION = '0.18';
 our @EXPORT_OK = qw(pcritique critique);
