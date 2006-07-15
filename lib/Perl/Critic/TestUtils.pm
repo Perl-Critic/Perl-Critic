@@ -56,7 +56,27 @@ Perl::Critic::TestUtils - Utility functions for testing new Policies
 
 =head1 SYNOPSIS
 
+  use Perl::Critic::TestUtils qw(critique pcritique);
+
+  my $code = '<<END_CODE';
+  $foo = frobulator();
+  $baz = $foo ** 2;
+  END_CODE
+
+  # Critique code against all loaded policies...
+  my $perl_critic_config = { -severity => 2 };
+  my $violation_count = critique( $code, $perl_critic_config);
+
+  # Critique code against one policy...
+  my $custom_policy = 'Miscellanea::ProhibitFrobulation'
+  my $violation_count = pcritique( $code, $custom_policy );
+
 =head1 DESCRIPTION
+
+This module is not used directly by L<Perl::Critic> but it provides a
+few handy subroutines for testing new Perl::Critic::Policy modules.
+Look at the test scripts that ship with Perl::Critic for more examples
+of how to use these subroutines.
 
 =head1 EXPORTS
 
