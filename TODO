@@ -94,6 +94,7 @@ NON-PBP POLICIES WANTED:
   Low severity
 - VariablesAndExpressions::ProhibitQuotedHashKeys
   Forbid quotes around hash keys, unless they are really needed.
+  This is against what Damian says.
   Suggested by Adam Kennedy
   Low severity
 - Miscellanea::B::Lint
@@ -105,6 +106,11 @@ NON-PBP POLICIES WANTED:
   and
   VariablesAndExpressions::ProhibitComplexVersion (medium severity)
   http://rt.cpan.org/Ticket/Display.html?id=20439
+- ProhibitStringSplit
+  Since split("x", $whatever) is translated to split(/x/, $whatever),
+  you might as well write it that way anyway.  It will help people
+  remember.  I don't know how many times I've seen someone perplexed
+  by split("|", $something) not working.
 
 REFACTORINGS and ENHANCEMENTS:
 
