@@ -15,6 +15,7 @@
      * 20254: "use vars qw(@EXPORT_OK)" not recognized
      * ProhibitOneArgBless now understands "bless {} => $class;"
      * 'while' and 'until' are now part of the McCabe score.
+     * ProhibitLeadingZeros was falsely hitting things like '.0456'
 
      Enhancements:
      * If File::HomeDir is available, we use it to locate the

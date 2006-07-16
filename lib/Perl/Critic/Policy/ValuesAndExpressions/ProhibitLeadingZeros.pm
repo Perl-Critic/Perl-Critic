@@ -31,6 +31,14 @@ sub applies_to { return 'PPI::Token::Number' }
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
+
+    # PPI misparses floating point numbers that don't have any digits
+    # to the left of the decimal poing.  So this is a workaround.
+    if ( my $previous = $elem->previous_sibling() ) {
+        return if $previous->isa('PPI::Token::Operator') && $previous eq '.';
+    }
+
+
     if ( $elem =~ $leading_rx ) {
         my $sev = $self->get_severity();
         return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );

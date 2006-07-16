@@ -171,12 +171,12 @@ $var = +0.0;
 $var = +10.0;
 $var = +0.11;
 
-#These are legal, but PPI doesn't parse them correctly.
-#I will file a bug with Adam when I get the chance.
+#These are legal, but PPI doesn't parse them correctly.  So I've put
+#in a workaround that looks for a decimal preceeding the number.
 
-#$var = +.011;
-#$var = .011;
-#$var = -.011;
+$var = +.011;
+$var = .011;
+$var = -.011;
 END_PERL
 
 $policy = 'ValuesAndExpressions::ProhibitLeadingZeros';
