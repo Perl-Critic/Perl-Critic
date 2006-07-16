@@ -13,9 +13,10 @@
        and RequireNumberSeparator policies.
      * 20068: .perlrc file - inconsistent documentation
      * 20254: "use vars qw(@EXPORT_OK)" not recognized
-     * ProhibitOneArgBless now understands "bless {} => $class;"
-     * 'while' and 'until' are now part of the McCabe score.
-     * ProhibitLeadingZeros was falsely hitting things like '.0456'
+     * 20463: No-case heredoc terminator incorrectly detected as lower case.
+     * ProhibitOneArgBless doesn't understand "bless {} => $class;"
+     * ProhibitExcessComplexity doesn't count 'while' and 'until' stmnts
+     * ProhibitLeadingZeros was falsely hits '.0456'
 
      Enhancements:
      * If File::HomeDir is available, we use it to locate the
