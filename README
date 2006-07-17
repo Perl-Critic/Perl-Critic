@@ -1,0 +1,453 @@
+NAME
+    Perl::Critic - Critique Perl source code for best-practices
+
+SYNOPSIS
+      use Perl::Critic;
+      my $file = shift;
+      my $critic = Perl::Critic->new();
+      my @violations = $critic->critique($file);
+      print @violations;
+
+DESCRIPTION
+    Perl::Critic is an extensible framework for creating and applying coding
+    standards to Perl source code. Essentially, it is a static source code
+    analysis engine. Perl::Critic is distributed with a number of
+    Perl::Critic::Policy modules that attempt to enforce various coding
+    guidelines. Most Policy modules are based on Damian Conway's book Perl
+    Best Practices. However, Perl::Critic is not limited to PBP and will
+    even support Policies that contradict Conway. You can enable, disable,
+    and customize those Polices through the Perl::Critic interface. You can
+    also create new Policy modules that suit your own tastes.
+
+    For a convenient command-line interface to Perl::Critic, see the
+    documentation for perlcritic. If you want to integrate Perl::Critic with
+    your build process, Test::Perl::Critic provides an interface that is
+    suitable for test scripts. For the ultimate convenience (at the expense
+    of some flexibility) see the criticism pragma.
+
+    Win32 and ActivePerl users can find PPM distributions of Perl::Critic at
+    <http://theoryx5.uwinnipeg.ca/ppms/>.
+
+    If you'd like to try Perl::Critic before you install it, there is a
+    web-service available at <http://perlcritic.com>. The web-service does
+    not yet support all the configuration features that are available in the
+    native Perl::Critic API, but it should give you a good idea of what it
+    does.
+
+CONSTRUCTOR
+    "new( -profile => $FILE, -severity => $N, -include => \@PATTERNS,
+    -exclude => \@PATTERNS, -top => N, -force => 1 )"
+            Returns a reference to a new Perl::Critic object. Most arguments
+            are just passed directly into Perl::Critic::Config, but I have
+            described them here as well. All arguments are optional
+            key-value pairs as follows:
+
+            -profile is a path to a configuration file. If $FILE is not
+            defined, Perl::Critic::Config attempts to find a .perlcriticrc
+            configuration file in the current directory, and then in your
+            home directory. Alternatively, you can set the "PERLCRITIC"
+            environment variable to point to a file in another location. If
+            a configuration file can't be found, or if $FILE is an empty
+            string, then all Policies will be loaded with their default
+            configuration. See "CONFIGURATION" for more information.
+
+            -severity is the minimum severity level. Only Policy modules
+            that have a severity greater than $N will be loaded. Severity
+            values are integers ranging from 1 (least severe) to 5 (most
+            severe). The default is 5. For a given "-profile", decreasing
+            the "-severity" will usually result in more Policy violations.
+            Users can redefine the severity level for any Policy in their
+            .perlcriticrc file. See "CONFIGURATION" for more information.
+
+            -include is a reference to a list of string @PATTERNS. Policy
+            modules that match at least one "m/$PATTERN/imx" will always be
+            loaded, irrespective of the severity settings. For example:
+
+              my $critic = Perl::Critic->new(-include => ['layout'] -severity => 4);
+
+            This would cause Perl::Critic to load all the "CodeLayout::*"
+            Policy modules even though they have a severity level that is
+            less than 4. You can use "-include" in conjunction with the
+            "-exclude" option. Note that "-exclude" takes precedence over
+            "-include" when a Policy matches both patterns.
+
+            -exclude is a reference to a list of string @PATTERNS. Policy
+            modules that match at least one "m/$PATTERN/imx" will not be
+            loaded, irrespective of the severity settings. For example:
+
+              my $critic = Perl::Critic->new(-exclude => ['strict'] -severity => 1);
+
+            This would cause Perl::Critic to not load the "RequireUseStrict"
+            and "ProhibitNoStrict" Policy modules even though they have a
+            severity level that is greater than 1. You can use "-exclude" in
+            conjunction with the "-include" option. Note that "-exclude"
+            takes precedence over "-include" when a Policy matches both
+            patterns.
+
+            -top is the maximum number of Violations to return when ranked
+            by their severity levels. Violations are still returned in the
+            order that they occur within the file. This must be a positive
+            integer
+
+            -force controls whether Perl::Critic observes the magical ""##
+            no critic"" pseudo-pragmas in your code. If set to a true value,
+            Perl::Critic will analyze all code. If set to a false value
+            (which is the default) Perl::Critic will ignore code that is
+            tagged with these comments. See "BENDING THE RULES" for more
+            information.
+
+            -config is a reference to a Perl::Critic::Config object. If you
+            have created your own Config object for some reason, you can
+            pass it in here instead of having Perl::Critic create one for
+            you. Using the "-config" option causes all the other options to
+            be silently ignored.
+
+METHODS
+    "critique( $source_code )"
+            Runs the $source_code through the Perl::Critic engine using all
+            the Policies that have been loaded into this engine. If
+            $source_code is a scalar reference, then it is treated as string
+            of actual Perl code. If $source_code is a reference to an
+            instance of PPI::Document, then that instance is used directly.
+            Otherwise, it is treated as a path to a local file containing
+            Perl code. This method Returns a list of Perl::Critic::Violation
+            objects for each violation of the loaded Policies. The list is
+            sorted in the order that the Violations appear in the code. If
+            there are no violations, this method returns an empty list.
+
+    "add_policy( -policy => $policy_name, -config => \%config_hash )"
+            Creates a Policy object and loads it into this Critic. If the
+            object cannot be instantiated, it will throw a warning and
+            return a false value. Otherwise, it returns a reference to this
+            Critic.
+
+            -policy is the name of a Perl::Critic::Policy subclass module.
+            The 'Perl::Critic::Policy' portion of the name can be omitted
+            for brevity. This argument is required.
+
+            -config is an optional reference to a hash of Policy
+            configuration parameters. Note that this is not the same thing
+            as a Perl::Critic::Config object. The contents of this hash
+            reference will be passed into to the constructor of the Policy
+            module. See the documentation in the relevant Policy module for
+            a description of the arguments it supports.
+
+    "policies()"
+            Returns a list containing references to all the Policy objects
+            that have been loaded into this engine. Objects will be in the
+            order that they were loaded.
+
+    "config()"
+            Returns the Perl::Critic::Config object that was created for or
+            given to this Critic.
+
+FUNCTIONAL INTERFACE
+    For those folks who prefer to have a functional interface, The
+    "critique" method can be exported on request and called as a static
+    function. If the first argument is a hashref, its contents are used to
+    construct a new Perl::Critic object internally. The keys of that hash
+    should be the same as those supported by the "Perl::Critic::new" method.
+    Here are some examples:
+
+      use Perl::Critic qw(critique);
+
+      # Use default parameters...
+      @violations = critique( $some_file );
+
+      # Use custom parameters...
+      @violations = critique( {-severity => 2}, $some_file );
+
+      # As a one-liner
+      %> perl -MPerl::Critic=critique -e 'print critique(shift)' some_file.pm
+
+    None of the other object-methods are currently supported as static
+    functions. Sorry.
+
+CONFIGURATION
+    The default configuration file is called .perlcriticrc. Perl::Critic
+    will look for this file in the current directory first, and then in your
+    home directory. Alternatively, you can set the "PERLCRITIC" environment
+    variable to explicitly point to a different file in another location. If
+    none of these files exist, and the "-profile" option is not given to the
+    constructor, then all the modules that are found in the
+    Perl::Critic::Policy namespace will be loaded with their default
+    configuration.
+
+    The format of the configuration file is a series of INI-style sections
+    that contain key-value pairs separated by '='. Comments should start
+    with '#' and can be placed on a separate line or after the name-value
+    pairs if you desire. The general recipe is a series of blocks like this:
+
+      [Perl::Critic::Policy::Category::PolicyName]
+      severity = 1
+      arg1 = value1
+      arg2 = value2
+
+    "Perl::Critic::Policy::Category::PolicyName" is the full name of a
+    module that implements the policy. The Policy modules distributed with
+    Perl::Critic have been grouped into categories according to the table of
+    contents in Damian Conway's book Perl Best Practices. For brevity, you
+    can omit the 'Perl::Critic::Policy' part of the module name.
+
+    "severity" is the level of importance you wish to assign to the Policy.
+    All Policy modules are defined with a default severity value ranging
+    from 1 (least severe) to 5 (most severe). However, you may disagree with
+    the default severity and choose to give it a higher or lower severity,
+    based on your own coding philosophy.
+
+    The remaining key-value pairs are configuration parameters that will be
+    passed into the constructor for that Policy. The constructors for most
+    Policy objects do not support arguments, and those that do should have
+    reasonable defaults. See the documentation on the appropriate Policy
+    module for more details.
+
+    Instead of redefining the severity for a given Policy, you can
+    completely disable a Policy by prepending a '-' to the name of the
+    module in your configuration file. In this manner, the Policy will never
+    be loaded, regardless of the "-severity" given to the Perl::Critic
+    constructor.
+
+    A simple configuration might look like this:
+
+      #--------------------------------------------------------------
+      # I think these are really important, so always load them
+
+      [TestingAndDebugging::RequireUseStrict]
+      severity = 5
+
+      [TestingAndDebugging::RequireUseWarnings]
+      severity = 5
+
+      #--------------------------------------------------------------
+      # I think these are less important, so only load when asked
+
+      [Variables::ProhibitPackageVars]
+      severity = 2
+
+      [ControlStructures::ProhibitPostfixControls]
+      allow = if unless  #My custom configuration
+      severity = 2
+
+      #--------------------------------------------------------------
+      # I do not agree with these at all, so never load them
+
+      [-NamingConventions::ProhibitMixedCaseVars]
+      [-NamingConventions::ProhibitMixedCaseSubs]
+
+      #--------------------------------------------------------------
+      # For all other Policies, I accept the default severity,
+      # so no additional configuration is required for them.
+
+    A few sample configuration files are included in this distribution under
+    the t/samples directory. The perlcriticrc.none file demonstrates how to
+    disable Policy modules. The perlcriticrc.levels file demonstrates how to
+    redefine the severity level for any given Policy module. The
+    perlcriticrc.pbp file configures Perl::Critic to load only Policies
+    described in Damian Conway's book "Perl Best Practice."
+
+THE POLICIES
+    A large number of Policy modules are distributed with Perl::Critic. They
+    are described briefly in the companion document
+    Perl::Critic::PolicySummary and in more detail in the individual modules
+    themselves.
+
+BENDING THE RULES
+    Perl::Critic takes a hard-line approach to your code: either you comply
+    or you don't. In the real world, it is not always practical (nor even
+    possible) to fully comply with coding standards. In such cases, it is
+    wise to show that you are knowingly violating the standards and that you
+    have a Damn Good Reason (DGR) for doing so.
+
+    To help with those situations, you can direct Perl::Critic to ignore
+    certain lines or blocks of code by using pseudo-pragmas:
+
+        require 'LegacyLibaray1.pl';  ## no critic
+        require 'LegacyLibrary2.pl';  ## no critic
+
+        for my $element (@list) {
+
+            ## no critic
+
+            $foo = "";               #Violates 'ProhibitEmptyQuotes'
+            $barf = bar() if $foo;   #Violates 'ProhibitPostfixControls'
+            #Some more evil code...
+
+            ## use critic
+
+            #Some good code...
+            do_something($_);
+        }
+
+    The "## no critic" comments direct Perl::Critic to ignore the remaining
+    lines of code until the end of the current block, or until a "## use
+    critic" comment is found (whichever comes first). If the "## no critic"
+    comment is on the same line as a code statement, then only that line of
+    code is overlooked. To direct perlcritic to ignore the "## no critic"
+    comments, use the "-force" option.
+
+    A bare "## no critic" comment disables all the active Policies. If you
+    wish to disable only specific Policies, add a list of Policy names as
+    arguments, just as you would for the "no strict" or ""no warnings""
+    pragmas. For example, this would disable the "ProhibitEmptyQuotes" and
+    "ProhibitPostfixControls" policies until the end of the block or until
+    the next "## use critic" comment (whichever comes first):
+
+      ## no critic (EmptyQuotes, PostfixControls)
+
+      $foo = "";                  #Now exempt from ValuesAndExpressions::ProhibitEmptyQuotes
+      $barf = bar() if $foo;      #Now exempt ControlStructures::ProhibitPostfixControls
+      $long_int = 10000000000;    #Still subjected to ValuesAndExpression::RequireNumberSeparators
+
+    Since the Policy names are matched against the arguments as regular
+    expressions, you can abbreviate the Policy names or disable an entire
+    family of Policies in one shot like this:
+
+      ## no critic (NamingConventions)
+
+      my $camelHumpVar = 'foo';  #Now exempt from NamingConventions::ProhibitMixedCaseVars
+      sub camelHumpSub {}        #Now exempt from NamingConventions::ProhibitMixedCaseSubs
+
+    The argument list must be enclosed in parens and must contain one or
+    more comma-separated barewords (e.g. don't use quotes). The ""## no
+    critic"" pragmas can be nested, and Policies named by an inner pragma
+    will be disabled along with those already disabled an outer pragma.
+
+    Use this feature wisely. "## no critic" should be used in the smallest
+    possible scope, or only on individual lines of code. And you should
+    always be as specific as possible about which policies you want to
+    disable (i.e. never use a bare "## no critic"). If Perl::Critic
+    complains about your code, try and find a compliant solution before
+    resorting to this feature.
+
+IMPORTANT CHANGES
+    Perl-Critic is evolving rapidly, so some of the interfaces have changed
+    in ways that are not backward-compatible. If you have been using an
+    older version of Perl-Critic and/or you have been developing custom
+    Policy modules, please read this section carefully.
+
+  VERSION 0.16
+    Starting in version 0.16, you can add a list Policy names as arguments
+    to the "## no critic" pseudo-pragma. This feature allows you to disable
+    specific policies. So if you have been in the habit of adding additional
+    words after "no critic", then those words might cause unexpected
+    results. If you want to append other stuff to the ""## no critic""
+    comment, then terminate the pseudo-pragma with a semi-colon, and then
+    start another comment. For example:
+
+      #This may not work as expected.
+      $email = 'foo@bar.com';  ## no critic for literal '@'
+
+      #This will work.
+      $email = 'foo@bar.com';  ## no critic; #for literal '@'
+
+      #This is even better.
+      $email = 'foo@bar.com'; ## no critic (RequireInterpolation);
+
+  VERSION 0.14
+    Starting in version 0.14, the interface to Perl::Critic::Violation
+    changed. This will also break any custom Policy modules that you might
+    have written for earlier modules. See Perl::Critic::DEVELOPER for an
+    up-to-date guide on creating Policy modules.
+
+    The notion of "priority" was also replaced with "severity" in version
+    0.14. Consequently, the default behavior of Perl::Critic is to only load
+    the most "severe" Policy modules, rather than loading all of them. This
+    decision was based on user-feedback suggesting that Perl-Critic should
+    be less critical for new users, and should steer them toward gradually
+    increasing the strictness as they progressively adopt better coding
+    practices.
+
+  VERSION 0.11
+    Starting in version 0.11, the internal mechanics of Perl-Critic were
+    rewritten so that only one traversal of the PPI document tree is
+    required. Unfortunately, this will break any custom Policy modules that
+    you might have written for earlier versions. Converting your policies to
+    work with the new version is pretty easy and actually results in cleaner
+    code. See Perl::Critic::DEVELOPER for an up-to-date guide on creating
+    Policy modules.
+
+THE Perl::Critic PHILOSOPHY
+      Coding standards are deeply personal and highly subjective.  The
+      goal of Perl::Critic is to help you write code that conforms with a
+      set of best practices.  Our primary goal is not to dictate what
+      those practices are, but rather, to implement the practices
+      discovered by others.  Ultimately, you make the rules --
+      Perl::Critic is merely a tool for encouraging consistency.  If there
+      is a policy that you think is important or that we have overlooked,
+      we would be very grateful for contributions, or you can simply load
+      your own private set of policies into Perl::Critic.
+
+EXTENDING THE CRITIC
+    The modular design of Perl::Critic is intended to facilitate the
+    addition of new Policies. You'll need to have some understanding of PPI,
+    but most Policy modules are pretty straightforward and only require
+    about 20 lines of code. Please see the Perl::Critic::DEVELOPER file
+    included in this distribution for a step-by-step demonstration of how to
+    create new Policy modules.
+
+    If you develop any new Policy modules, feel free to send them to
+    "thaljef@cpan.org" and I'll be happy to put them into the Perl::Critic
+    distribution. Or if you'd like to work on the Perl::Critic project
+    directly, check out our repository at <http://perlcritic.tigris.org>. To
+    subscribe to our mailing list, send a message to
+    "dev-subscribe@perlcritic.tigris.org".
+
+PREREQUISITES
+    Perl::Critic requires the following modules:
+
+    Config::Tiny
+
+    File::Spec
+
+    IO::String
+
+    List::Util
+
+    List::MoreUtils
+
+    Module::Pluggable
+
+    PPI
+
+    Pod::Usage
+
+    Pod::PlainText
+
+    Scalar::Util
+
+    String::Format
+
+    The following modules are optional, but recommended for complete
+    testing:
+
+    Test::Pod
+
+    Test::Pod::Coverage
+
+BUGS
+    Scrutinizing Perl code is hard for humans, let alone machines. If you
+    find any bugs, particularly false-positives or false-negatives from a
+    Perl::Critic::Policy, please submit them to
+    <http://rt.cpan.org/NoAuth/Bugs.html?Dist=Perl-Critic>. Thanks.
+
+CREDITS
+    Adam Kennedy - For creating PPI, the heart and soul of Perl::Critic.
+
+    Damian Conway - For writing Perl Best Practices, finally :)
+
+    Chris Dolan - For contributing the best features and Policy modules.
+
+    Giuseppe Maxia - For all the great ideas and positive encouragement.
+
+    and Sharon, my wife - For putting up with my all-night code sessions.
+
+AUTHOR
+    Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+
+COPYRIGHT
+    Copyright (c) 2005-2006 Jeffrey Ryan Thalhammer. All rights reserved.
+
+    This program is free software; you can redistribute it and/or modify it
+    under the same terms as Perl itself. The full text of this license can
+    be found in the LICENSE file included with this module.
+
