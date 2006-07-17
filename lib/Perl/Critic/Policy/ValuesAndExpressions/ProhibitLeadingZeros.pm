@@ -35,7 +35,8 @@ sub violates {
     # PPI misparses floating point numbers that don't have any digits
     # to the left of the decimal poing.  So this is a workaround.
     if ( my $previous = $elem->previous_sibling() ) {
-        return if $previous->isa('PPI::Token::Operator') && $previous eq q{.};
+        return if $previous->isa('PPI::Token::Operator') &&
+            $previous eq $PERIOD;
     }
 
 
