@@ -135,7 +135,7 @@ sub critique {
           ELEMENT:
             for my $element ( @{ $elements_of{$type} } ) {
 
-                # Evaulate the policy on this $element.  A policy may
+                # Evaluate the policy on this $element.  A policy may
                 # return zero or more violations.  We only want the
                 # violations that occur on lines that have not been
                 # disabled.
