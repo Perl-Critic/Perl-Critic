@@ -304,7 +304,7 @@ __END__
 
 =pod
 
-=for stopwords DGR INI-style vim-fu minibuffer -noprofile
+=for stopwords DGR INI-style vim-fu minibuffer -noprofile API ben Jore
 
 =head1 NAME
 
