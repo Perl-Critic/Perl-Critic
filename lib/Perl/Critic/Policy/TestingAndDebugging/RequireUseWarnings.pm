@@ -55,11 +55,12 @@ sub violates {
 }
 
 sub _is_use_warnings {
-    my ($doc, $elem) = @_;
-    return 0 if  ! $elem->isa('PPI::Statement::Include');
-    return 0 if  $elem->type() ne 'use';
-    return 0 if  $elem->pragma() ne 'warnings';
-    return 1;
+    my (undef, $elem) = @_;
+
+    return
+        $elem->isa('PPI::Statement::Include') &&
+        ($elem->type() eq 'use') &&
+        ($elem->pragma() eq 'warnings');
 }
 
 sub _isnt_include_or_package {

@@ -54,15 +54,17 @@ sub violates {
 }
 
 sub _is_use_strict {
-    my ($doc, $elem) = @_;
-    return 0 if  ! $elem->isa('PPI::Statement::Include');
-    return 0 if  $elem->type() ne 'use';
-    return 0 if  $elem->pragma() ne 'strict';
-    return 1;
+    my (undef, $elem) = @_;
+
+    return
+        $elem->isa('PPI::Statement::Include') &&
+        ($elem->type() eq 'use') &&
+        ($elem->pragma() eq 'strict');
 }
 
 sub _isnt_include_or_package {
-    my ($doc, $elem) = @_;
+    my (undef, $elem) = @_;
+
     return 0 if ! $elem->isa('PPI::Statement');
     return 0 if $elem->isa('PPI::Statement::Package');
     return 0 if $elem->isa('PPI::Statement::Include');

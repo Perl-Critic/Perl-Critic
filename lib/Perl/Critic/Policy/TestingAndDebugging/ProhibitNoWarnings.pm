@@ -47,7 +47,8 @@ sub new {
 sub violates {
 
     my ( $self, $elem, $doc ) = @_;
-    return if $elem->type() ne 'no' || $elem->pragma() ne 'warnings';
+
+    return unless ($elem->type() eq 'no' && $elem->pragma() eq 'warnings');
 
     #Arguments to 'no warnings' are usually a list of literals or a
     #qw() list.  Rather than trying to parse the various PPI elements,
