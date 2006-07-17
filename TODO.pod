@@ -235,6 +235,14 @@ Give it same functionality as the -verbose option in `perlcritic`
 
 Just like `perlcritic` does now.
 
+=item * Helper functions:
+
+Combine these three:
+
+    return if is_hash_key($elem);
+    return if is_method_call($elem);
+    return if is_subroutine_name($elem);
+
 =back
 
 =cut

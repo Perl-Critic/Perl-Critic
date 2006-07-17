@@ -48,7 +48,7 @@ sub violates {
 
     my ( $self, $elem, $doc ) = @_;
 
-    return unless ($elem->type() eq 'no' && $elem->pragma() eq 'strict');
+    return unless ($elem->type() eq 'no' && $elem->pragma() eq 'strict'); ## no critic
 
     #Arguments to 'no strict' are usually a list of literals or a qw()
     #list.  Rather than trying to parse the various PPI elements, I

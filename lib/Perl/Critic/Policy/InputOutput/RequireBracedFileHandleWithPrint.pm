@@ -29,9 +29,9 @@ sub applies_to { return 'PPI::Token::Word' }
 #----------------------------------------------------------------------------
 
 sub violates {
-
     my ( $self, $elem, $doc ) = @_;
-    return if !($elem eq 'print');
+
+    return if ($elem ne 'print');
     return if is_method_call($elem);
     return if is_hash_key($elem);
     return if is_subroutine_name($elem);

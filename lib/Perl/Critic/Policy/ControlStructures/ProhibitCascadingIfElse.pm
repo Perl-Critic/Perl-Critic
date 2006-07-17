@@ -41,7 +41,9 @@ sub new {
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-    return if !($elem->type() eq 'if');
+
+    return if ($elem->type() ne 'if');
+
     if ( _count_elsifs($elem) > $self->{_max} ) {
         return $self->violation( $desc, $expl, $elem );
     }
