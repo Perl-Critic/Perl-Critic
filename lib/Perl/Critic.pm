@@ -115,8 +115,7 @@ sub critique {
 
     # Seed a hash of PPI elements.  Keys are PPI class names, and the
     # values are arrayrefs containing all the instances of the class.
-    my %elements_of = ( 'PPI::Document' => [$doc],
-                        'PPI::Element'  => $doc->find('PPI::Element') || [], );
+    my %elements_of = ( 'PPI::Document' => [$doc] );
 
 
     my @violations = ();
@@ -128,9 +127,7 @@ sub critique {
             # Gather up all the PPI elements that are of the $type
             # that this $policy wants.  Save them in a hash so we go
             # only have to go searching for any given type once.
-
-            $elements_of{$type}
-              ||= [ grep {$_->isa($type)} @{ $elements_of{'PPI::Element'} } ];
+            $elements_of{$type} ||= ( $doc->find($type) || [] );
 
           ELEMENT:
             for my $element ( @{ $elements_of{$type} } ) {
