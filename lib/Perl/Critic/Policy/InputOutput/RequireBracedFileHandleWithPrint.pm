@@ -37,7 +37,7 @@ sub violates {
     return if is_hash_key($elem);
     return if is_subroutine_name($elem);
 
-    my @sibs;
+    my @sib;
     $sib[0] = $elem->snext_sibling()  || return;
 
     # Deal with situations where 'print' is called with parens
