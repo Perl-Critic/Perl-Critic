@@ -308,7 +308,7 @@ __END__
 
 =pod
 
-=for stopwords DGR INI-style
+=for stopwords DGR INI-style API
 
 =head1 NAME
 
