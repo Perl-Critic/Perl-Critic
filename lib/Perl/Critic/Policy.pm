@@ -10,6 +10,7 @@ package Perl::Critic::Policy;
 use strict;
 use warnings;
 use Perl::Critic::Utils;
+use Perl::Critic::Violation;
 
 our $VERSION = '0.18';
 $VERSION = eval $VERSION;    ## no critic
@@ -23,6 +24,11 @@ sub violates         { return _abstract_method() }
 sub set_severity     { return $_[0]->{_severity} = $_[1] }
 sub get_severity     { return $_[0]->{_severity} || $_[0]->default_severity() }
 sub default_severity { return $SEVERITY_LOWEST }
+
+sub violation {
+    my ( $self, $desc, $expl, $elem ) = @_;
+    return Perl::Critic::Violation->new( $desc, $expl, $elem, $self->get_severity() );
+}
 
 #----------------------------------------------------------------------------
 
@@ -79,6 +85,17 @@ error message and let the caller decide how to handle it.
 C<violates()> is an abstract method and it will abort if you attempt
 to invoke it directly.  It is the heart of all Policy modules, and
 your subclass B<must> override this method.
+
+=item C<violation( $description, $explanation, $element )>
+
+Returns a reference to a new C<Perl::Critic::Violation> object. The
+arguments are a description of the violation (as string), an
+explanation for the policy (as string) or a series of page numbers in
+PBP (as an ARRAY ref), a reference to the L<PPI> element that caused
+the violation.
+
+These are the same as the constructor to L<Perl::Critic::Violation>,
+but without the severity.  The Policy itself knows the severity.
 
 =item C<applies_to()>
 
