@@ -9,7 +9,6 @@ package Perl::Critic::Policy::NamingConventions::ProhibitAmbiguousNames;
 
 use strict;
 use warnings;
-use Perl::Critic::Violation;
 use Perl::Critic::Utils;
 use base 'Perl::Critic::Policy';
 
@@ -69,8 +68,7 @@ sub violates {
             # strip off any leading "Package::"
             my ($name) = $word =~ m/ (\w+) \z /xms;
             if ( defined $name && $self->{_forbid}->{$name} ) {
-                my $sev = $self->get_severity();
-                return Perl::Critic::Violation->new($desc, $expl, $elem, $sev);
+                return $self->violation( $desc, $expl, $elem );
             }
         }
         return;    # ok
@@ -96,8 +94,7 @@ sub violates {
                 next if ! defined $name;
 
                 if ( defined $self->{_forbid}->{$name} ) {
-                    my $sev = $self->get_severity;
-                    push @viols, Perl::Critic::Violation->new($desc, $expl, $elem, $sev);
+                    push @viols, $self->violation( $desc, $expl, $elem );
                 }
             }
         }

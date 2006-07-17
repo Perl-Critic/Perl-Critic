@@ -10,7 +10,6 @@ package Perl::Critic::Policy::Modules::ProhibitMultiplePackages;
 use strict;
 use warnings;
 use Perl::Critic::Utils;
-use Perl::Critic::Violation;
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '0.18';
@@ -33,8 +32,7 @@ sub violates {
     my $nodes_ref = $doc->find('PPI::Statement::Package') || return;
     my @matches = @{$nodes_ref} > 1 ? @{$nodes_ref}[ 1 .. $#{$nodes_ref} ] :();
 
-    my $sev = $self->get_severity();
-    return map {Perl::Critic::Violation->new($desc, $expl, $_, $sev)} @matches;
+    return map {$self->violation($desc, $expl, $_)} @matches;
 }
 
 1;

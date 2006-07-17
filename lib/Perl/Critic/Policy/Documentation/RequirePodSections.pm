@@ -10,7 +10,6 @@ package Perl::Critic::Policy::Documentation::RequirePodSections;
 use strict;
 use warnings;
 use Perl::Critic::Utils;
-use Perl::Critic::Violation;
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '0.18';
@@ -76,10 +75,8 @@ sub violates {
     # Compare the required sections against those we found
     for my $required ( @required_sections ) {
         if ( ! exists $found_sections{$required} ) {
-            my $sev  = $self->get_severity();
             my $desc = qq{Missing '$required' section in POD};
-            my $viol = Perl::Critic::Violation->new( $desc, $expl, $doc, $sev );
-            push @violations, $viol;
+            push @violations, $self->violation( $desc, $expl, $doc );
         }
     }
 

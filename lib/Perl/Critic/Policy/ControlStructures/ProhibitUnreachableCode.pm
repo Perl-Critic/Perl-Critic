@@ -3,7 +3,6 @@ package Perl::Critic::Policy::ControlStructures::ProhibitUnreachableCode;
 use strict;
 use warnings;
 use Perl::Critic::Utils;
-use Perl::Critic::Violation;
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '0.18';
@@ -78,8 +77,7 @@ sub violates {
         last if $stmnt->schildren() && $stmnt->schild( 0 )->isa('PPI::Token::Label');
         next if $stmnt->isa('PPI::Statement::Sub');
 
-        my $sev = $self->get_severity();
-        push @viols, Perl::Critic::Violation->new( $desc, $expl, $stmnt, $sev );
+        push @viols, $self->violation( $desc, $expl, $stmnt );
     }
 
     return @viols;

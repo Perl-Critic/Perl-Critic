@@ -10,7 +10,6 @@ package Perl::Critic::Policy::ValuesAndExpressions::ProhibitConstantPragma;
 use strict;
 use warnings;
 use Perl::Critic::Utils;
-use Perl::Critic::Violation;
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '0.18';
@@ -31,8 +30,7 @@ sub applies_to { return 'PPI::Statement::Include' }
 sub violates {
     my ( $self, $elem, $doc ) = @_;
     if ( $elem->type() eq 'use' && $elem->pragma() eq 'constant' ) {
-        my $sev = $self->get_severity();
-        return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
+        return $self->violation( $desc, $expl, $elem );
     }
     return;    #ok!
 }

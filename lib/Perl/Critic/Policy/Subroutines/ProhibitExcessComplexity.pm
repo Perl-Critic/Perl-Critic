@@ -10,7 +10,6 @@ package Perl::Critic::Policy::Subroutines::ProhibitExcessComplexity;
 use strict;
 use warnings;
 use Perl::Critic::Utils;
-use Perl::Critic::Violation;
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '0.18';
@@ -68,9 +67,8 @@ sub violates {
     $count += grep { exists $logic_ops{$_} }  @{ $operators_ref };
 
     if ( $count > $self->{_max_mccabe} ) {
-        my $sev = $self->get_severity();
         my $desc = qq{Subroutine with high complexity score ($count)};
-        return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
+        return $self->violation( $desc, $expl, $elem );
     }
     return; #ok!
 }
@@ -111,7 +109,7 @@ techniques that help create simple and extensible Perl code.
 This Policy accepts an additional key-value pair in the C<new> method.
 The key is 'max_mccabe' and the value is the maximum acceptable McCabe
 score.  Any subroutine with a McCabe score higher than this number
-will generate a policy Violation.  The default is 20.  Users of the
+will generate a policy violation.  The default is 20.  Users of the
 Perl::Critic engine can configure this in their F<.perlcriticrc> like
 this:
 

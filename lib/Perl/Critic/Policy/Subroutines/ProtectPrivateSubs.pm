@@ -10,7 +10,6 @@ package Perl::Critic::Policy::Subroutines::ProtectPrivateSubs;
 use strict;
 use warnings;
 use Perl::Critic::Utils;
-use Perl::Critic::Violation;
 use List::MoreUtils qw(all);
 use base 'Perl::Critic::Policy';
 
@@ -35,8 +34,7 @@ sub violates {
     if ( $self->_is_other_pkg_private_function($elem) ||
          $self->_is_other_pkg_private_method($elem) )
     {
-        my $sev = $self->get_severity();
-        return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
+        return $self->violation( $desc, $expl, $elem );
     }
     return;    #ok!
 }

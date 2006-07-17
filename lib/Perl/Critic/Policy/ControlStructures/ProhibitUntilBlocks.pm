@@ -9,7 +9,6 @@ package Perl::Critic::Policy::ControlStructures::ProhibitUntilBlocks;
 
 use strict;
 use warnings;
-use Perl::Critic::Violation;
 use Perl::Critic::Utils;
 use base 'Perl::Critic::Policy';
 
@@ -31,8 +30,7 @@ sub applies_to { return 'PPI::Statement' }
 sub violates {
     my ( $self, $elem, $doc ) = @_;
     if ( $elem->first_element() eq 'until' ) {
-        my $sev = $self->get_severity();
-        return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
+        return $self->violation( $desc, $expl, $elem );
     }
     return;    #ok!
 }

@@ -10,7 +10,6 @@ package Perl::Critic::Policy::BuiltinFunctions::ProhibitLvalueSubstr;
 use strict;
 use warnings;
 use Perl::Critic::Utils;
-use Perl::Critic::Violation;
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '0.18';
@@ -30,16 +29,16 @@ sub applies_to { return 'PPI::Token::Word' }
 
 sub violates {
     my ($self, $elem, $doc) = @_;
-    return if !($elem eq 'substr');
+    return if $elem ne 'substr';
     return if is_method_call($elem);
     return if is_hash_key($elem);
     return if is_subroutine_name($elem);
 
     my $sib = $elem;
-    my $sev = $self->get_severity();
     while ($sib = $sib->snext_sibling()) {
-	next if ! ( $sib->isa( 'PPI::Token::Operator') && $sib eq q{=} );
-	return Perl::Critic::Violation->new( $desc, $expl, $sib, $sev );
+	if ( $sib->isa( 'PPI::Token::Operator') && $sib eq q{=} ) {
+            return $self->violation( $desc, $expl, $sib );
+        }
     }
     return; #ok!
 }

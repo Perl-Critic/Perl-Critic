@@ -10,7 +10,6 @@ package Perl::Critic::Policy::CodeLayout::RequireTrailingCommas;
 use strict;
 use warnings;
 use Perl::Critic::Utils;
-use Perl::Critic::Violation;
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '0.18';
@@ -48,8 +47,7 @@ sub violates {
     # Is the final element a comma?
     my $final = $children[-1] || return;
     if ( ! ($final->isa('PPI::Token::Operator') && $final eq $COMMA) ) {
-        my $sev = $self->get_severity();
-	return Perl::Critic::Violation->new( $desc, $expl, $final, $sev );
+        return $self->violation( $desc, $expl, $elem );
     }
 
     return; #ok!

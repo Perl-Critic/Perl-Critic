@@ -11,7 +11,6 @@ use strict;
 use warnings;
 use Perl::Critic::Utils;
 use List::Util qw(first);
-use Perl::Critic::Violation;
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '0.18';
@@ -49,8 +48,7 @@ sub violates {
         }
     }
 
-    my $sev = $self->get_severity();
-    return Perl::Critic::Violation->new($desc, $expl, $pod, $sev);
+    return $self->violation( $desc, $expl, $pod );
 }
 
 1;

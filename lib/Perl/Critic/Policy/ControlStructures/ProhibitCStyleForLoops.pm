@@ -9,7 +9,6 @@ package Perl::Critic::Policy::ControlStructures::ProhibitCStyleForLoops;
 
 use strict;
 use warnings;
-use Perl::Critic::Violation;
 use Perl::Critic::Utils;
 use base 'Perl::Critic::Policy';
 
@@ -31,8 +30,7 @@ sub applies_to { return 'PPI::Structure::ForLoop' }
 sub violates {
     my ( $self, $elem, $doc ) = @_;
     if ( _is_cstyle($elem) ) {
-        my $sev = $self->get_severity();
-        return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
+        return $self->violation( $desc, $expl, $elem );
     }
     return;    #ok!
 }

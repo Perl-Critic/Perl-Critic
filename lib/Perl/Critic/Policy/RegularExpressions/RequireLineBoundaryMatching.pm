@@ -9,7 +9,6 @@ package Perl::Critic::Policy::RegularExpressions::RequireLineBoundaryMatching;
 
 use strict;
 use warnings;
-use Perl::Critic::Violation;
 use Perl::Critic::Utils;
 use base 'Perl::Critic::Policy';
 
@@ -36,8 +35,7 @@ sub violates {
     #API.  I'm cheating by accessing it here directly.
 
     if ( ! defined $elem->{modifiers}->{'m'} ) {
-        my $sev = $self->get_severity();
-	return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
+        return $self->violation( $desc, $expl, $elem );
     }
     return; #ok!;
 }

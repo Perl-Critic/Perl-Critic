@@ -10,7 +10,6 @@ package Perl::Critic::Policy::Variables::ProhibitPackageVars;
 use strict;
 use warnings;
 use Perl::Critic::Utils;
-use Perl::Critic::Violation;
 use List::MoreUtils qw(all);
 use base 'Perl::Critic::Policy';
 
@@ -40,8 +39,7 @@ sub violates {
         || _is_our_var($elem)
         || _is_vars_pragma($elem) )
     {
-        my $sev = $self->get_severity();
-        return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
+        return $self->violation( $desc, $expl, $elem );
     }
     return;    #ok!
 }

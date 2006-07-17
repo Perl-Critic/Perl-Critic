@@ -10,7 +10,6 @@ package Perl::Critic::Policy::Subroutines::ProhibitBuiltinHomonyms;
 use strict;
 use warnings;
 use Perl::Critic::Utils;
-use Perl::Critic::Violation;
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '0.18';
@@ -33,8 +32,7 @@ sub violates {
     my ( $self, $elem, $doc ) = @_;
     return if exists $allow{ $elem->name() };
     if ( is_perl_builtin( $elem ) ) {
-        my $sev = $self->get_severity();
-        return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
+        return $self->violation( $desc, $expl, $elem );
     }
     return;    #ok!
 }

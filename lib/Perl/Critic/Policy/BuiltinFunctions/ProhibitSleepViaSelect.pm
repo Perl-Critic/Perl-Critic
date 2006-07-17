@@ -10,7 +10,6 @@ package Perl::Critic::Policy::BuiltinFunctions::ProhibitSleepViaSelect;
 use strict;
 use warnings;
 use Perl::Critic::Utils;
-use Perl::Critic::Violation;
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '0.18';
@@ -30,14 +29,13 @@ sub applies_to { return 'PPI::Token::Word' }
 
 sub violates {
     my ($self, $elem, $doc) = @_;
-    return if !($elem eq 'select');
+    return if $elem ne 'select';
     return if is_method_call($elem);
     return if is_hash_key($elem);
     return if is_subroutine_name($elem);
 
     if ( 3 == grep {$_->[0] eq 'undef' } parse_arg_list($elem) ){
-        my $sev = $self->get_severity();
-	return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
+        return $self->violation( $desc, $expl, $elem );
     }
     return; #ok!
 }

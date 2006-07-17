@@ -10,7 +10,6 @@ package Perl::Critic::Policy::Variables::ProhibitConditionalDeclarations;
 use strict;
 use warnings;
 use Perl::Critic::Utils;
-use Perl::Critic::Violation;
 use List::MoreUtils qw(any);
 use base 'Perl::Critic::Policy';
 
@@ -33,8 +32,7 @@ sub violates {
     my ( $self, $elem, $doc ) = @_;
 
     if ( $elem->find(\&_is_conditional) ) {
-        my $sev = $self->get_severity();
-        return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
+        return $self->violation( $desc, $expl, $elem );
     }
     return;    #ok!
 }

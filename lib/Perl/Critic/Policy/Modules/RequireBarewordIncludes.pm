@@ -10,7 +10,6 @@ package Perl::Critic::Policy::Modules::RequireBarewordIncludes;
 use strict;
 use warnings;
 use Perl::Critic::Utils;
-use Perl::Critic::Violation;
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '0.18';
@@ -34,8 +33,7 @@ sub violates {
     if( $child->isa('PPI::Token::Quote') ) {
 	my $type = $elem->type();
 	my $desc = qq{'$type' statement with library name as string};
-        my $sev = $self->get_severity();
-	return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
+        return $self->violation( $desc, $expl, $elem );
     }
     return; #ok!
 }

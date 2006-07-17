@@ -9,7 +9,6 @@ package Perl::Critic::Policy::ControlStructures::ProhibitPostfixControls;
 
 use strict;
 use warnings;
-use Perl::Critic::Violation;
 use Perl::Critic::Utils;
 use base 'Perl::Critic::Policy';
 
@@ -85,9 +84,7 @@ sub violates {
     # If we get here, it must be postfix.
     my $desc = qq{Postfix control '$elem' used};
     my $expl = $pages_of{$elem};
-    my $sev = $self->get_severity();
-
-    return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
+    return $self->violation( $desc, $expl, $elem );
 }
 
 1;

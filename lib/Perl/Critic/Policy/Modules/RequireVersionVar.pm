@@ -10,7 +10,6 @@ package Perl::Critic::Policy::Modules::RequireVersionVar;
 use strict;
 use warnings;
 use Perl::Critic::Utils;
-use Perl::Critic::Violation;
 use List::MoreUtils qw(any);
 use base 'Perl::Critic::Policy';
 
@@ -35,8 +34,7 @@ sub violates {
     return if $doc->find_first( \&_wanted );
 
     #If we get here, then no $VERSION was found
-    my $sev = $self->get_severity();
-    return Perl::Critic::Violation->new( $desc, $expl, $doc, $sev );
+    return $self->violation( $desc, $expl, $doc );
 }
 
 sub _wanted {

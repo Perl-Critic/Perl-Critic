@@ -10,7 +10,6 @@ package Perl::Critic::Policy::Modules::ProhibitAutomaticExportation;
 use strict;
 use warnings;
 use Perl::Critic::Utils;
-use Perl::Critic::Violation;
 use List::MoreUtils qw(any);
 use base 'Perl::Critic::Policy';
 
@@ -34,8 +33,7 @@ sub violates {
 
     if ( _uses_exporter($doc) ) {
         if ( my $exp = _has_exports($doc) ) {
-            my $sev = $self->get_severity();
-            return Perl::Critic::Violation->new( $desc, $expl, $exp, $sev );
+            return $self->violation( $desc, $expl, $exp );
         }
     }
     return; #ok

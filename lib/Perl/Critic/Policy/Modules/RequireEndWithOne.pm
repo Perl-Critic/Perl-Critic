@@ -10,7 +10,6 @@ package Perl::Critic::Policy::Modules::RequireEndWithOne;
 use strict;
 use warnings;
 use Perl::Critic::Utils;
-use Perl::Critic::Violation;
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '0.18';
@@ -40,8 +39,7 @@ sub violates {
                $match =~  m{\A 1 \s* ; \z}mx );
 
     # Must be a violation...
-    my $sev = $self->get_severity();
-    return Perl::Critic::Violation->new( $desc, $expl, $match, $sev );
+    return $self->violation( $desc, $expl, $match );
 }
 
 sub _is_code {

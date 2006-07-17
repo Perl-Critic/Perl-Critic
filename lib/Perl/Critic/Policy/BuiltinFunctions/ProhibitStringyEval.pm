@@ -10,7 +10,6 @@ package Perl::Critic::Policy::BuiltinFunctions::ProhibitStringyEval;
 use strict;
 use warnings;
 use Perl::Critic::Utils;
-use Perl::Critic::Violation;
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '0.18';
@@ -40,8 +39,7 @@ sub violates {
     return if !$arg || $arg->isa('PPI::Structure::Block');
 
     # Must not be a block
-    my $sev = $self->get_severity();
-    return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
+    return $self->violation( $desc, $expl, $elem );
 }
 
 

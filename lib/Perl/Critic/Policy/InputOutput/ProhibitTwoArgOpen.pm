@@ -10,7 +10,6 @@ package Perl::Critic::Policy::InputOutput::ProhibitTwoArgOpen;
 use strict;
 use warnings;
 use Perl::Critic::Utils;
-use Perl::Critic::Violation;
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '0.18';
@@ -35,9 +34,8 @@ sub violates {
     return if is_hash_key($elem);
     return if is_subroutine_name($elem);
 
-    if( scalar parse_arg_list($elem) == 2 ) {
-        my $sev = $self->get_severity();
-	return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
+    if ( scalar parse_arg_list($elem) == 2 ) {
+        return $self->violation( $desc, $expl, $elem );
     }
     return; #ok!
 }

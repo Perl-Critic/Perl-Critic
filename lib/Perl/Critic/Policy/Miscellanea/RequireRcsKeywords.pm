@@ -10,7 +10,6 @@ package Perl::Critic::Policy::Miscellanea::RequireRcsKeywords;
 use strict;
 use warnings;
 use Perl::Critic::Utils;
-use Perl::Critic::Violation;
 use List::MoreUtils qw(none);
 use base 'Perl::Critic::Policy';
 
@@ -50,10 +49,8 @@ sub violates {
     my $nodes = $doc->find( \&_wanted );
     for my $keyword ( @{ $self->{_keywords} } ) {
 	if ( (!$nodes) || none { $_ =~ m{ \$$keyword.*\$ }mx } @{$nodes} ) {
-            my $sev  = $self->get_severity();
             my $desc = qq{RCS keyword '\$$keyword\$' not found};
-            my $v = Perl::Critic::Violation->new( $desc, $expl, $doc, $sev );
-            push @viols, $v;
+            push @viols, $self->violation( $desc, $expl, $doc );
 	}
     }
     return @viols;

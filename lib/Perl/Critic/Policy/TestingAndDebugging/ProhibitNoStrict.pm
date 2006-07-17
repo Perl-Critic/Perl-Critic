@@ -11,7 +11,6 @@ use strict;
 use warnings;
 use List::MoreUtils qw(all);
 use Perl::Critic::Utils;
-use Perl::Critic::Violation;
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '0.18';
@@ -61,8 +60,7 @@ sub violates {
     return if all { exists $self->{_allow}->{$_} } @words;
 
     #If we get here, then it must be a violation
-    my $sev = $self->get_severity();
-    return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
+    return $self->violation( $desc, $expl, $elem );
 }
 
 1;

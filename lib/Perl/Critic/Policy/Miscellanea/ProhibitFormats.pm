@@ -10,7 +10,6 @@ package Perl::Critic::Policy::Miscellanea::ProhibitFormats;
 use strict;
 use warnings;
 use Perl::Critic::Utils;
-use Perl::Critic::Violation;
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '0.18';
@@ -35,8 +34,7 @@ sub violates {
     return if is_subroutine_name( $elem );
 
     if ( $elem eq 'format' ) {
-        my $sev  = $self->get_severity();
-        return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
+        return $self->violation( $desc, $expl, $elem );
     }
 
     return;  #ok!

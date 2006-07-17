@@ -10,7 +10,6 @@ package Perl::Critic::Policy::InputOutput::ProhibitBarewordFileHandles;
 use strict;
 use warnings;
 use Perl::Critic::Utils;
-use Perl::Critic::Violation;
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '0.18';
@@ -39,8 +38,7 @@ sub violates {
     $first = $first->[0] || return; #Ick!
 
     if( $first->isa('PPI::Token::Word') && !($first eq 'my') ) {
-        my $sev = $self->get_severity();
-	return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
+        return $self->violation( $desc, $expl, $elem );
     }
     return; #ok!
 }

@@ -9,7 +9,6 @@ package Perl::Critic::Policy::ControlStructures::ProhibitCascadingIfElse;
 
 use strict;
 use warnings;
-use Perl::Critic::Violation;
 use Perl::Critic::Utils;
 use base 'Perl::Critic::Policy';
 
@@ -44,8 +43,7 @@ sub violates {
     my ( $self, $elem, $doc ) = @_;
     return if !($elem->type() eq 'if');
     if ( _count_elsifs($elem) > $self->{_max} ) {
-        my $sev = $self->get_severity();
-        return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
+        return $self->violation( $desc, $expl, $elem );
     }
     return;    #ok!
 }

@@ -10,7 +10,6 @@ package Perl::Critic::Policy::Miscellanea::ProhibitTies;
 use strict;
 use warnings;
 use Perl::Critic::Utils;
-use Perl::Critic::Violation;
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '0.18';
@@ -34,9 +33,8 @@ sub violates {
     return if is_method_call( $elem );
     return if is_subroutine_name($elem);
 
-    if ( $elem eq 'tie' ) {
-        my $sev  = $self->get_severity();
-        return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
+    if ( $elem eq 'tie' ) { # XXX This looks like it should be the FIRST thing we check.
+        return $self->violation( $desc, $expl, $elem );
     }
 
     return;  #ok!

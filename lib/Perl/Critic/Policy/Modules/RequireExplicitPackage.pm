@@ -10,7 +10,6 @@ package Perl::Critic::Policy::Modules::RequireExplicitPackage;
 use strict;
 use warnings;
 use Perl::Critic::Utils;
-use Perl::Critic::Violation;
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '0.18';
@@ -61,8 +60,7 @@ sub violates {
     for my $stmnt ( @{ $stmnts_ref } ) {
         my $stmnt_line = $stmnt->location()->[0];
         if ( (! defined $package_line) || ($stmnt_line < $package_line) ) {
-            my $sev = $self->get_severity();
-            push @viols , Perl::Critic::Violation->new($desc, $expl, $stmnt, $sev);
+            push @viols, $self->violation( $desc, $expl, $stmnt );
         }
     }
 

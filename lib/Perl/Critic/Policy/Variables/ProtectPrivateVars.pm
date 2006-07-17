@@ -10,7 +10,6 @@ package Perl::Critic::Policy::Variables::ProtectPrivateVars;
 use strict;
 use warnings;
 use Perl::Critic::Utils;
-use Perl::Critic::Violation;
 use List::MoreUtils qw(all);
 use base 'Perl::Critic::Policy';
 
@@ -32,10 +31,8 @@ sub applies_to { return 'PPI::Token::Symbol' }
 sub violates {
     my ( $self, $elem, $doc ) = @_;
 
-    if ( $elem =~ m{ \w::_\w+ \z }xms )
-    {
-        my $sev = $self->get_severity();
-        return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
+    if ( $elem =~ m{ \w::_\w+ \z }xms ) {
+        return $self->violation( $desc, $expl, $elem );
     }
     return;    #ok!
 }
