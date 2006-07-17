@@ -1,3 +1,7 @@
+=pod
+
+=for stopwords LHS RHS REFACTORINGS FH stopwords
+
 =head1
 
     #######################################################################
@@ -188,7 +192,7 @@ Good: C<< Foo::Bar->new >>, Bad: C<< new Foo::Bar >>
 VariablesAndExpressions::ProhibitComplexVersion (medium severity)
 L<http://rt.cpan.org/Ticket/Display.html?id=20439>
 
-=item * ProhibitStringSplit
+=item * BuiltinFunctions::ProhibitStringSplit
 
 Since C<split("x", $whatever)> is translated to C<split(/x/, $whatever)>,
 you might as well write it that way anyway.  It will help people
@@ -219,14 +223,18 @@ See also L<http://www.perlmonks.org/?node_id=287545>
 
 =over 4
 
-=item * Move %FORMATS from `perlcritic` into Perl::Critic::Utils so that
+=item * Move %FORMATS from `perlcritic` into Perl::Critic::Utils
 
-Test::P::C can use them.  Use a subroutine instead of a package var.
+So that Test::P::C can use them.  Use a subroutine instead of a package var.
 
 =item * Alias -verbose to -format option in Test::P::C.
 
 Give it same functionality as the -verbose option in `perlcritic`
 
-=item * Enhance P::C::critique() to accept file names, directories, or code strings (as refs) just like `perlcritic` does now.
+=item * Enhance P::C::critique() to accept file names, directories, or code strings (as refs)
+
+Just like `perlcritic` does now.
 
 =back
+
+=cut
