@@ -35,7 +35,11 @@ Allow forbidden words in RHS of variable declarations
 Doesn't forbid C<< $pkg->_foo() >> because it can't tell the
 difference between that and C<< $self->_foo() >>
 
+=back
+
 =head1 OTHER PBP POLICIES THAT SEEM FEASIBLE TO IMPLEMENT
+
+=over 4
 
 =item * ValuesAndExpressions::ProhibitCommaSeparatedStatements (p68)
 
