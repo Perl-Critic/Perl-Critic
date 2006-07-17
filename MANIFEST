@@ -123,4 +123,4 @@ t/samples/perlcriticrc.none
 t/samples/perlcriticrc.pbp
 t/tlib/ViolationTest.pm
 t/tlib/ViolationTest2.pm
-TODO
+TODO.pod
