@@ -1,0 +1,228 @@
+=head1
+
+    #######################################################################
+    #      $URL$
+    #     $Date$
+    #   $Author$
+    # $Revision$
+    #######################################################################
+
+=head1 NEW FEATURES
+
+=over 4
+
+=item * Report safari sections instead of book page numbers.
+
+=back
+
+=head1 BUGS/LIMITATIONS
+
+=over 4
+
+=item * Errors in .perlcriticrc are silent
+
+=item * Modules::RequireVersionVar
+
+Doesn't enforce three-part versions
+
+=item * NamingConventions::ProhibitAmbiguousNames
+
+Don't allow compound names with forbidden words, like "last_record".
+Allow forbidden words in RHS of variable declarations
+
+=item * Subroutines::ProtectPrivateSubs
+
+Doesn't forbid C<< $pkg->_foo() >> because it can't tell the
+difference between that and C<< $self->_foo() >>
+
+=head1 OTHER PBP POLICIES THAT SEEM FEASIBLE TO IMPLEMENT
+
+=item * ValuesAndExpressions::ProhibitCommaSeparatedStatements (p68)
+
+=item * ValuesAndExpressions::RequireListParens (p71)
+
+=item * ValuesAndExpressions::ProhibitScalarGrep (p71)
+
+Look for grep in a scalar context and recommend any() instead
+
+=item * Variables::RequireLocalizedPunctuationVars (p81)
+
+=item * Variables::RequireNegativeIndices (p88)
+
+=item * Variables::RequireLexicalForLoopIterator (p108)
+
+=item * Variables::ProhibitTopicChangeInListFunction (p114)
+
+=item * Documentation::PodSpelling (p148)
+
+Base it on Pod::Spell or Test::Spelling. Add a "=for stopwords"
+section for words to skip, as per Pod::Spell.
+
+=item * BuiltinFunctions::ProhibitReverseSortBlock (p152)
+
+Don't allow first instance of C<$b> to be before first instance of C<$a>.
+
+=item * Subroutines::RequireArgUnpacking (p178)
+
+Ensure that the first child of a sub is PPI::Statement::Variable
+
+=item * Subroutines::ProhibitManyArgs (p182)
+
+If first L<PPI::Statement::Variable> is a list C<my>, make sure
+it's fewer than N elements.  Otherwise make sure there are less
+than N L<PPI::Statement::Variable>s in a row at begin
+
+=item * InputOutput::RequireErrorChecking (p208)
+
+Forbid open, print, close in void context
+
+=item * InputOutput::RequireBriefOpen (p209)
+
+Make sure there's a close within N statements of an open, both with
+same lexical FH
+
+=item * InputOutput::ProhibitJoinedReadline (p213)
+
+=item * InputOutput::ProhibitExplicitStdin (p216)
+
+=item * InputOutput::ProhibitInteractiveTest (p218)
+
+Forbid -t operand
+
+=item * Miscellanea::ProhibitObnoxiousComments
+
+Forbid excessive hash marks e.g. "#### This is a loud comment ####".
+Make the obnoxious pattern configurable
+
+=item * RegularExpressions::RequireBracesForMultiline (p242)
+
+=item * RegularExpressions::ProhibitUnusualDelimiters (p246)
+
+=item * RegularExpressions::ProhibitEscapedMetacharacters (p247)
+
+=item * RegularExpressions::ProhibitEnumeratedClasses (p248)
+
+This will be avoided for ASCII-only code
+
+=item * RegularExpressions::ProhibitUnusedCapture (p252)
+
+Look for LHS of regexp or use of C<$1>, C<$2>, ... before next
+regexp
+
+=item * RegularExpressions::ProhibitCaptureWithoutTest (p253)
+
+C<$1>, C<$2>, ... must be inside conditional with no preceding regexp
+
+=item * RegularExpressions::ProhibitComplexRegexps (p261)
+
+If regexp is longer than N characters/lines, require it be split
+into C<qr//> pieces.
+
+=item * RegularExpressions::ProhibitSingleCharAlternation (p265)
+
+Not sure if this is easy or hard.  Need to look at what PPI emits
+for regexps.
+
+=item * RegularExpressions::ProhibitFixedStringMatches (p271)
+
+Can't be C<qr/\s*\\A\s*\((?:\?:)?(?:\s*\w+\s*\|)*\s*\w+\s*\)\s*\\z/>
+or C<qr/\s*\\A\s*\w+\s*\\z/>
+
+=item * TestingAndDebugging::ProhibitProlongedStrictureOverride (p443)
+
+=back
+
+=head1 NON-PBP POLICIES WANTED
+
+=over 4
+
+=item * BuiltInFunctions::RequireConstantSprintfFormat
+
+=item * BuiltInFunctions::RequireConstantUnpackFormat
+
+L<http://home.earthlink.net/~josh.jore/new-warnings/slides/slide1.html>
+
+=item * ControlStructures::ProhibitIncludeViaDo
+
+Forbid C<do "foo.pl">.  Not sure about this policy name.
+
+=item * CodingStyle::ProhibitNonASCII
+
+Definitely low severity!  Only looks at code, not comments or POD
+
+=item * Miscellanea::RequireMinimumPerlVersion
+
+Every module should have something like C<use 5.6.0>
+
+=item * Miscellanea::Prohibit5006isms
+
+Keep the code 5.005 compatible Low severity
+
+=item * Variables::ProhibitUseVars
+
+Require C<our $foo> instead.  This contradicts
+Miscellanea::Prohibit5006isms.  Maybe verify C<use 5.6> before
+applying this policy.  Low severity.
+
+=item * VariablesAndExpressions::ProhibitQuotedHashKeys
+
+Forbid quotes around hash keys, unless they are really needed.  This
+is against what Damian says.  Suggested by Adam Kennedy.  Low
+severity.
+
+=item * Miscellanea::B::Lint
+
+Create a compatibility layer for the L<B::Lint> code analyzer.  Make
+it very clear that this runs code and thus is a security hole.
+
+=item * CodingStyle::ProhibitFunctionalNew
+
+Good: C<< Foo::Bar->new >>, Bad: C<< new Foo::Bar >>
+
+=item * VariablesAndExpressions::RequireConstantVersion (low severity)
+
+VariablesAndExpressions::ProhibitComplexVersion (medium severity)
+L<http://rt.cpan.org/Ticket/Display.html?id=20439>
+
+=item * ProhibitStringSplit
+
+Since C<split("x", $whatever)> is translated to C<split(/x/, $whatever)>,
+you might as well write it that way anyway.  It will help people
+remember.  I don't know how many times I've seen someone perplexed
+by C<split("|", $something)> not working.
+
+However, there is at least one exception, and if you write such a
+rule, you should take this special case into account:
+
+    $ perl -le 'print map {"<$_>"} split q{ }, " Romeo and Juliet "'
+    <Romeo><and><Juliet>
+    $ perl -le 'print map {"<$_>"} split / /, " Romeo and Juliet "'
+    <><Romeo><and><Juliet>
+
+Quoting from L<http://perldoc.perl.org/functions/split.html>
+
+    As a special case, specifying a PATTERN of space (' ') will split
+    on white space just as split with no arguments does.  Thus,
+    split(' ') can be used to emulate awk's default behavior, whereas
+    split(/ /) will give you as many null initial fields as there
+    are leading spaces.
+
+See also L<http://www.perlmonks.org/?node_id=287545>
+
+=back
+
+=head1 REFACTORINGS and ENHANCEMENTS
+
+=over 4
+
+=item * Move %FORMATS from `perlcritic` into Perl::Critic::Utils so that
+
+Test::P::C can use them.  Use a subroutine instead of a package var.
+
+=item * Alias -verbose to -format option in Test::P::C.
+
+Give it same functionality as the -verbose option in `perlcritic`
+
+=item * Enhance P::C::critique() to accept file names, directories, or code strings (as refs) just like `perlcritic` does now.
+
+=back
