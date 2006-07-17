@@ -29,15 +29,13 @@ sub applies_to { return 'PPI::Token::Word' }
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
+
+    return unless $elem eq 'tie';
     return if is_hash_key( $elem );
     return if is_method_call( $elem );
     return if is_subroutine_name($elem);
 
-    if ( $elem eq 'tie' ) { # XXX This looks like it should be the FIRST thing we check.
-        return $self->violation( $desc, $expl, $elem );
-    }
-
-    return;  #ok!
+    return $self->violation( $desc, $expl, $elem );
 }
 
 
