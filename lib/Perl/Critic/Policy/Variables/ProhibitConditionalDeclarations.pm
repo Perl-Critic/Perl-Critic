@@ -42,7 +42,7 @@ my %conditionals = map {($_,1)} qw(if while foreach for until unless);
 sub _is_conditional {
     my (undef, $elem) = @_;
 
-    return 0 if !$conditionals{$elem};
+    return if !$conditionals{$elem};
     return if ! $elem->isa('PPI::Token::Word');
     return if is_hash_key($elem);
     return if is_method_call($elem);
