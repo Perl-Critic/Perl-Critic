@@ -70,12 +70,12 @@ separated by commas, including the last element.  This makes it a
 little easier to re-order the list by cutting and pasting.
 
   my @list = ($foo,
-	      $bar,
-	      $baz);  #not ok
+              $bar,
+              $baz);  #not ok
 
   my @list = ($foo,
-	      $bar,
-	      $baz,); #ok
+              $bar,
+              $baz,); #ok
 
 =head1 NOTES
 

@@ -37,7 +37,7 @@ sub violates {
 
     my $sib = $elem;
     while ($sib = $sib->snext_sibling()) {
-	if ( $sib->isa( 'PPI::Token::Operator') && $sib eq q{=} ) {
+        if ( $sib->isa( 'PPI::Token::Operator') && $sib eq q{=} ) {
             return $self->violation( $desc, $expl, $sib );
         }
     }

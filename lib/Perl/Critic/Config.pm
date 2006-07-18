@@ -141,11 +141,11 @@ sub add_policy {
         my $policy_obj  = $module_name->new( %{ $config_ref } );
 
         if( defined $severity ) {
-	    my $normal_severity = _normalize_severity( $severity );
-	    $policy_obj->set_severity( $normal_severity );
-	}
+            my $normal_severity = _normalize_severity( $severity );
+            $policy_obj->set_severity( $normal_severity );
+        }
 
-	push @{ $self->{_policies} }, $policy_obj;
+        push @{ $self->{_policies} }, $policy_obj;
     };
 
 

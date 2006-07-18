@@ -60,10 +60,10 @@ sub violates {
 
     # Trap Perl::Tidy errors, just in case it dies
     eval {
-	Perl::Tidy::perltidy(
-	    source      => \$source,
-	    destination => \$dest,
-	    stderr      => \$stderr,
+        Perl::Tidy::perltidy(
+            source      => \$source,
+            destination => \$dest,
+            stderr      => \$stderr,
        );
     };
 

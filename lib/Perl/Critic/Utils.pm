@@ -259,21 +259,21 @@ sub parse_arg_list {
 
     if ( $sib->isa('PPI::Structure::List') ) {
 
-	#Pull siblings from list
-	my $expr = $sib->schild(0) || return;
-	return _split_nodes_on_comma( $expr->schildren() );
+        #Pull siblings from list
+        my $expr = $sib->schild(0) || return;
+        return _split_nodes_on_comma( $expr->schildren() );
     }
     else {
 
-	#Gather up remaining nodes in the statement
-	my $iter     = $elem;
-	my @arg_list = ();
+        #Gather up remaining nodes in the statement
+        my $iter     = $elem;
+        my @arg_list = ();
 
-	while ($iter = $iter->snext_sibling() ) {
-	    last if $iter->isa('PPI::Token::Structure') and $iter eq $SCOLON;
-	    push @arg_list, $iter;
-	}
-	return  _split_nodes_on_comma( @arg_list );
+        while ($iter = $iter->snext_sibling() ) {
+            last if $iter->isa('PPI::Token::Structure') and $iter eq $SCOLON;
+            push @arg_list, $iter;
+        }
+        return  _split_nodes_on_comma( @arg_list );
     }
 }
 
@@ -285,17 +285,17 @@ sub _split_nodes_on_comma {
     for my $node (@_) {
         if ( $node->isa('PPI::Token::Operator') &&
                 (($node eq $COMMA) || ($node eq $FATCOMMA)) ) {
-	    $i++; #Move forward to next 'node stack'
-	    next;
-	}
+            $i++; #Move forward to next 'node stack'
+            next;
+        }
 
-	#Push onto current 'node stack', or create a new 'stack'
-	if ( defined $nodes[$i] ) {
-	    push @{ $nodes[$i] }, $node;
-	}
-	else {
-	    $nodes[$i] = [$node];
-	}
+        #Push onto current 'node stack', or create a new 'stack'
+        if ( defined $nodes[$i] ) {
+            push @{ $nodes[$i] }, $node;
+        }
+        else {
+            $nodes[$i] = [$node];
+        }
     }
     return @nodes;
 }

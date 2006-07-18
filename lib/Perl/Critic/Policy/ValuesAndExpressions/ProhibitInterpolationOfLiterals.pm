@@ -38,11 +38,15 @@ sub new {
 
     #Set configuration, if defined
     if ( defined $args{allow} ) {
-	my @allow = split m{ \s+ }mx, $args{allow};
-	#Try to be forgiving with the configuration...
-	for (@allow) { m{ \A qq }mx || ($_ = 'qq' . $_) }  #Add 'qq'
-	for (@allow) { (length $_ <= 3) || chop }    #Chop closing char
-	$self->{_allow} = \@allow;
+        my @allow = split m{ \s+ }mx, $args{allow};
+        #Try to be forgiving with the configuration...
+        for (@allow) {
+            m{ \A qq }mx || ($_ = 'qq' . $_)
+        }  #Add 'qq'
+        for (@allow) {
+            (length $_ <= 3) || chop
+        }    #Chop closing char
+        $self->{_allow} = \@allow;
     }
 
     return $self;

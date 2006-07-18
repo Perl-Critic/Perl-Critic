@@ -32,10 +32,10 @@ sub import {
     return if exists $DIAGNOSTICS{$caller};
 
     if ( my $file = _mod2file($caller) ) {
-	if ( my $diags = _get_diagnostics($file) ) {
-	       $DIAGNOSTICS{$caller} = $diags;
-	       return; #ok!
-	   }
+        if ( my $diags = _get_diagnostics($file) ) {
+               $DIAGNOSTICS{$caller} = $diags;
+               return; #ok!
+           }
     }
 
     #If we get here, then we couldn't get diagnostics
@@ -136,9 +136,9 @@ sub explanation {
     my $self = shift;
     my $expl = $self->{_explanation};
     if( ref $expl eq 'ARRAY' ) {
-	my $page = @{$expl} > 1 ? 'pages' : 'page';
-	$page .= $SPACE . join $COMMA, @{$expl};
-	$expl = "See $page of PBP";
+        my $page = @{$expl} > 1 ? 'pages' : 'page';
+        $page .= $SPACE . join $COMMA, @{$expl};
+        $expl = "See $page of PBP";
     }
     return $expl;
 }

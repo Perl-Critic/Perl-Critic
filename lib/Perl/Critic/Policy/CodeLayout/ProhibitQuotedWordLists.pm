@@ -53,15 +53,15 @@ sub violates {
 
     my $count = 0;
     for my $child ( @children ) {
-	next if $child->isa('PPI::Token::Operator')  && $child eq $COMMA;
+        next if $child->isa('PPI::Token::Operator')  && $child eq $COMMA;
 
         #All elements must be literal strings,
         #of non-zero length, with no whitespace
 
-	return if ! _is_literal($child);
-	return if $child =~ m{ \s }mx;
+        return if ! _is_literal($child);
+        return if $child =~ m{ \s }mx;
         return if $child eq $EMPTY;
-	$count++;
+        $count++;
     }
 
     #Were there enough?
@@ -74,7 +74,7 @@ sub violates {
 sub _is_literal {
     my $elem = shift;
     return $elem->isa('PPI::Token::Quote::Single')
-	|| $elem->isa('PPI::Token::Quote::Literal');
+        || $elem->isa('PPI::Token::Quote::Literal');
 }
 
 1;

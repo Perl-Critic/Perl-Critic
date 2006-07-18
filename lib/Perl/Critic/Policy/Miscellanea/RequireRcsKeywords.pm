@@ -34,7 +34,7 @@ sub new {
 
     #Set configuration, if defined.
     if ( defined $config{keywords} ) {
-	$self->{_keywords} = [ split m{ \s+ }mx, $config{keywords} ];
+        $self->{_keywords} = [ split m{ \s+ }mx, $config{keywords} ];
     }
 
     return $self;

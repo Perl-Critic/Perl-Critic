@@ -76,10 +76,10 @@ sub violates {
 
     #Handle special cases
     if ( $elem eq 'if' ) {
-	#Postfix 'if' allowed with loop breaks, or other
-	#flow-controls like 'die', 'warn', and 'croak'
-	return if $stmnt->isa('PPI::Statement::Break');
-	return if defined $exemptions{ $stmnt->schild(0) };
+        #Postfix 'if' allowed with loop breaks, or other
+        #flow-controls like 'die', 'warn', and 'croak'
+        return if $stmnt->isa('PPI::Statement::Break');
+        return if defined $exemptions{ $stmnt->schild(0) };
     }
 
     # If we get here, it must be postfix.
