@@ -38,16 +38,17 @@ sub violates {
     return;    #ok!
 }
 
+my %conditionals = map {($_,1)} qw(if while foreach for until unless);
+
 sub _is_conditional {
     my (undef, $elem) = @_;
 
+    return 0 if !$conditionals{$elem};
     return if ! $elem->isa('PPI::Token::Word');
     return if is_hash_key($elem);
     return if is_method_call($elem);
 
-    # XXX Do this first
-    my @keywords = qw(if while foreach for until unless);
-    return any { $elem eq $_ } @keywords;
+    return 1;
 }
 
 1;
