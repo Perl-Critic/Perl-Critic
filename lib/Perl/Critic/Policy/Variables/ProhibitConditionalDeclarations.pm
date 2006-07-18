@@ -29,7 +29,7 @@ sub applies_to { return 'PPI::Statement::Variable' }
 #---------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, $doc ) = @_;
+    my ( $self, $elem, undef ) = @_;
 
     if ( $elem->find(\&_is_conditional) ) {
         return $self->violation( $desc, $expl, $elem );
@@ -38,10 +38,13 @@ sub violates {
 }
 
 sub _is_conditional {
-    my ($doc, $elem) = @_;
+    my (undef, $elem) = @_;
+
     return if ! $elem->isa('PPI::Token::Word');
     return if is_hash_key($elem);
     return if is_method_call($elem);
+
+    # XXX Do this first
     my @keywords = qw(if while foreach for until unless);
     return any { $elem eq $_ } @keywords;
 }

@@ -29,7 +29,7 @@ sub applies_to { return 'PPI::Token::HereDoc' }
 #---------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, $doc ) = @_;
+    my ( $self, $elem, undef ) = @_;
     if ( $elem !~ $heredoc_rx ) {
         return $self->violation( $desc, $expl, $elem );
     }

@@ -31,7 +31,7 @@ sub applies_to {
 #---------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, $doc ) = @_;
+    my ( $self, $elem, undef ) = @_;
     if ($elem->content =~ m/(?<!\\)(?:\\\\)*(?:\\x[0-9A-F]|\\[01][0-7])/mx) {
         return $self->violation( $desc, $expl, $elem );
     }

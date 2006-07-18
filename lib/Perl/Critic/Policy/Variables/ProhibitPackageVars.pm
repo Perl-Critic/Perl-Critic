@@ -33,7 +33,7 @@ sub applies_to {
 #---------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, $doc ) = @_;
+    my ( $self, $elem, undef ) = @_;
 
     if (   _is_package_var($elem)
         || _is_our_var($elem)

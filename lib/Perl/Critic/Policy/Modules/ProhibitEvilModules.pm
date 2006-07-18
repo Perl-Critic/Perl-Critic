@@ -52,7 +52,7 @@ sub new {
 #----------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, $doc ) = @_;
+    my ( $self, $elem, undef ) = @_;
     my $module = $elem->module() || return;
 
     if ( exists $self->{_evil_modules}->{ $module } ||

@@ -48,16 +48,16 @@ sub violates {
 
     my $nodes = $doc->find( \&_wanted );
     for my $keyword ( @{ $self->{_keywords} } ) {
-	if ( (!$nodes) || none { $_ =~ m{ \$$keyword.*\$ }mx } @{$nodes} ) {
+        if ( (!$nodes) || none { $_ =~ m{ \$$keyword.*\$ }mx } @{$nodes} ) {
             my $desc = qq{RCS keyword '\$$keyword\$' not found};
             push @viols, $self->violation( $desc, $expl, $doc );
-	}
+        }
     }
     return @viols;
 }
 
 sub _wanted {
-    my ($doc, $elem) = @_;
+    my (undef, $elem) = @_;
     return    $elem->isa('PPI::Token::Comment')
            || $elem->isa('PPI::Token::Quote::Single')
            || $elem->isa('PPI::Token::Quote::Literal');

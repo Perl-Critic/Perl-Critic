@@ -29,7 +29,7 @@ sub applies_to { return qw(PPI::Token::Regexp::Match
 #----------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, $doc ) = @_;
+    my ( $self, $elem, undef ) = @_;
 
     #Note: as of PPI 1.103, 'modifiers' is not part of the published
     #API.  I'm cheating by accessing it here directly.

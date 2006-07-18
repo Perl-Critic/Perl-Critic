@@ -34,7 +34,7 @@ sub applies_to { return 'PPI::Token::Magic' }
 #---------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, $doc ) = @_;
+    my ( $self, $elem, undef ) = @_;
     if ( !exists $exempt{$elem} ) {
         return $self->violation( $desc, $expl, $elem );
     }

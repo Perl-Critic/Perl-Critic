@@ -28,7 +28,8 @@ sub applies_to { return 'PPI::Structure::ForLoop' }
 #----------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, $doc ) = @_;
+    my ( $self, $elem, undef ) = @_;
+
     if ( _is_cstyle($elem) ) {
         return $self->violation( $desc, $expl, $elem );
     }

@@ -59,7 +59,7 @@ sub default_forbidden_words { return @default_forbid }
 #---------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, $doc ) = @_;
+    my ( $self, $elem, undef ) = @_;
 
     if ( $elem->isa('PPI::Statement::Sub') ) {
         my @words = grep { $_->isa('PPI::Token::Word') } $elem->schildren();

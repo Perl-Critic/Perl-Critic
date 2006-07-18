@@ -28,7 +28,7 @@ sub applies_to { return 'PPI::Token::Symbol' }
 #---------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, $doc ) = @_;
+    my ( $self, $elem, undef ) = @_;
 
     if ( my $psib = $elem->previous_sibling() ) {
         #Sigil is allowed if taking a reference, e.g. "\&my_sub"

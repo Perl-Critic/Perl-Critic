@@ -40,7 +40,7 @@ sub new {
 #---------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, $doc ) = @_;
+    my ( $self, $elem, undef ) = @_;
     my $min = $self->{_min};
 
     if ( abs _to_number($elem) >= $min && $elem =~ m{ \d{4,} }mx ) {

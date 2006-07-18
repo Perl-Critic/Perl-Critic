@@ -29,7 +29,7 @@ sub applies_to { return 'PPI::Statement::Sub' }
 #---------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, $doc ) = @_;
+    my ( $self, $elem, undef ) = @_;
     if ( $elem->name() =~ $mixed_rx ) {
         return $self->violation( $desc, $expl, $elem );
     }

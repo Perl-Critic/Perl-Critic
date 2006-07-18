@@ -28,7 +28,7 @@ sub applies_to { return 'PPI::Statement::Include' }
 #---------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, $doc ) = @_;
+    my ( $self, $elem, undef ) = @_;
     if ( $elem->type() eq 'use' || $elem->type() eq 'require' ) {
 
         #This is a pretty crude way to verify that a version string is

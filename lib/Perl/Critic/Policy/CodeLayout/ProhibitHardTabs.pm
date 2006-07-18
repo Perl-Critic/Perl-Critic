@@ -39,7 +39,7 @@ sub new {
 #----------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, $doc ) = @_;
+    my ( $self, $elem, undef ) = @_;
     $elem =~ m{ \t }mx || return;
 
     #Permit leading tabs, if allowed

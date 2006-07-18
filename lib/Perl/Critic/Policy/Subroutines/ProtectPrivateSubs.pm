@@ -29,7 +29,7 @@ sub applies_to { return 'PPI::Token::Word' }
 #---------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, $doc ) = @_;
+    my ( $self, $elem, undef ) = @_;
 
     if ( $self->_is_other_pkg_private_function($elem) ||
          $self->_is_other_pkg_private_method($elem) )

@@ -54,7 +54,7 @@ sub new {
 #---------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, $doc ) = @_;
+    my ( $self, $elem, undef ) = @_;
     my $count = 1;
 
     # Count up all the logic keywords, weed out hash keys

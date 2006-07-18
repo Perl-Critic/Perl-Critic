@@ -44,7 +44,7 @@ sub _wanted {
 #------------------
 
 sub _our_VERSION {
-    my ($doc, $elem) = @_;
+    my (undef, $elem) = @_;
     $elem->isa('PPI::Statement::Variable') || return 0;
     $elem->type() eq 'our' || return 0;
     return any { $_ eq '$VERSION' } $elem->variables(); ## no critic
@@ -53,7 +53,7 @@ sub _our_VERSION {
 #------------------
 
 sub _vars_VERSION {
-    my ($doc, $elem) = @_;
+    my (undef, $elem) = @_;
     $elem->isa('PPI::Statement::Include') || return 0;
     $elem->pragma() eq 'vars' || return 0;
     return $elem =~ m{ \$VERSION }mx; #Crude, but usually works
@@ -62,7 +62,7 @@ sub _vars_VERSION {
 #------------------
 
 sub _package_VERSION {
-    my ($doc, $elem) = @_;
+    my (undef, $elem) = @_;
     $elem->isa('PPI::Token::Symbol') || return 0;
     return $elem =~ m{ \A \$ \S+ ::VERSION \z }mx;
     #TODO: ensure that it is in _this_ package!

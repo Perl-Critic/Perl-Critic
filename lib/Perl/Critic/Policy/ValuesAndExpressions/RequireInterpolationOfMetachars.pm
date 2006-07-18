@@ -30,7 +30,7 @@ sub applies_to {
 #---------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, $doc ) = @_;
+    my ( $self, $elem, undef ) = @_;
     if ( _has_interpolation($elem) ) {
         return $self->violation( $desc, $expl, $elem );
     }

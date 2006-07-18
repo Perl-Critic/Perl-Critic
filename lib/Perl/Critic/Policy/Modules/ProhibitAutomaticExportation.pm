@@ -59,7 +59,7 @@ sub _has_exports {
 #------------------
 
 sub _our_EXPORT {
-    my ($doc, $elem) = @_;
+    my (undef, $elem) = @_;
     $elem->isa('PPI::Statement::Variable') || return 0;
     $elem->type() eq 'our' || return 0;
     return any { $_ eq '@EXPORT' } $elem->variables(); ## no critic
@@ -68,7 +68,7 @@ sub _our_EXPORT {
 #------------------
 
 sub _vars_EXPORT {
-    my ($doc, $elem) = @_;
+    my (undef, $elem) = @_;
     $elem->isa('PPI::Statement::Include') || return 0;
     $elem->pragma() eq 'vars' || return 0;
     return $elem =~ m{ \@EXPORT \b }mx; #Crude, but usually works
@@ -77,7 +77,7 @@ sub _vars_EXPORT {
 #------------------
 
 sub _package_EXPORT {
-    my ($doc, $elem) = @_;
+    my (undef, $elem) = @_;
     $elem->isa('PPI::Token::Symbol') || return 0;
     return $elem =~ m{ \A \@ \S+ ::EXPORT \z }mx;
     #TODO: ensure that it is in _this_ package!

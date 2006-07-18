@@ -28,7 +28,7 @@ sub applies_to { return 'PPI::Structure::List' }
 #----------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, $doc ) = @_;
+    my ( $self, $elem, undef ) = @_;
     $elem =~ m{ \n }mx || return;
 
     # Is it an assignment of some kind?

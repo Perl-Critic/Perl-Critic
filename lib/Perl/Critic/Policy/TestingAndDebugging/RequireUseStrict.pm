@@ -28,7 +28,7 @@ sub applies_to { return 'PPI::Document' }
 #---------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, $doc ) = @_;
+    my ( $self, undef, $doc ) = @_;
 
     # Find the first 'use strict' statement
     my $strict_stmnt = $doc->find_first( \&_is_use_strict );

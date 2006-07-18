@@ -46,7 +46,7 @@ sub new {
 
 sub violates {
 
-    my ( $self, $elem, $doc ) = @_;
+    my ( $self, $elem, undef ) = @_;
 
     return unless ($elem->type() eq 'no' && $elem->pragma() eq 'strict'); ## no critic
 

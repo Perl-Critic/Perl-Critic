@@ -29,7 +29,7 @@ sub applies_to { return 'PPI::Statement::Sub' }
 #---------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, $doc ) = @_;
+    my ( $self, $elem, undef ) = @_;
     return if exists $allow{ $elem->name() };
     if ( is_perl_builtin( $elem ) ) {
         return $self->violation( $desc, $expl, $elem );

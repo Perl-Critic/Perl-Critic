@@ -60,7 +60,8 @@ sub new {
 #----------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, $doc ) = @_;
+    my ( $self, $elem, undef ) = @_;
+
     return if !exists $pages_of{$elem};
     return if is_hash_key($elem);
     return if is_method_call($elem);

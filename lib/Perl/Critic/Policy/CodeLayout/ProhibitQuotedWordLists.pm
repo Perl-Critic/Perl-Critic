@@ -39,7 +39,7 @@ sub new {
 #---------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, $doc ) = @_;
+    my ( $self, $elem, undef ) = @_;
 
     #Don't worry about subroutine calls
     my $sib = $elem->sprevious_sibling() || return;

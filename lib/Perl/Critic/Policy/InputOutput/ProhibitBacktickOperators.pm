@@ -31,7 +31,7 @@ sub applies_to {
 #----------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, $doc ) = @_;
+    my ( $self, $elem, undef ) = @_;
     return $self->violation( $desc, $expl, $elem );
 }
 

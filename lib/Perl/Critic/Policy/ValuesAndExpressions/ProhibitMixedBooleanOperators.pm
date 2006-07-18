@@ -46,7 +46,7 @@ sub applies_to { return 'PPI::Statement' }
 
 sub violates {
 
-    my ( $self, $elem, $doc ) = @_;
+    my ( $self, $elem, undef ) = @_;
 
     # PPI::Statement is the ancestor of several types of PPI elements.
     # But for this policy, we only want the ones that generally
@@ -69,13 +69,13 @@ sub violates {
 
 
 sub _low_boolean {
-    my ($doc, $elem) = @_;
+    my (undef, $elem) = @_;
     $elem->isa('PPI::Token::Operator') || return 0;
     return exists $low_booleans{$elem};
 }
 
 sub _high_boolean {
-    my ($doc, $elem) = @_;
+    my (undef, $elem) = @_;
     $elem->isa('PPI::Token::Operator') || return 0;
     return exists $high_booleans{$elem};
 }

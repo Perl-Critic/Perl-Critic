@@ -29,7 +29,8 @@ sub applies_to { return 'PPI::Token::QuoteLike::Readline' }
 #----------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, $doc ) = @_;
+    my ( $self, $elem, undef ) = @_;
+
     if ( $elem =~ $glob_rx ) {
         return $self->violation( $desc, $expl, $elem );
     }

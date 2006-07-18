@@ -79,7 +79,7 @@ sub _is_script {
 #---------------------------------------------
 
 sub _is_package {
-    my ($doc, $elem) = @_;
+    my (undef, $elem) = @_;
     return 1 if  $elem->isa('PPI::Statement::Package');
     return 0;
 }
@@ -87,7 +87,7 @@ sub _is_package {
 #---------------------------------------------
 
 sub _isnt_package {
-    my ($doc, $elem) = @_;
+    my (undef, $elem) = @_;
     return 0 if $elem->isa('PPI::Statement::Package');
     return 0 if !$elem->isa('PPI::Statement');
     return 1;

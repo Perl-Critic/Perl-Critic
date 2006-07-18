@@ -28,7 +28,7 @@ sub applies_to { return qw( PPI::Structure::ForLoop) }
 #----------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, $doc ) = @_;
+    my ( $self, $elem, undef ) = @_;
 
     if ( my $rl = $elem->find_first('PPI::Token::QuoteLike::Readline') ) {
         return $self->violation( $desc, $expl, $rl );

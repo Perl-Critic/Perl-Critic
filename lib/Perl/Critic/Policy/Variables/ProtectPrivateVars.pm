@@ -29,7 +29,7 @@ sub applies_to { return 'PPI::Token::Symbol' }
 #---------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, $doc ) = @_;
+    my ( $self, $elem, undef ) = @_;
 
     if ( $elem =~ m{ \w::_\w+ \z }xms ) {
         return $self->violation( $desc, $expl, $elem );
