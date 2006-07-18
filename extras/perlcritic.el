@@ -83,6 +83,12 @@
 
 
 ;;; Change Log:
+;; 0.07
+;;   * Moved perlcritic-compilation-error-regexp-alist so it is in the
+;;     source before it's used. This only seems to matter when
+;;     perlcritic.el is compiled to bytecode.
+;;   * Added perlcritic-exclude, perlcritic-include
+
 ;; 0.06
 ;;   * Code cleanliness.
 ;;   * Comment cleanliness.
@@ -117,16 +123,22 @@
 ;;   modify it under the same terms as Perl itself
 
 
+
+
 ;;; Code:
+
+;;; Customization and variables.
 (defgroup perlcritic nil "Perl::Critic"
   :prefix "perlcritic-"
   :group 'tools)
+
 (defcustom perlcritic-bin "perlcritic"
   "The perlcritic program used by `perlcritic'."
   :type 'string
   :group 'perlcritic)
+
 (defcustom perlcritic-pass-required nil
-  "When `perlcritic-mode' is enabled then this boolean controls
+  "When \\[perlcritic-mode] is enabled then this boolean controls
 whether your file can be saved when there are perlcritic warnings.
 
 This variable is automatically buffer-local and may be overridden on a
@@ -137,10 +149,18 @@ per-file basis with File Variables."
   :group 'perlcritic)
 (make-variable-buffer-local 'perlcritic-pass-required)
 
-;; TODO: perlcritic-profile
+(defcustom perlcritic-profile nil
+  "Specify an alternate .perlcriticrc file. This is only used if
+non-nil."
+  :type '(string)
+  :group 'perlcritic)
+(make-variable-buffer-local 'perlcritic-profile)
 
-;; TODO: perlcritic-noprofile
-
+(defcustom perlcritic-noprofile nil
+  "Disables the use of any .perlcriticrc file."
+  :type '(boolean)
+  :group 'perlcritic)
+(make-variable-buffer-local 'perlcritic-noprofile)
 
 (defcustom perlcritic-severity nil
   "Directs perlcritic to only report violations of Policies with a
@@ -171,37 +191,86 @@ level is 1. Users can redefine the severity for any Policy in their
 
 This variable is automatically buffer-local and may be overridden on a
 per-file basis with File Variables."
-  :type 'integer
+  :type '(integer)
   :group 'perlcritic)
 (make-variable-buffer-local 'perlcritic-top)
 
-;; TODO: perlcritic-include
+(defcustom perlcritic-include nil
+  "TODO: document perlcritic-include"
+  :type '(string)
+  :group 'perlcritic)
+(make-variable-buffer-local 'perlcritic-include)
 
-;; TODO: perlcritic-exclude
+(defcustom perlcritic-exclude nil
+  "TODO: document perlcritic-exclude"
+  :type '(string)
+  :group 'perlcritic)
+(make-variable-buffer-local 'perlcritic-exclude)
 
-;; TODO: perlcritic-force
+
+(defcustom perlcritic-force nil
+  "TODO: document perlcritic-force"
+  :type '(boolean)
+  :group 'perlcritic)
+(make-variable-buffer-local 'perlcritic-force)
 
 (defcustom perlcritic-verbose nil
   "TODO: Document this.
 
 This variable is automatically buffer-local and may be overridden on a
 per-file basis with File Variables."
-  :type 'integer
+  :type '(integer)
   :group 'perlcritic)
 (make-variable-buffer-local 'perlcritic-verbose)
 
-;; TODO: perlcritic-verbose-regexp. perlcritic supports custom
-;; formats.
+;; TODO: Enable strings in perlcritic-verbose.
+;; (defcustom perlcritic-verbose-regexp nil
+;;   "An optional  regexp to match the warning output.
+;; 
+;; This is used when `perlcritic-verbose' has a regexp instead of one of
+;; the standard verbose levels.")
+;; (make-local-variable 'perlcritic-verbose-regexp)
+
+
+;; compile.el requires that something be the "filename." I've tagged
+;; the severity with that. It happens to make it get highlighted in
+;; red. The following advice on COMPILATION-FIND-FILE makes sure that
+;; the "filename" is getting ignored when perlcritic is using it.
+
+;; Verbosity     Format Specification
+;; -----------   --------------------------------------------------------------------
+;; 1             "%f:%l:%c:%m\n"
+;; 2             "%m at line %l, column %c.  %e. (Severity: %s)\n"
+;; 3             "%f: %m at line %l, column %c.  %e. (Severity: %s)\n"
+;; 4             "%m near '%r'. (Severity: %s)\n"
+;; 5             "%f: %m near '%r'. (Severity: %s)\n"
+;; 6             "%m at line %l, column %c near '%r'.  %e. (Severity: %s)\n"
+;; 7             "%f: %m at line %l, column %c near '%r'.  %e. (Severity: %s)\n"
+;; 8             "[%p] %m at line %l, column %c near '%r'.  %e. (Severity: %s)\n"
+;; 9             "[%p] %m at line %l, column %c near '%r'.  %e. (Severity: %s)\n%d\n"
+(defvar perlcritic-compilation-error-regexp-alist
+  '(("^\\([^\n]+\\):\\([0-9]+\\):\\([0-9]+\\):[^\n]+$" 1 2 3)
+    ("^[^\n]+ at line \\([0-9]+\\), column \\([0-9]+\\).  [^\n]+. (Severity: \\([0-9]+\\))$" 3 1 2)
+    ("^\\([^\n]+\\): [^\n]+ at line \\([0-9]+\\), column \\([0-9]+\\).  [^\n]+. (Severity: [0-9]+)$" 1 2 3)
+    ("^[^\n]+ near '[^\n]+'. (Severity: [0-9]+)$" 1)
+    ("^\\([^\n]+\\): [^\n]+ near '[^\n]+'. (Severity: [0-9]+)$" 1)
+    ("^[^\n]+ at line \\([0-9]+\\), column \\([0-9]+\\) near '[^\n]+'.  [^\n]+. (Severity: [0-9]+)" 3 1 2)
+    ("^\\([^\n]+\\): [^\n]+ at line \\([0-9]+\\), column \\([0-9]+\\) near '[^\n]+'.  [^\n]+. (Severity: [^\n]+)$" 1 2 3)
+    ("\\[[^\n]+\\] [^\n]+ at line \\([0-9]+\\), column \\([0-9]+\\) near '[0-9]+;.  [^\n]+. (Severity: [^\n]+)$" 3 1 2)
+    ("\\[[^\n]+\\] [^\n]+ at line \\([0-9]+\\), column \\([0-9]+\\) near '[^\n]+'.  [^\n]+. (Severity: \\([^\n]+\\))" 3 1 2))
+  "Alist that specified how to match errors in perlcritic output.")
 
 
 
+
 ;; The Emacs Lisp manual says to do this with the cl library.
 (eval-when-compile (require 'cl))
 
 ;;;###autoload
 (defun perlcritic ()
-  "Returns a either nil or t depending on whether the current buffer
-passes perlcritic's check."
+  "\\[perlcritic]] returns a either nil or t depending on whether the
+current buffer passes perlcritic's check. If there are any warnings
+those are displayed in a separate buffer."
   (interactive)
   (save-restriction
     (widen)
@@ -209,8 +278,9 @@ passes perlcritic's check."
 
 ;;;###autoload
 (defun perlcritic-region (start end)
-  "Returns a either nil or t depending on whether the region passes
-perlcritic's check."
+  "\\[perlcritic-region] returns a either nil or t depending on
+whether the region passes perlcritic's check. If there are any
+warnings those are displayed in a separate buffer."
 
   (interactive "r")
 
@@ -228,9 +298,14 @@ perlcritic's check."
       (let ((perlcritic-args (loop for p in (list
                                              ;; Add new bin/perlcritic
                                              ;; parameters here!
-                                             (perlcritic-severity)
-                                             (perlcritic-top)
-                                             (perlcritic-verbose))
+					     (perlcritic--param-profile)
+					     (perlcritic--param-noprofile)
+                                             (perlcritic--param-severity)
+                                             (perlcritic--param-top)
+					     (perlcritic--param-include)
+					     (perlcritic--param-exclude)
+					     (perlcritic--param-force)
+                                             (perlcritic--param-verbose))
                                    unless (null p)
                                    append p)))
                                         ;
@@ -256,6 +331,7 @@ perlcritic's check."
                                     (zerop rc)
                                     (progn
 				      (set-buffer err-buf)
+				      (goto-char (point-min))
 				      (delete-matching-lines "source OK$")
 				      (zerop (buffer-size))))))
             ;; Either clean up or finish setting up my output.
@@ -304,27 +380,60 @@ perlcritic's check."
 	    ;; Return our success or failure.
             perlcritic-ok))))))
 
-(defun perlcritic-severity ()
-  "Returns the appropriate parameters for invoking `perlcritic-bin'
-with the current severity"
+
+
+
+;;; Parameters for use by perlcritic-region.
+(defun perlcritic--param-profile ()
+  "A private method that supplies the -profile FILENAME parameter for
+\\[perlcritic-region]"
+  (if perlcritic-profile (list "-profile" perlcritic-profile)))
+
+(defun perlcritic--param-noprofile ()
+  "A private method that supplies the -noprofile parameter for
+\\[perlcritic-region]"
+  (if perlcritic-noprofile (list "-noprofile")))
+
+(defun perlcritic--param-force ()
+  "A private method that supplies the -force parameter for
+\\[perlcritic-region]"
+  (if perlcritic-force (list "-force")))
+
+(defun perlcritic--param-severity ()
+  "A private method that supplies the -severity NUMBER parameter for
+\\[perlcritic-region]"
   (cond ((stringp perlcritic-severity)
 	 (list "-severity" perlcritic-severity))
         ((numberp perlcritic-severity)
 	 (list "-severity" (number-to-string perlcritic-severity)))
         (t nil)))
 
-(defun perlcritic-top ()
-  "Returns the appropriate parameters for invoking `perlcritic-bin'
-with -top"
+(defun perlcritic--param-top ()
+  "A private method that supplies the -top NUMBER parameter for
+\\[perlcritic-region]"
   (cond ((stringp perlcritic-top)
 	 (list "-top" perlcritic-top))
         ((numberp perlcritic-top)
 	 (list "-top" (number-to-string perlcritic-top)))
         (t nil)))
 
-(defun perlcritic-verbose ()
-  "Returns the appropriate parameters for invoking `perlcritic-bin'
-with -verbose"
+(defun perlcritic--param-include ()
+  "A private method that supplies the -include REGEXP parameter for
+\\[perlcritic-region]"
+  (if perlcritic-include
+      (list "-include" perlcritic-include)
+    nil))
+
+(defun perlcritic--param-exclude ()
+  "A private method that supplies the -exclude REGEXP parameter for
+\\[perlcritic-region]"
+  (if perlcritic-exclude
+      (list "-exclude" perlcritic-exclude)
+    nil))
+
+(defun perlcritic--param-verbose ()
+  "A private method that supplies the -verbose NUMBER parameter for
+\\[perlcritic-region]"
   (cond ((stringp perlcritic-verbose)
 	 (list "-verbose" perlcritic-verbose))
         ((numberp perlcritic-verbose)
@@ -332,36 +441,53 @@ with -verbose"
         (t nil)))
 
 
+;; Interactive functions for use by the user to modify parameters on
+;; an adhoc basis. I'm sure there's room for significant niceness
+;; here. Suggest something. Please.
+(defun perlcritic-profile (profile)
+  "Sets perlcritic's -profile FILENAME parameter."
+  (interactive "sperlcritic -profile: ")
+  (setq perlcritic-profile (if (string= profile "") nil profile)))
 
-;; compile.el requires that something be the "filename." I've tagged
-;; the severity with that. It happens to make it get highlighted in
-;; red. The following advice on COMPILATION-FIND-FILE makes sure that
-;; the "filename" is getting ignored when perlcritic is using it.
+(defun perlcritic-noprofile (noprofile)
+  "Toggles perlcritic's -noprofile parameter."
+  (interactive (list (yes-or-no-p "Enable perlcritic -noprofile? ")))
+  (setq perlcritic-noprofile noprofile))
 
-;; Verbosity     Format Specification
-;; -----------   --------------------------------------------------------------------
-;; 1             "%f:%l:%c:%m\n"
-;; 2             "%m at line %l, column %c.  %e. (Severity: %s)\n"
-;; 3             "%f: %m at line %l, column %c.  %e. (Severity: %s)\n"
-;; 4             "%m near '%r'. (Severity: %s)\n"
-;; 5             "%f: %m near '%r'. (Severity: %s)\n"
-;; 6             "%m at line %l, column %c near '%r'.  %e. (Severity: %s)\n"
-;; 7             "%f: %m at line %l, column %c near '%r'.  %e. (Severity: %s)\n"
-;; 8             "[%p] %m at line %l, column %c near '%r'.  %e. (Severity: %s)\n"
-;; 9             "[%p] %m at line %l, column %c near '%r'.  %e. (Severity: %s)\n%d\n"
-(defvar perlcritic-compilation-error-regexp-alist
-  '(("^\\([^\n]+\\):\\([0-9]+\\):\\([0-9]+\\):[^\n]+$" 1 2 3)
-    ("^[^\n]+ at line \\([0-9]+\\), column \\([0-9]+\\).  [^\n]+. (Severity: \\([0-9]+\\))$" 3 1 2)
-    ("^\\([^\n]+\\): [^\n]+ at line \\([0-9]+\\), column \\([0-9]+\\).  [^\n]+. (Severity: [0-9]+)$" 1 2 3)
-    ("^[^\n]+ near '[^\n]+'. (Severity: [0-9]+)$" 1)
-    ("^\\([^\n]+\\): [^\n]+ near '[^\n]+'. (Severity: [0-9]+)$" 1)
-    ("^[^\n]+ at line \\([0-9]+\\), column \\([0-9]+\\) near '[^\n]+'.  [^\n]+. (Severity: [0-9]+)" 3 1 2)
-    ("^\\([^\n]+\\): [^\n]+ at line \\([0-9]+\\), column \\([0-9]+\\) near '[^\n]+'.  [^\n]+. (Severity: [^\n]+)$" 1 2 3)
-    ("\\[[^\n]+\\] [^\n]+ at line \\([0-9]+\\), column \\([0-9]+\\) near '[0-9]+;.  [^\n]+. (Severity: [^\n]+)$" 3 1 2)
-    ("\\[[^\n]+\\] [^\n]+ at line \\([0-9]+\\), column \\([0-9]+\\) near '[^\n]+'.  [^\n]+. (Severity: \\([^\n]+\\))" 3 1 2))
-  "Alist that specified how to match errors in perlcritic output.")
+(defun perlcritic-force (force)
+  "Toggles perlcritic's -force parameter."
+  (interactive (list (yes-or-no-p "Enable perlcritic -force? ")))
+  (setq perlcritic-force force))
+
+(defun perlcritic-severity (severity)
+  "Sets perlcritic's -severity NUMBER parameter."
+  (interactive "nperlcritic -severity: ")
+  (setq perlcritic-severity severity))
+
+(defun perlcritic-top (top)
+  "Sets perlcritic's -top NUMBER parameter."
+  (interactive "nperlcritic -top: ")
+  (setq perlcritic-top top))
+
+(defun perlcritic-include (include)
+  "Sets perlcritic's -include REGEXP parameter."
+  (interactive "sperlcritic -include: ")
+  (setq perlcritic-include include))
+
+(defun perlcritic-exclude (exclude)
+  "Sets perlcritic's -exclude REGEXP parameter."
+  (interactive "sperlcritic -exclude: ")
+  (setq perlcritic-exclude exclude))
+
+(defun perlcritic-verbose (verbose)
+  "Sets perlcritic's -verbose NUMBER parameter."
+  (interactive "nperlcritic -verbose: ")
+  (setq perlcritic-verbose verbose))
 
 
+
+
+
 ;; Hooks compile.el's compilation-find-file to enable our file-less
 ;; operation. We feed `perlcritic-bin' from STDIN, not from a file.
 (defadvice compilation-find-file (around perlcritic-find-file)
