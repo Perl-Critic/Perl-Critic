@@ -3,6 +3,7 @@
 #     $Date: 2006-01-30 19:49:47 -0800 (Mon, 30 Jan 2006) $
 #   $Author$
 # $Revision$
+# ex: set ts=8 sts=4 sw=4 expandtab
 ########################################################################
 
 package Perl::Critic::Policy::Variables::ProhibitConditionalDeclarations;

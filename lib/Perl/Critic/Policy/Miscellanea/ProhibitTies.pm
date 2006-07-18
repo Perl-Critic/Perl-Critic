@@ -3,6 +3,7 @@
 #     $Date: 2006-02-02 18:38:30 -0800 (Thu, 02 Feb 2006) $
 #   $Author$
 # $Revision$
+# ex: set ts=8 sts=4 sw=4 expandtab
 ########################################################################
 
 package Perl::Critic::Policy::Miscellanea::ProhibitTies;
