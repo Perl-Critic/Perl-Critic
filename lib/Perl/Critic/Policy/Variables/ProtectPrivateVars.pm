@@ -11,7 +11,6 @@ package Perl::Critic::Policy::Variables::ProtectPrivateVars;
 use strict;
 use warnings;
 use Perl::Critic::Utils;
-use List::MoreUtils qw(all);
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '0.18';
