@@ -117,17 +117,32 @@ sub critique {
     # values are arrayrefs containing all the instances of the class.
     my %elements_of = ( 'PPI::Document' => [$doc] );
 
+    # Gather up all the PPI elements and sort by @ISA.
+    my %isa_cache;
+    $doc->find( sub {
+        my $element = $_[1];
+        my $classes = $isa_cache{ref $element};
+        if (!$classes) {
+            $classes = [ ref $element ];
+            for (my $i=0; $i<@{$classes}; $i++) { ## no critic(ProhibitCStyleForLoops)
+                no strict 'refs'; ## no critic(ProhibitNoStrict)
+                push @{$classes}, @{"$classes->[$i]::ISA"};
+                $elements_of{$classes->[$i]} ||= [];
+            }
+            $isa_cache{$classes->[0]} = $classes;
+        }
+        for my $class (@{$classes})
+        {
+           push @{$elements_of{$class}}, $element;
+        }
+    } );
+
 
     my @violations = ();
     for my $policy ( @{ $self->policies() } ) {
 
       TYPE:
         for my $type ( $policy->applies_to() ) {
-
-            # Gather up all the PPI elements that are of the $type
-            # that this $policy wants.  Save them in a hash so we go
-            # only have to go searching for any given type once.
-            $elements_of{$type} ||= ( $doc->find($type) || [] );
 
           ELEMENT:
             for my $element ( @{ $elements_of{$type} } ) {
@@ -175,7 +190,7 @@ sub critique {
 
 sub _filter_code {
 
-    my ($doc, @site_policies)= @_;;
+    my ($doc, @site_policies)= @_;
     my $nodes_ref  = $doc->find('PPI::Token::Comment') || return;
     my $no_critic  = qr{\A \s* \#\# \s* no  \s+ critic}mx;
     my $use_critic = qr{\A \s* \#\# \s* use \s+ critic}mx;
