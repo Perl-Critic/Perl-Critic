@@ -1,4 +1,5 @@
-README.developer
+^tags$
+^README\.developer$
 
 # Version Control files
 ^\.cvsignore$
@@ -28,11 +29,15 @@ RCS
 ^pm_to_blib$
 ^Makefile.old$
 ^patch
+\.patch$
 \.rej$
 \.old$
 ^t/00_local_.*t$
 ^t/perlcriticrc$
 ^tools
+^tmon\.out$
+\.gdb_history$
+\.ERR$
 
 # Temp/backup files
 ~$
