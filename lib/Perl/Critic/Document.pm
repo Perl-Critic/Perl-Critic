@@ -1,0 +1,138 @@
+#######################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+########################################################################
+
+package Perl::Critic::Document;
+
+use warnings;
+use strict;
+use PPI::Document;
+
+our $VERSION = '0.18';
+$VERSION = eval $VERSION;    ## no critic
+
+#----------------------------------------------------------------------------
+
+our $AUTOLOAD;
+sub AUTOLOAD {  ## no critic(ProhibitAutoloading)
+   my ( $function_name ) = $AUTOLOAD =~ m/ ([^:\']+) \z /xms;
+   return if $function_name eq 'DESTROY';
+   my $self = shift;
+   return $self->{_doc}->$function_name(@_);
+}
+
+sub new {
+    my $class = shift;
+    my $doc   = shift;
+
+    return bless { _doc => $doc }, $class;
+}
+
+sub find {
+    my $self = shift;
+    my $wanted = shift;
+
+    if ( ( ref $wanted ) || !$wanted || $wanted !~ m/ \A PPI:: /xms ) {
+        return $self->{_doc}->find($wanted, @_);
+    }
+    
+    # Build the class cache if it doesn't exist
+    # This happens at most once per Perl::Critic::Document instance
+    if ( !$self->{_elements_of} ) {
+        my %elements_of = ( 'PPI::Document' => [ $self ] );
+
+        # Gather up all the PPI elements and sort by @ISA.
+        # Note: if any instances used multiple inheritance, this
+        #   implementation would lead to multiple copies of $element
+        #   in the $elements_of lists.  However, PPI::* doesn't do
+        #   multiple inheritance, so we are safe
+        my %isa_cache;
+        $self->{_doc}->find( sub {
+            my $element = $_[1];
+            my $classes = $isa_cache{ref $element};
+            if ( !$classes ) {
+                $classes = [ ref $element ];
+                # Use a C-style loop because we append to the classes array inside
+                for ( my $i = 0; $i < @{$classes}; $i++ ) { ## no critic(ProhibitCStyleForLoops)
+                    no strict 'refs';                       ## no critic(ProhibitNoStrict)
+                    push @{$classes}, @{"$classes->[$i]::ISA"};
+                    $elements_of{$classes->[$i]} ||= [];
+                }
+                $isa_cache{$classes->[0]} = $classes;
+            }
+            for my $class ( @{$classes} ) {
+                push @{$elements_of{$class}}, $element;
+            }
+            return 0; # 0 tells find() to keep traversing, but not to store this $element
+        } );
+
+        $self->{_elements_of} = \%elements_of;
+    }
+
+    return $self->{_elements_of}->{$wanted} || q{}; # find() must return false-but-defined on fail
+}
+
+1;
+__END__
+
+=head1 NAME
+
+Perl::Critic::Document - Caching wrapper around PPI::Document
+
+=head1 SYNOPSIS
+
+    use PPI::Document;
+    use Perl::Critic::Document;
+    my $doc = PPI::Document->new('Foo.pm');
+    $doc = Perl::Critic::Document->new($doc);
+    ## Then use the instance just like a PPI::Document
+
+=head1 DESCRIPTION
+
+Perl::Critic does a lot of iterations over the PPI document tree via
+the C<PPI::Document::find()> method.  To save some time, this class
+pre-caches a lot of the common C<find()> calls in a single traversal.
+Then, on subsequent requests we return the cached data.
+
+This is implemented as a facade, where method calls are handed to the
+stored C<PPI::Document> instance.
+
+=head1 CAVEATS
+
+This facade does not implement the overloaded operators from
+L<PPI::Document> (that is, the C<use overload ...> work). Therefore,
+users of this facade must not rely on that syntactic sugar.  So, for
+example, instead of C<my $source = "$doc";> you should write C<my
+$source = $doc->content();>
+
+Perhaps there is a CPAN module out there which implements a facade
+better than we do here?
+
+=head1 METHODS
+
+=over
+
+=item $self->find($wanted)
+
+If C<wanted> is a simple PPI class name, then the cache is employed.
+Otherwise we forward the call to the C<find()> method of the
+C<PPI::Document> instance.
+
+=back
+
+=head1 AUTHOR
+
+Chris Dolan <cdolan@cpan.org>
+
+=head1 COPYRIGHT
+
+Copyright (c) 2006 Chris Dolan.  All rights reserved.
+
+This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.  The full text of this license
+can be found in the LICENSE file included with this module.
+
+=cut

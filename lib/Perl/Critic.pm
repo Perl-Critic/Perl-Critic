@@ -17,6 +17,7 @@ use Scalar::Util qw(blessed);
 use English qw(-no_match_vars);
 use Perl::Critic::Config;
 use Perl::Critic::Violation ();
+use Perl::Critic::Document;
 use Carp;
 use PPI;
 
@@ -103,6 +104,9 @@ sub critique {
     # Pre-index location of each node (for speed)
     $doc->index_locations();
 
+    # Wrap the doc in a caching layer
+    $doc = Perl::Critic::Document->new($doc);
+
     # Disable the magic shebang fix
     my %is_line_disabled = _unfix_shebang($doc);
 
@@ -113,32 +117,6 @@ sub critique {
                               _filter_code($doc, @site_policies) );
     }
 
-
-    # Seed a hash of PPI elements.  Keys are PPI class names, and the
-    # values are arrayrefs containing all the instances of the class.
-    my %elements_of = ( 'PPI::Document' => [$doc] );
-
-    # Gather up all the PPI elements and sort by @ISA.
-    my %isa_cache;
-    $doc->find( sub {
-        my $element = $_[1];
-        my $classes = $isa_cache{ref $element};
-        if (!$classes) {
-            $classes = [ ref $element ];
-            for (my $i=0; $i<@{$classes}; $i++) { ## no critic(ProhibitCStyleForLoops)
-                no strict 'refs'; ## no critic(ProhibitNoStrict)
-                push @{$classes}, @{"$classes->[$i]::ISA"};
-                $elements_of{$classes->[$i]} ||= [];
-            }
-            $isa_cache{$classes->[0]} = $classes;
-        }
-        for my $class (@{$classes})
-        {
-           push @{$elements_of{$class}}, $element;
-        }
-    } );
-
-
     my @violations = ();
     for my $policy ( @{ $self->policies() } ) {
 
@@ -146,7 +124,7 @@ sub critique {
         for my $type ( $policy->applies_to() ) {
 
           ELEMENT:
-            for my $element ( @{ $elements_of{$type} } ) {
+            for my $element ( @{ $doc->find($type) || [] } ) {
 
                 # Evaluate the policy on this $element.  A policy may
                 # return zero or more violations.  We only want the

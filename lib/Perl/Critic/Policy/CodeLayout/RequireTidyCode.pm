@@ -46,7 +46,7 @@ sub violates {
     # scalar, but does not occur when writing to a file.  I may
     # investigate further, but for now, this seems to do the trick.
 
-    my $source = "$doc";
+    my $source = $doc->content();
     $source =~ s{ \s+ \Z}{\n}mx;
 
     my $dest    = $EMPTY;

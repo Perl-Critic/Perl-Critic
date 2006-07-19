@@ -59,9 +59,16 @@ sub new {
         croak $msg;
     }
 
-    if ( ! eval { $_[3]->isa( 'PPI::Element' ) } ) {
-        my $msg = '3rd arg to Violation->new() must be a PPI::Element';
-        croak $msg;
+    if ( ! eval { $elem->isa( 'PPI::Element' ) } ) {
+
+        if ( eval { $elem->isa( 'Perl::Critic::Document' ) } ) {
+            # break the facade, return the real PPI::Document
+            $elem = $elem->{_doc};
+        }
+        else {
+            my $msg = '3rd arg to Violation->new() must be a PPI::Element';
+            croak $msg;
+        }
     }
 
     #Create object
