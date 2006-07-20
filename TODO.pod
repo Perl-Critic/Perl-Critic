@@ -1,3 +1,5 @@
+# best viewed via "perldoc TODO.pod"
+
 =pod
 
 =for stopwords LHS RHS REFACTORINGS FH stopwords
@@ -217,6 +219,15 @@ Quoting from L<http://perldoc.perl.org/functions/split.html>
 
 See also L<http://www.perlmonks.org/?node_id=287545>
 
+=item * Tests::RequireTestDescriptions
+
+If Test::More is detected:
+
+   ok $foo;                        # not ok
+   ok $foo, 'foo got populated';   # ok
+   is $foo, 'bar';                 # not ok
+   is $foo, 'bar', 'foo value';    # ok
+
 =back
 
 =head1 REFACTORINGS and ENHANCEMENTS
@@ -233,7 +244,7 @@ Give it same functionality as the -verbose option in `perlcritic`
 
 =item * Enhance P::C::critique() to accept file names, directories, or code strings (as refs)
 
-Just like `perlcritic` does now.
+Just like F<bin/perlcritic> does now.
 
 =item * Helper functions:
 
@@ -242,6 +253,33 @@ Combine these three:
     return if is_hash_key($elem);
     return if is_method_call($elem);
     return if is_subroutine_name($elem);
+
+=item * Add C<-cache> flag to F<bin/perlcritic>
+
+If enabled, this turns on L<PPI::Cache>:
+
+    require PPI::Cache;
+    my $cache_path = "/tmp/test-perl-critic-cache-$ENV{USER}";
+    mkdir $cache_path, oct 700 if (! -d $cache_path);
+    PPI::Cache->import(path => $cache_path);
+
+(see F<t/40_criticize.t> for a more robust implementation)
+
+=back
+
+=head1 PPI BUGS
+
+We're waiting on the following bugs to get fixed in a CPAN release of PPI:
+
+=over 4
+
+=item * C<goto> as a PPI::Statement::Break instance
+
+Broken through v1.115, fixed in SVN, needed to remove workaround from Subroutines::RequireFinalReturn
+
+=item * RT #19629: End of list mistakenly seen as end of statement
+
+Broken through v1.115, fixed in SVN, needed for BuiltinFunctions::ProhibitReverseSortBlock
 
 =back
 
