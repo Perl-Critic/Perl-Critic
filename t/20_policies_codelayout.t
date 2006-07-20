@@ -17,6 +17,9 @@ my $code ;
 my $policy;
 my %config;
 
+# omit the "## Please see file perltidy.ERR" warning
+local $SIG{__WARN__} = sub {$_[0] =~ m/\A \#\# [ ] Please [ ] see [ ] file/xms || warn @_};
+
 #-----------------------------------------------------------------------------
 
 $code = <<"END_PERL";
