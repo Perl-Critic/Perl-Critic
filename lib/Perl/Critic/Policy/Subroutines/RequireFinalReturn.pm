@@ -32,7 +32,7 @@ sub violates {
     my ( $self, $elem, undef ) = @_;
 
     # skip BEGIN{} and INIT{} and END{} etc
-    $elem->isa('PPI::Statement::Scheduled') && return;
+    return if $elem->isa('PPI::Statement::Scheduled');
 
     my @blocks = grep {$_->isa('PPI::Structure::Block')} $elem->schildren();
     if (@blocks > 1) {  
@@ -69,15 +69,22 @@ sub _block_has_return {
     my @blockparts = $block->schildren();
     my $final = $blockparts[-1];
     return $final && (_is_explicit_return($final) ||
-                     _is_compound_return($final));
+                      _is_compound_return($final));
 }
 
 #-------------------------
 
 sub _is_explicit_return {
     my ( $final ) = @_;
-    return $final->isa('PPI::Statement::Break') &&
-           $final =~ m/ \A return\b /xms;
+    ## PPI 1.115 bug: goto is not identified as a break, fixed in SVN r851
+    ## TODO: uncomment this when we depend on a newer PPI
+    #return $final->isa('PPI::Statement::Break') &&
+    #       $final =~ m/ \A (?: return | goto ) \b /xms;
+    return 1 if $final->isa('PPI::Statement::Break') &&
+                $final =~ m/ \A return \b /xms;
+    return 1 if $final->isa('PPI::Statement') &&
+                $final =~ m/ \A goto \b /xms;
+    return; # failed to find a return
 }
 
 #-------------------------
@@ -124,6 +131,8 @@ __END__
 Perl::Critic::Policy::Subroutines::RequireFinalReturn
 
 =head1 DESCRIPTION
+
+Require all subroutines to terminate with a C<return> (or a C<goto>).
 
 Subroutines without explicit return statements at their ends can be
 confusing.  It can be challenging to deduce what the return value will

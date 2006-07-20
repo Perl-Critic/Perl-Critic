@@ -31,16 +31,18 @@ sub applies_to { return 'PPI::Token::Symbol' }
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    if ( my $psib = $elem->previous_sibling() ) {
+    my $psib = $elem->previous_sibling();
+    if ( $psib ) {
         #Sigil is allowed if taking a reference, e.g. "\&my_sub"
         return if $psib->isa('PPI::Token::Cast') && $psib eq q{\\};
     }
 
-    if ( $elem =~ m{\A [&] }mx ) {
-        return $self->violation( $desc, $expl, $elem );
-    }
+    return if ( $elem !~ m{\A [&] }mx ); # ok
 
-    return;    #ok!
+    $psib = $elem->sprevious_sibling();
+    return if ( $psib eq 'goto' ); # ok
+
+    return $self->violation( $desc, $expl, $elem );
 }
 
 1;

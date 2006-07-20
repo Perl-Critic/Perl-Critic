@@ -122,6 +122,7 @@ t/samples/perlcriticrc.all
 t/samples/perlcriticrc.levels
 t/samples/perlcriticrc.none
 t/samples/perlcriticrc.pbp
+t/tlib/Perl/Critic/Policy/Test.pm
 t/tlib/ViolationTest.pm
 t/tlib/ViolationTest2.pm
 TODO.pod

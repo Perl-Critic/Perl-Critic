@@ -23,7 +23,7 @@ $VERSION = eval $VERSION;    ## no critic
 
 #Class variables...
 our $FORMAT = "%m at line %l, column %c. %e.\n"; #Default stringy format
-my %DIAGNOSTICS = ();  #Cache of diagnositc messages
+my %DIAGNOSTICS = ();  #Cache of diagnostic messages
 
 #----------------------------------------------------------------------------
 
@@ -128,6 +128,13 @@ sub location {
 sub diagnostics {
     my $self = shift;
     my $pol = $self->policy();
+    if (!$DIAGNOSTICS{$pol}) {
+        if ( my $file = _mod2file($pol) ) {
+            if ( my $diags = _get_diagnostics($file) ) {
+               $DIAGNOSTICS{$pol} = $diags;
+            }
+        }
+    }
     return $DIAGNOSTICS{$pol};
 }
 
@@ -222,6 +229,11 @@ sub _get_diagnostics {
 
     my $file = shift;
 
+    (my $podfile = $file) =~ s{\.[^\.]+ \z}{.pod}mx;
+    if (-f $podfile)
+    {
+       $file = $podfile;
+    }
     # Extract POD into a string
     my $pod_string = $EMPTY;
     my $handle     = IO::String->new( \$pod_string );
@@ -230,8 +242,8 @@ sub _get_diagnostics {
     $parser->parse_from_file( $file, $handle );
 
     # Remove header and trailing whitespace.
-    $pod_string =~ s{ \A \s* DESCRIPTION \s* \n}{}mx;
-    $pod_string =~ s{ \s* \z}{}mx;
+    $pod_string =~ s{ \A \s* DESCRIPTION \s* }{}smx;
+    $pod_string =~ s{ \s* \z}{}smx;
     return $pod_string;
 }
 

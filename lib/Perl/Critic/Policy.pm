@@ -28,7 +28,10 @@ sub default_severity { return $SEVERITY_LOWEST }
 
 sub violation {
     my ( $self, $desc, $expl, $elem ) = @_;
-    return Perl::Critic::Violation->new( $desc, $expl, $elem, $self->get_severity() );
+    # Use goto instead of an explicit call because P::C::V::new() uses caller()
+    my $sev = $self->get_severity();
+    @_ = ('Perl::Critic::Violation', $desc, $expl, $elem, $sev );
+    goto &Perl::Critic::Violation::new;
 }
 
 #----------------------------------------------------------------------------
