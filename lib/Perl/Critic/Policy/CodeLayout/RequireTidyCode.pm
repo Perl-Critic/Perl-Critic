@@ -27,6 +27,22 @@ my $expl = [ 33 ];
 sub default_severity { return $SEVERITY_LOWEST }
 sub applies_to { return 'PPI::Document'  }
 
+#---------------------------------------------------------------------------
+
+sub new {
+    my ($class, %args) = @_;
+    my $self = bless {}, $class;
+
+    #Set configuration if defined
+    $self->{_perltidyrc} = $args{perltidyrc};
+    if (defined $self->{_perltidyrc} && $self->{_perltidyrc} eq $EMPTY)
+    {
+       $self->{_perltidyrc} = \$EMPTY;
+    }
+
+    return $self;
+}
+
 #----------------------------------------------------------------------------
 
 sub violates {
@@ -46,7 +62,7 @@ sub violates {
     # scalar, but does not occur when writing to a file.  I may
     # investigate further, but for now, this seems to do the trick.
 
-    my $source = $doc->content();
+    my $source = $doc->serialize();
     $source =~ s{ \s+ \Z}{\n}mx;
 
     my $dest    = $EMPTY;
@@ -65,6 +81,7 @@ sub violates {
             source      => \$source,
             destination => \$dest,
             stderr      => \$stderr,
+            defined $self->{_perltidyrc} ? (perltidyrc => $self->{_perltidyrc}) : (),
        );
     };
 
@@ -101,6 +118,24 @@ consistent layout, regardless of the specifics.  And the easiest way
 to do that is to use L<Perl::Tidy>.  This policy will complain if
 you're code hasn't been run through Perl::Tidy.
 
+=head1 CONSTRUCTOR
+
+This Policy accepts an additional key-value pair in the constructor.
+The key must be C<perltidyrc> and the value is the filename of a
+Perl::Tidy configuration file.  The default is C<undef>, which tells
+Perl::Tidy to look in it's default location.  Users of Perl::Critic
+can configure this in their F<.perlcriticrc> file like this:
+
+  [CodeLayout::RequireTidyCode]
+  perltidyrc = /usr/share/perltidy.conf
+
+As a special case, setting C<perltidyrc> to the empty string tells
+Perl::Tidy not to load any configuration file at all and just use
+Perl::Tidy's own default style.
+
+  [CodeLayout::RequireTidyCode]
+  perltidyrc = 
+
 =head1 NOTES
 
 L<Perl::Tidy> is not included in the Perl::Critic distribution.  The
@@ -110,7 +145,6 @@ Perl::Tidy is not installed, this policy is silently ignored.
 =head1 SEE ALSO
 
 L<Perl::Tidy>
-
 
 =head1 AUTHOR
 
