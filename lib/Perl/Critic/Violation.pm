@@ -27,27 +27,6 @@ my %DIAGNOSTICS = ();  #Cache of diagnostic messages
 
 #----------------------------------------------------------------------------
 
-sub import {
-
-    my $caller = caller;
-    return if exists $DIAGNOSTICS{$caller};
-
-    if ( my $file = _mod2file($caller) ) {
-        if ( my $diags = _get_diagnostics($file) ) {
-               $DIAGNOSTICS{$caller} = $diags;
-               return; #ok!
-           }
-    }
-
-    #If we get here, then we couldn't get diagnostics
-    my $no_diags = "    No diagnostics available\n";
-    $DIAGNOSTICS{$caller} = $no_diags;
-
-    return; #ok!
-}
-
-#----------------------------------------------------------------------------
-
 sub new {
     my ( $class, $desc, $expl, $elem, $sev ) = @_;
 
@@ -77,11 +56,7 @@ sub new {
     $self->{_explanation} = $expl;
     $self->{_severity}    = $sev;
     $self->{_policy}      = caller;
-    $self->{_location}    = $elem->location() || [0,0];
-
-    my $stmnt = $elem->statement() || $elem;
-    $self->{_source} = $stmnt->content() || $EMPTY;
-
+    $self->{_elem}        = $elem;
 
     return $self;
 }
@@ -100,8 +75,11 @@ sub sort_by_location {
 
     ## no critic qw(RequireSimpleSort);
     ## TODO: What if $a and $b are not Violation objects?
-    return sort {   (($a->location->[0] || 0) <=> ($b->location->[0] || 0))
-                 || (($a->location->[1] || 0) <=> ($b->location->[1] || 0)) } @_;
+    return
+        map {$_->[0]}
+            sort { ($a->[1] <=> $b->[1]) || ($a->[2] <=> $b->[2]) } 
+                map {[$_, $_->location->[0] || 0, $_->location->[1] || 0]}
+                    @_;
 }
 
 #-----------------------------------------------------------------------------
@@ -113,14 +91,19 @@ sub sort_by_severity {
 
     ## no critic qw(RequireSimpleSort);
     ## TODO: What if $a and $b are not Violation objects?
-    return sort { ($a->severity() || 0) <=> ($b->severity() || 0) } @_;
+    return
+        map {$_->[0]}
+            sort { $a->[1] <=> $b->[1] } 
+                map {[$_, $_->severity() || 0]}
+                    @_;
 }
 
 #-----------------------------------------------------------------------------
 
 sub location {
     my $self = shift;
-    return $self->{_location};
+
+    return $self->{_location} ||= $self->{_elem}->location() || [0,0,0];
 }
 
 #-----------------------------------------------------------------------------
@@ -134,6 +117,7 @@ sub diagnostics {
                $DIAGNOSTICS{$pol} = $diags;
             }
         }
+        $DIAGNOSTICS{$pol} ||= "    No diagnostics available\n";
     }
     return $DIAGNOSTICS{$pol};
 }
@@ -176,9 +160,13 @@ sub policy {
 
 sub source {
      my $self = shift;
-     my $source = $self->{_source};
+
+     if (!defined $self->{_source}) {
+         my $stmnt = $self->{_elem}->statement() || $self->{_elem};
+         $self->{_source} = $stmnt->content() || $EMPTY;
+     }
      #Return the first line of code only.
-     $source =~ m{\A ( [^\n]* ) }mx;
+     $self->{_source} =~ m{\A ( [^\n]* ) }mx;
      return $1;
 }
 
@@ -187,14 +175,19 @@ sub source {
 sub to_string {
     my $self = shift;
 
-    my $short_policy = $self->policy();
-    $short_policy =~ s/ \A Perl::Critic::Policy:: //xms;
+    my $long_policy = $self->policy();
+    (my $short_policy = $long_policy) =~ s/ \A Perl::Critic::Policy:: //xms;
 
+    # Wrap the more expensive ones in sub{} to postpone evaluation
     my %fspec = (
-         'l' => $self->location->[0], 'c' => $self->location->[1],
-         'm' => $self->description(), 'e' => $self->explanation(),
-         'P' => $self->policy(),      'd' => $self->diagnostics(),
-         's' => $self->severity(),    'r' => $self->source(),
+         'l' => sub { $self->location->[0] },
+         'c' => sub { $self->location->[1] },
+         'm' => $self->description(),
+         'e' => $self->explanation(),
+         's' => $self->severity(),
+         'd' => sub { $self->diagnostics() },
+         'r' => sub { $self->source() },
+         'P' => $long_policy,
          'p' => $short_policy,
     );
     return stringf($FORMAT, %fspec);
@@ -242,8 +235,8 @@ sub _get_diagnostics {
     $parser->parse_from_file( $file, $handle );
 
     # Remove header and trailing whitespace.
-    $pod_string =~ s{ \A \s* DESCRIPTION \s* }{}smx;
-    $pod_string =~ s{ \s* \z}{}smx;
+    $pod_string =~ s{ \A \s* DESCRIPTION \s* \n}{}mx;
+    $pod_string =~ s{ \s* \z}{}mx;
     return $pod_string;
 }
 

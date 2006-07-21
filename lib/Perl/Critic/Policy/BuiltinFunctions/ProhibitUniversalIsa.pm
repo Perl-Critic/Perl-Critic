@@ -65,7 +65,7 @@ a technique which is crucial for implementing mock objects and some
 facades.
 
 Another alternative to UNIVERSAL::isa is the C<_INSTANCE> method of
-Param::Util.
+Param::Util, which is faster.
 
 See the CPAN module L<UNIVERSAL::isa> for an incendiary discussion of
 this topic.

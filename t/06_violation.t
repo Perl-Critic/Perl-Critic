@@ -51,7 +51,7 @@ my $viol = Perl::Critic::Violation->new( 'Foo', 'Bar', $doc, 99, );
 
 is(        $viol->description(), 'Foo',    'description');
 is(        $viol->explanation(), 'Bar',    'explanation');
-is_deeply( $viol->location(),    [0,0],    'location');
+is_deeply( $viol->location(),    [0,0,0],  'location');
 is(        $viol->severity(),    99,       'severity');
 is(        $viol->source(),      $code,    'source');
 is(        $viol->policy(),      $pkg,     'policy');
@@ -108,14 +108,14 @@ END_PERL
 # Violation formatting
 
 {
-    my $format = '%l; %c; %m; %e; %d; %s; %r; %P; %p';
+    my $format = '%l; %c; %m; %e; %s; %r; %P; %p; %d';
     my $expected = join q{; }, (
        1, 1,  # line, col
        'desc', 'expl',
-       'diagnostic',
        1, # severity
        'print;', # source near token[0]
        'Perl::Critic::Policy::Test', 'Test', # long, short
+       '    diagnostic',
     );
 
     Perl::Critic::Violation::set_format($format);
