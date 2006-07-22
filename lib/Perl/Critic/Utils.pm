@@ -511,6 +511,8 @@ without the sigil.
 
 =item C<$COMMA>
 
+=item C<$FATCOMMA>
+
 =item C<$COLON>
 
 =item C<$SCOLON>
