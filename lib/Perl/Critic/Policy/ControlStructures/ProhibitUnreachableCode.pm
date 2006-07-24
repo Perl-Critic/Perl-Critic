@@ -1,3 +1,11 @@
+#######################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+# ex: set ts=8 sts=4 sw=4 expandtab
+########################################################################
+
 package Perl::Critic::Policy::ControlStructures::ProhibitUnreachableCode;
 
 use strict;
