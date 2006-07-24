@@ -10,6 +10,10 @@
 
      Bug Fixes:
      * RequireTidyCode tests fail if user has custom .perltidyrc file
+     * 20612: RequirePerlTidy was ignoring HEREDOCs
+     * Fix for PPI::XS (no C<use overload '""'> support)
+     * Support for 'goto' in ProhibitAmpersandSigils and
+       Subroutines::RequireFinalReturn
 
      Performance Enhancements:
      * Introduced Perl::Critic::Document class.  This is a facade for
