@@ -13,7 +13,7 @@ use warnings;
 use Perl::Critic::Utils;
 use Perl::Critic::Violation;
 
-our $VERSION = '0.18';
+our $VERSION = '0.18_01';
 $VERSION = eval $VERSION;    ## no critic
 
 #----------------------------------------------------------------------------
