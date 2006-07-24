@@ -4,7 +4,11 @@
 
 =for stopwords LHS RHS REFACTORINGS FH stopwords
 
-=head1
+=head1 NAME
+
+Things for Perl::Critic developers TODO
+
+=head1 SOURCE
 
     #######################################################################
     #      $URL$
@@ -46,6 +50,10 @@ difference between that and C<< $self->_foo() >>
 =head1 OTHER PBP POLICIES THAT SEEM FEASIBLE TO IMPLEMENT
 
 =over 4
+
+=item * ErrorHandling::RequireCarp (283)
+
+Prefer C<carp> and C<croak> over C<warn> and C<die>
 
 =item * ValuesAndExpressions::ProhibitCommaSeparatedStatements (p68)
 
@@ -234,7 +242,7 @@ If Test::More is detected:
 
 =over 4
 
-=item * Move %FORMATS from `perlcritic` into Perl::Critic::Utils
+=item * Move %FORMATS from F<bin/perlcritic> into L<Perl::Critic::Utils>
 
 So that Test::P::C can use them.  Use a subroutine instead of a package var.
 
