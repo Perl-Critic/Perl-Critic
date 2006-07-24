@@ -52,7 +52,7 @@ sub violates {
     eval { require Perl::Tidy; };
     return if $EVAL_ERROR;
 
-    # Perl::Tidy seems to produce slightly different output, depeding
+    # Perl::Tidy seems to produce slightly different output, depending
     # on the trailing whitespace in the input.  As best I can tell,
     # Perl::Tidy will truncate any extra trailing newlines, and if the
     # input has no trailing newline, then it adds one.  But when you
