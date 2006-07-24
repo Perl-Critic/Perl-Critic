@@ -1,18 +1,19 @@
-#######################################################################
-#      $URL$
-#     $Date$
-#   $Author$
-# $Revision$
+########################################################################
+#      $URL:$
+#     $Date:$
+#   $Author:$
+# $Revision:$
 ########################################################################
 
 package Perl::Critic::Document;
 
-use warnings;
 use strict;
+use warnings;
 use PPI::Document;
 
+#----------------------------------------------------------------------------
+
 our $VERSION = '0.18';
-$VERSION = eval $VERSION;    ## no critic
 
 #----------------------------------------------------------------------------
 
@@ -24,58 +25,78 @@ sub AUTOLOAD {  ## no critic(ProhibitAutoloading)
    return $self->{_doc}->$function_name(@_);
 }
 
-sub new {
-    my $class = shift;
-    my $doc   = shift;
+#----------------------------------------------------------------------------
 
+sub new {
+    my ($class, $doc) = @_;
     return bless { _doc => $doc }, $class;
 }
 
-sub find {
-    my $self = shift;
-    my $wanted = shift;
+#----------------------------------------------------------------------------
 
+sub find {
+    my ($self, $wanted) = @_;
+
+    # This method can only find elements by their class names.  For
+    # other types of searches, delegate to the PPI::Document
     if ( ( ref $wanted ) || !$wanted || $wanted !~ m/ \A PPI:: /xms ) {
         return $self->{_doc}->find($wanted, @_);
     }
-    
-    # Build the class cache if it doesn't exist
-    # This happens at most once per Perl::Critic::Document instance
+
+    # Build the class cache if it doesn't exist.  This happens at most
+    # once per Perl::Critic::Document instance.  %elements of will be
+    # populated as a side-effect of calling the $finder_sub coderef
+    # that is produced by the caching_finder() closure.
     if ( !$self->{_elements_of} ) {
-        my %elements_of = ( 'PPI::Document' => [ $self ] );
-
-        # Gather up all the PPI elements and sort by @ISA.
-        # Note: if any instances used multiple inheritance, this
-        #   implementation would lead to multiple copies of $element
-        #   in the $elements_of lists.  However, PPI::* doesn't do
-        #   multiple inheritance, so we are safe
-        my %isa_cache;
-        $self->{_doc}->find( sub {
-            my $element = $_[1];
-            my $classes = $isa_cache{ref $element};
-            if ( !$classes ) {
-                $classes = [ ref $element ];
-                # Use a C-style loop because we append to the classes array inside
-                for ( my $i = 0; $i < @{$classes}; $i++ ) { ## no critic(ProhibitCStyleForLoops)
-                    no strict 'refs';                       ## no critic(ProhibitNoStrict)
-                    push @{$classes}, @{"$classes->[$i]::ISA"};
-                    $elements_of{$classes->[$i]} ||= [];
-                }
-                $isa_cache{$classes->[0]} = $classes;
-            }
-            for my $class ( @{$classes} ) {
-                push @{$elements_of{$class}}, $element;
-            }
-            return 0; # 0 tells find() to keep traversing, but not to store this $element
-        } );
-
-        $self->{_elements_of} = \%elements_of;
+        my %cache = ( 'PPI::Document' => [ $self ] );
+        my $finder_coderef = _caching_finder( \%cache );
+        $self->{_doc}->find( $finder_coderef );
+        $self->{_elements_of} = \%cache;
     }
 
-    return $self->{_elements_of}->{$wanted} || q{}; # find() must return false-but-defined on fail
+    # find() must return false-but-defined on fail
+    return $self->{_elements_of}->{$wanted} || q{};
 }
 
+#----------------------------------------------------------------------------
+
+sub _caching_finder {
+
+    my $cache_ref = shift;  # These vars will persist for the life
+    my %isa_cache = ();     # of the code ref that this sub returns
+
+
+    # Gather up all the PPI elements and sort by @ISA.  Note: if any
+    # instances used multiple inheritance, this implementation would
+    # lead to multiple copies of $element in the $elements_of lists.
+    # However, PPI::* doesn't do multiple inheritance, so we are safe
+
+    return sub {
+        my $element = $_[1];
+        my $classes = $isa_cache{ref $element};
+        if ( !$classes ) {
+            $classes = [ ref $element ];
+            # Use a C-style loop because we append to the classes array inside
+            for ( my $i = 0; $i < @{$classes}; $i++ ) { ## no critic(ProhibitCStyleForLoops)
+                no strict 'refs';                       ## no critic(ProhibitNoStrict)
+                push @{$classes}, @{"$classes->[$i]::ISA"};
+                $cache_ref->{$classes->[$i]} ||= [];
+            }
+            $isa_cache{$classes->[0]} = $classes;
+        }
+
+        for my $class ( @{$classes} ) {
+            push @{$cache_ref->{$class}}, $element;
+        }
+
+        return 0; # 0 tells find() to keep traversing, but not to store this $element
+    };
+}
+
+#----------------------------------------------------------------------------
+
 1;
+
 __END__
 
 =head1 NAME
