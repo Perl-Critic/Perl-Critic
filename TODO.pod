@@ -65,8 +65,6 @@ Look for grep in a scalar context and recommend any() instead
 
 =item * Variables::RequireLocalizedPunctuationVars (p81)
 
-=item * Variables::RequireNegativeIndices (p88)
-
 =item * Variables::RequireLexicalForLoopIterator (p108)
 
 =item * Variables::ProhibitTopicChangeInListFunction (p114)
@@ -79,6 +77,9 @@ section for words to skip, as per Pod::Spell.
 =item * BuiltinFunctions::ProhibitReverseSortBlock (p152)
 
 Don't allow first instance of C<$b> to be before first instance of C<$a>.
+
+[Note: already implemented by Chris Dolan, but not committed yet due
+to PPI bugs.  Ask Chris for the patch.]
 
 =item * Subroutines::RequireArgUnpacking (p178)
 
