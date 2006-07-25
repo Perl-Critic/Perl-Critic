@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 7;
+use Test::More tests => 8;
 
 #-----------------------------------------------------------------------------
 
@@ -28,6 +28,13 @@ can_ok('Perl::Critic::Document', 'find');
     $nodes_ref = $pc_doc->find( sub{ return 1 } );
     is( scalar @{ $nodes_ref }, 6, 'Search by wanted() handler');
 
-    $nodes_ref = $pc_doc->find( q{} );
-    is( $nodes_ref, undef, 'Search by empty class name');
+    $nodes_ref = $pc_doc->find( q{Element} );
+    is( scalar @{ $nodes_ref }, 6, 'Search by shortened class name');
+
+    {
+        # Ignore "Cannot create search condition for 'PPI::': Not a PPI::Element"
+        no warnings;
+        $nodes_ref = $pc_doc->find( q{} );
+        is( $nodes_ref, undef, 'Search by empty class name');
+    }
 }
