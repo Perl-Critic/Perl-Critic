@@ -262,3 +262,6 @@ severity = 1
 
 [Variables::RequireNegativeIndices]
 severity = 1
+
+[InputOutput::ProhibitInteractiveTest]
+severity = 1

@@ -127,6 +127,10 @@ Discourage stuff like C<@files = `ls $directory`> [Severity 3]
 
 Write C<open my $fh, q{<}, $filename;> instead of C<open FH, q{<}, $filename;> [Severity 5]
 
+=head2 L<Perl::Critic::Policy::InputOutput::ProhibitInteractiveTest>
+
+Use prompt() instead of -t [Severity 5]
+
 =head2 L<Perl::Critic::Policy::InputOutput::ProhibitOneArgSelect>
 
 Never write C<select($fh)> [Severity 4]

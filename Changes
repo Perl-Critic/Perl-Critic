@@ -10,6 +10,7 @@
 
      New Policies:
      * Variables::RequireNegativeIndices
+     * InputOutput::ProhibitInteractiveTest
 
      Bug Fixes:
      * RequireTidyCode tests fail if user has custom .perltidyrc file

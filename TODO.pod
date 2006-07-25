@@ -104,10 +104,6 @@ same lexical FH
 
 =item * InputOutput::ProhibitExplicitStdin (p216)
 
-=item * InputOutput::ProhibitInteractiveTest (p218)
-
-Forbid -t operand
-
 =item * Miscellanea::ProhibitObnoxiousComments
 
 Forbid excessive hash marks e.g. "#### This is a loud comment ####".

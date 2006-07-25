@@ -339,6 +339,7 @@ sub native_policies {
       Perl::Critic::Policy::Documentation::RequirePodSections
       Perl::Critic::Policy::InputOutput::ProhibitBacktickOperators
       Perl::Critic::Policy::InputOutput::ProhibitBarewordFileHandles
+      Perl::Critic::Policy::InputOutput::ProhibitInteractiveTest
       Perl::Critic::Policy::InputOutput::ProhibitOneArgSelect
       Perl::Critic::Policy::InputOutput::ProhibitReadlineInForLoop
       Perl::Critic::Policy::InputOutput::ProhibitTwoArgOpen

@@ -34,6 +34,7 @@
 [Documentation::RequirePodSections]
 [InputOutput::ProhibitBacktickOperators]
 [InputOutput::ProhibitBarewordFileHandles]
+[InputOutput::ProhibitInteractiveTest]
 [InputOutput::ProhibitOneArgSelect]
 [InputOutput::ProhibitReadlineInForLoop]
 [InputOutput::RequireBracedFileHandleWithPrint]

@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 17;
+use Test::More tests => 19;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -269,3 +269,23 @@ END_PERL
 
 $policy = 'InputOutput::RequireBracedFileHandleWithPrint';
 is( pcritique($policy, \$code), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+-t;
+3-t();  # Really.  I tested this in Perl 5.8.6
+if (-t) { }
+END_PERL
+
+$policy = 'InputOutput::ProhibitInteractiveTest';
+is( pcritique($policy, \$code), 3, $policy );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+-toomany;
+END_PERL
+
+$policy = 'InputOutput::ProhibitInteractiveTest';
+is( pcritique($policy, \$code), 0, $policy );
