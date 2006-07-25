@@ -33,7 +33,9 @@ can_ok('Perl::Critic::Document', 'find');
 
     {
         # Ignore "Cannot create search condition for 'PPI::': Not a PPI::Element"
-        no warnings;
+        local $SIG{__WARN__} = sub {
+            $_[0] =~ m/\QCannot create search condition for\E/ || warn @_
+        };
         $nodes_ref = $pc_doc->find( q{} );
         is( $nodes_ref, undef, 'Search by empty class name');
     }
