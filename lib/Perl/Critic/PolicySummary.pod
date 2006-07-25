@@ -327,6 +327,10 @@ Prevent access to private vars in other packages [Severity 3]
 
 Write C<local $foo = $bar;> instead of just C<local $foo;> [Severity 3]
 
+=head2 L<Perl::Critic::Policy::Variables::RequireNegativeIndices>
+
+Negative array index should be used [Severity 4]
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>

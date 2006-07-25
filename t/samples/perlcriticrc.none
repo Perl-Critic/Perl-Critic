@@ -85,3 +85,4 @@
 [-Variables::ProhibitPunctuationVars]
 [-Variables::ProtectPrivateVars]
 [-Variables::RequireInitializationForLocalVars]
+[-Variables::RequireNegativeIndices]

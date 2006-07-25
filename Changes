@@ -8,6 +8,9 @@
 
 [0.18_01]  Released on ????????
 
+     New Policies:
+     * Variables::RequireNegativeIndices
+
      Bug Fixes:
      * RequireTidyCode tests fail if user has custom .perltidyrc file
      * 20612: RequirePerlTidy was ignoring HEREDOCs

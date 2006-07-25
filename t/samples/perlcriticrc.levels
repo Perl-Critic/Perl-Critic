@@ -259,3 +259,6 @@ severity = 1
 
 [BuiltinFunctions::RequireSimpleSortBlock]
 severity = 1
+
+[Variables::RequireNegativeIndices]
+severity = 1

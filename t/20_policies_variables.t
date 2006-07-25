@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 20;
+use Test::More tests => 32;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -16,6 +16,16 @@ Perl::Critic::TestUtils::block_perlcriticrc();
 my $code ;
 my $policy;
 my %config;
+
+# These are proxies for a compile test
+can_ok('Perl::Critic::Policy::Variables::ProhibitLocalVars', 'violates');
+can_ok('Perl::Critic::Policy::Variables::ProhibitMatchVars', 'violates');
+can_ok('Perl::Critic::Policy::Variables::ProhibitPackageVars', 'violates');
+can_ok('Perl::Critic::Policy::Variables::ProhibitPunctuationVars', 'violates');
+can_ok('Perl::Critic::Policy::Variables::ProtectPrivateVars', 'violates');
+can_ok('Perl::Critic::Policy::Variables::ProhibitConditionalDeclarations', 'violates');
+can_ok('Perl::Critic::Policy::Variables::RequireInitializationForLocalVars', 'violates');
+can_ok('Perl::Critic::Policy::Variables::RequireNegativeIndices', 'violates');
 
 #----------------------------------------------------------------
 
@@ -343,3 +353,70 @@ END_PERL
 $policy = 'Variables::RequireInitializationForLocalVars';
 is( pcritique($policy, \$code), 0, $policy);
 
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+$arr[-1];
+$arr[ -2 ];
+$arr[$m-$n];
+$arr[@foo-1];
+$arr[$#foo-1];
+$arr[@$arr-1];
+$arr[$#$arr-1];
+1+$arr[$#{$arr}-1];
+$arr->[-1];
+$arr->[ -2 ];
+3+$arr->[@foo-1 ];
+$arr->[@arr-1 ];
+$arr->[ $#foo - 2 ];
+$$arr[-1];
+$$arr[ -2 ];
+$$arr[@foo-1 ];
+$$arr[@arr-1 ];
+$$arr[ $#foo - 2 ];
+END_PERL
+
+$policy = 'Variables::RequireNegativeIndices';
+is( pcritique($policy, \$code), 0, $policy );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+$arr[$#arr];
+$arr[$#arr-1];
+$arr[ $#arr - 2 ];
+$arr[@arr-1];
+$arr[@arr - 2];
+END_PERL
+
+$policy = 'Variables::RequireNegativeIndices';
+is( pcritique($policy, \$code), 5, $policy );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+$arr_ref->[$#{$arr_ref}-1];
+$arr_ref->[$#$arr_ref-1];
+$arr_ref->[@{$arr_ref}-1];
+$arr_ref->[@$arr_ref-1];
+$$arr_ref[$#{$arr_ref}-1];
+$$arr_ref[$#$arr_ref-1];
+$$arr_ref[@{$arr_ref}-1];
+$$arr_ref[@$arr_ref-1];
+END_PERL
+
+$policy = 'Variables::RequireNegativeIndices';
+is( pcritique($policy, \$code), 8, $policy );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+# These ones are too hard to detect for now; FIXME??
+$some->{complicated}->[$data_structure]->[$#{$some->{complicated}->[$data_structure]} -1];
+my $ref = $some->{complicated}->[$data_structure];
+$some->{complicated}->[$data_structure]->[$#{$ref} -1];
+$ref->[$#{$some->{complicated}->[$data_structure]} -1];
+END_PERL
+
+$policy = 'Variables::RequireNegativeIndices';
+is( pcritique($policy, \$code), 0, $policy.', fixme' );
