@@ -18,7 +18,7 @@ $VERSION = eval $VERSION;    ## no critic
 
 #----------------------------------------------------------------------------
 
-my $expl = [ 169 ];
+my $expl = [ 283 ];
 
 #----------------------------------------------------------------------------
 
@@ -38,7 +38,7 @@ sub violates {
 
     # Must be a call to 'die' or 'warn'
     my $alternative = $elem eq 'warn' ? 'carp' : 'croak';
-    my $expl qq{'$elem' used instead of '$alternative'};
+    my $desc = qq{'$elem' used instead of '$alternative'};
     return $self->violation( $desc, $expl, $elem );
 }
 
