@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 22;
+use Test::More tests => 21;
 use Perl::Critic::Config;
 use Perl::Critic;
 
