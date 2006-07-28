@@ -15,6 +15,7 @@
      Bug Fixes:
      * RequireTidyCode tests fail if user has custom .perltidyrc file
      * 20612: RequirePerlTidy was ignoring HEREDOCs
+     * 20659: __END__ statement considered "unreachable"
      * Fix for PPI::XS (no C<use overload '""'> support)
      * Support for 'goto' in ProhibitAmpersandSigils and
        Subroutines::RequireFinalReturn

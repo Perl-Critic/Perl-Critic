@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 21;
+use Test::More tests => 22;
 use Perl::Critic::Config;
 use Perl::Critic;
 
@@ -357,22 +357,37 @@ is( pcritique($policy, \$code), 11, $policy);
 
 #----------------------------------------------------------------
 
-$code = <<'ENT_PERL';
+# Josh proposed this test, but I don't understand why this
+# should be allowed, so I'm going to punt for now.
+
+#$code = <<'END_PERL';
+#exit;
+#our %memoization;
+#END_PERL
+
+#$policy = 'ControlStructures::ProhibitUnreachableCode';
+#is( pcritique($policy, \$code), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
 exit;
-our %memoization;
-ENT_PERL
+
+__DATA__
+...
+END_PERL
 
 $policy = 'ControlStructures::ProhibitUnreachableCode';
 is( pcritique($policy, \$code), 0, $policy);
 
 #----------------------------------------------------------------
 
-$code = <<'ENT_PERL';
+$code = <<'END_PERL';
 exit;
 
-__DATA__
+__END__
 ...
-ENT_PERL
+END_PERL
 
 $policy = 'ControlStructures::ProhibitUnreachableCode';
 is( pcritique($policy, \$code), 0, $policy);

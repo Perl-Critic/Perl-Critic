@@ -84,6 +84,8 @@ sub violates {
     while ( $stmnt = $stmnt->snext_sibling() ) {
         last if $stmnt->schildren() && $stmnt->schild( 0 )->isa('PPI::Token::Label');
         next if $stmnt->isa('PPI::Statement::Sub');
+        next if $stmnt->isa('PPI::Statement::End');
+        next if $stmnt->isa('PPI::Statement::Data');
 
         push @viols, $self->violation( $desc, $expl, $stmnt );
     }
