@@ -11,6 +11,7 @@
      New Policies:
      * Variables::RequireNegativeIndices
      * InputOutput::ProhibitInteractiveTest
+     * ErrorHandling::RequireCarping
 
      Bug Fixes:
      * RequireTidyCode tests fail if user has custom .perltidyrc file

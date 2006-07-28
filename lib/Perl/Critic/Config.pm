@@ -337,6 +337,7 @@ sub native_policies {
       Perl::Critic::Policy::ControlStructures::ProhibitUntilBlocks
       Perl::Critic::Policy::Documentation::RequirePodAtEnd
       Perl::Critic::Policy::Documentation::RequirePodSections
+      Perl::Critic::Policy::ErrorHandling::RequireCarping
       Perl::Critic::Policy::InputOutput::ProhibitBacktickOperators
       Perl::Critic::Policy::InputOutput::ProhibitBarewordFileHandles
       Perl::Critic::Policy::InputOutput::ProhibitInteractiveTest

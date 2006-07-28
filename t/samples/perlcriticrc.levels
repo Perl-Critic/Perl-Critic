@@ -265,3 +265,6 @@ severity = 1
 
 [InputOutput::ProhibitInteractiveTest]
 severity = 1
+
+[ErrorHandling::RequireCarping]
+severity = 1

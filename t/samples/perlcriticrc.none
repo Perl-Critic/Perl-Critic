@@ -33,6 +33,7 @@
 [-ControlStructures::ProhibitUntilBlocks]
 [-Documentation::RequirePodAtEnd]
 [-Documentation::RequirePodSections]
+[-ErrorHandling::RequireCarping]
 [-InputOutput::ProhibitBacktickOperators]
 [-InputOutput::ProhibitBarewordFileHandles]
 [-InputOutput::ProhibitInteractiveTest]
