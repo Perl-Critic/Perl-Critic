@@ -10,6 +10,7 @@ package Perl::Critic::Policy;
 
 use strict;
 use warnings;
+use Carp qw(confess);
 use Perl::Critic::Utils;
 use Perl::Critic::Violation;
 
@@ -38,8 +39,7 @@ sub violation {
 
 sub _abstract_method {
     my $method_name = ( caller 1 )[3];
-    my ( $file, $line ) = ( caller 2 )[ 1, 2 ];
-    die qq{Can't call abstract method '$method_name' at $file line $line.\n};
+    confess qq{Can't call abstract method '$method_name'};
     return; ## no critic (UnreachableCode)
 }
 

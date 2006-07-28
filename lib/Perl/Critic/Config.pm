@@ -92,7 +92,7 @@ sub new {
 
         #Don't load policy if it does not comply with the current API
         if ( !$policy_long->can('default_severity') || !$policy_long->can('applies_to') ) {
-            warn "Policy $policy_short does not comply with the current API, skipping";
+            carp "Policy $policy_short does not comply with the current API, skipping";
             $load_me = $FALSE;
             next; # don't perform any other tests.  This one trumps the rest
         }
@@ -249,7 +249,7 @@ sub _screen_user_profile {
     my ($profile_ref, $namespace) = @_;
     for my $policy_name ( sort keys %{ $profile_ref } ) {
         next if _is_valid_policy( $policy_name, $namespace );
-        warn qq{Can't find policy module '$policy_name'\n};
+        carp qq{Can't find policy module '$policy_name'\n};
     }
     return 1;
 }

@@ -15,6 +15,7 @@ use warnings;
 use Pod::Usage;
 use File::Spec;
 use Getopt::Long;
+use Carp qw(carp croak);
 use List::Util qw(first);
 use English qw(-no_match_vars);
 use Perl::Critic::Utils;
@@ -178,7 +179,7 @@ sub get_input {
             $code_string = q{};
         }
 
-        $code_string =~ m{ \S+ }mx || die qq{Nothing to critique.\n};
+        $code_string =~ m{ \S+ }mx || croak qq{Nothing to critique.\n};
         return \$code_string;    #Convert to SCALAR ref for PPI
     }
 }
@@ -188,7 +189,7 @@ sub get_input {
 sub critique {
 
     my ( $opts, @files ) = @_;
-    @files || die "No perl files were found.\n";
+    @files || croak "No perl files were found.\n";
 
     # Perl::Critic has lots of dependencies, so loading is delayed
     # until it is really needed.  This hack reduces startup time for
@@ -211,7 +212,7 @@ sub critique {
     };
 
 
-    warn qq{$EVAL_ERROR} if $EVAL_ERROR;
+    carp qq{$EVAL_ERROR} if $EVAL_ERROR;
     return $count;
 }
 

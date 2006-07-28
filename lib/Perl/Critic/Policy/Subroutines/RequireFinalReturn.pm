@@ -10,6 +10,7 @@ package Perl::Critic::Policy::Subroutines::RequireFinalReturn;
 
 use strict;
 use warnings;
+use Carp qw(confess);
 use Perl::Critic::Utils;
 use base 'Perl::Critic::Policy';
 
@@ -37,7 +38,7 @@ sub violates {
     my @blocks = grep {$_->isa('PPI::Structure::Block')} $elem->schildren();
     if (@blocks > 1) {  
        # sanity check
-       die 'Internal error: subroutine should have no more than one block';
+       confess 'Internal error: subroutine should have no more than one block';
     }
     elsif (@blocks == 0) {
        #Technically, subroutines don't have to have a block at all. In
@@ -105,7 +106,7 @@ sub _is_compound_return {
                        !$_->isa('PPI::Token')} $final->schildren();
     # Sanity check:
     if (scalar grep {!$_->isa('PPI::Structure::Block')} @blocks) { 
-        die 'Internal error: expected only conditions, blocks and tokens in the if statement';
+        confess 'Internal error: expected only conditions, blocks and tokens in the if statement';
         return; ## no critic (UnreachableCode)
     }
 
