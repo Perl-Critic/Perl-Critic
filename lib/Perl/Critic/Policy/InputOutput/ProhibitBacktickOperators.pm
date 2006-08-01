@@ -1,3 +1,4 @@
+## no critic (RequireRcsKeywords,RequirePodSections)
 #######################################################################
 #      $URL$
 #     $Date$
@@ -56,7 +57,8 @@ when they fail.  I think its better to use IPC::Open3 to trap all the
 output and let the application decide what to do with it.
 
 
-  use IPC::Open3;
+  use IPC::Open3 'open3';
+  $SIG{CHLD} = 'IGNORE';
 
   @output = `some_command`;                      #not ok
 
@@ -69,6 +71,9 @@ output and let the application decide what to do with it.
 
 This policy also prohibits the generalized form of backticks seen as
 C<qx{}>.
+
+See L<perlipc> for more discussion on using C<wait()> instead of
+C<$SIG{CHLD} = 'IGNORE'>.
 
 =head1 AUTHOR
 
