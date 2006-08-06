@@ -2,7 +2,7 @@
 
 =pod
 
-=for stopwords LHS RHS REFACTORINGS FH stopwords
+=for stopwords LHS RHS REFACTORINGS FH SVN stopwords
 
 =head1 NAME
 
