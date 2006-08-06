@@ -1,8 +1,8 @@
 ########################################################################
-#      $URL:$
-#     $Date:$
-#   $Author:$
-# $Revision:$
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
 ########################################################################
 
 package Perl::Critic::Document;
@@ -99,6 +99,10 @@ sub _caching_finder {
 1;
 
 __END__
+
+=pod
+
+=for stopwords pre-caches
 
 =head1 NAME
 

@@ -175,13 +175,15 @@ __END__
 
 =pod
 
+=for stopwords performant
+
 =head1 NAME
 
 Perl::Critic::Policy::Variables::RequireNegativeIndices
 
 =head1 DESCRIPTION
 
-Conway points out that 
+Conway points out that
 
   $arr[$#arr];
   $arr[$#arr-1];

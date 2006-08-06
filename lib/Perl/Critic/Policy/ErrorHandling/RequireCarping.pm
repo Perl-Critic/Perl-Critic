@@ -58,7 +58,7 @@ Perl::Critic::Policy::ErrorHandling::RequireCarping
 =head1 DESCRIPTION
 
 The C<die> and C<warn> functions both report the file and line number
-where the exception ocurred.  But if someone else is using your
+where the exception occurred.  But if someone else is using your
 subroutine, they usually don't care where B<your> code blew up.
 Instead, they want to know where B<their> code invoked the subroutine.
 The L<Carp> module provides alternative methods that report the
