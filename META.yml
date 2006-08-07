@@ -1,6 +1,6 @@
 ---
 name: Perl-Critic
-version: 0.18
+version: 0.18_01
 author:
   - Jeffrey Thalhammer <thaljef@cpan.org>
 abstract: Critique Perl source code for best-practices
@@ -26,251 +26,263 @@ build_requires:
 provides:
   Perl::Critic:
     file: lib/Perl/Critic.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Config:
     file: lib/Perl/Critic/Config.pm
-    version: 0.18
+    version: 0.18_01
+  Perl::Critic::Document:
+    file: lib/Perl/Critic/Document.pm
+    version: 0.18_01
   Perl::Critic::Policy:
     file: lib/Perl/Critic/Policy.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::BuiltinFunctions::ProhibitLvalueSubstr:
     file: lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitLvalueSubstr.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::BuiltinFunctions::ProhibitSleepViaSelect:
     file: lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitSleepViaSelect.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::BuiltinFunctions::ProhibitStringyEval:
     file: lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitStringyEval.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalCan:
     file: lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitUniversalCan.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalIsa:
     file: lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitUniversalIsa.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep:
     file: lib/Perl/Critic/Policy/BuiltinFunctions/RequireBlockGrep.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::BuiltinFunctions::RequireBlockMap:
     file: lib/Perl/Critic/Policy/BuiltinFunctions/RequireBlockMap.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::BuiltinFunctions::RequireGlobFunction:
     file: lib/Perl/Critic/Policy/BuiltinFunctions/RequireGlobFunction.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::BuiltinFunctions::RequireSimpleSortBlock:
     file: lib/Perl/Critic/Policy/BuiltinFunctions/RequireSimpleSortBlock.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::ClassHierarchies::ProhibitAutoloading:
     file: lib/Perl/Critic/Policy/ClassHierarchies/ProhibitAutoloading.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::ClassHierarchies::ProhibitExplicitISA:
     file: lib/Perl/Critic/Policy/ClassHierarchies/ProhibitExplicitISA.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::ClassHierarchies::ProhibitOneArgBless:
     file: lib/Perl/Critic/Policy/ClassHierarchies/ProhibitOneArgBless.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::CodeLayout::ProhibitHardTabs:
     file: lib/Perl/Critic/Policy/CodeLayout/ProhibitHardTabs.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::CodeLayout::ProhibitParensWithBuiltins:
     file: lib/Perl/Critic/Policy/CodeLayout/ProhibitParensWithBuiltins.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::CodeLayout::ProhibitQuotedWordLists:
     file: lib/Perl/Critic/Policy/CodeLayout/ProhibitQuotedWordLists.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::CodeLayout::RequireTidyCode:
     file: lib/Perl/Critic/Policy/CodeLayout/RequireTidyCode.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::CodeLayout::RequireTrailingCommas:
     file: lib/Perl/Critic/Policy/CodeLayout/RequireTrailingCommas.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::ControlStructures::ProhibitCStyleForLoops:
     file: lib/Perl/Critic/Policy/ControlStructures/ProhibitCStyleForLoops.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::ControlStructures::ProhibitCascadingIfElse:
     file: lib/Perl/Critic/Policy/ControlStructures/ProhibitCascadingIfElse.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::ControlStructures::ProhibitPostfixControls:
     file: lib/Perl/Critic/Policy/ControlStructures/ProhibitPostfixControls.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::ControlStructures::ProhibitUnlessBlocks:
     file: lib/Perl/Critic/Policy/ControlStructures/ProhibitUnlessBlocks.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::ControlStructures::ProhibitUnreachableCode:
     file: lib/Perl/Critic/Policy/ControlStructures/ProhibitUnreachableCode.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::ControlStructures::ProhibitUntilBlocks:
     file: lib/Perl/Critic/Policy/ControlStructures/ProhibitUntilBlocks.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::Documentation::RequirePodAtEnd:
     file: lib/Perl/Critic/Policy/Documentation/RequirePodAtEnd.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::Documentation::RequirePodSections:
     file: lib/Perl/Critic/Policy/Documentation/RequirePodSections.pm
-    version: 0.18
+    version: 0.18_01
+  Perl::Critic::Policy::ErrorHandling::RequireCarping:
+    file: lib/Perl/Critic/Policy/ErrorHandling/RequireCarping.pm
+    version: 0.18_01
   Perl::Critic::Policy::InputOutput::ProhibitBacktickOperators:
     file: lib/Perl/Critic/Policy/InputOutput/ProhibitBacktickOperators.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::InputOutput::ProhibitBarewordFileHandles:
     file: lib/Perl/Critic/Policy/InputOutput/ProhibitBarewordFileHandles.pm
-    version: 0.18
+    version: 0.18_01
+  Perl::Critic::Policy::InputOutput::ProhibitInteractiveTest:
+    file: lib/Perl/Critic/Policy/InputOutput/ProhibitInteractiveTest.pm
+    version: 0.18_01
   Perl::Critic::Policy::InputOutput::ProhibitOneArgSelect:
     file: lib/Perl/Critic/Policy/InputOutput/ProhibitOneArgSelect.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::InputOutput::ProhibitReadlineInForLoop:
     file: lib/Perl/Critic/Policy/InputOutput/ProhibitReadlineInForLoop.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::InputOutput::ProhibitTwoArgOpen:
     file: lib/Perl/Critic/Policy/InputOutput/ProhibitTwoArgOpen.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::InputOutput::RequireBracedFileHandleWithPrint:
     file: lib/Perl/Critic/Policy/InputOutput/RequireBracedFileHandleWithPrint.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::Miscellanea::ProhibitFormats:
     file: lib/Perl/Critic/Policy/Miscellanea/ProhibitFormats.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::Miscellanea::ProhibitTies:
     file: lib/Perl/Critic/Policy/Miscellanea/ProhibitTies.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::Miscellanea::RequireRcsKeywords:
     file: lib/Perl/Critic/Policy/Miscellanea/RequireRcsKeywords.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::Modules::ProhibitAutomaticExportation:
     file: lib/Perl/Critic/Policy/Modules/ProhibitAutomaticExportation.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::Modules::ProhibitEvilModules:
     file: lib/Perl/Critic/Policy/Modules/ProhibitEvilModules.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::Modules::ProhibitMultiplePackages:
     file: lib/Perl/Critic/Policy/Modules/ProhibitMultiplePackages.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::Modules::RequireBarewordIncludes:
     file: lib/Perl/Critic/Policy/Modules/RequireBarewordIncludes.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::Modules::RequireEndWithOne:
     file: lib/Perl/Critic/Policy/Modules/RequireEndWithOne.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::Modules::RequireExplicitPackage:
     file: lib/Perl/Critic/Policy/Modules/RequireExplicitPackage.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::Modules::RequireVersionVar:
     file: lib/Perl/Critic/Policy/Modules/RequireVersionVar.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::NamingConventions::ProhibitAmbiguousNames:
     file: lib/Perl/Critic/Policy/NamingConventions/ProhibitAmbiguousNames.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseSubs:
     file: lib/Perl/Critic/Policy/NamingConventions/ProhibitMixedCaseSubs.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars:
     file: lib/Perl/Critic/Policy/NamingConventions/ProhibitMixedCaseVars.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::References::ProhibitDoubleSigils:
     file: lib/Perl/Critic/Policy/References/ProhibitDoubleSigils.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::RegularExpressions::RequireExtendedFormatting:
     file: lib/Perl/Critic/Policy/RegularExpressions/RequireExtendedFormatting.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::RegularExpressions::RequireLineBoundaryMatching:
     file: lib/Perl/Critic/Policy/RegularExpressions/RequireLineBoundaryMatching.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::Subroutines::ProhibitAmpersandSigils:
     file: lib/Perl/Critic/Policy/Subroutines/ProhibitAmpersandSigils.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::Subroutines::ProhibitBuiltinHomonyms:
     file: lib/Perl/Critic/Policy/Subroutines/ProhibitBuiltinHomonyms.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::Subroutines::ProhibitExcessComplexity:
     file: lib/Perl/Critic/Policy/Subroutines/ProhibitExcessComplexity.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::Subroutines::ProhibitExplicitReturnUndef:
     file: lib/Perl/Critic/Policy/Subroutines/ProhibitExplicitReturnUndef.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::Subroutines::ProhibitSubroutinePrototypes:
     file: lib/Perl/Critic/Policy/Subroutines/ProhibitSubroutinePrototypes.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::Subroutines::ProtectPrivateSubs:
     file: lib/Perl/Critic/Policy/Subroutines/ProtectPrivateSubs.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::Subroutines::RequireFinalReturn:
     file: lib/Perl/Critic/Policy/Subroutines/RequireFinalReturn.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::TestingAndDebugging::ProhibitNoStrict:
     file: lib/Perl/Critic/Policy/TestingAndDebugging/ProhibitNoStrict.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::TestingAndDebugging::ProhibitNoWarnings:
     file: lib/Perl/Critic/Policy/TestingAndDebugging/ProhibitNoWarnings.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::TestingAndDebugging::RequireUseStrict:
     file: lib/Perl/Critic/Policy/TestingAndDebugging/RequireUseStrict.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::TestingAndDebugging::RequireUseWarnings:
     file: lib/Perl/Critic/Policy/TestingAndDebugging/RequireUseWarnings.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::ValuesAndExpressions::ProhibitConstantPragma:
     file: lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitConstantPragma.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::ValuesAndExpressions::ProhibitEmptyQuotes:
     file: lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitEmptyQuotes.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::ValuesAndExpressions::ProhibitEscapedCharacters:
     file: lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitEscapedCharacters.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::ValuesAndExpressions::ProhibitInterpolationOfLiterals:
     file: lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitInterpolationOfLiterals.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::ValuesAndExpressions::ProhibitLeadingZeros:
     file: lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitLeadingZeros.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::ValuesAndExpressions::ProhibitMixedBooleanOperators:
     file: lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitMixedBooleanOperators.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::ValuesAndExpressions::ProhibitNoisyQuotes:
     file: lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitNoisyQuotes.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::ValuesAndExpressions::ProhibitVersionStrings:
     file: lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitVersionStrings.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::ValuesAndExpressions::RequireInterpolationOfMetachars:
     file: lib/Perl/Critic/Policy/ValuesAndExpressions/RequireInterpolationOfMetachars.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::ValuesAndExpressions::RequireNumberSeparators:
     file: lib/Perl/Critic/Policy/ValuesAndExpressions/RequireNumberSeparators.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::ValuesAndExpressions::RequireQuotedHeredocTerminator:
     file: lib/Perl/Critic/Policy/ValuesAndExpressions/RequireQuotedHeredocTerminator.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::ValuesAndExpressions::RequireUpperCaseHeredocTerminator:
     file: lib/Perl/Critic/Policy/ValuesAndExpressions/RequireUpperCaseHeredocTerminator.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::Variables::ProhibitConditionalDeclarations:
     file: lib/Perl/Critic/Policy/Variables/ProhibitConditionalDeclarations.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::Variables::ProhibitLocalVars:
     file: lib/Perl/Critic/Policy/Variables/ProhibitLocalVars.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::Variables::ProhibitMatchVars:
     file: lib/Perl/Critic/Policy/Variables/ProhibitMatchVars.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::Variables::ProhibitPackageVars:
     file: lib/Perl/Critic/Policy/Variables/ProhibitPackageVars.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::Variables::ProhibitPunctuationVars:
     file: lib/Perl/Critic/Policy/Variables/ProhibitPunctuationVars.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::Variables::ProtectPrivateVars:
     file: lib/Perl/Critic/Policy/Variables/ProtectPrivateVars.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Policy::Variables::RequireInitializationForLocalVars:
     file: lib/Perl/Critic/Policy/Variables/RequireInitializationForLocalVars.pm
-    version: 0.18
+    version: 0.18_01
+  Perl::Critic::Policy::Variables::RequireNegativeIndices:
+    file: lib/Perl/Critic/Policy/Variables/RequireNegativeIndices.pm
+    version: 0.18_01
   Perl::Critic::TestUtils:
     file: lib/Perl/Critic/TestUtils.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Utils:
     file: lib/Perl/Critic/Utils.pm
-    version: 0.18
+    version: 0.18_01
   Perl::Critic::Violation:
     file: lib/Perl/Critic/Violation.pm
-    version: 0.18
+    version: 0.18_01
 generated_by: Module::Build version 0.2611
