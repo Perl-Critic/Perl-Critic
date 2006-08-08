@@ -6,7 +6,7 @@
 
 =head1 NAME
 
-Things for Perl::Critic developers TODO
+TODO - Things for Perl::Critic developers to do
 
 =head1 SOURCE
 
@@ -51,10 +51,6 @@ difference between that and C<< $self->_foo() >>
 
 =over 4
 
-=item * ErrorHandling::RequireCarp (283)
-
-Prefer C<carp> and C<croak> over C<warn> and C<die>
-
 =item * ValuesAndExpressions::ProhibitCommaSeparatedStatements (p68)
 
 =item * ValuesAndExpressions::RequireListParens (p71)
@@ -64,8 +60,6 @@ Prefer C<carp> and C<croak> over C<warn> and C<die>
 Look for grep in a scalar context and recommend any() instead
 
 =item * Variables::RequireLocalizedPunctuationVars (p81)
-
-=item * Variables::RequireLexicalForLoopIterator (p108)
 
 =item * Variables::ProhibitTopicChangeInListFunction (p114)
 

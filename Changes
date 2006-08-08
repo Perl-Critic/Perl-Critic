@@ -5,6 +5,10 @@
 # $Revision$
 #######################################################################
 
+[0.18_02]  Released on ????????
+
+     New Policies:
+     * Variables::RequireLexicalLoopIterator
 
 [0.18_01]  Released on 20060806
 

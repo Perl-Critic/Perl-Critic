@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 32;
+use Test::More tests => 37;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -25,7 +25,9 @@ can_ok('Perl::Critic::Policy::Variables::ProhibitPunctuationVars', 'violates');
 can_ok('Perl::Critic::Policy::Variables::ProtectPrivateVars', 'violates');
 can_ok('Perl::Critic::Policy::Variables::ProhibitConditionalDeclarations', 'violates');
 can_ok('Perl::Critic::Policy::Variables::RequireInitializationForLocalVars', 'violates');
+can_ok('Perl::Critic::Policy::Variables::RequireLexicalLoopIterators', 'violates');
 can_ok('Perl::Critic::Policy::Variables::RequireNegativeIndices', 'violates');
+
 
 #----------------------------------------------------------------
 
@@ -64,7 +66,7 @@ is( pcritique($policy, \$code), 0, $policy);
 
 $code = <<'END_PERL';
 use English;
- use English qw($PREMATCH) ; 
+use English qw($PREMATCH);
 use English qw($MATCH);
 use English qw($POSTMATCH);
 $`;
@@ -352,6 +354,47 @@ END_PERL
 
 $policy = 'Variables::RequireInitializationForLocalVars';
 is( pcritique($policy, \$code), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+for $foo ( @list ) {}
+foreach $foo ( @list ) {}
+END_PERL
+
+$policy = 'Variables::RequireLexicalLoopIterators';
+is( pcritique($policy, \$code), 2, $policy.'non-lexical iterator' );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+for my $foo ( @list ) {}
+foreach my $foo ( @list ) {}
+END_PERL
+
+$policy = 'Variables::RequireLexicalLoopIterators';
+is( pcritique($policy, \$code), 0, $policy.'lexical iterators' );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+for ( @list ) {}
+foreach ( @list ) {}
+END_PERL
+
+$policy = 'Variables::RequireLexicalLoopIterators';
+is( pcritique($policy, \$code), 0, $policy.'$_ iterator' );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+for ( $i=0; $i<10; $i++ ) {}
+while ( $condition ) {}
+until ( $condition ) {}
+END_PERL
+
+$policy = 'Variables::RequireLexicalLoopIterators';
+is( pcritique($policy, \$code), 0, $policy.'Other compounds' );
 
 #----------------------------------------------------------------
 

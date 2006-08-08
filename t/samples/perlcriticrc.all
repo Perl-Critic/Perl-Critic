@@ -84,4 +84,5 @@
 [Variables::ProhibitPunctuationVars]
 [Variables::ProtectPrivateVars]
 [Variables::RequireInitializationForLocalVars]
+[Variables::RequireLexicalLoopIterators]
 [Variables::RequireNegativeIndices]

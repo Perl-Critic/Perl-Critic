@@ -119,6 +119,10 @@ All POD should be after C<__END__> [Severity 1]
 
 Organize your POD into the customary sections. [Severity 2]
 
+=head2 L<Perl::Critic::Policy::ErrorHandling::RequireCarping>
+
+Use functions from L<Carp> instead of C<warn> or C<die>. [Severity 3]
+
 =head2 L<Perl::Critic::Policy::InputOutput::ProhibitBacktickOperators>
 
 Discourage stuff like C<@files = `ls $directory`> [Severity 3]
@@ -330,6 +334,10 @@ Prevent access to private vars in other packages [Severity 3]
 =head2 L<Perl::Critic::Policy::Variables::RequireInitializationForLocalVars>
 
 Write C<local $foo = $bar;> instead of just C<local $foo;> [Severity 3]
+
+=head2 L<Perl::Critic::Policy::Variables::RequireLexicalLoopIterators>
+
+Write C<for my $element (@list) {...}> instead of C<for $element (@list) {...}>
 
 =head2 L<Perl::Critic::Policy::Variables::RequireNegativeIndices>
 

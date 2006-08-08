@@ -268,3 +268,6 @@ severity = 1
 
 [ErrorHandling::RequireCarping]
 severity = 1
+
+[Variables::RequireLexicalLoopIterators]
+severity = 1

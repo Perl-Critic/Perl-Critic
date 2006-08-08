@@ -391,6 +391,7 @@ sub native_policies {
       Perl::Critic::Policy::Variables::ProhibitPunctuationVars
       Perl::Critic::Policy::Variables::ProtectPrivateVars
       Perl::Critic::Policy::Variables::RequireInitializationForLocalVars
+      Perl::Critic::Policy::Variables::RequireLexicalLoopIterators
       Perl::Critic::Policy::Variables::RequireNegativeIndices
     );
 }
