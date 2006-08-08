@@ -8,6 +8,7 @@
 [0.18_02]  Released on ????????
 
      New Policies:
+     * ControlStructures::ProhibitDeepNests
      * Variables::RequireLexicalLoopIterator
 
 [0.18_01]  Released on 20060806

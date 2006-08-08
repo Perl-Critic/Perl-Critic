@@ -95,6 +95,10 @@ Write C<for(0..20)> instead of C<for($i=0; $i<=20; $i++)> [Severity 2]
 
 Don't write long "if-elsif-elsif-elsif-elsif...else" chains. [Severity 3]
 
+=head2 L<Perl::Critic::Policy::ControlStructures::ProhibitDeepNests> [Severity 2]
+
+Don't write deeply nested loops and conditionals.
+
 =head2 L<Perl::Critic::Policy::ControlStructures::ProhibitPostfixControls>
 
 Write C<if($condition){ do_something() }> instead of C<do_something() if $condition> [Severity 2]

@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 21;
+use Test::More tests => 26;
 use Perl::Critic::Config;
 use Perl::Critic;
 
@@ -478,3 +478,111 @@ END_PERL
 $policy = 'ControlStructures::ProhibitUnreachableCode';
 is( pcritique($policy, \$code), 1, $policy);
 
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+
+for $element1 ( @list1 ) {
+    foreach $element2 ( @list2 ) {
+        for $element3 ( @list3 ) {
+            foreach $element4 ( @list4 ) {
+               for $element5 ( @list5 ) {
+                  for $element5 ( @list5 ) {
+                  }
+               }
+            }
+        }
+    }
+}
+
+END_PERL
+
+$policy = 'ControlStructures::ProhibitDeepNests';
+is( pcritique($policy, \$code), 1, '5 for loops');
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+
+if ($condition1) {
+  if ($condition2) {
+    if ($condition3) {
+      if ($condition4) {
+        if ($condition5) {
+          if ($condition6) {
+          }
+        }
+      }
+    }
+  }
+}
+
+END_PERL
+
+$policy = 'ControlStructures::ProhibitDeepNests';
+is( pcritique($policy, \$code), 1, '6 if blocks');
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+
+if ($condition) {
+  foreach ( @list ) {
+    until ($condition) {
+      for (my $i=0; $<10; $i++) {
+        if ($condition) {
+          while ($condition) {
+          }
+        }
+      }
+    }
+  }
+}
+
+END_PERL
+
+$policy = 'ControlStructures::ProhibitDeepNests';
+is( pcritique($policy, \$code), 1, '5 mixed nests');
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+
+if ($condition) {
+  foreach ( @list ) {
+    until ($condition) {
+      for (my $i=0; $<10; $i++) {
+        if ($condition) {
+          while ($condition) {
+          }
+        }
+      }
+    }
+  }
+}
+
+END_PERL
+
+%config = ( max_nests => 6 );
+$policy = 'ControlStructures::ProhibitDeepNests';
+is( pcritique($policy, \$code, \%config), 0, 'Configurable');
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+
+if ($condition) {
+    s/foo/bar/ for @list;
+    until ($condition) {
+      for (my $i=0; $<10; $i++) {
+          die if $condition;
+        while ($condition) {
+        }
+      }
+   }
+}
+
+END_PERL
+
+$policy = 'ControlStructures::ProhibitDeepNests';
+is( pcritique($policy, \$code), 0, 'With postfixes');

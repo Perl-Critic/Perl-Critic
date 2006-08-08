@@ -9,6 +9,7 @@
 [-BuiltinFunctions::ProhibitUniversalIsa]
 [-ClassHierarchies::ProhibitExplicitISA]
 [-CodeLayout::ProhibitQuotedWordLists]
+[-ControlStructures::ProhibitDeepNests]
 [-ControlStructures::ProhibitUnreachableCode]
 [-InputOutput::ProhibitBacktickOperators]
 [-Modules::ProhibitAutomaticExportation]

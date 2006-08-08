@@ -26,6 +26,7 @@
 [CodeLayout::RequireTrailingCommas]
 [ControlStructures::ProhibitCStyleForLoops]
 [ControlStructures::ProhibitCascadingIfElse]
+[ControlStructures::ProhibitDeepNests]
 [ControlStructures::ProhibitPostfixControls]
 [ControlStructures::ProhibitUnlessBlocks]
 [ControlStructures::ProhibitUnreachableCode]

@@ -331,6 +331,7 @@ sub native_policies {
       Perl::Critic::Policy::CodeLayout::RequireTrailingCommas
       Perl::Critic::Policy::ControlStructures::ProhibitCStyleForLoops
       Perl::Critic::Policy::ControlStructures::ProhibitCascadingIfElse
+      Perl::Critic::Policy::ControlStructures::ProhibitDeepNests
       Perl::Critic::Policy::ControlStructures::ProhibitPostfixControls
       Perl::Critic::Policy::ControlStructures::ProhibitUnlessBlocks
       Perl::Critic::Policy::ControlStructures::ProhibitUnreachableCode

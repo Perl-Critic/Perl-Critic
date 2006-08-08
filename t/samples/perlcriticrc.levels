@@ -271,3 +271,6 @@ severity = 1
 
 [Variables::RequireLexicalLoopIterators]
 severity = 1
+
+[ControlStructures::ProhibitDeepNests]
+severity = 1

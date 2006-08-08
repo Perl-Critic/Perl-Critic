@@ -93,6 +93,9 @@ provides:
   Perl::Critic::Policy::ControlStructures::ProhibitCascadingIfElse:
     file: lib/Perl/Critic/Policy/ControlStructures/ProhibitCascadingIfElse.pm
     version: 0.18_01
+  Perl::Critic::Policy::ControlStructures::ProhibitDeepNests:
+    file: lib/Perl/Critic/Policy/ControlStructures/ProhibitDeepNests.pm
+    version: 0.18_01
   Perl::Critic::Policy::ControlStructures::ProhibitPostfixControls:
     file: lib/Perl/Critic/Policy/ControlStructures/ProhibitPostfixControls.pm
     version: 0.18_01

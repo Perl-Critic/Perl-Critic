@@ -27,6 +27,7 @@ lib/Perl/Critic/Policy/CodeLayout/RequireTidyCode.pm
 lib/Perl/Critic/Policy/CodeLayout/RequireTrailingCommas.pm
 lib/Perl/Critic/Policy/ControlStructures/ProhibitCascadingIfElse.pm
 lib/Perl/Critic/Policy/ControlStructures/ProhibitCStyleForLoops.pm
+lib/Perl/Critic/Policy/ControlStructures/ProhibitDeepNests.pm
 lib/Perl/Critic/Policy/ControlStructures/ProhibitPostfixControls.pm
 lib/Perl/Critic/Policy/ControlStructures/ProhibitUnlessBlocks.pm
 lib/Perl/Critic/Policy/ControlStructures/ProhibitUnreachableCode.pm
