@@ -23,7 +23,7 @@ my $expl = q{Consider refactoring};
 
 #----------------------------------------------------------------------------
 
-sub default_severity { return $SEVERITY_LOW }
+sub default_severity { return $SEVERITY_MEDIUM }
 sub applies_to { return 'PPI::Statement::Compound' }
 
 #----------------------------------------------------------------------------
@@ -43,10 +43,14 @@ sub new {
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    my $compound_nodes_ref = $elem->find('PPI::Statement::Compound') || return;
+    my $nest_count = 1;  #For _this_ element
+    my $parent = $elem;
 
-    #Add one to count for _this_ statement
-    my $nest_count =  @{ $compound_nodes_ref } + 1;
+    while ( $parent = $parent->parent() ){
+        if( $parent->isa('PPI::Statement::Compound') ) {
+            $nest_count++;
+        }
+    }
 
     if ( $nest_count > $self->{_max_nests} ) {
         return $self->violation( $desc, $expl, $elem );
