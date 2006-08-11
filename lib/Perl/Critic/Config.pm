@@ -315,6 +315,7 @@ sub native_policies {
       Perl::Critic::Policy::BuiltinFunctions::ProhibitLvalueSubstr
       Perl::Critic::Policy::BuiltinFunctions::ProhibitSleepViaSelect
       Perl::Critic::Policy::BuiltinFunctions::ProhibitStringyEval
+      Perl::Critic::Policy::BuiltinFunctions::ProhibitStringySplit
       Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalCan
       Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalIsa
       Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep

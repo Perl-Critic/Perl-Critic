@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 30;
+use Test::More tests => 34;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -323,3 +323,97 @@ END_PERL
 
 $policy = 'BuiltinFunctions::RequireSimpleSortBlock';
 is( pcritique($policy, \$code), 0, $policy );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+
+# Single quote
+split 'pattern';
+split 'pattern', $string;
+split 'pattern', $string, 3;
+
+# Double quote
+split "pattern";
+split "pattern", $string;
+split "pattern", $string, 3;
+
+# Single quote, w/ parens
+split('pattern');
+split('pattern'), $string;
+split('pattern'), $string, 3;
+
+# Double quote, w/ parens
+split("pattern");
+split("pattern"), $string;
+split("pattern"), $string, 3;
+
+END_PERL
+
+$policy = 'BuiltinFunctions::ProhibitStringySplit';
+is( pcritique($policy, \$code), 12, 'Stringy splits' );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+
+# Scalar arg
+split $pattern;
+split $pattern, $string;
+split $pattern, $string, 3;
+
+# Scalar arg, w/ parens
+split($pattern);
+split($pattern), $string;
+split($pattern), $string, 3;
+
+# Regex arg
+split //;
+split //, $string;
+split //, $string, 3;
+
+# Regex arg, w/ parens
+split( // );
+split( // ), $string;
+split( // ), $string, 3;
+
+END_PERL
+
+$policy = 'BuiltinFunctions::ProhibitStringySplit';
+is( pcritique($policy, \$code), 0, 'Non-stringy splits' );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+
+split ' ';
+split ' ', $string;
+split ' ', $string, 3;
+
+split( " " );
+split( " " ), $string;
+split( " " ), $string, 3;
+
+split( q{ }  );
+split( q{ }  ), $string;
+split( q{ }  ), $string, 3;
+
+END_PERL
+
+$policy = 'BuiltinFunctions::ProhibitStringySplit';
+is( pcritique($policy, \$code), 0, 'Special split on space' );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+
+# These might be technically legal, but they are so hard
+# to understand that they might as well be outlawed.
+
+split @list;
+split( @list );
+
+END_PERL
+
+$policy = 'BuiltinFunctions::ProhibitStringySplit';
+is( pcritique($policy, \$code), 0, 'Split oddities' );

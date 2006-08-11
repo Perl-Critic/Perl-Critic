@@ -11,6 +11,7 @@
 [-BuiltinFunctions::ProhibitLvalueSubstr]
 [-BuiltinFunctions::ProhibitSleepViaSelect]
 [-BuiltinFunctions::ProhibitStringyEval]
+[-BuiltinFunctions::ProhibitStringySplit]
 [-BuiltinFunctions::ProhibitUniversalCan]
 [-BuiltinFunctions::ProhibitUniversalIsa]
 [-BuiltinFunctions::RequireBlockGrep]

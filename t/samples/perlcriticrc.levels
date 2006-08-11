@@ -274,3 +274,6 @@ severity = 1
 
 [ControlStructures::ProhibitDeepNests]
 severity = 1
+
+[BuiltinFunctions::ProhibitStringySplit]
+severity = 1

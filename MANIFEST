@@ -11,6 +11,7 @@ lib/Perl/Critic/Policy.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitLvalueSubstr.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitSleepViaSelect.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitStringyEval.pm
+lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitStringySplit.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitUniversalCan.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitUniversalIsa.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/RequireBlockGrep.pm

@@ -8,6 +8,7 @@
 [0.18_02]  Released on ????????
 
      New Policies:
+     * BuiltinFunctions::ProhibitStringySplit
      * ControlStructures::ProhibitDeepNests
      * Variables::RequireLexicalLoopIterator
 

@@ -35,6 +35,10 @@ Use L<Time::HiRes> instead of something like C<select(undef, undef, undef, .05)>
 
 Write C<eval { my $foo; bar($foo) }> instead of C<eval "my $foo; bar($foo);"> [Severity 5]
 
+=head2 L<Perl::Critic::Policy::BuiltinFunctions::ProhibitStringySplit>
+
+Write C<split /-/, $string> instead of C<split '-', $string> [Severity 3]
+
 =head2 L<Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalCan>
 
 Write C<< eval { $foo->can($name) } >> instead of C<UNIVERSAL::can($foo, $name)> [Severity 3]
