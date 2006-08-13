@@ -31,13 +31,19 @@ sub violates {
 
     my ( $self, $elem, undef ) = @_;
 
-    return if ($elem ne 'warn' && $elem ne 'die');
+    if ( $elem eq 'warn' ) {
+        $alternative = 'carp';
+    }
+    elsif ( $elem eq 'die' ) {
+        $alternative eq 'croak';
+    }
+    else {
+        return;
+    }
     return if is_method_call($elem);
     return if is_hash_key($elem);
     return if is_subroutine_name($elem);
 
-    # Must be a call to 'die' or 'warn'
-    my $alternative = $elem eq 'warn' ? 'carp' : 'croak';
     my $desc = qq{'$elem' used instead of '$alternative'};
     return $self->violation( $desc, $expl, $elem );
 }
