@@ -27,6 +27,22 @@ TODO - Things for Perl::Critic developers to do
 
 =back
 
+=head1 SPELLING & DISPLAY
+
+=over 4
+
+=item * Double-quote things, not single-quote, in messages
+
+Erorr messages should be in the form:
+
+    Use "croak" instead of "die"
+
+Instead of the incorrect:
+
+    Use 'croak' instead of 'die'
+
+=back
+
 =head1 BUGS/LIMITATIONS
 
 =over 4
@@ -46,6 +62,15 @@ Allow forbidden words in RHS of variable declarations
 
 Doesn't forbid C<< $pkg->_foo() >> because it can't tell the
 difference between that and C<< $self->_foo() >>
+
+=item * ErrorHandling::RequireCarping
+
+This should not complain about using warn or die if it's not in a function.
+
+=item * Variables::ProhibitLocalVars
+
+Should not complain if what we're declaring local is a magic variable.
+C<local $/ = undef> is perfect OK.
 
 =back
 
