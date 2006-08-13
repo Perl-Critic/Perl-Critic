@@ -67,6 +67,18 @@ difference between that and C<< $self->_foo() >>
 
 This should not complain about using warn or die if it's not in a function.
 
+Also, if the error string ends with a "\n", then the line number
+and package information is not shown, so it doesn't matter if you
+use carp/confess or not.  For example:
+
+    my $fh;
+    if ( !open( $fh, '<', $filename ) ) {
+        warn "ack: $filename: $!\n";
+        return;
+    }
+
+I just want to print a warning and move on.  The location is irrelevant.
+
 =item * Variables::ProhibitLocalVars
 
 Should not complain if what we're declaring local is a magic variable.
