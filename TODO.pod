@@ -23,6 +23,8 @@ TODO - Things for Perl::Critic developers to do
 
 =item * Report safari sections instead of book page numbers.
 
+=item * C<-q> flag to not print "filename checks OK" messages.
+
 =back
 
 =head1 BUGS/LIMITATIONS
@@ -50,6 +52,15 @@ difference between that and C<< $self->_foo() >>
 =head1 OTHER PBP POLICIES THAT SEEM FEASIBLE TO IMPLEMENT
 
 =over 4
+
+=item * ValuesAndExpressions::ProhibitUselessQuotingOfVariables
+
+I've seen a lot of beginners do things like this:
+
+    open( my $fh, "$filename" );
+
+There's no reason for C<$filename> to be quoted.
+
 
 =item * ValuesAndExpressions::ProhibitCommaSeparatedStatements (p68)
 
