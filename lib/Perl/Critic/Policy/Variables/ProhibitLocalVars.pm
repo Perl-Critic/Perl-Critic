@@ -79,7 +79,7 @@ module to give those variables more meaningful names.
 
 =head1 NOTES
 
-If an external module uses package variables as it's interface, then
+If an external module uses package variables as its interface, then
 using C<local> is actually a pretty sensible thing to do.  So
 Perl::Critic will not complain if you C<local>-ize variables with a
 fully qualified name such as C<$Some::Package::foo>.  However, if
