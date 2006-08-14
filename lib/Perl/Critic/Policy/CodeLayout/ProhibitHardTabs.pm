@@ -43,10 +43,15 @@ sub violates {
     my ( $self, $elem, undef ) = @_;
     $elem =~ m{ \t }mx || return;
 
-    #Permit leading tabs, if allowed
+    # The __DATA__ element is exempt
+    if (my $parent = $elem->parent() ) {
+        return if $parent->isa('PPI::Statement::Data');
+    }
+
+    # Permit leading tabs, if allowed
     return if $self->{_allow_leading_tabs} && $elem->location->[1] == 1;
 
-    #Must be a violation...
+    # Must be a violation...
     return $self->violation( $desc, $expl, $elem );
 }
 
@@ -68,9 +73,10 @@ cause you code to look vastly different to other people.  Any decent
 editor can be configured to expand tabs into spaces.  L<Perl::Tidy>
 also does this for you.
 
-This Policy catches all tabs in your source code, including POD, quotes,
-and HEREDOCS.  However, tabs in a leading position are allowed.  If you want
-to forbid all tabs everywhere, put this to your F<.perlcriticrc> file:
+This Policy catches all tabs in your source code, including POD,
+quotes, and HEREDOCS.  The contents of the C<__DATA__> section are not
+examined.  Tabs in a leading position are allowed, but if you want to
+forbid all tabs everywhere, put this to your F<.perlcriticrc> file:
 
   [CodeLayout::ProhibitHardTabs]
   allow_leading_tabs = 0

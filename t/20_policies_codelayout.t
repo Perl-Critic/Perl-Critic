@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 25;
+use Test::More tests => 26;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -82,7 +82,22 @@ END_PERL
 $policy = 'CodeLayout::ProhibitHardTabs';
 is( pcritique($policy, \$code, \%config), 3, $policy );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
+
+$code = <<"END_PERL";
+#This will be interpolated!
+
+__DATA__
+foo\tbar\tbaz
+\tfred\barney
+
+END_PERL
+
+%config = (allow_leading_tabs => 0);
+$policy = 'CodeLayout::ProhibitHardTabs';
+is( pcritique($policy, \$code, \%config), 0, 'Tabs in __DATA__' );
+
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 open ($foo, $bar);
