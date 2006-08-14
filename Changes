@@ -12,6 +12,9 @@
      * ControlStructures::ProhibitDeepNests
      * Variables::RequireLexicalLoopIterator
 
+     Bug Fixes:
+     * 20965: "Hard tabs used at" shouldn't check __DATA__
+
 [0.18_01]  Released on 20060806
 
      New Policies:
