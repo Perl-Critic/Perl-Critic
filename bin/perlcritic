@@ -223,14 +223,12 @@ sub render_report {
     my ( $file, $opts_ref, @violations ) = @_;
 
 
-    if( ! @violations && !$opts_ref->{-q}) {
-        if ( ! $opts_ref->{-quiet} ) {
-            if ( ! ref $file ) {
-                print "$file ";
-            }
-            print "source OK\n";
+    if( !@violations && !$opts_ref->{-quiet} ) {
+        if ( ! ref $file ) {
+            print "$file ";
         }
-        return;
+        print "source OK\n";
+        return 0;
     }
 
 
@@ -319,7 +317,7 @@ C<perlcritic> - Command-line interface to critique Perl source
   perlcritic [ -12345 | -severity number ] [ -noprofile | -profile file ]
              [ -top [ number ]] [ -include pattern ] [ -exclude pattern ]
              [ -verbose number | format ] [ -force ] [ -Version ]
-             [ -list ] [ -help ] [ -man ] [ -q|quiet ] [ FILE | DIRECTORY ]
+             [ -list ] [ -help ] [ -man ] [ -quiet ] [ FILE | DIRECTORY ]
 
 =head1 DESCRIPTION
 
@@ -528,20 +526,15 @@ severity.  This can be useful for discovering the Policy modules that
 you have available and tuning the severity levels in your
 F<.perlcriticrc> file.
 
-=item -quiet
-
-Supress the "source OK" message if no violations are found.
-
 =item -Safari
 
 Report "Perl Best Practice" citations as section numbers from
 L<http://safari.oreilly.com> instead of page numbers from the actual
 book.  NOTE: This feature is not implemented yet.
 
-=item -q|-quiet
+=item -quiet
 
-Supresses printing of the OK message for source files that pass
-without problems.
+Surpress the "source OK" message if no violations are found.
 
 =item -help
 
