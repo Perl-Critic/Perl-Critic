@@ -38,6 +38,7 @@ our @EXPORT = qw(
     &is_perl_global
     &is_subroutine_name
     &is_method_call
+    &is_function_call
     &find_keywords
     &parse_arg_list
     &precedence_of
@@ -241,6 +242,16 @@ sub is_subroutine_name {
     my $sib   = $elem->sprevious_sibling () || return;
     my $stmnt = $elem->statement() || return;
     return $stmnt->isa('PPI::Statement::Sub') && $sib eq 'sub';
+}
+
+#-------------------------------------------------------------------------
+
+sub is_function_call {
+    my $elem  = shift;
+    return ! ( is_hash_key($elem) ||
+               is_method_call($elem) ||
+               is_subroutine_name($elem)
+    );
 }
 
 #-------------------------------------------------------------------------
@@ -450,6 +461,13 @@ static function calls from object method calls.
 Given a L<PPI::Token::Word>, returns true if the element is the name
 of a subroutine declaration.  This is useful for distinguishing
 barewords and from function calls from subroutine declarations.
+
+=item C<is_function_call( $element )>
+
+Given a L<PPI::Token::Word> returns true if the element appears to be
+call to a static function.  Specifically, this function returns true
+if C<is_hash_key>, C<is_method_call>, and C<is_subroutine_name> all
+return false for the given element.
 
 =item C<parse_arg_list( $element )>
 

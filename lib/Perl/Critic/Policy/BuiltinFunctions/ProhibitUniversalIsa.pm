@@ -30,9 +30,7 @@ sub applies_to { return 'PPI::Token::Word' }
 sub violates {
     my ( $self, $elem, undef ) = @_;
     return if !($elem eq 'isa' || $elem eq 'UNIVERSAL::isa');
-    return if is_hash_key($elem);
-    return if is_method_call($elem);
-    return if is_subroutine_name($elem);
+    return if ! is_function_call($elem);
     return if $elem->parent()->isa('PPI::Statement::Include'); # allow 'use UNIVERSAL::isa;'
 
     return $self->violation( $desc, $expl, $elem );
