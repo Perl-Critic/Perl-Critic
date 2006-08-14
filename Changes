@@ -15,6 +15,10 @@
      Bug Fixes:
      * 20965: "Hard tabs used at" shouldn't check __DATA__
 
+     Enhancements:
+     * Added "-quiet" option to perlcritic, which suppresses the
+       "source OK" message.
+
 [0.18_01]  Released on 20060806
 
      New Policies:

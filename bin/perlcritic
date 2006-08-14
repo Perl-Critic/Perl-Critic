@@ -94,7 +94,7 @@ sub _parse_command_line {
 
     my %opts      = ();
     my @opt_specs = qw(severity=i profile=s noprofile verbose=s force list
-        help|? man Version Safari top:i 5 4 3 2 1 include=s@ exclude=s@);
+        help|? man Version Safari quiet top:i 5 4 3 2 1 include=s@ exclude=s@);
 
     Getopt::Long::Configure('no_ignore_case');
     GetOptions( \%opts, @opt_specs ) || pod2usage();           #Exits
@@ -188,7 +188,7 @@ sub get_input {
 
 sub critique {
 
-    my ( $opts, @files ) = @_;
+    my ( $opts_ref, @files ) = @_;
     @files || croak "No perl files were found.\n";
 
     # Perl::Critic has lots of dependencies, so loading is delayed
@@ -198,7 +198,7 @@ sub critique {
     # why not save a few seconds if you can.
 
     require Perl::Critic;
-    my $critic = Perl::Critic->new( %{$opts} );
+    my $critic = Perl::Critic->new( %{$opts_ref} );
     my $count  = undef;
 
 
@@ -206,7 +206,7 @@ sub critique {
 
         for my $file (@files) {
             my @violations = $critic->critique($file);
-            render_report( $file, $opts, @violations );
+            render_report( $file, $opts_ref, @violations );
             $count += scalar @violations;
         }
     };
@@ -224,10 +224,12 @@ sub render_report {
 
 
     if( ! @violations ){
-        if ( ! ref $file ) {
-            print "$file ";
+        if ( ! $opts_ref->{-quiet} ) {
+            if ( ! ref $file ) {
+                print "$file ";
+            }
+            print "source OK\n";
         }
-        print "source OK\n";
         return;
     }
 
@@ -525,6 +527,10 @@ then the user-defined severity will be the same as the default
 severity.  This can be useful for discovering the Policy modules that
 you have available and tuning the severity levels in your
 F<.perlcriticrc> file.
+
+=item -quiet
+
+Supress the "source OK" message if no violations are found.
 
 =item -Safari
 
