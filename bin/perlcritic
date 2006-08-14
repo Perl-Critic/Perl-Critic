@@ -223,7 +223,7 @@ sub render_report {
     my ( $file, $opts_ref, @violations ) = @_;
 
 
-    if( ! @violations ){
+    if( ! @violations && !$opts_ref->{-q}) {
         if ( ! $opts_ref->{-quiet} ) {
             if ( ! ref $file ) {
                 print "$file ";
@@ -319,7 +319,7 @@ C<perlcritic> - Command-line interface to critique Perl source
   perlcritic [ -12345 | -severity number ] [ -noprofile | -profile file ]
              [ -top [ number ]] [ -include pattern ] [ -exclude pattern ]
              [ -verbose number | format ] [ -force ] [ -Version ]
-             [ -list ] [ -help ] [ -man ]   [ FILE | DIRECTORY ]
+             [ -list ] [ -help ] [ -man ] [ -q|quiet ] [ FILE | DIRECTORY ]
 
 =head1 DESCRIPTION
 
@@ -537,6 +537,11 @@ Supress the "source OK" message if no violations are found.
 Report "Perl Best Practice" citations as section numbers from
 L<http://safari.oreilly.com> instead of page numbers from the actual
 book.  NOTE: This feature is not implemented yet.
+
+=item -q|-quiet
+
+Supresses printing of the OK message for source files that pass
+without problems.
 
 =item -help
 

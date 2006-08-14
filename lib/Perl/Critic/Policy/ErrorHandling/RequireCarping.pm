@@ -31,11 +31,12 @@ sub violates {
 
     my ( $self, $elem, undef ) = @_;
 
+    my $alternative;
     if ( $elem eq 'warn' ) {
         $alternative = 'carp';
     }
     elsif ( $elem eq 'die' ) {
-        $alternative eq 'croak';
+        $alternative = 'croak';
     }
     else {
         return;

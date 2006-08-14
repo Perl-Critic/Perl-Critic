@@ -21,9 +21,7 @@ TODO - Things for Perl::Critic developers to do
 
 =over 4
 
-=item * Report safari sections instead of book page numbers.
-
-=item * C<-q> flag to not print "filename checks OK" messages.
+=item * Report Safari sections in addition to book page numbers.
 
 =back
 
@@ -33,7 +31,7 @@ TODO - Things for Perl::Critic developers to do
 
 =item * Double-quote things, not single-quote, in messages
 
-Erorr messages should be in the form:
+Error messages should be in the form:
 
     Use "croak" instead of "die"
 

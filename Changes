@@ -12,6 +12,10 @@
      * ControlStructures::ProhibitDeepNests
      * Variables::RequireLexicalLoopIterator
 
+     New Features:
+     * perlcritic -q|-quiet doesn't print the OK messages for the
+       source files that passed.
+
      Bug Fixes:
      * 20965: "Hard tabs used at" shouldn't check __DATA__
 

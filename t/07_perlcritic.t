@@ -8,7 +8,7 @@
 use strict;
 use warnings;
 use File::Spec;
-use Test::More tests => 21;
+use Test::More tests => 22;
 
 #-----------------------------------------------------------------------------
 # Load perlcritic like a library so we can test its subroutines.  If it is not
@@ -91,6 +91,12 @@ is( $options{-verbose}, 2);
 @ARGV = qw(-verbose %l:%c:%m);
 %options = get_options();
 is( $options{-verbose}, '%l:%c:%m');
+
+#-----------------------------------------------------------------------------
+
+@ARGV = qw(-quiet);
+%options = get_options();
+is( $options{-quiet}, 1);
 
 #-----------------------------------------------------------------------------
 
