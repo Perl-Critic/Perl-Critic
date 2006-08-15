@@ -71,9 +71,8 @@ sub violates {
     my ( $self, $elem, undef ) = @_;
 
     return if exists $allow{$elem};
-    return if ! is_perl_builtin( $elem );
-    return if is_method_call( $elem );
-    return if is_subroutine_name( $elem );
+    return if ! is_perl_builtin($elem);
+    return if ! is_function_call($elem);
 
     my $sib = $elem->snext_sibling() || return;
     if ( $sib->isa('PPI::Structure::List') ) {

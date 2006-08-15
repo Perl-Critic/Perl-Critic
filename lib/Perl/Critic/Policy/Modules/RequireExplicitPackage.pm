@@ -45,7 +45,7 @@ sub violates {
     my ( $self, $elem, $doc ) = @_;
 
     # You can configure this policy to exclude scripts
-    return if $self->{_exempt_scripts} && _is_script($doc);
+    return if $self->{_exempt_scripts} && is_script($doc);
 
     # Find the first 'package' statement
     my $package_stmnt = $doc->find_first( \&_is_package );
@@ -66,15 +66,6 @@ sub violates {
     }
 
     return @viols;
-}
-
-#---------------------------------------------
-
-sub _is_script {
-    my $doc = shift;
-    my $first_comment = $doc->find_first('PPI::Token::Comment') || return;
-    $first_comment->location->[0] == 1 || return;
-    return $first_comment =~ m{ \A \#\! }mx;
 }
 
 #---------------------------------------------

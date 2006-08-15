@@ -30,15 +30,9 @@ sub applies_to { return 'PPI::Token::Word' }
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
-    return if is_hash_key( $elem );
-    return if is_method_call( $elem );
-    return if is_subroutine_name( $elem );
-
-    if ( $elem eq 'format' ) {
-        return $self->violation( $desc, $expl, $elem );
-    }
-
-    return;  #ok!
+    return if $elem ne 'format';
+    return if ! is_function_call( $elem );
+    return $self->violation( $desc, $expl, $elem );
 }
 
 

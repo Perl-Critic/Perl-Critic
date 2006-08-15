@@ -41,9 +41,8 @@ sub violates {
     else {
         return;
     }
-    return if is_method_call($elem);
-    return if is_hash_key($elem);
-    return if is_subroutine_name($elem);
+
+    return if ! is_function_call($elem);
 
     my $desc = qq{'$elem' used instead of '$alternative'};
     return $self->violation( $desc, $expl, $elem );
