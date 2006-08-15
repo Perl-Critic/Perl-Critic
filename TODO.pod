@@ -176,7 +176,7 @@ into C<qr//> pieces.
 =item * RegularExpressions::ProhibitSingleCharAlternation (p265)
 
 Not sure if this is easy or hard.  Need to look at what PPI emits
-for regexps.
+for regexps.  Make an exception for qr/ [ ] /x.
 
 =item * RegularExpressions::ProhibitFixedStringMatches (p271)
 
