@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 24;
+use Test::More tests => 25;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -256,6 +256,20 @@ END_PERL
 
 $policy = 'Subroutines::ProhibitAmpersandSigils';
 is( pcritique($policy, \$code), 7, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+exists &function_call;
+defined &function_call;
+\ &function_call;
+exists &my_package::function_call;
+defined &my_package::function_call;
+\ &my_package::function_call;
+END_PERL
+
+$policy = 'Subroutines::ProhibitAmpersandSigils';
+is( pcritique($policy, \$code), 0, $policy);
 
 #----------------------------------------------------------------
 
