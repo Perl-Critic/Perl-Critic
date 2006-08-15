@@ -31,8 +31,10 @@ sub applies_to { return 'PPI::Token::Word' }
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    if ( $self->_is_other_pkg_private_function($elem) ||
-         $self->_is_other_pkg_private_method($elem) )
+    my $psib = $elem->sprevious_sibling;
+    if ( $psib ne 'package'
+        && ( $self->_is_other_pkg_private_function($elem)
+	     || $self->_is_other_pkg_private_method($elem) ) )
     {
         return $self->violation( $desc, $expl, $elem );
     }

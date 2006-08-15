@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 25;
+use Test::More tests => 26;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -343,6 +343,15 @@ END_PERL
 
 $policy = 'Subroutines::ProtectPrivateSubs';
 is( pcritique($policy, \$code), 5, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+package My::Self::_private;
+END_PERL
+
+$policy = 'Subroutines::ProtectPrivateSubs';
+is( pcritique($policy, \$code), 0, $policy);
 
 #----------------------------------------------------------------
 
