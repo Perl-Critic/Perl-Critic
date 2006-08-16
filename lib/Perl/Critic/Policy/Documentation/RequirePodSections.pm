@@ -62,7 +62,8 @@ sub violates {
     my @required_sections = is_script($doc) ? @{ $self->{_script_sections} }
                                             : @{ $self->{_lib_sections} };
 
-    my $pods_ref = $doc->find('PPI::Token::Pod') || return;
+    my $pods_ref = $doc->find('PPI::Token::Pod');
+    return if !$pods_ref;
     my $counter  = 0;  #Might use this to enforce ordering.
 
     # Round up the names of all the =head1 sections

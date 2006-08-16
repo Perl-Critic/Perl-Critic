@@ -34,16 +34,18 @@ sub violates {
     my ( $self, $elem, $doc ) = @_;
 
     # No POD means no violation
-    my $end = $doc->find_first('PPI::Statement::End');
-    my $pods_ref = $doc->find('PPI::Token::Pod') || return;
+    my $pods_ref = $doc->find('PPI::Token::Pod');
+    return if !$pods_ref;
 
     # Look for first POD tag that isn't =for, =begin, or =end
-    my $pod = first { $_ !~ $pod_rx} @{ $pods_ref } or return;
+    my $pod = first { $_ !~ $pod_rx} @{ $pods_ref };
+    return if !$pod;
  
+    my $end = $doc->find_first('PPI::Statement::End');
     if ($end) {  # No __END__ means definite violation
         my $pod_loc = $pod->location();
         my $end_loc = $end->location();
-        if (!$pod_loc || !$end_loc || $pod_loc->[0] > $end_loc->[0]) {
+        if ( $pod_loc->[0] > $end_loc->[0] ) {
             # POD is after __END__, or relative position couldn't be determined
             return;
         }
