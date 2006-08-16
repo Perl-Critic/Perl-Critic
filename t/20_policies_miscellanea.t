@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 10;
+use Test::More tests => 11;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -26,7 +26,7 @@ $baz = qq{nuts};
 END_PERL
 
 $policy = 'Miscellanea::RequireRcsKeywords';
-is( pcritique($policy, \$code), 3, $policy);
+is( pcritique($policy, \$code), 2, $policy);
 
 #----------------------------------------------------------------
 
@@ -34,6 +34,15 @@ $code = <<'END_PERL';
 # $Revision$
 # $Source$
 # $Date$
+END_PERL
+
+$policy = 'Miscellanea::RequireRcsKeywords';
+is( pcritique($policy, \$code), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+# $Id$
 END_PERL
 
 $policy = 'Miscellanea::RequireRcsKeywords';
@@ -81,7 +90,7 @@ END_PERL
 
 %config = (keywords => 'Author Id');
 $policy = 'Miscellanea::RequireRcsKeywords';
-is( pcritique($policy, \$code, \%config), 2, $policy);
+is( pcritique($policy, \$code, \%config), 1, $policy);
 
 #----------------------------------------------------------------
 

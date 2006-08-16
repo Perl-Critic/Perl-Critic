@@ -19,23 +19,36 @@ $VERSION = eval $VERSION;    ## no critic
 
 #---------------------------------------------------------------------------
 
-my $expl = [ 441 ];
+my $expl = [441];
 
 #---------------------------------------------------------------------------
 
 sub default_severity { return $SEVERITY_LOW }
-sub applies_to { return 'PPI::Document' }
+sub applies_to       { return 'PPI::Document' }
 
 #---------------------------------------------------------------------------
 
 sub new {
-    my ($class, %config) = @_;
+    my ( $class, %config ) = @_;
     my $self = bless {}, $class;
-    $self->{_keywords} = [ qw(Revision Source Date) ];
+
+    # Any of these lists
+    $self->{_keywords} = [
+
+        # Minimal svk/svn
+        [qw(Id)],
+
+        # Expansive svk/svn
+        [qw(Revision HeadURL Date)],
+
+        # cvs?
+        [qw(Revision Source Date)],
+    ];
 
     #Set configuration, if defined.
     if ( defined $config{keywords} ) {
-        $self->{_keywords} = [ split m{ \s+ }mx, $config{keywords} ];
+        ## no critic ProhibitEmptyQuotes
+        $self->{_keywords} = [ [ split ' ', $config{keywords} ] ];
     }
 
     return $self;
@@ -48,20 +61,47 @@ sub violates {
     my @viols = ();
 
     my $nodes = $doc->find( \&_wanted );
-    for my $keyword ( @{ $self->{_keywords} } ) {
-        if ( (!$nodes) || none { $_ =~ m{ \$$keyword.*\$ }mx } @{$nodes} ) {
-            my $desc = qq{RCS keyword '\$$keyword\$' not found};
+    for my $keywordset_ref ( @{ $self->{_keywords} } ) {
+        if ( not $nodes ) {
+            my $desc = 'RCS keywords '
+                . join( ', ', map {"\$$_\$"} @{$keywordset_ref} )
+                . ' not found';
             push @viols, $self->violation( $desc, $expl, $doc );
         }
+        else {
+            my @missing_keywords = grep {
+                my $keyword_rx = qr/\$$_.*\$/;
+                !!none {
+                    /$keyword_rx/    ## no critic
+                    }
+                    @{$nodes}
+            } @{$keywordset_ref};
+
+            if (@missing_keywords) {
+
+                # Provisionally flag a violation. See below.
+                my $desc = 'RCS keywords '
+                    . join( ', ', map {"\$$_\$"} @missing_keywords )
+                    . ' not found';
+                push @viols, $self->violation( $desc, $expl, $doc );
+            }
+            else {
+
+                # Hey! I'm ignoring @viols for other keyword sets
+                # because this one is complete.
+                return;
+            }
+        }
     }
+
     return @viols;
 }
 
 sub _wanted {
-    my (undef, $elem) = @_;
-    return    $elem->isa('PPI::Token::Comment')
-           || $elem->isa('PPI::Token::Quote::Single')
-           || $elem->isa('PPI::Token::Quote::Literal');
+    my ( undef, $elem ) = @_;
+    return $elem->isa('PPI::Token::Comment')
+        || $elem->isa('PPI::Token::Quote::Single')
+        || $elem->isa('PPI::Token::Quote::Literal');
 }
 
 1;
