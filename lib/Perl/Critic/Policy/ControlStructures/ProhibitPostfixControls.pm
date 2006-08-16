@@ -70,7 +70,8 @@ sub violates {
     return if exists $self->{_allow}{$elem};
 
     # Skip Compound variety (these are good)
-    my $stmnt = $elem->statement() || return;
+    my $stmnt = $elem->statement();
+    return if !$stmnt;
     return if $stmnt->isa('PPI::Statement::Compound');
 
     #Handle special cases

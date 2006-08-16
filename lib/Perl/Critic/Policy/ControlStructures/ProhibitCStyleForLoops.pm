@@ -39,7 +39,8 @@ sub violates {
 
 sub _is_cstyle {
     my $elem      = shift;
-    my $nodes_ref = $elem->find('PPI::Token::Structure') || return;
+    my $nodes_ref = $elem->find('PPI::Token::Structure');
+    return if !$nodes_ref;
     my @semis     = grep { $_ eq $SCOLON } @{$nodes_ref};
     return scalar @semis == 2;
 }

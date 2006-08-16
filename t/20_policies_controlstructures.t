@@ -216,6 +216,11 @@ else {
 if ($condition1){
   $foo;
 }
+
+foreach (1,2,3){
+ $foo;
+}
+
 END_PERL
 
 $policy = 'ControlStructures::ProhibitCascadingIfElse';
@@ -346,6 +351,11 @@ for (1..2) {
     print 123;
 }
 
+{
+   $foo, die;
+   print 123;
+}
+
 die;
 print 456;
 FOO: print $baz;
@@ -353,7 +363,7 @@ FOO: print $baz;
 END_PERL
 
 $policy = 'ControlStructures::ProhibitUnreachableCode';
-is( pcritique($policy, \$code), 11, $policy);
+is( pcritique($policy, \$code), 12, $policy);
 
 #----------------------------------------------------------------
 
@@ -456,6 +466,11 @@ for (1..2) {
     BEGIN {
         print 123;
     }
+}
+
+{
+   $foo || die;
+   print 123;
 }
 
 END_PERL

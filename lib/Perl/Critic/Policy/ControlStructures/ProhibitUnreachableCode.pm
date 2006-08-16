@@ -55,7 +55,8 @@ sub violates {
     my ( $self, $elem, undef ) = @_;
     return if ! is_function_call($elem);
 
-    my $stmnt = $elem->statement() || return;
+    my $stmnt = $elem->statement();
+    return if !$stmnt;
     return if ( !exists $terminals{$elem} ) &&
         ( !$stmnt->isa('PPI::Statement::Break') );
 
@@ -80,7 +81,8 @@ sub violates {
 
     my @viols = ();
     while ( $stmnt = $stmnt->snext_sibling() ) {
-        last if $stmnt->schildren() && $stmnt->schild( 0 )->isa('PPI::Token::Label');
+        my @children = $stmnt->schildren();
+        last if @children && $children[0]->isa('PPI::Token::Label');
         next if $stmnt->isa('PPI::Statement::Sub');
         next if $stmnt->isa('PPI::Statement::End');
         next if $stmnt->isa('PPI::Statement::Data');
