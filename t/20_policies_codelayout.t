@@ -207,16 +207,30 @@ is( pcritique($policy, \$code), 2, 'low operator after parens');
 #----------------------------------------------------------------
 
 $code = <<'END_PERL';
+($foo,
+ $bar,
+ $baz
+);
 @list = ($foo, $bar, $baz);
 @list = some_function($foo, $bar, $baz);
 @list = ($baz);
 @list = ();
+
+@list = (
+);
 
 @list = ($baz
 );
 
 @list = ($baz
 	);
+
+# not a straight assignment
+@list = ((1,2,3),(
+ 1,
+ 2,
+ 3
+));
 
 END_PERL
 

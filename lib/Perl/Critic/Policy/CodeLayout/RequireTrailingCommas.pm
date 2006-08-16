@@ -33,11 +33,13 @@ sub violates {
     $elem =~ m{ \n }mx || return;
 
     # Is it an assignment of some kind?
-    my $sib = $elem->sprevious_sibling() || return;
+    my $sib = $elem->sprevious_sibling();
+    return if !$sib;
     $sib->isa('PPI::Token::Operator') && $sib =~ m{ = }mx || return;
 
     # List elements are children of an expression
-    my $expr = $elem->schild(0) || return;
+    my $expr = $elem->schild(0);
+    return if !$expr;
 
     # Does the list have more than 1 element?
     # This means list element, not PPI element.
@@ -46,7 +48,7 @@ sub violates {
                           && $_ eq $COMMA } @children;
 
     # Is the final element a comma?
-    my $final = $children[-1] || return;
+    my $final = $children[-1];
     if ( ! ($final->isa('PPI::Token::Operator') && $final eq $COMMA) ) {
         return $self->violation( $desc, $expl, $elem );
     }
