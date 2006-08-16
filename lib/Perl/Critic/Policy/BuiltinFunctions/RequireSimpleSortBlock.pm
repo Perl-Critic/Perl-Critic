@@ -33,7 +33,8 @@ sub violates {
     return if $elem ne 'sort';
     return if ! is_function_call($elem);
 
-    my $sib = $elem->snext_sibling() || return;
+    my $sib = $elem->snext_sibling();
+    return if !$sib;
     my $arg = $sib->isa('PPI::Structure::List') ? $sib->schild(0) : $sib;
     return if !$arg || !$arg->isa('PPI::Structure::Block');
 

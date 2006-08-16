@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 34;
+use Test::More tests => 36;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -24,7 +24,7 @@ substr( $foo, 2, 1 ) = 'XYZ';
 END_PERL
 
 $policy = 'BuiltinFunctions::ProhibitLvalueSubstr';
-is( pcritique($policy, \$code), 1, 'lvalue' );
+is( pcritique($policy, \$code), 1, $policy.' lvalue' );
 
 #----------------------------------------------------------------
 
@@ -33,7 +33,7 @@ substr $foo, 2, 1, 'XYZ';
 END_PERL
 
 $policy = 'BuiltinFunctions::ProhibitLvalueSubstr';
-isnt( pcritique($policy, \$code), 1, '4 arg substr' );
+is( pcritique($policy, \$code), 0, $policy.' 4 arg substr' );
 
 #----------------------------------------------------------------
 
@@ -42,18 +42,27 @@ $bar = substr( $foo, 2, 1 );
 END_PERL
 
 $policy = 'BuiltinFunctions::ProhibitLvalueSubstr';
-isnt( pcritique($policy, \$code), 1, 'rvalue' );
+is( pcritique($policy, \$code), 0, $policy.' rvalue' );
 
 #----------------------------------------------------------------
 
 $code = <<'END_PERL';
 %bar = (
-    'foobar'    => substr( $foo, 2, 1 ),
+    foobar    => substr( $foo, 2, 1 ),
     );
 END_PERL
 
 $policy = 'BuiltinFunctions::ProhibitLvalueSubstr';
-isnt( pcritique($policy, \$code), 1, 'hash rvalue' );
+is( pcritique($policy, \$code), 0, $policy.' hash rvalue' );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+$foo{substr};
+END_PERL
+
+$policy = 'BuiltinFunctions::ProhibitLvalueSubstr';
+is( pcritique($policy, \$code), 0, $policy.' substr as word' );
 
 #----------------------------------------------------------------
 
@@ -62,7 +71,7 @@ select( undef, undef, undef, 0.25 );
 END_PERL
 
 $policy = 'BuiltinFunctions::ProhibitSleepViaSelect';
-is( pcritique($policy, \$code), 1, 'sleep, as list' );
+is( pcritique($policy, \$code), 1, $policy.' sleep, as list' );
 
 #----------------------------------------------------------------
 
@@ -71,7 +80,7 @@ select( undef, undef, undef, $time );
 END_PERL
 
 $policy = 'BuiltinFunctions::ProhibitSleepViaSelect';
-is( pcritique($policy, \$code), 1, 'sleep, as list w/var' );
+is( pcritique($policy, \$code), 1, $policy.' sleep, as list w/var' );
 
 #----------------------------------------------------------------
 
@@ -80,7 +89,7 @@ select undef, undef, undef, 0.25;
 END_PERL
 
 $policy = 'BuiltinFunctions::ProhibitSleepViaSelect';
-is( pcritique($policy, \$code), 1, 'sleep, as built-in' );
+is( pcritique($policy, \$code), 1, $policy.' sleep, as built-in' );
 
 #----------------------------------------------------------------
 
@@ -89,7 +98,7 @@ select $vec, undef, undef, 0.25;
 END_PERL
 
 $policy = 'BuiltinFunctions::ProhibitSleepViaSelect';
-isnt( pcritique($policy, \$code), 1, 'select on read' );
+is( pcritique($policy, \$code), 0, $policy.' select on read' );
 
 #----------------------------------------------------------------
 
@@ -98,7 +107,7 @@ select undef, $vec, undef, 0.25;
 END_PERL
 
 $policy = 'BuiltinFunctions::ProhibitSleepViaSelect';
-isnt( pcritique($policy, \$code), 1, 'select on write' );
+is( pcritique($policy, \$code), 0, $policy.' select on write' );
 
 #----------------------------------------------------------------
 
@@ -107,7 +116,16 @@ select undef, undef, $vec, 0.25;
 END_PERL
 
 $policy = 'BuiltinFunctions::ProhibitSleepViaSelect';
-isnt( pcritique($policy, \$code), 1, 'select on error' );
+is( pcritique($policy, \$code), 0, $policy.' select on error' );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+$foo{select};
+END_PERL
+
+$policy = 'BuiltinFunctions::ProhibitSleepViaSelect';
+is( pcritique($policy, \$code), 0, $policy.' select as word' );
 
 #----------------------------------------------------------------
 
@@ -124,6 +142,7 @@ $code = <<'END_PERL';
 eval { some_code() };
 eval( {some_code() } );
 eval();
+{eval}; # for Devel::Cover
 END_PERL
 
 $policy = 'BuiltinFunctions::ProhibitStringyEval';
@@ -158,6 +177,7 @@ grep( {$_ eq 'foo'}  @list );
 @matches = grep( {$_ eq 'foo'}  @list )
 grep();
 @matches = grep();
+{grep}; # for Devel::Cover
 END_PERL
 
 $policy = 'BuiltinFunctions::RequireBlockGrep';
@@ -192,6 +212,7 @@ map( {$_++}   @list );
 @foo = map( {$_++}   @list );
 map();
 @foo = map();
+{map}; # for Devel::Cover
 END_PERL
 
 $policy = 'BuiltinFunctions::RequireBlockMap';
@@ -305,6 +326,12 @@ sort @list;
 sort {$a cmp $b;} @list;
 sort {$a->[0] <=> $b->[0] && $a->[1] <=> $b->[1]} @list;
 sort {bar($a,$b)} @list;
+
+sort 'func', @list;
+
+$foo{sort}; # for Devel::Cover
+{sort}; # for Devel::Cover
+
 END_PERL
 
 $policy = 'BuiltinFunctions::RequireSimpleSortBlock';
@@ -376,6 +403,9 @@ split //, $string, 3;
 split( // );
 split( // ), $string;
 split( // ), $string, 3;
+
+$foo{split}; # for Devel::Cover
+{split}; # for Devel::Cover
 
 END_PERL
 

@@ -141,6 +141,10 @@ better than we do here?
 
 =over
 
+=item $pkg->new($doc)
+
+Create a new instance referencing a PPI::Document instance.
+
 =item $self->find($wanted)
 
 If C<wanted> is a simple PPI class name, then the cache is employed.

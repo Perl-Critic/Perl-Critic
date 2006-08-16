@@ -32,9 +32,7 @@ sub violates {
     my ($self, $elem, undef) = @_;
 
     return if ($elem ne 'select');
-    return if is_method_call($elem);
-    return if is_hash_key($elem);
-    return if is_subroutine_name($elem);
+    return if ! is_function_call($elem);
 
     if ( 3 == grep {$_->[0] eq 'undef' } parse_arg_list($elem) ){
         return $self->violation( $desc, $expl, $elem );
