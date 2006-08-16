@@ -34,7 +34,7 @@ sub violates {
     my $psib = $elem->sprevious_sibling;
     if ( $psib ne 'package'
         && ( $self->_is_other_pkg_private_function($elem)
-	     || $self->_is_other_pkg_private_method($elem) ) )
+             || $self->_is_other_pkg_private_method($elem) ) )
     {
         return $self->violation( $desc, $expl, $elem );
     }

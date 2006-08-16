@@ -42,7 +42,7 @@ sub violates {
     $psib = $elem->sprevious_sibling();
     return if ( $psib eq 'goto'
                 or $psib eq 'exists'
-		or $psib eq 'defined' ); # ok
+                or $psib eq 'defined' ); # ok
 
     return $self->violation( $desc, $expl, $elem );
 }

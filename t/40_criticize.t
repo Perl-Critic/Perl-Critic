@@ -26,7 +26,10 @@ if ($ENV{PERL_CRITIC_CACHE}) {
 eval {
     require Test::Perl::Critic;
     my @exclude = qw(RcsKeywords TidyCode PodSections);
-    my %config = (-severity => 1, -exclude => \@exclude, -profile => q{} );
+    my $profile = {
+        'CodeLayout::ProhibitHardTabs' => { allow_leading_tabs => 0 },
+    };
+    my %config = (-severity => 1, -exclude => \@exclude, -profile => $profile);
     Test::Perl::Critic->import( %config );
 };
 
