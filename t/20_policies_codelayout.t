@@ -122,6 +122,7 @@ local ($foo $bar);
 return ($foo, $bar);
 return ();
 my_subroutine($foo $bar);
+{print}; # for Devel::Cover
 END_PERL
 
 $policy = 'CodeLayout::ProhibitParensWithBuiltins';
@@ -387,11 +388,20 @@ is( pcritique($policy, \$code), 2, $policy);
 #----------------------------------------------------------------
 
 $code = <<'END_PERL';
+('foo');
+@list = ();
+@list = ('foo');
 @list = ('foo', 'bar', 'bee baz');
-@list = ('foo, 'bar');
+@list = ('foo', 'bar', q{bee baz});
+@list = ('foo', 'bar', q{});
+@list = ('foo', 'bar', 1.0);
+@list = ('foo', 'bar', 'foo'.'bar');
+@list = ('foo, 'bar'); # XXX is this a typo?  What is this trying to test?
 @list = ($foo, 'bar', 'baz');
+@list = (foo => 'bar');
 %hash = ('foo' => 'bar', 'fo' => 'fum');
 my_function('foo', 'bar', 'fudge');
+$a_function->('foo', 'bar', 'fudge');
 foreach ('foo', 'bar', 'nuts'){ do_something($_) }
 END_PERL
 

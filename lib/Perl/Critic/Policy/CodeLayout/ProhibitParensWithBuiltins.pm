@@ -74,7 +74,8 @@ sub violates {
     return if ! is_perl_builtin($elem);
     return if ! is_function_call($elem);
 
-    my $sib = $elem->snext_sibling() || return;
+    my $sib = $elem->snext_sibling();
+    return if !$sib;
     if ( $sib->isa('PPI::Structure::List') ) {
 
         my $elem_after_parens = $sib->snext_sibling();
@@ -114,7 +115,7 @@ sub violates {
 #-----------------------------------------------------------------------------
 
 sub _is_named_unary {
-    my $elem = shift || return;
+    my $elem = shift;
     return if ! $elem->isa('PPI::Token::Word');
     return exists $named_unary_ops{$elem};
 }
@@ -122,19 +123,10 @@ sub _is_named_unary {
 #-----------------------------------------------------------------------------
 
 sub _is_greedy {
-    my $elem = shift || return;
+    my $elem = shift;
     return if ! $elem->isa('PPI::Token::Word');
     return exists $greedy_funcs{$elem};
 }
-
-#-----------------------------------------------------------------------------
-
-sub _is_commalike {
-    my $elem = shift || return;
-    return if ! $elem->isa('PPI::Token::Operator');
-    return $elem eq q{,} || $elem eq q{=>};
-}
-
 
 1;
 
