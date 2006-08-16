@@ -41,6 +41,9 @@ my $self = bless( {}, 'foo' );
 my $self = bless [], 'foo';
 my $self = bless( [], 'foo' );
 my $self = bless {} => 'foo';
+
+$baz{bless}; # not a function call
+$bar->bless('foo'); # method call
 END_PERL
 
 $policy = 'ClassHierarchies::ProhibitOneArgBless';
