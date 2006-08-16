@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 48;
+use Test::More tests => 51;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -55,6 +55,7 @@ $code = <<'END_PERL';
 require; #incomplete statement
 use;     #incomplete statement
 no;      #incomplete statement
+{require}; # for Devel::Cover
 END_PERL
 
 $policy = 'Modules::RequireBarewordIncludes';
@@ -77,6 +78,7 @@ is( pcritique($policy, \$code), 6, $policy);
 #----------------------------------------------------------------
 
 $code = <<'END_PERL';
+use 5.008;
 require MyModule;
 use MyModule;
 no MyModule;
@@ -94,7 +96,7 @@ package foo;
 END_PERL
 
 $policy = 'Modules::RequireExplicitPackage';
-is( pcritique($policy, \$code), 1, '1 stmnt before package');
+is( pcritique($policy, \$code), 1, $policy.' 1 stmnt before package');
 
 #----------------------------------------------------------------
 
@@ -108,7 +110,7 @@ package foo;
 END_PERL
 
 $policy = 'Modules::RequireExplicitPackage';
-is( pcritique($policy, \$code), 3, 'BEGIN block before package');
+is( pcritique($policy, \$code), 3, $policy.' BEGIN block before package');
 
 #----------------------------------------------------------------
 
@@ -118,7 +120,7 @@ package foo;
 END_PERL
 
 $policy = 'Modules::RequireExplicitPackage';
-is( pcritique($policy, \$code), 1, 'inclusion before package');
+is( pcritique($policy, \$code), 1, $policy.' inclusion before package');
 
 #----------------------------------------------------------------
 
@@ -129,7 +131,7 @@ package foo;
 END_PERL
 
 $policy = 'Modules::RequireExplicitPackage';
-is( pcritique($policy, \$code), 2, '2 stmnts before package');
+is( pcritique($policy, \$code), 2, $policy.' 2 stmnts before package');
 
 #----------------------------------------------------------------
 
@@ -138,7 +140,25 @@ print 'whatever';
 END_PERL
 
 $policy = 'Modules::RequireExplicitPackage';
-is( pcritique($policy, \$code), 1, 'no package at all');
+is( pcritique($policy, \$code), 1, $policy.' no package at all');
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+
+END_PERL
+
+$policy = 'Modules::RequireExplicitPackage';
+is( pcritique($policy, \$code), 0, $policy.' no statements at all');
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+package foo;
+END_PERL
+
+$policy = 'Modules::RequireExplicitPackage';
+is( pcritique($policy, \$code), 0, $policy.' just a package, no other statements');
 
 #----------------------------------------------------------------
 
@@ -149,7 +169,7 @@ $foo = $bar;
 END_PERL
 
 $policy = 'Modules::RequireExplicitPackage';
-is( pcritique($policy, \$code), 0, 'package ok');
+is( pcritique($policy, \$code), 0, $policy.' package ok');
 
 #----------------------------------------------------------------
 
@@ -161,7 +181,7 @@ END_PERL
 
 %config = (exempt_scripts => 1);
 $policy = 'Modules::RequireExplicitPackage';
-is( pcritique($policy, \$code, \%config), 0, 'scripts exempted');
+is( pcritique($policy, \$code, \%config), 0, $policy.' scripts exempted');
 
 #----------------------------------------------------------------
 
@@ -174,7 +194,7 @@ END_PERL
 
 %config = (exempt_scripts => 0);
 $policy = 'Modules::RequireExplicitPackage';
-is( pcritique($policy, \$code, \%config), 3, 'scripts not exempted');
+is( pcritique($policy, \$code, \%config), 3, $policy.' scripts not exempted');
 
 
 #----------------------------------------------------------------
@@ -513,6 +533,15 @@ $code = <<'END_PERL';
 use base 'Exporter';
 use vars qw(@EXPORT_TAGS);
 %EXPORT_TAGS = ( foo => [ qw(baz bar) ] );
+END_PERL
+
+$policy = 'Modules::ProhibitAutomaticExportation';
+is( pcritique($policy, \$code), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+print 123; # no exporting at all; for test coverage
 END_PERL
 
 $policy = 'Modules::ProhibitAutomaticExportation';

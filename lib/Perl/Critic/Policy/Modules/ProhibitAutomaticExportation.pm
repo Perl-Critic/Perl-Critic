@@ -44,7 +44,8 @@ sub violates {
 
 sub _uses_exporter {
     my ($doc) = @_;
-    my $includes_ref = $doc->find('PPI::Statement::Include') || return;
+    my $includes_ref = $doc->find('PPI::Statement::Include');
+    return if !$includes_ref;
     #This covers both C<use Exporter;> and C<use base 'Exporter';>
     return scalar grep { m/ \b Exporter \b/mx }  @{ $includes_ref };
 }
@@ -63,7 +64,7 @@ sub _our_EXPORT {
     my (undef, $elem) = @_;
     $elem->isa('PPI::Statement::Variable') || return 0;
     $elem->type() eq 'our' || return 0;
-    return any { $_ eq '@EXPORT' } $elem->variables(); ## no critic
+    return any { $_ eq '@EXPORT' } $elem->variables(); ## no critic(RequireInterpolationOfMetachars)
 }
 
 #------------------

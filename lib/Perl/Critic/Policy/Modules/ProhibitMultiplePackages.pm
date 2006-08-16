@@ -30,7 +30,8 @@ sub applies_to { return 'PPI::Document' }
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-    my $nodes_ref = $doc->find('PPI::Statement::Package') || return;
+    my $nodes_ref = $doc->find('PPI::Statement::Package');
+    return if !$nodes_ref;
     my @matches = @{$nodes_ref} > 1 ? @{$nodes_ref}[ 1 .. $#{$nodes_ref} ] :();
 
     return map {$self->violation($desc, $expl, $_)} @matches;

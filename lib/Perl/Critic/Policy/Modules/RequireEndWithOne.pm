@@ -34,9 +34,9 @@ sub violates {
 
     # Last statement should be just "1;"
     my @significant = grep { _is_code($_) } $doc->schildren();
-    my $match = $significant[-1] || return;
-    return if ($match &&
-               (ref $match) eq 'PPI::Statement' &&
+    my $match = $significant[-1];
+    return if !$match;
+    return if ((ref $match) eq 'PPI::Statement' &&
                $match =~  m{\A 1 \s* ; \z}mx );
 
     # Must be a violation...

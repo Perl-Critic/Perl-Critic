@@ -48,17 +48,20 @@ sub violates {
     return if $self->{_exempt_scripts} && is_script($doc);
 
     # Find the first 'package' statement
-    my $package_stmnt = $doc->find_first( \&_is_package );
+    my $package_stmnt = $doc->find_first( 'PPI::Statement::Package' );
     my $package_line = $package_stmnt ? $package_stmnt->location()->[0] : undef;
 
     # Find all statements that aren't 'package' statements
-    my $stmnts_ref = $doc->find( \&_isnt_package ) || return;
+    my $stmnts_ref = $doc->find( 'PPI::Statement' );
+    return if !$stmnts_ref;
+    my @non_packages = grep { !$_->isa('PPI::Statement::Package') } @{$stmnts_ref};
+    return if !@non_packages;
 
     # If the 'package' statement is not defined, or the other
     # statements appear before the 'package', then it violates.
 
     my @viols = ();
-    for my $stmnt ( @{ $stmnts_ref } ) {
+    for my $stmnt ( @non_packages ) {
         my $stmnt_line = $stmnt->location()->[0];
         if ( (! defined $package_line) || ($stmnt_line < $package_line) ) {
             push @viols, $self->violation( $desc, $expl, $stmnt );
@@ -66,23 +69,6 @@ sub violates {
     }
 
     return @viols;
-}
-
-#---------------------------------------------
-
-sub _is_package {
-    my (undef, $elem) = @_;
-    return 1 if  $elem->isa('PPI::Statement::Package');
-    return 0;
-}
-
-#---------------------------------------------
-
-sub _isnt_package {
-    my (undef, $elem) = @_;
-    return 0 if $elem->isa('PPI::Statement::Package');
-    return 0 if !$elem->isa('PPI::Statement');
-    return 1;
 }
 
 1;
