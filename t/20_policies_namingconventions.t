@@ -142,7 +142,7 @@ TODO: {
 $code = <<'END_PERL';
 for my $bases () {}
 print $main::contract;
-local $\; # for Devel::Cover, and example of a var without \w
+local $\; # for Devel::Cover; an example of a var declaration without \w
 END_PERL
 
 $policy = 'NamingConventions::ProhibitAmbiguousNames';

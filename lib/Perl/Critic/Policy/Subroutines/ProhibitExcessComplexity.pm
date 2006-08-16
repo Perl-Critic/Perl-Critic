@@ -59,13 +59,17 @@ sub violates {
     my $count = 1;
 
     # Count up all the logic keywords, weed out hash keys
-    my $keywords_ref = $elem->find('PPI::Token::Word') || [];
-    my @filtered = grep { ! is_hash_key($_) } @{ $keywords_ref };
-    $count += grep { exists $logic_keywords{$_} } @filtered;
+    my $keywords_ref = $elem->find('PPI::Token::Word');
+    if ( $keywords_ref ) { # should always be true due to "sub" keyword, I think
+       my @filtered = grep { ! is_hash_key($_) } @{ $keywords_ref };
+       $count += grep { exists $logic_keywords{$_} } @filtered;
+    }
 
     # Count up all the logic operators
-    my $operators_ref = $elem->find('PPI::Token::Operator') || [];
-    $count += grep { exists $logic_ops{$_} }  @{ $operators_ref };
+    my $operators_ref = $elem->find('PPI::Token::Operator');
+    if ( $operators_ref ) {
+       $count += grep { exists $logic_ops{$_} }  @{ $operators_ref };
+    }
 
     if ( $count > $self->{_max_mccabe} ) {
         my $desc = qq{Subroutine with high complexity score ($count)};

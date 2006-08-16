@@ -50,10 +50,8 @@ is( pcritique($policy, \$code), 6, $policy);
 
 #----------------------------------------------------------------
 
-# PPI bug: multiplication is mistakenly interpreted as a glob.
-#
-# Update 2006-05-08: As-of PPI v1.112, this seems to be fixed.
-# So this test is no longer a "TODO" test.
+# old PPI bug (fixed as of PPI v1.112): multiplication is mistakenly
+# interpreted as a glob.
 
 $code = <<'END_PERL';
 $value = $one*$two;

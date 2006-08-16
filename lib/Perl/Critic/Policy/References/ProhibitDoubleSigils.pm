@@ -32,7 +32,8 @@ sub violates {
     my ( $self, $elem, undef ) = @_;
     return if $elem eq q{\\};
 
-    my $sib = $elem->snext_sibling || return;
+    my $sib = $elem->snext_sibling;
+    return if !$sib;
     if ( ! $sib->isa('PPI::Structure::Block') ) {
         return $self->violation( $desc, $expl, $elem );
     }

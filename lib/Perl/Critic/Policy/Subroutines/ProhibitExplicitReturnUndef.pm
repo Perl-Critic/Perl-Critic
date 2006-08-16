@@ -33,8 +33,10 @@ sub violates {
     return if ($elem ne 'return');
     return if is_hash_key($elem);
 
-    my $sib = $elem->snext_sibling() || return;
-    $sib->isa('PPI::Token::Word') && $sib eq 'undef' || return;
+    my $sib = $elem->snext_sibling();
+    return if !$sib;
+    return if !$sib->isa('PPI::Token::Word');
+    return if $sib ne 'undef';
 
     # Must be 'return undef'
     return $self->violation( $desc, $expl, $elem );
