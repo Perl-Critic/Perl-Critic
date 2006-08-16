@@ -53,6 +53,9 @@ open my $fh, '>', $some_file or die;
 open(my $fh, '>', $some_file);
 open(my $fh, '>', $some_file) or die;
 
+$foo{open}; # not a function call
+{open}; # zero args, for Devel::Cover
+
 END_PERL
 
 $policy = 'InputOutput::ProhibitBarewordFileHandles';
@@ -160,6 +163,8 @@ open $fh, '>', $output" or die;
 open my $fh, '>', $output" or die;
 open FH, '>', $output" or die;
 
+$foo{open}; # not a function call
+
 END_PERL
 
 $policy = 'InputOutput::ProhibitTwoArgOpen';
@@ -183,6 +188,7 @@ is( pcritique($policy, \$code), 6, $policy);
 #----------------------------------------------------------------
 
 $code = <<'END_PERL';
+for my $foo (@lines) {}
 while( my $foo = <> ){}
 while( $foo = <> ){}
 while( <> ){}
@@ -214,6 +220,7 @@ is( pcritique($policy, \$code), 7, $policy);
 $code = <<'END_PERL';
 
 #print $fh;           #Punt on this
+#print $fh if 1;
 print $fh "something" . "something else";
 print $fh generate_report();
 print $fh "something" if $DEBUG;
@@ -237,18 +244,30 @@ print {FH} "something" . "something else";
 print generate_report();
 print {FH} generate_report();
 
+print rand 10;
+
 print {FH};
 print {FH} @list;
 print {FH} $foo, $bar;
 
 print @list;
 print $foo, $bar;
+print $foo , $bar;
+print foo => 1;
 
 print( {FH} @list );
 print( {FH} $foo, $bar );
 
+print();
+print( );
 print( @list );
 print( $foo, $bar );
+
+print if 1;
+
+print 1 2; # syntax error, but not a policy violation
+$foo{print}; # not a function call
+{print}; # no siblings
 
 END_PERL
 
@@ -285,6 +304,7 @@ is( pcritique($policy, \$code), 3, $policy );
 
 $code = <<'END_PERL';
 -toomany;
+-f _;
 END_PERL
 
 $policy = 'InputOutput::ProhibitInteractiveTest';

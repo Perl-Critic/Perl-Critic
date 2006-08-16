@@ -34,10 +34,12 @@ sub violates {
     return if $elem ne 'open';
     return if ! is_function_call($elem);
 
-    my $first = ( parse_arg_list($elem) )[0] || return;
-    $first = $first->[0] || return; #Ick!
+    my $first_arg = ( parse_arg_list($elem) )[0];
+    return if !$first_arg;
+    my $first_token = $first_arg->[0];
+    return if !$first_token;
 
-    if( $first->isa('PPI::Token::Word') && !($first eq 'my') ) {
+    if( $first_token->isa('PPI::Token::Word') && $first_token ne 'my' ) {
         return $self->violation( $desc, $expl, $elem );
     }
     return; #ok!

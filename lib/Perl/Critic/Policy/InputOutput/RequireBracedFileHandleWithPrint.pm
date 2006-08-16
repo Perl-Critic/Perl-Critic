@@ -36,23 +36,30 @@ sub violates {
     return if ! is_function_call($elem);
 
     my @sib;
-    $sib[0] = $elem->snext_sibling()  || return;
+
+    $sib[0] = $elem->snext_sibling();
+    return if !$sib[0];
 
     # Deal with situations where 'print' is called with parens
     if ( $sib[0]->isa('PPI::Structure::List') ) {
-        my $expr = $sib[0]->schild(0) || return;
-        $sib[0] = $expr->schild(0)    || return;
+        my $expr = $sib[0]->schild(0);
+        return if !$expr;
+        $sib[0] = $expr->schild(0);
+        return if !$sib[0];
     }
 
-    $sib[1] = $sib[0]->next_sibling() || return;
-    $sib[2] = $sib[1]->next_sibling() || return;
+    $sib[1] = $sib[0]->next_sibling();
+    return if !$sib[1];
+    $sib[2] = $sib[1]->next_sibling();
+    return if !$sib[2];
 
     # First token must be a symbol or bareword;
     return if !(    $sib[0]->isa('PPI::Token::Symbol')
                  || $sib[0]->isa('PPI::Token::Word') );
 
-    # First token must not be a builtin function
+    # First token must not be a builtin function or control
     return if is_perl_builtin($sib[0]);
+    return if exists $postfix_words{ $sib[0] };
 
     # Second token must be white space
     return if !$sib[1]->isa('PPI::Token::Whitespace');
@@ -63,11 +70,9 @@ sub violates {
     # Special case for postfix controls
     return if exists $postfix_words{ $sib[2] };
 
-    if ( !$sib[0]->isa('PPI::Structure::Block') ) {
-        return $self->violation( $desc, $expl, $elem );
-    }
+    return if $sib[0]->isa('PPI::Structure::Block');
 
-    return;  #ok!
+    return $self->violation( $desc, $expl, $elem );
 }
 
 1;

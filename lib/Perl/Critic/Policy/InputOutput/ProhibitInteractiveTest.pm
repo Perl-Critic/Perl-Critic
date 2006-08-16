@@ -29,10 +29,8 @@ sub applies_to { return 'PPI::Token::Operator' }
 
 sub violates {
     my ($self, $elem, $doc) = @_;
-    if ($elem eq '-t') {
-        return $self->violation( $desc, $expl, $elem );
-    }
-    return; #ok!
+    return if $elem ne '-t';
+    return $self->violation( $desc, $expl, $elem );
 }
 
 1;
