@@ -24,7 +24,7 @@ my $expl = q{Use published APIs};
 #---------------------------------------------------------------------------
 
 sub default_severity { return $SEVERITY_MEDIUM }
-sub applies_to { return 'PPI::Token::Word' }
+sub applies_to       { return 'PPI::Token::Word' }
 
 #---------------------------------------------------------------------------
 
@@ -32,18 +32,24 @@ sub violates {
     my ( $self, $elem, undef ) = @_;
 
     my $psib = $elem->sprevious_sibling;
-    if ( $psib ne 'package'
-        && ( $self->_is_other_pkg_private_function($elem)
-             || $self->_is_other_pkg_private_method($elem) ) )
+    my $psib_name = eval { $psib->content };
+    no warnings 'uninitialized';    ## no critic ProhibitNoWarnings
+    if (   $psib_name ne 'package'
+        && $psib_name ne 'require'
+        && $psib_name ne 'use'
+        && (   $self->_is_other_pkg_private_function($elem)
+            || $self->_is_other_pkg_private_method($elem) )
+        )
     {
         return $self->violation( $desc, $expl, $elem );
     }
-    return;    #ok!
+    return;                         #ok!
 }
 
 sub _is_other_pkg_private_function {
     my ( $self, $elem ) = @_;
-    return $elem =~ m{ (\w+)::_\w+ \z }xms && $elem !~ m{ \A SUPER::_\w+ \z }xms;
+    return $elem =~ m{ (\w+)::_\w+ \z }xms
+        && $elem !~ m{ \A SUPER::_\w+ \z }xms;
 }
 
 sub _is_other_pkg_private_method {
