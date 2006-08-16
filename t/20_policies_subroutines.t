@@ -348,6 +348,8 @@ is( pcritique($policy, \$code), 5, $policy);
 
 $code = <<'END_PERL';
 package My::Self::_private;
+use My::Self::_private;
+require My::Self::_private;
 END_PERL
 
 $policy = 'Subroutines::ProtectPrivateSubs';
