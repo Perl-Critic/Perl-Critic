@@ -235,7 +235,7 @@ $code = <<'END_PERL';
 END_PERL
 
 $policy = 'BuiltinFunctions::RequireGlobFunction';
-is( pcritique($policy, \$code), 1, 'glob via <...>' );
+is( pcritique($policy, \$code), 1, $policy.' glob via <...>' );
 
 #-----------------------------------------------------------------------------
 
@@ -246,7 +246,7 @@ foreach my $file (<*.pl>) {
 END_PERL
 
 $policy = 'BuiltinFunctions::RequireGlobFunction';
-is( pcritique($policy, \$code), 1, 'glob via <...> in foreach' );
+is( pcritique($policy, \$code), 1, $policy.' glob via <...> in foreach' );
 
 #-----------------------------------------------------------------------------
 
@@ -255,7 +255,7 @@ $code = <<'END_PERL';
 END_PERL
 
 $policy = 'BuiltinFunctions::RequireGlobFunction';
-is( pcritique($policy, \$code), 1, 'multiple globs via <...>' );
+is( pcritique($policy, \$code), 1, $policy.' multiple globs via <...>' );
 
 #-----------------------------------------------------------------------------
 
@@ -266,7 +266,7 @@ while (<$fh>) {
 END_PERL
 
 $policy = 'BuiltinFunctions::RequireGlobFunction';
-isnt( pcritique($policy, \$code), 1, 'I/O' );
+is( pcritique($policy, \$code), 0, $policy.' I/O' );
 
 #-----------------------------------------------------------------------------
 
@@ -276,7 +276,7 @@ UNIVERSAL::isa($foo, $pkg);
 END_PERL
 
 $policy = 'BuiltinFunctions::ProhibitUniversalIsa';
-is( pcritique($policy, \$code), 2, 'UNIVERSAL::isa' );
+is( pcritique($policy, \$code), 2, $policy );
 
 #-----------------------------------------------------------------------------
 
@@ -287,7 +287,7 @@ $foo->isa($pkg);
 END_PERL
 
 $policy = 'BuiltinFunctions::ProhibitUniversalIsa';
-is( pcritique($policy, \$code), 0, 'UNIVERSAL::isa' );
+is( pcritique($policy, \$code), 0, $policy );
 
 #-----------------------------------------------------------------------------
 
@@ -297,7 +297,7 @@ UNIVERSAL::can($foo, $funcname);
 END_PERL
 
 $policy = 'BuiltinFunctions::ProhibitUniversalCan';
-is( pcritique($policy, \$code), 2, 'UNIVERSAL::can' );
+is( pcritique($policy, \$code), 2, $policy );
 
 #-----------------------------------------------------------------------------
 
@@ -308,7 +308,7 @@ $foo->can($funcname);
 END_PERL
 
 $policy = 'BuiltinFunctions::ProhibitUniversalCan';
-is( pcritique($policy, \$code), 0, 'UNIVERSAL::can' );
+is( pcritique($policy, \$code), 0, $policy );
 
 #----------------------------------------------------------------
 
@@ -378,7 +378,7 @@ split("pattern"), $string, 3;
 END_PERL
 
 $policy = 'BuiltinFunctions::ProhibitStringySplit';
-is( pcritique($policy, \$code), 12, 'Stringy splits' );
+is( pcritique($policy, \$code), 12, $policy );
 
 #----------------------------------------------------------------
 
@@ -410,7 +410,7 @@ $foo{split}; # for Devel::Cover
 END_PERL
 
 $policy = 'BuiltinFunctions::ProhibitStringySplit';
-is( pcritique($policy, \$code), 0, 'Non-stringy splits' );
+is( pcritique($policy, \$code), 0, $policy.' Non-stringy splits' );
 
 #----------------------------------------------------------------
 
@@ -431,7 +431,7 @@ split( q{ }  ), $string, 3;
 END_PERL
 
 $policy = 'BuiltinFunctions::ProhibitStringySplit';
-is( pcritique($policy, \$code), 0, 'Special split on space' );
+is( pcritique($policy, \$code), 0, $policy.' Special split on space' );
 
 #----------------------------------------------------------------
 
@@ -446,4 +446,4 @@ split( @list );
 END_PERL
 
 $policy = 'BuiltinFunctions::ProhibitStringySplit';
-is( pcritique($policy, \$code), 0, 'Split oddities' );
+is( pcritique($policy, \$code), 0, $policy.' Split oddities' );

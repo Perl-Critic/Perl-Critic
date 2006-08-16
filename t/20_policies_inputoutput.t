@@ -68,7 +68,7 @@ select( $fh );
 END_PERL
 
 $policy = 'InputOutput::ProhibitOneArgSelect';
-is( pcritique($policy, \$code), 1, '1 arg; variable, w/parens' );
+is( pcritique($policy, \$code), 1, $policy.' 1 arg; variable, w/parens' );
 
 #----------------------------------------------------------------
 
@@ -77,7 +77,7 @@ select $fh;
 END_PERL
 
 $policy = 'InputOutput::ProhibitOneArgSelect';
-is( pcritique($policy, \$code), 1, '1 arg; variable, as built-in' );
+is( pcritique($policy, \$code), 1, $policy.' 1 arg; variable, as built-in' );
 
 #----------------------------------------------------------------
 
@@ -86,7 +86,7 @@ select( STDERR );
 END_PERL
 
 $policy = 'InputOutput::ProhibitOneArgSelect';
-is( pcritique($policy, \$code), 1, '1 arg; fh, w/parens' );
+is( pcritique($policy, \$code), 1, $policy.' 1 arg; fh, w/parens' );
 
 #----------------------------------------------------------------
 
@@ -95,7 +95,7 @@ select STDERR;
 END_PERL
 
 $policy = 'InputOutput::ProhibitOneArgSelect';
-is( pcritique($policy, \$code), 1, '1 arg; fh, as built-in' );
+is( pcritique($policy, \$code), 1, $policy.' 1 arg; fh, as built-in' );
 
 #----------------------------------------------------------------
 
@@ -104,7 +104,7 @@ select( undef, undef, undef, 0.25 );
 END_PERL
 
 $policy = 'InputOutput::ProhibitOneArgSelect';
-isnt( pcritique($policy, \$code), 1, '4 args' );
+is( pcritique($policy, \$code), 0, $policy.' 4 args' );
 
 #----------------------------------------------------------------
 
@@ -113,7 +113,7 @@ sub select { }
 END_PERL
 
 $policy = 'InputOutput::ProhibitOneArgSelect';
-is( pcritique($policy, \$code), 0, 'RT Bug: #15653' );
+is( pcritique($policy, \$code), 0, $policy.' RT Bug: #15653' );
 
 #----------------------------------------------------------------
 
