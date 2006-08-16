@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 10;
+use Test::More tests => 14;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -142,6 +142,7 @@ TODO: {
 $code = <<'END_PERL';
 for my $bases () {}
 print $main::contract;
+local $\; # for Devel::Cover, and example of a var without \w
 END_PERL
 
 $policy = 'NamingConventions::ProhibitAmbiguousNames';
@@ -187,3 +188,52 @@ END_PERL
 
 $policy = 'NamingConventions::ProhibitAmbiguousNames';
 is( pcritique($policy, \$code), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+my $left;
+my $close;
+END_PERL
+
+%config = (forbid => q{});
+$policy = 'NamingConventions::ProhibitAmbiguousNames';
+is( pcritique($policy, \$code, \%config), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+my $left;
+my $close;
+my $foo;
+my $bar;
+END_PERL
+
+%config = (forbid => q{foo bar baz quux});
+$policy = 'NamingConventions::ProhibitAmbiguousNames';
+is( pcritique($policy, \$code, \%config), 2, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+my $left;
+my $close;
+my $foo;
+my $bar;
+END_PERL
+
+my @default = Perl::Critic::Policy::NamingConventions::ProhibitAmbiguousNames::default_forbidden_words();
+%config = ( forbid => join q{ }, qw(foo bar baz quux), @default );
+$policy = 'NamingConventions::ProhibitAmbiguousNames';
+is( pcritique($policy, \$code, \%config), 4, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+my $left;
+my $close;
+END_PERL
+
+%config = (forbid => undef);
+$policy = 'NamingConventions::ProhibitAmbiguousNames';
+is( pcritique($policy, \$code, \%config), 2, $policy);

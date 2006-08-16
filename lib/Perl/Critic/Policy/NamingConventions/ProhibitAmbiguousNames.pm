@@ -68,7 +68,9 @@ sub violates {
 
             # strip off any leading "Package::"
             my ($name) = $word =~ m/ (\w+) \z /xms;
-            if ( defined $name && $self->{_forbid}->{$name} ) {
+            next if ! defined $name; # should never happen, right?
+
+            if ( exists $self->{_forbid}->{$name} ) {
                 return $self->violation( $desc, $expl, $elem );
             }
         }
@@ -84,7 +86,7 @@ sub violates {
         # assignment half of a variable statement
 
         my $symbols = $elem->find('PPI::Token::Symbol');
-        if ($symbols) {
+        if ($symbols) {   # this should always be true, right?
             for my $symbol ( @{$symbols} ) {
 
                 # Strip off sigil and any leading "Package::"
@@ -94,7 +96,7 @@ sub violates {
                 my ($name) = $symbol =~ m/ (\w+) \z /xms;
                 next if ! defined $name;
 
-                if ( defined $self->{_forbid}->{$name} ) {
+                if ( exists $self->{_forbid}->{$name} ) {
                     push @viols, $self->violation( $desc, $expl, $elem );
                 }
             }
