@@ -232,7 +232,17 @@ sub _get_diagnostics {
     my $handle     = IO::String->new( \$pod_string );
     my $parser     = Pod::PlainText->new();
     $parser->select('DESCRIPTION');
-    $parser->parse_from_file( $file, $handle );
+
+    # Use parse_from_filehandle instead of parse_from_file as a
+    # workaround for RT bug #21009 and #21010, which document a bad
+    # interaction with Devel::Cover 0.58 and
+    # Pod::Parser::parse_from_file
+    my $fh;
+    if (!open $fh, '<', $file)
+    {
+       return q{};
+    }
+    $parser->parse_from_filehandle( $fh, $handle );
 
     # Remove header and trailing whitespace.
     $pod_string =~ s{ \A \s* DESCRIPTION \s* \n}{}mx;
