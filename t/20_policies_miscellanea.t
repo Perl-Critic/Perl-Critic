@@ -26,7 +26,7 @@ $baz = qq{nuts};
 END_PERL
 
 $policy = 'Miscellanea::RequireRcsKeywords';
-is( pcritique($policy, \$code), 2, $policy);
+is( pcritique($policy, \$code), 3, $policy);
 
 #----------------------------------------------------------------
 
