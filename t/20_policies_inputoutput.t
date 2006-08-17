@@ -237,33 +237,69 @@ is( pcritique($policy, \$code), 7, $policy);
 #----------------------------------------------------------------
 
 $code = <<'END_PERL';
-
 print "something" . "something else";
+print "something" . "something else"
+  or die;
 print {FH} "something" . "something else";
+print {FH} "something" . "something else"
+  or die;
 
 print generate_report();
+print generate_report()
+  or die;
 print {FH} generate_report();
+print {FH} generate_report()
+  or die;
 
 print rand 10;
+print rand 10
+  or die;
 
 print {FH};
+print {FH}
+  or die;
 print {FH} @list;
+print {FH} @list
+  or die;
 print {FH} $foo, $bar;
+print {FH} $foo, $bar
+  or die;
 
 print @list;
+print @list
+  or die;
 print $foo, $bar;
+print $foo, $bar
+  or die;
 print $foo , $bar;
+print $foo , $bar
+  or die;
 print foo => 1;
+print foo => 1
+  or die;
 
 print( {FH} @list );
+print( {FH} @list )
+  or die;
 print( {FH} $foo, $bar );
+print( {FH} $foo, $bar )
+  or die;
 
 print();
+print()
+  or die;
 print( );
+print( )
+  or die;
 print( @list );
+print( @list )
+  or die;
 print( $foo, $bar );
+print( $foo, $bar )
+  or die;
 
 print if 1;
+print or die if 1;
 
 print 1 2; # syntax error, but not a policy violation
 $foo{print}; # not a function call
