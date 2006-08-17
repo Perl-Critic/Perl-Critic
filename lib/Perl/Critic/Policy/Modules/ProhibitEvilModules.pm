@@ -9,6 +9,7 @@ package Perl::Critic::Policy::Modules::ProhibitEvilModules;
 
 use strict;
 use warnings;
+use English qw(-no_match_vars);
 use List::MoreUtils qw(any);
 use Perl::Critic::Utils;
 use base 'Perl::Critic::Policy';
@@ -36,10 +37,16 @@ sub new {
     #Set config, if defined
     if ( defined $args{modules} ) {
         for my $module ( split m{ \s+ }mx, $args{modules} ) {
-            if ( $module =~ m{ \A [/] .+ [/] \z }mx ) {
+            if ( $module =~ m{ \A [/] (.+) [/] \z }mx ) {
                 # These are module name patterns (e.g. /Acme/)
-                my $pattern = eval "qr$module"; ## no critic;
-                push @{ $self->{_evil_modules_rx} }, $pattern;
+                my $re = $1;
+                my $pattern = eval { qr/$re/ };
+                if ( $EVAL_ERROR ) {
+                    warn 'Regexp syntax error in configuration for '.__PACKAGE__;
+                }
+                else {
+                    push @{ $self->{_evil_modules_rx} }, $pattern;
+                }
             }
             else {
                 # These are literal module names (e.g. Acme::Foo)

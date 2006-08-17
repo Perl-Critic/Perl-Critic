@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 51;
+use Test::More tests => 52;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -252,6 +252,19 @@ END_PERL
 
 $policy = 'Modules::ProhibitEvilModules';
 %config = (modules => '/Evil::/ Demonic::Module /Acme/');
+is( pcritique($policy, \$code, \%config), 4, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+use Evil::Module qw(bad stuff);
+use Super::Evil::Module;
+use Demonic::Module;
+use Acme::Foo;
+END_PERL
+
+$policy = 'Modules::ProhibitEvilModules';
+%config = (modules => '/Evil::|Demonic::Module|Acme/');
 is( pcritique($policy, \$code, \%config), 4, $policy);
 
 #----------------------------------------------------------------
