@@ -66,6 +66,7 @@ WriteMakefile( NAME           => 'Perl::Critic',
                                   'Scalar::Util'          => 0,
 				  'String::Format'        => 1.13,
                                   'Module::Pluggable'     => 0,
+                                  'B::Keywords'           => 1.04,
 			      },
 
 );

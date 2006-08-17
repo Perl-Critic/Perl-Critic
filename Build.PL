@@ -68,6 +68,7 @@ my $builder = Module::Build->new(
 	            },
 
   build_requires => {'Test::More'            => 0,
+                     'B::Keywords'           => 1.04,
                     },
 
   recommends     => {'File::HomeDir'         => 0,
