@@ -88,22 +88,15 @@ C<local $/ = undef> is perfect OK.
 
 =over 4
 
-=item * ValuesAndExpressions::ProhibitUselessQuotingOfVariables
-
-I've seen a lot of beginners do things like this:
-
-    open( my $fh, "$filename" );
-
-There's no reason for C<$filename> to be quoted.
-
-
 =item * ValuesAndExpressions::ProhibitCommaSeparatedStatements (p68)
 
 =item * ValuesAndExpressions::RequireListParens (p71)
 
 =item * ValuesAndExpressions::ProhibitScalarGrep (p71)
 
-Look for grep in a scalar context and recommend any() instead
+Look for grep in a scalar context and recommend any() instead.
+Perhaps we need to distinguish cases like:
+   $count += grep {qr/foo/} @list;
 
 =item * Variables::RequireLocalizedPunctuationVars (p81)
 
@@ -124,16 +117,19 @@ to PPI bugs.  Ask Chris for the patch.]
 =item * Subroutines::RequireArgUnpacking (p178)
 
 Ensure that the first child of a sub is PPI::Statement::Variable
+(unless the sub has N or fewer statements, where N defaults to 1.
 
 =item * Subroutines::ProhibitManyArgs (p182)
 
-If first L<PPI::Statement::Variable> is a list C<my>, make sure
-it's fewer than N elements.  Otherwise make sure there are less
-than N L<PPI::Statement::Variable>s in a row at begin
+If first L<PPI::Statement::Variable> is a list C<my>, and @_ is used,
+make sure it's fewer than N elements.  Otherwise make sure there are
+less than N L<PPI::Statement::Variable>s in a row at begin which
+shift.
 
 =item * InputOutput::RequireErrorChecking (p208)
 
-Forbid open, print, close in void context
+Forbid open, print, close in void context, unless "use Fatal" is in
+effect.
 
 =item * InputOutput::RequireBriefOpen (p209)
 
@@ -184,6 +180,8 @@ Can't be C<qr/\s*\\A\s*\((?:\?:)?(?:\s*\w+\s*\|)*\s*\w+\s*\)\s*\\z/>
 or C<qr/\s*\\A\s*\w+\s*\\z/>
 
 =item * TestingAndDebugging::ProhibitProlongedStrictureOverride (p443)
+
+This conflicts with TestingAndDebugging::ProhibitNoStrict
 
 =back
 
@@ -273,6 +271,15 @@ If Test::More is detected:
    is $foo, 'bar';                 # not ok
    is $foo, 'bar', 'foo value';    # ok
 
+=item * ValuesAndExpressions::ProhibitUselessQuotingOfVariables
+
+I've seen a lot of beginners do things like this:
+
+    open( my $fh, "$filename" );
+
+There's no reason for C<$filename> to be quoted.  (except stringifying
+overloaded instances)
+
 =back
 
 =head1 REFACTORINGS and ENHANCEMENTS
@@ -290,14 +297,6 @@ Give it same functionality as the -verbose option in `perlcritic`
 =item * Enhance P::C::critique() to accept file names, directories, or code strings (as refs)
 
 Just like F<bin/perlcritic> does now.
-
-=item * Helper functions:
-
-Combine these three:
-
-    return if is_hash_key($elem);
-    return if is_method_call($elem);
-    return if is_subroutine_name($elem);
 
 =item * Add C<-cache> flag to F<bin/perlcritic>
 
@@ -320,11 +319,13 @@ We're waiting on the following bugs to get fixed in a CPAN release of PPI:
 
 =item * C<goto> as a PPI::Statement::Break instance
 
-Broken through v1.115, fixed in SVN, needed to remove workaround from Subroutines::RequireFinalReturn
+Broken through PPI v1.115, fixed in PPI SVN, needed to remove
+workaround from Subroutines::RequireFinalReturn
 
 =item * RT #19629: End of list mistakenly seen as end of statement
 
-Broken through v1.115, fixed in SVN, needed for BuiltinFunctions::ProhibitReverseSortBlock
+Broken through PPI v1.115, fixed in PPI SVN, needed for
+BuiltinFunctions::ProhibitReverseSortBlock
 
 =back
 
