@@ -32,17 +32,18 @@ sub violates {
     my ( $self, $elem, undef ) = @_;
 
     # First child will be 'for' or 'foreach' keyword
-    my $first_child = $elem->schild(0) || return;
+    my $first_child = $elem->schild(0);
+    return if !$first_child;
     return if $first_child ne 'for' and $first_child ne 'foreach';
 
     # The second child could be the iteration list
-    my $second_child = $elem->schild(1) || return;
+    my $second_child = $elem->schild(1);
+    return if !$second_child;
     return if $second_child->isa('PPI::Structure::ForLoop');
 
-    if ( $second_child ne 'my' ) {
-        return $self->violation( $desc, $expl, $elem );
-    }
-    return;    #ok!
+    return if $second_child eq 'my';
+
+    return $self->violation( $desc, $expl, $elem );
 }
 
 #---------------------------------------------------------------------------

@@ -8,7 +8,7 @@
 use strict;
 use warnings;
 use File::Spec;
-use Test::More tests => 22;
+use Test::More tests => 26;
 
 #-----------------------------------------------------------------------------
 # Load perlcritic like a library so we can test its subroutines.  If it is not
@@ -17,6 +17,10 @@ use Test::More tests => 22;
 my $perlcritic = File::Spec->catfile( qw(blib script perlcritic) );
 $perlcritic = File::Spec->catfile( qw(bin perlcritic) ) if ! -e $perlcritic;
 require $perlcritic;  ## no critic
+
+# Because bin/perlcritic does not declare a package, it has functions
+# in main, just like this test file, so we can use it's functions
+# without a prefix.
 
 #-----------------------------------------------------------------------------
 
@@ -102,5 +106,16 @@ is( $options{-quiet}, 1);
 
 ok( _interpolate( '\r%l\t%c\n' ) eq "\r%l\t%c\n", 'Interpolation' );
 ok( _interpolate( 'literal'    ) eq "literal",    'Interpolation' );
+
+#-----------------------------------------------------------------------------
+
+{
+    my @lines = policy_listing();
+    my $list = join q{}, @lines;
+    cmp_ok(scalar @lines, '>', 70, 'policy_listing');
+    like($list, qr/^BuiltinFunctions::/xms, 'policy_listing');
+    like($list, qr/^InputOutput::/xms, 'policy_listing');
+    like($list, qr/^Variables::/xms, 'policy_listing');
+}
 
 #-----------------------------------------------------------------------------

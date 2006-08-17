@@ -36,8 +36,8 @@ sub violates {
     my $strict_line  = $strict_stmnt ? $strict_stmnt->location()->[0] : undef;
 
     # Find all statements that aren't 'use', 'require', or 'package'
-    my $stmnts_ref = $doc->find( \&_isnt_include_or_package ) || return;
-
+    my $stmnts_ref = $doc->find( \&_isnt_include_or_package );
+    return if !$stmnts_ref;
 
     # If the 'use strict' statement is not defined, or the other
     # statement appears before the 'use strict', then it violates.
@@ -57,10 +57,10 @@ sub violates {
 sub _is_use_strict {
     my (undef, $elem) = @_;
 
-    return
-        $elem->isa('PPI::Statement::Include') &&
-        ($elem->type() eq 'use') &&
-        ($elem->pragma() eq 'strict');
+    return 0 if !$elem->isa('PPI::Statement::Include');
+    return 0 if $elem->type() ne 'use';
+    return 0 if $elem->pragma() ne 'strict';
+    return 1;
 }
 
 sub _isnt_include_or_package {

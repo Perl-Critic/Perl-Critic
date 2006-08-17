@@ -32,16 +32,14 @@ sub applies_to {
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
-    if ( _has_interpolation($elem) ) {
-        return $self->violation( $desc, $expl, $elem );
-    }
-    return;    #ok;
+    return if ! _has_interpolation($elem);
+    return $self->violation( $desc, $expl, $elem );
 }
 
 sub _has_interpolation {
-    my $elem = shift || return;
+    my $elem = shift;
     return $elem =~ m{ (?<!\\) [\$\@] \S{2,} }mx   #Contains unescaped $. or @.
-      || $elem   =~ m{ \\[tnrfae0xcNLuLUEQ]  }mx;  #Containts escaped metachars
+        || $elem =~ m{ \\[tnrfae0xcNLuLUEQ]  }mx;  #Containts escaped metachars
 }
 
 1;

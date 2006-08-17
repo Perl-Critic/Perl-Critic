@@ -55,7 +55,8 @@ sub violates {
     #I just use a regext to split the statement into words.  This is
     #kinda lame, but it does the trick for now.
 
-    my $stmnt = $elem->statement() || return;
+    my $stmnt = $elem->statement();
+    return if !$stmnt;
     my @words = split m{ [^a-z]+ }mx, $stmnt;
     @words = grep { $_ !~ m{ qw|no|warnings }mx } @words;
     return if all { exists $self->{_allow}->{$_} } @words;

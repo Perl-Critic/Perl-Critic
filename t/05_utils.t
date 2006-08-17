@@ -67,9 +67,9 @@ sub make_doc { my $code = shift; return PPI::Document->new( ref $code ? $code : 
    my $doc = PPI::Document->new(\$code);
    my @words = @{$doc->find('PPI::Token::Word')};
    my @expect = (
-      ['sub', 0],
-      ['foo', 0],
-      ['return', 0],
+      ['sub', undef],
+      ['foo', undef],
+      ['return', undef],
       ['bar', 1],
       ['baz', 1],
    );

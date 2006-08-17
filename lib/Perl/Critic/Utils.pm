@@ -180,7 +180,8 @@ our %UNARY_OPS = ();
 
 sub find_keywords {
     my ( $doc, $keyword ) = @_;
-    my $nodes_ref = $doc->find('PPI::Token::Word') || return;
+    my $nodes_ref = $doc->find('PPI::Token::Word');
+    return if !$nodes_ref;
     my @matches = grep { $_ eq $keyword } @{$nodes_ref};
     return @matches ? \@matches : undef;
 }
@@ -188,7 +189,8 @@ sub find_keywords {
 #-------------------------------------------------------------------------
 
 sub is_perl_builtin {
-    my $elem = shift || return;
+    my $elem = shift;
+    return if !$elem;
     my $name = $elem->isa('PPI::Statement::Sub') ? $elem->name() : $elem;
     return exists $BUILTINS{ $name };
 }
@@ -196,7 +198,8 @@ sub is_perl_builtin {
 #-------------------------------------------------------------------------
 
 sub is_perl_global {
-    my $elem = shift || return;
+    my $elem = shift;
+    return if !$elem;
     my $var_name = "$elem"; #Convert Token::Symbol to string
     $var_name =~ s{\A [\$@%] }{}mx;  #Chop off the sigil
     return exists $GLOBALS{ $var_name };
@@ -205,7 +208,8 @@ sub is_perl_global {
 #-------------------------------------------------------------------------
 
 sub precedence_of {
-    my $elem = shift || return;
+    my $elem = shift;
+    return if !$elem;
     return $PRECEDENCE_OF{ ref $elem ? "$elem" : $elem };
 }
 
@@ -213,25 +217,31 @@ sub precedence_of {
 
 sub is_hash_key {
     my $elem = shift;
+    return if !$elem;
 
     #Check curly-brace style: $hash{foo} = bar;
-    my $parent = $elem->parent() || return;
-    my $grandparent = $parent->parent() || return;
+    my $parent = $elem->parent();
+    return if !$parent;
+    my $grandparent = $parent->parent();
+    return if !$grandparent;
     return 1 if $grandparent->isa('PPI::Structure::Subscript');
 
 
     #Check declarative style: %hash = (foo => bar);
-    my $sib = $elem->snext_sibling() || return;
+    my $sib = $elem->snext_sibling();
+    return if !$sib;
     return 1 if $sib->isa('PPI::Token::Operator') && $sib eq '=>';
 
-    return 0;
+    return;
 }
 
 #-------------------------------------------------------------------------
 
 sub is_method_call {
     my $elem = shift;
-    my $sib = $elem->sprevious_sibling() || return;
+    return if !$elem;
+    my $sib = $elem->sprevious_sibling();
+    return if !$sib;
     return $sib->isa('PPI::Token::Operator') && $sib eq q{->};
 }
 
@@ -239,8 +249,11 @@ sub is_method_call {
 
 sub is_subroutine_name {
     my $elem  = shift;
-    my $sib   = $elem->sprevious_sibling () || return;
-    my $stmnt = $elem->statement() || return;
+    return if !$elem;
+    my $sib   = $elem->sprevious_sibling();
+    return if !$sib;
+    my $stmnt = $elem->statement();
+    return if !$stmnt;
     return $stmnt->isa('PPI::Statement::Sub') && $sib eq 'sub';
 }
 
@@ -258,8 +271,9 @@ sub is_function_call {
 
 sub is_script {
     my $doc = shift;
-    my $first_comment = $doc->find_first('PPI::Token::Comment') || return;
-    $first_comment->location()->[0] == 1 || return;
+    my $first_comment = $doc->find_first('PPI::Token::Comment');
+    return if !$first_comment;
+    return if $first_comment->location()->[0] != 1;
     return $first_comment =~ m{ \A \#\! }mx;
 }
 
@@ -267,12 +281,14 @@ sub is_script {
 
 sub parse_arg_list {
     my $elem = shift;
-    my $sib  = $elem->snext_sibling() || return;
+    my $sib  = $elem->snext_sibling();
+    return if !$sib;
 
     if ( $sib->isa('PPI::Structure::List') ) {
 
         #Pull siblings from list
-        my $expr = $sib->schild(0) || return;
+        my $expr = $sib->schild(0);
+        return if !$expr;
         return _split_nodes_on_comma( $expr->schildren() );
     }
     else {
