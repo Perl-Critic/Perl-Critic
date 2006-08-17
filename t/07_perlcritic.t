@@ -1,14 +1,15 @@
-##################################################################
+###############################################################################
 #     $URL$
 #    $Date$
 #   $Author$
 # $Revision$
-##################################################################
+###############################################################################
 
 use strict;
 use warnings;
 use File::Spec;
-use Test::More tests => 26;
+use English qw(-no_match_vars);
+use Test::More tests => 33;
 
 #-----------------------------------------------------------------------------
 # Load perlcritic like a library so we can test its subroutines.  If it is not
@@ -118,4 +119,32 @@ ok( _interpolate( 'literal'    ) eq "literal",    'Interpolation' );
     like($list, qr/^Variables::/xms, 'policy_listing');
 }
 
+#-----------------------------------------------------------------------------
+# Intercept pod2usage so we can test invalid options and special switches
+
+{
+    no warnings qw(redefine once);
+    local *main::pod2usage = sub { my %args = @_; die $args{-message} || q{} };
+
+    eval { @ARGV = qw( -help ); get_options() };
+    ok( $EVAL_ERROR, '-help option' );
+
+    eval { @ARGV = qw( -man ); get_options() };
+    ok( $EVAL_ERROR, '-man option' );
+
+    eval { @ARGV = qw( -noprofile -profile foo ); get_options() };
+    like( $EVAL_ERROR, qr/-noprofile with -profile/, '-noprofile & -profile');
+
+    eval { @ARGV = qw( -verbose bogus ); get_options() };
+    like( $EVAL_ERROR, qr/looks odd/, 'Invalid -verbose option' );
+
+    eval { @ARGV = qw( -top -9 ); get_options() };
+    like( $EVAL_ERROR, qr/is negative/, 'Negative -verbose option' );
+
+    eval { @ARGV = qw( -severity 0 ); get_options() };
+    like( $EVAL_ERROR, qr/out of range/, '-severity too small' );
+
+    eval { @ARGV = qw( -severity 6 ); get_options() };
+    like( $EVAL_ERROR, qr/out of range/, '-severity too large' );
+}
 #-----------------------------------------------------------------------------

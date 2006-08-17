@@ -286,10 +286,6 @@ overloaded instances)
 
 =over 4
 
-=item * Move %FORMATS from F<bin/perlcritic> into L<Perl::Critic::Utils>
-
-So that Test::P::C can use them.  Use a subroutine instead of a package var.
-
 =item * Alias -verbose to -format option in Test::P::C.
 
 Give it same functionality as the -verbose option in `perlcritic`

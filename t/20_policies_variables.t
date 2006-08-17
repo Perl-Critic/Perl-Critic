@@ -128,6 +128,8 @@ use vars qw($VERSION @EXPORT);
 use vars ('$VERSION, '@EXPORT');
 use vars  '$VERSION, '@EXPORT';
 
+use vars  '+foo'; #Illegal, but not a violaton
+
 #local $Foo::bar;
 #local @This::that;
 #local %This::that;
@@ -144,6 +146,8 @@ $::VERSION = '1.2';
 @::EXPORT = ();
 &Package::my_sub();
 &::my_sub();
+*foo::glob = $code_ref;
+
 END_PERL
 
 $policy = 'Variables::ProhibitPackageVars';

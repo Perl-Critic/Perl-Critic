@@ -23,36 +23,24 @@ use Perl::Critic::Utils;
 our $VERSION = '0.18_01';
 $VERSION = eval $VERSION;  ## no critic
 
-#----------------------------------------------------------------------------
-# Globals
-
-my @files = ();
-my %FORMAT_OF = (
-    1 => "%f:%l:%c:%m\n",
-    2 => "%f: (%l:%c) %m\n",
-    3 => "%m at line %l, column %c.  %e.  (Severity: %s)\n",
-    4 => "%f: %m at line %l, column %c.  %e.  (Severity: %s)\n",
-    5 => "%m at line %l, near '%r'.  (Severity: %s)\n",
-    6 => "%f: %m at line %l near '%r'.  (Severity: %s)\n",
-    7 => "[%p] %m at line %l, column %c.  (Severity: %s)\n",
-    8 => "[%p] %m at line %l, near '%r'.  (Severity: %s)\n",
-    9 => "%m at line %l, column %c.\n  %p (Severity: %s)\n%d\n",
-   10 => "%m at line %l, near '%r'.\n  %p (Severity: %s)\n%d\n",
-);
-
 #-----------------------------------------------------------------------------
-# Begin script.  Only execute if not in a test harness
+# Begin script.  Don't run when loaded as a library
 
-if ( !$ENV{HARNESS_ACTIVE} ) {
-    my %options    = get_options();
-    @files         = get_input(@ARGV);
-    my $violations = critique(\%options, @files);
-    my $status     = defined $violations ? ( $violations ? 2 : 0 ) : 1;
-    exit $status;
-}
+my @FILES = ();
+exit run() if !caller;
 
 #-----------------------------------------------------------------------------
 # Begin subroutines
+
+sub run {
+    my %options    = get_options();
+    @FILES         = get_input(@ARGV);
+    my $violations = critique(\%options, @FILES);
+    my $status     = defined $violations ? ( $violations ? 2 : 0 ) : 1;
+    return $status;
+}
+
+#-----------------------------------------------------------------------------
 
 sub get_options {
 
@@ -69,7 +57,7 @@ sub get_options {
     # If -top is specified, default the severity level to 1, unless an
     # explicit severity is defined.  This provides us flexibility to
     # report top-offenders across just some or all of the severity levels.
-    # We also default the -top count to twenty if non is given
+    # We also default the -top count to twenty if none is given
     if ( exists $opts{top} ) {
         $opts{severity} ||= 1;
         $opts{top} ||= 20;
@@ -233,7 +221,7 @@ sub render_report {
 
 
     $file = -f $file ? $file : 'stdin';
-    my $default_verbosity = @files > 1 ? 4 : 3;  #@files is global!
+    my $default_verbosity = @FILES > 1 ? 4 : 3;  #@FILES is global!
     my $fmt = _get_format( $opts_ref->{-verbose} || $default_verbosity );
     $fmt =~ s{ \%f }{$file}mxg;  #HACK! Violation objects don't know the file
     Perl::Critic::Violation::set_format( $fmt );
@@ -247,7 +235,8 @@ sub render_report {
 sub _get_format {
     my ( $verbosity ) = @_;
     my $is_integer = $verbosity =~ m{ \A [+-]? \d+ \z }mx;
-    return $is_integer ? $FORMAT_OF{abs $verbosity} : _interpolate($verbosity);
+    return $is_integer ? verbosity_to_format($verbosity)
+                       : _interpolate($verbosity);
 }
 
 

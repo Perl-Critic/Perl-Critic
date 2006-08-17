@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 32;
+use Test::More tests => 34;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -49,7 +49,6 @@ is( pcritique($policy, \$code), 1, $policy.' no warnings at all');
 
 #----------------------------------------------------------------
 
-
 $code = <<'END_PERL';
 require warnings;
 1;
@@ -57,6 +56,16 @@ END_PERL
 
 $policy = 'TestingAndDebugging::RequireUseWarnings';
 is( pcritique($policy, \$code), 1, $policy.' require warnings');
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+use warnings;
+
+END_PERL
+
+$policy = 'TestingAndDebugging::RequireUseWarnings';
+is( pcritique($policy, \$code), 0, $policy.' warnings used, but no code');
 
 #----------------------------------------------------------------
 
@@ -166,6 +175,16 @@ END_PERL
 
 $policy = 'TestingAndDebugging::RequireUseStrict';
 is( pcritique($policy, \$code), 1, $policy.' require strict');
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+use strict;
+
+END_PERL
+
+$policy = 'TestingAndDebugging::RequireUseStrict';
+is( pcritique($policy, \$code), 0, $policy.' strictures used, but no code');
 
 #----------------------------------------------------------------
 
