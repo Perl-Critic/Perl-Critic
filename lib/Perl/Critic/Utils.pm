@@ -188,7 +188,7 @@ sub find_keywords {
 sub is_perl_builtin {
     my $elem = shift;
     return if !$elem;
-    my $name = $elem->isa('PPI::Statement::Sub') ? $elem->name() : $elem;
+    my $name = eval { $elem->isa('PPI::Statement::Sub') } ? $elem->name() : $elem;
     return exists $BUILTINS{ $name };
 }
 
