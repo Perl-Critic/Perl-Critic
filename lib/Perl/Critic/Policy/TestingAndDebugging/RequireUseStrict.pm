@@ -115,7 +115,7 @@ C<"## use critic"> pseudo-pragma.
 
 =head1 SEE ALSO
 
-L<Perl::Critic::Policy::TestingAndDebugging::RequirePackageWarnings>
+L<Perl::Critic::Policy::TestingAndDebugging::RequireUseWarnings>
 
 =head1 AUTHOR
 
