@@ -1,10 +1,13 @@
 use strict;
 use warnings;
 use PPI::Document;
-eval 'use B::Keywords 1.03';
-use Test::More tests => 66
-  + @B::Keywords::Functions + @B::Keywords::Scalars + @B::Keywords::Arrays + @B::Keywords::Hashes
-  + @B::Keywords::FileHandles;
+use constant USE_B_KEYWORDS => eval 'use B::Keywords 1.04; 1';
+use Test::More tests => 66 + (
+    USE_B_KEYWORDS
+    ? ( @B::Keywords::Functions + @B::Keywords::Scalars + @B::Keywords::Arrays
+            + @B::Keywords::Hashes + @B::Keywords::FileHandles )
+    : 0
+);
 
 #---------------------------------------------------------------------------
 
@@ -132,7 +135,7 @@ for my $code (@bad) {
 }
 
 SKIP: {
-    if ( not @B::Keywords::Functions ) {
+    if ( not USE_B_KEYWORDS ) {
         skip 0, 'Need B::Keywords 1.03';
     }
 
@@ -161,7 +164,7 @@ SKIP: {
 }
 
 SKIP: {
-    if ( not @B::Keywords::Scalars ) {
+    if ( not USE_B_KEYWORDS ) {
         skip 0, 'Need B::Keywords';
     }
 
