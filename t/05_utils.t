@@ -1,7 +1,10 @@
 use strict;
 use warnings;
 use PPI::Document;
-use Test::More tests => 66;
+eval 'use B::Keywords 1.03';
+use Test::More tests => 66
+  + @B::Keywords::Functions + @B::Keywords::Scalars + @B::Keywords::Arrays + @B::Keywords::Hashes
+  + @B::Keywords::FileHandles;
 
 #---------------------------------------------------------------------------
 
@@ -128,6 +131,16 @@ for my $code (@bad) {
 
 }
 
+SKIP: {
+    if ( not @B::Keywords::Functions ) {
+        skip 0, 'Need B::Keywords 1.03';
+    }
+
+    for my $builtin ( @B::Keywords::Functions ) {
+        is( is_perl_builtin($builtin), 1, "Is $builtin builtin function" );
+    }
+}
+
 #---------------------------------------------------------------------------
 # is_perl_global tests
 
@@ -145,6 +158,17 @@ for my $code (@bad) {
     $var  = $doc->find_first('Token::Symbol');
     isnt( is_perl_global($var), 1, 'Is not perl global var (PPI)' );
 
+}
+
+SKIP: {
+    if ( not @B::Keywords::Scalars ) {
+        skip 0, 'Need B::Keywords';
+    }
+
+    for my $global ( @B::Keywords::Scalars, @B::Keywords::Arrays, @B::Keywords::Hashes,
+                     @B::Keywords::FileHandles ) {
+        is( is_perl_global($global), 1, "$global is a perl global" );
+    }
 }
 
 #---------------------------------------------------------------------------
