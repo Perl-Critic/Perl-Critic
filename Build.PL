@@ -68,8 +68,10 @@ my $builder = Module::Build->new(
 	            },
 
   build_requires => {'Test::More'            => 0,
-                     'B::Keywords'           => 1.04,
                     },
+
+  build_recommends => {'B::Keywords'         => 1.04,
+                      },
 
   recommends     => {'File::HomeDir'         => 0,
                      'Perl::Tidy'            => 0,
