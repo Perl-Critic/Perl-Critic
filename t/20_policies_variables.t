@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 37;
+use Test::More tests => 38;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -173,7 +173,7 @@ $> = 3;
 END_PERL
 
 $policy = 'Variables::ProhibitPunctuationVars';
-is( pcritique($policy, \$code), 3, $policy);
+is( pcritique($policy, \$code), 3, $policy.' forbidden');
 
 #----------------------------------------------------------------
 
@@ -185,7 +185,7 @@ print $foo, $baz;
 END_PERL
 
 $policy = 'Variables::ProhibitPunctuationVars';
-is( pcritique($policy, \$code), 0, $policy);
+is( pcritique($policy, \$code), 0, $policy.' English');
 
 #----------------------------------------------------------------
 
@@ -200,7 +200,18 @@ my $line = $_;
 END_PERL
 
 $policy = 'Variables::ProhibitPunctuationVars';
-is( pcritique($policy, \$code), 0, $policy);
+is( pcritique($policy, \$code), 0, $policy.' permitted vars');
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+print $@;
+print $!;
+END_PERL
+
+%config = (allow => '$@ $!');
+$policy = 'Variables::ProhibitPunctuationVars';
+is( pcritique($policy, \$code, \%config), 0, $policy.' configuration');
 
 #----------------------------------------------------------------
 
