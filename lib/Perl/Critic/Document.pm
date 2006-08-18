@@ -76,6 +76,21 @@ sub find_first {
 
 #----------------------------------------------------------------------------
 
+sub find_any {
+    my ($self, $wanted) = @_;
+
+    # This method can only find elements by their class names.  For
+    # other types of searches, delegate to the PPI::Document
+    if ( ( ref $wanted ) || !$wanted || $wanted !~ m/ \A PPI:: /xms ) {
+        return $self->{_doc}->find_any($wanted, @_);
+    }
+
+    my $result = $self->find($wanted);
+    return $result ? 1 : $result;
+}
+
+#----------------------------------------------------------------------------
+
 sub _caching_finder {
 
     my $cache_ref = shift;  # These vars will persist for the life
@@ -164,9 +179,11 @@ Create a new instance referencing a PPI::Document instance.
 
 =item $self->find_first($wanted)
 
+=item $self->find_any($wanted)
+
 If C<$wanted> is a simple PPI class name, then the cache is employed.
-Otherwise we forward the call to the C<find()> or C<find_first()>
-method of the C<PPI::Document> instance.
+Otherwise we forward the call to the corresponding method of the
+C<PPI::Document> instance.
 
 =back
 
