@@ -33,20 +33,20 @@ can_ok('Perl::Critic::Policy::Variables::RequireNegativeIndices', 'violates');
 
 $code = <<'END_PERL';
 local $foo = $bar;
-local $/ = undef;
-local $| = 1;
 local ($foo, $bar) = ();
-local ($/) = undef;
-local ($RS, $>) = ();
 local ($foo, %SIG);
 END_PERL
 
 $policy = 'Variables::ProhibitLocalVars';
-is( pcritique($policy, \$code), 7, $policy);
+is( pcritique($policy, \$code), 3, $policy);
 
 #----------------------------------------------------------------
 
 $code = <<'END_PERL';
+local $/ = undef;
+local $| = 1;
+local ($/) = undef;
+local ($RS, $>) = ();
 local ($RS);
 local $INPUT_RECORD_SEPARATOR;
 local $PROGRAM_NAME;

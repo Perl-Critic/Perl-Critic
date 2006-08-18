@@ -53,8 +53,8 @@ sub violates {
     $sib[2] = $sib[1]->next_sibling();
     return if !$sib[2];
 
-    # First token must be a symbol or bareword;
-    return if !(    $sib[0]->isa('PPI::Token::Symbol')
+    # First token must be a scalar symbol or bareword;
+    return if !( ($sib[0]->isa('PPI::Token::Symbol') && $sib[0] =~ m/\A \$/mx)
                  || $sib[0]->isa('PPI::Token::Word') );
 
     # First token must not be a builtin function or control

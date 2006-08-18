@@ -136,7 +136,7 @@ for my $code (@bad) {
 
 SKIP: {
     if ( not USE_B_KEYWORDS ) {
-        skip 0, 'Need B::Keywords 1.03';
+        skip 'Need B::Keywords 1.03', 0;
     }
 
     for my $builtin ( @B::Keywords::Functions ) {
@@ -165,7 +165,7 @@ SKIP: {
 
 SKIP: {
     if ( not USE_B_KEYWORDS ) {
-        skip 0, 'Need B::Keywords';
+        skip 'Need B::Keywords', 0;
     }
 
     for my $global ( @B::Keywords::Scalars, @B::Keywords::Arrays, @B::Keywords::Hashes,

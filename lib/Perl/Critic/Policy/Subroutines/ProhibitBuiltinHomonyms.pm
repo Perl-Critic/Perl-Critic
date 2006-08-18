@@ -18,7 +18,7 @@ $VERSION = eval $VERSION;    ## no critic
 
 #---------------------------------------------------------------------------
 
-my %allow = ( import => 1 );
+my %allow = ( import => 1, AUTOLOAD => 1 );
 my $desc  = q{Subroutine name is a homonym for builtin function};
 my $expl  = [177];
 

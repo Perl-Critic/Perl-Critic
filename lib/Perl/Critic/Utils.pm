@@ -105,7 +105,7 @@ my %BUILTINS = map { $_ => 1 } @BUILTINS;
 #TODO: Should this include punctuations vars?
 
 our @GLOBALS =
-  ('(',')','\\',',','#', qw(
+  ('(',')',q{\\},q{,},q{#}, qw(
 !  " $ % & ' * + - .  / 0 : ; < = > ?  @ ACCUMULATOR ARG ARGV BASETIME
 CHILD_ERROR COMPILING DEBUGGING EFFECTIVE_GROUP_ID EFFECTIVE_USER_ID
 EGID ENV ERRNO EUID EVAL_ERROR EXCEPTIONS_BEING_CAUGHT EXECUTABLE_NAME
@@ -122,7 +122,8 @@ SUBSCRIPT_SEPARATOR SUBSEP SYSTEM_FD_MAX UID WARNING [ ] ^ ^A ^C
 ^CHILD_ERROR_NATIVE ^D ^E ^ENCODING ^F ^H ^I ^L ^M ^N ^O ^OPEN ^P ^R
 ^RE_DEBUG_FLAGS ^RE_TRIE_MAXBUF ^S ^T ^TAINT ^UNICODE ^UTF8LOCALE ^V
 ^W ^WARNING_BITS ^WIDE_SYSTEM_CALLS ^X _ ` a b | ~
-));
+),
+);
 
 #Hashify
 my %GLOBALS = map { $_ => 1 } @GLOBALS;

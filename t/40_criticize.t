@@ -25,7 +25,7 @@ if ($ENV{PERL_CRITIC_CACHE}) {
 
 eval {
     require Test::Perl::Critic;
-    my @exclude = qw(RcsKeywords TidyCode PodSections);
+    my @exclude = qw(RcsKeywords TidyCode PodSections RequireCarping);
     my $profile = {
         'CodeLayout::ProhibitHardTabs' => { allow_leading_tabs => 0 },
     };
