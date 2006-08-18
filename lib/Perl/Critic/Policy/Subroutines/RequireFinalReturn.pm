@@ -19,7 +19,7 @@ $VERSION = eval $VERSION;    ## no critic
 
 #---------------------------------------------------------------------------
 
-my $desc = q{Subroutine does not end with 'return'};
+my $desc = q{Subroutine does not end with "return"};
 my $expl = [ 197 ];
 
 #---------------------------------------------------------------------------

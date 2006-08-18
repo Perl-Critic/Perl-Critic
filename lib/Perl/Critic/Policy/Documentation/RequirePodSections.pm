@@ -77,7 +77,7 @@ sub violates {
     # Compare the required sections against those we found
     for my $required ( @required_sections ) {
         if ( ! exists $found_sections{$required} ) {
-            my $desc = qq{Missing '$required' section in POD};
+            my $desc = qq{Missing "$required" section in POD};
             push @violations, $self->violation( $desc, $expl, $doc );
         }
     }

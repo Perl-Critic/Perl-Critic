@@ -83,7 +83,7 @@ sub violates {
     }
 
     # If we get here, it must be postfix.
-    my $desc = qq{Postfix control '$elem' used};
+    my $desc = qq{Postfix control "$elem" used};
     my $expl = $pages_of{$elem};
     return $self->violation( $desc, $expl, $elem );
 }

@@ -19,7 +19,7 @@ $VERSION = eval $VERSION;    ## no critic
 #----------------------------------------------------------------------------
 
 my $expl = q{Must end with a recognizable true value};
-my $desc = q{Module does not end with '1;'};
+my $desc = q{Module does not end with "1;"};
 
 #----------------------------------------------------------------------------
 

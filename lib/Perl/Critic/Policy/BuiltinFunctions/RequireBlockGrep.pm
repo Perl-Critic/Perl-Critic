@@ -22,7 +22,7 @@ $VERSION = eval $VERSION;    ## no critic
 
 #----------------------------------------------------------------------------
 
-my $desc = q{Expression form of 'grep'};
+my $desc = q{Expression form of "grep"};
 my $expl = [ 169 ];
 
 #----------------------------------------------------------------------------

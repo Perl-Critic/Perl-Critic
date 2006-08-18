@@ -18,7 +18,7 @@ $VERSION = eval $VERSION;    ## no critic
 
 #----------------------------------------------------------------------------
 
-my $desc = q{Expression form of 'eval'};
+my $desc = q{Expression form of "eval"};
 my $expl = [ 161 ];
 
 #----------------------------------------------------------------------------

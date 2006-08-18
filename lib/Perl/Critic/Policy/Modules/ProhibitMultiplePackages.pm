@@ -18,7 +18,7 @@ $VERSION = eval $VERSION;    ## no critic
 
 #----------------------------------------------------------------------------
 
-my $desc   = q{Multiple 'package' declarations};
+my $desc   = q{Multiple "package" declarations};
 my $expl   = q{Limit to one per file};
 
 #----------------------------------------------------------------------------

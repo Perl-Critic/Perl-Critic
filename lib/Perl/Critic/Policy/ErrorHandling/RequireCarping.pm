@@ -44,7 +44,7 @@ sub violates {
 
     return if ! is_function_call($elem);
 
-    my $desc = qq{'$elem' used instead of '$alternative'};
+    my $desc = qq{"$elem" used instead of "$alternative"};
     return $self->violation( $desc, $expl, $elem );
 }
 

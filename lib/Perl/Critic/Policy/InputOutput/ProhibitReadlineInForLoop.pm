@@ -18,7 +18,7 @@ $VERSION = eval $VERSION;    ## no critic
 
 #----------------------------------------------------------------------------
 
-my $desc = q{Readline inside 'for' loop};
+my $desc = q{Readline inside "for" loop};
 my $expl = [ 211 ];
 
 #----------------------------------------------------------------------------

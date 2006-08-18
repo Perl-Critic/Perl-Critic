@@ -18,7 +18,7 @@ $VERSION = eval $VERSION; ## no critic
 
 #--------------------------------------------------------------------------
 
-my $desc = q{One-argument 'select' used};
+my $desc = q{One-argument "select" used};
 my $expl = [ 224 ];
 
 #--------------------------------------------------------------------------

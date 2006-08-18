@@ -18,7 +18,7 @@ $VERSION = eval $VERSION;    ## no critic
 
 #----------------------------------------------------------------------------
 
-my $desc = q{Regular expression without '/x' flag};
+my $desc = q{Regular expression without "/x" flag};
 my $expl = [ 236 ];
 
 #----------------------------------------------------------------------------

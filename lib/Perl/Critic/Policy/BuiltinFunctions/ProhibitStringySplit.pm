@@ -18,7 +18,7 @@ $VERSION = eval $VERSION;    ## no critic
 
 #----------------------------------------------------------------------------
 
-my $desc = q{String delimiter used with 'split'};
+my $desc = q{String delimiter used with "split"};
 my $expl = q{Express it as a regex instead};
 
 #----------------------------------------------------------------------------

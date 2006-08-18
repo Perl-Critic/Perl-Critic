@@ -19,7 +19,7 @@ $VERSION = eval $VERSION;    ## no critic
 
 #---------------------------------------------------------------------------
 
-my $desc = q{No 'VERSION' variable found};
+my $desc = q{No "VERSION" variable found};
 my $expl = [ 404 ];
 
 #---------------------------------------------------------------------------

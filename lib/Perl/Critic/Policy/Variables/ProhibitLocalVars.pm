@@ -19,7 +19,7 @@ $VERSION = eval $VERSION;    ## no critic
 #---------------------------------------------------------------------------
 
 my $package_rx = qr/::/mx;
-my $desc = q{Variable declared as 'local'};
+my $desc = q{Variable declared as "local"};
 my $expl = [ 77, 78, 79 ];
 
 #---------------------------------------------------------------------------

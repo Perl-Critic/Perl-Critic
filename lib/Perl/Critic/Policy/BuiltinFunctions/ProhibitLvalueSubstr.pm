@@ -18,7 +18,7 @@ $VERSION = eval $VERSION; ## no critic;
 
 #----------------------------------------------------------------------------
 
-my $desc = q{Lvalue form of 'substr' used};
+my $desc = q{Lvalue form of "substr" used};
 my $expl = [ 165 ];
 
 #----------------------------------------------------------------------------

@@ -19,7 +19,7 @@ $VERSION = eval $VERSION;    ## no critic
 #----------------------------------------------------------------------------
 
 my %postfix_words = ('if' => 1, 'unless' => 1, 'for' => 1);
-my $desc = q{File handle for 'print' is not braced};
+my $desc = q{File handle for "print" is not braced};
 my $expl = [ 211 ];
 
 #----------------------------------------------------------------------------

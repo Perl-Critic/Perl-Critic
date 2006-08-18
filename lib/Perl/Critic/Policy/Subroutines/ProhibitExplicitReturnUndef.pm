@@ -18,7 +18,7 @@ $VERSION = eval $VERSION;    ## no critic
 
 #---------------------------------------------------------------------------
 
-my $desc = q{'return' statement with explicit 'undef'};
+my $desc = q{"return" statement with explicit "undef"};
 my $expl = [ 199 ];
 
 #---------------------------------------------------------------------------

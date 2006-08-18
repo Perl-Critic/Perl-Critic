@@ -18,7 +18,7 @@ $VERSION = eval $VERSION; ## no critic;
 
 #------------------------------------------------------------------------
 
-my $desc = q{'select' used to emmulate 'sleep'};
+my $desc = q{"select" used to emulate "sleep"};
 my $expl = [168];
 
 #------------------------------------------------------------------------

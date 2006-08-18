@@ -18,7 +18,7 @@ $VERSION = eval $VERSION; ## no critic
 
 #--------------------------------------------------------------------------
 
-my $desc = q{@ISA used instead of 'use base'}; ##no critic; #for @ in string
+my $desc = q{@ISA used instead of "use base"}; ##no critic; #for @ in string
 my $expl = [ 360 ];
 
 #--------------------------------------------------------------------------

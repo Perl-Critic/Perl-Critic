@@ -18,7 +18,7 @@ $VERSION = eval $VERSION; ## no critic
 
 #--------------------------------------------------------------------------
 
-my $desc = q{One-argument 'bless' used};
+my $desc = q{One-argument "bless" used};
 my $expl = [ 365 ];
 
 #--------------------------------------------------------------------------

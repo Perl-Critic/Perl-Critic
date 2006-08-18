@@ -33,9 +33,9 @@ sub violates {
     my $child = $elem->schild(1);
     return if !$child;
 
-    if( $child->isa('PPI::Token::Quote') ) {
-        my $type = $elem->type();
-        my $desc = qq{'$type' statement with library name as string};
+    if ( $child->isa('PPI::Token::Quote') ) {
+        my $type = $elem->type;
+        my $desc = qq{"$type" statement with library name as string};
         return $self->violation( $desc, $expl, $elem );
     }
     return; #ok!

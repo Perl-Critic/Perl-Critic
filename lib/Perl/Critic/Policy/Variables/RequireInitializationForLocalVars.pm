@@ -18,7 +18,7 @@ $VERSION = eval $VERSION;    ## no critic
 
 #---------------------------------------------------------------------------
 
-my $desc = q{'local' variable not initialized};
+my $desc = q{"local" variable not initialized};
 my $expl = [ 78 ];
 
 #---------------------------------------------------------------------------

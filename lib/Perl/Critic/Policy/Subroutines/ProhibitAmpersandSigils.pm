@@ -18,7 +18,7 @@ $VERSION = eval $VERSION;    ## no critic
 
 #---------------------------------------------------------------------------
 
-my $desc  = q{Subroutine called with '&' sigil};
+my $desc  = q{Subroutine called with "&" sigil};
 my $expl  = [ 175 ];
 
 #---------------------------------------------------------------------------
