@@ -166,8 +166,10 @@ sub source {
          $self->{_source} = $stmnt->content() || $EMPTY;
      }
      #Return the first line of code only.
-     $self->{_source} =~ m{\A ( [^\n]* ) }mx;
-     return $1;
+     if ($self->{_source} =~ m{\A ( [^\n]* ) }mx) {
+         return $1;
+     }
+     return;
 }
 
 #-----------------------------------------------------------------------------

@@ -99,7 +99,9 @@ Write C<for(0..20)> instead of C<for($i=0; $i<=20; $i++)> [Severity 2]
 
 Don't write long "if-elsif-elsif-elsif-elsif...else" chains. [Severity 3]
 
-=head2 L<Perl::Critic::Policy::ControlStructures::ProhibitDeepNests> [Severity 2]
+=head2 L<Perl::Critic::Policy::ControlStructures::ProhibitDeepNests>
+
+[Severity 2]
 
 Don't write deeply nested loops and conditionals.
 
@@ -214,6 +216,10 @@ Write C<$my_variable = 42> instead of C<$MyVariable = 42> [Severity 1]
 =head2 L<Perl::Critic::Policy::References::ProhibitDoubleSigils>
 
 Write C<@{ $array_ref }> instead of C<@$array_ref> [Severity 2]
+
+=head2 L<Perl::Critic::Policy::RegularExpressions::ProhibitCaptureWithoutTest>
+
+Capture variable used outside conditional [Severity 3]
 
 =head2 L<Perl::Critic::Policy::RegularExpressions::RequireExtendedFormatting>
 

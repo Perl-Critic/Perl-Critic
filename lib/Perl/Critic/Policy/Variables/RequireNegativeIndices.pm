@@ -59,52 +59,69 @@ sub _is_bad_var_in_index {
     # return (varname, isref=0|1, isindex=0|1) if this could be a violation
     my ( $expr ) = @_;
 
-    my $name;
-    my $isref;
-    my $isindex;
-
     if ( $expr->[0]->isa('PPI::Token::ArrayIndex') ) {
-       # [$#arr]
-        my $arrindex = shift @{$expr};
-        return if $arrindex->content !~ m/\A \$\# (.*) \z /xms; # What else could it be???
-        $name = $1;
-        $isref = 0;
-        $isindex = 1;
+        # [$#arr]
+        return _arrayindex($expr);
     }
     elsif ( $expr->[0]->isa('PPI::Token::Cast') ) {
-        my $cast = shift @{$expr};
-        if ( $cast eq q{$#} || $cast eq q{@} ) { ## no critic(RequireInterpolationOfMetachars)
-            $isindex = $cast eq q{$#} ? 1 : 0;  ## no critic(RequireInterpolationOfMetachars)
-            $isref = 1;
-            # look for [$#{$arr} ...] or [$#$arr ...] or [@{$arr} ...] or [@$arr ...]
-            my $arrvar = shift @{$expr};
-            if ($arrvar->isa('PPI::Structure::Block')) {
-                # look for [$#{$arr} ...] or [@{$arr} ...]
-               my @blockchildren = $arrvar->schildren();
-               return if @blockchildren != 1;
-               return if !$blockchildren[0]->isa('PPI::Statement');
-               my @ggg = $blockchildren[0]->schildren;
-               return if @ggg != 1;
-               return if !$ggg[0]->isa('PPI::Token::Symbol');
-               return if $ggg[0] !~ m/\A \$ (.*) \z/xms;
-               $name = $1;
-            }
-            elsif ( $arrvar->isa('PPI::Token::Symbol') ) {
-                # look for [$#$arr ...] or [@$arr ...]
-                return if $arrvar !~ m/\A \$ (.*) \z/xms;
-                $name = $1;
-            }
-        }
+        # [$#{$arr} ...] or [$#$arr ...] or [@{$arr} ...] or [@$arr ...]
+        return _cast($expr);
     }
-    elsif ($expr->[0]->isa('PPI::Token::Symbol')) {  # [@arr ...]
-        my $arrvar = shift @{$expr};
-        return if $arrvar !~ m/\A \@ (.*) \z/xms;
-        $name = $1;
-        $isref = 0;
-        $isindex = 0;
+    elsif ($expr->[0]->isa('PPI::Token::Symbol')) {
+        # [@arr ...]
+        return _symbol($expr);
     }
 
-    return $name, $isref, $isindex;
+    return;
+}
+
+sub _arrayindex {
+    # return (varname, isref=0|1, isindex=0|1) if this could be a violation
+    my ( $expr ) = @_;
+    my $arrindex = shift @{$expr};
+    if ($arrindex->content =~ m/\A \$\# (.*) \z /xms) { # What else could it be???
+       return $1, 0, 1;
+    }
+    return;
+}
+
+sub _cast {
+    # return (varname, isref=0|1, isindex=0|1) if this could be a violation
+    my ( $expr ) = @_;
+    my $cast = shift @{$expr};
+    if ( $cast eq q{$#} || $cast eq q{@} ) { ## no critic(RequireInterpolationOfMetachars)
+        my $isindex = $cast eq q{$#} ? 1 : 0;  ## no critic(RequireInterpolationOfMetachars)
+        my $arrvar = shift @{$expr};
+        if ($arrvar->isa('PPI::Structure::Block')) {
+            # look for [$#{$arr} ...] or [@{$arr} ...]
+            my @blockchildren = $arrvar->schildren();
+            return if @blockchildren != 1;
+            return if !$blockchildren[0]->isa('PPI::Statement');
+            my @ggg = $blockchildren[0]->schildren;
+            return if @ggg != 1;
+            return if !$ggg[0]->isa('PPI::Token::Symbol');
+            if ($ggg[0] =~ m/\A \$ (.*) \z/xms) {
+                return $1, 1, $isindex;
+            }
+        }
+        elsif ( $arrvar->isa('PPI::Token::Symbol') ) {
+           # look for [$#$arr ...] or [@$arr ...]
+           if ($arrvar =~ m/\A \$ (.*) \z/xms) {
+              return $1, 1, $isindex;
+           }
+        }
+    }
+    return;
+}
+
+sub _symbol {
+    # return (varname, isref=0|1, isindex=0|1) if this could be a violation
+    my ( $expr ) = @_;
+    my $arrvar = shift @{$expr};
+    if ($arrvar =~ m/\A \@ (.*) \z/xms) {
+       return $1, 0, 0;
+    }
+    return;
 }
 
 sub _is_minus_number  # return true if @expr looks like "- n"

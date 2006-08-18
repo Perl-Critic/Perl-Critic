@@ -54,6 +54,7 @@
 [NamingConventions::ProhibitMixedCaseSubs]
 [NamingConventions::ProhibitMixedCaseVars]
 [References::ProhibitDoubleSigils]
+[RegularExpressions::ProhibitCaptureWithoutTest]
 [RegularExpressions::RequireExtendedFormatting]
 [RegularExpressions::RequireLineBoundaryMatching]
 [Subroutines::ProhibitAmpersandSigils]

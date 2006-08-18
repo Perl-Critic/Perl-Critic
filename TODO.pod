@@ -160,10 +160,6 @@ This will be avoided for ASCII-only code
 Look for LHS of regexp or use of C<$1>, C<$2>, ... before next
 regexp
 
-=item * RegularExpressions::ProhibitCaptureWithoutTest (p253)
-
-C<$1>, C<$2>, ... must be inside conditional with no preceding regexp
-
 =item * RegularExpressions::ProhibitComplexRegexps (p261)
 
 If regexp is longer than N characters/lines, require it be split

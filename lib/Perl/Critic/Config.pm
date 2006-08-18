@@ -361,6 +361,7 @@ sub native_policies {
       Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseSubs
       Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars
       Perl::Critic::Policy::References::ProhibitDoubleSigils
+      Perl::Critic::Policy::RegularExpressions::ProhibitCaptureWithoutTest
       Perl::Critic::Policy::RegularExpressions::RequireExtendedFormatting
       Perl::Critic::Policy::RegularExpressions::RequireLineBoundaryMatching
       Perl::Critic::Policy::Subroutines::ProhibitAmpersandSigils

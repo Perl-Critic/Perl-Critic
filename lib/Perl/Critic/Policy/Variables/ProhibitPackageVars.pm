@@ -68,8 +68,11 @@ sub _is_vars_pragma {
     # pass arguments to pragmas (e.g. "$foo" or qw($foo) ) we just use
     # a regex to match things that look like variables names.
 
-    return $elem =~ m{ [@\$%&] ( [\w+] ) }mx
-        && $1    =~ m{ [a-z] }mx;
+    if ($elem =~ m{ [@\$%&] ( [\w+] ) }mx) {
+        my $varname = $1;
+        return 1 if $varname =~ m{ [a-z] }mx;
+    }
+    return;
 }
 
 sub _all_upcase {

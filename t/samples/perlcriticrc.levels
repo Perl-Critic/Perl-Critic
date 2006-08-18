@@ -277,3 +277,6 @@ severity = 1
 
 [BuiltinFunctions::ProhibitStringySplit]
 severity = 1
+
+[RegularExpressions::ProhibitCaptureWithoutTest]
+severity = 1
