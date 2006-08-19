@@ -4,161 +4,122 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.6	//
+AUTOLOAD	lib/Perl/Critic/Document.pm	/^sub AUTOLOAD {  ## no critic(ProhibitAutoloading)$/;"	s
 AUTOLOAD	t/20_policies_classhierarchies.t	/^sub AUTOLOAD {$/;"	s
 AUTOLOAD	t/20_policies_classhierarchies.t	/^sub AUTOLOAD {}$/;"	s
-BAR	t/20_policies_controlstructures.t	/^    BAR:$/;"	l
 BAR	t/20_policies_valuesandexpressions.t	/^use constant BAR => 24;$/;"	c
-BAZ	t/20_policies_controlstructures.t	/^    BAZ:$/;"	l
-ELEMENT	lib/Perl/Critic.pm	/^          ELEMENT:$/;"	l
-FOO	t/20_policies_controlstructures.t	/^    FOO:$/;"	l
-FOO	t/20_policies_controlstructures.t	/^FOO: print $baz;$/;"	l
+FOO	t/03_pragmas.t	/^package FOO;$/;"	p
 FOO	t/20_policies_valuesandexpressions.t	/^use constant FOO => 42;$/;"	c
 FOO_bar	t/20_policies_namingconventions.t	/^sub FOO_bar {}$/;"	s
 FOObar	t/20_policies_namingconventions.t	/^sub FOObar {}$/;"	s
 FooBar	t/20_policies_namingconventions.t	/^sub FooBar {}$/;"	s
 Foo_Bar	t/20_policies_namingconventions.t	/^sub Foo_Bar {}$/;"	s
-Getopt	bin/perlcritic	/^    Getopt::Long::Configure('no_ignore_case');$/;"	l
-JAPH	t/20_policies_controlstructures.t	/^    JAPH:$/;"	l
 MY	Makefile.PL	/^sub MY::postamble {$/;"	s
-Module	lib/Perl/Critic/Config.pm	/^        Module::Pluggable->import( search_path => $NAMESPACE,$/;"	l
-Other	t/20_policies_subroutines.t	/^Other::Package->_bar();$/;"	l
-Other	t/20_policies_subroutines.t	/^Other::Package->_bar;$/;"	l
-Other	t/20_policies_subroutines.t	/^Other::Package::_foo();$/;"	l
-Other	t/20_policies_subroutines.t	/^Other::Package::_foo;$/;"	l
-PPI	lib/Perl/Critic/Policy/InputOutput/ProhibitBacktickOperators.pm	/^               PPI::Token::QuoteLike::Command );$/;"	l
-PPI	lib/Perl/Critic/Policy/RegularExpressions/RequireExtendedFormatting.pm	/^                           PPI::Token::Regexp::Substitute) }$/;"	l
-PPI	lib/Perl/Critic/Policy/RegularExpressions/RequireLineBoundaryMatching.pm	/^                           PPI::Token::Regexp::Substitute) }$/;"	l
-PPI	lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitEscapedCharacters.pm	/^              PPI::Token::Quote::Interpolate);$/;"	l
-PPI	lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitInterpolationOfLiterals.pm	/^              PPI::Token::Quote::Interpolate);$/;"	l
-PPI	lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitMixedBooleanOperators.pm	/^    PPI::Statement::Block$/;"	l
-PPI	lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitMixedBooleanOperators.pm	/^    PPI::Statement::Compound$/;"	l
-PPI	lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitMixedBooleanOperators.pm	/^    PPI::Statement::Data$/;"	l
-PPI	lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitMixedBooleanOperators.pm	/^    PPI::Statement::End$/;"	l
-PPI	lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitMixedBooleanOperators.pm	/^    PPI::Statement::Include$/;"	l
-PPI	lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitMixedBooleanOperators.pm	/^    PPI::Statement::Package$/;"	l
-PPI	lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitMixedBooleanOperators.pm	/^    PPI::Statement::Scheduled$/;"	l
-PPI	lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitMixedBooleanOperators.pm	/^    PPI::Statement::Sub$/;"	l
-PPI	lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitMixedBooleanOperators.pm	/^    PPI::Statement::Variable$/;"	l
-PPI	lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitNoisyQuotes.pm	/^              PPI::Token::Quote::Single);$/;"	l
-PPI	lib/Perl/Critic/Policy/Variables/ProhibitMatchVars.pm	/^               PPI::Statement::Include );$/;"	l
-PPI	lib/Perl/Critic/Policy/Variables/ProhibitPackageVars.pm	/^               PPI::Statement::Include );$/;"	l
-PPI	lib/Perl/Critic/Policy/Variables/ProhibitPackageVars.pm	/^               PPI::Statement::Variable$/;"	l
-PRAGMA	lib/Perl/Critic.pm	/^  PRAGMA:$/;"	l
-Perl	bin/perlcritic	/^    Perl::Critic::Config->import( -namespace => $namespace );$/;"	l
-Perl	bin/perlcritic	/^    Perl::Critic::Violation::set_format( $fmt );$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::BuiltinFunctions::ProhibitLvalueSubstr$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::BuiltinFunctions::ProhibitSleepViaSelect$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::BuiltinFunctions::ProhibitStringyEval$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalCan$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalIsa$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::BuiltinFunctions::RequireBlockMap$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::BuiltinFunctions::RequireGlobFunction$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::BuiltinFunctions::RequireSimpleSortBlock$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::ClassHierarchies::ProhibitAutoloading$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::ClassHierarchies::ProhibitExplicitISA$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::ClassHierarchies::ProhibitOneArgBless$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::CodeLayout::ProhibitHardTabs$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::CodeLayout::ProhibitParensWithBuiltins$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::CodeLayout::ProhibitQuotedWordLists$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::CodeLayout::RequireTidyCode$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::CodeLayout::RequireTrailingCommas$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::ControlStructures::ProhibitCStyleForLoops$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::ControlStructures::ProhibitCascadingIfElse$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::ControlStructures::ProhibitPostfixControls$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::ControlStructures::ProhibitUnlessBlocks$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::ControlStructures::ProhibitUnreachableCode$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::ControlStructures::ProhibitUntilBlocks$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::Documentation::RequirePodAtEnd$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::Documentation::RequirePodSections$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::InputOutput::ProhibitBacktickOperators$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::InputOutput::ProhibitBarewordFileHandles$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::InputOutput::ProhibitOneArgSelect$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::InputOutput::ProhibitReadlineInForLoop$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::InputOutput::ProhibitTwoArgOpen$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::InputOutput::RequireBracedFileHandleWithPrint$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::Miscellanea::ProhibitFormats$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::Miscellanea::ProhibitTies$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::Miscellanea::RequireRcsKeywords$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::Modules::ProhibitAutomaticExportation$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::Modules::ProhibitEvilModules$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::Modules::ProhibitMultiplePackages$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::Modules::RequireBarewordIncludes$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::Modules::RequireEndWithOne$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::Modules::RequireExplicitPackage$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::Modules::RequireVersionVar$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::NamingConventions::ProhibitAmbiguousNames$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseSubs$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::References::ProhibitDoubleSigils$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::RegularExpressions::RequireExtendedFormatting$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::RegularExpressions::RequireLineBoundaryMatching$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::Subroutines::ProhibitAmpersandSigils$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::Subroutines::ProhibitBuiltinHomonyms$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::Subroutines::ProhibitExcessComplexity$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::Subroutines::ProhibitExplicitReturnUndef$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::Subroutines::ProhibitSubroutinePrototypes$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::Subroutines::ProtectPrivateSubs$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::Subroutines::RequireFinalReturn$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::TestingAndDebugging::ProhibitNoStrict$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::TestingAndDebugging::ProhibitNoWarnings$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::TestingAndDebugging::RequireUseStrict$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::TestingAndDebugging::RequireUseWarnings$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::ValuesAndExpressions::ProhibitConstantPragma$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::ValuesAndExpressions::ProhibitEmptyQuotes$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::ValuesAndExpressions::ProhibitEscapedCharacters$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::ValuesAndExpressions::ProhibitInterpolationOfLiterals$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::ValuesAndExpressions::ProhibitLeadingZeros$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::ValuesAndExpressions::ProhibitMixedBooleanOperators$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::ValuesAndExpressions::ProhibitNoisyQuotes$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::ValuesAndExpressions::ProhibitVersionStrings$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::ValuesAndExpressions::RequireInterpolationOfMetachars$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::ValuesAndExpressions::RequireNumberSeparators$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::ValuesAndExpressions::RequireQuotedHeredocTerminator$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::ValuesAndExpressions::RequireUpperCaseHeredocTerminator$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::Variables::ProhibitConditionalDeclarations$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::Variables::ProhibitLocalVars$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::Variables::ProhibitMatchVars$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::Variables::ProhibitPackageVars$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::Variables::ProhibitPunctuationVars$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::Variables::ProtectPrivateVars$/;"	l
-Perl	lib/Perl/Critic/Config.pm	/^      Perl::Critic::Policy::Variables::RequireInitializationForLocalVars$/;"	l
-Perl	lib/Perl/Critic/Policy/CodeLayout/RequireTidyCode.pm	/^	Perl::Tidy::perltidy($/;"	l
-Perl	t/00_modules.t	/^Perl::Critic->import( qw(critique) );$/;"	l
-Perl	t/01_config.t	/^    Perl::Critic::Config->import( -namespace => 'Bogus::Namespace' );$/;"	l
-Perl	t/01_config.t	/^Perl::Critic::TestUtils::block_perlcriticrc();$/;"	l
-Perl	t/03_pragmas.t	/^Perl::Critic::TestUtils::block_perlcriticrc();$/;"	l
-Perl	t/05_utils.t	/^Perl::Critic::TestUtils::block_perlcriticrc();$/;"	l
-Perl	t/20_policies_builtinfunctions.t	/^Perl::Critic::TestUtils::block_perlcriticrc();$/;"	l
-Perl	t/20_policies_classhierarchies.t	/^Perl::Critic::TestUtils::block_perlcriticrc();$/;"	l
-Perl	t/20_policies_codelayout.t	/^Perl::Critic::TestUtils::block_perlcriticrc();$/;"	l
-Perl	t/20_policies_controlstructures.t	/^Perl::Critic::TestUtils::block_perlcriticrc();$/;"	l
-Perl	t/20_policies_documentation.t	/^Perl::Critic::TestUtils::block_perlcriticrc();$/;"	l
-Perl	t/20_policies_inputoutput.t	/^Perl::Critic::TestUtils::block_perlcriticrc();$/;"	l
-Perl	t/20_policies_miscellanea.t	/^Perl::Critic::TestUtils::block_perlcriticrc();$/;"	l
-Perl	t/20_policies_modules.t	/^Perl::Critic::TestUtils::block_perlcriticrc();$/;"	l
-Perl	t/20_policies_namingconventions.t	/^Perl::Critic::TestUtils::block_perlcriticrc();$/;"	l
-Perl	t/20_policies_references.t	/^Perl::Critic::TestUtils::block_perlcriticrc();$/;"	l
-Perl	t/20_policies_regularexpressions.t	/^Perl::Critic::TestUtils::block_perlcriticrc();$/;"	l
-Perl	t/20_policies_subroutines.t	/^Perl::Critic::TestUtils::block_perlcriticrc();$/;"	l
-Perl	t/20_policies_testinganddebugging.t	/^Perl::Critic::TestUtils::block_perlcriticrc();$/;"	l
-Perl	t/20_policies_valuesandexpressions.t	/^Perl::Critic::TestUtils::block_perlcriticrc();$/;"	l
-Perl	t/20_policies_variables.t	/^Perl::Critic::TestUtils::block_perlcriticrc();$/;"	l
-SIB	lib/Perl/Critic.pm	/^      SIB:$/;"	l
-SKIP	t/01_config.t	/^SKIP:$/;"	l
-SKIP	t/06_violation.t	/^SKIP: {$/;"	l
-TODO	t/20_policies_namingconventions.t	/^TODO: {$/;"	l
-TODO	t/20_policies_subroutines.t	/^TODO:{$/;"	l
-TYPE	lib/Perl/Critic.pm	/^      TYPE:$/;"	l
-Test	t/40_criticize.t	/^    Test::Perl::Critic->import( %config );$/;"	l
-UNIVERSAL	t/20_policies_builtinfunctions.t	/^UNIVERSAL::can($foo, $funcname);$/;"	l
-UNIVERSAL	t/20_policies_builtinfunctions.t	/^UNIVERSAL::isa($foo, $pkg);$/;"	l
-VIOLATION	lib/Perl/Critic.pm	/^              VIOLATION:$/;"	l
+My::Self::_private	t/20_policies_subroutines.t	/^package My::Self::_private;$/;"	p
+Perl::Critic	lib/Perl/Critic.pm	/^package Perl::Critic;$/;"	p
+Perl::Critic::Config	lib/Perl/Critic/Config.pm	/^package Perl::Critic::Config;$/;"	p
+Perl::Critic::Document	lib/Perl/Critic/Document.pm	/^package Perl::Critic::Document;$/;"	p
+Perl::Critic::Policy	lib/Perl/Critic/Policy.pm	/^package Perl::Critic::Policy;$/;"	p
+Perl::Critic::Policy::BuiltinFunctions::ProhibitLvalueSubstr	lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitLvalueSubstr.pm	/^package Perl::Critic::Policy::BuiltinFunctions::ProhibitLvalueSubstr;$/;"	p
+Perl::Critic::Policy::BuiltinFunctions::ProhibitSleepViaSelect	lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitSleepViaSelect.pm	/^package Perl::Critic::Policy::BuiltinFunctions::ProhibitSleepViaSelect;$/;"	p
+Perl::Critic::Policy::BuiltinFunctions::ProhibitStringyEval	lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitStringyEval.pm	/^package Perl::Critic::Policy::BuiltinFunctions::ProhibitStringyEval;$/;"	p
+Perl::Critic::Policy::BuiltinFunctions::ProhibitStringySplit	lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitStringySplit.pm	/^package Perl::Critic::Policy::BuiltinFunctions::ProhibitStringySplit;$/;"	p
+Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalCan	lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitUniversalCan.pm	/^package Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalCan;$/;"	p
+Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalIsa	lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitUniversalIsa.pm	/^package Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalIsa;$/;"	p
+Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep	lib/Perl/Critic/Policy/BuiltinFunctions/RequireBlockGrep.pm	/^package Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep;$/;"	p
+Perl::Critic::Policy::BuiltinFunctions::RequireBlockMap	lib/Perl/Critic/Policy/BuiltinFunctions/RequireBlockMap.pm	/^package Perl::Critic::Policy::BuiltinFunctions::RequireBlockMap;$/;"	p
+Perl::Critic::Policy::BuiltinFunctions::RequireGlobFunction	lib/Perl/Critic/Policy/BuiltinFunctions/RequireGlobFunction.pm	/^package Perl::Critic::Policy::BuiltinFunctions::RequireGlobFunction;$/;"	p
+Perl::Critic::Policy::BuiltinFunctions::RequireSimpleSortBlock	lib/Perl/Critic/Policy/BuiltinFunctions/RequireSimpleSortBlock.pm	/^package Perl::Critic::Policy::BuiltinFunctions::RequireSimpleSortBlock;$/;"	p
+Perl::Critic::Policy::ClassHierarchies::ProhibitAutoloading	lib/Perl/Critic/Policy/ClassHierarchies/ProhibitAutoloading.pm	/^package Perl::Critic::Policy::ClassHierarchies::ProhibitAutoloading;$/;"	p
+Perl::Critic::Policy::ClassHierarchies::ProhibitExplicitISA	lib/Perl/Critic/Policy/ClassHierarchies/ProhibitExplicitISA.pm	/^package Perl::Critic::Policy::ClassHierarchies::ProhibitExplicitISA;$/;"	p
+Perl::Critic::Policy::ClassHierarchies::ProhibitOneArgBless	lib/Perl/Critic/Policy/ClassHierarchies/ProhibitOneArgBless.pm	/^package Perl::Critic::Policy::ClassHierarchies::ProhibitOneArgBless;$/;"	p
+Perl::Critic::Policy::CodeLayout::ProhibitHardTabs	lib/Perl/Critic/Policy/CodeLayout/ProhibitHardTabs.pm	/^package Perl::Critic::Policy::CodeLayout::ProhibitHardTabs;$/;"	p
+Perl::Critic::Policy::CodeLayout::ProhibitParensWithBuiltins	lib/Perl/Critic/Policy/CodeLayout/ProhibitParensWithBuiltins.pm	/^package Perl::Critic::Policy::CodeLayout::ProhibitParensWithBuiltins;$/;"	p
+Perl::Critic::Policy::CodeLayout::ProhibitQuotedWordLists	lib/Perl/Critic/Policy/CodeLayout/ProhibitQuotedWordLists.pm	/^package Perl::Critic::Policy::CodeLayout::ProhibitQuotedWordLists;$/;"	p
+Perl::Critic::Policy::CodeLayout::RequireTidyCode	lib/Perl/Critic/Policy/CodeLayout/RequireTidyCode.pm	/^package Perl::Critic::Policy::CodeLayout::RequireTidyCode;$/;"	p
+Perl::Critic::Policy::CodeLayout::RequireTrailingCommas	lib/Perl/Critic/Policy/CodeLayout/RequireTrailingCommas.pm	/^package Perl::Critic::Policy::CodeLayout::RequireTrailingCommas;$/;"	p
+Perl::Critic::Policy::ControlStructures::ProhibitCStyleForLoops	lib/Perl/Critic/Policy/ControlStructures/ProhibitCStyleForLoops.pm	/^package Perl::Critic::Policy::ControlStructures::ProhibitCStyleForLoops;$/;"	p
+Perl::Critic::Policy::ControlStructures::ProhibitCascadingIfElse	lib/Perl/Critic/Policy/ControlStructures/ProhibitCascadingIfElse.pm	/^package Perl::Critic::Policy::ControlStructures::ProhibitCascadingIfElse;$/;"	p
+Perl::Critic::Policy::ControlStructures::ProhibitDeepNests	lib/Perl/Critic/Policy/ControlStructures/ProhibitDeepNests.pm	/^package Perl::Critic::Policy::ControlStructures::ProhibitDeepNests;$/;"	p
+Perl::Critic::Policy::ControlStructures::ProhibitPostfixControls	lib/Perl/Critic/Policy/ControlStructures/ProhibitPostfixControls.pm	/^package Perl::Critic::Policy::ControlStructures::ProhibitPostfixControls;$/;"	p
+Perl::Critic::Policy::ControlStructures::ProhibitUnlessBlocks	lib/Perl/Critic/Policy/ControlStructures/ProhibitUnlessBlocks.pm	/^package Perl::Critic::Policy::ControlStructures::ProhibitUnlessBlocks;$/;"	p
+Perl::Critic::Policy::ControlStructures::ProhibitUnreachableCode	lib/Perl/Critic/Policy/ControlStructures/ProhibitUnreachableCode.pm	/^package Perl::Critic::Policy::ControlStructures::ProhibitUnreachableCode;$/;"	p
+Perl::Critic::Policy::ControlStructures::ProhibitUntilBlocks	lib/Perl/Critic/Policy/ControlStructures/ProhibitUntilBlocks.pm	/^package Perl::Critic::Policy::ControlStructures::ProhibitUntilBlocks;$/;"	p
+Perl::Critic::Policy::Documentation::RequirePodAtEnd	lib/Perl/Critic/Policy/Documentation/RequirePodAtEnd.pm	/^package Perl::Critic::Policy::Documentation::RequirePodAtEnd;$/;"	p
+Perl::Critic::Policy::Documentation::RequirePodSections	lib/Perl/Critic/Policy/Documentation/RequirePodSections.pm	/^package Perl::Critic::Policy::Documentation::RequirePodSections;$/;"	p
+Perl::Critic::Policy::ErrorHandling::RequireCarping	lib/Perl/Critic/Policy/ErrorHandling/RequireCarping.pm	/^package Perl::Critic::Policy::ErrorHandling::RequireCarping;$/;"	p
+Perl::Critic::Policy::InputOutput::ProhibitBacktickOperators	lib/Perl/Critic/Policy/InputOutput/ProhibitBacktickOperators.pm	/^package Perl::Critic::Policy::InputOutput::ProhibitBacktickOperators;$/;"	p
+Perl::Critic::Policy::InputOutput::ProhibitBarewordFileHandles	lib/Perl/Critic/Policy/InputOutput/ProhibitBarewordFileHandles.pm	/^package Perl::Critic::Policy::InputOutput::ProhibitBarewordFileHandles;$/;"	p
+Perl::Critic::Policy::InputOutput::ProhibitInteractiveTest	lib/Perl/Critic/Policy/InputOutput/ProhibitInteractiveTest.pm	/^package Perl::Critic::Policy::InputOutput::ProhibitInteractiveTest;$/;"	p
+Perl::Critic::Policy::InputOutput::ProhibitOneArgSelect	lib/Perl/Critic/Policy/InputOutput/ProhibitOneArgSelect.pm	/^package Perl::Critic::Policy::InputOutput::ProhibitOneArgSelect;$/;"	p
+Perl::Critic::Policy::InputOutput::ProhibitReadlineInForLoop	lib/Perl/Critic/Policy/InputOutput/ProhibitReadlineInForLoop.pm	/^package Perl::Critic::Policy::InputOutput::ProhibitReadlineInForLoop;$/;"	p
+Perl::Critic::Policy::InputOutput::ProhibitTwoArgOpen	lib/Perl/Critic/Policy/InputOutput/ProhibitTwoArgOpen.pm	/^package Perl::Critic::Policy::InputOutput::ProhibitTwoArgOpen;$/;"	p
+Perl::Critic::Policy::InputOutput::RequireBracedFileHandleWithPrint	lib/Perl/Critic/Policy/InputOutput/RequireBracedFileHandleWithPrint.pm	/^package Perl::Critic::Policy::InputOutput::RequireBracedFileHandleWithPrint;$/;"	p
+Perl::Critic::Policy::Miscellanea::ProhibitFormats	lib/Perl/Critic/Policy/Miscellanea/ProhibitFormats.pm	/^package Perl::Critic::Policy::Miscellanea::ProhibitFormats;$/;"	p
+Perl::Critic::Policy::Miscellanea::ProhibitTies	lib/Perl/Critic/Policy/Miscellanea/ProhibitTies.pm	/^package Perl::Critic::Policy::Miscellanea::ProhibitTies;$/;"	p
+Perl::Critic::Policy::Miscellanea::RequireRcsKeywords	lib/Perl/Critic/Policy/Miscellanea/RequireRcsKeywords.pm	/^package Perl::Critic::Policy::Miscellanea::RequireRcsKeywords;$/;"	p
+Perl::Critic::Policy::Modules::ProhibitAutomaticExportation	lib/Perl/Critic/Policy/Modules/ProhibitAutomaticExportation.pm	/^package Perl::Critic::Policy::Modules::ProhibitAutomaticExportation;$/;"	p
+Perl::Critic::Policy::Modules::ProhibitEvilModules	lib/Perl/Critic/Policy/Modules/ProhibitEvilModules.pm	/^package Perl::Critic::Policy::Modules::ProhibitEvilModules;$/;"	p
+Perl::Critic::Policy::Modules::ProhibitMultiplePackages	lib/Perl/Critic/Policy/Modules/ProhibitMultiplePackages.pm	/^package Perl::Critic::Policy::Modules::ProhibitMultiplePackages;$/;"	p
+Perl::Critic::Policy::Modules::RequireBarewordIncludes	lib/Perl/Critic/Policy/Modules/RequireBarewordIncludes.pm	/^package Perl::Critic::Policy::Modules::RequireBarewordIncludes;$/;"	p
+Perl::Critic::Policy::Modules::RequireEndWithOne	lib/Perl/Critic/Policy/Modules/RequireEndWithOne.pm	/^package Perl::Critic::Policy::Modules::RequireEndWithOne;$/;"	p
+Perl::Critic::Policy::Modules::RequireExplicitPackage	lib/Perl/Critic/Policy/Modules/RequireExplicitPackage.pm	/^package Perl::Critic::Policy::Modules::RequireExplicitPackage;$/;"	p
+Perl::Critic::Policy::Modules::RequireVersionVar	lib/Perl/Critic/Policy/Modules/RequireVersionVar.pm	/^package Perl::Critic::Policy::Modules::RequireVersionVar;$/;"	p
+Perl::Critic::Policy::NamingConventions::ProhibitAmbiguousNames	lib/Perl/Critic/Policy/NamingConventions/ProhibitAmbiguousNames.pm	/^package Perl::Critic::Policy::NamingConventions::ProhibitAmbiguousNames;$/;"	p
+Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseSubs	lib/Perl/Critic/Policy/NamingConventions/ProhibitMixedCaseSubs.pm	/^package Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseSubs;$/;"	p
+Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars	lib/Perl/Critic/Policy/NamingConventions/ProhibitMixedCaseVars.pm	/^package Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars;$/;"	p
+Perl::Critic::Policy::References::ProhibitDoubleSigils	lib/Perl/Critic/Policy/References/ProhibitDoubleSigils.pm	/^package Perl::Critic::Policy::References::ProhibitDoubleSigils;$/;"	p
+Perl::Critic::Policy::RegularExpressions::ProhibitCaptureWithoutTest	lib/Perl/Critic/Policy/RegularExpressions/ProhibitCaptureWithoutTest.pm	/^package Perl::Critic::Policy::RegularExpressions::ProhibitCaptureWithoutTest;$/;"	p
+Perl::Critic::Policy::RegularExpressions::RequireExtendedFormatting	lib/Perl/Critic/Policy/RegularExpressions/RequireExtendedFormatting.pm	/^package Perl::Critic::Policy::RegularExpressions::RequireExtendedFormatting;$/;"	p
+Perl::Critic::Policy::RegularExpressions::RequireLineBoundaryMatching	lib/Perl/Critic/Policy/RegularExpressions/RequireLineBoundaryMatching.pm	/^package Perl::Critic::Policy::RegularExpressions::RequireLineBoundaryMatching;$/;"	p
+Perl::Critic::Policy::Subroutines::ProhibitAmpersandSigils	lib/Perl/Critic/Policy/Subroutines/ProhibitAmpersandSigils.pm	/^package Perl::Critic::Policy::Subroutines::ProhibitAmpersandSigils;$/;"	p
+Perl::Critic::Policy::Subroutines::ProhibitBuiltinHomonyms	lib/Perl/Critic/Policy/Subroutines/ProhibitBuiltinHomonyms.pm	/^package Perl::Critic::Policy::Subroutines::ProhibitBuiltinHomonyms;$/;"	p
+Perl::Critic::Policy::Subroutines::ProhibitExcessComplexity	lib/Perl/Critic/Policy/Subroutines/ProhibitExcessComplexity.pm	/^package Perl::Critic::Policy::Subroutines::ProhibitExcessComplexity;$/;"	p
+Perl::Critic::Policy::Subroutines::ProhibitExplicitReturnUndef	lib/Perl/Critic/Policy/Subroutines/ProhibitExplicitReturnUndef.pm	/^package Perl::Critic::Policy::Subroutines::ProhibitExplicitReturnUndef;$/;"	p
+Perl::Critic::Policy::Subroutines::ProhibitSubroutinePrototypes	lib/Perl/Critic/Policy/Subroutines/ProhibitSubroutinePrototypes.pm	/^package Perl::Critic::Policy::Subroutines::ProhibitSubroutinePrototypes;$/;"	p
+Perl::Critic::Policy::Subroutines::ProtectPrivateSubs	lib/Perl/Critic/Policy/Subroutines/ProtectPrivateSubs.pm	/^package Perl::Critic::Policy::Subroutines::ProtectPrivateSubs;$/;"	p
+Perl::Critic::Policy::Subroutines::RequireFinalReturn	lib/Perl/Critic/Policy/Subroutines/RequireFinalReturn.pm	/^package Perl::Critic::Policy::Subroutines::RequireFinalReturn;$/;"	p
+Perl::Critic::Policy::Test	t/tlib/Perl/Critic/Policy/Test.pm	/^package Perl::Critic::Policy::Test;$/;"	p
+Perl::Critic::Policy::TestingAndDebugging::ProhibitNoStrict	lib/Perl/Critic/Policy/TestingAndDebugging/ProhibitNoStrict.pm	/^package Perl::Critic::Policy::TestingAndDebugging::ProhibitNoStrict;$/;"	p
+Perl::Critic::Policy::TestingAndDebugging::ProhibitNoWarnings	lib/Perl/Critic/Policy/TestingAndDebugging/ProhibitNoWarnings.pm	/^package Perl::Critic::Policy::TestingAndDebugging::ProhibitNoWarnings;$/;"	p
+Perl::Critic::Policy::TestingAndDebugging::RequireUseStrict	lib/Perl/Critic/Policy/TestingAndDebugging/RequireUseStrict.pm	/^package Perl::Critic::Policy::TestingAndDebugging::RequireUseStrict;$/;"	p
+Perl::Critic::Policy::TestingAndDebugging::RequireUseWarnings	lib/Perl/Critic/Policy/TestingAndDebugging/RequireUseWarnings.pm	/^package Perl::Critic::Policy::TestingAndDebugging::RequireUseWarnings;$/;"	p
+Perl::Critic::Policy::ValuesAndExpressions::ProhibitConstantPragma	lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitConstantPragma.pm	/^package Perl::Critic::Policy::ValuesAndExpressions::ProhibitConstantPragma;$/;"	p
+Perl::Critic::Policy::ValuesAndExpressions::ProhibitEmptyQuotes	lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitEmptyQuotes.pm	/^package Perl::Critic::Policy::ValuesAndExpressions::ProhibitEmptyQuotes;$/;"	p
+Perl::Critic::Policy::ValuesAndExpressions::ProhibitEscapedCharacters	lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitEscapedCharacters.pm	/^package Perl::Critic::Policy::ValuesAndExpressions::ProhibitEscapedCharacters;$/;"	p
+Perl::Critic::Policy::ValuesAndExpressions::ProhibitInterpolationOfLiterals	lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitInterpolationOfLiterals.pm	/^package Perl::Critic::Policy::ValuesAndExpressions::ProhibitInterpolationOfLiterals;$/;"	p
+Perl::Critic::Policy::ValuesAndExpressions::ProhibitLeadingZeros	lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitLeadingZeros.pm	/^package Perl::Critic::Policy::ValuesAndExpressions::ProhibitLeadingZeros;$/;"	p
+Perl::Critic::Policy::ValuesAndExpressions::ProhibitMixedBooleanOperators	lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitMixedBooleanOperators.pm	/^package Perl::Critic::Policy::ValuesAndExpressions::ProhibitMixedBooleanOperators;$/;"	p
+Perl::Critic::Policy::ValuesAndExpressions::ProhibitNoisyQuotes	lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitNoisyQuotes.pm	/^package Perl::Critic::Policy::ValuesAndExpressions::ProhibitNoisyQuotes;$/;"	p
+Perl::Critic::Policy::ValuesAndExpressions::ProhibitVersionStrings	lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitVersionStrings.pm	/^package Perl::Critic::Policy::ValuesAndExpressions::ProhibitVersionStrings;$/;"	p
+Perl::Critic::Policy::ValuesAndExpressions::RequireInterpolationOfMetachars	lib/Perl/Critic/Policy/ValuesAndExpressions/RequireInterpolationOfMetachars.pm	/^package Perl::Critic::Policy::ValuesAndExpressions::RequireInterpolationOfMetachars;$/;"	p
+Perl::Critic::Policy::ValuesAndExpressions::RequireNumberSeparators	lib/Perl/Critic/Policy/ValuesAndExpressions/RequireNumberSeparators.pm	/^package Perl::Critic::Policy::ValuesAndExpressions::RequireNumberSeparators;$/;"	p
+Perl::Critic::Policy::ValuesAndExpressions::RequireQuotedHeredocTerminator	lib/Perl/Critic/Policy/ValuesAndExpressions/RequireQuotedHeredocTerminator.pm	/^package Perl::Critic::Policy::ValuesAndExpressions::RequireQuotedHeredocTerminator;$/;"	p
+Perl::Critic::Policy::ValuesAndExpressions::RequireUpperCaseHeredocTerminator	lib/Perl/Critic/Policy/ValuesAndExpressions/RequireUpperCaseHeredocTerminator.pm	/^package Perl::Critic::Policy::ValuesAndExpressions::RequireUpperCaseHeredocTerminator;$/;"	p
+Perl::Critic::Policy::Variables::ProhibitConditionalDeclarations	lib/Perl/Critic/Policy/Variables/ProhibitConditionalDeclarations.pm	/^package Perl::Critic::Policy::Variables::ProhibitConditionalDeclarations;$/;"	p
+Perl::Critic::Policy::Variables::ProhibitLocalVars	lib/Perl/Critic/Policy/Variables/ProhibitLocalVars.pm	/^package Perl::Critic::Policy::Variables::ProhibitLocalVars;$/;"	p
+Perl::Critic::Policy::Variables::ProhibitMatchVars	lib/Perl/Critic/Policy/Variables/ProhibitMatchVars.pm	/^package Perl::Critic::Policy::Variables::ProhibitMatchVars;$/;"	p
+Perl::Critic::Policy::Variables::ProhibitPackageVars	lib/Perl/Critic/Policy/Variables/ProhibitPackageVars.pm	/^package Perl::Critic::Policy::Variables::ProhibitPackageVars;$/;"	p
+Perl::Critic::Policy::Variables::ProhibitPunctuationVars	lib/Perl/Critic/Policy/Variables/ProhibitPunctuationVars.pm	/^package Perl::Critic::Policy::Variables::ProhibitPunctuationVars;$/;"	p
+Perl::Critic::Policy::Variables::ProtectPrivateVars	lib/Perl/Critic/Policy/Variables/ProtectPrivateVars.pm	/^package Perl::Critic::Policy::Variables::ProtectPrivateVars;$/;"	p
+Perl::Critic::Policy::Variables::RequireInitializationForLocalVars	lib/Perl/Critic/Policy/Variables/RequireInitializationForLocalVars.pm	/^package Perl::Critic::Policy::Variables::RequireInitializationForLocalVars;$/;"	p
+Perl::Critic::Policy::Variables::RequireLexicalLoopIterators	lib/Perl/Critic/Policy/Variables/RequireLexicalLoopIterators.pm	/^package Perl::Critic::Policy::Variables::RequireLexicalLoopIterators;$/;"	p
+Perl::Critic::Policy::Variables::RequireNegativeIndices	lib/Perl/Critic/Policy/Variables/RequireNegativeIndices.pm	/^package Perl::Critic::Policy::Variables::RequireNegativeIndices;$/;"	p
+Perl::Critic::TestUtils	lib/Perl/Critic/TestUtils.pm	/^package Perl::Critic::TestUtils;$/;"	p
+Perl::Critic::Utils	lib/Perl/Critic/Utils.pm	/^package Perl::Critic::Utils;$/;"	p
+Perl::Critic::Violation	lib/Perl/Critic/Violation.pm	/^package Perl::Critic::Violation;$/;"	p
+PolicyTest	t/02_policy.t	/^package PolicyTest;$/;"	p
+USE_B_KEYWORDS	t/05_utils.t	/^use constant USE_B_KEYWORDS => eval 'use B::Keywords 1.04; 1';$/;"	c
+ViolationTest	t/tlib/ViolationTest.pm	/^package ViolationTest;$/;"	p
+ViolationTest2	t/tlib/ViolationTest2.pm	/^package ViolationTest2;$/;"	p
 _abstract_method	lib/Perl/Critic/Policy.pm	/^sub _abstract_method {$/;"	s
 _all_global_vars	lib/Perl/Critic/Policy/Variables/ProhibitLocalVars.pm	/^sub _all_global_vars {$/;"	s
 _all_upcase	lib/Perl/Critic/Policy/Variables/ProhibitPackageVars.pm	/^sub _all_upcase {$/;"	s
+_arrayindex	lib/Perl/Critic/Policy/Variables/RequireNegativeIndices.pm	/^sub _arrayindex {$/;"	s
 _block_has_return	lib/Perl/Critic/Policy/Subroutines/RequireFinalReturn.pm	/^sub _block_has_return {$/;"	s
 _block_is_empty	lib/Perl/Critic/Policy/Subroutines/RequireFinalReturn.pm	/^sub _block_is_empty {$/;"	s
+_caching_finder	lib/Perl/Critic/Document.pm	/^sub _caching_finder {$/;"	s
+_cast	lib/Perl/Critic/Policy/Variables/RequireNegativeIndices.pm	/^sub _cast {$/;"	s
 _compare	lib/Perl/Critic/Violation.pm	/^sub _compare { return "$_[0]" cmp "$_[1]" }$/;"	s
 _count_elsifs	lib/Perl/Critic/Policy/ControlStructures/ProhibitCascadingIfElse.pm	/^sub _count_elsifs {$/;"	s
 _dispatch_special_requests	bin/perlcritic	/^sub _dispatch_special_requests {$/;"	s
@@ -172,25 +133,28 @@ _has_interpolation	lib/Perl/Critic/Policy/ValuesAndExpressions/RequireInterpolat
 _has_mixed_case_vars	lib/Perl/Critic/Policy/NamingConventions/ProhibitMixedCaseVars.pm	/^sub _has_mixed_case_vars {$/;"	s
 _high_boolean	lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitMixedBooleanOperators.pm	/^sub _high_boolean {$/;"	s
 _interpolate	bin/perlcritic	/^sub _interpolate {$/;"	s
+_is_array_name	lib/Perl/Critic/Policy/Variables/RequireNegativeIndices.pm	/^sub _is_array_name {  # return true if name and isref matches$/;"	s
 _is_backup	lib/Perl/Critic/Utils.pm	/^sub _is_backup {$/;"	s
+_is_bad_index	lib/Perl/Critic/Policy/Variables/RequireNegativeIndices.pm	/^sub _is_bad_index {$/;"	s
+_is_bad_var_in_index	lib/Perl/Critic/Policy/Variables/RequireNegativeIndices.pm	/^sub _is_bad_var_in_index {$/;"	s
 _is_code	lib/Perl/Critic/Policy/Modules/RequireEndWithOne.pm	/^sub _is_code {$/;"	s
-_is_commalike	lib/Perl/Critic/Policy/CodeLayout/ProhibitParensWithBuiltins.pm	/^sub _is_commalike {$/;"	s
 _is_compound_return	lib/Perl/Critic/Policy/Subroutines/RequireFinalReturn.pm	/^sub _is_compound_return {$/;"	s
 _is_conditional	lib/Perl/Critic/Policy/Variables/ProhibitConditionalDeclarations.pm	/^sub _is_conditional {$/;"	s
 _is_cstyle	lib/Perl/Critic/Policy/ControlStructures/ProhibitCStyleForLoops.pm	/^sub _is_cstyle {$/;"	s
+_is_dereferencer	lib/Perl/Critic/Policy/Variables/RequireNegativeIndices.pm	/^sub _is_dereferencer { # must return 0 or 1, not undef$/;"	s
 _is_explicit_return	lib/Perl/Critic/Policy/Subroutines/RequireFinalReturn.pm	/^sub _is_explicit_return {$/;"	s
 _is_forbidden_var	lib/Perl/Critic/Policy/Variables/ProhibitMatchVars.pm	/^sub _is_forbidden_var {$/;"	s
 _is_greedy	lib/Perl/Critic/Policy/CodeLayout/ProhibitParensWithBuiltins.pm	/^sub _is_greedy {$/;"	s
+_is_in_conditional	lib/Perl/Critic/Policy/RegularExpressions/ProhibitCaptureWithoutTest.pm	/^sub _is_in_conditional {$/;"	s
 _is_initialized	lib/Perl/Critic/Policy/Variables/RequireInitializationForLocalVars.pm	/^sub _is_initialized {$/;"	s
 _is_literal	lib/Perl/Critic/Policy/CodeLayout/ProhibitQuotedWordLists.pm	/^sub _is_literal {$/;"	s
+_is_minus_number	lib/Perl/Critic/Policy/Variables/RequireNegativeIndices.pm	/^sub _is_minus_number  # return true if @expr looks like "- n"$/;"	s
 _is_named_unary	lib/Perl/Critic/Policy/CodeLayout/ProhibitParensWithBuiltins.pm	/^sub _is_named_unary {$/;"	s
 _is_other_pkg_private_function	lib/Perl/Critic/Policy/Subroutines/ProtectPrivateSubs.pm	/^sub _is_other_pkg_private_function {$/;"	s
 _is_other_pkg_private_method	lib/Perl/Critic/Policy/Subroutines/ProtectPrivateSubs.pm	/^sub _is_other_pkg_private_method {$/;"	s
 _is_our_var	lib/Perl/Critic/Policy/Variables/ProhibitPackageVars.pm	/^sub _is_our_var {$/;"	s
-_is_package	lib/Perl/Critic/Policy/Modules/RequireExplicitPackage.pm	/^sub _is_package {$/;"	s
 _is_package_var	lib/Perl/Critic/Policy/Variables/ProhibitPackageVars.pm	/^sub _is_package_var {$/;"	s
 _is_perl	lib/Perl/Critic/Utils.pm	/^sub _is_perl {$/;"	s
-_is_script	lib/Perl/Critic/Policy/Modules/RequireExplicitPackage.pm	/^sub _is_script {$/;"	s
 _is_use_english	lib/Perl/Critic/Policy/Variables/ProhibitMatchVars.pm	/^sub _is_use_english {$/;"	s
 _is_use_strict	lib/Perl/Critic/Policy/TestingAndDebugging/RequireUseStrict.pm	/^sub _is_use_strict {$/;"	s
 _is_use_warnings	lib/Perl/Critic/Policy/TestingAndDebugging/RequireUseWarnings.pm	/^sub _is_use_warnings {$/;"	s
@@ -198,7 +162,6 @@ _is_valid_policy	lib/Perl/Critic/Config.pm	/^sub _is_valid_policy {$/;"	s
 _is_vars_pragma	lib/Perl/Critic/Policy/Variables/ProhibitPackageVars.pm	/^sub _is_vars_pragma {$/;"	s
 _isnt_include_or_package	lib/Perl/Critic/Policy/TestingAndDebugging/RequireUseStrict.pm	/^sub _isnt_include_or_package {$/;"	s
 _isnt_include_or_package	lib/Perl/Critic/Policy/TestingAndDebugging/RequireUseWarnings.pm	/^sub _isnt_include_or_package {$/;"	s
-_isnt_package	lib/Perl/Critic/Policy/Modules/RequireExplicitPackage.pm	/^sub _isnt_package {$/;"	s
 _load_from_array	lib/Perl/Critic/Config.pm	/^sub _load_from_array {$/;"	s
 _load_from_file	lib/Perl/Critic/Config.pm	/^sub _load_from_file {$/;"	s
 _load_from_hash	lib/Perl/Critic/Config.pm	/^sub _load_from_hash {$/;"	s
@@ -217,6 +180,7 @@ _parse_nocritic_import	lib/Perl/Critic.pm	/^sub _parse_nocritic_import {$/;"	s
 _screen_user_profile	lib/Perl/Critic/Config.pm	/^sub _screen_user_profile {$/;"	s
 _short_name	lib/Perl/Critic/Config.pm	/^sub _short_name {$/;"	s
 _split_nodes_on_comma	lib/Perl/Critic/Utils.pm	/^sub _split_nodes_on_comma {$/;"	s
+_symbol	lib/Perl/Critic/Policy/Variables/RequireNegativeIndices.pm	/^sub _symbol {$/;"	s
 _to_number	lib/Perl/Critic/Policy/ValuesAndExpressions/RequireNumberSeparators.pm	/^sub _to_number {$/;"	s
 _unfix_shebang	lib/Perl/Critic.pm	/^sub _unfix_shebang {$/;"	s
 _uses_exporter	lib/Perl/Critic/Policy/Modules/ProhibitAutomaticExportation.pm	/^sub _uses_exporter {$/;"	s
@@ -233,6 +197,7 @@ applies_to	lib/Perl/Critic/Policy.pm	/^sub applies_to       { return qw(PPI::Ele
 applies_to	lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitLvalueSubstr.pm	/^sub applies_to { return 'PPI::Token::Word' }$/;"	s
 applies_to	lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitSleepViaSelect.pm	/^sub applies_to { return 'PPI::Token::Word' }$/;"	s
 applies_to	lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitStringyEval.pm	/^sub applies_to { return 'PPI::Token::Word' }$/;"	s
+applies_to	lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitStringySplit.pm	/^sub applies_to { return 'PPI::Token::Word' }$/;"	s
 applies_to	lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitUniversalCan.pm	/^sub applies_to { return 'PPI::Token::Word' }$/;"	s
 applies_to	lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitUniversalIsa.pm	/^sub applies_to { return 'PPI::Token::Word' }$/;"	s
 applies_to	lib/Perl/Critic/Policy/BuiltinFunctions/RequireBlockGrep.pm	/^sub applies_to { return 'PPI::Token::Word' }$/;"	s
@@ -249,21 +214,24 @@ applies_to	lib/Perl/Critic/Policy/CodeLayout/RequireTidyCode.pm	/^sub applies_to
 applies_to	lib/Perl/Critic/Policy/CodeLayout/RequireTrailingCommas.pm	/^sub applies_to { return 'PPI::Structure::List' }$/;"	s
 applies_to	lib/Perl/Critic/Policy/ControlStructures/ProhibitCStyleForLoops.pm	/^sub applies_to { return 'PPI::Structure::ForLoop' }$/;"	s
 applies_to	lib/Perl/Critic/Policy/ControlStructures/ProhibitCascadingIfElse.pm	/^sub applies_to { return 'PPI::Statement::Compound' }$/;"	s
+applies_to	lib/Perl/Critic/Policy/ControlStructures/ProhibitDeepNests.pm	/^sub applies_to { return 'PPI::Statement::Compound' }$/;"	s
 applies_to	lib/Perl/Critic/Policy/ControlStructures/ProhibitPostfixControls.pm	/^sub applies_to { return 'PPI::Token::Word' }$/;"	s
 applies_to	lib/Perl/Critic/Policy/ControlStructures/ProhibitUnlessBlocks.pm	/^sub applies_to { return 'PPI::Statement::Compound' }$/;"	s
 applies_to	lib/Perl/Critic/Policy/ControlStructures/ProhibitUnreachableCode.pm	/^sub applies_to { return 'PPI::Token::Word' }$/;"	s
 applies_to	lib/Perl/Critic/Policy/ControlStructures/ProhibitUntilBlocks.pm	/^sub applies_to { return 'PPI::Statement' }$/;"	s
 applies_to	lib/Perl/Critic/Policy/Documentation/RequirePodAtEnd.pm	/^sub applies_to { return 'PPI::Document' }$/;"	s
 applies_to	lib/Perl/Critic/Policy/Documentation/RequirePodSections.pm	/^sub applies_to { return 'PPI::Document' }$/;"	s
+applies_to	lib/Perl/Critic/Policy/ErrorHandling/RequireCarping.pm	/^sub applies_to { return 'PPI::Token::Word' }$/;"	s
 applies_to	lib/Perl/Critic/Policy/InputOutput/ProhibitBacktickOperators.pm	/^sub applies_to {$/;"	s
 applies_to	lib/Perl/Critic/Policy/InputOutput/ProhibitBarewordFileHandles.pm	/^sub applies_to { return 'PPI::Token::Word' }$/;"	s
+applies_to	lib/Perl/Critic/Policy/InputOutput/ProhibitInteractiveTest.pm	/^sub applies_to { return 'PPI::Token::Operator' }$/;"	s
 applies_to	lib/Perl/Critic/Policy/InputOutput/ProhibitOneArgSelect.pm	/^sub applies_to { return 'PPI::Token::Word' }$/;"	s
 applies_to	lib/Perl/Critic/Policy/InputOutput/ProhibitReadlineInForLoop.pm	/^sub applies_to { return qw( PPI::Structure::ForLoop) }$/;"	s
 applies_to	lib/Perl/Critic/Policy/InputOutput/ProhibitTwoArgOpen.pm	/^sub applies_to { return 'PPI::Token::Word' }$/;"	s
 applies_to	lib/Perl/Critic/Policy/InputOutput/RequireBracedFileHandleWithPrint.pm	/^sub applies_to { return 'PPI::Token::Word' }$/;"	s
 applies_to	lib/Perl/Critic/Policy/Miscellanea/ProhibitFormats.pm	/^sub applies_to { return 'PPI::Token::Word' }$/;"	s
 applies_to	lib/Perl/Critic/Policy/Miscellanea/ProhibitTies.pm	/^sub applies_to { return 'PPI::Token::Word' }$/;"	s
-applies_to	lib/Perl/Critic/Policy/Miscellanea/RequireRcsKeywords.pm	/^sub applies_to { return 'PPI::Document' }$/;"	s
+applies_to	lib/Perl/Critic/Policy/Miscellanea/RequireRcsKeywords.pm	/^sub applies_to       { return 'PPI::Document' }$/;"	s
 applies_to	lib/Perl/Critic/Policy/Modules/ProhibitAutomaticExportation.pm	/^sub applies_to { return 'PPI::Document' }$/;"	s
 applies_to	lib/Perl/Critic/Policy/Modules/ProhibitEvilModules.pm	/^sub applies_to { return 'PPI::Statement::Include' }$/;"	s
 applies_to	lib/Perl/Critic/Policy/Modules/ProhibitMultiplePackages.pm	/^sub applies_to { return 'PPI::Document' }$/;"	s
@@ -275,6 +243,7 @@ applies_to	lib/Perl/Critic/Policy/NamingConventions/ProhibitAmbiguousNames.pm	/^
 applies_to	lib/Perl/Critic/Policy/NamingConventions/ProhibitMixedCaseSubs.pm	/^sub applies_to { return 'PPI::Statement::Sub' }$/;"	s
 applies_to	lib/Perl/Critic/Policy/NamingConventions/ProhibitMixedCaseVars.pm	/^sub applies_to { return 'PPI::Statement::Variable' }$/;"	s
 applies_to	lib/Perl/Critic/Policy/References/ProhibitDoubleSigils.pm	/^sub applies_to { return 'PPI::Token::Cast' }$/;"	s
+applies_to	lib/Perl/Critic/Policy/RegularExpressions/ProhibitCaptureWithoutTest.pm	/^sub applies_to { return 'PPI::Token::Magic' }$/;"	s
 applies_to	lib/Perl/Critic/Policy/RegularExpressions/RequireExtendedFormatting.pm	/^sub applies_to { return qw(PPI::Token::Regexp::Match$/;"	s
 applies_to	lib/Perl/Critic/Policy/RegularExpressions/RequireLineBoundaryMatching.pm	/^sub applies_to { return qw(PPI::Token::Regexp::Match$/;"	s
 applies_to	lib/Perl/Critic/Policy/Subroutines/ProhibitAmpersandSigils.pm	/^sub applies_to { return 'PPI::Token::Symbol' }$/;"	s
@@ -282,7 +251,7 @@ applies_to	lib/Perl/Critic/Policy/Subroutines/ProhibitBuiltinHomonyms.pm	/^sub a
 applies_to	lib/Perl/Critic/Policy/Subroutines/ProhibitExcessComplexity.pm	/^sub applies_to { return 'PPI::Statement::Sub' }$/;"	s
 applies_to	lib/Perl/Critic/Policy/Subroutines/ProhibitExplicitReturnUndef.pm	/^sub applies_to { return 'PPI::Token::Word' }$/;"	s
 applies_to	lib/Perl/Critic/Policy/Subroutines/ProhibitSubroutinePrototypes.pm	/^sub applies_to { return 'PPI::Statement::Sub' }$/;"	s
-applies_to	lib/Perl/Critic/Policy/Subroutines/ProtectPrivateSubs.pm	/^sub applies_to { return 'PPI::Token::Word' }$/;"	s
+applies_to	lib/Perl/Critic/Policy/Subroutines/ProtectPrivateSubs.pm	/^sub applies_to       { return 'PPI::Token::Word' }$/;"	s
 applies_to	lib/Perl/Critic/Policy/Subroutines/RequireFinalReturn.pm	/^sub applies_to { return 'PPI::Statement::Sub' }$/;"	s
 applies_to	lib/Perl/Critic/Policy/TestingAndDebugging/ProhibitNoStrict.pm	/^sub applies_to { return 'PPI::Statement::Include' }$/;"	s
 applies_to	lib/Perl/Critic/Policy/TestingAndDebugging/ProhibitNoWarnings.pm	/^sub applies_to { return 'PPI::Statement::Include' }$/;"	s
@@ -307,8 +276,13 @@ applies_to	lib/Perl/Critic/Policy/Variables/ProhibitPackageVars.pm	/^sub applies
 applies_to	lib/Perl/Critic/Policy/Variables/ProhibitPunctuationVars.pm	/^sub applies_to { return 'PPI::Token::Magic' }$/;"	s
 applies_to	lib/Perl/Critic/Policy/Variables/ProtectPrivateVars.pm	/^sub applies_to { return 'PPI::Token::Symbol' }$/;"	s
 applies_to	lib/Perl/Critic/Policy/Variables/RequireInitializationForLocalVars.pm	/^sub applies_to { return 'PPI::Statement::Variable' }$/;"	s
+applies_to	lib/Perl/Critic/Policy/Variables/RequireLexicalLoopIterators.pm	/^sub applies_to { return 'PPI::Statement::Compound' }$/;"	s
+applies_to	lib/Perl/Critic/Policy/Variables/RequireNegativeIndices.pm	/^sub applies_to { return 'PPI::Structure::Subscript' }$/;"	s
+applies_to	t/tlib/Perl/Critic/Policy/Test.pm	/^sub applies_to { return 'PPI::Token::Word' }$/;"	s
 autoload	t/20_policies_classhierarchies.t	/^sub autoload {}$/;"	s
 b	t/20_policies_controlstructures.t	/^sub b {$/;"	s
+bar	t/20_policies_modules.t	/^package bar;$/;"	p
+bar	t/20_policies_subroutines.t	/^sub bar { last; }$/;"	s
 bar	t/20_policies_subroutines.t	/^sub bar;$/;"	s
 block_perlcriticrc	lib/Perl/Critic/TestUtils.pm	/^sub block_perlcriticrc {$/;"	s
 c	t/20_policies_controlstructures.t	/^sub c {$/;"	s
@@ -325,6 +299,7 @@ default_severity	lib/Perl/Critic/Policy.pm	/^sub default_severity { return $SEVE
 default_severity	lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitLvalueSubstr.pm	/^sub default_severity { return $SEVERITY_MEDIUM }$/;"	s
 default_severity	lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitSleepViaSelect.pm	/^sub default_severity { return $SEVERITY_HIGHEST  }$/;"	s
 default_severity	lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitStringyEval.pm	/^sub default_severity { return $SEVERITY_HIGHEST }$/;"	s
+default_severity	lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitStringySplit.pm	/^sub default_severity { return $SEVERITY_LOW }$/;"	s
 default_severity	lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitUniversalCan.pm	/^sub default_severity { return $SEVERITY_MEDIUM }$/;"	s
 default_severity	lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitUniversalIsa.pm	/^sub default_severity { return $SEVERITY_MEDIUM }$/;"	s
 default_severity	lib/Perl/Critic/Policy/BuiltinFunctions/RequireBlockGrep.pm	/^sub default_severity { return $SEVERITY_HIGH }$/;"	s
@@ -341,14 +316,17 @@ default_severity	lib/Perl/Critic/Policy/CodeLayout/RequireTidyCode.pm	/^sub defa
 default_severity	lib/Perl/Critic/Policy/CodeLayout/RequireTrailingCommas.pm	/^sub default_severity { return $SEVERITY_LOWEST }$/;"	s
 default_severity	lib/Perl/Critic/Policy/ControlStructures/ProhibitCStyleForLoops.pm	/^sub default_severity { return $SEVERITY_LOW }$/;"	s
 default_severity	lib/Perl/Critic/Policy/ControlStructures/ProhibitCascadingIfElse.pm	/^sub default_severity { return $SEVERITY_MEDIUM }$/;"	s
+default_severity	lib/Perl/Critic/Policy/ControlStructures/ProhibitDeepNests.pm	/^sub default_severity { return $SEVERITY_MEDIUM }$/;"	s
 default_severity	lib/Perl/Critic/Policy/ControlStructures/ProhibitPostfixControls.pm	/^sub default_severity   { return $SEVERITY_LOW }$/;"	s
 default_severity	lib/Perl/Critic/Policy/ControlStructures/ProhibitUnlessBlocks.pm	/^sub default_severity { return $SEVERITY_LOW }$/;"	s
 default_severity	lib/Perl/Critic/Policy/ControlStructures/ProhibitUnreachableCode.pm	/^sub default_severity { return $SEVERITY_HIGH }$/;"	s
 default_severity	lib/Perl/Critic/Policy/ControlStructures/ProhibitUntilBlocks.pm	/^sub default_severity { return $SEVERITY_LOW }$/;"	s
 default_severity	lib/Perl/Critic/Policy/Documentation/RequirePodAtEnd.pm	/^sub default_severity { return $SEVERITY_LOWEST }$/;"	s
 default_severity	lib/Perl/Critic/Policy/Documentation/RequirePodSections.pm	/^sub default_severity { return $SEVERITY_LOW }$/;"	s
+default_severity	lib/Perl/Critic/Policy/ErrorHandling/RequireCarping.pm	/^sub default_severity { return $SEVERITY_MEDIUM }$/;"	s
 default_severity	lib/Perl/Critic/Policy/InputOutput/ProhibitBacktickOperators.pm	/^sub default_severity   { return $SEVERITY_MEDIUM }$/;"	s
 default_severity	lib/Perl/Critic/Policy/InputOutput/ProhibitBarewordFileHandles.pm	/^sub default_severity { return $SEVERITY_HIGHEST }$/;"	s
+default_severity	lib/Perl/Critic/Policy/InputOutput/ProhibitInteractiveTest.pm	/^sub default_severity { return $SEVERITY_HIGHEST }$/;"	s
 default_severity	lib/Perl/Critic/Policy/InputOutput/ProhibitOneArgSelect.pm	/^sub default_severity { return $SEVERITY_HIGH }$/;"	s
 default_severity	lib/Perl/Critic/Policy/InputOutput/ProhibitReadlineInForLoop.pm	/^sub default_severity   { return $SEVERITY_HIGH }$/;"	s
 default_severity	lib/Perl/Critic/Policy/InputOutput/ProhibitTwoArgOpen.pm	/^sub default_severity { return $SEVERITY_HIGHEST }$/;"	s
@@ -367,6 +345,7 @@ default_severity	lib/Perl/Critic/Policy/NamingConventions/ProhibitAmbiguousNames
 default_severity	lib/Perl/Critic/Policy/NamingConventions/ProhibitMixedCaseSubs.pm	/^sub default_severity { return $SEVERITY_LOWEST }$/;"	s
 default_severity	lib/Perl/Critic/Policy/NamingConventions/ProhibitMixedCaseVars.pm	/^sub default_severity { return $SEVERITY_LOWEST }$/;"	s
 default_severity	lib/Perl/Critic/Policy/References/ProhibitDoubleSigils.pm	/^sub default_severity { return $SEVERITY_LOW }$/;"	s
+default_severity	lib/Perl/Critic/Policy/RegularExpressions/ProhibitCaptureWithoutTest.pm	/^sub default_severity { return $SEVERITY_MEDIUM }$/;"	s
 default_severity	lib/Perl/Critic/Policy/RegularExpressions/RequireExtendedFormatting.pm	/^sub default_severity { return $SEVERITY_MEDIUM }$/;"	s
 default_severity	lib/Perl/Critic/Policy/RegularExpressions/RequireLineBoundaryMatching.pm	/^sub default_severity { return $SEVERITY_LOW }$/;"	s
 default_severity	lib/Perl/Critic/Policy/Subroutines/ProhibitAmpersandSigils.pm	/^sub default_severity  { return $SEVERITY_LOW }$/;"	s
@@ -399,25 +378,39 @@ default_severity	lib/Perl/Critic/Policy/Variables/ProhibitPackageVars.pm	/^sub d
 default_severity	lib/Perl/Critic/Policy/Variables/ProhibitPunctuationVars.pm	/^sub default_severity { return $SEVERITY_LOW }$/;"	s
 default_severity	lib/Perl/Critic/Policy/Variables/ProtectPrivateVars.pm	/^sub default_severity { return $SEVERITY_MEDIUM }$/;"	s
 default_severity	lib/Perl/Critic/Policy/Variables/RequireInitializationForLocalVars.pm	/^sub default_severity { return $SEVERITY_MEDIUM }$/;"	s
+default_severity	lib/Perl/Critic/Policy/Variables/RequireLexicalLoopIterators.pm	/^sub default_severity { return $SEVERITY_HIGHEST }$/;"	s
+default_severity	lib/Perl/Critic/Policy/Variables/RequireNegativeIndices.pm	/^sub default_severity { return $SEVERITY_HIGH }$/;"	s
+default_severity	t/tlib/Perl/Critic/Policy/Test.pm	/^sub default_severity { return $SEVERITY_LOWEST }$/;"	s
 description	lib/Perl/Critic/Violation.pm	/^sub description {$/;"	s
 diagnostics	lib/Perl/Critic/Violation.pm	/^sub diagnostics {$/;"	s
-e	t/20_policies_controlstructures.t	/^    sub e {}$/;"	s
 eval	t/20_policies_subroutines.t	/^sub eval {}$/;"	s
 eval2	t/20_policies_subroutines.t	/^sub eval2 {}$/;"	s
 explanation	lib/Perl/Critic/Violation.pm	/^sub explanation {$/;"	s
+find	lib/Perl/Critic/Document.pm	/^sub find {$/;"	s
+find_any	lib/Perl/Critic/Document.pm	/^sub find_any {$/;"	s
+find_first	lib/Perl/Critic/Document.pm	/^sub find_first {$/;"	s
 find_keywords	lib/Perl/Critic/Utils.pm	/^sub find_keywords {$/;"	s
 find_profile_path	lib/Perl/Critic/Config.pm	/^sub find_profile_path {$/;"	s
 foo	t/03_pragmas.t	/^sub foo {$/;"	s
+foo	t/20_policies_modules.t	/^package foo;$/;"	p
 foo	t/20_policies_subroutines.t	/^sub foo { 'Club sandwich'; }$/;"	s
 foo	t/20_policies_subroutines.t	/^sub foo { 1 ? return : 2 ? return : return; }$/;"	s
-foo	t/20_policies_subroutines.t	/^sub foo { if (1) { $foo = 'bar'; } else { return; } }$/;"	s
-foo	t/20_policies_subroutines.t	/^sub foo { if (1) { return; } else { return; } }$/;"	s
-foo	t/20_policies_subroutines.t	/^sub foo { if (1) { return; } elsif (2) { return; } else { return; } }$/;"	s
+foo	t/20_policies_subroutines.t	/^sub foo { 1 }$/;"	s
+foo	t/20_policies_subroutines.t	/^sub foo { goto &bar; }$/;"	s
+foo	t/20_policies_subroutines.t	/^sub foo { if ($bool) { $foo = 'bar'; } else { return; } }$/;"	s
+foo	t/20_policies_subroutines.t	/^sub foo { if ($bool) { return; } else { return; } }$/;"	s
+foo	t/20_policies_subroutines.t	/^sub foo { if ($bool) { return; } elsif ($bool2) { return; } else { return; } }$/;"	s
+foo	t/20_policies_subroutines.t	/^sub foo { if ($bool) { } else { } }$/;"	s
+foo	t/20_policies_subroutines.t	/^sub foo { next; }$/;"	s
 foo	t/20_policies_subroutines.t	/^sub foo { return 1 ? 1 : 2 ? 2 : 3; }$/;"	s
 foo	t/20_policies_subroutines.t	/^sub foo { return {some => [qw(complicated data)], q{ } => \/structure\/}; }$/;"	s
 foo	t/20_policies_subroutines.t	/^sub foo { return; }$/;"	s
+foo	t/20_policies_subroutines.t	/^sub foo { unless ($bool) { $foo = 'bar'; } else { return; } }$/;"	s
+foo	t/20_policies_subroutines.t	/^sub foo { unless ($bool) { return; } else { return; } }$/;"	s
+foo	t/20_policies_subroutines.t	/^sub foo { unless ($bool) { return; } elsif ($bool2) { return; } else { return; } }$/;"	s
 foo	t/20_policies_subroutines.t	/^sub foo { while (1==1) { return; } }$/;"	s
 foo	t/20_policies_subroutines.t	/^sub foo { }$/;"	s
+foo	t/20_policies_subroutines.t	/^sub foo {return}; # no sibling$/;"	s
 fooBAR	t/20_policies_namingconventions.t	/^sub fooBAR {}$/;"	s
 foo_BAR	t/20_policies_namingconventions.t	/^sub foo_BAR {}$/;"	s
 foo_bar	t/20_policies_namingconventions.t	/^sub foo_bar {}$/;"	s
@@ -430,8 +423,8 @@ get_violation	t/tlib/ViolationTest2.pm	/^sub get_violation {$/;"	s
 grep	t/03_pragmas.t	/^sub grep {  ## no critic;$/;"	s
 grep	t/03_pragmas.t	/^sub grep { return $foo; } ## no critic$/;"	s
 import	lib/Perl/Critic/Config.pm	/^sub import {$/;"	s
-import	lib/Perl/Critic/Violation.pm	/^sub import {$/;"	s
 import	t/20_policies_subroutines.t	/^sub import {}$/;"	s
+is_function_call	lib/Perl/Critic/Utils.pm	/^sub is_function_call {$/;"	s
 is_hash_key	lib/Perl/Critic/Utils.pm	/^sub is_hash_key {$/;"	s
 is_method_call	lib/Perl/Critic/Utils.pm	/^sub is_method_call {$/;"	s
 is_perl_builtin	lib/Perl/Critic/Utils.pm	/^sub is_perl_builtin {$/;"	s
@@ -439,12 +432,12 @@ is_perl_global	lib/Perl/Critic/Utils.pm	/^sub is_perl_global {$/;"	s
 is_script	lib/Perl/Critic/Utils.pm	/^sub is_script {$/;"	s
 is_subroutine_name	lib/Perl/Critic/Utils.pm	/^sub is_subroutine_name {$/;"	s
 location	lib/Perl/Critic/Violation.pm	/^sub location {$/;"	s
+main	bin/perlcritic	/^package main;$/;"	p
+main	t/02_policy.t	/^package main;$/;"	p
 make_doc	t/05_utils.t	/^sub make_doc { my $code = shift; return PPI::Document->new( ref $code ? $code : \\$code); }$/;"	s
 map	t/20_policies_subroutines.t	/^sub map {}$/;"	s
 my_map	t/20_policies_subroutines.t	/^sub my_map {}$/;"	s
 my_open	t/20_policies_subroutines.t	/^sub my_open {}$/;"	s
-my_package	t/20_policies_subroutines.t	/^my_package::function_call( %args );$/;"	l
-my_package	t/20_policies_subroutines.t	/^my_package::function_call();$/;"	l
 my_sub	t/20_policies_codelayout.t	/^sub my_sub {$/;"	s
 my_sub1	t/20_policies_subroutines.t	/^sub my_sub1 ($@) {}$/;"	s
 my_sub1	t/20_policies_subroutines.t	/^sub my_sub1 {}$/;"	s
@@ -452,10 +445,13 @@ my_sub2	t/20_policies_subroutines.t	/^sub my_sub2 (@@) {}$/;"	s
 native_policies	lib/Perl/Critic/Config.pm	/^sub native_policies {$/;"	s
 new	lib/Perl/Critic.pm	/^sub new {$/;"	s
 new	lib/Perl/Critic/Config.pm	/^sub new {$/;"	s
+new	lib/Perl/Critic/Document.pm	/^sub new {$/;"	s
 new	lib/Perl/Critic/Policy.pm	/^sub new              { return bless {}, shift    }$/;"	s
 new	lib/Perl/Critic/Policy/CodeLayout/ProhibitHardTabs.pm	/^sub new {$/;"	s
 new	lib/Perl/Critic/Policy/CodeLayout/ProhibitQuotedWordLists.pm	/^sub new {$/;"	s
+new	lib/Perl/Critic/Policy/CodeLayout/RequireTidyCode.pm	/^sub new {$/;"	s
 new	lib/Perl/Critic/Policy/ControlStructures/ProhibitCascadingIfElse.pm	/^sub new {$/;"	s
+new	lib/Perl/Critic/Policy/ControlStructures/ProhibitDeepNests.pm	/^sub new {$/;"	s
 new	lib/Perl/Critic/Policy/ControlStructures/ProhibitPostfixControls.pm	/^sub new {$/;"	s
 new	lib/Perl/Critic/Policy/Documentation/RequirePodSections.pm	/^sub new {$/;"	s
 new	lib/Perl/Critic/Policy/Miscellanea/RequireRcsKeywords.pm	/^sub new {$/;"	s
@@ -467,8 +463,10 @@ new	lib/Perl/Critic/Policy/TestingAndDebugging/ProhibitNoStrict.pm	/^sub new {$/
 new	lib/Perl/Critic/Policy/TestingAndDebugging/ProhibitNoWarnings.pm	/^sub new {$/;"	s
 new	lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitInterpolationOfLiterals.pm	/^sub new {$/;"	s
 new	lib/Perl/Critic/Policy/ValuesAndExpressions/RequireNumberSeparators.pm	/^sub new {$/;"	s
+new	lib/Perl/Critic/Policy/Variables/ProhibitPunctuationVars.pm	/^sub new {$/;"	s
 new	lib/Perl/Critic/Violation.pm	/^sub new {$/;"	s
 no_left_turn	t/20_policies_namingconventions.t	/^sub no_left_turn {}$/;"	s
+nuts	t/20_policies_modules.t	/^package nuts;$/;"	p
 open	t/20_policies_subroutines.t	/^sub open {}$/;"	s
 parse_arg_list	lib/Perl/Critic/Utils.pm	/^sub parse_arg_list {$/;"	s
 pcritique	lib/Perl/Critic/TestUtils.pm	/^sub pcritique {$/;"	s
@@ -480,6 +478,7 @@ policy_listing	bin/perlcritic	/^sub policy_listing {$/;"	s
 precedence_of	lib/Perl/Critic/Utils.pm	/^sub precedence_of {$/;"	s
 record	t/20_policies_namingconventions.t	/^sub record {}          # sub$/;"	s
 render_report	bin/perlcritic	/^sub render_report {$/;"	s
+run	bin/perlcritic	/^sub run {$/;"	s
 select	t/20_policies_inputoutput.t	/^sub select { }$/;"	s
 set_format	lib/Perl/Critic/Violation.pm	/^sub set_format { return $FORMAT = $_[0]; }$/;"	s
 set_severity	lib/Perl/Critic/Policy.pm	/^sub set_severity     { return $_[0]->{_severity} = $_[1] }$/;"	s
@@ -488,16 +487,17 @@ site_policies	lib/Perl/Critic/Config.pm	/^sub site_policies {$/;"	s
 sort_by_location	lib/Perl/Critic/Violation.pm	/^sub sort_by_location {$/;"	s
 sort_by_severity	lib/Perl/Critic/Violation.pm	/^sub sort_by_severity {$/;"	s
 source	lib/Perl/Critic/Violation.pm	/^sub source {$/;"	s
-tags	Makefile.PL	/^tags:$/;"	l
 test_sub	t/20_policies_subroutines.t	/^sub test_sub {$/;"	s
 test_sub1	t/20_policies_subroutines.t	/^sub test_sub1 {$/;"	s
 test_sub2	t/20_policies_subroutines.t	/^sub test_sub2 {$/;"	s
 test_sub3	t/20_policies_subroutines.t	/^sub test_sub3 {$/;"	s
 to_string	lib/Perl/Critic/Violation.pm	/^sub to_string {$/;"	s
+verbosity_to_format	lib/Perl/Critic/Utils.pm	/^sub verbosity_to_format {$/;"	s
 violates	lib/Perl/Critic/Policy.pm	/^sub violates         { return _abstract_method() }$/;"	s
 violates	lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitLvalueSubstr.pm	/^sub violates {$/;"	s
 violates	lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitSleepViaSelect.pm	/^sub violates {$/;"	s
 violates	lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitStringyEval.pm	/^sub violates {$/;"	s
+violates	lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitStringySplit.pm	/^sub violates {$/;"	s
 violates	lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitUniversalCan.pm	/^sub violates {$/;"	s
 violates	lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitUniversalIsa.pm	/^sub violates {$/;"	s
 violates	lib/Perl/Critic/Policy/BuiltinFunctions/RequireBlockGrep.pm	/^sub violates {$/;"	s
@@ -514,14 +514,17 @@ violates	lib/Perl/Critic/Policy/CodeLayout/RequireTidyCode.pm	/^sub violates {$/
 violates	lib/Perl/Critic/Policy/CodeLayout/RequireTrailingCommas.pm	/^sub violates {$/;"	s
 violates	lib/Perl/Critic/Policy/ControlStructures/ProhibitCStyleForLoops.pm	/^sub violates {$/;"	s
 violates	lib/Perl/Critic/Policy/ControlStructures/ProhibitCascadingIfElse.pm	/^sub violates {$/;"	s
+violates	lib/Perl/Critic/Policy/ControlStructures/ProhibitDeepNests.pm	/^sub violates {$/;"	s
 violates	lib/Perl/Critic/Policy/ControlStructures/ProhibitPostfixControls.pm	/^sub violates {$/;"	s
 violates	lib/Perl/Critic/Policy/ControlStructures/ProhibitUnlessBlocks.pm	/^sub violates {$/;"	s
 violates	lib/Perl/Critic/Policy/ControlStructures/ProhibitUnreachableCode.pm	/^sub violates {$/;"	s
 violates	lib/Perl/Critic/Policy/ControlStructures/ProhibitUntilBlocks.pm	/^sub violates {$/;"	s
 violates	lib/Perl/Critic/Policy/Documentation/RequirePodAtEnd.pm	/^sub violates {$/;"	s
 violates	lib/Perl/Critic/Policy/Documentation/RequirePodSections.pm	/^sub violates {$/;"	s
+violates	lib/Perl/Critic/Policy/ErrorHandling/RequireCarping.pm	/^sub violates {$/;"	s
 violates	lib/Perl/Critic/Policy/InputOutput/ProhibitBacktickOperators.pm	/^sub violates {$/;"	s
 violates	lib/Perl/Critic/Policy/InputOutput/ProhibitBarewordFileHandles.pm	/^sub violates {$/;"	s
+violates	lib/Perl/Critic/Policy/InputOutput/ProhibitInteractiveTest.pm	/^sub violates {$/;"	s
 violates	lib/Perl/Critic/Policy/InputOutput/ProhibitOneArgSelect.pm	/^sub violates {$/;"	s
 violates	lib/Perl/Critic/Policy/InputOutput/ProhibitReadlineInForLoop.pm	/^sub violates {$/;"	s
 violates	lib/Perl/Critic/Policy/InputOutput/ProhibitTwoArgOpen.pm	/^sub violates {$/;"	s
@@ -540,6 +543,7 @@ violates	lib/Perl/Critic/Policy/NamingConventions/ProhibitAmbiguousNames.pm	/^su
 violates	lib/Perl/Critic/Policy/NamingConventions/ProhibitMixedCaseSubs.pm	/^sub violates {$/;"	s
 violates	lib/Perl/Critic/Policy/NamingConventions/ProhibitMixedCaseVars.pm	/^sub violates {$/;"	s
 violates	lib/Perl/Critic/Policy/References/ProhibitDoubleSigils.pm	/^sub violates {$/;"	s
+violates	lib/Perl/Critic/Policy/RegularExpressions/ProhibitCaptureWithoutTest.pm	/^sub violates {$/;"	s
 violates	lib/Perl/Critic/Policy/RegularExpressions/RequireExtendedFormatting.pm	/^sub violates {$/;"	s
 violates	lib/Perl/Critic/Policy/RegularExpressions/RequireLineBoundaryMatching.pm	/^sub violates {$/;"	s
 violates	lib/Perl/Critic/Policy/Subroutines/ProhibitAmpersandSigils.pm	/^sub violates {$/;"	s
@@ -572,4 +576,7 @@ violates	lib/Perl/Critic/Policy/Variables/ProhibitPackageVars.pm	/^sub violates 
 violates	lib/Perl/Critic/Policy/Variables/ProhibitPunctuationVars.pm	/^sub violates {$/;"	s
 violates	lib/Perl/Critic/Policy/Variables/ProtectPrivateVars.pm	/^sub violates {$/;"	s
 violates	lib/Perl/Critic/Policy/Variables/RequireInitializationForLocalVars.pm	/^sub violates {$/;"	s
+violates	lib/Perl/Critic/Policy/Variables/RequireLexicalLoopIterators.pm	/^sub violates {$/;"	s
+violates	lib/Perl/Critic/Policy/Variables/RequireNegativeIndices.pm	/^sub violates {$/;"	s
+violates	t/tlib/Perl/Critic/Policy/Test.pm	/^sub violates {$/;"	s
 violation	lib/Perl/Critic/Policy.pm	/^sub violation {$/;"	s

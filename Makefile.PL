@@ -75,10 +75,17 @@ sub MY::postamble {
 .PHONY: tags
 
 tags:
-	ctags -f tags --recurse --totals \
-		--exclude=blib/ --exclude=t/lib \
-		--exclude=.svn --exclude='*~' \
-		--languages=Perl --langmap=Perl:+.t \
+	ctags -f tags \
+		--recurse \
+		--totals \
+		\
+		--exclude=blib/ \
+		--exclude=t/lib \
+		--exclude=.svn \
+		--exclude='*~' \
+		\
+		--languages=Perl \
+		--langmap=Perl:+.t \
 MAKE_FRAG
 }
 
