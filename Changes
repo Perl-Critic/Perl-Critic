@@ -19,6 +19,7 @@
 
      Bug Fixes:
      * 20965: "Hard tabs used at" shouldn't check __DATA__
+     * 21070: ProhibitNoisyQuotes hates overload
      * Punctuation variables are now exempt from ProhibitLocalVars
 
      Other Stuff:
