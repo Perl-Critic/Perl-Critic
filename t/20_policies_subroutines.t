@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 28;
+use Test::More tests => 29;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -107,6 +107,15 @@ is( pcritique($policy, \$code), 0, $policy);
 
 $code = <<'END_PERL';
 sub import {}
+END_PERL
+
+$policy = 'Subroutines::ProhibitBuiltinHomonyms';
+is( pcritique($policy, \$code), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+BEGIN { use_ok( 'Foo::Bar' ); }
 END_PERL
 
 $policy = 'Subroutines::ProhibitBuiltinHomonyms';

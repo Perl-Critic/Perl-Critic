@@ -17,7 +17,8 @@ our $VERSION = 0.19;
 
 #---------------------------------------------------------------------------
 
-my %allow = ( import => 1, AUTOLOAD => 1 );
+my @allow = qw( import AUTOLOAD BEGIN INIT CHECK END );
+my %allow = map {($_,1)} @allow;
 my $desc  = q{Subroutine name is a homonym for builtin function};
 my $expl  = [177];
 
@@ -60,6 +61,9 @@ for a list of built-ins.
   sub print {} #not ok
 
   #You get the idea...
+
+Exceptions are made for C<BEGIN>, C<END>, C<INIT> and C<CHECK>
+blocks, as well as C<AUTOLOAD> and C<import> subroutines.
 
 =head1 AUTHOR
 
