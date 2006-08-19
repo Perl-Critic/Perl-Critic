@@ -12,8 +12,7 @@ use strict;
 use warnings;
 use base 'Exporter';
 
-our $VERSION = '0.18_01';
-$VERSION = eval $VERSION;    ## no critic
+our $VERSION = 0.19;
 
 #---------------------------------------------------------------------------
 # Exported symbols here

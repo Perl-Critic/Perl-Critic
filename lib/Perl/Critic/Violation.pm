@@ -18,8 +18,7 @@ use String::Format qw(stringf);
 use English qw(-no_match_vars);
 use overload ( q{""} => q{to_string}, cmp => q{_compare} );
 
-our $VERSION = '0.18_01';
-$VERSION = eval $VERSION;    ## no critic
+our $VERSION = 0.19;
 
 #Class variables...
 our $FORMAT = "%m at line %l, column %c. %e.\n"; #Default stringy format

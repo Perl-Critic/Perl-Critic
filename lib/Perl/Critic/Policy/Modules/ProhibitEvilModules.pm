@@ -15,8 +15,7 @@ use List::MoreUtils qw(any);
 use Perl::Critic::Utils;
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '0.18_01';
-$VERSION = eval $VERSION;    ## no critic
+our $VERSION = 0.19;
 
 my $expl = q{Find an alternative module};
 my $desc = q{Prohibited module used};

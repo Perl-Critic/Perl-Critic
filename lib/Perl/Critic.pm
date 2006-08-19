@@ -23,8 +23,7 @@ use PPI;
 
 #----------------------------------------------------------------------------
 
-our $VERSION = '0.18_01';
-$VERSION = eval $VERSION;    ## no critic;
+our $VERSION = 0.19;
 
 our @EXPORT_OK = qw(&critique);
 
