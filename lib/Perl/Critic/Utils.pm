@@ -43,6 +43,7 @@ our @EXPORT = qw(
     &precedence_of
     &all_perl_files
     &verbosity_to_format
+    &hashify
 );
 
 
@@ -96,8 +97,7 @@ telldir tie tied time times truncate uc ucfirst umask undef unlink
 unpack unshift untie use utime values vec wait waitpid wantarray warn
 write );
 
-#Hashify
-my %BUILTINS = map { $_ => 1 } @BUILTINS;
+my %BUILTINS = hashify( @BUILTINS );
 
 #---------------------------------------------------------------------------
 
@@ -124,8 +124,7 @@ SUBSCRIPT_SEPARATOR SUBSEP SYSTEM_FD_MAX UID WARNING [ ] ^ ^A ^C
 ),
 );
 
-#Hashify
-my %GLOBALS = map { $_ => 1 } @GLOBALS;
+my %GLOBALS = hashify( @GLOBALS );
 
 #-------------------------------------------------------------------------
 ## no critic 'ProhibitNoisyQuotes';
@@ -152,6 +151,12 @@ my %PRECEDENCE_OF = (
 );
 
 ## use critic
+#-------------------------------------------------------------------------
+
+sub hashify {
+    return map { $_ => 1 } @_;
+}
+
 #-------------------------------------------------------------------------
 
 sub find_keywords {
@@ -522,6 +527,11 @@ Given a verbosity level between 1 and 10, returns the corresponding
 predefined format string.  These formats are suitable for passing to
 the C<set_format> method in L<Perl::Critic::Violation>.  See the
 L<perlcritic> documentation for a listing of the predefined formats.
+
+=item C<hashify( @list )>
+
+Given C<@list>, return a hash where C<@list> is in the keys and
+each value is 1.
 
 =back
 

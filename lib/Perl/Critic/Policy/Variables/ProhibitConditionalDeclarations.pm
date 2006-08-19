@@ -36,7 +36,8 @@ sub violates {
     return;    #ok!
 }
 
-my %conditionals = map {($_,1)} qw(if while foreach for until unless);
+my @conditionals = qw( if while foreach for until unless );
+my %conditionals = hashify( @conditionals );
 
 sub _is_conditional {
     my (undef, $elem) = @_;
