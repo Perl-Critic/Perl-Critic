@@ -16,8 +16,7 @@ if ($ENV{PERL_CRITIC_CACHE}) {
     my $cache_path
         = File::Spec->catdir(File::Spec->tmpdir,
                              'test-perl-critic-cache-'.$ENV{USER});
-    if ( ! -d $cache_path)
-    {
+    if ( ! -d $cache_path) {
         mkdir $cache_path, oct 700;
     }
     PPI::Cache->import(path => $cache_path);
@@ -25,8 +24,9 @@ if ($ENV{PERL_CRITIC_CACHE}) {
 
 eval {
     require Test::Perl::Critic;
-    my @exclude = qw(RcsKeywords TidyCode PodSections RequireCarping);
+    my @exclude = qw(TidyCode PodSections);
     my $profile = {
+        'Miscellanea::RequireRcsKeywords' => {keywords => 'URL Date Author Revision' },
         'CodeLayout::ProhibitHardTabs' => { allow_leading_tabs => 0 },
     };
     my %config = (-severity => 1, -exclude => \@exclude, -profile => $profile);

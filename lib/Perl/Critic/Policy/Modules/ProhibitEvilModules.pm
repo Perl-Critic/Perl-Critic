@@ -9,6 +9,7 @@ package Perl::Critic::Policy::Modules::ProhibitEvilModules;
 
 use strict;
 use warnings;
+use Carp qw(cluck);
 use English qw(-no_match_vars);
 use List::MoreUtils qw(any);
 use Perl::Critic::Utils;
@@ -39,10 +40,10 @@ sub new {
         for my $module ( split m{ \s+ }mx, $args{modules} ) {
             if ( $module =~ m{ \A [/] (.+) [/] \z }mx ) {
                 # These are module name patterns (e.g. /Acme/)
-                my $re = $1;
+                my $re = $1; # Untainting
                 my $pattern = eval { qr/$re/ };
                 if ( $EVAL_ERROR ) {
-                    warn 'Regexp syntax error in configuration for '.__PACKAGE__;
+                    cluck qq{Regexp syntax error in "$module"};
                 }
                 else {
                     push @{ $self->{_evil_modules_rx} }, $pattern;
