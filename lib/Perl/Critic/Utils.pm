@@ -331,14 +331,15 @@ sub verbosity_to_format {
 
 #-----------------------------------------------------------------------------
 
+my @skip_dir = qw( CVS RCS .svn _darcs {arch} .bzr _build blib );
+my %skip_dir = hashify( @skip_dir );
+
 sub all_perl_files {
 
     # Recursively searches a list of directories and returns the paths
     # to files that seem to be Perl source code.  This subroutine was
     # poached from Test::Perl::Critic.
 
-    my %skip_dir = map { ($_,1) } qw( CVS RCS .svn _darcs {arch} .bzr
-                                      _build blib );
     my @queue      = @_;
     my @code_files = ();
 

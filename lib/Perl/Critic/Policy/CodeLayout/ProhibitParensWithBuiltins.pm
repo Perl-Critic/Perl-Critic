@@ -17,7 +17,8 @@ our $VERSION = 0.19;
 
 #----------------------------------------------------------------------------
 
-my %allow = ( my => 1, our => 1, local => 1, return => 1, );
+my @allow = qw( my our local return );
+my %allow = hashify( @allow );
 my $desc  = q{Builtin function called with parens};
 my $expl  = [ 13 ];
 
@@ -27,37 +28,40 @@ my $expl  = [ 13 ];
 # arguments as they can.  These functions often require parens to
 # enforce precedence.
 
-my %greedy_funcs = (
-    chmod  =>  1,  formline =>  1,  print   =>  1,  sprintf => 1,  utime => 1,
-    chomp  =>  1,  grep     =>  1,  printf  =>  1,  syscall => 1,  warn  => 1,
-    chop   =>  1,  join     =>  1,  push    =>  1,  system  => 1,
-    chown  =>  1,  kill     =>  1,  reverse =>  1,  tie     => 1,
-    die    =>  1,  map      =>  1,  sort    =>  1,  unlink  => 1,
-    exec   =>  1,  pack     =>  1,  splice  =>  1,  unshift => 1,
+my @greedy_funcs = qw(
+    chmod formline print   sprintf utime
+    chomp grep     printf  syscall warn
+    chop  join     push    system
+    chown kill     reverse tie
+    die   map      sort    unlink
+    exec  pack     splice  unshift
 );
+my %greedy_funcs = hashify( @greedy_funcs );
 
 #----------------------------------------------------------------------------
 # These are all the functions that are considered named unary
 # operators.  These frequently require parens because they have lower
 # precedence than ordinary function calls.
 
-my %named_unary_ops = (
-    alarm   => 1,         glob      => 1,  rand      => 1,  undef => 1,
-    caller  => 1,         gmtime    => 1,  readlink  => 1,
-    chdir   => 1,         hex       => 1,  ref       => 1,
-    chroot  => 1,         int       => 1,  require   => 1,
-    cos     => 1,         lc        => 1,  return    => 1,
-    defined => 1,         lcfirst   => 1,  rmdir     => 1,
-    delete  => 1,         length    => 1,  scalar    => 1,
-    do      => 1,         localtime => 1,  sin       => 1,
-    eval    => 1,         lock      => 1,  sleep     => 1,
-    exists  => 1,         log       => 1,  sqrt      => 1,
-    exit    => 1,         lstat     => 1,  srand     => 1,
-    getgrp  => 1,         my        => 1,  stat      => 1,
-    gethostbyname  => 1,  oct       => 1,  uc        => 1,
-    getnetbyname   => 1,  ord       => 1,  ucfirst   => 1,
-    getprotobyname => 1,  quotemeta => 1,  umask     => 1,
+my @named_unary_ops = qw(
+    alarm           glob        rand
+    caller          gmtime      readlink
+    chdir           hex         ref
+    chroot          int         require
+    cos             lc          return
+    defined         lcfirst     rmdir
+    delete          length      scalar
+    do              localtime   sin
+    eval            lock        sleep
+    exists          log         sqrt
+    exit            lstat       srand
+    getgrp          my          stat
+    gethostbyname   oct         uc
+    getnetbyname    ord         ucfirst
+    getprotobyname  quotemeta   umask
+                                undef
 );
+my %named_unary_ops = hashify( @named_unary_ops );
 
 #----------------------------------------------------------------------------
 

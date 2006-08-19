@@ -20,8 +20,8 @@ our $VERSION = 0.19;
 my $desc = q{Match variable used};
 my $expl = [ 82 ];
 
-my %forbidden = map {q{$}.$_ => 1}  ## no critic
-                (q{`}, q{&}, q{'}, qw( MATCH PREMATCH POSTMATCH ));
+my @forbidden = qw( $` $& $' $MATCH $PREMATCH $POSTMATCH );
+my %forbidden = hashify( @forbidden );
 
 #---------------------------------------------------------------------------
 

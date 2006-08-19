@@ -21,7 +21,7 @@ my $desc = q{Magic punctuation variable used};
 my $expl = [ 79 ];
 
 ## no critic
-my %default_exempt = map {$_ => 1} (
+my %default_exempt = hashify(
   '$_', '@_',
   '$1', '$2', '$3', '$4', '$5', '$6', '$7', '$8', '$9',
   '_',   # default filehandle for stat()

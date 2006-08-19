@@ -41,13 +41,14 @@ sub new {
     my $self = bless {}, $class;
 
     #Set configuration, if defined
+    my @forbid;
     if ( defined $args{forbid} ) {
-        my @forbid = split m{ \s+ }mx, $args{forbid};
-        $self->{_forbid} = { map { $_ => 1 } @forbid };
+        @forbid = split m{ \s+ }mx, $args{forbid};
     }
     else {
-        $self->{_forbid} = { map { $_ => 1 } @default_forbid };
+        @forbid = @default_forbid;
     }
+    $self->{_forbid} = { hashify( @forbid ) };
 
     return $self;
 }

@@ -18,7 +18,7 @@ our $VERSION = 0.19;
 #---------------------------------------------------------------------------
 
 my @allow = qw( import AUTOLOAD BEGIN INIT CHECK END );
-my %allow = map {($_,1)} @allow;
+my %allow = hashify( @allow );
 my $desc  = q{Subroutine name is a homonym for builtin function};
 my $expl  = [177];
 
