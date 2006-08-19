@@ -34,10 +34,13 @@ sub applies_to {
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
-    if ( $elem =~ $noise_rx ) {
-        return $self->violation( $desc, $expl, $elem );
-    }
-    return;    #ok!
+    return if $elem !~ $noise_rx;
+    my $statement = $elem->statement;
+    return if $statement
+        && $statement->isa('PPI::Statement::Include')
+        && $statement->type eq 'use'
+        && $statement->module eq 'overload';
+    return $self->violation( $desc, $expl, $elem );
 }
 
 1;

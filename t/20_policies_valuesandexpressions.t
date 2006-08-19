@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 37;
+use Test::More tests => 38;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -351,6 +351,15 @@ $var = 'a';
 $var = "a";
 $var = '1';
 $var = "1";
+END_PERL
+
+$policy = 'ValuesAndExpressions::ProhibitNoisyQuotes';
+is( pcritique($policy, \$code), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+use overload '""';
 END_PERL
 
 $policy = 'ValuesAndExpressions::ProhibitNoisyQuotes';
