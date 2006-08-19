@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -67,17 +67,22 @@ is( pcritique($policy, \$code), 0, 'carp' );
 #----------------------------------------------------------------
 
 $code = <<'END_PERL';
-croak 'A horrible death' if $condtion;
-
-if ($condition) {
-   croak 'A horrible death';
-}
-
-open my $fh, '<', $path or
-  croak "Can't open file $path";
+die 'A horrible death';
 END_PERL
 
 $policy = 'ErrorHandling::RequireCarping';
+is( pcritique($policy, \$code), 1, 'croak' );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+die "A horrible death\n";
+END_PERL
+
+TODO: {
+    local $TODO = q{Shouldn't complain if the message ends with \n};
+$policy = 'ErrorHandling::RequireCarping';
 is( pcritique($policy, \$code), 0, 'croak' );
+}
 
 #----------------------------------------------------------------
