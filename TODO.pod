@@ -23,21 +23,10 @@ TODO - Things for Perl::Critic developers to do
 
 =item * Report Safari sections in addition to book page numbers.
 
-=back
+=item * Report some statistics on the violations and the source code.
 
-=head1 SPELLING & DISPLAY
-
-=over 4
-
-=item * Double-quote things, not single-quote, in messages
-
-Error messages should be in the form:
-
-    Use "croak" instead of "die"
-
-Instead of the incorrect:
-
-    Use 'croak' instead of 'die'
+e.g. Number of violations of each policy/severity.  Total lines of code,
+number of subroutines, average number of statements/operators per sub.
 
 =back
 
@@ -76,11 +65,6 @@ use carp/confess or not.  For example:
     }
 
 I just want to print a warning and move on.  The location is irrelevant.
-
-=item * Variables::ProhibitLocalVars
-
-Should not complain if what we're declaring local is a magic variable.
-C<local $/ = undef> is perfect OK.
 
 =back
 
@@ -233,31 +217,6 @@ Good: C<< Foo::Bar->new >>, Bad: C<< new Foo::Bar >>
 VariablesAndExpressions::ProhibitComplexVersion (medium severity)
 L<http://rt.cpan.org/Ticket/Display.html?id=20439>
 
-=item * BuiltinFunctions::ProhibitStringSplit
-
-Since C<split("x", $whatever)> is translated to C<split(/x/, $whatever)>,
-you might as well write it that way anyway.  It will help people
-remember.  I don't know how many times I've seen someone perplexed
-by C<split("|", $something)> not working.
-
-However, there is at least one exception, and if you write such a
-rule, you should take this special case into account:
-
-    $ perl -le 'print map {"<$_>"} split q{ }, " Romeo and Juliet "'
-    <Romeo><and><Juliet>
-    $ perl -le 'print map {"<$_>"} split / /, " Romeo and Juliet "'
-    <><Romeo><and><Juliet>
-
-Quoting from L<http://perldoc.perl.org/functions/split.html>
-
-    As a special case, specifying a PATTERN of space (' ') will split
-    on white space just as split with no arguments does.  Thus,
-    split(' ') can be used to emulate awk's default behavior, whereas
-    split(/ /) will give you as many null initial fields as there
-    are leading spaces.
-
-See also L<http://www.perlmonks.org/?node_id=287545>
-
 =item * Tests::RequireTestDescriptions
 
 If Test::More is detected:
@@ -275,6 +234,12 @@ I've seen a lot of beginners do things like this:
 
 There's no reason for C<$filename> to be quoted.  (except stringifying
 overloaded instances)
+
+=item * Variables::ProhibitPerl4PackageNames
+
+Forbid old-schoole package names like Foo'Bar'Baz.  This should also
+apply to any variables or subroutines that get declared/called.
+
 
 =back
 
