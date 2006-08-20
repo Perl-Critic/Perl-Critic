@@ -5,7 +5,7 @@
 # $Revision$
 #######################################################################
 
-[0.18_02]  Released on ????????
+[0.18_02]  Released on 2006-08-20
 
      New Policies:
      * BuiltinFunctions::ProhibitStringySplit
