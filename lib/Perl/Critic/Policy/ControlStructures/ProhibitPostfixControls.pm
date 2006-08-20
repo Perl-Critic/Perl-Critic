@@ -25,16 +25,8 @@ my %pages_of = (
     while  => [ 96     ],
 );
 
-my %exemptions = (
-    warn    => 1,
-    die     => 1,
-    carp    => 1,
-    croak   => 1,
-    cluck   => 1,
-    confess => 1,
-    goto    => 1,
-    exit    => 1,
-);
+my @exemptions = qw( warn die carp croak cluck confess goto exit );
+my %exemptions = hashify( @exemptions );
 
 #----------------------------------------------------------------------------
 
@@ -62,7 +54,8 @@ sub new {
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    return if !exists $pages_of{$elem};
+    my $expl = $pages_of{$elem};
+    return if !$expl;
     return if ! is_function_call($elem);
 
     # Skip controls that are allowed
@@ -83,7 +76,6 @@ sub violates {
 
     # If we get here, it must be postfix.
     my $desc = qq{Postfix control "$elem" used};
-    my $expl = $pages_of{$elem};
     return $self->violation( $desc, $expl, $elem );
 }
 

@@ -17,8 +17,11 @@ our $VERSION = 0.19;
 
 #---------------------------------------------------------------------------
 
-my %low_booleans  = ( not  => 1,   or  => 1,  and  => 1 );
-my %high_booleans = ( q{!} => 1, q{||} => 1, q{&&} => 1 );
+my @low_booleans  = qw( not or and );
+my %low_booleans  = hashify( @low_booleans );
+
+my @high_booleans = qw( ! || && );
+my %high_booleans = hashify( @high_booleans );
 
 my @exempt_types = qw(
     PPI::Statement::Block

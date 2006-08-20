@@ -15,28 +15,14 @@ use base 'Perl::Critic::Policy';
 
 our $VERSION = 0.19;
 
-my %terminals = (
-    'die'     => 1,
-    'exit'    => 1,
-    'croak'   => 1,
-    'confess' => 1,
-);
+my @terminals = qw( die exit croak confess );
+my %terminals = hashify( @terminals );
 
-my %conditionals = (
-    'if'      => 1,
-    'unless'  => 1,
-    'foreach' => 1,
-    'while'   => 1,
-    'for'     => 1,
-);
+my @conditionals = qw( if unless foreach while for );
+my %conditionals = hashify( @conditionals );
 
-my %operators = (
-    q{&&}  => 1,
-    q{||}  => 1,
-    q{and} => 1,
-    q{or}  => 1,
-    q{?}   => 1,
-);
+my @operators = qw( && || and or ? );
+my %operators = hashify( @operators );
 
 #---------------------------------------------------------------------------
 

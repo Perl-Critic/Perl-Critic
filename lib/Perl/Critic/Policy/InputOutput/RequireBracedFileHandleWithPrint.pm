@@ -17,7 +17,9 @@ our $VERSION = 0.19;
 
 #----------------------------------------------------------------------------
 
-my %postfix_words = ('if' => 1, 'unless' => 1, 'for' => 1);
+my @postfix_words = qw( if unless for );
+my %postfix_words = hashify( @postfix_words );
+
 my $desc = q{File handle for "print" is not braced};
 my $expl = [ 211 ];
 

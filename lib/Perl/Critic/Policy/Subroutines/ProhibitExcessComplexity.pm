@@ -19,23 +19,11 @@ our $VERSION = 0.19;
 
 my $expl = q{Consider refactoring};
 
-## no critic 'ProhibitNoisyQuotes';
+my @logic_ops = qw( && || ||= &&= or and xor ? <<= >>= );
+my %logic_ops = hashify( @logic_ops );
 
-my %logic_ops = (
-   '&&'  =>  1, '||'  => 1,
-   '||=' =>  1, '&&=' => 1,
-   'or'  =>  1, 'and' => 1,
-   'xor' =>  1, '?'   => 1,
-   '<<=' =>  1, '>>=' => 1,
-);
-
-## use critic
-
-my %logic_keywords = (
-   'if'    => 1, 'elsif'  => 1,
-   'else'  => 1, 'unless' => 1,
-   'until' => 1, 'while'  => 1,
-);
+my @logic_keywords = qw( if else elsif unless until while );
+my %logic_keywords = hashify( @logic_keywords );
 
 #---------------------------------------------------------------------------
 
