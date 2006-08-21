@@ -99,7 +99,7 @@ perlcriticrc file, add a block like this:
   allow = $@ $!
 
 The C<allow> property should be a whitespace-delimited list of
-punctutation variables.
+punctuation variables.
 
 =head1 AUTHOR
 

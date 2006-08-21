@@ -67,6 +67,8 @@ __END__
 
 =pod
 
+=for stopwords refactored
+
 =head1 NAME
 
 Perl::Critic::Policy::ControlStructures::ProhibitDeepNests

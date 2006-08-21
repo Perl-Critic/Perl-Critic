@@ -522,7 +522,7 @@ book.  NOTE: This feature is not implemented yet.
 
 =item -quiet
 
-Surpress the "source OK" message if no violations are found.
+Suppress the "source OK" message if no violations are found.
 
 =item -help
 
