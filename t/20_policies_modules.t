@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 52;
+use Test::More tests => 53;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -266,6 +266,16 @@ END_PERL
 $policy = 'Modules::ProhibitEvilModules';
 %config = (modules => '/Evil::|Demonic::Module|Acme/');
 is( pcritique($policy, \$code, \%config), 4, $policy);
+
+#----------------------------------------------------------------
+
+{
+    # Trap warning messages from ProhibitEvilModules
+    my $caught_warning = q{};
+    local $SIG{__WARN__} = sub { $caught_warning = shift; };
+    pcritique($policy, \$code, { modules => '/(/' } );
+    like( $caught_warning, qr/Regexp syntax error/, 'Invalid regex config');
+}
 
 #----------------------------------------------------------------
 
@@ -559,3 +569,4 @@ END_PERL
 
 $policy = 'Modules::ProhibitAutomaticExportation';
 is( pcritique($policy, \$code), 0, $policy);
+
