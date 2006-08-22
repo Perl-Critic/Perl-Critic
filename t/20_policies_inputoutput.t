@@ -165,6 +165,18 @@ open FH, '>', $output" or die;
 
 $foo{open}; # not a function call
 
+# There is no three-arg equivalent for these
+open( \*STDOUT, '>&STDERR' );
+open( *STDOUT, '>&STDERR' );
+open( STDOUT, '>&STDERR' );
+
+# Other file modes.
+open( \*STDOUT, '>>&STDERR' );
+open( \*STDOUT, '<&STDERR' );
+open( \*STDOUT, '+>&STDERR' );
+open( \*STDOUT, '+>>&STDERR' );
+open( \*STDOUT, '+<&STDERR' );
+
 END_PERL
 
 $policy = 'InputOutput::ProhibitTwoArgOpen';
