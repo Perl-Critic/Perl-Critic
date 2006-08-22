@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 53;
+use Test::More tests => 54;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -348,6 +348,16 @@ END_PERL
 
 $policy = 'Modules::RequireVersionVar';
 is( pcritique($policy, \$code), 1, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+#!anything
+## no critic (RequireVersionVar)
+END_PERL
+
+$policy = 'Modules::RequireVersionVar';
+is( pcritique($policy, \$code), 0, $policy);
 
 #----------------------------------------------------------------
 
