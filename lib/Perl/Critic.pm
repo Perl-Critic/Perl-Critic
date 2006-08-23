@@ -24,7 +24,6 @@ use PPI;
 #----------------------------------------------------------------------------
 
 our $VERSION = 0.19;
-
 our @EXPORT_OK = qw(&critique);
 
 #----------------------------------------------------------------------------
@@ -252,7 +251,7 @@ sub _parse_nocritic_import {
     my $module    = qr{ [\w:]+ }mx;
     my $delim     = qr{ \s* [,\s] \s* }mx;
     my $qw        = qr{ (?: qw )? }mx;
-    my $qualifier = qr{ $qw \( \s* ( $module \s* (?: $delim $module)* ) \s* \) }mx;
+    my $qualifier = qr{ $qw \(? \s* ( $module (?: $delim $module)* ) \s* \)? }mx;
     my $no_critic = qr{ \A \s* \#\# \s* no \s+ critic \s* $qualifier }mx;
 
     if ( my ($module_list) = $pragma =~ $no_critic ) {

@@ -545,15 +545,23 @@ use strict;
 use warnings;
 our $VERSION = 1.0;
 
+# with parens
 my $noisy = '!';           ##no critic (NoisyQuotes)
 barf() unless $$ eq '';    ##no critic (Postfix,Empty,Punctuation)
 barf() unless $$ eq '';    ##no critic (Postfix , Empty , Punctuation)
 barf() unless $$ eq '';    ##no critic (Postfix Empty Punctuation)
 
+# qw() style
 my $noisy = '!';           ##no critic qw(NoisyQuotes);
 barf() unless $$ eq '';    ##no critic qw(Postfix,Empty,Punctuation)
 barf() unless $$ eq '';    ##no critic qw(Postfix , Empty , Punctuation)
 barf() unless $$ eq '';    ##no critic qw(Postfix Empty Punctuation)
+
+# no parens
+my $noisy = '!';           ##no critic NoisyQuotes;
+barf() unless $$ eq '';    ##no critic Postfix,Empty,Punctuation;
+barf() unless $$ eq '';    ##no critic Postfix , Empty , Punctuation;
+barf() unless $$ eq '';    ##no critic Postfix Empty Punctuation;
 
 1;
 END_PERL
