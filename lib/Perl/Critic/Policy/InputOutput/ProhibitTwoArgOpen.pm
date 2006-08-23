@@ -17,6 +17,7 @@ our $VERSION = 0.19;
 
 #--------------------------------------------------------------------------
 
+my $STDIO_HANDLES_RX = qr/\b STD (?: IN | OUT | ERR \b)/mx;
 my $desc = q{Two-argument "open" used};
 my $expl = [ 207 ];
 
@@ -32,8 +33,12 @@ sub violates {
 
     return if $elem ne 'open';
     return if ! is_function_call($elem);
+    my @args = parse_arg_list($elem);
 
-    if ( scalar parse_arg_list($elem) == 2 ) {
+    if ( scalar @args == 2 ) {
+        # When opening STDIN, STDOUT, or STDERR, the
+        # two-arg form is the only option you have.
+        return if $args[1]->[0] =~ $STDIO_HANDLES_RX;
         return $self->violation( $desc, $expl, $elem );
     }
     return; #ok!
