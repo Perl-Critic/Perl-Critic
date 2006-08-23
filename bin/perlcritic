@@ -140,7 +140,21 @@ sub _validate_options {
 
 sub get_input {
 
-    if (@_) {
+    if ( !@_ || (@_ == 1 && $_[0] eq q{-}) )  {
+
+        # Reading code from STDIN.  All the code is slurped into
+        # a string.  PPI will barf if the string is just whitespace.
+        my $code_string = do { local $RS = undef; <STDIN> };
+
+        # Notice if STDIN was closed (pipe error, etc)
+        if ( ! defined $code_string ) {
+            $code_string = q{};
+        }
+
+        $code_string =~ m{ \S+ }mx || croak qq{Nothing to critique.\n};
+        return \$code_string;    #Convert to SCALAR ref for PPI
+    }
+    else {
 
         # Test to make sure all the specified files or directories
         # actually exist.  If any one of them is bogus, then die.
@@ -154,20 +168,6 @@ sub get_input {
         # be Perl code).  If argument is a directory, recursively
         # search the directory for files that look like Perl code.
         return map { -d $_ ? all_perl_files($_) : $_ } @_;
-    }
-    else {
-
-        # Reading code from STDIN.  All the code is slurped into
-        # a string.  PPI will barf if the string is just whitespace.
-        my $code_string = do { local $RS = undef; <STDIN> };
-
-        # Notice if STDIN was closed (pipe error, etc)
-        if ( ! defined $code_string ) {
-            $code_string = q{};
-        }
-
-        $code_string =~ m{ \S+ }mx || croak qq{Nothing to critique.\n};
-        return \$code_string;    #Convert to SCALAR ref for PPI
     }
 }
 
