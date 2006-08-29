@@ -62,7 +62,8 @@ sub violates {
     # die or exit or return.  Then all the subsequent sibling
     # statements are unreachable, except for those that have labels,
     # which could be reached from anywhere using C<goto>.  Subroutine
-    # declarations are also exempt for the same reason.
+    # declarations are also exempt for the same reason.  "use" and
+    # "our" statements are exempt because they happen at compile time.
 
     my @viols = ();
     while ( $stmnt = $stmnt->snext_sibling() ) {
