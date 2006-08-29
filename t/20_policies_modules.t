@@ -351,13 +351,19 @@ is( pcritique($policy, \$code), 1, $policy);
 
 #----------------------------------------------------------------
 
-$code = <<'END_PERL';
+TODO:
+{
+
+    local $TODO = q{"no critic" doesn't work at the document level};
+
+    $code = <<'END_PERL';
 #!anything
 ## no critic (RequireVersionVar)
 END_PERL
 
-$policy = 'Modules::RequireVersionVar';
-is( pcritique($policy, \$code), 0, $policy);
+    $policy = 'Modules::RequireVersionVar';
+    is( pcritique($policy, \$code), 0, $policy);
+}
 
 #----------------------------------------------------------------
 

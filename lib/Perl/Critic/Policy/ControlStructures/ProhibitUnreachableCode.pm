@@ -72,6 +72,12 @@ sub violates {
         next if $stmnt->isa('PPI::Statement::End');
         next if $stmnt->isa('PPI::Statement::Data');
 
+        next if $stmnt->isa('PPI::Statement::Include') &&
+            $stmnt->type() ne 'require';
+
+        next if $stmnt->isa('PPI::Statement::Variable') &&
+            $stmnt->type() eq 'our';
+
         push @viols, $self->violation( $desc, $expl, $stmnt );
     }
 

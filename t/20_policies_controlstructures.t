@@ -7,12 +7,11 @@
 
 use strict;
 use warnings;
-use Test::More tests => 28;
+use Test::More tests => 29;
 use Perl::Critic::Config;
 use Perl::Critic;
 
 # common P::C testing tools
-
 use Perl::Critic::TestUtils qw(pcritique);
 Perl::Critic::TestUtils::block_perlcriticrc();
 
@@ -299,8 +298,8 @@ is( pcritique($policy, \$code), 0, $policy);
 
 $code = <<'END_PERL';
 {
-  exit;
-  use Foo::Bar;
+    exit;
+    require Foo;
 }
 
 sub a {
@@ -366,17 +365,18 @@ $policy = 'ControlStructures::ProhibitUnreachableCode';
 is( pcritique($policy, \$code), 12, $policy);
 
 #----------------------------------------------------------------
+$code = <<'END_PERL';
 
-# Josh proposed this test, but I don't understand why this
-# should be allowed, so I'm going to punt for now.
+exit;
 
-#$code = <<'END_PERL';
-#exit;
-#our %memoization;
-#END_PERL
+no warnings;
+use Memoize;
+our %memoization;
 
-#$policy = 'ControlStructures::ProhibitUnreachableCode';
-#is( pcritique($policy, \$code), 0, $policy);
+END_PERL
+
+$policy = 'ControlStructures::ProhibitUnreachableCode';
+is( pcritique($policy, \$code), 0, $policy);
 
 #----------------------------------------------------------------
 
