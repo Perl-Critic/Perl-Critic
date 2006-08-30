@@ -10,12 +10,13 @@ package Perl::Critic::Config;
 
 use strict;
 use warnings;
-use File::Spec;
+use Carp qw(carp croak);
 use Config::Tiny;
 use English qw(-no_match_vars);
+use File::Spec;
+use File::Spec::Unix;
 use List::MoreUtils qw(any none);
 use Perl::Critic::Utils;
-use Carp qw(carp croak);
 
 our $VERSION = 0.19;
 
@@ -34,9 +35,9 @@ sub import {
 
     eval {
         require Module::Pluggable;
-        Module::Pluggable->import( search_path => $NAMESPACE,
-                                   require => 1, inner => 0 );
-        @SITE_POLICIES = plugins();  #Exported by  Module::Pluggable
+        Module::Pluggable->import(search_path => $NAMESPACE,
+                                  require => 1, inner => 0);
+        @SITE_POLICIES = plugins(); #Exported by Module::Pluggable
     };
 
     if ( $EVAL_ERROR ) {
@@ -47,15 +48,28 @@ sub import {
     }
 
     # In test mode, only load native policies, not third-party ones
-    if ( $TEST_MODE && grep {m/\bblib\b/xms} @INC ) {
-        require File::Spec;
-        my %files = map { $_ => File::Spec->catdir(split m/::/xms, $_) . '.pm' } @SITE_POLICIES;
-        @SITE_POLICIES = grep { $INC{$files{$_}} && $INC{$files{$_}} =~ m/\bblib\b/xms } @SITE_POLICIES;
+    if ( $TEST_MODE && any {m/\b blib \b/xms} @INC ) {
+        @SITE_POLICIES = _modules_from_blib( @SITE_POLICIES );
     }
 
     return 1;
 }
 
+sub _modules_from_blib {
+    my (@modules) = @_;
+    return grep { _was_loaded_from_blib( _module2path($_) ) } @modules;
+}
+
+sub _module2path {
+    my $module = shift || return;
+    return File::Spec::Unix->catdir(split m/::/xms, $module) . '.pm';
+}
+
+sub _was_loaded_from_blib {
+    my $path = shift || return;
+    my $full_path = $INC{$path};
+    return $full_path && $full_path =~ m/\b blib \b/xms;
+}
 #-------------------------------------------------------------------------
 
 sub new {
