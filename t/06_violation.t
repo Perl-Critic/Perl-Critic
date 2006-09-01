@@ -49,9 +49,11 @@ my $doc = PPI::Document->new(\$code);
 my $no_diagnostics_msg = qr/ \s* No [ ] diagnostics [ ] available \s* /xms;
 my $viol = Perl::Critic::Violation->new( 'Foo', 'Bar', $doc, 99, );
 
+my $expected_location = $PPI::VERSION ge '1.116' ? [1,1,1] : [0,0,0];
+
 is(        $viol->description(), 'Foo',    'description');
 is(        $viol->explanation(), 'Bar',    'explanation');
-is_deeply( $viol->location(),    [0,0,0],  'location');
+is_deeply( $viol->location(),    $expected_location,  'location');
 is(        $viol->severity(),    99,       'severity');
 is(        $viol->source(),      $code,    'source');
 is(        $viol->policy(),      $pkg,     'policy');
@@ -59,7 +61,7 @@ like(      $viol->diagnostics(), qr/ \A $no_diagnostics_msg \z /xms, 'diagnostic
 
 {
     local $Perl::Critic::Violation::FORMAT = '%l,%c,%m,%e,%p,%d,%r';
-    my $expect = qr/\A 0,0,Foo,Bar,$pkg,$no_diagnostics_msg,\Q$code\E \z/xms;
+    my $expect = qr/\A $expected_location->[0],$expected_location->[1],Foo,Bar,$pkg,$no_diagnostics_msg,\Q$code\E \z/xms;
 
     like($viol->to_string(), $expect, 'to_string');
     like("$viol",            $expect, 'stringify');
