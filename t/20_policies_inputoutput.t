@@ -341,12 +341,11 @@ is( pcritique($policy, \$code), 0, $policy);
 
 $code = <<'END_PERL';
 -t;
-3-t();  # Really.  I tested this in Perl 5.8.6
 if (-t) { }
 END_PERL
 
 $policy = 'InputOutput::ProhibitInteractiveTest';
-is( pcritique($policy, \$code), 3, $policy );
+is( pcritique($policy, \$code), 2, $policy );
 
 #----------------------------------------------------------------
 
