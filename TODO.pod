@@ -183,6 +183,11 @@ Forbid C<do "foo.pl">.  Not sure about this policy name.
 
 Definitely low severity!  Only looks at code, not comments or POD
 
+=item * CodingStyle::RequireUTF8
+
+All characters must be valid UTF-8.  Note that typical ASCII Perl code
+is a valid UTF8 subset.
+
 =item * Miscellanea::RequireMinimumPerlVersion
 
 Every module should have something like C<use 5.6.0>
@@ -240,6 +245,33 @@ overloaded instances)
 Forbid old-schoole package names like Foo'Bar'Baz.  This should also
 apply to any variables or subroutines that get declared/called.
 
+=item * CodingStyle::RequireEditorSettings
+
+Files must have something like the following in them for Emacs and Vi:
+
+  # Local Variables:
+  #   mode: cperl
+  #   cperl-indent-level: 4
+  #   fill-column: 100
+  # End:
+  # vim: expandtab shiftwidth=4:
+
+=item * Documentation::RequireSynopsis
+
+=item * Documentation::RequireLicense
+
+These are simplified versions of Documentation::RequirePodSections.
+
+=item * CodingStyle::RequireConsistentNewlines
+
+Mixing any two of \r\n, \r and \n in the same file causes problems
+with GnuPG (and thus Module::Signature).  This applies to the whole
+file, including strings, heredocs, POD, __DATA__, etc.
+
+=item * Miscellaneous::ProhibitBoilerplate
+
+Complain about copy-and-paste code or docs from h2xs, Module::Starter,
+etc.
 
 =back
 
@@ -266,6 +298,24 @@ If enabled, this turns on L<PPI::Cache>:
 
 (see F<t/40_criticize.t> for a more robust implementation)
 
+=item * Use the PPI::Document::File features
+
+This gives us access to the filename.  New possible policies:
+
+=over 4
+
+=item * File::RequirePortableName
+
+No spaces, punctuation, etc.
+
+=item * File::RequireNameMatchesPackage
+
+If the file has C<package Foo::Bar;> then the file path must end with
+C<File::Spec->catfile('Foo', 'Bar.$ext');> where C<$ext> is one of
+C<pm, pl, PL, pod>, etc.
+
+=back
+
 =back
 
 =head1 PPI BUGS
@@ -276,12 +326,12 @@ We're waiting on the following bugs to get fixed in a CPAN release of PPI:
 
 =item * C<goto> as a PPI::Statement::Break instance
 
-Broken through PPI v1.115, fixed in PPI SVN, needed to remove
+Broken through PPI v1.115, fixed in PPI 1.117, needed to remove
 workaround from Subroutines::RequireFinalReturn
 
 =item * RT #19629: End of list mistakenly seen as end of statement
 
-Broken through PPI v1.115, fixed in PPI SVN, needed for
+Broken through PPI v1.115, fixed in PPI 1.117, needed for
 BuiltinFunctions::ProhibitReverseSortBlock
 
 =back
