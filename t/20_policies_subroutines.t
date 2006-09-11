@@ -106,7 +106,9 @@ is( pcritique($policy, \$code), 0, $policy);
 #----------------------------------------------------------------
 
 $code = <<'END_PERL';
-sub import {}
+sub import   { do_something(); }
+sub AUTOLOAD { do_something(); }
+sub DESTROY  { do_something(); }
 END_PERL
 
 $policy = 'Subroutines::ProhibitBuiltinHomonyms';
@@ -115,7 +117,10 @@ is( pcritique($policy, \$code), 0, $policy);
 #----------------------------------------------------------------
 
 $code = <<'END_PERL';
-BEGIN { use_ok( 'Foo::Bar' ); }
+BEGIN { do_something(); }
+INIT  { do_something(); }
+CHECK { do_something(); }
+END   { do_something(); }
 END_PERL
 
 $policy = 'Subroutines::ProhibitBuiltinHomonyms';
