@@ -14,7 +14,7 @@ use Carp qw(confess);
 use Perl::Critic::Utils;
 use Perl::Critic::Violation;
 
-our $VERSION = 0.19;
+our $VERSION = 0.20;
 
 #----------------------------------------------------------------------------
 

@@ -14,7 +14,7 @@ use Perl::Critic::Utils;
 use List::Util qw(first);
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 0.19;
+our $VERSION = 0.20;
 
 #---------------------------------------------------------------------------
 

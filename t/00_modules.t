@@ -11,7 +11,7 @@ use PPI::Document;
 use Test::More tests => 797;  # Add 9 for each new policy created
 use English qw(-no_match_vars);
 
-our $VERSION = 0.19;
+our $VERSION = 0.20;
 my $obj = undef;
 
 #---------------------------------------------------------------

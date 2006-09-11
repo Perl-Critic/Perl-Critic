@@ -18,7 +18,7 @@ use File::Spec::Unix;
 use List::MoreUtils qw(any none);
 use Perl::Critic::Utils;
 
-our $VERSION = 0.19;
+our $VERSION = 0.20;
 
 # Globals.  Ick!
 my $NAMESPACE = $EMPTY;

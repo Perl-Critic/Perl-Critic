@@ -20,13 +20,13 @@ use List::Util qw(first);
 use English qw(-no_match_vars);
 use Perl::Critic::Utils;
 
-our $VERSION = 0.19;
+our $VERSION = 0.20;
 
 #-----------------------------------------------------------------------------
 # Begin script.  Don't run when loaded as a library
 
 my @FILES = ();
-exit run() if !caller;
+exit run() if not caller;
 
 #-----------------------------------------------------------------------------
 # Begin subroutines

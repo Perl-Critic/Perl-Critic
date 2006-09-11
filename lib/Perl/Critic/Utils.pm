@@ -12,7 +12,7 @@ use strict;
 use warnings;
 use base 'Exporter';
 
-our $VERSION = 0.19;
+our $VERSION = 0.20;
 
 #---------------------------------------------------------------------------
 # Exported symbols here

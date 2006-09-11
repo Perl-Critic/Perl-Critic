@@ -15,7 +15,7 @@ use Perl::Critic::Config (-test => 1);
 use Perl::Critic;
 
 
-our $VERSION = 0.19;
+our $VERSION = 0.20;
 our @EXPORT_OK = qw(pcritique critique);
 
 #---------------------------------------------------------------
