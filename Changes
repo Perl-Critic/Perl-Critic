@@ -5,7 +5,17 @@
 # $Revision$
 #######################################################################
 
-[0.18_02]  Released on 2006-08-20
+[0.20]  Released on ????-??-??
+
+     Perl::Critic now requires PPI version 1.117, which fixes
+     several bugs that were introduced in version 1.116.
+
+     Bug Fixes:
+     * 21079: grep clears @SITE_POLICIES
+     * 21352: Test failures with PPI 1.117
+     * 11365: sub DESTROY detected as a builtin homonym
+
+[0.19]  Released on 2006-08-20
 
      New Policies:
      * BuiltinFunctions::ProhibitStringySplit
