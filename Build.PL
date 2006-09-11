@@ -54,7 +54,7 @@ my $builder = Module::Build->new(
   dist_abstract  => 'Critique Perl source code for best-practices',
   license        => 'perl',
 
-  requires       => {'PPI'                   => 1.115,
+  requires       => {'PPI'                   => 1.117,
 	             'Config::Tiny'          => 2,
 	             'File::Spec'            => 0,
   	             'List::MoreUtils'       => 0,
@@ -67,16 +67,16 @@ my $builder = Module::Build->new(
                      'Module::Pluggable'     => 0,
 	            },
 
+  recommends     => {'File::HomeDir'         => 0,
+                     'Perl::Tidy'            => 0,
+                     'Test::Perl::Critic'    => 0,
+                    },
+
   build_requires => {'Test::More'            => 0,
                     },
 
   build_recommends => {'B::Keywords'         => 1.04,
                       },
-
-  recommends     => {'File::HomeDir'         => 0,
-                     'Perl::Tidy'            => 0,
-                     'Test::Perl::Critic'    => 0,
-                    },
 
   script_files   => ['bin/perlcritic'],
 );
