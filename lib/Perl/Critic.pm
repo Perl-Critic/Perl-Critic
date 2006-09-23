@@ -20,6 +20,7 @@ use Perl::Critic::Violation ();
 use Perl::Critic::Document;
 use Carp;
 use PPI;
+use PPI::Document;
 
 #----------------------------------------------------------------------------
 
