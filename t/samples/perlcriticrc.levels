@@ -280,3 +280,6 @@ severity = 1
 
 [RegularExpressions::ProhibitCaptureWithoutTest]
 severity = 1
+
+[Testing::RequireTestLabels]
+severity = 1

@@ -5,7 +5,15 @@
 # $Revision$
 #######################################################################
 
-[0.20]  Released on ????-??-??
+[x.xx]  Released on ????-??-??
+
+     New Policies:
+     * Testing::RequireTest::Labels
+
+     Other Stuff:
+     * Added author-only tests to the release, but disabled by default
+
+[0.20]  Released on 2006-09-10
 
      Perl::Critic now requires PPI version 1.117, which fixes
      several bugs that were introduced in version 1.116.

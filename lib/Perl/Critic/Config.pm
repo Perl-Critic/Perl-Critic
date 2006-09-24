@@ -384,6 +384,7 @@ sub native_policies {
       Perl::Critic::Policy::Subroutines::ProhibitSubroutinePrototypes
       Perl::Critic::Policy::Subroutines::ProtectPrivateSubs
       Perl::Critic::Policy::Subroutines::RequireFinalReturn
+      Perl::Critic::Policy::Testing::RequireTestLabels
       Perl::Critic::Policy::TestingAndDebugging::ProhibitNoStrict
       Perl::Critic::Policy::TestingAndDebugging::ProhibitNoWarnings
       Perl::Critic::Policy::TestingAndDebugging::RequireUseStrict

@@ -2,11 +2,13 @@
 use warnings;
 use strict;
 use File::Find;
-use Test::More qw(no_plan);
+use Test::More;
 
 if (!$ENV{TEST_AUTHOR}) {
     plan skip_all => 'Author test';
 }
+
+plan 'no_plan';
 
 my $last_version = undef;
 find({wanted => \&check_version, no_chdir => 1}, 'blib');
