@@ -2,7 +2,6 @@
 
 use warnings;
 use strict;
-use File::Slurp;
 use File::Find;
 use PPI::Document;
 use Test::More;
