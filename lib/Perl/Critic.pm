@@ -21,6 +21,7 @@ use Perl::Critic::Document;
 use Carp;
 use PPI;
 use PPI::Document;
+use PPI::Document::File;
 
 #----------------------------------------------------------------------------
 
@@ -90,8 +91,10 @@ sub critique {
     # PPI::Document, or a reference to a scalar containing source
     # code.  In the last case, PPI handles the translation for us.
 
-    my $doc = ( blessed($source_code) && $source_code->isa('PPI::Document') ) ?
-        $source_code : PPI::Document->new($source_code);
+    my $doc
+        = blessed($source_code) && $source_code->isa('PPI::Document') ? $source_code
+        : ref $source_code ? PPI::Document->new($source_code)
+        : PPI::Document::File->new($source_code);
 
     # Bail on error
     if ( !defined $doc ) {
