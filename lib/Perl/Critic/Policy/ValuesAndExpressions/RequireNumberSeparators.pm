@@ -43,15 +43,19 @@ sub violates {
     my ( $self, $elem, undef ) = @_;
     my $min = $self->{_min};
 
-    if ( abs _to_number($elem) >= $min && $elem =~ m{ \d{4,} }mx ) {
-        return $self->violation( $desc, $expl, $elem );
-    }
-    return;    #ok!
+    return if $elem !~ m{ \d{4} }mx;
+    return if abs _to_number($elem) < $min;
+
+    return $self->violation( $desc, $expl, $elem );
 }
 
 sub _to_number {
     my $elem  = shift;
-    my $value = "$elem";
+
+    # This eval is necessary because Perl only supports the underscore
+    # during compilation, not numification.
+
+    my $value = $elem->content;
     $value = eval $value;    ## no critic
     return $value;
 }
