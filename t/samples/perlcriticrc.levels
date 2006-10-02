@@ -281,5 +281,5 @@ severity = 1
 [RegularExpressions::ProhibitCaptureWithoutTest]
 severity = 1
 
-[Testing::RequireTestLabels]
+[TestingAndDebugging::RequireTestLabels]
 severity = 1

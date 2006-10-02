@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 36;
+use Test::More tests => 39;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -425,4 +425,60 @@ END_PERL
 %config = (allow => 'paCK/PortablE'); 
 $policy = 'TestingAndDebugging::ProhibitNoWarnings';
 is( pcritique($policy, \$code, \%config), 1, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+use Test::More tests => 10;
+ok($foo);
+ok(!$foo);
+is(1,2);
+isnt(1,2);
+like('foo',qr/f/);
+unlike('foo',qr/f/);
+cmp_ok(1,'==',2);
+is_deeply([], {});
+pass();
+fail();
+END_PERL
+
+$policy = 'TestingAndDebugging::RequireTestLabels';
+is( pcritique($policy, \$code), 10, $policy );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+ok($foo);
+ok(!$foo);
+is(1,2);
+isnt(1,2);
+like('foo',qr/f/);
+unlike('foo',qr/f/);
+cmp_ok(1,'==',2);
+is_deeply([], {});
+pass();
+fail();
+END_PERL
+
+$policy = 'TestingAndDebugging::RequireTestLabels';
+is( pcritique($policy, \$code), 0, $policy );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+use Test::More tests => 10;
+ok($foo,'label');
+ok(!$foo,'label');
+is(1,2,'label');
+isnt(1,2,'label');
+like('foo',qr/f/,'label');
+unlike('foo',qr/f/,'label');
+cmp_ok(1,'==',2,'label');
+is_deeply('foo', 'bar','label');
+pass('label');
+fail('label');
+END_PERL
+
+$policy = 'TestingAndDebugging::RequireTestLabels';
+is( pcritique($policy, \$code), 0, $policy );
 

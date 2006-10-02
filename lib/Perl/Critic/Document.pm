@@ -15,6 +15,15 @@ use PPI::Document;
 
 our $VERSION = 0.20;
 
+# Fast...
+{
+   no warnings 'redefine'; ## no critic(ProhibitNoWarn)
+   *PPI::Node::content = sub {
+      return $_[0]->{_content} ||= join q{}, map { $_->content } @{$_[0]->{children}};
+   };
+}
+
+
 #----------------------------------------------------------------------------
 
 our $AUTOLOAD;

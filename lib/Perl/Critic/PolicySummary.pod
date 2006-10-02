@@ -257,10 +257,6 @@ Prevent access to private subs in other packages [Severity 3]
 
 End every path through a subroutine with an explicit C<return> statement. [Severity 4]
 
-=head2 L<Perl::Critic::Policy::Testing::RequireTestLabels>
-
-Tests should all have labels [Severity 3]
-
 =head2 L<Perl::Critic::Policy::TestingAndDebugging::ProhibitNoStrict>
 
 Prohibit various flavors of C<no strict> [Severity 5]
@@ -268,6 +264,10 @@ Prohibit various flavors of C<no strict> [Severity 5]
 =head2 L<Perl::Critic::Policy::TestingAndDebugging::ProhibitNoWarnings>
 
 Prohibit various flavors of C<no warnings> [Severity 4]
+
+=head2 L<Perl::Critic::Policy::TestingAndDebugging::RequireTestLabels>
+
+Tests should all have labels [Severity 3]
 
 =head2 L<Perl::Critic::Policy::TestingAndDebugging::RequireUseStrict>
 

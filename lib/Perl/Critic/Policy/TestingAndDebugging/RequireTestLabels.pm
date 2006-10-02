@@ -5,7 +5,7 @@
 # $Revision$
 ##################################################################
 
-package Perl::Critic::Policy::Testing::RequireTestLabels;
+package Perl::Critic::Policy::TestingAndDebugging::RequireTestLabels;
 
 use strict;
 use warnings;
@@ -72,7 +72,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Testing::RequireTestLabels
+Perl::Critic::Policy::TestingAndDebugging::RequireTestLabels
 
 =head1 DESCRIPTION
 

@@ -67,9 +67,9 @@ lib/Perl/Critic/Policy/Subroutines/ProhibitExplicitReturnUndef.pm
 lib/Perl/Critic/Policy/Subroutines/ProhibitSubroutinePrototypes.pm
 lib/Perl/Critic/Policy/Subroutines/ProtectPrivateSubs.pm
 lib/Perl/Critic/Policy/Subroutines/RequireFinalReturn.pm
-lib/Perl/Critic/Policy/Testing/RequireTestLabels.pm
 lib/Perl/Critic/Policy/TestingAndDebugging/ProhibitNoStrict.pm
 lib/Perl/Critic/Policy/TestingAndDebugging/ProhibitNoWarnings.pm
+lib/Perl/Critic/Policy/TestingAndDebugging/RequireTestLabels.pm
 lib/Perl/Critic/Policy/TestingAndDebugging/RequireUseStrict.pm
 lib/Perl/Critic/Policy/TestingAndDebugging/RequireUseWarnings.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitConstantPragma.pm
@@ -123,7 +123,6 @@ t/20_policies_namingconventions.t
 t/20_policies_references.t
 t/20_policies_regularexpressions.t
 t/20_policies_subroutines.t
-t/20_policies_testing.t
 t/20_policies_testinganddebugging.t
 t/20_policies_valuesandexpressions.t
 t/20_policies_variables.t

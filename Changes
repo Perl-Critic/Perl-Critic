@@ -8,7 +8,7 @@
 [x.xx]  Released on ????-??-??
 
      New Policies:
-     * Testing::RequireTest::Labels
+     * TestingAndDebugging::RequireTestLabels
 
      Other Stuff:
      * Added author-only tests to the release, but disabled by default
