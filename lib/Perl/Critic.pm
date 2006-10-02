@@ -99,8 +99,8 @@ sub critique {
     # Bail on error
     if ( !defined $doc ) {
         my $errstr = PPI::Document::errstr();
-        my $file = -f $source_code ? $source_code : 'stdin';
-        croak qq{Warning: Can't parse code: $errstr for '$file'};
+        my $file = ref $source_code ? undef : $source_code;
+        croak qq{Warning: Can't parse code: $errstr}.($file ? qq{ for '$file'} : q{});
     }
 
     # Pre-index location of each node (for speed)
