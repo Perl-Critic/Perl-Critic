@@ -1,13 +1,13 @@
 ##################################################################
-#     $URL$
-#    $Date$
+#      $URL$
+#     $Date$
 #   $Author$
 # $Revision$
 ##################################################################
 
 use strict;
 use warnings;
-use Test::More tests => 39;
+use Test::More tests => 41;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -482,3 +482,24 @@ END_PERL
 $policy = 'TestingAndDebugging::RequireTestLabels';
 is( pcritique($policy, \$code), 0, $policy );
 
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+use Test::Bar tests => 10;
+ok($foo);
+END_PERL
+
+%config = (modules => 'Test::Foo Test::Bar'); 
+$policy = 'TestingAndDebugging::RequireTestLabels';
+is( pcritique($policy, \$code, \%config), 1, $policy );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+use Test::Baz tests => 10;
+ok($foo);
+END_PERL
+
+%config = (modules => 'Test::Foo Test::Bar'); 
+$policy = 'TestingAndDebugging::RequireTestLabels';
+is( pcritique($policy, \$code, \%config), 0, $policy );

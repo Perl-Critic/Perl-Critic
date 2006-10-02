@@ -27,6 +27,8 @@ my %label_arg_pos = (
    fail => 0,
 );
 
+my %default_test_modules = hashify( qw( Test::More ) );
+
 #----------------------------------------------------------------------------
 
 my $desc = q{Test without a label};
@@ -39,13 +41,27 @@ sub applies_to { return 'PPI::Token::Word' }
 
 #----------------------------------------------------------------------------
 
+sub new {
+    my ( $class, %args ) = @_;
+    my $self = bless {}, $class;
+
+    $self->{_test_modules} = \%default_test_modules;
+    if (defined $args{modules})
+    {
+        my @modules = split m{ \s+ }mx, $args{modules};
+        $self->{_test_modules} = { %default_test_modules, hashify(@modules) };
+    }
+
+    return $self;
+}
+
 sub violates {
     my ($self, $elem, $doc) = @_;
 
     my $arg_index = $label_arg_pos{$elem};
     return if !defined $arg_index; # this is the fastest conditional, so do it first
     return if !is_function_call($elem);
-    return if !_has_test_more($doc);
+    return if !$self->_has_test_more($doc);
 
     # Does the function call have enough arguments?
     my @args = parse_arg_list($elem);
@@ -55,11 +71,11 @@ sub violates {
 }
 
 sub _has_test_more {
-    my ( $doc ) = @_;
+    my ( $self, $doc ) = @_;
 
     my $includes = $doc->find('PPI::Statement::Include');
     return if !$includes;
-    return any { $_->module() eq 'Test::More' } @{ $includes };
+    return any { exists $self->{_test_modules}->{$_->module()} } @{ $includes };
 }
 
 1;
@@ -87,7 +103,20 @@ determining where the problem originated.
 
 This policy enforces that all Test::More functions have labels where
 applicable.  This only applies to code that has a C<use Test::More> or
-C<require Test::More> declaration.
+C<require Test::More> declaration (see below to add more test modules
+to the list).
+
+=head1 CONSTRUCTOR
+
+This policy accepts an additional key-value pair in the C<new> method.
+The key should be 'modules' and the value is a string of
+space-delimited fully qualified module names.  These can be configured
+in the F<.perlcriticrc> file like this:
+
+ [TestingAndDebugging::RequireTestLabels]
+ modules = My::Test::SubClass  Some::Other::Module
+
+The module list always implicitly includes L<Test::More>.
 
 =head1 AUTHOR
 
