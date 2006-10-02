@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 11;
+use Test::More tests => 12;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -228,6 +228,22 @@ my $result = $str =~ m/(.)/;
 if ($result) {
    return $1;
 }
+END_PERL
+
+$policy = 'RegularExpressions::ProhibitCaptureWithoutTest';
+is( pcritique($policy, \$code), 0, $policy );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+print m/(.)/ ? $1 : 'undef';
+print !m/(.)/ ? 'undef' : $1;
+print s/(.)// ? $1 : 'undef';
+print !s/(.)// ? 'undef' : $1;
+$foo = m/(.)/ && $1;
+$foo = !m/(.)/ || $1;
+$foo = s/(.)// && $1;
+$foo = !s/(.)// || $1;
 END_PERL
 
 $policy = 'RegularExpressions::ProhibitCaptureWithoutTest';

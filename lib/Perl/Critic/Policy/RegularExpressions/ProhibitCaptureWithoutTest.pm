@@ -30,15 +30,40 @@ sub violates {
     my ($self, $elem, $doc) = @_;
     return if $elem !~ m/\A \$\d \z/mx;
     return if $elem eq '$0';   ## no critic(RequireInterpolationOfMetachars)
-    return if _is_in_conditional($elem->statement);
+    return if _is_in_conditional_expression($elem);
+    return if _is_in_conditional_structure($elem->statement);
     return $self->violation( $desc, $expl, $elem );
 }
 
-sub _is_in_conditional {
-    my $elem = shift;  # should be a statement or a structure, not a token
+sub _is_in_conditional_expression {
+    my $elem = shift;
+
+    # simplistic check: is there one of qw(&& || ?) between a match and the capture var?
+    my $psib = $elem->sprevious_sibling;
+    while ($psib) {
+        if ($psib->isa('PPI::Token::Operator')) {
+            my $op = $psib->content;
+            if ($op eq q{&&} || $op eq q{||} || $op eq q{?}) {
+                $psib = $psib->sprevious_sibling;
+                while ($psib) {
+                    return 1 if ($psib->isa('PPI::Token::Regexp::Match'));
+                    return 1 if ($psib->isa('PPI::Token::Regexp::Substitute'));
+                    $psib = $psib->sprevious_sibling;
+                }
+                return; # false
+            }
+        }
+        $psib = $psib->sprevious_sibling;
+    }
+
+    return; # false
+}
+
+sub _is_in_conditional_structure {
+    my $stmt = shift;  # should be a statement or a structure, not a token
 
     # Check if any previous statements in the same scope have regexp matches
-    my $psib = $elem->sprevious_sibling;
+    my $psib = $stmt->sprevious_sibling;
     while ($psib) {
         if ($psib->isa('PPI::Node')) {  # skip tokens
             return if $psib->find_any('PPI::Token::Regexp::Match'); # fail
@@ -48,13 +73,13 @@ sub _is_in_conditional {
     }
 
     # Check for an enclosing 'if', 'unless', 'endif', or 'else'
-    my $parent = $elem->parent;
+    my $parent = $stmt->parent;
     while ($parent # never false as long as we're inside a PPI::Document
            && ($parent->isa('PPI::Structure') || $parent->isa('PPI::Statement::Compound'))) {
         if ($parent->isa('PPI::Statement::Compound') && $parent->type eq 'if') {
             return 1;
         }
-        return 1 if _is_in_conditional($parent);
+        return 1 if _is_in_conditional_structure($parent);
         $parent = $parent->parent;
     }
 
