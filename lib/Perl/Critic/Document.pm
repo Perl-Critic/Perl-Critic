@@ -191,6 +191,11 @@ If C<$wanted> is a simple PPI class name, then the cache is employed.
 Otherwise we forward the call to the corresponding method of the
 C<PPI::Document> instance.
 
+=item $self->filename()
+
+Returns the filename for the source code if applicable
+(PPI::Document::File) or C<undef> otherwise (PPI::Document).
+
 =back
 
 =head1 AUTHOR

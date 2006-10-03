@@ -82,7 +82,7 @@ sub fcritique {
     my $err = $EVAL_ERROR;
     File::Path::rmtree($dir, 0, 1);
     if ($err) {
-        die $err;
+        die $err; ## no critic(ErrorHandling::RequireCarping)
     }
     return scalar @v;
 }

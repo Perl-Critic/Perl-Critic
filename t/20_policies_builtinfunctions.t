@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 36;
+use Test::More tests => 38;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -447,3 +447,25 @@ END_PERL
 
 $policy = 'BuiltinFunctions::ProhibitStringySplit';
 is( pcritique($policy, \$code), 0, $policy.' Split oddities' );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+sort {$b <=> $a} @list;
+sort {$alpha{$b} <=> $beta{$a}} @list;
+sort {$b->[0] <=> $a->[0] && $b->[1] <=> $a->[1]} @list;
+END_PERL
+
+$policy = 'BuiltinFunctions::ProhibitReverseSortBlock';
+is( pcritique($policy, \$code), 3, $policy );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+reverse sort {$a <=> $b} @list;
+reverse sort {$a->[0] <=> $b->[0] && $a->[1] <=> $b->[1]} @list;
+sort {$beta{$a} <=> $alpha{$b}} @list;
+END_PERL
+
+$policy = 'BuiltinFunctions::ProhibitReverseSortBlock';
+is( pcritique($policy, \$code), 0, $policy );

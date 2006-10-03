@@ -10,6 +10,7 @@
      New Policies:
      * TestingAndDebugging::RequireTestLabels
      * File::RequireFilenameMatchesPackage
+     * BuiltinFunctions::ProhibitReverseSortBlock
 
      Other Stuff:
      * Added author-only tests to the release, but disabled by default

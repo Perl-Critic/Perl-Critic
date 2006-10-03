@@ -9,6 +9,7 @@
 ##########################################################################
 
 [-BuiltinFunctions::ProhibitLvalueSubstr]
+[-BuiltinFunctions::ProhibitReverseSortBlock]
 [-BuiltinFunctions::ProhibitSleepViaSelect]
 [-BuiltinFunctions::ProhibitStringyEval]
 [-BuiltinFunctions::ProhibitStringySplit]

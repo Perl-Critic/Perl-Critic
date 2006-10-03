@@ -326,6 +326,7 @@ sub site_policies {
 sub native_policies {
     return qw(
       Perl::Critic::Policy::BuiltinFunctions::ProhibitLvalueSubstr
+      Perl::Critic::Policy::BuiltinFunctions::ProhibitReverseSortBlock
       Perl::Critic::Policy::BuiltinFunctions::ProhibitSleepViaSelect
       Perl::Critic::Policy::BuiltinFunctions::ProhibitStringyEval
       Perl::Critic::Policy::BuiltinFunctions::ProhibitStringySplit

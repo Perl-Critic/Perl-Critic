@@ -9,6 +9,7 @@ lib/Perl/Critic/DEVELOPER.pod
 lib/Perl/Critic/Document.pm
 lib/Perl/Critic/Policy.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitLvalueSubstr.pm
+lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitReverseSortBlock.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitSleepViaSelect.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitStringyEval.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitStringySplit.pm
