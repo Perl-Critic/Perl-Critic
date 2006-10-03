@@ -99,6 +99,13 @@ sub find_any {
 
 #----------------------------------------------------------------------------
 
+sub filename {
+    my ($self) = @_;
+    return $self->{_doc}->can('filename') ? $self->{_doc}->filename : undef;
+}
+
+#----------------------------------------------------------------------------
+
 sub _caching_finder {
 
     my $cache_ref = shift;  # These vars will persist for the life

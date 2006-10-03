@@ -9,9 +9,11 @@
 
      New Policies:
      * TestingAndDebugging::RequireTestLabels
+     * File::RequireFilenameMatchesPackage
 
      Other Stuff:
      * Added author-only tests to the release, but disabled by default
+     * Support for filename-based policies
 
 [0.20]  Released on 2006-09-10
 

@@ -133,6 +133,10 @@ Organize your POD into the customary sections. [Severity 2]
 
 Use functions from L<Carp> instead of C<warn> or C<die>. [Severity 3]
 
+=head2 L<Perl::Critic::Policy::File::RequireFilenameMatchesPackage>
+
+Package declaration must match filename [Severity 5]
+
 =head2 L<Perl::Critic::Policy::InputOutput::ProhibitBacktickOperators>
 
 Discourage stuff like C<@files = `ls $directory`> [Severity 3]

@@ -283,3 +283,6 @@ severity = 1
 
 [TestingAndDebugging::RequireTestLabels]
 severity = 1
+
+[File::RequireFilenameMatchesPackage]
+severity = 1

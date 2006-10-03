@@ -36,6 +36,7 @@ lib/Perl/Critic/Policy/ControlStructures/ProhibitUntilBlocks.pm
 lib/Perl/Critic/Policy/Documentation/RequirePodAtEnd.pm
 lib/Perl/Critic/Policy/Documentation/RequirePodSections.pm
 lib/Perl/Critic/Policy/ErrorHandling/RequireCarping.pm
+lib/Perl/Critic/Policy/File/RequireFilenameMatchesPackage.pm
 lib/Perl/Critic/Policy/InputOutput/ProhibitBacktickOperators.pm
 lib/Perl/Critic/Policy/InputOutput/ProhibitBarewordFileHandles.pm
 lib/Perl/Critic/Policy/InputOutput/ProhibitInteractiveTest.pm
@@ -116,6 +117,7 @@ t/20_policies_codelayout.t
 t/20_policies_controlstructures.t
 t/20_policies_documentation.t
 t/20_policies_errorhandling.t
+t/20_policies_file.t
 t/20_policies_inputoutput.t
 t/20_policies_miscellanea.t
 t/20_policies_modules.t

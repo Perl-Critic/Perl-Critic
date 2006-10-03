@@ -35,6 +35,7 @@
 [Documentation::RequirePodAtEnd]
 [Documentation::RequirePodSections]
 [ErrorHandling::RequireCarping]
+[File::RequireFilenameMatchesPackage]
 [InputOutput::ProhibitBacktickOperators]
 [InputOutput::ProhibitBarewordFileHandles]
 [InputOutput::ProhibitInteractiveTest]
