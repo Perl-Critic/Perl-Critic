@@ -172,11 +172,11 @@ L<http://home.earthlink.net/~josh.jore/new-warnings/slides/slide1.html>
 
 Forbid C<do "foo.pl">.  Not sure about this policy name.
 
-=item * CodingStyle::ProhibitNonASCII
+=item * CodeLayout::ProhibitNonASCII
 
 Definitely low severity!  Only looks at code, not comments or POD
 
-=item * CodingStyle::RequireUTF8
+=item * CodeLayout::RequireUTF8
 
 All characters must be valid UTF-8.  Note that typical ASCII Perl code
 is a valid UTF8 subset.
@@ -206,7 +206,7 @@ severity.
 Create a compatibility layer for the L<B::Lint> code analyzer.  Make
 it very clear that this runs code and thus is a security hole.
 
-=item * CodingStyle::ProhibitFunctionalNew
+=item * CodeLayout::ProhibitFunctionalNew
 
 Good: C<< Foo::Bar->new >>, Bad: C<< new Foo::Bar >>
 
@@ -214,15 +214,6 @@ Good: C<< Foo::Bar->new >>, Bad: C<< new Foo::Bar >>
 
 VariablesAndExpressions::ProhibitComplexVersion (medium severity)
 L<http://rt.cpan.org/Ticket/Display.html?id=20439>
-
-=item * Tests::RequireTestDescriptions
-
-If Test::More is detected:
-
-   ok $foo;                        # not ok
-   ok $foo, 'foo got populated';   # ok
-   is $foo, 'bar';                 # not ok
-   is $foo, 'bar', 'foo value';    # ok
 
 =item * ValuesAndExpressions::ProhibitUselessQuotingOfVariables
 
@@ -235,10 +226,10 @@ overloaded instances)
 
 =item * Variables::ProhibitPerl4PackageNames
 
-Forbid old-schoole package names like Foo'Bar'Baz.  This should also
+Forbid old-school package names like Foo'Bar'Baz.  This should also
 apply to any variables or subroutines that get declared/called.
 
-=item * CodingStyle::RequireEditorSettings
+=item * CodeLayout::RequireEditorSettings
 
 Files must have something like the following in them for Emacs and Vi:
 
@@ -249,21 +240,66 @@ Files must have something like the following in them for Emacs and Vi:
   # End:
   # vim: expandtab shiftwidth=4:
 
+=over 4
+
+=item Emacs file variables
+
+L<http://www.gnu.org/software/emacs/manual/html_node/File-Variables.html>
+
+In emacs, this is called "File Variables".  There are two syntaxes:
+C<-*- ... -*-> (single-line) and C<Local Variables:\n...\nEnd:>
+(multi-line).  Both syntaxes allow leading and trailing text on the
+line.
+
+The single-line syntax must be used on the first line of the file to
+be recognized.
+
+The multi-line syntax must be used "in the last page" at the end of
+the file.  As of Emacs21, this is hard-coded to be the last 3000 bytes
+of the file (in the hack-local-variables function in files.el).  In
+this syntax, each line must begin and end with the same prefix/suffix
+pair.  That pair is defined by the text before and after the "Local
+Variables:" string.
+
+=item Vim modelines
+
+In vim, this is called "modelines" and should match the following
+pattern:
+
+  [text]{white}{vi:|vim:|ex:}[white]se[t] {options}:[text]
+
+The vim modeline must be within N lines of the top or bottom of the
+file.  That N is user-settable, but defaults to 5.  To learn more type
+":help modelines" in vim.
+
+=item Kate modelines
+
+I also discovered that Kate supports per-file modelines:
+
+L<http://kate-editor.org/article/katepart_modelines>
+
+=back
+
 =item * Documentation::RequireSynopsis
 
 =item * Documentation::RequireLicense
 
 These are simplified versions of Documentation::RequirePodSections.
 
-=item * CodingStyle::RequireConsistentNewlines
+=item * CodeLayout::RequireConsistentNewlines
 
 Mixing any two of \r\n, \r and \n in the same file causes problems
 with GnuPG (and thus Module::Signature).  This applies to the whole
 file, including strings, heredocs, POD, __DATA__, etc.
 
+NOTE: this is impossible to implement as of the current PPI (v1.118)
+because PPI fixes all newlines before tokenization as an
+implementation expedient.  The PPI docs state that newline preserving
+is on the wishlist.
+
 =item * Miscellaneous::ProhibitBoilerplate
 
-Complain about copy-and-paste code or docs from h2xs, Module::Starter,
+Complain about copy-and-paste code or docs from h2xs, Module::Starter::*,
 etc.
 
 =back
@@ -302,6 +338,20 @@ No spaces, punctuation, etc.
 We're waiting on the following bugs to get fixed in a CPAN release of PPI:
 
 =over 4
+
+=item literal()
+
+ValuesAndExpressions::RequireNumberSeparators uses a stringy eval to
+numify.  Current PPI SVN has code for the
+PPI::Token::Number->literal() method which numifies from source.  When
+we depend on a PPI version higher than 1.118, the _to_number()
+function in that policy can be removed in favor of literal().
+
+=item newlines
+
+PPI does not preserve newlines.  That makes
+CodeLayout::RequireConsistentNewlines impossible to implement under
+PPI.
 
 =back
 
