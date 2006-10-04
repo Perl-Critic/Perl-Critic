@@ -52,6 +52,11 @@ sub violates {
 sub _to_number {
     my $elem  = shift;
 
+    # TODO: when we can depend on PPI > v1.118, we can remove this if()
+    if ( $elem->can('literal') ) {
+        return $elem->literal();
+    }
+
     # This eval is necessary because Perl only supports the underscore
     # during compilation, not numification.
 
