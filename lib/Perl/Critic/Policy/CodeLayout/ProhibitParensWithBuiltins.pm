@@ -119,16 +119,14 @@ sub violates {
 
 sub _is_named_unary {
     my $elem = shift;
-    return if ! $elem->isa('PPI::Token::Word');
-    return exists $named_unary_ops{$elem};
+    return exists $named_unary_ops{$elem->content};
 }
 
 #-----------------------------------------------------------------------------
 
 sub _is_greedy {
     my $elem = shift;
-    return if ! $elem->isa('PPI::Token::Word');
-    return exists $greedy_funcs{$elem};
+    return exists $greedy_funcs{$elem->content};
 }
 
 1;

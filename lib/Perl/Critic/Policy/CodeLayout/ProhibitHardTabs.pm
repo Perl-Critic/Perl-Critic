@@ -43,9 +43,7 @@ sub violates {
     $elem =~ m{ \t }mx || return;
 
     # The __DATA__ element is exempt
-    if (my $parent = $elem->parent() ) {
-        return if $parent->isa('PPI::Statement::Data');
-    }
+    return if $elem->parent->isa('PPI::Statement::Data');
 
     # Permit leading tabs, if allowed
     return if $self->{_allow_leading_tabs} && $elem->location->[1] == 1;

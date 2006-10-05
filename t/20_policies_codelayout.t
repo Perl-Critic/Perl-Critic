@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 53;
+use Test::More tests => 55;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique fcritique);
@@ -104,10 +104,15 @@ open ($foo, $bar);
 open($foo, $bar);
 uc();
 lc();
+uc($f) lt "b";
+
+# These ones deliberately omit the semi-colon
+sub {uc()}
+sub {reverse()}
 END_PERL
 
 $policy = 'CodeLayout::ProhibitParensWithBuiltins';
-is( pcritique($policy, \$code), 4, $policy);
+is( pcritique($policy, \$code), 7, $policy);
 
 #----------------------------------------------------------------
 
@@ -483,4 +488,10 @@ for my $keyword (qw( Pkg; heredoc_body HEREDOC POD_HEADER pod =cut
         ($code = $base_code) =~ s/(\Q$keyword\E)\n/$1$nl/;
         is( fcritique($policy, \$code), $nfail, $policy.' - '.$keyword );
     }
+}
+
+for my $nl ("\012", "\015", "\015\012") {
+    next if $nl eq "\n";
+    ($code = $base_code) =~ s/\n/$nl/;
+    is( pcritique($policy, \$code), 0, $policy.' - no filename' );
 }
