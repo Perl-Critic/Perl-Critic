@@ -34,7 +34,15 @@ sub violates {
 
     my $sib = $elem->snext_sibling();
     return if !$sib;
-    my $arg = $sib->isa('PPI::Structure::List') ? $sib->schild(0) : $sib;
+
+    my $arg = $sib;
+    if ( $arg->isa('PPI::Structure::List') ) {
+        $arg = $arg->schild(0);
+        # Forward looking: PPI might change in v1.200 so schild(0) is a PPI::Statement::Expression
+        if ( $arg && $arg->isa('PPI::Statement::Expression') ) {
+            $arg = $arg->schild(0);
+        }
+    }
     return if !$arg || !$arg->isa('PPI::Structure::Block');
 
     # If we get here, we found a sort with a block as the first arg
