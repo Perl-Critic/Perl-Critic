@@ -76,7 +76,7 @@ sub _is_in_conditional_structure {
     my $parent = $stmt->parent;
     while ($parent # never false as long as we're inside a PPI::Document
            && ($parent->isa('PPI::Structure') || $parent->isa('PPI::Statement::Compound'))) {
-        if ($parent->isa('PPI::Statement::Compound') && $parent->type eq 'if') {
+        if ($parent->isa('PPI::Statement::Compound')) {
             return 1;
         }
         return 1 if _is_in_conditional_structure($parent);

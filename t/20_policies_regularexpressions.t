@@ -220,6 +220,10 @@ if ($str =~ m/(.)/) {
    }
 }
 
+while ($str =~ m/\G(.)/cg) {
+   print $1;
+}
+
 print $0; # not affected by policy
 print $_; # not affected by policy
 print $f1; # not affected by policy
