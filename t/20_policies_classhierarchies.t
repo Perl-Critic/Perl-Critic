@@ -25,6 +25,8 @@ my $self = bless [];
 
 #Critic doesn't catch these,
 #cuz they parse funny
+# Update CJD 2006-10-05: There is a failing test for this in PPI.
+# Hopefully it will be fixed in PPI v1.200.
 #my $self = bless( {} );
 #my $self = bless( [] );
 
@@ -44,6 +46,11 @@ my $self = bless {} => 'foo';
 
 $baz{bless}; # not a function call
 $bar->bless('foo'); # method call
+
+# Failure due to constructor parsing in PPI v1.118
+# Uncomment when PPI v1.200 is ready
+# RT 21153
+#$data{"attachment_$index"} = bless([ $files->[$i] ], "Attachment");
 END_PERL
 
 $policy = 'ClassHierarchies::ProhibitOneArgBless';

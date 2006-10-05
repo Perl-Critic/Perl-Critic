@@ -236,7 +236,7 @@ Files must have something like the following in them for Emacs and Vi:
   # Local Variables:
   #   mode: cperl
   #   cperl-indent-level: 4
-  #   fill-column: 100
+  #   fill-column: 78
   # End:
   # vim: expandtab shiftwidth=4:
 
@@ -291,6 +291,28 @@ These are simplified versions of Documentation::RequirePodSections.
 Complain about copy-and-paste code or docs from h2xs, Module::Starter::*,
 etc.
 
+=item * ValuesAndExpressions::ProhibitHereDocs
+
+=item * ValuesAndExpressions::ProhibitLongStrings
+
+Low severity.
+
+Both of these attempt to address problems with code layout and appearance.
+Large blocks of inline text can disrupt the readability of code.  Instead, the
+text should be external, in __DATA__, or simply declared in separate functions
+at the end of the module.
+
+Exceptions: if the only code in a sub is a return of a long string, allow it.
+If there is a C<use Inline::> at the top of the module, allow HereDocs.
+
+L<http://rt.cpan.org/Ticket/Display.html?id=20714>
+
+=item * CodeLayout::ProhibitTrailingSpaces
+
+Forbid [ \t] before \n.  This is a subset of RequireTidyCode.
+
+L<http://rt.cpan.org/Ticket/Display.html?id=20714>
+
 =back
 
 =head1 REFACTORINGS and ENHANCEMENTS
@@ -336,11 +358,21 @@ PPI::Token::Number->literal() method which numifies from source.  When
 we depend on a PPI version higher than 1.118, the _to_number()
 function in that policy can be removed in favor of literal().
 
-=item newlines
+=item Newlines
 
 PPI does not preserve newlines.  That makes
-CodeLayout::RequireConsistentNewlines impossible to implement under
-PPI.
+CodeLayout::RequireConsistentNewlines impossible to implement under PPI.  For
+now, it's implemented by pulling the source out of the file and skipping PPI.
+
+It's unlikely that PPI will support mixde newlines anytime soon.
+
+=item Anonymous constructors in lists
+
+The following parses wrong in PPI v1.118.  A PPI fix is in progress.
+
+  bless( {} );
+
+When this is fixed, uncomment a few tests in t/20_policies_classhierarchies.t
 
 =back
 
