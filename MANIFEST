@@ -25,6 +25,7 @@ lib/Perl/Critic/Policy/ClassHierarchies/ProhibitOneArgBless.pm
 lib/Perl/Critic/Policy/CodeLayout/ProhibitHardTabs.pm
 lib/Perl/Critic/Policy/CodeLayout/ProhibitParensWithBuiltins.pm
 lib/Perl/Critic/Policy/CodeLayout/ProhibitQuotedWordLists.pm
+lib/Perl/Critic/Policy/CodeLayout/RequireConsistentNewlines.pm
 lib/Perl/Critic/Policy/CodeLayout/RequireTidyCode.pm
 lib/Perl/Critic/Policy/CodeLayout/RequireTrailingCommas.pm
 lib/Perl/Critic/Policy/ControlStructures/ProhibitCascadingIfElse.pm

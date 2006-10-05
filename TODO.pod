@@ -286,17 +286,6 @@ L<http://kate-editor.org/article/katepart_modelines>
 
 These are simplified versions of Documentation::RequirePodSections.
 
-=item * CodeLayout::RequireConsistentNewlines
-
-Mixing any two of \r\n, \r and \n in the same file causes problems
-with GnuPG (and thus Module::Signature).  This applies to the whole
-file, including strings, heredocs, POD, __DATA__, etc.
-
-NOTE: this is impossible to implement as of the current PPI (v1.118)
-because PPI fixes all newlines before tokenization as an
-implementation expedient.  The PPI docs state that newline preserving
-is on the wishlist.
-
 =item * Miscellaneous::ProhibitBoilerplate
 
 Complain about copy-and-paste code or docs from h2xs, Module::Starter::*,

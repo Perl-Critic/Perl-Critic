@@ -65,7 +65,8 @@ sub fcritique {
     my $c = Perl::Critic->new( -profile => 'NONE' );
     $c->add_policy(-policy => $policy, -config => $config_ref);
 
-    my $dir = File::Temp::tempdir( 'PerlCritic-tmpXXXXXX' );
+    my $dir = File::Temp::tempdir( 'PerlCritic-tmpXXXXXX', TMPDIR => 1 );
+    $filename ||= 'Temp.pm';
     my @fileparts = File::Spec::Unix->splitdir($filename);
     if (@fileparts > 1) {
         my $subdir = File::Spec->catdir($dir, @fileparts[0..$#fileparts-1]);

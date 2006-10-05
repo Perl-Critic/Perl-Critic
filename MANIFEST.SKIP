@@ -1,5 +1,6 @@
 ^tags$
 ^README\.developer$
+\.PPI$
 
 # Version Control files
 ^\.cvsignore$

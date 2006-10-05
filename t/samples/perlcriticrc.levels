@@ -289,3 +289,6 @@ severity = 1
 
 [BuiltinFunctions::ProhibitReverseSortBlock]
 severity = 1
+
+[CodeLayout::RequireConsistentNewlines]
+severity = 1

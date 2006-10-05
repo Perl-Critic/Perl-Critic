@@ -7,10 +7,10 @@
 
 use strict;
 use warnings;
-use Test::More tests => 26;
+use Test::More tests => 53;
 
 # common P::C testing tools
-use Perl::Critic::TestUtils qw(pcritique);
+use Perl::Critic::TestUtils qw(pcritique fcritique);
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 my $code ;
@@ -441,3 +441,46 @@ END_PERL
 %config = (min_elements => 4);
 $policy = 'CodeLayout::ProhibitQuotedWordLists';
 is( pcritique($policy, \$code, \%config), 1, $policy);
+
+#----------------------------------------------------------------
+
+my $base_code = <<'END_PERL';
+package My::Pkg;
+my $str = <<"HEREDOC";
+heredoc_body
+heredoc_body
+HEREDOC
+
+=head1 POD_HEADER
+
+pod pod pod
+
+=cut
+
+# comment_line
+
+1; # inline_comment
+
+__END__
+end_body
+__DATA__
+DataLine1
+DataLine2
+END_PERL
+
+$policy = 'CodeLayout::RequireConsistentNewlines';
+
+is( fcritique($policy, \$base_code), 0, $policy );
+
+my @lines = split m/\n/mx, $base_code;
+for my $keyword (qw( Pkg; heredoc_body HEREDOC POD_HEADER pod =cut
+                     comment_line inline_comment
+                     __END__ end_body __DATA__ DataLine1 DataLine2 )) {
+    my $is_first_line = $lines[0] =~ m/\Q$keyword\E\z/mx;
+    my $nfail = $is_first_line ? @lines-1 : 1;
+    for my $nl ("\012", "\015", "\015\012") {
+        next if $nl eq "\n";
+        ($code = $base_code) =~ s/(\Q$keyword\E)\n/$1$nl/;
+        is( fcritique($policy, \$code), $nfail, $policy.' - '.$keyword );
+    }
+}

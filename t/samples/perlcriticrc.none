@@ -25,6 +25,7 @@
 [-CodeLayout::ProhibitHardTabs]
 [-CodeLayout::ProhibitParensWithBuiltins]
 [-CodeLayout::ProhibitQuotedWordLists]
+[-CodeLayout::RequireConsistentNewlines]
 [-CodeLayout::RequireTidyCode]
 [-CodeLayout::RequireTrailingCommas]
 [-ControlStructures::ProhibitCStyleForLoops]

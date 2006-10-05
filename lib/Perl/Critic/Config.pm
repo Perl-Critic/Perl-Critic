@@ -342,6 +342,7 @@ sub native_policies {
       Perl::Critic::Policy::CodeLayout::ProhibitHardTabs
       Perl::Critic::Policy::CodeLayout::ProhibitParensWithBuiltins
       Perl::Critic::Policy::CodeLayout::ProhibitQuotedWordLists
+      Perl::Critic::Policy::CodeLayout::RequireConsistentNewlines
       Perl::Critic::Policy::CodeLayout::RequireTidyCode
       Perl::Critic::Policy::CodeLayout::RequireTrailingCommas
       Perl::Critic::Policy::ControlStructures::ProhibitCStyleForLoops

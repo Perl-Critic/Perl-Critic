@@ -11,6 +11,7 @@
      * TestingAndDebugging::RequireTestLabels
      * File::RequireFilenameMatchesPackage
      * BuiltinFunctions::ProhibitReverseSortBlock
+     * CodeLayout::RequireConsistentNewlines
 
      Other Stuff:
      * Added author-only tests to the release, but disabled by default
