@@ -187,13 +187,13 @@ Every module should have something like C<use 5.6.0>
 
 =item * Miscellanea::Prohibit5006isms
 
-Keep the code 5.005 compatible Low severity
+Keep the code 5.005 compatible. Low severity
 
 =item * Variables::ProhibitUseVars
 
-Require C<our $foo> instead.  This contradicts
-Miscellanea::Prohibit5006isms.  Maybe verify C<use 5.6> before
-applying this policy.  Low severity.
+Disallow C<use vars qw(...)> and require C<our $foo> instead.  This
+contradicts Miscellanea::Prohibit5006isms.  Maybe verify C<use 5.6>
+before applying this policy.  Low severity.
 
 =item * VariablesAndExpressions::ProhibitQuotedHashKeys
 
@@ -212,7 +212,8 @@ Good: C<< Foo::Bar->new >>, Bad: C<< new Foo::Bar >>
 
 =item * VariablesAndExpressions::RequireConstantVersion (low severity)
 
-VariablesAndExpressions::ProhibitComplexVersion (medium severity)
+=item * VariablesAndExpressions::ProhibitComplexVersion (medium severity)
+
 L<http://rt.cpan.org/Ticket/Display.html?id=20439>
 
 =item * ValuesAndExpressions::ProhibitUselessQuotingOfVariables
