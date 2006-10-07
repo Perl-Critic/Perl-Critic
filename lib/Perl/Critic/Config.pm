@@ -659,12 +659,25 @@ relevant Policy module for a description of the arguments it supports.
 NOTE: this parameter is ignored when the -policy argument is a
 reference to an actual policy object.
 
-
 =item C<policies()>
 
 Returns a list containing references to all the Policy objects that
 have been loaded into this Config.  Objects will be in the order that
 they were loaded.
+
+=item C<profile_path()>
+
+=item C<profile()>
+
+=item C<defaults()>
+
+=item C<severity()>
+
+=item C<exclude()>
+
+=item C<include()>
+
+=item C<themes()>
 
 =back
 
