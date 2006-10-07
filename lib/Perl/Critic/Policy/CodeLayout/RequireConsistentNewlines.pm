@@ -13,7 +13,7 @@ use Perl::Critic::Utils;
 use English qw(-no_match_vars);
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 0.20;
+our $VERSION = 0.21;
 
 my $LINE_END = qr/\015{1,2}\012|\012|\015/mxs;
 

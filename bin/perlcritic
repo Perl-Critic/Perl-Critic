@@ -20,7 +20,7 @@ use List::Util qw(first);
 use English qw(-no_match_vars);
 use Perl::Critic::Utils;
 
-our $VERSION = 0.20;
+our $VERSION = 0.21;
 
 #-----------------------------------------------------------------------------
 # Begin script.  Don't run when loaded as a library

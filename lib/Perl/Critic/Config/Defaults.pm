@@ -14,7 +14,7 @@ use Carp qw(cluck);
 use English qw(-no_match_vars);
 use Perl::Critic::Utils;
 
-our $VERSION = 0.20;
+our $VERSION = 0.21;
 
 #-----------------------------------------------------------------------------
 

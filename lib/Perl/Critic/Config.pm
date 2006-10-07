@@ -20,7 +20,7 @@ use Scalar::Util qw(blessed);
 use Perl::Critic::Utils;
 use Perl::Critic::Config::Defaults;
 
-our $VERSION = 0.20;
+our $VERSION = 0.21;
 
 # Globals.  Ick!
 my $NAMESPACE = $EMPTY;

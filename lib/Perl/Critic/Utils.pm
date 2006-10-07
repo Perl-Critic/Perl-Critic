@@ -13,7 +13,7 @@ use warnings;
 use File::Spec;
 use base 'Exporter';
 
-our $VERSION = 0.20;
+our $VERSION = 0.21;
 
 #---------------------------------------------------------------------------
 # Exported symbols here

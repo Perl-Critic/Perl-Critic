@@ -10,10 +10,10 @@
 use strict;
 use warnings;
 use PPI::Document;
-use Test::More tests => 1145;  # Add 13 for each new policy created
+use Test::More tests => 1197;  # Add 13 for each new policy created
 use English qw(-no_match_vars);
 
-our $VERSION = 0.20;
+our $VERSION = 0.21;
 my $obj = undef;
 
 #---------------------------------------------------------------
