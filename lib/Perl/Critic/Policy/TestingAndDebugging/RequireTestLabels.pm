@@ -37,7 +37,8 @@ my $expl = q{Add a label argument to all Test::More functions};
 #----------------------------------------------------------------------------
 
 sub default_severity { return $SEVERITY_MEDIUM }
-sub applies_to { return 'PPI::Token::Word' }
+sub default_themes   { return qw( unreliable tests ) }
+sub applies_to       { return 'PPI::Token::Word' }
 
 #----------------------------------------------------------------------------
 
