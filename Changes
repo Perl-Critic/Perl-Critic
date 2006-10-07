@@ -5,13 +5,27 @@
 # $Revision$
 #######################################################################
 
-[x.xx]  Released on ????-??-??
+[0.21]  Released on ????-??-??
 
      New Policies:
      * TestingAndDebugging::RequireTestLabels
      * File::RequireFilenameMatchesPackage
      * BuiltinFunctions::ProhibitReverseSortBlock
      * CodeLayout::RequireConsistentNewlines
+
+     New Features:
+     * perlcritic output is colorized if you have Term::ANSIColor.  This
+       only works on non-Win32 platforms.  Use -nocolor switch to disable.
+     * Say "perlcritic -count" to get just the the total number of
+       violations per file.
+     * Default values for most of the perlcritic and Perl::Critic switches
+       can now be defined in your .perlcriticrc file.  See POD for details.
+
+     Bug Fixes:
+     * 21236: wrong page number for "printing to filehandles"
+     * 21916: File handle ... wrong page reference in PBP [DUPE]
+     * 21714: false positive for capture var used in ternary condition
+     * 21718: No skip for File::Slurp in includes.t
 
      Other Stuff:
      * Added author-only tests to the release, but disabled by default
