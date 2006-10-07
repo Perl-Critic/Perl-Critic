@@ -1,3 +1,5 @@
+#!perl
+
 ##################################################################
 #     $URL$
 #    $Date$
@@ -8,7 +10,7 @@
 use strict;
 use warnings;
 use PPI::Document;
-use Test::More tests => 833;  # Add 9 for each new policy created
+use Test::More tests => 1145;  # Add 13 for each new policy created
 use English qw(-no_match_vars);
 
 our $VERSION = 0.20;
@@ -45,6 +47,20 @@ isa_ok($obj, 'Perl::Critic::Config');
 is($obj->VERSION(), $VERSION);
 
 #---------------------------------------------------------------
+# Test Perl::Critic::Config::Defaults module interface
+
+use_ok('Perl::Critic::Config::Defaults');
+can_ok('Perl::Critic::Config::Defaults', 'new');
+can_ok('Perl::Critic::Config::Defaults', 'default_severity');
+can_ok('Perl::Critic::Config::Defaults', 'default_include');
+can_ok('Perl::Critic::Config::Defaults', 'default_exclude');
+can_ok('Perl::Critic::Config::Defaults', 'default_themes');
+
+$obj = Perl::Critic::Config::Defaults->new();
+isa_ok($obj, 'Perl::Critic::Config::Defaults');
+is($obj->VERSION(), $VERSION);
+
+#---------------------------------------------------------------
 # Test Perl::Critic::Policy module interface
 
 use_ok('Perl::Critic::Policy');
@@ -54,6 +70,11 @@ can_ok('Perl::Critic::Policy', 'applies_to');
 can_ok('Perl::Critic::Policy', 'default_severity');
 can_ok('Perl::Critic::Policy', 'get_severity');
 can_ok('Perl::Critic::Policy', 'set_severity');
+can_ok('Perl::Critic::Policy', 'default_themes');
+can_ok('Perl::Critic::Policy', 'get_themes');
+can_ok('Perl::Critic::Policy', 'set_themes');
+can_ok('Perl::Critic::Policy', 'add_themes');
+
 
 $obj = Perl::Critic::Policy->new();
 isa_ok($obj, 'Perl::Critic::Policy');
@@ -89,6 +110,10 @@ for my $mod ( Perl::Critic::Config::native_policies() ) {
     can_ok($mod, 'default_severity');
     can_ok($mod, 'get_severity');
     can_ok($mod, 'set_severity');
+    can_ok($mod, 'default_themes');
+    can_ok($mod, 'get_themes');
+    can_ok($mod, 'set_themes');
+    can_ok($mod, 'set_themes');
 
     $obj = $mod->new();
     isa_ok($obj, 'Perl::Critic::Policy');

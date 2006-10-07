@@ -18,13 +18,77 @@ our $VERSION = 0.20;
 
 #----------------------------------------------------------------------------
 
-sub new              { return bless {}, shift    }
-sub applies_to       { return qw(PPI::Element)   }
-sub violates         { return _abstract_method() }
+sub new {
+    my $class = shift;
+    return bless {}, $class;
+}
 
-sub set_severity     { return $_[0]->{_severity} = $_[1] }
-sub get_severity     { return $_[0]->{_severity} || $_[0]->default_severity() }
-sub default_severity { return $SEVERITY_LOWEST }
+#----------------------------------------------------------------------------
+
+sub applies_to {
+    return qw(PPI::Element);
+}
+
+#----------------------------------------------------------------------------
+
+sub set_severity {
+    my ($self, $severity) = @_;
+    $self->{_severity} = $severity;
+    return $self;
+}
+
+#----------------------------------------------------------------------------
+
+sub get_severity {
+    my ($self) = @_;
+    return $self->{_severity} || $self->default_severity();
+}
+
+#----------------------------------------------------------------------------
+
+sub default_severity {
+    return $SEVERITY_LOWEST;
+}
+
+#----------------------------------------------------------------------------
+
+sub set_themes {
+    my ($self, @themes) = @_;
+    $self->{_themes} = [ sort @themes ];
+    return $self;
+}
+
+#----------------------------------------------------------------------------
+
+sub get_themes {
+    my ($self) = @_;
+    return @{ $self->{_themes} } if defined $self->{_themes};
+    return $self->default_themes();
+}
+
+#----------------------------------------------------------------------------
+
+sub add_themes {
+    my ($self, @additional_themes) = @_;
+    #By hashifying the themes, we squish duplicates
+    my %merged = hashify( $self->get_themes(), @additional_themes);
+    $self->{_themes} = [ sort keys %merged];
+    return $self;
+}
+
+#----------------------------------------------------------------------------
+
+sub default_themes {
+    return ();
+}
+
+#----------------------------------------------------------------------------
+
+sub violates {
+    return confess q{Can't call abstract method};
+}
+
+#----------------------------------------------------------------------------
 
 sub violation {
     my ( $self, $desc, $expl, $elem ) = @_;
@@ -34,13 +98,6 @@ sub violation {
     goto &Perl::Critic::Violation::new;
 }
 
-#----------------------------------------------------------------------------
-
-sub _abstract_method {
-    my $method_name = ( caller 1 )[3];
-    confess qq{Can't call abstract method '$method_name'};
-    return; ## no critic (UnreachableCode)
-}
 
 1;
 
@@ -132,6 +189,29 @@ Perl::Critic::Policy objects can call this method to assign a
 different severity to the Policy if they don't agree with the
 C<default_severity>.  See the C<$SEVERITY> constants in
 L<Perl::Critic::Utils> for an enumeration of possible values.
+
+=item C<default_themes()>
+
+Returns a sorted list of the default themes associated with this
+Policy.  The default method returns an empty list.  Policy authors
+should override this method to return a list of themes that are
+appropriate for their policy.
+
+=item C<get_themes()>
+
+Returns a sorted list of the themes associated with this Policy.  If
+you haven't added themes or set the themes explicilty, this method
+just returns the default themes.
+
+=item C<set_themes( @THEME_LIST )>
+
+Sets the themes associated with this Policy.  Any existing themes are
+overwritten.  Duplicate themes will be removed.
+
+=item C<add_themes( @THEME_LIST )>
+
+Appends additional themes to this Policy.  Any existing themes are
+preserved.  Duplicate themes will be removed.
 
 =back
 

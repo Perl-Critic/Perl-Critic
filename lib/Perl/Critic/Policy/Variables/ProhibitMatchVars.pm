@@ -25,11 +25,10 @@ my %forbidden = hashify( @forbidden );
 
 #---------------------------------------------------------------------------
 
-sub default_severity { return $SEVERITY_HIGH }
-sub applies_to {
-    return qw( PPI::Token::Symbol
-               PPI::Statement::Include );
-}
+sub default_severity { return $SEVERITY_HIGH  }
+sub default_themes    { return qw( risky pbp ) }
+sub applies_to       { return qw( PPI::Token::Symbol
+                                  PPI::Statement::Include ) }
 
 #---------------------------------------------------------------------------
 

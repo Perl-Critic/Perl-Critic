@@ -1,3 +1,5 @@
+#!perl
+
 ##################################################################
 #     $URL: http://perlcritic.tigris.org/svn/perlcritic/trunk/Perl-Critic/t/20_policies_builtinfunctions.t $
 #    $Date: 2006-07-15 01:00:50 -0700 (Sat, 15 Jul 2006) $

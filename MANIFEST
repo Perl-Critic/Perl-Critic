@@ -5,6 +5,7 @@ extras/perlcritic.el
 INSTALL
 lib/Perl/Critic.pm
 lib/Perl/Critic/Config.pm
+lib/Perl/Critic/Config/Defaults.pm
 lib/Perl/Critic/DEVELOPER.pod
 lib/Perl/Critic/Document.pm
 lib/Perl/Critic/Policy.pm
@@ -109,6 +110,7 @@ t/00_modules.t
 t/01_config.t
 t/02_policy.t
 t/03_pragmas.t
+t/04_defaults.t
 t/05_utils.t
 t/06_violation.t
 t/07_perlcritic.t
@@ -137,6 +139,7 @@ t/96_filenames.t
 t/98_pod_syntax.t
 t/99_pod_coverage.t
 t/samples/perlcriticrc.all
+t/samples/perlcriticrc.defaults
 t/samples/perlcriticrc.levels
 t/samples/perlcriticrc.none
 t/samples/perlcriticrc.pbp

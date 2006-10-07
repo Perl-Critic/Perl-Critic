@@ -24,7 +24,8 @@ my $expl    = [ 167 ];
 #----------------------------------------------------------------------------
 
 sub default_severity { return $SEVERITY_HIGHEST }
-sub applies_to { return 'PPI::Token::QuoteLike::Readline' }
+sub default_themes    { return qw( pbp danger )  }
+sub applies_to       { return 'PPI::Token::QuoteLike::Readline' }
 
 #----------------------------------------------------------------------------
 
@@ -51,10 +52,10 @@ Perl::Critic::Policy::BuiltinFunctions::RequireGlobFunction
 
 =head1 DESCRIPTION
 
-Conway discourages the use of the C< <..> > construct for globbing, as it is easily
-confused with the angle bracket file input operator.  Instead, he recommends
-the use of the C<glob()> function as it makes it much more obvious what you're
-attempting to do.
+Conway discourages the use of the C< <..> > construct for globbing, as
+it is easily confused with the angle bracket file input operator.
+Instead, he recommends the use of the C<glob()> function as it makes
+it much more obvious what you're attempting to do.
 
   @files = <*.pl>;              # not ok
   @files = glob( "*.pl" );      # ok

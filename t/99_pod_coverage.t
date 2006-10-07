@@ -1,3 +1,5 @@
+#!perl
+
 ##################################################################
 #     $URL$
 #    $Date$
@@ -33,6 +35,19 @@ plan skip_all => 'Test::Pod::Coverage 1.00 requried to test POD' if $@;
     *Perl::Critic::Violation::import = sub { 1 };
 }
 
-my $trusted_rx = qr{ \A (?: new | violates | applies_to | default_severity ) \z }x; 
-my $trustme = { trustme => [ $trusted_rx ] };
-all_pod_coverage_ok( $trustme );
+my @trusted_methods  = get_trusted_methods();
+my $method_string = join ' | ', @trusted_methods;
+my $trusted_rx = qr{ \A (?: $method_string ) \z }x;
+all_pod_coverage_ok( {trustme => [$trusted_rx]} );
+
+#-----------------------------------------------------------------------------
+
+sub get_trusted_methods {
+    return qw(
+        new
+        violates
+        applies_to
+        default_themes
+        default_severity
+    );
+}

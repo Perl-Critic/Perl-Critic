@@ -22,8 +22,9 @@ my $expl   = q{Limit to one per file};
 
 #----------------------------------------------------------------------------
 
-sub default_severity { return $SEVERITY_HIGH }
-sub applies_to { return 'PPI::Document' }
+sub default_severity { return $SEVERITY_HIGH  }
+sub default_themes    { return qw( risky )     }
+sub applies_to       { return 'PPI::Document' }
 
 #----------------------------------------------------------------------------
 

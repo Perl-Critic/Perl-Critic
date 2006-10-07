@@ -21,8 +21,9 @@ my $expl = q{Use eval{$obj->isa($pkg)} instead};  ##no critic 'RequireInterp';
 
 #----------------------------------------------------------------------------
 
-sub default_severity { return $SEVERITY_MEDIUM }
-sub applies_to { return 'PPI::Token::Word' }
+sub default_severity { return $SEVERITY_MEDIUM   }
+sub default_themes    { return qw( unreliable )   }
+sub applies_to       { return 'PPI::Token::Word' }
 
 #----------------------------------------------------------------------------
 

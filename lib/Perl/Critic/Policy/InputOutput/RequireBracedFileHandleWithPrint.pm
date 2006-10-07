@@ -25,8 +25,9 @@ my $expl = [ 217 ];
 
 #----------------------------------------------------------------------------
 
-sub default_severity { return $SEVERITY_LOWEST }
-sub applies_to { return 'PPI::Token::Word' }
+sub default_severity { return $SEVERITY_LOWEST   }
+sub default_themes    { return qw( pbp cosmetic ) }
+sub applies_to       { return 'PPI::Token::Word' }
 
 #----------------------------------------------------------------------------
 

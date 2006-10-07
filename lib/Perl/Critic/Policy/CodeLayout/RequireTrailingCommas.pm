@@ -23,7 +23,8 @@ my $expl  = [ 17 ];
 #----------------------------------------------------------------------------
 
 sub default_severity { return $SEVERITY_LOWEST }
-sub applies_to { return 'PPI::Structure::List' }
+sub default_themes    { return qw(pbp cosmetic) }
+sub applies_to       { return 'PPI::Structure::List' }
 
 #----------------------------------------------------------------------------
 

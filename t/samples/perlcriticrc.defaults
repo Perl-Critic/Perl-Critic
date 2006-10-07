@@ -1,0 +1,4 @@
+-severity = 3
+-themes   = danger risky pbp
+-include  = CodeLayout Modules
+-exclude  = Documentation NamingConventions

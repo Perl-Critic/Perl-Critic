@@ -21,8 +21,9 @@ my $expl = [ 218 ];
 
 #----------------------------------------------------------------------------
 
-sub default_severity { return $SEVERITY_HIGHEST }
-sub applies_to { return 'PPI::Token::Operator' }
+sub default_severity { return $SEVERITY_HIGHEST      }
+sub default_themes    { return qw( pbp danger )       }
+sub applies_to       { return 'PPI::Token::Operator' }
 
 #----------------------------------------------------------------------------
 

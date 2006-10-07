@@ -22,8 +22,9 @@ my $expl = [ 211 ];
 
 #----------------------------------------------------------------------------
 
-sub default_severity   { return $SEVERITY_HIGH }
-sub applies_to { return qw( PPI::Structure::ForLoop) }
+sub default_severity   { return $SEVERITY_HIGH               }
+sub default_themes      { return qw( risky pbp )              }
+sub applies_to         { return qw( PPI::Structure::ForLoop) }
 
 #----------------------------------------------------------------------------
 

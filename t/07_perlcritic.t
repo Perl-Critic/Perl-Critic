@@ -1,3 +1,5 @@
+#!perl
+
 ###############################################################################
 #     $URL$
 #    $Date$
@@ -114,9 +116,9 @@ ok( _interpolate( 'literal'    ) eq "literal",    'Interpolation' );
     my @lines = policy_listing();
     my $list = join q{}, @lines;
     cmp_ok(scalar @lines, '>', 70, 'policy_listing');
-    like($list, qr/^BuiltinFunctions::/xms, 'policy_listing');
-    like($list, qr/^InputOutput::/xms, 'policy_listing');
-    like($list, qr/^Variables::/xms, 'policy_listing');
+    like($list, qr/^ \d \s \d \s BuiltinFunctions::/xms, 'policy_listing');
+    like($list, qr/^ \d \s \d \s InputOutput::/xms, 'policy_listing');
+    like($list, qr/^ \d \s \d \s Variables::/xms, 'policy_listing');
 }
 
 #-----------------------------------------------------------------------------

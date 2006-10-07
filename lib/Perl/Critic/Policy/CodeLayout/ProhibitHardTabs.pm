@@ -21,6 +21,7 @@ my $expl = [ 20 ];
 #----------------------------------------------------------------------------
 
 sub default_severity { return $SEVERITY_MEDIUM }
+sub default_themes { return qw(cosmetic) };
 sub applies_to { return 'PPI::Token' }
 
 #----------------------------------------------------------------------------
