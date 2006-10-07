@@ -94,6 +94,7 @@ $code = <<'END_PERL';
 sub foo_BAR {}
 sub foo_bar {}
 sub FOO_bar {}
+sub Foo::Bar::grok {}
 END_PERL
 
 $policy = 'NamingConventions::ProhibitMixedCaseSubs';

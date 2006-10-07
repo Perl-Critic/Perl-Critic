@@ -30,7 +30,8 @@ sub applies_to { return 'PPI::Statement::Sub' }
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
-    if ( $elem->name() =~ $mixed_rx ) {
+    (my $name = $elem->name() ) =~ s/\A.*:://mx;
+    if ( $name =~ $mixed_rx ) {
         return $self->violation( $desc, $expl, $elem );
     }
     return;    #ok!
@@ -60,10 +61,12 @@ name.
   sub FOO_bar{}   #ok
   sub FOO_BAR{}   #ok
 
+  sub Some::Class::foo{}   #ok, grudgingly
+
   sub FooBar {}   #not ok
   sub FOObar {}   #not ok
   sub fooBAR {}   #not ok
-  sub fooBar {}   #Not ok
+  sub fooBar {}   #not ok
 
 =head1 SEE ALSO
 
