@@ -256,7 +256,7 @@ sub _set_attributes {
 
 sub _parse_theme_string {
     my ($theme_string) = @_;
-    return map { lc $_ } split m{ /s+ }mx, $theme_string;
+    return map { lc $_ } split m{ \s+ }mx, $theme_string;
 }
 
 sub _intersection {
