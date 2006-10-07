@@ -99,6 +99,7 @@ lib/Perl/Critic/Policy/Variables/RequireLexicalLoopIterators.pm
 lib/Perl/Critic/Policy/Variables/RequireNegativeIndices.pm
 lib/Perl/Critic/PolicySummary.pod
 lib/Perl/Critic/TestUtils.pm
+lib/Perl/Critic/ThemeMath.pm
 lib/Perl/Critic/Utils.pm
 lib/Perl/Critic/Violation.pm
 LICENSE
@@ -115,6 +116,7 @@ t/05_utils.t
 t/06_violation.t
 t/07_perlcritic.t
 t/08_document.t
+t/09_thememath.t
 t/20_policies_builtinfunctions.t
 t/20_policies_classhierarchies.t
 t/20_policies_codelayout.t
