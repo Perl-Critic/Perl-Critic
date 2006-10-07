@@ -24,10 +24,18 @@ if ($ENV{PERL_CRITIC_CACHE}) {
 
 eval {
     require Test::Perl::Critic;
-    my @exclude = qw(TidyCode PodSections);
+    my @exclude = qw(CodeLayout::RequireTidyCode);
     my $profile = {
-        'Miscellanea::RequireRcsKeywords' => {keywords => 'URL Date Author Revision' },
-        'CodeLayout::ProhibitHardTabs' => { allow_leading_tabs => 0 },
+        'Documentation::RequirePodSections' => {
+            lib_sections    => 'NAME|DESCRIPTION|AUTHOR|COPYRIGHT',
+            script_sections => 'NAME|DESCRIPTION|AUTHOR|COPYRIGHT',
+        },
+        'Miscellanea::RequireRcsKeywords' => {
+            keywords => 'URL Date Author Revision',
+        },
+        'CodeLayout::ProhibitHardTabs' => {
+            allow_leading_tabs => 0,
+        },
     };
     my %config = (-severity => 1, -exclude => \@exclude, -profile => $profile);
     Test::Perl::Critic->import( %config );

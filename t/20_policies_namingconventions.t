@@ -95,6 +95,7 @@ sub foo_BAR {}
 sub foo_bar {}
 sub FOO_bar {}
 sub Foo::Bar::grok {}
+sub Class::Encapsulate::_hidden::_hash_overload {}
 END_PERL
 
 $policy = 'NamingConventions::ProhibitMixedCaseSubs';
