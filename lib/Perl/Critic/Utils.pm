@@ -45,6 +45,7 @@ our @EXPORT = qw(
     &all_perl_files
     &verbosity_to_format
     &hashify
+    &shebang_line
 );
 
 
@@ -253,10 +254,8 @@ sub is_function_call {
 
 sub is_script {
     my $doc = shift;
-    my $first_comment = $doc->find_first('PPI::Token::Comment');
-    return if !$first_comment;
-    return if $first_comment->location()->[0] != 1;
-    return $first_comment =~ m{ \A \#\! }mx;
+    my $shebang = shebang_line($doc);
+    return !!$shebang;  # booleanize
 }
 
 #-------------------------------------------------------------------------
@@ -394,8 +393,25 @@ sub _is_perl {
     my $first = <$fh>;
     close $fh;
 
-    return 1 if defined $first && ( $first =~ m{ \A \#!.*perl }mx );
+    return 1 if defined $first && ( $first =~ m{ \A \#![ ]*\S*perl }mx );
     return;
+}
+
+#-------------------------------------------------------------------------
+
+sub shebang_line {
+    my $doc = shift;
+    my $first_comment = $doc->find_first('PPI::Token::Comment');
+    return if !$first_comment;
+    my $location = $first_comment->location();
+    return if !$location;
+    # The shebang must be the first two characters in the file, according to
+    # http://en.wikipedia.org/wiki/Shebang_(Unix)
+    return if $location->[0] != 1; # line number
+    return if $location->[1] != 1; # column number
+    my $shebang = $first_comment->content;
+    return if $shebang !~ m{ \A \#\! }mx;
+    return $shebang;
 }
 
 #-------------------------------------------------------------------------
@@ -502,8 +518,8 @@ present).
 
 =item C<is_script( $document )>
 
-Given a L<PPI::Document>, test if it starts with C</#!.*perl/>.  If so,
-it is judged to be a script instead of a module.
+Given a L<PPI::Document>, test if it starts with C</#!.*/>.  If so,
+it is judged to be a script instead of a module.  See C<shebang_line()>.
 
 =item C<all_perl_files( @directories )>
 
@@ -534,6 +550,11 @@ L<perlcritic> documentation for a listing of the predefined formats.
 
 Given C<@list>, return a hash where C<@list> is in the keys and
 each value is 1.
+
+=item C<shebang_line( $document )>
+
+Given a L<PPI::Document>, test if it starts with C<#!>.  If so,
+return that line.  Otherwise return undef. 
 
 =back
 
