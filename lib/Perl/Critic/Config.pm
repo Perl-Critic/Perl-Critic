@@ -510,7 +510,6 @@ sub native_policies {
       Perl::Critic::Policy::Documentation::RequirePodAtEnd
       Perl::Critic::Policy::Documentation::RequirePodSections
       Perl::Critic::Policy::ErrorHandling::RequireCarping
-      Perl::Critic::Policy::File::RequireFilenameMatchesPackage
       Perl::Critic::Policy::InputOutput::ProhibitBacktickOperators
       Perl::Critic::Policy::InputOutput::ProhibitBarewordFileHandles
       Perl::Critic::Policy::InputOutput::ProhibitInteractiveTest
@@ -527,6 +526,7 @@ sub native_policies {
       Perl::Critic::Policy::Modules::RequireBarewordIncludes
       Perl::Critic::Policy::Modules::RequireEndWithOne
       Perl::Critic::Policy::Modules::RequireExplicitPackage
+      Perl::Critic::Policy::Modules::RequireFilenameMatchesPackage
       Perl::Critic::Policy::Modules::RequireVersionVar
       Perl::Critic::Policy::NamingConventions::ProhibitAmbiguousNames
       Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseSubs

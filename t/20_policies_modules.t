@@ -9,10 +9,10 @@
 
 use strict;
 use warnings;
-use Test::More tests => 54;
+use Test::More tests => 72;
 
 # common P::C testing tools
-use Perl::Critic::TestUtils qw(pcritique);
+use Perl::Critic::TestUtils qw(pcritique fcritique);
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 my $code ;
@@ -588,3 +588,53 @@ END_PERL
 $policy = 'Modules::ProhibitAutomaticExportation';
 is( pcritique($policy, \$code), 0, $policy);
 
+#-----------------------------------------------------------------------------
+
+$code = <<'END_PERL';
+package Filename::OK;
+1;
+END_PERL
+
+$policy = 'Modules::RequireFilenameMatchesPackage';
+for my $file ( qw( OK.pm
+                   Filename/OK.pm
+                   lib/Filename/OK.pm
+                   blib/lib/Filename/OK.pm
+                   OK.pl
+                   Filename-OK-1.00/OK.pm
+                   Filename-OK/OK.pm
+                   Foobar-1.00/OK.pm
+                 )) {
+
+   is( fcritique($policy, \$code, $file), 0, $policy.' - '.$file );
+}
+
+for my $file ( qw( Bad.pm
+                   Filename/Bad.pm
+                   lib/Filename/BadOK.pm
+                   ok.pm
+                   filename/OK.pm
+                   Foobar/OK.pm
+                 )) {
+   is( fcritique($policy, \$code, $file), 1, $policy.' - '.$file );
+}
+
+#-----------------------------------------------------------------------------
+
+$code = <<'END_PERL';
+package D'Oh;
+1;
+END_PERL
+
+$policy = 'Modules::RequireFilenameMatchesPackage';
+for my $file ( qw( Oh.pm
+                   D/Oh.pm
+                 )) {
+   is( fcritique($policy, \$code, $file), 0, $policy.' - '.$file );
+}
+
+for my $file ( qw( oh.pm
+                   d/Oh.pm
+                 )) {
+   is( fcritique($policy, \$code, $file), 1, $policy.' - '.$file );
+}

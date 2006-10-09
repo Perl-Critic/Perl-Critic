@@ -5,7 +5,7 @@
 # $Revision$
 ##################################################################
 
-package Perl::Critic::Policy::File::RequireFilenameMatchesPackage;
+package Perl::Critic::Policy::Modules::RequireFilenameMatchesPackage;
 
 use strict;
 use warnings;
