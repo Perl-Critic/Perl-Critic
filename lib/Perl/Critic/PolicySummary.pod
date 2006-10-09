@@ -141,7 +141,7 @@ Organize your POD into the customary sections. [Severity 2]
 
 Use functions from L<Carp> instead of C<warn> or C<die>. [Severity 3]
 
-=head2 L<Perl::Critic::Policy::File::RequireFilenameMatchesPackage>
+=head2 L<Perl::Critic::Policy::Modules::RequireFilenameMatchesPackage>
 
 Package declaration must match filename [Severity 5]
 

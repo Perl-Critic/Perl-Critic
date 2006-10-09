@@ -78,7 +78,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::File::RequireFilenameMatchesPackage
+Perl::Critic::Policy::Modules::RequireFilenameMatchesPackage
 
 =head1 DESCRIPTION
 

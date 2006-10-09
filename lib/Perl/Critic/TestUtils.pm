@@ -119,7 +119,7 @@ Perl::Critic::TestUtils - Utility functions for testing new Policies
   my $violation_count = pcritique( $custom_policy, \$code );
 
   # Critique code against one filename-related policy...
-  my $custom_policy = 'File::RequireFilenameMatchesPackage'
+  my $custom_policy = 'Modules::RequireFilenameMatchesPackage'
   my $violation_count = fcritique( $custom_policy, \$code, 'Foo/Bar.pm' );
 
 =head1 DESCRIPTION

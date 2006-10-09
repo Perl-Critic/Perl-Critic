@@ -9,7 +9,7 @@
 
      New Policies:
      * TestingAndDebugging::RequireTestLabels
-     * File::RequireFilenameMatchesPackage
+     * Modules::RequireFilenameMatchesPackage
      * BuiltinFunctions::ProhibitReverseSortBlock
      * CodeLayout::RequireConsistentNewlines
 
@@ -30,6 +30,7 @@
      Other Stuff:
      * Added author-only tests to the release, but disabled by default
      * Support for filename-based policies
+     * New Perl::Critic::Utils::shebang_line() method
 
 [0.20]  Released on 2006-09-10
 
