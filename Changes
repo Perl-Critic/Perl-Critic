@@ -26,6 +26,8 @@
      * 21916: File handle ... wrong page reference in PBP [DUPE]
      * 21714: false positive for capture var used in ternary condition
      * 21718: No skip for File::Slurp in includes.t
+     * ProhibitBarewordFilehandles doesn't complain if you open
+       STDIN, STDOUT or STDERR.
 
      Other Stuff:
      * Added author-only tests to the release, but disabled by default

@@ -36,11 +36,15 @@ open FH, '>', $some_file;
 open FH, '>', $some_file or die;
 open(FH, '>', $some_file);
 open(FH, '>', $some_file) or die;
+open(STDIN, '<', '/dev/null') or die;
+open(STDOUT, '>', '/dev/null') or die;
+open(STDERR, '>', '/dev/null') or die;
+open(STDERROR, '>', '/dev/null') or die;
 
 END_PERL
 
 $policy = 'InputOutput::ProhibitBarewordFileHandles';
-is( pcritique($policy, \$code), 4, $policy);
+is( pcritique($policy, \$code), 5, $policy);
 
 #----------------------------------------------------------------
 

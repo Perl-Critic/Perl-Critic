@@ -39,8 +39,10 @@ sub violates {
     my $first_token = $first_arg->[0];
     return if !$first_token;
 
-    if( $first_token->isa('PPI::Token::Word') && $first_token ne 'my' ) {
-        return $self->violation( $desc, $expl, $elem );
+    if ( $first_token->isa('PPI::Token::Word') ) {
+        if ( ($first_token ne 'my') && ($first_token !~ /^STD(IN|OUT|ERR)$/) ) {
+            return $self->violation( $desc, $expl, $elem );
+        }
     }
     return; #ok!
 }
@@ -67,9 +69,12 @@ by C<local>izing the symbol first, but that's pretty ugly.  Since Perl
 to an anonymous filehandle.  Alternatively, see the L<IO::Handle> or
 L<IO::File> or L<FileHandle> modules for an object-oriented approach.
 
-  open FH, '<', $some_file;           #not ok
-  open my $fh, '<', $some_file;       #ok
-  my $fh = IO::File->new($some_file); #ok
+    open FH, '<', $some_file;           #not ok
+    open my $fh, '<', $some_file;       #ok
+    my $fh = IO::File->new($some_file); #ok
+
+There are three exceptions: STDIN, STDOUT and STDERR.  These three
+standard filehandles are always package variables.
 
 =head1 SEE ALSO
 
