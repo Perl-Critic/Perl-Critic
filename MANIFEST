@@ -39,7 +39,6 @@ lib/Perl/Critic/Policy/ControlStructures/ProhibitUntilBlocks.pm
 lib/Perl/Critic/Policy/Documentation/RequirePodAtEnd.pm
 lib/Perl/Critic/Policy/Documentation/RequirePodSections.pm
 lib/Perl/Critic/Policy/ErrorHandling/RequireCarping.pm
-lib/Perl/Critic/Policy/File/RequireFilenameMatchesPackage.pm
 lib/Perl/Critic/Policy/InputOutput/ProhibitBacktickOperators.pm
 lib/Perl/Critic/Policy/InputOutput/ProhibitBarewordFileHandles.pm
 lib/Perl/Critic/Policy/InputOutput/ProhibitInteractiveTest.pm
@@ -56,6 +55,7 @@ lib/Perl/Critic/Policy/Modules/ProhibitMultiplePackages.pm
 lib/Perl/Critic/Policy/Modules/RequireBarewordIncludes.pm
 lib/Perl/Critic/Policy/Modules/RequireEndWithOne.pm
 lib/Perl/Critic/Policy/Modules/RequireExplicitPackage.pm
+lib/Perl/Critic/Policy/Modules/RequireFilenameMatchesPackage.pm
 lib/Perl/Critic/Policy/Modules/RequireVersionVar.pm
 lib/Perl/Critic/Policy/NamingConventions/ProhibitAmbiguousNames.pm
 lib/Perl/Critic/Policy/NamingConventions/ProhibitMixedCaseSubs.pm
@@ -99,6 +99,7 @@ lib/Perl/Critic/Policy/Variables/RequireLexicalLoopIterators.pm
 lib/Perl/Critic/Policy/Variables/RequireNegativeIndices.pm
 lib/Perl/Critic/PolicySummary.pod
 lib/Perl/Critic/TestUtils.pm
+lib/Perl/Critic/ThemeManager.pm
 lib/Perl/Critic/ThemeMath.pm
 lib/Perl/Critic/Utils.pm
 lib/Perl/Critic/Violation.pm
@@ -116,6 +117,7 @@ t/05_utils.t
 t/06_violation.t
 t/07_perlcritic.t
 t/08_document.t
+t/09_thememanager.t
 t/09_thememath.t
 t/20_policies_builtinfunctions.t
 t/20_policies_classhierarchies.t
@@ -123,7 +125,6 @@ t/20_policies_codelayout.t
 t/20_policies_controlstructures.t
 t/20_policies_documentation.t
 t/20_policies_errorhandling.t
-t/20_policies_file.t
 t/20_policies_inputoutput.t
 t/20_policies_miscellanea.t
 t/20_policies_modules.t
@@ -134,6 +135,7 @@ t/20_policies_subroutines.t
 t/20_policies_testinganddebugging.t
 t/20_policies_valuesandexpressions.t
 t/20_policies_variables.t
+t/80_policysummary.t
 t/93_version.t
 t/94_includes.t
 t/95_kwalitee.t
