@@ -9,7 +9,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 12;
+use Test::More tests => 13;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -250,6 +250,19 @@ $foo = m/(.)/ && $1;
 $foo = !m/(.)/ || $1;
 $foo = s/(.)// && $1;
 $foo = !s/(.)// || $1;
+END_PERL
+
+$policy = 'RegularExpressions::ProhibitCaptureWithoutTest';
+is( pcritique($policy, \$code), 0, $policy );
+
+#----------------------------------------------------------------
+
+# Regression for PPI::Statement::Expressions
+
+$code = <<'END_PERL';
+if (m/(\d+)/xms) {
+   $foo = ($1);
+}
 END_PERL
 
 $policy = 'RegularExpressions::ProhibitCaptureWithoutTest';

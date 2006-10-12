@@ -31,7 +31,7 @@ sub violates {
     return if $elem !~ m/\A \$\d \z/mx;
     return if $elem eq '$0';   ## no critic(RequireInterpolationOfMetachars)
     return if _is_in_conditional_expression($elem);
-    return if _is_in_conditional_structure($elem->statement);
+    return if _is_in_conditional_structure($elem);
     return $self->violation( $desc, $expl, $elem );
 }
 
@@ -60,7 +60,13 @@ sub _is_in_conditional_expression {
 }
 
 sub _is_in_conditional_structure {
-    my $stmt = shift;  # should be a statement or a structure, not a token
+    my $elem = shift;
+
+    my $stmt = $elem->statement();
+    while ($stmt && $elem->isa('PPI::Statement::Expression')) {
+       $stmt = $stmt->statement();
+    }
+    return if !$stmt;
 
     # Check if any previous statements in the same scope have regexp matches
     my $psib = $stmt->sprevious_sibling;
