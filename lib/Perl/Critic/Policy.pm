@@ -200,7 +200,7 @@ appropriate for their policy.
 =item C<get_themes()>
 
 Returns a sorted list of the themes associated with this Policy.  If
-you haven't added themes or set the themes explicilty, this method
+you haven't added themes or set the themes explicitly, this method
 just returns the default themes.
 
 =item C<set_themes( @THEME_LIST )>

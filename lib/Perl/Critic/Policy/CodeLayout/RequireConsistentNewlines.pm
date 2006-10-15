@@ -1,15 +1,16 @@
-##################################################################
+##############################################################################
 #      $URL$
 #     $Date$
 #   $Author$
 # $Revision$
-##################################################################
+##############################################################################
 
 package Perl::Critic::Policy::CodeLayout::RequireConsistentNewlines;
 
 use strict;
 use warnings;
 use Perl::Critic::Utils;
+use PPI::Token::Whitespace;
 use English qw(-no_match_vars);
 use base 'Perl::Critic::Policy';
 
@@ -66,6 +67,8 @@ sub violates {
 __END__
 
 =pod
+
+=for stopwords GnuPG
 
 =head1 NAME
 

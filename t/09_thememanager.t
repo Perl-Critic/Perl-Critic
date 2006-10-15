@@ -1,10 +1,10 @@
 #!perl
 
 #######################################################################
-#      $URL: http://perlcritic.tigris.org/svn/perlcritic/trunk/Perl-Critic/lib/Perl/Critic/Config.pm $
-#     $Date: 2006-10-06 22:45:08 -0700 (Fri, 06 Oct 2006) $
-#   $Author: thaljef $
-# $Revision: 714 $
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
 # ex: set ts=8 sts=4 sw=4 expandtab
 ########################################################################
 
@@ -14,10 +14,6 @@ use English qw(-no_match_vars);
 use Perl::Critic::ThemeManager;
 use Perl::Critic::Config (-test => 1);
 use Test::More (tests => 31);
-
-
-my @policy_objects = map{ $_->new() } Perl::Critic::Config::native_policies();
-my $tm = Perl::Critic::ThemeManager->new( @policy_objects );
 
 #-----------------------------------------------------------------------------
 

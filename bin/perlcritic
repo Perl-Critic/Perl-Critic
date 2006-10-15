@@ -761,7 +761,7 @@ with each one.
 Using the F<.perlcriticrc> file, you can override and/or append to the
 theme of any Policy.  For instance, you could append the C<"foo">
 theme to all the Policies that you've decided to use on the code for
-applicaton "foo"...
+application "foo"...
 
   [CodeLayout::RequireTrailingCommas]
   add_theme = foo

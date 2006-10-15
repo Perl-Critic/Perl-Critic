@@ -11,29 +11,29 @@ package Perl::Critic::Config;
 use strict;
 use warnings;
 use Carp qw(carp confess);
-use Config::Tiny qw();
 use English qw(-no_match_vars);
-use File::Spec qw();
 use File::Spec::Unix qw();
 use List::MoreUtils qw(any none);
 use Scalar::Util qw(blessed);
+use Perl::Critic::PolicyFactory;
+use Perl::Critic::UserProfile;
 use Perl::Critic::Utils;
-use Perl::Critic::Config::Defaults;
 
 our $VERSION = 0.21;
 
 # Globals.  Ick!
 my $NAMESPACE = $EMPTY;
+my $DEFAULT_NAMESPACE = 'Perl::Critic::Policy';
 my @SITE_POLICIES = ();
-my $TEST_MODE = 0;
 
 #-----------------------------------------------------------------------------
 
 sub import {
 
     my ( $class, %args ) = @_;
-    $NAMESPACE = $args{-namespace} || 'Perl::Critic::Policy';
-    $TEST_MODE ||= $args{-test};
+    my $test_mode = $args{-test};
+    $NAMESPACE    = $args{-namespace} || $DEFAULT_NAMESPACE;
+
 
     eval {
         require Module::Pluggable;
@@ -50,7 +50,7 @@ sub import {
     }
 
     # In test mode, only load native policies, not third-party ones
-    if ( $TEST_MODE && any {m/\b blib \b/xms} @INC ) {
+    if ( $test_mode && any {m/\b blib \b/xms} @INC ) {
         @SITE_POLICIES = _modules_from_blib( @SITE_POLICIES );
     }
 
@@ -83,10 +83,7 @@ sub new {
 
     my ( $class, %args ) = @_;
     my $self = bless {}, $class;
-    $self->{_policies} = [];
-    $self->{_exclude}  = [];
-    $self->{_themes}   = [];
-    $self->_init(%args);
+    $self->_init($NAMESPACE, %args);
     return $self;
 }
 
@@ -94,105 +91,103 @@ sub new {
 
 sub _init {
 
-    my ($self, %args) = @_;
+    my ( $self, $ns, %args ) = @_;
+    my $p = $args{-profile};
 
-    # Locate the user's profile
-    my $profile_path = $args{-profile} || find_profile_path();
-    return $self if defined $profile_path && $profile_path eq 'NONE';
-    $self->{_profile_path} = $profile_path;
+    my $profile = Perl::Critic::UserProfile->new( -profile => $p, -namespace => $ns );
+    $self->{_exclude}  = $args{-exclude}  || $profile->defaults->exclude();
+    $self->{_force}    = $args{-force}    || $profile->defaults->force();
+    $self->{_include}  = $args{-include}  || $profile->defaults->include();
+    $self->{_nocolor}  = $args{-nocolor}  || $profile->defaults->nocolor();
+    $self->{_only}     = $args{-only}     || $profile->defaults->only();
+    $self->{_severity} = $args{-severity} || $profile->defaults->severity();
+    $self->{_theme}    = $args{-theme}    || $profile->defaults->theme();
+    $self->{_verbose}  = $args{-verbose}  || $profile->defaults->verbose();
+    $self->{_profile}  = $profile;
+    $self->{_policies} = [];
 
-    # Now load the profile
-    $self->_load_profile();
+    # "NONE" means don't load any policies
+    return $self if defined $p and $p eq 'NONE';
 
-    # Set attributes from arguments and defaults
-    $self->_set_attributes( %args );
-
-    # Load policies
-    $self->_load_policies();
-
-    #All done!
+    $self->_load_policies( @SITE_POLICIES );
     return $self;
 }
 
-sub _load_policies {
+#-----------------------------------------------------------------------------
 
-    my ($self) = @_;
+sub add_policy {
 
-    for my $policy_name ( @SITE_POLICIES ) {
+    my ( $self, %args ) = @_;
+    my $profile = $self->{_profile};
+    my $policy  = $args{-policy} || return;
+    my $params  = $args{-params} || $args{-config} || $profile->policy_params( $policy );
 
-        my $params = $self->_get_policy_params( $policy_name );
-        my $policy = $self->_create_policy( $policy_name, $params );
-        my $load_me = $TRUE; #Assume policy should be loaded
+    eval {
+        my $policy_name = policy_long_name( $policy, $NAMESPACE );
+        my $policy_obj  = $policy_name->new( %{ $params } );
+        push @{ $self->{_policies} }, $policy_obj;
+    };
 
-        ##no critic (ProhibitPostfixControls)
-        $load_me = $FALSE if $self->_policy_is_disabled( $policy );
-        $load_me = $FALSE if $self->_policy_is_unimportant( $policy );
-        $load_me = $FALSE if not $self->_policy_fits_themes( $policy );
-        $load_me = $TRUE  if $self->_policy_is_included( $policy );
-        $load_me = $FALSE if $self->_policy_is_excluded( $policy);
 
-        next if not $load_me;
-        $self->add_policy( -policy => $policy );
+    if ($EVAL_ERROR) {
+        carp qq{Failed to create policy '$policy': $EVAL_ERROR};
+        return;  #Not fatal!
     }
+
 
     return $self;
 }
 
 #-----------------------------------------------------------------------------
-# Factory method
 
-sub _create_policy {
-    my ($self, $policy_name, $params) = @_;
+sub _load_policies {
 
-    # Pull out base parameters
-    my $user_severity   = $params->{severity};
-    my $user_set_themes = $params->{set_themes};
-    my $user_add_themes = $params->{add_themes};
+    my ( $self, @policy_names ) = @_;
 
-    # Construct policy from remaining params
-    my $policy = $policy_name->new( %{$params} );
+    my $factory = Perl::Critic::PolicyFactory->new( -profile  => $self->{_profile},
+                                                    -policies => \@policy_names );
 
-    # Set base attributes on policy
-    if ( defined $user_severity ) {
-        $policy->set_severity( $user_severity );
+    for my $policy ( $factory->policies() ) {
+
+        my $load_me = $TRUE; #Assume policy should be loaded
+
+        ##no critic (ProhibitPostfixControls)
+        $load_me = $FALSE if $self->_policy_is_disabled( $policy );
+        $load_me = $FALSE if $self->_policy_is_unimportant( $policy );
+        $load_me = $FALSE if not $self->_policy_is_thematic( $policy );
+        $load_me = $TRUE  if $self->_policy_is_included( $policy );
+        $load_me = $FALSE if $self->_policy_is_excluded( $policy );
+
+        next if not $load_me;
+        push @{ $self->{_policies} }, $policy;
     }
 
-    if ( defined $user_set_themes ) {
-        my @user_set_themes_list = _parse_theme_string( $user_set_themes );
-        $policy->set_themes( @user_set_themes_list );
-    }
-
-    if ( defined $user_add_themes ) {
-        my @user_add_themes_list = _parse_themes_string( $user_add_themes );
-        $policy->add_themes( @user_add_themes_list );
-    }
-
-    # Return constructed policy
-    return $policy;
+    return $self;
 }
 
 #-----------------------------------------------------------------------------
 
 sub _policy_is_disabled {
     my ($self, $policy) = @_;
-    my $policy_long_name  = ref $policy;
-    my $policy_short_name = _policy_short_name($policy_long_name, $NAMESPACE);
     my $profile = $self->{_profile};
-
-    return exists $profile->{"-$policy_short_name"} ||
-        exists $profile->{"-$policy_long_name"};
+    return $profile->policy_is_disabled( $policy );
 }
 
 #-----------------------------------------------------------------------------
 
-sub _policy_fits_themes {
+sub _policy_is_ensabled {
     my ($self, $policy) = @_;
-    my @policy_themes    = $policy->get_themes();
-    my @requested_themes = $self->themes();
+    my $profile = $self->{_profile};
+    return $profile->policy_is_enabled( $policy );
+}
 
-    return 1 if not @requested_themes; #If none requested, then it always fits
-    return 1 if _intersection(\@policy_themes, \@requested_themes);
-    return 0;
+#-----------------------------------------------------------------------------
+
+sub _policy_is_thematic {
+    my ($self, $policy) = @_;
+    my $theme_manager = $self->{_theme_manager};
+    return 1 if not $theme_manager;
+    return $theme_manager->is_thematic( $policy );
 }
 
 #-----------------------------------------------------------------------------
@@ -200,7 +195,7 @@ sub _policy_fits_themes {
 sub _policy_is_unimportant {
     my ($self, $policy) = @_;
     my $policy_severity = $policy->get_severity();
-    my $min_severity    = $self->severity();
+    my $min_severity    = $self->{_severity};
     return $policy_severity < $min_severity;
 }
 
@@ -208,7 +203,7 @@ sub _policy_is_unimportant {
 
 sub _policy_is_included {
     my ($self, $policy) = @_;
-    my $policy_long_name = ref $policy || _policy_long_name($policy, $NAMESPACE);
+    my $policy_long_name = ref $policy;
     my @inclusions  = $self->include();
     return any { $policy_long_name =~ m/$_/imx } @inclusions;
 }
@@ -217,258 +212,73 @@ sub _policy_is_included {
 
 sub _policy_is_excluded {
     my ($self, $policy) = @_;
-    my $policy_long_name = ref $policy || _policy_long_name($policy, $NAMESPACE);
+    my $policy_long_name = ref $policy;
     my @exclusions  = $self->exclude();
     return any { $policy_long_name =~ m/$_/imx } @exclusions;
 }
 
-#-----------------------------------------------------------------------------
-
-sub _get_policy_params {
-    my ($self, $policy) = @_;
-    my $policy_long_name  = ref $policy || _policy_long_name($policy, $NAMESPACE);
-    my $policy_short_name = _policy_short_name($policy_long_name, $NAMESPACE);
-
-    my $profile = $self->{_profile};
-    return $profile->{$policy_short_name}    ||
-           $profile->{$policy_long_name}     ||
-           $profile->{"-$policy_short_name"} ||
-           $profile->{"-$policy_long_name"}  ||
-           {};
-}
-
-#-----------------------------------------------------------------------------
-
-sub _set_attributes {
-    my ($self, %args) = @_;
-    my $profile = $self->{_profile};
-    my $user_defaults = $profile->{_} || {};
-    my $defaults = Perl::Critic::Config::Defaults->new( %{ $user_defaults } );
-    $self->{_severity} = $args{-severity} || $defaults->default_severity();
-    $self->{_exclude}  = $args{-exclude}  || $defaults->default_exclude();
-    $self->{_include}  = $args{-include}  || $defaults->default_include();
-    $self->{_themes}   = $args{-themes}   || $defaults->default_themes();
-    $self->{_defaults} = $defaults;
-    return $self;
-}
-
-#-----------------------------------------------------------------------------
-
-sub _parse_theme_string {
-    my ($theme_string) = @_;
-    return map { lc $_ } split m{ \s+ }mx, $theme_string;
-}
-
-sub _intersection {
-    my ($arrayref_1, $arrayref_2) = @_;
-    my %hashed = (); #Need a better name for this variable.
-    @hashed{ @{$arrayref_1} } = @{$arrayref_1}; #e.g. (foo) ---> (foo => foo);
-    return @hashed{ @{$arrayref_2} }; #Slicing out matching values
-}
-
-#------------------------------------------------------------------------
-
-sub add_policy {
-
-    my ( $self, %args ) = @_;
-    my $policy  = $args{-policy} || return;
-    my $config  = $args{-config} || {};
-
-    if( not blessed($policy) ) {
-
-        my $policy_long_name = _policy_long_name($policy, $NAMESPACE);
-        eval { $policy  = $self->_create_policy($policy_long_name, $config) };
-
-        if ($EVAL_ERROR) {
-            confess qq{Failed to create policy "$policy": $EVAL_ERROR};
-        }
-    }
-
-    push @{ $self->{_policies} }, $policy;
-    return $self;
-}
-
 #------------------------------------------------------------------------
 # Begin ACCESSSOR methods
-
 
 sub policies {
     my $self = shift;
     return @{ $self->{_policies} };
 }
 
-sub profile_path {
-    my $self = shift;
-    return $self->{_profile_path};
-}
-
-sub profile {
-    my $self = shift;
-    return $self->{_profile};
-}
-
-sub defaults {
-    my $self = shift;
-    return $self->{_defaults};
-}
-
-sub severity {
-    my $self = shift;
-    return $self->{_severity};
-}
-
-sub include {
-    my $self = shift;
-    return @{ $self->{_include} };
-}
+#----------------------------------------------------------------------------
 
 sub exclude {
     my $self = shift;
     return @{ $self->{_exclude} };
 }
 
-sub themes {
+#----------------------------------------------------------------------------
+
+sub force {
     my $self = shift;
-    return @{ $self->{_themes} };
-}
-
-#------------------------------------------------------------------------
-# Begin PRIVATE methods
-
-sub _load_profile {
-
-    my ($self, $profile) = (@_);
-    $profile ||= $self->profile_path();
-    return {} if defined $profile && $profile eq $EMPTY;
-    my $ref_type = ref $profile || 'DEFAULT';
-
-    my %handlers = (
-        SCALAR  => \&_load_profile_from_string,
-        ARRAY   => \&_load_profile_from_array,
-        HASH    => \&_load_profile_from_hash,
-        DEFAULT => \&_load_profile_from_file,
-    );
-
-    my $handler = $handlers{$ref_type};
-    confess qq{Can't create Config from $ref_type} if ! $handler;
-    $self->{_profile} = $handler->($profile);
-    return $self;
-}
-
-#------------------------------------------------------------------------
-
-sub _load_profile_from_file {
-    my $file = shift;
-    $file ||= find_profile_path() || return {};
-    confess qq{'$file' is not a file} if ! -f $file;
-    return Config::Tiny->read($file);
-}
-
-#------------------------------------------------------------------------
-
-sub _load_profile_from_array {
-    my $array_ref = shift;
-    my $joined    = join qq{\n}, @{ $array_ref };
-    return Config::Tiny->read_string( $joined );
-}
-
-#------------------------------------------------------------------------
-
-sub _load_profile_from_string {
-    my $string = shift;
-    return Config::Tiny->read_string( ${ $string } );
-}
-
-#------------------------------------------------------------------------
-
-sub _load_profile_from_hash {
-    my $hash_ref = shift;
-    return $hash_ref;
-}
-
-#-----------------------------------------------------------------------------
-
-sub _policy_long_name {
-    my ($module_name, $namespace) = @_;
-    if ( $module_name !~ m{ \A $namespace }mx ) {
-        $module_name = $namespace . q{::} . $module_name;
-    }
-    return $module_name;
-}
-
-sub _policy_short_name {
-    my ($module_name, $namespace) = @_;
-    $module_name =~ s{\A $namespace ::}{}mx;
-    return $module_name;
+    return $self->{_force};
 }
 
 #----------------------------------------------------------------------------
 
-sub _normalize_severity {
-    my $severity = abs int shift;
-    return $SEVERITY_HIGHEST if $severity > $SEVERITY_HIGHEST;
-    return $SEVERITY_LOWEST  if $severity < $SEVERITY_LOWEST;
-    return $severity;
+sub include {
+    my $self = shift;
+    return @{ $self->{_include} };
 }
 
 #----------------------------------------------------------------------------
 
-sub _validate_user_profile {
-    my ($profile, $namespace) = @_;
-    for my $policy_name ( sort keys %{ $profile } ) {
-        next if _is_valid_policy( $policy_name, $namespace );
-        carp qq{Can't find policy module '$policy_name'\n};
-    }
-    return 1;
-}
-
-sub _is_valid_policy {
-    my ($policy_name, $namespace) = @_;
-    $policy_name =~ s{\A \s* -}{}mx;
-    my $policy_long_name = _policy_long_name($policy_name, $namespace);
-    return any { $policy_long_name eq $_ } @SITE_POLICIES;
+sub nocolor {
+    my $self = shift;
+    return $self->{_nocolor};
 }
 
 #----------------------------------------------------------------------------
-# Begin PUBLIC STATIC methods
 
-sub find_profile_path {
-
-    #Define default filename
-    my $rc_file = '.perlcriticrc';
-
-    #Check explicit environment setting
-    return $ENV{PERLCRITIC} if exists $ENV{PERLCRITIC};
-
-    #Check current directory
-    return $rc_file if -f $rc_file;
-
-    #Check home directory
-    if ( my $home_dir = _find_home_dir() ) {
-        my $path = File::Spec->catfile( $home_dir, $rc_file );
-        return $path if -f $path;
-    }
-
-    #No profile defined
-    return;
+sub only {
+    my $self = shift;
+    return $self->{_only};
 }
 
-sub _find_home_dir {
+#----------------------------------------------------------------------------
 
-    #Try using File::HomeDir
-    eval { require File::HomeDir };
-    if ( ! $EVAL_ERROR ) {
-        return File::HomeDir->my_home();
-    }
+sub theme {
+    my $self = shift;
+    return $self->{_theme};
+}
 
-    #Check usual environment vars
-    for my $key (qw(HOME USERPROFILE HOMESHARE)) {
-        next if ! defined $ENV{$key};
-        return $ENV{$key} if -d $ENV{$key};
-    }
+#----------------------------------------------------------------------------
 
-    #No home directory defined
-    return;
+sub top {
+    my $self = shift;
+    return $self->{_top};
+}
+
+#----------------------------------------------------------------------------
+
+sub verbose {
+    my $self = shift;
+    return $self->{_verbose};
 }
 
 #----------------------------------------------------------------------------
@@ -641,43 +451,44 @@ precedence over C<-include> when a Policy matches both patterns.
 
 =item C<< add_policy( -policy => $policy_name, -config => \%config_hash ) >>
 
-Loads a Policy object and adds into this Config.  If the object
+Creates a Policy object and loads it into this Critic.  If the object
 cannot be instantiated, it will throw a warning and return a false
-value.  Otherwise, it returns a reference to this Config.  Arguments
-are key-value pairs as follows:
+value.  Otherwise, it returns a reference to this Critic.
 
-B<-policy> is the name of a L<Perl::Critic::Policy> subclass or an
-reference to an actual Policy object.  If given a class name, The
-C<'Perl::Critic::Policy'> portion of the name can be omitted for
-brevity.  This argument is required.
+B<-policy> is the name of a L<Perl::Critic::Policy> subclass
+module.  The C<'Perl::Critic::Policy'> portion of the name can be
+omitted for brevity.  This argument is required.
 
 B<-config> is an optional reference to a hash of Policy configuration
-parameters (Note that this is B<not> a Perl::Critic::Config
-object). The contents of this hash reference will be passed into to
-the constructor of the Policy module.  See the documentation in the
-relevant Policy module for a description of the arguments it supports.
-NOTE: this parameter is ignored when the -policy argument is a
-reference to an actual policy object.
+parameters.  Note that this is B<not> the same thing as a
+L<Perl::Critic::Config> object. The contents of this hash reference
+will be passed into to the constructor of the Policy module.  See the
+documentation in the relevant Policy module for a description of the
+arguments it supports.
 
-=item C<policies()>
+=item C< policies() >
 
 Returns a list containing references to all the Policy objects that
 have been loaded into this Config.  Objects will be in the order that
 they were loaded.
 
-=item C<profile_path()>
+=item C< exclude() >
 
-=item C<profile()>
+=item C< force() >
 
-=item C<defaults()>
+=item C< include() >
 
-=item C<severity()>
+=item C< nocolor() >
 
-=item C<exclude()>
+=item C< only() >
 
-=item C<include()>
+=item C< severity() >
 
-=item C<themes()>
+=item C< theme() >
+
+=item C< top() >
+
+=item C< verbose() >
 
 =back
 
@@ -687,13 +498,6 @@ Perl::Critic::Config has a few static subroutines that are used
 internally, but may be useful to you in some way.
 
 =over 8
-
-=item C<find_profile_path()>
-
-Searches the C<PERLCRITIC> environment variable, the current
-directory, and you home directory (in that order) for a
-F<.perlcriticrc> file.  If the file is found, the full path is
-returned.  Otherwise, returns undef;
 
 =item C<site_policies()>
 

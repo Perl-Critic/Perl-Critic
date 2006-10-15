@@ -13,7 +13,8 @@ use warnings;
 use base 'Exporter';
 use English qw(-no_match_vars);
 use File::Path qw();
-use File::Spec;
+use File::Spec qw();
+use File::Spec::Unix qw();
 use File::Temp qw();
 use Perl::Critic::Config (-test => 1);
 use Perl::Critic;
@@ -29,7 +30,7 @@ our @EXPORT_OK = qw(pcritique critique fcritique);
 
 sub block_perlcriticrc {
     no warnings 'redefine';  ## no critic (ProhibitNoWarnings);
-    *Perl::Critic::Config::find_profile_path = sub { return };
+    *Perl::Critic::UserProfile::find_profile_path = sub { return };
     return 1;
 }
 
@@ -83,7 +84,7 @@ sub fcritique {
     my $err = $EVAL_ERROR;
     File::Path::rmtree($dir, 0, 1);
     if ($err) {
-        die $err; ## no critic(ErrorHandling::RequireCarping)
+        die $err; ## no critic (ErrorHandling::RequireCarping)
     }
     return scalar @v;
 }
@@ -93,6 +94,8 @@ sub fcritique {
 
 __END__
 
+#-----------------------------------------------------------------------------
+
 =pod
 
 =head1 NAME
@@ -101,7 +104,7 @@ Perl::Critic::TestUtils - Utility functions for testing new Policies
 
 =head1 SYNOPSIS
 
-  use Perl::Critic::TestUtils qw(critique pcritique);
+  use Perl::Critic::TestUtils qw(critique pcritique fcritique);
 
   my $code = '<<END_CODE';
   package Foo::Bar;

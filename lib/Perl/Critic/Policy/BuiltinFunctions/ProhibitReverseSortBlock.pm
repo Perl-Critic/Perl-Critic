@@ -1,9 +1,9 @@
-##################################################################
+##############################################################################
 #      $URL$
 #     $Date$
 #   $Author$
 # $Revision$
-##################################################################
+##############################################################################
 
 package Perl::Critic::Policy::BuiltinFunctions::ProhibitReverseSortBlock;
 
@@ -62,7 +62,7 @@ sub violates {
                 if ($count < 0) {
                     # Found too many C<$b>s too early
                     my $sev = $self->get_severity();
-                    return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
+                    return $self->violation( $desc, $expl, $elem, $sev );
                 }
             }
         }

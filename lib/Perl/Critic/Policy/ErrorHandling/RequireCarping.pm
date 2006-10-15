@@ -1,8 +1,8 @@
 ##################################################################
-#      $URL: http://perlcritic.tigris.org/svn/perlcritic/trunk/Perl-Critic/lib/Perl/Critic/Policy/BuiltinFunctions/RequireBlockGrep.pm $
-#     $Date: 2006-07-24 00:53:20 -0700 (Mon, 24 Jul 2006) $
-#   $Author: thaljef $
-# $Revision: 537 $
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
 # ex: set ts=8 sts=4 sw=4 expandtab
 ##################################################################
 

@@ -17,6 +17,13 @@ use Set::Scalar;
 
 our $VERSION = 0.21;
 
+#######################################################################
+## This package is still under construction, so don't bother critiquing
+## When development is complete, you can remove this comment block.
+##
+## no critic
+#######################################################################
+
 sub parse_themes {
     my $pkg      = shift;
     my $request  = shift;

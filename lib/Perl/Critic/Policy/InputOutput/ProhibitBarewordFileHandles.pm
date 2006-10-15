@@ -40,7 +40,7 @@ sub violates {
     return if !$first_token;
 
     if ( $first_token->isa('PPI::Token::Word') ) {
-        if ( ($first_token ne 'my') && ($first_token !~ /^STD(IN|OUT|ERR)$/) ) {
+        if ( ($first_token ne 'my') && ($first_token !~ m/^STD(IN|OUT|ERR)$/mx ) ) {
             return $self->violation( $desc, $expl, $elem );
         }
     }

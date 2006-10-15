@@ -12,14 +12,13 @@ use strict;
 use warnings;
 use base qw(Exporter);
 
+use Carp;
 use File::Spec;
 use Scalar::Util qw(blessed);
 use English qw(-no_match_vars);
 use Perl::Critic::Config;
-use Perl::Critic::Violation ();
+use Perl::Critic::Violation;
 use Perl::Critic::Document;
-use Carp;
-use PPI;
 use PPI::Document;
 use PPI::Document::File;
 
@@ -33,8 +32,6 @@ our @EXPORT_OK = qw(&critique);
 sub new {
     my ( $class, %args ) = @_;
     my $self = bless {}, $class;
-    $self->{_force}  = $args{-force}  || 0;
-    $self->{_top}    = $args{-top}    || 0;
     $self->{_config} = $args{-config} || Perl::Critic::Config->new( %args );
     return $self;
 }
@@ -85,7 +82,7 @@ sub critique {
 
     my ( $self, $source_code ) = @_ >= 2 ? @_ : ( {}, $_[0] );
     $self = ref $self eq 'HASH' ? __PACKAGE__->new(%{ $self }) : $self;
-    return if ! $source_code;  # If no code, then nothing to do.
+    return if not $source_code;  # If no code, then nothing to do.
 
     # $source_code can be a file name, or a reference to a
     # PPI::Document, or a reference to a scalar containing source
@@ -97,7 +94,7 @@ sub critique {
         : PPI::Document::File->new($source_code);
 
     # Bail on error
-    if ( !defined $doc ) {
+    if ( not defined $doc ) {
         my $errstr = PPI::Document::errstr();
         my $file = ref $source_code ? undef : $source_code;
         croak qq{Warning: Can't parse code: $errstr}.($file ? qq{ for '$file'} : q{});
@@ -113,17 +110,21 @@ sub critique {
     my %is_line_disabled = _unfix_shebang($doc);
 
     # Filter exempt code, if desired
-    if ( !$self->{_force} ) {
+    if ( not $self->config->force() ) {
         my @site_policies = $self->config->site_policies();
         %is_line_disabled = ( %is_line_disabled,
                               _filter_code($doc, @site_policies) );
     }
 
     my @violations = ();
-    for my $policy ( $self->policies() ){
+
+  POLICY:
+    for my $policy ( $self->config->policies() ){
+
 
       TYPE:
         for my $type ( $policy->applies_to() ) {
+
 
           ELEMENT:
             for my $element ( @{ $doc->find($type) || [] } ) {
@@ -136,19 +137,12 @@ sub critique {
               VIOLATION:
                 for my $violation ( $policy->violates( $element, $doc ) ) {
                     my $policy_name = ref $policy;
-                    my $loc = $violation->location();
-                    my $line = defined $loc ? $loc->[0] : 0;  #See note [1]
+                    my $line = $violation->location()->[0];
                     next VIOLATION if $is_line_disabled{$line}->{$policy_name};
                     next VIOLATION if $is_line_disabled{$line}->{ALL};
                     push @violations, $violation;
                 }
             }
-
-            # [1] Empty lists have an undef location.  This is an
-            # unresolved bug in PPI, which is documented here:
-            # http://sourceforge.net/mailarchive/forum.php?thread_id=9684490&forum_id=45571
-            # So I'm just trying to avoid derefencing an undef value.
-
         }
     }
 
@@ -157,7 +151,7 @@ sub critique {
     # but I moved it into the library to give the Perl::Critic API
     # more flexibility and functionality.
 
-    if ( @violations && (my $top = $self->{_top}) ) {
+    if ( @violations && (my $top = $self->config->top()) ) {
         my $limit = @violations < $top ? $#violations : $top-1;
         @violations = Perl::Critic::Violation::sort_by_severity(@violations);
         @violations = ( reverse @violations )[ 0 .. $limit ];  #Slicing...
@@ -447,13 +441,13 @@ will be passed into to the constructor of the Policy module.  See the
 documentation in the relevant Policy module for a description of the
 arguments it supports.
 
-=item C<policies()>
+=item C< policies() >
 
 Returns a list containing references to all the Policy objects that
 have been loaded into this engine.  Objects will be in the order that
 they were loaded.
 
-=item C<config()>
+=item C< config() >
 
 Returns the L<Perl::Critic::Config> object that was created for or given
 to this Critic.

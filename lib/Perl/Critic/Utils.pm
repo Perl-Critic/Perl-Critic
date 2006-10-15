@@ -20,35 +20,46 @@ our $VERSION = 0.21;
 
 ## no critic (AutomaticExport)
 our @EXPORT = qw(
-    @GLOBALS    $COMMA      $SEVERITY_HIGHEST
-    @BUILTINS   $FATCOMMA   $SEVERITY_HIGH
-                $COLON      $SEVERITY_MEDIUM
-                $SCOLON     $SEVERITY_LOW
-                $QUOTE      $SEVERITY_LOWEST
-                $DQUOTE
-                $SPACE
-    $TRUE       $PIPE
-    $FALSE      $PERIOD
-                $EMPTY
+    @GLOBALS
+    @BUILTINS
 
+    $TRUE
+    $FALSE
 
+    $SEVERITY_HIGHEST
+    $SEVERITY_HIGH
+    $SEVERITY_MEDIUM
+    $SEVERITY_LOW
+    $SEVERITY_LOWEST
+
+    $COLON
+    $COMMA
+    $DQUOTE
+    $EMPTY
+    $FATCOMMA
+    $PERIOD
+    $PIPE
+    $QUOTE
+    $SCOLON
+    $SPACE
+
+    &all_perl_files
+    &find_keywords
+    &hashify
+    &is_function_call
     &is_hash_key
-    &is_script
+    &is_method_call
     &is_perl_builtin
     &is_perl_global
+    &is_script
     &is_subroutine_name
-    &is_method_call
-    &is_function_call
-    &find_keywords
     &parse_arg_list
+    &policy_long_name
+    &policy_short_name
     &precedence_of
-    &all_perl_files
-    &verbosity_to_format
-    &hashify
     &shebang_line
+    &verbosity_to_format
 );
-
-
 
 #---------------------------------------------------------------------------
 
@@ -129,7 +140,7 @@ SUBSCRIPT_SEPARATOR SUBSEP SYSTEM_FD_MAX UID WARNING [ ] ^ ^A ^C
 my %GLOBALS = hashify( @GLOBALS );
 
 #-------------------------------------------------------------------------
-## no critic 'ProhibitNoisyQuotes';
+## no critic (ProhibitNoisyQuotes);
 
 my %PRECEDENCE_OF = (
   '->'  => 1,       '<'    => 10,      '||'  => 15,
@@ -256,6 +267,24 @@ sub is_script {
     my $doc = shift;
     my $shebang = shebang_line($doc);
     return !!$shebang;  # booleanize
+}
+
+#-------------------------------------------------------------------------
+
+sub policy_long_name {
+    my ( $policy_name, $namespace ) = @_;
+    if ( $policy_name !~ m{ \A $namespace }mx ) {
+        $policy_name = $namespace . q{::} . $policy_name;
+    }
+    return $policy_name;
+}
+
+#-------------------------------------------------------------------------
+
+sub policy_short_name {
+    my ( $policy_name, $namespace ) = @_;
+    $policy_name =~ s{\A $namespace ::}{}mx;
+    return $policy_name;
 }
 
 #-------------------------------------------------------------------------
@@ -520,6 +549,10 @@ present).
 
 Given a L<PPI::Document>, test if it starts with C</#!.*/>.  If so,
 it is judged to be a script instead of a module.  See C<shebang_line()>.
+
+=item C< policy_long_name( ) >
+
+=item C< policy_short_name( ) >
 
 =item C<all_perl_files( @directories )>
 

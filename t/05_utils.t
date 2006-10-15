@@ -11,7 +11,7 @@ use strict;
 use warnings;
 use PPI::Document;
 use constant USE_B_KEYWORDS => eval 'use B::Keywords 1.04; 1';
-use Test::More tests => 66 + (
+use Test::More tests => 72 + (
     USE_B_KEYWORDS
     ? ( @B::Keywords::Functions + @B::Keywords::Scalars + @B::Keywords::Arrays
             + @B::Keywords::Hashes + @B::Keywords::FileHandles )
@@ -29,23 +29,25 @@ BEGIN
 #---------------------------------------------------------------------------
 #  export tests
 
+can_ok('main', 'all_perl_files');
 can_ok('main', 'find_keywords');
 can_ok('main', 'is_hash_key');
 can_ok('main', 'is_method_call');
-can_ok('main', 'parse_arg_list');
-can_ok('main', 'is_perl_global');
 can_ok('main', 'is_perl_builtin');
-can_ok('main', 'is_subroutine_name');
-can_ok('main', 'precedence_of');
+can_ok('main', 'is_perl_global');
 can_ok('main', 'is_script');
-can_ok('main', 'all_perl_files');
+can_ok('main', 'is_subroutine_name');
+can_ok('main', 'parse_arg_list');
+can_ok('main', 'policy_long_name');
+can_ok('main', 'policy_short_name');
+can_ok('main', 'precedence_of');
 
 is($SPACE, ' ', 'character constants');
 is($SEVERITY_LOWEST, 1, 'severity constants');
 
-# These globals are deprecated.  Use function instead
-is((scalar grep {$_ eq 'grep'} @BUILTINS), 1, 'perl builtins');
-is((scalar grep {$_ eq 'OSNAME'} @GLOBALS), 1, 'perl globals');
+# These globals are deprecated.  Use functions instead
+is( (scalar grep {$_ eq 'grep'}   @BUILTINS), 1, 'perl builtins');
+is( (scalar grep {$_ eq 'OSNAME'} @GLOBALS),  1, 'perl globals');
 
 #---------------------------------------------------------------------------
 #  find_keywords tests
@@ -219,6 +221,18 @@ SKIP: {
 
 }
 
+#----------------------------------------------------------------------------
+# policy_long_name and policy_short_name tests
+
+{
+    my $namespace  = 'Foo::Bar';
+    my $short_name = 'Baz::Nuts';
+    my $long_name  = "${namespace}::$short_name";
+    is( policy_long_name(  $short_name,   $namespace), $long_name   );
+    is( policy_long_name(  $long_name,    $namespace), $long_name   );
+    is( policy_short_name( $short_name,   $namespace), $short_name  );
+    is( policy_short_name( $long_name,    $namespace), $short_name  );
+}
 
 #-----------------------------------------------------------------------------
 # Test _is_perl() subroutine.  This used to be part of `perlcritic` but I

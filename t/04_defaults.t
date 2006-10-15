@@ -9,59 +9,47 @@
 
 use strict;
 use warnings;
-use Test::More tests => 12;
+use Test::More tests => 18;
+use Perl::Critic::Defaults;
 
-use Perl::Critic::Config::Defaults;
-use Perl::Critic::Config;
-use Perl::Critic::Utils;
-
-# common P::C testing tools
-use Perl::Critic::TestUtils qw();
-Perl::Critic::TestUtils::block_perlcriticrc();
 
 {
-    my $d = Perl::Critic::Config::Defaults->new();
-    is($d->default_severity(), $SEVERITY_HIGHEST, 'native default severity');
-    is_deeply($d->default_themes,  [], 'native default themes');
-    is_deeply($d->default_include, [], 'native default include');
-    is_deeply($d->default_exclude, [], 'native default exclude');
+    my $d = Perl::Critic::Defaults->new();
+    is($d->force(),    0,           'native default force');
+    is($d->nocolor(),  0,           'native default nocolor');
+    is($d->only(),     0,           'native default only');
+    is($d->severity(), 5,           'native default severity');
+    is($d->theme(),    q{},         'native default theme');
+    is($d->top(),      0,           'native default top');
+    is($d->verbose(),  3,           'native default verbose');
+    is_deeply($d->include(), [],    'native default include');
+    is_deeply($d->exclude(), [],    'native default exclude');
 }
 
 #-----------------------------------------------------------------------------
 
 {
-    my $severity = 2;
-    my @themes   = sort qw(pbp risky);
-    my @includes = qw(CodeLayout ControlStructures);
-    my @excludes = qw(Variables Modules);
-    my %user_defaults = ( -severity => $severity,
-                          -themes   => \@themes,
-                          -include  => \@includes,
-                          -exclude  => \@excludes,
-                     );
+    my %user_defaults = (
+         -force => undef,
+         -nocolor => undef,
+         -only => undef,
+         -severity => 4,
+         -theme => 'pbp',
+         -top => 50,
+         -verbose => 7,
+         -include => 'foo bar',
+         -exclude => 'baz nuts',
+    );
 
-    my $d = Perl::Critic::Config::Defaults->new( %user_defaults );
-    is($d->default_severity(), $severity, 'user-default severity');
-    is_deeply($d->default_themes,  \@themes, 'user-default themes');
-    is_deeply($d->default_include, \@includes, 'user-default include');
-    is_deeply($d->default_exclude, \@excludes, 'user-default exclude');
+    my $d = Perl::Critic::Defaults->new( %user_defaults );
+    is($d->force(),    1,           'user default force');
+    is($d->nocolor(),  1,           'user default nocolor');
+    is($d->only(),     1,           'user default only');
+    is($d->severity(), 4,           'user default severity');
+    is($d->theme(),    'pbp',       'user default theme');
+    is($d->top(),      50,          'user default top');
+    is($d->verbose(),  7,           'user default verbose');
+    is_deeply($d->include(), [ qw(foo bar) ], 'user default include');
+    is_deeply($d->exclude(), [ qw(baz nuts)], 'user default exclude');
 }
 
-#-----------------------------------------------------------------------------
-
-{
-    my $samples_dir = 't/samples';
-    my $profile = "$samples_dir/perlcriticrc.defaults";
-    my $critic  = Perl::Critic::Config->new( -profile => $profile );
-    my $d       = $critic->defaults();
-
-    my $severity = 3;
-    my @themes   = sort qw(danger risky pbp);
-    my @includes = qw(CodeLayout Modules);
-    my @excludes = qw(Documentation NamingConventions);
-
-    is_deeply($d->default_severity, $severity, 'user-default from file');
-    is_deeply($d->default_themes,   \@themes, 'user-default from file');
-    is_deeply($d->default_include,  \@includes, 'user-default from file');
-    is_deeply($d->default_exclude,  \@excludes, 'user-default from file');
-}
