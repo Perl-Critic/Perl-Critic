@@ -5,7 +5,7 @@ extras/perlcritic.el
 INSTALL
 lib/Perl/Critic.pm
 lib/Perl/Critic/Config.pm
-lib/Perl/Critic/Config/Defaults.pm
+lib/Perl/Critic/Defaults.pm
 lib/Perl/Critic/DEVELOPER.pod
 lib/Perl/Critic/Document.pm
 lib/Perl/Critic/Policy.pm
@@ -97,10 +97,12 @@ lib/Perl/Critic/Policy/Variables/ProtectPrivateVars.pm
 lib/Perl/Critic/Policy/Variables/RequireInitializationForLocalVars.pm
 lib/Perl/Critic/Policy/Variables/RequireLexicalLoopIterators.pm
 lib/Perl/Critic/Policy/Variables/RequireNegativeIndices.pm
+lib/Perl/Critic/PolicyFactory.pm
 lib/Perl/Critic/PolicySummary.pod
 lib/Perl/Critic/TestUtils.pm
 lib/Perl/Critic/ThemeManager.pm
 lib/Perl/Critic/ThemeMath.pm
+lib/Perl/Critic/UserProfile.pm
 lib/Perl/Critic/Utils.pm
 lib/Perl/Critic/Violation.pm
 LICENSE
@@ -119,6 +121,8 @@ t/07_perlcritic.t
 t/08_document.t
 t/09_thememanager.t
 t/09_thememath.t
+t/10_userprofile.t
+t/11_policyfactory.t
 t/20_policies_builtinfunctions.t
 t/20_policies_classhierarchies.t
 t/20_policies_codelayout.t
