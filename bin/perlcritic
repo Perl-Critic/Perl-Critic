@@ -1,24 +1,25 @@
 #!/usr/bin/perl
 
-#######################################################################
+###############################################################################
 #      $URL$
 #     $Date$
 #   $Author$
 # $Revision$
 #        ex: set ts=8 sts=4 sw=4 expandtab
-########################################################################
+##############################################################################
 
 package main;
 
 use strict;
 use warnings;
-use Pod::Usage;
-use File::Spec;
-use Getopt::Long;
-use Carp qw(carp croak);
-use List::Util qw(first);
+use Carp qw(carp confess);
 use English qw(-no_match_vars);
+use Getopt::Long qw(GetOptions);
+use List::Util qw(first);
 use Perl::Critic::Utils;
+use Perl::Critic::Violation qw();
+use Pod::Usage qw(pod2usage);
+
 
 our $VERSION = 0.21;
 
@@ -26,6 +27,7 @@ our $VERSION = 0.21;
 # Begin script.  Don't run when loaded as a library
 
 my @FILES = ();
+my $CRITIC = undef;
 exit run() if not caller;
 
 #-----------------------------------------------------------------------------
@@ -153,7 +155,7 @@ sub get_input {
             $code_string = q{};
         }
 
-        $code_string =~ m{ \S+ }mx || croak qq{Nothing to critique.\n};
+        $code_string =~ m{ \S+ }mx || confess qq{Nothing to critique.\n};
         return \$code_string;    #Convert to SCALAR ref for PPI
     }
     else {
@@ -178,7 +180,7 @@ sub get_input {
 sub critique {
 
     my ( $opts_ref, @files ) = @_;
-    @files || croak "No perl files were found.\n";
+    @files || confess "No perl files were found.\n";
 
     # Perl::Critic has lots of dependencies, so loading is delayed
     # until it is really needed.  This hack reduces startup time for
@@ -187,14 +189,14 @@ sub critique {
     # why not save a few seconds if you can.
 
     require Perl::Critic;
-    my $critic = Perl::Critic->new( %{$opts_ref} );
+    $CRITIC = Perl::Critic->new( %{$opts_ref} );
     my $count  = undef;
 
 
     eval {
 
         for my $file (@files) {
-            my @violations = $critic->critique($file);
+            my @violations = $CRITIC->critique($file);
             render_report( $file, $opts_ref, @violations );
             $count += scalar @violations;
         }
@@ -230,11 +232,11 @@ sub render_report {
     # Otherwise, format and print violations
     $file = -f $file ? $file : 'stdin';
     my $default_verbosity = @FILES > 1 ? 4 : 3;  #@FILES is global!
-    my $fmt = _get_format( $opts_ref->{-verbose} || $default_verbosity );
+    my $fmt = _get_format( $CRITIC->config->verbose() || $default_verbosity );
     $fmt =~ s{ \%f }{$file}mxg;  #HACK! Violation objects don't know the file
     Perl::Critic::Violation::set_format( $fmt );
 
-    if ( $opts_ref->{-nocolor} ) {
+    if ( $CRITIC->config->nocolor() ) {
         print @violations;
     }
     else {
@@ -322,8 +324,8 @@ sub _this_is_windows {
 sub _at_tty {
     return -t STDOUT; ##no critic 'InteractiveTest';
 }
-#-----------------------------------------------------------------------------
 
+#-----------------------------------------------------------------------------
 
 sub policy_listing {
 
@@ -352,6 +354,8 @@ sub policy_listing {
     }
     return @listing;
 }
+
+#-----------------------------------------------------------------------------
 
 sub _sort_objects_by_type {
     my (@objects) = @_;

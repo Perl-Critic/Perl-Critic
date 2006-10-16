@@ -1,17 +1,19 @@
 #!perl
 
-##################################################################
+##############################################################################
 #     $URL$
 #    $Date$
 #   $Author$
 # $Revision$
-##################################################################
+# ex: set ts=8 sts=4 sw=4 expandtab
+##############################################################################
 
 use strict;
 use warnings;
 use Test::More tests => 18;
 use Perl::Critic::Defaults;
 
+#-----------------------------------------------------------------------------
 
 {
     my $d = Perl::Critic::Defaults->new();
@@ -19,8 +21,8 @@ use Perl::Critic::Defaults;
     is($d->nocolor(),  0,           'native default nocolor');
     is($d->only(),     0,           'native default only');
     is($d->severity(), 5,           'native default severity');
-    is($d->theme(),    q{},         'native default theme');
-    is($d->top(),      0,           'native default top');
+    is($d->theme(),    undef,       'native default theme');
+    is($d->top(),      undef,       'native default top');
     is($d->verbose(),  3,           'native default verbose');
     is_deeply($d->include(), [],    'native default include');
     is_deeply($d->exclude(), [],    'native default exclude');
@@ -30,15 +32,15 @@ use Perl::Critic::Defaults;
 
 {
     my %user_defaults = (
-         -force => undef,
-         -nocolor => undef,
-         -only => undef,
-         -severity => 4,
-         -theme => 'pbp',
-         -top => 50,
-         -verbose => 7,
-         -include => 'foo bar',
-         -exclude => 'baz nuts',
+         -force     => 1,
+         -nocolor   => 1,
+         -only      => 1,
+         -severity  => 4,
+         -theme     => 'pbp',
+         -top       => 50,
+         -verbose   => 7,
+         -include   => 'foo bar',
+         -exclude   => 'baz nuts',
     );
 
     my $d = Perl::Critic::Defaults->new( %user_defaults );

@@ -1,22 +1,22 @@
-#######################################################################
+##############################################################################
 #      $URL$
 #     $Date$
 #   $Author$
 # $Revision$
 # ex: set ts=8 sts=4 sw=4 expandtab
-########################################################################
+##############################################################################
 
 package Perl::Critic::Violation;
 
 use strict;
 use warnings;
 use Carp;
-use IO::String;
-use Pod::PlainText;
+use English qw(-no_match_vars);
+use IO::String qw();
+use Pod::PlainText qw();
 use Perl::Critic::Utils;
 use String::Format qw(stringf);
-use English qw(-no_match_vars);
-use overload ( q{""} => q{to_string}, cmp => q{_compare} );
+use overload ( q{""} => 'to_string', cmp => '_compare' );
 
 our $VERSION = 0.21;
 

@@ -1,10 +1,10 @@
-#######################################################################
+##############################################################################
 #      $URL$
 #     $Date$
 #   $Author$
 # $Revision$
 # ex: set ts=8 sts=4 sw=4 expandtab
-########################################################################
+##############################################################################
 
 package Perl::Critic::Policy;
 
@@ -12,7 +12,7 @@ use strict;
 use warnings;
 use Carp qw(confess);
 use Perl::Critic::Utils;
-use Perl::Critic::Violation;
+use Perl::Critic::Violation qw();
 
 our $VERSION = 0.21;
 

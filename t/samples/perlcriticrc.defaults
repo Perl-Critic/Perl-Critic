@@ -1,4 +1,15 @@
--severity = 3
--themes   = danger risky pbp
--include  = CodeLayout Modules
--exclude  = Documentation NamingConventions
+##########################################################################
+# This sample file demonstrates how to set the Perl::Critic default
+# parameters.  You can override any of these settings at the command
+# line, or through the Perl::Critic API.
+##########################################################################
+
+-exclude   = Documentation Naming
+-force     = 1
+-include   = CodeLayout Modules
+-nocolor   = 1 
+-only      = 1
+-severity  = 3
+-theme     = danger + risky - pbp
+-top       = 50
+-verbose   = 5

@@ -38,15 +38,13 @@ sub _init {
     $self->{_include}    = defined $args{-include} ?
                            [ split m/\s+/mx, $args{-include} ] :  [];
     # Single-value defaults
+    $self->{_force}      = $args{-force}    || $FALSE;
+    $self->{_nocolor}    = $args{-nocolor}  || $FALSE;
+    $self->{_only}       = $args{-only}     || $FALSE;
     $self->{_severity}   = $args{-severity} || $SEVERITY_HIGHEST;
-    $self->{_theme}      = $args{-theme}    || $EMPTY;
-    $self->{_top}        = $args{-top}      || $FALSE;
+    $self->{_theme}      = $args{-theme}    || undef;
+    $self->{_top}        = $args{-top}      || undef;
     $self->{_verbose}    = $args{-verbose}  || 3;
-
-    # Switch-like defaults
-    $self->{_force}      = exists $args{-force}   ? $TRUE : $FALSE;
-    $self->{_nocolor}    = exists $args{-nocolor} ? $TRUE : $FALSE;
-    $self->{_only}       = exists $args{-only}    ? $TRUE : $FALSE;
 
     return $self;
 }

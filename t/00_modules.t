@@ -1,11 +1,12 @@
 #!perl
 
-##################################################################
+##############################################################################
 #     $URL$
 #    $Date$
 #   $Author$
 # $Revision$
-##################################################################
+# ex: set ts=8 sts=4 sw=4 expandtab
+##############################################################################
 
 use strict;
 use warnings;
@@ -16,7 +17,7 @@ use English qw(-no_match_vars);
 our $VERSION = 0.21;
 my $obj = undef;
 
-#---------------------------------------------------------------
+#-----------------------------------------------------------------------------
 # Test Perl::Critic module interface
 
 use_ok('Perl::Critic');
@@ -31,7 +32,7 @@ $obj = Perl::Critic->new( -profile => 'NONE' );
 isa_ok($obj, 'Perl::Critic');
 is($obj->VERSION(), $VERSION);
 
-#---------------------------------------------------------------
+#-----------------------------------------------------------------------------
 # Test Perl::Critic::Config module interface
 
 use_ok('Perl::Critic::Config');
@@ -54,7 +55,7 @@ $obj = Perl::Critic::Config->new( -profile => 'NONE');
 isa_ok($obj, 'Perl::Critic::Config');
 is($obj->VERSION(), $VERSION);
 
-#---------------------------------------------------------------
+#-----------------------------------------------------------------------------
 # Test Perl::Critic::Config::Defaults module interface
 
 use_ok('Perl::Critic::Defaults');
@@ -73,7 +74,7 @@ $obj = Perl::Critic::Defaults->new();
 isa_ok($obj, 'Perl::Critic::Defaults');
 is($obj->VERSION(), $VERSION);
 
-#---------------------------------------------------------------
+#-----------------------------------------------------------------------------
 # Test Perl::Critic::Policy module interface
 
 use_ok('Perl::Critic::Policy');
@@ -94,7 +95,7 @@ $obj = Perl::Critic::Policy->new();
 isa_ok($obj, 'Perl::Critic::Policy');
 is($obj->VERSION(), $VERSION);
 
-#---------------------------------------------------------------
+#-----------------------------------------------------------------------------
 # Test Perl::Critic::Violation module interface
 
 use_ok('Perl::Critic::Violation');
@@ -118,7 +119,7 @@ $obj = Perl::Critic::Violation->new(undef, undef, $doc, undef);
 isa_ok($obj, 'Perl::Critic::Violation');
 is($obj->VERSION(), $VERSION);
 
-#---------------------------------------------------------------
+#-----------------------------------------------------------------------------
 # Test Perl::Critic::UserProfile module interface
 
 use_ok('Perl::Critic::UserProfile');
@@ -132,7 +133,7 @@ $obj = Perl::Critic::UserProfile->new();
 isa_ok($obj, 'Perl::Critic::UserProfile');
 is($obj->VERSION(), $VERSION);
 
-#---------------------------------------------------------------
+#-----------------------------------------------------------------------------
 # Test Perl::Critic::PolicyFactory module interface
 
 use_ok('Perl::Critic::PolicyFactory');
@@ -144,7 +145,7 @@ my $profile = Perl::Critic::UserProfile->new();
 $obj = Perl::Critic::PolicyFactory->new( -profile => $profile );
 isa_ok($obj, 'Perl::Critic::PolicyFactory');
 
-#---------------------------------------------------------------
+#-----------------------------------------------------------------------------
 # Test module interface for each Policy subclass
 
 for my $mod ( Perl::Critic::Config::native_policies() ) {
@@ -167,7 +168,7 @@ for my $mod ( Perl::Critic::Config::native_policies() ) {
     is($obj->VERSION(), $VERSION, "Version of $mod");
 }
 
-#---------------------------------------------------------------
+#-----------------------------------------------------------------------------
 # Test functional interface to Perl::Critic
 
 Perl::Critic->import( qw(critique) );

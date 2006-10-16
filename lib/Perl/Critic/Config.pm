@@ -1,22 +1,22 @@
-#######################################################################
+##############################################################################
 #      $URL$
 #     $Date$
 #   $Author$
 # $Revision$
 # ex: set ts=8 sts=4 sw=4 expandtab
-########################################################################
+##############################################################################
 
 package Perl::Critic::Config;
 
 use strict;
 use warnings;
-use Carp qw(carp confess);
+use Carp qw(confess);
 use English qw(-no_match_vars);
 use File::Spec::Unix qw();
 use List::MoreUtils qw(any none);
 use Scalar::Util qw(blessed);
-use Perl::Critic::PolicyFactory;
-use Perl::Critic::UserProfile;
+use Perl::Critic::PolicyFactory qw();
+use Perl::Critic::UserProfile qw();
 use Perl::Critic::Utils;
 
 our $VERSION = 0.21;
@@ -46,7 +46,7 @@ sub import {
         confess qq{Can't load Policies from namespace '$NAMESPACE': $EVAL_ERROR};
     }
     elsif ( ! @SITE_POLICIES ) {
-        carp qq{No Policies found in namespace '$NAMESPACE'};
+        confess qq{No Policies found in namespace '$NAMESPACE'};
     }
 
     # In test mode, only load native policies, not third-party ones
@@ -83,7 +83,7 @@ sub new {
 
     my ( $class, %args ) = @_;
     my $self = bless {}, $class;
-    $self->_init($NAMESPACE, %args);
+    $self->_init( %args );
     return $self;
 }
 
@@ -91,10 +91,12 @@ sub new {
 
 sub _init {
 
-    my ( $self, $ns, %args ) = @_;
-    my $p = $args{-profile};
+    my ( $self, %args ) = @_;
 
-    my $profile = Perl::Critic::UserProfile->new( -profile => $p, -namespace => $ns );
+    my $p = $args{-profile};
+    my $profile = Perl::Critic::UserProfile->new( -profile => $p,
+                                                  namespace => $NAMESPACE );
+
     $self->{_exclude}  = $args{-exclude}  || $profile->defaults->exclude();
     $self->{_force}    = $args{-force}    || $profile->defaults->force();
     $self->{_include}  = $args{-include}  || $profile->defaults->include();
@@ -102,6 +104,7 @@ sub _init {
     $self->{_only}     = $args{-only}     || $profile->defaults->only();
     $self->{_severity} = $args{-severity} || $profile->defaults->severity();
     $self->{_theme}    = $args{-theme}    || $profile->defaults->theme();
+    $self->{_top}      = $args{-top}      || $profile->defaults->top();
     $self->{_verbose}  = $args{-verbose}  || $profile->defaults->verbose();
     $self->{_profile}  = $profile;
     $self->{_policies} = [];
@@ -119,8 +122,17 @@ sub add_policy {
 
     my ( $self, %args ) = @_;
     my $profile = $self->{_profile};
-    my $policy  = $args{-policy} || return;
+    my $policy  = $args{-policy} || confess q{The -policy argument is required};
+
+    if ( blessed $policy ) {
+        push @{ $self->{_policies} }, $policy;
+        return $self;
+    }
+
+    # NOTE: The "-config" alias is supported for backward compatibility.
     my $params  = $args{-params} || $args{-config} || $profile->policy_params( $policy );
+
+    # TODO: Use PolicyFactory::create_policy to instantiate the Policy.
 
     eval {
         my $policy_name = policy_long_name( $policy, $NAMESPACE );
@@ -128,13 +140,8 @@ sub add_policy {
         push @{ $self->{_policies} }, $policy_obj;
     };
 
-
-    if ($EVAL_ERROR) {
-        carp qq{Failed to create policy '$policy': $EVAL_ERROR};
-        return;  #Not fatal!
-    }
-
-
+    # Failure to create a policy is now fatal!
+    confess qq{Unable to create policy '$policy': $EVAL_ERROR} if $EVAL_ERROR;
     return $self;
 }
 
@@ -149,17 +156,18 @@ sub _load_policies {
 
     for my $policy ( $factory->policies() ) {
 
-        my $load_me = $TRUE; #Assume policy should be loaded
+        my $load_me = $self->only() ? $FALSE : $TRUE;
 
         ##no critic (ProhibitPostfixControls)
         $load_me = $FALSE if $self->_policy_is_disabled( $policy );
+        $load_me = $TRUE  if $self->_policy_is_enabled( $policy );
         $load_me = $FALSE if $self->_policy_is_unimportant( $policy );
         $load_me = $FALSE if not $self->_policy_is_thematic( $policy );
         $load_me = $TRUE  if $self->_policy_is_included( $policy );
         $load_me = $FALSE if $self->_policy_is_excluded( $policy );
 
         next if not $load_me;
-        push @{ $self->{_policies} }, $policy;
+        $self->add_policy( -policy => $policy );
     }
 
     return $self;
@@ -175,7 +183,7 @@ sub _policy_is_disabled {
 
 #-----------------------------------------------------------------------------
 
-sub _policy_is_ensabled {
+sub _policy_is_enabled {
     my ($self, $policy) = @_;
     my $profile = $self->{_profile};
     return $profile->policy_is_enabled( $policy );
@@ -258,6 +266,12 @@ sub nocolor {
 sub only {
     my $self = shift;
     return $self->{_only};
+}
+#----------------------------------------------------------------------------
+
+sub severity {
+    my $self = shift;
+    return $self->{_severity};
 }
 
 #----------------------------------------------------------------------------

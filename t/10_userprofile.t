@@ -1,22 +1,20 @@
 #!perl
 
-##################################################################
+##############################################################################
 #     $URL$
 #    $Date$
 #   $Author$
 # $Revision$
-##################################################################
+# ex: set ts=8 sts=4 sw=4 expandtab
+##############################################################################
 
 use strict;
 use warnings;
-use Test::More tests => 36;
+use Test::More tests => 41;
+use English qw(-no_match_vars);
 use Perl::Critic::UserProfile;
 
-# common P::C testing tools
-use Perl::Critic::TestUtils qw();
-Perl::Critic::TestUtils::block_perlcriticrc();
-
-#--------------------------------------------------------------
+#-----------------------------------------------------------------------------
 # Create profile from hash
 
 {
@@ -42,8 +40,8 @@ Perl::Critic::TestUtils::block_perlcriticrc();
     is_deeply($up->policy_params('Perl::Critic::Policy::Bogus'), {} );
 }
 
-#--------------------------------------------------------------
-# Test config as array
+#-----------------------------------------------------------------------------
+# Create profile from array
 
 {
     my %policy_params = (keywords => 'Revision');
@@ -71,8 +69,8 @@ Perl::Critic::TestUtils::block_perlcriticrc();
     is_deeply($up->policy_params('Perl::Critic::Policy::Bogus'), {} );
 }
 
-#--------------------------------------------------------------
-# Test config as string
+#-----------------------------------------------------------------------------
+# Create profile from string
 
 {
     my %policy_params = (keywords => 'Revision');
@@ -100,8 +98,7 @@ END_PROFILE
     is_deeply($up->policy_params('Perl::Critic::Policy::Bogus'), {} );
 }
 
-
-#--------------------------------------------------------------
+#-----------------------------------------------------------------------------
 # Test long policy names
 
 {
@@ -129,3 +126,33 @@ END_PROFILE
        is($up->policy_is_disabled('Perl::Critic::Policy::Bogus'),  q{} );
        is_deeply($up->policy_params('Perl::Critic::Policy::Bogus'), {} );
    }
+
+#-----------------------------------------------------------------------------
+# Test exception handling
+
+{
+    my $code_ref = sub { return };
+    eval { Perl::Critic::UserProfile->new( -profile => $code_ref ) };
+    like( $EVAL_ERROR, qr/Can't load UserProfile/, 'Invalid profile type');
+
+    eval { Perl::Critic::UserProfile->new( -profile => 'bogus' ) };
+    like( $EVAL_ERROR, qr/File 'bogus' does not exist/, 'Invalid profile path');
+
+    my $invalid_syntax = '[Foo::Bar'; #Missing "]"
+    eval { Perl::Critic::UserProfile->new( -profile => \$invalid_syntax ) };
+    like( $EVAL_ERROR, qr/Syntax error at line/, 'Invalid profile syntax');
+
+    $invalid_syntax = 'severity 2'; #Missing "="
+    eval { Perl::Critic::UserProfile->new( -profile => \$invalid_syntax ) };
+    like( $EVAL_ERROR, qr/Syntax error at line/, 'Invalid profile syntax');
+
+}
+
+#-----------------------------------------------------------------------------
+# Test profile finding
+
+{
+    my $expected = $ENV{PERLCRITIC} = 'foo';
+    my $got = Perl::Critic::UserProfile::_find_profile_path();
+    is( $got, $expected, 'PERLCRITIC environment variable');
+}

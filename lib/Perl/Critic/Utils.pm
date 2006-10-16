@@ -16,7 +16,8 @@ use base 'Exporter';
 our $VERSION = 0.21;
 
 #---------------------------------------------------------------------------
-# Exported symbols here
+# Exported symbols here. TODO: Use @EXPORT_OK and %EXPORT_TAGS instead
+
 
 ## no critic (AutomaticExport)
 our @EXPORT = qw(

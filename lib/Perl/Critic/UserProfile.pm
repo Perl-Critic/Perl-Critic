@@ -1,10 +1,10 @@
-#######################################################################
+##############################################################################
 #      $URL$
 #     $Date$
 #   $Author$
 # $Revision$
 # ex: set ts=8 sts=4 sw=4 expandtab
-########################################################################
+##############################################################################
 
 package Perl::Critic::UserProfile;
 
@@ -14,7 +14,7 @@ use Carp qw(carp confess);
 use Config::Tiny qw();
 use English qw(-no_match_vars);
 use File::Spec qw();
-use Perl::Critic::Defaults;
+use Perl::Critic::Defaults qw();
 use Perl::Critic::Utils;
 
 our $VERSION = 0.21;
@@ -113,7 +113,7 @@ sub _load_profile {
     return $self;
 }
 
-#------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 sub _set_defaults {
     my ($self) = @_;
@@ -127,8 +127,9 @@ sub _set_defaults {
 
 sub _load_profile_from_file {
     my $file = shift || return {};
-    confess qq{'$file' is not a file} if not -f $file;
-    return Config::Tiny->read($file);
+    my $prof = Config::Tiny->read($file);
+    confess( Config::Tiny->errstr() ) if not defined $prof;
+    return $prof;
 }
 
 #------------------------------------------------------------------------
@@ -136,14 +137,18 @@ sub _load_profile_from_file {
 sub _load_profile_from_array {
     my $array_ref = shift;
     my $joined    = join qq{\n}, @{ $array_ref };
-    return Config::Tiny->read_string( $joined );
+    my $prof = Config::Tiny->read_string( $joined );
+    confess( Config::Tiny->errstr() ) if not defined $prof;
+    return $prof;
 }
 
 #------------------------------------------------------------------------
 
 sub _load_profile_from_string {
     my $string = shift;
-    return Config::Tiny->read_string( ${ $string } );
+    my $prof = Config::Tiny->read_string( ${ $string } );
+    confess( Config::Tiny->errstr() ) if not defined $prof;
+    return $prof;
 }
 
 #------------------------------------------------------------------------
@@ -182,13 +187,13 @@ sub _find_home_dir {
 
     #Try using File::HomeDir
     eval { require File::HomeDir };
-    if ( ! $EVAL_ERROR ) {
+    if ( not $EVAL_ERROR ) {
         return File::HomeDir->my_home();
     }
 
     #Check usual environment vars
     for my $key (qw(HOME USERPROFILE HOMESHARE)) {
-        next if ! defined $ENV{$key};
+        next if not defined $ENV{$key};
         return $ENV{$key} if -d $ENV{$key};
     }
 

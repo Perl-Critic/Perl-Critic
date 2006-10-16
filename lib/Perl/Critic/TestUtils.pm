@@ -1,10 +1,10 @@
-#######################################################################
+##############################################################################
 #      $URL$
 #     $Date$
 #   $Author$
 # $Revision$
 # ex: set ts=8 sts=4 sw=4 expandtab
-########################################################################
+##############################################################################
 
 package Perl::Critic::TestUtils;
 
@@ -17,24 +17,24 @@ use File::Spec qw();
 use File::Spec::Unix qw();
 use File::Temp qw();
 use Perl::Critic::Config (-test => 1);
-use Perl::Critic;
+use Perl::Critic qw();
 
 
 our $VERSION = 0.21;
 our @EXPORT_OK = qw(pcritique critique fcritique);
 
-#---------------------------------------------------------------
-# If the user already has an existing perlcriticrc file, it will
-# get in the way of these test.  This little tweak to ensures
-# that we don't find the perlcriticrc file.
+#-----------------------------------------------------------------------------
+# If the user already has an existing perlcriticrc file, it will get
+# in the way of these test.  This little tweak to ensures that we
+# don't find the perlcriticrc file.
 
 sub block_perlcriticrc {
     no warnings 'redefine';  ## no critic (ProhibitNoWarnings);
-    *Perl::Critic::UserProfile::find_profile_path = sub { return };
+    *Perl::Critic::UserProfile::_find_profile_path = sub { return }; ## no critic (ProtectPrivateVars)
     return 1;
 }
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 # Criticize a code snippet using only one policy.  Returns the number
 # of violations
 
@@ -46,7 +46,7 @@ sub pcritique {
     return scalar @v;
 }
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 # Criticize a code snippet using a specified config.  Returns the
 # number of violations
 
@@ -57,7 +57,7 @@ sub critique {
     return scalar @v;
 }
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 # Like pcritique, but forces a PPI::Document::File context.  The
 # $filename arg is a Unix-style relative path, like 'Foo/Bar.pm'
 
