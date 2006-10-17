@@ -34,7 +34,6 @@ sub new {
 sub _init {
 
     my ( $self, %args ) = @_;
-    $self->{_namespace} = $args{-namespace} || 'Perl::Critic::Policy';
     $self->_load_profile( $args{-profile}   || _find_profile_path() );
     $self->_set_defaults();
     return $self;
@@ -53,10 +52,9 @@ sub defaults {
 sub policy_params {
 
     my ( $self, $policy ) = @_;
-    my $ns = $self->{_namespace};
     my $profile = $self->{_profile};
-    my $long_name  = ref $policy || policy_long_name( $policy, $ns );
-    my $short_name = policy_short_name( $long_name, $ns );
+    my $long_name  = ref $policy || policy_long_name( $policy );
+    my $short_name = policy_short_name( $long_name );
 
     return $profile->{$short_name}    || $profile->{$long_name}     ||
            $profile->{"-$short_name"} || $profile->{"-$long_name"}  || {};
@@ -67,10 +65,9 @@ sub policy_params {
 sub policy_is_disabled {
 
     my ( $self, $policy ) = @_;
-    my $ns = $self->{_namespace};
     my $profile = $self->{_profile};
-    my $long_name  = ref $policy || policy_long_name( $policy, $ns );
-    my $short_name = policy_short_name( $long_name, $ns );
+    my $long_name  = ref $policy || policy_long_name( $policy );
+    my $short_name = policy_short_name( $long_name );
     return exists $profile->{"-$short_name"} || exists $profile->{"-$long_name"};
 }
 
@@ -79,10 +76,9 @@ sub policy_is_disabled {
 sub policy_is_enabled {
 
     my ( $self, $policy ) = @_;
-    my $ns = $self->{_namespace};
     my $profile = $self->{_profile};
-    my $long_name  = ref $policy || policy_long_name( $policy, $ns );
-    my $short_name = policy_short_name( $long_name, $ns );
+    my $long_name  = ref $policy || policy_long_name( $policy );
+    my $short_name = policy_short_name( $long_name );
     return exists $profile->{$short_name} || exists $profile->{$long_name};
 }
 
@@ -225,7 +221,7 @@ no user-serviceable parts here.
 
 =over 8
 
-=item C< new( -profile => $p, -namespace => $ns ) >
+=item C< new( -profile => $p ) >
 
 =back
 

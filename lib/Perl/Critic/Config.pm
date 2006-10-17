@@ -22,8 +22,6 @@ use Perl::Critic::Utils;
 our $VERSION = 0.21;
 
 # Globals.  Ick!
-my $NAMESPACE = $EMPTY;
-my $DEFAULT_NAMESPACE = 'Perl::Critic::Policy';
 my @SITE_POLICIES = ();
 
 #-----------------------------------------------------------------------------
@@ -32,21 +30,20 @@ sub import {
 
     my ( $class, %args ) = @_;
     my $test_mode = $args{-test};
-    $NAMESPACE    = $args{-namespace} || $DEFAULT_NAMESPACE;
 
 
     eval {
         require Module::Pluggable;
-        Module::Pluggable->import(search_path => $NAMESPACE,
+        Module::Pluggable->import(search_path => $POLICY_NAMESPACE,
                                   require => 1, inner => 0);
         @SITE_POLICIES = plugins(); #Exported by Module::Pluggable
     };
 
     if ( $EVAL_ERROR ) {
-        confess qq{Can't load Policies from namespace '$NAMESPACE': $EVAL_ERROR};
+        confess qq{Can't load Policies from namespace '$POLICY_NAMESPACE': $EVAL_ERROR};
     }
     elsif ( ! @SITE_POLICIES ) {
-        confess qq{No Policies found in namespace '$NAMESPACE'};
+        confess qq{No Policies found in namespace '$POLICY_NAMESPACE'};
     }
 
     # In test mode, only load native policies, not third-party ones
@@ -94,9 +91,7 @@ sub _init {
     my ( $self, %args ) = @_;
 
     my $p = $args{-profile};
-    my $profile = Perl::Critic::UserProfile->new( -profile => $p,
-                                                  namespace => $NAMESPACE );
-
+    my $profile = Perl::Critic::UserProfile->new( -profile => $p );
     $self->{_exclude}  = $args{-exclude}  || $profile->defaults->exclude();
     $self->{_force}    = $args{-force}    || $profile->defaults->force();
     $self->{_include}  = $args{-include}  || $profile->defaults->include();
@@ -135,7 +130,7 @@ sub add_policy {
     # TODO: Use PolicyFactory::create_policy to instantiate the Policy.
 
     eval {
-        my $policy_name = policy_long_name( $policy, $NAMESPACE );
+        my $policy_name = policy_long_name( $policy );
         my $policy_obj  = $policy_name->new( %{ $params } );
         push @{ $self->{_policies} }, $policy_obj;
     };
@@ -526,21 +521,6 @@ Returns a list of all the Policy modules that have been distributed
 with Perl::Critic.  Does not include any third-party modules.
 
 =back
-
-=head1 ADVANCED USAGE
-
-All the Policy modules that ship with Perl::Critic are in the
-C<"Perl::Critic::Policy"> namespace.  To load modules from an alternate
-namespace, import Perl::Critic::Config using the C<-namespace> option
-like this:
-
-  use Perl::Critic::Config -namespace => 'Foo::Bar'; #Loads from Foo::Bar::*
-
-At the moment, only one alternate namespace may be specified.  Unless
-Policy module names are fully qualified, Perl::Critic::Config assumes
-that all Policies are in the specified namespace.  So if you want to
-use Policies from multiple namespaces, you will need to use the full
-module name in your F<.perlcriticrc> file.
 
 =head1 CONFIGURATION
 

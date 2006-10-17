@@ -11,7 +11,7 @@ use strict;
 use warnings;
 use PPI::Document;
 use constant USE_B_KEYWORDS => eval 'use B::Keywords 1.04; 1';
-use Test::More tests => 72 + (
+use Test::More tests => 73 + (
     USE_B_KEYWORDS
     ? ( @B::Keywords::Functions + @B::Keywords::Scalars + @B::Keywords::Arrays
             + @B::Keywords::Hashes + @B::Keywords::FileHandles )
@@ -44,6 +44,7 @@ can_ok('main', 'precedence_of');
 
 is($SPACE, ' ', 'character constants');
 is($SEVERITY_LOWEST, 1, 'severity constants');
+is($POLICY_NAMESPACE, 'Perl::Critic::Policy', 'Policy namespace');
 
 # These globals are deprecated.  Use functions instead
 is( (scalar grep {$_ eq 'grep'}   @BUILTINS), 1, 'perl builtins');
@@ -225,13 +226,12 @@ SKIP: {
 # policy_long_name and policy_short_name tests
 
 {
-    my $namespace  = 'Foo::Bar';
     my $short_name = 'Baz::Nuts';
-    my $long_name  = "${namespace}::$short_name";
-    is( policy_long_name(  $short_name,   $namespace), $long_name   );
-    is( policy_long_name(  $long_name,    $namespace), $long_name   );
-    is( policy_short_name( $short_name,   $namespace), $short_name  );
-    is( policy_short_name( $long_name,    $namespace), $short_name  );
+    my $long_name  = "${POLICY_NAMESPACE}::$short_name";
+    is( policy_long_name(  $short_name ), $long_name   );
+    is( policy_long_name(  $long_name  ), $long_name   );
+    is( policy_short_name( $short_name ), $short_name  );
+    is( policy_short_name( $long_name  ), $short_name  );
 }
 
 #-----------------------------------------------------------------------------

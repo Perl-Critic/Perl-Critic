@@ -24,6 +24,8 @@ our @EXPORT = qw(
     @GLOBALS
     @BUILTINS
 
+    $POLICY_NAMESPACE
+
     $TRUE
     $FALSE
 
@@ -61,6 +63,10 @@ our @EXPORT = qw(
     &shebang_line
     &verbosity_to_format
 );
+
+#---------------------------------------------------------------------------
+
+our $POLICY_NAMESPACE = 'Perl::Critic::Policy';
 
 #---------------------------------------------------------------------------
 
@@ -273,9 +279,9 @@ sub is_script {
 #-------------------------------------------------------------------------
 
 sub policy_long_name {
-    my ( $policy_name, $namespace ) = @_;
-    if ( $policy_name !~ m{ \A $namespace }mx ) {
-        $policy_name = $namespace . q{::} . $policy_name;
+    my ( $policy_name ) = @_;
+    if ( $policy_name !~ m{ \A $POLICY_NAMESPACE }mx ) {
+        $policy_name = $POLICY_NAMESPACE . q{::} . $policy_name;
     }
     return $policy_name;
 }
@@ -283,8 +289,8 @@ sub policy_long_name {
 #-------------------------------------------------------------------------
 
 sub policy_short_name {
-    my ( $policy_name, $namespace ) = @_;
-    $policy_name =~ s{\A $namespace ::}{}mx;
+    my ( $policy_name ) = @_;
+    $policy_name =~ s{\A $POLICY_NAMESPACE ::}{}mx;
     return $policy_name;
 }
 

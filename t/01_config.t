@@ -178,7 +178,8 @@ my $total_policies   = scalar @all_policies;
     like( $EVAL_ERROR, qr/The -policy argument is required/, 'add_policy w/o args' );
 
     # Try loading from bogus namespace
-    eval { Perl::Critic::Config->import( -namespace => 'Bogus::Namespace' ) };
+    $Perl::Critic::Utils::POLICY_NAMESPACE = 'bogus';
+    eval { Perl::Critic::Config->import() };
     like( $EVAL_ERROR, qr/No Policies found/, 'loading from bogus namespace' );
 }
 
