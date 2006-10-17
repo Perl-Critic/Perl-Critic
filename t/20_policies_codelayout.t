@@ -9,7 +9,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 55;
+use Test::More tests => 56;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique fcritique);
@@ -391,6 +391,21 @@ END_PERL
 $policy = 'CodeLayout::RequireTidyCode';
 %config = (perltidyrc => q{});
 is( pcritique($policy, \$code, \%config), 0, 'Tidy with heredoc' );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+#!perl
+
+eval 'exec /usr/bin/perl -w -S $0 ${1+"$@"}'
+        if 0; # not running under some shell
+
+package main;
+END_PERL
+
+$policy = 'CodeLayout::RequireTidyCode';
+%config = (perltidyrc => q{});
+is( pcritique($policy, \$code, \%config), 0, 'Tidy with shell escape' );
 
 #----------------------------------------------------------------
 
