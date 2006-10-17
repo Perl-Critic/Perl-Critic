@@ -458,22 +458,20 @@ precedence over C<-include> when a Policy matches both patterns.
 
 =over 8
 
-=item C<< add_policy( -policy => $policy_name, -config => \%config_hash ) >>
+=item C<< add_policy( -policy => $policy_name, -params => \%param_hash ) >>
 
-Creates a Policy object and loads it into this Critic.  If the object
-cannot be instantiated, it will throw a warning and return a false
-value.  Otherwise, it returns a reference to this Critic.
+Creates a Policy object and loads it into this Config.  If the object
+cannot be instantiated, it will throw a fatal exception.  Otherwise,
+it returns a reference to this Critic.
 
 B<-policy> is the name of a L<Perl::Critic::Policy> subclass
 module.  The C<'Perl::Critic::Policy'> portion of the name can be
 omitted for brevity.  This argument is required.
 
-B<-config> is an optional reference to a hash of Policy configuration
-parameters.  Note that this is B<not> the same thing as a
-L<Perl::Critic::Config> object. The contents of this hash reference
-will be passed into to the constructor of the Policy module.  See the
-documentation in the relevant Policy module for a description of the
-arguments it supports.
+B<-params> is an optional reference to a hash of Policy parameters.
+The contents of this hash reference will be passed into to the
+constructor of the Policy module.  See the documentation in the
+relevant Policy module for a description of the arguments it supports.
 
 =item C< policies() >
 
