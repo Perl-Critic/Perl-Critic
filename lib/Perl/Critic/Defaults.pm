@@ -31,22 +31,40 @@ sub new {
 sub _init {
 
     my ( $self, %args ) = @_;
+    my $key = undef;
 
     # Multi-value defaults
-    $self->{_exclude}    = defined $args{-exclude} ?
-                           [ split m/\s+/mx, $args{-exclude} ] :  [];
-    $self->{_include}    = defined $args{-include} ?
-                           [ split m/\s+/mx, $args{-include} ] :  [];
+    my $exclude = _default( 'exclude', q{}, %args );
+    $self->{_exclude}    = [ split m/\s+/mx, $exclude ];
+    my $include = _default( 'include', q{}, %args );
+    $self->{_include}    = [ split m/\s+/mx, $include ];
+
     # Single-value defaults
-    $self->{_force}      = $args{-force}    || $FALSE;
-    $self->{_nocolor}    = $args{-nocolor}  || $FALSE;
-    $self->{_only}       = $args{-only}     || $FALSE;
-    $self->{_severity}   = $args{-severity} || $SEVERITY_HIGHEST;
-    $self->{_theme}      = $args{-theme}    || undef;
-    $self->{_top}        = $args{-top}      || undef;
-    $self->{_verbose}    = $args{-verbose}  || 3;
+    $self->{_force}    = _default('force',    $FALSE,            %args);
+    $self->{_color}    = _default('color',    $TRUE,             %args);
+    $self->{_only}     = _default('only',     $FALSE,            %args);
+    $self->{_severity} = _default('severity', $SEVERITY_HIGHEST, %args);
+    $self->{_theme}    = _default('theme',    undef,             %args);
+    $self->{_top}      = _default('top',      undef,,            %args);
+    $self->{_verbose}   =_default('verbose',  3,                 %args);
 
     return $self;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _default {
+    my ($key_name, $default, %args) = @_;
+    $key_name = _kludge( $key_name, %args );
+    return $key_name ? $args{$key_name} : $default;
+}
+
+sub _kludge {
+    my ($key, %args) = @_;
+    return $key     if exists $args{$key};
+    return "-$key"  if exists $args{"-$key"};
+    return "--$key" if exists $args{"--$key"};
+    return;
 }
 
 #-----------------------------------------------------------------------------
@@ -93,9 +111,9 @@ sub verbose {
 
 #-----------------------------------------------------------------------------
 
-sub nocolor {
+sub color {
     my ($self) = @_;
-    return $self->{_nocolor};
+    return $self->{_color};
 }
 
 #-----------------------------------------------------------------------------
@@ -149,7 +167,7 @@ user-serviceable parts here.
 
 =item C< include() >
 
-=item C< nocolor() >
+=item C< color() >
 
 =item C< only() >
 

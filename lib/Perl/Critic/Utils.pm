@@ -10,7 +10,7 @@ package Perl::Critic::Utils;
 
 use strict;
 use warnings;
-use File::Spec;
+use File::Spec qw();
 use base 'Exporter';
 
 our $VERSION = 0.21;

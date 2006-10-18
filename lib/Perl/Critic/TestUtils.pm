@@ -16,8 +16,9 @@ use File::Path qw();
 use File::Spec qw();
 use File::Spec::Unix qw();
 use File::Temp qw();
-use Perl::Critic::Config (-test => 1);
 use Perl::Critic qw();
+use Perl::Critic::PolicyFactory (-test => 1);
+
 
 
 our $VERSION = 0.21;

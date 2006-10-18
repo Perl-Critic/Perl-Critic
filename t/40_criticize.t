@@ -13,7 +13,7 @@ use strict;
 use warnings;
 use English qw( -no_match_vars );
 use Test::More;
-use Perl::Critic::Config ( -test => 1 );
+use Perl::Critic::PolicyFactory ( -test => 1 );
 
 eval { require Test::Perl::Critic; };
 plan skip_all => 'Test::Perl::Critic required to criticise code' if $EVAL_ERROR;

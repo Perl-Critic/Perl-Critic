@@ -111,7 +111,7 @@ sub critique {
 
     # Filter exempt code, if desired
     if ( not $self->config->force() ) {
-        my @site_policies = $self->config->site_policies();
+        my @site_policies = $self->config->site_policy_names();
         %is_line_disabled = ( %is_line_disabled,
                               _filter_code($doc, @site_policies) );
     }
@@ -295,7 +295,7 @@ __END__
 
 =pod
 
-=for stopwords DGR INI-style API
+=for stopwords DGR INI-style API params
 
 =head1 NAME
 

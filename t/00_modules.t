@@ -11,7 +11,7 @@
 use strict;
 use warnings;
 use PPI::Document;
-use Test::More tests => 1318;  # Add 14 for each new policy created
+use Test::More tests => 1320;  # Add 14 for each new policy created
 use English qw(-no_match_vars);
 
 our $VERSION = 0.21;
@@ -38,14 +38,14 @@ is($obj->VERSION(), $VERSION);
 use_ok('Perl::Critic::Config');
 can_ok('Perl::Critic::Config', 'new');
 can_ok('Perl::Critic::Config', 'add_policy');
+can_ok('Perl::Critic::Config', 'color');
 can_ok('Perl::Critic::Config', 'exclude');
 can_ok('Perl::Critic::Config', 'force');
 can_ok('Perl::Critic::Config', 'include');
-can_ok('Perl::Critic::Config', 'native_policies');
-can_ok('Perl::Critic::Config', 'nocolor');
+can_ok('Perl::Critic::Config', 'native_policy_names');
 can_ok('Perl::Critic::Config', 'only');
 can_ok('Perl::Critic::Config', 'policies');
-can_ok('Perl::Critic::Config', 'site_policies');
+can_ok('Perl::Critic::Config', 'site_policy_names');
 can_ok('Perl::Critic::Config', 'theme');
 can_ok('Perl::Critic::Config', 'top');
 can_ok('Perl::Critic::Config', 'verbose');
@@ -63,7 +63,7 @@ can_ok('Perl::Critic::Defaults', 'new');
 can_ok('Perl::Critic::Defaults', 'exclude');
 can_ok('Perl::Critic::Defaults', 'force');
 can_ok('Perl::Critic::Defaults', 'include');
-can_ok('Perl::Critic::Defaults', 'nocolor');
+can_ok('Perl::Critic::Defaults', 'color');
 can_ok('Perl::Critic::Defaults', 'only');
 can_ok('Perl::Critic::Defaults', 'severity');
 can_ok('Perl::Critic::Defaults', 'theme');
@@ -138,8 +138,11 @@ is($obj->VERSION(), $VERSION);
 
 use_ok('Perl::Critic::PolicyFactory');
 can_ok('Perl::Critic::PolicyFactory', 'create_policy');
+can_ok('Perl::Critic::PolicyFactory', 'native_policy_names');
 can_ok('Perl::Critic::PolicyFactory', 'new');
 can_ok('Perl::Critic::PolicyFactory', 'policies');
+can_ok('Perl::Critic::PolicyFactory', 'site_policy_names');
+
 
 my $profile = Perl::Critic::UserProfile->new();
 $obj = Perl::Critic::PolicyFactory->new( -profile => $profile );
@@ -148,7 +151,7 @@ isa_ok($obj, 'Perl::Critic::PolicyFactory');
 #-----------------------------------------------------------------------------
 # Test module interface for each Policy subclass
 
-for my $mod ( Perl::Critic::Config::native_policies() ) {
+for my $mod ( Perl::Critic::PolicyFactory::native_policy_names() ) {
 
     use_ok($mod);
     can_ok($mod, 'applies_to');

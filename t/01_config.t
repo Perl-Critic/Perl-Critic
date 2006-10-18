@@ -12,9 +12,9 @@ use strict;
 use warnings;
 use English qw(-no_match_vars);
 use List::MoreUtils qw(all any);
-use Perl::Critic::Config (-test => 1);
+use Perl::Critic::Config qw();
 use Perl::Critic::Utils;
-use Test::More (tests => 36);
+use Test::More (tests => 38);
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw();
@@ -23,10 +23,10 @@ Perl::Critic::TestUtils::block_perlcriticrc();
 #-----------------------------------------------------------------------------
 
 my $samples_dir      = 't/samples';
-my $critic           = Perl::Critic->new(-severity => $SEVERITY_LOWEST);
-my @native_policies  = Perl::Critic::Config::native_policies();
-my @all_policies     = map {ref $_} $critic->policies();
-my $total_policies   = scalar @all_policies;
+my $config           = Perl::Critic::Config->new(-severity => $SEVERITY_LOWEST);
+my @native_policies  = Perl::Critic::Config::native_policy_names();
+my @site_policies    = Perl::Critic::Config::site_policy_names();
+my $total_policies   = scalar @site_policies;
 
 #-----------------------------------------------------------------------------
 # Test default config.  Increasing the severity should yield
@@ -100,15 +100,15 @@ my $total_policies   = scalar @all_policies;
 {
     my $profile = "$samples_dir/perlcriticrc.defaults";
     my $c = Perl::Critic::Config->new( -profile => $profile );
-    is_deeply([$c->exclude()], [ qw(Documentation Naming) ], 'user default -exclude from file' );
-    is_deeply([$c->include()], [ qw(CodeLayout Modules) ],  'user default -include from file' );
-    is($c->force(),    1,  'user default -force from file'     );
-    is($c->nocolor(),  1,  'user default -nocolor from file'   );
-    #is($c->only(),     1,  'user default -only from file'      );
-    is($c->severity(), 3,  'user default -severity from file'  );
-    is($c->theme(),    'danger + risky - pbp',  'user default -theme from file');
-    is($c->top(),      50, 'user default -top from file'       );
-    is($c->verbose(),  5,  'user default -verbose from file'   );
+    is_deeply([$c->exclude()], [ qw(Documentation Naming) ], 'user default exclude from file' );
+    is_deeply([$c->include()], [ qw(CodeLayout Modules) ],  'user default include from file' );
+    is($c->force(),    1,  'user default force from file'     );
+    is($c->color(),    0,  'user default color from file'   );
+    is($c->only(),     1,  'user default only from file'      );
+    is($c->severity(), 3,  'user default severity from file'  );
+    is($c->theme(),    'danger + risky - pbp',  'user default theme from file');
+    is($c->top(),      50, 'user default top from file'       );
+    is($c->verbose(),  5,  'user default verbose from file'   );
 }
 
 #-----------------------------------------------------------------------------
@@ -164,6 +164,26 @@ my $total_policies   = scalar @all_policies;
 }
 
 #-----------------------------------------------------------------------------
+# Test the -only switch
+
+{
+
+    my %profile = (
+        '-NamingConventions::ProhibitMixedCaseVars' => {},
+        'NamingConventions::ProhibitMixedCaseSubs' => {},
+        'Miscellanea::RequireRcsKeywords' => {},
+    );
+
+    my %pc_config = (-severity => 1, -only => 1, -profile => \%profile);
+    my @pols = Perl::Critic::Config->new( %pc_config )->policies();
+    is(scalar @pols, 2, '-only switch');
+
+    %pc_config = ( -severity => 1, -only => 1, -profile => {} );
+    @pols = Perl::Critic::Config->new( %pc_config )->policies();
+    is(scalar @pols, 0, '-only switch, empty profile');
+}
+
+#-----------------------------------------------------------------------------
 # Test exception handling
 
 {
@@ -176,10 +196,5 @@ my $total_policies   = scalar @all_policies;
     # Try adding w/o policy
     eval { $config->add_policy() };
     like( $EVAL_ERROR, qr/The -policy argument is required/, 'add_policy w/o args' );
-
-    # Try loading from bogus namespace
-    $Perl::Critic::Utils::POLICY_NAMESPACE = 'bogus';
-    eval { Perl::Critic::Config->import() };
-    like( $EVAL_ERROR, qr/No Policies found/, 'loading from bogus namespace' );
 }
 

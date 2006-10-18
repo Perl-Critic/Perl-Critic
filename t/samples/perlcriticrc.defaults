@@ -4,12 +4,12 @@
 # line, or through the Perl::Critic API.
 ##########################################################################
 
--exclude   = Documentation Naming
--force     = 1
--include   = CodeLayout Modules
--nocolor   = 1 
--only      = 1
--severity  = 3
--theme     = danger + risky - pbp
--top       = 50
--verbose   = 5
+exclude   = Documentation Naming
+force     = 1
+include   = CodeLayout Modules
+color     = 0 
+only      = 1
+severity  = 3
+theme     = danger + risky - pbp
+top       = 50
+verbose   = 5

@@ -10,7 +10,7 @@ package Perl::Critic::Violation;
 
 use strict;
 use warnings;
-use Carp;
+use Carp qw(confess);
 use English qw(-no_match_vars);
 use IO::String qw();
 use Pod::PlainText qw();
@@ -33,8 +33,7 @@ sub new {
     #be creating new Perl::Critic::Policy modules.
 
     if ( @_ != 5 ) {
-        my $msg = 'Wrong number of args to Violation->new()';
-        croak $msg;
+        confess 'Wrong number of args to Violation->new()';
     }
 
     if ( ! eval { $elem->isa( 'PPI::Element' ) } ) {
@@ -44,8 +43,7 @@ sub new {
             $elem = $elem->{_doc};
         }
         else {
-            my $msg = '3rd arg to Violation->new() must be a PPI::Element';
-            croak $msg;
+            confess '3rd arg to Violation->new() must be a PPI::Element';
         }
     }
 

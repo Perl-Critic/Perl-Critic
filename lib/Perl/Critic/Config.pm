@@ -12,66 +12,15 @@ use strict;
 use warnings;
 use Carp qw(confess);
 use English qw(-no_match_vars);
-use File::Spec::Unix qw();
 use List::MoreUtils qw(any none);
 use Scalar::Util qw(blessed);
-use Perl::Critic::PolicyFactory qw();
+use Perl::Critic::PolicyFactory;
+use Perl::Critic::ThemeManager qw();
 use Perl::Critic::UserProfile qw();
 use Perl::Critic::Utils;
 
 our $VERSION = 0.21;
 
-# Globals.  Ick!
-my @SITE_POLICIES = ();
-
-#-----------------------------------------------------------------------------
-
-sub import {
-
-    my ( $class, %args ) = @_;
-    my $test_mode = $args{-test};
-
-
-    eval {
-        require Module::Pluggable;
-        Module::Pluggable->import(search_path => $POLICY_NAMESPACE,
-                                  require => 1, inner => 0);
-        @SITE_POLICIES = plugins(); #Exported by Module::Pluggable
-    };
-
-    if ( $EVAL_ERROR ) {
-        confess qq{Can't load Policies from namespace '$POLICY_NAMESPACE': $EVAL_ERROR};
-    }
-    elsif ( ! @SITE_POLICIES ) {
-        confess qq{No Policies found in namespace '$POLICY_NAMESPACE'};
-    }
-
-    # In test mode, only load native policies, not third-party ones
-    if ( $test_mode && any {m/\b blib \b/xms} @INC ) {
-        @SITE_POLICIES = _modules_from_blib( @SITE_POLICIES );
-    }
-
-    return 1;
-}
-
-#---------------------------------------------------------------------------
-# Some static helper subs
-
-sub _modules_from_blib {
-    my (@modules) = @_;
-    return grep { _was_loaded_from_blib( _module2path($_) ) } @modules;
-}
-
-sub _module2path {
-    my $module = shift || return;
-    return File::Spec::Unix->catdir(split m/::/xms, $module) . '.pm';
-}
-
-sub _was_loaded_from_blib {
-    my $path = shift || return;
-    my $full_path = $INC{$path};
-    return $full_path && $full_path =~ m/\b blib \b/xms;
-}
 
 #-----------------------------------------------------------------------------
 # Constructor
@@ -95,7 +44,7 @@ sub _init {
     $self->{_exclude}  = $args{-exclude}  || $profile->defaults->exclude();
     $self->{_force}    = $args{-force}    || $profile->defaults->force();
     $self->{_include}  = $args{-include}  || $profile->defaults->include();
-    $self->{_nocolor}  = $args{-nocolor}  || $profile->defaults->nocolor();
+    $self->{_color}    = $args{-color}    || $profile->defaults->color();
     $self->{_only}     = $args{-only}     || $profile->defaults->only();
     $self->{_severity} = $args{-severity} || $profile->defaults->severity();
     $self->{_theme}    = $args{-theme}    || $profile->defaults->theme();
@@ -104,10 +53,17 @@ sub _init {
     $self->{_profile}  = $profile;
     $self->{_policies} = [];
 
+    my $factory = Perl::Critic::PolicyFactory->new( -profile  => $profile );
+    $self->{_factory} = $factory;
+
+    my @policies = $factory->policies();
+    my $manager = Perl::Critic::ThemeManager->new( -polices => \@policies );
+    $self->{_theme_manager} = $manager;
+
     # "NONE" means don't load any policies
     return $self if defined $p and $p eq 'NONE';
 
-    $self->_load_policies( @SITE_POLICIES );
+    $self->_load_policies( @policies );
     return $self;
 }
 
@@ -144,12 +100,9 @@ sub add_policy {
 
 sub _load_policies {
 
-    my ( $self, @policy_names ) = @_;
+    my ( $self, @policies ) = @_;
 
-    my $factory = Perl::Critic::PolicyFactory->new( -profile  => $self->{_profile},
-                                                    -policies => \@policy_names );
-
-    for my $policy ( $factory->policies() ) {
+    for my $policy ( @policies ) {
 
         my $load_me = $self->only() ? $FALSE : $TRUE;
 
@@ -157,7 +110,7 @@ sub _load_policies {
         $load_me = $FALSE if $self->_policy_is_disabled( $policy );
         $load_me = $TRUE  if $self->_policy_is_enabled( $policy );
         $load_me = $FALSE if $self->_policy_is_unimportant( $policy );
-        $load_me = $FALSE if not $self->_policy_is_thematic( $policy );
+        #$load_me = $FALSE if not $self->_policy_is_thematic( $policy );
         $load_me = $TRUE  if $self->_policy_is_included( $policy );
         $load_me = $FALSE if $self->_policy_is_excluded( $policy );
 
@@ -188,9 +141,12 @@ sub _policy_is_enabled {
 
 sub _policy_is_thematic {
     my ($self, $policy) = @_;
+    my $policy_name = ref $policy;
+    my $theme_rule = $self->{_theme};
+    return $TRUE if defined $theme_rule && $theme_rule eq $EMPTY;
     my $theme_manager = $self->{_theme_manager};
-    return 1 if not $theme_manager;
-    return $theme_manager->is_thematic( $policy );
+    my @thematic_policy_names = $theme_manager->evaluate( $theme_rule );
+    return any { $policy_name eq $_ } @thematic_policy_names;
 }
 
 #-----------------------------------------------------------------------------
@@ -251,9 +207,9 @@ sub include {
 
 #----------------------------------------------------------------------------
 
-sub nocolor {
+sub color {
     my $self = shift;
-    return $self->{_nocolor};
+    return $self->{_color};
 }
 
 #----------------------------------------------------------------------------
@@ -292,102 +248,14 @@ sub verbose {
 
 #----------------------------------------------------------------------------
 
-sub site_policies {
-    return @SITE_POLICIES;
+sub site_policy_names {
+    return Perl::Critic::PolicyFactory::site_policy_names();
 }
 
-# This list should be in alphabetic order but it's no longer critical
-sub native_policies {
-    return qw(
-      Perl::Critic::Policy::BuiltinFunctions::ProhibitLvalueSubstr
-      Perl::Critic::Policy::BuiltinFunctions::ProhibitReverseSortBlock
-      Perl::Critic::Policy::BuiltinFunctions::ProhibitSleepViaSelect
-      Perl::Critic::Policy::BuiltinFunctions::ProhibitStringyEval
-      Perl::Critic::Policy::BuiltinFunctions::ProhibitStringySplit
-      Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalCan
-      Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalIsa
-      Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep
-      Perl::Critic::Policy::BuiltinFunctions::RequireBlockMap
-      Perl::Critic::Policy::BuiltinFunctions::RequireGlobFunction
-      Perl::Critic::Policy::BuiltinFunctions::RequireSimpleSortBlock
-      Perl::Critic::Policy::ClassHierarchies::ProhibitAutoloading
-      Perl::Critic::Policy::ClassHierarchies::ProhibitExplicitISA
-      Perl::Critic::Policy::ClassHierarchies::ProhibitOneArgBless
-      Perl::Critic::Policy::CodeLayout::ProhibitHardTabs
-      Perl::Critic::Policy::CodeLayout::ProhibitParensWithBuiltins
-      Perl::Critic::Policy::CodeLayout::ProhibitQuotedWordLists
-      Perl::Critic::Policy::CodeLayout::RequireConsistentNewlines
-      Perl::Critic::Policy::CodeLayout::RequireTidyCode
-      Perl::Critic::Policy::CodeLayout::RequireTrailingCommas
-      Perl::Critic::Policy::ControlStructures::ProhibitCStyleForLoops
-      Perl::Critic::Policy::ControlStructures::ProhibitCascadingIfElse
-      Perl::Critic::Policy::ControlStructures::ProhibitDeepNests
-      Perl::Critic::Policy::ControlStructures::ProhibitPostfixControls
-      Perl::Critic::Policy::ControlStructures::ProhibitUnlessBlocks
-      Perl::Critic::Policy::ControlStructures::ProhibitUnreachableCode
-      Perl::Critic::Policy::ControlStructures::ProhibitUntilBlocks
-      Perl::Critic::Policy::Documentation::RequirePodAtEnd
-      Perl::Critic::Policy::Documentation::RequirePodSections
-      Perl::Critic::Policy::ErrorHandling::RequireCarping
-      Perl::Critic::Policy::InputOutput::ProhibitBacktickOperators
-      Perl::Critic::Policy::InputOutput::ProhibitBarewordFileHandles
-      Perl::Critic::Policy::InputOutput::ProhibitInteractiveTest
-      Perl::Critic::Policy::InputOutput::ProhibitOneArgSelect
-      Perl::Critic::Policy::InputOutput::ProhibitReadlineInForLoop
-      Perl::Critic::Policy::InputOutput::ProhibitTwoArgOpen
-      Perl::Critic::Policy::InputOutput::RequireBracedFileHandleWithPrint
-      Perl::Critic::Policy::Miscellanea::ProhibitFormats
-      Perl::Critic::Policy::Miscellanea::ProhibitTies
-      Perl::Critic::Policy::Miscellanea::RequireRcsKeywords
-      Perl::Critic::Policy::Modules::ProhibitAutomaticExportation
-      Perl::Critic::Policy::Modules::ProhibitEvilModules
-      Perl::Critic::Policy::Modules::ProhibitMultiplePackages
-      Perl::Critic::Policy::Modules::RequireBarewordIncludes
-      Perl::Critic::Policy::Modules::RequireEndWithOne
-      Perl::Critic::Policy::Modules::RequireExplicitPackage
-      Perl::Critic::Policy::Modules::RequireFilenameMatchesPackage
-      Perl::Critic::Policy::Modules::RequireVersionVar
-      Perl::Critic::Policy::NamingConventions::ProhibitAmbiguousNames
-      Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseSubs
-      Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars
-      Perl::Critic::Policy::References::ProhibitDoubleSigils
-      Perl::Critic::Policy::RegularExpressions::ProhibitCaptureWithoutTest
-      Perl::Critic::Policy::RegularExpressions::RequireExtendedFormatting
-      Perl::Critic::Policy::RegularExpressions::RequireLineBoundaryMatching
-      Perl::Critic::Policy::Subroutines::ProhibitAmpersandSigils
-      Perl::Critic::Policy::Subroutines::ProhibitBuiltinHomonyms
-      Perl::Critic::Policy::Subroutines::ProhibitExcessComplexity
-      Perl::Critic::Policy::Subroutines::ProhibitExplicitReturnUndef
-      Perl::Critic::Policy::Subroutines::ProhibitSubroutinePrototypes
-      Perl::Critic::Policy::Subroutines::ProtectPrivateSubs
-      Perl::Critic::Policy::Subroutines::RequireFinalReturn
-      Perl::Critic::Policy::TestingAndDebugging::ProhibitNoStrict
-      Perl::Critic::Policy::TestingAndDebugging::ProhibitNoWarnings
-      Perl::Critic::Policy::TestingAndDebugging::RequireTestLabels
-      Perl::Critic::Policy::TestingAndDebugging::RequireUseStrict
-      Perl::Critic::Policy::TestingAndDebugging::RequireUseWarnings
-      Perl::Critic::Policy::ValuesAndExpressions::ProhibitConstantPragma
-      Perl::Critic::Policy::ValuesAndExpressions::ProhibitEmptyQuotes
-      Perl::Critic::Policy::ValuesAndExpressions::ProhibitEscapedCharacters
-      Perl::Critic::Policy::ValuesAndExpressions::ProhibitInterpolationOfLiterals
-      Perl::Critic::Policy::ValuesAndExpressions::ProhibitLeadingZeros
-      Perl::Critic::Policy::ValuesAndExpressions::ProhibitMixedBooleanOperators
-      Perl::Critic::Policy::ValuesAndExpressions::ProhibitNoisyQuotes
-      Perl::Critic::Policy::ValuesAndExpressions::ProhibitVersionStrings
-      Perl::Critic::Policy::ValuesAndExpressions::RequireInterpolationOfMetachars
-      Perl::Critic::Policy::ValuesAndExpressions::RequireNumberSeparators
-      Perl::Critic::Policy::ValuesAndExpressions::RequireQuotedHeredocTerminator
-      Perl::Critic::Policy::ValuesAndExpressions::RequireUpperCaseHeredocTerminator
-      Perl::Critic::Policy::Variables::ProhibitConditionalDeclarations
-      Perl::Critic::Policy::Variables::ProhibitLocalVars
-      Perl::Critic::Policy::Variables::ProhibitMatchVars
-      Perl::Critic::Policy::Variables::ProhibitPackageVars
-      Perl::Critic::Policy::Variables::ProhibitPunctuationVars
-      Perl::Critic::Policy::Variables::ProtectPrivateVars
-      Perl::Critic::Policy::Variables::RequireInitializationForLocalVars
-      Perl::Critic::Policy::Variables::RequireLexicalLoopIterators
-      Perl::Critic::Policy::Variables::RequireNegativeIndices
-    );
+#----------------------------------------------------------------------------
+
+sub native_policy_names {
+    return Perl::Critic::PolicyFactory::native_policy_names();
 }
 
 1;
@@ -397,6 +265,8 @@ sub native_policies {
 __END__
 
 =pod
+
+=for stopwords params
 
 =head1 NAME
 
@@ -485,7 +355,7 @@ they were loaded.
 
 =item C< include() >
 
-=item C< nocolor() >
+=item C< color() >
 
 =item C< only() >
 
@@ -506,14 +376,14 @@ internally, but may be useful to you in some way.
 
 =over 8
 
-=item C<site_policies()>
+=item C<site_policy_names()>
 
 Returns a list of all the Policy modules that are currently installed
 in the Perl::Critic:Policy namespace.  These will include modules that
 are distributed with Perl::Critic plus any third-party modules that
 have been installed.
 
-=item C<native_policies()>
+=item C<native_policy_names()>
 
 Returns a list of all the Policy modules that have been distributed
 with Perl::Critic.  Does not include any third-party modules.

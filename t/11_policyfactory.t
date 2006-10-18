@@ -9,7 +9,8 @@
 
 use strict;
 use warnings;
-use Test::More tests => 7;
+use English qw(-no_mactch_vars);
+use Test::More tests => 8;
 use Perl::Critic::UserProfile;
 use Perl::Critic::PolicyFactory;
 
@@ -26,7 +27,7 @@ Perl::Critic::TestUtils::block_perlcriticrc();
     my $userprof = Perl::Critic::UserProfile->new( -profile => $profile );
 
     my $pf = Perl::Critic::PolicyFactory->new( -profile  => $userprof,
-                                               -policies => [$policy_name] );
+                                               -policy_names => [$policy_name] );
 
 
     # Now test...
@@ -62,4 +63,15 @@ Perl::Critic::TestUtils::block_perlcriticrc();
 
     my @themes = $policy->get_themes();
     is_deeply( \@themes, [ qw(betty wilma) ], 'Set the theme');
+}
+
+#-----------------------------------------------------------------------------
+# Test exception handling
+
+{
+    # Try loading from bogus namespace
+    $Perl::Critic::Utils::POLICY_NAMESPACE = 'bogus';
+    eval { Perl::Critic::PolicyFactory->import() };
+    like( $EVAL_ERROR, qr/No Policies found/, 'loading from bogus namespace' );
+
 }

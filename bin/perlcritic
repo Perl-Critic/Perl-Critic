@@ -231,16 +231,17 @@ sub render_report {
 
     # Otherwise, format and print violations
     $file = -f $file ? $file : 'stdin';
-    my $default_verbosity = @FILES > 1 ? 4 : 3;  #@FILES is global!
-    my $fmt = _get_format( $CRITIC->config->verbose() || $default_verbosity );
+    my $fmt = $CRITIC->config->verbose();
+    $fmt = (@FILES > 1 && $fmt == 3) ? 4 : $fmt;  #@FILES is global!
+    $fmt = _get_format( $fmt );
     $fmt =~ s{ \%f }{$file}mxg;  #HACK! Violation objects don't know the file
     Perl::Critic::Violation::set_format( $fmt );
 
-    if ( $CRITIC->config->nocolor() ) {
-        print @violations;
+    if ( $CRITIC->config->color() ) {
+        print _colorize_by_severity(@violations);
     }
     else {
-        print _colorize_by_severity(@violations);
+        print @violations;
     }
 
     return $count;
@@ -255,18 +256,17 @@ sub _get_option_specification {
         Version
         count
         exclude=s@
-        force
+        force!
         help|?
         include=s@
         list
         man
-        nocolor
+        color!
         noprofile
-        notheme=s@
         profile=s
         quiet
         severity=i
-        theme=s@
+        theme=s
         top:i
         verbose=s
     );
@@ -335,8 +335,7 @@ sub policy_listing {
     # Perl::Critic until we absolutely have to.
 
     require Perl::Critic::Config;
-    Perl::Critic::Config->import( -namespace => $namespace );
-    my $config = Perl::Critic::Config->new(-severity => 1);
+    my $config = Perl::Critic::Config->new(-severity => 1, -profile => $EMPTY);
     my @policies = _sort_objects_by_type( $config->policies() );
 
 
@@ -381,7 +380,7 @@ C<perlcritic> - Command-line interface to critique Perl source
   perlcritic [-12345 | -severity number] [-noprofile | -profile file]
              [-top [ number ]] [-include pattern] [-exclude pattern]
              [-theme string] [-notheme string] [-verbose number | format]
-             [-force] [-list] [-nocolor] [-Version] [-help]
+             [-force] [-list] [-color] [-Version] [-help]
              [-man] [-quiet] [FILE | DIRECTORY | STDIN]
 
 =head1 DESCRIPTION
@@ -619,12 +618,12 @@ Report "Perl Best Practice" citations as section numbers from
 L<http://safari.oreilly.com> instead of page numbers from the actual
 book.  NOTE: This feature is not implemented yet.
 
-=item C<-nocolor>
+=item C<-color>
 
-Do not colorize the output.  Otherwise, severity 5 and 4 are colored
-red and yellow, respectively.  Colorization only happens if STDOUT is
-a tty and L<Term::ANSIColor> is installed.  And it only works on
-non-windows environments.
+Colorize the output.  By default, Severity 5 and 4 are colored red and
+yellow, respectively.  Colorization only happens if STDOUT is a tty
+and L<Term::ANSIColor> is installed.  And it only works on non-windows
+environments.  You can negate this option as C<"-nocolor">.
 
 =item C<-quiet>
 

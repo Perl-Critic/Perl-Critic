@@ -264,11 +264,11 @@ SKIP: {
 #-----------------------------------------------------------------------------
 
 
-use Perl::Critic::Config;
+use Perl::Critic::PolicyFactory;
 use Perl::Critic::TestUtils qw();
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 
-my @native_policies = Perl::Critic::Config::native_policies();
+my @native_policies = Perl::Critic::PolicyFactory::native_policy_names();
 my @found_policies  = all_perl_files( 'lib/Perl/Critic/Policy' );
 is( scalar @found_policies, scalar @native_policies, 'Find all perl code');

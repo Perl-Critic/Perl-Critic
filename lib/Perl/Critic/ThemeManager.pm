@@ -13,42 +13,43 @@ use warnings;
 use Carp qw(confess);
 use English qw(-no_match_vars);
 use List::MoreUtils qw(any);
-use Set::Scalar;
+use Set::Scalar qw();
 
 our $VERSION = 0.21;
 
 #-----------------------------------------------------------------------------
 
 sub new {
-    my ($class, $request, @policy_objects) = @_;
+    my ($class, %args) = @_;
     my $self = bless {}, $class;
-    $self->_init( $request, @policy_objects );
+    $self->_init( %args );
     return $self;
 }
 
 #-----------------------------------------------------------------------------
 
 sub _init {
-    my ($self, $request, @policy_objects) = @_;
-    my $tmap = _make_theme_map( @policy_objects );
-    $self->{_policies} = _evaluate_request($request, $tmap);
+    my ($self, %args) = @_;
+    my $theme_rule     = $args{-theme};
+    my $policy_objects = $args{-policies} || [];
+    $self->{_tmap} = _make_theme_map( @{$policy_objects} );
     return $self;
 }
 
 #-----------------------------------------------------------------------------
 
-sub _evaluate_request {
-    my ($request, $tmap) = @_;
-    my %tmap = %{ $tmap };
-    $request = _validate_request( $request );
-    $request = _translate_request( $request );
-    $request = _interpolate_request( $request, 'tmap' );
-    return if not length $request;
+sub evaluate {
+    my ($self, $expression) = @_;
+    return if not defined $expression;
+    my %tmap = %{ $self->{_tmap} };
+    _validate_expression( $expression );
+    $expression = _translate_expression( $expression );
+    $expression = _interpolate_expression( $expression, 'tmap' );
 
-    my $wanted_set = eval $request;  ## no critic ProhibitStringyEval;
-    confess  q{Something went wrong} if ref $wanted_set ne 'Set::Scalar';
+    no warnings 'uninitialized'; ## no critic (ProhibitNoWarnings);
+    my $wanted = eval $expression || return; ## no critic (ProhibitStringyEval);
     confess qq{Invalid theme expression: $EVAL_ERROR} if $EVAL_ERROR;
-    return $wanted_set->members();
+    return $wanted->members();
 }
 
 #-----------------------------------------------------------------------------
@@ -70,11 +71,11 @@ sub _make_theme_map {
 
 #-----------------------------------------------------------------------------
 
-sub _validate_request {
-    my ($request) = @_;
-    return if not length $request;
-    if ( $request !~ m/\A    [()\s\w\d\+\-\*]+ \z/mx ) {
-        $request  =~ m/   ( [^()\s\w\d\+\-\*] )  /mx;
+sub _validate_expression {
+    my ($expression) = @_;
+    return 1 if not defined $expression;
+    if ( $expression !~ m/\A    [()\s\w\d\+\-\*]* \z/mx ) {
+        $expression  =~ m/   ( [^()\s\w\d\+\-\*] )  /mx;
         confess qq{Illegal character "$1" in theme expression};
     }
     return 1;
@@ -82,20 +83,21 @@ sub _validate_request {
 
 #-----------------------------------------------------------------------------
 
-sub _translate_request {
-    my ($request) = @_;
-    $request =~ s{\b and \b}{\*}ixmg; # "and" -> "*" e.g. intersection
-    $request =~ s{\b not \b}{\-}ixmg; # "not" -> "-" e.g. difference
-    $request =~ s{\b or  \b}{\+}ixmg; # "or"  -> "+" e.g. union
-    return $request;
+sub _translate_expression {
+    my ($expression) = @_;
+    return if not defined $expression;
+    $expression =~ s{\b and \b}{\*}ixmg; # "and" -> "*" e.g. intersection
+    $expression =~ s{\b not \b}{\-}ixmg; # "not" -> "-" e.g. difference
+    $expression =~ s{\b or  \b}{\+}ixmg; # "or"  -> "+" e.g. union
+    return $expression;
 }
 
 #-----------------------------------------------------------------------------
 
-sub _interpolate_request {
-    my ($request, $map_name) = @_;
-    $request =~ s/\b ([\w\d]+) \b/\$$map_name\{"$1"\}/ixmg;
-    return $request;
+sub _interpolate_expression {
+    my ($expression, $map_name) = @_;
+    $expression =~ s/\b ([\w\d]+) \b/\$$map_name\{"$1"\}/ixmg;
+    return $expression;
 }
 
 1;
