@@ -469,8 +469,9 @@ Directs C<perlcritic> to only report violations of Policies with a
 severity greater than C<N>.  Severity values are integers ranging from
 1 (least severe) to 5 (most severe).  The default is 5.  For a given
 C<-profile>, decreasing the C<-severity> will usually produce more
-violations.  Users can redefine the C<severity> for any Policy in
-their F<.perlcriticrc> file.  See L<"CONFIGURATION"> for more
+violations.  You can set the default value for this option in your
+F<.perlcriticrc> file.  You can also redefine the C<severity> for any
+Policy in your F<.perlcriticrc> file.  See L<"CONFIGURATION"> for more
 information.
 
 =item C<-5 | -4 | -3 | -2 | -1>
@@ -483,21 +484,14 @@ Be careful not to put one of the severity shortcut options immediately
 after the C<-top> flag or C<perlcritic> will interpret it as the
 number of violations to report.
 
-=item C<-theme THEME>
+=item C<-theme EXPRESSION>
 
 Directs C<perlcritic> to report only violations of Policies that are
-part of C<THEME>.  The C<THEME> argument is case-insensitive, and this
-option can be repeated multiple times.  Themes are arbitrary names for
-logical groups of policies.  See the L<"POLICY THEMES"> section for
-more information.
-
-=item C<-notheme THEME>
-
-Directs C<perlcritic> to not report violations of Policies that are
-part of C<THEME>.  The C<THEME> argument is case-insensitive, and this
-option can be repeated multiple times.  Themes are arbitrary names for
-logical groups of policies.  See the L<"POLICY THEMES"> section for
-more information.
+encompassed by the C<EXPRESSION>.  Themes are arbitrary names
+for groups of related policies.  You can combine theme names with
+mathematical and boolean operators to create an arbitrarily complex
+C<EXPRESSION>.  See the L<"POLICY THEMES"> section for more
+information.
 
 =item C<-include PATTERN>
 
@@ -514,7 +508,8 @@ less than the default level of 5, or have been disabled in your
 F<.perlcriticrc> file.  You can specify multiple C<-include> options
 and you can use it in conjunction with the C<-exclude> option.  Note
 that C<-exclude> takes precedence over C<-include> when a Policy
-matches both patterns.
+matches both patterns.  You can set the default value for this option
+in your F<.perlcriticrc> file.
 
 =item C<-exclude PATTERN>
 
@@ -530,7 +525,8 @@ C<RequireUseStrict> and C<ProhibitNoStrict> policies even though they
 have the highest severity level.  You can specify multiple C<-exclude>
 options and you can use it in conjunction with the C<-include> option.
 Note that C<-exclude> takes precedence over C<-include> when a Policy
-matches both patterns.
+matches both patterns.  You can set the default value for this option
+in your F<.perlcriticrc> file.
 
 =item C<-top [ N ]>
 
@@ -540,15 +536,17 @@ defaults to 20.  If the C<-severity> option (or one of the shortcuts)
 is not explicitly given, the C<-top> option implies that the minimum
 severity level is 1. Users can redefine the severity for any Policy in
 their F<.perlcriticrc> file.  See L<"CONFIGURATION"> for more
-information.  NOTE: Be careful not to put one of the severity shortcut
-options immediately after the C<-top> flag or C<perlcritic> will
-interpret it as the number of violations to report.
+information.  You can set the default value for this option in your
+F<.perlcriticrc> file.  NOTE: Be careful not to put one of the
+severity shortcut options immediately after the C<-top> flag or
+C<perlcritic> will interpret it as the number of violations to report.
 
 =item C<-force>
 
 Directs C<perlcritic> to ignore the magical C<"## no critic">
 pseudo-pragmas in the source code. See L<"BENDING THE RULES"> for more
-information.
+information.  You can set the default value for this option in your
+F<.perlcriticrc> file.
 
 =item C<-verbose N | FORMAT>
 
@@ -558,7 +556,8 @@ predefined formats described below.  If given a string (C<FORMAT>), it
 is interpreted to be an actual format specification.  If the
 C<-verbose> option is not specified, it defaults to either 3 or 4,
 depending on whether multiple files were given as arguments to
-C<perlcritic>.
+C<perlcritic>.  You can set the default value for this option in your
+F<.perlcriticrc> file.
 
   Verbosity     Format Specification
   -----------   ---------------------------------------------------------------
@@ -605,6 +604,12 @@ then the user-defined severity will be the same as the default
 severity.  This can be useful for discovering the Policy modules that
 you have available and tuning the severity levels in your
 F<.perlcriticrc> file.
+
+=item C<-only>
+
+Directs perlcritic to choose only from policies that are explicitly
+named in your F<.perlcriticrc> file.  You can set the default value
+for this option in your F<.perlcriticrc> file.
 
 =item C<-count>
 
@@ -761,34 +766,31 @@ and C<"cosmetic"> and C<"pbp">.  Say C<`perlcritic -list`> to get a
 listing of all available policies and the themes that are associated
 with each one.
 
-Using the F<.perlcriticrc> file, you can override and/or append to the
-theme of any Policy.  For instance, you could append the C<"foo">
-theme to all the Policies that you've decided to use on the code for
-application "foo"...
+Using the C<-theme> command-line option, you can combine themes with
+mathematical and boolean operators to create an arbitrarily complex
+expression that represent a custom "set" of Policies.  The folowing
+operators are supported
 
-  [CodeLayout::RequireTrailingCommas]
-  add_theme = foo
+   Operator       Altertative         Meaning
+   -------------------------------------------------------------
+   *              and                 Intersection
+   -              not                 Difference
+   +              or                  Union
 
-  [Variables::ProhibitPackageVars]
-  add_theme = foo
+Operator precedence is the same as that of normal mathematics.  You
+can also use parenthesis to enforce precedence.  Here are some examples:
 
-  #Now say `perlcritic -theme foo Foo.pm`
+   Expression              Meaning
+   -----------------------------------------------------------------------------
+   pbp * risky             Policies that are "pbp" AND "risky"
+   danger + risky          Policies that are "danger" OR "risky"
+   pbp - cosmetic          Policies that are "pbp" BUT NOT "risky"
+   -reliability            Policies that are NOT "reliability"
+   (pbp - danger) * risky  Policies that are "pbp" BUT NOT "danger", AND "risky"
 
-Or you could set the theme to C<"no_testing"> for all the policies that
-you want to exclude when examining test scripts...
-
-  [TestingAndDebugging::RequireUseWarnings]
-  add_theme = no_testing
-
-  [Subroutines::ProtectPrivateSubs]
-  add_theme = no_testing
-
-  #Now say `perlcritic -notheme no_testing foo.t`
-
-You can add multiple themes to a Policy as well...
-
-  [ValuesAndExpressions::RequireFinalReturn]
-  add_theme = damian larry abigail
+Theme names are case-insensitive.  If you specify a theme that doesn't
+represent any themes, it resolves to an empty set. See
+L<http://en.wikipedia.org/wiki/Set> for a discussion on set theory.
 
 =head1 BENDING THE RULES
 
