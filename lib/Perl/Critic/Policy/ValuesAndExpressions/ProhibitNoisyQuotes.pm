@@ -23,11 +23,10 @@ my $expl     = [ 53 ];
 
 #---------------------------------------------------------------------------
 
-sub default_severity { return $SEVERITY_LOW }
-sub applies_to {
-    return qw(PPI::Token::Quote::Double
-              PPI::Token::Quote::Single);
-}
+sub default_severity { return $SEVERITY_LOW       }
+sub default_themes   { return qw(pbp readability) }
+sub applies_to       { return qw(PPI::Token::Quote::Double
+                                 PPI::Token::Quote::Single) }
 
 #---------------------------------------------------------------------------
 

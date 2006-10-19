@@ -23,12 +23,11 @@ my $expl = [ 73, 75 ];
 
 #---------------------------------------------------------------------------
 
-sub default_severity { return $SEVERITY_MEDIUM }
-sub applies_to {
-    return qw( PPI::Token::Symbol
-               PPI::Statement::Variable
-               PPI::Statement::Include );
-}
+sub default_severity { return $SEVERITY_MEDIUM    }
+sub default_themes   { return qw(pbp reliability) }
+sub applies_to       { return qw(PPI::Token::Symbol
+                                 PPI::Statement::Variable
+                                 PPI::Statement::Include) }
 
 #---------------------------------------------------------------------------
 

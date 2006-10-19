@@ -62,8 +62,8 @@ sub set_themes {
 
 sub get_themes {
     my ($self) = @_;
-    return @{ $self->{_themes} } if defined $self->{_themes};
-    return $self->default_themes();
+    return sort @{ $self->{_themes} } if defined $self->{_themes};
+    return sort $self->default_themes();
 }
 
 #----------------------------------------------------------------------------
@@ -72,7 +72,7 @@ sub add_themes {
     my ($self, @additional_themes) = @_;
     #By hashifying the themes, we squish duplicates
     my %merged = hashify( $self->get_themes(), @additional_themes);
-    $self->{_themes} = [ sort keys %merged];
+    $self->{_themes} = [ keys %merged];
     return $self;
 }
 

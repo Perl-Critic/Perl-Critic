@@ -22,8 +22,9 @@ my $expl = q{Express it as a regex instead};
 
 #----------------------------------------------------------------------------
 
-sub default_severity { return $SEVERITY_LOW }
-sub applies_to { return 'PPI::Token::Word' }
+sub default_severity { return $SEVERITY_LOW       }
+sub default_themes   { return qw(pbp readability) }
+sub applies_to       { return 'PPI::Token::Word'  }
 
 #----------------------------------------------------------------------------
 

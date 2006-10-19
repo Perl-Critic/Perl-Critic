@@ -22,13 +22,14 @@ my $expl = q{Consider refactoring};
 my @logic_ops = qw( && || ||= &&= or and xor ? <<= >>= );
 my %logic_ops = hashify( @logic_ops );
 
-my @logic_keywords = qw( if else elsif unless until while );
+my @logic_keywords = qw( if else elsif unless until while for foreach );
 my %logic_keywords = hashify( @logic_keywords );
 
 #---------------------------------------------------------------------------
 
-sub default_severity { return $SEVERITY_MEDIUM }
-sub applies_to { return 'PPI::Statement::Sub' }
+sub default_severity { return $SEVERITY_MEDIUM      }
+sub default_themes   { return qw(complexity)        }
+sub applies_to       { return 'PPI::Statement::Sub' }
 
 #---------------------------------------------------------------------------
 

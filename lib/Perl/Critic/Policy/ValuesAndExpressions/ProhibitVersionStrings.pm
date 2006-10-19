@@ -22,8 +22,9 @@ my $expl = q{Use a real number instead};
 
 #---------------------------------------------------------------------------
 
-sub default_severity { return $SEVERITY_MEDIUM }
-sub applies_to { return 'PPI::Statement::Include' }
+sub default_severity { return $SEVERITY_MEDIUM          }
+sub default_themes   { return qw(pbp reliability)       }
+sub applies_to       { return 'PPI::Statement::Include' }
 
 #---------------------------------------------------------------------------
 

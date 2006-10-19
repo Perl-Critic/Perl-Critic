@@ -23,8 +23,9 @@ my $expl       = [ 64 ];
 
 #---------------------------------------------------------------------------
 
-sub default_severity { return $SEVERITY_LOW }
-sub applies_to { return 'PPI::Token::HereDoc' }
+sub default_severity { return $SEVERITY_LOW         }
+sub default_themes   { return qw(pbp readability)   }
+sub applies_to       { return 'PPI::Token::HereDoc' }
 
 #---------------------------------------------------------------------------
 
