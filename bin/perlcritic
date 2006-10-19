@@ -237,11 +237,11 @@ sub render_report {
     $fmt =~ s{ \%f }{$file}mxg;  #HACK! Violation objects don't know the file
     Perl::Critic::Violation::set_format( $fmt );
 
-    if ( $CRITIC->config->color() ) {
-        print _colorize_by_severity(@violations);
+    if ( $opts_ref->{-nocolor} ) {
+        print @violations;
     }
     else {
-        print @violations;
+        print _colorize_by_severity(@violations);
     }
 
     return $count;
@@ -261,7 +261,7 @@ sub _get_option_specification {
         include=s@
         list
         man
-        color!
+        nocolor
         noprofile
         profile=s
         quiet
@@ -380,7 +380,7 @@ C<perlcritic> - Command-line interface to critique Perl source
   perlcritic [-12345 | -severity number] [-noprofile | -profile file]
              [-top [ number ]] [-include pattern] [-exclude pattern]
              [-theme string] [-notheme string] [-verbose number | format]
-             [-force] [-list] [-color] [-Version] [-help]
+             [-force] [-list] [-nocolor] [-Version] [-help]
              [-man] [-quiet] [FILE | DIRECTORY | STDIN]
 
 =head1 DESCRIPTION
@@ -618,12 +618,12 @@ Report "Perl Best Practice" citations as section numbers from
 L<http://safari.oreilly.com> instead of page numbers from the actual
 book.  NOTE: This feature is not implemented yet.
 
-=item C<-color>
+=item C<-nocolor>
 
-Colorize the output.  By default, Severity 5 and 4 are colored red and
-yellow, respectively.  Colorization only happens if STDOUT is a tty
-and L<Term::ANSIColor> is installed.  And it only works on non-windows
-environments.  You can negate this option as C<"-nocolor">.
+By default, Severity 5 and 4 are colored red and yellow, respectively.
+Colorization only happens if STDOUT is a tty and L<Term::ANSIColor> is
+installed.  And it only works on non-windows environments.  Set this
+switch to disable color
 
 =item C<-quiet>
 

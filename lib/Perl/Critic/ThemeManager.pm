@@ -1,10 +1,10 @@
-#######################################################################
+##############################################################################
 #      $URL$
 #     $Date$
 #   $Author$
 # $Revision$
 # ex: set ts=8 sts=4 sw=4 expandtab
-########################################################################
+##############################################################################
 
 package Perl::Critic::ThemeManager;
 
@@ -13,6 +13,7 @@ use warnings;
 use Carp qw(confess);
 use English qw(-no_match_vars);
 use List::MoreUtils qw(any);
+use Perl::Critic::Utils;
 use Set::Scalar qw();
 
 our $VERSION = 0.21;
@@ -20,7 +21,7 @@ our $VERSION = 0.21;
 #-----------------------------------------------------------------------------
 
 sub new {
-    my ($class, %args) = @_;
+    my ( $class, %args ) = @_;
     my $self = bless {}, $class;
     $self->_init( %args );
     return $self;
@@ -28,27 +29,41 @@ sub new {
 
 #-----------------------------------------------------------------------------
 
+sub thematic_policy_names {
+    my $self = shift;
+    return @{ $self->{_policy_names} };
+}
+
+#-----------------------------------------------------------------------------
+
 sub _init {
-    my ($self, %args) = @_;
-    my $theme_rule     = $args{-theme};
-    my $policy_objects = $args{-policies} || [];
-    $self->{_tmap} = _make_theme_map( @{$policy_objects} );
+    my ( $self, %args ) = @_;
+    my $theme_rule = $args{-theme};
+    my $policies   = $args{-policies} || [];
+
+    if ( !defined $theme_rule || $theme_rule eq $EMPTY ) {
+        $self->{_policy_names} = [ map {ref $_} @{ $policies } ];
+        return $self;
+    }
+
+    my $tmap = _make_theme_map( @{$policies} );
+    $self->{_policy_names} = [ _evaluate_rule( $theme_rule, $tmap ) ];
     return $self;
 }
 
 #-----------------------------------------------------------------------------
 
-sub evaluate {
-    my ($self, $expression) = @_;
-    return if not defined $expression;
-    my %tmap = %{ $self->{_tmap} };
-    _validate_expression( $expression );
-    $expression = _translate_expression( $expression );
-    $expression = _interpolate_expression( $expression, 'tmap' );
+sub _evaluate_rule {
+    my ( $rule, $tmap ) = @_;
 
-    no warnings 'uninitialized'; ## no critic (ProhibitNoWarnings);
-    my $wanted = eval $expression || return; ## no critic (ProhibitStringyEval);
-    confess qq{Invalid theme expression: $EVAL_ERROR} if $EVAL_ERROR;
+    my %tmap = %{ $tmap };
+    _validate_rule( $rule );
+    $rule = _translate_rule( $rule );
+    $rule = _interpolate_rule( $rule, 'tmap' );
+
+    no warnings 'uninitialized'; ## no critic (ProhibitNoWarnings)
+    my $wanted = eval $rule || return; ## no critic (ProhibitStringyEval)
+    confess qq{Invalid theme rule: $EVAL_ERROR} if $EVAL_ERROR;
     return $wanted->members();
 }
 
@@ -56,7 +71,7 @@ sub evaluate {
 
 sub _make_theme_map {
 
-    my @policy_objects = @_;
+    my (@policy_objects) = @_;
     my %theme_map = ();
 
     for my $policy (@policy_objects){
@@ -71,33 +86,33 @@ sub _make_theme_map {
 
 #-----------------------------------------------------------------------------
 
-sub _validate_expression {
-    my ($expression) = @_;
-    return 1 if not defined $expression;
-    if ( $expression !~ m/\A    [()\s\w\d\+\-\*]* \z/mx ) {
-        $expression  =~ m/   ( [^()\s\w\d\+\-\*] )  /mx;
-        confess qq{Illegal character "$1" in theme expression};
+sub _validate_rule {
+    my ($rule) = @_;
+    return 1 if not defined $rule;
+    if ( $rule !~ m/\A    [()\s\w\d\+\-\*]* \z/mx ) {
+        $rule  =~ m/   ( [^()\s\w\d\+\-\*] )  /mx;
+        confess qq{Illegal character "$1" in theme rule};
     }
     return 1;
 }
 
 #-----------------------------------------------------------------------------
 
-sub _translate_expression {
-    my ($expression) = @_;
-    return if not defined $expression;
-    $expression =~ s{\b and \b}{\*}ixmg; # "and" -> "*" e.g. intersection
-    $expression =~ s{\b not \b}{\-}ixmg; # "not" -> "-" e.g. difference
-    $expression =~ s{\b or  \b}{\+}ixmg; # "or"  -> "+" e.g. union
-    return $expression;
+sub _translate_rule {
+    my ($rule) = @_;
+    return if not defined $rule;
+    $rule =~ s{\b and \b}{\*}ixmg; # "and" -> "*" e.g. intersection
+    $rule =~ s{\b not \b}{\-}ixmg; # "not" -> "-" e.g. difference
+    $rule =~ s{\b or  \b}{\+}ixmg; # "or"  -> "+" e.g. union
+    return $rule;
 }
 
 #-----------------------------------------------------------------------------
 
-sub _interpolate_expression {
-    my ($expression, $map_name) = @_;
-    $expression =~ s/\b ([\w\d]+) \b/\$$map_name\{"$1"\}/ixmg;
-    return $expression;
+sub _interpolate_rule {
+    my ($rule, $map_name) = @_;
+    $rule =~ s/\b ([\w\d]+) \b/\$$map_name\{"$1"\}/ixmg;
+    return $rule;
 }
 
 1;
@@ -110,7 +125,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::ThemeManager - Evaluate theme boolean expressions
+Perl::Critic::ThemeManager - Evaluate theme rules
 
 =head1 DESCRIPTION
 
@@ -118,9 +133,9 @@ Perl::Critic::ThemeManager - Evaluate theme boolean expressions
 
 =over 8
 
-=item C< new( @polcies ) >
+=item C< new( -theme => $theme_rule, -policies => @polcies ) >
 
-=item C< evaluate( $expression ) >
+=item C< thematic_policy_names() >
 
 =back
 

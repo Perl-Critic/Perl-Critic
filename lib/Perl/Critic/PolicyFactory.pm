@@ -28,7 +28,7 @@ my @SITE_POLICY_NAMES = ();
 sub import {
 
     my ( $class, %args ) = @_;
-    my $test_mode = 1;
+    my $test_mode = $args{-test};
 
 
     eval {

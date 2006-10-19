@@ -39,12 +39,12 @@ sub _init {
 
     my ( $self, %args ) = @_;
 
+    # Set attributes
     my $p = $args{-profile};
     my $profile = Perl::Critic::UserProfile->new( -profile => $p );
     $self->{_exclude}  = $args{-exclude}  || $profile->defaults->exclude();
     $self->{_force}    = $args{-force}    || $profile->defaults->force();
     $self->{_include}  = $args{-include}  || $profile->defaults->include();
-    $self->{_color}    = $args{-color}    || $profile->defaults->color();
     $self->{_only}     = $args{-only}     || $profile->defaults->only();
     $self->{_severity} = $args{-severity} || $profile->defaults->severity();
     $self->{_theme}    = $args{-theme}    || $profile->defaults->theme();
@@ -53,12 +53,15 @@ sub _init {
     $self->{_profile}  = $profile;
     $self->{_policies} = [];
 
+    # Construct PolicyFactory
     my $factory = Perl::Critic::PolicyFactory->new( -profile  => $profile );
     $self->{_factory} = $factory;
 
+    #Construct ThemeManager
     my @policies = $factory->policies();
-    my $manager = Perl::Critic::ThemeManager->new( -polices => \@policies );
-    $self->{_theme_manager} = $manager;
+    my $tm = Perl::Critic::ThemeManager->new( -theme    => $self->{_theme},
+                                              -policies => \@policies );
+    $self->{_theme_manager} = $tm;
 
     # "NONE" means don't load any policies
     return $self if defined $p and $p eq 'NONE';
@@ -110,7 +113,7 @@ sub _load_policies {
         $load_me = $FALSE if $self->_policy_is_disabled( $policy );
         $load_me = $TRUE  if $self->_policy_is_enabled( $policy );
         $load_me = $FALSE if $self->_policy_is_unimportant( $policy );
-        #$load_me = $FALSE if not $self->_policy_is_thematic( $policy );
+        $load_me = $FALSE if not $self->_policy_is_thematic( $policy );
         $load_me = $TRUE  if $self->_policy_is_included( $policy );
         $load_me = $FALSE if $self->_policy_is_excluded( $policy );
 
@@ -141,12 +144,10 @@ sub _policy_is_enabled {
 
 sub _policy_is_thematic {
     my ($self, $policy) = @_;
+    return 1 if not $self->theme();
     my $policy_name = ref $policy;
-    my $theme_rule = $self->{_theme};
-    return $TRUE if defined $theme_rule && $theme_rule eq $EMPTY;
-    my $theme_manager = $self->{_theme_manager};
-    my @thematic_policy_names = $theme_manager->evaluate( $theme_rule );
-    return any { $policy_name eq $_ } @thematic_policy_names;
+    my $tm = $self->{_theme_manager};
+    return any { $policy_name eq $_ } $tm->thematic_policy_names();
 }
 
 #-----------------------------------------------------------------------------
@@ -203,13 +204,6 @@ sub force {
 sub include {
     my $self = shift;
     return @{ $self->{_include} };
-}
-
-#----------------------------------------------------------------------------
-
-sub color {
-    my $self = shift;
-    return $self->{_color};
 }
 
 #----------------------------------------------------------------------------
@@ -354,8 +348,6 @@ they were loaded.
 =item C< force() >
 
 =item C< include() >
-
-=item C< color() >
 
 =item C< only() >
 

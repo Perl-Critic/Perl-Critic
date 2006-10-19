@@ -41,12 +41,11 @@ sub _init {
 
     # Single-value defaults
     $self->{_force}    = _default('force',    $FALSE,            %args);
-    $self->{_color}    = _default('color',    $TRUE,             %args);
     $self->{_only}     = _default('only',     $FALSE,            %args);
     $self->{_severity} = _default('severity', $SEVERITY_HIGHEST, %args);
-    $self->{_theme}    = _default('theme',    undef,             %args);
-    $self->{_top}      = _default('top',      undef,,            %args);
-    $self->{_verbose}   =_default('verbose',  3,                 %args);
+    $self->{_theme}    = _default('theme',    $EMPTY,            %args);
+    $self->{_top}      = _default('top',      $FALSE,            %args);
+    $self->{_verbose}  = _default('verbose',  3,                 %args);
 
     return $self;
 }
@@ -61,13 +60,15 @@ sub _default {
 
 sub _kludge {
     my ($key, %args) = @_;
+    return          if not defined $key;
     return $key     if exists $args{$key};
     return "-$key"  if exists $args{"-$key"};
     return "--$key" if exists $args{"--$key"};
-    return;
+    return; # Key does not exist
 }
 
 #-----------------------------------------------------------------------------
+# Public ACCESSOR methods
 
 sub severity {
     my ($self) = @_;
@@ -107,13 +108,6 @@ sub only {
 sub verbose {
     my ($self) = @_;
     return $self->{_verbose};
-}
-
-#-----------------------------------------------------------------------------
-
-sub color {
-    my ($self) = @_;
-    return $self->{_color};
 }
 
 #-----------------------------------------------------------------------------
@@ -166,8 +160,6 @@ user-serviceable parts here.
 =item C< force() >
 
 =item C< include() >
-
-=item C< color() >
 
 =item C< only() >
 

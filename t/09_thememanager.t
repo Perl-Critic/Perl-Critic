@@ -33,7 +33,7 @@ my @invalid_expressions = (
 );
 
 for my $invalid ( @invalid_expressions ) {
-    eval { Perl::Critic::ThemeManager::_validate_expression( $invalid ) };
+    eval { Perl::Critic::ThemeManager::_validate_rule( $invalid ) };
     like( $EVAL_ERROR, qr/Illegal character/, qq{Invalid expression: "$invalid"} );
 }
 
@@ -49,7 +49,7 @@ my @valid_expressions = (
 );
 
 for my $valid ( @valid_expressions ) {
-    my $got = Perl::Critic::ThemeManager::_validate_expression( $valid );
+    my $got = Perl::Critic::ThemeManager::_validate_rule( $valid );
     is( $got, 1, qq{Valid expression: "$valid"} );
 }
 
@@ -68,7 +68,7 @@ for my $valid ( @valid_expressions ) {
     );
 
     while ( my ($raw, $expected) = each %expressions ) {
-        my $cooked = Perl::Critic::ThemeManager::_translate_expression( $raw );
+        my $cooked = Perl::Critic::ThemeManager::_translate_rule( $raw );
         is( $cooked, $expected, 'Theme translation');
     }
 }
@@ -86,7 +86,7 @@ for my $valid ( @valid_expressions ) {
     );
 
     while ( my ($raw, $expected) = each %expressions ) {
-        my $cooked = Perl::Critic::ThemeManager::_interpolate_expression( $raw, 'tmap' );
+        my $cooked = Perl::Critic::ThemeManager::_interpolate_rule( $raw, 'tmap' );
         is( $cooked, $expected, 'Theme interpolation');
     }
 }
@@ -94,41 +94,48 @@ for my $valid ( @valid_expressions ) {
 #-----------------------------------------------------------------------------
 
 {
-    my @pols = Perl::Critic::Config::native_policy_names();
-    my $up   = Perl::Critic::UserProfile->new( -profile => q{} );
-    my $pf   = Perl::Critic::PolicyFactory->new( -profile => $up, -policies => \@pols );
-    my $tm   = Perl::Critic::ThemeManager->new( -policies => [ $pf->policies() ] );
-    my %pmap = map { ref $_ => $_ } $pf->policies(); #Hashify class_name -> object
+    my $profile = Perl::Critic::UserProfile->new( -profile => q{} );
+    my $factory = Perl::Critic::PolicyFactory->new( -profile => $profile );
+    my @pols = $factory->policies();
+    my %pmap = map { ref $_ => $_ } @pols; #Hashify class_name -> object
 
 
-    my @thematic_pols = $tm->evaluate( 'cosmetic' );
+    my $tm = Perl::Critic::ThemeManager->new( -theme => 'cosmetic', -policies => \@pols );
+    my @thematic_pols = $tm->thematic_policy_names();
     ok( all { in_theme($pmap{$_}, 'cosmetic') }  @thematic_pols );
 
-    @thematic_pols = $tm->evaluate( 'cosmetic - pbp' );
+    $tm = Perl::Critic::ThemeManager->new( -theme => 'cosmetic - pbp', -policies => \@pols );
+    @thematic_pols = $tm->thematic_policy_names();
     ok( all  { in_theme($pmap{$_}, 'cosmetic') } @thematic_pols );
     ok( none { in_theme($pmap{$_}, 'pbp')      } @thematic_pols );
 
-    @thematic_pols =  $tm->evaluate( 'cosmetic + pbp' );
+    $tm = Perl::Critic::ThemeManager->new( -theme => 'cosmetic + pbp', -policies => \@pols );
+    @thematic_pols = $tm->thematic_policy_names();
     ok( all  { in_theme($pmap{$_}, 'cosmetic') ||
                in_theme($pmap{$_}, 'pbp') } @thematic_pols );
 
-    @thematic_pols = $tm->evaluate( 'risky * pbp' );
+    $tm = Perl::Critic::ThemeManager->new( -theme => 'risky * pbp', -policies => \@pols );
+    @thematic_pols = $tm->thematic_policy_names();
     ok( all  { in_theme($pmap{$_}, 'risky') } @thematic_pols );
     ok( all  { in_theme($pmap{$_}, 'pbp')      } @thematic_pols );
 
-    @thematic_pols = $tm->evaluate( '-pbp' );
+    $tm = Perl::Critic::ThemeManager->new( -theme => '-pbp', -policies => \@pols );
+    @thematic_pols = $tm->thematic_policy_names();
     ok( none  { in_theme($pmap{$_}, 'pbp') } @thematic_pols );
 
-    @thematic_pols = $tm->evaluate( 'pbp - (danger * security)' );
+    $tm = Perl::Critic::ThemeManager->new( -theme => 'pbp - (danger * security)', -policies => \@pols );
+    @thematic_pols = $tm->thematic_policy_names();
     ok( all  { in_theme($pmap{$_}, 'pbp') } @thematic_pols );
     ok( none { in_theme($pmap{$_}, 'danger') &&
                in_theme($pmap{$_}, 'security') } @thematic_pols );
 
-    @thematic_pols = $tm->evaluate( 'bogus' );
+    $tm = Perl::Critic::ThemeManager->new( -theme => 'bogus', -policies => \@pols );
+    @thematic_pols = $tm->thematic_policy_names();
     is( scalar @thematic_pols, 0, 'bogus theme' );
 
-    @thematic_pols = $tm->evaluate( q{} );
-    is( scalar @thematic_pols, 0, 'empty theme' );
+    $tm = Perl::Critic::ThemeManager->new( -theme => q{}, -policies => \@pols );
+    @thematic_pols = $tm->thematic_policy_names();
+    is( scalar @thematic_pols, scalar @pols, 'empty theme' );
 
 }
 

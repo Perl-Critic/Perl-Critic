@@ -14,7 +14,7 @@ use English qw(-no_match_vars);
 use List::MoreUtils qw(all any);
 use Perl::Critic::Config qw();
 use Perl::Critic::Utils;
-use Test::More (tests => 38);
+use Test::More (tests => 55);
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw();
@@ -103,7 +103,6 @@ my $total_policies   = scalar @site_policies;
     is_deeply([$c->exclude()], [ qw(Documentation Naming) ], 'user default exclude from file' );
     is_deeply([$c->include()], [ qw(CodeLayout Modules) ],  'user default include from file' );
     is($c->force(),    1,  'user default force from file'     );
-    is($c->color(),    0,  'user default color from file'   );
     is($c->only(),     1,  'user default only from file'      );
     is($c->severity(), 3,  'user default severity from file'  );
     is($c->theme(),    'danger + risky - pbp',  'user default theme from file');
@@ -161,6 +160,39 @@ my $total_policies   = scalar @site_policies;
     is_deeply( [grep {/block/imx} @pol_names], [], 'pattern match' );
     # This odd construct arises because "any" can't be used with parens without syntax error(!)
     ok( @{[any {/builtinfunc/imx} @pol_names]}, 'pattern match' );
+}
+
+#-----------------------------------------------------------------------------
+# Test the switch behavior
+
+{
+    my @switches = qw(-top -verbose -theme -severity -only -force);
+    my %undef_args = map { $_ => undef } @switches;
+    my $c = Perl::Critic::Config->new( %undef_args );
+    is( $c->force(),     0,     'Undefined -force');
+    is( $c->only(),      0,     'Undefined -only');
+    is( $c->severity(),  5,     'Undefined -severity');
+    is( $c->theme(),     q{},   'Undefined -theme');
+    is( $c->top(),       0,     'Undefined -top');
+    is( $c->verbose(),   3,     'Undefined -verbose');
+
+    my %zero_args = map { $_ => 0 } @switches;
+    $c = Perl::Critic::Config->new( %zero_args );
+    is( $c->force(),     0,     'zero -force');
+    is( $c->only(),      0,     'zero -only');
+    is( $c->severity(),  5,     'zero -severity');
+    is( $c->theme(),     q{},   'zero -theme');
+    is( $c->top(),       0,     'zero -top');
+    is( $c->verbose(),   3,     'zero -verbose');
+
+    my %empty_args = map { $_ => q{} } @switches;
+    $c = Perl::Critic::Config->new( %empty_args );
+    is( $c->force(),     0,     'empty -force');
+    is( $c->only(),      0,     'empty -only');
+    is( $c->severity(),  5,     'empty -severity');
+    is( $c->theme(),     q{},   'empty -theme');
+    is( $c->top(),       0,     'empty -top');
+    is( $c->verbose(),   3,     'empty -verbose');
 }
 
 #-----------------------------------------------------------------------------
