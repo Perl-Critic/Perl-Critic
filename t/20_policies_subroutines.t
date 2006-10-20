@@ -9,7 +9,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 29;
+use Test::More tests => 30;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -277,6 +277,21 @@ END_PERL
 
 $policy = 'Subroutines::RequireFinalReturn';
 is( pcritique($policy, \$code), 2, $policy);
+
+#----------------------------------------------------------------
+
+# abnormal termination is allowed
+$code = <<'END_PERL';
+sub foo   { die; }
+sub bar   { croak; }
+sub baz   { confess; }
+sub bar_C { Carp::croak; }
+sub baz_C { Carp::confess; }
+sub quux  { exit; }
+END_PERL
+
+$policy = 'Subroutines::RequireFinalReturn';
+is( pcritique($policy, \$code), 0, $policy);
 
 #----------------------------------------------------------------
 

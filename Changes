@@ -28,6 +28,8 @@
      * 21718: No skip for File::Slurp in includes.t
      * ProhibitBarewordFilehandles doesn't complain if you open
        STDIN, STDOUT or STDERR.
+     * Parrot 40564: Subroutines::RequireFinalReturn should allow die,
+       exit, etc.
 
      Other Stuff:
      * Added author-only tests to the release, but disabled by default

@@ -24,7 +24,7 @@ my $expl = [ 197 ];
 #---------------------------------------------------------------------------
 
 sub default_severity { return $SEVERITY_HIGH        }
-sub default_themes    { return qw( risky pbp )       }
+sub default_themes   { return qw( risky pbp )       }
 sub applies_to       { return 'PPI::Statement::Sub' }
 
 #---------------------------------------------------------------------------
@@ -78,8 +78,15 @@ sub _block_has_return {
 
 sub _is_explicit_return {
     my ( $final ) = @_;
-    return $final->isa('PPI::Statement::Break') &&
-           $final =~ m/ \A (?: return | goto ) \b /xms;
+    if ( $final->isa('PPI::Statement::Break') ) {
+       return $final =~ m/ \A (?: return | goto ) \b /xms;
+    }
+    elsif ( $final->isa('PPI::Statement') ) {
+       return $final =~ m/ \A (?: exit | die |
+                                  Carp::croak | Carp::confess |
+                                  croak | confess ) \b /xms;
+    }
+    return;
 }
 
 #-------------------------
@@ -129,7 +136,8 @@ Perl::Critic::Policy::Subroutines::RequireFinalReturn
 
 =head1 DESCRIPTION
 
-Require all subroutines to terminate with a C<return> (or a C<goto>).
+Require all subroutines to terminate explicitly with one of the
+following: C<return>, C<goto>, C<die>, C<exit>, C<carp> or C<croak>.
 
 Subroutines without explicit return statements at their ends can be
 confusing.  It can be challenging to deduce what the return value will
@@ -169,10 +177,6 @@ We do not look for returns inside ternary operators.  That
 construction is too complicated to analyze right now.  Besides, a
 better form is the return outside of the ternary like this: C<return
 foo ? 1 : bar ? 2 : 3>
-
-Also, this policy doesn't allow you to terminate a subroutine with
-C<die>, C<exit>, C<croak>, or C<confess>.  We'll try and fix that in
-the future.
 
 =head1 AUTHOR
 
