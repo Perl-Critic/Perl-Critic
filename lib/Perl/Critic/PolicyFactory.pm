@@ -30,19 +30,20 @@ sub import {
     my ( $class, %args ) = @_;
     my $test_mode = $args{-test};
 
+    if ( ! @SITE_POLICY_NAMES ) {
+        eval {
+            require Module::Pluggable;
+            Module::Pluggable->import(search_path => $POLICY_NAMESPACE,
+                                      require => 1, inner => 0);
+            @SITE_POLICY_NAMES = plugins(); #Exported by Module::Pluggable
+        };
 
-    eval {
-        require Module::Pluggable;
-        Module::Pluggable->import(search_path => $POLICY_NAMESPACE,
-                                  require => 1, inner => 0);
-        @SITE_POLICY_NAMES = plugins(); #Exported by Module::Pluggable
-    };
-
-    if ( $EVAL_ERROR ) {
-        confess qq{Can't load Policies from namespace '$POLICY_NAMESPACE': $EVAL_ERROR};
-    }
-    elsif ( ! @SITE_POLICY_NAMES ) {
-        confess qq{No Policies found in namespace '$POLICY_NAMESPACE'};
+        if ( $EVAL_ERROR ) {
+            confess qq{Can't load Policies from namespace '$POLICY_NAMESPACE': $EVAL_ERROR};
+        }
+        elsif ( ! @SITE_POLICY_NAMES ) {
+            confess qq{No Policies found in namespace '$POLICY_NAMESPACE'};
+        }
     }
 
     # In test mode, only load native policies, not third-party ones

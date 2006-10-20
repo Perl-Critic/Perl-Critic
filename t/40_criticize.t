@@ -12,8 +12,11 @@
 use strict;
 use warnings;
 use English qw( -no_match_vars );
+use File::Spec qw();
 use Test::More;
 use Perl::Critic::PolicyFactory ( -test => 1 );
+
+my $rcfile = File::Spec->catfile( 't', '40_perlcriticrc' );
 
 eval { require Test::Perl::Critic; };
 plan skip_all => 'Test::Perl::Critic required to criticise code' if $EVAL_ERROR;
@@ -32,32 +35,15 @@ if ( $ENV{PERL_CRITIC_CACHE} ) {
 }
 
 # Strict object testing -- prevent direct hash key access
-eval { require Class::Encapsulate::Runtime; };
+eval { require Devel::EnforceEncapsulation; };
 if ( !$EVAL_ERROR ) {
     for my $pkg ( '', '::Config', '::Policy', '::Violation' ) {
-        diag 'apply Class::Encapsulate to Perl::Critic'.$pkg;
-        Class::Encapsulate::Runtime->apply_to('Perl::Critic'.$pkg);
+        diag 'apply Devel::EnforceEncapsulation to Perl::Critic'.$pkg;
+        Devel::EnforceEncapsulation->apply_to('Perl::Critic'.$pkg);
     }
 }
 
-# Configure Test::Perl::Critic
-my @exclude = qw( CodeLayout::RequireTidyCode );
-my %profile = (
-    'Documentation::RequirePodSections' => {
-        lib_sections    => 'NAME|DESCRIPTION|AUTHOR|COPYRIGHT',
-        script_sections => 'NAME|DESCRIPTION|AUTHOR|COPYRIGHT',
-    },
-    'Miscellanea::RequireRcsKeywords' => {
-        keywords => 'URL Date Author Revision',
-    },
-    'CodeLayout::ProhibitHardTabs' => {
-        allow_leading_tabs => 0,
-    },
-);
-
-Test::Perl::Critic->import( -severity => 1,
-                            -exclude => \@exclude,
-                            -profile => \%profile );
+Test::Perl::Critic->import( -severity => 1, -profile => $rcfile );
 
 # Run critic against all of our own files
 all_critic_ok();
