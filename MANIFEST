@@ -100,7 +100,7 @@ lib/Perl/Critic/Policy/Variables/RequireNegativeIndices.pm
 lib/Perl/Critic/PolicyFactory.pm
 lib/Perl/Critic/PolicySummary.pod
 lib/Perl/Critic/TestUtils.pm
-lib/Perl/Critic/ThemeManager.pm
+lib/Perl/Critic/Theme.pm
 lib/Perl/Critic/ThemeMath.pm
 lib/Perl/Critic/UserProfile.pm
 lib/Perl/Critic/Utils.pm
@@ -119,7 +119,7 @@ t/05_utils.t
 t/06_violation.t
 t/07_perlcritic.t
 t/08_document.t
-t/09_thememanager.t
+t/09_theme.t
 t/09_thememath.t
 t/10_userprofile.t
 t/11_policyfactory.t
@@ -139,11 +139,14 @@ t/20_policies_subroutines.t
 t/20_policies_testinganddebugging.t
 t/20_policies_valuesandexpressions.t
 t/20_policies_variables.t
+t/40_criticize.t
+t/40_perlcriticrc
 t/80_policysummary.t
 t/93_version.t
 t/94_includes.t
 t/95_kwalitee.t
 t/96_filenames.t
+t/97_spelling.t
 t/98_pod_syntax.t
 t/99_pod_coverage.t
 t/samples/perlcriticrc.all

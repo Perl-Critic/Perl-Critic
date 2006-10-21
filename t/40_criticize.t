@@ -1,11 +1,11 @@
 #!perl
 
-##################################################################
+##############################################################################
 #      $URL$
 #     $Date$
 #   $Author$
 # $Revision$
-##################################################################
+##############################################################################
 
 # Self-compliance tests
 
@@ -16,12 +16,18 @@ use File::Spec qw();
 use Test::More;
 use Perl::Critic::PolicyFactory ( -test => 1 );
 
-my $rcfile = File::Spec->catfile( 't', '40_perlcriticrc' );
+if (!$ENV{TEST_AUTHOR}) {
+    plan skip_all => 'Author test';
+}
+
+#-----------------------------------------------------------------------------
 
 eval { require Test::Perl::Critic; };
 plan skip_all => 'Test::Perl::Critic required to criticise code' if $EVAL_ERROR;
 
+#-----------------------------------------------------------------------------
 # Set up PPI caching for speed (used primarily during development)
+
 if ( $ENV{PERL_CRITIC_CACHE} ) {
     require File::Spec;
     require PPI::Cache;
@@ -34,7 +40,9 @@ if ( $ENV{PERL_CRITIC_CACHE} ) {
     PPI::Cache->import( path => $cache_path );
 }
 
+#-----------------------------------------------------------------------------
 # Strict object testing -- prevent direct hash key access
+
 eval { require Devel::EnforceEncapsulation; };
 if ( !$EVAL_ERROR ) {
     for my $pkg ( '', '::Config', '::Policy', '::Violation' ) {
@@ -43,7 +51,9 @@ if ( !$EVAL_ERROR ) {
     }
 }
 
-Test::Perl::Critic->import( -severity => 1, -profile => $rcfile );
-
+#-----------------------------------------------------------------------------
 # Run critic against all of our own files
+
+my $rcfile = File::Spec->catfile( 't', '40_perlcriticrc' );
+Test::Perl::Critic->import( -severity => 1, -profile => $rcfile );
 all_critic_ok();

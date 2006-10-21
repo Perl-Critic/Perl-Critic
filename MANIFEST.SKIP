@@ -57,6 +57,3 @@ RCS
 \.swd$
 ^test\.swf$
 
-# Author-time tests
-40_criticize\.t$
-97_spelling\.t$
