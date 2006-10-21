@@ -36,10 +36,17 @@ sub members {
 
 #-----------------------------------------------------------------------------
 
+sub expression {
+    my $self = shift;
+    return $self->{_expression};
+}
+
+#-----------------------------------------------------------------------------
+
 sub _init {
     my ( $self, %args ) = @_;
     my $theme_expression = $args{-theme};
-    my $policies   = $args{-policies} || [];
+    my $policies = $args{-policies} || [];
 
     if ( !defined $theme_expression || $theme_expression eq $EMPTY ) {
         $self->{_members} = [ map {ref $_} @{ $policies } ];
@@ -48,6 +55,7 @@ sub _init {
 
     my $tmap = _make_theme_map( @{$policies} );
     $self->{_members} = [ _evaluate_expression( $theme_expression, $tmap ) ];
+    $self->{_expression} = $theme_expression;
     return $self;
 }
 
@@ -133,9 +141,11 @@ Perl::Critic::Theme - Construct thematic sets of policies
 
 =over 8
 
-=item C< new( -theme => $theme_expression, -policies => @polcies ) >
+=item C<< new( -theme => $theme_expression, -policies => @polcies ) >>
 
 =item C< members() >
+
+=item C< expression() >
 
 =back
 

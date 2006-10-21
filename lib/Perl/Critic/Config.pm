@@ -15,7 +15,7 @@ use English qw(-no_match_vars);
 use List::MoreUtils qw(any none);
 use Scalar::Util qw(blessed);
 use Perl::Critic::PolicyFactory;
-use Perl::Critic::ThemeManager qw();
+use Perl::Critic::Theme qw();
 use Perl::Critic::UserProfile qw();
 use Perl::Critic::Utils;
 
@@ -47,7 +47,6 @@ sub _init {
     $self->{_include}  = $args{-include}  || $profile->defaults->include();
     $self->{_only}     = $args{-only}     || $profile->defaults->only();
     $self->{_severity} = $args{-severity} || $profile->defaults->severity();
-    $self->{_theme}    = $args{-theme}    || $profile->defaults->theme();
     $self->{_top}      = $args{-top}      || $profile->defaults->top();
     $self->{_verbose}  = $args{-verbose}  || $profile->defaults->verbose();
     $self->{_profile}  = $profile;
@@ -55,13 +54,12 @@ sub _init {
 
     # Construct PolicyFactory
     my $factory = Perl::Critic::PolicyFactory->new( -profile  => $profile );
-    $self->{_factory} = $factory;
-
-    #Construct ThemeManager
     my @policies = $factory->policies();
-    my $tm = Perl::Critic::ThemeManager->new( -theme    => $self->{_theme},
-                                              -policies => \@policies );
-    $self->{_theme_manager} = $tm;
+
+    #Construct Theme
+    my $theme = $args{-theme} || $profile->defaults->theme();
+    my $t = Perl::Critic::Theme->new( -theme => $theme, -policies => \@policies );
+    $self->{_theme} = $t;
 
     # "NONE" means don't load any policies
     return $self if defined $p and $p eq 'NONE';
@@ -144,10 +142,8 @@ sub _policy_is_enabled {
 
 sub _policy_is_thematic {
     my ($self, $policy) = @_;
-    return 1 if not $self->theme();
     my $policy_name = ref $policy;
-    my $tm = $self->{_theme_manager};
-    return any { $policy_name eq $_ } $tm->thematic_policy_names();
+    return any { $policy_name eq $_ } $self->theme()->members();
 }
 
 #-----------------------------------------------------------------------------
