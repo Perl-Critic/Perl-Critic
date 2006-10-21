@@ -14,10 +14,14 @@
      * CodeLayout::RequireConsistentNewlines
 
      New Features:
+     * Introduced policy "themes."  Themes are arbitrary names that can
+       be used to identify a group of related Policies.  You can select
+       your favorite by combining themes in a mathematic expression such
+       as "pbp * (danger + risky)".  See POD for details. 
      * perlcritic output is colorized if you have Term::ANSIColor.  This
        only works on non-Win32 platforms.  Use -nocolor switch to disable.
      * Say "perlcritic -count" to get just the the total number of
-       violations per file.
+       violations per file.  Use this feature to quickly identify hot-spots.
      * Default values for most of the perlcritic and Perl::Critic switches
        can now be defined in your .perlcriticrc file.  See POD for details.
 
@@ -32,9 +36,13 @@
        exit, etc.
 
      Other Stuff:
+     * The internals of Perl::Critic have been significantly refactored,
+       but should still be compatible with existing third-party Policies.
      * Added author-only tests to the release, but disabled by default
-     * Support for filename-based policies
      * New Perl::Critic::Utils::shebang_line() method
+     * Support for filename-based policies
+     * Additional prerequisite: Set::Scalar
+     * Now requires PPI version 1.118
 
 [0.20]  Released on 2006-09-10
 
