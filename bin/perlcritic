@@ -427,11 +427,11 @@ examples to help get you started.
   #Report all violations, regardless of severity (severity >= 1)
   perlcritic -1 YourModule.pm
 
+  #Report only violations of things from "Perl Best Practices"
+  perlcritic -theme pbp YourModule.pm
+
   #Report top 20 most severe violations (severity >= 1)
   perlcritic -top YourModule.pm
-
-  #Report top 20 violations with severity >= 3
-  perlcritic -3 -top YourModule.pm
 
   #Report additional violations of Policies that match m/variables/ix
   perlcritic -include variables YourModule.pm
@@ -663,10 +663,25 @@ and the C<-profile> option is not given on the command line, then all
 Policies will be loaded with their default configuration.
 
 The format of the configuration file is a series of INI-style
-sections that contain key-value pairs separated by '='. Comments
+blocks that contain key-value pairs separated by '='. Comments
 should start with '#' and can be placed on a separate line or after
-the name-value pairs if you desire.  The general recipe is a series of
-blocks like this:
+the name-value pairs if you desire.
+
+Default settings for perlcritic itself can be set before the first
+named block.  For example, putting any or all of these at the top of
+your F<.perlcriticrc> file will set the default value for the
+corresponding command-line argument.
+
+  severity  = 3
+  only      = 1
+  verbose   = 4
+  top       = 50
+  theme     = risky + (pbp * security) - cosmetic
+  include   = NamingConventions ClassHierarchies
+  exclude   = Variables  Modules::RequirePackage
+
+The remainder of the configuration file is a series of blocks like
+this:
 
     [Perl::Critic::Policy::Category::PolicyName]
     severity = 1
@@ -782,14 +797,24 @@ can also use parenthesis to enforce precedence.  Here are some examples:
 
    Expression              Meaning
    -----------------------------------------------------------------------------
-   pbp * risky             Policies that are "pbp" AND "risky"
-   danger + risky          Policies that are "danger" OR "risky"
-   pbp - cosmetic          Policies that are "pbp" BUT NOT "risky"
-   -reliability            Policies that are NOT "reliability"
-   (pbp - danger) * risky  Policies that are "pbp" BUT NOT "danger", AND "risky"
+   pbp * risky                 Policies that are "pbp" AND "risky"
+   pbp and risky               Ditto
 
-Theme names are case-insensitive.  If you specify a theme that doesn't
-represent any themes, it resolves to an empty set. See
+   danger + risky              Policies that are "danger" OR "risky"
+   pbp or risky                Ditto
+
+   pbp - cosmetic              Policies that are "pbp" BUT NOT "risky"
+   pbp not cosmetic            Ditto
+
+   -reliability                Policies that are NOT "reliability"
+   not reliability             Ditto
+
+   (pbp - danger) * risky      Policies that are "pbp" BUT NOT "danger", AND "risky"
+   (pbp not danger) and risky  Ditto
+
+Theme names are case-insensitive.  If C<-theme> is set to an empty
+string, then it is equivalent to all policies.  A theme name that
+doesn't exist resolves to an empty set. Please See
 L<http://en.wikipedia.org/wiki/Set> for a discussion on set theory.
 
 =head1 BENDING THE RULES
