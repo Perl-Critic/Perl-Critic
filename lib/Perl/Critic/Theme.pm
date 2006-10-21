@@ -47,6 +47,7 @@ sub _init {
     my ( $self, %args ) = @_;
     my $theme_expression = $args{-theme};
     my $policies = $args{-policies} || [];
+    $self->{_expression} = $theme_expression;
 
     if ( !defined $theme_expression || $theme_expression eq $EMPTY ) {
         $self->{_members} = [ map {ref $_} @{ $policies } ];
@@ -55,7 +56,6 @@ sub _init {
 
     my $tmap = _make_theme_map( @{$policies} );
     $self->{_members} = [ _evaluate_expression( $theme_expression, $tmap ) ];
-    $self->{_expression} = $theme_expression;
     return $self;
 }
 

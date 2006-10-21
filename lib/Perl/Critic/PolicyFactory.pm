@@ -30,7 +30,7 @@ sub import {
     my ( $class, %args ) = @_;
     my $test_mode = $args{-test};
 
-    if ( ! @SITE_POLICY_NAMES ) {
+    if ( not @SITE_POLICY_NAMES ) {
         eval {
             require Module::Pluggable;
             Module::Pluggable->import(search_path => $POLICY_NAMESPACE,

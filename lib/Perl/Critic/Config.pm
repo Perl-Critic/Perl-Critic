@@ -39,7 +39,7 @@ sub _init {
 
     my ( $self, %args ) = @_;
 
-    # Set attributes
+    # Set some attributes
     my $p = $args{-profile};
     my $profile = Perl::Critic::UserProfile->new( -profile => $p );
     $self->{_exclude}  = $args{-exclude}  || $profile->defaults->exclude();
@@ -52,11 +52,11 @@ sub _init {
     $self->{_profile}  = $profile;
     $self->{_policies} = [];
 
-    # Construct PolicyFactory
+    # Construct PolicyFactory and get all the Policies
     my $factory = Perl::Critic::PolicyFactory->new( -profile  => $profile );
     my @policies = $factory->policies();
 
-    #Construct Theme
+    #Construct Theme from the user's definition
     my $theme = $args{-theme} || $profile->defaults->theme();
     my $t = Perl::Critic::Theme->new( -theme => $theme, -policies => \@policies );
     $self->{_theme} = $t;
