@@ -71,6 +71,12 @@ elegant anyway.
   use IO::File;
   my $fh = IO::File->new( 'output.txt', q{>} ); # even better!
 
+It's also more explicitly clear to define the input mode of the
+file, as in the difference between these two:
+
+  open( $fh, 'foo.txt' );       # BAD: Reader must think what default mode is
+  open( $fh, '<', 'foo.txt' );  # GOOD: Reader can see open mode
+
 =head1 NOTES
 
 The only time you should use the two-argument form is when you re-open
