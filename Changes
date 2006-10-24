@@ -1,9 +1,9 @@
-#######################################################################
+##############################################################################
 #      $URL$
 #     $Date$
 #   $Author$
 # $Revision$
-#######################################################################
+##############################################################################
 
 [0.21]  Released on ????-??-??
 
@@ -22,7 +22,7 @@
        only works on non-Win32 platforms.  Use -nocolor switch to disable.
      * Say "perlcritic -count" to get just the the total number of
        violations per file.  Use this feature to quickly identify hot-spots.
-     * Default values for most of the perlcritic and Perl::Critic switches
+     * Default values for most of the perlcritic and Perl::Critic options
        can now be defined in your .perlcriticrc file.  See POD for details.
 
      Bug Fixes:
@@ -34,6 +34,8 @@
        STDIN, STDOUT or STDERR.
      * Parrot 40564: Subroutines::RequireFinalReturn should allow die,
        exit, etc.
+     * Each "for" and "foreach" loop now adds one point to the McCabe
+       complexity score.
 
      Other Stuff:
      * The internals of Perl::Critic have been significantly refactored,

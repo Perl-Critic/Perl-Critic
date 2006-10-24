@@ -61,9 +61,9 @@ sub _default {
 sub _kludge {
     my ($key, %args) = @_;
     return          if not defined $key;
-    return $key     if exists $args{$key};
-    return "-$key"  if exists $args{"-$key"};
-    return "--$key" if exists $args{"--$key"};
+    return $key     if defined $args{$key};
+    return "-$key"  if defined $args{"-$key"};
+    return "--$key" if defined $args{"--$key"};
     return; # Key does not exist
 }
 

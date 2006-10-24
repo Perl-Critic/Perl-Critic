@@ -10,7 +10,7 @@ package Perl::Critic::UserProfile;
 
 use strict;
 use warnings;
-use Carp qw(carp confess);
+use Carp qw(carp croak confess);
 use Config::Tiny qw();
 use English qw(-no_match_vars);
 use File::Spec qw();
@@ -119,42 +119,42 @@ sub _set_defaults {
     return $self;
 }
 
-#------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 sub _load_profile_from_file {
     my $file = shift || return {};
     my $prof = Config::Tiny->read($file);
-    confess( Config::Tiny->errstr() ) if not defined $prof;
+    croak( "$file: " . Config::Tiny::errstr() ) if not defined $prof;
     return $prof;
 }
 
-#------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 sub _load_profile_from_array {
     my $array_ref = shift;
     my $joined    = join qq{\n}, @{ $array_ref };
     my $prof = Config::Tiny->read_string( $joined );
-    confess( Config::Tiny->errstr() ) if not defined $prof;
+    croak( "Config error: " . Config::Tiny::errstr() ) if not defined $prof;
     return $prof;
 }
 
-#------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 sub _load_profile_from_string {
     my $string = shift;
     my $prof = Config::Tiny->read_string( ${ $string } );
-    confess( Config::Tiny->errstr() ) if not defined $prof;
+    croak( "Config error: " . Config::Tiny::errstr() ) if not defined $prof;
     return $prof;
 }
 
-#------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 sub _load_profile_from_hash {
     my $hash_ref = shift;
     return $hash_ref;
 }
 
-#----------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 sub _find_profile_path {
 
@@ -177,7 +177,7 @@ sub _find_profile_path {
     return;
 }
 
-#----------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 sub _find_home_dir {
 
@@ -201,7 +201,7 @@ sub _find_home_dir {
 
 __END__
 
-#----------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 =pod
 

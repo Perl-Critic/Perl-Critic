@@ -49,6 +49,7 @@ our @EXPORT = qw(
     &all_perl_files
     &find_keywords
     &hashify
+    &interpolate
     &is_function_call
     &is_hash_key
     &is_method_call
@@ -171,13 +172,20 @@ my %PRECEDENCE_OF = (
 );
 
 ## use critic
-#-------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 sub hashify {
     return map { $_ => 1 } @_;
 }
 
-#-------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
+
+sub interpolate {
+    my ( $literal ) = @_;
+    return eval "\"$literal\"";  ## no critic 'StringyEval';
+}
+
+#-----------------------------------------------------------------------------
 
 sub find_keywords {
     my ( $doc, $keyword ) = @_;
@@ -187,7 +195,7 @@ sub find_keywords {
     return @matches ? \@matches : undef;
 }
 
-#-------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 sub is_perl_builtin {
     my $elem = shift;
@@ -196,7 +204,7 @@ sub is_perl_builtin {
     return exists $BUILTINS{ $name };
 }
 
-#-------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 sub is_perl_global {
     my $elem = shift;
@@ -206,7 +214,7 @@ sub is_perl_global {
     return exists $GLOBALS{ $var_name };
 }
 
-#-------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 sub precedence_of {
     my $elem = shift;
@@ -214,7 +222,7 @@ sub precedence_of {
     return $PRECEDENCE_OF{ ref $elem ? "$elem" : $elem };
 }
 
-#-------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 sub is_hash_key {
     my $elem = shift;
@@ -236,7 +244,7 @@ sub is_hash_key {
     return;
 }
 
-#-------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 sub is_method_call {
     my $elem = shift;
@@ -246,7 +254,7 @@ sub is_method_call {
     return $sib->isa('PPI::Token::Operator') && $sib eq q{->};
 }
 
-#-------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 sub is_subroutine_name {
     my $elem  = shift;
@@ -258,7 +266,7 @@ sub is_subroutine_name {
     return $stmnt->isa('PPI::Statement::Sub') && $sib eq 'sub';
 }
 
-#-------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 sub is_function_call {
     my $elem  = shift;
@@ -268,7 +276,7 @@ sub is_function_call {
     );
 }
 
-#-------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 sub is_script {
     my $doc = shift;
@@ -276,7 +284,7 @@ sub is_script {
     return !!$shebang;  # booleanize
 }
 
-#-------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 sub policy_long_name {
     my ( $policy_name ) = @_;
@@ -286,7 +294,7 @@ sub policy_long_name {
     return $policy_name;
 }
 
-#-------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 sub policy_short_name {
     my ( $policy_name ) = @_;
@@ -294,7 +302,7 @@ sub policy_short_name {
     return $policy_name;
 }
 
-#-------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 sub parse_arg_list {
     my $elem = shift;
@@ -588,13 +596,22 @@ L<perlcritic> documentation for a listing of the predefined formats.
 
 =item C<hashify( @list )>
 
-Given C<@list>, return a hash where C<@list> is in the keys and
-each value is 1.
+Given C<@list>, return a hash where C<@list> is in the keys and each
+value is 1.  Duplicate values in C<@list> are silently squished.
+
+=item C<interpolate( $literal )>
+
+Given a C<$literal> string that may contain control characters
+(eg. '\t' '\n'), this function does a double interpolation on the
+string and returns it as if it had been declared in double quotes.
+For example:
+
+  'foo \t bar \n' ...becomes... "foo \t bar \n"
 
 =item C<shebang_line( $document )>
 
 Given a L<PPI::Document>, test if it starts with C<#!>.  If so,
-return that line.  Otherwise return undef. 
+return that line.  Otherwise return undef.
 
 =back
 
@@ -640,7 +657,8 @@ without the sigil.
 =item C<$SPACE>
 
 These character constants give clear names to commonly-used strings
-that can be hard to read when surrounded by quotes.
+that can be hard to read when surrounded by quotes and other
+punctuation.
 
 =item C<$SEVERITY_HIGHEST>
 

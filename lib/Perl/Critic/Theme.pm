@@ -45,11 +45,11 @@ sub expression {
 
 sub _init {
     my ( $self, %args ) = @_;
-    my $theme_expression = $args{-theme};
     my $policies = $args{-policies} || [];
+    my $theme_expression = $args{-theme} || $EMPTY;
     $self->{_expression} = $theme_expression;
 
-    if ( !defined $theme_expression || $theme_expression eq $EMPTY ) {
+    if ( $theme_expression eq $EMPTY ) {
         $self->{_members} = [ map {ref $_} @{ $policies } ];
         return $self;
     }

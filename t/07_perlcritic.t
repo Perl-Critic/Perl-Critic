@@ -11,7 +11,7 @@ use strict;
 use warnings;
 use File::Spec;
 use English qw(-no_match_vars);
-use Test::More tests => 33;
+use Test::More tests => 31;
 
 #-----------------------------------------------------------------------------
 # Load perlcritic like a library so we can test its subroutines.  If it is not
@@ -104,11 +104,6 @@ is( $options{-verbose}, '%l:%c:%m');
 @ARGV = qw(-quiet);
 %options = get_options();
 is( $options{-quiet}, 1);
-
-#-----------------------------------------------------------------------------
-
-ok( _interpolate( '\r%l\t%c\n' ) eq "\r%l\t%c\n", 'Interpolation' );
-ok( _interpolate( 'literal'    ) eq "literal",    'Interpolation' );
 
 #-----------------------------------------------------------------------------
 

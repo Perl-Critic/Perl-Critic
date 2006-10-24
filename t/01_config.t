@@ -14,7 +14,7 @@ use English qw(-no_match_vars);
 use List::MoreUtils qw(all any);
 use Perl::Critic::Config qw();
 use Perl::Critic::Utils;
-use Test::More (tests => 55);
+use Test::More (tests => 58);
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw();
@@ -178,21 +178,21 @@ my $total_policies   = scalar @site_policies;
 
     my %zero_args = map { $_ => 0 } @switches;
     $c = Perl::Critic::Config->new( %zero_args );
-    is( $c->force(),     0,     'zero -force');
-    is( $c->only(),      0,     'zero -only');
-    is( $c->severity(),  5,     'zero -severity');
+    is( $c->force(),     0,       'zero -force');
+    is( $c->only(),      0,       'zero -only');
+    is( $c->severity(),  1,       'zero -severity');
     is( $c->theme()->expression(),     q{},   'zero -theme');
-    is( $c->top(),       0,     'zero -top');
-    is( $c->verbose(),   3,     'zero -verbose');
+    is( $c->top(),       0,       'zero -top');
+    is( $c->verbose(),   3,       'zero -verbose');
 
     my %empty_args = map { $_ => q{} } @switches;
     $c = Perl::Critic::Config->new( %empty_args );
-    is( $c->force(),     0,     'empty -force');
-    is( $c->only(),      0,     'empty -only');
-    is( $c->severity(),  5,     'empty -severity');
+    is( $c->force(),     0,       'empty -force');
+    is( $c->only(),      0,       'empty -only');
+    is( $c->severity(),  1,       'empty -severity');
     is( $c->theme()->expression(),     q{},   'empty -theme');
-    is( $c->top(),       0,     'empty -top');
-    is( $c->verbose(),   3,     'empty -verbose');
+    is( $c->top(),       0,       'empty -top');
+    is( $c->verbose(),   3,       'empty -verbose');
 }
 
 #-----------------------------------------------------------------------------
@@ -213,6 +213,20 @@ my $total_policies   = scalar @site_policies;
     %pc_config = ( -severity => 1, -only => 1, -profile => {} );
     @pols = Perl::Critic::Config->new( %pc_config )->policies();
     is(scalar @pols, 0, '-only switch, empty profile');
+}
+
+#-----------------------------------------------------------------------------
+# Test interaction between switches and defaults
+
+{
+    my %true_defaults = ( force => 1, only  => 1, top => 10 );
+    my %profile  = ( '_' => \%true_defaults );
+
+    my %pc_config = (-force => 0, -only => 0, -top => 0, -profile => \%profile);
+    my $config = Perl::Critic::Config->new( %pc_config );
+    is( $config->force, 0, '-force: default is true, arg is false');
+    is( $config->only,  0, '-only: default is true, arg is false');
+    is( $config->top,   0, '-top: default is true, arg is false');
 }
 
 #-----------------------------------------------------------------------------

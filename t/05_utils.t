@@ -11,7 +11,7 @@ use strict;
 use warnings;
 use PPI::Document;
 use constant USE_B_KEYWORDS => eval 'use B::Keywords 1.04; 1';
-use Test::More tests => 73 + (
+use Test::More tests => 76 + (
     USE_B_KEYWORDS
     ? ( @B::Keywords::Functions + @B::Keywords::Scalars + @B::Keywords::Arrays
             + @B::Keywords::Hashes + @B::Keywords::FileHandles )
@@ -31,6 +31,7 @@ BEGIN
 
 can_ok('main', 'all_perl_files');
 can_ok('main', 'find_keywords');
+can_ok('main', 'interpolate');
 can_ok('main', 'is_hash_key');
 can_ok('main', 'is_method_call');
 can_ok('main', 'is_perl_builtin');
@@ -233,6 +234,13 @@ SKIP: {
     is( policy_short_name( $short_name ), $short_name  );
     is( policy_short_name( $long_name  ), $short_name  );
 }
+
+#-----------------------------------------------------------------------------
+# interpolate() tests
+
+is( interpolate( '\r%l\t%c\n' ), "\r%l\t%c\n", 'Interpolation' );
+is( interpolate( 'literal'    ), "literal",    'Interpolation' );
+
 
 #-----------------------------------------------------------------------------
 # Test _is_perl() subroutine.  This used to be part of `perlcritic` but I
