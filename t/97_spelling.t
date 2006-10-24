@@ -23,7 +23,7 @@ my $aspell_path = eval q{use Test::Spelling; use File::Which;
 plan skip_all => 'Optional Test::Spelling, File::Which and aspell program required to spellcheck POD' if $@;
 
 add_stopwords(<DATA>);
-set_spell_cmd("$aspell_path -l");
+set_spell_cmd("$aspell_path list");
 all_pod_files_spelling_ok();
 
 __DATA__
