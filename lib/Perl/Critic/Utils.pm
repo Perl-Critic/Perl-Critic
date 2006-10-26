@@ -602,7 +602,7 @@ value is 1.  Duplicate values in C<@list> are silently squished.
 =item C<interpolate( $literal )>
 
 Given a C<$literal> string that may contain control characters
-(eg. '\t' '\n'), this function does a double interpolation on the
+(e.g.. '\t' '\n'), this function does a double interpolation on the
 string and returns it as if it had been declared in double quotes.
 For example:
 

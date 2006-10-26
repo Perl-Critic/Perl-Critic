@@ -295,7 +295,7 @@ __END__
 
 =pod
 
-=for stopwords DGR INI-style API params
+=for stopwords DGR INI-style API -params pbp
 
 =head1 NAME
 
@@ -506,7 +506,7 @@ functions.  Sorry.
 =head1 CONFIGURATION
 
 Most of the settings for Perl::Critic and each of the Policy modules
-can be controled by a configuration file.  The default configuration
+can be controlled by a configuration file.  The default configuration
 file is called F<.perlcriticrc>.  Perl::Critic will look for this file
 in the current directory first, and then in your home directory.
 Alternatively, you can set the C<PERLCRITIC> environment variable to
@@ -652,7 +652,7 @@ L<"CONFIGURATION"> section for more information about that.
 
 Using the C<-theme> command-line option, you can combine themes with
 mathematical and boolean operators to create an arbitrarily complex
-expression that represents a custom "set" of Policies.  The folowing
+expression that represents a custom "set" of Policies.  The following
 operators are supported
 
    Operator       Altertative         Meaning
@@ -683,7 +683,7 @@ can also use parenthesis to enforce precedence.  Here are some examples:
 
 Theme names are case-insensitive.  If C<-theme> is set to an empty
 string, then it is equivalent to the set of all policies.  A theme
-name that doesn't exist is eqivalent to an empty set. Please See
+name that doesn't exist is equivalent to an empty set. Please See
 L<http://en.wikipedia.org/wiki/Set> for a discussion on set theory.
 
 =head1 BENDING THE RULES
