@@ -311,11 +311,8 @@ provides:
   Perl::Critic::TestUtils:
     file: lib/Perl/Critic/TestUtils.pm
     version: 0.21
-  Perl::Critic::ThemeManager:
-    file: lib/Perl/Critic/ThemeManager.pm
-    version: 0.21
-  Perl::Critic::ThemeMath:
-    file: lib/Perl/Critic/ThemeMath.pm
+  Perl::Critic::Theme:
+    file: lib/Perl/Critic/Theme.pm
     version: 0.21
   Perl::Critic::UserProfile:
     file: lib/Perl/Critic/UserProfile.pm
