@@ -31,8 +31,10 @@ my @default_forbid =
 
 #---------------------------------------------------------------------------
 
-sub default_severity { return $SEVERITY_MEDIUM }
-sub applies_to { return 'PPI::Statement::Sub', 'PPI::Statement::Variable' }
+sub default_severity { return $SEVERITY_MEDIUM   }
+sub default_themes   { return qw(pbp unreliable) }
+sub applies_to       { return qw(PPI::Statement::Sub
+                                 PPI::Statement::Variable) }
 
 #---------------------------------------------------------------------------
 

@@ -21,8 +21,9 @@ my $expl = [ 253 ];
 
 #----------------------------------------------------------------------------
 
-sub default_severity { return $SEVERITY_MEDIUM }
-sub applies_to { return 'PPI::Token::Magic' }
+sub default_severity { return $SEVERITY_MEDIUM    }
+sub default_themes   { return qw(pbp unreliable)  }
+sub applies_to       { return 'PPI::Token::Magic' }
 
 #----------------------------------------------------------------------------
 
