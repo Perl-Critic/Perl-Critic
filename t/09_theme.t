@@ -16,7 +16,7 @@ use Perl::Critic::Theme;
 use Perl::Critic::PolicyFactory;
 use Perl::Critic::UserProfile;
 use Perl::Critic::Config;
-use Test::More (tests => 51);
+use Test::More (tests => 53);
 
 #-----------------------------------------------------------------------------
 
@@ -77,12 +77,12 @@ for my $valid ( @valid_expressions ) {
 
 {
     my %expressions = (
-         'cosmetic'                    =>  '$tmap{"cosmetic"}',
-         'cosmetic + risky',           =>  '$tmap{"cosmetic"} + $tmap{"risky"}',
-         'cosmetic * risky',           =>  '$tmap{"cosmetic"} * $tmap{"risky"}',
-         'cosmetic - risky',           =>  '$tmap{"cosmetic"} - $tmap{"risky"}',
-         'cosmetic + (risky - pbp)'    =>  '$tmap{"cosmetic"} + ($tmap{"risky"} - $tmap{"pbp"})',
-         'cosmetic*(risky-pbp)'        =>  '$tmap{"cosmetic"}*($tmap{"risky"}-$tmap{"pbp"})',
+         'cosmetic'                 =>  '$tmap{"cosmetic"}',
+         'cosmetic + risky',        =>  '$tmap{"cosmetic"} + $tmap{"risky"}',
+         'cosmetic * risky',        =>  '$tmap{"cosmetic"} * $tmap{"risky"}',
+         'cosmetic - risky',        =>  '$tmap{"cosmetic"} - $tmap{"risky"}',
+         'cosmetic + (risky - pbp)' =>  '$tmap{"cosmetic"} + ($tmap{"risky"} - $tmap{"pbp"})',
+         'cosmetic*(risky-pbp)'     =>  '$tmap{"cosmetic"}*($tmap{"risky"}-$tmap{"pbp"})',
     );
 
     while ( my ($raw, $expected) = each %expressions ) {
@@ -181,6 +181,11 @@ for my $valid ( @valid_expressions ) {
     @members = Perl::Critic::Theme->new( %args )->members();
     is( scalar @members, 0, 'bogus theme' );
 
+    $theme = 'bogus - pbp';
+    %args  = (-theme => $theme, -policies => \@pols);
+    @members = Perl::Critic::Theme->new( %args )->members();
+    is( scalar @members, 0, 'bogus theme' );
+
     $theme = q{};
     %args  = (-theme => $theme, -policies => \@pols);
     @members = Perl::Critic::Theme->new( %args )->members();
@@ -190,6 +195,14 @@ for my $valid ( @valid_expressions ) {
     %args  = (-theme => $theme, -policies => \@pols);
     @members = Perl::Critic::Theme->new( %args )->members();
     is( scalar @members, scalar @pols, 'undef theme' );
+
+    #--------------
+    # Exceptions
+
+    $theme = 'cosmetic *(';
+    %args  = (-theme => $theme, -policies => \@pols);
+    eval{ Perl::Critic::Theme->new( %args )->members() };
+    like( $EVAL_ERROR, qr/Invalid theme/, 'invalid theme expression' );
 
 }
 

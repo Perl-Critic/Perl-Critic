@@ -70,9 +70,15 @@ sub _evaluate_expression {
     $expression = _interpolate_expression( $expression, 'tmap' );
 
     no warnings 'uninitialized'; ## no critic (ProhibitNoWarnings)
-    my $wanted = eval $expression || return; ## no critic (ProhibitStringyEval)
-    confess qq{Invalid theme expression: $EVAL_ERROR} if $EVAL_ERROR;
-    return $wanted->members();
+    my $wanted = eval $expression; ## no critic (ProhibitStringyEval)
+    confess qq{Invalid theme expression: "$expression"} if $EVAL_ERROR;
+    return if not defined $wanted;
+    my @members = $wanted->members();
+
+    # Ick. Set::Scalar::members will return a one-element list under
+    # some circumstances.  This is probably a bug.
+    return if @members == 1 and $members[0] == undef;
+    return @members;
 }
 
 #-----------------------------------------------------------------------------
