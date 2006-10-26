@@ -22,7 +22,8 @@ my $expl = q{Use published APIs};
 
 #---------------------------------------------------------------------------
 
-sub default_severity { return $SEVERITY_MEDIUM }
+sub default_severity { return $SEVERITY_MEDIUM   }
+sub default_themes   { return qw(unreliable)     }
 sub applies_to       { return 'PPI::Token::Word' }
 
 #---------------------------------------------------------------------------
