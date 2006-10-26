@@ -23,11 +23,10 @@ my $desc = q{Backtick operator used};
 
 #----------------------------------------------------------------------------
 
-sub default_severity   { return $SEVERITY_MEDIUM }
-sub applies_to {
-    return qw( PPI::Token::QuoteLike::Backtick
-               PPI::Token::QuoteLike::Command );
-}
+sub default_severity { return $SEVERITY_MEDIUM }
+sub default_themes   { return qw(unreliable)   }
+sub applies_to       { return qw(PPI::Token::QuoteLike::Backtick
+                                 PPI::Token::QuoteLike::Command ) }
 
 #----------------------------------------------------------------------------
 
