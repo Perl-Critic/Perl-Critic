@@ -71,7 +71,6 @@ my $builder = Module::Build->new(
 
   recommends     => {'File::HomeDir'         => 0,
                      'Perl::Tidy'            => 0,
-                     'Test::Perl::Critic'    => 0,
                     },
 
   build_requires => {'Test::More'            => 0,
