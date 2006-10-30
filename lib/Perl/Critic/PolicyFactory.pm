@@ -270,11 +270,17 @@ __END__
 
 =pod
 
+=for stopwords PolicyFactory -params
+
 =head1 NAME
 
 Perl::Critic::PolicyFactory - Instantiate Policy objects
 
 =head1 DESCRIPTION
+
+This is a helper class that instantiates L<Perl::Critic::Policy>
+objects with the user's preferred parameters. There are no
+user-serviceable parts here.
 
 =head1 CONSTRUCTOR
 
@@ -282,15 +288,40 @@ Perl::Critic::PolicyFactory - Instantiate Policy objects
 
 =item C<< new( -profile => $profile, -policy_names => \@policy_names ) >>
 
+Returns a reference to a new Perl::Critic::PolicyFactory object.
+
+B<-profile> is a reference to a L<Perl::Critic::UserProfile> object.
+This argument is required.
+
+B<-policy_names> is a reference to an array of fully-qualified Policy
+names.  Internally, the PolicyFactory will create one instance each of
+the named Policies.
+
 =back
 
 =head1 METHODS
 
 =over 8
 
-=item C< create_policy() >
+=item C<< create_policy( -policy => $policy_name, -params => \%param_hash ) >>
+
+Creates one Policy object.  If the object cannot be instantiated, it
+will throw a fatal exception.  Otherwise, it returns a reference to
+the new Policy object.
+
+B<-policy> is the name of a L<Perl::Critic::Policy> subclass module.
+The C<'Perl::Critic::Policy'> portion of the name can be omitted for
+brevity.  This argument is required.
+
+B<-params> is an optional reference to hash of parameters that will be
+passed into the constructor of the Policy.  If C<-params> is not
+defined, we will use the appropriate Policy parameters from the
+L<Perl::Critic::UserProfile>.
 
 =item C< policies() >
+
+Returns a list of of references to all the L<Perl::Critic::Policy>
+objects that were created by this PolicyFactory.
 
 =back
 

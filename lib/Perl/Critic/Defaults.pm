@@ -149,6 +149,10 @@ user-serviceable parts here.
 
 =item C< new( %DEFAULT_PARAMS ) >
 
+Returns a reference to a new C<Perl::Critic::Defaults> object.  The
+arguments are name-value pairs that correspond to the methods listed
+below.
+
 =back
 
 =head1 METHODS
@@ -157,19 +161,38 @@ user-serviceable parts here.
 
 =item C< exclude() >
 
+Returns a reference to a list of the default exclusion patterns.  If
+there are no default exclusion patterns, then the list will be empty.
+
 =item C< force() >
+
+Returns the default value of the C<force> flag (Either 1 or 0).
 
 =item C< include() >
 
+Returns a reference to a list of the default inclusion patterns.  If
+there are no default exclusion patterns, then the list will be empty.
+
 =item C< only() >
+
+Returns the default value of the C<only> flag (Either 1 or 0).
 
 =item C< severity() >
 
+Returns the default C<severity> setting. (1..5).
+
 =item C< theme() >
+
+Returns the default C<theme> setting. (As a string).
 
 =item C< top() >
 
+Returns the default C<top> setting. (Either 0 or a positive integer).
+
 =item C< verbose() >
+
+Returns the default C<verbose> setting. (Either a number or format
+string).
 
 =back
 

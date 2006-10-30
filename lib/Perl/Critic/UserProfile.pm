@@ -223,6 +223,11 @@ no user-serviceable parts here.
 
 =item C< new( -profile => $p ) >
 
+B<-profile> is the path to the user's profile.  If -profile is not
+defined, then it looks for the profile at F<./.perlcriticrc> and then
+F<$HOME/.perlcriticrc>.  If neither of those files exists, then the
+UserProfile is created with default values.
+
 =back
 
 =head1 METHODS
