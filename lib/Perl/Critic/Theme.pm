@@ -73,10 +73,15 @@ sub _evaluate_expression {
     my $wanted = eval $expression; ## no critic (ProhibitStringyEval)
     confess qq{Invalid theme expression: "$expression"} if $EVAL_ERROR;
     return if not defined $wanted;
-    my @members = $wanted->members();
+
+    # If one of the operands in the expression evaluated to undef,
+    # then the Set could end up with an undef member.  So we toss
+    # it out to avoid 'uninitialized' warnings downstream;
+    $wanted->delete(undef);
 
     # Ick. Set::Scalar::members will return a one-element list under
     # some circumstances.  This is probably a bug.
+    my @members = $wanted->members();
     return if @members == 1 and not defined $members[0];
     return @members;
 }
