@@ -979,6 +979,19 @@ useful utilities.  And all is seamlessly integrated into the
 editor. See L<http://lug.fh-swf.de/vim/vim-perl/screenshots-en.html>
 for complete details.
 
+=head2 EPIC
+
+EPIC is an open source Perl IDE based on the Eclipse platform.
+Features supported are syntax highlighting, on-the-fly syntax check,
+content assist, perldoc support, source formatter, templating support
+and a Perl debugger.  Go to L<http://e-p-i-c.sourceforge.net> for
+more information about EPIC.
+
+The EPIC team is currently working on integration with Perl::Critic.
+In the meantime, you can use the L<criticism> pragma and EPIC will
+highlight violations whenever it does a syntax check on your code.
+I haven't tried this myself, but other folks say it works.
+
 =head1 EXIT STATUS
 
 If C<perlcritic> has any errors itself, exits with status == 1.  If there
