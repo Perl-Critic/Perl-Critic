@@ -77,7 +77,7 @@ sub _evaluate_expression {
 
     # Ick. Set::Scalar::members will return a one-element list under
     # some circumstances.  This is probably a bug.
-    return if @members == 1 and $members[0] == undef;
+    return if @members == 1 and not defined $members[0];
     return @members;
 }
 
