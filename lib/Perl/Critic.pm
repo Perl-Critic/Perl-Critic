@@ -88,10 +88,9 @@ sub critique {
     # PPI::Document, or a reference to a scalar containing source
     # code.  In the last case, PPI handles the translation for us.
 
-    my $doc
-        = blessed($source_code) && $source_code->isa('PPI::Document') ? $source_code
-        : ref $source_code ? PPI::Document->new($source_code)
-        : PPI::Document::File->new($source_code);
+    my $doc = _is_ppi_doc( $source_code ) ? $source_code
+              : ref $source_code ? PPI::Document->new($source_code)
+              : PPI::Document::File->new($source_code);
 
     # Bail on error
     if ( not defined $doc ) {
@@ -116,52 +115,62 @@ sub critique {
                               _filter_code($doc, @site_policies) );
     }
 
-    my @violations = ();
+    # Evaluate each policy
+    my @pols = $self->config->policies();
+    my @violations = map { _critique( $_, $doc, \%is_line_disabled) } @pols;
 
-  POLICY:
-    for my $policy ( $self->config->policies() ){
-
-
-      TYPE:
-        for my $type ( $policy->applies_to() ) {
-
-
-          ELEMENT:
-            for my $element ( @{ $doc->find($type) || [] } ) {
-
-                # Evaluate the policy on this $element.  A policy may
-                # return zero or more violations.  We only want the
-                # violations that occur on lines that have not been
-                # disabled.
-
-              VIOLATION:
-                for my $violation ( $policy->violates( $element, $doc ) ) {
-                    my $policy_name = ref $policy;
-                    my $line = $violation->location()->[0];
-                    next VIOLATION if $is_line_disabled{$line}->{$policy_name};
-                    next VIOLATION if $is_line_disabled{$line}->{ALL};
-                    push @violations, $violation;
-                }
-            }
-        }
-    }
-
-    # If requested, rank violations by their severity and only return
-    # the top N violations.  This used to be handled by 'perlcritic'
-    # but I moved it into the library to give the Perl::Critic API
-    # more flexibility and functionality.
-
+    # If requested, rank violations by their severity and return the top N.
     if ( @violations && (my $top = $self->config->top()) ) {
         my $limit = @violations < $top ? $#violations : $top-1;
         @violations = Perl::Critic::Violation::sort_by_severity(@violations);
         @violations = ( reverse @violations )[ 0 .. $limit ];  #Slicing...
     }
 
+    # Always return violations sorted by location
     return Perl::Critic::Violation->sort_by_location(@violations);
 }
 
 #============================================================================
-#PRIVATE SUBS
+# PRIVATE functions
+
+sub _is_ppi_doc {
+    my ($ref) = @_;
+    return blessed($ref) && $ref->isa('PPI::Document');
+}
+
+#-----------------------------------------------------------------------------
+
+sub _critique {
+
+    my ($policy, $doc, $is_line_disabled) = @_;
+    my @violations = ();
+
+  TYPE:
+    for my $type ( $policy->applies_to() ) {
+
+      ELEMENT:
+        for my $element ( @{ $doc->find($type) || [] } ) {
+
+            # Evaluate the policy on this $element.  A policy may
+            # return zero or more violations.  We only want the
+            # violations that occur on lines that have not been
+            # disabled.
+
+          VIOLATION:
+            for my $violation ( $policy->violates( $element, $doc ) ) {
+                my $policy_name = ref $policy;
+                my $line = $violation->location()->[0];
+                next VIOLATION if $is_line_disabled->{$line}->{$policy_name};
+                next VIOLATION if $is_line_disabled->{$line}->{ALL};
+                push @violations, $violation;
+            }
+        }
+    }
+
+    return @violations;
+}
+
+#-----------------------------------------------------------------------------
 
 sub _filter_code {
 
