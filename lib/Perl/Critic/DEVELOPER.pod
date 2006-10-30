@@ -81,15 +81,7 @@ Perl::Critic to be a hypocrite, now do we?
   use Perl::Critic::Violation;
   use base 'Perl::Critic::Policy';
 
-This following is a pretty standard way to declare a version number
-for your module, and it's also required for self-compliance.  But the
-C<ProhibitStringyEval> policy doesn't approve of using C<eval> in this
-manner, so we attach the "## no critic" comments to tell Perl::Critic
-to overlook this line of code.
-
   our $VERSION = '0.13_01';
-  $VERSION = eval $VERSION;    ## no critic
-
 
 Next, we'll declare a description and explanation for this Policy.
 The description is always just a string that basically says "this is
@@ -118,6 +110,14 @@ purely cosmetic.  The L<Perl::Critic::Utils> package exports several
 severity constants that you can use here.
 
   sub default_severity  { return $SEVERITY_HIGH }
+
+Likewise, the C<default_themes()> method returns a list of theme
+names.  Themes are intended to be named groups of Policies.  Since
+this Policy comes directly from Damian's "Perl Best Practices" book,
+this Policy should be a member of the C<pbp> theme.  As a Policy
+author, you can specify any themes you want.
+
+  sub default_themes { return qw( pbp ) }
 
 Next we indicate what parts of the code this policy will analyze, like
 statements or variables or conditionals or POD.  These parts are
