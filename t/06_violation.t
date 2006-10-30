@@ -11,7 +11,7 @@ use strict;
 use warnings;
 use PPI::Document;
 use English qw(-no_match_vars);
-use Test::More tests => 32;
+use Test::More tests => 33;
 
 #-----------------------------------------------------------------------------
 
@@ -36,6 +36,7 @@ can_ok('Perl::Critic::Violation', 'location');
 can_ok('Perl::Critic::Violation', 'diagnostics');
 can_ok('Perl::Critic::Violation', 'description');
 can_ok('Perl::Critic::Violation', 'explanation');
+can_ok('Perl::Critic::Violation', 'filename');
 can_ok('Perl::Critic::Violation', 'source');
 can_ok('Perl::Critic::Violation', 'policy');
 can_ok('Perl::Critic::Violation', 'get_format');

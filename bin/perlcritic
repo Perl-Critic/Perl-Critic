@@ -224,14 +224,11 @@ sub render_report {
 
     # Otherwise, format and print violations
     my $fmt = _get_format( $CRITIC->config->verbose() );
-
-    # HACK! Violation objects don't know the file
-    $file = -f $file ? $file : 'stdin';
-    $fmt =~ s{ \%f }{$file}mxg;
-
+    if (not -f $file) { $fmt =~ s{\%f}{STDIN}mx; } #HACK!
     Perl::Critic::Violation::set_format( $fmt );
 
-    print $opts_ref->{-nocolor} ? @violations : _colorize_by_severity(@violations);
+    print $opts_ref->{-nocolor} ? @violations
+                                : _colorize_by_severity(@violations);
     return $count;
 }
 #-----------------------------------------------------------------------------
@@ -266,10 +263,10 @@ sub _get_option_specification {
 sub _get_format {
     my ( $verbosity ) = @_;
     if ( _is_integer($verbosity) ) {
-        $verbosity = ($verbosity == 3 && @FILES > 1) ? 4 : $verbosity;
+        $verbosity = ($verbosity == 4 && @FILES > 1) ? 5 : $verbosity;
         return verbosity_to_format( $verbosity );
     }
-    return $verbosity;
+    return interpolate( $verbosity );
 }
 
 sub _is_integer { return $_[0] =~  m{ \A [+-]? \d+ \z }mx }
@@ -537,7 +534,7 @@ Sets the verbosity level or format for reporting violations.  If given
 a number (C<N>), C<perlcritic> reports violations using one of the
 predefined formats described below.  If given a string (C<FORMAT>), it
 is interpreted to be an actual format specification.  If the
-C<-verbose> option is not specified, it defaults to either 3 or 4,
+C<-verbose> option is not specified, it defaults to either 4 or 5,
 depending on whether multiple files were given as arguments to
 C<perlcritic>.  You can set the default value for this option in your
 F<.perlcriticrc> file.
@@ -546,14 +543,15 @@ F<.perlcriticrc> file.
   -----------   ---------------------------------------------------------------
    1            "%f:%l:%c:%m\n",
    2            "%f: (%l:%c) %m\n",
-   3            "%m at line %l, column %c.  %e.  (Severity: %s)\n",
-   4            "%f: %m at line %l, column %c.  %e.  (Severity: %s)\n",
-   5            "%m at line %l, near '%r'.  (Severity: %s)\n",
-   6            "%f: %m at line %l near '%r'.  (Severity: %s)\n",
-   7            "[%p] %m at line %l, column %c.  (Severity: %s)\n",
-   8            "[%p] %m at line %l, near '%r'.  (Severity: %s)\n",
-   9            "%m at line %l, column %c.\n  %p (Severity: %s)\n%d\n",
-  10            "%m at line %l, near '%r'.\n  %p (Severity: %s)\n%d\n"
+   3            "%m at %f line %l\n",
+   4            "%m at line %l, column %c.  %e.  (Severity: %s)\n",
+   5            "%f: %m at line %l, column %c.  %e.  (Severity: %s)\n",
+   6            "%m at line %l, near '%r'.  (Severity: %s)\n",
+   7            "%f: %m at line %l near '%r'.  (Severity: %s)\n",
+   8            "[%p] %m at line %l, column %c.  (Severity: %s)\n",
+   9            "[%p] %m at line %l, near '%r'.  (Severity: %s)\n",
+  10            "%m at line %l, column %c.\n  %p (Severity: %s)\n%d\n",
+  11            "%m at line %l, near '%r'.\n  %p (Severity: %s)\n%d\n"
 
 Formats are a combination of literal and escape characters similar to
 the way C<sprintf> works.  See L<String::Format> for a full

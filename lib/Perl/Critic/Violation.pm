@@ -155,6 +155,16 @@ sub policy {
 
 #-----------------------------------------------------------------------------
 
+sub filename {
+    my $self = shift;
+    my $elem = $self->{_elem};
+    my $top  = $elem->top();
+    return $top->can('filename') ? $top->filename() : undef;
+}
+
+#-----------------------------------------------------------------------------
+
+
 sub source {
      my $self = shift;
 
@@ -179,6 +189,7 @@ sub to_string {
 
     # Wrap the more expensive ones in sub{} to postpone evaluation
     my %fspec = (
+         'f' => sub { $self->filename() },
          'l' => sub { $self->location->[0] },
          'c' => sub { $self->location->[1] },
          'm' => $self->description(),
@@ -236,11 +247,7 @@ sub _get_diagnostics {
     # workaround for RT bug #21009 and #21010, which document a bad
     # interaction with Devel::Cover 0.58 and
     # Pod::Parser::parse_from_file
-    my $fh;
-    if (!open $fh, '<', $file)
-    {
-       return q{};
-    }
+    return $EMPTY if not (open my $fh, '<', $file);
     $parser->parse_from_filehandle( $fh, $handle );
 
     # Remove header and trailing whitespace.
@@ -311,6 +318,12 @@ an array of page numbers in PBP.
 
 Returns a two-element list containing the line and column number where
 this Violation occurred.
+
+=item C<filename()>
+
+Returns the path to the file where this Violation occurred.  In some
+cases, the path may be undefined because the source code was not read
+directly from a file.
 
 =item C<severity()>
 

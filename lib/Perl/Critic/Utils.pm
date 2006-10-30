@@ -358,19 +358,20 @@ sub _split_nodes_on_comma {
 my %FORMAT_OF = (
     1 => "%f:%l:%c:%m\n",
     2 => "%f: (%l:%c) %m\n",
-    3 => "%m at line %l, column %c.  %e.  (Severity: %s)\n",
-    4 => "%f: %m at line %l, column %c.  %e.  (Severity: %s)\n",
-    5 => "%m at line %l, near '%r'.  (Severity: %s)\n",
-    6 => "%f: %m at line %l near '%r'.  (Severity: %s)\n",
-    7 => "[%p] %m at line %l, column %c.  (Severity: %s)\n",
-    8 => "[%p] %m at line %l, near '%r'.  (Severity: %s)\n",
-    9 => "%m at line %l, column %c.\n  %p (Severity: %s)\n%d\n",
-   10 => "%m at line %l, near '%r'.\n  %p (Severity: %s)\n%d\n",
+    3 => "%m at %f line %l\n",
+    4 => "%m at line %l, column %c.  %e.  (Severity: %s)\n",
+    5 => "%f: %m at line %l, column %c.  %e.  (Severity: %s)\n",
+    6 => "%m at line %l, near '%r'.  (Severity: %s)\n",
+    7 => "%f: %m at line %l near '%r'.  (Severity: %s)\n",
+    8 => "[%p] %m at line %l, column %c.  (Severity: %s)\n",
+    9 => "[%p] %m at line %l, near '%r'.  (Severity: %s)\n",
+   10 => "%m at line %l, column %c.\n  %p (Severity: %s)\n%d\n",
+   11 => "%m at line %l, near '%r'.\n  %p (Severity: %s)\n%d\n",
 );
 
 sub verbosity_to_format {
     my ($verbosity_level) = @_;
-    return $FORMAT_OF{ abs $verbosity_level };
+    return $FORMAT_OF{ abs int $verbosity_level };
 }
 
 #-----------------------------------------------------------------------------
