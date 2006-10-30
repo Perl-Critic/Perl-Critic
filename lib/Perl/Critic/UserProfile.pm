@@ -124,7 +124,7 @@ sub _set_defaults {
 sub _load_profile_from_file {
     my $file = shift || return {};
     my $prof = Config::Tiny->read($file);
-    croak( "$file: " . Config::Tiny::errstr() ) if not defined $prof;
+    croak( "Profile error: $file: " . Config::Tiny::errstr() ) if not defined $prof;
     return $prof;
 }
 
@@ -134,7 +134,7 @@ sub _load_profile_from_array {
     my $array_ref = shift;
     my $joined    = join qq{\n}, @{ $array_ref };
     my $prof = Config::Tiny->read_string( $joined );
-    croak( "Config error: " . Config::Tiny::errstr() ) if not defined $prof;
+    croak( 'Profile error: ' . Config::Tiny::errstr() ) if not defined $prof;
     return $prof;
 }
 
@@ -143,7 +143,7 @@ sub _load_profile_from_array {
 sub _load_profile_from_string {
     my $string = shift;
     my $prof = Config::Tiny->read_string( ${ $string } );
-    croak( "Config error: " . Config::Tiny::errstr() ) if not defined $prof;
+    croak( 'Profile error: ' . Config::Tiny::errstr() ) if not defined $prof;
     return $prof;
 }
 

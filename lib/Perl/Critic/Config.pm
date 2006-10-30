@@ -21,7 +21,6 @@ use Perl::Critic::Utils;
 
 our $VERSION = 0.21;
 
-
 #-----------------------------------------------------------------------------
 # Constructor
 
@@ -39,13 +38,15 @@ sub _init {
 
     my ( $self, %args ) = @_;
 
+    # -top or -theme imply that -severity is 1
+    if ( defined $args{-top} || defined $args{-theme} ) {
+        $args{-severity} ||= $SEVERITY_LOWEST;
+    }
+
     # Set some attributes
     my $p = $args{-profile};
     my $profile = Perl::Critic::UserProfile->new( -profile => $p );
     my $defaults = $profile->defaults();
-
-    $args{-severity} ||= $SEVERITY_LOWEST if defined $args{-top};
-    $args{-severity} ||= $SEVERITY_LOWEST if defined $args{-theme};
 
     # If given, these options should always have a true value
     $self->{_include}  = $args{-include}  ? $args{-include}  : $defaults->include();
@@ -68,7 +69,7 @@ sub _init {
     my @policies = $factory->policies();
 
     # Construct Theme from the user's definition
-    my $theme = _default( '-theme', $profile->defaults->theme(), %args);
+    my $theme = exists $args{-theme} ? $args{-theme} : $profile->defaults->theme();
     my $t = Perl::Critic::Theme->new( -theme => $theme, -policies => \@policies );
     $self->{_theme} = $t;
 
@@ -77,13 +78,6 @@ sub _init {
 
     $self->_load_policies( @policies );
     return $self;
-}
-
-#-----------------------------------------------------------------------------
-
-sub _default {
-    my ($key, $default, %args) = @_;
-    return exists $args{$key} ? $args{$key} : $default;
 }
 
 #-----------------------------------------------------------------------------
