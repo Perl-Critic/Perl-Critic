@@ -45,7 +45,7 @@ sub _init {
     $self->{_severity} = _default('severity', $SEVERITY_HIGHEST, %args);
     $self->{_theme}    = _default('theme',    $EMPTY,            %args);
     $self->{_top}      = _default('top',      $FALSE,            %args);
-    $self->{_verbose}  = _default('verbose',  3,                 %args);
+    $self->{_verbose}  = _default('verbose',  4,                 %args);
 
     return $self;
 }
