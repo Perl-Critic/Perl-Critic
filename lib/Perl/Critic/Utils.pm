@@ -369,10 +369,16 @@ my %FORMAT_OF = (
    11 => "%m at line %l, near '%r'.\n  %p (Severity: %s)\n%d\n",
 );
 
+my $DEFAULT_FORMAT = $FORMAT_OF{4};
+
 sub verbosity_to_format {
-    my ($verbosity_level) = @_;
-    return $FORMAT_OF{ abs int $verbosity_level };
+    my ($verbosity) = @_;
+    return $DEFAULT_FORMAT if not defined $verbosity;
+    return $FORMAT_OF{abs int $verbosity} || $DEFAULT_FORMAT if _is_integer($verbosity);
+    return interpolate( $verbosity );  #Otherwise, treat as a format spec
 }
+
+sub _is_integer { return $_[0] =~  m{ \A [+-]? \d+ \z }mx }
 
 #-----------------------------------------------------------------------------
 

@@ -223,7 +223,9 @@ sub render_report {
     }
 
     # Otherwise, format and print violations
-    my $fmt = _get_format( $CRITIC->config->verbose() );
+    my $verbosity = $CRITIC->config->verbose();
+    $verbosity = ($verbosity == 4 && @FILES > 1) ? 5 : $verbosity;
+    my $fmt = verbosity_to_format( $verbosity );
     if (not -f $file) { $fmt =~ s{\%f}{STDIN}mx; } #HACK!
     Perl::Critic::Violation::set_format( $fmt );
 
@@ -257,19 +259,6 @@ sub _get_option_specification {
         verbose=s
     );
 }
-
-#-----------------------------------------------------------------------------
-
-sub _get_format {
-    my ( $verbosity ) = @_;
-    if ( _is_integer($verbosity) ) {
-        $verbosity = ($verbosity == 4 && @FILES > 1) ? 5 : $verbosity;
-        return verbosity_to_format( $verbosity );
-    }
-    return interpolate( $verbosity );
-}
-
-sub _is_integer { return $_[0] =~  m{ \A [+-]? \d+ \z }mx }
 
 #-----------------------------------------------------------------------------
 

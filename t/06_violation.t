@@ -1,17 +1,17 @@
 #!perl
 
-#############################################################################
+##############################################################################
 #      $URL$
 #     $Date$
 #   $Author$
 # $Revision$
-#############################################################################
+##############################################################################
 
 use strict;
 use warnings;
 use PPI::Document;
 use English qw(-no_match_vars);
-use Test::More tests => 33;
+use Test::More tests => 41;
 
 #-----------------------------------------------------------------------------
 
@@ -141,4 +141,29 @@ END_PERL
     ok($v, 'got a violation');
 
     is($v->to_string(), $expected, 'to_string()');
+}
+
+#-----------------------------------------------------------------------------
+# More formatting
+
+{
+    # Alias subroutines, because I'm lazy
+    my $get_format = *Perl::Critic::Violation::get_format;
+    my $set_format = *Perl::Critic::Violation::set_format;
+
+    my $fmt_literal = 'Found %m in file %f on line %l\n';
+    my $fmt_interp  = "Found %m in file %f on line %l\n"; #Same, but double-quotes
+    is($set_format->($fmt_literal), $fmt_interp, 'set_format by spec');
+    is($get_format->(), $fmt_interp, 'get_format by spec');
+
+    my $fmt_predefined = "%m at %f line %l\n";
+    is($set_format->(3), $fmt_predefined, 'set_format by number');
+    is($get_format->(),  $fmt_predefined, 'get_format by number');
+
+    my $fmt_default = "%m at line %l, column %c.  %e.  (Severity: %s)\n";
+    is($set_format->(999),   $fmt_default, 'set_format by invalid number');
+    is($get_format->(),      $fmt_default, 'get_format by invalid number');
+    is($set_format->(undef), $fmt_default, 'set_format with undef');
+    is($get_format->(),      $fmt_default, 'get_format with undef');
+
 }

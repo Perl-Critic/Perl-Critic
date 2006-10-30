@@ -60,7 +60,7 @@ sub new {
 
 #-----------------------------------------------------------------------------
 
-sub set_format { return $FORMAT = $_[0]; }
+sub set_format { return $FORMAT = verbosity_to_format( $_[0] ); }
 sub get_format { return $FORMAT;         }
 
 #-----------------------------------------------------------------------------
