@@ -528,37 +528,37 @@ depending on whether multiple files were given as arguments to
 C<perlcritic>.  You can set the default value for this option in your
 F<.perlcriticrc> file.
 
-  Verbosity     Format Specification
-  -----------   ---------------------------------------------------------------
-   1            "%f:%l:%c:%m\n",
-   2            "%f: (%l:%c) %m\n",
-   3            "%m at %f line %l\n",
-   4            "%m at line %l, column %c.  %e.  (Severity: %s)\n",
-   5            "%f: %m at line %l, column %c.  %e.  (Severity: %s)\n",
-   6            "%m at line %l, near '%r'.  (Severity: %s)\n",
-   7            "%f: %m at line %l near '%r'.  (Severity: %s)\n",
-   8            "[%p] %m at line %l, column %c.  (Severity: %s)\n",
-   9            "[%p] %m at line %l, near '%r'.  (Severity: %s)\n",
-  10            "%m at line %l, column %c.\n  %p (Severity: %s)\n%d\n",
-  11            "%m at line %l, near '%r'.\n  %p (Severity: %s)\n%d\n"
+    Verbosity     Format Specification
+    -----------   -------------------------------------------------------------
+     1            "%f:%l:%c:%m\n",
+     2            "%f: (%l:%c) %m\n",
+     3            "%m at %f line %l\n",
+     4            "%m at line %l, column %c.  %e.  (Severity: %s)\n",
+     5            "%f: %m at line %l, column %c.  %e.  (Severity: %s)\n",
+     6            "%m at line %l, near '%r'.  (Severity: %s)\n",
+     7            "%f: %m at line %l near '%r'.  (Severity: %s)\n",
+     8            "[%p] %m at line %l, column %c.  (Severity: %s)\n",
+     9            "[%p] %m at line %l, near '%r'.  (Severity: %s)\n",
+    10            "%m at line %l, column %c.\n  %p (Severity: %s)\n%d\n",
+    11            "%m at line %l, near '%r'.\n  %p (Severity: %s)\n%d\n"
 
 Formats are a combination of literal and escape characters similar to
 the way C<sprintf> works.  See L<String::Format> for a full
 explanation of the formatting capabilities.  Valid escape characters
 are:
 
-  Escape    Meaning
-  -------   ------------------------------------------------------------------
-  %m        Brief description of the violation
-  %f        Name of the file where the violation occurred.
-  %l        Line number where the violation occurred
-  %c        Column number where the violation occurred
-  %e        Explanation of violation or page numbers in PBP
-  %d        Full diagnostic discussion of the violation
-  %r        The string of source code that caused the violation
-  %P        Name of the Policy module that created the violation
-  %p        Name of the Policy without the Perl::Critic::Policy:: prefix
-  %s        The severity level of the violation
+    Escape    Meaning
+    -------   ----------------------------------------------------------------
+    %c        Column number where the violation occurred
+    %d        Full diagnostic discussion of the violation
+    %e        Explanation of violation or page numbers in PBP
+    %f        Name of the file where the violation occurred.
+    %l        Line number where the violation occurred
+    %m        Brief description of the violation
+    %P        Full name of the Policy module that created the violation
+    %p        Name of the Policy without the Perl::Critic::Policy:: prefix
+    %r        The string of source code that caused the violation
+    %s        The severity level of the violation
 
 The purpose of these formats is to provide some compatibility with
 editors that have an interface for parsing certain kinds of input. See
@@ -644,14 +644,14 @@ named block.>  For example, putting any or all of these at the top of
 your F<.perlcriticrc> file will set the default value for the
 corresponding command-line argument.
 
-  severity  = 3                                     #Integer from 1 to 5
-  only      = 1                                     #Zero or One
-  force     = 0                                     #Zero or One
-  verbose   = 4                                     #An integer or format spec
-  top       = 50                                    #A positive integer
-  theme     = risky + (pbp * security) - cosmetic   #A theme expression
-  include   = NamingConventions ClassHierarchies    #Space-delimited list
-  exclude   = Variables  Modules::RequirePackage    #Space-delimited list
+    severity  = 3                                     #Integer from 1 to 5
+    only      = 1                                     #Zero or One
+    force     = 0                                     #Zero or One
+    verbose   = 4                                     #Integer or format spec
+    top       = 50                                    #A positive integer
+    theme     = risky + (pbp * security) - cosmetic   #A theme expression
+    include   = NamingConventions ClassHierarchies    #Space-delimited list
+    exclude   = Variables  Modules::RequirePackage    #Space-delimited list
 
 The remainder of the configuration file is a series of blocks like
 this:
@@ -757,7 +757,7 @@ the numeric severity levels awkward can use these mnemonic theme names
 instead.
 
     Severity Level                   Equivalent Theme
-    -----------------------------------------------------------------------------
+    ---------------------------------------------------------------------------
     5                                danger
     4                                risky
     3                                unreliable
@@ -765,7 +765,7 @@ instead.
     1                                cosmetic
 
 
-Say C<`perlcritic -list`> to get a listing of all available policies
+Say C<"perlcritic -list"> to get a listing of all available policies
 and the themes that are associated with each one.  You can also change
 the theme for any Policy in your F<.perlcriticrc> file.  See the
 L<"CONFIGURATION"> section for more information about that.

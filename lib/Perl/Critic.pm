@@ -535,14 +535,14 @@ named block.>  For example, putting any or all of these at the top of
 your configuration file will set the default value for the
 corresponding command-line argument.
 
-  severity  = 3                                     #Integer from 1 to 5
-  only      = 1                                     #Zero or One
-  force     = 0                                     #Zero or One
-  verbose   = 4                                     #An integer or format spec
-  top       = 50                                    #A positive integer
-  theme     = risky + (pbp * security) - cosmetic   #A theme expression
-  include   = NamingConventions ClassHierarchies    #Space-delimited list
-  exclude   = Variables  Modules::RequirePackage    #Space-delimited list
+    severity  = 3                                     #Integer from 1 to 5
+    only      = 1                                     #Zero or One
+    force     = 0                                     #Zero or One
+    verbose   = 4                                     #Integer or format spec
+    top       = 50                                    #A positive integer
+    theme     = risky + (pbp * security) - cosmetic   #A theme expression
+    include   = NamingConventions ClassHierarchies    #Space-delimited list
+    exclude   = Variables  Modules::RequirePackage    #Space-delimited list
 
 The remainder of the configuration file is a series of blocks like
 this:
@@ -638,7 +638,7 @@ the numeric severity levels awkward can use these mnemonic theme names
 instead.
 
     Severity Level                   Equivalent Theme
-    -----------------------------------------------------------------------------
+    ---------------------------------------------------------------------------
     5                                danger
     4                                risky
     3                                unreliable
@@ -646,7 +646,7 @@ instead.
     1                                cosmetic
 
 
-Say C<`perlcritic -list`> to get a listing of all available policies
+Say C<"perlcritic -list"> to get a listing of all available policies
 and the themes that are associated with each one.  You can also change
 the theme for any Policy in your F<.perlcriticrc> file.  See the
 L<"CONFIGURATION"> section for more information about that.
@@ -657,7 +657,7 @@ expression that represents a custom "set" of Policies.  The following
 operators are supported
 
    Operator       Altertative         Meaning
-   -----------------------------------------------------------------------------
+   ----------------------------------------------------------------------------
    *              and                 Intersection
    -              not                 Difference
    +              or                  Union
@@ -666,7 +666,7 @@ Operator precedence is the same as that of normal mathematics.  You
 can also use parenthesis to enforce precedence.  Here are some examples:
 
    Expression                  Meaning
-   -----------------------------------------------------------------------------
+   ----------------------------------------------------------------------------
    pbp * risky                 All policies that are "pbp" AND "risky"
    pbp and risky               Ditto
 
@@ -764,6 +764,18 @@ changed in ways that are not backward-compatible.  If you have been
 using an older version of Perl-Critic and/or you have been developing
 custom Policy modules, please read this section carefully.
 
+=head2 VERSION 0.21
+
+In version 0.21, we introduced the concept of policy "themes".  All
+you existing custom Policies should still be compatible.  But to take
+advantage of the theme feature, you should add a C<default_themes>
+method to your custom Policy modules.  See L<Perl::Critic::DEVELOPER>
+for an up-to-date guide on creating Policy modules.
+
+The internals of Perl::Critic were also refactored significantly.  The
+public API is largely unchanged, but if you've been accessing bits
+inside Perl::Critic, then you may be in for a surprise.
+
 =head2 VERSION 0.16
 
 Starting in version 0.16, you can add a list Policy names as arguments
@@ -774,22 +786,21 @@ unexpected results.  If you want to append other stuff to the C<"## no
 critic"> comment, then terminate the pseudo-pragma with a semi-colon,
 and then start another comment.  For example:
 
-  #This may not work as expected.
-  $email = 'foo@bar.com';  ## no critic for literal '@'
+    #This may not work as expected.
+    $email = 'foo@bar.com';  ## no critic for literal '@'
 
-  #This will work.
-  $email = 'foo@bar.com';  ## no critic; #for literal '@'
+    #This will work.
+    $email = 'foo@bar.com';  ## no critic; #for literal '@'
 
-  #This is even better.
-  $email = 'foo@bar.com'; ## no critic (RequireInterpolation);
+    #This is even better.
+    $email = 'foo@bar.com'; ## no critic (RequireInterpolation);
 
 =head2 VERSION 0.14
 
 Starting in version 0.14, the interface to L<Perl::Critic::Violation>
 changed.  This will also break any custom Policy modules that you
-might have written for earlier modules.  See
-L<Perl::Critic::DEVELOPER> for an up-to-date guide on creating Policy
-modules.
+might have written for earlier modules. See L<Perl::Critic::DEVELOPER>
+for an up-to-date guide on creating Policy modules.
 
 The notion of "priority" was also replaced with "severity" in version
 0.14.  Consequently, the default behavior of Perl::Critic is to only

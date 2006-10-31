@@ -458,14 +458,14 @@ named block.>  For example, putting any or all of these at the top of
 your configuration file will set the default value for the
 corresponding Perl::Critic constructor argument.
 
-  severity  = 3                                     #Integer from 1 to 5
-  only      = 1                                     #Zero or One
-  force     = 0                                     #Zero or One
-  verbose   = 4                                     #An integer or format spec
-  top       = 50                                    #A positive integer
-  theme     = risky + (pbp * security) - cosmetic   #A theme expression
-  include   = NamingConventions ClassHierarchies    #Space-delimited list
-  exclude   = Variables  Modules::RequirePackage    #Space-delimited list
+    severity  = 3                                     #Integer from 1 to 5
+    only      = 1                                     #Zero or One
+    force     = 0                                     #Zero or One
+    verbose   = 4                                     #Integer or format spec
+    top       = 50                                    #A positive integer
+    theme     = risky + (pbp * security) - cosmetic   #A theme expression
+    include   = NamingConventions ClassHierarchies    #Space-delimited list
+    exclude   = Variables  Modules::RequirePackage    #Space-delimited list
 
 The remainder of the configuration file is a series of blocks like
 this:
@@ -561,7 +561,7 @@ the numeric severity levels awkward can use these mnemonic theme names
 instead.
 
     Severity Level                   Equivalent Theme
-    -----------------------------------------------------------------------------
+    ---------------------------------------------------------------------------
     5                                danger
     4                                risky
     3                                unreliable
@@ -580,7 +580,7 @@ expression that represents a custom "set" of Policies.  The following
 operators are supported
 
    Operator       Altertative         Meaning
-   -----------------------------------------------------------------------------
+   ----------------------------------------------------------------------------
    *              and                 Intersection
    -              not                 Difference
    +              or                  Union
@@ -589,7 +589,7 @@ Operator precedence is the same as that of normal mathematics.  You
 can also use parenthesis to enforce precedence.  Here are some examples:
 
    Expression                  Meaning
-   -----------------------------------------------------------------------------
+   ----------------------------------------------------------------------------
    pbp * risky                 All policies that are "pbp" AND "risky"
    pbp and risky               Ditto
 
