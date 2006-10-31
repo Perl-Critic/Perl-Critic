@@ -174,7 +174,7 @@ my $total_policies   = scalar @site_policies;
     is( $c->severity(),  5,     'Undefined -severity');
     is( $c->theme()->expression(),     q{},   'Undefined -theme');
     is( $c->top(),       0,     'Undefined -top');
-    is( $c->verbose(),   3,     'Undefined -verbose');
+    is( $c->verbose(),   4,     'Undefined -verbose');
 
     my %zero_args = map { $_ => 0 } @switches;
     $c = Perl::Critic::Config->new( %zero_args );
@@ -183,7 +183,7 @@ my $total_policies   = scalar @site_policies;
     is( $c->severity(),  1,       'zero -severity');
     is( $c->theme()->expression(),     q{},   'zero -theme');
     is( $c->top(),       0,       'zero -top');
-    is( $c->verbose(),   3,       'zero -verbose');
+    is( $c->verbose(),   4,       'zero -verbose');
 
     my %empty_args = map { $_ => q{} } @switches;
     $c = Perl::Critic::Config->new( %empty_args );
@@ -192,7 +192,7 @@ my $total_policies   = scalar @site_policies;
     is( $c->severity(),  1,       'empty -severity');
     is( $c->theme()->expression(),     q{},   'empty -theme');
     is( $c->top(),       0,       'empty -top');
-    is( $c->verbose(),   3,       'empty -verbose');
+    is( $c->verbose(),   4,       'empty -verbose');
 }
 
 #-----------------------------------------------------------------------------

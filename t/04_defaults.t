@@ -22,7 +22,7 @@ use Perl::Critic::Defaults;
     is($d->severity(), 5,           'native default severity');
     is($d->theme(),    q{},         'native default theme');
     is($d->top(),      0,           'native default top');
-    is($d->verbose(),  3,           'native default verbose');
+    is($d->verbose(),  4,           'native default verbose');
     is_deeply($d->include(), [],    'native default include');
     is_deeply($d->exclude(), [],    'native default exclude');
 }
