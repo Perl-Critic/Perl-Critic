@@ -4,10 +4,7 @@ Steps for adding a new Policy:
  * Create the .pm in lib/Perl/Critic/Policy/[category]/[name].pm
  * If it will be a default policy:
    - Add it to lib/Perl/Critic/Config.pm in native_policies()
-   - Add it to t/samples/perlcriticrc.all
-   - Add it to t/samples/perlcriticrc.levels
-   - Add it to t/samples/perlcriticrc.none
-   - Add 9 to the number of tests in t/00_modules.t
+   - Add 14 to the number of tests in t/00_modules.t
  * Add it to MANIFEST (via "Build manifest")
  * Add it to the POD in lib/Perl/Critic/PolicySummary.pod
  * Mention it in Changes

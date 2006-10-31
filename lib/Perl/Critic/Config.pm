@@ -54,7 +54,7 @@ sub _init {
     $self->{_verbose}  = $args{-verbose}  ? $args{-verbose}  : $defaults->verbose();
     $self->{_severity} = $args{-severity} ? $args{-severity} : $defaults->severity();
 
-    # If give, these options can be true or false (but defined)
+    # If given, these options can be true or false (but defined)
     # We normalize these to numeric values by multiplying them by 1;
     no warnings 'numeric'; ## no critic (ProhibitNoWarnings)
     $self->{_top}   = 1 * (defined $args{-top}   ? $args{-top}   : $defaults->top()   );

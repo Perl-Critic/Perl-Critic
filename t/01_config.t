@@ -46,14 +46,15 @@ my $total_policies   = scalar @site_policies;
 
 
 #-----------------------------------------------------------------------------
-# Same tests as above, but using a config file
+# Same tests as above, but using a generated config
 
 {
-    my $profile = "$samples_dir/perlcriticrc.all";
+    my %profile = map { $_ => {} } @native_policies;
     my $last_policy_count = $total_policies + 1;
     for my $severity ($SEVERITY_LOWEST .. $SEVERITY_HIGHEST) {
-        my $c = Perl::Critic::Config->new( -profile => $profile, -severity => $severity);
-        my $policy_count = scalar $c->policies();
+        my %pc_args = (-profile => \%profile, -severity => $severity);
+        my $critic = Perl::Critic::Config->new( %pc_args );
+        my $policy_count = scalar $critic->policies();
         my $test_name = "Count all policies, severity: $severity";
         cmp_ok($policy_count, '<', $last_policy_count, $test_name);
         $last_policy_count = $policy_count;
@@ -63,35 +64,51 @@ my $total_policies   = scalar @site_policies;
 #-----------------------------------------------------------------------------
 # Test all-off config w/ various severity levels.  In this case, the
 # severity level should not affect the number of polices because we've
-# turned them all off in the config file.
+# turned them all off in the profile.
 
 {
-    my $profile = "$samples_dir/perlcriticrc.none";
+    my %profile = map { '-' . $_ => {} } @native_policies;
     for my $severity (undef, $SEVERITY_LOWEST .. $SEVERITY_HIGHEST) {
-        my $c = Perl::Critic::Config->new( -profile => $profile, -severity => $severity);
-        is_deeply( [$c->policies], [], 'no policies, severity '.($severity||'undef'));
+        my %pc_args = (-profile => \%profile, -severity => $severity);
+        my @policies = Perl::Critic::Config->new( %pc_args )->policies();
+        my $test_name = 'no policies, severity ' . ($severity || 'undef');
+        is_deeply( \@policies, [], $test_name);
     }
 }
 
 #--------------------------------------------------------------
-# Test config w/ multiple severity levels.  In this config, we've
-# defined an arbitrary severity for each Policy so that severity
+# Test config w/ multiple severity levels.  In this profile, we
+# define an arbitrary severity for each Policy so that severity
 # levels 5 through 2 each have 10 Policies.  All remaining Policies
 # are in the 1st severity level.
 
 
 {
+    my %profile = ();
     my $last_policy_count = 0;
-    my $profile = "$samples_dir/perlcriticrc.levels";
-    for my $severity ( reverse $SEVERITY_LOWEST+1 .. $SEVERITY_HIGHEST ) {
-        my $c = Perl::Critic::Config->new( -profile => $profile, -severity => $severity);
-        my $policy_count = scalar $c->policies();
-        is( $policy_count, ($SEVERITY_HIGHEST - $severity + 1) * 10, 'severity levels' );
+    my $severity = $SEVERITY_HIGHEST;
+    for my $index ( 0 .. $#native_policies ){
+        $severity-- if $index && $index % 10 == 0;
+        $severity = $SEVERITY_LOWEST if $severity < $SEVERITY_LOWEST;
+        $profile{$native_policies[$index]} = {severity => $severity};
     }
 
-    my $c = Perl::Critic::Config->new( -profile => $profile, -severity => $SEVERITY_LOWEST);
-    my $policy_count = scalar $c->policies();
-    cmp_ok( $policy_count, '>=', ($SEVERITY_HIGHEST * 10), 'count highest severity');
+    for my $severity ( reverse $SEVERITY_LOWEST+1 .. $SEVERITY_HIGHEST ) {
+        my %pc_args = (-profile => \%profile, -severity => $severity);
+        my $critic = Perl::Critic::Config->new( %pc_args );
+        my $policy_count = scalar $critic->policies();
+        my $expected_count = ($SEVERITY_HIGHEST - $severity + 1) * 10;
+        my $test_name = "user-defined severity level: $severity";
+        is( $policy_count, $expected_count, $test_name );
+    }
+
+    # All remaining policies should be at the lowest severity
+    my %pc_args = (-profile => \%profile, -severity => $SEVERITY_LOWEST);
+    my $critic = Perl::Critic::Config->new( %pc_args );
+    my $policy_count = scalar $critic->policies();
+    my $expected_count = $SEVERITY_HIGHEST * 10;
+    my $test_name = "user-defined severity, all remaining policies";
+    cmp_ok( $policy_count, '>=', $expected_count, $test_name);
 }
 
 #-----------------------------------------------------------------------------
