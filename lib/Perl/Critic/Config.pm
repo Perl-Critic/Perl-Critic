@@ -543,14 +543,6 @@ A simple configuration might look like this:
     # For all other Policies, I accept the default severity,
     # so no additional configuration is required for them.
 
-A few sample configuration files are included in this distribution
-under the F<t/samples> directory. The F<perlcriticrc.none> file
-demonstrates how to disable Policy modules.  The
-F<perlcriticrc.levels> file demonstrates how to redefine the severity
-level for any given Policy module.  The F<perlcriticrc.pbp> file
-configures Perl::Critic to load only Policies described in Damian
-Conway's book "Perl Best Practices."
-
 =head1 THE POLICIES
 
 A large number of Policy modules are distributed with Perl::Critic.
