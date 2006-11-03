@@ -1,8 +1,8 @@
 ##############################################################################
-#      $URL: http://perlcritic.tigris.org/svn/perlcritic/trunk/Perl-Critic/lib/Perl/Critic/Policy/Variables/ProtectPrivateVars.pm $
-#     $Date: 2006-10-25 21:49:09 -0700 (Wed, 25 Oct 2006) $
-#   $Author: thaljef $
-# $Revision: 750 $
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
 # ex: set ts=8 sts=4 sw=4 expandtab
 ##############################################################################
 
