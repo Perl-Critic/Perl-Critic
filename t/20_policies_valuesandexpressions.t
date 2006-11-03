@@ -1,5 +1,3 @@
-#!perl
-
 ##################################################################
 #     $URL$
 #    $Date$
@@ -9,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 38;
+use Test::More tests => 40;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -584,3 +582,51 @@ END_PERL
 
 $policy = 'ValuesAndExpressions::ProhibitEscapedCharacters';
 is( pcritique($policy, \$code), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+if (1 == 1 || 1 != 1 || 1 > 1 || 1 >= 1 || 1 < 1 || 1 <= 1) {}
+if (1 + 1 || 1 - 1 || 1 * 1 || 1 / 1) {}
+
+if ($a == 1 || $a != 1 || $a > 1 || $a >= 1 || $a < 1 || $a <= 1) {}
+if ($a + 1 || $a - 1 || $a * 1 || $a / 1) {}
+$a += 1;
+$a -= 1;
+$a *= 1;
+$a /= 1;
+
+if ($a == $a || $a != $a || $a > $a || $a >= $a || $a < $a || $a <= $a) {}
+if ($a + $a || $a - $a || $a * $a || $a / $a) {}
+$a += $a;
+$a -= $a;
+$a *= $a;
+$a /= $a;
+
+if ('' eq '' || '' ne '' || '' gt '' || '' lt '' || '' ge '' || '' le '' || '' . '') {}
+if ('' eq $a || '' ne $a || '' gt $a || '' lt $a || '' ge $a || '' le $a || '' . $a) {}
+END_PERL
+
+$policy = 'ValuesAndExpressions::ProhibitMismatchedOperators';
+is( pcritique($policy, \$code), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+if ('' == 1 || '' != 1 || '' > 1  || '' >= 1 || '' < 1 || '' <= 1) {}
+if ('' + 1  || '' - 1  || '' * 1  || '' / 1) {}
+
+if ($a == '' || $a != '' || $a > ''  || $a >= '' || $a < '' || $a <= '') {}
+if ($a + ''  || $a - ''  || $a * ''  || $a / '') {}
+$a += '';
+$a -= '';
+$a *= '';
+$a /= '';
+
+if ($a eq 1 || $a ne 1 || $a lt 1 || $a gt 1 || $a le 1 || $a ge 1 || $a . 1) {}
+if ('' eq 1 || '' ne 1 || '' lt 1 || '' gt 1 || '' le 1 || '' ge 1 || '' . 1) {}
+$a .= 1;
+END_PERL
+
+$policy = 'ValuesAndExpressions::ProhibitMismatchedOperators';
+is( pcritique($policy, \$code), 39, $policy);
