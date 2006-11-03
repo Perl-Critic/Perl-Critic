@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 41;
+use Test::More tests => 42;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -396,6 +396,18 @@ END_PERL
 
 $policy = 'Variables::ProhibitUnusedLexicalVars';
 is( pcritique($policy, \$code), 17, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+#Some corner cases
+for my $foo (@list) { doit( $foo ) }
+foreach my $foo (@list) { doit( $foo ) }
+if (my $foo = defined $bar){ doit( $foo ) }
+END_PERL
+
+$policy = 'Variables::ProhibitUnusedLexicalVars';
+is( pcritique($policy, \$code), 0, $policy);
 
 #----------------------------------------------------------------
 
