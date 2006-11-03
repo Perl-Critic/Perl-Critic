@@ -22,7 +22,6 @@ requires:
 recommends:
   File::HomeDir: 0
   Perl::Tidy: 0
-  Test::Perl::Critic: 0
 build_requires:
   Test::More: 0
 provides:
@@ -257,6 +256,9 @@ provides:
   Perl::Critic::Policy::ValuesAndExpressions::ProhibitLeadingZeros:
     file: lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitLeadingZeros.pm
     version: 0.21
+  Perl::Critic::Policy::ValuesAndExpressions::ProhibitMismatchedOperators:
+    file: lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitMismatchedOperators.pm
+    version: 0.21
   Perl::Critic::Policy::ValuesAndExpressions::ProhibitMixedBooleanOperators:
     file: lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitMixedBooleanOperators.pm
     version: 0.21
@@ -292,6 +294,9 @@ provides:
     version: 0.21
   Perl::Critic::Policy::Variables::ProhibitPunctuationVars:
     file: lib/Perl/Critic/Policy/Variables/ProhibitPunctuationVars.pm
+    version: 0.21
+  Perl::Critic::Policy::Variables::ProhibitUnusedLexicalVars:
+    file: lib/Perl/Critic/Policy/Variables/ProhibitUnusedLexicalVars.pm
     version: 0.21
   Perl::Critic::Policy::Variables::ProtectPrivateVars:
     file: lib/Perl/Critic/Policy/Variables/ProtectPrivateVars.pm

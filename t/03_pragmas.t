@@ -17,9 +17,10 @@ use Perl::Critic::TestUtils qw(critique);
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 # Configure Critic not to load certain policies.  This
-# just make it a little easier to create test cases
-my $profile = { '-CodeLayout::RequireTidyCode'     => {},
-                '-Miscellanea::RequireRcsKeywords' => {},
+# just makes it a little easier to create test cases
+my $profile = { '-CodeLayout::RequireTidyCode'          => {},
+                '-Miscellanea::RequireRcsKeywords'      => {},
+                '-Variables::ProhibitUnusedLexicalVars' => {},
 };
 
 my $code = undef;

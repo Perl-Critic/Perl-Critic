@@ -243,6 +243,7 @@ sub native_policy_names {
       Perl::Critic::Policy::ValuesAndExpressions::ProhibitEscapedCharacters
       Perl::Critic::Policy::ValuesAndExpressions::ProhibitInterpolationOfLiterals
       Perl::Critic::Policy::ValuesAndExpressions::ProhibitLeadingZeros
+      Perl::Critic::Policy::ValuesAndExpressions::ProhibitMismatchedOperators
       Perl::Critic::Policy::ValuesAndExpressions::ProhibitMixedBooleanOperators
       Perl::Critic::Policy::ValuesAndExpressions::ProhibitNoisyQuotes
       Perl::Critic::Policy::ValuesAndExpressions::ProhibitVersionStrings
@@ -255,6 +256,7 @@ sub native_policy_names {
       Perl::Critic::Policy::Variables::ProhibitMatchVars
       Perl::Critic::Policy::Variables::ProhibitPackageVars
       Perl::Critic::Policy::Variables::ProhibitPunctuationVars
+      Perl::Critic::Policy::Variables::ProhibitUnusedLexicalVars
       Perl::Critic::Policy::Variables::ProtectPrivateVars
       Perl::Critic::Policy::Variables::RequireInitializationForLocalVars
       Perl::Critic::Policy::Variables::RequireLexicalLoopIterators

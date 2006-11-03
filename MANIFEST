@@ -81,6 +81,7 @@ lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitEmptyQuotes.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitEscapedCharacters.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitInterpolationOfLiterals.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitLeadingZeros.pm
+lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitMismatchedOperators.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitMixedBooleanOperators.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitNoisyQuotes.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitVersionStrings.pm
@@ -93,6 +94,7 @@ lib/Perl/Critic/Policy/Variables/ProhibitLocalVars.pm
 lib/Perl/Critic/Policy/Variables/ProhibitMatchVars.pm
 lib/Perl/Critic/Policy/Variables/ProhibitPackageVars.pm
 lib/Perl/Critic/Policy/Variables/ProhibitPunctuationVars.pm
+lib/Perl/Critic/Policy/Variables/ProhibitUnusedLexicalVars.pm
 lib/Perl/Critic/Policy/Variables/ProtectPrivateVars.pm
 lib/Perl/Critic/Policy/Variables/RequireInitializationForLocalVars.pm
 lib/Perl/Critic/Policy/Variables/RequireLexicalLoopIterators.pm
