@@ -8,20 +8,25 @@
 [0.21]  Released on ????-??-??
 
      New Policies:
-     * TestingAndDebugging::RequireTestLabels
-     * Modules::RequireFilenameMatchesPackage
      * BuiltinFunctions::ProhibitReverseSortBlock
      * CodeLayout::RequireConsistentNewlines
+     * Modules::RequireFilenameMatchesPackage
+     * TestingAndDebugging::RequireTestLabels
+     * ValuesAndExpressions::ProhibitMismatchedOperators
+     * Variables::ProhibitUnusedLexicalVars
 
      New Features:
      * Introduced policy "themes."  Themes are arbitrary names that can
        be used to identify a group of related Policies.  You can select
-       your favorite by combining themes in a mathematic expression such
-       as "pbp * (danger + risky)".  See POD for details. 
+       your favorite policies by combining themes in a mathematic expression
+       such as "pbp * (danger + risky)".  See POD for details. 
      * perlcritic output is colorized if you have Term::ANSIColor.  This
        only works on non-Win32 platforms.  Use -nocolor switch to disable.
      * Say "perlcritic -count" to get just the the total number of
        violations per file.  Use this feature to quickly identify hot-spots.
+     * Use the -only switch to choose only from policies mentioned in your
+       .perlcriticrc file.  This is useful if you usually only want to
+       work with a small subset of the policies.
      * Default values for most of the perlcritic and Perl::Critic options
        can now be defined in your .perlcriticrc file.  See POD for details.
 
