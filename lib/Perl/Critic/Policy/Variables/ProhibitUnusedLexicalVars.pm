@@ -18,6 +18,7 @@ our $VERSION = 0.21;
 #---------------------------------------------------------------------------
 
 my $desc = q{Unused lexical variable};
+my $expl = q{Consider eliminating it, or replacing with "undef"};
 
 sub default_severity { return $SEVERITY_LOW;   }
 sub default_themes   { return qw(readability)  }
@@ -104,7 +105,7 @@ sub violates {
 
     foreach my $declare_aref (values %var_lookup) {
        foreach my $elem (@{ $declare_aref }) {
-           push @violations, $self->violation( $desc, undef, $elem );
+           push @violations, $self->violation( $desc, $expl, $elem );
        }
     }
 
