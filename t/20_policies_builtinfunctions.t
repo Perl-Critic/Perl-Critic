@@ -9,7 +9,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 43;
+use Test::More tests => 45;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -568,3 +568,27 @@ END_PERL
 
 $policy = 'BuiltinFunctions::ProhibitVoidMap';
 is( pcritique($policy, \$code), 0, $policy );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+grep { foo($_) }
+  grep { bar($_) }
+    grep { baz($_) } @list;
+END_PERL
+
+$policy = 'BuiltinFunctions::ProhibitVoidGrep';
+is( pcritique($policy, \$code), 1, $policy );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+map { foo($_) }
+  map { bar($_) }
+    map { baz($_) } @list;
+END_PERL
+
+$policy = 'BuiltinFunctions::ProhibitVoidMap';
+is( pcritique($policy, \$code), 1, $policy );
+
+#----------------------------------------------------------------
