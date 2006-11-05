@@ -18,7 +18,7 @@ our $VERSION = 0.21;
 #---------------------------------------------------------------------------
 
 my $desc = q{Unused lexical variable};
-my $expl = q{Consider eliminating it, or replacing with "undef"};
+my $expl = q{Consider removing it, or using "undef"};
 
 sub default_severity { return $SEVERITY_LOW;   }
 sub default_themes   { return qw(readability)  }
@@ -47,10 +47,8 @@ sub new {
 sub violates {
     my ( $self, $elem, $doc ) = @_;
 
-    return if !$doc->schild(0);
-
     my $declares_aref = $doc->find('PPI::Statement::Variable');
-    return if !$declares_aref;
+    return if not $declares_aref;
 
     my %var_lookup;
     my @violations = ();
@@ -59,49 +57,39 @@ sub violates {
 
     for my $var_stmt ( @{ $declares_aref } ) {
         my $var_type = $var_stmt->type();
-        next if !defined $var_type || $var_type ne 'my';
+        next if $var_type ne 'my';
 
         foreach my $var_name ( $var_stmt->variables() ) {
           next if exists $exclude_vars{$var_name};
-
-          if ( !exists $var_lookup{$var_name} ) {
-              $var_lookup{$var_name} = [];
-          }
-
+          $var_lookup{$var_name} ||= [];
           push @{ $var_lookup{$var_name} }, $var_stmt;
         }
     }
 
-    my $vars_aref = $doc->find('PPI::Token::Symbol');
+    my $vars_aref = $doc->find('PPI::Token::Symbol') || [];
 
-    if ( $vars_aref ) {
-        for my $variable ( @{ $vars_aref } ) {
-            next if $self->_is_declaration( $variable );
+  VARIABLE:
+    for my $variable ( @{ $vars_aref } ) {
+        next VARIABLE if $self->_is_declaration( $variable );
 
-            my $symbol = $variable->symbol();
-            next if !exists $var_lookup{$symbol};
+        my $symbol = $variable->symbol();
+        next VARIABLE if not exists $var_lookup{$symbol};
 
-            my $parent = $variable->parent();
+        my $parent = $variable->parent();
 
-            my $found_match = 0;
-
-            while ( defined $parent ) {
-                for my $idx ( 0 .. $#{$var_lookup{$symbol}} ) {
-                    my $declare = $var_lookup{$symbol}->[$idx]->parent();
-
-                    if ( $declare eq $parent ) {
-                        $found_match = 1;
-                        splice @{ $var_lookup{$symbol} }, $idx, 1;
-                        last;
-                    }
-
-                    last if $found_match;
+      PARENT:
+        while ( defined $parent ) {
+            for my $idx ( 0 .. $#{$var_lookup{$symbol}} ) {
+                my $declare = $var_lookup{$symbol}->[$idx]->parent();
+                if ( $declare eq $parent ) {
+                    splice @{ $var_lookup{$symbol} }, $idx, 1;
+                    last PARENT;
                 }
-
-                $parent = $parent->parent();
             }
+            $parent = $parent->parent();
         }
     }
+
 
     foreach my $declare_aref (values %var_lookup) {
        foreach my $elem (@{ $declare_aref }) {
@@ -118,14 +106,12 @@ sub _is_declaration {
     my ( $self, $elem ) = @_;
 
     my $symbol = $elem->symbol();
+    my $stmnt  = $elem->statement();
+    return 1 if $stmnt->isa('PPI::Statement::Variable')
+        && grep { $_ eq $symbol } $stmnt->variables();
 
-    my $var_elem = $elem->parent();
-    return 1 if $var_elem->isa('PPI::Statement::Variable')
-        && grep { $_ eq $symbol } $var_elem->variables();
-
-    my $parent = $var_elem->parent();
-
-    return 1 if $var_elem->isa('PPI::Statement::Expression')
+    my $parent = $stmnt->parent();
+    return 1 if $stmnt->isa('PPI::Statement::Expression')
         && $parent->isa('PPI::Structure::List')
         && $parent->parent()->isa('PPI::Statement::Variable');
 
