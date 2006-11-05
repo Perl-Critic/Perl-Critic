@@ -61,6 +61,12 @@ provides:
   Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalIsa:
     file: lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitUniversalIsa.pm
     version: 0.21
+  Perl::Critic::Policy::BuiltinFunctions::ProhibitVoidGrep:
+    file: lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitVoidGrep.pm
+    version: 0.21
+  Perl::Critic::Policy::BuiltinFunctions::ProhibitVoidMap:
+    file: lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitVoidMap.pm
+    version: 0.21
   Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep:
     file: lib/Perl/Critic/Policy/BuiltinFunctions/RequireBlockGrep.pm
     version: 0.21

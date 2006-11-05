@@ -51,6 +51,14 @@ Write C<< eval { $foo->can($name) } >> instead of C<UNIVERSAL::can($foo, $name)>
 
 Write C<< eval { $foo->isa($pkg) } >> instead of C<UNIVERSAL::isa($foo, $pkg)> [Severity 3]
 
+=head2 L<Perl::Critic::Policy::BuiltinFunctions::ProhibitBlockGrep>
+
+Don't use C<grep> in void contexts. [Severity 3]
+
+=head2 L<Perl::Critic::Policy::BuiltinFunctions::ProhibitBlockMap>
+
+Don't use C<map> in void contexts. [Severity 3]
+
 =head2 L<Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep>
 
 Write C<grep { $_ =~ /$pattern/ } @list> instead of C<grep /$pattern/, @list> [Severity 4]

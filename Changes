@@ -9,6 +9,8 @@
 
      New Policies:
      * BuiltinFunctions::ProhibitReverseSortBlock
+     * BuiltinFunctions::ProhibitVoidGrep
+     * BuiltinFunctions::ProhibitVoidMap
      * CodeLayout::RequireConsistentNewlines
      * Modules::RequireFilenameMatchesPackage
      * TestingAndDebugging::RequireTestLabels

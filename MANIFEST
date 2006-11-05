@@ -16,6 +16,8 @@ lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitStringyEval.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitStringySplit.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitUniversalCan.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitUniversalIsa.pm
+lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitVoidGrep.pm
+lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitVoidMap.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/RequireBlockGrep.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/RequireBlockMap.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/RequireGlobFunction.pm

@@ -9,7 +9,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 39;
+use Test::More tests => 43;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -501,4 +501,64 @@ sort();
 END_PERL
 
 $policy = 'BuiltinFunctions::ProhibitReverseSortBlock';
+is( pcritique($policy, \$code), 0, $policy );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+grep "$foo", @list;
+grep("$foo", @list);
+grep { foo($_) } @list;
+grep({ foo($_) } @list);
+
+if( $condition ){ grep { foo($_) } @list }
+while( $condition ){ grep { foo($_) } @list }
+for( @list ){ grep { foo($_) } @list }
+END_PERL
+
+$policy = 'BuiltinFunctions::ProhibitVoidGrep';
+is( pcritique($policy, \$code), 7, $policy );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+$baz, grep "$foo", @list;
+print grep("$foo", @list);
+print ( grep "$foo", @list );
+
+if( grep { foo($_) } @list ) {}
+for( grep { foo($_) } @list ) {}
+END_PERL
+
+$policy = 'BuiltinFunctions::ProhibitVoidGrep';
+is( pcritique($policy, \$code), 0, $policy );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+map "$foo", @list;
+map("$foo", @list);
+map { foo($_) } @list;
+map({ foo($_) } @list);
+
+if( $condition ){ map { foo($_) } @list }
+while( $condition ){ map { foo($_) } @list }
+for( @list ){ map { foo($_) } @list }
+END_PERL
+
+$policy = 'BuiltinFunctions::ProhibitVoidMap';
+is( pcritique($policy, \$code), 7, $policy );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+$baz, map "$foo", @list;
+print map("$foo", @list);
+print ( map "$foo", @list );
+
+if( map { foo($_) } @list ) {}
+for( map { foo($_) } @list ) {}
+END_PERL
+
+$policy = 'BuiltinFunctions::ProhibitVoidMap';
 is( pcritique($policy, \$code), 0, $policy );

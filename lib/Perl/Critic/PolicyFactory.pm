@@ -178,6 +178,8 @@ sub native_policy_names {
       Perl::Critic::Policy::BuiltinFunctions::ProhibitStringySplit
       Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalCan
       Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalIsa
+      Perl::Critic::Policy::BuiltinFunctions::ProhibitVoidGrep
+      Perl::Critic::Policy::BuiltinFunctions::ProhibitVoidMap
       Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep
       Perl::Critic::Policy::BuiltinFunctions::RequireBlockMap
       Perl::Critic::Policy::BuiltinFunctions::RequireGlobFunction
