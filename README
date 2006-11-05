@@ -28,19 +28,31 @@ DESCRIPTION
     Win32 and ActivePerl users can find PPM distributions of Perl::Critic at
     <http://theoryx5.uwinnipeg.ca/ppms/>.
 
-    If you'd like to try Perl::Critic before you install it, there is a
-    web-service available at <http://perlcritic.com>. The web-service does
+    If you'd like to try Perl::Critic without installing anything, there is
+    a web-service available at <http://perlcritic.com>. The web-service does
     not yet support all the configuration features that are available in the
     native Perl::Critic API, but it should give you a good idea of what it
-    does.
+    does. You can also invoke the perlcritic web-service from the command
+    line by doing an HTTP-post, such as one of these:
+
+        $> POST http://perlcritic.com/perl/critic.pl < MyModule.pm
+        $> lwp-request -m POST http://perlcritic.com/perl/critic.pl < MyModule.pm
+        $> wget -q -O - --post-file=MyModule.pm http://perlcritic.com/perl/critic.pl
+
+    Please note that the perlcritic web-service is still alpha code. The URL
+    and interface to the service are subject to change.
 
 CONSTRUCTOR
-    "new( -profile => $FILE, -severity => $N, -include => \@PATTERNS,
-    -exclude => \@PATTERNS, -top => N, -force => 1 )"
-            Returns a reference to a new Perl::Critic object. Most arguments
+    "new( [ -profile => $FILE, -severity => $N, -theme => $string, -include
+    => \@PATTERNS, -exclude => \@PATTERNS, -top => $N, -only => $B, -force
+    => $B, -verbose => $N ] )"
+    "new( [ -config => Perl::Critic::Config->new() ]"
+    "new()" Returns a reference to a new Perl::Critic object. Most arguments
             are just passed directly into Perl::Critic::Config, but I have
-            described them here as well. All arguments are optional
-            key-value pairs as follows:
+            described them here as well. The default value for all arguments
+            can be defined in your .perlcriticrc file. See the
+            "CONFIGURATION" section for more information about that. All
+            arguments are optional key-value pairs as follows:
 
             -profile is a path to a configuration file. If $FILE is not
             defined, Perl::Critic::Config attempts to find a .perlcriticrc
@@ -59,9 +71,21 @@ CONSTRUCTOR
             Users can redefine the severity level for any Policy in their
             .perlcriticrc file. See "CONFIGURATION" for more information.
 
+            -theme is special string that defines a set of Policies based on
+            their respective themes. If "-theme" is given, only policies
+            that are members of that set will be loaded. For example, the
+            following would load only Policies that have a 'danger' and
+            'pbp' theme:
+
+              my $critic = Perl::Critic->new(-theme => 'danger * pbp');
+
+            See the "POLICY THEMES" section for more information about
+            themes. Unless the "-severity" option is explicitly given,
+            setting "-theme" silently causes the "-severity" to be set to 1.
+
             -include is a reference to a list of string @PATTERNS. Policy
             modules that match at least one "m/$PATTERN/imx" will always be
-            loaded, irrespective of the severity settings. For example:
+            loaded, irrespective of all other settings. For example:
 
               my $critic = Perl::Critic->new(-include => ['layout'] -severity => 4);
 
@@ -73,7 +97,7 @@ CONSTRUCTOR
 
             -exclude is a reference to a list of string @PATTERNS. Policy
             modules that match at least one "m/$PATTERN/imx" will not be
-            loaded, irrespective of the severity settings. For example:
+            loaded, irrespective of all other settings. For example:
 
               my $critic = Perl::Critic->new(-exclude => ['strict'] -severity => 1);
 
@@ -85,9 +109,17 @@ CONSTRUCTOR
             patterns.
 
             -top is the maximum number of Violations to return when ranked
-            by their severity levels. Violations are still returned in the
-            order that they occur within the file. This must be a positive
-            integer
+            by their severity levels. This must be a positive integer.
+            Violations are still returned in the order that they occur
+            within the file. Unless the "-severity" option is explicitly
+            given, setting "-top" silently causes the "-severity" to be set
+            to 1.
+
+            -only is a boolean value. If set to a true value, Perl::Critic
+            will only choose from Policies that are mentioned in the user's
+            profile. If set to a false value (which is the default), then
+            Perl::Critic chooses from all the Policies that it finds at your
+            site.
 
             -force controls whether Perl::Critic observes the magical ""##
             no critic"" pseudo-pragmas in your code. If set to a true value,
@@ -95,6 +127,10 @@ CONSTRUCTOR
             (which is the default) Perl::Critic will ignore code that is
             tagged with these comments. See "BENDING THE RULES" for more
             information.
+
+            -verbose can be a positive integer (from 1 to 10), or a literal
+            format specification. See Perl::Critic::Violations for an
+            explanation of format specifications.
 
             -config is a reference to a Perl::Critic::Config object. If you
             have created your own Config object for some reason, you can
@@ -115,29 +151,27 @@ METHODS
             sorted in the order that the Violations appear in the code. If
             there are no violations, this method returns an empty list.
 
-    "add_policy( -policy => $policy_name, -config => \%config_hash )"
+    "add_policy( -policy => $policy_name, -params => \%param_hash )"
             Creates a Policy object and loads it into this Critic. If the
-            object cannot be instantiated, it will throw a warning and
-            return a false value. Otherwise, it returns a reference to this
-            Critic.
+            object cannot be instantiated, it will throw a fatal exception.
+            Otherwise, it returns a reference to this Critic.
 
             -policy is the name of a Perl::Critic::Policy subclass module.
             The 'Perl::Critic::Policy' portion of the name can be omitted
             for brevity. This argument is required.
 
-            -config is an optional reference to a hash of Policy
-            configuration parameters. Note that this is not the same thing
-            as a Perl::Critic::Config object. The contents of this hash
-            reference will be passed into to the constructor of the Policy
-            module. See the documentation in the relevant Policy module for
-            a description of the arguments it supports.
+            -params is an optional reference to a hash of Policy parameters.
+            The contents of this hash reference will be passed into to the
+            constructor of the Policy module. See the documentation in the
+            relevant Policy module for a description of the arguments it
+            supports.
 
-    "policies()"
+    " policies() "
             Returns a list containing references to all the Policy objects
             that have been loaded into this engine. Objects will be in the
             order that they were loaded.
 
-    "config()"
+    " config() "
             Returns the Perl::Critic::Config object that was created for or
             given to this Critic.
 
@@ -164,24 +198,43 @@ FUNCTIONAL INTERFACE
     functions. Sorry.
 
 CONFIGURATION
-    The default configuration file is called .perlcriticrc. Perl::Critic
-    will look for this file in the current directory first, and then in your
-    home directory. Alternatively, you can set the "PERLCRITIC" environment
-    variable to explicitly point to a different file in another location. If
-    none of these files exist, and the "-profile" option is not given to the
-    constructor, then all the modules that are found in the
-    Perl::Critic::Policy namespace will be loaded with their default
-    configuration.
+    Most of the settings for Perl::Critic and each of the Policy modules can
+    be controlled by a configuration file. The default configuration file is
+    called .perlcriticrc. Perl::Critic will look for this file in the
+    current directory first, and then in your home directory. Alternatively,
+    you can set the "PERLCRITIC" environment variable to explicitly point to
+    a different file in another location. If none of these files exist, and
+    the "-profile" option is not given to the constructor, then all the
+    modules that are found in the Perl::Critic::Policy namespace will be
+    loaded with their default configuration.
 
-    The format of the configuration file is a series of INI-style sections
+    The format of the configuration file is a series of INI-style blocks
     that contain key-value pairs separated by '='. Comments should start
     with '#' and can be placed on a separate line or after the name-value
-    pairs if you desire. The general recipe is a series of blocks like this:
+    pairs if you desire.
 
-      [Perl::Critic::Policy::Category::PolicyName]
-      severity = 1
-      arg1 = value1
-      arg2 = value2
+    Default settings for Perl::Critic itself can be set before the first
+    named block. For example, putting any or all of these at the top of your
+    configuration file will set the default value for the corresponding
+    command-line argument.
+
+        severity  = 3                                     #Integer from 1 to 5
+        only      = 1                                     #Zero or One
+        force     = 0                                     #Zero or One
+        verbose   = 4                                     #Integer or format spec
+        top       = 50                                    #A positive integer
+        theme     = risky + (pbp * security) - cosmetic   #A theme expression
+        include   = NamingConventions ClassHierarchies    #Space-delimited list
+        exclude   = Variables  Modules::RequirePackage    #Space-delimited list
+
+    The remainder of the configuration file is a series of blocks like this:
+
+        [Perl::Critic::Policy::Category::PolicyName]
+        severity = 1
+        set_theme = foo bar
+        add_theme = baz
+        arg1 = value1
+        arg2 = value2
 
     "Perl::Critic::Policy::Category::PolicyName" is the full name of a
     module that implements the policy. The Policy modules distributed with
@@ -209,47 +262,108 @@ CONFIGURATION
 
     A simple configuration might look like this:
 
-      #--------------------------------------------------------------
-      # I think these are really important, so always load them
+        #--------------------------------------------------------------
+        # I think these are really important, so always load them
 
-      [TestingAndDebugging::RequireUseStrict]
-      severity = 5
+        [TestingAndDebugging::RequireUseStrict]
+        severity = 5
 
-      [TestingAndDebugging::RequireUseWarnings]
-      severity = 5
+        [TestingAndDebugging::RequireUseWarnings]
+        severity = 5
 
-      #--------------------------------------------------------------
-      # I think these are less important, so only load when asked
+        #--------------------------------------------------------------
+        # I think these are less important, so only load when asked
 
-      [Variables::ProhibitPackageVars]
-      severity = 2
+        [Variables::ProhibitPackageVars]
+        severity = 2
 
-      [ControlStructures::ProhibitPostfixControls]
-      allow = if unless  #My custom configuration
-      severity = 2
+        [ControlStructures::ProhibitPostfixControls]
+        allow = if unless  #My custom configuration
+        severity = 2
 
-      #--------------------------------------------------------------
-      # I do not agree with these at all, so never load them
+        #--------------------------------------------------------------
+        # Give these policies a custom theme.  I can activate just
+        # these policies by saying `perlcritic -theme larry`
 
-      [-NamingConventions::ProhibitMixedCaseVars]
-      [-NamingConventions::ProhibitMixedCaseSubs]
+        [Modules::RequireFilenameMatchesPackage]
+        add_theme = larry
 
-      #--------------------------------------------------------------
-      # For all other Policies, I accept the default severity,
-      # so no additional configuration is required for them.
+        [TestingAndDebugging::RequireTestLables]
+        add_theme = larry curly moe
 
-    A few sample configuration files are included in this distribution under
-    the t/samples directory. The perlcriticrc.none file demonstrates how to
-    disable Policy modules. The perlcriticrc.levels file demonstrates how to
-    redefine the severity level for any given Policy module. The
-    perlcriticrc.pbp file configures Perl::Critic to load only Policies
-    described in Damian Conway's book "Perl Best Practice."
+        #--------------------------------------------------------------
+        # I do not agree with these at all, so never load them
+
+        [-NamingConventions::ProhibitMixedCaseVars]
+        [-NamingConventions::ProhibitMixedCaseSubs]
+
+        #--------------------------------------------------------------
+        # For all other Policies, I accept the default severity,
+        # so no additional configuration is required for them.
 
 THE POLICIES
     A large number of Policy modules are distributed with Perl::Critic. They
     are described briefly in the companion document
     Perl::Critic::PolicySummary and in more detail in the individual modules
     themselves.
+
+POLICY THEMES
+    Each Policy is defined with one or more "themes". Themes can be used to
+    create arbitrary groups of Policies. They are intended to provide an
+    alternative mechanism for selecting your preferred set of Policies. The
+    Policies that ship with Perl::Critic have been grouped into themes that
+    are roughly analogous to their severity levels. Folks who find the
+    numeric severity levels awkward can use these mnemonic theme names
+    instead.
+
+        Severity Level                   Equivalent Theme
+        ---------------------------------------------------------------------------
+        5                                danger
+        4                                risky
+        3                                unreliable
+        2                                readability
+        1                                cosmetic
+
+    Say "perlcritic -list" to get a listing of all available policies and
+    the themes that are associated with each one. You can also change the
+    theme for any Policy in your .perlcriticrc file. See the "CONFIGURATION"
+    section for more information about that.
+
+    Using the "-theme" command-line option, you can combine themes with
+    mathematical and boolean operators to create an arbitrarily complex
+    expression that represents a custom "set" of Policies. The following
+    operators are supported
+
+       Operator       Altertative         Meaning
+       ----------------------------------------------------------------------------
+       *              and                 Intersection
+       -              not                 Difference
+       +              or                  Union
+
+    Operator precedence is the same as that of normal mathematics. You can
+    also use parenthesis to enforce precedence. Here are some examples:
+
+       Expression                  Meaning
+       ----------------------------------------------------------------------------
+       pbp * risky                 All policies that are "pbp" AND "risky"
+       pbp and risky               Ditto
+
+       danger + risky              All policies that are "danger" OR "risky"
+       pbp or risky                Ditto
+
+       pbp - cosmetic              All policies that are "pbp" BUT NOT "risky"
+       pbp not cosmetic            Ditto
+
+       -unreliable                All policies that are NOT "unreliable"
+       not unreliable             Ditto
+
+       (pbp - danger) * risky      All policies that are "pbp" BUT NOT "danger", AND "risky"
+       (pbp not danger) and risky  Ditto
+
+    Theme names are case-insensitive. If "-theme" is set to an empty string,
+    then it is equivalent to the set of all policies. A theme name that
+    doesn't exist is equivalent to an empty set. Please See
+    <http://en.wikipedia.org/wiki/Set> for a discussion on set theory.
 
 BENDING THE RULES
     Perl::Critic takes a hard-line approach to your code: either you comply
@@ -325,6 +439,17 @@ IMPORTANT CHANGES
     older version of Perl-Critic and/or you have been developing custom
     Policy modules, please read this section carefully.
 
+  VERSION 0.21
+    In version 0.21, we introduced the concept of policy "themes". All you
+    existing custom Policies should still be compatible. But to take
+    advantage of the theme feature, you should add a "default_themes" method
+    to your custom Policy modules. See Perl::Critic::DEVELOPER for an
+    up-to-date guide on creating Policy modules.
+
+    The internals of Perl::Critic were also refactored significantly. The
+    public API is largely unchanged, but if you've been accessing bits
+    inside Perl::Critic, then you may be in for a surprise.
+
   VERSION 0.16
     Starting in version 0.16, you can add a list Policy names as arguments
     to the "## no critic" pseudo-pragma. This feature allows you to disable
@@ -334,14 +459,14 @@ IMPORTANT CHANGES
     comment, then terminate the pseudo-pragma with a semi-colon, and then
     start another comment. For example:
 
-      #This may not work as expected.
-      $email = 'foo@bar.com';  ## no critic for literal '@'
+        #This may not work as expected.
+        $email = 'foo@bar.com';  ## no critic for literal '@'
 
-      #This will work.
-      $email = 'foo@bar.com';  ## no critic; #for literal '@'
+        #This will work.
+        $email = 'foo@bar.com';  ## no critic; #for literal '@'
 
-      #This is even better.
-      $email = 'foo@bar.com'; ## no critic (RequireInterpolation);
+        #This is even better.
+        $email = 'foo@bar.com'; ## no critic (RequireInterpolation);
 
   VERSION 0.14
     Starting in version 0.14, the interface to Perl::Critic::Violation
