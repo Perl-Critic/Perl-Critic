@@ -224,7 +224,8 @@ sub render_report {
 
     # Otherwise, format and print violations
     my $verbosity = $CRITIC->config->verbose();
-    $verbosity = ($verbosity == 4 && @FILES > 1) ? 5 : $verbosity;
+    # $verbosity can be numeric or string, so use "eq" for comparison;
+    $verbosity = ($verbosity eq '4' && @FILES > 1) ? 5 : $verbosity;
     my $fmt = verbosity_to_format( $verbosity );
     if (not -f $file) { $fmt =~ s{\%f}{STDIN}mx; } #HACK!
     Perl::Critic::Violation::set_format( $fmt );
