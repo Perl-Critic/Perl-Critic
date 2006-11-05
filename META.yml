@@ -301,9 +301,6 @@ provides:
   Perl::Critic::Policy::Variables::ProhibitPunctuationVars:
     file: lib/Perl/Critic/Policy/Variables/ProhibitPunctuationVars.pm
     version: 0.21
-  Perl::Critic::Policy::Variables::ProhibitUnusedLexicalVars:
-    file: lib/Perl/Critic/Policy/Variables/ProhibitUnusedLexicalVars.pm
-    version: 0.21
   Perl::Critic::Policy::Variables::ProtectPrivateVars:
     file: lib/Perl/Critic/Policy/Variables/ProtectPrivateVars.pm
     version: 0.21
