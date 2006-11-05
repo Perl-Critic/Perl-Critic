@@ -34,13 +34,21 @@ sub violates {
     return if $elem ne 'map';
     return if not is_function_call($elem);
 
-    my $sib = $elem->sprevious_sibling();
-    return if $sib;
+    if( my $sib = $elem->sprevious_sibling() ){
+        return if $sib;
+    }
 
-    my $parent = $elem->statement()->parent();
-    return if $parent->isa('PPI::Structure::List');
-    return if $parent->isa('PPI::Structure::ForLoop');
-    return if $parent->isa('PPI::Structure::Condition');
+    if( my $parent = $elem->statement()->parent() ){
+        return if $parent->isa('PPI::Structure::List');
+        return if $parent->isa('PPI::Structure::ForLoop');
+        return if $parent->isa('PPI::Structure::Condition');
+        return if $parent->isa('PPI::Structure::Constructor');
+
+        if (my $grand_parent = $parent->parent() ){
+            return if $parent->isa('PPI::Structure::Block') &&
+                !$grand_parent->isa('PPI::Statement::Compound');
+        }
+    }
 
     #Otherwise, must be void context
     return $self->violation( $desc, $expl, $elem );
