@@ -48,14 +48,14 @@ sub violates {
     my $declares_aref = $doc->find('PPI::Statement::Variable');
     return if not $declares_aref;
 
-    my %var_lookup;
-    my @violations = ();
 
     my %exclude_vars = map { $_ => 1 } @{ $self->{_exclude_vars} };
+    my %var_lookup = ();
+    my @violations = ();
+
 
     for my $var_stmt ( @{ $declares_aref } ) {
-        my $var_type = $var_stmt->type();
-        next if $var_type ne 'my';
+        next if $var_stmt->type() ne 'my';
 
         foreach my $var_name ( $var_stmt->variables() ) {
           next if exists $exclude_vars{$var_name};
