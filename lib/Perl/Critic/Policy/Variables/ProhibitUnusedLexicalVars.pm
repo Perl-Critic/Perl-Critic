@@ -56,31 +56,31 @@ sub violates {
 
     for my $var_stmt ( @{ $declares_aref } ) {
         next if $var_stmt->type() ne 'my';
+        my $parent = $var_stmt->parent();
 
         foreach my $var_name ( $var_stmt->variables() ) {
           next if exists $exclude_vars{$var_name};
           $var_lookup{$var_name} ||= [];
-          push @{ $var_lookup{$var_name} }, $var_stmt;
+          push @{ $var_lookup{$var_name} }, $parent;
         }
     }
 
-    my $vars_aref = $doc->find('PPI::Token::Symbol') || [];
+    my $symbols_ref = $doc->find('PPI::Token::Symbol') || [];
 
-  VARIABLE:
-    for my $variable ( @{ $vars_aref } ) {
-        next VARIABLE if $self->_is_declaration( $variable );
+  SYMBOL:
+    for my $symbol ( @{ $symbols_ref } ) {
+        next SYMBOL if _is_in_declaration( $symbol );
 
-        my $symbol = $variable->symbol();
-        next VARIABLE if not exists $var_lookup{$symbol};
+        my $symbol_name = $symbol->symbol();
+        next SYMBOL if not exists $var_lookup{$symbol_name};
 
-        my $parent = $variable->parent();
+        my $parent = $symbol->parent();
 
       PARENT:
         while ( defined $parent ) {
-            for my $idx ( 0 .. $#{$var_lookup{$symbol}} ) {
-                my $declare = $var_lookup{$symbol}->[$idx]->parent();
-                if ( $declare eq $parent ) {
-                    splice @{ $var_lookup{$symbol} }, $idx, 1;
+            for my $idx ( 0 .. $#{$var_lookup{$symbol_name}} ) {
+                if ( $parent eq $var_lookup{$symbol_name}->[$idx] ) {
+                    splice @{ $var_lookup{$symbol_name} }, $idx, 1;
                     last PARENT;
                 }
             }
@@ -100,8 +100,8 @@ sub violates {
 
 #---------------------------------------------------------------------------
 
-sub _is_declaration {
-    my ( $self, $elem ) = @_;
+sub _is_in_declaration {
+    my ( $elem ) = @_;
 
     my $symbol = $elem->symbol();
     my $stmnt  = $elem->statement();
