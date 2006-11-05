@@ -34,7 +34,9 @@ number of subroutines, average number of statements/operators per sub.
 
 =over 4
 
-=item * Errors in .perlcriticrc are silent
+=item * Invalid policy names in .perlcriticrc do not cause any warnings.
+
+=item * Invalid parameters in .perlcriticrc do not cause any warnings.
 
 =item * Modules::RequireVersionVar
 
@@ -71,6 +73,11 @@ I just want to print a warning and move on.  The location is irrelevant.
 =head1 OTHER PBP POLICIES THAT SEEM FEASIBLE TO IMPLEMENT
 
 =over 4
+
+
+=item * ControlStructures::ProhibitComplexMappings (p113)
+
+Base this on RequireSimpleSortBlock.  Make number of statements configurable
 
 =item * ValuesAndExpressions::ProhibitCommaSeparatedStatements (p68)
 
