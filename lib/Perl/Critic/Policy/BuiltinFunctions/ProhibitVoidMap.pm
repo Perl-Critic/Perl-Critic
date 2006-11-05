@@ -18,13 +18,13 @@ our $VERSION = 0.21;
 #----------------------------------------------------------------------------
 
 my $desc = q{"map" used in void context};
-my $expl = [];
+my $expl = q{Use a "for" loop instead};
 
 #----------------------------------------------------------------------------
 
-sub default_severity  { return $SEVERITY_MEDIUM     }
-sub default_themes    { return qw(pbp unreliable)   }
-sub applies_to        { return 'PPI::Token::Word'   }
+sub default_severity  { return $SEVERITY_MEDIUM   }
+sub default_themes    { return qw(unreliable)     }
+sub applies_to        { return 'PPI::Token::Word' }
 
 #----------------------------------------------------------------------------
 
@@ -68,6 +68,19 @@ __END__
 Perl::Critic::Policy::BuiltinFunctions::ProhibitVoidMap
 
 =head1 DESCRIPTION
+
+C<map> and C<grep> are intended to be pure functions, not mutators.
+If you want to iterate with side-effects, then you should use a proper
+C<for> or C<foreach> loop.
+
+  grep{ print frobulate($_) } @list;           #not ok
+  print map{ frobulate($_) } @list;            #ok
+
+  grep{ $_ = lc $_ } @list;                    #not ok
+  for( @list ){ $_ = lc $_  };                 #ok
+
+  map{ push @frobbed, frobulate($_) } @list;   #not ok
+  @frobbed = map { frobulate($_) } @list;      #ok
 
 =head1 AUTHOR
 
