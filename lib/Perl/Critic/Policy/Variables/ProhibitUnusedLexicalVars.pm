@@ -49,19 +49,20 @@ sub violates {
     return if not $declares_aref;
 
 
-    my %exclude_vars = map { $_ => 1 } @{ $self->{_exclude_vars} };
+    my %exclude_vars = hashify( @{ $self->{_exclude_vars} } );
     my %var_lookup = ();
-    my @violations = ();
 
 
     for my $var_stmt ( @{ $declares_aref } ) {
         next if $var_stmt->type() ne 'my';
-        my $parent = $var_stmt->parent();
+
+        # Find the ancestor of the variable declaraion.  For variables
+        # decared inside a conditional, we have to go up two levels.
 
         foreach my $var_name ( $var_stmt->variables() ) {
           next if exists $exclude_vars{$var_name};
           $var_lookup{$var_name} ||= [];
-          push @{ $var_lookup{$var_name} }, $parent;
+          push @{ $var_lookup{$var_name} }, $var_stmt;
         }
     }
 
@@ -74,21 +75,27 @@ sub violates {
         my $symbol_name = $symbol->symbol();
         next SYMBOL if not exists $var_lookup{$symbol_name};
 
-        my $parent = $symbol->parent();
+        my $symbol_parent = $symbol->parent();
 
       PARENT:
-        while ( defined $parent ) {
+        while ( defined $symbol_parent ) {
             for my $idx ( 0 .. $#{$var_lookup{$symbol_name}} ) {
-                if ( $parent eq $var_lookup{$symbol_name}->[$idx] ) {
+                my $declare_parent = $var_lookup{$symbol_name}->[$idx]->parent();
+                if ($declare_parent->isa('PPI::Structure::Condition')) {
+                    $declare_parent = $declare_parent->parent();
+                }
+
+                if ( $symbol_parent eq $declare_parent ) {
                     splice @{ $var_lookup{$symbol_name} }, $idx, 1;
                     last PARENT;
                 }
             }
-            $parent = $parent->parent();
+            $symbol_parent = $symbol_parent->parent();
         }
     }
 
 
+    my @violations = ();
     foreach my $declare_aref (values %var_lookup) {
        foreach my $elem (@{ $declare_aref }) {
            push @violations, $self->violation( $desc, $expl, $elem );
@@ -109,9 +116,11 @@ sub _is_in_declaration {
         && grep { $_ eq $symbol } $stmnt->variables();
 
     my $parent = $stmnt->parent();
+    my $grand_parent = $parent->parent();
     return 1 if $stmnt->isa('PPI::Statement::Expression')
         && $parent->isa('PPI::Structure::List')
-        && $parent->parent()->isa('PPI::Statement::Variable');
+            && $grand_parent->isa('PPI::Statement::Variable')
+                && grep { $_ eq $symbol } $grand_parent->variables();
 
     return 0;
 }
