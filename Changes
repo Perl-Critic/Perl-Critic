@@ -15,7 +15,6 @@
      * Modules::RequireFilenameMatchesPackage
      * TestingAndDebugging::RequireTestLabels
      * ValuesAndExpressions::ProhibitMismatchedOperators
-     * Variables::ProhibitUnusedLexicalVars
 
      New Features:
      * Introduced policy "themes."  Themes are arbitrary names that can

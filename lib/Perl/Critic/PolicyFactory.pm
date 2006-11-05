@@ -258,7 +258,6 @@ sub native_policy_names {
       Perl::Critic::Policy::Variables::ProhibitMatchVars
       Perl::Critic::Policy::Variables::ProhibitPackageVars
       Perl::Critic::Policy::Variables::ProhibitPunctuationVars
-      Perl::Critic::Policy::Variables::ProhibitUnusedLexicalVars
       Perl::Critic::Policy::Variables::ProtectPrivateVars
       Perl::Critic::Policy::Variables::RequireInitializationForLocalVars
       Perl::Critic::Policy::Variables::RequireLexicalLoopIterators

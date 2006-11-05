@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 42;
+use Test::More tests => 38;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -24,7 +24,6 @@ can_ok('Perl::Critic::Policy::Variables::ProhibitPackageVars', 'violates');
 can_ok('Perl::Critic::Policy::Variables::ProhibitPunctuationVars', 'violates');
 can_ok('Perl::Critic::Policy::Variables::ProtectPrivateVars', 'violates');
 can_ok('Perl::Critic::Policy::Variables::ProhibitConditionalDeclarations', 'violates');
-can_ok('Perl::Critic::Policy::Variables::ProhibitUnusedLexicalVars', 'violates');
 can_ok('Perl::Critic::Policy::Variables::RequireInitializationForLocalVars', 'violates');
 can_ok('Perl::Critic::Policy::Variables::RequireLexicalLoopIterators', 'violates');
 can_ok('Perl::Critic::Policy::Variables::RequireNegativeIndices', 'violates');
@@ -337,76 +336,6 @@ my $foo = $obj->if();
 END_PERL
 
 $policy = 'Variables::ProhibitConditionalDeclarations';
-is( pcritique($policy, \$code), 0, $policy);
-
-#----------------------------------------------------------------
-
-$code = <<'END_PERL';
-my $a;
-$a = 1;
-my ($b, $c, $d);
-($b, $c, $d) = (1..3);
-my $e = 1;
-print $e;
-my ($f, $g) = (1, 1);
-foo($f);
-my %h;
-$h{'foo'} = $g;
-my @i;
-$i[0] = 123;
-my %j = (abc => 'def');
-delete $j{'abc'};
-my @k = (1, 2, 3);
-shift @k;
-my @l = @_;
-foreach (@l) {}
-my ($m, $n) = @_;
-$obj->foo($m, $n);
-my %o = @_;
-print keys %o;
-my $p = shift;
-undef $p;
-my $q = foo();
-$q++;
-my ($class);
-my $self = bless {}, $class;
-for (0..$self->foo()) {}
-END_PERL
-
-$policy = 'Variables::ProhibitUnusedLexicalVars';
-is( pcritique($policy, \$code), 0, $policy);
-
-#----------------------------------------------------------------
-
-$code = <<'END_PERL';
-my $a;
-my ($b, $c, $d);
-my $e = 1;
-my ($f, $g) = (1, 1);
-my %h;
-my @i;
-my %j = (abc => 'def');
-my @k = (1, 2, 3);
-my @l = @_;
-my ($m, $n) = @_;
-my %o = @_;
-my $p = shift;
-my $q = foo();
-END_PERL
-
-$policy = 'Variables::ProhibitUnusedLexicalVars';
-is( pcritique($policy, \$code), 17, $policy);
-
-#----------------------------------------------------------------
-
-$code = <<'END_PERL';
-#Some corner cases
-for my $foo (@list) { doit( $foo ) }
-foreach my $foo (@list) { doit( $foo ) }
-if (my $foo = defined $bar){ doit( $foo ) }
-END_PERL
-
-$policy = 'Variables::ProhibitUnusedLexicalVars';
 is( pcritique($policy, \$code), 0, $policy);
 
 #----------------------------------------------------------------
