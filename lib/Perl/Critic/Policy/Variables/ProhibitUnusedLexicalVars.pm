@@ -32,11 +32,9 @@ sub new {
     $self->{_exclude_vars} = [ default_exclude_vars() ];
 
     # set config, if defined
-
     if ( defined $args{exclude_vars} ) {
-        my @sections = split m{ \s* [|] \s* }mx, $args{exclude_vars};
-        @sections = map { uc $_ } @sections;
-        $self->{exclude_vars} = \@sections;
+        my @excludes = split m{ \s+ }mx, $args{exclude_vars};
+        $self->{exclude_vars} = [ map { lc $_ } @excludes ];
     }
 
     return $self;
