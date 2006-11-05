@@ -81,11 +81,9 @@ sub violates {
 
 sub _get_token_compat {
     my ( $self, $elem ) = @_;
-
-    foreach my $class ( keys %token_compat ) {
+    for my $class ( keys %token_compat ) {
         return $token_compat{$class} if $elem->isa($class);
     }
-
     return;
 }
 
@@ -103,14 +101,21 @@ Perl::Critic::Policy::ValuesAndExpressions::ProhibitMismatchedOperators
 
 =head1 DESCRIPTION
 
-Using the wrong operator type for a value can obscure coding intent and
-possibly lead to subtle errors.  An example of this is mixing a string equality
-operator with a numeric value, or vice-versa.
+Using the wrong operator type for a value can obscure coding intent
+and possibly lead to subtle errors.  An example of this is mixing a
+string equality operator with a numeric value, or vice-versa.
 
   if ($foo == 'bar') {}     #not ok
   if ($foo eq 'bar') {}     #ok
   if ($foo eq 123) {}       #not ok
   if ($foo == 123) {}       #ok
+
+=head1 NOTES
+
+If L<warnings> are enabled, the Perl interpreter usually warns you
+about using mismatched operators at run-time.  This Policy does
+essentially the same thing, but at author-time.  That way, you can
+find our about them sooner.
 
 =head1 AUTHOR
 
