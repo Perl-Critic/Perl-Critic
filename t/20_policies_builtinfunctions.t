@@ -525,6 +525,9 @@ $code = <<'END_PERL';
 $baz, grep "$foo", @list;
 print grep("$foo", @list);
 print ( grep "$foo", @list );
+@list = ( grep "$foo", @list );
+$aref = [ grep "$foo", @list ];
+$href = { grep "$foo", @list };
 
 if( grep { foo($_) } @list ) {}
 for( grep { foo($_) } @list ) {}
@@ -555,6 +558,9 @@ $code = <<'END_PERL';
 $baz, map "$foo", @list;
 print map("$foo", @list);
 print ( map "$foo", @list );
+@list = ( map $foo, @list );
+$aref = [ map $foo, @list ];
+$href = { map $foo, @list };
 
 if( map { foo($_) } @list ) {}
 for( map { foo($_) } @list ) {}
