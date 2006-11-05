@@ -30,7 +30,8 @@ if (open my ($fh), '<', File::Spec->catfile(qw(lib Perl Critic PolicySummary.pod
 
     for my $policy_name ( @policy_names ) {
         my $label = qq{PolicySummary.pod has "$policy_name"};
-        ok( any{ $_ eq $policy_name } @summaries, $label );
+        my $has_summary = any{ $_ eq $policy_name } @summaries;
+        is( $has_summary, 1, $label );
     }
 }
 else {
