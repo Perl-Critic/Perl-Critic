@@ -555,6 +555,12 @@ modules themselves.
 
 =head1 POLICY THEMES
 
+B<NOTE:> As of version 0.21, policy themes are still considered
+experimental.  The implementation of this feature may change in a
+future release.  Additionally, the default theme names that ship with
+Perl::Critic may also change.  But this is a pretty cool feature, so
+read on...
+
 Each Policy is defined with one or more "themes".  Themes can be used
 to create arbitrary groups of Policies.  They are intended to provide
 an alternative mechanism for selecting your preferred set of Policies.
