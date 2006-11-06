@@ -22,7 +22,7 @@ Perl::Critic::TestUtils::block_perlcriticrc();
 
 #-----------------------------------------------------------------------------
 
-my $samples_dir      = 't/samples';
+my $examples_dir      = 't/examples';
 my $config           = Perl::Critic::Config->new(-severity => $SEVERITY_LOWEST);
 my @native_policies  = Perl::Critic::Config::native_policy_names();
 my @site_policies    = Perl::Critic::Config::site_policy_names();
@@ -115,7 +115,7 @@ my $total_policies   = scalar @site_policies;
 # Test config with defaults
 
 {
-    my $profile = "$samples_dir/perlcriticrc";
+    my $profile = "$examples_dir/perlcriticrc";
     my $c = Perl::Critic::Config->new( -profile => $profile );
     is_deeply([$c->exclude()], [ qw(Documentation Naming) ], 'user default exclude from file' );
     is_deeply([$c->include()], [ qw(CodeLayout Modules) ],  'user default include from file' );
