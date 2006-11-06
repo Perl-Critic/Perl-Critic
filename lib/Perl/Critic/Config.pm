@@ -543,6 +543,9 @@ A simple configuration might look like this:
     # For all other Policies, I accept the default severity,
     # so no additional configuration is required for them.
 
+For additional configuration examples, see the F<perlcriticrc> file
+that is included in this F<t/examples> directory of this distribution.
+
 =head1 THE POLICIES
 
 A large number of Policy modules are distributed with Perl::Critic.
