@@ -135,7 +135,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Config::Defaults - Manage default settings for Perl::Critic
+Perl::Critic::Defaults - Manage default settings for Perl::Critic
 
 =head1 DESCRIPTION
 
