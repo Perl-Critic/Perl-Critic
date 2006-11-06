@@ -115,7 +115,7 @@ my $total_policies   = scalar @site_policies;
 # Test config with defaults
 
 {
-    my $profile = "$samples_dir/perlcriticrc.defaults";
+    my $profile = "$samples_dir/perlcriticrc";
     my $c = Perl::Critic::Config->new( -profile => $profile );
     is_deeply([$c->exclude()], [ qw(Documentation Naming) ], 'user default exclude from file' );
     is_deeply([$c->include()], [ qw(CodeLayout Modules) ],  'user default include from file' );
