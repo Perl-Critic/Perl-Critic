@@ -5,7 +5,7 @@
 # $Revision$
 ##############################################################################
 
-[0.21]  Released on ????-??-??
+[0.21]  Released on 2006-11-05
 
      New Policies:
      * BuiltinFunctions::ProhibitReverseSortBlock
