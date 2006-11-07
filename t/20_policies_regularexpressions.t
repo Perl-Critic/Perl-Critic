@@ -9,7 +9,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 13;
+use Test::More tests => 14;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -263,6 +263,19 @@ $code = <<'END_PERL';
 if (m/(\d+)/xms) {
    $foo = ($1);
 }
+END_PERL
+
+$policy = 'RegularExpressions::ProhibitCaptureWithoutTest';
+is( pcritique($policy, \$code), 0, $policy );
+
+#----------------------------------------------------------------
+
+# Regression for ternaries with structures
+
+$code = <<'END_PERL';
+$str =~ m/(.)/xms ? foo($1) : die;
+$str =~ m/(.)/xms ? [$1] : die;
+$str =~ m/(.)/xms ? { match => $1 } : die;
 END_PERL
 
 $policy = 'RegularExpressions::ProhibitCaptureWithoutTest';

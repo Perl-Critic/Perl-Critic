@@ -65,6 +65,7 @@ sub _is_in_conditional_structure {
 
     my $stmt = $elem->statement();
     while ($stmt && $elem->isa('PPI::Statement::Expression')) {
+       #return if _is_in_conditional_expression($stmt);
        $stmt = $stmt->statement();
     }
     return if !$stmt;
@@ -81,13 +82,18 @@ sub _is_in_conditional_structure {
 
     # Check for an enclosing 'if', 'unless', 'endif', or 'else'
     my $parent = $stmt->parent;
-    while ($parent # never false as long as we're inside a PPI::Document
-           && ($parent->isa('PPI::Structure') || $parent->isa('PPI::Statement::Compound'))) {
+    while ($parent) { # never false as long as we're inside a PPI::Document
         if ($parent->isa('PPI::Statement::Compound')) {
             return 1;
         }
-        return 1 if _is_in_conditional_structure($parent);
-        $parent = $parent->parent;
+        elsif ($parent->isa('PPI::Structure')) {
+           return 1 if _is_in_conditional_expression($parent);
+           return 1 if _is_in_conditional_structure($parent);
+           $parent = $parent->parent;
+        }
+        else {
+           last;
+        }
     }
 
     return; # fail
