@@ -133,10 +133,12 @@ is( pcritique($policy, \$code), 0, $policy.' select as word' );
 
 $code = <<'END_PERL';
 eval "$some_code";
+eval( "$some_code" );
+eval( 'sub {'.$some_code.'}' );
 END_PERL
 
 $policy = 'BuiltinFunctions::ProhibitStringyEval';
-is( pcritique($policy, \$code), 1, $policy);
+is( pcritique($policy, \$code), 3, $policy);
 
 #----------------------------------------------------------------
 
