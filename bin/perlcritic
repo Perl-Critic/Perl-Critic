@@ -339,7 +339,7 @@ __END__
 
 =pod
 
-=for stopwords DGR INI-style vim-fu minibuffer -noprofile API ben Jore
+=for stopwords DGR INI-style vim-fu minibuffer -noprofile API ben Jore formatter
 
 =head1 NAME
 

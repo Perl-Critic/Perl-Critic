@@ -74,6 +74,8 @@ __END__
 
 =pod
 
+=for stopwords McCabe
+
 =head1 NAME
 
 Perl::Critic::Policy::Subroutines::ProhibitExcessComplexity

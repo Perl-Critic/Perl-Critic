@@ -138,6 +138,8 @@ __END__
 
 =pod
 
+=for stopwords disambiguates
+
 =head1 NAME
 
 Perl::Critic::Policy::CodeLayout::ProhibitParensWithBuiltins

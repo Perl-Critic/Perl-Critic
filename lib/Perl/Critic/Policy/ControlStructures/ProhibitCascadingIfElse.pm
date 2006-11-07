@@ -65,6 +65,8 @@ __END__
 
 =pod
 
+=for stopwords lookup
+
 =head1 NAME
 
 Perl::Critic::Policy::ControlStructures::ProhibitCascadingIfElse

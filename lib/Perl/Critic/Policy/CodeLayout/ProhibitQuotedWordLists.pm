@@ -123,7 +123,7 @@ cases that I haven't covered.  If you find one, send me a note.
 =head1 IMPORTANT CHANGES
 
 This policy was formerly called C<RequireQuotedWords> which seemed a
-little counterintuitive.  If you get lots of "Cannot load policy
+little counter-intuitive.  If you get lots of "Cannot load policy
 module" errors, then you probably need to change C<RequireQuotedWords>
 to C<ProhibitQuotedWordLists> in your F<.perlcriticrc> file.
 

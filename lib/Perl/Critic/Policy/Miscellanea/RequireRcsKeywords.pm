@@ -112,6 +112,8 @@ __END__
 
 =pod
 
+=for stopwords RCS
+
 =head1 NAME
 
 Perl::Critic::Policy::Miscellanea::RequireRcsKeywords

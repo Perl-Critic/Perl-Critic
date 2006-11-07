@@ -32,6 +32,7 @@ CGI
 CPAN
 CVS
 Dolan
+filename
 Guzis
 HEREDOC
 HEREDOCs
@@ -39,13 +40,17 @@ HEREDOCS
 IDE
 Maxia
 Mehner
+multi-line
 namespace
 namespaces
 PBP
 perlcritic
 perlcriticrc
+postfix
 PPI
 refactor
+refactoring
+runtime
 sigil
 sigils
 SQL
@@ -56,3 +61,4 @@ TerMarsch
 Thalhammer
 TODO
 unblessed
+vice-versa
