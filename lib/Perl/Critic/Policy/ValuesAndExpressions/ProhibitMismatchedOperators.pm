@@ -17,6 +17,7 @@ our $VERSION = 0.21;
 #---------------------------------------------------------------------------
 
 my $desc = q{Mismatched operator};
+my $expl = q{Numeric/string operators and operands should match};
 
 # operator types
 
@@ -45,7 +46,7 @@ sub applies_to { return 'PPI::Token::Operator'; }
 sub violates {
     my ( $self, $elem ) = @_;
 
-    my $elem_text = "$elem";
+    my $elem_text = $elem->content;
 
     return if !exists $op_types{$elem_text};
 
@@ -72,7 +73,7 @@ sub violates {
     return if ( !defined $prev_compat || $prev_compat->[$op_type] )
         && ( !defined $next_compat || $next_compat->[$op_type] );
 
-    return $self->violation( $desc, undef, $elem );
+    return $self->violation( $desc, $expl, $elem );
 }
 
 #---------------------------------------------------------------------------

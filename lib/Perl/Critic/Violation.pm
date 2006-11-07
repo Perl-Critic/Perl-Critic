@@ -131,7 +131,10 @@ sub description {
 sub explanation {
     my $self = shift;
     my $expl = $self->{_explanation};
-    if( ref $expl eq 'ARRAY' ) {
+    if ( !$expl ) {
+       $expl = '(no explanation)';
+    }
+    if ( ref $expl eq 'ARRAY' ) {
         my $page = @{$expl} > 1 ? 'pages' : 'page';
         $page .= $SPACE . join $COMMA, @{$expl};
         $expl = "See $page of PBP";
