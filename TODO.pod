@@ -69,6 +69,29 @@ use carp/confess or not.  For example:
 
 I just want to print a warning and move on.  The location is irrelevant.
 
+=item * Variables::ProhibitPackageVars
+
+Allow a way to specify packages that ARE OK to have the package
+vars for.  For example, File::Find requires you to access package
+vars.  There is no other way.  Data::Dumper's package vars are the
+most common way to set parameters for it.
+
+=item * RegularExpressions::ProhibitCaptureWithoutTest
+
+Allow this construct:
+
+    for ( ... ) {
+        next unless /(....)/;
+        if ( $1 ) {
+            ....
+        }
+    }
+
+Right now, P::C thinks that the C<$1> isn't legal to use because it's
+"outside" of the match.  The thing is, we can only get to the C<if>
+if the regex matched.
+    while ( $str =~ /(expression)/ ) 
+
 =back
 
 =head1 OTHER PBP POLICIES THAT SEEM FEASIBLE TO IMPLEMENT
