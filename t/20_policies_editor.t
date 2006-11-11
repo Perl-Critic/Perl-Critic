@@ -9,7 +9,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 9;
+use Test::More tests => 13;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -26,7 +26,45 @@ foo();
 END_PERL
 
 $policy = 'Editor::RequireEmacsFileVariables';
-is( pcritique($policy, \$code), 1, $policy.' - no vars');
+is( pcritique($policy, \$code), 1, $policy.' - no file vars, no shebang');
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+#! /usr/bin/perl
+foo();
+END_PERL
+
+$policy = 'Editor::RequireEmacsFileVariables';
+is( pcritique($policy, \$code), 1, $policy.' - no file vars, w/ simple shebang');
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+#!perl -w -*- cperl -*-
+END_PERL
+
+$policy = 'Editor::RequireEmacsFileVariables';
+is( pcritique($policy, \$code), 0, $policy.' - first line, w/ perl arg');
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+#!perl -w # -*- cperl -*-
+foo();
+END_PERL
+
+$policy = 'Editor::RequireEmacsFileVariables';
+is( pcritique($policy, \$code), 0, $policy.' - first line, w/ perl arg, w/ comment');
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+#!perl # -*- cperl -*-
+END_PERL
+
+$policy = 'Editor::RequireEmacsFileVariables';
+is( pcritique($policy, \$code), 0, $policy.' - first line, w/o perl arg, w/ comment');
 
 #----------------------------------------------------------------
 
@@ -36,10 +74,9 @@ foo();
 END_PERL
 
 $policy = 'Editor::RequireEmacsFileVariables';
-is( pcritique($policy, \$code), 0, $policy.' - first line');
+is( pcritique($policy, \$code), 0, $policy.' - first line, mode only');
 
 #----------------------------------------------------------------
-
 
 $code = <<'END_PERL';
 #!/usr/bin/perl -w -*- mode: cperl-mode -*-
@@ -47,7 +84,7 @@ foo();
 END_PERL
 
 $policy = 'Editor::RequireEmacsFileVariables';
-is( pcritique($policy, \$code), 0, $policy.' - first line, perl arg');
+is( pcritique($policy, \$code), 0, $policy.' - first line, shebang w/ perl arg');
 
 #----------------------------------------------------------------
 
@@ -63,17 +100,18 @@ is( pcritique($policy, \$code), 0, $policy.' - second line');
 #----------------------------------------------------------------
 
 $code = <<'END_PERL';
-# comment...
+# random non-shebang comment...
 # -*- mode: cperl-mode -*-
 foo();
 END_PERL
 
 $policy = 'Editor::RequireEmacsFileVariables';
-is( pcritique($policy, \$code), 0, $policy.' - second line, no shebang');
+is( pcritique($policy, \$code), 1, $policy.' - fake second line, no shebang');
 
 #----------------------------------------------------------------
 
 $code = <<'END_PERL';
+/usr/bin/perl -w
 foo();
 # Local Variables:
 # End:
@@ -84,9 +122,9 @@ is( pcritique($policy, \$code), 0, $policy.' - multi-line');
 
 #----------------------------------------------------------------
 
-$code = <<'END_PERL';
+$code = <<"END_PERL";
 foo();
-
+\f
 # Local Variables:
 # End:
 END_PERL
@@ -104,16 +142,16 @@ END_PERL
 $code .= 'A' x 3000;
 
 $policy = 'Editor::RequireEmacsFileVariables';
-is( pcritique($policy, \$code), 1, $policy.' - multi-line, too early');
+is( pcritique($policy, \$code), 1, $policy.' - fake multi-line, too early');
 
 #----------------------------------------------------------------
 
-$code = <<'END_PERL';
+$code = <<"END_PERL";
 foo();
 # Local Variables:
 # End:
-
+\f
 END_PERL
 
 $policy = 'Editor::RequireEmacsFileVariables';
-is( pcritique($policy, \$code), 1, $policy.' - multi-line before page break');
+is( pcritique($policy, \$code), 1, $policy.' - fake multi-line, before page break');
