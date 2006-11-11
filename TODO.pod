@@ -88,7 +88,8 @@ Base this on RequireSimpleSortBlock.  Make number of statements configurable
 
 Look for grep in a scalar context and recommend any() instead.
 Perhaps we need to distinguish cases like:
-   $count += grep {qr/foo/} @list;
+
+    $count += grep {qr/foo/} @list;
 
 =item * Variables::RequireLocalizedPunctuationVars (p81)
 
