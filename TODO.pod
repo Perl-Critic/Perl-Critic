@@ -228,15 +228,6 @@ Good: C<< Foo::Bar->new >>, Bad: C<< new Foo::Bar >>
 
 L<http://rt.cpan.org/Ticket/Display.html?id=20439>
 
-=item * ValuesAndExpressions::ProhibitUselessQuotingOfVariables
-
-I've seen a lot of beginners do things like this:
-
-    open( my $fh, "$filename" );
-
-There's no reason for C<$filename> to be quoted.  (except stringifying
-overloaded instances)
-
 =item * Variables::ProhibitPerl4PackageNames
 
 Forbid old-school package names like Foo'Bar'Baz.  This should also
