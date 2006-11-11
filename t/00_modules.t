@@ -11,7 +11,7 @@
 use strict;
 use warnings;
 use PPI::Document;
-use Test::More tests => 1360;  # Add 14 for each new policy created
+use Test::More tests => 1374;  # Add 14 for each new policy created
 use English qw(-no_match_vars);
 
 our $VERSION = 0.21;

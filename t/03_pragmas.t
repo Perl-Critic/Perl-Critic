@@ -21,6 +21,7 @@ Perl::Critic::TestUtils::block_perlcriticrc();
 my $profile = { '-CodeLayout::RequireTidyCode'          => {},
                 '-Miscellanea::RequireRcsKeywords'      => {},
                 '-Variables::ProhibitUnusedLexicalVars' => {},
+                '-Editor::RequireEmacsFileVariables'    => {},
 };
 
 my $code = undef;

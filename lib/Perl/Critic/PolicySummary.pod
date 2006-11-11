@@ -149,6 +149,10 @@ All POD should be after C<__END__> [Severity 1]
 
 Organize your POD into the customary sections. [Severity 2]
 
+=head2 L<Perl::Critic::Policy::Editor::RequireEmacsFileVariables>
+
+Use Emacs file variables to declare coding style. [Severity 2]
+
 =head2 L<Perl::Critic::Policy::ErrorHandling::RequireCarping>
 
 Use functions from L<Carp> instead of C<warn> or C<die>. [Severity 3]

@@ -5,6 +5,7 @@ Steps for adding a new Policy:
  * If it will be a default policy:
    - Add it to lib/Perl/Critic/Config.pm in native_policies()
    - Add 14 to the number of tests in t/00_modules.t
+ * If it applies_to() PPI::Document, perhaps add an exception in t/03_pragmas.t
  * Add it to MANIFEST (via "Build manifest")
  * Add it to the POD in lib/Perl/Critic/PolicySummary.pod
  * Mention it in Changes

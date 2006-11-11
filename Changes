@@ -5,6 +5,11 @@
 # $Revision$
 ##############################################################################
 
+Hackathon:
+
+     New Policies:
+     * Editor::RequireEmacsFileVariables
+
 [0.21]  Released on 2006-11-05
 
      New Policies:

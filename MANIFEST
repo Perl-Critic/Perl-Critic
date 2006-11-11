@@ -40,6 +40,7 @@ lib/Perl/Critic/Policy/ControlStructures/ProhibitUnreachableCode.pm
 lib/Perl/Critic/Policy/ControlStructures/ProhibitUntilBlocks.pm
 lib/Perl/Critic/Policy/Documentation/RequirePodAtEnd.pm
 lib/Perl/Critic/Policy/Documentation/RequirePodSections.pm
+lib/Perl/Critic/Policy/Editor/RequireEmacsFileVariables.pm
 lib/Perl/Critic/Policy/ErrorHandling/RequireCarping.pm
 lib/Perl/Critic/Policy/InputOutput/ProhibitBacktickOperators.pm
 lib/Perl/Critic/Policy/InputOutput/ProhibitBarewordFileHandles.pm
@@ -110,6 +111,7 @@ lib/Perl/Critic/Violation.pm
 LICENSE
 Makefile.PL
 MANIFEST			This list of files
+META.yml
 README
 t/00_modules.t
 t/01_config.t
@@ -128,6 +130,7 @@ t/20_policies_classhierarchies.t
 t/20_policies_codelayout.t
 t/20_policies_controlstructures.t
 t/20_policies_documentation.t
+t/20_policies_editor.t
 t/20_policies_errorhandling.t
 t/20_policies_inputoutput.t
 t/20_policies_miscellanea.t
@@ -154,4 +157,3 @@ t/tlib/Perl/Critic/Policy/Test.pm
 t/tlib/ViolationTest.pm
 t/tlib/ViolationTest2.pm
 TODO.pod
-META.yml
