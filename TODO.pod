@@ -55,7 +55,7 @@ difference between that and C<< $self->_foo() >>
 =item * ErrorHandling::RequireCarping
 
 This should not complain about using warn or die if it's not in a
-function.
+function, or if it's not in a non-main:: package.
 
 Also, if the error string ends with a "\n", then the line number
 and package information is not shown, so it doesn't matter if you
@@ -75,7 +75,6 @@ I just want to print a warning and move on.  The location is irrelevant.
 
 =over 4
 
-
 =item * ControlStructures::ProhibitComplexMappings (p113)
 
 Base this on RequireSimpleSortBlock.  Make number of statements configurable
@@ -86,10 +85,13 @@ Base this on RequireSimpleSortBlock.  Make number of statements configurable
 
 =item * ValuesAndExpressions::ProhibitScalarGrep (p71)
 
-Look for grep in a scalar context and recommend any() instead.
+Look for C<grep> in a scalar context and recommend C<any()> instead.
 Perhaps we need to distinguish cases like:
 
     $count += grep {qr/foo/} @list;
+
+OTOH, this assumes that the common use of scalar grep is to check
+for existence.  I'm not sure that's the case.
 
 =item * Variables::RequireLocalizedPunctuationVars (p81)
 
@@ -115,7 +117,7 @@ shift.
 =item * InputOutput::RequireErrorChecking (p208)
 
 Forbid open, print, close in void context, unless "use Fatal" is in
-effect.
+effect.  Allow an exception for close and print.
 
 =item * InputOutput::RequireBriefOpen (p209)
 
@@ -125,6 +127,9 @@ same lexical FH
 =item * InputOutput::ProhibitJoinedReadline (p213)
 
 =item * InputOutput::ProhibitExplicitStdin (p216)
+
+If you're reading from STDIN, chances are you're really wanting to
+read from the magic filehandle.
 
 =item * Miscellanea::ProhibitObnoxiousComments
 
@@ -139,12 +144,12 @@ Make the obnoxious pattern configurable
 
 =item * RegularExpressions::ProhibitEnumeratedClasses (p248)
 
-This will be avoided for ASCII-only code
+This will be avoided for ASCII-only code.
 
 =item * RegularExpressions::ProhibitUnusedCapture (p252)
 
 Look for LHS of regexp or use of C<$1>, C<$2>, ... before next
-regexp
+regexp.
 
 =item * RegularExpressions::ProhibitComplexRegexps (p261)
 
@@ -171,7 +176,11 @@ This conflicts with TestingAndDebugging::ProhibitNoStrict
 
 =over 4
 
-=item AllProgramsNeedShebangs
+=item * TBD::VariableNotUsed
+
+Detect a variable that has a value assigned to it, but never used.
+
+=item * TBD::AllProgramsNeedShebangs
 
 Anything that is a program should have a shebang line.  This includes .t files.
 
