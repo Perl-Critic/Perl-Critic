@@ -17,6 +17,9 @@ use English qw(-no_match_vars);
 our $VERSION = 0.21;
 my $obj = undef;
 
+# pre-compute for version comparisons
+my $version_string = __PACKAGE__->VERSION;
+
 #-----------------------------------------------------------------------------
 # Test Perl::Critic module interface
 
@@ -30,7 +33,7 @@ can_ok('Perl::Critic', 'policies');
 #Set -profile to avoid messing with .perlcriticrc
 $obj = Perl::Critic->new( -profile => 'NONE' );
 isa_ok($obj, 'Perl::Critic');
-is($obj->VERSION(), $VERSION);
+is($obj->VERSION(), $version_string);
 
 #-----------------------------------------------------------------------------
 # Test Perl::Critic::Config module interface
@@ -52,7 +55,7 @@ can_ok('Perl::Critic::Config', 'verbose');
 #Set -profile to avoid messing with .perlcriticrc
 $obj = Perl::Critic::Config->new( -profile => 'NONE');
 isa_ok($obj, 'Perl::Critic::Config');
-is($obj->VERSION(), $VERSION);
+is($obj->VERSION(), $version_string);
 
 #-----------------------------------------------------------------------------
 # Test Perl::Critic::Config::Defaults module interface
@@ -70,7 +73,7 @@ can_ok('Perl::Critic::Defaults', 'verbose');
 
 $obj = Perl::Critic::Defaults->new();
 isa_ok($obj, 'Perl::Critic::Defaults');
-is($obj->VERSION(), $VERSION);
+is($obj->VERSION(), $version_string);
 
 #-----------------------------------------------------------------------------
 # Test Perl::Critic::Policy module interface
@@ -91,7 +94,7 @@ can_ok('Perl::Critic::Policy', 'violation');
 
 $obj = Perl::Critic::Policy->new();
 isa_ok($obj, 'Perl::Critic::Policy');
-is($obj->VERSION(), $VERSION);
+is($obj->VERSION(), $version_string);
 
 #-----------------------------------------------------------------------------
 # Test Perl::Critic::Violation module interface
@@ -115,7 +118,7 @@ my $code = q{print 'Hello World';};
 my $doc = PPI::Document->new(\$code);
 $obj = Perl::Critic::Violation->new(undef, undef, $doc, undef);
 isa_ok($obj, 'Perl::Critic::Violation');
-is($obj->VERSION(), $VERSION);
+is($obj->VERSION(), $version_string);
 
 #-----------------------------------------------------------------------------
 # Test Perl::Critic::UserProfile module interface
@@ -129,7 +132,7 @@ can_ok('Perl::Critic::UserProfile', 'policy_params');
 
 $obj = Perl::Critic::UserProfile->new();
 isa_ok($obj, 'Perl::Critic::UserProfile');
-is($obj->VERSION(), $VERSION);
+is($obj->VERSION(), $version_string);
 
 #-----------------------------------------------------------------------------
 # Test Perl::Critic::PolicyFactory module interface
@@ -166,7 +169,7 @@ for my $mod ( Perl::Critic::PolicyFactory::native_policy_names() ) {
 
     $obj = $mod->new();
     isa_ok($obj, 'Perl::Critic::Policy');
-    is($obj->VERSION(), $VERSION, "Version of $mod");
+    is($obj->VERSION(), $version_string, "Version of $mod");
 }
 
 #-----------------------------------------------------------------------------
