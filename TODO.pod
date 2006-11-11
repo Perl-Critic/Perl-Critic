@@ -170,6 +170,10 @@ This conflicts with TestingAndDebugging::ProhibitNoStrict
 
 =over 4
 
+=item AllProgramsNeedShebangs
+
+Anything that is a program should have a shebang line.  This includes .t files.
+
 =item * BuiltInFunctions::RequireConstantSprintfFormat
 
 =item * BuiltInFunctions::RequireConstantUnpackFormat
