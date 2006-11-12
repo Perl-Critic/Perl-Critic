@@ -9,8 +9,18 @@ our $VERSION = 0.21;
 
 #----------------------------------------------------------------------------
 
-my $desc = q{Numeric literals make code less maintainable};
-my %allowed = hashify( 0, 1, 2 );   # Should be configurable
+my $DESC = q{Numeric literals make code less maintainable};
+my $USE_READONLY_OR_CONSTANT =
+    ' Use the Readonly module or the "constant" pragma instead.';
+my $TYPE_NOT_ALLOWED_SUFFIX = ") are not allowed.$USE_READONLY_OR_CONSTANT";
+
+my %allowed         = hashify( 0, 1, 2 );   # Should be configurable
+my $allowed_string  =
+      ' is not one of the allowed literal values ('
+    . ( join ', ', sort { $a <=> $b } keys %allowed )
+    . ').'
+    . $USE_READONLY_OR_CONSTANT;
+
 
 #----------------------------------------------------------------------------
 
@@ -25,27 +35,55 @@ sub violates {
 
     return if _element_is_in_an_include_or_readonly_statement($elem);
 
-    my @violation = ( $desc, undef, $elem );
-
     my $literal = $elem->literal();
-    return $self->violation(@violation)
-        if defined $literal and not defined $allowed{ $literal };
-
-    if (
-            $elem->isa('PPI::Token::Number::Binary')
-        or  $elem->isa('PPI::Token::Number::Hex')
-        or  $elem->isa('PPI::Token::Number::Octal')
-        or  $elem->isa('PPI::Token::Number::Version')
-    ) {
-        return $self->violation(@violation);
+    if ( defined $literal and not defined $allowed{ $literal } ) {
+        return
+            $self->violation(
+                $DESC,
+                $elem->content() . $allowed_string,
+                $elem,
+            );
     } # end if
 
-    if (
-            $elem->isa('PPI::Token::Number::Exp')
-        and $elem->content() ne '0E0'
-        and $elem->content() ne '0e0'
-    ) {
-        return $self->violation(@violation);
+    if ($elem->isa('PPI::Token::Number::Binary')) {
+        return
+            $self->violation(
+                $DESC,
+                'Binary literals (' . $elem->content() . $TYPE_NOT_ALLOWED_SUFFIX,
+                $elem,
+            );
+    } # end if
+    if ($elem->isa('PPI::Token::Number::Exp')) {
+        return
+            $self->violation(
+                $DESC,
+                'Exponential literals (' . $elem->content() . $TYPE_NOT_ALLOWED_SUFFIX,
+                $elem,
+            );
+    } # end if
+    if ($elem->isa('PPI::Token::Number::Hex')) {
+        return
+            $self->violation(
+                $DESC,
+                'Hexadecimal literals (' . $elem->content() . $TYPE_NOT_ALLOWED_SUFFIX,
+                $elem,
+            );
+    } # end if
+    if ($elem->isa('PPI::Token::Number::Octal')) {
+        return
+            $self->violation(
+                $DESC,
+                'Octal literals (' . $elem->content() . $TYPE_NOT_ALLOWED_SUFFIX,
+                $elem,
+            );
+    } # end if
+    if ($elem->isa('PPI::Token::Number::Version')) {
+        return
+            $self->violation(
+                $DESC,
+                'Version literals (' . $elem->content() . $TYPE_NOT_ALLOWED_SUFFIX,
+                $elem,
+            );
     } # end if
 
     return;
@@ -103,10 +141,9 @@ things like Perl version restrictions and L<Test::More> plans.
 The rule is relaxed in that C<2> is permitted to allow for things like
 alternation, the STDERR file handle, etc..
 
-Use of binary, hexadecimal, octal, and version numbers, even for C<0> and C<1>
-outside of C<use>/C<require>/C<Readonly> statements aren't permitted.  This
-applies for exponential numbers as well, with the exception of the "zero but
-true" value, "C<0e0>".
+Use of binary, exponential, hexadecimal, octal, and version numbers, even for
+C<0> and C<1> outside of C<use>/C<require>/C<Readonly> statements aren't
+permitted.
 
 
   $x = 0;                                   #ok
@@ -122,7 +159,6 @@ true" value, "C<0e0>".
   $x = 001                                  #not ok
   $x = 0e1                                  #not ok
   $x = 1e1                                  #not ok
-  $x = 0e0                                  #ok
 
   $frobnication_factor = 42;                #not ok
   use constant FROBNICATION_FACTOR => 42;   #ok
