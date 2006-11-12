@@ -97,18 +97,32 @@ maintain because one cannot understand their significance or where they were
 derived from.  Use the L<constant> pragma or the L<Readonly> module to give a
 descriptive name to the number.
 
-Numeric literals are allowed in C<use> statements to allow for things like Perl
-version restrictions and L<Test::More> plans.
+Numeric literals are allowed in C<use> and C<require> statements to allow for
+things like Perl version restrictions and L<Test::More> plans.
 
 The rule is relaxed in that C<2> is permitted to allow for things like
 alternation, the STDERR file handle, etc..
 
+Use of binary, hexadecimal, octal, and version numbers, even for C<0> and C<1>
+outside of C<use>/C<require>/C<Readonly> statements aren't permitted.  This
+applies for exponential numbers as well, with the exception of the "zero but
+true" value, "C<0e0>".
+
+
   $x = 0;                                   #ok
   $x = 0.0;                                 #ok
-  $x = 0_._0_;                              #ok
   $x = 1;                                   #ok
   $x = 1.0;                                 #ok
   $x = 1.5;                                 #not ok
+  $x = 0b0                                  #not ok
+  $x = 0b1                                  #not ok
+  $x = 0x00                                 #not ok
+  $x = 0x01                                 #not ok
+  $x = 000                                  #not ok
+  $x = 001                                  #not ok
+  $x = 0e1                                  #not ok
+  $x = 1e1                                  #not ok
+  $x = 0e0                                  #ok
 
   $frobnication_factor = 42;                #not ok
   use constant FROBNICATION_FACTOR => 42;   #ok
