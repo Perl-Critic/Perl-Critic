@@ -48,10 +48,12 @@ RCS
 \.tmp$
 \.\#.+
 \#$
+\.swp$
 
 # Mac/SMB files
 \.DS_Store
 ^\._.+
+\bIcon\x0d
 
 # Flash development
 \.swd$
