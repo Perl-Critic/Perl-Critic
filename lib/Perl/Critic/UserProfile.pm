@@ -57,7 +57,7 @@ sub policy_params {
     my $short_name = policy_short_name( $long_name );
 
     return $profile->{$short_name}    || $profile->{$long_name}     ||
-           $profile->{"-$short_name"} || $profile->{"-$long_name"}  || {};
+	   $profile->{"-$short_name"} || $profile->{"-$long_name"}  || {};
 }
 
 #-----------------------------------------------------------------------------
@@ -91,15 +91,15 @@ sub _load_profile {
 
     # "NONE" means don't load any profile
     if (defined $profile && $profile eq 'NONE') {
-        $self->{_profile} = {};
-        return $self;
+	$self->{_profile} = {};
+	return $self;
     }
 
     my %loader_for = (
-        ARRAY   => \&_load_profile_from_array,
-        DEFAULT => \&_load_profile_from_file,
-        HASH    => \&_load_profile_from_hash,
-        SCALAR  => \&_load_profile_from_string,
+	ARRAY   => \&_load_profile_from_array,
+	DEFAULT => \&_load_profile_from_file,
+	HASH    => \&_load_profile_from_hash,
+	SCALAR  => \&_load_profile_from_string,
     );
 
     my $ref_type = ref $profile || 'DEFAULT';
@@ -124,8 +124,12 @@ sub _set_defaults {
 sub _load_profile_from_file {
     my $file = shift || return {};
     my $prof = Config::Tiny->read($file);
-    croak( "Profile error: $file: " . Config::Tiny::errstr() ) if not defined $prof;
-    return $prof;
+    if (defined $prof) {
+	return $prof;
+    } else {
+	croak(sprintf qq{Config::Tiny could not parse profile '%s':\n\t%s\n},
+	      $file, Config::Tiny::errstr());
+    }
 }
 
 #-----------------------------------------------------------------------------
@@ -169,8 +173,8 @@ sub _find_profile_path {
 
     #Check home directory
     if ( my $home_dir = _find_home_dir() ) {
-        my $path = File::Spec->catfile( $home_dir, $rc_file );
-        return $path if -f $path;
+	my $path = File::Spec->catfile( $home_dir, $rc_file );
+	return $path if -f $path;
     }
 
     #No profile defined
@@ -184,13 +188,13 @@ sub _find_home_dir {
     #Try using File::HomeDir
     eval { require File::HomeDir };
     if ( not $EVAL_ERROR ) {
-        return File::HomeDir->my_home();
+	return File::HomeDir->my_home();
     }
 
     #Check usual environment vars
     for my $key (qw(HOME USERPROFILE HOMESHARE)) {
-        next if not defined $ENV{$key};
-        return $ENV{$key} if -d $ENV{$key};
+	next if not defined $ENV{$key};
+	return $ENV{$key} if -d $ENV{$key};
     }
 
     #No home directory defined
