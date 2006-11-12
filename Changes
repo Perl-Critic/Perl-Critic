@@ -10,6 +10,7 @@ Hackathon:
      New Policies:
      * Editor::RequireEmacsFileVariables
      * TestingAndDebugging::ProhibitProlongedStrictureOverride
+     * Variables::ProhibitListProcessingSideEffects (not quite finished)
 
 [0.21]  Released on 2006-11-05
 

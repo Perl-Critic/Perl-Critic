@@ -52,9 +52,8 @@ sub violates {
     my ($first_line, $second_line) = $code =~ m/\A ([^\n]*) (?: \n ([^\n]*) )? /xms;
     return if $first_line =~ m/$one_line_local_var/xms;
     return if ($second_line
-	       && $first_line =~ m/\A \#!/xms
-	       && $second_line =~ m/$one_line_local_var/xms);
-
+               && $first_line =~ m/\A \#!/xms
+               && $second_line =~ m/$one_line_local_var/xms);
 
     ## Look for end of doc file vars  Example:
     #  Local Variables:
@@ -69,10 +68,10 @@ sub violates {
     # Note that the [ \t]* before "End:" appears to be wrong, but is
     # added for compatibility
     return if $last_page =~ m/
-			      ^ ([^\n]*) Local [ ] Variables: [ \t]* ([^\n]*) $
-			      .*?
-			      ^ \1 [ \t]* End: [ \t]* \2 $
-			      /ixms;
+                              ^ ([^\n]*) Local [ ] Variables: [ \t]* ([^\n]*) $
+                              .*?
+                              ^ \1 [ \t]* End: [ \t]* \2 $
+                            /ixms;
 
     return $self->violation( $desc, $expl, $doc );
 }

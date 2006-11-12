@@ -365,6 +365,10 @@ Write C< <<'THE_END'; > instead of C< <<'theEnd'; > [Severity 1]
 
 Do not write C< my $foo = $bar if $baz; > [Severity 5]
 
+=head2 L<Perl::Critic::Policy::Variables::ProhibitListProcessingSideEffects>
+
+Don't modify C<$_> in list functions [Severity 5]
+
 =head2 L<Perl::Critic::Policy::Variables::ProhibitLocalVars>
 
 Use C<my> instead of C<local>, except when you have to. [Severity 2]

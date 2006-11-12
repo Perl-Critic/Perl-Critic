@@ -189,10 +189,6 @@ for regexps.  Make an exception for qr/ [ ] /x.
 Can't be C<qr/\s*\\A\s*\((?:\?:)?(?:\s*\w+\s*\|)*\s*\w+\s*\)\s*\\z/>
 or C<qr/\s*\\A\s*\w+\s*\\z/>
 
-=item * TestingAndDebugging::ProhibitProlongedStrictureOverride (p443)
-
-This conflicts with TestingAndDebugging::ProhibitNoStrict
-
 =back
 
 =head1 NON-PBP POLICIES WANTED
