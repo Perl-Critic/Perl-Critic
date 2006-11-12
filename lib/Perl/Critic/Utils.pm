@@ -340,14 +340,7 @@ sub _split_nodes_on_comma {
             $i++; #Move forward to next 'node stack'
             next;
         }
-
-        #Push onto current 'node stack', or create a new 'stack'
-        if ( defined $nodes[$i] ) {
-            push @{ $nodes[$i] }, $node;
-        }
-        else {
-            $nodes[$i] = [$node];
-        }
+        push @{ $nodes[$i] }, $node;
     }
     return @nodes;
 }
