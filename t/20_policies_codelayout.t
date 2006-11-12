@@ -512,3 +512,12 @@ for my $nl ("\012", "\015", "\015\012") {
     ($code = $base_code) =~ s/\n/$nl/;
     is( pcritique($policy, \$code), 0, $policy.' - no filename' );
 }
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 expandtab

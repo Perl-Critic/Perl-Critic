@@ -280,3 +280,12 @@ Perl::Critic::TestUtils::block_perlcriticrc();
 my @native_policies = Perl::Critic::PolicyFactory::native_policy_names();
 my @found_policies  = all_perl_files( 'lib/Perl/Critic/Policy' );
 is( scalar @found_policies, scalar @native_policies, 'Find all perl code');
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 expandtab

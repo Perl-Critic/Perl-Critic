@@ -5,7 +5,6 @@
 #     $Date$
 #   $Author$
 # $Revision$
-# ex: set ts=8 sts=4 sw=4 expandtab
 ##############################################################################
 
 use strict;
@@ -62,3 +61,12 @@ $p->add_themes( qw(f e d) ); #unsorted
 #Test theme again...
 is_deeply( [$p->default_themes()], [] ); #Still the same
 is_deeply( [$p->get_themes()], [ qw(a b c d e f) ] );  #Should have new value, sorted
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 expandtab

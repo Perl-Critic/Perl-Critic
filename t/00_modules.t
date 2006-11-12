@@ -5,7 +5,6 @@
 #    $Date$
 #   $Author$
 # $Revision$
-# ex: set ts=8 sts=4 sw=4 expandtab
 ##############################################################################
 
 use strict;
@@ -185,3 +184,12 @@ ok( critique( {}, \$code ), 'Functional style, empty config' );
 ok( critique( {severity => 1}, \$code ), 'Functional style, with config');
 ok( !critique(), 'Functional style, no args at all');
 ok( !critique(undef, undef), 'Functional style, undef args');
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 expandtab

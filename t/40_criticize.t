@@ -57,3 +57,12 @@ if ( !$EVAL_ERROR ) {
 my $rcfile = File::Spec->catfile( 't', '40_perlcriticrc' );
 Test::Perl::Critic->import( -severity => 1, -profile => $rcfile );
 all_critic_ok();
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 expandtab

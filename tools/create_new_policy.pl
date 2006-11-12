@@ -100,7 +100,7 @@ sub change
          write_file('/tmp/change', $_);
          system '/usr/bin/diff', '-u', $file, '/tmp/change';
       }
-      else
+      elsif ($action eq '-w')
       {
          write_file($file, $_);
       }

@@ -5,7 +5,6 @@
 #    $Date$
 #   $Author$
 # $Revision$
-# ex: set ts=8 sts=4 sw=4 expandtab
 ##############################################################################
 
 use strict;
@@ -261,3 +260,11 @@ my $total_policies   = scalar @site_policies;
     like( $EVAL_ERROR, qr/The -policy argument is required/, 'add_policy w/o args' );
 }
 
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 expandtab
