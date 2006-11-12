@@ -11,7 +11,7 @@ our $VERSION = 0.21;
 
 my $DESC = q{Numeric literals make code less maintainable};
 my $USE_READONLY_OR_CONSTANT =
-    ' Use the Readonly module or the "constant" pragma instead.';
+    ' Use the Readonly module or the "constant" pragma instead';
 my $TYPE_NOT_ALLOWED_SUFFIX = ") are not allowed.$USE_READONLY_OR_CONSTANT";
 
 my %allowed         = hashify( 0, 1, 2 );   # Should be configurable
@@ -33,7 +33,7 @@ sub applies_to       { return 'PPI::Token::Number' }
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    return if _element_is_in_an_include_or_readonly_statement($elem);
+    return if _element_is_in_an_include_readonly_or_version_statement($elem);
 
     my $literal = $elem->literal();
     if ( defined $literal and not defined $allowed{ $literal } ) {
@@ -89,7 +89,7 @@ sub violates {
     return;
 } # end violates()
 
-sub _element_is_in_an_include_or_readonly_statement {
+sub _element_is_in_an_include_readonly_or_version_statement {
     my $elem = shift;
 
     my $parent = $elem->parent();
@@ -97,12 +97,22 @@ sub _element_is_in_an_include_or_readonly_statement {
         if ($parent->isa('PPI::Statement')) {
             return 1 if $parent->isa('PPI::Statement::Include');
 
+            if ( $parent->isa('PPI::Statement::Variable') ) {
+                if ( $parent->type() eq 'our' ) {
+                    my @variables = $parent->variables();
+                    if ( scalar (@variables) == 1 and $variables[0] eq '$VERSION') {
+                        return 1;
+                    } # end if
+                } # end if
+
+                return 0;
+            } # end if
+
             my $first_token = $parent->first_token();
-            if (
-                    $first_token->isa('PPI::Token::Word')
-                and $first_token eq 'Readonly'
-            ) {
-                return 1;
+            if ( $first_token->isa('PPI::Token::Word') ) {
+                if ( $first_token eq 'Readonly' ) {
+                    return 1;
+                } # end if
             } # end if
 # Uncomment once PPI bug fixed.
 #        } elsif ($parent->isa('PPI::Structure::Block')) {
@@ -113,7 +123,7 @@ sub _element_is_in_an_include_or_readonly_statement {
     } # end while
 
     return 0;
-} # end _element_is_in_an_include_or_readonly_statement()
+} # end _element_is_in_an_include_readonly_or_version_statement()
 
 
 1;
@@ -136,7 +146,9 @@ derived from.  Use the L<constant> pragma or the L<Readonly> module to give a
 descriptive name to the number.
 
 Numeric literals are allowed in C<use> and C<require> statements to allow for
-things like Perl version restrictions and L<Test::More> plans.
+things like Perl version restrictions and L<Test::More> plans.  Uses of the
+Readonly module are obviously valid.  Declarations of C<$VERSION> package
+variables are permitted.
 
 The rule is relaxed in that C<2> is permitted to allow for things like
 alternation, the STDERR file handle, etc..
@@ -144,6 +156,7 @@ alternation, the STDERR file handle, etc..
 Use of binary, exponential, hexadecimal, octal, and version numbers, even for
 C<0> and C<1> outside of C<use>/C<require>/C<Readonly> statements aren't
 permitted.
+
 
 
   $x = 0;                                   #ok
@@ -166,6 +179,7 @@ permitted.
 
   use 5.6.1;                                #ok
   use Test::More plan => 57;                #ok
+  our $VERSION = 0.21;                      #ok
 
 
   foreach my $solid (1..5) {                #not ok

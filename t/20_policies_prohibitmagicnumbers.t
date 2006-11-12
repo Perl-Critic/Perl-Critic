@@ -389,19 +389,6 @@ is(
 
 # TEST
 $code = <<'END_PERL';
-$Orion = 0e0;
-END_PERL
-
-is(
-    pcritique($policy, \$code),
-    0,
-    "$policy: special 0e0 is allowed anywhere"
-);
-
-#----------------------------------------------------------------
-
-# TEST
-$code = <<'END_PERL';
 $Uruk_hai = 1e1;
 END_PERL
 
@@ -695,6 +682,19 @@ is(
     pcritique($policy, \$code),
     0,
     "$policy: good numbers allowed in deep datastructures anywhere"
+);
+
+#----------------------------------------------------------------
+
+# TEST
+$code = <<'END_PERL';
+our $VERSION = 0.21;
+END_PERL
+
+is(
+    pcritique($policy, \$code),
+    0,
+    "$policy: \$VERSION variables get a special exemption"
 );
 
 #----------------------------------------------------------------
