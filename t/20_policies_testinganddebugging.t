@@ -478,7 +478,8 @@ isnt(1,2,'label');
 like('foo',qr/f/,'label');
 unlike('foo',qr/f/,'label');
 cmp_ok(1,'==',2,'label');
-is_deeply('foo', 'bar','label');
+is_deeply([],[],'label');
+is_deeply({],{},'label');
 pass('label');
 fail('label');
 END_PERL

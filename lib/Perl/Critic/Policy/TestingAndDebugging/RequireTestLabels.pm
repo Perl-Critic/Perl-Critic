@@ -47,8 +47,7 @@ sub new {
     my $self = bless {}, $class;
 
     $self->{_test_modules} = \%default_test_modules;
-    if (defined $args{modules})
-    {
+    if (defined $args{modules}) {
         my @modules = split m{ \s+ }mx, $args{modules};
         $self->{_test_modules} = { %default_test_modules, hashify(@modules) };
     }
