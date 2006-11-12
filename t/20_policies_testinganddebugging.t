@@ -9,7 +9,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 41;
+use Test::More tests => 47;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -505,3 +505,92 @@ END_PERL
 %config = (modules => 'Test::Foo Test::Bar'); 
 $policy = 'TestingAndDebugging::RequireTestLabels';
 is( pcritique($policy, \$code, \%config), 0, $policy );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+use strict;
+no strict;
+END_PERL
+
+$policy = 'TestingAndDebugging::ProhibitProlongedStrictureOverride';
+is( pcritique($policy, \$code), 0, $policy );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+use strict;
+no strict;
+print 1;
+print 2;
+print 3;
+print 4;
+END_PERL
+
+$policy = 'TestingAndDebugging::ProhibitProlongedStrictureOverride';
+is( pcritique($policy, \$code), 1, $policy );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+use strict;
+no strict;
+print 1;
+print 2;
+print 3;
+END_PERL
+
+$policy = 'TestingAndDebugging::ProhibitProlongedStrictureOverride';
+is( pcritique($policy, \$code), 0, $policy );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+use strict;
+sub foo {
+    no strict;
+}
+print 1;
+print 2;
+print 3;
+print 4;
+END_PERL
+
+$policy = 'TestingAndDebugging::ProhibitProlongedStrictureOverride';
+is( pcritique($policy, \$code), 0, $policy );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+use strict;
+sub foo {
+    no strict;
+    print 1;
+    print 2;
+    print 3;
+    print 4;
+}
+END_PERL
+
+$policy = 'TestingAndDebugging::ProhibitProlongedStrictureOverride';
+is( pcritique($policy, \$code), 1, $policy );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+use strict;
+sub foo {
+    no strict;
+    print 1;
+    print 2;
+    print 3;
+    print 4;
+    print 5;
+    print 6;
+
+END_PERL
+
+%config = ( lines => 6 );
+$policy = 'TestingAndDebugging::ProhibitProlongedStrictureOverride';
+is( pcritique($policy, \$code, \%config), 0, $policy );
+

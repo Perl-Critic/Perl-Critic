@@ -238,6 +238,7 @@ sub native_policy_names {
       Perl::Critic::Policy::Subroutines::RequireFinalReturn
       Perl::Critic::Policy::TestingAndDebugging::ProhibitNoStrict
       Perl::Critic::Policy::TestingAndDebugging::ProhibitNoWarnings
+      Perl::Critic::Policy::TestingAndDebugging::ProhibitProlongedStrictureOverride
       Perl::Critic::Policy::TestingAndDebugging::RequireTestLabels
       Perl::Critic::Policy::TestingAndDebugging::RequireUseStrict
       Perl::Critic::Policy::TestingAndDebugging::RequireUseWarnings

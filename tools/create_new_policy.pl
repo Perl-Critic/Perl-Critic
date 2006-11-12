@@ -3,7 +3,7 @@
 # This program is a developer convenience.  It may be WRONG or out of
 # date!  Run with a "-d" flag to see diffs before running for real
 # with "-w" to write.  Make sure to edit the $author vars
-my $syntax = "Syntax: $0 [-d|-w] <name> <description> <severity>";
+my $SYNTAX = "Syntax: $0 [-d|-w] <name> <description> <severity>";
 
 use warnings;
 use strict;
@@ -47,7 +47,7 @@ if ($action eq '-w')
 }
 
 # Add new policy to list in Config.pm
-change(sub {s/(sub \s+ native_policies \s+ {[^\}]+})/::native_policies::/xms;  # extract whole sub
+change(sub {s/(sub \s+ native_policy_names \s+ {[^\}]+})/::native_policies::/xms;  # extract whole sub
             my $sub = $1;
             my @mods = $sub =~ m/(Perl::Critic::Policy::\S+)/gxms;             # extract policy pkgs
             @mods = sort @mods, $pkg;                                          # add new policy and sort

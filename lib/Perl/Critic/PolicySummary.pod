@@ -157,10 +157,6 @@ Use Emacs file variables to declare coding style. [Severity 2]
 
 Use functions from L<Carp> instead of C<warn> or C<die>. [Severity 3]
 
-=head2 L<Perl::Critic::Policy::Modules::RequireFilenameMatchesPackage>
-
-Package declaration must match filename [Severity 5]
-
 =head2 L<Perl::Critic::Policy::InputOutput::ProhibitBacktickOperators>
 
 Discourage stuff like C<@files = `ls $directory`> [Severity 3]
@@ -224,6 +220,10 @@ End each module with an explicitly C<1;> instead of some funky expression. [Seve
 =head2 L<Perl::Critic::Policy::Modules::RequireExplicitPackage>
 
 Always make the C<package> explicit. [Severity 4]
+
+=head2 L<Perl::Critic::Policy::Modules::RequireFilenameMatchesPackage>
+
+Package declaration must match filename [Severity 5]
 
 =head2 L<Perl::Critic::Policy::Modules::RequireVersionVar>
 
@@ -292,6 +292,10 @@ Prohibit various flavors of C<no strict> [Severity 5]
 =head2 L<Perl::Critic::Policy::TestingAndDebugging::ProhibitNoWarnings>
 
 Prohibit various flavors of C<no warnings> [Severity 4]
+
+=head2 L<Perl::Critic::Policy::TestingAndDebugging::ProhibitProlongedStrictureOverride>
+
+Don't turn off strict for large blocks of code [Severity 4]
 
 =head2 L<Perl::Critic::Policy::TestingAndDebugging::RequireTestLabels>
 
