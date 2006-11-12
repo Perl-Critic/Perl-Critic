@@ -439,13 +439,14 @@ isnt(1,2);
 like('foo',qr/f/);
 unlike('foo',qr/f/);
 cmp_ok(1,'==',2);
-is_deeply([], {});
+is_deeply([], []);
+is_deeply({}, {});
 pass();
 fail();
 END_PERL
 
 $policy = 'TestingAndDebugging::RequireTestLabels';
-is( pcritique($policy, \$code), 10, $policy );
+is( pcritique($policy, \$code), 11, $policy );
 
 #----------------------------------------------------------------
 
@@ -457,7 +458,8 @@ isnt(1,2);
 like('foo',qr/f/);
 unlike('foo',qr/f/);
 cmp_ok(1,'==',2);
-is_deeply([], {});
+is_deeply([], []);
+is_deeply({}, {});
 pass();
 fail();
 END_PERL
