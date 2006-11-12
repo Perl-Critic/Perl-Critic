@@ -439,6 +439,7 @@ isnt(1,2);
 like('foo',qr/f/);
 unlike('foo',qr/f/);
 cmp_ok(1,'==',2);
+is_deeply('literal','literal');
 is_deeply([], []);
 is_deeply({}, {});
 pass();
@@ -446,7 +447,7 @@ fail();
 END_PERL
 
 $policy = 'TestingAndDebugging::RequireTestLabels';
-is( pcritique($policy, \$code), 11, $policy );
+is( pcritique($policy, \$code), 12, $policy );
 
 #----------------------------------------------------------------
 
@@ -458,6 +459,7 @@ isnt(1,2);
 like('foo',qr/f/);
 unlike('foo',qr/f/);
 cmp_ok(1,'==',2);
+is_deeply('literal','literal');
 is_deeply([], []);
 is_deeply({}, {});
 pass();
@@ -478,6 +480,7 @@ isnt(1,2,'label');
 like('foo',qr/f/,'label');
 unlike('foo',qr/f/,'label');
 cmp_ok(1,'==',2,'label');
+is_deeply('literal','literal','label');
 is_deeply([],[],'label');
 is_deeply({],{},'label');
 pass('label');
