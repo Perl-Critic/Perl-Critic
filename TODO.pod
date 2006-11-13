@@ -92,6 +92,13 @@ Right now, P::C thinks that the C<$1> isn't legal to use because it's
 if the regex matched.
     while ( $str =~ /(expression)/ ) 
 
+=item * Module::Pluggable
+
+Module::Pluggable has the unpleasant feature of silently ignoring
+compilation errors in loaded modules.  This creates hard-to-diagnose
+bugs.  Look for a workaround to make Module::Pluggable die() when
+syntax errors happen, or replace it entirely.
+
 =back
 
 =head1 OTHER PBP POLICIES THAT SEEM FEASIBLE TO IMPLEMENT
@@ -118,7 +125,11 @@ for existence.  I'm not sure that's the case.
 
 =item * Variables::RequireLocalizedPunctuationVars (p81)
 
-=item * Variables::ProhibitTopicChangeInListFunction (p114)
+=item * Variables::ProhibitListProcessingSideEffects (p114)
+
+Partially implemented (see SKIP tests in t/20_policies_variables.t.  Needs documentation.
+
+This should be renamed to ControlStructures::ProhibitMutatingListFunctions
 
 =item * Documentation::PodSpelling (p148)
 
@@ -262,7 +273,9 @@ L<http://rt.cpan.org/Ticket/Display.html?id=20439>
 Forbid old-school package names like Foo'Bar'Baz.  This should also
 apply to any variables or subroutines that get declared/called.
 
-=item * CodeLayout::RequireEditorSettings
+=item * Editor::RequireEmacsFileVariables
+
+=item * Editor::RequireViModelines
 
 Files must have something like the following in them for Emacs and Vi:
 
@@ -275,17 +288,26 @@ Files must have something like the following in them for Emacs and Vi:
 
 =over 4
 
-=item Emacs file variables [IMPLEMENTED!]
+=item Emacs file variables
+
+Implemented!  Currently just tests for the existence of "-*- ... -*-"
+or "Local Variables: ... End:".  This should eventually take a
+perlcriticrc option to specify the exact set of variables.
 
 =item Vim modelines
 
 In vim, this is called "modelines" and should match the following
-pattern:
+pattern (taken from Vim docs):
 
   [text]{white}{vi:|vim:|ex:}[white]se[t] {options}:[text]
   [text]{white}{vi:|vim:|ex:}[white]{options}
 
-Watch out for escaped colons!
+Roughly translated to regexp:
+
+  ($options) = m/^ (?:\N*\S)? [ \t]+ (?:vi|vim|ex): [ \t]+ set? [ \t]+ (\N+): \N* $/xms;
+  ($options) = m/^ (?:\N*\S)? [ \t]+ (?:vi|vim|ex): [ \t]+ (\N+) $/xms;
+
+Watch out for escaped colons!!
 
 The vim modeline must be within N lines of the top or bottom of the
 file.  That N is user-settable, but defaults to 5.  To learn more type
