@@ -278,8 +278,8 @@ sub is_function_call {
 
 sub is_script {
     my $doc = shift;
-    my $shebang = shebang_line($doc);
-    return !!$shebang;  # booleanize
+
+    return shebang_line($doc) ? 1 : 0;
 }
 
 #-----------------------------------------------------------------------------
