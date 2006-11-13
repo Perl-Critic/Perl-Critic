@@ -107,12 +107,14 @@ sub create_policy {
     my ($self, $policy_name, $params) = @_;
 
     confess q{policy argument is required} if not $policy_name;
+    $policy_name = policy_long_name( $policy_name );
     $params ||= {};
 
-    # Pull out base parameters
+    # Pull out base parameters.  Alternate spellings are supported just for
+    # convenience to the user, but please don't document them.
+    my $user_set_themes = $params->{set_themes} || $params->{set_theme};
+    my $user_add_themes = $params->{add_themes} || $params->{add_theme};
     my $user_severity   = $params->{severity};
-    my $user_set_themes = $params->{set_themes};
-    my $user_add_themes = $params->{add_themes};
 
     # Construct policy from remaining params
     my $policy = $policy_name->new( %{$params} );

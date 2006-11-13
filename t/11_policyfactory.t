@@ -10,7 +10,7 @@
 use strict;
 use warnings;
 use English qw(-no_mactch_vars);
-use Test::More tests => 8;
+use Test::More tests => 11;
 use Perl::Critic::UserProfile;
 use Perl::Critic::PolicyFactory;
 
@@ -66,7 +66,37 @@ Perl::Critic::TestUtils::block_perlcriticrc();
 }
 
 #-----------------------------------------------------------------------------
+# Using short module name, and alternate add_theme and set_theme spellings;
+{
+    my $policy_name = 'Variables::ProhibitPunctuationVars';
+    my $params = {set_theme => 'betty', add_theme => 'wilma'};
+
+    my $userprof = Perl::Critic::UserProfile->new( -profile => 'NONE' );
+    my $pf = Perl::Critic::PolicyFactory->new( -profile  => $userprof );
+
+
+    # Now test...
+    my $policy = $pf->create_policy( $policy_name, $params );
+    my $policy_name_long = 'Perl::Critic::Policy::' . $policy_name;
+    is( ref $policy, $policy_name_long, 'Created correct type of policy');
+
+    my @themes = $policy->get_themes();
+    is_deeply( \@themes, [ qw(betty wilma) ], 'Set the theme');
+}
+
+#-----------------------------------------------------------------------------
 # Test exception handling
+
+{
+    my $bogus_policy = 'Perl::Critic::Foo';
+    my $userprof = Perl::Critic::UserProfile->new( -profile => 'NONE' );
+    my $pf = Perl::Critic::PolicyFactory->new( -profile  => $userprof );
+
+    eval{ $pf->create_policy( $bogus_policy ) };
+    like( $EVAL_ERROR, qr/Can't locate object method "new"/m, 'create bogus policy' );
+}
+
+
 
 TODO:{
 
