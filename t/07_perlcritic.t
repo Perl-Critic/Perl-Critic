@@ -11,7 +11,7 @@ use strict;
 use warnings;
 use File::Spec;
 use English qw(-no_match_vars);
-use Test::More tests => 31;
+use Test::More tests => 27;
 
 #-----------------------------------------------------------------------------
 # Load perlcritic like a library so we can test its subroutines.  If it is not
@@ -104,17 +104,6 @@ is( $options{-verbose}, '%l:%c:%m');
 @ARGV = qw(-quiet);
 %options = get_options();
 is( $options{-quiet}, 1);
-
-#-----------------------------------------------------------------------------
-
-{
-    my @lines = policy_listing();
-    my $list = join q{}, @lines;
-    cmp_ok(scalar @lines, '>', 70, 'policy_listing');
-    like($list, qr/^ \d \s \d \s BuiltinFunctions::/xms, 'policy_listing');
-    like($list, qr/^ \d \s \d \s InputOutput::/xms, 'policy_listing');
-    like($list, qr/^ \d \s \d \s Variables::/xms, 'policy_listing');
-}
 
 #-----------------------------------------------------------------------------
 # Intercept pod2usage so we can test invalid options and special switches

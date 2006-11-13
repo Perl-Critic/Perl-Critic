@@ -12,8 +12,13 @@ use warnings;
 use Carp qw(confess);
 use Perl::Critic::Utils;
 use Perl::Critic::Violation qw();
+use String::Format qw(stringf);
+use overload ( q{""} => 'to_string', cmp => '_compare' );
 
 our $VERSION = 0.21;
+
+#Class variables...
+our $FORMAT = "%p\n"; #Default stringy format
 
 #----------------------------------------------------------------------------
 
@@ -97,6 +102,37 @@ sub violation {
     goto &Perl::Critic::Violation::new;
 }
 
+
+#-----------------------------------------------------------------------------
+
+sub to_string {
+    my $self = shift;
+
+    # Wrap the more expensive ones in sub{} to postpone evaluation
+    my %fspec = (
+         'P' => ref $self,
+         'p' => sub { policy_short_name( ref $self ) },
+         'T' => sub { join $SPACE, $self->default_themes() },
+         't' => sub { join $SPACE, $self->get_themes() },
+         'S' => sub { $self->default_severity() },
+         's' => sub { $self->get_severity() },
+    );
+    return stringf($FORMAT, %fspec);
+}
+
+#-----------------------------------------------------------------------------
+# Apparently, some perls do not implicitly stringify overloading
+# objects before doing a comparison.  This causes a couple of our
+# sorting tests to fail.  To work around this, we overload C<cmp> to
+# do it explicitly.
+#
+# 20060503 - More information:  This problem has been traced to
+# Test::Simple versions <= 0.60, not perl itself.  Upgrading to
+# Test::Simple v0.62 will fix the problem.  But rather than forcing
+# everyone to upgrade, I have decided to leave this workaround in
+# place.
+
+sub _compare { return "$_[0]" cmp "$_[1]" }
 
 1;
 

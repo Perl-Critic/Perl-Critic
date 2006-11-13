@@ -91,10 +91,11 @@ sub _parse_command_line {
 
 sub _dispatch_special_requests {
     my (%opts) = @_;
-    if ( $opts{help}    ) { pod2usage( -verbose => 0 )      }  #Exits
-    if ( $opts{man}     ) { pod2usage( -verbose => 2 )      }  #Exits
-    if ( $opts{Version} ) { print "$VERSION\n"; exit 0;     }  #Exits
-    if ( $opts{list}    ) { print policy_listing(); exit 0; }  #Exits
+    if ( $opts{help}    ) { pod2usage( -verbose => 0 )   }  #Exits
+    if ( $opts{man}     ) { pod2usage( -verbose => 2 )   }  #Exits
+    if ( $opts{Version} ) { print "$VERSION\n"; exit 0;  }  #Exits
+    if ( $opts{list}    ) { policy_listing( 'short' );   }  #Exits
+    if ( $opts{List}    ) { policy_listing( 'long'  );   }  #Exits
     return 1;
 }
 
@@ -240,6 +241,7 @@ sub _get_option_specification {
 
     return qw(
         5 4 3 2 1
+        List
         Safari
         Version
         count
@@ -299,36 +301,15 @@ sub _at_tty {
 
 sub policy_listing {
 
-    my $namespace = shift;
-
-    # Again, this require/import hack is just to delay loading of
-    # Perl::Critic until we absolutely have to.
-
+    my $type = shift;
+    require Perl::Critic::PolicyListing;
     require Perl::Critic::Config;
-    my $config = Perl::Critic::Config->new(-severity => 1, -profile => $EMPTY);
-    my @policies = _sort_objects_by_type( $config->policies() );
 
-
-    my $format = '%1d %1d %s [%s]';
-    my @listing = ();
-
-    for my $policy ( @policies ) {
-        my $name = ref $policy;
-        $name =~ s{\A Perl::Critic::Policy::}{}mxg;
-        my $def_sev  = $policy->default_severity();
-        my $user_sev = $policy->get_severity();
-        my $themes = join $SPACE, $policy->get_themes();
-        my $line = sprintf $format, $def_sev, $user_sev, $name, $themes;
-        push @listing, "$line\n";
-    }
-    return @listing;
-}
-
-#-----------------------------------------------------------------------------
-
-sub _sort_objects_by_type {
-    my (@objects) = @_;
-    return sort {ref $a cmp ref $b}  @objects;
+    my %pc_params = (-profile => $EMPTY, -severity => 1);
+    my @pols = Perl::Critic::Config->new( %pc_params )->policies();
+    my $pl = Perl::Critic::PolicyListing->new( -policies => \@pols );
+    print $type eq 'short' ? $pl->short_listing() :  $pl->long_listing();
+    exit 1;
 }
 
 1;
@@ -349,9 +330,9 @@ C<perlcritic> - Command-line interface to critique Perl source
 
   perlcritic [-12345 | -severity number] [-noprofile | -profile file]
              [-top [ number ]] [-include pattern] [-exclude pattern]
-             [-theme expression] [-verbose number | format]  [-list]
-             [-only | -noonly] [-force | -noforce] [-nocolor] [-Version]
-             [-help] [-man] [-quiet] [FILE | DIRECTORY | STDIN]
+             [-theme expression] [-verbose number | format] [-nocolor]
+             [-only | -noonly] [-force | -noforce] [-list | -List]
+             [-quiet] [-help] [-man] [-Version] [FILE | DIRECTORY | STDIN]
 
 =head1 DESCRIPTION
 
