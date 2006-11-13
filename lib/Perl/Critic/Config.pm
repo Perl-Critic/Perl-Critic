@@ -472,7 +472,7 @@ this:
     [Perl::Critic::Policy::Category::PolicyName]
     severity = 1
     set_theme = foo bar
-    add_theme = baz
+    add_themes = baz
     arg1 = value1
     arg2 = value2
 
@@ -527,10 +527,10 @@ A simple configuration might look like this:
     # these policies by saying (-theme => 'larry + curly')
 
     [Modules::RequireFilenameMatchesPackage]
-    add_theme = larry
+    add_themes = larry
 
     [TestingAndDebugging::RequireTestLables]
-    add_theme = curly moe
+    add_themes = curly moe
 
     #--------------------------------------------------------------
     # I do not agree with these at all, so never load them
