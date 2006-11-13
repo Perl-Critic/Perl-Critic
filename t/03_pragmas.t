@@ -17,10 +17,12 @@ Perl::Critic::TestUtils::block_perlcriticrc();
 
 # Configure Critic not to load certain policies.  This
 # just makes it a little easier to create test cases
-my $profile = { '-CodeLayout::RequireTidyCode'          => {},
-                '-Miscellanea::RequireRcsKeywords'      => {},
-                '-Variables::ProhibitUnusedLexicalVars' => {},
-                '-Editor::RequireEmacsFileVariables'    => {},
+my $profile = {
+    '-CodeLayout::RequireTidyCode'                 => {},
+    '-Editor::RequireEmacsFileVariables'           => {},
+    '-Miscellanea::RequireRcsKeywords'             => {},
+    '-ValuesAndExpressions::ProhibitMagicNumbers'  => {},
+    '-Variables::ProhibitUnusedLexicalVars'        => {},
 };
 
 my $code = undef;
