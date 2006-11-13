@@ -668,7 +668,7 @@ this:
 
     [Perl::Critic::Policy::Category::PolicyName]
     severity = 1
-    set_theme = foo bar
+    set_themes = foo bar
     add_themes = baz
     arg1 = value1
     arg2 = value2
@@ -686,7 +686,7 @@ ranging from 1 (least severe) to 5 (most severe).  However, you may
 disagree with the default severity and choose to give it a higher or
 lower severity, based on your own coding philosophy.
 
-C<set_theme> sets the theme for the Policy and overrides it's default
+C<set_themes> sets the theme for the Policy and overrides it's default
 theme.  The argument is a string of one or more whitespace-delimited
 words.  Themes are case-insensitive.  See L<"POLICY THEMES"> for more
 information.

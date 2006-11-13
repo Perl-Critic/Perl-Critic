@@ -471,7 +471,7 @@ this:
 
     [Perl::Critic::Policy::Category::PolicyName]
     severity = 1
-    set_theme = foo bar
+    set_themes = foo bar
     add_themes = baz
     arg1 = value1
     arg2 = value2
