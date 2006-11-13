@@ -269,9 +269,10 @@ sub is_subroutine_name {
 
 sub is_function_call {
     my $elem  = shift;
-    return if is_hash_key($elem);
-    return if is_method_call($elem);
-    return    is_subroutine_name($elem);
+    return ! ( is_hash_key($elem) ||
+               is_method_call($elem) ||
+               is_subroutine_name($elem)
+    );
 }
 
 #-----------------------------------------------------------------------------
