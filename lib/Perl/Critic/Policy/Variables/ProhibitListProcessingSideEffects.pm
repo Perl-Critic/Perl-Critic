@@ -10,6 +10,7 @@ package Perl::Critic::Policy::Variables::ProhibitListProcessingSideEffects;
 use strict;
 use warnings;
 use Perl::Critic::Utils;
+use List::MoreUtils qw(none);
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 0.21;
