@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 45;
+use Test::More tests => 46;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -369,12 +369,25 @@ my ($foo, $bar);
 our $bar
 our ($foo, $bar);
 
-$x->{local};
-
 END_PERL
 
 $policy = 'Variables::RequireInitializationForLocalVars';
 is( pcritique($policy, \$code), 0, $policy);
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+
+$x->{local};
+
+END_PERL
+
+TODO: {
+  local $TODO = "PPI bug prevents this from working";
+
+  $policy = 'Variables::RequireInitializationForLocalVars';
+  is( pcritique($policy, \$code), 0, $policy);
+}
 
 #----------------------------------------------------------------
 
