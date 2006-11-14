@@ -2,6 +2,10 @@ package Perl::Critic::Policy::ValuesAndExpressions::ProhibitMagicNumbers;
 
 use strict;
 use warnings;
+
+# force $PPI::VERSION to be initialized so that the BEGIN block below works.
+use PPI;
+
 use Perl::Critic::Utils;
 use base 'Perl::Critic::Policy';
 
@@ -30,7 +34,7 @@ sub applies_to       { return 'PPI::Token::Number' }
 
 #----------------------------------------------------------------------------
 
-sub violates {
+sub real_violates {
     my ( $self, $elem, undef ) = @_;
 
     return if _element_is_in_an_include_readonly_or_version_statement($elem);
@@ -87,7 +91,21 @@ sub violates {
     } # end if
 
     return;
-} # end violates()
+} # end real_violates()
+
+sub pre119_violates {
+    return;
+} # end pre119_violates()
+
+
+BEGIN {
+    if ($PPI::VERSION le '1.118') {
+        *violates = *pre119_violates{CODE};
+    } else {
+        *violates = *real_violates{CODE};
+    } # end if
+} # end BEGIN
+
 
 sub _element_is_in_an_include_readonly_or_version_statement {
     my $elem = shift;

@@ -8,6 +8,10 @@ use Test::More tests => 52;
 use Perl::Critic::TestUtils qw(pcritique);
 Perl::Critic::TestUtils::block_perlcriticrc();
 
+# The variables in this test suite have been brought to you by the
+# wonders of Acme::Metasyntactic, in the guise of the currently
+# unreleased Nethack theme.
+
 my $policy = 'ValuesAndExpressions::ProhibitMagicNumbers';
 my $code;
 
