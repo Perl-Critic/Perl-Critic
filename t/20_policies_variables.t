@@ -369,6 +369,8 @@ my ($foo, $bar);
 our $bar
 our ($foo, $bar);
 
+$x->{local};
+
 END_PERL
 
 $policy = 'Variables::RequireInitializationForLocalVars';
