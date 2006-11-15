@@ -17,6 +17,11 @@ TODO - Things for Perl::Critic developers to do
     # $Revision$
     #######################################################################
 
+=head1 SEE ALSO
+
+Perl-Critic-More is a separate distribution for less-widely-accepted
+policies.  It contains it's own TODO.pod.
+
 =head1 NEW FEATURES
 
 =over 4
@@ -91,13 +96,6 @@ Right now, P::C thinks that the C<$1> isn't legal to use because it's
 "outside" of the match.  The thing is, we can only get to the C<if>
 if the regex matched.
     while ( $str =~ /(expression)/ ) 
-
-=item * Module::Pluggable
-
-Module::Pluggable has the unpleasant feature of silently ignoring
-compilation errors in loaded modules.  This creates hard-to-diagnose
-bugs.  Look for a workaround to make Module::Pluggable die() when
-syntax errors happen, or replace it entirely.
 
 =back
 
@@ -218,23 +216,6 @@ L<http://home.earthlink.net/~josh.jore/new-warnings/slides/slide1.html>
 
 Forbid C<do "foo.pl">.  Not sure about this policy name.
 
-=item * CodeLayout::ProhibitNonASCII
-
-Definitely low severity!  Only looks at code, not comments or POD
-
-=item * CodeLayout::RequireUTF8
-
-All characters must be valid UTF-8.  Note that typical ASCII Perl code
-is a valid UTF8 subset.
-
-=item * Miscellanea::RequireMinimumPerlVersion
-
-Every module should have something like C<use 5.6.0>
-
-=item * Miscellanea::Prohibit5006isms
-
-Keep the code 5.005 compatible. Low severity
-
 =item * Variables::ProhibitUseVars
 
 Disallow C<use vars qw(...)> and require C<our $foo> instead.  This
@@ -246,11 +227,6 @@ before applying this policy.  Low severity.
 Forbid quotes around hash keys, unless they are really needed.  This
 is against what Damian says.  Suggested by Adam Kennedy.  Low
 severity.
-
-=item * Miscellanea::B::Lint
-
-Create a compatibility layer for the L<B::Lint> code analyzer.  Make
-it very clear that this runs code and thus is a security hole.
 
 =item * CodeLayout::ProhibitFunctionalNew
 
@@ -267,54 +243,6 @@ L<http://rt.cpan.org/Ticket/Display.html?id=20439>
 Forbid old-school package names like Foo'Bar'Baz.  This should also
 apply to any variables or subroutines that get declared/called.
 
-=item * Editor::RequireEmacsFileVariables
-
-=item * Editor::RequireViModelines
-
-Files must have something like the following in them for Emacs and Vi:
-
-  # Local Variables:
-  #   mode: cperl
-  #   cperl-indent-level: 4
-  #   fill-column: 78
-  # End:
-  # vim: expandtab shiftwidth=4:
-
-=over 4
-
-=item Emacs file variables
-
-Implemented!  Currently just tests for the existence of "-*- ... -*-"
-or "Local Variables: ... End:".  This should eventually take a
-perlcriticrc option to specify the exact set of variables.
-
-=item Vim modelines
-
-In vim, this is called "modelines" and should match the following
-pattern (taken from Vim docs):
-
-  [text]{white}{vi:|vim:|ex:}[white]se[t] {options}:[text]
-  [text]{white}{vi:|vim:|ex:}[white]{options}
-
-Roughly translated to regexp:
-
-  ($options) = m/^ (?:\N*\S)? [ \t]+ (?:vi|vim|ex): [ \t]+ set? [ \t]+ (\N+): \N* $/xms;
-  ($options) = m/^ (?:\N*\S)? [ \t]+ (?:vi|vim|ex): [ \t]+ (\N+) $/xms;
-
-Watch out for escaped colons!!
-
-The vim modeline must be within N lines of the top or bottom of the
-file.  That N is user-settable, but defaults to 5.  To learn more type
-":help modelines" in vim.
-
-=item Kate modelines
-
-I also discovered that Kate supports per-file modelines:
-
-L<http://kate-editor.org/article/katepart_modelines>
-
-=back
-
 =item * Documentation::RequireSynopsis
 
 =item * Documentation::RequireLicense
@@ -328,22 +256,6 @@ etc.
 
 Here's a non-PPI implementation:
 L<http://search.cpan.org/src/JJORE/Carp-Clan-5.8/t/04boilerplate.t>
-
-=item * ValuesAndExpressions::ProhibitHereDocs
-
-=item * ValuesAndExpressions::ProhibitLongStrings
-
-Low severity.
-
-Both of these attempt to address problems with code layout and appearance.
-Large blocks of inline text can disrupt the readability of code.  Instead, the
-text should be external, in __DATA__, or simply declared in separate functions
-at the end of the module.
-
-Exceptions: if the only code in a sub is a return of a long string, allow it.
-If there is a C<use Inline::> at the top of the module, allow HereDocs.
-
-L<http://rt.cpan.org/Ticket/Display.html?id=20714>
 
 =item * CodeLayout::ProhibitTrailingSpaces
 
@@ -374,11 +286,10 @@ If enabled, this turns on L<PPI::Cache>:
     mkdir $cache_path, oct 700 if (! -d $cache_path);
     PPI::Cache->import(path => $cache_path);
 
+This cachedir should perhaps include the PPI version number!  At least
+until PPI incorporates it's own version number in the cache.
+
 (see F<t/40_criticize.t> for a more robust implementation)
-
-=item * File::RequirePortableName
-
-No spaces, punctuation, etc.
 
 =back
 
