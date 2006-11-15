@@ -125,12 +125,6 @@ for existence.  I'm not sure that's the case.
 
 =item * Variables::RequireLocalizedPunctuationVars (p81)
 
-=item * ControlStructures::ProhibitMutatingListFunctions (p114)
-
-Partially implemented (see SKIP tests in t/20_policies_variables.t.  Needs documentation.
-
-This should be renamed to ControlStructures::ProhibitMutatingListFunctions
-
 =item * Documentation::PodSpelling (p148)
 
 Base it on Pod::Spell or Test::Spelling. Add a "=for stopwords"

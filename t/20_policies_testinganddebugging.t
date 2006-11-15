@@ -490,8 +490,6 @@ is( pcritique($policy, \$code), 0, $policy );
 
 #----------------------------------------------------------------
 
-TODO: {
-    local $TODO = 'PPI bug in 1.118 parsing hash and array constructors';
 $code = <<'END_PERL';
 is_deeply([],[],'label');
 is_deeply({},{},'label');
@@ -499,7 +497,6 @@ END_PERL
 
 $policy = 'TestingAndDebugging::RequireTestLabels';
 is( pcritique($policy, \$code), 0, $policy );
-}
 
 #----------------------------------------------------------------
 
@@ -607,7 +604,7 @@ sub foo {
 
 END_PERL
 
-%config = ( lines => 6 );
+%config = ( statements => 6 );
 $policy = 'TestingAndDebugging::ProhibitProlongedStrictureOverride';
 is( pcritique($policy, \$code, \%config), 0, $policy );
 

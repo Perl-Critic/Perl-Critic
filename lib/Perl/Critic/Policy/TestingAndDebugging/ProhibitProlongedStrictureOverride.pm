@@ -19,6 +19,8 @@ our $VERSION = 0.21;
 my $desc = q{Don't turn off strict for large blocks of code};
 my $expl = [ 433 ];
 
+my $DEFAULT_N_STATEMENTS = 3;
+
 #----------------------------------------------------------------------------
 
 sub default_severity { return $SEVERITY_HIGH }
@@ -31,9 +33,9 @@ sub new {
     my ( $class, %config ) = @_;
     my $self = bless {}, $class;
 
-    $self->{_lines} = 3;
-    if ( defined $config{lines} ) {
-        $self->{_lines} = $config{lines};
+    $self->{_nstatements} = $DEFAULT_N_STATEMENTS;
+    if ( defined $config{statements} ) {
+        $self->{_nstatements} = $config{statements};
     }
 
     return $self;
@@ -48,8 +50,8 @@ sub violates {
     return if $elem->module ne 'strict';
 
     my $sib = $elem->snext_sibling;
-    my $lines = 0;
-    while ($lines++ <= $self->{_lines}) {
+    my $nstatements = 0;
+    while ($nstatements++ <= $self->{_nstatements}) {
         return if !$sib;
         return if $sib->isa('PPI::Statement::Include') &&
             $sib->type eq 'use' &&
@@ -74,6 +76,20 @@ Perl::Critic::Policy::TestingAndDebugging::ProhibitProlongedStrictureOverride
 
 =head1 DESCRIPTION
 
+Every agrees that C<use strict> is the first step to writing maintainable code
+in Perl.  However, sometimes C<strict> is a little too strict.  In those
+cases, you can turn it off briefly with a C<no strict> directive.
+
+This policy checks that C<no strict> is only in effect for a small number of
+statements.
+
+=head1 CONSTRUCTOR
+
+The default number of statements allowed per C<no strict> is three.  To
+override this number, put the following in your F<.perlcriticrc>:
+
+ [TestingAndDebugging::ProhibitProlongedStrictureOverride]
+ statements = 5
 
 =head1 AUTHOR
 
