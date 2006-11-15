@@ -125,7 +125,7 @@ for existence.  I'm not sure that's the case.
 
 =item * Variables::RequireLocalizedPunctuationVars (p81)
 
-=item * Variables::ProhibitListProcessingSideEffects (p114)
+=item * ControlStructures::ProhibitMutatingListFunctions (p114)
 
 Partially implemented (see SKIP tests in t/20_policies_variables.t.  Needs documentation.
 

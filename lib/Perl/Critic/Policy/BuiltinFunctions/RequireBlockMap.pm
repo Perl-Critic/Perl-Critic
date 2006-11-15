@@ -33,22 +33,11 @@ sub violates {
     return if $elem ne 'map';
     return if ! is_function_call($elem);
 
-    my $arg = _first_arg($elem);
+    my $arg = first_arg($elem);
     return if !$arg;
     return if $arg->isa('PPI::Structure::Block');
 
     return $self->violation( $desc, $expl, $elem );
-}
-
-sub _first_arg {
-    my $elem = shift;
-
-    my $arg = $elem->snext_sibling();
-    while ($arg) {
-        last if !$arg->isa('PPI::Structure::List') && !$arg->isa('PPI::Statement');
-        $arg = $arg->schild(0);
-    }
-    return $arg;
 }
 
 1;

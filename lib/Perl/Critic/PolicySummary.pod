@@ -121,9 +121,11 @@ Don't write long "if-elsif-elsif-elsif-elsif...else" chains. [Severity 3]
 
 =head2 L<Perl::Critic::Policy::ControlStructures::ProhibitDeepNests>
 
-[Severity 2]
+Don't write deeply nested loops and conditionals. [Severity 2]
 
-Don't write deeply nested loops and conditionals.
+=head2 L<Perl::Critic::Policy::ControlStructures::ProhibitMutatingListFunctions>
+
+Don't modify C<$_> in list functions [Severity 5]
 
 =head2 L<Perl::Critic::Policy::ControlStructures::ProhibitPostfixControls>
 
@@ -368,10 +370,6 @@ Write C< <<'THE_END'; > instead of C< <<'theEnd'; > [Severity 1]
 =head2 L<Perl::Critic::Policy::Variables::ProhibitConditionalDeclarations>
 
 Do not write C< my $foo = $bar if $baz; > [Severity 5]
-
-=head2 L<Perl::Critic::Policy::Variables::ProhibitListProcessingSideEffects>
-
-Don't modify C<$_> in list functions [Severity 5]
 
 =head2 L<Perl::Critic::Policy::Variables::ProhibitLocalVars>
 

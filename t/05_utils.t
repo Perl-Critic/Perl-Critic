@@ -11,7 +11,7 @@ use strict;
 use warnings;
 use PPI::Document;
 use constant USE_B_KEYWORDS => eval 'use B::Keywords 1.04; 1';
-use Test::More tests => 76 + (
+use Test::More tests => 80 + (
     USE_B_KEYWORDS
     ? ( @B::Keywords::Functions + @B::Keywords::Scalars + @B::Keywords::Arrays
             + @B::Keywords::Hashes + @B::Keywords::FileHandles )
@@ -38,6 +38,7 @@ can_ok('main', 'is_perl_builtin');
 can_ok('main', 'is_perl_global');
 can_ok('main', 'is_script');
 can_ok('main', 'is_subroutine_name');
+can_ok('main', 'first_arg');
 can_ok('main', 'parse_arg_list');
 can_ok('main', 'policy_long_name');
 can_ok('main', 'policy_short_name');
@@ -229,10 +230,10 @@ SKIP: {
 {
     my $short_name = 'Baz::Nuts';
     my $long_name  = "${POLICY_NAMESPACE}::$short_name";
-    is( policy_long_name(  $short_name ), $long_name   );
-    is( policy_long_name(  $long_name  ), $long_name   );
-    is( policy_short_name( $short_name ), $short_name  );
-    is( policy_short_name( $long_name  ), $short_name  );
+    is( policy_long_name(  $short_name ), $long_name,  'policy_long_name'  );
+    is( policy_long_name(  $long_name  ), $long_name,  'policy_long_name'  );
+    is( policy_short_name( $short_name ), $short_name, 'policy_short_name' );
+    is( policy_short_name( $long_name  ), $short_name, 'policy_short_name' );
 }
 
 #-----------------------------------------------------------------------------
@@ -266,6 +267,25 @@ is( interpolate( 'literal'    ), "literal",    'Interpolation' );
 
     for ( qw( swp.pm Bak ~foo ) ) {
         ok( ! Perl::Critic::Utils::_is_backup($_), qq{Is not backup: '$_'} );
+    }
+}
+
+#-----------------------------------------------------------------------------
+# first_arg tests
+
+{
+    my @tests = (
+        q{eval { some_code() };}   => q{{ some_code() }},
+        q{eval( {some_code() } );} => q{{some_code() }},
+        q{eval();}                 => undef,
+    );
+
+    for (my $i = 0; $i < @tests; $i += 2) {
+        my $code = $tests[$i];
+        my $expect = $tests[$i+1];
+        my $doc = PPI::Document->new(\$code);
+        my $got = first_arg($doc->first_token());
+        is($got ? "$got" : undef, $expect, 'first_arg - '.$code);
     }
 }
 

@@ -9,7 +9,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 47;
+use Test::More tests => 48;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -481,14 +481,25 @@ like('foo',qr/f/,'label');
 unlike('foo',qr/f/,'label');
 cmp_ok(1,'==',2,'label');
 is_deeply('literal','literal','label');
-is_deeply([],[],'label');
-is_deeply({],{},'label');
 pass('label');
 fail('label');
 END_PERL
 
 $policy = 'TestingAndDebugging::RequireTestLabels';
 is( pcritique($policy, \$code), 0, $policy );
+
+#----------------------------------------------------------------
+
+TODO: {
+    local $TODO = 'PPI bug in 1.118 parsing hash and array constructors';
+$code = <<'END_PERL';
+is_deeply([],[],'label');
+is_deeply({},{},'label');
+END_PERL
+
+$policy = 'TestingAndDebugging::RequireTestLabels';
+is( pcritique($policy, \$code), 0, $policy );
+}
 
 #----------------------------------------------------------------
 

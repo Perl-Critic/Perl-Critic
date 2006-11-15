@@ -197,6 +197,7 @@ sub native_policy_names {
       Perl::Critic::Policy::ControlStructures::ProhibitCStyleForLoops
       Perl::Critic::Policy::ControlStructures::ProhibitCascadingIfElse
       Perl::Critic::Policy::ControlStructures::ProhibitDeepNests
+      Perl::Critic::Policy::ControlStructures::ProhibitMutatingListFunctions
       Perl::Critic::Policy::ControlStructures::ProhibitPostfixControls
       Perl::Critic::Policy::ControlStructures::ProhibitUnlessBlocks
       Perl::Critic::Policy::ControlStructures::ProhibitUnreachableCode
@@ -258,7 +259,6 @@ sub native_policy_names {
       Perl::Critic::Policy::ValuesAndExpressions::RequireQuotedHeredocTerminator
       Perl::Critic::Policy::ValuesAndExpressions::RequireUpperCaseHeredocTerminator
       Perl::Critic::Policy::Variables::ProhibitConditionalDeclarations
-      Perl::Critic::Policy::Variables::ProhibitListProcessingSideEffects
       Perl::Critic::Policy::Variables::ProhibitLocalVars
       Perl::Critic::Policy::Variables::ProhibitMatchVars
       Perl::Critic::Policy::Variables::ProhibitPackageVars

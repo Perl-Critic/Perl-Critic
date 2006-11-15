@@ -11,7 +11,7 @@ Hackathon:
      * Editor::RequireEmacsFileVariables
      * TestingAndDebugging::ProhibitProlongedStrictureOverride
      * ValuesAndExpressions::ProhibitMagicNumbers (needs customizability)
-     * Variables::ProhibitListProcessingSideEffects (not quite finished)
+     * ControlStructures::ProhibitMutatingListFunctions (not quite finished)
 
 [0.21]  Released on 2006-11-05
 

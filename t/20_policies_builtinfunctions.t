@@ -182,7 +182,7 @@ grep( {$_ eq 'foo'}  @list );
 grep();
 @matches = grep();
 {grep}; # for Devel::Cover
-grelp $_ eq 'foo', @list; # for Devel::Cover
+grelp $_ eq 'foo', @list; # deliberately misspell grep
 END_PERL
 
 $policy = 'BuiltinFunctions::RequireBlockGrep';
@@ -218,7 +218,7 @@ map( {$_++}   @list );
 map();
 @foo = map();
 {map}; # for Devel::Cover
-malp $_++, @list; # for Devel::Cover
+malp $_++, @list; # deliberately misspell map
 END_PERL
 
 $policy = 'BuiltinFunctions::RequireBlockMap';

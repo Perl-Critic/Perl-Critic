@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 46;
+use Test::More tests => 39;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -497,85 +497,6 @@ END_PERL
 
 $policy = 'Variables::RequireNegativeIndices';
 is( pcritique($policy, \$code), 0, $policy.', fixme' );
-
-#----------------------------------------------------------------
-
-$code = <<'END_PERL';
-@bar = map {$_ = 1} @foo;
-@bar = map {$_ *= 2} @foo;
-@bar = map {$_++} @foo;
-END_PERL
-
-$policy = 'Variables::ProhibitListProcessingSideEffects';
-is( pcritique($policy, \$code), 3, "$policy assignment and op-assignment" );
-
-#----------------------------------------------------------------
-
-$code = <<'END_PERL';
-@bar = map {$_ =~ s/f/g/} @foo;
-@bar = map {$_ =~ tr/f/g/} @foo;
-@bar = map {$_ =~ y/f/g/} @foo;
-END_PERL
-
-$policy = 'Variables::ProhibitListProcessingSideEffects';
-is( pcritique($policy, \$code), 3, "$policy - explicit regexes" );
-
-#----------------------------------------------------------------
-
-$code = <<'END_PERL';
-@bar = map {s/f/g/} @foo;
-@bar = map {tr/f/g/} @foo;
-@bar = map {y/f/g/} @foo;
-END_PERL
-
-$policy = 'Variables::ProhibitListProcessingSideEffects';
-is( pcritique($policy, \$code), 3, "$policy - implicit regexps" );
-
-#----------------------------------------------------------------
-
-SKIP: {
-    skip 'not yet implemented', 3;
-
-$code = <<'END_PERL';
-@bar = map {chop} @foo;
-@bar = map {chomp} @foo;
-END_PERL
-
-$policy = 'Variables::ProhibitListProcessingSideEffects';
-is( pcritique($policy, \$code), 2, "$policy - implicit chomp-ish builtins" );
-
-#----------------------------------------------------------------
-
-$code = <<'END_PERL';
-@bar = map {chop $_} @foo;
-@bar = map {chomp $_} @foo;
-@bar = map {undef $_} @foo;
-END_PERL
-
-$policy = 'Variables::ProhibitListProcessingSideEffects';
-is( pcritique($policy, \$code), 3, "$policy - explicit chomp-ish builtins" );
-
-#----------------------------------------------------------------
-
-$code = <<'END_PERL';
-@bar = map {substr $_, 0, 1, 'f'} @foo;
-END_PERL
-
-$policy = 'Variables::ProhibitListProcessingSideEffects';
-is( pcritique($policy, \$code), 1, "$policy - substr" );
-
-}
-#----------------------------------------------------------------
-
-$code = <<'END_PERL';
-@bar = map {$_} @foo;
-@bar = map {$_ => 1} @foo;
-@bar = map {m/4/} @foo;
-@bar = map {my $s=$_; chomp $s; $s} @foo;
-END_PERL
-
-$policy = 'Variables::ProhibitListProcessingSideEffects';
-is( pcritique($policy, \$code), 0, $policy );
 
 #----------------------------------------------------------------
 

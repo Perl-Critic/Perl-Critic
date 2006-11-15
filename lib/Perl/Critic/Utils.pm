@@ -56,6 +56,7 @@ our @EXPORT = qw(
     &is_perl_global
     &is_script
     &is_subroutine_name
+    &first_arg
     &parse_arg_list
     &policy_long_name
     &policy_short_name
@@ -303,6 +304,23 @@ sub policy_short_name {
 
 #-----------------------------------------------------------------------------
 
+sub first_arg {
+    my $elem = shift;
+    my $sib  = $elem->snext_sibling();
+    return if !$sib;
+
+    if ( $sib->isa('PPI::Structure::List') ) {
+
+        my $expr = $sib->schild(0);
+        return if !$expr;
+        return $expr->isa('PPI::Statement') ? $expr->schild(0) : $expr;
+    }
+
+    return $sib;
+}
+
+#-----------------------------------------------------------------------------
+
 sub parse_arg_list {
     my $elem = shift;
     my $sib  = $elem->snext_sibling();
@@ -546,6 +564,21 @@ Given a L<PPI::Token::Word> returns true if the element appears to be
 call to a static function.  Specifically, this function returns true
 if C<is_hash_key>, C<is_method_call>, and C<is_subroutine_name> all
 return false for the given element.
+
+=item C<first_arg( $element )>
+
+Given a L<PPI::Element> that is presumed to be a function call (which is
+usually a L<PPI::Token::Word>), return the first argument.  This is similar
+of C<parse_arg_list()> and follows the same logic.  Note that for the code:
+
+  int($x + 0.5)
+
+this function will return just the C<$x>, not the whole expression.  This is
+different from the behavior of C<parse_arg_list()>.  Another caveat is:
+
+  int(($x + $y) + 0.5)
+
+which returns C<($x + $y)> as a L<PPI::Structure::List> instance.
 
 =item C<parse_arg_list( $element )>
 

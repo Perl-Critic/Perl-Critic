@@ -34,6 +34,7 @@ lib/Perl/Critic/Policy/CodeLayout/RequireTrailingCommas.pm
 lib/Perl/Critic/Policy/ControlStructures/ProhibitCascadingIfElse.pm
 lib/Perl/Critic/Policy/ControlStructures/ProhibitCStyleForLoops.pm
 lib/Perl/Critic/Policy/ControlStructures/ProhibitDeepNests.pm
+lib/Perl/Critic/Policy/ControlStructures/ProhibitMutatingListFunctions.pm
 lib/Perl/Critic/Policy/ControlStructures/ProhibitPostfixControls.pm
 lib/Perl/Critic/Policy/ControlStructures/ProhibitUnlessBlocks.pm
 lib/Perl/Critic/Policy/ControlStructures/ProhibitUnreachableCode.pm
@@ -95,7 +96,6 @@ lib/Perl/Critic/Policy/ValuesAndExpressions/RequireNumberSeparators.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/RequireQuotedHeredocTerminator.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/RequireUpperCaseHeredocTerminator.pm
 lib/Perl/Critic/Policy/Variables/ProhibitConditionalDeclarations.pm
-lib/Perl/Critic/Policy/Variables/ProhibitListProcessingSideEffects.pm
 lib/Perl/Critic/Policy/Variables/ProhibitLocalVars.pm
 lib/Perl/Critic/Policy/Variables/ProhibitMatchVars.pm
 lib/Perl/Critic/Policy/Variables/ProhibitPackageVars.pm

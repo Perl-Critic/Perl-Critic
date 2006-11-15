@@ -248,6 +248,12 @@ overwritten.  Duplicate themes will be removed.
 Appends additional themes to this Policy.  Any existing themes are
 preserved.  Duplicate themes will be removed.
 
+=item C<to_string()>
+
+Returns a string representation of the policy.  The content of the
+string depends on the current value of the C<$FORMAT> package
+variable.  See L<"OVERLOADS"> for the details.
+
 =back
 
 =head1 DOCUMENTATION
@@ -257,6 +263,25 @@ will try and extract the DESCRIPTION section of your Policy module's
 POD.  This information is displayed by Perl::Critic if the verbosity
 level is set accordingly.  Therefore, please include a DESCRIPTION
 section in the POD for any Policy modules that you author.  Thanks.
+
+=head1 OVERLOADS
+
+Perl::Critic::Violation overloads the C<""> operator to produce neat
+little messages when evaluated in string context.  The format depends
+on the current value of the C<$FORMAT> package variable.
+
+Formats are a combination of literal and escape characters similar to
+the way C<sprintf> works.  If you want to know the specific formatting
+capabilities, look at L<String::Format>. Valid escape characters are:
+
+  Escape    Meaning
+  -------   -----------------------------------------------------------------
+  %P        Name of the Policy module
+  %p        Name of the Policy without the Perl::Critic::Policy:: prefix
+  %S        The default severity level of the policy
+  %s        The current severity level of the policy
+  %T        The default themes for the policy
+  %t        The current themes for the policy
 
 =head1 AUTHOR
 
