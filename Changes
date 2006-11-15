@@ -8,7 +8,6 @@
 Hackathon:
 
      New Policies:
-     * Editor::RequireEmacsFileVariables
      * TestingAndDebugging::ProhibitProlongedStrictureOverride
      * ValuesAndExpressions::ProhibitMagicNumbers (needs customizability)
      * ControlStructures::ProhibitMutatingListFunctions (not quite finished)
