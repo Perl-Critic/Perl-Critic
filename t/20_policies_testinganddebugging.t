@@ -481,6 +481,8 @@ like('foo',qr/f/,'label');
 unlike('foo',qr/f/,'label');
 cmp_ok(1,'==',2,'label');
 is_deeply('literal','literal','label');
+is_deeply([],[],'label');
+is_deeply({],{},'label'); # This is the failure in PPI 1.19_02
 pass('label');
 fail('label');
 END_PERL
