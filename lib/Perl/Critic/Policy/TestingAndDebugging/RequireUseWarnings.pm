@@ -85,11 +85,11 @@ Perl::Critic::Policy::TestingAndDebugging::RequireUseWarnings
 
 =head1 DESCRIPTION
 
-Using warnings is probably the single most effective way to improve
-the quality of your code.  This policy requires that the C<'use
-warnings'> statement must come before any other statements except
-C<package>, C<require>, and other C<use> statements.  Thus, all the
-code in the entire package will be affected.
+Using warnings, and paying attention to what they say, is probably the
+single most effective way to improve the quality of your code.  This
+policy requires that the C<'use warnings'> statement must come before
+any other statements except C<package>, C<require>, and other C<use>
+statements.  Thus, all the code in the entire package will be affected.
 
 =head1 NOTES
 
