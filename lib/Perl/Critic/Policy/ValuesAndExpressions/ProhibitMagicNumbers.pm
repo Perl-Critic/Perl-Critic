@@ -18,14 +18,6 @@ my $USE_READONLY_OR_CONSTANT =
     ' Use the Readonly module or the "constant" pragma instead';
 my $TYPE_NOT_ALLOWED_SUFFIX = ") are not allowed.$USE_READONLY_OR_CONSTANT";
 
-my %allowed         = hashify( 0, 1, 2 );   # Should be configurable
-my $allowed_string  =
-      ' is not one of the allowed literal values ('
-    . ( join ', ', sort { $a <=> $b } keys %allowed )
-    . ').'
-    . $USE_READONLY_OR_CONSTANT;
-
-
 #----------------------------------------------------------------------------
 
 sub default_severity { return $SEVERITY_LOW        }
@@ -34,75 +26,101 @@ sub applies_to       { return 'PPI::Token::Number' }
 
 #----------------------------------------------------------------------------
 
-sub real_violates {
+sub new {
+    my ( $class, %config ) = @_;
+    my $self = bless {}, $class;
+
+    #Set config, if defined
+    my @allowed_literals;
+    if ( defined $config{allowed_literals} ) {
+        my @allowed_literals_strings =
+            grep {$_} split m/\s+/xms, $config{allowed_literals};
+
+        @allowed_literals = map { $_ + 0 } @allowed_literals_strings;
+    } else {
+        @allowed_literals = ( 2 );
+    } # end if
+    my %allowed_literals = hashify( 0, 1, @allowed_literals );
+
+    my $allowed_string  =
+          ' is not one of the allowed literal values ('
+        . ( join ', ', sort { $a <=> $b } keys %allowed_literals )
+        . ').'
+        . $USE_READONLY_OR_CONSTANT;
+
+    my %checked_types = (
+        'PPI::Token::Number::Binary'  => 'Binary literals ('      ,
+        'PPI::Token::Number::Float'   => 'Float literals (' ,
+        'PPI::Token::Number::Exp'     => 'Exponential literals (' ,
+        'PPI::Token::Number::Hex'     => 'Hexadecimal literals (' ,
+        'PPI::Token::Number::Octal'   => 'Octal literals ('       ,
+        'PPI::Token::Number::Version' => 'Version literals ('     ,
+    );
+    if ( defined $config{allowed_types} ) {
+        foreach my $allowed_type (
+            grep {$_} split m/\s+/xms, $config{allowed_types}
+        ) {
+            delete $checked_types{ "PPI::Token::Number::$allowed_type" };
+
+            if ($allowed_type eq 'Exp') {
+                # because an Exp isa(Float).
+                delete $checked_types{ 'PPI::Token::Number::Float' };
+            } # end if
+        } # end foreach
+    } else {
+        delete $checked_types{ 'PPI::Token::Number::Float' };
+    } # end if
+
+    $self->{_allowed_literals}  = \%allowed_literals;
+    $self->{_allowed_string}    = $allowed_string;
+    $self->{_checked_types}     = \%checked_types;
+
+    return $self;
+} # end new()
+
+sub _real_violates {
     my ( $self, $elem, undef ) = @_;
 
     return if _element_is_in_an_include_readonly_or_version_statement($elem);
 
     my $literal = $elem->literal();
-    if ( defined $literal and not defined $allowed{ $literal } ) {
+    if ( defined $literal and not defined $self->{_allowed_literals}{ $literal } ) {
         return
             $self->violation(
                 $DESC,
-                $elem->content() . $allowed_string,
+                $elem->content() . $self->{_allowed_string},
                 $elem,
             );
     } # end if
 
-    if ($elem->isa('PPI::Token::Number::Binary')) {
-        return
-            $self->violation(
-                $DESC,
-                'Binary literals (' . $elem->content() . $TYPE_NOT_ALLOWED_SUFFIX,
-                $elem,
-            );
-    } # end if
-    if ($elem->isa('PPI::Token::Number::Exp')) {
-        return
-            $self->violation(
-                $DESC,
-                'Exponential literals (' . $elem->content() . $TYPE_NOT_ALLOWED_SUFFIX,
-                $elem,
-            );
-    } # end if
-    if ($elem->isa('PPI::Token::Number::Hex')) {
-        return
-            $self->violation(
-                $DESC,
-                'Hexadecimal literals (' . $elem->content() . $TYPE_NOT_ALLOWED_SUFFIX,
-                $elem,
-            );
-    } # end if
-    if ($elem->isa('PPI::Token::Number::Octal')) {
-        return
-            $self->violation(
-                $DESC,
-                'Octal literals (' . $elem->content() . $TYPE_NOT_ALLOWED_SUFFIX,
-                $elem,
-            );
-    } # end if
-    if ($elem->isa('PPI::Token::Number::Version')) {
-        return
-            $self->violation(
-                $DESC,
-                'Version literals (' . $elem->content() . $TYPE_NOT_ALLOWED_SUFFIX,
-                $elem,
-            );
-    } # end if
+    my ($number_type, $type_string);
+    while (
+          ( $number_type, $type_string )
+        = ( each %{ $self->{_checked_types} } )
+    ) {
+        if ( $elem->isa( $number_type ) ) {
+            return
+                $self->violation(
+                    $DESC,
+                    $type_string . $elem->content() . $TYPE_NOT_ALLOWED_SUFFIX,
+                    $elem,
+                );
+        } # end if
+    } # end foreach
 
     return;
-} # end real_violates()
+} # end _real_violates()
 
-sub pre119_violates {
+sub _pre119_violates {
     return;
-} # end pre119_violates()
+} # end _pre119_violates()
 
 
 BEGIN {
     if ($PPI::VERSION le '1.118') {
-        *violates = *pre119_violates{CODE};
+        *violates = *_pre119_violates{CODE};
     } else {
-        *violates = *real_violates{CODE};
+        *violates = *_real_violates{CODE};
     } # end if
 } # end BEGIN
 
@@ -158,22 +176,33 @@ Perl::Critic::Policy::ValuesAndExpressions::ProhibitMagicNumbers
 
 =head1 DESCRIPTION
 
-Numeric literals other than C<0> or C<1> in the middle of code make it hard to
-maintain because one cannot understand their significance or where they were
-derived from.  Use the L<constant> pragma or the L<Readonly> module to give a
-descriptive name to the number.
+What is a "magic number"?  A magic number is a number that appears in code
+without any explanation; e.g.  C<$bank_account_balance *= 57.492;>.  You look
+at that number and have to wonder where that number came from.  Since you don't
+understand the significance of the number, you don't understand the code.
+
+In general, numeric literals other than C<0> or C<1> in should not be used.
+Use the L<constant> pragma or the L<Readonly> module to give a descriptive name
+to the number.
+
+There are, of course, exceptions to when this rule should be applied.  One good
+example is positioning of objects in some container like shapes on a blueprint
+or widgets in a UI.  In these cases, the significance of a number can readily
+be determined by context.
+
+=head2 Ways in which this module applies this rule.
+
+By default, this rule is relaxed in that C<2> is permitted to allow for things
+like alternation, the STDERR file handle, etc..
 
 Numeric literals are allowed in C<use> and C<require> statements to allow for
 things like Perl version restrictions and L<Test::More> plans.  Uses of the
 Readonly module are obviously valid.  Declarations of C<$VERSION> package
 variables are permitted.
 
-The rule is relaxed in that C<2> is permitted to allow for things like
-alternation, the STDERR file handle, etc..
-
 Use of binary, exponential, hexadecimal, octal, and version numbers, even for
 C<0> and C<1> outside of C<use>/C<require>/C<Readonly> statements aren't
-permitted.
+permitted (but you can change this).
 
 
 
@@ -214,6 +243,46 @@ permitted.
   }
 
 
+=head1 CONSTRUCTOR
+
+This policy accepts two extra parameters: C<allowed_literals> and C<allowed_types>.
+
+=head2 C<allowed_literals>
+
+The C<allowed_literals> parameter is a whitespace delimited set of permitted number I<values>; this does not affect the permitted formats for numbers.  The defaults are equivalent to having the following in your F<.perlcriticrc>:
+
+  [ValuesAndExpressions::ProhibitMagicNumbers]
+  allowed_literals = 0 1 2
+
+Note that this policy forces the values C<0> and C<1> into the permitted values.  Thus, specifying no values,
+
+  allowed_literals =
+
+is the same as simply listing C<0> and C<1>:
+
+  allowed_literals = 0 1
+
+At present, you have to specify each individual acceptable value, e.g. for -3 to 3, by .5:
+
+  allowed_literals = -3 -2.5 -2 -1.5 -1 -0.5 0 0.5 1 1.5 2 2.5 3
+
+=head2 C<allowed_types>
+
+The C<allowed_types> parameter is a whitespace delimited set of subclasses of L<PPI::Token::Number>.
+
+Decimal integers are always allowed.  By default, floating-point numbers are also allowed.
+
+For example, to allow hexadecimal literals, you could configure this policy like
+
+  [ValuesAndExpressions::ProhibitMagicNumbers]
+  allowed_types = Hex
+
+but without specifying anything for C<allowed_literals>, the allowed hexadecimal literals will be C<0x00>, C<0x01>, and C<0x02>.  Note, also, as soon as you specify a value for this parameter, you must include C<Float> in the list to continue to be able to use floating point literals.  This effect can be used to restrict literals to only decimal integers:
+
+  [ValuesAndExpressions::ProhibitMagicNumbers]
+  allowed_types =
+
+
 =head1 AUTHOR
 
 Elliot Shank C<< <perl@galumph.com> >>
@@ -235,4 +304,4 @@ can be found in the LICENSE file included with this module.
 #   indent-tabs-mode: nil
 #   c-indentation-style: bsd
 # End:
-# ex: set ts=8 sts=4 sw=4 expandtab
+# ex: set ts=8 sts=4 sw=4 expandtab :

@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 52;
+use Test::More tests => 92;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -116,7 +116,33 @@ END_PERL
 is(
     pcritique($policy, \$code),
     0,
-    "$policy: floating-point 0 is allowed anywhere"
+    "$policy: floating-point one is allowed anywhere"
+);
+
+#----------------------------------------------------------------
+
+# TEST
+$code = <<'END_PERL';
+$gold_golem = 2;
+END_PERL
+
+is(
+    pcritique($policy, \$code),
+    0,
+    "$policy: decimal two is allowed anywhere"
+);
+
+#----------------------------------------------------------------
+
+# TEST
+$code = <<'END_PERL';
+$lich = 2.0;
+END_PERL
+
+is(
+    pcritique($policy, \$code),
+    0,
+    "$policy: floating-point two is allowed anywhere"
 );
 
 #----------------------------------------------------------------
@@ -367,7 +393,7 @@ is(
 
 # TEST
 $code = <<'END_PERL';
-$Green_elf = 0e1;
+$Green_elf = 0e0;
 END_PERL
 
 is(
@@ -380,7 +406,7 @@ is(
 
 # TEST
 $code = <<'END_PERL';
-Readonly $sasquatch => 0e1;
+Readonly $sasquatch => 0e0;
 END_PERL
 
 is(
@@ -393,7 +419,7 @@ is(
 
 # TEST
 $code = <<'END_PERL';
-$Uruk_hai = 1e1;
+$Uruk_hai = 1e0;
 END_PERL
 
 is(
@@ -406,7 +432,7 @@ is(
 
 # TEST
 $code = <<'END_PERL';
-Readonly $leather_golem => 1e1;
+Readonly $leather_golem => 1e0;
 END_PERL
 
 is(
@@ -699,6 +725,528 @@ is(
     pcritique($policy, \$code),
     0,
     "$policy: \$VERSION variables get a special exemption"
+);
+
+#----------------------------------------------------------------
+
+
+#----------------------------------------------------------------
+my %config;
+
+# TEST
+$code = <<'END_PERL';
+use 5.8.1;
+END_PERL
+
+is(
+    pcritique($policy, \$code, \%config),
+    0,
+    "$policy: code that passes without configuration should pass with empty configuration"
+);
+
+#----------------------------------------------------------------
+
+# TEST
+$code = <<'END_PERL';
+$killer_tomato = 1;
+END_PERL
+
+is(
+    pcritique($policy, \$code, \%config),
+    0,
+    "$policy: code that passes without configuration should pass with empty configuration"
+);
+
+#----------------------------------------------------------------
+
+# TEST
+$code = <<'END_PERL';
+$witch_doctor = 1.0;
+END_PERL
+
+is(
+    pcritique($policy, \$code, \%config),
+    0,
+    "$policy: code that passes without configuration should pass with empty configuration"
+);
+
+#----------------------------------------------------------------
+
+# TEST
+$code = <<'END_PERL';
+$soldier = 2.5;
+END_PERL
+
+is(
+    pcritique($policy, \$code, \%config),
+    1,
+    "$policy: code that doesn't pass without configuration should also not pass with empty configuration"
+);
+
+#----------------------------------------------------------------
+
+# TEST
+$code = <<'END_PERL';
+$frobnication_factor = 42;
+END_PERL
+
+is(
+    pcritique($policy, \$code, \%config),
+    1,
+    "$policy: code that doesn't pass without configuration should also not pass with empty configuration"
+);
+
+#----------------------------------------------------------------
+
+# TEST
+$code = <<'END_PERL';
+use constant FROBNICATION_FACTOR => 42;
+END_PERL
+
+is(
+    pcritique($policy, \$code, \%config),
+    0,
+    "$policy: code that passes without configuration should pass with empty configuration"
+);
+
+#----------------------------------------------------------------
+
+#----------------------------------------------------------------
+%config = ( allowed_literals => '' );
+
+# TEST
+$code = <<'END_PERL';
+$tangle_tree = 0;
+END_PERL
+
+is(
+    pcritique($policy, \$code),
+    0,
+    "$policy: decimal zero is allowed even if the configuration specifies that there aren't any allowed literals"
+);
+
+#----------------------------------------------------------------
+
+# TEST
+$code = <<'END_PERL';
+$xiron_golem = 0.0
+END_PERL
+
+is(
+    pcritique($policy, \$code, \%config),
+    0,
+    "$policy: floating-point zero is allowed even if the configuration specifies that there aren't any allowed literals"
+);
+
+#----------------------------------------------------------------
+
+# TEST
+$code = <<'END_PERL';
+$killer_tomato = 1;
+END_PERL
+
+is(
+    pcritique($policy, \$code, \%config),
+    0,
+    "$policy: decimal one is allowed even if the configuration specifies that there aren't any allowed literals"
+);
+
+#----------------------------------------------------------------
+
+# TEST
+$code = <<'END_PERL';
+$witch_doctor = 1.0;
+END_PERL
+
+is(
+    pcritique($policy, \$code, \%config),
+    0,
+    "$policy: floating-point one is allowed even if the configuration specifies that there aren't any allowed literals"
+);
+
+#----------------------------------------------------------------
+
+# TEST
+$code = <<'END_PERL';
+$gold_golem = 2;
+END_PERL
+
+is(
+    pcritique($policy, \$code, \%config),
+    1,
+    "$policy: decimal two is not allowed if the configuration specifies that there aren't any allowed literals"
+);
+
+#----------------------------------------------------------------
+
+# TEST
+$code = <<'END_PERL';
+$lich = 2.0;
+END_PERL
+
+is(
+    pcritique($policy, \$code, \%config),
+    1,
+    "$policy: floating-point two is not allowed if the configuration specifies that there aren't any allowed literals"
+);
+
+#----------------------------------------------------------------
+
+#----------------------------------------------------------------
+%config = ( allowed_literals => '3 -5' );
+
+# TEST
+$code = <<'END_PERL';
+$tangle_tree = 0;
+END_PERL
+
+is(
+    pcritique($policy, \$code),
+    0,
+    "$policy: decimal zero is allowed even if the configuration doesn't include it in the allowed literals"
+);
+
+#----------------------------------------------------------------
+
+# TEST
+$code = <<'END_PERL';
+$xiron_golem = 0.0
+END_PERL
+
+is(
+    pcritique($policy, \$code, \%config),
+    0,
+    "$policy: floating-point zero is allowed even if the configuration doesn't include it in the allowed literals"
+);
+
+#----------------------------------------------------------------
+
+# TEST
+$code = <<'END_PERL';
+$killer_tomato = 1;
+END_PERL
+
+is(
+    pcritique($policy, \$code, \%config),
+    0,
+    "$policy: decimal one is allowed even if the configuration doesn't include it in the allowed literals"
+);
+
+#----------------------------------------------------------------
+
+# TEST
+$code = <<'END_PERL';
+$witch_doctor = 1.0;
+END_PERL
+
+is(
+    pcritique($policy, \$code, \%config),
+    0,
+    "$policy: floating-point one is allowed even if the configuration doesn't include it in the allowed literals"
+);
+
+#----------------------------------------------------------------
+
+# TEST
+$code = <<'END_PERL';
+$gold_golem = 2;
+END_PERL
+
+is(
+    pcritique($policy, \$code, \%config),
+    1,
+    "$policy: decimal two is not allowed if the configuration doesn't include it in the allowed literals"
+);
+
+#----------------------------------------------------------------
+
+# TEST
+$code = <<'END_PERL';
+$lich = 2.0;
+END_PERL
+
+is(
+    pcritique($policy, \$code, \%config),
+    1,
+    "$policy: floating-point two is not allowed if the configuration doesn't include it in the allowed literals"
+);
+
+#----------------------------------------------------------------
+
+# TEST
+$code = <<'END_PERL';
+$ghoul = 3;
+END_PERL
+
+is(
+    pcritique($policy, \$code, \%config),
+    0,
+    "$policy: decimal three is allowed if the configuration includes it in the allowed literals"
+);
+
+#----------------------------------------------------------------
+
+# TEST
+$code = <<'END_PERL';
+$water_elemental = 3.0;
+END_PERL
+
+is(
+    pcritique($policy, \$code, \%config),
+    0,
+    "$policy: floating-point three is allowed if the configuration includes it in the allowed literals"
+);
+
+#----------------------------------------------------------------
+
+# TEST
+$code = <<'END_PERL';
+$glass_piercer = -5;
+END_PERL
+
+is(
+    pcritique($policy, \$code, \%config),
+    0,
+    "$policy: decimal negative five is allowed if the configuration includes it in the allowed literals"
+);
+
+#----------------------------------------------------------------
+
+# TEST
+$code = <<'END_PERL';
+$clay_golem = -5.0;
+END_PERL
+
+is(
+    pcritique($policy, \$code, \%config),
+    0,
+    "$policy: floating-point negative five is allowed if the configuration includes it in the allowed literals"
+);
+
+#----------------------------------------------------------------
+
+#----------------------------------------------------------------
+%config = ( allowed_types => '' );
+
+# TEST
+$code = <<'END_PERL';
+$tangle_tree = 0;
+END_PERL
+
+is(
+    pcritique($policy, \$code),
+    0,
+    "$policy: decimal zero is allowed even if the configuration specifies that there aren't any allowed types"
+);
+
+#----------------------------------------------------------------
+
+# TEST
+$code = <<'END_PERL';
+$xiron_golem = 0.0
+END_PERL
+
+is(
+    pcritique($policy, \$code, \%config),
+    1,
+    "$policy: floating-point zero is not allowed if the configuration specifies that there aren't any allowed types"
+);
+
+#----------------------------------------------------------------
+
+# TEST
+$code = <<'END_PERL';
+$killer_tomato = 1;
+END_PERL
+
+is(
+    pcritique($policy, \$code, \%config),
+    0,
+    "$policy: decimal one is allowed even if the configuration specifies that there aren't any allowed types"
+);
+
+#----------------------------------------------------------------
+
+# TEST
+$code = <<'END_PERL';
+$witch_doctor = 1.0;
+END_PERL
+
+is(
+    pcritique($policy, \$code, \%config),
+    1,
+    "$policy: floating-point one is not allowed if the configuration specifies that there aren't any allowed types"
+);
+
+#----------------------------------------------------------------
+
+#----------------------------------------------------------------
+%config = ( allowed_types => 'Float' );
+
+# TEST
+$code = <<'END_PERL';
+$tangle_tree = 0;
+END_PERL
+
+is(
+    pcritique($policy, \$code),
+    0,
+    "$policy: decimal zero is allowed if the configuration specifies that there are any allowed types"
+);
+
+#----------------------------------------------------------------
+
+# TEST
+$code = <<'END_PERL';
+$xiron_golem = 0.0
+END_PERL
+
+is(
+    pcritique($policy, \$code, \%config),
+    0,
+    "$policy: floating-point zero is allowed if the configuration specifies that the Float type is allowed"
+);
+
+#----------------------------------------------------------------
+
+# TEST
+$code = <<'END_PERL';
+$killer_tomato = 1;
+END_PERL
+
+is(
+    pcritique($policy, \$code, \%config),
+    0,
+    "$policy: decimal one is allowed if the configuration specifies that there are any allowed types"
+);
+
+#----------------------------------------------------------------
+
+# TEST
+$code = <<'END_PERL';
+$witch_doctor = 1.0;
+END_PERL
+
+is(
+    pcritique($policy, \$code, \%config),
+    0,
+    "$policy: floating-point one is allowed if the configuration specifies that the Float type is allowed"
+);
+
+#----------------------------------------------------------------
+
+#----------------------------------------------------------------
+%config = ( allowed_types => 'Binary' );
+
+# TEST
+$code = <<'END_PERL';
+$battlemech = 0b0;
+END_PERL
+
+is(
+    pcritique($policy, \$code, \%config),
+    0,
+    "$policy: binary zero is allowed if the configuration specifies that the Binary type is allowed"
+);
+
+#----------------------------------------------------------------
+
+# TEST
+$code = <<'END_PERL';
+$xeroc = 0b1;
+END_PERL
+
+is(
+    pcritique($policy, \$code, \%config),
+    0,
+    "$policy: binary one is allowed if the configuration specifies that the Binary type is allowed"
+);
+
+#----------------------------------------------------------------
+
+#----------------------------------------------------------------
+%config = ( allowed_types => 'Exp' );
+
+# TEST
+$code = <<'END_PERL';
+$Green_elf = 0e0;
+END_PERL
+
+is(
+    pcritique($policy, \$code, \%config),
+    0,
+    "$policy: exponential zero is allowed if the configuration specifies that the Exp type is allowed"
+);
+
+#----------------------------------------------------------------
+
+# TEST
+$code = <<'END_PERL';
+$Uruk_hai = 1e0;
+END_PERL
+
+is(
+    pcritique($policy, \$code, \%config),
+    0,
+    "$policy: exponential one is allowed if the configuration specifies that the Exp type is allowed"
+);
+
+#----------------------------------------------------------------
+
+#----------------------------------------------------------------
+%config = ( allowed_types => 'Hex' );
+
+# TEST
+$code = <<'END_PERL';
+$yeti = 0x00;
+END_PERL
+
+is(
+    pcritique($policy, \$code, \%config),
+    0,
+    "$policy: hexadecimal zero is allowed if the configuration specifies that the Hex type is allowed"
+);
+
+#----------------------------------------------------------------
+
+# TEST
+$code = <<'END_PERL';
+$piranha = 0x01;
+END_PERL
+
+is(
+    pcritique($policy, \$code, \%config),
+    0,
+    "$policy: hexadecimal one is allowed if the configuration specifies that the Hex type is allowed"
+);
+
+#----------------------------------------------------------------
+
+#----------------------------------------------------------------
+%config = ( allowed_types => 'Octal' );
+
+# TEST
+$code = <<'END_PERL';
+$basilisk = 000;
+END_PERL
+
+is(
+    pcritique($policy, \$code, \%config),
+    0,
+    "$policy: octal zero is allowed if the configuration specifies that the Octal type is allowed"
+);
+
+#----------------------------------------------------------------
+
+# TEST
+$code = <<'END_PERL';
+$brown_mold = 001;
+END_PERL
+
+is(
+    pcritique($policy, \$code, \%config),
+    0,
+    "$policy: octal one is allowed if the configuration specifies that the Octal type is allowed"
 );
 
 #----------------------------------------------------------------

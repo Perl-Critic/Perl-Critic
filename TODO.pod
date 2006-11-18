@@ -20,7 +20,7 @@ TODO - Things for Perl::Critic developers to do
 =head1 SEE ALSO
 
 Perl-Critic-More is a separate distribution for less-widely-accepted
-policies.  It contains it's own TODO.pod.
+policies.  It contains its own TODO.pod.
 
 =head1 NEW FEATURES
 
@@ -290,6 +290,13 @@ This cachedir should perhaps include the PPI version number!  At least
 until PPI incorporates it's own version number in the cache.
 
 (see F<t/40_criticize.t> for a more robust implementation)
+
+=item * Finish configurability of ValuesAndExpressions::ProhibitMagicNumbers.
+
+The C<allowed_literals> option needs to handle ranges and an C<all_integers>
+value.
+
+Also, the documentation still needs some work.
 
 =back
 
