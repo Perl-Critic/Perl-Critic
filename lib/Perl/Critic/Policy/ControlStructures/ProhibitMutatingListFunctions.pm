@@ -222,5 +222,5 @@ it under the same terms as Perl itself.
 #   fill-column: 78
 #   indent-tabs-mode: nil
 # End:
-# ex: set ts=8 sts=4 sw=4 expandtab
+# ex: set ts=8 sts=4 sw=4 expandtab :
 
