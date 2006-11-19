@@ -13,7 +13,7 @@ use Perl::Critic::Utils;
 use List::MoreUtils qw( none any );
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 0.21;
+our $VERSION = 0.22;
 
 my %modifying_ops = hashify qw( = *= /= += -= %= **= x= .= &= |= ^=  &&= ||= ++ -- );
 

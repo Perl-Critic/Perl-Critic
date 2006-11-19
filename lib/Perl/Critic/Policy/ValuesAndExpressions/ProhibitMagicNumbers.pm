@@ -9,7 +9,7 @@ use PPI;
 use Perl::Critic::Utils;
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 0.21;
+our $VERSION = 0.22;
 
 #----------------------------------------------------------------------------
 
@@ -226,7 +226,7 @@ permitted (but you can change this).
 
   use 5.6.1;                                #ok
   use Test::More plan => 57;                #ok
-  our $VERSION = 0.21;                      #ok
+  our $VERSION = 0.22;                      #ok
 
 
   foreach my $solid (1..5) {                #not ok

@@ -62,7 +62,7 @@ WriteMakefile(
         'IO::String'            => 0,
         'List::MoreUtils'       => 0,
         'List::Util'            => 0,
-        'Module::Pluggable'     => 0,
+        'Module::Pluggable'     => 3.1,
         'PPI'                   => 1.118,
         'Pod::PlainText'        => 0,
         'Pod::Usage'            => 0,

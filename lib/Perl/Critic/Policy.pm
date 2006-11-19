@@ -15,7 +15,7 @@ use Perl::Critic::Violation qw();
 use String::Format qw(stringf);
 use overload ( q{""} => 'to_string', cmp => '_compare' );
 
-our $VERSION = 0.21;
+our $VERSION = 0.22;
 
 #Class variables...
 our $FORMAT = "%p\n"; #Default stringy format
