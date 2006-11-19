@@ -98,7 +98,8 @@ sub violates {
 
 sub _wanted {
     my ( undef, $elem ) = @_;
-    return $elem->isa('PPI::Token::Comment')
+    return  $elem->isa('PPI::Token::Pod')
+        || $elem->isa('PPI::Token::Comment')
         || $elem->isa('PPI::Token::Quote::Single')
         || $elem->isa('PPI::Token::Quote::Literal');
 }

@@ -9,7 +9,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 11;
+use Test::More tests => 12;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -18,6 +18,21 @@ Perl::Critic::TestUtils::block_perlcriticrc();
 my $code ;
 my $policy;
 my %config;
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+=pod
+
+  $Revision$
+  $Source$
+  $Date$
+
+=cut
+END_PERL
+
+$policy = 'Miscellanea::RequireRcsKeywords';
+is( pcritique($policy, \$code), 0, 'RCS keywords in POD');
 
 #----------------------------------------------------------------
 
