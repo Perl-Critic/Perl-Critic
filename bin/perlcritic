@@ -557,13 +557,15 @@ L<"EDITOR INTEGRATION"> for more information about that.
 
 =item C<-list>
 
-Displays a listing of all the L<Perl::Critic::Policy> modules that are
-found on this machine.  For each Policy, the default severity and
-user-defined severity is also shown.  If the user has not overridden
-the severity for a particular Policy in their F<.perlcriticrc> file,
-then the user-defined severity will be the same as the default
-severity.  This can be useful for discovering the Policy modules that
-you have available and tuning the severity levels in your
+Displays a condensed listing of all the L<Perl::Critic::Policy> modules that
+are found on this machine.  For each Policy, the name, default severity and
+default themes are shown.
+
+=item C<-List>
+
+Displays an expanded listing of all the L<Perl::Critic::Policy> modules that
+are found on this machine.  For each Policy, the name, default severity and
+default themes are shown.  The format is suitable for use as your
 F<.perlcriticrc> file.
 
 =item C<-only>
@@ -775,7 +777,7 @@ expression that represents a custom "set" of Policies.  The following
 operators are supported
 
    Operator       Altertative         Meaning
-   -----------------------------------------------------------------------------
+   ----------------------------------------------------------------------------
    *              and                 Intersection
    -              not                 Difference
    +              or                  Union
@@ -784,7 +786,7 @@ Operator precedence is the same as that of normal mathematics.  You
 can also use parenthesis to enforce precedence.  Here are some examples:
 
    Expression                  Meaning
-   -----------------------------------------------------------------------------
+   ----------------------------------------------------------------------------
    pbp * risky                 All policies that are "pbp" AND "risky"
    pbp and risky               Ditto
 
@@ -850,9 +852,14 @@ the end of the block or until the next C<"## use critic"> comment
 
   ## no critic (EmptyQuotes, PostfixControls);
 
-  $foo = "";                  #Now exempt from ValuesAndExpressions::ProhibitEmptyQuotes
-  $barf = bar() if $foo;      #Now exempt ControlStructures::ProhibitPostfixControls
-  $long_int = 10000000000;    #Still subjected to ValuesAndExpression::RequireNumberSeparators
+  #Now exempt from ValuesAndExpressions::ProhibitEmptyQuotes
+  $foo = "";
+
+  #Now exempt ControlStructures::ProhibitPostfixControls
+  $barf = bar() if $foo;
+
+  #Still subject to ValuesAndExpression::RequireNumberSeparators
+  $long_int = 10000000000;
 
 Since the Policy names are matched against the arguments as regular
 expressions, you can abbreviate the Policy names or disable an entire
@@ -860,8 +867,11 @@ family of Policies in one shot like this:
 
   ## no critic 'NamingConventions';
 
-  my $camelHumpVar = 'foo';  #Now exempt from NamingConventions::ProhibitMixedCaseVars
-  sub camelHumpSub {}        #Now exempt from NamingConventions::ProhibitMixedCaseSubs
+  #Now exempt from NamingConventions::ProhibitMixedCaseVars
+  my $camelHumpVar = 'foo';
+
+  #Now exempt from NamingConventions::ProhibitMixedCaseSubs
+  sub camelHumpSub {}
 
 The argument list must be enclosed in parens and must contain one or
 more comma-separated barewords (i.e. don't use quotes).  The C<"## no
@@ -920,13 +930,12 @@ coding practices.
 
 =head2 VERSION 0.11
 
-Starting in version 0.11, the internal mechanics of Perl-Critic were
-rewritten so that only one traversal of the PPI document tree is
-required.  Unfortunately, this will break any custom Policy modules
-that you might have written for earlier versions.  Converting your
-policies to work with the new version is pretty easy and actually
-results in cleaner code.  See L<Perl::Critic::DEVELOPER> for an up-to-date guide
-on creating Policy modules.
+Starting in version 0.11, the internal mechanics of Perl-Critic were rewritten
+so that only one traversal of the PPI document tree is required.
+Unfortunately, this will break any custom Policy modules that you might have
+written for earlier versions.  Converting your policies to work with the new
+version is pretty easy and actually results in cleaner code.  See
+L<Perl::Critic::DEVELOPER> for an up-to-date guide on creating Policy modules.
 
 =head1 EDITOR INTEGRATION
 
