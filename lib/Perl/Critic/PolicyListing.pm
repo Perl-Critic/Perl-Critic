@@ -66,3 +66,54 @@ sub _by_type { return ref $a cmp ref $b }
 1;
 
 __END__
+
+=pod
+
+=head1 NAME
+
+Perl::Critic::PolicyListing - Display information about Policies
+
+=head1 SYNOPSIS
+
+=head1 DESCRIPTION
+
+=head1 CONSTRUCTOR
+
+=over 8
+
+=item C<< new( -policies => \@POLICY_OBJECTS ) >>
+
+=back
+
+=head1 METHODS
+
+=over 8
+
+=item C<< short_listing() >>
+
+=item C<< long_listing() >>
+
+=back
+
+=head1 AUTHOR
+
+Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+
+=head1 COPYRIGHT
+
+Copyright (c) 2005-2006 Jeffrey Ryan Thalhammer.  All rights reserved.
+
+This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.  The full text of this license
+can be found in the LICENSE file included with this module.
+
+=cut
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 expandtab :
