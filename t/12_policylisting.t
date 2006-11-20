@@ -30,7 +30,7 @@ is( scalar $list->long_listing(), $count, 'Long listing has all policies');
 
 #-----------------------------------------------------------------------------
 
-my $short_pattern = qr|^\d [\w:]+ \[[\w\s]+\]$|;
+my $short_pattern = qr{^\d [\w:]+ \[[\w\s]+\]$};
 for my $policy ( $list->short_listing() ) {
     like($policy, $short_pattern, 'Short listing format');
 }
@@ -42,7 +42,6 @@ my $set_theme    = qr{set_themes = [\w\s]+};
 my $severity     = qr{severity   = \d};
 my $long_pattern = qr{$pname\n$set_theme\n$severity\n\n};
 for my $policy ( $list->long_listing() ) {
-    my ($policy_name) = $policy =~ m/($pname)/;
     like($policy, $long_pattern, 'Long listing format');
 }
 
