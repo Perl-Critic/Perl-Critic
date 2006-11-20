@@ -269,10 +269,6 @@ L<http://rt.cpan.org/Ticket/Display.html?id=20714>
 
 =over 4
 
-=item * Alias -verbose to -format option in Test::P::C.
-
-Give it same functionality as the -verbose option in `perlcritic`
-
 =item * Enhance P::C::critique() to accept file names, directories, or code strings (as refs)
 
 Just like F<bin/perlcritic> does now.

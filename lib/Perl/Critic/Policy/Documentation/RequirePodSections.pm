@@ -1,9 +1,9 @@
-#######################################################################
+##############################################################################
 #      $URL$
 #     $Date$
 #   $Author$
 # $Revision$
-########################################################################
+##############################################################################
 
 package Perl::Critic::Policy::Documentation::RequirePodSections;
 
@@ -20,8 +20,9 @@ my $expl = [133, 138];
 
 #---------------------------------------------------------------------------
 
-sub default_severity { return $SEVERITY_LOW }
-sub applies_to { return 'PPI::Document' }
+sub default_severity { return $SEVERITY_LOW       }
+sub default_themes   { return qw(pbp readability) }
+sub applies_to       { return 'PPI::Document'     }
 
 #---------------------------------------------------------------------------
 
