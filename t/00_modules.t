@@ -10,11 +10,10 @@
 use strict;
 use warnings;
 use PPI::Document;
-use Test::More tests => 1402;  # Add 14 for each new policy created
+use Test::More tests => 1409;  # Add 14 for each new policy created
 use English qw(-no_match_vars);
 
 our $VERSION = 0.22;
-my $obj = undef;
 
 # pre-compute for version comparisons
 my $version_string = __PACKAGE__->VERSION;
@@ -30,9 +29,9 @@ can_ok('Perl::Critic', 'critique');
 can_ok('Perl::Critic', 'policies');
 
 #Set -profile to avoid messing with .perlcriticrc
-$obj = Perl::Critic->new( -profile => 'NONE' );
-isa_ok($obj, 'Perl::Critic');
-is($obj->VERSION(), $version_string);
+my $critic = Perl::Critic->new( -profile => 'NONE' );
+isa_ok($critic, 'Perl::Critic');
+is($critic->VERSION(), $version_string);
 
 #-----------------------------------------------------------------------------
 # Test Perl::Critic::Config module interface
@@ -52,9 +51,9 @@ can_ok('Perl::Critic::Config', 'top');
 can_ok('Perl::Critic::Config', 'verbose');
 
 #Set -profile to avoid messing with .perlcriticrc
-$obj = Perl::Critic::Config->new( -profile => 'NONE');
-isa_ok($obj, 'Perl::Critic::Config');
-is($obj->VERSION(), $version_string);
+my $config = Perl::Critic::Config->new( -profile => 'NONE');
+isa_ok($config, 'Perl::Critic::Config');
+is($config->VERSION(), $version_string);
 
 #-----------------------------------------------------------------------------
 # Test Perl::Critic::Config::Defaults module interface
@@ -70,9 +69,9 @@ can_ok('Perl::Critic::Defaults', 'theme');
 can_ok('Perl::Critic::Defaults', 'top');
 can_ok('Perl::Critic::Defaults', 'verbose');
 
-$obj = Perl::Critic::Defaults->new();
-isa_ok($obj, 'Perl::Critic::Defaults');
-is($obj->VERSION(), $version_string);
+my $defaults = Perl::Critic::Defaults->new();
+isa_ok($defaults, 'Perl::Critic::Defaults');
+is($defaults->VERSION(), $version_string);
 
 #-----------------------------------------------------------------------------
 # Test Perl::Critic::Policy module interface
@@ -91,9 +90,9 @@ can_ok('Perl::Critic::Policy', 'violates');
 can_ok('Perl::Critic::Policy', 'violation');
 
 
-$obj = Perl::Critic::Policy->new();
-isa_ok($obj, 'Perl::Critic::Policy');
-is($obj->VERSION(), $version_string);
+my $policy = Perl::Critic::Policy->new();
+isa_ok($policy, 'Perl::Critic::Policy');
+is($policy->VERSION(), $version_string);
 
 #-----------------------------------------------------------------------------
 # Test Perl::Critic::Violation module interface
@@ -115,9 +114,9 @@ can_ok('Perl::Critic::Violation', 'to_string');
 
 my $code = q{print 'Hello World';};
 my $doc = PPI::Document->new(\$code);
-$obj = Perl::Critic::Violation->new(undef, undef, $doc, undef);
-isa_ok($obj, 'Perl::Critic::Violation');
-is($obj->VERSION(), $version_string);
+my $viol = Perl::Critic::Violation->new(undef, undef, $doc, undef);
+isa_ok($viol, 'Perl::Critic::Violation');
+is($viol->VERSION(), $version_string);
 
 #-----------------------------------------------------------------------------
 # Test Perl::Critic::UserProfile module interface
@@ -129,9 +128,9 @@ can_ok('Perl::Critic::UserProfile', 'policy_is_disabled');
 can_ok('Perl::Critic::UserProfile', 'policy_is_enabled');
 can_ok('Perl::Critic::UserProfile', 'policy_params');
 
-$obj = Perl::Critic::UserProfile->new();
-isa_ok($obj, 'Perl::Critic::UserProfile');
-is($obj->VERSION(), $version_string);
+my $up = Perl::Critic::UserProfile->new();
+isa_ok($up, 'Perl::Critic::UserProfile');
+is($up->VERSION(), $version_string);
 
 #-----------------------------------------------------------------------------
 # Test Perl::Critic::PolicyFactory module interface
@@ -145,8 +144,21 @@ can_ok('Perl::Critic::PolicyFactory', 'site_policy_names');
 
 
 my $profile = Perl::Critic::UserProfile->new();
-$obj = Perl::Critic::PolicyFactory->new( -profile => $profile );
-isa_ok($obj, 'Perl::Critic::PolicyFactory');
+my $factory = Perl::Critic::PolicyFactory->new( -profile => $profile );
+isa_ok($factory, 'Perl::Critic::PolicyFactory');
+is($factory->VERSION(), $version_string);
+
+#-----------------------------------------------------------------------------
+# Test Perl::Critic::PolicyListing module interface
+
+use_ok('Perl::Critic::PolicyListing');
+can_ok('Perl::Critic::PolicyListing', 'new');
+can_ok('Perl::Critic::PolicyListing', 'short_listing');
+can_ok('Perl::Critic::PolicyListing', 'long_listing');
+
+my $listing = Perl::Critic::PolicyListing->new();
+isa_ok($listing, 'Perl::Critic::PolicyListing');
+is($listing->VERSION(), $version_string);
 
 #-----------------------------------------------------------------------------
 # Test module interface for each Policy subclass
@@ -166,9 +178,9 @@ for my $mod ( Perl::Critic::PolicyFactory::native_policy_names() ) {
     can_ok($mod, 'violates');
     can_ok($mod, 'violation');
 
-    $obj = $mod->new();
-    isa_ok($obj, 'Perl::Critic::Policy');
-    is($obj->VERSION(), $version_string, "Version of $mod");
+    my $policy = $mod->new();
+    isa_ok($policy, 'Perl::Critic::Policy');
+    is($policy->VERSION(), $version_string, "Version of $mod");
 }
 
 #-----------------------------------------------------------------------------
