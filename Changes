@@ -12,6 +12,14 @@
      * ValuesAndExpressions::ProhibitMagicNumbers (needs customizability)
      * ControlStructures::ProhibitMutatingListFunctions (not quite finished)
 
+     New Features:
+     * Say "perlcritic -List" to get an expanded listing of all Policies.
+       The format is suitable for use as your .perlcriticrc file.
+
+     Bug Fixes:
+     * 21713 false positive for parens used with substr and unpack.
+     * 22890 allow Rcs keywords in POD.
+
 [0.21]  Released on 2006-11-05
 
      New Policies:
