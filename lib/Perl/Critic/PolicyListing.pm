@@ -74,15 +74,18 @@ __END__
 
 Perl::Critic::PolicyListing - Display information about Policies
 
-=head1 SYNOPSIS
-
 =head1 DESCRIPTION
+
+This is a helper class that formats a set of Policy objects for
+pretty-printing.  There are no user-serviceable parts here.
 
 =head1 CONSTRUCTOR
 
 =over 8
 
 =item C<< new( -policies => \@POLICY_OBJECTS ) >>
+
+Returns a reference to a new C<Perl::Critic::PolicyListing> object.
 
 =back
 
@@ -92,7 +95,16 @@ Perl::Critic::PolicyListing - Display information about Policies
 
 =item C<< short_listing() >>
 
+Returns a list of strings, where each string is a one-line summary of the
+default severity, policy name, and default themes for each Policy that was
+given to the constructor of this PolicyListing.
+
 =item C<< long_listing() >>
+
+Returns a list of strings, where each string is a multi-line summary of the
+policy name, default themes, and default severity for each Policy that was
+given to the constructor of this PolicyListing.  The format is suitable for
+use in the F<.perlcriticrc> file.
 
 =back
 
