@@ -32,11 +32,12 @@ CGI
 CPAN
 CVS
 Dolan
+exponentials
 filename
 Guzis
 HEREDOC
-HEREDOCs
 HEREDOCS
+HEREDOCs
 IDE
 Maxia
 Mehner
@@ -48,6 +49,7 @@ perlcritic
 perlcriticrc
 postfix
 PPI
+Readonly
 refactor
 refactoring
 runtime
@@ -60,6 +62,7 @@ STDOUT
 TerMarsch
 Thalhammer
 TODO
+UI
 unblessed
 vice-versa
 

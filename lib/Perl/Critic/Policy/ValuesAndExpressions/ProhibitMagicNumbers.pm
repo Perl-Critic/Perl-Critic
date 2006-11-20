@@ -31,30 +31,30 @@ sub new {
     my $self = bless {}, $class;
 
     #Set config, if defined
-    my @allowed_literals;
-    if ( defined $config{allowed_literals} ) {
-        my @allowed_literals_strings =
-            grep {$_} split m/\s+/xms, $config{allowed_literals};
+    my @allowed_values;
+    if ( defined $config{allowed_values} ) {
+        my @allowed_values_strings =
+            grep {$_} split m/\s+/xms, $config{allowed_values};
 
-        @allowed_literals = map { $_ + 0 } @allowed_literals_strings;
+        @allowed_values = map { $_ + 0 } @allowed_values_strings;
     } else {
-        @allowed_literals = ( 2 );
+        @allowed_values = ( 2 );
     } # end if
-    my %allowed_literals = hashify( 0, 1, @allowed_literals );
+    my %allowed_values = hashify( 0, 1, @allowed_values );
 
     my $allowed_string  =
           ' is not one of the allowed literal values ('
-        . ( join ', ', sort { $a <=> $b } keys %allowed_literals )
+        . ( join ', ', sort { $a <=> $b } keys %allowed_values )
         . ').'
         . $USE_READONLY_OR_CONSTANT;
 
     my %checked_types = (
-        'PPI::Token::Number::Binary'  => 'Binary literals ('      ,
-        'PPI::Token::Number::Float'   => 'Float literals (' ,
-        'PPI::Token::Number::Exp'     => 'Exponential literals (' ,
-        'PPI::Token::Number::Hex'     => 'Hexadecimal literals (' ,
-        'PPI::Token::Number::Octal'   => 'Octal literals ('       ,
-        'PPI::Token::Number::Version' => 'Version literals ('     ,
+        'PPI::Token::Number::Binary'  => 'Binary literals ('         ,
+        'PPI::Token::Number::Float'   => 'Floating-point literals (' ,
+        'PPI::Token::Number::Exp'     => 'Exponential literals ('    ,
+        'PPI::Token::Number::Hex'     => 'Hexadecimal literals ('    ,
+        'PPI::Token::Number::Octal'   => 'Octal literals ('          ,
+        'PPI::Token::Number::Version' => 'Version literals ('        ,
     );
     if ( defined $config{allowed_types} ) {
         foreach my $allowed_type (
@@ -71,9 +71,9 @@ sub new {
         delete $checked_types{ 'PPI::Token::Number::Float' };
     } # end if
 
-    $self->{_allowed_literals}  = \%allowed_literals;
-    $self->{_allowed_string}    = $allowed_string;
-    $self->{_checked_types}     = \%checked_types;
+    $self->{_allowed_values}  = \%allowed_values;
+    $self->{_allowed_string}  = $allowed_string;
+    $self->{_checked_types}   = \%checked_types;
 
     return $self;
 } # end new()
@@ -84,7 +84,7 @@ sub _real_violates {
     return if _element_is_in_an_include_readonly_or_version_statement($elem);
 
     my $literal = $elem->literal();
-    if ( defined $literal and not defined $self->{_allowed_literals}{ $literal } ) {
+    if ( defined $literal and not defined $self->{_allowed_values}{ $literal } ) {
         return
             $self->violation(
                 $DESC,
@@ -192,8 +192,8 @@ be determined by context.
 
 =head2 Ways in which this module applies this rule.
 
-By default, this rule is relaxed in that C<2> is permitted to allow for things
-like alternation, the STDERR file handle, etc..
+By default, this rule is relaxed in that C<2> is permitted to allow for common
+things like alternation, the STDERR file handle, etc..
 
 Numeric literals are allowed in C<use> and C<require> statements to allow for
 things like Perl version restrictions and L<Test::More> plans.  Uses of the
@@ -201,7 +201,7 @@ Readonly module are obviously valid.  Declarations of C<$VERSION> package
 variables are permitted.
 
 Use of binary, exponential, hexadecimal, octal, and version numbers, even for
-C<0> and C<1> outside of C<use>/C<require>/C<Readonly> statements aren't
+C<0> and C<1>, outside of C<use>/C<require>/C<Readonly> statements aren't
 permitted (but you can change this).
 
 
@@ -243,44 +243,73 @@ permitted (but you can change this).
   }
 
 
+
+
+
 =head1 CONSTRUCTOR
 
-This policy accepts two extra parameters: C<allowed_literals> and C<allowed_types>.
+This policy accepts two extra parameters: C<allowed_values> and
+C<allowed_types>.
 
-=head2 C<allowed_literals>
+=head2 C<allowed_values>
 
-The C<allowed_literals> parameter is a whitespace delimited set of permitted number I<values>; this does not affect the permitted formats for numbers.  The defaults are equivalent to having the following in your F<.perlcriticrc>:
+The C<allowed_values> parameter is a whitespace delimited set of permitted
+number I<values>; this does not affect the permitted formats for numbers.  The
+defaults are equivalent to having the following in your F<.perlcriticrc>:
 
   [ValuesAndExpressions::ProhibitMagicNumbers]
-  allowed_literals = 0 1 2
+  allowed_values = 0 1 2
 
-Note that this policy forces the values C<0> and C<1> into the permitted values.  Thus, specifying no values,
+Note that this policy forces the values C<0> and C<1> into the permitted
+values.  Thus, specifying no values,
 
-  allowed_literals =
+  allowed_values =
 
 is the same as simply listing C<0> and C<1>:
 
-  allowed_literals = 0 1
+  allowed_values = 0 1
 
-At present, you have to specify each individual acceptable value, e.g. for -3 to 3, by .5:
+At present, you have to specify each individual acceptable value, e.g. for -3
+to 3, by .5:
 
-  allowed_literals = -3 -2.5 -2 -1.5 -1 -0.5 0 0.5 1 1.5 2 2.5 3
+  allowed_values = -3 -2.5 -2 -1.5 -1 -0.5 0 0.5 1 1.5 2 2.5 3
 
 =head2 C<allowed_types>
 
-The C<allowed_types> parameter is a whitespace delimited set of subclasses of L<PPI::Token::Number>.
+The C<allowed_types> parameter is a whitespace delimited set of subclasses of
+L<PPI::Token::Number>.
 
-Decimal integers are always allowed.  By default, floating-point numbers are also allowed.
+Decimal integers are always allowed.  By default, floating-point numbers are
+also allowed.
 
-For example, to allow hexadecimal literals, you could configure this policy like
+For example, to allow hexadecimal literals, you could configure this policy
+like
 
   [ValuesAndExpressions::ProhibitMagicNumbers]
   allowed_types = Hex
 
-but without specifying anything for C<allowed_literals>, the allowed hexadecimal literals will be C<0x00>, C<0x01>, and C<0x02>.  Note, also, as soon as you specify a value for this parameter, you must include C<Float> in the list to continue to be able to use floating point literals.  This effect can be used to restrict literals to only decimal integers:
+but without specifying anything for C<allowed_values>, the allowed
+hexadecimal literals will be C<0x00>, C<0x01>, and C<0x02>.  Note, also, as
+soon as you specify a value for this parameter, you must include C<Float> in
+the list to continue to be able to use floating point literals.  This effect
+can be used to restrict literals to only decimal integers:
 
   [ValuesAndExpressions::ProhibitMagicNumbers]
   allowed_types =
+
+If you permit exponentials, you automatically also allow floating point values
+because an exponential is a subclass of floating-point in L<PPI>.
+
+
+=head1 BUGS
+
+There is currently no way to permit version numbers in regular code, even if
+you include them in the allowed_types.  Some may actually consider this a
+feature.
+
+This policy depends upon features of L<PPI> that don't exist in versions prior
+to 1.119, so it disables itself if the installed version of PPI is 1.118 or
+earlier.
 
 
 =head1 AUTHOR
