@@ -287,12 +287,11 @@ until PPI incorporates it's own version number in the cache.
 
 (see F<t/40_criticize.t> for a more robust implementation)
 
-=item * Finish configurability of ValuesAndExpressions::ProhibitMagicNumbers.
+=item * ValuesAndExpressions::ProhibitMagicNumbers
 
-The C<allowed_literals> option needs to handle ranges and an C<all_integers>
-value.
+The C<allowed_literals> option needs to handle ranges.
 
-Also, the documentation still needs some work.
+Needs to be tested against a wider range of $VERSION declarations.
 
 =back
 

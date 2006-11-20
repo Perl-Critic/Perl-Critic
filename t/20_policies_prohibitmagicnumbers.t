@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 92;
+use Test::More tests => 98;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -1247,6 +1247,100 @@ is(
     pcritique($policy, \$code, \%config),
     0,
     "$policy: octal one is allowed if the configuration specifies that the Octal type is allowed"
+);
+
+#----------------------------------------------------------------
+
+#----------------------------------------------------------------
+%config = ( allowed_values => 'all_integers' );
+
+# TEST
+$code = <<'END_PERL';
+$brogmoid = 356_634_627;
+$rat_ant  =     -29_422;
+END_PERL
+
+is(
+    pcritique($policy, \$code, \%config),
+    0,
+    "$policy: any integer value should pass if the allowed values contains 'all_integers'."
+);
+
+#----------------------------------------------------------------
+
+# TEST
+$code = <<'END_PERL';
+$human = 102_938.0;
+END_PERL
+
+is(
+    pcritique($policy, \$code, \%config),
+    0,
+    "$policy: any floating-point value without a fractional portion should pass if the allowed values contains 'all_integers'."
+);
+
+#----------------------------------------------------------------
+
+#----------------------------------------------------------------
+%config = ( allowed_values => 'all_integers 429.73902' );
+
+# TEST
+$code = <<'END_PERL';
+$Norn = 429.73902;
+END_PERL
+
+is(
+    pcritique($policy, \$code, \%config),
+    0,
+    "$policy: a non-integral value should pass if the allowed values contains it and 'all_integers'."
+);
+
+#----------------------------------------------------------------
+
+#----------------------------------------------------------------
+%config = ( allowed_values => 'all_integers', allowed_types => 'Binary' );
+
+# TEST
+$code = <<'END_PERL';
+$baby_blue_dragon = 0b01100101_01101010_01110011;
+END_PERL
+
+is(
+    pcritique($policy, \$code, \%config),
+    0,
+    "$policy: any binary value should pass if the allowed values contains 'all_integers' and allowed types includes 'Binary'."
+);
+
+#----------------------------------------------------------------
+
+#----------------------------------------------------------------
+%config = ( allowed_values => 'all_integers', allowed_types => 'Hex' );
+
+# TEST
+$code = <<'END_PERL';
+$killer_bee = 0x656a73;
+END_PERL
+
+is(
+    pcritique($policy, \$code, \%config),
+    0,
+    "$policy: any hexadecimal value should pass if the allowed values contains 'all_integers' and allowed types includes 'Hex'."
+);
+
+#----------------------------------------------------------------
+
+#----------------------------------------------------------------
+%config = ( allowed_values => 'all_integers', allowed_types => 'Octal' );
+
+# TEST
+$code = <<'END_PERL';
+$ettin_mummy = 0145_152_163;
+END_PERL
+
+is(
+    pcritique($policy, \$code, \%config),
+    0,
+    "$policy: any octal value should pass if the allowed values contains 'all_integers' and allowed types includes 'Octal'."
 );
 
 #----------------------------------------------------------------

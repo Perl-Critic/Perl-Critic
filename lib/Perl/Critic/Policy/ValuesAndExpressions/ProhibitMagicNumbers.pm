@@ -1,3 +1,10 @@
+##############################################################################
+#     $URL$
+#    $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
 package Perl::Critic::Policy::ValuesAndExpressions::ProhibitMagicNumbers;
 
 use strict;
@@ -5,6 +12,7 @@ use warnings;
 
 # force $PPI::VERSION to be initialized so that the BEGIN block below works.
 use PPI;
+use List::MoreUtils qw{ any };
 
 use Perl::Critic::Utils;
 use base 'Perl::Critic::Policy';
@@ -31,22 +39,68 @@ sub new {
     my $self = bless {}, $class;
 
     #Set config, if defined
+    my ($all_integers_allowed, $allowed_values) =
+        _determine_allowed_values(%config);
+
+    my $allowed_string  = ' is not one of the allowed literal values (';
+    if ($all_integers_allowed) {
+        $allowed_string .= 'all integers';
+
+        if ( %{$allowed_values} ) {
+            $allowed_string .= ', ';
+        } # end if
+    } # end if
+    $allowed_string .=
+          ( join ', ', sort { $a <=> $b } keys %{$allowed_values} )
+        . ').'
+        . $USE_READONLY_OR_CONSTANT;
+
+    $self->{_allowed_values}        = $allowed_values;
+    $self->{_all_integers_allowed}  = $all_integers_allowed;
+    $self->{_allowed_string}        = $allowed_string;
+    $self->{_checked_types}         = _determine_checked_types(%config);
+
+    return $self;
+} # end new()
+
+sub _determine_allowed_values {
+    my %config = @_;
+
     my @allowed_values;
+    my $all_integers_allowed;
     if ( defined $config{allowed_values} ) {
         my @allowed_values_strings =
             grep {$_} split m/\s+/xms, $config{allowed_values};
 
-        @allowed_values = map { $_ + 0 } @allowed_values_strings;
+        $all_integers_allowed =
+            any { 'all_integers' eq $_ } @allowed_values_strings;
+
+        if ($all_integers_allowed) {
+            foreach my $allowed_value_string (@allowed_values_strings) {
+                if (
+                        'all_integers' ne $allowed_value_string
+                    and int($allowed_value_string) != $allowed_value_string
+                ) {
+                    push @allowed_values, ($allowed_value_string + 0);
+                } # end if
+            } # end foreach
+        } else {
+            @allowed_values = map { $_ + 0 } @allowed_values_strings;
+        } # end if
     } else {
         @allowed_values = ( 2 );
     } # end if
-    my %allowed_values = hashify( 0, 1, @allowed_values );
 
-    my $allowed_string  =
-          ' is not one of the allowed literal values ('
-        . ( join ', ', sort { $a <=> $b } keys %allowed_values )
-        . ').'
-        . $USE_READONLY_OR_CONSTANT;
+    if (not $all_integers_allowed) {
+        push @allowed_values, 0, 1;
+    } # end if
+    my %allowed_values = hashify(@allowed_values);
+
+    return ($all_integers_allowed, \%allowed_values);
+} # end _determine_allowed_values()
+
+sub _determine_checked_types {
+    my %config = @_;
 
     my %checked_types = (
         'PPI::Token::Number::Binary'  => 'Binary literals ('         ,
@@ -56,6 +110,7 @@ sub new {
         'PPI::Token::Number::Octal'   => 'Octal literals ('          ,
         'PPI::Token::Number::Version' => 'Version literals ('        ,
     );
+
     if ( defined $config{allowed_types} ) {
         foreach my $allowed_type (
             grep {$_} split m/\s+/xms, $config{allowed_types}
@@ -71,12 +126,8 @@ sub new {
         delete $checked_types{ 'PPI::Token::Number::Float' };
     } # end if
 
-    $self->{_allowed_values}  = \%allowed_values;
-    $self->{_allowed_string}  = $allowed_string;
-    $self->{_checked_types}   = \%checked_types;
-
-    return $self;
-} # end new()
+    return \%checked_types;
+} # end _determine_checked_types()
 
 sub _real_violates {
     my ( $self, $elem, undef ) = @_;
@@ -84,7 +135,14 @@ sub _real_violates {
     return if _element_is_in_an_include_readonly_or_version_statement($elem);
 
     my $literal = $elem->literal();
-    if ( defined $literal and not defined $self->{_allowed_values}{ $literal } ) {
+    if (
+            defined $literal
+        and not (
+                    $self->{_all_integers_allowed}
+                and int($literal) == $literal
+        )
+        and not defined $self->{_allowed_values}{ $literal }
+    ) {
         return
             $self->violation(
                 $DESC,
@@ -136,7 +194,7 @@ sub _element_is_in_an_include_readonly_or_version_statement {
             if ( $parent->isa('PPI::Statement::Variable') ) {
                 if ( $parent->type() eq 'our' ) {
                     my @variables = $parent->variables();
-                    if ( scalar (@variables) == 1 and $variables[0] eq '$VERSION') {
+                    if ( scalar (@variables) == 1 and $variables[0] eq '$VERSION') {  ##no critic (RequireInterpolationOfMetachars)
                         return 1;
                     } # end if
                 } # end if
@@ -268,6 +326,9 @@ values.  Thus, specifying no values,
 is the same as simply listing C<0> and C<1>:
 
   allowed_values = 0 1
+
+The special C<all_integers> value, not surprisingly, allows all integral values
+to pass, subject to the restrictions on number types.
 
 At present, you have to specify each individual acceptable value, e.g. for -3
 to 3, by .5:
