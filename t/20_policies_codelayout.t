@@ -9,7 +9,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 56;
+use Test::More tests => 57;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique fcritique);
@@ -106,7 +106,6 @@ open ($foo, $bar);
 open($foo, $bar);
 uc();
 lc();
-uc($f) lt "b";
 
 # These ones deliberately omit the semi-colon
 sub {uc()}
@@ -114,7 +113,7 @@ sub {reverse()}
 END_PERL
 
 $policy = 'CodeLayout::ProhibitParensWithBuiltins';
-is( pcritique($policy, \$code), 7, $policy);
+is( pcritique($policy, \$code), 6, $policy);
 
 #----------------------------------------------------------------
 
@@ -166,6 +165,16 @@ END_PERL
 
 $policy = 'CodeLayout::ProhibitParensWithBuiltins';
 is( pcritique($policy, \$code), 0, 'parens w/ unary ops');
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+print substr($foo, 2, 3), "\n";
+if ( unpack('V', $foo) == 2 ) { }
+END_PERL
+
+$policy = 'CodeLayout::ProhibitParensWithBuiltins';
+is( pcritique($policy, \$code), 0, 'RT #21713');
 
 #----------------------------------------------------------------
 
