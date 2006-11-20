@@ -88,7 +88,7 @@ sub _has_topic_side_effect {
             return 1 if ( _has_topic_side_effect($child) );
 
         } elsif ( $child->isa('PPI::Token::Magic') ) {
-            # Look for explict $_, like "$_ = 1" or "$_ *= 2" or "$_ =~ s/f/g/"
+            # Look for explicit $_, like "$_ = 1" or "$_ *= 2" or "$_ =~ s/f/g/"
             next CHILD if $child ne $TOPIC;
             my $sib = $child->snext_sibling;
             next CHILD if !$sib;
@@ -188,7 +188,7 @@ Or, one can just append to the list like so:
 This policy deliberately does not apply to C<for (@array) { ... }> or
 C<List::MoreUtils::apply()>.
 
-Currently, the policy only detects explict external module usage like this:
+Currently, the policy only detects explicit external module usage like this:
 
   my @out = List::MoreUtils::any {s/^foo//} @in;
 
@@ -197,7 +197,7 @@ and not like this:
   use List::MoreUtils qw(any);
   my @out = any {s/^foo//} @in;
 
-This policy looks only for modifications of C<$_>.  Other nautiness could
+This policy looks only for modifications of C<$_>.  Other naughtiness could
 include modifying C<$a> and C<$b> in C<sort> and the like.  That's beyond the
 scope of this policy.
 
