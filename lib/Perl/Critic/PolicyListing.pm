@@ -1,8 +1,8 @@
 ###############################################################################
 #      $URL: http://perlcritic.tigris.org/svn/perlcritic/trunk/Perl-Critic/bin/
-#     $Date: 2006-11-12 16:25:00 -0800 (Sun, 12 Nov 2006) $
-#   $Author: thaljef $
-# $Revision: 851 $
+#     $Date$
+#   $Author$
+# $Revision$
 #        ex: set ts=8 sts=4 sw=4 expandtab :
 ##############################################################################
 
