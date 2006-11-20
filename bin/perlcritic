@@ -947,6 +947,11 @@ run an arbitrary command and the editor will parse the output into an
 interactive buffer that you can click on and jump to the relevant line
 of code.
 
+The Perl::Critic team thanks everyone who has helped integrate Perl-Critic
+with their favorite editor.  Your contributions in particular have made
+Perl-Critic a convenient and user-friendly tool for Perl developers of all
+stripes.  We sincerely appreciate your hard work.
+
 =head2 EMACS
 
 Joshua ben Jore has authored a minor-mode for emacs that allows you to
@@ -991,6 +996,12 @@ The EPIC team is currently working on integration with Perl::Critic.
 In the meantime, you can use the L<criticism> pragma and EPIC will
 highlight violations whenever it does a syntax check on your code.
 I haven't tried this myself, but other folks say it works.
+
+=head2 BBEdit
+
+Josh Clark has produced an excellent Perl-Critic plugin for BBEdit. See
+L<http://beta.bigmedium.com/projects/bbedit-perl-critic/index.shtml> for
+more information.
 
 =head1 EXIT STATUS
 
