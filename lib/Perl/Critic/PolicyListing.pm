@@ -1,5 +1,5 @@
 ###############################################################################
-#      $URL: http://perlcritic.tigris.org/svn/perlcritic/trunk/Perl-Critic/bin/
+#      $URL: http://perlcritic.tigris.org/svn/perlcritic/trunk/Perl-Critic/bin/$
 #     $Date$
 #   $Author$
 # $Revision$
