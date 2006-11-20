@@ -12,7 +12,7 @@ use warnings;
 use English qw(-no_mactch_vars);
 use Test::More;
 use Perl::Critic::UserProfile;
-use Perl::Critic::PolicyFactory;
+use Perl::Critic::PolicyFactory (-test => 1);
 use Perl::Critic::PolicyListing;
 
 #-----------------------------------------------------------------------------
