@@ -105,6 +105,11 @@ sub violation {
 
 #-----------------------------------------------------------------------------
 
+sub set_format { return $FORMAT = $_[0] }
+sub get_format { return $FORMAT         }
+
+#-----------------------------------------------------------------------------
+
 sub to_string {
     my $self = shift;
 
@@ -247,6 +252,17 @@ overwritten.  Duplicate themes will be removed.
 
 Appends additional themes to this Policy.  Any existing themes are
 preserved.  Duplicate themes will be removed.
+
+=item C<set_format( $FORMAT )>
+
+Class method.  Sets the format for all Policy objects when they are evaluated
+in string context.  The default is C<"%p\n">.  See L<"OVERLOADS"> for
+formatting options.
+
+=item C<get_format()>
+
+Class method. Returns the current format for all Policy objects when they are
+evaluated in string context.
 
 =item C<to_string()>
 
