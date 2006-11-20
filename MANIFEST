@@ -128,6 +128,7 @@ t/08_document.t
 t/09_theme.t
 t/10_userprofile.t
 t/11_policyfactory.t
+t/12_policylisting.t
 t/20_policies_builtinfunctions.t
 t/20_policies_classhierarchies.t
 t/20_policies_codelayout.t
@@ -139,6 +140,7 @@ t/20_policies_miscellanea.t
 t/20_policies_modules.t
 t/20_policies_namingconventions.t
 t/20_policies_prohibitmagicnumbers.t
+t/20_policies_prohibitmagicnumbers_ppi.t
 t/20_policies_references.t
 t/20_policies_regularexpressions.t
 t/20_policies_subroutines.t
