@@ -147,17 +147,51 @@ Perl::Critic::Theme - Construct thematic sets of policies
 
 =head1 DESCRIPTION
 
+This is a helper class for evalutating theme expressions into sets of Policy
+objects.  There are no user-servicable parts here.
+
 =head1 METHODS
 
 =over 8
 
-=item C<< new( -theme => $theme_expression, -policies => @polcies ) >>
+=item C<< new( -theme => $theme_expression, -policies => \@polcies ) >>
+
+Returns a reference to a new Perl::Critic::Theme object.  C<-theme> is a
+string exrpession that defines how to construct the Theme. C<-policies> is a
+reference to an array of L<Perl::Critic::Policy> objects, from which the Theme
+will be constructed.  See L<"THEME EXPRESSIONS"> for more information.
 
 =item C< members() >
 
+Returns a list of Policy objects that comprise this Theme.
+
 =item C< expression() >
 
+Returns the theme expression that was used to consruct this Theme.  See
+L<"THEME EXPRESSIONS"> for more information.
+
 =back
+
+=head2 THEME EXPRESSIONS
+
+Theme expressions are simple mathematical expressions, where the operands are
+the names of any of the themes associated with the Perl::Critic::Polices.
+Each operand represents the set of all Policies that are declared with or
+configured with that paricular theme.
+
+Theme names can be combined with basic mathematical operators into arbitrarily
+complex expressions.  Precedence is the same as normal mathematics, but you
+can use parens to enforce precedence as well.  Supported operators are:
+
+   Operator       Altertative         Meaning
+   ----------------------------------------------------------------------------
+   *              and                 Intersection
+   -              not                 Difference
+   +              or                  Union
+
+See <Perl::Critic/"CONFIGURATION"> for more information about customizing the
+themes.
+
 
 =head1 AUTHOR
 
