@@ -1,9 +1,9 @@
-##################################################################
+##############################################################################
 #      $URL$
 #     $Date$
 #   $Author$
 # $Revision$
-##################################################################
+##############################################################################
 
 package Perl::Critic::Policy::ControlStructures::ProhibitMutatingListFunctions;
 
@@ -15,25 +15,33 @@ use base 'Perl::Critic::Policy';
 
 our $VERSION = 0.22;
 
-my %modifying_ops = hashify qw( = *= /= += -= %= **= x= .= &= |= ^=  &&= ||= ++ -- );
-
 my @builtin_list_funcs = qw( map grep );
 my @cpan_list_funcs    = qw( List::Util::first ),
   map { 'List::MoreUtils::'.$_ } qw(any all none notall true false firstidx first_index
                                     lastidx last_index insert_after insert_after_string);
 
-# Isolate this so we only need one "no critic"
-my $TOPIC = q{$_};  ##no critic(RequireInterpolationOfMetachars)
 
-#----------------------------------------------------------------------------
 
-my $desc = q{Don't modify $_ in list functions};  ##no critic(RequireInterpolationOfMetachars)
+
+#-----------------------------------------------------------------------------
+
+sub _is_topic {
+    my $elem = shift;
+    return defined $elem
+        && $elem->isa('PPI::Token::Magic')
+            && $elem eq q{$_}; ##no critic (InterpolationOfMetachars)
+}
+
+
+#-----------------------------------------------------------------------------
+
+my $desc = q{Don't modify $_ in list functions};  ##no critic (InterpolationOfMetachars)
 my $expl = [ 114 ];
 
 #----------------------------------------------------------------------------
 
-sub default_severity { return $SEVERITY_HIGHEST }
-sub default_themes   { return qw(danger) }
+sub default_severity { return $SEVERITY_HIGHEST  }
+sub default_themes   { return qw(danger pbp)     }
 sub applies_to       { return 'PPI::Token::Word' }
 
 #----------------------------------------------------------------------------
@@ -42,15 +50,15 @@ sub new {
     my ( $class, %config ) = @_;
     my $self = bless {}, $class;
 
-    my @list_funcs;
-    @list_funcs = $config{list_funcs}
-        ? ( grep {$_} split m/\s+/xms, $config{list_funcs} )
+    my @list_funcs = $config{list_funcs}
+        ? split m/\s+/xms, $config{list_funcs}
         : ( @builtin_list_funcs, @cpan_list_funcs );
 
     if ( $config{add_list_funcs} ) {
-        push @list_funcs, grep {$_} split m/\s+/xms, $config{add_list_funcs};
+        push @list_funcs, split m/\s+/xms, $config{add_list_funcs};
     }
 
+    # Hashify also removes duplicates!
     $self->{_list_funcs} = { hashify @list_funcs };
 
     return $self;
@@ -61,84 +69,104 @@ sub new {
 sub violates {
     my ($self, $elem, $doc) = @_;
 
-    return if !$self->{_list_funcs}->{$elem};
-    return if !is_function_call($elem);
+    # Is this element a list function?
+    return if not $self->{_list_funcs}->{$elem};
+    return if not is_function_call($elem);
 
-    my $first_arg = first_arg($elem);
-    return if !$first_arg;
-    return if !$first_arg->isa('PPI::Structure::Block');
+    # Only the block form of list functions can be analyzed.
+    return if not my $first_arg = first_arg( $elem );
+    return if not $first_arg->isa('PPI::Structure::Block');
+    return if not _has_topic_side_effect( $first_arg );
 
-    return if !_has_topic_side_effect($first_arg);
-
+    # Must be a violation
     return $self->violation( $desc, $expl, $elem );
 }
+
+#----------------------------------------------------------------------------
 
 sub _has_topic_side_effect {
     my $node = shift;
 
-    #print "Check node $node\n";
-
-  CHILD:
-    for my $child ($node->schildren) {
-
-        ##no critic(ProhibitCascadingIfElse)
-
-        if ( $child->isa('PPI::Node') ) {
-            # Descend into children
-            return 1 if ( _has_topic_side_effect($child) );
-
-        } elsif ( $child->isa('PPI::Token::Magic') ) {
-            # Look for explicit $_, like "$_ = 1" or "$_ *= 2" or "$_ =~ s/f/g/"
-            next CHILD if $child ne $TOPIC;
-            my $sib = $child->snext_sibling;
-            next CHILD if !$sib;
-            next CHILD if !$sib->isa('PPI::Token::Operator');
-
-            # Failed: explicit assignment operator to $_
-            return 1 if $modifying_ops{$sib};
-
-            # Check for explicit binding operator to $_
-            if ( any { $sib eq $_ } qw( =~ !~) ) {
-                my $re = $sib->snext_sibling;
-                next CHILD if !$re;
-
-                # Failed: explicit $_ modified by s/// or tr/// (or y///)
-                return 1 if ( $re->isa('PPI::Token::Regexp::Substitute') ||
-                              $re->isa('PPI::Token::Regexp::Transliterate') );
-            }
-
-        } elsif ( $child->isa('PPI::Token::Regexp::Substitute') ||
-                  $child->isa('PPI::Token::Regexp::Transliterate') ) {
-            # Look for implicit s/// or tr/// or y/// on $_
-            my $prevsib = $child->sprevious_sibling;
-
-            # Failed: implicit $_ modified by s/// or tr///
-            # It's first operator in list, or it doesn't have previous binding operator.
-            return 1 if !$prevsib;
-            return 1 if none {$prevsib eq $_} qw( =~ !~ );
-
-        } elsif ( $child->isa('PPI::Token::Word') ) {
-            # look for chop, chomp, undef, or substr on $_
-
-            if ( $child eq 'chop' || $child eq 'chomp' || $child eq 'undef' ) {
-                next CHILD if !is_function_call( $child );
-
-                my $first_arg = first_arg( $child );
-                if (!$first_arg) {
-                    return 1 if $child ne 'undef';
-                } else {
-                    return 1 if $first_arg eq $TOPIC;
-                }
-            } elsif ( $child eq 'substr' ) {
-                next CHILD if !is_function_call( $child );
-
-                my @args = parse_arg_list( $child );
-                return 1 if @args >= 4 && "@{$args[0]}" eq $TOPIC;
-            }
-        }
+    # Search through all significant elements in the block
+    my $elements = $node->find( 'PPI::Element' ) || [];
+    for my $elem ( @{ $elements } ) {
+        next if $elem->isa('PPI::Node');
+        next if not $elem->significant();
+        return 1 if _assigns_to_topic( $elem );
+        return 1 if _is_topic_mutating_regex( $elem );
+        return 1 if _is_topic_mutating_func( $elem );
+        return 1 if _is_topic_mutating_substr( $elem );
     }
     return;
 }
+
+#----------------------------------------------------------------------------
+
+sub _assigns_to_topic {
+    my $elem = shift;
+    return if not _is_topic( $elem );
+    return if not my $sib = $elem->snext_sibling();
+    return if not $sib->isa('PPI::Token::Operator');
+    return _is_assignment_operator( $sib );
+}
+
+#-----------------------------------------------------------------------------
+
+sub _is_topic_mutating_regex {
+    my $elem = shift;
+    return if ! ( $elem->isa('PPI::Token::Regexp::Substitute')
+                  || $elem->isa('PPI::Token::Regexp::Transliterate') );
+
+    # If the previous sibling does not exist, then
+    # the regex implicitly binds to $_
+    my $prevsib = $elem->sprevious_sibling;
+    return 1 if not $prevsib;
+
+    # If the previous sibling does exist, then it
+    # should be a binding operator.
+    return if not _is_binding_operator( $prevsib );
+
+    # Check if the sibling before the biding operator
+    # is explicitly set to $_
+    my $bound_to = $prevsib->sprevious_sibling;
+    return 1 if _is_topic( $bound_to );
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _is_topic_mutating_func {
+
+    my $elem = shift;
+    return if not $elem->isa('PPI::Token::Word');
+    return if not any { $elem eq $_ } qw(chop chomp undef);
+    return if not is_function_call( $elem );
+
+    my $first_arg = first_arg( $elem );
+    return 1 if not defined $first_arg; #Implicit modification of $_
+    return 1 if _is_topic( $first_arg );
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _is_topic_mutating_substr {
+    my $elem = shift;
+    return if $elem ne 'substr';
+    return if not is_function_call( $elem );
+
+    my @args = parse_arg_list( $elem );
+    return 1 if @args >= 4 && _is_topic( $args[0]->[0] );
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
+my %assignment_ops = hashify qw( = *= /= += -= %= **= x= .= &= |= ^=  &&= ||= ++ -- );
+sub _is_assignment_operator { return exists $assignment_ops{$_[0]} ? 1 : 0 }
+
+my %binding_ops = hashify qw( =~ !~ );
+sub _is_binding_operator { return exists $binding_ops{$_[0]} ? 1 : 0 }
 
 1;
 
