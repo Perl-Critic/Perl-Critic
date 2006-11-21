@@ -93,7 +93,7 @@ sub _has_topic_side_effect {
     for my $elem ( @{ $elements } ) {
         next if $elem->isa('PPI::Node');
         next if not $elem->significant();
-        return 1 if _assigns_to_topic( $elem );
+        return 1 if _is_assignment_to_topic( $elem );
         return 1 if _is_topic_mutating_regex( $elem );
         return 1 if _is_topic_mutating_func( $elem );
         return 1 if _is_topic_mutating_substr( $elem );
@@ -103,7 +103,7 @@ sub _has_topic_side_effect {
 
 #----------------------------------------------------------------------------
 
-sub _assigns_to_topic {
+sub _is_assignment_to_topic {
     my $elem = shift;
     return if not _is_topic( $elem );
     return if not my $sib = $elem->snext_sibling();
@@ -130,8 +130,7 @@ sub _is_topic_mutating_regex {
     # Check if the sibling before the biding operator
     # is explicitly set to $_
     my $bound_to = $prevsib->sprevious_sibling;
-    return 1 if _is_topic( $bound_to );
-    return;
+    return _is_topic( $bound_to );
 }
 
 #-----------------------------------------------------------------------------
@@ -146,8 +145,7 @@ sub _is_topic_mutating_func {
     # they default to mutating $_
     my $first_arg = first_arg( $elem );
     return 1 if not defined $first_arg;
-    return 1 if _is_topic( $first_arg );
-    return;
+    return _is_topic( $first_arg );
 }
 
 #-----------------------------------------------------------------------------
@@ -160,17 +158,16 @@ sub _is_topic_mutating_substr {
     # 4-argument form of substr mutates its first arg,
     # so check and see if the first arg is $_
     my @args = parse_arg_list( $elem );
-    return 1 if @args >= 4 && _is_topic( $args[0]->[0] );
-    return;
+    return @args >= 4 && _is_topic( $args[0]->[0] );
 }
 
 #-----------------------------------------------------------------------------
 
 my %assignment_ops = hashify qw( = *= /= += -= %= **= x= .= &= |= ^=  &&= ||= ++ -- );
-sub _is_assignment_operator { return exists $assignment_ops{$_[0]} ? 1 : 0 }
+sub _is_assignment_operator { return exists $assignment_ops{$_[0]} }
 
 my %binding_ops = hashify qw( =~ !~ );
-sub _is_binding_operator { return exists $binding_ops{$_[0]} ? 1 : 0 }
+sub _is_binding_operator { return exists $binding_ops{$_[0]} }
 
 1;
 
