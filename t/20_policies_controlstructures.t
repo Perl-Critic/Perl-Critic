@@ -9,7 +9,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 37;
+use Test::More tests => 41;
 use Perl::Critic::Config;
 use Perl::Critic;
 
@@ -653,17 +653,13 @@ is( pcritique($policy, \$code), 3, "$policy assignment and op-assignment" );
 
 #----------------------------------------------------------------
 
-TODO:
-{
-    local $TODO = 'Pre-increment/decrement operators not tested';
-    $code = <<'END_PERL';
+$code = <<'END_PERL';
 @bar = map {++$_} @foo;
 @bar = map {--$_} @foo;
 END_PERL
 
-    $policy = 'ControlStructures::ProhibitMutatingListFunctions';
-    is( pcritique($policy, \$code), 2, "$policy: ++ and -- operators" );
-}
+$policy = 'ControlStructures::ProhibitMutatingListFunctions';
+is( pcritique($policy, \$code), 2, "$policy: ++ and -- operators" );
 
 #----------------------------------------------------------------
 
@@ -682,6 +678,17 @@ $code = <<'END_PERL';
 @bar = map {s/f/g/} @foo;
 @bar = map {tr/f/g/} @foo;
 @bar = map {y/f/g/} @foo;
+END_PERL
+
+$policy = 'ControlStructures::ProhibitMutatingListFunctions';
+is( pcritique($policy, \$code), 3, "$policy - implicit regexps" );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+@bar = map {my $c = s/f/g/g; $c} @foo;
+@bar = map {my $c = tr/f/g/g; $c} @foo;
+@bar = map {my $c = y/f/g/g; $c} @foo;
 END_PERL
 
 $policy = 'ControlStructures::ProhibitMutatingListFunctions';
@@ -728,6 +735,39 @@ END_PERL
 
 $policy = 'ControlStructures::ProhibitMutatingListFunctions';
 is( pcritique($policy, \$code), 0, "$policy - non-mutators" );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+@bar = map {$_=1} @foo;
+@bar = foo {$_} @foo;
+@bar = baz {$_=1} @foo;
+END_PERL
+
+$policy = 'ControlStructures::ProhibitMutatingListFunctions';
+%config = (list_funcs => ' foo bar ');
+is( pcritique($policy, \$code, \%config), 0, "$policy - configurable");
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+@bar = foo {$_=1} @foo;
+END_PERL
+
+$policy = 'ControlStructures::ProhibitMutatingListFunctions';
+%config = (list_funcs => ' foo bar ');
+is( pcritique($policy, \$code, \%config), 1, "$policy - configurable");
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+@bar = map {$_=1} @foo;
+@bar = foo {$_=1} @foo;
+END_PERL
+
+$policy = 'ControlStructures::ProhibitMutatingListFunctions';
+%config = (add_list_funcs => ' foo bar ');
+is( pcritique($policy, \$code, \%config), 2, "$policy - configurable");
 
 #----------------------------------------------------------------
 

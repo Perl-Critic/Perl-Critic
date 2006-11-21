@@ -51,11 +51,11 @@ sub new {
     my $self = bless {}, $class;
 
     my @list_funcs = $config{list_funcs}
-        ? split m/\s+/xms, $config{list_funcs}
+        ? $config{list_funcs} =~ m/(\S+)/gxms
         : ( @builtin_list_funcs, @cpan_list_funcs );
 
     if ( $config{add_list_funcs} ) {
-        push @list_funcs, split m/\s+/xms, $config{add_list_funcs};
+        push @list_funcs, $config{add_list_funcs} =~ m/(\S+)/gxms;
     }
 
     # Hashify also removes duplicates!
@@ -106,9 +106,18 @@ sub _has_topic_side_effect {
 sub _is_assignment_to_topic {
     my $elem = shift;
     return if not _is_topic( $elem );
-    return if not my $sib = $elem->snext_sibling();
-    return if not $sib->isa('PPI::Token::Operator');
-    return _is_assignment_operator( $sib );
+
+    my $sib = $elem->snext_sibling();
+    if ($sib && $sib->isa('PPI::Token::Operator')) {
+        return 1 if _is_assignment_operator( $sib );
+    }
+
+    my $psib = $elem->sprevious_sibling();
+    if ($psib && $psib->isa('PPI::Token::Operator')) {
+        return 1 if _is_increment_operator( $psib );
+    }
+
+    return;
 }
 
 #-----------------------------------------------------------------------------
@@ -125,7 +134,7 @@ sub _is_topic_mutating_regex {
 
     # If the previous sibling does exist, then it
     # should be a binding operator.
-    return if not _is_binding_operator( $prevsib );
+    return 1 if not _is_binding_operator( $prevsib );
 
     # Check if the sibling before the biding operator
     # is explicitly set to $_
@@ -165,6 +174,9 @@ sub _is_topic_mutating_substr {
 
 my %assignment_ops = hashify qw( = *= /= += -= %= **= x= .= &= |= ^=  &&= ||= ++ -- );
 sub _is_assignment_operator { return exists $assignment_ops{$_[0]} }
+
+my %increment_ops = hashify qw( ++ -- );
+sub _is_increment_operator { return exists $increment_ops{$_[0]} }
 
 my %binding_ops = hashify qw( =~ !~ );
 sub _is_binding_operator { return exists $binding_ops{$_[0]} }
