@@ -9,7 +9,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 36;
+use Test::More tests => 37;
 use Perl::Critic::Config;
 use Perl::Critic;
 
@@ -650,6 +650,20 @@ END_PERL
 
 $policy = 'ControlStructures::ProhibitMutatingListFunctions';
 is( pcritique($policy, \$code), 3, "$policy assignment and op-assignment" );
+
+#----------------------------------------------------------------
+
+TODO:
+{
+    local $TODO = 'Pre-increment/decrement operators not tested';
+    $code = <<'END_PERL';
+@bar = map {++$_} @foo;
+@bar = map {--$_} @foo;
+END_PERL
+
+    $policy = 'ControlStructures::ProhibitMutatingListFunctions';
+    is( pcritique($policy, \$code), 2, "$policy: ++ and -- operators" );
+}
 
 #----------------------------------------------------------------
 

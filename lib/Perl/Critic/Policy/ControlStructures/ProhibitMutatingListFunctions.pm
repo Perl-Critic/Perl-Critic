@@ -87,7 +87,8 @@ sub violates {
 sub _has_topic_side_effect {
     my $node = shift;
 
-    # Search through all significant elements in the block
+    # Search through all significant elements in the block,
+    # testing each element to see if it mutates the topic.
     my $elements = $node->find( 'PPI::Element' ) || [];
     for my $elem ( @{ $elements } ) {
         next if $elem->isa('PPI::Node');
@@ -136,14 +137,15 @@ sub _is_topic_mutating_regex {
 #-----------------------------------------------------------------------------
 
 sub _is_topic_mutating_func {
-
     my $elem = shift;
     return if not $elem->isa('PPI::Token::Word');
     return if not any { $elem eq $_ } qw(chop chomp undef);
     return if not is_function_call( $elem );
 
+    # If these functions have no argument,
+    # they default to mutating $_
     my $first_arg = first_arg( $elem );
-    return 1 if not defined $first_arg; #Implicit modification of $_
+    return 1 if not defined $first_arg;
     return 1 if _is_topic( $first_arg );
     return;
 }
@@ -155,6 +157,8 @@ sub _is_topic_mutating_substr {
     return if $elem ne 'substr';
     return if not is_function_call( $elem );
 
+    # 4-argument form of substr mutates its first arg,
+    # so check and see if the first arg is $_
     my @args = parse_arg_list( $elem );
     return 1 if @args >= 4 && _is_topic( $args[0]->[0] );
     return;
