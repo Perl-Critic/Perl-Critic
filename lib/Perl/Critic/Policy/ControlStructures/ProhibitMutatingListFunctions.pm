@@ -89,9 +89,8 @@ sub _has_topic_side_effect {
 
     # Search through all significant elements in the block,
     # testing each element to see if it mutates the topic.
-    my $elements = $node->find( 'PPI::Element' ) || [];
-    for my $elem ( @{ $elements } ) {
-        next if $elem->isa('PPI::Node');
+    my $tokens = $node->find( 'PPI::Token' ) || [];
+    for my $elem ( @{ $tokens } ) {
         next if not $elem->significant();
         return 1 if _is_assignment_to_topic( $elem );
         return 1 if _is_topic_mutating_regex( $elem );
