@@ -96,6 +96,7 @@ sub _dispatch_special_requests {
     if ( $opts{Version} ) { print "$VERSION\n"; exit 0;  }  #Exits
     if ( $opts{list}    ) { policy_listing( 'short' );   }  #Exits
     if ( $opts{List}    ) { policy_listing( 'long'  );   }  #Exits
+    if ( $opts{doc}     ) { policy_docs( $opts{doc} );   }  #Exits
     return 1;
 }
 
@@ -245,6 +246,7 @@ sub _get_option_specification {
         Safari
         Version
         count
+        doc=s
         exclude=s@
         force!
         help|?
@@ -310,6 +312,24 @@ sub policy_listing {
     my $pl = Perl::Critic::PolicyListing->new( -policies => \@pols );
     print $type eq 'short' ? $pl->short_listing() :  $pl->long_listing();
     exit 1;
+}
+
+#-----------------------------------------------------------------------------
+
+sub policy_docs {
+
+    my $pattern = shift;
+    require Perl::Critic::PolicyFactory;
+    Perl::Critic::PolicyFactory->import();
+
+    my @site_policies = Perl::Critic::PolicyFactory::site_policy_names();
+    my @matches = grep { $_ =~ m/$pattern/imx } @site_policies;
+
+    for my $matching_policy ( @matches ) {
+        my @perldoc_cmd = qw(perldoc -T); #-T means don't send to pager
+        system @perldoc_cmd, $matching_policy;
+    }
+    exit 0;
 }
 
 1;
@@ -592,6 +612,14 @@ By default, Severity 5 and 4 are colored red and yellow, respectively.
 Colorization only happens if STDOUT is a tty and L<Term::ANSIColor> is
 installed.  And it only works on non-windows environments.  Set this
 switch to disable color
+
+=item C<-doc PATTERN>
+
+Displays the perldoc for all L<Perl::Critic::Policy> modules that match
+C<m/PATTERN/imx>.  Since Policy modules tend to have rather long names, this
+just provides a more convenient way to say something like: C<"perldoc
+Perl::Critic::Policy::ValuesAndExpressions::RequireUpperCaseHeredocTerminator">
+at the command prompt.
 
 =item C<-quiet>
 
