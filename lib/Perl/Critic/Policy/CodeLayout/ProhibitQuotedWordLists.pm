@@ -101,16 +101,19 @@ it easy to add to the list in the future.
   @list = ('foo', 'bar', 'baz');  #not ok
   @list = qw(foo bar baz);        #ok
 
-=head1 CONSTRUCTOR
+=head1 CONFIGURATION
 
-This Policy accepts an additional key-value pair in the constructor.
-The key must be C<min_elements> and the value is the minimum number of
-elements in the list.  Lists with fewer elements will be overlooked by
-this Policy.  The default is 2.  Users of Perl::Critic can configure
-this in their F<.perlcriticrc> file like this:
+This policy can be configured to only pay attention to word lists with
+at least a particular number of elements.  By default, this value is 2,
+which means that lists containing zero or one elements are ignored.
+The minimum list size to be looked at can be specified by giving a
+value for C<min_elements> in F<.perlcriticrc> like this:
 
   [CodeLayout::ProhibitQuotedWordLists]
   min_elements = 4
+
+This would cause this policy to only complain about lists containing
+four or more words.
 
 =head1 NOTES
 
