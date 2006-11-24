@@ -55,8 +55,10 @@ if ( !$EVAL_ERROR ) {
 # Run critic against all of our own files
 
 my $rcfile = File::Spec->catfile( 't', '40_perlcriticrc' );
-Test::Perl::Critic->import( -severity => 1, -profile => $rcfile );
+Test::Perl::Critic->import( -profile => $rcfile );
 all_critic_ok();
+
+#-----------------------------------------------------------------------------
 
 # Local Variables:
 #   mode: cperl
