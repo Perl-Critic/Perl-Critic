@@ -146,12 +146,12 @@ can save you lots of keystrokes.
 =head1 DEFAULTS
 
 Different POD sections are required, depending on whether the file is a
-library or script (which is determined by the presence or absence of a
+library or program (which is determined by the presence or absence of a
 perl shebang line).
 
              Default Required POD Sections
 
-   Perl Libraries                     Perl Scripts
+   Perl Libraries                     Perl Programs
    ------------------------------------------------------
    NAME                               NAME
    VERSION                            VERSION
@@ -168,13 +168,12 @@ perl shebang line).
    AUTHOR                             AUTHOR
    LICENSE AND COPYRIGHT              LICENSE AND COPYRIGHT
 
-=head1 CONSTRUCTOR
+=head1 CONFIGURATION
 
-This policy accepts two additional key-value pairs in the C<new>
-method.  The keys can be either C<'script_sections'> or
-C<'lib_sections'>, and the value is always a string of pipe-delimited
-POD section names.  These can be configured in the F<.perlcriticrc>
-file like this:
+The sections required for modules and programs can independently customized, by
+giving values for C<script_sections> and C<lib_sections> of a string of
+pipe-delimited required POD section names.  An example of entries in a
+F<.perlcriticrc> file:
 
  [Documentation::RequirePodSections]
  lib_sections    = NAME | SYNOPSIS | BUGS AND LIMITATIONS | AUTHOR

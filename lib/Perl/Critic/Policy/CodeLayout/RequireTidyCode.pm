@@ -123,13 +123,13 @@ consistent layout, regardless of the specifics.  And the easiest way
 to do that is to use L<Perl::Tidy>.  This policy will complain if
 you're code hasn't been run through Perl::Tidy.
 
-=head1 CONSTRUCTOR
+=head1 CONFIGURATION
 
-This Policy accepts an additional key-value pair in the constructor.
-The key must be C<perltidyrc> and the value is the filename of a
-Perl::Tidy configuration file.  The default is C<undef>, which tells
-Perl::Tidy to look in it's default location.  Users of Perl::Critic
-can configure this in their F<.perlcriticrc> file like this:
+This policy can be configured to tell Perl::Tidy to use a particular
+F<perltidyrc> file or no configuration at all.  By default, Perl::Tidy is told
+to look in its default location for configuration.  Perl::Critic can be told to
+tell Perl::Tidy to use a specific configuration file by putting an entry in a
+F<.perlcriticrc> file like this:
 
   [CodeLayout::RequireTidyCode]
   perltidyrc = /usr/share/perltidy.conf

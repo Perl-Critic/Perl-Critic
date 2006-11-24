@@ -204,7 +204,7 @@ array being passed is C<@_> or perhaps C<values(%ENV)>!  Instead authors
 should restrict in-place array modification to C<for(@array) { ... }>
 constructs instead, or use C<List::MoreUtils::apply()>.
 
-=head1 CONSTRUCTOR
+=head1 CONFIGURATION
 
 By default, this policy applies to the following list functions:
 

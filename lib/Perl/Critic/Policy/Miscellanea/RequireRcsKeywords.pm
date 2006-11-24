@@ -134,14 +134,12 @@ define the C<$VERSION> variable like this:
 
   our ($VERSION) = '$Revision$' =~ m{ \$Revision: \s+ (\S+) }x;
 
-=head1 CONSTRUCTOR
+=head1 CONFIGURATION
 
-By default, this policy only requires the C<Revision>, C<Source>, and
-C<Date> keywords.  To specify alternate keywords, pass them into the
-constructor as a key-value pair, where the key is 'keywords' and the
-value is a whitespace delimited series of keywords (without the
-dollar-signs).  Or specify them in your F<.perlcriticrc> file like
-this:
+By default, this policy only requires the C<Revision>, C<Source>, and C<Date>
+keywords.  To specify alternate keywords, specify a value for C<keywords> of a
+whitespace delimited series of keywords (without the dollar-signs).  This would
+look something like the following in a F<.perlcriticrc> file:
 
   [Miscellanea::RequireRcsKeywords]
   keywords = Revision Source Date Author Id

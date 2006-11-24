@@ -120,13 +120,12 @@ C<continue>.
       last LOOP if $other_condition;    #also ok
   }
 
-=head1 CONSTRUCTOR
+=head1 CONFIGURATION
 
-This policy accepts an additional key-value pair in the C<new> method.
-The key should be 'allow' and the value is a string of space-delimited
-keywords.  Choose from C<if>, C<for>, C<unless>, C<until>,and
-C<while>.  When using the L<Perl::Critic> engine, these can be
-configured in the F<.perlcriticrc> file like this:
+A set of constructs to be ignored by this policy can specified by giving a
+value for 'allow' of a string of space-delimited keywords: C<if>, C<for>,
+C<unless>, C<until>, and/or C<while>.  An example of specifying allowed
+flow-control structures in a F<.perlcriticrc> file:
 
  [ControlStructures::ProhibitPostfixControls]
  allow = for if until

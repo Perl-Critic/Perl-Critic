@@ -92,13 +92,11 @@ hash lookup instead.  See L<Switch> for another approach.
       $foo = $default;
   }
 
-=head1 CONSTRUCTOR
+=head1 CONFIGURATION
 
-This policy accepts an additional key-value pair in the C<new> method.
-The key should be C<max_elsif> and the value should be an integer
-indicating the maximum number of C<elsif> alternatives to allow.  The
-default is 2.  When using the L<Perl::Critic> engine, these can be
-configured in the F<.perlcriticrc> file like this:
+This policy can be configured with a maximum number of C<elsif> alternatives
+to allow.  The default is 2.  This can be specified via a C<max_elsif> item in
+the F<.perlcriticrc> file:
 
  [ControlStructures::ProhibitCascadingIfElse]
  max_elsif = 3
