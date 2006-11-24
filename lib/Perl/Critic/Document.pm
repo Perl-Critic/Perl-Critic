@@ -36,7 +36,8 @@ sub new {
 
 sub isa {
     my $self = shift;
-    return $self->SUPER::isa(@_) || ((ref $self) && $self->{_doc} && $self->{_doc}->isa(@_));
+    return $self->SUPER::isa(@_)
+        || ( (ref $self) && $self->{_doc} && $self->{_doc}->isa(@_) );
 }
 
 #----------------------------------------------------------------------------
@@ -202,6 +203,11 @@ C<PPI::Document> instance.
 
 Returns the filename for the source code if applicable
 (PPI::Document::File) or C<undef> otherwise (PPI::Document).
+
+=item $self->isa( $classname )
+
+To be compatible with other modules that expect to get a PPI::Document, the
+Perl::Critic::Document class masqerades as the PPI::Document class.
 
 =back
 

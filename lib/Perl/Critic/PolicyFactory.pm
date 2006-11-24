@@ -248,7 +248,6 @@ sub native_policy_names {
       Perl::Critic::Policy::ValuesAndExpressions::ProhibitEscapedCharacters
       Perl::Critic::Policy::ValuesAndExpressions::ProhibitInterpolationOfLiterals
       Perl::Critic::Policy::ValuesAndExpressions::ProhibitLeadingZeros
-      Perl::Critic::Policy::ValuesAndExpressions::ProhibitMagicNumbers
       Perl::Critic::Policy::ValuesAndExpressions::ProhibitMismatchedOperators
       Perl::Critic::Policy::ValuesAndExpressions::ProhibitMixedBooleanOperators
       Perl::Critic::Policy::ValuesAndExpressions::ProhibitNoisyQuotes
