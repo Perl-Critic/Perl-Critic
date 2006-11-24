@@ -9,12 +9,14 @@
 
      New Policies:
      * TestingAndDebugging::ProhibitProlongedStrictureOverride
-     * ValuesAndExpressions::ProhibitMagicNumbers (needs customizability)
-     * ControlStructures::ProhibitMutatingListFunctions (not quite finished)
+     * ControlStructures::ProhibitMutatingListFunctions
 
      New Features:
      * Say "perlcritic -List" to get an expanded listing of all Policies.
        The format is suitable for use as your .perlcriticrc file.
+     * Say "perlcritic -doc PATTERN" to get the documentation for all
+       Policies that match m/PATTERN/imx.  This is a little easier than
+       typing in the full name of the Policy module with "perldoc".
 
      Bug Fixes:
      * 21713 false positive for parens used with substr and unpack.
