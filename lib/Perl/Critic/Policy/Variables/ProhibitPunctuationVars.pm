@@ -84,13 +84,12 @@ give them clear names.
   use English qw(-no_match_vars);
   local $OUTPUT_AUTOFLUSH = undef;        #ok
 
-=head1 EXCEPTIONS
+=head1 CONFIGURATION
 
-The scratch variables C<$_> and C<@_> are very common and have no
-equivalent name in L<English>, so they are exempt from this policy.
-The same goes for the less-frequently-used default filehandle C<_>
-used by stat().  All the regexp capture variables (C<$1>, C<$2>, ...)
-are exempt too.
+The scratch variables C<$_> and C<@_> are very common and are pretty
+well understood, so they are exempt from this policy.  The same goes
+for the less-frequently-used default filehandle C<_> used by stat().
+All the regexp capture variables (C<$1>, C<$2>, ...) are exempt too.
 
 You can add more exceptions to your configuration.  In your
 perlcriticrc file, add a block like this:

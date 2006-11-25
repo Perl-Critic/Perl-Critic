@@ -83,7 +83,7 @@ cases, you can turn it off briefly with a C<no strict> directive.
 This policy checks that C<no strict> is only in effect for a small number of
 statements.
 
-=head1 CONSTRUCTOR
+=head1 CONFIGURATION
 
 The default number of statements allowed per C<no strict> is three.  To
 override this number, put the following in your F<.perlcriticrc>:

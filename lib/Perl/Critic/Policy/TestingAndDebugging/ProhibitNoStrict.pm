@@ -84,16 +84,15 @@ if you were wise enough to C<use strict> in the first place, then it
 doesn't make sense to disable it completely.  By default, any C<no
 strict> statement will violate this policy.  However, you can
 configure this Policy to allow certain types of strictures to be
-disabled (See L<Configuration>).  A bare C<no strict> statement will
+disabled (See L<CONFIGURATION>).  A bare C<no strict> statement will
 always raise a violation.
 
-=head1 CONSTRUCTOR
+=head1 CONFIGURATION
 
-This policy accepts one key-value pair in the constructor.  The key is
-'allow' and the value is a string of whitespace delimited stricture
-types that you want to permit.  These can be 'vars', 'subs' and/or
-'refs'.  Users of the Perl::Critic engine can configure this in their
-F<.perlcriticrc> file like this:
+The permitted strictures can be configured via the C<allow> option.
+The value is a list of whitespace-delimited stricture types that you
+want to permit.  These can be C<vars>, C<subs> and/or C<refs>.  An
+example of this customization:
 
   [TestingAndDebugging::ProhibitStrictureDisabling]
   allow = vars subs refs

@@ -98,14 +98,12 @@ into smaller subroutines.  Mark Dominus book "Higher Order Perl" also
 describes callbacks, recursion, memoization, iterators, and other
 techniques that help create simple and extensible Perl code.
 
-=head1 CONSTRUCTOR
+=head1 CONFIGURATION
 
-This Policy accepts an additional key-value pair in the C<new> method.
-The key is 'max_mccabe' and the value is the maximum acceptable McCabe
-score.  Any subroutine with a McCabe score higher than this number
-will generate a policy violation.  The default is 20.  Users of the
-Perl::Critic engine can configure this in their F<.perlcriticrc> like
-this:
+The maximum acceptable McCabe can be set with the C<max_mccabe>
+configuration item.  Any subroutine with a McCabe score higher than
+this number will generate a policy violation.  The default is 20.  An
+example section for a F<.perlcriticrc>:
 
   [Subroutines::ProhibitExcessComplexity]
   max_mccabe = 30

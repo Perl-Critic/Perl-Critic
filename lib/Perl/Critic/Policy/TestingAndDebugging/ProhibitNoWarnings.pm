@@ -86,13 +86,12 @@ configure this Policy to allow certain types of warnings to be
 disabled (See L<Configuration>).  A bare C<no warnings> statement will
 always raise a violation.
 
-=head1 CONSTRUCTOR
+=head1 CONFIGURATION
 
-This policy accepts one key-value pair in the constructor.  The key is
-'allow' and the value is a string of whitespace delimited warning
-types that you are willing to disable.  See L<perllexwarn> for a list
-of possible warning types.  Users of the Perl::Critic engine can
-configure this in their F<.perlcriticrc> file like this:
+The permitted warning types can be configured via the C<allow> option.
+The value is a list of whitespace-delimited warning types that you
+want to be able to disable.  See L<perllexwarn> for a list of possible
+warning types.  An example of this customization:
 
   [TestingAndDebugging::ProhibitWarningsDisabling]
   allow = uninitialized once

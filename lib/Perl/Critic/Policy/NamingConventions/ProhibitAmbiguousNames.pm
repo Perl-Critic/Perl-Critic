@@ -129,20 +129,21 @@ previous or final.
 This policy tests against a list of ambiguous words for variable
 names.
 
-=head1 CONSTRUCTOR
+=head1 CONFIGURATION
 
-This Policy accepts an additional key-value pair in the constructor,
-The key is 'forbid' and the value is a string of forbidden words
-separated by spaces.  Any specified list replaces the default list.
+The default list of forbidden words is:
 
-The default list is:
+  last set left right no abstract contract record second close bases
 
-    last set left right no abstract contract record second close bases
+This list can be changed by giving a value for C<forbid> of a series of
+forbidden words separated by spaces.
 
-For example, to override the default list:
+For example, if you decide that C<bases> is an OK name for variables (e.g.
+in bioinformatics), then put something like the following in
+C<$HOME/.perlcriticrc>:
 
-    my $pkg = 'Perl::Critic::Policy::NamingConventions::ProhibitAmbiguousNames';
-    my $policy = $pkg->new(forbid => 'last set');
+  [NamingConventions::ProhibitAmbiguousNames]
+  forbid = last set left right no abstract contract record second close
 
 =head1 METHODS
 
@@ -151,15 +152,7 @@ For example, to override the default list:
 =item default_forbidden_words()
 
 This can be called as a class or instance method.  It returns the list
-of words that are forbidden by default.  This list can be overridden
-via a perlcriticrc file.
-
-For example, if you decide that C<bases> is an OK name for variables
-(e.g. in bioinformatics), then put something like the following in
-C<$HOME/.perlcriticrc>:
-
-    [NamingConventions::ProhibitAmbiguousNames]
-    forbid = last set left right no abstract contract record second close
+of words that are forbidden by default.
 
 =back
 

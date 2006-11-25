@@ -90,17 +90,15 @@ three digits to be separated.
  $long_float = 12345678.001;   #not ok
  $long_float = 12_345_678.001; #ok
 
-=head1 CONSTRUCTOR
+=head1 CONFIGURATION
 
-This Policy accepts an additional key-value pair in the C<new> method.
-The key is 'min_value' and the value is the minimum absolute value of
-numbers that must be separated.  The default is 10,000.  Thus, all
-numbers >= 10,000 and <= -10,000 must be separated.  Users of the
-Perl::Critic engine can configure this in their F<.perlcriticrc> like
-this:
+The minimum absolute value of numbers that must contain separators can
+be configured via the C<min_value> option.  The default is 10,000;
+thus, all numbers >= 10,000 and <= -10,000 must have separators.  For
+example:
 
   [ValuesAndExpressions::RequireNumberSeparators]
-  min_value = 100000    #That's one-hundred-thousand!
+  min_value = 100000    # That's one-hundred-thousand!
 
 =head1 NOTES
 

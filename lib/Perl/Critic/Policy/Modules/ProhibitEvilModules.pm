@@ -90,30 +90,30 @@ Use this policy if you wish to prohibit the use of specific modules.
 These may be modules that you feel are deprecated, buggy, unsupported,
 insecure, or just don't like.
 
-=head1 CONSTRUCTOR
+=head1 CONFIGURATION
 
-This policy accepts an additional key-value pair in the C<new> method.
-The key should be 'modules' and the value is a string of
-space-delimited fully qualified module names.  These can be configured
-in the F<.perlcriticrc> file like this:
+The set of prohibited modules is configurable via the C<modules> option.  The
+value of C<modules> should be a string of space-delimited, fully qualified
+module names and/or regular expressions.  An example of prohibiting two
+specific modules in a F<.perlcriticrc> file:
 
- [Modules::ProhibitEvilModules]
- modules = Getopt::Std  Autoload
+  [Modules::ProhibitEvilModules]
+  modules = Getopt::Std Autoload
 
-If any module name in your configuration is braced with slashes, it
-is interpreted as a regular expression.  So any module that matches
-C<m/$module_name/> will be forbidden.  For example:
+Regular expressions are identified by values beginning and ending with slashes.
+Any module with a name that matches C<m/pattern/> will be forbidden.  For
+example:
 
   [Modules::ProhibitEvilModules]
   modules = /Acme::/
 
-would cause all modules that match C<m/Acme::/> to be forbidden.  You
-can add any of the C<imxs> switches to the end of the pattern, but
-beware that your pattern should not contain spaces, lest the parser
-get confused.
+would cause all modules that match C<m/Acme::/> to be forbidden.  You can add
+any of the C<imxs> switches to the end of a pattern, but be aware that patterns
+cannot contain whitespace because the configuration file parser uses it to
+delimit the module names and patterns.
 
-By default, there are no prohibited modules (although I can think
-of a few that should be).
+By default, there are no prohibited modules (although I can think of a few that
+should be).
 
 =head1 NOTES
 

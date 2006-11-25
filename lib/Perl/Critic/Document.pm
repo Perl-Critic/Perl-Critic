@@ -207,7 +207,7 @@ Returns the filename for the source code if applicable
 =item $self->isa( $classname )
 
 To be compatible with other modules that expect to get a PPI::Document, the
-Perl::Critic::Document class masqerades as the PPI::Document class.
+Perl::Critic::Document class masquerades as the PPI::Document class.
 
 =back
 

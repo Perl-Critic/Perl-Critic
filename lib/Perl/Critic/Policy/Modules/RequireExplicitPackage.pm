@@ -91,11 +91,10 @@ caller's package, and you have no idea who that is.  Good
 encapsulation and common decency require your module to keep its
 innards to itself.
 
-As for scripts, most people understand that the default package is
-C<main>, so this Policy doesn't apply to files that begin with a perl
-shebang.  If you want to require an explicit C<package>
-declaration in all files, including programs, then add the following to
-your F<.perlcriticrc> file
+As for programs, most people understand that the default package is C<main>, so
+this Policy doesn't apply to files that begin with a perl shebang.  If you want
+to require an explicit C<package> declaration in all files, including programs,
+then add the following to your F<.perlcriticrc> file
 
   [Modules::RequireExplicitPackage]
   exempt_scripts = 0

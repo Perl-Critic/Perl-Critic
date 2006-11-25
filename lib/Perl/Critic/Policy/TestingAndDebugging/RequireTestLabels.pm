@@ -106,12 +106,12 @@ applicable.  This only applies to code that has a C<use Test::More> or
 C<require Test::More> declaration (see below to add more test modules
 to the list).
 
-=head1 CONSTRUCTOR
+=head1 CONFIGURATION
 
-This policy accepts an additional key-value pair in the C<new> method.
-The key should be 'modules' and the value is a string of
-space-delimited fully qualified module names.  These can be configured
-in the F<.perlcriticrc> file like this:
+A list of additional modules to require label parameters be passed to
+their methods can be specified with the C<modules> option.  The list
+must consist of whitespace-delimited, fully-qualified module names.
+For example:
 
  [TestingAndDebugging::RequireTestLabels]
  modules = My::Test::SubClass  Some::Other::Module
