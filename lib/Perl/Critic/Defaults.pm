@@ -39,12 +39,13 @@ sub _init {
     $self->{_include}    = [ split m/\s+/mx, $include ];
 
     # Single-value defaults
-    $self->{_force}    = _default('force',    $FALSE,            %args);
-    $self->{_only}     = _default('only',     $FALSE,            %args);
-    $self->{_severity} = _default('severity', $SEVERITY_HIGHEST, %args);
-    $self->{_theme}    = _default('theme',    $EMPTY,            %args);
-    $self->{_top}      = _default('top',      $FALSE,            %args);
-    $self->{_verbose}  = _default('verbose',  4,                 %args);
+    $self->{_force}        = _default('force',        $FALSE,            %args);
+    $self->{_only}         = _default('only',         $FALSE,            %args);
+    $self->{_singlepolicy} = _default('singlepolicy', $EMPTY,            %args);
+    $self->{_severity}     = _default('severity',     $SEVERITY_HIGHEST, %args);
+    $self->{_theme}        = _default('theme',        $EMPTY,            %args);
+    $self->{_top}          = _default('top',          $FALSE,            %args);
+    $self->{_verbose}      = _default('verbose',      4,                 %args);
 
     return $self;
 }
@@ -100,6 +101,13 @@ sub include {
 sub only {
     my ($self) = @_;
     return $self->{_only};
+}
+
+#-----------------------------------------------------------------------------
+
+sub singlepolicy {
+    my ($self) = @_;
+    return $self->{_singlepolicy};
 }
 
 #-----------------------------------------------------------------------------
@@ -175,6 +183,10 @@ there are no default exclusion patterns, then the list will be empty.
 =item C< only() >
 
 Returns the default value of the C<only> flag (Either 1 or 0).
+
+=item C< singlepolicy() >
+
+Returns the default single-policy pattern.  (As a string.)
 
 =item C< severity() >
 

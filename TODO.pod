@@ -43,6 +43,11 @@ number of subroutines, average number of statements/operators per sub.
 
 =item * Invalid parameters in .perlcriticrc do not cause any warnings.
 
+=item * Fix inappropriate uses of C<confess>.
+
+E.g. when no files to process have been found or multiple policies match
+the C<--singlepolicy> option.
+
 =item * Modules::RequireVersionVar
 
 Doesn't enforce three-part versions

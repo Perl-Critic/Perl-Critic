@@ -17,6 +17,8 @@
      * Say "perlcritic -doc PATTERN" to get the documentation for all
        Policies that match m/PATTERN/imx.  This is a little easier than
        typing in the full name of the Policy module with "perldoc".
+     * Say "perlcritic --singlepolicy PATTERN" to use one and only one
+       policy.
      * Can now specify exceptions to Variables::ProhibitPackageVars,
        for packages like File::Find that only interface through
        package variables.

@@ -11,7 +11,7 @@ use strict;
 use warnings;
 use File::Spec;
 use English qw(-no_match_vars);
-use Test::More tests => 27;
+use Test::More tests => 28;
 
 #-----------------------------------------------------------------------------
 # Load perlcritic like a library so we can test its subroutines.  If it is not
@@ -88,6 +88,12 @@ is( $options{-profile}, q{});
 @ARGV = qw(-profile foo);
 %options = get_options();
 is( $options{-profile}, 'foo');
+
+#-----------------------------------------------------------------------------
+
+@ARGV = qw(-singlepolicy nowarnings);
+%options = get_options();
+is( $options{-singlepolicy}, 'nowarnings');
 
 #-----------------------------------------------------------------------------
 

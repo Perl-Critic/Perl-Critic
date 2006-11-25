@@ -303,7 +303,7 @@ __END__
 
 =pod
 
-=for stopwords DGR INI-style API -params pbp refactored
+=for stopwords DGR INI-style API -params pbp refactored singlepolicy
 
 =head1 NAME
 
@@ -423,6 +423,11 @@ C<ProhibitNoStrict> Policy modules even though they have a severity
 level that is greater than 1.  You can use C<-exclude> in conjunction
 with the C<-include> option.  Note that C<-exclude> takes precedence
 over C<-include> when a Policy matches both patterns.
+
+B<-singlepolicy> is a string C<PATTERN>.  Only the policy that matches
+C<m/$PATTERN/imx> will be used.  This value overrides the
+C<-severity>, C<-theme>, C<-include>, C<-exclude>, and C<-only>
+options.
 
 B<-top> is the maximum number of Violations to return when ranked by
 their severity levels.  This must be a positive integer.  Violations

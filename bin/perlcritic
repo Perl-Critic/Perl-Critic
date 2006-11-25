@@ -259,6 +259,7 @@ sub _get_option_specification {
         profile=s
         quiet
         severity=i
+        singlepolicy=s
         theme=s
         top:i
         verbose=s
@@ -349,10 +350,11 @@ C<perlcritic> - Command-line interface to critique Perl source
 =head1 SYNOPSIS
 
   perlcritic [-12345 | -severity number] [-noprofile | -profile file]
-             [-top [ number ]] [-include pattern] [-exclude pattern]
-             [-theme expression] [-verbose number | format] [-nocolor]
-             [-only | -noonly] [-force | -noforce] [-list | -List]
-             [-quiet] [-help] [-man] [-Version] [FILE | DIRECTORY | STDIN]
+             [-top [ number ]] [-theme expression] [-include pattern]
+             [-exclude pattern] [-singlepolicy pattern] [-only | -noonly]
+             [-force | -noforce] [-verbose number | format] [-nocolor]
+             [-list | -List] [-quiet] [-help] [-man] [-Version]
+             [FILE | DIRECTORY | STDIN]
 
 =head1 DESCRIPTION
 
@@ -507,6 +509,33 @@ options and you can use it in conjunction with the C<-include> option.
 Note that C<-exclude> takes precedence over C<-include> when a Policy
 matches both patterns.  You can set the default value for this option
 in your F<.perlcriticrc> file.
+
+=item C<-singlepolicy PATTERN>
+
+Directs C<perlcritic> to report only violations of the single Policy
+module that matches the regex C</PATTERN/imx>.  Use this option to
+temporarily override your profile and/or other command-line settings
+that specify the policies to use, including severity, C<-theme>,
+C<-include>, C<-exclude>, and C<-only> options.  For example:
+
+  perlcritic --singlepolicy=nowarnings my_file.pl
+
+This would cause C<perlcritic> to only report violations of the
+C<ProhibitNoWarnings> policy, regardless of the severity level
+setting.
+
+This is equivalent to what one might intend by
+
+  perlcritic --exclude=. --include=nowarnings my_file.pl
+
+but this won't work because the C<-exclude> option overrides the
+C<-include> option.
+
+The equivalent of this option can be accomplished by creating a custom
+profile containing only the desired policy and its configuration and
+running
+
+  perlcritic --profile=customprofile --only my_file.pl
 
 =item C<-top [ N ]>
 

@@ -11,7 +11,7 @@ use strict;
 use warnings;
 use Carp qw(confess);
 use English qw(-no_match_vars);
-use List::MoreUtils qw(any none);
+use List::MoreUtils qw(any none apply);
 use Scalar::Util qw(blessed);
 use Perl::Critic::PolicyFactory;
 use Perl::Critic::Theme qw();
@@ -48,10 +48,11 @@ sub _init {
     my $defaults = $profile->defaults();
 
     # If given, these options should always have a true value
-    $self->{_include}  = $args{-include}  ? $args{-include}  : $defaults->include();
-    $self->{_exclude}  = $args{-exclude}  ? $args{-exclude}  : $defaults->exclude();
-    $self->{_verbose}  = $args{-verbose}  ? $args{-verbose}  : $defaults->verbose();
-    $self->{_severity} = $args{-severity} ? $args{-severity} : $defaults->severity();
+    $self->{_include}      = $args{-include}      ? $args{-include}      : $defaults->include();
+    $self->{_exclude}      = $args{-exclude}      ? $args{-exclude}      : $defaults->exclude();
+    $self->{_singlepolicy} = $args{-singlepolicy} ? $args{-singlepolicy} : $defaults->singlepolicy();
+    $self->{_verbose}      = $args{-verbose}      ? $args{-verbose}      : $defaults->verbose();
+    $self->{_severity}     = $args{-severity}     ? $args{-severity}     : $defaults->severity();
 
     # If given, these options can be true or false (but defined)
     # We normalize these to numeric values by multiplying them by 1;
@@ -76,6 +77,17 @@ sub _init {
     return $self if defined $p and $p eq 'NONE';
 
     $self->_load_policies( @policies );
+
+    if ($self->singlepolicy() && scalar $self->policies() != 1) {
+        if (scalar $self->policies() == 0) {
+            confess 'No policies matched "' . $self->singlepolicy() . $DQUOTE;
+        }
+        else {
+            confess 'Multiple policies matched "' . $self->singlepolicy()
+                . '": ' . join ', ', apply { chomp } $self->policies();
+        }
+    }
+
     return $self;
 }
 
@@ -113,6 +125,16 @@ sub add_policy {
 sub _load_policies {
 
     my ( $self, @policies ) = @_;
+
+    if ($self->singlepolicy()) {
+        for my $policy (@policies) {
+            if ( $self->_policy_is_single_policy( $policy ) ) {
+                $self->add_policy( -policy => $policy );
+            }
+        }
+
+        return $self;
+    }
 
     for my $policy ( @policies ) {
 
@@ -185,6 +207,20 @@ sub _policy_is_excluded {
 }
 
 #------------------------------------------------------------------------
+
+sub _policy_is_single_policy {
+    my ($self, $policy) = @_;
+    my $policy_long_name = ref $policy;
+    my $singlepolicy = $self->singlepolicy();
+
+    if ($singlepolicy) {
+        return $policy_long_name =~ m/$singlepolicy/imxo;
+    }
+
+    return 0;
+}
+
+#------------------------------------------------------------------------
 # Begin ACCESSSOR methods
 
 sub policies {
@@ -219,11 +255,19 @@ sub only {
     my $self = shift;
     return $self->{_only};
 }
+
 #----------------------------------------------------------------------------
 
 sub severity {
     my $self = shift;
     return $self->{_severity};
+}
+
+#----------------------------------------------------------------------------
+
+sub singlepolicy {
+    my $self = shift;
+    return $self->{_singlepolicy};
 }
 
 #----------------------------------------------------------------------------
@@ -267,7 +311,7 @@ __END__
 
 =pod
 
-=for stopwords -params INI-style
+=for stopwords -params INI-style singlepolicy
 
 =head1 NAME
 
@@ -286,7 +330,7 @@ constructor will do it for you.
 
 =over 8
 
-=item C<< new( [ -profile => $FILE, -severity => $N, -theme => $string, -include => \@PATTERNS, -exclude => \@PATTERNS, -top => $N, -only => $B, -force => $B, -verbose => $N ] ) >>
+=item C<< new( [ -profile => $FILE, -severity => $N, -theme => $string, -include => \@PATTERNS, -exclude => \@PATTERNS, -singlepolicy => $PATTERN, -top => $N, -only => $B, -force => $B, -verbose => $N ] ) >>
 
 =item C<< new() >>
 
@@ -330,6 +374,11 @@ that match at least one C<m/$PATTERN/imx> will not be loaded into this
 Config, irrespective of the severity settings.  You can use it in
 conjunction with the C<-include> option.  Note that C<-exclude> takes
 precedence over C<-include> when a Policy matches both patterns.
+
+B<-singlepolicy> is a string C<PATTERN>.  Only the policy that matches
+C<m/$PATTERN/imx> will be used.  This value overrides the
+C<-severity>, C<-theme>, C<-include>, C<-exclude>, and C<-only>
+options.
 
 B<-top> is the maximum number of Violations to return when ranked by
 their severity levels.  This must be a positive integer.  Violations
@@ -398,6 +447,10 @@ Returns the value of the C<-only> attribute for this Config.
 =item C< severity() >
 
 Returns the value of the C<-severity> attribute for this Config.
+
+=item C< singlepolicy() >
+
+Returns the value of the C<-singlepolicy> attribute for this Config.
 
 =item C< theme() >
 
