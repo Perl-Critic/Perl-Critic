@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 39;
+use Test::More tests => 42;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -114,7 +114,7 @@ use vars ('$fooBar', '@EXPORT');
 END_PERL
 
 $policy = 'Variables::ProhibitPackageVars';
-is( pcritique($policy, \$code), 15, $policy);
+is( pcritique($policy, \$code), 15, "$policy failures" );
 
 #----------------------------------------------------------------
 
@@ -151,7 +151,7 @@ $::VERSION = '1.2';
 END_PERL
 
 $policy = 'Variables::ProhibitPackageVars';
-is( pcritique($policy, \$code), 0, $policy);
+is( pcritique($policy, \$code), 0, "$policy passing" );
 
 #----------------------------------------------------------------
 
@@ -162,7 +162,40 @@ my ($foo, $bar) = ();
 END_PERL
 
 $policy = 'Variables::ProhibitPackageVars';
-is( pcritique($policy, \$code), 0, $policy);
+is( pcritique($policy, \$code), 0, "$policy lexicals pass" );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+use File::Find;
+print $File::Find::dir;
+END_PERL
+
+$policy = 'Variables::ProhibitPackageVars';
+is( pcritique($policy, \$code), 0, "$policy default exceptions" );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+use File::Find;
+print $File::Find::dir;
+$Override::Defaults::wango = $x;
+$Override::Defaults::tango = 47;
+END_PERL
+
+$policy = 'Variables::ProhibitPackageVars';
+is( pcritique($policy, \$code, {packages => 'Override::Defaults'}), 1, "$policy override default exceptions" );
+
+#----------------------------------------------------------------
+
+$code = <<'END_PERL';
+use File::Find;
+print $File::Find::dir;
+$Addl::Package::bar = 27;
+END_PERL
+
+$policy = 'Variables::ProhibitPackageVars';
+is( pcritique($policy, \$code, {add_packages => 'Addl::Package'}), 0, "$policy add to default exceptions" );
 
 #----------------------------------------------------------------
 

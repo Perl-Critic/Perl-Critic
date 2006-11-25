@@ -17,6 +17,9 @@
      * Say "perlcritic -doc PATTERN" to get the documentation for all
        Policies that match m/PATTERN/imx.  This is a little easier than
        typing in the full name of the Policy module with "perldoc".
+     * Can now specify exceptions to Variables::ProhibitPackageVars,
+       for packages like File::Find that only interface through
+       package variables.
 
      Bug Fixes:
      * 21713 false positive for parens used with substr and unpack.

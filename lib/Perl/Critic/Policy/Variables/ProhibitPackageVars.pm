@@ -10,7 +10,7 @@ package Perl::Critic::Policy::Variables::ProhibitPackageVars;
 use strict;
 use warnings;
 use Perl::Critic::Utils;
-use List::MoreUtils qw(all);
+use List::MoreUtils qw(all any);
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 0.22;
@@ -28,18 +28,44 @@ sub applies_to       { return qw(PPI::Token::Symbol
                                  PPI::Statement::Variable
                                  PPI::Statement::Include) }
 
+our @DEFAULT_PACKAGE_EXCEPTIONS = qw(
+    File::Find
+    Data::Dumper
+);
+
 #---------------------------------------------------------------------------
+
+sub new {
+    my $class = shift;
+    my %config = @_;
+
+    my $self = bless {}, $class;
+
+    # Set list of package exceptions from configuration, if defined.
+    $self->{_packages} =
+        defined $config{packages}
+            ? [ split m{ \s+ }mx, $config{packages} ]
+            : [ @DEFAULT_PACKAGE_EXCEPTIONS ];
+
+    # Add to list of packages
+    if ( defined $config{add_packages} ) {
+        push( @{$self->{_packages}}, split m{ \s+ }mx, $config{add_packages} );
+    }
+
+    return $self;
+}
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    if (   _is_package_var($elem)
-        || _is_our_var($elem)
-        || _is_vars_pragma($elem) )
-    {
-        return $self->violation( $desc, $expl, $elem );
+    return unless _is_package_var($elem) || _is_our_var($elem) || _is_vars_pragma($elem);
+
+    if ( $elem =~ m{ \A [@\$%] (.*) :: }mx ) { # REVIEW: This is redundant to a check in _is_package_var
+        my $package = $1;
+        return if any { $package eq $_ } @{$self->{_packages}};
     }
-    return;    #ok!
+
+    return $self->violation( $desc, $expl, $elem );
 }
 
 sub _is_package_var {
@@ -115,6 +141,26 @@ be global, as do any variables that you want to Export.  To work
 around this, the Policy overlooks any variables that are in ALL_CAPS.
 This forces you to put all your exported variables in ALL_CAPS too, which
 seems to be the usual practice anyway.
+
+There is room for exceptions.  Some modules, like the core File::Find
+module, use package variables as their only interface, and others
+like Data::Dumper use package variables as their most common
+interface.  These module can be specified from your F<.perlcriticrc>
+file, and the policy will ignore them.
+
+    [Variables::ProhibitPackageVars]
+    packages = File::Find Data::Dumper
+
+This is the default setting.  Using C<packages =>  will override
+these defaults.
+
+You can also add packages to the defaults like so:
+
+    [Variables::ProhibitPackageVars]
+    add_packages = My::Package
+
+You can add package C<main> to the list of packages, but that will
+only OK variables explicitly in the C<main> package.
 
 =head1 SEE ALSO
 
