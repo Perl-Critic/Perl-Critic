@@ -204,4 +204,4 @@ ok( !critique(undef, undef), 'Functional style, undef args');
 #   indent-tabs-mode: nil
 #   c-indentation-style: bsd
 # End:
-# ex: set ts=8 sts=4 sw=4 expandtab :
+# ex: set ts=8 sts=4 sw=4 tw=78 expandtab :

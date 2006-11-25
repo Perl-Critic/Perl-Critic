@@ -3,7 +3,7 @@
 #     $Date$
 #   $Author$
 # $Revision$
-#        ex: set ts=8 sts=4 sw=4 expandtab :
+#        ex: set ts=8 sts=4 sw=4 tw=78 expandtab :
 ########################################################################
 
 use strict;
