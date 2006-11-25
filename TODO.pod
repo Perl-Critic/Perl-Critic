@@ -287,12 +287,6 @@ until PPI incorporates it's own version number in the cache.
 
 (see F<t/40_criticize.t> for a more robust implementation)
 
-=item * ValuesAndExpressions::ProhibitMagicNumbers
-
-The C<allowed_literals> option needs to handle ranges.
-
-Needs to be tested against a wider range of $VERSION declarations.
-
 =back
 
 =head1 PPI BUGS
@@ -331,14 +325,6 @@ ValuesAndExpressions::ProhibitMismatchedOperators has two workarounds
 for PPI bugs with parsing operators.  Many of these bugs have been
 fixed in PPI, so it would be good to check if those workarounds are
 still needed.
-
-=item Hash constructors being parsed as blocks
-
-ValuesAndExpressions::ProhibitMagicNumbers has a performance optimization that
-can't be done because it can't tell whether a block is really a block or not.
-
-When fixed, uncomment the lines in
-_element_is_in_an_include_or_readonly_statement().
 
 =back
 
