@@ -1,15 +1,15 @@
 #!perl
 
-##################################################################
+##############################################################################
 #     $URL$
 #    $Date$
 #   $Author$
 # $Revision$
-##################################################################
+##############################################################################
 
 use strict;
 use warnings;
-use Test::More tests => 45;
+use Test::More tests => 40;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -19,52 +19,6 @@ my $code ;
 my $policy;
 my %config;
 
-#----------------------------------------------------------------
-
-$code = <<'END_PERL';
-substr( $foo, 2, 1 ) = 'XYZ';
-END_PERL
-
-$policy = 'BuiltinFunctions::ProhibitLvalueSubstr';
-is( pcritique($policy, \$code), 1, $policy.' lvalue' );
-
-#----------------------------------------------------------------
-
-$code = <<'END_PERL';
-substr $foo, 2, 1, 'XYZ';
-END_PERL
-
-$policy = 'BuiltinFunctions::ProhibitLvalueSubstr';
-is( pcritique($policy, \$code), 0, $policy.' 4 arg substr' );
-
-#----------------------------------------------------------------
-
-$code = <<'END_PERL';
-$bar = substr( $foo, 2, 1 );
-END_PERL
-
-$policy = 'BuiltinFunctions::ProhibitLvalueSubstr';
-is( pcritique($policy, \$code), 0, $policy.' rvalue' );
-
-#----------------------------------------------------------------
-
-$code = <<'END_PERL';
-%bar = (
-    foobar    => substr( $foo, 2, 1 ),
-    );
-END_PERL
-
-$policy = 'BuiltinFunctions::ProhibitLvalueSubstr';
-is( pcritique($policy, \$code), 0, $policy.' hash rvalue' );
-
-#----------------------------------------------------------------
-
-$code = <<'END_PERL';
-$foo{substr};
-END_PERL
-
-$policy = 'BuiltinFunctions::ProhibitLvalueSubstr';
-is( pcritique($policy, \$code), 0, $policy.' substr as word' );
 
 #----------------------------------------------------------------
 
