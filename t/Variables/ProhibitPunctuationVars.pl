@@ -1,4 +1,4 @@
-=head1 basic
+=name basic
 
 =failures 3
 
