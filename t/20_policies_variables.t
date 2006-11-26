@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 35;
+use Test::More tests => 24;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -18,9 +18,6 @@ my $policy;
 my %config;
 
 # These are proxies for a compile test
-can_ok('Perl::Critic::Policy::Variables::ProhibitLocalVars', 'violates');
-can_ok('Perl::Critic::Policy::Variables::ProhibitMatchVars', 'violates');
-can_ok('Perl::Critic::Policy::Variables::ProhibitPunctuationVars', 'violates');
 can_ok('Perl::Critic::Policy::Variables::ProtectPrivateVars', 'violates');
 can_ok('Perl::Critic::Policy::Variables::ProhibitConditionalDeclarations', 'violates');
 can_ok('Perl::Critic::Policy::Variables::RequireInitializationForLocalVars', 'violates');
@@ -28,117 +25,8 @@ can_ok('Perl::Critic::Policy::Variables::RequireLexicalLoopIterators', 'violates
 can_ok('Perl::Critic::Policy::Variables::RequireNegativeIndices', 'violates');
 
 
-#----------------------------------------------------------------
 
-$code = <<'END_PERL';
-local $foo = $bar;
-local ($foo, $bar) = ();
-local ($foo, %SIG);
-END_PERL
 
-$policy = 'Variables::ProhibitLocalVars';
-is( pcritique($policy, \$code), 3, $policy);
-
-#----------------------------------------------------------------
-
-$code = <<'END_PERL';
-local $/ = undef;
-local $| = 1;
-local ($/) = undef;
-local ($RS, $>) = ();
-local ($RS);
-local $INPUT_RECORD_SEPARATOR;
-local $PROGRAM_NAME;
-local ($EVAL_ERROR, $OS_ERROR);
-local $Other::Package::foo;
-local (@Other::Package::foo, $EVAL_ERROR);
-my  $var1 = 'foo';
-our $var2 = 'bar';
-local $SIG{HUP} \&handler;
-local $INC{$module} = $path;
-END_PERL
-
-$policy = 'Variables::ProhibitLocalVars';
-is( pcritique($policy, \$code), 0, $policy);
-
-#----------------------------------------------------------------
-
-$code = <<'END_PERL';
-use English;
-use English qw($PREMATCH);
-use English qw($MATCH);
-use English qw($POSTMATCH);
-$`;
-$&;
-$';
-$PREMATCH;
-$MATCH;
-$POSTMATCH;
-END_PERL
-
-$policy = 'Variables::ProhibitMatchVars';
-is( pcritique($policy, \$code), 10, $policy);
-
-#----------------------------------------------------------------
-
-$code = <<'END_PERL';
-use English qw(-no_match_vars);
-use English qw($EVAL_ERROR);
-END_PERL
-
-$policy = 'Variables::ProhibitMatchVars';
-is( pcritique($policy, \$code), 0, $policy);
-
-#----------------------------------------------------------------
-
-$code = <<'END_PERL';
-$/ = undef;
-$| = 1;
-$> = 3;
-END_PERL
-
-$policy = 'Variables::ProhibitPunctuationVars';
-is( pcritique($policy, \$code), 3, $policy.' forbidden');
-
-#----------------------------------------------------------------
-
-$code = <<'END_PERL';
-$RS = undef;
-$INPUT_RECORD_SEPARATOR = "\n";
-$OUTPUT_AUTOFLUSH = 1;
-print $foo, $baz;
-END_PERL
-
-$policy = 'Variables::ProhibitPunctuationVars';
-is( pcritique($policy, \$code), 0, $policy.' English');
-
-#----------------------------------------------------------------
-
-$code = <<'END_PERL';
-$string =~ /((foo)bar)/;
-$foobar = $1;
-$foo = $2;
-$3;
-$stat = stat(_);
-@list = @_;
-my $line = $_;
-END_PERL
-
-$policy = 'Variables::ProhibitPunctuationVars';
-is( pcritique($policy, \$code), 0, $policy.' permitted vars');
-
-#----------------------------------------------------------------
-
-$code = <<'END_PERL';
-print $@;
-print $!;
-END_PERL
-
-%config = (allow => '$@ $!');
-$policy = 'Variables::ProhibitPunctuationVars';
-is( pcritique($policy, \$code, \%config), 0, $policy.' configuration');
-
-#----------------------------------------------------------------
 
 $code = <<'END_PERL';
 $Other::Package::_foo;

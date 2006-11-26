@@ -50,6 +50,16 @@ is itself a valid Perl file, and not hidden in a heredoc, your
 editor's color-coding still works, and it is much easier to work
 with the code and the POD.
 
+If you need to pass special parms for your subtest, do so like this:
+
+    =parms { allow_y => 0 }
+
+The value of I<parms> will get C<eval>ed and passed to C<pcritique>,
+so be careful.
+
+Note that nowhere within the F<.pl> file itself do you specify the
+policy that you're testing.  That's implicit within the filename.
+
 # TODO: Abstract this out into a module so other Perl::Critic::* modules
 # can use it.
 
