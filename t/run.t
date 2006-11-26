@@ -149,8 +149,13 @@ sub subtests {
             $subtest->{$key} = $value;
         }
         else {
-            $incode = 1;
-            push @{$subtest->{code}}, $line if $subtest; # Don't start a subtest if we're not in one
+            if ( $subtest ) {
+                $incode = 1;
+                push @{$subtest->{code}}, $line if $subtest; # Don't start a subtest if we're not in one
+            }
+            else {
+                die "Got some code but I'm not in a subtest: $test_file";
+            }
         }
     }
     close $fh;
