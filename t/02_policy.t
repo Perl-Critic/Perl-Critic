@@ -69,4 +69,4 @@ is_deeply( [$p->get_themes()], [ qw(a b c d e f) ] );  #Should have new value, s
 #   indent-tabs-mode: nil
 #   c-indentation-style: bsd
 # End:
-# ex: set ts=8 sts=4 sw=4 tw=78 expandtab :
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :
