@@ -67,11 +67,17 @@ Note that nowhere within the F<.pl> file itself do you specify the
 policy that you're testing.  That's implicit within the filename.
 
 # TODO: Abstract this out into a module so other Perl::Critic::* modules
-# can use it.
+# can use it.  Name suggestion: Perl::Critic::TestHarness
 
 # TODO: test that we have a t/*/*.pl for each lib/*/*.pm
 
 # TODO: Allow us to specify the nature of the failures, and which one.
+# thaljef: I'm not sure what this means?
+
+# TODO: Allow test runner to take arguments, so you can specify
+# which subtests to run.
+
+# TODO: Make the File::Find callback portable (e.g. use catfile or some such).
 
 =cut
 
