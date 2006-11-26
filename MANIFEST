@@ -143,7 +143,6 @@ t/20_policies_namingconventions.t
 t/20_policies_regularexpressions.t
 t/20_policies_subroutines.t
 t/20_policies_testinganddebugging.t
-t/20_policies_valuesandexpressions.t
 t/40_criticize.t
 t/40_perlcriticrc
 t/80_policysummary.t

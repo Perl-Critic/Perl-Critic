@@ -1,0 +1,58 @@
+=name Basic failure
+
+=failures 4
+
+=cut
+
+$var = "";
+$var = ''
+$var = '     ';
+$var = "     ";
+
+#----------------------------------------------------------------
+
+=name Quote-like operator passing
+
+=failures 0
+
+=cut
+
+$var = qq{};
+$var = q{}
+$var = qq{     };
+$var = q{     };
+
+#----------------------------------------------------------------
+
+=name Non-empty passing
+
+=failures 0
+
+=cut
+
+$var = qq{this};
+$var = q{that}
+$var = qq{the};
+$var = q{other};
+$var = "this";
+$var = 'that';
+$var = 'the'; 
+$var = "other";
+
+#----------------------------------------------------------------
+
+##################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :

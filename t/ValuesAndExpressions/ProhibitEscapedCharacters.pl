@@ -1,0 +1,41 @@
+=name Basic passing
+
+=failures 0
+
+=cut
+
+"\t\r\n\\";
+"\N{DELETE}\N{ACKNOWLEDGE}\N{CANCEL}Z";
+"\"\'\0";
+'\x7f';
+q{\x7f};
+
+#----------------------------------------------------------------
+
+=name Basic failure
+
+=failures 3
+
+=cut
+
+"\127\006\030Z";
+"\x7F\x06\x22Z";
+qq{\x7F\x06\x22Z};
+
+#----------------------------------------------------------------
+
+##################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :
