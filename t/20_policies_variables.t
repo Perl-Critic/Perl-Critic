@@ -7,7 +7,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 42;
+use Test::More tests => 35;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -20,7 +20,6 @@ my %config;
 # These are proxies for a compile test
 can_ok('Perl::Critic::Policy::Variables::ProhibitLocalVars', 'violates');
 can_ok('Perl::Critic::Policy::Variables::ProhibitMatchVars', 'violates');
-can_ok('Perl::Critic::Policy::Variables::ProhibitPackageVars', 'violates');
 can_ok('Perl::Critic::Policy::Variables::ProhibitPunctuationVars', 'violates');
 can_ok('Perl::Critic::Policy::Variables::ProtectPrivateVars', 'violates');
 can_ok('Perl::Critic::Policy::Variables::ProhibitConditionalDeclarations', 'violates');
@@ -89,113 +88,6 @@ END_PERL
 
 $policy = 'Variables::ProhibitMatchVars';
 is( pcritique($policy, \$code), 0, $policy);
-
-#----------------------------------------------------------------
-
-$code = <<'END_PERL';
-our $var1 = 'foo';
-our (%var2, %var3) = 'foo';
-our (%VAR4, $var5) = ();
-
-$Package::foo;
-@Package::list = ('nuts');
-%Package::hash = ('nuts');
-
-$::foo = $bar;
-@::foo = ($bar);
-%::foo = ();
-
-use vars qw($fooBar $baz);
-use vars qw($fooBar @EXPORT);
-use vars '$fooBar', "$baz";
-use vars '$fooBar', '@EXPORT';
-use vars ('$fooBar', '$baz');
-use vars ('$fooBar', '@EXPORT');
-END_PERL
-
-$policy = 'Variables::ProhibitPackageVars';
-is( pcritique($policy, \$code), 15, "$policy failures" );
-
-#----------------------------------------------------------------
-
-$code = <<'END_PERL';
-our $VAR1 = 'foo';
-our (%VAR2, %VAR3) = ();
-our $VERSION = '1.0';
-our @EXPORT = qw(some symbols);
-
-use vars qw($VERSION @EXPORT);
-use vars ('$VERSION, '@EXPORT');
-use vars  '$VERSION, '@EXPORT';
-
-use vars  '+foo'; #Illegal, but not a violaton
-
-#local $Foo::bar;
-#local @This::that;
-#local %This::that;
-#local $This::that{ 'key' };
-#local $This::that[ 1 ];
-#local (@Baz::bar, %Baz::foo);
-
-$Package::VERSION = '1.2';
-%Package::VAR = ('nuts');
-@Package::EXPORT = ();
-
-$::VERSION = '1.2';
-%::VAR = ('nuts');
-@::EXPORT = ();
-&Package::my_sub();
-&::my_sub();
-*foo::glob = $code_ref;
-
-END_PERL
-
-$policy = 'Variables::ProhibitPackageVars';
-is( pcritique($policy, \$code), 0, "$policy passing" );
-
-#----------------------------------------------------------------
-
-$code = <<'END_PERL';
-my $var1 = 'foo';
-my %var2 = 'foo';
-my ($foo, $bar) = ();
-END_PERL
-
-$policy = 'Variables::ProhibitPackageVars';
-is( pcritique($policy, \$code), 0, "$policy lexicals pass" );
-
-#----------------------------------------------------------------
-
-$code = <<'END_PERL';
-use File::Find;
-print $File::Find::dir;
-END_PERL
-
-$policy = 'Variables::ProhibitPackageVars';
-is( pcritique($policy, \$code), 0, "$policy default exceptions" );
-
-#----------------------------------------------------------------
-
-$code = <<'END_PERL';
-use File::Find;
-print $File::Find::dir;
-$Override::Defaults::wango = $x;
-$Override::Defaults::tango = 47;
-END_PERL
-
-$policy = 'Variables::ProhibitPackageVars';
-is( pcritique($policy, \$code, {packages => 'Override::Defaults'}), 1, "$policy override default exceptions" );
-
-#----------------------------------------------------------------
-
-$code = <<'END_PERL';
-use File::Find;
-print $File::Find::dir;
-$Addl::Package::bar = 27;
-END_PERL
-
-$policy = 'Variables::ProhibitPackageVars';
-is( pcritique($policy, \$code, {add_packages => 'Addl::Package'}), 0, "$policy add to default exceptions" );
 
 #----------------------------------------------------------------
 
