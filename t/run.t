@@ -131,6 +131,8 @@ sub subtests {
 
     my %valid_keys = map {($_,1)} qw( name failures parms TODO );
 
+    return () unless -s $test_file; # XXX Remove me once all subtest files are populated
+
     open( my $fh, '<', $test_file ) or die "Couldn't open $test_file: $!";
 
     my @subtests = ();
