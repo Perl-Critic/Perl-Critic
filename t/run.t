@@ -54,6 +54,12 @@ If you need to pass special parms for your subtest, do so like this:
 
     =parms { allow_y => 0 }
 
+If it's a TODO subtest (probably because of some weird corner of
+PPI that we exercised that Adam is getting around to fixing, right?),
+then make a C<=TODO> POD entry.
+
+    =TODO Should pass when PPI 1.xxx comes out
+
 The value of I<parms> will get C<eval>ed and passed to C<pcritique>,
 so be careful.
 
@@ -76,7 +82,7 @@ find( sub {
         my $policy = $1;
         $policy =~ s{/}{::}gmsx;
 
-        my @subtests = subtests( $_ );
+        my @subtests = subtests( $_, $File::Find::name );
         $nsubtests += @subtests;
         $subtests{ $policy } = [ @subtests ];
     }
@@ -105,7 +111,10 @@ sub run_subtest {
 
     my $parms = $subtest->{parms} ? eval $subtest->{parms} : {};
 
-    is( pcritique($policy, \$code, $parms), $nfailures, "$policy: $name" );
+    TODO: {
+        local $TODO = $subtest->{TODO}; # Is NOT a TODO if it's not set
+        is( pcritique($policy, \$code, $parms), $nfailures, "$policy: $name" );
+    }
 }
 
 =for notes
@@ -118,8 +127,9 @@ but at this point I don't see why.
 
 sub subtests {
     my $test_file = shift;
+    my $full_path = shift;
 
-    my %valid_keys = map {($_,1)} qw( name failures parms );
+    my %valid_keys = map {($_,1)} qw( name failures parms TODO );
 
     open( my $fh, '<', $test_file ) or die "Couldn't open $test_file: $!";
 
@@ -136,7 +146,7 @@ sub subtests {
         if ( $inpod ) {
             $line =~ /^=(\S+)\s+(.+)/ or next;
             my ($key,$value) = ($1,$2);
-            die "Unknown key $key" unless $valid_keys{$key};
+            die "Unknown key $key in $full_path" unless $valid_keys{$key};
 
             if ( $key eq 'name' ) {
                 if ( $subtest ) { # Stash any current subtest
@@ -145,7 +155,7 @@ sub subtests {
                 }
                 $incode = 0;
             }
-            $incode && die "POD found while I'm still in code";
+            $incode && die "POD found while I'm still in code: $full_path";
             $subtest->{$key} = $value;
         }
         else {
@@ -154,7 +164,7 @@ sub subtests {
                 push @{$subtest->{code}}, $line if $subtest; # Don't start a subtest if we're not in one
             }
             else {
-                die "Got some code but I'm not in a subtest: $test_file";
+                die "Got some code but I'm not in a subtest: $full_path";
             }
         }
     }
@@ -164,7 +174,7 @@ sub subtests {
             push( @subtests, $subtest );
         }
         else {
-            die "Incomplete subtest in $test_file";
+            die "Incomplete subtest in $full_path";
         }
     }
 

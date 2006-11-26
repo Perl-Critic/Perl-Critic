@@ -34,7 +34,7 @@ our ($foo, $bar);
 
 =name key named "local"
 
-  local $TODO = "PPI bug prevents this from working";
+=TODO PPI bug prevents this from working
 
 =failures 0
 
