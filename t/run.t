@@ -20,21 +20,78 @@ Perl::Critic::TestUtils::block_perlcriticrc();
 
 # TODO: test that we have a t/*/*.pl for each lib/*/*.pm
 
-my %test_files;
+my %test_chunks;
+my $nchunks;
 find( sub {
     if ( -f && ( $File::Find::name =~ m{t/(.+)\.pl$} ) ) {
         my $package = $1;
         $package =~ s{/}{::}gmsx;
-        $test_files{ $package } = $File::Find::name;
+
+        my @chunks = chunks( $_ );
+        $nchunks += @chunks;
+        $test_chunks{ $package } = [ @chunks ];
     }
 }, 't/' );
 
-plan tests => scalar keys %test_files;
+plan tests => $nchunks;
 
-for my $package ( sort keys %test_files ) {
-    my $test_file = $test_files{ $package };
-    pass( $test_file );
+for my $package ( sort keys %test_chunks ) {
+    my $chunk_list = $test_chunks{ $package };
+    for my $chunk ( @$chunk_list ) {
+        pass( "$package: $chunk->{name}" );
+    }
 }
+
+sub chunks {
+    my $test_file = shift;
+
+    my %valid_keys = map {($_,1)} qw( name failures parms );
+
+    open( my $fh, '<', $test_file ) or die "Couldn't open $test_file: $!";
+
+    my @chunks = ();
+
+    my $incode = 0;
+    my $chunk;
+    while ( <$fh> ) {
+        chomp;
+        my $inpod = /^=name/ .. /^=cut/;
+
+        my $line = $_;
+
+        if ( $inpod ) {
+            $line =~ /^=(\S+)\s+(.+)/ or next;
+            my ($key,$value) = ($1,$2);
+            die "Unknown key $key" unless $valid_keys{$key};
+
+            if ( $key eq 'name' ) {
+                if ( $chunk ) { # Stash any current chunk
+                    push( @chunks, $chunk );
+                    undef $chunk;
+                }
+                $incode = 0;
+            }
+            $incode && die "POD found while I'm still in code";
+            $chunk->{$key} = $value;
+        }
+        else {
+            $incode = 1;
+            push @{$chunk->{code}}, $line if $chunk; # Don't start a chunk if we're not in one
+        }
+    }
+    close $fh;
+    if ( $chunk ) {
+        if ( $incode ) {
+            push( @chunks, $chunk );
+        }
+        else {
+            die "Incomplete chunk in $test_file";
+        }
+    }
+
+    return @chunks;
+}
+
 #----------------------------------------------------------------
 # Local Variables:
 #   mode: cperl

@@ -1,4 +1,4 @@
-=head1 basic testing
+=name Basic failures
 
 =failures 15
 
@@ -26,7 +26,7 @@ use vars ('$fooBar', '@EXPORT');
 
 #----------------------------------------------------------------
 
-=head1 Things that are OK
+=name Basic passes
 
 =failures 0
 
@@ -62,7 +62,7 @@ $::VERSION = '1.2';
 *foo::glob = $code_ref;
 
 
-=head1 Lexicals pass
+=name Lexicals should pass
 
 =failures 0
 
@@ -75,7 +75,7 @@ my ($foo, $bar) = ();
 
 #----------------------------------------------------------------
 
-=head1 Default package exceptions
+=name Default package exceptions
 
 =failures 0
 
@@ -87,7 +87,7 @@ print $File::Find::dir;
 
 #----------------------------------------------------------------
 
-=head1 Override default package exceptions
+=name Override default package exceptions
 
 =failures 1
 
@@ -104,7 +104,7 @@ END_PERL
 
 #----------------------------------------------------------------
 
-=head1 Add to default exceptions
+=name Add to default exceptions
 
 =failures 1
 
@@ -116,3 +116,4 @@ END_PERL
 use File::Find;
 print $File::Find::dir;
 $Addl::Package::bar = 27;
+
