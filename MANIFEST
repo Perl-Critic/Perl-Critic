@@ -136,7 +136,6 @@ t/20_policies_classhierarchies.t
 t/20_policies_codelayout.t
 t/20_policies_controlstructures.t
 t/20_policies_documentation.t
-t/20_policies_errorhandling.t
 t/20_policies_inputoutput.t
 t/20_policies_miscellanea.t
 t/20_policies_modules.t
