@@ -157,7 +157,10 @@ t/96_filenames.t
 t/97_spelling.t
 t/98_pod_syntax.t
 t/99_pod_coverage.t
+t/run.t
 t/examples/perlcriticrc
 t/tlib/Perl/Critic/Policy/Test.pm
 t/tlib/ViolationTest.pm
 t/tlib/ViolationTest2.pm
+
+t/Variables/ProhibitPackageVars.pl

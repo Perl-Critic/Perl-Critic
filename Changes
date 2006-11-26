@@ -27,6 +27,10 @@
      * 21713 false positive for parens used with substr and unpack.
      * 22890 allow Rcs keywords in POD.
 
+     Internals:
+     * Testing system overhauled.  Details on the Policy/subtest
+       framework is in t/run.t.
+
 [0.21]  Released on 2006-11-05
 
      New Policies:
