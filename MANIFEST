@@ -1,8 +1,15 @@
 bin/perlcritic
 Build.PL
 Changes
-extras/perlcritic.el
 INSTALL
+LICENSE
+MANIFEST
+META.yml
+Makefile.PL
+README
+TODO.pod
+extras/perlcritic.el
+
 lib/Perl/Critic.pm
 lib/Perl/Critic/Config.pm
 lib/Perl/Critic/Defaults.pm
@@ -110,10 +117,7 @@ lib/Perl/Critic/Theme.pm
 lib/Perl/Critic/UserProfile.pm
 lib/Perl/Critic/Utils.pm
 lib/Perl/Critic/Violation.pm
-LICENSE
-Makefile.PL
-MANIFEST			This list of files
-README
+
 t/00_modules.t
 t/01_config.t
 t/02_policy.t
@@ -157,5 +161,3 @@ t/examples/perlcriticrc
 t/tlib/Perl/Critic/Policy/Test.pm
 t/tlib/ViolationTest.pm
 t/tlib/ViolationTest2.pm
-TODO.pod
-META.yml
