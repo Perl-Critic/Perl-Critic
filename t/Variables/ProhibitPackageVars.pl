@@ -87,6 +87,27 @@ print $File::Find::dir;
 
 #----------------------------------------------------------------
 
+=name Add to default exceptions
+
+=failures 3
+
+=parms {add_packages => 'Addl::Package'}
+
+=cut
+
+
+use File::Find;
+print $File::Find::dir;
+
+$Addl::Package::bar = 27;
+
+$Addl::Other::wango = 9;
+$Addl::Other::tango = 9;
+$Addl::Other::bango = 9;
+
+
+#----------------------------------------------------------------
+
 =name Override default package exceptions
 
 =failures 1
@@ -100,20 +121,4 @@ print $File::Find::dir;
 $Override::Defaults::wango = $x;
 $Override::Defaults::tango = 47;
 END_PERL
-
-
-#----------------------------------------------------------------
-
-=name Add to default exceptions
-
-=failures 1
-
-=parms {add_packages => 'Addl::Package'}
-
-=cut
-
-
-use File::Find;
-print $File::Find::dir;
-$Addl::Package::bar = 27;
 

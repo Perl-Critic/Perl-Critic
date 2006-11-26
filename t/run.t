@@ -1,12 +1,5 @@
 #!perl
 
-##################################################################
-#     $URL: http://perlcritic.tigris.org/svn/perlcritic/trunk/Perl-Critic/t/20_policies_variables.t $
-#    $Date: 2006-11-25 11:47:17 -0600 (Sat, 25 Nov 2006) $
-#   $Author: petdance $
-# $Revision: 938 $
-##################################################################
-
 use strict;
 use warnings;
 use Test::More;
@@ -24,22 +17,40 @@ my %test_chunks;
 my $nchunks;
 find( sub {
     if ( -f && ( $File::Find::name =~ m{t/(.+)\.pl$} ) ) {
-        my $package = $1;
-        $package =~ s{/}{::}gmsx;
+        my $policy = $1;
+        $policy =~ s{/}{::}gmsx;
 
         my @chunks = chunks( $_ );
         $nchunks += @chunks;
-        $test_chunks{ $package } = [ @chunks ];
+        $test_chunks{ $policy } = [ @chunks ];
     }
 }, 't/' );
 
-plan tests => $nchunks;
+my $npolicies = scalar keys %test_chunks;
 
-for my $package ( sort keys %test_chunks ) {
-    my $chunk_list = $test_chunks{ $package };
+plan tests => $nchunks + $npolicies;
+
+for my $policy ( sort keys %test_chunks ) {
+    can_ok( "Perl::Critic::Policy::$policy", 'violates' );
+    my $chunk_list = $test_chunks{ $policy };
     for my $chunk ( @$chunk_list ) {
-        pass( "$package: $chunk->{name}" );
+        run_chunk( $policy, $chunk );
     }
+}
+
+sub run_chunk {
+    my $policy = shift;
+    my $chunk = shift;
+
+    my $name = $chunk->{name};
+
+    my $code = join( "\n", @{$chunk->{code}} );
+    my $nfailures = $chunk->{failures};
+    defined $nfailures or die "$policy, $name does not specify failures\n";
+
+    my $parms = $chunk->{parms} ? eval $chunk->{parms} : {};
+
+    is( pcritique($policy, \$code, $parms), $nfailures, "$policy: $name" );
 }
 
 sub chunks {
