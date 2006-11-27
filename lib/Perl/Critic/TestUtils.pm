@@ -22,7 +22,7 @@ use Perl::Critic::PolicyFactory (-test => 1);
 our $VERSION = 0.22;
 our @EXPORT_OK = qw(
     pcritique critique fcritique
-    subtests_in_tree run_subtest
+    subtests_in_tree
 );
 
 #-----------------------------------------------------------------------------
@@ -89,25 +89,6 @@ sub fcritique {
         die $err; ## no critic (ErrorHandling::RequireCarping)
     }
     return scalar @v;
-}
-
-sub run_subtest {
-    my $policy = shift;
-    my $subtest = shift;
-
-    my $name = $subtest->{name};
-
-    my $code = join( "\n", @{$subtest->{code}} );
-    my $nfailures = $subtest->{failures};
-    defined $nfailures or die "$policy, $name does not specify failures\n";
-
-    my $parms = $subtest->{parms} ? eval $subtest->{parms} : {};
-
-    TODO: {
-        require Test::More;
-        local $main::TODO = $subtest->{TODO}; # Is NOT a TODO if it's not set
-        Test::More::is( pcritique($policy, \$code, $parms), $nfailures, "$policy: $name" );
-    }
 }
 
 sub subtests_in_tree {
@@ -250,8 +231,6 @@ more examples of how to use these subroutines.
 =item fcritique( $policy_name, $code_string_ref, $filename, $config_ref )
 
 =item block_perlcriticrc()
-
-=item run_subtest( $subtest )
 
 =item subtests_in_tree( $dir )
 

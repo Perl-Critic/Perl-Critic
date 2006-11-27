@@ -5,7 +5,7 @@ use warnings;
 use Test::More;
 
 # common P::C testing tools
-use Perl::Critic::TestUtils qw(pcritique subtests_in_tree run_subtest);
+use Perl::Critic::TestUtils qw(pcritique subtests_in_tree);
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 my ($subtests,$nsubtests) = subtests_in_tree( 't/' );
@@ -20,6 +20,27 @@ for my $policy ( sort keys %$subtests ) {
         run_subtest( $policy, $subtest );
     }
 }
+
+
+sub run_subtest {
+    my $policy = shift;
+    my $subtest = shift;
+
+    my $name = $subtest->{name};
+
+    my $code = join( "\n", @{$subtest->{code}} );
+    my $nfailures = $subtest->{failures};
+    defined $nfailures or die "$policy, $name does not specify failures\n";
+
+    my $parms = $subtest->{parms} ? eval $subtest->{parms} : {};
+
+    TODO: {
+        require Test::More;
+        local $main::TODO = $subtest->{TODO}; # Is NOT a TODO if it's not set
+        Test::More::is( pcritique($policy, \$code, $parms), $nfailures, "$policy: $name" );
+    }
+}
+
 
 =head1 How t/run.t works
 
