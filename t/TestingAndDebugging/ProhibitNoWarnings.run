@@ -1,0 +1,69 @@
+## name warnings disabled
+## failures 1
+## cut
+
+package foo;
+no warnings;
+
+#----------------------------------------------------------------
+
+## name selective warnings disabled
+## failures 1
+## cut
+
+package foo;
+no warnings 'uninitialized', 'deprecated';
+END_PERL
+
+$policy = 'TestingAndDebugging::ProhibitNoWarnings';
+is( pcritique($policy, \$code), 1, $policy.' selective warnings disabled');
+
+#----------------------------------------------------------------
+
+## name selective warnings disabled
+## failures 1
+## cut
+
+package foo;
+no warnings qw(closure glob);
+
+#----------------------------------------------------------------
+
+## name allow no warnings
+## failures 0
+## parms {allow => 'iO Glob OnCe'}
+## cut
+
+package foo;
+no warnings qw(glob io once);
+
+#----------------------------------------------------------------
+
+## name allow no warnings
+## failures 0
+## parms {allow => 'numeric,portable, pack'}
+# Funky config
+## cut
+
+package foo;
+no warnings "numeric", "pack", "portable";
+
+#----------------------------------------------------------------
+
+## name wrong case, funky config
+## failures 1
+## parms { allow => 'NumerIC;PORTABLE' }
+## cut
+
+package foo;
+no warnings "numeric", "pack", 'portable';
+
+#----------------------------------------------------------------
+
+## name More wrong case, funky config
+## failures 1
+## parms { allow => 'paCK/PortablE' }
+## cut
+
+package foo;
+no warnings qw(numeric pack portable);

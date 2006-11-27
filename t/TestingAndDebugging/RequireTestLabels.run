@@ -1,0 +1,76 @@
+## name standard failures
+## failures 12
+## cut
+
+use Test::More tests => 10;
+ok($foo);
+ok(!$foo);
+is(1,2);
+isnt(1,2);
+like('foo',qr/f/);
+unlike('foo',qr/f/);
+cmp_ok(1,'==',2);
+is_deeply('literal','literal');
+is_deeply([], []);
+is_deeply({}, {});
+pass();
+fail();
+
+#----------------------------------------------------------------
+
+## name standard passing
+## failures 0
+## cut
+
+ok($foo);
+ok(!$foo);
+is(1,2);
+isnt(1,2);
+like('foo',qr/f/);
+unlike('foo',qr/f/);
+cmp_ok(1,'==',2);
+is_deeply('literal','literal');
+is_deeply([], []);
+is_deeply({}, {});
+pass();
+fail();
+
+#----------------------------------------------------------------
+
+## name more passing
+## failures 0
+## cut
+
+use Test::More tests => 10;
+ok($foo,'label');
+ok(!$foo,'label');
+is(1,2,'label');
+isnt(1,2,'label');
+like('foo',qr/f/,'label');
+unlike('foo',qr/f/,'label');
+cmp_ok(1,'==',2,'label');
+is_deeply('literal','literal','label');
+is_deeply([],[],'label');
+is_deeply({},{},'label');
+pass('label');
+fail('label');
+
+#----------------------------------------------------------------
+
+## name exceptions
+## failures 1
+## parms {modules => 'Test::Foo Test::Bar'}
+## cut
+
+use Test::Bar tests => 10;
+ok($foo);
+
+#----------------------------------------------------------------
+
+## name more exceptions
+## failures 0
+## parms {modules => 'Test::Foo Test::Bar'}
+## cut
+
+use Test::Baz tests => 10;
+ok($foo);

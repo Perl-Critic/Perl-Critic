@@ -1,0 +1,79 @@
+## name standard pass
+## failures 0
+## cut
+
+use strict;
+no strict;
+
+#----------------------------------------------------------------
+
+## name standard fail
+## failures 1
+## cut
+
+use strict;
+no strict;
+print 1;
+print 2;
+print 3;
+print 4;
+
+#----------------------------------------------------------------
+
+## name pass that's almost to fail
+## failures 0
+## cut
+
+use strict;
+no strict;
+print 1;
+print 2;
+print 3;
+
+#----------------------------------------------------------------
+
+## name in a block
+## failures 0
+## cut
+
+use strict;
+sub foo {
+    no strict;
+}
+print 1;
+print 2;
+print 3;
+print 4;
+
+#----------------------------------------------------------------
+
+## name long fail in a block
+## failures 1
+## cut
+
+use strict;
+sub foo {
+    no strict;
+    print 1;
+    print 2;
+    print 3;
+    print 4;
+}
+
+#----------------------------------------------------------------
+
+## name config override
+## failures 0
+## parms { statements => 6 }
+## cut
+
+use strict;
+sub foo {
+    no strict;
+    print 1;
+    print 2;
+    print 3;
+    print 4;
+    print 5;
+    print 6;
+}
