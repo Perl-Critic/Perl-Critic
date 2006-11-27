@@ -128,7 +128,7 @@ sub _subtests_from_file {
 
     return () unless -s $test_file; # XXX Remove me once all subtest files are populated
 
-    open( my $fh, '<', $test_file ) or die "Couldn't open $test_file: $!";
+    open( my $fh, '<', $test_file ) or confess "Couldn't open $test_file: $!";
 
     my @subtests = ();
 
@@ -141,9 +141,10 @@ sub _subtests_from_file {
         my $line = $_;
 
         if ( $inpod ) {
-            $line =~ /^##\s+(\S+)\s+(.+)/ or next;
-            my ($key,$value) = ($1,$2);
-            die "Unknown key $key in $full_path" unless $valid_keys{$key};
+            $line =~ /^##\s+(\S+)(\s+(.+))?/ or next;
+            my ($key,$value) = ($1,$3);
+            next if $key eq 'cut';
+            confess "Unknown key $key in $full_path" unless $valid_keys{$key};
 
             if ( $key eq 'name' ) {
                 if ( $subtest ) { # Stash any current subtest
@@ -152,7 +153,7 @@ sub _subtests_from_file {
                 }
                 $incode = 0;
             }
-            $incode && die "POD found while I'm still in code: $full_path";
+            $incode && confess "POD found while I'm still in code: $full_path";
             $subtest->{$key} = $value;
         }
         else {
@@ -161,7 +162,7 @@ sub _subtests_from_file {
                 push @{$subtest->{code}}, $line if $subtest; # Don't start a subtest if we're not in one
             }
             else {
-                die "Got some code but I'm not in a subtest: $full_path";
+                confess "Got some code but I'm not in a subtest: $full_path";
             }
         }
     }
@@ -171,7 +172,7 @@ sub _subtests_from_file {
             push( @subtests, _finalize_subtest( $subtest ) );
         }
         else {
-            die "Incomplete subtest in $full_path";
+            confess "Incomplete subtest in $full_path";
         }
     }
 
@@ -181,7 +182,12 @@ sub _subtests_from_file {
 sub _finalize_subtest {
     my $subtest = shift;
 
-    $subtest->{code} = join( "\n", @{$subtest->{code}} );
+    if ( $subtest->{code} ) {
+        $subtest->{code} = join( "\n", @{$subtest->{code}} );
+    }
+    else {
+        confess "$subtest->{name} has no code lines";
+    }
     if ( !defined $subtest->{failures} ) {
         confess "$subtest->{name} does not specify failures";
     }
