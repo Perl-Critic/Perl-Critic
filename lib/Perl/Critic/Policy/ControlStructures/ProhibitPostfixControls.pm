@@ -42,7 +42,7 @@ sub new {
 
     #Set config, if defined
     if ( defined $args{allow} ) {
-        for my $control ( split m{ \s+ }mx, $args{allow} ) {
+        for my $control ( words_from_string( $args{allow} ) ) {
             $self->{_allow}->{$control} = 1;
         }
     }

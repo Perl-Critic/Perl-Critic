@@ -30,6 +30,8 @@
      Internals:
      * Testing system overhauled.  Details on the Policy/subtest
        framework is in t/run.t.
+     * Added Perl::Critic::Utils::words_from_string.  This is safer
+       than plain old C<split /\s+/>.
 
 [0.21]  Released on 2006-11-05
 

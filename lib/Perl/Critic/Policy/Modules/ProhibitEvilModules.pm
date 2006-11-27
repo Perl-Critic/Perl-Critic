@@ -36,7 +36,7 @@ sub new {
 
     #Set config, if defined
     if ( defined $args{modules} ) {
-        for my $module ( split m{ \s+ }mx, $args{modules} ) {
+        for my $module ( words_from_string( $args{modules} ) ) {
             if ( $module =~ m{ \A [/] (.+) [/] \z }mx ) {
                 # These are module name patterns (e.g. /Acme/)
                 my $re = $1; # Untainting

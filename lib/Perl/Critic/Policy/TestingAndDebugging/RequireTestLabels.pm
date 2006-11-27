@@ -48,7 +48,7 @@ sub new {
 
     $self->{_test_modules} = \%default_test_modules;
     if (defined $args{modules}) {
-        my @modules = split m{ \s+ }mx, $args{modules};
+        my @modules = words_from_string( $args{modules} );
         $self->{_test_modules} = { %default_test_modules, hashify(@modules) };
     }
 

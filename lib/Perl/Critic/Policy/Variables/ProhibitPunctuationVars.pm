@@ -41,9 +41,9 @@ sub new {
 
     $self->{_exempt} = {%default_exempt};
     if ( defined $args{allow} ) {
-        my @allow = split m{ \s+ }mx, $args{allow};
+        my @allow = words_from_string( $args{allow} );
         for my $varname (@allow) {
-           $self->{_exempt}->{$varname} = 1;
+            $self->{_exempt}->{$varname} = 1;
         }
     }
 

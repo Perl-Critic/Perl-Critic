@@ -35,7 +35,7 @@ sub new {
 
     #Set configuration, if defined
     if ( defined $args{allow} ) {
-        my @allow = split m{ \s+ }mx, $args{allow};
+        my @allow = words_from_string( $args{allow} );
         #Try to be forgiving with the configuration...
         for (@allow) {
             m{ \A qq }mx || ($_ = 'qq' . $_)

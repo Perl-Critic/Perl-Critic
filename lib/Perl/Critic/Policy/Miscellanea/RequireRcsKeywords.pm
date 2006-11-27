@@ -47,7 +47,7 @@ sub new {
     #Set configuration, if defined.
     if ( defined $config{keywords} ) {
         ## no critic ProhibitEmptyQuotes
-        $self->{_keywords} = [ [ split ' ', $config{keywords} ] ];
+        $self->{_keywords} = [ [ words_from_string( $config{keywords} ) ] ];
     }
 
     return $self;

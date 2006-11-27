@@ -63,6 +63,7 @@ our @EXPORT = qw(
     &precedence_of
     &shebang_line
     &verbosity_to_format
+    &words_from_string
 );
 
 #-----------------------------------------------------------------------------
@@ -477,6 +478,13 @@ sub shebang_line {
 
 #-----------------------------------------------------------------------------
 
+sub words_from_string {
+    my $str = shift;
+
+    return $str =~ m/(\S+)/gmx;
+}
+
+
 1;
 
 __END__
@@ -644,6 +652,11 @@ For example:
 
 Given a L<PPI::Document>, test if it starts with C<#!>.  If so,
 return that line.  Otherwise return undef.
+
+=item C<words_from_string( $str )>
+
+Given config string I<$str>, return all the words from the string.
+This is safer than splitting on whitespace.
 
 =back
 

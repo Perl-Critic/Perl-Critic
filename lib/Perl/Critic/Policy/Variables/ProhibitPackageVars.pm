@@ -44,12 +44,12 @@ sub new {
     # Set list of package exceptions from configuration, if defined.
     $self->{_packages} =
         defined $config{packages}
-            ? [ $config{packages} =~ m/ (\S+) /gmx ]
+            ? [ words_from_string( $config{packages} ) ]
             : [ @DEFAULT_PACKAGE_EXCEPTIONS ];
 
     # Add to list of packages
     if ( defined $config{add_packages} ) {
-        push @{$self->{_packages}}, split m{ \s+ }mx, $config{add_packages};
+        push( @{$self->{_packages}}, words_from_string( $config{add_packages} ) );
     }
 
     return $self;
