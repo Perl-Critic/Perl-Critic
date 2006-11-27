@@ -1,11 +1,11 @@
 #!perl
 
-##################################################################
+##############################################################################
 #     $URL$
 #    $Date$
 #   $Author$
 # $Revision$
-##################################################################
+##############################################################################
 
 use strict;
 use warnings;
@@ -19,7 +19,7 @@ my $code ;
 my $policy;
 my %config;
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 #no package
@@ -29,7 +29,7 @@ END_PERL
 $policy = 'Modules::ProhibitMultiplePackages';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 package foo;
@@ -41,7 +41,7 @@ END_PERL
 $policy = 'Modules::ProhibitMultiplePackages';
 is( pcritique($policy, \$code), 2, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 package foo;
@@ -51,7 +51,7 @@ END_PERL
 $policy = 'Modules::ProhibitMultiplePackages';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 require; #incomplete statement
@@ -63,7 +63,7 @@ END_PERL
 $policy = 'Modules::RequireBarewordIncludes';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 require 'Exporter';
@@ -77,7 +77,7 @@ END_PERL
 $policy = 'Modules::RequireBarewordIncludes';
 is( pcritique($policy, \$code), 6, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 use 5.008;
@@ -90,7 +90,7 @@ END_PERL
 $policy = 'Modules::RequireBarewordIncludes';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 $foo = $bar;
@@ -100,7 +100,7 @@ END_PERL
 $policy = 'Modules::RequireExplicitPackage';
 is( pcritique($policy, \$code), 1, $policy.' 1 stmnt before package');
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 BEGIN{
@@ -114,7 +114,7 @@ END_PERL
 $policy = 'Modules::RequireExplicitPackage';
 is( pcritique($policy, \$code), 3, $policy.' BEGIN block before package');
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 use Some::Module;
@@ -124,7 +124,7 @@ END_PERL
 $policy = 'Modules::RequireExplicitPackage';
 is( pcritique($policy, \$code), 1, $policy.' inclusion before package');
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 $baz = $nuts;
@@ -135,7 +135,7 @@ END_PERL
 $policy = 'Modules::RequireExplicitPackage';
 is( pcritique($policy, \$code), 2, $policy.' 2 stmnts before package');
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 print 'whatever';
@@ -144,7 +144,7 @@ END_PERL
 $policy = 'Modules::RequireExplicitPackage';
 is( pcritique($policy, \$code), 1, $policy.' no package at all');
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 
@@ -153,7 +153,7 @@ END_PERL
 $policy = 'Modules::RequireExplicitPackage';
 is( pcritique($policy, \$code), 0, $policy.' no statements at all');
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 package foo;
@@ -162,7 +162,7 @@ END_PERL
 $policy = 'Modules::RequireExplicitPackage';
 is( pcritique($policy, \$code), 0, $policy.' just a package, no other statements');
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 package foo;
@@ -173,7 +173,7 @@ END_PERL
 $policy = 'Modules::RequireExplicitPackage';
 is( pcritique($policy, \$code), 0, $policy.' package ok');
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 #!/usr/bin/perl
@@ -185,7 +185,7 @@ END_PERL
 $policy = 'Modules::RequireExplicitPackage';
 is( pcritique($policy, \$code, \%config), 0, $policy.' scripts exempted');
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 #!/usr/bin/perl
@@ -199,7 +199,7 @@ $policy = 'Modules::RequireExplicitPackage';
 is( pcritique($policy, \$code, \%config), 3, $policy.' scripts not exempted');
 
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 #!/usr/bin/perl
@@ -211,7 +211,7 @@ END_PERL
 $policy = 'Modules::RequireExplicitPackage';
 is( pcritique($policy, \$code, \%config), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 use Evil::Module qw(bad stuff);
@@ -222,7 +222,7 @@ $policy = 'Modules::ProhibitEvilModules';
 %config = (modules => 'Evil::Module Super::Evil::Module');
 is( pcritique($policy, \$code, \%config), 2, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 use Good::Module;
@@ -232,7 +232,7 @@ $policy = 'Modules::ProhibitEvilModules';
 %config = (modules => 'Evil::Module Super::Evil::Module');
 is( pcritique($policy, \$code, \%config), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 use Evil::Module qw(bad stuff);
@@ -243,7 +243,7 @@ $policy = 'Modules::ProhibitEvilModules';
 %config = (modules => '/Evil::/ /Demonic/');
 is( pcritique($policy, \$code, \%config), 2, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 use Evil::Module qw(bad stuff);
@@ -256,7 +256,7 @@ $policy = 'Modules::ProhibitEvilModules';
 %config = (modules => '/Evil::/ Demonic::Module /Acme/');
 is( pcritique($policy, \$code, \%config), 4, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 use Evil::Module qw(bad stuff);
@@ -269,7 +269,7 @@ $policy = 'Modules::ProhibitEvilModules';
 %config = (modules => '/Evil::|Demonic::Module|Acme/');
 is( pcritique($policy, \$code, \%config), 4, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 {
     # Trap warning messages from ProhibitEvilModules
@@ -279,7 +279,7 @@ is( pcritique($policy, \$code, \%config), 4, $policy);
     like( $caught_warning, qr/Regexp syntax error/, 'Invalid regex config');
 }
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 #Nothing!
@@ -288,7 +288,7 @@ END_PERL
 $policy = 'Modules::RequireVersionVar';
 is( pcritique($policy, \$code), 1, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 our $VERSION = 1.0;
@@ -297,7 +297,7 @@ END_PERL
 $policy = 'Modules::RequireVersionVar';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 our ($VERSION) = 1.0;
@@ -306,7 +306,7 @@ END_PERL
 $policy = 'Modules::RequireVersionVar';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 $Package::VERSION = 1.0;
@@ -315,7 +315,7 @@ END_PERL
 $policy = 'Modules::RequireVersionVar';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 use vars '$VERSION';
@@ -324,7 +324,7 @@ END_PERL
 $policy = 'Modules::RequireVersionVar';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 use vars qw($VERSION);
@@ -333,7 +333,7 @@ END_PERL
 $policy = 'Modules::RequireVersionVar';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 my $VERSION;
@@ -342,7 +342,7 @@ END_PERL
 $policy = 'Modules::RequireVersionVar';
 is( pcritique($policy, \$code), 1, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 our $Version;
@@ -351,7 +351,7 @@ END_PERL
 $policy = 'Modules::RequireVersionVar';
 is( pcritique($policy, \$code), 1, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 TODO:
 {
@@ -367,7 +367,7 @@ END_PERL
     is( pcritique($policy, \$code), 0, $policy);
 }
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 =pod
@@ -380,7 +380,7 @@ END_PERL
 $policy = 'Modules::RequireEndWithOne';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 1;
@@ -389,7 +389,7 @@ END_PERL
 $policy = 'Modules::RequireEndWithOne';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 1;
@@ -399,7 +399,7 @@ END_PERL
 $policy = 'Modules::RequireEndWithOne';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 1;
@@ -409,7 +409,7 @@ END_PERL
 $policy = 'Modules::RequireEndWithOne';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 1;
@@ -419,7 +419,7 @@ END_PERL
 $policy = 'Modules::RequireEndWithOne';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 1; # final true value
@@ -428,7 +428,7 @@ END_PERL
 $policy = 'Modules::RequireEndWithOne';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 1  ;   #With extra space.
@@ -437,7 +437,7 @@ END_PERL
 $policy = 'Modules::RequireEndWithOne';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
   1  ;   #With extra space.
@@ -446,7 +446,7 @@ END_PERL
 $policy = 'Modules::RequireEndWithOne';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 $foo = 2; 1;   #On same line..
@@ -455,7 +455,7 @@ END_PERL
 $policy = 'Modules::RequireEndWithOne';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 0;
@@ -464,7 +464,7 @@ END_PERL
 $policy = 'Modules::RequireEndWithOne';
 is( pcritique($policy, \$code), 1, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 1;
@@ -474,7 +474,7 @@ END_PERL
 $policy = 'Modules::RequireEndWithOne';
 is( pcritique($policy, \$code), 1, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 1;
@@ -484,7 +484,7 @@ END_PERL
 $policy = 'Modules::RequireEndWithOne';
 is( pcritique($policy, \$code), 1, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 'Larry';
@@ -493,7 +493,7 @@ END_PERL
 $policy = 'Modules::RequireEndWithOne';
 is( pcritique($policy, \$code), 1, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 require Exporter;
@@ -503,7 +503,7 @@ END_PERL
 $policy = 'Modules::ProhibitAutomaticExportation';
 is( pcritique($policy, \$code), 1, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 use Exporter;
@@ -515,7 +515,7 @@ $policy = 'Modules::ProhibitAutomaticExportation';
 is( pcritique($policy, \$code), 1, $policy);
 
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 use base 'Exporter';
@@ -525,7 +525,7 @@ END_PERL
 $policy = 'Modules::ProhibitAutomaticExportation';
 is( pcritique($policy, \$code), 1, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 require Exporter;
@@ -535,7 +535,7 @@ END_PERL
 $policy = 'Modules::ProhibitAutomaticExportation';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 use Exporter;
@@ -547,7 +547,7 @@ $policy = 'Modules::ProhibitAutomaticExportation';
 is( pcritique($policy, \$code), 0, $policy);
 
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 use base 'Exporter';
@@ -557,7 +557,7 @@ END_PERL
 $policy = 'Modules::ProhibitAutomaticExportation';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 use base 'Exporter';
@@ -568,7 +568,7 @@ END_PERL
 $policy = 'Modules::ProhibitAutomaticExportation';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 use base 'Exporter';
@@ -579,7 +579,7 @@ END_PERL
 $policy = 'Modules::ProhibitAutomaticExportation';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 print 123; # no exporting at all; for test coverage

@@ -5,7 +5,7 @@
 package foo;
 no strict;
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 ## name selective strictures disabled
 ## failures 1
@@ -14,7 +14,7 @@ no strict;
 package foo;
 no strict 'refs', 'vars';
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 ## name selective strictures disabled
 ## failures 1
@@ -23,7 +23,7 @@ no strict 'refs', 'vars';
 package foo;
 no strict qw(vars refs subs);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 ## name allowed no strict
 ## failures 0
@@ -33,7 +33,7 @@ no strict qw(vars refs subs);
 package foo;
 no strict qw(vars refs subs);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 ## name allowed no strict
 ## failures 0
@@ -43,7 +43,7 @@ no strict qw(vars refs subs);
 package foo;
 no strict "vars", "refs", "subs";
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 ## name partially allowed no strict
 ## failures 1
@@ -54,7 +54,7 @@ no strict "vars", "refs", "subs";
 package foo;
 no strict "vars", "refs", 'subs';
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 ## name partially allowed no strict
 ## failures 1

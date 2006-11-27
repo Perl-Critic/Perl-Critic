@@ -1,11 +1,11 @@
 #!perl
 
-##################################################################
+##############################################################################
 #     $URL$
 #    $Date$
 #   $Author$
 # $Revision$
-##################################################################
+##############################################################################
 
 use strict;
 use warnings;
@@ -21,7 +21,7 @@ my $code ;
 my $policy;
 my %config;
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 for($i=0; $i<=$max; $i++){
@@ -32,7 +32,7 @@ END_PERL
 $policy = 'ControlStructures::ProhibitCStyleForLoops';
 is( pcritique($policy, \$code), 1, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 for(@list){
@@ -53,7 +53,7 @@ END_PERL
 $policy = 'ControlStructures::ProhibitCStyleForLoops';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 do_something() if $condition;
@@ -66,7 +66,7 @@ END_PERL
 $policy = 'ControlStructures::ProhibitPostfixControls';
 is( pcritique($policy, \$code), 5, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 do_something() if $condition;
@@ -80,7 +80,7 @@ $policy = 'ControlStructures::ProhibitPostfixControls';
 %config = (allow => 'if while until unless for');
 is( pcritique($policy, \$code, \%config), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 if($condition){ do_something() } 
@@ -93,7 +93,7 @@ $policy = 'ControlStructures::ProhibitPostfixControls';
 %config = (allow => 'if while until unless for');
 is( pcritique($policy, \$code, \%config), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 #PPI versions < 1.03 had problems with this
@@ -105,7 +105,7 @@ END_PERL
 $policy = 'ControlStructures::ProhibitPostfixControls';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 use Carp;
@@ -145,7 +145,7 @@ END_PERL
 $policy = 'ControlStructures::ProhibitPostfixControls';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 my %hash;
@@ -159,7 +159,7 @@ END_PERL
 $policy = 'ControlStructures::ProhibitPostfixControls';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 my %hash = (if => 1, unless => 1, until => 1, while => 1, for => 1);
@@ -168,7 +168,7 @@ END_PERL
 $policy = 'ControlStructures::ProhibitPostfixControls';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 if ($condition1){
@@ -191,7 +191,7 @@ END_PERL
 $policy = 'ControlStructures::ProhibitCascadingIfElse';
 is( pcritique($policy, \$code), 1, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 if ($condition1){
@@ -227,7 +227,7 @@ END_PERL
 $policy = 'ControlStructures::ProhibitCascadingIfElse';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 if ($condition1){
@@ -248,7 +248,7 @@ END_PERL
 $policy = 'ControlStructures::ProhibitCascadingIfElse';
 is( pcritique($policy, \$code, \%config), 1, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 until($condition){
@@ -259,7 +259,7 @@ END_PERL
 $policy = 'ControlStructures::ProhibitUntilBlocks';
 is( pcritique($policy, \$code), 1, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 while(! $condition){
@@ -272,7 +272,7 @@ END_PERL
 $policy = 'ControlStructures::ProhibitUntilBlocks';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 unless($condition){
@@ -283,7 +283,7 @@ END_PERL
 $policy = 'ControlStructures::ProhibitUnlessBlocks';
 is( pcritique($policy, \$code), 1, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 if(! $condition){
@@ -296,7 +296,7 @@ END_PERL
 $policy = 'ControlStructures::ProhibitUnlessBlocks';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 {
@@ -366,7 +366,7 @@ END_PERL
 $policy = 'ControlStructures::ProhibitUnreachableCode';
 is( pcritique($policy, \$code), 12, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 $code = <<'END_PERL';
 
 exit;
@@ -380,7 +380,7 @@ END_PERL
 $policy = 'ControlStructures::ProhibitUnreachableCode';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 exit;
@@ -392,7 +392,7 @@ END_PERL
 $policy = 'ControlStructures::ProhibitUnreachableCode';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 exit;
@@ -404,7 +404,7 @@ END_PERL
 $policy = 'ControlStructures::ProhibitUnreachableCode';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 sub a {
@@ -482,7 +482,7 @@ is( pcritique($policy, \$code), 0, $policy);
 
 
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 
@@ -495,7 +495,7 @@ END_PERL
 $policy = 'ControlStructures::ProhibitUnreachableCode';
 is( pcritique($policy, \$code), 1, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 
@@ -517,7 +517,7 @@ END_PERL
 $policy = 'ControlStructures::ProhibitDeepNests';
 is( pcritique($policy, \$code), 1, '6 for loops');
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 
@@ -539,7 +539,7 @@ END_PERL
 $policy = 'ControlStructures::ProhibitDeepNests';
 is( pcritique($policy, \$code), 1, '6 if blocks');
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 
@@ -556,7 +556,7 @@ END_PERL
 $policy = 'ControlStructures::ProhibitDeepNests';
 is( pcritique($policy, \$code), 0, '6 if blocks, not nested');
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 
@@ -574,7 +574,7 @@ END_PERL
 $policy = 'ControlStructures::ProhibitDeepNests';
 is( pcritique($policy, \$code), 0, '6 for loops, not nested');
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 
@@ -596,7 +596,7 @@ END_PERL
 $policy = 'ControlStructures::ProhibitDeepNests';
 is( pcritique($policy, \$code), 1, '6 mixed nests');
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 
@@ -619,7 +619,7 @@ END_PERL
 $policy = 'ControlStructures::ProhibitDeepNests';
 is( pcritique($policy, \$code, \%config), 0, 'Configurable');
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 
@@ -640,7 +640,7 @@ $policy = 'ControlStructures::ProhibitDeepNests';
 is( pcritique($policy, \$code), 0, 'With postfixes');
 
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 @bar = map {$_ = 1} @foo;
@@ -651,7 +651,7 @@ END_PERL
 $policy = 'ControlStructures::ProhibitMutatingListFunctions';
 is( pcritique($policy, \$code), 3, "$policy assignment and op-assignment" );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 @bar = map {++$_} @foo;
@@ -661,7 +661,7 @@ END_PERL
 $policy = 'ControlStructures::ProhibitMutatingListFunctions';
 is( pcritique($policy, \$code), 2, "$policy: ++ and -- operators" );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 @bar = map {$_ =~ s/f/g/} @foo;
@@ -672,7 +672,7 @@ END_PERL
 $policy = 'ControlStructures::ProhibitMutatingListFunctions';
 is( pcritique($policy, \$code), 3, "$policy - explicit regexes" );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 @bar = map {s/f/g/} @foo;
@@ -683,7 +683,7 @@ END_PERL
 $policy = 'ControlStructures::ProhibitMutatingListFunctions';
 is( pcritique($policy, \$code), 3, "$policy - implicit regexps" );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 @bar = map {my $c = s/f/g/g; $c} @foo;
@@ -694,7 +694,7 @@ END_PERL
 $policy = 'ControlStructures::ProhibitMutatingListFunctions';
 is( pcritique($policy, \$code), 3, "$policy - implicit regexps" );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 @bar = map {chop} @foo;
@@ -704,7 +704,7 @@ END_PERL
 $policy = 'ControlStructures::ProhibitMutatingListFunctions';
 is( pcritique($policy, \$code), 2, "$policy - implicit chomp-ish builtins" );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 @bar = map {chop $_} @foo;
@@ -715,7 +715,7 @@ END_PERL
 $policy = 'ControlStructures::ProhibitMutatingListFunctions';
 is( pcritique($policy, \$code), 3, "$policy - explicit chomp-ish builtins" );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 @bar = map {substr $_, 0, 1, 'f'} @foo;
@@ -724,7 +724,7 @@ END_PERL
 $policy = 'ControlStructures::ProhibitMutatingListFunctions';
 is( pcritique($policy, \$code), 1, "$policy - substr" );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 @bar = map {$_} @foo;
@@ -736,7 +736,7 @@ END_PERL
 $policy = 'ControlStructures::ProhibitMutatingListFunctions';
 is( pcritique($policy, \$code), 0, "$policy - non-mutators" );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 @bar = map {$_=1} @foo;
@@ -748,7 +748,7 @@ $policy = 'ControlStructures::ProhibitMutatingListFunctions';
 %config = (list_funcs => ' foo bar ');
 is( pcritique($policy, \$code, \%config), 0, "$policy - configurable");
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 @bar = foo {$_=1} @foo;
@@ -758,7 +758,7 @@ $policy = 'ControlStructures::ProhibitMutatingListFunctions';
 %config = (list_funcs => ' foo bar ');
 is( pcritique($policy, \$code, \%config), 1, "$policy - configurable");
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 @bar = map {$_=1} @foo;
@@ -769,7 +769,7 @@ $policy = 'ControlStructures::ProhibitMutatingListFunctions';
 %config = (add_list_funcs => ' foo bar ');
 is( pcritique($policy, \$code, \%config), 2, "$policy - configurable");
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 # Local Variables:
 #   mode: cperl

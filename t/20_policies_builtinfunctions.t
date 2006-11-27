@@ -20,7 +20,7 @@ my $policy;
 my %config;
 
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 select( undef, undef, undef, 0.25 );
@@ -29,7 +29,7 @@ END_PERL
 $policy = 'BuiltinFunctions::ProhibitSleepViaSelect';
 is( pcritique($policy, \$code), 1, $policy.' sleep, as list' );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 select( undef, undef, undef, $time );
@@ -38,7 +38,7 @@ END_PERL
 $policy = 'BuiltinFunctions::ProhibitSleepViaSelect';
 is( pcritique($policy, \$code), 1, $policy.' sleep, as list w/var' );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 select undef, undef, undef, 0.25;
@@ -47,7 +47,7 @@ END_PERL
 $policy = 'BuiltinFunctions::ProhibitSleepViaSelect';
 is( pcritique($policy, \$code), 1, $policy.' sleep, as built-in' );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 select $vec, undef, undef, 0.25;
@@ -56,7 +56,7 @@ END_PERL
 $policy = 'BuiltinFunctions::ProhibitSleepViaSelect';
 is( pcritique($policy, \$code), 0, $policy.' select on read' );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 select undef, $vec, undef, 0.25;
@@ -65,7 +65,7 @@ END_PERL
 $policy = 'BuiltinFunctions::ProhibitSleepViaSelect';
 is( pcritique($policy, \$code), 0, $policy.' select on write' );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 select undef, undef, $vec, 0.25;
@@ -74,7 +74,7 @@ END_PERL
 $policy = 'BuiltinFunctions::ProhibitSleepViaSelect';
 is( pcritique($policy, \$code), 0, $policy.' select on error' );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 $foo{select};
@@ -83,7 +83,7 @@ END_PERL
 $policy = 'BuiltinFunctions::ProhibitSleepViaSelect';
 is( pcritique($policy, \$code), 0, $policy.' select as word' );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 eval "$some_code";
@@ -94,7 +94,7 @@ END_PERL
 $policy = 'BuiltinFunctions::ProhibitStringyEval';
 is( pcritique($policy, \$code), 3, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 eval { some_code() };
@@ -106,7 +106,7 @@ END_PERL
 $policy = 'BuiltinFunctions::ProhibitStringyEval';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 $hash1{eval} = 1;
@@ -116,7 +116,7 @@ END_PERL
 $policy = 'BuiltinFunctions::ProhibitStringyEval';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 grep $_ eq 'foo', @list;
@@ -126,7 +126,7 @@ END_PERL
 $policy = 'BuiltinFunctions::RequireBlockGrep';
 is( pcritique($policy, \$code), 2, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 grep {$_ eq 'foo'}  @list;
@@ -142,7 +142,7 @@ END_PERL
 $policy = 'BuiltinFunctions::RequireBlockGrep';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 $hash1{grep} = 1;
@@ -152,7 +152,7 @@ END_PERL
 $policy = 'BuiltinFunctions::RequireBlockGrep';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 map $_++, @list;
@@ -162,7 +162,7 @@ END_PERL
 $policy = 'BuiltinFunctions::RequireBlockMap';
 is( pcritique($policy, \$code), 2, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 map {$_++}   @list;
@@ -178,7 +178,7 @@ END_PERL
 $policy = 'BuiltinFunctions::RequireBlockMap';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 $hash1{map} = 1;
@@ -270,7 +270,7 @@ END_PERL
 $policy = 'BuiltinFunctions::ProhibitUniversalCan';
 is( pcritique($policy, \$code), 0, $policy );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 sort {my $aa = $foo{$a};my $b = $foo{$b};$a cmp $b} @list;
@@ -279,7 +279,7 @@ END_PERL
 $policy = 'BuiltinFunctions::RequireSimpleSortBlock';
 is( pcritique($policy, \$code), 1, $policy );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 sort @list;
@@ -303,7 +303,7 @@ END_PERL
 $policy = 'BuiltinFunctions::RequireSimpleSortBlock';
 is( pcritique($policy, \$code), 0, $policy );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 # These are things I found in my Perl that caused some false-
 # positives because they have some extra whitespace in the block.
 
@@ -317,7 +317,7 @@ END_PERL
 $policy = 'BuiltinFunctions::RequireSimpleSortBlock';
 is( pcritique($policy, \$code), 0, $policy );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 
@@ -346,7 +346,7 @@ END_PERL
 $policy = 'BuiltinFunctions::ProhibitStringySplit';
 is( pcritique($policy, \$code), 12, $policy );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 
@@ -378,7 +378,7 @@ END_PERL
 $policy = 'BuiltinFunctions::ProhibitStringySplit';
 is( pcritique($policy, \$code), 0, $policy.' Non-stringy splits' );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 
@@ -399,7 +399,7 @@ END_PERL
 $policy = 'BuiltinFunctions::ProhibitStringySplit';
 is( pcritique($policy, \$code), 0, $policy.' Special split on space' );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 
@@ -414,7 +414,7 @@ END_PERL
 $policy = 'BuiltinFunctions::ProhibitStringySplit';
 is( pcritique($policy, \$code), 0, $policy.' Split oddities' );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 sort {$b <=> $a} @list;
@@ -425,7 +425,7 @@ END_PERL
 $policy = 'BuiltinFunctions::ProhibitReverseSortBlock';
 is( pcritique($policy, \$code), 3, $policy );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 reverse sort {$a <=> $b} @list;
@@ -442,7 +442,7 @@ $policy = 'BuiltinFunctions::ProhibitReverseSortBlock';
 is( pcritique($policy, \$code), 0, $policy );
 
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 $hash1{sort} = { $b <=> $a };
@@ -459,7 +459,7 @@ END_PERL
 $policy = 'BuiltinFunctions::ProhibitReverseSortBlock';
 is( pcritique($policy, \$code), 0, $policy );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 grep "$foo", @list;
@@ -475,7 +475,7 @@ END_PERL
 $policy = 'BuiltinFunctions::ProhibitVoidGrep';
 is( pcritique($policy, \$code), 7, $policy );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 $baz, grep "$foo", @list;
@@ -492,7 +492,7 @@ END_PERL
 $policy = 'BuiltinFunctions::ProhibitVoidGrep';
 is( pcritique($policy, \$code), 0, $policy );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 map "$foo", @list;
@@ -508,7 +508,7 @@ END_PERL
 $policy = 'BuiltinFunctions::ProhibitVoidMap';
 is( pcritique($policy, \$code), 7, $policy );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 $baz, map "$foo", @list;
@@ -525,7 +525,7 @@ END_PERL
 $policy = 'BuiltinFunctions::ProhibitVoidMap';
 is( pcritique($policy, \$code), 0, $policy );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 grep { foo($_) }
@@ -536,7 +536,7 @@ END_PERL
 $policy = 'BuiltinFunctions::ProhibitVoidGrep';
 is( pcritique($policy, \$code), 1, $policy );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 map { foo($_) }
@@ -547,7 +547,7 @@ END_PERL
 $policy = 'BuiltinFunctions::ProhibitVoidMap';
 is( pcritique($policy, \$code), 1, $policy );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 # Local Variables:
 #   mode: cperl

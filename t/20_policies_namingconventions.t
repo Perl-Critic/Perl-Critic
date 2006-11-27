@@ -1,11 +1,11 @@
 #!perl
 
-##################################################################
+##############################################################################
 #     $URL$
 #    $Date$
 #   $Author$
 # $Revision$
-##################################################################
+##############################################################################
 
 use strict;
 use warnings;
@@ -19,7 +19,7 @@ my $code ;
 my $policy;
 my %config;
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 my $fooBAR;
@@ -31,7 +31,7 @@ END_PERL
 $policy = 'NamingConventions::ProhibitMixedCaseVars';
 is( pcritique($policy, \$code), 4, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 my ($foobar, $fooBAR);
@@ -45,7 +45,7 @@ END_PERL
 $policy = 'NamingConventions::ProhibitMixedCaseVars';
 is( pcritique($policy, \$code), 6, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 my $foo_BAR;
@@ -65,7 +65,7 @@ END_PERL
 $policy = 'NamingConventions::ProhibitMixedCaseVars';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 my ($foo_BAR, $BAR_FOO);
@@ -78,7 +78,7 @@ END_PERL
 $policy = 'NamingConventions::ProhibitMixedCaseVars';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 sub fooBAR {}
@@ -90,7 +90,7 @@ END_PERL
 $policy = 'NamingConventions::ProhibitMixedCaseSubs';
 is( pcritique($policy, \$code), 4, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 sub foo_BAR {}
@@ -103,7 +103,7 @@ END_PERL
 $policy = 'NamingConventions::ProhibitMixedCaseSubs';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 # Use all of the forbidden names in slightly different ways
 # The test should catch all of them
@@ -122,7 +122,7 @@ END_PERL
 $policy = 'NamingConventions::ProhibitAmbiguousNames';
 is( pcritique($policy, \$code), 11, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 # word fragments
 $code = <<'END_PERL';
@@ -140,7 +140,7 @@ TODO: {
     1;
 }
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 # These are not forbidden usages
 $code = <<'END_PERL';
@@ -152,7 +152,7 @@ END_PERL
 $policy = 'NamingConventions::ProhibitAmbiguousNames';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 # These are not forbidden usages
 $code = <<'END_PERL';
@@ -170,7 +170,7 @@ TODO: {
     1;
 }
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 # These are not forbidden names
 $code = <<'END_PERL';
@@ -182,7 +182,7 @@ END_PERL
 $policy = 'NamingConventions::ProhibitAmbiguousNames';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 # These ambiguous but standard names should be allowed
 $code = <<'END_PERL';
@@ -193,7 +193,7 @@ END_PERL
 $policy = 'NamingConventions::ProhibitAmbiguousNames';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 my $left;
@@ -204,7 +204,7 @@ END_PERL
 $policy = 'NamingConventions::ProhibitAmbiguousNames';
 is( pcritique($policy, \$code, \%config), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 my $left;
@@ -217,7 +217,7 @@ END_PERL
 $policy = 'NamingConventions::ProhibitAmbiguousNames';
 is( pcritique($policy, \$code, \%config), 2, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 my $left;
@@ -231,7 +231,7 @@ my @default = Perl::Critic::Policy::NamingConventions::ProhibitAmbiguousNames::d
 $policy = 'NamingConventions::ProhibitAmbiguousNames';
 is( pcritique($policy, \$code, \%config), 4, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 my $left;

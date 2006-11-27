@@ -1,11 +1,11 @@
 #!perl
 
-##################################################################
+##############################################################################
 #     $URL$
 #    $Date$
 #   $Author$
 # $Revision$
-##################################################################
+##############################################################################
 
 use strict;
 use warnings;
@@ -19,7 +19,7 @@ my $code ;
 my $policy;
 my %config;
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 @out = `some_command`;
@@ -29,7 +29,7 @@ END_PERL
 $policy = 'InputOutput::ProhibitBacktickOperators';
 is( pcritique($policy, \$code), 2, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 open FH, '>', $some_file;
@@ -46,7 +46,7 @@ END_PERL
 $policy = 'InputOutput::ProhibitBarewordFileHandles';
 is( pcritique($policy, \$code), 5, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 open $fh, '>', $some_file;
@@ -67,7 +67,7 @@ END_PERL
 $policy = 'InputOutput::ProhibitBarewordFileHandles';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 select( $fh );
@@ -76,7 +76,7 @@ END_PERL
 $policy = 'InputOutput::ProhibitOneArgSelect';
 is( pcritique($policy, \$code), 1, $policy.' 1 arg; variable, w/parens' );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 select $fh;
@@ -85,7 +85,7 @@ END_PERL
 $policy = 'InputOutput::ProhibitOneArgSelect';
 is( pcritique($policy, \$code), 1, $policy.' 1 arg; variable, as built-in' );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 select( STDERR );
@@ -94,7 +94,7 @@ END_PERL
 $policy = 'InputOutput::ProhibitOneArgSelect';
 is( pcritique($policy, \$code), 1, $policy.' 1 arg; fh, w/parens' );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 select STDERR;
@@ -103,7 +103,7 @@ END_PERL
 $policy = 'InputOutput::ProhibitOneArgSelect';
 is( pcritique($policy, \$code), 1, $policy.' 1 arg; fh, as built-in' );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 select( undef, undef, undef, 0.25 );
@@ -112,7 +112,7 @@ END_PERL
 $policy = 'InputOutput::ProhibitOneArgSelect';
 is( pcritique($policy, \$code), 0, $policy.' 4 args' );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 sub select { }
@@ -121,7 +121,7 @@ END_PERL
 $policy = 'InputOutput::ProhibitOneArgSelect';
 is( pcritique($policy, \$code), 0, $policy.' RT Bug: #15653' );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 
@@ -148,7 +148,7 @@ END_PERL
 $policy = 'InputOutput::ProhibitTwoArgOpen';
 is( pcritique($policy, \$code), 12, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 open $fh, '>', $output";
@@ -188,7 +188,7 @@ END_PERL
 $policy = 'InputOutput::ProhibitTwoArgOpen';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 for my $foo (<FH>) {}
@@ -203,7 +203,7 @@ END_PERL
 $policy = 'InputOutput::ProhibitReadlineInForLoop';
 is( pcritique($policy, \$code), 6, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 for my $foo (@lines) {}
@@ -215,7 +215,7 @@ END_PERL
 $policy = 'InputOutput::ProhibitReadlineInForLoop';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 
@@ -233,7 +233,7 @@ END_PERL
 $policy = 'InputOutput::RequireBracedFileHandleWithPrint';
 is( pcritique($policy, \$code), 7, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 
@@ -252,7 +252,7 @@ END_PERL
 $policy = 'InputOutput::RequireBracedFileHandleWithPrint';
 is( pcritique($policy, \$code), 7, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 print "something" . "something else";
@@ -328,7 +328,7 @@ END_PERL
 $policy = 'InputOutput::RequireBracedFileHandleWithPrint';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 
@@ -343,7 +343,7 @@ END_PERL
 $policy = 'InputOutput::RequireBracedFileHandleWithPrint';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 -t;
@@ -353,7 +353,7 @@ END_PERL
 $policy = 'InputOutput::ProhibitInteractiveTest';
 is( pcritique($policy, \$code), 2, $policy );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 -toomany;

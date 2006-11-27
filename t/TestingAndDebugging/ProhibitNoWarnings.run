@@ -5,7 +5,7 @@
 package foo;
 no warnings;
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 ## name selective warnings disabled
 ## failures 1
@@ -18,7 +18,7 @@ END_PERL
 $policy = 'TestingAndDebugging::ProhibitNoWarnings';
 is( pcritique($policy, \$code), 1, $policy.' selective warnings disabled');
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 ## name selective warnings disabled
 ## failures 1
@@ -27,7 +27,7 @@ is( pcritique($policy, \$code), 1, $policy.' selective warnings disabled');
 package foo;
 no warnings qw(closure glob);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 ## name allow no warnings
 ## failures 0
@@ -37,7 +37,7 @@ no warnings qw(closure glob);
 package foo;
 no warnings qw(glob io once);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 ## name allow no warnings
 ## failures 0
@@ -48,7 +48,7 @@ no warnings qw(glob io once);
 package foo;
 no warnings "numeric", "pack", "portable";
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 ## name wrong case, funky config
 ## failures 1
@@ -58,7 +58,7 @@ no warnings "numeric", "pack", "portable";
 package foo;
 no warnings "numeric", "pack", 'portable';
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 ## name More wrong case, funky config
 ## failures 1

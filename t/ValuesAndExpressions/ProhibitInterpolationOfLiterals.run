@@ -5,7 +5,7 @@
 print "this is literal";
 print qq{this is literal};
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 ## name Basic passing
 ## failures 0
@@ -14,7 +14,7 @@ print qq{this is literal};
 print 'this is literal';
 print q{this is literal};
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 ## name Code with all delimiters in configuration
 ## failures 0
@@ -28,7 +28,7 @@ $sql = qq/select foo from bar/;
 
 is( pcritique($policy, \$code, \%config), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 ## name Code with not all delimiters in configuration
 ## failures 2
@@ -40,7 +40,7 @@ $sql = qq{select foo from bar};
 $sql = qq[select foo from bar];
 $sql = qq/select foo from bar/;
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 ## name Configuration with only delimiters, no operators
 ## failures 2
@@ -52,7 +52,7 @@ $sql = qq{select foo from bar};
 $sql = qq[select foo from bar];
 $sql = qq/select foo from bar/;
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 ## name Configuration with matching closing delimiters
 ## failures 2
@@ -64,14 +64,14 @@ $sql = qq{select foo from bar};
 $sql = qq[select foo from bar];
 $sql = qq/select foo from bar/;
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
-##################################################################
+##############################################################################
 #      $URL$
 #     $Date$
 #   $Author$
 # $Revision$
-##################################################################
+##############################################################################
 
 # Local Variables:
 #   mode: cperl

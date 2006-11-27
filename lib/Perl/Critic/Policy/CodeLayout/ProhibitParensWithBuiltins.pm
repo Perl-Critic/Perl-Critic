@@ -1,9 +1,9 @@
-#######################################################################
+##############################################################################
 #      $URL$
 #     $Date$
 #   $Author$
 # $Revision$
-########################################################################
+##############################################################################
 
 package Perl::Critic::Policy::CodeLayout::ProhibitParensWithBuiltins;
 
@@ -14,7 +14,7 @@ use base 'Perl::Critic::Policy';
 
 our $VERSION = 0.22;
 
-#----------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 my @allow = qw( my our local return );
 my %allow = hashify( @allow );
@@ -22,7 +22,7 @@ my %allow = hashify( @allow );
 my $desc  = q{Builtin function called with parens};
 my $expl  = [ 13 ];
 
-#----------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 # These are all the functions that are considered named unary
 # operators.  These frequently require parens because they have lower
 # precedence than ordinary function calls.
@@ -47,13 +47,13 @@ my @named_unary_ops = qw(
 );
 my %named_unary_ops = hashify( @named_unary_ops );
 
-#----------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 sub default_severity { return $SEVERITY_LOWEST   }
 sub default_themes   { return qw( pbp cosmetic ) }
 sub applies_to       { return 'PPI::Token::Word' }
 
-#----------------------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, undef ) = @_;

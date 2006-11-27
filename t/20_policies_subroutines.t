@@ -1,11 +1,11 @@
 #!perl
 
-##################################################################
+##############################################################################
 #     $URL$
 #    $Date$
 #   $Author$
 # $Revision$
-##################################################################
+##############################################################################
 
 use strict;
 use warnings;
@@ -19,7 +19,7 @@ my $code ;
 my $policy;
 my %config;
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 sub test_sub1 {
@@ -40,7 +40,7 @@ END_PERL
 $policy = 'Subroutines::ProhibitExplicitReturnUndef';
 is( pcritique($policy, \$code), 3, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 sub test_sub1 {
@@ -63,7 +63,7 @@ END_PERL
 $policy = 'Subroutines::ProhibitExplicitReturnUndef';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 sub my_sub1 ($@) {}
@@ -73,7 +73,7 @@ END_PERL
 $policy = 'Subroutines::ProhibitSubroutinePrototypes';
 is( pcritique($policy, \$code), 2, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 sub my_sub1 {}
@@ -83,7 +83,7 @@ END_PERL
 $policy = 'Subroutines::ProhibitSubroutinePrototypes';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 sub open {}
@@ -94,7 +94,7 @@ END_PERL
 $policy = 'Subroutines::ProhibitBuiltinHomonyms';
 is( pcritique($policy, \$code), 3, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 sub my_open {}
@@ -105,7 +105,7 @@ END_PERL
 $policy = 'Subroutines::ProhibitBuiltinHomonyms';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 sub import   { do_something(); }
@@ -116,7 +116,7 @@ END_PERL
 $policy = 'Subroutines::ProhibitBuiltinHomonyms';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 BEGIN { do_something(); }
@@ -128,7 +128,7 @@ END_PERL
 $policy = 'Subroutines::ProhibitBuiltinHomonyms';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 sub foo { }
@@ -138,7 +138,7 @@ END_PERL
 $policy = 'Subroutines::RequireFinalReturn';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 sub foo { return; }
@@ -147,7 +147,7 @@ END_PERL
 $policy = 'Subroutines::RequireFinalReturn';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 sub foo { return {some => [qw(complicated data)], q{ } => /structure/}; }
@@ -156,7 +156,7 @@ END_PERL
 $policy = 'Subroutines::RequireFinalReturn';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 sub foo { if ($bool) { return; } else { return; } }
@@ -166,7 +166,7 @@ END_PERL
 $policy = 'Subroutines::RequireFinalReturn';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 sub foo { if ($bool) { return; } elsif ($bool2) { return; } else { return; } }
@@ -176,7 +176,7 @@ END_PERL
 $policy = 'Subroutines::RequireFinalReturn';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 TODO:{
 local $TODO = 'we are not yet detecting ternaries';
@@ -195,7 +195,7 @@ END_PERL
 
 }
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 sub foo { return 1 ? 1 : 2 ? 2 : 3; }
@@ -204,7 +204,7 @@ END_PERL
 $policy = 'Subroutines::RequireFinalReturn';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 sub foo { 1 }
@@ -214,7 +214,7 @@ END_PERL
 $policy = 'Subroutines::RequireFinalReturn';
 is( pcritique($policy, \$code), 2, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 # This one IS valid to a human or an optimizer, but it's too rare and
 # too hard to detect so we disallow it
@@ -226,7 +226,7 @@ END_PERL
 $policy = 'Subroutines::RequireFinalReturn';
 is( pcritique($policy, \$code), 1, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 sub foo { if ($bool) { } else { } }
@@ -237,7 +237,7 @@ END_PERL
 $policy = 'Subroutines::RequireFinalReturn';
 is( pcritique($policy, \$code), 3, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 BEGIN {
@@ -257,7 +257,7 @@ END_PERL
 $policy = 'Subroutines::RequireFinalReturn';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 # goto is equivalent to return
 $code = <<'END_PERL';
@@ -267,7 +267,7 @@ END_PERL
 $policy = 'Subroutines::RequireFinalReturn';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 # next, last are not equivalent to return (and are invalid Perl)
 $code = <<'END_PERL';
@@ -278,7 +278,7 @@ END_PERL
 $policy = 'Subroutines::RequireFinalReturn';
 is( pcritique($policy, \$code), 2, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 # abnormal termination is allowed
 $code = <<'END_PERL';
@@ -293,7 +293,7 @@ END_PERL
 $policy = 'Subroutines::RequireFinalReturn';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 &function_call();
@@ -307,7 +307,7 @@ END_PERL
 $policy = 'Subroutines::ProhibitAmpersandSigils';
 is( pcritique($policy, \$code), 7, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 exists &function_call;
@@ -322,7 +322,7 @@ END_PERL
 $policy = 'Subroutines::ProhibitAmpersandSigils';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 function_call();
@@ -338,7 +338,7 @@ END_PERL
 $policy = 'Subroutines::ProhibitAmpersandSigils';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 sub test_sub {
@@ -362,7 +362,7 @@ END_PERL
 $policy = 'Subroutines::ProhibitExcessComplexity';
 is( pcritique($policy, \$code, \%config), 1, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 sub test_sub {
@@ -382,7 +382,7 @@ END_PERL
 $policy = 'Subroutines::ProhibitExcessComplexity';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 sub test_sub {
@@ -392,7 +392,7 @@ END_PERL
 $policy = 'Subroutines::ProhibitExcessComplexity';
 is( pcritique($policy, \$code), 0, $policy.' no-op sub');
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 Other::Package::_foo();
@@ -405,7 +405,7 @@ END_PERL
 $policy = 'Subroutines::ProtectPrivateSubs';
 is( pcritique($policy, \$code), 5, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 package My::Self::_private;
@@ -416,7 +416,7 @@ END_PERL
 $policy = 'Subroutines::ProtectPrivateSubs';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 

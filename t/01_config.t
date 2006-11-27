@@ -75,7 +75,7 @@ my $total_policies   = scalar @site_policies;
     }
 }
 
-#--------------------------------------------------------------
+#-----------------------------------------------------------------------------
 # Test config w/ multiple severity levels.  In this profile, we
 # define an arbitrary severity for each Policy so that severity
 # levels 5 through 2 each have 10 Policies.  All remaining Policies

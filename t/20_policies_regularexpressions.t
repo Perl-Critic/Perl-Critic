@@ -1,11 +1,11 @@
 #!perl
 
-##################################################################
+##############################################################################
 #     $URL$
 #    $Date$
 #   $Author$
 # $Revision$
-##################################################################
+##############################################################################
 
 use strict;
 use warnings;
@@ -19,7 +19,7 @@ my $code ;
 my $policy;
 my %config;
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 my $string =~ m{pattern}x;
@@ -46,7 +46,7 @@ END_PERL
 $policy = 'RegularExpressions::RequireExtendedFormatting';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 my $string =~ m{pattern};
@@ -74,7 +74,7 @@ END_PERL
 $policy = 'RegularExpressions::RequireExtendedFormatting';
 is( pcritique($policy, \$code), 16, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 my $string =~ m{pattern}m;
@@ -101,7 +101,7 @@ END_PERL
 $policy = 'RegularExpressions::RequireLineBoundaryMatching';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 my $string =~ m{pattern};
@@ -129,7 +129,7 @@ END_PERL
 $policy = 'RegularExpressions::RequireLineBoundaryMatching';
 is( pcritique($policy, \$code), 16, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 my $string =~ tr/[A-Z]/[a-z]/;
@@ -147,7 +147,7 @@ END_PERL
 $policy = 'RegularExpressions::RequireExtendedFormatting';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 my $string =~ tr/[A-Z]/[a-z]/;
@@ -165,7 +165,7 @@ END_PERL
 $policy = 'RegularExpressions::RequireLineBoundaryMatching';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 my $foo = $1;
@@ -175,7 +175,7 @@ END_PERL
 $policy = 'RegularExpressions::ProhibitCaptureWithoutTest';
 is( pcritique($policy, \$code), 3, $policy );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 $1
@@ -184,7 +184,7 @@ END_PERL
 $policy = 'RegularExpressions::ProhibitCaptureWithoutTest';
 is( pcritique($policy, \$code), 1, $policy );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 'some string' =~ m/(s)/;
@@ -194,7 +194,7 @@ END_PERL
 $policy = 'RegularExpressions::ProhibitCaptureWithoutTest';
 is( pcritique($policy, \$code), 1, $policy );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 if (m/(.)/) {
@@ -206,7 +206,7 @@ END_PERL
 $policy = 'RegularExpressions::ProhibitCaptureWithoutTest';
 is( pcritique($policy, \$code), 1, $policy );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 if ($str =~ m/(.)/) {
@@ -239,7 +239,7 @@ END_PERL
 $policy = 'RegularExpressions::ProhibitCaptureWithoutTest';
 is( pcritique($policy, \$code), 0, $policy );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 print m/(.)/ ? $1 : 'undef';
@@ -255,7 +255,7 @@ END_PERL
 $policy = 'RegularExpressions::ProhibitCaptureWithoutTest';
 is( pcritique($policy, \$code), 0, $policy );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 # Regression for PPI::Statement::Expressions
 
@@ -268,7 +268,7 @@ END_PERL
 $policy = 'RegularExpressions::ProhibitCaptureWithoutTest';
 is( pcritique($policy, \$code), 0, $policy );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 # Regression for ternaries with structures
 

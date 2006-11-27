@@ -1,11 +1,11 @@
 #!perl
 
-##################################################################
+##############################################################################
 #     $URL$
 #    $Date$
 #   $Author$
 # $Revision$
-##################################################################
+##############################################################################
 
 use strict;
 use warnings;
@@ -115,7 +115,7 @@ END_PERL
 $policy = 'CodeLayout::ProhibitParensWithBuiltins';
 is( pcritique($policy, \$code), 6, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 open $foo, $bar;
@@ -134,7 +134,7 @@ END_PERL
 $policy = 'CodeLayout::ProhibitParensWithBuiltins';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 my $obj = SomeClass->new();
@@ -147,7 +147,7 @@ END_PERL
 $policy = 'CodeLayout::ProhibitParensWithBuiltins';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 $foo = int( 0.5 ) + 1.5;
@@ -166,7 +166,7 @@ END_PERL
 $policy = 'CodeLayout::ProhibitParensWithBuiltins';
 is( pcritique($policy, \$code), 0, 'parens w/ unary ops');
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 print substr($foo, 2, 3), "\n";
@@ -176,7 +176,7 @@ END_PERL
 $policy = 'CodeLayout::ProhibitParensWithBuiltins';
 is( pcritique($policy, \$code), 0, 'RT #21713');
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 substr join( $delim, @list), $offset, $length;
@@ -187,7 +187,7 @@ END_PERL
 $policy = 'CodeLayout::ProhibitParensWithBuiltins';
 is( pcritique($policy, \$code), 0, 'parens w/ greedy funcs');
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 chomp( my $foo = <STDIN> );
@@ -198,7 +198,7 @@ END_PERL
 $policy = 'CodeLayout::ProhibitParensWithBuiltins';
 is( pcritique($policy, \$code), 0, 'test cases from RT');
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 grep( { do_something($_) }, @list ) + 3;
@@ -210,7 +210,7 @@ END_PERL
 $policy = 'CodeLayout::ProhibitParensWithBuiltins';
 is( pcritique($policy, \$code), 0, 'high operator after parens');
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 grep( { do_something($_) }, $foo, $bar) and do_something();
@@ -220,7 +220,7 @@ END_PERL
 $policy = 'CodeLayout::ProhibitParensWithBuiltins';
 is( pcritique($policy, \$code), 2, 'low operator after parens');
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 ($foo,
@@ -253,7 +253,7 @@ END_PERL
 $policy = 'CodeLayout::RequireTrailingCommas';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 @list = ($foo, 
@@ -276,7 +276,7 @@ END_PERL
 $policy = 'CodeLayout::RequireTrailingCommas';
 is( pcritique($policy, \$code), 3, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 @list = ($foo, 
@@ -298,7 +298,7 @@ END_PERL
 $policy = 'CodeLayout::RequireTrailingCommas';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 $foo = ( 1 > 2 ?
@@ -386,7 +386,7 @@ $policy = 'CodeLayout::RequireTidyCode';
 %config = (perltidyrc => q{});
 is( pcritique($policy, \$code, \%config), 0, 'Tidy with several trailing newlines' );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 sub foo {
@@ -401,7 +401,7 @@ $policy = 'CodeLayout::RequireTidyCode';
 %config = (perltidyrc => q{});
 is( pcritique($policy, \$code, \%config), 0, 'Tidy with heredoc' );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 #!perl
@@ -416,7 +416,7 @@ $policy = 'CodeLayout::RequireTidyCode';
 %config = (perltidyrc => q{});
 is( pcritique($policy, \$code, \%config), 0, 'Tidy with shell escape' );
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 @list = ('foo', 'bar', 'baz');
@@ -430,7 +430,7 @@ END_PERL
 $policy = 'CodeLayout::ProhibitQuotedWordLists';
 is( pcritique($policy, \$code), 2, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 ('foo');
@@ -453,7 +453,7 @@ END_PERL
 $policy = 'CodeLayout::ProhibitQuotedWordLists';
 is( pcritique($policy, \$code), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 @list = ('foo', 'bar, 'baz');
@@ -463,7 +463,7 @@ END_PERL
 $policy = 'CodeLayout::ProhibitQuotedWordLists';
 is( pcritique($policy, \$code, \%config), 0, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
 @list = ('foo', 'bar', 'baz', 'nuts');
@@ -473,7 +473,7 @@ END_PERL
 $policy = 'CodeLayout::ProhibitQuotedWordLists';
 is( pcritique($policy, \$code, \%config), 1, $policy);
 
-#----------------------------------------------------------------
+#-----------------------------------------------------------------------------
 
 my $base_code = <<'END_PERL';
 package My::Pkg;
