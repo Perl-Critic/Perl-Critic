@@ -1,0 +1,132 @@
+## name Assignment and op-assignment
+## failures 3
+## cut
+
+@bar = map {$_ = 1} @foo;
+@bar = map {$_ *= 2} @foo;
+@bar = map {$_++} @foo;
+
+#-----------------------------------------------------------------------------
+
+## name ++ and -- operators
+## failures 2
+## cut
+
+@bar = map {++$_} @foo;
+@bar = map {--$_} @foo;
+
+#-----------------------------------------------------------------------------
+
+## name Explicit regexes
+## failures 3
+## cut
+
+@bar = map {$_ =~ s/f/g/} @foo;
+@bar = map {$_ =~ tr/f/g/} @foo;
+@bar = map {$_ =~ y/f/g/} @foo;
+
+#-----------------------------------------------------------------------------
+
+## name Simple implicit regexps
+## failures 3
+## cut
+
+@bar = map {s/f/g/} @foo;
+@bar = map {tr/f/g/} @foo;
+@bar = map {y/f/g/} @foo;
+
+#-----------------------------------------------------------------------------
+
+## name "Hidden" implicit regexps
+## failures 3
+## cut
+
+@bar = map {my $c = s/f/g/g; $c} @foo;
+@bar = map {my $c = tr/f/g/g; $c} @foo;
+@bar = map {my $c = y/f/g/g; $c} @foo;
+
+#-----------------------------------------------------------------------------
+
+## name Implicit chomp-ish builtins
+## failures 2
+## cut
+
+@bar = map {chop} @foo;
+@bar = map {chomp} @foo;
+
+#-----------------------------------------------------------------------------
+
+## name Explicit chomp-ish builtins
+## failures 3
+## cut
+
+@bar = map {chop $_} @foo;
+@bar = map {chomp $_} @foo;
+@bar = map {undef $_} @foo;
+
+#-----------------------------------------------------------------------------
+
+## name substr
+## failures 1
+## cut
+
+@bar = map {substr $_, 0, 1, 'f'} @foo;
+
+#-----------------------------------------------------------------------------
+
+## name Non-mutators
+## failures 0
+## cut
+
+@bar = map {$_} @foo;
+@bar = map {$_ => 1} @foo;
+@bar = map {m/4/} @foo;
+@bar = map {my $s=$_; chomp $s; $s} @foo;
+
+#-----------------------------------------------------------------------------
+
+## name Value given for list_funcs passing
+## failures 0
+## parms {list_funcs => ' foo bar '}
+## cut
+
+@bar = map {$_=1} @foo;
+@bar = foo {$_} @foo;
+@bar = baz {$_=1} @foo;
+
+#-----------------------------------------------------------------------------
+
+## name Value given for list_funcs failure
+## failures 1
+## parms {list_funcs => ' foo bar '}
+## cut
+
+@bar = foo {$_=1} @foo;
+
+#-----------------------------------------------------------------------------
+
+## name Value given for add_list_funcs
+## failures 2
+## parms {add_list_funcs => ' foo bar '}
+## cut
+
+@bar = map {$_=1} @foo;
+@bar = foo {$_=1} @foo;
+
+#-----------------------------------------------------------------------------
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :

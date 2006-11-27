@@ -1,0 +1,139 @@
+## name 6 for loops
+## failures 1
+## cut
+
+for $element1 ( @list1 ) {
+    foreach $element2 ( @list2 ) {
+        for $element3 ( @list3 ) {
+            foreach $element4 ( @list4 ) {
+               for $element5 ( @list5 ) {
+                  for $element6 ( @list6 ) {
+                  }
+               }
+            }
+        }
+    }
+}
+
+#-----------------------------------------------------------------------------
+
+## name 6 if blocks
+## failures 1
+## cut
+
+if ($condition1) {
+  if ($condition2) {
+    if ($condition3) {
+      if ($condition4) {
+        if ($condition5) {
+          if ($condition6) {
+          }
+        }
+      }
+    }
+  }
+}
+
+#-----------------------------------------------------------------------------
+
+## name 6 if blocks, not nested
+## failures 0
+## cut
+
+if ($condition1) {
+  if ($condition2) {}
+  if ($condition3) {}
+  if ($condition4) {}
+  if ($condition5) {}
+  if ($condition6) {}
+}
+
+#-----------------------------------------------------------------------------
+
+## name 6 for loops, not nested
+## failures 0
+## cut
+
+for     $element1 ( @list1 ) {
+  foreach $element2 ( @list2 ) {}
+  for     $element3 ( @list3 ) {}
+  foreach $element4 ( @list4 ) {}
+  for     $element5 ( @list5 ) {}
+  foreach $element6 ( @list6 ) {}
+}
+
+#-----------------------------------------------------------------------------
+
+## name 6 mixed nests
+## failures 1
+## cut
+
+if ($condition) {
+  foreach ( @list ) {
+    until ($condition) {
+      for (my $i=0; $<10; $i++) {
+        if ($condition) {
+          while ($condition) {
+          }
+        }
+      }
+    }
+  }
+}
+
+is( pcritique($policy, \$code), 1, '');
+
+#-----------------------------------------------------------------------------
+
+## name Configurable
+## failures 0
+## parms {max_nests => 6}
+## cut
+
+if ($condition) {
+  foreach ( @list ) {
+    until ($condition) {
+      for (my $i=0; $<10; $i++) {
+        if ($condition) {
+          while ($condition) {
+          }
+        }
+      }
+    }
+  }
+}
+
+#-----------------------------------------------------------------------------
+
+## name With postfixes
+## failures 0
+## cut
+
+if ($condition) {
+    s/foo/bar/ for @list;
+    until ($condition) {
+      for (my $i=0; $<10; $i++) {
+          die if $condition;
+        while ($condition) {
+        }
+      }
+   }
+}
+
+#-----------------------------------------------------------------------------
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :

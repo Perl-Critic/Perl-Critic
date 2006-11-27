@@ -132,7 +132,6 @@ t/10_userprofile.t
 t/11_policyfactory.t
 t/12_policylisting.t
 t/20_policies_codelayout.t
-t/20_policies_controlstructures.t
 t/20_policies_documentation.t
 t/20_policies_inputoutput.t
 t/20_policies_miscellanea.t

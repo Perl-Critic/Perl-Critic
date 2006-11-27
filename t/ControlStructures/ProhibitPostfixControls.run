@@ -1,0 +1,128 @@
+## name Basic failure
+## failures 5
+## cut
+
+do_something() if $condition;
+do_something() while $condition;
+do_something() until $condition;
+do_something() unless $condition;
+do_something() for @list;
+
+is( pcritique($policy, \$code), 5, $policy);
+
+#-----------------------------------------------------------------------------
+
+## name Configured to allow all
+## failures 0
+## parms {allow => 'if while until unless for'}
+## cut
+
+do_something() if $condition;
+do_something() while $condition;
+do_something() until $condition;
+do_something() unless $condition;
+do_something() for @list;
+
+is( pcritique($policy, \$code, \%config), 0, $policy);
+
+#-----------------------------------------------------------------------------
+
+## name Configured to allow all, all regular control structures
+## failures 0
+## parms {allow => 'qq( qq{ qq[ qq/'}
+## cut
+
+if($condition){ do_something() } 
+while($condition){ do_something() }
+until($condition){ do_something() }
+unless($condition){ do_something() }
+
+%config = (allow => 'if while until unless for');
+is( pcritique($policy, \$code, \%config), 0, $policy);
+
+#-----------------------------------------------------------------------------
+
+## name Regular for loops
+## failures 0
+## cut
+
+#PPI versions < 1.03 had problems with this
+for my $element (@list){ do_something() }
+for (@list){ do_something_else() }
+
+#-----------------------------------------------------------------------------
+
+## name Legal postfix usage
+## failures 0
+## cut
+
+use Carp;
+
+while ($condition) {
+    next if $condition;
+    last if $condition;
+    redo if $condition;
+    return if $condition;
+    goto HELL if $condition;
+    exit if $condition;
+}
+
+die 'message' if $condition;
+die if $condition;
+
+warn 'message' if $condition;
+warn if $condition;
+
+carp 'message' if $condition;
+carp if $condition;
+
+croak 'message' if $condition;
+croak if $condition;
+
+cluck 'message' if $condition;
+cluck if $condition;
+
+confess 'message' if $condition;
+confess if $condition;
+
+exit 0 if $condition;
+exit if $condition;
+
+#-----------------------------------------------------------------------------
+
+## name Individual "keyword" hash assignment
+## failures 0
+## cut
+
+my %hash;
+$hash{if} = 1;
+$hash{unless} = 1;
+$hash{until} = 1;
+$hash{while} = 1;
+$hash{for} = 1;
+
+#-----------------------------------------------------------------------------
+
+## name "Keyword"-list hash assignment
+## failures 0
+## cut
+
+my %hash = (if => 1, unless => 1, until => 1, while => 1, for => 1);
+
+#-----------------------------------------------------------------------------
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :

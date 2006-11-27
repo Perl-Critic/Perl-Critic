@@ -1,0 +1,191 @@
+## name Basic passing
+## failures 0
+## cut
+
+sub a {
+  return 123 if $a == 1;
+  do_something();
+}
+
+sub b {
+  croak 'error' unless $b;
+  do_something();
+}
+
+sub c {
+  confess 'error' if $c != $d;
+  do_something();
+}
+
+for (1..2) {
+  next if $_ == 1;
+  do_something();
+}
+
+for (1..2) {
+  last if $_ == 2;
+  do_something();
+}
+
+for (1..2) {
+  redo if do_this($_);
+  do_something();
+}
+
+{
+    exit;
+    FOO:
+    do_something();
+}
+
+{
+    die;
+    BAR:
+    do_something();
+}
+
+{
+    exit;
+    sub d {}
+    BAZ:
+    print 123;
+}
+
+{
+    die;
+    JAPH:
+    sub e {}
+    print 456;
+}
+
+{
+    exit;
+    BEGIN {
+        print 123;
+    }
+}
+
+{
+   $foo || die;
+   print 123;
+}
+
+#-----------------------------------------------------------------------------
+
+## name Basic failure
+## failures 12
+## cut
+
+{
+    exit;
+    require Foo;
+}
+
+sub a {
+  return 123;
+  do_something();
+}
+
+sub b {
+  croak 'error';
+  do_something();
+}
+
+sub c {
+  confess 'error';
+  do_something();
+}
+
+for (1..2) {
+  next;
+  do_something();
+}
+
+for (1..2) {
+  last;
+  do_something();
+}
+
+for (1..2) {
+  redo;
+  do_something();
+}
+
+{
+    exit;
+    do_something();
+}
+
+
+{
+    die;
+    do_something();
+}
+
+
+{
+    exit;
+    sub d {}
+    print 123;
+}
+
+{
+   $foo, die;
+   print 123;
+}
+
+die;
+print 456;
+FOO: print $baz;
+
+#-----------------------------------------------------------------------------
+
+## name Compile-time code
+## failures 0
+## cut
+
+exit;
+
+no warnings;
+use Memoize;
+our %memoization;
+
+#-----------------------------------------------------------------------------
+
+## name __DATA__ section
+## failures 0
+## cut
+
+exit;
+
+__DATA__
+...
+
+#-----------------------------------------------------------------------------
+
+## name __END__ section
+## failures 0
+## cut
+
+exit;
+
+__END__
+...
+
+#-----------------------------------------------------------------------------
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :

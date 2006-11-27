@@ -1,0 +1,45 @@
+## name Basic passing
+## failures 0
+## cut
+
+for(@list){
+  do_something();
+}
+
+for my $element (@list){
+  do_something();
+}
+
+foreach my $element (@list){
+  do_something();
+}
+
+do_something() for @list;
+
+#-----------------------------------------------------------------------------
+
+## name Basic failure
+## failures 1
+## cut
+
+for($i=0; $i<=$max; $i++){
+  do_something();
+}
+
+#-----------------------------------------------------------------------------
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :

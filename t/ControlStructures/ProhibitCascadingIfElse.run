@@ -1,0 +1,91 @@
+## name Basic passing
+## failures 0
+## cut
+
+if ($condition1){
+  $foo;
+}
+elsif ($condition2){
+  $bar;
+}
+elsif ($condition3){
+  $bar;
+}
+else {
+  $nuts;
+}
+
+if ($condition1){
+  $foo;
+}
+else {
+  $nuts;
+}
+
+if ($condition1){
+  $foo;
+}
+
+foreach (1,2,3){
+ $foo;
+}
+
+#-----------------------------------------------------------------------------
+
+## name Basic failure
+## failures 1
+## cut
+
+if ($condition1){
+  $foo;
+}
+elsif ($condition2){
+  $bar;
+}
+elsif ($condition3){
+  $baz;
+}
+elsif ($condition4){
+  $barf;
+}
+else {
+  $nuts;
+}
+
+#-----------------------------------------------------------------------------
+
+## name With custom max_elsif value.
+## failures 1
+## parms {max_elsif => 1}
+## cut
+
+if ($condition1){
+  $foo;
+}
+elsif ($condition2){
+  $bar;
+}
+elsif ($condition3){
+  $baz;
+}
+else {
+  $nuts;
+}
+
+#-----------------------------------------------------------------------------
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :
