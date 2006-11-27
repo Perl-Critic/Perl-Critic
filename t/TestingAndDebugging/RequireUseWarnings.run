@@ -1,0 +1,121 @@
+## name 1 statement before warnings
+## failures 1
+## cut
+
+$foo = $bar;
+use warnings;
+
+#----------------------------------------------------------------
+
+## name 2 statements before warnings
+## failures 2
+## cut
+
+$foo = $bar;
+$baz = $nuts;
+use warnings;
+
+#----------------------------------------------------------------
+
+## name no warnings at all
+## failures 1
+## cut
+
+$foo = $bar;
+
+#----------------------------------------------------------------
+
+## name require warnings
+## failures 1
+## cut
+
+require warnings;
+1;
+
+#----------------------------------------------------------------
+
+## name warnings used, but no code
+## failures 0
+## cut
+
+use warnings;
+
+#----------------------------------------------------------------
+
+## name -w used, but no code
+## failures 0
+## cut
+
+#!perl -w
+
+#----------------------------------------------------------------
+
+## name -W used, but no code
+## failures 0
+## cut
+
+#!perl -W
+
+#----------------------------------------------------------------
+
+## name no warnings at all, w/END
+## failures 1
+## cut
+
+$foo = $bar;
+
+#Should not find the rest of these
+
+__END__
+
+=head1 NAME
+
+Foo - A Foo factory class
+
+=cut
+
+#----------------------------------------------------------------
+
+## name no warnings at all, w/DATA
+## failures 1
+## cut
+
+$foo = $bar;
+
+#Should not find the rest of these
+
+__DATA__
+
+Fred
+Barney
+Wilma
+
+
+#----------------------------------------------------------------
+
+## name warnings used
+## failures 0
+## cut
+
+use warnings;
+$foo = $bar;
+
+#----------------------------------------------------------------
+
+## name Other module included before warnings
+## failures 0
+## cut
+
+use Module;
+use warnings;
+$foo = $bar;
+
+#----------------------------------------------------------------
+
+## name package statement before warnings
+## failures 0
+## cut
+
+package FOO;
+use warnings;
+$foo = $bar;

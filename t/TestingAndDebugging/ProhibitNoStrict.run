@@ -1,0 +1,65 @@
+## name strictures disabled
+## failures 1
+## cut
+
+package foo;
+no strict;
+
+#----------------------------------------------------------------
+
+## name selective strictures disabled
+## failures 1
+## cut
+
+package foo;
+no strict 'refs', 'vars';
+
+#----------------------------------------------------------------
+
+## name selective strictures disabled
+## failures 1
+## cut
+
+package foo;
+no strict qw(vars refs subs);
+
+#----------------------------------------------------------------
+
+## name allowed no strict
+## failures 0
+## parms { allow => 'vars refs subs' }
+## cut
+
+package foo;
+no strict qw(vars refs subs);
+
+#----------------------------------------------------------------
+
+## name allowed no strict
+## failures 0
+## parms { allow => 'vars refs subs' }
+## cut
+
+package foo;
+no strict "vars", "refs", "subs";
+
+#----------------------------------------------------------------
+
+## name partially allowed no strict
+## failures 1
+## parms {allow => 'VARS SUBS'} #Note wrong case!
+## cut
+
+package foo;
+no strict "vars", "refs", 'subs';
+
+#----------------------------------------------------------------
+
+## name partially allowed no strict
+## failures 1
+## parms {allow => 'VARS SUBS'} #Note wrong case!
+## cut
+
+package foo;
+no strict qw(vars refs subs);
+

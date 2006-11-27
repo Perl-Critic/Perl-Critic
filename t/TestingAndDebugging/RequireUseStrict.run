@@ -1,0 +1,104 @@
+## name one statement before strict
+## failures 1
+## cut
+
+$foo = $bar;
+use strict;
+
+#----------------------------------------------------------------
+
+## name two statements before strict
+## failures 2
+## cut
+
+$foo = $bar;
+$baz = $nuts;
+use strict;
+
+#----------------------------------------------------------------
+
+## name no strict at all
+## failures 1
+## cut
+
+$foo = $bar;
+
+#----------------------------------------------------------------
+
+## name require strict
+## failures 1
+## cut
+
+require strict;
+1;
+
+#----------------------------------------------------------------
+
+## name strictures used, but no code
+## failures 0
+## cut
+
+use strict;
+
+#----------------------------------------------------------------
+
+## name no strict at all, w/END
+## failures 1
+## cut
+
+$foo = $bar;
+
+#Should not find the rest of these
+
+__END__
+
+=head1 NAME
+
+Foo - A Foo factory class
+
+=cut
+
+#----------------------------------------------------------------
+
+## name no strict at all, w/DATA
+## failures 1
+## cut
+
+$foo = $bar;
+
+#Should not find the rest of these
+
+__DATA__
+
+Fred
+Barney
+Wilma
+
+#----------------------------------------------------------------
+
+## name strictures used OK
+## failures 0
+## cut
+
+use strict;
+$foo = $bar;
+
+#----------------------------------------------------------------
+
+## name other module included before strict
+## failures 0
+## cut
+
+use Module;
+use strict;
+$foo = $bar;
+
+#----------------------------------------------------------------
+
+## name package statement before strict
+## failures 0
+## cut
+
+package FOO;
+use strict;
+$foo = $bar;
