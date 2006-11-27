@@ -7,12 +7,13 @@ use strict;
 
 #----------------------------------------------------------------
 
-## name two statements before strict
-## failures 2
+## name several statements before strict
+## failures 1
 ## cut
 
-$foo = $bar;
-$baz = $nuts;
+$foo = $bar;   ## This one violates.
+$baz = $nuts;  ## no critic;  This one is exempted
+$blamo;        ## This one should be squelched
 use strict;
 
 #----------------------------------------------------------------
@@ -102,3 +103,4 @@ $foo = $bar;
 package FOO;
 use strict;
 $foo = $bar;
+

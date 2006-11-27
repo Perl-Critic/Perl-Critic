@@ -18,6 +18,7 @@ use English qw(-no_match_vars);
 use Perl::Critic::Config;
 use Perl::Critic::Violation;
 use Perl::Critic::Document;
+use Perl::Critic::Utils;
 use PPI::Document;
 use PPI::Document::File;
 
@@ -93,9 +94,10 @@ sub critique {
 
     # Bail on error
     if ( not defined $doc ) {
-        my $errstr = PPI::Document::errstr();
-        my $file = ref $source_code ? undef : $source_code;
-        croak qq{Warning: Can't parse code: $errstr}.($file ? qq{ for '$file'} : q{});
+        my $errstr   = PPI::Document::errstr();
+        my $file     = ref $source_code ? undef : $source_code;
+        my $for_file = $file ? qq{ for "$file"} : $EMPTY;
+        croak qq{Warning: Can't parse code: $errstr} . $for_file;
     }
 
     # Pre-index location of each node (for speed)
@@ -117,6 +119,10 @@ sub critique {
     # Evaluate each policy
     my @pols = $self->config->policies();
     my @violations = map { _critique( $_, $doc, \%is_line_disabled) } @pols;
+
+    # Some policies emit multiple violations, which tend to drown out the
+    # others.  So for those, we squelch out all but the first violation.
+    @violations = _squelch_noisy_violations( @violations );
 
     # If requested, rank violations by their severity and return the top N.
     if ( @violations && (my $top = $self->config->top()) ) {
@@ -272,18 +278,19 @@ sub _parse_nocritic_import {
 #----------------------------------------------------------------------------
 sub _unfix_shebang {
 
-    #When you install a script using ExtUtils::MakeMaker or
-    #Module::Build, it inserts some magical code into the top of the
-    #file (just after the shebang).  This code allows people to call
-    #your script using a shell, like `sh my_script`.  Unfortunately,
-    #this code causes several Policy violations, so we just remove it.
+    # When you install a script using ExtUtils::MakeMaker or Module::Build, it
+    # inserts some magical code into the top of the file (just after the
+    # shebang).  This code allows people to call your script using a shell,
+    # like `sh my_script`.  Unfortunately, this code causes several Policy
+    # violations, so we just disable it as if a "## no critic" comment had
+    # been attached.
 
     my $doc         = shift;
     my $first_stmnt = $doc->schild(0) || return;
 
-    #Different versions of MakeMaker and Build use slightly differnt
-    #shebang fixing strings.  This matches most of the ones I've found
-    #in my own Perl distribution, but it may not be bullet-proof.
+    # Different versions of MakeMaker and Build use slightly differnt shebang
+    # fixing strings.  This matches most of the ones I've found in my own Perl
+    # distribution, but it may not be bullet-proof.
 
     my $fixin_rx = qr{^eval 'exec .* \$0 \${1\+"\$@"}'\s*[\r\n]\s*if.+;};
     if ( $first_stmnt =~ $fixin_rx ) {
@@ -293,6 +300,25 @@ sub _unfix_shebang {
 
     #No magic shebang was found!
     return;
+}
+
+#-----------------------------------------------------------------------------
+# TODO: This sub makes my head hurt.  Refactor soon.
+
+sub _squelch_noisy_violations {
+    my @violations = @_;
+    my %seen = ();
+    return grep { my $pol = $_->policy();
+                  !( _is_noisy($pol) && $seen{$pol}++ ) } @violations;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _is_noisy {
+    my $policy_name = shift;
+    my $namespace = 'Perl::Critic::Policy::TestingAndDebugging';
+    return $policy_name eq "${namespace}::RequireUseStrict"
+        || $policy_name eq "${namespace}::RequireUseWarnings";
 }
 
 1;
