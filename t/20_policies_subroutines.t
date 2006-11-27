@@ -9,7 +9,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 30;
+use Test::More tests => 26;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -18,70 +18,6 @@ Perl::Critic::TestUtils::block_perlcriticrc();
 my $code ;
 my $policy;
 my %config;
-
-#-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-sub test_sub1 {
-	$foo = shift;
-	return undef;
-}
-
-sub test_sub2 {
-	shift || return undef;
-}
-
-sub test_sub3 {
-	return undef if $bar;
-}
-
-END_PERL
-
-$policy = 'Subroutines::ProhibitExplicitReturnUndef';
-is( pcritique($policy, \$code), 3, $policy);
-
-#-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-sub test_sub1 {
-	$foo = shift;
-	return;
-}
-
-sub test_sub2 {
-	shift || return;
-}
-
-sub test_sub3 {
-	return if $bar;
-}
-
-$foo{return}; # hash key, not keyword
-sub foo {return}; # no sibling
-END_PERL
-
-$policy = 'Subroutines::ProhibitExplicitReturnUndef';
-is( pcritique($policy, \$code), 0, $policy);
-
-#-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-sub my_sub1 ($@) {}
-sub my_sub2 (@@) {}
-END_PERL
-
-$policy = 'Subroutines::ProhibitSubroutinePrototypes';
-is( pcritique($policy, \$code), 2, $policy);
-
-#-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-sub my_sub1 {}
-sub my_sub1 {}
-END_PERL
-
-$policy = 'Subroutines::ProhibitSubroutinePrototypes';
-is( pcritique($policy, \$code), 0, $policy);
 
 #-----------------------------------------------------------------------------
 

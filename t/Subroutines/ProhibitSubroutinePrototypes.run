@@ -1,0 +1,16 @@
+## name simple failure
+## failures 2
+## cut
+
+sub my_sub1 ($@) {}
+sub my_sub2 (@@) {}
+
+#-----------------------------------------------------------------------------
+
+## name simple success
+## failures 0
+## cut
+
+sub my_sub1 {}
+sub my_sub1 {}
+

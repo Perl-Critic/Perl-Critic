@@ -1,0 +1,38 @@
+## name simple failure
+## failures 3
+## cut
+
+sub test_sub1 {
+	$foo = shift;
+	return undef;
+}
+
+sub test_sub2 {
+	shift || return undef;
+}
+
+sub test_sub3 {
+	return undef if $bar;
+}
+
+#-----------------------------------------------------------------------------
+
+## name simple success
+## failures 0
+## cut
+
+sub test_sub1 {
+	$foo = shift;
+	return;
+}
+
+sub test_sub2 {
+	shift || return;
+}
+
+sub test_sub3 {
+	return if $bar;
+}
+
+$foo{return}; # hash key, not keyword
+sub foo {return}; # no sibling
