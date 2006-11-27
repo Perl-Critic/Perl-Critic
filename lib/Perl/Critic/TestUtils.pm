@@ -249,6 +249,69 @@ more examples of how to use these subroutines.
 
 =back
 
+=head1 F<.run> file information
+
+Testing a policy follows a very simple pattern:
+
+    * Policy name
+        * Subtest name
+        * Optional parameters
+        * Number of failures expected
+
+Each of the subtests for a policy is collected in a single F<.run>
+file, with POD in front of each code block that describes how we
+expect P::C to react to the code.  For example, say you have a
+policy called Variables::ProhibitVowels:
+
+    (In file t/Variables/ProhibitVowels.run)
+
+    ## name Basics
+    ## failures 1
+    ## cut
+
+    my $vrbl_nm = 'foo';    # Good, vowel-free name
+    my $wango = 12;         # Bad, pronouncable name
+
+
+    ## name Sometimes Y
+    ## failures 1
+    ## cut
+
+    my $yllw = 0;       # "y" not a vowel here
+    my $rhythm = 12;    # But here it is
+
+These are called "subtests", and two are shown above.  The beauty
+of the multiple-subtests-in-a-file method is that because the F<.run>
+is itself a valid Perl file, and not hidden in a heredoc, your
+editor's color-coding still works, and it is much easier to work
+with the code and the POD.
+
+If you need to pass special parms for your subtest, do so like this:
+
+    ## parms { allow_y => 0 }
+
+If it's a TODO subtest (probably because of some weird corner of
+PPI that we exercised that Adam is getting around to fixing, right?),
+then make a C<=TODO> POD entry.
+
+    ## TODO Should pass when PPI 1.xxx comes out
+
+The value of I<parms> will get C<eval>ed and passed to C<pcritique>,
+so be careful.
+
+Note that nowhere within the F<.run> file itself do you specify the
+policy that you're testing.  That's implicit within the filename.
+
+=head1 TODO items
+
+Test that we have a t/*/*.run for each lib/*/*.pm
+
+Allow us to specify the nature of the failures, and which one.  If
+there are 15 lines of code, and six of them fail, how do we know
+they're the right six?
+
+Make the File::Find callback portable (e.g. use catfile or some such).
+
 =head1 AUTHOR
 
 Chris Dolan <cdolan@cpan.org>
