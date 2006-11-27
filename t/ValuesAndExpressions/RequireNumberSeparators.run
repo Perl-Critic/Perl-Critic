@@ -1,8 +1,6 @@
-=name Basic passing
-
-=failures 0
-
-=cut
+## name Basic passing
+## failures 0
+## cut
 
 $var = 12;
 $var = 1234;
@@ -24,11 +22,9 @@ $var = +1_234_567.890_123;
 
 #----------------------------------------------------------------
 
-=name Basic failure
-
-=failures 12
-
-=cut
+## name Basic failure
+## failures 12
+## cut
 
 $var = 1234_567;
 $var = 1234_567.;
@@ -47,13 +43,10 @@ is( pcritique($policy, \$code), 12, $policy);
 
 #----------------------------------------------------------------
 
-=name Below configuration minimum passing
-
-=failures 0
-
-=parms {min_value => 1_000_000}
-
-=cut
+## name Below configuration minimum passing
+## failures 0
+## parms {min_value => 1_000_000}
+## cut
 
 $var = 999999;
 $var = 123456;
@@ -68,13 +61,10 @@ $var = -100_000.01;
 
 #----------------------------------------------------------------
 
-=name Above configuration minimum failure
-
-=failures 9
-
-=parms {min_value => 1_000_000}
-
-=cut
+## name Above configuration minimum failure
+## failures 9
+## parms {min_value => 1_000_000}
+## cut
 
 $var = 1000001;
 $var = 1000000.01;

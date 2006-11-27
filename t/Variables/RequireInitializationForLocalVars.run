@@ -1,8 +1,6 @@
-=name Basic
-
-=failures 6
-
-=cut
+## name Basic
+## failures 6
+## cut
 
 local $foo;
 local ($foo, $bar);
@@ -15,11 +13,9 @@ local ($OUTPUT_RECORD_SEPARATOR, $PROGRAM_NAME);
 
 #----------------------------------------------------------------
 
-=name Initialized passes
-
-=failures 0
-
-=cut
+## name Initialized passes
+## failures 0
+## cut
 
 local $foo = 'foo';
 local ($foo, $bar) = 'foo';       #Not right, but still passes
@@ -32,13 +28,10 @@ our ($foo, $bar);
 
 #----------------------------------------------------------------
 
-=name key named "local"
-
-=TODO PPI bug prevents this from working
-
-=failures 0
-
-=cut
+## name key named "local"
+## TODO PPI bug prevents this from working
+## failures 0
+## cut
 
 $x->{local};
 

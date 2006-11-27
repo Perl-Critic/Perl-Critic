@@ -43,21 +43,17 @@ policy called Variables::ProhibitVowels:
 
     (In file t/Variables/ProhibitVowels.run)
 
-    =name Basics
-
-    =failures 1
-
-    =cut
+    ## name Basics
+    ## failures 1
+    ## cut
 
     my $vrbl_nm = 'foo';    # Good, vowel-free name
     my $wango = 12;         # Bad, pronouncable name
 
 
-    =name Sometimes Y
-
-    =failures 1
-
-    =cut
+    ## name Sometimes Y
+    ## failures 1
+    ## cut
 
     my $yllw = 0;       # "y" not a vowel here
     my $rhythm = 12;    # But here it is
@@ -70,13 +66,13 @@ with the code and the POD.
 
 If you need to pass special parms for your subtest, do so like this:
 
-    =parms { allow_y => 0 }
+    ## parms { allow_y => 0 }
 
 If it's a TODO subtest (probably because of some weird corner of
 PPI that we exercised that Adam is getting around to fixing, right?),
 then make a C<=TODO> POD entry.
 
-    =TODO Should pass when PPI 1.xxx comes out
+    ## TODO Should pass when PPI 1.xxx comes out
 
 The value of I<parms> will get C<eval>ed and passed to C<pcritique>,
 so be careful.

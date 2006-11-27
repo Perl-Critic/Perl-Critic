@@ -1,8 +1,6 @@
-=name High-precedence passing
-
-=failures 0
-
-=cut
+## name High-precedence passing
+## failures 0
+## cut
 
 next if ! $finished || $foo < $bar;
 if( $foo && !$bar || $baz){ do_something() }
@@ -10,11 +8,9 @@ this() && !that() || the_other();
 
 #----------------------------------------------------------------
 
-=name Low-precedence passing
-
-=failures 0
-
-=cut
+## name Low-precedence passing
+## failures 0
+## cut
 
 next if not $finished or $foo < $bar;
 if( $foo and not $bar or $baz){ do_something() }
@@ -22,11 +18,9 @@ this() and not that() or the_other();
 
 #----------------------------------------------------------------
 
-=name Basic failure
-
-=failures 3
-
-=cut
+## name Basic failure
+## failures 3
+## cut
 
 next if not $finished || $foo < $bar;
 if( $foo && not $bar or $baz){ do_something() }
@@ -34,13 +28,10 @@ this() and ! that() or the_other();
 
 #----------------------------------------------------------------
 
-=name High-precedence with low precedence self-equals
-
-=failures 0
-
-=TODO this is a failing test
-
-=cut
+## name High-precedence with low precedence self-equals
+## failures 0
+## TODO this is a failing test
+## cut
 
 $sub ||= sub {
    return 1 and 2;

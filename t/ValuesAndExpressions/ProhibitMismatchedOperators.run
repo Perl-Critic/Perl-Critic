@@ -1,8 +1,6 @@
-=name Basic passing
-
-=failures 0
-
-=cut
+## name Basic passing
+## failures 0
+## cut
 
 if (1 == 1 || 1 != 1 || 1 > 1 || 1 >= 1 || 1 < 1 || 1 <= 1) {}
 if (1 + 1 || 1 - 1 || 1 * 1 || 1 / 1) {}
@@ -26,11 +24,9 @@ if ('' eq $a || '' ne $a || '' gt $a || '' lt $a || '' ge $a || '' le $a || '' .
 
 #----------------------------------------------------------------
 
-=name Basic failure
-
-=failures 39
-
-=cut
+## name Basic failure
+## failures 39
+## cut
 
 if ('' == 1 || '' != 1 || '' > 1  || '' >= 1 || '' < 1 || '' <= 1) {}
 if ('' + 1  || '' - 1  || '' * 1  || '' / 1) {}

@@ -1,8 +1,6 @@
-=name With if
-
-=failures 6
-
-=cut
+## name With if
+## failures 6
+## cut
 
 my $foo = 1 if $bar;
 local $foo = 1 if $bar;
@@ -15,11 +13,9 @@ our ($foo, $baz) = 1 if $bar;
 
 #----------------------------------------------------------------
 
-=name With unless
-
-=failures 6
-
-=cut
+## name With unless
+## failures 6
+## cut
 
 my $foo = 1 unless $bar;
 local $foo = 1 unless $bar;
@@ -32,11 +28,9 @@ our ($foo, $baz) = 1 unless $bar;
 
 #----------------------------------------------------------------
 
-=name With while
-
-=failures 6
-
-=cut
+## name With while
+## failures 6
+## cut
 
 my $foo = 1 while $bar;
 local $foo = 1 while $bar;
@@ -48,11 +42,9 @@ our ($foo, $baz) = 1 while $bar;
 
 #----------------------------------------------------------------
 
-=name With for
-
-=failures 6
-
-=cut
+## name With for
+## failures 6
+## cut
 
 my $foo = 1 for @bar;
 local $foo = 1 for @bar;
@@ -64,11 +56,9 @@ our ($foo, $baz) = 1 for @bar;
 
 #----------------------------------------------------------------
 
-=name With foreach
-
-=failures 6
-
-=cut
+## name With foreach
+## failures 6
+## cut
 
 my $foo = 1 foreach @bar;
 local $foo = 1 foreach @bar;
@@ -80,11 +70,9 @@ our ($foo, $baz) = 1 foreach @bar;
 
 #----------------------------------------------------------------
 
-=name Passing cases
-
-=failures 0
-
-=cut
+## name Passing cases
+## failures 0
+## cut
 
 for my $foo (@list) { do_something() }
 foreach my $foo (@list) { do_something() }

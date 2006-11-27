@@ -1,8 +1,6 @@
-=name Basic passing
-
-=failures 0
-
-=cut
+## name Basic passing
+## failures 0
+## cut
 
 $var = q{'};
 $var = q{"};
@@ -17,11 +15,9 @@ $var = "1";
 
 #----------------------------------------------------------------
 
-=name Basic failure
-
-=failures 4
-
-=cut
+## name Basic failure
+## failures 4
+## cut
 
 $var = "!";
 $var = '!';
@@ -30,21 +26,17 @@ $var = "||";
 
 #----------------------------------------------------------------
 
-=name overload pragma
-
-=failures 0
-
-=cut
+## name overload pragma
+## failures 0
+## cut
 
 use overload '""';
 
 #----------------------------------------------------------------
 
-=name Parentheses, braces, brackets
-
-=failures 0
-
-=cut
+## name Parentheses, braces, brackets
+## failures 0
+## cut
 
 $var = '(';
 $var = ')';

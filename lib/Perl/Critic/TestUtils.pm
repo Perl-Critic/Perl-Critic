@@ -136,12 +136,12 @@ sub _subtests_from_file {
     my $subtest;
     while ( <$fh> ) {
         chomp;
-        my $inpod = /^=name/ .. /^=cut/;
+        my $inpod = /^## name/ .. /^## cut/;
 
         my $line = $_;
 
         if ( $inpod ) {
-            $line =~ /^=(\S+)\s+(.+)/ or next;
+            $line =~ /^##\s+(\S+)\s+(.+)/ or next;
             my ($key,$value) = ($1,$2);
             die "Unknown key $key in $full_path" unless $valid_keys{$key};
 

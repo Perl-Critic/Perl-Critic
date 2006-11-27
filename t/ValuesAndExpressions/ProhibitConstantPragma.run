@@ -1,8 +1,6 @@
-=name Basic passing
-
-=failures 0
-
-=cut
+## name Basic passing
+## failures 0
+## cut
 
 my $FOO = 42;
 local BAR = 24;
@@ -10,11 +8,9 @@ our $NUTS = 16;
 
 #----------------------------------------------------------------
 
-=name Basic failure
-
-=failures 2
-
-=cut
+## name Basic failure
+## failures 2
+## cut
 
 use constant FOO => 42;
 use constant BAR => 24;

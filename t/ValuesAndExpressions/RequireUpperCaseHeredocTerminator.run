@@ -1,8 +1,6 @@
-=name Basic passing
-
-=failures 0
-
-=cut
+## name Basic passing
+## failures 0
+## cut
 
 print <<"QUOTE_1";
 Four score and seven years ago...
@@ -10,11 +8,9 @@ QUOTE_1
 
 #----------------------------------------------------------------
 
-=name Quoted failure
-
-=failures 1
-
-=cut
+## name Quoted failure
+## failures 1
+## cut
 
 print <<"endquote";
 Four score and seven years ago...
@@ -22,11 +18,9 @@ endquote
 
 #----------------------------------------------------------------
 
-=name Bareword failure
-
-=failures 1
-
-=cut
+## name Bareword failure
+## failures 1
+## cut
 
 print <<endquote;
 Four score and seven years ago...

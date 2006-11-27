@@ -1,8 +1,6 @@
-=name basics
-
-=failures 3
-
-=cut
+## name basics
+## failures 3
+## cut
 
 local $foo = $bar;
 local ($foo, $bar) = ();
@@ -10,11 +8,9 @@ local ($foo, %SIG);
 
 #----------------------------------------------------------------
 
-=name exceptions
-
-=failures 0
-
-=cut
+## name exceptions
+## failures 0
+## cut
 
 local $/ = undef;
 local $| = 1;

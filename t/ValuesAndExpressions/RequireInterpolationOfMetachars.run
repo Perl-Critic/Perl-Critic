@@ -1,8 +1,6 @@
-=name Basic passing
-
-=failures 0
-
-=cut
+## name Basic passing
+## failures 0
+## cut
 
 print "this is not $literal";
 print qq{this is not $literal};
@@ -11,11 +9,9 @@ print qq{this is not literal\n};
 
 #----------------------------------------------------------------
 
-=name Basic failure
-
-=failures 4
-
-=cut
+## name Basic failure
+## failures 4
+## cut
 
 print 'this is not $literal';
 print q{this is not $literal};
@@ -24,11 +20,9 @@ print q{this is not literal\n};
 
 #----------------------------------------------------------------
 
-=name Sigil characters not looking like sigils
-
-=failures 0
-
-=cut
+## name Sigil characters not looking like sigils
+## failures 0
+## cut
 
 $sigil_at_end_of_word = 'list@ scalar$';
 $sigil_at_end_of_word = 'scalar$ list@';

@@ -1,8 +1,6 @@
-=name basic
-
-=failures 3
-
-=cut
+## name basic
+## failures 3
+## cut
 
 $/ = undef;
 $| = 1;
@@ -10,11 +8,9 @@ $> = 3;
 
 #----------------------------------------------------------------
 
-=head1 English is nice
-
-=failures 0
-
-=cut
+## name English is nice
+## failures 0
+## cut
 
 $RS = undef;
 $INPUT_RECORD_SEPARATOR = "\n";
@@ -23,11 +19,9 @@ print $foo, $baz;
 
 #----------------------------------------------------------------
 
-=name Permitted variables
-
-=failures 0
-
-=cut
+## name Permitted variables
+## failures 0
+## cut
 
 $string =~ /((foo)bar)/;
 $foobar = $1;
@@ -39,13 +33,10 @@ my $line = $_;
 
 #----------------------------------------------------------------
 
-=name Configuration
-
-=parms { allow => '$@ $!' }
-
-=failures 0
-
-=cut
+## name Configuration
+## parms { allow => '$@ $!' }
+## failures 0
+## cut
 
 print $@;
 print $!;

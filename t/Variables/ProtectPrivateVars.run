@@ -1,8 +1,6 @@
-=name Basic failure
-
-=failures 6
-
-=cut
+## name Basic failure
+## failures 6
+## cut
 
 $Other::Package::_foo;
 @Other::Package::_bar;
@@ -13,11 +11,9 @@ $Other::Package::_foo;
 
 #----------------------------------------------------------------
 
-=head1 Basic passing
-
-=failures 0
-
-=cut
+## name Basic passing
+## failures 0
+## cut
 
 $_foo;
 @_bar;

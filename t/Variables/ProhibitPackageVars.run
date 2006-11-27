@@ -1,8 +1,6 @@
-=name Basic failures
-
-=failures 15
-
-=cut
+## name Basic failures
+## failures 15
+## cut
 
 our $var1 = 'foo';
 our (%var2, %var3) = 'foo';
@@ -26,11 +24,9 @@ use vars ('$fooBar', '@EXPORT');
 
 #----------------------------------------------------------------
 
-=name Basic passes
-
-=failures 0
-
-=cut
+## name Basic passes
+## failures 0
+## cut
 
 our $VAR1 = 'foo';
 our (%VAR2, %VAR3) = ();
@@ -62,11 +58,9 @@ $::VERSION = '1.2';
 *foo::glob = $code_ref;
 
 
-=name Lexicals should pass
-
-=failures 0
-
-=cut
+## name Lexicals should pass
+## failures 0
+## cut
 
 my $var1 = 'foo';
 my %var2 = 'foo';
@@ -75,11 +69,9 @@ my ($foo, $bar) = ();
 
 #----------------------------------------------------------------
 
-=name Default package exceptions
-
-=failures 0
-
-=cut
+## name Default package exceptions
+## failures 0
+## cut
 
 use File::Find;
 print $File::Find::dir;
@@ -87,13 +79,10 @@ print $File::Find::dir;
 
 #----------------------------------------------------------------
 
-=name Add to default exceptions
-
-=failures 3
-
-=parms {add_packages => 'Addl::Package'}
-
-=cut
+## name Add to default exceptions
+## failures 3
+## parms {add_packages => 'Addl::Package'}
+## cut
 
 
 use File::Find;
@@ -108,13 +97,10 @@ $Addl::Other::bango = 9;
 
 #----------------------------------------------------------------
 
-=name Override default package exceptions
-
-=failures 1
-
-=parms {packages => 'Override::Defaults'}
-
-=cut
+## name Override default package exceptions
+## failures 1
+## parms {packages => 'Override::Defaults'}
+## cut
 
 use File::Find;
 print $File::Find::dir;

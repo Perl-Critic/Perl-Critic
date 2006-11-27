@@ -1,8 +1,6 @@
-=name Basic passing
-
-=failures 0
-
-=cut
+## name Basic passing
+## failures 0
+## cut
 
 $var = 0;
 $var = 0.;
@@ -35,11 +33,9 @@ $var = -.011;
 
 #----------------------------------------------------------------
 
-=name Basic failure
-
-=failures 12
-
-=cut
+## name Basic failure
+## failures 12
+## cut
 
 $var = 01;
 $var = 010;

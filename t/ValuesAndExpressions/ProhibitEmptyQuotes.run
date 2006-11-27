@@ -1,8 +1,6 @@
-=name Basic failure
-
-=failures 4
-
-=cut
+## name Basic failure
+## failures 4
+## cut
 
 $var = "";
 $var = ''
@@ -11,11 +9,9 @@ $var = "     ";
 
 #----------------------------------------------------------------
 
-=name Quote-like operator passing
-
-=failures 0
-
-=cut
+## name Quote-like operator passing
+## failures 0
+## cut
 
 $var = qq{};
 $var = q{}
@@ -24,11 +20,9 @@ $var = q{     };
 
 #----------------------------------------------------------------
 
-=name Non-empty passing
-
-=failures 0
-
-=cut
+## name Non-empty passing
+## failures 0
+## cut
 
 $var = qq{this};
 $var = q{that}

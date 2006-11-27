@@ -1,8 +1,6 @@
-=name Basic passing
-
-=failures 0
-
-=cut
+## name Basic passing
+## failures 0
+## cut
 
 use 5.006_001;
 require 5.006_001;
@@ -17,11 +15,9 @@ is( pcritique($policy, \$code), 0, $policy);
 
 #----------------------------------------------------------------
 
-=name use failure
-
-=failures 7
-
-=cut
+## name use failure
+## failures 7
+## cut
 
 use 5.6.1;
 use v5.6.1;
@@ -33,11 +29,9 @@ use Foo v1.2.3 ('foo', 'bar');
 
 #----------------------------------------------------------------
 
-=name require failure
-
-=failures 7
-
-=cut
+## name require failure
+## failures 7
+## cut
 
 require 5.6.1;
 require v5.6.1;

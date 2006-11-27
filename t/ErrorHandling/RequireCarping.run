@@ -1,8 +1,6 @@
-=name Unspectacular die
-
-=failures 3
-
-=cut
+## name Unspectacular die
+## failures 3
+## cut
 
 die 'A horrible death' if $condtion;
 
@@ -15,11 +13,9 @@ open my $fh, '<', $path or
 
 #----------------------------------------------------------------
 
-=name Unspectacular warn
-
-=failures 3
-
-=cut
+## name Unspectacular warn
+## failures 3
+## cut
 
 warn 'A horrible warning' if $condtion;
 
@@ -32,11 +28,9 @@ open my $fh, '<', $path or
 
 #----------------------------------------------------------------
 
-=name Carping
-
-=failures 0
-
-=cut
+## name Carping
+## failures 0
+## cut
 
 carp 'A horrible death' if $condtion;
 
@@ -49,23 +43,18 @@ open my $fh, '<', $path or
 
 #----------------------------------------------------------------
 
-=name No croaking
-
-=failures 1
-
-=cut
+## name No croaking
+## failures 1
+## cut
 
 die 'A horrible death';
 
 #----------------------------------------------------------------
 
-=name Don't complain if message ends with "\n"
-
-=TODO Not written yet
-
-=failures 0
-
-=cut
+## name Don't complain if message ends with "\n"
+## TODO Not written yet
+## failures 0
+## cut
 
 die "A horrible death\n";
 
