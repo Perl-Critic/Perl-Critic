@@ -24,7 +24,7 @@ use vars ('$fooBar', '@EXPORT');
 
 #-----------------------------------------------------------------------------
 
-## name Basic passes
+## name Basic passes - our
 ## failures 0
 ## cut
 
@@ -33,11 +33,23 @@ our (%VAR2, %VAR3) = ();
 our $VERSION = '1.0';
 our @EXPORT = qw(some symbols);
 
+#-----------------------------------------------------------------------------
+
+## name Basic passes - use vars
+## failures 0
+## cut
+
 use vars qw($VERSION @EXPORT);
 use vars ('$VERSION, '@EXPORT');
 use vars  '$VERSION, '@EXPORT';
 
 use vars  '+foo'; #Illegal, but not a violaton
+
+#-----------------------------------------------------------------------------
+
+## name Basic passes - symbols
+## failures 0
+## cut
 
 #local $Foo::bar;
 #local @This::that;
@@ -57,6 +69,7 @@ $::VERSION = '1.2';
 &::my_sub();
 *foo::glob = $code_ref;
 
+#-----------------------------------------------------------------------------
 
 ## name Lexicals should pass
 ## failures 0
@@ -75,7 +88,8 @@ my ($foo, $bar) = ();
 
 use File::Find;
 print $File::Find::dir;
-
+use Data::Dumper;
+$Data::Dumper::Indent = 1;
 
 #-----------------------------------------------------------------------------
 
@@ -106,6 +120,16 @@ use File::Find;
 print $File::Find::dir;
 $Override::Defaults::wango = $x;
 $Override::Defaults::tango = 47;
+END_PERL
+
+#-----------------------------------------------------------------------------
+
+## name Override default package exceptions, null package
+## failures 1
+## parms {packages => ' Override::Defaults '}
+## cut
+
+$::foo = 1;
 END_PERL
 
 #-----------------------------------------------------------------------------

@@ -44,12 +44,12 @@ sub new {
     # Set list of package exceptions from configuration, if defined.
     $self->{_packages} =
         defined $config{packages}
-            ? [ split m{ \s+ }mx, $config{packages} ]
+            ? [ $config{packages} =~ m/ (\S+) /gmx ]
             : [ @DEFAULT_PACKAGE_EXCEPTIONS ];
 
     # Add to list of packages
     if ( defined $config{add_packages} ) {
-        push( @{$self->{_packages}}, split m{ \s+ }mx, $config{add_packages} );
+        push @{$self->{_packages}}, split m{ \s+ }mx, $config{add_packages};
     }
 
     return $self;
@@ -58,32 +58,35 @@ sub new {
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    return unless _is_package_var($elem) || _is_our_var($elem) || _is_vars_pragma($elem);
-
-    if ( $elem =~ m{ \A [@\$%] (.*) :: }mx ) { # REVIEW: This is redundant to a check in _is_package_var
-        my $package = $1;
-        return if any { $package eq $_ } @{$self->{_packages}};
+    if ( $self->_is_package_var($elem) || _is_our_var($elem) || _is_vars_pragma($elem) ) {
+        return $self->violation( $desc, $expl, $elem );
     }
-
-    return $self->violation( $desc, $expl, $elem );
+    return;  # ok
 }
 
 sub _is_package_var {
+    my $self = shift;
     my $elem = shift;
-    $elem->isa('PPI::Token::Symbol') || return;
-    return $elem =~ m{ \A [@\$%] .* :: }mx && $elem !~ m{ :: [A-Z0-9_]+ \z }mx;
+    return if !$elem->isa('PPI::Token::Symbol');
+    my ($package, $name) = $elem =~ m{ \A [@\$%] (.*) :: (\w+) \z }mx;
+    return if !defined $package;
+    return if _all_upcase( $name );
+    return if any { $package eq $_ } @{$self->{_packages}};
+    return 1;
 }
 
 sub _is_our_var {
     my $elem = shift;
-    $elem->isa('PPI::Statement::Variable') || return;
-    return $elem->type() eq 'our' && !_all_upcase( $elem->variables() );
+    return if !$elem->isa('PPI::Statement::Variable');
+    return if $elem->type() ne 'our';
+    return if _all_upcase( $elem->variables() );
+    return 1;
 }
 
 sub _is_vars_pragma {
     my $elem = shift;
-    $elem->isa('PPI::Statement::Include') || return;
-    $elem->pragma() eq 'vars' || return;
+    return if !$elem->isa('PPI::Statement::Include');
+    return if $elem->pragma() ne 'vars';
 
     # Older Perls don't support the C<our> keyword, so we try to let
     # people use the C<vars> pragma instead, but only if all the
@@ -91,11 +94,11 @@ sub _is_vars_pragma {
     # pass arguments to pragmas (e.g. "$foo" or qw($foo) ) we just use
     # a regex to match things that look like variables names.
 
-    if ($elem =~ m{ [@\$%&] ( [\w+] ) }mx) {
-        my $varname = $1;
-        return 1 if $varname =~ m{ [a-z] }mx;
-    }
-    return;
+    my @varnames = $elem =~ m{ [@\$%&] (\w+) }gmx;
+
+    return if !@varnames;   # no valid variables specified
+    return if _all_upcase( @varnames );
+    return 1;
 }
 
 sub _all_upcase {
