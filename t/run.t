@@ -18,12 +18,12 @@ Testing a policy follows a very simple pattern:
         * Optional parameters
         * Number of failures expected
 
-Each of the subtests for a policy is collected in a single F<.pl>
+Each of the subtests for a policy is collected in a single F<.run>
 file, with POD in front of each code block that describes how we
 expect P::C to react to the code.  For example, say you have a
 policy called Variables::ProhibitVowels:
 
-    (In file t/Variables/ProhibitVowels.pl)
+    (In file t/Variables/ProhibitVowels.run)
 
     =name Basics
 
@@ -45,7 +45,7 @@ policy called Variables::ProhibitVowels:
     my $rhythm = 12;    # But here it is
 
 These are called "subtests", and two are shown above.  The beauty
-of the multiple-subtests-in-a-file method is that because the F<.pl>
+of the multiple-subtests-in-a-file method is that because the F<.run>
 is itself a valid Perl file, and not hidden in a heredoc, your
 editor's color-coding still works, and it is much easier to work
 with the code and the POD.
@@ -63,13 +63,13 @@ then make a C<=TODO> POD entry.
 The value of I<parms> will get C<eval>ed and passed to C<pcritique>,
 so be careful.
 
-Note that nowhere within the F<.pl> file itself do you specify the
+Note that nowhere within the F<.run> file itself do you specify the
 policy that you're testing.  That's implicit within the filename.
 
 # TODO: Abstract this out into a module so other Perl::Critic::* modules
 # can use it.  Name suggestion: Perl::Critic::TestHarness
 
-# TODO: test that we have a t/*/*.pl for each lib/*/*.pm
+# TODO: test that we have a t/*/*.run for each lib/*/*.pm
 
 # TODO: Allow us to specify the nature of the failures, and which one.
 # thaljef: I'm not sure what this means?
@@ -84,7 +84,7 @@ policy that you're testing.  That's implicit within the filename.
 my %subtests;
 my $nsubtests;
 find( sub {
-    if ( -f && ( $File::Find::name =~ m{t/(.+)\.pl$} ) ) {
+    if ( -f && ( $File::Find::name =~ m{t/(.+)\.run$} ) ) {
         my $policy = $1;
         $policy =~ s{/}{::}gmsx;
 
