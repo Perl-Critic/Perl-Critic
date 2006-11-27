@@ -11,17 +11,19 @@ use strict;
 use warnings;
 use base 'Exporter';
 use English qw(-no_match_vars);
-use File::Path qw();
-use File::Spec qw();
-use File::Spec::Unix qw();
-use File::Temp qw();
-use Perl::Critic qw();
+use File::Path ();
+use File::Spec ();
+use File::Spec::Unix ();
+use File::Temp ();
+use File::Find qw( find );
+use Perl::Critic ();
 use Perl::Critic::PolicyFactory (-test => 1);
 
-
-
 our $VERSION = 0.22;
-our @EXPORT_OK = qw(pcritique critique fcritique);
+our @EXPORT_OK = qw(
+    pcritique critique fcritique
+    subtests_in_tree run_subtest
+);
 
 #-----------------------------------------------------------------------------
 # If the user already has an existing perlcriticrc file, it will get
@@ -89,6 +91,111 @@ sub fcritique {
     return scalar @v;
 }
 
+sub run_subtest {
+    my $policy = shift;
+    my $subtest = shift;
+
+    my $name = $subtest->{name};
+
+    my $code = join( "\n", @{$subtest->{code}} );
+    my $nfailures = $subtest->{failures};
+    defined $nfailures or die "$policy, $name does not specify failures\n";
+
+    my $parms = $subtest->{parms} ? eval $subtest->{parms} : {};
+
+    TODO: {
+        require Test::More;
+        local $main::TODO = $subtest->{TODO}; # Is NOT a TODO if it's not set
+        Test::More::is( pcritique($policy, \$code, $parms), $nfailures, "$policy: $name" );
+    }
+}
+
+sub subtests_in_tree {
+    my $start = shift;
+
+    my %subtests;
+    my $nsubtests;
+
+    find( sub {
+        if ( -f && ( $File::Find::name =~ m{\Q$start\E(.+)\.run$} ) ) {
+            my $policy = $1;
+            $policy =~ s{/}{::}gmsx;
+
+            my @subtests = _subtests_from_file( $_, $File::Find::name );
+            $nsubtests += @subtests;
+            $subtests{ $policy } = [ @subtests ];
+        }
+    }, $start );
+    return ( \%subtests, $nsubtests );
+}
+
+
+=for notes
+
+The internal representation of a subtest is just a hash with some
+named keys.  It could be an object with accessors for safety's sake,
+but at this point I don't see why.
+
+=cut
+
+sub _subtests_from_file {
+    my $test_file = shift;
+    my $full_path = shift;
+
+    my %valid_keys = map {($_,1)} qw( name failures parms TODO );
+
+    return () unless -s $test_file; # XXX Remove me once all subtest files are populated
+
+    open( my $fh, '<', $test_file ) or die "Couldn't open $test_file: $!";
+
+    my @subtests = ();
+
+    my $incode = 0;
+    my $subtest;
+    while ( <$fh> ) {
+        chomp;
+        my $inpod = /^=name/ .. /^=cut/;
+
+        my $line = $_;
+
+        if ( $inpod ) {
+            $line =~ /^=(\S+)\s+(.+)/ or next;
+            my ($key,$value) = ($1,$2);
+            die "Unknown key $key in $full_path" unless $valid_keys{$key};
+
+            if ( $key eq 'name' ) {
+                if ( $subtest ) { # Stash any current subtest
+                    push( @subtests, $subtest );
+                    undef $subtest;
+                }
+                $incode = 0;
+            }
+            $incode && die "POD found while I'm still in code: $full_path";
+            $subtest->{$key} = $value;
+        }
+        else {
+            if ( $subtest ) {
+                $incode = 1;
+                push @{$subtest->{code}}, $line if $subtest; # Don't start a subtest if we're not in one
+            }
+            else {
+                die "Got some code but I'm not in a subtest: $full_path";
+            }
+        }
+    }
+    close $fh;
+    if ( $subtest ) {
+        if ( $incode ) {
+            push( @subtests, $subtest );
+        }
+        else {
+            die "Incomplete subtest in $full_path";
+        }
+    }
+
+    return @subtests;
+}
+
 
 1;
 
@@ -143,6 +250,10 @@ more examples of how to use these subroutines.
 =item fcritique( $policy_name, $code_string_ref, $filename, $config_ref )
 
 =item block_perlcriticrc()
+
+=item run_subtest( $subtest )
+
+=item subtests_in_tree( $dir )
 
 =back
 
