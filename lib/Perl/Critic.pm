@@ -329,7 +329,7 @@ __END__
 
 =pod
 
-=for stopwords DGR INI-style API -params pbp refactored singlepolicy
+=for stopwords DGR INI-style API -params pbp refactored -singlepolicy
 
 =head1 NAME
 

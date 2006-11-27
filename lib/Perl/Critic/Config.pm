@@ -311,7 +311,7 @@ __END__
 
 =pod
 
-=for stopwords -params INI-style singlepolicy
+=for stopwords -params INI-style -singlepolicy
 
 =head1 NAME
 
