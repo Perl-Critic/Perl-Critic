@@ -1,0 +1,56 @@
+## name Basic passing
+## failures 0
+## cut
+
+$baz, grep "$foo", @list;
+print grep("$foo", @list);
+print ( grep "$foo", @list );
+@list = ( grep "$foo", @list );
+$aref = [ grep "$foo", @list ];
+$href = { grep "$foo", @list };
+
+if( grep { foo($_) } @list ) {}
+for( grep { foo($_) } @list ) {}
+
+#-----------------------------------------------------------------------------
+
+## name Basic failure
+## failures 7
+## cut
+
+grep "$foo", @list;
+grep("$foo", @list);
+grep { foo($_) } @list;
+grep({ foo($_) } @list);
+
+if( $condition ){ grep { foo($_) } @list }
+while( $condition ){ grep { foo($_) } @list }
+for( @list ){ grep { foo($_) } @list }
+
+#-----------------------------------------------------------------------------
+
+## name Chained void grep
+## failures 1
+## cut
+
+grep { foo($_) }
+  grep { bar($_) }
+    grep { baz($_) } @list;
+
+#-----------------------------------------------------------------------------
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :

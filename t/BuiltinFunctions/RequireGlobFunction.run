@@ -1,0 +1,51 @@
+## name glob via <...>
+## failures 1
+## cut
+
+@files = <*.pl>;
+
+#-----------------------------------------------------------------------------
+
+## name glob via <...> in foreach
+## failures 1
+## cut
+
+foreach my $file (<*.pl>) {
+    print $file;
+}
+
+#-----------------------------------------------------------------------------
+
+## name Multiple globs via <...>
+## failures 1
+## cut
+
+@files = (<*.pl>, <*.pm>);
+
+#-----------------------------------------------------------------------------
+
+## name I/O
+## failures 0
+## cut
+
+while (<$fh>) {
+    print $_;
+}
+
+#-----------------------------------------------------------------------------
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :

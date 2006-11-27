@@ -1,0 +1,71 @@
+## name sleep, as list
+## failures 1
+## cut
+
+select( undef, undef, undef, 0.25 );
+
+#-----------------------------------------------------------------------------
+
+## name sleep, as list w/var
+## failures 1
+## cut
+
+select( undef, undef, undef, $time );
+
+#-----------------------------------------------------------------------------
+
+## name sleep, as built-in
+## failures 1
+## cut
+
+select undef, undef, undef, 0.25;
+
+#-----------------------------------------------------------------------------
+
+## name select on read
+## failures 0
+## cut
+
+select $vec, undef, undef, 0.25;
+
+#-----------------------------------------------------------------------------
+
+## name select on write
+## failures 0
+## cut
+
+select undef, $vec, undef, 0.25;
+
+#-----------------------------------------------------------------------------
+
+## name select on error
+## failures 0
+## cut
+
+select undef, undef, $vec, 0.25;
+
+#-----------------------------------------------------------------------------
+
+## name select as word
+## failures 0
+## cut
+
+$foo{select};
+
+#-----------------------------------------------------------------------------
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :

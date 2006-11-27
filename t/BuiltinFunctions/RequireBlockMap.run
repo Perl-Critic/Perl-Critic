@@ -1,0 +1,48 @@
+## name Basic passing
+## failures 0
+## cut
+
+map {$_++}   @list;
+@foo = map {$_++}   @list;
+map( {$_++}   @list );
+@foo = map( {$_++}   @list );
+map();
+@foo = map();
+{map}; # for Devel::Cover
+malp $_++, @list; # deliberately misspell map
+
+#-----------------------------------------------------------------------------
+
+## name Basic failure
+## failures 2
+## cut
+
+map $_++, @list;
+@foo = map $_++, @list;
+
+#-----------------------------------------------------------------------------
+
+## name Things that may look like a map, but aren't
+## failures 0
+## cut
+
+$hash1{map} = 1;
+%hash2 = (map => 1);
+
+#-----------------------------------------------------------------------------
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :

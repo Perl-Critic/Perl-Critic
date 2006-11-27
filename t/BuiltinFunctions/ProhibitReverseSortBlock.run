@@ -1,0 +1,58 @@
+## name Basic passing
+## failures 0
+## cut
+
+reverse sort {$a <=> $b} @list;
+reverse sort {$a->[0] <=> $b->[0] && $a->[1] <=> $b->[1]} @list;
+sort {$beta{$a} <=> $alpha{$b}} @list;
+reverse sort({$a <=> $b} @list);
+reverse sort({$a->[0] <=> $b->[0] && $a->[1] <=> $b->[1]} @list);
+sort({$beta{$a} <=> $alpha{$b}} @list);
+
+sort{ $isopen{$a}->[0] <=> $isopen{$b}->[0] } @list;
+
+#-----------------------------------------------------------------------------
+
+## name Basic failure
+## failures 3
+## cut
+
+sort {$b <=> $a} @list;
+sort {$alpha{$b} <=> $beta{$a}} @list;
+sort {$b->[0] <=> $a->[0] && $b->[1] <=> $a->[1]} @list;
+
+#-----------------------------------------------------------------------------
+
+## name Things that might look like sorts, but aren't, and sorts not involving $a and $b.
+## failures 0
+## cut
+
+$hash1{sort} = { $b <=> $a };
+%hash2 = (sort => { $b <=> $a });
+$foo->sort({ $b <=> $a });
+sub sort { $b <=> $a }
+sort 'some_sort_func', @list;
+sort('some_sort_func', @list);
+sort();
+
+{sort}; # for Devel::Cover
+
+is( pcritique($policy, \$code), 0, $policy );
+
+#-----------------------------------------------------------------------------
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :

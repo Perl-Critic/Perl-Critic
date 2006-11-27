@@ -1,0 +1,34 @@
+## name Basic passing
+## failures 0
+## cut
+
+use UNIVERSAL::can;
+require UNIVERSAL::can;
+$foo->can($funcname);
+
+#-----------------------------------------------------------------------------
+
+## name Basic failure
+## failures 2
+## cut
+
+can($foo, $funcname);
+UNIVERSAL::can($foo, $funcname);
+
+#-----------------------------------------------------------------------------
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :

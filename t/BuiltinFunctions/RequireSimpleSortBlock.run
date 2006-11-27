@@ -1,0 +1,59 @@
+## name Basic passing
+## failures 0
+## cut
+
+sort @list;
+sort {$a cmp $b;} @list;
+sort {$a->[0] <=> $b->[0] && $a->[1] <=> $b->[1]} @list;
+sort {bar($a,$b)} @list;
+sort 'func', @list;
+
+sort(@list);
+sort({$a cmp $b;} @list);
+sort({$a->[0] <=> $b->[0] && $a->[1] <=> $b->[1]} @list);
+sort({bar($a,$b)} @list);
+sort('func', @list);
+
+$foo{sort}; # for Devel::Cover
+{sort}; # for Devel::Cover
+sort();
+
+#-----------------------------------------------------------------------------
+
+## name Basic failure
+## failures 1
+## cut
+
+sort {my $aa = $foo{$a};my $b = $foo{$b};$a cmp $b} @list;
+
+#-----------------------------------------------------------------------------
+
+## name Potential false positives
+## failures 0
+## cut
+
+# These are things I found in my Perl that caused some false-
+# positives because they have some extra whitespace in the block.
+
+sort { $a->[2] cmp $b->[2] } @dl;
+sort { $a->[0] <=> $b->[0] } @failed;
+sort{ $isopen{$a}->[0] <=> $isopen{$b}->[0] } @list;
+sort { -M $b <=> -M $a} @entries;
+
+#-----------------------------------------------------------------------------
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :

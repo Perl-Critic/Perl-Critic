@@ -1,0 +1,56 @@
+## name Basic passing
+## failures 0
+## cut
+
+$baz, map "$foo", @list;
+print map("$foo", @list);
+print ( map "$foo", @list );
+@list = ( map $foo, @list );
+$aref = [ map $foo, @list ];
+$href = { map $foo, @list };
+
+if( map { foo($_) } @list ) {}
+for( map { foo($_) } @list ) {}
+
+#-----------------------------------------------------------------------------
+
+## name Basic failure
+## failures 7
+## cut
+
+map "$foo", @list;
+map("$foo", @list);
+map { foo($_) } @list;
+map({ foo($_) } @list);
+
+if( $condition ){ map { foo($_) } @list }
+while( $condition ){ map { foo($_) } @list }
+for( @list ){ map { foo($_) } @list }
+
+#-----------------------------------------------------------------------------
+
+## name Chained void map
+## failures 1
+## cut
+
+map { foo($_) }
+  map { bar($_) }
+    map { baz($_) } @list;
+
+#-----------------------------------------------------------------------------
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :

@@ -1,0 +1,45 @@
+## name Basic passing
+## failures 0
+## cut
+
+eval { some_code() };
+eval( {some_code() } );
+eval();
+{eval}; # for Devel::Cover
+
+#-----------------------------------------------------------------------------
+
+## name Basic failure
+## failures 3
+## cut
+
+eval "$some_code";
+eval( "$some_code" );
+eval( 'sub {'.$some_code.'}' );
+
+#-----------------------------------------------------------------------------
+
+## name Things that might look like an eval, but aren't
+## failures 0
+## cut
+
+$hash1{eval} = 1;
+%hash2 = (eval => 1);
+
+#-----------------------------------------------------------------------------
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :
