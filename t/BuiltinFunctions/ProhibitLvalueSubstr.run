@@ -1,6 +1,16 @@
-## name something
+## name Basic passing
 ## failures 0
 ## cut
+
+substr($something, 1, 2, $newvalue);
+
+#-----------------------------------------------------------------------------
+
+## name Basic failure
+## failures 1
+## cut
+
+substr($something, 1, 2) = $newvalue;
 
 #-----------------------------------------------------------------------------
 
