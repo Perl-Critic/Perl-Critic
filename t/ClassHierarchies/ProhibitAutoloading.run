@@ -1,0 +1,44 @@
+## name Basic passing
+## failures 0
+## cut
+
+sub autoload {}
+my $AUTOLOAD = 'foo';
+our @AUTOLOAD = qw(nuts);
+
+#-----------------------------------------------------------------------------
+
+## name Empty AUTOLOAD()
+## failures 1
+## cut
+
+sub AUTOLOAD {}
+
+#-----------------------------------------------------------------------------
+
+## name AUTOLOAD() with code
+## failures 1
+## cut
+
+sub AUTOLOAD {
+     $foo, $bar = @_;
+     return $baz;
+}
+
+#-----------------------------------------------------------------------------
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :
