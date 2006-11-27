@@ -10,6 +10,7 @@ package Perl::Critic::TestUtils;
 use strict;
 use warnings;
 use base 'Exporter';
+use Carp qw( confess );
 use English qw(-no_match_vars);
 use File::Path ();
 use File::Spec ();
@@ -146,7 +147,7 @@ sub _subtests_from_file {
 
             if ( $key eq 'name' ) {
                 if ( $subtest ) { # Stash any current subtest
-                    push( @subtests, $subtest );
+                    push( @subtests, _finalize_subtest( $subtest ) );
                     undef $subtest;
                 }
                 $incode = 0;
@@ -167,7 +168,7 @@ sub _subtests_from_file {
     close $fh;
     if ( $subtest ) {
         if ( $incode ) {
-            push( @subtests, $subtest );
+            push( @subtests, _finalize_subtest( $subtest ) );
         }
         else {
             die "Incomplete subtest in $full_path";
@@ -175,6 +176,18 @@ sub _subtests_from_file {
     }
 
     return @subtests;
+}
+
+sub _finalize_subtest {
+    my $subtest = shift;
+
+    $subtest->{code} = join( "\n", @{$subtest->{code}} );
+    if ( !defined $subtest->{failures} ) {
+        confess "$subtest->{name} does not specify failures";
+    }
+    $subtest->{parms} = $subtest->{parms} ? eval $subtest->{parms} : {};
+
+    return $subtest;
 }
 
 

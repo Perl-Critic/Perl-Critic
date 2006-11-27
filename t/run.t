@@ -16,28 +16,13 @@ plan tests => $nsubtests + $npolicies;
 
 for my $policy ( sort keys %$subtests ) {
     can_ok( "Perl::Critic::Policy::$policy", 'violates' );
-    for my $subtest ( @{$subtests->{ $policy }} ) {
-        run_subtest( $policy, $subtest );
-    }
-}
-
-
-sub run_subtest {
-    my $policy = shift;
-    my $subtest = shift;
-
-    my $name = $subtest->{name};
-
-    my $code = join( "\n", @{$subtest->{code}} );
-    my $nfailures = $subtest->{failures};
-    defined $nfailures or die "$policy, $name does not specify failures\n";
-
-    my $parms = $subtest->{parms} ? eval $subtest->{parms} : {};
-
-    TODO: {
-        require Test::More;
-        local $main::TODO = $subtest->{TODO}; # Is NOT a TODO if it's not set
-        Test::More::is( pcritique($policy, \$code, $parms), $nfailures, "$policy: $name" );
+    for my $subtest ( @{$subtests->{$policy}} ) {
+        local $TODO = $subtest->{TODO}; # Is NOT a TODO if it's not set
+        is(
+            pcritique($policy, \$subtest->{code}, $subtest->{parms}),
+            $subtest->{failures},
+            "$policy: $subtest->{name}"
+        );
     }
 }
 
