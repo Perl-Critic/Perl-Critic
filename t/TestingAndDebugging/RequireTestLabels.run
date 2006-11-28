@@ -50,10 +50,17 @@ like('foo',qr/f/,'label');
 unlike('foo',qr/f/,'label');
 cmp_ok(1,'==',2,'label');
 is_deeply('literal','literal','label');
-is_deeply([],[],'label');
-is_deeply({},{},'label');
 pass('label');
 fail('label');
+
+#-----------------------------------------------------------------------------
+
+## name empty array and hash parsing
+## failures 0
+## TODO awaiting a fix in PPI
+## cut
+is_deeply([],[],'label');
+is_deeply({},{},'label');
 
 #-----------------------------------------------------------------------------
 
