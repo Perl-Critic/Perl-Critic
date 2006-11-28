@@ -1,0 +1,28 @@
+## name Basic failures
+## failures 3
+## cut
+sub open {}
+sub map {}
+sub eval {}
+
+#-----------------------------------------------------------------------------
+
+## name Basic passing
+## failures 0
+## cut
+sub my_open {}
+sub my_map {}
+sub eval2 {}
+
+#-----------------------------------------------------------------------------
+
+## name Acceptable homonyms
+## failures 0
+## cut
+sub import   { do_something(); }
+sub AUTOLOAD { do_something(); }
+sub DESTROY  { do_something(); }
+BEGIN { do_something(); }
+INIT  { do_something(); }
+CHECK { do_something(); }
+END   { do_something(); }

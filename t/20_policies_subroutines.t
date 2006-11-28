@@ -9,7 +9,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 26;
+use Test::More tests => 22;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -20,49 +20,6 @@ my $policy;
 my %config;
 
 #-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-sub open {}
-sub map {}
-sub eval {}
-END_PERL
-
-$policy = 'Subroutines::ProhibitBuiltinHomonyms';
-is( pcritique($policy, \$code), 3, $policy);
-
-#-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-sub my_open {}
-sub my_map {}
-sub eval2 {}
-END_PERL
-
-$policy = 'Subroutines::ProhibitBuiltinHomonyms';
-is( pcritique($policy, \$code), 0, $policy);
-
-#-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-sub import   { do_something(); }
-sub AUTOLOAD { do_something(); }
-sub DESTROY  { do_something(); }
-END_PERL
-
-$policy = 'Subroutines::ProhibitBuiltinHomonyms';
-is( pcritique($policy, \$code), 0, $policy);
-
-#-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-BEGIN { do_something(); }
-INIT  { do_something(); }
-CHECK { do_something(); }
-END   { do_something(); }
-END_PERL
-
-$policy = 'Subroutines::ProhibitBuiltinHomonyms';
-is( pcritique($policy, \$code), 0, $policy);
 
 #-----------------------------------------------------------------------------
 
