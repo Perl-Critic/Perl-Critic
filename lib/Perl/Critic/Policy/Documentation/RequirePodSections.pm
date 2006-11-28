@@ -157,7 +157,7 @@ perl shebang line).
    VERSION                            VERSION
    SYNOPSIS                           USAGE
    DESCRIPTION                        DESCRIPTION
-   SUBROUNTES/METHODS                 REQUIRED ARGUMENTS
+   SUBROUTINES/METHODS                REQUIRED ARGUMENTS
                                       OPTIONS
    DIAGNOSTICS                        DIAGNOSTICS
                                       EXIT STATUS
