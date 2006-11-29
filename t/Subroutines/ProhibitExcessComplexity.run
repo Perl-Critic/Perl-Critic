@@ -1,0 +1,46 @@
+## name parm-based pass
+## failures 0
+## parms { max_mccabe => 100 }
+## cut
+sub test_sub {
+    if ( $foo && $bar || $baz ) {
+        open my $fh, '<', $file or die $!;
+    }
+    elsif ( $blah >>= some_function() ) {
+        return if $barf;
+    }
+    else {
+        $results = $condition ? 1 : 0;
+    }
+    croak unless $result;
+
+    while( $condition ){ frobulate() }
+    until( $foo > $baz ){ blech() }
+}
+
+#-----------------------------------------------------------------------------
+
+## name parm-based failure
+## failures 1
+## parms { max_mccabe => 1 }
+## cut
+sub test_sub {
+    if ( $foo && $bar || $baz ) {
+        open my $fh, '<', $file or die $!;
+    }
+    elsif ( $blah >>= some_function() ) {
+        return if $barf;
+    }
+    else {
+        $results = $condition ? 1 : 0;
+    }
+    croak unless $result;
+}
+
+#-----------------------------------------------------------------------------
+
+## name no-op sub
+## failures 0
+## cut
+sub test_sub {
+}

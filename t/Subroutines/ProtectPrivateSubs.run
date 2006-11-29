@@ -1,0 +1,29 @@
+## name basic failure
+## failures 5
+## cut
+Other::Package::_foo();
+Other::Package->_bar();
+Other::Package::_foo;
+Other::Package->_bar;
+$self->Other::Package::_baz();
+
+#-----------------------------------------------------------------------------
+
+## name basic passes
+## failures 0
+## cut
+package My::Self::_private;
+use My::Self::_private;
+require My::Self::_private;
+
+#-----------------------------------------------------------------------------
+
+## name Difficult-to-detect pass
+# This one should be illegal, but it is too hard to distinguish from
+# the next one, which is legal
+## failures 0
+## cut
+$pkg->_foo();
+
+$self->_bar();
+$self->SUPER::_foo();

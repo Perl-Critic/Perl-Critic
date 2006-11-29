@@ -1,0 +1,39 @@
+## name basic failures
+## failures 7
+## cut
+
+&function_call();
+&my_package::function_call();
+&function_call( $args );
+&my_package::function_call( %args );
+&function_call( &other_call( @foo ), @bar );
+&::function_call();
+
+#-----------------------------------------------------------------------------
+
+## name basic passing
+## failures 0
+## cut
+exists &function_call;
+defined &function_call;
+\ &function_call;
+\&function_call;
+exists &my_package::function_call;
+defined &my_package::function_call;
+\ &my_package::function_call;
+\&my_package::function_call;
+$$foo; # for Devel::Cover; skip non-backslash casts
+
+#-----------------------------------------------------------------------------
+
+## name more passing
+## failures 0
+## cut
+function_call();
+my_package::function_call();
+function_call( $args );
+my_package::function_call( %args );
+function_call( other_call( @foo ), @bar );
+\&my_package::function_call;
+\&function_call;
+goto &foo;
