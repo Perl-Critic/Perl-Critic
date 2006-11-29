@@ -8,7 +8,7 @@ use Test::More;
 use Perl::Critic::TestUtils qw(pcritique subtests_in_tree);
 Perl::Critic::TestUtils::block_perlcriticrc();
 
-my ($subtests,$nsubtests) = subtests_in_tree( 't/' );
+my ($subtests,$nsubtests) = subtests_in_tree( 't' );
 
 my $npolicies = scalar keys %$subtests;
 
