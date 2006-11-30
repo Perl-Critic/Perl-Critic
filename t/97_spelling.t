@@ -61,6 +61,7 @@ SQL
 STDERR
 STDIN
 STDOUT
+subdirectories
 TerMarsch
 Thalhammer
 TODO

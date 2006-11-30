@@ -105,7 +105,7 @@ sub subtests_in_tree {
                return if !$fileroot;
                my @pathparts = File::Spec->splitdir($fileroot);
                if (@pathparts < 2) {
-                   die 'confusing policy test filename ' . $_;
+                   confess 'confusing policy test filename ' . $_;
                }
                my $policy = join q{::}, $pathparts[-2], $pathparts[-1];
 
@@ -116,13 +116,9 @@ sub subtests_in_tree {
     return ( \%subtests, $nsubtests );
 }
 
-=for notes
-
-The internal representation of a subtest is just a hash with some
-named keys.  It could be an object with accessors for safety's sake,
-but at this point I don't see why.
-
-=cut
+# The internal representation of a subtest is just a hash with some
+# named keys.  It could be an object with accessors for safety's sake,
+# but at this point I don't see why.
 
 sub _subtests_from_file {
     my $test_file = shift;
@@ -141,7 +137,7 @@ sub _subtests_from_file {
     my $subtest;
     while ( <$fh> ) {
         chomp;
-        my $inheader = /^## name/ .. /^## cut/;
+        my $inheader = /^## name/ .. /^## cut/; ## no critic(RegularExpression)
 
         my $line = $_;
 
@@ -174,7 +170,7 @@ sub _subtests_from_file {
     close $fh;
     if ( $subtest ) {
         if ( $incode ) {
-            push( @subtests, _finalize_subtest( $subtest ) );
+            push @subtests, _finalize_subtest( $subtest );
         }
         else {
             confess "Incomplete subtest in $test_file";
@@ -197,7 +193,7 @@ sub _finalize_subtest {
         confess "$subtest->{name} does not specify failures";
     }
     if ($subtest->{parms}) {
-        $subtest->{parms} = eval $subtest->{parms};
+        $subtest->{parms} = eval $subtest->{parms}; ## no critic(StringyEval)
         if ($EVAL_ERROR) {
             confess "$subtest->{name} has an error in the 'parms' property:\n"
               . $EVAL_ERROR;
@@ -220,6 +216,8 @@ __END__
 #-----------------------------------------------------------------------------
 
 =pod
+
+=for stopwords subtest subtests
 
 =head1 NAME
 
@@ -259,15 +257,41 @@ more examples of how to use these subroutines.
 
 =over
 
+=item block_perlcriticrc()
+
+If a user has a F<~/.perlcriticrc> file, this can interfere with testing.
+This handy method disables the search for that file -- simply call it at the
+top of your F<.t> program.  Note that this is not easily reversible, but that
+should not matter.
+
 =item critique( $code_string_ref, $config_ref )
+
+Test a block of code against the specified Perl::Critic::Config instance (or
+C<undef> for the default).  Returns the number of violations that occurred
 
 =item pcritique( $policy_name, $code_string_ref, $config_ref )
 
+Like C<critique()>, but tests only a single policy instead of the whole bunch.
+
 =item fcritique( $policy_name, $code_string_ref, $filename, $config_ref )
 
-=item block_perlcriticrc()
+Like C<pcritique()>, but pretends that the code was loaded from the specified
+filename.  This is handy for testing policies like
+C<Modules::RequireFilenameMatchesPackage> which care about the filename that
+the source derived from.
+
+The C<$filename> parameter must be a relative path, not absolute.  The file
+and all necessary subdirectories will be created via L<File::Temp> and will be
+automatically deleted.
 
 =item subtests_in_tree( $dir )
+
+Searches the specified directory recursively for F<.run> files.  Each one
+found is parsed and a hash-of-list-of-hashes is returned.  The outer hash is
+keyed on policy short name, like C<Modules::RequireEndWithOne>.  The inner
+hash specifies a single test to be handed to C<pcritique()> or C<fcritique()>,
+including the code string, test name, etc.  See below for the syntax of the
+F<.run> files.
 
 =back
 
@@ -282,10 +306,10 @@ Testing a policy follows a very simple pattern:
         * Optional exception expected
         * Optional filename for code
 
-Each of the subtests for a policy is collected in a single F<.run>
-file, with POD in front of each code block that describes how we
-expect P::C to react to the code.  For example, say you have a
-policy called Variables::ProhibitVowels:
+Each of the subtests for a policy is collected in a single F<.run> file, with
+test properties as comments in front of each code block that describes how we expect
+Perl::Critic to react to the code.  For example, say you have a policy called
+Variables::ProhibitVowels:
 
     (In file t/Variables/ProhibitVowels.run)
 
@@ -304,19 +328,20 @@ policy called Variables::ProhibitVowels:
     my $yllw = 0;       # "y" not a vowel here
     my $rhythm = 12;    # But here it is
 
-These are called "subtests", and two are shown above.  The beauty
-of the multiple-subtests-in-a-file method is that because the F<.run>
-is itself a valid Perl file, and not hidden in a heredoc, your
-editor's color-coding still works, and it is much easier to work
-with the code and the POD.
+These are called "subtests", and two are shown above.  The beauty of
+incorporating multiple subtests in a file is that the F<.run> is itself a
+(mostly) valid Perl file, and not hidden in a HEREDOC, so your editor's
+color-coding still works, and it is much easier to work with the code and the
+POD.
 
-If you need to pass special parms for your subtest, do so like this:
+If you need to pass any configuration parameters for your subtest, do so like
+this:
 
     ## parms { allow_y => 0 }
 
 If it's a TODO subtest (probably because of some weird corner of
 PPI that we exercised that Adam is getting around to fixing, right?),
-then make a C<=TODO> POD entry.
+then make a C<##TODO> entry.
 
     ## TODO Should pass when PPI 1.xxx comes out
 
@@ -336,13 +361,13 @@ details):
 
     ## filename lib/Foo/Bar.pm
 
-The value of I<parms> will get C<eval>ed and passed to C<pcritique>,
+The value of C<parms> will get C<eval>ed and passed to C<pcritique()>,
 so be careful.
 
 Note that nowhere within the F<.run> file itself do you specify the
 policy that you're testing.  That's implicit within the filename.
 
-=head1 TODO items
+=head1 BUGS AND CAVEATS AND TODO ITEMS
 
 Test that we have a t/*/*.run for each lib/*/*.pm
 
@@ -350,11 +375,10 @@ Allow us to specify the nature of the failures, and which one.  If
 there are 15 lines of code, and six of them fail, how do we know
 they're the right six?
 
-Make the File::Find callback portable (e.g. use catfile or some such).
-
 =head1 AUTHOR
 
 Chris Dolan <cdolan@cpan.org>
+and the rest of the L<Perl::Critic> team.
 
 =head1 COPYRIGHT
 

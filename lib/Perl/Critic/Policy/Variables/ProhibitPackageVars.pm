@@ -49,7 +49,7 @@ sub new {
 
     # Add to list of packages
     if ( defined $config{add_packages} ) {
-        push( @{$self->{_packages}}, words_from_string( $config{add_packages} ) );
+        push @{$self->{_packages}}, words_from_string( $config{add_packages} );
     }
 
     return $self;

@@ -481,7 +481,7 @@ sub shebang_line {
 sub words_from_string {
     my $str = shift;
 
-    return split( ' ', $str );
+    return split $SPACE, $str;
 }
 
 

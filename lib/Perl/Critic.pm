@@ -329,7 +329,7 @@ __END__
 
 =pod
 
-=for stopwords DGR INI-style API -params pbp refactored -singlepolicy
+=for stopwords DGR INI-style API -params pbp refactored -singlepolicy ben Jore
 
 =head1 NAME
 
@@ -946,6 +946,12 @@ Damian Conway - For writing B<Perl Best Practices>, finally :)
 Chris Dolan - For contributing the best features and Policy modules.
 
 Giuseppe Maxia - For all the great ideas and positive encouragement.
+
+Andy Lester - For creating the very first third-party policies.
+
+Joshua ben Jore - For continued feedback and sanity checking.
+
+Elliot Shank - For creating one of the coolest Policies.
 
 and Sharon, my wife - For putting up with my all-night code sessions.
 
