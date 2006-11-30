@@ -127,47 +127,48 @@ but at this point I don't see why.
 sub _subtests_from_file {
     my $test_file = shift;
 
-    my %valid_keys = hashify qw( name failures parms TODO );
+    my %valid_keys = hashify qw( name failures parms TODO error filename );
 
-    return unless -s $test_file; # XXX Remove me once all subtest files are populated
+    # XXX Remove me once all subtest files are populated
+    return if -z $test_file;
 
-    open my $fh, '<', $test_file or confess "Couldn't open $test_file: $OS_ERROR";
+    open my $fh, '<', $test_file
+      or confess "Couldn't open $test_file: $OS_ERROR";
 
-    my @subtests = ();
+    my @subtests;
 
     my $incode = 0;
     my $subtest;
     while ( <$fh> ) {
         chomp;
-        my $inpod = /^## name/ .. /^## cut/;
+        my $inheader = /^## name/ .. /^## cut/;
 
         my $line = $_;
 
-        if ( $inpod ) {
+        if ( $inheader ) {
             $line =~ m/\A\#/mx or confess "Code before cut: $test_file";
             my ($key,$value) = $line =~ m/\A\#\#[ ](\S+)(?:\s+(.+))?/mx;
             next if !$key;
             next if $key eq 'cut';
-            confess "Unknown key $key in $test_file" unless $valid_keys{$key};
+            confess "Unknown key $key in $test_file" if !$valid_keys{$key};
 
             if ( $key eq 'name' ) {
                 if ( $subtest ) { # Stash any current subtest
-                    push( @subtests, _finalize_subtest( $subtest ) );
+                    push @subtests, _finalize_subtest( $subtest );
                     undef $subtest;
                 }
                 $incode = 0;
             }
-            $incode && confess "POD found while I'm still in code: $test_file";
+            if ($incode) {
+                confess "Header line found while still in code: $test_file";
+            }
             $subtest->{$key} = $value;
-        }
-        else {
-            if ( $subtest ) {
-                $incode = 1;
-                push @{$subtest->{code}}, $line if $subtest; # Don't start a subtest if we're not in one
-            }
-            else {
-                confess "Got some code but I'm not in a subtest: $test_file";
-            }
+        } elsif ( $subtest ) {
+            $incode = 1;
+            # Don't start a subtest if we're not in one
+            push @{$subtest->{code}}, $line;
+        } else {
+            confess "Got some code but I'm not in a subtest: $test_file";
         }
     }
     close $fh;
@@ -187,7 +188,7 @@ sub _finalize_subtest {
     my $subtest = shift;
 
     if ( $subtest->{code} ) {
-        $subtest->{code} = join( "\n", @{$subtest->{code}} );
+        $subtest->{code} = join "\n", @{$subtest->{code}};
     }
     else {
         confess "$subtest->{name} has no code lines";
@@ -195,7 +196,18 @@ sub _finalize_subtest {
     if ( !defined $subtest->{failures} ) {
         confess "$subtest->{name} does not specify failures";
     }
-    $subtest->{parms} = $subtest->{parms} ? eval $subtest->{parms} : {};
+    if ($subtest->{parms}) {
+        $subtest->{parms} = eval $subtest->{parms};
+        if ($EVAL_ERROR) {
+            confess "$subtest->{name} has an error in the 'parms' property:\n"
+              . $EVAL_ERROR;
+        }
+        if ('HASH' ne ref $subtest->{parms}) {
+            confess "$subtest->{name} 'parms' did not evaluate to a hashref";
+        }
+    } else {
+        $subtest->{parms} = {};
+    }
 
     return $subtest;
 }
@@ -267,6 +279,8 @@ Testing a policy follows a very simple pattern:
         * Subtest name
         * Optional parameters
         * Number of failures expected
+        * Optional exception expected
+        * Optional filename for code
 
 Each of the subtests for a policy is collected in a single F<.run>
 file, with POD in front of each code block that describes how we
@@ -305,6 +319,22 @@ PPI that we exercised that Adam is getting around to fixing, right?),
 then make a C<=TODO> POD entry.
 
     ## TODO Should pass when PPI 1.xxx comes out
+
+If the code is expected to trigger an exception in the policy, indicate that
+like so:
+
+    ## error 1
+
+If you want to test the error message, mark it with C</.../> to indicate a
+C<like()> test:
+
+    ## error /Can't load Foo::Bar/
+
+If the policy you are testing cares about the filename of the code, you can
+indicate that C<fcritique> should be used like so (see C<fcritique> for more
+details):
+
+    ## filename lib/Foo/Bar.pm
 
 The value of I<parms> will get C<eval>ed and passed to C<pcritique>,
 so be careful.
