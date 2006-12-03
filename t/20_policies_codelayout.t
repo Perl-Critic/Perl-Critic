@@ -1,5 +1,7 @@
 #!perl
 
+# Elliot is converting this to run.t format.  Kep yer hends te yerself.
+
 ##############################################################################
 #     $URL$
 #    $Date$

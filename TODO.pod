@@ -33,48 +33,10 @@ policies.  It contains its own TODO.pod.
 e.g. Number of violations of each policy/severity.  Total lines of code,
 number of subroutines, average number of statements/operators per sub.
 
-=item * Add option to display the name of the policy being violated in output.
-
-When I get a violation, it's a pain to figure out what the name of the policy
-being violated is so that I can configure it in my F<perlcriticrc>.
-
 =item * Allow policies to say that they've had enough and to not use them for the rest of the current document.
 
 Primarily for things like C<RequireUseStrict> and C<ProhibitMagicNumbers>.
-
-=item * Allow for local customization of policies.
-
-I<Pie-in-the-sky idea.>
-
-In the vein of code delimited by "C<## no critic (Policy)>"/"C<## use critic>",
-allow a document to specify custom options just for a range of code, rather
-than turning the policy entirely off.
-
-Rationale: in the course of actually using C<ProhibitMagicNumbers> with the
-policy set to be as strict as possible, I've found sections of code where
-I'd like to make the policy less strict, but not to entirely turn it off.
-
-Example: I've got a static declaration of data (and I don't want to/can't
-use C<__DATA__>), like so:
-
-  my $foo =
-      [
-          [ 'KILCHICA42', 2006, 11, 26 ],
-          [ 'KILCHICA42', 2006, 11, 27 ],
-          [ 'KILCHICA42', 2006, 11, 28 ],
-          [ 'KILCHICA42', 2006, 11, 29 ],
-          [ 'KILCHICA52', 2006, 10, 27 ],
-          [ 'KILCHICA52', 2006, 10, 28 ],
-          [ 'KILCHICA52', 2006, 10, 29 ],
-          [ 'KILCHICA52', 2006, 10, 30 ],
-      ];
-
-Right now, I've got this surrounded with
-"C<## no critic (ProhibitMagicNumbers)>"/"C<## use critic>".
-I'd like to configure the policy's C<allowed_values> to be C<all_integers>,
-just for this block of code, and not turn the policy entirely off.  With
-that ability, C<ProhibitMagicNumbers> could complain if it found a
-floating-point number in the data.
+Replace current workaround for C<RequireUseStrict>.
 
 =back
 
