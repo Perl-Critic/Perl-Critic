@@ -1,0 +1,114 @@
+## name No code at all
+## failures 0
+## cut
+
+#Nothing!  No code!
+
+#-----------------------------------------------------------------------------
+
+## name Just an END section
+## failures 0
+## cut
+__END__
+#Nothing!
+
+#-----------------------------------------------------------------------------
+
+## name only one pod section
+## failures 1
+## cut
+=head1 Foo
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+## name only one pod section, at the end
+## failures 0
+## cut
+__END__
+
+=head1 Foo
+
+=cut
+#-----------------------------------------------------------------------------
+
+## name some pod sections OK not at the end
+## failures 0
+## cut
+
+=for comment
+This POD is ok
+=cut
+
+__END__
+
+=head1 Foo
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+## name but main pod still has to be at the end
+## failures 1
+## cut
+
+=for comment
+This POD is ok
+=cut
+
+=head1 Foo
+
+This POD is illegal
+
+=cut
+
+=begin comment
+
+This POD is ok
+
+This POD is also ok
+
+=end comment
+
+=cut
+
+__END__
+
+=head1 Bar
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+## name more =for exceptions
+## failures 0
+## cut
+
+=for comment
+This is a one-line comment
+
+=cut
+
+my $baz = 'nuts';
+
+__END__
+
+
+#-----------------------------------------------------------------------------
+
+## name =begin exceptions
+## failures 0
+## cut
+
+=begin comment
+
+Multi-paragraph comment
+
+Mutli-paragrapm comment
+
+=end comment
+
+=cut
+
+__END__
