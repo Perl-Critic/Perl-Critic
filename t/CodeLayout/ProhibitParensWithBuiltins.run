@@ -1,0 +1,129 @@
+## name Basic failure
+## failures 6
+## cut
+
+open ($foo, $bar);
+open($foo, $bar);
+uc();
+lc();
+
+# These ones deliberately omit the semi-colon
+sub {uc()}
+sub {reverse()}
+
+#-----------------------------------------------------------------------------
+
+## name Basic passing
+## failures 0
+## cut
+
+open $foo, $bar;
+uc $foo;
+lc $foo;
+my $foo;
+my ($foo, $bar);
+our ($foo, $bar);
+local ($foo $bar);
+return ($foo, $bar);
+return ();
+my_subroutine($foo $bar);
+{print}; # for Devel::Cover
+
+#-----------------------------------------------------------------------------
+
+## name Method invocation
+## failures 0
+## cut
+
+my $obj = SomeClass->new();
+$obj->open();
+$obj->close();
+$obj->prototype();
+$obj->delete();
+
+is( pcritique($policy, \$code), 0, $policy);
+
+#-----------------------------------------------------------------------------
+
+## name Parentheses with unary operators
+## failures 0
+## cut
+
+$foo = int( 0.5 ) + 1.5;
+$foo = int( 0.5 ) - 1.5;
+$foo = int( 0.5 ) * 1.5;
+$foo = int( 0.5 ) / 1.5;
+$foo = int( 0.5 ) ** 1.5;
+
+$foo = oct( $foo ) + 1;
+$foo = ord( $foo ) - 1;
+$foo = sin( $foo ) * 2;
+$foo = uc( $foo ) . $bar;
+$foo = lc( $foo ) . $bar;
+
+#-----------------------------------------------------------------------------
+
+## name RT #21713
+## failures 0
+## cut
+
+print substr($foo, 2, 3), "\n";
+if ( unpack('V', $foo) == 2 ) { }
+
+#-----------------------------------------------------------------------------
+
+## name Parentheses with greedy functions
+## failures 0
+## cut
+
+substr join( $delim, @list), $offset, $length;
+print reverse( $foo, $bar, $baz), $nuts;
+sort map( {some_func($_)} @list1 ), @list2;
+
+#-----------------------------------------------------------------------------
+
+## name Test cases from RT
+## failures 0
+## cut
+
+chomp( my $foo = <STDIN> );
+defined( my $child = shift @free_children )
+return ( $start_time + $elapsed_hours ) % $hours_in_day;
+
+#-----------------------------------------------------------------------------
+
+## name High-precedence operator after parentheses
+## failures 0
+## cut
+
+grep( { do_something($_) }, @list ) + 3;
+join( $delim, @list ) . "\n";
+pack( $template, $foo, $bar ) . $suffix;
+chown( $file1, $file2 ) || die q{Couldn't chown};
+
+#-----------------------------------------------------------------------------
+
+## name Low-precedence operator after parentheses
+## failures 2
+## cut
+
+grep( { do_something($_) }, $foo, $bar) and do_something();
+chown( $file1, $file2 ) or die q{Couldn't chown};
+
+#-----------------------------------------------------------------------------
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :

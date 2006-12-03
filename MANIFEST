@@ -131,11 +131,13 @@ t/09_theme.t
 t/10_userprofile.t
 t/11_policyfactory.t
 t/12_policylisting.t
-t/20_policies_codelayout.t
 t/20_policies_inputoutput.t
 t/20_policies_miscellanea.t
 t/20_policies_modules.t
 t/20_policies_namingconventions.t
+t/20_policy_prohibithardtabs.t
+t/20_policy_requireconsistentnewlines.t
+t/20_policy_requiretidycode.t
 t/40_criticize.t
 t/40_perlcriticrc
 t/80_policysummary.t
@@ -168,11 +170,8 @@ t/BuiltinFunctions/RequireSimpleSortBlock.run
 t/ClassHierarchies/ProhibitAutoloading.run
 t/ClassHierarchies/ProhibitExplicitISA.run
 t/ClassHierarchies/ProhibitOneArgBless.run
-t/CodeLayout/ProhibitHardTabs.run
 t/CodeLayout/ProhibitParensWithBuiltins.run
 t/CodeLayout/ProhibitQuotedWordLists.run
-t/CodeLayout/RequireConsistentNewlines.run
-t/CodeLayout/RequireTidyCode.run
 t/CodeLayout/RequireTrailingCommas.run
 t/ControlStructures/ProhibitCStyleForLoops.run
 t/ControlStructures/ProhibitCascadingIfElse.run

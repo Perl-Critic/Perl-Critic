@@ -1,0 +1,111 @@
+## name Basic passing
+## failures 0
+## cut
+
+($foo,
+ $bar,
+ $baz
+);
+@list = ($foo, $bar, $baz);
+@list = some_function($foo, $bar, $baz);
+@list = ($baz);
+@list = ();
+
+@list = (
+);
+
+@list = ($baz
+);
+
+@list = ($baz
+	);
+
+# not a straight assignment
+@list = ((1,2,3),(
+ 1,
+ 2,
+ 3
+));
+
+#-----------------------------------------------------------------------------
+
+## name Basic failure
+## failures 3
+## cut
+
+@list = ($foo, 
+	 $bar, 
+	 $baz);
+
+@list = ($foo, 
+	 $bar, 
+	 $baz
+	);
+
+@list = ($foo, 
+	 $bar, 
+	 $baz
+);
+
+#-----------------------------------------------------------------------------
+
+## name List assignment
+## failures 0
+## cut
+
+@list = ($foo, 
+	 $bar, 
+	 $baz,);
+
+@list = ($foo, 
+	 $bar, 
+	 $baz,
+);
+
+@list = ($foo, 
+	 $bar, 
+	 $baz,
+	);
+
+#-----------------------------------------------------------------------------
+
+## name Conditionals and mathematical precedence
+## failures 0
+## cut
+
+$foo = ( 1 > 2 ?
+         $baz  :
+         $nuts );
+
+$bar = ( $condition1
+         && (    $condition2
+              || $condition3 )
+       );
+
+
+# These were reported as false-positives.
+# See http://rt.cpan.org/Ticket/Display.html?id=18297
+
+$median = ( $times[ int $array_size / 2 ] +
+            $times[(int $array_size / 2) - 1 ]) / 2;
+
+$median = ( $times[ int $array_size / 2 ] +
+            $times[ int $array_size / 2  - 1 ]) / 2;
+
+#-----------------------------------------------------------------------------
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :

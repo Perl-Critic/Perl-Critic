@@ -1,0 +1,67 @@
+## name Basic failure
+## failures 2
+## cut
+
+@list = ('foo', 'bar', 'baz');
+
+@list = ('foo',
+	 'bar',
+	 'baz');
+
+#-----------------------------------------------------------------------------
+
+## name Basic passing
+## failures 0
+## cut
+
+('foo');
+@list = ();
+@list = ('foo');
+@list = ('foo', 'bar', 'bee baz');
+@list = ('foo', 'bar', q{bee baz});
+@list = ('foo', 'bar', q{});
+@list = ('foo', 'bar', 1.0);
+@list = ('foo', 'bar', 'foo'.'bar');
+@list = ('foo, 'bar'); # XXX is this a typo?  What is this trying to test?
+@list = ($foo, 'bar', 'baz');
+@list = (foo => 'bar');
+%hash = ('foo' => 'bar', 'fo' => 'fum');
+my_function('foo', 'bar', 'fudge');
+$a_function->('foo', 'bar', 'fudge');
+foreach ('foo', 'bar', 'nuts'){ do_something($_) }
+
+#-----------------------------------------------------------------------------
+
+## name Three elements with minimum set to four
+## failures 0
+## parms {min_elements => 4}
+## cut
+
+@list = ('foo', 'bar, 'baz');
+
+#-----------------------------------------------------------------------------
+
+## name Four elements with minimum set to four
+## failures 1
+## parms {min_elements => 4}
+## cut
+
+@list = ('foo', 'bar', 'baz', 'nuts');
+
+#-----------------------------------------------------------------------------
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :
