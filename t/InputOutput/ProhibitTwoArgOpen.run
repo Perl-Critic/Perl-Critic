@@ -1,0 +1,59 @@
+## name basic failures
+## failures 12
+## cut
+
+open $fh, ">$output";
+open($fh, ">$output");
+open($fh, ">$output") or die;
+
+open my $fh, ">$output";
+open(my $fh, ">$output");
+open(my $fh, ">$output") or die;
+
+open FH, ">$output";
+open(FH, ">$output");
+open(FH, ">$output") or die;
+
+#This are tricky because the Critic can't
+#tell where the expression really ends
+open FH, ">$output" or die;
+open $fh, ">$output" or die;
+open my $fh, ">$output" or die;
+
+#-----------------------------------------------------------------------------
+
+## name basic passes
+## failures 0
+## cut
+
+open $fh, '>', $output;
+open($fh, '>', $output);
+open($fh, '>', $output) or die;
+
+open my $fh, '>', $output;
+open(my $fh, '>', $output);
+open(my $fh, '>', $output) or die;
+
+open FH, '>', $output;
+open(FH, '>', $output);
+open(FH, '>', $output) or die;
+
+#This are tricky because the Critic can't
+#tell where the expression really ends
+open $fh, '>', $output or die;
+open my $fh, '>', $output or die;
+open FH, '>', $output or die;
+
+$foo{open}; # not a function call
+
+# There is no three-arg equivalent for these
+open( \*STDOUT, '>&STDERR' );
+open( *STDOUT, '>&STDERR' );
+open( STDOUT, '>&STDERR' );
+
+# Other file modes.
+open( \*STDOUT, '>>&STDERR' );
+open( \*STDOUT, '<&STDERR' );
+open( \*STDOUT, '+>&STDERR' );
+open( \*STDOUT, '+>>&STDERR' );
+open( \*STDOUT, '+<&STDERR' );

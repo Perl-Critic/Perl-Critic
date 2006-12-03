@@ -1,0 +1,37 @@
+## name standard filehandles are OK
+## failures 0
+## cut
+
+open(STDIN, '<', '/dev/null') or die;
+open(STDOUT, '>', '/dev/null') or die;
+open(STDERR, '>', '/dev/null') or die;
+
+#-----------------------------------------------------------------------------
+
+## name basic failures
+## failures 5
+## cut
+
+open FH, '>', $some_file;
+open FH, '>', $some_file or die;
+open(FH, '>', $some_file);
+open(FH, '>', $some_file) or die;
+open(STDERROR, '>', '/dev/null') or die;
+
+#-----------------------------------------------------------------------------
+
+## name basic passes
+## failures 0
+## cut
+open $fh, '>', $some_file;
+open $fh, '>', $some_file or die;
+open($fh, '>', $some_file);
+open($fh, '>', $some_file) or die;
+
+open my $fh, '>', $some_file;
+open my $fh, '>', $some_file or die;
+open(my $fh, '>', $some_file);
+open(my $fh, '>', $some_file) or die;
+
+$foo{open}; # not a function call
+{open}; # zero args, for Devel::Cover

@@ -1,0 +1,14 @@
+## name basic failures
+## failures 2
+## cut
+
+-t;
+if (-t) { }
+
+#-----------------------------------------------------------------------------
+
+## name basic passes
+## failures 0
+## cut
+-toomany;
+-f _;

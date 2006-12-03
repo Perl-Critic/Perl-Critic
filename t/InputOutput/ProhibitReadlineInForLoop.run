@@ -1,0 +1,20 @@
+## name basic failures
+## failures 6
+## cut
+for my $foo (<FH>) {}
+for $foo (<$fh>) {}
+for (<>) {}
+
+foreach my $foo (<FH>) {}
+foreach $foo (<$fh>) {}
+foreach (<>) {}
+
+#-----------------------------------------------------------------------------
+
+## name basic passes
+## failures 0
+## cut
+for my $foo (@lines) {}
+while( my $foo = <> ){}
+while( $foo = <> ){}
+while( <> ){}

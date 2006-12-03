@@ -1,0 +1,39 @@
+## name 1 arg; variable w/parens
+## failures 1
+## cut
+select( $fh );
+
+#-----------------------------------------------------------------------------
+
+## name 1 arg; variable, as built-in
+## failures 1
+## cut
+select $fh;
+
+#-----------------------------------------------------------------------------
+
+## name 1 arg; fh, w/parens
+## failures 1
+## cut
+select( STDERR );
+
+#-----------------------------------------------------------------------------
+
+## name 1 arg; fh, as built-in
+## failures 1
+## cut
+select STDERR;
+
+#-----------------------------------------------------------------------------
+
+## name 4 args
+## failures 0
+## cut
+select( undef, undef, undef, 0.25 );
+
+#-----------------------------------------------------------------------------
+
+## name RT Bug #15653
+## failures 0
+## cut
+sub select { }

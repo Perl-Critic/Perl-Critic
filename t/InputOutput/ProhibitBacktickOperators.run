@@ -1,0 +1,6 @@
+## name basic failures
+## failures 2
+## cut
+
+@out = `some_command`;
+@out = qx{some_command};
