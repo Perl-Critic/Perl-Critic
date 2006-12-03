@@ -14,7 +14,7 @@ use Test::More;
 
 #-----------------------------------------------------------------------------
 
-if (!$ENV{TEST_AUTHOR}) {
+if ( !-d '.svn' ) {
     plan skip_all => 'Author test';
 }
 

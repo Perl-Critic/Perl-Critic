@@ -16,7 +16,7 @@ use File::Spec qw();
 use Test::More;
 use Perl::Critic::PolicyFactory ( -test => 1 );
 
-if (!$ENV{TEST_AUTHOR}) {
+if (!-d '.svn') {
     plan skip_all => 'Author test';
 }
 
