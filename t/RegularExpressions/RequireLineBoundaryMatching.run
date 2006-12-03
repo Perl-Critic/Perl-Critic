@@ -1,0 +1,13 @@
+## name standard passes
+## failures 0
+## cut
+my $string =~ tr/[A-Z]/[a-z]/;
+my $string =~ tr|[A-Z]|[a-z]|;
+my $string =~ tr{[A-Z]}{[a-z]};
+
+my $string =~ y/[A-Z]/[a-z]/;
+my $string =~ y|[A-Z]|[a-z]|;
+my $string =~ y{[A-Z]}{[a-z]};
+
+my $string =~ tr/[A-Z]/[a-z]/cds;
+my $string =~ y/[A-Z]/[a-z]/cds;

@@ -9,7 +9,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 4;
+use Test::More tests => 2;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique);
@@ -75,42 +75,6 @@ $policy = 'RegularExpressions::RequireLineBoundaryMatching';
 is( pcritique($policy, \$code), 16, $policy);
 
 #-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-my $string =~ tr/[A-Z]/[a-z]/;
-my $string =~ tr|[A-Z]|[a-z]|;
-my $string =~ tr{[A-Z]}{[a-z]};
-
-my $string =~ y/[A-Z]/[a-z]/;
-my $string =~ y|[A-Z]|[a-z]|;
-my $string =~ y{[A-Z]}{[a-z]};
-
-my $string =~ tr/[A-Z]/[a-z]/cds;
-my $string =~ y/[A-Z]/[a-z]/cds;
-END_PERL
-
-$policy = 'RegularExpressions::RequireExtendedFormatting';
-is( pcritique($policy, \$code), 0, $policy);
-
-#-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-my $string =~ tr/[A-Z]/[a-z]/;
-my $string =~ tr|[A-Z]|[a-z]|;
-my $string =~ tr{[A-Z]}{[a-z]};
-
-my $string =~ y/[A-Z]/[a-z]/;
-my $string =~ y|[A-Z]|[a-z]|;
-my $string =~ y{[A-Z]}{[a-z]};
-
-my $string =~ tr/[A-Z]/[a-z]/cds;
-my $string =~ y/[A-Z]/[a-z]/cds;
-END_PERL
-
-$policy = 'RegularExpressions::RequireLineBoundaryMatching';
-is( pcritique($policy, \$code), 0, $policy);
-
-
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

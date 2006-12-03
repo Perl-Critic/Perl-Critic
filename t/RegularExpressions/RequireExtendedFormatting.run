@@ -46,3 +46,19 @@ my $string =~ s/pattern/foo/gim;
 my $string =~ s/pattern/foo/gis;
 my $string =~ s/pattern/foo/gms;
 
+#-----------------------------------------------------------------------------
+
+## name tr and y formatting
+## failures 0
+## cut
+
+my $string =~ tr/[A-Z]/[a-z]/;
+my $string =~ tr|[A-Z]|[a-z]|;
+my $string =~ tr{[A-Z]}{[a-z]};
+
+my $string =~ y/[A-Z]/[a-z]/;
+my $string =~ y|[A-Z]|[a-z]|;
+my $string =~ y{[A-Z]}{[a-z]};
+
+my $string =~ tr/[A-Z]/[a-z]/cds;
+my $string =~ y/[A-Z]/[a-z]/cds;
