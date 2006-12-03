@@ -1,0 +1,27 @@
+## name basic failures
+## failures 12
+## cut
+tie $scalar, 'Some::Class';
+tie @array, 'Some::Class';
+tie %hash, 'Some::Class';
+
+tie ($scalar, 'Some::Class');
+tie (@array, 'Some::Class');
+tie (%hash, 'Some::Class');
+
+tie $scalar, 'Some::Class', @args;
+tie @array, 'Some::Class', @args;
+tie %hash, 'Some::Class' @args;
+
+tie ($scalar, 'Some::Class', @args);
+tie (@array, 'Some::Class', @args);
+tie (%hash, 'Some::Class', @args);
+
+#-----------------------------------------------------------------------------
+
+## name basic passes
+## failures 0
+## cut
+$hash{tie} = 'foo';
+%hash = ( tie => 'knot' );
+$object->tie();

@@ -1,0 +1,31 @@
+## name standard failures
+## failures 4
+## cut
+format STDOUT =
+@<<<<<<   @||||||   @>>>>>>
+"left",   "middle", "right"
+.
+
+format =
+@<<<<<<   @||||||   @>>>>>>
+"foo",   "bar",     "baz"
+.
+
+format REPORT_TOP =
+                                Passwd File
+Name                Login    Office   Uid   Gid Home
+------------------------------------------------------------------
+.
+format REPORT =
+@<<<<<<<<<<<<<<<<<< @||||||| @<<<<<<@>>>> @>>>> @<<<<<<<<<<<<<<<<<
+$name,              $login,  $office,$uid,$gid, $home
+.
+
+#-----------------------------------------------------------------------------
+
+## name basic passes
+## failures 0
+## cut
+$hash{format} = 'foo';
+%hash = ( format => 'baz' );
+$object->format();
