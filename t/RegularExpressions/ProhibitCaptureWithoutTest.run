@@ -1,0 +1,95 @@
+## name use without regex
+## failures 3
+## cut
+my $foo = $1;
+my @matches = ($1, $2);
+
+#-----------------------------------------------------------------------------
+
+## name void use without regex
+## failures 1
+## cut
+$1
+
+#-----------------------------------------------------------------------------
+
+## name regex but no check on success
+## failures 1
+## cut
+'some string' =~ m/(s)/;
+my $s = $1;
+
+#-----------------------------------------------------------------------------
+
+## name inside a checkblock, but another regex overrides
+## failures 1
+## cut
+if (m/(.)/) {
+   'some string' =~ m/(s)/;
+   my $s = $1;
+}
+
+#-----------------------------------------------------------------------------
+
+## name good passes
+## failures 0
+## cut
+if ($str =~ m/(.)/) {
+   return $1;
+}
+elsif ($foo =~ s/(b)//) {
+   $bar = $1;
+}
+
+if ($str =~ m/(.)/) {
+   while (1) {
+      return $1;
+   }
+}
+
+while ($str =~ m/\G(.)/cg) {
+   print $1;
+}
+
+print $0; # not affected by policy
+print $_; # not affected by policy
+print $f1; # not affected by policy
+
+my $result = $str =~ m/(.)/;
+if ($result) {
+   return $1;
+}
+
+#-----------------------------------------------------------------------------
+
+## name ternary passes
+## failures 0
+## cut
+print m/(.)/ ? $1 : 'undef';
+print !m/(.)/ ? 'undef' : $1;
+print s/(.)// ? $1 : 'undef';
+print !s/(.)// ? 'undef' : $1;
+$foo = m/(.)/ && $1;
+$foo = !m/(.)/ || $1;
+$foo = s/(.)// && $1;
+$foo = !s/(.)// || $1;
+
+#-----------------------------------------------------------------------------
+
+## name Regression for PPI::Statement::Expressions
+## failures 0
+## cut
+
+if (m/(\d+)/xms) {
+   $foo = ($1);
+}
+
+#-----------------------------------------------------------------------------
+
+## name Regression for ternaries with structures
+## failures 0
+## cut
+
+$str =~ m/(.)/xms ? foo($1) : die;
+$str =~ m/(.)/xms ? [$1] : die;
+$str =~ m/(.)/xms ? { match => $1 } : die;
