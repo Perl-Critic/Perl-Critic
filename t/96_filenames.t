@@ -4,8 +4,9 @@ use warnings;
 use strict;
 use Test::More;
 
-if ( !-d '.svn' ) {
-    plan skip_all => 'Author test';
+if ( !-d '.svn' && !$ENV{TEST_AUTHOR} ) {
+    plan skip_all =>
+        'Author test.  Set $ENV{TEST_AUTHOR} to a true value to run.';
 }
 
 eval 'use Test::Portability::Files';
