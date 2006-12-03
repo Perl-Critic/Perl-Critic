@@ -1,0 +1,76 @@
+## name RCS keywords in POD
+## failures 0
+## cut
+=pod
+
+  $Revision$
+  $Source$
+  $Date$
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+## name No RCS keywords at all
+## failures 3
+## cut
+
+#just a comment
+$foo = "bar";
+$baz = qq{nuts};
+
+#-----------------------------------------------------------------------------
+
+## name Keywords in comments
+## failures 0
+## cut
+# $Revision$
+# $Source$
+# $Date$
+
+#-----------------------------------------------------------------------------
+
+## name Id in comments
+## failures 0
+## cut
+# $Id$
+END_PERL
+
+#-----------------------------------------------------------------------------
+
+## name Keywords in literals
+## failures 0
+## cut
+'$Revision$'
+'$Source: foo/bar $'
+'$Date$'
+
+#-----------------------------------------------------------------------------
+
+## name Keywords in literals, q{}-style
+## failures 0
+## cut
+q{$Revision$}
+q{$Source: foo/bar $}
+q{$Date$}
+
+#-----------------------------------------------------------------------------
+
+## name Keywords in literals, q{}-style, with parms
+## failures 0
+## parms {keywords => 'Revision Author Id'}
+## cut
+q{$Revision$}
+q{$Author$}
+q{$Id: whatever $}
+
+#-----------------------------------------------------------------------------
+
+## name Empty code
+## failures 1
+## parms {keywords => 'Author Id'}
+## cut
+#nothing here!
+$policy = 'Miscellanea::RequireRcsKeywords';
+is( pcritique($policy, \$code, \%config), 1, $policy);
+
