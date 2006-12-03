@@ -1,0 +1,115 @@
+## name No code
+## failures 0
+## cut
+=pod
+
+=head1 NO CODE IN HERE
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+## name No POD
+## failures 0
+## cut
+#!/usr/bin/perl
+print 'Hello World';
+
+#-----------------------------------------------------------------------------
+
+## name Missing many sections
+## failures 10
+## cut
+#!/usr/bin/perl
+
+print 'Hello World';
+
+__END__
+
+=head1 NAME
+
+Blah...
+
+=head1   DESCRIPTION
+
+Blah...
+
+=head1 USAGE
+
+Blah...
+
+#-----------------------------------------------------------------------------
+
+## name No shebang, this is a library
+## failures 8
+## cut
+#No shebang, this is a library
+#POD is inline with code too
+
+=head1 NAME  
+
+Blah...
+
+=head1  DESCRIPTION
+
+Blah...
+
+=cut
+
+print 'Hello World';
+
+=head1  SUBROUTINES/METHODS 
+
+Blah...
+
+=cut
+
+sub foobar {}
+
+=head1 AUTHOR
+
+Santa Claus
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+## name Passing parms, for a library
+## failures 0
+## parms {lib_sections => 'mi nombre | el descripcion'}
+## cut
+
+print 'Hello World';
+
+__END__
+
+=head1 MI NOMBRE
+
+Blah...
+
+=head1 EL DESCRIPCION
+
+Blah...
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+## name Passing parms, for a program
+## failures 0
+## parms {lib_sections => 'mi nombre | el descripcion'}
+## cut
+
+#!/usr/bin/perl
+
+__END__
+
+=head1 MI NOMBRE
+
+Blah...
+
+=head1 EL DESCRIPCION
+
+Blah...
+
+=cut
