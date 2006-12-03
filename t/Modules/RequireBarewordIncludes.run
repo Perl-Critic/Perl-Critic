@@ -1,0 +1,35 @@
+## name basic pass, incomplete statements
+## failures 0
+## cut
+
+require; #incomplete statement
+use;     #incomplete statement
+no;      #incomplete statement
+{require}; # for Devel::Cover
+END_PERL
+
+$policy = 'Modules::RequireBarewordIncludes';
+is( pcritique($policy, \$code), 0, $policy);
+
+#-----------------------------------------------------------------------------
+
+## name basic failures
+## failures 6
+## cut
+require 'Exporter';
+require 'My/Module.pl';
+use 'SomeModule';
+use q{OtherModule.pm};
+no "Module";
+no "Module.pm";
+
+#-----------------------------------------------------------------------------
+
+## name basic passes with module names
+## failures 0
+## cut
+use 5.008;
+require MyModule;
+use MyModule;
+no MyModule;
+use strict;

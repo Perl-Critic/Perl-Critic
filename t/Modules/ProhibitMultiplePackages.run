@@ -1,0 +1,24 @@
+## name basic pass, no package
+## failures 0
+## cut
+
+#no package
+$some_code = $foo;
+
+#-----------------------------------------------------------------------------
+
+## name basic failure
+## failures 2
+## cut
+package foo;
+package bar;
+package nuts;
+$some_code = undef;
+
+#-----------------------------------------------------------------------------
+
+## name basic pass, with code
+## failures 0
+## cut
+package foo;
+$some_code = undef;

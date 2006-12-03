@@ -1,0 +1,100 @@
+## name one statement before package
+## failures 1
+## cut
+$foo = $bar;
+package foo;
+END_PERL
+
+$policy = 'Modules::RequireExplicitPackage';
+is( pcritique($policy, \$code), 1, $policy.' 1 stmnt before package');
+
+#-----------------------------------------------------------------------------
+
+## name BEGIN block before package
+## failures 3
+## cut
+BEGIN{
+    print 'Hello';
+    print 'Beginning';
+}
+
+package foo;
+
+#-----------------------------------------------------------------------------
+
+## name inclusion before package
+## failures 1
+## cut
+use Some::Module;
+package foo;
+
+#-----------------------------------------------------------------------------
+
+## name two statements before package
+## failures 2
+## cut
+$baz = $nuts;
+print 'whatever';
+package foo;
+
+#-----------------------------------------------------------------------------
+
+## name no package at all
+## failures 1
+## cut
+print 'whatever';
+
+#-----------------------------------------------------------------------------
+
+## name no statements at all
+## failures 0
+## cut
+
+# no statements
+
+#-----------------------------------------------------------------------------
+
+## name just a package, no statements
+## failures 0
+## cut
+package foo;
+
+#-----------------------------------------------------------------------------
+
+## name package OK
+## failures 0
+## cut
+package foo;
+use strict;
+$foo = $bar;
+
+#-----------------------------------------------------------------------------
+
+## name programs can be exempt
+## failures 0
+## parms {exempt_scripts => 1}
+## cut
+#!/usr/bin/perl
+$foo = $bar;
+package foo;
+
+#-----------------------------------------------------------------------------
+
+## name programs not exempted
+## failures 3
+## parms {exempt_scripts => 0}
+## cut
+#!/usr/bin/perl
+use strict;
+use warnings;
+my $foo = 42;
+
+#-----------------------------------------------------------------------------
+
+## name programs not exempted, but we have a package
+## failures 0
+## parms {exempt_scripts => 0}
+## cut
+#!/usr/bin/perl
+package foo;
+$foo = $bar;
