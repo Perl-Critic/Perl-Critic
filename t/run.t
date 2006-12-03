@@ -20,7 +20,7 @@ for my $policy ( sort keys %$subtests ) {
     for my $subtest ( @{$subtests->{$policy}} ) {
         local $TODO = $subtest->{TODO}; # Is NOT a TODO if it's not set
 
-        my $desc = $policy . ' - ' . $subtest->{name};
+        my $desc = join( ' - ', $policy, "line $subtest->{lineno}", $subtest->{name} );
         my $violations = $subtest->{filename}
           ? eval { pcritique($policy, \$subtest->{code}, $subtest->{parms}) }
           : eval { fcritique($policy, \$subtest->{code}, $subtest->{filename}, $subtest->{parms}) };
@@ -30,10 +30,12 @@ for my $policy ( sort keys %$subtests ) {
             if ( $subtest->{error} && $subtest->{error} =~ m{ \A / (.*) / \z }xms) {
                 my $re = qr/$1/;
                 like($err, $re, $desc);
-            } else {
+            }
+            else {
                 ok($err, $desc);
             }
-        } else {
+        }
+        else {
             die $err if $err;
             is($violations, $subtest->{failures}, $desc);
         }

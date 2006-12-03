@@ -88,7 +88,7 @@ sub fcritique {
     my $err = $EVAL_ERROR;
     File::Path::rmtree($dir, 0, 1);
     if ($err) {
-        die $err; ## no critic (ErrorHandling::RequireCarping)
+        confess $err;
     }
     return scalar @v;
 }
@@ -135,7 +135,9 @@ sub _subtests_from_file {
 
     my $incode = 0;
     my $subtest;
+    my $lineno;
     while ( <$fh> ) {
+        ++$lineno;
         chomp;
         my $inheader = /^## name/ .. /^## cut/; ## no critic(RegularExpression)
 
@@ -153,17 +155,20 @@ sub _subtests_from_file {
                     push @subtests, _finalize_subtest( $subtest );
                     undef $subtest;
                 }
+                $subtest->{lineno} = $lineno;
                 $incode = 0;
             }
             if ($incode) {
                 confess "Header line found while still in code: $test_file";
             }
             $subtest->{$key} = $value;
-        } elsif ( $subtest ) {
+        }
+        elsif ( $subtest ) {
             $incode = 1;
             # Don't start a subtest if we're not in one
             push @{$subtest->{code}}, $line;
-        } else {
+        }
+        else {
             confess "Got some code but I'm not in a subtest: $test_file";
         }
     }
