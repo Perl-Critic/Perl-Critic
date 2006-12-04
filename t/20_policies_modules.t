@@ -9,7 +9,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 46;
+use Test::More tests => 33;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique fcritique);
@@ -176,130 +176,6 @@ END_PERL
 }
 
 #-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-=pod
-
-=head1 NO CODE IN HERE
-
-=cut
-END_PERL
-
-$policy = 'Modules::RequireEndWithOne';
-is( pcritique($policy, \$code), 0, $policy);
-
-#-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-1;
-END_PERL
-
-$policy = 'Modules::RequireEndWithOne';
-is( pcritique($policy, \$code), 0, $policy);
-
-#-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-1;
-__END__
-END_PERL
-
-$policy = 'Modules::RequireEndWithOne';
-is( pcritique($policy, \$code), 0, $policy);
-
-#-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-1;
-__DATA__
-END_PERL
-
-$policy = 'Modules::RequireEndWithOne';
-is( pcritique($policy, \$code), 0, $policy);
-
-#-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-1;
-# The end
-END_PERL
-
-$policy = 'Modules::RequireEndWithOne';
-is( pcritique($policy, \$code), 0, $policy);
-
-#-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-1; # final true value
-END_PERL
-
-$policy = 'Modules::RequireEndWithOne';
-is( pcritique($policy, \$code), 0, $policy);
-
-#-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-1  ;   #With extra space.
-END_PERL
-
-$policy = 'Modules::RequireEndWithOne';
-is( pcritique($policy, \$code), 0, $policy);
-
-#-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-  1  ;   #With extra space.
-END_PERL
-
-$policy = 'Modules::RequireEndWithOne';
-is( pcritique($policy, \$code), 0, $policy);
-
-#-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-$foo = 2; 1;   #On same line..
-END_PERL
-
-$policy = 'Modules::RequireEndWithOne';
-is( pcritique($policy, \$code), 0, $policy);
-
-#-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-0;
-END_PERL
-
-$policy = 'Modules::RequireEndWithOne';
-is( pcritique($policy, \$code), 1, $policy);
-
-#-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-1;
-sub foo {}
-END_PERL
-
-$policy = 'Modules::RequireEndWithOne';
-is( pcritique($policy, \$code), 1, $policy);
-
-#-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-1;
-END {}
-END_PERL
-
-$policy = 'Modules::RequireEndWithOne';
-is( pcritique($policy, \$code), 1, $policy);
-
-#-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-'Larry';
-END_PERL
-
-$policy = 'Modules::RequireEndWithOne';
-is( pcritique($policy, \$code), 1, $policy);
 
 $code = <<'END_PERL';
 package Filename::OK;

@@ -1,0 +1,97 @@
+## name no code, no need for a one
+## failures 0
+## cut
+=pod
+
+=head1 NO CODE IN HERE
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+## name basic pass
+## failures 0
+## cut
+1;
+
+#-----------------------------------------------------------------------------
+
+## name pass with __END__
+## failures 0
+## cut
+1;
+__END__
+
+#-----------------------------------------------------------------------------
+
+## name pass with __DATA__
+## failures 0
+## cut
+1;
+__DATA__
+
+#-----------------------------------------------------------------------------
+
+## name pass with comments at the end
+## failures 0
+## cut
+1;
+# The end
+
+#-----------------------------------------------------------------------------
+
+## name pass with comment on the same line
+## failures 0
+## cut
+1; # final true value
+
+#-----------------------------------------------------------------------------
+
+## name pass with extra space
+## failures 0
+## cut
+1  ;   #With extra space.
+
+#-----------------------------------------------------------------------------
+
+## name pass with more spacing
+## failures 0
+## cut
+  1  ;   #With extra space.
+
+#-----------------------------------------------------------------------------
+
+## name pass with 1 on last line, but not last statement
+## failures 0
+## cut
+$foo = 2; 1;   #On same line..
+
+#-----------------------------------------------------------------------------
+
+## name fails with 0
+## failures 1
+## cut
+0;
+
+#-----------------------------------------------------------------------------
+
+## name fail with closing sub
+## failures 1
+## cut
+1;
+sub foo {}
+
+#-----------------------------------------------------------------------------
+
+## name fail with END block
+## failures 1
+## cut
+1;
+END {}
+
+#-----------------------------------------------------------------------------
+
+## name fail with a non-zero true value
+## failures 1
+## cut
+'Larry';
