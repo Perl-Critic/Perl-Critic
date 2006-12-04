@@ -108,6 +108,11 @@ CONSTRUCTOR
             takes precedence over "-include" when a Policy matches both
             patterns.
 
+            -singlepolicy is a string "PATTERN". Only the policy that
+            matches "m/$PATTERN/imx" will be used. This value overrides the
+            "-severity", "-theme", "-include", "-exclude", and "-only"
+            options.
+
             -top is the maximum number of Violations to return when ranked
             by their severity levels. This must be a positive integer.
             Violations are still returned in the order that they occur
@@ -231,8 +236,8 @@ CONFIGURATION
 
         [Perl::Critic::Policy::Category::PolicyName]
         severity = 1
-        set_theme = foo bar
-        add_theme = baz
+        set_themes = foo bar
+        add_themes = baz
         arg1 = value1
         arg2 = value2
 
@@ -286,10 +291,10 @@ CONFIGURATION
         # these policies by saying `perlcritic -theme larry`
 
         [Modules::RequireFilenameMatchesPackage]
-        add_theme = larry
+        add_themes = larry
 
         [TestingAndDebugging::RequireTestLables]
-        add_theme = larry curly moe
+        add_themes = larry curly moe
 
         #--------------------------------------------------------------
         # I do not agree with these at all, so never load them
@@ -301,6 +306,9 @@ CONFIGURATION
         # For all other Policies, I accept the default severity,
         # so no additional configuration is required for them.
 
+    For additional configuration examples, see the perlcriticrc file that is
+    included in this t/examples directory of this distribution.
+
 THE POLICIES
     A large number of Policy modules are distributed with Perl::Critic. They
     are described briefly in the companion document
@@ -308,6 +316,12 @@ THE POLICIES
     themselves.
 
 POLICY THEMES
+    NOTE: As of version 0.21, policy themes are still considered
+    experimental. The implementation of this feature may change in a future
+    release. Additionally, the default theme names that ship with
+    Perl::Critic may also change. But this is a pretty cool feature, so read
+    on...
+
     Each Policy is defined with one or more "themes". Themes can be used to
     create arbitrary groups of Policies. They are intended to provide an
     alternative mechanism for selecting your preferred set of Policies. The
@@ -563,6 +577,12 @@ CREDITS
     Chris Dolan - For contributing the best features and Policy modules.
 
     Giuseppe Maxia - For all the great ideas and positive encouragement.
+
+    Andy Lester - For creating the very first third-party policies.
+
+    Joshua ben Jore - For continued feedback and sanity checking.
+
+    Elliot Shank - For creating one of the coolest Policies.
 
     and Sharon, my wife - For putting up with my all-night code sessions.
 
