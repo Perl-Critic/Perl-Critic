@@ -1,0 +1,97 @@
+## name Basic failure, "our @EXPORT;"
+## failures 1
+## cut
+
+require Exporter;
+our @EXPORT = qw(foo bar);
+
+#-----------------------------------------------------------------------------
+
+## name Basic failure, "use vars @EXPORT;"
+## failures 1
+## cut
+
+use Exporter;
+use vars '@EXPORT';
+@EXPORT = qw(foo bar);
+
+#-----------------------------------------------------------------------------
+
+## name Basic failure, "@PACKAGE::EXPORT;"
+## failures 1
+## cut
+
+use base 'Exporter';
+@Foo::EXPORT = qw(foo bar);
+
+#-----------------------------------------------------------------------------
+
+## name Basic pass, "our @EXPORT_OK;"
+## failures 0
+## cut
+
+require Exporter;
+our @EXPORT_OK = ( '$foo', '$bar' );
+
+#-----------------------------------------------------------------------------
+
+## name Basic pass, "use vars %EXPORT_TAGS;"
+## failures 0
+## cut
+
+use Exporter;
+use vars '%EXPORT_TAGS';
+%EXPORT_TAGS = ();
+
+#-----------------------------------------------------------------------------
+
+## name Basic pass, "@PACKAGE::EXPORT_OK;"
+## failures 0
+## cut
+
+use base 'Exporter';
+@Foo::EXPORT_OK = qw(foo bar);
+
+#-----------------------------------------------------------------------------
+
+## name Basic pass, "use vars '@EXPORT_OK';"
+## failures 0
+## cut
+
+use base 'Exporter';
+use vars qw(@EXPORT_OK);
+@EXPORT_OK = qw(foo bar);
+
+#-----------------------------------------------------------------------------
+
+## name Basic pass, "use vars '%EXPORT_TAGS';"
+## failures 0
+## cut
+
+use base 'Exporter';
+use vars qw(%EXPORT_TAGS);
+%EXPORT_TAGS = ( foo => [ qw(baz bar) ] );
+
+#-----------------------------------------------------------------------------
+
+## name No exporting at all
+## failures 0
+## cut
+
+print 123; # no exporting at all; for test coverage
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :

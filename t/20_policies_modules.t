@@ -9,7 +9,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 55;
+use Test::More tests => 46;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique fcritique);
@@ -301,107 +301,12 @@ END_PERL
 $policy = 'Modules::RequireEndWithOne';
 is( pcritique($policy, \$code), 1, $policy);
 
-#-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-require Exporter;
-our @EXPORT = qw(foo bar);
-END_PERL
-
-$policy = 'Modules::ProhibitAutomaticExportation';
-is( pcritique($policy, \$code), 1, $policy);
-
-#-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-use Exporter;
-use vars '@EXPORT';
-@EXPORT = qw(foo bar);
-END_PERL
-
-$policy = 'Modules::ProhibitAutomaticExportation';
-is( pcritique($policy, \$code), 1, $policy);
-
-
-#-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-use base 'Exporter';
-@Foo::EXPORT = qw(foo bar);
-END_PERL
-
-$policy = 'Modules::ProhibitAutomaticExportation';
-is( pcritique($policy, \$code), 1, $policy);
-
-#-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-require Exporter;
-our @EXPORT_OK = ( '$foo', '$bar' );
-END_PERL
-
-$policy = 'Modules::ProhibitAutomaticExportation';
-is( pcritique($policy, \$code), 0, $policy);
-
-#-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-use Exporter;
-use vars '%EXPORT_TAGS';
-%EXPORT_TAGS = ();
-END_PERL
-
-$policy = 'Modules::ProhibitAutomaticExportation';
-is( pcritique($policy, \$code), 0, $policy);
-
-
-#-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-use base 'Exporter';
-@Foo::EXPORT_OK = qw(foo bar);
-END_PERL
-
-$policy = 'Modules::ProhibitAutomaticExportation';
-is( pcritique($policy, \$code), 0, $policy);
-
-#-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-use base 'Exporter';
-use vars qw(@EXPORT_OK);
-@EXPORT_OK = qw(foo bar);
-END_PERL
-
-$policy = 'Modules::ProhibitAutomaticExportation';
-is( pcritique($policy, \$code), 0, $policy);
-
-#-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-use base 'Exporter';
-use vars qw(@EXPORT_TAGS);
-%EXPORT_TAGS = ( foo => [ qw(baz bar) ] );
-END_PERL
-
-$policy = 'Modules::ProhibitAutomaticExportation';
-is( pcritique($policy, \$code), 0, $policy);
-
-#-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-print 123; # no exporting at all; for test coverage
-END_PERL
-
-$policy = 'Modules::ProhibitAutomaticExportation';
-is( pcritique($policy, \$code), 0, $policy);
-
-#-----------------------------------------------------------------------------
-
 $code = <<'END_PERL';
 package Filename::OK;
 1;
 END_PERL
+
+#-----------------------------------------------------------------------------
 
 $policy = 'Modules::RequireFilenameMatchesPackage';
 for my $file ( qw( OK.pm
