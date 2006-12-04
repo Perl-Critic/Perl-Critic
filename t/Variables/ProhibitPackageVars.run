@@ -125,7 +125,7 @@ $Override::Defaults::tango = 47;
 
 ## name Override default package exceptions, null package
 ## parms {packages => ' Override::Defaults '}
-## failures 0
+## failures 1
 ## cut
 
 $::foo = 1;

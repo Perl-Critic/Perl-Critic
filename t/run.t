@@ -26,10 +26,9 @@ for my $policy ( sort keys %$subtests ) {
           : eval { fcritique($policy, \$subtest->{code}, $subtest->{filename}, $subtest->{parms}) };
         my $err = $EVAL_ERROR;
 
-        if (exists $subtest->{error}) {
-            if ( $subtest->{error} && $subtest->{error} =~ m{ \A / (.*) / \z }xms) {
-                my $re = qr/$1/;
-                like($err, $re, $desc);
+        if ($subtest->{error}) {
+            if ( 'Regexp' eq ref $subtest->{error} ) {
+                like($err, $subtest->{error}, $desc);
             }
             else {
                 ok($err, $desc);

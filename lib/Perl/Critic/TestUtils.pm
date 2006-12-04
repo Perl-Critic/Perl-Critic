@@ -223,6 +223,15 @@ sub _finalize_subtest {
         $subtest->{parms} = {};
     }
 
+    if (defined $subtest->{error}) {
+        if ( $subtest->{error} =~ m{ \A / (.*) / \z }xms) {
+            $subtest->{error} = eval {qr/$1/};
+            if ($EVAL_ERROR) {
+                confess "$subtest->{name} 'error' has a malformed regular expression";
+            }
+        }
+    }
+
     return $subtest;
 }
 

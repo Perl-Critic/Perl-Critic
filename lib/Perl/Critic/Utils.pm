@@ -481,7 +481,7 @@ sub shebang_line {
 sub words_from_string {
     my $str = shift;
 
-    return split $SPACE, $str;
+    return split q{ }, $str; # This must be a literal space, not $SPACE
 }
 
 
