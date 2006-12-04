@@ -133,6 +133,7 @@ t/20_policies_modules.t
 t/20_policy_prohibithardtabs.t
 t/20_policy_requireconsistentnewlines.t
 t/20_policy_requiretidycode.t
+t/20_policy_requirefilenamematchespackage.t
 t/40_criticize.t
 t/40_perlcriticrc
 t/80_policysummary.t

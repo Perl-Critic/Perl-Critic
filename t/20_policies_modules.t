@@ -87,59 +87,6 @@ is( pcritique($policy, \$code, \%config), 4, $policy);
     like( $caught_warning, qr/Regexp syntax error/, 'Invalid regex config');
 }
 
-#-----------------------------------------------------------------------------
-
-#-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-package Filename::OK;
-1;
-END_PERL
-
-$policy = 'Modules::RequireFilenameMatchesPackage';
-for my $file ( qw( OK.pm
-                   Filename/OK.pm
-                   lib/Filename/OK.pm
-                   blib/lib/Filename/OK.pm
-                   OK.pl
-                   Filename-OK-1.00/OK.pm
-                   Filename-OK/OK.pm
-                   Foobar-1.00/OK.pm
-                 )) {
-
-   is( fcritique($policy, \$code, $file), 0, $policy.' - '.$file );
-}
-
-for my $file ( qw( Bad.pm
-                   Filename/Bad.pm
-                   lib/Filename/BadOK.pm
-                   ok.pm
-                   filename/OK.pm
-                   Foobar/OK.pm
-                 )) {
-   is( fcritique($policy, \$code, $file), 1, $policy.' - '.$file );
-}
-
-#-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-package D'Oh;
-1;
-END_PERL
-
-$policy = 'Modules::RequireFilenameMatchesPackage';
-for my $file ( qw( Oh.pm
-                   D/Oh.pm
-                 )) {
-   is( fcritique($policy, \$code, $file), 0, $policy.' - '.$file );
-}
-
-for my $file ( qw( oh.pm
-                   d/Oh.pm
-                 )) {
-   is( fcritique($policy, \$code, $file), 1, $policy.' - '.$file );
-}
-
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4
