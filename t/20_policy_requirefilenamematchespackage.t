@@ -1,10 +1,10 @@
 #!perl
 
 ##############################################################################
-#     $URL: http://perlcritic.tigris.org/svn/perlcritic/trunk/Perl-Critic/t/20_policies_modules.t $
-#    $Date: 2006-12-03 23:58:25 -0600 (Sun, 03 Dec 2006) $
-#   $Author: petdance $
-# $Revision: 1022 $
+#     $URL$
+#    $Date$
+#   $Author$
+# $Revision$
 ##############################################################################
 
 use strict;

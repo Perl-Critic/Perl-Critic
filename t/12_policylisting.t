@@ -1,10 +1,10 @@
 #!perl
 
 ##############################################################################
-#     $URL: http://perlcritic.tigris.org/svn/perlcritic/trunk/Perl-Critic/t/11_policyfactory.t $
-#    $Date: 2006-11-18 15:48:03 -0800 (Sat, 18 Nov 2006) $
-#   $Author: clonezone $
-# $Revision: 878 $
+#     $URL$
+#    $Date$
+#   $Author$
+# $Revision$
 ##############################################################################
 
 use strict;
