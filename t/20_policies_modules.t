@@ -9,7 +9,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 33;
+use Test::More tests => 24;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique fcritique);
@@ -88,92 +88,6 @@ is( pcritique($policy, \$code, \%config), 4, $policy);
 }
 
 #-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-#Nothing!
-END_PERL
-
-$policy = 'Modules::RequireVersionVar';
-is( pcritique($policy, \$code), 1, $policy);
-
-#-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-our $VERSION = 1.0;
-END_PERL
-
-$policy = 'Modules::RequireVersionVar';
-is( pcritique($policy, \$code), 0, $policy);
-
-#-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-our ($VERSION) = 1.0;
-END_PERL
-
-$policy = 'Modules::RequireVersionVar';
-is( pcritique($policy, \$code), 0, $policy);
-
-#-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-$Package::VERSION = 1.0;
-END_PERL
-
-$policy = 'Modules::RequireVersionVar';
-is( pcritique($policy, \$code), 0, $policy);
-
-#-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-use vars '$VERSION';
-END_PERL
-
-$policy = 'Modules::RequireVersionVar';
-is( pcritique($policy, \$code), 0, $policy);
-
-#-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-use vars qw($VERSION);
-END_PERL
-
-$policy = 'Modules::RequireVersionVar';
-is( pcritique($policy, \$code), 0, $policy);
-
-#-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-my $VERSION;
-END_PERL
-
-$policy = 'Modules::RequireVersionVar';
-is( pcritique($policy, \$code), 1, $policy);
-
-#-----------------------------------------------------------------------------
-
-$code = <<'END_PERL';
-our $Version;
-END_PERL
-
-$policy = 'Modules::RequireVersionVar';
-is( pcritique($policy, \$code), 1, $policy);
-
-#-----------------------------------------------------------------------------
-
-TODO:
-{
-
-    local $TODO = q{"no critic" doesn't work at the document level};
-
-    $code = <<'END_PERL';
-#!anything
-## no critic (RequireVersionVar)
-END_PERL
-
-    $policy = 'Modules::RequireVersionVar';
-    is( pcritique($policy, \$code), 0, $policy);
-}
 
 #-----------------------------------------------------------------------------
 

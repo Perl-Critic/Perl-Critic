@@ -1,0 +1,63 @@
+## name No code
+## failures 1
+## cut
+#Nothing!
+
+#-----------------------------------------------------------------------------
+
+## name basic pass
+## failures 0
+## cut
+our $VERSION = 1.0;
+
+#-----------------------------------------------------------------------------
+
+## name basic pass #2
+## failures 0
+## cut
+our ($VERSION) = 1.0;
+
+#-----------------------------------------------------------------------------
+
+## name basic pass #3
+## failures 0
+## cut
+$Package::VERSION = 1.0;
+
+#-----------------------------------------------------------------------------
+
+## name basic pass #4
+## failures 0
+## cut
+use vars '$VERSION';
+
+#-----------------------------------------------------------------------------
+
+## name basic pass #5
+## failures 0
+## cut
+use vars qw($VERSION);
+
+#-----------------------------------------------------------------------------
+
+## name fail with lexical
+## failures 1
+## cut
+my $VERSION;
+
+#-----------------------------------------------------------------------------
+
+## name fail with wrong variable
+## failures 1
+## cut
+our $Version;
+
+#-----------------------------------------------------------------------------
+
+## name pass with "no critic" on
+## TODO "no critic" doesn't work at the document level
+## failures 0
+## cut
+
+#!anything
+## no critic (RequireVersionVar)
