@@ -5,6 +5,10 @@
 # $Revision$
 ##############################################################################
 
+[0.2x]  Released on ????-??-??
+
+     Renamed "-List" option to "-profileproto".
+
 [0.21_01] Released on 2006-12-03
 
      New Policies:

@@ -91,12 +91,12 @@ sub _parse_command_line {
 
 sub _dispatch_special_requests {
     my (%opts) = @_;
-    if ( $opts{help}    ) { pod2usage( -verbose => 0 )   }  #Exits
-    if ( $opts{man}     ) { pod2usage( -verbose => 2 )   }  #Exits
-    if ( $opts{Version} ) { print "$VERSION\n"; exit 0;  }  #Exits
-    if ( $opts{list}    ) { policy_listing( 'short' );   }  #Exits
-    if ( $opts{List}    ) { policy_listing( 'long'  );   }  #Exits
-    if ( $opts{doc}     ) { policy_docs( $opts{doc} );   }  #Exits
+    if ( $opts{help}         ) { pod2usage( -verbose => 0 )   }  #Exits
+    if ( $opts{man}          ) { pod2usage( -verbose => 2 )   }  #Exits
+    if ( $opts{Version}      ) { print "$VERSION\n"; exit 0;  }  #Exits
+    if ( $opts{list}         ) { policy_listing( 'short' );   }  #Exits
+    if ( $opts{profileproto} ) { policy_listing( 'long'  );   }  #Exits
+    if ( $opts{doc}          ) { policy_docs( $opts{doc} );   }  #Exits
     return 1;
 }
 
@@ -242,7 +242,7 @@ sub _get_option_specification {
 
     return qw(
         5 4 3 2 1
-        List
+        profileproto
         Safari
         Version
         count
@@ -353,7 +353,7 @@ C<perlcritic> - Command-line interface to critique Perl source
              [-top [ number ]] [-theme expression] [-include pattern]
              [-exclude pattern] [-singlepolicy pattern] [-only | -noonly]
              [-force | -noforce] [-verbose number | format] [-nocolor]
-             [-list | -List] [-quiet] [-help] [-man] [-Version]
+             [-list | -profileproto] [-quiet] [-help] [-man] [-Version]
              [FILE | DIRECTORY | STDIN]
 
 =head1 DESCRIPTION
@@ -610,11 +610,11 @@ Displays a condensed listing of all the L<Perl::Critic::Policy> modules that
 are found on this machine.  For each Policy, the name, default severity and
 default themes are shown.
 
-=item C<-List>
+=item C<-profileproto>
 
 Displays an expanded listing of all the L<Perl::Critic::Policy> modules that
 are found on this machine.  For each Policy, the name, default severity and
-default themes are shown.  The format is suitable for use as your
+default themes are shown.  The format is suitable as a prototype for your
 F<.perlcriticrc> file.
 
 =item C<-only>
