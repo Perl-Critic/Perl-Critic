@@ -12,6 +12,7 @@ use warnings;
 use base 'Exporter';
 use Carp qw( confess );
 use English qw(-no_match_vars);
+use Readonly;
 use File::Path ();
 use File::Spec ();
 use File::Spec::Unix ();
@@ -25,7 +26,12 @@ our $VERSION = 0.22;
 our @EXPORT_OK = qw(
     pcritique critique fcritique
     subtests_in_tree
+    should_skip_author_tests
+    $AUTHOR_TEST_SKIP_MESSAGE
 );
+
+Readonly our $AUTHOR_TEST_SKIP_MESSAGE =>
+    'Author test.  Set $ENV{TEST_AUTHOR} to a true value to run.';
 
 #-----------------------------------------------------------------------------
 # If the user already has an existing perlcriticrc file, it will get
@@ -114,6 +120,12 @@ sub subtests_in_tree {
                $subtests{ $policy } = [ @subtests ];
            }, no_chdir => 1}, $start );
     return ( \%subtests, $nsubtests );
+}
+
+# Answer whether author test should be run.
+
+sub should_skip_author_tests {
+    return !-d '.svn' && !$ENV{TEST_AUTHOR}
 }
 
 # The internal representation of a subtest is just a hash with some
@@ -297,6 +309,15 @@ keyed on policy short name, like C<Modules::RequireEndWithOne>.  The inner
 hash specifies a single test to be handed to C<pcritique()> or C<fcritique()>,
 including the code string, test name, etc.  See below for the syntax of the
 F<.run> files.
+
+=item should_skip_author_tests()
+
+Answers whether author tests should run.
+
+=item $AUTHOR_TEST_SKIP_MESSAGE
+
+A string constant containing the message that should be emitted when a test
+is skipped due to it being an author test when author tests are not enabled.
 
 =back
 

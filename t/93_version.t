@@ -4,9 +4,10 @@ use strict;
 use File::Find;
 use Test::More;
 
-if ( !-d '.svn' && !$ENV{TEST_AUTHOR} ) {
-    plan skip_all =>
-        'Author test.  Set $ENV{TEST_AUTHOR} to a true value to run.';
+use Perl::Critic::TestUtils qw{ should_skip_author_tests $AUTHOR_TEST_SKIP_MESSAGE };
+
+if (should_skip_author_tests()) {
+    plan skip_all => $AUTHOR_TEST_SKIP_MESSAGE;
 }
 
 plan 'no_plan';

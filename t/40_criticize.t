@@ -15,10 +15,10 @@ use English qw( -no_match_vars );
 use File::Spec qw();
 use Test::More;
 use Perl::Critic::PolicyFactory ( -test => 1 );
+use Perl::Critic::TestUtils qw{ should_skip_author_tests $AUTHOR_TEST_SKIP_MESSAGE };
 
-if ( !-d '.svn' && !$ENV{TEST_AUTHOR} ) {
-    plan skip_all =>
-        'Author test.  Set $ENV{TEST_AUTHOR} to a true value to run.';
+if (should_skip_author_tests()) {
+    plan skip_all => $AUTHOR_TEST_SKIP_MESSAGE;
 }
 
 #-----------------------------------------------------------------------------
