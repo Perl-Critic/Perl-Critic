@@ -18,7 +18,7 @@ use Perl::Critic::Theme qw();
 use Perl::Critic::UserProfile qw();
 use Perl::Critic::Utils;
 
-our $VERSION = 0.22;
+our $VERSION = 0.21_01;
 
 #-----------------------------------------------------------------------------
 # Constructor

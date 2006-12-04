@@ -21,7 +21,7 @@ use Perl::Critic::Violation qw();
 use Pod::Usage qw(pod2usage);
 
 
-our $VERSION = 0.22;
+our $VERSION = 0.21_01;
 
 #-----------------------------------------------------------------------------
 # Begin script.  Don't run when loaded as a library

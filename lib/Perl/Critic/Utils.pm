@@ -12,7 +12,7 @@ use warnings;
 use File::Spec qw();
 use base 'Exporter';
 
-our $VERSION = 0.22;
+our $VERSION = 0.21_01;
 
 #-----------------------------------------------------------------------------
 # Exported symbols here. TODO: Use @EXPORT_OK and %EXPORT_TAGS instead

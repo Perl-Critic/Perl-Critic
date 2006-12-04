@@ -13,7 +13,7 @@ use PPI::Document;
 use Test::More tests => 1395;  # Add 14 for each new policy created
 use English qw(-no_match_vars);
 
-our $VERSION = 0.22;
+our $VERSION = 0.21_01;
 
 # pre-compute for version comparisons
 my $version_string = __PACKAGE__->VERSION;

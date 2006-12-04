@@ -13,7 +13,7 @@ use warnings;
 use Carp qw(carp confess);
 use English qw(-no_match_vars);
 
-our $VERSION = 0.22;
+our $VERSION = 0.21_01;
 
 #-----------------------------------------------------------------------------
 
