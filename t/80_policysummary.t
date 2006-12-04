@@ -14,12 +14,12 @@ use File::Spec;
 use Test::More;
 use List::MoreUtils qw(any);
 use Perl::Critic::PolicyFactory ( -test => 1 );
-use Perl::Critic::TestUtils qw{ should_skip_author_tests $AUTHOR_TEST_SKIP_MESSAGE };
+use Perl::Critic::TestUtils qw{ should_skip_author_tests get_author_test_skip_message };
 
 #-----------------------------------------------------------------------------
 
 if (should_skip_author_tests()) {
-    plan skip_all => $AUTHOR_TEST_SKIP_MESSAGE;
+    plan skip_all => get_author_test_skip_message();
 }
 
 if (open my ($fh), '<', File::Spec->catfile(qw(lib Perl Critic PolicySummary.pod))) {
