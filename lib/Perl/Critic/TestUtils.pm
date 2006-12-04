@@ -124,7 +124,8 @@ sub should_skip_author_tests {
     return !-d '.svn' && !$ENV{TEST_AUTHOR}
 }
 
-sub get_author_test_skip_message() {
+sub get_author_test_skip_message {
+    ## no critic (RequireInterpolation);
     return 'Author test.  Set $ENV{TEST_AUTHOR} to a true value to run.';
 }
 
