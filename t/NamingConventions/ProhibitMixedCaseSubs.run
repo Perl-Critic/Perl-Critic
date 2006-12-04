@@ -1,0 +1,30 @@
+## name Basic failures.
+## failures 4
+## cut
+
+sub fooBAR {}
+sub FooBar {}
+sub Foo_Bar {}
+sub FOObar {}
+
+#-----------------------------------------------------------------------------
+
+## name Basic passes.
+## failures 0
+## cut
+
+sub foo_BAR {}
+sub foo_bar {}
+sub FOO_bar {}
+sub Foo::Bar::grok {}
+sub Class::Encapsulate::_hidden::_hash_overload {}
+
+#-----------------------------------------------------------------------------
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :

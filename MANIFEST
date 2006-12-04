@@ -1,15 +1,8 @@
 bin/perlcritic
 Build.PL
 Changes
-INSTALL
-LICENSE
-MANIFEST
-META.yml
-Makefile.PL
-README
-TODO.pod
 extras/perlcritic.el
-
+INSTALL
 lib/Perl/Critic.pm
 lib/Perl/Critic/Config.pm
 lib/Perl/Critic/Defaults.pm
@@ -117,7 +110,12 @@ lib/Perl/Critic/Theme.pm
 lib/Perl/Critic/UserProfile.pm
 lib/Perl/Critic/Utils.pm
 lib/Perl/Critic/Violation.pm
-
+LICENSE
+Makefile.PL
+MANIFEST			This list of files
+META.yml
+README
+README.developer
 t/00_modules.t
 t/01_config.t
 t/02_policy.t
@@ -131,10 +129,7 @@ t/09_theme.t
 t/10_userprofile.t
 t/11_policyfactory.t
 t/12_policylisting.t
-t/20_policies_inputoutput.t
-t/20_policies_miscellanea.t
 t/20_policies_modules.t
-t/20_policies_namingconventions.t
 t/20_policy_prohibithardtabs.t
 t/20_policy_requireconsistentnewlines.t
 t/20_policy_requiretidycode.t
@@ -148,12 +143,6 @@ t/96_filenames.t
 t/97_spelling.t
 t/98_pod_syntax.t
 t/99_pod_coverage.t
-t/run.t
-t/examples/perlcriticrc
-t/tlib/Perl/Critic/Policy/Test.pm
-t/tlib/ViolationTest.pm
-t/tlib/ViolationTest2.pm
-
 t/BuiltinFunctions/ProhibitLvalueSubstr.run
 t/BuiltinFunctions/ProhibitReverseSortBlock.run
 t/BuiltinFunctions/ProhibitSleepViaSelect.run
@@ -173,8 +162,8 @@ t/ClassHierarchies/ProhibitOneArgBless.run
 t/CodeLayout/ProhibitParensWithBuiltins.run
 t/CodeLayout/ProhibitQuotedWordLists.run
 t/CodeLayout/RequireTrailingCommas.run
-t/ControlStructures/ProhibitCStyleForLoops.run
 t/ControlStructures/ProhibitCascadingIfElse.run
+t/ControlStructures/ProhibitCStyleForLoops.run
 t/ControlStructures/ProhibitDeepNests.run
 t/ControlStructures/ProhibitMutatingListFunctions.run
 t/ControlStructures/ProhibitPostfixControls.run
@@ -184,6 +173,7 @@ t/ControlStructures/ProhibitUntilBlocks.run
 t/Documentation/RequirePodAtEnd.run
 t/Documentation/RequirePodSections.run
 t/ErrorHandling/RequireCarping.run
+t/examples/perlcriticrc
 t/InputOutput/ProhibitBacktickOperators.run
 t/InputOutput/ProhibitBarewordFileHandles.run
 t/InputOutput/ProhibitInteractiveTest.run
@@ -209,6 +199,7 @@ t/References/ProhibitDoubleSigils.run
 t/RegularExpressions/ProhibitCaptureWithoutTest.run
 t/RegularExpressions/RequireExtendedFormatting.run
 t/RegularExpressions/RequireLineBoundaryMatching.run
+t/run.t
 t/Subroutines/ProhibitAmpersandSigils.run
 t/Subroutines/ProhibitBuiltinHomonyms.run
 t/Subroutines/ProhibitExcessComplexity.run
@@ -222,6 +213,9 @@ t/TestingAndDebugging/ProhibitProlongedStrictureOverride.run
 t/TestingAndDebugging/RequireTestLabels.run
 t/TestingAndDebugging/RequireUseStrict.run
 t/TestingAndDebugging/RequireUseWarnings.run
+t/tlib/Perl/Critic/Policy/Test.pm
+t/tlib/ViolationTest.pm
+t/tlib/ViolationTest2.pm
 t/ValuesAndExpressions/ProhibitConstantPragma.run
 t/ValuesAndExpressions/ProhibitEmptyQuotes.run
 t/ValuesAndExpressions/ProhibitEscapedCharacters.run
@@ -244,3 +238,7 @@ t/Variables/ProtectPrivateVars.run
 t/Variables/RequireInitializationForLocalVars.run
 t/Variables/RequireLexicalLoopIterators.run
 t/Variables/RequireNegativeIndices.run
+tags
+TODO.pod
+tools/create_new_policy.pl
+tools/ppidump

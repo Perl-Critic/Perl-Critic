@@ -1,0 +1,110 @@
+## name Basic failures.
+## failures 11
+## cut
+
+my $left = 1;          # scalar
+my @right = ('foo');   # array
+our $no = undef;       # our
+my %abstract;          # hash
+local *main::contract; # pkg prefix on var
+sub record {}          # sub
+my ($second, $close);  # catch both of these
+sub pkg::bases {}      # pkg prefix on sub
+my ($last, $set);
+
+#-----------------------------------------------------------------------------
+
+## name Ambiguous word in compound name.
+## TODO False negative: Ambiguous words in compound names should be forbidden
+## failures 2
+## cut
+
+my $last_record;
+my $first_record;
+
+#-----------------------------------------------------------------------------
+
+## name Basic passes.
+## failures 0
+## cut
+
+for my $bases () {}
+print $main::contract;
+my %hash = (left => 1, center => 'right');
+sub no_left_turn {}
+local $\; # for Devel::Cover; an example of a var declaration without \w
+
+#-----------------------------------------------------------------------------
+
+## name Ambiguous name on rhs.
+## TODO False positive: Need to distinguish rhs in variable statements
+## failures 0
+## cut
+
+my ($foo) = ($left);
+
+#-----------------------------------------------------------------------------
+
+## name Ambiguous, but exempt by convention
+## failures 0
+## cut
+
+no warnings;
+close $fh;
+
+#-----------------------------------------------------------------------------
+
+## name Custom null configuration
+## parms { forbid => q{} }
+## failures 0
+## cut
+
+my $left;
+my $close;
+END_PERL
+
+#-----------------------------------------------------------------------------
+
+## name Custom configuration: "foo bar baz quux"
+## parms { forbid => 'foo bar baz quux' }
+## failures 2
+## cut
+
+my $left;
+my $close;
+my $foo;
+my $bar;
+
+#-----------------------------------------------------------------------------
+
+## name Custom configuration: "foo bar baz quux"
+## parms { forbid => 'foo bar left close' }
+## failures 4
+## cut
+
+my $left;
+my $close;
+my $foo;
+my $bar;
+
+#%config = ( forbid => join q{ }, qw(foo bar baz quux), @default );
+
+#-----------------------------------------------------------------------------
+
+## name Custom null configuration
+## parms { forbid => undef }
+## failures 2
+## cut
+
+my $left;
+my $close;
+
+#-----------------------------------------------------------------------------
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :
