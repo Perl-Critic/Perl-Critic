@@ -129,7 +129,7 @@ t/09_theme.t
 t/10_userprofile.t
 t/11_policyfactory.t
 t/12_policylisting.t
-t/20_policies_modules.t
+t/20_policy_prohibitevilmodules.t
 t/20_policy_prohibithardtabs.t
 t/20_policy_requireconsistentnewlines.t
 t/20_policy_requiretidycode.t
