@@ -182,8 +182,6 @@ package Filename::OK;
 1;
 END_PERL
 
-#-----------------------------------------------------------------------------
-
 $policy = 'Modules::RequireFilenameMatchesPackage';
 for my $file ( qw( OK.pm
                    Filename/OK.pm
