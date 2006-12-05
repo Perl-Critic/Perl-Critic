@@ -104,3 +104,11 @@ package FOO;
 use strict;
 $foo = $bar;
 
+#-----------------------------------------------------------------------------
+
+## name Work around a PPI bug that doesn't return a location for C<({})>.
+## failures 1
+## cut
+
+({})
+
