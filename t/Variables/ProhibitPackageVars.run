@@ -112,8 +112,8 @@ $Addl::Other::bango = 9;
 #-----------------------------------------------------------------------------
 
 ## name Override default package exceptions
-## parms {packages => 'Override::Defaults'}
-## failures 1
+## parms {add_packages => 'Incorrect::Override::Package'}
+## failures 2
 ## cut
 
 use File::Find;
@@ -124,7 +124,7 @@ $Override::Defaults::tango = 47;
 #-----------------------------------------------------------------------------
 
 ## name Override default package exceptions, null package
-## parms {packages => ' Override::Defaults '}
+## parms {add_packages => 'Incorrect::Override::Package'}
 ## failures 1
 ## cut
 

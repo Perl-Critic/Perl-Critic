@@ -11,6 +11,7 @@ use strict;
 use warnings;
 use Perl::Critic::Utils;
 use List::MoreUtils qw(all any);
+use Carp qw( carp );
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 0.21_01;
@@ -48,8 +49,15 @@ sub new {
             : [ @DEFAULT_PACKAGE_EXCEPTIONS ];
 
     # Add to list of packages
-    if ( defined $config{add_packages} ) {
-        push @{$self->{_packages}}, words_from_string( $config{add_packages} );
+    my $packages = delete $config{add_packages};
+    if ( defined $packages ) {
+        push @{$self->{_packages}}, words_from_string( $packages );
+    }
+
+    # Find any leftover, and therefore incorrect, parameters passed in
+    delete @config{ qw( severity ) };
+    for my $parm ( sort keys %config ) {
+        carp qq{Unknown parameter "$parm" for Variables::ProhibitPackageVars\n};
     }
 
     return $self;
