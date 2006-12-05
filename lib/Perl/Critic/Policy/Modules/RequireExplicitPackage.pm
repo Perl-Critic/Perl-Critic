@@ -61,7 +61,9 @@ sub violates {
 
     my @viols = ();
     for my $stmnt ( @non_packages ) {
-        my $stmnt_line = $stmnt->location()->[0];
+        # work around PPI bug: C<({})> results in a statement without a
+        # location.
+        my $stmnt_line = $stmnt->location() ? $stmnt->location()->[0] : -1;
         if ( (! defined $package_line) || ($stmnt_line < $package_line) ) {
             push @viols, $self->violation( $desc, $expl, $stmnt );
         }

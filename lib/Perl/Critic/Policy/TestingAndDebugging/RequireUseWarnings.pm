@@ -46,7 +46,10 @@ sub violates {
     for my $stmnt ( @{ $stmnts_ref } ) {
         last if $stmnt->isa('PPI::Statement::End');
         last if $stmnt->isa('PPI::Statement::Data');
-        my $stmnt_line = $stmnt->location()->[0];
+
+        # work around PPI bug: C<({})> results in a statement without a
+        # location.
+        my $stmnt_line = $stmnt->location() ? $stmnt->location()->[0] : -1;
         if ( (! defined $warn_line) || ($stmnt_line < $warn_line) ) {
             push @viols, $self->violation( $desc, $expl, $stmnt );
         }

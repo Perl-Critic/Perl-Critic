@@ -337,6 +337,26 @@ The following parses wrong in PPI v1.118.  A PPI fix is in progress.
 
 When this is fixed, uncomment a few tests in t/20_policies_classhierarchies.t
 
+=item Hash constructors with a parenthesis directly to the left.
+
+The L<PPI::Statement> surrounding the L<PPI::Constructor> returns undef
+for C<location()> for the following:
+
+  ({})
+
+The same problem exists for
+
+  ({} )
+
+but not for
+
+  ( {})
+
+Logged as RT #23788.
+
+Remove trinary operator usage in RequireUseStrict, RequireUseWarnings, and
+RequireExplicitPackage once this is fixed.
+
 =item Operators
 
 ValuesAndExpressions::ProhibitMismatchedOperators has two workarounds

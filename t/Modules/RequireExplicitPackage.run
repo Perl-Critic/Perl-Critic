@@ -98,3 +98,11 @@ my $foo = 42;
 #!/usr/bin/perl
 package foo;
 $foo = $bar;
+
+#-----------------------------------------------------------------------------
+
+## name Work around a PPI bug that doesn't return a location for C<({})>.
+## failures 2
+## cut
+
+({})
