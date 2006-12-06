@@ -353,8 +353,11 @@ C<perlcritic> - Command-line interface to critique Perl source
              [-top [ number ]] [-theme expression] [-include pattern]
              [-exclude pattern] [-singlepolicy pattern] [-only | -noonly]
              [-force | -noforce] [-verbose number | format] [-nocolor]
-             [-list | -profileproto] [-quiet] [-help] [-man] [-Version]
-             [FILE | DIRECTORY | STDIN]
+             [-quiet] {FILE | DIRECTORY | STDIN}
+
+  perlcritic -doc pattern [...]
+
+  perlcritic {-list | -profileproto | -help | -man | -Version}
 
 =head1 DESCRIPTION
 
