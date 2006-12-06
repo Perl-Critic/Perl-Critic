@@ -87,13 +87,6 @@ use carp/confess or not.  For example:
 
 I just want to print a warning and move on.  The location is irrelevant.
 
-=item * Variables::ProhibitPackageVars
-
-Allow a way to specify packages that ARE OK to have the package
-vars for.  For example, File::Find requires you to access package
-vars.  There is no other way.  Data::Dumper's package vars are the
-most common way to set parameters for it.
-
 =item * RegularExpressions::ProhibitCaptureWithoutTest
 
 Allow this construct:
@@ -304,6 +297,15 @@ This cachedir should perhaps include the PPI version number!  At least
 until PPI incorporates it's own version number in the cache.
 
 (see F<t/40_criticize.t> for a more robust implementation)
+
+=item * Use hash-lookup instead of C<List::MoreUtils::any> function.
+
+In several places, Perl::Critic uses C<List::MoreUtils::any> to see if
+a string is a member of a list.  Instead, I suggest using a named
+subroutine that does a hash-lookup like this:
+
+    my %logical_ops = hashify( qw( ! || && ||= &&= and or not ) );
+    sub is_logical_op { return exists $logical_ops{ $_[0] }; }
 
 =back
 
