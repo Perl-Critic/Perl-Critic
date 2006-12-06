@@ -1,7 +1,6 @@
 bin/perlcritic
 Build.PL
 Changes
-examples/critiquekwalitee
 extras/perlcritic.el
 INSTALL
 lib/Perl/Critic.pm
