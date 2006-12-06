@@ -1,0 +1,334 @@
+#!/usr/bin/perl
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+#       $Id$
+#  $HeadURL$
+#   $Source$
+##############################################################################
+
+use 5.008001;
+use strict;
+use warnings;
+
+use version; our $VERSION = qv('529.358.159');
+
+use Carp qw{ croak };
+use English qw{ -no_match_vars };
+use Readonly;
+
+use Perl6::Say;
+use File::Temp qw{ tempdir };
+use File::Spec qw{ };
+use LWP::Simple qw{ getstore is_error };
+use Archive::Any qw{ };
+use Perl::Critic::Utils qw{ all_perl_files };
+use Perl::Critic;
+
+# Current versions at the time of this writing.
+## no critic (ValuesAndExpressions::RestrictLongStrings)
+Readonly my %urls_by_distribution => (
+    'Test::Kwalitee' =>
+'http://search.cpan.org/CPAN/authors/id/C/CH/CHROMATIC/Test-Kwalitee-0.30.tar.gz',
+    'Module::CPANTS::Analyse' =>
+'http://search.cpan.org/CPAN/authors/id/D/DO/DOMM/Module-CPANTS-Analyse-0.69.tar.gz',
+    'Module::Build::Kwalitee' =>
+'http://search.cpan.org/CPAN/authors/id/S/ST/STIG/Module-Build-Kwalitee-0.22.tar.gz',
+    'Acme::Raise_my_kwalitee' =>
+'http://search.cpan.org/CPAN/authors/id/H/HT/HTOUG/Acme-Raise_my_kwalitee-0.02.tar.gz',
+    'Module::CPANTS::ProcessCPAN' =>
+'http://search.cpan.org/CPAN/authors/id/D/DO/DOMM/Module-CPANTS-ProcessCPAN-0.63.tar.gz',
+);
+## use critic
+
+foreach my $distribution ( sort keys %urls_by_distribution ) {
+    say "Looking at $distribution.";
+
+    say 'Creating work directory.';
+    my $work_directory = tempdir( CLEANUP => 1 );
+
+    say 'Retrieving distribution.';
+    my $archive_path = _get_distribution( $distribution, $work_directory );
+
+    say 'Extracting distribution.';
+    my $archive = Archive::Any->new($archive_path);
+    $archive->extract($work_directory);
+
+    # Hrmmm... looks like we need an enhancement to ProhibitCaptureWithoutTest.
+    $archive_path =~ m/ \A ( .* ) [.] tar [.] gz \z /xms
+      or croak
+      'Could not determine the directory the distribution files are in.';
+    my $archive_directory =
+      $1;    ## no critic (RegularExpressions::ProhibitCaptureWithoutTest)
+
+    my @files = all_perl_files($archive_directory);
+    say 'Analyzing ', scalar @files, ' files.';
+
+    my $results = _summarize( \@files, $archive_directory );
+
+    _report($results);
+
+    say;
+    say;
+}
+
+exit 0;
+
+sub _get_distribution {
+    my ( $distribution, $work_directory ) = @_;
+
+    my $url = $urls_by_distribution{$distribution};
+    my $base_file_name = substr $url, ( rindex $url, qw{/} ) + 1;
+    my $file_name = File::Spec->catfile( $work_directory, $base_file_name );
+
+    my $http_response_code = getstore( $url, $file_name );
+    croak "Could not retrieve '$url'.  Server response: $http_response_code"
+      if is_error($http_response_code);
+
+    return $file_name;
+}
+
+sub _summarize {
+    my ( $files, $archive_directory ) = @_;
+
+    my $critic = Perl::Critic->new( -severity => 1 );
+    my $absolute_path_length = ( length $archive_directory ) + 1;
+    my %total_severities;
+    my %total_policies;
+    my %types;
+    my %files;
+    my %results;
+
+    foreach my $file ( @{$files} ) {
+        my $relative_path;
+        my $type;
+        my %severities;
+        my %policies;
+
+        $relative_path = substr $file, $absolute_path_length;
+        if ( $file =~ m/ [.] ([^.]+) \z /xms ) {
+            $type = $1;
+        }
+
+        $types{$type}{files}++;
+        foreach my $violation ( $critic->critique($file) ) {
+            $files{$relative_path}{severities}{ $violation->severity() }++;
+            $files{$relative_path}{policies}{ $violation->policy() }++;
+            $types{$type}{severities}{ $violation->severity() }++;
+            $types{$type}{policies}{ $violation->policy() }++;
+            $total_severities{ $violation->severity() }++;
+            $total_policies{ $violation->policy() }++;
+        }
+    }
+
+    return {
+        severities => \%total_severities,
+        policies   => \%total_policies,
+        types      => \%types,
+        files      => \%files,
+    };
+}
+
+sub _report {
+    my ($results) = @_;
+
+    _report_totals($results);
+    _report_types($results);
+    _report_files($results);
+
+    return;
+}
+
+sub _report_totals {
+    my ($results) = @_;
+
+    say;
+    say 'Total violations by severity:';
+    _report_severities( $results->{severities} );
+
+    say;
+    say 'Total violations by policy:';
+    _report_policies( $results->{policies} );
+
+    return;
+}
+
+sub _report_types {
+    my ($results) = @_;
+    my $types = $results->{types};
+
+    say;
+    say 'Total files by type:';
+    foreach my $type ( sort keys %{$types} ) {
+        say qq{\t}, $type, ': ', $types->{$type}{files};
+    }
+
+    foreach my $type ( sort keys %{$types} ) {
+        say;
+        say "Violations in $type files by severity:";
+        _report_severities( $types->{$type}{severities} );
+
+        say;
+        say "Violations in $type files by policy:";
+        _report_policies( $types->{$type}{policies} );
+    }
+
+    return;
+}
+
+sub _report_files {
+    my ($results) = @_;
+    my $files = $results->{files};
+
+    foreach my $file ( sort keys %{$files} ) {
+        say;
+        say "Violations in $file by severity:";
+        _report_severities( $files->{$file}{severities} );
+
+        say;
+        say "Violations in $file by policy:";
+        _report_policies( $files->{$file}{policies} );
+    }
+
+    return;
+}
+
+sub _report_severities {
+    my ($severities) = @_;
+
+    foreach my $severity ( reverse sort { $a <=> $b } keys %{$severities} ) {
+        say qq{\t}, $severity, ': ', $severities->{$severity};
+    }
+
+    return;
+}
+
+sub _report_policies {
+    my ($policies) = @_;
+
+    foreach my $policy ( sort keys %{$policies} ) {
+        ( my $short_policy = $policy ) =~ s/ \A Perl::Critic::Policy:: //xms;
+
+        say qq{\t}, $short_policy, ': ', $policies->{$policy};
+    }
+
+    return;
+}
+
+__END__
+
+=pod
+
+=for stopwords kwalitee
+
+=head1 NAME
+
+C<critiquekwalitee> - Play the Kwalitee game on itself.
+
+
+=head1 USAGE
+
+  critiquekwalitee
+
+
+=head1 DESCRIPTION
+
+Kwalitee ratings include a test for examples.  What better way to satisfy this
+requirement than to critique distributions that have some kwalitee component
+in them?
+
+
+=head1 REQUIRED ARGUMENTS
+
+None.
+
+
+=head1 OPTIONS
+
+None.
+
+
+=head1 DIAGNOSTICS
+
+None.
+
+
+=head1 EXIT STATUS
+
+0
+
+
+=head1 CONFIGURATION
+
+None.
+
+
+=head1 DEPENDENCIES
+
+L<Perl::Critic>
+L<LWP::Simple>
+L<Perl6::Say>
+L<File::Temp>
+L<File::Spec>
+L<Archive::Any>
+
+
+=head1 INCOMPATIBILITIES
+
+People who take kwalitee too seriously.
+
+
+=head1 BUGS AND LIMITATIONS
+
+This is is way to complicated for an example and the Perl::Critic parts are
+buried in a subroutine.
+
+
+=head1 AUTHOR
+
+Elliot Shank  C<< <perl@galumph.com> >>
+
+
+=head1 LICENSE AND COPYRIGHT
+
+Copyright (c) 2006, Elliot Shank C<< <perl@galumph.com> >>. All rights
+reserved.
+
+This module is free software; you can redistribute it and/or modify it under
+the same terms as Perl itself. See L<perlartistic>.
+
+
+=head1 DISCLAIMER OF WARRANTY
+
+BECAUSE THIS SOFTWARE IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY FOR THE
+SOFTWARE, TO THE EXTENT PERMITTED BY APPLICABLE LAW. EXCEPT WHEN OTHERWISE
+STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES PROVIDE THE
+SOFTWARE "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED,
+INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+FITNESS FOR A PARTICULAR PURPOSE. THE ENTIRE RISK AS TO THE QUALITY AND
+PERFORMANCE OF THE SOFTWARE IS WITH YOU. SHOULD THE SOFTWARE PROVE DEFECTIVE,
+YOU ASSUME THE COST OF ALL NECESSARY SERVICING, REPAIR, OR CORRECTION.
+
+IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING WILL ANY
+COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY AND/OR REDISTRIBUTE THE
+SOFTWARE AS PERMITTED BY THE ABOVE LICENSE, BE LIABLE TO YOU FOR DAMAGES,
+INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES ARISING
+OUT OF THE USE OR INABILITY TO USE THE SOFTWARE (INCLUDING BUT NOT LIMITED TO
+LOSS OF DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR
+THIRD PARTIES OR A FAILURE OF THE SOFTWARE TO OPERATE WITH ANY OTHER SOFTWARE),
+EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH
+DAMAGES.
+
+=cut
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :
