@@ -115,7 +115,6 @@ Makefile.PL
 MANIFEST			This list of files
 META.yml
 README
-README.developer
 t/00_modules.t
 t/01_config.t
 t/02_policy.t
@@ -129,11 +128,12 @@ t/09_theme.t
 t/10_userprofile.t
 t/11_policyfactory.t
 t/12_policylisting.t
+t/20_policies.t
 t/20_policy_prohibitevilmodules.t
 t/20_policy_prohibithardtabs.t
 t/20_policy_requireconsistentnewlines.t
-t/20_policy_requiretidycode.t
 t/20_policy_requirefilenamematchespackage.t
+t/20_policy_requiretidycode.t
 t/40_criticize.t
 t/40_perlcriticrc
 t/80_policysummary.t
@@ -200,7 +200,6 @@ t/References/ProhibitDoubleSigils.run
 t/RegularExpressions/ProhibitCaptureWithoutTest.run
 t/RegularExpressions/RequireExtendedFormatting.run
 t/RegularExpressions/RequireLineBoundaryMatching.run
-t/run.t
 t/Subroutines/ProhibitAmpersandSigils.run
 t/Subroutines/ProhibitBuiltinHomonyms.run
 t/Subroutines/ProhibitExcessComplexity.run
@@ -239,7 +238,4 @@ t/Variables/ProtectPrivateVars.run
 t/Variables/RequireInitializationForLocalVars.run
 t/Variables/RequireLexicalLoopIterators.run
 t/Variables/RequireNegativeIndices.run
-tags
 TODO.pod
-tools/create_new_policy.pl
-tools/ppidump
