@@ -283,7 +283,7 @@ People who take kwalitee too seriously.
 
 =head1 BUGS AND LIMITATIONS
 
-This is is way to complicated for an example and the Perl::Critic parts are
+This is way too complicated for an example and the Perl::Critic parts are
 buried in a subroutine.
 
 
