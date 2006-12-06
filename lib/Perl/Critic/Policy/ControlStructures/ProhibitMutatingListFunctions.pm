@@ -13,7 +13,7 @@ use Perl::Critic::Utils;
 use List::MoreUtils qw( none any );
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 0.21_01;
+our $VERSION = 0.22;
 
 my @builtin_list_funcs = qw( map grep );
 my @cpan_list_funcs    = qw( List::Util::first ),
