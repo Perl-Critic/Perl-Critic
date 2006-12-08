@@ -79,13 +79,22 @@ sub _init {
     $self->_load_policies( @policies );
 
     if ($self->singlepolicy() && scalar $self->policies() != 1) {
+        # We want to use die here because the problem is with user input and
+        # the user shouldn't receive a stack trace for this.
+
+        ## no critic (RequireCarping)
         if (scalar $self->policies() == 0) {
-            confess 'No policies matched "' . $self->singlepolicy() . $DQUOTE;
+            die 'No policies matched "' . $self->singlepolicy() . qq{".\n};
         }
         else {
-            confess 'Multiple policies matched "' . $self->singlepolicy()
-                . '": ' . join ', ', apply { chomp } $self->policies();
+            die
+                'Multiple policies matched "'
+                . $self->singlepolicy()
+                . qq{":\n\t}
+                . ( join qq{,\n\t}, apply { chomp } sort $self->policies() )
+                . qq{\n};
         }
+        ## use critic
     }
 
     return $self;
