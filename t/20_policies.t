@@ -9,9 +9,26 @@ use English qw(-no_match_vars);
 use Perl::Critic::TestUtils qw(pcritique fcritique subtests_in_tree);
 Perl::Critic::TestUtils::block_perlcriticrc();
 
-my ($subtests,$nsubtests) = subtests_in_tree( 't' );
+my $subtests = subtests_in_tree( 't' );
 
-my $npolicies = scalar keys %$subtests;
+# Check for cmdline limit on policies.  Example:
+#   perl -Ilib t/20_policies.t BuiltinFunctions::ProhibitLvalueSubstr
+if (@ARGV) {
+    my @policies = keys %{$subtests};
+    # This is inefficient, but who cares...
+    for my $p (@policies) {
+        if (0 == grep {$_ eq $p} @ARGV) {
+            delete $subtests->{$p};
+        }
+    }
+}
+
+# count how many tests there will be
+my $nsubtests = 0;
+for my $s (values %$subtests) {
+    $nsubtests += @$s; # one [pf]critique() test per subtest
+}
+my $npolicies = scalar keys %$subtests; # one can() test per policy
 
 plan tests => $nsubtests + $npolicies;
 

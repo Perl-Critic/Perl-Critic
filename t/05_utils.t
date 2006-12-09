@@ -11,7 +11,7 @@ use strict;
 use warnings;
 use PPI::Document;
 use constant USE_B_KEYWORDS => eval 'use B::Keywords 1.04; 1';
-use Test::More tests => 80 + (
+use Test::More tests => 82 + (
     USE_B_KEYWORDS
     ? ( @B::Keywords::Functions + @B::Keywords::Scalars + @B::Keywords::Arrays
             + @B::Keywords::Hashes + @B::Keywords::FileHandles )
@@ -287,6 +287,15 @@ is( interpolate( 'literal'    ), "literal",    'Interpolation' );
         my $got = first_arg($doc->first_token());
         is($got ? "$got" : undef, $expect, 'first_arg - '.$code);
     }
+}
+
+#-----------------------------------------------------------------------------
+
+{
+    my $doc = PPI::Document->new(\'sub foo {}');
+    my $words = $doc->find('PPI::Token::Word');
+    is(scalar @{$words}, 2, 'count PPI::Token::Words');
+    is((scalar grep {is_function_call($_)} @{$words}), 0, 'is_function_call');
 }
 
 #-----------------------------------------------------------------------------

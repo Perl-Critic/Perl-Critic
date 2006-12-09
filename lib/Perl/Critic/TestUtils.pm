@@ -99,7 +99,6 @@ sub subtests_in_tree {
     my $start = shift;
 
     my %subtests;
-    my $nsubtests;
 
     find( {wanted => sub {
                return if ! -f $_;
@@ -112,10 +111,9 @@ sub subtests_in_tree {
                my $policy = join q{::}, $pathparts[-2], $pathparts[-1];
 
                my @subtests = _subtests_from_file( $_ );
-               $nsubtests += @subtests;
                $subtests{ $policy } = [ @subtests ];
            }, no_chdir => 1}, $start );
-    return ( \%subtests, $nsubtests );
+    return \%subtests;
 }
 
 # Answer whether author test should be run.
