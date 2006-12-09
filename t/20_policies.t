@@ -39,8 +39,8 @@ for my $policy ( sort keys %$subtests ) {
 
         my $desc = join( ' - ', $policy, "line $subtest->{lineno}", $subtest->{name} );
         my $violations = $subtest->{filename}
-          ? eval { pcritique($policy, \$subtest->{code}, $subtest->{parms}) }
-          : eval { fcritique($policy, \$subtest->{code}, $subtest->{filename}, $subtest->{parms}) };
+          ? eval { fcritique($policy, \$subtest->{code}, $subtest->{filename}, $subtest->{parms}) }
+          : eval { pcritique($policy, \$subtest->{code}, $subtest->{parms}) };
         my $err = $EVAL_ERROR;
 
         if ($subtest->{error}) {
