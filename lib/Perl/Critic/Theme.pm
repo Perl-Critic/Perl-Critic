@@ -71,8 +71,10 @@ sub _evaluate_expression {
 
     no warnings 'uninitialized'; ## no critic (ProhibitNoWarnings)
     my $wanted = eval $expression; ## no critic (ProhibitStringyEval)
+    ## no critic (RequireCarping)
     die qq{Invalid theme expression: "$original_expression".\n}
-        if $EVAL_ERROR; ## no critic (RequireCarping)
+        if $EVAL_ERROR;
+    ## use critic
     return if not defined $wanted;
 
     # If one of the operands in the expression evaluated to undef,
