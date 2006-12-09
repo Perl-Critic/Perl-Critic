@@ -167,107 +167,6 @@ sub site_policy_names {
     return @SITE_POLICY_NAMES;
 }
 
-#-----------------------------------------------------------------------------
-# This list should be in alphabetic order but it's no longer critical
-
-sub native_policy_names {
-    return qw(
-      Perl::Critic::Policy::BuiltinFunctions::ProhibitLvalueSubstr
-      Perl::Critic::Policy::BuiltinFunctions::ProhibitReverseSortBlock
-      Perl::Critic::Policy::BuiltinFunctions::ProhibitSleepViaSelect
-      Perl::Critic::Policy::BuiltinFunctions::ProhibitStringyEval
-      Perl::Critic::Policy::BuiltinFunctions::ProhibitStringySplit
-      Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalCan
-      Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalIsa
-      Perl::Critic::Policy::BuiltinFunctions::ProhibitVoidGrep
-      Perl::Critic::Policy::BuiltinFunctions::ProhibitVoidMap
-      Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep
-      Perl::Critic::Policy::BuiltinFunctions::RequireBlockMap
-      Perl::Critic::Policy::BuiltinFunctions::RequireGlobFunction
-      Perl::Critic::Policy::BuiltinFunctions::RequireSimpleSortBlock
-      Perl::Critic::Policy::ClassHierarchies::ProhibitAutoloading
-      Perl::Critic::Policy::ClassHierarchies::ProhibitExplicitISA
-      Perl::Critic::Policy::ClassHierarchies::ProhibitOneArgBless
-      Perl::Critic::Policy::CodeLayout::ProhibitHardTabs
-      Perl::Critic::Policy::CodeLayout::ProhibitParensWithBuiltins
-      Perl::Critic::Policy::CodeLayout::ProhibitQuotedWordLists
-      Perl::Critic::Policy::CodeLayout::RequireConsistentNewlines
-      Perl::Critic::Policy::CodeLayout::RequireTidyCode
-      Perl::Critic::Policy::CodeLayout::RequireTrailingCommas
-      Perl::Critic::Policy::ControlStructures::ProhibitCStyleForLoops
-      Perl::Critic::Policy::ControlStructures::ProhibitCascadingIfElse
-      Perl::Critic::Policy::ControlStructures::ProhibitDeepNests
-      Perl::Critic::Policy::ControlStructures::ProhibitMutatingListFunctions
-      Perl::Critic::Policy::ControlStructures::ProhibitPostfixControls
-      Perl::Critic::Policy::ControlStructures::ProhibitUnlessBlocks
-      Perl::Critic::Policy::ControlStructures::ProhibitUnreachableCode
-      Perl::Critic::Policy::ControlStructures::ProhibitUntilBlocks
-      Perl::Critic::Policy::Documentation::RequirePodAtEnd
-      Perl::Critic::Policy::Documentation::RequirePodSections
-      Perl::Critic::Policy::ErrorHandling::RequireCarping
-      Perl::Critic::Policy::InputOutput::ProhibitBacktickOperators
-      Perl::Critic::Policy::InputOutput::ProhibitBarewordFileHandles
-      Perl::Critic::Policy::InputOutput::ProhibitInteractiveTest
-      Perl::Critic::Policy::InputOutput::ProhibitOneArgSelect
-      Perl::Critic::Policy::InputOutput::ProhibitReadlineInForLoop
-      Perl::Critic::Policy::InputOutput::ProhibitTwoArgOpen
-      Perl::Critic::Policy::InputOutput::RequireBracedFileHandleWithPrint
-      Perl::Critic::Policy::Miscellanea::ProhibitFormats
-      Perl::Critic::Policy::Miscellanea::ProhibitTies
-      Perl::Critic::Policy::Miscellanea::RequireRcsKeywords
-      Perl::Critic::Policy::Modules::ProhibitAutomaticExportation
-      Perl::Critic::Policy::Modules::ProhibitEvilModules
-      Perl::Critic::Policy::Modules::ProhibitMultiplePackages
-      Perl::Critic::Policy::Modules::RequireBarewordIncludes
-      Perl::Critic::Policy::Modules::RequireEndWithOne
-      Perl::Critic::Policy::Modules::RequireExplicitPackage
-      Perl::Critic::Policy::Modules::RequireFilenameMatchesPackage
-      Perl::Critic::Policy::Modules::RequireVersionVar
-      Perl::Critic::Policy::NamingConventions::ProhibitAmbiguousNames
-      Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseSubs
-      Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars
-      Perl::Critic::Policy::References::ProhibitDoubleSigils
-      Perl::Critic::Policy::RegularExpressions::ProhibitCaptureWithoutTest
-      Perl::Critic::Policy::RegularExpressions::RequireExtendedFormatting
-      Perl::Critic::Policy::RegularExpressions::RequireLineBoundaryMatching
-      Perl::Critic::Policy::Subroutines::ProhibitAmpersandSigils
-      Perl::Critic::Policy::Subroutines::ProhibitBuiltinHomonyms
-      Perl::Critic::Policy::Subroutines::ProhibitExcessComplexity
-      Perl::Critic::Policy::Subroutines::ProhibitExplicitReturnUndef
-      Perl::Critic::Policy::Subroutines::ProhibitSubroutinePrototypes
-      Perl::Critic::Policy::Subroutines::ProtectPrivateSubs
-      Perl::Critic::Policy::Subroutines::RequireFinalReturn
-      Perl::Critic::Policy::TestingAndDebugging::ProhibitNoStrict
-      Perl::Critic::Policy::TestingAndDebugging::ProhibitNoWarnings
-      Perl::Critic::Policy::TestingAndDebugging::ProhibitProlongedStrictureOverride
-      Perl::Critic::Policy::TestingAndDebugging::RequireTestLabels
-      Perl::Critic::Policy::TestingAndDebugging::RequireUseStrict
-      Perl::Critic::Policy::TestingAndDebugging::RequireUseWarnings
-      Perl::Critic::Policy::ValuesAndExpressions::ProhibitConstantPragma
-      Perl::Critic::Policy::ValuesAndExpressions::ProhibitEmptyQuotes
-      Perl::Critic::Policy::ValuesAndExpressions::ProhibitEscapedCharacters
-      Perl::Critic::Policy::ValuesAndExpressions::ProhibitInterpolationOfLiterals
-      Perl::Critic::Policy::ValuesAndExpressions::ProhibitLeadingZeros
-      Perl::Critic::Policy::ValuesAndExpressions::ProhibitMismatchedOperators
-      Perl::Critic::Policy::ValuesAndExpressions::ProhibitMixedBooleanOperators
-      Perl::Critic::Policy::ValuesAndExpressions::ProhibitNoisyQuotes
-      Perl::Critic::Policy::ValuesAndExpressions::ProhibitVersionStrings
-      Perl::Critic::Policy::ValuesAndExpressions::RequireInterpolationOfMetachars
-      Perl::Critic::Policy::ValuesAndExpressions::RequireNumberSeparators
-      Perl::Critic::Policy::ValuesAndExpressions::RequireQuotedHeredocTerminator
-      Perl::Critic::Policy::ValuesAndExpressions::RequireUpperCaseHeredocTerminator
-      Perl::Critic::Policy::Variables::ProhibitConditionalDeclarations
-      Perl::Critic::Policy::Variables::ProhibitLocalVars
-      Perl::Critic::Policy::Variables::ProhibitMatchVars
-      Perl::Critic::Policy::Variables::ProhibitPackageVars
-      Perl::Critic::Policy::Variables::ProhibitPunctuationVars
-      Perl::Critic::Policy::Variables::ProtectPrivateVars
-      Perl::Critic::Policy::Variables::RequireInitializationForLocalVars
-      Perl::Critic::Policy::Variables::RequireLexicalLoopIterators
-      Perl::Critic::Policy::Variables::RequireNegativeIndices
-    );
-}
-
 1;
 
 __END__
@@ -344,11 +243,6 @@ Returns a list of all the Policy modules that are currently installed
 in the Perl::Critic:Policy namespace.  These will include modules that
 are distributed with Perl::Critic plus any third-party modules that
 have been installed.
-
-=item C<native_policy_names()>
-
-Returns a list of all the Policy modules that have been distributed
-with Perl::Critic.  Does not include any third-party modules.
 
 =back
 

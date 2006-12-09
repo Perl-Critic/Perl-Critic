@@ -10,7 +10,8 @@
 use strict;
 use warnings;
 use PPI::Document;
-use Test::More tests => 1395;  # Add 14 for each new policy created
+use Test::More tests => 1393;  # Add 14 for each new policy created
+use Perl::Critic::TestUtils qw(bundled_policy_names);
 use English qw(-no_match_vars);
 
 our $VERSION = 0.22;
@@ -42,7 +43,6 @@ can_ok('Perl::Critic::Config', 'add_policy');
 can_ok('Perl::Critic::Config', 'exclude');
 can_ok('Perl::Critic::Config', 'force');
 can_ok('Perl::Critic::Config', 'include');
-can_ok('Perl::Critic::Config', 'native_policy_names');
 can_ok('Perl::Critic::Config', 'only');
 can_ok('Perl::Critic::Config', 'policies');
 can_ok('Perl::Critic::Config', 'site_policy_names');
@@ -137,7 +137,6 @@ is($up->VERSION(), $version_string);
 
 use_ok('Perl::Critic::PolicyFactory');
 can_ok('Perl::Critic::PolicyFactory', 'create_policy');
-can_ok('Perl::Critic::PolicyFactory', 'native_policy_names');
 can_ok('Perl::Critic::PolicyFactory', 'new');
 can_ok('Perl::Critic::PolicyFactory', 'policies');
 can_ok('Perl::Critic::PolicyFactory', 'site_policy_names');
@@ -163,24 +162,26 @@ is($listing->VERSION(), $version_string);
 #-----------------------------------------------------------------------------
 # Test module interface for each Policy subclass
 
-for my $mod ( Perl::Critic::PolicyFactory::native_policy_names() ) {
+{
+    for my $mod ( bundled_policy_names() ) {
 
-    use_ok($mod);
-    can_ok($mod, 'applies_to');
-    can_ok($mod, 'default_severity');
-    can_ok($mod, 'default_themes');
-    can_ok($mod, 'get_severity');
-    can_ok($mod, 'get_themes');
-    can_ok($mod, 'new');
-    can_ok($mod, 'set_severity');
-    can_ok($mod, 'set_themes');
-    can_ok($mod, 'set_themes');
-    can_ok($mod, 'violates');
-    can_ok($mod, 'violation');
+        use_ok($mod);
+        can_ok($mod, 'applies_to');
+        can_ok($mod, 'default_severity');
+        can_ok($mod, 'default_themes');
+        can_ok($mod, 'get_severity');
+        can_ok($mod, 'get_themes');
+        can_ok($mod, 'new');
+        can_ok($mod, 'set_severity');
+        can_ok($mod, 'set_themes');
+        can_ok($mod, 'set_themes');
+        can_ok($mod, 'violates');
+        can_ok($mod, 'violation');
 
-    my $policy = $mod->new();
-    isa_ok($policy, 'Perl::Critic::Policy');
-    is($policy->VERSION(), $version_string, "Version of $mod");
+        my $policy = $mod->new();
+        isa_ok($policy, 'Perl::Critic::Policy');
+        is($policy->VERSION(), $version_string, "Version of $mod");
+    }
 }
 
 #-----------------------------------------------------------------------------

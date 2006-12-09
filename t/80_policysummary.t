@@ -14,7 +14,8 @@ use File::Spec;
 use Test::More;
 use List::MoreUtils qw(any);
 use Perl::Critic::PolicyFactory ( -test => 1 );
-use Perl::Critic::TestUtils qw{ should_skip_author_tests get_author_test_skip_message };
+use Perl::Critic::TestUtils qw{ should_skip_author_tests get_author_test_skip_message 
+                                bundled_policy_names };
 
 #-----------------------------------------------------------------------------
 
@@ -24,7 +25,7 @@ if (should_skip_author_tests()) {
 
 if (open my ($fh), '<', File::Spec->catfile(qw(lib Perl Critic PolicySummary.pod))) {
 
-    my @policy_names = Perl::Critic::PolicyFactory::native_policy_names();
+    my @policy_names = bundled_policy_names();
     my @summaries    = map { m/^=head2 [ ]+ L<([\w:]+)>/mx } <$fh>;
     plan( tests => scalar @policy_names );
 

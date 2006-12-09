@@ -27,6 +27,7 @@ our @EXPORT_OK = qw(
     subtests_in_tree
     should_skip_author_tests
     get_author_test_skip_message
+    bundled_policy_names
 );
 
 #-----------------------------------------------------------------------------
@@ -233,6 +234,13 @@ sub _finalize_subtest {
     return $subtest;
 }
 
+sub bundled_policy_names {
+    require ExtUtils::Manifest;
+    my $manifest = ExtUtils::Manifest::maniread();
+    my @policy_paths = map {m{\A lib/(Perl/Critic/Policy/.*).pm \z}mx} keys %{$manifest};
+    my @policies = map { join q{::}, split m{/}mx, $_} @policy_paths;
+    return sort @policies;
+}
 
 1;
 
@@ -326,6 +334,12 @@ Answers whether author tests should run.
 
 Returns a string containing the message that should be emitted when a test
 is skipped due to it being an author test when author tests are not enabled.
+
+=item bundled_policy_names()
+
+Returns a list of Policy packages that come bundled with this package.  This
+functions by searching F<MANIFEST> for F<lib/Perl/Critic/Policy/*.pm> and
+converts the results to package names.
 
 =back
 

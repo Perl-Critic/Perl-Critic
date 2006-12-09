@@ -302,11 +302,11 @@ is( interpolate( 'literal'    ), "literal",    'Interpolation' );
 
 
 use Perl::Critic::PolicyFactory;
-use Perl::Critic::TestUtils qw();
+use Perl::Critic::TestUtils qw(bundled_policy_names);
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 
-my @native_policies = Perl::Critic::PolicyFactory::native_policy_names();
+my @native_policies = bundled_policy_names();
 my @found_policies  = all_perl_files( 'lib/Perl/Critic/Policy' );
 is( scalar @found_policies, scalar @native_policies, 'Find all perl code');
 

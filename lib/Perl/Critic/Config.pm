@@ -306,12 +306,6 @@ sub site_policy_names {
     return Perl::Critic::PolicyFactory::site_policy_names();
 }
 
-#-----------------------------------------------------------------------------
-
-sub native_policy_names {
-    return Perl::Critic::PolicyFactory::native_policy_names();
-}
-
 1;
 
 #-----------------------------------------------------------------------------
@@ -489,11 +483,6 @@ Returns a list of all the Policy modules that are currently installed
 in the Perl::Critic:Policy namespace.  These will include modules that
 are distributed with Perl::Critic plus any third-party modules that
 have been installed.
-
-=item C<native_policy_names()>
-
-Returns a list of all the Policy modules that have been distributed
-with Perl::Critic.  Does not include any third-party modules.
 
 =back
 

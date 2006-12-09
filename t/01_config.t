@@ -16,14 +16,14 @@ use Perl::Critic::Utils;
 use Test::More (tests => 58);
 
 # common P::C testing tools
-use Perl::Critic::TestUtils qw();
+use Perl::Critic::TestUtils qw(bundled_policy_names);
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 #-----------------------------------------------------------------------------
 
 my $examples_dir      = 't/examples';
 my $config           = Perl::Critic::Config->new(-severity => $SEVERITY_LOWEST);
-my @native_policies  = Perl::Critic::Config::native_policy_names();
+my @native_policies  = bundled_policy_names();
 my @site_policies    = Perl::Critic::Config::site_policy_names();
 my $total_policies   = scalar @site_policies;
 
