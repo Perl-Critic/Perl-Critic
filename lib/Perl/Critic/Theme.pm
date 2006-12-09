@@ -62,6 +62,7 @@ sub _init {
 
 sub _evaluate_expression {
     my ( $expression, $tmap ) = @_;
+    my $original_expression = $expression;
 
     my %tmap = %{ $tmap };
     _validate_expression( $expression );
@@ -70,7 +71,8 @@ sub _evaluate_expression {
 
     no warnings 'uninitialized'; ## no critic (ProhibitNoWarnings)
     my $wanted = eval $expression; ## no critic (ProhibitStringyEval)
-    confess qq{Invalid theme expression: "$expression"} if $EVAL_ERROR;
+    die qq{Invalid theme expression: "$original_expression".\n}
+        if $EVAL_ERROR; ## no critic (RequireCarping)
     return if not defined $wanted;
 
     # If one of the operands in the expression evaluated to undef,
@@ -109,7 +111,9 @@ sub _validate_expression {
     return 1 if not defined $expression;
     if ( $expression !~ m/\A    [()\s\w\d\+\-\*]* \z/mx ) {
         $expression  =~ m/   ( [^()\s\w\d\+\-\*] )  /mx;
-        confess qq{Illegal character "$1" in theme expression};
+        ## no critic (RequireCarping)
+        die qq{Illegal character "$1" in theme expression.\n};
+        ## use critic
     }
     return 1;
 }

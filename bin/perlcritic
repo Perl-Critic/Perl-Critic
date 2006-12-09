@@ -175,7 +175,7 @@ sub get_input {
 sub critique {
 
     my ( $opts_ref, @files ) = @_;
-    @files || confess "No perl files were found.\n";
+    @files || die "No perl files were found.\n"; ## no critic (RequireCarping)
 
     # Perl::Critic has lots of dependencies, so loading is delayed
     # until it is really needed.  This hack reduces startup time for
