@@ -29,6 +29,7 @@ my @invalid_expressions = (
     'cosmetic + {risky - pbp}',
     'cosmetic && risky || pbp',
     'cosmetic @ risky ^ pbp',
+    'cosmetic risky',
 );
 
 for my $invalid ( @invalid_expressions ) {
