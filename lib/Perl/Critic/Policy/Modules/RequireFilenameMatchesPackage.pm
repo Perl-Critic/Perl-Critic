@@ -23,7 +23,7 @@ my $expl = q{Correct the filename or package statement};
 #-----------------------------------------------------------------------------
 
 sub default_severity { return $SEVERITY_HIGHEST }
-sub default_themes   { return qw(danger)        }
+sub default_themes   { return qw(core danger)        }
 sub applies_to       { return 'PPI::Document'   }
 
 #-----------------------------------------------------------------------------

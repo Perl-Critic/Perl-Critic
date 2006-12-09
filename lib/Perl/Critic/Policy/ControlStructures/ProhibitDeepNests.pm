@@ -22,7 +22,7 @@ my $expl = q{Consider refactoring};
 #-----------------------------------------------------------------------------
 
 sub default_severity { return $SEVERITY_MEDIUM           }
-sub default_themes   { return qw(readability complexity) }
+sub default_themes   { return qw(core readability complexity) }
 sub applies_to       { return 'PPI::Statement::Compound' }
 
 #-----------------------------------------------------------------------------

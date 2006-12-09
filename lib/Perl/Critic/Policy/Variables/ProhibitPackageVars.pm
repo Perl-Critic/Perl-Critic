@@ -24,7 +24,7 @@ my $expl = [ 73, 75 ];
 #-----------------------------------------------------------------------------
 
 sub default_severity { return $SEVERITY_MEDIUM    }
-sub default_themes   { return qw(pbp unreliable) }
+sub default_themes   { return qw(core pbp unreliable) }
 sub applies_to       { return qw(PPI::Token::Symbol
                                  PPI::Statement::Variable
                                  PPI::Statement::Include) }

@@ -31,7 +31,7 @@ my $expl = q{Consider removing it};
 #-----------------------------------------------------------------------------
 
 sub default_severity { return $SEVERITY_HIGH     }
-sub default_themes    { return qw( risky )        }
+sub default_themes    { return qw( core risky )        }
 sub applies_to       { return 'PPI::Token::Word' }
 
 #-----------------------------------------------------------------------------

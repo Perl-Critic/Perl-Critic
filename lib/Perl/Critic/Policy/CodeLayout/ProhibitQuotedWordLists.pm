@@ -22,7 +22,7 @@ my $expl = q{Use 'qw()' instead};
 #-----------------------------------------------------------------------------
 
 sub default_severity { return $SEVERITY_LOW }
-sub default_themes { return qw(cosmetic) };
+sub default_themes { return qw(core cosmetic) };
 sub applies_to { return 'PPI::Structure::List' }
 
 #-----------------------------------------------------------------------------

@@ -22,7 +22,7 @@ my $expl = [ 117, 118 ];
 #-----------------------------------------------------------------------------
 
 sub default_severity { return $SEVERITY_MEDIUM               }
-sub default_themes   { return qw(pbp readability complexity) }
+sub default_themes   { return qw(core pbp readability complexity) }
 sub applies_to       { return 'PPI::Statement::Compound'     }
 
 #-----------------------------------------------------------------------------

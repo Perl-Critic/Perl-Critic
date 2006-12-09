@@ -27,7 +27,7 @@ my %logic_keywords = hashify( @logic_keywords );
 #-----------------------------------------------------------------------------
 
 sub default_severity { return $SEVERITY_MEDIUM      }
-sub default_themes   { return qw(complexity)        }
+sub default_themes   { return qw(core complexity)        }
 sub applies_to       { return 'PPI::Statement::Sub' }
 
 #-----------------------------------------------------------------------------

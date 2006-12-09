@@ -22,7 +22,7 @@ my $expl = [51];
 #-----------------------------------------------------------------------------
 
 sub default_severity   { return $SEVERITY_LOWEST }
-sub default_themes      { return qw(pbp cosmetic) }
+sub default_themes      { return qw(core pbp cosmetic) }
 sub applies_to         { return qw(PPI::Token::Quote::Double
                                    PPI::Token::Quote::Interpolate) }
 
