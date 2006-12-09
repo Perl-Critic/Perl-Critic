@@ -128,6 +128,7 @@ t/09_theme.t
 t/10_userprofile.t
 t/11_policyfactory.t
 t/12_policylisting.t
+t/13_bundled_policies.t
 t/20_policies.t
 t/20_policy_prohibitevilmodules.t
 t/20_policy_prohibithardtabs.t
