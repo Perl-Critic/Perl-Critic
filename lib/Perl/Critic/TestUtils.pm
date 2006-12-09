@@ -180,7 +180,8 @@ sub _subtests_from_file {
             # Don't start a subtest if we're not in one
             push @{$subtest->{code}}, $line;
         }
-        else {
+        elsif (@subtests) {
+            ## don't complain if we have not yet hit the first test
             confess "Got some code but I'm not in a subtest: $test_file";
         }
     }
