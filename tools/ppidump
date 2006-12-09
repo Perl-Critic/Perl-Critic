@@ -5,9 +5,10 @@ use warnings;
 use PPI::Document;
 use PPI::Dumper;
 
+my $whitespace = $ARGV[0] && $ARGV[0] eq '-w' ? shift : 0;
 my $code = $ARGV[0] ? (-f $ARGV[0] ? shift : \shift) : \join q{}, <STDIN>;
 my $doc  = PPI::Document->new( $code );
-my $dump = PPI::Dumper->new( $doc, whitespace => 0 );
+my $dump = PPI::Dumper->new( $doc, whitespace => $whitespace );
 $dump->print();
 
 __END__
@@ -25,12 +26,16 @@ ppidump - Dump Perl code as PPI structure
   ppidump                     #Read from STDIN
   ppidump MyModule.pm         #Read code from file
   ppidump 'my $foo = $bar;'   #Read code as from string
+  ppidump -w 'foo( );'        #Show whitespace tokens
 
 =head1 DESCRIPTION
 
 This is a simple tool for helping to develop Perl::Critic::Policy
 modules.  If you want to see how L<PPI> would parse a snippet of
 code, just feed it to C<ppidump>.
+
+By default, whitespace tokens are hidden.  Use the C<-w> flag to show
+them.
 
 =head1 AUTHOR
 
