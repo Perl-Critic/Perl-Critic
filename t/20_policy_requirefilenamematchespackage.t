@@ -12,16 +12,13 @@ use warnings;
 use Test::More tests => 18;
 
 # common P::C testing tools
-use Perl::Critic::TestUtils qw(pcritique fcritique);
+use Perl::Critic::TestUtils qw(fcritique);
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 my $policy = 'Modules::RequireFilenameMatchesPackage';
 
-BASIC_CHECKS: {
-    my $code = <<'END_PERL';
-package Filename::OK;
-1;
-END_PERL
+COLONCOLON: {
+    my $code = 'package Filename::OK; 1;';
 
     my @goodfiles = qw(
         OK.pm
@@ -52,11 +49,8 @@ END_PERL
 
 #-----------------------------------------------------------------------------
 
-APOSTROPHES: {
-    my $code = <<'END_PERL';
-package D'Oh;
-1;
-END_PERL
+APOSTROPHE: {
+    my $code = 'package D\'Oh; 1;';
 
     my @goodfiles = qw( Oh.pm D/Oh.pm );
     for my $file ( @goodfiles ) {
