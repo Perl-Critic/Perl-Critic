@@ -42,75 +42,124 @@ sub violates {
     }
 
     return if ! is_function_call($elem);
-
-    my $last_list_element = _find_last_flattened_list_element($elem);
-    if (
-            $last_list_element
-        and (
-                $last_list_element->isa('PPI::Token::Quote::Double')
-            or  $last_list_element->isa('PPI::Token::Quote::Interpolate')
-        )
-    ) {
-        return if $last_list_element =~ m{ [\\] n . \z }xmso;
-    }
+    return if _last_flattened_argument_list_element_ends_in_newline($elem);
 
     my $desc = qq{"$elem" used instead of "$alternative"};
     return $self->violation( $desc, $expl, $elem );
 }
 
-# TODO: refactor this overly complicated function
-sub _find_last_flattened_list_element {
-    my $starting_element = shift;
+sub _last_flattened_argument_list_element_ends_in_newline {
+    my $die_or_warn = shift;
 
-    my $last_following_sibling;
-    my $next_sibling = $starting_element;
-    while (
-            $next_sibling = $next_sibling->snext_sibling()
-        and not _is_postfix_operator( $next_sibling )
+    my $last_flattened_argument =
+        _find_last_flattened_argument_list_element($die_or_warn);
+    if (
+            $last_flattened_argument
+        and (
+                $last_flattened_argument->isa('PPI::Token::Quote::Double')
+            or  $last_flattened_argument->isa('PPI::Token::Quote::Interpolate')
+        )
     ) {
-        $last_following_sibling = $next_sibling;
+        return $TRUE if $last_flattened_argument =~ m{ [\\] n . \z }xmso;
     }
 
-    return if not $last_following_sibling;
+    return $FALSE
+}
 
-    my $current_candidate = $last_following_sibling;
+# Here starts the fun.  Explanation by example:
+#
+# Let's say we've got the following (contrived) statement:
+#
+#    die q{Isn't }, ( $this, ( " fun?\n" ) , ) if "It isn't Monday.";
+#
+# This statement should pass because the last parameter that die is going to
+# get is C<" fun?\n">.
+#
+# The approach is to first find the last non-flattened parameter.  If this
+# is a simple token, we're done.  Else, it's some aggregate thing.  We can't
+# tell what C<some_function( "foo\n" )> is going to do, so we give up on
+# anything other than a PPI::Structure::List.
+#
+# There are three possible scenarios for the children of a List:
+#
+#   * No children of the List, i.e. the list looks like C< ( ) >.
+#   * One PPI::Statement::Expression element.
+#   * One PPI::Statement element.  That's right, an instance of the base
+#     statement class and not some subclass.  *sigh*
+#
+# In the first case, we're done.  The latter two cases get treated
+# identically.  We get the last child of the Statement and start the search
+# all over again.
+#
+# Back to our example.  The PPI tree for this expression is
+#
+#     PPI::Document
+#       PPI::Statement
+#         PPI::Token::Word    'die'
+#         PPI::Token::Quote::Literal          'q{Isn't }'
+#         PPI::Token::Operator        ','
+#         PPI::Structure::List        ( ... )
+#           PPI::Statement::Expression
+#             PPI::Token::Symbol      '$this'
+#             PPI::Token::Operator    ','
+#             PPI::Structure::List    ( ... )
+#               PPI::Statement::Expression
+#                 PPI::Token::Quote::Double   '" fun?\n"'
+#             PPI::Token::Operator    ','
+#         PPI::Token::Word    'if'
+#         PPI::Token::Quote::Double   '"It isn't Monday.\n"'
+#         PPI::Token::Structure       ';'
+#
+# We're starting with the Word containing 'die' (it could just as well be
+# 'warn') because the earlier parts of validate() have taken care of any
+# other possibility.  We're going to scan forward through 'die's siblings
+# until we reach what we think the end of its parameters are. So we get
+#
+#     1. A Literal. A perfectly good argument.
+#     2. A comma operator. Looks like we've got more to go.
+#     3. A List. Another argument.
+#     4. The Word 'if'.  Oops.  That's a postfix operator.
+#
+# Thus, the last parameter is the List.  So, we've got to scan backwards
+# through the components of the List; again, the goal is to find the last
+# value in the flattened list.
+#
+# Before decending into the List, we check that it isn't a subroutine call by
+# looking at its prior sibling.  In this case, the prior sibling is a comma
+# operator, so it's fine.
+#
+# The List has one Expression element as we expect.  We grab the Expression's
+# last child and start all over again.
+#
+#     1. The last child is a comma operator, which Perl will ignore, so we
+#        skip it.
+#     2. The comma's prior sibling is a List.  This is the last significant
+#        part of the outer list.
+#     3. The List's prior sibling isn't a Word, so we can continue because the
+#        List is not a parameter list.
+#     4. We go through the child Expression and find that the last child of
+#        that is a PPI::Token::Quote::Double, which is a simple, non-compound
+#        token.  We return that and we're done.
+
+sub _find_last_flattened_argument_list_element {
+    my $die_or_warn = shift;
+
+    # Zoom forward...
+    my $current_candidate =
+        _find_last_element_in_subexpression($die_or_warn);
+
+    # ... scan back.
     while (
-            not _is_list_element_token( $current_candidate )
-        and not _is_stop_token( $current_candidate )
+            $current_candidate
+        and not _is_simple_list_element_token( $current_candidate )
+        and not _is_complex_expression_token( $current_candidate )
     ) {
         if ( $current_candidate->isa('PPI::Structure::List') ) {
-            my $prior_sibling = $current_candidate->sprevious_sibling();
-
-            if ( $prior_sibling ) {
-                if ( $prior_sibling->isa('PPI::Token::Operator') ) {
-                    if ( $prior_sibling != $COMMA ) {
-                        return;
-                    }
-                } elsif ( $prior_sibling != $starting_element ) {
-                    return
-                }
-            }
-
-            my @list_children = $current_candidate->schildren();
-
-            # If zero children, nothing to look for.
-            # If multiple children, then PPI is not giving us
-            # anything we understand.
-            return if scalar (@list_children) != 1;
-
-            my $list_child = $list_children[0];
-            return if not $list_child->isa('PPI::Statement');
-            if (
-                    not $list_child->isa('PPI::Statement::Expression')
-                and ref $list_child ne 'PPI::Statement'
-            ) {
-                return;
-            }
-
-            my @statement_children = $list_child->schildren();
-            return if scalar (@statement_children) < 1;
-
-            $current_candidate = $statement_children[-1];
+            $current_candidate =
+                _determine_if_list_is_a_plain_list_and_get_last_child(
+                    $current_candidate,
+                    $die_or_warn
+                );
         } elsif ( not $current_candidate->isa('PPI::Token') ) {
             return;
         } else {
@@ -118,9 +167,75 @@ sub _find_last_flattened_list_element {
         }
     }
 
-    return if _is_stop_token( $current_candidate );
+    return if not $current_candidate;
+    return if _is_complex_expression_token( $current_candidate );
 
     return $current_candidate;
+}
+
+# This is the part where we scan forward from the 'die' or 'warn' to find
+# the last argument.
+sub _find_last_element_in_subexpression {
+    my $die_or_warn = shift;
+
+    my $last_following_sibling;
+    my $next_sibling = $die_or_warn;
+    while (
+            $next_sibling = $next_sibling->snext_sibling()
+        and not _is_postfix_operator( $next_sibling )
+    ) {
+        $last_following_sibling = $next_sibling;
+    }
+
+    return $last_following_sibling;
+}
+
+# Ensure that the list isn't a parameter list.  Find the last element
+# of it.
+sub _determine_if_list_is_a_plain_list_and_get_last_child {
+    my ($list, $die_or_warn) = @_;
+
+    my $prior_sibling = $list->sprevious_sibling();
+
+    if ( $prior_sibling ) {
+        # Bail if we've got a Word in front of the List that isn't
+        # the original 'die' or 'warn' or anything else that isn't
+        # a comma operator.
+        if ( $prior_sibling->isa('PPI::Token::Operator') ) {
+            if ( $prior_sibling != $COMMA ) {
+                return;
+            }
+        } elsif ( $prior_sibling != $die_or_warn ) {
+            return
+        }
+    }
+
+    my @list_children = $list->schildren();
+
+    # If zero children, nothing to look for.
+    # If multiple children, then PPI is not giving us
+    # anything we understand.
+    return if scalar (@list_children) != 1;
+
+    my $list_child = $list_children[0];
+
+    # If the child isn't a Statement, we don't understand the
+    # PPI tree.
+    return if not $list_child->isa('PPI::Statement');
+
+    # If the child isn't an Expression or it is some other subclass
+    # of Statement, we again don't understand PPI's output.
+    if (
+            not $list_child->isa('PPI::Statement::Expression')
+        and ref $list_child ne 'PPI::Statement'  # blech
+    ) {
+        return;
+    }
+
+    my @statement_children = $list_child->schildren();
+    return if scalar (@statement_children) < 1;
+
+    return $statement_children[-1];
 }
 
 
@@ -140,7 +255,7 @@ sub _is_postfix_operator {
 }
 
 
-my @LIST_ELEMENT_TOKEN_CLASSES =
+my @SIMPLE_LIST_ELEMENT_TOKEN_CLASSES =
     qw{
         PPI::Token::Number
         PPI::Token::Word
@@ -149,12 +264,12 @@ my @LIST_ELEMENT_TOKEN_CLASSES =
         PPI::Token::Quote
     };
 
-sub _is_list_element_token {
+sub _is_simple_list_element_token {
     my $element = shift;
 
     return $FALSE if not $element->isa('PPI::Token');
 
-    foreach my $class (@LIST_ELEMENT_TOKEN_CLASSES) {
+    foreach my $class (@SIMPLE_LIST_ELEMENT_TOKEN_CLASSES) {
         return $TRUE if $element->isa($class);
     }
 
@@ -162,7 +277,9 @@ sub _is_list_element_token {
 }
 
 
-my @STOP_TOKEN_CLASSES =
+# Tokens that can't possibly be part of an expression simple
+# enough for us to examine.
+my @COMPLEX_EXPRESSION_TOKEN_CLASSES =
     qw{
         PPI::Token::ArrayIndex
         PPI::Token::QuoteLike
@@ -178,12 +295,12 @@ my @STOP_TOKEN_CLASSES =
         PPI::Token::Unknown
     };
 
-sub _is_stop_token {
+sub _is_complex_expression_token {
     my $element = shift;
 
     return $FALSE if not $element->isa('PPI::Token');
 
-    foreach my $class (@STOP_TOKEN_CLASSES) {
+    foreach my $class (@COMPLEX_EXPRESSION_TOKEN_CLASSES) {
         return $TRUE if $element->isa($class);
     }
 
