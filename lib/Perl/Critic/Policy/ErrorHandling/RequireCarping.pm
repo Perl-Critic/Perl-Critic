@@ -20,6 +20,7 @@ my $expl = [ 283 ];
 
 #-----------------------------------------------------------------------------
 
+# TODO: make configurable to be strict again.
 sub default_severity { return $SEVERITY_MEDIUM   }
 sub default_themes   { return qw(core pbp maintenance) }
 sub applies_to       { return 'PPI::Token::Word' }
@@ -57,12 +58,16 @@ sub violates {
     return $self->violation( $desc, $expl, $elem );
 }
 
+# TODO: refactor this overly complicated function
 sub _find_last_flattened_list_element {
     my $starting_element = shift;
 
     my $last_following_sibling;
     my $next_sibling = $starting_element;
-    while ( $next_sibling = $next_sibling->snext_sibling() ) {
+    while (
+            $next_sibling = $next_sibling->snext_sibling()
+        and not _is_postfix_operator( $next_sibling )
+    ) {
         $last_following_sibling = $next_sibling;
     }
 
@@ -73,14 +78,65 @@ sub _find_last_flattened_list_element {
             not _is_list_element_token( $current_candidate )
         and not _is_stop_token( $current_candidate )
     ) {
-        return if not $current_candidate->isa('PPI::Token'); # Lists not handled yet.
+        if ( $current_candidate->isa('PPI::Structure::List') ) {
+            my $prior_sibling = $current_candidate->sprevious_sibling();
 
-        $current_candidate = $current_candidate->sprevious_sibling();
+            if ( $prior_sibling ) {
+                if ( $prior_sibling->isa('PPI::Token::Operator') ) {
+                    if ( $prior_sibling != $COMMA ) {
+                        return;
+                    }
+                } elsif ( $prior_sibling != $starting_element ) {
+                    return
+                }
+            }
+
+            my @list_children = $current_candidate->schildren();
+
+            # If zero children, nothing to look for.
+            # If multiple children, then PPI is not giving us
+            # anything we understand.
+            return if scalar (@list_children) != 1;
+
+            my $list_child = $list_children[0];
+            return if not $list_child->isa('PPI::Statement');
+            if (
+                    not $list_child->isa('PPI::Statement::Expression')
+                and ref $list_child ne 'PPI::Statement'
+            ) {
+                return;
+            }
+
+            my @statement_children = $list_child->schildren();
+            return if scalar (@statement_children) < 1;
+
+            $current_candidate = $statement_children[-1];
+        } elsif ( not $current_candidate->isa('PPI::Token') ) {
+            return;
+        } else {
+            $current_candidate = $current_candidate->sprevious_sibling();
+        }
     }
 
     return if _is_stop_token( $current_candidate );
 
     return $current_candidate;
+}
+
+
+my %POSTFIX_OPERATORS = hashify qw{ if unless while until for foreach };
+
+sub _is_postfix_operator {
+    my $element = shift;
+
+    if (
+            $element->isa('PPI::Token::Word')
+        and $POSTFIX_OPERATORS{$element}
+    ) {
+        return $TRUE;
+    }
+
+    return $FALSE;
 }
 
 
@@ -96,13 +152,13 @@ my @LIST_ELEMENT_TOKEN_CLASSES =
 sub _is_list_element_token {
     my $element = shift;
 
-    return 0 if not $element->isa('PPI::Token');
+    return $FALSE if not $element->isa('PPI::Token');
 
     foreach my $class (@LIST_ELEMENT_TOKEN_CLASSES) {
-        return 1 if $element->isa($class);
+        return $TRUE if $element->isa($class);
     }
 
-    return 0;
+    return $FALSE;
 }
 
 
@@ -125,13 +181,13 @@ my @STOP_TOKEN_CLASSES =
 sub _is_stop_token {
     my $element = shift;
 
-    return 0 if not $element->isa('PPI::Token');
+    return $FALSE if not $element->isa('PPI::Token');
 
     foreach my $class (@STOP_TOKEN_CLASSES) {
-        return 1 if $element->isa($class);
+        return $TRUE if $element->isa($class);
     }
 
-    return 0;
+    return $FALSE;
 }
 
 1;

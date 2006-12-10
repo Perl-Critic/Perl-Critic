@@ -70,7 +70,7 @@ die ( )
 #-----------------------------------------------------------------------------
 
 ## name Complain about cases with non-string arguments.
-## failures 6
+## failures 7
 ## cut
 
 die $error;
@@ -79,6 +79,7 @@ die %errors_by_id;
 die $errors[0];
 die $errors_by_id{"Cheese fondue overflow"};
 die $marvin_gaye->whats_goin_on();
+die $george_washington->cross("Delaware River\n");
 
 #-----------------------------------------------------------------------------
 
@@ -147,19 +148,6 @@ die qq/A horrible death\n/  # last statement doesn't need a terminator
 die q{A horrible death\n} ;
 die q#A horrible death\n# ;
 die q/A horrible death\n/   # last statement doesn't need a terminator
-
-#-----------------------------------------------------------------------------
-
-## name Don't complain if followed by postfix operator and otherwise valid.
-## TODO not yet implemented
-## failures 0
-## cut
-
-die "A horrible death\n" if $self->is_a_bad_guy();
-die "A horrible death\n" unless $self->rescued_from_the_sinking_ship();
-die "A horrible death\n" while $deep_sense_of_guilt;
-die "A horrible death\n" until $clear_conscience;
-die "A horrible death\n" for @your_crimes;
 
 #-----------------------------------------------------------------------------
 
@@ -244,6 +232,58 @@ die ( ( q{Don't }   , ( $die   , ( @a_horrible_death ) ) ) ) ;
 # play with extra commas
 die ( ( q{Don't } , ( $die , ( @a_horrible_death , ) , ) , ) , ) , ;
 die ( ( q{Don't } , ( $die , ( @a_horrible_death , ) , ) , ) , ) ,
+
+#-----------------------------------------------------------------------------
+
+## name Don't complain if message is a concatenation with a last element that ends with "\n"
+## TODO not implemented yet
+## failures 0
+## cut
+
+die ( q{Don't }  . $die . " a horrible death\n"     )   ;
+die ( qq{Don't } . $die . qq/ a horrible death\n/   )   ;
+die ( qq{Don't } . $die . qq/ a horrible death\n/   ) , ;
+die ( q{Don't }  . $die . " a horrible death\n"   , )
+
+#-----------------------------------------------------------------------------
+
+## name Don't complain if followed by postfix operator and otherwise valid.
+## failures 0
+## cut
+
+die "A horrible death\n" if $self->is_a_bad_guy();
+die "A horrible death\n" unless $self->rescued_from_the_sinking_ship();
+die "A horrible death\n" while $deep_sense_of_guilt;
+die "A horrible death\n" until $clear_conscience;
+die "A horrible death\n" for @your_crimes;
+die "A horrible death\n" foreach @{ $songs_sung_off_key };
+
+die 'A horrible ', "death\n" if $self->is_a_bad_guy();
+die 'A horrible ', "death\n" unless $self->rescued_from_the_sinking_ship();
+die 'A horrible ', "death\n" while $deep_sense_of_guilt;
+die 'A horrible ', "death\n" until $clear_conscience;
+die 'A horrible ', "death\n" for @your_crimes;
+die 'A horrible ', "death\n" foreach @{ $songs_sung_off_key };
+
+#-----------------------------------------------------------------------------
+
+## name Complain if followed by postfix operator with "\n" ending last operand and otherwise invalid.
+## failures 12
+## cut
+
+die "A horrible death" if "Matagami\n";
+die "A horrible death" unless "Enniscorthy\n";
+die "A horrible death" while "Htargcm\n";
+die "A horrible death" until "Akhalataki\n";
+die "A horrible death" for "Fleac\n";
+die "A horrible death" foreach "Uist\n";
+
+die 'A horrible ', "death" if "Matagami\n";
+die 'A horrible ', "death" unless "Enniscorthy\n";
+die 'A horrible ', "death" while "Htargcm\n";
+die 'A horrible ', "death" until "Akhalataki\n";
+die 'A horrible ', "death" for "Fleac\n";
+die 'A horrible ', "death" foreach "Uist\n";
 
 #-----------------------------------------------------------------------------
 
