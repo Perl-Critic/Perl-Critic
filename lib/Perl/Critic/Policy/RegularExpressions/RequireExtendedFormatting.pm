@@ -22,7 +22,7 @@ my $expl = [ 236 ];
 #-----------------------------------------------------------------------------
 
 sub default_severity { return $SEVERITY_MEDIUM   }
-sub default_themes   { return qw(core pbp unreliable) }
+sub default_themes   { return qw(core pbp maintenance) }
 sub applies_to       { return qw(PPI::Token::Regexp::Match
                                  PPI::Token::Regexp::Substitute) }
 

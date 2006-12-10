@@ -42,7 +42,7 @@ my $expl = [ 70 ];
 #-----------------------------------------------------------------------------
 
 sub default_severity { return $SEVERITY_HIGH   }
-sub default_themes    { return qw( core risky pbp )  }
+sub default_themes    { return qw( core bugs pbp )  }
 sub applies_to       { return 'PPI::Statement' }
 
 #-----------------------------------------------------------------------------

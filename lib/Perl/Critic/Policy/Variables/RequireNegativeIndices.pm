@@ -22,7 +22,7 @@ my $expl = [ 88 ];
 #-----------------------------------------------------------------------------
 
 sub default_severity { return $SEVERITY_HIGH              }
-sub default_themes    { return qw( core risky pbp )             }
+sub default_themes   { return qw( core maintenance pbp )  }
 sub applies_to       { return 'PPI::Structure::Subscript' }
 
 #-----------------------------------------------------------------------------

@@ -22,7 +22,7 @@ my $expl = q{Declare variables outside of the condition};
 #-----------------------------------------------------------------------------
 
 sub default_severity { return $SEVERITY_HIGHEST          }
-sub default_themes    { return qw( core danger )               }
+sub default_themes    { return qw( core bugs )               }
 sub applies_to       { return 'PPI::Statement::Variable' }
 
 #-----------------------------------------------------------------------------

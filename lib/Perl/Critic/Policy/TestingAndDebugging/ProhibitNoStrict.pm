@@ -23,7 +23,7 @@ my $expl = [ 429 ];
 #-----------------------------------------------------------------------------
 
 sub default_severity { return $SEVERITY_HIGHEST         }
-sub default_themes    { return qw( core pbp danger )          }
+sub default_themes    { return qw( core pbp bugs )          }
 sub applies_to       { return 'PPI::Statement::Include' }
 
 #-----------------------------------------------------------------------------
