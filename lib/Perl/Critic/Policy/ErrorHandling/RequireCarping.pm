@@ -85,13 +85,13 @@ sub _find_last_flattened_list_element {
 
 
 my @LIST_ELEMENT_TOKEN_CLASSES =
-    (
-        'PPI::Token::Number',
-        'PPI::Token::Word',
-        'PPI::Token::DashedWord',
-        'PPI::Token::Symbol',
-        'PPI::Token::Quote',
-    );
+    qw{
+        PPI::Token::Number
+        PPI::Token::Word
+        PPI::Token::DashedWord
+        PPI::Token::Symbol
+        PPI::Token::Quote
+    };
 
 sub _is_list_element_token {
     my $element = shift;
@@ -107,20 +107,20 @@ sub _is_list_element_token {
 
 
 my @STOP_TOKEN_CLASSES =
-    (
-        'PPI::Token::ArrayIndex',
-        'PPI::Token::QuoteLike',
-        'PPI::Token::Regexp',
-        'PPI::Token::HereDoc',
-        'PPI::Token::Cast',
-        'PPI::Token::Label',
-        'PPI::Token::Separator',
-        'PPI::Token::Data',
-        'PPI::Token::End',
-        'PPI::Token::Prototype',
-        'PPI::Token::Attribute',
-        'PPI::Token::Unknown',
-    );
+    qw{
+        PPI::Token::ArrayIndex
+        PPI::Token::QuoteLike
+        PPI::Token::Regexp
+        PPI::Token::HereDoc
+        PPI::Token::Cast
+        PPI::Token::Label
+        PPI::Token::Separator
+        PPI::Token::Data
+        PPI::Token::End
+        PPI::Token::Prototype
+        PPI::Token::Attribute
+        PPI::Token::Unknown
+    };
 
 sub _is_stop_token {
     my $element = shift;
