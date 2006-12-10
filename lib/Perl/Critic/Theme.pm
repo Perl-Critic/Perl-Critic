@@ -112,11 +112,14 @@ sub _validate_expression {
     my ($expression) = @_;
     return 1 if not defined $expression;
 
-    die qq{Illegal character "$1" in theme expression.\n}
-        if $expression =~ m/ ( [^()\s\w\d\+\-\*] ) /mx;
+    if ( $expression =~ m/ ( [^()\s\w\d\+\-\*] ) /mx ) {
+        die qq{Illegal character "$1" in theme expression.\n};
+    }
 
-    die qq{Missing operator in theme expression.\n}
-        if $expression =~ m/ [()\w\d]+ \s+ [()\w\d]+ /mx;
+
+    if ( $expression =~ m/ [()\w\d]+ \s+ [()\w\d]+ /mx ) {
+        die qq{Missing operator in theme expression.\n};
+    }
 
     return 1;
 }

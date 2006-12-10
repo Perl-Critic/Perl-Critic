@@ -11,7 +11,7 @@ use strict;
 use warnings;
 use PPI::Document;
 use constant USE_B_KEYWORDS => eval 'use B::Keywords 1.04; 1';
-use Test::More tests => 82 + (
+use Test::More tests => 84 + (
     USE_B_KEYWORDS
     ? ( @B::Keywords::Functions + @B::Keywords::Scalars + @B::Keywords::Arrays
             + @B::Keywords::Hashes + @B::Keywords::FileHandles )
@@ -43,6 +43,8 @@ can_ok('main', 'parse_arg_list');
 can_ok('main', 'policy_long_name');
 can_ok('main', 'policy_short_name');
 can_ok('main', 'precedence_of');
+can_ok('main', 'severity_to_number');
+can_ok('main', 'verbosity_to_format');
 
 is($SPACE, ' ', 'character constants');
 is($SEVERITY_LOWEST, 1, 'severity constants');
