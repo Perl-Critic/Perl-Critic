@@ -624,7 +624,7 @@ instead.
     ---------------------------------------------------------------------------
     5                                danger
     4                                risky
-    3                                unreliable
+    3                                debt
     2                                readability
     1                                cosmetic
 
@@ -659,8 +659,8 @@ can also use parenthesis to enforce precedence.  Here are some examples:
    pbp - cosmetic              All policies that are "pbp" BUT NOT "risky"
    pbp not cosmetic            Ditto
 
-   -unreliable                All policies that are NOT "unreliable"
-   not unreliable             Ditto
+   -debt                All policies that are NOT "unreliable"
+   not debt             Ditto
 
    (pbp - danger) * risky      All policies that are "pbp" BUT NOT "danger", AND "risky"
    (pbp not danger) and risky  Ditto

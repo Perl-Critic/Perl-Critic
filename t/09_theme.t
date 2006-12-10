@@ -19,52 +19,73 @@ use Test::More (tests => 53);
 
 #-----------------------------------------------------------------------------
 
-my @invalid_expressions = (
-    '$cosmetic',
-    '"cosmetic"',
-    '#cosmetic > risky',
-    'cosmetic / risky',
-    'cosmetic % risky',
-    'cosmetic + [risky - pbp]',
-    'cosmetic + {risky - pbp}',
-    'cosmetic && risky || pbp',
-    'cosmetic @ risky ^ pbp',
-    'cosmetic risky',
-);
+ILLEGAL_CHARACTERS:{
 
-for my $invalid ( @invalid_expressions ) {
-    eval { Perl::Critic::Theme::_validate_expression( $invalid ) };
-    like( $EVAL_ERROR, qr/Illegal character/, qq{Invalid expression: "$invalid"} );
-}
+    my @invalid_expressions = (
+        '$cosmetic',
+        '"cosmetic"',
+        '#cosmetic > bugs',
+        'cosmetic / bugs',
+        'cosmetic % bugs',
+        'cosmetic + [bugs - pbp]',
+        'cosmetic + {bugs - pbp}',
+        'cosmetic && bugs || pbp',
+        'cosmetic @ bugs ^ pbp',
+    );
 
-my @valid_expressions = (
-    'cosmetic',
-    'cosmetic + risky',
-    'cosmetic - risky',
-    'cosmetic + (risky - pbp)',
-    'cosmetic+(risky-pbp)',
-    'cosmetic or risky',
-    'cosmetic and risky',
-    'cosmetic and (risky and not pbp)',
-);
-
-for my $valid ( @valid_expressions ) {
-    my $got = Perl::Critic::Theme::_validate_expression( $valid );
-    is( $got, 1, qq{Valid expression: "$valid"} );
+    for my $invalid ( @invalid_expressions ) {
+        eval { Perl::Critic::Theme::_validate_expression( $invalid ) };
+        like( $EVAL_ERROR, qr/Illegal character/, qq{Invalid expression: "$invalid"} );
+    }
 }
 
 #-----------------------------------------------------------------------------
 
+MISSING_OPERATORS:{
+
+    my @invalid_expressions = (
+         'cosmetic bugs',
+         '(cosmetic bugs) - bugs',
+         '(bugs) (pbp)',
+    );
+
+    for my $invalid ( @invalid_expressions ) {
+        eval { Perl::Critic::Theme::_validate_expression( $invalid ) };
+        like( $EVAL_ERROR, qr/Missing operator/, qq{Missing operator: "$invalid"} );
+    }
+}
+
+#-----------------------------------------------------------------------------
+
+VALID_EXPRESSIONS:{
+
+    my @valid_expressions = (
+        'cosmetic',
+        'cosmetic + bugs',
+        'cosmetic - bugs',
+        'cosmetic + (bugs - pbp)',
+        'cosmetic+(bugs-pbp)',
+    );
+
+    for my $valid ( @valid_expressions ) {
+        my $got = Perl::Critic::Theme::_validate_expression( $valid );
+        is( $got, 1, qq{Valid expression: "$valid"} );
+    }
+}
+
+#-----------------------------------------------------------------------------
+
+TRANSLATIONS:
 {
     my %expressions = (
         'cosmetic' => 'cosmetic',
-        'cosmetic + risky',           =>  'cosmetic + risky',
-        'cosmetic - risky',           =>  'cosmetic - risky',
-        'cosmetic + (risky - pbp)'    =>  'cosmetic + (risky - pbp)',
-        'cosmetic+(risky-pbp)'        =>  'cosmetic+(risky-pbp)',
-        'cosmetic or risky'           =>  'cosmetic + risky',
-        'cosmetic and risky'          =>  'cosmetic * risky',
-        'cosmetic and (risky or pbp)' =>  'cosmetic * (risky + pbp)',
+        'cosmetic + bugs',           =>  'cosmetic + bugs',
+        'cosmetic - bugs',           =>  'cosmetic - bugs',
+        'cosmetic + (bugs - pbp)'    =>  'cosmetic + (bugs - pbp)',
+        'cosmetic+(bugs-pbp)'        =>  'cosmetic+(bugs-pbp)',
+        'cosmetic or bugs'           =>  'cosmetic + bugs',
+        'cosmetic and bugs'          =>  'cosmetic * bugs',
+        'cosmetic and (bugs or pbp)' =>  'cosmetic * (bugs + pbp)',
     );
 
     while ( my ($raw, $expected) = each %expressions ) {
@@ -77,12 +98,12 @@ for my $valid ( @valid_expressions ) {
 
 {
     my %expressions = (
-         'cosmetic'                 =>  '$tmap{"cosmetic"}',
-         'cosmetic + risky',        =>  '$tmap{"cosmetic"} + $tmap{"risky"}',
-         'cosmetic * risky',        =>  '$tmap{"cosmetic"} * $tmap{"risky"}',
-         'cosmetic - risky',        =>  '$tmap{"cosmetic"} - $tmap{"risky"}',
-         'cosmetic + (risky - pbp)' =>  '$tmap{"cosmetic"} + ($tmap{"risky"} - $tmap{"pbp"})',
-         'cosmetic*(risky-pbp)'     =>  '$tmap{"cosmetic"}*($tmap{"risky"}-$tmap{"pbp"})',
+         'cosmetic'                =>  '$tmap{"cosmetic"}',
+         'cosmetic + bugs',        =>  '$tmap{"cosmetic"} + $tmap{"bugs"}',
+         'cosmetic * bugs',        =>  '$tmap{"cosmetic"} * $tmap{"bugs"}',
+         'cosmetic - bugs',        =>  '$tmap{"cosmetic"} - $tmap{"bugs"}',
+         'cosmetic + (bugs - pbp)' =>  '$tmap{"cosmetic"} + ($tmap{"bugs"} - $tmap{"pbp"})',
+         'cosmetic*(bugs-pbp)'     =>  '$tmap{"cosmetic"}*($tmap{"bugs"}-$tmap{"pbp"})',
     );
 
     while ( my ($raw, $expected) = each %expressions ) {
@@ -134,16 +155,16 @@ for my $valid ( @valid_expressions ) {
 
     #--------------
 
-    $theme = 'risky * pbp';
+    $theme = 'bugs * pbp';
     %args  = (-theme => $theme, -policies => \@pols);
     @members = Perl::Critic::Theme->new( %args )->members();
-    ok( all  { in_theme($pmap{$_}, 'risky') } @members );
+    ok( all  { in_theme($pmap{$_}, 'bugs') } @members );
     ok( all  { in_theme($pmap{$_}, 'pbp')   } @members );
 
-    $theme = 'risky and pbp';
+    $theme = 'bugs and pbp';
     %args  = (-theme => $theme, -policies => \@pols);
     @members = Perl::Critic::Theme->new( %args )->members();
-    ok( all  { in_theme($pmap{$_}, 'risky') } @members );
+    ok( all  { in_theme($pmap{$_}, 'bugs') } @members );
     ok( all  { in_theme($pmap{$_}, 'pbp')   } @members );
 
     #--------------

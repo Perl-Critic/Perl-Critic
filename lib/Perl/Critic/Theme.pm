@@ -65,8 +65,8 @@ sub _evaluate_expression {
     my $original_expression = $expression;
 
     my %tmap = %{ $tmap };
-    _validate_expression( $expression );
     $expression = _translate_expression( $expression );
+    _validate_expression( $expression );
     $expression = _interpolate_expression( $expression, 'tmap' );
 
     no warnings 'uninitialized'; ## no critic (ProhibitNoWarnings)
@@ -111,10 +111,13 @@ sub _make_theme_map {
 sub _validate_expression {
     my ($expression) = @_;
     return 1 if not defined $expression;
-    if ( $expression !~ m/\A    [()\s\w\d\+\-\*]* \z/mx ) {
-        $expression  =~ m/   ( [^()\s\w\d\+\-\*] )  /mx;
-        die qq{Illegal character "$1" in theme expression.\n};
-    }
+
+    die qq{Illegal character "$1" in theme expression.\n}
+        if $expression =~ m/ ( [^()\s\w\d\+\-\*] ) /mx;
+
+    die qq{Missing operator in theme expression.\n}
+        if $expression =~ m/ [()\w\d]+ \s+ [()\w\d]+ /mx;
+
     return 1;
 }
 

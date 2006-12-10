@@ -590,7 +590,7 @@ corresponding command-line argument.
     force     = 0                                     #Zero or One
     verbose   = 4                                     #Integer or format spec
     top       = 50                                    #A positive integer
-    theme     = risky + (pbp * security) - cosmetic   #A theme expression
+    theme     = (pbp + security) * bugs               #A theme expression
     include   = NamingConventions ClassHierarchies    #Space-delimited list
     exclude   = Variables  Modules::RequirePackage    #Space-delimited list
 
@@ -714,10 +714,26 @@ For example, you may wish disable a certain subset of Policies when
 analyzing test scripts.  Conversely, you may wish to enable only a
 specific subset of Policies when analyzing modules.
 
-Say C<"perlcritic -list"> to get a listing of all available policies
-and the themes that are associated with each one.  You can also change
-the theme for any Policy in your F<.perlcriticrc> file.  See the
-L<"CONFIGURATION"> section for more information about that.
+The Policies that ship with Perl::Critic are have been broken into the
+following themes.  This is just our attempt to provide some basic
+logical groupings.  You are free to invent themes that suit your needs.
+
+    THEME             DESCRIPTION
+    --------------------------------------------------------------------------
+    core              All policies that ship with Perl::Critic
+    pbp               Policies that come directly from "Perl Best Practices"
+    bugs              Policies that that prevent or reveal bugs
+    maintenance       Policies that affect the long-term health of the code
+    cosmetic          Policies that only have a superficial effect
+    complexity        Policies that specificaly relate to code complexity
+    security          Policies relate to security issues
+    tests             Policies that are specific to test scripts
+
+
+Any Policy may fit into multiple themes.  Say C<"perlcritic -list"> to get a
+listing of all available Policies and the themes that are associated with each
+one.  You can also change the theme for any Policy in your F<.perlcriticrc>
+file.  See the L<"CONFIGURATION"> section for more information about that.
 
 Using the C<-theme> option, you can combine themes with mathematical and
 boolean operators to create an arbitrarily complex expression that represents
@@ -734,20 +750,21 @@ can also use parenthesis to enforce precedence.  Here are some examples:
 
    Expression                  Meaning
    ----------------------------------------------------------------------------
-   pbp * risky                 All policies that are "pbp" AND "risky"
-   pbp and risky               Ditto
+   pbp * bugs                  All policies that are "pbp" AND "bugs"
+   pbp and bugs                Ditto
 
-   danger + risky              All policies that are "danger" OR "risky"
-   pbp or risky                Ditto
+   bugs + cosmetic             All policies that are "bugs" OR "cosmetic"
+   bugs or cosmetic            Ditto
 
-   pbp - cosmetic              All policies that are "pbp" BUT NOT "risky"
+   pbp - cosmetic              All policies that are "pbp" BUT NOT "cosmetic"
    pbp not cosmetic            Ditto
 
-   -unreliable                All policies that are NOT "unreliable"
-   not unreliable             Ditto
+   -maintenance                All policies that are NOT "maintenance"
+   not maintenance             Ditto
 
-   (pbp - danger) * risky      All policies that are "pbp" BUT NOT "danger", AND "risky"
-   (pbp not danger) and risky  Ditto
+   (pbp - bugs) * complexity     All policies that are "pbp" BUT NOT "bugs",
+                                    AND "complexity"
+   (pbp not bugs) and complexity  Ditto
 
 Theme names are case-insensitive.  If C<-theme> is set to an empty
 string, then it is equivalent to the set of all policies.  A theme
