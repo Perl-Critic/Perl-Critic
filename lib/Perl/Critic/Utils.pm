@@ -9,6 +9,7 @@ package Perl::Critic::Utils;
 
 use strict;
 use warnings;
+use Carp qw(confess);
 use File::Spec qw();
 use base 'Exporter';
 
@@ -33,6 +34,7 @@ our @EXPORT = qw(
     $SEVERITY_MEDIUM
     $SEVERITY_LOW
     $SEVERITY_LOWEST
+    @SEVERITY_NAMES
 
     $COLON
     $COMMA
@@ -64,6 +66,7 @@ our @EXPORT = qw(
     &policy_short_name
     &precedence_of
     &shebang_line
+    &severity_to_number
     &verbosity_to_format
     &words_from_string
 );
@@ -398,6 +401,34 @@ sub _is_integer { return $_[0] =~  m{ \A [+-]? \d+ \z }mx }
 
 #-----------------------------------------------------------------------------
 
+my %SEVERITY_NUMBER_OF = (
+   gentle  => 5,
+   stern   => 4,
+   harsh   => 3,
+   cruel   => 2,
+   brutal  => 1,
+);
+
+our @SEVERITY_NAMES = sort { $SEVERITY_NUMBER_OF{$a} <=> $SEVERITY_NUMBER_OF{$b} }
+    keys %SEVERITY_NUMBER_OF;  #This is exported!
+
+sub severity_to_number {
+    my ($severity) = @_;
+    return _normalize_severity( $severity ) if _is_integer( $severity );
+    my $severity_number = $SEVERITY_NUMBER_OF{lc $severity};
+    confess qq{Invalid severity: "$severity"} if not defined $severity_number;
+    return $severity_number;
+}
+
+sub _normalize_severity {
+    my $s = shift || return $SEVERITY_HIGHEST;
+    $s = $s > $SEVERITY_HIGHEST ? $SEVERITY_HIGHEST : $s;
+    $s = $s < $SEVERITY_LOWEST  ? $SEVERITY_LOWEST : $s;
+    return $s;
+}
+
+#-----------------------------------------------------------------------------
+
 my @skip_dir = qw( CVS RCS .svn _darcs {arch} .bzr _build blib );
 my %skip_dir = hashify( @skip_dir );
 
@@ -631,6 +662,14 @@ A Perl code file is:
 =item * Any file that has a first line with a shebang containing 'perl'
 
 =back
+
+=item C<severity_to_number( $severity )>
+
+If C<$severity> is given as an integer, this function returns C<$severity> but
+normalized to lie between C<$SEVERITY_LOWEST> and C<$SEVERITY_HIGHEST>.  If
+C<$severity> is given as a string, this function returns the corresponding
+severity number.  If the string doesn't have a corresponding number, this
+function will throw an exception.
 
 =item C<verbosity_to_format( $verbosity_level )>
 

@@ -10,7 +10,7 @@
 use strict;
 use warnings;
 use English qw(-no_mactch_vars);
-use Test::More tests => 11;
+use Test::More tests => 12;
 use Perl::Critic::UserProfile;
 use Perl::Critic::PolicyFactory;
 
@@ -69,6 +69,7 @@ Perl::Critic::TestUtils::block_perlcriticrc();
 # Using short module name, and alternate add_theme and set_theme spellings;
 {
     my $policy_name = 'Variables::ProhibitPunctuationVars';
+    # Note that the final "s" is missing from "set_theme" and "add_theme"
     my $params = {set_theme => 'betty', add_theme => 'wilma'};
 
     my $userprof = Perl::Critic::UserProfile->new( -profile => 'NONE' );
@@ -92,8 +93,14 @@ Perl::Critic::TestUtils::block_perlcriticrc();
     my $userprof = Perl::Critic::UserProfile->new( -profile => 'NONE' );
     my $pf = Perl::Critic::PolicyFactory->new( -profile  => $userprof );
 
+    # Try creating bogus policy
     eval{ $pf->create_policy( $bogus_policy ) };
     like( $EVAL_ERROR, qr/Can't locate object method "new"/m, 'create bogus policy' );
+
+    # Try using a bogus severity level
+    my $policy_name = 'Modules::RequireVersionVar';
+    eval{ $pf->create_policy( $policy_name, {severity => 'bogus'} ) };
+    like( $EVAL_ERROR, qr/Invalid severity: "bogus"/m, 'create policy w/ bogus severity' );
 }
 
 

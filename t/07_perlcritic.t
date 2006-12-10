@@ -11,7 +11,7 @@ use strict;
 use warnings;
 use File::Spec;
 use English qw(-no_match_vars);
-use Test::More tests => 28;
+use Test::More tests => 33;
 
 #-----------------------------------------------------------------------------
 # Load perlcritic like a library so we can test its subroutines.  If it is not
@@ -51,6 +51,26 @@ is( $options{-severity}, 4);
 @ARGV = qw(-severity 2 -3 -4);
 %options = get_options();
 is( $options{-severity}, 2);
+
+@ARGV = qw(--severity=2 -3 -4);
+%options = get_options();
+is( $options{-severity}, 2);
+
+@ARGV = qw(-cruel);
+%options = get_options();
+is( $options{-severity}, 'cruel');
+
+@ARGV = qw(-cruel --severity=1);
+%options = get_options();
+is( $options{-severity}, 1);
+
+@ARGV = qw(-stern --severity=1 -2);
+%options = get_options();
+is( $options{-severity}, 1);
+
+@ARGV = qw(-stern -severity 1 -2);
+%options = get_options();
+is( $options{-severity}, 1);
 
 #-----------------------------------------------------------------------------
 

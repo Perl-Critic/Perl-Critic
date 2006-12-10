@@ -52,7 +52,10 @@ sub _init {
     $self->{_exclude}      = $args{-exclude}      ? $args{-exclude}      : $defaults->exclude();
     $self->{_singlepolicy} = $args{-singlepolicy} ? $args{-singlepolicy} : $defaults->singlepolicy();
     $self->{_verbose}      = $args{-verbose}      ? $args{-verbose}      : $defaults->verbose();
-    $self->{_severity}     = $args{-severity}     ? $args{-severity}     : $defaults->severity();
+
+    # Severity levels can be expressed as names or numbers
+    my $severity        = $args{-severity} ? $args{-severity} : $defaults->severity();
+    $self->{_severity}  = severity_to_number( $severity );
 
     # If given, these options can be true or false (but defined)
     # We normalize these to numeric values by multiplying them by 1;

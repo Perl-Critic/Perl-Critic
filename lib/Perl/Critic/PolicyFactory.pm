@@ -121,7 +121,7 @@ sub create_policy {
 
     # Set base attributes on policy
     if ( defined $user_severity ) {
-        my $normalized_severity = _normalize_severity( $user_severity );
+        my $normalized_severity = severity_to_number( $user_severity );
         $policy->set_severity( $normalized_severity );
     }
 
@@ -143,15 +143,6 @@ sub create_policy {
 sub policies {
     my $self = shift;
     return @{ $self->{_policies} };
-}
-
-#-----------------------------------------------------------------------------
-
-sub _normalize_severity {
-    my $s = shift || return $SEVERITY_HIGHEST;
-    $s = $s > $SEVERITY_HIGHEST ? $SEVERITY_HIGHEST : $s;
-    $s = $s < $SEVERITY_LOWEST  ? $SEVERITY_LOWEST : $s;
-    return $s;
 }
 
 #-----------------------------------------------------------------------------

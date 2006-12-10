@@ -13,7 +13,7 @@ use English qw(-no_match_vars);
 use List::MoreUtils qw(all any);
 use Perl::Critic::Config qw();
 use Perl::Critic::Utils;
-use Test::More (tests => 58);
+use Test::More (tests => 64);
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(bundled_policy_names);
@@ -246,6 +246,18 @@ my $total_policies   = scalar @site_policies;
 }
 
 #-----------------------------------------------------------------------------
+# Test named severity levels
+
+{
+    my %severity_levels = (gentle=>5, stern=>4, harsh=>3, cruel=>2, brutal=>1);
+    while (my ($name, $number) = each %severity_levels) {
+        my $config = Perl::Critic::Config->new( -severity => $name );
+        is( $config->severity(), $number, qq{Severity "$name" is "number"});
+    }
+}
+
+
+#-----------------------------------------------------------------------------
 # Test exception handling
 
 {
@@ -258,6 +270,10 @@ my $total_policies   = scalar @site_policies;
     # Try adding w/o policy
     eval { $config->add_policy() };
     like( $EVAL_ERROR, qr/The -policy argument is required/, 'add_policy w/o args' );
+
+    # Try using bogus named severity level
+    eval{ Perl::Critic::Config->new( -severity => 'bogus' ) };
+    like( $EVAL_ERROR, qr/Invalid severity: "bogus"/, 'invalid severity' );
 }
 
 # Local Variables:

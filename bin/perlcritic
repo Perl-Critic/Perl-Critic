@@ -51,7 +51,9 @@ sub get_options {
 
     # Convert severity shortcut options.  If multiple shortcuts
     # are given, the lowest one wins.  If an explicit -severity
-    # option has been given, then the shortcuts are ignored.
+    # option has been given, then the shortcuts are ignored. The
+    # @SEVERITY_NAMES variable is exported by Perl::Critic::Utils.
+    $opts{severity} ||=  first { exists $opts{$_} } @SEVERITY_NAMES;
     $opts{severity} ||=  first { exists $opts{$_} } (1 .. 5);
 
 
@@ -242,14 +244,17 @@ sub _get_option_specification {
 
     return qw(
         5 4 3 2 1
-        profileproto
         Safari
         Version
-        count
+        brutal
+        count|Count
+        cruel
         doc=s
         exclude=s@
         force!
-        help|?
+        gentle
+        harsh
+        help|?|Help
         include=s@
         list
         man
@@ -257,9 +262,11 @@ sub _get_option_specification {
         noprofile
         only!
         profile=s
+        profileproto
         quiet
         severity=i
         singlepolicy=s
+        stern
         theme=s
         top:i
         verbose=s
@@ -349,7 +356,8 @@ C<perlcritic> - Command-line interface to critique Perl source
 
 =head1 SYNOPSIS
 
-  perlcritic [-12345 | -severity number] [-noprofile | -profile file]
+  perlcritic [-12345 | -brutal | -cruel | -harsh | -stern | -gentle]
+             [-severity number | name] [-noprofile | -profile file]
              [-top [ number ]] [-theme expression] [-include pattern]
              [-exclude pattern] [-singlepolicy pattern] [-only | -noonly]
              [-force | -noforce] [-verbose number | format] [-nocolor]
@@ -409,8 +417,14 @@ examples to help get you started.
   #Report slightly less severe violations too (severity >= 4)
   perlcritic -4 YourModule.pm
 
+  #Same as above, but using named severity level
+  perlcritic -stern YourModule.pm
+
   #Report all violations, regardless of severity (severity >= 1)
   perlcritic -1 YourModule.pm
+
+  #Same as above, but using named severity level
+  perlcritic -brutal YourModule.pm
 
   #Report only violations of things from "Perl Best Practices"
   perlcritic -theme pbp YourModule.pm
@@ -450,24 +464,43 @@ to the default configuration for all Policies.
 
 =item C<-severity N>
 
-Directs C<perlcritic> to only report violations of Policies with a
-severity greater than C<N>.  Severity values are integers ranging from
-1 (least severe) to 5 (most severe).  The default is 5.  For a given
-C<-profile>, decreasing the C<-severity> will usually produce more
-violations.  You can set the default value for this option in your
-F<.perlcriticrc> file.  You can also redefine the C<severity> for any
-Policy in your F<.perlcriticrc> file.  See L<"CONFIGURATION"> for more
-information.
+Directs C<perlcritic> to only report violations of Policies with a severity
+greater than C<N>.  Severity values are integers ranging from 1 (least severe)
+to 5 (most severe).  The default is 5.  For a given C<-profile>, decreasing
+the C<-severity> will usually produce more violations.  You can set the
+default value for this option in your F<.perlcriticrc> file.  You can also
+redefine the C<severity> for any Policy in your F<.perlcriticrc> file.  See
+L<"CONFIGURATION"> for more information.
 
 =item C<-5 | -4 | -3 | -2 | -1>
 
-These are shortcuts for setting the C<-severity> option.  For example,
+These are numeric shortcuts for setting the C<-severity> option.  For example,
 C<"-4"> is equivalent to C<"-severity 4">.  If multiple shortcuts are
-specified, then the lowest one wins.  If an explicit C<-severity>
-option is given, then all shortcut options are silently ignored.  NOTE:
-Be careful not to put one of the severity shortcut options immediately
-after the C<-top> flag or C<perlcritic> will interpret it as the
-number of violations to report.
+specified, then the most restrictive one wins.  If an explicit C<-severity>
+option is also given, then all shortcut options are silently ignored.  NOTE:
+Be careful not to put one of the number severity shortcut options immediately
+after the C<-top> flag or C<perlcritic> will interpret it as the number of
+violations to report.
+
+=item C<-severity NAME>
+
+If it is difficult for you to remember whether severity "5" is more or less
+restrictive than severity "4", then you can use one of these named values:
+
+    SEVERITY NAME    ...is eqivalent to...   SEVERITY NUMBER
+    --------------------------------------------------------
+    -severity gentle                             -severity 5
+    -severity stern                              -severity 4
+    -severity harsh                              -severity 3
+    -severity cruel                              -severity 2
+    -severity brutal                             -severity 1
+
+=item C<-gentle | -stern | -harsh | -cruel | -brutal>
+
+These are named shortcuts for setting the C<-severity> option.  For example,
+C<"-cruel"> is equivalent to C<"-severity 4">.  If multiple shortcuts are
+specified, then the most restrictive one wins.  If an explicit C<-severity>
+option is also given, then all shortcut options are silently ignored.
 
 =item C<-theme EXPRESSION>
 
@@ -542,16 +575,16 @@ running
 
 =item C<-top [ N ]>
 
-Directs C<perlcritic> to report only the top C<N> Policy violations in
-each file, ranked by their severity.  If C<N> is not specified, it
-defaults to 20.  If the C<-severity> option (or one of the shortcuts)
-is not explicitly given, the C<-top> option implies that the minimum
-severity level is 1. Users can redefine the severity for any Policy in
-their F<.perlcriticrc> file.  See L<"CONFIGURATION"> for more
-information.  You can set the default value for this option in your
-F<.perlcriticrc> file.  NOTE: Be careful not to put one of the
-severity shortcut options immediately after the C<-top> flag or
-C<perlcritic> will interpret it as the number of violations to report.
+Directs C<perlcritic> to report only the top C<N> Policy violations in each
+file, ranked by their severity.  If C<N> is not specified, it defaults to 20.
+If the C<-severity> option (or one of the shortcuts) is not explicitly given,
+the C<-top> option implies that the minimum severity level is "1"
+(i.e. "brutal"). Users can redefine the severity for any Policy in their
+F<.perlcriticrc> file.  See L<"CONFIGURATION"> for more information.  You can
+set the default value for this option in your F<.perlcriticrc> file.  NOTE: Be
+careful not to put one of the severity shortcut options immediately after the
+C<-top> flag or C<perlcritic> will interpret it as the number of violations to
+report.
 
 =item C<-force>
 
@@ -628,6 +661,8 @@ for this option in your F<.perlcriticrc> file.
 
 =item C<-count>
 
+=item C<-C>
+
 Display only the number of violations for each file.  Use this feature
 to get a quick handle on where a large pile of code might need the
 most attention.
@@ -660,6 +695,8 @@ Suppress the "source OK" message if no violations are found.
 =item C<-help>
 
 =item C<-?>
+
+=item C<-H>
 
 Displays a brief summary of options and exits.
 
@@ -697,7 +734,7 @@ named block.>  For example, putting any or all of these at the top of
 your F<.perlcriticrc> file will set the default value for the
 corresponding command-line argument.
 
-    severity  = 3                                     #Integer from 1 to 5
+    severity  = 3                                     #Integer or named level
     only      = 1                                     #Zero or One
     force     = 0                                     #Zero or One
     verbose   = 4                                     #Integer or format spec
@@ -727,7 +764,16 @@ C<severity> is the level of importance you wish to assign to the
 Policy.  All Policy modules are defined with a default severity value
 ranging from 1 (least severe) to 5 (most severe).  However, you may
 disagree with the default severity and choose to give it a higher or
-lower severity, based on your own coding philosophy.
+lower severity, based on your own coding philosophy.  You can set the
+<severity> to an integer from 1 to 5, or use one of the equivalent names:
+
+    SEVERITY NAME  ...is eqivalent to... SEVERITY NUMBER
+    ----------------------------------------------------
+    gentle                                             5
+    stern                                              4
+    harsh                                              3
+    cruel                                              2
+    brutal                                             1
 
 C<set_themes> sets the theme for the Policy and overrides it's default
 theme.  The argument is a string of one or more whitespace-delimited
@@ -769,8 +815,8 @@ A simple configuration might look like this:
     severity = 2
 
     [ControlStructures::ProhibitPostfixControls]
-    allow = if unless  #My custom configuration
-    severity = 2
+    allow = if unless  # My custom configuration
+    severity = cruel   # Same as "severity = 2"
 
     #--------------------------------------------------------------
     # Give these policies a custom theme.  I can activate just
@@ -813,18 +859,9 @@ read on...
 Each Policy is defined with one or more "themes".  Themes can be used
 to create arbitrary groups of Policies.  They are intended to provide
 an alternative mechanism for selecting your preferred set of Policies.
-The Policies that ship with Perl::Critic have been grouped into themes
-that are roughly analogous to their severity levels.  Folks who find
-the numeric severity levels awkward can use these mnemonic theme names
-instead.
-
-    Severity Level                   Equivalent Theme
-    ---------------------------------------------------------------------------
-    5                                danger
-    4                                risky
-    3                                unreliable
-    2                                readability
-    1                                cosmetic
+For example, you may wish disable a certain subset of Policies when
+analyzing test scripts.  Conversely, you may wish to enable only a
+specific subset of Policies when analyze modules.
 
 Say C<"perlcritic -list"> to get a listing of all available policies
 and the themes that are associated with each one.  You can also change
