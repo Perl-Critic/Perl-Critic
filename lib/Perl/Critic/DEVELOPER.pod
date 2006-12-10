@@ -62,7 +62,7 @@ convention of grouping Policies into directories according to the
 table of contents in Conway's book "Perl Best Practices."  Since the
 goal of this policy is to enforce the use of block arguments to
 C<grep> and it comes from the "Builtin Functions" chapter of PBP, we
-call it "Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep".
+call it C<"Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep">.
 
   package Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep;
 
@@ -81,7 +81,7 @@ Perl::Critic to be a hypocrite, now do we?
   use Perl::Critic::Violation;
   use base 'Perl::Critic::Policy';
 
-  our $VERSION = '0.13_01';
+  our $VERSION = '0.22';
 
 Next, we'll declare a description and explanation for this Policy.
 The description is always just a string that basically says "this is
@@ -101,7 +101,7 @@ for a simple example and
 L<Perl::Critic::Policy::Documentation::RequirePodSections> for a more
 complex example.
 
-Next we define the C<default_severity()> method, which should return a
+Next, we define the C<default_severity()> method, which should return a
 scalar value indicating the severity of violating this Policy.
 Severity values range from 1 to 5, where 5 is the "most severe."  In
 general, level 5 is reserved for things that are frequently misused
@@ -111,38 +111,45 @@ severity constants that you can use here.
 
   sub default_severity  { return $SEVERITY_HIGH }
 
-Likewise, the C<default_themes()> method returns a list of theme
-names.  Themes are intended to be named groups of Policies.  Since
-this Policy comes directly from Damian's "Perl Best Practices" book,
-this Policy should be a member of the C<pbp> theme.  As a Policy
-author, you can specify any themes you want.
+Likewise, the C<default_themes()> method returns a list of theme names.
+Themes are intended to be named groups of Policies.  All Policies that ship
+with Perl::Critic have a C<"core"> theme.  And since this Policy comes directly
+from Damian's "Perl Best Practices" book, this Policy should be a member of
+the C<"pbp"> theme.
 
-  sub default_themes { return qw( pbp ) }
+  sub default_themes { return qw( core pbp ) }
 
-Next we indicate what parts of the code this policy will analyze, like
-statements or variables or conditionals or POD.  These parts are
-specified as PPI classes like L<PPI::Statement>,
-L<PPI::Token::Symbol>, L<PPI::Structure::Conditional> or
-L<PPI::Token::Pod> respectively.  The applies_to() method returns a
-list of PPI package names.  (You can get that list of package names
-via C<perldoc PPI>.)  As Perl::Critic traverses the document, it will
-call the C<violates()> method from this module whenever it encounters
-one of the PPI types that are given here.  In this case, we just want
-to test calls to C<grep>.  Since the token "grep" is a
-L<PPI::Token::Word>, we return that name from the C<applies_to()>
+As a Policy author, you can assign any themes you want to the Policy.  If
+you're publishing a suite of custom Policies, we suggest that you create a
+unique theme that covers all the Policies in the distro.  That way, users can
+easily enable or disable all of your policies at once.
+
+Next, we indicate what elements of the code this policy will analyze, like
+statements or variables or conditionals or POD.  These elements are specified
+as PPI classes usch as L<PPI::Statement>, L<PPI::Token::Symbol>,
+L<PPI::Structure::Conditional> or L<PPI::Token::Pod> respectively.  The
+applies_to() method returns a list of PPI package names.  (You can get that
+list of available package names via C<perldoc PPI>.)  As Perl::Critic
+traverses the document, it will call the C<violates()> method from this module
+whenever it encounters one of the PPI types that are given here.  In this
+case, we just want to test calls to C<grep>.  Since the token "grep" is a
+L<PPI::Token::Word>, we return that package name from the C<applies_to()>
 method.
 
   sub applies_to { return 'PPI::Token::Word' }
 
-Note that applies_to() is purely a performance enhancement -- if you
-want your policy to analyze every L<PPI::Element>, that's just fine.
+If your Policy needs to analyze several different types of elements, the
+C<applies_to> method may return the name of several PPI packages.  If your
+Policy needs to examine the file as a whole, then the C<applies_to> method
+should return L<PPI::Document>.  Since there is only one PPI::Document
+element, such a Policy would only be invoked once per file.
 
-Now comes the interesting part.  The C<violates()> method does all the
-work.  It is always called with 2 arguments: a reference to the
-current PPI element instance that Perl::Critic is traversing, and a
-reference to the entire PPI document. [And since this is an instance
-method, there will be an additional argument that is a reference to
-this object (C<$self>), but you already knew that!]
+Now comes the interesting part.  The C<violates()> method does all the work.
+It is always called with 2 arguments: a reference to the current PPI element
+that Perl::Critic is traversing, and a reference to the entire PPI
+document. [And since this is an object method, there will be an additional
+argument that is a reference to this object (C<$self>), but you already knew
+that!]
 
   sub violates {
       my ( $self, $elem, $doc ) = @_;
@@ -156,7 +163,7 @@ a string context returns the literal form of the code.  So we make
 sure that this PPI::Token::Word is, in fact, "grep".  If it's not,
 then we don't' need to bother examining it.
 
-    return if !($elem eq 'grep');
+    return if $elem ne 'grep';
 
 The C<PPI::Token::Word> class is also used for barewords and methods
 called on object references.  It is possible for someone to declare a
