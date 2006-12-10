@@ -415,6 +415,17 @@ will usually result in more Policy violations.  Users can redefine the
 severity level for any Policy in their F<.perlcriticrc> file.  See
 L<"CONFIGURATION"> for more information.
 
+If it is difficult for you to remember whether severity "5" is the most
+or least restrictive level, then you can use one of these named values:
+
+    SEVERITY NAME    ...is eqivalent to...   SEVERITY NUMBER
+    --------------------------------------------------------
+    -severity => 'gentle'                     -severity => 5
+    -severity => 'stern'                      -severity => 4
+    -severity => 'harsh'                      -severity => 3
+    -severity => 'cruel'                      -severity => 2
+    -severity => 'brutal'                     -severity => 1
+
 B<-theme> is special string that defines a set of Policies based on
 their respective themes.  If C<-theme> is given, only policies that
 are members of that set will be loaded.  For example, the following
@@ -466,13 +477,13 @@ will only choose from Policies that are mentioned in the user's
 profile.  If set to a false value (which is the default), then
 Perl::Critic chooses from all the Policies that it finds at your site.
 
-B<-force> controls whether Perl::Critic observes the magical C<"## no
-critic"> pseudo-pragmas in your code.  If set to a true value,
-Perl::Critic will analyze all code.  If set to a false value (which is
-the default) Perl::Critic will ignore code that is tagged with these
-comments.  See L<"BENDING THE RULES"> for more information.
+B<-force> is a boolean value that controls whether Perl::Critic observes the
+magical C<"## no critic"> pseudo-pragmas in your code.  If set to a true
+value, Perl::Critic will analyze all code.  If set to a false value (which is
+the default) Perl::Critic will ignore code that is tagged with these comments.
+See L<"BENDING THE RULES"> for more information.
 
-B<-verbose> can be a positive integer (from 1 to 10), or a literal
+B<-verbose> can be a positive integer (from 1 to 11), or a literal
 format specification.  See L<Perl::Critic::Violations> for an
 explanation of format specifications.
 
@@ -491,11 +502,11 @@ C<-config> option causes all the other options to be silently ignored.
 
 Runs the C<$source_code> through the Perl::Critic engine using all the
 Policies that have been loaded into this engine.  If C<$source_code>
-is a scalar reference, then it is treated as string of actual Perl
+is a scalar reference, then it is treated as a string of actual Perl
 code.  If C<$source_code> is a reference to an instance of
 L<PPI::Document>, then that instance is used directly.  Otherwise, it
 is treated as a path to a local file containing Perl code.  This
-method Returns a list of L<Perl::Critic::Violation> objects for each
+method returns a list of L<Perl::Critic::Violation> objects for each
 violation of the loaded Policies.  The list is sorted in the order
 that the Violations appear in the code.  If there are no violations,
 this method returns an empty list.
@@ -574,7 +585,7 @@ named block.>  For example, putting any or all of these at the top of
 your configuration file will set the default value for the
 corresponding command-line argument.
 
-    severity  = 3                                     #Integer from 1 to 5
+    severity  = 3                                     #Integer or named level
     only      = 1                                     #Zero or One
     force     = 0                                     #Zero or One
     verbose   = 4                                     #Integer or format spec
@@ -604,7 +615,26 @@ C<severity> is the level of importance you wish to assign to the
 Policy.  All Policy modules are defined with a default severity value
 ranging from 1 (least severe) to 5 (most severe).  However, you may
 disagree with the default severity and choose to give it a higher or
-lower severity, based on your own coding philosophy.
+lower severity, based on your own coding philosophy.   You can set the
+C<severity> to an integer from 1 to 5, or use one of the equivalent names:
+
+    SEVERITY NAME  ...is eqivalent to... SEVERITY NUMBER
+    ----------------------------------------------------
+    gentle                                             5
+    stern                                              4
+    harsh                                              3
+    cruel                                              2
+    brutal                                             1
+
+C<set_themes> sets the theme for the Policy and overrides it's default
+theme.  The argument is a string of one or more whitespace-delimited
+words.  Themes are case-insensitive.  See L<"POLICY THEMES"> for more
+information.
+
+C<add_themes> appends to the default themes for this Policy.  The
+argument is a string of one or more whitespace-delimited words.
+Themes are case-insensitive.  See L<"POLICY THEMES"> for more
+information.
 
 The remaining key-value pairs are configuration parameters that will
 be passed into the constructor for that Policy.  The constructors for
@@ -636,8 +666,8 @@ A simple configuration might look like this:
     severity = 2
 
     [ControlStructures::ProhibitPostfixControls]
-    allow = if unless  #My custom configuration
-    severity = 2
+    allow = if unless  # My custom configuration
+    severity = cruel   # Same as "severity = 2"
 
     #--------------------------------------------------------------
     # Give these policies a custom theme.  I can activate just
@@ -680,29 +710,18 @@ read on...
 Each Policy is defined with one or more "themes".  Themes can be used
 to create arbitrary groups of Policies.  They are intended to provide
 an alternative mechanism for selecting your preferred set of Policies.
-The Policies that ship with Perl::Critic have been grouped into themes
-that are roughly analogous to their severity levels.  Folks who find
-the numeric severity levels awkward can use these mnemonic theme names
-instead.
-
-    Severity Level                   Equivalent Theme
-    ---------------------------------------------------------------------------
-    5                                danger
-    4                                risky
-    3                                unreliable
-    2                                readability
-    1                                cosmetic
-
+For example, you may wish disable a certain subset of Policies when
+analyzing test scripts.  Conversely, you may wish to enable only a
+specific subset of Policies when analyzing modules.
 
 Say C<"perlcritic -list"> to get a listing of all available policies
 and the themes that are associated with each one.  You can also change
 the theme for any Policy in your F<.perlcriticrc> file.  See the
 L<"CONFIGURATION"> section for more information about that.
 
-Using the C<-theme> command-line option, you can combine themes with
-mathematical and boolean operators to create an arbitrarily complex
-expression that represents a custom "set" of Policies.  The following
-operators are supported
+Using the C<-theme> option, you can combine themes with mathematical and
+boolean operators to create an arbitrarily complex expression that represents
+a custom "set" of Policies.  The following operators are supported:
 
    Operator       Altertative         Meaning
    ----------------------------------------------------------------------------

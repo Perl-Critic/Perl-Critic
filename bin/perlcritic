@@ -484,8 +484,8 @@ violations to report.
 
 =item C<-severity NAME>
 
-If it is difficult for you to remember whether severity "5" is more or less
-restrictive than severity "4", then you can use one of these named values:
+If it is difficult for you to remember whether severity "5" is the most
+or least restrictive level, then you can use one of these named values:
 
     SEVERITY NAME    ...is eqivalent to...   SEVERITY NUMBER
     --------------------------------------------------------
@@ -765,7 +765,7 @@ Policy.  All Policy modules are defined with a default severity value
 ranging from 1 (least severe) to 5 (most severe).  However, you may
 disagree with the default severity and choose to give it a higher or
 lower severity, based on your own coding philosophy.  You can set the
-<severity> to an integer from 1 to 5, or use one of the equivalent names:
+C<severity> to an integer from 1 to 5, or use one of the equivalent names:
 
     SEVERITY NAME  ...is eqivalent to... SEVERITY NUMBER
     ----------------------------------------------------
@@ -861,7 +861,7 @@ to create arbitrary groups of Policies.  They are intended to provide
 an alternative mechanism for selecting your preferred set of Policies.
 For example, you may wish disable a certain subset of Policies when
 analyzing test scripts.  Conversely, you may wish to enable only a
-specific subset of Policies when analyze modules.
+specific subset of Policies when analyzing modules.
 
 Say C<"perlcritic -list"> to get a listing of all available policies
 and the themes that are associated with each one.  You can also change
@@ -871,7 +871,7 @@ L<"CONFIGURATION"> section for more information about that.
 Using the C<-theme> command-line option, you can combine themes with
 mathematical and boolean operators to create an arbitrarily complex
 expression that represents a custom "set" of Policies.  The following
-operators are supported
+operators are supported:
 
    Operator       Altertative         Meaning
    ----------------------------------------------------------------------------
