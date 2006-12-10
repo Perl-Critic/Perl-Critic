@@ -82,7 +82,6 @@ sub _init {
         # We want to use die here because the problem is with user input and
         # the user shouldn't receive a stack trace for this.
 
-        ## no critic (RequireCarping)
         if (scalar $self->policies() == 0) {
             die 'No policies matched "' . $self->singlepolicy() . qq{".\n};
         }
@@ -94,7 +93,6 @@ sub _init {
                 . ( join qq{,\n\t}, apply { chomp } sort $self->policies() )
                 . qq{\n};
         }
-        ## use critic
     }
 
     return $self;

@@ -27,7 +27,6 @@ sub applies_to       { return 'PPI::Token::Word' }
 #-----------------------------------------------------------------------------
 
 sub violates {
-
     my ( $self, $elem, undef ) = @_;
 
     my $alternative;
@@ -43,10 +42,97 @@ sub violates {
 
     return if ! is_function_call($elem);
 
+    my $last_list_element = _find_last_flattened_list_element($elem);
+    if (
+            $last_list_element
+        and (
+                $last_list_element->isa('PPI::Token::Quote::Double')
+            or  $last_list_element->isa('PPI::Token::Quote::Interpolate')
+        )
+    ) {
+        return if $last_list_element =~ m{ [\\] n . \z }xmso;
+    }
+
     my $desc = qq{"$elem" used instead of "$alternative"};
     return $self->violation( $desc, $expl, $elem );
 }
 
+sub _find_last_flattened_list_element {
+    my $starting_element = shift;
+
+    my $last_following_sibling;
+    my $next_sibling = $starting_element;
+    while ( $next_sibling = $next_sibling->snext_sibling() ) {
+        $last_following_sibling = $next_sibling;
+    }
+
+    return if not $last_following_sibling;
+
+    my $current_candidate = $last_following_sibling;
+    while (
+            not _is_list_element_token( $current_candidate )
+        and not _is_stop_token( $current_candidate )
+    ) {
+        return if not $current_candidate->isa('PPI::Token'); # Lists not handled yet.
+
+        $current_candidate = $current_candidate->sprevious_sibling();
+    }
+
+    return if _is_stop_token( $current_candidate );
+
+    return $current_candidate;
+}
+
+
+my @LIST_ELEMENT_TOKEN_CLASSES =
+    (
+        'PPI::Token::Number',
+        'PPI::Token::Word',
+        'PPI::Token::DashedWord',
+        'PPI::Token::Symbol',
+        'PPI::Token::Quote',
+    );
+
+sub _is_list_element_token {
+    my $element = shift;
+
+    return 0 if not $element->isa('PPI::Token');
+
+    foreach my $class (@LIST_ELEMENT_TOKEN_CLASSES) {
+        return 1 if $element->isa($class);
+    }
+
+    return 0;
+}
+
+
+my @STOP_TOKEN_CLASSES =
+    (
+        'PPI::Token::ArrayIndex',
+        'PPI::Token::QuoteLike',
+        'PPI::Token::Regexp',
+        'PPI::Token::HereDoc',
+        'PPI::Token::Cast',
+        'PPI::Token::Label',
+        'PPI::Token::Separator',
+        'PPI::Token::Data',
+        'PPI::Token::End',
+        'PPI::Token::Prototype',
+        'PPI::Token::Attribute',
+        'PPI::Token::Unknown',
+    );
+
+sub _is_stop_token {
+    my $element = shift;
+
+    return 0 if not $element->isa('PPI::Token');
+
+    foreach my $class (@STOP_TOKEN_CLASSES) {
+        return 1 if $element->isa($class);
+    }
+
+    return 0;
+}
 
 1;
 

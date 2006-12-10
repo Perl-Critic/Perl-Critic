@@ -44,6 +44,8 @@ our @EXPORT = qw(
     $QUOTE
     $SCOLON
     $SPACE
+    $SLASH
+    $BSLASH
 
     &all_perl_files
     &find_keywords
@@ -88,6 +90,8 @@ our $DQUOTE     = q{"};
 our $PERIOD     = q{.};
 our $PIPE       = q{|};
 our $SPACE      = q{ };
+our $SLASH      = q{/};
+our $BSLASH     = q{\\};
 our $EMPTY      = q{};
 our $TRUE       = 1;
 our $FALSE      = 0;
@@ -701,6 +705,10 @@ without the sigil.
 =item C<$EMPTY>
 
 =item C<$SPACE>
+
+=item C<$SLASH>
+
+=item C<$BSLASH>
 
 These character constants give clear names to commonly-used strings
 that can be hard to read when surrounded by quotes and other

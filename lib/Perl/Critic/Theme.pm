@@ -113,9 +113,7 @@ sub _validate_expression {
     return 1 if not defined $expression;
     if ( $expression !~ m/\A    [()\s\w\d\+\-\*]* \z/mx ) {
         $expression  =~ m/   ( [^()\s\w\d\+\-\*] )  /mx;
-        ## no critic (RequireCarping)
         die qq{Illegal character "$1" in theme expression.\n};
-        ## use critic
     }
     return 1;
 }

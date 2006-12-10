@@ -51,12 +51,199 @@ die 'A horrible death';
 
 #-----------------------------------------------------------------------------
 
-## name Don't complain if message ends with "\n"
-## TODO Not written yet
+## name Complain about cases without arguments.
+## failures 2
+## cut
+
+die;
+die
+
+#-----------------------------------------------------------------------------
+
+## name Complain about cases with empty list arguments.
+## failures 2
+## cut
+
+die ( );
+die ( )
+
+#-----------------------------------------------------------------------------
+
+## name Complain about cases with non-string arguments.
+## failures 6
+## cut
+
+die $error;
+die @errors;
+die %errors_by_id;
+die $errors[0];
+die $errors_by_id{"Cheese fondue overflow"};
+die $marvin_gaye->whats_goin_on();
+
+#-----------------------------------------------------------------------------
+
+## name Don't complain about obvious uses of references because they're likely being used as exception objects.
+## TODO not yet implemented
 ## failures 0
 ## cut
 
-die "A horrible death\n";
+die \$frobnication_exception;
+die \@accumulated_warnings;
+die \%problem_data;
+
+die
+    [
+        'process.html: missing standard section separator comments',
+        'green.css: uses non-standard font "Broken 15"',
+        'cat.jpg: missing copyright information in Exif metadata',
+    ];
+
+die
+    {
+        message     => 'Found duplicate entries',
+        file        => $current_file,
+        parser      => $self,
+        occurrences => $occurrences,
+        duplicated  => $entry_content,
+    };
+
+die Blrfl::Exception->new('Too many croutons', $salad);
+
+
+#-----------------------------------------------------------------------------
+
+## name Don't complain if message ends with "\n" in double quotes.
+## failures 0
+## cut
+
+die "A horrible death\n" ;
+die "A horrible death\n"    # last statement doesn't need a terminator
+
+#-----------------------------------------------------------------------------
+
+## name Complain if message ends with "\n" in single quotes.
+## failures 2
+## cut
+
+die 'A horrible death\n' ;
+die 'A horrible death\n'    # last statement doesn't need a terminator
+
+#-----------------------------------------------------------------------------
+
+## name Don't complain if message ends with "\n" in interpolated quotelike operator.
+## failures 0
+## cut
+
+die qq{A horrible death\n} ;
+die qq#A horrible death\n# ;
+die qq/A horrible death\n/  # last statement doesn't need a terminator
+
+#-----------------------------------------------------------------------------
+
+## name Complain if message ends with "\n" in non-interpolated quotelike operator.
+## failures 3
+## cut
+
+die q{A horrible death\n} ;
+die q#A horrible death\n# ;
+die q/A horrible death\n/   # last statement doesn't need a terminator
+
+#-----------------------------------------------------------------------------
+
+## name Don't complain if followed by postfix operator and otherwise valid.
+## TODO not yet implemented
+## failures 0
+## cut
+
+die "A horrible death\n" if $self->is_a_bad_guy();
+die "A horrible death\n" unless $self->rescued_from_the_sinking_ship();
+die "A horrible death\n" while $deep_sense_of_guilt;
+die "A horrible death\n" until $clear_conscience;
+die "A horrible death\n" for @your_crimes;
+
+#-----------------------------------------------------------------------------
+
+## name Don't complain if message is a list with a last element that ends with "\n"
+## failures 0
+## cut
+
+die q{Don't },  $die, " a horrible death\n"     ;
+die qq{Don't }, $die, qq/ a horrible death\n/   ;
+die q{Don't },  $die, " a horrible death\n"   , ;
+die q{Don't },  $die, " a horrible death\n"   , # last statement doesn't need a terminator
+
+#-----------------------------------------------------------------------------
+
+## name Don't complain if message is a parenthesised list with a last element that ends with "\n"
+## TODO not implemented yet
+## failures 0
+## cut
+
+die ( q{Don't },  $die, " a horrible death\n"     )   ;
+die ( qq{Don't }, $die, qq/ a horrible death\n/   )   ;
+die ( qq{Don't }, $die, qq/ a horrible death\n/   ) , ;
+die ( q{Don't },  $die, " a horrible death\n"   , ) # last statement doesn't need a terminator
+
+#-----------------------------------------------------------------------------
+
+## name Don't complain if message is a list with "sub" lists with a last (flattened list) element that ends with "\n"
+## TODO not implemented yet
+## failures 0
+## cut
+
+# all these tests are necessary (different PPI trees)
+
+# one element in a sub list
+die q{Don't } , ( $die ) ,   " a horrible death\n"   ;
+die q{Don't } ,   $die   , ( " a horrible death\n" ) ;
+
+# sub list and a bare element
+die q{Don't } , ( $die   ,   " a horrible death\n" ) ;
+
+# two sub lists
+die q{Don't } , ( $die ) , ( " a horrible death\n" ) ;
+
+
+# sub sub lists
+die ( ( q{Don't } ) ,   $die   ,   " a horrible death\n"       ) ;
+die (   q{Don't }   ,   $die   , ( " a horrible death\n"     ) ) ;
+die (   q{Don't }   , ( $die   , ( " a horrible death\n"   ) ) ) ;
+die ( ( q{Don't }   , ( $die   , ( " a horrible death\n" ) ) ) ) ;
+
+# play with extra commas
+die ( ( q{Don't } , ( $die , ( " a horrible death\n" , ) , ) , ) , ) , ;
+die ( ( q{Don't } , ( $die , ( " a horrible death\n" , ) , ) , ) , ) ,
+
+#-----------------------------------------------------------------------------
+
+## name Complain if message is a list with "sub" lists with a last (flattened list) element that doesn't end with "\n"
+## TODO not implemented yet
+## failures 10
+## cut
+
+# all these tests are necessary: make sure that the policy knows when to
+# stop looking.
+
+# one element in a sub list
+die q{Don't }   , ( $die ) ,   @a_horrible_death   ;
+die q{Don't }   ,   $die   , ( @a_horrible_death ) ;
+
+# sub list and a bare element
+die q{Don't }   , ( $die   ,   @a_horrible_death ) ;
+
+# two sub lists
+die q{Don't }   , ( $die ) , ( @a_horrible_death ) ;
+
+
+# sub sub lists
+die ( ( q{Don't } ) ,   $die   ,   @a_horrible_death       ) ;
+die (   q{Don't }   ,   $die   , ( @a_horrible_death     ) ) ;
+die (   q{Don't }   , ( $die   , ( @a_horrible_death   ) ) ) ;
+die ( ( q{Don't }   , ( $die   , ( @a_horrible_death ) ) ) ) ;
+
+# play with extra commas
+die ( ( q{Don't } , ( $die , ( @a_horrible_death , ) , ) , ) , ) , ;
+die ( ( q{Don't } , ( $die , ( @a_horrible_death , ) , ) , ) , ) ,
 
 #-----------------------------------------------------------------------------
 
