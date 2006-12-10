@@ -393,9 +393,9 @@ good idea of what it does.  You can also invoke the perlcritic
 web-service from the command line by doing an HTTP-post, such as one
 of these:
 
-    $> POST http://perlcritic.com/perl/critic.pl < MyModule.pm
-    $> lwp-request -m POST http://perlcritic.com/perl/critic.pl < MyModule.pm
-    $> wget -q -O - --post-file=MyModule.pm http://perlcritic.com/perl/critic.pl
+   $> POST http://perlcritic.com/perl/critic.pl < MyModule.pm
+   $> lwp-request -m POST http://perlcritic.com/perl/critic.pl < MyModule.pm
+   $> wget -q -O - --post-file=MyModule.pm http://perlcritic.com/perl/critic.pl
 
 Please note that the perlcritic web-service is still alpha code.  The
 URL and interface to the service are subject to change.
@@ -487,7 +487,7 @@ violations to report.
 If it is difficult for you to remember whether severity "5" is the most
 or least restrictive level, then you can use one of these named values:
 
-    SEVERITY NAME    ...is eqivalent to...   SEVERITY NUMBER
+    SEVERITY NAME   ...is equivalent to...   SEVERITY NUMBER
     --------------------------------------------------------
     -severity gentle                             -severity 5
     -severity stern                              -severity 4
@@ -568,8 +568,7 @@ but this won't work because the C<-exclude> option overrides the
 C<-include> option.
 
 The equivalent of this option can be accomplished by creating a custom
-profile containing only the desired policy and its configuration and
-running
+profile containing only the desired policy and then running...
 
   perlcritic --profile=customprofile --only my_file.pl
 
@@ -636,7 +635,7 @@ are:
     %r        The string of source code that caused the violation
     %s        The severity level of the violation
 
-The purpose of these formats is to provide some compatibility with
+The purpose of these formats is to provide some compatibility with text
 editors that have an interface for parsing certain kinds of input. See
 L<"EDITOR INTEGRATION"> for more information about that.
 
@@ -677,8 +676,8 @@ book.  NOTE: This feature is not implemented yet.
 
 By default, Severity 5 and 4 are colored red and yellow, respectively.
 Colorization only happens if STDOUT is a tty and L<Term::ANSIColor> is
-installed.  And it only works on non-windows environments.  Set this
-switch to disable color
+installed.  And it only works on non-windows environments.  Set this switch to
+disable color.
 
 =item C<-doc PATTERN>
 
@@ -725,8 +724,8 @@ on the command line, then all Policies will be loaded with their
 default configuration.
 
 The format of the configuration file is a series of INI-style
-blocks that contain key-value pairs separated by '='. Comments
-should start with '#' and can be placed on a separate line or after
+blocks that contain key-value pairs separated by "=". Comments
+should start with "#" and can be placed on a separate line or after
 the name-value pairs if you desire.
 
 Default settings for perlcritic itself can be set B<before the first
@@ -743,8 +742,7 @@ corresponding command-line argument.
     include   = NamingConventions ClassHierarchies    #Space-delimited list
     exclude   = Variables  Modules::RequirePackage    #Space-delimited list
 
-The remainder of the configuration file is a series of blocks like
-this:
+The remainder of the configuration file is a series of blocks like this:
 
     [Perl::Critic::Policy::Category::PolicyName]
     severity = 1
@@ -767,7 +765,7 @@ disagree with the default severity and choose to give it a higher or
 lower severity, based on your own coding philosophy.  You can set the
 C<severity> to an integer from 1 to 5, or use one of the equivalent names:
 
-    SEVERITY NAME  ...is eqivalent to... SEVERITY NUMBER
+    SEVERITY NAME ...is equivalent to... SEVERITY NUMBER
     ----------------------------------------------------
     gentle                                             5
     stern                                              4
@@ -775,8 +773,8 @@ C<severity> to an integer from 1 to 5, or use one of the equivalent names:
     cruel                                              2
     brutal                                             1
 
-C<set_themes> sets the theme for the Policy and overrides it's default
-theme.  The argument is a string of one or more whitespace-delimited
+C<set_themes> sets the theme for the Policy and overrides it's default theme.
+The argument is a string of one or more whitespace-delimited alphanumeric
 words.  Themes are case-insensitive.  See L<"POLICY THEMES"> for more
 information.
 
@@ -843,29 +841,24 @@ that is included in this F<t/examples> directory of this distribution.
 
 =head1 THE POLICIES
 
-A large number of Policy modules are distributed with Perl::Critic.
-They are described briefly in the companion document
-L<Perl::Critic::PolicySummary> and in more detail in the individual
-modules themselves.
+A large number of Policy modules are distributed with Perl::Critic.  They are
+described briefly in the companion document L<Perl::Critic::PolicySummary> and
+in more detail in the individual modules themselves.  Say C<"perlcritic -doc
+PATTERN"> to see the perldoc for all Policy modules that match the regex
+C<m/PATTERN/imx>
 
 =head1 POLICY THEMES
 
-B<NOTE:> As of version 0.21, policy themes are still considered
-experimental.  The implementation of this feature may change in a
-future release.  Additionally, the default theme names that ship with
-Perl::Critic may also change.  But this is a pretty cool feature, so
-read on...
-
-Each Policy is defined with one or more "themes".  Themes can be used
-to create arbitrary groups of Policies.  They are intended to provide
-an alternative mechanism for selecting your preferred set of Policies.
-For example, you may wish disable a certain subset of Policies when
-analyzing test scripts.  Conversely, you may wish to enable only a
-specific subset of Policies when analyzing modules.
+Each Policy is defined with one or more "themes".  Themes can be used to
+create arbitrary groups of Policies.  They are intended to provide an
+alternative mechanism for selecting your preferred set of Policies.  For
+example, you may wish disable a certain subset of Policies when analyzing test
+scripts.  Conversely, you may wish to enable only a specific subset of
+Policies when analyzing modules.
 
 The Policies that ship with Perl::Critic are have been broken into the
-following themes.  This is just our attempt to provide some basic
-logical groupings.  You are free to invent themes that suit your needs.
+following themes.  This is just our attempt to provide some basic logical
+groupings.  You are free to invent new themes that suit your needs.
 
     THEME             DESCRIPTION
     --------------------------------------------------------------------------
@@ -875,7 +868,7 @@ logical groupings.  You are free to invent themes that suit your needs.
     maintenance       Policies that affect the long-term health of the code
     cosmetic          Policies that only have a superficial effect
     complexity        Policies that specificaly relate to code complexity
-    security          Policies relate to security issues
+    security          Policies that relate to security issues
     tests             Policies that are specific to test scripts
 
 Say C<"perlcritic -list"> to get a listing of all available policies
@@ -917,7 +910,7 @@ can also use parenthesis to enforce precedence.  Here are some examples:
 
 Theme names are case-insensitive.  If C<-theme> is set to an empty
 string, then it is equivalent to the set of all policies.  A theme
-name that doesn't exist is equivalent to an empty set. Please See
+name that doesn't exist is equivalent to an empty set.  Please see
 L<http://en.wikipedia.org/wiki/Set> for a discussion on set theory.
 
 =head1 BENDING THE RULES
@@ -965,25 +958,25 @@ the end of the block or until the next C<"## use critic"> comment
 
   ## no critic (EmptyQuotes, PostfixControls);
 
-  #Now exempt from ValuesAndExpressions::ProhibitEmptyQuotes
+  # Now exempt from ValuesAndExpressions::ProhibitEmptyQuotes
   $foo = "";
 
-  #Now exempt ControlStructures::ProhibitPostfixControls
+  # Now exempt ControlStructures::ProhibitPostfixControls
   $barf = bar() if $foo;
 
-  #Still subject to ValuesAndExpression::RequireNumberSeparators
+  # Still subject to ValuesAndExpression::RequireNumberSeparators
   $long_int = 10000000000;
 
-Since the Policy names are matched against the arguments as regular
-expressions, you can abbreviate the Policy names or disable an entire
+Since the Policy names are matched against the C<"## no critic"> arguments as
+regular expressions, you can abbreviate the Policy names or disable an entire
 family of Policies in one shot like this:
 
-  ## no critic 'NamingConventions';
+  ## no critic (NamingConventions)
 
-  #Now exempt from NamingConventions::ProhibitMixedCaseVars
+  # Now exempt from NamingConventions::ProhibitMixedCaseVars
   my $camelHumpVar = 'foo';
 
-  #Now exempt from NamingConventions::ProhibitMixedCaseSubs
+  # Now exempt from NamingConventions::ProhibitMixedCaseSubs
   sub camelHumpSub {}
 
 The argument list must be enclosed in parens and must contain one or
@@ -1004,6 +997,14 @@ Perl-Critic is evolving rapidly.  As such, some of the interfaces have
 changed in ways that are not backward-compatible.  If you have been
 using an older version of Perl-Critic and/or you have been developing
 custom Policy modules, please read this section carefully.
+
+=head2 VERSION 0.21
+
+In version 0.21, we introduced the concept of policy "themes".  All
+you existing custom Policies should still be compatible.  But to take
+advantage of the theme feature, you should add a C<default_themes>
+method to your custom Policy modules.  See L<Perl::Critic::DEVELOPER>
+for an up-to-date guide on creating Policy modules.
 
 =head2 VERSION 0.16
 
@@ -1039,7 +1040,6 @@ them.  This decision was based on user-feedback suggesting that
 Perl-Critic should be less "critical" for new users, and should steer
 them toward gradually increasing the strictness as they adopt better
 coding practices.
-
 
 =head2 VERSION 0.11
 
@@ -1114,7 +1114,7 @@ I haven't tried this myself, but other folks say it works.
 
 Josh Clark has produced an excellent Perl-Critic plugin for BBEdit. See
 L<http://beta.bigmedium.com/projects/bbedit-perl-critic/index.shtml> for
-more information.
+more information.  Apple users rejoice!
 
 =head1 EXIT STATUS
 
@@ -1166,6 +1166,10 @@ Damian Conway - For writing B<Perl Best Practices>, finally :)
 
 Chris Dolan - For contributing the best features and Policy modules.
 
+Andy Lester - Wise sage and master of all-things-testing.
+
+Elliot Shank - The self-proclaimed quality freak.
+
 Giuseppe Maxia - For all the great ideas and positive encouragement.
 
 and Sharon, my wife - For putting up with my all-night code sessions.
@@ -1184,6 +1188,7 @@ can be found in the LICENSE file included with this module.
 
 =cut
 
+##############################################################################
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4
