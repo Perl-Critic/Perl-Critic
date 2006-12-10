@@ -121,12 +121,12 @@ the C<"pbp"> theme.
 
 As a Policy author, you can assign any themes you want to the Policy.  If
 you're publishing a suite of custom Policies, we suggest that you create a
-unique theme that covers all the Policies in the distro.  That way, users can
-easily enable or disable all of your policies at once.
+unique theme that covers all the Policies in the distribution.  That way,
+users can easily enable or disable all of your policies at once.
 
 Next, we indicate what elements of the code this policy will analyze, like
 statements or variables or conditionals or POD.  These elements are specified
-as PPI classes usch as L<PPI::Statement>, L<PPI::Token::Symbol>,
+as PPI classes such as L<PPI::Statement>, L<PPI::Token::Symbol>,
 L<PPI::Structure::Conditional> or L<PPI::Token::Pod> respectively.  The
 applies_to() method returns a list of PPI package names.  (You can get that
 list of available package names via C<perldoc PPI>.)  As Perl::Critic
