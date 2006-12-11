@@ -19,11 +19,11 @@ DESCRIPTION
     and customize those Polices through the Perl::Critic interface. You can
     also create new Policy modules that suit your own tastes.
 
-    For a convenient command-line interface to Perl::Critic, see the
-    documentation for perlcritic. If you want to integrate Perl::Critic with
-    your build process, Test::Perl::Critic provides an interface that is
-    suitable for test scripts. For the ultimate convenience (at the expense
-    of some flexibility) see the criticism pragma.
+    For a command-line interface to Perl::Critic, see the documentation for
+    perlcritic. If you want to integrate Perl::Critic with your build
+    process, Test::Perl::Critic provides an interface that is suitable for
+    test scripts. For the ultimate convenience (at the expense of some
+    flexibility) see the criticism pragma.
 
     Win32 and ActivePerl users can find PPM distributions of Perl::Critic at
     <http://theoryx5.uwinnipeg.ca/ppms/>.
@@ -35,9 +35,9 @@ DESCRIPTION
     does. You can also invoke the perlcritic web-service from the command
     line by doing an HTTP-post, such as one of these:
 
-        $> POST http://perlcritic.com/perl/critic.pl < MyModule.pm
-        $> lwp-request -m POST http://perlcritic.com/perl/critic.pl < MyModule.pm
-        $> wget -q -O - --post-file=MyModule.pm http://perlcritic.com/perl/critic.pl
+       $> POST http://perlcritic.com/perl/critic.pl < MyModule.pm
+       $> lwp-request -m POST http://perlcritic.com/perl/critic.pl < MyModule.pm
+       $> wget -q -O - --post-file=MyModule.pm http://perlcritic.com/perl/critic.pl
 
     Please note that the perlcritic web-service is still alpha code. The URL
     and interface to the service are subject to change.
@@ -46,7 +46,7 @@ CONSTRUCTOR
     "new( [ -profile => $FILE, -severity => $N, -theme => $string, -include
     => \@PATTERNS, -exclude => \@PATTERNS, -top => $N, -only => $B, -force
     => $B, -verbose => $N ] )"
-    "new( [ -config => Perl::Critic::Config->new() ]"
+    "new( -config => Perl::Critic::Config->new() )"
     "new()" Returns a reference to a new Perl::Critic object. Most arguments
             are just passed directly into Perl::Critic::Config, but I have
             described them here as well. The default value for all arguments
@@ -71,10 +71,22 @@ CONSTRUCTOR
             Users can redefine the severity level for any Policy in their
             .perlcriticrc file. See "CONFIGURATION" for more information.
 
+            If it is difficult for you to remember whether severity "5" is
+            the most or least restrictive level, then you can use one of
+            these named values:
+
+                SEVERITY NAME   ...is equivalent to...   SEVERITY NUMBER
+                --------------------------------------------------------
+                -severity => 'gentle'                     -severity => 5
+                -severity => 'stern'                      -severity => 4
+                -severity => 'harsh'                      -severity => 3
+                -severity => 'cruel'                      -severity => 2
+                -severity => 'brutal'                     -severity => 1
+
             -theme is special string that defines a set of Policies based on
             their respective themes. If "-theme" is given, only policies
             that are members of that set will be loaded. For example, the
-            following would load only Policies that have a 'danger' and
+            following would load only Policies that have a 'danger' AND
             'pbp' theme:
 
               my $critic = Perl::Critic->new(-theme => 'danger * pbp');
@@ -126,14 +138,14 @@ CONSTRUCTOR
             Perl::Critic chooses from all the Policies that it finds at your
             site.
 
-            -force controls whether Perl::Critic observes the magical ""##
-            no critic"" pseudo-pragmas in your code. If set to a true value,
-            Perl::Critic will analyze all code. If set to a false value
-            (which is the default) Perl::Critic will ignore code that is
-            tagged with these comments. See "BENDING THE RULES" for more
-            information.
+            -force is a boolean value that controls whether Perl::Critic
+            observes the magical "## no critic" pseudo-pragmas in your code.
+            If set to a true value, Perl::Critic will analyze all code. If
+            set to a false value (which is the default) Perl::Critic will
+            ignore code that is tagged with these comments. See "BENDING THE
+            RULES" for more information.
 
-            -verbose can be a positive integer (from 1 to 10), or a literal
+            -verbose can be a positive integer (from 1 to 11), or a literal
             format specification. See Perl::Critic::Violations for an
             explanation of format specifications.
 
@@ -147,11 +159,11 @@ METHODS
     "critique( $source_code )"
             Runs the $source_code through the Perl::Critic engine using all
             the Policies that have been loaded into this engine. If
-            $source_code is a scalar reference, then it is treated as string
-            of actual Perl code. If $source_code is a reference to an
+            $source_code is a scalar reference, then it is treated as a
+            string of actual Perl code. If $source_code is a reference to an
             instance of PPI::Document, then that instance is used directly.
             Otherwise, it is treated as a path to a local file containing
-            Perl code. This method Returns a list of Perl::Critic::Violation
+            Perl code. This method returns a list of Perl::Critic::Violation
             objects for each violation of the loaded Policies. The list is
             sorted in the order that the Violations appear in the code. If
             there are no violations, this method returns an empty list.
@@ -223,12 +235,12 @@ CONFIGURATION
     configuration file will set the default value for the corresponding
     command-line argument.
 
-        severity  = 3                                     #Integer from 1 to 5
+        severity  = 3                                     #Integer or named level
         only      = 1                                     #Zero or One
         force     = 0                                     #Zero or One
         verbose   = 4                                     #Integer or format spec
         top       = 50                                    #A positive integer
-        theme     = risky + (pbp * security) - cosmetic   #A theme expression
+        theme     = (pbp + security) * bugs               #A theme expression
         include   = NamingConventions ClassHierarchies    #Space-delimited list
         exclude   = Variables  Modules::RequirePackage    #Space-delimited list
 
@@ -251,7 +263,25 @@ CONFIGURATION
     All Policy modules are defined with a default severity value ranging
     from 1 (least severe) to 5 (most severe). However, you may disagree with
     the default severity and choose to give it a higher or lower severity,
-    based on your own coding philosophy.
+    based on your own coding philosophy. You can set the "severity" to an
+    integer from 1 to 5, or use one of the equivalent names:
+
+        SEVERITY NAME ...is equivalent to... SEVERITY NUMBER
+        ----------------------------------------------------
+        gentle                                             5
+        stern                                              4
+        harsh                                              3
+        cruel                                              2
+        brutal                                             1
+
+    "set_themes" sets the theme for the Policy and overrides its default
+    theme. The argument is a string of one or more whitespace-delimited
+    alphanumeric words. Themes are case-insensitive. See "POLICY THEMES" for
+    more information.
+
+    "add_themes" appends to the default themes for this Policy. The argument
+    is a string of one or more whitespace-delimited words. Themes are
+    case-insensitive. See "POLICY THEMES" for more information.
 
     The remaining key-value pairs are configuration parameters that will be
     passed into the constructor for that Policy. The constructors for most
@@ -283,8 +313,8 @@ CONFIGURATION
         severity = 2
 
         [ControlStructures::ProhibitPostfixControls]
-        allow = if unless  #My custom configuration
-        severity = 2
+        allow = if unless  # My custom configuration
+        severity = cruel   # Same as "severity = 2"
 
         #--------------------------------------------------------------
         # Give these policies a custom theme.  I can activate just
@@ -313,40 +343,42 @@ THE POLICIES
     A large number of Policy modules are distributed with Perl::Critic. They
     are described briefly in the companion document
     Perl::Critic::PolicySummary and in more detail in the individual modules
-    themselves.
+    themselves. Say ""perlcritic -doc PATTERN"" to see the perldoc for all
+    Policy modules that match the regex "m/PATTERN/imx"
 
 POLICY THEMES
-    NOTE: As of version 0.21, policy themes are still considered
-    experimental. The implementation of this feature may change in a future
-    release. Additionally, the default theme names that ship with
-    Perl::Critic may also change. But this is a pretty cool feature, so read
-    on...
-
     Each Policy is defined with one or more "themes". Themes can be used to
     create arbitrary groups of Policies. They are intended to provide an
-    alternative mechanism for selecting your preferred set of Policies. The
-    Policies that ship with Perl::Critic have been grouped into themes that
-    are roughly analogous to their severity levels. Folks who find the
-    numeric severity levels awkward can use these mnemonic theme names
-    instead.
+    alternative mechanism for selecting your preferred set of Policies. For
+    example, you may wish disable a certain subset of Policies when
+    analyzing test scripts. Conversely, you may wish to enable only a
+    specific subset of Policies when analyzing modules.
 
-        Severity Level                   Equivalent Theme
-        ---------------------------------------------------------------------------
-        5                                danger
-        4                                risky
-        3                                unreliable
-        2                                readability
-        1                                cosmetic
+    The Policies that ship with Perl::Critic are have been broken into the
+    following themes. This is just our attempt to provide some basic logical
+    groupings. You are free to invent new themes that suit your needs.
 
-    Say "perlcritic -list" to get a listing of all available policies and
-    the themes that are associated with each one. You can also change the
-    theme for any Policy in your .perlcriticrc file. See the "CONFIGURATION"
-    section for more information about that.
+        THEME             DESCRIPTION
+        --------------------------------------------------------------------------
+        core              All policies that ship with Perl::Critic
+        pbp               Policies that come directly from "Perl Best Practices"
+        bugs              Policies that that prevent or reveal bugs
+        maintenance       Policies that affect the long-term health of the code
+        cosmetic          Policies that only have a superficial effect
+        complexity        Policies that specificaly relate to code complexity
+        security          Policies that relate to security issues
+        tests             Policies that are specific to test scripts
 
-    Using the "-theme" command-line option, you can combine themes with
-    mathematical and boolean operators to create an arbitrarily complex
-    expression that represents a custom "set" of Policies. The following
-    operators are supported
+    Any Policy may fit into multiple themes. Say "perlcritic -list" to get a
+    listing of all available Policies and the themes that are associated
+    with each one. You can also change the theme for any Policy in your
+    .perlcriticrc file. See the "CONFIGURATION" section for more information
+    about that.
+
+    Using the "-theme" option, you can combine themes with mathematical and
+    boolean operators to create an arbitrarily complex expression that
+    represents a custom "set" of Policies. The following operators are
+    supported:
 
        Operator       Altertative         Meaning
        ----------------------------------------------------------------------------
@@ -359,20 +391,21 @@ POLICY THEMES
 
        Expression                  Meaning
        ----------------------------------------------------------------------------
-       pbp * risky                 All policies that are "pbp" AND "risky"
-       pbp and risky               Ditto
+       pbp * bugs                  All policies that are "pbp" AND "bugs"
+       pbp and bugs                Ditto
 
-       danger + risky              All policies that are "danger" OR "risky"
-       pbp or risky                Ditto
+       bugs + cosmetic             All policies that are "bugs" OR "cosmetic"
+       bugs or cosmetic            Ditto
 
-       pbp - cosmetic              All policies that are "pbp" BUT NOT "risky"
+       pbp - cosmetic              All policies that are "pbp" BUT NOT "cosmetic"
        pbp not cosmetic            Ditto
 
-       -unreliable                All policies that are NOT "unreliable"
-       not unreliable             Ditto
+       -maintenance                All policies that are NOT "maintenance"
+       not maintenance             Ditto
 
-       (pbp - danger) * risky      All policies that are "pbp" BUT NOT "danger", AND "risky"
-       (pbp not danger) and risky  Ditto
+       (pbp - bugs) * complexity     All policies that are "pbp" BUT NOT "bugs",
+                                        AND "complexity"
+       (pbp not bugs) and complexity  Ditto
 
     Theme names are case-insensitive. If "-theme" is set to an empty string,
     then it is equivalent to the set of all policies. A theme name that
@@ -422,18 +455,26 @@ BENDING THE RULES
 
       ## no critic (EmptyQuotes, PostfixControls)
 
-      $foo = "";                  #Now exempt from ValuesAndExpressions::ProhibitEmptyQuotes
-      $barf = bar() if $foo;      #Now exempt ControlStructures::ProhibitPostfixControls
-      $long_int = 10000000000;    #Still subjected to ValuesAndExpression::RequireNumberSeparators
+      # Now exempt from ValuesAndExpressions::ProhibitEmptyQuotes
+      $foo = "";
 
-    Since the Policy names are matched against the arguments as regular
-    expressions, you can abbreviate the Policy names or disable an entire
-    family of Policies in one shot like this:
+      # Now exempt ControlStructures::ProhibitPostfixControls
+      $barf = bar() if $foo;
+
+      # Still subjected to ValuesAndExpression::RequireNumberSeparators
+      $long_int = 10000000000;
+
+    Since the Policy names are matched against the "## no critic" arguments
+    as regular expressions, you can abbreviate the Policy names or disable
+    an entire family of Policies in one shot like this:
 
       ## no critic (NamingConventions)
 
-      my $camelHumpVar = 'foo';  #Now exempt from NamingConventions::ProhibitMixedCaseVars
-      sub camelHumpSub {}        #Now exempt from NamingConventions::ProhibitMixedCaseSubs
+      # Now exempt from NamingConventions::ProhibitMixedCaseVars
+      my $camelHumpVar = 'foo';
+
+      # Now exempt from NamingConventions::ProhibitMixedCaseSubs
+      sub camelHumpSub {}
 
     The argument list must be enclosed in parens and must contain one or
     more comma-separated barewords (e.g. don't use quotes). The ""## no
@@ -576,13 +617,11 @@ CREDITS
 
     Chris Dolan - For contributing the best features and Policy modules.
 
+    Andy Lester - Wise sage and master of all-things-testing.
+
+    Elliot Shank - The self-proclaimed quality freak.
+
     Giuseppe Maxia - For all the great ideas and positive encouragement.
-
-    Andy Lester - For creating the very first third-party policies.
-
-    Joshua ben Jore - For continued feedback and sanity checking.
-
-    Elliot Shank - For creating one of the coolest Policies.
 
     and Sharon, my wife - For putting up with my all-night code sessions.
 

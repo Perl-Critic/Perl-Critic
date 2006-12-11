@@ -386,7 +386,7 @@ URL and interface to the service are subject to change.
 
 =item C<< new( [ -profile => $FILE, -severity => $N, -theme => $string, -include => \@PATTERNS, -exclude => \@PATTERNS, -top => $N, -only => $B, -force => $B, -verbose => $N ] ) >>
 
-=item C<< new( -config => Perl::Critic::Config->new() >>
+=item C<< new( -config => Perl::Critic::Config->new() ) >>
 
 =item C<< new() >>
 
