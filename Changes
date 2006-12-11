@@ -19,6 +19,13 @@
        themes and they are organized more around concepts rather
        than severity level.
 
+     Policy Changes:
+     * ErrorHandling::RequireCarping will not complain if it can figure
+       out that the die or warn message will always end in a newline
+       ("\n").  The idea is that, if you put the newline there, you
+       don't indend for there to be any file/line/stack information
+       emitted, in which case you really don't want carp/croak.
+
      Misc Changes:
      Renamed "-List" option to "-profileproto".
      Added uppercase alternative to some perlcritic options.

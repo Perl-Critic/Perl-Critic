@@ -170,6 +170,23 @@ sub _find_last_flattened_argument_list_element {
     return if not $current_candidate;
     return if _is_complex_expression_token( $current_candidate );
 
+    my $penultimate_element = $current_candidate->sprevious_sibling();
+    if ($penultimate_element) {
+        # Bail if we've got a Word in front of the Element that isn't
+        # the original 'die' or 'warn' or anything else that isn't
+        # a comma operator.
+        if ( $penultimate_element->isa('PPI::Token::Operator') ) {
+            if (
+                    $penultimate_element ne $COMMA
+                and $penultimate_element ne $PERIOD
+            ) {
+                return;
+            }
+        } elsif ( $penultimate_element != $die_or_warn ) {
+            return
+        }
+    }
+
     return $current_candidate;
 }
 
@@ -202,7 +219,7 @@ sub _determine_if_list_is_a_plain_list_and_get_last_child {
         # the original 'die' or 'warn' or anything else that isn't
         # a comma operator.
         if ( $prior_sibling->isa('PPI::Token::Operator') ) {
-            if ( $prior_sibling != $COMMA ) {
+            if ( $prior_sibling ne $COMMA ) {
                 return;
             }
         } elsif ( $prior_sibling != $die_or_warn ) {
