@@ -174,7 +174,7 @@ sub _find_last_flattened_argument_list_element {
     if ($penultimate_element) {
         # Bail if we've got a Word in front of the Element that isn't
         # the original 'die' or 'warn' or anything else that isn't
-        # a comma operator.
+        # a comma or dot operator.
         if ( $penultimate_element->isa('PPI::Token::Operator') ) {
             if (
                     $penultimate_element ne $COMMA
@@ -345,6 +345,30 @@ Instead, they want to know where B<their> code invoked the subroutine.
 The L<Carp> module provides alternative methods that report the
 exception from the caller's file and line number.
 
+This policy will not complain about C<die> or C<warn>, if it can
+determine that the message will always result in a terminal newline.
+Since perl suppresses file names and line numbers in this situation,
+it is assumed that no stack traces are desired either and none of the
+L<Carp> functions are necessary.
+
+    die "oops" if $explosion;             #not ok
+    warn "Where? Where?!" if $tiger;      #not ok
+
+    open my $mouth, '<', 'food'
+        or die 'of starvation';           #not ok
+
+    if (! $dentist_appointment) {
+        warn "You have bad breath!\n";    #ok
+    }
+
+    die "$clock not set.\n" if $no_time;  #ok
+
+    my $message = "$clock not set.\n";
+    die $message if $no_time;             #not ok, not obvious
+
+=head1 SEE ALSO
+
+L<Carp::Always>
 
 =head1 AUTHOR
 
