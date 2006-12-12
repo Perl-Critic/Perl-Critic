@@ -22,6 +22,7 @@ my $expl     = [ 44 ];
 
 #-----------------------------------------------------------------------------
 
+sub policy_parameters { return() }
 sub default_severity { return $SEVERITY_LOWEST      }
 sub default_themes    { return qw( core pbp cosmetic )    }
 sub applies_to       { return 'PPI::Statement::Sub' }

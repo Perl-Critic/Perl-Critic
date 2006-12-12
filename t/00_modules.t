@@ -10,7 +10,7 @@
 use strict;
 use warnings;
 use PPI::Document;
-use Test::More tests => 1393;  # Add 14 for each new policy created
+use Test::More tests => 1487;  # Add 15 for each new policy created
 use Perl::Critic::TestUtils qw(bundled_policy_names);
 use English qw(-no_match_vars);
 
@@ -84,6 +84,7 @@ can_ok('Perl::Critic::Policy', 'default_themes');
 can_ok('Perl::Critic::Policy', 'get_severity');
 can_ok('Perl::Critic::Policy', 'get_themes');
 can_ok('Perl::Critic::Policy', 'new');
+can_ok('Perl::Critic::Policy', 'policy_parameters');
 can_ok('Perl::Critic::Policy', 'set_severity');
 can_ok('Perl::Critic::Policy', 'set_themes');
 can_ok('Perl::Critic::Policy', 'violates');
@@ -172,6 +173,7 @@ is($listing->VERSION(), $version_string);
         can_ok($mod, 'get_severity');
         can_ok($mod, 'get_themes');
         can_ok($mod, 'new');
+        can_ok($mod, 'policy_parameters');
         can_ok($mod, 'set_severity');
         can_ok($mod, 'set_themes');
         can_ok($mod, 'set_themes');

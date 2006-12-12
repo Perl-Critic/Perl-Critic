@@ -22,9 +22,10 @@ my $expl = [ 33 ];
 
 #-----------------------------------------------------------------------------
 
-sub default_severity { return $SEVERITY_LOWEST }
-sub default_themes   { return qw(core pbp cosmetic) }
-sub applies_to       { return 'PPI::Document'  }
+sub policy_parameters { return qw( perltidyrc )      }
+sub default_severity  { return $SEVERITY_LOWEST      }
+sub default_themes    { return qw(core pbp cosmetic) }
+sub applies_to        { return 'PPI::Document'       }
 
 #-----------------------------------------------------------------------------
 
@@ -34,9 +35,8 @@ sub new {
 
     #Set configuration if defined
     $self->{_perltidyrc} = $args{perltidyrc};
-    if (defined $self->{_perltidyrc} && $self->{_perltidyrc} eq $EMPTY)
-    {
-       $self->{_perltidyrc} = \$EMPTY;
+    if (defined $self->{_perltidyrc} && $self->{_perltidyrc} eq $EMPTY) {
+        $self->{_perltidyrc} = \$EMPTY;
     }
 
     return $self;

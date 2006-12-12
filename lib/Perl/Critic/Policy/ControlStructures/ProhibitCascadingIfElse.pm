@@ -19,11 +19,14 @@ our $VERSION = 0.22;
 my $desc = q{Cascading if-elsif chain};
 my $expl = [ 117, 118 ];
 
+my $DEFAULT_MAX_ELSIF = 2;
+
 #-----------------------------------------------------------------------------
 
-sub default_severity { return $SEVERITY_MEDIUM               }
-sub default_themes   { return qw(core pbp maintenance complexity) }
-sub applies_to       { return 'PPI::Statement::Compound'     }
+sub policy_parameters { return qw( max_elsif )                       }
+sub default_severity  { return $SEVERITY_MEDIUM                      }
+sub default_themes    { return qw( core pbp maintenance complexity ) }
+sub applies_to        { return 'PPI::Statement::Compound'            }
 
 #-----------------------------------------------------------------------------
 
@@ -32,7 +35,8 @@ sub new {
     my $self = bless {}, $class;
 
     #Set configuration
-    $self->{_max} = defined $args{max_elsif} ? $args{max_elsif} : 2;
+    $self->{_max} = defined $args{max_elsif} ? $args{max_elsif}
+                                             : $DEFAULT_MAX_ELSIF;
 
     return $self;
 }

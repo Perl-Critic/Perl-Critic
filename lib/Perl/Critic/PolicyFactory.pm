@@ -79,6 +79,7 @@ sub new {
 
     my ( $class, %args ) = @_;
     my $self = bless {}, $class;
+    $self->{_policies} = [];
     $self->_init( %args );
     return $self;
 }
@@ -89,8 +90,6 @@ sub _init {
 
     my ( $self, %args ) = @_;
     my $profile = $args{-profile};
-    $self->{_policies} = [];
-
     my $policy_names = $args{-policy_names} || \@SITE_POLICY_NAMES;
     for my $policy_name ( @{ $policy_names } ) {
         my $params = $profile->policy_params( $policy_name );
@@ -108,13 +107,19 @@ sub create_policy {
 
     confess q{policy argument is required} if not $policy_name;
     $policy_name = policy_long_name( $policy_name );
-    $params ||= {};
+
+    # This function will delete keys from $params, so we copy them to avoid
+    # screwing up the user's hash.  What a pain in the ass!
+    $params = $params ? { %{$params} } : {};
 
     # Pull out base parameters.  Alternate spellings are supported just for
     # convenience to the user, but please don't document them.
-    my $user_set_themes = $params->{set_themes} || $params->{set_theme};
-    my $user_add_themes = $params->{add_themes} || $params->{add_theme};
-    my $user_severity   = $params->{severity};
+    my $user_set_themes = delete $params->{set_themes} || delete $params->{set_theme};
+    my $user_add_themes = delete $params->{add_themes} || delete $params->{add_theme};
+    my $user_severity   = delete $params->{severity};
+
+    # Validate remaining parameters
+    _validate_policy_params( $policy_name, $params ); # Dies on failure
 
     # Construct policy from remaining params
     my $policy = $policy_name->new( %{$params} );
@@ -126,12 +131,12 @@ sub create_policy {
     }
 
     if ( defined $user_set_themes ) {
-        my @set_themes = _parse_theme_string( $user_set_themes );
+        my @set_themes = words_from_string( $user_set_themes );
         $policy->set_themes( @set_themes );
     }
 
     if ( defined $user_add_themes ) {
-        my @add_themes = _parse_theme_string( $user_add_themes );
+        my @add_themes = words_from_string( $user_add_themes );
         $policy->add_themes( @add_themes );
     }
 
@@ -147,15 +152,33 @@ sub policies {
 
 #-----------------------------------------------------------------------------
 
-sub _parse_theme_string {
-    my $theme_string = shift;
-    return sort split m{\s+}mx, $theme_string;
+sub site_policy_names {
+    return @SITE_POLICY_NAMES;
 }
 
 #-----------------------------------------------------------------------------
 
-sub site_policy_names {
-    return @SITE_POLICY_NAMES;
+sub _validate_policy_params {
+    my ($policy, $params) = @_;
+
+    my @supported_params = $policy->policy_parameters();
+
+    # If @supported_params is a one-element-list containting (undef), then it
+    # means the author has not implemented policy_parameters() and we can't
+    # tell if this policy supports any parameters.  So we just let it go.
+    return if !defined $supported_params[0] && @supported_params == 1;
+
+    my %is_supported = hashify( @supported_params );
+    my $msg = $EMPTY;
+
+    for my $offered_param ( keys %{ $params } ) {
+        if ( not defined $is_supported{$offered_param} ) {
+            $msg .= qq{Parameter "$offered_param" isn't supported by $policy\n};
+        }
+    }
+
+    die "$msg\n" if $msg;
+    return 1;
 }
 
 1;

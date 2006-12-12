@@ -19,11 +19,14 @@ our $VERSION = 0.22;
 my $desc = q{List of quoted literal words};
 my $expl = q{Use 'qw()' instead};
 
+my $DEFAULT_MIN_ELEMENTS = 2;
+
 #-----------------------------------------------------------------------------
 
-sub default_severity { return $SEVERITY_LOW }
-sub default_themes { return qw(core cosmetic) };
-sub applies_to { return 'PPI::Structure::List' }
+sub policy_parameters { return qw( min_elements )     }
+sub default_severity  { return $SEVERITY_LOW          }
+sub default_themes    { return qw( core cosmetic )    }
+sub applies_to        { return 'PPI::Structure::List' }
 
 #-----------------------------------------------------------------------------
 
@@ -32,7 +35,9 @@ sub new {
     my $self = bless {}, $class;
 
     #Set configuration if defined
-    $self->{_min} = defined $args{min_elements} ? $args{min_elements} : 2;
+    $self->{_min} = defined $args{min_elements} ? $args{min_elements}
+                                                : $DEFAULT_MIN_ELEMENTS;
+
     return $self;
 }
 

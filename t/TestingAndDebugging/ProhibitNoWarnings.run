@@ -29,7 +29,7 @@ no warnings qw(closure glob);
 
 #-----------------------------------------------------------------------------
 
-## name allow no warnings
+## name allow no warnings, mixed case config
 ## failures 0
 ## parms {allow => 'iO Glob OnCe'}
 ## cut
@@ -39,7 +39,7 @@ no warnings qw(glob io once);
 
 #-----------------------------------------------------------------------------
 
-## name allow no warnings
+## name allow no warnings, comma delimimted
 ## failures 0
 ## parms {allow => 'numeric,portable, pack'}
 # Funky config
@@ -51,8 +51,8 @@ no warnings "numeric", "pack", "portable";
 #-----------------------------------------------------------------------------
 
 ## name wrong case, funky config
-## failures 1
 ## parms { allow => 'NumerIC;PORTABLE' }
+## failures 1
 ## cut
 
 package foo;

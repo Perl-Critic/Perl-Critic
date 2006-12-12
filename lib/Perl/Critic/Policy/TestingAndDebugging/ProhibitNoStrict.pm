@@ -22,9 +22,10 @@ my $expl = [ 429 ];
 
 #-----------------------------------------------------------------------------
 
-sub default_severity { return $SEVERITY_HIGHEST         }
-sub default_themes    { return qw( core pbp bugs )          }
-sub applies_to       { return 'PPI::Statement::Include' }
+sub policy_parameters { return qw( allow )               }
+sub default_severity  { return $SEVERITY_HIGHEST         }
+sub default_themes    { return qw( core pbp bugs )       }
+sub applies_to        { return 'PPI::Statement::Include' }
 
 #-----------------------------------------------------------------------------
 
@@ -34,9 +35,9 @@ sub new {
     $self->{_allow} = {};
 
     if( defined $args{allow} ) {
-        for my $allowed ( split m{\W+}mx, lc $args{allow} ) {
-            $self->{_allow}->{$allowed} = 1;
-        }
+        my $allowed = lc $args{allow}; #String of words
+        my %allowed = hashify( $allowed =~ m/ (\w+) /gmx );
+        $self->{_allow} = \%allowed;
     }
 
     return $self;
@@ -48,7 +49,8 @@ sub violates {
 
     my ( $self, $elem, undef ) = @_;
 
-    return unless ($elem->type() eq 'no' && $elem->pragma() eq 'strict'); ## no critic
+    return if $elem->type()   ne 'no';
+    return if $elem->pragma() ne 'strict';
 
     #Arguments to 'no strict' are usually a list of literals or a qw()
     #list.  Rather than trying to parse the various PPI elements, I

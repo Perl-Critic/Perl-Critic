@@ -21,9 +21,10 @@ my $expl = q{Use a "for" loop instead};
 
 #-----------------------------------------------------------------------------
 
-sub default_severity  { return $SEVERITY_MEDIUM   }
-sub default_themes    { return qw(core maintenance)     }
-sub applies_to        { return 'PPI::Token::Word' }
+sub policy_parameters { return ()                     }
+sub default_severity  { return $SEVERITY_MEDIUM       }
+sub default_themes    { return qw( core maintenance ) }
+sub applies_to        { return 'PPI::Token::Word'     }
 
 #-----------------------------------------------------------------------------
 

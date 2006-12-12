@@ -95,7 +95,7 @@ Perl::Critic::TestUtils::block_perlcriticrc();
 
     # Try creating bogus policy
     eval{ $pf->create_policy( $bogus_policy ) };
-    like( $EVAL_ERROR, qr/Can't locate object method "new"/m, 'create bogus policy' );
+    like( $EVAL_ERROR, qr/Can't locate object method/m, 'create bogus policy' );
 
     # Try using a bogus severity level
     my $policy_name = 'Modules::RequireVersionVar';

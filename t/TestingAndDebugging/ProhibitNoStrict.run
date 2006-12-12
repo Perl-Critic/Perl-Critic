@@ -65,3 +65,32 @@ no strict "vars", "refs", 'subs';
 package foo;
 no strict qw(vars refs subs);
 
+#-----------------------------------------------------------------------------
+
+## name allow no strict, mixed case config
+## parms {allow => 'RefS SuBS'}
+## failures 0
+## cut
+
+package foo;
+no strict qw(refs subs);
+
+#-----------------------------------------------------------------------------
+
+## name allow no strict, comma-delimimted config
+## parms {allow => 'refs,subs'}
+## failures 0
+## cut
+
+package foo;
+no strict "refs", "subs";
+
+#-----------------------------------------------------------------------------
+
+## name wrong case, funky config
+## parms { allow => 'REfs;vArS' }
+## failures 1
+## cut
+
+package foo;
+no strict "refs", 'vars', "subs";

@@ -20,9 +20,10 @@ my $expl = [133, 138];
 
 #-----------------------------------------------------------------------------
 
-sub default_severity { return $SEVERITY_LOW       }
-sub default_themes   { return qw(core pbp maintenance) }
-sub applies_to       { return 'PPI::Document'     }
+sub policy_parameters { return qw( lib_sections script_sections ) }
+sub default_severity  { return $SEVERITY_LOW                      }
+sub default_themes    { return qw(core pbp maintenance)           }
+sub applies_to        { return 'PPI::Document'                    }
 
 #-----------------------------------------------------------------------------
 

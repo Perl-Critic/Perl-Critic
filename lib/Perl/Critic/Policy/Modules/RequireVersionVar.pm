@@ -22,6 +22,7 @@ my $expl = [ 404 ];
 
 #-----------------------------------------------------------------------------
 
+sub policy_parameters { return() }
 sub default_severity { return $SEVERITY_LOW       }
 sub default_themes   { return qw(core pbp readability) }
 sub applies_to       { return 'PPI::Document'     }

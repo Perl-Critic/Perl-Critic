@@ -15,12 +15,12 @@ use base 'Perl::Critic::Policy';
 
 our $VERSION = 0.22;
 
+#-----------------------------------------------------------------------------
+
 my @builtin_list_funcs = qw( map grep );
 my @cpan_list_funcs    = qw( List::Util::first ),
   map { 'List::MoreUtils::'.$_ } qw(any all none notall true false firstidx first_index
                                     lastidx last_index insert_after insert_after_string);
-
-
 
 
 #-----------------------------------------------------------------------------
@@ -40,9 +40,10 @@ my $expl = [ 114 ];
 
 #-----------------------------------------------------------------------------
 
-sub default_severity { return $SEVERITY_HIGHEST  }
-sub default_themes   { return qw(core bugs pbp)     }
-sub applies_to       { return 'PPI::Token::Word' }
+sub policy_parameters { return qw( list_funcs )   }
+sub default_severity  { return $SEVERITY_HIGHEST  }
+sub default_themes    { return qw(core bugs pbp)  }
+sub applies_to        { return 'PPI::Token::Word' }
 
 #-----------------------------------------------------------------------------
 

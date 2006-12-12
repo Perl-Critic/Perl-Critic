@@ -23,9 +23,10 @@ my $DEFAULT_N_STATEMENTS = 3;
 
 #-----------------------------------------------------------------------------
 
-sub default_severity { return $SEVERITY_HIGH }
-sub default_themes   { return qw(core pbp bugs) }
-sub applies_to       { return 'PPI::Statement::Include' }
+sub policy_parameters { return qw( statements )          }
+sub default_severity  { return $SEVERITY_HIGH            }
+sub default_themes    { return qw( core pbp bugs )       }
+sub applies_to        { return 'PPI::Statement::Include' }
 
 #-----------------------------------------------------------------------------
 
