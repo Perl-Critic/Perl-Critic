@@ -26,6 +26,10 @@
        don't indend for there to be any file/line/stack information
        emitted, in which case you really don't want carp/croak.
 
+       You can restore the old strict behavior by giving the policy
+       a false value for "allow_messages_ending_with_newlines" in your
+       configuration.
+
      Misc Changes:
      Renamed "-List" option to "-profileproto".
      Added uppercase alternative to some perlcritic options.

@@ -361,11 +361,11 @@ Instead, they want to know where B<their> code invoked the subroutine.
 The L<Carp> module provides alternative methods that report the
 exception from the caller's file and line number.
 
-This policy will not complain about C<die> or C<warn>, if it can
-determine that the message will always result in a terminal newline.
-Since perl suppresses file names and line numbers in this situation,
-it is assumed that no stack traces are desired either and none of the
-L<Carp> functions are necessary.
+By default, this policy will not complain about C<die> or C<warn>, if
+it can determine that the message will always result in a terminal
+newline.  Since perl suppresses file names and line numbers in this
+situation, it is assumed that no stack traces are desired either and
+none of the L<Carp> functions are necessary.
 
     die "oops" if $explosion;             #not ok
     warn "Where? Where?!" if $tiger;      #not ok
@@ -381,6 +381,14 @@ L<Carp> functions are necessary.
 
     my $message = "$clock not set.\n";
     die $message if $no_time;             #not ok, not obvious
+
+
+If you give this policy an C<allow_messages_ending_with_newlines>
+option in your F<.perlcriticrc> with a false value, then this policy
+will disallow all uses of C<die> and C<warn>.
+
+    [ErrorHandling::RequireCarping]
+    allow_messages_ending_with_newlines = 0
 
 =head1 SEE ALSO
 
