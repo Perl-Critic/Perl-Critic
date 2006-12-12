@@ -27,6 +27,19 @@ sub applies_to       { return 'PPI::Token::Word' }
 
 #-----------------------------------------------------------------------------
 
+my $allow_newlines = 1;
+
+sub new {
+    my ( $class, %config ) = @_;
+    my $self = bless {}, $class;
+
+    if ( defined $config{allow_messages_ending_with_newlines} ) {
+        $allow_newlines = $config{allow_messages_ending_with_newlines};
+    }
+
+    return $self;
+}
+
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
@@ -42,7 +55,10 @@ sub violates {
     }
 
     return if ! is_function_call($elem);
-    return if _last_flattened_argument_list_element_ends_in_newline($elem);
+
+    if ($allow_newlines) {
+        return if _last_flattened_argument_list_element_ends_in_newline($elem);
+    }
 
     my $desc = qq{"$elem" used instead of "$alternative"};
     return $self->violation( $desc, $expl, $elem );

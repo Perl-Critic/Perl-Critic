@@ -318,6 +318,15 @@ die ( 'A horrible ' . "death" ) foreach "Uist\n";
 
 #-----------------------------------------------------------------------------
 
+## name Complain if config doesn't allow newlines.
+## failures 1
+## parms { allow_messages_ending_with_newlines => 0 }
+## cut
+
+die "A horrible death\n" ;
+
+#-----------------------------------------------------------------------------
+
 ##############################################################################
 #      $URL$
 #     $Date$
