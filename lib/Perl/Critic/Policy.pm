@@ -37,10 +37,8 @@ sub policy_parameters {
 
 sub policy_parameters_are_specified {
     my $self = shift;
-
     my @parameters = $self->policy_parameters();
-
-    return scalar @parameters != 1 or not defined $parameters[0];
+    return defined $parameters[0] or scalar @parameters == 0;
 }
 
 #-----------------------------------------------------------------------------
@@ -142,28 +140,13 @@ sub to_string {
     return stringf($FORMAT, %fspec);
 }
 
-# That third parameter is buuuuuuuugly.  Better ideas for how to deal with
-# newlines in arguments to a String::Format format specifier appreciated.
 sub _format_policy_parameters {
-    my ($self, $formats) = @_;
-
+    my ($self, $format) = @_;
     return $EMPTY if not $self->policy_parameters_are_specified();
-
-    my ( $prefix, $suffix, $newline, $empty_placeholder ) = split $COLON, $formats;
-    $suffix .= "\n" if $newline;
-    $empty_placeholder = $EMPTY if not defined $empty_placeholder;
-
-    my @parameters = $self->policy_parameters();
-    return $empty_placeholder if not @parameters;
-
-    my $separator;
-    if ( $prefix or $suffix ) {
-        $separator = $suffix . $prefix;
-    } else {
-        $separator = $SPACE;
-    }
-
-    return $prefix . ( join $separator, @parameters ) . $suffix;
+    $format = Perl::Critic::Utils::interpolate( $format );
+    my @parameter_names = $self->policy_parameters();
+    return join $SPACE, @parameter_names if not $format;
+    return join $EMPTY, map { sprintf($format, $_) } @parameter_names;
 }
 
 #-----------------------------------------------------------------------------
