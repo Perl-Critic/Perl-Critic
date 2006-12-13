@@ -91,7 +91,7 @@ Allow this construct:
 Right now, P::C thinks that the C<$1> isn't legal to use because it's
 "outside" of the match.  The thing is, we can only get to the C<if>
 if the regex matched.
-    while ( $str =~ /(expression)/ ) 
+    while ( $str =~ /(expression)/ )
 
 =item * Documentation::RequirePodSections
 
@@ -158,11 +158,6 @@ same lexical FH
 If you're reading from STDIN, chances are you're really wanting to
 read from the magic filehandle.
 
-=item * Miscellanea::ProhibitObnoxiousComments
-
-Forbid excessive hash marks e.g. "#### This is a loud comment ####".
-Make the obnoxious pattern configurable
-
 =item * RegularExpressions::RequireBracesForMultiline (p242)
 
 =item * RegularExpressions::ProhibitUnusualDelimiters (p246)
@@ -213,6 +208,28 @@ Anything that is a program should have a shebang line.  This includes .t files.
 
 L<http://home.earthlink.net/~josh.jore/new-warnings/slides/slide1.html>
 
+=item * Miscellanea::ProhibitObnoxiousComments
+
+Forbid excessive hash marks e.g. "#### This is a loud comment ####".
+Make the obnoxious pattern configurable
+
+=item * ValuesAndExpressions::RequireNotOperator
+
+Require the use of "not" instead of "!", except when this would contradict
+ProhibitMixedBooleanOperators.  This may be better suited for
+Perl::Critic::More.
+
+=item * Modules::RequireExplicitImporting
+
+Require every C<use> statement to have an explicit import list.  You could
+still get around this by calling C<import> directly.
+
+=item * Modules::ForbidImporting
+
+Require every C<use> to have an explicitly empty import list.  This is for
+folks who like to see fully-qualified function names.  Should probably provide
+a list of exempt modules (like FindBin);
+
 =item * ControlStructures::ProhibitIncludeViaDo
 
 Forbid C<do "foo.pl">.  Not sure about this policy name.
@@ -260,7 +277,7 @@ L<http://search.cpan.org/src/JJORE/Carp-Clan-5.8/t/04boilerplate.t>
 
 =item * CodeLayout::ProhibitTrailingSpaces
 
-Forbid [ \t] before \n.  This is a subset of RequireTidyCode.
+Forbid [\s\t] before \n.  This is a subset of RequireTidyCode.
 
 L<http://rt.cpan.org/Ticket/Display.html?id=20714>
 
@@ -270,7 +287,29 @@ L<http://rt.cpan.org/Ticket/Display.html?id=20714>
 
 =over 4
 
-=item * Enhance P::C::critique() to accept file names, directories, or code strings (as refs)
+=item * Rework P::C::Config and P::C::PolicyFactory
+
+The interaction between Config and PolicyFactory is a mess.  An instance of
+the PolicyFactory should probably be an attribute of the Config.  Then it can
+call PolicyFactory::create_policy to construct Policies ad-hoc.
+
+An alternative is to make P::C::PolicyFactory into a singleton, but I'm not
+sure what that would buy us.
+
+=item * Change API to use named parameters
+
+Most of the methods on the public classes use named parameters for passing
+arguments.  I'd like to extend that pattern to include all object-methods.
+Static methods can still use positional parameters.
+
+=item * Allow more flexible Policy parameter parsing
+
+Several policies use C<words_from_string()> to split their parameters into
+words.  This function is currently limited to splitting on whitespace.  It
+would be nice to allow some lattitude for users who might try and use commas
+or some other kind of delimiter.
+
+=item * Enhance P::C::critique() to accept files, directories, or code strings
 
 Just like F<bin/perlcritic> does now.
 
@@ -359,3 +398,13 @@ still needed.
 =back
 
 =cut
+
+##############################################################################
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :
