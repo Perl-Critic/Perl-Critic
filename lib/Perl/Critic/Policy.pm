@@ -40,7 +40,7 @@ sub policy_parameters_are_specified {
 
     my @parameters = $self->policy_parameters();
 
-    return scalar @parameters == 1 and not defined $parameters[0];
+    return scalar @parameters != 1 or not defined $parameters[0];
 }
 
 #-----------------------------------------------------------------------------
@@ -149,11 +149,12 @@ sub _format_policy_parameters {
 
     return $EMPTY if not $self->policy_parameters_are_specified();
 
-    my @parameters = $self->policy_parameters();
-    return $EMPTY if not @parameters;
-
-    my ( $prefix, $suffix, $newline ) = split ':', $formats;
+    my ( $prefix, $suffix, $newline, $empty_placeholder ) = split $COLON, $formats;
     $suffix .= "\n" if $newline;
+    $empty_placeholder = $EMPTY if not defined $empty_placeholder;
+
+    my @parameters = $self->policy_parameters();
+    return $empty_placeholder if not @parameters;
 
     my $separator;
     if ( $prefix or $suffix ) {
