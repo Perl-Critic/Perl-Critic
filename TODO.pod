@@ -72,20 +72,10 @@ difference between that and C<< $self->_foo() >>
 
 =item * ErrorHandling::RequireCarping
 
-This should not complain about using warn or die if it's not in a
+This should not complain about using C<warn> or C<die> if it's not in a
 function, or if it's not in a non-main:: package.
 
-Also, if the error string ends with a "\n", then the line number
-and package information is not shown, so it doesn't matter if you
-use carp/confess or not.  For example:
-
-    my $fh;
-    if ( !open( $fh, '<', $filename ) ) {
-        warn "ack: $filename: $!\n";
-        return;
-    }
-
-I just want to print a warning and move on.  The location is irrelevant.
+Also, should allow C<die> when it is obvious that the "message" is a reference.
 
 =item * RegularExpressions::ProhibitCaptureWithoutTest
 
