@@ -35,6 +35,16 @@ sub policy_parameters {
 
 #-----------------------------------------------------------------------------
 
+sub policy_parameters_are_specified {
+    my $self = shift;
+
+    my @parameters = $self->policy_parameters();
+
+    return scalar @parameters == 1 and not defined $parameters[0];
+}
+
+#-----------------------------------------------------------------------------
+
 sub applies_to {
     return qw(PPI::Element);
 }
@@ -121,6 +131,7 @@ sub to_string {
 
     # Wrap the more expensive ones in sub{} to postpone evaluation
     my %fspec = (
+         'O' => sub { $self->_format_policy_parameters(@_) },
          'P' => ref $self,
          'p' => sub { policy_short_name( ref $self ) },
          'T' => sub { join $SPACE, $self->default_themes() },
@@ -129,6 +140,29 @@ sub to_string {
          's' => sub { $self->get_severity() },
     );
     return stringf($FORMAT, %fspec);
+}
+
+# That third parameter is buuuuuuuugly.  Better ideas for how to deal with
+# newlines in arguments to a String::Format format specifier appreciated.
+sub _format_policy_parameters {
+    my ($self, $formats) = @_;
+
+    return $EMPTY if not $self->policy_parameters_are_specified();
+
+    my @parameters = $self->policy_parameters();
+    return $EMPTY if not @parameters;
+
+    my ( $prefix, $suffix, $newline ) = split ':', $formats;
+    $suffix .= "\n" if $newline;
+
+    my $separator;
+    if ( $prefix or $suffix ) {
+        $separator = $suffix . $prefix;
+    } else {
+        $separator = $SPACE;
+    }
+
+    return $prefix . ( join $separator, @parameters ) . $suffix;
 }
 
 #-----------------------------------------------------------------------------

@@ -55,6 +55,7 @@ sub _long_format {
 [%P]
 set_themes = %t
 severity   = %s
+%{# : =:1}O
 
 END_OF_FORMAT
 
