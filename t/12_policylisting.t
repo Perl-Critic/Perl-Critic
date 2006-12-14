@@ -40,7 +40,8 @@ for my $policy ( $list->short_listing() ) {
 my $pname        = qr{\[[\w:]+\]};
 my $set_theme    = qr{set_themes = [\w\s]+};
 my $severity     = qr{severity   = \d};
-my $long_pattern = qr{$pname\n$set_theme\n$severity\n\n};
+my $other_params = qr{#\w+ = };
+my $long_pattern = qr{$pname\n$set_theme\n$severity\n$other_params*\n};
 for my $policy ( $list->long_listing() ) {
     like($policy, $long_pattern, 'Long listing format');
 }

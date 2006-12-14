@@ -12,6 +12,7 @@ use strict;
 use warnings;
 use Carp qw(carp confess);
 use English qw(-no_match_vars);
+use Perl::Critic::Policy qw();
 
 our $VERSION = 0.22;
 
@@ -29,7 +30,8 @@ sub new {
 
 sub short_listing {
     my $self = shift;
-    local $Perl::Critic::Policy::FORMAT =  _short_format();
+    my $format = _short_format();
+    Perl::Critic::Policy::set_format( $format );
     return map { "$_" } @{ $self->{_policies} };
 }
 
@@ -38,7 +40,8 @@ sub short_listing {
 
 sub long_listing {
     my $self = shift;
-    local $Perl::Critic::Policy::FORMAT =  _long_format();
+    my $format = _long_format();
+    Perl::Critic::Policy::set_format( $format );
     return map { "$_" } @{ $self->{_policies} };
 }
 

@@ -17,8 +17,9 @@ use overload ( q{""} => 'to_string', cmp => '_compare' );
 
 our $VERSION = 0.22;
 
-#Class variables...
-our $FORMAT = "%p\n"; #Default stringy format
+#-----------------------------------------------------------------------------
+
+my $FORMAT = "%p\n"; #Default stringy format
 
 #-----------------------------------------------------------------------------
 
@@ -104,6 +105,7 @@ sub violation {
 
 
 #-----------------------------------------------------------------------------
+# Static methods.
 
 sub set_format { return $FORMAT = $_[0] }
 sub get_format { return $FORMAT         }
@@ -132,7 +134,7 @@ sub _format_policy_parameters {
     $format = Perl::Critic::Utils::interpolate( $format );
     my @parameter_names = $self->policy_parameters();
     return join $SPACE, @parameter_names if not $format;
-    return join $EMPTY, map { sprintf($format, $_) } @parameter_names;
+    return join $EMPTY, map { sprintf $format, $_ } @parameter_names;
 }
 
 #-----------------------------------------------------------------------------
