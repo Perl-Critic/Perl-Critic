@@ -19,33 +19,25 @@ use Perl::Critic::PolicyListing;
 
 my $prof = Perl::Critic::UserProfile->new( -profile => 'NONE' );
 my @pols = Perl::Critic::PolicyFactory->new( -profile => $prof )->policies();
-my $list = Perl::Critic::PolicyListing->new( -policies => \@pols );
-my $count = scalar @pols;
-plan( tests => ($count * 2) + 2);
+my $listing = Perl::Critic::PolicyListing->new( -policies => \@pols );
+my $policy_count = scalar @pols;
+plan( tests => $policy_count + 1);
 
 #-----------------------------------------------------------------------------
+# These tests verify that the listing has the right number of lines (one per
+# policy) and that each line matches the expected pattern.  This indirectly
+# verifies that each core policy declares at least one theme.
 
-is( scalar $list->short_listing(), $count, 'Short listing has all policies');
-is( scalar $list->long_listing(), $count, 'Long listing has all policies');
+my $listing_as_string = "$listing";
+my @listing_lines = split /\n/, $listing_as_string;
+my $line_count = scalar @listing_lines;
+is( $line_count, $policy_count, qq{Listing has all $policy_count policies} );
 
-#-----------------------------------------------------------------------------
 
-my $short_pattern = qr{^\d [\w:]+ \[[\w\s]+\]$};
-for my $policy ( $list->short_listing() ) {
-    like($policy, $short_pattern, 'Short listing format');
+my $listing_pattern = qr{\A\d [\w:]+ \[[\w\s]+\]\z};
+for my $line ( @listing_lines ) {
+    like($line, $listing_pattern, 'Listing format matches expected pattern');
 }
-
-#-----------------------------------------------------------------------------
-
-my $pname        = qr{\[[\w:]+\]};
-my $set_theme    = qr{set_themes = [\w\s]+};
-my $severity     = qr{severity   = \d};
-my $other_params = qr{#\w+ = };
-my $long_pattern = qr{$pname\n$set_theme\n$severity\n$other_params*\n};
-for my $policy ( $list->long_listing() ) {
-    like($policy, $long_pattern, 'Long listing format');
-}
-
 
 #-----------------------------------------------------------------------------
 # Local Variables:

@@ -109,13 +109,12 @@ sub create_policy {
     $policy_name = policy_long_name( $policy_name );
 
     # This function will delete keys from $params, so we copy them to avoid
-    # screwing up the user's hash.  What a pain in the ass!
+    # screwing up the callers's hash.  What a pain in the ass!
     $params = $params ? { %{$params} } : {};
 
-    # Pull out base parameters.  Alternate spellings are supported just for
-    # convenience to the user, but please don't document them.
-    my $user_set_themes = delete $params->{set_themes} || delete $params->{set_theme};
-    my $user_add_themes = delete $params->{add_themes} || delete $params->{add_theme};
+    # Pull out base parameters.
+    my $user_set_themes = delete $params->{set_themes};
+    my $user_add_themes = delete $params->{add_themes};
     my $user_severity   = delete $params->{severity};
 
     # Validate remaining parameters
