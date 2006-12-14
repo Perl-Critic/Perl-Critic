@@ -161,6 +161,7 @@ sub site_policy_names {
 sub _validate_policy_params {
     my ($policy, $params) = @_;
 
+    return if not $policy->can('policy_parameters');
     my @supported_params = $policy->policy_parameters();
 
     # If @supported_params is a one-element-list containting (undef), then it

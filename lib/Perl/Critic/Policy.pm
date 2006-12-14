@@ -29,20 +29,6 @@ sub new {
 
 #-----------------------------------------------------------------------------
 
-sub policy_parameters {
-    return ( undef ); # I really do mean ( undef );
-}
-
-#-----------------------------------------------------------------------------
-
-sub policy_parameters_are_specified {
-    my $self = shift;
-    my @parameters = $self->policy_parameters();
-    return defined $parameters[0] or scalar @parameters == 0;
-}
-
-#-----------------------------------------------------------------------------
-
 sub applies_to {
     return qw(PPI::Element);
 }
@@ -142,7 +128,7 @@ sub to_string {
 
 sub _format_policy_parameters {
     my ($self, $format) = @_;
-    return $EMPTY if not $self->policy_parameters_are_specified();
+    return $EMPTY if not $self->can('policy_parameters');
     $format = Perl::Critic::Utils::interpolate( $format );
     my @parameter_names = $self->policy_parameters();
     return join $SPACE, @parameter_names if not $format;
