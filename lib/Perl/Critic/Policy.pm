@@ -304,6 +304,7 @@ capabilities, look at L<String::Format>. Valid escape characters are:
 
   Escape    Meaning
   -------   -----------------------------------------------------------------
+  %O        Comma-delimited list of supported policy parameters
   %P        Name of the Policy module
   %p        Name of the Policy without the Perl::Critic::Policy:: prefix
   %S        The default severity level of the policy
