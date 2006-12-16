@@ -32,14 +32,6 @@ sub applies_to       { return 'PPI::Token::Number' }
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    # PPI misparses floating point numbers that don't have any digits
-    # to the left of the decimal poing.  So this is a workaround.
-    if ( my $previous = $elem->previous_sibling() ) {
-        return if $previous->isa('PPI::Token::Operator') &&
-            $previous eq $PERIOD;
-    }
-
-
     if ( $elem =~ $leading_rx ) {
         return $self->violation( $desc, $expl, $elem );
     }
