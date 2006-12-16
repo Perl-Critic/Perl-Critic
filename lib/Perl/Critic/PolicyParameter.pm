@@ -10,20 +10,98 @@ package Perl::Critic::PolicyParameter;
 use strict;
 use warnings;
 use Carp qw(confess);
+
 use Perl::Critic::Utils;
+use Perl::Critic::PolicyParameter::Behavior;
 
 our $VERSION = 0.22;
 
 #-----------------------------------------------------------------------------
 
+# Grrr... one of the OO limitations of Perl: you can't put references to
+# subclases in a superclass.  This map and method belong in Behavior.pm.
+my %_behaviors =
+    (
+        'boolean'     => Perl::Critic::PolicyParameter::BooleanBehavior->new(),
+        'enumeration' => Perl::Critic::PolicyParameter::EnumeratioinBehavior->new(),
+    );
+
+sub _get_behavior_for_name {
+    my $behavior_name = shift;
+
+    my $behavior = $_behaviors{$behavior_name}
+        or confess qq{There's no "$behavior_name" behavior.};
+
+    return $behavior
+}
+
+#-----------------------------------------------------------------------------
+
 sub new {
-    my ($class, $name) = @_;
+    my ($class, $specification) = @_;
     my $self = bless {}, $class;
 
-    $self->${_name} = $name;
-    $self->${_behavior_values} = {};
+    defined $specification
+        or confess
+            'Attempt to create a ', __PACKAGE__, ' without a specification.';
+
+    my $specification_type = ref $specification;
+    if ( not $specification_type ) {
+        $self->{_name} = $specification;
+
+        return $self;
+    }
+
+    $specification_type eq 'HASH'
+        or confess
+            'Attempt to create a ',
+            __PACKAGE__,
+            " with a $specification_type as a specification.",
+            ;
+
+    defined $specification->{name}
+        or confess 'Attempt to create a ', __PACKAGE__, ' without a name.';
+    $self->{_name} = $specification->{name};
+
+    $self->_initialize_from_behavior($specification);
+    $self->_finish_initialization($specification);
 
     return $self;
+}
+
+# See if the policy has specified a behavior, and if so, let the behavior
+# plug in its implementations of parser, etc.
+sub _initialize_from_behavior {
+    my ($self, $specification) = @_;
+
+    my $behavior_name = $specification->{behavior};
+    if ($behavior_name) {
+        my $behavior = _get_behavior_for_name($behavior_name);
+
+        $self->{_behavior} = $behavior;
+        $self->{_behavior_values} = {};
+
+        $behavior->initialize_parameter($self, $specification);
+    }
+
+    return;
+}
+
+# Grab the rest of the values out of the specification, including overrides
+# of what the Behavior specified.
+sub _finish_initialization {
+    my ($self, $specification) = @_;
+
+    $self->_set_description($specification->{description});
+    $self->_set_default_string($specification->{default_string});
+
+    if ( exists $specification->{default} ) {
+        $self->_set_default($specification->{default});
+    }
+
+    $self->_set_parser($specification->{parser});
+
+    return;
 }
 
 #-----------------------------------------------------------------------------
@@ -42,13 +120,13 @@ sub get_description {
     return $self->{_description};
 }
 
-sub set_description {
+sub _set_description {
     my ($self, $new_value) = @_;
-    my $old_value = $self->{_description};
 
+    return if not defined $new_value;
     $self->{_description} = $new_value;
 
-    return $old_value;
+    return;
 }
 
 #-----------------------------------------------------------------------------
@@ -59,102 +137,78 @@ sub get_default_string {
     return $self->{_default_string};
 }
 
-sub set_default_string {
+sub _set_default_string {
     my ($self, $new_value) = @_;
-    my $old_value = $self->{_default_string};
 
+    return if not defined $new_value;
     $self->{_default_string} = $new_value;
-
-    return $old_value;
-}
-
-#-----------------------------------------------------------------------------
-
-sub get_default {
-    my $self = shift;
-
-    return $self->{_default};
-}
-
-sub set_default {
-    my ($self, $new_value) = @_;
-    my $old_value = $self->{_default};
-
-    $self->{_default} = $new_value;
-
-    return $old_value;
-}
-
-#-----------------------------------------------------------------------------
-
-sub get_behavior {
-    my $self = shift;
-
-    return $self->{_behavior};
-}
-
-sub set_behavior {
-    my ($self, $new_value) = @_;
-    my $old_value = $self->{_behavior};
-
-    $self->{_behavior} = $new_value;
-
-    return $old_value;
-}
-
-
-sub get_behavior_values {
-    my $self = shift;
-
-    return $self->{_behavior_values};
-}
-
-# This is not automatically done as part of the C<set_behavior()> because we
-# may want to override some of the things that the behavior plugs in for us,
-#.e.g. override the parser.
-sub initialize_from_behavior {
-    my ($self, $specification) = @_;
-
-    my $behavior = $self->get_behavior();
-    if {$behavior} {
-        $behavior->initialize_parameter($self, $specification);
-    }
 
     return;
 }
 
 #-----------------------------------------------------------------------------
 
-sub get_parser {
+sub _get_default {
+    my $self = shift;
+
+    return $self->{_default};
+}
+
+sub _set_default {
+    my ($self, $new_value) = @_;
+
+    $self->{_default} = $new_value;
+
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _get_behavior {
+    my $self = shift;
+
+    return $self->{_behavior};
+}
+
+sub _get_behavior_values {
+    my $self = shift;
+
+    return $self->{_behavior_values};
+}
+
+#-----------------------------------------------------------------------------
+
+sub _get_parser {
     my $self = shift;
 
     return $self->{_parser};
 }
 
-sub set_parser {
+sub _set_parser {
     my ($self, $new_value) = @_;
-    my $old_value = $self->{_parser};
 
+    return if not defined $new_value;
     $self->{_parser} = $new_value;
 
-    return $old_value;
+    return;
 }
 
 #-----------------------------------------------------------------------------
 
-sub get_parsed_value {
-    my $self = shift;
+sub get_config_value {
+    my ($self, %config) = @_;
 
-    return $self->{_parsed_value};
-}
+    my $config_string = $config{$self->get_name()};
+    if ( not defined $config_string ) {
+        return $self->_get_default();
+    }
 
-sub set_parsed_value {
-    my ($self, $new_value) = @_;
-    my $old_value = $self->{_parsed_value};
+    my $parser = _get_parser();
+    if ($parser) {
+        return $parser->($config_string)
+    }
 
-    $self->{_parsed_value} = $new_value;
-
-    return $old_value;
+    return $self->_get_default();
 }
 
 #-----------------------------------------------------------------------------
@@ -174,13 +228,11 @@ Perl::Critic::PolicyParameter - Metadata about a parameter for a Policy.
 =head1 DESCRIPTION
 
 
+
 =head1 METHODS
 
 
 =head1 DOCUMENTATION
-
-
-=head1 OVERLOADS
 
 
 =head1 AUTHOR

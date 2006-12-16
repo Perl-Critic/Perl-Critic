@@ -10,42 +10,21 @@ package Perl::Critic::PolicyParameter::Behavior;
 use strict;
 use warnings;
 use Carp qw(confess);
-use Perl::Critic::Utils;
 
 our $VERSION = 0.22;
-
-#-----------------------------------------------------------------------------
-
-my %_behaviors =
-    (
-        'boolean'     => Perl::Critic::PolicyParameter::BooleanBehavior->new(),
-        'enumeration' => Perl::Critic::PolicyParameter::EnumeratioinBehavior->new(),
-    };
-
-sub get_bahavior {
-    $behavior_name = shift;
-
-    return $_behaviors{$behavior_name}
-}
 
 #-----------------------------------------------------------------------------
 
 sub new {
     my $class = shift;
 
-    return $self = bless {}, $class;
+    return bless {}, $class;
 }
 
 #-----------------------------------------------------------------------------
 
-# Any overrides of this method need to call up to this version at the end,
-# not the beginning.
 sub initialize_parameter {
     my ($self, $parameter, $specification) = @_;
-
-    if ( $self->can('get_parser') ) {
-        $parameter->set_parser($self->get_parser($parameter));
-    }
 
     return;
 }

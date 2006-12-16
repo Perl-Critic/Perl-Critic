@@ -10,62 +10,65 @@ package Perl::Critic::PolicyParameter::EnumerationBehavior;
 use strict;
 use warnings;
 use Carp qw(confess);
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ $PERIOD &words_from_string };
 
-use base q{ Perl::Critic::PolicyParameter::Behavior };
+use base qw{ Perl::Critic::PolicyParameter::Behavior };
 
 our $VERSION = 0.22;
-
-#-----------------------------------------------------------------------------
-
-sub _parse_single {
-    my ($self, $parameter, %config) = @_;
-
-    #TODO
-}
-
-sub _parse_multiple {
-    my ($self, $parameter, %config) = @_;
-
-    #TODO
-}
 
 #-----------------------------------------------------------------------------
 
 sub initialize_parameter {
     my ($self, $parameter, $specification) = @_;
 
-    my $enumeration_values_string = $specification->{enumeration_values};
+    my $values_string = $specification->{enumeration_values}
+        or confess 'No enumeration_values given for ',
+                    $parameter->get_name(), $PERIOD;
 
-    $enumeration_values_string
-        or croak 'No enumeration_values given for '
-                    . $parameter->get_name()
-                    . '.';
-    $parameter->get_behavior_values()->{enumeration_values} =
-        hashify( words_from_string( $enumeration_values ) );
+    my %values = hashify( words_from_string( $values_string ) );
 
-    $parameter->get_behavior_values()->{enumeration_allow_multiple_values} = 
+    my $allow_multiple_values = 
         $specification->{enumeration_allow_multiple_values};
 
-    # This is so wrong, but due to time and location constraints and lack of
-    # proper Perl OO knowledge, I'll have to look this up later.
-    Perl::Critic::PolicyParameter::Behavior::initialize_parameter(@_);
+    if ($allow_multiple_values) {
+        $parameter->_set_parser(
+            sub {
+                my $config_string = shift;
 
-    return;
-}
+                my @potential_values = words_from_string($config_string);
 
-#-----------------------------------------------------------------------------
+                my @bad_values =
+                    grep { not defined $values{$_} } @potential_values;
+                if (@bad_values) {
+                    # TODO: include policy name.
+                    die 'Invalid values given in configuration for "',
+                        $parameter->get_name(),
+                        q{": },
+                        join (q{, }, @bad_values),
+                        qq{.\n};
+                }
 
-sub get_parser {
-    my ($self, $parameter) = @_;
+                return @potential_values;
+            }
+        );
+    } else {
+        $parameter->_set_parser(
+            sub {
+                my $config_string = shift;
 
-    if (
-        $parameter->get_behavior_values()->{enumeration_allow_multiple_values}
-    ) {
-        return _parse_multiple;
+                if ( not defined $values{$config_string} ) {
+                    # TODO: include policy name.
+                    die 'Invalid value given in configuration for "',
+                        $parameter->get_name(),
+                        qq{": $config_string.\n};
+                }
+
+                return $config_string;
+            }
+        );
     }
 
-    return _parse_single;
+    return;
 }
 
 #-----------------------------------------------------------------------------

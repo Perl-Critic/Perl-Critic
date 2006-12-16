@@ -12,7 +12,7 @@ use warnings;
 use Carp qw(confess);
 use Perl::Critic::Utils;
 
-use base q{ Perl::Critic::PolicyParameter::Behavior };
+use base qw{ Perl::Critic::PolicyParameter::Behavior };
 
 our $VERSION = 0.22;
 
@@ -37,10 +37,12 @@ sub _parse {
 
 #-----------------------------------------------------------------------------
 
-sub get_parser {
-    my ($self, $parameter) = @_;
+sub initialize_parameter {
+    my ($self, $parameter, $specification) = @_;
 
-    return _parse;
+    $parameter->_set_parser(\&_parse);
+
+    return;
 }
 
 #-----------------------------------------------------------------------------
