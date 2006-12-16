@@ -319,7 +319,7 @@ sub render_policy_listing {
     my @pols = Perl::Critic::Config->new( %pc_params )->policies();
     my $listing = Perl::Critic::PolicyListing->new( -policies => \@pols );
     print $listing;
-    exit 1;
+    exit 0;
 }
 
 #-----------------------------------------------------------------------------
@@ -333,7 +333,7 @@ sub render_profile_prototype {
     my @pols = Perl::Critic::Config->new( %pc_params )->policies();
     my $prototype = Perl::Critic::ProfilePrototype->new( -policies => \@pols );
     print $prototype;
-    exit 1;
+    exit 0;
 }
 
 #-----------------------------------------------------------------------------
