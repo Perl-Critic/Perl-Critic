@@ -105,6 +105,7 @@ lib/Perl/Critic/Policy/Variables/RequireNegativeIndices.pm
 lib/Perl/Critic/PolicyFactory.pm
 lib/Perl/Critic/PolicyListing.pm
 lib/Perl/Critic/PolicySummary.pod
+lib/Perl/Critic/ProfilePrototype.pm
 lib/Perl/Critic/TestUtils.pm
 lib/Perl/Critic/Theme.pm
 lib/Perl/Critic/UserProfile.pm

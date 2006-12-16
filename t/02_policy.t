@@ -10,7 +10,7 @@
 use strict;
 use warnings;
 use English qw(-no_match_vars);
-use Test::More tests => 13;
+use Test::More tests => 17;
 
 
 #-----------------------------------------------------------------------------
@@ -62,6 +62,19 @@ $p->add_themes( qw(f e d) ); #unsorted
 is_deeply( [$p->default_themes()], [] ); #Still the same
 is_deeply( [$p->get_themes()], [ qw(a b c d e f) ] );  #Should have new value, sorted
 
+#Test format getter/setters
+is( Perl::Critic::Policy::get_format, "%p\n", 'Default policy format');
+
+my $new_format = '%P %s [%t]';
+Perl::Critic::Policy::set_format( $new_format ); #Set format
+is( Perl::Critic::Policy::get_format, $new_format, 'Changed policy format');
+
+my $expected_string = 'PolicyTest 3 [a b c d e f]';
+is( $p->to_string(), $expected_string, 'Stringification by to_string()');
+is( "$p", $expected_string, 'Stringification by overloading');
+
+
+##############################################################################
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4
