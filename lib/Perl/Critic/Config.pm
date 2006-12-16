@@ -47,7 +47,7 @@ sub _init {
     my $profile = Perl::Critic::UserProfile->new( -profile => $p );
     my $defaults = $profile->defaults();
 
-    # If given, these options should always have a true value
+    # If given, these options should always have a defined value
     $self->{_include}      = $args{-include}      ? $args{-include}      : $defaults->include();
     $self->{_exclude}      = $args{-exclude}      ? $args{-exclude}      : $defaults->exclude();
     $self->{_singlepolicy} = $args{-singlepolicy} ? $args{-singlepolicy} : $defaults->singlepolicy();
@@ -115,7 +115,8 @@ sub add_policy {
     }
 
     # NOTE: The "-config" alias is supported for backward compatibility.
-    my $params  = $args{-params} || $args{-config} || $profile->policy_params( $policy );
+    my $params  = $args{-params} || $args{-config} ||
+        $profile->policy_params( $policy );
 
     # TODO: Use PolicyFactory::create_policy to instantiate the Policy.
 
@@ -222,12 +223,8 @@ sub _policy_is_single_policy {
     my ($self, $policy) = @_;
     my $policy_long_name = ref $policy;
     my $singlepolicy = $self->singlepolicy();
-
-    if ($singlepolicy) {
-        return $policy_long_name =~ m/$singlepolicy/imxo;
-    }
-
-    return 0;
+    return if not $singlepolicy;
+    return $policy_long_name =~ m/$singlepolicy/imxo;
 }
 
 #-----------------------------------------------------------------------------
@@ -496,7 +493,7 @@ for this file in the current directory first, and then in your home
 directory.  Alternatively, you can set the C<PERLCRITIC> environment
 variable to explicitly point to a different file in another location.
 If none of these files exist, and the C<-profile> option is not given
-on the command line, then all Policies will be loaded with their
+to the constructor, then all Policies will be loaded with their
 default configuration.
 
 The format of the configuration file is a series of INI-style
@@ -591,8 +588,9 @@ A simple configuration might look like this:
     [-NamingConventions::ProhibitMixedCaseSubs]
 
     #--------------------------------------------------------------
-    # For all other Policies, I accept the default severity,
-    # so no additional configuration is required for them.
+    # For all other Policies, I accept the default severity, theme
+    # and other parameters, so no additional configuration is
+    # required for them.
 
 For additional configuration examples, see the F<perlcriticrc> file
 that is included in this F<t/examples> directory of this distribution.
@@ -606,27 +604,27 @@ modules themselves.
 
 =head1 POLICY THEMES
 
-B<NOTE:> As of version 0.21, policy themes are still considered
-experimental.  The implementation of this feature may change in a
-future release.  Additionally, the default theme names that ship with
-Perl::Critic may also change.  But this is a pretty cool feature, so
-read on...
+Each Policy is defined with one or more "themes".  Themes can be used to
+create arbitrary groups of Policies.  They are intended to provide an
+alternative mechanism for selecting your preferred set of Policies.  For
+example, you may wish disable a certain subset of Policies when analyzing test
+scripts.  Conversely, you may wish to enable only a specific subset of
+Policies when analyzing modules.
 
-Each Policy is defined with one or more "themes".  Themes can be used
-to create arbitrary groups of Policies.  They are intended to provide
-an alternative mechanism for selecting your preferred set of Policies.
-The Policies that ship with Perl::Critic have been grouped into themes
-that are roughly analogous to their severity levels.  Folks who find
-the numeric severity levels awkward can use these mnemonic theme names
-instead.
+The Policies that ship with Perl::Critic are have been broken into the
+following themes.  This is just our attempt to provide some basic logical
+groupings.  You are free to invent new themes that suit your needs.
 
-    Severity Level                   Equivalent Theme
-    ---------------------------------------------------------------------------
-    5                                danger
-    4                                risky
-    3                                debt
-    2                                readability
-    1                                cosmetic
+    THEME             DESCRIPTION
+    --------------------------------------------------------------------------
+    core              All policies that ship with Perl::Critic
+    pbp               Policies that come directly from "Perl Best Practices"
+    bugs              Policies that that prevent or reveal bugs
+    maintenance       Policies that affect the long-term health of the code
+    cosmetic          Policies that only have a superficial effect
+    complexity        Policies that specificaly relate to code complexity
+    security          Policies that relate to security issues
+    tests             Policies that are specific to test scripts
 
 
 Say C<`perlcritic -list`> to get a listing of all available policies
@@ -634,12 +632,11 @@ and the themes that are associated with each one.  You can also change
 the theme for any Policy in your F<.perlcriticrc> file.  See the
 L<"CONFIGURATION"> section for more information about that.
 
-Using the C<-theme> command-line option, you can combine themes with
-mathematical and boolean operators to create an arbitrarily complex
-expression that represents a custom "set" of Policies.  The following
-operators are supported
+Using the C<-theme> option, you can combine theme names with mathematical and
+boolean operators to create an arbitrarily complex expression that represents
+a custom "set" of Policies.  The following operators are supported
 
-   Operator       Altertative         Meaning
+   Operator       Alternative         Meaning
    ----------------------------------------------------------------------------
    *              and                 Intersection
    -              not                 Difference
@@ -650,24 +647,25 @@ can also use parenthesis to enforce precedence.  Here are some examples:
 
    Expression                  Meaning
    ----------------------------------------------------------------------------
-   pbp * risky                 All policies that are "pbp" AND "risky"
-   pbp and risky               Ditto
+   pbp * bugs                  All policies that are "pbp" AND "bugs"
+   pbp and bugs                Ditto
 
-   danger + risky              All policies that are "danger" OR "risky"
-   pbp or risky                Ditto
+   bugs + cosmetic             All policies that are "bugs" OR "cosmetic"
+   bugs or cosmetic            Ditto
 
-   pbp - cosmetic              All policies that are "pbp" BUT NOT "risky"
+   pbp - cosmetic              All policies that are "pbp" BUT NOT "cosmetic"
    pbp not cosmetic            Ditto
 
-   -debt                All policies that are NOT "unreliable"
-   not debt             Ditto
+   -maintenance                All policies that are NOT "maintenance"
+   not maintenance             Ditto
 
-   (pbp - danger) * risky      All policies that are "pbp" BUT NOT "danger", AND "risky"
-   (pbp not danger) and risky  Ditto
+   (pbp - bugs) * complexity     All policies that are "pbp" BUT NOT "bugs",
+                                    AND "complexity"
+   (pbp not bugs) and complexity  Ditto
 
-Theme names are case-insensitive.  If C<-theme> is set to an empty
-string, then it is equivalent to the set of all policies.  A theme
-name that doesn't exist is equivalent to an empty set.  Please See
+Theme names are case-insensitive.  If C<-theme> is set to an empty string,
+then it is equivalent to the set of all Policies.  A theme name that doesn't
+exist is equivalent to an empty set.  Please See
 L<http://en.wikipedia.org/wiki/Set> for a discussion on set theory.
 
 =head1 AUTHOR
