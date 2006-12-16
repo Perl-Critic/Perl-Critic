@@ -39,7 +39,7 @@
 
      Misc Changes:
 
-     Added uppercase alternative to some perlcritic options.
+     Added single-letter uppercase alternatives for some perlcritic options.
 
 [0.21_01] Released on 2006-12-03
 
