@@ -21,6 +21,7 @@ my $expl = [ 237 ];
 
 #-----------------------------------------------------------------------------
 
+sub policy_parameters { return() }
 sub default_severity { return $SEVERITY_LOW       }
 sub default_themes   { return qw(core pbp cosmetic) }
 sub applies_to       { return qw(PPI::Token::Regexp::Match

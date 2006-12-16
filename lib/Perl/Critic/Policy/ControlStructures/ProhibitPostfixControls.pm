@@ -29,9 +29,10 @@ my %exemptions = hashify( @exemptions );
 
 #-----------------------------------------------------------------------------
 
-sub default_severity { return $SEVERITY_LOW       }
-sub default_themes   { return qw(core pbp cosmetic) }
-sub applies_to       { return 'PPI::Token::Word'  }
+sub policy_parameters { return qw( allow )           }
+sub default_severity  { return $SEVERITY_LOW         }
+sub default_themes    { return qw(core pbp cosmetic) }
+sub applies_to        { return 'PPI::Token::Word'    }
 
 #-----------------------------------------------------------------------------
 
@@ -42,10 +43,10 @@ sub new {
 
     #Set config, if defined
     if ( defined $args{allow} ) {
-        for my $control ( words_from_string( $args{allow} ) ) {
-            $self->{_allow}->{$control} = 1;
-        }
+        my %allowed = hashify( words_from_string( $args{allow} ) );
+        $self->{_allow} = \%allowed;
     }
+
     return $self;
 }
 
@@ -55,11 +56,11 @@ sub violates {
     my ( $self, $elem, undef ) = @_;
 
     my $expl = $pages_of{$elem};
-    return if !$expl;
-    return if ! is_function_call($elem);
+    return if not $expl;
+    return if not is_function_call($elem);
 
     # Skip controls that are allowed
-    return if exists $self->{_allow}{$elem};
+    return if exists $self->{_allow}->{$elem};
 
     # Skip Compound variety (these are good)
     my $stmnt = $elem->statement();

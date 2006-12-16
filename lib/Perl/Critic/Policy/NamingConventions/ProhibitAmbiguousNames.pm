@@ -30,9 +30,10 @@ my @default_forbid =
 
 #-----------------------------------------------------------------------------
 
-sub default_severity { return $SEVERITY_MEDIUM   }
-sub default_themes   { return qw(core pbp maintenance) }
-sub applies_to       { return qw(PPI::Statement::Sub
+sub policy_parameters { return qw( forbid )             }
+sub default_severity  { return $SEVERITY_MEDIUM         }
+sub default_themes    { return qw(core pbp maintenance) }
+sub applies_to        { return qw(PPI::Statement::Sub
                                  PPI::Statement::Variable) }
 
 #-----------------------------------------------------------------------------
@@ -44,7 +45,7 @@ sub new {
     #Set configuration, if defined
     my @forbid;
     if ( defined $args{forbid} ) {
-        @forbid = split m{ \s+ }mx, $args{forbid};
+        @forbid = words_from_string( $args{forbid} );
     }
     else {
         @forbid = @default_forbid;
@@ -69,7 +70,7 @@ sub violates {
 
             # strip off any leading "Package::"
             my ($name) = $word =~ m/ (\w+) \z /xms;
-            next if ! defined $name; # should never happen, right?
+            next if not defined $name; # should never happen, right?
 
             if ( exists $self->{_forbid}->{$name} ) {
                 return $self->violation( $desc, $expl, $elem );

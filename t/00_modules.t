@@ -10,7 +10,7 @@
 use strict;
 use warnings;
 use PPI::Document;
-use Test::More tests => 1393;  # Add 14 for each new policy created
+use Test::More tests => 1396;  # Add 14 for each new policy created
 use Perl::Critic::TestUtils qw(bundled_policy_names);
 use English qw(-no_match_vars);
 
@@ -126,7 +126,6 @@ can_ok('Perl::Critic::UserProfile', 'defaults');
 can_ok('Perl::Critic::UserProfile', 'new');
 can_ok('Perl::Critic::UserProfile', 'policy_is_disabled');
 can_ok('Perl::Critic::UserProfile', 'policy_is_enabled');
-can_ok('Perl::Critic::UserProfile', 'policy_params');
 
 my $up = Perl::Critic::UserProfile->new();
 isa_ok($up, 'Perl::Critic::UserProfile');
@@ -152,11 +151,21 @@ is($factory->VERSION(), $version_string);
 
 use_ok('Perl::Critic::PolicyListing');
 can_ok('Perl::Critic::PolicyListing', 'new');
-can_ok('Perl::Critic::PolicyListing', 'short_listing');
-can_ok('Perl::Critic::PolicyListing', 'long_listing');
+can_ok('Perl::Critic::PolicyListing', 'to_string');
 
 my $listing = Perl::Critic::PolicyListing->new();
 isa_ok($listing, 'Perl::Critic::PolicyListing');
+is($listing->VERSION(), $version_string);
+
+#-----------------------------------------------------------------------------
+# Test Perl::Critic::ProfilePrototype module interface
+
+use_ok('Perl::Critic::ProfilePrototype');
+can_ok('Perl::Critic::ProfilePrototype', 'new');
+can_ok('Perl::Critic::ProfilePrototype', 'to_string');
+
+my $prototype = Perl::Critic::ProfilePrototype->new();
+isa_ok($prototype, 'Perl::Critic::ProfilePrototype');
 is($listing->VERSION(), $version_string);
 
 #-----------------------------------------------------------------------------

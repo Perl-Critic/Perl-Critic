@@ -17,8 +17,9 @@ use overload ( q{""} => 'to_string', cmp => '_compare' );
 
 our $VERSION = 0.22;
 
-#Class variables...
-our $FORMAT = "%p\n"; #Default stringy format
+#-----------------------------------------------------------------------------
+
+my $FORMAT = "%p\n"; #Default stringy format
 
 #-----------------------------------------------------------------------------
 
@@ -104,6 +105,7 @@ sub violation {
 
 
 #-----------------------------------------------------------------------------
+# Static methods.
 
 sub set_format { return $FORMAT = $_[0] }
 sub get_format { return $FORMAT         }
@@ -115,6 +117,7 @@ sub to_string {
 
     # Wrap the more expensive ones in sub{} to postpone evaluation
     my %fspec = (
+         'O' => sub { $self->_format_policy_parameters(@_) },
          'P' => ref $self,
          'p' => sub { policy_short_name( ref $self ) },
          'T' => sub { join $SPACE, $self->default_themes() },
@@ -123,6 +126,15 @@ sub to_string {
          's' => sub { $self->get_severity() },
     );
     return stringf($FORMAT, %fspec);
+}
+
+sub _format_policy_parameters {
+    my ($self, $format) = @_;
+    return $EMPTY if not $self->can('policy_parameters');
+    $format = Perl::Critic::Utils::interpolate( $format );
+    my @parameter_names = $self->policy_parameters();
+    return join $SPACE, @parameter_names if not $format;
+    return join $EMPTY, map { sprintf $format, $_ } @parameter_names;
 }
 
 #-----------------------------------------------------------------------------
@@ -292,6 +304,7 @@ capabilities, look at L<String::Format>. Valid escape characters are:
 
   Escape    Meaning
   -------   -----------------------------------------------------------------
+  %O        Comma-delimited list of supported policy parameters
   %P        Name of the Policy module
   %p        Name of the Policy without the Perl::Critic::Policy:: prefix
   %S        The default severity level of the policy

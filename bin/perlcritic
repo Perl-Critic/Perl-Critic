@@ -96,8 +96,8 @@ sub _dispatch_special_requests {
     if ( $opts{help}         ) { pod2usage( -verbose => 0 )   }  #Exits
     if ( $opts{man}          ) { pod2usage( -verbose => 2 )   }  #Exits
     if ( $opts{Version}      ) { print "$VERSION\n"; exit 0;  }  #Exits
-    if ( $opts{list}         ) { policy_listing( 'short' );   }  #Exits
-    if ( $opts{profileproto} ) { policy_listing( 'long'  );   }  #Exits
+    if ( $opts{list}         ) { render_policy_listing();     }  #Exits
+    if ( $opts{profileproto} ) { render_profile_prototype();  }  #Exits
     if ( $opts{doc}          ) { policy_docs( $opts{doc} );   }  #Exits
     return 1;
 }
@@ -309,7 +309,7 @@ sub _at_tty {
 
 #-----------------------------------------------------------------------------
 
-sub policy_listing {
+sub render_policy_listing {
 
     my $type = shift;
     require Perl::Critic::PolicyListing;
@@ -317,8 +317,22 @@ sub policy_listing {
 
     my %pc_params = (-profile => $EMPTY, -severity => 1);
     my @pols = Perl::Critic::Config->new( %pc_params )->policies();
-    my $pl = Perl::Critic::PolicyListing->new( -policies => \@pols );
-    print $type eq 'short' ? $pl->short_listing() :  $pl->long_listing();
+    my $listing = Perl::Critic::PolicyListing->new( -policies => \@pols );
+    print $listing;
+    exit 1;
+}
+
+#-----------------------------------------------------------------------------
+
+sub render_profile_prototype {
+
+    require Perl::Critic::ProfilePrototype;
+    require Perl::Critic::Config;
+
+    my %pc_params = (-profile => $EMPTY, -severity => 1);
+    my @pols = Perl::Critic::Config->new( %pc_params )->policies();
+    my $prototype = Perl::Critic::ProfilePrototype->new( -policies => \@pols );
+    print $prototype;
     exit 1;
 }
 

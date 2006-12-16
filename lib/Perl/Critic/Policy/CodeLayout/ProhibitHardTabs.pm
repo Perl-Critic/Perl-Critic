@@ -14,14 +14,19 @@ use base 'Perl::Critic::Policy';
 
 our $VERSION = 0.22;
 
+#-----------------------------------------------------------------------------
+
 my $desc = q{Hard tabs used};
 my $expl = [ 20 ];
 
+my $DEFAULT_ALLOW_LEADING_TABS = $TRUE;
+
 #-----------------------------------------------------------------------------
 
-sub default_severity { return $SEVERITY_MEDIUM }
-sub default_themes { return qw(core cosmetic) };
-sub applies_to { return 'PPI::Token' }
+sub policy_parameters { return qw( allow_leading_tabs ) }
+sub default_severity  { return $SEVERITY_MEDIUM         }
+sub default_themes    { return qw( core cosmetic )      }
+sub applies_to        { return 'PPI::Token'             }
 
 #-----------------------------------------------------------------------------
 
@@ -31,7 +36,7 @@ sub new {
 
     #Set config, if defined
     $self->{_allow_leading_tabs} =
-      defined $args{allow_leading_tabs} ? $args{allow_leading_tabs} : 1;
+      defined $args{allow_leading_tabs} ? $args{allow_leading_tabs} : $TRUE;
 
     return $self;
 }
@@ -56,6 +61,8 @@ sub violates {
 
 __END__
 
+#-----------------------------------------------------------------------------
+
 =head1 NAME
 
 Perl::Critic::Policy::CodeLayout::ProhibitHardTabs
@@ -72,11 +79,17 @@ also does this for you.
 
 This Policy catches all tabs in your source code, including POD,
 quotes, and HEREDOCS.  The contents of the C<__DATA__> section are not
-examined.  Tabs in a leading position are allowed, but if you want to
-forbid all tabs everywhere, put this to your F<.perlcriticrc> file:
+examined.
 
-  [CodeLayout::ProhibitHardTabs]
-  allow_leading_tabs = 0
+=head1 CONFIGURATION
+
+Tabs in a leading position are allowed, but if you want to forbid all tabs
+everywhere, put this to your F<.perlcriticrc> file:
+
+    [CodeLayout::ProhibitHardTabs]
+    allow_leading_tabs = 0
+
+=head1 NOTES
 
 Beware that Perl::Critic may report the location of the string that
 contains the tab, not the actual location of the tab, so you may need
@@ -96,6 +109,7 @@ can be found in the LICENSE file included with this module.
 
 =cut
 
+##############################################################################
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

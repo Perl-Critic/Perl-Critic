@@ -25,9 +25,10 @@ my $expl = q{Change your newlines to be the same throughout};
 
 #-----------------------------------------------------------------------------
 
-sub default_severity { return $SEVERITY_HIGH  }
-sub default_themes   { return qw(core bugs)       }
-sub applies_to       { return 'PPI::Document' }
+sub policy_parameters { return ()              }
+sub default_severity  { return $SEVERITY_HIGH  }
+sub default_themes    { return qw( core bugs ) }
+sub applies_to        { return 'PPI::Document' }
 
 #-----------------------------------------------------------------------------
 

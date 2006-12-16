@@ -16,14 +16,17 @@ use base 'Perl::Critic::Policy';
 
 our $VERSION = 0.22;
 
+#-----------------------------------------------------------------------------
+
 my $expl = q{Find an alternative module};
 my $desc = q{Prohibited module used};
 
 #-----------------------------------------------------------------------------
 
-sub default_severity { return $SEVERITY_HIGHEST         }
-sub default_themes   { return qw(core bugs)                }
-sub applies_to       { return 'PPI::Statement::Include' }
+sub policy_parameters { return qw( modules )             }
+sub default_severity  { return $SEVERITY_HIGHEST         }
+sub default_themes    { return qw( core bugs )           }
+sub applies_to        { return 'PPI::Statement::Include' }
 
 #-----------------------------------------------------------------------------
 

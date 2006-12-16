@@ -21,9 +21,11 @@ my $expl = [ 283 ];
 #-----------------------------------------------------------------------------
 
 # TODO: make configurable to be strict again.
-sub default_severity { return $SEVERITY_MEDIUM   }
-sub default_themes   { return qw(core pbp maintenance) }
-sub applies_to       { return 'PPI::Token::Word' }
+
+sub policy_parameters { return qw( allow_messages_ending_with_newlines ) }
+sub default_severity  { return $SEVERITY_MEDIUM                          }
+sub default_themes    { return qw( core pbp maintenance )                }
+sub applies_to        { return 'PPI::Token::Word'                        }
 
 #-----------------------------------------------------------------------------
 
@@ -64,6 +66,8 @@ sub violates {
     return $self->violation( $desc, $expl, $elem );
 }
 
+#-----------------------------------------------------------------------------
+
 sub _last_flattened_argument_list_element_ends_in_newline {
     my $die_or_warn = shift;
 
@@ -82,6 +86,7 @@ sub _last_flattened_argument_list_element_ends_in_newline {
     return $FALSE
 }
 
+#-----------------------------------------------------------------------------
 # Here starts the fun.  Explanation by example:
 #
 # Let's say we've got the following (contrived) statement:
@@ -206,8 +211,10 @@ sub _find_last_flattened_argument_list_element {
     return $current_candidate;
 }
 
+#-----------------------------------------------------------------------------
 # This is the part where we scan forward from the 'die' or 'warn' to find
 # the last argument.
+
 sub _find_last_element_in_subexpression {
     my $die_or_warn = shift;
 
@@ -223,8 +230,9 @@ sub _find_last_element_in_subexpression {
     return $last_following_sibling;
 }
 
-# Ensure that the list isn't a parameter list.  Find the last element
-# of it.
+#-----------------------------------------------------------------------------
+# Ensure that the list isn't a parameter list.  Find the last element of it.
+
 sub _determine_if_list_is_a_plain_list_and_get_last_child {
     my ($list, $die_or_warn) = @_;
 
@@ -272,6 +280,7 @@ sub _determine_if_list_is_a_plain_list_and_get_last_child {
 }
 
 
+#-----------------------------------------------------------------------------
 my %POSTFIX_OPERATORS = hashify qw{ if unless while until for foreach };
 
 sub _is_postfix_operator {
@@ -310,8 +319,10 @@ sub _is_simple_list_element_token {
 }
 
 
+#-----------------------------------------------------------------------------
 # Tokens that can't possibly be part of an expression simple
 # enough for us to examine.
+
 my @COMPLEX_EXPRESSION_TOKEN_CLASSES =
     qw{
         PPI::Token::ArrayIndex

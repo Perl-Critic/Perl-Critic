@@ -21,9 +21,10 @@ my $expl = [ 149 ];
 
 #-----------------------------------------------------------------------------
 
-sub default_severity { return $SEVERITY_MEDIUM   }
-sub default_themes   { return qw(core pbp maintenance complexity) }
-sub applies_to       { return 'PPI::Token::Word' }
+sub policy_parameters { return ()                                   }
+sub default_severity  { return $SEVERITY_MEDIUM                     }
+sub default_themes    { return qw( core pbp maintenance complexity) }
+sub applies_to        { return 'PPI::Token::Word'                   }
 
 #-----------------------------------------------------------------------------
 

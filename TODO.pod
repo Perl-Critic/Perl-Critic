@@ -65,6 +65,9 @@ Doesn't enforce three-part versions
 Don't allow compound names with forbidden words, like "last_record".
 Allow forbidden words in RHS of variable declarations
 
+Also, we should make it easeir to add (or delete) words from the
+forbbiden list.
+
 =item * Subroutines::ProtectPrivateSubs
 
 Doesn't forbid C<< $pkg->_foo() >> because it can't tell the

@@ -17,13 +17,14 @@ our $VERSION = 0.22;
 
 #-----------------------------------------------------------------------------
 
-my $expl = [441];
+my $expl = [ 441 ];
 
 #-----------------------------------------------------------------------------
 
-sub default_severity { return $SEVERITY_LOW       }
-sub default_themes   { return qw(core pbp cosmetic) }
-sub applies_to       { return 'PPI::Document'     }
+sub policy_parameters { return qw( keywords )        }
+sub default_severity  { return $SEVERITY_LOW         }
+sub default_themes    { return qw(core pbp cosmetic) }
+sub applies_to        { return 'PPI::Document'       }
 
 #-----------------------------------------------------------------------------
 

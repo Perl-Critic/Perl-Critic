@@ -1,19 +1,19 @@
 ##############################################################################
-#      $URL$
-#     $Date$
-#   $Author$
-# $Revision$
+#      $URL: http://perlcritic.tigris.org/svn/perlcritic/branches/Perl-Critic-With-Param-Validation/lib/Perl/Critic/PolicyListing.pm $
+#     $Date: 2006-12-13 21:35:21 -0800 (Wed, 13 Dec 2006) $
+#   $Author: thaljef $
+# $Revision: 1089 $
 #        ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :
 ##############################################################################
 
-package Perl::Critic::PolicyListing;
+package Perl::Critic::ProfilePrototype;
 
 use strict;
 use warnings;
 use Carp qw(carp confess);
 use English qw(-no_match_vars);
 use Perl::Critic::Policy qw();
-use overload ( q{""} => 'to_string');
+use overload ( q{""} => 'to_string' );
 
 our $VERSION = 0.22;
 
@@ -31,8 +31,21 @@ sub new {
 
 sub to_string {
     my $self = shift;
-    Perl::Critic::Policy::set_format( "%s %p [%t]\n" );
+    my $format = _proto_format();
+    Perl::Critic::Policy::set_format( $format );
     return join q{}, map { "$_" } @{ $self->{_policies} };
+}
+
+#-----------------------------------------------------------------------------
+
+sub _proto_format {
+    return <<'END_OF_FORMAT';
+[%P]
+# set_themes = %t
+# severity   = %s
+%{# %s = \n}O
+END_OF_FORMAT
+
 }
 
 #-----------------------------------------------------------------------------
@@ -47,12 +60,12 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::PolicyListing - Display information about Policies
+Perl::Critic::ProfilePrototype - Generate a Perl::Critic profile
 
 =head1 DESCRIPTION
 
-This is a helper class that formats a set of Policy objects for
-pretty-printing.  There are no user-serviceable parts here.
+This is a helper class that generates a prototype of a L<Perl::Critic> profile
+(e.g. a F<.perlcriticrc> file. There are no user-serviceable parts here.
 
 =head1 CONSTRUCTOR
 
@@ -60,7 +73,7 @@ pretty-printing.  There are no user-serviceable parts here.
 
 =item C<< new( -policies => \@POLICY_OBJECTS ) >>
 
-Returns a reference to a new C<Perl::Critic::PolicyListing> object.
+Returns a reference to a new C<Perl::Critic::ProfilePrototype> object.
 
 =back
 
@@ -70,7 +83,7 @@ Returns a reference to a new C<Perl::Critic::PolicyListing> object.
 
 =item to_string()
 
-Returns a string representation of this C<PolicyListing>.  See
+Returns a string representation of this C<ProfilePrototype>.  See
 L<"OVERLOADS"> for more information.
 
 =back
@@ -78,9 +91,11 @@ L<"OVERLOADS"> for more information.
 =head1 OVERLOADS
 
 When a L<Perl::Critic::ProfilePrototype> is evaluated in string context, it
-produces a one-line summary of the default severity, policy name, and default
-themes for each L<Perl::Critic::Policy> object that was given to the
-constructor of this C<PolicyListing>.
+produces a multi-line summary of the policy name, default themes, and default
+severity for each L<Perl::Critic::Policy> object that was given to the
+constructor of this C<ProfilePrototype>.  If the Policy supports an additional
+parameters, they will also be listed (but commented-out).  The format is
+suitable for use as a F<.perlcriticrc> file.
 
 =head1 AUTHOR
 

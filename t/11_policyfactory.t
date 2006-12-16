@@ -66,11 +66,10 @@ Perl::Critic::TestUtils::block_perlcriticrc();
 }
 
 #-----------------------------------------------------------------------------
-# Using short module name, and alternate add_theme and set_theme spellings;
+# Using short module name.
 {
     my $policy_name = 'Variables::ProhibitPunctuationVars';
-    # Note that the final "s" is missing from "set_theme" and "add_theme"
-    my $params = {set_theme => 'betty', add_theme => 'wilma'};
+    my $params = {set_themes => 'betty', add_themes => 'wilma'};
 
     my $userprof = Perl::Critic::UserProfile->new( -profile => 'NONE' );
     my $pf = Perl::Critic::PolicyFactory->new( -profile  => $userprof );
@@ -95,7 +94,7 @@ Perl::Critic::TestUtils::block_perlcriticrc();
 
     # Try creating bogus policy
     eval{ $pf->create_policy( $bogus_policy ) };
-    like( $EVAL_ERROR, qr/Can't locate object method "new"/m, 'create bogus policy' );
+    like( $EVAL_ERROR, qr/Can't locate object method/m, 'create bogus policy' );
 
     # Try using a bogus severity level
     my $policy_name = 'Modules::RequireVersionVar';

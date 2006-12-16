@@ -21,9 +21,10 @@ my $expl = [ 78 ];
 
 #-----------------------------------------------------------------------------
 
-sub default_severity { return $SEVERITY_MEDIUM           }
-sub default_themes   { return qw(core pbp bugs)          }
-sub applies_to       { return 'PPI::Statement::Variable' }
+sub policy_parameters { return ()                         }
+sub default_severity  { return $SEVERITY_MEDIUM           }
+sub default_themes    { return qw(core pbp bugs)          }
+sub applies_to        { return 'PPI::Statement::Variable' }
 
 #-----------------------------------------------------------------------------
 
