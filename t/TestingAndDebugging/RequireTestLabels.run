@@ -57,7 +57,6 @@ fail('label');
 
 ## name empty array and hash parsing
 ## failures 0
-## TODO awaiting a fix in PPI
 ## cut
 is_deeply([],[],'label');
 is_deeply({},{},'label');
