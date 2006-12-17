@@ -5,26 +5,26 @@
 # $Revision$
 ##############################################################################
 
-[0.22]  Released on ????-??-??
+[0.22]  Released on 2006-12-15
 
      New Features:
      * Introduced named severity levels: gentle, stern, harsh, cruel, brutal
        You can use these named levels instead of the numeric ones.
        For example: "perlcritic --severity=cruel MyModule.pm"
+       Or just:     "perlcritic --cruel MyModule.pm"
 
      * For perlcritic, the "-List" option has been renamed to
        "-profileproto".  The output now includes the names of the
-       parameters that the policy supports, if any.  This should
-       make it a little easier to know how you could configure each
-       policy, if you ever want to do so.
+       parameters that each Policy supports, if any.
 
      * Improved validation of Policy parameters in your F<.perlcriticrc>
+       Any invalid parameter now causes a fatal exception.
 
      Major Changes:
      * Reassigned themes for most policies.  Now there are fewer
-       themes and they are organized more around concepts rather
-       than severity level.  If you have assigned your own themes
-       to any policies, they should still work as expected.
+       themes and they are organized around programming concepts
+       instead of severity levels.  If you have assigned your own
+       themes to any Policies, they should still work as expected.
 
      Policy Changes:
      * ErrorHandling::RequireCarping will not complain if it can figure
