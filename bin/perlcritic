@@ -247,14 +247,14 @@ sub _get_option_specification {
         Safari
         Version
         brutal
-        count|Count
+        count|C
         cruel
         doc=s
         exclude=s@
         force!
         gentle
         harsh
-        help|?|Help
+        help|?|H
         include=s@
         list
         man
@@ -371,7 +371,7 @@ C<perlcritic> - Command-line interface to critique Perl source
 =head1 SYNOPSIS
 
   perlcritic [-12345 | -brutal | -cruel | -harsh | -stern | -gentle]
-             [-severity number | name] [-noprofile | -profile file]
+             [-severity number | name] [-profile file | -noprofile]
              [-top [ number ]] [-theme expression] [-include pattern]
              [-exclude pattern] [-singlepolicy pattern] [-only | -noonly]
              [-force | -noforce] [-verbose number | format] [-nocolor]
@@ -532,7 +532,7 @@ modules that match the regex C</PATTERN/imx>.  Use this option to
 temporarily override your profile and/or the severity settings at the
 command-line.  For example:
 
-  perlcritic --include=layout my_file.pl
+  perlcritic -include=layout my_file.pl
 
 This would cause C<perlcritic> to report violations of all the
 C<CodeLayout::*> policies even if they have a severity level that is
@@ -550,7 +550,7 @@ that match the regex C</PATTERN/imx>.  Use this option to temporarily
 override your profile and/or the severity settings at the
 command-line.  For example:
 
-  perlcritic --exclude=strict my_file.pl
+  perlcritic -exclude=strict my_file.pl
 
 This would cause C<perlcritic> to not report violations of the
 C<RequireUseStrict> and C<ProhibitNoStrict> policies even though they
@@ -568,7 +568,7 @@ temporarily override your profile and/or other command-line settings
 that specify the policies to use, including severity, C<-theme>,
 C<-include>, C<-exclude>, and C<-only> options.  For example:
 
-  perlcritic --singlepolicy=nowarnings my_file.pl
+  perlcritic -singlepolicy=nowarnings my_file.pl
 
 This would cause C<perlcritic> to only report violations of the
 C<ProhibitNoWarnings> policy, regardless of the severity level
@@ -576,7 +576,7 @@ setting.
 
 This is equivalent to what one might intend by
 
-  perlcritic --exclude=. --include=nowarnings my_file.pl
+  perlcritic -exclude=. -include=nowarnings my_file.pl
 
 but this won't work because the C<-exclude> option overrides the
 C<-include> option.
@@ -584,7 +584,7 @@ C<-include> option.
 The equivalent of this option can be accomplished by creating a custom
 profile containing only the desired policy and then running...
 
-  perlcritic --profile=customprofile --only my_file.pl
+  perlcritic -profile=customprofile -only my_file.pl
 
 =item C<-top [ N ]>
 
