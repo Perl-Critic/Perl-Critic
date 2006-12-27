@@ -84,6 +84,7 @@ our $SEVERITY_LOW     = 2;
 our $SEVERITY_LOWEST  = 1;
 
 #-----------------------------------------------------------------------------
+
 our $COMMA      = q{,};
 our $FATCOMMA   = q{=>};
 our $COLON      = q{:};
@@ -100,31 +101,29 @@ our $TRUE       = 1;
 our $FALSE      = 0;
 
 #-----------------------------------------------------------------------------
-our @BUILTINS = qw( AUTOLOAD BEGIN DESTROY END INIT CHECK break my not
-say state -r -w -x -o -R -W -X -O -e -z -s -f -d -l -p -S -b -c -t -u
--g -k -T -B -M -A -C abs accept alarm atan2 bind binmode bless caller
-chdir chmod chomp chop chown chr chroot close closedir connect
-continue cos crypt dbmclose dbmopen defined delete die do dump each
-endgrent endhostent endnetent endprotoent endpwent endservent eof eval
-exec exists exit exp fcntl fileno flock fork format formline getc
-getgrent getgrgid getgrnam gethostbyaddr gethostbyname gethostent
-getlogin getnetbyaddr getnetbyname getnetent getpeername getpgrp
-getppid getpriority getprotobyname getprotobynumber getprotoent
-getpwent getpwnam getpwuid getservbyname getservbyport getservent
-getsockname getsockopt glob gmtime goto grep hex import index int
-ioctl join keys kill last lc lcfirst length link listen local
-localtime log lstat map mkdir msgctl msgget msgrcv msgsnd next no oct
-open opendir ord our pack package pipe pop pos print printf prototype
-push quotemeta rand read readdir readline readlink readpipe recv redo
-ref rename require reset return reverse rewinddir rindex rmdir scalar
-seek seekdir select semctl semget semop send setgrent sethostent
-setnetent setpgrp setpriority setprotoent setpwent setservent
-setsockopt shift shmctl shmget shmread shmwrite shutdown sin sleep
-socket socketpair sort splice split sprintf sqrt srand stat study sub
-substr symlink syscall sysopen sysread sysseek system syswrite tell
-telldir tie tied time times truncate uc ucfirst umask undef unlink
-unpack unshift untie use utime values vec wait waitpid wantarray warn
-write );
+
+our @BUILTINS = qw( AUTOLOAD BEGIN DESTROY END INIT CHECK UNITCHECK break my
+not say state -r -w -x -o -R -W -X -O -e -z -s -f -d -l -p -S -b -c -t -u -g
+-k -T -B -M -A -C abs accept alarm atan2 bind binmode bless caller chdir chmod
+chomp chop chown chr chroot close closedir connect continue cos crypt dbmclose
+dbmopen defined delete die do dump each endgrent endhostent endnetent
+endprotoent endpwent endservent eof eval exec exists exit exp fcntl fileno
+flock fork format formline getc getgrent getgrgid getgrnam gethostbyaddr
+gethostbyname gethostent getlogin getnetbyaddr getnetbyname getnetent
+getpeername getpgrp getppid getpriority getprotobyname getprotobynumber
+getprotoent getpwent getpwnam getpwuid getservbyname getservbyport getservent
+getsockname getsockopt glob gmtime goto grep hex import index int ioctl join
+keys kill last lc lcfirst length link listen local localtime log lstat map
+mkdir msgctl msgget msgrcv msgsnd next no oct open opendir ord our pack
+package pipe pop pos print printf prototype push quotemeta rand read readdir
+readline readlink readpipe recv redo ref rename require reset return reverse
+rewinddir rindex rmdir scalar seek seekdir select semctl semget semop send
+setgrent sethostent setnetent setpgrp setpriority setprotoent setpwent
+setservent setsockopt shift shmctl shmget shmread shmwrite shutdown sin sleep
+socket socketpair sort splice split sprintf sqrt srand stat study sub substr
+symlink syscall sysopen sysread sysseek system syswrite tell telldir tie tied
+time times truncate uc ucfirst umask undef unlink unpack unshift untie use
+utime values vec wait waitpid wantarray warn write );
 
 my %BUILTINS = hashify( @BUILTINS );
 

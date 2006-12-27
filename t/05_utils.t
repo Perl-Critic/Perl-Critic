@@ -10,7 +10,7 @@
 use strict;
 use warnings;
 use PPI::Document;
-use constant USE_B_KEYWORDS => eval 'use B::Keywords 1.04; 1';
+use constant USE_B_KEYWORDS => eval 'use B::Keywords 1.05; 1';
 use Test::More tests => 84 + (
     USE_B_KEYWORDS
     ? ( @B::Keywords::Functions + @B::Keywords::Scalars + @B::Keywords::Arrays
