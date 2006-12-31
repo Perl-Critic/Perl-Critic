@@ -5,6 +5,18 @@
 # $Revision$
 ##############################################################################
 
+[?.??]  Released on ????-??-??
+
+     Bug Fixes:
+     * 23994: Test 56 in t/05_utils.t of Perl::Critic v0.22 fails
+
+     Other Changes:
+     * Perl::Critic now requires B::Keywords v1.05 or newer.
+     * The @GLOBALS and @BUILTINS variables are no longer exported by
+       Perl::Critic::Utils.  Use the is_perl_global() and is_perl_builtin()
+       functions instead.
+
+
 [0.22]  Released on 2006-12-15
 
      New Features:

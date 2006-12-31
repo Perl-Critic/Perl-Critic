@@ -11,6 +11,7 @@ use strict;
 use warnings;
 use Carp qw(confess);
 use File::Spec qw();
+use B::Keywords qw();
 use base 'Exporter';
 
 our $VERSION = 0.22;
@@ -21,13 +22,11 @@ our $VERSION = 0.22;
 
 ## no critic (AutomaticExport)
 our @EXPORT = qw(
-    @GLOBALS
-    @BUILTINS
-
-    $POLICY_NAMESPACE
 
     $TRUE
     $FALSE
+
+    $POLICY_NAMESPACE
 
     $SEVERITY_HIGHEST
     $SEVERITY_HIGH
@@ -102,57 +101,9 @@ our $FALSE      = 0;
 
 #-----------------------------------------------------------------------------
 
-our @BUILTINS = qw( AUTOLOAD BEGIN DESTROY END INIT CHECK UNITCHECK break my
-not say state -r -w -x -o -R -W -X -O -e -z -s -f -d -l -p -S -b -c -t -u -g
--k -T -B -M -A -C abs accept alarm atan2 bind binmode bless caller chdir chmod
-chomp chop chown chr chroot close closedir connect continue cos crypt dbmclose
-dbmopen defined delete die do dump each endgrent endhostent endnetent
-endprotoent endpwent endservent eof eval exec exists exit exp fcntl fileno
-flock fork format formline getc getgrent getgrgid getgrnam gethostbyaddr
-gethostbyname gethostent getlogin getnetbyaddr getnetbyname getnetent
-getpeername getpgrp getppid getpriority getprotobyname getprotobynumber
-getprotoent getpwent getpwnam getpwuid getservbyname getservbyport getservent
-getsockname getsockopt glob gmtime goto grep hex import index int ioctl join
-keys kill last lc lcfirst length link listen local localtime log lstat map
-mkdir msgctl msgget msgrcv msgsnd next no oct open opendir ord our pack
-package pipe pop pos print printf prototype push quotemeta rand read readdir
-readline readlink readpipe recv redo ref rename require reset return reverse
-rewinddir rindex rmdir scalar seek seekdir select semctl semget semop send
-setgrent sethostent setnetent setpgrp setpriority setprotoent setpwent
-setservent setsockopt shift shmctl shmget shmread shmwrite shutdown sin sleep
-socket socketpair sort splice split sprintf sqrt srand stat study sub substr
-symlink syscall sysopen sysread sysseek system syswrite tell telldir tie tied
-time times truncate uc ucfirst umask undef unlink unpack unshift untie use
-utime values vec wait waitpid wantarray warn write );
-
-my %BUILTINS = hashify( @BUILTINS );
-
-#-----------------------------------------------------------------------------
-
 #TODO: Should this include punctuations vars?
 
-our @GLOBALS =
-  ('(',')',q{\\},q{,},q{#}, qw(
-!  " $ % & ' * + - .  / 0 : ; < = > ?  @ ACCUMULATOR ARG ARGV BASETIME
-CHILD_ERROR COMPILING DEBUGGING EFFECTIVE_GROUP_ID EFFECTIVE_USER_ID
-EGID ENV ERRNO EUID EVAL_ERROR EXCEPTIONS_BEING_CAUGHT EXECUTABLE_NAME
-EXTENDED_OS_ERROR FORMAT_FORMFEED FORMAT_LINES_LEFT
-FORMAT_LINES_PER_PAGE FORMAT_LINE_BREAK_CHARACTERS FORMAT_NAME
-FORMAT_PAGE_NUMBER FORMAT_TOP_NAME GID INC INPLACE_EDIT
-INPUT_LINE_NUMBER INPUT_RECORD_SEPARATOR LAST_MATCH_END
-LAST_MATCH_START LAST_PAREN_MATCH LAST_REGEXP_CODE_RESULT
-LIST_SEPARATOR MATCH MULTILINE_MATCHING NR OFMT OFS ORS OSNAME
-OS_ERROR OUTPUT_AUTOFLUSH OUTPUT_AUTO_FLUSH OUTPUT_FIELD_SEPARATOR
-OUTPUT_RECORD_SEPARATOR OVERLOAD PERLDB PERL_VERSION PID POSTMATCH
-PREMATCH PROCESS_ID PROGRAM_NAME REAL_GROUP_ID REAL_USER_ID RS SIG
-SUBSCRIPT_SEPARATOR SUBSEP SYSTEM_FD_MAX UID WARNING [ ] ^ ^A ^C
-^CHILD_ERROR_NATIVE ^D ^E ^ENCODING ^F ^H ^I ^L ^M ^N ^O ^OPEN ^P ^R
-^RE_DEBUG_FLAGS ^RE_TRIE_MAXBUF ^S ^T ^TAINT ^UNICODE ^UTF8LOCALE ^V
-^W ^WARNING_BITS ^WIDE_SYSTEM_CALLS ^X _ ` a b | ~
-),
-);
 
-my %GLOBALS = hashify( @GLOBALS );
 
 #-----------------------------------------------------------------------------
 ## no critic (ProhibitNoisyQuotes);
@@ -204,14 +155,22 @@ sub find_keywords {
 
 #-----------------------------------------------------------------------------
 
+my %BUILTINS = hashify( @B::Keywords::Functions );
+
 sub is_perl_builtin {
     my $elem = shift;
     return if !$elem;
-    my $name = eval { $elem->isa('PPI::Statement::Sub') } ? $elem->name() : $elem;
+    my $name= eval {$elem->isa('PPI::Statement::Sub')} ? $elem->name() : $elem;
     return exists $BUILTINS{ $name };
 }
 
 #-----------------------------------------------------------------------------
+
+my @GLOBALS_WITHOUT_SIGILS = map { substr($_, 1) } @B::Keywords::Arrays,
+                                                   @B::Keywords::Hashes,
+                                                   @B::Keywords::Scalars;
+
+my %GLOBALS= hashify( @GLOBALS_WITHOUT_SIGILS );
 
 sub is_perl_global {
     my $elem = shift;
@@ -706,23 +665,6 @@ This is safer than splitting on whitespace.
 =head1 EXPORTED VARIABLES
 
 =over 8
-
-=item C<@BUILTINS>
-
-B<DEPRECATED:>  Use C<is_perl_builtin()> instead.
-
-This is a list of all the built-in functions provided by Perl 5.8.  I
-imagine this is useful for distinguishing native and non-native
-function calls.
-
-=item C<@GLOBALS>
-
-B<DEPRECATED:>  Use C<is_perl_global()> instead.
-
-This is a list of all the magic global variables provided by the
-L<English> module.  Also includes commonly-used global like C<%SIG>,
-C<%ENV>, and C<@ARGV>.  The list contains only the variable name,
-without the sigil.
 
 =item C<$COMMA>
 

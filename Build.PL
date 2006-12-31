@@ -54,7 +54,8 @@ my $builder = Module::Build->new(
   dist_abstract  => 'Critique Perl source code for best-practices',
   license        => 'perl',
 
-  requires       => {'Config::Tiny'          => 2,
+  requires       => {'B::Keywords'           => 1.05,
+                     'Config::Tiny'          => 2,
                      'File::Spec'            => 0,
                      'File::Spec::Unix'      => 0,
                      'IO::String'            => 0,
