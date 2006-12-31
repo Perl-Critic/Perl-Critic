@@ -122,12 +122,12 @@ sub _set_defaults {
 
 sub _load_profile_from_file {
     my $file = shift || return {};
-    my $prof = Config::Tiny->read($file);
+    my $prof = Config::Tiny->read( $file );
     if (defined $prof) {
         return $prof;
     } else {
-        croak(sprintf qq{Config::Tiny could not parse profile '%s':\n\t%s\n},
-              $file, Config::Tiny::errstr());
+        my $errstr = Config::Tiny::errstr();
+        die qq{Could not parse profile "$file": $errstr\n};
     }
 }
 
