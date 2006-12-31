@@ -154,6 +154,7 @@ sub find_keywords {
 }
 
 #-----------------------------------------------------------------------------
+## no critic (ProhibitPackageVars)
 
 my %BUILTINS = hashify( @B::Keywords::Functions );
 
@@ -166,7 +167,7 @@ sub is_perl_builtin {
 
 #-----------------------------------------------------------------------------
 
-my @GLOBALS_WITHOUT_SIGILS = map { substr($_, 1) } @B::Keywords::Arrays,
+my @GLOBALS_WITHOUT_SIGILS = map { substr $_, 1 }  @B::Keywords::Arrays,
                                                    @B::Keywords::Hashes,
                                                    @B::Keywords::Scalars;
 
@@ -180,6 +181,7 @@ sub is_perl_global {
     return exists $GLOBALS{ $var_name };
 }
 
+## use critic
 #-----------------------------------------------------------------------------
 
 sub precedence_of {
