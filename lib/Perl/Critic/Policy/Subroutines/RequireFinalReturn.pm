@@ -74,22 +74,17 @@ sub _block_has_return {
         || _is_compound_return($final);
 }
 
-#-------------------------
+#-----------------------------------------------------------------------------
 
 sub _is_explicit_return {
     my ( $final ) = @_;
-    if ( $final->isa('PPI::Statement::Break') ) {
-       return $final =~ m/ \A (?: return | goto ) \b /xms;
-    }
-    elsif ( $final->isa('PPI::Statement') ) {
-       return $final =~ m/ \A (?: exit | die |
-                                  Carp::croak | Carp::confess |
-                                  croak | confess ) \b /xms;
-    }
-    return;
+
+    return if _is_conditional_stmnt( $final );
+    return _is_return_or_goto_stmnt( $final )
+        || _is_terminal_stmnt( $final );
 }
 
-#-------------------------
+#-----------------------------------------------------------------------------
 
 sub _is_compound_return {
     my ( $final ) = @_;
@@ -120,6 +115,39 @@ sub _is_compound_return {
     }
 
     return 1;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _is_return_or_goto_stmnt {
+    my $stmnt = shift;
+    return if not $stmnt->isa('PPI::Statement::Break');
+    my $first_token = $stmnt->schild(0) || return;
+    return $first_token eq 'return' || $first_token eq 'goto';
+}
+
+#-----------------------------------------------------------------------------
+my %terminals = hashify( qw(exit die croak confess Carp::confess Carp::croak) );
+
+sub _is_terminal_stmnt {
+    my $stmnt = shift;
+    return if not $stmnt->isa('PPI::Statement');
+    my $first_token = $stmnt->schild(0) || return;
+    return exists $terminals{$first_token};
+}
+
+#-----------------------------------------------------------------------------
+
+my %conditionals = hashify( qw(if unless for foreach) );
+
+sub _is_conditional_stmnt {
+    my $stmnt = shift;
+    return if not $stmnt->isa('PPI::Statement');
+    for my $elem ( $stmnt->schildren() ) {
+        return 1 if $elem->isa('PPI::Token::Word')
+            && exists $conditionals{$elem};
+    }
+    return;
 }
 
 1;

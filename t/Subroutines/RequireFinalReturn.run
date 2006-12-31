@@ -100,3 +100,30 @@ sub baz   { confess; }
 sub bar_C { Carp::croak; }
 sub baz_C { Carp::confess; }
 sub quux  { exit; }
+
+#-----------------------------------------------------------------------------
+
+## name Final return is present, but conditional
+## failures 3
+## cut
+sub foo   { die if $condition }
+sub bar   { croak unless $condition }
+sub baz   { exit for @condition }
+
+#-----------------------------------------------------------------------------
+
+## name Compound final return is present, but conditional
+## failures 1
+## cut
+sub foo {
+
+    if( $condition ) {
+        return if $today_is_tuesday;
+    }
+    else {
+        exit unless $today_is_wednesday;
+    }
+}
+
+
+
