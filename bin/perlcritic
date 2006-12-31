@@ -362,7 +362,7 @@ __END__
 
 =pod
 
-=for stopwords DGR INI-style vim-fu minibuffer -noprofile API ben Jore formatter
+=for stopwords DGR INI-style vim-fu minibuffer -noprofile API ben Jore formatter Peshak
 
 =head1 NAME
 
@@ -1090,17 +1090,8 @@ inside this distribution.
 
 =head2 VIM
 
-Configure the grep format as follows:
-
-  set grepformat=%f:%l:%c:m
-  set grepprg=perlcritic\ -verbose\ 1\ %
-
-Then, you can run perlcritic on the current buffer with:
-
-  :grep
-
-Navigation and display instructions can be found under C<:help grep>.
-Someone with stronger Vim-fu may wish to convert this to a real macro.
+Scott Peshak has published F<perlchecker.vim>, which is available
+at L<http://www.vim.org/scripts/script.php?script_id=1731>.
 
 =head2 gVIM
 
