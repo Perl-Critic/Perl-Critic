@@ -14,7 +14,7 @@ use PPI::Token::Whitespace;
 use English qw(-no_match_vars);
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 0.22;
+our $VERSION = 1.00;
 
 my $LINE_END = qr/\015{1,2}\012|\012|\015/mxs;
 
