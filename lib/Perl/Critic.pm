@@ -836,12 +836,30 @@ more comma-separated barewords (e.g. don't use quotes).  The C<"## no
 critic"> pragmas can be nested, and Policies named by an inner pragma
 will be disabled along with those already disabled an outer pragma.
 
+Some Policies like C<Subroutines::ProhibitExcessComplexity> apply to
+an entire block of code.  In those cases, C<"## no critic"> must appear
+on the line where the violation is reported.  For example:
+
+  sub complicated_function {  ## no critic (ProhibitExcessComplexity)
+      # Your code here...
+  }
+
 Use this feature wisely.  C<"## no critic"> should be used in the
 smallest possible scope, or only on individual lines of code. And you
 should always be as specific as possible about which policies you want
 to disable (i.e. never use a bare C<"## no critic">).  If Perl::Critic
 complains about your code, try and find a compliant solution before
 resorting to this feature.
+
+=head2 LIMITATIONS OF THE "no critic" DIRECTIVE
+
+Policies such as C<Documentation::RequirePodSections> apply to the entire
+document, in which case violations are reported at line 1.  But if the file
+requires a shebang line, it is impossible to put C<"## no critic"> on the
+first line of the file.  This is a known limitation and it will be addressed
+in a future release.  As a workaround, you can disable the affected policies
+at the command-line or in your F<.perlcriticrc> file.  But beware that this
+will affect the analysis of B<all> files.
 
 =head1 IMPORTANT CHANGES
 
