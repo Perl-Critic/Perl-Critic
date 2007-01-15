@@ -21,7 +21,7 @@ my $expl = [ 59 ];
 
 #-----------------------------------------------------------------------------
 
-sub policy_parameters { return qw( min_value )         }
+sub supported_parameters { return qw( min_value )         }
 sub default_severity  { return $SEVERITY_LOW           }
 sub default_themes    { return qw( core pbp cosmetic ) }
 sub applies_to        { return 'PPI::Token::Number'    }

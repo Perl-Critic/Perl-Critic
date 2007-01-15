@@ -23,7 +23,7 @@ my $DEFAULT_MIN_ELEMENTS = 2;
 
 #-----------------------------------------------------------------------------
 
-sub policy_parameters { return qw( min_elements )     }
+sub supported_parameters { return qw( min_elements )     }
 sub default_severity  { return $SEVERITY_LOW          }
 sub default_themes    { return qw( core cosmetic )    }
 sub applies_to        { return 'PPI::Structure::List' }

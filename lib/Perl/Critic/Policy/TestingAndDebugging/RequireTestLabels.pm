@@ -36,7 +36,7 @@ my $expl = q{Add a label argument to all Test::More functions};
 
 #-----------------------------------------------------------------------------
 
-sub policy_parameters { return qw( modules )                }
+sub supported_parameters { return qw( modules )                }
 sub default_severity  { return $SEVERITY_MEDIUM             }
 sub default_themes    { return qw( core maintenance tests ) }
 sub applies_to        { return 'PPI::Token::Word'           }

@@ -160,11 +160,11 @@ sub site_policy_names {
 sub _validate_policy_params {
     my ($policy, $params) = @_;
 
-    return if not $policy->can('policy_parameters');
-    my @supported_params = $policy->policy_parameters();
+    return if not $policy->can('supported_parameters');
+    my @supported_params = $policy->supported_parameters();
 
     # If @supported_params is a one-element-list containting (undef), then it
-    # means the author has not implemented policy_parameters() and we can't
+    # means the author has not implemented supported_parameters() and we can't
     # tell if this policy supports any parameters.  So we just let it go.
     return if !defined $supported_params[0] && @supported_params == 1;
 

@@ -24,7 +24,7 @@ my %default_exempt = hashify( qw( $_ @_ $1 $2 $3 $4 $5 $6 $7 $8 $9 _ ) );
 
 #-----------------------------------------------------------------------------
 
-sub policy_parameters { return qw( allow )           }
+sub supported_parameters { return qw( allow )           }
 sub default_severity  { return $SEVERITY_LOW         }
 sub default_themes    { return qw(core pbp cosmetic) }
 sub applies_to        { return 'PPI::Token::Magic'   }

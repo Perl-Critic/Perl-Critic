@@ -21,7 +21,7 @@ my $desc = q{Code not contained in explicit package};
 
 #-----------------------------------------------------------------------------
 
-sub policy_parameters { return qw( exempt_scripts ) }
+sub supported_parameters { return qw( exempt_scripts ) }
 sub default_severity  { return $SEVERITY_HIGH       }
 sub default_themes    { return qw( core bugs )      }
 sub applies_to        { return 'PPI::Document'      }

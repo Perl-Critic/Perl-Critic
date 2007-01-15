@@ -30,7 +30,7 @@ my @default_forbid =
 
 #-----------------------------------------------------------------------------
 
-sub policy_parameters { return qw( forbid )             }
+sub supported_parameters { return qw( forbid )             }
 sub default_severity  { return $SEVERITY_MEDIUM         }
 sub default_themes    { return qw(core pbp maintenance) }
 sub applies_to        { return qw(PPI::Statement::Sub

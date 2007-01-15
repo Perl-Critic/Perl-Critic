@@ -37,7 +37,7 @@ my %token_compat = (
 
 #-----------------------------------------------------------------------------
 
-sub policy_parameters { return() }
+sub supported_parameters { return() }
 sub default_severity { return $SEVERITY_MEDIUM       }
 sub default_themes   { return qw( core bugs )        }
 sub applies_to       { return 'PPI::Token::Operator' }

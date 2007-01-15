@@ -23,7 +23,7 @@ my $DEFAULT_MAX_ELSIF = 2;
 
 #-----------------------------------------------------------------------------
 
-sub policy_parameters { return qw( max_elsif )                       }
+sub supported_parameters { return qw( max_elsif )                       }
 sub default_severity  { return $SEVERITY_MEDIUM                      }
 sub default_themes    { return qw( core pbp maintenance complexity ) }
 sub applies_to        { return 'PPI::Statement::Compound'            }

@@ -23,7 +23,7 @@ my $DEFAULT_MAX_NESTS = 5;
 
 #-----------------------------------------------------------------------------
 
-sub policy_parameters { return qw( max_nests )                 }
+sub supported_parameters { return qw( max_nests )                 }
 sub default_severity  { return $SEVERITY_MEDIUM                }
 sub default_themes    { return qw(core maintenance complexity) }
 sub applies_to        { return 'PPI::Statement::Compound'      }

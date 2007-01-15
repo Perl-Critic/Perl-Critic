@@ -22,7 +22,7 @@ my $expl = [ 431 ];
 
 #-----------------------------------------------------------------------------
 
-sub policy_parameters { return qw( allow )               }
+sub supported_parameters { return qw( allow )               }
 sub default_severity  { return $SEVERITY_HIGH            }
 sub default_themes    { return qw( core bugs pbp )       }
 sub applies_to        { return 'PPI::Statement::Include' }

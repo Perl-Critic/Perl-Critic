@@ -23,7 +23,7 @@ my $expl = [ 73, 75 ];
 
 #-----------------------------------------------------------------------------
 
-sub policy_parameters { return qw( packages add_packages ) }
+sub supported_parameters { return qw( packages add_packages ) }
 sub default_severity  { return $SEVERITY_MEDIUM            }
 sub default_themes    { return qw(core pbp maintenance)    }
 sub applies_to        { return qw(PPI::Token::Symbol

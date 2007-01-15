@@ -21,7 +21,7 @@ my $expl = [ 97 ];
 
 #-----------------------------------------------------------------------------
 
-sub policy_parameters { return() }
+sub supported_parameters { return() }
 sub default_severity { return $SEVERITY_LOW             }
 sub default_themes   { return qw( core pbp maintenance )  }
 sub applies_to       { return 'PPI::Structure::ForLoop' }

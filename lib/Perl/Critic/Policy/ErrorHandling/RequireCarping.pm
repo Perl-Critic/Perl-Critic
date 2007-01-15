@@ -22,7 +22,7 @@ my $expl = [ 283 ];
 
 # TODO: make configurable to be strict again.
 
-sub policy_parameters { return qw( allow_messages_ending_with_newlines ) }
+sub supported_parameters { return qw( allow_messages_ending_with_newlines ) }
 sub default_severity  { return $SEVERITY_MEDIUM                          }
 sub default_themes    { return qw( core pbp maintenance )                }
 sub applies_to        { return 'PPI::Token::Word'                        }
