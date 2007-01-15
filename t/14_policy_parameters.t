@@ -66,9 +66,10 @@ sub test_supported_parameters {
 
 sub test_invalid_parameters {
     my $policy = shift;
+    my $bogus_params  = { bogus => 'shizzle' };
     my $profile = Perl::Critic::UserProfile->new( -profile => 'NONE' );
     my $factory = Perl::Critic::PolicyFactory->new( -profile => $profile );
-    eval { $factory->create_policy( $policy, {bogus => 'shizzle'} ) };
+    eval { $factory->create_policy(-name => $policy, -params => $bogus_params) };
     my $label = qq{Created $policy with bogus parameters};
     like( $EVAL_ERROR, qr/Parameter "bogus" isn't supported/, $label);
 }

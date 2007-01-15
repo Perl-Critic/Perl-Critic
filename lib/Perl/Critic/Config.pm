@@ -42,27 +42,27 @@ sub _init {
         $args{-severity} ||= $SEVERITY_LOWEST;
     }
 
-    # Set some attributes
+    # Set some options
     my $p = $args{-profile};
     my $profile = Perl::Critic::UserProfile->new( -profile => $p );
     my $defaults = $profile->defaults();
 
-    # If given, these options should always have a defined value
-    $self->{_include}      = $args{-include}      ? $args{-include}      : $defaults->include();
-    $self->{_exclude}      = $args{-exclude}      ? $args{-exclude}      : $defaults->exclude();
-    $self->{_singlepolicy} = $args{-singlepolicy} ? $args{-singlepolicy} : $defaults->singlepolicy();
-    $self->{_verbose}      = $args{-verbose}      ? $args{-verbose}      : $defaults->verbose();
+    # If given, these options should always have a true value
+    $self->{_include}      = $args{-include}      || $defaults->include();
+    $self->{_exclude}      = $args{-exclude}      || $defaults->exclude();
+    $self->{_singlepolicy} = $args{-singlepolicy} || $defaults->singlepolicy();
+    $self->{_verbose}      = $args{-verbose}      || $defaults->verbose();
 
     # Severity levels can be expressed as names or numbers
-    my $severity        = $args{-severity} ? $args{-severity} : $defaults->severity();
+    my $severity        = $args{-severity} || $defaults->severity();
     $self->{_severity}  = severity_to_number( $severity );
 
     # If given, these options can be true or false (but defined)
     # We normalize these to numeric values by multiplying them by 1;
     no warnings 'numeric'; ## no critic (ProhibitNoWarnings)
-    $self->{_top}   = 1 * (defined $args{-top}   ? $args{-top}   : $defaults->top()   );
-    $self->{_force} = 1 * (defined $args{-force} ? $args{-force} : $defaults->force() );
-    $self->{_only}  = 1 * (defined $args{-only}  ? $args{-only}  : $defaults->only()  );
+    $self->{_top}   = 1 * _dor( $args{-top},   $defaults->top()   );
+    $self->{_force} = 1 * _dor( $args{-force}, $defaults->force() );
+    $self->{_only}  = 1 * _dor( $args{-only},  $defaults->only()  );
 
     $self->{_profile}  = $profile;
     $self->{_policies} = [];
@@ -225,6 +225,14 @@ sub _policy_is_single_policy {
     my $singlepolicy = $self->singlepolicy();
     return if not $singlepolicy;
     return $policy_long_name =~ m/$singlepolicy/imxo;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _dor {
+    #The defined-or //
+    my ($this, $that) = @_;
+    return defined $this ? $this : $that;
 }
 
 #-----------------------------------------------------------------------------

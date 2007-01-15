@@ -89,11 +89,12 @@ sub new {
 sub _init {
 
     my ( $self, %args ) = @_;
-    my $profile = $args{-profile};
-    my $policy_names = $args{-policy_names} || \@SITE_POLICY_NAMES;
-    for my $policy_name ( @{ $policy_names } ) {
-        my $params = $profile->policy_params( $policy_name );
-        my $policy = $self->create_policy( $policy_name, $params );
+    my $profile = $args{-profile} || confess q{The -profile argument is required};
+
+    for my $policy_name ( @SITE_POLICY_NAMES ) {
+        my $policy_params = $profile->policy_params( $policy_name );
+        my $policy = $self->create_policy( -name   => $policy_name,
+                                           -params => $policy_params );
         push @{ $self->{_policies} }, $policy;
     }
     return $self;
@@ -103,25 +104,25 @@ sub _init {
 
 sub create_policy {
 
-    my ($self, $policy_name, $params) = @_;
-
-    confess q{policy argument is required} if not $policy_name;
+    my ($self, %args ) = @_;
+    my $policy_params = $args{-params};
+    my $policy_name = $args{-name} || confess q{The -name argument is required};
     $policy_name = policy_long_name( $policy_name );
 
-    # This function will delete keys from $params, so we copy them to avoid
-    # screwing up the callers's hash.  What a pain in the ass!
-    $params = $params ? { %{$params} } : {};
+    # This function will delete keys from $policy_params, so we copy them to
+    # avoid modifying the callers's hash.  What a pain in the ass!
+    my %policy_params_copy = $policy_params ? %{$policy_params} : ();
 
     # Pull out base parameters.
-    my $user_set_themes = delete $params->{set_themes};
-    my $user_add_themes = delete $params->{add_themes};
-    my $user_severity   = delete $params->{severity};
+    my $user_set_themes = delete $policy_params_copy{set_themes};
+    my $user_add_themes = delete $policy_params_copy{add_themes};
+    my $user_severity   = delete $policy_params_copy{severity};
 
-    # Validate remaining parameters
-    _validate_policy_params( $policy_name, $params ); # Dies on failure
+    # Validate remaining parameters. This dies on failure
+    _validate_policy_params( $policy_name, \%policy_params_copy );
 
     # Construct policy from remaining params
-    my $policy = $policy_name->new( %{$params} );
+    my $policy = $policy_name->new( %policy_params_copy );
 
     # Set base attributes on policy
     if ( defined $user_severity ) {
@@ -160,13 +161,10 @@ sub site_policy_names {
 sub _validate_policy_params {
     my ($policy, $params) = @_;
 
+    # If the Policy author hasn't provided the "supported_parameters" method,
+    # then we can't tell which parameters it supports.  So we let it go.
     return if not $policy->can('supported_parameters');
     my @supported_params = $policy->supported_parameters();
-
-    # If @supported_params is a one-element-list containting (undef), then it
-    # means the author has not implemented supported_parameters() and we can't
-    # tell if this policy supports any parameters.  So we just let it go.
-    return if !defined $supported_params[0] && @supported_params == 1;
 
     my %is_supported = hashify( @supported_params );
     my $msg = $EMPTY;
@@ -197,24 +195,19 @@ Perl::Critic::PolicyFactory - Instantiate Policy objects
 
 =head1 DESCRIPTION
 
-This is a helper class that instantiates L<Perl::Critic::Policy>
-objects with the user's preferred parameters. There are no
-user-serviceable parts here.
+This is a helper class that instantiates L<Perl::Critic::Policy> objects with
+the user's preferred parameters. There are no user-serviceable parts here.
 
 =head1 CONSTRUCTOR
 
 =over 8
 
-=item C<< new( -profile => $profile, -policy_names => \@policy_names ) >>
+=item C<< new( -profile => $profile >>
 
 Returns a reference to a new Perl::Critic::PolicyFactory object.
 
-B<-profile> is a reference to a L<Perl::Critic::UserProfile> object.
-This argument is required.
-
-B<-policy_names> is a reference to an array of fully-qualified Policy
-names.  Internally, the PolicyFactory will create one instance each of
-the named Policies.
+B<-profile> is a reference to a L<Perl::Critic::UserProfile> object.  This
+argument is required.
 
 =back
 
@@ -222,25 +215,24 @@ the named Policies.
 
 =over 8
 
-=item C<< create_policy( -policy => $policy_name, -params => \%param_hash ) >>
+=item C<< create_policy( -name => $policy_name, -params => \%param_hash ) >>
 
-Creates one Policy object.  If the object cannot be instantiated, it
-will throw a fatal exception.  Otherwise, it returns a reference to
-the new Policy object.
+Creates one Policy object.  If the object cannot be instantiated, it will
+throw a fatal exception.  Otherwise, it returns a reference to the new Policy
+object.
 
-B<-policy> is the name of a L<Perl::Critic::Policy> subclass module.
-The C<'Perl::Critic::Policy'> portion of the name can be omitted for
-brevity.  This argument is required.
+B<-name> is the name of a L<Perl::Critic::Policy> subclass module.  The
+C<'Perl::Critic::Policy'> portion of the name can be omitted for brevity.
+This argument is required.
 
-B<-params> is an optional reference to hash of parameters that will be
-passed into the constructor of the Policy.  If C<-params> is not
-defined, we will use the appropriate Policy parameters from the
-L<Perl::Critic::UserProfile>.
+B<-params> is an optional reference to hash of parameters that will be passed
+into the constructor of the Policy.  If C<-params> is not defined, we will use
+the appropriate Policy parameters from the L<Perl::Critic::UserProfile>.
 
 =item C< policies() >
 
-Returns a list of of references to all the L<Perl::Critic::Policy>
-objects that were created by this PolicyFactory.
+Returns a list of of references to all the L<Perl::Critic::Policy> objects
+that were created by this PolicyFactory.
 
 =back
 
@@ -253,10 +245,10 @@ internally, but may be useful to you in some way.
 
 =item C<site_policy_names()>
 
-Returns a list of all the Policy modules that are currently installed
-in the Perl::Critic:Policy namespace.  These will include modules that
-are distributed with Perl::Critic plus any third-party modules that
-have been installed.
+Returns a list of all the Policy modules that are currently installed in the
+Perl::Critic:Policy namespace.  These will include modules that are
+distributed with Perl::Critic plus any third-party modules that have been
+installed.
 
 =back
 
@@ -268,9 +260,9 @@ Jeffrey Ryan Thalhammer <thaljef@cpan.org>
 
 Copyright (c) 2005-2007 Jeffrey Ryan Thalhammer.  All rights reserved.
 
-This program is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself.  The full text of this license
-can be found in the LICENSE file included with this module.
+This program is free software; you can redistribute it and/or modify it under
+the same terms as Perl itself.  The full text of this license can be found in
+the LICENSE file included with this module.
 
 =cut
 
