@@ -18,7 +18,9 @@ use Perl::Critic::PolicyListing;
 #-----------------------------------------------------------------------------
 
 my $prof = Perl::Critic::UserProfile->new( -profile => 'NONE' );
-my @pols = Perl::Critic::PolicyFactory->new( -profile => $prof )->policies();
+my @policy_names = Perl::Critic::PolicyFactory::site_policy_names();
+my $factory = Perl::Critic::PolicyFactory->new( -profile => $prof );
+my @pols = map { $factory->create_policy( -name => $_ ) } @policy_names;
 my $listing = Perl::Critic::PolicyListing->new( -policies => \@pols );
 my $policy_count = scalar @pols;
 plan( tests => $policy_count + 1);

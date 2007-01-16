@@ -73,13 +73,11 @@ sub _was_loaded_from_blib {
 }
 
 #-----------------------------------------------------------------------------
-# Constructor
 
 sub new {
 
     my ( $class, %args ) = @_;
     my $self = bless {}, $class;
-    $self->{_policies} = [];
     $self->_init( %args );
     return $self;
 }
@@ -88,15 +86,11 @@ sub new {
 
 sub _init {
 
-    my ( $self, %args ) = @_;
-    my $profile = $args{-profile} || confess q{The -profile argument is required};
+    my ($self, %args) = @_;
 
-    for my $policy_name ( @SITE_POLICY_NAMES ) {
-        my $policy_params = $profile->policy_params( $policy_name );
-        my $policy = $self->create_policy( -name   => $policy_name,
-                                           -params => $policy_params );
-        push @{ $self->{_policies} }, $policy;
-    }
+    $self->{_profile} = $args{-profile}
+        or confess q{The -profile argument is required};
+
     return $self;
 }
 
@@ -105,9 +99,12 @@ sub _init {
 sub create_policy {
 
     my ($self, %args ) = @_;
-    my $policy_params = $args{-params};
+
     my $policy_name = $args{-name} || confess q{The -name argument is required};
     $policy_name = policy_long_name( $policy_name );
+
+    my $profile = $self->{_profile};
+    my $policy_params = $args{-params} || $profile->policy_params($policy_name);
 
     # This function will delete keys from $policy_params, so we copy them to
     # avoid modifying the callers's hash.  What a pain in the ass!
@@ -141,13 +138,6 @@ sub create_policy {
     }
 
     return $policy;
-}
-
-#-----------------------------------------------------------------------------
-
-sub policies {
-    my $self = shift;
-    return @{ $self->{_policies} };
 }
 
 #-----------------------------------------------------------------------------

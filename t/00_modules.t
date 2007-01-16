@@ -10,7 +10,7 @@
 use strict;
 use warnings;
 use PPI::Document;
-use Test::More tests => 1396;  # Add 14 for each new policy created
+use Test::More tests => 1401;  # Add 14 for each new policy created
 use Perl::Critic::TestUtils qw(bundled_policy_names);
 use English qw(-no_match_vars);
 
@@ -137,7 +137,6 @@ is($up->VERSION(), $version_string);
 use_ok('Perl::Critic::PolicyFactory');
 can_ok('Perl::Critic::PolicyFactory', 'create_policy');
 can_ok('Perl::Critic::PolicyFactory', 'new');
-can_ok('Perl::Critic::PolicyFactory', 'policies');
 can_ok('Perl::Critic::PolicyFactory', 'site_policy_names');
 
 
@@ -145,6 +144,19 @@ my $profile = Perl::Critic::UserProfile->new();
 my $factory = Perl::Critic::PolicyFactory->new( -profile => $profile );
 isa_ok($factory, 'Perl::Critic::PolicyFactory');
 is($factory->VERSION(), $version_string);
+
+#-----------------------------------------------------------------------------
+# Test Perl::Critic::Theme module interface
+
+use_ok('Perl::Critic::Theme');
+can_ok('Perl::Critic::Theme', 'new');
+can_ok('Perl::Critic::Theme', 'model');
+can_ok('Perl::Critic::Theme', 'policy_is_thematic');
+
+
+my $theme = Perl::Critic::Theme->new( -model => 'foo' );
+isa_ok($theme, 'Perl::Critic::Theme');
+is($theme->VERSION(), $version_string);
 
 #-----------------------------------------------------------------------------
 # Test Perl::Critic::PolicyListing module interface

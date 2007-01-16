@@ -255,8 +255,8 @@ their user profile.
 
 =item C< policy_params() >
 
-Given a reference to a L<Perl::Critic::Policy> object or the name of
-one, returns a hash of the user's configuration parameters for that
+Given a reference to a L<Perl::Critic::Policy> object or the name of one,
+returns a reference to a hash of the user's configuration parameters for that
 policy.
 
 =back

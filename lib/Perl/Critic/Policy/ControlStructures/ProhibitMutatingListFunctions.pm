@@ -40,10 +40,10 @@ my $expl = [ 114 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return qw( list_funcs )   }
-sub default_severity  { return $SEVERITY_HIGHEST  }
-sub default_themes    { return qw(core bugs pbp)  }
-sub applies_to        { return 'PPI::Token::Word' }
+sub supported_parameters { return qw( list_funcs add_list_funcs) }
+sub default_severity     { return $SEVERITY_HIGHEST              }
+sub default_themes       { return qw(core bugs pbp)              }
+sub applies_to           { return 'PPI::Token::Word'             }
 
 #-----------------------------------------------------------------------------
 

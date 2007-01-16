@@ -68,7 +68,6 @@ WriteMakefile(
         'Pod::PlainText'        => 0,
         'Pod::Usage'            => 0,
         'Scalar::Util'          => 0,
-        'Set::Scalar'           => 1.20,
         'String::Format'        => 1.13,
         'Test::More'            => 0,
     },

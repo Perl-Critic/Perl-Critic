@@ -12,7 +12,7 @@ use warnings;
 use Test::More; #plan set below!
 use English qw(-no_match_vars);
 use Perl::Critic::UserProfile qw();
-use Perl::Critic::PolicyFactory ( -test => 1 );
+use Perl::Critic::PolicyFactory (-test => 1);
 use Perl::Critic::TestUtils qw(bundled_policy_names);
 
 Perl::Critic::TestUtils::block_perlcriticrc();

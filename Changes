@@ -10,13 +10,26 @@
      Bug Fixes:
      * 23994: Test 56 in t/05_utils.t of Perl::Critic v0.22 fails
 
-     Other Changes:
-     * Perl::Critic now requires B::Keywords v1.05 or newer.
+
+     Interface Changes:
+     * The syntax for theme expressions has changed.  Instead of using
+       mathematical operators qw(+ * !) you must now use the logical
+       operators qw(|| && !).  See the Perl::Critic docs for more info.
+     
      * The @GLOBALS and @BUILTINS variables are no longer exported by
        Perl::Critic::Utils.  Use the is_perl_global() and is_perl_builtin()
        functions instead.
+
      * Perl::Critic::Policy::policy_parameters() has bee renamed to
-       Perl::Critic::Policy::supported_paramters().
+       Perl::Critic::Policy::supported_paramters().  This was an
+       undocumented feature anyway, so it shouldn't affect anyone.
+
+
+     Other Internal Changes:
+     * Perl::Critic now requires B::Keywords v1.05 or newer.
+
+     * A few internal classes have been refactored.  As a result,
+       Set::Scalar is no longer a required dependency.
 
 
 [0.22]  Released on 2006-12-15

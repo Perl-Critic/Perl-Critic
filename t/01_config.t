@@ -13,7 +13,7 @@ use English qw(-no_match_vars);
 use List::MoreUtils qw(all any);
 use Perl::Critic::Config qw();
 use Perl::Critic::Utils;
-use Test::More (tests => 64);
+use Test::More (tests => 67);
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(bundled_policy_names);
@@ -116,12 +116,17 @@ my $total_policies   = scalar @site_policies;
 {
     my $profile = "$examples_dir/perlcriticrc";
     my $c = Perl::Critic::Config->new( -profile => $profile );
-    is_deeply([$c->exclude()], [ qw(Documentation Naming) ], 'user default exclude from file' );
-    is_deeply([$c->include()], [ qw(CodeLayout Modules) ],  'user default include from file' );
+
+    is_deeply([$c->exclude()], [ qw(Documentation Naming) ],
+              'user default exclude from file' );
+
+    is_deeply([$c->include()], [ qw(CodeLayout Modules) ],
+              'user default include from file' );
+
     is($c->force(),    1,  'user default force from file'     );
     is($c->only(),     1,  'user default only from file'      );
     is($c->severity(), 3,  'user default severity from file'  );
-    is($c->theme->expression(),    'danger + risky - pbp',  'user default theme from file');
+    is($c->theme()->model(),    'danger || risky && ! pbp',  'user default theme from file');
     is($c->top(),      50, 'user default top from file'       );
     is($c->verbose(),  5,  'user default verbose from file'   );
 }
@@ -188,7 +193,7 @@ my $total_policies   = scalar @site_policies;
     is( $c->force(),     0,     'Undefined -force');
     is( $c->only(),      0,     'Undefined -only');
     is( $c->severity(),  5,     'Undefined -severity');
-    is( $c->theme()->expression(),     q{},   'Undefined -theme');
+    is( $c->theme()->model(),   q{},   'Undefined -theme');
     is( $c->top(),       0,     'Undefined -top');
     is( $c->verbose(),   4,     'Undefined -verbose');
 
@@ -197,7 +202,7 @@ my $total_policies   = scalar @site_policies;
     is( $c->force(),     0,       'zero -force');
     is( $c->only(),      0,       'zero -only');
     is( $c->severity(),  1,       'zero -severity');
-    is( $c->theme()->expression(),     q{},   'zero -theme');
+    is( $c->theme()->model(),     q{},     'zero -theme');
     is( $c->top(),       0,       'zero -top');
     is( $c->verbose(),   4,       'zero -verbose');
 
@@ -206,7 +211,7 @@ my $total_policies   = scalar @site_policies;
     is( $c->force(),     0,       'empty -force');
     is( $c->only(),      0,       'empty -only');
     is( $c->severity(),  1,       'empty -severity');
-    is( $c->theme()->expression(),     q{},   'empty -theme');
+    is( $c->theme->model(),     q{},     'empty -theme');
     is( $c->top(),       0,       'empty -top');
     is( $c->verbose(),   4,       'empty -verbose');
 }
@@ -215,7 +220,6 @@ my $total_policies   = scalar @site_policies;
 # Test the -only switch
 
 {
-
     my %profile = (
         '-NamingConventions::ProhibitMixedCaseVars' => {},
         'NamingConventions::ProhibitMixedCaseSubs' => {},
@@ -229,6 +233,15 @@ my $total_policies   = scalar @site_policies;
     %pc_config = ( -severity => 1, -only => 1, -profile => {} );
     @pols = Perl::Critic::Config->new( %pc_config )->policies();
     is(scalar @pols, 0, '-only switch, empty profile');
+}
+
+#-----------------------------------------------------------------------------
+# Test the -singlepolicy switch
+
+{
+    my %pc_config = (-singlepolicy => 'ProhibitEvilModules');
+    my @pols = Perl::Critic::Config->new( %pc_config )->policies();
+    is(scalar @pols, 1, '-singlepolicy switch');
 }
 
 #-----------------------------------------------------------------------------
@@ -252,7 +265,7 @@ my $total_policies   = scalar @site_policies;
     my %severity_levels = (gentle=>5, stern=>4, harsh=>3, cruel=>2, brutal=>1);
     while (my ($name, $number) = each %severity_levels) {
         my $config = Perl::Critic::Config->new( -severity => $name );
-        is( $config->severity(), $number, qq{Severity "$name" is "number"});
+        is( $config->severity(), $number, qq{Severity "$name" is "$number"});
     }
 }
 
@@ -274,8 +287,17 @@ my $total_policies   = scalar @site_policies;
     # Try using bogus named severity level
     eval{ Perl::Critic::Config->new( -severity => 'bogus' ) };
     like( $EVAL_ERROR, qr/Invalid severity: "bogus"/, 'invalid severity' );
+
+    # Try using vague -singlepolicy option
+    eval{ Perl::Critic::Config->new( -singlepolicy => '.*' ) };
+    like( $EVAL_ERROR, qr/Multiple policies matched/, 'vague -singlepolicy' );
+
+    # Try using invalid -singlepolicy option
+    eval{ Perl::Critic::Config->new( -singlepolicy => 'bogus' ) };
+    like( $EVAL_ERROR, qr/No policies matched/, 'invalid -singlepolicy' );
 }
 
+##############################################################################
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

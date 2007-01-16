@@ -10,28 +10,13 @@
 use strict;
 use warnings;
 use English qw(-no_mactch_vars);
-use Test::More tests => 10;
+use Test::More (tests => 9);
 use Perl::Critic::UserProfile;
 use Perl::Critic::PolicyFactory (test => 1);
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw();
 Perl::Critic::TestUtils::block_perlcriticrc();
-
-#-----------------------------------------------------------------------------
-
-{
-    my $policy_name = 'Perl::Critic::Policy::CodeLayout::RequireTidyCode';
-    my $userprof = Perl::Critic::UserProfile->new( -profile => {} );
-    my $pf = Perl::Critic::PolicyFactory->new( -profile  => $userprof );
-    my @site_policy_names = Perl::Critic::PolicyFactory::site_policy_names();
-    my $npolicies = scalar @site_policy_names;
-
-
-    # Now test...
-    my @policies = $pf->policies();
-    is( scalar @policies, $npolicies, "Created all $npolicies policies");
-}
 
 #-----------------------------------------------------------------------------
 
