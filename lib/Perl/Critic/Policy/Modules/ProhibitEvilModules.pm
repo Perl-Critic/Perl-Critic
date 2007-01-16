@@ -8,7 +8,6 @@ package Perl::Critic::Policy::Modules::ProhibitEvilModules;
 
 use strict;
 use warnings;
-use Carp qw(cluck);
 use English qw(-no_match_vars);
 use List::MoreUtils qw(any);
 use Perl::Critic::Utils;
@@ -40,16 +39,17 @@ sub new {
     #Set config, if defined
     if ( defined $args{modules} ) {
         for my $module ( words_from_string( $args{modules} ) ) {
+
             if ( $module =~ m{ \A [/] (.+) [/] \z }mx ) {
+
                 # These are module name patterns (e.g. /Acme/)
                 my $re = $1; # Untainting
                 my $pattern = eval { qr/$re/ };
-                if ( $EVAL_ERROR ) {
-                    cluck qq{Regexp syntax error in "$module"};
-                }
-                else {
-                    push @{ $self->{_evil_modules_rx} }, $pattern;
-                }
+
+                die qq{Regexp syntax error in your profile: "$module"\n}
+                    if $EVAL_ERROR;
+
+                push @{ $self->{_evil_modules_rx} }, $pattern;
             }
             else {
                 # These are literal module names (e.g. Acme::Foo)
