@@ -11,6 +11,7 @@ use strict;
 use warnings;
 use Carp qw(confess);
 use English qw(-no_match_vars);
+use File::Basename qw(basename);
 use IO::String qw();
 use Pod::PlainText qw();
 use Perl::Critic::Utils;
@@ -192,6 +193,7 @@ sub to_string {
     # Wrap the more expensive ones in sub{} to postpone evaluation
     my %fspec = (
          'f' => sub { $self->filename() },
+         'F' => sub { basename( $self->filename()) },
          'l' => sub { $self->location->[0] },
          'c' => sub { $self->location->[1] },
          'm' => $self->description(),
@@ -387,13 +389,12 @@ variable.  See L<"OVERLOADS"> for the details.
 
 =item C<$Perl::Critic::Violation::FORMAT>
 
-This variable is deprecated.  Use the C<set_format> and C<get_format>
-class methods instead.
+B<DEPRECATED:> Use the C<set_format> and C<get_format> methods instead.
 
-Sets the format for all Violation objects when they are evaluated in
-string context.  The default is C<'%d at line %l, column %c. %e'>.
-See L<"OVERLOADS"> for formatting options.  If you want to change
-C<$FORMAT>, you should probably localize it first.
+Sets the format for all Violation objects when they are evaluated in string
+context.  The default is C<'%d at line %l, column %c. %e'>.  See
+L<"OVERLOADS"> for formatting options.  If you want to change C<$FORMAT>, you
+should probably localize it first.
 
 =back
 
@@ -407,18 +408,19 @@ Formats are a combination of literal and escape characters similar to
 the way C<sprintf> works.  If you want to know the specific formatting
 capabilities, look at L<String::Format>. Valid escape characters are:
 
-  Escape    Meaning
-  -------   -----------------------------------------------------------------
-  %m        Brief description of the violation
-  %f        Name of the file where the violation occurred.
-  %l        Line number where the violation occurred
-  %c        Column number where the violation occurred
-  %e        Explanation of violation or page numbers in PBP
-  %d        Full diagnostic discussion of the violation
-  %r        The string of source code that caused the violation
-  %P        Name of the Policy module that created the violation
-  %p        Name of the Policy without the Perl::Critic::Policy:: prefix
-  %s        The severity level of the violation
+    Escape    Meaning
+    -------   ----------------------------------------------------------------
+    %c        Column number where the violation occurred
+    %d        Full diagnostic discussion of the violation
+    %e        Explanation of violation or page numbers in PBP
+    %F        Just the name of the file where the violation occurred.
+    %f        Path to the file where the violation occurred.
+    %l        Line number where the violation occurred
+    %m        Brief description of the violation
+    %P        Full name of the Policy module that created the violation
+    %p        Name of the Policy without the Perl::Critic::Policy:: prefix
+    %r        The string of source code that caused the violation
+    %s        The severity level of the violation
 
 Here are some examples:
 

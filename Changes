@@ -10,6 +10,11 @@
      Bug Fixes:
      * 23994: Test 56 in t/05_utils.t of Perl::Critic v0.22 fails
 
+     Groovy New Features:
+     * Added '%F' to the Violation format specifications.  This will
+       give you just the name of file where the violation occurred
+       (i.e. without the path).
+
 
      Interface Changes:
      * The syntax for theme expressions has changed.  Instead of using

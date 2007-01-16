@@ -641,7 +641,8 @@ are:
     %c        Column number where the violation occurred
     %d        Full diagnostic discussion of the violation
     %e        Explanation of violation or page numbers in PBP
-    %f        Name of the file where the violation occurred.
+    %F        Just the name of the file where the violation occurred.
+    %f        Path to the file where the violation occurred.
     %l        Line number where the violation occurred
     %m        Brief description of the violation
     %P        Full name of the Policy module that created the violation
