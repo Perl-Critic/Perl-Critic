@@ -1,6 +1,6 @@
 ---
 name: Perl-Critic
-version: 1.00
+version: 1
 author:
   - Jeffrey Thalhammer <thaljef@cpan.org>
 abstract: Critique Perl source code for best-practices
@@ -20,7 +20,6 @@ requires:
   Pod::PlainText: 0
   Pod::Usage: 0
   Scalar::Util: 0
-  Set::Scalar: 1.2
   String::Format: 1.13
 build_requires:
   Test::More: 0
@@ -30,7 +29,7 @@ recommends:
 provides:
   Perl::Critic:
     file: lib/Perl/Critic.pm
-    version: 1.00
+    version: 1
   Perl::Critic::Config:
     file: lib/Perl/Critic/Config.pm
     version: 1
@@ -346,7 +345,7 @@ provides:
   Perl::Critic::Violation:
     file: lib/Perl/Critic/Violation.pm
     version: 1
-generated_by: Module::Build version 0.2805
+generated_by: Module::Build version 0.2806
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.2.html
   version: 1.2
