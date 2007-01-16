@@ -1,0 +1,171 @@
+#------------------------------------------------------------------------------
+## name Basic passes.
+## filename OK.pm
+## failures 0
+## cut
+
+package Filename::OK;
+1;
+
+#------------------------------------------------------------------------------
+## name Basic passes.
+## filename Filename/OK.pm
+## failures 0
+## cut
+
+package Filename::OK;
+1;
+
+#------------------------------------------------------------------------------
+## name Basic passes.
+## filename lib/Filename/OK.pm
+## failures 0
+## cut
+
+package Filename::OK;
+1;
+
+#------------------------------------------------------------------------------
+## name Basic passes.
+## filename blib/lib/Filename/OK.pm
+## failures 0
+## cut
+
+package Filename::OK;
+1;
+
+#------------------------------------------------------------------------------
+## name Basic passes.
+## filename OK.pl
+## failures 0
+## cut
+
+package Filename::OK;
+1;
+
+#------------------------------------------------------------------------------
+## name Basic passes.
+## filename Filename-OK-1.00/OK.pm
+## failures 0
+## cut
+
+package Filename::OK;
+1;
+
+#------------------------------------------------------------------------------
+## name Basic passes.
+## filename Filename-OK/OK.pm
+## failures 0
+## cut
+
+package Filename::OK;
+1;
+
+#------------------------------------------------------------------------------
+## name Basic passes.
+## filename Foobar-1.00/OK.pm
+## failures 0
+## cut
+
+package Filename::OK;
+1;
+
+#------------------------------------------------------------------------------
+## name Basic Failure.
+## filename Bad.pm
+## failures 1
+## cut
+
+package Filename::OK;
+1;
+
+#------------------------------------------------------------------------------
+## name Basic Failure.
+## filename Filename/Bad.pm
+## failures 1
+## cut
+
+package Filename::OK;
+1;
+
+#------------------------------------------------------------------------------
+## name Basic Failure.
+## filename lib/Filename/BadOK.pm
+## failures 1
+## cut
+
+package Filename::OK;
+1;
+
+#------------------------------------------------------------------------------
+## name Basic Failure.
+## filename ok.pm
+## failures 1
+## cut
+
+package Filename::OK;
+1;
+
+#------------------------------------------------------------------------------
+## name Basic Failure.
+## filename filename/OK.pm
+## failures 1
+## cut
+
+package Filename::OK;
+1;
+
+#------------------------------------------------------------------------------
+## name Basic Failure.
+## filename Foobar/OK.pm
+## failures 1
+## cut
+
+package Filename::OK;
+1;
+
+#------------------------------------------------------------------------------
+## name Pass with apostrophe.
+## filename Oh.pm
+## failures 0
+## cut
+
+package D'Oh;
+1;
+
+#------------------------------------------------------------------------------
+## name Pass with apostrophe.
+## filename D/Oh.pm
+## failures 0
+## cut
+
+package D'Oh;
+1;
+
+#------------------------------------------------------------------------------
+## name Failure with apostrophe.
+## filename oh.pm
+## failures 1
+## cut
+
+package D'Oh;
+1;
+
+#------------------------------------------------------------------------------
+## name Failure with apostrophe.
+## filename d/Oh.pm
+## failures 1
+## cut
+
+package D'Oh;
+1;
+
+##############################################################################
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :
