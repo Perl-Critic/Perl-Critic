@@ -49,13 +49,6 @@ Replace current workaround for C<RequireUseStrict>.
 Fix for this should not cause T::P::C to fail, because "invalid" may simply
 mean that the policy isn't locally installed.
 
-=item * Invalid parameters in F<.perlcriticrc> do not cause any warnings.
-
-=item * Fix inappropriate uses of C<confess>.
-
-E.g. when no files to process have been found or multiple policies match
-the C<--singlepolicy> option.
-
 =item * Modules::RequireVersionVar
 
 Doesn't enforce three-part versions
@@ -296,15 +289,6 @@ L<http://rt.cpan.org/Ticket/Display.html?id=20714>
 =head1 REFACTORINGS and ENHANCEMENTS
 
 =over 4
-
-=item * Rework P::C::Config and P::C::PolicyFactory
-
-The interaction between Config and PolicyFactory is a mess.  An instance of
-the PolicyFactory should probably be an attribute of the Config.  Then it can
-call PolicyFactory::create_policy to construct Policies ad-hoc.
-
-An alternative is to make P::C::PolicyFactory into a singleton, but I'm not
-sure what that would buy us.
 
 =item * MOVE THE LINE-DISABLING INTO P::C::Document
 
