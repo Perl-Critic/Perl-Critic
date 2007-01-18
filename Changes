@@ -17,6 +17,9 @@
        give you just the name of file where the violation occurred
        (i.e. without the path).
 
+     * Improved validation of .perlcriticrc settings.  An invalid
+       default setting will now cause a fatal exception.
+
 
      Interface Changes:
      * The syntax for theme expressions has changed.  Instead of using

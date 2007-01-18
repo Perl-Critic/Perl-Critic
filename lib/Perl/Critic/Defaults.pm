@@ -32,40 +32,27 @@ sub _init {
     my ( $self, %args ) = @_;
 
     # Multi-value defaults
-    my $exclude = _default( 'exclude', q{}, %args );
+    my $exclude = delete $args{exclude} || $EMPTY;
     $self->{_exclude}    = [ words_from_string( $exclude ) ];
-    my $include = _default( 'include', q{}, %args );
+    my $include = delete $args{include} || $EMPTY;
     $self->{_include}    = [ words_from_string( $include ) ];
 
     # Single-value defaults
-    $self->{_force}        = _default('force',       $FALSE,            %args);
-    $self->{_only}         = _default('only',        $FALSE,            %args);
-    $self->{_singlepolicy} = _default('singlepolicy', $EMPTY,           %args);
-    $self->{_severity}     = _default('severity',    $SEVERITY_HIGHEST, %args);
-    $self->{_theme}        = _default('theme',       $EMPTY,            %args);
-    $self->{_top}          = _default('top',         $FALSE,            %args);
-    $self->{_verbose}      = _default('verbose',     4,                 %args);
+    $self->{_force}        = delete $args{force}        || $FALSE;
+    $self->{_only}         = delete $args{only}         || $FALSE;
+    $self->{_singlepolicy} = delete $args{singlepolicy} || $EMPTY;
+    $self->{_severity}     = delete $args{severity}     || $SEVERITY_HIGHEST;
+    $self->{_theme}        = delete $args{theme}        || $EMPTY;
+    $self->{_top}          = delete $args{top}          || $FALSE;
+    $self->{_verbose}      = delete $args{verbose}      || 4;
+
+    # If there's anything left, warn about invalid settings
+    if ( my @remaining = sort keys %args ){
+        my @warnings = map { qq{Setting "$_" is not supported\n} } @remaining;
+        die @warnings, "\n";
+    }
 
     return $self;
-}
-
-#-----------------------------------------------------------------------------
-
-sub _default {
-    my ($key_name, $default, %args) = @_;
-    $key_name = _kludge( $key_name, %args );
-    return $key_name ? $args{$key_name} : $default;
-}
-
-#-----------------------------------------------------------------------------
-
-sub _kludge {
-    my ($key, %args) = @_;
-    return          if not defined $key;
-    return $key     if defined $args{$key};
-    return "-$key"  if defined $args{"-$key"};
-    return "--$key" if defined $args{"--$key"};
-    return; # Key does not exist
 }
 
 #-----------------------------------------------------------------------------
