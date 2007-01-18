@@ -30,22 +30,21 @@ sub new {
 sub _init {
 
     my ( $self, %args ) = @_;
-    my $key = undef;
 
     # Multi-value defaults
     my $exclude = _default( 'exclude', q{}, %args );
-    $self->{_exclude}    = [ split m/\s+/mx, $exclude ];
+    $self->{_exclude}    = [ words_from_string( $exclude ) ];
     my $include = _default( 'include', q{}, %args );
-    $self->{_include}    = [ split m/\s+/mx, $include ];
+    $self->{_include}    = [ words_from_string( $include ) ];
 
     # Single-value defaults
-    $self->{_force}        = _default('force',        $FALSE,            %args);
-    $self->{_only}         = _default('only',         $FALSE,            %args);
-    $self->{_singlepolicy} = _default('singlepolicy', $EMPTY,            %args);
-    $self->{_severity}     = _default('severity',     $SEVERITY_HIGHEST, %args);
-    $self->{_theme}        = _default('theme',        $EMPTY,            %args);
-    $self->{_top}          = _default('top',          $FALSE,            %args);
-    $self->{_verbose}      = _default('verbose',      4,                 %args);
+    $self->{_force}        = _default('force',       $FALSE,            %args);
+    $self->{_only}         = _default('only',        $FALSE,            %args);
+    $self->{_singlepolicy} = _default('singlepolicy', $EMPTY,           %args);
+    $self->{_severity}     = _default('severity',    $SEVERITY_HIGHEST, %args);
+    $self->{_theme}        = _default('theme',       $EMPTY,            %args);
+    $self->{_top}          = _default('top',         $FALSE,            %args);
+    $self->{_verbose}      = _default('verbose',     4,                 %args);
 
     return $self;
 }
@@ -57,6 +56,8 @@ sub _default {
     $key_name = _kludge( $key_name, %args );
     return $key_name ? $args{$key_name} : $default;
 }
+
+#-----------------------------------------------------------------------------
 
 sub _kludge {
     my ($key, %args) = @_;
