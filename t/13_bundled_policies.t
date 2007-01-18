@@ -9,15 +9,22 @@
 
 use strict;
 use warnings;
-use Perl::Critic::Utils;
-use Perl::Critic::TestUtils qw(bundled_policy_names);
 use Perl::Critic::Config;
+use Perl::Critic::PolicyFactory (test => 1);
 use Test::More (tests => 1);
 
-my $config = Perl::Critic::Config->new(-theme => 'core');
-my @found_policies = sort map { policy_long_name(ref $_) } $config->policies();
-is_deeply(\@found_policies, [bundled_policy_names()], 'successfully loaded policies matches MANIFEST');
+# common P::C testing tools
+use Perl::Critic::TestUtils qw(bundled_policy_names);
+Perl::Critic::TestUtils::block_perlcriticrc();
 
+#-----------------------------------------------------------------------------
+
+my $config = Perl::Critic::Config->new( -theme => 'core', -profile => '' );
+my @found_policies = sort map { ref $_ } $config->policies();
+my $test_label = 'successfully loaded policies matches MANIFEST';
+is_deeply( \@found_policies, [bundled_policy_names()], $test_label );
+
+##############################################################################
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4
