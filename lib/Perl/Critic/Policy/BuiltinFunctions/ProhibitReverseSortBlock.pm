@@ -16,7 +16,7 @@ our $VERSION = 1.00;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{Forbid $b before $a in sort blocks};
+my $desc = q{Forbid $b before $a in sort blocks}; ## no critic (Interpolation)
 my $expl = [ 152 ];
 
 #-----------------------------------------------------------------------------
