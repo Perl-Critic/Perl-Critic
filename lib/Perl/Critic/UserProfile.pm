@@ -33,7 +33,9 @@ sub new {
 sub _init {
 
     my ( $self, %args ) = @_;
-    $self->_load_profile( $args{-profile}   || _find_profile_path() );
+    # The profile can be defined, undefined, or empty.
+    my $profile = defined $args{-profile} ? $args{-profile} : _find_profile_path();
+    $self->_load_profile( $profile );
     $self->_set_defaults();
     return $self;
 }
@@ -55,8 +57,11 @@ sub policy_params {
     my $long_name  = ref $policy || policy_long_name( $policy );
     my $short_name = policy_short_name( $long_name );
 
-    return $profile->{$short_name}    || $profile->{$long_name}     ||
-           $profile->{"-$short_name"} || $profile->{"-$long_name"}  || {};
+    return $profile->{$short_name}
+        || $profile->{$long_name}
+        || $profile->{"-$short_name"}
+        || $profile->{"-$long_name"}
+        || {};
 }
 
 #-----------------------------------------------------------------------------
@@ -67,7 +72,9 @@ sub policy_is_disabled {
     my $profile = $self->{_profile};
     my $long_name  = ref $policy || policy_long_name( $policy );
     my $short_name = policy_short_name( $long_name );
-    return exists $profile->{"-$short_name"} || exists $profile->{"-$long_name"};
+
+    return exists $profile->{"-$short_name"}
+        || exists $profile->{"-$long_name"};
 }
 
 #-----------------------------------------------------------------------------
@@ -78,7 +85,9 @@ sub policy_is_enabled {
     my $profile = $self->{_profile};
     my $long_name  = ref $policy || policy_long_name( $policy );
     my $short_name = policy_short_name( $long_name );
-    return exists $profile->{$short_name} || exists $profile->{$long_name};
+
+    return exists $profile->{$short_name}
+        || exists $profile->{$long_name};
 }
 
 #-----------------------------------------------------------------------------
@@ -86,13 +95,7 @@ sub policy_is_enabled {
 
 sub _load_profile {
 
-    my ($self, $profile) = @_;
-
-    # "NONE" means don't load any profile
-    if (defined $profile && $profile eq 'NONE') {
-        $self->{_profile} = {};
-        return $self;
-    }
+    my ( $self, $profile ) = @_;
 
     my %loader_for = (
         ARRAY   => \&_load_profile_from_array,
@@ -104,6 +107,7 @@ sub _load_profile {
     my $ref_type = ref $profile || 'DEFAULT';
     my $loader = $loader_for{$ref_type};
     confess qq{Can't load UserProfile from type "$ref_type"} if ! $loader;
+
     $self->{_profile} = $loader->($profile);
     return $self;
 }
@@ -111,6 +115,7 @@ sub _load_profile {
 #-----------------------------------------------------------------------------
 
 sub _set_defaults {
+
     my ($self) = @_;
     my $profile = $self->{_profile};
     my $defaults = $profile->{_} || {};
@@ -121,7 +126,14 @@ sub _set_defaults {
 #-----------------------------------------------------------------------------
 
 sub _load_profile_from_file {
-    my $file = shift || return {};
+
+    my ($file) = @_;
+
+    # Handle special cases.
+    return {} if not defined $file;
+    return {} if $file eq $EMPTY;
+    return {} if $file eq 'NONE';
+
     my $prof = Config::Tiny->read( $file );
     if (defined $prof) {
         return $prof;

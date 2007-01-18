@@ -100,26 +100,40 @@ sub create_policy {
 
     my ($self, %args ) = @_;
 
-    my $policy_name = $args{-name} || confess q{The -name argument is required};
+    my $policy_name = $args{-name}
+        or confess q{The -name argument is required};
+
+
+    # Normalize policy name to a fully-qualified package name
     $policy_name = policy_long_name( $policy_name );
 
+
+    # Get the policy parameters from the user profile if they were
+    # not given to us directly.  If none exist, use an empty hash.
     my $profile = $self->{_profile};
-    my $policy_params = $args{-params} || $profile->policy_params($policy_name);
+    my $policy_params = $args{-params}
+        || $profile->policy_params($policy_name) || {};
+
 
     # This function will delete keys from $policy_params, so we copy them to
     # avoid modifying the callers's hash.  What a pain in the ass!
     my %policy_params_copy = $policy_params ? %{$policy_params} : ();
+
 
     # Pull out base parameters.
     my $user_set_themes = delete $policy_params_copy{set_themes};
     my $user_add_themes = delete $policy_params_copy{add_themes};
     my $user_severity   = delete $policy_params_copy{severity};
 
+
     # Validate remaining parameters. This dies on failure
     _validate_policy_params( $policy_name, \%policy_params_copy );
 
-    # Construct policy from remaining params
-    my $policy = $policy_name->new( %policy_params_copy );
+
+    # Construct policy from remaining params.  Trap errors.
+    my $policy = eval { $policy_name->new( %policy_params_copy ) };
+    confess qq{Unable to create policy '$policy_name': $EVAL_ERROR} if $EVAL_ERROR;
+
 
     # Set base attributes on policy
     if ( defined $user_severity ) {
@@ -142,8 +156,16 @@ sub create_policy {
 
 #-----------------------------------------------------------------------------
 
+sub create_all_policies {
+
+    my $self = shift;
+    return map { $self->create_policy( -name => $_ ) } site_policy_names();
+}
+
+#-----------------------------------------------------------------------------
+
 sub site_policy_names {
-    return @SITE_POLICY_NAMES;
+    return sort @SITE_POLICY_NAMES;
 }
 
 #-----------------------------------------------------------------------------
@@ -219,10 +241,11 @@ B<-params> is an optional reference to hash of parameters that will be passed
 into the constructor of the Policy.  If C<-params> is not defined, we will use
 the appropriate Policy parameters from the L<Perl::Critic::UserProfile>.
 
-=item C< policies() >
+=item C< create_all_policies() >
 
-Returns a list of of references to all the L<Perl::Critic::Policy> objects
-that were created by this PolicyFactory.
+Constructs and returns one instance of each L<Perl::Critic::Policy> subclass
+that is installed on the local system.  Each Policy will be created with the
+appropriate parameters from the user's configuration profile.
 
 =back
 

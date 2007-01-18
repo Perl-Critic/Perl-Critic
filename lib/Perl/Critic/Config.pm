@@ -48,7 +48,7 @@ sub _init {
     my $p        = $args{-profile}; #Can be file path or data struct
     my $profile  = Perl::Critic::UserProfile->new( -profile => $p );
     my $defaults = $profile->defaults();
-    $self->{_profile}  = $profile;
+    $self->{_profile} = $profile;
 
     # If given, these options should always have a true value.
     $self->{_include}      = $args{-include}      || $defaults->include();
@@ -69,11 +69,11 @@ sub _init {
 
     # Construct a Theme object from model
     my $theme_model = $args{-theme} || $defaults->theme();
-    my $theme = Perl::Critic::Theme->new(-model => $theme_model);
+    my $theme = Perl::Critic::Theme->new( -model => $theme_model );
     $self->{_theme} = $theme;
 
     # Construct a Factory with the Profile
-    my $factory = Perl::Critic::PolicyFactory->new(-profile => $profile);
+    my $factory = Perl::Critic::PolicyFactory->new( -profile => $profile );
     $self->{_factory} = $factory;
 
     # Initialize internal storage for Policies
@@ -93,28 +93,24 @@ sub _init {
 sub add_policy {
 
     my ( $self, %args ) = @_;
-    my $policy  = $args{-policy}
-     or confess q{The -policy argument is required};
 
-    # If the -policy is already a Policy object, then just add it directly.
+    my $policy  = $args{-policy}
+        or confess q{The -policy argument is required};
+
+    # If the -policy is already a blessed object, then just add it directly.
     if ( blessed $policy ) {
         push @{ $self->{_policies} }, $policy;
         return $self;
     }
 
     # NOTE: The "-config" option is supported for backward compatibility.
-    my $params  = $args{-params} || $args{-config} ||
-        $self->{_profile}->policy_params( $policy );
+    my $params = $args{-params} || $args{-config};
 
-    eval {
-        my $pf = $self->{_factory};
-        my $policy_name = policy_long_name( $policy );
-        my $policy = $pf->create_policy( -name => $policy_name, -params => $params );
-        push @{ $self->{_policies} }, $policy;
-    };
+    my $factory    = $self->{_factory};
+    my $policy_obj = $factory->create_policy(-name=>$policy, -params=>$params);
+    push @{ $self->{_policies} }, $policy_obj;
 
-    # Failure to create a policy is now fatal!
-    confess qq{Unable to create policy '$policy': $EVAL_ERROR} if $EVAL_ERROR;
+
     return $self;
 }
 
@@ -124,13 +120,9 @@ sub _load_policies {
 
     my ( $self ) = @_;
     my $factory  = $self->{_factory};
-    my @policies = $factory->site_policy_names();
+    my @policies = $factory->create_all_policies();
 
-    for my $policy_name ( @policies ) {
-
-        # First, create the policy object.  The PolicyFactory will create the
-        # policy with the user's preferred settings and stuff.
-        my $policy  = $factory->create_policy( -name => $policy_name );
+    for my $policy ( @policies ) {
 
         # If -singlepolicy is true, only load policies that match it
         if ( $self->singlepolicy() ) {
@@ -227,6 +219,7 @@ sub _policy_is_single_policy {
 #-----------------------------------------------------------------------------
 
 sub _throw_single_policy_exception {
+
     my $self = shift;
 
     my $error_msg = $EMPTY;
