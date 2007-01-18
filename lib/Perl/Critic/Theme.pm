@@ -72,6 +72,7 @@ sub policy_is_thematic {
     $as_code =~ s/ ( [\w\d]+ ) /exists $themes{$1} || 0/gemx;
     my $is_thematic = eval $as_code;  ## no critic (ProhibitStringyEval)
     die qq{Syntax error in theme "$model"\n} if $EVAL_ERROR;
+
     return $is_thematic;
 }
 
@@ -92,7 +93,7 @@ sub _cook_model {
     $raw_model =~ s{   [*] }{&&}ixmg;    # "*" -> "&&"    e.g. intersection
     $raw_model =~ s{   [+] }{||}ixmg;    # "+" -> "||"    e.g. union
 
-    my $cooked_model = $raw_model;  #Is now cooked!
+    my $cooked_model = lc $raw_model;  #Is now cooked!
     return $cooked_model;
 }
 
@@ -118,18 +119,17 @@ objects.  There are no user-serviceable parts here.
 
 =over 8
 
-=item C<< new( -model => $model_expression >>
+=item C<< new( -rule => $rule_expression >>
 
-Returns a reference to a new Perl::Critic::Theme object.  C<-model> is a
-string expression that defines how to construct the Theme. See L<"THEME
-MODELS"> for more information.
-
-Returns a list of Policy objects that comprise this Theme.
+Returns a reference to a new Perl::Critic::Theme object.  C<-rule> is a string
+expression that evaluates to true or false for each Policy.. See L<"THEME
+RULES"> for more information.
 
 =item C<< policy_is_thematic( -policy => $policy ) >>
 
 Given a reference to a L<Perl::Critic::Policy> object, this method returns
-true if the Policy belongs in this Theme.
+evaluates the rule against the themes that are associated with the Policy.
+Returns 1 if the Policy satisfies the rule, 0 otherwise.
 
 =item C< model() >
 
