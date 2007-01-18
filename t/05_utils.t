@@ -263,7 +263,8 @@ is( interpolate( 'literal'    ), "literal",    'Interpolation' );
 #-----------------------------------------------------------------------------
 
 {
-    my $doc = PPI::Document->new(\'sub foo {}');
+    my $code = 'sub foo{}';
+    my $doc = PPI::Document->new( \$code );
     my $words = $doc->find('PPI::Token::Word');
     is(scalar @{$words}, 2, 'count PPI::Token::Words');
     is((scalar grep {is_function_call($_)} @{$words}), 0, 'is_function_call');
@@ -278,7 +279,8 @@ Perl::Critic::TestUtils::block_perlcriticrc();
 
 
 my @native_policies = bundled_policy_names();
-my @found_policies  = all_perl_files( 'lib/Perl/Critic/Policy' );
+my $policy_dir = File::Spec->catfile( qw(lib Perl Critic Policy) );
+my @found_policies  = all_perl_files( $policy_dir );
 is( scalar @found_policies, scalar @native_policies, 'Find all perl code');
 
 # Local Variables:
