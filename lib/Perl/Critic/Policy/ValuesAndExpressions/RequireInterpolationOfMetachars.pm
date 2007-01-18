@@ -12,6 +12,8 @@ use warnings;
 use Perl::Critic::Utils;
 use base 'Perl::Critic::Policy';
 
+#-----------------------------------------------------------------------------
+
 our $VERSION = 1.00;
 
 #-----------------------------------------------------------------------------
@@ -22,23 +24,34 @@ my $expl = [ 51 ];
 #-----------------------------------------------------------------------------
 
 sub supported_parameters { return() }
-sub default_severity   { return $SEVERITY_LOWEST }
-sub default_themes      { return qw(core pbp cosmetic) }
-sub applies_to         { return qw(PPI::Token::Quote::Single
-                                   PPI::Token::Quote::Literal) }
+sub default_severity     { return $SEVERITY_LOWEST }
+sub default_themes       { return qw(core pbp cosmetic) }
+sub applies_to           { return qw(PPI::Token::Quote::Single
+                                     PPI::Token::Quote::Literal) }
 
 #-----------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
-    return if ! _has_interpolation($elem);
+    # The string() method strips off the quotes
+    return if not _needs_interpolation( $elem->string() );
+    return if _looks_like_email_address( $elem->string() );
     return $self->violation( $desc, $expl, $elem );
 }
 
-sub _has_interpolation {
-    my $elem = shift;
-    return $elem =~ m{ (?<!\\) [\$\@] \S{2,} }mx   #Contains unescaped $. or @.
-        || $elem =~ m{ \\[tnrfae0xcNLuLUEQ]  }mx;  #Containts escaped metachars
+#-----------------------------------------------------------------------------
+
+sub _needs_interpolation {
+    my $string = shift;
+    return $string =~ m{ [\$\@] \S+ }mxo             #Contains a $ or @
+        || $string =~ m{ \\[tnrfae0xcNLuLUEQ] }mxo;  #Contains metachars
+}
+
+#-----------------------------------------------------------------------------
+
+sub _looks_like_email_address {
+    my $string = shift;
+    return $string =~ m{\A [^\@\s]+ \@ [\w\-\.]+ \z}mxo;
 }
 
 1;

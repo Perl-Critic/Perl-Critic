@@ -33,6 +33,25 @@ $sigil_at_end_of_word = q(scalar$ list@);
 
 #-----------------------------------------------------------------------------
 
+## name Things that look like email addresses are exempt
+## failures 0
+## cut
+
+$simple  = 'me@foo.bar';
+$complex = q{don-quixote@man-from.lamancha.org};
+
+#-----------------------------------------------------------------------------
+
+## name Email address is part of larger string
+## TODO False positive: we should allow this but I'm feeling lazy right now.
+## failures 0
+## cut
+
+$simple  = 'Email: me@foo.bar';
+$complex = q{"don-quixote@man-from.lamancha.org" is my address};
+
+#-----------------------------------------------------------------------------
+
 ##############################################################################
 #      $URL$
 #     $Date$
