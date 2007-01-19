@@ -284,6 +284,10 @@ Forbid [\s\t] before \n.  This is a subset of RequireTidyCode.
 
 L<http://rt.cpan.org/Ticket/Display.html?id=20714>
 
+=item * BuiltinFunctions::ProhibitExtraneousScalarCall
+
+Recommend that C<if (scalar @array)> be rewritten as C<if (@array)>.
+
 =back
 
 =head1 REFACTORINGS and ENHANCEMENTS
