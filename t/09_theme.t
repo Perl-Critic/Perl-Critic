@@ -18,9 +18,9 @@ use Test::More (tests => 66);
 
 #-----------------------------------------------------------------------------
 
-ILLEGAL_MODELS:{
+ILLEGAL_RULES:{
 
-    my @invalid_models = (
+    my @invalid_rules = (
         '$cosmetic',
         '"cosmetic"',
         '#cosmetic > bugs',
@@ -31,17 +31,17 @@ ILLEGAL_MODELS:{
         'cosmetic @ bugs ^ pbp',
     );
 
-    for my $invalid ( @invalid_models ) {
-        eval { Perl::Critic::Theme::->new( -model => $invalid ) };
-        like( $EVAL_ERROR, qr/Illegal char/, qq{Invalid model: "$invalid"});
+    for my $invalid ( @invalid_rules ) {
+        eval { Perl::Critic::Theme::->new( -rule => $invalid ) };
+        like( $EVAL_ERROR, qr/Illegal char/, qq{Invalid rule: "$invalid"});
     }
 }
 
 #-----------------------------------------------------------------------------
 
-VALID_MODELS:{
+VALID_RULES:{
 
-    my @valid_models = (
+    my @valid_rules = (
         'cosmetic',
         '!cosmetic',
         '-cosmetic',
@@ -62,8 +62,8 @@ VALID_MODELS:{
         'cosmetic or (bugs not pbp)',
     );
 
-    for my $valid ( @valid_models ) {
-        my $theme = Perl::Critic::Theme->new( -model => $valid );
+    for my $valid ( @valid_rules ) {
+        my $theme = Perl::Critic::Theme->new( -rule => $valid );
         ok( $theme, qq{Valid expression: "$valid"} );
     }
 }
@@ -93,7 +93,7 @@ TRANSLATIONS:
     );
 
     while ( my ($raw, $expected) = each %expressions ) {
-        my $cooked = Perl::Critic::Theme::_cook_model( $raw );
+        my $cooked = Perl::Critic::Theme::_cook_rule( $raw );
         is( $cooked, $expected, qq{Theme cooking: '$raw' -> '$cooked'});
     }
 }
@@ -109,89 +109,89 @@ TRANSLATIONS:
 
     #--------------
 
-    my $model = 'cosmetic';
-    my $theme = Perl::Critic::Theme->new( -model => $model );
+    my $rule = 'cosmetic';
+    my $theme = Perl::Critic::Theme->new( -rule => $rule );
     my @members = grep { $theme->policy_is_thematic( -policy => $_) }  @pols;
     ok( all { has_theme( $_, 'cosmetic' ) } @members );
 
     #--------------
 
-    $model = 'cosmetic - pbp';
-    $theme = Perl::Critic::Theme->new( -model => $model );
+    $rule = 'cosmetic - pbp';
+    $theme = Perl::Critic::Theme->new( -rule => $rule );
     @members = grep { $theme->policy_is_thematic( -policy => $_) }  @pols;
     ok( all  { has_theme( $_, 'cosmetic' ) } @members );
     ok( none { has_theme( $_, 'pbp')       } @members );
 
-    $model = 'cosmetic and not pbp';
-    $theme = Perl::Critic::Theme->new( -model => $model );
+    $rule = 'cosmetic and not pbp';
+    $theme = Perl::Critic::Theme->new( -rule => $rule );
     @members = grep { $theme->policy_is_thematic( -policy => $_) }  @pols;
     ok( all  { has_theme( $_, 'cosmetic' ) } @members );
     ok( none { has_theme( $_, 'pbp')       } @members );
 
-    $model = 'cosmetic && ! pbp';
-    $theme = Perl::Critic::Theme->new( -model => $model );
+    $rule = 'cosmetic && ! pbp';
+    $theme = Perl::Critic::Theme->new( -rule => $rule );
     @members = grep { $theme->policy_is_thematic( -policy => $_) }  @pols;
     ok( all  { has_theme( $_, 'cosmetic' ) } @members );
     ok( none { has_theme( $_, 'pbp')       } @members );
 
     #--------------
 
-    $model = 'cosmetic + pbp';
-    $theme = Perl::Critic::Theme->new( -model => $model );
+    $rule = 'cosmetic + pbp';
+    $theme = Perl::Critic::Theme->new( -rule => $rule );
     @members = grep { $theme->policy_is_thematic( -policy => $_) } @pols;
     ok( all  { has_theme($_, 'cosmetic') ||
                has_theme($_, 'pbp') } @members );
 
-    $model = 'cosmetic || pbp';
-    $theme = Perl::Critic::Theme->new( -model => $model );
+    $rule = 'cosmetic || pbp';
+    $theme = Perl::Critic::Theme->new( -rule => $rule );
     @members = grep { $theme->policy_is_thematic( -policy => $_) } @pols;
     ok( all  { has_theme($_, 'cosmetic') ||
                has_theme($_, 'pbp') } @members );
 
-    $model = 'cosmetic or pbp';
-    $theme = Perl::Critic::Theme->new( -model => $model );
+    $rule = 'cosmetic or pbp';
+    $theme = Perl::Critic::Theme->new( -rule => $rule );
     @members = grep { $theme->policy_is_thematic( -policy => $_) } @pols;
     ok( all  { has_theme($_, 'cosmetic') ||
                has_theme($_, 'pbp') } @members );
 
     #--------------
 
-    $model = 'bugs * pbp';
-    $theme = Perl::Critic::Theme->new( -model => $model );
+    $rule = 'bugs * pbp';
+    $theme = Perl::Critic::Theme->new( -rule => $rule );
     @members = grep { $theme->policy_is_thematic( -policy => $_) } @pols;
     ok( all  { has_theme($_, 'bugs')  } @members );
     ok( all  { has_theme($_, 'pbp')   } @members );
 
-    $model = 'bugs and pbp';
-    $theme = Perl::Critic::Theme->new( -model => $model );
+    $rule = 'bugs and pbp';
+    $theme = Perl::Critic::Theme->new( -rule => $rule );
     @members = grep { $theme->policy_is_thematic( -policy => $_) } @pols;
     ok( all  { has_theme($_, 'bugs')  } @members );
     ok( all  { has_theme($_, 'pbp')   } @members );
 
-    $model = 'bugs && pbp';
-    $theme = Perl::Critic::Theme->new( -model => $model );
+    $rule = 'bugs && pbp';
+    $theme = Perl::Critic::Theme->new( -rule => $rule );
     @members = grep { $theme->policy_is_thematic( -policy => $_) } @pols;
     ok( all  { has_theme($_, 'bugs')  } @members );
     ok( all  { has_theme($_, 'pbp')   } @members );
 
     #-------------
 
-    $model = 'pbp - (danger * security)';
-    $theme = Perl::Critic::Theme->new( -model => $model );
+    $rule = 'pbp - (danger * security)';
+    $theme = Perl::Critic::Theme->new( -rule => $rule );
     @members = grep { $theme->policy_is_thematic( -policy => $_) } @pols;
     ok( all  { has_theme($_, 'pbp') } @members );
     ok( none { has_theme($_, 'danger') &&
                has_theme($_, 'security') } @members );
 
-    $model = 'pbp and ! (danger and security)';
-    $theme = Perl::Critic::Theme->new( -model => $model );
+    $rule = 'pbp and ! (danger and security)';
+    $theme = Perl::Critic::Theme->new( -rule => $rule );
     @members = grep { $theme->policy_is_thematic( -policy => $_) } @pols;
     ok( all  { has_theme($_, 'pbp') } @members );
     ok( none { has_theme($_, 'danger') &&
                has_theme($_, 'security') } @members );
 
-    $model = 'pbp && not (danger && security)';
-    $theme = Perl::Critic::Theme->new( -model => $model );
+    $rule = 'pbp && not (danger && security)';
+    $theme = Perl::Critic::Theme->new( -rule => $rule );
     @members = grep { $theme->policy_is_thematic( -policy => $_) } @pols;
     ok( all  { has_theme($_, 'pbp') } @members );
     ok( none { has_theme($_, 'danger') &&
@@ -199,31 +199,31 @@ TRANSLATIONS:
 
     #--------------
 
-    $model = 'bogus';
-    $theme =  Perl::Critic::Theme->new( -model => $model );
+    $rule = 'bogus';
+    $theme =  Perl::Critic::Theme->new( -rule => $rule );
     @members = grep { $theme->policy_is_thematic( -policy => $_) } @pols;
     is( scalar @members, 0, 'bogus theme' );
 
-    $model = 'bogus - pbp';
-    $theme =  Perl::Critic::Theme->new( -model => $model );
+    $rule = 'bogus - pbp';
+    $theme =  Perl::Critic::Theme->new( -rule => $rule );
     @members = grep { $theme->policy_is_thematic( -policy => $_) } @pols;
     is( scalar @members, 0, 'bogus theme' );
 
-    $model = q{};
-    $theme =  Perl::Critic::Theme->new( -model => $model );
+    $rule = q{};
+    $theme =  Perl::Critic::Theme->new( -rule => $rule );
     @members = grep { $theme->policy_is_thematic( -policy => $_) } @pols;
     is( scalar @members, scalar @pols, 'empty theme' );
 
-    $model = q{};
-    $theme =  Perl::Critic::Theme->new( -model => $model );
+    $rule = q{};
+    $theme =  Perl::Critic::Theme->new( -rule => $rule );
     @members = grep { $theme->policy_is_thematic( -policy => $_) } @pols;
     is( scalar @members, scalar @pols, 'undef theme' );
 
     #--------------
     # Exceptions
 
-    $model = 'cosmetic *(';
-    $theme =  Perl::Critic::Theme->new( -model => $model );
+    $rule = 'cosmetic *(';
+    $theme =  Perl::Critic::Theme->new( -rule => $rule );
     eval{ $theme->policy_is_thematic( -policy => $pols[0] ) };
     like( $EVAL_ERROR, qr/Syntax error/, 'invalid theme expression' );
 

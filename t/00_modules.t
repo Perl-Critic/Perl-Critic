@@ -150,11 +150,11 @@ is($factory->VERSION(), $version_string);
 
 use_ok('Perl::Critic::Theme');
 can_ok('Perl::Critic::Theme', 'new');
-can_ok('Perl::Critic::Theme', 'model');
+can_ok('Perl::Critic::Theme', 'rule');
 can_ok('Perl::Critic::Theme', 'policy_is_thematic');
 
 
-my $theme = Perl::Critic::Theme->new( -model => 'foo' );
+my $theme = Perl::Critic::Theme->new( -rule => 'foo' );
 isa_ok($theme, 'Perl::Critic::Theme');
 is($theme->VERSION(), $version_string);
 

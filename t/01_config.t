@@ -126,7 +126,7 @@ my $total_policies   = scalar @site_policies;
     is($c->force(),    1,  'user default force from file'     );
     is($c->only(),     1,  'user default only from file'      );
     is($c->severity(), 3,  'user default severity from file'  );
-    is($c->theme()->model(),    'danger || risky && ! pbp',  'user default theme from file');
+    is($c->theme()->rule(),    'danger || risky && ! pbp',  'user default theme from file');
     is($c->top(),      50, 'user default top from file'       );
     is($c->verbose(),  5,  'user default verbose from file'   );
 }
@@ -193,7 +193,7 @@ my $total_policies   = scalar @site_policies;
     is( $c->force(),     0,     'Undefined -force');
     is( $c->only(),      0,     'Undefined -only');
     is( $c->severity(),  5,     'Undefined -severity');
-    is( $c->theme()->model(),   q{},   'Undefined -theme');
+    is( $c->theme()->rule(),   q{},   'Undefined -theme');
     is( $c->top(),       0,     'Undefined -top');
     is( $c->verbose(),   4,     'Undefined -verbose');
 
@@ -202,7 +202,7 @@ my $total_policies   = scalar @site_policies;
     is( $c->force(),     0,       'zero -force');
     is( $c->only(),      0,       'zero -only');
     is( $c->severity(),  1,       'zero -severity');
-    is( $c->theme()->model(),     q{},     'zero -theme');
+    is( $c->theme()->rule(),     q{},     'zero -theme');
     is( $c->top(),       0,       'zero -top');
     is( $c->verbose(),   4,       'zero -verbose');
 
@@ -211,7 +211,7 @@ my $total_policies   = scalar @site_policies;
     is( $c->force(),     0,       'empty -force');
     is( $c->only(),      0,       'empty -only');
     is( $c->severity(),  1,       'empty -severity');
-    is( $c->theme->model(),     q{},     'empty -theme');
+    is( $c->theme->rule(),     q{},     'empty -theme');
     is( $c->top(),       0,       'empty -top');
     is( $c->verbose(),   4,       'empty -verbose');
 }

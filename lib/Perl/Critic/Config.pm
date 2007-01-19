@@ -67,9 +67,9 @@ sub _init {
     $self->{_force} = 1 * _dor( $args{-force}, $defaults->force() );
     $self->{_only}  = 1 * _dor( $args{-only},  $defaults->only()  );
 
-    # Construct a Theme object from model
-    my $theme_model = $args{-theme} || $defaults->theme();
-    my $theme = Perl::Critic::Theme->new( -model => $theme_model );
+    # Construct a Theme object from rule
+    my $theme_rule = $args{-theme} || $defaults->theme();
+    my $theme = Perl::Critic::Theme->new( -rule => $theme_rule );
     $self->{_theme} = $theme;
 
     # Construct a Factory with the Profile

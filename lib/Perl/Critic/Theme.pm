@@ -33,12 +33,12 @@ sub new {
 sub _init {
 
     my ($self, %args) = @_;
-    my $model = $args{-model} || $EMPTY;
+    my $rule = $args{-rule} || $EMPTY;
 
-    die qq{Illegal character "$1" in theme model.\n}
-        if $model =~ m/ ( [^()\s\w\d\+\-\*\&\|\!] ) /mx;
+    die qq{Illegal character "$1" in theme rule.\n}
+        if $rule =~ m/ ( [^()\s\w\d\+\-\*\&\|\!] ) /mx;
 
-    $self->{_model} = _cook_model( $model );
+    $self->{_rule} = _cook_rule( $rule );
 
     return $self;
 }
@@ -46,9 +46,9 @@ sub _init {
 
 #-----------------------------------------------------------------------------
 
-sub model {
+sub rule {
     my $self = shift;
-    return $self->{_model};
+    return $self->{_rule};
 }
 
 #-----------------------------------------------------------------------------
@@ -59,42 +59,42 @@ sub policy_is_thematic {
     my $policy = $args{-policy} || confess 'The -policy argument is required';
     ref $policy || confess 'The -policy must be an object';
 
-    my $model = $self->{_model} || return 1;
+    my $rule = $self->{_rule} || return 1;
     my %themes = hashify( $policy->get_themes() );
 
-    # This bit of magic turns the model into a perl expression that can be
-    # eval-ed for truth.  Each theme name in the model is translated to 1 or 0
+    # This bit of magic turns the rule into a perl expression that can be
+    # eval-ed for truth.  Each theme name in the rule is translated to 1 or 0
     # if the $policy belongs in that theme.  For example:
     #
     # 'bugs && (pbp || core)'  ...could become... '1 && (0 || 1)'
 
-    my $as_code = $model; #Making a copy, so $model is preserved
+    my $as_code = $rule; #Making a copy, so $rule is preserved
     $as_code =~ s/ ( [\w\d]+ ) /exists $themes{$1} || 0/gemx;
     my $is_thematic = eval $as_code;  ## no critic (ProhibitStringyEval)
-    die qq{Syntax error in theme "$model"\n} if $EVAL_ERROR;
+    die qq{Syntax error in theme "$rule"\n} if $EVAL_ERROR;
 
     return $is_thematic;
 }
 
 #-----------------------------------------------------------------------------
 
-sub _cook_model {
-    my ($raw_model) = @_;
-    return if not defined $raw_model;
+sub _cook_rule {
+    my ($raw_rule) = @_;
+    return if not defined $raw_rule;
 
     #Translate logical operators
-    $raw_model =~ s{\b not \b}{!}ixmg;     # "not" -> "!"
-    $raw_model =~ s{\b and \b}{&&}ixmg;    # "and" -> "&&"
-    $raw_model =~ s{\b or  \b}{||}ixmg;    # "or"  -> "||"
+    $raw_rule =~ s{\b not \b}{!}ixmg;     # "not" -> "!"
+    $raw_rule =~ s{\b and \b}{&&}ixmg;    # "and" -> "&&"
+    $raw_rule =~ s{\b or  \b}{||}ixmg;    # "or"  -> "||"
 
     #Translate algebra operators (for backward compatibility)
-    $raw_model =~ s{\A [-] }{!}ixmg;     # "-" -> "!"     e.g. difference
-    $raw_model =~ s{   [-] }{&& !}ixmg;  # "-" -> "&& !"  e.g. difference
-    $raw_model =~ s{   [*] }{&&}ixmg;    # "*" -> "&&"    e.g. intersection
-    $raw_model =~ s{   [+] }{||}ixmg;    # "+" -> "||"    e.g. union
+    $raw_rule =~ s{\A [-] }{!}ixmg;     # "-" -> "!"     e.g. difference
+    $raw_rule =~ s{   [-] }{&& !}ixmg;  # "-" -> "&& !"  e.g. difference
+    $raw_rule =~ s{   [*] }{&&}ixmg;    # "*" -> "&&"    e.g. intersection
+    $raw_rule =~ s{   [+] }{||}ixmg;    # "+" -> "||"    e.g. union
 
-    my $cooked_model = lc $raw_model;  #Is now cooked!
-    return $cooked_model;
+    my $cooked_rule = lc $raw_rule;  #Is now cooked!
+    return $cooked_rule;
 }
 
 
@@ -131,18 +131,18 @@ Given a reference to a L<Perl::Critic::Policy> object, this method returns
 evaluates the rule against the themes that are associated with the Policy.
 Returns 1 if the Policy satisfies the rule, 0 otherwise.
 
-=item C< model() >
+=item C< rule() >
 
-Returns the model expression that was used to construct this Theme.  The model
-may have been translated into a normalized expression.  See L<"THEME MODELS">
+Returns the rule expression that was used to construct this Theme.  The rule
+may have been translated into a normalized expression.  See L<"THEME RULES">
 for more information.
 
 =back
 
-=head2 THEME MODELS
+=head2 THEME RULES
 
-A theme model is a simple mathematical expressions, where the operands are the
-names of any of the themes associated with the Perl::Critic::Polices.
+A theme rule is a simple boolean expression, where the operands are the names
+of any of the themes associated with the Perl::Critic::Polices.
 
 Theme names can be combined with logical operators to form arbitrarily complex
 expressions.  Precedence is the same as normal mathematics, but you can use
