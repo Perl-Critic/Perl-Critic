@@ -14,7 +14,7 @@ use File::Spec qw();
 use B::Keywords qw();
 use base 'Exporter';
 
-our $VERSION = 1.00;
+our $VERSION = 0.230;
 
 #-----------------------------------------------------------------------------
 # Exported symbols here. TODO: Use @EXPORT_OK and %EXPORT_TAGS instead

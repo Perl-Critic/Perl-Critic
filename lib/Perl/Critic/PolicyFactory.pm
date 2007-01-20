@@ -15,7 +15,7 @@ use File::Spec::Unix qw();
 use List::MoreUtils qw(any);
 use Perl::Critic::Utils;
 
-our $VERSION = 1.00;
+our $VERSION = 0.230;
 
 #-----------------------------------------------------------------------------
 
@@ -203,7 +203,7 @@ sub _validate_policies_in_profile {
 
     for my $policy_name ( $profile->listed_policies() ) {
         if( not exists $known_policies{$policy_name} ) {
-            warn qq{Policy "$policy_name" is not available\n};
+            warn qq{Policy "$policy_name" is not installed\n};
         }
     }
 
