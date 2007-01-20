@@ -10,7 +10,7 @@
 use strict;
 use warnings;
 use English qw(-no_mactch_vars);
-use Test::More (tests => 9);
+use Test::More (tests => 11);
 use Perl::Critic::UserProfile;
 use Perl::Critic::PolicyFactory (test => 1);
 
@@ -78,6 +78,26 @@ Perl::Critic::TestUtils::block_perlcriticrc();
     my $policy_params = {severity => 'bogus'};
     eval{ $pf->create_policy( -name => $policy_name, -params => $policy_params)};
     like( $EVAL_ERROR, qr/Invalid severity: "bogus"/m, 'create policy w/ bogus severity' );
+}
+
+#-----------------------------------------------------------------------------
+# Test warnings about bogus policies
+
+{
+    my $last_warning = q{}; #Trap warning messages here
+    local $SIG{__WARN__} = sub { $last_warning = shift };
+
+    my $profile = { 'Perl::Critic::Bogus' => {} };
+    my $userprof = Perl::Critic::UserProfile->new( -profile => $profile );
+    my $pf = Perl::Critic::PolicyFactory->new( -profile  => $userprof );
+    like( $last_warning, qr/^Policy ".*Bogus" is not installed/m );
+    $last_warning = q{};
+
+    $profile = { '-Perl::Critic::Shizzle' => {} };
+    $userprof = Perl::Critic::UserProfile->new( -profile => $profile );
+    $pf = Perl::Critic::PolicyFactory->new( -profile  => $userprof );
+    like( $last_warning, qr/^Policy ".*Shizzle" is not installed/m );
+    $last_warning = q{};
 }
 
 #-----------------------------------------------------------------------------
