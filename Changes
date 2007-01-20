@@ -5,7 +5,7 @@
 # $Revision$
 ##############################################################################
 
-[?.??]  Released on ????-??-??
+[0.23]  Released on 2007-01-19
 
      Bug Fixes:
      * 23994: Test 56 in t/05_utils.t of Perl::Critic v0.22 fails
