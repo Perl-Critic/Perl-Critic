@@ -16,7 +16,7 @@ use warnings;
 use Perl::Critic::Utils;
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 0.230;
+our $VERSION = 0.23;
 
 #-----------------------------------------------------------------------------
 

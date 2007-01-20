@@ -16,7 +16,7 @@ use File::Spec qw();
 use Perl::Critic::Defaults qw();
 use Perl::Critic::Utils;
 
-our $VERSION = 0.230;
+our $VERSION = 0.23;
 
 #-----------------------------------------------------------------------------
 

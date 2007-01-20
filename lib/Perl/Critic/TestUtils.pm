@@ -21,7 +21,7 @@ use Perl::Critic;
 use Perl::Critic::Utils;
 use Perl::Critic::PolicyFactory (-test => 1);
 
-our $VERSION = 0.230;
+our $VERSION = 0.23;
 our @EXPORT_OK = qw(
     pcritique critique fcritique
     subtests_in_tree

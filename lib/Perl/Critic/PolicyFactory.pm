@@ -15,7 +15,7 @@ use File::Spec::Unix qw();
 use List::MoreUtils qw(any);
 use Perl::Critic::Utils;
 
-our $VERSION = 0.230;
+our $VERSION = 0.23;
 
 #-----------------------------------------------------------------------------
 

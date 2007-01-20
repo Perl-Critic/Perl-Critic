@@ -13,7 +13,7 @@ use List::MoreUtils qw(any);
 use Perl::Critic::Utils;
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 0.230;
+our $VERSION = 0.23;
 
 my %label_arg_pos = (
    ok        => 1,

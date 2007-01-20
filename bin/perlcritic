@@ -516,13 +516,12 @@ C<"-cruel"> is equivalent to C<"-severity 4">.  If multiple shortcuts are
 specified, then the most restrictive one wins.  If an explicit C<-severity>
 option is also given, then all shortcut options are silently ignored.
 
-=item C<-theme EXPRESSION>
+=item C<-theme RULE>
 
-Directs C<perlcritic> to report only violations of Policies that are
-encompassed by the C<EXPRESSION>.  Themes are arbitrary names
-for groups of related policies.  You can combine theme names with
-mathematical and boolean operators to create an arbitrarily complex
-C<EXPRESSION>.  See the L<"POLICY THEMES"> section for more
+Directs C<perlcritic> to report only violations of Policies whose themes
+satisfy the C<RULE>.  Themes are arbitrary names for groups of related
+policies.  You can combine theme names with boolean operators to create an
+arbitrarily complex C<RULE>.  See the L<"POLICY THEMES"> section for more
 information.
 
 =item C<-include PATTERN>
@@ -1007,6 +1006,13 @@ Perl-Critic is evolving rapidly.  As such, some of the interfaces have
 changed in ways that are not backward-compatible.  If you have been
 using an older version of Perl-Critic and/or you have been developing
 custom Policy modules, please read this section carefully.
+
+=head2 VERSION 0.23
+
+In version 0.23, the syntax for theme rules changed.  The mathematical
+operators ( "*", "+", "-" ) are no longer supported.  You must use logical
+operators instead ( "&&", "!", "||" ).  However the meanings of these
+operators is effectively the same.  See <"POLICY THEMES"> for more details.
 
 =head2 VERSION 0.21
 

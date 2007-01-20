@@ -12,7 +12,7 @@ use warnings;
 use Perl::Critic::Utils;
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 0.230;
+our $VERSION = 0.23;
 
 my @terminals = qw( die exit croak confess );
 my %terminals = hashify( @terminals );

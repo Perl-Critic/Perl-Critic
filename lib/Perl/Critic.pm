@@ -846,6 +846,13 @@ changed in ways that are not backward-compatible.  If you have been
 using an older version of Perl-Critic and/or you have been developing
 custom Policy modules, please read this section carefully.
 
+=head2 VERSION 0.23
+
+In version 0.23, the syntax for theme rules changed.  The mathematical
+operators ( "*", "+", "-" ) are no longer supported.  You must use logical
+operators instead ( "&&", "!", "||" ).  However the meanings of these
+operators is effectively the same.  See <"POLICY THEMES"> for more details.
+
 =head2 VERSION 0.21
 
 In version 0.21, we introduced the concept of policy "themes".  All
