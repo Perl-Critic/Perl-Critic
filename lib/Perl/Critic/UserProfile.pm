@@ -91,6 +91,22 @@ sub policy_is_enabled {
 }
 
 #-----------------------------------------------------------------------------
+
+sub listed_policies {
+
+    my ( $self, $policy ) = @_;
+    my @normalized_policy_names = ();
+
+    for my $policy_name ( sort keys %{$self->{_profile}} ) {
+        $policy_name =~ s/\A - //mxo; #Chomp leading "-"
+        my $policy_long_name = policy_long_name( $policy_name );
+        push @normalized_policy_names, $policy_long_name;
+    }
+
+    return @normalized_policy_names;
+}
+
+#-----------------------------------------------------------------------------
 # Begin PRIVATE methods
 
 sub _load_profile {
@@ -118,7 +134,7 @@ sub _set_defaults {
 
     my ($self) = @_;
     my $profile = $self->{_profile};
-    my $defaults = $profile->{_} || {};
+    my $defaults = delete $profile->{_} || {};
     $self->{_defaults} = Perl::Critic::Defaults->new( %{ $defaults } );
     return $self;
 }
@@ -270,6 +286,11 @@ their user profile.
 Given a reference to a L<Perl::Critic::Policy> object or the name of one,
 returns a reference to a hash of the user's configuration parameters for that
 policy.
+
+=item C< listed_policies() >
+
+Returns a list of the names of all the Policies that are mentioned in the
+profile.  The Policy names will be fully qualified (e.g. Perl::Critic::Foo).
 
 =back
 

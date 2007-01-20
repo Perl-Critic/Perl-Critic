@@ -9,7 +9,7 @@
 
      Bug Fixes:
      * 23994: Test 56 in t/05_utils.t of Perl::Critic v0.22 fails
-     * 24005: test 95 in t/13_bundled_policies fails in 0.22 
+     * 24005: test 95 in t/13_bundled_policies fails in 0.22
 
 
      Groovy New Features:
@@ -17,8 +17,9 @@
        give you just the name of file where the violation occurred
        (i.e. without the path).
 
-     * Improved validation of .perlcriticrc settings.  An invalid
-       default setting will now cause a fatal exception.
+     * Improved validation of .perlcriticrc file.  An invalid
+       default setting will now cause a fatal exception. A
+       strange-looking policy name will cause a warning.
 
 
      Interface Changes:

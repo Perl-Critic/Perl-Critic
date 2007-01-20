@@ -38,10 +38,10 @@ sub import {
         };
 
         if ( $EVAL_ERROR ) {
-            confess qq{Can't load Policies from namespace '$POLICY_NAMESPACE': $EVAL_ERROR};
+            confess qq{Can't load Policies from namespace "$POLICY_NAMESPACE": $EVAL_ERROR};
         }
         elsif ( ! @SITE_POLICY_NAMES ) {
-            confess qq{No Policies found in namespace '$POLICY_NAMESPACE'};
+            confess qq{No Policies found in namespace "$POLICY_NAMESPACE"};
         }
     }
 
@@ -91,6 +91,8 @@ sub _init {
     $self->{_profile} = $args{-profile}
         or confess q{The -profile argument is required};
 
+    $self->_validate_policies_in_profile();
+
     return $self;
 }
 
@@ -127,7 +129,7 @@ sub create_policy {
 
 
     # Validate remaining parameters. This dies on failure
-    _validate_policy_params( $policy_name, \%policy_params_copy );
+    $self->_validate_policy_params( $policy_name, \%policy_params_copy );
 
 
     # Construct policy from remaining params.  Trap errors.
@@ -171,7 +173,7 @@ sub site_policy_names {
 #-----------------------------------------------------------------------------
 
 sub _validate_policy_params {
-    my ($policy, $params) = @_;
+    my ($self, $policy, $params) = @_;
 
     # If the Policy author hasn't provided the "supported_parameters" method,
     # then we can't tell which parameters it supports.  So we let it go.
@@ -191,11 +193,29 @@ sub _validate_policy_params {
     return 1;
 }
 
+#-----------------------------------------------------------------------------
+
+sub _validate_policies_in_profile {
+    my ($self) = @_;
+
+    my $profile = $self->{_profile};
+    my %known_policies = hashify( $self->site_policy_names() );
+
+    for my $policy_name ( $profile->listed_policies() ) {
+        if( not exists $known_policies{$policy_name} ) {
+            warn qq{Policy "$policy_name" is not available\n};
+        }
+    }
+
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
 1;
 
 __END__
 
-#-----------------------------------------------------------------------------
 
 =pod
 

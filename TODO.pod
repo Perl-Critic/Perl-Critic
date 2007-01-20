@@ -44,11 +44,6 @@ Replace current workaround for C<RequireUseStrict>.
 
 =over 4
 
-=item * Invalid policy names in F<.perlcriticrc> do not cause any warnings.
-
-Fix for this should not cause T::P::C to fail, because "invalid" may simply
-mean that the policy isn't locally installed.
-
 =item * Modules::RequireVersionVar
 
 Doesn't enforce three-part versions

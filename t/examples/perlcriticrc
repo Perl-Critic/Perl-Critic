@@ -85,8 +85,8 @@ verbose = 5
 # will never be applied unless you use the "-include" option to apply
 # it explicitly.
 
-[-NamingConvetiongs::ProhibitMixedCaseVars]
-[-NamingConvetiongs::ProhibitMixedCaseSubs]
+[-NamingConventions::ProhibitMixedCaseVars]
+[-NamingConventions::ProhibitMixedCaseSubs]
 [-TestingAndDebugging::RequireUseWarnings]
 
 #-----------------------------------------------------------------------------
@@ -101,8 +101,8 @@ severity = 2
 [CodeLayout::ProhibitHardTabs]
 severity = 1
 
-[ClassHierarchies::Autoloading]
-severty = 5
+[ClassHierarchies::ProhibitAutoloading]
+severity = 5
 
 #-----------------------------------------------------------------------------
 # Policies are also organized into themes.  Themes are just names for

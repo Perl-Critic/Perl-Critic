@@ -9,7 +9,10 @@
 
 use strict;
 use warnings;
-use Test::More tests => 28;
+
+use Test::More (tests => 28);
+use Perl::Critic::PolicyFactory (test => 1);
+
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(critique);
@@ -19,10 +22,7 @@ Perl::Critic::TestUtils::block_perlcriticrc();
 # just makes it a little easier to create test cases
 my $profile = {
     '-CodeLayout::RequireTidyCode'                 => {},
-    '-Editor::RequireEmacsFileVariables'           => {},
     '-Miscellanea::RequireRcsKeywords'             => {},
-    '-ValuesAndExpressions::ProhibitMagicNumbers'  => {},
-    '-Variables::ProhibitUnusedLexicalVars'        => {},
 };
 
 my $code = undef;
@@ -589,7 +589,7 @@ barf() unless $$ eq '';    ##no critic Postfix Empty Punctuation;
 1;
 END_PERL
 
-is( critique(\$code, {-profile  => $profile, -severity => 1} ), 0,
+is( critique(\$code, {-profile => $profile, -severity => 1} ), 0,
     'no critic: syntaxes');
 
 #-----------------------------------------------------------------------------
