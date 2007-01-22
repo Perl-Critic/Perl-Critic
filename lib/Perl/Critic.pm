@@ -370,7 +370,7 @@ there is a web-service available at L<http://perlcritic.com>.  The
 web-service does not yet support all the configuration features that
 are available in the native Perl::Critic API, but it should give you a
 good idea of what it does.  You can also invoke the perlcritic
-web-service from the command line by doing an HTTP-post, such as one
+web-service from the command-line by doing an HTTP-post, such as one
 of these:
 
    $> POST http://perlcritic.com/perl/critic.pl < MyModule.pm
@@ -425,16 +425,16 @@ or least restrictive level, then you can use one of these named values:
     -severity => 'cruel'                      -severity => 2
     -severity => 'brutal'                     -severity => 1
 
-B<-theme> is special string that defines a set of Policies based on
-their respective themes.  If C<-theme> is given, only policies that
-are members of that set will be loaded.  For example, the following
-would load only Policies that have a 'danger' AND 'pbp' theme:
+B<-theme> is special expression that determines which Policies to load based
+on their respective themes.  For example, the following would load only
+Policies that have a 'bugs' AND 'pbp' theme:
 
-  my $critic = Perl::Critic->new(-theme => 'danger * pbp');
+  my $critic = Perl::Critic->new( -theme => 'bugs && pbp' );
 
-See the L<"POLICY THEMES"> section for more information about themes.
-Unless the C<-severity> option is explicitly given, setting C<-theme>
-silently causes the C<-severity> to be set to 1.
+Unless the C<-severity> option is explicitly given, setting C<-theme> silently
+causes the C<-severity> to be set to 1.  See the L<"POLICY THEMES"> section
+for more information about themes.
+
 
 B<-include> is a reference to a list of string C<@PATTERNS>.  Policy
 modules that match at least one C<m/$PATTERN/imx> will always be
@@ -579,10 +579,10 @@ blocks that contain key-value pairs separated by '='. Comments
 should start with '#' and can be placed on a separate line or after
 the name-value pairs if you desire.
 
-Default settings for Perl::Critic itself can be set B<before the first
-named block.>  For example, putting any or all of these at the top of
-your configuration file will set the default value for the
-corresponding command-line argument.
+Default settings for Perl::Critic itself can be set B<before the first named
+block.> For example, putting any or all of these at the top of your
+configuration file will set the default value for the corresponding
+constructor argument.
 
     severity  = 3                                     #Integer or named level
     only      = 1                                     #Zero or One
@@ -822,15 +822,6 @@ on the line where the violation is reported.  For example:
       # Your code here...
   }
 
-Use this feature wisely.  C<"## no critic"> should be used in the
-smallest possible scope, or only on individual lines of code. And you
-should always be as specific as possible about which policies you want
-to disable (i.e. never use a bare C<"## no critic">).  If Perl::Critic
-complains about your code, try and find a compliant solution before
-resorting to this feature.
-
-=head2 LIMITATIONS OF THE "no critic" DIRECTIVE
-
 Policies such as C<Documentation::RequirePodSections> apply to the entire
 document, in which case violations are reported at line 1.  But if the file
 requires a shebang line, it is impossible to put C<"## no critic"> on the
@@ -838,6 +829,13 @@ first line of the file.  This is a known limitation and it will be addressed
 in a future release.  As a workaround, you can disable the affected policies
 at the command-line or in your F<.perlcriticrc> file.  But beware that this
 will affect the analysis of B<all> files.
+
+Use this feature wisely.  C<"## no critic"> should be used in the
+smallest possible scope, or only on individual lines of code. And you
+should always be as specific as possible about which policies you want
+to disable (i.e. never use a bare C<"## no critic">).  If Perl::Critic
+complains about your code, try and find a compliant solution before
+resorting to this feature.
 
 =head1 IMPORTANT CHANGES
 
@@ -851,7 +849,7 @@ custom Policy modules, please read this section carefully.
 In version 0.23, the syntax for theme rules changed.  The mathematical
 operators ( "*", "+", "-" ) are no longer supported.  You must use logical
 operators instead ( "&&", "!", "||" ).  However the meanings of these
-operators is effectively the same.  See <"POLICY THEMES"> for more details.
+operators is effectively the same.  See L<"POLICY THEMES"> for more details.
 
 =head2 VERSION 0.21
 

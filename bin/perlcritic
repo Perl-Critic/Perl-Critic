@@ -404,7 +404,7 @@ there is a web-service available at L<http://perlcritic.com>.  The
 web-service does not yet support all the configuration features that
 are available in the native Perl::Critic API, but it should give you a
 good idea of what it does.  You can also invoke the perlcritic
-web-service from the command line by doing an HTTP-post, such as one
+web-service from the command-line by doing an HTTP-post, such as one
 of these:
 
    $> POST http://perlcritic.com/perl/critic.pl < MyModule.pm
@@ -521,8 +521,14 @@ option is also given, then all shortcut options are silently ignored.
 Directs C<perlcritic> to report only violations of Policies whose themes
 satisfy the C<RULE>.  Themes are arbitrary names for groups of related
 policies.  You can combine theme names with boolean operators to create an
-arbitrarily complex C<RULE>.  See the L<"POLICY THEMES"> section for more
-information.
+arbitrarily complex C<RULE>.  For example, the following would apply only
+Policies that have a 'bugs' AND 'pbp' theme:
+
+  $> perlcritic -theme='bugs && pbp' MyModule.pm
+
+Unless the C<-severity> option is explicitly given, setting C<-theme> silently
+causes the C<-severity> to be set to 1.  See the L<"POLICY THEMES"> section
+for more information about themes.
 
 =item C<-include PATTERN>
 
@@ -703,7 +709,7 @@ at the command prompt.
 
 =item C<-quiet>
 
-Suppress the "source OK" message if no violations are found.
+Suppress the "source OK" message when no violations are found.
 
 =item C<-help>
 
@@ -983,22 +989,20 @@ on the line where the violation is reported.  For example:
       # Your code here...
   }
 
-Use this feature wisely.  C<"## no critic"> should be used in the
-smallest possible scope, or only on individual lines of code. And you
-should always be as specific as possible about which policies you want
-to disable (i.e. never use a bare C<"## no critic">).  If Perl::Critic
-complains about your code, try and find a compliant solution before
-resorting to this feature.
-
-=head2 LIMITATIONS OF THE "no critic" DIRECTIVE
-
-Policies such as C<Documentation::RequirePodSections> apply to the entire
+Some Policies like C<Documentation::RequirePodSections> apply to the entire
 document, in which case violations are reported at line 1.  But if the file
 requires a shebang line, it is impossible to put C<"## no critic"> on the
 first line of the file.  This is a known limitation and it will be addressed
 in a future release.  As a workaround, you can disable the affected policies
 at the command-line or in your F<.perlcriticrc> file.  But beware that this
 will affect the analysis of B<all> files.
+
+Use this feature wisely.  C<"## no critic"> should be used in the
+smallest possible scope, or only on individual lines of code. And you
+should always be as specific as possible about which policies you want
+to disable (i.e. never use a bare C<"## no critic">).  If Perl::Critic
+complains about your code, try and find a compliant solution before
+resorting to this feature.
 
 =head1 IMPORTANT CHANGES
 
@@ -1012,7 +1016,7 @@ custom Policy modules, please read this section carefully.
 In version 0.23, the syntax for theme rules changed.  The mathematical
 operators ( "*", "+", "-" ) are no longer supported.  You must use logical
 operators instead ( "&&", "!", "||" ).  However the meanings of these
-operators is effectively the same.  See <"POLICY THEMES"> for more details.
+operators is effectively the same.  See L<"POLICY THEMES"> for more details.
 
 =head2 VERSION 0.21
 

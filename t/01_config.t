@@ -9,8 +9,10 @@
 
 use strict;
 use warnings;
+use File::Spec;
 use English qw(-no_match_vars);
 use List::MoreUtils qw(all any);
+use Perl::Critic::PolicyFactory (test => 1);
 use Perl::Critic::Config qw();
 use Perl::Critic::Utils;
 use Test::More (tests => 67);
@@ -21,8 +23,7 @@ Perl::Critic::TestUtils::block_perlcriticrc();
 
 #-----------------------------------------------------------------------------
 
-my $examples_dir      = 't/examples';
-my $config           = Perl::Critic::Config->new(-severity => $SEVERITY_LOWEST);
+my $config       = Perl::Critic::Config->new( -severity => $SEVERITY_LOWEST );
 my @native_policies  = bundled_policy_names();
 my @site_policies    = Perl::Critic::Config::site_policy_names();
 my $total_policies   = scalar @site_policies;
@@ -114,7 +115,8 @@ my $total_policies   = scalar @site_policies;
 # Test config with defaults
 
 {
-    my $profile = "$examples_dir/perlcriticrc";
+    my $examples_dir = 'examples';
+    my $profile = File::Spec->catfile( $examples_dir, 'perlcriticrc' );
     my $c = Perl::Critic::Config->new( -profile => $profile );
 
     is_deeply([$c->exclude()], [ qw(Documentation Naming) ],
