@@ -32,8 +32,8 @@ DESCRIPTION
     a web-service available at <http://perlcritic.com>. The web-service does
     not yet support all the configuration features that are available in the
     native Perl::Critic API, but it should give you a good idea of what it
-    does. You can also invoke the perlcritic web-service from the command
-    line by doing an HTTP-post, such as one of these:
+    does. You can also invoke the perlcritic web-service from the
+    command-line by doing an HTTP-post, such as one of these:
 
        $> POST http://perlcritic.com/perl/critic.pl < MyModule.pm
        $> lwp-request -m POST http://perlcritic.com/perl/critic.pl < MyModule.pm
@@ -64,12 +64,14 @@ CONSTRUCTOR
             configuration. See "CONFIGURATION" for more information.
 
             -severity is the minimum severity level. Only Policy modules
-            that have a severity greater than $N will be loaded. Severity
+            that have a severity greater than $N will be applied. Severity
             values are integers ranging from 1 (least severe) to 5 (most
             severe). The default is 5. For a given "-profile", decreasing
-            the "-severity" will usually result in more Policy violations.
-            Users can redefine the severity level for any Policy in their
-            .perlcriticrc file. See "CONFIGURATION" for more information.
+            the "-severity" will usually reveal more Policy violations. You
+            can set the default value for this option in your .perlcriticrc
+            file. Users can redefine the severity level for any Policy in
+            their .perlcriticrc file. See "CONFIGURATION" for more
+            information.
 
             If it is difficult for you to remember whether severity "5" is
             the most or least restrictive level, then you can use one of
@@ -83,17 +85,18 @@ CONSTRUCTOR
                 -severity => 'cruel'                      -severity => 2
                 -severity => 'brutal'                     -severity => 1
 
-            -theme is special string that defines a set of Policies based on
-            their respective themes. If "-theme" is given, only policies
-            that are members of that set will be loaded. For example, the
-            following would load only Policies that have a 'danger' AND
-            'pbp' theme:
+            -theme is special expression that determines which Policies to
+            apply based on their respective themes. For example, the
+            following would load only Policies that have a 'bugs' AND 'pbp'
+            theme:
 
-              my $critic = Perl::Critic->new(-theme => 'danger * pbp');
+              my $critic = Perl::Critic->new( -theme => 'bugs && pbp' );
 
-            See the "POLICY THEMES" section for more information about
-            themes. Unless the "-severity" option is explicitly given,
-            setting "-theme" silently causes the "-severity" to be set to 1.
+            Unless the "-severity" option is explicitly given, setting
+            "-theme" silently causes the "-severity" to be set to 1. You can
+            set the default value for this option in your .perlcriticrc
+            file. See the "POLICY THEMES" section for more information about
+            themes.
 
             -include is a reference to a list of string @PATTERNS. Policy
             modules that match at least one "m/$PATTERN/imx" will always be
@@ -101,11 +104,13 @@ CONSTRUCTOR
 
               my $critic = Perl::Critic->new(-include => ['layout'] -severity => 4);
 
-            This would cause Perl::Critic to load all the "CodeLayout::*"
+            This would cause Perl::Critic to apply all the "CodeLayout::*"
             Policy modules even though they have a severity level that is
-            less than 4. You can use "-include" in conjunction with the
-            "-exclude" option. Note that "-exclude" takes precedence over
-            "-include" when a Policy matches both patterns.
+            less than 4. You can set the default value for this option in
+            your .perlcriticrc file. You can also use "-include" in
+            conjunction with the "-exclude" option. Note that "-exclude"
+            takes precedence over "-include" when a Policy matches both
+            patterns.
 
             -exclude is a reference to a list of string @PATTERNS. Policy
             modules that match at least one "m/$PATTERN/imx" will not be
@@ -113,41 +118,48 @@ CONSTRUCTOR
 
               my $critic = Perl::Critic->new(-exclude => ['strict'] -severity => 1);
 
-            This would cause Perl::Critic to not load the "RequireUseStrict"
-            and "ProhibitNoStrict" Policy modules even though they have a
-            severity level that is greater than 1. You can use "-exclude" in
-            conjunction with the "-include" option. Note that "-exclude"
-            takes precedence over "-include" when a Policy matches both
-            patterns.
+            This would cause Perl::Critic to not apply the
+            "RequireUseStrict" and "ProhibitNoStrict" Policy modules even
+            though they have a severity level that is greater than 1. You
+            can set the default value for this option in your .perlcriticrc
+            file. You can also use "-exclude" in conjunction with the
+            "-include" option. Note that "-exclude" takes precedence over
+            "-include" when a Policy matches both patterns.
 
-            -singlepolicy is a string "PATTERN". Only the policy that
-            matches "m/$PATTERN/imx" will be used. This value overrides the
+            -singlepolicy is a string "PATTERN". Only one policy that
+            matches "m/$PATTERN/imx" will be used. Policies that do not
+            match will be excluded. This option has precedence over the
             "-severity", "-theme", "-include", "-exclude", and "-only"
-            options.
+            options. You can set the default value for this option in your
+            .perlcriticrc file.
 
             -top is the maximum number of Violations to return when ranked
             by their severity levels. This must be a positive integer.
             Violations are still returned in the order that they occur
             within the file. Unless the "-severity" option is explicitly
             given, setting "-top" silently causes the "-severity" to be set
-            to 1.
+            to 1. You can set the default value for this option in your
+            .perlcriticrc file.
 
             -only is a boolean value. If set to a true value, Perl::Critic
             will only choose from Policies that are mentioned in the user's
             profile. If set to a false value (which is the default), then
             Perl::Critic chooses from all the Policies that it finds at your
-            site.
+            site. You can set the default value for this option in your
+            .perlcriticrc file.
 
             -force is a boolean value that controls whether Perl::Critic
             observes the magical "## no critic" pseudo-pragmas in your code.
             If set to a true value, Perl::Critic will analyze all code. If
             set to a false value (which is the default) Perl::Critic will
             ignore code that is tagged with these comments. See "BENDING THE
-            RULES" for more information.
+            RULES" for more information. You can set the default value for
+            this option in your .perlcriticrc file.
 
             -verbose can be a positive integer (from 1 to 11), or a literal
             format specification. See Perl::Critic::Violations for an
-            explanation of format specifications.
+            explanation of format specifications. You can set the default
+            value for this option in your .perlcriticrc file.
 
             -config is a reference to a Perl::Critic::Config object. If you
             have created your own Config object for some reason, you can
@@ -233,14 +245,14 @@ CONFIGURATION
     Default settings for Perl::Critic itself can be set before the first
     named block. For example, putting any or all of these at the top of your
     configuration file will set the default value for the corresponding
-    command-line argument.
+    constructor argument.
 
         severity  = 3                                     #Integer or named level
         only      = 1                                     #Zero or One
         force     = 0                                     #Zero or One
         verbose   = 4                                     #Integer or format spec
         top       = 50                                    #A positive integer
-        theme     = (pbp + security) * bugs               #A theme expression
+        theme     = (pbp || security) && bugs             #A theme expression
         include   = NamingConventions ClassHierarchies    #Space-delimited list
         exclude   = Variables  Modules::RequirePackage    #Space-delimited list
 
@@ -337,7 +349,7 @@ CONFIGURATION
         # so no additional configuration is required for them.
 
     For additional configuration examples, see the perlcriticrc file that is
-    included in this t/examples directory of this distribution.
+    included in this examples directory of this distribution.
 
 THE POLICIES
     A large number of Policy modules are distributed with Perl::Critic. They
@@ -375,42 +387,19 @@ POLICY THEMES
     .perlcriticrc file. See the "CONFIGURATION" section for more information
     about that.
 
-    Using the "-theme" option, you can combine themes with mathematical and
-    boolean operators to create an arbitrarily complex expression that
-    represents a custom "set" of Policies. The following operators are
-    supported:
+    Using the "-theme" option, you can create an arbitrarily complex rule
+    that determines which Policies will be loaded. Precedence is the same as
+    regular Perl code, and you can use parens to enforce precedence as well.
+    Supported operators are:
 
-       Operator       Altertative         Meaning
+       Operator    Altertative    Example
        ----------------------------------------------------------------------------
-       *              and                 Intersection
-       -              not                 Difference
-       +              or                  Union
+       &&          and            'pbp && core'
+       ||          or             'pbp || (bugs && security)'
+       !           not            'pbp && ! (portability || complexity)'
 
-    Operator precedence is the same as that of normal mathematics. You can
-    also use parenthesis to enforce precedence. Here are some examples:
-
-       Expression                  Meaning
-       ----------------------------------------------------------------------------
-       pbp * bugs                  All policies that are "pbp" AND "bugs"
-       pbp and bugs                Ditto
-
-       bugs + cosmetic             All policies that are "bugs" OR "cosmetic"
-       bugs or cosmetic            Ditto
-
-       pbp - cosmetic              All policies that are "pbp" BUT NOT "cosmetic"
-       pbp not cosmetic            Ditto
-
-       -maintenance                All policies that are NOT "maintenance"
-       not maintenance             Ditto
-
-       (pbp - bugs) * complexity     All policies that are "pbp" BUT NOT "bugs",
-                                        AND "complexity"
-       (pbp not bugs) and complexity  Ditto
-
-    Theme names are case-insensitive. If "-theme" is set to an empty string,
-    then it is equivalent to the set of all policies. A theme name that
-    doesn't exist is equivalent to an empty set. Please See
-    <http://en.wikipedia.org/wiki/Set> for a discussion on set theory.
+    Theme names are case-insensitive. If the "-theme" is set to an empty
+    string, then it evaluates as true all Policies.
 
 BENDING THE RULES
     Perl::Critic takes a hard-line approach to your code: either you comply
@@ -440,15 +429,15 @@ BENDING THE RULES
         }
 
     The "## no critic" comments direct Perl::Critic to ignore the remaining
-    lines of code until the end of the current block, or until a "## use
-    critic" comment is found (whichever comes first). If the "## no critic"
+    lines of code until the end of the current block, or until a ""## use
+    critic"" comment is found (whichever comes first). If the "## no critic"
     comment is on the same line as a code statement, then only that line of
     code is overlooked. To direct perlcritic to ignore the "## no critic"
     comments, use the "-force" option.
 
     A bare "## no critic" comment disables all the active Policies. If you
     wish to disable only specific Policies, add a list of Policy names as
-    arguments, just as you would for the "no strict" or ""no warnings""
+    arguments, just as you would for the "no strict" or "no warnings"
     pragmas. For example, this would disable the "ProhibitEmptyQuotes" and
     "ProhibitPostfixControls" policies until the end of the block or until
     the next "## use critic" comment (whichever comes first):
@@ -477,9 +466,25 @@ BENDING THE RULES
       sub camelHumpSub {}
 
     The argument list must be enclosed in parens and must contain one or
-    more comma-separated barewords (e.g. don't use quotes). The ""## no
-    critic"" pragmas can be nested, and Policies named by an inner pragma
+    more comma-separated barewords (e.g. don't use quotes). The "## no
+    critic" pragmas can be nested, and Policies named by an inner pragma
     will be disabled along with those already disabled an outer pragma.
+
+    Some Policies like "Subroutines::ProhibitExcessComplexity" apply to an
+    entire block of code. In those cases, "## no critic" must appear on the
+    line where the violation is reported. For example:
+
+      sub complicated_function {  ## no critic (ProhibitExcessComplexity)
+          # Your code here...
+      }
+
+    Policies such as "Documentation::RequirePodSections" apply to the entire
+    document, in which case violations are reported at line 1. But if the
+    file requires a shebang line, it is impossible to put "## no critic" on
+    the first line of the file. This is a known limitation and it will be
+    addressed in a future release. As a workaround, you can disable the
+    affected policies at the command-line or in your .perlcriticrc file. But
+    beware that this will affect the analysis of all files.
 
     Use this feature wisely. "## no critic" should be used in the smallest
     possible scope, or only on individual lines of code. And you should
@@ -493,6 +498,13 @@ IMPORTANT CHANGES
     in ways that are not backward-compatible. If you have been using an
     older version of Perl-Critic and/or you have been developing custom
     Policy modules, please read this section carefully.
+
+  VERSION 0.23
+    In version 0.23, the syntax for theme rules changed. The mathematical
+    operators ( "*", "+", "-" ) are no longer supported. You must use
+    logical operators instead ( "&&", "!", "||" ). However the meanings of
+    these operators is effectively the same. See "POLICY THEMES" for more
+    details.
 
   VERSION 0.21
     In version 0.21, we introduced the concept of policy "themes". All you
@@ -510,7 +522,7 @@ IMPORTANT CHANGES
     to the "## no critic" pseudo-pragma. This feature allows you to disable
     specific policies. So if you have been in the habit of adding additional
     words after "no critic", then those words might cause unexpected
-    results. If you want to append other stuff to the ""## no critic""
+    results. If you want to append other stuff to the "## no critic"
     comment, then terminate the pseudo-pragma with a semi-colon, and then
     start another comment. For example:
 
@@ -575,6 +587,8 @@ EXTENDING THE CRITIC
 PREREQUISITES
     Perl::Critic requires the following modules:
 
+    B::Keywords
+
     Config::Tiny
 
     File::Spec
@@ -592,8 +606,6 @@ PREREQUISITES
     Pod::Usage
 
     Pod::PlainText
-
-    Scalar::Util
 
     String::Format
 
@@ -629,7 +641,7 @@ AUTHOR
     Jeffrey Ryan Thalhammer <thaljef@cpan.org>
 
 COPYRIGHT
-    Copyright (c) 2005-2006 Jeffrey Ryan Thalhammer. All rights reserved.
+    Copyright (c) 2005-2007 Jeffrey Ryan Thalhammer. All rights reserved.
 
     This program is free software; you can redistribute it and/or modify it
     under the same terms as Perl itself. The full text of this license can
