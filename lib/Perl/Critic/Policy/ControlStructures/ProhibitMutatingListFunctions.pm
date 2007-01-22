@@ -153,7 +153,11 @@ sub _is_topic_mutating_func {
     # If these functions have no argument,
     # they default to mutating $_
     my $first_arg = first_arg( $elem );
-    return 1 if not defined $first_arg;
+    if (not defined $first_arg) {
+        # undef does not default to $_, unlike the others
+        return if $elem eq 'undef';
+        return 1;
+    }
     return _is_topic( $first_arg );
 }
 
