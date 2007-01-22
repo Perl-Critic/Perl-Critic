@@ -313,10 +313,10 @@ sub render_policy_listing {
 
     my $type = shift;
     require Perl::Critic::PolicyListing;
-    require Perl::Critic::Config;
+    require Perl::Critic;
 
     my %pc_params = (-profile => $EMPTY, -severity => 1);
-    my @pols = Perl::Critic::Config->new( %pc_params )->policies();
+    my @pols = Perl::Critic->new( %pc_params )->policies();
     my $listing = Perl::Critic::PolicyListing->new( -policies => \@pols );
     print $listing;
     exit 0;
@@ -327,10 +327,10 @@ sub render_policy_listing {
 sub render_profile_prototype {
 
     require Perl::Critic::ProfilePrototype;
-    require Perl::Critic::Config;
+    require Perl::Critic;
 
     my %pc_params = (-profile => $EMPTY, -severity => 1);
-    my @pols = Perl::Critic::Config->new( %pc_params )->policies();
+    my @pols = Perl::Critic->new( %pc_params )->policies();
     my $prototype = Perl::Critic::ProfilePrototype->new( -policies => \@pols );
     print $prototype;
     exit 0;
@@ -341,15 +341,15 @@ sub render_profile_prototype {
 sub policy_docs {
 
     my $pattern = shift;
-    require Perl::Critic::PolicyFactory;
-    Perl::Critic::PolicyFactory->import();
+    require Perl::Critic;
 
-    my @site_policies = Perl::Critic::PolicyFactory::site_policy_names();
-    my @matches = grep { $_ =~ m/$pattern/imx } @site_policies;
+    my %pc_params = (-profile => $EMPTY, -severity => 1);
+    my @policies  = Perl::Critic::Config->new( %pc_params )->policies();
+    my @matches   = grep { $_ =~ m/$pattern/imx } @policies;
 
     for my $matching_policy ( @matches ) {
         my @perldoc_cmd = qw(perldoc -T); #-T means don't send to pager
-        system @perldoc_cmd, $matching_policy;
+        system @perldoc_cmd, ref $matching_policy;
     }
     exit 0;
 }
