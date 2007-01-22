@@ -1,6 +1,7 @@
 bin/perlcritic
 Build.PL
 Changes
+examples/perlcriticrc
 extras/perlcritic.el
 INSTALL
 lib/Perl/Critic.pm
@@ -114,6 +115,7 @@ lib/Perl/Critic/Violation.pm
 LICENSE
 Makefile.PL
 MANIFEST			This list of files
+META.yml
 README
 t/00_modules.t
 t/01_config.t
@@ -173,7 +175,6 @@ t/ControlStructures/ProhibitUntilBlocks.run
 t/Documentation/RequirePodAtEnd.run
 t/Documentation/RequirePodSections.run
 t/ErrorHandling/RequireCarping.run
-t/examples/perlcriticrc
 t/InputOutput/ProhibitBacktickOperators.run
 t/InputOutput/ProhibitBarewordFileHandles.run
 t/InputOutput/ProhibitInteractiveTest.run
@@ -238,4 +239,3 @@ t/Variables/RequireInitializationForLocalVars.run
 t/Variables/RequireLexicalLoopIterators.run
 t/Variables/RequireNegativeIndices.run
 TODO.pod
-META.yml
