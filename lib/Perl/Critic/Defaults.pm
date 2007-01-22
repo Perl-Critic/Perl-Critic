@@ -13,7 +13,7 @@ use Carp qw(cluck);
 use English qw(-no_match_vars);
 use Perl::Critic::Utils;
 
-our $VERSION = 0.23;
+our $VERSION = 1.01;
 
 #-----------------------------------------------------------------------------
 

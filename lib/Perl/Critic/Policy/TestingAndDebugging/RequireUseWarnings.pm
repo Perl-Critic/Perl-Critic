@@ -13,7 +13,7 @@ use Perl::Critic::Utils;
 use List::Util qw(first);
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 0.23;
+our $VERSION = 1.01;
 
 #-----------------------------------------------------------------------------
 

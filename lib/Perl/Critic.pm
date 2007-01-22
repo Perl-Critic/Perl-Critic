@@ -24,7 +24,7 @@ use PPI::Document::File;
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = 0.23;
+our $VERSION = 1.01;
 our @EXPORT_OK = qw(&critique);
 
 #-----------------------------------------------------------------------------
@@ -688,7 +688,7 @@ A simple configuration might look like this:
     # so no additional configuration is required for them.
 
 For additional configuration examples, see the F<perlcriticrc> file
-that is included in this F<t/examples> directory of this distribution.
+that is included in this F<examples> directory of this distribution.
 
 =head1 THE POLICIES
 

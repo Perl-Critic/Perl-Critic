@@ -21,7 +21,7 @@ use Perl::Critic::Violation qw();
 use Pod::Usage qw(pod2usage);
 
 
-our $VERSION = 0.23;
+our $VERSION = 1.01;
 
 #-----------------------------------------------------------------------------
 # Begin script.  Don't run when loaded as a library
@@ -362,7 +362,7 @@ __END__
 
 =pod
 
-=for stopwords DGR INI-style vim-fu minibuffer -noprofile API ben Jore formatter Peshak
+=for stopwords DGR INI-style vim-fu minibuffer -noprofile API ben Jore formatter Peshak pbp
 
 =head1 NAME
 
@@ -844,7 +844,7 @@ A simple configuration might look like this:
     # so no additional configuration is required for them.
 
 For additional configuration examples, see the F<perlcriticrc> file that is
-included in this F<t/examples> directory of this distribution.
+included in this F<examples> directory of this distribution.
 
 =head1 THE POLICIES
 
