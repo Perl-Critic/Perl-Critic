@@ -7,7 +7,9 @@
 
 [?.??]  Released on 2007-??-??
 
-
+     Bug Fixes:
+     * Fixed memory leak.  This was reported by the Parrot team at
+       http://rt.perl.org/rt3/Ticket/Display.html?id=41230
 
 [0.23]  Released on 2007-01-19
 
@@ -28,7 +30,7 @@
 
      Interface Changes:
      * The syntax for theme expressions has changed.  Instead of using
-       mathematical operators qw(+ * !) you must now use the logical
+       mathematical operators qw(+ * -) you must now use the logical
        operators qw(|| && !).  See the Perl::Critic docs for more info.
      
      * The @GLOBALS and @BUILTINS variables are no longer exported by
