@@ -1144,7 +1144,7 @@ The Perl::Critic team is also available for hire.  If your organization has
 its own coding standards, we can create custom Policies to enforce your local
 guidelines.  Or if your code base is prone to a particular defect pattern, we
 can design Policies that will help you catch those costly defects B<before>
-they go into producion.  To discuss your needs with the Perl::Critic team,
+they go into production.  To discuss your needs with the Perl::Critic team,
 just contact C<< <thaljef@cpan.org> >>.
 
 =head1 BUGS
