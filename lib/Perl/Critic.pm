@@ -919,11 +919,19 @@ code.  Please see the L<Perl::Critic::DEVELOPER> file included in this
 distribution for a step-by-step demonstration of how to create new Policy
 modules.
 
-If you develop any new Policy modules, feel free to send them to
-C<thaljef@cpan.org> and I'll be happy to put them into the Perl::Critic
-distribution.  Or if you'd like to work on the Perl::Critic project directly,
-check out our repository at L<http://perlcritic.tigris.org>.  To subscribe to
-our mailing list, send a message to C<dev-subscribe@perlcritic.tigris.org>.
+If you develop any new Policy modules, feel free to send them to C<<
+<thaljef@cpan.org> >> and I'll be happy to put them into the Perl::Critic
+distribution.  Or if you would like to work on the Perl::Critic project
+directly, check out our repository at L<http://perlcritic.tigris.org>.  To
+subscribe to our mailing list, send a message to C<<
+<dev-subscribe@perlcritic.tigris.org> >>.
+
+The Perl::Critic team is also available for hire.  If your organization has
+its own coding standards, we can create custom Policies to enforce your local
+guidelines.  Or if your code base is prone to a particular defect pattern, we
+can design Policies that will help you catch those costly defects B<before>
+they go into producion.  To discuss your needs with the Perl::Critic team,
+just contact C<< <thaljef@cpan.org> >>.
 
 =head1 PREREQUISITES
 
