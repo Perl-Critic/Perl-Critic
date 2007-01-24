@@ -13,7 +13,7 @@ use base qw(Exporter);
 
 use Carp;
 use File::Spec;
-use Scalar::Util qw(blessed weaken);
+use Scalar::Util qw(blessed);
 use English qw(-no_match_vars);
 use Perl::Critic::Config;
 use Perl::Critic::Violation;
@@ -130,13 +130,6 @@ sub critique {
         @violations = Perl::Critic::Violation::sort_by_severity(@violations);
         @violations = ( reverse @violations )[ 0 .. $limit ];  #Slicing...
     }
-
-    # The cache in Perl::Critic::Document contains references to elements in
-    # the PPI::Document, to which P::C::Document also refers.  This creates a
-    # circular reference, which leaks memory every time you call critique().
-    # Through trial and error, I've found that weakening the reference here
-    # solves the problem, but I'm not sure this is the proper way to fix it.
-    weaken( $doc->{_elements_of} );  #Ick, violates encapsulation!
 
     # Always return violations sorted by location
     return Perl::Critic::Violation->sort_by_location(@violations);

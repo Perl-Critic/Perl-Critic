@@ -10,6 +10,7 @@ package Perl::Critic::Document;
 use strict;
 use warnings;
 use PPI::Document;
+use Scalar::Util qw(weaken);
 
 #-----------------------------------------------------------------------------
 
@@ -56,7 +57,15 @@ sub find {
     # populated as a side-effect of calling the $finder_sub coderef
     # that is produced by the caching_finder() closure.
     if ( !$self->{_elements_of} ) {
+
         my %cache = ( 'PPI::Document' => [ $self ] );
+
+        # The cache refers to $self, and $self refers to the cache.  This
+        # creates a circular reference that leaks memory (i.e.  $self is not
+        # destroyed until execution is complete).  By weakening the reference,
+        # we allow perl to collect the garbage properly.
+        weaken( $cache{'PPI::Document'}->[0] );
+
         my $finder_coderef = _caching_finder( \%cache );
         $self->{_doc}->find( $finder_coderef );
         $self->{_elements_of} = \%cache;
