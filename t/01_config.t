@@ -12,7 +12,7 @@ use warnings;
 use File::Spec;
 use English qw(-no_match_vars);
 use List::MoreUtils qw(all any);
-use Perl::Critic::PolicyFactory (test => 1);
+use Perl::Critic::PolicyFactory (-test => 1);
 use Perl::Critic::Config qw();
 use Perl::Critic::Utils;
 use Test::More (tests => 67);
