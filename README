@@ -578,11 +578,18 @@ EXTENDING THE CRITIC
     create new Policy modules.
 
     If you develop any new Policy modules, feel free to send them to
-    "thaljef@cpan.org" and I'll be happy to put them into the Perl::Critic
-    distribution. Or if you'd like to work on the Perl::Critic project
+    "<thaljef@cpan.org>" and I'll be happy to put them into the Perl::Critic
+    distribution. Or if you would like to work on the Perl::Critic project
     directly, check out our repository at <http://perlcritic.tigris.org>. To
     subscribe to our mailing list, send a message to
-    "dev-subscribe@perlcritic.tigris.org".
+    "<dev-subscribe@perlcritic.tigris.org>".
+
+    The Perl::Critic team is also available for hire. If your organization
+    has its own coding standards, we can create custom Policies to enforce
+    your local guidelines. Or if your code base is prone to a particular
+    defect pattern, we can design Policies that will help you catch those
+    costly defects before they go into production. To discuss your needs
+    with the Perl::Critic team, just contact "<thaljef@cpan.org>".
 
 PREREQUISITES
     Perl::Critic requires the following modules:
