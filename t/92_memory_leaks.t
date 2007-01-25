@@ -9,10 +9,8 @@
 
 use strict;
 use warnings;
-use English qw(-no_match_vars);
 
 use Test::More; #plan set below
-use Test::Memory::Cycle; qw();
 
 use Perl::Critic::PolicyFactory (-test => 1);
 use Perl::Critic::Document;
@@ -24,7 +22,7 @@ use Perl::Critic::TestUtils qw();
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 eval 'use Test::Memory::Cycle'; ## no critic
-plan skip_all => 'Test::Memory::Cycle requried to test memory leaks' if $@;
+plan( skip_all => 'Test::Memory::Cycle requried to test memory leaks') if $@;
 
 #-----------------------------------------------------------------------------
 {
