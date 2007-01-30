@@ -18,10 +18,21 @@ our $VERSION = 1.01;
 #-----------------------------------------------------------------------------
 
 my @builtin_list_funcs = qw( map grep );
-my @cpan_list_funcs    = qw( List::Util::first ),
-  map { 'List::MoreUtils::'.$_ } qw(any all none notall true false firstidx first_index
-                                    lastidx last_index insert_after insert_after_string);
+my @cpan_list_funcs    = _get_cpan_list_funcs();
 
+#-----------------------------------------------------------------------------
+
+sub _get_cpan_list_funcs {
+    return  qw( List::Util::first ),
+        map { 'List::MoreUtils::'.$_ } _get_list_moreutils_funcs();
+}
+
+#-----------------------------------------------------------------------------
+
+sub _get_list_moreutils_funcs {
+    return  qw(any all none notall true false firstidx first_index
+               lastidx last_index insert_after insert_after_string);
+}
 
 #-----------------------------------------------------------------------------
 
@@ -147,7 +158,8 @@ sub _is_topic_mutating_regex {
 sub _is_topic_mutating_func {
     my $elem = shift;
     return if not $elem->isa('PPI::Token::Word');
-    return if not any { $elem eq $_ } qw(chop chomp undef);
+    my @mutator_funcs = qw(chop chomp undef);
+    return if not any { $elem eq $_ } @mutator_funcs;
     return if not is_function_call( $elem );
 
     # If these functions have no argument,
