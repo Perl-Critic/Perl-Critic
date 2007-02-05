@@ -83,7 +83,7 @@ sub fcritique {
     my $file = File::Spec->catfile($dir, @fileparts);
     if (open my $fh, '>', $file) {
         print {$fh} ${$code_ref};
-        close $fh;
+        close $fh or confess "unable to close $file: $!";
     }
 
     # Use eval so we can clean up before die() in case of error.
@@ -185,7 +185,7 @@ sub _subtests_from_file {
             confess "Got some code but I'm not in a subtest: $test_file";
         }
     }
-    close $fh;
+    close $fh or confess "unable to close $test_file: $!";
     if ( $subtest ) {
         if ( $incode ) {
             push @subtests, _finalize_subtest( $subtest );

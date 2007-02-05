@@ -50,6 +50,8 @@ lib/Perl/Critic/Policy/InputOutput/ProhibitOneArgSelect.pm
 lib/Perl/Critic/Policy/InputOutput/ProhibitReadlineInForLoop.pm
 lib/Perl/Critic/Policy/InputOutput/ProhibitTwoArgOpen.pm
 lib/Perl/Critic/Policy/InputOutput/RequireBracedFileHandleWithPrint.pm
+lib/Perl/Critic/Policy/InputOutput/RequireCheckedClose.pm
+lib/Perl/Critic/Policy/InputOutput/RequireCheckedOpen.pm
 lib/Perl/Critic/Policy/Miscellanea/ProhibitFormats.pm
 lib/Perl/Critic/Policy/Miscellanea/ProhibitTies.pm
 lib/Perl/Critic/Policy/Miscellanea/RequireRcsKeywords.pm
@@ -183,6 +185,8 @@ t/InputOutput/ProhibitOneArgSelect.run
 t/InputOutput/ProhibitReadlineInForLoop.run
 t/InputOutput/ProhibitTwoArgOpen.run
 t/InputOutput/RequireBracedFileHandleWithPrint.run
+t/InputOutput/RequireCheckedClose.run
+t/InputOutput/RequireCheckedOpen.run
 t/Miscellanea/ProhibitFormats.run
 t/Miscellanea/ProhibitTies.run
 t/Miscellanea/RequireRcsKeywords.run

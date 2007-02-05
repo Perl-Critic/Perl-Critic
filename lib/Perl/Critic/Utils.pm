@@ -68,6 +68,7 @@ our @EXPORT = qw(
     &severity_to_number
     &verbosity_to_format
     &words_from_string
+    &is_unchecked_call
 );
 
 #-----------------------------------------------------------------------------
@@ -449,7 +450,7 @@ sub _is_perl {
     #Check for shebang
     open my ($fh), '<', $file or return;
     my $first = <$fh>;
-    close $fh;
+    close $fh or confess "unable to close $file: $!";
 
     return 1 if defined $first && ( $first =~ m{ \A \#![ ]*\S*perl }mx );
     return;
@@ -478,6 +479,59 @@ sub words_from_string {
     my $str = shift;
 
     return split q{ }, $str; # This must be a literal space, not $SPACE
+}
+
+#-----------------------------------------------------------------------------
+
+sub is_unchecked_call {
+    my $elem = shift;
+
+    return if not is_function_call( $elem );
+
+    # check to see if there's an '=' or 'unless' or something before this.
+    if( my $sib = $elem->sprevious_sibling() ){
+        return if $sib;
+    }
+
+
+    if( my $statement = $elem->statement() ){
+
+        # "open or die" is OK.
+        # We can't check snext_sibling for 'or' since the next siblings are an
+        # unknown number of arguments to the system call. Instead, check all of
+        # the elements to this statement to see if we find 'or'
+        if ( $statement->find( sub  {
+                                   my (undef, $elem) = @_;
+
+                                   return if $elem->content() ne 'or';
+                                   return if $elem->isa('PPI::Token::Word');
+                                   return if is_hash_key($elem);
+                                   return if is_method_call($elem);
+
+                                   return 1;
+                               } ) ) {
+            return;
+        }
+
+        if( my $parent = $elem->statement()->parent() ){
+
+            # check to see if we're in an if( open ) { good } else { bad } condition
+            return if $parent->isa('PPI::Structure::Condition');
+
+            # the return value could be captured in a data structure and checked later.
+            return if $parent->isa('PPI::Structure::Constructor');
+
+            # "die if not ( open() )" - It's in list context.
+            if ( $parent->isa('PPI::Structure::List') ) {
+                if( my $uncle = $parent->sprevious_sibling() ){
+                    return if $uncle;
+                }
+            }
+        }
+    }
+
+    # Otherwise, return. this system call is unchecked.
+    return 1;
 }
 
 
@@ -661,6 +715,11 @@ return that line.  Otherwise return undef.
 
 Given config string I<$str>, return all the words from the string.
 This is safer than splitting on whitespace.
+
+=item C<is_unchecked_call( $element )>
+
+Given a L<PPI::Element>, test to see if it contains a function call whose
+return value is not checked.
 
 =back
 

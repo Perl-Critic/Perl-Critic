@@ -42,7 +42,7 @@ sub violates {
     return if !open $fh, '<', $filename;
     local $RS = undef;
     my $source = <$fh>;
-    close $fh;
+    close $fh or return;
 
     my $newline; # undef until we find the first one
     my $line = 1;

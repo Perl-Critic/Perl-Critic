@@ -5,6 +5,10 @@
 # $Revision$
 ##############################################################################
 
+     New Policies:
+     * InputOutput::RequireCheckedOpen
+     * InputOutput::RequireCheckedClose
+
 [1.01]  Released on 2007-01-24
 
      PRODUCTION RELEASE:  You may now consider the public Perl::Critic
