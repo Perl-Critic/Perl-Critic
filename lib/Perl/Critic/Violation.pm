@@ -55,6 +55,10 @@ sub new {
     $self->{_policy}      = caller;
     $self->{_elem}        = $elem;
 
+    # Do this now before the weakened $doc gets garbage collected
+    my $top = $elem->top();
+    $self->{_filename} = $top->can('filename') ? $top->filename() : undef;
+
     return $self;
 }
 
@@ -160,9 +164,7 @@ sub policy {
 
 sub filename {
     my $self = shift;
-    my $elem = $self->{_elem};
-    my $top  = $elem->top();
-    return $top->can('filename') ? $top->filename() : undef;
+    return $self->{_filename};
 }
 
 #-----------------------------------------------------------------------------
