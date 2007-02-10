@@ -13,7 +13,7 @@ use Carp qw(confess);
 use Perl::Critic::Utils;
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 1.01;
+our $VERSION = 1.02;
 
 #-----------------------------------------------------------------------------
 

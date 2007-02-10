@@ -5,6 +5,12 @@
 # $Revision$
 ##############################################################################
 
+[1.02]  Released on 2007-??-??
+
+     Bug Fixes:
+     * "undef" incorrectly triggered ProhibitMutatingListFunctions.
+     * The filename was not appearing in the '%f' placeholder.
+
      New Policies:
      * InputOutput::RequireCheckedOpen
      * InputOutput::RequireCheckedClose
