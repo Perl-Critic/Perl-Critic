@@ -27,6 +27,7 @@ our @EXPORT_OK = qw(
     subtests_in_tree
     should_skip_author_tests
     get_author_test_skip_message
+    starting_points_including_examples
     bundled_policy_names
 );
 
@@ -126,6 +127,10 @@ sub should_skip_author_tests {
 sub get_author_test_skip_message {
     ## no critic (RequireInterpolation);
     return 'Author test.  Set $ENV{TEST_AUTHOR} to a true value to run.';
+}
+
+sub starting_points_including_examples {
+    return (-e 'blib' ? 'blib' : 'lib', 'examples');
 }
 
 # The internal representation of a subtest is just a hash with some
@@ -335,6 +340,11 @@ Answers whether author tests should run.
 
 Returns a string containing the message that should be emitted when a test
 is skipped due to it being an author test when author tests are not enabled.
+
+=item starting_points_including_examples()
+
+Returns a list of the directories contain code that needs to be tested when it
+is desired that the examples be included.
 
 =item bundled_policy_names()
 

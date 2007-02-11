@@ -14,7 +14,7 @@ use 5.008001;
 use strict;
 use warnings;
 
-use version; our $VERSION = qv('529.358.159');
+use version; our $VERSION = qv('1.002');
 
 use Carp qw{ croak };
 use English qw{ -no_match_vars };
@@ -205,6 +205,8 @@ __END__
 
 =pod
 
+=for stopwords codebase
+
 =head1 NAME
 
 C<generatestats> - Produce some simple quality statistics of a codebase
@@ -270,7 +272,7 @@ This is an example program and thus does minimal error handling.
 Elliot Shank  C<< <perl@galumph.com> >>
 
 
-=head1 LICENSE AND COPYRIGHT
+=head1 COPYRIGHT
 
 Copyright (c) 2006-2007, Elliot Shank C<< <perl@galumph.com> >>. All rights
 reserved.

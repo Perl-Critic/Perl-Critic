@@ -1,6 +1,8 @@
 bin/perlcritic
 Build.PL
 Changes
+examples/generatestats
+examples/loadanalysisdb
 examples/perlcriticrc
 extras/perlcritic.el
 INSTALL
