@@ -55,9 +55,10 @@ sub new {
     $self->{_policy}      = caller;
     $self->{_elem}        = $elem;
 
-    # Do this now before the weakened $doc gets garbage collected
+    # Do these now before the weakened $doc gets garbage collected
     my $top = $elem->top();
-    $self->{_filename} = $top->can('filename') ? $top->filename() : undef;
+    $self->{_filename} = top->can('filename') ? $top->filename() : undef;
+    $self->{_source} = _first_line_of_source( $elem );
 
     return $self;
 }
@@ -171,17 +172,8 @@ sub filename {
 
 
 sub source {
-     my $self = shift;
-
-     if (!defined $self->{_source}) {
-         my $stmnt = $self->{_elem}->statement() || $self->{_elem};
-         $self->{_source} = $stmnt->content() || $EMPTY;
-     }
-     #Return the first line of code only.
-     if ($self->{_source} =~ m{\A ( [^\n]* ) }mx) {
-         return $1;
-     }
-     return;
+    my $self = shift;
+    return $self->{_source};
 }
 
 #-----------------------------------------------------------------------------
@@ -261,6 +253,20 @@ sub _get_diagnostics {
     $pod_string =~ s{ \s* \z}{}mx;
     return $pod_string;
 }
+
+#-----------------------------------------------------------------------------
+
+sub _first_line_of_source {
+    my $elem = shift;
+
+    my $stmnt = $elem->statement() || $elem;
+    my $code_string = $stmnt->content() || $EMPTY;
+
+    #Chop everything but the first line (without newline);
+    $code_string =~ s{ \n.* }{}smx;
+    return $code_string;
+}
+
 
 1;
 
