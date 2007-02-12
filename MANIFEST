@@ -4,6 +4,7 @@ Changes
 examples/generatestats
 examples/loadanalysisdb
 examples/perlcriticrc
+examples/perlcriticrc-conway
 extras/perlcritic.el
 INSTALL
 lib/Perl/Critic.pm

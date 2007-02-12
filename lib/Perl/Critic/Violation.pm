@@ -18,7 +18,7 @@ use Perl::Critic::Utils;
 use String::Format qw(stringf);
 use overload ( q{""} => 'to_string', cmp => '_compare' );
 
-our $VERSION = 1.02;
+our $VERSION = 1.03;
 
 #Class variables...
 our $FORMAT = "%m at line %l, column %c. %e.\n"; #Default stringy format

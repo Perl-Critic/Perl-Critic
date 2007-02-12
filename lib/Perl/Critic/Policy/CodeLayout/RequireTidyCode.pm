@@ -13,7 +13,7 @@ use English qw(-no_match_vars);
 use Perl::Critic::Utils;
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 1.02;
+our $VERSION = 1.03;
 
 #-----------------------------------------------------------------------------
 
