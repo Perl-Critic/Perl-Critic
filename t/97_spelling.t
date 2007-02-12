@@ -11,10 +11,7 @@
 use strict;
 use warnings;
 use Test::More;
-use Perl::Critic::TestUtils qw{
-    should_skip_author_tests get_author_test_skip_message
-    starting_points_including_examples
-};
+use Perl::Critic::TestUtils qw{ should_skip_author_tests get_author_test_skip_message };
 
 #-----------------------------------------------------------------------------
 
@@ -28,7 +25,7 @@ plan skip_all => 'Optional Test::Spelling, File::Which and aspell program requir
 
 add_stopwords(<DATA>);
 set_spell_cmd("$aspell_path list");
-all_pod_files_spelling_ok( starting_points_including_examples() );
+all_pod_files_spelling_ok();
 
 __DATA__
 autoflushes

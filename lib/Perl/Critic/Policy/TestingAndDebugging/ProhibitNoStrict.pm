@@ -13,7 +13,7 @@ use List::MoreUtils qw(all);
 use Perl::Critic::Utils;
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 1.02;
+our $VERSION = 0.23;
 
 #-----------------------------------------------------------------------------
 
@@ -23,9 +23,9 @@ my $expl = [ 429 ];
 #-----------------------------------------------------------------------------
 
 sub supported_parameters { return qw( allow )               }
-sub default_severity     { return $SEVERITY_HIGHEST         }
-sub default_themes       { return qw( core pbp bugs )       }
-sub applies_to           { return 'PPI::Statement::Include' }
+sub default_severity  { return $SEVERITY_HIGHEST         }
+sub default_themes    { return qw( core pbp bugs )       }
+sub applies_to        { return 'PPI::Statement::Include' }
 
 #-----------------------------------------------------------------------------
 
@@ -96,12 +96,12 @@ The value is a list of whitespace-delimited stricture types that you
 want to permit.  These can be C<vars>, C<subs> and/or C<refs>.  An
 example of this customization:
 
-  [TestingAndDebugging::ProhibitNoStrict]
+  [TestingAndDebugging::ProhibitStrictureDisabling]
   allow = vars subs refs
 
 =head1 SEE ALSO
 
-L<Perl::Critic::Policy::TestingAndDebugging::RequireUseStrict>
+L<Perl::Critic::Policy::TestingAndDebugging::RequirePackageStricture>
 
 =head1 AUTHOR
 
@@ -117,7 +117,6 @@ can be found in the LICENSE file included with this module
 
 =cut
 
-##############################################################################
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

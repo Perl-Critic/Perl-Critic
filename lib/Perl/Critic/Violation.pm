@@ -18,7 +18,7 @@ use Perl::Critic::Utils;
 use String::Format qw(stringf);
 use overload ( q{""} => 'to_string', cmp => '_compare' );
 
-our $VERSION = 1.02;
+our $VERSION = 0.23;
 
 #Class variables...
 our $FORMAT = "%m at line %l, column %c. %e.\n"; #Default stringy format
@@ -54,10 +54,6 @@ sub new {
     $self->{_severity}    = $sev;
     $self->{_policy}      = caller;
     $self->{_elem}        = $elem;
-
-    # Do this now before the weakened $doc gets garbage collected
-    my $top = $elem->top();
-    $self->{_filename} = $top->can('filename') ? $top->filename() : undef;
 
     return $self;
 }
@@ -164,7 +160,9 @@ sub policy {
 
 sub filename {
     my $self = shift;
-    return $self->{_filename};
+    my $elem = $self->{_elem};
+    my $top  = $elem->top();
+    return $top->can('filename') ? $top->filename() : undef;
 }
 
 #-----------------------------------------------------------------------------

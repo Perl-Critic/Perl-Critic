@@ -14,7 +14,7 @@ use PPI::Token::Whitespace;
 use English qw(-no_match_vars);
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 1.02;
+our $VERSION = 0.23;
 
 my $LINE_END = qr/\015{1,2}\012|\012|\015/mxs;
 
@@ -42,7 +42,7 @@ sub violates {
     return if !open $fh, '<', $filename;
     local $RS = undef;
     my $source = <$fh>;
-    close $fh or return;
+    close $fh;
 
     my $newline; # undef until we find the first one
     my $line = 1;

@@ -15,7 +15,7 @@ use Perl::Critic::Violation qw();
 use String::Format qw(stringf);
 use overload ( q{""} => 'to_string', cmp => '_compare' );
 
-our $VERSION = 1.02;
+our $VERSION = 0.23;
 
 #-----------------------------------------------------------------------------
 

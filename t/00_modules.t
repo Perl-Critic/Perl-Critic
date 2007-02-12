@@ -10,11 +10,11 @@
 use strict;
 use warnings;
 use PPI::Document;
-use Test::More tests => 1429;  # Add 14 for each new policy created
+use Test::More tests => 1401;  # Add 14 for each new policy created
 use Perl::Critic::TestUtils qw(bundled_policy_names);
 use English qw(-no_match_vars);
 
-our $VERSION = 1.02;
+our $VERSION = 0.23;
 
 # pre-compute for version comparisons
 my $version_string = __PACKAGE__->VERSION;

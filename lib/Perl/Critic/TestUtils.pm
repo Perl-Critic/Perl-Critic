@@ -21,13 +21,12 @@ use Perl::Critic;
 use Perl::Critic::Utils;
 use Perl::Critic::PolicyFactory (-test => 1);
 
-our $VERSION = 1.02;
+our $VERSION = 0.23;
 our @EXPORT_OK = qw(
     pcritique critique fcritique
     subtests_in_tree
     should_skip_author_tests
     get_author_test_skip_message
-    starting_points_including_examples
     bundled_policy_names
 );
 
@@ -84,7 +83,7 @@ sub fcritique {
     my $file = File::Spec->catfile($dir, @fileparts);
     if (open my $fh, '>', $file) {
         print {$fh} ${$code_ref};
-        close $fh or confess "unable to close $file: $!";
+        close $fh;
     }
 
     # Use eval so we can clean up before die() in case of error.
@@ -127,10 +126,6 @@ sub should_skip_author_tests {
 sub get_author_test_skip_message {
     ## no critic (RequireInterpolation);
     return 'Author test.  Set $ENV{TEST_AUTHOR} to a true value to run.';
-}
-
-sub starting_points_including_examples {
-    return (-e 'blib' ? 'blib' : 'lib', 'examples');
 }
 
 # The internal representation of a subtest is just a hash with some
@@ -190,7 +185,7 @@ sub _subtests_from_file {
             confess "Got some code but I'm not in a subtest: $test_file";
         }
     }
-    close $fh or confess "unable to close $test_file: $!";
+    close $fh;
     if ( $subtest ) {
         if ( $incode ) {
             push @subtests, _finalize_subtest( $subtest );
@@ -340,11 +335,6 @@ Answers whether author tests should run.
 
 Returns a string containing the message that should be emitted when a test
 is skipped due to it being an author test when author tests are not enabled.
-
-=item starting_points_including_examples()
-
-Returns a list of the directories contain code that needs to be tested when it
-is desired that the examples be included.
 
 =item bundled_policy_names()
 

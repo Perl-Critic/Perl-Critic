@@ -10,7 +10,7 @@
 use strict;
 use warnings;
 use PPI::Document;
-use Test::More tests => 89;
+use Test::More tests => 82;
 
 #-----------------------------------------------------------------------------
 
@@ -39,7 +39,6 @@ can_ok('main', 'policy_short_name');
 can_ok('main', 'precedence_of');
 can_ok('main', 'severity_to_number');
 can_ok('main', 'verbosity_to_format');
-can_ok('main', 'is_unchecked_call');
 
 is($SPACE, ' ', 'character constants');
 is($SEVERITY_LOWEST, 1, 'severity constants');
@@ -283,43 +282,6 @@ my @native_policies = bundled_policy_names();
 my $policy_dir = File::Spec->catfile( qw(lib Perl Critic Policy) );
 my @found_policies  = all_perl_files( $policy_dir );
 is( scalar @found_policies, scalar @native_policies, 'Find all perl code');
-
-#-----------------------------------------------------------------------------
-# is_unchecked_call tests
-{
-    my @trials = (
-                  # just an obvious failure to check the return value
-                  { code => q( open( $fh, $mode, $filename ); ),
-                    pass => 1 },
-                  # check the value with a trailing conditional
-                  { code => q( open( $fh, $mode, $filename ) or die 'unable to open'; ),
-                    pass => 0 },
-                  # assign the return value to a variable (and assume that it's checked later)
-                  { code => q( my $error = open( $fh, $mode, $filename ); ),
-                    pass => 0 },
-                  # the system call is in a conditional
-                  { code => q( return $EMPTY if not open my $fh, '<', $file; ),
-                    pass => 0 },
-                  # open call in list context, checked with 'not'
-                  { code => q( return $EMPTY if not ( open my $fh, '<', $file ); ),
-                    pass => 0 },
-                  # just putting the system call in a list context doesn't mean the return value is checked
-                  { code => q( ( open my $fh, '<', $file ); ),
-                    pass => 1 },
-                 );
-
-    foreach my $trial ( @trials ) {
-        my $doc = make_doc( $trial->{'code'} );
-        my $statement = $doc->find_first( sub { $_[1] eq 'open' } );
-        if ( $trial->{'pass'} ) {
-            ok( is_unchecked_call( $statement ), 'is_unchecked_call returns true' );
-        } else {
-            ok( ! is_unchecked_call( $statement ), 'is_unchecked_call returns false' );
-        }
-    }
-}
-
-#-----------------------------------------------------------------------------
 
 # Local Variables:
 #   mode: cperl

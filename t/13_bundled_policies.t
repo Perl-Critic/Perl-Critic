@@ -10,7 +10,7 @@
 use strict;
 use warnings;
 use Perl::Critic::Config;
-use Perl::Critic::PolicyFactory (-test => 1);
+use Perl::Critic::PolicyFactory (test => 1);
 use Test::More (tests => 1);
 
 # common P::C testing tools

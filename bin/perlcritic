@@ -21,7 +21,7 @@ use Perl::Critic::Violation qw();
 use Pod::Usage qw(pod2usage);
 
 
-our $VERSION = 1.02;
+our $VERSION = 0.23;
 
 #-----------------------------------------------------------------------------
 # Begin script.  Don't run when loaded as a library
@@ -313,10 +313,10 @@ sub render_policy_listing {
 
     my $type = shift;
     require Perl::Critic::PolicyListing;
-    require Perl::Critic;
+    require Perl::Critic::Config;
 
     my %pc_params = (-profile => $EMPTY, -severity => 1);
-    my @pols = Perl::Critic->new( %pc_params )->policies();
+    my @pols = Perl::Critic::Config->new( %pc_params )->policies();
     my $listing = Perl::Critic::PolicyListing->new( -policies => \@pols );
     print $listing;
     exit 0;
@@ -327,10 +327,10 @@ sub render_policy_listing {
 sub render_profile_prototype {
 
     require Perl::Critic::ProfilePrototype;
-    require Perl::Critic;
+    require Perl::Critic::Config;
 
     my %pc_params = (-profile => $EMPTY, -severity => 1);
-    my @pols = Perl::Critic->new( %pc_params )->policies();
+    my @pols = Perl::Critic::Config->new( %pc_params )->policies();
     my $prototype = Perl::Critic::ProfilePrototype->new( -policies => \@pols );
     print $prototype;
     exit 0;
@@ -341,15 +341,15 @@ sub render_profile_prototype {
 sub policy_docs {
 
     my $pattern = shift;
-    require Perl::Critic;
+    require Perl::Critic::PolicyFactory;
+    Perl::Critic::PolicyFactory->import();
 
-    my %pc_params = (-profile => $EMPTY, -severity => 1);
-    my @policies  = Perl::Critic::Config->new( %pc_params )->policies();
-    my @matches   = grep { $_ =~ m/$pattern/imx } @policies;
+    my @site_policies = Perl::Critic::PolicyFactory::site_policy_names();
+    my @matches = grep { $_ =~ m/$pattern/imx } @site_policies;
 
     for my $matching_policy ( @matches ) {
         my @perldoc_cmd = qw(perldoc -T); #-T means don't send to pager
-        system @perldoc_cmd, ref $matching_policy;
+        system @perldoc_cmd, $matching_policy;
     }
     exit 0;
 }
@@ -362,7 +362,7 @@ __END__
 
 =pod
 
-=for stopwords DGR INI-style vim-fu minibuffer -noprofile API ben Jore formatter Peshak pbp
+=for stopwords DGR INI-style vim-fu minibuffer -noprofile API ben Jore formatter Peshak
 
 =head1 NAME
 
@@ -404,7 +404,7 @@ there is a web-service available at L<http://perlcritic.com>.  The
 web-service does not yet support all the configuration features that
 are available in the native Perl::Critic API, but it should give you a
 good idea of what it does.  You can also invoke the perlcritic
-web-service from the command-line by doing an HTTP-post, such as one
+web-service from the command line by doing an HTTP-post, such as one
 of these:
 
    $> POST http://perlcritic.com/perl/critic.pl < MyModule.pm
@@ -478,12 +478,12 @@ to the default configuration for all Policies.
 
 =item C<-severity N>
 
-Directs C<perlcritic> to only apply Policies with a severity greater than
-C<N>.  Severity values are integers ranging from 1 (least severe) to 5 (most
-severe).  The default is 5.  For a given C<-profile>, decreasing the
-C<-severity> will usually produce more violations.  You can set the default
-value for this option in your F<.perlcriticrc> file.  You can also redefine
-the C<severity> for any Policy in your F<.perlcriticrc> file.  See
+Directs C<perlcritic> to only report violations of Policies with a severity
+greater than C<N>.  Severity values are integers ranging from 1 (least severe)
+to 5 (most severe).  The default is 5.  For a given C<-profile>, decreasing
+the C<-severity> will usually produce more violations.  You can set the
+default value for this option in your F<.perlcriticrc> file.  You can also
+redefine the C<severity> for any Policy in your F<.perlcriticrc> file.  See
 L<"CONFIGURATION"> for more information.
 
 =item C<-5 | -4 | -3 | -2 | -1>
@@ -518,71 +518,70 @@ option is also given, then all shortcut options are silently ignored.
 
 =item C<-theme RULE>
 
-Directs C<perlcritic> to apply only Policies with themes that satisfy the
-C<RULE>.  Themes are arbitrary names for groups of related policies.  You can
-combine theme names with boolean operators to create an arbitrarily complex
-C<RULE>.  For example, the following would apply only Policies that have a
-'bugs' AND 'pbp' theme:
-
-  $> perlcritic -theme='bugs && pbp' MyModule.pm
-
-Unless the C<-severity> option is explicitly given, setting C<-theme> silently
-causes the C<-severity> to be set to 1.  You can set the default value for
-this option in your F<.perlcriticrc> file.  See the L<"POLICY THEMES"> section
-for more information about themes.
+Directs C<perlcritic> to report only violations of Policies whose themes
+satisfy the C<RULE>.  Themes are arbitrary names for groups of related
+policies.  You can combine theme names with boolean operators to create an
+arbitrarily complex C<RULE>.  See the L<"POLICY THEMES"> section for more
+information.
 
 =item C<-include PATTERN>
 
-Directs C<perlcritic> to apply additional Policies that match the regex
-C</PATTERN/imx>.  Use this option to temporarily override your profile and/or
-the severity settings at the command-line.  For example:
+Directs C<perlcritic> to report additional violations of all Policy
+modules that match the regex C</PATTERN/imx>.  Use this option to
+temporarily override your profile and/or the severity settings at the
+command-line.  For example:
 
   perlcritic -include=layout my_file.pl
 
-This would cause C<perlcritic> to apply all the C<CodeLayout::*> policies even
-if they have a severity level that is less than the default level of 5, or
-have been disabled in your F<.perlcriticrc> file.  You can specify multiple
-C<-include> options and you can use it in conjunction with the C<-exclude>
-option.  Note that C<-exclude> takes precedence over C<-include> when a Policy
-matches both patterns.  You can set the default value for this option in your
-F<.perlcriticrc> file.
+This would cause C<perlcritic> to report violations of all the
+C<CodeLayout::*> policies even if they have a severity level that is
+less than the default level of 5, or have been disabled in your
+F<.perlcriticrc> file.  You can specify multiple C<-include> options
+and you can use it in conjunction with the C<-exclude> option.  Note
+that C<-exclude> takes precedence over C<-include> when a Policy
+matches both patterns.  You can set the default value for this option
+in your F<.perlcriticrc> file.
 
 =item C<-exclude PATTERN>
 
-Directs C<perlcritic> to not apply any Policy that matches the regex
-C</PATTERN/imx>.  Use this option to temporarily override your profile and/or
-the severity settings at the command-line.  For example:
+Directs C<perlcritic> to not report violations of any Policy modules
+that match the regex C</PATTERN/imx>.  Use this option to temporarily
+override your profile and/or the severity settings at the
+command-line.  For example:
 
   perlcritic -exclude=strict my_file.pl
 
-This would cause C<perlcritic> to not apply the C<RequireUseStrict> and
-C<ProhibitNoStrict> Policies even though they have the highest severity level.
-You can specify multiple C<-exclude> options and you can use it in conjunction
-with the C<-include> option.  Note that C<-exclude> takes precedence over
-C<-include> when a Policy matches both patterns.  You can set the default
-value for this option in your F<.perlcriticrc> file.
+This would cause C<perlcritic> to not report violations of the
+C<RequireUseStrict> and C<ProhibitNoStrict> policies even though they
+have the highest severity level.  You can specify multiple C<-exclude>
+options and you can use it in conjunction with the C<-include> option.
+Note that C<-exclude> takes precedence over C<-include> when a Policy
+matches both patterns.  You can set the default value for this option
+in your F<.perlcriticrc> file.
 
 =item C<-singlepolicy PATTERN>
 
-Directs C<perlcritic> to apply just one Policy module matching the regex
-C</PATTERN/imx>, and exclude all other Policies.  This option has precedence
-over the C<-severity>, C<-theme>, C<-include>, C<-exclude>, and C<-only>
-options.  For example:
+Directs C<perlcritic> to report only violations of the single Policy
+module that matches the regex C</PATTERN/imx>.  Use this option to
+temporarily override your profile and/or other command-line settings
+that specify the policies to use, including severity, C<-theme>,
+C<-include>, C<-exclude>, and C<-only> options.  For example:
 
   perlcritic -singlepolicy=nowarnings my_file.pl
 
-This would cause C<perlcritic> to apply just the C<ProhibitNoWarnings> Policy,
-regardless of the severity level setting.  No other Policies would be applied.
+This would cause C<perlcritic> to only report violations of the
+C<ProhibitNoWarnings> policy, regardless of the severity level
+setting.
 
-This is equivalent to what one might intend by...
+This is equivalent to what one might intend by
 
   perlcritic -exclude=. -include=nowarnings my_file.pl
 
-...but this won't work because the C<-exclude> option overrides the
+but this won't work because the C<-exclude> option overrides the
 C<-include> option.
 
-The equivalent of this option can be accomplished by creating a custom profile
-containing only the desired policy and then running...
+The equivalent of this option can be accomplished by creating a custom
+profile containing only the desired policy and then running...
 
   perlcritic -profile=customprofile -only my_file.pl
 
@@ -601,19 +600,21 @@ report.
 
 =item C<-force>
 
-Directs C<perlcritic> to ignore the magical C<"## no critic"> pseudo-pragmas
-in the source code. See L<"BENDING THE RULES"> for more information.  You can
-set the default value for this option in your F<.perlcriticrc> file.
+Directs C<perlcritic> to ignore the magical C<"## no critic">
+pseudo-pragmas in the source code. See L<"BENDING THE RULES"> for more
+information.  You can set the default value for this option in your
+F<.perlcriticrc> file.
 
 =item C<-verbose N | FORMAT>
 
-Sets the verbosity level or format for reporting violations.  If given a
-number (C<N>), C<perlcritic> reports violations using one of the predefined
-formats described below.  If given a string (C<FORMAT>), it is interpreted to
-be an actual format specification.  If the C<-verbose> option is not
-specified, it defaults to either 4 or 5, depending on whether multiple files
-were given as arguments to C<perlcritic>.  You can set the default value for
-this option in your F<.perlcriticrc> file.
+Sets the verbosity level or format for reporting violations.  If given
+a number (C<N>), C<perlcritic> reports violations using one of the
+predefined formats described below.  If given a string (C<FORMAT>), it
+is interpreted to be an actual format specification.  If the
+C<-verbose> option is not specified, it defaults to either 4 or 5,
+depending on whether multiple files were given as arguments to
+C<perlcritic>.  You can set the default value for this option in your
+F<.perlcriticrc> file.
 
     Verbosity     Format Specification
     -----------   -------------------------------------------------------------
@@ -629,9 +630,10 @@ this option in your F<.perlcriticrc> file.
     10            "%m at line %l, column %c.\n  %p (Severity: %s)\n%d\n",
     11            "%m at line %l, near '%r'.\n  %p (Severity: %s)\n%d\n"
 
-Formats are a combination of literal and escape characters similar to the way
-C<sprintf> works.  See L<String::Format> for a full explanation of the
-formatting capabilities.  Valid escape characters are:
+Formats are a combination of literal and escape characters similar to
+the way C<sprintf> works.  See L<String::Format> for a full
+explanation of the formatting capabilities.  Valid escape characters
+are:
 
     Escape    Meaning
     -------   ----------------------------------------------------------------
@@ -661,29 +663,28 @@ default themes are shown.
 
 Displays an expanded listing of all the L<Perl::Critic::Policy> modules that
 are found on this machine.  For each Policy, the name, default severity and
-default themes are shown, as well as the name of any additional parameters
-that the Policy supports.  The format is suitable as a prototype for your
+default themes are shown.  The format is suitable as a prototype for your
 F<.perlcriticrc> file.
 
 =item C<-only>
 
-Directs perlcritic to apply only Policies that are explicitly mentioned in
-your F<.perlcriticrc> file.  This is useful if you want to use just a small
-subset of Policies without having to disable all the others.  You can set the
-default value for this option in your F<.perlcriticrc> file.
+Directs perlcritic to choose only from policies that are explicitly
+named in your F<.perlcriticrc> file.  You can set the default value
+for this option in your F<.perlcriticrc> file.
 
 =item C<-count>
 
 =item C<-C>
 
-Display only the number of violations for each file.  Use this feature to get
-a quick handle on where a large pile of code might need the most attention.
+Display only the number of violations for each file.  Use this feature
+to get a quick handle on where a large pile of code might need the
+most attention.
 
 =item C<-Safari>
 
 Report "Perl Best Practice" citations as section numbers from
-L<http://safari.oreilly.com> instead of page numbers from the actual book.
-NOTE: This feature is not implemented yet.
+L<http://safari.oreilly.com> instead of page numbers from the actual
+book.  NOTE: This feature is not implemented yet.
 
 =item C<-nocolor>
 
@@ -702,7 +703,7 @@ at the command prompt.
 
 =item C<-quiet>
 
-Suppress the "source OK" message when no violations are found.
+Suppress the "source OK" message if no violations are found.
 
 =item C<-help>
 
@@ -726,23 +727,25 @@ Displays the version number of C<perlcritic> and exits.
 
 =head1 CONFIGURATION
 
-Most of the settings for Perl::Critic and each of the Policy modules can be
-controlled by a configuration file.  The default configuration file is called
-F<.perlcriticrc>.  C<perlcritic> will look for this file in the current
-directory first, and then in your home directory.  Alternatively, you can set
-the C<PERLCRITIC> environment variable to explicitly point to a different file
-in another location.  If none of these files exist, and the C<-profile> option
-is not given on the command-line, then all Policies will be loaded with their
+Most of the settings for Perl::Critic and each of the Policy modules
+can be controlled by a configuration file.  The default configuration
+file is called F<.perlcriticrc>.  L<Perl::Critic::Config> will look
+for this file in the current directory first, and then in your home
+directory.  Alternatively, you can set the C<PERLCRITIC> environment
+variable to explicitly point to a different file in another location.
+If none of these files exist, and the C<-profile> option is not given
+on the command line, then all Policies will be loaded with their
 default configuration.
 
-The format of the configuration file is a series of INI-style blocks that
-contain key-value pairs separated by "=". Comments should start with "#" and
-can be placed on a separate line or after the name-value pairs if you desire.
+The format of the configuration file is a series of INI-style
+blocks that contain key-value pairs separated by "=". Comments
+should start with "#" and can be placed on a separate line or after
+the name-value pairs if you desire.
 
-Default settings for perlcritic itself can be set B<before the first named
-block.> For example, putting any or all of these at the top of your
-F<.perlcriticrc> file will set the default value for the corresponding
-command-line argument.
+Default settings for perlcritic itself can be set B<before the first
+named block.>  For example, putting any or all of these at the top of
+your F<.perlcriticrc> file will set the default value for the
+corresponding command-line argument.
 
     severity  = 3                                     #Integer or named level
     only      = 1                                     #Zero or One
@@ -762,18 +765,19 @@ The remainder of the configuration file is a series of blocks like this:
     arg1 = value1
     arg2 = value2
 
-C<Perl::Critic::Policy::Category::PolicyName> is the full name of a module
-that implements the policy.  The Policy modules distributed with Perl::Critic
-have been grouped into categories according to the table of contents in Damian
-Conway's book B<Perl Best Practices>. For brevity, you can omit the
-C<'Perl::Critic::Policy'> part of the module name.
+C<Perl::Critic::Policy::Category::PolicyName> is the full name of a
+module that implements the policy.  The Policy modules distributed
+with Perl::Critic have been grouped into categories according to the
+table of contents in Damian Conway's book B<Perl Best Practices>. For
+brevity, you can omit the C<'Perl::Critic::Policy'> part of the
+module name.
 
-C<severity> is the level of importance you wish to assign to the Policy.  All
-Policy modules are defined with a default severity value ranging from 1 (least
-severe) to 5 (most severe).  However, you may disagree with the default
-severity and choose to give it a higher or lower severity, based on your own
-coding philosophy.  You can set the C<severity> to an integer from 1 to 5, or
-use one of the equivalent names:
+C<severity> is the level of importance you wish to assign to the
+Policy.  All Policy modules are defined with a default severity value
+ranging from 1 (least severe) to 5 (most severe).  However, you may
+disagree with the default severity and choose to give it a higher or
+lower severity, based on your own coding philosophy.  You can set the
+C<severity> to an integer from 1 to 5, or use one of the equivalent names:
 
     SEVERITY NAME ...is equivalent to... SEVERITY NUMBER
     ----------------------------------------------------
@@ -788,19 +792,22 @@ The argument is a string of one or more whitespace-delimited alphanumeric
 words.  Themes are case-insensitive.  See L<"POLICY THEMES"> for more
 information.
 
-C<add_themes> appends to the default themes for this Policy.  The argument is
-a string of one or more whitespace-delimited words.  Themes are
-case-insensitive.  See L<"POLICY THEMES"> for more information.
+C<add_themes> appends to the default themes for this Policy.  The
+argument is a string of one or more whitespace-delimited words.
+Themes are case-insensitive.  See L<"POLICY THEMES"> for more
+information.
 
-The remaining key-value pairs are configuration parameters that will be passed
-into the constructor of that Policy.  The constructors for most Policy modules
-do not support arguments, and those that do should have reasonable defaults.
-See the documentation on the appropriate Policy module for more details.
+The remaining key-value pairs are configuration parameters that will
+be passed into the constructor of that Policy.  The constructors for
+most Policy modules do not support arguments, and those that do should
+have reasonable defaults.  See the documentation on the appropriate
+Policy module for more details.
 
-Instead of redefining the severity for a given Policy, you can completely
-disable a Policy by prepending a '-' to the name of the module in your
-configuration file.  In this manner, the Policy will never be loaded,
-regardless of the C<-severity> given on the command line.
+Instead of redefining the severity for a given Policy, you can
+completely disable a Policy by prepending a '-' to the name of the
+module in your configuration file.  In this manner, the Policy will
+never be loaded, regardless of the C<-severity> given on the
+command line.
 
 A simple configuration might look like this:
 
@@ -825,7 +832,7 @@ A simple configuration might look like this:
 
     #--------------------------------------------------------------
     # Give these policies a custom theme.  I can activate just
-    # these policies by saying "perlcritic -theme 'larry || curly'"
+    # these policies by saying "perlcritic -theme 'larry + curly'"
 
     [Modules::RequireFilenameMatchesPackage]
     add_themes = larry
@@ -843,11 +850,8 @@ A simple configuration might look like this:
     # For all other Policies, I accept the default severity,
     # so no additional configuration is required for them.
 
-For additional configuration examples, see the F<perlcriticrc> file that is
-included in this F<examples> directory of this distribution.
-
-Damian Conway's own Perl::Critic configuration is also included in this
-distribution as F<examples/perlcriticrc-conway>.
+For additional configuration examples, see the F<perlcriticrc> file
+that is included in this F<t/examples> directory of this distribution.
 
 =head1 THE POLICIES
 
@@ -866,7 +870,7 @@ example, you may wish disable a certain set of Policies when analyzing test
 scripts.  Conversely, you may wish to enable only a specific subset of
 Policies when analyzing modules.
 
-The Policies that ship with Perl::Critic are have been divided into the
+The Policies that ship with Perl::Critic are have been broken into the
 following themes.  This is just our attempt to provide some basic logical
 groupings.  You are free to invent new themes that suit your needs.
 
@@ -881,13 +885,13 @@ groupings.  You are free to invent new themes that suit your needs.
     security          Policies that relate to security issues
     tests             Policies that are specific to test scripts
 
-Say C<"perlcritic -list"> to get a listing of all available policies and the
-themes that are associated with each one.  You can also change the theme for
-any Policy in your F<.perlcriticrc> file.  See the L<"CONFIGURATION"> section
-for more information about that.
+Say C<"perlcritic -list"> to get a listing of all available policies
+and the themes that are associated with each one.  You can also change
+the theme for any Policy in your F<.perlcriticrc> file.  See the
+L<"CONFIGURATION"> section for more information about that.
 
 Using the C<-theme> command-line option, you can create an arbitrarily complex
-rule that determines which Policies to apply.  Precedence is the same as
+rule that determines which Policies will be loaded.  Precedence is the same as
 regular Perl code, and you can use parens to enforce precedence as well.
 Supported operators are:
 
@@ -928,19 +932,20 @@ certain lines or blocks of code by using pseudo-pragmas:
         do_something($_);
     }
 
-The C<"## no critic"> comments direct Perl::Critic to ignore the remaining
-lines of code until the end of the current block, or until a C<"## use
-critic"> comment is found (whichever comes first).  If the C<"## no critic">
-comment is on the same line as a code statement, then only that line of code
-is overlooked.  To direct perlcritic to ignore the C<"## no critic"> comments,
-use the C<-force> option.
+The C<"## no critic"> comments direct Perl::Critic to ignore the
+remaining lines of code until the end of the current block, or until a
+C<"## use critic"> comment is found (whichever comes first).  If the
+C<"## no critic"> comment is on the same line as a code statement,
+then only that line of code is overlooked.  To direct perlcritic to
+ignore the C<"## no critic"> comments, use the C<-force> option.
 
-A bare C<"## no critic"> comment disables all the active Policies.  If you
-wish to disable only specific Policies, add a list of Policy names as
-arguments just as you would for the C<"no strict"> or C<"no warnings"> pragma.
-For example, this would disable the C<ProhibitEmptyQuotes> and
-C<ProhibitPostfixControls> policies until the end of the block or until the
-next C<"## use critic"> comment (whichever comes first):
+A bare C<"## no critic"> comment disables all the active Policies.  If
+you wish to disable only specific Policies, add a list of Policy names
+as arguments just as you would for the C<"no strict"> or C<"no
+warnings"> pragma.  For example, this would disable the
+C<ProhibitEmptyQuotes> and C<ProhibitPostfixControls> policies until
+the end of the block or until the next C<"## use critic"> comment
+(whichever comes first):
 
   ## no critic (EmptyQuotes, PostfixControls);
 
@@ -965,20 +970,29 @@ family of Policies in one shot like this:
   # Now exempt from NamingConventions::ProhibitMixedCaseSubs
   sub camelHumpSub {}
 
-The argument list must be enclosed in parens and must contain one or more
-comma-separated barewords (i.e. don't use quotes).  The C<"## no critic">
-pragmas can be nested, and Policies named by an inner pragma will be disabled
-along with those already disabled an outer pragma.
+The argument list must be enclosed in parens and must contain one or
+more comma-separated barewords (i.e. don't use quotes).  The C<"## no
+critic"> pragmas can be nested, and Policies named by an inner pragma
+will be disabled along with those already disabled an outer pragma.
 
-Some Policies like C<Subroutines::ProhibitExcessComplexity> apply to an entire
-block of code.  In those cases, C<"## no critic"> must appear on the line
-where the violation is reported.  For example:
+Some Policies like C<Subroutines::ProhibitExcessComplexity> apply to
+an entire block of code.  In those cases, C<"## no critic"> must appear
+on the line where the violation is reported.  For example:
 
   sub complicated_function {  ## no critic (ProhibitExcessComplexity)
       # Your code here...
   }
 
-Some Policies like C<Documentation::RequirePodSections> apply to the entire
+Use this feature wisely.  C<"## no critic"> should be used in the
+smallest possible scope, or only on individual lines of code. And you
+should always be as specific as possible about which policies you want
+to disable (i.e. never use a bare C<"## no critic">).  If Perl::Critic
+complains about your code, try and find a compliant solution before
+resorting to this feature.
+
+=head2 LIMITATIONS OF THE "no critic" DIRECTIVE
+
+Policies such as C<Documentation::RequirePodSections> apply to the entire
 document, in which case violations are reported at line 1.  But if the file
 requires a shebang line, it is impossible to put C<"## no critic"> on the
 first line of the file.  This is a known limitation and it will be addressed
@@ -986,42 +1000,37 @@ in a future release.  As a workaround, you can disable the affected policies
 at the command-line or in your F<.perlcriticrc> file.  But beware that this
 will affect the analysis of B<all> files.
 
-Use this feature wisely.  C<"## no critic"> should be used in the smallest
-possible scope, or only on individual lines of code. And you should always be
-as specific as possible about which policies you want to disable (i.e. never
-use a bare C<"## no critic">).  If Perl::Critic complains about your code, try
-and find a compliant solution before resorting to this feature.
-
 =head1 IMPORTANT CHANGES
 
-Perl-Critic is evolving rapidly.  As such, some of the interfaces have changed
-in ways that are not backward-compatible.  If you have been using an older
-version of Perl-Critic and/or you have been developing custom Policy modules,
-please read this section carefully.
+Perl-Critic is evolving rapidly.  As such, some of the interfaces have
+changed in ways that are not backward-compatible.  If you have been
+using an older version of Perl-Critic and/or you have been developing
+custom Policy modules, please read this section carefully.
 
 =head2 VERSION 0.23
 
 In version 0.23, the syntax for theme rules changed.  The mathematical
 operators ( "*", "+", "-" ) are no longer supported.  You must use logical
 operators instead ( "&&", "!", "||" ).  However the meanings of these
-operators is effectively the same.  See L<"POLICY THEMES"> for more details.
+operators is effectively the same.  See <"POLICY THEMES"> for more details.
 
 =head2 VERSION 0.21
 
-In version 0.21, we introduced the concept of policy "themes".  All you
-existing custom Policies should still be compatible.  But to take advantage of
-the theme feature, you should add a C<default_themes> method to your custom
-Policy modules.  See L<Perl::Critic::DEVELOPER> for an up-to-date guide on
-creating Policy modules.
+In version 0.21, we introduced the concept of policy "themes".  All
+you existing custom Policies should still be compatible.  But to take
+advantage of the theme feature, you should add a C<default_themes>
+method to your custom Policy modules.  See L<Perl::Critic::DEVELOPER>
+for an up-to-date guide on creating Policy modules.
 
 =head2 VERSION 0.16
 
-Starting in version 0.16, you can add a list Policy names as arguments to the
-C<"## no critic"> pseudo-pragma.  This feature allows you to disable specific
-policies.  So if you have been in the habit of adding additional words after
-C<"no critic">, then those words might cause unexpected results.  If you want
-to append other stuff to the C<"## no critic"> comment, then terminate the
-pseudo-pragma with a semi-colon, and then start another comment.  For example:
+Starting in version 0.16, you can add a list Policy names as arguments
+to the C<"## no critic"> pseudo-pragma.  This feature allows you to
+disable specific policies.  So if you have been in the habit of adding
+additional words after C<"no critic">, then those words might cause
+unexpected results.  If you want to append other stuff to the C<"## no
+critic"> comment, then terminate the pseudo-pragma with a semi-colon,
+and then start another comment.  For example:
 
   #This may not work as expected.
   $email = 'foo@bar.com';  ## no critic for literal '@'
@@ -1034,17 +1043,19 @@ pseudo-pragma with a semi-colon, and then start another comment.  For example:
 
 =head2 VERSION 0.14
 
-Starting in version 0.14, the interface to L<Perl::Critic::Violation> changed.
-This will also break any custom Policy modules that you might have written for
-earlier modules.  See L<Perl::Critic::DEVELOPER> for an up-to-date guide on
-creating Policy modules.
+Starting in version 0.14, the interface to L<Perl::Critic::Violation>
+changed.  This will also break any custom Policy modules that you
+might have written for earlier modules.  See
+L<Perl::Critic::DEVELOPER> for an up-to-date guide on creating Policy
+modules.
 
-The notion of "priority" was also replaced with "severity" in version 0.14.
-Consequently, the default behavior of Perl::Critic is to only load the most
-"severe" Policy modules, rather than loading all of them.  This decision was
-based on user-feedback suggesting that Perl-Critic should be less "critical"
-for new users, and should steer them toward gradually increasing the
-strictness as they adopt better coding practices.
+The notion of "priority" was also replaced with "severity" in version
+0.14.  Consequently, the default behavior of Perl::Critic is to only
+load the most "severe" Policy modules, rather than loading all of
+them.  This decision was based on user-feedback suggesting that
+Perl-Critic should be less "critical" for new users, and should steer
+them toward gradually increasing the strictness as they adopt better
+coding practices.
 
 =head2 VERSION 0.11
 
@@ -1058,11 +1069,12 @@ L<Perl::Critic::DEVELOPER> for an up-to-date guide on creating Policy modules.
 =head1 EDITOR INTEGRATION
 
 For ease-of-use, C<perlcritic> can be integrated with your favorite text
-editor.  The output-formatting capabilities of C<perlcritic> are specifically
-intended for use with the "grep" or "compile" modes available in editors like
-C<emacs> and C<vim>.  In these modes, you can run an arbitrary command and the
-editor will parse the output into an interactive buffer that you can click on
-and jump to the relevant line of code.
+editor.  The output-formatting capabilities of C<perlcritic> are
+specifically intended for use with the "grep" or "compile" modes
+available in editors like C<emacs> and C<vim>.  In these modes, you can
+run an arbitrary command and the editor will parse the output into an
+interactive buffer that you can click on and jump to the relevant line
+of code.
 
 The Perl::Critic team thanks everyone who has helped integrate Perl-Critic
 with their favorite editor.  Your contributions in particular have made
@@ -1071,49 +1083,52 @@ stripes.  We sincerely appreciate your hard work.
 
 =head2 EMACS
 
-Joshua ben Jore has authored a minor-mode for emacs that allows you to run
-perlcritic on the current region or buffer.  You can run it on demand, or
-configure it to run automatically when you save the buffer.  The output
-appears in a hot-linked compiler buffer.  The code and installation
-instructions can be found in the F<extras> directory inside this distribution.
+Joshua ben Jore has authored a minor-mode for emacs that allows you to
+run perlcritic on the current region or buffer.  You can run it on
+demand, or configure it to run automatically when you save the buffer.
+The output appears in a hot-linked compiler buffer.  The code and
+installation instructions can be found in the F<extras> directory
+inside this distribution.
 
 =head2 VIM
 
-Scott Peshak has published F<perlchecker.vim>, which is available at
-L<http://www.vim.org/scripts/script.php?script_id=1731>.
+Scott Peshak has published F<perlchecker.vim>, which is available
+at L<http://www.vim.org/scripts/script.php?script_id=1731>.
 
 =head2 gVIM
 
-Fritz Mehner recently added support for C<perlcritic> to his fantastic gVIM
-plugin.  In addition to providing a very Perlish IDE, Fritz's plugin enables
-one-click access to C<perlcritic> and many other very useful utilities.  And
-all is seamlessly integrated into the editor. See
-L<http://lug.fh-swf.de/vim/vim-perl/screenshots-en.html> for complete details.
+Fritz Mehner recently added support for C<perlcritic> to his fantastic
+gVIM plugin.  In addition to providing a very Perlish IDE, Fritz's
+plugin enables one-click access to C<perlcritic> and many other very
+useful utilities.  And all is seamlessly integrated into the
+editor. See L<http://lug.fh-swf.de/vim/vim-perl/screenshots-en.html>
+for complete details.
 
 =head2 EPIC
 
-EPIC is an open source Perl IDE based on the Eclipse platform.  Features
-supported are syntax highlighting, on-the-fly syntax check, content assist,
-perldoc support, source formatter, templating support and a Perl debugger.  Go
-to L<http://e-p-i-c.sourceforge.net> for more information about EPIC.
+EPIC is an open source Perl IDE based on the Eclipse platform.
+Features supported are syntax highlighting, on-the-fly syntax check,
+content assist, perldoc support, source formatter, templating support
+and a Perl debugger.  Go to L<http://e-p-i-c.sourceforge.net> for
+more information about EPIC.
 
-The EPIC team is currently working on integration with Perl::Critic.  In the
-meantime, you can use the L<criticism> pragma and EPIC will highlight
-violations whenever it does a syntax check on your code.  I haven't tried this
-myself, but other folks say it works.
+The EPIC team is currently working on integration with Perl::Critic.
+In the meantime, you can use the L<criticism> pragma and EPIC will
+highlight violations whenever it does a syntax check on your code.
+I haven't tried this myself, but other folks say it works.
 
 =head2 BBEdit
 
 Josh Clark has produced an excellent Perl-Critic plugin for BBEdit. See
-L<http://beta.bigmedium.com/projects/bbedit-perl-critic/index.shtml> for more
-information.  Apple users rejoice!
+L<http://beta.bigmedium.com/projects/bbedit-perl-critic/index.shtml> for
+more information.  Apple users rejoice!
 
 =head1 EXIT STATUS
 
-If C<perlcritic> has any errors itself, exits with status == 1.  If there are
-no errors, but C<perlcritic> finds Policy violations in your source code,
-exits with status == 2.  If there were no errors and no violations were found,
-exits with status == 0.
+If C<perlcritic> has any errors itself, exits with status == 1.  If there
+are no errors, but C<perlcritic> finds Policy violations in your source
+code, exits with status == 2.  If there were no errors and no
+violations were found, exits with status == 0.
 
 =head1 THE L<Perl::Critic> PHILOSOPHY
 
@@ -1129,31 +1144,24 @@ exits with status == 0.
 
 =head1 EXTENDING THE CRITIC
 
-The modular design of Perl::Critic is intended to facilitate the addition of
-new Policies.  You'll need to have some understanding of L<PPI>, but most
-Policy modules are pretty straightforward and only require about 20 lines of
-code.  Please see the L<Perl::Critic::DEVELOPER> file included in this
-distribution for a step-by-step demonstration of how to create new Policy
-modules.
+The modular design of Perl::Critic is intended to facilitate the
+addition of new Policies.  You'll need to have some understanding of
+L<PPI>, but most Policy modules are pretty straightforward and only
+require about 20 lines of code.  Please see the
+L<Perl::Critic::DEVELOPER> file included in this distribution for a
+step-by-step demonstration of how to create new Policy modules.
 
-If you develop any new Policy modules, feel free to send them to C<<
-<thaljef@cpan.org> >> and I'll be happy to put them into the Perl::Critic
-distribution.  Or if you would like to work on the Perl::Critic project
-directly, check out our repository at L<http://perlcritic.tigris.org>.  To
-subscribe to our mailing list, send a message to C<<
-<dev-subscribe@perlcritic.tigris.org> >>.
-
-The Perl::Critic team is also available for hire.  If your organization has
-its own coding standards, we can create custom Policies to enforce your local
-guidelines.  Or if your code base is prone to a particular defect pattern, we
-can design Policies that will help you catch those costly defects B<before>
-they go into production.  To discuss your needs with the Perl::Critic team,
-just contact C<< <thaljef@cpan.org> >>.
+If you develop any new Policy modules, feel free to send them to
+C<thaljef@cpan.org> and I'll be happy to put them into the Perl::Critic
+distribution.  Or if you'd like to work on the Perl::Critic project
+directly, check out our repository at L<http://perlcritic.tigris.org>.
+To subscribe to our mailing list, send a message to
+C<dev-subscribe@perlcritic.tigris.org>.
 
 =head1 BUGS
 
-Scrutinizing Perl code is hard for humans, let alone machines.  If you find
-any bugs, particularly false-positives or false-negatives from a
+Scrutinizing Perl code is hard for humans, let alone machines.  If you
+find any bugs, particularly false-positives or false-negatives from a
 Perl::Critic::Policy, please submit them to
 L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Perl-Critic>.  Thanks.
 
@@ -1181,9 +1189,9 @@ Jeffrey Ryan Thalhammer <thaljef@cpan.org>
 
 Copyright (c) 2005-2007 Jeffrey Ryan Thalhammer.  All rights reserved.
 
-This program is free software; you can redistribute it and/or modify it under
-the same terms as Perl itself.  The full text of this license can be found in
-the LICENSE file included with this module.
+This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.  The full text of this license
+can be found in the LICENSE file included with this module.
 
 =cut
 

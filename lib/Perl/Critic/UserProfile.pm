@@ -16,7 +16,7 @@ use File::Spec qw();
 use Perl::Critic::Defaults qw();
 use Perl::Critic::Utils;
 
-our $VERSION = 1.02;
+our $VERSION = 0.23;
 
 #-----------------------------------------------------------------------------
 
@@ -33,9 +33,9 @@ sub new {
 sub _init {
 
     my ( $self, %args ) = @_;
-    # The profile can be defined, undefined, or an empty string.
-    my $prof = defined $args{-profile} ? $args{-profile} : _find_profile_path();
-    $self->_load_profile( $prof );
+    # The profile can be defined, undefined, or empty.
+    my $profile = defined $args{-profile} ? $args{-profile} : _find_profile_path();
+    $self->_load_profile( $profile );
     $self->_set_defaults();
     return $self;
 }
