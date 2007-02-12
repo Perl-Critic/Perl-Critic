@@ -57,8 +57,8 @@ sub new {
 
     # Do these now before the weakened $doc gets garbage collected
     my $top = $elem->top();
-    $self->{_filename} = top->can('filename') ? $top->filename() : undef;
-    $self->{_source} = _first_line_of_source( $elem );
+    $self->{_filename} = $top->can('filename') ? $top->filename() : undef;
+    $self->{_source}   = _first_line_of_source( $elem );
 
     return $self;
 }
