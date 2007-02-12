@@ -504,7 +504,7 @@ sub is_unchecked_call {
         my $or_operators = sub  {
             my (undef, $elem) = @_;
             return if not $elem->isa('PPI::Token::Operator');
-            return if $elem ne 'or' && $elem ne '||';
+            return if $elem ne q{or} && $elem ne q{||};
             return 1;
         };
 
