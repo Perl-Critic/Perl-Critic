@@ -5,15 +5,23 @@
 # $Revision$
 ##############################################################################
 
-[1.02]  Released on 2007-??-??
+[1.02]  Released on 2007-02-11
 
      Bug Fixes:
      * "undef" incorrectly triggered ProhibitMutatingListFunctions.
-     * The filename was not appearing in the '%f' placeholder.
+     * 24876: %f and %F escapes not working in custom "verbose" format strings.
+     * 24875: Documentation bug in TestingAndDebugging::ProhibitNoStrict
 
      New Policies:
      * InputOutput::RequireCheckedOpen
      * InputOutput::RequireCheckedClose
+
+     Other Cool Stuff:
+     * Added Conway's own suggested Perl::Critic configuration as
+       examples/perlcriticrc-conway.
+
+     * See the examples/ directory for some neat demonstrations of using 
+       the Perl::Critic API. Contributed by Elliot Shank.
 
 [1.01]  Released on 2007-01-24
 
