@@ -499,26 +499,24 @@ sub is_unchecked_call {
         # "open or die" is OK.
         # We can't check snext_sibling for 'or' since the next siblings are an
         # unknown number of arguments to the system call. Instead, check all of
-        # the elements to this statement to see if we find 'or'
-        if ( $statement->find( sub  {
-                                   my (undef, $elem) = @_;
+        # the elements to this statement to see if we find 'or' or '||'.
 
-                                   return if $elem->content() ne 'or';
-                                   return if $elem->isa('PPI::Token::Word');
-                                   return if is_hash_key($elem);
-                                   return if is_method_call($elem);
+        my $or_operators = sub  {
+            my (undef, $elem) = @_;
+            return if not $elem->isa('PPI::Token::Operator');
+            return if $elem ne q{or} && $elem ne q{||};
+            return 1;
+        };
 
-                                   return 1;
-                               } ) ) {
-            return;
-        }
+        return if $statement->find( $or_operators );
+
 
         if( my $parent = $elem->statement()->parent() ){
 
-            # check to see if we're in an if( open ) { good } else { bad } condition
+            # Check if we're in an if( open ) {good} else {bad} condition
             return if $parent->isa('PPI::Structure::Condition');
 
-            # the return value could be captured in a data structure and checked later.
+            # Return val could be captured in data structure and checked later
             return if $parent->isa('PPI::Structure::Constructor');
 
             # "die if not ( open() )" - It's in list context.

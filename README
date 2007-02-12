@@ -351,6 +351,9 @@ CONFIGURATION
     For additional configuration examples, see the perlcriticrc file that is
     included in this examples directory of this distribution.
 
+    Damian Conway's own Perl::Critic configuration is also included in this
+    distro as examples/perlcriticrc-conway.
+
 THE POLICIES
     A large number of Policy modules are distributed with Perl::Critic. They
     are described briefly in the companion document
