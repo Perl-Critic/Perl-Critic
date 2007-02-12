@@ -9,7 +9,7 @@ package Perl::Critic::Policy::Miscellanea::RequireRcsKeywords;
 
 use strict;
 use warnings;
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :severities :data_conversion };
 use List::MoreUtils qw(none);
 use base 'Perl::Critic::Policy';
 

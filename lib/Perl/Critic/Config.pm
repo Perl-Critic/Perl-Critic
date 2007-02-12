@@ -16,7 +16,9 @@ use Scalar::Util qw(blessed);
 use Perl::Critic::PolicyFactory;
 use Perl::Critic::Theme qw();
 use Perl::Critic::UserProfile qw();
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{
+    :booleans :characters :severities :internal_lookup
+};
 
 #-----------------------------------------------------------------------------
 

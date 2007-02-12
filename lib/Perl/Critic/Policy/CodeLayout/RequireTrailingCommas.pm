@@ -9,7 +9,7 @@ package Perl::Critic::Policy::CodeLayout::RequireTrailingCommas;
 
 use strict;
 use warnings;
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :characters :severities };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.03;

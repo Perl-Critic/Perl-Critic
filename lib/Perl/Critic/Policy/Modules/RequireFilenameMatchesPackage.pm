@@ -10,7 +10,7 @@ package Perl::Critic::Policy::Modules::RequireFilenameMatchesPackage;
 use strict;
 use warnings;
 use File::Spec;
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.03;

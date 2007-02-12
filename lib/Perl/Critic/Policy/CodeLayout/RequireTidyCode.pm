@@ -10,7 +10,7 @@ package Perl::Critic::Policy::CodeLayout::RequireTidyCode;
 use strict;
 use warnings;
 use English qw(-no_match_vars);
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :characters :severities };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.03;

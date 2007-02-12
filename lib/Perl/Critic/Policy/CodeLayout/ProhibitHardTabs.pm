@@ -9,7 +9,7 @@ package Perl::Critic::Policy::CodeLayout::ProhibitHardTabs;
 
 use strict;
 use warnings;
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :booleans :severities };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.03;

@@ -13,7 +13,13 @@ use Carp qw(confess);
 use English qw(-no_match_vars);
 use File::Spec::Unix qw();
 use List::MoreUtils qw(any);
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{
+    :characters
+    $POLICY_NAMESPACE
+    :data_conversion
+    &policy_long_name
+    :internal_lookup
+};
 
 our $VERSION = 1.03;
 

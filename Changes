@@ -29,6 +29,12 @@
      * See the examples/ directory for some neat demonstrations of using 
        the Perl::Critic API. Contributed by Elliot Shank.
 
+     Interface Changes:
+     * Perl::Critic::Utils no longer exports anything by default.  Policies
+       outside the distribution will need to specify what exactly they need
+       from this module.  There are a number of tags that can be used in
+       addition to individual imports.
+
 [1.01]  Released on 2007-01-24
 
      PRODUCTION RELEASE:  You may now consider the public Perl::Critic

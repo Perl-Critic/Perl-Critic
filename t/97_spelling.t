@@ -54,6 +54,7 @@ perlcritic
 perlcriticrc
 PolicyListing
 postfix
+programmatically
 PPI
 Readonly
 refactor

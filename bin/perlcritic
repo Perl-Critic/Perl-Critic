@@ -16,7 +16,7 @@ use Carp qw(carp confess);
 use English qw(-no_match_vars);
 use Getopt::Long qw(GetOptions);
 use List::Util qw(first);
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :characters :severities };
 use Perl::Critic::Violation qw();
 use Pod::Usage qw(pod2usage);
 

@@ -14,7 +14,7 @@ use English qw(-no_match_vars);
 use List::MoreUtils qw(all any);
 use Perl::Critic::PolicyFactory (-test => 1);
 use Perl::Critic::Config qw();
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :severities };
 use Test::More (tests => 67);
 
 # common P::C testing tools

@@ -11,7 +11,7 @@ use strict;
 use warnings;
 use Carp qw(cluck);
 use English qw(-no_match_vars);
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :booleans :characters :severities :data_conversion };
 
 our $VERSION = 1.03;
 

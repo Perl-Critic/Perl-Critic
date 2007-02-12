@@ -10,7 +10,7 @@ package Perl::Critic::Policy::Subroutines::RequireFinalReturn;
 use strict;
 use warnings;
 use Carp qw(confess);
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :severities :data_conversion };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.03;

@@ -10,7 +10,7 @@ package Perl::Critic::Policy::ValuesAndExpressions::ProhibitInterpolationOfLiter
 use strict;
 use warnings;
 use List::MoreUtils qw(any);
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :severities :data_conversion };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.03;

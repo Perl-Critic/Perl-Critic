@@ -17,12 +17,9 @@ use base 'Exporter';
 our $VERSION = 1.03;
 
 #-----------------------------------------------------------------------------
-# Exported symbols here. TODO: Use @EXPORT_OK and %EXPORT_TAGS instead
+# Exportable symbols here.
 
-
-## no critic (AutomaticExport)
-our @EXPORT = qw(
-
+our @EXPORT_OK = qw(
     $TRUE
     $FALSE
 
@@ -50,6 +47,7 @@ our @EXPORT = qw(
 
     &all_perl_files
     &find_keywords
+    &first_arg
     &hashify
     &interpolate
     &is_function_call
@@ -59,16 +57,63 @@ our @EXPORT = qw(
     &is_perl_global
     &is_script
     &is_subroutine_name
-    &first_arg
+    &is_unchecked_call
     &parse_arg_list
     &policy_long_name
     &policy_short_name
     &precedence_of
-    &shebang_line
     &severity_to_number
+    &shebang_line
     &verbosity_to_format
     &words_from_string
-    &is_unchecked_call
+);
+
+our %EXPORT_TAGS = (
+    all             => [ @EXPORT_OK ],
+    booleans        => [ qw{ $TRUE $FALSE } ],
+    severities      => [
+        qw{
+            $SEVERITY_HIGHEST
+            $SEVERITY_HIGH
+            $SEVERITY_MEDIUM
+            $SEVERITY_LOW
+            $SEVERITY_LOWEST
+            @SEVERITY_NAMES
+        }
+    ],
+    characters      => [
+        qw{
+            $COLON
+            $COMMA
+            $DQUOTE
+            $EMPTY
+            $FATCOMMA
+            $PERIOD
+            $PIPE
+            $QUOTE
+            $SCOLON
+            $SPACE
+            $SLASH
+            $BSLASH
+        }
+    ],
+    classification  => [
+        qw{
+            &is_function_call
+            &is_hash_key
+            &is_method_call
+            &is_perl_builtin
+            &is_perl_global
+            &is_script
+            &is_subroutine_name
+            &is_unchecked_call
+        }
+    ],
+    data_conversion => [ qw{ &hashify &words_from_string &interpolate } ],
+    ppi             => [ qw{ &first_arg &parse_arg_list } ],
+    internal_lookup => [ qw{ &severity_to_number &verbosity_to_format } ],
+    language        => [ qw{ &precedence_of } ],
+    deprecated      => [ qw{ &find_keywords } ],
 );
 
 #-----------------------------------------------------------------------------
@@ -545,87 +590,86 @@ Perl::Critic::Utils - Utility subs and vars for Perl::Critic
 
 =head1 DESCRIPTION
 
-This module exports several static subs and variables that are useful
-for developing L<Perl::Critic::Policy> subclasses.  Unless you are
-writing Policy modules, you probably don't care about this package.
+This module provides several static subs and variables that are useful for
+developing L<Perl::Critic::Policy> subclasses.  Unless you are writing Policy
+modules, you probably don't care about this package.
 
-=head1 EXPORTED SUBS
+=head1 IMPORTABLE SUBS
 
 =over 8
 
 =item C<find_keywords( $doc, $keyword )>
 
-B<DEPRECATED:> Since version 0.11, every Policy is evaluated at each
-element of the document.  So you shouldn't need to go looking for a
-particular keyword.
+B<DEPRECATED:> Since version 0.11, every Policy is evaluated at each element
+of the document.  So you shouldn't need to go looking for a particular
+keyword.  If you I<do> want to use this, please import it via the
+C<:deprecated> tag, rather than directly, to mark the module as needing
+updating.
 
 Given a L<PPI::Document> as C<$doc>, returns a reference to an array
-containing all the L<PPI::Token::Word> elements that match
-C<$keyword>.  This can be used to find any built-in function, method
-call, bareword, or reserved keyword.  It will not match variables,
-subroutine names, literal strings, numbers, or symbols.  If the
-document doesn't contain any matches, returns undef.
+containing all the L<PPI::Token::Word> elements that match C<$keyword>.  This
+can be used to find any built-in function, method call, bareword, or reserved
+keyword.  It will not match variables, subroutine names, literal strings,
+numbers, or symbols.  If the document doesn't contain any matches, returns
+undef.
 
 =item C<is_perl_global( $element )>
 
 Given a L<PPI::Token::Symbol> or a string, returns true if that token
-represents one of the global variables provided by the L<English>
-module, or one of the builtin global variables like C<%SIG>, C<%ENV>,
-or C<@ARGV>.  The sigil on the symbol is ignored, so things like
-C<$ARGV> or C<$ENV> will still return true.
+represents one of the global variables provided by the L<English> module, or
+one of the builtin global variables like C<%SIG>, C<%ENV>, or C<@ARGV>.  The
+sigil on the symbol is ignored, so things like C<$ARGV> or C<$ENV> will still
+return true.
 
 =item C<is_perl_builtin( $element )>
 
-Given a L<PPI::Token::Word> or a string, returns true if that token
-represents a call to any of the builtin functions defined in Perl
-5.8.8
+Given a L<PPI::Token::Word> or a string, returns true if that token represents
+a call to any of the builtin functions defined in Perl 5.8.8
 
 =item C<precedence_of( $element )>
 
-Given a L<PPI::Token::Operator> or a string, returns the precedence of
-the operator, where 1 is the highest precedence.  Returns undef if the
-precedence can't be determined (which is usually because it is not an
-operator).
+Given a L<PPI::Token::Operator> or a string, returns the precedence of the
+operator, where 1 is the highest precedence.  Returns undef if the precedence
+can't be determined (which is usually because it is not an operator).
 
 =item C<is_hash_key( $element )>
 
-Given a L<PPI::Element>, returns true if the element is a hash key.
-PPI doesn't distinguish between regular barewords (like keywords or
-subroutine calls) and barewords in hash subscripts (which are
-considered literal).  So this subroutine is useful if your Policy is
-searching for L<PPI::Token::Word> elements and you want to filter out
-the hash subscript variety.  In both of the following examples, 'foo'
-is considered a hash key:
+Given a L<PPI::Element>, returns true if the element is a hash key.  PPI
+doesn't distinguish between regular barewords (like keywords or subroutine
+calls) and barewords in hash subscripts (which are considered literal).  So
+this subroutine is useful if your Policy is searching for L<PPI::Token::Word>
+elements and you want to filter out the hash subscript variety.  In both of
+the following examples, 'foo' is considered a hash key:
 
   $hash1{foo} = 1;
   %hash2 = (foo => 1);
 
 =item C<is_method_call( $element )>
 
-Given a L<PPI::Element> that is presumed to be a function call (which
-is usually a L<PPI::Token::Word>), returns true if the function is a
-method being called on some reference.  Basically, it just looks to see
-if the preceding operator is "->".  This is useful for distinguishing
-static function calls from object method calls.
+Given a L<PPI::Element> that is presumed to be a function call (which is
+usually a L<PPI::Token::Word>), returns true if the function is a method being
+called on some reference.  Basically, it just looks to see if the preceding
+operator is "->".  This is useful for distinguishing static function calls
+from object method calls.
 
 =item C<is_subroutine_name( $element )>
 
-Given a L<PPI::Token::Word>, returns true if the element is the name
-of a subroutine declaration.  This is useful for distinguishing
-barewords and from function calls from subroutine declarations.
+Given a L<PPI::Token::Word>, returns true if the element is the name of a
+subroutine declaration.  This is useful for distinguishing barewords and from
+function calls from subroutine declarations.
 
 =item C<is_function_call( $element )>
 
-Given a L<PPI::Token::Word> returns true if the element appears to be
-call to a static function.  Specifically, this function returns true
-if C<is_hash_key>, C<is_method_call>, and C<is_subroutine_name> all
-return false for the given element.
+Given a L<PPI::Token::Word> returns true if the element appears to be call to
+a static function.  Specifically, this function returns true if
+C<is_hash_key>, C<is_method_call>, and C<is_subroutine_name> all return false
+for the given element.
 
 =item C<first_arg( $element )>
 
 Given a L<PPI::Element> that is presumed to be a function call (which is
-usually a L<PPI::Token::Word>), return the first argument.  This is similar
-of C<parse_arg_list()> and follows the same logic.  Note that for the code:
+usually a L<PPI::Token::Word>), return the first argument.  This is similar of
+C<parse_arg_list()> and follows the same logic.  Note that for the code:
 
   int($x + 0.5)
 
@@ -638,32 +682,34 @@ which returns C<($x + $y)> as a L<PPI::Structure::List> instance.
 
 =item C<parse_arg_list( $element )>
 
-Given a L<PPI::Element> that is presumed to be a function call (which
-is usually a L<PPI::Token::Word>), splits the argument expressions
-into arrays of tokens.  Returns a list containing references to each
-of those arrays.  This is useful because parens are optional when
-calling a function, and PPI parses them very differently.  So this
-method is a poor-man's parse tree of PPI nodes.  It's not bullet-proof
-because it doesn't respect precedence.  In general, I don't like the
-way this function works, so don't count on it to be stable (or even
-present).
+Given a L<PPI::Element> that is presumed to be a function call (which is
+usually a L<PPI::Token::Word>), splits the argument expressions into arrays of
+tokens.  Returns a list containing references to each of those arrays.  This
+is useful because parens are optional when calling a function, and PPI parses
+them very differently.  So this method is a poor-man's parse tree of PPI
+nodes.  It's not bullet-proof because it doesn't respect precedence.  In
+general, I don't like the way this function works, so don't count on it to be
+stable (or even present).
 
 =item C<is_script( $document )>
 
-Given a L<PPI::Document>, test if it starts with C</#!.*/>.  If so,
-it is judged to be a script instead of a module.  See C<shebang_line()>.
+Given a L<PPI::Document>, test if it starts with C</#!.*/>.  If so, it is
+judged to be a script instead of a module.  See C<shebang_line()>.
 
-=item C< policy_long_name( ) >
+=item C< policy_long_name( $policy_name ) >
 
-=item C< policy_short_name( ) >
+Given a policy class name in long or short form, return the long form.
+
+=item C< policy_short_name( $policy_name ) >
+
+Given a policy class name in long or short form, return the short form.
 
 =item C<all_perl_files( @directories )>
 
-Given a list of directories, recursively searches through all the
-directories (depth first) and returns a list of paths for all the
-files that are Perl code files.  Any administrative files for CVS or
-Subversion are skipped, as are things that look like temporary or
-backup files.
+Given a list of directories, recursively searches through all the directories
+(depth first) and returns a list of paths for all the files that are Perl code
+files.  Any administrative files for CVS or Subversion are skipped, as are
+things that look like temporary or backup files.
 
 A Perl code file is:
 
@@ -685,34 +731,33 @@ function will throw an exception.
 
 =item C<verbosity_to_format( $verbosity_level )>
 
-Given a verbosity level between 1 and 10, returns the corresponding
-predefined format string.  These formats are suitable for passing to
-the C<set_format> method in L<Perl::Critic::Violation>.  See the
-L<perlcritic> documentation for a listing of the predefined formats.
+Given a verbosity level between 1 and 10, returns the corresponding predefined
+format string.  These formats are suitable for passing to the C<set_format>
+method in L<Perl::Critic::Violation>.  See the L<perlcritic> documentation for
+a listing of the predefined formats.
 
 =item C<hashify( @list )>
 
-Given C<@list>, return a hash where C<@list> is in the keys and each
-value is 1.  Duplicate values in C<@list> are silently squished.
+Given C<@list>, return a hash where C<@list> is in the keys and each value is
+1.  Duplicate values in C<@list> are silently squished.
 
 =item C<interpolate( $literal )>
 
-Given a C<$literal> string that may contain control characters
-(e.g.. '\t' '\n'), this function does a double interpolation on the
-string and returns it as if it had been declared in double quotes.
-For example:
+Given a C<$literal> string that may contain control characters (e.g.. '\t'
+'\n'), this function does a double interpolation on the string and returns it
+as if it had been declared in double quotes.  For example:
 
   'foo \t bar \n' ...becomes... "foo \t bar \n"
 
 =item C<shebang_line( $document )>
 
-Given a L<PPI::Document>, test if it starts with C<#!>.  If so,
-return that line.  Otherwise return undef.
+Given a L<PPI::Document>, test if it starts with C<#!>.  If so, return that
+line.  Otherwise return undef.
 
 =item C<words_from_string( $str )>
 
-Given config string I<$str>, return all the words from the string.
-This is safer than splitting on whitespace.
+Given config string I<$str>, return all the words from the string.  This is
+safer than splitting on whitespace.
 
 =item C<is_unchecked_call( $element )>
 
@@ -721,7 +766,7 @@ return value is not checked.
 
 =back
 
-=head1 EXPORTED VARIABLES
+=head1 IMPORTABLE VARIABLES
 
 =over 8
 
@@ -749,9 +794,9 @@ return value is not checked.
 
 =item C<$BSLASH>
 
-These character constants give clear names to commonly-used strings
-that can be hard to read when surrounded by quotes and other
-punctuation.
+These character constants give clear names to commonly-used strings that can
+be hard to read when surrounded by quotes and other punctuation.  Can be
+imported in one go via the C<:characters> tag.
 
 =item C<$SEVERITY_HIGHEST>
 
@@ -764,15 +809,114 @@ punctuation.
 =item C<$SEVERITY_LOWEST>
 
 These numeric constants define the relative severity of violating each
-L<Perl::Critic::Policy>.  The C<get_severity> and C<default_severity>
-methods of every Policy subclass must return one of these values.
+L<Perl::Critic::Policy>.  The C<get_severity> and C<default_severity> methods
+of every Policy subclass must return one of these values. Can be imported via
+the C<:severities> tag.
 
 =item C<$TRUE>
 
 =item C<$FALSE>
 
 These are simple booleans. 1 and 0 respectively.  Be mindful of using these
-with string equality.  C<$FALSE ne $EMPTY>.
+with string equality.  C<$FALSE ne $EMPTY>.  Can be imported via the
+C<:booleans> tag.
+
+=back
+
+=head1 IMPORT TAGS
+
+The following groups of functions and constants are available as parameters to
+a C<use Perl::Critic::Util> statement.
+
+=over
+
+=item C<:all>
+
+The lot.
+
+=item C<:booleans>
+
+Includes:
+C<$TRUE>, C<$FALSE>
+
+=item C<:severities>
+
+Includes:
+C<$SEVERITY_HIGHEST>,
+C<$SEVERITY_HIGH>,
+C<$SEVERITY_MEDIUM>,
+C<$SEVERITY_LOW>,
+C<$SEVERITY_LOWEST>,
+C<@SEVERITY_NAMES>
+
+=item C<:characters>
+
+Includes:
+C<$COLON>,
+C<$COMMA>,
+C<$DQUOTE>,
+C<$EMPTY>,
+C<$FATCOMMA>,
+C<$PERIOD>,
+C<$PIPE>,
+C<$QUOTE>,
+C<$SCOLON>,
+C<$SPACE>,
+C<$SLASH>,
+C<$BSLASH>
+
+=item C<:classification>
+
+Includes:
+C<&is_function_call>,
+C<&is_hash_key>,
+C<&is_method_call>,
+C<&is_perl_builtin>,
+C<&is_perl_global>,
+C<&is_script>,
+C<&is_subroutine_name>,
+C<&is_unchecked_call>
+
+=item C<:data_conversion>
+
+Generic manipulation, not having anything specific to do with Perl::Critic.
+
+Includes:
+C<&hashify>,
+C<&words_from_string>,
+C<&interpolate>
+
+=item C<:ppi>
+
+Things for dealing with L<PPI>, other than classification.
+
+Includes:
+C<&first_arg>,
+C<&parse_arg_list>
+
+=item C<:internal_lookup>
+
+Translations between internal representations.
+
+Includes:
+C<&severity_to_number>,
+C<&verbosity_to_format>
+
+=item C<:language>
+
+Information about Perl not programmatically available elsewhere.
+
+Includes:
+C<&precedence_of>
+
+=item C<:deprecated>
+
+Not surprisingly, things that are deprecated.  It is preferred to use this tag
+to get to these functions, rather than the function names themselves, so as to
+mark any module using them as needing cleanup.
+
+Includes:
+C<&find_keywords>
 
 =back
 

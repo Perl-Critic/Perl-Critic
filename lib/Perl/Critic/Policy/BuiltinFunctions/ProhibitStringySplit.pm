@@ -9,7 +9,7 @@ package Perl::Critic::Policy::BuiltinFunctions::ProhibitStringySplit;
 
 use strict;
 use warnings;
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :characters :severities :classification :ppi };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.03;

@@ -17,7 +17,7 @@ use Test::More tests => 89;
 BEGIN
 {
     # Needs to be in BEGIN for global vars
-    use_ok('Perl::Critic::Utils');
+    use_ok('Perl::Critic::Utils', qw{ :all } );
 }
 
 #-----------------------------------------------------------------------------

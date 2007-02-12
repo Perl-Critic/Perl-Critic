@@ -18,7 +18,7 @@ use File::Spec::Unix ();
 use File::Temp ();
 use File::Find qw( find );
 use Perl::Critic;
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :data_conversion };
 use Perl::Critic::PolicyFactory (-test => 1);
 
 our $VERSION = 1.03;

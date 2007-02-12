@@ -9,7 +9,7 @@ package Perl::Critic::Policy::ValuesAndExpressions::RequireInterpolationOfMetach
 
 use strict;
 use warnings;
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
 #-----------------------------------------------------------------------------

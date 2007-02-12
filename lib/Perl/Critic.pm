@@ -18,7 +18,7 @@ use English qw(-no_match_vars);
 use Perl::Critic::Config;
 use Perl::Critic::Violation;
 use Perl::Critic::Document;
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :characters };
 use PPI::Document;
 use PPI::Document::File;
 

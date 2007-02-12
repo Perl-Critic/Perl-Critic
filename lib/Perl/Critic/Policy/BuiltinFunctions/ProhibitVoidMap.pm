@@ -9,7 +9,7 @@ package Perl::Critic::Policy::BuiltinFunctions::ProhibitVoidMap;
 
 use strict;
 use warnings;
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :severities :classification };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.03;

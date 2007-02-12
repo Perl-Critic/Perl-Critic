@@ -9,7 +9,7 @@ package Perl::Critic::Policy::CodeLayout::RequireConsistentNewlines;
 
 use strict;
 use warnings;
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :severities };
 use PPI::Token::Whitespace;
 use English qw(-no_match_vars);
 use base 'Perl::Critic::Policy';

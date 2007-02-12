@@ -9,7 +9,7 @@ package Perl::Critic::Policy::Modules::ProhibitAutomaticExportation;
 
 use strict;
 use warnings;
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :severities };
 use List::MoreUtils qw(any);
 use base 'Perl::Critic::Policy';
 

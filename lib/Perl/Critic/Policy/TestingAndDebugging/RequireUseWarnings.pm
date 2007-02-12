@@ -9,7 +9,7 @@ package Perl::Critic::Policy::TestingAndDebugging::RequireUseWarnings;
 
 use strict;
 use warnings;
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :severities };
 use List::Util qw(first);
 use base 'Perl::Critic::Policy';
 

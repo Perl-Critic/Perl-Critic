@@ -12,7 +12,7 @@ use warnings;
 use Carp qw(confess);
 use English qw(-no_match_vars);
 use List::MoreUtils qw(any);
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :characters :data_conversion };
 
 #-----------------------------------------------------------------------------
 

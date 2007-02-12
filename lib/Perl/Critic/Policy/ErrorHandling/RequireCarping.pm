@@ -9,7 +9,9 @@ package Perl::Critic::Policy::ErrorHandling::RequireCarping;
 
 use strict;
 use warnings;
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{
+    :booleans :characters :severities :classification :data_conversion
+};
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.03;

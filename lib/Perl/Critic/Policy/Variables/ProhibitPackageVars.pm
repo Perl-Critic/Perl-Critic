@@ -9,7 +9,7 @@ package Perl::Critic::Policy::Variables::ProhibitPackageVars;
 
 use strict;
 use warnings;
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :severities :data_conversion };
 use List::MoreUtils qw(all any);
 use Carp qw( carp );
 use base 'Perl::Critic::Policy';
