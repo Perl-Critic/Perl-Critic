@@ -11,11 +11,11 @@ is( pcritique($policy, \$code), 1, $policy.' 1 stmnt before package');
 #-----------------------------------------------------------------------------
 
 ## name BEGIN block before package
-## failures 3
+## failures 1
 ## cut
 BEGIN{
-    print 'Hello';
-    print 'Beginning';
+    print 'Hello';        #this violation will be squelched 
+    print 'Beginning';    #this violation will be squelched 
 }
 
 package foo;
@@ -31,10 +31,10 @@ package foo;
 #-----------------------------------------------------------------------------
 
 ## name two statements before package
-## failures 2
+## failures 1
 ## cut
 $baz = $nuts;
-print 'whatever';
+print 'whatever';      #this violation will be squelched 
 package foo;
 
 #-----------------------------------------------------------------------------
@@ -81,13 +81,13 @@ package foo;
 #-----------------------------------------------------------------------------
 
 ## name programs not exempted
-## failures 3
+## failures 1
 ## parms {exempt_scripts => 0}
 ## cut
 #!/usr/bin/perl
 use strict;
-use warnings;
-my $foo = 42;
+use warnings;          #this violation will be squelched 
+my $foo = 42;          #this violation will be squelched 
 
 #-----------------------------------------------------------------------------
 

@@ -638,10 +638,9 @@ is( critique(\$code, {-profile  => $profile, -severity => 4} ), 1,
 #-----------------------------------------------------------------------------
 
 $code = <<'END_PERL';
-use strict;      #should find this
-use warnings;    #and this one
-my $foo = 'baz'; ## no critic
-my $bar = 42;    #should find this too
+use strict;      ##no critic
+use warnings;    #should find this
+my $bar = 42;    #this one will be squelched
 
 package FOO;
 
@@ -650,9 +649,10 @@ our $VERSION = 1.0;
 1;
 END_PERL
 
-is( critique(\$code, {-profile  => $profile, -severity => 4} ), 3,
+is( critique(\$code, {-profile  => $profile, -severity => 4} ), 1,
     'no critic & RequireExplicitPackage');
 
+##############################################################################
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

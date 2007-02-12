@@ -316,9 +316,10 @@ sub _squelch_noisy_violations {
 
 sub _is_noisy {
     my $policy_name = shift;
-    my $namespace = 'Perl::Critic::Policy::TestingAndDebugging';
-    return $policy_name eq "${namespace}::RequireUseStrict"
-        || $policy_name eq "${namespace}::RequireUseWarnings";
+    my $ns = 'Perl::Critic::Policy';
+    return $policy_name eq "${ns}::TestingAndDebugging::RequireUseStrict"
+        || $policy_name eq "${ns}::TestingAndDebugging::RequireUseWarnings"
+        || $policy_name eq "${ns}::Modules::RequireExplicitPackage";
 }
 
 1;
