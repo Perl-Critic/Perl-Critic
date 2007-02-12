@@ -1,8 +1,8 @@
 ##############################################################################
-#      $URL: $
-#     $Date: $
-#   $Author: $
-# $Revision: $
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
 ##############################################################################
 
 package Perl::Critic::Policy::InputOutput::RequireCheckedClose;
@@ -80,6 +80,7 @@ can be found in the LICENSE file included with this module.
 
 =cut
 
+##############################################################################
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

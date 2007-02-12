@@ -1,8 +1,8 @@
 ##############################################################################
-#      $URL: $
-#     $Date: $
-#   $Author: $
-# $Revision: $
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
 ##############################################################################
 
 package Perl::Critic::Policy::InputOutput::RequireCheckedOpen;
@@ -54,7 +54,7 @@ Perl::Critic::Policy::InputOutput::RequireCheckedOpen
 =head1 DESCRIPTION
 
 The perl builtin I/O function C<open> returns a false value on failure. That
-value should be checked to ensure that the open was successful.
+value should always be checked to ensure that the open was successful.
 
 
   my $error = open( $filehanle, $mode, $filname );                  # ok
@@ -80,6 +80,7 @@ can be found in the LICENSE file included with this module.
 
 =cut
 
+##############################################################################
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4
