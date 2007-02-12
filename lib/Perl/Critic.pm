@@ -686,6 +686,9 @@ A simple configuration might look like this:
 For additional configuration examples, see the F<perlcriticrc> file
 that is included in this F<examples> directory of this distribution.
 
+Damian Conway's own Perl::Critic configuration is also included in this distro
+as F<examples/perlcriticrc-conway>.
+
 =head1 THE POLICIES
 
 A large number of Policy modules are distributed with Perl::Critic.  They are
