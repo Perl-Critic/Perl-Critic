@@ -13,7 +13,19 @@ my $error = close  OR;
 ## failures 0
 ## cut
 
-close $filehandle or die 'could not close';
+close  $filehandle  or die 'could not close';
+close ($filehandle) or die 'could not close';
+close ($filehandle) or croak 'could not close';
+
+#-----------------------------------------------------------------------------
+
+## name passes by "|| die"
+## failures 0
+## cut
+
+close  $filehandle  || die 'could not close';
+close ($filehandle) || die 'could not close';
+close ($filehandle) || croak 'could not close';
 
 #-----------------------------------------------------------------------------
 
@@ -21,7 +33,29 @@ close $filehandle or die 'could not close';
 ## failures 0
 ## cut
 
-die unless close $filehandle;
+die unless close ( $filehandle );
+die unless close   $filehandle;
+
+croak unless close ( $filehandle );
+croak unless close   $filehandle;
+
+#-----------------------------------------------------------------------------
+
+## name passes by "if not"
+## failures 0
+## cut
+
+die if not close ( $filehandle );
+die if not close   $filehandle;
+
+croak if not close ( $filehandle );
+croak if not close   $filehandle;
+
+die if !close ( $filehandle );
+die if !close   $filehandle;
+
+croak if !close ( $filehandle );
+croak if !close   $filehandle;
 
 #-----------------------------------------------------------------------------
 

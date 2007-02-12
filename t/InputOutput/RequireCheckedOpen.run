@@ -13,7 +13,19 @@ my $error = open  OR, $or, 'or';
 ## failures 0
 ## cut
 
+open  $filehandle, $mode, $filename   or die 'could not open';
 open( $filehandle, $mode, $filename ) or die 'could not open';
+open( $filehandle, $mode, $filename ) or croak 'could not open';
+
+#-----------------------------------------------------------------------------
+
+## name passes by "|| die"
+## failures 0
+## cut
+
+open  $filehandle, $mode, $filename   or die 'could not open';
+open( $filehandle, $mode, $filename ) || die 'could not open';
+open( $filehandle, $mode, $filename ) || croak 'could not open';
 
 #-----------------------------------------------------------------------------
 
@@ -22,6 +34,28 @@ open( $filehandle, $mode, $filename ) or die 'could not open';
 ## cut
 
 die unless open( $filehandle, $mode, $filename );
+die unless open  $filehandle, $mode, $filename;
+
+croak unless open( $filehandle, $mode, $filename );
+croak unless open  $filehandle, $mode, $filename;
+
+#-----------------------------------------------------------------------------
+
+## name passes by "if not"
+## failures 0
+## cut
+
+die if not open( $filehandle, $mode, $filename );
+die if not open  $filehandle, $mode, $filename;
+
+croak if not open( $filehandle, $mode, $filename );
+croak if not open  $filehandle, $mode, $filename;
+
+die if !open( $filehandle, $mode, $filename );
+die if !open  $filehandle, $mode, $filename;
+
+croak if !open( $filehandle, $mode, $filename );
+croak if !open  $filehandle, $mode, $filename;
 
 #-----------------------------------------------------------------------------
 
@@ -34,18 +68,20 @@ if ( open( $filehandle, $mode, $filename ) ) { dosomething(); };
 #-----------------------------------------------------------------------------
 
 ## name Basic failure with parens
-## failures 1
+## failures 2
 ## cut
 
 open( $filehandle, $mode, $filename );
+open( $filehandle, $filename );
 
 #-----------------------------------------------------------------------------
 
 ## name Basic failure no parens
-## failures 1
+## failures 2
 ## cut
 
 open $filehandle, $mode, $filename;
+open $filehandle, $filename;
 
 #-----------------------------------------------------------------------------
 
