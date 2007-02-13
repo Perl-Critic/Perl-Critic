@@ -68,7 +68,10 @@ our @EXPORT_OK = qw(
     &words_from_string
 );
 
-our @EXPORT = @EXPORT_OK;  # Note: this is deprecated.
+
+# Note: this is deprecated.
+our @EXPORT = @EXPORT_OK;  ## no critic (ProhibitAutomaticExport)
+
 
 our %EXPORT_TAGS = (
     all             => [ @EXPORT_OK ],
