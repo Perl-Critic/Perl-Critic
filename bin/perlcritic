@@ -16,7 +16,7 @@ use Carp qw(carp confess);
 use English qw(-no_match_vars);
 use Getopt::Long qw(GetOptions);
 use List::Util qw(first);
-use Perl::Critic::Utils qw{ :characters :severities };
+use Perl::Critic::Utils qw( :characters :severities );
 use Perl::Critic::Violation qw();
 use Pod::Usage qw(pod2usage);
 
@@ -169,7 +169,7 @@ sub get_input {
         # then we process it as-is (even though it may not actually
         # be Perl code).  If argument is a directory, recursively
         # search the directory for files that look like Perl code.
-        return map { -d $_ ? all_perl_files($_) : $_ } @_;
+        return map { -d $_ ? Perl::Critic::Utils::all_perl_files($_) : $_ } @_;
     }
 }
 
@@ -231,7 +231,7 @@ sub render_report {
     my $verbosity = $CRITIC->config->verbose();
     # $verbosity can be numeric or string, so use "eq" for comparison;
     $verbosity = ($verbosity eq '4' && @FILES > 1) ? 5 : $verbosity;
-    my $fmt = verbosity_to_format( $verbosity );
+    my $fmt = Perl::Critic::Utils::verbosity_to_format( $verbosity );
     if (not -f $file) { $fmt =~ s{\%[fF]}{STDIN}mx; } #HACK!
     Perl::Critic::Violation::set_format( $fmt );
 
