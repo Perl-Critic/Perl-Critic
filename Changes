@@ -5,17 +5,17 @@
 # $Revision$
 ##############################################################################
 
-[1.0x]  Released on 2007-0x-xx
-
-     Interface Changes:
-     * Perl::Critic::Utils exports everything again.  However, this is
-       deprecated.
 
 [1.03]  Released on 2007-02-12
 
      Bug Fixes:
      * Fixed a few more problems with the %f, %F, and %r format escapes.
-     * I forgot to put Conways perlcriticrc file in the MANIFEST. Sorry.
+     * I forgot to put Conway's perlcriticrc file in the MANIFEST. Sorry.
+
+     Interface Changes:
+     * Perl::Critic::Utils exports everything.  However, this is
+       deprecated.  In the future, you must request your exports.
+
 
 [1.02]  Released on 2007-02-11
 
