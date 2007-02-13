@@ -352,7 +352,7 @@ CONFIGURATION
     included in this examples directory of this distribution.
 
     Damian Conway's own Perl::Critic configuration is also included in this
-    distro as examples/perlcriticrc-conway.
+    distribution as examples/perlcriticrc-conway.
 
 THE POLICIES
     A large number of Policy modules are distributed with Perl::Critic. They

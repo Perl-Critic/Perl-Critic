@@ -5,22 +5,19 @@
 # $Revision$
 ##############################################################################
 
-NEXT
-
-     Bug Fixes:
-     * perlcritic would die if passed a numeric verbosity like -1.
-
-
-[1.03]  Released on 2007-02-12
+[1.03]  Released on 2007-02-13
 
      Bug Fixes:
      * Fixed a few more problems with the %f, %F, and %r format escapes.
      * I forgot to put Conway's perlcriticrc file in the MANIFEST. Sorry.
 
      Interface Changes:
-     * Perl::Critic::Utils exports everything.  However, this is
-       deprecated.  In the future, you must request your exports.
+     * Perl::Critic::Utils automatically exports everything.  However,
+       this is deprecated.  In the future, you must request your exports.
 
+     Policy Changes:
+     * Duplicate violations of RequireExcplicitPackage are now squelched,
+       in the same way as RequireUseStrict and RequireUseWarnings.
 
 [1.02]  Released on 2007-02-11
 
