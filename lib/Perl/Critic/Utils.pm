@@ -68,6 +68,8 @@ our @EXPORT_OK = qw(
     &words_from_string
 );
 
+our @EXPORT = @EXPORT_OK;  # Note: this is deprecated.
+
 our %EXPORT_TAGS = (
     all             => [ @EXPORT_OK ],
     booleans        => [ qw{ $TRUE $FALSE } ],
