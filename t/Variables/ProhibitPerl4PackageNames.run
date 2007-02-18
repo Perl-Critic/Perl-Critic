@@ -1,0 +1,176 @@
+## name package declarations
+## failures 3
+## cut
+
+package Foo::Bar;
+package Foo'Bar;
+package Foo::Bar::Baz;
+package Foo'Bar::Baz;
+package Foo::Bar'Baz;
+
+
+#-----------------------------------------------------------------------------
+
+## name simple variable access
+## failures 9
+## cut
+
+my $x = $Foo::bar;
+my $x = $Foo'bar;
+my $x = $Foo::Bar::baz;
+my $x = $Foo'Bar::baz;
+my $x = $Foo::Bar'baz;
+
+my @x = @Foo::bar;
+my @x = @Foo'bar;
+my @x = @Foo::Bar::baz;
+my @x = @Foo'Bar::baz;
+my @x = @Foo::Bar'baz;
+
+my %x = %Foo::bar;
+my %x = %Foo'bar;
+my %x = %Foo::Bar::baz;
+my %x = %Foo'Bar::baz;
+my %x = %Foo::Bar'baz;
+
+
+#-----------------------------------------------------------------------------
+
+## name simple variable assignment
+## failures 9
+## cut
+
+my $Foo::bar      = $x;
+my $Foo'bar       = $x;
+my $Foo::Bar::baz = $x;
+my $Foo'Bar::baz  = $x;
+my $Foo::Bar'baz  = $x;
+
+my @Foo::bar      = @x;
+my @Foo'bar       = @x;
+my @Foo::Bar::baz = @x;
+my @Foo'Bar::baz  = @x;
+my @Foo::Bar'baz  = @x;
+
+my %Foo::bar      = %x;
+my %Foo'bar       = %x;
+my %Foo::Bar::baz = %x;
+my %Foo'Bar::baz  = %x;
+my %Foo::Bar'baz  = %x;
+
+
+#-----------------------------------------------------------------------------
+
+## name simple subroutine invocation
+## failures 8
+## cut
+
+Foo::bar();
+Foo'bar();
+&Foo::bar;
+&Foo'bar;
+Foo::Bar::baz($x, 'y');
+Foo'Bar::baz($x, 'y');
+Foo::Bar'baz($x, 'y');
+
+my $x = Foo::bar();
+my $x = Foo'bar();
+my $x = &Foo::bar;
+my $x = &Foo'bar;
+my $x = Foo::Bar::baz($x, 'y');
+my $x = Foo'Bar::baz($x, 'y');
+my $x = Foo::Bar'baz($x, 'y');
+
+
+#-----------------------------------------------------------------------------
+
+## name simple direct class method invocation
+## failures 8
+## cut
+
+Foo::bar->new();
+Foo'bar->new();
+&Foo::bar->new;
+&Foo'bar->new;
+Foo::Bar::baz->new($x, 'y');
+Foo'Bar::baz->new($x, 'y');
+Foo::Bar'baz->new($x, 'y');
+
+my $x = Foo::bar->new();
+my $x = Foo'bar->new();
+my $x = &Foo::bar->new;
+my $x = &Foo'bar->new;
+my $x = Foo::Bar::baz->new($x, 'y');
+my $x = Foo'Bar::baz->new($x, 'y');
+my $x = Foo::Bar'baz->new($x, 'y');
+
+
+#-----------------------------------------------------------------------------
+
+## name simple indirect class method invocation
+## failures 4
+## cut
+
+$z = new Foo::bar();
+$z = new Foo'bar();
+$z = new Foo::bar;
+$z = new Foo'bar;
+$z = new Foo::Bar::baz($x, 'y');
+$z = new Foo'Bar::baz($x, 'y');
+$z = new Foo::Bar'baz($x, 'y');
+
+
+#-----------------------------------------------------------------------------
+
+## name complicated statements
+## failures 20
+## cut
+
+# If PPI ever gains the ability to parse regexes failures ought to be 26.
+@Foo::bar = Xyzzy::Qux::corge(Grault::Thud->fred('x') + new Plugh::Waldo) =~ m/ a $B::C::d e /xms;
+@Foo'bar = Xyzzy::Qux::corge(Grault::Thud->fred('x') + new Plugh::Waldo) =~ m/ a $B::C::d e /xms;
+@Foo::bar = Xyzzy'Qux::corge(Grault::Thud->fred('x') + new Plugh::Waldo) =~ m/ a $B::C::d e /xms;
+@Foo::bar = Xyzzy::Qux'corge(Grault::Thud->fred('x') + new Plugh::Waldo) =~ m/ a $B::C::d e /xms;
+@Foo::bar = Xyzzy::Qux::corge(Grault'Thud->fred('x') + new Plugh::Waldo) =~ m/ a $B::C::d e /xms;
+@Foo::bar = Xyzzy::Qux::corge(Grault::Thud->fred('x') + new Plugh'Waldo) =~ m/ a $B::C::d e /xms;
+@Foo::bar = Xyzzy::Qux::corge(Grault::Thud->fred('x') + new Plugh::Waldo) =~ m/ a $B'C::d e /xms;
+@Foo::bar = Xyzzy::Qux::corge(Grault::Thud->fred('x') + new Plugh::Waldo) =~ m/ a $B::C'd e /xms;
+
+@Foo'bar = Xyzzy::Qux'corge(Grault::Thud->fred('x') + new Plugh::Waldo) =~ m/ a $B::C::d e /xms;
+@Foo::bar = Xyzzy'Qux::corge(Grault'Thud->fred('x') + new Plugh::Waldo) =~ m/ a $B::C::d e /xms;
+@Foo::bar = Xyzzy::Qux'corge(Grault::Thud->fred('x') + new Plugh'Waldo) =~ m/ a $B::C::d e /xms;
+@Foo::bar = Xyzzy::Qux::corge(Grault'Thud->fred('x') + new Plugh::Waldo) =~ m/ a $B'C::d e /xms;
+@Foo::bar = Xyzzy::Qux::corge(Grault::Thud->fred('x') + new Plugh'Waldo) =~ m/ a $B::C'd e /xms;
+
+@Foo'bar = Xyzzy::Qux'corge(Grault::Thud->fred('x') + new Plugh'Waldo) =~ m/ a $B'C::d e /xms;
+
+@Foo'bar = Xyzzy'Qux'corge(Grault'Thud->fred('x') + new Plugh'Waldo) =~ m/ a $B'C'd e /xms;
+
+
+#-----------------------------------------------------------------------------
+
+## name hash keys
+## failures 0
+## cut
+
+$foo = { bar'baz => 0 };
+print $foo{ bar'baz };
+
+
+#-----------------------------------------------------------------------------
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :

@@ -258,11 +258,6 @@ Good: C<< Foo::Bar->new >>, Bad: C<< new Foo::Bar >>
 
 L<http://rt.cpan.org/Ticket/Display.html?id=20439>
 
-=item * Variables::ProhibitPerl4PackageNames
-
-Forbid old-school package names like Foo'Bar'Baz.  This should also
-apply to any variables or subroutines that get declared/called.
-
 =item * Documentation::RequireSynopsis
 
 =item * Documentation::RequireLicense
@@ -420,4 +415,4 @@ still needed.
 #   indent-tabs-mode: nil
 #   c-indentation-style: bsd
 # End:
-# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=pod expandtab :

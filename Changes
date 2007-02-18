@@ -10,6 +10,9 @@
      Bug Fixes:
      * 25008: Subroutines::RequireFinalReturn should allow "throw"
 
+     New Policies:
+     * Variables::ProhibitPerl4PackageNames
+
      Policy Enhancements:
      * Subroutines::RequireFinalReturn can now be configured to recognize
        custom functions that behave like "die" or "exit".

@@ -387,6 +387,10 @@ Avoid C<$`>, C<$&>, C<$'> and their English equivalents. [Severity 4]
 
 Eliminate globals declared with C<our> or C<use vars> [Severity 3]
 
+=head2 L<Perl::Critic::Policy::Variables::ProhibitPerl4PackageNames>
+
+Use double colon (::) to separate package name components instead of single quotes ('). [Severity 2]
+
 =head2 L<Perl::Critic::Policy::Variables::ProhibitPunctuationVars>
 
 Write C<$EVAL_ERROR> instead of C<$@> [Severity 2]
@@ -429,4 +433,4 @@ can be found in the LICENSE file included with this module.
 #   indent-tabs-mode: nil
 #   c-indentation-style: bsd
 # End:
-# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=pod expandtab :

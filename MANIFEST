@@ -103,6 +103,7 @@ lib/Perl/Critic/Policy/Variables/ProhibitConditionalDeclarations.pm
 lib/Perl/Critic/Policy/Variables/ProhibitLocalVars.pm
 lib/Perl/Critic/Policy/Variables/ProhibitMatchVars.pm
 lib/Perl/Critic/Policy/Variables/ProhibitPackageVars.pm
+lib/Perl/Critic/Policy/Variables/ProhibitPerl4PackageNames.pm
 lib/Perl/Critic/Policy/Variables/ProhibitPunctuationVars.pm
 lib/Perl/Critic/Policy/Variables/ProtectPrivateVars.pm
 lib/Perl/Critic/Policy/Variables/RequireInitializationForLocalVars.pm
@@ -241,6 +242,7 @@ t/Variables/ProhibitConditionalDeclarations.run
 t/Variables/ProhibitLocalVars.run
 t/Variables/ProhibitMatchVars.run
 t/Variables/ProhibitPackageVars.run
+t/Variables/ProhibitPerl4PackageNames.run
 t/Variables/ProhibitPunctuationVars.run
 t/Variables/ProtectPrivateVars.run
 t/Variables/RequireInitializationForLocalVars.run
