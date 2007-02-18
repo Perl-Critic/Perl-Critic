@@ -84,11 +84,6 @@ Right now, P::C thinks that the C<$1> isn't legal to use because it's
 if the regex matched.
     while ( $str =~ /(expression)/ )
 
-=item * Documentation::RequirePodSections
-
-Need to make this configurable to conform to either the book or
-his Module::Starter::PBP, since Damian's apparently changed his mind.
-
 =item * CodeLayout::ProhibitParensWithBuiltins
 
 Some builtin functions (particularly those that take a variable number of
