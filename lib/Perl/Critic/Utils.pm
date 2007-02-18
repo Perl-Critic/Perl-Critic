@@ -44,6 +44,8 @@ our @EXPORT_OK = qw(
     $SPACE
     $SLASH
     $BSLASH
+    $LEFT_PAREN
+    $RIGHT_PAREN
 
     &all_perl_files
     &find_keywords
@@ -100,6 +102,8 @@ our %EXPORT_TAGS = (
             $SPACE
             $SLASH
             $BSLASH
+            $LEFT_PAREN
+            $RIGHT_PAREN
         }
     ],
     classification  => [
@@ -135,20 +139,22 @@ our $SEVERITY_LOWEST  = 1;
 
 #-----------------------------------------------------------------------------
 
-our $COMMA      = q{,};
-our $FATCOMMA   = q{=>};
-our $COLON      = q{:};
-our $SCOLON     = q{;};
-our $QUOTE      = q{'};
-our $DQUOTE     = q{"};
-our $PERIOD     = q{.};
-our $PIPE       = q{|};
-our $SPACE      = q{ };
-our $SLASH      = q{/};
-our $BSLASH     = q{\\};
-our $EMPTY      = q{};
-our $TRUE       = 1;
-our $FALSE      = 0;
+our $COMMA        = q{,};
+our $FATCOMMA     = q{=>};
+our $COLON        = q{:};
+our $SCOLON       = q{;};
+our $QUOTE        = q{'};
+our $DQUOTE       = q{"};
+our $PERIOD       = q{.};
+our $PIPE         = q{|};
+our $SPACE        = q{ };
+our $SLASH        = q{/};
+our $BSLASH       = q{\\};
+our $LEFT_PAREN   = q{(};
+our $RIGHT_PAREN  = q{)};
+our $EMPTY        = q{};
+our $TRUE         = 1;
+our $FALSE        = 0;
 
 #-----------------------------------------------------------------------------
 
@@ -799,6 +805,10 @@ return value is not checked.
 
 =item C<$BSLASH>
 
+=item C<$LEFT_PAREN>
+
+=item C<$RIGHT_PAREN>
+
 These character constants give clear names to commonly-used strings that can
 be hard to read when surrounded by quotes and other punctuation.  Can be
 imported in one go via the C<:characters> tag.
@@ -869,6 +879,8 @@ C<$SCOLON>,
 C<$SPACE>,
 C<$SLASH>,
 C<$BSLASH>
+C<$LEFT_PAREN>
+C<$RIGHT_PAREN>
 
 =item C<:classification>
 
