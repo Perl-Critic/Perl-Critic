@@ -16,6 +16,8 @@
      Policy Enhancements:
      * Subroutines::RequireFinalReturn can now be configured to recognize
        custom functions that behave like "die" or "exit".
+     * Documentation::RequirePodSections can be configured to match
+       Module::Starter:PBP or to really match the PBP book.
 
 [1.03]  Released on 2007-02-13
 
