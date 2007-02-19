@@ -9,9 +9,12 @@ package Perl::Critic::Utils;
 
 use strict;
 use warnings;
+
 use Carp qw(confess);
 use File::Spec qw();
+use Scalar::Util qw( blessed );
 use B::Keywords qw();
+
 use base 'Exporter';
 
 our $VERSION = 1.03;
@@ -56,6 +59,8 @@ our @EXPORT_OK = qw(
     &is_hash_key
     &is_method_call
     &is_perl_builtin
+    &is_perl_builtin_with_list_context
+    &is_perl_builtin_with_multiple_arguments
     &is_perl_global
     &is_script
     &is_subroutine_name
@@ -113,6 +118,8 @@ our %EXPORT_TAGS = (
             &is_method_call
             &is_perl_builtin
             &is_perl_global
+            &is_perl_builtin_with_list_context
+            &is_perl_builtin_with_multiple_arguments
             &is_script
             &is_subroutine_name
             &is_unchecked_call
@@ -211,6 +218,18 @@ sub find_keywords {
 }
 
 #-----------------------------------------------------------------------------
+
+sub _name_for_sub_or_stringified_element {
+    my $elem = shift;
+
+    if ( blessed $elem and $elem->isa('PPI::Statement::Sub') ) {
+        return $elem->name();
+    }
+
+    return "$elem";
+}
+
+#-----------------------------------------------------------------------------
 ## no critic (ProhibitPackageVars)
 
 my %BUILTINS = hashify( @B::Keywords::Functions );
@@ -218,8 +237,8 @@ my %BUILTINS = hashify( @B::Keywords::Functions );
 sub is_perl_builtin {
     my $elem = shift;
     return if !$elem;
-    my $name= eval {$elem->isa('PPI::Statement::Sub')} ? $elem->name() : $elem;
-    return exists $BUILTINS{ $name };
+
+    return exists $BUILTINS{ _name_for_sub_or_stringified_element($elem) };
 }
 
 #-----------------------------------------------------------------------------
@@ -239,6 +258,134 @@ sub is_perl_global {
 }
 
 ## use critic
+#-----------------------------------------------------------------------------
+
+# egrep '=item.*LIST' perlfunc.pod
+my %BUILTINS_WHICH_PROVIDE_LIST_CONTEXT =
+    hashify(
+        qw{
+            chmod
+            chown
+            die
+            exec
+            formline
+            grep
+            import
+            join
+            kill
+            map
+            no
+            open
+            pack
+            print
+            printf
+            push
+            reverse
+            sort
+            splice
+            sprintf
+            syscall
+            system
+            tie
+            unlink
+            unshift
+            use
+            utime
+            warn
+        }
+    );
+
+sub is_perl_builtin_with_list_context {
+    my $elem = shift;
+
+    return
+        exists
+            $BUILTINS_WHICH_PROVIDE_LIST_CONTEXT{
+                _name_for_sub_or_stringified_element($elem)
+            };
+}
+
+#-----------------------------------------------------------------------------
+
+# egrep '=item.*[A-Z],' perlfunc.pod
+my %BUILTINS_WHICH_TAKE_MULTIPLE_ARGUMENTS =
+    hashify(
+        qw{
+            accept
+            atan2
+            bind
+            binmode
+            bless
+            connect
+            crypt
+            dbmopen
+            fcntl
+            flock
+            gethostbyaddr
+            getnetbyaddr
+            getpriority
+            getservbyname
+            getservbyport
+            getsockopt
+            index
+            ioctl
+            link
+            listen
+            mkdir
+            msgctl
+            msgget
+            msgrcv
+            msgsnd
+            open
+            opendir
+            pipe
+            read
+            recv
+            rename
+            rindex
+            seek
+            seekdir
+            select
+            semctl
+            semget
+            semop
+            send
+            setpgrp
+            setpriority
+            setsockopt
+            shmctl
+            shmget
+            shmread
+            shmwrite
+            shutdown
+            socket
+            socketpair
+            splice
+            split
+            substr
+            symlink
+            sysopen
+            sysread
+            sysseek
+            syswrite
+            truncate
+            unpack
+            vec
+            waitpid
+        },
+        keys %BUILTINS_WHICH_PROVIDE_LIST_CONTEXT
+    );
+
+sub is_perl_builtin_with_multiple_arguments {
+    my $elem = shift;
+
+    return
+        exists
+            $BUILTINS_WHICH_TAKE_MULTIPLE_ARGUMENTS{
+                _name_for_sub_or_stringified_element($elem)
+            };
+}
+
 #-----------------------------------------------------------------------------
 
 sub precedence_of {
@@ -634,8 +781,23 @@ return true.
 
 =item C<is_perl_builtin( $element )>
 
-Given a L<PPI::Token::Word> or a string, returns true if that token represents
-a call to any of the builtin functions defined in Perl 5.8.8
+Given a L<PPI::Token::Word>, L<PPI::Statement::Sub>, or string, returns true
+if that token represents a call to any of the builtin functions defined in
+Perl 5.8.8.
+
+=item C<is_perl_builtin_with_list_context( $element )>
+
+Given a L<PPI::Token::Word>, L<PPI::Statement::Sub>, or string, returns true
+if that token represents a call to any of the builtin functions defined in
+Perl 5.8.8 that provide a list context to the following tokens, and thus
+affect the semantics of the comma operator.
+
+=item C<is_perl_builtin_with_multiple_arguments( $element )>
+
+Given a L<PPI::Token::Word>, L<PPI::Statement::Sub>, or string, returns true
+if that token represents a call to any of the builtin functions defined in
+Perl 5.8.8 that can take multiple arguments without parentheses, and thus
+affect the semantics of the comma operator.
 
 =item C<precedence_of( $element )>
 

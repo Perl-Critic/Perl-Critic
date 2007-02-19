@@ -315,6 +315,10 @@ Always C<use strict> [Severity 5]
 
 Always C<use warnings> [Severity 4]
 
+=head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitCommaSeparatedStatements>
+
+Don't use the comma operator as a statement separator. [Severity 4]
+
 =head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitConstantPragma>
 
 Don't C<< use constant $FOO => 15 >> [Severity 4]

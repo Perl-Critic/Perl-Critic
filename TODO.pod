@@ -105,8 +105,6 @@ These policies should not report violations if 'use Fatal' is in effect.
 
 Base this on RequireSimpleSortBlock.  Make number of statements configurable
 
-=item * ValuesAndExpressions::ProhibitCommaSeparatedStatements (p68)
-
 =item * ValuesAndExpressions::RequireListParens (p71)
 
 =item * ValuesAndExpressions::ProhibitScalarGrep (p71)
@@ -390,6 +388,15 @@ Logged as RT #23788.
 
 Remove trinary operator usage in RequireUseStrict, RequireUseWarnings, and
 RequireExplicitPackage once this is fixed.
+
+=item L<PPI::Structure::Block>s being generated instead of L<PPI::Structure::Constructor>
+
+For complicated data structures, C<< { blah => blah } >> will result in a
+L<PPI::Structure::Block> being created, instead of a
+L<PPI::Structure::Constructor>.
+
+ValuesAndExpressions::ProhibitCommaSeparatedStatements and other policies have
+workarounds for this.
 
 =item Operators
 
