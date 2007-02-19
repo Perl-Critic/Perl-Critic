@@ -23,7 +23,7 @@ my $desc = q{Use double colon (::) to separate package name components instead o
 sub supported_parameters { return() }
 sub default_severity     { return $SEVERITY_LOW                              }
 sub default_themes       { return qw(core maintenance)                       }
-sub applies_to           { return qw ( PPI::Token::Word PPI::Token::Symbol ) }
+sub applies_to           { return qw( PPI::Token::Word PPI::Token::Symbol )  }
 
 #-----------------------------------------------------------------------------
 
@@ -63,32 +63,19 @@ Perl::Critic::Policy::Variables::ProhibitPerl4PackageNames
 
 =head1 DESCRIPTION
 
-Since Perl 5, there are very few reasons to declare C<local>
-variables.  The most common exceptions are Perl's magical global
-variables.  If you do need to modify one of those global variables,
-you should localize it first.  You should also use the L<English>
-module to give those variables more meaningful names.
+Perl 5 kept single quotes (C<'>) as package component separators in
+order to remain backward compatible with prior C<perl>s, but advocated
+using double colon (C<::>) instead.  In the more than a decade since
+Perl 5, double colons have been overwhelmingly adopted and most people
+are not even aware that the single quote can be used in this manner.
+So, unless you're trying to obfuscate your code, don't use them.
 
-  local $foo;   #not ok
-  my $foo;      #ok
-
-  use English qw(-no_match_vars);
-  local $INPUT_RECORD_SEPARATOR    #ok
-  local $RS                        #ok
-  local $/;                        #not ok
-
-=head1 NOTES
-
-If an external module uses package variables as its interface, then
-using C<local> is actually a pretty sensible thing to do.  So
-Perl::Critic will not complain if you C<local>-ize variables with a
-fully qualified name such as C<$Some::Package::foo>.  However, if
-you're in a position to dictate the module's interface, I strongly
-suggest using accessor methods instead.
+  package Foo::Bar::Baz;    #ok
+  package Foo'Bar'Baz;      #not ok
 
 =head1 SEE ALSO
 
-L<Perl::Critic::Policy::Variables::ProhibitPunctuationVars>
+L<perlmod>
 
 =head1 AUTHOR
 
