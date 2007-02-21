@@ -45,11 +45,11 @@ my %foo = (
 #-----------------------------------------------------------------------------
 
 ## name Regular statement inside a block.
-## failures 1
+## failures 0
 ## cut
 
 foreach my $path ( @ARGV ) {
-    say 'Looking at ', $path, '.';
+    utter 'Looking at ', $path, '.';
 }
 
 #-----------------------------------------------------------------------------
@@ -66,7 +66,11 @@ foreach my $path ( @ARGV ) {
 ## failures 1
 ## cut
 
-@x = foo(@y), @z;
+# The space between the sub name and the left parenthesis is significant
+# in that part of Conway's point is that things that look like lists may
+# not be.
+
+@x = foo (@y), @z;
 
 #-----------------------------------------------------------------------------
 
@@ -79,14 +83,14 @@ foreach my $path ( @ARGV ) {
 #-----------------------------------------------------------------------------
 
 ## name Two sub calls
-## failures 1
+## failures 0
 ## cut
 
 @x = foo @y, bar @z;
 
 #-----------------------------------------------------------------------------
 
-## name Built-in call that provides a list context
+## name Built-in call that provides a list context without parentheses
 ## failures 0
 ## cut
 
@@ -106,23 +110,79 @@ foreach my $path ( @ARGV ) {
 ## failures 0
 ## cut
 
-$x = substr $y, 1, 2;
+@x = substr $y, 1, 2;
 
 #-----------------------------------------------------------------------------
 
-## name Built-in call that takes multiple arguments without parentheses, called like a function
+## name Built-in call that takes multiple arguments, called like a function
 ## failures 1
 ## cut
 
-$x = substr ($y, 1), 2;
+@x = substr ($y, 1), 2;
 
 #-----------------------------------------------------------------------------
 
-## name Call to unary built-in
+## name Call to unary built-in without parentheses
+## failures 1
+## cut
+
+@x = tied @y, @z;
+
+#-----------------------------------------------------------------------------
+
+## name Unary built-in, called like a function
+## failures 1
+## cut
+
+@x = tied (@y), @z;
+
+#-----------------------------------------------------------------------------
+
+## name Call to no-argument built-in without parentheses
+## failures 1
+## cut
+
+@x = time, @z;
+
+#-----------------------------------------------------------------------------
+
+## name No-argument built-in, called like a function
+## failures 1
+## cut
+
+@x = time (), @z;
+
+#-----------------------------------------------------------------------------
+
+## name Call to optional argument built-in without an argument without parentheses
+## failures 1
+## cut
+
+@x = sin, @z;
+
+#-----------------------------------------------------------------------------
+
+## name Optional argument built-in, called like a function without an argument
+## failures 1
+## cut
+
+@x = sin (), @z;
+
+#-----------------------------------------------------------------------------
+
+## name Call to optional argument built-in with an argument without parentheses
 ## failures 1
 ## cut
 
 @x = sin @y, @z;
+
+#-----------------------------------------------------------------------------
+
+## name Optional argument built-in, called like a function with an argument
+## failures 1
+## cut
+
+@x = sin (@y), @z;
 
 #-----------------------------------------------------------------------------
 

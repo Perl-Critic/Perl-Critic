@@ -94,14 +94,13 @@ sub _is_parent_a_constructor_or_list {
 sub _succeeding_commas_are_list_element_separators {
     my $elem = shift;
 
+    return if is_perl_builtin_with_zero_and_or_one_arguments($elem);
+
     my $sibling = $elem->snext_sibling();
 
     return 1 if not $sibling;  # There won't be any succeeding commas.
 
-    return (
-            not $sibling->isa('PPI::Structure::List')
-        and is_perl_builtin_with_multiple_arguments($elem)
-    );
+    return not $sibling->isa('PPI::Structure::List');
 }
 
 1;
