@@ -289,6 +289,7 @@ my %BUILTINS_WHICH_PROVIDE_LIST_CONTEXT =
             printf
             push
             reverse
+            say
             sort
             splice
             sprintf
@@ -301,10 +302,6 @@ my %BUILTINS_WHICH_PROVIDE_LIST_CONTEXT =
             utime
             warn
         },
-        # Perl 6, but included in B::Keywords
-        qw{
-            say
-        }
     );
 
 sub is_perl_builtin_with_list_context {
