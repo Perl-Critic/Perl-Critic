@@ -111,7 +111,7 @@ C<continue>.
 
   do_something() until $condition;      #not ok
   do_something() until ! $condition;    #really bad
-  while(! $condition){ do_something() } #ok 
+  while(! $condition){ do_something() } #ok
 
   do_something($_) for @list;           #not ok
 

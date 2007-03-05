@@ -99,6 +99,10 @@ Write C<open $handle, $path> instead of C<open($handle, $path)> [Severity 1]
 
 Write C<qw(foo bar baz)> instead of C<('foo', 'bar', 'baz')> [Severity 2]
 
+=head2 L<Perl::Critic::Policy::CodeLayout::ProhibitTrailingWhitespace>
+
+Don't use whitespace at the end of lines. [Severity 1]
+
 =head2 L<Perl::Critic::Policy::CodeLayout::RequireConsistentNewlines>
 
 Use the same newline through the source [Severity 4]

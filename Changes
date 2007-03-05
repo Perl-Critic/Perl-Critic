@@ -11,6 +11,7 @@
      * 25008: Subroutines::RequireFinalReturn should allow "throw"
 
      New Policies:
+     * CodeLayout::ProhibitTrailingWhitespace
      * ValuesAndExpressions::ProhibitCommaSeparatedStatements
      * Variables::ProhibitPerl4PackageNames
 

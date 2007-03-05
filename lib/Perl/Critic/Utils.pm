@@ -514,7 +514,7 @@ sub is_perl_builtin_with_optional_argument {
 
 sub is_perl_builtin_with_zero_and_or_one_arguments {
     my $elem = shift;
-    
+
     return if not $elem;
 
     my $name = _name_for_sub_or_stringified_element($elem);

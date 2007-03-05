@@ -66,7 +66,7 @@ to the reader whether the content is going to be interpolated or not.
   $greeting
   END_MESSAGE
 
-=head1 SEE ALSO 
+=head1 SEE ALSO
 
 L<Perl::Critic::Policy::ValuesAndExpressions::RequireUpperCaseHeredocTerminator>
 

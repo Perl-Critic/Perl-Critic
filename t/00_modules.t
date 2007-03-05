@@ -10,7 +10,7 @@
 use strict;
 use warnings;
 use PPI::Document;
-use Test::More tests => 1457;  # Add 14 for each new policy created
+use Test::More tests => 1471;  # Add 14 for each new policy created
 use Perl::Critic::TestUtils qw(bundled_policy_names);
 use English qw(-no_match_vars);
 

@@ -55,7 +55,7 @@ Escaped numeric values are hard to read and debug.  Instead, use named
 values.  The syntax is less compact, but dramatically more readable.
 
   $str = "\X7F\x06\x22Z";                         # not ok
-  
+
   use charnames ':full';
   $str = "\N{DELETE}\N{ACKNOWLEDGE}\N{CANCEL}Z";  # ok
 

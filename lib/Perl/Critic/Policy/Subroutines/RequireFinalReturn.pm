@@ -119,7 +119,7 @@ sub _is_compound_return {
     my @blocks = grep {!$_->isa('PPI::Structure::Condition') &&
                        !$_->isa('PPI::Token')} $final->schildren();
     # Sanity check:
-    if (scalar grep {!$_->isa('PPI::Structure::Block')} @blocks) { 
+    if (scalar grep {!$_->isa('PPI::Structure::Block')} @blocks) {
         confess 'Internal error: expected only conditions, blocks and tokens in the if statement';
         return; ## no critic (UnreachableCode)
     }

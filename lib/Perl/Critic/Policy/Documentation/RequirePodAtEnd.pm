@@ -40,7 +40,7 @@ sub violates {
     # Look for first POD tag that isn't =for, =begin, or =end
     my $pod = first { $_ !~ $pod_rx} @{ $pods_ref };
     return if !$pod;
- 
+
     my $end = $doc->find_first('PPI::Statement::End');
     if ($end) {  # No __END__ means definite violation
         my $pod_loc = $pod->location();

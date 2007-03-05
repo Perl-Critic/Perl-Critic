@@ -79,7 +79,7 @@ sub sort_by_location {
     ## TODO: What if $a and $b are not Violation objects?
     return
         map {$_->[0]}
-            sort { ($a->[1] <=> $b->[1]) || ($a->[2] <=> $b->[2]) } 
+            sort { ($a->[1] <=> $b->[1]) || ($a->[2] <=> $b->[2]) }
                 map {[$_, $_->location->[0] || 0, $_->location->[1] || 0]}
                     @_;
 }
@@ -95,7 +95,7 @@ sub sort_by_severity {
     ## TODO: What if $a and $b are not Violation objects?
     return
         map {$_->[0]}
-            sort { $a->[1] <=> $b->[1] } 
+            sort { $a->[1] <=> $b->[1] }
                 map {[$_, $_->severity() || 0]}
                     @_;
 }
@@ -328,8 +328,9 @@ an array of page numbers in PBP.
 
 =item C<location()>
 
-Returns a two-element list containing the line and column number where
-this Violation occurred.
+Returns a three-element array reference containing the line and real
+& virtual column numbers where this Violation occurred, as in
+L<PPI::Element>.
 
 =item C<filename()>
 

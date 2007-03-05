@@ -139,7 +139,7 @@ Perl::Tidy not to load any configuration file at all and just use
 Perl::Tidy's own default style.
 
   [CodeLayout::RequireTidyCode]
-  perltidyrc = 
+  perltidyrc =
 
 =head1 NOTES
 

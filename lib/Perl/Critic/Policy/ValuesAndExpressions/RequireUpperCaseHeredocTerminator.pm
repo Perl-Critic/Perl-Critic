@@ -64,7 +64,7 @@ standard prefix like "END_" but this policy doesn't enforce that.
   Hello World
   THE_END
 
-=head1 SEE ALSO 
+=head1 SEE ALSO
 
 L<Perl::Critic::Policy::ValuesAndExpressions::RequireQuotedHeredocTerminator>
 

@@ -45,7 +45,7 @@ sub _is_bad_index {
     my @children = $elem->schildren();
     return if @children != 1; # too complex
     return if !$children[0]->isa( 'PPI::Statement::Expression'); # too complex
-                
+
     # This is the expression elements that compose the array indexing
     my @expr = $children[0]->schildren();
     return if !@expr || @expr > 4; # no-op or too complex
@@ -146,7 +146,7 @@ sub _is_minus_number  # return true if @expr looks like "- n"
     my $op = shift @expr;
     return if !$op->isa('PPI::Token::Operator');
     return if $op ne q{-};
-    
+
     my $number = shift @expr;
     return if !$number->isa('PPI::Token::Number');
 
