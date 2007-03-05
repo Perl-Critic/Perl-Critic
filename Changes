@@ -9,6 +9,7 @@
 
      Bug Fixes:
      * 25008: Subroutines::RequireFinalReturn should allow "throw"
+     * 25085: False Positive - Heredoc terminator must be quoted
 
      New Policies:
      * CodeLayout::ProhibitTrailingWhitespace
