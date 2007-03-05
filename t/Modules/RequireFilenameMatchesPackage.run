@@ -125,6 +125,38 @@ package Filename::OK;
 1;
 
 #------------------------------------------------------------------------------
+## name first package is main, with inner package
+## filename some_script
+## failures 0
+## cut
+
+package main;
+
+Inner::frobulate( @ARGV );
+
+package Inner;
+
+sub frobulate{};
+
+1;
+
+#------------------------------------------------------------------------------
+## name second package is main, with inner package
+## filename some_script
+## failures 1
+## cut
+
+package Inner;
+
+sub frobulate{};
+
+package main;
+
+Inner::frobulate( @ARGV );
+
+1;
+
+#------------------------------------------------------------------------------
 ## name Pass with apostrophe.
 ## filename Oh.pm
 ## failures 0
