@@ -15,7 +15,7 @@ use warnings;
 use Perl::Critic::Utils qw{ :characters :severities :data_conversion };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 0.12;
+our $VERSION = 1.03;
 
 #----------------------------------------------------------------------------
 
@@ -222,7 +222,7 @@ sub _element_is_sole_component_of_a_subscript {
 
         my $grandparent = $parent->parent();
         if (
-                $grandparent 
+                $grandparent
             and $grandparent->isa('PPI::Structure::Subscript')
         ) {
             return 1;

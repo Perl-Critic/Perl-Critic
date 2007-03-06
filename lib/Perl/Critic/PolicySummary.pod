@@ -419,6 +419,10 @@ Write C<for my $element (@list) {...}> instead of C<for $element (@list) {...}>
 
 Negative array index should be used [Severity 4]
 
+=head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitMagicNumbers>
+
+This entry is here simply to pass tests.
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>

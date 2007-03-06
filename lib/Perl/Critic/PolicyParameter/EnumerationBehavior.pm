@@ -14,7 +14,7 @@ use Perl::Critic::Utils qw{ $PERIOD &words_from_string };
 
 use base qw{ Perl::Critic::PolicyParameter::Behavior };
 
-our $VERSION = 0.22;
+our $VERSION = 1.03;
 
 #-----------------------------------------------------------------------------
 
@@ -27,7 +27,7 @@ sub initialize_parameter {
 
     my %values = hashify( words_from_string( $values_string ) );
 
-    my $allow_multiple_values = 
+    my $allow_multiple_values =
         $specification->{enumeration_allow_multiple_values};
 
     if ($allow_multiple_values) {

@@ -11,7 +11,7 @@ use strict;
 use warnings;
 use Carp qw(confess);
 
-our $VERSION = 0.22;
+our $VERSION = 1.03;
 
 #-----------------------------------------------------------------------------
 

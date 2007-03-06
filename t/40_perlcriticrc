@@ -21,3 +21,5 @@ keywords = URL Date Author Revision
 [CodeLayout::ProhibitHardTabs]
 allow_leading_tabs = 0
 
+[ValuesAndExpressions::ProhibitMagicNumbers]
+allowed_values = all_integers

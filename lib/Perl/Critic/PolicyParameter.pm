@@ -14,7 +14,7 @@ use Carp qw(confess);
 use Perl::Critic::Utils;
 use Perl::Critic::PolicyParameter::Behavior;
 
-our $VERSION = 0.22;
+our $VERSION = 1.03;
 
 #-----------------------------------------------------------------------------
 

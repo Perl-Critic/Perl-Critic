@@ -22,6 +22,7 @@ Perl::Critic::TestUtils::block_perlcriticrc();
 my $profile = {
     '-CodeLayout::RequireTidyCode'                 => {},
     '-Miscellanea::RequireRcsKeywords'             => {},
+    '-ValuesAndExpressions::ProhibitMagicNumbers'  => {},
 };
 
 my $code = undef;
