@@ -9,12 +9,12 @@ package Perl::Critic::Policy::CodeLayout::RequireConsistentNewlines;
 
 use strict;
 use warnings;
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :severities };
 use PPI::Token::Whitespace;
 use English qw(-no_match_vars);
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 0.22;
+our $VERSION = 1.03;
 
 my $LINE_END = qr/\015{1,2}\012|\012|\015/mxs;
 
@@ -25,7 +25,7 @@ my $expl = q{Change your newlines to be the same throughout};
 
 #-----------------------------------------------------------------------------
 
-sub policy_parameters { return ()              }
+sub supported_parameters { return ()              }
 sub default_severity  { return $SEVERITY_HIGH  }
 sub default_themes    { return qw( core bugs ) }
 sub applies_to        { return 'PPI::Document' }
@@ -42,7 +42,7 @@ sub violates {
     return if !open $fh, '<', $filename;
     local $RS = undef;
     my $source = <$fh>;
-    close $fh;
+    close $fh or return;
 
     my $newline; # undef until we find the first one
     my $line = 1;

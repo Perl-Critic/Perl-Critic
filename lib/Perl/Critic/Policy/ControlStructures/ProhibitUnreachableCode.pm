@@ -9,10 +9,10 @@ package Perl::Critic::Policy::ControlStructures::ProhibitUnreachableCode;
 
 use strict;
 use warnings;
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :severities :data_conversion :classification };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 0.22;
+our $VERSION = 1.03;
 
 my @terminals = qw( die exit croak confess );
 my %terminals = hashify( @terminals );
@@ -30,7 +30,7 @@ my $expl = q{Consider removing it};
 
 #-----------------------------------------------------------------------------
 
-sub policy_parameters { return ()                 }
+sub supported_parameters { return ()                 }
 sub default_severity  { return $SEVERITY_HIGH     }
 sub default_themes    { return qw( core bugs )    }
 sub applies_to        { return 'PPI::Token::Word' }

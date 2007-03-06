@@ -9,10 +9,10 @@ package Perl::Critic::Policy::Subroutines::ProhibitExcessComplexity;
 
 use strict;
 use warnings;
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :severities :data_conversion :classification };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 0.22;
+our $VERSION = 1.03;
 
 #-----------------------------------------------------------------------------
 
@@ -26,7 +26,7 @@ my %logic_keywords = hashify( @logic_keywords );
 
 #-----------------------------------------------------------------------------
 
-sub policy_parameters { return qw( max_mccabe )                }
+sub supported_parameters { return qw( max_mccabe )                }
 sub default_severity  { return $SEVERITY_MEDIUM                }
 sub default_themes    { return qw(core complexity maintenance) }
 sub applies_to        { return 'PPI::Statement::Sub'           }
@@ -149,7 +149,7 @@ Jeffrey Ryan Thalhammer <thaljef@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2006 Jeffrey Ryan Thalhammer.  All rights reserved.
+Copyright (c) 2005-2007 Jeffrey Ryan Thalhammer.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

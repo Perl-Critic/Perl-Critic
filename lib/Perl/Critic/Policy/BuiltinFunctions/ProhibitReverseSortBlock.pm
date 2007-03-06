@@ -9,19 +9,19 @@ package Perl::Critic::Policy::BuiltinFunctions::ProhibitReverseSortBlock;
 
 use strict;
 use warnings;
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :severities :classification };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 0.22;
+our $VERSION = 1.03;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{Forbid $b before $a in sort blocks};
+my $desc = q{Forbid $b before $a in sort blocks}; ## no critic (Interpolation)
 my $expl = [ 152 ];
 
 #-----------------------------------------------------------------------------
 
-sub policy_parameters { return () }
+sub supported_parameters { return () }
 sub default_severity { return $SEVERITY_LOWEST    }
 sub default_themes   { return qw(core pbp cosmetic)    }
 sub applies_to       { return 'PPI::Token::Word'  }

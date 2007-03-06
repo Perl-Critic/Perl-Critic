@@ -9,10 +9,10 @@ package Perl::Critic::Policy::ClassHierarchies::ProhibitExplicitISA;
 
 use strict;
 use warnings;
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 0.22;
+our $VERSION = 1.03;
 
 #-----------------------------------------------------------------------------
 
@@ -21,7 +21,7 @@ my $expl = [ 360 ];
 
 #-----------------------------------------------------------------------------
 
-sub policy_parameters { return() }
+sub supported_parameters { return() }
 sub default_severity { return $SEVERITY_MEDIUM     }
 sub default_themes    { return qw( core maintenance pbp ) }
 sub applies_to       { return 'PPI::Token::Symbol' }

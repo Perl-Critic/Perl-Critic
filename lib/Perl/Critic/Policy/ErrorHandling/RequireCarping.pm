@@ -9,10 +9,12 @@ package Perl::Critic::Policy::ErrorHandling::RequireCarping;
 
 use strict;
 use warnings;
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{
+    :booleans :characters :severities :classification :data_conversion
+};
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 0.22;
+our $VERSION = 1.03;
 
 #-----------------------------------------------------------------------------
 
@@ -22,7 +24,7 @@ my $expl = [ 283 ];
 
 # TODO: make configurable to be strict again.
 
-sub policy_parameters { return qw( allow_messages_ending_with_newlines ) }
+sub supported_parameters { return qw( allow_messages_ending_with_newlines ) }
 sub default_severity  { return $SEVERITY_MEDIUM                          }
 sub default_themes    { return qw( core pbp maintenance )                }
 sub applies_to        { return 'PPI::Token::Word'                        }
@@ -411,7 +413,7 @@ Jeffrey Ryan Thalhammer <thaljef@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2006 Jeffrey Ryan Thalhammer.  All rights reserved.
+Copyright (c) 2005-2007 Jeffrey Ryan Thalhammer.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

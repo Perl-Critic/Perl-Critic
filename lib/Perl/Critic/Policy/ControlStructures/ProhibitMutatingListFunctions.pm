@@ -9,19 +9,30 @@ package Perl::Critic::Policy::ControlStructures::ProhibitMutatingListFunctions;
 
 use strict;
 use warnings;
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :severities :data_conversion :classification :ppi };
 use List::MoreUtils qw( none any );
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 0.22;
+our $VERSION = 1.03;
 
 #-----------------------------------------------------------------------------
 
 my @builtin_list_funcs = qw( map grep );
-my @cpan_list_funcs    = qw( List::Util::first ),
-  map { 'List::MoreUtils::'.$_ } qw(any all none notall true false firstidx first_index
-                                    lastidx last_index insert_after insert_after_string);
+my @cpan_list_funcs    = _get_cpan_list_funcs();
 
+#-----------------------------------------------------------------------------
+
+sub _get_cpan_list_funcs {
+    return  qw( List::Util::first ),
+        map { 'List::MoreUtils::'.$_ } _get_list_moreutils_funcs();
+}
+
+#-----------------------------------------------------------------------------
+
+sub _get_list_moreutils_funcs {
+    return  qw(any all none notall true false firstidx first_index
+               lastidx last_index insert_after insert_after_string);
+}
 
 #-----------------------------------------------------------------------------
 
@@ -40,10 +51,10 @@ my $expl = [ 114 ];
 
 #-----------------------------------------------------------------------------
 
-sub policy_parameters { return qw( list_funcs )   }
-sub default_severity  { return $SEVERITY_HIGHEST  }
-sub default_themes    { return qw(core bugs pbp)  }
-sub applies_to        { return 'PPI::Token::Word' }
+sub supported_parameters { return qw( list_funcs add_list_funcs) }
+sub default_severity     { return $SEVERITY_HIGHEST              }
+sub default_themes       { return qw(core bugs pbp)              }
+sub applies_to           { return 'PPI::Token::Word'             }
 
 #-----------------------------------------------------------------------------
 
@@ -147,13 +158,18 @@ sub _is_topic_mutating_regex {
 sub _is_topic_mutating_func {
     my $elem = shift;
     return if not $elem->isa('PPI::Token::Word');
-    return if not any { $elem eq $_ } qw(chop chomp undef);
+    my @mutator_funcs = qw(chop chomp undef);
+    return if not any { $elem eq $_ } @mutator_funcs;
     return if not is_function_call( $elem );
 
     # If these functions have no argument,
     # they default to mutating $_
     my $first_arg = first_arg( $elem );
-    return 1 if not defined $first_arg;
+    if (not defined $first_arg) {
+        # undef does not default to $_, unlike the others
+        return if $elem eq 'undef';
+        return 1;
+    }
     return _is_topic( $first_arg );
 }
 

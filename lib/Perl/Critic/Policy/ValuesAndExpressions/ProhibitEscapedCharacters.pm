@@ -9,10 +9,10 @@ package Perl::Critic::Policy::ValuesAndExpressions::ProhibitEscapedCharacters;
 
 use strict;
 use warnings;
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 0.22;
+our $VERSION = 1.03;
 
 #-----------------------------------------------------------------------------
 
@@ -21,7 +21,7 @@ my $expl     = [ 56 ];
 
 #-----------------------------------------------------------------------------
 
-sub policy_parameters { return() }
+sub supported_parameters { return() }
 sub default_severity { return $SEVERITY_LOW       }
 sub default_themes   { return qw(core pbp cosmetic) }
 sub applies_to       { return qw(PPI::Token::Quote::Double
@@ -55,7 +55,7 @@ Escaped numeric values are hard to read and debug.  Instead, use named
 values.  The syntax is less compact, but dramatically more readable.
 
   $str = "\X7F\x06\x22Z";                         # not ok
-  
+
   use charnames ':full';
   $str = "\N{DELETE}\N{ACKNOWLEDGE}\N{CANCEL}Z";  # ok
 

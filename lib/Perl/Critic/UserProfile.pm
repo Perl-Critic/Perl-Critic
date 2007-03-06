@@ -14,9 +14,9 @@ use Config::Tiny qw();
 use English qw(-no_match_vars);
 use File::Spec qw();
 use Perl::Critic::Defaults qw();
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :characters &policy_long_name &policy_short_name };
 
-our $VERSION = 0.22;
+our $VERSION = 1.03;
 
 #-----------------------------------------------------------------------------
 
@@ -33,7 +33,9 @@ sub new {
 sub _init {
 
     my ( $self, %args ) = @_;
-    $self->_load_profile( $args{-profile}   || _find_profile_path() );
+    # The profile can be defined, undefined, or an empty string.
+    my $prof = defined $args{-profile} ? $args{-profile} : _find_profile_path();
+    $self->_load_profile( $prof );
     $self->_set_defaults();
     return $self;
 }
@@ -55,8 +57,11 @@ sub policy_params {
     my $long_name  = ref $policy || policy_long_name( $policy );
     my $short_name = policy_short_name( $long_name );
 
-    return $profile->{$short_name}    || $profile->{$long_name}     ||
-           $profile->{"-$short_name"} || $profile->{"-$long_name"}  || {};
+    return $profile->{$short_name}
+        || $profile->{$long_name}
+        || $profile->{"-$short_name"}
+        || $profile->{"-$long_name"}
+        || {};
 }
 
 #-----------------------------------------------------------------------------
@@ -67,7 +72,9 @@ sub policy_is_disabled {
     my $profile = $self->{_profile};
     my $long_name  = ref $policy || policy_long_name( $policy );
     my $short_name = policy_short_name( $long_name );
-    return exists $profile->{"-$short_name"} || exists $profile->{"-$long_name"};
+
+    return exists $profile->{"-$short_name"}
+        || exists $profile->{"-$long_name"};
 }
 
 #-----------------------------------------------------------------------------
@@ -78,7 +85,25 @@ sub policy_is_enabled {
     my $profile = $self->{_profile};
     my $long_name  = ref $policy || policy_long_name( $policy );
     my $short_name = policy_short_name( $long_name );
-    return exists $profile->{$short_name} || exists $profile->{$long_name};
+
+    return exists $profile->{$short_name}
+        || exists $profile->{$long_name};
+}
+
+#-----------------------------------------------------------------------------
+
+sub listed_policies {
+
+    my ( $self, $policy ) = @_;
+    my @normalized_policy_names = ();
+
+    for my $policy_name ( sort keys %{$self->{_profile}} ) {
+        $policy_name =~ s/\A - //mxo; #Chomp leading "-"
+        my $policy_long_name = policy_long_name( $policy_name );
+        push @normalized_policy_names, $policy_long_name;
+    }
+
+    return @normalized_policy_names;
 }
 
 #-----------------------------------------------------------------------------
@@ -86,13 +111,7 @@ sub policy_is_enabled {
 
 sub _load_profile {
 
-    my ($self, $profile) = @_;
-
-    # "NONE" means don't load any profile
-    if (defined $profile && $profile eq 'NONE') {
-        $self->{_profile} = {};
-        return $self;
-    }
+    my ( $self, $profile ) = @_;
 
     my %loader_for = (
         ARRAY   => \&_load_profile_from_array,
@@ -104,6 +123,7 @@ sub _load_profile {
     my $ref_type = ref $profile || 'DEFAULT';
     my $loader = $loader_for{$ref_type};
     confess qq{Can't load UserProfile from type "$ref_type"} if ! $loader;
+
     $self->{_profile} = $loader->($profile);
     return $self;
 }
@@ -111,9 +131,10 @@ sub _load_profile {
 #-----------------------------------------------------------------------------
 
 sub _set_defaults {
+
     my ($self) = @_;
     my $profile = $self->{_profile};
-    my $defaults = $profile->{_} || {};
+    my $defaults = delete $profile->{_} || {};
     $self->{_defaults} = Perl::Critic::Defaults->new( %{ $defaults } );
     return $self;
 }
@@ -121,13 +142,20 @@ sub _set_defaults {
 #-----------------------------------------------------------------------------
 
 sub _load_profile_from_file {
-    my $file = shift || return {};
-    my $prof = Config::Tiny->read($file);
+
+    my ($file) = @_;
+
+    # Handle special cases.
+    return {} if not defined $file;
+    return {} if $file eq $EMPTY;
+    return {} if $file eq 'NONE';
+
+    my $prof = Config::Tiny->read( $file );
     if (defined $prof) {
         return $prof;
     } else {
-        croak(sprintf qq{Config::Tiny could not parse profile '%s':\n\t%s\n},
-              $file, Config::Tiny::errstr());
+        my $errstr = Config::Tiny::errstr();
+        die qq{Could not parse profile "$file": $errstr\n};
     }
 }
 
@@ -255,9 +283,14 @@ their user profile.
 
 =item C< policy_params() >
 
-Given a reference to a L<Perl::Critic::Policy> object or the name of
-one, returns a hash of the user's configuration parameters for that
+Given a reference to a L<Perl::Critic::Policy> object or the name of one,
+returns a reference to a hash of the user's configuration parameters for that
 policy.
+
+=item C< listed_policies() >
+
+Returns a list of the names of all the Policies that are mentioned in the
+profile.  The Policy names will be fully qualified (e.g. Perl::Critic::Foo).
 
 =back
 
@@ -267,7 +300,7 @@ Jeffrey Ryan Thalhammer <thaljef@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2006 Jeffrey Ryan Thalhammer.  All rights reserved.
+Copyright (c) 2005-2007 Jeffrey Ryan Thalhammer.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

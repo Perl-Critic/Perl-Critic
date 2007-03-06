@@ -9,10 +9,10 @@ package Perl::Critic::Policy::Modules::RequireEndWithOne;
 
 use strict;
 use warnings;
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :severities :classification };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 0.22;
+our $VERSION = 1.03;
 
 #-----------------------------------------------------------------------------
 
@@ -21,7 +21,7 @@ my $desc = q{Module does not end with "1;"};
 
 #-----------------------------------------------------------------------------
 
-sub policy_parameters { return() }
+sub supported_parameters { return() }
 sub default_severity { return $SEVERITY_HIGH  }
 sub default_themes    { return qw( core bugs pbp ) }
 sub applies_to       { return 'PPI::Document' }
@@ -79,7 +79,7 @@ L<Perl::Critic::Policy::Modules::RequireExplicitPackage>.
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2006 Chris Dolan and Jeffrey Ryan Thalhammer.  All
+Copyright (c) 2005-2007 Chris Dolan and Jeffrey Ryan Thalhammer.  All
 rights reserved.
 
 This program is free software; you can redistribute it and/or modify

@@ -9,11 +9,11 @@ package Perl::Critic::Policy::Documentation::RequirePodAtEnd;
 
 use strict;
 use warnings;
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :severities };
 use List::Util qw(first);
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 0.22;
+our $VERSION = 1.03;
 
 #-----------------------------------------------------------------------------
 
@@ -23,7 +23,7 @@ my $expl = [139, 140];
 
 #-----------------------------------------------------------------------------
 
-sub policy_parameters { return() }
+sub supported_parameters { return() }
 sub default_severity { return $SEVERITY_LOWEST   }
 sub default_themes    { return qw( core cosmetic pbp ) }
 sub applies_to       { return 'PPI::Document'    }
@@ -40,7 +40,7 @@ sub violates {
     # Look for first POD tag that isn't =for, =begin, or =end
     my $pod = first { $_ !~ $pod_rx} @{ $pods_ref };
     return if !$pod;
- 
+
     my $end = $doc->find_first('PPI::Statement::End');
     if ($end) {  # No __END__ means definite violation
         my $pod_loc = $pod->location();

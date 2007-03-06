@@ -49,7 +49,7 @@ sub get_trusted_methods {
         applies_to
         default_themes
         default_severity
-        policy_parameters
+        supported_parameters
     );
 }
 

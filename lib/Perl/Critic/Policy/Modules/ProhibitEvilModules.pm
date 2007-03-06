@@ -8,13 +8,12 @@ package Perl::Critic::Policy::Modules::ProhibitEvilModules;
 
 use strict;
 use warnings;
-use Carp qw(cluck);
 use English qw(-no_match_vars);
 use List::MoreUtils qw(any);
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :severities :data_conversion };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 0.22;
+our $VERSION = 1.03;
 
 #-----------------------------------------------------------------------------
 
@@ -23,7 +22,7 @@ my $desc = q{Prohibited module used};
 
 #-----------------------------------------------------------------------------
 
-sub policy_parameters { return qw( modules )             }
+sub supported_parameters { return qw( modules )             }
 sub default_severity  { return $SEVERITY_HIGHEST         }
 sub default_themes    { return qw( core bugs )           }
 sub applies_to        { return 'PPI::Statement::Include' }
@@ -40,16 +39,17 @@ sub new {
     #Set config, if defined
     if ( defined $args{modules} ) {
         for my $module ( words_from_string( $args{modules} ) ) {
+
             if ( $module =~ m{ \A [/] (.+) [/] \z }mx ) {
+
                 # These are module name patterns (e.g. /Acme/)
                 my $re = $1; # Untainting
                 my $pattern = eval { qr/$re/ };
-                if ( $EVAL_ERROR ) {
-                    cluck qq{Regexp syntax error in "$module"};
-                }
-                else {
-                    push @{ $self->{_evil_modules_rx} }, $pattern;
-                }
+
+                die qq{Regexp syntax error in your profile: "$module"\n}
+                    if $EVAL_ERROR;
+
+                push @{ $self->{_evil_modules_rx} }, $pattern;
             }
             else {
                 # These are literal module names (e.g. Acme::Foo)
@@ -130,7 +130,7 @@ Jeffrey Ryan Thalhammer <thaljef@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2006 Jeffrey Ryan Thalhammer.  All rights reserved.
+Copyright (c) 2005-2007 Jeffrey Ryan Thalhammer.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

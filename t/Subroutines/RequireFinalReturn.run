@@ -1,3 +1,13 @@
+##############################################################################
+#     $URL$
+#    $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+
+#-----------------------------------------------------------------------------
+
 ## name basic passes
 ## failures 0
 ## cut
@@ -100,3 +110,49 @@ sub baz   { confess; }
 sub bar_C { Carp::croak; }
 sub baz_C { Carp::confess; }
 sub quux  { exit; }
+sub quux2 { throw 'nuts'; }
+
+#-----------------------------------------------------------------------------
+
+## name Final return is present, but conditional
+## failures 4
+## cut
+sub foo   { die if $condition }
+sub bar   { croak unless $condition }
+sub baz   { exit for @condition }
+sub quux  { throw 'nuts'if not $condition }
+
+#-----------------------------------------------------------------------------
+
+## name Compound final return is present, but conditional
+## failures 1
+## cut
+sub foo {
+
+    if( $condition ) {
+        return if $today_is_tuesday;
+    }
+    else {
+        exit unless $today_is_wednesday;
+    }
+}
+
+#-----------------------------------------------------------------------------
+
+## name Custom terminals
+## parms { terminal_funcs => 'bailout abort quit' };
+## failures 0
+## cut
+sub foo  { if ($condition) { return 1; }else{ abort } }
+sub bar  { if ($condition) { bailout }else{ return 1 } }
+sub baz  { quit }
+
+##############################################################################
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :

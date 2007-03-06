@@ -10,10 +10,10 @@ package Perl::Critic::Policy::TestingAndDebugging::ProhibitNoStrict;
 use strict;
 use warnings;
 use List::MoreUtils qw(all);
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :severities :data_conversion };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 0.22;
+our $VERSION = 1.03;
 
 #-----------------------------------------------------------------------------
 
@@ -22,10 +22,10 @@ my $expl = [ 429 ];
 
 #-----------------------------------------------------------------------------
 
-sub policy_parameters { return qw( allow )               }
-sub default_severity  { return $SEVERITY_HIGHEST         }
-sub default_themes    { return qw( core pbp bugs )       }
-sub applies_to        { return 'PPI::Statement::Include' }
+sub supported_parameters { return qw( allow )               }
+sub default_severity     { return $SEVERITY_HIGHEST         }
+sub default_themes       { return qw( core pbp bugs )       }
+sub applies_to           { return 'PPI::Statement::Include' }
 
 #-----------------------------------------------------------------------------
 
@@ -96,12 +96,12 @@ The value is a list of whitespace-delimited stricture types that you
 want to permit.  These can be C<vars>, C<subs> and/or C<refs>.  An
 example of this customization:
 
-  [TestingAndDebugging::ProhibitStrictureDisabling]
+  [TestingAndDebugging::ProhibitNoStrict]
   allow = vars subs refs
 
 =head1 SEE ALSO
 
-L<Perl::Critic::Policy::TestingAndDebugging::RequirePackageStricture>
+L<Perl::Critic::Policy::TestingAndDebugging::RequireUseStrict>
 
 =head1 AUTHOR
 
@@ -109,7 +109,7 @@ Jeffrey Ryan Thalhammer <thaljef@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2006 Jeffrey Ryan Thalhammer.  All rights reserved.
+Copyright (c) 2005-2007 Jeffrey Ryan Thalhammer.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
@@ -117,6 +117,7 @@ can be found in the LICENSE file included with this module
 
 =cut
 
+##############################################################################
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

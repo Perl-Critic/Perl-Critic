@@ -97,9 +97,8 @@ Blah...
 
 ## name Passing parms, for a program
 ## failures 0
-## parms {lib_sections => 'mi nombre | el descripcion'}
+## parms {script_sections => 'mi nombre | el descripcion'}
 ## cut
-
 #!/usr/bin/perl
 
 __END__

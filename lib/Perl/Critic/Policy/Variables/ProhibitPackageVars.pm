@@ -9,12 +9,12 @@ package Perl::Critic::Policy::Variables::ProhibitPackageVars;
 
 use strict;
 use warnings;
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :severities :data_conversion };
 use List::MoreUtils qw(all any);
 use Carp qw( carp );
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 0.22;
+our $VERSION = 1.03;
 
 #-----------------------------------------------------------------------------
 
@@ -23,7 +23,7 @@ my $expl = [ 73, 75 ];
 
 #-----------------------------------------------------------------------------
 
-sub policy_parameters { return qw( packages add_packages ) }
+sub supported_parameters { return qw( packages add_packages ) }
 sub default_severity  { return $SEVERITY_MEDIUM            }
 sub default_themes    { return qw(core pbp maintenance)    }
 sub applies_to        { return qw(PPI::Token::Symbol
@@ -192,7 +192,7 @@ Jeffrey Ryan Thalhammer <thaljef@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2006 Jeffrey Ryan Thalhammer.  All rights reserved.
+Copyright (c) 2005-2007 Jeffrey Ryan Thalhammer.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

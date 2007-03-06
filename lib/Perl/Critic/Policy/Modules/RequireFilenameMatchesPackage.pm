@@ -10,10 +10,10 @@ package Perl::Critic::Policy::Modules::RequireFilenameMatchesPackage;
 use strict;
 use warnings;
 use File::Spec;
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 0.22;
+our $VERSION = 1.03;
 
 #-----------------------------------------------------------------------------
 
@@ -22,7 +22,7 @@ my $expl = q{Correct the filename or package statement};
 
 #-----------------------------------------------------------------------------
 
-sub policy_parameters { return ()                }
+sub supported_parameters { return ()                }
 sub default_severity  { return $SEVERITY_HIGHEST }
 sub default_themes    { return qw(core bugs)     }
 sub applies_to        { return 'PPI::Document'   }

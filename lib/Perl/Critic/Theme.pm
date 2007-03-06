@@ -12,14 +12,16 @@ use warnings;
 use Carp qw(confess);
 use English qw(-no_match_vars);
 use List::MoreUtils qw(any);
-use Perl::Critic::Utils;
-use Set::Scalar qw();
+use Perl::Critic::Utils qw{ :characters :data_conversion };
 
-our $VERSION = 0.22;
+#-----------------------------------------------------------------------------
+
+our $VERSION = 1.03;
 
 #-----------------------------------------------------------------------------
 
 sub new {
+
     my ( $class, %args ) = @_;
     my $self = bless {}, $class;
     $self->_init( %args );
@@ -28,120 +30,73 @@ sub new {
 
 #-----------------------------------------------------------------------------
 
-sub members {
-    my $self = shift;
-    return @{ $self->{_members} };
-}
-
-#-----------------------------------------------------------------------------
-
-sub expression {
-    my $self = shift;
-    return $self->{_expression};
-}
-
-#-----------------------------------------------------------------------------
-
 sub _init {
-    my ( $self, %args ) = @_;
-    my $policies = $args{-policies} || [];
-    my $theme_expression = $args{-theme} || $EMPTY;
-    $self->{_expression} = $theme_expression;
 
-    if ( $theme_expression eq $EMPTY ) {
-        $self->{_members} = [ map {ref $_} @{ $policies } ];
-        return $self;
-    }
+    my ($self, %args) = @_;
+    my $rule = $args{-rule} || $EMPTY;
 
-    my $tmap = _make_theme_map( @{$policies} );
-    $self->{_members} = [ _evaluate_expression( $theme_expression, $tmap ) ];
+    die qq{Illegal character "$1" in theme rule.\n}
+        if $rule =~ m/ ( [^()\s\w\d\+\-\*\&\|\!] ) /mx;
+
+    $self->{_rule} = _cook_rule( $rule );
+
     return $self;
 }
 
+
 #-----------------------------------------------------------------------------
 
-sub _evaluate_expression {
-    my ( $expression, $tmap ) = @_;
-    my $original_expression = $expression;
-
-    my %tmap = %{ $tmap };
-    $expression = _translate_expression( $expression );
-    _validate_expression( $expression );
-    $expression = _interpolate_expression( $expression, 'tmap' );
-
-    no warnings 'uninitialized'; ## no critic (ProhibitNoWarnings)
-    my $wanted = eval $expression; ## no critic (ProhibitStringyEval)
-    ## no critic (RequireCarping)
-    die qq{Invalid theme expression: "$original_expression".\n}
-        if $EVAL_ERROR;
-    ## use critic
-    return if not defined $wanted;
-
-    # If one of the operands in the expression evaluated to undef,
-    # then the Set could end up with an undef member.  So we toss
-    # it out to avoid 'uninitialized' warnings downstream;
-    $wanted->delete(undef);
-
-    # Ick. Set::Scalar::members will return a one-element list under
-    # some circumstances.  This is probably a bug.
-    my @members = $wanted->members();
-    return if @members == 1 and not defined $members[0];
-    return @members;
+sub rule {
+    my $self = shift;
+    return $self->{_rule};
 }
 
 #-----------------------------------------------------------------------------
 
-sub _make_theme_map {
+sub policy_is_thematic {
 
-    my (@policy_objects) = @_;
-    my %theme_map = ();
+    my ($self, %args) = @_;
+    my $policy = $args{-policy} || confess 'The -policy argument is required';
+    ref $policy || confess 'The -policy must be an object';
 
-    for my $policy (@policy_objects){
-        my $policy_name = ref $policy || confess q{Not a policy object};
-        for my $theme ( $policy->get_themes() ) {
-            $theme_map{$theme} ||= Set::Scalar->new();
-            $theme_map{$theme}->insert( $policy_name );
-        }
-    }
-    return \%theme_map;
+    my $rule = $self->{_rule} || return 1;
+    my %themes = hashify( $policy->get_themes() );
+
+    # This bit of magic turns the rule into a perl expression that can be
+    # eval-ed for truth.  Each theme name in the rule is translated to 1 or 0
+    # if the $policy belongs in that theme.  For example:
+    #
+    # 'bugs && (pbp || core)'  ...could become... '1 && (0 || 1)'
+
+    my $as_code = $rule; #Making a copy, so $rule is preserved
+    $as_code =~ s/ ( [\w\d]+ ) /exists $themes{$1} || 0/gemx;
+    my $is_thematic = eval $as_code;  ## no critic (ProhibitStringyEval)
+    die qq{Syntax error in theme "$rule"\n} if $EVAL_ERROR;
+
+    return $is_thematic;
 }
 
 #-----------------------------------------------------------------------------
 
-sub _validate_expression {
-    my ($expression) = @_;
-    return 1 if not defined $expression;
+sub _cook_rule {
+    my ($raw_rule) = @_;
+    return if not defined $raw_rule;
 
-    if ( $expression =~ m/ ( [^()\s\w\d\+\-\*] ) /mx ) {
-        die qq{Illegal character "$1" in theme expression.\n};
-    }
+    #Translate logical operators
+    $raw_rule =~ s{\b not \b}{!}ixmg;     # "not" -> "!"
+    $raw_rule =~ s{\b and \b}{&&}ixmg;    # "and" -> "&&"
+    $raw_rule =~ s{\b or  \b}{||}ixmg;    # "or"  -> "||"
 
+    #Translate algebra operators (for backward compatibility)
+    $raw_rule =~ s{\A [-] }{!}ixmg;     # "-" -> "!"     e.g. difference
+    $raw_rule =~ s{   [-] }{&& !}ixmg;  # "-" -> "&& !"  e.g. difference
+    $raw_rule =~ s{   [*] }{&&}ixmg;    # "*" -> "&&"    e.g. intersection
+    $raw_rule =~ s{   [+] }{||}ixmg;    # "+" -> "||"    e.g. union
 
-    if ( $expression =~ m/ [()\w\d]+ \s+ [()\w\d]+ /mx ) {
-        die qq{Missing operator in theme expression.\n};
-    }
-
-    return 1;
+    my $cooked_rule = lc $raw_rule;  #Is now cooked!
+    return $cooked_rule;
 }
 
-#-----------------------------------------------------------------------------
-
-sub _translate_expression {
-    my ($expression) = @_;
-    return if not defined $expression;
-    $expression =~ s{\b and \b}{\*}ixmg; # "and" -> "*" e.g. intersection
-    $expression =~ s{\b not \b}{\-}ixmg; # "not" -> "-" e.g. difference
-    $expression =~ s{\b or  \b}{\+}ixmg; # "or"  -> "+" e.g. union
-    return $expression;
-}
-
-#-----------------------------------------------------------------------------
-
-sub _interpolate_expression {
-    my ($expression, $map_name) = @_;
-    $expression =~ s/\b ([\w\d]+) \b/\$$map_name\{"$1"\}/ixmg;
-    return $expression;
-}
 
 1;
 
@@ -164,43 +119,43 @@ objects.  There are no user-serviceable parts here.
 
 =over 8
 
-=item C<< new( -theme => $theme_expression, -policies => \@polcies ) >>
+=item C<< new( -rule => $rule_expression >>
 
-Returns a reference to a new Perl::Critic::Theme object.  C<-theme> is a
-string expression that defines how to construct the Theme. C<-policies> is a
-reference to an array of L<Perl::Critic::Policy> objects, from which the Theme
-will be constructed.  See L<"THEME EXPRESSIONS"> for more information.
+Returns a reference to a new Perl::Critic::Theme object.  C<-rule> is a string
+expression that evaluates to true or false for each Policy.. See L<"THEME
+RULES"> for more information.
 
-=item C< members() >
+=item C<< policy_is_thematic( -policy => $policy ) >>
 
-Returns a list of Policy objects that comprise this Theme.
+Given a reference to a L<Perl::Critic::Policy> object, this method returns
+evaluates the rule against the themes that are associated with the Policy.
+Returns 1 if the Policy satisfies the rule, 0 otherwise.
 
-=item C< expression() >
+=item C< rule() >
 
-Returns the theme expression that was used to construct this Theme.  See
-L<"THEME EXPRESSIONS"> for more information.
+Returns the rule expression that was used to construct this Theme.  The rule
+may have been translated into a normalized expression.  See L<"THEME RULES">
+for more information.
 
 =back
 
-=head2 THEME EXPRESSIONS
+=head2 THEME RULES
 
-Theme expressions are simple mathematical expressions, where the operands are
-the names of any of the themes associated with the Perl::Critic::Polices.
-Each operand represents the set of all Policies that are declared with or
-configured with that particular theme.
+A theme rule is a simple boolean expression, where the operands are the names
+of any of the themes associated with the Perl::Critic::Polices.
 
-Theme names can be combined with basic mathematical operators into arbitrarily
-complex expressions.  Precedence is the same as normal mathematics, but you
-can use parens to enforce precedence as well.  Supported operators are:
+Theme names can be combined with logical operators to form arbitrarily complex
+expressions.  Precedence is the same as normal mathematics, but you can use
+parens to enforce precedence as well.  Supported operators are:
 
-   Operator       Altertative         Meaning
+   Operator    Altertative    Example
    ----------------------------------------------------------------------------
-   *              and                 Intersection
-   -              not                 Difference
-   +              or                  Union
+   &&          and            'pbp && core'
+   ||          or             'pbp || (bugs && security)'
+   !           not            'pbp && ! (portability || complexity)
 
-See <Perl::Critic/"CONFIGURATION"> for more information about customizing the
-themes.
+See L<Perl::Critic/"CONFIGURATION"> for more information about customizing the
+themes for each Policy.
 
 
 =head1 AUTHOR
@@ -217,6 +172,7 @@ can be found in the LICENSE file included with this module.
 
 =cut
 
+##############################################################################
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

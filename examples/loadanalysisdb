@@ -1,0 +1,348 @@
+#!/usr/bin/perl
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+#       $Id$
+#  $HeadURL$
+#   $Source$
+##############################################################################
+
+use 5.008001;
+use strict;
+use warnings;
+
+use version; our $VERSION = qv('1.002');
+
+use Carp qw{ croak };
+use English qw{ -no_match_vars };
+use Readonly;
+
+use DBI qw{ :sql_types };
+use File::Spec qw{ };
+use Perl6::Say;
+
+use Perl::Critic::Utils qw{ all_perl_files policy_short_name $EMPTY };
+use Perl::Critic;
+
+
+if ( ! @ARGV ) {
+    die qq{usage: loadanalysisdb path [...]\n};
+}
+
+main();
+
+exit 0;
+
+
+sub main {
+    say 'Connecting to database.';
+    say;
+
+    my $database_connection = connect_to_database();
+    my $insert_statement    = prepare_insert_statement($database_connection);
+
+    foreach my $path ( @ARGV ) {
+        say "Looking at $path.";
+
+        my @files = all_perl_files($path);
+        say 'Analyzing ', scalar @files, ' files.';
+
+        load( \@files, File::Spec->canonpath($path), $insert_statement );
+
+        say; say;
+    }
+
+    say 'Disconnecting from database.';
+    say;
+
+    close_insert_statement($insert_statement);
+    # Need to do this or DBI emits warning at disconnect
+    $insert_statement = undef;
+
+    disconnect_from_database($database_connection);
+
+    say 'Done.';
+    say;
+
+    return;
+}
+
+
+sub load {
+    my ( $files, $path, $insert_statement ) = @_;
+
+    # Force reporting level to be really strict, just so that the database
+    # has everything.
+    my $critic = Perl::Critic->new( -severity => 1 );
+
+    foreach my $file ( @{$files} ) {
+        my $relative_path;
+
+        if ($file eq $path) {
+            $relative_path = $file;
+        } else {
+            my $absolute_path_length = ( length $path ) + 1;
+
+            $relative_path = substr $file, $absolute_path_length;
+        }
+
+        say "Processing $relative_path.";
+
+        foreach my $violation ( $critic->critique($file) ) {
+            my ($line, $column) = @{ $violation->location() };
+
+            execute_insert_statement(
+                $insert_statement,
+                $relative_path,
+                $line,
+                $column,
+                $violation->severity(),
+                policy_short_name( $violation->policy() ),
+                $violation->explanation(),
+                $violation->source(),
+            );
+        }
+    }
+
+    return;
+}
+
+
+sub connect_to_database {
+    my $database_file_name = 'perl_critic_analysis.sqlite';
+
+    my $database_connection =
+        DBI->connect(
+            "dbi:SQLite:dbname=$database_file_name",
+            $EMPTY,  # login
+            $EMPTY,  # password
+            {
+                AutoCommit => 1,    # In real life, this should be 0
+                RaiseError => 1,
+            }
+        );
+
+    defined $database_connection or
+        croak "Could not connect to $database_file_name.";
+
+    return $database_connection;
+}
+
+
+sub prepare_insert_statement {
+    my ( $database_connection ) = @_;
+
+    my $insert_statement =
+        $database_connection->prepare(<<'END_SQL');
+            INSERT INTO
+                violation
+            (
+                file_path,
+                line_number,
+                column_number,
+                severity,
+                policy,
+                explanation,
+                source_code
+            )
+            VALUES
+                (?, ?, ?, ?, ?, ?, ?)
+END_SQL
+
+
+    # The following values are bogus-- these statements are simply to tell
+    # the driver what the parameter types are so that we can use execute()
+    # without calling bind_param() each time. See "Binding Values Without
+    # bind_param()" on pages 126-7 of "Programming the Perl DBI".
+    $insert_statement->bind_param( 1, 'x', SQL_VARCHAR);
+    $insert_statement->bind_param( 2,   1, SQL_INTEGER);
+    $insert_statement->bind_param( 3,   1, SQL_INTEGER);
+    $insert_statement->bind_param( 4,   1, SQL_INTEGER);
+    $insert_statement->bind_param( 5, 'x', SQL_VARCHAR);
+    $insert_statement->bind_param( 6, 'x', SQL_VARCHAR);
+    $insert_statement->bind_param( 6, 'x', SQL_VARCHAR);
+
+    return $insert_statement;
+}
+
+
+sub execute_insert_statement {
+    my (
+        $statement,
+        $file_path,
+        $line_number,
+        $column_number,
+        $severity,
+        $policy,
+        $explanation,
+        $source_code,
+    )
+        = @_;
+
+    $statement->execute(
+        $file_path,
+        $line_number,
+        $column_number,
+        $severity,
+        $policy,
+        $explanation,
+        $source_code,
+    );
+
+    return;
+}
+
+
+sub close_insert_statement {
+    my ( $insert_statement ) = @_;
+
+    $insert_statement->finish();
+
+    return;
+}
+
+sub disconnect_from_database {
+    my ( $database_connection ) = @_;
+
+    $database_connection->disconnect();
+
+    return;
+}
+
+
+__END__
+
+=pod
+
+=for stopwords SQLite analyses
+
+=head1 NAME
+
+C<loadanalysisdb> - Critique a body of code and load the results into a database for later processing.
+
+
+=head1 USAGE
+
+  loadanalysisdb path [...]
+
+
+=head1 DESCRIPTION
+
+Scan a body of code and, rather than emit the results in a textual format, put
+them into a database so that analyses can be made.
+
+This example doesn't put anything into the database that isn't available from
+L<Perl::Critic::Violation> in order to keep the code easier to understand.  In
+a full application of the idea presented here, one might want to include the
+current date and a distribution name in the database so that progress on
+cleaning up a code corpus can be tracked.
+
+Note the explanation attribute of L<Perl::Critic::Violation> is constant for
+most policies, but some of them do provide more specific diagnostics of the
+code in question.
+
+
+=head1 REQUIRED ARGUMENTS
+
+A list of paths to files and directories to find code in.
+
+
+=head1 OPTIONS
+
+None.
+
+
+=head1 DIAGNOSTICS
+
+Errors from L<DBI>.
+
+
+=head1 EXIT STATUS
+
+0
+
+
+=head1 CONFIGURATION
+
+None.
+
+
+=head1 DEPENDENCIES
+
+L<Perl::Critic>
+L<DBD::SQLite>
+L<Perl6::Say>
+L<Readonly>
+
+An SQLite database named "perl_critic_analysis.sqlite" with the following
+schema:
+
+  CREATE TABLE violation (
+      file_path     VARCHAR(1024),
+      line_number   INTEGER,
+      column_number INTEGER,
+      severity      INTEGER,
+      policy        VARCHAR(512),
+      explanation   TEXT,
+      source_code   TEXT
+  )
+
+
+=head1 INCOMPATIBILITIES
+
+None reported.
+
+
+=head1 BUGS AND LIMITATIONS
+
+This is an example program and thus does minimal error handling.
+
+
+=head1 AUTHOR
+
+Elliot Shank  C<< <perl@galumph.com> >>
+
+
+=head1 COPYRIGHT
+
+Copyright (c) 2006-2007, Elliot Shank C<< <perl@galumph.com> >>. All rights
+reserved.
+
+This module is free software; you can redistribute it and/or modify it under
+the same terms as Perl itself. See L<perlartistic>.
+
+
+=head1 DISCLAIMER OF WARRANTY
+
+BECAUSE THIS SOFTWARE IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY FOR THE
+SOFTWARE, TO THE EXTENT PERMITTED BY APPLICABLE LAW. EXCEPT WHEN OTHERWISE
+STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES PROVIDE THE
+SOFTWARE "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED,
+INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
+FITNESS FOR A PARTICULAR PURPOSE. THE ENTIRE RISK AS TO THE QUALITY AND
+PERFORMANCE OF THE SOFTWARE IS WITH YOU. SHOULD THE SOFTWARE PROVE DEFECTIVE,
+YOU ASSUME THE COST OF ALL NECESSARY SERVICING, REPAIR, OR CORRECTION.
+
+IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING WILL ANY
+COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY AND/OR REDISTRIBUTE THE
+SOFTWARE AS PERMITTED BY THE ABOVE LICENSE, BE LIABLE TO YOU FOR DAMAGES,
+INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES ARISING
+OUT OF THE USE OR INABILITY TO USE THE SOFTWARE (INCLUDING BUT NOT LIMITED TO
+LOSS OF DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR
+THIRD PARTIES OR A FAILURE OF THE SOFTWARE TO OPERATE WITH ANY OTHER
+SOFTWARE), EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGES.
+
+=cut
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :

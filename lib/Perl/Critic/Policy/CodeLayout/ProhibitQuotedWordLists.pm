@@ -9,10 +9,10 @@ package Perl::Critic::Policy::CodeLayout::ProhibitQuotedWordLists;
 
 use strict;
 use warnings;
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :characters :severities };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 0.22;
+our $VERSION = 1.03;
 
 #-----------------------------------------------------------------------------
 
@@ -23,7 +23,7 @@ my $DEFAULT_MIN_ELEMENTS = 2;
 
 #-----------------------------------------------------------------------------
 
-sub policy_parameters { return qw( min_elements )     }
+sub supported_parameters { return qw( min_elements )     }
 sub default_severity  { return $SEVERITY_LOW          }
 sub default_themes    { return qw( core cosmetic )    }
 sub applies_to        { return 'PPI::Structure::List' }
@@ -139,7 +139,7 @@ to C<ProhibitQuotedWordLists> in your F<.perlcriticrc> file.
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
 
-Copyright (c) 2005-2006 Jeffrey Ryan Thalhammer.  All rights reserved.
+Copyright (c) 2005-2007 Jeffrey Ryan Thalhammer.  All rights reserved.
 
 =head1 COPYRIGHT
 

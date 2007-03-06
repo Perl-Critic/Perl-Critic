@@ -5,26 +5,129 @@
 # $Revision$
 ##############################################################################
 
-[0.22]  Released on ????-??-??
+[1.04]  Released on 2007-??-??
+
+     Bug Fixes:
+     * 25008: Subroutines::RequireFinalReturn should allow "throw"
+     * 25085: False Positive - Heredoc terminator must be quoted
+
+     New Policies:
+     * CodeLayout::ProhibitTrailingWhitespace
+     * ValuesAndExpressions::ProhibitCommaSeparatedStatements
+     * Variables::ProhibitPerl4PackageNames
+
+     Policy Enhancements:
+     * Subroutines::RequireFinalReturn can now be configured to recognize
+       custom functions that behave like "die" or "exit".
+     * Documentation::RequirePodSections can be configured to match
+       Module::Starter:PBP or to really match the PBP book.
+
+[1.03]  Released on 2007-02-13
+
+     Bug Fixes:
+     * Fixed a few more problems with the %f, %F, and %r format escapes.
+     * I forgot to put Conway's perlcriticrc file in the MANIFEST. Sorry.
+
+     Interface Changes:
+     * Perl::Critic::Utils automatically exports everything.  However,
+       this is deprecated.  In the future, you must request your exports.
+
+     Policy Changes:
+     * Duplicate violations of RequireExcplicitPackage are now squelched,
+       in the same way as RequireUseStrict and RequireUseWarnings.
+
+[1.02]  Released on 2007-02-11
+
+     Bug Fixes:
+     * "undef" incorrectly triggered ProhibitMutatingListFunctions.
+     * 24876: %f and %F escapes not working in custom "verbose" format strings.
+     * 24875: Documentation bug in TestingAndDebugging::ProhibitNoStrict
+
+     New Policies:
+     * InputOutput::RequireCheckedOpen
+     * InputOutput::RequireCheckedClose
+
+     Other Cool Stuff:
+     * Added Conway's own suggested Perl::Critic configuration as
+       examples/perlcriticrc-conway.
+
+     * See the examples/ directory for some neat demonstrations of using 
+       the Perl::Critic API. Contributed by Elliot Shank.
+
+     Interface Changes:
+     * Perl::Critic::Utils no longer exports anything by default.  Policies
+       outside the distribution will need to specify what exactly they need
+       from this module.  There are a number of tags that can be used in
+       addition to individual imports.
+
+[1.01]  Released on 2007-01-24
+
+     PRODUCTION RELEASE:  You may now consider the public Perl::Critic
+     API as "stable."  Future minor releases will focus on bug fixes,
+     new policies, and internal refactoring.
+
+     Bug Fixes:
+     * Fixed memory leak.  This was reported by the Parrot team at
+       http://rt.perl.org/rt3/Ticket/Display.html?id=41230
+
+[0.23]  Released on 2007-01-19
+
+     Bug Fixes:
+     * 23994: Test 56 in t/05_utils.t of Perl::Critic v0.22 fails
+     * 24005: test 95 in t/13_bundled_policies fails in 0.22
+
+
+     Groovy New Features:
+     * Added '%F' to the Violation format specifications.  This will
+       give you just the name of file where the violation occurred
+       (i.e. without the path).
+
+     * Improved validation of .perlcriticrc file.  An invalid
+       default setting will now cause a fatal exception. A
+       strange-looking policy name will cause a warning.
+
+
+     Interface Changes:
+     * The syntax for theme expressions has changed.  Instead of using
+       mathematical operators qw(+ * -) you must now use the logical
+       operators qw(|| && !).  See the Perl::Critic docs for more info.
+     
+     * The @GLOBALS and @BUILTINS variables are no longer exported by
+       Perl::Critic::Utils.  Use the is_perl_global() and is_perl_builtin()
+       functions instead.
+
+     * Perl::Critic::Policy::policy_parameters() has bee renamed to
+       Perl::Critic::Policy::supported_paramters().  This was an
+       undocumented feature anyway, so it shouldn't affect anyone.
+
+
+     Other Internal Changes:
+     * Perl::Critic now requires B::Keywords v1.05 or newer.
+
+     * A few internal classes have been refactored.  As a result,
+       Set::Scalar is no longer a required dependency.
+
+
+[0.22]  Released on 2006-12-15
 
      New Features:
      * Introduced named severity levels: gentle, stern, harsh, cruel, brutal
        You can use these named levels instead of the numeric ones.
        For example: "perlcritic --severity=cruel MyModule.pm"
+       Or just:     "perlcritic --cruel MyModule.pm"
 
      * For perlcritic, the "-List" option has been renamed to
        "-profileproto".  The output now includes the names of the
-       parameters that the policy supports, if any.  This should
-       make it a little easier to know how you could configure each
-       policy, if you ever want to do so.
+       parameters that each Policy supports, if any.
 
      * Improved validation of Policy parameters in your F<.perlcriticrc>
+       Any invalid parameter now causes a fatal exception.
 
      Major Changes:
      * Reassigned themes for most policies.  Now there are fewer
-       themes and they are organized more around concepts rather
-       than severity level.  If you have assigned your own themes
-       to any policies, they should still work as expected.
+       themes and they are organized around programming concepts
+       instead of severity levels.  If you have assigned your own
+       themes to any Policies, they should still work as expected.
 
      Policy Changes:
      * ErrorHandling::RequireCarping will not complain if it can figure
@@ -39,7 +142,7 @@
 
      Misc Changes:
 
-     Added uppercase alternative to some perlcritic options.
+     Added single-letter uppercase alternatives for some perlcritic options.
 
 [0.21_01] Released on 2006-12-03
 
@@ -225,8 +328,6 @@
 
 [0.16]  Released on 2006-05-14
 
-     Production release.
-
      Enhancements:
      * Perl::Critic->critique() now accepts a PPI::Document as the
        argument.  This feature creates an additional dependency on
@@ -298,8 +399,6 @@
 
 
 [0.15] Released on 2006-03-26
-
-     Production release.
 
      Bug Fixes:
      * 17964: Insists my code is not tidy (may not be fixed for all cases)
@@ -413,7 +512,7 @@
      
 [0.13] Released on 2005-10-31 
 
-     Production release of 0.12_03.  No code major changes.
+     Official release of 0.12_03.  No code major changes.
 
 [0.12_03] Not released
 

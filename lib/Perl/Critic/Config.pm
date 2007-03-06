@@ -16,9 +16,13 @@ use Scalar::Util qw(blessed);
 use Perl::Critic::PolicyFactory;
 use Perl::Critic::Theme qw();
 use Perl::Critic::UserProfile qw();
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{
+    :booleans :characters :severities :internal_lookup
+};
 
-our $VERSION = 0.22;
+#-----------------------------------------------------------------------------
+
+our $VERSION = 1.03;
 
 #-----------------------------------------------------------------------------
 # Constructor
@@ -37,66 +41,51 @@ sub _init {
 
     my ( $self, %args ) = @_;
 
-    # -top or -theme imply that -severity is 1
+    # -top or -theme imply that -severity is 1, unless it is already defined
     if ( defined $args{-top} || defined $args{-theme} ) {
         $args{-severity} ||= $SEVERITY_LOWEST;
     }
 
-    # Set some attributes
-    my $p = $args{-profile};
-    my $profile = Perl::Critic::UserProfile->new( -profile => $p );
+    # Construct the UserProfile to get default options.
+    my $p        = $args{-profile}; #Can be file path or data struct
+    my $profile  = Perl::Critic::UserProfile->new( -profile => $p );
     my $defaults = $profile->defaults();
+    $self->{_profile} = $profile;
 
-    # If given, these options should always have a true value
-    $self->{_include}      = $args{-include}      ? $args{-include}      : $defaults->include();
-    $self->{_exclude}      = $args{-exclude}      ? $args{-exclude}      : $defaults->exclude();
-    $self->{_singlepolicy} = $args{-singlepolicy} ? $args{-singlepolicy} : $defaults->singlepolicy();
-    $self->{_verbose}      = $args{-verbose}      ? $args{-verbose}      : $defaults->verbose();
+    # If given, these options should always have a true value.
+    $self->{_include}      = $args{-include}      || $defaults->include();
+    $self->{_exclude}      = $args{-exclude}      || $defaults->exclude();
+    $self->{_singlepolicy} = $args{-singlepolicy} || $defaults->singlepolicy();
+    $self->{_verbose}      = $args{-verbose}      || $defaults->verbose();
 
     # Severity levels can be expressed as names or numbers
-    my $severity        = $args{-severity} ? $args{-severity} : $defaults->severity();
+    my $severity        = $args{-severity} || $defaults->severity();
     $self->{_severity}  = severity_to_number( $severity );
 
     # If given, these options can be true or false (but defined)
     # We normalize these to numeric values by multiplying them by 1;
     no warnings 'numeric'; ## no critic (ProhibitNoWarnings)
-    $self->{_top}   = 1 * (defined $args{-top}   ? $args{-top}   : $defaults->top()   );
-    $self->{_force} = 1 * (defined $args{-force} ? $args{-force} : $defaults->force() );
-    $self->{_only}  = 1 * (defined $args{-only}  ? $args{-only}  : $defaults->only()  );
+    $self->{_top}   = 1 * _dor( $args{-top},   $defaults->top()   );
+    $self->{_force} = 1 * _dor( $args{-force}, $defaults->force() );
+    $self->{_only}  = 1 * _dor( $args{-only},  $defaults->only()  );
 
-    $self->{_profile}  = $profile;
+    # Construct a Theme object from rule
+    my $theme_rule = $args{-theme} || $defaults->theme();
+    my $theme = Perl::Critic::Theme->new( -rule => $theme_rule );
+    $self->{_theme} = $theme;
+
+    # Construct a Factory with the Profile
+    my $factory = Perl::Critic::PolicyFactory->new( -profile => $profile );
+    $self->{_factory} = $factory;
+
+    # Initialize internal storage for Policies
     $self->{_policies} = [];
-
-    # Construct PolicyFactory and get all the Policies
-    my $factory = Perl::Critic::PolicyFactory->new( -profile  => $profile );
-    my @policies = $factory->policies();
-
-    # Construct Theme from the user's definition
-    my $theme = exists $args{-theme} ? $args{-theme} : $profile->defaults->theme();
-    my $t = Perl::Critic::Theme->new( -theme => $theme, -policies => \@policies );
-    $self->{_theme} = $t;
 
     # "NONE" means don't load any policies
     return $self if defined $p and $p eq 'NONE';
 
-    $self->_load_policies( @policies );
-
-    if ($self->singlepolicy() && scalar $self->policies() != 1) {
-        # We want to use die here because the problem is with user input and
-        # the user shouldn't receive a stack trace for this.
-
-        if (scalar $self->policies() == 0) {
-            die 'No policies matched "' . $self->singlepolicy() . qq{".\n};
-        }
-        else {
-            die
-                'Multiple policies matched "'
-                . $self->singlepolicy()
-                . qq{":\n\t}
-                . ( join qq{,\n\t}, apply { chomp } sort $self->policies() )
-                . qq{\n};
-        }
-    }
+    # Heavy lifting here...
+    $self->_load_policies();
 
     return $self;
 }
@@ -106,27 +95,24 @@ sub _init {
 sub add_policy {
 
     my ( $self, %args ) = @_;
-    my $profile = $self->{_profile};
-    my $policy  = $args{-policy} || confess q{The -policy argument is required};
 
+    my $policy  = $args{-policy}
+        or confess q{The -policy argument is required};
+
+    # If the -policy is already a blessed object, then just add it directly.
     if ( blessed $policy ) {
         push @{ $self->{_policies} }, $policy;
         return $self;
     }
 
-    # NOTE: The "-config" alias is supported for backward compatibility.
-    my $params  = $args{-params} || $args{-config} || $profile->policy_params( $policy );
+    # NOTE: The "-config" option is supported for backward compatibility.
+    my $params = $args{-params} || $args{-config};
 
-    # TODO: Use PolicyFactory::create_policy to instantiate the Policy.
+    my $factory    = $self->{_factory};
+    my $policy_obj = $factory->create_policy(-name=>$policy, -params=>$params);
+    push @{ $self->{_policies} }, $policy_obj;
 
-    eval {
-        my $policy_name = policy_long_name( $policy );
-        my $policy_obj  = $policy_name->new( %{ $params } );
-        push @{ $self->{_policies} }, $policy_obj;
-    };
 
-    # Failure to create a policy is now fatal!
-    confess qq{Unable to create policy '$policy': $EVAL_ERROR} if $EVAL_ERROR;
     return $self;
 }
 
@@ -134,32 +120,39 @@ sub add_policy {
 
 sub _load_policies {
 
-    my ( $self, @policies ) = @_;
-
-    if ($self->singlepolicy()) {
-        for my $policy (@policies) {
-            if ( $self->_policy_is_single_policy( $policy ) ) {
-                $self->add_policy( -policy => $policy );
-            }
-        }
-
-        return $self;
-    }
+    my ( $self ) = @_;
+    my $factory  = $self->{_factory};
+    my @policies = $factory->create_all_policies();
 
     for my $policy ( @policies ) {
 
+        # If -singlepolicy is true, only load policies that match it
+        if ( $self->singlepolicy() ) {
+            if ( $self->_policy_is_single_policy( $policy ) ) {
+                $self->add_policy( -policy => $policy );
+            }
+            next;
+        }
+
+        # To load, or not to load -- that is the question.
         my $load_me = $self->only() ? $FALSE : $TRUE;
 
-        ##no critic (ProhibitPostfixControls)
-        $load_me = $FALSE if $self->_policy_is_disabled( $policy );
-        $load_me = $TRUE  if $self->_policy_is_enabled( $policy );
-        $load_me = $FALSE if $self->_policy_is_unimportant( $policy );
+        ## no critic (ProhibitPostfixControls)
+        $load_me = $FALSE if     $self->_policy_is_disabled( $policy );
+        $load_me = $TRUE  if     $self->_policy_is_enabled( $policy );
+        $load_me = $FALSE if     $self->_policy_is_unimportant( $policy );
         $load_me = $FALSE if not $self->_policy_is_thematic( $policy );
-        $load_me = $TRUE  if $self->_policy_is_included( $policy );
-        $load_me = $FALSE if $self->_policy_is_excluded( $policy );
+        $load_me = $TRUE  if     $self->_policy_is_included( $policy );
+        $load_me = $FALSE if     $self->_policy_is_excluded( $policy );
+
 
         next if not $load_me;
         $self->add_policy( -policy => $policy );
+    }
+
+    # When using -singlepolicy, only one policy should ever be loaded.
+    if ($self->singlepolicy() && scalar $self->policies() != 1) {
+        $self->_throw_single_policy_exception();
     }
 
     return $self;
@@ -185,8 +178,8 @@ sub _policy_is_enabled {
 
 sub _policy_is_thematic {
     my ($self, $policy) = @_;
-    my $policy_name = ref $policy;
-    return any { $policy_name eq $_ } $self->theme()->members();
+    my $theme = $self->theme();
+    return $theme->policy_is_thematic( -policy => $policy );
 }
 
 #-----------------------------------------------------------------------------
@@ -221,13 +214,36 @@ sub _policy_is_excluded {
 sub _policy_is_single_policy {
     my ($self, $policy) = @_;
     my $policy_long_name = ref $policy;
-    my $singlepolicy = $self->singlepolicy();
+    my $singlepolicy = $self->singlepolicy() || return;
+    return $policy_long_name =~ m/$singlepolicy/imx;
+}
 
-    if ($singlepolicy) {
-        return $policy_long_name =~ m/$singlepolicy/imxo;
+#-----------------------------------------------------------------------------
+
+sub _throw_single_policy_exception {
+
+    my $self = shift;
+
+    my $error_msg = $EMPTY;
+    my $sp_option = $self->singlepolicy();
+
+    if (scalar $self->policies() == 0) {
+        $error_msg = qq{No policies matched "$sp_option".};
+    }
+    else {
+        $error_msg  = qq{Multiple policies matched "$sp_option":\n\t};
+        $error_msg .= join qq{,\n\t}, apply { chomp } sort $self->policies();
     }
 
-    return 0;
+    die "$error_msg\n";
+}
+
+#-----------------------------------------------------------------------------
+
+sub _dor {
+    #The defined-or //
+    my ($this, $that) = @_;
+    return defined $this ? $this : $that;
 }
 
 #-----------------------------------------------------------------------------
@@ -496,7 +512,7 @@ for this file in the current directory first, and then in your home
 directory.  Alternatively, you can set the C<PERLCRITIC> environment
 variable to explicitly point to a different file in another location.
 If none of these files exist, and the C<-profile> option is not given
-on the command line, then all Policies will be loaded with their
+to the constructor, then all Policies will be loaded with their
 default configuration.
 
 The format of the configuration file is a series of INI-style
@@ -591,8 +607,9 @@ A simple configuration might look like this:
     [-NamingConventions::ProhibitMixedCaseSubs]
 
     #--------------------------------------------------------------
-    # For all other Policies, I accept the default severity,
-    # so no additional configuration is required for them.
+    # For all other Policies, I accept the default severity, theme
+    # and other parameters, so no additional configuration is
+    # required for them.
 
 For additional configuration examples, see the F<perlcriticrc> file
 that is included in this F<t/examples> directory of this distribution.
@@ -606,27 +623,27 @@ modules themselves.
 
 =head1 POLICY THEMES
 
-B<NOTE:> As of version 0.21, policy themes are still considered
-experimental.  The implementation of this feature may change in a
-future release.  Additionally, the default theme names that ship with
-Perl::Critic may also change.  But this is a pretty cool feature, so
-read on...
+Each Policy is defined with one or more "themes".  Themes can be used to
+create arbitrary groups of Policies.  They are intended to provide an
+alternative mechanism for selecting your preferred set of Policies.  For
+example, you may wish disable a certain subset of Policies when analyzing test
+scripts.  Conversely, you may wish to enable only a specific subset of
+Policies when analyzing modules.
 
-Each Policy is defined with one or more "themes".  Themes can be used
-to create arbitrary groups of Policies.  They are intended to provide
-an alternative mechanism for selecting your preferred set of Policies.
-The Policies that ship with Perl::Critic have been grouped into themes
-that are roughly analogous to their severity levels.  Folks who find
-the numeric severity levels awkward can use these mnemonic theme names
-instead.
+The Policies that ship with Perl::Critic are have been broken into the
+following themes.  This is just our attempt to provide some basic logical
+groupings.  You are free to invent new themes that suit your needs.
 
-    Severity Level                   Equivalent Theme
-    ---------------------------------------------------------------------------
-    5                                danger
-    4                                risky
-    3                                debt
-    2                                readability
-    1                                cosmetic
+    THEME             DESCRIPTION
+    --------------------------------------------------------------------------
+    core              All policies that ship with Perl::Critic
+    pbp               Policies that come directly from "Perl Best Practices"
+    bugs              Policies that that prevent or reveal bugs
+    maintenance       Policies that affect the long-term health of the code
+    cosmetic          Policies that only have a superficial effect
+    complexity        Policies that specificaly relate to code complexity
+    security          Policies that relate to security issues
+    tests             Policies that are specific to test scripts
 
 
 Say C<`perlcritic -list`> to get a listing of all available policies
@@ -634,12 +651,11 @@ and the themes that are associated with each one.  You can also change
 the theme for any Policy in your F<.perlcriticrc> file.  See the
 L<"CONFIGURATION"> section for more information about that.
 
-Using the C<-theme> command-line option, you can combine themes with
-mathematical and boolean operators to create an arbitrarily complex
-expression that represents a custom "set" of Policies.  The following
-operators are supported
+Using the C<-theme> option, you can combine theme names with mathematical and
+boolean operators to create an arbitrarily complex expression that represents
+a custom "set" of Policies.  The following operators are supported
 
-   Operator       Altertative         Meaning
+   Operator       Alternative         Meaning
    ----------------------------------------------------------------------------
    *              and                 Intersection
    -              not                 Difference
@@ -650,24 +666,25 @@ can also use parenthesis to enforce precedence.  Here are some examples:
 
    Expression                  Meaning
    ----------------------------------------------------------------------------
-   pbp * risky                 All policies that are "pbp" AND "risky"
-   pbp and risky               Ditto
+   pbp * bugs                  All policies that are "pbp" AND "bugs"
+   pbp and bugs                Ditto
 
-   danger + risky              All policies that are "danger" OR "risky"
-   pbp or risky                Ditto
+   bugs + cosmetic             All policies that are "bugs" OR "cosmetic"
+   bugs or cosmetic            Ditto
 
-   pbp - cosmetic              All policies that are "pbp" BUT NOT "risky"
+   pbp - cosmetic              All policies that are "pbp" BUT NOT "cosmetic"
    pbp not cosmetic            Ditto
 
-   -debt                All policies that are NOT "unreliable"
-   not debt             Ditto
+   -maintenance                All policies that are NOT "maintenance"
+   not maintenance             Ditto
 
-   (pbp - danger) * risky      All policies that are "pbp" BUT NOT "danger", AND "risky"
-   (pbp not danger) and risky  Ditto
+   (pbp - bugs) * complexity     All policies that are "pbp" BUT NOT "bugs",
+                                    AND "complexity"
+   (pbp not bugs) and complexity  Ditto
 
-Theme names are case-insensitive.  If C<-theme> is set to an empty
-string, then it is equivalent to the set of all policies.  A theme
-name that doesn't exist is equivalent to an empty set.  Please See
+Theme names are case-insensitive.  If C<-theme> is set to an empty string,
+then it is equivalent to the set of all Policies.  A theme name that doesn't
+exist is equivalent to an empty set.  Please See
 L<http://en.wikipedia.org/wiki/Set> for a discussion on set theory.
 
 =head1 AUTHOR
@@ -676,7 +693,7 @@ Jeffrey Ryan Thalhammer <thaljef@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2006 Jeffrey Ryan Thalhammer.  All rights reserved.
+Copyright (c) 2005-2007 Jeffrey Ryan Thalhammer.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
@@ -684,6 +701,7 @@ can be found in the LICENSE file included with this module.
 
 =cut
 
+##############################################################################
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

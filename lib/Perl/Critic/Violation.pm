@@ -11,13 +11,14 @@ use strict;
 use warnings;
 use Carp qw(confess);
 use English qw(-no_match_vars);
+use File::Basename qw(basename);
 use IO::String qw();
 use Pod::PlainText qw();
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :characters :internal_lookup };
 use String::Format qw(stringf);
 use overload ( q{""} => 'to_string', cmp => '_compare' );
 
-our $VERSION = 0.22;
+our $VERSION = 1.03;
 
 #Class variables...
 our $FORMAT = "%m at line %l, column %c. %e.\n"; #Default stringy format
@@ -54,6 +55,11 @@ sub new {
     $self->{_policy}      = caller;
     $self->{_elem}        = $elem;
 
+    # Do these now before the weakened $doc gets garbage collected
+    my $top = $elem->top();
+    $self->{_filename} = $top->can('filename') ? $top->filename() : undef;
+    $self->{_source}   = _first_line_of_source( $elem );
+
     return $self;
 }
 
@@ -73,7 +79,7 @@ sub sort_by_location {
     ## TODO: What if $a and $b are not Violation objects?
     return
         map {$_->[0]}
-            sort { ($a->[1] <=> $b->[1]) || ($a->[2] <=> $b->[2]) } 
+            sort { ($a->[1] <=> $b->[1]) || ($a->[2] <=> $b->[2]) }
                 map {[$_, $_->location->[0] || 0, $_->location->[1] || 0]}
                     @_;
 }
@@ -89,7 +95,7 @@ sub sort_by_severity {
     ## TODO: What if $a and $b are not Violation objects?
     return
         map {$_->[0]}
-            sort { $a->[1] <=> $b->[1] } 
+            sort { $a->[1] <=> $b->[1] }
                 map {[$_, $_->severity() || 0]}
                     @_;
 }
@@ -159,26 +165,15 @@ sub policy {
 
 sub filename {
     my $self = shift;
-    my $elem = $self->{_elem};
-    my $top  = $elem->top();
-    return $top->can('filename') ? $top->filename() : undef;
+    return $self->{_filename};
 }
 
 #-----------------------------------------------------------------------------
 
 
 sub source {
-     my $self = shift;
-
-     if (!defined $self->{_source}) {
-         my $stmnt = $self->{_elem}->statement() || $self->{_elem};
-         $self->{_source} = $stmnt->content() || $EMPTY;
-     }
-     #Return the first line of code only.
-     if ($self->{_source} =~ m{\A ( [^\n]* ) }mx) {
-         return $1;
-     }
-     return;
+    my $self = shift;
+    return $self->{_source};
 }
 
 #-----------------------------------------------------------------------------
@@ -192,6 +187,7 @@ sub to_string {
     # Wrap the more expensive ones in sub{} to postpone evaluation
     my %fspec = (
          'f' => sub { $self->filename() },
+         'F' => sub { basename( $self->filename()) },
          'l' => sub { $self->location->[0] },
          'c' => sub { $self->location->[1] },
          'm' => $self->description(),
@@ -258,6 +254,20 @@ sub _get_diagnostics {
     return $pod_string;
 }
 
+#-----------------------------------------------------------------------------
+
+sub _first_line_of_source {
+    my $elem = shift;
+
+    my $stmnt = $elem->statement() || $elem;
+    my $code_string = $stmnt->content() || $EMPTY;
+
+    #Chop everything but the first line (without newline);
+    $code_string =~ s{ \n.* }{}smx;
+    return $code_string;
+}
+
+
 1;
 
 #-----------------------------------------------------------------------------
@@ -318,8 +328,9 @@ an array of page numbers in PBP.
 
 =item C<location()>
 
-Returns a two-element list containing the line and column number where
-this Violation occurred.
+Returns a three-element array reference containing the line and real
+& virtual column numbers where this Violation occurred, as in
+L<PPI::Element>.
 
 =item C<filename()>
 
@@ -387,13 +398,12 @@ variable.  See L<"OVERLOADS"> for the details.
 
 =item C<$Perl::Critic::Violation::FORMAT>
 
-This variable is deprecated.  Use the C<set_format> and C<get_format>
-class methods instead.
+B<DEPRECATED:> Use the C<set_format> and C<get_format> methods instead.
 
-Sets the format for all Violation objects when they are evaluated in
-string context.  The default is C<'%d at line %l, column %c. %e'>.
-See L<"OVERLOADS"> for formatting options.  If you want to change
-C<$FORMAT>, you should probably localize it first.
+Sets the format for all Violation objects when they are evaluated in string
+context.  The default is C<'%d at line %l, column %c. %e'>.  See
+L<"OVERLOADS"> for formatting options.  If you want to change C<$FORMAT>, you
+should probably localize it first.
 
 =back
 
@@ -407,18 +417,19 @@ Formats are a combination of literal and escape characters similar to
 the way C<sprintf> works.  If you want to know the specific formatting
 capabilities, look at L<String::Format>. Valid escape characters are:
 
-  Escape    Meaning
-  -------   -----------------------------------------------------------------
-  %m        Brief description of the violation
-  %f        Name of the file where the violation occurred.
-  %l        Line number where the violation occurred
-  %c        Column number where the violation occurred
-  %e        Explanation of violation or page numbers in PBP
-  %d        Full diagnostic discussion of the violation
-  %r        The string of source code that caused the violation
-  %P        Name of the Policy module that created the violation
-  %p        Name of the Policy without the Perl::Critic::Policy:: prefix
-  %s        The severity level of the violation
+    Escape    Meaning
+    -------   ----------------------------------------------------------------
+    %c        Column number where the violation occurred
+    %d        Full diagnostic discussion of the violation
+    %e        Explanation of violation or page numbers in PBP
+    %F        Just the name of the file where the violation occurred.
+    %f        Path to the file where the violation occurred.
+    %l        Line number where the violation occurred
+    %m        Brief description of the violation
+    %P        Full name of the Policy module that created the violation
+    %p        Name of the Policy without the Perl::Critic::Policy:: prefix
+    %r        The string of source code that caused the violation
+    %s        The severity level of the violation
 
 Here are some examples:
 
@@ -444,7 +455,7 @@ Jeffrey Ryan Thalhammer <thaljef@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2006 Jeffrey Ryan Thalhammer.  All rights reserved.
+Copyright (c) 2005-2007 Jeffrey Ryan Thalhammer.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

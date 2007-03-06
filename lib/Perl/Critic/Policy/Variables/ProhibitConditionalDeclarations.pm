@@ -9,10 +9,10 @@ package Perl::Critic::Policy::Variables::ProhibitConditionalDeclarations;
 
 use strict;
 use warnings;
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :severities :classification :data_conversion };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 0.22;
+our $VERSION = 1.03;
 
 #-----------------------------------------------------------------------------
 
@@ -21,7 +21,7 @@ my $expl = q{Declare variables outside of the condition};
 
 #-----------------------------------------------------------------------------
 
-sub policy_parameters { return() }
+sub supported_parameters { return() }
 sub default_severity { return $SEVERITY_HIGHEST          }
 sub default_themes    { return qw( core bugs )               }
 sub applies_to       { return 'PPI::Statement::Variable' }

@@ -9,10 +9,10 @@ package Perl::Critic::Policy::Modules::RequireBarewordIncludes;
 
 use strict;
 use warnings;
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 0.22;
+our $VERSION = 1.03;
 
 #-----------------------------------------------------------------------------
 
@@ -20,7 +20,7 @@ my $expl = q{Use a bareword instead};
 
 #-----------------------------------------------------------------------------
 
-sub policy_parameters { return() }
+sub supported_parameters { return() }
 sub default_severity   { return $SEVERITY_HIGHEST }
 sub default_themes      { return qw(core portability)   }
 sub applies_to         { return 'PPI::Statement::Include' }
@@ -94,7 +94,7 @@ correct motivation for and behavior of this Policy.  Thanks Chris.
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
 
-Copyright (c) 2005-2006 Jeffrey Ryan Thalhammer.  All rights reserved.
+Copyright (c) 2005-2007 Jeffrey Ryan Thalhammer.  All rights reserved.
 
 =head1 COPYRIGHT
 

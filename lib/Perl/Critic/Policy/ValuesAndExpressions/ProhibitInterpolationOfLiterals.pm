@@ -10,10 +10,10 @@ package Perl::Critic::Policy::ValuesAndExpressions::ProhibitInterpolationOfLiter
 use strict;
 use warnings;
 use List::MoreUtils qw(any);
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :severities :data_conversion };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 0.22;
+our $VERSION = 1.03;
 
 #-----------------------------------------------------------------------------
 
@@ -22,7 +22,7 @@ my $expl = [51];
 
 #-----------------------------------------------------------------------------
 
-sub policy_parameters  { return qw( allow )             }
+sub supported_parameters  { return qw( allow )             }
 sub default_severity   { return $SEVERITY_LOWEST        }
 sub default_themes     { return qw( core pbp cosmetic ) }
 sub applies_to         { return qw(PPI::Token::Quote::Double
@@ -71,7 +71,7 @@ sub violates {
 sub _has_interpolation {
     my $elem = shift;
     return $elem =~ m{ (?<!\\) [\$\@] \S+ }mx      #Contains unescaped $. or @.
-        || $elem =~ m{ \\[tnrfae0xcNLuLUEQ] }mx;   #Containts escaped metachars
+        || $elem =~ m{ \\[tnrfbae0xcNLuLUEQ] }mx;   #Containts escaped metachars
 }
 
 1;
@@ -132,7 +132,7 @@ Jeffrey Ryan Thalhammer <thaljef@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2006 Jeffrey Ryan Thalhammer.  All rights reserved.
+Copyright (c) 2005-2007 Jeffrey Ryan Thalhammer.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

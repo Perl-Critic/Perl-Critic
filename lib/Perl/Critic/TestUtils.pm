@@ -18,15 +18,16 @@ use File::Spec::Unix ();
 use File::Temp ();
 use File::Find qw( find );
 use Perl::Critic;
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :data_conversion };
 use Perl::Critic::PolicyFactory (-test => 1);
 
-our $VERSION = 0.22;
+our $VERSION = 1.03;
 our @EXPORT_OK = qw(
     pcritique critique fcritique
     subtests_in_tree
     should_skip_author_tests
     get_author_test_skip_message
+    starting_points_including_examples
     bundled_policy_names
 );
 
@@ -83,7 +84,7 @@ sub fcritique {
     my $file = File::Spec->catfile($dir, @fileparts);
     if (open my $fh, '>', $file) {
         print {$fh} ${$code_ref};
-        close $fh;
+        close $fh or confess "unable to close $file: $!";
     }
 
     # Use eval so we can clean up before die() in case of error.
@@ -126,6 +127,10 @@ sub should_skip_author_tests {
 sub get_author_test_skip_message {
     ## no critic (RequireInterpolation);
     return 'Author test.  Set $ENV{TEST_AUTHOR} to a true value to run.';
+}
+
+sub starting_points_including_examples {
+    return (-e 'blib' ? 'blib' : 'lib', 'examples');
 }
 
 # The internal representation of a subtest is just a hash with some
@@ -185,7 +190,7 @@ sub _subtests_from_file {
             confess "Got some code but I'm not in a subtest: $test_file";
         }
     }
-    close $fh;
+    close $fh or confess "unable to close $test_file: $!";
     if ( $subtest ) {
         if ( $incode ) {
             push @subtests, _finalize_subtest( $subtest );
@@ -336,6 +341,11 @@ Answers whether author tests should run.
 Returns a string containing the message that should be emitted when a test
 is skipped due to it being an author test when author tests are not enabled.
 
+=item starting_points_including_examples()
+
+Returns a list of the directories contain code that needs to be tested when it
+is desired that the examples be included.
+
 =item bundled_policy_names()
 
 Returns a list of Policy packages that come bundled with this package.  This
@@ -431,7 +441,7 @@ and the rest of the L<Perl::Critic> team.
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2006 Chris Dolan.  All rights reserved.
+Copyright (c) 2005-2007 Chris Dolan.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

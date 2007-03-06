@@ -2,7 +2,7 @@ package Perl::Critic::Policy::Test;
 
 use warnings;
 use strict;
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
 sub default_severity { return $SEVERITY_LOWEST }

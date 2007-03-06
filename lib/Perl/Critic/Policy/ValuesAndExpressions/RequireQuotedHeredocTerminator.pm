@@ -9,20 +9,20 @@ package Perl::Critic::Policy::ValuesAndExpressions::RequireQuotedHeredocTerminat
 
 use strict;
 use warnings;
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 0.22;
+our $VERSION = 1.03;
 
 #-----------------------------------------------------------------------------
 
-my $heredoc_rx = qr/ \A << ["|'] .* ['|"] \z /x;
+my $heredoc_rx = qr/ \A << \s* ["|'] .* ['|"] \z /x;
 my $desc       = q{Heredoc terminator must be quoted};
 my $expl       = [ 62 ];
 
 #-----------------------------------------------------------------------------
 
-sub policy_parameters { return() }
+sub supported_parameters { return() }
 sub default_severity { return $SEVERITY_MEDIUM      }
 sub default_themes   { return qw(core pbp maintenance)    }
 sub applies_to       { return 'PPI::Token::HereDoc' }
@@ -66,7 +66,7 @@ to the reader whether the content is going to be interpolated or not.
   $greeting
   END_MESSAGE
 
-=head1 SEE ALSO 
+=head1 SEE ALSO
 
 L<Perl::Critic::Policy::ValuesAndExpressions::RequireUpperCaseHeredocTerminator>
 
@@ -76,7 +76,7 @@ Jeffrey Ryan Thalhammer <thaljef@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2006 Jeffrey Ryan Thalhammer.  All rights reserved.
+Copyright (c) 2005-2007 Jeffrey Ryan Thalhammer.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

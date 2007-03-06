@@ -9,10 +9,10 @@ package Perl::Critic::Policy::Variables::ProhibitMatchVars;
 
 use strict;
 use warnings;
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :severities :data_conversion };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 0.22;
+our $VERSION = 1.03;
 
 #-----------------------------------------------------------------------------
 
@@ -24,7 +24,7 @@ my %forbidden = hashify( @forbidden );
 
 #-----------------------------------------------------------------------------
 
-sub policy_parameters { return ()                  }
+sub supported_parameters { return ()                  }
 sub default_severity  { return $SEVERITY_HIGH      }
 sub default_themes    { return qw( core bugs pbp ) }
 sub applies_to        { return qw( PPI::Token::Symbol

@@ -44,18 +44,6 @@ Replace current workaround for C<RequireUseStrict>.
 
 =over 4
 
-=item * Invalid policy names in F<.perlcriticrc> do not cause any warnings.
-
-Fix for this should not cause T::P::C to fail, because "invalid" may simply
-mean that the policy isn't locally installed.
-
-=item * Invalid parameters in F<.perlcriticrc> do not cause any warnings.
-
-=item * Fix inappropriate uses of C<confess>.
-
-E.g. when no files to process have been found or multiple policies match
-the C<--singlepolicy> option.
-
 =item * Modules::RequireVersionVar
 
 Doesn't enforce three-part versions
@@ -75,20 +63,10 @@ difference between that and C<< $self->_foo() >>
 
 =item * ErrorHandling::RequireCarping
 
-This should not complain about using warn or die if it's not in a
+This should not complain about using C<warn> or C<die> if it's not in a
 function, or if it's not in a non-main:: package.
 
-Also, if the error string ends with a "\n", then the line number
-and package information is not shown, so it doesn't matter if you
-use carp/confess or not.  For example:
-
-    my $fh;
-    if ( !open( $fh, '<', $filename ) ) {
-        warn "ack: $filename: $!\n";
-        return;
-    }
-
-I just want to print a warning and move on.  The location is irrelevant.
+Also, should allow C<die> when it is obvious that the "message" is a reference.
 
 =item * RegularExpressions::ProhibitCaptureWithoutTest
 
@@ -104,12 +82,18 @@ Allow this construct:
 Right now, P::C thinks that the C<$1> isn't legal to use because it's
 "outside" of the match.  The thing is, we can only get to the C<if>
 if the regex matched.
-    while ( $str =~ /(expression)/ ) 
+    while ( $str =~ /(expression)/ )
 
-=item * Documentation::RequirePodSections
+=item * CodeLayout::ProhibitParensWithBuiltins
 
-Need to make this configurable to conform to either the book or
-his Module::Starter::PBP, since Damian's apparently changed his mind.
+Some builtin functions (particularly those that take a variable number of
+scalar arguments) should probably get parens.  This policy should be enhanced
+to allow the user to specify a list of builtins that are expempt from the
+policy.
+
+=item * InputOutput::RequireCheckedOpen and RequireCheckedClose
+
+These policies should not report violations if 'use Fatal' is in effect.
 
 =back
 
@@ -120,8 +104,6 @@ his Module::Starter::PBP, since Damian's apparently changed his mind.
 =item * ControlStructures::ProhibitComplexMappings (p113)
 
 Base this on RequireSimpleSortBlock.  Make number of statements configurable
-
-=item * ValuesAndExpressions::ProhibitCommaSeparatedStatements (p68)
 
 =item * ValuesAndExpressions::RequireListParens (p71)
 
@@ -154,10 +136,10 @@ make sure it's fewer than N elements.  Otherwise make sure there are
 less than N L<PPI::Statement::Variable>s in a row at begin which
 shift.
 
-=item * InputOutput::RequireErrorChecking (p208)
+=item * InputOutput::RequireChecked* for system calls (p208)
 
-Forbid open, print, close in void context, unless "use Fatal" is in
-effect.  Allow an exception for close and print.
+Add policies to ensure checking the return values of system calls. See
+InputOutputRequireCheckedOpen.
 
 =item * InputOutput::RequireBriefOpen (p209)
 
@@ -170,11 +152,6 @@ same lexical FH
 
 If you're reading from STDIN, chances are you're really wanting to
 read from the magic filehandle.
-
-=item * Miscellanea::ProhibitObnoxiousComments
-
-Forbid excessive hash marks e.g. "#### This is a loud comment ####".
-Make the obnoxious pattern configurable
 
 =item * RegularExpressions::RequireBracesForMultiline (p242)
 
@@ -226,6 +203,28 @@ Anything that is a program should have a shebang line.  This includes .t files.
 
 L<http://home.earthlink.net/~josh.jore/new-warnings/slides/slide1.html>
 
+=item * Miscellanea::ProhibitObnoxiousComments
+
+Forbid excessive hash marks e.g. "#### This is a loud comment ####".
+Make the obnoxious pattern configurable
+
+=item * ValuesAndExpressions::RequireNotOperator
+
+Require the use of "not" instead of "!", except when this would contradict
+ProhibitMixedBooleanOperators.  This may be better suited for
+Perl::Critic::More.
+
+=item * Modules::RequireExplicitImporting
+
+Require every C<use> statement to have an explicit import list.  You could
+still get around this by calling C<import> directly.
+
+=item * Modules::ForbidImporting
+
+Require every C<use> to have an explicitly empty import list.  This is for
+folks who like to see fully-qualified function names.  Should probably provide
+a list of exempt modules (like FindBin);
+
 =item * ControlStructures::ProhibitIncludeViaDo
 
 Forbid C<do "foo.pl">.  Not sure about this policy name.
@@ -252,11 +251,6 @@ Good: C<< Foo::Bar->new >>, Bad: C<< new Foo::Bar >>
 
 L<http://rt.cpan.org/Ticket/Display.html?id=20439>
 
-=item * Variables::ProhibitPerl4PackageNames
-
-Forbid old-school package names like Foo'Bar'Baz.  This should also
-apply to any variables or subroutines that get declared/called.
-
 =item * Documentation::RequireSynopsis
 
 =item * Documentation::RequireLicense
@@ -271,11 +265,9 @@ etc.
 Here's a non-PPI implementation:
 L<http://search.cpan.org/src/JJORE/Carp-Clan-5.8/t/04boilerplate.t>
 
-=item * CodeLayout::ProhibitTrailingSpaces
+=item * BuiltinFunctions::ProhibitExtraneousScalarCall
 
-Forbid [ \t] before \n.  This is a subset of RequireTidyCode.
-
-L<http://rt.cpan.org/Ticket/Display.html?id=20714>
+Recommend that C<if (scalar @array)> be rewritten as C<if (@array)>.
 
 =back
 
@@ -283,7 +275,36 @@ L<http://rt.cpan.org/Ticket/Display.html?id=20714>
 
 =over 4
 
-=item * Enhance P::C::critique() to accept file names, directories, or code strings (as refs)
+=item * MOVE THE LINE-DISABLING INTO P::C::Document
+
+All the code that deals with finding all the '##no critic' comments and noting
+which policies are disabled at each line seems like it would be better placed
+in Perl::Critic::Document.  P::C::Document could then provide methods to
+indicate if a policy is disabled at a particular line.  So the basic algorithm
+in Perl::Critic might look something like this:
+
+  foreach $element (@PPI_ELEMENTS) {
+     foreach $policy (@POLICIES) {
+        $line = $element->location->[0];
+        next if $doc->policy_is_disabled_at_line( $policy, $line );
+        push @violations, $policy->violates( $elem, $doc );
+     }
+  }
+
+=item * Change API to use named parameters
+
+Most of the methods on the public classes use named parameters for passing
+arguments.  I'd like to extend that pattern to include all object-methods.
+Static methods can still use positional parameters.
+
+=item * Allow more flexible Policy parameter parsing
+
+Several policies use C<words_from_string()> to split their parameters into
+words.  This function is currently limited to splitting on whitespace.  It
+would be nice to allow some lattitude for users who might try and use commas
+or some other kind of delimiter.
+
+=item * Enhance P::C::critique() to accept files, directories, or code strings
 
 Just like F<bin/perlcritic> does now.
 
@@ -362,6 +383,15 @@ Logged as RT #23788.
 Remove trinary operator usage in RequireUseStrict, RequireUseWarnings, and
 RequireExplicitPackage once this is fixed.
 
+=item L<PPI::Structure::Block>s being generated instead of L<PPI::Structure::Constructor>
+
+For complicated data structures, C<< { blah => blah } >> will result in a
+L<PPI::Structure::Block> being created, instead of a
+L<PPI::Structure::Constructor>.
+
+ValuesAndExpressions::ProhibitCommaSeparatedStatements and other policies have
+workarounds for this.
+
 =item Operators
 
 ValuesAndExpressions::ProhibitMismatchedOperators has two workarounds
@@ -381,4 +411,4 @@ still needed.
 #   indent-tabs-mode: nil
 #   c-indentation-style: bsd
 # End:
-# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=pod expandtab :

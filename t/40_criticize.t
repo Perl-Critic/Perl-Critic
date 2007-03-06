@@ -15,7 +15,10 @@ use English qw( -no_match_vars );
 use File::Spec qw();
 use Test::More;
 use Perl::Critic::PolicyFactory ( -test => 1 );
-use Perl::Critic::TestUtils qw{ should_skip_author_tests get_author_test_skip_message };
+use Perl::Critic::TestUtils qw{
+    should_skip_author_tests get_author_test_skip_message
+    starting_points_including_examples
+};
 
 if (should_skip_author_tests()) {
     plan skip_all => get_author_test_skip_message();
@@ -57,7 +60,8 @@ if ( !$EVAL_ERROR ) {
 
 my $rcfile = File::Spec->catfile( 't', '40_perlcriticrc' );
 Test::Perl::Critic->import( -profile => $rcfile );
-all_critic_ok();
+
+all_critic_ok( starting_points_including_examples() );
 
 #-----------------------------------------------------------------------------
 

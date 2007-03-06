@@ -1,0 +1,66 @@
+#-----------------------------------------------------------------------------
+## name 2 evil modules
+## parms {modules => 'Evil::Module Super::Evil::Module'}
+## failures 2
+## cut
+
+use Evil::Module qw(bad stuff);
+use Super::Evil::Module;
+
+#-----------------------------------------------------------------------------
+## name No evil modules
+## parms {modules => 'Evil::Module Super::Evil::Module'}
+## failures 0
+## cut
+
+use Good::Module;
+
+#-----------------------------------------------------------------------------
+## name 2 evil modules, with pattern matching
+## parms { modules => '/Evil::/ /Demonic/' }
+## failures 2
+## cut
+
+use Evil::Module qw(bad stuff);
+use Demonic::Module
+
+#-----------------------------------------------------------------------------
+## name More evil modules, with mixed config
+## parms { modules => '/Evil::/ Demonic::Module /Acme/' }
+## failures 4
+## cut
+
+use Evil::Module qw(bad stuff);
+use Super::Evil::Module;
+use Demonic::Module;
+use Acme::Foo;
+
+#-----------------------------------------------------------------------------
+## name More evil modules, with more pattern matching
+## parms { modules => '/Evil::|Demonic::Module|Acme/' }
+## failures 4
+## cut
+
+use Evil::Module qw(bad stuff);
+use Super::Evil::Module;
+use Demonic::Module;
+use Acme::Foo;
+
+#-----------------------------------------------------------------------------
+## name Pattern matching exceptions
+## parms { modules => '/(/' }
+## failures 0
+## error /Regexp syntax/
+## cut
+
+print 'Hello World';
+
+##############################################################################
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :

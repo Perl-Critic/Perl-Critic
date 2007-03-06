@@ -9,10 +9,10 @@ package Perl::Critic::Policy::TestingAndDebugging::ProhibitProlongedStrictureOve
 
 use strict;
 use warnings;
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 0.22;
+our $VERSION = 1.03;
 
 #-----------------------------------------------------------------------------
 
@@ -23,7 +23,7 @@ my $DEFAULT_N_STATEMENTS = 3;
 
 #-----------------------------------------------------------------------------
 
-sub policy_parameters { return qw( statements )          }
+sub supported_parameters { return qw( statements )          }
 sub default_severity  { return $SEVERITY_HIGH            }
 sub default_themes    { return qw( core pbp bugs )       }
 sub applies_to        { return 'PPI::Statement::Include' }

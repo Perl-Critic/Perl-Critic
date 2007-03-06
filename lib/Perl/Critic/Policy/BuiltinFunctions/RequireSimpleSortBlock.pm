@@ -9,10 +9,10 @@ package Perl::Critic::Policy::BuiltinFunctions::RequireSimpleSortBlock;
 
 use strict;
 use warnings;
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :severities :classification };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 0.22;
+our $VERSION = 1.03;
 
 #-----------------------------------------------------------------------------
 
@@ -21,7 +21,7 @@ my $expl = [ 149 ];
 
 #-----------------------------------------------------------------------------
 
-sub policy_parameters { return ()                                   }
+sub supported_parameters { return ()                                   }
 sub default_severity  { return $SEVERITY_MEDIUM                     }
 sub default_themes    { return qw( core pbp maintenance complexity) }
 sub applies_to        { return 'PPI::Token::Word'                   }

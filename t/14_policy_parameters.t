@@ -12,14 +12,14 @@ use warnings;
 use Test::More; #plan set below!
 use English qw(-no_match_vars);
 use Perl::Critic::UserProfile qw();
-use Perl::Critic::PolicyFactory ( -test => 1 );
+use Perl::Critic::PolicyFactory (-test => 1);
 use Perl::Critic::TestUtils qw(bundled_policy_names);
 
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 #-----------------------------------------------------------------------------
 # This script just proves that each policy that ships with Perl::Critic
-# overrides the policy_parameters() method.  It tries to create each Policy
+# overrides the supported_parameters() method.  It tries to create each Policy
 # using the parameters that it claims to support, but it uses a dummy value
 # for the parameter.  So this doesn't actually prove if we can create the
 # Policy using the parameters that it claims to support.
@@ -35,7 +35,7 @@ Perl::Critic::TestUtils::block_perlcriticrc();
 
 # Figure out how many tests there will be...
 my @all_policies = bundled_policy_names();
-my @all_params   = map { $_->policy_parameters() } @all_policies;
+my @all_params   = map { $_->supported_parameters() } @all_policies;
 my $ntests       = @all_policies + @all_params;
 plan( tests => $ntests );
 
@@ -51,7 +51,7 @@ for my $policy ( @all_policies ) {
 
 sub test_supported_parameters {
     my $policy = shift;
-    my @supported_params = $policy->policy_parameters();
+    my @supported_params = $policy->supported_parameters();
     my $config = Perl::Critic::Config->new( -profile => 'NONE' );
 
     for my $param_name ( @supported_params ) {
@@ -66,9 +66,10 @@ sub test_supported_parameters {
 
 sub test_invalid_parameters {
     my $policy = shift;
+    my $bogus_params  = { bogus => 'shizzle' };
     my $profile = Perl::Critic::UserProfile->new( -profile => 'NONE' );
     my $factory = Perl::Critic::PolicyFactory->new( -profile => $profile );
-    eval { $factory->create_policy( $policy, {bogus => 'shizzle'} ) };
+    eval { $factory->create_policy(-name => $policy, -params => $bogus_params) };
     my $label = qq{Created $policy with bogus parameters};
     like( $EVAL_ERROR, qr/Parameter "bogus" isn't supported/, $label);
 }
@@ -77,10 +78,9 @@ sub test_invalid_parameters {
 
 sub test_has_declared_parameters {
     my $policy = shift;
-    my @supported_params = $policy->policy_parameters();
-    if ( !defined $supported_params[0] && @supported_params == 1) {
+    if ( not $policy->can('supported_parameters') ) {
         fail( qq{I don't know if $policy supports params} );
-        diag( qq{This means $policy needs a policy_parameters() method} );
+        diag( qq{This means $policy needs a supported_parameters() method} );
         return;
     }
 }

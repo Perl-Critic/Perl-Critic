@@ -9,10 +9,10 @@ package Perl::Critic::Policy::Variables::RequireNegativeIndices;
 
 use strict;
 use warnings;
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 0.22;
+our $VERSION = 1.03;
 
 #-----------------------------------------------------------------------------
 
@@ -21,7 +21,7 @@ my $expl = [ 88 ];
 
 #-----------------------------------------------------------------------------
 
-sub policy_parameters { return() }
+sub supported_parameters { return() }
 sub default_severity { return $SEVERITY_HIGH              }
 sub default_themes   { return qw( core maintenance pbp )  }
 sub applies_to       { return 'PPI::Structure::Subscript' }
@@ -45,7 +45,7 @@ sub _is_bad_index {
     my @children = $elem->schildren();
     return if @children != 1; # too complex
     return if !$children[0]->isa( 'PPI::Statement::Expression'); # too complex
-                
+
     # This is the expression elements that compose the array indexing
     my @expr = $children[0]->schildren();
     return if !@expr || @expr > 4; # no-op or too complex
@@ -146,7 +146,7 @@ sub _is_minus_number  # return true if @expr looks like "- n"
     my $op = shift @expr;
     return if !$op->isa('PPI::Token::Operator');
     return if $op ne q{-};
-    
+
     my $number = shift @expr;
     return if !$number->isa('PPI::Token::Number');
 

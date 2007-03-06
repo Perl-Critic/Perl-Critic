@@ -11,9 +11,9 @@ use strict;
 use warnings;
 use Carp qw(cluck);
 use English qw(-no_match_vars);
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :booleans :characters :severities :data_conversion };
 
-our $VERSION = 0.22;
+our $VERSION = 1.03;
 
 #-----------------------------------------------------------------------------
 
@@ -30,41 +30,29 @@ sub new {
 sub _init {
 
     my ( $self, %args ) = @_;
-    my $key = undef;
 
     # Multi-value defaults
-    my $exclude = _default( 'exclude', q{}, %args );
-    $self->{_exclude}    = [ split m/\s+/mx, $exclude ];
-    my $include = _default( 'include', q{}, %args );
-    $self->{_include}    = [ split m/\s+/mx, $include ];
+    my $exclude = delete $args{exclude} || $EMPTY;
+    $self->{_exclude}    = [ words_from_string( $exclude ) ];
+    my $include = delete $args{include} || $EMPTY;
+    $self->{_include}    = [ words_from_string( $include ) ];
 
     # Single-value defaults
-    $self->{_force}        = _default('force',        $FALSE,            %args);
-    $self->{_only}         = _default('only',         $FALSE,            %args);
-    $self->{_singlepolicy} = _default('singlepolicy', $EMPTY,            %args);
-    $self->{_severity}     = _default('severity',     $SEVERITY_HIGHEST, %args);
-    $self->{_theme}        = _default('theme',        $EMPTY,            %args);
-    $self->{_top}          = _default('top',          $FALSE,            %args);
-    $self->{_verbose}      = _default('verbose',      4,                 %args);
+    $self->{_force}        = delete $args{force}        || $FALSE;
+    $self->{_only}         = delete $args{only}         || $FALSE;
+    $self->{_singlepolicy} = delete $args{singlepolicy} || $EMPTY;
+    $self->{_severity}     = delete $args{severity}     || $SEVERITY_HIGHEST;
+    $self->{_theme}        = delete $args{theme}        || $EMPTY;
+    $self->{_top}          = delete $args{top}          || $FALSE;
+    $self->{_verbose}      = delete $args{verbose}      || 4;
+
+    # If there's anything left, warn about invalid settings
+    if ( my @remaining = sort keys %args ){
+        my @warnings = map { qq{Setting "$_" is not supported\n} } @remaining;
+        die @warnings, "\n";
+    }
 
     return $self;
-}
-
-#-----------------------------------------------------------------------------
-
-sub _default {
-    my ($key_name, $default, %args) = @_;
-    $key_name = _kludge( $key_name, %args );
-    return $key_name ? $args{$key_name} : $default;
-}
-
-sub _kludge {
-    my ($key, %args) = @_;
-    return          if not defined $key;
-    return $key     if defined $args{$key};
-    return "-$key"  if defined $args{"-$key"};
-    return "--$key" if defined $args{"--$key"};
-    return; # Key does not exist
 }
 
 #-----------------------------------------------------------------------------
@@ -213,7 +201,7 @@ Jeffrey Ryan Thalhammer <thaljef@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2006 Jeffrey Ryan Thalhammer.  All rights reserved.
+Copyright (c) 2005-2007 Jeffrey Ryan Thalhammer.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

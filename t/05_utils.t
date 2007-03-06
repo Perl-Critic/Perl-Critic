@@ -10,20 +10,14 @@
 use strict;
 use warnings;
 use PPI::Document;
-use constant USE_B_KEYWORDS => eval 'use B::Keywords 1.04; 1';
-use Test::More tests => 84 + (
-    USE_B_KEYWORDS
-    ? ( @B::Keywords::Functions + @B::Keywords::Scalars + @B::Keywords::Arrays
-            + @B::Keywords::Hashes + @B::Keywords::FileHandles )
-    : 0
-);
+use Test::More tests => 89;
 
 #-----------------------------------------------------------------------------
 
 BEGIN
 {
     # Needs to be in BEGIN for global vars
-    use_ok('Perl::Critic::Utils');
+    use_ok('Perl::Critic::Utils', qw{ :all } );
 }
 
 #-----------------------------------------------------------------------------
@@ -45,14 +39,11 @@ can_ok('main', 'policy_short_name');
 can_ok('main', 'precedence_of');
 can_ok('main', 'severity_to_number');
 can_ok('main', 'verbosity_to_format');
+can_ok('main', 'is_unchecked_call');
 
 is($SPACE, ' ', 'character constants');
 is($SEVERITY_LOWEST, 1, 'severity constants');
 is($POLICY_NAMESPACE, 'Perl::Critic::Policy', 'Policy namespace');
-
-# These globals are deprecated.  Use functions instead
-is( (scalar grep {$_ eq 'grep'}   @BUILTINS), 1, 'perl builtins');
-is( (scalar grep {$_ eq 'OSNAME'} @GLOBALS),  1, 'perl globals');
 
 #-----------------------------------------------------------------------------
 #  find_keywords tests
@@ -150,16 +141,6 @@ for my $code (@bad) {
 
 }
 
-SKIP: {
-    if ( not USE_B_KEYWORDS ) {
-        skip 'Need B::Keywords 1.03', 0;
-    }
-
-    for my $builtin ( @B::Keywords::Functions ) {
-        is( is_perl_builtin($builtin), 1, "Is $builtin builtin function" );
-    }
-}
-
 #-----------------------------------------------------------------------------
 # is_perl_global tests
 
@@ -177,17 +158,6 @@ SKIP: {
     $var  = $doc->find_first('Token::Symbol');
     isnt( is_perl_global($var), 1, 'Is not perl global var (PPI)' );
 
-}
-
-SKIP: {
-    if ( not USE_B_KEYWORDS ) {
-        skip 'Need B::Keywords', 0;
-    }
-
-    for my $global ( @B::Keywords::Scalars, @B::Keywords::Arrays, @B::Keywords::Hashes,
-                     @B::Keywords::FileHandles ) {
-        is( is_perl_global($global), 1, "$global is a perl global" );
-    }
 }
 
 #-----------------------------------------------------------------------------
@@ -294,7 +264,8 @@ is( interpolate( 'literal'    ), "literal",    'Interpolation' );
 #-----------------------------------------------------------------------------
 
 {
-    my $doc = PPI::Document->new(\'sub foo {}');
+    my $code = 'sub foo{}';
+    my $doc = PPI::Document->new( \$code );
     my $words = $doc->find('PPI::Token::Word');
     is(scalar @{$words}, 2, 'count PPI::Token::Words');
     is((scalar grep {is_function_call($_)} @{$words}), 0, 'is_function_call');
@@ -309,8 +280,46 @@ Perl::Critic::TestUtils::block_perlcriticrc();
 
 
 my @native_policies = bundled_policy_names();
-my @found_policies  = all_perl_files( 'lib/Perl/Critic/Policy' );
+my $policy_dir = File::Spec->catfile( qw(lib Perl Critic Policy) );
+my @found_policies  = all_perl_files( $policy_dir );
 is( scalar @found_policies, scalar @native_policies, 'Find all perl code');
+
+#-----------------------------------------------------------------------------
+# is_unchecked_call tests
+{
+    my @trials = (
+                  # just an obvious failure to check the return value
+                  { code => q( open( $fh, $mode, $filename ); ),
+                    pass => 1 },
+                  # check the value with a trailing conditional
+                  { code => q( open( $fh, $mode, $filename ) or die 'unable to open'; ),
+                    pass => 0 },
+                  # assign the return value to a variable (and assume that it's checked later)
+                  { code => q( my $error = open( $fh, $mode, $filename ); ),
+                    pass => 0 },
+                  # the system call is in a conditional
+                  { code => q( return $EMPTY if not open my $fh, '<', $file; ),
+                    pass => 0 },
+                  # open call in list context, checked with 'not'
+                  { code => q( return $EMPTY if not ( open my $fh, '<', $file ); ),
+                    pass => 0 },
+                  # just putting the system call in a list context doesn't mean the return value is checked
+                  { code => q( ( open my $fh, '<', $file ); ),
+                    pass => 1 },
+                 );
+
+    foreach my $trial ( @trials ) {
+        my $doc = make_doc( $trial->{'code'} );
+        my $statement = $doc->find_first( sub { $_[1] eq 'open' } );
+        if ( $trial->{'pass'} ) {
+            ok( is_unchecked_call( $statement ), 'is_unchecked_call returns true' );
+        } else {
+            ok( ! is_unchecked_call( $statement ), 'is_unchecked_call returns false' );
+        }
+    }
+}
+
+#-----------------------------------------------------------------------------
 
 # Local Variables:
 #   mode: cperl

@@ -24,8 +24,7 @@ $var = +0.0;
 $var = +10.0;
 $var = +0.11;
 
-#These are legal, but PPI doesn't parse them correctly.  So I've put
-#in a workaround that looks for a decimal preceeding the number.
+#These are legal, but PPI <= v1.118 doesn't parse them correctly.
 
 $var = +.011;
 $var = .011;

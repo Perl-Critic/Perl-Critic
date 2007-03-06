@@ -10,10 +10,12 @@ package Perl::Critic::Policy::TestingAndDebugging::RequireTestLabels;
 use strict;
 use warnings;
 use List::MoreUtils qw(any);
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{
+    :severities :data_conversion :classification :ppi
+};
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 0.22;
+our $VERSION = 1.03;
 
 my %label_arg_pos = (
    ok        => 1,
@@ -36,7 +38,7 @@ my $expl = q{Add a label argument to all Test::More functions};
 
 #-----------------------------------------------------------------------------
 
-sub policy_parameters { return qw( modules )                }
+sub supported_parameters { return qw( modules )                }
 sub default_severity  { return $SEVERITY_MEDIUM             }
 sub default_themes    { return qw( core maintenance tests ) }
 sub applies_to        { return 'PPI::Token::Word'           }

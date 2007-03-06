@@ -99,6 +99,10 @@ Write C<open $handle, $path> instead of C<open($handle, $path)> [Severity 1]
 
 Write C<qw(foo bar baz)> instead of C<('foo', 'bar', 'baz')> [Severity 2]
 
+=head2 L<Perl::Critic::Policy::CodeLayout::ProhibitTrailingWhitespace>
+
+Don't use whitespace at the end of lines. [Severity 1]
+
 =head2 L<Perl::Critic::Policy::CodeLayout::RequireConsistentNewlines>
 
 Use the same newline through the source [Severity 4]
@@ -178,6 +182,14 @@ Write C<< while( $line = <> ){...} >> instead of C<< for(<>){...} >> [Severity 4
 =head2 L<Perl::Critic::Policy::InputOutput::ProhibitTwoArgOpen>
 
 Write C<< open $fh, q{<}, $filename; >> instead of C<< open $fh, "<$filename"; >> [Severity 5]
+
+=head2 L<Perl::Critic::Policy::InputOutput::RequireCheckedOpen>
+
+Write C<< my $error = open $fh, $mode, $filename; >> instead of C<< open $fh, $mode, $filename; >> [Severity 3]
+
+=head2 L<Perl::Critic::Policy::InputOutput::RequireCheckedClose>
+
+Write C<< my $error = close $fh; >> instead of C<< close $fh; >> [Severity 3]
 
 =head2 L<Perl::Critic::Policy::InputOutput::RequireBracedFileHandleWithPrint>
 
@@ -307,6 +319,10 @@ Always C<use strict> [Severity 5]
 
 Always C<use warnings> [Severity 4]
 
+=head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitCommaSeparatedStatements>
+
+Don't use the comma operator as a statement separator. [Severity 4]
+
 =head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitConstantPragma>
 
 Don't C<< use constant $FOO => 15 >> [Severity 4]
@@ -379,6 +395,10 @@ Avoid C<$`>, C<$&>, C<$'> and their English equivalents. [Severity 4]
 
 Eliminate globals declared with C<our> or C<use vars> [Severity 3]
 
+=head2 L<Perl::Critic::Policy::Variables::ProhibitPerl4PackageNames>
+
+Use double colon (::) to separate package name components instead of single quotes ('). [Severity 2]
+
 =head2 L<Perl::Critic::Policy::Variables::ProhibitPunctuationVars>
 
 Write C<$EVAL_ERROR> instead of C<$@> [Severity 2]
@@ -405,10 +425,20 @@ Jeffrey Ryan Thalhammer <thaljef@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2006 Jeffrey Ryan Thalhammer.  All rights reserved.
+Copyright (c) 2005-2007 Jeffrey Ryan Thalhammer.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
 can be found in the LICENSE file included with this module.
 
 =cut
+
+##############################################################################
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=pod expandtab :

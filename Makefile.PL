@@ -56,6 +56,7 @@ WriteMakefile(
     EXE_FILES      => ['bin/perlcritic'],
     PL_FILES       => {},
     PREREQ_PM      => {
+        'B::Keywords'           => 1.05,
         'Config::Tiny'          => 2,
         'File::Spec'            => 0,
         'File::Spec::Unix'      => 0,
@@ -67,7 +68,6 @@ WriteMakefile(
         'Pod::PlainText'        => 0,
         'Pod::Usage'            => 0,
         'Scalar::Util'          => 0,
-        'Set::Scalar'           => 1.20,
         'String::Format'        => 1.13,
         'Test::More'            => 0,
     },

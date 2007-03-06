@@ -10,10 +10,10 @@ package Perl::Critic::Policy::CodeLayout::RequireTidyCode;
 use strict;
 use warnings;
 use English qw(-no_match_vars);
-use Perl::Critic::Utils;
+use Perl::Critic::Utils qw{ :characters :severities };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 0.22;
+our $VERSION = 1.03;
 
 #-----------------------------------------------------------------------------
 
@@ -22,7 +22,7 @@ my $expl = [ 33 ];
 
 #-----------------------------------------------------------------------------
 
-sub policy_parameters { return qw( perltidyrc )      }
+sub supported_parameters { return qw( perltidyrc )      }
 sub default_severity  { return $SEVERITY_LOWEST      }
 sub default_themes    { return qw(core pbp cosmetic) }
 sub applies_to        { return 'PPI::Document'       }
@@ -139,7 +139,7 @@ Perl::Tidy not to load any configuration file at all and just use
 Perl::Tidy's own default style.
 
   [CodeLayout::RequireTidyCode]
-  perltidyrc = 
+  perltidyrc =
 
 =head1 NOTES
 
@@ -157,7 +157,7 @@ Jeffrey Ryan Thalhammer <thaljef@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2006 Jeffrey Ryan Thalhammer.  All rights reserved.
+Copyright (c) 2005-2007 Jeffrey Ryan Thalhammer.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
