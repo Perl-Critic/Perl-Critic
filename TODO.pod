@@ -117,6 +117,11 @@ Perhaps we need to distinguish cases like:
 OTOH, this assumes that the common use of scalar grep is to check
 for existence.  I'm not sure that's the case.
 
+=item * ValuesAndExpressions::ProhibitImplicitNewlines (p60-61)
+
+Forbid multi-line strings with implicit newlines.  Use concatenation or
+heredoc instead.
+
 =item * Variables::RequireLocalizedPunctuationVars (p81)
 
 =item * Documentation::PodSpelling (p148)
