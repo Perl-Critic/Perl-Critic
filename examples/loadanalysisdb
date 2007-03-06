@@ -156,7 +156,7 @@ END_SQL
     # The following values are bogus-- these statements are simply to tell
     # the driver what the parameter types are so that we can use execute()
     # without calling bind_param() each time. See "Binding Values Without
-    # bind_param()" on pages 126-7 of Programming the Perl DBI.
+    # bind_param()" on pages 126-7 of "Programming the Perl DBI".
     $insert_statement->bind_param( 1, 'x', SQL_VARCHAR);
     $insert_statement->bind_param( 2,   1, SQL_INTEGER);
     $insert_statement->bind_param( 3,   1, SQL_INTEGER);
@@ -234,8 +234,11 @@ C<loadanalysisdb> - Critique a body of code and load the results into a database
 Scan a body of code and, rather than emit the results in a textual format, put
 them into a database so that analyses can be made.
 
-One way one might want to extend this example is to include the current date
-in the database so that progress on cleaning up a code corpus can be tracked.
+This example doesn't put anything into the database that isn't available from
+L<Perl::Critic::Violation> in order to keep the code easier to understand.  In
+a full application of the idea presented here, one might want to include the
+current date and a distribution name in the database so that progress on
+cleaning up a code corpus can be tracked.
 
 Note the explanation attribute of L<Perl::Critic::Violation> is constant for
 most policies, but some of them do provide more specific diagnostics of the
