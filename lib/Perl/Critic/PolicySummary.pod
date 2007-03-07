@@ -387,6 +387,10 @@ Do not write C< my $foo = $bar if $baz; > [Severity 5]
 
 Use C<my> instead of C<local>, except when you have to. [Severity 2]
 
+=head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitMagicNumbers>
+
+This entry is here simply to pass tests.
+
 =head2 L<Perl::Critic::Policy::Variables::ProhibitMatchVars>
 
 Avoid C<$`>, C<$&>, C<$'> and their English equivalents. [Severity 4]
@@ -418,10 +422,6 @@ Write C<for my $element (@list) {...}> instead of C<for $element (@list) {...}>
 =head2 L<Perl::Critic::Policy::Variables::RequireNegativeIndices>
 
 Negative array index should be used [Severity 4]
-
-=head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitMagicNumbers>
-
-This entry is here simply to pass tests.
 
 =head1 AUTHOR
 

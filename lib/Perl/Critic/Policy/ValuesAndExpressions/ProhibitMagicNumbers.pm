@@ -50,7 +50,7 @@ my $SPECIAL_ARRAY_SUBSCRIPT_EXEMPTION = -1; ## no critic (ProhibitMagicNumbers)
 
 sub supported_parameters { return qw( allowed_values allowed_types) }
 sub default_severity     { return $SEVERITY_LOW                     }
-sub default_themes       { return qw( more maintenance )            }
+sub default_themes       { return qw( core maintenance )            }
 sub applies_to           { return 'PPI::Token::Number'              }
 
 #----------------------------------------------------------------------------
