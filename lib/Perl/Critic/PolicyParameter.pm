@@ -13,6 +13,8 @@ use Carp qw(confess);
 
 use Perl::Critic::Utils;
 use Perl::Critic::PolicyParameter::Behavior;
+use Perl::Critic::PolicyParameter::BooleanBehavior;
+use Perl::Critic::PolicyParameter::EnumerationBehavior;
 
 our $VERSION = 1.03;
 
@@ -38,17 +40,12 @@ sub _get_behavior_for_name {
 #-----------------------------------------------------------------------------
 
 sub new {
-    my ($class, $policy, $specification) = @_;
+    my ($class, $specification) = @_;
     my $self = bless {}, $class;
 
-    defined $policy
-        or confess
-            'Attempt to create a ', __PACKAGE__, ' without a policy.';
     defined $specification
         or confess
             'Attempt to create a ', __PACKAGE__, ' without a specification.';
-
-    $self->{_policy} = $policy;
 
     my $specification_type = ref $specification;
     if ( not $specification_type ) {
@@ -74,8 +71,8 @@ sub new {
     return $self;
 }
 
-# See if the policy has specified a behavior, and if so, let the behavior
-# plug in its implementations of parser, etc.
+# See if the specification includes a Behavior name, and if so, let the
+# Behavior with that name plug in its implementations of parser, etc.
 sub _initialize_from_behavior {
     my ($self, $specification) = @_;
 
@@ -100,7 +97,8 @@ sub _finish_initialization {
     $self->_set_description($specification->{description});
     $self->_set_default_string($specification->{default_string});
 
-    # TODO: What is this?
+    # TODO: What was I thinking of at the time I was sketching out how
+    # parameters work?
     if ( exists $specification->{default} ) {
         $self->_set_default($specification->{default});
     }
@@ -116,14 +114,6 @@ sub get_name {
     my $self = shift;
 
     return $self->{_name};
-}
-
-#-----------------------------------------------------------------------------
-
-sub get_policy {
-    my $self = shift;
-
-    return $self->{_policy};
 }
 
 #-----------------------------------------------------------------------------

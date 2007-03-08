@@ -10,7 +10,7 @@ package Perl::Critic::PolicyParameter::EnumerationBehavior;
 use strict;
 use warnings;
 use Carp qw(confess);
-use Perl::Critic::Utils qw{ $PERIOD &words_from_string };
+use Perl::Critic::Utils qw{ $PERIOD &words_from_string &hashify };
 
 use base qw{ Perl::Critic::PolicyParameter::Behavior };
 

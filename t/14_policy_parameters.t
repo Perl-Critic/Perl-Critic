@@ -54,7 +54,14 @@ sub test_supported_parameters {
     my @supported_params = $policy->supported_parameters();
     my $config = Perl::Critic::Config->new( -profile => 'NONE' );
 
-    for my $param_name ( @supported_params ) {
+    for my $param_specification ( @supported_params ) {
+        my $param_name;
+        if (ref $param_specification) {
+            $param_name = $param_specification->{name};
+        } else {
+            $param_name = $param_specification;
+        }
+
         my %args = ( -policy => $policy, -params => {$param_name => 'dummy'} );
         eval { $config->add_policy( %args ) };
         my $label = qq{Created policy "$policy" with param "$param_name"};

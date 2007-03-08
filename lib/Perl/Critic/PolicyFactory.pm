@@ -9,10 +9,13 @@ package Perl::Critic::PolicyFactory;
 
 use strict;
 use warnings;
+
 use Carp qw(confess);
 use English qw(-no_match_vars);
+
 use File::Spec::Unix qw();
 use List::MoreUtils qw(any);
+
 use Perl::Critic::Utils qw{
     :characters
     $POLICY_NAMESPACE
@@ -119,29 +122,39 @@ sub create_policy {
     # Get the policy parameters from the user profile if they were
     # not given to us directly.  If none exist, use an empty hash.
     my $profile = $self->{_profile};
-    my $policy_params = $args{-params}
+    my $policy_config = $args{-params}
         || $profile->policy_params($policy_name) || {};
 
 
-    # This function will delete keys from $policy_params, so we copy them to
+    # This function will delete keys from $policy_config, so we copy them to
     # avoid modifying the callers's hash.  What a pain in the ass!
-    my %policy_params_copy = $policy_params ? %{$policy_params} : ();
+    my %policy_config_copy = $policy_config ? %{$policy_config} : ();
 
 
     # Pull out base parameters.
-    my $user_set_themes = delete $policy_params_copy{set_themes};
-    my $user_add_themes = delete $policy_params_copy{add_themes};
-    my $user_severity   = delete $policy_params_copy{severity};
+    my $user_set_themes = delete $policy_config_copy{set_themes};
+    my $user_add_themes = delete $policy_config_copy{add_themes};
+    my $user_severity   = delete $policy_config_copy{severity};
 
-
-    # Validate remaining parameters. This dies on failure
-    $self->_validate_policy_params( $policy_name, \%policy_params_copy );
-
-
-    # Construct policy from remaining params.  Trap errors.
-    my $policy = eval { $policy_name->new( %policy_params_copy ) };
+    # Instantiate parameter metadata.
+    my $policy_params = eval { $policy_name->_build_parameters_by_name() };
     confess qq{Unable to create policy '$policy_name': $EVAL_ERROR} if $EVAL_ERROR;
 
+    # Validate remaining parameters. This dies on failure
+    $self->_validate_config_keys(
+        $policy_name,
+        $policy_params,
+        \%policy_config_copy
+    );
+
+    # Construct policy from remaining params.  Trap errors.
+    $policy_config_copy{__parameters_by_name} = $policy_params;
+    my $policy = eval { $policy_name->new( %policy_config_copy ) };
+    confess qq{Unable to create policy '$policy_name': $EVAL_ERROR} if $EVAL_ERROR;
+
+    # Complete initialization of the base Policy class, if the Policy subclass
+    # has not already done so.
+    $policy->_finish_initialization( \%policy_config_copy );
 
     # Set base attributes on policy
     if ( defined $user_severity ) {
@@ -178,20 +191,14 @@ sub site_policy_names {
 
 #-----------------------------------------------------------------------------
 
-sub _validate_policy_params {
-    my ($self, $policy, $params) = @_;
+sub _validate_config_keys {
+    my ($self, $policy_name, $policy_parameters, $policy_config) = @_;
 
-    # If the Policy author hasn't provided the "supported_parameters" method,
-    # then we can't tell which parameters it supports.  So we let it go.
-    return if not $policy->can('supported_parameters');
-    my @supported_params = $policy->supported_parameters();
-
-    my %is_supported = hashify( @supported_params );
     my $msg = $EMPTY;
 
-    for my $offered_param ( keys %{ $params } ) {
-        if ( not defined $is_supported{$offered_param} ) {
-            $msg .= qq{Parameter "$offered_param" isn't supported by $policy\n};
+    for my $offered_param ( keys %{ $policy_config } ) {
+        if ( not exists $policy_parameters->{$offered_param} ) {
+            $msg .= qq{Parameter "$offered_param" isn't supported by $policy_name\n};
         }
     }
 

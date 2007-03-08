@@ -16,6 +16,7 @@ use Perl::Critic::Utils qw{
     :data_conversion
     &policy_short_name
 };
+use Perl::Critic::PolicyParameter qw();
 use Perl::Critic::Violation qw();
 use String::Format qw(stringf);
 use overload ( q{""} => 'to_string', cmp => '_compare' );
@@ -28,9 +29,53 @@ my $FORMAT = "%p\n"; #Default stringy format
 
 #-----------------------------------------------------------------------------
 
+# Note: you can't put additional functionality here because subclasses are not
+# required to call up to the super-constructor.
 sub new {
     my $class = shift;
     return bless {}, $class;
+}
+
+#-----------------------------------------------------------------------------
+
+# Since Policies' constructors don't have to call up to the base class's one,
+# this exists to do what should be done there.  This is always invoked by
+# PolicyFactory after the Policy has been constructed, but should be invoked
+# by subclasses' constructors right after creating the blessed reference.
+#
+# Note that the configuration is passed by reference here.
+sub _finish_initialization {
+    my ($self, $config) = @_;
+
+    # Bail if this method was called previously.
+    return if defined $self->get_parameters_by_name();
+
+    my $parameters_by_name = $config->{__parameters_by_name};
+    $self->{_parameters_by_name} =
+        $parameters_by_name ? $parameters_by_name : {};
+
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
+# Called by PolicyFactory.  The results of this will be put into the
+# configuration so that _finish_initialization() above can access it.
+sub _build_parameters_by_name {
+    my ($class) = @_;
+
+    my $parameters_by_name = {};
+
+    if ( $class->can('supported_parameters') ) {
+        foreach my $parameter_specification ($class->supported_parameters()) {
+            my $parameter =
+                Perl::Critic::PolicyParameter->new($parameter_specification);
+
+            $parameters_by_name->{ $parameter->get_name() } = $parameter;
+        }
+    }
+
+    return $parameters_by_name;
 }
 
 #-----------------------------------------------------------------------------
@@ -94,6 +139,22 @@ sub default_themes {
 
 #-----------------------------------------------------------------------------
 
+sub get_parameters_by_name {
+    my ($self) = @_;
+
+    return $self->{_parameters_by_name};
+}
+
+#-----------------------------------------------------------------------------
+
+sub get_parameter {
+    my ($self, $parameter_name) = @_;
+
+    return $self->get_parameters_by_name()->{$parameter_name};
+}
+
+#-----------------------------------------------------------------------------
+
 sub violates {
     return confess q{Can't call abstract method};
 }
@@ -122,7 +183,7 @@ sub to_string {
 
     # Wrap the more expensive ones in sub{} to postpone evaluation
     my %fspec = (
-         'O' => sub { $self->_format_supported_parameters(@_) },
+         'O' => sub { $self->_format_parameters(@_) },
          'P' => ref $self,
          'p' => sub { policy_short_name( ref $self ) },
          'T' => sub { join $SPACE, $self->default_themes() },
@@ -133,11 +194,11 @@ sub to_string {
     return stringf($FORMAT, %fspec);
 }
 
-sub _format_supported_parameters {
+sub _format_parameters {
     my ($self, $format) = @_;
-    return $EMPTY if not $self->can('supported_parameters');
+
     $format = Perl::Critic::Utils::interpolate( $format );
-    my @parameter_names = $self->supported_parameters();
+    my @parameter_names = keys %{ $self->get_parameters_by_name() };
     return join $SPACE, @parameter_names if not $format;
     return join $EMPTY, map { sprintf $format, $_ } @parameter_names;
 }
@@ -269,6 +330,15 @@ overwritten.  Duplicate themes will be removed.
 
 Appends additional themes to this Policy.  Any existing themes are
 preserved.  Duplicate themes will be removed.
+
+=item C< get_parameters_by_name() >
+
+Returns a reference to a hash containing instances of
+L<Perl::Critic::PolicyParameter>s keyed by their names.
+
+=item C< get_parameter( $parameter_name ) >
+
+Returns the L<Perl::Critic::PolicyParameter> with the specified name.
 
 =item C<set_format( $FORMAT )>
 

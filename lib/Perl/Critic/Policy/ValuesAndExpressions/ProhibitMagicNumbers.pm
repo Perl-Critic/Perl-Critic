@@ -19,7 +19,7 @@ our $VERSION = 1.03;
 
 #----------------------------------------------------------------------------
 
-my $DESC = q{Numeric literals make code less maintainable};
+my $DESC = q{Unnamed numeric literals make code less maintainable};
 my $USE_READONLY_OR_CONSTANT
     = ' Use the Readonly module or the "constant" pragma instead';
 my $TYPE_NOT_ALLOWED_SUFFIX = ") are not allowed.$USE_READONLY_OR_CONSTANT";
@@ -48,7 +48,24 @@ my $SPECIAL_ARRAY_SUBSCRIPT_EXEMPTION = -1; ## no critic (ProhibitMagicNumbers)
 
 #----------------------------------------------------------------------------
 
-sub supported_parameters { return qw( allowed_values allowed_types) }
+sub supported_parameters {
+    return (
+        {
+            name               => 'allowed_values',
+            description        => 'Individual and ranges of values to allow, and/or "all_integers".',
+            default_string     => '0 1 2',
+            parser             => \&_determine_allowed_values,
+        },
+        {
+            name               => 'allowed_types',
+            description        => 'Kind of literals to allow.',
+            default_string     => 'Float',
+            behavior           => 'enumeration',
+            enumeration_values => [ qw{ Binary Exp Float Hex Octal } ],
+        },
+    );
+}
+
 sub default_severity     { return $SEVERITY_LOW                     }
 sub default_themes       { return qw( core maintenance )            }
 sub applies_to           { return 'PPI::Token::Number'              }
