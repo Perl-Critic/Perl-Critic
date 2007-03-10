@@ -305,7 +305,7 @@ Perl::Critic::Policy::ValuesAndExpressions::ProhibitMagicNumbers
 
 =head1 AFFILIATION
 
-This policy is part of L<Perl::Critic::More>, a bleading edge supplement to
+This policy is part of L<Perl::Critic::More>, a bleeding edge supplement to
 L<Perl::Critic>.
 
 =head1 DESCRIPTION

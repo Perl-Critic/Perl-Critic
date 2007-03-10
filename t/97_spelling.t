@@ -53,6 +53,7 @@ PBP
 perlcritic
 perlcriticrc
 PolicyListing
+PolicyParameter
 postfix
 programmatically
 PPI

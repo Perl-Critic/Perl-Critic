@@ -225,18 +225,42 @@ __END__
 
 =pod
 
+=for stopwords Metadata metadata
+
 =head1 NAME
 
 Perl::Critic::PolicyParameter - Metadata about a parameter for a Policy.
 
+
 =head1 DESCRIPTION
 
+A provider of validation and parsing of parameter values and metadata about
+the parameter.
 
 
 =head1 METHODS
 
+=over
 
-=head1 DOCUMENTATION
+=item C<get_name()>
+
+Return the name of the parameter.  This is the key that will be looked for in
+the F<.perlcriticrc>.
+
+=item C<get_description()>
+
+Return an explanation of the significance of the parameter.
+
+=item C<get_default_string()>
+
+Return a representation of the default value of this parameter as it would
+appear if it was specified in a F<.perlcriticrc> file.
+
+=item C<get_config_value( %config )>
+
+Return the parsed value of the parameter from the configuration.
+
+=back
 
 
 =head1 AUTHOR
@@ -245,7 +269,7 @@ Elliot Shank <perl@galumph.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2006 Elliot Shank.  All rights reserved.
+Copyright (c) 2006-2007 Elliot Shank.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

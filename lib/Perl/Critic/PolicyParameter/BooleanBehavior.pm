@@ -55,20 +55,30 @@ __END__
 
 =pod
 
+=for stopwords
+
 =head1 NAME
 
 Perl::Critic::PolicyParameter::BooleanBehavior - Subroutines for a boolean PolicyParameter.
 
+
 =head1 DESCRIPTION
+
+Provides a standard set of functionality for a boolean
+L<Perl::Critic::PolicyParameter> so that the developer of a policy does not
+have to provide it her/himself.
 
 
 =head1 METHODS
 
+=over
 
-=head1 DOCUMENTATION
+=item C<initialize_parameter( $parameter, $specification )>
 
+Plug in the functionality this behavior provides into the parameter.
+At present, this behavior isn't customizable by the specification.
 
-=head1 OVERLOADS
+=back
 
 
 =head1 AUTHOR
@@ -77,7 +87,7 @@ Elliot Shank <perl@galumph.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2006 Elliot Shank.  All rights reserved.
+Copyright (c) 2006-2007 Elliot Shank.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

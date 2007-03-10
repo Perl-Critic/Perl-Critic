@@ -21,11 +21,18 @@ our $VERSION = 1.03;
 sub initialize_parameter {
     my ($self, $parameter, $specification) = @_;
 
-    my $values_string = $specification->{enumeration_values}
+    my $values = $specification->{enumeration_values}
         or confess 'No enumeration_values given for ',
                     $parameter->get_name(), $PERIOD;
+    ref $values eq 'ARRAY'
+        or confess 'The value given for enumeration_values for ',
+                    $parameter->get_name(), ' is not an array reference.';
+    scalar @{$values} > 1
+        or confess 'There were not at least two valid values given for',
+                   ' enumeration_values for ', $parameter->get_name(),
+                   $PERIOD;
 
-    my %values = hashify( words_from_string( $values_string ) );
+    my %values = hashify( @{$values} );
 
     my $allow_multiple_values =
         $specification->{enumeration_allow_multiple_values};
@@ -81,20 +88,45 @@ __END__
 
 =pod
 
+=for stopwords
+
 =head1 NAME
 
 Perl::Critic::PolicyParameter::Behavior - Type-specific subroutines for a PolicyParameter.
 
+
 =head1 DESCRIPTION
+
+Provides a standard set of functionality for an enumerated
+L<Perl::Critic::PolicyParameter> so that the developer of a policy does not
+have to provide it her/himself.
 
 
 =head1 METHODS
 
+=over
 
-=head1 DOCUMENTATION
+=item C<initialize_parameter( $parameter, $specification )>
 
+Plug in the functionality this behavior provides into the parameter, based
+upon the configuration provided by the specification.
 
-=head1 OVERLOADS
+This behavior looks for two configuration items:
+
+=over
+
+=item enumeration_values
+
+Mandatory.  The set of valid values for the parameter, as an array reference.
+
+=item enumeration_allow_multiple_values
+
+Optional, defaults to false.  Should the parameter support a single value or
+accept multiple?
+
+=back
+
+=back
 
 
 =head1 AUTHOR
@@ -103,7 +135,7 @@ Elliot Shank <perl@galumph.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2006 Elliot Shank.  All rights reserved.
+Copyright (c) 2006-2007 Elliot Shank.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
