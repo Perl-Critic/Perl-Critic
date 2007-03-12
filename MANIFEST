@@ -118,6 +118,7 @@ lib/Perl/Critic/PolicyParameter.pm
 lib/Perl/Critic/PolicyParameter/Behavior.pm
 lib/Perl/Critic/PolicyParameter/BooleanBehavior.pm
 lib/Perl/Critic/PolicyParameter/EnumerationBehavior.pm
+lib/Perl/Critic/PolicyParameter/StringBehavior.pm
 lib/Perl/Critic/PolicySummary.pod
 lib/Perl/Critic/ProfilePrototype.pm
 lib/Perl/Critic/TestUtils.pm
@@ -145,6 +146,7 @@ t/11_policyfactory.t
 t/12_policylisting.t
 t/13_bundled_policies.t
 t/14_policy_parameters.t
+t/14_policy_parameters_behavior_boolean.t
 t/20_policies.t
 t/20_policy_prohibithardtabs.t
 t/20_policy_prohibitmagicnumbers.t

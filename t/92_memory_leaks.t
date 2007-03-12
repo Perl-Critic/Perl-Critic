@@ -41,6 +41,9 @@ plan( skip_all => 'Test::Memory::Cycle requried to test memory leaks') if $@;
     # about it.  The particular input we use here does not seem to create
     # circular references.
 
+    my $devel_cycle_message =
+            'Devel::Cycle bug. http://rt.cpan.org/Ticket/Display.html?id=25360';
+
     my $code    = q{print foo(); split /this/, $that;};
     my $ppi_doc = PPI::Document->new( \$code );
     my $pc_doc  = Perl::Critic::Document->new( $ppi_doc );
@@ -51,17 +54,15 @@ plan( skip_all => 'Test::Memory::Cycle requried to test memory leaks') if $@;
     # One test for each violation, plus one each for Critic and Document.
     plan( tests => scalar @violations + 2 );
 
-    TODO: {
-        local $TODO =
-            'Devel::Cycle bug. http://rt.cpan.org/Ticket/Display.html?id=25360';
+    memory_cycle_ok( $pc_doc, 'cycles in document' );
 
-        eval { memory_cycle_ok( $pc_doc ); };
-        diag $EVAL_ERROR if $EVAL_ERROR;
-        eval { memory_cycle_ok( $critic ); };
-        diag $EVAL_ERROR if $EVAL_ERROR;
+    # Guh.  Ugly hack around Devel::Cycle.
+    SKIP: {
+        eval { memory_cycle_ok( $critic, 'cycles in Perl::Critic instance' ); };
+        skip( "$devel_cycle_message: $EVAL_ERROR", 1 ) if $EVAL_ERROR;
     }
 
-    memory_cycle_ok($_) for @violations;
+    memory_cycle_ok( $_, 'cycles in violation' ) for @violations;
 }
 
 #-----------------------------------------------------------------------------

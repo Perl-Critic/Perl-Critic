@@ -10,7 +10,7 @@ package Perl::Critic::Policy::ValuesAndExpressions::ProhibitInterpolationOfLiter
 use strict;
 use warnings;
 use List::MoreUtils qw(any);
-use Perl::Critic::Utils qw{ :severities :data_conversion };
+use Perl::Critic::Utils qw{ :characters :severities :data_conversion };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.03;
@@ -22,7 +22,19 @@ my $expl = [51];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters  { return qw( allow )             }
+# TODO: An enumeration may not really be appropriate-- this previously allowed
+# any kind of delimiting character.
+sub supported_parameters {
+    return (
+        {
+            name               => 'allow',
+            description        => 'Kinds of delimiters to permit.',
+            default_string     => $EMPTY,
+            behavior           => 'enumeration',
+            enumeration_values => [ qw{ qq{} qq() qq[] qq// {} () [] // } ],
+        },
+    );
+}
 sub default_severity   { return $SEVERITY_LOWEST        }
 sub default_themes     { return qw( core pbp cosmetic ) }
 sub applies_to         { return qw(PPI::Token::Quote::Double

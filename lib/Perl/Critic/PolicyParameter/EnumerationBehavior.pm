@@ -34,43 +34,49 @@ sub initialize_parameter {
 
     my %values = hashify( @{$values} );
 
+    my $policy_variable_name = q{_} . $parameter->get_name();
+
     my $allow_multiple_values =
         $specification->{enumeration_allow_multiple_values};
 
     if ($allow_multiple_values) {
         $parameter->_set_parser(
             sub {
-                my $config_string = shift;
+                # Normally bad thing, obscuring a variable in a outer scope
+                # with a variable with the same name, done in order to remain
+                # consistent with the parser function interface.
+                my ($policy, $parameter, $config_string) = @_;
 
-                my @potential_values = words_from_string($config_string);
+                my @potential_values;
+                if ( defined $config_string ) {
+                    @potential_values = words_from_string($config_string);
 
-                my @bad_values =
-                    grep { not defined $values{$_} } @potential_values;
-                if (@bad_values) {
-                    # TODO: include policy name.
-                    die 'Invalid values given in configuration for "',
-                        $parameter->get_name(),
-                        q{": },
-                        join (q{, }, @bad_values),
-                        qq{.\n};
+                    my @bad_values =
+                        grep { not exists $values{$_} } @potential_values;
+                    if (@bad_values) {
+                        die q{Invalid values: },
+                            join (q{, }, @bad_values),
+                            qq{.\n};
+                    }
                 }
 
-                return @potential_values;
+                $policy->{ $policy_variable_name } = \@potential_values;
+                return;
             }
         );
     } else {
         $parameter->_set_parser(
             sub {
-                my $config_string = shift;
+                # Normally bad thing, obscuring a variable in a outer scope
+                # with a variable with the same name, done in order to remain
+                # consistent with the parser function interface.
+                my ($policy, $parameter, $config_string) = @_;
 
                 if ( not defined $values{$config_string} ) {
-                    # TODO: include policy name.
-                    die 'Invalid value given in configuration for "',
-                        $parameter->get_name(),
-                        qq{": $config_string.\n};
+                    die qq{Invalid value: $config_string.\n};
                 }
 
-                return $config_string;
+                $policy->{ $policy_variable_name } = $config_string;
             }
         );
     }

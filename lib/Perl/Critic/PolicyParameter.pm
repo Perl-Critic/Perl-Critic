@@ -94,6 +94,9 @@ sub _initialize_from_behavior {
 sub _finish_initialization {
     my ($self, $specification) = @_;
 
+    defined $specification->{description}
+        or confess 'Attempt to create a ', __PACKAGE__,
+                   ' without a description.';
     $self->_set_description($specification->{description});
     $self->_set_default_string($specification->{default_string});
 
@@ -182,9 +185,9 @@ sub parse_and_validate_config_value {
 
     my $config_string = $config->{$self->get_name()};
 
-    my $parser = _get_parser();
+    my $parser = $self->_get_parser();
     if ($parser) {
-        $parser->($policy, $config_string);
+        $parser->($policy, $self, $config_string);
     }
 
     return;
