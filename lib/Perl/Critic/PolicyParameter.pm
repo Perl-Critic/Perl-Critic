@@ -15,6 +15,7 @@ use Perl::Critic::Utils;
 use Perl::Critic::PolicyParameter::Behavior;
 use Perl::Critic::PolicyParameter::BooleanBehavior;
 use Perl::Critic::PolicyParameter::EnumerationBehavior;
+use Perl::Critic::PolicyParameter::StringBehavior;
 
 our $VERSION = 1.03;
 
@@ -26,6 +27,7 @@ my %_behaviors =
     (
         'boolean'     => Perl::Critic::PolicyParameter::BooleanBehavior->new(),
         'enumeration' => Perl::Critic::PolicyParameter::EnumerationBehavior->new(),
+        'string'      => Perl::Critic::PolicyParameter::StringBehavior->new(),
     );
 
 sub _get_behavior_for_name {

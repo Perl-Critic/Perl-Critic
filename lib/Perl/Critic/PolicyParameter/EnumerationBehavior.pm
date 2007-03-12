@@ -48,8 +48,14 @@ sub initialize_parameter {
                 my ($policy, $parameter, $config_string) = @_;
 
                 my @potential_values;
-                if ( defined $config_string ) {
-                    @potential_values = words_from_string($config_string);
+                my $value_string = $parameter->get_default_string();
+
+                if (defined $config_string) {
+                    $value_string = $config_string;
+                }
+
+                if ( defined $value_string ) {
+                    @potential_values = words_from_string($value_string);
 
                     my @bad_values =
                         grep { not exists $values{$_} } @potential_values;
@@ -60,7 +66,9 @@ sub initialize_parameter {
                     }
                 }
 
-                $policy->{ $policy_variable_name } = \@potential_values;
+                my %actual_values = hashify(@potential_values);
+
+                $policy->{ $policy_variable_name } = \%actual_values;
                 return;
             }
         );
@@ -72,11 +80,21 @@ sub initialize_parameter {
                 # consistent with the parser function interface.
                 my ($policy, $parameter, $config_string) = @_;
 
-                if ( not defined $values{$config_string} ) {
-                    die qq{Invalid value: $config_string.\n};
+                my $value_string = $parameter->get_default_string();
+
+                if (defined $config_string) {
+                    $value_string = $config_string;
                 }
 
-                $policy->{ $policy_variable_name } = $config_string;
+                if (
+                        defined $value_string
+                    and not defined $values{$value_string}
+                ) {
+                    die qq{Invalid value: $value_string.\n};
+                }
+
+                $policy->{ $policy_variable_name } = $value_string;
+                return;
             }
         );
     }

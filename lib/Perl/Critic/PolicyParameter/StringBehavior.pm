@@ -22,7 +22,7 @@ sub _parse {
     my ($policy, $parameter, $config_string) = @_;
 
     my $name = $parameter->get_name();
-    my $value = $parameter->get_default();
+    my $value = $parameter->get_default_string();
 
     if ( defined $config_string ) {
         $value = $config_string;

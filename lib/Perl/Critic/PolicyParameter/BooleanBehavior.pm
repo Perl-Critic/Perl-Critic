@@ -24,7 +24,9 @@ sub _parse {
     my $value;
     my $value_string = $parameter->get_default_string();
 
-    $value_string = $config_string if defined $config_string;
+    if (defined $config_string) {
+        $value_string = $config_string;
+    }
 
     if ( defined $value_string ) {
         if ( $value_string ) {
