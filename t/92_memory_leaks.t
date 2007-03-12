@@ -10,6 +10,8 @@
 use strict;
 use warnings;
 
+use English qw{ -no_match_vars };
+
 use Test::More; #plan set below
 
 use Perl::Critic::PolicyFactory (-test => 1);
@@ -49,8 +51,16 @@ plan( skip_all => 'Test::Memory::Cycle requried to test memory leaks') if $@;
     # One test for each violation, plus one each for Critic and Document.
     plan( tests => scalar @violations + 2 );
 
-    memory_cycle_ok( $pc_doc );
-    memory_cycle_ok( $critic );
+    TODO: {
+        local $TODO =
+            'Devel::Cycle bug. http://rt.cpan.org/Ticket/Display.html?id=25360';
+
+        eval { memory_cycle_ok( $pc_doc ); };
+        diag $EVAL_ERROR if $EVAL_ERROR;
+        eval { memory_cycle_ok( $critic ); };
+        diag $EVAL_ERROR if $EVAL_ERROR;
+    }
+
     memory_cycle_ok($_) for @violations;
 }
 
