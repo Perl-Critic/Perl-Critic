@@ -97,12 +97,6 @@ sub _finish_initialization {
     $self->_set_description($specification->{description});
     $self->_set_default_string($specification->{default_string});
 
-    # TODO: What was I thinking of at the time I was sketching out how
-    # parameters work?
-    if ( exists $specification->{default} ) {
-        $self->_set_default($specification->{default});
-    }
-
     $self->_set_parser($specification->{parser});
 
     return;
@@ -152,22 +146,6 @@ sub _set_default_string {
 
 #-----------------------------------------------------------------------------
 
-sub _get_default {
-    my $self = shift;
-
-    return $self->{_default};
-}
-
-sub _set_default {
-    my ($self, $new_value) = @_;
-
-    $self->{_default} = $new_value;
-
-    return;
-}
-
-#-----------------------------------------------------------------------------
-
 sub _get_behavior {
     my $self = shift;
 
@@ -199,20 +177,17 @@ sub _set_parser {
 
 #-----------------------------------------------------------------------------
 
-sub get_config_value {
-    my ($self, %config) = @_;
+sub parse_and_validate_config_value {
+    my ($self, $policy, $config) = @_;
 
-    my $config_string = $config{$self->get_name()};
-    if ( not defined $config_string ) {
-        return $self->_get_default();
-    }
+    my $config_string = $config->{$self->get_name()};
 
     my $parser = _get_parser();
     if ($parser) {
-        return $parser->($config_string)
+        $parser->($policy, $config_string);
     }
 
-    return $self->_get_default();
+    return;
 }
 
 #-----------------------------------------------------------------------------
@@ -256,9 +231,10 @@ Return an explanation of the significance of the parameter.
 Return a representation of the default value of this parameter as it would
 appear if it was specified in a F<.perlcriticrc> file.
 
-=item C<get_config_value( %config )>
+=item C<parse_and_validate_config_value( $parser, $config )>
 
-Return the parsed value of the parameter from the configuration.
+Extract the configuration value for this parameter from the overall
+configuration and initialize the policy based upon it.
 
 =back
 
