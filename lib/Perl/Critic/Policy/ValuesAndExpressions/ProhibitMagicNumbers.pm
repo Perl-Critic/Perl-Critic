@@ -51,10 +51,10 @@ my $SPECIAL_ARRAY_SUBSCRIPT_EXEMPTION = -1; ## no critic (ProhibitMagicNumbers)
 sub supported_parameters {
     return (
         {
-            name               => 'allowed_values',
-            description        => 'Individual and ranges of values to allow, and/or "all_integers".',
-            default_string     => '0 1 2',
-            parser             => \&_determine_allowed_values,
+            name           => 'allowed_values',
+            description    => 'Individual and ranges of values to allow, and/or "all_integers".',
+            default_string => '0 1 2',
+            parser         => \&_parse_allowed_values,
         },
         {
             name               => 'allowed_types',
@@ -62,6 +62,7 @@ sub supported_parameters {
             default_string     => 'Float',
             behavior           => 'enumeration',
             enumeration_values => [ qw{ Binary Exp Float Hex Octal } ],
+            enumeration_allow_multiple_values => 1,
         },
     );
 }
@@ -76,9 +77,17 @@ sub new {
     my ( $class, %config ) = @_;
     my $self = bless {}, $class;
 
-    #Set config, if defined
+    $self->_finish_initialization(\%config);
+    $self->_determine_checked_types();
+
+    return $self;
+}
+
+sub _parse_allowed_values {
+    my ($self, $parameter, $config_string) = @_;
+
     my ( $all_integers_allowed, $allowed_values )
-        = _determine_allowed_values(%config);
+        = _determine_allowed_values($config_string);
 
     my $allowed_string = ' is not one of the allowed literal values (';
     if ($all_integers_allowed) {
@@ -95,25 +104,26 @@ sub new {
     $self->{_allowed_values}       = $allowed_values;
     $self->{_all_integers_allowed} = $all_integers_allowed;
     $self->{_allowed_string}       = $allowed_string;
-    $self->{_checked_types}        = _determine_checked_types(%config);
 
-    return $self;
+    return;
 }
 
 sub _determine_allowed_values {
-    my %config = @_;
+    my $config_string = shift;
 
     my @allowed_values;
     my @potential_allowed_values;
     my $all_integers_allowed = 0;
 
-    if ( defined $config{allowed_values} ) {
+    if ( defined $config_string ) {
         my @allowed_values_strings =
-            grep {$_} split m/\s+/xms, $config{allowed_values};
+            grep {$_} split m/\s+/xms, $config_string;
 
         foreach my $value_string (@allowed_values_strings) {
             if ($value_string eq 'all_integers') {
                 $all_integers_allowed = 1;
+            } elsif ( $value_string =~ m/$SIGNED_NUMBER/xms ) {
+                push @potential_allowed_values, $value_string + 0;
             } elsif ( $value_string =~ m/$RANGE/xms ) {
                 my ( $minimum, $maximum, $increment ) = ($1, $2, $3);
                 $increment ||= 1;
@@ -130,7 +140,9 @@ sub _determine_allowed_values {
                     push @potential_allowed_values, $value;
                 }
             } else {
-                push @potential_allowed_values, $value_string + 0;
+                die q{Invalid value for allowed_values: }, $value_string,
+                    q{. Must be a number, a number range, or},
+                    qq{ "all_integers".\n};
             }
         }
 
@@ -152,7 +164,7 @@ sub _determine_allowed_values {
 }
 
 sub _determine_checked_types {
-    my %config = @_;
+    my $self = shift;
 
     my %checked_types = (
         'PPI::Token::Number::Binary'  => 'Binary literals (',
@@ -163,23 +175,23 @@ sub _determine_checked_types {
         'PPI::Token::Number::Version' => 'Version literals (',
     );
 
-    if ( defined $config{allowed_types} ) {
-        foreach my $allowed_type (
-            grep {$_} split m/\s+/xms, $config{allowed_types}
-        ) {
-            delete $checked_types{"PPI::Token::Number::$allowed_type"};
+    # This will be set by the enumeration behavior specified in
+    # supported_parameters() above.
+    my $allowed_types = $self->{_allowed_types};
 
-            if ( $allowed_type eq 'Exp' ) {
+    foreach my $allowed_type ( keys %{$allowed_types} ) {
+        delete $checked_types{"PPI::Token::Number::$allowed_type"};
 
-                # because an Exp isa(Float).
-                delete $checked_types{'PPI::Token::Number::Float'};
-            }
+        if ( $allowed_type eq 'Exp' ) {
+
+            # because an Exp isa(Float).
+            delete $checked_types{'PPI::Token::Number::Float'};
         }
-    } else {
-        delete $checked_types{'PPI::Token::Number::Float'};
     }
 
-    return \%checked_types;
+    $self->{_checked_types} = \%checked_types;
+
+    return;
 }
 
 

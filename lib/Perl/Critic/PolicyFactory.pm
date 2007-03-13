@@ -137,24 +137,26 @@ sub create_policy {
     my $user_severity   = delete $policy_config_copy{severity};
 
     # Instantiate parameter metadata.
-    my $policy_params = eval { $policy_name->_build_parameters_by_name() };
+    my @policy_params = eval { $policy_name->_build_parameters() };
     confess qq{Unable to create policy '$policy_name': $EVAL_ERROR} if $EVAL_ERROR;
+    my %parameter_names = hashify( map { $_->get_name() } @policy_params );
 
     # Validate remaining parameters. This dies on failure
     $self->_validate_config_keys(
         $policy_name,
-        $policy_params,
+        \%parameter_names,
         \%policy_config_copy
     );
 
     # Construct policy from remaining params.  Trap errors.
-    $policy_config_copy{__parameters_by_name} = $policy_params;
+    $policy_config_copy{__parameters} = \@policy_params;
     my $policy = eval { $policy_name->new( %policy_config_copy ) };
     confess qq{Unable to create policy '$policy_name': $EVAL_ERROR} if $EVAL_ERROR;
 
     # Complete initialization of the base Policy class, if the Policy subclass
     # has not already done so.
-    $policy->_finish_initialization( \%policy_config_copy );
+    eval { $policy->_finish_initialization( \%policy_config_copy ); };
+    confess qq{Unable to create policy '$policy_name': $EVAL_ERROR} if $EVAL_ERROR;
 
     # Set base attributes on policy
     if ( defined $user_severity ) {
@@ -192,12 +194,12 @@ sub site_policy_names {
 #-----------------------------------------------------------------------------
 
 sub _validate_config_keys {
-    my ($self, $policy_name, $policy_parameters, $policy_config) = @_;
+    my ($self, $policy_name, $parameter_names, $policy_config) = @_;
 
     my $msg = $EMPTY;
 
     for my $offered_param ( keys %{ $policy_config } ) {
-        if ( not exists $policy_parameters->{$offered_param} ) {
+        if ( not exists $parameter_names->{$offered_param} ) {
             $msg .= qq{Parameter "$offered_param" isn't supported by $policy_name\n};
         }
     }

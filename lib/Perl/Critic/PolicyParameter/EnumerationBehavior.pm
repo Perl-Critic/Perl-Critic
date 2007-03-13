@@ -10,7 +10,7 @@ package Perl::Critic::PolicyParameter::EnumerationBehavior;
 use strict;
 use warnings;
 use Carp qw(confess);
-use Perl::Critic::Utils qw{ $PERIOD &words_from_string &hashify };
+use Perl::Critic::Utils qw{ :characters &words_from_string &hashify };
 
 use base qw{ Perl::Critic::PolicyParameter::Behavior };
 
@@ -21,18 +21,18 @@ our $VERSION = 1.03;
 sub initialize_parameter {
     my ($self, $parameter, $specification) = @_;
 
-    my $values = $specification->{enumeration_values}
+    my $valid_values = $specification->{enumeration_values}
         or confess 'No enumeration_values given for ',
                     $parameter->get_name(), $PERIOD;
-    ref $values eq 'ARRAY'
+    ref $valid_values eq 'ARRAY'
         or confess 'The value given for enumeration_values for ',
                     $parameter->get_name(), ' is not an array reference.';
-    scalar @{$values} > 1
+    scalar @{$valid_values} > 1
         or confess 'There were not at least two valid values given for',
                    ' enumeration_values for ', $parameter->get_name(),
                    $PERIOD;
 
-    my %values = hashify( @{$values} );
+    my %valid_values = hashify( @{$valid_values} );
 
     my $policy_variable_name = q{_} . $parameter->get_name();
 
@@ -58,10 +58,14 @@ sub initialize_parameter {
                     @potential_values = words_from_string($value_string);
 
                     my @bad_values =
-                        grep { not exists $values{$_} } @potential_values;
+                        grep { not exists $valid_values{$_} } @potential_values;
                     if (@bad_values) {
-                        die q{Invalid values: },
+                        die q{Invalid values for },
+                            $parameter->get_name(),
+                            q{: },
                             join (q{, }, @bad_values),
+                            q{. Allowed values are: },
+                            join (q{, }, sort keys %valid_values),
                             qq{.\n};
                     }
                 }
@@ -88,9 +92,12 @@ sub initialize_parameter {
 
                 if (
                         defined $value_string
-                    and not defined $values{$value_string}
+                    and $EMPTY ne $value_string
+                    and not defined $valid_values{$value_string}
                 ) {
-                    die qq{Invalid value: $value_string.\n};
+                    die q{Invalid value for },
+                        $parameter->get_name(),
+                        qq{: $value_string.\n};
                 }
 
                 $policy->{ $policy_variable_name } = $value_string;

@@ -145,8 +145,10 @@ t/10_userprofile.t
 t/11_policyfactory.t
 t/12_policylisting.t
 t/13_bundled_policies.t
+t/14_policy_parameter_behavior_boolean.t
+t/14_policy_parameter_behavior_enumeration.t
+t/14_policy_parameter_behavior_string.t
 t/14_policy_parameters.t
-t/14_policy_parameters_behavior_boolean.t
 t/20_policies.t
 t/20_policy_prohibithardtabs.t
 t/20_policy_prohibitmagicnumbers.t

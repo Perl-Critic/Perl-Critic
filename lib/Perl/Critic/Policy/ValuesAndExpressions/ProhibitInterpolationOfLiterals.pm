@@ -32,6 +32,7 @@ sub supported_parameters {
             default_string     => $EMPTY,
             behavior           => 'enumeration',
             enumeration_values => [ qw{ qq{} qq() qq[] qq// {} () [] // } ],
+            enumeration_allow_multiple_values => 1,
         },
     );
 }
@@ -42,26 +43,26 @@ sub applies_to         { return qw(PPI::Token::Quote::Double
 
 #-----------------------------------------------------------------------------
 
-sub new {
-    my ( $class, %args ) = @_;
-    my $self = bless {}, $class;
-    $self->{_allow} = [];
-
-    #Set configuration, if defined
-    if ( defined $args{allow} ) {
-        my @allow = words_from_string( $args{allow} );
-        #Try to be forgiving with the configuration...
-        for (@allow) {
-            m{ \A qq }mx || ($_ = 'qq' . $_)
-        }  #Add 'qq'
-        for (@allow) {
-            (length $_ <= 3) || chop
-        }    #Chop closing char
-        $self->{_allow} = \@allow;
-    }
-
-    return $self;
-}
+#sub new {
+#    my ( $class, %args ) = @_;
+#    my $self = bless {}, $class;
+#    $self->{_allow} = [];
+#
+#    #Set configuration, if defined
+#    if ( defined $args{allow} ) {
+#        my @allow = words_from_string( $args{allow} );
+#        #Try to be forgiving with the configuration...
+#        for (@allow) {
+#            m{ \A qq }mx || ($_ = 'qq' . $_)
+#        }  #Add 'qq'
+#        for (@allow) {
+#            (length $_ <= 3) || chop
+#        }    #Chop closing char
+#        $self->{_allow} = \@allow;
+#    }
+#
+#    return $self;
+#}
 
 #-----------------------------------------------------------------------------
 
@@ -71,8 +72,8 @@ sub violates {
     # Skip if this string needs interpolation
     return if _has_interpolation($elem);
 
-    #Overlook allowed quote styles
-    return if any { $elem =~ m{ \A \Q$_\E }mx } @{ $self->{_allow} };
+    # Overlook allowed quote styles
+    return if any { $elem =~ m{ \A \Q$_\E }mx } keys %{ $self->{_allow} };
 
     # Must be a violation
     return $self->violation( $desc, $expl, $elem );

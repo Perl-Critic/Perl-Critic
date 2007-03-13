@@ -43,16 +43,22 @@ sub new {
 # PolicyFactory after the Policy has been constructed, but should be invoked
 # by subclasses' constructors right after creating the blessed reference.
 #
+# Since the parameters are told to validate the configuration, this may throw
+# an exception.
+#
 # Note that the configuration is passed by reference here.
 sub _finish_initialization {
     my ($self, $config) = @_;
 
     # Bail if this method was called previously.
-    return if defined $self->get_parameters_by_name();
+    return if defined $self->get_parameters();
 
-    my $parameters_by_name = $config->{__parameters_by_name};
-    $self->{_parameters_by_name} =
-        $parameters_by_name ? $parameters_by_name : {};
+    my $parameters = $config->{__parameters};
+    $self->{_parameters} = $parameters ? $parameters : [];
+
+    foreach my $parameter ( @{$parameters} ) {
+        $parameter->parse_and_validate_config_value( $self, $config );
+    }
 
     return;
 }
@@ -61,21 +67,19 @@ sub _finish_initialization {
 
 # Called by PolicyFactory.  The results of this will be put into the
 # configuration so that _finish_initialization() above can access it.
-sub _build_parameters_by_name {
+sub _build_parameters {
     my ($class) = @_;
 
-    my $parameters_by_name = {};
+    my @parameters;
 
     if ( $class->can('supported_parameters') ) {
-        foreach my $parameter_specification ($class->supported_parameters()) {
-            my $parameter =
-                Perl::Critic::PolicyParameter->new($parameter_specification);
-
-            $parameters_by_name->{ $parameter->get_name() } = $parameter;
-        }
+        @parameters =
+            map
+                { Perl::Critic::PolicyParameter->new($_) }
+                $class->supported_parameters()
     }
 
-    return $parameters_by_name;
+    return @parameters;
 }
 
 #-----------------------------------------------------------------------------
@@ -139,18 +143,10 @@ sub default_themes {
 
 #-----------------------------------------------------------------------------
 
-sub get_parameters_by_name {
+sub get_parameters {
     my ($self) = @_;
 
-    return $self->{_parameters_by_name};
-}
-
-#-----------------------------------------------------------------------------
-
-sub get_parameter {
-    my ($self, $parameter_name) = @_;
-
-    return $self->get_parameters_by_name()->{$parameter_name};
+    return $self->{_parameters};
 }
 
 #-----------------------------------------------------------------------------
@@ -198,7 +194,7 @@ sub _format_parameters {
     my ($self, $format) = @_;
 
     $format = Perl::Critic::Utils::interpolate( $format );
-    my @parameter_names = keys %{ $self->get_parameters_by_name() };
+    my @parameter_names = map { $_->get_name() } @{ $self->get_parameters() };
     return join $SPACE, @parameter_names if not $format;
     return join $EMPTY, map { sprintf $format, $_ } @parameter_names;
 }
@@ -331,10 +327,10 @@ overwritten.  Duplicate themes will be removed.
 Appends additional themes to this Policy.  Any existing themes are
 preserved.  Duplicate themes will be removed.
 
-=item C< get_parameters_by_name() >
+=item C< get_parameters() >
 
-Returns a reference to a hash containing instances of
-L<Perl::Critic::PolicyParameter>s keyed by their names.
+Returns a reference to an array containing instances of
+L<Perl::Critic::PolicyParameter>.
 
 =item C< get_parameter( $parameter_name ) >
 
