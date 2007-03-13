@@ -122,7 +122,7 @@ sub _determine_allowed_values {
         foreach my $value_string (@allowed_values_strings) {
             if ($value_string eq 'all_integers') {
                 $all_integers_allowed = 1;
-            } elsif ( $value_string =~ m/$SIGNED_NUMBER/xms ) {
+            } elsif ( $value_string =~ m/ \A $SIGNED_NUMBER \z /xms ) {
                 push @potential_allowed_values, $value_string + 0;
             } elsif ( $value_string =~ m/$RANGE/xms ) {
                 my ( $minimum, $maximum, $increment ) = ($1, $2, $3);
