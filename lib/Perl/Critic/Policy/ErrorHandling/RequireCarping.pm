@@ -22,27 +22,22 @@ my $expl = [ 283 ];
 
 #-----------------------------------------------------------------------------
 
-# TODO: make configurable to be strict again.
+sub supported_parameters {
+    return (
+        {
+            name           => 'allow_messages_ending_with_newlines',
+            description    => q{Don't complain about die or warn if the message ends in a newline.},
+            default_string => '1',
+            behavior       => 'boolean',
+        },
+    );
+}
 
-sub supported_parameters { return qw( allow_messages_ending_with_newlines ) }
 sub default_severity  { return $SEVERITY_MEDIUM                          }
 sub default_themes    { return qw( core pbp maintenance )                }
 sub applies_to        { return 'PPI::Token::Word'                        }
 
 #-----------------------------------------------------------------------------
-
-sub new {
-    my ( $class, %config ) = @_;
-    my $self = bless {}, $class;
-
-    my $allow_newlines = 1;
-    if ( defined $config{allow_messages_ending_with_newlines} ) {
-        $allow_newlines = $config{allow_messages_ending_with_newlines};
-    }
-    $self->{allow_newlines} = $allow_newlines;
-
-    return $self;
-}
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
@@ -60,7 +55,7 @@ sub violates {
 
     return if ! is_function_call($elem);
 
-    if ($self->{allow_newlines}) {
+    if ($self->{_allow_messages_ending_with_newlines}) {
         return if _last_flattened_argument_list_element_ends_in_newline($elem);
     }
 

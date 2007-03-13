@@ -10,11 +10,12 @@
 use strict;
 use warnings;
 
-use Test::More tests => 24;
+use Test::More tests => 27;
 use English qw(-no_match_vars);
 
 use Perl::Critic::Policy;
 use Perl::Critic::PolicyParameter;
+use Perl::Critic::Utils qw{ :booleans };
 
 my $specification;
 my $parameter;
@@ -74,11 +75,12 @@ $parameter->parse_and_validate_config_value($policy, \%config);
 is($policy->{_test}, 'gemini', q{'gemini', no default});
 
 $policy = Perl::Critic::Policy->new();
-$config{test} = 'easter_bunny';
+$config{test} = 'GEMINI';
 eval {$parameter->parse_and_validate_config_value($policy, \%config); };
 ok($EVAL_ERROR, q{invalid value});
 
 $specification->{default_string} = 'apollo';
+$specification->{enumeration_case_insensitive} = $TRUE;
 delete $config{test};
 
 $parameter = Perl::Critic::PolicyParameter->new($specification);
@@ -91,8 +93,14 @@ $config{test} = 'gemini';
 $parameter->parse_and_validate_config_value($policy, \%config);
 is($policy->{_test}, 'gemini', q{'gemini', default 'apollo'});
 
+$policy = Perl::Critic::Policy->new();
+$config{test} = 'GEMINI';
+$parameter->parse_and_validate_config_value($policy, \%config);
+is($policy->{_test}, 'gemini', q{'GEMINI', default 'apollo', case-insensitive});
+
 
 delete $specification->{default_string};
+delete $specification->{enumeration_case_insensitive};
 $specification->{enumeration_values} = [ qw{ moore gaiman ellis miller } ];
 $specification->{enumeration_allow_multiple_values} = 1;
 delete $config{test};
@@ -121,11 +129,12 @@ ok( $values->{gaiman}, q{'gaiman miller', no default} );
 ok( $values->{miller}, q{'gaiman miller', no default} );
 
 $policy = Perl::Critic::Policy->new();
-$config{test} = 'leeb';
+$config{test} = 'ELLIS';
 eval {$parameter->parse_and_validate_config_value($policy, \%config); };
 ok($EVAL_ERROR, q{invalid value});
 
 $specification->{default_string} = 'ellis miller';
+$specification->{enumeration_case_insensitive} = $TRUE;
 delete $config{test};
 
 $parameter = Perl::Critic::PolicyParameter->new($specification);
@@ -150,6 +159,17 @@ $values = $policy->{_test};
 is( scalar( keys %{$values} ), 2, q{'gaiman miller', default 'ellis miller'} );
 ok( $values->{gaiman}, q{'gaiman miller', default 'ellis miller'} );
 ok( $values->{miller}, q{'gaiman miller', default 'ellis miller'} );
+
+$policy = Perl::Critic::Policy->new();
+$config{test} = 'ELLIS';
+$parameter->parse_and_validate_config_value($policy, \%config);
+$values = $policy->{_test};
+is(
+    scalar( keys %{$values} ),
+    1,
+    q{'ELLIS', default 'ellis miller', case-insensitive}
+);
+ok( $values->{ellis}, q{'ELLIS', default 'ellis miller', case-insensitive} );
 
 ###############################################################################
 # Local Variables:

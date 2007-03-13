@@ -32,7 +32,15 @@ sub initialize_parameter {
                    ' enumeration_values for ', $parameter->get_name(),
                    $PERIOD;
 
-    my %valid_values = hashify( @{$valid_values} );
+    my $case_insensitive =
+        $specification->{enumeration_case_insensitive};
+
+    my %valid_values;
+    if ($case_insensitive) {
+        %valid_values = hashify( map { lc } @{$valid_values} );
+    } else {
+        %valid_values = hashify( @{$valid_values} );
+    }
 
     my $policy_variable_name = q{_} . $parameter->get_name();
 
@@ -56,6 +64,9 @@ sub initialize_parameter {
 
                 if ( defined $value_string ) {
                     @potential_values = words_from_string($value_string);
+                    if ($case_insensitive) {
+                        @potential_values = map { lc } @potential_values;
+                    }
 
                     my @bad_values =
                         grep { not exists $valid_values{$_} } @potential_values;
@@ -90,14 +101,16 @@ sub initialize_parameter {
                     $value_string = $config_string;
                 }
 
-                if (
-                        defined $value_string
-                    and $EMPTY ne $value_string
-                    and not defined $valid_values{$value_string}
-                ) {
-                    die q{Invalid value for },
-                        $parameter->get_name(),
-                        qq{: $value_string.\n};
+                if ( defined $value_string and $EMPTY ne $value_string ) {
+                    if ($case_insensitive) {
+                        $value_string = lc $value_string;
+                    }
+
+                    if (not defined $valid_values{$value_string}) {
+                        die q{Invalid value for },
+                            $parameter->get_name(),
+                            qq{: $value_string.\n};
+                    }
                 }
 
                 $policy->{ $policy_variable_name } = $value_string;

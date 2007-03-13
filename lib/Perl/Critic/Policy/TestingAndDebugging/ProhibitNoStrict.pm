@@ -10,7 +10,7 @@ package Perl::Critic::Policy::TestingAndDebugging::ProhibitNoStrict;
 use strict;
 use warnings;
 use List::MoreUtils qw(all);
-use Perl::Critic::Utils qw{ :severities :data_conversion };
+use Perl::Critic::Utils qw{ :characters :severities :data_conversion };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.03;
@@ -22,26 +22,23 @@ my $expl = [ 429 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return qw( allow )               }
+sub supported_parameters {
+    return (
+        {
+            name               => 'allow',
+            description        => 'Allow vars, subs, and/or refs.',
+            default_string     => $EMPTY,
+            behavior           => 'enumeration',
+            enumeration_values => [ qw{ vars subs refs } ],
+            enumeration_allow_multiple_values => 1,
+            enumeration_case_insensitive      => 1,
+        },
+    );
+}
+
 sub default_severity     { return $SEVERITY_HIGHEST         }
 sub default_themes       { return qw( core pbp bugs )       }
 sub applies_to           { return 'PPI::Statement::Include' }
-
-#-----------------------------------------------------------------------------
-
-sub new {
-    my ($class, %args) = @_;
-    my $self = bless {}, $class;
-    $self->{_allow} = {};
-
-    if( defined $args{allow} ) {
-        my $allowed = lc $args{allow}; #String of words
-        my %allowed = hashify( $allowed =~ m/ (\w+) /gmx );
-        $self->{_allow} = \%allowed;
-    }
-
-    return $self;
-}
 
 #-----------------------------------------------------------------------------
 

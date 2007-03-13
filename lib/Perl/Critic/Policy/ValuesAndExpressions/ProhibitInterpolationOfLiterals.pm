@@ -22,8 +22,6 @@ my $expl = [51];
 
 #-----------------------------------------------------------------------------
 
-# TODO: An enumeration may not really be appropriate-- this previously allowed
-# any kind of delimiting character.
 sub supported_parameters {
     return (
         {
@@ -37,6 +35,7 @@ sub supported_parameters {
         },
     );
 }
+
 sub default_severity   { return $SEVERITY_LOWEST        }
 sub default_themes     { return qw( core pbp cosmetic ) }
 sub applies_to         { return qw(PPI::Token::Quote::Double
