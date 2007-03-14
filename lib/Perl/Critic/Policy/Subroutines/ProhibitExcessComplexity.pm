@@ -26,7 +26,18 @@ my %logic_keywords = hashify( @logic_keywords );
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return qw( max_mccabe )                }
+sub supported_parameters {
+    return (
+        {
+            name            => 'max_mccabe',
+            description     => 'The maximum complexity score allowed.',
+            default_string  => '20',
+            behavior        => 'integer',
+            integer_minimum => 1,
+        },
+    );
+}
+
 sub default_severity  { return $SEVERITY_MEDIUM                }
 sub default_themes    { return qw(core complexity maintenance) }
 sub applies_to        { return 'PPI::Statement::Sub'           }

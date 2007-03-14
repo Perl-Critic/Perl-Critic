@@ -51,8 +51,8 @@ sub initialize_parameter {
         $parameter->_set_parser(
             sub {
                 # Normally bad thing, obscuring a variable in a outer scope
-                # with a variable with the same name, done in order to remain
-                # consistent with the parser function interface.
+                # with a variable with the same name is being done here in
+                # order to remain consistent with the parser function interface.
                 my ($policy, $parameter, $config_string) = @_;
 
                 my @potential_values;
@@ -91,8 +91,8 @@ sub initialize_parameter {
         $parameter->_set_parser(
             sub {
                 # Normally bad thing, obscuring a variable in a outer scope
-                # with a variable with the same name, done in order to remain
-                # consistent with the parser function interface.
+                # with a variable with the same name is being done here in
+                # order to remain consistent with the parser function interface.
                 my ($policy, $parameter, $config_string) = @_;
 
                 my $value_string = $parameter->get_default_string();
@@ -142,8 +142,8 @@ Perl::Critic::PolicyParameter::Behavior - Type-specific subroutines for a Policy
 =head1 DESCRIPTION
 
 Provides a standard set of functionality for an enumerated
-L<Perl::Critic::PolicyParameter> so that the developer of a policy does not
-have to provide it her/himself.
+L<Perl::Critic::PolicyParameter> so that the developer of a policy
+does not have to provide it her/himself.
 
 
 =head1 METHODS
@@ -152,8 +152,8 @@ have to provide it her/himself.
 
 =item C<initialize_parameter( $parameter, $specification )>
 
-Plug in the functionality this behavior provides into the parameter, based
-upon the configuration provided by the specification.
+Plug in the functionality this behavior provides into the parameter,
+based upon the configuration provided by the specification.
 
 This behavior looks for two configuration items:
 
@@ -161,12 +161,13 @@ This behavior looks for two configuration items:
 
 =item enumeration_values
 
-Mandatory.  The set of valid values for the parameter, as an array reference.
+Mandatory.  The set of valid values for the parameter, as an array
+reference.
 
 =item enumeration_allow_multiple_values
 
-Optional, defaults to false.  Should the parameter support a single value or
-accept multiple?
+Optional, defaults to false.  Should the parameter support a single
+value or accept multiple?
 
 =back
 

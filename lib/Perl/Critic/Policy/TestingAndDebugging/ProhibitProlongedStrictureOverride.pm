@@ -19,28 +19,23 @@ our $VERSION = 1.03;
 my $desc = q{Don't turn off strict for large blocks of code};
 my $expl = [ 433 ];
 
-my $DEFAULT_N_STATEMENTS = 3;
-
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return qw( statements )          }
+sub supported_parameters {
+    return (
+        {
+            name            => 'statements',
+            description     => 'The maximum number of statements in a no strict block.',
+            default_string  => '3',
+            behavior        => 'integer',
+            integer_minimum => 1,
+        },
+    );
+}
+
 sub default_severity  { return $SEVERITY_HIGH            }
 sub default_themes    { return qw( core pbp bugs )       }
 sub applies_to        { return 'PPI::Statement::Include' }
-
-#-----------------------------------------------------------------------------
-
-sub new {
-    my ( $class, %config ) = @_;
-    my $self = bless {}, $class;
-
-    $self->{_nstatements} = $DEFAULT_N_STATEMENTS;
-    if ( defined $config{statements} ) {
-        $self->{_nstatements} = $config{statements};
-    }
-
-    return $self;
-}
 
 #-----------------------------------------------------------------------------
 
@@ -52,7 +47,7 @@ sub violates {
 
     my $sib = $elem->snext_sibling;
     my $nstatements = 0;
-    while ($nstatements++ <= $self->{_nstatements}) {
+    while ($nstatements++ <= $self->{_statements}) {
         return if !$sib;
         return if $sib->isa('PPI::Statement::Include') &&
             $sib->type eq 'use' &&

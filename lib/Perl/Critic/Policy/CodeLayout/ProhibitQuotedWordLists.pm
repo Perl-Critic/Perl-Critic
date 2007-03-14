@@ -19,27 +19,23 @@ our $VERSION = 1.03;
 my $desc = q{List of quoted literal words};
 my $expl = q{Use 'qw()' instead};
 
-my $DEFAULT_MIN_ELEMENTS = 2;
-
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return qw( min_elements )     }
+sub supported_parameters {
+    return (
+        {
+            name            => 'min_elements',
+            description     => 'The minimum number of words in a list that will be complained about.',
+            default_string  => '2',
+            behavior        => 'integer',
+            integer_minimum => 1,
+        },
+    );
+}
+
 sub default_severity  { return $SEVERITY_LOW          }
 sub default_themes    { return qw( core cosmetic )    }
 sub applies_to        { return 'PPI::Structure::List' }
-
-#-----------------------------------------------------------------------------
-
-sub new {
-    my ($class, %args) = @_;
-    my $self = bless {}, $class;
-
-    #Set configuration if defined
-    $self->{_min} = defined $args{min_elements} ? $args{min_elements}
-                                                : $DEFAULT_MIN_ELEMENTS;
-
-    return $self;
-}
 
 #-----------------------------------------------------------------------------
 
@@ -74,7 +70,7 @@ sub violates {
     }
 
     #Were there enough?
-    return if $count < $self->{_min};
+    return if $count < $self->{_min_elements};
 
     #If we get here, then all elements were literals
     return $self->violation( $desc, $expl, $elem );

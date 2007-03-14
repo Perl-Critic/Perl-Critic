@@ -19,27 +19,23 @@ our $VERSION = 1.03;
 my $desc = q{Code structure is deeply nested};
 my $expl = q{Consider refactoring};
 
-my $DEFAULT_MAX_NESTS = 5;
-
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return qw( max_nests )                 }
+sub supported_parameters {
+    return (
+        {
+            name            => 'max_nests',
+            description     => 'The maximum number of nested constructs to allow.',
+            default_string  => '5',
+            behavior        => 'integer',
+            integer_minimum => 1,
+        },
+    );
+}
+
 sub default_severity  { return $SEVERITY_MEDIUM                }
 sub default_themes    { return qw(core maintenance complexity) }
 sub applies_to        { return 'PPI::Statement::Compound'      }
-
-#-----------------------------------------------------------------------------
-
-sub new {
-    my ( $class, %args ) = @_;
-    my $self = bless {}, $class;
-
-    #Set configuration
-    $self->{_max_nests} = defined $args{max_nests} ? $args{max_nests}
-                                                   : $DEFAULT_MAX_NESTS;
-
-    return $self;
-}
 
 #-----------------------------------------------------------------------------
 

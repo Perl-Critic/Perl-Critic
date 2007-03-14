@@ -25,7 +25,7 @@ sub supported_parameters {
     return (
         {
             name           => 'exempt_scripts',
-            description    => q{Don't required programs to contain a package statement.=},
+            description    => q{Don't required programs to contain a package statement.},
             default_string => '1',
             behavior       => 'boolean',
         },
