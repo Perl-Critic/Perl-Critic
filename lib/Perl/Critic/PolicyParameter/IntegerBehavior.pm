@@ -11,6 +11,8 @@ use strict;
 use warnings;
 use Carp qw(confess);
 
+use Perl::Critic::Utils qw{ :characters };
+
 use base qw{ Perl::Critic::PolicyParameter::Behavior };
 
 our $VERSION = 1.03;
@@ -22,6 +24,9 @@ sub initialize_parameter {
 
     my $minimum = $specification->{integer_minimum};
     my $maximum = $specification->{integer_maximum};
+
+    $parameter->_get_behavior_values()->{minimum} = $minimum;
+    $parameter->_get_behavior_values()->{maximum} = $maximum;
 
     my $policy_variable_name = q{_} . $parameter->get_name();
 
@@ -74,6 +79,38 @@ sub initialize_parameter {
 
 #-----------------------------------------------------------------------------
 
+sub generate_parameter_description {
+    my ($self, $parameter) = @_;
+
+    my $minimum = $parameter->_get_behavior_values()->{minimum};
+    my $maximum = $parameter->_get_behavior_values()->{maximum};
+
+    my $description = $parameter->_get_description_with_trailing_period();
+    if ( $description ) {
+        $description .= qq{\n};
+    }
+
+    if (defined $minimum or defined $maximum) {
+        if (defined $minimum) {
+            $description .= "Minimum value $minimum. ";
+        } else {
+            $description .= 'No minimum. ';
+        }
+
+        if (defined $maximum) {
+            $description .= "Maximum value $maximum.";
+        } else {
+            $description .= 'No maximum.';
+        }
+    } else {
+        $description .= 'No limits.';
+    }
+
+    return $description;
+}
+
+#-----------------------------------------------------------------------------
+
 1;
 
 __END__
@@ -86,7 +123,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::PolicyParameter::Behavior - Type-specific subroutines for a PolicyParameter.
+Perl::Critic::PolicyParameter::IntegerBehavior - Actions appropriate for an integer.
 
 
 =head1 DESCRIPTION
@@ -118,6 +155,14 @@ Optional.  The minimum acceptable value.
 Optional.  The maximum acceptable value.
 
 =back
+
+=item C<generate_parameter_description( $parameter )>
+
+Create a description of the parameter, based upon the description on
+the parameter itself, but enhancing it with information from this
+behavior.
+
+In this case, this means including the minimum and maximum values.
 
 =back
 

@@ -26,6 +26,9 @@ sub initialize_parameter {
     my @always_present_values;
 
     my $always_present_values = $specification->{list_always_present_values};
+    $parameter->_get_behavior_values()->{always_present_values} =
+        $always_present_values;
+
     if ( $always_present_values ) {
         @always_present_values = @{$always_present_values};
     }
@@ -60,6 +63,26 @@ sub initialize_parameter {
 
 #-----------------------------------------------------------------------------
 
+sub generate_parameter_description {
+    my ($self, $parameter) = @_;
+
+    my $always_present_values =
+        $parameter->_get_behavior_values()->{always_present_values};
+
+    my $description = $parameter->_get_description_with_trailing_period();
+    if ( $description and $always_present_values ) {
+        $description .= qq{\n};
+    }
+
+    if ( $always_present_values ) {
+        $description .= 'Values that are always included: ';
+        $description .= join ', ', sort @{ $always_present_values };
+        $description .= $PERIOD;
+    }
+
+    return $description;
+}
+
 1;
 
 __END__
@@ -72,12 +95,12 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::PolicyParameter::Behavior - Type-specific subroutines for a PolicyParameter.
+Perl::Critic::PolicyParameter::StringListBehavior - Actions appropriate for a parameter that is a list of strings.
 
 
 =head1 DESCRIPTION
 
-Provides a standard set of functionality for an enumerated
+Provides a standard set of functionality for a string list
 L<Perl::Critic::PolicyParameter> so that the developer of a policy
 does not have to provide it her/himself.
 
@@ -91,21 +114,24 @@ does not have to provide it her/himself.
 Plug in the functionality this behavior provides into the parameter,
 based upon the configuration provided by the specification.
 
-This behavior looks for two configuration items:
+This behavior looks for one configuration item:
 
 =over
 
-=item enumeration_values
+=item always_present_values
 
-Mandatory.  The set of valid values for the parameter, as an array
-reference.
-
-=item enumeration_allow_multiple_values
-
-Optional, defaults to false.  Should the parameter support a single
-value or accept multiple?
+Optional.  Values that should always be included, regardless of what
+the configuration of the parameter specifies, as an array reference.
 
 =back
+
+=item C<generate_parameter_description( $parameter )>
+
+Create a description of the parameter, based upon the description on
+the parameter itself, but enhancing it with information from this
+behavior.
+
+In this specific case, the always present values are added at the end.
 
 =back
 

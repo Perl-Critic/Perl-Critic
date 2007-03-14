@@ -11,6 +11,8 @@ use strict;
 use warnings;
 use Carp qw(confess);
 
+use Perl::Critic::Utils qw{ :characters };
+
 our $VERSION = 1.03;
 
 #-----------------------------------------------------------------------------
@@ -27,6 +29,14 @@ sub initialize_parameter {
     my ($self, $parameter, $specification) = @_;
 
     return;
+}
+
+#-----------------------------------------------------------------------------
+
+sub generate_parameter_description {
+    my ($self, $parameter) = @_;
+
+    return $parameter->_get_description_with_trailing_period();
 }
 
 #-----------------------------------------------------------------------------
@@ -49,8 +59,11 @@ Perl::Critic::PolicyParameter::Behavior - Type-specific subroutines for a Policy
 =head1 DESCRIPTION
 
 Provides a standard set of functionality for a
-L<Perl::Critic::PolicyParameter> so that the developer of a policy does not
-have to provide it her/himself.
+L<Perl::Critic::PolicyParameter> so that the developer of a policy
+does not have to provide it her/himself.
+
+All subclasses have singleton instances held onto by
+L<Perl::Critic::PolicyParameter>.
 
 
 =head1 METHODS
@@ -59,9 +72,20 @@ have to provide it her/himself.
 
 =item C<initialize_parameter( $parameter, $specification )>
 
-Plug in the functionality this behavior provides into the parameter, based
-upon the configuration provided by the specification.  The configuration
-items looked for depends upon the specific behavior subclass.
+Plug in the functionality this behavior provides into the parameter,
+based upon the configuration provided by the specification.  The
+configuration items looked for depends upon the specific behavior
+subclass.
+
+=item C<generate_parameter_description( $parameter )>
+
+Create a description of the parameter, based upon the description on
+the parameter itself, but enhancing it with information from this
+behavior.
+
+Note that this may return C<undef> if the parameter itself doesn't
+have a description.  Also, the returned value may include multiple
+lines.
 
 =back
 

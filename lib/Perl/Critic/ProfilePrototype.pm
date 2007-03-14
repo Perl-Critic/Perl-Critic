@@ -38,12 +38,24 @@ sub to_string {
 
 #-----------------------------------------------------------------------------
 
+# About "%{\n%\x7b# \x7df\n# %n = %D\n}O" below:
+#
+# The %0 format for a policy specifies how to format parameters.
+# For a parameter %f specifies the full description.
+#
+# The problem is that both of these need to take options, but String::Format
+# doesn't allow nesting of {}.  So, to get the option to the %f, the braces
+# are hex encoded.  I.e. the parameter sees:
+#
+#    \n%{# }f\n# %n = %D\n
+#
 sub _proto_format {
     return <<'END_OF_FORMAT';
 [%P]
 # set_themes = %t
 # severity   = %s
-%{# %s = \n}O
+%{\n%\x7b# \x7df\n# %n = %D\n}O
+
 END_OF_FORMAT
 
 }

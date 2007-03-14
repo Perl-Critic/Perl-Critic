@@ -65,14 +65,14 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::PolicyParameter::BooleanBehavior - Subroutines for a boolean PolicyParameter.
+Perl::Critic::PolicyParameter::BooleanBehavior - Actions appropriate for a boolean.
 
 
 =head1 DESCRIPTION
 
 Provides a standard set of functionality for a boolean
-L<Perl::Critic::PolicyParameter> so that the developer of a policy does not
-have to provide it her/himself.
+L<Perl::Critic::PolicyParameter> so that the developer of a policy
+does not have to provide it her/himself.
 
 
 =head1 METHODS

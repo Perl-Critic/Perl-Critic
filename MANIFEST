@@ -118,6 +118,7 @@ lib/Perl/Critic/PolicyParameter.pm
 lib/Perl/Critic/PolicyParameter/Behavior.pm
 lib/Perl/Critic/PolicyParameter/BooleanBehavior.pm
 lib/Perl/Critic/PolicyParameter/EnumerationBehavior.pm
+lib/Perl/Critic/PolicyParameter/GenericBehavior.pm
 lib/Perl/Critic/PolicyParameter/IntegerBehavior.pm
 lib/Perl/Critic/PolicyParameter/StringBehavior.pm
 lib/Perl/Critic/PolicyParameter/StringListBehavior.pm

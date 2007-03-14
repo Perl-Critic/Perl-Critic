@@ -193,10 +193,18 @@ sub to_string {
 sub _format_parameters {
     my ($self, $format) = @_;
 
-    $format = Perl::Critic::Utils::interpolate( $format );
-    my @parameter_names = map { $_->get_name() } @{ $self->get_parameters() };
-    return join $SPACE, @parameter_names if not $format;
-    return join $EMPTY, map { sprintf $format, $_ } @parameter_names;
+    my $separator;
+    if ($format) {
+        $separator = $EMPTY;
+    } else {
+        $separator = $SPACE;
+        $format = '%n';
+    }
+
+    return
+        join
+            $separator,
+            map { $_->to_formatted_string($format) } @{ $self->get_parameters() };
 }
 
 #-----------------------------------------------------------------------------
@@ -338,14 +346,14 @@ Returns the L<Perl::Critic::PolicyParameter> with the specified name.
 
 =item C<set_format( $FORMAT )>
 
-Class method.  Sets the format for all Policy objects when they are evaluated
-in string context.  The default is C<"%p\n">.  See L<"OVERLOADS"> for
-formatting options.
+Class method.  Sets the format for all Policy objects when they are
+evaluated in string context.  The default is C<"%p\n">.  See
+L<"OVERLOADS"> for formatting options.
 
 =item C<get_format()>
 
-Class method. Returns the current format for all Policy objects when they are
-evaluated in string context.
+Class method. Returns the current format for all Policy objects when
+they are evaluated in string context.
 
 =item C<to_string()>
 
@@ -374,14 +382,19 @@ the way C<sprintf> works.  If you want to know the specific formatting
 capabilities, look at L<String::Format>. Valid escape characters are:
 
   Escape    Meaning
-  -------   -----------------------------------------------------------------
-  %O        Comma-delimited list of supported policy parameters
-  %P        Name of the Policy module
-  %p        Name of the Policy without the Perl::Critic::Policy:: prefix
-  %S        The default severity level of the policy
-  %s        The current severity level of the policy
-  %T        The default themes for the policy
-  %t        The current themes for the policy
+  -------   ----------------------------------------------------------
+  %O        List of supported policy parameters.  Takes an option of
+            a format string for
+            L<Perl::Critic::PolicyParameter/to_formatted_string>.  For
+            example, this can be used like C<%{%n - %d\n}O> to get a
+            list of parameter names followed by their descriptions.
+  %P        Name of the Policy module.
+  %p        Name of the Policy without the Perl::Critic::Policy::
+            prefix.
+  %S        The default severity level of the policy.
+  %s        The current severity level of the policy.
+  %T        The default themes for the policy.
+  %t        The current themes for the policy.
 
 =head1 AUTHOR
 

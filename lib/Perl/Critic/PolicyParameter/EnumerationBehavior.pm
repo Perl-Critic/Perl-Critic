@@ -33,6 +33,7 @@ sub initialize_parameter {
                    $PERIOD;
 
     my %valid_values = hashify( @{$valid_values} );
+    $parameter->_get_behavior_values()->{enumeration_values} = \%valid_values;
 
     my $policy_variable_name = q{_} . $parameter->get_name();
 
@@ -111,6 +112,24 @@ sub initialize_parameter {
 
 #-----------------------------------------------------------------------------
 
+sub generate_parameter_description {
+    my ($self, $parameter) = @_;
+
+    my $description = $parameter->_get_description_with_trailing_period();
+    if ( $description ) {
+        $description .= qq{\n};
+    }
+
+    my %values = %{$parameter->_get_behavior_values()->{enumeration_values}};
+    return
+        $description
+        . 'Valid values: '
+        . join (', ', sort keys %values)
+        . $PERIOD;
+}
+
+#-----------------------------------------------------------------------------
+
 1;
 
 __END__
@@ -123,7 +142,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::PolicyParameter::Behavior - Type-specific subroutines for a PolicyParameter.
+Perl::Critic::PolicyParameter::EnumerationBehavior - Actions appropriate for an enumerated value.
 
 
 =head1 DESCRIPTION
@@ -157,6 +176,14 @@ Optional, defaults to false.  Should the parameter support a single
 value or accept multiple?
 
 =back
+
+=item C<generate_parameter_description( $parameter )>
+
+Create a description of the parameter, based upon the description on
+the parameter itself, but enhancing it with information from this
+behavior.
+
+In this specific case, the universe of values is added at the end.
 
 =back
 

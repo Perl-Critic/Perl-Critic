@@ -55,10 +55,9 @@ sub test_supported_parameters {
             Perl::Critic::PolicyParameter->new($param_specification);
         my $param_name = $parameter->get_name();
 
-        is(
-            ref $param_specification,
-            'HASH',
-            qq{Param "$param_name" for policy "$policy_name" specified as a hash},
+        ok(
+            $parameter->get_description(),
+            qq{Param "$param_name" for policy "$policy_name" has a description},
         );
 
         my %args = (

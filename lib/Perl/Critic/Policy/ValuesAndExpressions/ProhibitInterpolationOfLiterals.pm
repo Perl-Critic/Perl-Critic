@@ -26,11 +26,9 @@ sub supported_parameters {
     return (
         {
             name               => 'allow',
-            description        => 'Kinds of delimiters to permit.',
+            description        =>
+                'Kinds of delimiters to permit, e.g. "qq{", "qq(", "qq[", "qq/".',
             default_string     => $EMPTY,
-            behavior           => 'enumeration',
-            enumeration_values => [ qw| qq{ qq( qq[ qq/ | ],
-            enumeration_allow_multiple_values => 1,
             parser             => \&_parse_allow,
         },
     );

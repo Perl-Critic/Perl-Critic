@@ -56,14 +56,14 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::PolicyParameter::StringBehavior - Subroutines for a simple string PolicyParameter.
+Perl::Critic::PolicyParameter::StringBehavior - Actions appropriate for a simple string.
 
 
 =head1 DESCRIPTION
 
 Provides a standard set of functionality for a string
-L<Perl::Critic::PolicyParameter> so that the developer of a policy does not
-have to provide it her/himself.
+L<Perl::Critic::PolicyParameter> so that the developer of a policy
+does not have to provide it her/himself.
 
 
 =head1 METHODS
