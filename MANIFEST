@@ -120,6 +120,7 @@ lib/Perl/Critic/PolicyParameter/BooleanBehavior.pm
 lib/Perl/Critic/PolicyParameter/EnumerationBehavior.pm
 lib/Perl/Critic/PolicyParameter/IntegerBehavior.pm
 lib/Perl/Critic/PolicyParameter/StringBehavior.pm
+lib/Perl/Critic/PolicyParameter/StringListBehavior.pm
 lib/Perl/Critic/PolicySummary.pod
 lib/Perl/Critic/ProfilePrototype.pm
 lib/Perl/Critic/TestUtils.pm
@@ -149,6 +150,7 @@ t/13_bundled_policies.t
 t/14_policy_parameter_behavior_boolean.t
 t/14_policy_parameter_behavior_enumeration.t
 t/14_policy_parameter_behavior_integer.t
+t/14_policy_parameter_behavior_list_string.t
 t/14_policy_parameter_behavior_string.t
 t/14_policy_parameters.t
 t/20_policies.t

@@ -19,18 +19,21 @@ our $VERSION = 1.03;
 my $desc = 'Ambiguous name for variable or subroutine';
 my $expl = [ 48 ];
 
-my @default_forbid =
-    qw( last      contract
-        set       record
-        left      second
-        right     close
-        no        bases
-        abstract
-);
+my $default_forbid = 'abstract bases close contract last left no record right second set';
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return qw( forbid )             }
+sub supported_parameters {
+    return (
+        {
+            name            => 'forbid',
+            description     => 'The variable names that are not to be allowed.',
+            default_string  => $default_forbid,
+            behavior        => 'string list',
+        },
+    );
+}
+
 sub default_severity  { return $SEVERITY_MEDIUM         }
 sub default_themes    { return qw(core pbp maintenance) }
 sub applies_to        { return qw(PPI::Statement::Sub
@@ -38,26 +41,7 @@ sub applies_to        { return qw(PPI::Statement::Sub
 
 #-----------------------------------------------------------------------------
 
-sub new {
-    my ( $class, %args ) = @_;
-    my $self = bless {}, $class;
-
-    #Set configuration, if defined
-    my @forbid;
-    if ( defined $args{forbid} ) {
-        @forbid = words_from_string( $args{forbid} );
-    }
-    else {
-        @forbid = @default_forbid;
-    }
-    $self->{_forbid} = { hashify( @forbid ) };
-
-    return $self;
-}
-
-#-----------------------------------------------------------------------------
-
-sub default_forbidden_words { return @default_forbid }
+sub default_forbidden_words { return words_from_string( $default_forbid ) }
 
 #-----------------------------------------------------------------------------
 
@@ -134,7 +118,7 @@ names.
 
 The default list of forbidden words is:
 
-  last set left right no abstract contract record second close bases
+  abstract bases close contract last left no record right second set
 
 This list can be changed by giving a value for C<forbid> of a series of
 forbidden words separated by spaces.

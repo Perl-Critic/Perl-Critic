@@ -10,7 +10,7 @@ package Perl::Critic::Policy::Subroutines::RequireFinalReturn;
 use strict;
 use warnings;
 use Carp qw(confess);
-use Perl::Critic::Utils qw{ :severities :data_conversion };
+use Perl::Critic::Utils qw{ :characters :severities :data_conversion };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.03;
@@ -22,7 +22,19 @@ my $expl = [ 197 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return qw(terminal_funcs)    }
+sub supported_parameters {
+    return (
+        {
+            name            => 'terminal_funcs',
+            description     => 'The additional subroutines to treat as terminal.',
+            default_string  => $EMPTY,
+            behavior        => 'string list',
+            list_always_present_values =>
+                [ qw( exit die croak confess throw Carp::confess Carp::croak ) ],
+        },
+    );
+}
+
 sub default_severity     { return $SEVERITY_HIGH        }
 sub default_themes       { return qw( core bugs pbp )   }
 sub applies_to           { return 'PPI::Statement::Sub' }
@@ -30,16 +42,13 @@ sub applies_to           { return 'PPI::Statement::Sub' }
 #-----------------------------------------------------------------------------
 
 sub new {
-    my ( $class, %args ) = @_;
+    my ( $class, %config ) = @_;
     my $self = bless {}, $class;
 
-    my $user_terminals = $args{terminal_funcs} || q{};
-    my @user_terminals = words_from_string( $user_terminals );
-    my @default_terminals =
-        qw(exit die croak confess throw Carp::confess Carp::croak);
+    $self->_finish_initialization(\%config);
 
-    $self->{_terminals} = { hashify(@default_terminals, @user_terminals) };
     $self->{_conditionals} = { hashify( qw(if unless for foreach) ) };
+
     return $self;
 }
 
@@ -148,7 +157,7 @@ sub _is_terminal_stmnt {
     my ( $self, $stmnt ) = @_;
     return if not $stmnt->isa('PPI::Statement');
     my $first_token = $stmnt->schild(0) || return;
-    return exists $self->{_terminals}->{$first_token};
+    return exists $self->{_terminal_funcs}->{$first_token};
 }
 
 #-----------------------------------------------------------------------------

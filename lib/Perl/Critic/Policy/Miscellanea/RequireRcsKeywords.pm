@@ -9,7 +9,7 @@ package Perl::Critic::Policy::Miscellanea::RequireRcsKeywords;
 
 use strict;
 use warnings;
-use Perl::Critic::Utils qw{ :severities :data_conversion };
+use Perl::Critic::Utils qw{ :characters :severities :data_conversion };
 use List::MoreUtils qw(none);
 use base 'Perl::Critic::Policy';
 
@@ -21,7 +21,17 @@ my $expl = [ 441 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return qw( keywords )        }
+sub supported_parameters {
+    return (
+        {
+            name            => 'keywords',
+            description     => 'The keywords to require in all files.',
+            default_string  => $EMPTY,
+            behavior        => 'string list',
+        },
+    );
+}
+
 sub default_severity  { return $SEVERITY_LOW         }
 sub default_themes    { return qw(core pbp cosmetic) }
 sub applies_to        { return 'PPI::Document'       }
@@ -32,8 +42,10 @@ sub new {
     my ( $class, %config ) = @_;
     my $self = bless {}, $class;
 
+    $self->_finish_initialization(\%config);
+
     # Any of these lists
-    $self->{_keywords} = [
+    $self->{_keyword_sets} = [
 
         # Minimal svk/svn
         [qw(Id)],
@@ -45,10 +57,11 @@ sub new {
         [qw(Revision Source Date)],
     ];
 
-    #Set configuration, if defined.
-    if ( defined $config{keywords} ) {
+    # Set configuration, if defined.
+    my @keywords = keys %{ $self->{_keywords} };
+    if ( @keywords ) {
         ## no critic ProhibitEmptyQuotes
-        $self->{_keywords} = [ [ words_from_string( $config{keywords} ) ] ];
+        $self->{_keyword_sets} = [ [ @keywords ] ];
     }
 
     return $self;
@@ -61,7 +74,7 @@ sub violates {
     my @viols = ();
 
     my $nodes = $doc->find( \&_wanted );
-    for my $keywordset_ref ( @{ $self->{_keywords} } ) {
+    for my $keywordset_ref ( @{ $self->{_keyword_sets} } ) {
         if ( not $nodes ) {
             my $desc = 'RCS keywords '
                 . join( ', ', map {"\$$_\$"} @{$keywordset_ref} )

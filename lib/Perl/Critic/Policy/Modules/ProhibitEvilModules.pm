@@ -10,7 +10,7 @@ use strict;
 use warnings;
 use English qw(-no_match_vars);
 use List::MoreUtils qw(any);
-use Perl::Critic::Utils qw{ :severities :data_conversion };
+use Perl::Critic::Utils qw{ :characters :severities :data_conversion };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.03;
@@ -22,7 +22,17 @@ my $desc = q{Prohibited module used};
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return qw( modules )             }
+sub supported_parameters {
+    return (
+        {
+            name            => 'modules',
+            description     => 'The names of or patterns for modules to forbid.',
+            default_string  => $EMPTY,
+            behavior        => 'string list',
+        },
+    );
+}
+
 sub default_severity  { return $SEVERITY_HIGHEST         }
 sub default_themes    { return qw( core bugs )           }
 sub applies_to        { return 'PPI::Statement::Include' }
@@ -30,15 +40,17 @@ sub applies_to        { return 'PPI::Statement::Include' }
 #-----------------------------------------------------------------------------
 
 sub new {
-    my ( $class, %args ) = @_;
+    my ( $class, %config ) = @_;
     my $self = bless {}, $class;
+
+    $self->_finish_initialization(\%config);
 
     $self->{_evil_modules}    = {};  #Hash
     $self->{_evil_modules_rx} = [];  #Array
 
     #Set config, if defined
-    if ( defined $args{modules} ) {
-        for my $module ( words_from_string( $args{modules} ) ) {
+    if ( defined $self->{_modules} ) {
+        for my $module ( keys %{ $self->{_modules} } ) {
 
             if ( $module =~ m{ \A [/] (.+) [/] \z }mx ) {
 
