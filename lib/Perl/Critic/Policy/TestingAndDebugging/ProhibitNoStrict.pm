@@ -25,13 +25,10 @@ my $expl = [ 429 ];
 sub supported_parameters {
     return (
         {
-            name               => 'allow',
-            description        => 'Allow vars, subs, and/or refs.',
-            default_string     => $EMPTY,
-            behavior           => 'enumeration',
-            enumeration_values => [ qw{ vars subs refs } ],
-            enumeration_allow_multiple_values => 1,
-            enumeration_case_insensitive      => 1,
+            name            => 'allow',
+            description     => 'Allow vars, subs, and/or refs.',
+            default_string  => $EMPTY,
+            parser          => \&_parse_allow,
         },
     );
 }
@@ -39,6 +36,22 @@ sub supported_parameters {
 sub default_severity     { return $SEVERITY_HIGHEST         }
 sub default_themes       { return qw( core pbp bugs )       }
 sub applies_to           { return 'PPI::Statement::Include' }
+
+#-----------------------------------------------------------------------------
+
+sub _parse_allow {
+    my ($self, $parameter, $config_string) = @_;
+
+    $self->{_allow} = {};
+
+    if( defined $config_string ) {
+        my $allowed = lc $config_string; #String of words
+        my %allowed = hashify( $allowed =~ m/ (\w+) /gmx );
+        $self->{_allow} = \%allowed;
+    }
+
+    return;
+}
 
 #-----------------------------------------------------------------------------
 

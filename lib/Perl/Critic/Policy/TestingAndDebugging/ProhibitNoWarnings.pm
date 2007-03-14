@@ -25,62 +25,10 @@ my $expl = [ 431 ];
 sub supported_parameters {
     return (
         {
-            name               => 'allow',
-            description        => 'Permitted warning categories.',
-            default_string     => $EMPTY,
-            behavior           => 'enumeration',
-            enumeration_values =>
-                [ qw{
-                     all
-                        closure
-                        deprecated
-                        exiting
-                        glob
-                        io
-                            closed
-                            exec
-                            layer
-                            newline
-                            pipe
-                            unopened
-                        misc
-                        numeric
-                        once
-                        overflow
-                        pack
-                        portable
-                        recursion
-                        redefine
-                        regexp
-                        severe
-                                debugging
-                                inplace
-                                internal
-                                malloc
-                        signal
-                        substr
-                        syntax
-                                ambiguous
-                                bareword
-                                digit
-                                parenthesis
-                                precedence
-                                printf
-                                prototype
-                                qw
-                                reserved
-                                semicolon
-                        taint
-                        threads
-                        uninitialized
-                        unpack
-                        untie
-                        utf8
-                        void
-                        y2k
-                } ],
-            enumeration_allow_multiple_values => 1,
-            enumeration_case_insensitive      => 1,
+            name            => 'allow',
+            description     => 'Permitted warning categories.',
+            default_string  => $EMPTY,
+            parser          => \&_parse_allow,
         },
     );
 }
@@ -88,6 +36,22 @@ sub supported_parameters {
 sub default_severity     { return $SEVERITY_HIGH            }
 sub default_themes       { return qw( core bugs pbp )       }
 sub applies_to           { return 'PPI::Statement::Include' }
+
+#-----------------------------------------------------------------------------
+
+sub _parse_allow {
+    my ($self, $parameter, $config_string) = @_;
+
+    $self->{_allow} = {};
+
+    if( defined $config_string ) {
+        my $allowed = lc $config_string; #String of words
+        my %allowed = hashify( $allowed =~ m/ (\w+) /gmx );
+        $self->{_allow} = \%allowed;
+    }
+
+    return;
+}
 
 #-----------------------------------------------------------------------------
 
@@ -100,7 +64,7 @@ sub violates {
 
     #Arguments to 'no warnings' are usually a list of literals or a
     #qw() list.  Rather than trying to parse the various PPI elements,
-    #I just use a regext to split the statement into words.  This is
+    #I just use a regex to split the statement into words.  This is
     #kinda lame, but it does the trick for now.
 
     my $stmnt = $elem->statement();
