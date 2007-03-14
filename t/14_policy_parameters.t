@@ -32,7 +32,7 @@ Perl::Critic::TestUtils::block_perlcriticrc();
 # Figure out how many tests there will be...
 my @all_policies = bundled_policy_names();
 my @all_params   = map { $_->supported_parameters() } @all_policies;
-my $ntests       = @all_policies + @all_params;
+my $ntests       = @all_policies + 2 * @all_params;
 plan( tests => $ntests );
 
 #-----------------------------------------------------------------------------
@@ -55,6 +55,12 @@ sub test_supported_parameters {
             Perl::Critic::PolicyParameter->new($param_specification);
         my $param_name = $parameter->get_name();
 
+        is(
+            ref $param_specification,
+            'HASH',
+            qq{Param "$param_name" for policy "$policy_name" specified as a hash},
+        );
+
         my %args = (
             -policy => $policy_name,
             -params => {
@@ -62,8 +68,11 @@ sub test_supported_parameters {
             }
         );
         eval { $config->add_policy( %args ) };
-        my $label = qq{Created policy "$policy_name" with param "$param_name"};
-        is( $EVAL_ERROR, q{}, $label );
+        is(
+            $EVAL_ERROR,
+            q{},
+            qq{Created policy "$policy_name" with param "$param_name"},
+        );
     }
 }
 

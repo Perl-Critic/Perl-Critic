@@ -9,7 +9,9 @@ package Perl::Critic::Policy::ControlStructures::ProhibitMutatingListFunctions;
 
 use strict;
 use warnings;
-use Perl::Critic::Utils qw{ :severities :data_conversion :classification :ppi };
+use Perl::Critic::Utils qw{
+    :characters :severities :data_conversion :classification :ppi
+};
 use List::MoreUtils qw( none any );
 use base 'Perl::Critic::Policy';
 
@@ -51,7 +53,23 @@ my $expl = [ 114 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return qw( list_funcs add_list_funcs) }
+sub supported_parameters {
+    return (
+        {
+            name            => 'list_funcs',
+            description     => 'The base set of functions to check.',
+            default_string  => join ($SPACE, @builtin_list_funcs, @cpan_list_funcs ),
+            behavior        => 'string list',
+        },
+        {
+            name            => 'add_list_funcs',
+            description     => 'The set of functions to check, in addition to those given in list_funcs.',
+            default_string  => $EMPTY,
+            behavior        => 'string list',
+        },
+    );
+}
+
 sub default_severity     { return $SEVERITY_HIGHEST              }
 sub default_themes       { return qw(core bugs pbp)              }
 sub applies_to           { return 'PPI::Token::Word'             }
@@ -62,16 +80,11 @@ sub new {
     my ( $class, %config ) = @_;
     my $self = bless {}, $class;
 
-    my @list_funcs = $config{list_funcs}
-        ? $config{list_funcs} =~ m/(\S+)/gxms
-        : ( @builtin_list_funcs, @cpan_list_funcs );
+    $self->_finish_initialization( \%config );
 
-    if ( $config{add_list_funcs} ) {
-        push @list_funcs, $config{add_list_funcs} =~ m/(\S+)/gxms;
-    }
-
-    # Hashify also removes duplicates!
-    $self->{_list_funcs} = { hashify @list_funcs };
+    $self->{_all_list_funcs} = {
+        hashify keys %{ $self->{_list_funcs} }, keys %{ $self->{_add_list_funcs} }
+    };
 
     return $self;
 }
@@ -82,7 +95,7 @@ sub violates {
     my ($self, $elem, $doc) = @_;
 
     # Is this element a list function?
-    return if not $self->{_list_funcs}->{$elem};
+    return if not $self->{_all_list_funcs}->{$elem};
     return if not is_function_call($elem);
 
     # Only the block form of list functions can be analyzed.

@@ -9,7 +9,7 @@ package Perl::Critic::Policy::Documentation::RequirePodSections;
 
 use strict;
 use warnings;
-use Perl::Critic::Utils qw{ :severities :classification };
+use Perl::Critic::Utils qw{ :characters :severities :classification };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.03;
@@ -197,7 +197,34 @@ my %DEFAULT_SCRIPT_SECTIONS = (
 #-----------------------------------------------------------------------------
 
 sub supported_parameters {
-    return qw( lib_sections script_sections source language )
+    return (
+        {
+            name            => 'lib_sections',
+            description     => 'The sections to require for modules (separated by qr/\s* [|] \s*/xm).',
+            default_string  => $EMPTY,
+            parser          => \&_parse_lib_sections,
+        },
+        {
+            name            => 'script_sections',
+            description     => 'The sections to require for programs (separated by qr/\s* [|] \s*/xm).',
+            default_string  => $EMPTY,
+            parser          => \&_parse_script_sections,
+        },
+        {
+            name            => 'source',
+            description     => 'The origin of sections to use.',
+            default_string  => $DEFAULT_SOURCE,
+            behavior        => 'enumeration',
+            enumeration_values => [ keys %SOURCE_TRANSLATION ],
+        },
+        {
+            name            => 'language',
+            description     => 'The spelling of sections to use.',
+            default_string  => $EMPTY,
+            behavior        => 'enumeration',
+            enumeration_values => [ $EN_AU, $EN_US ],
+        },
+    );
 }
 
 sub default_severity     { return $SEVERITY_LOW            }
@@ -206,25 +233,48 @@ sub applies_to           { return 'PPI::Document'          }
 
 #-----------------------------------------------------------------------------
 
-sub new {
-    my ( $class, %args ) = @_;
-    my $self = bless {}, $class;
+sub _parse_sections {
+    my $config_string = shift;
 
-    # Set config, if defined
-    for my $section_type ( qw(lib_sections script_sections) ) {
-        if ( defined $args{$section_type} ) {
-            my @sections = split m{ \s* [|] \s* }mx, $args{$section_type};
-            @sections = map { uc $_ } @sections;  #Nomalize CaSe!
-            $self->{ "_$section_type" } = \@sections;
-        }
+    my @sections = split m{ \s* [|] \s* }mx, $config_string;
+
+    return map { uc $_ } @sections;  #Nomalize CaSe!
+}
+
+sub _parse_lib_sections {
+    my ($self, $parameter, $config_string) = @_;
+
+    if ( defined $config_string ) {
+        $self->{_lib_sections} = [ _parse_sections( $config_string ) ];
     }
 
-    my $source = $args{source};
+    return;
+}
+
+sub _parse_script_sections {
+    my ($self, $parameter, $config_string) = @_;
+
+    if ( defined $config_string ) {
+        $self->{_script_sections} = [ _parse_sections( $config_string ) ];
+    }
+
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
+sub new {
+    my ( $class, %config ) = @_;
+    my $self = bless {}, $class;
+
+    $self->_finish_initialization( \%config );
+
+    my $source = $self->{_source};
     if ( not defined $source or not defined $DEFAULT_LIB_SECTIONS{$source} ) {
         $source = $DEFAULT_SOURCE;
     }
 
-    my $language = $args{language};
+    my $language = $self->{_language};
     if (
             not defined $language
         or  not defined $DEFAULT_LIB_SECTIONS{$source}{$language}

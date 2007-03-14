@@ -22,7 +22,16 @@ my $expl = [ 33 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return qw( perltidyrc )      }
+sub supported_parameters {
+    return (
+        {
+            name            => 'perltidyrc',
+            description     => 'The Perl::Tidy configuration file to use, if any.',
+            default_string  => undef,
+        },
+    );
+}
+
 sub default_severity  { return $SEVERITY_LOWEST      }
 sub default_themes    { return qw(core pbp cosmetic) }
 sub applies_to        { return 'PPI::Document'       }
