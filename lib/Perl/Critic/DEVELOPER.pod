@@ -81,7 +81,7 @@ Perl::Critic to be a hypocrite, now do we?
   use Perl::Critic::Violation;
   use base 'Perl::Critic::Policy';
 
-  our $VERSION = '0.22';
+  our $VERSION = '1.03';
 
 Next, we'll declare a description and explanation for this Policy.
 The description is always just a string that basically says "this is
@@ -94,62 +94,63 @@ page numbers in the "Perl Best Practices" book.
 
 Most policies don't need to override the new() method provided by
 L<Perl::Critic::Policy>.  However, if your policy is configurable via
-F<.perlcriticrc> you will need to override the constructor to examine
-the C<%args> values.  See
-L<Perl::Critic::Policy::ControlStructures::ProhibitCascadingIfElse>
-for a simple example and
-L<Perl::Critic::Policy::Documentation::RequirePodSections> for a more
-complex example.
+F<.perlcriticrc> you will need to implement a
+C<supported_parameters()> method and/or override the constructor to
+examine the C<%config> values.  See
+L</MAKING YOUR POLICY CONFIGURABLE> below.
 
-Next, we define the C<default_severity()> method, which should return a
-scalar value indicating the severity of violating this Policy.
+Next, we define the C<default_severity()> method, which should return
+a scalar value indicating the severity of violating this Policy.
 Severity values range from 1 to 5, where 5 is the "most severe."  In
 general, level 5 is reserved for things that are frequently misused
-and/or cause bugs.  Level 1 is for things that are highly subjective or
-purely cosmetic.  The L<Perl::Critic::Utils> package exports several
-severity constants that you can use here.
+and/or cause bugs.  Level 1 is for things that are highly subjective
+or purely cosmetic.  The L<Perl::Critic::Utils> package exports
+several severity constants that you can use here.
 
   sub default_severity  { return $SEVERITY_HIGH }
 
-Likewise, the C<default_themes()> method returns a list of theme names.
-Themes are intended to be named groups of Policies.  All Policies that ship
-with Perl::Critic have a C<"core"> theme.  And since this Policy comes directly
-from Damian's "Perl Best Practices" book, this Policy should be a member of
-the C<"pbp"> theme.
+Likewise, the C<default_themes()> method returns a list of theme
+names.  Themes are intended to be named groups of Policies.  All
+Policies that ship with Perl::Critic have a C<"core"> theme.  And
+since this Policy comes directly from Damian's "Perl Best Practices"
+book, this Policy should be a member of the C<"pbp"> theme.
 
   sub default_themes { return qw( core pbp ) }
 
-As a Policy author, you can assign any themes you want to the Policy.  If
-you're publishing a suite of custom Policies, we suggest that you create a
-unique theme that covers all the Policies in the distribution.  That way,
-users can easily enable or disable all of your policies at once.
+As a Policy author, you can assign any themes you want to the Policy.
+If you're publishing a suite of custom Policies, we suggest that you
+create a unique theme that covers all the Policies in the
+distribution.  That way, users can easily enable or disable all of
+your policies at once.
 
-Next, we indicate what elements of the code this policy will analyze, like
-statements or variables or conditionals or POD.  These elements are specified
-as PPI classes such as L<PPI::Statement>, L<PPI::Token::Symbol>,
-L<PPI::Structure::Conditional> or L<PPI::Token::Pod> respectively.  The
-applies_to() method returns a list of PPI package names.  (You can get that
-list of available package names via C<perldoc PPI>.)  As Perl::Critic
-traverses the document, it will call the C<violates()> method from this module
-whenever it encounters one of the PPI types that are given here.  In this
-case, we just want to test calls to C<grep>.  Since the token "grep" is a
-L<PPI::Token::Word>, we return that package name from the C<applies_to()>
-method.
+Next, we indicate what elements of the code this policy will analyze,
+like statements or variables or conditionals or POD.  These elements
+are specified as PPI classes such as L<PPI::Statement>,
+L<PPI::Token::Symbol>, L<PPI::Structure::Conditional> or
+L<PPI::Token::Pod> respectively.  The applies_to() method returns a
+list of PPI package names.  (You can get that list of available
+package names via C<perldoc PPI>.)  As Perl::Critic traverses the
+document, it will call the C<violates()> method from this module
+whenever it encounters one of the PPI types that are given here.  In
+this case, we just want to test calls to C<grep>.  Since the token
+"grep" is a L<PPI::Token::Word>, we return that package name from the
+C<applies_to()> method.
 
   sub applies_to { return 'PPI::Token::Word' }
 
-If your Policy needs to analyze several different types of elements, the
-C<applies_to> method may return the name of several PPI packages.  If your
-Policy needs to examine the file as a whole, then the C<applies_to> method
-should return L<PPI::Document>.  Since there is only one PPI::Document
-element, such a Policy would only be invoked once per file.
+If your Policy needs to analyze several different types of elements,
+the C<applies_to> method may return the name of several PPI packages.
+If your Policy needs to examine the file as a whole, then the
+C<applies_to> method should return L<PPI::Document>.  Since there is
+only one PPI::Document element, such a Policy would only be invoked
+once per file.
 
-Now comes the interesting part.  The C<violates()> method does all the work.
-It is always called with 2 arguments: a reference to the current PPI element
-that Perl::Critic is traversing, and a reference to the entire PPI
-document. [And since this is an object method, there will be an additional
-argument that is a reference to this object (C<$self>), but you already knew
-that!]
+Now comes the interesting part.  The C<violates()> method does all the
+work.  It is always called with 2 arguments: a reference to the
+current PPI element that Perl::Critic is traversing, and a reference
+to the entire PPI document. [And since this is an object method, there
+will be an additional argument that is a reference to this object
+(C<$self>), but you already knew that!]
 
   sub violates {
       my ( $self, $elem, $doc ) = @_;
@@ -177,12 +178,12 @@ the right context.
     return if is_hash_key($elem);
     return if is_subroutine_name($elem);
 
-Now that we know this element is a call to the C<grep> function, we can
-look at the nearby elements to see what kind of arguments are being
-passed to it.  Every PPI element is linked to its siblings, parent,
-and children (if it has any).  Since those siblings could just be
-whitespace, we use the C<snext_sibling()> to get the next code-sibling
-(the 's' in C<snext_sibling> stands for 'significant').
+Now that we know this element is a call to the C<grep> function, we
+can look at the nearby elements to see what kind of arguments are
+being passed to it.  Every PPI element is linked to its siblings,
+parent, and children (if it has any).  Since those siblings could just
+be whitespace, we use the C<snext_sibling()> to get the next
+code-sibling (the 's' in C<snext_sibling> stands for 'significant').
 
     my $sib = $elem->snext_sibling() || return;
 
@@ -215,13 +216,13 @@ violation.  And that's all there is to it!
 
   1;
 
-One last thing -- When you import L<Perl::Critic::Violation>, it extracts
-the DESCRIPTION section from the POD in your Policy module.  That text
-can displayed in the diagnostic output when the Violations objects are
-stringified.  So please include a DESCRIPTION section in the POD for
-your Policy.  It should succinctly describe the behavior and
-motivation for your Policy and include a few examples of both good and
-bad code.  Here's an example:
+One last thing -- When you import L<Perl::Critic::Violation>, it
+extracts the DESCRIPTION section from the POD in your Policy module.
+That text can displayed in the diagnostic output when the Violations
+objects are stringified.  So please include a DESCRIPTION section in
+the POD for your Policy.  It should succinctly describe the behavior
+and motivation for your Policy and include a few examples of both good
+and bad code.  Here's an example:
 
   =pod
 
@@ -241,6 +242,39 @@ bad code.  Here's an example:
     @mapped = map { transform($_) }  @list;      #ok
 
   =cut
+
+
+=head1 MAKING YOUR POLICY CONFIGURABLE
+
+L<Perl::Critic> takes care of gathering configuration information for
+your Policy, from whatever source the user specifies.  (See
+L<perlcritic/CONFIGURATION> for the details of how a user specifies 
+the values you're going to receive.)  What your policy ends up
+receiving for the value of a parameter is a string with leading and
+trailing whitespace removed.  By default, you will need to handle
+conversion of that string to a useful form yourself.  However, if you
+provide some metadata about your parameters, the parameter handling
+will be taken care of for you.
+
+You can look at
+L<Perl::Critic::Policy::ControlStructures::ProhibitCascadingIfElse>
+for a simple example of a configurable Policy and
+L<Perl::Critic::Policy::Documentation::RequirePodSections> for a more
+complex one.
+
+=head2 Do It All Yourself
+
+Constructor
+
+
+=head2 Providing Basic Configuration Information Via C<supported_parameters()>
+
+
+=head2 Using C<supported_parameters()> to Get It Done For You
+
+
+=head2 Using Both C<supported_parameters()> and a Constructor
+
 
 =head1 AUTHOR
 
@@ -264,4 +298,4 @@ can be found in the LICENSE file included with this module.
 #   indent-tabs-mode: nil
 #   c-indentation-style: bsd
 # End:
-# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :
+# ex: set ts=8 sts=4 sw=4 tw=70 ft=pod expandtab :
