@@ -1,3 +1,11 @@
+##############################################################################
+#     $URL$
+#    $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+
 ## name No code
 ## failures 1
 ## cut
@@ -61,3 +69,40 @@ our $Version;
 
 #!anything
 ## no critic (RequireVersionVar)
+
+#-----------------------------------------------------------------------------
+
+## name Readonly VERSION
+## TODO Policy doesn't work with Readonly variables
+## failures 0
+## cut
+
+Readonly our $VERSION = 1.0;
+
+#-----------------------------------------------------------------------------
+
+## name Readonly::Scalar VERSION
+## TODO Policy doesn't work with Readonly::Scalar variables
+## failures 0
+## cut
+
+Readonly::Scalar our $VERSION = 1.0;
+
+#-----------------------------------------------------------------------------
+
+## name Readonly::Scalar VERSION
+## TODO Don't find a lexical Readonly $VERSION
+## failures 1
+## cut
+
+Readonly::Scalar my $VERSION = 1.0;  #Note this is lexical
+
+##############################################################################
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :
