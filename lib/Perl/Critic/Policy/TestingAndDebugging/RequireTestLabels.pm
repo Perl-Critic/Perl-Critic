@@ -52,7 +52,8 @@ sub new {
     $self->{_test_modules} = \%default_test_modules;
     if (defined $args{modules}) {
         my @modules = words_from_string( $args{modules} );
-        $self->{_test_modules} = { %default_test_modules, hashify(@modules) };
+        my %all_test_modules = ( %default_test_modules, hashify(@modules) );
+        $self->{_test_modules} = \%all_test_modules;
     }
 
     return $self;
