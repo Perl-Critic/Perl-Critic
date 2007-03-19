@@ -649,7 +649,7 @@ handling from within the constructor, there's a problem because
 L<Perl::Critic> can't do its initialization of a Policy until the
 Policy has been created.  (Due to the lack of a requirement for a
 Policy to invoke the super-constructor.)  The way around this is to
-invoke C<_finish_initialization()> on the Policy before accessing the
+invoke C<_finish_standard_initialization()> on the Policy before accessing the
 parsed parameter values.
 
 This is done like so:
@@ -658,7 +658,7 @@ This is done like so:
       my ( $class, %config ) = @_;
       my $self = bless {}, $class;
 
-      $self->_finish_initialization( \%config );
+      $self->_finish_standard_initialization( \%config );
 
       # do additional setup that requires the parameter values
 

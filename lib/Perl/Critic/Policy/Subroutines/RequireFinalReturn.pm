@@ -45,7 +45,7 @@ sub new {
     my ( $class, %config ) = @_;
     my $self = bless {}, $class;
 
-    $self->_finish_initialization(\%config);
+    $self->_finish_standard_initialization(\%config);
 
     $self->{_conditionals} = { hashify( qw(if unless for foreach) ) };
 

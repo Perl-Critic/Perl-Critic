@@ -47,7 +47,7 @@ sub new {
 # an exception.
 #
 # Note that the configuration is passed by reference here.
-sub _finish_initialization {
+sub _finish_standard_initialization {
     my ($self, $config) = @_;
 
     # Bail if this method was called previously.
@@ -66,7 +66,7 @@ sub _finish_initialization {
 #-----------------------------------------------------------------------------
 
 # Called by PolicyFactory.  The results of this will be put into the
-# configuration so that _finish_initialization() above can access it.
+# configuration so that _finish_standard_initialization() above can access it.
 sub _build_parameters {
     my ($class) = @_;
 

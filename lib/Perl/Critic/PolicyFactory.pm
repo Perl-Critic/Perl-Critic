@@ -155,7 +155,7 @@ sub create_policy {
 
     # Complete initialization of the base Policy class, if the Policy subclass
     # has not already done so.
-    eval { $policy->_finish_initialization( \%policy_config_copy ); };
+    eval { $policy->_finish_standard_initialization( \%policy_config_copy ); };
     confess qq{Unable to create policy '$policy_name': $EVAL_ERROR} if $EVAL_ERROR;
 
     # Set base attributes on policy

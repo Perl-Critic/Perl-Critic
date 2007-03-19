@@ -267,7 +267,7 @@ sub new {
     my ( $class, %config ) = @_;
     my $self = bless {}, $class;
 
-    $self->_finish_initialization( \%config );
+    $self->_finish_standard_initialization( \%config );
 
     my $source = $self->{_source};
     if ( not defined $source or not defined $DEFAULT_LIB_SECTIONS{$source} ) {
