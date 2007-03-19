@@ -316,8 +316,8 @@ prefixed with an underscore.  E.g.
 Often, you'll want to convert the configuration values into something
 more useful.  In this example, C<selections> is supposed to be a list
 of integers.  L<Perl::Critic::Utils> contains a number of functions
-that can help you with this.  Assuming that C<violates()> will find
-having C<selections> as an array, you'll want to have something like
+that can help you with this.  Assuming that C<violates()> wants to
+have C<selections> as an array, you'll want to have something like
 this:
 
   use Perl::Critic::Utils qw{ :data_conversion };
@@ -328,7 +328,7 @@ this:
 
       $self->{_foo} = $config{foo};
       $self->{_factor} = $config{factor};
-      $self->{_selections} = [ words_from_string($config{selections}) ];
+      $self->{_selections} = [ words_from_string( $config{selections} ) ];
 
       return $self;
   }
@@ -575,6 +575,68 @@ Example:
 
 
 =back
+
+
+=head2 Using a Custom Parser
+
+If none of the behaviors does exactly what you want it to, you can
+provide your own parser for a parameter.  The reason for doing this as
+opposed to using a constructor is that it allows you to use a behavior
+to provide its extra functionality and it provides a means for a
+C<Perl::Critic> configuration program, e.g. an IDE that integrates
+C<Perl::Critic>, to validate your parameter as the user
+modifies its value.
+
+The way you declare that you have a custom parser is to include a
+reference to it in the parameter specification with the C<parser> key.
+For example:
+
+  sub supported_parameters {
+      return (
+          {
+              name           => 'file_name',
+              description    => 'A file for to read a list of values from.',
+              default_string => undef,
+              behavior       => 'string',
+              parser         => \&_parse_file_name,
+          },
+      );
+  }
+
+A parser is a method on a subclass of L<Perl::Critic::Policy> that
+takes two parameters: the L<Perl::Critic::PolicyParameter> that is
+being specified and the value string provided by the user.  The method
+is responsible for dealing with any default value and for saving the
+parsed value for later use by the C<violates()> method.
+
+An example parser (without enough error handling) for the above
+example declaration:
+
+  use File::Slurp qw{ slurp };
+
+  sub _parse_file_name {
+      my ($self, $parameter, $config_string) = @_;
+
+      my @thingies;
+
+      if ($config_string) {
+          if (not -r $config_string) {
+              die q{Invalid value for },
+                  $parameter->get_name(),
+                  qq{: $config_string is not readable.\n};
+          }
+
+          @thingies = slurp $config_string;
+      }
+
+      $self->{_thingies} = \@thingies;
+
+      return;
+  }
+
+Note that, if the value for the parameter is not valid, C<die> is used
+instead of C<confess> because the problem is not a bug in the code but
+a problem with user input.
 
 
 =head2 Using Both C<supported_parameters()> and a Constructor

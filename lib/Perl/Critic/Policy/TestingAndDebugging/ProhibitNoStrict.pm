@@ -96,7 +96,7 @@ if you were wise enough to C<use strict> in the first place, then it
 doesn't make sense to disable it completely.  By default, any C<no
 strict> statement will violate this policy.  However, you can
 configure this Policy to allow certain types of strictures to be
-disabled (See L<CONFIGURATION>).  A bare C<no strict> statement will
+disabled (See L</CONFIGURATION>).  A bare C<no strict> statement will
 always raise a violation.
 
 =head1 CONFIGURATION
