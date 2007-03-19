@@ -24,7 +24,7 @@ use Perl::Critic::Utils qw{
     :internal_lookup
 };
 
-our $VERSION = 1.03;
+our $VERSION = 1.04;
 
 #-----------------------------------------------------------------------------
 

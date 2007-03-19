@@ -22,7 +22,7 @@ use Perl::Critic::PolicyParameter::StringBehavior;
 use Perl::Critic::PolicyParameter::StringListBehavior;
 use Perl::Critic::Utils qw{ :characters &interpolate };
 
-our $VERSION = 1.03;
+our $VERSION = 1.04;
 
 #-----------------------------------------------------------------------------
 
