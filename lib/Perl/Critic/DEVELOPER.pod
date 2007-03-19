@@ -641,6 +641,33 @@ a problem with user input.
 
 =head2 Using Both C<supported_parameters()> and a Constructor
 
+There are cases where a Policy needs additional initialization beyond
+configuration or where the way it acts depends upon the combination of
+multiple parameters.  In such situations, you will need to create a
+constructor.  If you want to take advantage of the supplied parameter
+handling from within the constructor, there's a problem because
+L<Perl::Critic> can't do its initialization of a Policy until the
+Policy has been created.  (Due to the lack of a requirement for a
+Policy to invoke the super-constructor.)  The way around this is to
+invoke C<_finish_initialization()> on the Policy before accessing the
+parsed parameter values.
+
+This is done like so:
+
+  sub new {
+      my ( $class, %config ) = @_;
+      my $self = bless {}, $class;
+
+      $self->_finish_initialization( \%config );
+
+      # do additional setup that requires the parameter values
+
+      return $self;
+  }
+
+An example of a Policy that does this is
+L<Perl::Critic::Policy::Documentation::RequirePodSections>.
+
 
 =head1 AUTHOR
 
