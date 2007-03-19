@@ -5,11 +5,13 @@
 # $Revision$
 ##############################################################################
 
-[1.04]  Released on 2007-??-??
+[1.04]  Released on 2007-03-18
 
      Bug Fixes:
      * 25008: Subroutines::RequireFinalReturn should allow "throw"
      * 25085: False Positive - Heredoc terminator must be quoted
+     * 18423: VERSION check does not notice Readonly::Scalar version 
+     * 25449: Proposal of $VERSION declaration (DUPLICATE)
 
      New Policies:
      * CodeLayout::ProhibitTrailingWhitespace
@@ -18,7 +20,7 @@
 
      Policy Enhancements:
      * Subroutines::RequireFinalReturn can now be configured to recognize
-       custom functions that behave like "die" or "exit".
+       your custom functions that behave like "die" or "exit".
      * Documentation::RequirePodSections can be configured to match
        Module::Starter:PBP or to really match the PBP book.
 
