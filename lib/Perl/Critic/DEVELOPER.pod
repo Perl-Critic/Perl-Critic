@@ -398,6 +398,184 @@ prototype.
 
 =head2 Using C<supported_parameters()> to Get It Done For You
 
+The C<supported_parameters()> discussion above showed how you could
+help others with your policy, but didn't do anything to make your life
+as a Policy author easier; you still need to implement a constructor
+to access any configuration that the user has specified.  To have the
+configuration automatically handled for you, you need to declare how
+your parameters act by specifying a value for their C<behavior>.  For
+example, the following declares that a parameter allows the user to
+choose from five specific values and that the user can select any
+combination of them:
+
+  sub supported_parameters {
+      return (
+          {
+              name               => 'allowed_types',
+              description        => 'Kind of literals to allow.',
+              default_string     => 'Float',
+              behavior           => 'enumeration',
+              enumeration_values => [ qw{ Binary Exp Float Hex Octal } ],
+              enumeration_allow_multiple_values => 1,
+          },
+      );
+  }
+
+When you specify a behavior, parsing and validation of the
+user-specified and default values is done for you and your
+C<violates()> method can retrieve the value under the key of the
+parameter name prefixed with an underscore, e.g., for the above
+declaration, the parsed and validated value can be accessed via
+C<$self->{_allowed_types}>.
+
+The behaviors provide additional functionality to C<Perl::Critic>; for
+more on this, see L<Perl::Critic::PolicyParameter> and
+L<Perl::Critic::PolicyParameter::Behavior>.
+
+The following discusses each of the supported behaviors and the
+options they support.  For the full details of a behavior, see the
+documentation for the implementing class.
+
+=over
+
+=item string
+
+Implemented in L<Perl::Critic::PolicyParameter::StringBehavior>.
+
+The most basic of behaviors, the value of the parameter will be stored
+in the Policy as a string.
+
+This behavior is not configurable.
+
+Example:
+
+  sub supported_parameters {
+      return (
+          {
+              name           => 'a_string',
+              description    => 'An example string.',
+              default_string => 'blah blah blah',
+              behavior       => 'string',
+          },
+      );
+  }
+
+
+=item boolean
+
+Implemented in L<Perl::Critic::PolicyParameter::BooleanBehavior>.
+
+The value of the parameter will be either L<Perl::Critic::Utils/$TRUE>
+or L<Perl::Critic::Utils/$FALSE>.
+
+This behavior is not configurable.
+
+Example:
+
+  sub supported_parameters {
+      return (
+          {
+              name           => 'a_boolean',
+              description    => 'An example boolean.',
+              default_string => '1',
+              behavior       => 'boolean',
+          },
+      );
+  }
+
+
+=item integer
+
+Implemented in L<Perl::Critic::PolicyParameter::IntegerBehavior>.
+
+The value is validated against C<m/ \A [-+]? [1-9] \d* \z /xms>.
+
+This takes two options, C<integer_minimum> and
+C<integer_maximum>, which specify endpoints of an inclusive range to
+restrict the value to.  Either, neither, or both may be specified.
+
+Example:
+
+  sub supported_parameters {
+      return (
+          {
+              name            => 'an_integer',
+              description     => 'An example integer.',
+              default_string  => '5',
+              behavior        => 'integer',
+              integer_minimum => 0,
+              integer_maximum => 10,
+          },
+      );
+  }
+
+
+=item string list
+
+Implemented in L<Perl::Critic::PolicyParameter::StringListBehavior>.
+
+The values will be derived by splitting the input string on blanks.
+(See L<Perl::Critic::Utils/words_from_string>.) The parameter will be
+stored as a reference to a hash, with the values being the keys.
+
+This takes one optional option, C<always_present_values>, of a
+reference to an array of strings that will always be included in the
+parameter value, e.g. if the value of this option is
+C<[ qw{ a b c } ]> and the user specifies a value of C<'c d e'>, then
+the value of the parameter will contain C<'a'>, C<'b'>, C<'c'>,
+C<'d'>, and C<'e'>.
+
+Example:
+
+  sub supported_parameters {
+      return (
+          {
+              name                  => 'a_string_list',
+              description           => 'An example list.',
+              default_string        => 'red pink blue',
+              behavior              => 'string list',
+              always_present_values => [ qw{ green purple} ],
+          },
+      );
+  }
+
+
+=item enumeration
+
+Implemented in L<Perl::Critic::PolicyParameter::EnumerationBehavior>.
+
+The values will be derived by splitting the input string on blanks.
+(See L<Perl::Critic::Utils/words_from_string>.)  Depending upon the
+value of the C<enumeration_allow_multiple_values> option, the
+parameter will be stored as a string or a reference to a hash, with
+the values being the keys.
+
+This behavior takes one required option and one optional one.  A value
+for C<enumeration_values> of a reference to an array of valid strings
+is required.  A true value can be specified for
+C<enumeration_allow_multiple_values> to allow the user to pick more
+than one value.
+
+Example:
+
+  use Perl::Critic::Utils qw{ :characters };
+
+  sub supported_parameters {
+      return (
+          {
+              name               => 'an_enumeration',
+              description        => 'An example enumeration.',
+              default_string     => $EMPTY,
+              behavior           => 'enumeration',
+              enumeration_values => [ qw{ block statement pod operator } ],
+              enumeration_allow_multiple_values => 1,
+          },
+      );
+  }
+
+
+=back
+
 
 =head2 Using Both C<supported_parameters()> and a Constructor
 

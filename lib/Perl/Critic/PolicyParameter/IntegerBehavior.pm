@@ -148,11 +148,11 @@ This behavior looks for two configuration items:
 
 =item integer_minimum
 
-Optional.  The minimum acceptable value.
+Optional.  The minimum acceptable value.  Inclusive.
 
 =item integer_maximum
 
-Optional.  The maximum acceptable value.
+Optional.  The maximum acceptable value.  Inclusive.
 
 =back
 
