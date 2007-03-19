@@ -264,10 +264,136 @@ complex one.
 
 =head2 Do It All Yourself
 
-Constructor
+The constructor for a Policy receives two arguments: the standard
+class name argument, plus a hash of the configuration for the Policy;
+this is a regular hash, and not a reference to one.  Unfortunately,
+Policies are not required to call the super constructor; however, in
+order to work correctly, a Policy must be a blessed hash.  An example
+minimal constructor:
+
+  sub new {
+      my ( $class, %config ) = @_;
+      my $self = bless {}, $class;
+
+      return $self;
+  }
+
+Actually using the above code is pretty useless since this is what the
+Policy constructor does.  The reason to actually create a constructor
+is to do something with C<%config>.
+
+As stated above, what you get in C<%config> are trimmed strings.  For
+example, if the user's F<.perlcritic> contains
+
+  [Your::Policy]
+  foo          = bar baz
+  factor   =     5.52
+  selections =   2 78 92
+
+then C<%config> will contain the equivalent of
+
+  my %config = (
+      foo => 'bar baz'
+      factor => '5.52'
+      selections => '2 78 92'
+  );
+
+To make this available to the C<violates()> method, the values are
+usually put into C<self> under the name of the configuration item
+prefixed with an underscore.  E.g.
+
+  sub new {
+      my ( $class, %config ) = @_;
+      my $self = bless {}, $class;
+
+      $self->{_foo} = $config{foo};
+      $self->{_factor} = $config{factor};
+      $self->{_selections} = $config{selections};
+
+      return $self;
+  }
+
+Often, you'll want to convert the configuration values into something
+more useful.  In this example, C<selections> is supposed to be a list
+of integers.  L<Perl::Critic::Utils> contains a number of functions
+that can help you with this.  Assuming that C<violates()> will find
+having C<selections> as an array, you'll want to have something like
+this:
+
+  use Perl::Critic::Utils qw{ :data_conversion };
+
+  sub new {
+      my ( $class, %config ) = @_;
+      my $self = bless {}, $class;
+
+      $self->{_foo} = $config{foo};
+      $self->{_factor} = $config{factor};
+      $self->{_selections} = [ words_from_string($config{selections}) ];
+
+      return $self;
+  }
+
+Since C<selections> contains numbers, it may be desirable to change
+the assignment to look like
+
+  $self->{_selections} = [ map { $_ + 0 } words_from_string($config{selections}) ];
+
+If C<violates()> needs to quickly determine whether a particular value
+is in C<selections>, you would want to use a hash instead of an array,
+like this:
+
+  $self->{_selections} = { hashify( words_from_string( $config{selections} ) ) };
+
+For an example of a Policy that has some simple, but non-standard
+configuration handling, see
+L<Perl::Critic::Policy::CodeLayout::RequireTidyCode>.
 
 
 =head2 Providing Basic Configuration Information Via C<supported_parameters()>
+
+As minimum for a well behaved Policy, you should implement
+C<supported_parameters()> in order to tell the rest of C<Perl::Critic>
+what configuration values the Policy looks for, even if it is only to say
+that the Policy is not configurable.  In the simple form, this
+function returns a list of the names of the parameters the Policy
+supports.  So, for an non-configurable Policy, this should look like
+
+  sub supported_parameters { return (); }
+
+For the example being used in the constructor section above, this
+would be
+
+  sub supported_parameters { return qw{ foo factor selections }; }
+
+Given this information, C<Perl::Critic> can tell the user when they
+have specified a parameter for a Policy which isn't valid, e.g. when
+they've misspelled the name of the parameter, and can emit the
+parameter as part of a F<.perlcritic> prototype.
+
+You can provide even more information about your Policy's
+configuration by giving each parameter a description and a string
+representation of the default value for the parameter.  You do this by
+having the values in the list returned by C<supported_parameters()> be
+hash references instead of strings, with keys of C<name>,
+C<description>, and C<default_string>.  For example,
+
+  sub supported_parameters {
+      return (
+          {
+              name           => 'allowed_values',
+              description    => 'Individual and ranges of values to allow, and/or "all_integers".',
+              default_string => '0 1 2',
+          },
+          {
+              name           => 'allowed_types',
+              description    => 'Kind of literals to allow.',
+              default_string => 'Float',
+          },
+      );
+  }
+
+From this C<Perl::Critic> can emit a better F<.perlcriticrc>
+prototype.
 
 
 =head2 Using C<supported_parameters()> to Get It Done For You
