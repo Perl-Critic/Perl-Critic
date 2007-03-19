@@ -13,7 +13,7 @@ use Perl::Critic::Utils qw{ :severities };
 use List::MoreUtils qw(any);
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 1.03;
+our $VERSION = 1.04;
 
 #-----------------------------------------------------------------------------
 
@@ -23,50 +23,78 @@ my $expl = [ 404 ];
 #-----------------------------------------------------------------------------
 
 sub supported_parameters { return() }
-sub default_severity { return $SEVERITY_LOW       }
-sub default_themes   { return qw(core pbp readability) }
-sub applies_to       { return 'PPI::Document'     }
+sub default_severity     { return $SEVERITY_LOW            }
+sub default_themes       { return qw(core pbp readability) }
+sub applies_to           { return 'PPI::Document'          }
 
 #-----------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
 
-    return if $doc->find_first( \&_wanted );
+    return if $doc->find_first( \&_is_VERSION_declaration );
 
     #If we get here, then no $VERSION was found
     return $self->violation( $desc, $expl, $doc );
 }
 
-sub _wanted {
-    return  ( _our_VERSION(@_) || _vars_VERSION(@_)  || _package_VERSION(@_) );
+#-----------------------------------------------------------------------------
+
+sub _is_VERSION_declaration {
+    return 1 if _is_our_VERSION(@_);
+    return 1 if _is_vars_VERSION(@_);
+    return 1 if _is_package_VERSION(@_);
+    return 1 if _is_readonly_VERSION(@_);
+    return 0;
 }
 
-#------------------
+#-----------------------------------------------------------------------------
 
-sub _our_VERSION {
+sub _is_our_VERSION {
     my (undef, $elem) = @_;
     $elem->isa('PPI::Statement::Variable') || return 0;
     $elem->type() eq 'our' || return 0;
     return any { $_ eq '$VERSION' } $elem->variables(); ## no critic
 }
 
-#------------------
+#-----------------------------------------------------------------------------
 
-sub _vars_VERSION {
+sub _is_vars_VERSION {
     my (undef, $elem) = @_;
     $elem->isa('PPI::Statement::Include') || return 0;
     $elem->pragma() eq 'vars' || return 0;
     return $elem =~ m{ \$VERSION }mx; #Crude, but usually works
 }
 
-#------------------
+#-----------------------------------------------------------------------------
 
-sub _package_VERSION {
+sub _is_package_VERSION {
     my (undef, $elem) = @_;
     $elem->isa('PPI::Token::Symbol') || return 0;
     return $elem =~ m{ \A \$ \S+ ::VERSION \z }mx;
     #TODO: ensure that it is in _this_ package!
+}
+
+#-----------------------------------------------------------------------------
+
+sub _is_readonly_VERSION {
+
+    #---------------------------------------------------------------
+    # Readonly VERSION statements usually come in one of two forms:
+    #
+    #   Readonly our $VERSION = 1.0;
+    #   Readonly::Scalar our $VERSION = 1.0;
+    #---------------------------------------------------------------
+
+    my (undef, $elem) = @_;
+    $elem->isa('PPI::Token::Symbol') || return 0;
+    return 0 if $elem !~ m{ \A \$VERSION \z }mx;
+
+    my $psib = $elem->sprevious_sibling() || return 0;
+    return 0 if $psib ne 'our';
+
+    my $ppsib = $psib->sprevious_sibling() || return 0;
+    return $ppsib eq 'Readonly' || $ppsib eq 'Readonly::Scalar';
 }
 
 1;
@@ -93,8 +121,8 @@ This Policy scans your file for any package variable named
 C<$VERSION>.  I'm assuming that you are using C<strict>, so you'll
 have to declare it like one of these:
 
-  our $VERSION = 1.031;
-  $MyPackage::VERSION = 1.031;
+  our $VERSION = 1.041;
+  $MyPackage::VERSION = 1.041;
   use vars qw($VERSION);
 
 A common practice is to use the C<$Revision$> keyword to automatically

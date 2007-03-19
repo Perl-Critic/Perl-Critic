@@ -73,7 +73,6 @@ our $Version;
 #-----------------------------------------------------------------------------
 
 ## name Readonly VERSION
-## TODO Policy doesn't work with Readonly variables
 ## failures 0
 ## cut
 
@@ -82,7 +81,6 @@ Readonly our $VERSION = 1.0;
 #-----------------------------------------------------------------------------
 
 ## name Readonly::Scalar VERSION
-## TODO Policy doesn't work with Readonly::Scalar variables
 ## failures 0
 ## cut
 
@@ -91,7 +89,6 @@ Readonly::Scalar our $VERSION = 1.0;
 #-----------------------------------------------------------------------------
 
 ## name Readonly::Scalar VERSION
-## TODO Don't find a lexical Readonly $VERSION
 ## failures 1
 ## cut
 
