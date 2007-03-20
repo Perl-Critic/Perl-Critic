@@ -15,7 +15,7 @@ use Perl::Critic::Utils qw{
 };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 1.04;
+our $VERSION = 1.05;
 
 my %label_arg_pos = (
    ok        => 1,

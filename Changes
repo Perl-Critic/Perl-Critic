@@ -5,6 +5,11 @@
 # $Revision$
 ##############################################################################
 
+[1.05]  Released on 2007-03-19
+
+     Bug Fixes:
+     * 25557: t/20_policy_prohibittrailingwhitespace.t fails on Perl 5.8.0
+
 [1.04]  Released on 2007-03-18
 
      Bug Fixes:
