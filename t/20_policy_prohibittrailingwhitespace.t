@@ -43,8 +43,8 @@ is ( pcritique($policy, \$code), 5, $policy );
 #-----------------------------------------------------------------------------
 
 $code = <<"END_PERL";
-sub${SPACE}do_frobnication${SPACE}{
-\tfor${SPACE}(${SPACE}is_frobnicating()${SPACE})${SPACE}{
+sub${SPACE}do_frobnication${SPACE}\{
+\tfor${SPACE}(${SPACE}is_frobnicating()${SPACE})${SPACE}\{
 ${SPACE}${SPACE}${SPACE}${SPACE}frobnicate();
 \l}
 }
