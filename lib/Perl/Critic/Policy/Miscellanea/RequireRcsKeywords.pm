@@ -13,7 +13,7 @@ use Perl::Critic::Utils qw{ :characters :severities :data_conversion };
 use List::MoreUtils qw(none);
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 1.04;
+our $VERSION = 1.05;
 
 #-----------------------------------------------------------------------------
 

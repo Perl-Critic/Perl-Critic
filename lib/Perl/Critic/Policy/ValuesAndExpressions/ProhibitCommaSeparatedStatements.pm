@@ -14,7 +14,7 @@ use Perl::Critic::Utils qw{ :characters :severities :classification };
 
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 1.04;
+our $VERSION = 1.05;
 
 #-----------------------------------------------------------------------------
 

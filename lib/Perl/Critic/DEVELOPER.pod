@@ -81,7 +81,7 @@ Perl::Critic to be a hypocrite, now do we?
   use Perl::Critic::Violation;
   use base 'Perl::Critic::Policy';
 
-  our $VERSION = '1.04';
+  our $VERSION = '1.05';
 
 Next, we'll declare a description and explanation for this Policy.
 The description is always just a string that basically says "this is

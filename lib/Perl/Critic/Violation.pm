@@ -18,7 +18,7 @@ use Perl::Critic::Utils qw{ :characters :internal_lookup };
 use String::Format qw(stringf);
 use overload ( q{""} => 'to_string', cmp => '_compare' );
 
-our $VERSION = 1.04;
+our $VERSION = 1.05;
 
 #Class variables...
 our $FORMAT = "%m at line %l, column %c. %e.\n"; #Default stringy format

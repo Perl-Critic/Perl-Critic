@@ -14,7 +14,7 @@ use List::MoreUtils qw(all);
 use Carp qw( carp );
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 1.04;
+our $VERSION = 1.05;
 
 #-----------------------------------------------------------------------------
 

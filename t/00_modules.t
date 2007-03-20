@@ -14,7 +14,7 @@ use Test::More tests => 1485;  # Add 14 for each new policy created
 use Perl::Critic::TestUtils qw(bundled_policy_names);
 use English qw(-no_match_vars);
 
-our $VERSION = 1.04;
+our $VERSION = 1.05;
 
 # pre-compute for version comparisons
 my $version_string = __PACKAGE__->VERSION;
