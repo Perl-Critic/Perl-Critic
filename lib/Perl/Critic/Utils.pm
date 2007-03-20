@@ -57,6 +57,7 @@ our @EXPORT_OK = qw(
     &interpolate
     &is_function_call
     &is_hash_key
+    &is_included_module_name
     &is_method_call
     &is_perl_builtin
     &is_perl_builtin_with_list_context
@@ -119,6 +120,7 @@ our %EXPORT_TAGS = (
         qw{
             &is_function_call
             &is_hash_key
+            &is_included_module_name
             &is_method_call
             &is_perl_builtin
             &is_perl_global
@@ -558,6 +560,17 @@ sub is_hash_key {
 
 #-----------------------------------------------------------------------------
 
+sub is_included_module_name {
+    my $elem  = shift;
+    return if !$elem;
+    my $stmnt = $elem->statement();
+    return if !$stmnt;
+    return if !$stmnt->isa('PPI::Statement::Include');
+    return $stmnt->schild(1) == $elem;
+}
+
+#-----------------------------------------------------------------------------
+
 sub is_method_call {
     my $elem = shift;
     return if !$elem;
@@ -585,6 +598,7 @@ sub is_function_call {
     return ! ( is_hash_key($elem) ||
                is_method_call($elem) ||
                is_subroutine_name($elem) ||
+               is_included_module_name($elem) ||
                $elem eq 'sub'
     );
 }
@@ -1004,6 +1018,11 @@ Given a L<PPI::Token::Word>, returns true if the element is the name of a
 subroutine declaration.  This is useful for distinguishing barewords and from
 function calls from subroutine declarations.
 
+=item C<is_included_module_name( $element )>
+
+Given a L<PPI::Token::Word>, returns true if the element is the name of a
+module that is being included via C<use>, C<require>, or C<no>.
+
 =item C<is_function_call( $element )>
 
 Given a L<PPI::Token::Word> returns true if the element appears to be call to
@@ -1222,6 +1241,7 @@ C<$RIGHT_PAREN>
 Includes:
 C<&is_function_call>,
 C<&is_hash_key>,
+C<&is_included_module_name>,
 C<&is_method_call>,
 C<&is_perl_builtin>,
 C<&is_perl_global>,
