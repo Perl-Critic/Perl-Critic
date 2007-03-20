@@ -50,15 +50,17 @@ sub applies_to           { return 'PPI::Token::Whitespace' }
 sub violates {
     my ( $self, $token, undef ) = @_;
 
+    # There is at most one linefeed per Whitespace token, and it will always
+    # be the last character, if present.  If the code has two consecutive
+    # blank lines, PPI will produce two Whitespace tokens, each consisting
+    # of a single linefeed.  Thus, any Whitespace token consisting of a single
+    # character cannot contain trailing whitespace.
     my $content = $token->content();
     return if length($content) < 2;
-
-    my @characters = split $EMPTY, $content;
-
-    return if qq{\n} ne pop @characters;
+    return if qq{\n} ne chop $content;
 
     my $explanation = q{Found "};
-    $explanation .= join $EMPTY, map { _escape($_) } @characters;
+    $explanation .= join $EMPTY, map { _escape($_) } split $EMPTY, $content;
     $explanation .= q{" at the end of the line};
 
     return $self->violation( $description, $explanation, $token );
