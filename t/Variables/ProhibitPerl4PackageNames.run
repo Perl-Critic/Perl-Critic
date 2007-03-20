@@ -1,127 +1,195 @@
-## name package declarations
+## name Perl 4 package declarations
 ## failures 3
 ## cut
 
-package Foo::Bar;
-package Foo'Bar;
-package Foo::Bar::Baz;
-package Foo'Bar::Baz;
-package Foo::Bar'Baz;
 
+package Foo'Bar;
+package Foo::Bar'Baz;
+package Foo'Bar::Baz;
 
 #-----------------------------------------------------------------------------
+## name Perl 5 package declarations
+## failures 0
+## cut
 
-## name simple variable access
+package Foo;
+package Foo::Bar;
+package Foo::Bar::Baz;
+
+#-----------------------------------------------------------------------------
+## name Perl 4 simple variable access
 ## failures 9
 ## cut
 
-my $x = $Foo::bar;
+
 my $x = $Foo'bar;
-my $x = $Foo::Bar::baz;
 my $x = $Foo'Bar::baz;
 my $x = $Foo::Bar'baz;
 
-my @x = @Foo::bar;
 my @x = @Foo'bar;
-my @x = @Foo::Bar::baz;
 my @x = @Foo'Bar::baz;
 my @x = @Foo::Bar'baz;
 
-my %x = %Foo::bar;
+
 my %x = %Foo'bar;
-my %x = %Foo::Bar::baz;
 my %x = %Foo'Bar::baz;
 my %x = %Foo::Bar'baz;
 
+#-----------------------------------------------------------------------------
+## name Perl 5 simple variable access
+## failures 0
+## cut
+
+my $x = $Foo::bar;
+my $x = $Foo::Bar::baz;
+
+my @x = @Foo;
+my @x = @Foo::bar;
+
+my %x = %Foo::baz;
+my %x = %Foo::Bar::baz;
 
 #-----------------------------------------------------------------------------
-
-## name simple variable assignment
+## name Perl 4 simple variable assignment
 ## failures 9
 ## cut
 
-my $Foo::bar      = $x;
-my $Foo'bar       = $x;
-my $Foo::Bar::baz = $x;
-my $Foo'Bar::baz  = $x;
-my $Foo::Bar'baz  = $x;
+$Foo'bar       = $x;
+$Foo'Bar::baz  = $x;
+$Foo::Bar'baz  = $x;
 
-my @Foo::bar      = @x;
-my @Foo'bar       = @x;
-my @Foo::Bar::baz = @x;
-my @Foo'Bar::baz  = @x;
-my @Foo::Bar'baz  = @x;
+@Foo'bar       = @x;
+@Foo'Bar::baz  = @x;
+@Foo::Bar'baz  = @x;
 
-my %Foo::bar      = %x;
-my %Foo'bar       = %x;
-my %Foo::Bar::baz = %x;
-my %Foo'Bar::baz  = %x;
-my %Foo::Bar'baz  = %x;
-
+%Foo'bar       = %x;
+%Foo'Bar::baz  = %x;
+%Foo::Bar'baz  = %x;
 
 #-----------------------------------------------------------------------------
+## name Perl 4 localized variable assignment
+## failures 11
+## cut
 
-## name simple subroutine invocation
+local $Foo'bar       = $x;
+local $Foo'Bar::baz  = $x;
+local $Foo::Bar'baz  = $x;
+
+local @Foo'bar       = @x;
+local @Foo'Bar::baz  = @x;
+local @Foo::Bar'baz  = @x;
+
+local %Foo'bar       = %x;
+local %Foo'Bar::baz  = %x;
+local %Foo::Bar'baz  = %x;
+
+local ($Foo'Bar'baz, $Foo'Bar'bam) = @list;
+
+#-----------------------------------------------------------------------------
+## name Perl 5 simple variable assignment
+## failures 0
+## cut
+
+$Foo::Bar = $x;
+$Foo::Bar::baz = $x;
+
+@Foo::Bar = @x;
+@Foo::Bar::baz = @x;
+
+%Foo::Bar = %x;
+%Foo::Bar::baz = %x;
+
+#-----------------------------------------------------------------------------
+## name Perl 5 localized variable assignment
+## failures 0
+## cut
+
+local $Foo::Bar = $x;
+local $Foo::Bar::baz = $x;
+
+local @Foo::Bar = @x;
+local @Foo::Bar::baz = @x;
+
+local %Foo::Bar = %x;
+local %Foo::Bar::baz = %x;
+
+local ($Foo::Bar::baz, $Foo::Bar::bam) = @list;
+
+#-----------------------------------------------------------------------------
+## name Perl 4 simple subroutine invocation
 ## failures 8
 ## cut
 
-Foo::bar();
 Foo'bar();
-&Foo::bar;
 &Foo'bar;
-Foo::Bar::baz($x, 'y');
 Foo'Bar::baz($x, 'y');
 Foo::Bar'baz($x, 'y');
 
-my $x = Foo::bar();
 my $x = Foo'bar();
-my $x = &Foo::bar;
 my $x = &Foo'bar;
-my $x = Foo::Bar::baz($x, 'y');
 my $x = Foo'Bar::baz($x, 'y');
 my $x = Foo::Bar'baz($x, 'y');
 
+#-----------------------------------------------------------------------------
+## name Perl 5 simple subroutine invocation
+## failures 0
+## cut
+
+Foo::bar();
+&Foo::bar;
+Foo::Bar::baz($x, 'y');
+my $x = Foo::bar();
+my $x = &Foo::bar;
+my $x = Foo::Bar::baz($x, 'y');
 
 #-----------------------------------------------------------------------------
-
-## name simple direct class method invocation
+## name Perl 4 simple direct class method invocation
 ## failures 8
 ## cut
 
-Foo::bar->new();
 Foo'bar->new();
-&Foo::bar->new;
 &Foo'bar->new;
-Foo::Bar::baz->new($x, 'y');
 Foo'Bar::baz->new($x, 'y');
 Foo::Bar'baz->new($x, 'y');
 
-my $x = Foo::bar->new();
 my $x = Foo'bar->new();
-my $x = &Foo::bar->new;
 my $x = &Foo'bar->new;
-my $x = Foo::Bar::baz->new($x, 'y');
 my $x = Foo'Bar::baz->new($x, 'y');
 my $x = Foo::Bar'baz->new($x, 'y');
 
+#-----------------------------------------------------------------------------
+## name Perl 5 simple direct class method invocation
+## failures 0
+## cut
+
+Foo::bar->new();
+&Foo::bar->new;
+Foo::Bar::baz->new($x, 'y');
+
+my $x = &Foo::bar->new;
+my $x = Foo::bar->new();
+my $x = Foo::Bar::baz->new($x, 'y');
 
 #-----------------------------------------------------------------------------
-
-## name simple indirect class method invocation
+## name Perl 4 simple indirect class method invocation
 ## failures 4
 ## cut
 
-$z = new Foo::bar();
 $z = new Foo'bar();
-$z = new Foo::bar;
 $z = new Foo'bar;
-$z = new Foo::Bar::baz($x, 'y');
 $z = new Foo'Bar::baz($x, 'y');
 $z = new Foo::Bar'baz($x, 'y');
 
+#-----------------------------------------------------------------------------
+## name Perl 5 simple indirect class method invocation
+## failures 0
+## cut
+
+$z = new Foo::bar();
+$z = new Foo::bar;
+$z = new Foo::Bar::baz($x, 'y');
 
 #-----------------------------------------------------------------------------
-
 ## name complicated statements
 ## failures 20
 ## cut
