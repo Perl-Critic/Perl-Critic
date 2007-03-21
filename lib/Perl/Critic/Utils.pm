@@ -59,6 +59,7 @@ our @EXPORT_OK = qw(
     &is_hash_key
     &is_included_module_name
     &is_method_call
+    &is_package_declaration
     &is_perl_builtin
     &is_perl_builtin_with_list_context
     &is_perl_builtin_with_multiple_arguments
@@ -122,6 +123,7 @@ our %EXPORT_TAGS = (
             &is_hash_key
             &is_included_module_name
             &is_method_call
+            &is_package_declaration
             &is_perl_builtin
             &is_perl_global
             &is_perl_builtin_with_list_context
@@ -581,6 +583,17 @@ sub is_method_call {
 
 #-----------------------------------------------------------------------------
 
+sub is_package_declaration {
+    my $elem  = shift;
+    return if !$elem;
+    my $stmnt = $elem->statement();
+    return if !$stmnt;
+    return if !$stmnt->isa('PPI::Statement::Package');
+    return $stmnt->schild(1) == $elem;
+}
+
+#-----------------------------------------------------------------------------
+
 sub is_subroutine_name {
     my $elem  = shift;
     return if !$elem;
@@ -599,6 +612,7 @@ sub is_function_call {
                is_method_call($elem) ||
                is_subroutine_name($elem) ||
                is_included_module_name($elem) ||
+               is_package_declaration($elem) ||
                $elem eq 'sub'
     );
 }
@@ -1004,6 +1018,11 @@ the following examples, 'foo' is considered a hash key:
   $hash1{foo} = 1;
   %hash2 = (foo => 1);
 
+=item C<is_included_module_name( $element )>
+
+Given a L<PPI::Token::Word>, returns true if the element is the name of a
+module that is being included via C<use>, C<require>, or C<no>.
+
 =item C<is_method_call( $element )>
 
 Given a L<PPI::Element> that is presumed to be a function call (which is
@@ -1012,16 +1031,16 @@ called on some reference.  Basically, it just looks to see if the preceding
 operator is "->".  This is useful for distinguishing static function calls
 from object method calls.
 
+=item C<is_package_declaration( $element )>
+
+Given a L<PPI::Token::Word>, returns true if the element is the name of a
+package that is being declared.
+
 =item C<is_subroutine_name( $element )>
 
 Given a L<PPI::Token::Word>, returns true if the element is the name of a
 subroutine declaration.  This is useful for distinguishing barewords and from
 function calls from subroutine declarations.
-
-=item C<is_included_module_name( $element )>
-
-Given a L<PPI::Token::Word>, returns true if the element is the name of a
-module that is being included via C<use>, C<require>, or C<no>.
 
 =item C<is_function_call( $element )>
 
@@ -1243,6 +1262,7 @@ C<&is_function_call>,
 C<&is_hash_key>,
 C<&is_included_module_name>,
 C<&is_method_call>,
+C<&is_package_declaration>,
 C<&is_perl_builtin>,
 C<&is_perl_global>,
 C<&is_script>,
