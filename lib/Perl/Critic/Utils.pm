@@ -589,9 +589,19 @@ sub is_included_module_name {
 sub is_method_call {
     my $elem = shift;
     return if !$elem;
-    my $sib = $elem->sprevious_sibling();
-    return if !$sib;
-    return $sib->isa('PPI::Token::Operator') && $sib eq q{->};
+
+    return 1 if _is_dereference_operator( $elem->sprevious_sibling() );
+    return 1 if _is_dereference_operator( $elem->snext_sibling() );
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _is_dereference_operator {
+    my $elem = shift;
+    return if !$elem;
+
+    return $elem->isa('PPI::Token::Operator') && $elem eq q{->};
 }
 
 #-----------------------------------------------------------------------------
@@ -1047,11 +1057,11 @@ module that is being included via C<use>, C<require>, or C<no>.
 
 =item C<is_method_call( $element )>
 
-Given a L<PPI::Element> that is presumed to be a function call (which is
-usually a L<PPI::Token::Word>), returns true if the function is a method being
-called on some reference.  Basically, it just looks to see if the preceding
-operator is "->".  This is useful for distinguishing static function calls
-from object method calls.
+Given a L<PPI::Token::Word>, returns true if there the element that
+immediately preceeds or follows the given element is the dereference operator
+"->". When a bareword has a "->" on either side of it, it usually (always?)
+means that it is part of a method call.  This is useful for distinguishing
+static function calls from object method calls.
 
 =item C<is_package_declaration( $element )>
 
