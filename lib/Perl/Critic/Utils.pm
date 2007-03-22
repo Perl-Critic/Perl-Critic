@@ -61,6 +61,7 @@ our @EXPORT_OK = qw(
     &is_method_call
     &is_package_declaration
     &is_perl_builtin
+    &is_perl_bareword
     &is_perl_builtin_with_list_context
     &is_perl_builtin_with_multiple_arguments
     &is_perl_builtin_with_no_arguments
@@ -126,6 +127,7 @@ our %EXPORT_TAGS = (
             &is_package_declaration
             &is_perl_builtin
             &is_perl_global
+            &is_perl_bareword
             &is_perl_builtin_with_list_context
             &is_perl_builtin_with_multiple_arguments
             &is_perl_builtin_with_no_arguments
@@ -251,6 +253,17 @@ sub is_perl_builtin {
     return if !$elem;
 
     return exists $BUILTINS{ _name_for_sub_or_stringified_element($elem) };
+}
+
+#-----------------------------------------------------------------------------
+
+my %BAREWORDS = hashify( @B::Keywords::Barewords );
+
+sub is_perl_bareword {
+    my $elem = shift;
+    return if !$elem;
+
+    return exists $BAREWORDS{ _name_for_sub_or_stringified_element($elem) };
 }
 
 #-----------------------------------------------------------------------------
@@ -608,13 +621,16 @@ sub is_subroutine_name {
 
 sub is_function_call {
     my $elem  = shift;
-    return ! ( is_hash_key($elem) ||
-               is_method_call($elem) ||
-               is_subroutine_name($elem) ||
-               is_included_module_name($elem) ||
-               is_package_declaration($elem) ||
-               $elem eq 'sub'
-    );
+    return if ! $elem;
+
+    return if is_hash_key($elem);
+    return if is_method_call($elem);
+    return if is_subroutine_name($elem);
+    return if is_included_module_name($elem);
+    return if is_package_declaration($elem);
+    return if is_perl_bareword($elem);
+
+    return 1;
 }
 
 #-----------------------------------------------------------------------------
@@ -953,6 +969,12 @@ Given a L<PPI::Token::Word>, L<PPI::Statement::Sub>, or string, returns true
 if that token represents a call to any of the builtin functions defined in
 Perl 5.8.8.
 
+=item C<is_perl_bareword( $element )>
+
+Given a L<PPI::Token::Word>, L<PPI::Statement::Sub>, or string, returns true
+if that token represents a bareword (e.g. "if", "else", "sub", "package")
+defined in Perl 5.8.8.
+
 =item C<is_perl_builtin_with_list_context( $element )>
 
 Given a L<PPI::Token::Word>, L<PPI::Statement::Sub>, or string, returns true
@@ -1046,8 +1068,9 @@ function calls from subroutine declarations.
 
 Given a L<PPI::Token::Word> returns true if the element appears to be call to
 a static function.  Specifically, this function returns true if
-C<is_hash_key>, C<is_method_call>, and C<is_subroutine_name> all return false
-for the given element.
+C<is_hash_key>, C<is_method_call>, C<is_subroutine_name>,
+C<is_included_module_anme>, C<is_package_declaration>, C<is_perl_bareword>,
+and C<is_subroutine_name> all return false for the given element.
 
 =item C<first_arg( $element )>
 

@@ -57,7 +57,12 @@ sub violates {
 
     my $expl = $pages_of{$elem};
     return if not $expl;
-    return if not is_function_call($elem);
+
+    return if is_hash_key($elem);
+    return if is_method_call($elem);
+    return if is_subroutine_name($elem);
+    return if is_included_module_name($elem);
+    return if is_package_declaration($elem);
 
     # Skip controls that are allowed
     return if exists $self->{_allow}->{$elem};
