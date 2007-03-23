@@ -55,6 +55,7 @@ our @EXPORT_OK = qw(
     &first_arg
     &hashify
     &interpolate
+    &is_class_name
     &is_function_call
     &is_hash_key
     &is_included_module_name
@@ -120,6 +121,7 @@ our %EXPORT_TAGS = (
     ],
     classification  => [
         qw{
+            &is_class_name
             &is_function_call
             &is_hash_key
             &is_included_module_name
@@ -590,9 +592,16 @@ sub is_method_call {
     my $elem = shift;
     return if !$elem;
 
-    return 1 if _is_dereference_operator( $elem->sprevious_sibling() );
-    return 1 if _is_dereference_operator( $elem->snext_sibling() );
-    return;
+    return _is_dereference_operator( $elem->sprevious_sibling() );
+}
+
+#-----------------------------------------------------------------------------
+
+sub is_class_name {
+    my $elem = shift;
+    return if !$elem;
+
+    return _is_dereference_operator( $elem->snext_sibling() );
 }
 
 #-----------------------------------------------------------------------------
@@ -635,6 +644,7 @@ sub is_function_call {
 
     return if is_hash_key($elem);
     return if is_method_call($elem);
+    return if is_class_name($elem);
     return if is_subroutine_name($elem);
     return if is_included_module_name($elem);
     return if is_package_declaration($elem);
@@ -1045,7 +1055,7 @@ doesn't distinguish between regular barewords (like keywords or subroutine
 calls) and barewords in hash subscripts (which are considered literal).  So
 this subroutine is useful if your Policy is searching for L<PPI::Token::Word>
 elements and you want to filter out the hash subscript variety.  In both of
-the following examples, 'foo' is considered a hash key:
+the following examples, "foo" is considered a hash key:
 
   $hash1{foo} = 1;
   %hash2 = (foo => 1);
@@ -1055,13 +1065,19 @@ the following examples, 'foo' is considered a hash key:
 Given a L<PPI::Token::Word>, returns true if the element is the name of a
 module that is being included via C<use>, C<require>, or C<no>.
 
+=item C<is_class_name( $element )>
+
+Given a L<PPI::Token::Word>, returns true if the element that immediately
+follows this element is the dereference operator "->". When a bareword has a
+"->" on the B<right> side, it usually means that it is the name of the class
+(from which a method is being called).
+
 =item C<is_method_call( $element )>
 
-Given a L<PPI::Token::Word>, returns true if there the element that
-immediately preceeds or follows the given element is the dereference operator
-"->". When a bareword has a "->" on either side of it, it usually (always?)
-means that it is part of a method call.  This is useful for distinguishing
-static function calls from object method calls.
+Given a L<PPI::Token::Word>, returns true if the element that immediately
+precedes this element is the dereference operator "->". When a bareword has a
+"->" on the B<left> side, it usually means that it is the name of a method
+(that is being called from a class).
 
 =item C<is_package_declaration( $element )>
 
