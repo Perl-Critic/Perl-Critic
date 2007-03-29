@@ -296,6 +296,13 @@ in Perl::Critic might look something like this:
      }
   }
 
+=item * Some means of detecting "runnaway" C<##no critic>
+
+Elliot was talking to a couple of users at ETech and one of their major
+concerns was that they were using C<##no critic> and forgetting to do a
+C<##use critic> after the problematic section.  Perhaps an option to
+F<perlcritic> to scan for such things is in order.
+
 =item * Change API to use named parameters
 
 Most of the methods on the public classes use named parameters for passing
