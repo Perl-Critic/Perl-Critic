@@ -59,6 +59,7 @@ our @EXPORT_OK = qw(
     &is_function_call
     &is_hash_key
     &is_included_module_name
+    &is_label_pointer
     &is_method_call
     &is_package_declaration
     &is_perl_builtin
@@ -126,6 +127,7 @@ our %EXPORT_TAGS = (
             &is_function_call
             &is_hash_key
             &is_included_module_name
+            &is_label_pointer
             &is_method_call
             &is_package_declaration
             &is_perl_bareword
@@ -601,6 +603,22 @@ sub is_included_module_name {
 
 #-----------------------------------------------------------------------------
 
+sub is_label_pointer {
+    my $elem = shift;
+    return if !$elem;
+
+    my $statement = $elem->statement();
+    return if !$statement;
+
+    my $psib = $elem->sprevious_sibling();
+    return if !$psib;
+
+    return $statement->isa('PPI::Statement::Break')
+        && $psib =~ m/(?:redo|goto|next|last)/mxo;
+}
+
+#-----------------------------------------------------------------------------
+
 sub is_method_call {
     my $elem = shift;
     return if !$elem;
@@ -663,6 +681,7 @@ sub is_function_call {
     return if is_package_declaration($elem);
     return if is_perl_bareword($elem);
     return if is_perl_filehandle($elem);
+    return if is_label_pointer($elem);
 
     return 1;
 }
@@ -1093,6 +1112,12 @@ follows this element is the dereference operator "->". When a bareword has a
 "->" on the B<right> side, it usually means that it is the name of the class
 (from which a method is being called).
 
+=item C<is_label_pointer( $element )>
+
+Given a L<PPI::Token::Word>, returns true if the element is the label
+in a C<next>, C<last>, C<redo>, or C<goto> statement.  Note this is not the
+same thing as the label declaration.
+
 =item C<is_method_call( $element )>
 
 Given a L<PPI::Token::Word>, returns true if the element that immediately
@@ -1117,7 +1142,8 @@ Given a L<PPI::Token::Word> returns true if the element appears to be call to
 a static function.  Specifically, this function returns true if
 C<is_hash_key>, C<is_method_call>, C<is_subroutine_name>,
 C<is_included_module_anme>, C<is_package_declaration>, C<is_perl_bareword>,
-and C<is_subroutine_name> all return false for the given element.
+C<is_perl_filehandle>, C<is_label_pointer> and C<is_subroutine_name> all
+return false for the given element.
 
 =item C<first_arg( $element )>
 
