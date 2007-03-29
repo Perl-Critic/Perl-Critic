@@ -859,6 +859,10 @@ in more detail in the individual modules themselves.  Say C<"perlcritic -doc
 PATTERN"> to see the perldoc for all Policy modules that match the regex
 C<m/PATTERN/imx>
 
+There are a number of distributions of additional policies on CPAN.  If
+L<Perl::Critic> doesn't contain a policy that you want, some one may have
+already written it.  Some of these can be found via L<Bundle::Perl::Critic>.
+
 =head1 POLICY THEMES
 
 Each Policy is defined with one or more "themes".  Themes can be used to
