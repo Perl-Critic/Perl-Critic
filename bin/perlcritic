@@ -12,7 +12,7 @@ package main;
 
 use strict;
 use warnings;
-use Carp qw(carp confess);
+use Carp qw(confess);
 use English qw(-no_match_vars);
 use Getopt::Long qw(GetOptions);
 use List::Util qw(first);
@@ -191,17 +191,18 @@ sub critique {
     my $count  = undef;
 
 
-    eval {
+    for my $file (@files) {
 
-        for my $file (@files) {
+        eval {
             my @violations = $CRITIC->critique($file);
             render_report( $file, $opts_ref, @violations );
             $count += scalar @violations;
-        }
-    };
+        };
 
+        confess qq{Fatal error while critiquing "$file": $EVAL_ERROR}
+            if $EVAL_ERROR;
+    }
 
-    carp qq{$EVAL_ERROR} if $EVAL_ERROR;
     return $count;
 }
 
