@@ -69,6 +69,7 @@ our @EXPORT_OK = qw(
     &is_perl_builtin_with_one_argument
     &is_perl_builtin_with_optional_argument
     &is_perl_builtin_with_zero_and_or_one_arguments
+    &is_perl_filehandle
     &is_perl_global
     &is_script
     &is_subroutine_name
@@ -127,9 +128,10 @@ our %EXPORT_TAGS = (
             &is_included_module_name
             &is_method_call
             &is_package_declaration
-            &is_perl_builtin
-            &is_perl_global
             &is_perl_bareword
+            &is_perl_builtin
+            &is_perl_filehandle
+            &is_perl_global
             &is_perl_builtin_with_list_context
             &is_perl_builtin_with_multiple_arguments
             &is_perl_builtin_with_no_arguments
@@ -282,6 +284,17 @@ sub is_perl_global {
     my $var_name = "$elem"; #Convert Token::Symbol to string
     $var_name =~ s{\A [\$@%] }{}mx;  #Chop off the sigil
     return exists $GLOBALS{ $var_name };
+}
+
+#-----------------------------------------------------------------------------
+
+my %FILEHANDLES = hashify( @B::Keywords::Filehandles );
+
+sub is_perl_filehandle {
+    my $elem = shift;
+    return if !$elem;
+
+    return exists $FILEHANDLES{ _name_for_sub_or_stringified_element($elem) };
 }
 
 ## use critic
@@ -649,6 +662,7 @@ sub is_function_call {
     return if is_included_module_name($elem);
     return if is_package_declaration($elem);
     return if is_perl_bareword($elem);
+    return if is_perl_filehandle($elem);
 
     return 1;
 }
@@ -994,6 +1008,13 @@ Perl 5.8.8.
 Given a L<PPI::Token::Word>, L<PPI::Statement::Sub>, or string, returns true
 if that token represents a bareword (e.g. "if", "else", "sub", "package")
 defined in Perl 5.8.8.
+
+=item C<is_perl_filehandle( $element )>
+
+Given a L<PPI::Token::Word>, or string, returns true if that token represents
+one of the global filehandles (e.g. C<STDIN>, C<STDERR>, C<STDOUT>, C<ARGV>)
+that are defined in Perl 5.8.8.  Note that this function will return false if
+given a filehandle that is represented as a typeglob (e.g. C<*STDIN>)
 
 =item C<is_perl_builtin_with_list_context( $element )>
 
