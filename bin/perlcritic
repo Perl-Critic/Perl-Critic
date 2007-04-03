@@ -1163,6 +1163,9 @@ any bugs, particularly false-positives or false-negatives from a
 Perl::Critic::Policy, please submit them to
 L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Perl-Critic>.  Thanks.
 
+Most policies will produce false-negatives if they cannot understand a
+particular block of code.
+
 =head1 CREDITS
 
 Adam Kennedy - For creating L<PPI>, the heart and soul of L<Perl::Critic>.
