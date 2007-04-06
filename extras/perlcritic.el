@@ -83,6 +83,9 @@
 
 
 ;;; Change Log:
+;; 0.10
+;;   * Synched up regexp alist with Perl::Critic::Utils and accounted for all
+;;     past patterns too.
 ;; 0.09
 ;;   * Added documentation for perlcritic-top, perlcritic-include,
 ;;     perlcritic-exclude, perlcritic-force, perlcritic-verbose.
@@ -314,29 +317,70 @@ per-file basis with File Variables."
 ;; red. The following advice on COMPILATION-FIND-FILE makes sure that
 ;; the "filename" is getting ignored when perlcritic is using it.
 
-;; Verbosity     Format Specification
-;; -----------   --------------------------------------------------------------------
-;; 1             "%f:%l:%c:%m\n"
-;; 2             "%m at line %l, column %c.  %e. (Severity: %s)\n"
-;; 3             "%f: %m at line %l, column %c.  %e. (Severity: %s)\n"
-;; 4             "%m near '%r'. (Severity: %s)\n"
-;; 5             "%f: %m near '%r'. (Severity: %s)\n"
-;; 6             "%m at line %l, column %c near '%r'.  %e. (Severity: %s)\n"
-;; 7             "%f: %m at line %l, column %c near '%r'.  %e. (Severity: %s)\n"
-;; 8             "[%p] %m at line %l, column %c near '%r'.  %e. (Severity: %s)\n"
-;; 9             "[%p] %m at line %l, column %c near '%r'.  %e. (Severity: %s)\n%d\n"
-(defvar perlcritic-compilation-error-regexp-alist
-  '(("^\\([^\n]+\\):\\([0-9]+\\):\\([0-9]+\\):[^\n]+$" 1 2 3)
-    ("^[^\n]+ at line \\([0-9]+\\), column \\([0-9]+\\).  [^\n]+. (Severity: \\([0-9]+\\))$" 3 1 2)
-    ("^\\([^\n]+\\): [^\n]+ at line \\([0-9]+\\), column \\([0-9]+\\).  [^\n]+. (Severity: [0-9]+)$" 1 2 3)
-    ("^[^\n]+ near '[^\n]+'. (Severity: [0-9]+)$" 1)
-    ("^\\([^\n]+\\): [^\n]+ near '[^\n]+'. (Severity: [0-9]+)$" 1)
-    ("^[^\n]+ at line \\([0-9]+\\), column \\([0-9]+\\) near '[^\n]+'.  [^\n]+. (Severity: [0-9]+)" 3 1 2)
-    ("^\\([^\n]+\\): [^\n]+ at line \\([0-9]+\\), column \\([0-9]+\\) near '[^\n]+'.  [^\n]+. (Severity: [^\n]+)$" 1 2 3)
-    ("\\[[^\n]+\\] [^\n]+ at line \\([0-9]+\\), column \\([0-9]+\\) near '[0-9]+;.  [^\n]+. (Severity: [^\n]+)$" 3 1 2)
-    ("\\[[^\n]+\\] [^\n]+ at line \\([0-9]+\\), column \\([0-9]+\\) near '[^\n]+'.  [^\n]+. (Severity: \\([^\n]+\\))" 3 1 2))
-  "Alist that specified how to match errors in perlcritic output.")
+;; These patterns are defined in Perl::Critic::Utils
 
+(defvar perlcritic-compilation-error-regexp-alist
+  '(;; Verbose level 1
+    ;;  "%f:%l:%c:%m\n"
+    ("^\\([^\n]+\\):\\([0-9]+\\):\\([0-9]+\\)" 1 2 3)
+
+    ;; Verbose level 2
+    ;;  "%f: (%l:%c) %m\n"
+    ("^\\([^\n]+\\): (\\([0-9]+\\):\\([0-9]+\\))" 1 2 3)
+
+    ;; Verbose level 3
+    ;;   "%m at %f line %l\n"
+    ("^[^\n]+ at \\([^\n]+\\) line \\([0-9]+\\)" 1 2)
+    ;;   "%m at line %l, column %c.  %e.  (Severity: %s)\n"
+    ("^[^\n]+ at line\\( \\)\\([0-9]+\\), column \\([0-9]+\\)." 1 2 3)
+
+    ;; Verbose level 4
+    ;;   "%m at line %l, column %c.  %e.  (Severity: %s)\n"
+    ("^[^\n]+ at line\\( \\)\\([0-9]+\\), column \\([0-9]+\\)." 1 2 3)
+    ;;   "%f: %m at line %l, column %c.  %e.  (Severity: %s)\n"
+    ("^\\([^\n]+\\): [^\n]+ at line \\([0-9]+\\), column \\([0-9]+\\)" 1 2 3)
+
+    ;; Verbose level 5
+    ;;    "%m at line %l, near '%r'.  (Severity: %s)\n"
+    ("^[^\n]+ at line\\( \\)\\([0-9]+\\)," 1 2)
+    ;;    "%f: %m at line %l, column %c.  %e.  (Severity: %s)\n"
+    ("^\\([^\n]+\\): [^\n]+ at line \\([0-9]+\\), column \\([0-9]+\\)" 1 2 3)
+    
+    ;; Verbose level 6
+    ;;    "%m at line %l, near '%r'.  (Severity: %s)\\n"
+    ("^[^\n]+ at line\\( \\)\\([0-9]+\\)" 1 2)
+    ;;    "%f: %m at line %l near '%r'.  (Severity: %s)\n"
+    ("^\\([^\n]+\\): [^\n]+ at line \\([0-9]+\\)" 1 2)
+
+    ;; Verbose level 7
+    ;;    "%f: %m at line %l near '%r'.  (Severity: %s)\n"
+    ("^\\([^\n]+\\): [^\n]+ at line \\([0-9]+\\)" 1 2)
+    ;;    "[%p] %m at line %l, column %c.  (Severity: %s)\n"
+    ("^\\[[^\n]+\\] [^\n]+ at line\\( \\)\\([0-9]+\\), column \\([0-9]+\\)" 1 2 3)
+
+    ;; Verbose level 8
+    ;;    "[%p] %m at line %l, column %c.  (Severity: %s)\n"
+    ("^\\[[^\n]+\\] [^\n]+ at line\\( \\)\\([0-9]+\\), column \\([0-9]+\\)" 1 2 3)
+    ;;    "[%p] %m at line %l, near '%r'.  (Severity: %s)\n"
+    ("^\\[[^\n]+\\] [^\n]+ at line\\( \\)\\([0-9]+\\)" 1 2)
+    
+    ;; Verbose level 9
+    ;;    "%m at line %l, column %c.\n  %p (Severity: %s)\n%d\n"
+    ("^[^\n]+ at line\\( \\)\\([0-9]+\\), column \\([0-9]+\\)" 1 2 3)
+    ;;    "[%p] %m at line %l, near '%r'.  (Severity: %s)\n"
+    ("^\\[[^\n]+\\] [^\n]+ at line\\( \\)\\([0-9]+\\)" 1 2)
+    
+    ;; Verbose level 10
+    ;;    "%m at line %l, near '%r'.\n  %p (Severity: %s)\n%d\n"
+    ("^[^\n]+ at line\\( \\)\\([0-9]+\\)" 1 2)
+    ;;    "%m at line %l, column %c.\n  %p (Severity: %s)\n%d\n"
+    ("^[^\n]+ at line\\( \\)\\([0-9]+\\), column \\([0-9]+\\)" 1 2 3)
+    
+    ;; Verbose level 11
+    ;;    "%m at line %l, near '%r'.\n  %p (Severity: %s)\n%d\n"
+    ("^[^\n]+ at line\\( \\)\\([0-9]+\\)" 1 2)
+    )
+  "Alist that specified how to match errors in perlcritic output.")
 
 
 
