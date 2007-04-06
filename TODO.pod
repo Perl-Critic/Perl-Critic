@@ -206,7 +206,7 @@ Anything that is a program should have a shebang line.  This includes .t files.
 
 =item * BuiltInFunctions::RequireConstantUnpackFormat
 
-L<http://home.earthlink.net/~josh.jore/new-warnings/slides/slide1.html>
+L<http://diotalevi.isa-geek.net/~josh/yapc-lint/slides/slide5.html>
 
 =item * Miscellanea::ProhibitObnoxiousComments
 
