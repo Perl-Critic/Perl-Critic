@@ -775,6 +775,8 @@ sub _split_nodes_on_comma {
 
 #-----------------------------------------------------------------------------
 
+# XXX: You must keep the regular expressions in extras/perlcritic.el in sync
+# if you change these.
 my %FORMAT_OF = (
     1 => "%f:%l:%c:%m\n",
     2 => "%f: (%l:%c) %m\n",
