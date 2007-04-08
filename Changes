@@ -5,6 +5,19 @@
 # $Revision$
 ##############################################################################
 
+[1.06]  Released on ????-??-??
+
+     Internals:
+     * Added several new utility functions to support the StricterSubs distro.
+       Also, some of the existing functions in Perl-Critic-Utils have
+       changed in ways that might break your custom policies.
+
+     Miscellanea:
+     * Updated Emacs plugin (Courtesy Josh ben Jore).
+       See extras/perlcritic.el for details.
+     * Added copy of BBEdit plugin (Courtesy of Josh Clark).
+       See extras/perl_critic_for_bbedit-1_0.zip for details
+
 [1.05]  Released on 2007-03-19
 
      Bug Fixes:
