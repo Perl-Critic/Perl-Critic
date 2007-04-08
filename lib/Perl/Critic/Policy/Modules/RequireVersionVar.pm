@@ -13,7 +13,7 @@ use Perl::Critic::Utils qw{ :severities };
 use List::MoreUtils qw(any);
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 1.05;
+our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
@@ -121,8 +121,8 @@ This Policy scans your file for any package variable named
 C<$VERSION>.  I'm assuming that you are using C<strict>, so you'll
 have to declare it like one of these:
 
-  our $VERSION = 1.051;
-  $MyPackage::VERSION = 1.051;
+  our $VERSION = 1.061;
+  $MyPackage::VERSION = 1.061;
   use vars qw($VERSION);
 
 A common practice is to use the C<$Revision$> keyword to automatically
