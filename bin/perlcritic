@@ -1110,9 +1110,17 @@ myself, but other folks say it works.
 
 =head2 BBEdit
 
-Josh Clark has produced an excellent Perl-Critic plugin for BBEdit. See
-L<http://beta.bigmedium.com/projects/bbedit-perl-critic/index.shtml> for more
-information.  Apple users rejoice!
+Josh Clark has produced an excellent Perl-Critic plugin for BBEdit. A copy is
+included in this distro at F<extras/perl_critic_for_bbedit-1_0.zip>. See
+L<http://beta.bigmedium.com/projects/bbedit-perl-critic/index.shtml> for
+screenshots and additional installation info.  Apple users rejoice!
+
+=head2 Komodo
+
+Komodo is a proprietary IDE for Perl and several other dynamic languages.
+Free trial copies of Komodo can be obtained from the ActiveState website at
+L<http://www.activestate.com>. For instructions on integrating F<perlcritic>
+with Komodo, see F<extras/KomodoIntegration.pod> in this distro.
 
 =head1 EXIT STATUS
 
