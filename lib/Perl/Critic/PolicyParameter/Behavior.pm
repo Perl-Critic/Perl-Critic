@@ -13,7 +13,7 @@ use Carp qw(confess);
 
 use Perl::Critic::Utils qw{ :characters };
 
-our $VERSION = 1.05;
+our $VERSION = 1.051;
 
 #-----------------------------------------------------------------------------
 

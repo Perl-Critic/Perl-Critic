@@ -1,10 +1,10 @@
 ;;; perlcritic.el --- minor mode for Perl::Critic integration
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;     $URL$
-;;;    $Date$
-;;;  $Author$
-;;; $Revison: $
+;;;      $URL$
+;;;     $Date$
+;;;   $Author$
+;;; $Revision$
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
@@ -83,6 +83,14 @@
 
 
 ;;; Change Log:
+;; 0.10
+;;   * Synched up regexp alist with Perl::Critic::Utils and accounted for all
+;;     past patterns too.
+;; 0.09
+;;   * Added documentation for perlcritic-top, perlcritic-include,
+;;     perlcritic-exclude, perlcritic-force, perlcritic-verbose.
+;;   * Added emacs/vim editor hints to the bottom.
+;;   * Corrected indentation.
 ;; 0.08
 ;;   * Fixed perlcritic-compilation-error-regexp-alist for all
 ;;     severity levels.
@@ -187,7 +195,7 @@ per-file basis with File Variables."
 (make-variable-buffer-local 'perlcritic-severity)
 
 (defcustom perlcritic-top nil
-  "Directs perlcritic to report only the top N Policy violations in
+  "Directs \"perlcritic\" to report only the top N Policy violations in
 each file, ranked by their severity. If the -severity option is not
 explicitly given, the -top option implies that the minimum severity
 level is 1. Users can redefine the severity for any Policy in their
@@ -200,26 +208,94 @@ per-file basis with File Variables."
 (make-variable-buffer-local 'perlcritic-top)
 
 (defcustom perlcritic-include nil
-  "TODO: document perlcritic-include"
+  "Directs \"perlcritic\" to apply additional Policies that match the regex \"/PATTERN/imx\".
+Use this option to override your profile and/or the severity settings.
+
+For example:
+
+  layout
+
+This would cause \"perlcritic\" to apply all the \"CodeLayout::*\" policies
+even if they have a severity level that is less than the default level of 5,
+or have been disabled in your .perlcriticrc file.  You can specify multiple
+`perlcritic-include' options and you can use it in conjunction with the
+`perlcritic-exclude' option.  Note that `perlcritic-exclude' takes precedence
+over `perlcritic-include' when a Policy matches both patterns.  You can set
+the default value for this option in your .perlcriticrc file."
   :type '(string)
   :group 'perlcritic)
 (make-variable-buffer-local 'perlcritic-include)
 
 (defcustom perlcritic-exclude nil
-  "TODO: document perlcritic-exclude"
+  "Directs \"perlcritic\" to not apply any Policy that matches the regex
+\"/PATTERN/imx\".  Use this option to temporarily override your profile and/or
+the severity settings at the command-line.  For example:
+
+  strict
+
+This would cause \"perlcritic\" to not apply the \"RequireUseStrict\" and
+\"ProhibitNoStrict\" Policies even though they have the highest severity
+level.  You can specify multiple `perlcritic-exclude' options and you can use
+it in conjunction with the `perlcritic-include' option.  Note that
+`perlcritic-exclude' takes precedence over `perlcritic-include' when a Policy
+matches both patterns.  You can set the default value for this option in your
+.perlcriticrc file."
   :type '(string)
   :group 'perlcritic)
 (make-variable-buffer-local 'perlcritic-exclude)
 
 
 (defcustom perlcritic-force nil
-  "TODO: document perlcritic-force"
+  "Directs \"perlcritic\" to ignore the magical \"## no critic\"
+pseudo-pragmas in the source code. You can set the default value for this
+option in your .perlcriticrc file."
   :type '(boolean)
   :group 'perlcritic)
 (make-variable-buffer-local 'perlcritic-force)
 
 (defcustom perlcritic-verbose nil
-  "TODO: Document this.
+  "Sets the numeric verbosity level or format for reporting violations. If
+given a number (\"N\"), \"perlcritic\" reports violations using one of the
+predefined formats described below. If the `perlcritic-verbose' option is not
+specified, it defaults to either 4 or 5, depending on whether multiple files
+were given as arguments to \"perlcritic\".  You can set the default value for
+this option in your .perlcriticrc file.
+
+Verbosity     Format Specification
+-----------   -------------------------------------------------------------
+ 1            \"%f:%l:%c:%m\n\",
+ 2            \"%f: (%l:%c) %m\n\",
+ 3            \"%m at %f line %l\n\",
+ 4            \"%m at line %l, column %c.  %e.  (Severity: %s)\n\",
+ 5            \"%f: %m at line %l, column %c.  %e.  (Severity: %s)\n\",
+ 6            \"%m at line %l, near ’%r’.  (Severity: %s)\n\",
+ 7            \"%f: %m at line %l near ’%r’.  (Severity: %s)\n\",
+ 8            \"[%p] %m at line %l, column %c.  (Severity: %s)\n\",
+ 9            \"[%p] %m at line %l, near ’%r’.  (Severity: %s)\n\",
+10            \"%m at line %l, column %c.\n  %p (Severity: %s)\n%d\n\",
+11            \"%m at line %l, near ’%r’.\n  %p (Severity: %s)\n%d\n\"
+
+Formats are a combination of literal and escape characters similar to the way
+\"sprintf\" works.  See String::Format for a full explanation of the
+formatting capabilities.  Valid escape characters are:
+
+Escape    Meaning
+-------   ----------------------------------------------------------------
+%c        Column number where the violation occurred
+%d        Full diagnostic discussion of the violation
+%e        Explanation of violation or page numbers in PBP
+%F        Just the name of the file where the violation occurred.
+%f        Path to the file where the violation occurred.
+%l        Line number where the violation occurred
+%m        Brief description of the violation
+%P        Full name of the Policy module that created the violation
+%p        Name of the Policy without the Perl::Critic::Policy:: prefix
+%r        The string of source code that caused the violation
+%s        The severity level of the violation
+
+The purpose of these formats is to provide some compatibility with text
+editors that have an interface for parsing certain kinds of input.
+
 
 This variable is automatically buffer-local and may be overridden on a
 per-file basis with File Variables."
@@ -241,29 +317,70 @@ per-file basis with File Variables."
 ;; red. The following advice on COMPILATION-FIND-FILE makes sure that
 ;; the "filename" is getting ignored when perlcritic is using it.
 
-;; Verbosity     Format Specification
-;; -----------   --------------------------------------------------------------------
-;; 1             "%f:%l:%c:%m\n"
-;; 2             "%m at line %l, column %c.  %e. (Severity: %s)\n"
-;; 3             "%f: %m at line %l, column %c.  %e. (Severity: %s)\n"
-;; 4             "%m near '%r'. (Severity: %s)\n"
-;; 5             "%f: %m near '%r'. (Severity: %s)\n"
-;; 6             "%m at line %l, column %c near '%r'.  %e. (Severity: %s)\n"
-;; 7             "%f: %m at line %l, column %c near '%r'.  %e. (Severity: %s)\n"
-;; 8             "[%p] %m at line %l, column %c near '%r'.  %e. (Severity: %s)\n"
-;; 9             "[%p] %m at line %l, column %c near '%r'.  %e. (Severity: %s)\n%d\n"
-(defvar perlcritic-compilation-error-regexp-alist
-  '(("^\\([^\n]+\\):\\([0-9]+\\):\\([0-9]+\\):[^\n]+$" 1 2 3)
-    ("^[^\n]+ at line \\([0-9]+\\), column \\([0-9]+\\).  [^\n]+. (Severity: \\([0-9]+\\))$" 3 1 2)
-    ("^\\([^\n]+\\): [^\n]+ at line \\([0-9]+\\), column \\([0-9]+\\).  [^\n]+. (Severity: [0-9]+)$" 1 2 3)
-    ("^[^\n]+ near '[^\n]+'. (Severity: [0-9]+)$" 1)
-    ("^\\([^\n]+\\): [^\n]+ near '[^\n]+'. (Severity: [0-9]+)$" 1)
-    ("^[^\n]+ at line \\([0-9]+\\), column \\([0-9]+\\) near '[^\n]+'.  [^\n]+. (Severity: [0-9]+)" 3 1 2)
-    ("^\\([^\n]+\\): [^\n]+ at line \\([0-9]+\\), column \\([0-9]+\\) near '[^\n]+'.  [^\n]+. (Severity: [^\n]+)$" 1 2 3)
-    ("\\[[^\n]+\\] [^\n]+ at line \\([0-9]+\\), column \\([0-9]+\\) near '[0-9]+;.  [^\n]+. (Severity: [^\n]+)$" 3 1 2)
-    ("\\[[^\n]+\\] [^\n]+ at line \\([0-9]+\\), column \\([0-9]+\\) near '[^\n]+'.  [^\n]+. (Severity: \\([^\n]+\\))" 3 1 2))
-  "Alist that specified how to match errors in perlcritic output.")
+;; These patterns are defined in Perl::Critic::Utils
 
+(defvar perlcritic-compilation-error-regexp-alist
+  '(;; Verbose level 1
+    ;;  "%f:%l:%c:%m\n"
+    ("^\\([^\n]+\\):\\([0-9]+\\):\\([0-9]+\\)" 1 2 3)
+
+    ;; Verbose level 2
+    ;;  "%f: (%l:%c) %m\n"
+    ("^\\([^\n]+\\): (\\([0-9]+\\):\\([0-9]+\\))" 1 2 3)
+
+    ;; Verbose level 3
+    ;;   "%m at %f line %l\n"
+    ("^[^\n]+ at \\([^\n]+\\) line \\([0-9]+\\)" 1 2)
+    ;;   "%m at line %l, column %c.  %e.  (Severity: %s)\n"
+    ("^[^\n]+ at line\\( \\)\\([0-9]+\\), column \\([0-9]+\\)." 1 2 3)
+
+    ;; Verbose level 4
+    ;;   "%m at line %l, column %c.  %e.  (Severity: %s)\n"
+    ("^[^\n]+ at line\\( \\)\\([0-9]+\\), column \\([0-9]+\\)." 1 2 3)
+    ;;   "%f: %m at line %l, column %c.  %e.  (Severity: %s)\n"
+    ("^\\([^\n]+\\): [^\n]+ at line \\([0-9]+\\), column \\([0-9]+\\)" 1 2 3)
+
+    ;; Verbose level 5
+    ;;    "%m at line %l, near '%r'.  (Severity: %s)\n"
+    ("^[^\n]+ at line\\( \\)\\([0-9]+\\)," 1 2)
+    ;;    "%f: %m at line %l, column %c.  %e.  (Severity: %s)\n"
+    ("^\\([^\n]+\\): [^\n]+ at line \\([0-9]+\\), column \\([0-9]+\\)" 1 2 3)
+    
+    ;; Verbose level 6
+    ;;    "%m at line %l, near '%r'.  (Severity: %s)\\n"
+    ("^[^\n]+ at line\\( \\)\\([0-9]+\\)" 1 2)
+    ;;    "%f: %m at line %l near '%r'.  (Severity: %s)\n"
+    ("^\\([^\n]+\\): [^\n]+ at line \\([0-9]+\\)" 1 2)
+
+    ;; Verbose level 7
+    ;;    "%f: %m at line %l near '%r'.  (Severity: %s)\n"
+    ("^\\([^\n]+\\): [^\n]+ at line \\([0-9]+\\)" 1 2)
+    ;;    "[%p] %m at line %l, column %c.  (Severity: %s)\n"
+    ("^\\[[^\n]+\\] [^\n]+ at line\\( \\)\\([0-9]+\\), column \\([0-9]+\\)" 1 2 3)
+
+    ;; Verbose level 8
+    ;;    "[%p] %m at line %l, column %c.  (Severity: %s)\n"
+    ("^\\[[^\n]+\\] [^\n]+ at line\\( \\)\\([0-9]+\\), column \\([0-9]+\\)" 1 2 3)
+    ;;    "[%p] %m at line %l, near '%r'.  (Severity: %s)\n"
+    ("^\\[[^\n]+\\] [^\n]+ at line\\( \\)\\([0-9]+\\)" 1 2)
+    
+    ;; Verbose level 9
+    ;;    "%m at line %l, column %c.\n  %p (Severity: %s)\n%d\n"
+    ("^[^\n]+ at line\\( \\)\\([0-9]+\\), column \\([0-9]+\\)" 1 2 3)
+    ;;    "[%p] %m at line %l, near '%r'.  (Severity: %s)\n"
+    ("^\\[[^\n]+\\] [^\n]+ at line\\( \\)\\([0-9]+\\)" 1 2)
+    
+    ;; Verbose level 10
+    ;;    "%m at line %l, near '%r'.\n  %p (Severity: %s)\n%d\n"
+    ("^[^\n]+ at line\\( \\)\\([0-9]+\\)" 1 2)
+    ;;    "%m at line %l, column %c.\n  %p (Severity: %s)\n%d\n"
+    ("^[^\n]+ at line\\( \\)\\([0-9]+\\), column \\([0-9]+\\)" 1 2 3)
+    
+    ;; Verbose level 11
+    ;;    "%m at line %l, near '%r'.\n  %p (Severity: %s)\n%d\n"
+    ("^[^\n]+ at line\\( \\)\\([0-9]+\\)" 1 2)
+    )
+  "Alist that specified how to match errors in perlcritic output.")
 
 
 
@@ -287,11 +404,11 @@ whether the region passes perlcritic's check. If there are any
 warnings those are displayed in a separate buffer."
 
   (interactive "r")
-
+  
   ;; Kill the perlcritic buffer so I can make a new one.
   (if (get-buffer "*perlcritic*")
       (kill-buffer "*perlcritic*"))
-
+  
   ;; In the following lines I'll be switching between buffers
   ;; freely. This upper save-excursion will keep things sane.
   (save-excursion
@@ -323,7 +440,7 @@ warnings those are displayed in a separate buffer."
                                       (list err-buf t)
                                       nil)
                                 perlcritic-args))))
-
+          
           ;; Figure out whether we're ok or not. perlcritic has to
           ;; return zero and the output buffer has to be empty except
           ;; for that "... source OK" line. Different versions of the
@@ -378,7 +495,7 @@ warnings those are displayed in a separate buffer."
               (set (make-local-variable 'compilation-error-regexp-alist)
 		   perlcritic-compilation-error-regexp-alist)
               (ad-activate #'compilation-find-file)
-	      ; (ad-deactivate #'compilation-find-file)
+                                        ; (ad-deactivate #'compilation-find-file)
               (display-buffer err-buf))
 	    
 	    ;; Return our success or failure.
@@ -552,5 +669,13 @@ require that the perl document exist in a file anywhere."
                 minor-mode-alist)))
 
 (provide 'perlcritic)
+
+;; Local Variables:
+;; mode: emacs-lisp
+;; tab-width: 8
+;; fill-column: 78
+;; indent-tabs-mode: nil
+;; End:
+;; ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :
 
 ;;; perlcritic.el ends here

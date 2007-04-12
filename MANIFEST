@@ -5,6 +5,7 @@ examples/generatestats
 examples/loadanalysisdb
 examples/perlcriticrc
 examples/perlcriticrc-conway
+extras/KomodoIntegration.pod
 extras/perlcritic.el
 INSTALL
 lib/Perl/Critic.pm

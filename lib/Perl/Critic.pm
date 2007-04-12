@@ -24,7 +24,7 @@ use PPI::Document::File;
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = 1.05;
+our $VERSION = 1.051;
 our @EXPORT_OK = qw(&critique);
 
 #-----------------------------------------------------------------------------
@@ -698,6 +698,10 @@ in more detail in the individual modules themselves.  Say C<"perlcritic -doc
 PATTERN"> to see the perldoc for all Policy modules that match the regex
 C<m/PATTERN/imx>
 
+There are a number of distributions of additional policies on CPAN.  If
+L<Perl::Critic> doesn't contain a policy that you want, some one may have
+already written it.  Some of these can be found via L<Bundle::Perl::Critic>.
+
 
 =head1 POLICY THEMES
 
@@ -976,6 +980,9 @@ Scrutinizing Perl code is hard for humans, let alone machines.  If you find
 any bugs, particularly false-positives or false-negatives from a
 Perl::Critic::Policy, please submit them to
 L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Perl-Critic>.  Thanks.
+
+Most policies will produce false-negatives if they cannot understand a
+particular block of code.
 
 =head1 CREDITS
 

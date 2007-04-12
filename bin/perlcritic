@@ -12,7 +12,7 @@ package main;
 
 use strict;
 use warnings;
-use Carp qw(carp confess);
+use Carp qw(confess);
 use English qw(-no_match_vars);
 use Getopt::Long qw(GetOptions);
 use List::Util qw(first);
@@ -22,7 +22,7 @@ use Pod::Usage qw(pod2usage);
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = 1.05;
+our $VERSION = 1.051;
 
 #-----------------------------------------------------------------------------
 # Begin script.  Don't run when loaded as a library
@@ -191,17 +191,18 @@ sub critique {
     my $count  = undef;
 
 
-    eval {
+    for my $file (@files) {
 
-        for my $file (@files) {
+        eval {
             my @violations = $CRITIC->critique($file);
             render_report( $file, $opts_ref, @violations );
             $count += scalar @violations;
-        }
-    };
+        };
 
+        confess qq{Fatal error while critiquing "$file": $EVAL_ERROR}
+            if $EVAL_ERROR;
+    }
 
-    carp qq{$EVAL_ERROR} if $EVAL_ERROR;
     return $count;
 }
 
@@ -858,6 +859,10 @@ in more detail in the individual modules themselves.  Say C<"perlcritic -doc
 PATTERN"> to see the perldoc for all Policy modules that match the regex
 C<m/PATTERN/imx>
 
+There are a number of distributions of additional policies on CPAN.  If
+L<Perl::Critic> doesn't contain a policy that you want, some one may have
+already written it.  Some of these can be found via L<Bundle::Perl::Critic>.
+
 =head1 POLICY THEMES
 
 Each Policy is defined with one or more "themes".  Themes can be used to
@@ -1105,9 +1110,17 @@ myself, but other folks say it works.
 
 =head2 BBEdit
 
-Josh Clark has produced an excellent Perl-Critic plugin for BBEdit. See
-L<http://beta.bigmedium.com/projects/bbedit-perl-critic/index.shtml> for more
-information.  Apple users rejoice!
+Josh Clark has produced an excellent Perl-Critic plugin for BBEdit. A copy is
+included in this distro at F<extras/perl_critic_for_bbedit-1_0.zip>. See
+L<http://beta.bigmedium.com/projects/bbedit-perl-critic/index.shtml> for
+screenshots and additional installation info.  Apple users rejoice!
+
+=head2 Komodo
+
+Komodo is a proprietary IDE for Perl and several other dynamic languages.
+Free trial copies of Komodo can be obtained from the ActiveState website at
+L<http://www.activestate.com>. For instructions on integrating F<perlcritic>
+with Komodo, see F<extras/KomodoIntegration.pod> in this distro.
 
 =head1 EXIT STATUS
 
@@ -1157,6 +1170,9 @@ Scrutinizing Perl code is hard for humans, let alone machines.  If you find
 any bugs, particularly false-positives or false-negatives from a
 Perl::Critic::Policy, please submit them to
 L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Perl-Critic>.  Thanks.
+
+Most policies will produce false-negatives if they cannot understand a
+particular block of code.
 
 =head1 CREDITS
 

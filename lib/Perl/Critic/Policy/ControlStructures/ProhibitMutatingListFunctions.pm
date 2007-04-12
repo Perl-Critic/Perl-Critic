@@ -15,7 +15,7 @@ use Perl::Critic::Utils qw{
 use List::MoreUtils qw( none any );
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 1.05;
+our $VERSION = 1.051;
 
 #-----------------------------------------------------------------------------
 

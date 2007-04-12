@@ -17,7 +17,7 @@ use B::Keywords qw();
 
 use base 'Exporter';
 
-our $VERSION = 1.05;
+our $VERSION = 1.051;
 
 #-----------------------------------------------------------------------------
 # Exportable symbols here.
@@ -55,17 +55,24 @@ our @EXPORT_OK = qw(
     &first_arg
     &hashify
     &interpolate
+    &is_class_name
     &is_function_call
     &is_hash_key
+    &is_included_module_name
+    &is_label_pointer
     &is_method_call
+    &is_package_declaration
     &is_perl_builtin
+    &is_perl_bareword
     &is_perl_builtin_with_list_context
     &is_perl_builtin_with_multiple_arguments
     &is_perl_builtin_with_no_arguments
     &is_perl_builtin_with_one_argument
     &is_perl_builtin_with_optional_argument
     &is_perl_builtin_with_zero_and_or_one_arguments
+    &is_perl_filehandle
     &is_perl_global
+    &is_qualified_name
     &is_script
     &is_subroutine_name
     &is_unchecked_call
@@ -117,10 +124,16 @@ our %EXPORT_TAGS = (
     ],
     classification  => [
         qw{
+            &is_class_name
             &is_function_call
             &is_hash_key
+            &is_included_module_name
+            &is_label_pointer
             &is_method_call
+            &is_package_declaration
+            &is_perl_bareword
             &is_perl_builtin
+            &is_perl_filehandle
             &is_perl_global
             &is_perl_builtin_with_list_context
             &is_perl_builtin_with_multiple_arguments
@@ -128,6 +141,7 @@ our %EXPORT_TAGS = (
             &is_perl_builtin_with_one_argument
             &is_perl_builtin_with_optional_argument
             &is_perl_builtin_with_zero_and_or_one_arguments
+            &is_qualified_name
             &is_script
             &is_subroutine_name
             &is_unchecked_call
@@ -251,6 +265,17 @@ sub is_perl_builtin {
 
 #-----------------------------------------------------------------------------
 
+my %BAREWORDS = hashify( @B::Keywords::Barewords );
+
+sub is_perl_bareword {
+    my $elem = shift;
+    return if !$elem;
+
+    return exists $BAREWORDS{ _name_for_sub_or_stringified_element($elem) };
+}
+
+#-----------------------------------------------------------------------------
+
 my @GLOBALS_WITHOUT_SIGILS = map { substr $_, 1 }  @B::Keywords::Arrays,
                                                    @B::Keywords::Hashes,
                                                    @B::Keywords::Scalars;
@@ -263,6 +288,17 @@ sub is_perl_global {
     my $var_name = "$elem"; #Convert Token::Symbol to string
     $var_name =~ s{\A [\$@%] }{}mx;  #Chop off the sigil
     return exists $GLOBALS{ $var_name };
+}
+
+#-----------------------------------------------------------------------------
+
+my %FILEHANDLES = hashify( @B::Keywords::Filehandles );
+
+sub is_perl_filehandle {
+    my $elem = shift;
+    return if !$elem;
+
+    return exists $FILEHANDLES{ _name_for_sub_or_stringified_element($elem) };
 }
 
 ## use critic
@@ -528,6 +564,16 @@ sub is_perl_builtin_with_zero_and_or_one_arguments {
 
 #-----------------------------------------------------------------------------
 
+sub is_qualified_name {
+    my $name = shift;
+
+    return if not $name;
+
+    return index ( $name, q{::} ) >= 0;
+}
+
+#-----------------------------------------------------------------------------
+
 sub precedence_of {
     my $elem = shift;
     return if !$elem;
@@ -558,12 +604,67 @@ sub is_hash_key {
 
 #-----------------------------------------------------------------------------
 
+sub is_included_module_name {
+    my $elem  = shift;
+    return if !$elem;
+    my $stmnt = $elem->statement();
+    return if !$stmnt;
+    return if !$stmnt->isa('PPI::Statement::Include');
+    return $stmnt->schild(1) == $elem;
+}
+
+#-----------------------------------------------------------------------------
+
+sub is_label_pointer {
+    my $elem = shift;
+    return if !$elem;
+
+    my $statement = $elem->statement();
+    return if !$statement;
+
+    my $psib = $elem->sprevious_sibling();
+    return if !$psib;
+
+    return $statement->isa('PPI::Statement::Break')
+        && $psib =~ m/(?:redo|goto|next|last)/mxo;
+}
+
+#-----------------------------------------------------------------------------
+
 sub is_method_call {
     my $elem = shift;
     return if !$elem;
-    my $sib = $elem->sprevious_sibling();
-    return if !$sib;
-    return $sib->isa('PPI::Token::Operator') && $sib eq q{->};
+
+    return _is_dereference_operator( $elem->sprevious_sibling() );
+}
+
+#-----------------------------------------------------------------------------
+
+sub is_class_name {
+    my $elem = shift;
+    return if !$elem;
+
+    return _is_dereference_operator( $elem->snext_sibling() );
+}
+
+#-----------------------------------------------------------------------------
+
+sub _is_dereference_operator {
+    my $elem = shift;
+    return if !$elem;
+
+    return $elem->isa('PPI::Token::Operator') && $elem eq q{->};
+}
+
+#-----------------------------------------------------------------------------
+
+sub is_package_declaration {
+    my $elem  = shift;
+    return if !$elem;
+    my $stmnt = $elem->statement();
+    return if !$stmnt;
+    return if !$stmnt->isa('PPI::Statement::Package');
+    return $stmnt->schild(1) == $elem;
 }
 
 #-----------------------------------------------------------------------------
@@ -582,11 +683,19 @@ sub is_subroutine_name {
 
 sub is_function_call {
     my $elem  = shift;
-    return ! ( is_hash_key($elem) ||
-               is_method_call($elem) ||
-               is_subroutine_name($elem) ||
-               $elem eq 'sub'
-    );
+    return if ! $elem;
+
+    return if is_hash_key($elem);
+    return if is_method_call($elem);
+    return if is_class_name($elem);
+    return if is_subroutine_name($elem);
+    return if is_included_module_name($elem);
+    return if is_package_declaration($elem);
+    return if is_perl_bareword($elem);
+    return if is_perl_filehandle($elem);
+    return if is_label_pointer($elem);
+
+    return 1;
 }
 
 #-----------------------------------------------------------------------------
@@ -678,6 +787,8 @@ sub _split_nodes_on_comma {
 
 #-----------------------------------------------------------------------------
 
+# XXX: You must keep the regular expressions in extras/perlcritic.el in sync
+# if you change these.
 my %FORMAT_OF = (
     1 => "%f:%l:%c:%m\n",
     2 => "%f: (%l:%c) %m\n",
@@ -925,6 +1036,19 @@ Given a L<PPI::Token::Word>, L<PPI::Statement::Sub>, or string, returns true
 if that token represents a call to any of the builtin functions defined in
 Perl 5.8.8.
 
+=item C<is_perl_bareword( $element )>
+
+Given a L<PPI::Token::Word>, L<PPI::Statement::Sub>, or string, returns true
+if that token represents a bareword (e.g. "if", "else", "sub", "package")
+defined in Perl 5.8.8.
+
+=item C<is_perl_filehandle( $element )>
+
+Given a L<PPI::Token::Word>, or string, returns true if that token represents
+one of the global filehandles (e.g. C<STDIN>, C<STDERR>, C<STDOUT>, C<ARGV>)
+that are defined in Perl 5.8.8.  Note that this function will return false if
+given a filehandle that is represented as a typeglob (e.g. C<*STDIN>)
+
 =item C<is_perl_builtin_with_list_context( $element )>
 
 Given a L<PPI::Token::Word>, L<PPI::Statement::Sub>, or string, returns true
@@ -972,6 +1096,11 @@ Returns true if any of C<is_perl_builtin_with_no_arguments()>,
 C<is_perl_builtin_with_one_argument()>, and
 C<is_perl_builtin_with_optional_argument()> returns true.
 
+=item C<is_qualified_name( $name )>
+
+Given a string, L<PPI::Token::Word>, or L<PPI::Token::Symbol>, answers
+whether it has a module component, i.e. contains "::".
+
 =item C<precedence_of( $element )>
 
 Given a L<PPI::Token::Operator> or a string, returns the precedence of the
@@ -985,18 +1114,40 @@ doesn't distinguish between regular barewords (like keywords or subroutine
 calls) and barewords in hash subscripts (which are considered literal).  So
 this subroutine is useful if your Policy is searching for L<PPI::Token::Word>
 elements and you want to filter out the hash subscript variety.  In both of
-the following examples, 'foo' is considered a hash key:
+the following examples, "foo" is considered a hash key:
 
   $hash1{foo} = 1;
   %hash2 = (foo => 1);
 
+=item C<is_included_module_name( $element )>
+
+Given a L<PPI::Token::Word>, returns true if the element is the name of a
+module that is being included via C<use>, C<require>, or C<no>.
+
+=item C<is_class_name( $element )>
+
+Given a L<PPI::Token::Word>, returns true if the element that immediately
+follows this element is the dereference operator "->". When a bareword has a
+"->" on the B<right> side, it usually means that it is the name of the class
+(from which a method is being called).
+
+=item C<is_label_pointer( $element )>
+
+Given a L<PPI::Token::Word>, returns true if the element is the label
+in a C<next>, C<last>, C<redo>, or C<goto> statement.  Note this is not the
+same thing as the label declaration.
+
 =item C<is_method_call( $element )>
 
-Given a L<PPI::Element> that is presumed to be a function call (which is
-usually a L<PPI::Token::Word>), returns true if the function is a method being
-called on some reference.  Basically, it just looks to see if the preceding
-operator is "->".  This is useful for distinguishing static function calls
-from object method calls.
+Given a L<PPI::Token::Word>, returns true if the element that immediately
+precedes this element is the dereference operator "->". When a bareword has a
+"->" on the B<left> side, it usually means that it is the name of a method
+(that is being called from a class).
+
+=item C<is_package_declaration( $element )>
+
+Given a L<PPI::Token::Word>, returns true if the element is the name of a
+package that is being declared.
 
 =item C<is_subroutine_name( $element )>
 
@@ -1008,8 +1159,10 @@ function calls from subroutine declarations.
 
 Given a L<PPI::Token::Word> returns true if the element appears to be call to
 a static function.  Specifically, this function returns true if
-C<is_hash_key>, C<is_method_call>, and C<is_subroutine_name> all return false
-for the given element.
+C<is_hash_key>, C<is_method_call>, C<is_subroutine_name>,
+C<is_included_module_anme>, C<is_package_declaration>, C<is_perl_bareword>,
+C<is_perl_filehandle>, C<is_label_pointer> and C<is_subroutine_name> all
+return false for the given element.
 
 =item C<first_arg( $element )>
 
@@ -1222,7 +1375,9 @@ C<$RIGHT_PAREN>
 Includes:
 C<&is_function_call>,
 C<&is_hash_key>,
+C<&is_included_module_name>,
 C<&is_method_call>,
+C<&is_package_declaration>,
 C<&is_perl_builtin>,
 C<&is_perl_global>,
 C<&is_script>,

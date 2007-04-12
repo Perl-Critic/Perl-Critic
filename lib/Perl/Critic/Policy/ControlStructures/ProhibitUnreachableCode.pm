@@ -12,7 +12,7 @@ use warnings;
 use Perl::Critic::Utils qw{ :severities :data_conversion :classification };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 1.05;
+our $VERSION = 1.051;
 
 my @terminals = qw( die exit croak confess );
 my %terminals = hashify( @terminals );
