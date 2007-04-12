@@ -72,6 +72,7 @@ our @EXPORT_OK = qw(
     &is_perl_builtin_with_zero_and_or_one_arguments
     &is_perl_filehandle
     &is_perl_global
+    &is_qualified_name
     &is_script
     &is_subroutine_name
     &is_unchecked_call
@@ -140,6 +141,7 @@ our %EXPORT_TAGS = (
             &is_perl_builtin_with_one_argument
             &is_perl_builtin_with_optional_argument
             &is_perl_builtin_with_zero_and_or_one_arguments
+            &is_qualified_name
             &is_script
             &is_subroutine_name
             &is_unchecked_call
@@ -558,6 +560,16 @@ sub is_perl_builtin_with_zero_and_or_one_arguments {
         or  exists $BUILTINS_WHICH_TAKE_NO_ARGUMENTS{ $name }
         or  exists $BUILTINS_WHICH_TAKE_OPTIONAL_ARGUMENT{ $name }
     );
+}
+
+#-----------------------------------------------------------------------------
+
+sub is_qualified_name {
+    my $name = shift;
+
+    return if not $name;
+
+    return index ( $name, q{::} ) >= 0;
 }
 
 #-----------------------------------------------------------------------------
@@ -1083,6 +1095,11 @@ Perl 5.8.8 that takes no and/or one argument.
 Returns true if any of C<is_perl_builtin_with_no_arguments()>,
 C<is_perl_builtin_with_one_argument()>, and
 C<is_perl_builtin_with_optional_argument()> returns true.
+
+=item C<is_qualified_name( $name )>
+
+Given a string, L<PPI::Token::Word>, or L<PPI::Token::Symbol>, answers
+whether it has a module component, i.e. contains "::".
 
 =item C<precedence_of( $element )>
 
