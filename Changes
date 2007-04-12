@@ -5,7 +5,12 @@
 # $Revision$
 ##############################################################################
 
-[1.06]  Released on ????-??-??
+[1.051]  Released on 2007-04-12
+
+     *DEVELOPMENT RELEASE*
+
+     No new policies.
+     No particular bug fixes.
 
      Internals:
      * Added several new utility functions to support the StricterSubs distro.
