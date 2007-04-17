@@ -14,26 +14,25 @@ Perl::Critic::DEVELOPER - How to make new Perl::Critic::Policy modules
 
 =head1 DESCRIPTION
 
-This document describes how to create a new Policy module for
-L<Perl::Critic>.  It is intended for developers who wish to extend
-Perl::Critic to enforce their own custom coding standards.  Although
-the Perl::Critic distribution already includes a number of Policies
-based on Damian Conway's book "Perl Best Practices", Perl::Critic is
-not limited to his guidelines and can be used to enforce any practice,
-preference, or style that you want to follow.  In fact, you can even
-write Policies to enforce contradictory guidelines.  All you need to
-do is write a corresponding L<Perl::Critic::Policy> subclass, which
-may require as little as 10 lines of code..
+For developers who want to create custom coding standards, the
+following tells how to create a Policy module for L<Perl::Critic>.
+Although the Perl::Critic distribution already includes a number of
+Policies based on Damian Conway's book I<Perl Best Practices> (which
+will be referred to via "I<PBP>" from here on), Perl::Critic is not
+limited to his guidelines and can be used to enforce any practice,
+preference, or style that you want to follow.  You can even write
+Policies to enforce contradictory guidelines.  All you need to do is
+write a corresponding L<Perl::Critic::Policy> subclass, which may
+require as little as 10 lines of code..
 
 =head1 BACKGROUND
 
-The heart of Perl::Critic is L<PPI>, which is a parser and lexer for
-Perl.  PPI transforms a file of Perl source code into a Document
-Object Model (DOM).  Each token in the document is represented by one
-of the various PPI classes (for example: L<PPI::Token::Operator>,
-L<PPI::Token::Word>).  The tokens are then organized into a hierarchy
-of structural classes (for example: L<PPI::Statement::Expression>,
-L<PPI::Structure::Subroutine>).  The root node of the hierarchy is the
+The heart of Perl::Critic is L<PPI>, a parser and lexer for Perl.  PPI
+transforms Perl source code into a Document Object Model (DOM).  Each
+token in the document is represented by a PPI class, such as
+L<PPI::Token::Operator> or L<PPI::Token::Word>, and then organized
+into structure classes, like L<PPI::Statement::Expression> and
+L<PPI::Structure::Subroutine>. The root node of the hierarchy is the
 L<PPI::Document>.
 
 The L<Perl::Critic> engine traverses each node in the L<PPI::Document>
@@ -44,25 +43,23 @@ decides that that a coding standard has been violated, it returns one
 or more L<Perl::Critic::Violation> objects.  If there are no
 violations, then the Policy returns nothing.
 
-So now that we understand the basic organization of PPI and
-Perl::Critic, lets examine one the existing Policy modules so we can
-see how this all works.  We will pick the F<RequireBlockGrep.pm>
-policy because it is relatively simple but demonstrates most of the
-important issues.  The goal of this Policy is to enforce that every
-call to C<grep> uses a block for the first argument and not an
-expression.  The reasons for this Policy are discussed in detail in
-"Perl Best Practices."
+Policies are usually written based on existing policies, so let's look
+at one to see how it works.  The F<RequireBlockGrep.pm> policy is
+relatively simple and demonstrates most of the important issues.  The
+goal of this Policy is to enforce that every call to C<grep> uses a
+block for the first argument and not an expression.  The reasons for
+this Policy are discussed in detail in I<PBP>.
 
 =head1 EXAMPLE POLICY
 
 First, the Policy module needs to have a name.  Perl::Critic uses
-L<Module::Pluggable> to automatically discover all modules that are in
-the C<Perl::Critic::Policy> namespace.  Also, we've adopted the
-convention of grouping Policies into directories according to the
-table of contents in Conway's book "Perl Best Practices."  Since the
-goal of this policy is to enforce the use of block arguments to
-C<grep> and it comes from the "Builtin Functions" chapter of PBP, we
-call it C<"Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep">.
+L<Module::Pluggable> to automatically discover all modules in the
+C<Perl::Critic::Policy> namespace.  Also, we've adopted the convention
+of grouping Policies into directories according to the chapters of
+I<PBP>.  Since the goal of this policy is to enforce the use of block
+arguments to C<grep> and it comes from the "Builtin Functions" chapter
+of I<PBP>, we call it
+C<"Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep">.
 
   package Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep;
 
@@ -71,9 +68,8 @@ Policy modules inherit from the L<Perl::Critic::Policy> class, which
 provides no-op implementations of the basic methods.  Our job is to
 override these methods to make them do something useful.
 
-Technically, C<use strict> and C<use warnings> are optional, but they
-are necessary to make Perl::Critic self-compliant.  And we don't want
-Perl::Critic to be a hypocrite, now do we?
+Technically, C<use strict> and C<use warnings> are optional, but we
+don't want Perl::Critic to be a hypocrite, now do we?
 
   use strict;
   use warnings;
@@ -87,33 +83,33 @@ Next, we'll declare a description and explanation for this Policy.
 The description is always just a string that basically says "this is
 what's wrong."  The explanation can be either a string with further
 details, or a reference to an array of integers that correspond to
-page numbers in the "Perl Best Practices" book.
+page numbers in I<PBP>.
 
   my $desc = q{Expression form of "grep"};
   my $expl = [169];
 
-Most policies don't need to override the new() method provided by
+Most policies don't need to override the C<new()> method provided by
 L<Perl::Critic::Policy>.  However, if your policy is configurable via
 F<.perlcriticrc> you will need to implement a
 C<supported_parameters()> method and/or override the constructor to
-examine the C<%config> values.  See
-L</MAKING YOUR POLICY CONFIGURABLE> below.
+examine the C<%config> values.  See L</MAKING YOUR POLICY CONFIGURABLE>
+below.
 
-Next, we define the C<default_severity()> method, which should return
-a scalar value indicating the severity of violating this Policy.
-Severity values range from 1 to 5, where 5 is the "most severe."  In
-general, level 5 is reserved for things that are frequently misused
-and/or cause bugs.  Level 1 is for things that are highly subjective
-or purely cosmetic.  The L<Perl::Critic::Utils> package exports
-several severity constants that you can use here.
+Next, we define the C<default_severity()> method, which must return an
+intger indicating the severity of violating this Policy.  Severity
+values range from 1 to 5, where 5 is the "most severe."  In general,
+level 5 is reserved for things that are frequently misused and/or
+cause bugs.  Level 1 is for things that are highly subjective or
+purely cosmetic.  The L<Perl::Critic::Utils> package exports several
+severity constants that you can use here.
 
   sub default_severity  { return $SEVERITY_HIGH }
 
 Likewise, the C<default_themes()> method returns a list of theme
 names.  Themes are intended to be named groups of Policies.  All
 Policies that ship with Perl::Critic have a C<"core"> theme.  And
-since this Policy comes directly from Damian's "Perl Best Practices"
-book, this Policy should be a member of the C<"pbp"> theme.
+since this Policy comes directly from I<PBP>, this Policy should be a
+member of the C<"pbp"> theme.
 
   sub default_themes { return qw( core pbp ) }
 
@@ -426,7 +422,7 @@ user-specified and default values is done for you and your
 C<violates()> method can retrieve the value under the key of the
 parameter name prefixed with an underscore, e.g., for the above
 declaration, the parsed and validated value can be accessed via
-C<$self->{_allowed_types}>.
+C<$self-E<gt>{_allowed_types}>.
 
 The behaviors provide additional functionality to C<Perl::Critic>; for
 more on this, see L<Perl::Critic::PolicyParameter> and
