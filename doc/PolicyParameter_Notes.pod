@@ -2,6 +2,9 @@
 
 =head1 Notes on PolicyParameter design
 
+Most of the following came out of discussion on the dev list in
+December '06.
+
 =over
 
 =item Must not require any changes to existing Policies.
@@ -136,7 +139,8 @@ without breaking anything.
 
 Rather than using I<is a> relationships, C<PolicyParameter> objects
 I<have a> C<Behavior>.  This means that a developer can use the base
-functionality of a C<Behavior>, but override the parts that it wants.
+functionality of a C<Behavior>, but override the parts that they
+want.
 
 =back
 

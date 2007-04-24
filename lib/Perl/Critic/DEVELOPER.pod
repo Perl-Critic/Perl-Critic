@@ -275,8 +275,8 @@ minimal constructor:
   }
 
 Actually using the above code is pretty useless since this is what the
-Policy constructor does.  The reason to actually create a constructor
-is to do something with C<%config>.
+superclass constructor does.  The reason to actually create a
+constructor is to do something with C<%config>.
 
 As stated above, what you get in C<%config> are trimmed strings.  For
 example, if the user's F<.perlcritic> contains
@@ -550,7 +550,7 @@ This behavior takes one required option and one optional one.  A value
 for C<enumeration_values> of a reference to an array of valid strings
 is required.  A true value can be specified for
 C<enumeration_allow_multiple_values> to allow the user to pick more
-than one value.
+than one value, but this defaults to false.
 
 Example:
 
@@ -645,8 +645,8 @@ handling from within the constructor, there's a problem because
 L<Perl::Critic> can't do its initialization of a Policy until the
 Policy has been created.  (Due to the lack of a requirement for a
 Policy to invoke the super-constructor.)  The way around this is to
-invoke C<_finish_standard_initialization()> on the Policy before accessing the
-parsed parameter values.
+invoke C<_finish_standard_initialization()> on the Policy before
+accessing the parsed parameter values.
 
 This is done like so:
 
