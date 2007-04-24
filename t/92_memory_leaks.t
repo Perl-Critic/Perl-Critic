@@ -56,11 +56,7 @@ plan( skip_all => 'Test::Memory::Cycle requried to test memory leaks') if $@;
 
     memory_cycle_ok( $pc_doc, 'cycles in document' );
 
-    # Guh.  Ugly hack around Devel::Cycle.
-    SKIP: {
-        eval { memory_cycle_ok( $critic, 'cycles in Perl::Critic instance' ); };
-        skip( "$devel_cycle_message: $EVAL_ERROR", 1 ) if $EVAL_ERROR;
-    }
+    memory_cycle_ok( $critic, 'cycles in Perl::Critic instance' );
 
     memory_cycle_ok( $_, 'cycles in violation' ) for @violations;
 }

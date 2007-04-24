@@ -96,7 +96,7 @@ examine the C<%config> values.  See L</MAKING YOUR POLICY CONFIGURABLE>
 below.
 
 Next, we define the C<default_severity()> method, which must return an
-intger indicating the severity of violating this Policy.  Severity
+integer indicating the severity of violating this Policy.  Severity
 values range from 1 to 5, where 5 is the "most severe."  In general,
 level 5 is reserved for things that are frequently misused and/or
 cause bugs.  Level 1 is for things that are highly subjective or

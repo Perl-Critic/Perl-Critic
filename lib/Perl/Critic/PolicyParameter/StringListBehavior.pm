@@ -23,14 +23,16 @@ sub initialize_parameter {
 
     my $policy_variable_name = q{_} . $parameter->get_name();
 
-    my @always_present_values;
-
+    # Unfortunately, this has to be kept as a reference, rather than a regular
+    # array, due to a problem in Devel::Cycle
+    # (http://rt.cpan.org/Ticket/Display.html?id=25360) which causes
+    # t/92_memory_leaks.t to fall over.
     my $always_present_values = $specification->{list_always_present_values};
     $parameter->_get_behavior_values()->{always_present_values} =
-        $always_present_values;
+    $always_present_values;
 
-    if ( $always_present_values ) {
-        @always_present_values = @{$always_present_values};
+    if ( not $always_present_values ) {
+        $always_present_values = [];
     }
 
     $parameter->_set_parser(
@@ -40,7 +42,7 @@ sub initialize_parameter {
             # order to remain consistent with the parser function interface.
             my ($policy, $parameter, $config_string) = @_;
 
-            my @values = @always_present_values;
+            my @values = @{$always_present_values};
             my $value_string = $parameter->get_default_string();
 
             if (defined $config_string) {

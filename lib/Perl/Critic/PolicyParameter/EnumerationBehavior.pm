@@ -32,8 +32,12 @@ sub initialize_parameter {
                    ' enumeration_values for ', $parameter->get_name(),
                    $PERIOD;
 
-    my %valid_values = hashify( @{$valid_values} );
-    $parameter->_get_behavior_values()->{enumeration_values} = \%valid_values;
+    # Unfortunately, this has to be a reference, rather than a regular hash,
+    # due to a problem in Devel::Cycle
+    # (http://rt.cpan.org/Ticket/Display.html?id=25360) which causes
+    # t/92_memory_leaks.t to fall over.
+    my $value_lookup = { hashify( @{$valid_values} ) };
+    $parameter->_get_behavior_values()->{enumeration_values} = $value_lookup;
 
     my $policy_variable_name = q{_} . $parameter->get_name();
 
@@ -59,14 +63,14 @@ sub initialize_parameter {
                     @potential_values = words_from_string($value_string);
 
                     my @bad_values =
-                        grep { not exists $valid_values{$_} } @potential_values;
+                        grep { not exists $value_lookup->{$_} } @potential_values;
                     if (@bad_values) {
                         die q{Invalid values for },
                             $parameter->get_name(),
                             q{: },
                             join (q{, }, @bad_values),
                             q{. Allowed values are: },
-                            join (q{, }, sort keys %valid_values),
+                            join (q{, }, sort keys %{$value_lookup}),
                             qq{.\n};
                     }
                 }
@@ -94,7 +98,7 @@ sub initialize_parameter {
                 if (
                         defined $value_string
                     and $EMPTY ne $value_string
-                    and not defined $valid_values{$value_string}
+                    and not defined $value_lookup->{$value_string}
                 ) {
                     die q{Invalid value for },
                         $parameter->get_name(),
