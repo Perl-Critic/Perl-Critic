@@ -364,7 +364,8 @@ __END__
 
 =pod
 
-=for stopwords DGR INI-style vim-fu minibuffer -noprofile API ben Jore formatter Peshak pbp
+=for stopwords DGR INI-style vim-fu minibuffer -noprofile API ben Jore
+formatter Peshak pbp Komodo screenshots
 
 =head1 NAME
 
@@ -1111,7 +1112,7 @@ myself, but other folks say it works.
 =head2 BBEdit
 
 Josh Clark has produced an excellent Perl-Critic plugin for BBEdit. A copy is
-included in this distro at F<extras/perl_critic_for_bbedit-1_0.zip>. See
+included in this distribution at F<extras/perl_critic_for_bbedit-1_0.zip>. See
 L<http://beta.bigmedium.com/projects/bbedit-perl-critic/index.shtml> for
 screenshots and additional installation info.  Apple users rejoice!
 
@@ -1120,7 +1121,7 @@ screenshots and additional installation info.  Apple users rejoice!
 Komodo is a proprietary IDE for Perl and several other dynamic languages.
 Free trial copies of Komodo can be obtained from the ActiveState website at
 L<http://www.activestate.com>. For instructions on integrating F<perlcritic>
-with Komodo, see F<extras/KomodoIntegration.pod> in this distro.
+with Komodo, see F<extras/KomodoIntegration.pod> in this distribution.
 
 =head1 EXIT STATUS
 
