@@ -5,6 +5,13 @@
 # $Revision$
 ##############################################################################
 
+[1.xxx]  Released on 2007-xx-xx
+
+     Bug Fixes:
+     * ValuesAndExpressions::ProhibitCommaSeparatedStatements was complaining
+       about multiple values in the list to be iterated over by a foreach
+       loop.
+
 [1.051]  Released on 2007-04-12
 
      *DEVELOPMENT RELEASE*
