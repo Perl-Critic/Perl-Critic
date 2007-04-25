@@ -40,6 +40,7 @@ sub violates {
     # got an element who's class really is PPI::Statement.
 
     return if _is_parent_a_constructor_or_list($elem);
+    return if _is_parent_a_foreach_loop($elem);
 
     foreach my $child ( $elem->schildren() ) {
         if ( $child->isa('PPI::Token::Word') ) {
@@ -63,6 +64,7 @@ sub violates {
 sub _is_ppi_statement_subclass {
     my $elem = shift;
 
+    # This whole problem is sucky.  Cost of multiple isa() calls vs ref() ???
     return 1 if $elem->isa('PPI::Statement::Package');
     return 1 if $elem->isa('PPI::Statement::Include');
     return 1 if $elem->isa('PPI::Statement::Sub');
@@ -89,6 +91,18 @@ sub _is_parent_a_constructor_or_list {
             $parent->isa('PPI::Structure::Constructor')
         or  $parent->isa('PPI::Structure::List')
     );
+}
+
+sub _is_parent_a_foreach_loop {
+    my $elem = shift;
+
+    my $parent = $elem->parent();
+
+    return if not $parent;
+
+    return if not $parent->isa('PPI::Structure::ForLoop');
+
+    return 1 == scalar $parent->schildren(); # Multiple means C-style loop.
 }
 
 sub _succeeding_commas_are_list_element_separators {
