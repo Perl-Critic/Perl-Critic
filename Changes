@@ -7,6 +7,10 @@
 
 [1.xxx]  Released on 2007-xx-xx
 
+     New Features:
+     * perlcritic now emits a summary about the scanned code when enabled by
+       the "-statistics" option.
+
      Bug Fixes:
      * ValuesAndExpressions::ProhibitCommaSeparatedStatements was complaining
        about multiple values in the list to be iterated over by a foreach

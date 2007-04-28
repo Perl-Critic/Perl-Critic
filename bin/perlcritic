@@ -16,7 +16,7 @@ use Carp qw(confess);
 use English qw(-no_match_vars);
 use Getopt::Long qw(GetOptions);
 use List::Util qw(first);
-use Perl::Critic::Utils qw( :characters :severities );
+use Perl::Critic::Utils qw( :characters :severities &policy_short_name );
 use Perl::Critic::Violation qw();
 use Pod::Usage qw(pod2usage);
 
@@ -188,22 +188,63 @@ sub critique {
 
     require Perl::Critic;
     $CRITIC = Perl::Critic->new( %{$opts_ref} );
-    my $count  = undef;
+    my $number_of_violations = undef;
+
+    my $statistics = $opts_ref->{-statistics};
+    my %statistics;
+    $statistics{severities} = {};
+    $statistics{policies} = {};
+    $statistics{total_violations} = 0;
 
 
     for my $file (@files) {
 
         eval {
-            my @violations = $CRITIC->critique($file);
+            my @violations;
+
+            if ($statistics) {
+                my $results = $CRITIC->critique_and_gather_statistics($file);
+
+                @violations = @{ $results->{violations} };
+                accumulate_statistics( \%statistics, $results );
+            } else {
+                @violations = $CRITIC->critique($file);
+            }
+
             render_report( $file, $opts_ref, @violations );
-            $count += scalar @violations;
+            $number_of_violations += scalar @violations;
         };
 
         confess qq{Fatal error while critiquing "$file": $EVAL_ERROR}
             if $EVAL_ERROR;
     }
 
-    return $count;
+    if ($statistics) {
+        report_statistics( $opts_ref, \%statistics );
+    }
+
+    return $number_of_violations;
+}
+
+#------------------------------------------------------------------------------
+
+sub accumulate_statistics {
+    my ($statistics, $criticism_results) = @_;
+
+    $statistics->{files}++;
+
+    $statistics->{lines_of_code} += $criticism_results->{lines_of_code};
+    $statistics->{number_of_subs} += $criticism_results->{number_of_subs};
+    $statistics->{number_of_statements} +=
+        $criticism_results->{number_of_statements};
+
+    foreach my $violation ( @{ $criticism_results->{violations} } ) {
+        $statistics->{total_violations}++;
+        $statistics->{severities}->{ $violation->severity() }++;
+        $statistics->{policies}->{ $violation->policy() }++;
+    }
+
+    return;
 }
 
 #------------------------------------------------------------------------------
@@ -240,6 +281,52 @@ sub render_report {
                                 : _colorize_by_severity(@violations);
     return $count;
 }
+
+#-----------------------------------------------------------------------------
+
+sub report_statistics {
+    my ($opts_ref, $statistics) = @_;
+    my %statistics = %{$statistics};
+
+    if (
+            $statistics->{total_violations}
+        or  not $opts_ref->{-quiet} and $statistics->{files}
+    ) {
+        print "\n"; # There's prior output that we want to separate from.
+    }
+
+    my $number_of_subs = $statistics{number_of_subs};
+    my $number_of_statements =
+        $statistics{number_of_statements} - $number_of_subs;
+
+    print "$statistics{files} files.\n";
+    print "$statistics{lines_of_code} lines of code.\n";
+    print "$number_of_subs subroutines/methods.\n";
+    print "$number_of_statements statements.\n";
+    print "$statistics{total_violations} violations.\n";
+
+    if ( $statistics{total_violations} ) {
+        print "\n";
+
+        my %severities = %{ $statistics{severities} };
+        foreach my $severity ( reverse sort keys %severities ) {
+            print "$severities{$severity} severity $severity violations.\n";
+        }
+
+        print "\n";
+
+        my %policies = %{ $statistics{policies} };
+        foreach my $policy ( sort keys %policies ) {
+            print
+                "$policies{$policy} violations of ",
+                policy_short_name($policy),
+                ".\n";
+        }
+    }
+
+    return;
+}
+
 #-----------------------------------------------------------------------------
 
 sub _get_option_specification {
@@ -269,6 +356,7 @@ sub _get_option_specification {
         severity=i
         singlepolicy=s
         stern
+        statistics!
         theme=s
         top:i
         verbose=s
@@ -377,8 +465,8 @@ C<perlcritic> - Command-line interface to critique Perl source
              [-severity number | name] [-profile file | -noprofile]
              [-top [ number ]] [-theme expression] [-include pattern]
              [-exclude pattern] [-singlepolicy pattern] [-only | -noonly]
-             [-force | -noforce] [-verbose number | format] [-nocolor]
-             [-quiet] {FILE | DIRECTORY | STDIN}
+             [-force | -noforce] [-statistics] [-verbose number | format]
+             [-nocolor] [-quiet] {FILE | DIRECTORY | STDIN}
 
   perlcritic -doc pattern [...]
 
@@ -607,6 +695,11 @@ report.
 Directs C<perlcritic> to ignore the magical C<"## no critic"> pseudo-pragmas
 in the source code. See L<"BENDING THE RULES"> for more information.  You can
 set the default value for this option in your F<.perlcriticrc> file.
+
+=item C<-statistics>
+
+Causes several statistics about the code being scanned and the violations
+found to be reported after any other output.
 
 =item C<-verbose N | FORMAT>
 
