@@ -275,9 +275,23 @@ sub report_statistics {
     print _commaify($statements), " statements.\n";
     print _commaify($statistics->lines_of_code()), " lines of code.\n";
 
+    my $average_sub_mccabe = $statistics->average_sub_mccabe();
+    if (defined $average_sub_mccabe) {
+        printf
+            "\nAverage McCabe score of subroutines was %.2f.\n",
+            $average_sub_mccabe;
+    }
+
     print "\n";
 
     print _commaify($statistics->total_violations()), " violations.\n";
+
+    my $violations_per_line = $statistics->violations_per_line_of_code();
+    if (defined $violations_per_line) {
+        printf
+            "Violations per line of code was %.3f.\n",
+            $violations_per_line;
+    }
 
     if ( $statistics->total_violations() ) {
         print "\n";
@@ -306,6 +320,7 @@ sub report_statistics {
 
 #-----------------------------------------------------------------------------
 
+# Only works for integers.
 sub _commaify {
     my ( $number ) = @_;
 

@@ -12,6 +12,8 @@ use warnings;
 
 use English qw(-no_match_vars);
 
+use Perl::Critic::Utils::McCabe qw{ &calculate_mccabe_of_sub };
+
 #-----------------------------------------------------------------------------
 
 our $VERSION = 1.051;
@@ -72,7 +74,12 @@ sub _accumulate {
     $self->{_modules}++;
 
     my $subs = $doc->find('PPI::Statement::Sub');
-    $self->{_subs} += $subs ? scalar @{$subs} : 0;
+    if ($subs) {
+        foreach my $sub ( @{$subs} ) {
+            $self->{_subs}++;
+            $self->{_subs_total_mccabe} += calculate_mccabe_of_sub( $sub );
+        }
+    }
 
     my $statements = $doc->find('PPI::Statement');
     $self->{_statements} += $statements ? scalar @{$statements} : 0;
@@ -133,6 +140,14 @@ sub lines_of_code {
 
 #-----------------------------------------------------------------------------
 
+sub _subs_total_mccabe {
+    my ( $self ) = @_;
+
+    return $self->{_subs_total_mccabe};
+}
+
+#-----------------------------------------------------------------------------
+
 sub severity_violations {
     my ( $self ) = @_;
 
@@ -157,6 +172,26 @@ sub total_violations {
 
 #-----------------------------------------------------------------------------
 
+sub average_sub_mccabe {
+    my ( $self ) = @_;
+
+    return if $self->subs() == 0;
+
+    return $self->_subs_total_mccabe() / $self->subs();
+}
+
+#-----------------------------------------------------------------------------
+
+sub violations_per_line_of_code {
+    my ( $self ) = @_;
+
+    return if $self->lines_of_code() == 0;
+
+    return $self->total_violations() / $self->lines_of_code();
+}
+
+#-----------------------------------------------------------------------------
+
 1;
 
 __END__
@@ -164,6 +199,8 @@ __END__
 #-----------------------------------------------------------------------------
 
 =pod
+
+=for stopwords McCabe
 
 =head1 NAME
 
@@ -184,7 +221,7 @@ Create a new instance around a L<Perl::Critic>.
 
 =item C<critique( $source_code )>
 
-Wrapper around L<Perl::Critic/"critique">.
+Version of L<Perl::Critic/"critique"> that gathers statistics.
 
 =item C<modules()>
 
@@ -215,6 +252,14 @@ reference to a hash keyed by full policy name.
 =item C<total_violations()>
 
 The the total number of violations found by C<critique()>.
+
+=item C<average_sub_mccabe()>
+
+The average McCabe score of all scanned subroutines.
+
+=item C<violations_per_line_of_code()>
+
+The total violations divided by the lines of code.
 
 =back
 

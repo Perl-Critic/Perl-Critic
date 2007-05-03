@@ -28,10 +28,6 @@ policies.  It contains its own TODO.pod.
 
 =item * Report Safari sections in addition to book page numbers.
 
-=item * Enhance statistics on the violations and the source code.
-
-e.g. average number of statements/operators per sub.
-
 =item * Allow policies to say that they've had enough and to not use them for the rest of the current document.
 
 Primarily for things like C<RequireUseStrict> and C<ProhibitMagicNumbers>.
