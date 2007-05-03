@@ -190,11 +190,12 @@ sub critique {
     $CRITIC = Perl::Critic->new( %{$opts_ref} );
     my $number_of_violations = undef;
 
-    my $statistics = $opts_ref->{-statistics};
-    my %statistics;
-    $statistics{severities} = {};
-    $statistics{policies} = {};
-    $statistics{total_violations} = 0;
+    my $statistics;
+    if ($opts_ref->{-statistics}) {
+        require Perl::Critic::Statistics;
+        $statistics = Perl::Critic::Statistics->new($CRITIC);
+        $CRITIC = $statistics;
+    }
 
 
     for my $file (@files) {
@@ -202,14 +203,7 @@ sub critique {
         eval {
             my @violations;
 
-            if ($statistics) {
-                my $results = $CRITIC->critique_and_gather_statistics($file);
-
-                @violations = @{ $results->{violations} };
-                accumulate_statistics( \%statistics, $results );
-            } else {
-                @violations = $CRITIC->critique($file);
-            }
+            @violations = $CRITIC->critique($file);
 
             render_report( $file, $opts_ref, @violations );
             $number_of_violations += scalar @violations;
@@ -220,31 +214,10 @@ sub critique {
     }
 
     if ($statistics) {
-        report_statistics( $opts_ref, \%statistics );
+        report_statistics( $opts_ref, $statistics );
     }
 
     return $number_of_violations;
-}
-
-#------------------------------------------------------------------------------
-
-sub accumulate_statistics {
-    my ($statistics, $criticism_results) = @_;
-
-    $statistics->{files}++;
-
-    $statistics->{lines_of_code} += $criticism_results->{lines_of_code};
-    $statistics->{number_of_subs} += $criticism_results->{number_of_subs};
-    $statistics->{number_of_statements} +=
-        $criticism_results->{number_of_statements};
-
-    foreach my $violation ( @{ $criticism_results->{violations} } ) {
-        $statistics->{total_violations}++;
-        $statistics->{severities}->{ $violation->severity() }++;
-        $statistics->{policies}->{ $violation->policy() }++;
-    }
-
-    return;
 }
 
 #------------------------------------------------------------------------------
@@ -286,45 +259,61 @@ sub render_report {
 
 sub report_statistics {
     my ($opts_ref, $statistics) = @_;
-    my %statistics = %{$statistics};
 
     if (
-            $statistics->{total_violations}
-        or  not $opts_ref->{-quiet} and $statistics->{files}
+            $statistics->total_violations()
+        or  not $opts_ref->{-quiet} and $statistics->modules()
     ) {
         print "\n"; # There's prior output that we want to separate from.
     }
 
-    my $number_of_subs = $statistics{number_of_subs};
-    my $number_of_statements =
-        $statistics{number_of_statements} - $number_of_subs;
+    my $subs = $statistics->subs();
+    my $statements = $statistics->statements() - $subs;
 
-    print "$statistics{files} files.\n";
-    print "$statistics{lines_of_code} lines of code.\n";
-    print "$number_of_subs subroutines/methods.\n";
-    print "$number_of_statements statements.\n";
-    print "$statistics{total_violations} violations.\n";
+    print _commaify($statistics->modules()), " files.\n";
+    print _commaify($subs), " subroutines/methods.\n";
+    print _commaify($statements), " statements.\n";
+    print _commaify($statistics->lines_of_code()), " lines of code.\n";
 
-    if ( $statistics{total_violations} ) {
+    print "\n";
+
+    print _commaify($statistics->total_violations()), " violations.\n";
+
+    if ( $statistics->total_violations() ) {
         print "\n";
 
-        my %severities = %{ $statistics{severities} };
-        foreach my $severity ( reverse sort keys %severities ) {
-            print "$severities{$severity} severity $severity violations.\n";
+        my %severity_violations = %{ $statistics->severity_violations() };
+        foreach my $severity ( reverse sort keys %severity_violations ) {
+            print
+                _commaify($severity_violations{$severity}),
+                " severity $severity violations.\n";
         }
 
         print "\n";
 
-        my %policies = %{ $statistics{policies} };
-        foreach my $policy ( sort keys %policies ) {
+        my %policy_violations = %{ $statistics->policy_violations() };
+        foreach my $policy ( sort keys %policy_violations ) {
             print
-                "$policies{$policy} violations of ",
+                _commaify($policy_violations{$policy}),
+                ' violations of ',
                 policy_short_name($policy),
                 ".\n";
         }
     }
 
     return;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _commaify {
+    my ( $number ) = @_;
+
+    while ($number =~ s/ \A ( [-+]? \d+ ) ( \d{3} ) /$1,$2/xms) {
+        # nothing
+    }
+
+    return $number;
 }
 
 #-----------------------------------------------------------------------------

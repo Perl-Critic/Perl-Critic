@@ -84,52 +84,16 @@ sub critique {
     $self = ref $self eq 'HASH' ? __PACKAGE__->new(%{ $self }) : $self;
     return if not $source_code;  # If no code, then nothing to do.
 
-    my $doc = _create_perl_critic_document($source_code);
+    my $doc = $self->_create_perl_critic_document($source_code);
 
     return $self->_gather_violations($doc);
-}
-
-#-----------------------------------------------------------------------------
-
-sub critique_and_gather_statistics {
-    my ($self, $source_code) = @_;
-
-    if (not $source_code) {
-        return {
-            violations              => [],
-            lines_of_code           => 0,
-            number_of_subs          => 0,
-            number_of_statements    => 0,
-        };
-    }
-
-    my $doc = _create_perl_critic_document($source_code);
-
-    my @violations = $self->_gather_violations($doc);
-
-    ## no critic (RequireExtendedFormatting, RequireLineBoundaryMatching)
-    my @lines_of_code = split /$INPUT_RECORD_SEPARATOR/, $doc->serialize();
-    ## use critic
-
-    my $subs = $doc->find('PPI::Statement::Sub');
-    my $number_of_subs = $subs ? scalar @{$subs} : 0;
-
-    my $statements = $doc->find('PPI::Statement');
-    my $number_of_statements = $statements ? scalar @{$statements} : 0;
-
-    return {
-        violations              => \@violations,
-        lines_of_code           => scalar @lines_of_code,
-        number_of_subs          => $number_of_subs,
-        number_of_statements    => $number_of_statements,
-    }
 }
 
 #=============================================================================
 # PRIVATE functions
 
 sub _create_perl_critic_document {
-    my ($source_code) = @_;
+    my ($self, $source_code) = @_;
 
     # $source_code can be a file name, or a reference to a
     # PPI::Document, or a reference to a scalar containing source
@@ -565,14 +529,6 @@ containing Perl code.  This method returns a list of
 L<Perl::Critic::Violation> objects for each violation of the loaded Policies.
 The list is sorted in the order that the Violations appear in the code.  If
 there are no violations, this method returns an empty list.
-
-=item C<critique_and_gather_statistics( $source_code )>
-
-Runs the C<$source_code> through the Perl::Critic engine as in L</"critique">.
-This method returns a reference to a hash containing the violations and some
-statistics.  The violations are in an array reference under the key
-"violations".  A hash is always returned, including the "violations" key, even
-if there are not violations.
 
 =item C<< add_policy( -policy => $policy_name, -params => \%param_hash ) >>
 
