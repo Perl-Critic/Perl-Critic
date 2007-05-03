@@ -125,10 +125,12 @@ lib/Perl/Critic/PolicyParameter/StringBehavior.pm
 lib/Perl/Critic/PolicyParameter/StringListBehavior.pm
 lib/Perl/Critic/PolicySummary.pod
 lib/Perl/Critic/ProfilePrototype.pm
+lib/Perl/Critic/Statistics.pm
 lib/Perl/Critic/TestUtils.pm
 lib/Perl/Critic/Theme.pm
 lib/Perl/Critic/UserProfile.pm
 lib/Perl/Critic/Utils.pm
+lib/Perl/Critic/Utils/McCabe.pm
 lib/Perl/Critic/Violation.pm
 LICENSE
 Makefile.PL

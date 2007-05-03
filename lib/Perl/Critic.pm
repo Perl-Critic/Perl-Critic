@@ -84,6 +84,17 @@ sub critique {
     $self = ref $self eq 'HASH' ? __PACKAGE__->new(%{ $self }) : $self;
     return if not $source_code;  # If no code, then nothing to do.
 
+    my $doc = $self->_create_perl_critic_document($source_code);
+
+    return $self->_gather_violations($doc);
+}
+
+#=============================================================================
+# PRIVATE functions
+
+sub _create_perl_critic_document {
+    my ($self, $source_code) = @_;
+
     # $source_code can be a file name, or a reference to a
     # PPI::Document, or a reference to a scalar containing source
     # code.  In the last case, PPI handles the translation for us.
@@ -104,7 +115,13 @@ sub critique {
     $doc->index_locations();
 
     # Wrap the doc in a caching layer
-    $doc = Perl::Critic::Document->new($doc);
+    return Perl::Critic::Document->new($doc);
+}
+
+#-----------------------------------------------------------------------------
+
+sub _gather_violations {
+    my ($self, $doc) = @_;
 
     # Disable the magic shebang fix
     my %is_line_disabled = _unfix_shebang($doc);
@@ -135,8 +152,7 @@ sub critique {
     return Perl::Critic::Violation->sort_by_location(@violations);
 }
 
-#============================================================================
-# PRIVATE functions
+#-----------------------------------------------------------------------------
 
 sub _is_ppi_doc {
     my ($ref) = @_;
