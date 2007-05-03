@@ -58,12 +58,13 @@ our @EXPORT_OK = qw(
     &is_class_name
     &is_function_call
     &is_hash_key
+    &is_in_void_context
     &is_included_module_name
     &is_label_pointer
     &is_method_call
     &is_package_declaration
-    &is_perl_builtin
     &is_perl_bareword
+    &is_perl_builtin
     &is_perl_builtin_with_list_context
     &is_perl_builtin_with_multiple_arguments
     &is_perl_builtin_with_no_arguments
@@ -709,6 +710,32 @@ sub is_script {
 
 #-----------------------------------------------------------------------------
 
+sub is_in_void_context {
+    my ($token) = @_;
+
+    # If part of a collective, can't be void.
+    return if $token->sprevious_sibling();
+
+    my $parent = $token->statement()->parent();
+    if ($parent) {
+        return if $parent->isa('PPI::Structure::List');
+        return if $parent->isa('PPI::Structure::ForLoop');
+        return if $parent->isa('PPI::Structure::Condition');
+        return if $parent->isa('PPI::Structure::Constructor');
+
+        my $grand_parent = $parent->parent();
+        if ($grand_parent) {
+            return if
+                    $parent->isa('PPI::Structure::Block')
+                and not $grand_parent->isa('PPI::Statement::Compound');
+        }
+    }
+
+    return $TRUE;
+}
+
+#-----------------------------------------------------------------------------
+
 sub policy_long_name {
     my ( $policy_name ) = @_;
     if ( $policy_name !~ m{ \A $POLICY_NAMESPACE }mx ) {
@@ -1196,6 +1223,10 @@ stable (or even present).
 Given a L<PPI::Document>, test if it starts with C</#!.*/>.  If so, it is
 judged to be a script instead of a module.  See C<shebang_line()>.
 
+=item C<is_in_void_context( $token )>
+
+Given a L<PPI::Token>, answer whether it appears to be in a void context.
+
 =item C< policy_long_name( $policy_name ) >
 
 Given a policy class name in long or short form, return the long form.
@@ -1381,6 +1412,12 @@ C<&is_method_call>,
 C<&is_package_declaration>,
 C<&is_perl_builtin>,
 C<&is_perl_global>,
+C<&is_perl_builtin_with_list_context>
+C<&is_perl_builtin_with_multiple_arguments>
+C<&is_perl_builtin_with_no_arguments>
+C<&is_perl_builtin_with_one_argument>
+C<&is_perl_builtin_with_optional_argument>
+C<&is_perl_builtin_with_zero_and_or_one_arguments>
 C<&is_script>,
 C<&is_subroutine_name>,
 C<&is_unchecked_call>

@@ -11,6 +11,10 @@
      * perlcritic now emits a summary about the scanned code when enabled by
        the "-statistics" option.
 
+     Policy Enhancements:
+     * InputOutput::ProhibitBacktickOperators can now be configured to only
+       check in void contexts.
+
      Bug Fixes:
      * ValuesAndExpressions::ProhibitCommaSeparatedStatements was complaining
        about multiple values in the list to be iterated over by a foreach
