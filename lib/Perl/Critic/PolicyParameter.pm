@@ -113,10 +113,8 @@ sub _initialize_from_behavior {
 sub _finish_standard_initialization {
     my ($self, $specification) = @_;
 
-    defined $specification->{description}
-        or confess 'Attempt to create a ', __PACKAGE__,
-                   ' without a description.';
-    $self->_set_description($specification->{description});
+    my $description = $specification->{description} || 'Unknown.';
+    $self->_set_description($description);
     $self->_set_default_string($specification->{default_string});
 
     $self->_set_parser($specification->{parser});

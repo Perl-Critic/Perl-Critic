@@ -1,6 +1,91 @@
-## name basic failures
-## failures 2
+## name Basic failures
+## failures 18
 ## cut
 
-@out = `some_command`;
-@out = qx{some_command};
+$string = `date`;
+@array = `date`;
+@array = ( `date` );
+@array = ( $foo, `date`, 'bar' );
+$array_ref = [ $foo, `date`, 'bar' ];
+
+print `date`;
+print ( `date` );
+
+if ( `date` ) {}
+
+for ( `date` ) {}
+
+$string = qx/date/;
+@array = qx/date/;
+@array = ( qx/date/ );
+@array = ( $foo, qx/date/, 'bar' );
+$array_ref = [ $foo, qx/date/, 'bar' ];
+
+print qx/date/;
+print ( qx/date/ );
+
+if ( qx/date/ ) {}
+
+for ( qx/date/ ) {}
+
+#-----------------------------------------------------------------------------
+
+## name Passing with only_in_void_context
+## failures 0
+## parms { only_in_void_context => 1 }
+## cut
+
+$string = `date`;
+@array = `date`;
+@array = ( `date` );
+@array = ( $foo, `date`, 'bar' );
+$array_ref = [ $foo, `date`, 'bar' ];
+
+print `date`;
+print ( `date` );
+
+if ( `date` ) {}
+
+for ( `date` ) {}
+
+$string = qx/date/;
+@array = qx/date/;
+@array = ( qx/date/ );
+@array = ( $foo, qx/date/, 'bar' );
+$array_ref = [ $foo, qx/date/, 'bar' ];
+
+print qx/date/;
+print ( qx/date/ );
+
+if ( qx/date/ ) {}
+
+for ( qx/date/ ) {}
+
+#-----------------------------------------------------------------------------
+
+## name Failure with only_in_void_context
+## failures 4
+## parms { only_in_void_context => 1 }
+## cut
+
+`date`;
+qx/date/;
+
+if ( $blah ) { `date` }
+if ( $blah ) { qx/date/ }
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :
