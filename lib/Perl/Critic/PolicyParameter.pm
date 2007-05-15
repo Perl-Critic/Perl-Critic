@@ -113,7 +113,8 @@ sub _initialize_from_behavior {
 sub _finish_standard_initialization {
     my ($self, $specification) = @_;
 
-    my $description = $specification->{description} || 'Unknown.';
+    my $description =
+        $specification->{description} || 'No description available.';
     $self->_set_description($description);
     $self->_set_default_string($specification->{default_string});
 
@@ -152,7 +153,7 @@ sub _get_description_with_trailing_period {
 
     my $description = $self->get_description();
     if ($description) {
-        if ( $PERIOD ne substr $description, length $description - 1 ) {
+        if ( $PERIOD ne substr $description, ( length $description ) - 1 ) {
             $description .= $PERIOD;
         }
     } else {
