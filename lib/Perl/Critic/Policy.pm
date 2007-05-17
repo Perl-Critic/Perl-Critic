@@ -16,6 +16,7 @@ use Perl::Critic::Utils qw{
     :data_conversion
     &policy_short_name
 };
+use Perl::Critic::PolicyParameter qw();
 use Perl::Critic::Violation qw();
 use String::Format qw(stringf);
 use overload ( q{""} => 'to_string', cmp => '_compare' );
@@ -28,9 +29,57 @@ my $FORMAT = "%p\n"; #Default stringy format
 
 #-----------------------------------------------------------------------------
 
+# Note: you can't put additional functionality here because subclasses are not
+# required to call up to the super-constructor.
 sub new {
     my $class = shift;
     return bless {}, $class;
+}
+
+#-----------------------------------------------------------------------------
+
+# Since Policies' constructors don't have to call up to the base class's one,
+# this exists to do what should be done there.  This is always invoked by
+# PolicyFactory after the Policy has been constructed, but should be invoked
+# by subclasses' constructors right after creating the blessed reference.
+#
+# Since the parameters are told to validate the configuration, this may throw
+# an exception.
+#
+# Note that the configuration is passed by reference here.
+sub _finish_standard_initialization {
+    my ($self, $config) = @_;
+
+    # Bail if this method was called previously.
+    return if defined $self->get_parameters();
+
+    my $parameters = $config->{__parameters};
+    $self->{_parameters} = $parameters ? $parameters : [];
+
+    foreach my $parameter ( @{$parameters} ) {
+        $parameter->parse_and_validate_config_value( $self, $config );
+    }
+
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
+# Called by PolicyFactory.  The results of this will be put into the
+# configuration so that _finish_standard_initialization() above can access it.
+sub _build_parameters {
+    my ($class) = @_;
+
+    my @parameters;
+
+    if ( $class->can('supported_parameters') ) {
+        @parameters =
+            map
+                { Perl::Critic::PolicyParameter->new($_) }
+                $class->supported_parameters()
+    }
+
+    return @parameters;
 }
 
 #-----------------------------------------------------------------------------
@@ -94,6 +143,14 @@ sub default_themes {
 
 #-----------------------------------------------------------------------------
 
+sub get_parameters {
+    my ($self) = @_;
+
+    return $self->{_parameters};
+}
+
+#-----------------------------------------------------------------------------
+
 sub violates {
     return confess q{Can't call abstract method};
 }
@@ -122,7 +179,7 @@ sub to_string {
 
     # Wrap the more expensive ones in sub{} to postpone evaluation
     my %fspec = (
-         'O' => sub { $self->_format_supported_parameters(@_) },
+         'O' => sub { $self->_format_parameters(@_) },
          'P' => ref $self,
          'p' => sub { policy_short_name( ref $self ) },
          'T' => sub { join $SPACE, $self->default_themes() },
@@ -133,13 +190,21 @@ sub to_string {
     return stringf($FORMAT, %fspec);
 }
 
-sub _format_supported_parameters {
+sub _format_parameters {
     my ($self, $format) = @_;
-    return $EMPTY if not $self->can('supported_parameters');
-    $format = Perl::Critic::Utils::interpolate( $format );
-    my @parameter_names = $self->supported_parameters();
-    return join $SPACE, @parameter_names if not $format;
-    return join $EMPTY, map { sprintf $format, $_ } @parameter_names;
+
+    my $separator;
+    if ($format) {
+        $separator = $EMPTY;
+    } else {
+        $separator = $SPACE;
+        $format = '%n';
+    }
+
+    return
+        join
+            $separator,
+            map { $_->to_formatted_string($format) } @{ $self->get_parameters() };
 }
 
 #-----------------------------------------------------------------------------
@@ -270,16 +335,25 @@ overwritten.  Duplicate themes will be removed.
 Appends additional themes to this Policy.  Any existing themes are
 preserved.  Duplicate themes will be removed.
 
+=item C< get_parameters() >
+
+Returns a reference to an array containing instances of
+L<Perl::Critic::PolicyParameter>.
+
+=item C< get_parameter( $parameter_name ) >
+
+Returns the L<Perl::Critic::PolicyParameter> with the specified name.
+
 =item C<set_format( $FORMAT )>
 
-Class method.  Sets the format for all Policy objects when they are evaluated
-in string context.  The default is C<"%p\n">.  See L<"OVERLOADS"> for
-formatting options.
+Class method.  Sets the format for all Policy objects when they are
+evaluated in string context.  The default is C<"%p\n">.  See
+L<"OVERLOADS"> for formatting options.
 
 =item C<get_format()>
 
-Class method. Returns the current format for all Policy objects when they are
-evaluated in string context.
+Class method. Returns the current format for all Policy objects when
+they are evaluated in string context.
 
 =item C<to_string()>
 
@@ -308,14 +382,19 @@ the way C<sprintf> works.  If you want to know the specific formatting
 capabilities, look at L<String::Format>. Valid escape characters are:
 
   Escape    Meaning
-  -------   -----------------------------------------------------------------
-  %O        Comma-delimited list of supported policy parameters
-  %P        Name of the Policy module
-  %p        Name of the Policy without the Perl::Critic::Policy:: prefix
-  %S        The default severity level of the policy
-  %s        The current severity level of the policy
-  %T        The default themes for the policy
-  %t        The current themes for the policy
+  -------   ----------------------------------------------------------
+  %O        List of supported policy parameters.  Takes an option of
+            a format string for
+            L<Perl::Critic::PolicyParameter/"to_formatted_string">.
+            For example, this can be used like C<%{%n - %d\n}O> to get
+            a list of parameter names followed by their descriptions.
+  %P        Name of the Policy module.
+  %p        Name of the Policy without the Perl::Critic::Policy::
+            prefix.
+  %S        The default severity level of the policy.
+  %s        The current severity level of the policy.
+  %T        The default themes for the policy.
+  %t        The current themes for the policy.
 
 =head1 AUTHOR
 

@@ -1,6 +1,7 @@
 bin/perlcritic
 Build.PL
 Changes
+doc/PolicyParameter_Notes.pod
 examples/generatestats
 examples/loadanalysisdb
 examples/perlcriticrc
@@ -114,6 +115,14 @@ lib/Perl/Critic/Policy/Variables/RequireLexicalLoopIterators.pm
 lib/Perl/Critic/Policy/Variables/RequireNegativeIndices.pm
 lib/Perl/Critic/PolicyFactory.pm
 lib/Perl/Critic/PolicyListing.pm
+lib/Perl/Critic/PolicyParameter.pm
+lib/Perl/Critic/PolicyParameter/Behavior.pm
+lib/Perl/Critic/PolicyParameter/BooleanBehavior.pm
+lib/Perl/Critic/PolicyParameter/EnumerationBehavior.pm
+lib/Perl/Critic/PolicyParameter/GenericBehavior.pm
+lib/Perl/Critic/PolicyParameter/IntegerBehavior.pm
+lib/Perl/Critic/PolicyParameter/StringBehavior.pm
+lib/Perl/Critic/PolicyParameter/StringListBehavior.pm
 lib/Perl/Critic/PolicySummary.pod
 lib/Perl/Critic/ProfilePrototype.pm
 lib/Perl/Critic/Statistics.pm
@@ -142,6 +151,11 @@ t/10_userprofile.t
 t/11_policyfactory.t
 t/12_policylisting.t
 t/13_bundled_policies.t
+t/14_policy_parameter_behavior_boolean.t
+t/14_policy_parameter_behavior_enumeration.t
+t/14_policy_parameter_behavior_integer.t
+t/14_policy_parameter_behavior_list_string.t
+t/14_policy_parameter_behavior_string.t
 t/14_policy_parameters.t
 t/20_policies.t
 t/20_policy_prohibithardtabs.t

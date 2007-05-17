@@ -46,6 +46,7 @@ HEREDOCs
 IDE
 Maxia
 Mehner
+metadata
 multi-line
 namespace
 namespaces
@@ -53,9 +54,10 @@ PBP
 perlcritic
 perlcriticrc
 PolicyListing
+PolicyParameter
 postfix
-programmatically
 PPI
+programmatically
 Readonly
 refactor
 refactoring

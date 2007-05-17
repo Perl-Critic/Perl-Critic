@@ -277,7 +277,7 @@ __END__
 
 =pod
 
-=for stopwords Metadata metadata
+=for stopwords
 
 =head1 NAME
 

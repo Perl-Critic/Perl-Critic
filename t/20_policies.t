@@ -6,6 +6,7 @@ use Test::More;
 use English qw(-no_match_vars);
 
 # common P::C testing tools
+use Perl::Critic::Utils qw( :characters );
 use Perl::Critic::TestUtils qw(pcritique fcritique subtests_in_tree);
 Perl::Critic::TestUtils::block_perlcriticrc();
 
@@ -51,8 +52,17 @@ for my $policy ( sort keys %$subtests ) {
                 ok($err, $desc);
             }
         }
+        elsif ($err) {
+            if ($err =~ m/\A Unable [ ] to [ ] create [ ] policy [ ] [']/xms) {
+                # We most likely hit a configuration that a parameter didn't like.
+                fail($desc);
+                diag($err);
+            }
+            else {
+                die $err;
+            }
+        }
         else {
-            die $err if $err;
             is($violations, $subtest->{failures}, $desc);
         }
     }

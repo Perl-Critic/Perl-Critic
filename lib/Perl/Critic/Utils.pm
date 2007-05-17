@@ -645,8 +645,7 @@ sub is_class_name {
     my $elem = shift;
     return if !$elem;
 
-    return _is_dereference_operator( $elem->snext_sibling() )
-        && !_is_dereference_operator( $elem->sprevious_sibling() );
+    return _is_dereference_operator( $elem->snext_sibling() );
 }
 
 #-----------------------------------------------------------------------------
