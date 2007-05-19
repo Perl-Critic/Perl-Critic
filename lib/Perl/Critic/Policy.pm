@@ -53,6 +53,9 @@ sub _finish_standard_initialization {
     # Bail if this method was called previously.
     return if defined $self->get_parameters();
 
+    $self->{_parameter_metadata_available} =
+        $config->{__parameter_metadata_available};
+
     my $parameters = $config->{__parameters};
     $self->{_parameters} = $parameters ? $parameters : [];
 
@@ -77,6 +80,9 @@ sub _build_parameters {
             map
                 { Perl::Critic::PolicyParameter->new($_) }
                 $class->supported_parameters()
+    } else {
+        # Special indicator that PolicyFactory looks for.
+        @parameters = (undef);
     }
 
     return @parameters;
@@ -139,6 +145,14 @@ sub add_themes {
 
 sub default_themes {
     return ();
+}
+
+#-----------------------------------------------------------------------------
+
+sub parameter_metadata_available {
+    my ($self) = @_;
+
+    return $self->{_parameter_metadata_available};
 }
 
 #-----------------------------------------------------------------------------
@@ -335,10 +349,19 @@ overwritten.  Duplicate themes will be removed.
 Appends additional themes to this Policy.  Any existing themes are
 preserved.  Duplicate themes will be removed.
 
+=item C< parameter_metadata_available() >
+
+Returns whether information about the parameters is available.
+
 =item C< get_parameters() >
 
 Returns a reference to an array containing instances of
 L<Perl::Critic::PolicyParameter>.
+
+Note that this will return an empty list if the parameters for this
+policy are unknown.  In order to differentiate between this
+circumstance and the one where this policy does not take any
+parameters, it is necessary to call C<parameter_metadata_available()>.
 
 =item C< get_parameter( $parameter_name ) >
 

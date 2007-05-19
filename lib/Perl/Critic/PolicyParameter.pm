@@ -11,6 +11,10 @@ use strict;
 use warnings;
 use Carp qw(confess);
 
+use Exporter qw{ import };
+
+our @EXPORT_OK = qw{ $NO_DESCRIPTION_AVAILABLE };
+
 use String::Format qw{ stringf };
 
 use Perl::Critic::PolicyParameter::Behavior;
@@ -23,6 +27,8 @@ use Perl::Critic::PolicyParameter::StringListBehavior;
 use Perl::Critic::Utils qw{ :characters &interpolate };
 
 our $VERSION = 1.051;
+
+our $NO_DESCRIPTION_AVAILABLE = 'No description available.';
 
 #-----------------------------------------------------------------------------
 
@@ -114,7 +120,7 @@ sub _finish_standard_initialization {
     my ($self, $specification) = @_;
 
     my $description =
-        $specification->{description} || 'No description available.';
+        $specification->{description} || $NO_DESCRIPTION_AVAILABLE;
     $self->_set_description($description);
     $self->_set_default_string($specification->{default_string});
 

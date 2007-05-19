@@ -22,7 +22,7 @@ my $expl = [ 404 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return() }
+sub supported_parameters { return () }
 sub default_severity     { return $SEVERITY_LOW            }
 sub default_themes       { return qw(core pbp readability) }
 sub applies_to           { return 'PPI::Document'          }
@@ -121,8 +121,8 @@ This Policy scans your file for any package variable named
 C<$VERSION>.  I'm assuming that you are using C<strict>, so you'll
 have to declare it like one of these:
 
-  our $VERSION = 1.0511;
-  $MyPackage::VERSION = 1.0511;
+  our $VERSION = 1.031;
+  $MyPackage::VERSION = 1.031;
   use vars qw($VERSION);
 
 A common practice is to use the C<$Revision$> keyword to automatically

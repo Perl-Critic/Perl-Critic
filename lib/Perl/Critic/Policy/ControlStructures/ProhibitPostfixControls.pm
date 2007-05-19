@@ -9,7 +9,7 @@ package Perl::Critic::Policy::ControlStructures::ProhibitPostfixControls;
 
 use strict;
 use warnings;
-use Perl::Critic::Utils qw{ :severities :data_conversion :classification };
+use Perl::Critic::Utils qw{ :characters :severities :data_conversion :classification };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.051;
@@ -17,11 +17,12 @@ our $VERSION = 1.051;
 #-----------------------------------------------------------------------------
 
 my %pages_of = (
-    if     => [ 93, 94 ],
-    unless => [ 96, 97 ],
-    until  => [ 96, 97 ],
-    for    => [ 96     ],
-    while  => [ 96     ],
+    if      => [ 93, 94 ],
+    unless  => [ 96, 97 ],
+    until   => [ 96, 97 ],
+    for     => [ 96     ],
+    foreach => [ 96     ],
+    while   => [ 96     ],
 );
 
 my @exemptions = qw( warn die carp croak cluck confess goto exit );
@@ -29,26 +30,20 @@ my %exemptions = hashify( @exemptions );
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return qw( allow )           }
+sub supported_parameters {
+    return (
+        {
+            name               => 'allow',
+            description        => 'The permitted postfix controls.',
+            default_string     => $EMPTY,
+            behavior           => 'string list',
+        },
+    );
+}
+
 sub default_severity  { return $SEVERITY_LOW         }
 sub default_themes    { return qw(core pbp cosmetic) }
 sub applies_to        { return 'PPI::Token::Word'    }
-
-#-----------------------------------------------------------------------------
-
-sub new {
-    my ( $class, %args ) = @_;
-    my $self = bless {}, $class;
-    $self->{_allow} = {};
-
-    #Set config, if defined
-    if ( defined $args{allow} ) {
-        my %allowed = hashify( words_from_string( $args{allow} ) );
-        $self->{_allow} = \%allowed;
-    }
-
-    return $self;
-}
 
 #-----------------------------------------------------------------------------
 

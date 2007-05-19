@@ -21,28 +21,27 @@ my $expl = [ 59 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return qw( min_value )         }
+sub supported_parameters {
+    return (
+        {
+            name            => 'min_value',
+            description     => 'The minimum absolute value to require separators in.',
+            default_string  => '10000',
+            behavior        => 'integer',
+            integer_minimum => 10,
+        },
+    );
+}
+
 sub default_severity  { return $SEVERITY_LOW           }
 sub default_themes    { return qw( core pbp cosmetic ) }
 sub applies_to        { return 'PPI::Token::Number'    }
 
 #-----------------------------------------------------------------------------
 
-sub new {
-    my ( $class, %args ) = @_;
-    my $self = bless {}, $class;
-
-    #Set configuration, if defined
-    $self->{_min} = defined $args{min_value} ? $args{min_value} : 10_000;
-
-    return $self;
-}
-
-#-----------------------------------------------------------------------------
-
 sub violates {
     my ( $self, $elem, undef ) = @_;
-    my $min = $self->{_min};
+    my $min = $self->{_min_value};
 
     return if $elem !~ m{ \d{4} }mx;
     return if abs _to_number($elem) < $min;

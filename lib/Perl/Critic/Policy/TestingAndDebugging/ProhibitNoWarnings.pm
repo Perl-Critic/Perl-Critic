@@ -10,7 +10,7 @@ package Perl::Critic::Policy::TestingAndDebugging::ProhibitNoWarnings;
 use strict;
 use warnings;
 use List::MoreUtils qw(all);
-use Perl::Critic::Utils qw{ :severities :data_conversion };
+use Perl::Critic::Utils qw{ :characters :severities :data_conversion };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.051;
@@ -22,25 +22,35 @@ my $expl = [ 431 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return qw( allow )               }
+sub supported_parameters {
+    return (
+        {
+            name            => 'allow',
+            description     => 'Permitted warning categories.',
+            default_string  => $EMPTY,
+            parser          => \&_parse_allow,
+        },
+    );
+}
+
 sub default_severity     { return $SEVERITY_HIGH            }
 sub default_themes       { return qw( core bugs pbp )       }
 sub applies_to           { return 'PPI::Statement::Include' }
 
 #-----------------------------------------------------------------------------
 
-sub new {
-    my ($class, %args) = @_;
-    my $self = bless {}, $class;
+sub _parse_allow {
+    my ($self, $parameter, $config_string) = @_;
+
     $self->{_allow} = {};
 
-    if( defined $args{allow} ) {
-        my $allowed = lc $args{allow}; #String of words
+    if( defined $config_string ) {
+        my $allowed = lc $config_string; #String of words
         my %allowed = hashify( $allowed =~ m/ (\w+) /gmx );
         $self->{_allow} = \%allowed;
     }
 
-    return $self;
+    return;
 }
 
 #-----------------------------------------------------------------------------
@@ -54,7 +64,7 @@ sub violates {
 
     #Arguments to 'no warnings' are usually a list of literals or a
     #qw() list.  Rather than trying to parse the various PPI elements,
-    #I just use a regext to split the statement into words.  This is
+    #I just use a regex to split the statement into words.  This is
     #kinda lame, but it does the trick for now.
 
     my $stmnt = $elem->statement();

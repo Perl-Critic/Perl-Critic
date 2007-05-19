@@ -10,7 +10,7 @@ package Perl::Critic::Policy::ValuesAndExpressions::ProhibitInterpolationOfLiter
 use strict;
 use warnings;
 use List::MoreUtils qw(any);
-use Perl::Critic::Utils qw{ :severities :data_conversion };
+use Perl::Critic::Utils qw{ :characters :severities :data_conversion };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.051;
@@ -22,7 +22,18 @@ my $expl = [51];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters  { return qw( allow )             }
+sub supported_parameters {
+    return (
+        {
+            name               => 'allow',
+            description        =>
+                'Kinds of delimiters to permit, e.g. "qq{", "qq(", "qq[", "qq/".',
+            default_string     => $EMPTY,
+            parser             => \&_parse_allow,
+        },
+    );
+}
+
 sub default_severity   { return $SEVERITY_LOWEST        }
 sub default_themes     { return qw( core pbp cosmetic ) }
 sub applies_to         { return qw(PPI::Token::Quote::Double
@@ -30,14 +41,13 @@ sub applies_to         { return qw(PPI::Token::Quote::Double
 
 #-----------------------------------------------------------------------------
 
-sub new {
-    my ( $class, %args ) = @_;
-    my $self = bless {}, $class;
-    $self->{_allow} = [];
+sub _parse_allow {
+    my ($self, $parameter, $config_string) = @_;
 
-    #Set configuration, if defined
-    if ( defined $args{allow} ) {
-        my @allow = words_from_string( $args{allow} );
+    my @allow;
+
+    if (defined $config_string) {
+        @allow = words_from_string( $config_string );
         #Try to be forgiving with the configuration...
         for (@allow) {
             m{ \A qq }mx || ($_ = 'qq' . $_)
@@ -45,10 +55,11 @@ sub new {
         for (@allow) {
             (length $_ <= 3) || chop
         }    #Chop closing char
-        $self->{_allow} = \@allow;
     }
 
-    return $self;
+    $self->{_allow} = \@allow;
+
+    return;
 }
 
 #-----------------------------------------------------------------------------
@@ -59,7 +70,7 @@ sub violates {
     # Skip if this string needs interpolation
     return if _has_interpolation($elem);
 
-    #Overlook allowed quote styles
+    # Overlook allowed quote styles
     return if any { $elem =~ m{ \A \Q$_\E }mx } @{ $self->{_allow} };
 
     # Must be a violation

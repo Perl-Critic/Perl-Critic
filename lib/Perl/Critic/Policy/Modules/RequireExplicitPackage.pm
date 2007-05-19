@@ -21,23 +21,20 @@ my $desc = q{Code not contained in explicit package};
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return qw( exempt_scripts ) }
+sub supported_parameters {
+    return (
+        {
+            name           => 'exempt_scripts',
+            description    => q{Don't require programs to contain a package statement.},
+            default_string => '1',
+            behavior       => 'boolean',
+        },
+    );
+}
+
 sub default_severity  { return $SEVERITY_HIGH       }
 sub default_themes    { return qw( core bugs )      }
 sub applies_to        { return 'PPI::Document'      }
-
-#-----------------------------------------------------------------------------
-
-sub new {
-    my ( $class, %args ) = @_;
-    my $self = bless {}, $class;
-
-    #Set config, if defined
-    $self->{_exempt_scripts} =
-      defined $args{exempt_scripts} ? $args{exempt_scripts} : 1;
-
-    return $self;
-}
 
 #-----------------------------------------------------------------------------
 

@@ -9,7 +9,7 @@ package Perl::Critic::Policy::Variables::ProhibitPunctuationVars;
 
 use strict;
 use warnings;
-use Perl::Critic::Utils qw{ :severities :data_conversion };
+use Perl::Critic::Utils qw{ :characters :severities :data_conversion };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.051;
@@ -19,38 +19,32 @@ our $VERSION = 1.051;
 my $desc = q{Magic punctuation variable used};
 my $expl = [ 79 ];
 
-
-my %default_exempt = hashify( qw( $_ @_ $1 $2 $3 $4 $5 $6 $7 $8 $9 _ ) );
-
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return qw( allow )           }
+sub supported_parameters {
+    return (
+        {
+            name            => 'allow',
+            description     => 'The additional variables to allow.',
+            default_string  => $EMPTY,
+            behavior        => 'string list',
+            list_always_present_values =>
+                                 [ qw( $_ @_ $1 $2 $3 $4 $5 $6 $7 $8 $9 _ ) ],
+        },
+    );
+}
+
 sub default_severity  { return $SEVERITY_LOW         }
 sub default_themes    { return qw(core pbp cosmetic) }
 sub applies_to        { return 'PPI::Token::Magic'   }
 
 #-----------------------------------------------------------------------------
 
-sub new {
-    my ( $class, %args ) = @_;
-    my $self = bless {}, $class;
-
-    $self->{_exempt} = \%default_exempt;
-    if ( defined $args{allow} ) {
-        my @allow = words_from_string( $args{allow} );
-        for my $varname (@allow) {
-            $self->{_exempt}->{$varname} = 1;
-        }
-    }
-
-    return $self;
-}
-
 #-----------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
-    if ( !exists $self->{_exempt}->{$elem} ) {
+    if ( !exists $self->{_allow}->{$elem} ) {
         return $self->violation( $desc, $expl, $elem );
     }
     return;  #ok!

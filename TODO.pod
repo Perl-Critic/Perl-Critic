@@ -39,8 +39,6 @@ Replace current workaround for C<RequireUseStrict>.
 
 =over 4
 
-=item * Once policies from the parameters branch are brought over, fix t/14_policy_parameters.t to check for parameter descriptions.
-
 =item * Modules::RequireVersionVar
 
 Doesn't enforce three-part versions
