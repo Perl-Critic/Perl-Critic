@@ -17,6 +17,7 @@
 
      Bug Fixes:
      * 27073: False positive in RequireUpperCaseHeredocTerminator
+     * 26462: ControlStructures::ProhibitCascadingIfElse pod typo
      * ValuesAndExpressions::ProhibitCommaSeparatedStatements was complaining
        about multiple values in the list to be iterated over by a foreach
        loop.
