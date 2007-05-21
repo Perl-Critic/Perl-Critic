@@ -16,9 +16,11 @@
        check in void contexts.
 
      Bug Fixes:
+     * 27073: False positive in RequireUpperCaseHeredocTerminator
      * ValuesAndExpressions::ProhibitCommaSeparatedStatements was complaining
        about multiple values in the list to be iterated over by a foreach
        loop.
+
 
 [1.051]  Released on 2007-04-12
 

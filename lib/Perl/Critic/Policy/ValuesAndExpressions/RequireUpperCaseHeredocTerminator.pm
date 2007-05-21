@@ -16,7 +16,7 @@ our $VERSION = 1.051;
 
 #-----------------------------------------------------------------------------
 
-my $heredoc_rx = qr{ \A << ["|']? [A-Z_] [A-Z0-9_]* ['|"]? \z }x;
+my $heredoc_rx = qr{ \A << \s* ["|']? [A-Z_] [A-Z0-9_]* ['|"]? \z }x;
 my $desc       = q{Heredoc terminator not alphanumeric and upper-case};
 my $expl       = [ 64 ];
 
