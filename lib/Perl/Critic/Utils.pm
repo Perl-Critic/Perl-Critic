@@ -587,6 +587,9 @@ sub is_hash_key {
     my $elem = shift;
     return if !$elem;
 
+    #If followed by an argument list, then its a function call, not a literal
+    return if _is_followed_by_parens($elem);
+
     #Check curly-brace style: $hash{foo} = bar;
     my $parent = $elem->parent();
     return if !$parent;
@@ -601,6 +604,16 @@ sub is_hash_key {
     return 1 if $sib->isa('PPI::Token::Operator') && $sib eq '=>';
 
     return;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _is_followed_by_parens {
+    my $elem = shift;
+    return if !$elem;
+
+    my $sibling = $elem->snext_sibling() || return;
+    return $sibling->isa('PPI::Structure::List');
 }
 
 #-----------------------------------------------------------------------------
@@ -685,7 +698,7 @@ sub is_subroutine_name {
 
 sub is_function_call {
     my $elem  = shift;
-    return if ! $elem;
+    return if !$elem;
 
     return if is_hash_key($elem);
     return if is_method_call($elem);
@@ -1137,8 +1150,8 @@ can't be determined (which is usually because it is not an operator).
 
 =item C<is_hash_key( $element )>
 
-Given a L<PPI::Element>, returns true if the element is a hash key.  PPI
-doesn't distinguish between regular barewords (like keywords or subroutine
+Given a L<PPI::Element>, returns true if the element is a literal hash key.
+PPI doesn't distinguish between regular barewords (like keywords or subroutine
 calls) and barewords in hash subscripts (which are considered literal).  So
 this subroutine is useful if your Policy is searching for L<PPI::Token::Word>
 elements and you want to filter out the hash subscript variety.  In both of
@@ -1146,6 +1159,12 @@ the following examples, "foo" is considered a hash key:
 
   $hash1{foo} = 1;
   %hash2 = (foo => 1);
+
+But if the bareword is followed by an argument list, then perl treats it as a
+function call.  So in these examples, "foo" is B<not> considered a hash key:
+
+  $hash1{ foo() } = 1;
+  &hash2 = (foo() => 1);
 
 =item C<is_included_module_name( $element )>
 
