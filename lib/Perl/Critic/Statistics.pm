@@ -20,18 +20,6 @@ our $VERSION = 1.051;
 
 #-----------------------------------------------------------------------------
 
-our $AUTOLOAD;
-
-sub AUTOLOAD {  ## no critic(ProhibitAutoloading)
-    my ( $method ) = $AUTOLOAD =~ m/ ( [^:]+ ) \z /xms;
-    return if $method eq 'DESTROY';
-
-    my ( $self ) = @_;
-    return $self->_critic()->$method(@_);
-}
-
-#-----------------------------------------------------------------------------
-
 sub new {
     my ( $class, $critic ) = @_;
 
@@ -204,12 +192,14 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Statistics - Decorator for a L<Perl::Critic> instance to accumulate statistics.
+Perl::Critic::Statistics - Decorator for a L<Perl::Critic> instance to
+accumulate statistics.
 
 =head1 DESCRIPTION
 
 Wraps an instance of L<Perl::Critic> and aggregates statistics resulting from
-calls to C<critique()>.
+calls to C<critique()>.  NOTE: This class is expermiental and subject to
+change.
 
 =head1 METHODS
 
