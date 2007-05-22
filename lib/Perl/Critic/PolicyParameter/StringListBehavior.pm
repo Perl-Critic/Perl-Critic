@@ -29,7 +29,7 @@ sub initialize_parameter {
     # t/92_memory_leaks.t to fall over.
     my $always_present_values = $specification->{list_always_present_values};
     $parameter->_get_behavior_values()->{always_present_values} =
-    $always_present_values;
+        $always_present_values;
 
     if ( not $always_present_values ) {
         $always_present_values = [];

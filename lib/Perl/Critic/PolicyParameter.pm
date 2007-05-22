@@ -20,7 +20,6 @@ use String::Format qw{ stringf };
 use Perl::Critic::PolicyParameter::Behavior;
 use Perl::Critic::PolicyParameter::BooleanBehavior;
 use Perl::Critic::PolicyParameter::EnumerationBehavior;
-use Perl::Critic::PolicyParameter::GenericBehavior;
 use Perl::Critic::PolicyParameter::IntegerBehavior;
 use Perl::Critic::PolicyParameter::StringBehavior;
 use Perl::Critic::PolicyParameter::StringListBehavior;
@@ -43,8 +42,6 @@ my %BEHAVIORS =
         'string'      => Perl::Critic::PolicyParameter::StringBehavior->new(),
         'string list' => Perl::Critic::PolicyParameter::StringListBehavior->new(),
     );
-
-my $GENERIC_BEHAVIOR = Perl::Critic::PolicyParameter::GenericBehavior->new();
 
 sub _get_behavior_for_name {
     my $behavior_name = shift;
@@ -103,7 +100,7 @@ sub _initialize_from_behavior {
     if ($behavior_name) {
         $behavior = _get_behavior_for_name($behavior_name);
     } else {
-        $behavior = $GENERIC_BEHAVIOR;
+        $behavior = _get_behavior_for_name('string');
     }
 
     $self->{_behavior} = $behavior;
