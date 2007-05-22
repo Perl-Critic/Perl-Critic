@@ -143,6 +143,7 @@ t/11_policyfactory.t
 t/12_policylisting.t
 t/13_bundled_policies.t
 t/14_policy_parameters.t
+t/15_statistics.t
 t/20_policies.t
 t/20_policy_prohibithardtabs.t
 t/20_policy_prohibittrailingwhitespace.t

@@ -20,7 +20,7 @@ use Perl::Critic::Violation qw();
 use String::Format qw(stringf);
 use overload ( q{""} => 'to_string', cmp => '_compare' );
 
-our $VERSION = 1.051;
+our $VERSION = 1.052;
 
 #-----------------------------------------------------------------------------
 
