@@ -296,7 +296,7 @@ sub report_statistics {
     if ( $statistics->total_violations() ) {
         print "\n";
 
-        my %severity_violations = %{ $statistics->severity_violations() };
+        my %severity_violations = %{ $statistics->violations_by_severity() };
         foreach my $severity ( reverse sort keys %severity_violations ) {
             print
                 _commaify($severity_violations{$severity}),
@@ -305,7 +305,7 @@ sub report_statistics {
 
         print "\n";
 
-        my %policy_violations = %{ $statistics->policy_violations() };
+        my %policy_violations = %{ $statistics->violations_by_policy() };
         foreach my $policy ( sort keys %policy_violations ) {
             print
                 _commaify($policy_violations{$policy}),

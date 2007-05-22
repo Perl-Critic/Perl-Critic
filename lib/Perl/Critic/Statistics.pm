@@ -30,8 +30,8 @@ sub new {
     $self->{_subs} = 0;
     $self->{_statements} = 0;
     $self->{_lines_of_code} = 0;
-    $self->{_severity_violations} = {};
-    $self->{_policy_violations} = {};
+    $self->{_violations_by_policy} = {};
+    $self->{_violations_by_severity} = {};
     $self->{_total_violations} = 0;
 
     return $self;
@@ -78,8 +78,8 @@ sub _accumulate {
     $self->{_lines_of_code} += scalar @lines_of_code;
 
     foreach my $violation ( @{ $violations } ) {
-        $self->{_severity_violations}->{ $violation->severity() }++;
-        $self->{_policy_violations}->{ $violation->policy() }++;
+        $self->{_violations_by_severity}->{ $violation->severity() }++;
+        $self->{_violations_by_policy}->{ $violation->policy() }++;
         $self->{_total_violations}++;
     }
 
@@ -136,18 +136,18 @@ sub _subs_total_mccabe {
 
 #-----------------------------------------------------------------------------
 
-sub severity_violations {
+sub violations_by_severity {
     my ( $self ) = @_;
 
-    return $self->{_severity_violations};
+    return $self->{_violations_by_severity};
 }
 
 #-----------------------------------------------------------------------------
 
-sub policy_violations {
+sub violations_by_policy {
     my ( $self ) = @_;
 
-    return $self->{_policy_violations};
+    return $self->{_violations_by_policy};
 }
 
 #-----------------------------------------------------------------------------
@@ -198,7 +198,7 @@ accumulate statistics.
 =head1 DESCRIPTION
 
 Wraps an instance of L<Perl::Critic> and aggregates statistics resulting from
-calls to C<critique()>.  NOTE: This class is expermiental and subject to
+calls to C<critique()>.  NOTE: This class is experimental and subject to
 change.
 
 =head1 METHODS
@@ -229,12 +229,12 @@ The number of statements analyzed by C<critique()>.
 
 The number of lines of code analyzed by C<critique()>.
 
-=item C<severity_violations()>
+=item C<violations_by_severity()>
 
 The number of violations of each severity found by C<critique()> as a
 reference to a hash keyed by severity.
 
-=item C<policy_violations()>
+=item C<violations_by_policy()>
 
 The number of violations of each policy found by C<critique()> as a
 reference to a hash keyed by full policy name.

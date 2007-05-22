@@ -27,11 +27,11 @@ my @methods = qw(
     lines_of_code
     modules
     new
-    policy_violations
-    severity_violations
     statements
     subs
     total_violations
+    violations_by_policy
+    violations_by_severity
     violations_per_line_of_code
 );
 
