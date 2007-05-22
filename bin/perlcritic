@@ -607,7 +607,7 @@ or least restrictive level, then you can use one of these named values:
 =item C<-gentle | -stern | -harsh | -cruel | -brutal>
 
 These are named shortcuts for setting the C<-severity> option.  For example,
-C<"-cruel"> is equivalent to C<"-severity 4">.  If multiple shortcuts are
+C<"-cruel"> is equivalent to C<"-severity 2">.  If multiple shortcuts are
 specified, then the most restrictive one wins.  If an explicit C<-severity>
 option is also given, then all shortcut options are silently ignored.
 
