@@ -39,24 +39,7 @@ sub new {
 
 #-----------------------------------------------------------------------------
 
-sub critique {
-    my ( $self, $source_code ) = @_;
-
-    return if not $source_code;
-
-    my $critic = $self->_critic();
-
-    my $doc = $critic->_create_perl_critic_document($source_code);
-    my @violations = $critic->_gather_violations($doc);
-
-    $self->_accumulate($doc, \@violations);
-
-    return @violations;
-}
-
-#-----------------------------------------------------------------------------
-
-sub _accumulate {
+sub accumulate {
     my ($self, $doc, $violations) = @_;
 
     $self->{_modules}++;
@@ -84,14 +67,6 @@ sub _accumulate {
     }
 
     return;
-}
-
-#------------------------------------------------------------------------------
-
-sub _critic {
-    my ( $self ) = @_;
-
-    return $self->{_critic};
 }
 
 #-----------------------------------------------------------------------------
@@ -192,56 +167,56 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Statistics - Decorator for a L<Perl::Critic> instance to
-accumulate statistics.
+Perl::Critic::Statistics - Compile stats on Perl::Critic violations
 
 =head1 DESCRIPTION
 
-Wraps an instance of L<Perl::Critic> and aggregates statistics resulting from
-calls to C<critique()>.  NOTE: This class is experimental and subject to
-change.
+This class accumulates statistics on Perl::Critic violations across one or
+more files.  NOTE: This class is experimental and subject to change.
 
 =head1 METHODS
 
 =over
 
-=item C<new( $critic )>
+=item C<new()>
 
-Create a new instance around a L<Perl::Critic>.
+Create a new instance of Perl::Critic::Statistics.  No arguments are supported
+at this time.
 
-=item C<critique( $source_code )>
+=item C< accumulate( $doc, \@violations ) >
 
-Version of L<Perl::Critic/"critique"> that gathers statistics.
+Accumulates statistics about the C<$doc> and the C<@violations> that were
+found.
 
 =item C<modules()>
 
-The number of chunks of code that have been passed to C<critique()>.
+The number of chunks of code (usually files) that have been analyzed.
 
 =item C<subs()>
 
-The number of subroutines analyzed by C<critique()>.
+The total number of subroutines analyzed by this Critic.
 
 =item C<statements()>
 
-The number of statements analyzed by C<critique()>.
+The total number of statements analyzed by this Critic.
 
 =item C<lines_of_code()>
 
-The number of lines of code analyzed by C<critique()>.
+The total number of lines of code analyzed by this Critic.
 
 =item C<violations_by_severity()>
 
-The number of violations of each severity found by C<critique()> as a
+The number of violations of each severity found by this Critic as a
 reference to a hash keyed by severity.
 
 =item C<violations_by_policy()>
 
-The number of violations of each policy found by C<critique()> as a
+The number of violations of each policy found by this Critic as a
 reference to a hash keyed by full policy name.
 
 =item C<total_violations()>
 
-The the total number of violations found by C<critique()>.
+The the total number of violations found by this Critic.
 
 =item C<average_sub_mccabe()>
 

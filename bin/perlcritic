@@ -190,21 +190,11 @@ sub critique {
     $CRITIC = Perl::Critic->new( %{$opts_ref} );
     my $number_of_violations = undef;
 
-    my $statistics;
-    if ($opts_ref->{-statistics}) {
-        require Perl::Critic::Statistics;
-        $statistics = Perl::Critic::Statistics->new($CRITIC);
-        $CRITIC = $statistics;
-    }
-
-
     for my $file (@files) {
 
         eval {
-            my @violations;
 
-            @violations = $CRITIC->critique($file);
-
+            my @violations = $CRITIC->critique($file);
             render_report( $file, $opts_ref, @violations );
             $number_of_violations += scalar @violations;
         };
@@ -213,8 +203,9 @@ sub critique {
             if $EVAL_ERROR;
     }
 
-    if ($statistics) {
-        report_statistics( $opts_ref, $statistics );
+    if ( $opts_ref->{-statistics} ) {
+        my $stats = $CRITIC->statistics();
+        report_statistics( $opts_ref, $stats );
     }
 
     return $number_of_violations;

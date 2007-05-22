@@ -10,7 +10,7 @@
 use strict;
 use warnings;
 
-use Test::More (tests => 18);
+use Test::More (tests => 19);
 use English qw(-no_match_vars);
 use Perl::Critic::PolicyFactory (-test => 1);
 use Perl::Critic::TestUtils;
@@ -52,8 +52,10 @@ END_PERL
 #-----------------------------------------------------------------------------
 
 my $critic = Perl::Critic->new( -severity => 1 );
-my $stats  = Perl::Critic::Statistics->new( $critic );
-$stats->critique( \$code );
+my @violations = $critic->critique( \$code );
+
+#print @violations;
+#exit;
 
 my %expected_stats = (
     average_sub_mccabe            => 2,
@@ -64,6 +66,9 @@ my %expected_stats = (
     total_violations              => 10,
     violations_per_line_of_code   => 2,
 );
+
+my $stats = $critic->statistics();
+isa_ok($stats, $pkg);
 
 while ( my($method, $expected) = each %expected_stats) {
     is( $stats->$method, $expected, "Statistics: $method");
