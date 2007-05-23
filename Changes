@@ -11,6 +11,10 @@
      * perlcritic now emits a summary about the scanned code when enabled by
        the "-statistics" option.
 
+     * perlcritic now emits errors for all the problems it can find for the
+       global options in the command-line parameters and .perlcriticrc file,
+       rather than bailing on the first one it encounters.
+
      * A new metadata system for defining policy parameters/options has been
        added.  This makes the life of policy authors easier because
        configuration validation and parsing can be taken care of

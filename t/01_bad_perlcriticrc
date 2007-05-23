@@ -1,0 +1,21 @@
+# Test that all the problems in an rc file get reported and not just the first
+# one that is found.
+
+# Purposely bad values
+severity = 6
+theme = &&
+include = *
+exclude = *
+singlepolicy = *
+top = -1
+verbose = 2095
+
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=conf expandtab :

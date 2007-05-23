@@ -11,13 +11,16 @@ use strict;
 use warnings;
 use Carp qw(confess);
 use English qw(-no_match_vars);
+
 use List::MoreUtils qw(any none apply);
 use Scalar::Util qw(blessed);
+
+use Perl::Critic::ConfigErrors;
 use Perl::Critic::PolicyFactory;
-use Perl::Critic::Theme qw();
+use Perl::Critic::Theme qw( $RULE_INVALID_CHARACTER_REGEX &cook_rule );
 use Perl::Critic::UserProfile qw();
 use Perl::Critic::Utils qw{
-    :booleans :characters :severities :internal_lookup
+    :booleans :characters :severities :internal_lookup :classification
 };
 
 #-----------------------------------------------------------------------------
@@ -38,7 +41,6 @@ sub new {
 #-----------------------------------------------------------------------------
 
 sub _init {
-
     my ( $self, %args ) = @_;
 
     # -top or -theme imply that -severity is 1, unless it is already defined
@@ -46,33 +48,46 @@ sub _init {
         $args{-severity} ||= $SEVERITY_LOWEST;
     }
 
+    my $errors = Perl::Critic::ConfigErrors->new();
+
     # Construct the UserProfile to get default options.
-    my $p        = $args{-profile}; #Can be file path or data struct
-    my $profile  = Perl::Critic::UserProfile->new( -profile => $p );
+    my $profile_source  = $args{-profile}; #Can be file path or data struct
+    my $profile =
+        Perl::Critic::UserProfile->new( -profile => $profile_source );
     my $defaults = $profile->defaults();
     $self->{_profile} = $profile;
 
     # If given, these options should always have a true value.
-    $self->{_include}      = $args{-include}      || $defaults->include();
-    $self->{_exclude}      = $args{-exclude}      || $defaults->exclude();
-    $self->{_singlepolicy} = $args{-singlepolicy} || $defaults->singlepolicy();
-    $self->{_verbose}      = $args{-verbose}      || $defaults->verbose();
+    $self->_validate_and_save_regex(
+        'include', $args{-include}, $defaults->include(), $errors
+    );
+    $self->_validate_and_save_regex(
+        'exclude', $args{-exclude}, $defaults->exclude(), $errors
+    );
+    $self->_validate_and_save_regex(
+        'singlepolicy',
+        $args{-singlepolicy},
+        $defaults->singlepolicy(),
+        $errors,
+    );
 
-    # Severity levels can be expressed as names or numbers
-    my $severity        = $args{-severity} || $defaults->severity();
-    $self->{_severity}  = severity_to_number( $severity );
+    $self->_validate_and_save_verbosity($args{-verbose}, $errors);
+    $self->_validate_and_save_severity($args{-severity}, $errors);
+    $self->_validate_and_save_top($args{-top}, $errors);
 
     # If given, these options can be true or false (but defined)
     # We normalize these to numeric values by multiplying them by 1;
-    no warnings 'numeric'; ## no critic (ProhibitNoWarnings)
-    $self->{_top}   = 1 * _dor( $args{-top},   $defaults->top()   );
-    $self->{_force} = 1 * _dor( $args{-force}, $defaults->force() );
-    $self->{_only}  = 1 * _dor( $args{-only},  $defaults->only()  );
+    {
+        no warnings 'numeric'; ## no critic (ProhibitNoWarnings)
+        $self->{_force} = 1 * _dor( $args{-force}, $defaults->force() );
+        $self->{_only}  = 1 * _dor( $args{-only},  $defaults->only()  );
+    }
 
-    # Construct a Theme object from rule
-    my $theme_rule = $args{-theme} || $defaults->theme();
-    my $theme = Perl::Critic::Theme->new( -rule => $theme_rule );
-    $self->{_theme} = $theme;
+    $self->_validate_and_save_theme($args{-theme}, $errors);
+
+    if ( @{ $errors->messages() } ) {
+        die $errors;  ## no critic (RequireCarping)
+    }
 
     # Construct a Factory with the Profile
     my $factory = Perl::Critic::PolicyFactory->new( -profile => $profile );
@@ -82,7 +97,7 @@ sub _init {
     $self->{_policies} = [];
 
     # "NONE" means don't load any policies
-    return $self if defined $p and $p eq 'NONE';
+    return $self if defined $profile_source and $profile_source eq 'NONE';
 
     # Heavy lifting here...
     $self->_load_policies();
@@ -155,14 +170,14 @@ sub _load_policies {
         $self->_throw_single_policy_exception();
     }
 
-    return $self;
+    return;
 }
 
 #-----------------------------------------------------------------------------
 
 sub _policy_is_disabled {
     my ($self, $policy) = @_;
-    my $profile = $self->{_profile};
+    my $profile = $self->_profile();
     return $profile->policy_is_disabled( $policy );
 }
 
@@ -170,7 +185,7 @@ sub _policy_is_disabled {
 
 sub _policy_is_enabled {
     my ($self, $policy) = @_;
-    my $profile = $self->{_profile};
+    my $profile = $self->_profile();
     return $profile->policy_is_enabled( $policy );
 }
 
@@ -213,9 +228,12 @@ sub _policy_is_excluded {
 
 sub _policy_is_single_policy {
     my ($self, $policy) = @_;
+
+    my @patterns = $self->singlepolicy();
+    return if not @patterns;
+
     my $policy_long_name = ref $policy;
-    my $singlepolicy = $self->singlepolicy() || return;
-    return $policy_long_name =~ m/$singlepolicy/imx;
+    return any { $policy_long_name =~ m/$_/imx } @patterns;
 }
 
 #-----------------------------------------------------------------------------
@@ -225,17 +243,254 @@ sub _throw_single_policy_exception {
     my $self = shift;
 
     my $error_msg = $EMPTY;
-    my $sp_option = $self->singlepolicy();
+    my $patterns = join q{", "}, $self->singlepolicy();
 
     if (scalar $self->policies() == 0) {
-        $error_msg = qq{No policies matched "$sp_option".};
+        $error_msg =
+            qq{No policies matched any of "$patterns" (in combination with }
+                . q{other policy restrictions).};
     }
     else {
-        $error_msg  = qq{Multiple policies matched "$sp_option":\n\t};
+        $error_msg  = qq{Multiple policies matched "$patterns":\n\t};
         $error_msg .= join qq{,\n\t}, apply { chomp } sort $self->policies();
     }
 
-    die "$error_msg\n";
+    confess "$error_msg\n";
+}
+
+#-----------------------------------------------------------------------------
+
+sub _validate_and_save_regex {
+    my ($self, $option_name, $args_value, $default_value, $errors) = @_;
+
+    my $full_option_name;
+    my $source;
+    my @regexes;
+
+    if ($args_value) {
+        $full_option_name = "-$option_name";
+
+        if (ref $args_value) {
+            @regexes = @{ $args_value };
+        }
+        else {
+            @regexes = ( $args_value );
+        }
+    }
+
+    if (not @regexes) {
+        $full_option_name = $option_name;
+        $source = $self->_profile()->source();
+
+        if (ref $default_value) {
+            @regexes = @{ $default_value };
+        }
+        elsif ($default_value) {
+            @regexes = ( $default_value );
+        }
+    }
+
+    my $found_errors;
+    foreach my $regex (@regexes) {
+        eval { my $test = qr/$regex/imx; };
+        if ($EVAL_ERROR) {
+            (my $cleaned_error = $EVAL_ERROR) =~
+                s/ [ ] at [ ] .* Config [.] pm [ ] line [ ] \d+ [.] \n? \z/./xms;
+
+            $errors->add_bad_option_message(
+                $option_name,
+                $regex,
+                $source,
+                qq{is not valid: $cleaned_error},
+            );
+
+            $found_errors = 1;
+        }
+    }
+
+    if (not $found_errors) {
+        $self->{"_$option_name"} = \@regexes;
+    }
+
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _validate_and_save_verbosity {
+    my ($self, $args_value, $errors) = @_;
+
+    my $option_name;
+    my $source;
+    my $verbosity;
+
+    if ($args_value) {
+        $option_name = '-verbose';
+        $verbosity = $args_value;
+    }
+    else {
+        $option_name = 'verbose';
+
+        my $profile = $self->_profile();
+        $source = $profile->source();
+        $verbosity = $profile->defaults()->verbose();
+    }
+
+    if ( is_integer($verbosity) and not is_valid_numeric_verbosity($verbosity) ) {
+        $errors->add_bad_option_message(
+            $option_name,
+            $verbosity,
+            $source,
+            'is not the number of one of the pre-defined verbosity formats.',
+        );
+    }
+    else {
+        $self->{_verbose} = $verbosity;
+    }
+
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _validate_and_save_severity {
+    my ($self, $args_value, $errors) = @_;
+
+    my $option_name;
+    my $source;
+    my $severity;
+
+    if ($args_value) {
+        $option_name = '-severity';
+        $severity = $args_value;
+    }
+    else {
+        $option_name = 'severity';
+
+        my $profile = $self->_profile();
+        $source = $profile->source();
+        $severity = $profile->defaults()->severity();
+    }
+
+    if ( is_integer($severity) ) {
+        if (
+            $severity >= $SEVERITY_LOWEST and $severity <= $SEVERITY_HIGHEST
+        ) {
+            $self->{_severity} = $severity;
+        }
+        else {
+            $errors->add_bad_option_message(
+                $option_name,
+                $severity,
+                $source,
+                "is not between $SEVERITY_LOWEST (low) and $SEVERITY_HIGHEST (high).",
+            );
+        }
+    }
+    elsif ( not any { $_ eq lc $severity } @SEVERITY_NAMES ) {
+        $errors->add_bad_option_message(
+            $option_name,
+            $severity,
+            $source,
+            q{is not one of the valid severity names: "}
+                . join (q{", "}, @SEVERITY_NAMES)
+                . q{".},
+        );
+    }
+    else {
+        $self->{_severity} = severity_to_number($severity);
+    }
+
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _validate_and_save_top {
+    my ($self, $args_value, $errors) = @_;
+
+    my $option_name;
+    my $source;
+    my $top;
+
+    if (defined $args_value and $args_value ne q{}) {
+        $option_name = '-top';
+        $top = $args_value;
+    }
+    else {
+        $option_name = 'top';
+
+        my $profile = $self->_profile();
+        $source = $profile->source();
+        $top = $profile->defaults()->top();
+    }
+
+    if ( is_integer($top) and $top >= 0 ) {
+        $self->{_top} = $top;
+    }
+    else {
+        $errors->add_bad_option_message(
+            $option_name,
+            $top,
+            $source,
+            q{is not a non-negative integer.},
+        );
+    }
+
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _validate_and_save_theme {
+    my ($self, $args_value, $errors) = @_;
+
+    my $option_name;
+    my $source;
+    my $theme_rule;
+
+    if ($args_value) {
+        $option_name = '-theme';
+        $theme_rule = $args_value;
+    }
+    else {
+        $option_name = 'theme';
+
+        my $profile = $self->_profile();
+        $source = $profile->source();
+        $theme_rule = $profile->defaults()->theme();
+    }
+
+    if ( $theme_rule =~ m/$RULE_INVALID_CHARACTER_REGEX/xms ) {
+        my $bad_character = $1;
+
+        $errors->add_bad_option_message(
+            $option_name,
+            $theme_rule,
+            $source,
+            qq{contains an illegal character ("$bad_character").},
+        );
+    }
+    else {
+        my $rule_as_code = cook_rule($theme_rule);
+
+        $rule_as_code =~ s/ [\w\d]+ / 1 /gxms;
+        eval $rule_as_code;  ## no critic (ProhibitStringyEval)
+
+        if ($EVAL_ERROR) {
+            $errors->add_bad_option_message(
+                $option_name,
+                $theme_rule,
+                $source,
+                q{is not syntactically valid.},
+            );
+        }
+        else {
+            $self->{_theme} = Perl::Critic::Theme->new( -rule => $theme_rule );
+        }
+    }
+
+    return;
 }
 
 #-----------------------------------------------------------------------------
@@ -248,6 +503,13 @@ sub _dor {
 
 #-----------------------------------------------------------------------------
 # Begin ACCESSSOR methods
+
+sub _profile {
+    my $self = shift;
+    return $self->{_profile};
+}
+
+#-----------------------------------------------------------------------------
 
 sub policies {
     my $self = shift;
@@ -293,7 +555,7 @@ sub severity {
 
 sub singlepolicy {
     my $self = shift;
-    return $self->{_singlepolicy};
+    return @{ $self->{_singlepolicy} };
 }
 
 #-----------------------------------------------------------------------------
