@@ -18,7 +18,7 @@ our $VERSION = 1.052;
 
 my $heredoc_rx = qr/ \A << \s* ["|'] .* ['|"] \z /x;
 my $desc       = q{Heredoc terminator must be quoted};
-my $expl       = [ 62 ];
+my $expl       = [ 64 ];
 
 #-----------------------------------------------------------------------------
 

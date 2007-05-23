@@ -19,9 +19,8 @@
      * 27073: False positive in RequireUpperCaseHeredocTerminator
      * 26462: ControlStructures::ProhibitCascadingIfElse pod typo
      * ValuesAndExpressions::ProhibitCommaSeparatedStatements was complaining
-       about multiple values in the list to be iterated over by a foreach
-       loop.
-
+       about multiple values in the list to be iterated over by a foreach loop.
+     * Corrected PBP page numbers for some policies (Quinn Weaver).
 
 [1.051]  Released on 2007-04-12
 
