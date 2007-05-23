@@ -74,7 +74,20 @@ sub _escape {
         return $c_escape;
     }
 
-    return q/\N{/ . charnames::viacode($ordinal) . q/}/; ## no critic (RequireInterpolationOfMetachars)
+
+    # Apparently, the charnames.pm that ships with older perls does not
+    # support the C<viacode> function, and newer versions of the module are
+    # not distributed separately from perl itself So if the C<viacode> method
+    # is not supported, then just substitute something.
+
+
+    ## no critic (RequireInterpolationOfMetachars)
+    if ( charnames->can( 'viacode' ) ) {
+        return q/\N{/ . charnames::viacode($ordinal) . q/}/;
+    }
+    else {
+        return '\N{WHITESPACE CHAR}';
+    }
 }
 
 1;
