@@ -16,10 +16,10 @@ Policy modules have been categorized according to the table of
 contents in Damian Conway's book B<Perl Best Practices>.  Since most
 coding standards take the form "do this..." or "don't do that...", I
 have adopted the convention of naming each module C<RequireSomething>
-or C<ProhibitSomething>.  Each Policy is listed here with it's default
+or C<ProhibitSomething>.  Each Policy is listed here with its default
 severity.  If you don't agree with the default severity, you can
 change it in your F<.perlcriticrc> file.  See the documentation of
-each module for it's specific details.
+each module for its specific details.
 
 =head1 POLICIES
 

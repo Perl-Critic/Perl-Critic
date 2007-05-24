@@ -893,7 +893,7 @@ use one of the equivalent names:
     cruel                                              2
     brutal                                             1
 
-C<set_themes> sets the theme for the Policy and overrides it's default theme.
+C<set_themes> sets the theme for the Policy and overrides its default theme.
 The argument is a string of one or more whitespace-delimited alphanumeric
 words.  Themes are case-insensitive.  See L<"POLICY THEMES"> for more
 information.

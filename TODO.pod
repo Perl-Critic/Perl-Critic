@@ -329,7 +329,7 @@ If enabled, this turns on L<PPI::Cache>:
     PPI::Cache->import(path => $cache_path);
 
 This cachedir should perhaps include the PPI version number!  At least
-until PPI incorporates it's own version number in the cache.
+until PPI incorporates its own version number in the cache.
 
 (see F<t/40_criticize.t> for a more robust implementation)
 

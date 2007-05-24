@@ -22,7 +22,7 @@ $perlcritic = File::Spec->catfile( qw(bin perlcritic) ) if ! -e $perlcritic;
 require $perlcritic;  ## no critic
 
 # Because bin/perlcritic does not declare a package, it has functions
-# in main, just like this test file, so we can use it's functions
+# in main, just like this test file, so we can use its functions
 # without a prefix.
 
 #-----------------------------------------------------------------------------
