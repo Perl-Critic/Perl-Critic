@@ -139,7 +139,8 @@ shift.
 =item * InputOutput::RequireChecked* for system calls (p208)
 
 Add policies to ensure checking the return values of system calls. See
-InputOutputRequireCheckedOpen.
+InputOutputRequireCheckedOpen.  Needs to take into account the Fatal
+and Fatal::Exception modules.
 
 =item * InputOutput::RequireBriefOpen (p209)
 
@@ -168,10 +169,13 @@ This will be avoided for ASCII-only code.
 Look for LHS of regexp or use of C<$1>, C<$2>, ... before next
 regexp.
 
-=item * RegularExpressions::ProhibitComplexRegexps (p261)
+=item * RegularExpressions::ProhibitComplexRegexes (p261)
 
 If regexp is longer than N characters/lines, require it be split
 into C<qr//> pieces.
+
+Even if the x modifier is used and the regex is split across
+multiple lines?
 
 =item * RegularExpressions::ProhibitSingleCharAlternation (p265)
 
