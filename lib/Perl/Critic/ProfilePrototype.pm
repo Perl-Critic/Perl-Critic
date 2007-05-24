@@ -54,7 +54,7 @@ sub _proto_format {
 [%P]
 # set_themes = %t
 # severity   = %s
-%{\n%\x7b# \x7df\n# %n = %D\n}O
+%{\n%\x7b# \x7df\n# %n = %D\n}O%{# Cannot programmatically discover what parameters this policy takes.}U
 
 END_OF_FORMAT
 
