@@ -81,17 +81,24 @@ sub _init {
         no warnings 'numeric'; ## no critic (ProhibitNoWarnings)
         $self->{_force} = 1 * _dor( $args{-force}, $defaults->force() );
         $self->{_only}  = 1 * _dor( $args{-only},  $defaults->only()  );
+        $self->{_strictprofile} =
+                          1 * _dor( $args{-strictprofile},  $defaults->strictprofile() );
     }
 
     $self->_validate_and_save_theme($args{-theme}, $errors);
 
+    # Construct a Factory with the Profile
+    my $factory =
+        Perl::Critic::PolicyFactory->new(
+            -profile       => $profile,
+            -errors        => $errors,
+            -strictprofile => $self->strictprofile(),
+        );
+    $self->{_factory} = $factory;
+
     if ( @{ $errors->messages() } ) {
         die $errors;  ## no critic (RequireCarping)
     }
-
-    # Construct a Factory with the Profile
-    my $factory = Perl::Critic::PolicyFactory->new( -profile => $profile );
-    $self->{_factory} = $factory;
 
     # Initialize internal storage for Policies
     $self->{_policies} = [];
@@ -546,6 +553,13 @@ sub only {
 
 #-----------------------------------------------------------------------------
 
+sub strictprofile {
+    my $self = shift;
+    return $self->{_strictprofile};
+}
+
+#-----------------------------------------------------------------------------
+
 sub severity {
     my $self = shift;
     return $self->{_severity};
@@ -593,7 +607,7 @@ __END__
 
 =pod
 
-=for stopwords -params INI-style -singlepolicy
+=for stopwords -params INI-style -singlepolicy -strictprofile
 
 =head1 NAME
 
@@ -612,7 +626,7 @@ constructor will do it for you.
 
 =over 8
 
-=item C<< new( [ -profile => $FILE, -severity => $N, -theme => $string, -include => \@PATTERNS, -exclude => \@PATTERNS, -singlepolicy => $PATTERN, -top => $N, -only => $B, -force => $B, -verbose => $N ] ) >>
+=item C<< new( [ -profile => $FILE, -severity => $N, -theme => $string, -include => \@PATTERNS, -exclude => \@PATTERNS, -singlepolicy => $PATTERN, -top => $N, -only => $B, -strictprofile => $B, -force => $B, -verbose => $N ] ) >>
 
 =item C<< new() >>
 
@@ -673,6 +687,13 @@ will only choose from Policies that are mentioned in the user's
 profile.  If set to a false value (which is the default), then
 Perl::Critic chooses from all the Policies that it finds at your site.
 
+B<-strictprofile> is a boolean value.  If set to a true value,
+Perl::Critic will make certain warnings about problems found in a
+F<.perlcriticrc> or file specified via the B<-profile> option fatal.
+In particular, Perl::Critic normally only C<warn>s about profiles
+referring to non-existent Policies, but this option makes this
+situation fatal.
+
 B<-force> controls whether Perl::Critic observes the magical C<"## no
 critic"> pseudo-pragmas in your code.  If set to a true value,
 Perl::Critic will analyze all code.  If set to a false value (which is
@@ -725,6 +746,10 @@ Returns the value of the C<-force> attribute for this Config.
 =item C< only() >
 
 Returns the value of the C<-only> attribute for this Config.
+
+=item C< strictprofile() >
+
+Returns the value of the C<-strictprofile> attribute for this Config.
 
 =item C< severity() >
 
