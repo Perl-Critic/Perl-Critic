@@ -8,9 +8,6 @@
 [1.xxx]  Released on 2007-xx-xx
 
      New Features:
-     * perlcritic now emits a summary about the scanned code when enabled by
-       the "-statistics" option.
-
      * perlcritic now emits errors for all the problems it can find for the
        global options in the command-line parameters and .perlcriticrc file,
        rather than bailing on the first one it encounters.
@@ -38,6 +35,12 @@
 
        There is a discussion of the design considerations for this facility in
        the distribution in doc/PolicyParameter_Notes.pod.
+
+[1.052]  Released on 2007-06-01
+
+     New Features:
+     * perlcritic now emits a summary about the scanned code when enabled by
+       the "-statistics" option.
 
      Policy Enhancements:
      * InputOutput::ProhibitBacktickOperators can now be configured to only

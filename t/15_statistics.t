@@ -46,7 +46,7 @@ package Foo;
 
 use My::Module;
 $this = $that if $condition;
-sub foo { return @list if $condition };
+sub foo { return @list unless $condition };
 END_PERL
 
 #-----------------------------------------------------------------------------
