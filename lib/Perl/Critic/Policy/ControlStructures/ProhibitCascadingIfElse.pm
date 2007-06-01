@@ -12,7 +12,7 @@ use warnings;
 use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 1.051;
+our $VERSION = 1.052;
 
 #-----------------------------------------------------------------------------
 
@@ -79,7 +79,7 @@ hash lookup instead.  See L<Switch> for another approach.
   if ($condition1) {         #ok
       $foo = 1;
   }
-  elseif ($condition2) {     #ok
+  elsif ($condition2) {      #ok
       $foo = 2;
   }
   elsif ($condition3) {      #ok
@@ -88,7 +88,7 @@ hash lookup instead.  See L<Switch> for another approach.
   elsif ($condition4) {      #too many!
       $foo = 4;
   }
-  else{                      #ok
+  else {                     #ok
       $foo = $default;
   }
 

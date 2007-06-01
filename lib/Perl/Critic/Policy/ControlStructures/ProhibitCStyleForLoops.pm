@@ -12,12 +12,12 @@ use warnings;
 use Perl::Critic::Utils qw{ :characters :severities };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 1.051;
+our $VERSION = 1.052;
 
 #-----------------------------------------------------------------------------
 
 my $desc = q{C-style "for" loop used};
-my $expl = [ 97 ];
+my $expl = [ 100 ];
 
 #-----------------------------------------------------------------------------
 

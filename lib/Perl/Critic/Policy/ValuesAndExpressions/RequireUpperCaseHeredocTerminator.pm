@@ -12,11 +12,11 @@ use warnings;
 use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 1.051;
+our $VERSION = 1.052;
 
 #-----------------------------------------------------------------------------
 
-my $heredoc_rx = qr{ \A << ["|']? [A-Z_] [A-Z0-9_]* ['|"]? \z }x;
+my $heredoc_rx = qr{ \A << \s* ["|']? [A-Z_] [A-Z0-9_]* ['|"]? \z }x;
 my $desc       = q{Heredoc terminator not alphanumeric and upper-case};
 my $expl       = [ 64 ];
 

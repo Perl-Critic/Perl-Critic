@@ -12,13 +12,13 @@ use warnings;
 use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 1.051;
+our $VERSION = 1.052;
 
 #-----------------------------------------------------------------------------
 
 my $heredoc_rx = qr/ \A << \s* ["|'] .* ['|"] \z /x;
 my $desc       = q{Heredoc terminator must be quoted};
-my $expl       = [ 62 ];
+my $expl       = [ 64 ];
 
 #-----------------------------------------------------------------------------
 

@@ -28,6 +28,15 @@ endquote
 
 #-----------------------------------------------------------------------------
 
+## name RT #27073: Spaces before HEREDOC token
+## failures 0
+## cut
+
+print <<  'END_QUOTE';
+The only thing we have to fear is fear itself...
+END_QUOTE
+
+
 ##############################################################################
 #      $URL$
 #     $Date$

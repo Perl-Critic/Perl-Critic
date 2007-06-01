@@ -18,13 +18,14 @@ use English qw(-no_match_vars);
 use Perl::Critic::Config;
 use Perl::Critic::Violation;
 use Perl::Critic::Document;
+use Perl::Critic::Statistics;
 use Perl::Critic::Utils qw{ :characters };
 use PPI::Document;
 use PPI::Document::File;
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = 1.051;
+our $VERSION = 1.052;
 our @EXPORT_OK = qw(&critique);
 
 #-----------------------------------------------------------------------------
@@ -33,6 +34,7 @@ sub new {
     my ( $class, %args ) = @_;
     my $self = bless {}, $class;
     $self->{_config} = $args{-config} || Perl::Critic::Config->new( %args );
+    $self->{_stats} = Perl::Critic::Statistics->new();
     return $self;
 }
 
@@ -57,6 +59,13 @@ sub policies {
     my $self = shift;
     #Delegate to Perl::Critic::Config
     return $self->config()->policies();
+}
+
+#-----------------------------------------------------------------------------
+
+sub statistics {
+    my $self = shift;
+    return $self->{_stats};
 }
 
 #-----------------------------------------------------------------------------
@@ -140,6 +149,9 @@ sub _gather_violations {
     # Some policies emit multiple violations, which tend to drown out the
     # others.  So for those, we squelch out all but the first violation.
     @violations = _squelch_noisy_violations( @violations );
+
+    # Accumulate statistics
+    $self->statistics->accumulate( $doc, \@violations );
 
     # If requested, rank violations by their severity and return the top N.
     if ( @violations && (my $top = $self->config->top()) ) {
@@ -561,6 +573,12 @@ loaded into this engine.  Objects will be in the order that they were loaded.
 
 Returns the L<Perl::Critic::Config> object that was created for or given
 to this Critic.
+
+=item C< statistics() >
+
+Returns the L<Perl::Critic::Statistics> object that was created for this
+Critic.  The Statistics object accumulates data for all files that are
+analyzed by this Critic.
 
 =back
 

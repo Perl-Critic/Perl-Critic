@@ -95,3 +95,15 @@ END {}
 ## failures 1
 ## cut
 'Larry';
+
+#-----------------------------------------------------------------------------
+
+## name DESTROY sub hides the 1;
+## TODO This is a PPI bug. See http://rt.cpan.org/Ticket/Display.html?id=27364
+## failures 0
+## cut
+
+DESTROY { warn 'DEAD'; }
+
+1;
+

@@ -159,6 +159,7 @@ t/14_policy_parameter_behavior_integer.t
 t/14_policy_parameter_behavior_list_string.t
 t/14_policy_parameter_behavior_string.t
 t/14_policy_parameters.t
+t/15_statistics.t
 t/20_policies.t
 t/20_policy_prohibithardtabs.t
 t/20_policy_prohibittrailingwhitespace.t

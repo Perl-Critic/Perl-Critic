@@ -10,7 +10,7 @@
 use strict;
 use warnings;
 use PPI::Document;
-use Test::More tests => 89;
+use Test::More tests => 91;
 
 #-----------------------------------------------------------------------------
 
@@ -76,7 +76,7 @@ sub make_doc { my $code = shift; return PPI::Document->new( ref $code ? $code : 
 #  is_hash_key tests
 
 {
-   my $code = 'sub foo { return $hash1{bar}, $hash2->{baz}; }';
+   my $code = 'sub foo { return $h1{bar}, $h2->{baz}, $h3->{ nuts() } }';
    my $doc = PPI::Document->new(\$code);
    my @words = @{$doc->find('PPI::Token::Word')};
    my @expect = (
@@ -85,6 +85,7 @@ sub make_doc { my $code = shift; return PPI::Document->new( ref $code ? $code : 
       ['return', undef],
       ['bar', 1],
       ['baz', 1],
+      ['nuts', undef],
    );
    is(scalar @words, scalar @expect, 'is_hash_key count');
    for my $i (0 .. $#expect)

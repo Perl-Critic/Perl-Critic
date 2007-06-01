@@ -22,7 +22,7 @@ use Pod::Usage qw(pod2usage);
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = 1.051;
+our $VERSION = 1.052;
 
 #-----------------------------------------------------------------------------
 # Begin script.  Don't run when loaded as a library
@@ -190,21 +190,11 @@ sub critique {
     $CRITIC = Perl::Critic->new( %{$opts_ref} );
     my $number_of_violations = undef;
 
-    my $statistics;
-    if ($opts_ref->{-statistics}) {
-        require Perl::Critic::Statistics;
-        $statistics = Perl::Critic::Statistics->new($CRITIC);
-        $CRITIC = $statistics;
-    }
-
-
     for my $file (@files) {
 
         eval {
-            my @violations;
 
-            @violations = $CRITIC->critique($file);
-
+            my @violations = $CRITIC->critique($file);
             render_report( $file, $opts_ref, @violations );
             $number_of_violations += scalar @violations;
         };
@@ -213,8 +203,9 @@ sub critique {
             if $EVAL_ERROR;
     }
 
-    if ($statistics) {
-        report_statistics( $opts_ref, $statistics );
+    if ( $opts_ref->{-statistics} ) {
+        my $stats = $CRITIC->statistics();
+        report_statistics( $opts_ref, $stats );
     }
 
     return $number_of_violations;
@@ -296,7 +287,7 @@ sub report_statistics {
     if ( $statistics->total_violations() ) {
         print "\n";
 
-        my %severity_violations = %{ $statistics->severity_violations() };
+        my %severity_violations = %{ $statistics->violations_by_severity() };
         foreach my $severity ( reverse sort keys %severity_violations ) {
             print
                 _commaify($severity_violations{$severity}),
@@ -305,7 +296,7 @@ sub report_statistics {
 
         print "\n";
 
-        my %policy_violations = %{ $statistics->policy_violations() };
+        my %policy_violations = %{ $statistics->violations_by_policy() };
         foreach my $policy ( sort keys %policy_violations ) {
             print
                 _commaify($policy_violations{$policy}),
@@ -609,7 +600,7 @@ or least restrictive level, then you can use one of these named values:
 =item C<-gentle | -stern | -harsh | -cruel | -brutal>
 
 These are named shortcuts for setting the C<-severity> option.  For example,
-C<"-cruel"> is equivalent to C<"-severity 4">.  If multiple shortcuts are
+C<"-cruel"> is equivalent to C<"-severity 2">.  If multiple shortcuts are
 specified, then the most restrictive one wins.  If an explicit C<-severity>
 option is also given, then all shortcut options are silently ignored.
 
