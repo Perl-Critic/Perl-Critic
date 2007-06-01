@@ -2,7 +2,7 @@
 name: Perl-Critic
 version: 1.052
 author:
-  - Jeffrey Thalhammer <thaljef@cpan.org>
+  - 'Jeffrey Thalhammer <thaljef@cpan.org>'
 abstract: Critique Perl source code for best-practices
 license: perl
 resources:
@@ -366,7 +366,7 @@ provides:
   Perl::Critic::Violation:
     file: lib/Perl/Critic/Violation.pm
     version: 1.052
-generated_by: Module::Build version 0.2806
+generated_by: Module::Build version 0.2808
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.2.html
   version: 1.2
