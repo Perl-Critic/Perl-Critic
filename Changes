@@ -5,7 +5,7 @@
 # $Revision$
 ##############################################################################
 
-[1.xxx]  Released on 2007-xx-xx
+[1.052]  Released on 2007-06-01
 
      New Features:
      * perlcritic now emits a summary about the scanned code when enabled by
