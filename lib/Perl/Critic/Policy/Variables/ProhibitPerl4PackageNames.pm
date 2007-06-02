@@ -12,7 +12,7 @@ use warnings;
 use Perl::Critic::Utils qw{ :characters :severities :classification };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 1.052;
+our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
