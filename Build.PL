@@ -76,9 +76,6 @@ my $builder = Module::Build->new(
   build_requires => {'Test::More'            => 0,
                     },
 
-  build_recommends => {'B::Keywords'         => 1.04,
-                      },
-
   script_files   => ['bin/perlcritic'],
 );
 
