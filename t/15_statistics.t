@@ -51,7 +51,9 @@ END_PERL
 
 #-----------------------------------------------------------------------------
 
-my $critic = Perl::Critic->new( -severity => 1 );
+# User may not have Perl::Tidy installed...
+my $profile = { '-CodeLayout::RequireTidyCode' => {} };
+my $critic = Perl::Critic->new( -severity => 1, -profile => $profile );
 my @violations = $critic->critique( \$code );
 
 #print @violations;
