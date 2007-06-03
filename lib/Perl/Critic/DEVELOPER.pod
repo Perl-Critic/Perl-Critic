@@ -484,8 +484,9 @@ Example:
 
 Implemented in L<Perl::Critic::PolicyParameter::IntegerBehavior>.
 
-The value is validated against C<m/ \A [-+]? [1-9] \d* \z /xms> (with
-an special check for "0").
+The value is validated against C<m/ \A [-+]? [1-9] [\d_]* \z /xms>
+(with an special check for "0").  Notice that this means that
+underscores are allowed in input values as with Perl numeric literals.
 
 This takes two options, C<integer_minimum> and
 C<integer_maximum>, which specify endpoints of an inclusive range to

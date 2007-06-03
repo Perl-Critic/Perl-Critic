@@ -46,7 +46,7 @@ sub initialize_parameter {
             my $value;
             if ( defined $value_string ) {
                 if (
-                        $value_string !~ m/ \A [-+]? [1-9] \d* \z /xms
+                        $value_string !~ m/ \A [-+]? [1-9] [\d_]* \z /xms
                     and $value_string ne '0'
                 ) {
                     die q{Invalid value for },
@@ -54,6 +54,7 @@ sub initialize_parameter {
                         qq{: $value_string does not look like an integer.\n};
                 }
 
+                $value_string =~ tr/_//d;
                 $value = $value_string + 0;
 
                 if ( defined $minimum and $minimum > $value ) {
@@ -131,6 +132,9 @@ Perl::Critic::PolicyParameter::IntegerBehavior - Actions appropriate for an inte
 Provides a standard set of functionality for an integer
 L<Perl::Critic::PolicyParameter> so that the developer of a policy
 does not have to provide it her/himself.
+
+The parser provided by this behavior allows underscores ("_") in input
+values as in a Perl numeric literal.
 
 NOTE: Do not instantiate this class.  Use the singleton instance held
 onto by L<Perl::Critic::PolicyParameter>.

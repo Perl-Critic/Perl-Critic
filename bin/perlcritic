@@ -931,7 +931,7 @@ A simple configuration might look like this:
     [Modules::RequireFilenameMatchesPackage]
     add_themes = larry
 
-    [TestingAndDebugging::RequireTestLables]
+    [TestingAndDebugging::RequireTestLabels]
     add_themes = curly moe
 
     #--------------------------------------------------------------
@@ -943,6 +943,13 @@ A simple configuration might look like this:
     #--------------------------------------------------------------
     # For all other Policies, I accept the default severity,
     # so no additional configuration is required for them.
+
+Note that all policies included with the Perl::Critic distribution that have
+integer parameters accept underscores ("_") in their values, as with Perl
+numeric literals.  For example,
+
+    [ValuesAndExpressions::RequireNumberSeparators]
+    min_value = 1_000
 
 For additional configuration examples, see the F<perlcriticrc> file that is
 included in this F<examples> directory of this distribution.

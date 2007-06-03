@@ -26,7 +26,7 @@ sub supported_parameters {
         {
             name            => 'min_value',
             description     => 'The minimum absolute value to require separators in.',
-            default_string  => '10000',
+            default_string  => '10_000',
             behavior        => 'integer',
             integer_minimum => 10,
         },
@@ -100,7 +100,7 @@ thus, all numbers >= 10,000 and <= -10,000 must have separators.  For
 example:
 
   [ValuesAndExpressions::RequireNumberSeparators]
-  min_value = 100000    # That's one-hundred-thousand!
+  min_value = 100_000    # That's one-hundred-thousand!
 
 =head1 NOTES
 

@@ -10,7 +10,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 19;
+use Test::More tests => 22;
 use English qw(-no_match_vars);
 
 use Perl::Critic::Policy;
@@ -25,7 +25,7 @@ my $policy;
 $specification =
     {
         name        => 'test',
-        description => 'An enumeration parameter for testing',
+        description => 'An integer parameter for testing',
         behavior    => 'integer',
     };
 
@@ -51,13 +51,28 @@ $parameter->parse_and_validate_config_value($policy, \%config);
 cmp_ok($policy->{_test}, '==', -2943, q{-2943, no default});
 
 $policy = Perl::Critic::Policy->new();
+$config{test} = '29_43';
+$parameter->parse_and_validate_config_value($policy, \%config);
+cmp_ok($policy->{_test}, '==', 2943, q{29_43, no default});
+
+$policy = Perl::Critic::Policy->new();
+$config{test} = '+29_43';
+$parameter->parse_and_validate_config_value($policy, \%config);
+cmp_ok($policy->{_test}, '==', 2943, q{+29_43, no default});
+
+$policy = Perl::Critic::Policy->new();
+$config{test} = '-29_43';
+$parameter->parse_and_validate_config_value($policy, \%config);
+cmp_ok($policy->{_test}, '==', -2943, q{-29_43, no default});
+
+$policy = Perl::Critic::Policy->new();
 $config{test} = '0';
 $parameter->parse_and_validate_config_value($policy, \%config);
 cmp_ok($policy->{_test}, '==', 0, q{0, no default});
 
 $policy = Perl::Critic::Policy->new();
 $config{test} = '1.5';
-eval {$parameter->parse_and_validate_config_value($policy, \%config); };
+eval { $parameter->parse_and_validate_config_value($policy, \%config); };
 ok($EVAL_ERROR, q{not an integer});
 
 
@@ -90,7 +105,7 @@ cmp_ok($policy->{_test}, '==', 0, q{0, minimum 0});
 
 $policy = Perl::Critic::Policy->new();
 $config{test} = '-5';
-eval {$parameter->parse_and_validate_config_value($policy, \%config); };
+eval { $parameter->parse_and_validate_config_value($policy, \%config); };
 ok($EVAL_ERROR, q{below minimum});
 
 
@@ -110,7 +125,7 @@ cmp_ok($policy->{_test}, '==', 0, q{0, maximum 0});
 
 $policy = Perl::Critic::Policy->new();
 $config{test} = '5';
-eval {$parameter->parse_and_validate_config_value($policy, \%config); };
+eval { $parameter->parse_and_validate_config_value($policy, \%config); };
 ok($EVAL_ERROR, q{above maximum});
 
 
@@ -120,7 +135,7 @@ $specification->{integer_maximum} = 5;
 $parameter = Perl::Critic::PolicyParameter->new($specification);
 $policy = Perl::Critic::Policy->new();
 $config{test} = '-5';
-eval {$parameter->parse_and_validate_config_value($policy, \%config); };
+eval { $parameter->parse_and_validate_config_value($policy, \%config); };
 ok($EVAL_ERROR, q{below minimum of range});
 
 $policy = Perl::Critic::Policy->new();
@@ -140,7 +155,7 @@ cmp_ok($policy->{_test}, '==', 5, q{5, minimum 0, maximum 5});
 
 $policy = Perl::Critic::Policy->new();
 $config{test} = '10';
-eval {$parameter->parse_and_validate_config_value($policy, \%config); };
+eval { $parameter->parse_and_validate_config_value($policy, \%config); };
 ok($EVAL_ERROR, q{above maximum of range});
 
 ###############################################################################

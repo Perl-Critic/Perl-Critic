@@ -354,6 +354,11 @@ characters are:
 =back
 
 
+=head1 SEE ALSO
+
+L<Perl::Critic::DEVELOPER/"MAKING YOUR POLICY CONFIGURABLE">
+
+
 =head1 AUTHOR
 
 Elliot Shank <perl@galumph.org>
