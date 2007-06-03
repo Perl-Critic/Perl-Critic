@@ -1015,6 +1015,13 @@ L<Test::Pod>
 
 L<Test::Pod::Coverage>
 
+=head1 CONTACTING THE DEVELOPMENT TEAM
+
+You are encouraged to subscribe to the mailing list; send a message to
+C<< <users-subscribe@perlcritic.tigris.org> >>.  See also
+L<the archives|http://perlcritic.tigris.org/servlets/SummarizeList?listName=users>.
+You can also contact the author at C<< <thaljef@cpan.org> >>.
+
 =head1 BUGS
 
 Scrutinizing Perl code is hard for humans, let alone machines.  If you find
