@@ -10,7 +10,7 @@ Steps for adding a new Policy:
    need to put it in the correct alphabetical order, or you'll get a
    failure in t/13_bundled_policies.t
  * Mention it in Changes
- * svn add lib/Perl/Critic/Policy/[category]/[name].pm
- * svn propset svn:keywords 'URL Author Revision Date' lib/Perl/Critic/Policy/[category]/[name].pm
+ * svn add t/[category]/[name].run lib/Perl/Critic/Policy/[category]/[name].pm
+ * svn propset svn:keywords 'URL Author Revision Date' t/[category]/[name].run lib/Perl/Critic/Policy/[category]/[name].pm
 
  * Remove from TODO

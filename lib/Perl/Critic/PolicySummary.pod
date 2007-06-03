@@ -355,6 +355,10 @@ Write C< !$foo && $bar || $baz > instead of C< not $foo && $bar or $baz> [Severi
 
 Use C<q{}> or C<qq{}> instead of quotes for awkward-looking strings. [Severity 2]
 
+=head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitQuotesAsQuotelikeOperatorDelimiters>
+
+Don't use quotes (C<'>, C<">, C<`>) as delimiters for the quote-like operators. [Severity 3]
+
 =head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitVersionStrings>
 
 Don't use strings like C<v1.4> or C<1.4.5> when including other modules. [Severity 3]
