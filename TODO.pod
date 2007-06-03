@@ -22,6 +22,11 @@ TODO - Things for Perl::Critic developers to do
 Perl-Critic-More is a separate distribution for less-widely-accepted
 policies.  It contains its own TODO.pod.
 
+=head1 URGENT!!!
+
+Bring grep example in DEVELOPER.pod up to date!!!  Especially in terms of
+Violation objects.
+
 =head1 NEW FEATURES
 
 =over 4

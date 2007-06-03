@@ -160,7 +160,7 @@ a string context returns the literal form of the code.  So we make
 sure that this PPI::Token::Word is, in fact, "grep".  If it's not,
 then we don't' need to bother examining it.
 
-    return if $elem ne 'grep';
+      return if $elem ne 'grep';
 
 The C<PPI::Token::Word> class is also used for barewords and methods
 called on object references.  It is possible for someone to declare a
@@ -170,9 +170,9 @@ calls to C<grep>.  So we use some handy utility functions from
 L<Perl::Critic::Utils> to make sure that this "grep" is actually in
 the right context.
 
-    return if is_method_call($elem);
-    return if is_hash_key($elem);
-    return if is_subroutine_name($elem);
+      return if is_method_call($elem);
+      return if is_hash_key($elem);
+      return if is_subroutine_name($elem);
 
 Now that we know this element is a call to the C<grep> function, we
 can look at the nearby elements to see what kind of arguments are
@@ -181,7 +181,7 @@ parent, and children (if it has any).  Since those siblings could just
 be whitespace, we use the C<snext_sibling()> to get the next
 code-sibling (the 's' in C<snext_sibling> stands for 'significant').
 
-    my $sib = $elem->snext_sibling() || return;
+      my $sib = $elem->snext_sibling() || return;
 
 In Perl, the parenthesis around argument lists are usually optional,
 and PPI packs the elements into a L<PPI::Structure::List> object when
@@ -190,24 +190,23 @@ out the first (significant) child of that list.  This child will be
 the first argument to C<grep>.  If parens were not used, then the
 sibling itself is the first argument.
 
-    my $arg = $sib->isa('PPI::Structure::List') ? $sib->schild(0) : $sib;
+      my $arg = $sib->isa('PPI::Structure::List') ? $sib->schild(0) : $sib;
 
 Finally, we now have a reference to the first argument to C<grep>.  If
 that argument is a block (i.e. something in curly braces), then it
 will be a L<PPI::Structure::Block>, in which case our Policy is
 satisfied and we just return nothing.
 
-    return if !$arg || $arg->isa('PPI::Structure::Block');
+      return if !$arg || $arg->isa('PPI::Structure::Block');
 
 But if it is not a L<PPI::Structure::Block>, then we know that this
 call to C<grep> must be using the expression form, and that violates
 our Policy.  So we create and return a new L<Perl::Critic::Violation>
-object, passing in the description, explanation, and severity of the
-violation, as well as a reference to the PPI element that caused the
-violation.  And that's all there is to it!
+object, passing in the description, explanation, and a reference to
+the PPI element that caused the violation.  And that's all there is to
+it!
 
-    my $sev = $self->get_severity();
-    return Perl::Critic::Violation->new( $desc, $expl, $elem, $sev );
+      return $self->violation( $desc, $expl, $elem );
   }
 
   1;
