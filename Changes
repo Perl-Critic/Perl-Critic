@@ -36,7 +36,17 @@
        There is a discussion of the design considerations for this facility in
        the distribution in doc/PolicyParameter_Notes.pod.
 
+[1.053]  Released on 2007-06-02
+
+     *DEVELOPMENT RELEASE*
+
+     Bug Fixes:
+     Fixed bug in 15_statustics.t test script, which caused the build
+     to fail on machines that don't have Perl::Tidy installed.
+
 [1.052]  Released on 2007-06-01
+
+     *DEVELOPMENT RELEASE*
 
      New Features:
      * perlcritic now emits a summary about the scanned code when enabled by
