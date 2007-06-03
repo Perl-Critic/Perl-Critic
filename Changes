@@ -12,7 +12,7 @@
        global options in the command-line parameters and .perlcriticrc file,
        rather than bailing on the first one it encounters.
 
-     * perlcritic now has a "-strictprofile" option which will make warnings
+     * perlcritic now has a "--strictprofile" option which will make warnings
        about problems in a profile fatal.
 
      * A new metadata system for defining policy parameters/options has been
@@ -35,6 +35,11 @@
 
        There is a discussion of the design considerations for this facility in
        the distribution in doc/PolicyParameter_Notes.pod.
+
+     Minor changes:
+     * In addition to the additional output based upon the parameter metadata
+       facilitiy, the perlcritic "--profileproto" option now emits the short
+       names for policies, rather than the full ones.
 
 [1.053]  Released on 2007-06-02
 
