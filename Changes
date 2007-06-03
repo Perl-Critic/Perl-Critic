@@ -36,6 +36,10 @@
        There is a discussion of the design considerations for this facility in
        the distribution in doc/PolicyParameter_Notes.pod.
 
+     Feature requests:
+     * A value for "nocolor" can now be specified in a .perlcriticrc.
+       http://rt.perl.org/rt3/Ticket/Display.html?id=24877
+
      Minor changes:
      * In addition to the additional output based upon the parameter metadata
        facilitiy, the perlcritic "--profileproto" option now emits the short

@@ -359,7 +359,7 @@ __END__
 =pod
 
 =for stopwords DGR INI-style API -params pbp refactored -singlepolicy
--strictprofile ben Jore
+-strictprofile ben Jore -nocolor
 
 =head1 NAME
 
@@ -412,7 +412,7 @@ interface to the service are subject to change.
 
 =over 8
 
-=item C<< new( [ -profile => $FILE, -severity => $N, -theme => $string, -include => \@PATTERNS, -exclude => \@PATTERNS, -top => $N, -only => $B, -strictprofile => $B, -force => $B, -verbose => $N ] ) >>
+=item C<< new( [ -profile => $FILE, -severity => $N, -theme => $string, -include => \@PATTERNS, -exclude => \@PATTERNS, -top => $N, -only => $B, -strictprofile => $B, -force => $B, -verbose => $N ], -nocolor => $B ) >>
 
 =item C<< new( -config => Perl::Critic::Config->new() ) >>
 
@@ -526,6 +526,9 @@ specification.  See L<Perl::Critic::Violations> for an explanation of format
 specifications.  You can set the default value for this option in your
 F<.perlcriticrc> file.
 
+B<-nocolor> is not used by Perl::Critic but is provided for the benefit of
+L<perlcritic>.
+
 B<-config> is a reference to a L<Perl::Critic::Config> object.  If you have
 created your own Config object for some reason, you can pass it in here
 instead of having Perl::Critic create one for you.  Using the C<-config>
@@ -633,6 +636,7 @@ constructor argument.
     theme     = (pbp || security) && bugs             #A theme expression
     include   = NamingConventions ClassHierarchies    #Space-delimited list
     exclude   = Variables  Modules::RequirePackage    #Space-delimited list
+    nocolor   = 0                                     #Zero or One
 
 The remainder of the configuration file is a series of blocks like this:
 
