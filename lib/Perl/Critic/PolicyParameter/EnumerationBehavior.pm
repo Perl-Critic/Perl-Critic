@@ -155,6 +155,9 @@ Provides a standard set of functionality for an enumerated
 L<Perl::Critic::PolicyParameter> so that the developer of a policy
 does not have to provide it her/himself.
 
+NOTE: Do not instantiate this class.  Use the singleton instance held
+onto by L<Perl::Critic::PolicyParameter>.
+
 
 =head1 METHODS
 

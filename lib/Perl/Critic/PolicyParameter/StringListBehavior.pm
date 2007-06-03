@@ -99,6 +99,9 @@ __END__
 
 Perl::Critic::PolicyParameter::StringListBehavior - Actions appropriate for a parameter that is a list of strings.
 
+NOTE: Do not instantiate this class.  Use the singleton instance held
+onto by L<Perl::Critic::PolicyParameter>.
+
 
 =head1 DESCRIPTION
 
