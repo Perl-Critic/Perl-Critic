@@ -9,6 +9,8 @@ package Perl::Critic::Policy::BuiltinFunctions::ProhibitSleepViaSelect;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities :classification :ppi };
 use base 'Perl::Critic::Policy';
 
@@ -16,8 +18,8 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{"select" used to emulate "sleep"};
-my $expl = [168];
+Readonly my $DESC => q{"select" used to emulate "sleep"};
+Readonly my $EXPL => [168];
 
 #-----------------------------------------------------------------------------
 
@@ -35,7 +37,7 @@ sub violates {
     return if ! is_function_call($elem);
 
     if ( 3 == grep {$_->[0] eq 'undef' } parse_arg_list($elem) ){
-        return $self->violation( $desc, $expl, $elem );
+        return $self->violation( $DESC, $EXPL, $elem );
     }
     return; #ok!
 }

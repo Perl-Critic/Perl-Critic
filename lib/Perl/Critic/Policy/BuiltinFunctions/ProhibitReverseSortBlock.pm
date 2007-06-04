@@ -9,6 +9,8 @@ package Perl::Critic::Policy::BuiltinFunctions::ProhibitReverseSortBlock;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities :classification };
 use base 'Perl::Critic::Policy';
 
@@ -16,15 +18,15 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{Forbid $b before $a in sort blocks}; ## no critic (Interpolation)
-my $expl = [ 152 ];
+Readonly my $DESC => q{Forbid $b before $a in sort blocks}; ## no critic (Interpolation)
+Readonly my $EXPL => [ 152 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return () }
-sub default_severity { return $SEVERITY_LOWEST    }
-sub default_themes   { return qw(core pbp cosmetic)    }
-sub applies_to       { return 'PPI::Token::Word'  }
+sub supported_parameters { return ()                    }
+sub default_severity     { return $SEVERITY_LOWEST      }
+sub default_themes       { return qw(core pbp cosmetic) }
+sub applies_to           { return 'PPI::Token::Word'    }
 
 #-----------------------------------------------------------------------------
 
@@ -64,7 +66,7 @@ sub violates {
                 if ($count < 0) {
                     # Found too many C<$b>s too early
                     my $sev = $self->get_severity();
-                    return $self->violation( $desc, $expl, $elem, $sev );
+                    return $self->violation( $DESC, $EXPL, $elem, $sev );
                 }
             }
         }

@@ -9,6 +9,8 @@ package Perl::Critic::Policy::BuiltinFunctions::ProhibitStringyEval;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities :classification :ppi };
 use base 'Perl::Critic::Policy';
 
@@ -16,15 +18,15 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{Expression form of "eval"};
-my $expl = [ 161 ];
+Readonly my $DESC => q{Expression form of "eval"};
+Readonly my $EXPL => [ 161 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return() }
-sub default_severity { return $SEVERITY_HIGHEST  }
-sub default_themes    { return qw( core pbp bugs )   }
-sub applies_to       { return 'PPI::Token::Word' }
+sub supported_parameters { return()                   }
+sub default_severity     { return $SEVERITY_HIGHEST   }
+sub default_themes       { return qw( core pbp bugs ) }
+sub applies_to           { return 'PPI::Token::Word'  }
 
 #-----------------------------------------------------------------------------
 
@@ -38,7 +40,7 @@ sub violates {
     return if !$arg;
     return if $arg->isa('PPI::Structure::Block');
 
-    return $self->violation( $desc, $expl, $elem );
+    return $self->violation( $DESC, $EXPL, $elem );
 }
 
 1;

@@ -9,6 +9,8 @@ package Perl::Critic::Policy::BuiltinFunctions::ProhibitStringySplit;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :characters :severities :classification :ppi };
 use base 'Perl::Critic::Policy';
 
@@ -16,8 +18,8 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{String delimiter used with "split"};
-my $expl = q{Express it as a regex instead};
+Readonly my $DESC => q{String delimiter used with "split"};
+Readonly my $EXPL => q{Express it as a regex instead};
 
 #-----------------------------------------------------------------------------
 
@@ -38,7 +40,7 @@ sub violates {
     my $pattern = @args ? $args[0]->[0] : return;
 
     if ( $pattern->isa('PPI::Token::Quote') && $pattern->string() ne $SPACE ) {
-        return $self->violation( $desc, $expl, $elem );
+        return $self->violation( $DESC, $EXPL, $elem );
     }
 
     return;  #ok

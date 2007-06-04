@@ -9,6 +9,8 @@ package Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalIsa;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities :classification };
 use base 'Perl::Critic::Policy';
 
@@ -16,15 +18,15 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{UNIVERSAL::isa should not be used as a function};
-my $expl = q{Use eval{$obj->isa($pkg)} instead};  ##no critic 'RequireInterp';
+Readonly my $DESC => q{UNIVERSAL::isa should not be used as a function};
+Readonly my $EXPL => q{Use eval{$obj->isa($pkg)} instead};  ##no critic 'RequireInterp';
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return() }
-sub default_severity { return $SEVERITY_MEDIUM   }
-sub default_themes    { return qw( core maintenance )   }
-sub applies_to       { return 'PPI::Token::Word' }
+sub supported_parameters { return()                      }
+sub default_severity     { return $SEVERITY_MEDIUM       }
+sub default_themes       { return qw( core maintenance ) }
+sub applies_to           { return 'PPI::Token::Word'     }
 
 #-----------------------------------------------------------------------------
 
@@ -34,7 +36,7 @@ sub violates {
     return if ! is_function_call($elem);
     return if $elem->parent()->isa('PPI::Statement::Include'); # allow 'use UNIVERSAL::isa;'
 
-    return $self->violation( $desc, $expl, $elem );
+    return $self->violation( $DESC, $EXPL, $elem );
 }
 
 
