@@ -9,6 +9,8 @@ package Perl::Critic::Policy::ValuesAndExpressions::ProhibitVersionStrings;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
@@ -16,15 +18,15 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{Version string used};
-my $expl = q{Use a real number instead};
+Readonly::Scalar my $DESC => q{Version string used};
+Readonly::Scalar my $EXPL => q{Use a real number instead};
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return () }
-sub default_severity { return $SEVERITY_MEDIUM          }
-sub default_themes   { return qw(core pbp maintenance)       }
-sub applies_to       { return 'PPI::Statement::Include' }
+sub supported_parameters { return ()                        }
+sub default_severity     { return $SEVERITY_MEDIUM          }
+sub default_themes       { return qw(core pbp maintenance)  }
+sub applies_to           { return 'PPI::Statement::Include' }
 
 #-----------------------------------------------------------------------------
 
@@ -39,7 +41,7 @@ sub violates {
         #float.  I'm not sure if this should be reported as a bug.
 
         if ( $elem =~ m{ \b v? \d+ [.] \d+ [.] \d+ \b }mx ) {
-            return $self->violation( $desc, $expl, $elem );
+            return $self->violation( $DESC, $EXPL, $elem );
         }
     }
     return;    #ok!

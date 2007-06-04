@@ -9,6 +9,8 @@ package Perl::Critic::Policy::ValuesAndExpressions::ProhibitLeadingZeros;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
@@ -16,24 +18,24 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-my $leading_rx = qr{\A [+-]? (?: 0+ _* )+ [1-9]}mx;
-my $desc       = q{Integer with leading zeros};
-my $expl       = [ 58 ];
+Readonly::Scalar my $LEADING_RX => qr{\A [+-]? (?: 0+ _* )+ [1-9]}mx;
+Readonly::Scalar my $DESC       => q{Integer with leading zeros};
+Readonly::Scalar my $EXPL       => [ 58 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return () }
-sub default_severity { return $SEVERITY_HIGHEST    }
-sub default_themes    { return qw( core pbp bugs )     }
-sub applies_to       { return 'PPI::Token::Number' }
+sub supported_parameters { return ()                   }
+sub default_severity     { return $SEVERITY_HIGHEST    }
+sub default_themes       { return qw( core pbp bugs )  }
+sub applies_to           { return 'PPI::Token::Number' }
 
 #-----------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    if ( $elem =~ $leading_rx ) {
-        return $self->violation( $desc, $expl, $elem );
+    if ( $elem =~ $LEADING_RX ) {
+        return $self->violation( $DESC, $EXPL, $elem );
     }
     return;    #ok!
 }

@@ -9,6 +9,8 @@ package Perl::Critic::Policy::ValuesAndExpressions::ProhibitEscapedCharacters;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
@@ -16,23 +18,23 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-my $desc     = q{Numeric escapes in interpolated string};
-my $expl     = [ 56 ];
+Readonly::Scalar my $DESC     => q{Numeric escapes in interpolated string};
+Readonly::Scalar my $EXPL     => [ 56 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return () }
-sub default_severity { return $SEVERITY_LOW       }
-sub default_themes   { return qw(core pbp cosmetic) }
-sub applies_to       { return qw(PPI::Token::Quote::Double
-                                 PPI::Token::Quote::Interpolate) }
+sub supported_parameters { return ()                    }
+sub default_severity     { return $SEVERITY_LOW         }
+sub default_themes       { return qw(core pbp cosmetic) }
+sub applies_to           { return qw(PPI::Token::Quote::Double
+                                     PPI::Token::Quote::Interpolate) }
 
 #-----------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
     if ($elem->content =~ m/(?<!\\)(?:\\\\)*(?:\\x[0-9A-F]|\\[01][0-7])/mx) {
-        return $self->violation( $desc, $expl, $elem );
+        return $self->violation( $DESC, $EXPL, $elem );
     }
     return;    #ok!
 }

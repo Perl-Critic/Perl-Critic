@@ -9,6 +9,8 @@ package Perl::Critic::Policy::ValuesAndExpressions::RequireNumberSeparators;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
@@ -16,8 +18,8 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{Long number not separated with underscores};
-my $expl = [ 59 ];
+Readonly::Scalar my $DESC => q{Long number not separated with underscores};
+Readonly::Scalar my $EXPL => [ 59 ];
 
 #-----------------------------------------------------------------------------
 
@@ -46,7 +48,7 @@ sub violates {
     return if $elem !~ m{ \d{4} }mx;
     return if abs _to_number($elem) < $min;
 
-    return $self->violation( $desc, $expl, $elem );
+    return $self->violation( $DESC, $EXPL, $elem );
 }
 
 #-----------------------------------------------------------------------------

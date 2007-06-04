@@ -9,6 +9,8 @@ package Perl::Critic::Policy::ValuesAndExpressions::ProhibitEmptyQuotes;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
@@ -16,23 +18,23 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-my $empty_rx = qr{\A ["|'] \s* ['|"] \z}x;
-my $desc     = q{Quotes used with an empty string};
-my $expl     = [ 53 ];
+Readonly::Scalar my $EMPTY_RX => qr{\A ["|'] \s* ['|"] \z}x;
+Readonly::Scalar my $DESC     => q{Quotes used with an empty string};
+Readonly::Scalar my $EXPL     => [ 53 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return () }
-sub default_severity { return $SEVERITY_LOW       }
-sub default_themes   { return qw(core pbp cosmetic) }
-sub applies_to       { return 'PPI::Token::Quote' }
+sub supported_parameters { return ()                    }
+sub default_severity     { return $SEVERITY_LOW         }
+sub default_themes       { return qw(core pbp cosmetic) }
+sub applies_to           { return 'PPI::Token::Quote'   }
 
 #-----------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
-    if ( $elem =~ $empty_rx ) {
-        return $self->violation( $desc, $expl, $elem );
+    if ( $elem =~ $EMPTY_RX ) {
+        return $self->violation( $DESC, $EXPL, $elem );
     }
     return;    #ok!
 }

@@ -9,6 +9,8 @@ package Perl::Critic::Policy::ValuesAndExpressions::RequireQuotedHeredocTerminat
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
@@ -16,23 +18,23 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-my $heredoc_rx = qr/ \A << \s* ["|'] .* ['|"] \z /x;
-my $desc       = q{Heredoc terminator must be quoted};
-my $expl       = [ 64 ];
+Readonly::Scalar my $HEREDOC_RX => qr/ \A << \s* ["|'] .* ['|"] \z /x;
+Readonly::Scalar my $DESC       => q{Heredoc terminator must be quoted};
+Readonly::Scalar my $EXPL       => [ 64 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return () }
-sub default_severity { return $SEVERITY_MEDIUM      }
-sub default_themes   { return qw(core pbp maintenance)    }
-sub applies_to       { return 'PPI::Token::HereDoc' }
+sub supported_parameters { return ()                       }
+sub default_severity     { return $SEVERITY_MEDIUM         }
+sub default_themes       { return qw(core pbp maintenance) }
+sub applies_to           { return 'PPI::Token::HereDoc'    }
 
 #-----------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
-    if ( $elem !~ $heredoc_rx ) {
-        return $self->violation( $desc, $expl, $elem );
+    if ( $elem !~ $HEREDOC_RX ) {
+        return $self->violation( $DESC, $EXPL, $elem );
     }
     return;    #ok!
 }

@@ -9,6 +9,8 @@ package Perl::Critic::Policy::ValuesAndExpressions::ProhibitNoisyQuotes;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
@@ -16,29 +18,29 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-my $noise_rx = qr{\A ["|']  [^ \w () {} [\] <> ]{1,2}  ['|"] \z}x;
-my $desc     = q{Quotes used with a noisy string};
-my $expl     = [ 53 ];
+Readonly::Scalar my $NOISE_RX => qr{\A ["|']  [^ \w () {} [\] <> ]{1,2}  ['|"] \z}x;
+Readonly::Scalar my $DESC     => q{Quotes used with a noisy string};
+Readonly::Scalar my $EXPL     => [ 53 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return () }
-sub default_severity { return $SEVERITY_LOW       }
-sub default_themes   { return qw(core pbp cosmetic) }
-sub applies_to       { return qw(PPI::Token::Quote::Double
-                                 PPI::Token::Quote::Single) }
+sub supported_parameters { return ()                    }
+sub default_severity     { return $SEVERITY_LOW         }
+sub default_themes       { return qw(core pbp cosmetic) }
+sub applies_to           { return qw(PPI::Token::Quote::Double
+                                     PPI::Token::Quote::Single) }
 
 #-----------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
-    return if $elem !~ $noise_rx;
+    return if $elem !~ $NOISE_RX;
     my $statement = $elem->statement;
     return if $statement
         && $statement->isa('PPI::Statement::Include')
         && $statement->type eq 'use'
         && $statement->module eq 'overload';
-    return $self->violation( $desc, $expl, $elem );
+    return $self->violation( $DESC, $EXPL, $elem );
 }
 
 1;

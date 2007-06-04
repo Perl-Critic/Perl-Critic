@@ -9,6 +9,8 @@ package Perl::Critic::Policy::ValuesAndExpressions::ProhibitMixedBooleanOperator
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities :data_conversion };
 use base 'Perl::Critic::Policy';
 
@@ -16,13 +18,13 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-my @low_booleans  = qw( not or and );
-my %low_booleans  = hashify( @low_booleans );
+Readonly::Array my @LOW_BOOLEANS  => qw( not or and );
+Readonly::Hash my %LOW_BOOLEANS  => hashify( @LOW_BOOLEANS );
 
-my @high_booleans = qw( ! || && );
-my %high_booleans = hashify( @high_booleans );
+Readonly::Array my @HIGH_BOOLEANS => qw( ! || && );
+Readonly::Hash my %HIGH_BOOLEANS => hashify( @HIGH_BOOLEANS );
 
-my @exempt_types = qw(
+Readonly::Array my @EXEMPT_TYPES => qw(
     PPI::Statement::Block
     PPI::Statement::Scheduled
     PPI::Statement::Package
@@ -36,15 +38,15 @@ my @exempt_types = qw(
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{Mixed high and low-precedence booleans};
-my $expl = [ 70 ];
+Readonly::Scalar my $DESC => q{Mixed high and low-precedence booleans};
+Readonly::Scalar my $EXPL => [ 70 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return () }
-sub default_severity { return $SEVERITY_HIGH   }
-sub default_themes    { return qw( core bugs pbp )  }
-sub applies_to       { return 'PPI::Statement' }
+sub supported_parameters { return ()                  }
+sub default_severity     { return $SEVERITY_HIGH      }
+sub default_themes       { return qw( core bugs pbp ) }
+sub applies_to           { return 'PPI::Statement'    }
 
 #-----------------------------------------------------------------------------
 
@@ -58,7 +60,7 @@ sub violates {
     # better ways to do this, such as scanning for a semi-colon or
     # some other marker.
 
-    for my $type (@exempt_types) {
+    for my $type (@EXEMPT_TYPES) {
         return if $elem->isa($type);
     }
 
@@ -66,7 +68,7 @@ sub violates {
     if (    $elem->find_first(\&_low_boolean)
          && $elem->find_first(\&_high_boolean) ) {
 
-        return $self->violation( $desc, $expl, $elem );
+        return $self->violation( $DESC, $EXPL, $elem );
     }
     return;    #ok!
 }
@@ -75,13 +77,13 @@ sub violates {
 sub _low_boolean {
     my (undef, $elem) = @_;
     $elem->isa('PPI::Token::Operator') || return 0;
-    return exists $low_booleans{$elem};
+    return exists $LOW_BOOLEANS{$elem};
 }
 
 sub _high_boolean {
     my (undef, $elem) = @_;
     $elem->isa('PPI::Token::Operator') || return 0;
-    return exists $high_booleans{$elem};
+    return exists $HIGH_BOOLEANS{$elem};
 }
 
 1;

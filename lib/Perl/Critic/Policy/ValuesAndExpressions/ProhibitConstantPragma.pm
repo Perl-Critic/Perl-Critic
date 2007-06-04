@@ -9,6 +9,8 @@ package Perl::Critic::Policy::ValuesAndExpressions::ProhibitConstantPragma;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
@@ -16,22 +18,22 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{Pragma "constant" used};
-my $expl = [ 55 ];
+Readonly::Scalar my $DESC => q{Pragma "constant" used};
+Readonly::Scalar my $EXPL => [ 55 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return () }
-sub default_severity { return $SEVERITY_HIGH            }
-sub default_themes    { return qw( core bugs pbp )           }
-sub applies_to       { return 'PPI::Statement::Include' }
+sub supported_parameters { return ()                        }
+sub default_severity     { return $SEVERITY_HIGH            }
+sub default_themes       { return qw( core bugs pbp )       }
+sub applies_to           { return 'PPI::Statement::Include' }
 
 #-----------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
     if ( $elem->type() eq 'use' && $elem->pragma() eq 'constant' ) {
-        return $self->violation( $desc, $expl, $elem );
+        return $self->violation( $DESC, $EXPL, $elem );
     }
     return;    #ok!
 }
