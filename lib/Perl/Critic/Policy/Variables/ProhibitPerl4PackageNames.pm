@@ -20,7 +20,7 @@ my $desc = q{Use double colon (::) to separate package name components instead o
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return() }
+sub supported_parameters { return () }
 sub default_severity     { return $SEVERITY_LOW                              }
 sub default_themes       { return qw(core maintenance)                       }
 sub applies_to           { return qw( PPI::Token::Word PPI::Token::Symbol )  }

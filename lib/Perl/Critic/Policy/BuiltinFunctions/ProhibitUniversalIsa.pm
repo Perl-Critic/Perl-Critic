@@ -23,7 +23,7 @@ Readonly::Scalar my $EXPL => q{Use eval{$obj->isa($pkg)} instead};  ##no critic 
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return()                      }
+sub supported_parameters { return ()                     }
 sub default_severity     { return $SEVERITY_MEDIUM       }
 sub default_themes       { return qw( core maintenance ) }
 sub applies_to           { return 'PPI::Token::Word'     }

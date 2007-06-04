@@ -24,9 +24,9 @@ Readonly::Scalar my $EXPL => q{Express it as a regex instead};
 #-----------------------------------------------------------------------------
 
 sub supported_parameters { return ()                    }
-sub default_severity  { return $SEVERITY_LOW         }
-sub default_themes    { return qw(core pbp cosmetic) }
-sub applies_to        { return 'PPI::Token::Word'    }
+sub default_severity     { return $SEVERITY_LOW         }
+sub default_themes       { return qw(core pbp cosmetic) }
+sub applies_to           { return 'PPI::Token::Word'    }
 
 #-----------------------------------------------------------------------------
 

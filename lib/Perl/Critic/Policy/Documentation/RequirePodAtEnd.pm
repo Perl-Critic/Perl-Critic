@@ -23,7 +23,7 @@ my $expl = [139, 140];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return() }
+sub supported_parameters { return () }
 sub default_severity { return $SEVERITY_LOWEST   }
 sub default_themes    { return qw( core cosmetic pbp ) }
 sub applies_to       { return 'PPI::Document'    }

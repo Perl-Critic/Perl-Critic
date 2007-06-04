@@ -21,7 +21,7 @@ my $expl = q{Declare variables outside of the condition};
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return() }
+sub supported_parameters { return () }
 sub default_severity { return $SEVERITY_HIGHEST          }
 sub default_themes    { return qw( core bugs )               }
 sub applies_to       { return 'PPI::Statement::Variable' }
