@@ -9,6 +9,8 @@ package Perl::Critic::Policy::Variables::RequireNegativeIndices;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
@@ -16,15 +18,15 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{Negative array index should be used};
-my $expl = [ 88 ];
+Readonly::Scalar my $DESC => q{Negative array index should be used};
+Readonly::Scalar my $EXPL => [ 88 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return () }
-sub default_severity { return $SEVERITY_HIGH              }
-sub default_themes   { return qw( core maintenance pbp )  }
-sub applies_to       { return 'PPI::Structure::Subscript' }
+sub supported_parameters { return ()                          }
+sub default_severity     { return $SEVERITY_HIGH              }
+sub default_themes       { return qw( core maintenance pbp )  }
+sub applies_to           { return 'PPI::Structure::Subscript' }
 
 #-----------------------------------------------------------------------------
 
@@ -35,7 +37,7 @@ sub violates {
     my ($name, $isref) = _is_bad_index( $elem );
     return if ( !$name );
     return if !_is_array_name( $elem, $name, $isref );
-    return $self->violation( $desc, $expl, $elem );
+    return $self->violation( $DESC, $EXPL, $elem );
 }
 
 sub _is_bad_index {

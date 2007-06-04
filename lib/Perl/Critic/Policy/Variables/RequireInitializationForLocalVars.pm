@@ -9,6 +9,8 @@ package Perl::Critic::Policy::Variables::RequireInitializationForLocalVars;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
@@ -16,22 +18,22 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{"local" variable not initialized};
-my $expl = [ 78 ];
+Readonly::Scalar my $DESC => q{"local" variable not initialized};
+Readonly::Scalar my $EXPL => [ 78 ];
 
 #-----------------------------------------------------------------------------
 
 sub supported_parameters { return ()                         }
-sub default_severity  { return $SEVERITY_MEDIUM           }
-sub default_themes    { return qw(core pbp bugs)          }
-sub applies_to        { return 'PPI::Statement::Variable' }
+sub default_severity     { return $SEVERITY_MEDIUM           }
+sub default_themes       { return qw(core pbp bugs)          }
+sub applies_to           { return 'PPI::Statement::Variable' }
 
 #-----------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
     if ( $elem->type() eq 'local' && !_is_initialized($elem) ) {
-        return $self->violation( $desc, $expl, $elem );
+        return $self->violation( $DESC, $EXPL, $elem );
     }
     return;    #ok!
 }

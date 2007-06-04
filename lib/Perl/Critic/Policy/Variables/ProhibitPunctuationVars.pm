@@ -9,6 +9,8 @@ package Perl::Critic::Policy::Variables::ProhibitPunctuationVars;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :characters :severities :data_conversion };
 use base 'Perl::Critic::Policy';
 
@@ -16,8 +18,8 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{Magic punctuation variable used};
-my $expl = [ 79 ];
+Readonly::Scalar my $DESC => q{Magic punctuation variable used};
+Readonly::Scalar my $EXPL => [ 79 ];
 
 #-----------------------------------------------------------------------------
 
@@ -34,9 +36,9 @@ sub supported_parameters {
     );
 }
 
-sub default_severity  { return $SEVERITY_LOW         }
-sub default_themes    { return qw(core pbp cosmetic) }
-sub applies_to        { return 'PPI::Token::Magic'   }
+sub default_severity { return $SEVERITY_LOW         }
+sub default_themes   { return qw(core pbp cosmetic) }
+sub applies_to       { return 'PPI::Token::Magic'   }
 
 #-----------------------------------------------------------------------------
 
@@ -45,7 +47,7 @@ sub applies_to        { return 'PPI::Token::Magic'   }
 sub violates {
     my ( $self, $elem, undef ) = @_;
     if ( !exists $self->{_allow}->{$elem} ) {
-        return $self->violation( $desc, $expl, $elem );
+        return $self->violation( $DESC, $EXPL, $elem );
     }
     return;  #ok!
 }
