@@ -9,6 +9,8 @@ package Perl::Critic::Policy::NamingConventions::ProhibitAmbiguousNames;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities :data_conversion };
 use base 'Perl::Critic::Policy';
 
@@ -16,10 +18,11 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-my $desc = 'Ambiguous name for variable or subroutine';
-my $expl = [ 48 ];
+Readonly::Scalar my $DESC => 'Ambiguous name for variable or subroutine';
+Readonly::Scalar my $EXPL => [ 48 ];
 
-my $default_forbid = 'abstract bases close contract last left no record right second set';
+Readonly::Scalar my $DEFAULT_FORBID =>
+    'abstract bases close contract last left no record right second set';
 
 #-----------------------------------------------------------------------------
 
@@ -28,20 +31,20 @@ sub supported_parameters {
         {
             name            => 'forbid',
             description     => 'The variable names that are not to be allowed.',
-            default_string  => $default_forbid,
+            default_string  => $DEFAULT_FORBID,
             behavior        => 'string list',
         },
     );
 }
 
-sub default_severity  { return $SEVERITY_MEDIUM         }
-sub default_themes    { return qw(core pbp maintenance) }
-sub applies_to        { return qw(PPI::Statement::Sub
+sub default_severity { return $SEVERITY_MEDIUM         }
+sub default_themes   { return qw(core pbp maintenance) }
+sub applies_to       { return qw(PPI::Statement::Sub
                                  PPI::Statement::Variable) }
 
 #-----------------------------------------------------------------------------
 
-sub default_forbidden_words { return words_from_string( $default_forbid ) }
+sub default_forbidden_words { return words_from_string( $DEFAULT_FORBID ) }
 
 #-----------------------------------------------------------------------------
 
@@ -57,7 +60,7 @@ sub violates {
             next if not defined $name; # should never happen, right?
 
             if ( exists $self->{_forbid}->{$name} ) {
-                return $self->violation( $desc, $expl, $elem );
+                return $self->violation( $DESC, $EXPL, $elem );
             }
         }
         return;    # ok
@@ -83,7 +86,7 @@ sub violates {
                 next if ! defined $name;
 
                 if ( exists $self->{_forbid}->{$name} ) {
-                    push @viols, $self->violation( $desc, $expl, $elem );
+                    push @viols, $self->violation( $DESC, $EXPL, $elem );
                 }
             }
         }

@@ -9,20 +9,23 @@ package Perl::Critic::Policy::TestingAndDebugging::RequireUseWarnings;
 
 use strict;
 use warnings;
-use Perl::Critic::Utils qw{ :severities };
+use Readonly;
+
 use List::Util qw(first);
+
+use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{Code before warnings are enabled};
-my $expl = [431];
+Readonly::Scalar my $DESC => q{Code before warnings are enabled};
+Readonly::Scalar my $EXPL => [431];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return ()                   }
+sub supported_parameters { return ()                  }
 sub default_severity     { return $SEVERITY_HIGH      }
 sub default_themes       { return qw( core bugs pbp ) }
 sub applies_to           { return 'PPI::Document'     }
@@ -52,7 +55,7 @@ sub violates {
         # location.
         my $stmnt_line = $stmnt->location() ? $stmnt->location()->[0] : -1;
         if ( (! defined $warn_line) || ($stmnt_line < $warn_line) ) {
-            push @viols, $self->violation( $desc, $expl, $stmnt );
+            push @viols, $self->violation( $DESC, $EXPL, $stmnt );
         }
     }
     return @viols;

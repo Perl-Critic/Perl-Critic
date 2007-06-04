@@ -9,6 +9,8 @@ package Perl::Critic::Policy::RegularExpressions::ProhibitCaptureWithoutTest;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
@@ -16,15 +18,15 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{Capture variable used outside conditional};
-my $expl = [ 253 ];
+Readonly::Scalar my $DESC => q{Capture variable used outside conditional};
+Readonly::Scalar my $EXPL => [ 253 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return () }
-sub default_severity { return $SEVERITY_MEDIUM    }
-sub default_themes   { return qw(core pbp maintenance)  }
-sub applies_to       { return 'PPI::Token::Magic' }
+sub supported_parameters { return ()                       }
+sub default_severity     { return $SEVERITY_MEDIUM         }
+sub default_themes       { return qw(core pbp maintenance) }
+sub applies_to           { return 'PPI::Token::Magic'      }
 
 #-----------------------------------------------------------------------------
 
@@ -34,7 +36,7 @@ sub violates {
     return if $elem eq '$0';   ## no critic(RequireInterpolationOfMetachars)
     return if _is_in_conditional_expression($elem);
     return if _is_in_conditional_structure($elem);
-    return $self->violation( $desc, $expl, $elem );
+    return $self->violation( $DESC, $EXPL, $elem );
 }
 
 sub _is_in_conditional_expression {

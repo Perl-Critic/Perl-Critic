@@ -9,6 +9,8 @@ package Perl::Critic::Policy::TestingAndDebugging::RequireTestLabels;
 
 use strict;
 use warnings;
+use Readonly;
+
 use List::MoreUtils qw(any);
 use Perl::Critic::Utils qw{
     :characters :severities :data_conversion :classification :ppi
@@ -17,7 +19,7 @@ use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.053;
 
-my %label_arg_pos = (
+Readonly::Hash my %LABEL_ARG_POS => (
    ok        => 1,
    is        => 2,
    isnt      => 2,
@@ -31,8 +33,8 @@ my %label_arg_pos = (
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{Test without a label};
-my $expl = q{Add a label argument to all Test::More functions};
+Readonly::Scalar my $DESC => q{Test without a label};
+Readonly::Scalar my $EXPL => q{Add a label argument to all Test::More functions};
 
 #-----------------------------------------------------------------------------
 
@@ -48,16 +50,16 @@ sub supported_parameters {
     );
 }
 
-sub default_severity  { return $SEVERITY_MEDIUM             }
-sub default_themes    { return qw( core maintenance tests ) }
-sub applies_to        { return 'PPI::Token::Word'           }
+sub default_severity { return $SEVERITY_MEDIUM             }
+sub default_themes   { return qw( core maintenance tests ) }
+sub applies_to       { return 'PPI::Token::Word'           }
 
 #-----------------------------------------------------------------------------
 
 sub violates {
     my ($self, $elem, $doc) = @_;
 
-    my $arg_index = $label_arg_pos{$elem};
+    my $arg_index = $LABEL_ARG_POS{$elem};
     return if not defined $arg_index;
     return if not is_function_call($elem);
     return if not $self->_has_test_more($doc);
@@ -66,7 +68,7 @@ sub violates {
     my @args = parse_arg_list($elem);
     return if ( @args > $arg_index );
 
-    return $self->violation( $desc, $expl, $elem );
+    return $self->violation( $DESC, $EXPL, $elem );
 }
 
 #-----------------------------------------------------------------------------

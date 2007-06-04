@@ -9,6 +9,8 @@ package Perl::Critic::Policy::Subroutines::ProhibitAmpersandSigils;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
@@ -16,15 +18,15 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-my $desc  = q{Subroutine called with "&" sigil};
-my $expl  = [ 175 ];
+Readonly::Scalar my $DESC  => q{Subroutine called with "&" sigil};
+Readonly::Scalar my $EXPL  => [ 175 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return ()                        }
-sub default_severity  { return $SEVERITY_LOW             }
-sub default_themes    { return qw(core pbp maintenance)  }
-sub applies_to        { return 'PPI::Token::Symbol'      }
+sub supported_parameters { return ()                       }
+sub default_severity     { return $SEVERITY_LOW            }
+sub default_themes       { return qw(core pbp maintenance) }
+sub applies_to           { return 'PPI::Token::Symbol'     }
 
 #-----------------------------------------------------------------------------
 
@@ -44,7 +46,7 @@ sub violates {
                 or $psib eq 'exists'
                 or $psib eq 'defined' ); # ok
 
-    return $self->violation( $desc, $expl, $elem );
+    return $self->violation( $DESC, $EXPL, $elem );
 }
 
 1;

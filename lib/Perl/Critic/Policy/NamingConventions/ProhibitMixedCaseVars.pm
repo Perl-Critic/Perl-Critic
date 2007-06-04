@@ -9,6 +9,8 @@ package Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
@@ -16,24 +18,24 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-my $package_rx = qr/ :: /mx;
-my $mixed_rx   = qr/ [A-Z][a-z] | [a-z][A-Z] /mx;
-my $desc       = 'Mixed-case variable name(s)';
-my $expl       = [ 44 ];
+Readonly::Scalar my $PACKAGE_RX => qr/ :: /mx;
+Readonly::Scalar my $MIXED_RX   => qr/ [A-Z][a-z] | [a-z][A-Z] /mx;
+Readonly::Scalar my $DESC       => 'Mixed-case variable name(s)';
+Readonly::Scalar my $EXPL       => [ 44 ];
 
 #-----------------------------------------------------------------------------
 
 sub supported_parameters { return ()                         }
-sub default_severity  { return $SEVERITY_LOWEST           }
-sub default_themes    { return qw( core pbp cosmetic )    }
-sub applies_to        { return 'PPI::Statement::Variable' }
+sub default_severity     { return $SEVERITY_LOWEST           }
+sub default_themes       { return qw( core pbp cosmetic )    }
+sub applies_to           { return 'PPI::Statement::Variable' }
 
 #-----------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
     if ( _has_mixed_case_vars($elem) ) {
-        return $self->violation( $desc, $expl, $elem );
+        return $self->violation( $DESC, $EXPL, $elem );
     }
     return;    #ok!
 }
@@ -47,8 +49,8 @@ sub _has_mixed_case_vars {
         #because we can't really be responsible for symbols that
         #are defined in other packages.
 
-        next if $elem->type() eq 'local' && $variable_name =~ $package_rx;
-        return 1 if $variable_name =~ $mixed_rx;
+        next if $elem->type() eq 'local' && $variable_name =~ $PACKAGE_RX;
+        return 1 if $variable_name =~ $MIXED_RX;
     }
     return 0;
 }

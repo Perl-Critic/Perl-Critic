@@ -9,6 +9,8 @@ package Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseSubs;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
@@ -16,24 +18,24 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-my $mixed_rx = qr/ [A-Z][a-z] | [a-z][A-Z] /x;
-my $desc     = 'Mixed-case subroutine name';
-my $expl     = [ 44 ];
+Readonly::Scalar my $MIXED_RX => qr/ [A-Z][a-z] | [a-z][A-Z] /x;
+Readonly::Scalar my $DESC     => 'Mixed-case subroutine name';
+Readonly::Scalar my $EXPL     => [ 44 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return () }
-sub default_severity { return $SEVERITY_LOWEST      }
-sub default_themes    { return qw( core pbp cosmetic )    }
-sub applies_to       { return 'PPI::Statement::Sub' }
+sub supported_parameters { return ()                      }
+sub default_severity     { return $SEVERITY_LOWEST        }
+sub default_themes       { return qw( core pbp cosmetic ) }
+sub applies_to           { return 'PPI::Statement::Sub'   }
 
 #-----------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
     (my $name = $elem->name() ) =~ s/\A.*:://mx;
-    if ( $name =~ $mixed_rx ) {
-        return $self->violation( $desc, $expl, $elem );
+    if ( $name =~ $MIXED_RX ) {
+        return $self->violation( $DESC, $EXPL, $elem );
     }
     return;    #ok!
 }
