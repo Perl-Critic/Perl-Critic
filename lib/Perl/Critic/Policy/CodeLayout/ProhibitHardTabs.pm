@@ -18,8 +18,8 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-Readonly my $DESC => q{Hard tabs used};
-Readonly my $EXPL => [ 20 ];
+Readonly::Scalar my $DESC => q{Hard tabs used};
+Readonly::Scalar my $EXPL => [ 20 ];
 
 my $DEFAULT_ALLOW_LEADING_TABS = $TRUE;
 

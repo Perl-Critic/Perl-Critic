@@ -57,7 +57,8 @@ L<Readonly> module.
   use constant FOOBAR => 42;  #not ok
 
   use Readonly;
-  Readonly  my $FOOBAR => 42;  #ok
+  Readonly my $FOOBAR => 42;  #ok
+  Readonly::Scalar my $FOOBAR => 42;  #ok
 
 =head1 AUTHOR
 

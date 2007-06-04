@@ -18,8 +18,8 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-Readonly my $DESC => q{One-argument "bless" used};
-Readonly my $EXPL => [ 365 ];
+Readonly::Scalar my $DESC => q{One-argument "bless" used};
+Readonly::Scalar my $EXPL => [ 365 ];
 
 #-----------------------------------------------------------------------------
 

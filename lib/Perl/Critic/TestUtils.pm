@@ -26,7 +26,7 @@ use Perl::Critic::Utils qw{ :data_conversion };
 use Perl::Critic::PolicyFactory (-test => 1);
 
 our $VERSION = 1.053;
-Readonly our @EXPORT_OK => qw(
+Readonly::Array our @EXPORT_OK => qw(
     pcritique critique fcritique
     subtests_in_tree
     should_skip_author_tests

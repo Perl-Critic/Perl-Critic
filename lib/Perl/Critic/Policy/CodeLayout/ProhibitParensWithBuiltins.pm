@@ -20,18 +20,18 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-Readonly my @ALLOW => qw( my our local return );
-Readonly my %ALLOW => hashify( @ALLOW );
+Readonly::Array my @ALLOW => qw( my our local return );
+Readonly::Hash my %ALLOW => hashify( @ALLOW );
 
-Readonly my $DESC  => q{Builtin function called with parens};
-Readonly my $EXPL  => [ 13 ];
+Readonly::Scalar my $DESC  => q{Builtin function called with parens};
+Readonly::Scalar my $EXPL  => [ 13 ];
 
 #-----------------------------------------------------------------------------
 # These are all the functions that are considered named unary
 # operators.  These frequently require parens because they have lower
 # precedence than ordinary function calls.
 
-Readonly my @NAMED_UNARY_OPS => qw(
+Readonly::Array my @NAMED_UNARY_OPS => qw(
     alarm           glob        rand
     caller          gmtime      readlink
     chdir           hex         ref
@@ -49,7 +49,7 @@ Readonly my @NAMED_UNARY_OPS => qw(
     getprotobyname  quotemeta   umask
                                 undef
 );
-Readonly my %NAMED_UNARY_OPS => hashify( @NAMED_UNARY_OPS );
+Readonly::Hash my %NAMED_UNARY_OPS => hashify( @NAMED_UNARY_OPS );
 
 #-----------------------------------------------------------------------------
 

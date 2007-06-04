@@ -18,8 +18,8 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-Readonly my $DESC => q{Sort blocks should have a single statement};
-Readonly my $EXPL => [ 149 ];
+Readonly::Scalar my $DESC => q{Sort blocks should have a single statement};
+Readonly::Scalar my $EXPL => [ 149 ];
 
 #-----------------------------------------------------------------------------
 

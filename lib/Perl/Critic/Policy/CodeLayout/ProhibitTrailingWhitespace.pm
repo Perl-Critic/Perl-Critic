@@ -23,10 +23,10 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-Readonly my $DESCRIPTION => q{Don't use whitespace at the end of lines};
+Readonly::Scalar my $DESCRIPTION => q{Don't use whitespace at the end of lines};
 
 ## no critic (RequireInterpolationOfMetachars)
-Readonly my %C_STYLE_ESCAPES =>
+Readonly::Hash my %C_STYLE_ESCAPES =>
     (
         ord "\t" => q{\t},
         ord "\n" => q{\n},

@@ -18,8 +18,8 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-Readonly my $DESC => q{AUTOLOAD method declared};
-Readonly my $EXPL => [ 393 ];
+Readonly::Scalar my $DESC => q{AUTOLOAD method declared};
+Readonly::Scalar my $EXPL => [ 393 ];
 
 #-----------------------------------------------------------------------------
 

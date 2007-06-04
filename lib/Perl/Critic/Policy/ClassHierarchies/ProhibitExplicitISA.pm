@@ -18,8 +18,8 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-Readonly my $DESC => q{@ISA used instead of "use base"}; ##no critic; #for @ in string
-Readonly my $EXPL => [ 360 ];
+Readonly::Scalar my $DESC => q{@ISA used instead of "use base"}; ##no critic; #for @ in string
+Readonly::Scalar my $EXPL => [ 360 ];
 
 #-----------------------------------------------------------------------------
 

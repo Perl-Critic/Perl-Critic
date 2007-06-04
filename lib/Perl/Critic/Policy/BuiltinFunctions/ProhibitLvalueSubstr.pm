@@ -18,8 +18,8 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-Readonly my $DESC => q{Lvalue form of "substr" used};
-Readonly my $EXPL => [ 165 ];
+Readonly::Scalar my $DESC => q{Lvalue form of "substr" used};
+Readonly::Scalar my $EXPL => [ 165 ];
 
 #-----------------------------------------------------------------------------
 

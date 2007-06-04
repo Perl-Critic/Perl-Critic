@@ -18,8 +18,8 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-Readonly my $DESC => q{List of quoted literal words};
-Readonly my $EXPL => q{Use 'qw()' instead};
+Readonly::Scalar my $DESC => q{List of quoted literal words};
+Readonly::Scalar my $EXPL => q{Use 'qw()' instead};
 
 #-----------------------------------------------------------------------------
 

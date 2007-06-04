@@ -19,8 +19,8 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-Readonly my $DESC => q{Code is not tidy};
-Readonly my $EXPL => [ 33 ];
+Readonly::Scalar my $DESC => q{Code is not tidy};
+Readonly::Scalar my $EXPL => [ 33 ];
 
 #-----------------------------------------------------------------------------
 

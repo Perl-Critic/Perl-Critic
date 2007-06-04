@@ -24,14 +24,14 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-Readonly our @EXPORT_OK => qw{
+Readonly::Array our @EXPORT_OK => qw{
     $RULE_INVALID_CHARACTER_REGEX
     &cook_rule
 };
 
 #-----------------------------------------------------------------------------
 
-Readonly our $RULE_INVALID_CHARACTER_REGEX =>
+Readonly::Scalar our $RULE_INVALID_CHARACTER_REGEX =>
     qr/ ( [^()\s\w\d\+\-\*\&\|\!] ) /xms;
 
 #-----------------------------------------------------------------------------

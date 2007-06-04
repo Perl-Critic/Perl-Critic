@@ -18,8 +18,8 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-Readonly my $DESC => q{String delimiter used with "split"};
-Readonly my $EXPL => q{Express it as a regex instead};
+Readonly::Scalar my $DESC => q{String delimiter used with "split"};
+Readonly::Scalar my $EXPL => q{Express it as a regex instead};
 
 #-----------------------------------------------------------------------------
 

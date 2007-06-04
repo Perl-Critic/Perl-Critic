@@ -18,8 +18,8 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-Readonly my $DESC => q{Expression form of "eval"};
-Readonly my $EXPL => [ 161 ];
+Readonly::Scalar my $DESC => q{Expression form of "eval"};
+Readonly::Scalar my $EXPL => [ 161 ];
 
 #-----------------------------------------------------------------------------
 

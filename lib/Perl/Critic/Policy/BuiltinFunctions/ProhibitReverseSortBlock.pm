@@ -18,8 +18,8 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-Readonly my $DESC => q{Forbid $b before $a in sort blocks}; ## no critic (Interpolation)
-Readonly my $EXPL => [ 152 ];
+Readonly::Scalar my $DESC => q{Forbid $b before $a in sort blocks}; ## no critic (Interpolation)
+Readonly::Scalar my $EXPL => [ 152 ];
 
 #-----------------------------------------------------------------------------
 

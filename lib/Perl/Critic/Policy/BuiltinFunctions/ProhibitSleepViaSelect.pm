@@ -18,8 +18,8 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-Readonly my $DESC => q{"select" used to emulate "sleep"};
-Readonly my $EXPL => [168];
+Readonly::Scalar my $DESC => q{"select" used to emulate "sleep"};
+Readonly::Scalar my $EXPL => [168];
 
 #-----------------------------------------------------------------------------
 

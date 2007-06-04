@@ -22,8 +22,8 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-Readonly my $DESC => q{Expression form of "grep"};
-Readonly my $EXPL => [ 169 ];
+Readonly::Scalar my $DESC => q{Expression form of "grep"};
+Readonly::Scalar my $EXPL => [ 169 ];
 
 #-----------------------------------------------------------------------------
 

@@ -18,8 +18,8 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-Readonly my $DESC => q{"grep" used in void context};
-Readonly my $EXPL => q{Use a "for" loop instead};
+Readonly::Scalar my $DESC => q{"grep" used in void context};
+Readonly::Scalar my $EXPL => q{Use a "for" loop instead};
 
 #-----------------------------------------------------------------------------
 

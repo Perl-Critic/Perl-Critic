@@ -18,12 +18,12 @@ use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.053;
 
-Readonly my $LINE_END => qr/\015{1,2}\012|\012|\015/mxs;
+Readonly::Scalar my $LINE_END => qr/\015{1,2}\012|\012|\015/mxs;
 
 #-----------------------------------------------------------------------------
 
-Readonly my $DESC => q{Use the same newline through the source};
-Readonly my $EXPL => q{Change your newlines to be the same throughout};
+Readonly::Scalar my $DESC => q{Use the same newline through the source};
+Readonly::Scalar my $EXPL => q{Change your newlines to be the same throughout};
 
 #-----------------------------------------------------------------------------
 

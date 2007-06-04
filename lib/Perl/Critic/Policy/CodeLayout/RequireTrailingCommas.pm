@@ -18,8 +18,8 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-Readonly my $DESC => q{List declaration without trailing comma};
-Readonly my $EXPL => [ 17 ];
+Readonly::Scalar my $DESC => q{List declaration without trailing comma};
+Readonly::Scalar my $EXPL => [ 17 ];
 
 #-----------------------------------------------------------------------------
 

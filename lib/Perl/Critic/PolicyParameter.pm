@@ -14,7 +14,7 @@ use Readonly;
 
 use Exporter qw{ import };
 
-Readonly our @EXPORT_OK => qw{ $NO_DESCRIPTION_AVAILABLE };
+Readonly::Array our @EXPORT_OK => qw{ $NO_DESCRIPTION_AVAILABLE };
 
 use String::Format qw{ stringf };
 
@@ -28,14 +28,14 @@ use Perl::Critic::Utils qw{ :characters &interpolate };
 
 our $VERSION = 1.053;
 
-Readonly our $NO_DESCRIPTION_AVAILABLE => 'No description available.';
+Readonly::Scalar our $NO_DESCRIPTION_AVAILABLE => 'No description available.';
 
 #-----------------------------------------------------------------------------
 
 # Grrr... one of the OO limitations of Perl: you can't put references to
 # subclases in a superclass (well, not nicely).  This map and method belong
 # in Behavior.pm.
-Readonly my %BEHAVIORS =>
+Readonly::Hash my %BEHAVIORS =>
     (
         'boolean'     => Perl::Critic::PolicyParameter::BooleanBehavior->new(),
         'enumeration' => Perl::Critic::PolicyParameter::EnumerationBehavior->new(),
