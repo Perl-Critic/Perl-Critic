@@ -9,6 +9,8 @@ package Perl::Critic::Policy::Miscellanea::ProhibitFormats;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities :classification };
 use base 'Perl::Critic::Policy';
 
@@ -16,15 +18,15 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{Format used};
-my $expl = [ 449 ];
+Readonly::Scalar my $DESC => q{Format used};
+Readonly::Scalar my $EXPL => [ 449 ];
 
 #-----------------------------------------------------------------------------
 
 sub supported_parameters { return ()                         }
-sub default_severity  { return $SEVERITY_MEDIUM           }
-sub default_themes    { return qw( core maintenance pbp ) }
-sub applies_to        { return 'PPI::Token::Word'         }
+sub default_severity     { return $SEVERITY_MEDIUM           }
+sub default_themes       { return qw( core maintenance pbp ) }
+sub applies_to           { return 'PPI::Token::Word'         }
 
 #-----------------------------------------------------------------------------
 
@@ -32,7 +34,7 @@ sub violates {
     my ( $self, $elem, undef ) = @_;
     return if $elem ne 'format';
     return if ! is_function_call( $elem );
-    return $self->violation( $desc, $expl, $elem );
+    return $self->violation( $DESC, $EXPL, $elem );
 }
 
 

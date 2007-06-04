@@ -9,20 +9,23 @@ package Perl::Critic::Policy::Modules::RequireVersionVar;
 
 use strict;
 use warnings;
-use Perl::Critic::Utils qw{ :severities };
+use Readonly;
+
 use List::MoreUtils qw(any);
+
+use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{No "VERSION" variable found};
-my $expl = [ 404 ];
+Readonly::Scalar my $DESC => q{No "VERSION" variable found};
+Readonly::Scalar my $EXPL => [ 404 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return () }
+sub supported_parameters { return ()                       }
 sub default_severity     { return $SEVERITY_LOW            }
 sub default_themes       { return qw(core pbp readability) }
 sub applies_to           { return 'PPI::Document'          }
@@ -35,7 +38,7 @@ sub violates {
     return if $doc->find_first( \&_is_VERSION_declaration );
 
     #If we get here, then no $VERSION was found
-    return $self->violation( $desc, $expl, $doc );
+    return $self->violation( $DESC, $EXPL, $doc );
 }
 
 #-----------------------------------------------------------------------------

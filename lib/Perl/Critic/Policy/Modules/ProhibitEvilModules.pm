@@ -9,7 +9,10 @@ package Perl::Critic::Policy::Modules::ProhibitEvilModules;
 use strict;
 use warnings;
 use English qw(-no_match_vars);
+use Readonly;
+
 use List::MoreUtils qw(any);
+
 use Perl::Critic::Utils qw{ :characters :severities :data_conversion };
 use base 'Perl::Critic::Policy';
 
@@ -17,8 +20,8 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-my $expl = q{Find an alternative module};
-my $desc = q{Prohibited module used};
+Readonly::Scalar my $EXPL => q{Find an alternative module};
+Readonly::Scalar my $DESC => q{Prohibited module used};
 
 #-----------------------------------------------------------------------------
 
@@ -82,7 +85,7 @@ sub violates {
     if ( exists $self->{_evil_modules}->{ $module } ||
          any { $module =~ $_ } @{ $self->{_evil_modules_rx} } ) {
 
-        return $self->violation( $desc, $expl, $elem );
+        return $self->violation( $DESC, $EXPL, $elem );
     }
     return;    #ok!
 }
