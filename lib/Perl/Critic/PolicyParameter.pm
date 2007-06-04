@@ -280,7 +280,7 @@ __END__
 
 =pod
 
-=for stopwords
+=for stopwords parsable
 
 =head1 NAME
 
@@ -341,14 +341,27 @@ to the way C<sprintf> works.  If you want to know the specific
 formatting capabilities, look at L<String::Format>. Valid escape
 characters are:
 
-  Escape    Meaning
-  -------   ----------------------------------------------------------
-  %n        The name of the parameter.
-  %d        The description, as supplied by the programmer.
-  %D        The default value, in a parseable form.
-  %f        The full description, which is an extension of the value
-            returned by %d.  Takes a parameter of a prefix for the
-            beginning of each line.
+=over
+
+=item C<%n>
+
+The name of the parameter.
+
+=item C<%d>
+
+The description, as supplied by the programmer.
+
+=item C<%D>
+
+The default value, in a parsable form.
+
+=item C<%f>
+
+The full description, which is an extension of the value returned by
+C<%d>.  Takes a parameter of a prefix for the beginning of each line.
+
+
+=back
 
 
 =back

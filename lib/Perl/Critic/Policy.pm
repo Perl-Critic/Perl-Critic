@@ -14,6 +14,7 @@ use Perl::Critic::Utils qw{
     :characters
     :severities
     :data_conversion
+    &interpolate
     &policy_short_name
 };
 use Perl::Critic::PolicyParameter qw();
@@ -226,7 +227,7 @@ sub _format_lack_of_parameter_metadata {
     my ($self, $message) = @_;
 
     return $EMPTY if $self->parameter_metadata_available();
-    return $message if $message;
+    return interpolate($message) if $message;
 
     return
         'Cannot programmatically discover what parameters this policy takes.';
@@ -416,25 +417,50 @@ Formats are a combination of literal and escape characters similar to
 the way C<sprintf> works.  If you want to know the specific formatting
 capabilities, look at L<String::Format>. Valid escape characters are:
 
-  Escape    Meaning
-  -------   ----------------------------------------------------------
-  %O        List of supported policy parameters.  Takes an option of
-            a format string for
-            L<Perl::Critic::PolicyParameter/"to_formatted_string">.
-            For example, this can be used like C<%{%n - %d\n}O> to get
-            a list of parameter names followed by their descriptions.
-  %U        A message stating that the parameters for the policy are
-            unknown if C<parameter_metadata_available()> returns
-            false.  Takes an option of what the message should be,
-            which defaults to "Cannot programmatically discover what
-            parameters this policy takes.".
-  %P        Name of the Policy module.
-  %p        Name of the Policy without the Perl::Critic::Policy::
-            prefix.
-  %S        The default severity level of the policy.
-  %s        The current severity level of the policy.
-  %T        The default themes for the policy.
-  %t        The current themes for the policy.
+=over
+
+=item C<%O>
+
+List of supported policy parameters.  Takes an option of a format
+string for L<Perl::Critic::PolicyParameter/"to_formatted_string">.
+For example, this can be used like C<%{%n - %d\n}O> to get a list of
+parameter names followed by their descriptions.
+
+=item C<%U>
+
+A message stating that the parameters for the policy are unknown if
+C<parameter_metadata_available()> returns false.  Takes an option of
+what the message should be, which defaults to "Cannot programmatically
+discover what parameters this policy takes.".  The value of this
+option is interpolated in order to expand the standard escape
+sequences (C<\n>, C<\t>, etc.).
+
+=item C<%P>
+
+Name of the Policy module.
+
+=item C<%p>
+
+Name of the Policy without the C<Perl::Critic::Policy::> prefix.
+
+=item C<%S>
+
+The default severity level of the policy.
+
+=item C<%s>
+
+The current severity level of the policy.
+
+=item C<%T>
+
+The default themes for the policy.
+
+=item C<%t>
+
+The current themes for the policy.
+
+=back
+
 
 =head1 AUTHOR
 
