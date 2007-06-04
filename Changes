@@ -49,6 +49,9 @@
        facilitiy, the perlcritic "--profileproto" option now emits the short
        names for policies, rather than the full ones.
 
+     Other Stuff:
+     * Now requires the Readonly module in order to be more self-compliant.
+
 [1.053]  Released on 2007-06-02
 
      *DEVELOPMENT RELEASE*

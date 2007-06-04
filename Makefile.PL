@@ -67,6 +67,7 @@ WriteMakefile(
         'PPI'                   => 1.118,
         'Pod::PlainText'        => 0,
         'Pod::Usage'            => 0,
+        'Readonly'              => 1.03,
         'Scalar::Util'          => 0,
         'String::Format'        => 1.13,
         'Test::More'            => 0,
@@ -78,17 +79,17 @@ sub MY::postamble {
 .PHONY: tags
 
 tags:
-	ctags -f tags \
-		--recurse \
-		--totals \
-		\
-		--exclude=blib/ \
-		--exclude=t/lib \
-		--exclude=.svn \
-		--exclude='*~' \
-		\
-		--languages=Perl \
-		--langmap=Perl:+.t \
+        ctags -f tags \
+                --recurse \
+                --totals \
+                \
+                --exclude=blib/ \
+                --exclude=t/lib \
+                --exclude=.svn \
+                --exclude='*~' \
+                \
+                --languages=Perl \
+                --langmap=Perl:+.t \
 MAKE_FRAG
 }
 

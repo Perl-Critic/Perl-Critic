@@ -9,8 +9,9 @@ package Perl::Critic::Theme;
 
 use strict;
 use warnings;
-use Carp qw(confess);
 use English qw(-no_match_vars);
+use Carp qw(confess);
+use Readonly;
 
 use Exporter qw{ import };
 
@@ -23,14 +24,15 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-our @EXPORT_OK = qw{
+Readonly our @EXPORT_OK => qw{
     $RULE_INVALID_CHARACTER_REGEX
     &cook_rule
 };
 
 #-----------------------------------------------------------------------------
 
-our $RULE_INVALID_CHARACTER_REGEX = qr/ ( [^()\s\w\d\+\-\*\&\|\!] ) /xms;
+Readonly our $RULE_INVALID_CHARACTER_REGEX =>
+    qr/ ( [^()\s\w\d\+\-\*\&\|\!] ) /xms;
 
 #-----------------------------------------------------------------------------
 

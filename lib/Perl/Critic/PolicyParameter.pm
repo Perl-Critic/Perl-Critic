@@ -10,10 +10,11 @@ package Perl::Critic::PolicyParameter;
 use strict;
 use warnings;
 use Carp qw(confess);
+use Readonly;
 
 use Exporter qw{ import };
 
-our @EXPORT_OK = qw{ $NO_DESCRIPTION_AVAILABLE };
+Readonly our @EXPORT_OK => qw{ $NO_DESCRIPTION_AVAILABLE };
 
 use String::Format qw{ stringf };
 
@@ -27,14 +28,14 @@ use Perl::Critic::Utils qw{ :characters &interpolate };
 
 our $VERSION = 1.053;
 
-our $NO_DESCRIPTION_AVAILABLE = 'No description available.';
+Readonly our $NO_DESCRIPTION_AVAILABLE => 'No description available.';
 
 #-----------------------------------------------------------------------------
 
 # Grrr... one of the OO limitations of Perl: you can't put references to
 # subclases in a superclass (well, not nicely).  This map and method belong
 # in Behavior.pm.
-my %BEHAVIORS =
+Readonly my %BEHAVIORS =>
     (
         'boolean'     => Perl::Critic::PolicyParameter::BooleanBehavior->new(),
         'enumeration' => Perl::Critic::PolicyParameter::EnumerationBehavior->new(),

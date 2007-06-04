@@ -10,6 +10,8 @@ package Perl::Critic::Utils::McCabe;
 use strict;
 use warnings;
 
+use Readonly;
+
 use Perl::Critic::Utils qw{ :data_conversion :classification };
 
 use base 'Exporter';
@@ -18,7 +20,7 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-our @EXPORT_OK = qw( &calculate_mccabe_of_sub );
+Readonly our @EXPORT_OK => qw( &calculate_mccabe_of_sub );
 
 #-----------------------------------------------------------------------------
 
