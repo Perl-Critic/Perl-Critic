@@ -14,20 +14,22 @@ $x =~ s{}{};
 $x =~ tr{}{};
 $x =~ y{}{};
 
+$x = qx'';
+$x = qr'';
+
+$x =~ m'';
+$x =~ s''';
+
 #-----------------------------------------------------------------------------
 
 ## name Basic failure
-## failures 18
+## failures 23
 ## cut
 
 $x = q'';
 $x = qq'';
-$x = qx'';
-$x = qr'';
 $x = qw'';
 
-$x =~ m'';
-$x =~ s''';
 $x =~ tr''';
 $x =~ y''';
 
@@ -41,6 +43,125 @@ $x =~ m"";
 $x =~ s""";
 $x =~ tr""";
 $x =~ y""";
+
+$x = q``;
+$x = qq``;
+$x = qx``;
+$x = qr``;
+$x = qw``;
+
+$x =~ m``;
+$x =~ s```;
+$x =~ tr```;
+$x =~ y```;
+
+#-----------------------------------------------------------------------------
+
+## name single_quote_allowed_operators = m q qq qr qw qx s tr y
+## failures 0
+## parms { single_quote_allowed_operators => 'm q qq qr qw qx s tr y' }
+## cut
+
+$x = q'';
+$x = qq'';
+$x = qx'';
+$x = qr'';
+$x = qw'';
+
+$x =~ m'';
+$x =~ s''';
+$x =~ tr''';
+$x =~ y''';
+
+#-----------------------------------------------------------------------------
+
+## name single_quote_allowed_operators =
+## failures 9
+## parms { single_quote_allowed_operators => '' }
+## cut
+
+$x = q'';
+$x = qq'';
+$x = qx'';
+$x = qr'';
+$x = qw'';
+
+$x =~ m'';
+$x =~ s''';
+$x =~ tr''';
+$x =~ y''';
+
+#-----------------------------------------------------------------------------
+
+## name double_quote_allowed_operators = m q qq qr qw qx s tr y
+## failures 0
+## parms { double_quote_allowed_operators => 'm q qq qr qw qx s tr y' }
+## cut
+
+$x = q"";
+$x = qq"";
+$x = qx"";
+$x = qr"";
+$x = qw"";
+
+$x =~ m"";
+$x =~ s""";
+$x =~ tr""";
+$x =~ y""";
+
+#-----------------------------------------------------------------------------
+
+## name double_quote_allowed_operators =
+## failures 9
+## parms { double_quote_allowed_operators => '' }
+## cut
+
+$x = q"";
+$x = qq"";
+$x = qx"";
+$x = qr"";
+$x = qw"";
+
+$x =~ m"";
+$x =~ s""";
+$x =~ tr""";
+$x =~ y""";
+
+#-----------------------------------------------------------------------------
+
+## name back_quote_allowed_operators = m q qq qr qw qx s tr y
+## failures 0
+## parms { back_quote_allowed_operators => 'm q qq qr qw qx s tr y' }
+## cut
+
+$x = q``;
+$x = qq``;
+$x = qx``;
+$x = qr``;
+$x = qw``;
+
+$x =~ m``;
+$x =~ s```;
+$x =~ tr```;
+$x =~ y```;
+
+#-----------------------------------------------------------------------------
+
+## name back_quote_allowed_operators =
+## failures 9
+## parms { back_quote_allowed_operators => '' }
+## cut
+
+$x = q``;
+$x = qq``;
+$x = qx``;
+$x = qr``;
+$x = qw``;
+
+$x =~ m``;
+$x =~ s```;
+$x =~ tr```;
+$x =~ y```;
 
 
 ##############################################################################
