@@ -10,7 +10,7 @@
 use strict;
 use warnings;
 use English qw(-no_mactch_vars);
-use Test::More (tests => 11);
+use Test::More (tests => 10);
 use Perl::Critic::UserProfile;
 use Perl::Critic::PolicyFactory (-test => 1);
 
@@ -98,18 +98,6 @@ Perl::Critic::TestUtils::block_perlcriticrc();
     $pf = Perl::Critic::PolicyFactory->new( -profile  => $userprof );
     like( $last_warning, qr/^Policy ".*Shizzle" is not installed/m );
     $last_warning = q{};
-}
-
-#-----------------------------------------------------------------------------
-
-TODO:{
-
-    # Try loading from bogus namespace
-    local $TODO = 'Test not working yet';
-    $Perl::Critic::Utils::POLICY_NAMESPACE = 'bogus';
-    eval { Perl::Critic::PolicyFactory->import() };
-    like( $EVAL_ERROR, qr/No Policies found/, 'loading from bogus namespace' );
-
 }
 
 ##############################################################################
