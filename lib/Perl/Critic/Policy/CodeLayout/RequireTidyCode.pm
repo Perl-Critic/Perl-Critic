@@ -9,6 +9,8 @@ package Perl::Critic::Policy::CodeLayout::RequireTidyCode;
 
 use strict;
 use warnings;
+use Readonly;
+
 use English qw(-no_match_vars);
 use Perl::Critic::Utils qw{ :characters :severities };
 use base 'Perl::Critic::Policy';
@@ -17,8 +19,8 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{Code is not tidy};
-my $expl = [ 33 ];
+Readonly my $DESC => q{Code is not tidy};
+Readonly my $EXPL => [ 33 ];
 
 #-----------------------------------------------------------------------------
 
@@ -32,9 +34,9 @@ sub supported_parameters {
     );
 }
 
-sub default_severity  { return $SEVERITY_LOWEST      }
-sub default_themes    { return qw(core pbp cosmetic) }
-sub applies_to        { return 'PPI::Document'       }
+sub default_severity { return $SEVERITY_LOWEST      }
+sub default_themes   { return qw(core pbp cosmetic) }
+sub applies_to       { return 'PPI::Document'       }
 
 #-----------------------------------------------------------------------------
 
@@ -102,11 +104,11 @@ sub violates {
     if ($stderr || $EVAL_ERROR) {
 
         # Looks like perltidy had problems
-        return $self->violation( 'perltidy had errors!!', $expl, $elem );
+        return $self->violation( 'perltidy had errors!!', $EXPL, $elem );
     }
 
     if ( $source ne $dest ) {
-        return $self->violation( $desc, $expl, $elem );
+        return $self->violation( $DESC, $EXPL, $elem );
     }
 
     return;    #ok!

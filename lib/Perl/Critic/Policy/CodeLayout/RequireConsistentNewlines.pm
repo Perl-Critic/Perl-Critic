@@ -9,6 +9,8 @@ package Perl::Critic::Policy::CodeLayout::RequireConsistentNewlines;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities };
 use PPI::Token::Whitespace;
 use English qw(-no_match_vars);
@@ -16,19 +18,19 @@ use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.053;
 
-my $LINE_END = qr/\015{1,2}\012|\012|\015/mxs;
+Readonly my $LINE_END => qr/\015{1,2}\012|\012|\015/mxs;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{Use the same newline through the source};
-my $expl = q{Change your newlines to be the same throughout};
+Readonly my $DESC => q{Use the same newline through the source};
+Readonly my $EXPL => q{Change your newlines to be the same throughout};
 
 #-----------------------------------------------------------------------------
 
 sub supported_parameters { return ()              }
-sub default_severity  { return $SEVERITY_HIGH  }
-sub default_themes    { return qw( core bugs ) }
-sub applies_to        { return 'PPI::Document' }
+sub default_severity     { return $SEVERITY_HIGH  }
+sub default_themes       { return qw( core bugs ) }
+sub applies_to           { return 'PPI::Document' }
 
 #-----------------------------------------------------------------------------
 
@@ -55,7 +57,7 @@ sub violates {
         if ( $nl ne $newline ) {
             my $token = PPI::Token::Whitespace->new( $nl );
             $token->{_location} = [$line, $col, $col];
-            push @v, $self->violation( $desc, $expl, $token );
+            push @v, $self->violation( $DESC, $EXPL, $token );
         }
         $line++;
     }
