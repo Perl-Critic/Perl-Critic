@@ -9,6 +9,8 @@ package Perl::Critic::Policy::ClassHierarchies::ProhibitAutoloading;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
@@ -16,15 +18,15 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{AUTOLOAD method declared};
-my $expl = [ 393 ];
+Readonly my $DESC => q{AUTOLOAD method declared};
+Readonly my $EXPL => [ 393 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return() }
-sub default_severity { return $SEVERITY_MEDIUM      }
-sub default_themes    { return qw( core maintenance pbp )  }
-sub applies_to       { return 'PPI::Statement::Sub' }
+sub supported_parameters { return()                          }
+sub default_severity     { return $SEVERITY_MEDIUM           }
+sub default_themes       { return qw( core maintenance pbp ) }
+sub applies_to           { return 'PPI::Statement::Sub'      }
 
 #-----------------------------------------------------------------------------
 
@@ -32,7 +34,7 @@ sub violates {
     my ($self, $elem, undef) = @_;
 
     if( $elem->name eq 'AUTOLOAD' ) {
-        return $self->violation( $desc, $expl, $elem );
+        return $self->violation( $DESC, $EXPL, $elem );
     }
     return; #ok!
 }
