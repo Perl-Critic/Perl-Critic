@@ -9,31 +9,33 @@ package Perl::Critic::Policy::ControlStructures::ProhibitUnreachableCode;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities :data_conversion :classification };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.053;
 
-my @terminals = qw( die exit croak confess );
-my %terminals = hashify( @terminals );
+Readonly::Array my @TERMINALS => qw( die exit croak confess );
+Readonly::Hash my %TERMINALS => hashify( @TERMINALS );
 
-my @conditionals = qw( if unless foreach while for );
-my %conditionals = hashify( @conditionals );
+Readonly::Array my @CONDITIONALS => qw( if unless foreach while for );
+Readonly::Hash my %CONDITIONALS => hashify( @CONDITIONALS );
 
-my @operators = qw( && || and or ? );
-my %operators = hashify( @operators );
+Readonly::Array my @OPERATORS => qw( && || and or ? );
+Readonly::Hash my %OPERATORS => hashify( @OPERATORS );
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{Unreachable code};
-my $expl = q{Consider removing it};
+Readonly::Scalar my $DESC => q{Unreachable code};
+Readonly::Scalar my $EXPL => q{Consider removing it};
 
 #-----------------------------------------------------------------------------
 
 sub supported_parameters { return ()                 }
-sub default_severity  { return $SEVERITY_HIGH     }
-sub default_themes    { return qw( core bugs )    }
-sub applies_to        { return 'PPI::Token::Word' }
+sub default_severity     { return $SEVERITY_HIGH     }
+sub default_themes       { return qw( core bugs )    }
+sub applies_to           { return 'PPI::Token::Word' }
 
 #-----------------------------------------------------------------------------
 
@@ -43,7 +45,7 @@ sub violates {
 
     my $stmnt = $elem->statement();
     return if !$stmnt;
-    return if ( !exists $terminals{$elem} ) &&
+    return if ( !exists $TERMINALS{$elem} ) &&
         ( !$stmnt->isa('PPI::Statement::Break') );
 
     # Scan the enclosing statement for conditional keywords or logical
@@ -55,8 +57,8 @@ sub violates {
     # unreachable.  But this policy doesn't catch that situation.
 
     for my $child ( $stmnt->schildren() ) {
-        return if $child->isa('PPI::Token::Operator') && exists $operators{$child};
-        return if $child->isa('PPI::Token::Word') && exists $conditionals{$child};
+        return if $child->isa('PPI::Token::Operator') && exists $OPERATORS{$child};
+        return if $child->isa('PPI::Token::Word') && exists $CONDITIONALS{$child};
     }
 
     # If we get here, then the statement contained an unconditional
@@ -80,7 +82,7 @@ sub violates {
         next if $stmnt->isa('PPI::Statement::Variable') &&
             $stmnt->type() eq 'our';
 
-        push @viols, $self->violation( $desc, $expl, $stmnt );
+        push @viols, $self->violation( $DESC, $EXPL, $stmnt );
     }
 
     return @viols;

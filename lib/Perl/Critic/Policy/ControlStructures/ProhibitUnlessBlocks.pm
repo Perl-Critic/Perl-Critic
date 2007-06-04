@@ -9,6 +9,8 @@ package Perl::Critic::Policy::ControlStructures::ProhibitUnlessBlocks;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
@@ -16,15 +18,15 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{"unless" block used};
-my $expl = [ 97 ];
+Readonly::Scalar my $DESC => q{"unless" block used};
+Readonly::Scalar my $EXPL => [ 97 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return() }
-sub default_severity { return $SEVERITY_LOW              }
-sub default_themes   { return qw(core pbp cosmetic)        }
-sub applies_to       { return 'PPI::Statement::Compound' }
+sub supported_parameters { return ()                         }
+sub default_severity     { return $SEVERITY_LOW              }
+sub default_themes       { return qw(core pbp cosmetic)      }
+sub applies_to           { return 'PPI::Statement::Compound' }
 
 #-----------------------------------------------------------------------------
 
@@ -32,7 +34,7 @@ sub violates {
     my ( $self, $elem, undef ) = @_;
 
     if ( $elem->first_element() eq 'unless' ) {
-        return $self->violation( $desc, $expl, $elem );
+        return $self->violation( $DESC, $EXPL, $elem );
     }
     return;    #ok!
 }

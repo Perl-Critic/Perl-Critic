@@ -9,18 +9,21 @@ package Perl::Critic::Policy::ControlStructures::ProhibitMutatingListFunctions;
 
 use strict;
 use warnings;
+use Readonly;
+
+use List::MoreUtils qw( none any );
+
 use Perl::Critic::Utils qw{
     :characters :severities :data_conversion :classification :ppi
 };
-use List::MoreUtils qw( none any );
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-my @builtin_list_funcs = qw( map grep );
-my @cpan_list_funcs    = _get_cpan_list_funcs();
+Readonly::Array my @BUILTIN_LIST_FUNCS => qw( map grep );
+Readonly::Array my @CPAN_LIST_FUNCS    => _get_cpan_list_funcs();
 
 #-----------------------------------------------------------------------------
 
@@ -48,8 +51,8 @@ sub _is_topic {
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{Don't modify $_ in list functions};  ##no critic (InterpolationOfMetachars)
-my $expl = [ 114 ];
+Readonly::Scalar my $DESC => q{Don't modify $_ in list functions};  ##no critic (InterpolationOfMetachars)
+Readonly::Scalar my $EXPL => [ 114 ];
 
 #-----------------------------------------------------------------------------
 
@@ -58,7 +61,7 @@ sub supported_parameters {
         {
             name            => 'list_funcs',
             description     => 'The base set of functions to check.',
-            default_string  => join ($SPACE, @builtin_list_funcs, @cpan_list_funcs ),
+            default_string  => join ($SPACE, @BUILTIN_LIST_FUNCS, @CPAN_LIST_FUNCS ),
             behavior        => 'string list',
         },
         {
@@ -70,9 +73,9 @@ sub supported_parameters {
     );
 }
 
-sub default_severity     { return $SEVERITY_HIGHEST              }
-sub default_themes       { return qw(core bugs pbp)              }
-sub applies_to           { return 'PPI::Token::Word'             }
+sub default_severity { return $SEVERITY_HIGHEST  }
+sub default_themes   { return qw(core bugs pbp)  }
+sub applies_to       { return 'PPI::Token::Word' }
 
 #-----------------------------------------------------------------------------
 
@@ -104,7 +107,7 @@ sub violates {
     return if not _has_topic_side_effect( $first_arg );
 
     # Must be a violation
-    return $self->violation( $desc, $expl, $elem );
+    return $self->violation( $DESC, $EXPL, $elem );
 }
 
 #-----------------------------------------------------------------------------
