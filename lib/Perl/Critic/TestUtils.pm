@@ -73,6 +73,8 @@ sub critique {
 # Like pcritique, but forces a PPI::Document::File context.  The
 # $filename arg is a Unix-style relative path, like 'Foo/Bar.pm'
 
+Readonly::Scalar my $TEMP_FILE_PERMISSIONS => oct 700;
+
 sub fcritique {
     my($policy, $code_ref, $filename, $config_ref) = @_;
     my $c = Perl::Critic->new( -profile => 'NONE' );
@@ -83,7 +85,7 @@ sub fcritique {
     my @fileparts = File::Spec::Unix->splitdir($filename);
     if (@fileparts > 1) {
         my $subdir = File::Spec->catdir($dir, @fileparts[0..$#fileparts-1]);
-        File::Path::mkpath($subdir, 0, oct 700);
+        File::Path::mkpath($subdir, 0, $TEMP_FILE_PERMISSIONS);
     }
     my $file = File::Spec->catfile($dir, @fileparts);
     if (open my $fh, '>', $file) {
@@ -114,7 +116,7 @@ sub subtests_in_tree {
                if (@pathparts < 2) {
                    confess 'confusing policy test filename ' . $_;
                }
-               my $policy = join q{::}, $pathparts[-2], $pathparts[-1];
+               my $policy = join q{::}, @pathparts[-2, -1]; ## no critic (MagicNumbers)
 
                my @subtests = _subtests_from_file( $_ );
                $subtests{ $policy } = [ @subtests ];

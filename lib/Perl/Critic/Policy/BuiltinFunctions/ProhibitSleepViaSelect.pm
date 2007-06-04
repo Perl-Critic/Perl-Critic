@@ -20,6 +20,7 @@ our $VERSION = 1.053;
 
 Readonly::Scalar my $DESC => q{"select" used to emulate "sleep"};
 Readonly::Scalar my $EXPL => [168];
+Readonly::Scalar my $UNDEFS_IN_SLEEP_SELECT => 3;
 
 #-----------------------------------------------------------------------------
 
@@ -36,7 +37,10 @@ sub violates {
     return if ($elem ne 'select');
     return if ! is_function_call($elem);
 
-    if ( 3 == grep {$_->[0] eq 'undef' } parse_arg_list($elem) ){
+    if (
+            $UNDEFS_IN_SLEEP_SELECT
+        ==  grep { $_->[0] eq 'undef' } parse_arg_list($elem)
+    ) {
         return $self->violation( $DESC, $EXPL, $elem );
     }
     return; #ok!
@@ -58,9 +62,9 @@ Perl::Critic::Policy::BuiltinFunctions::ProhibitSleepViaSelect
 
 Conway discourages the use of C<select()> for performing non-integer
 sleeps.  Although documented in L<perlfunc>, it's something that
-generally requires the reader to read C<perldoc -f select> to figure out what it should be
-doing.  Instead, Conway recommends that you use the
-C<Time::HiRes> module when you want to sleep.
+generally requires the reader to read C<perldoc -f select> to figure
+out what it should be doing.  Instead, Conway recommends that you use
+the C<Time::HiRes> module when you want to sleep.
 
   select undef, undef, undef, 0.25;         # not ok
 

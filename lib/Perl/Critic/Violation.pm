@@ -10,6 +10,8 @@ package Perl::Critic::Violation;
 use strict;
 use warnings;
 use English qw(-no_match_vars);
+use Readonly;
+
 use Carp qw(confess);
 
 use File::Basename qw(basename);
@@ -28,13 +30,15 @@ my %DIAGNOSTICS = ();  #Cache of diagnostic messages
 
 #-----------------------------------------------------------------------------
 
+Readonly::Scalar my $CONSTRUCTOR_ARG_COUNT => 5;
+
 sub new {
     my ( $class, $desc, $expl, $elem, $sev ) = @_;
 
     #Check arguments to help out developers who might
     #be creating new Perl::Critic::Policy modules.
 
-    if ( @_ != 5 ) {
+    if ( @_ != $CONSTRUCTOR_ARG_COUNT ) {
         confess 'Wrong number of args to Violation->new()';
     }
 

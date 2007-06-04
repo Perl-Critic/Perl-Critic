@@ -11,7 +11,9 @@ use strict;
 use warnings;
 use Carp qw(cluck);
 use English qw(-no_match_vars);
-use Perl::Critic::Utils qw{ :booleans :characters :severities :data_conversion };
+use Perl::Critic::Utils qw{
+    :booleans :characters :severities :data_conversion $DEFAULT_VERBOSITY
+};
 
 our $VERSION = 1.053;
 
@@ -45,7 +47,7 @@ sub _init {
     $self->{_severity}      = delete $args{severity}      || $SEVERITY_HIGHEST;
     $self->{_theme}         = delete $args{theme}         || $EMPTY;
     $self->{_top}           = delete $args{top}           || $FALSE;
-    $self->{_verbose}       = delete $args{verbose}       || 4;
+    $self->{_verbose}       = delete $args{verbose}       || $DEFAULT_VERBOSITY;
     $self->{_nocolor}       = delete $args{nocolor}       || $FALSE;
 
     # If there's anything left, warn about invalid settings
