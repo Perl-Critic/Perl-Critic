@@ -9,6 +9,8 @@ package Perl::Critic::Policy::InputOutput::RequireCheckedOpen;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities :classification };
 use base 'Perl::Critic::Policy';
 
@@ -16,15 +18,15 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{Return value of "open" ignored};
-my $expl = q{Check the return value of "open" for success};
+Readonly::Scalar my $DESC => q{Return value of "open" ignored};
+Readonly::Scalar my $EXPL => q{Check the return value of "open" for success};
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return ()                  }
-sub default_severity  { return $SEVERITY_MEDIUM       }
-sub default_themes    { return qw( core maintenance ) }
-sub applies_to        { return 'PPI::Token::Word'     }
+sub supported_parameters { return ()                     }
+sub default_severity     { return $SEVERITY_MEDIUM       }
+sub default_themes       { return qw( core maintenance ) }
+sub applies_to           { return 'PPI::Token::Word'     }
 
 #-----------------------------------------------------------------------------
 
@@ -34,7 +36,7 @@ sub violates {
     return if $elem ne 'open';
     return if ! is_unchecked_call( $elem );
 
-    return $self->violation( $desc, $expl, $elem );
+    return $self->violation( $DESC, $EXPL, $elem );
 
 }
 

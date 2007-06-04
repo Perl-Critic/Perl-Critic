@@ -9,6 +9,8 @@ package Perl::Critic::Policy::ErrorHandling::RequireCarping;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{
     :booleans :characters :severities :classification :data_conversion
 };
@@ -18,7 +20,7 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-my $expl = [ 283 ];
+Readonly::Scalar my $EXPL => [ 283 ];
 
 #-----------------------------------------------------------------------------
 
@@ -60,7 +62,7 @@ sub violates {
     }
 
     my $desc = qq{"$elem" used instead of "$alternative"};
-    return $self->violation( $desc, $expl, $elem );
+    return $self->violation( $desc, $EXPL, $elem );
 }
 
 #-----------------------------------------------------------------------------

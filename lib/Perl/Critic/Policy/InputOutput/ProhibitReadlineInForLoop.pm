@@ -9,6 +9,8 @@ package Perl::Critic::Policy::InputOutput::ProhibitReadlineInForLoop;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
@@ -16,15 +18,15 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{Readline inside "for" loop};
-my $expl = [ 211 ];
+Readonly::Scalar my $DESC => q{Readline inside "for" loop};
+Readonly::Scalar my $EXPL => [ 211 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return () }
-sub default_severity   { return $SEVERITY_HIGH               }
-sub default_themes      { return qw( core bugs pbp )              }
-sub applies_to         { return qw( PPI::Structure::ForLoop) }
+sub supported_parameters { return ()                           }
+sub default_severity     { return $SEVERITY_HIGH               }
+sub default_themes       { return qw( core bugs pbp )          }
+sub applies_to           { return qw( PPI::Structure::ForLoop) }
 
 #-----------------------------------------------------------------------------
 
@@ -32,7 +34,7 @@ sub violates {
     my ( $self, $elem, undef ) = @_;
 
     if ( my $rl = $elem->find_first('PPI::Token::QuoteLike::Readline') ) {
-        return $self->violation( $desc, $expl, $rl );
+        return $self->violation( $DESC, $EXPL, $rl );
     }
 
     return;  #ok!
