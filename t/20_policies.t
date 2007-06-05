@@ -7,7 +7,11 @@ use English qw(-no_match_vars);
 
 # common P::C testing tools
 use Perl::Critic::Utils qw( :characters );
-use Perl::Critic::TestUtils qw(pcritique fcritique subtests_in_tree);
+use Perl::Critic::TestUtils qw(
+    pcritique_with_violations
+    fcritique_with_violations
+    subtests_in_tree
+);
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 my $subtests = subtests_in_tree( 't' );
@@ -38,18 +42,34 @@ for my $policy ( sort keys %$subtests ) {
     for my $subtest ( @{$subtests->{$policy}} ) {
         local $TODO = $subtest->{TODO}; # Is NOT a TODO if it's not set
 
-        my $desc = join( ' - ', $policy, "line $subtest->{lineno}", $subtest->{name} );
-        my $violations = $subtest->{filename}
-          ? eval { fcritique($policy, \$subtest->{code}, $subtest->{filename}, $subtest->{parms}) }
-          : eval { pcritique($policy, \$subtest->{code}, $subtest->{parms}) };
+        my $desc =
+            join ' - ', $policy, "line $subtest->{lineno}", $subtest->{name};
+
+        my @violations = $subtest->{filename}
+            ? eval {
+                fcritique_with_violations(
+                    $policy,
+                    \$subtest->{code},
+                    $subtest->{filename},
+                    $subtest->{parms},
+                )
+            }
+            : eval {
+                pcritique_with_violations(
+                    $policy,
+                    \$subtest->{code},
+                    $subtest->{parms},
+                )
+            };
         my $err = $EVAL_ERROR;
 
+        my $test_passed;
         if ($subtest->{error}) {
             if ( 'Regexp' eq ref $subtest->{error} ) {
-                like($err, $subtest->{error}, $desc);
+                $test_passed = like($err, $subtest->{error}, $desc);
             }
             else {
-                ok($err, $desc);
+                $test_passed = ok($err, $desc);
             }
         }
         elsif ($err) {
@@ -57,13 +77,18 @@ for my $policy ( sort keys %$subtests ) {
                 # We most likely hit a configuration that a parameter didn't like.
                 fail($desc);
                 diag($err);
+                $test_passed = 0;
             }
             else {
                 die $err;
             }
         }
         else {
-            is($violations, $subtest->{failures}, $desc);
+            $test_passed = is(scalar @violations, $subtest->{failures}, $desc);
+        }
+
+        if (not $test_passed) {
+            diag("Violation found: $_") foreach @violations;
         }
     }
 }
