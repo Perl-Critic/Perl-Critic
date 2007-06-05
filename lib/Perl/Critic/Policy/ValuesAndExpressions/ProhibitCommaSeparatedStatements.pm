@@ -13,6 +13,7 @@ use Readonly;
 
 
 use Perl::Critic::Utils qw{ :characters :severities :classification };
+use Perl::Critic::Utils::PPI qw{ &is_ppi_statement_subclass };
 
 use base 'Perl::Critic::Policy';
 
@@ -36,7 +37,7 @@ sub violates {
     my ( $self, $elem, undef ) = @_;
 
     # Grrr... PPI instantiates non-leaf nodes in its class hierarchy...
-    return if _is_ppi_statement_subclass($elem);
+    return if is_ppi_statement_subclass($elem);
 
     # Now, if PPI hasn't introduced any new PPI::Statement subclasses, we've
     # got an element who's class really is PPI::Statement.
@@ -59,25 +60,6 @@ sub violates {
             }
         }
     }
-
-    return;
-}
-
-sub _is_ppi_statement_subclass {
-    my $elem = shift;
-
-    # This whole problem is sucky.  Cost of multiple isa() calls vs ref() ???
-    return 1 if $elem->isa('PPI::Statement::Package');
-    return 1 if $elem->isa('PPI::Statement::Include');
-    return 1 if $elem->isa('PPI::Statement::Sub');
-    return 1 if $elem->isa('PPI::Statement::Compound');
-    return 1 if $elem->isa('PPI::Statement::Break');
-    return 1 if $elem->isa('PPI::Statement::Data');
-    return 1 if $elem->isa('PPI::Statement::End');
-    return 1 if $elem->isa('PPI::Statement::Expression');
-    return 1 if $elem->isa('PPI::Statement::Null');
-    return 1 if $elem->isa('PPI::Statement::UnmatchedBrace');
-    return 1 if $elem->isa('PPI::Statement::Unknown');
 
     return;
 }
