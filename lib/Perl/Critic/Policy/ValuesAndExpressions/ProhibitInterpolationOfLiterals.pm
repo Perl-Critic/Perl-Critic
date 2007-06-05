@@ -43,6 +43,8 @@ sub applies_to       { return qw(PPI::Token::Quote::Double
 
 #-----------------------------------------------------------------------------
 
+Readonly::Scalar my $MAX_SPECIFICATION_LENGTH => 3;
+
 sub _parse_allow {
     my ($self, $parameter, $config_string) = @_;
 
@@ -55,7 +57,7 @@ sub _parse_allow {
             m{ \A qq }mx || ($_ = 'qq' . $_)
         }  #Add 'qq'
         for (@allow) {
-            (length $_ <= 3) || chop
+            (length $_ <= $MAX_SPECIFICATION_LENGTH) || chop
         }    #Chop closing char
     }
 

@@ -425,7 +425,7 @@ sub render_policy_listing {
     require Perl::Critic::PolicyListing;
     require Perl::Critic;
 
-    my %pc_params = (-profile => $EMPTY, -severity => 1);
+    my %pc_params = (-profile => $EMPTY, -severity => $SEVERITY_LOWEST);
     my @pols = Perl::Critic->new( %pc_params )->policies();
     my $listing = Perl::Critic::PolicyListing->new( -policies => \@pols );
     print $listing;
@@ -439,7 +439,7 @@ sub render_profile_prototype {
     require Perl::Critic::ProfilePrototype;
     require Perl::Critic;
 
-    my %pc_params = (-profile => $EMPTY, -severity => 1);
+    my %pc_params = (-profile => $EMPTY, -severity => $SEVERITY_LOWEST);
     my @pols = Perl::Critic->new( %pc_params )->policies();
     my $prototype = Perl::Critic::ProfilePrototype->new( -policies => \@pols );
     print $prototype;
@@ -453,7 +453,7 @@ sub policy_docs {
     my $pattern = shift;
     require Perl::Critic;
 
-    my %pc_params = (-profile => $EMPTY, -severity => 1);
+    my %pc_params = (-profile => $EMPTY, -severity => $SEVERITY_LOWEST);
     my @policies  = Perl::Critic::Config->new( %pc_params )->policies();
     my @matches   = grep { $_ =~ m/$pattern/imx } @policies;
 

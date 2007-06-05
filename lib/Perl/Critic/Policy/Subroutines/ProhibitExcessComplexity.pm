@@ -42,15 +42,6 @@ sub applies_to       { return 'PPI::Statement::Sub'           }
 
 #-----------------------------------------------------------------------------
 
-sub new {
-    my ( $class, %args ) = @_;
-    my $self = bless {}, $class;
-    $self->{_max_mccabe} = $args{max_mccabe} || 20;
-    return $self;
-}
-
-#-----------------------------------------------------------------------------
-
 sub violates {
     my ( $self, $elem, undef ) = @_;
 

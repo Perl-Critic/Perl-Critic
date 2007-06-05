@@ -191,15 +191,16 @@ sub _is_topic_mutating_func {
 
 #-----------------------------------------------------------------------------
 
+Readonly::Scalar my $MUTATING_SUBSTR_ARG_COUNT => 4;
+
 sub _is_topic_mutating_substr {
     my $elem = shift;
     return if $elem ne 'substr';
     return if not is_function_call( $elem );
 
-    # 4-argument form of substr mutates its first arg,
-    # so check and see if the first arg is $_
+    # check and see if the first arg is $_
     my @args = parse_arg_list( $elem );
-    return @args >= 4 && _is_topic( $args[0]->[0] );
+    return @args >= $MUTATING_SUBSTR_ARG_COUNT && _is_topic( $args[0]->[0] );
 }
 
 #-----------------------------------------------------------------------------

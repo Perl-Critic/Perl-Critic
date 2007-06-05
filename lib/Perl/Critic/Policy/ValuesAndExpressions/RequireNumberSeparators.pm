@@ -23,6 +23,8 @@ Readonly::Scalar my $EXPL => [ 59 ];
 
 #-----------------------------------------------------------------------------
 
+Readonly::Scalar my $MINIMUM_INTEGER_WITH_MULTIPLE_DIGITS => 10;
+
 sub supported_parameters {
     return (
         {
@@ -30,7 +32,7 @@ sub supported_parameters {
             description     => 'The minimum absolute value to require separators in.',
             default_string  => '10_000',
             behavior        => 'integer',
-            integer_minimum => 10,
+            integer_minimum => $MINIMUM_INTEGER_WITH_MULTIPLE_DIGITS,
         },
     );
 }

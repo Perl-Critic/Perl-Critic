@@ -18,7 +18,7 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-my $expl = [133, 138];
+Readonly::Scalar my $EXPL => [133, 138];
 
 Readonly::Scalar my $BOOK                => 'book';
 Readonly::Scalar my $BOOK_FIRST_EDITION  => 'book_first_edition';
@@ -328,7 +328,7 @@ sub violates {
     for my $required ( @required_sections ) {
         if ( ! exists $found_sections{$required} ) {
             my $desc = qq{Missing "$required" section in POD};
-            push @violations, $self->violation( $desc, $expl, $doc );
+            push @violations, $self->violation( $desc, $EXPL, $doc );
         }
     }
 
