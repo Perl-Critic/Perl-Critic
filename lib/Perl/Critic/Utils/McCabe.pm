@@ -24,11 +24,12 @@ Readonly::Array our @EXPORT_OK => qw( &calculate_mccabe_of_sub );
 
 #-----------------------------------------------------------------------------
 
-my @logic_ops = qw( && || ||= &&= or and xor ? <<= >>= );
-my %logic_ops = hashify( @logic_ops );
+Readonly::Array my @LOGIC_OPS => qw( && || ||= &&= or and xor ? <<= >>= );
+Readonly::Hash my %LOGIC_OPS => hashify( @LOGIC_OPS );
 
-my @logic_keywords = qw( if else elsif unless until while for foreach );
-my %logic_keywords = hashify( @logic_keywords );
+Readonly::Array my @LOGIC_KEYWORDS =>
+    qw( if else elsif unless until while for foreach );
+Readonly::Hash my %LOGIC_KEYWORDS => hashify( @LOGIC_KEYWORDS );
 
 #-----------------------------------------------------------------------------
 
@@ -51,7 +52,7 @@ sub _count_logic_keywords {
     my $keywords_ref = $sub->find('PPI::Token::Word');
     if ( $keywords_ref ) { # should always be true due to "sub" keyword
         my @filtered = grep { ! is_hash_key($_) } @{ $keywords_ref };
-        $count = grep { exists $logic_keywords{$_} } @filtered;
+        $count = grep { exists $LOGIC_KEYWORDS{$_} } @filtered;
     }
     return $count;
 }
@@ -64,7 +65,7 @@ sub _count_logic_operators {
 
     my $operators_ref = $sub->find('PPI::Token::Operator');
     if ( $operators_ref ) {
-        $count = grep { exists $logic_ops{$_} }  @{ $operators_ref };
+        $count = grep { exists $LOGIC_OPS{$_} }  @{ $operators_ref };
     }
 
     return $count;
