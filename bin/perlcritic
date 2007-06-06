@@ -214,7 +214,7 @@ sub critique {
             my @violations = $CRITIC->critique($file);
             $number_of_violations += scalar @violations;
 
-            if (not $opts_ref->{-summary}) {
+            if (not $opts_ref->{-statisticsonly}) {
                 render_report( $file, $opts_ref, @violations )
             }
         };
@@ -223,7 +223,7 @@ sub critique {
             if $EVAL_ERROR;
     }
 
-    if ( $opts_ref->{-statistics} or $opts_ref->{-summary} ) {
+    if ( $opts_ref->{-statistics} or $opts_ref->{-statisticsonly} ) {
         my $stats = $CRITIC->statistics();
         report_statistics( $opts_ref, $stats );
     }
@@ -276,7 +276,7 @@ sub report_statistics {
     my ($opts_ref, $statistics) = @_;
 
     if (
-            not $opts_ref->{-summary}
+            not $opts_ref->{-statisticsonly}
         and (
                 $statistics->total_violations()
             or  not $opts_ref->{-quiet} and $statistics->modules()
@@ -380,7 +380,7 @@ sub _get_option_specification {
         singlepolicy=s
         stern
         statistics!
-        summary!
+        statisticsonly!
         strictprofile!
         theme=s
         top:i
@@ -494,8 +494,8 @@ C<perlcritic> - Command-line interface to critique Perl source
              [-top [ number ]] [-theme expression] [-include pattern]
              [-exclude pattern] [-singlepolicy pattern] [-only | -noonly]
              [-strictprofile | -nostrictprofile] [-force | -noforce]
-             [-statistics] [-summary] [-verbose number | format] [-nocolor]
-             [-quiet] {FILE | DIRECTORY | STDIN}
+             [-statistics] [-statisticsonly] [-verbose number | format]
+             [-nocolor] [-quiet] {FILE | DIRECTORY | STDIN}
 
   perlcritic -doc pattern [...]
 
@@ -730,7 +730,7 @@ set the default value for this option in your F<.perlcriticrc> file.
 Causes several statistics about the code being scanned and the violations
 found to be reported after any other output.
 
-=item C<-summary>
+=item C<-statisticsonly>
 
 Like the C<-statistics> option, but suppresses normal output and only shows
 the statistics.
