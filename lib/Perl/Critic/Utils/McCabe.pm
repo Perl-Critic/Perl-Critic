@@ -16,24 +16,27 @@ use Perl::Critic::Utils qw{ :data_conversion :classification };
 
 use base 'Exporter';
 
+#-----------------------------------------------------------------------------
+
 our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-Readonly::Array our @EXPORT_OK => qw( &calculate_mccabe_of_sub );
+Readonly::Array our @EXPORT_OK =>
+  qw( &calculate_mccabe_of_sub &calculate_mccabe_of_main );
 
 #-----------------------------------------------------------------------------
 
-Readonly::Array my @LOGIC_OPS => qw( && || ||= &&= or and xor ? <<= >>= );
-Readonly::Hash my %LOGIC_OPS => hashify( @LOGIC_OPS );
+Readonly::Hash my %LOGIC_OPS =>
+    hashify( qw( && || ||= &&= or and xor ? <<= >>= ) );
 
-Readonly::Array my @LOGIC_KEYWORDS =>
-    qw( if else elsif unless until while for foreach );
-Readonly::Hash my %LOGIC_KEYWORDS => hashify( @LOGIC_KEYWORDS );
+Readonly::Hash my %LOGIC_KEYWORDS =>
+    hashify( qw( if else elsif unless until while for foreach ) );
 
 #-----------------------------------------------------------------------------
 
 sub calculate_mccabe_of_sub {
+
     my ( $sub ) = @_;
 
     my $count = 1; # Minimum score is 1
@@ -45,8 +48,58 @@ sub calculate_mccabe_of_sub {
 
 #-----------------------------------------------------------------------------
 
+sub calculate_mccabe_of_main {
+
+    my ( $doc ) = @_;
+
+    my $count = 1; # Minimum score is 1
+    $count += _count_main_logic_operatos_and_keywords( $doc );
+    return $count;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _count_main_logic_operators_and_keywords {
+
+    my ( $doc ) = @_;
+
+    # I can't leverage Perl::Critic::Document's fast search mechanism here
+    # because we're not searching for elements by class name.  So to speed
+    # things up, search for both keywords and operators at the same time.
+
+    my $wanted = sub {
+
+        my (undef, $elem) = @_;
+
+        # Only count things that *are not* in a subroutine.  Returning an
+        # explicit 'undef' here prevents PPI from descending into the node.
+
+        ## no critic Subroutines::ProhibitExplicitReturnUndef
+        return undef if $elem->isa('PPI::Statement::Sub');
+
+
+        if ( $elem->isa('PPI::Token::Word') ) {
+            return 0 if is_hash_key( $elem );
+            return exists $LOGIC_KEYWORDS{$elem};
+        }
+        elsif ($elem->isa('PPI::Token::Operator') ) {
+            return exists $LOGIC_OPS{$elem};
+        }
+    };
+
+    my $logic_operators_and_keywords = $doc->find( $wanted );
+
+    my $count = defined $logic_operators_and_keywords ?
+      scalar @{$logic_operators_and_keywords} : 0;
+
+    return $count;
+}
+
+#-----------------------------------------------------------------------------
+
 sub _count_logic_keywords {
-    my $sub = shift;
+
+    my ( $sub ) = @_;
     my $count = 0;
 
     my $keywords_ref = $sub->find('PPI::Token::Word');
@@ -60,7 +113,8 @@ sub _count_logic_keywords {
 #-----------------------------------------------------------------------------
 
 sub _count_logic_operators {
-    my $sub = shift;
+
+    my ( $sub ) = @_;
     my $count = 0;
 
     my $operators_ref = $sub->find('PPI::Token::Operator');
@@ -104,6 +158,11 @@ some discussion about the McCabe number and other complexity metrics.
 
 Calculates an approximation of the McCabe number of the code in a
 L<PPI::Statement::Sub>.
+
+=item C<calculate_mccabe_of_main( $doc )>
+
+Calculates an approximation of the McCabe number of all the code in a
+L<PPI::Statement::Document> that is B<not> contained in a subroutine.
 
 =back
 
