@@ -349,7 +349,7 @@ Write C<oct(755)> instead of C<0755> [Severity 5]
 
 =head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitLongChainsOfMethodCalls>
 
-Long chains of method calls indicate tightly coupled code [Severity 3]
+Long chains of method calls indicate tightly coupled code [Severity 2]
 
 =head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitMismatchedOperators>
 
