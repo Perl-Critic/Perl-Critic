@@ -102,6 +102,10 @@ sub _count_logic_keywords {
     my ( $sub ) = @_;
     my $count = 0;
 
+    # Here, I'm using this round-about method of finding elements so
+    # that I can take advantage of Perl::Critic::Document's faster
+    # find() mechanism.  It can only search for elements by class name.
+
     my $keywords_ref = $sub->find('PPI::Token::Word');
     if ( $keywords_ref ) { # should always be true due to "sub" keyword
         my @filtered = grep { ! is_hash_key($_) } @{ $keywords_ref };
@@ -116,6 +120,10 @@ sub _count_logic_operators {
 
     my ( $sub ) = @_;
     my $count = 0;
+
+    # Here, I'm using this round-about method of finding elements so
+    # that I can take advantage of Perl::Critic::Document's faster
+    # find() mechanism.  It can only search for elements by class name.
 
     my $operators_ref = $sub->find('PPI::Token::Operator');
     if ( $operators_ref ) {
