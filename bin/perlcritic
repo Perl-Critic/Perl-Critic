@@ -105,6 +105,7 @@ sub _parse_command_line {
 sub _dispatch_special_requests {
     my (%opts) = @_;
     if ( $opts{help}         ) { pod2usage( -verbose => 0 )   }  #Exits
+    if ( $opts{options}      ) { pod2usage( -verbose => 1 )   }  #Exits
     if ( $opts{man}          ) { pod2usage( -verbose => 2 )   }  #Exits
     if ( $opts{Version}      ) { print "$VERSION\n"; exit 0;  }  #Exits
     if ( $opts{list}         ) { render_policy_listing();     }  #Exits
@@ -371,6 +372,7 @@ sub _get_option_specification {
         nocolor
         noprofile
         only!
+        options
         profile=s
         profileproto
         quiet
@@ -497,7 +499,7 @@ C<perlcritic> - Command-line interface to critique Perl source
 
   perlcritic -doc pattern [...]
 
-  perlcritic {-list | -profileproto | -help | -man | -Version}
+  perlcritic {-list | -profileproto | -help | -options | -man | -Version}
 
 =head1 DESCRIPTION
 
@@ -847,6 +849,11 @@ Suppress the "source OK" message when no violations are found.
 =item C<-H>
 
 Displays a brief summary of options and exits.
+
+=item C<-options>
+
+Displays the descriptions of the options and exits.  While this output is
+long, it it nowhere near the length of the output of C<-man>.
 
 =item C<-man>
 
