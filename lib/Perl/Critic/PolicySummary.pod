@@ -343,6 +343,10 @@ Always use single quotes for literal strings. [Severity 1]
 
 Write C<oct(755)> instead of C<0755> [Severity 5]
 
+=head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitLongChainsOfMethodCalls>
+
+Long chains of method calls indicate tightly coupled code [Severity 3]
+
 =head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitMismatchedOperators>
 
 Don't mix numeric operators with string operands, or vice-versa. [Severity 3]

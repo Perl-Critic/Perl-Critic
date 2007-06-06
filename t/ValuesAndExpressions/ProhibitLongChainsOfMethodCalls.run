@@ -1,0 +1,81 @@
+## name Basic passing
+## failures 0
+## cut
+
+$x->y;
+$x->y();
+$x->y(@foo);
+$x->y(\%foo, *bar);
+
+$x->y->z;
+$x->y()->z();
+$x->y(@foo)->z(@bar);
+$x->y(\%foo, *bar)->z($baz, $qux);
+
+$x->y->z->w;
+$x->y()->z()->w();
+$x->y(@foo)->z(@bar)->w(%baz);
+$x->y(\%foo, *bar)->z($baz, $qux)->w(\@xyzzy, $plugh);
+
+#-----------------------------------------------------------------------------
+
+## name Basic failure
+## failures 4
+## cut
+
+$x->y->z->w->u;
+$x->y()->z()->w()->u();
+$x->y(@foo)->z(@bar)->w(%baz)->u($qux);
+$x->y(\%foo, *bar)->z($baz, $qux)->w(\@xyzzy, $plugh)->u(@joe, @blow);
+
+#-----------------------------------------------------------------------------
+
+## name Reduced maximum chain length
+## failures 4
+## parms { max_chain_length => 2 }
+## cut
+
+$x->y->z->w;
+$x->y()->z()->w();
+$x->y(@foo)->z(@bar)->w(%baz);
+$x->y(\%foo, *bar)->z($baz, $qux)->w(\@xyzzy, $plugh);
+
+#-----------------------------------------------------------------------------
+
+## name Increased maximum chain length
+## failures 0
+## parms { max_chain_length => 4 }
+## cut
+
+$x->y->z->w->u;
+$x->y()->z()->w()->u();
+$x->y(@foo)->z(@bar)->w(%baz)->u($qux);
+$x->y(\%foo, *bar)->z($baz, $qux)->w(\@xyzzy, $plugh)->u(@joe, @blow);
+
+#-----------------------------------------------------------------------------
+
+## name Ignore array and hash ref chains
+## failures 0
+## cut
+
+$blargh = $x->{y}->{z}->{w}->{u};
+$blargh = $x->[1]->[2]->[3]->[4];
+$blargh = $x->{y}->[2]->{w}->[4];
+$blargh = $x->[1]->{z}->[3]->{u};
+
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :

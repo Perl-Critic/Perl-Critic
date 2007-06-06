@@ -98,6 +98,7 @@ lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitEmptyQuotes.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitEscapedCharacters.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitInterpolationOfLiterals.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitLeadingZeros.pm
+lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitLongChainsOfMethodCalls.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitMismatchedOperators.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitMixedBooleanOperators.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitNoisyQuotes.pm
@@ -134,6 +135,7 @@ lib/Perl/Critic/Theme.pm
 lib/Perl/Critic/UserProfile.pm
 lib/Perl/Critic/Utils.pm
 lib/Perl/Critic/Utils/McCabe.pm
+lib/Perl/Critic/Utils/PPI.pm
 lib/Perl/Critic/Violation.pm
 LICENSE
 Makefile.PL
@@ -257,6 +259,7 @@ t/ValuesAndExpressions/ProhibitEmptyQuotes.run
 t/ValuesAndExpressions/ProhibitEscapedCharacters.run
 t/ValuesAndExpressions/ProhibitInterpolationOfLiterals.run
 t/ValuesAndExpressions/ProhibitLeadingZeros.run
+t/ValuesAndExpressions/ProhibitLongChainsOfMethodCalls.run
 t/ValuesAndExpressions/ProhibitMismatchedOperators.run
 t/ValuesAndExpressions/ProhibitMixedBooleanOperators.run
 t/ValuesAndExpressions/ProhibitNoisyQuotes.run
