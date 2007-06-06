@@ -44,6 +44,8 @@
      * ValuesAndExpressions::ProhibitQuotesAsQuotelikeOperatorDelimiters
        As suggested in http://rt.cpan.org/Public/Bug/Display.html?id=23290.
      * ValuesAndExpressions::ProhibitLongChainsOfMethodCalls
+     * Modules::ProhibitExcessMainComplexity
+       As suggested in http://rt.cpan.org/Ticket/Display.html?id=24699
 
      Minor changes:
      * In addition to the additional output based upon the parameter metadata

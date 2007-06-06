@@ -12,7 +12,7 @@ use warnings;
 
 use Readonly;
 
-use Perl::Critic::Utils qw{ :data_conversion :classification };
+use Perl::Critic::Utils qw{ &hashify &is_hash_key };
 
 use base 'Exporter';
 
@@ -53,7 +53,7 @@ sub calculate_mccabe_of_main {
     my ( $doc ) = @_;
 
     my $count = 1; # Minimum score is 1
-    $count += _count_main_logic_operatos_and_keywords( $doc );
+    $count += _count_main_logic_operators_and_keywords( $doc );
     return $count;
 }
 
@@ -89,7 +89,7 @@ sub _count_main_logic_operators_and_keywords {
 
     my $logic_operators_and_keywords = $doc->find( $wanted );
 
-    my $count = defined $logic_operators_and_keywords ?
+    my $count = $logic_operators_and_keywords ?
       scalar @{$logic_operators_and_keywords} : 0;
 
     return $count;
