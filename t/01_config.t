@@ -238,12 +238,12 @@ my $total_policies   = scalar @site_policies;
 }
 
 #-----------------------------------------------------------------------------
-# Test the -singlepolicy switch
+# Test the -single-policy switch
 
 {
-    my %pc_config = (-singlepolicy => 'ProhibitEvilModules');
+    my %pc_config = ('-single-policy' => 'ProhibitEvilModules');
     my @pols = Perl::Critic::Config->new( %pc_config )->policies();
-    is(scalar @pols, 1, '-singlepolicy switch');
+    is(scalar @pols, 1, '-single-policy switch');
 }
 
 #-----------------------------------------------------------------------------
@@ -294,13 +294,13 @@ my $total_policies   = scalar @site_policies;
         'invalid severity'
     );
 
-    # Try using vague -singlepolicy option
-    eval{ Perl::Critic::Config->new( -singlepolicy => '.*' ) };
-    like( $EVAL_ERROR, qr/Multiple policies matched/, 'vague -singlepolicy' );
+    # Try using vague -single-policy option
+    eval{ Perl::Critic::Config->new( '-single-policy' => '.*' ) };
+    like( $EVAL_ERROR, qr/Multiple policies matched/, 'vague -single-policy' );
 
-    # Try using invalid -singlepolicy option
-    eval{ Perl::Critic::Config->new( -singlepolicy => 'bogus' ) };
-    like( $EVAL_ERROR, qr/No policies matched/, 'invalid -singlepolicy' );
+    # Try using invalid -single-policy option
+    eval{ Perl::Critic::Config->new( '-single-policy' => 'bogus' ) };
+    like( $EVAL_ERROR, qr/No policies matched/, 'invalid -single-policy' );
 }
 
 ##############################################################################

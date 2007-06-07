@@ -11,7 +11,7 @@ use strict;
 use warnings;
 use File::Spec;
 use English qw(-no_match_vars);
-use Test::More tests => 33;
+use Test::More tests => 36;
 
 #-----------------------------------------------------------------------------
 # Load perlcritic like a library so we can test its subroutines.  If it is not
@@ -111,9 +111,9 @@ is( $options{-profile}, 'foo');
 
 #-----------------------------------------------------------------------------
 
-@ARGV = qw(-singlepolicy nowarnings);
+@ARGV = qw(-single-policy nowarnings);
 %options = get_options();
-is( $options{-singlepolicy}, 'nowarnings');
+is( $options{'-single-policy'}, 'nowarnings');
 
 #-----------------------------------------------------------------------------
 
@@ -124,6 +124,18 @@ is( $options{-verbose}, 2);
 @ARGV = qw(-verbose %l:%c:%m);
 %options = get_options();
 is( $options{-verbose}, '%l:%c:%m');
+
+#-----------------------------------------------------------------------------
+
+@ARGV = qw(-statistics);
+%options = get_options();
+is( $options{-statistics}, 1);
+
+#-----------------------------------------------------------------------------
+
+@ARGV = qw(-statistics-only);
+%options = get_options();
+is( $options{'-statistics-only'}, 1);
 
 #-----------------------------------------------------------------------------
 
@@ -140,6 +152,9 @@ is( $options{-quiet}, 1);
 
     eval { @ARGV = qw( -help ); get_options() };
     ok( $EVAL_ERROR, '-help option' );
+
+    eval { @ARGV = qw( -options ); get_options() };
+    ok( $EVAL_ERROR, '-options option' );
 
     eval { @ARGV = qw( -man ); get_options() };
     ok( $EVAL_ERROR, '-man option' );

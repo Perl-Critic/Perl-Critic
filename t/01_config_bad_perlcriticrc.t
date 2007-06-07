@@ -50,7 +50,7 @@ SKIP: {
         my @messages = @{ $eval_result->messages() };
 
         my @parameters = qw{
-            exclude include severity singlepolicy theme top verbose
+            exclude include severity single-policy theme top verbose
         };
 
         my %expected_regexes =

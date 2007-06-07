@@ -12,14 +12,18 @@
        global options in the command-line parameters and .perlcriticrc file,
        rather than bailing on the first one it encounters.
 
-     * perlcritic now has a "--strictprofile" option which will make warnings
+     * perlcritic now has a "--strict-profile" option which will make warnings
        about problems in a profile fatal.
+
+     * perlcritic now has a "--statistics-only" option which suppresses the
+       display of individual violations and only shows the additional output
+       produced by the "--statistics" option.
 
      * A new metadata system for defining policy parameters/options has been
        added.  This makes the life of policy authors easier because
        configuration validation and parsing can be taken care of
        automatically, in most cases.  This allows greater integration with
-       IDEs and allows the perlcritic "--profileproto" option to produce
+       IDEs and allows the perlcritic "--profile-proto" option to produce
        better output.  A standalone GUI configuration editor for Perl::Critic
        is being written based upon this information.
 
@@ -49,8 +53,13 @@
 
      Minor changes:
      * In addition to the additional output based upon the parameter metadata
-       facilitiy, the perlcritic "--profileproto" option now emits the short
+       facilitiy, the perlcritic "--profile-proto" option now emits the short
        names for policies, rather than the full ones.
+
+     * The "-profileproto" and "-singlepolicy" options have been renamed to
+       "-profile-proto" and "-single-policy" in order to make the growing
+       number of command-line options comprehensible.  The change of
+       "singlepolicy" also affects your F<.perlcriticrc> file.
 
      Other Stuff:
      * Now requires the Readonly module in order to be more self-compliant.

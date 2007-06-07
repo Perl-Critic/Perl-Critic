@@ -65,9 +65,9 @@ sub _init {
         'exclude', $args{-exclude}, $defaults->exclude(), $errors
     );
     $self->_validate_and_save_regex(
-        'singlepolicy',
-        $args{-singlepolicy},
-        $defaults->singlepolicy(),
+        'single-policy',
+        $args{'-single-policy'},
+        $defaults->single_policy(),
         $errors,
     );
 
@@ -83,8 +83,8 @@ sub _init {
         $self->{_only}  = 1 * _dor( $args{-only},  $defaults->only()  );
         $self->{_nocolor} =
             1 * _dor( $args{-nocolor},  $defaults->nocolor() );
-        $self->{_strictprofile} =
-            1 * _dor( $args{-strictprofile},  $defaults->strictprofile() );
+        $self->{_strict_profile} =
+            1 * _dor( $args{'-strict-profile'}, $defaults->strict_profile() );
     }
 
     $self->_validate_and_save_theme($args{-theme}, $errors);
@@ -92,9 +92,9 @@ sub _init {
     # Construct a Factory with the Profile
     my $factory =
         Perl::Critic::PolicyFactory->new(
-            -profile       => $profile,
-            -errors        => $errors,
-            -strictprofile => $self->strictprofile(),
+            -profile          => $profile,
+            -errors           => $errors,
+            '-strict-profile' => $self->strict_profile(),
         );
     $self->{_factory} = $factory;
 
@@ -150,8 +150,8 @@ sub _load_policies {
 
     for my $policy ( @policies ) {
 
-        # If -singlepolicy is true, only load policies that match it
-        if ( $self->singlepolicy() ) {
+        # If -single-policy is true, only load policies that match it
+        if ( $self->single_policy() ) {
             if ( $self->_policy_is_single_policy( $policy ) ) {
                 $self->add_policy( -policy => $policy );
             }
@@ -174,8 +174,8 @@ sub _load_policies {
         $self->add_policy( -policy => $policy );
     }
 
-    # When using -singlepolicy, only one policy should ever be loaded.
-    if ($self->singlepolicy() && scalar $self->policies() != 1) {
+    # When using -single-policy, only one policy should ever be loaded.
+    if ($self->single_policy() && scalar $self->policies() != 1) {
         $self->_throw_single_policy_exception();
     }
 
@@ -238,7 +238,7 @@ sub _policy_is_excluded {
 sub _policy_is_single_policy {
     my ($self, $policy) = @_;
 
-    my @patterns = $self->singlepolicy();
+    my @patterns = $self->single_policy();
     return if not @patterns;
 
     my $policy_long_name = ref $policy;
@@ -252,7 +252,7 @@ sub _throw_single_policy_exception {
     my $self = shift;
 
     my $error_msg = $EMPTY;
-    my $patterns = join q{", "}, $self->singlepolicy();
+    my $patterns = join q{", "}, $self->single_policy();
 
     if (scalar $self->policies() == 0) {
         $error_msg =
@@ -318,7 +318,10 @@ sub _validate_and_save_regex {
     }
 
     if (not $found_errors) {
-        $self->{"_$option_name"} = \@regexes;
+        my $option_key = $option_name;
+        $option_key =~ s/ - /_/xmsg;
+
+        $self->{"_$option_key"} = \@regexes;
     }
 
     return;
@@ -555,9 +558,9 @@ sub only {
 
 #-----------------------------------------------------------------------------
 
-sub strictprofile {
+sub strict_profile {
     my $self = shift;
-    return $self->{_strictprofile};
+    return $self->{_strict_profile};
 }
 
 #-----------------------------------------------------------------------------
@@ -569,9 +572,9 @@ sub severity {
 
 #-----------------------------------------------------------------------------
 
-sub singlepolicy {
+sub single_policy {
     my $self = shift;
-    return @{ $self->{_singlepolicy} };
+    return @{ $self->{_single_policy} };
 }
 
 #-----------------------------------------------------------------------------
@@ -616,7 +619,7 @@ __END__
 
 =pod
 
-=for stopwords -params INI-style -singlepolicy -strictprofile -nocolor
+=for stopwords -params INI-style -nocolor
 
 =head1 NAME
 
@@ -635,7 +638,7 @@ constructor will do it for you.
 
 =over 8
 
-=item C<< new( [ -profile => $FILE, -severity => $N, -theme => $string, -include => \@PATTERNS, -exclude => \@PATTERNS, -singlepolicy => $PATTERN, -top => $N, -only => $B, -strictprofile => $B, -force => $B, -verbose => $N, -nocolor => $B ] ) >>
+=item C<< new( [ -profile => $FILE, -severity => $N, -theme => $string, -include => \@PATTERNS, -exclude => \@PATTERNS, -single-policy => $PATTERN, -top => $N, -only => $B, -strict-profile => $B, -force => $B, -verbose => $N, -nocolor => $B ] ) >>
 
 =item C<< new() >>
 
@@ -680,7 +683,7 @@ Config, irrespective of the severity settings.  You can use it in
 conjunction with the C<-include> option.  Note that C<-exclude> takes
 precedence over C<-include> when a Policy matches both patterns.
 
-B<-singlepolicy> is a string C<PATTERN>.  Only the policy that matches
+B<-single-policy> is a string C<PATTERN>.  Only the policy that matches
 C<m/$PATTERN/imx> will be used.  This value overrides the
 C<-severity>, C<-theme>, C<-include>, C<-exclude>, and C<-only>
 options.
@@ -696,7 +699,7 @@ will only choose from Policies that are mentioned in the user's
 profile.  If set to a false value (which is the default), then
 Perl::Critic chooses from all the Policies that it finds at your site.
 
-B<-strictprofile> is a boolean value.  If set to a true value,
+B<-strict-profile> is a boolean value.  If set to a true value,
 Perl::Critic will make certain warnings about problems found in a
 F<.perlcriticrc> or file specified via the B<-profile> option fatal.
 In particular, Perl::Critic normally only C<warn>s about profiles
@@ -759,17 +762,17 @@ Returns the value of the C<-force> attribute for this Config.
 
 Returns the value of the C<-only> attribute for this Config.
 
-=item C< strictprofile() >
+=item C< strict_profile() >
 
-Returns the value of the C<-strictprofile> attribute for this Config.
+Returns the value of the C<-strict-profile> attribute for this Config.
 
 =item C< severity() >
 
 Returns the value of the C<-severity> attribute for this Config.
 
-=item C< singlepolicy() >
+=item C< single_policy() >
 
-Returns the value of the C<-singlepolicy> attribute for this Config.
+Returns the value of the C<-single-policy> attribute for this Config.
 
 =item C< theme() >
 
