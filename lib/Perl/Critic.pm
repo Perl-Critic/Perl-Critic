@@ -364,7 +364,7 @@ __END__
 =pod
 
 =for stopwords DGR INI-style API -params pbp refactored
-ben Jore -nocolor
+ben Jore
 
 =head1 NAME
 
@@ -417,7 +417,7 @@ interface to the service are subject to change.
 
 =over 8
 
-=item C<< new( [ -profile => $FILE, -severity => $N, -theme => $string, -include => \@PATTERNS, -exclude => \@PATTERNS, -top => $N, -only => $B, -strict-profile => $B, -force => $B, -verbose => $N ], -nocolor => $B ) >>
+=item C<< new( [ -profile => $FILE, -severity => $N, -theme => $string, -include => \@PATTERNS, -exclude => \@PATTERNS, -top => $N, -only => $B, -strict-profile => $B, -force => $B, -verbose => $N ], -color => $B ) >>
 
 =item C<< new( -config => Perl::Critic::Config->new() ) >>
 
@@ -531,7 +531,7 @@ specification.  See L<Perl::Critic::Violations> for an explanation of format
 specifications.  You can set the default value for this option in your
 F<.perlcriticrc> file.
 
-B<-nocolor> is not used by Perl::Critic but is provided for the benefit of
+B<-color> is not used by Perl::Critic but is provided for the benefit of
 L<perlcritic>.
 
 B<-config> is a reference to a L<Perl::Critic::Config> object.  If you have
@@ -641,7 +641,7 @@ constructor argument.
     theme     = (pbp || security) && bugs             #A theme expression
     include   = NamingConventions ClassHierarchies    #Space-delimited list
     exclude   = Variables  Modules::RequirePackage    #Space-delimited list
-    nocolor   = 0                                     #Zero or One
+    color     = 1                                     #Zero or One
 
 The remainder of the configuration file is a series of blocks like this:
 

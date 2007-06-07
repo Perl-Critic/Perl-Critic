@@ -93,7 +93,7 @@ sub get_options {
 #-----------------------------------------------------------------------------
 
 sub _parse_command_line {
-    my %opts      = ();
+    my %opts      = ( -color => 1 );
     my @opt_specs = _get_option_specification();
     Getopt::Long::Configure('no_ignore_case');
     GetOptions( \%opts, @opt_specs ) || pod2usage();           #Exits
@@ -264,8 +264,8 @@ sub render_report {
     if (not -f $file) { $fmt =~ s{\%[fF]}{STDIN}mx; } #HACK!
     Perl::Critic::Violation::set_format( $fmt );
 
-    my $nocolor = $CRITIC->config->nocolor();
-    print $nocolor ? @violations : _colorize_by_severity(@violations);
+    my $color = $CRITIC->config->color();
+    print $color ? _colorize_by_severity(@violations) : @violations;
 
     return $count;
 }
@@ -369,7 +369,7 @@ sub _get_option_specification {
         include=s@
         list
         man
-        nocolor
+        color!
         noprofile
         only!
         options
@@ -496,7 +496,7 @@ C<perlcritic> - Command-line interface to critique Perl source
              [-exclude pattern] [-single-policy pattern] [-only | -noonly]
              [-strict-profile | -nostrict-profile] [-force | -noforce]
              [-statistics] [-statistics-only] [-verbose number | format]
-             [-nocolor] [-quiet] {FILE | DIRECTORY | STDIN}
+             [-color | -nocolor] [-quiet] {FILE | DIRECTORY | STDIN}
 
   perlcritic -doc pattern [...]
 
@@ -824,12 +824,12 @@ Report "Perl Best Practice" citations as section numbers from
 L<http://safari.oreilly.com> instead of page numbers from the actual book.
 NOTE: This feature is not implemented yet.
 
-=item C<-nocolor>
+=item C<-color>
 
-By default, Severity 5 and 4 are colored red and yellow, respectively.
-Colorization only happens if STDOUT is a tty and L<Term::ANSIColor> is
-installed.  And it only works on non-windows environments.  Set this switch to
-disable color.
+This option is on by default.  When set, Severity 5 and 4 are colored red and
+yellow, respectively.  Colorization only happens if STDOUT is a tty and
+L<Term::ANSIColor> is installed.  And it only works on non-Windows
+environments.  Negate this switch to disable color.
 
 =item C<-doc PATTERN>
 
