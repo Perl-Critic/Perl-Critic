@@ -8,6 +8,8 @@
 
 =pod
 
+=for stopwords lookup
+
 =head1 NAME
 
 Perl::Critic::DEVELOPER - How to make new Perl::Critic::Policy modules
@@ -157,7 +159,7 @@ current PPI element that Perl::Critic is traversing, and a reference
 to the entire PPI document. [And since this is an object method, there
 will be an additional argument that is a reference to this object
 (C<$self>), but you already knew that!]  Since this Policy does not
-need access to the document as a whole, we ignore the last paramerter
+need access to the document as a whole, we ignore the last parameter
 by assigning to C<undef>.
 
   sub violates {
