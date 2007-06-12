@@ -5,7 +5,7 @@
 # $Revision$
 ##############################################################################
 
-package Perl::Critic::PolicyParameter::StringBehavior;
+package Perl::Critic::PolicyParameter::Behavior::Boolean;
 
 use strict;
 use warnings;
@@ -21,14 +21,23 @@ our $VERSION = 1.053;
 sub _parse {
     my ($policy, $parameter, $config_string) = @_;
 
-    my $name = $parameter->get_name();
-    my $value = $parameter->get_default_string();
+    my $value;
+    my $value_string = $parameter->get_default_string();
 
-    if ( defined $config_string ) {
-        $value = $config_string;
+    if (defined $config_string) {
+        $value_string = $config_string;
     }
 
-    $policy->{ "_$name" } = $value;
+    if ( defined $value_string ) {
+        if ( $value_string ) {
+            $value = $TRUE;
+        } else {
+            $value = $FALSE;
+        }
+    }
+
+    my $name = q{_} . $parameter->get_name();
+    $policy->{ $name } = $value;
     return;
 }
 
@@ -56,12 +65,12 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::PolicyParameter::StringBehavior - Actions appropriate for a simple string.
+Perl::Critic::PolicyParameter::Behavior::Boolean - Actions appropriate for a boolean.
 
 
 =head1 DESCRIPTION
 
-Provides a standard set of functionality for a string
+Provides a standard set of functionality for a boolean
 L<Perl::Critic::PolicyParameter> so that the developer of a policy
 does not have to provide it her/himself.
 
@@ -87,7 +96,7 @@ Elliot Shank <perl@galumph.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2007 Elliot Shank.  All rights reserved.
+Copyright (c) 2006-2007 Elliot Shank.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

@@ -5,7 +5,7 @@
 # $Revision$
 ##############################################################################
 
-package Perl::Critic::PolicyParameter::IntegerBehavior;
+package Perl::Critic::PolicyParameter::Behavior::Integer;
 
 use strict;
 use warnings;
@@ -124,7 +124,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::PolicyParameter::IntegerBehavior - Actions appropriate for an integer.
+Perl::Critic::PolicyParameter::Behavior::Integer - Actions appropriate for an integer.
 
 
 =head1 DESCRIPTION

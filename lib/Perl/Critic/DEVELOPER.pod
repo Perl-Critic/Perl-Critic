@@ -464,7 +464,7 @@ documentation for the implementing class.
 
 =head3 "string"
 
-Implemented in L<Perl::Critic::PolicyParameter::StringBehavior>.
+Implemented in L<Perl::Critic::PolicyParameter::Behavior::String>.
 
 The most basic of behaviors, the value of the parameter will be stored
 in the Policy as a string.
@@ -487,7 +487,7 @@ B<Example:>
 
 =head3 "boolean"
 
-Implemented in L<Perl::Critic::PolicyParameter::BooleanBehavior>.
+Implemented in L<Perl::Critic::PolicyParameter::Behavior::Boolean>.
 
 The value of the parameter will be either L<Perl::Critic::Utils/$TRUE>
 or L<Perl::Critic::Utils/$FALSE>.
@@ -510,7 +510,7 @@ B<Example:>
 
 =head3 "integer"
 
-Implemented in L<Perl::Critic::PolicyParameter::IntegerBehavior>.
+Implemented in L<Perl::Critic::PolicyParameter::Behavior::Integer>.
 
 The value is validated against C<m/ \A [-+]? [1-9] [\d_]* \z /xms>
 (with an special check for "0").  Notice that this means that
@@ -538,7 +538,7 @@ B<Example:>
 
 =head3 "string list"
 
-Implemented in L<Perl::Critic::PolicyParameter::StringListBehavior>.
+Implemented in L<Perl::Critic::PolicyParameter::Behavior::StringList>.
 
 The values will be derived by splitting the input string on blanks.
 (See L<Perl::Critic::Utils/"words_from_string">.) The parameter will
@@ -568,7 +568,7 @@ B<Example:>
 
 =head3 "enumeration"
 
-Implemented in L<Perl::Critic::PolicyParameter::EnumerationBehavior>.
+Implemented in L<Perl::Critic::PolicyParameter::Behavior::Enumeration>.
 
 The values will be derived by splitting the input string on blanks.
 (See L<Perl::Critic::Utils/"words_from_string">.)  Depending upon the

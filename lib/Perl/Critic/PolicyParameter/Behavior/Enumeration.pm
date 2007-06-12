@@ -5,7 +5,7 @@
 # $Revision$
 ##############################################################################
 
-package Perl::Critic::PolicyParameter::EnumerationBehavior;
+package Perl::Critic::PolicyParameter::Behavior::Enumeration;
 
 use strict;
 use warnings;
@@ -146,7 +146,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::PolicyParameter::EnumerationBehavior - Actions appropriate for an enumerated value.
+Perl::Critic::PolicyParameter::Behavior::Enumeration - Actions appropriate for an enumerated value.
 
 
 =head1 DESCRIPTION

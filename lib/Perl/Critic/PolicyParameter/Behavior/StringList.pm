@@ -5,7 +5,7 @@
 # $Revision$
 ##############################################################################
 
-package Perl::Critic::PolicyParameter::StringListBehavior;
+package Perl::Critic::PolicyParameter::Behavior::StringList;
 
 use strict;
 use warnings;
@@ -97,7 +97,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::PolicyParameter::StringListBehavior - Actions appropriate for a parameter that is a list of strings.
+Perl::Critic::PolicyParameter::Behavior::StringList - Actions appropriate for a parameter that is a list of strings.
 
 NOTE: Do not instantiate this class.  Use the singleton instance held
 onto by L<Perl::Critic::PolicyParameter>.

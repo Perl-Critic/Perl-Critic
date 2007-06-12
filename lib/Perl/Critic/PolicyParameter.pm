@@ -19,11 +19,11 @@ Readonly::Array our @EXPORT_OK => qw{ $NO_DESCRIPTION_AVAILABLE };
 use String::Format qw{ stringf };
 
 use Perl::Critic::PolicyParameter::Behavior;
-use Perl::Critic::PolicyParameter::BooleanBehavior;
-use Perl::Critic::PolicyParameter::EnumerationBehavior;
-use Perl::Critic::PolicyParameter::IntegerBehavior;
-use Perl::Critic::PolicyParameter::StringBehavior;
-use Perl::Critic::PolicyParameter::StringListBehavior;
+use Perl::Critic::PolicyParameter::Behavior::Boolean;
+use Perl::Critic::PolicyParameter::Behavior::Enumeration;
+use Perl::Critic::PolicyParameter::Behavior::Integer;
+use Perl::Critic::PolicyParameter::Behavior::String;
+use Perl::Critic::PolicyParameter::Behavior::StringList;
 use Perl::Critic::Utils qw{ :characters &interpolate };
 
 our $VERSION = 1.053;
@@ -37,11 +37,11 @@ Readonly::Scalar our $NO_DESCRIPTION_AVAILABLE => 'No description available.';
 # in Behavior.pm.
 Readonly::Hash my %BEHAVIORS =>
     (
-        'boolean'     => Perl::Critic::PolicyParameter::BooleanBehavior->new(),
-        'enumeration' => Perl::Critic::PolicyParameter::EnumerationBehavior->new(),
-        'integer'     => Perl::Critic::PolicyParameter::IntegerBehavior->new(),
-        'string'      => Perl::Critic::PolicyParameter::StringBehavior->new(),
-        'string list' => Perl::Critic::PolicyParameter::StringListBehavior->new(),
+        'boolean'     => Perl::Critic::PolicyParameter::Behavior::Boolean->new(),
+        'enumeration' => Perl::Critic::PolicyParameter::Behavior::Enumeration->new(),
+        'integer'     => Perl::Critic::PolicyParameter::Behavior::Integer->new(),
+        'string'      => Perl::Critic::PolicyParameter::Behavior::String->new(),
+        'string list' => Perl::Critic::PolicyParameter::Behavior::StringList->new(),
     );
 
 sub _get_behavior_for_name {
