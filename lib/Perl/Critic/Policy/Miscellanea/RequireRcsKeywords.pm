@@ -45,7 +45,7 @@ sub new {
     my ( $class, %config ) = @_;
     my $self = bless {}, $class;
 
-    $self->_finish_standard_initialization(\%config);
+    $self->__finish_standard_initialization(\%config);
 
     # Any of these lists
     $self->{_keyword_sets} = [

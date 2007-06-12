@@ -57,7 +57,7 @@ sub new {
 
     my $self = bless {}, $class;
 
-    $self->_finish_standard_initialization( \%config );
+    $self->__finish_standard_initialization( \%config );
 
     $self->{_all_packages} = {
         hashify keys %{ $self->{_packages} }, keys %{ $self->{_add_packages} }

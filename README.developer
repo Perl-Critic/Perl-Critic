@@ -1,3 +1,6 @@
+Naming standard: Things that are distribution-private (as opposed to class/package-private)
+begin with double underscore.
+
 Steps for adding a new Policy:
 
  * Create tests in t/[category]/[name].run

@@ -46,7 +46,7 @@ sub new {
     my ( $class, %config ) = @_;
     my $self = bless {}, $class;
 
-    $self->_finish_standard_initialization(\%config);
+    $self->__finish_standard_initialization(\%config);
 
     $self->{_evil_modules}    = {};  #Hash
     $self->{_evil_modules_rx} = [];  #Array

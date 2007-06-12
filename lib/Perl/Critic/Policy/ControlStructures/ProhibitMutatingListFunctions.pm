@@ -83,7 +83,7 @@ sub new {
     my ( $class, %config ) = @_;
     my $self = bless {}, $class;
 
-    $self->_finish_standard_initialization( \%config );
+    $self->__finish_standard_initialization( \%config );
 
     $self->{_all_list_funcs} = {
         hashify keys %{ $self->{_list_funcs} }, keys %{ $self->{_add_list_funcs} }
