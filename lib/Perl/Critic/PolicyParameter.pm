@@ -86,7 +86,7 @@ sub new {
     }
 
     $self->_initialize_from_behavior($behavior_specification);
-    $self->__finish_standard_initialization($behavior_specification);
+    $self->_finish_standard_initialization($behavior_specification);
 
     return $self;
 }
@@ -114,7 +114,7 @@ sub _initialize_from_behavior {
 
 # Grab the rest of the values out of the specification, including overrides
 # of what the Behavior specified.
-sub __finish_standard_initialization {
+sub _finish_standard_initialization {
     my ($self, $specification) = @_;
 
     my $description =
