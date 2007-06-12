@@ -54,6 +54,10 @@ if ( !$EVAL_ERROR ) {
         Devel::EnforceEncapsulation->apply_to('Perl::Critic'.$pkg);
     }
 }
+else {
+    diag 'You should install Devel::EnforceEncapsulation, but other tests '
+        . 'will still run.';
+}
 
 #-----------------------------------------------------------------------------
 # Run critic against all of our own files
