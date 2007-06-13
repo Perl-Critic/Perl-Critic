@@ -162,11 +162,11 @@ sub create_policy {
     my $user_severity   = delete $policy_config_copy{severity};
 
     # Instantiate parameter metadata.
-    my @policy_params = eval { $policy_name->_build_parameters() };
+    my @policy_params = eval { $policy_name->__build_parameters() };
     confess qq{Unable to create policy '$policy_name': $EVAL_ERROR}
         if $EVAL_ERROR;
 
-    # _build_parameters() returns a special value of a list containing a
+    # __build_parameters() returns a special value of a list containing a
     # single undef to indicate that the policy does not have a
     # supported_parameters() implementation.
     my $parameter_metadata_unavailable =

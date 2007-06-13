@@ -74,7 +74,7 @@ sub __finish_standard_initialization {
 
 # Called by PolicyFactory.  The results of this will be put into the
 # configuration so that __finish_standard_initialization() above can access it.
-sub _build_parameters {
+sub __build_parameters {
     my ($class) = @_;
 
     my @parameters;
