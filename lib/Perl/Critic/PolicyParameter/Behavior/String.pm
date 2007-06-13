@@ -28,7 +28,8 @@ sub _parse {
         $value = $config_string;
     }
 
-    $policy->{ "_$name" } = $value;
+    $policy->__set_parameter_value($parameter, $value);
+
     return;
 }
 

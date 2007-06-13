@@ -36,8 +36,8 @@ sub _parse {
         }
     }
 
-    my $name = q{_} . $parameter->get_name();
-    $policy->{ $name } = $value;
+    $policy->__set_parameter_value($parameter, $value);
+
     return;
 }
 

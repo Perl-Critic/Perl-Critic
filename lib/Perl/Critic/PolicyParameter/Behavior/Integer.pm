@@ -28,8 +28,6 @@ sub initialize_parameter {
     $parameter->_get_behavior_values()->{minimum} = $minimum;
     $parameter->_get_behavior_values()->{maximum} = $maximum;
 
-    my $policy_variable_name = q{_} . $parameter->get_name();
-
     $parameter->_set_parser(
         sub {
             # Normally bad thing, obscuring a variable in a outer scope
@@ -70,7 +68,7 @@ sub initialize_parameter {
                 }
             }
 
-            $policy->{ $policy_variable_name } = $value;
+            $policy->__set_parameter_value($parameter, $value);
             return;
         }
     );

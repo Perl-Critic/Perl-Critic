@@ -39,8 +39,6 @@ sub initialize_parameter {
     my $value_lookup = { hashify( @{$valid_values} ) };
     $parameter->_get_behavior_values()->{enumeration_values} = $value_lookup;
 
-    my $policy_variable_name = q{_} . $parameter->get_name();
-
     my $allow_multiple_values =
         $specification->{enumeration_allow_multiple_values};
 
@@ -77,7 +75,8 @@ sub initialize_parameter {
 
                 my %actual_values = hashify(@potential_values);
 
-                $policy->{ $policy_variable_name } = \%actual_values;
+                $policy->__set_parameter_value($parameter, \%actual_values);
+
                 return;
             }
         );
@@ -105,7 +104,8 @@ sub initialize_parameter {
                         qq{: $value_string.\n};
                 }
 
-                $policy->{ $policy_variable_name } = $value_string;
+                $policy->__set_parameter_value($parameter, $value_string);
+
                 return;
             }
         );

@@ -94,6 +94,18 @@ sub __build_parameters {
 
 #-----------------------------------------------------------------------------
 
+sub __set_parameter_value {
+    my ( $self, $parameter, $value ) = @_;
+
+    my $name = '_' . $parameter->get_name();
+
+    $self->{$name} = $value;
+
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
 sub applies_to {
     return qw(PPI::Element);
 }

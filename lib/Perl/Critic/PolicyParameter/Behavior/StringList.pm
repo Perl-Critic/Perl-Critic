@@ -21,8 +21,6 @@ our $VERSION = 1.053;
 sub initialize_parameter {
     my ($self, $parameter, $specification) = @_;
 
-    my $policy_variable_name = q{_} . $parameter->get_name();
-
     # Unfortunately, this has to be kept as a reference, rather than a regular
     # array, due to a problem in Devel::Cycle
     # (http://rt.cpan.org/Ticket/Display.html?id=25360) which causes
@@ -55,7 +53,8 @@ sub initialize_parameter {
 
             my %values = hashify(@values);
 
-            $policy->{ $policy_variable_name } = \%values;
+            $policy->__set_parameter_value($parameter, \%values);
+
             return;
         }
     );
