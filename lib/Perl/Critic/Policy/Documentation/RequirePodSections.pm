@@ -269,10 +269,6 @@ sub new {
     my $class = shift;
     my $self = $class->SUPER::new(@_);
 
-    my (%config) = @_;
-
-    $self->__finish_standard_initialization( \%config );
-
     my $source = $self->{_source};
     if ( not defined $source or not defined $DEFAULT_LIB_SECTIONS{$source} ) {
         $source = $DEFAULT_SOURCE;

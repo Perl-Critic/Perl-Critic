@@ -45,10 +45,6 @@ sub new {
     my $class = shift;
     my $self = $class->SUPER::new(@_);
 
-    my (%config) = @_;
-
-    $self->__finish_standard_initialization(\%config);
-
     # Any of these lists
     $self->{_keyword_sets} = [
 

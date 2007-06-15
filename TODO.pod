@@ -279,11 +279,6 @@ Recommend that C<if (scalar @array)> be rewritten as C<if (@array)>.
 
 =over 4
 
-=item * Move all the parameters construction stuff from PolicyFactory to Policy.
-
-We can do this because we're now going to require all policies that use the
-parameters stuff to invoke the super constructor.
-
 =item * Make parameter declarations at compile time instead of at run time.
 
 =item * Switch to using exceptions instead of die and confess.

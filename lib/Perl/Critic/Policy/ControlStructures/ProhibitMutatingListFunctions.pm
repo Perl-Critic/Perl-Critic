@@ -83,10 +83,6 @@ sub new {
     my $class = shift;
     my $self = $class->SUPER::new(@_);
 
-    my (%config) = @_;
-
-    $self->__finish_standard_initialization( \%config );
-
     $self->{_all_list_funcs} = {
         hashify keys %{ $self->{_list_funcs} }, keys %{ $self->{_add_list_funcs} }
     };

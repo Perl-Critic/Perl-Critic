@@ -161,42 +161,8 @@ sub create_policy {
     my $user_add_themes = delete $policy_config_copy{add_themes};
     my $user_severity   = delete $policy_config_copy{severity};
 
-    # Instantiate parameter metadata.
-    my @policy_params = eval { $policy_name->__build_parameters() };
-    confess qq{Unable to create policy '$policy_name': $EVAL_ERROR}
-        if $EVAL_ERROR;
-
-    # __build_parameters() returns a special value of a list containing a
-    # single undef to indicate that the policy does not have a
-    # supported_parameters() implementation.
-    my $parameter_metadata_unavailable =
-        @policy_params == 1 && ! defined $policy_params[0];
-
-    my %parameter_names;
-
-    if ($parameter_metadata_unavailable) {
-        @policy_params = ();
-    } else {
-        %parameter_names = hashify( map { $_->get_name() } @policy_params );
-
-        # Validate remaining parameters. This dies on failure
-        $self->_validate_config_keys(
-            $policy_name,
-            \%parameter_names,
-            \%policy_config_copy
-        );
-    }
-
     # Construct policy from remaining params.  Trap errors.
-    $policy_config_copy{__parameter_metadata_available} =
-        ! $parameter_metadata_unavailable;
-    $policy_config_copy{__parameters} = \@policy_params;
     my $policy = eval { $policy_name->new( %policy_config_copy ) };
-    confess qq{Unable to create policy '$policy_name': $EVAL_ERROR} if $EVAL_ERROR;
-
-    # Complete initialization of the base Policy class, if the Policy subclass
-    # has not already done so.
-    eval { $policy->__finish_standard_initialization( \%policy_config_copy ); };
     confess qq{Unable to create policy '$policy_name': $EVAL_ERROR} if $EVAL_ERROR;
 
     # Set base attributes on policy
@@ -238,23 +204,6 @@ sub _profile {
     my ($self) = @_;
 
     return $self->{_profile};
-}
-
-#-----------------------------------------------------------------------------
-
-sub _validate_config_keys {
-    my ($self, $policy_name, $parameter_names, $policy_config) = @_;
-
-    my $msg = $EMPTY;
-
-    for my $offered_param ( keys %{ $policy_config } ) {
-        if ( not exists $parameter_names->{$offered_param} ) {
-            $msg .= qq{Parameter "$offered_param" isn't supported by $policy_name\n};
-        }
-    }
-
-    die "$msg\n" if $msg;
-    return 1;
 }
 
 #-----------------------------------------------------------------------------

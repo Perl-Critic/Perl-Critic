@@ -10,11 +10,14 @@
 use strict;
 use warnings;
 use English qw(-no_match_vars);
+
 use List::MoreUtils qw(any all none);
+use Test::More (tests => 66);
+
+use Perl::Critic::TestUtils;
 use Perl::Critic::PolicyFactory;
 use Perl::Critic::UserProfile;
 use Perl::Critic::Theme;
-use Test::More (tests => 66);
 
 #-----------------------------------------------------------------------------
 
@@ -100,6 +103,8 @@ TRANSLATIONS:
 
 
 #-----------------------------------------------------------------------------
+
+Perl::Critic::TestUtils::block_perlcriticrc();
 
 {
     my $profile = Perl::Critic::UserProfile->new( -profile => q{} );

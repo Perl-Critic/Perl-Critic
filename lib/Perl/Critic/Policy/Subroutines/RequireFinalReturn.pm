@@ -48,10 +48,6 @@ sub new {
     my $class = shift;
     my $self = $class->SUPER::new(@_);
 
-    my (%config) = @_;
-
-    $self->__finish_standard_initialization(\%config);
-
     $self->{_conditionals} = { hashify( qw(if unless for foreach) ) };
 
     return $self;

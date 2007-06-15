@@ -33,63 +33,51 @@ my $FORMAT = "%p\n"; #Default stringy format
 
 #-----------------------------------------------------------------------------
 
-# Note: you can't put additional functionality here because subclasses are not
-# required to call up to the super-constructor.
 sub new {
     my $class = shift;
-    return bless {}, $class;
-}
+    my %config = @_;
 
-#-----------------------------------------------------------------------------
-
-# Since Policies' constructors don't have to call up to the base class's one,
-# this exists to do what should be done there.  This is always invoked by
-# PolicyFactory after the Policy has been constructed, but should be invoked
-# by subclasses' constructors right after creating the blessed reference.
-#
-# Since the parameters are told to validate the configuration, this may throw
-# an exception.
-#
-# Note that the configuration is passed by reference here.
-sub __finish_standard_initialization {
-    my ($self, $config) = @_;
-
-    # Bail if this method was called previously.
-    return if defined $self->get_parameters();
-
-    $self->{_parameter_metadata_available} =
-        $config->{__parameter_metadata_available};
-
-    my $parameters = $config->{__parameters};
-    $self->{_parameters} = $parameters ? $parameters : [];
-
-    foreach my $parameter ( @{$parameters} ) {
-        $parameter->parse_and_validate_config_value( $self, $config );
-    }
-
-    return;
-}
-
-#-----------------------------------------------------------------------------
-
-# Called by PolicyFactory.  The results of this will be put into the
-# configuration so that __finish_standard_initialization() above can access it.
-sub __build_parameters {
-    my ($class) = @_;
+    my $self = bless {}, $class;
 
     my @parameters;
+    my $parameter_metadata_available = 0;
 
     if ( $class->can('supported_parameters') ) {
+        $parameter_metadata_available = 1;
         @parameters =
             map
                 { Perl::Critic::PolicyParameter->new($_) }
-                $class->supported_parameters()
-    } else {
-        # Special indicator that PolicyFactory looks for.
-        @parameters = (undef);
+                $class->supported_parameters();
+    }
+    $self->{_parameter_metadata_available} = $parameter_metadata_available;
+    $self->{_parameters} = \@parameters;
+
+    foreach my $parameter ( @parameters ) {
+        $parameter->parse_and_validate_config_value( $self, \%config );
+        delete $config{ $parameter->get_name() };
     }
 
-    return @parameters;
+    if ($parameter_metadata_available) {
+        $self->_validate_config_keys(\%config);
+    }
+
+    return $self;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _validate_config_keys {
+    my ( $self, $config ) = @_;
+
+    my $msg = $EMPTY;
+    my $name = policy_short_name( ref $self );
+
+    for my $offered_param ( keys %{ $config } ) {
+        $msg .= qq{Parameter "$offered_param" isn't supported by $name\n};
+    }
+
+    die "$msg\n" if $msg;
+    return 1;
 }
 
 #-----------------------------------------------------------------------------

@@ -96,10 +96,6 @@ sub new {
     my $class = shift;
     my $self = $class->SUPER::new(@_);
 
-    my (%config) = @_;
-
-    $self->__finish_standard_initialization( \%config );
-
     $self->{_allowed_operators_by_delimiter} = {
         $QUOTE    => $self->_single_quote_allowed_operators(),
         $DQUOTE   => $self->_double_quote_allowed_operators(),

@@ -55,10 +55,6 @@ sub new {
     my $class = shift;
     my $self = $class->SUPER::new(@_);
 
-    my (%config) = @_;
-
-    $self->__finish_standard_initialization( \%config );
-
     $self->{_all_packages} = {
         hashify keys %{ $self->{_packages} }, keys %{ $self->{_add_packages} }
     };
