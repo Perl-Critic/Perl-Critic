@@ -12,9 +12,12 @@
 use strict;
 use warnings;
 use English qw( -no_match_vars );
+
 use File::Spec qw();
 use Test::More;
+
 use Perl::Critic::PolicyFactory ( -test => 1 );
+use Perl::Critic::Utils qw{ :characters };
 use Perl::Critic::TestUtils qw{
     should_skip_author_tests get_author_test_skip_message
     starting_points_including_examples
@@ -48,15 +51,18 @@ if ( $ENV{PERL_CRITIC_CACHE} ) {
 # Strict object testing -- prevent direct hash key access
 
 eval { require Devel::EnforceEncapsulation; };
+diag($EMPTY);
 if ( !$EVAL_ERROR ) {
     for my $pkg ( '', '::Config', '::Policy', '::Violation' ) {
-        diag 'apply Devel::EnforceEncapsulation to Perl::Critic'.$pkg;
+        diag('apply Devel::EnforceEncapsulation to Perl::Critic'.$pkg);
         Devel::EnforceEncapsulation->apply_to('Perl::Critic'.$pkg);
     }
 }
 else {
-    diag 'You should install Devel::EnforceEncapsulation, but other tests '
-        . 'will still run.';
+    diag(
+        'You should install Devel::EnforceEncapsulation, but other tests '
+            . 'will still run.'
+    );
 }
 
 #-----------------------------------------------------------------------------

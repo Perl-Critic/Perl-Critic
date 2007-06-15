@@ -41,11 +41,13 @@ sub applies_to       { return 'PPI::Document'       }
 #-----------------------------------------------------------------------------
 
 sub new {
-    my ($class, %args) = @_;
-    my $self = bless {}, $class;
+    my $class = shift;
+    my $self = $class->SUPER::new(@_);
+
+    my (%config) = @_;
 
     #Set configuration if defined
-    $self->{_perltidyrc} = $args{perltidyrc};
+    $self->{_perltidyrc} = $config{perltidyrc};
     if (defined $self->{_perltidyrc} && $self->{_perltidyrc} eq $EMPTY) {
         $self->{_perltidyrc} = \$EMPTY;
     }

@@ -93,8 +93,10 @@ sub applies_to {
 #-----------------------------------------------------------------------------
 
 sub new {
-    my ( $class, %config ) = @_;
-    my $self = bless {}, $class;
+    my $class = shift;
+    my $self = $class->SUPER::new(@_);
+
+    my (%config) = @_;
 
     $self->__finish_standard_initialization( \%config );
 

@@ -10,22 +10,17 @@ TODO - Things for Perl::Critic developers to do
 
 =head1 SOURCE
 
-    #######################################################################
-    #      $URL$
-    #     $Date$
-    #   $Author$
-    # $Revision$
-    #######################################################################
+  #######################################################################
+  #      $URL$
+  #     $Date$
+  #   $Author$
+  # $Revision$
+  #######################################################################
 
 =head1 SEE ALSO
 
 Perl-Critic-More is a separate distribution for less-widely-accepted
 policies.  It contains its own TODO.pod.
-
-=head1 URGENT!!!
-
-Bring grep example in DEVELOPER.pod up to date!!!  Especially in terms of
-Violation objects.
 
 =head1 NEW FEATURES
 
@@ -283,6 +278,20 @@ Recommend that C<if (scalar @array)> be rewritten as C<if (@array)>.
 =head1 REFACTORINGS and ENHANCEMENTS
 
 =over 4
+
+=item * Move all the parameters construction stuff from PolicyFactory to Policy.
+
+We can do this because we're now going to require all policies that use the
+parameters stuff to invoke the super constructor.
+
+=item * Make parameter declarations at compile time instead of at run time.
+
+=item * Switch to using exceptions instead of die and confess.
+
+=item * Move package globals, e.g. P::C::Violation::FORMAT, to instance variables on Perl::Critic.
+
+This applies regardless of whether the variable was declared with C<my> or
+C<our>.
 
 =item * MOVE THE LINE-DISABLING INTO P::C::Document
 
