@@ -43,6 +43,7 @@ our @EXPORT_OK = qw(
     $PERIOD
     $PIPE
     $QUOTE
+    $BACKTICK
     $SCOLON
     $SPACE
     $SLASH
@@ -117,6 +118,7 @@ our %EXPORT_TAGS = (
             $PERIOD
             $PIPE
             $QUOTE
+            $BACKTICK
             $SCOLON
             $SPACE
             $SLASH
@@ -179,6 +181,7 @@ our $COLON        = q{:};
 our $SCOLON       = q{;};
 our $QUOTE        = q{'};
 our $DQUOTE       = q{"};
+our $BACKTICK     = q{`};
 our $PERIOD       = q{.};
 our $PIPE         = q{|};
 our $SPACE        = q{ };
@@ -1356,6 +1359,8 @@ return value is not checked.
 
 =item C<$DQUOTE>
 
+=item C<$BACKTICK>
+
 =item C<$PERIOD>
 
 =item C<$PIPE>
@@ -1438,6 +1443,7 @@ C<$FATCOMMA>,
 C<$PERIOD>,
 C<$PIPE>,
 C<$QUOTE>,
+C<$BACKTICK>,
 C<$SCOLON>,
 C<$SPACE>,
 C<$SLASH>,

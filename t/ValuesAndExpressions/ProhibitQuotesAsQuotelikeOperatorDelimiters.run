@@ -1,0 +1,181 @@
+## name Basic passing
+## failures 0
+## cut
+
+$x = q{};
+$x = qq{};
+$x = qx{};
+$x = qr{};
+$x = qw{};
+
+$x =~ //;
+$x =~ m{};
+$x =~ s{}{};
+$x =~ tr{}{};
+$x =~ y{}{};
+
+$x = qx'';
+$x = qr'';
+
+$x =~ m'';
+$x =~ s''';
+
+#-----------------------------------------------------------------------------
+
+## name Basic failure
+## failures 23
+## cut
+
+$x = q'';
+$x = qq'';
+$x = qw'';
+
+$x =~ tr''';
+$x =~ y''';
+
+$x = q"";
+$x = qq"";
+$x = qx"";
+$x = qr"";
+$x = qw"";
+
+$x =~ m"";
+$x =~ s""";
+$x =~ tr""";
+$x =~ y""";
+
+$x = q``;
+$x = qq``;
+$x = qx``;
+$x = qr``;
+$x = qw``;
+
+$x =~ m``;
+$x =~ s```;
+$x =~ tr```;
+$x =~ y```;
+
+#-----------------------------------------------------------------------------
+
+## name single_quote_allowed_operators = m q qq qr qw qx s tr y
+## failures 0
+## parms { single_quote_allowed_operators => 'm q qq qr qw qx s tr y' }
+## cut
+
+$x = q'';
+$x = qq'';
+$x = qx'';
+$x = qr'';
+$x = qw'';
+
+$x =~ m'';
+$x =~ s''';
+$x =~ tr''';
+$x =~ y''';
+
+#-----------------------------------------------------------------------------
+
+## name single_quote_allowed_operators =
+## failures 9
+## parms { single_quote_allowed_operators => '' }
+## cut
+
+$x = q'';
+$x = qq'';
+$x = qx'';
+$x = qr'';
+$x = qw'';
+
+$x =~ m'';
+$x =~ s''';
+$x =~ tr''';
+$x =~ y''';
+
+#-----------------------------------------------------------------------------
+
+## name double_quote_allowed_operators = m q qq qr qw qx s tr y
+## failures 0
+## parms { double_quote_allowed_operators => 'm q qq qr qw qx s tr y' }
+## cut
+
+$x = q"";
+$x = qq"";
+$x = qx"";
+$x = qr"";
+$x = qw"";
+
+$x =~ m"";
+$x =~ s""";
+$x =~ tr""";
+$x =~ y""";
+
+#-----------------------------------------------------------------------------
+
+## name double_quote_allowed_operators =
+## failures 9
+## parms { double_quote_allowed_operators => '' }
+## cut
+
+$x = q"";
+$x = qq"";
+$x = qx"";
+$x = qr"";
+$x = qw"";
+
+$x =~ m"";
+$x =~ s""";
+$x =~ tr""";
+$x =~ y""";
+
+#-----------------------------------------------------------------------------
+
+## name back_quote_allowed_operators = m q qq qr qw qx s tr y
+## failures 0
+## parms { back_quote_allowed_operators => 'm q qq qr qw qx s tr y' }
+## cut
+
+$x = q``;
+$x = qq``;
+$x = qx``;
+$x = qr``;
+$x = qw``;
+
+$x =~ m``;
+$x =~ s```;
+$x =~ tr```;
+$x =~ y```;
+
+#-----------------------------------------------------------------------------
+
+## name back_quote_allowed_operators =
+## failures 9
+## parms { back_quote_allowed_operators => '' }
+## cut
+
+$x = q``;
+$x = qq``;
+$x = qx``;
+$x = qr``;
+$x = qw``;
+
+$x =~ m``;
+$x =~ s```;
+$x =~ tr```;
+$x =~ y```;
+
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :

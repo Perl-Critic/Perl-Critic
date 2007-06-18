@@ -19,6 +19,10 @@
      * A value for "nocolor" can now be specified in a .perlcriticrc.
        http://rt.perl.org/rt3/Ticket/Display.html?id=24877
 
+     New Policies:
+     * ValuesAndExpressions::ProhibitQuotesAsQuotelikeOperatorDelimiters
+       As suggested in http://rt.cpan.org/Public/Bug/Display.html?id=23290.
+
      Minor changes:
      * The perlcritic "--profileproto" option now emits the short names for
        policies, rather than the full ones.

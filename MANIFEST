@@ -1,9 +1,6 @@
 bin/perlcritic
 Build.PL
 Changes
-Changes.merge-left.r1534
-Changes.merge-right.r1535
-Changes.working
 examples/generatestats
 examples/loadanalysisdb
 examples/perlcriticrc
@@ -101,6 +98,7 @@ lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitLeadingZeros.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitMismatchedOperators.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitMixedBooleanOperators.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitNoisyQuotes.pm
+lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitQuotesAsQuotelikeOperatorDelimiters.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitVersionStrings.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/RequireInterpolationOfMetachars.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/RequireNumberSeparators.pm
@@ -130,9 +128,6 @@ lib/Perl/Critic/Violation.pm
 LICENSE
 Makefile.PL
 MANIFEST			This list of files
-MANIFEST.merge-left.r1534
-MANIFEST.merge-right.r1535
-MANIFEST.working
 META.yml
 README
 t/00_modules.t
@@ -250,6 +245,7 @@ t/ValuesAndExpressions/ProhibitLeadingZeros.run
 t/ValuesAndExpressions/ProhibitMismatchedOperators.run
 t/ValuesAndExpressions/ProhibitMixedBooleanOperators.run
 t/ValuesAndExpressions/ProhibitNoisyQuotes.run
+t/ValuesAndExpressions/ProhibitQuotesAsQuotelikeOperatorDelimiters.run
 t/ValuesAndExpressions/ProhibitVersionStrings.run
 t/ValuesAndExpressions/RequireInterpolationOfMetachars.run
 t/ValuesAndExpressions/RequireNumberSeparators.run
