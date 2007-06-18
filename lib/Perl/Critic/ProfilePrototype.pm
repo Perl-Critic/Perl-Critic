@@ -40,7 +40,7 @@ sub to_string {
 
 sub _proto_format {
     return <<'END_OF_FORMAT';
-[%P]
+[%p]
 # set_themes = %t
 # severity   = %s
 %{# %s = \n}O%{# Cannot programmatically discover what parameters this policy takes.}U
