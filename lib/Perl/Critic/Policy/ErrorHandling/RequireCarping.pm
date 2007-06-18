@@ -12,6 +12,7 @@ use warnings;
 use Perl::Critic::Utils qw{
     :booleans :characters :severities :classification :data_conversion
 };
+use Perl::Critic::Utils::PPI qw{ &is_ppi_expression_or_generic_statement };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.053;
@@ -262,18 +263,9 @@ sub _determine_if_list_is_a_plain_list_and_get_last_child {
 
     my $list_child = $list_children[0];
 
-    # If the child isn't a Statement, we don't understand the
-    # PPI tree.
-    return if not $list_child->isa('PPI::Statement');
-
     # If the child isn't an Expression or it is some other subclass
     # of Statement, we again don't understand PPI's output.
-    if (
-            not $list_child->isa('PPI::Statement::Expression')
-        and ref $list_child ne 'PPI::Statement'  # blech
-    ) {
-        return;
-    }
+    return if not is_ppi_expression_or_generic_statement($list_child);
 
     my @statement_children = $list_child->schildren();
     return if scalar (@statement_children) < 1;
