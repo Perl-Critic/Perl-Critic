@@ -15,6 +15,10 @@
      * perlcritic now has a "--strictprofile" option which will make warnings
        about problems in a profile fatal.
 
+     Feature requests:
+     * A value for "nocolor" can now be specified in a .perlcriticrc.
+       http://rt.perl.org/rt3/Ticket/Display.html?id=24877
+
      Minor changes:
      * The perlcritic "--profileproto" option now emits the short names for
        policies, rather than the full ones.

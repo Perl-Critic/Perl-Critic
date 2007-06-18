@@ -46,6 +46,7 @@ sub _init {
     $self->{_theme}         = delete $args{theme}         || $EMPTY;
     $self->{_top}           = delete $args{top}           || $FALSE;
     $self->{_verbose}       = delete $args{verbose}       || 4;
+    $self->{_nocolor}       = delete $args{nocolor}       || $FALSE;
 
     # If there's anything left, warn about invalid settings
     if ( my @remaining = sort keys %args ){
@@ -111,6 +112,13 @@ sub singlepolicy {
 sub verbose {
     my ($self) = @_;
     return $self->{_verbose};
+}
+
+#-----------------------------------------------------------------------------
+
+sub nocolor {
+    my ($self) = @_;
+    return $self->{_nocolor};
 }
 
 #-----------------------------------------------------------------------------
@@ -204,6 +212,11 @@ Returns the default C<top> setting. (Either 0 or a positive integer).
 =item C< verbose() >
 
 Returns the default C<verbose> setting. (Either a number or format
+string).
+
+=item C< nocolor() >
+
+Returns the default C<nocolor> setting. (Either 1 or 0).
 string).
 
 =back

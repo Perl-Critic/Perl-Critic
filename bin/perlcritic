@@ -241,8 +241,9 @@ sub render_report {
     if (not -f $file) { $fmt =~ s{\%[fF]}{STDIN}mx; } #HACK!
     Perl::Critic::Violation::set_format( $fmt );
 
-    print $opts_ref->{-nocolor} ? @violations
-                                : _colorize_by_severity(@violations);
+    my $nocolor = $CRITIC->config->nocolor();
+    print $nocolor ? @violations : _colorize_by_severity(@violations);
+
     return $count;
 }
 
