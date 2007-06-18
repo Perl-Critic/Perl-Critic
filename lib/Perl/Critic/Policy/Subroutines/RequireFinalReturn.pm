@@ -188,7 +188,7 @@ return value, and omits a return statement, some of the subroutine's inner
 data can leak to the outside.  Consider this case:
 
    package Password;
-   # every time the user guesses the password wrong, it's value
+   # every time the user guesses the password wrong, its value
    # is rotated by one character
    my $password;
    sub set_password {
