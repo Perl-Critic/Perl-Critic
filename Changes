@@ -22,6 +22,7 @@
      New Policies:
      * ValuesAndExpressions::ProhibitQuotesAsQuotelikeOperatorDelimiters
        As suggested in http://rt.cpan.org/Public/Bug/Display.html?id=23290.
+     * ValuesAndExpressions::ProhibitLongChainsOfMethodCalls
 
      Minor changes:
      * The perlcritic "--profileproto" option now emits the short names for
