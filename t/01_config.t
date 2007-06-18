@@ -1,8 +1,8 @@
 #!perl
 
 ##############################################################################
-#     $URL$
-#    $Date$
+#      $URL$
+#     $Date$
 #   $Author$
 # $Revision$
 ##############################################################################
@@ -251,7 +251,7 @@ my $total_policies   = scalar @site_policies;
 
 {
     my %true_defaults = ( force => 1, only  => 1, top => 10 );
-    my %profile  = ( '_' => \%true_defaults );
+    my %profile  = ( '__defaults__' => \%true_defaults );
 
     my %pc_config = (-force => 0, -only => 0, -top => 0, -profile => \%profile);
     my $config = Perl::Critic::Config->new( %pc_config );
@@ -288,7 +288,11 @@ my $total_policies   = scalar @site_policies;
 
     # Try using bogus named severity level
     eval{ Perl::Critic::Config->new( -severity => 'bogus' ) };
-    like( $EVAL_ERROR, qr/Invalid severity: "bogus"/, 'invalid severity' );
+    like(
+        $EVAL_ERROR,
+        qr/The value for "-severity" \("bogus"\) is not one of the valid severity names/,
+        'invalid severity'
+    );
 
     # Try using vague -singlepolicy option
     eval{ Perl::Critic::Config->new( -singlepolicy => '.*' ) };

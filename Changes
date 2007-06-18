@@ -5,6 +5,12 @@
 # $Revision$
 ##############################################################################
 
+[1.xxx]  Released on 2007-06-xx
+
+     * perlcritic now emits errors for all the problems it can find for the
+       global options in the command-line parameters and .perlcriticrc file,
+       rather than bailing on the first one it encounters.
+
 [1.053]  Released on 2007-06-02
 
      *DEVELOPMENT RELEASE*

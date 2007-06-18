@@ -60,6 +60,7 @@ our @EXPORT_OK = qw(
     &is_hash_key
     &is_in_void_context
     &is_included_module_name
+    &is_integer
     &is_label_pointer
     &is_method_call
     &is_package_declaration
@@ -77,6 +78,7 @@ our @EXPORT_OK = qw(
     &is_script
     &is_subroutine_name
     &is_unchecked_call
+    &is_valid_numeric_verbosity
     &parse_arg_list
     &policy_long_name
     &policy_short_name
@@ -129,6 +131,7 @@ our %EXPORT_TAGS = (
             &is_function_call
             &is_hash_key
             &is_included_module_name
+            &is_integer
             &is_label_pointer
             &is_method_call
             &is_package_declaration
@@ -146,6 +149,7 @@ our %EXPORT_TAGS = (
             &is_script
             &is_subroutine_name
             &is_unchecked_call
+            &is_valid_numeric_verbosity
         }
     ],
     data_conversion => [ qw{ &hashify &words_from_string &interpolate } ],
@@ -629,6 +633,14 @@ sub is_included_module_name {
 
 #-----------------------------------------------------------------------------
 
+sub is_integer {
+    return 0 if not defined $_[0];
+
+    return $_[0] =~  m{ \A [+-]? \d+ \z }mx;
+}
+
+#-----------------------------------------------------------------------------
+
 sub is_label_pointer {
     my $elem = shift;
     return if !$elem;
@@ -846,14 +858,18 @@ my %FORMAT_OF = (
 
 my $DEFAULT_FORMAT = $FORMAT_OF{4};
 
+sub is_valid_numeric_verbosity {
+    my ($verbosity) = @_;
+
+    return exists $FORMAT_OF{$verbosity};
+}
+
 sub verbosity_to_format {
     my ($verbosity) = @_;
     return $DEFAULT_FORMAT if not defined $verbosity;
-    return $FORMAT_OF{abs int $verbosity} || $DEFAULT_FORMAT if _is_integer($verbosity);
+    return $FORMAT_OF{abs int $verbosity} || $DEFAULT_FORMAT if is_integer($verbosity);
     return interpolate( $verbosity );  #Otherwise, treat as a format spec
 }
-
-sub _is_integer { return $_[0] =~  m{ \A [+-]? \d+ \z }mx }
 
 #-----------------------------------------------------------------------------
 
@@ -870,7 +886,7 @@ our @SEVERITY_NAMES = sort { $SEVERITY_NUMBER_OF{$a} <=> $SEVERITY_NUMBER_OF{$b}
 
 sub severity_to_number {
     my ($severity) = @_;
-    return _normalize_severity( $severity ) if _is_integer( $severity );
+    return _normalize_severity( $severity ) if is_integer( $severity );
     my $severity_number = $SEVERITY_NUMBER_OF{lc $severity};
     confess qq{Invalid severity: "$severity"} if not defined $severity_number;
     return $severity_number;
@@ -1171,6 +1187,10 @@ function call.  So in these examples, "foo" is B<not> considered a hash key:
 Given a L<PPI::Token::Word>, returns true if the element is the name of a
 module that is being included via C<use>, C<require>, or C<no>.
 
+=item C<is_integer( $value )>
+
+Answers whether the parameter, as a string, looks like an integral value.
+
 =item C<is_class_name( $element )>
 
 Given a L<PPI::Token::Word>, returns true if the element that immediately
@@ -1278,6 +1298,10 @@ normalized to lie between C<$SEVERITY_LOWEST> and C<$SEVERITY_HIGHEST>.  If
 C<$severity> is given as a string, this function returns the corresponding
 severity number.  If the string doesn't have a corresponding number, this
 function will throw an exception.
+
+=item C<is_valid_numeric_verbosity( $severity )>
+
+Answers whether the argument has a translation to a Violation format.
 
 =item C<verbosity_to_format( $verbosity_level )>
 
@@ -1427,6 +1451,7 @@ Includes:
 C<&is_function_call>,
 C<&is_hash_key>,
 C<&is_included_module_name>,
+C<&is_integer>,
 C<&is_method_call>,
 C<&is_package_declaration>,
 C<&is_perl_builtin>,
@@ -1440,6 +1465,7 @@ C<&is_perl_builtin_with_zero_and_or_one_arguments>
 C<&is_script>,
 C<&is_subroutine_name>,
 C<&is_unchecked_call>
+C<&is_valid_numeric_verbosity>
 
 =item C<:data_conversion>
 

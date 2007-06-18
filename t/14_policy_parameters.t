@@ -42,8 +42,8 @@ plan( tests => $ntests );
 #-----------------------------------------------------------------------------
 
 for my $policy ( @all_policies ) {
-    test_invalid_parameters( $policy );
     test_has_declared_parameters( $policy );
+    test_invalid_parameters( $policy );
     test_supported_parameters( $policy );
 }
 

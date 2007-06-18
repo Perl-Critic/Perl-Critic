@@ -11,12 +11,26 @@ use strict;
 use warnings;
 use Carp qw(confess);
 use English qw(-no_match_vars);
+
+use Exporter qw{ import };
+
 use List::MoreUtils qw(any);
 use Perl::Critic::Utils qw{ :characters :data_conversion };
 
 #-----------------------------------------------------------------------------
 
 our $VERSION = 1.053;
+
+#-----------------------------------------------------------------------------
+
+our @EXPORT_OK = qw{
+    $RULE_INVALID_CHARACTER_REGEX
+    &cook_rule
+};
+
+#-----------------------------------------------------------------------------
+
+our $RULE_INVALID_CHARACTER_REGEX = qr/ ( [^()\s\w\d\+\-\*\&\|\!] ) /xms;
 
 #-----------------------------------------------------------------------------
 
@@ -36,9 +50,9 @@ sub _init {
     my $rule = $args{-rule} || $EMPTY;
 
     die qq{Illegal character "$1" in theme rule.\n}
-        if $rule =~ m/ ( [^()\s\w\d\+\-\*\&\|\!] ) /mx;
+        if $rule =~ m/$RULE_INVALID_CHARACTER_REGEX/xms;
 
-    $self->{_rule} = _cook_rule( $rule );
+    $self->{_rule} = cook_rule( $rule );
 
     return $self;
 }
@@ -78,7 +92,7 @@ sub policy_is_thematic {
 
 #-----------------------------------------------------------------------------
 
-sub _cook_rule {
+sub cook_rule {
     my ($raw_rule) = @_;
     return if not defined $raw_rule;
 
@@ -117,9 +131,9 @@ objects.  There are no user-serviceable parts here.
 
 =head1 METHODS
 
-=over 8
+=over
 
-=item C<< new( -rule => $rule_expression >>
+=item C<< new( -rule => $rule_expression ) >>
 
 Returns a reference to a new Perl::Critic::Theme object.  C<-rule> is a string
 expression that evaluates to true or false for each Policy.. See L<"THEME
@@ -156,6 +170,32 @@ parens to enforce precedence as well.  Supported operators are:
 
 See L<Perl::Critic/"CONFIGURATION"> for more information about customizing the
 themes for each Policy.
+
+
+=head1 SUBROUTINES
+
+=over
+
+=item C<cook_rule( $rule )>
+
+Standardize a rule into a almost executable Perl code.  The "almost" comes
+from the fact that theme names are left as is.
+
+
+=back
+
+
+=head1 CONSTANTS
+
+=over
+
+=item C<$RULE_INVALID_CHARACTER_REGEX>
+
+A regular expression that will return the first character in the matched
+expression that is not valid in a rule.
+
+
+=back
 
 
 =head1 AUTHOR

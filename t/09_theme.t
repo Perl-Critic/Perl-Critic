@@ -93,7 +93,7 @@ TRANSLATIONS:
     );
 
     while ( my ($raw, $expected) = each %expressions ) {
-        my $cooked = Perl::Critic::Theme::_cook_rule( $raw );
+        my $cooked = Perl::Critic::Theme::cook_rule( $raw );
         is( $cooked, $expected, qq{Theme cooking: '$raw' -> '$cooked'});
     }
 }

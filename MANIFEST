@@ -1,6 +1,9 @@
 bin/perlcritic
 Build.PL
 Changes
+Changes.merge-left.r1534
+Changes.merge-right.r1535
+Changes.working
 examples/generatestats
 examples/loadanalysisdb
 examples/perlcriticrc
@@ -10,6 +13,7 @@ extras/perlcritic.el
 INSTALL
 lib/Perl/Critic.pm
 lib/Perl/Critic/Config.pm
+lib/Perl/Critic/ConfigErrors.pm
 lib/Perl/Critic/Defaults.pm
 lib/Perl/Critic/DEVELOPER.pod
 lib/Perl/Critic/Document.pm
@@ -126,10 +130,15 @@ lib/Perl/Critic/Violation.pm
 LICENSE
 Makefile.PL
 MANIFEST			This list of files
+MANIFEST.merge-left.r1534
+MANIFEST.merge-right.r1535
+MANIFEST.working
 META.yml
 README
 t/00_modules.t
+t/01_bad_perlcriticrc
 t/01_config.t
+t/01_config_bad_perlcriticrc.t
 t/02_policy.t
 t/03_pragmas.t
 t/04_defaults.t

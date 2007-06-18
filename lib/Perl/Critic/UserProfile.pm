@@ -107,6 +107,22 @@ sub listed_policies {
 }
 
 #-----------------------------------------------------------------------------
+
+sub source {
+    my ( $self ) = @_;
+
+    return $self->{_source};
+}
+
+sub _set_source {
+    my ( $self, $source ) = @_;
+
+    $self->{_source} = $source;
+
+    return;
+}
+
+#-----------------------------------------------------------------------------
 # Begin PRIVATE methods
 
 sub _load_profile {
@@ -124,7 +140,7 @@ sub _load_profile {
     my $loader = $loader_for{$ref_type};
     confess qq{Can't load UserProfile from type "$ref_type"} if ! $loader;
 
-    $self->{_profile} = $loader->($profile);
+    $self->{_profile} = $loader->($self, $profile);
     return $self;
 }
 
@@ -134,7 +150,7 @@ sub _set_defaults {
 
     my ($self) = @_;
     my $profile = $self->{_profile};
-    my $defaults = delete $profile->{_} || {};
+    my $defaults = delete $profile->{__defaults__} || {};
     $self->{_defaults} = Perl::Critic::Defaults->new( %{ $defaults } );
     return $self;
 }
@@ -142,16 +158,24 @@ sub _set_defaults {
 #-----------------------------------------------------------------------------
 
 sub _load_profile_from_file {
-
-    my ($file) = @_;
+    my ( $self, $file ) = @_;
 
     # Handle special cases.
     return {} if not defined $file;
     return {} if $file eq $EMPTY;
     return {} if $file eq 'NONE';
 
+    $self->_set_source( $file );
+
     my $prof = Config::Tiny->read( $file );
     if (defined $prof) {
+        # !$%@$%^ Config::Tiny uses a completely non-descriptive name for
+        # glabal values.
+        my $defaults = delete $prof->{_};
+        if ($defaults) {
+            $prof->{__defaults__} = $defaults;
+        }
+
         return $prof;
     } else {
         my $errstr = Config::Tiny::errstr();
@@ -162,7 +186,7 @@ sub _load_profile_from_file {
 #-----------------------------------------------------------------------------
 
 sub _load_profile_from_array {
-    my $array_ref = shift;
+    my ( $self, $array_ref ) = @_;
     my $joined    = join qq{\n}, @{ $array_ref };
     my $prof = Config::Tiny->read_string( $joined );
     croak( 'Profile error: ' . Config::Tiny::errstr() ) if not defined $prof;
@@ -172,7 +196,7 @@ sub _load_profile_from_array {
 #-----------------------------------------------------------------------------
 
 sub _load_profile_from_string {
-    my $string = shift;
+    my ( $self, $string ) = @_;
     my $prof = Config::Tiny->read_string( ${ $string } );
     croak( 'Profile error: ' . Config::Tiny::errstr() ) if not defined $prof;
     return $prof;
@@ -181,7 +205,7 @@ sub _load_profile_from_string {
 #-----------------------------------------------------------------------------
 
 sub _load_profile_from_hash {
-    my $hash_ref = shift;
+    my ( $self, $hash_ref ) = @_;
     return $hash_ref;
 }
 
@@ -281,16 +305,22 @@ Given a reference to a L<Perl::Critic::Policy> object or the name of
 one, returns true if the user has explicitly enabled that policy in
 their user profile.
 
-=item C< policy_params() >
+=item C< policy_params( $policy ) >
 
-Given a reference to a L<Perl::Critic::Policy> object or the name of one,
-returns a reference to a hash of the user's configuration parameters for that
-policy.
+Given a reference to a L<Perl::Critic::Policy> object or the name of
+one, returns a reference to a hash of the user's configuration
+parameters for that policy.
 
 =item C< listed_policies() >
 
-Returns a list of the names of all the Policies that are mentioned in the
-profile.  The Policy names will be fully qualified (e.g. Perl::Critic::Foo).
+Returns a list of the names of all the Policies that are mentioned in
+the profile.  The Policy names will be fully qualified (e.g.
+Perl::Critic::Foo).
+
+=item C< source() >
+
+The place where the profile information came from, if available.
+Usually the path to a F<.perlcriticrc>.
 
 =back
 
