@@ -39,15 +39,19 @@ SKIP: {
     skip 'because there was no exception', $test_count - 1
         if not $eval_result;
 
-    isa_ok($eval_result, 'Perl::Critic::ConfigErrors', '$EVAL_ERROR');
+    isa_ok(
+        $eval_result,
+        'Perl::Critic::Exception::AggregateConfiguration',
+        '$EVAL_ERROR',
+    );
 
     SKIP: {
         skip
-            q{because the exception wasn't an instance of ConfigErrors},
+            q{because the exception wasn't an instance of Exception::AggregateConfiguration},
             $test_count - 2
-            if not $eval_result->isa('Perl::Critic::ConfigErrors');
+            if not $eval_result->isa('Perl::Critic::Exception::AggregateConfiguration');
 
-        my @messages = @{ $eval_result->messages() };
+        my @messages = @{ $eval_result->exceptions() };
 
         my @parameters = qw{
             exclude include severity single-policy theme top verbose
@@ -78,7 +82,7 @@ sub generate_message_regex {
     return
         qr/
             \A
-            The [ ] value [ ] for [ ]
+            The [ ] value [ ] for [ ] the [ ] global [ ]
             "$parameter"
             .*
             found [ ] in [ ] "$file"

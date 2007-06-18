@@ -13,11 +13,11 @@ extras/perlcritic.el
 INSTALL
 lib/Perl/Critic.pm
 lib/Perl/Critic/Config.pm
-lib/Perl/Critic/ConfigErrors.pm
 lib/Perl/Critic/Defaults.pm
 lib/Perl/Critic/DEVELOPER.pod
 lib/Perl/Critic/Document.pm
 lib/Perl/Critic/Exception.pm
+lib/Perl/Critic/Exception/AggregateConfiguration.pm
 lib/Perl/Critic/Exception/Configuration.pm
 lib/Perl/Critic/Exception/Configuration/Global.pm
 lib/Perl/Critic/Exception/Configuration/Policy.pm

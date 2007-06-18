@@ -16,7 +16,7 @@ our $VERSION = 1.053;
 
 use Exception::Class (
     'Perl::Critic::Exception::Configuration::Global' => {
-        isa         => 'Perl::Critic::Exception',
+        isa         => 'Perl::Critic::Exception::Configuration',
         description => 'A problem with global Perl::Critic configuration.',
     },
 );
@@ -40,7 +40,7 @@ sub full_message {
     return
             qq{The value for the global "$option_name" option }
         .   qq{("$option_value")$source }
-        .   $self->suffix();
+        .   $self->message_suffix();
 }
 
 

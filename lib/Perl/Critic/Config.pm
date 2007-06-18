@@ -15,7 +15,8 @@ use English qw(-no_match_vars);
 use List::MoreUtils qw(any none apply);
 use Scalar::Util qw(blessed);
 
-use Perl::Critic::ConfigErrors;
+use Perl::Critic::Exception::AggregateConfiguration;
+use Perl::Critic::Exception::Configuration::Global;
 use Perl::Critic::PolicyFactory;
 use Perl::Critic::Theme qw( $RULE_INVALID_CHARACTER_REGEX &cook_rule );
 use Perl::Critic::UserProfile qw();
@@ -48,7 +49,7 @@ sub _init {
         $args{-severity} ||= $SEVERITY_LOWEST;
     }
 
-    my $errors = Perl::Critic::ConfigErrors->new();
+    my $errors = Perl::Critic::Exception::AggregateConfiguration->new();
 
     # Construct the UserProfile to get default options.
     my $profile_source  = $args{-profile}; #Can be file path or data struct
@@ -97,7 +98,7 @@ sub _init {
         );
     $self->{_factory} = $factory;
 
-    if ( @{ $errors->messages() } ) {
+    if ( @{ $errors->exceptions() } ) {
         die $errors;  ## no critic (RequireCarping)
     }
 
@@ -305,11 +306,13 @@ sub _validate_and_save_regex {
             (my $cleaned_error = $EVAL_ERROR) =~
                 s/ [ ] at [ ] .* Config [.] pm [ ] line [ ] \d+ [.] \n? \z/./xms;
 
-            $errors->add_bad_option_message(
-                $option_name,
-                $regex,
-                $source,
-                qq{is not valid: $cleaned_error},
+            $errors->add_exception(
+                Perl::Critic::Exception::Configuration::Global->new(
+                    option_name     => $option_name,
+                    option_value    => $regex,
+                    source          => $source,
+                    message_suffix  => qq{is not valid: $cleaned_error},
+                )
             );
 
             $found_errors = 1;
@@ -347,12 +350,18 @@ sub _validate_and_save_verbosity {
         $verbosity = $profile->defaults()->verbose();
     }
 
-    if ( is_integer($verbosity) and not is_valid_numeric_verbosity($verbosity) ) {
-        $errors->add_bad_option_message(
-            $option_name,
-            $verbosity,
-            $source,
-            'is not the number of one of the pre-defined verbosity formats.',
+    if (
+            is_integer($verbosity)
+        and not is_valid_numeric_verbosity($verbosity)
+    ) {
+        $errors->add_exception(
+            Perl::Critic::Exception::Configuration::Global->new(
+                option_name     => $option_name,
+                option_value    => $verbosity,
+                source          => $source,
+                message_suffix  =>
+                    'is not the number of one of the pre-defined verbosity formats.',
+            )
         );
     }
     else {
@@ -390,22 +399,28 @@ sub _validate_and_save_severity {
             $self->{_severity} = $severity;
         }
         else {
-            $errors->add_bad_option_message(
-                $option_name,
-                $severity,
-                $source,
-                "is not between $SEVERITY_LOWEST (low) and $SEVERITY_HIGHEST (high).",
+            $errors->add_exception(
+                Perl::Critic::Exception::Configuration::Global->new(
+                    option_name     => $option_name,
+                    option_value    => $severity,
+                    source          => $source,
+                    message_suffix  =>
+                        "is not between $SEVERITY_LOWEST (low) and $SEVERITY_HIGHEST (high).",
+                )
             );
         }
     }
     elsif ( not any { $_ eq lc $severity } @SEVERITY_NAMES ) {
-        $errors->add_bad_option_message(
-            $option_name,
-            $severity,
-            $source,
-            q{is not one of the valid severity names: "}
-                . join (q{", "}, @SEVERITY_NAMES)
-                . q{".},
+        $errors->add_exception(
+            Perl::Critic::Exception::Configuration::Global->new(
+                option_name     => $option_name,
+                option_value    => $severity,
+                source          => $source,
+                message_suffix  =>
+                    q{is not one of the valid severity names: "}
+                        . join (q{", "}, @SEVERITY_NAMES)
+                        . q{".},
+            )
         );
     }
     else {
@@ -440,11 +455,13 @@ sub _validate_and_save_top {
         $self->{_top} = $top;
     }
     else {
-        $errors->add_bad_option_message(
-            $option_name,
-            $top,
-            $source,
-            q{is not a non-negative integer.},
+        $errors->add_exception(
+            Perl::Critic::Exception::Configuration::Global->new(
+                option_name     => $option_name,
+                option_value    => $top,
+                source          => $source,
+                message_suffix  => q{is not a non-negative integer.},
+            )
         );
     }
 
@@ -475,11 +492,14 @@ sub _validate_and_save_theme {
     if ( $theme_rule =~ m/$RULE_INVALID_CHARACTER_REGEX/xms ) {
         my $bad_character = $1;
 
-        $errors->add_bad_option_message(
-            $option_name,
-            $theme_rule,
-            $source,
-            qq{contains an illegal character ("$bad_character").},
+        $errors->add_exception(
+            Perl::Critic::Exception::Configuration::Global->new(
+                option_name     => $option_name,
+                option_value    => $theme_rule,
+                source          => $source,
+                message_suffix  =>
+                    qq{contains an illegal character ("$bad_character").},
+            )
         );
     }
     else {
@@ -489,11 +509,13 @@ sub _validate_and_save_theme {
         eval $rule_as_code;  ## no critic (ProhibitStringyEval)
 
         if ($EVAL_ERROR) {
-            $errors->add_bad_option_message(
-                $option_name,
-                $theme_rule,
-                $source,
-                q{is not syntactically valid.},
+            $errors->add_exception(
+                Perl::Critic::Exception::Configuration::Global->new(
+                    option_name     => $option_name,
+                    option_value    => $theme_rule,
+                    source          => $source,
+                    message_suffix  => q{is not syntactically valid.},
+                )
             );
         }
         else {

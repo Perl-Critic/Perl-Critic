@@ -23,7 +23,7 @@ use Perl::Critic::Utils qw{
     &policy_long_name
     :internal_lookup
 };
-use Perl::Critic::ConfigErrors;
+use Perl::Critic::Exception::AggregateConfiguration;
 
 our $VERSION = 1.053;
 
@@ -109,12 +109,12 @@ sub _init {
     # If we're supposed to be strict or problems have already been found...
     if (
             $strictprofile
-        or  ( $incoming_errors and @{ $incoming_errors->messages() } )
+        or  ( $incoming_errors and @{ $incoming_errors->exceptions() } )
     ) {
         $errors =
             $incoming_errors
                 ? $incoming_errors
-                : Perl::Critic::ConfigErrors->new();
+                : Perl::Critic::Exception::AggregateConfiguration->new();
     }
 
     $self->_validate_policies_in_profile( $errors );
@@ -122,7 +122,7 @@ sub _init {
     if (
             not $incoming_errors
         and $errors
-        and @{ $errors->messages() }
+        and @{ $errors->exceptions() }
     ) {
         die $errors;  ## no critic (RequireCarping)
     }

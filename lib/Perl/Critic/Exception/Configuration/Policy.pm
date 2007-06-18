@@ -18,8 +18,8 @@ our $VERSION = 1.053;
 
 use Exception::Class (
     'Perl::Critic::Exception::Configuration::Policy' => {
-        isa         => 'Perl::Critic::Exception',
-        description => 'A problem with global Perl::Critic configuration.',
+        isa         => 'Perl::Critic::Exception::Configuration',
+        description => 'A problem with the configuration of a policy.',
         fields      => [ qw{ policy } ],
     },
 );
@@ -58,7 +58,7 @@ sub full_message {
     return
             qq{The value for the $policy "$option_name" option }
         .   qq{("$option_value")$source }
-        .   $self->suffix();
+        .   $self->message_suffix();
 }
 
 

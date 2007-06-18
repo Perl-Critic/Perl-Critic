@@ -19,13 +19,14 @@ our $VERSION = 1.053;
 my @bundled_policy_names = bundled_policy_names();
 
 my @concrete_exceptions = qw{
-    Internal
+    AggregateConfiguration
     Configuration::Global
     Configuration::Policy
+    Internal
 };
 
 plan tests =>
-        106
+        99
     +   (  9 * scalar @concrete_exceptions  )
     +   ( 14 * scalar @bundled_policy_names );
 
@@ -67,19 +68,6 @@ can_ok('Perl::Critic::Config', 'verbose');
 my $config = Perl::Critic::Config->new( -profile => 'NONE');
 isa_ok($config, 'Perl::Critic::Config');
 is($config->VERSION(), $version_string, 'Perl::Critic::Config version');
-
-#-----------------------------------------------------------------------------
-# Test Perl::Critic::ConfigErrors module interface
-
-use_ok('Perl::Critic::ConfigErrors');
-can_ok('Perl::Critic::ConfigErrors', 'new');
-can_ok('Perl::Critic::ConfigErrors', 'messages');
-can_ok('Perl::Critic::ConfigErrors', 'add_message');
-can_ok('Perl::Critic::ConfigErrors', 'add_bad_option_message');
-
-my $errors = Perl::Critic::ConfigErrors->new();
-isa_ok($errors, 'Perl::Critic::ConfigErrors');
-is($errors->VERSION(), $version_string, 'Perl::Critic::ConfigErrors version');
 
 #-----------------------------------------------------------------------------
 # Test Perl::Critic::Config::Defaults module interface

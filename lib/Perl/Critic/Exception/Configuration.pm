@@ -14,6 +14,8 @@ our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
+use Perl::Critic::Exception::Internal;
+
 use Exception::Class (
     'Perl::Critic::Exception::Configuration' => {
         isa         => 'Perl::Critic::Exception',
@@ -21,8 +23,6 @@ use Exception::Class (
         fields      => [ qw{ option_name option_value source message_suffix } ],
     },
 );
-
-use Perl::Critic::Exception::Internal;
 
 #-----------------------------------------------------------------------------
 
