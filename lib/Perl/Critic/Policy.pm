@@ -123,6 +123,7 @@ sub to_string {
     # Wrap the more expensive ones in sub{} to postpone evaluation
     my %fspec = (
          'O' => sub { $self->_format_supported_parameters(@_) },
+         'U' => sub { $self->_format_lack_of_parameter_metadata(@_) },
          'P' => ref $self,
          'p' => sub { policy_short_name( ref $self ) },
          'T' => sub { join $SPACE, $self->default_themes() },
@@ -141,6 +142,17 @@ sub _format_supported_parameters {
     return join $SPACE, @parameter_names if not $format;
     return join $EMPTY, map { sprintf $format, $_ } @parameter_names;
 }
+
+sub _format_lack_of_parameter_metadata {
+    my ($self, $message) = @_;
+
+    return $EMPTY if $self->parameter_metadata_available();
+    return $message if $message;
+
+    return
+        'Cannot programmatically discover what parameters this policy takes.';
+}
+
 
 #-----------------------------------------------------------------------------
 # Apparently, some perls do not implicitly stringify overloading
@@ -310,6 +322,11 @@ capabilities, look at L<String::Format>. Valid escape characters are:
   Escape    Meaning
   -------   -----------------------------------------------------------------
   %O        Comma-delimited list of supported policy parameters
+  %U        A message stating that the parameters for the policy are
+            unknown if C<parameter_metadata_available()> returns
+            false.  Takes an option of what the message should be,
+            which defaults to "Cannot programmatically discover what
+            parameters this policy takes.".
   %P        Name of the Policy module
   %p        Name of the Policy without the Perl::Critic::Policy:: prefix
   %S        The default severity level of the policy

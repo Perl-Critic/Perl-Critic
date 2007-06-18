@@ -43,7 +43,8 @@ sub _proto_format {
 [%P]
 # set_themes = %t
 # severity   = %s
-%{# %s = \n}O
+%{# %s = \n}O%{# Cannot programmatically discover what parameters this policy takes.}U
+
 END_OF_FORMAT
 
 }
