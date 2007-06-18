@@ -11,6 +11,9 @@
        global options in the command-line parameters and .perlcriticrc file,
        rather than bailing on the first one it encounters.
 
+     * perlcritic now has a "-strictprofile" option which will make warnings
+       about problems in a profile fatal.
+
 [1.053]  Released on 2007-06-02
 
      *DEVELOPMENT RELEASE*

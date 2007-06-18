@@ -358,7 +358,8 @@ __END__
 
 =pod
 
-=for stopwords DGR INI-style API -params pbp refactored -singlepolicy ben Jore
+=for stopwords DGR INI-style API -params pbp refactored -singlepolicy
+-strictprofile ben Jore
 
 =head1 NAME
 
@@ -411,7 +412,7 @@ interface to the service are subject to change.
 
 =over 8
 
-=item C<< new( [ -profile => $FILE, -severity => $N, -theme => $string, -include => \@PATTERNS, -exclude => \@PATTERNS, -top => $N, -only => $B, -force => $B, -verbose => $N ] ) >>
+=item C<< new( [ -profile => $FILE, -severity => $N, -theme => $string, -include => \@PATTERNS, -exclude => \@PATTERNS, -top => $N, -only => $B, -strictprofile => $B, -force => $B, -verbose => $N ] ) >>
 
 =item C<< new( -config => Perl::Critic::Config->new() ) >>
 
@@ -506,6 +507,12 @@ choose from Policies that are mentioned in the user's profile.  If set to a
 false value (which is the default), then Perl::Critic chooses from all the
 Policies that it finds at your site.  You can set the default value for this
 option in your F<.perlcriticrc> file.
+
+B<-strictprofile> is a boolean value.  If set to a true value, Perl::Critic
+will make certain warnings about problems found in a F<.perlcriticrc> or file
+specified via the B<-profile> option fatal.  In particular, Perl::Critic
+normally only C<warn>s about profiles referring to non-existent Policies, but
+this option makes this situation fatal.
 
 B<-force> is a boolean value that controls whether Perl::Critic observes the
 magical C<"## no critic"> pseudo-pragmas in your code.  If set to a true

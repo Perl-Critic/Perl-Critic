@@ -352,6 +352,7 @@ sub _get_option_specification {
         singlepolicy=s
         stern
         statistics!
+        strictprofile!
         theme=s
         top:i
         verbose=s
@@ -460,8 +461,9 @@ C<perlcritic> - Command-line interface to critique Perl source
              [-severity number | name] [-profile file | -noprofile]
              [-top [ number ]] [-theme expression] [-include pattern]
              [-exclude pattern] [-singlepolicy pattern] [-only | -noonly]
-             [-force | -noforce] [-statistics] [-verbose number | format]
-             [-nocolor] [-quiet] {FILE | DIRECTORY | STDIN}
+             [-strictprofile | -nostrictprofile] [-force | -noforce]
+             [-statistics] [-verbose number | format] [-nocolor]
+             [-quiet] {FILE | DIRECTORY | STDIN}
 
   perlcritic -doc pattern [...]
 
@@ -762,6 +764,14 @@ Directs perlcritic to apply only Policies that are explicitly mentioned in
 your F<.perlcriticrc> file.  This is useful if you want to use just a small
 subset of Policies without having to disable all the others.  You can set the
 default value for this option in your F<.perlcriticrc> file.
+
+=item C<-strictprofile>
+
+Directs perlcritic to make certain warnings about problems found in a
+F<.perlcriticrc> or file specified via the C<-profile> option fatal.  In
+particular, perlcritic normally only warns about profiles referring to
+non-existent Policies, but this option makes this situation fatal.  You can
+set the default value for this option in your F<.perlcriticrc> file.
 
 =item C<-count>
 

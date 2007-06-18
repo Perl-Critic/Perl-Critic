@@ -38,13 +38,14 @@ sub _init {
     $self->{_include}    = [ words_from_string( $include ) ];
 
     # Single-value defaults
-    $self->{_force}        = delete $args{force}        || $FALSE;
-    $self->{_only}         = delete $args{only}         || $FALSE;
-    $self->{_singlepolicy} = delete $args{singlepolicy} || $EMPTY;
-    $self->{_severity}     = delete $args{severity}     || $SEVERITY_HIGHEST;
-    $self->{_theme}        = delete $args{theme}        || $EMPTY;
-    $self->{_top}          = delete $args{top}          || $FALSE;
-    $self->{_verbose}      = delete $args{verbose}      || 4;
+    $self->{_force}         = delete $args{force}         || $FALSE;
+    $self->{_only}          = delete $args{only}          || $FALSE;
+    $self->{_strictprofile} = delete $args{strictprofile} || $FALSE;
+    $self->{_singlepolicy}  = delete $args{singlepolicy}  || $EMPTY;
+    $self->{_severity}      = delete $args{severity}      || $SEVERITY_HIGHEST;
+    $self->{_theme}         = delete $args{theme}         || $EMPTY;
+    $self->{_top}           = delete $args{top}           || $FALSE;
+    $self->{_verbose}       = delete $args{verbose}       || 4;
 
     # If there's anything left, warn about invalid settings
     if ( my @remaining = sort keys %args ){
@@ -89,6 +90,13 @@ sub include {
 sub only {
     my ($self) = @_;
     return $self->{_only};
+}
+
+#-----------------------------------------------------------------------------
+
+sub strictprofile {
+    my ($self) = @_;
+    return $self->{_strictprofile};
 }
 
 #-----------------------------------------------------------------------------
@@ -171,6 +179,11 @@ there are no default exclusion patterns, then the list will be empty.
 =item C< only() >
 
 Returns the default value of the C<only> flag (Either 1 or 0).
+
+=item C< strictprofile() >
+
+Returns the default value of the C<strictprofile> flag (Either 1 or
+0).
 
 =item C< singlepolicy() >
 
