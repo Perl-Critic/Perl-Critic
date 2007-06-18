@@ -20,7 +20,7 @@
        produced by the "--statistics" option.
 
      Feature requests:
-     * A value for "nocolor" can now be specified in a .perlcriticrc.
+     * A value for "color" can now be specified in a .perlcriticrc.
        http://rt.cpan.org/Ticket/Display.html?id=24877
 
      New Policies:

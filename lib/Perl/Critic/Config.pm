@@ -81,8 +81,7 @@ sub _init {
         no warnings 'numeric'; ## no critic (ProhibitNoWarnings)
         $self->{_force} = 1 * _dor( $args{-force}, $defaults->force() );
         $self->{_only}  = 1 * _dor( $args{-only},  $defaults->only()  );
-        $self->{_nocolor} =
-            1 * _dor( $args{-nocolor},  $defaults->nocolor() );
+        $self->{_color} = 1 * _dor( $args{-color}, $defaults->color() );
         $self->{_strict_profile} =
             1 * _dor( $args{'-strict-profile'}, $defaults->strict_profile() );
     }
@@ -600,9 +599,9 @@ sub verbose {
 
 #-----------------------------------------------------------------------------
 
-sub nocolor {
+sub color {
     my $self = shift;
-    return $self->{_nocolor};
+    return $self->{_color};
 }
 
 #-----------------------------------------------------------------------------
@@ -619,7 +618,7 @@ __END__
 
 =pod
 
-=for stopwords -params INI-style -nocolor
+=for stopwords -params INI-style
 
 =head1 NAME
 
@@ -638,7 +637,7 @@ constructor will do it for you.
 
 =over 8
 
-=item C<< new( [ -profile => $FILE, -severity => $N, -theme => $string, -include => \@PATTERNS, -exclude => \@PATTERNS, -single-policy => $PATTERN, -top => $N, -only => $B, -strict-profile => $B, -force => $B, -verbose => $N, -nocolor => $B ] ) >>
+=item C<< new( [ -profile => $FILE, -severity => $N, -theme => $string, -include => \@PATTERNS, -exclude => \@PATTERNS, -single-policy => $PATTERN, -top => $N, -only => $B, -strict-profile => $B, -force => $B, -verbose => $N, -color => $B ] ) >>
 
 =item C<< new() >>
 
@@ -716,8 +715,8 @@ B<-verbose> can be a positive integer (from 1 to 10), or a literal
 format specification.  See L<Perl::Critic::Violations> for an
 explanation of format specifications.
 
-B<-nocolor> is not used by Perl::Critic but is provided for the
-benefit of L<perlcritic>.
+B<-color> is not used by Perl::Critic but is provided for the benefit
+of L<perlcritic>.
 
 =back
 
@@ -787,9 +786,9 @@ Returns the value of the C<-top> attribute for this Config.
 
 Returns the value of the C<-verbose> attribute for this Config.
 
-=item C< nocolor() >
+=item C< color() >
 
-Returns the value of the C<-nocolor> attribute for this Config.
+Returns the value of the C<-color> attribute for this Config.
 
 =back
 
@@ -839,7 +838,7 @@ corresponding Perl::Critic constructor argument.
     theme     = risky + (pbp * security) - cosmetic   #A theme expression
     include   = NamingConventions ClassHierarchies    #Space-delimited list
     exclude   = Variables  Modules::RequirePackage    #Space-delimited list
-    nocolor   = 1                                     #Zero or One
+    color     = 1                                     #Zero or One
 
 The remainder of the configuration file is a series of blocks like
 this:
