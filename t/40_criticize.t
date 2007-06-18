@@ -51,14 +51,13 @@ if ( $ENV{PERL_CRITIC_CACHE} ) {
 # Strict object testing -- prevent direct hash key access
 
 eval { require Devel::EnforceEncapsulation; };
-diag($EMPTY);
 if ( !$EVAL_ERROR ) {
     for my $pkg ( '', '::Config', '::Policy', '::Violation' ) {
-        diag('apply Devel::EnforceEncapsulation to Perl::Critic'.$pkg);
         Devel::EnforceEncapsulation->apply_to('Perl::Critic'.$pkg);
     }
 }
 else {
+    diag($EMPTY);
     diag(
         'You should install Devel::EnforceEncapsulation, but other tests '
             . 'will still run.'
