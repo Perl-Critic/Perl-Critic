@@ -23,7 +23,9 @@ use Perl::Critic::PolicyFactory (-test => 1);
 
 our $VERSION = 1.053;
 our @EXPORT_OK = qw(
-    pcritique critique fcritique
+    pcritique pcritique_with_violations
+    critique  critique_with_violations
+    fcritique fcritique_with_violations
     subtests_in_tree
     should_skip_author_tests
     get_author_test_skip_message
@@ -43,15 +45,30 @@ sub block_perlcriticrc {
 }
 
 #-----------------------------------------------------------------------------
+# Criticize a code snippet using only one policy.  Returns the violations.
+
+sub pcritique_with_violations {
+    my($policy, $code_ref, $config_ref) = @_;
+    my $c = Perl::Critic->new( -profile => 'NONE' );
+    $c->add_policy(-policy => $policy, -config => $config_ref);
+    return $c->critique($code_ref);
+}
+
+#-----------------------------------------------------------------------------
 # Criticize a code snippet using only one policy.  Returns the number
 # of violations
 
 sub pcritique {
-    my($policy, $code_ref, $config_ref) = @_;
-    my $c = Perl::Critic->new( -profile => 'NONE' );
-    $c->add_policy(-policy => $policy, -config => $config_ref);
-    my @v = $c->critique($code_ref);
-    return scalar @v;
+    return scalar pcritique_with_violations(@_);
+}
+
+#-----------------------------------------------------------------------------
+# Criticize a code snippet using a specified config.  Returns the violations.
+
+sub critique_with_violations {
+    my ($code_ref, $config_ref) = @_;
+    my $c = Perl::Critic->new( %{$config_ref} );
+    return $c->critique($code_ref);
 }
 
 #-----------------------------------------------------------------------------
@@ -59,17 +76,14 @@ sub pcritique {
 # number of violations
 
 sub critique {
-    my ($code_ref, $config_ref) = @_;
-    my $c = Perl::Critic->new( %{$config_ref} );
-    my @v = $c->critique($code_ref);
-    return scalar @v;
+    return scalar critique_with_violations(@_);
 }
 
 #-----------------------------------------------------------------------------
-# Like pcritique, but forces a PPI::Document::File context.  The
-# $filename arg is a Unix-style relative path, like 'Foo/Bar.pm'
+# Like pcritique_with_violations, but forces a PPI::Document::File context.
+# The $filename arg is a Unix-style relative path, like 'Foo/Bar.pm'
 
-sub fcritique {
+sub fcritique_with_violations {
     my($policy, $code_ref, $filename, $config_ref) = @_;
     my $c = Perl::Critic->new( -profile => 'NONE' );
     $c->add_policy(-policy => $policy, -config => $config_ref);
@@ -94,7 +108,15 @@ sub fcritique {
     if ($err) {
         confess $err;
     }
-    return scalar @v;
+    return @v;
+}
+
+#-----------------------------------------------------------------------------
+# Like pcritique, but forces a PPI::Document::File context.  The
+# $filename arg is a Unix-style relative path, like 'Foo/Bar.pm'
+
+sub fcritique {
+    return scalar fcritique_with_violations(@_);
 }
 
 sub subtests_in_tree {
@@ -303,14 +325,35 @@ This handy method disables the search for that file -- simply call it at the
 top of your F<.t> program.  Note that this is not easily reversible, but that
 should not matter.
 
+=item critique_with_violations( $code_string_ref, $config_ref )
+
+Test a block of code against the specified Perl::Critic::Config instance (or
+C<undef> for the default).  Returns the violations that occurred.
+
 =item critique( $code_string_ref, $config_ref )
 
 Test a block of code against the specified Perl::Critic::Config instance (or
-C<undef> for the default).  Returns the number of violations that occurred
+C<undef> for the default).  Returns the number of violations that occurred.
+
+=item pcritique_with_violations( $policy_name, $code_string_ref, $config_ref )
+
+Like C<critique_with_violations()>, but tests only a single policy instead of
+the whole bunch.
 
 =item pcritique( $policy_name, $code_string_ref, $config_ref )
 
 Like C<critique()>, but tests only a single policy instead of the whole bunch.
+
+=item fcritique_with_violations( $policy_name, $code_string_ref, $filename, $config_ref )
+
+Like C<pcritique_with_violations()>, but pretends that the code was loaded
+from the specified filename.  This is handy for testing policies like
+C<Modules::RequireFilenameMatchesPackage> which care about the filename that
+the source derived from.
+
+The C<$filename> parameter must be a relative path, not absolute.  The file
+and all necessary subdirectories will be created via L<File::Temp> and will be
+automatically deleted.
 
 =item fcritique( $policy_name, $code_string_ref, $filename, $config_ref )
 
