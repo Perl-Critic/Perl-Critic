@@ -215,6 +215,10 @@ Export symbols via C<@EXPORT_OK> or C<%EXPORT_TAGS> instead of C<@EXPORT>.  [Sev
 
 Ban modules that aren't blessed by your shop. [Severity 5]
 
+=head2 L<Perl::Critic::Policy::Modules::ProhibitExcessMainComplexity>
+
+Minimize complexity in code that is B<outside> of subroutines. [Severity 3]
+
 =head2 L<Perl::Critic::Policy::Modules::ProhibitMultiplePackages>
 
 Put packages (especially subclasses) in separate files. [Severity 4]

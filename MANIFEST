@@ -63,6 +63,7 @@ lib/Perl/Critic/Policy/Miscellanea/ProhibitTies.pm
 lib/Perl/Critic/Policy/Miscellanea/RequireRcsKeywords.pm
 lib/Perl/Critic/Policy/Modules/ProhibitAutomaticExportation.pm
 lib/Perl/Critic/Policy/Modules/ProhibitEvilModules.pm
+lib/Perl/Critic/Policy/Modules/ProhibitExcessMainComplexity.pm
 lib/Perl/Critic/Policy/Modules/ProhibitMultiplePackages.pm
 lib/Perl/Critic/Policy/Modules/RequireBarewordIncludes.pm
 lib/Perl/Critic/Policy/Modules/RequireEndWithOne.pm
@@ -209,6 +210,7 @@ t/Miscellanea/ProhibitTies.run
 t/Miscellanea/RequireRcsKeywords.run
 t/Modules/ProhibitAutomaticExportation.run
 t/Modules/ProhibitEvilModules.run
+t/Modules/ProhibitExcessMainComplexity.run
 t/Modules/ProhibitMultiplePackages.run
 t/Modules/RequireBarewordIncludes.run
 t/Modules/RequireEndWithOne.run

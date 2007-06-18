@@ -1,0 +1,102 @@
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+#-----------------------------------------------------------------------------
+
+## name param-based failure
+## failures 0
+## parms { max_mccabe => 100 }
+## cut
+
+if ( $foo && $bar || $baz ) {
+  open my $fh, '<', $file or die $!;
+}
+elsif ( $blah >>= some_function() ) {
+  return if $barf;
+}
+else {
+  $results = $condition ? 1 : 0;
+}
+croak unless $result;
+
+while( $condition ){ frobulate() }
+until( $foo > $baz ){ blech() }
+
+#-----------------------------------------------------------------------------
+
+## name parm-based failure
+## failures 1
+## parms { max_mccabe => 1 }
+## cut
+
+
+if ( $foo && $bar || $baz ) {
+  open my $fh, '<', $file or die $!;
+}
+elsif ( $blah >>= some_function() ) {
+  return if $barf;
+}
+else {
+  $results = $condition ? 1 : 0;
+}
+
+croak unless $result;
+
+#-----------------------------------------------------------------------------
+
+## name exclude code inside subroutines
+## failures 0
+## parms { max_mccabe => 2 }
+## cut
+
+sub foo {
+    if ( $foo && $bar || $baz ) {
+        open my $fh, '<', $file or die $!;
+    }
+    elsif ( $blah >>= some_function() ) {
+        return if $barf;
+    }
+    else {
+        $results = $condition ? 1 : 0;
+    }
+
+    croak unless $result;
+}
+
+#main code here!
+die if $condition;
+
+sub bar {
+    if ( $foo && $bar || $baz ) {
+        open my $fh, '<', $file or die $!;
+    }
+    elsif ( $blah >>= some_function() ) {
+        return if $barf;
+    }
+    else {
+        $results = $condition ? 1 : 0;
+    }
+
+    croak unless $result;
+}
+
+#-----------------------------------------------------------------------------
+
+## name empty module
+## failures 0
+## cut
+
+##############################################################################
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :
+

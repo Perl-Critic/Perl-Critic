@@ -17,12 +17,14 @@
 
      Feature requests:
      * A value for "nocolor" can now be specified in a .perlcriticrc.
-       http://rt.perl.org/rt3/Ticket/Display.html?id=24877
+       http://rt.cpan.org/Ticket/Display.html?id=24877
 
      New Policies:
      * ValuesAndExpressions::ProhibitQuotesAsQuotelikeOperatorDelimiters
-       As suggested in http://rt.cpan.org/Public/Bug/Display.html?id=23290.
+       As suggested in http://rt.cpan.org/Ticket/Display.html?id=23290.
      * ValuesAndExpressions::ProhibitLongChainsOfMethodCalls
+     * Modules::ProhibitExcessMainComplexity
+       As suggested in http://rt.cpan.org/Ticket/Display.html?id=24699
 
      Minor changes:
      * The perlcritic "--profileproto" option now emits the short names for
