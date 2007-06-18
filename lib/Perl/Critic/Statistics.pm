@@ -21,11 +21,10 @@ our $VERSION = 1.053;
 #-----------------------------------------------------------------------------
 
 sub new {
-    my ( $class, $critic ) = @_;
+    my ( $class ) = @_;
 
     my $self = bless {}, $class;
 
-    $self->{_critic} = $critic;
     $self->{_modules} = 0;
     $self->{_subs} = 0;
     $self->{_statements} = 0;
