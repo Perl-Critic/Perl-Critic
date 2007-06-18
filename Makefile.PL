@@ -58,6 +58,7 @@ WriteMakefile(
     PREREQ_PM      => {
         'B::Keywords'           => 1.05,
         'Config::Tiny'          => 2,
+        'Exception::Class'      => 1.23,
         'File::Spec'            => 0,
         'File::Spec::Unix'      => 0,
         'IO::String'            => 0,

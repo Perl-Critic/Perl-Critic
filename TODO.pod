@@ -281,6 +281,8 @@ Recommend that C<if (scalar @array)> be rewritten as C<if (@array)>.
 
 =item * Make parameter declarations at compile time instead of at run time.
 
+=item * Have the Policy import() inject accessors for parameters into subclasses.
+
 =item * Switch to using exceptions instead of die and confess.
 
 =item * Move package globals, e.g. P::C::Violation::FORMAT, to instance variables on Perl::Critic.

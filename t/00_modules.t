@@ -17,7 +17,17 @@ use English qw(-no_match_vars);
 our $VERSION = 1.053;
 
 my @bundled_policy_names = bundled_policy_names();
-plan tests => 106 + 14 * scalar @bundled_policy_names;
+
+my @concrete_exceptions = qw{
+    Internal
+    Configuration::Global
+    Configuration::Policy
+};
+
+plan tests =>
+        106
+    +   (  9 * scalar @concrete_exceptions  )
+    +   ( 14 * scalar @bundled_policy_names );
 
 # pre-compute for version comparisons
 my $version_string = __PACKAGE__->VERSION;
@@ -194,7 +204,44 @@ can_ok('Perl::Critic::ProfilePrototype', 'to_string');
 
 my $prototype = Perl::Critic::ProfilePrototype->new();
 isa_ok($prototype, 'Perl::Critic::ProfilePrototype');
-is($listing->VERSION(), $version_string, 'Perl::Critic::ProfilePrototype version');
+is($prototype->VERSION(), $version_string, 'Perl::Critic::ProfilePrototype version');
+
+#-----------------------------------------------------------------------------
+# Test module interface for exceptions
+
+{
+    foreach my $class (
+        map { "Perl::Critic::Exception::$_" } @concrete_exceptions
+    ) {
+        use_ok($class);
+        can_ok($class, 'new');
+        can_ok($class, 'throw');
+        can_ok($class, 'message');
+        can_ok($class, 'error');
+        can_ok($class, 'full_message');
+        can_ok($class, 'as_string');
+
+        my $exception = $class->new();
+        isa_ok($exception, $class);
+        is($exception->VERSION(), $version_string, "$class version");
+    }
+}
+
+#{
+#    foreach my $class (
+#        qw{
+#            Perl::Critic::Exception::Configuration::Global
+#            Perl::Critic::Exception::Configuration::Policy
+#        }
+#    ) {
+#        can_ok($class, 'option_name');
+#        can_ok($class, 'option_value');
+#        can_ok($class, 'source');
+#        can_ok($class, 'message_suffix');
+#    }
+#
+#    can_ok('Perl::Critic::Exception::Configuration::Policy', 'policy');
+#}
 
 #-----------------------------------------------------------------------------
 # Test module interface for each Policy subclass
