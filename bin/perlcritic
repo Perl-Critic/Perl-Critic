@@ -193,17 +193,19 @@ sub critique {
     for my $file (@files) {
 
         eval {
-
             my @violations = $CRITIC->critique($file);
-            render_report( $file, $opts_ref, @violations );
             $number_of_violations += scalar @violations;
+
+            if (not $opts_ref->{-summary}) {
+                render_report( $file, $opts_ref, @violations )
+            }
         };
 
         confess qq{Fatal error while critiquing "$file": $EVAL_ERROR}
             if $EVAL_ERROR;
     }
 
-    if ( $opts_ref->{-statistics} ) {
+    if ( $opts_ref->{-statistics} or $opts_ref->{-summary} ) {
         my $stats = $CRITIC->statistics();
         report_statistics( $opts_ref, $stats );
     }
@@ -253,8 +255,11 @@ sub report_statistics {
     my ($opts_ref, $statistics) = @_;
 
     if (
-            $statistics->total_violations()
-        or  not $opts_ref->{-quiet} and $statistics->modules()
+            not $opts_ref->{-summary}
+        and (
+                $statistics->total_violations()
+            or  not $opts_ref->{-quiet} and $statistics->modules()
+        )
     ) {
         print "\n"; # There's prior output that we want to separate from.
     }
@@ -353,6 +358,7 @@ sub _get_option_specification {
         singlepolicy=s
         stern
         statistics!
+        summary!
         strictprofile!
         theme=s
         top:i
@@ -463,7 +469,7 @@ C<perlcritic> - Command-line interface to critique Perl source
              [-top [ number ]] [-theme expression] [-include pattern]
              [-exclude pattern] [-singlepolicy pattern] [-only | -noonly]
              [-strictprofile | -nostrictprofile] [-force | -noforce]
-             [-statistics] [-verbose number | format] [-nocolor]
+             [-statistics] [-summary] [-verbose number | format] [-nocolor]
              [-quiet] {FILE | DIRECTORY | STDIN}
 
   perlcritic -doc pattern [...]
@@ -698,6 +704,11 @@ set the default value for this option in your F<.perlcriticrc> file.
 
 Causes several statistics about the code being scanned and the violations
 found to be reported after any other output.
+
+=item C<-summary>
+
+Like the C<-statistics> option, but suppresses normal output and only shows
+the statistics.
 
 =item C<-verbose N | FORMAT>
 
