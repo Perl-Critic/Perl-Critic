@@ -12,8 +12,12 @@
        global options in the command-line parameters and .perlcriticrc file,
        rather than bailing on the first one it encounters.
 
-     * perlcritic now has a "--strictprofile" option which will make warnings
+     * perlcritic now has a "--strict-profile" option which will make warnings
        about problems in a profile fatal.
+
+     * perlcritic now has a "--statistics-only" option which suppresses the
+       display of individual violations and only shows the additional output
+       produced by the "--statistics" option.
 
      Feature requests:
      * A value for "nocolor" can now be specified in a .perlcriticrc.
@@ -27,8 +31,13 @@
        As suggested in http://rt.cpan.org/Ticket/Display.html?id=24699
 
      Minor changes:
-     * The perlcritic "--profileproto" option now emits the short names for
+     * The perlcritic "--profile-proto" option now emits the short names for
        policies, rather than the full ones.
+
+     * The "-profileproto" and "-singlepolicy" options have been renamed to
+       "-profile-proto" and "-single-policy" in order to make the growing
+       number of command-line options comprehensible.  The change of
+       "singlepolicy" also affects your F<.perlcriticrc> file.
 
 [1.053]  Released on 2007-06-02
 

@@ -11,7 +11,9 @@ use strict;
 use warnings;
 use Carp qw(cluck);
 use English qw(-no_match_vars);
-use Perl::Critic::Utils qw{ :booleans :characters :severities :data_conversion };
+use Perl::Critic::Utils qw{
+    :booleans :characters :severities :data_conversion $DEFAULT_VERBOSITY
+};
 
 our $VERSION = 1.053;
 
@@ -38,15 +40,15 @@ sub _init {
     $self->{_include}    = [ words_from_string( $include ) ];
 
     # Single-value defaults
-    $self->{_force}         = delete $args{force}         || $FALSE;
-    $self->{_only}          = delete $args{only}          || $FALSE;
-    $self->{_strictprofile} = delete $args{strictprofile} || $FALSE;
-    $self->{_singlepolicy}  = delete $args{singlepolicy}  || $EMPTY;
-    $self->{_severity}      = delete $args{severity}      || $SEVERITY_HIGHEST;
-    $self->{_theme}         = delete $args{theme}         || $EMPTY;
-    $self->{_top}           = delete $args{top}           || $FALSE;
-    $self->{_verbose}       = delete $args{verbose}       || 4;
-    $self->{_nocolor}       = delete $args{nocolor}       || $FALSE;
+    $self->{_force}          = delete $args{force}            || $FALSE;
+    $self->{_only}           = delete $args{only}             || $FALSE;
+    $self->{_strict_profile} = delete $args{'strict-profile'} || $FALSE;
+    $self->{_single_policy}  = delete $args{'single-policy'}  || $EMPTY;
+    $self->{_severity}       = delete $args{severity}         || $SEVERITY_HIGHEST;
+    $self->{_theme}          = delete $args{theme}            || $EMPTY;
+    $self->{_top}            = delete $args{top}              || $FALSE;
+    $self->{_verbose}        = delete $args{verbose}          || $DEFAULT_VERBOSITY;
+    $self->{_nocolor}        = delete $args{nocolor}          || $FALSE;
 
     # If there's anything left, warn about invalid settings
     if ( my @remaining = sort keys %args ){
@@ -95,16 +97,16 @@ sub only {
 
 #-----------------------------------------------------------------------------
 
-sub strictprofile {
+sub strict_profile {
     my ($self) = @_;
-    return $self->{_strictprofile};
+    return $self->{_strict_profile};
 }
 
 #-----------------------------------------------------------------------------
 
-sub singlepolicy {
+sub single_policy {
     my ($self) = @_;
-    return $self->{_singlepolicy};
+    return $self->{_single_policy};
 }
 
 #-----------------------------------------------------------------------------
@@ -188,12 +190,12 @@ there are no default exclusion patterns, then the list will be empty.
 
 Returns the default value of the C<only> flag (Either 1 or 0).
 
-=item C< strictprofile() >
+=item C< strict_profile() >
 
-Returns the default value of the C<strictprofile> flag (Either 1 or
+Returns the default value of the C<strict_profile> flag (Either 1 or
 0).
 
-=item C< singlepolicy() >
+=item C< single_policy() >
 
 Returns the default single-policy pattern.  (As a string.)
 

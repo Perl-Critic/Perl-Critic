@@ -6,7 +6,7 @@ severity = 6
 theme = &&
 include = *
 exclude = *
-singlepolicy = *
+single-policy = *
 top = -1
 verbose = 2095
 

@@ -358,8 +358,8 @@ __END__
 
 =pod
 
-=for stopwords DGR INI-style API -params pbp refactored -singlepolicy
--strictprofile ben Jore -nocolor
+=for stopwords DGR INI-style API -params pbp refactored
+ben Jore -nocolor
 
 =head1 NAME
 
@@ -412,7 +412,7 @@ interface to the service are subject to change.
 
 =over 8
 
-=item C<< new( [ -profile => $FILE, -severity => $N, -theme => $string, -include => \@PATTERNS, -exclude => \@PATTERNS, -top => $N, -only => $B, -strictprofile => $B, -force => $B, -verbose => $N ], -nocolor => $B ) >>
+=item C<< new( [ -profile => $FILE, -severity => $N, -theme => $string, -include => \@PATTERNS, -exclude => \@PATTERNS, -top => $N, -only => $B, -strict-profile => $B, -force => $B, -verbose => $N ], -nocolor => $B ) >>
 
 =item C<< new( -config => Perl::Critic::Config->new() ) >>
 
@@ -489,7 +489,7 @@ F<.perlcriticrc> file.  You can also use C<-exclude> in conjunction with the
 C<-include> option.  Note that C<-exclude> takes precedence over C<-include>
 when a Policy matches both patterns.
 
-B<-singlepolicy> is a string C<PATTERN>.  Only one policy that matches
+B<-single-policy> is a string C<PATTERN>.  Only one policy that matches
 C<m/$PATTERN/imx> will be used.  Policies that do not match will be excluded.
 This option has precedence over the C<-severity>, C<-theme>, C<-include>,
 C<-exclude>, and C<-only> options.  You can set the default value for this
@@ -508,7 +508,7 @@ false value (which is the default), then Perl::Critic chooses from all the
 Policies that it finds at your site.  You can set the default value for this
 option in your F<.perlcriticrc> file.
 
-B<-strictprofile> is a boolean value.  If set to a true value, Perl::Critic
+B<-strict-profile> is a boolean value.  If set to a true value, Perl::Critic
 will make certain warnings about problems found in a F<.perlcriticrc> or file
 specified via the B<-profile> option fatal.  In particular, Perl::Critic
 normally only C<warn>s about profiles referring to non-existent Policies, but

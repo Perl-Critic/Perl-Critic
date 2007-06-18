@@ -35,6 +35,9 @@ our @EXPORT_OK = qw(
     $SEVERITY_LOWEST
     @SEVERITY_NAMES
 
+    $DEFAULT_VERBOSITY
+    $DEFAULT_VERBOSITY_WITH_FILE_NAME
+
     $COLON
     $COMMA
     $DQUOTE
@@ -859,7 +862,9 @@ my %FORMAT_OF = (
    11 => "%m at line %l, near '%r'.\n  %p (Severity: %s)\n%d\n",
 );
 
-my $DEFAULT_FORMAT = $FORMAT_OF{4};
+our $DEFAULT_VERBOSITY = 4;
+our $DEFAULT_VERBOSITY_WITH_FILE_NAME = 5;
+my $DEFAULT_FORMAT = $FORMAT_OF{$DEFAULT_VERBOSITY};
 
 sub is_valid_numeric_verbosity {
     my ($verbosity) = @_;
@@ -1395,6 +1400,15 @@ These numeric constants define the relative severity of violating each
 L<Perl::Critic::Policy>.  The C<get_severity> and C<default_severity> methods
 of every Policy subclass must return one of these values. Can be imported via
 the C<:severities> tag.
+
+=item C<$DEFAULT_VERBOSITY>
+
+The default numeric verbosity.
+
+=item C<$DEFAULT_VERBOSITY_WITH_FILE_NAME>
+
+The numeric verbosity that corresponds to the format indicated by
+C<$DEFAULT_VERBOSITY>, but with the file name prefixed to it.
 
 =item C<$TRUE>
 

@@ -94,13 +94,13 @@ sub _parse_command_line {
 
 sub _dispatch_special_requests {
     my (%opts) = @_;
-    if ( $opts{help}         ) { pod2usage( -verbose => 0 )   }  #Exits
-    if ( $opts{options}      ) { pod2usage( -verbose => 1 )   }  #Exits
-    if ( $opts{man}          ) { pod2usage( -verbose => 2 )   }  #Exits
-    if ( $opts{Version}      ) { print "$VERSION\n"; exit 0;  }  #Exits
-    if ( $opts{list}         ) { render_policy_listing();     }  #Exits
-    if ( $opts{profileproto} ) { render_profile_prototype();  }  #Exits
-    if ( $opts{doc}          ) { policy_docs( $opts{doc} );   }  #Exits
+    if ( $opts{help}            ) { pod2usage( -verbose => 0 )  }  #Exits
+    if ( $opts{options}         ) { pod2usage( -verbose => 1 )  }  #Exits
+    if ( $opts{man}             ) { pod2usage( -verbose => 2 )  }  #Exits
+    if ( $opts{Version}         ) { print "$VERSION\n"; exit 0; }  #Exits
+    if ( $opts{list}            ) { render_policy_listing();    }  #Exits
+    if ( $opts{'profile-proto'} ) { render_profile_prototype(); }  #Exits
+    if ( $opts{doc}             ) { policy_docs( $opts{doc} );  }  #Exits
     return 1;
 }
 
@@ -197,7 +197,7 @@ sub critique {
             my @violations = $CRITIC->critique($file);
             $number_of_violations += scalar @violations;
 
-            if (not $opts_ref->{-summary}) {
+            if (not $opts_ref->{'-statistics-only'}) {
                 render_report( $file, $opts_ref, @violations )
             }
         };
@@ -206,7 +206,7 @@ sub critique {
             if $EVAL_ERROR;
     }
 
-    if ( $opts_ref->{-statistics} or $opts_ref->{-summary} ) {
+    if ( $opts_ref->{-statistics} or $opts_ref->{'-statistics-only'} ) {
         my $stats = $CRITIC->statistics();
         report_statistics( $opts_ref, $stats );
     }
@@ -256,7 +256,7 @@ sub report_statistics {
     my ($opts_ref, $statistics) = @_;
 
     if (
-            not $opts_ref->{-summary}
+            not $opts_ref->{'-statistics-only'}
         and (
                 $statistics->total_violations()
             or  not $opts_ref->{-quiet} and $statistics->modules()
@@ -354,14 +354,14 @@ sub _get_option_specification {
         only!
         options
         profile=s
-        profileproto
+        profile-proto
         quiet
         severity=i
-        singlepolicy=s
+        single-policy=s
         stern
         statistics!
-        summary!
-        strictprofile!
+        statistics-only!
+        strict-profile!
         theme=s
         top:i
         verbose=s
@@ -457,8 +457,9 @@ __END__
 
 =pod
 
-=for stopwords DGR INI-style vim-fu minibuffer -noprofile API ben Jore
-formatter Peshak pbp Komodo screenshots
+=for stopwords DGR INI-style vim-fu minibuffer -noprofile API -singlepolicy
+singlepolicy -profileproto -profile-proto ben Jore formatter Peshak pbp Komodo
+screenshots
 
 =head1 NAME
 
@@ -469,14 +470,14 @@ C<perlcritic> - Command-line interface to critique Perl source
   perlcritic [-12345 | -brutal | -cruel | -harsh | -stern | -gentle]
              [-severity number | name] [-profile file | -noprofile]
              [-top [ number ]] [-theme expression] [-include pattern]
-             [-exclude pattern] [-singlepolicy pattern] [-only | -noonly]
-             [-strictprofile | -nostrictprofile] [-force | -noforce]
-             [-statistics] [-summary] [-verbose number | format] [-nocolor]
-             [-quiet] {FILE | DIRECTORY | STDIN}
+             [-exclude pattern] [-single-policy pattern] [-only | -noonly]
+             [-strict-profile | -nostrict-profile] [-force | -noforce]
+             [-statistics] [-statistics-only] [-verbose number | format]
+             [-nocolor] [-quiet] {FILE | DIRECTORY | STDIN}
 
   perlcritic -doc pattern [...]
 
-  perlcritic {-list | -profileproto | -help | -options | -man | -Version}
+  perlcritic {-list | -profile-proto | -help | -options | -man | -Version}
 
 =head1 DESCRIPTION
 
@@ -659,14 +660,14 @@ with the C<-include> option.  Note that C<-exclude> takes precedence over
 C<-include> when a Policy matches both patterns.  You can set the default
 value for this option in your F<.perlcriticrc> file.
 
-=item C<-singlepolicy PATTERN>
+=item C<-single-policy PATTERN>
 
 Directs C<perlcritic> to apply just one Policy module matching the regex
 C</PATTERN/imx>, and exclude all other Policies.  This option has precedence
 over the C<-severity>, C<-theme>, C<-include>, C<-exclude>, and C<-only>
 options.  For example:
 
-  perlcritic -singlepolicy=nowarnings my_file.pl
+  perlcritic -single-policy=nowarnings my_file.pl
 
 This would cause C<perlcritic> to apply just the C<ProhibitNoWarnings> Policy,
 regardless of the severity level setting.  No other Policies would be applied.
@@ -707,7 +708,7 @@ set the default value for this option in your F<.perlcriticrc> file.
 Causes several statistics about the code being scanned and the violations
 found to be reported after any other output.
 
-=item C<-summary>
+=item C<-statistics-only>
 
 Like the C<-statistics> option, but suppresses normal output and only shows
 the statistics.
@@ -764,7 +765,7 @@ Displays a condensed listing of all the L<Perl::Critic::Policy> modules that
 are found on this machine.  For each Policy, the name, default severity and
 default themes are shown.
 
-=item C<-profileproto>
+=item C<-profile-proto>
 
 Displays an expanded listing of all the L<Perl::Critic::Policy> modules that
 are found on this machine.  For each Policy, the name, default severity and
@@ -779,7 +780,7 @@ your F<.perlcriticrc> file.  This is useful if you want to use just a small
 subset of Policies without having to disable all the others.  You can set the
 default value for this option in your F<.perlcriticrc> file.
 
-=item C<-strictprofile>
+=item C<-strict-profile>
 
 Directs perlcritic to make certain warnings about problems found in a
 F<.perlcriticrc> or file specified via the C<-profile> option fatal.  In
@@ -1122,6 +1123,13 @@ Perl-Critic is evolving rapidly.  As such, some of the interfaces have changed
 in ways that are not backward-compatible.  If you have been using an older
 version of Perl-Critic and/or you have been developing custom Policy modules,
 please read this section carefully.
+
+=head2 VERSION 1.xxx
+
+The "-profileproto" and "-singlepolicy" options have been renamed to
+"-profile-proto" and "-single-policy" in order to make the growing number of
+command-line options comprehensible.  The change of "singlepolicy" also
+affects your F<.perlcriticrc> file.
 
 =head2 VERSION 0.23
 
