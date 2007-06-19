@@ -1301,6 +1301,23 @@ C<< <users-subscribe@perlcritic.tigris.org> >>.  See also
 L<the archives|http://perlcritic.tigris.org/servlets/SummarizeList?listName=users>.
 You can also contact the author at C<< <thaljef@cpan.org> >>.
 
+=head1 SEE ALSO
+
+There are a number of distributions of additional Policies available.  A few
+are listed here:
+
+L<Perl::Critic::More>
+L<Perl::Critic::Bangs>
+L<Perl::Critic::Lax>
+L<Perl::Critic::StricterSubs>
+L<Perl::Critic::Swift>
+
+There are also a couple of distributions that will install all the
+Perl::Critic related modules known to the development team:
+
+L<Bundle::Perl::Critic>
+L<Task::Perl::Critic>
+
 =head1 BUGS
 
 Scrutinizing Perl code is hard for humans, let alone machines.  If you find
