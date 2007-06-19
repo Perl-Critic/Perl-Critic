@@ -505,9 +505,9 @@ good idea of what it does.  You can also invoke the perlcritic
 web-service from the command-line by doing an HTTP-post, such as one
 of these:
 
-   $> POST http://perlcritic.com/perl/critic.pl < MyModule.pm
-   $> lwp-request -m POST http://perlcritic.com/perl/critic.pl < MyModule.pm
-   $> wget -q -O - --post-file=MyModule.pm http://perlcritic.com/perl/critic.pl
+  $> POST http://perlcritic.com/perl/critic.pl < MyModule.pm
+  $> lwp-request -m POST http://perlcritic.com/perl/critic.pl < MyModule.pm
+  $> wget -q -O - --post-file=MyModule.pm http://perlcritic.com/perl/critic.pl
 
 Please note that the perlcritic web-service is still alpha code.  The
 URL and interface to the service are subject to change.
@@ -723,37 +723,37 @@ specified, it defaults to either 4 or 5, depending on whether multiple files
 were given as arguments to C<perlcritic>.  You can set the default value for
 this option in your F<.perlcriticrc> file.
 
-    Verbosity     Format Specification
-    -----------   -------------------------------------------------------------
-     1            "%f:%l:%c:%m\n",
-     2            "%f: (%l:%c) %m\n",
-     3            "%m at %f line %l\n",
-     4            "%m at line %l, column %c.  %e.  (Severity: %s)\n",
-     5            "%f: %m at line %l, column %c.  %e.  (Severity: %s)\n",
-     6            "%m at line %l, near '%r'.  (Severity: %s)\n",
-     7            "%f: %m at line %l near '%r'.  (Severity: %s)\n",
-     8            "[%p] %m at line %l, column %c.  (Severity: %s)\n",
-     9            "[%p] %m at line %l, near '%r'.  (Severity: %s)\n",
-    10            "%m at line %l, column %c.\n  %p (Severity: %s)\n%d\n",
-    11            "%m at line %l, near '%r'.\n  %p (Severity: %s)\n%d\n"
+  Verbosity     Format Specification
+  -----------   -------------------------------------------------------------
+   1            "%f:%l:%c:%m\n",
+   2            "%f: (%l:%c) %m\n",
+   3            "%m at %f line %l\n",
+   4            "%m at line %l, column %c.  %e.  (Severity: %s)\n",
+   5            "%f: %m at line %l, column %c.  %e.  (Severity: %s)\n",
+   6            "%m at line %l, near '%r'.  (Severity: %s)\n",
+   7            "%f: %m at line %l near '%r'.  (Severity: %s)\n",
+   8            "[%p] %m at line %l, column %c.  (Severity: %s)\n",
+   9            "[%p] %m at line %l, near '%r'.  (Severity: %s)\n",
+  10            "%m at line %l, column %c.\n  %p (Severity: %s)\n%d\n",
+  11            "%m at line %l, near '%r'.\n  %p (Severity: %s)\n%d\n"
 
 Formats are a combination of literal and escape characters similar to the way
 C<sprintf> works.  See L<String::Format> for a full explanation of the
 formatting capabilities.  Valid escape characters are:
 
-    Escape    Meaning
-    -------   ----------------------------------------------------------------
-    %c        Column number where the violation occurred
-    %d        Full diagnostic discussion of the violation
-    %e        Explanation of violation or page numbers in PBP
-    %F        Just the name of the file where the violation occurred.
-    %f        Path to the file where the violation occurred.
-    %l        Line number where the violation occurred
-    %m        Brief description of the violation
-    %P        Full name of the Policy module that created the violation
-    %p        Name of the Policy without the Perl::Critic::Policy:: prefix
-    %r        The string of source code that caused the violation
-    %s        The severity level of the violation
+  Escape    Meaning
+  -------   ----------------------------------------------------------------
+  %c        Column number where the violation occurred
+  %d        Full diagnostic discussion of the violation
+  %e        Explanation of violation or page numbers in PBP
+  %F        Just the name of the file where the violation occurred.
+  %f        Path to the file where the violation occurred.
+  %l        Line number where the violation occurred
+  %m        Brief description of the violation
+  %P        Full name of the Policy module that created the violation
+  %p        Name of the Policy without the Perl::Critic::Policy:: prefix
+  %r        The string of source code that caused the violation
+  %s        The severity level of the violation
 
 The purpose of these formats is to provide some compatibility with text
 editors that have an interface for parsing certain kinds of input. See
@@ -865,23 +865,23 @@ block.> For example, putting any or all of these at the top of your
 F<.perlcriticrc> file will set the default value for the corresponding
 command-line argument.
 
-    severity  = 3                                     #Integer or named level
-    only      = 1                                     #Zero or One
-    force     = 0                                     #Zero or One
-    verbose   = 4                                     #Integer or format spec
-    top       = 50                                    #A positive integer
-    theme     = (pbp + security) * bugs               #A theme expression
-    include   = NamingConventions ClassHierarchies    #Space-delimited list
-    exclude   = Variables  Modules::RequirePackage    #Space-delimited list
+  severity  = 3                                     #Integer or named level
+  only      = 1                                     #Zero or One
+  force     = 0                                     #Zero or One
+  verbose   = 4                                     #Integer or format spec
+  top       = 50                                    #A positive integer
+  theme     = (pbp + security) * bugs               #A theme expression
+  include   = NamingConventions ClassHierarchies    #Space-delimited list
+  exclude   = Variables  Modules::RequirePackage    #Space-delimited list
 
 The remainder of the configuration file is a series of blocks like this:
 
-    [Perl::Critic::Policy::Category::PolicyName]
-    severity = 1
-    set_themes = foo bar
-    add_themes = baz
-    arg1 = value1
-    arg2 = value2
+  [Perl::Critic::Policy::Category::PolicyName]
+  severity = 1
+  set_themes = foo bar
+  add_themes = baz
+  arg1 = value1
+  arg2 = value2
 
 C<Perl::Critic::Policy::Category::PolicyName> is the full name of a module
 that implements the policy.  The Policy modules distributed with Perl::Critic
@@ -896,13 +896,13 @@ severity and choose to give it a higher or lower severity, based on your own
 coding philosophy.  You can set the C<severity> to an integer from 1 to 5, or
 use one of the equivalent names:
 
-    SEVERITY NAME ...is equivalent to... SEVERITY NUMBER
-    ----------------------------------------------------
-    gentle                                             5
-    stern                                              4
-    harsh                                              3
-    cruel                                              2
-    brutal                                             1
+  SEVERITY NAME ...is equivalent to... SEVERITY NUMBER
+  ----------------------------------------------------
+  gentle                                             5
+  stern                                              4
+  harsh                                              3
+  cruel                                              2
+  brutal                                             1
 
 C<set_themes> sets the theme for the Policy and overrides its default theme.
 The argument is a string of one or more whitespace-delimited alphanumeric
@@ -925,44 +925,44 @@ regardless of the C<-severity> given on the command line.
 
 A simple configuration might look like this:
 
-    #--------------------------------------------------------------
-    # I think these are really important, so always load them
+  #--------------------------------------------------------------
+  # I think these are really important, so always load them
 
-    [TestingAndDebugging::RequireUseStrict]
-    severity = 5
+  [TestingAndDebugging::RequireUseStrict]
+  severity = 5
 
-    [TestingAndDebugging::RequireUseWarnings]
-    severity = 5
+  [TestingAndDebugging::RequireUseWarnings]
+  severity = 5
 
-    #--------------------------------------------------------------
-    # I think these are less important, so only load when asked
+  #--------------------------------------------------------------
+  # I think these are less important, so only load when asked
 
-    [Variables::ProhibitPackageVars]
-    severity = 2
+  [Variables::ProhibitPackageVars]
+  severity = 2
 
-    [ControlStructures::ProhibitPostfixControls]
-    allow = if unless  # My custom configuration
-    severity = cruel   # Same as "severity = 2"
+  [ControlStructures::ProhibitPostfixControls]
+  allow = if unless  # My custom configuration
+  severity = cruel   # Same as "severity = 2"
 
-    #--------------------------------------------------------------
-    # Give these policies a custom theme.  I can activate just
-    # these policies by saying "perlcritic -theme 'larry || curly'"
+  #--------------------------------------------------------------
+  # Give these policies a custom theme.  I can activate just
+  # these policies by saying "perlcritic -theme 'larry || curly'"
 
-    [Modules::RequireFilenameMatchesPackage]
-    add_themes = larry
+  [Modules::RequireFilenameMatchesPackage]
+  add_themes = larry
 
-    [TestingAndDebugging::RequireTestLables]
-    add_themes = curly moe
+  [TestingAndDebugging::RequireTestLabels]
+  add_themes = curly moe
 
-    #--------------------------------------------------------------
-    # I do not agree with these at all, so never load them
+  #--------------------------------------------------------------
+  # I do not agree with these at all, so never load them
 
-    [-NamingConventions::ProhibitMixedCaseVars]
-    [-NamingConventions::ProhibitMixedCaseSubs]
+  [-NamingConventions::ProhibitMixedCaseVars]
+  [-NamingConventions::ProhibitMixedCaseSubs]
 
-    #--------------------------------------------------------------
-    # For all other Policies, I accept the default severity,
-    # so no additional configuration is required for them.
+  #--------------------------------------------------------------
+  # For all other Policies, I accept the default severity,
+  # so no additional configuration is required for them.
 
 For additional configuration examples, see the F<perlcriticrc> file that is
 included in this F<examples> directory of this distribution.
@@ -995,16 +995,16 @@ The Policies that ship with Perl::Critic are have been divided into the
 following themes.  This is just our attempt to provide some basic logical
 groupings.  You are free to invent new themes that suit your needs.
 
-    THEME             DESCRIPTION
-    --------------------------------------------------------------------------
-    core              All policies that ship with Perl::Critic
-    pbp               Policies that come directly from "Perl Best Practices"
-    bugs              Policies that that prevent or reveal bugs
-    maintenance       Policies that affect the long-term health of the code
-    cosmetic          Policies that only have a superficial effect
-    complexity        Policies that specificaly relate to code complexity
-    security          Policies that relate to security issues
-    tests             Policies that are specific to test scripts
+  THEME             DESCRIPTION
+  --------------------------------------------------------------------------
+  core              All policies that ship with Perl::Critic
+  pbp               Policies that come directly from "Perl Best Practices"
+  bugs              Policies that that prevent or reveal bugs
+  maintenance       Policies that affect the long-term health of the code
+  cosmetic          Policies that only have a superficial effect
+  complexity        Policies that specificaly relate to code complexity
+  security          Policies that relate to security issues
+  tests             Policies that are specific to test scripts
 
 Say C<"perlcritic -list"> to get a listing of all available policies and the
 themes that are associated with each one.  You can also change the theme for
@@ -1016,11 +1016,11 @@ rule that determines which Policies to apply.  Precedence is the same as
 regular Perl code, and you can use parens to enforce precedence as well.
 Supported operators are:
 
-   Operator    Altertative    Example
-   ----------------------------------------------------------------------------
-   &&          and            'pbp && core'
-   ||          or             'pbp || (bugs && security)'
-   !           not            'pbp && ! (portability || complexity)'
+  Operator    Altertative    Example
+  ----------------------------------------------------------------------------
+  &&          and            'pbp && core'
+  ||          or             'pbp || (bugs && security)'
+  !           not            'pbp && ! (portability || complexity)'
 
 Theme names are case-insensitive.  If the C<-theme> is set to an empty string,
 then it evaluates as true all Policies.
@@ -1036,22 +1036,22 @@ standards and that you have a Damn Good Reason (DGR) for doing so.
 To help with those situations, you can direct Perl::Critic to ignore
 certain lines or blocks of code by using pseudo-pragmas:
 
-    require 'LegacyLibaray1.pl';  ## no critic
-    require 'LegacyLibrary2.pl';  ## no critic
+  require 'LegacyLibaray1.pl';  ## no critic
+  require 'LegacyLibrary2.pl';  ## no critic
 
-    for my $element (@list) {
+  for my $element (@list) {
 
-        ## no critic
+      ## no critic
 
-        $foo = "";               #Violates 'ProhibitEmptyQuotes'
-        $barf = bar() if $foo;   #Violates 'ProhibitPostfixControls'
-        #Some more evil code...
+      $foo = "";               #Violates 'ProhibitEmptyQuotes'
+      $barf = bar() if $foo;   #Violates 'ProhibitPostfixControls'
+      #Some more evil code...
 
-        ## use critic
+      ## use critic
 
-        #Some good code...
-        do_something($_);
-    }
+      #Some good code...
+      do_something($_);
+  }
 
 The C<"## no critic"> comments direct Perl::Critic to ignore the remaining
 lines of code until the end of the current block, or until a C<"## use
@@ -1257,27 +1257,31 @@ exits with status == 0.
 
 =head1 THE L<Perl::Critic> PHILOSOPHY
 
-  Coding standards are deeply personal and highly subjective.  The
-  goal of Perl::Critic is to help you write code that conforms with a
-  set of best practices.  Our primary goal is not to dictate what
-  those practices are, but rather, to implement the practices
-  discovered by others.  Ultimately, you make the rules --
-  Perl::Critic is merely a tool for encouraging consistency.  If there
-  is a policy that you think is important or that we have overlooked,
-  we would be very grateful for contributions, or you can simply load
-  your own private set of policies into Perl::Critic.
+=over
+
+Coding standards are deeply personal and highly subjective.  The goal of
+Perl::Critic is to help you write code that conforms with a set of best
+practices.  Our primary goal is not to dictate what those practices are, but
+rather, to implement the practices discovered by others.  Ultimately, you make
+the rules -- Perl::Critic is merely a tool for encouraging consistency.  If
+there is a policy that you think is important or that we have overlooked, we
+would be very grateful for contributions, or you can simply load your own
+private set of policies into Perl::Critic.
+
+=back
 
 =head1 EXTENDING THE CRITIC
 
 The modular design of Perl::Critic is intended to facilitate the addition of
 new Policies.  You'll need to have some understanding of L<PPI>, but most
 Policy modules are pretty straightforward and only require about 20 lines of
-code.  Please see the L<Perl::Critic::DEVELOPER> file included in this
-distribution for a step-by-step demonstration of how to create new Policy
+code, and half of those lines are simple use statements and simple
+declarations..  Please see the L<Perl::Critic::DEVELOPER> file included in
+this distribution for a step-by-step demonstration of how to create new Policy
 modules.
 
-If you develop any new Policy modules, feel free to send them to C<<
-<thaljef@cpan.org> >> and I'll be happy to put them into the Perl::Critic
+If you develop any new Policy modules, feel free to send them to
+C<< <thaljef@cpan.org> >> and I'll be happy to put them into the Perl::Critic
 distribution.  Or if you would like to work on the Perl::Critic project
 directly, check out our repository at L<http://perlcritic.tigris.org>.  To
 subscribe to our mailing list, send a message to
