@@ -5,20 +5,9 @@
 # $Revision$
 ##############################################################################
 
-[1.xxx]  Released on 2007-xx-xx
+[2.xxx]  Released on 2007-xx-xx
 
      New Features:
-     * perlcritic now emits errors for all the problems it can find for the
-       global options in the command-line parameters and .perlcriticrc file,
-       rather than bailing on the first one it encounters.
-
-     * perlcritic now has a "--strict-profile" option which will make warnings
-       about problems in a profile fatal.
-
-     * perlcritic now has a "--statistics-only" option which suppresses the
-       display of individual violations and only shows the additional output
-       produced by the "--statistics" option.
-
      * A new metadata system for defining policy parameters/options has been
        added.  This makes the life of policy authors easier because
        configuration validation and parsing can be taken care of
@@ -40,29 +29,42 @@
        There is a discussion of the design considerations for this facility in
        the distribution in doc/PolicyParameter_Notes.pod.
 
+     Other Stuff:
+     * Now requires the Readonly module in order to be more self-compliant.
+
+[1.xxx]  Released on 2007-06-xx
+
+     New Features:
+     * perlcritic now emits errors for all the problems it can find for the
+       global options in the command-line parameters and .perlcriticrc file,
+       rather than bailing on the first one it encounters.
+
+     * perlcritic now has a "--strict-profile" option which will make warnings
+       about problems in a profile fatal.
+
+     * perlcritic now has a "--statistics-only" option which suppresses the
+       display of individual violations and only shows the additional output
+       produced by the "--statistics" option.
+
      Feature requests:
      * A value for "color" can now be specified in a .perlcriticrc.
-       http://rt.perl.org/rt3/Ticket/Display.html?id=24877
+       http://rt.cpan.org/Ticket/Display.html?id=24877
 
      New Policies:
      * ValuesAndExpressions::ProhibitQuotesAsQuotelikeOperatorDelimiters
-       As suggested in http://rt.cpan.org/Public/Bug/Display.html?id=23290.
+       As suggested in http://rt.cpan.org/Ticket/Display.html?id=23290.
      * ValuesAndExpressions::ProhibitLongChainsOfMethodCalls
      * Modules::ProhibitExcessMainComplexity
        As suggested in http://rt.cpan.org/Ticket/Display.html?id=24699
 
      Minor changes:
-     * In addition to the additional output based upon the parameter metadata
-       facilitiy, the perlcritic "--profile-proto" option now emits the short
-       names for policies, rather than the full ones.
+     * The perlcritic "--profile-proto" option now emits the short names for
+       policies, rather than the full ones.
 
      * The "-profileproto" and "-singlepolicy" options have been renamed to
        "-profile-proto" and "-single-policy" in order to make the growing
        number of command-line options comprehensible.  The change of
        "singlepolicy" also affects your F<.perlcriticrc> file.
-
-     Other Stuff:
-     * Now requires the Readonly module in order to be more self-compliant.
 
 [1.053]  Released on 2007-06-02
 
