@@ -5,7 +5,7 @@
 # $Revision$
 ##############################################################################
 
-package Perl::Critic::Exception::Configuration::Policy::ParameterValue;
+package Perl::Critic::Exception::Configuration::Policy::InvalidParameter;
 
 use strict;
 use warnings;
@@ -17,10 +17,9 @@ our $VERSION = 1.053;
 #-----------------------------------------------------------------------------
 
 use Exception::Class (
-    'Perl::Critic::Exception::Configuration::Policy::ParameterValue' => {
+    'Perl::Critic::Exception::Configuration::Policy::InvalidParameter' => {
         isa         => 'Perl::Critic::Exception::Configuration::Policy',
-        description => 'A problem with the value of a parameter for a policy.',
-        fields      => [ qw{ policy } ],
+        description => 'The configuration of a policy referred to a non-existant parameter.',
     },
 );
 
@@ -31,7 +30,7 @@ sub full_message {
 
     my $source = $self->source();
     if ($source) {
-        $source = qq{ found in "$source"};
+        $source = qq{ (found in "$source")};
     }
     else {
         $source = q{};
@@ -39,12 +38,9 @@ sub full_message {
 
     my $policy = $self->policy();
     my $option_name = $self->option_name();
-    my $option_value = $self->option_value();
 
     return
-            qq{The value for the $policy "$option_name" option }
-        .   qq{("$option_value")$source }
-        .   $self->message_suffix();
+        qq{The $policy policy doesn't take a "$option_name" option$source.};
 }
 
 
@@ -60,25 +56,25 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Exception::Configuration::Policy::ParameterValue - A problem with the value of a parameter for a policy
+Perl::Critic::Exception::Configuration::Policy::InvalidParameter - The configuration referred to a non-existent parameter for a policy.
 
 =head1 DESCRIPTION
 
-A representation of a problem found with the value of a parameter for a
-L<Perl::Critic::Policy>, whether from a F<.perlcriticrc>, another
-profile file, or command line.
+A representation of the configuration attempting to specify a value
+for a perameter that a L<Perl::Critic::Policy> doesn't have, whether
+from a F<.perlcriticrc>, another profile file, or command line.
 
 
 =head1 CLASS METHODS
 
 =over
 
-=item C<< throw( policy => $policy, option_name => $option_name, option_value => $option_value, source => $source, message_suffix => $message_suffix ) >>
+=item C<< throw( policy => $policy, option_name => $option_name, source => $source ) >>
 
 See L<Exception::Class/"throw">.
 
 
-=item C<< new( policy => $policy, option_name => $option_name, option_value => $option_value, source => $source, message_suffix => $message_suffix ) >>
+=item C<< new( policy => $policy, option_name => $option_name, source => $source ) >>
 
 See L<Exception::Class/"new">.
 
@@ -92,8 +88,8 @@ See L<Exception::Class/"new">.
 
 =item C<full_message()>
 
-Provide a standard message for policy parameter value problems.  See
-L<Exception::Class/"full_message">.
+Provide a standard message for values for non-existent parameters for
+policies.  See L<Exception::Class/"full_message">.
 
 
 =back
