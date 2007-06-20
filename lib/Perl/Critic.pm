@@ -1026,6 +1026,9 @@ C<< <users-subscribe@perlcritic.tigris.org> >>.  See also
 L<the archives|http://perlcritic.tigris.org/servlets/SummarizeList?listName=users>.
 You can also contact the author at C<< <thaljef@cpan.org> >>.
 
+At least one member of the development team has started hanging around in
+L<irc://irc.perl.org/#perlcritic>.
+
 =head1 SEE ALSO
 
 There are a number of distributions of additional Policies available.  A few
