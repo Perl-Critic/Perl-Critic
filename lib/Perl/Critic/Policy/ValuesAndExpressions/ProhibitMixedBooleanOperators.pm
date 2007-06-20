@@ -12,26 +12,29 @@ use warnings;
 use Perl::Critic::Utils qw{ :severities :data_conversion };
 use base 'Perl::Critic::Policy';
 
+
+#-----------------------------------------------------------------------------
+
 our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-my @low_booleans  = qw( not or and );
-my %low_booleans  = hashify( @low_booleans );
+my %low_booleans  = hashify( qw( not or and ) );
 
-my @high_booleans = qw( ! || && );
-my %high_booleans = hashify( @high_booleans );
+my %high_booleans = hashify( qw( ! || && ) );
 
-my @exempt_types = qw(
-    PPI::Statement::Block
-    PPI::Statement::Scheduled
-    PPI::Statement::Package
-    PPI::Statement::Include
-    PPI::Statement::Sub
-    PPI::Statement::Variable
-    PPI::Statement::Compound
-    PPI::Statement::Data
-    PPI::Statement::End
+my %exempt_types = hashify(
+    qw(
+        PPI::Statement::Block
+        PPI::Statement::Scheduled
+        PPI::Statement::Package
+        PPI::Statement::Include
+        PPI::Statement::Sub
+        PPI::Statement::Variable
+        PPI::Statement::Compound
+        PPI::Statement::Data
+        PPI::Statement::End
+    )
 );
 
 #-----------------------------------------------------------------------------
@@ -41,10 +44,10 @@ my $expl = [ 70 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return() }
-sub default_severity { return $SEVERITY_HIGH   }
-sub default_themes    { return qw( core bugs pbp )  }
-sub applies_to       { return 'PPI::Statement' }
+sub supported_parameters { return                     }
+sub default_severity     { return $SEVERITY_HIGH      }
+sub default_themes       { return qw( core bugs pbp ) }
+sub applies_to           { return 'PPI::Statement'    }
 
 #-----------------------------------------------------------------------------
 
@@ -58,10 +61,7 @@ sub violates {
     # better ways to do this, such as scanning for a semi-colon or
     # some other marker.
 
-    for my $type (@exempt_types) {
-        return if $elem->isa($type);
-    }
-
+    return if exists $exempt_types{ ref $elem };
 
     if (    $elem->find_first(\&_low_boolean)
          && $elem->find_first(\&_high_boolean) ) {
@@ -71,12 +71,15 @@ sub violates {
     return;    #ok!
 }
 
+#-----------------------------------------------------------------------------
 
 sub _low_boolean {
     my (undef, $elem) = @_;
     $elem->isa('PPI::Token::Operator') || return 0;
     return exists $low_booleans{$elem};
 }
+
+#-----------------------------------------------------------------------------
 
 sub _high_boolean {
     my (undef, $elem) = @_;
