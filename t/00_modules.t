@@ -14,7 +14,7 @@ use Test::More;
 use Perl::Critic::TestUtils qw(bundled_policy_names);
 use English qw(-no_match_vars);
 
-our $VERSION = 1.053;
+our $VERSION = 1.06;
 
 my @bundled_policy_names = bundled_policy_names();
 plan tests => 106 + 14 * scalar @bundled_policy_names;

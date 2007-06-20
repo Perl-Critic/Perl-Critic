@@ -22,7 +22,7 @@ use Perl::Critic::Utils qw{
 };
 use Perl::Critic::ConfigErrors;
 
-our $VERSION = 1.053;
+our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 

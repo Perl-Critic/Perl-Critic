@@ -14,7 +14,7 @@ use Perl::Critic::Utils qw{ :data_conversion :classification };
 
 use base 'Exporter';
 
-our $VERSION = 1.053;
+our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
