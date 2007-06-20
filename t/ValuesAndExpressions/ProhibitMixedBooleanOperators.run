@@ -39,6 +39,15 @@ $sub ||= sub {
 
 #-----------------------------------------------------------------------------
 
+## name Mixed booleans in same statement, but different expressions
+## failures 0
+## cut
+
+# See http://rt.cpan.org/Ticket/Display.html?id=27637
+ok( ! 1, 'values are URLs' ) or diag 'never happens';
+
+#-----------------------------------------------------------------------------
+
 ##############################################################################
 #      $URL$
 #     $Date$
