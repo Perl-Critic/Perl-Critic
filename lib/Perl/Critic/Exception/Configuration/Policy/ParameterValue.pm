@@ -5,7 +5,7 @@
 # $Revision$
 ##############################################################################
 
-package Perl::Critic::Exception::Configuration::Policy;
+package Perl::Critic::Exception::Configuration::Policy::ParameterValue;
 
 use strict;
 use warnings;
@@ -38,6 +38,29 @@ sub new {
     return $class->SUPER::new(%options);
 }
 
+#-----------------------------------------------------------------------------
+
+sub full_message {
+    my ( $self ) = @_;
+
+    my $source = $self->source();
+    if ($source) {
+        $source = qq{ found in "$source"};
+    }
+    else {
+        $source = q{};
+    }
+
+    my $policy = $self->policy();
+    my $option_name = $self->option_name();
+    my $option_value = $self->option_value();
+
+    return
+            qq{The value for the $policy "$option_name" option }
+        .   qq{("$option_value")$source }
+        .   $self->message_suffix();
+}
+
 
 1;
 
@@ -51,24 +74,40 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Exception::Configuration::Policy - A problem with configuration of a policy
+Perl::Critic::Exception::Configuration::Policy::ParameterValue - A problem with the value of a parameter for a policy
 
 =head1 DESCRIPTION
 
-A representation of a problem found with the configuration of a
+A representation of a problem found with the value of a parameter for a
 L<Perl::Critic::Policy>, whether from a F<.perlcriticrc>, another
 profile file, or command line.
 
-This is an abstract class.  It should never be instantiated.
+
+=head1 CLASS METHODS
+
+=over
+
+=item C<< throw( policy => $policy, option_name => $option_name, option_value => $option_value, source => $source, message_suffix => $message_suffix ) >>
+
+See L<Exception::Class/"throw">.
+
+
+=item C<< new( policy => $policy, option_name => $option_name, option_value => $option_value, source => $source, message_suffix => $message_suffix ) >>
+
+See L<Exception::Class/"new">.
+
+
+=back
 
 
 =head1 METHODS
 
 =over
 
-=item C<policy()>
+=item C<full_message()>
 
-The short name of the policy that had configuration problems.
+Provide a standard message for policy parameter value problems.  See
+L<Exception::Class/"full_message">.
 
 
 =back
