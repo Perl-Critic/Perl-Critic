@@ -87,12 +87,12 @@ profile file, or command line.
 
 =over
 
-=item C<throw( policy => $policy, option_name => $option_name, option_value => $option_value, source => $source, message_suffix => $message_suffix )>
+=item C<< throw( policy => $policy, option_name => $option_name, option_value => $option_value, source => $source, message_suffix => $message_suffix ) >>
 
 See L<Exception::Class/"throw">.
 
 
-=item C<new( policy => $policy, option_name => $option_name, option_value => $option_value, source => $source, message_suffix => $message_suffix )>
+=item C<< new( policy => $policy, option_name => $option_name, option_value => $option_value, source => $source, message_suffix => $message_suffix ) >>
 
 See L<Exception::Class/"new">.
 

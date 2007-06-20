@@ -69,12 +69,12 @@ file, or command line.
 
 =over
 
-=item C<throw( option_name => $option_name, option_value => $option_value, source => $source, message_suffix => $message_suffix )>
+=item C<< throw( option_name => $option_name, option_value => $option_value, source => $source, message_suffix => $message_suffix ) >>
 
 See L<Exception::Class/"throw">.
 
 
-=item C<new( option_name => $option_name, option_value => $option_value, source => $source, message_suffix => $message_suffix )>
+=item C<< new( option_name => $option_name, option_value => $option_value, source => $source, message_suffix => $message_suffix ) >>
 
 See L<Exception::Class/"new">.
 
