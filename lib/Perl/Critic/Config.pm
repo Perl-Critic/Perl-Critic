@@ -98,18 +98,18 @@ sub _init {
         );
     $self->{_factory} = $factory;
 
-    if ( @{ $errors->exceptions() } ) {
-        die $errors;  ## no critic (RequireCarping)
-    }
-
     # Initialize internal storage for Policies
     $self->{_policies} = [];
 
     # "NONE" means don't load any policies
-    return $self if defined $profile_source and $profile_source eq 'NONE';
+    if ( not defined $profile_source or $profile_source ne 'NONE' ) {
+        # Heavy lifting here...
+        $self->_load_policies($errors);
+    }
 
-    # Heavy lifting here...
-    $self->_load_policies();
+    if ( $errors->has_exceptions() ) {
+        $errors->rethrow();
+    }
 
     return $self;
 }
@@ -144,9 +144,11 @@ sub add_policy {
 
 sub _load_policies {
 
-    my ( $self ) = @_;
+    my ( $self, $errors ) = @_;
     my $factory  = $self->{_factory};
-    my @policies = $factory->create_all_policies();
+    my @policies = $factory->create_all_policies( $errors );
+
+    return if $errors->has_exceptions();
 
     for my $policy ( @policies ) {
 

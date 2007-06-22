@@ -9,6 +9,8 @@ package Perl::Critic::Policy;
 
 use strict;
 use warnings;
+use English qw{ -no_match_vars };
+
 use Carp qw(confess);
 
 use String::Format qw(stringf);
@@ -20,10 +22,17 @@ use Perl::Critic::Utils qw{
     :severities
     :data_conversion
     &interpolate
+    &policy_long_name
     &policy_short_name
 };
+use Perl::Critic::Exception::AggregateConfiguration;
+use Perl::Critic::Exception::Configuration;
+use Perl::Critic::Exception::Configuration::Policy::InvalidParameter;
+use Perl::Critic::Exception::Configuration::Policy::ParameterValue;
 use Perl::Critic::PolicyParameter qw();
 use Perl::Critic::Violation qw();
+
+use Exception::Class;   # this must come after "use P::C::Exception::*"
 
 our $VERSION = 1.053;
 
@@ -52,13 +61,32 @@ sub new {
     $self->{_parameter_metadata_available} = $parameter_metadata_available;
     $self->{_parameters} = \@parameters;
 
+    my $errors = Perl::Critic::Exception::AggregateConfiguration->new();
     foreach my $parameter ( @parameters ) {
-        $parameter->parse_and_validate_config_value( $self, \%config );
+        eval {
+            $parameter->parse_and_validate_config_value( $self, \%config );
+        };
+
+        if (
+            my $exception =
+                Perl::Critic::Exception::Configuration->caught()
+        ) {
+            $errors->add_exception($exception);
+        }
+        elsif ($EVAL_ERROR) {
+            my $exception = Exception::Class->caught();
+            ref $exception ? $exception->rethrow() : confess $EVAL_ERROR;
+        }
+
         delete $config{ $parameter->get_name() };
     }
 
     if ($parameter_metadata_available) {
-        $self->_validate_config_keys(\%config);
+        $self->_validate_config_keys($errors, \%config);
+    }
+
+    if ( $errors->has_exceptions() ) {
+        $errors->rethrow();
     }
 
     return $self;
@@ -67,17 +95,19 @@ sub new {
 #-----------------------------------------------------------------------------
 
 sub _validate_config_keys {
-    my ( $self, $config ) = @_;
-
-    my $msg = $EMPTY;
-    my $name = policy_short_name( ref $self );
+    my ( $self, $errors, $config ) = @_;
 
     for my $offered_param ( keys %{ $config } ) {
-        $msg .= qq{Parameter "$offered_param" isn't supported by $name\n};
+        $errors->add_exception(
+            Perl::Critic::Exception::Configuration::Policy::InvalidParameter->new(
+                policy          => $self->get_short_name(),
+                option_name     => $offered_param,
+                source          => undef,
+            )
+        );
     }
 
-    die "$msg\n" if $msg;
-    return 1;
+    return;
 }
 
 #-----------------------------------------------------------------------------
@@ -90,6 +120,22 @@ sub __set_parameter_value {
     $self->{$name} = $value;
 
     return;
+}
+
+#-----------------------------------------------------------------------------
+
+sub get_long_name {
+    my ($self) = @_;
+
+    return policy_long_name(ref $self);
+}
+
+#-----------------------------------------------------------------------------
+
+sub get_short_name {
+    my ($self) = @_;
+
+    return policy_short_name(ref $self);
 }
 
 #-----------------------------------------------------------------------------
@@ -183,8 +229,25 @@ sub violation {
     goto &Perl::Critic::Violation::new;
 }
 
+#-----------------------------------------------------------------------------
+
+## no critic (Subroutines::RequireFinalReturn)
+sub throw_parameter_value_exception {
+    my ( $self, $option_name, $option_value, $source, $message_suffix ) = @_;
+
+    Perl::Critic::Exception::Configuration::Policy::ParameterValue->throw(
+        policy          => $self->get_short_name(),
+        option_name     => $option_name,
+        option_value    => $option_value,
+        source          => $source,
+        message_suffix  => $message_suffix
+    );
+}
+## use critic
+
 
 #-----------------------------------------------------------------------------
+
 # Static methods.
 
 sub set_format { return $FORMAT = $_[0] }
@@ -199,8 +262,8 @@ sub to_string {
     my %fspec = (
          'O' => sub { $self->_format_parameters(@_) },
          'U' => sub { $self->_format_lack_of_parameter_metadata(@_) },
-         'P' => ref $self,
-         'p' => sub { policy_short_name( ref $self ) },
+         'P' => sub { $self->get_long_name() },
+         'p' => sub { $self->get_short_name() },
          'T' => sub { join $SPACE, $self->default_themes() },
          't' => sub { join $SPACE, $self->get_themes() },
          'S' => sub { $self->default_severity() },
@@ -308,6 +371,21 @@ the violation.
 
 These are the same as the constructor to L<Perl::Critic::Violation>,
 but without the severity.  The Policy itself knows the severity.
+
+=item C< throw_parameter_value_exception( $option_name, $option_value, $source, $message_suffix ) >
+
+Create and throw a
+L<Perl::Critic::Exception::Configuration::Policy::ParameterValue>.
+Useful in parameter parser implementations.
+
+=item C< get_long_name() >
+
+Return the full package name of this policy.
+
+=item C< get_short_name() >
+
+Return the name of this policy without the "Perl::Critic::Policy::"
+prefix.
 
 =item C< applies_to() >
 

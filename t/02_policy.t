@@ -65,7 +65,7 @@ is_deeply( [$p->get_themes()], [ qw(a b c d e f) ] );  #Should have new value, s
 #Test format getter/setters
 is( Perl::Critic::Policy::get_format, "%p\n", 'Default policy format');
 
-my $new_format = '%P %s [%t]';
+my $new_format = '%p %s [%t]';
 Perl::Critic::Policy::set_format( $new_format ); #Set format
 is( Perl::Critic::Policy::get_format, $new_format, 'Changed policy format');
 

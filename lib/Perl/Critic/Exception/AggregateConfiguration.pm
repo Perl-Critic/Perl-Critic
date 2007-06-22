@@ -51,6 +51,24 @@ sub add_exception {
 
 #-----------------------------------------------------------------------------
 
+sub add_exceptions_from {
+    my ( $self, $aggregate ) = @_;
+
+    push @{ $self->exceptions() }, @{ $aggregate->exceptions() };
+
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
+sub has_exceptions {
+    my ( $self ) = @_;
+
+    return @{ $self->exceptions() } ? 1 : 0;
+}
+
+#-----------------------------------------------------------------------------
+
 my $MESSAGE_PREFIX = $EMPTY;
 my $MESSAGE_SUFFIX = "\n";
 my $MESSAGE_SEPARATOR = $MESSAGE_SUFFIX . $MESSAGE_PREFIX;
@@ -95,9 +113,19 @@ see them in one run.
 Accumulate the parameter with rest of the exceptions.
 
 
+=item C<add_exceptions_from( $aggregate )>
+
+Accumulate the exceptions from another instance of this class.
+
+
 =item C<exceptions()>
 
 Returns a reference to an array of the collected exceptions.
+
+
+=item C<has_exceptions()>
+
+Answer whether any configuration problems have been found.
 
 
 =item C<full_message()>

@@ -16,7 +16,7 @@ our $VERSION = 1.053;
 
 use Perl::Critic::Exception::Internal;
 
-use Exception::Class (
+use Exception::Class (   # this must come after "use P::C::Exception::*"
     'Perl::Critic::Exception::Configuration' => {
         isa         => 'Perl::Critic::Exception',
         description => 'A problem with Perl::Critic configuration, whether from a file or a command line or some other source.',

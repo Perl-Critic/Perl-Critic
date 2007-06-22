@@ -10,7 +10,7 @@ package Perl::Critic::Exception::Configuration::Policy::ParameterValue;
 use strict;
 use warnings;
 
-use Perl::Critic::Utils qw{ &policy_short_name };
+use Perl::Critic::Utils qw{ :characters &policy_short_name };
 
 our $VERSION = 1.053;
 
@@ -34,17 +34,20 @@ sub full_message {
         $source = qq{ found in "$source"};
     }
     else {
-        $source = q{};
+        $source = $EMPTY;
     }
 
     my $policy = $self->policy();
     my $option_name = $self->option_name();
-    my $option_value = $self->option_value();
+    my $option_value =
+        defined $self->option_value()
+            ? $DQUOTE . $self->option_value() . $DQUOTE
+            : '<undef>';
+    my $message_suffix = $self->message_suffix() || $EMPTY;
 
     return
             qq{The value for the $policy "$option_name" option }
-        .   qq{("$option_value")$source }
-        .   $self->message_suffix();
+        .   qq{($option_value)$source $message_suffix};
 }
 
 

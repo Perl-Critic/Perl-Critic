@@ -47,24 +47,33 @@ sub initialize_parameter {
                         $value_string !~ m/ \A [-+]? [1-9] [\d_]* \z /xms
                     and $value_string ne '0'
                 ) {
-                    die q{Invalid value for },
+                    $policy->throw_parameter_value_exception(
                         $parameter->get_name(),
-                        qq{: $value_string does not look like an integer.\n};
+                        $value_string,
+                        undef,
+                        'does not look like an integer.',
+                    );
                 }
 
                 $value_string =~ tr/_//d;
                 $value = $value_string + 0;
 
                 if ( defined $minimum and $minimum > $value ) {
-                    die q{Invalid value for },
+                    $policy->throw_parameter_value_exception(
                         $parameter->get_name(),
-                        qq{: $value is less than $minimum.\n};
+                        $value_string,
+                        undef,
+                        qq{is less than $minimum.},
+                    );
                 }
 
                 if ( defined $maximum and $maximum < $value ) {
-                    die q{Invalid value for },
+                    $policy->throw_parameter_value_exception(
                         $parameter->get_name(),
-                        qq{: $value is greater than $maximum.\n};
+                        $value_string,
+                        undef,
+                        qq{is greater than $maximum.},
+                    );
                 }
             }
 

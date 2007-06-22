@@ -14,6 +14,7 @@ use English qw(-no_match_vars);
 use Perl::Critic::UserProfile qw();
 use Perl::Critic::PolicyFactory (-test => 1);
 use Perl::Critic::PolicyParameter qw{ $NO_DESCRIPTION_AVAILABLE };
+use Perl::Critic::Utils qw( &policy_short_name );
 use Perl::Critic::TestUtils qw(bundled_policy_names);
 
 Perl::Critic::TestUtils::block_perlcriticrc();
@@ -83,9 +84,16 @@ sub test_invalid_parameters {
     my $bogus_params  = { bogus => 'shizzle' };
     my $profile = Perl::Critic::UserProfile->new( -profile => 'NONE' );
     my $factory = Perl::Critic::PolicyFactory->new( -profile => $profile );
+
+    my $policy_name = policy_short_name($policy);
+    my $label = qq{Created $policy_name with bogus parameters};
+
     eval { $factory->create_policy(-name => $policy, -params => $bogus_params) };
-    my $label = qq{Created $policy with bogus parameters};
-    like( $EVAL_ERROR, qr/Parameter "bogus" isn't supported/, $label);
+    like(
+        $EVAL_ERROR,
+        qr/The $policy_name policy doesn't take a "bogus" option/,
+        $label
+    );
 }
 
 #-----------------------------------------------------------------------------

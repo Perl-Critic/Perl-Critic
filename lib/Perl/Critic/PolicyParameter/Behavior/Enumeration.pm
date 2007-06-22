@@ -63,13 +63,16 @@ sub initialize_parameter {
                     my @bad_values =
                         grep { not exists $value_lookup->{$_} } @potential_values;
                     if (@bad_values) {
-                        die q{Invalid values for },
+                        $policy->throw_parameter_value_exception(
                             $parameter->get_name(),
-                            q{: },
-                            join (q{, }, @bad_values),
-                            q{. Allowed values are: },
-                            join (q{, }, sort keys %{$value_lookup}),
-                            qq{.\n};
+                            $value_string,
+                            undef,
+                            q{contains invalid values: }
+                                . join (q{, }, @bad_values)
+                                . q{. Allowed values are: }
+                                . join (q{, }, sort keys %{$value_lookup})
+                                . qq{.\n},
+                        );
                     }
                 }
 
@@ -99,9 +102,14 @@ sub initialize_parameter {
                     and $EMPTY ne $value_string
                     and not defined $value_lookup->{$value_string}
                 ) {
-                    die q{Invalid value for },
+                    $policy->throw_parameter_value_exception(
                         $parameter->get_name(),
-                        qq{: $value_string.\n};
+                        $value_string,
+                        undef,
+                        q{is not one of the allowed values: }
+                            . join (q{, }, sort keys %{$value_lookup})
+                            . qq{.\n},
+                    );
                 }
 
                 $policy->__set_parameter_value($parameter, $value_string);

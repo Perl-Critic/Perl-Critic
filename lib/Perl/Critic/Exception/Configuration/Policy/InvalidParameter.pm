@@ -61,7 +61,7 @@ Perl::Critic::Exception::Configuration::Policy::InvalidParameter - The configura
 =head1 DESCRIPTION
 
 A representation of the configuration attempting to specify a value
-for a perameter that a L<Perl::Critic::Policy> doesn't have, whether
+for a parameter that a L<Perl::Critic::Policy> doesn't have, whether
 from a F<.perlcriticrc>, another profile file, or command line.
 
 

@@ -24,6 +24,9 @@ use Perl::Critic::Utils qw{
     :internal_lookup
 };
 use Perl::Critic::Exception::AggregateConfiguration;
+use Perl::Critic::Exception::Configuration;
+
+use Exception::Class;   # this must come after "use P::C::Exception::*"
 
 our $VERSION = 1.053;
 
@@ -103,12 +106,12 @@ sub _init {
         or confess q{The -profile argument is required};
 
     my $incoming_errors = $args{-errors};
-    my $strictprofile = $args{-strictprofile};
+    my $strict_profile = $args{'-strict-profile'};
     my $errors;
 
     # If we're supposed to be strict or problems have already been found...
     if (
-            $strictprofile
+            $strict_profile
         or  ( $incoming_errors and @{ $incoming_errors->exceptions() } )
     ) {
         $errors =
@@ -122,9 +125,9 @@ sub _init {
     if (
             not $incoming_errors
         and $errors
-        and @{ $errors->exceptions() }
+        and $errors->has_exceptions()
     ) {
-        die $errors;  ## no critic (RequireCarping)
+        $errors->rethrow();
     }
 
     return $self;
@@ -138,7 +141,6 @@ sub create_policy {
 
     my $policy_name = $args{-name}
         or confess q{The -name argument is required};
-
 
     # Normalize policy name to a fully-qualified package name
     $policy_name = policy_long_name( $policy_name );
@@ -163,7 +165,16 @@ sub create_policy {
 
     # Construct policy from remaining params.  Trap errors.
     my $policy = eval { $policy_name->new( %policy_config_copy ) };
-    confess qq{Unable to create policy '$policy_name': $EVAL_ERROR} if $EVAL_ERROR;
+
+    if ($EVAL_ERROR) {
+        my $exception = Exception::Class->caught();
+
+        if (ref $exception) {
+            $exception->rethrow();
+        }
+
+        confess qq{Unable to create policy '$policy_name': $EVAL_ERROR};
+    }
 
     # Set base attributes on policy
     if ( defined $user_severity ) {
@@ -188,8 +199,44 @@ sub create_policy {
 
 sub create_all_policies {
 
-    my $self = shift;
-    return map { $self->create_policy( -name => $_ ) } site_policy_names();
+    my ( $self, $incoming_errors ) = @_;
+
+    my $errors =
+        $incoming_errors
+            ? $incoming_errors
+            : Perl::Critic::Exception::AggregateConfiguration->new();
+    my @policies;
+
+    foreach my $name ( site_policy_names() ) {
+        my $policy = eval { $self->create_policy( -name => $name ) };
+
+        my $exception;
+        if (
+            $exception =
+                Perl::Critic::Exception::Configuration->caught()
+        ) {
+            $errors->add_exception($exception);
+        }
+        elsif (
+            $exception =
+                Perl::Critic::Exception::AggregateConfiguration->caught()
+        ) {
+            $errors->add_exceptions_from($exception);
+        }
+        elsif ($EVAL_ERROR) {
+            $exception = Exception::Class->caught();
+            ref $exception ? $exception->rethrow() : confess $EVAL_ERROR;
+        }
+        else {
+            push @policies, $policy;
+        }
+    }
+
+    if ( not $incoming_errors and $errors->has_exceptions() ) {
+        $errors->rethrow();
+    }
+
+    return @policies;
 }
 
 #-----------------------------------------------------------------------------
