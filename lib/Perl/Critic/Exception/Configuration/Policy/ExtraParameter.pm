@@ -5,7 +5,7 @@
 # $Revision$
 ##############################################################################
 
-package Perl::Critic::Exception::Configuration::Policy::InvalidParameter;
+package Perl::Critic::Exception::Configuration::Policy::ExtraParameter;
 
 use strict;
 use warnings;
@@ -17,7 +17,7 @@ our $VERSION = 1.06;
 #-----------------------------------------------------------------------------
 
 use Exception::Class (
-    'Perl::Critic::Exception::Configuration::Policy::InvalidParameter' => {
+    'Perl::Critic::Exception::Configuration::Policy::ExtraParameter' => {
         isa         => 'Perl::Critic::Exception::Configuration::Policy',
         description => 'The configuration of a policy referred to a non-existant parameter.',
     },
@@ -56,7 +56,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Exception::Configuration::Policy::InvalidParameter - The configuration referred to a non-existent parameter for a policy.
+Perl::Critic::Exception::Configuration::Policy::ExtraParameter - The configuration referred to a non-existent parameter for a policy.
 
 =head1 DESCRIPTION
 

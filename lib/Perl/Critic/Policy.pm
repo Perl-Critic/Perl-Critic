@@ -27,7 +27,7 @@ use Perl::Critic::Utils qw{
 };
 use Perl::Critic::Exception::AggregateConfiguration;
 use Perl::Critic::Exception::Configuration;
-use Perl::Critic::Exception::Configuration::Policy::InvalidParameter;
+use Perl::Critic::Exception::Configuration::Policy::ExtraParameter;
 use Perl::Critic::Exception::Configuration::Policy::ParameterValue;
 use Perl::Critic::PolicyParameter qw();
 use Perl::Critic::Violation qw();
@@ -99,7 +99,7 @@ sub _validate_config_keys {
 
     for my $offered_param ( keys %{ $config } ) {
         $errors->add_exception(
-            Perl::Critic::Exception::Configuration::Policy::InvalidParameter->new(
+            Perl::Critic::Exception::Configuration::Policy::ExtraParameter->new(
                 policy          => $self->get_short_name(),
                 option_name     => $offered_param,
                 source          => undef,

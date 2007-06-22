@@ -21,6 +21,8 @@ lib/Perl/Critic/Exception/AggregateConfiguration.pm
 lib/Perl/Critic/Exception/Configuration.pm
 lib/Perl/Critic/Exception/Configuration/Global.pm
 lib/Perl/Critic/Exception/Configuration/Policy.pm
+lib/Perl/Critic/Exception/Configuration/Policy/ExtraParameter.pm
+lib/Perl/Critic/Exception/Configuration/Policy/ParameterValue.pm
 lib/Perl/Critic/Exception/Internal.pm
 lib/Perl/Critic/Policy.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitLvalueSubstr.pm
