@@ -29,7 +29,7 @@ use Perl::Critic::Utils qw{ :characters };
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = 1.053;
+our $VERSION = 1.06;
 
 Readonly::Array our @EXPORT_OK => qw(&critique);
 
@@ -1030,6 +1030,9 @@ You are encouraged to subscribe to the mailing list; send a message to
 C<< <users-subscribe@perlcritic.tigris.org> >>.  See also
 L<the archives|http://perlcritic.tigris.org/servlets/SummarizeList?listName=users>.
 You can also contact the author at C<< <thaljef@cpan.org> >>.
+
+At least one member of the development team has started hanging around in
+L<irc://irc.perl.org/#perlcritic>.
 
 =head1 SEE ALSO
 

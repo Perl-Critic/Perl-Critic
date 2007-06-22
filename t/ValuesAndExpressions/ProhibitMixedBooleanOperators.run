@@ -1,3 +1,11 @@
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+
 ## name High-precedence passing
 ## failures 0
 ## cut
@@ -39,13 +47,15 @@ $sub ||= sub {
 
 #-----------------------------------------------------------------------------
 
-##############################################################################
-#      $URL$
-#     $Date$
-#   $Author$
-# $Revision$
-##############################################################################
+## name Mixed booleans in same statement, but different expressions
+## TODO Not sure how to separate expressions right now
+## failures 0
+## cut
 
+# See http://rt.cpan.org/Ticket/Display.html?id=27637
+ok( ! 1, 'values are URLs' ) or diag 'never happens';
+
+##############################################################################
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

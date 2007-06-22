@@ -14,26 +14,28 @@ use Readonly;
 use Perl::Critic::Utils qw{ :severities :data_conversion };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 1.053;
 
 #-----------------------------------------------------------------------------
 
-Readonly::Array my @LOW_BOOLEANS  => qw( not or and );
-Readonly::Hash my %LOW_BOOLEANS  => hashify( @LOW_BOOLEANS );
+our $VERSION = 1.06;
 
-Readonly::Array my @HIGH_BOOLEANS => qw( ! || && );
-Readonly::Hash my %HIGH_BOOLEANS => hashify( @HIGH_BOOLEANS );
+#-----------------------------------------------------------------------------
 
-Readonly::Array my @EXEMPT_TYPES => qw(
-    PPI::Statement::Block
-    PPI::Statement::Scheduled
-    PPI::Statement::Package
-    PPI::Statement::Include
-    PPI::Statement::Sub
-    PPI::Statement::Variable
-    PPI::Statement::Compound
-    PPI::Statement::Data
-    PPI::Statement::End
+Readonly::Hash my %LOW_BOOLEANS  => hashify( qw( not or and ) );
+Readonly::Hash my %HIGH_BOOLEANS => hashify( qw( ! || && ) );
+
+Readonly::Hash my %EXEMPT_TYPES => hashify(
+    qw(
+        PPI::Statement::Block
+        PPI::Statement::Scheduled
+        PPI::Statement::Package
+        PPI::Statement::Include
+        PPI::Statement::Sub
+        PPI::Statement::Variable
+        PPI::Statement::Compound
+        PPI::Statement::Data
+        PPI::Statement::End
+    )
 );
 
 #-----------------------------------------------------------------------------
@@ -60,10 +62,7 @@ sub violates {
     # better ways to do this, such as scanning for a semi-colon or
     # some other marker.
 
-    for my $type (@EXEMPT_TYPES) {
-        return if $elem->isa($type);
-    }
-
+    return if exists $EXEMPT_TYPES{ ref $elem };
 
     if (    $elem->find_first(\&_low_boolean)
          && $elem->find_first(\&_high_boolean) ) {
@@ -73,12 +72,15 @@ sub violates {
     return;    #ok!
 }
 
+#-----------------------------------------------------------------------------
 
 sub _low_boolean {
     my (undef, $elem) = @_;
     $elem->isa('PPI::Token::Operator') || return 0;
     return exists $LOW_BOOLEANS{$elem};
 }
+
+#-----------------------------------------------------------------------------
 
 sub _high_boolean {
     my (undef, $elem) = @_;

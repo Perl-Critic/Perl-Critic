@@ -36,7 +36,7 @@
      Other Stuff:
      * Now requires the Readonly module in order to be more self-compliant.
 
-[1.xxx]  Released on 2007-06-xx
+[1.06]  Released on 2007-06-xx
 
      New Features:
      * perlcritic now emits errors for all the problems it can find for the
