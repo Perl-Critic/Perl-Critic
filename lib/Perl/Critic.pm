@@ -388,8 +388,9 @@ create new Policy modules that suit your own tastes.
 For a command-line interface to Perl::Critic, see the documentation for
 L<perlcritic>.  If you want to integrate Perl::Critic with your build process,
 L<Test::Perl::Critic> provides an interface that is suitable for test scripts.
-For the ultimate convenience (at the expense of some flexibility) see the
-L<criticism> pragma.
+Also, L<Test::Perl::Critic::Progressive> is useful for gradually applying
+coding standards to legacy code.  For the ultimate convenience (at the expense
+of some flexibility) see the L<criticism> pragma.
 
 Win32 and ActivePerl users can find PPM distributions of Perl::Critic at
 L<http://theoryx5.uwinnipeg.ca/ppms/>.
@@ -1039,6 +1040,11 @@ L<Perl::Critic::Bangs>
 L<Perl::Critic::Lax>
 L<Perl::Critic::StricterSubs>
 L<Perl::Critic::Swift>
+
+These distributions enable you to use Perl::Critic in your unit tests:
+
+L<Test::Perl::Critic>
+L<Test::Perl::Critic::Progressive>
 
 There are also a couple of distributions that will install all the
 Perl::Critic related modules known to the development team:
