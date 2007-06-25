@@ -21,7 +21,8 @@ my @bundled_policy_names = bundled_policy_names();
 my @concrete_exceptions = qw{
     AggregateConfiguration
     Configuration::Global
-    Configuration::Policy
+    Configuration::Policy::ExtraParameter
+    Configuration::Policy::ParameterValue
     Internal
 };
 

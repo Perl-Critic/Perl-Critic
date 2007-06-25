@@ -44,19 +44,6 @@ sub applies_to       { return qw(PPI::Token::QuoteLike::Backtick
 
 #-----------------------------------------------------------------------------
 
-sub new {
-    my $class = shift;
-    my $self = $class->SUPER::new(@_);
-
-    my (%config) = @_;
-
-    $self->{_only_in_void_context} = $config{only_in_void_context};
-
-    return $self;
-}
-
-#-----------------------------------------------------------------------------
-
 sub violates {
     my ( $self, $elem, undef ) = @_;
 

@@ -24,7 +24,9 @@ use Perl::Critic::PolicyParameter::Behavior::Enumeration;
 use Perl::Critic::PolicyParameter::Behavior::Integer;
 use Perl::Critic::PolicyParameter::Behavior::String;
 use Perl::Critic::PolicyParameter::Behavior::StringList;
+
 use Perl::Critic::Utils qw{ :characters &interpolate };
+use Perl::Critic::Utils::DataConversion qw{ &defined_or_empty };
 
 our $VERSION = 1.06;
 
@@ -263,8 +265,8 @@ sub to_formatted_string {
 
     my %specification = (
         n => sub { $self->get_name() },
-        d => sub { $self->get_description() },
-        D => sub { $self->get_default_string() },
+        d => sub { defined_or_empty( $self->get_description() ) },
+        D => sub { defined_or_empty( $self->get_default_string() ) },
         f => sub { $self->_generate_full_description(@_) },
     );
 

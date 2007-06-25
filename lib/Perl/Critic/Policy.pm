@@ -112,12 +112,18 @@ sub _validate_config_keys {
 
 #-----------------------------------------------------------------------------
 
+sub __get_parameter_name {
+    my ( $self, $parameter ) = @_;
+
+    return '_' . $parameter->get_name();
+}
+
+#-----------------------------------------------------------------------------
+
 sub __set_parameter_value {
     my ( $self, $parameter, $value ) = @_;
 
-    my $name = '_' . $parameter->get_name();
-
-    $self->{$name} = $value;
+    $self->{ $self->__get_parameter_name($parameter) } = $value;
 
     return;
 }
@@ -274,6 +280,8 @@ sub to_string {
 
 sub _format_parameters {
     my ($self, $format) = @_;
+
+    return $EMPTY if not $self->parameter_metadata_available();
 
     my $separator;
     if ($format) {

@@ -23,6 +23,7 @@ use Perl::Critic::UserProfile qw();
 use Perl::Critic::Utils qw{
     :booleans :characters :severities :internal_lookup :classification
 };
+use Perl::Critic::Utils::DataConversion qw{ &boolean_to_number };
 
 #-----------------------------------------------------------------------------
 
@@ -79,12 +80,13 @@ sub _init {
     # If given, these options can be true or false (but defined)
     # We normalize these to numeric values by multiplying them by 1;
     {
-        no warnings 'numeric'; ## no critic (ProhibitNoWarnings)
-        $self->{_force} = 1 * _dor( $args{-force}, $defaults->force() );
-        $self->{_only}  = 1 * _dor( $args{-only},  $defaults->only()  );
-        $self->{_color} = 1 * _dor( $args{-color}, $defaults->color() );
+        $self->{_force} = boolean_to_number( _dor( $args{-force}, $defaults->force() ) );
+        $self->{_only}  = boolean_to_number( _dor( $args{-only},  $defaults->only()  ) );
+        $self->{_color} = boolean_to_number( _dor( $args{-color}, $defaults->color() ) );
         $self->{_strict_profile} =
-            1 * _dor( $args{'-strict-profile'}, $defaults->strict_profile() );
+            boolean_to_number(
+                _dor( $args{'-strict-profile'}, $defaults->strict_profile() )
+            );
     }
 
     $self->_validate_and_save_theme($args{-theme}, $errors);

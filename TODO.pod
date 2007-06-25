@@ -285,6 +285,8 @@ Recommend that C<if (scalar @array)> be rewritten as C<if (@array)>.
 
 =item * Switch to using exceptions instead of die and confess.
 
+=item * Restore tri-state-edness to Behavior::Boolean.
+
 =item * Move package globals, e.g. P::C::Violation::FORMAT, to instance variables on Perl::Critic.
 
 This applies regardless of whether the variable was declared with C<my> or

@@ -282,15 +282,25 @@ sub new {
         $language = $SOURCE_DEFAULT_LANGUAGE{$source};
     }
 
-    if (not defined $self->{_lib_sections}) {
+    if ( not $self->_sections_specified('_lib_sections') ) {
         $self->{_lib_sections} = $DEFAULT_LIB_SECTIONS{$source}{$language};
     }
-    if (not defined $self->{_script_sections}) {
+    if ( not $self->_sections_specified('_script_sections') ) {
         $self->{_script_sections} =
             $DEFAULT_SCRIPT_SECTIONS{$source}{$language};
     }
 
     return $self;
+}
+
+sub _sections_specified {
+    my ( $self, $sections_key ) = @_;
+
+    my $sections = $self->{$sections_key};
+
+    return 0 if not defined $sections;
+
+    return scalar @{ $sections };
 }
 
 #-----------------------------------------------------------------------------

@@ -28,12 +28,10 @@ sub _parse {
         $value_string = $config_string;
     }
 
-    if ( defined $value_string ) {
-        if ( $value_string ) {
-            $value = $TRUE;
-        } else {
-            $value = $FALSE;
-        }
+    if ( $value_string ) {
+        $value = $TRUE;
+    } else {
+        $value = $FALSE;
     }
 
     $policy->__set_parameter_value($parameter, $value);
