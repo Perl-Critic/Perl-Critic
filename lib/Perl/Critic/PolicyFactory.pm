@@ -100,12 +100,12 @@ sub _init {
         or confess q{The -profile argument is required};
 
     my $incoming_errors = $args{-errors};
-    my $strictprofile = $args{-strictprofile};
+    my $strict_profile = $args{'-strict-profile'};
     my $errors;
 
     # If we're supposed to be strict or problems have already been found...
     if (
-            $strictprofile
+            $strict_profile
         or  ( $incoming_errors and @{ $incoming_errors->messages() } )
     ) {
         $errors =
