@@ -30,12 +30,15 @@ sub applies_to           { return 'PPI::Statement::Include' }
 #-----------------------------------------------------------------------------
 
 sub new {
-    my ($class, %args) = @_;
-    my $self = bless {}, $class;
+    my $class = shift;
+    my $self = $class->SUPER::new(@_);
+
+    my (%config) = @_;
+
     $self->{_allow} = {};
 
-    if( defined $args{allow} ) {
-        my $allowed = lc $args{allow}; #String of words
+    if( defined $config{allow} ) {
+        my $allowed = lc $config{allow}; #String of words
         my %allowed = hashify( $allowed =~ m/ (\w+) /gmx );
         $self->{_allow} = \%allowed;
     }

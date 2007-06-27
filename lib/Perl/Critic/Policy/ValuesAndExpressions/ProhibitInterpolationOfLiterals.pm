@@ -31,13 +31,16 @@ sub applies_to         { return qw(PPI::Token::Quote::Double
 #-----------------------------------------------------------------------------
 
 sub new {
-    my ( $class, %args ) = @_;
-    my $self = bless {}, $class;
+    my $class = shift;
+    my $self = $class->SUPER::new(@_);
+
+    my (%config) = @_;
+
     $self->{_allow} = [];
 
     #Set configuration, if defined
-    if ( defined $args{allow} ) {
-        my @allow = words_from_string( $args{allow} );
+    if ( defined $config{allow} ) {
+        my @allow = words_from_string( $config{allow} );
         #Try to be forgiving with the configuration...
         for (@allow) {
             m{ \A qq }mx || ($_ = 'qq' . $_)

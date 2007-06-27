@@ -30,15 +30,17 @@ sub applies_to        { return 'PPI::Statement::Include' }
 #-----------------------------------------------------------------------------
 
 sub new {
-    my ( $class, %args ) = @_;
-    my $self = bless {}, $class;
+    my $class = shift;
+    my $self = $class->SUPER::new(@_);
+
+    my (%config) = @_;
 
     $self->{_evil_modules}    = {};  #Hash
     $self->{_evil_modules_rx} = [];  #Array
 
     #Set config, if defined
-    if ( defined $args{modules} ) {
-        for my $module ( words_from_string( $args{modules} ) ) {
+    if ( defined $config{modules} ) {
+        for my $module ( words_from_string( $config{modules} ) ) {
 
             if ( $module =~ m{ \A [/] (.+) [/] \z }mx ) {
 

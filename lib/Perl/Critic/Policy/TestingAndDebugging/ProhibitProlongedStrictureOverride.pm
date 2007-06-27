@@ -31,8 +31,10 @@ sub applies_to        { return 'PPI::Statement::Include' }
 #-----------------------------------------------------------------------------
 
 sub new {
-    my ( $class, %config ) = @_;
-    my $self = bless {}, $class;
+    my $class = shift;
+    my $self = $class->SUPER::new(@_);
+
+    my (%config) = @_;
 
     $self->{_nstatements} = $DEFAULT_N_STATEMENTS;
     if ( defined $config{statements} ) {

@@ -33,8 +33,10 @@ sub applies_to        { return 'PPI::Token::Word'                        }
 #-----------------------------------------------------------------------------
 
 sub new {
-    my ( $class, %config ) = @_;
-    my $self = bless {}, $class;
+    my $class = shift;
+    my $self = $class->SUPER::new(@_);
+
+    my (%config) = @_;
 
     my $allow_newlines = 1;
     if ( defined $config{allow_messages_ending_with_newlines} ) {

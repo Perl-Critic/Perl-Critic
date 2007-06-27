@@ -31,12 +31,14 @@ sub applies_to        { return 'PPI::Statement::Compound'      }
 #-----------------------------------------------------------------------------
 
 sub new {
-    my ( $class, %args ) = @_;
-    my $self = bless {}, $class;
+    my $class = shift;
+    my $self = $class->SUPER::new(@_);
+
+    my (%config) = @_;
 
     #Set configuration
-    $self->{_max_nests} = defined $args{max_nests} ? $args{max_nests}
-                                                   : $DEFAULT_MAX_NESTS;
+    $self->{_max_nests} = defined $config{max_nests} ? $config{max_nests}
+                                                     : $DEFAULT_MAX_NESTS;
 
     return $self;
 }

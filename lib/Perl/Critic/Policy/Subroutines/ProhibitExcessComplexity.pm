@@ -31,9 +31,12 @@ sub applies_to        { return 'PPI::Statement::Sub'           }
 #-----------------------------------------------------------------------------
 
 sub new {
-    my ( $class, %args ) = @_;
-    my $self = bless {}, $class;
-    $self->{_max_mccabe} = $args{max_mccabe} || 20;
+    my $class = shift;
+    my $self = $class->SUPER::new(@_);
+
+    my (%config) = @_;
+
+    $self->{_max_mccabe} = $config{max_mccabe} || 20;
     return $self;
 }
 

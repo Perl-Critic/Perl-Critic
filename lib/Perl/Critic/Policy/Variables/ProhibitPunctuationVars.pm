@@ -32,12 +32,14 @@ sub applies_to        { return 'PPI::Token::Magic'   }
 #-----------------------------------------------------------------------------
 
 sub new {
-    my ( $class, %args ) = @_;
-    my $self = bless {}, $class;
+    my $class = shift;
+    my $self = $class->SUPER::new(@_);
+
+    my (%config) = @_;
 
     $self->{_exempt} = \%default_exempt;
-    if ( defined $args{allow} ) {
-        my @allow = words_from_string( $args{allow} );
+    if ( defined $config{allow} ) {
+        my @allow = words_from_string( $config{allow} );
         for my $varname (@allow) {
             $self->{_exempt}->{$varname} = 1;
         }

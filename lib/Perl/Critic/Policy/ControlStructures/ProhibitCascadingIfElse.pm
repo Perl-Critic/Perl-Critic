@@ -31,12 +31,14 @@ sub applies_to        { return 'PPI::Statement::Compound'            }
 #-----------------------------------------------------------------------------
 
 sub new {
-    my ( $class, %args ) = @_;
-    my $self = bless {}, $class;
+    my $class = shift;
+    my $self = $class->SUPER::new(@_);
+
+    my (%config) = @_;
 
     #Set configuration
-    $self->{_max} = defined $args{max_elsif} ? $args{max_elsif}
-                                             : $DEFAULT_MAX_ELSIF;
+    $self->{_max} = defined $config{max_elsif} ? $config{max_elsif}
+                                               : $DEFAULT_MAX_ELSIF;
 
     return $self;
 }

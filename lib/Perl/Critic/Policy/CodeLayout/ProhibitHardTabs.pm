@@ -31,12 +31,14 @@ sub applies_to        { return 'PPI::Token'             }
 #-----------------------------------------------------------------------------
 
 sub new {
-    my ( $class, %args ) = @_;
-    my $self = bless {}, $class;
+    my $class = shift;
+    my $self = $class->SUPER::new(@_);
+
+    my (%config) = @_;
 
     #Set config, if defined
     $self->{_allow_leading_tabs} =
-      defined $args{allow_leading_tabs} ? $args{allow_leading_tabs} : $TRUE;
+      defined $config{allow_leading_tabs} ? $config{allow_leading_tabs} : $TRUE;
 
     return $self;
 }

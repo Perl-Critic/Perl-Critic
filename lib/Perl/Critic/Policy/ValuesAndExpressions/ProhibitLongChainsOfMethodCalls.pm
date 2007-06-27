@@ -36,8 +36,10 @@ sub applies_to       { return qw{ PPI::Statement };  }
 #-----------------------------------------------------------------------------
 
 sub new {
-    my ( $class, %config ) = @_;
-    my $self = bless {}, $class;
+    my $class = shift;
+    my $self = $class->SUPER::new(@_);
+
+    my (%config) = @_;
 
     my $max_chain_length = $config{max_chain_length};
     if (

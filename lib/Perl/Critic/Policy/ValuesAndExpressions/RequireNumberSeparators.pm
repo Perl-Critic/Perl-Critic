@@ -29,11 +29,13 @@ sub applies_to        { return 'PPI::Token::Number'    }
 #-----------------------------------------------------------------------------
 
 sub new {
-    my ( $class, %args ) = @_;
-    my $self = bless {}, $class;
+    my $class = shift;
+    my $self = $class->SUPER::new(@_);
+
+    my (%config) = @_;
 
     #Set configuration, if defined
-    $self->{_min} = defined $args{min_value} ? $args{min_value} : 10_000;
+    $self->{_min} = defined $config{min_value} ? $config{min_value} : 10_000;
 
     return $self;
 }

@@ -30,10 +30,12 @@ sub applies_to           { return 'PPI::Statement::Sub' }
 #-----------------------------------------------------------------------------
 
 sub new {
-    my ( $class, %args ) = @_;
-    my $self = bless {}, $class;
+    my $class = shift;
+    my $self = $class->SUPER::new(@_);
 
-    my $user_terminals = $args{terminal_funcs} || q{};
+    my (%config) = @_;
+
+    my $user_terminals = $config{terminal_funcs} || q{};
     my @user_terminals = words_from_string( $user_terminals );
     my @default_terminals =
         qw(exit die croak confess throw Carp::confess Carp::croak);

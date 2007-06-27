@@ -69,8 +69,10 @@ sub applies_to {
 #-----------------------------------------------------------------------------
 
 sub new {
-    my ( $class, %config ) = @_;
-    my $self = bless {}, $class;
+    my $class = shift;
+    my $self = $class->SUPER::new(@_);
+
+    my (%config) = @_;
 
     $self->_parse_parameter(
         'single_quote_allowed_operators',

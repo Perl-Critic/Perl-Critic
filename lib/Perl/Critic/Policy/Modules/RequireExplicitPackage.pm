@@ -29,12 +29,14 @@ sub applies_to        { return 'PPI::Document'      }
 #-----------------------------------------------------------------------------
 
 sub new {
-    my ( $class, %args ) = @_;
-    my $self = bless {}, $class;
+    my $class = shift;
+    my $self = $class->SUPER::new(@_);
+
+    my (%config) = @_;
 
     #Set config, if defined
     $self->{_exempt_scripts} =
-      defined $args{exempt_scripts} ? $args{exempt_scripts} : 1;
+        defined $config{exempt_scripts} ? $config{exempt_scripts} : 1;
 
     return $self;
 }

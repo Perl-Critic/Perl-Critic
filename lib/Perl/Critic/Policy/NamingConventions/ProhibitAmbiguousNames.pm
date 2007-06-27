@@ -39,13 +39,15 @@ sub applies_to        { return qw(PPI::Statement::Sub
 #-----------------------------------------------------------------------------
 
 sub new {
-    my ( $class, %args ) = @_;
-    my $self = bless {}, $class;
+    my $class = shift;
+    my $self = $class->SUPER::new(@_);
+
+    my (%config) = @_;
 
     #Set configuration, if defined
     my @forbid;
-    if ( defined $args{forbid} ) {
-        @forbid = words_from_string( $args{forbid} );
+    if ( defined $config{forbid} ) {
+        @forbid = words_from_string( $config{forbid} );
     }
     else {
         @forbid = @default_forbid;

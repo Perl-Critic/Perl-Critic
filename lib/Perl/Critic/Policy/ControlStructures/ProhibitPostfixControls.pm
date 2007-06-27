@@ -37,13 +37,16 @@ sub applies_to        { return 'PPI::Token::Word'    }
 #-----------------------------------------------------------------------------
 
 sub new {
-    my ( $class, %args ) = @_;
-    my $self = bless {}, $class;
+    my $class = shift;
+    my $self = $class->SUPER::new(@_);
+
+    my (%config) = @_;
+
     $self->{_allow} = {};
 
     #Set config, if defined
-    if ( defined $args{allow} ) {
-        my %allowed = hashify( words_from_string( $args{allow} ) );
+    if ( defined $config{allow} ) {
+        my %allowed = hashify( words_from_string( $config{allow} ) );
         $self->{_allow} = \%allowed;
     }
 

@@ -38,8 +38,10 @@ sub applies_to       { return 'PPI::Document'                 }
 #-----------------------------------------------------------------------------
 
 sub new {
-    my ( $class, %config ) = @_;
-    my $self = bless {}, $class;
+    my $class = shift;
+    my $self = $class->SUPER::new(@_);
+
+    my (%config) = @_;
 
     my $max_mccabe = $config{max_mccabe};
     if (

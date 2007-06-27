@@ -46,12 +46,14 @@ sub applies_to        { return 'PPI::Token::Word'           }
 #-----------------------------------------------------------------------------
 
 sub new {
-    my ( $class, %args ) = @_;
-    my $self = bless {}, $class;
+    my $class = shift;
+    my $self = $class->SUPER::new(@_);
+
+    my (%config) = @_;
 
     $self->{_test_modules} = \%default_test_modules;
-    if (defined $args{modules}) {
-        my @modules = words_from_string( $args{modules} );
+    if (defined $config{modules}) {
+        my @modules = words_from_string( $config{modules} );
         my %all_test_modules = ( %default_test_modules, hashify(@modules) );
         $self->{_test_modules} = \%all_test_modules;
     }

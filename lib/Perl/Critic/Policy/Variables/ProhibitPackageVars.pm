@@ -36,9 +36,9 @@ our @DEFAULT_PACKAGE_EXCEPTIONS = qw( File::Find Data::Dumper );
 
 sub new {
     my $class = shift;
-    my %config = @_;
+    my $self = $class->SUPER::new(@_);
 
-    my $self = bless {}, $class;
+    my (%config) = @_;
 
     # Set list of package exceptions from configuration, if defined.
     $self->{_packages} =
