@@ -16,6 +16,7 @@ use List::MoreUtils qw(any none apply);
 use Scalar::Util qw(blessed);
 
 use Perl::Critic::Exception::AggregateConfiguration;
+use Perl::Critic::Exception::Configuration;
 use Perl::Critic::Exception::Configuration::Global;
 use Perl::Critic::PolicyFactory;
 use Perl::Critic::Theme qw( $RULE_INVALID_CHARACTER_REGEX &cook_rule );
@@ -523,7 +524,22 @@ sub _validate_and_save_theme {
             );
         }
         else {
-            $self->{_theme} = Perl::Critic::Theme->new( -rule => $theme_rule );
+            eval {
+                $self->{_theme} =
+                    Perl::Critic::Theme->new( -rule => $theme_rule );
+            };
+
+            if ($EVAL_ERROR) {
+                my $exception =
+                    Perl::Critic::Exception::Configuration->caught();
+
+                if (ref $exception) {
+                    $errors->add_exception( $exception );
+                }
+                else {
+                    confess $EVAL_ERROR;
+                }
+            }
         }
     }
 

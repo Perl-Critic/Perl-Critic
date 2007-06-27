@@ -18,8 +18,15 @@ use Exception::Class (
     'Perl::Critic::Exception::Configuration::Global' => {
         isa         => 'Perl::Critic::Exception::Configuration',
         description => 'A problem with global Perl::Critic configuration.',
+        alias       => 'throw_global',
     },
 );
+
+#-----------------------------------------------------------------------------
+
+use Exporter qw{ import };
+
+our @EXPORT_OK = qw{ &throw_global };
 
 #-----------------------------------------------------------------------------
 

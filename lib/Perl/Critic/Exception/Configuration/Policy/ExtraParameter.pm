@@ -20,8 +20,15 @@ use Exception::Class (
     'Perl::Critic::Exception::Configuration::Policy::ExtraParameter' => {
         isa         => 'Perl::Critic::Exception::Configuration::Policy',
         description => 'The configuration of a policy referred to a non-existant parameter.',
+        alias       => 'throw_extra_parameter',
     },
 );
+
+#-----------------------------------------------------------------------------
+
+use Exporter qw{ import };
+
+our @EXPORT_OK = qw{ &throw_extra_parameter };
 
 #-----------------------------------------------------------------------------
 

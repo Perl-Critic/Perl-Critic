@@ -17,9 +17,16 @@ our $VERSION = 1.06;
 use Exception::Class (
     'Perl::Critic::Exception::Internal' => {
         isa         => 'Perl::Critic::Exception',
-        description => 'A problem with the Perl::Critic code was found, a.k.a. a bug.'
+        description => 'A problem with the Perl::Critic code was found, a.k.a. a bug.',
+        alias       => 'throw_internal',
     },
 );
+
+#-----------------------------------------------------------------------------
+
+use Exporter qw{ import };
+
+our @EXPORT_OK = qw{ &throw_internal };
 
 #-----------------------------------------------------------------------------
 

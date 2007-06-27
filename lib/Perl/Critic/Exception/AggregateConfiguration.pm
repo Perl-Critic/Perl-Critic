@@ -22,8 +22,15 @@ use Exception::Class (
         isa         => 'Perl::Critic::Exception',
         description => 'A collected set of configuration exceptions.',
         fields      => [ qw{ exceptions } ],
+        alias       => 'throw_aggregate',
     },
 );
+
+#-----------------------------------------------------------------------------
+
+use Exporter qw{ import };
+
+our @EXPORT_OK = qw{ &throw_aggregate };
 
 #-----------------------------------------------------------------------------
 

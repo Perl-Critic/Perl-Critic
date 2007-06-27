@@ -21,8 +21,15 @@ use Exception::Class (
         isa         => 'Perl::Critic::Exception::Configuration::Policy',
         description => 'A problem with the value of a parameter for a policy.',
         fields      => [ qw{ policy } ],
+        alias       => 'throw_parameter_value',
     },
 );
+
+#-----------------------------------------------------------------------------
+
+use Exporter qw{ import };
+
+our @EXPORT_OK = qw{ &throw_parameter_value };
 
 #-----------------------------------------------------------------------------
 
