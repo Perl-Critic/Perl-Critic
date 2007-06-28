@@ -529,17 +529,7 @@ sub _validate_and_save_theme {
                     Perl::Critic::Theme->new( -rule => $theme_rule );
             };
 
-            if ($EVAL_ERROR) {
-                my $exception =
-                    Perl::Critic::Exception::Configuration->caught();
-
-                if (ref $exception) {
-                    $errors->add_exception( $exception );
-                }
-                else {
-                    confess $EVAL_ERROR;
-                }
-            }
+            $errors->add_exception_or_rethrow( $EVAL_ERROR );
         }
     }
 

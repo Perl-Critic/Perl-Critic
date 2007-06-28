@@ -210,24 +210,9 @@ sub create_all_policies {
     foreach my $name ( site_policy_names() ) {
         my $policy = eval { $self->create_policy( -name => $name ) };
 
-        my $exception;
-        if (
-            $exception =
-                Perl::Critic::Exception::Configuration->caught()
-        ) {
-            $errors->add_exception($exception);
-        }
-        elsif (
-            $exception =
-                Perl::Critic::Exception::AggregateConfiguration->caught()
-        ) {
-            $errors->add_exceptions_from($exception);
-        }
-        elsif ($EVAL_ERROR) {
-            $exception = Exception::Class->caught();
-            ref $exception ? $exception->rethrow() : confess $EVAL_ERROR;
-        }
-        else {
+        $errors->add_exception_or_rethrow( $EVAL_ERROR );
+
+        if ( $policy ) {
             push @policies, $policy;
         }
     }

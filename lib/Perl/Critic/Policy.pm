@@ -67,16 +67,7 @@ sub new {
             $parameter->parse_and_validate_config_value( $self, \%config );
         };
 
-        if (
-            my $exception =
-                Perl::Critic::Exception::Configuration->caught()
-        ) {
-            $errors->add_exception($exception);
-        }
-        elsif ($EVAL_ERROR) {
-            my $exception = Exception::Class->caught();
-            ref $exception ? $exception->rethrow() : confess $EVAL_ERROR;
-        }
+        $errors->add_exception_or_rethrow($EVAL_ERROR);
 
         delete $config{ $parameter->get_name() };
     }

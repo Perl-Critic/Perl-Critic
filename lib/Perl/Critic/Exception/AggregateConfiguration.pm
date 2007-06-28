@@ -11,6 +11,8 @@ use strict;
 use warnings;
 use English qw(-no_match_vars);
 
+use Carp qw{ confess };
+
 use Perl::Critic::Utils qw{ :characters };
 
 our $VERSION = 1.06;
@@ -62,6 +64,29 @@ sub add_exceptions_from {
     my ( $self, $aggregate ) = @_;
 
     push @{ $self->exceptions() }, @{ $aggregate->exceptions() };
+
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
+sub add_exception_or_rethrow {
+    my ( $self, $eval_error ) = @_;
+
+    return if not $eval_error;
+    confess $eval_error if not ref $eval_error;
+
+    if ( $eval_error->isa('Perl::Critic::Exception::Configuration') ) {
+        $self->add_exception($eval_error);
+    }
+    elsif (
+        $eval_error->isa('Perl::Critic::Exception::AggregateConfiguration')
+    ) {
+        $self->add_exceptions_from($eval_error);
+    }
+    else {
+        die $eval_error;    ## no critic (RequireCarp)
+    }
 
     return;
 }
@@ -128,6 +153,15 @@ Accumulate the exceptions from another instance of this class.
 =item C<exceptions()>
 
 Returns a reference to an array of the collected exceptions.
+
+
+=item C<add_exception_or_rethrow( $eval_error )>
+
+If the parameter is an instance of
+L<Perl::Critic::Exception::Configuration> or
+L<Perl::Critic::Exception::AggregateConfiguration>, add it.
+Otherwise, C<die> with the parameter, if it is a reference, or
+C<confess> with it.  If the parameter is false, simply returns.
 
 
 =item C<has_exceptions()>
