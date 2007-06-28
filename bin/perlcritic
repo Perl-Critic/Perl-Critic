@@ -206,6 +206,8 @@ sub critique {
 
     require Perl::Critic;
     $CRITIC = Perl::Critic->new( %{$opts_ref} );
+    $CRITIC->policies() || die "No policies selected.\n";
+
     my $number_of_violations = undef;
 
     for my $file (@files) {
@@ -236,14 +238,13 @@ sub critique {
 sub render_report {
 
     my ( $file, $opts_ref, @violations ) = @_;
-    my $count = scalar @violations;
-
 
     # Only report the number of violations, if asked.
+    my $number_of_violations = scalar @violations;
     if( $opts_ref->{-count} ){
         ref $file || print "$file: ";
-        print "$count\n";
-        return $count;
+        print "$number_of_violations\n";
+        return $number_of_violations;
     }
 
     # Hail all-clear unless we should shut up.
@@ -267,7 +268,7 @@ sub render_report {
     my $color = $CRITIC->config->color();
     print $color ? _colorize_by_severity(@violations) : @violations;
 
-    return $count;
+    return $number_of_violations;
 }
 
 #-----------------------------------------------------------------------------
@@ -513,9 +514,10 @@ enforcing PBP, and it will even support rules that contradict Conway.
 All rules can easily be configured or disabled to your liking.
 
 If you want to integrate C<perlcritic> with your build process, the
-L<Test::Perl::Critic> module provides a nice interface that is
-suitable for test scripts.  For ultimate convenience (at the expense
-of some flexibility) see the L<criticism> pragma.
+L<Test::Perl::Critic> module provides a nice interface that is suitable for
+test scripts.  Also, L<Test::Perl::Critic::Progressive> is useful for
+gradually applying coding standards to legacy code.  For ultimate convenience
+(at the expense of some flexibility) see the L<criticism> pragma.
 
 Win32 and ActivePerl users can find PPM distributions of Perl::Critic
 at L<http://theoryx5.uwinnipeg.ca/ppms/>.
@@ -1344,6 +1346,11 @@ L<Perl::Critic::Bangs>
 L<Perl::Critic::Lax>
 L<Perl::Critic::StricterSubs>
 L<Perl::Critic::Swift>
+
+These distributions enable you to use Perl::Critic in your unit tests:
+
+L<Test::Perl::Critic>
+L<Test::Perl::Critic::Progressive>
 
 There are also a couple of distributions that will install all the
 Perl::Critic related modules known to the development team:

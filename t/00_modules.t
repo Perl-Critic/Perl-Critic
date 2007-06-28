@@ -1,8 +1,8 @@
 #!perl
 
 ##############################################################################
-#     $URL$
-#    $Date$
+#      $URL$
+#     $Date$
 #   $Author$
 # $Revision$
 ##############################################################################
@@ -14,7 +14,13 @@ use Test::More;
 use Perl::Critic::TestUtils qw(bundled_policy_names);
 use English qw(-no_match_vars);
 
+#-----------------------------------------------------------------------------
+
 our $VERSION = 1.06;
+
+#-----------------------------------------------------------------------------
+
+Perl::Critic::TestUtils::block_perlcriticrc();
 
 my @bundled_policy_names = bundled_policy_names();
 
