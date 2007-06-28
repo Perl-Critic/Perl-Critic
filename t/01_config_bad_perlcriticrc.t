@@ -35,68 +35,63 @@ eval {
     my $critic = Perl::Critic->new( '-profile' => $PROFILE );
 };
 
+my $test_passed;
 my $eval_result = $EVAL_ERROR;
 
-ok( $eval_result, 'should get an exception when using a bad rc file' );
+$test_passed =
+    ok( $eval_result, 'should get an exception when using a bad rc file' );
 
-SKIP: {
-    skip 'because there was no exception', $TEST_COUNT - 1
-        if not $eval_result;
+die "No point in continuing.\n" if not $test_passed;
 
+$test_passed =
     isa_ok(
         $eval_result,
         'Perl::Critic::Exception::AggregateConfiguration',
         '$EVAL_ERROR',
     );
 
-    SKIP: {
-        skip
-            q{because the exception wasn't an instance of Exception::AggregateConfiguration},
-            $TEST_COUNT - 2
-            if not $eval_result->isa('Perl::Critic::Exception::AggregateConfiguration');
+die "No point in continuing.\n" if not $test_passed;
 
-        my @exceptions = @{ $eval_result->exceptions() };
+my @exceptions = @{ $eval_result->exceptions() };
 
-        my @parameters = qw{
-            exclude include severity single-policy theme top verbose
-        };
+my @parameters = qw{
+    exclude include severity single-policy theme top verbose
+};
 
-        my %expected_regexes =
-            map
-                { $_ => generate_global_message_regex( $_, $PROFILE ) }
-                @parameters;
+my %expected_regexes =
+    map
+        { $_ => generate_global_message_regex( $_, $PROFILE ) }
+        @parameters;
 
-        my $expected_exceptions = 2 + scalar @parameters;
-        is(
-            scalar @exceptions,
-            $expected_exceptions,
-            'should have received the correct number of exceptions'
-        );
-        if (@exceptions != $expected_exceptions) {
-            diag "Exception: $_" foreach @exceptions;
-        }
-
-        while (my ($parameter, $regex) = each %expected_regexes) {
-            is(
-                ( scalar grep { m/$regex/ } @exceptions ),
-                1,
-                "should have received one and only one exception for $parameter",
-            );
-        }
-
-        is(
-            ( scalar grep { $INVALID_PARAMETER_MESSAGE eq $_ } @exceptions ),
-            1,
-            "should have received an extra-parameter exception",
-        );
-
-        is(
-            ( scalar grep { is_require_pod_sections_source_exception($_) } @exceptions ),
-            1,
-            "should have received an invalid source exception for RequirePodSections",
-        );
-    }
+my $expected_exceptions = 2 + scalar @parameters;
+is(
+    scalar @exceptions,
+    $expected_exceptions,
+    'should have received the correct number of exceptions'
+);
+if (@exceptions != $expected_exceptions) {
+    diag "Exception: $_" foreach @exceptions;
 }
+
+while (my ($parameter, $regex) = each %expected_regexes) {
+    is(
+        ( scalar grep { m/$regex/ } @exceptions ),
+        1,
+        "should have received one and only one exception for $parameter",
+    );
+}
+
+is(
+    ( scalar grep { $INVALID_PARAMETER_MESSAGE eq $_ } @exceptions ),
+    1,
+    "should have received an extra-parameter exception",
+);
+
+is(
+    ( scalar grep { is_require_pod_sections_source_exception($_) } @exceptions ),
+    1,
+    "should have received an invalid source exception for RequirePodSections",
+);
 
 sub generate_global_message_regex {
     my ($parameter, $file) = @_;
