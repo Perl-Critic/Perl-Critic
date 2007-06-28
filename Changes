@@ -5,7 +5,7 @@
 # $Revision$
 ##############################################################################
 
-[1.06]  Released on 2007-06-xx
+[1.06]  Released on 2007-06-27
 
      New Features:
      * perlcritic now emits errors for all the problems it can find for the
