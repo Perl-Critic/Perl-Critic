@@ -5,23 +5,20 @@
 # $Revision$
 ##############################################################################
 
-package Perl::Critic::Exception::Configuration::Policy::ParameterValue;
+package Perl::Critic::Exception::Configuration::Option::Global;
 
 use strict;
 use warnings;
-
-use Perl::Critic::Utils qw{ :characters &policy_short_name };
 
 our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
 use Exception::Class (
-    'Perl::Critic::Exception::Configuration::Policy::ParameterValue' => {
-        isa         => 'Perl::Critic::Exception::Configuration::Policy',
-        description => 'A problem with the value of a parameter for a policy.',
-        fields      => [ qw{ policy } ],
-        alias       => 'throw_parameter_value',
+    'Perl::Critic::Exception::Configuration::Option::Global' => {
+        isa         => 'Perl::Critic::Exception::Configuration::Option',
+        description => 'A problem with global Perl::Critic configuration.',
+        alias       => 'throw_global',
     },
 );
 
@@ -29,7 +26,7 @@ use Exception::Class (
 
 use Exporter qw{ import };
 
-our @EXPORT_OK = qw{ &throw_parameter_value };
+our @EXPORT_OK = qw{ &throw_global };
 
 #-----------------------------------------------------------------------------
 
@@ -41,20 +38,16 @@ sub full_message {
         $source = qq{ found in "$source"};
     }
     else {
-        $source = $EMPTY;
+        $source = q{};
     }
 
-    my $policy = $self->policy();
     my $option_name = $self->option_name();
-    my $option_value =
-        defined $self->option_value()
-            ? $DQUOTE . $self->option_value() . $DQUOTE
-            : '<undef>';
-    my $message_suffix = $self->message_suffix() || $EMPTY;
+    my $option_value = $self->option_value();
 
     return
-            qq{The value for the $policy "$option_name" option }
-        .   qq{($option_value)$source $message_suffix};
+            qq{The value for the global "$option_name" option }
+        .   qq{("$option_value")$source }
+        .   $self->message_suffix();
 }
 
 
@@ -70,25 +63,25 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Exception::Configuration::Policy::ParameterValue - A problem with the value of a parameter for a policy
+Perl::Critic::Exception::Configuration::Option::Global - A problem with L<Perl::Critic> global configuration
 
 =head1 DESCRIPTION
 
-A representation of a problem found with the value of a parameter for a
-L<Perl::Critic::Policy>, whether from a F<.perlcriticrc>, another
-profile file, or command line.
+A representation of a problem found with the global configuration of
+L<Perl::Critic>, whether from a F<.perlcriticrc>, another profile
+file, or command line.
 
 
 =head1 CLASS METHODS
 
 =over
 
-=item C<< throw( policy => $policy, option_name => $option_name, option_value => $option_value, source => $source, message_suffix => $message_suffix ) >>
+=item C<< throw( option_name => $option_name, option_value => $option_value, source => $source, message_suffix => $message_suffix ) >>
 
 See L<Exception::Class/"throw">.
 
 
-=item C<< new( policy => $policy, option_name => $option_name, option_value => $option_value, source => $source, message_suffix => $message_suffix ) >>
+=item C<< new( option_name => $option_name, option_value => $option_value, source => $source, message_suffix => $message_suffix ) >>
 
 See L<Exception::Class/"new">.
 
@@ -102,7 +95,7 @@ See L<Exception::Class/"new">.
 
 =item C<full_message()>
 
-Provide a standard message for policy parameter value problems.  See
+Provide a standard message for global configuration problems.  See
 L<Exception::Class/"full_message">.
 
 

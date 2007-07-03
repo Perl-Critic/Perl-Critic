@@ -27,8 +27,8 @@ use Perl::Critic::Utils qw{
 };
 use Perl::Critic::Exception::AggregateConfiguration;
 use Perl::Critic::Exception::Configuration;
-use Perl::Critic::Exception::Configuration::Policy::ExtraParameter;
-use Perl::Critic::Exception::Configuration::Policy::ParameterValue;
+use Perl::Critic::Exception::Configuration::Option::Policy::ExtraParameter;
+use Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue;
 use Perl::Critic::PolicyParameter qw();
 use Perl::Critic::Violation qw();
 
@@ -90,7 +90,7 @@ sub _validate_config_keys {
 
     for my $offered_param ( keys %{ $config } ) {
         $errors->add_exception(
-            Perl::Critic::Exception::Configuration::Policy::ExtraParameter->new(
+            Perl::Critic::Exception::Configuration::Option::Policy::ExtraParameter->new(
                 policy          => $self->get_short_name(),
                 option_name     => $offered_param,
                 source          => undef,
@@ -232,7 +232,7 @@ sub violation {
 sub throw_parameter_value_exception {
     my ( $self, $option_name, $option_value, $source, $message_suffix ) = @_;
 
-    Perl::Critic::Exception::Configuration::Policy::ParameterValue->throw(
+    Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue->throw(
         policy          => $self->get_short_name(),
         option_name     => $option_name,
         option_value    => $option_value,
@@ -374,7 +374,7 @@ but without the severity.  The Policy itself knows the severity.
 =item C< throw_parameter_value_exception( $option_name, $option_value, $source, $message_suffix ) >
 
 Create and throw a
-L<Perl::Critic::Exception::Configuration::Policy::ParameterValue>.
+L<Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue>.
 Useful in parameter parser implementations.
 
 =item C< get_long_name() >

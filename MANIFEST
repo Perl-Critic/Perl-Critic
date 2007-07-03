@@ -19,10 +19,12 @@ lib/Perl/Critic/Document.pm
 lib/Perl/Critic/Exception.pm
 lib/Perl/Critic/Exception/AggregateConfiguration.pm
 lib/Perl/Critic/Exception/Configuration.pm
-lib/Perl/Critic/Exception/Configuration/Global.pm
-lib/Perl/Critic/Exception/Configuration/Policy.pm
-lib/Perl/Critic/Exception/Configuration/Policy/ExtraParameter.pm
-lib/Perl/Critic/Exception/Configuration/Policy/ParameterValue.pm
+lib/Perl/Critic/Exception/Configuration/Generic.pm
+lib/Perl/Critic/Exception/Configuration/Option.pm
+lib/Perl/Critic/Exception/Configuration/Option/Global.pm
+lib/Perl/Critic/Exception/Configuration/Option/Policy.pm
+lib/Perl/Critic/Exception/Configuration/Option/Policy/ExtraParameter.pm
+lib/Perl/Critic/Exception/Configuration/Option/Policy/ParameterValue.pm
 lib/Perl/Critic/Exception/Internal.pm
 lib/Perl/Critic/Policy.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitLvalueSubstr.pm
@@ -142,6 +144,7 @@ lib/Perl/Critic/TestUtils.pm
 lib/Perl/Critic/Theme.pm
 lib/Perl/Critic/UserProfile.pm
 lib/Perl/Critic/Utils.pm
+lib/Perl/Critic/Utils/DataConversion.pm
 lib/Perl/Critic/Utils/McCabe.pm
 lib/Perl/Critic/Utils/PPI.pm
 lib/Perl/Critic/Violation.pm
@@ -173,6 +176,7 @@ t/14_policy_parameter_behavior_list_string.t
 t/14_policy_parameter_behavior_string.t
 t/14_policy_parameters.t
 t/15_statistics.t
+t/16_roundtrip_defaults.t
 t/20_policies.t
 t/20_policy_prohibithardtabs.t
 t/20_policy_prohibittrailingwhitespace.t

@@ -12,8 +12,6 @@ use warnings;
 use English qw(-no_match_vars);
 use Readonly;
 
-use Carp qw(confess);
-
 use File::Basename qw(basename);
 use IO::String qw();
 use Pod::PlainText qw();
@@ -21,6 +19,7 @@ use String::Format qw(stringf);
 use overload ( q{""} => 'to_string', cmp => '_compare' );
 
 use Perl::Critic::Utils qw{ :characters :internal_lookup };
+use Perl::Critic::Exception::Internal qw{ &throw_internal };
 
 our $VERSION = 1.06;
 
@@ -39,7 +38,7 @@ sub new {
     #be creating new Perl::Critic::Policy modules.
 
     if ( @_ != $CONSTRUCTOR_ARG_COUNT ) {
-        confess 'Wrong number of args to Violation->new()';
+        throw_internal 'Wrong number of args to Violation->new()';
     }
 
     if ( ! eval { $elem->isa( 'PPI::Element' ) } ) {
@@ -49,7 +48,8 @@ sub new {
             $elem = $elem->{_doc};
         }
         else {
-            confess '3rd arg to Violation->new() must be a PPI::Element';
+            throw_internal
+                '3rd arg to Violation->new() must be a PPI::Element';
         }
     }
 

@@ -5,24 +5,39 @@
 # $Revision$
 ##############################################################################
 
-package Perl::Critic::Exception::Configuration;
+package Perl::Critic::Exception::Configuration::Option::Policy;
 
 use strict;
 use warnings;
+
+use Perl::Critic::Utils qw{ &policy_short_name };
 
 our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
 use Exception::Class (
-    'Perl::Critic::Exception::Configuration' => {
-        isa         => 'Perl::Critic::Exception',
-        description => 'A problem with Perl::Critic configuration, whether from a file or a command line or some other source.',
-        fields      => [ qw{ source } ],
+    'Perl::Critic::Exception::Configuration::Option::Policy' => {
+        isa         => 'Perl::Critic::Exception::Configuration::Option',
+        description => 'A problem with the configuration of a policy.',
+        fields      => [ qw{ policy } ],
     },
 );
 
 #-----------------------------------------------------------------------------
+
+sub new {
+    my $class = shift;
+    my %options = @_;
+
+    my $policy = $options{policy};
+    if ($policy) {
+        $options{policy} = policy_short_name($policy);
+    }
+
+    return $class->SUPER::new(%options);
+}
+
 
 1;
 
@@ -36,13 +51,13 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Exception::Configuration - A problem with L<Perl::Critic> configuration
+Perl::Critic::Exception::Configuration::Option::Policy - A problem with configuration of a policy
 
 =head1 DESCRIPTION
 
-A representation of a problem found with the configuration of
-L<Perl::Critic>, whether from a F<.perlcriticrc>, another profile
-file, or command line.
+A representation of a problem found with the configuration of a
+L<Perl::Critic::Policy>, whether from a F<.perlcriticrc>, another
+profile file, or command line.
 
 This is an abstract class.  It should never be instantiated.
 
@@ -51,18 +66,12 @@ This is an abstract class.  It should never be instantiated.
 
 =over
 
-=item C<source()>
+=item C<policy()>
 
-Where the configuration information came from, if it could be determined.
+The short name of the policy that had configuration problems.
 
 
 =back
-
-
-=head1 SEE ALSO
-
-L<Perl::Critic::Exception::Configuration::Generic>
-L<Perl::Critic::Exception::Configuration::Option>
 
 
 =head1 AUTHOR

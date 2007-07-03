@@ -17,7 +17,7 @@ use Scalar::Util qw(blessed);
 
 use Perl::Critic::Exception::AggregateConfiguration;
 use Perl::Critic::Exception::Configuration;
-use Perl::Critic::Exception::Configuration::Global;
+use Perl::Critic::Exception::Configuration::Option::Global;
 use Perl::Critic::PolicyFactory;
 use Perl::Critic::Theme qw( $RULE_INVALID_CHARACTER_REGEX &cook_rule );
 use Perl::Critic::UserProfile qw();
@@ -312,7 +312,7 @@ sub _validate_and_save_regex {
                 s/ [ ] at [ ] .* Config [.] pm [ ] line [ ] \d+ [.] \n? \z/./xms;
 
             $errors->add_exception(
-                Perl::Critic::Exception::Configuration::Global->new(
+                Perl::Critic::Exception::Configuration::Option::Global->new(
                     option_name     => $option_name,
                     option_value    => $regex,
                     source          => $source,
@@ -360,7 +360,7 @@ sub _validate_and_save_verbosity {
         and not is_valid_numeric_verbosity($verbosity)
     ) {
         $errors->add_exception(
-            Perl::Critic::Exception::Configuration::Global->new(
+            Perl::Critic::Exception::Configuration::Option::Global->new(
                 option_name     => $option_name,
                 option_value    => $verbosity,
                 source          => $source,
@@ -405,7 +405,7 @@ sub _validate_and_save_severity {
         }
         else {
             $errors->add_exception(
-                Perl::Critic::Exception::Configuration::Global->new(
+                Perl::Critic::Exception::Configuration::Option::Global->new(
                     option_name     => $option_name,
                     option_value    => $severity,
                     source          => $source,
@@ -417,7 +417,7 @@ sub _validate_and_save_severity {
     }
     elsif ( not any { $_ eq lc $severity } @SEVERITY_NAMES ) {
         $errors->add_exception(
-            Perl::Critic::Exception::Configuration::Global->new(
+            Perl::Critic::Exception::Configuration::Option::Global->new(
                 option_name     => $option_name,
                 option_value    => $severity,
                 source          => $source,
@@ -461,7 +461,7 @@ sub _validate_and_save_top {
     }
     else {
         $errors->add_exception(
-            Perl::Critic::Exception::Configuration::Global->new(
+            Perl::Critic::Exception::Configuration::Option::Global->new(
                 option_name     => $option_name,
                 option_value    => $top,
                 source          => $source,
@@ -498,7 +498,7 @@ sub _validate_and_save_theme {
         my $bad_character = $1;
 
         $errors->add_exception(
-            Perl::Critic::Exception::Configuration::Global->new(
+            Perl::Critic::Exception::Configuration::Option::Global->new(
                 option_name     => $option_name,
                 option_value    => $theme_rule,
                 source          => $source,
@@ -515,7 +515,7 @@ sub _validate_and_save_theme {
 
         if ($EVAL_ERROR) {
             $errors->add_exception(
-                Perl::Critic::Exception::Configuration::Global->new(
+                Perl::Critic::Exception::Configuration::Option::Global->new(
                     option_name     => $option_name,
                     option_value    => $theme_rule,
                     source          => $source,

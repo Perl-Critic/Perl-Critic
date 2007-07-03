@@ -18,7 +18,7 @@ use List::MoreUtils qw(any);
 
 use Perl::Critic::Utils qw{ :characters :data_conversion };
 use Perl::Critic::Exception::Internal qw{ &throw_internal };
-use Perl::Critic::Exception::Configuration::Global qw{ &throw_global };
+use Perl::Critic::Exception::Configuration::Option::Global qw{ &throw_global };
 
 #-----------------------------------------------------------------------------
 

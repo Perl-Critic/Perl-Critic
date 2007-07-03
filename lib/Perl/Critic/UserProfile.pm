@@ -12,13 +12,13 @@ use warnings;
 use English qw(-no_match_vars);
 use Readonly;
 
-use Carp qw(carp croak confess);
-
 use Config::Tiny qw();
 use File::Spec qw();
 
 use Perl::Critic::Defaults qw();
 use Perl::Critic::Utils qw{ :characters &policy_long_name &policy_short_name };
+use Perl::Critic::Exception::Internal qw{ throw_internal };
+use Perl::Critic::Exception::Configuration::Generic qw{ throw_generic };
 
 our $VERSION = 1.06;
 
@@ -142,7 +142,10 @@ sub _load_profile {
 
     my $ref_type = ref $profile || 'DEFAULT';
     my $loader = $LOADER_FOR{$ref_type};
-    confess qq{Can't load UserProfile from type "$ref_type"} if ! $loader;
+
+    if (not $loader) {
+        throw_internal qq{Can't load UserProfile from type "$ref_type"};
+    }
 
     $self->{_profile} = $loader->($self, $profile);
     return $self;
@@ -172,14 +175,16 @@ sub _load_profile_from_file {
     $self->_set_source( $file );
 
     my $profile = Config::Tiny->read( $file );
-    if (defined $profile) {
-        _fix_defaults_key( $profile );
-
-        return $profile;
-    } else {
+    if (not defined $profile) {
         my $errstr = Config::Tiny::errstr();
-        die qq{Could not parse profile "$file": $errstr\n};
+        throw_generic
+            message => qq{Could not parse profile "$file": $errstr},
+            source  => $file;
     }
+
+    _fix_defaults_key( $profile );
+
+    return $profile;
 }
 
 #-----------------------------------------------------------------------------
@@ -188,8 +193,10 @@ sub _load_profile_from_array {
     my ( $self, $array_ref ) = @_;
     my $joined    = join qq{\n}, @{ $array_ref };
     my $profile = Config::Tiny->read_string( $joined );
-    croak( 'Profile error: ' . Config::Tiny::errstr() )
-        if not defined $profile;
+
+    if (not defined $profile) {
+        throw_generic 'Profile error: ' . Config::Tiny::errstr();
+    }
 
     _fix_defaults_key( $profile );
 
@@ -201,8 +208,10 @@ sub _load_profile_from_array {
 sub _load_profile_from_string {
     my ( $self, $string ) = @_;
     my $profile = Config::Tiny->read_string( ${ $string } );
-    croak( 'Profile error: ' . Config::Tiny::errstr() )
-        if not defined $profile;
+
+    if (not defined $profile) {
+        throw_generic 'Profile error: ' . Config::Tiny::errstr();
+    }
 
     _fix_defaults_key( $profile );
 

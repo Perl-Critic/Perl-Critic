@@ -5,22 +5,23 @@
 # $Revision$
 ##############################################################################
 
-package Perl::Critic::Exception::Configuration::Policy::ExtraParameter;
+package Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue;
 
 use strict;
 use warnings;
 
-use Perl::Critic::Utils qw{ &policy_short_name };
+use Perl::Critic::Utils qw{ :characters &policy_short_name };
 
 our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
 use Exception::Class (
-    'Perl::Critic::Exception::Configuration::Policy::ExtraParameter' => {
-        isa         => 'Perl::Critic::Exception::Configuration::Policy',
-        description => 'The configuration of a policy referred to a non-existant parameter.',
-        alias       => 'throw_extra_parameter',
+    'Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue' => {
+        isa         => 'Perl::Critic::Exception::Configuration::Option::Policy',
+        description => 'A problem with the value of a parameter for a policy.',
+        fields      => [ qw{ policy } ],
+        alias       => 'throw_parameter_value',
     },
 );
 
@@ -28,7 +29,7 @@ use Exception::Class (
 
 use Exporter qw{ import };
 
-our @EXPORT_OK = qw{ &throw_extra_parameter };
+our @EXPORT_OK = qw{ &throw_parameter_value };
 
 #-----------------------------------------------------------------------------
 
@@ -37,17 +38,23 @@ sub full_message {
 
     my $source = $self->source();
     if ($source) {
-        $source = qq{ (found in "$source")};
+        $source = qq{ found in "$source"};
     }
     else {
-        $source = q{};
+        $source = $EMPTY;
     }
 
     my $policy = $self->policy();
     my $option_name = $self->option_name();
+    my $option_value =
+        defined $self->option_value()
+            ? $DQUOTE . $self->option_value() . $DQUOTE
+            : '<undef>';
+    my $message_suffix = $self->message_suffix() || $EMPTY;
 
     return
-        qq{The $policy policy doesn't take a "$option_name" option$source.};
+            qq{The value for the $policy "$option_name" option }
+        .   qq{($option_value)$source $message_suffix};
 }
 
 
@@ -63,25 +70,25 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Exception::Configuration::Policy::ExtraParameter - The configuration referred to a non-existent parameter for a policy.
+Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue - A problem with the value of a parameter for a policy
 
 =head1 DESCRIPTION
 
-A representation of the configuration attempting to specify a value
-for a parameter that a L<Perl::Critic::Policy> doesn't have, whether
-from a F<.perlcriticrc>, another profile file, or command line.
+A representation of a problem found with the value of a parameter for a
+L<Perl::Critic::Policy>, whether from a F<.perlcriticrc>, another
+profile file, or command line.
 
 
 =head1 CLASS METHODS
 
 =over
 
-=item C<< throw( policy => $policy, option_name => $option_name, source => $source ) >>
+=item C<< throw( policy => $policy, option_name => $option_name, option_value => $option_value, source => $source, message_suffix => $message_suffix ) >>
 
 See L<Exception::Class/"throw">.
 
 
-=item C<< new( policy => $policy, option_name => $option_name, source => $source ) >>
+=item C<< new( policy => $policy, option_name => $option_name, option_value => $option_value, source => $source, message_suffix => $message_suffix ) >>
 
 See L<Exception::Class/"new">.
 
@@ -95,8 +102,8 @@ See L<Exception::Class/"new">.
 
 =item C<full_message()>
 
-Provide a standard message for values for non-existent parameters for
-policies.  See L<Exception::Class/"full_message">.
+Provide a standard message for policy parameter value problems.  See
+L<Exception::Class/"full_message">.
 
 
 =back

@@ -5,39 +5,31 @@
 # $Revision$
 ##############################################################################
 
-package Perl::Critic::Exception::Configuration::Policy;
+package Perl::Critic::Exception::Configuration::Generic;
 
 use strict;
 use warnings;
-
-use Perl::Critic::Utils qw{ &policy_short_name };
 
 our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
 use Exception::Class (
-    'Perl::Critic::Exception::Configuration::Policy' => {
+    'Perl::Critic::Exception::Configuration::Generic' => {
         isa         => 'Perl::Critic::Exception::Configuration',
-        description => 'A problem with the configuration of a policy.',
-        fields      => [ qw{ policy } ],
+        description =>
+            q{A problem with Perl::Critic configuration that isn't related to an option.},
+        alias       => 'throw_generic',
     },
 );
 
 #-----------------------------------------------------------------------------
 
-sub new {
-    my $class = shift;
-    my %options = @_;
+use Exporter qw{ import };
 
-    my $policy = $options{policy};
-    if ($policy) {
-        $options{policy} = policy_short_name($policy);
-    }
+our @EXPORT_OK = qw{ &throw_generic };
 
-    return $class->SUPER::new(%options);
-}
-
+#-----------------------------------------------------------------------------
 
 1;
 
@@ -51,24 +43,28 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Exception::Configuration::Policy - A problem with configuration of a policy
+Perl::Critic::Exception::Configuration::Generic - A problem with L<Perl::Critic> configuration that doesn't involve an option
 
 =head1 DESCRIPTION
 
-A representation of a problem found with the configuration of a
-L<Perl::Critic::Policy>, whether from a F<.perlcriticrc>, another
-profile file, or command line.
+A representation of a problem found with the configuration of L<Perl::Critic>,
+whether from a F<.perlcriticrc>, another profile file, or command line.
 
-This is an abstract class.  It should never be instantiated.
+This covers things like file reading and parsing errors.
 
 
-=head1 METHODS
+=head1 CLASS METHODS
 
 =over
 
-=item C<policy()>
+=item C<< throw( message => $message, source => $source ) >>
 
-The short name of the policy that had configuration problems.
+See L<Exception::Class/"throw">.
+
+
+=item C<< new( message => $message, source => $source ) >>
+
+See L<Exception::Class/"new">.
 
 
 =back
