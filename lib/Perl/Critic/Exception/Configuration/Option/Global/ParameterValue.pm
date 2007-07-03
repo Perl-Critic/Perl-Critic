@@ -5,7 +5,7 @@
 # $Revision$
 ##############################################################################
 
-package Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue;
+package Perl::Critic::Exception::Configuration::Option::Global::ParameterValue;
 
 use strict;
 use warnings;
@@ -17,10 +17,10 @@ our $VERSION = 1.06;
 #-----------------------------------------------------------------------------
 
 use Exception::Class (
-    'Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue' => {
-        isa         => 'Perl::Critic::Exception::Configuration::Option::Policy',
-        description => 'A problem with the value of a parameter for a policy.',
-        alias       => 'throw_policy_value',
+    'Perl::Critic::Exception::Configuration::Option::Global::ParameterValue' => {
+        isa         => 'Perl::Critic::Exception::Configuration::Option::Global',
+        description => 'A problem with the value of a global parameter.',
+        alias       => 'throw_global_value',
     },
 );
 
@@ -28,7 +28,7 @@ use Exception::Class (
 
 use Exporter qw{ import };
 
-our @EXPORT_OK = qw{ &throw_policy_value };
+our @EXPORT_OK = qw{ &throw_global_value };
 
 #-----------------------------------------------------------------------------
 
@@ -43,7 +43,6 @@ sub full_message {
         $source = $EMPTY;
     }
 
-    my $policy = $self->policy();
     my $option_name = $self->option_name();
     my $option_value =
         defined $self->option_value()
@@ -52,7 +51,7 @@ sub full_message {
     my $message_suffix = $self->message_suffix() || $EMPTY;
 
     return
-            qq{The value for the $policy "$option_name" option }
+            qq{The value for the global "$option_name" option }
         .   qq{($option_value)$source $message_suffix};
 }
 
@@ -69,25 +68,25 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue - A problem with the value of a parameter for a policy
+Perl::Critic::Exception::Configuration::Option::Global::ParameterValue - A problem with the value of a global parameter
 
 =head1 DESCRIPTION
 
-A representation of a problem found with the value of a parameter for a
-L<Perl::Critic::Policy>, whether from a F<.perlcriticrc>, another
-profile file, or command line.
+A representation of a problem found with the value of a global
+parameter, whether from a F<.perlcriticrc>, another profile file, or
+command line.
 
 
 =head1 CLASS METHODS
 
 =over
 
-=item C<< throw( policy => $policy, option_name => $option_name, option_value => $option_value, source => $source, message_suffix => $message_suffix ) >>
+=item C<< throw( option_name => $option_name, option_value => $option_value, source => $source, message_suffix => $message_suffix ) >>
 
 See L<Exception::Class/"throw">.
 
 
-=item C<< new( policy => $policy, option_name => $option_name, option_value => $option_value, source => $source, message_suffix => $message_suffix ) >>
+=item C<< new( option_name => $option_name, option_value => $option_value, source => $source, message_suffix => $message_suffix ) >>
 
 See L<Exception::Class/"new">.
 
@@ -101,7 +100,7 @@ See L<Exception::Class/"new">.
 
 =item C<full_message()>
 
-Provide a standard message for policy parameter value problems.  See
+Provide a standard message for global configuration problems.  See
 L<Exception::Class/"full_message">.
 
 

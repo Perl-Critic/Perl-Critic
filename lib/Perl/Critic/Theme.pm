@@ -18,7 +18,8 @@ use List::MoreUtils qw(any);
 
 use Perl::Critic::Utils qw{ :characters :data_conversion };
 use Perl::Critic::Exception::Internal qw{ &throw_internal };
-use Perl::Critic::Exception::Configuration::Option::Global qw{ &throw_global };
+use Perl::Critic::Exception::Configuration::Option::Global::ParameterValue
+    qw{ &throw_global_value };
 
 #-----------------------------------------------------------------------------
 
@@ -58,7 +59,7 @@ sub _init {
     my $rule = $args{-rule} || $EMPTY;
 
     if ( $rule =~ m/$RULE_INVALID_CHARACTER_REGEX/xms ) {
-        throw_global
+        throw_global_value
             option_name     => $CONFIG_KEY,
             option_value    => $rule,
             message_suffix => qq{contains an invalid character: "$1".};
@@ -100,7 +101,7 @@ sub policy_is_thematic {
     my $is_thematic = eval $as_code;  ## no critic (ProhibitStringyEval)
 
     if ($EVAL_ERROR) {
-        throw_global
+        throw_global_value
             option_name     => $CONFIG_KEY,
             option_value    => $rule,
             message_suffix  => q{contains a syntax error.};

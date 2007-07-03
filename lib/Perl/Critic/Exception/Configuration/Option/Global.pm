@@ -18,38 +18,10 @@ use Exception::Class (
     'Perl::Critic::Exception::Configuration::Option::Global' => {
         isa         => 'Perl::Critic::Exception::Configuration::Option',
         description => 'A problem with global Perl::Critic configuration.',
-        alias       => 'throw_global',
     },
 );
 
 #-----------------------------------------------------------------------------
-
-use Exporter qw{ import };
-
-our @EXPORT_OK = qw{ &throw_global };
-
-#-----------------------------------------------------------------------------
-
-sub full_message {
-    my ( $self ) = @_;
-
-    my $source = $self->source();
-    if ($source) {
-        $source = qq{ found in "$source"};
-    }
-    else {
-        $source = q{};
-    }
-
-    my $option_name = $self->option_name();
-    my $option_value = $self->option_value();
-
-    return
-            qq{The value for the global "$option_name" option }
-        .   qq{("$option_value")$source }
-        .   $self->message_suffix();
-}
-
 
 1;
 
@@ -71,35 +43,7 @@ A representation of a problem found with the global configuration of
 L<Perl::Critic>, whether from a F<.perlcriticrc>, another profile
 file, or command line.
 
-
-=head1 CLASS METHODS
-
-=over
-
-=item C<< throw( option_name => $option_name, option_value => $option_value, source => $source, message_suffix => $message_suffix ) >>
-
-See L<Exception::Class/"throw">.
-
-
-=item C<< new( option_name => $option_name, option_value => $option_value, source => $source, message_suffix => $message_suffix ) >>
-
-See L<Exception::Class/"new">.
-
-
-=back
-
-
-=head1 METHODS
-
-=over
-
-=item C<full_message()>
-
-Provide a standard message for global configuration problems.  See
-L<Exception::Class/"full_message">.
-
-
-=back
+This is an abstract class.  It should never be instantiated.
 
 
 =head1 AUTHOR

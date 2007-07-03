@@ -5,7 +5,7 @@
 # $Revision$
 ##############################################################################
 
-package Perl::Critic::Exception::Configuration::Option::Policy::ExtraParameter;
+package Perl::Critic::Exception::Configuration::Option::Global::ExtraParameter;
 
 use strict;
 use warnings;
@@ -15,10 +15,10 @@ our $VERSION = 1.06;
 #-----------------------------------------------------------------------------
 
 use Exception::Class (
-    'Perl::Critic::Exception::Configuration::Option::Policy::ExtraParameter' => {
-        isa         => 'Perl::Critic::Exception::Configuration::Option::Policy',
-        description => 'The configuration of a policy referred to a non-existant parameter.',
-        alias       => 'throw_extra_parameter',
+    'Perl::Critic::Exception::Configuration::Option::Global::ExtraParameter' => {
+        isa         => 'Perl::Critic::Exception::Configuration::Option::Global',
+        description => 'The configuration referred to a non-existant global option.',
+        alias       => 'throw_extra_global',
     },
 );
 
@@ -26,7 +26,7 @@ use Exception::Class (
 
 use Exporter qw{ import };
 
-our @EXPORT_OK = qw{ &throw_extra_parameter };
+our @EXPORT_OK = qw{ &throw_extra_global };
 
 #-----------------------------------------------------------------------------
 
@@ -41,11 +41,9 @@ sub full_message {
         $source = q{};
     }
 
-    my $policy = $self->policy();
     my $option_name = $self->option_name();
 
-    return
-        qq{The $policy policy doesn't take a "$option_name" option$source.};
+    return qq{"$option_name" is not a supported option$source.};
 }
 
 
@@ -61,25 +59,25 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Exception::Configuration::Option::Policy::ExtraParameter - The configuration referred to a non-existent parameter for a policy.
+Perl::Critic::Exception::Configuration::Option::Global::ExtraParameter - The configuration referred to a non-existent global option.
 
 =head1 DESCRIPTION
 
 A representation of the configuration attempting to specify a value
-for a parameter that a L<Perl::Critic::Policy> doesn't have, whether
-from a F<.perlcriticrc>, another profile file, or command line.
+for an option that L<Perl::Critic> doesn't have, whether from a
+F<.perlcriticrc>, another profile file, or command line.
 
 
 =head1 CLASS METHODS
 
 =over
 
-=item C<< throw( policy => $policy, option_name => $option_name, source => $source ) >>
+=item C<< throw( option_name => $option_name, source => $source ) >>
 
 See L<Exception::Class/"throw">.
 
 
-=item C<< new( policy => $policy, option_name => $option_name, source => $source ) >>
+=item C<< new( option_name => $option_name, source => $source ) >>
 
 See L<Exception::Class/"new">.
 

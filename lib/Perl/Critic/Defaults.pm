@@ -9,11 +9,13 @@ package Perl::Critic::Defaults;
 
 use strict;
 use warnings;
-use Carp qw(cluck);
 use English qw(-no_match_vars);
+
 use Perl::Critic::Utils qw{
     :booleans :characters :severities :data_conversion $DEFAULT_VERBOSITY
 };
+use Perl::Critic::Exception::AggregateConfiguration;
+use Perl::Critic::Exception::Configuration::Option::Global::ExtraParameter;
 
 our $VERSION = 1.06;
 
@@ -50,13 +52,32 @@ sub _init {
     $self->{_verbose}        = delete $args{verbose}          || $DEFAULT_VERBOSITY;
     $self->{_color}          = delete $args{color}            || $TRUE;
 
-    # If there's anything left, warn about invalid settings
-    if ( my @remaining = sort keys %args ){
-        my @warnings = map { qq{Setting "$_" is not supported\n} } @remaining;
-        die @warnings, "\n";
-    }
+    # If there's anything left, complain.
+    _check_for_extra_options(%args);
 
     return $self;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _check_for_extra_options {
+    my %args = @_;
+
+    if ( my @remaining = sort keys %args ){
+        my $errors = Perl::Critic::Exception::AggregateConfiguration->new();
+
+        foreach my $option_name (@remaining) {
+            $errors->add_exception(
+                Perl::Critic::Exception::Configuration::Option::Global::ExtraParameter->new(
+                    option_name     => $option_name,
+                )
+            )
+        }
+
+        $errors->rethrow();
+    }
+
+    return;
 }
 
 #-----------------------------------------------------------------------------

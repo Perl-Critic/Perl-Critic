@@ -22,6 +22,8 @@ lib/Perl/Critic/Exception/Configuration.pm
 lib/Perl/Critic/Exception/Configuration/Generic.pm
 lib/Perl/Critic/Exception/Configuration/Option.pm
 lib/Perl/Critic/Exception/Configuration/Option/Global.pm
+lib/Perl/Critic/Exception/Configuration/Option/Global/ExtraParameter.pm
+lib/Perl/Critic/Exception/Configuration/Option/Global/ParameterValue.pm
 lib/Perl/Critic/Exception/Configuration/Option/Policy.pm
 lib/Perl/Critic/Exception/Configuration/Option/Policy/ExtraParameter.pm
 lib/Perl/Critic/Exception/Configuration/Option/Policy/ParameterValue.pm
