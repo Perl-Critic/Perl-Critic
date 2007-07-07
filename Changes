@@ -5,6 +5,12 @@
 # $Revision$
 ##############################################################################
 
+[1.xxx]  Released on 2007-xx-xx
+
+     Bug Fixes:
+     * Fix P::C::Theme-- Exporter in Perl 5.6 does not export import(), so you
+       must subclass it.  *sigh*
+
 [1.06]  Released on 2007-06-27
 
      New Features:
