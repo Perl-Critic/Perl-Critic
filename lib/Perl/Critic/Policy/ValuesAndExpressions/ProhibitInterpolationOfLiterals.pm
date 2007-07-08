@@ -32,6 +32,8 @@ sub applies_to       { return qw(PPI::Token::Quote::Double
 
 #-----------------------------------------------------------------------------
 
+Readonly::Scalar my $MAX_SPECIFICATION_LENGTH => 3;
+
 sub new {
     my $class = shift;
     my $self = $class->SUPER::new(@_);
@@ -48,7 +50,7 @@ sub new {
             m{ \A qq }mx || ($_ = 'qq' . $_)
         }  #Add 'qq'
         for (@allow) {
-            (length $_ <= 3) || chop
+            (length $_ <= $MAX_SPECIFICATION_LENGTH) || chop
         }    #Chop closing char
         $self->{_allow} = \@allow;
     }

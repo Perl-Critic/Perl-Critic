@@ -40,6 +40,8 @@ sub violates {
     return $self->violation( $DESC, $EXPL, $elem );
 }
 
+Readonly::Scalar my $MAX_EXPRESSION_COMPLEXETY => 4;
+
 sub _is_bad_index {
     # return (varname, 0|1) if this could be a violation
     my ( $elem ) = @_;
@@ -50,7 +52,7 @@ sub _is_bad_index {
 
     # This is the expression elements that compose the array indexing
     my @expr = $children[0]->schildren();
-    return if !@expr || @expr > 4; # no-op or too complex
+    return if !@expr || @expr > $MAX_EXPRESSION_COMPLEXETY;
     my ($name, $isref, $isindex) = _is_bad_var_in_index(\@expr);
     return if !$name;
     return $name, $isref if !@expr && $isindex;

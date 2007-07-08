@@ -12,17 +12,26 @@ package main;
 
 use strict;
 use warnings;
-use Carp qw(confess);
 use English qw(-no_match_vars);
+use Readonly;
+
+use Carp qw(confess);
+
 use Getopt::Long qw(GetOptions);
 use List::Util qw(first);
-use Perl::Critic::Utils qw( :characters :severities &policy_short_name );
-use Perl::Critic::Violation qw();
 use Pod::Usage qw(pod2usage);
+
+use Perl::Critic::Utils qw(
+    :characters :severities &policy_short_name
+    $DEFAULT_VERBOSITY $DEFAULT_VERBOSITY_WITH_FILE_NAME
+);
+use Perl::Critic::Violation qw();
 
 #-----------------------------------------------------------------------------
 
 our $VERSION = 1.06;
+
+Readonly::Scalar my $DEFAULT_VIOLATIONS_FOR_TOP => 20;
 
 #-----------------------------------------------------------------------------
 # Begin script.  Don't run when loaded as a library
@@ -54,8 +63,9 @@ sub get_options {
     # are given, the lowest one wins.  If an explicit -severity
     # option has been given, then the shortcuts are ignored. The
     # @SEVERITY_NAMES variable is exported by Perl::Critic::Utils.
-    $opts{severity} ||=  first { exists $opts{$_} } @SEVERITY_NAMES;
-    $opts{severity} ||=  first { exists $opts{$_} } (1 .. 5);
+    $opts{severity} ||= first { exists $opts{$_} } @SEVERITY_NAMES;
+    $opts{severity} ||=
+        first { exists $opts{$_} } ($SEVERITY_LOWEST ..  $SEVERITY_HIGHEST);
 
 
     # If -top is specified, default the severity level to 1, unless an
@@ -64,7 +74,7 @@ sub get_options {
     # We also default the -top count to twenty if none is given
     if ( exists $opts{top} ) {
         $opts{severity} ||= 1;
-        $opts{top} ||= 20;
+        $opts{top} ||= $DEFAULT_VIOLATIONS_FOR_TOP;
     }
 
     #Override profile, if -noprofile is specified
@@ -115,7 +125,7 @@ sub _validate_options {
         $msg .= qq{Warning: Cannot use -noprofile with -profile option.\n};
     }
 
-    if ( $opts{verbose} && $opts{verbose} !~ m{(?: \d+ | %[mfFlcedrps] )}mx){
+    if ( $opts{verbose} && $opts{verbose} !~ m{(?: \d+ | %[mfFlcedrps] )}mx) {
         $msg .= qq{Warning: -verbose arg "$opts{verbose}" looks odd.  };
         $msg .= qq{Perhaps you meant to say "-verbose 3 $opts{verbose}"\n};
     }
@@ -125,9 +135,16 @@ sub _validate_options {
         $msg .= qq{Perhaps you meant to say "$opts{top} -top".\n};
     }
 
-    if (exists $opts{severity} && ($opts{severity}<1 || $opts{severity}>5)){
+    if (
+            exists $opts{severity}
+        &&  (
+                    $opts{severity} < $SEVERITY_LOWEST
+                ||  $opts{severity} > $SEVERITY_HIGHEST
+            )
+    ) {
         $msg .= qq{Warning: -severity arg "$opts{severity}" out of range.  };
-        $msg .= qq{Severities range from ""'(lowest) to "5" (highest).\n};
+        $msg .= qq{Severities range from "$SEVERITY_LOWEST" (lowest) to };
+        $msg .= qq{"$SEVERITY_HIGHEST" (highest).\n};
     }
 
 
@@ -240,7 +257,10 @@ sub render_report {
     # Otherwise, format and print violations
     my $verbosity = $CRITIC->config->verbose();
     # $verbosity can be numeric or string, so use "eq" for comparison;
-    $verbosity = ($verbosity eq '4' && @FILES > 1) ? 5 : $verbosity;
+    $verbosity =
+        ($verbosity eq $DEFAULT_VERBOSITY && @FILES > 1)
+            ? $DEFAULT_VERBOSITY_WITH_FILE_NAME
+            : $verbosity;
     my $fmt = Perl::Critic::Utils::verbosity_to_format( $verbosity );
     if (not -f $file) { $fmt =~ s{\%[fF]}{STDIN}mx; } #HACK!
     Perl::Critic::Violation::set_format( $fmt );
@@ -377,7 +397,10 @@ sub _colorize_by_severity {
     return @violations if _this_is_windows();
     return @violations if not eval { require Term::ANSIColor };
 
-    my %color_of = ( 5 => 'bold red', 4 => 'yellow');
+    my %color_of = (
+        $SEVERITY_HIGHEST => 'bold red',
+        $SEVERITY_HIGH    => 'yellow',
+    );
     return map { _colorize( "$_", $color_of{$_->severity()} ) } @violations;
 
 }
@@ -411,7 +434,7 @@ sub render_policy_listing {
     require Perl::Critic::PolicyListing;
     require Perl::Critic;
 
-    my %pc_params = (-profile => $EMPTY, -severity => 1);
+    my %pc_params = (-profile => $EMPTY, -severity => $SEVERITY_LOWEST);
     my @pols = Perl::Critic->new( %pc_params )->policies();
     my $listing = Perl::Critic::PolicyListing->new( -policies => \@pols );
     print $listing;
@@ -425,7 +448,7 @@ sub render_profile_prototype {
     require Perl::Critic::ProfilePrototype;
     require Perl::Critic;
 
-    my %pc_params = (-profile => $EMPTY, -severity => 1);
+    my %pc_params = (-profile => $EMPTY, -severity => $SEVERITY_LOWEST);
     my @pols = Perl::Critic->new( %pc_params )->policies();
     my $prototype = Perl::Critic::ProfilePrototype->new( -policies => \@pols );
     print $prototype;
@@ -439,7 +462,7 @@ sub policy_docs {
     my $pattern = shift;
     require Perl::Critic;
 
-    my %pc_params = (-profile => $EMPTY, -severity => 1);
+    my %pc_params = (-profile => $EMPTY, -severity => $SEVERITY_LOWEST);
     my @policies  = Perl::Critic::Config->new( %pc_params )->policies();
     my @matches   = grep { $_ =~ m/$pattern/imx } @policies;
 
