@@ -378,7 +378,7 @@ L<Perl::Critic::DEVELOPER/"MAKING YOUR POLICY CONFIGURABLE">
 
 =head1 AUTHOR
 
-Elliot Shank <perl@galumph.org>
+Elliot Shank <perl@galumph.com>
 
 =head1 COPYRIGHT
 

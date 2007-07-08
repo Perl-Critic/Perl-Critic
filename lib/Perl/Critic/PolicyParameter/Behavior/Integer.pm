@@ -182,7 +182,7 @@ In this case, this means including the minimum and maximum values.
 
 =head1 AUTHOR
 
-Elliot Shank <perl@galumph.org>
+Elliot Shank <perl@galumph.com>
 
 =head1 COPYRIGHT
 

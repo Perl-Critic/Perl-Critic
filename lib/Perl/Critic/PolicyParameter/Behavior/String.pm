@@ -84,7 +84,7 @@ At present, this behavior isn't customizable by the specification.
 
 =head1 AUTHOR
 
-Elliot Shank <perl@galumph.org>
+Elliot Shank <perl@galumph.com>
 
 =head1 COPYRIGHT
 

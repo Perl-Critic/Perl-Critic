@@ -142,7 +142,7 @@ In this specific case, the always present values are added at the end.
 
 =head1 AUTHOR
 
-Elliot Shank <perl@galumph.org>
+Elliot Shank <perl@galumph.com>
 
 =head1 COPYRIGHT
 
