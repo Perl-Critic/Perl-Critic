@@ -15,6 +15,7 @@ lib/Perl/Critic/Defaults.pm
 lib/Perl/Critic/DEVELOPER.pod
 lib/Perl/Critic/Document.pm
 lib/Perl/Critic/Policy.pm
+lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitComplexMappings.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitLvalueSubstr.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitReverseSortBlock.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitSleepViaSelect.pm
@@ -166,6 +167,7 @@ t/95_kwalitee.t
 t/97_spelling.t
 t/98_pod_syntax.t
 t/99_pod_coverage.t
+t/BuiltinFunctions/ProhibitComplexMappings.run
 t/BuiltinFunctions/ProhibitLvalueSubstr.run
 t/BuiltinFunctions/ProhibitReverseSortBlock.run
 t/BuiltinFunctions/ProhibitSleepViaSelect.run

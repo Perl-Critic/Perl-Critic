@@ -1,0 +1,71 @@
+## name Basic passing
+## failures 0
+## cut
+
+map {$_} @list;
+map {substr $_, 0, 10;} @list;
+map {foo($_)} @list;
+map {{$_ => 1}} @list;
+
+map $_, @list;
+map substr($_, 0, 10), @list;
+map foo($_), @list;
+map {$_ => 1}, @list;
+
+$foo{map}; # for Devel::Cover
+{map}; # for Devel::Cover
+map();
+
+#-----------------------------------------------------------------------------
+
+## name Basic failure
+## failures 2
+## cut
+
+map {my $a = $foo{$_};$a} @list;
+map {if ($_) { 1 } else { 2 }} @list;
+
+#-----------------------------------------------------------------------------
+
+## name Compound statements (false negative)
+## failures 0
+## cut
+
+map {do {$a; $b}} @list;
+map do {$a; $b}, @list;
+
+#-----------------------------------------------------------------------------
+
+## name Vary config parameters: success
+## failures 0
+## parms {max_statements => 2}
+## cut
+
+map {my $a = $foo{$_};$a} @list;
+
+#-----------------------------------------------------------------------------
+
+## name Vary config parameters: failue
+## failures 1
+## parms {max_statements => 2}
+## cut
+
+map {my $a = $foo{$_};$a;$b} @list;
+
+#-----------------------------------------------------------------------------
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :

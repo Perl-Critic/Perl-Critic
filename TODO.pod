@@ -6,7 +6,7 @@
 
 =head1 NAME
 
-TODO - Things for Perl::Critic developers to do
+Perl::Critic::TODO - Things for Perl::Critic developers to do
 
 =head1 SOURCE
 
@@ -94,11 +94,12 @@ These policies should not report violations if 'use Fatal' is in effect.
 
 =head1 OTHER PBP POLICIES THAT SEEM FEASIBLE TO IMPLEMENT
 
+Chris Dolan is in the process of implementing the ideas below (but don't let
+that stop you from contributing!!!).  That work is supported by a Perl
+Foundation grant.  More details about the grant:
+L<http://www.perlfoundation.org/april_1_2007_new_grant_awards>
+
 =over 4
-
-=item * ControlStructures::ProhibitComplexMappings (p113)
-
-Base this on RequireSimpleSortBlock.  Make number of statements configurable
 
 =item * ValuesAndExpressions::RequireListParens (p71)
 

@@ -7,6 +7,9 @@
 
 [1.xxx]  Released on 2007-xx-xx
 
+     New Policies:
+     * BuiltinFunctions::ProhibitComplexMappings
+
      Bug Fixes:
      * Fix P::C::Theme-- Exporter in Perl 5.6 does not export import(), so you
        must subclass it.  *sigh*
