@@ -11,8 +11,7 @@ use strict;
 use warnings;
 use Readonly;
 
-use Carp qw(confess);
-
+use Perl::Critic::Exception::Internal qw{ &throw_internal };
 use Perl::Critic::Utils qw{ :characters :severities :data_conversion };
 use base 'Perl::Critic::Policy';
 
@@ -64,7 +63,7 @@ sub violates {
     my @blocks = grep {$_->isa('PPI::Structure::Block')} $elem->schildren();
     if (@blocks > 1) {
        # sanity check
-       confess 'Internal error: subroutine should have no more than one block';
+       throw_internal 'Subroutine should have no more than one block';
     }
     elsif (@blocks == 0) {
        #Technically, subroutines don't have to have a block at all. In
@@ -130,8 +129,8 @@ sub _is_compound_return {
                        !$_->isa('PPI::Token')} $final->schildren();
     # Sanity check:
     if (scalar grep {!$_->isa('PPI::Structure::Block')} @blocks) {
-        confess 'Internal error: expected only conditions, blocks and tokens in the if statement';
-        return; ## no critic (UnreachableCode)
+        throw_internal
+            'Expected only conditions, blocks and tokens in the if statement';
     }
 
     for my $block (@blocks) {

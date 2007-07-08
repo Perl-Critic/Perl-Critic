@@ -50,7 +50,7 @@ use Acme::Foo;
 ## name Pattern matching exceptions
 ## parms { modules => '/(/' }
 ## failures 0
-## error /Regexp syntax/
+## error /invalid regular expression/
 ## cut
 
 print 'Hello World';

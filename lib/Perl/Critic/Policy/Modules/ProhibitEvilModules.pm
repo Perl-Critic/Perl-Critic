@@ -13,7 +13,10 @@ use Readonly;
 
 use List::MoreUtils qw(any);
 
+use Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue
+    qw{ &throw_policy_value };
 use Perl::Critic::Utils qw{ :characters :severities :data_conversion };
+
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.06;
@@ -51,7 +54,8 @@ sub new {
 
     #Set config, if defined
     if ( defined $self->{_modules} ) {
-        for my $module ( keys %{ $self->{_modules} } ) {
+        my @modules = sort keys %{ $self->{_modules} };
+        for my $module ( @modules ) {
 
             if ( $module =~ m{ \A [/] (.+) [/] \z }mx ) {
 
@@ -59,8 +63,14 @@ sub new {
                 my $re = $1; # Untainting
                 my $pattern = eval { qr/$re/ };
 
-                die qq{Regexp syntax error in your profile: "$module"\n}
-                    if $EVAL_ERROR;
+                if ( $EVAL_ERROR ) {
+                    throw_policy_value
+                        policy         => $self->get_short_name(),
+                        option_name    => 'modules',
+                        option_value   => ( join q{", "}, @modules ),
+                        message_suffix =>
+                            qq{contains an invalid regular expression: "$module"};
+                }
 
                 push @{ $self->{_evil_modules_rx} }, $pattern;
             }
