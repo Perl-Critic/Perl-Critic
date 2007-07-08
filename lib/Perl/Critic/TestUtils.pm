@@ -11,7 +11,6 @@ use strict;
 use warnings;
 use English qw(-no_match_vars);
 use Readonly;
-use Carp qw( confess );
 
 use base 'Exporter';
 
@@ -22,10 +21,13 @@ use File::Temp ();
 use File::Find qw( find );
 
 use Perl::Critic;
+use Perl::Critic::Exception::Generic qw{ &throw_generic };
+use Perl::Critic::Exception::Internal qw{ &throw_internal };
 use Perl::Critic::Utils qw{ :data_conversion };
 use Perl::Critic::PolicyFactory (-test => 1);
 
 our $VERSION = 1.06;
+
 Readonly::Array our @EXPORT_OK => qw(
     pcritique pcritique_with_violations
     critique  critique_with_violations
@@ -104,7 +106,7 @@ sub fcritique_with_violations {
     my $file = File::Spec->catfile($dir, @fileparts);
     if (open my $fh, '>', $file) {
         print {$fh} ${$code_ref};
-        close $fh or confess "unable to close $file: $!";
+        close $fh or throw_generic "unable to close $file: $!";
     }
 
     # Use eval so we can clean up before die() in case of error.
@@ -112,7 +114,7 @@ sub fcritique_with_violations {
     my $err = $EVAL_ERROR;
     File::Path::rmtree($dir, 0, 1);
     if ($err) {
-        confess $err;
+        throw_generic $err;
     }
     return @v;
 }
@@ -136,7 +138,7 @@ sub subtests_in_tree {
                return if !$fileroot;
                my @pathparts = File::Spec->splitdir($fileroot);
                if (@pathparts < 2) {
-                   confess 'confusing policy test filename ' . $_;
+                   throw_internal 'confusing policy test filename ' . $_;
                }
                my $policy = join q{::}, @pathparts[-2, -1]; ## no critic (MagicNumbers)
 
@@ -174,7 +176,7 @@ sub _subtests_from_file {
     return if -z $test_file;
 
     open my $fh, '<', $test_file
-      or confess "Couldn't open $test_file: $OS_ERROR";
+      or throw_internal "Couldn't open $test_file: $OS_ERROR";
 
     my @subtests;
 
@@ -189,11 +191,13 @@ sub _subtests_from_file {
         my $line = $_;
 
         if ( $inheader ) {
-            $line =~ m/\A\#/mx or confess "Code before cut: $test_file";
+            $line =~ m/\A\#/mx or throw_internal "Code before cut: $test_file";
             my ($key,$value) = $line =~ m/\A\#\#[ ](\S+)(?:\s+(.+))?/mx;
             next if !$key;
             next if $key eq 'cut';
-            confess "Unknown key $key in $test_file" if !$valid_keys{$key};
+            if ( not $valid_keys{$key} ) {
+                throw_internal "Unknown key $key in $test_file";
+            }
 
             if ( $key eq 'name' ) {
                 if ( $subtest ) { # Stash any current subtest
@@ -204,7 +208,7 @@ sub _subtests_from_file {
                 $incode = 0;
             }
             if ($incode) {
-                confess "Header line found while still in code: $test_file";
+                throw_internal "Header line found while still in code: $test_file";
             }
             $subtest->{$key} = $value;
         }
@@ -215,16 +219,16 @@ sub _subtests_from_file {
         }
         elsif (@subtests) {
             ## don't complain if we have not yet hit the first test
-            confess "Got some code but I'm not in a subtest: $test_file";
+            throw_internal "Got some code but I'm not in a subtest: $test_file";
         }
     }
-    close $fh or confess "unable to close $test_file: $!";
+    close $fh or throw_generic "unable to close $test_file: $!";
     if ( $subtest ) {
         if ( $incode ) {
             push @subtests, _finalize_subtest( $subtest );
         }
         else {
-            confess "Incomplete subtest in $test_file";
+            throw_internal "Incomplete subtest in $test_file";
         }
     }
 
@@ -238,19 +242,21 @@ sub _finalize_subtest {
         $subtest->{code} = join "\n", @{$subtest->{code}};
     }
     else {
-        confess "$subtest->{name} has no code lines";
+        throw_internal "$subtest->{name} has no code lines";
     }
     if ( !defined $subtest->{failures} ) {
-        confess "$subtest->{name} does not specify failures";
+        throw_internal "$subtest->{name} does not specify failures";
     }
     if ($subtest->{parms}) {
         $subtest->{parms} = eval $subtest->{parms}; ## no critic(StringyEval)
         if ($EVAL_ERROR) {
-            confess "$subtest->{name} has an error in the 'parms' property:\n"
-              . $EVAL_ERROR;
+            throw_internal
+                "$subtest->{name} has an error in the 'parms' property:\n"
+                  . $EVAL_ERROR;
         }
         if ('HASH' ne ref $subtest->{parms}) {
-            confess "$subtest->{name} 'parms' did not evaluate to a hashref";
+            throw_internal
+                "$subtest->{name} 'parms' did not evaluate to a hashref";
         }
     } else {
         $subtest->{parms} = {};
@@ -260,7 +266,8 @@ sub _finalize_subtest {
         if ( $subtest->{error} =~ m{ \A / (.*) / \z }xms) {
             $subtest->{error} = eval {qr/$1/};
             if ($EVAL_ERROR) {
-                confess "$subtest->{name} 'error' has a malformed regular expression";
+                throw_internal
+                    "$subtest->{name} 'error' has a malformed regular expression";
             }
         }
     }
