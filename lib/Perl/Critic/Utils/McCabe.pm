@@ -27,9 +27,10 @@ Readonly::Array our @EXPORT_OK =>
 
 #-----------------------------------------------------------------------------
 
-my %LOGIC_OPS = hashify( qw( && || ||= &&= or and xor ? <<= >>= ) );
+Readonly::Hash my %LOGIC_OPS =>
+    hashify( qw( && || ||= &&= or and xor ? <<= >>= ) );
 
-my %LOGIC_KEYWORDS =
+Readonly::Hash my %LOGIC_KEYWORDS =>
     hashify( qw( if else elsif unless until while for foreach ) );
 
 #-----------------------------------------------------------------------------
