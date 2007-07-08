@@ -9,7 +9,6 @@ package Perl::Critic::PolicyParameter::Behavior::Integer;
 
 use strict;
 use warnings;
-use Carp qw(confess);
 
 use Perl::Critic::Utils qw{ :characters };
 

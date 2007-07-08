@@ -9,7 +9,7 @@ package Perl::Critic::PolicyParameter::Behavior::StringList;
 
 use strict;
 use warnings;
-use Carp qw(confess);
+
 use Perl::Critic::Utils qw{ :characters &words_from_string &hashify };
 
 use base qw{ Perl::Critic::PolicyParameter::Behavior };

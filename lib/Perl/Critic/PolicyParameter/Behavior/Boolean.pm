@@ -9,7 +9,6 @@ package Perl::Critic::PolicyParameter::Behavior::Boolean;
 
 use strict;
 use warnings;
-use Carp qw(confess);
 use Perl::Critic::Utils;
 
 use base qw{ Perl::Critic::PolicyParameter::Behavior };

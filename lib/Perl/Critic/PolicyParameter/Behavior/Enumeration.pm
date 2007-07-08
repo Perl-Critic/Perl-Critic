@@ -9,7 +9,8 @@ package Perl::Critic::PolicyParameter::Behavior::Enumeration;
 
 use strict;
 use warnings;
-use Carp qw(confess);
+
+use Perl::Critic::Exception::PolicyDefinition qw{ &throw_policy_definition };
 use Perl::Critic::Utils qw{ :characters &words_from_string &hashify };
 
 use base qw{ Perl::Critic::PolicyParameter::Behavior };
@@ -22,15 +23,21 @@ sub initialize_parameter {
     my ($self, $parameter, $specification) = @_;
 
     my $valid_values = $specification->{enumeration_values}
-        or confess 'No enumeration_values given for ',
-                    $parameter->get_name(), $PERIOD;
+        or throw_policy_definition
+            'No enumeration_values given for '
+                . $parameter->get_name()
+                . $PERIOD;
     ref $valid_values eq 'ARRAY'
-        or confess 'The value given for enumeration_values for ',
-                    $parameter->get_name(), ' is not an array reference.';
+        or throw_policy_definition
+            'The value given for enumeration_values for '
+                . $parameter->get_name()
+                . ' is not an array reference.';
     scalar @{$valid_values} > 1
-        or confess 'There were not at least two valid values given for',
-                   ' enumeration_values for ', $parameter->get_name(),
-                   $PERIOD;
+        or throw_policy_definition
+            'There were not at least two valid values given for'
+                . ' enumeration_values for '
+                . $parameter->get_name()
+                . $PERIOD;
 
     # Unfortunately, this has to be a reference, rather than a regular hash,
     # due to a problem in Devel::Cycle
