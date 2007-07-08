@@ -9,6 +9,8 @@ package Perl::Critic::Policy::BuiltinFunctions::ProhibitComplexMappings;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities :classification };
 use base 'Perl::Critic::Policy';
 
@@ -16,8 +18,8 @@ our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{Map blocks should have a single statement};
-my $expl = [ 113 ];
+Readonly::Scalar my $DESC => q{Map blocks should have a single statement};
+Readonly::Scalar my $EXPL => [ 113 ];
 
 #-----------------------------------------------------------------------------
 
@@ -66,7 +68,7 @@ sub violates {
         && 0 == grep {$_->isa('PPI::Statement::Compound')} $arg->schildren();
 
     # more than one child statements
-    return $self->violation( $desc, $expl, $elem );
+    return $self->violation( $DESC, $EXPL, $elem );
 }
 
 1;
