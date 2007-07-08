@@ -9,8 +9,8 @@ package Perl::Critic::Config;
 
 use strict;
 use warnings;
-use Carp qw(confess);
 use English qw(-no_match_vars);
+use Readonly;
 
 use List::MoreUtils qw(any none apply);
 use Scalar::Util qw(blessed);
@@ -18,6 +18,7 @@ use Scalar::Util qw(blessed);
 use Perl::Critic::Exception::AggregateConfiguration;
 use Perl::Critic::Exception::Configuration;
 use Perl::Critic::Exception::Configuration::Option::Global::ParameterValue;
+use Perl::Critic::Exception::Internal qw{ &throw_internal };
 use Perl::Critic::PolicyFactory;
 use Perl::Critic::Theme qw( $RULE_INVALID_CHARACTER_REGEX &cook_rule );
 use Perl::Critic::UserProfile qw();
@@ -29,6 +30,10 @@ use Perl::Critic::Utils::DataConversion qw{ &boolean_to_number };
 #-----------------------------------------------------------------------------
 
 our $VERSION = 1.06;
+
+#-----------------------------------------------------------------------------
+
+Readonly::Scalar my $SINGLE_POLICY_CONFIG_KEY => 'single-policy';
 
 #-----------------------------------------------------------------------------
 # Constructor
@@ -68,8 +73,8 @@ sub _init {
         'exclude', $args{-exclude}, $defaults->exclude(), $errors
     );
     $self->_validate_and_save_regex(
-        'single-policy',
-        $args{'-single-policy'},
+        $SINGLE_POLICY_CONFIG_KEY,
+        $args{ qq/-$SINGLE_POLICY_CONFIG_KEY/ },
         $defaults->single_policy(),
         $errors,
     );
@@ -123,8 +128,11 @@ sub add_policy {
 
     my ( $self, %args ) = @_;
 
-    my $policy  = $args{-policy}
-        or confess q{The -policy argument is required};
+    if ( not $args{-policy} ) {
+        throw_internal q{The -policy argument is required};
+    }
+
+    my $policy  = $args{-policy};
 
     # If the -policy is already a blessed object, then just add it directly.
     if ( blessed $policy ) {
@@ -181,7 +189,7 @@ sub _load_policies {
 
     # When using -single-policy, only one policy should ever be loaded.
     if ($self->single_policy() && scalar $self->policies() != 1) {
-        $self->_throw_single_policy_exception();
+        $self->_add_single_policy_exception_to($errors);
     }
 
     return;
@@ -252,24 +260,31 @@ sub _policy_is_single_policy {
 
 #-----------------------------------------------------------------------------
 
-sub _throw_single_policy_exception {
+sub _add_single_policy_exception_to {
+    my ($self, $errors) = @_;
 
-    my $self = shift;
-
-    my $error_msg = $EMPTY;
+    my $message_suffix = $EMPTY;
     my $patterns = join q{", "}, $self->single_policy();
 
     if (scalar $self->policies() == 0) {
-        $error_msg =
-            qq{No policies matched any of "$patterns" (in combination with }
+        $message_suffix =
+            q{did not match any policies (in combination with }
                 . q{other policy restrictions).};
     }
     else {
-        $error_msg  = qq{Multiple policies matched "$patterns":\n\t};
-        $error_msg .= join qq{,\n\t}, apply { chomp } sort $self->policies();
+        $message_suffix  = qq{matched multiple policies:\n\t};
+        $message_suffix .= join qq{,\n\t}, apply { chomp } sort $self->policies();
     }
 
-    confess "$error_msg\n";
+    $errors->add_exception(
+        Perl::Critic::Exception::Configuration::Option::Global::ParameterValue->new(
+            option_name     => $SINGLE_POLICY_CONFIG_KEY,
+            option_value    => $patterns,
+            message_suffix  => $message_suffix,
+        )
+    );
+
+    return;
 }
 
 #-----------------------------------------------------------------------------

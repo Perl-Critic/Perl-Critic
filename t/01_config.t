@@ -296,11 +296,11 @@ my $total_policies   = scalar @site_policies;
 
     # Try using vague -single-policy option
     eval{ Perl::Critic::Config->new( '-single-policy' => '.*' ) };
-    like( $EVAL_ERROR, qr/Multiple policies matched/, 'vague -single-policy' );
+    like( $EVAL_ERROR, qr/matched multiple policies/, 'vague -single-policy' );
 
     # Try using invalid -single-policy option
     eval{ Perl::Critic::Config->new( '-single-policy' => 'bogus' ) };
-    like( $EVAL_ERROR, qr/No policies matched/, 'invalid -single-policy' );
+    like( $EVAL_ERROR, qr/did not match any policies/, 'invalid -single-policy' );
 }
 
 ##############################################################################
