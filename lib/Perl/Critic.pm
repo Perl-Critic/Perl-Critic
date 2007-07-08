@@ -10,7 +10,6 @@ package Perl::Critic;
 use strict;
 use warnings;
 use English qw(-no_match_vars);
-use Carp;
 use Readonly;
 
 use base qw(Exporter);
@@ -21,6 +20,7 @@ use Scalar::Util qw(blessed);
 use PPI::Document;
 use PPI::Document::File;
 
+use Perl::Critic::Exception::Generic qw{ throw_generic };
 use Perl::Critic::Config;
 use Perl::Critic::Violation;
 use Perl::Critic::Document;
@@ -122,7 +122,7 @@ sub _create_perl_critic_document {
         my $errstr   = PPI::Document::errstr();
         my $file     = ref $source_code ? undef : $source_code;
         my $for_file = $file ? qq{ for "$file"} : $EMPTY;
-        croak qq{Warning: Can't parse code: $errstr} . $for_file;
+        throw_generic qq{Warning: Can't parse code: $errstr} . $for_file;
     }
 
     # Pre-index location of each node (for speed)
