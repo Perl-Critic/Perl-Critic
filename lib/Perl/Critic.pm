@@ -301,7 +301,12 @@ sub _parse_nocritic_import {
 
     if ( my ($module_list) = $pragma =~ $no_critic ) {
         my @modules = split $delim, $module_list;
-        return map { my $req = $_; grep {m/$req/imx} @site_policies } @modules;
+
+        # Compose the specified modules into a regex alternation.  Wrap each
+        # in a no-capturing group to permit "|" in the modules specification
+        # (backward compatibility)
+        my $re = join q{|}, map {"(?:$_)"} @modules;
+        return grep {m/$re/imx} @site_policies;
     }
 
     # Default to disabling ALL policies.
@@ -364,7 +369,7 @@ __END__
 =pod
 
 =for stopwords DGR INI-style API -params pbp refactored
-ben Jore
+ben Jore Dolan's
 
 =head1 NAME
 
@@ -1082,6 +1087,10 @@ Elliot Shank - The self-proclaimed quality freak.
 Giuseppe Maxia - For all the great ideas and positive encouragement.
 
 and Sharon, my wife - For putting up with my all-night code sessions.
+
+Thanks also to the Perl Foundation for providing a grant to support Chris
+Dolan's project to implement twenty PBP policies.
+L<http://www.perlfoundation.org/april_1_2007_new_grant_awards>
 
 =head1 AUTHOR
 
