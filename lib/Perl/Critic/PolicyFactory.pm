@@ -10,7 +10,6 @@ package Perl::Critic::PolicyFactory;
 use strict;
 use warnings;
 
-use Carp qw(confess);
 use English qw(-no_match_vars);
 
 use File::Spec::Unix qw();
@@ -25,6 +24,9 @@ use Perl::Critic::Utils qw{
 };
 use Perl::Critic::Exception::AggregateConfiguration;
 use Perl::Critic::Exception::Configuration;
+use Perl::Critic::Exception::Generic qw{ &throw_generic };
+use Perl::Critic::Exception::Internal qw{ &throw_internal };
+use Perl::Critic::Exception::PolicyDefinition qw{ &throw_policy_definition };
 
 use Exception::Class;   # this must come after "use P::C::Exception::*"
 
@@ -51,10 +53,12 @@ sub import {
         };
 
         if ( $EVAL_ERROR ) {
-            confess qq{Can't load Policies from namespace "$POLICY_NAMESPACE": $EVAL_ERROR};
+            throw_generic
+                qq{Can't load Policies from namespace "$POLICY_NAMESPACE": $EVAL_ERROR};
         }
         elsif ( ! @SITE_POLICY_NAMES ) {
-            confess qq{No Policies found in namespace "$POLICY_NAMESPACE"};
+            throw_generic
+                qq{No Policies found in namespace "$POLICY_NAMESPACE"};
         }
     }
 
@@ -103,7 +107,7 @@ sub _init {
 
     my $profile = $args{-profile};
     $self->{_profile} = $profile
-        or confess q{The -profile argument is required};
+        or throw_internal q{The -profile argument is required};
 
     my $incoming_errors = $args{-errors};
     my $strict_profile = $args{'-strict-profile'};
@@ -140,7 +144,7 @@ sub create_policy {
     my ($self, %args ) = @_;
 
     my $policy_name = $args{-name}
-        or confess q{The -name argument is required};
+        or throw_internal q{The -name argument is required};
 
     # Normalize policy name to a fully-qualified package name
     $policy_name = policy_long_name( $policy_name );
@@ -173,7 +177,8 @@ sub create_policy {
             $exception->rethrow();
         }
 
-        confess qq{Unable to create policy '$policy_name': $EVAL_ERROR};
+        throw_policy_definition
+            qq{Unable to create policy '$policy_name': $EVAL_ERROR};
     }
 
     # Set base attributes on policy

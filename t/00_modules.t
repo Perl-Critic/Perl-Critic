@@ -33,6 +33,7 @@ my @concrete_exceptions = qw{
     Configuration::Option::Policy::ParameterValue
     Generic
     Internal
+    PolicyDefinition
 };
 
 plan tests =>

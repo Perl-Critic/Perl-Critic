@@ -11,8 +11,6 @@ use strict;
 use warnings;
 use English qw{ -no_match_vars };
 
-use Carp qw(confess);
-
 use String::Format qw(stringf);
 
 use overload ( q{""} => 'to_string', cmp => '_compare' );
@@ -29,6 +27,7 @@ use Perl::Critic::Exception::AggregateConfiguration;
 use Perl::Critic::Exception::Configuration;
 use Perl::Critic::Exception::Configuration::Option::Policy::ExtraParameter;
 use Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue;
+use Perl::Critic::Exception::PolicyDefinition qw{ &throw_policy_definition };
 use Perl::Critic::PolicyParameter qw();
 use Perl::Critic::Violation qw();
 
@@ -213,7 +212,10 @@ sub get_parameters {
 #-----------------------------------------------------------------------------
 
 sub violates {
-    return confess q{Can't call abstract method};
+    my ($self) = @_;
+
+    return throw_policy_definition
+        $self->get_short_name() . q{ does not implement violates().};
 }
 
 #-----------------------------------------------------------------------------
