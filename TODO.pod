@@ -103,6 +103,20 @@ L<http://www.perlfoundation.org/april_1_2007_new_grant_awards>
 
 =item * ValuesAndExpressions::RequireListParens (p71)
 
+Detect this error:
+
+  @list = 1, 2, 3;
+
+and recommend this:
+
+  @list = (1, 2, 3);
+
+The former really means
+
+  @list = 1; 2; 3;
+
+See also ValuesAndExpressions::ProhibitCommaSeparatedStatements
+
 =item * ValuesAndExpressions::ProhibitScalarGrep (p71)
 
 Look for C<grep> in a scalar context and recommend C<any()> instead.
@@ -120,6 +134,10 @@ heredoc instead.
 
 =item * Variables::RequireLocalizedPunctuationVars (p81)
 
+Flag assignments to magic variables that are not declared local.  Detect both
+the punctation forms and the English forms.  Don't flag C<$_>.  Other
+exceptions?
+
 =item * Documentation::PodSpelling (p148)
 
 Base it on Pod::Spell or Test::Spelling. Add a "=for stopwords"
@@ -128,20 +146,20 @@ section for words to skip, as per Pod::Spell.
 =item * Subroutines::RequireArgUnpacking (p178)
 
 Ensure that the first child of a sub is PPI::Statement::Variable
-(unless the sub has N or fewer statements, where N defaults to 1.
+(unless the sub has N or fewer statements, where N defaults to 1).
 
 =item * Subroutines::ProhibitManyArgs (p182)
 
-If first L<PPI::Statement::Variable> is a list C<my>, and @_ is used,
-make sure it's fewer than N elements.  Otherwise make sure there are
-less than N L<PPI::Statement::Variable>s in a row at begin which
-shift.
+If first L<PPI::Statement::Variable> is a list C<my>, and @_ is used, make
+sure it's fewer than N elements.  Otherwise make sure there are less than N
+L<PPI::Statement::Variable>s in a row at the beginning which shift @_ or shift
+with no argument.
 
 =item * InputOutput::RequireChecked* for system calls (p208)
 
-Add policies to ensure checking the return values of system calls. See
-InputOutputRequireCheckedOpen.  Needs to take into account the Fatal
-and Fatal::Exception modules.
+Add policies to ensure checking the return values of system calls.  See
+InputOutput::RequireCheckedOpen and InputOutput::RequireCheckedClose.  Needs
+to take into account the Fatal and Fatal::Exception modules.
 
 =item * InputOutput::RequireBriefOpen (p209)
 
@@ -149,6 +167,8 @@ Make sure there's a close within N statements of an open, both with
 same lexical FH
 
 =item * InputOutput::ProhibitJoinedReadline (p213)
+
+Recommend C<local $/ = undef> instead.
 
 =item * InputOutput::ProhibitExplicitStdin (p216)
 
