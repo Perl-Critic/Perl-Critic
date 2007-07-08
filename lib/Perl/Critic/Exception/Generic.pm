@@ -5,7 +5,7 @@
 # $Revision$
 ##############################################################################
 
-package Perl::Critic::Exception::Internal;
+package Perl::Critic::Exception::Generic;
 
 use strict;
 use warnings;
@@ -15,16 +15,16 @@ our $VERSION = 1.06;
 #-----------------------------------------------------------------------------
 
 use Exception::Class (
-    'Perl::Critic::Exception::Internal' => {
+    'Perl::Critic::Exception::Generic' => {
         isa         => 'Perl::Critic::Exception',
-        description => 'A problem with the Perl::Critic code was found, a.k.a. a bug.',
-        alias       => 'throw_internal',
+        description => 'A general problem was found.',
+        alias       => 'throw_generic',
     },
 );
 
 #-----------------------------------------------------------------------------
 
-our @EXPORT_OK = qw{ &throw_internal };
+our @EXPORT_OK = qw{ &throw_generic };
 
 #-----------------------------------------------------------------------------
 
@@ -50,11 +50,11 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Exception::Internal - A problem with the L<Perl::Critic> implementation, i.e. a bug
+Perl::Critic::Exception::Generic - A problem for which there is no specialized information
 
 =head1 DESCRIPTION
 
-A representation of a bug found in the code of L<Perl::Critic>.
+A general problem, e.g. I/O errors and problems that may or not be bugs.
 
 Note: the constructor invokes L<Exception::Class/"show_trace"> to
 force stack-traces to be included in the standard stringification.

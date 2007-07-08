@@ -9,15 +9,15 @@ package Perl::Critic::PolicyParameter;
 
 use strict;
 use warnings;
-use Carp qw(confess);
 use Readonly;
 
-use Exporter qw{ import };
+use base 'Exporter';
 
 Readonly::Array our @EXPORT_OK => qw{ $NO_DESCRIPTION_AVAILABLE };
 
 use String::Format qw{ stringf };
 
+use Perl::Critic::Exception::Generic qw{ throw_generic };
 use Perl::Critic::PolicyParameter::Behavior;
 use Perl::Critic::PolicyParameter::Behavior::Boolean;
 use Perl::Critic::PolicyParameter::Behavior::Enumeration;
@@ -50,7 +50,7 @@ sub _get_behavior_for_name {
     my $behavior_name = shift;
 
     my $behavior = $BEHAVIORS{$behavior_name}
-        or confess qq{There's no "$behavior_name" behavior.};
+        or throw_generic qq{There's no "$behavior_name" behavior.};
 
     return $behavior;
 }
@@ -62,7 +62,7 @@ sub new {
     my $self = bless {}, $class;
 
     defined $specification
-        or confess
+        or throw_generic
             'Attempt to create a ', __PACKAGE__, ' without a specification.';
 
     my $behavior_specification;
@@ -74,14 +74,14 @@ sub new {
         $behavior_specification = {};
     } else {
         $specification_type eq 'HASH'
-            or confess
+            or throw_generic
                 'Attempt to create a ',
                 __PACKAGE__,
                 " with a $specification_type as a specification.",
                 ;
 
         defined $specification->{name}
-            or confess 'Attempt to create a ', __PACKAGE__, ' without a name.';
+            or throw_generic 'Attempt to create a ', __PACKAGE__, ' without a name.';
         $self->{_name} = $specification->{name};
 
         $behavior_specification = $specification;

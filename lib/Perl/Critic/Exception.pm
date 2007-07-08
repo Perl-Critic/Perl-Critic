@@ -21,6 +21,8 @@ use Exception::Class (
     },
 );
 
+use base 'Exporter';
+
 1;
 
 __END__
