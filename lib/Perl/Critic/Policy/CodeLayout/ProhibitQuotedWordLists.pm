@@ -9,6 +9,8 @@ package Perl::Critic::Policy::CodeLayout::ProhibitQuotedWordLists;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :characters :severities };
 use base 'Perl::Critic::Policy';
 
@@ -16,17 +18,17 @@ our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{List of quoted literal words};
-my $expl = q{Use 'qw()' instead};
+Readonly::Scalar my $DESC => q{List of quoted literal words};
+Readonly::Scalar my $EXPL => q{Use 'qw()' instead};
 
 my $DEFAULT_MIN_ELEMENTS = 2;
 
 #-----------------------------------------------------------------------------
 
 sub supported_parameters { return qw( min_elements )     }
-sub default_severity  { return $SEVERITY_LOW          }
-sub default_themes    { return qw( core cosmetic )    }
-sub applies_to        { return 'PPI::Structure::List' }
+sub default_severity { return $SEVERITY_LOW          }
+sub default_themes   { return qw( core cosmetic )    }
+sub applies_to       { return 'PPI::Structure::List' }
 
 #-----------------------------------------------------------------------------
 
@@ -79,7 +81,7 @@ sub violates {
     return if $count < $self->{_min};
 
     #If we get here, then all elements were literals
-    return $self->violation( $desc, $expl, $elem );
+    return $self->violation( $DESC, $EXPL, $elem );
 }
 
 sub _is_literal {

@@ -9,6 +9,8 @@ package Perl::Critic::Policy::TestingAndDebugging::RequireUseStrict;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
@@ -16,12 +18,12 @@ our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{Code before strictures are enabled};
-my $expl = [ 429 ];
+Readonly::Scalar my $DESC => q{Code before strictures are enabled};
+Readonly::Scalar my $EXPL => [ 429 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return()                   }
+sub supported_parameters { return ()                  }
 sub default_severity     { return $SEVERITY_HIGHEST   }
 sub default_themes       { return qw( core pbp bugs ) }
 sub applies_to           { return 'PPI::Document'     }
@@ -51,7 +53,7 @@ sub violates {
         # location.
         my $stmnt_line = $stmnt->location() ? $stmnt->location()->[0] : -1;
         if ( (! defined $strict_line) || ($stmnt_line < $strict_line) ) {
-            push @viols, $self->violation( $desc, $expl, $stmnt );
+            push @viols, $self->violation( $DESC, $EXPL, $stmnt );
         }
     }
     return @viols;

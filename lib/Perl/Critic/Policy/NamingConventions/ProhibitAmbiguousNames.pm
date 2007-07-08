@@ -9,6 +9,8 @@ package Perl::Critic::Policy::NamingConventions::ProhibitAmbiguousNames;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities :data_conversion };
 use base 'Perl::Critic::Policy';
 
@@ -16,24 +18,24 @@ our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
-my $desc = 'Ambiguous name for variable or subroutine';
-my $expl = [ 48 ];
+Readonly::Scalar my $DESC => 'Ambiguous name for variable or subroutine';
+Readonly::Scalar my $EXPL => [ 48 ];
 
-my @default_forbid =
+Readonly::Array my @DEFAULT_FORBID =>
     qw( last      contract
         set       record
         left      second
         right     close
         no        bases
         abstract
-);
+    );
 
 #-----------------------------------------------------------------------------
 
 sub supported_parameters { return qw( forbid )             }
-sub default_severity  { return $SEVERITY_MEDIUM         }
-sub default_themes    { return qw(core pbp maintenance) }
-sub applies_to        { return qw(PPI::Statement::Sub
+sub default_severity { return $SEVERITY_MEDIUM         }
+sub default_themes   { return qw(core pbp maintenance) }
+sub applies_to       { return qw(PPI::Statement::Sub
                                  PPI::Statement::Variable) }
 
 #-----------------------------------------------------------------------------
@@ -50,16 +52,12 @@ sub new {
         @forbid = words_from_string( $config{forbid} );
     }
     else {
-        @forbid = @default_forbid;
+        @forbid = @DEFAULT_FORBID;
     }
     $self->{_forbid} = { hashify( @forbid ) };
 
     return $self;
 }
-
-#-----------------------------------------------------------------------------
-
-sub default_forbidden_words { return @default_forbid }
 
 #-----------------------------------------------------------------------------
 
@@ -75,7 +73,7 @@ sub violates {
             next if not defined $name; # should never happen, right?
 
             if ( exists $self->{_forbid}->{$name} ) {
-                return $self->violation( $desc, $expl, $elem );
+                return $self->violation( $DESC, $EXPL, $elem );
             }
         }
         return;    # ok
@@ -101,7 +99,7 @@ sub violates {
                 next if ! defined $name;
 
                 if ( exists $self->{_forbid}->{$name} ) {
-                    push @viols, $self->violation( $desc, $expl, $elem );
+                    push @viols, $self->violation( $DESC, $EXPL, $elem );
                 }
             }
         }
@@ -151,11 +149,6 @@ C<$HOME/.perlcriticrc>:
 =head1 METHODS
 
 =over 8
-
-=item default_forbidden_words()
-
-This can be called as a class or instance method.  It returns the list
-of words that are forbidden by default.
 
 =back
 

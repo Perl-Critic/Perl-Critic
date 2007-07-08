@@ -9,16 +9,22 @@ package Perl::Critic::Policy::ControlStructures::ProhibitMutatingListFunctions;
 
 use strict;
 use warnings;
-use Perl::Critic::Utils qw{ :severities :data_conversion :classification :ppi };
+use Readonly;
+
 use List::MoreUtils qw( none any );
+
+use Perl::Critic::Utils qw{
+    :characters :severities :data_conversion :classification :ppi
+};
+
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
-my @builtin_list_funcs = qw( map grep );
-my @cpan_list_funcs    = _get_cpan_list_funcs();
+Readonly::Array my @BUILTIN_LIST_FUNCS => qw( map grep );
+Readonly::Array my @CPAN_LIST_FUNCS    => _get_cpan_list_funcs();
 
 #-----------------------------------------------------------------------------
 
@@ -46,15 +52,15 @@ sub _is_topic {
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{Don't modify $_ in list functions};  ##no critic (InterpolationOfMetachars)
-my $expl = [ 114 ];
+Readonly::Scalar my $DESC => q{Don't modify $_ in list functions};  ##no critic (InterpolationOfMetachars)
+Readonly::Scalar my $EXPL => [ 114 ];
 
 #-----------------------------------------------------------------------------
 
 sub supported_parameters { return qw( list_funcs add_list_funcs) }
-sub default_severity     { return $SEVERITY_HIGHEST              }
-sub default_themes       { return qw(core bugs pbp)              }
-sub applies_to           { return 'PPI::Token::Word'             }
+sub default_severity { return $SEVERITY_HIGHEST  }
+sub default_themes   { return qw(core bugs pbp)  }
+sub applies_to       { return 'PPI::Token::Word' }
 
 #-----------------------------------------------------------------------------
 
@@ -66,7 +72,7 @@ sub new {
 
     my @list_funcs = $config{list_funcs}
         ? $config{list_funcs} =~ m/(\S+)/gxms
-        : ( @builtin_list_funcs, @cpan_list_funcs );
+        : ( @BUILTIN_LIST_FUNCS, @CPAN_LIST_FUNCS );
 
     if ( $config{add_list_funcs} ) {
         push @list_funcs, $config{add_list_funcs} =~ m/(\S+)/gxms;
@@ -93,7 +99,7 @@ sub violates {
     return if not _has_topic_side_effect( $first_arg );
 
     # Must be a violation
-    return $self->violation( $desc, $expl, $elem );
+    return $self->violation( $DESC, $EXPL, $elem );
 }
 
 #-----------------------------------------------------------------------------

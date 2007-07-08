@@ -9,6 +9,8 @@ package Perl::Critic::Policy::TestingAndDebugging::ProhibitNoStrict;
 
 use strict;
 use warnings;
+use Readonly;
+
 use List::MoreUtils qw(all);
 use Perl::Critic::Utils qw{ :severities :data_conversion };
 use base 'Perl::Critic::Policy';
@@ -17,15 +19,15 @@ our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{Stricture disabled};
-my $expl = [ 429 ];
+Readonly::Scalar my $DESC => q{Stricture disabled};
+Readonly::Scalar my $EXPL => [ 429 ];
 
 #-----------------------------------------------------------------------------
 
 sub supported_parameters { return qw( allow )               }
-sub default_severity     { return $SEVERITY_HIGHEST         }
-sub default_themes       { return qw( core pbp bugs )       }
-sub applies_to           { return 'PPI::Statement::Include' }
+sub default_severity { return $SEVERITY_HIGHEST         }
+sub default_themes   { return qw( core pbp bugs )       }
+sub applies_to       { return 'PPI::Statement::Include' }
 
 #-----------------------------------------------------------------------------
 
@@ -67,7 +69,7 @@ sub violates {
     return if all { exists $self->{_allow}->{$_} } @words;
 
     #If we get here, then it must be a violation
-    return $self->violation( $desc, $expl, $elem );
+    return $self->violation( $DESC, $EXPL, $elem );
 }
 
 1;

@@ -9,7 +9,9 @@ package Perl::Critic::Policy::Documentation::RequirePodSections;
 
 use strict;
 use warnings;
-use Perl::Critic::Utils qw{ :severities :classification };
+use Readonly;
+
+use Perl::Critic::Utils qw{ :characters :severities :classification };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.06;
@@ -18,12 +20,12 @@ our $VERSION = 1.06;
 
 my $expl = [133, 138];
 
-my $BOOK                = 'book';
-my $BOOK_FIRST_EDITION  = 'book_first_edition';
-my $MODULE_STARTER_PBP  = 'module_starter_pbp';
-my $M_S_PBP_0_0_3       = 'module_starter_pbp_0_0_3';
+Readonly::Scalar my $BOOK                => 'book';
+Readonly::Scalar my $BOOK_FIRST_EDITION  => 'book_first_edition';
+Readonly::Scalar my $MODULE_STARTER_PBP  => 'module_starter_pbp';
+Readonly::Scalar my $M_S_PBP_0_0_3       => 'module_starter_pbp_0_0_3';
 
-my $DEFAULT_SOURCE      = $BOOK_FIRST_EDITION;
+Readonly::Scalar my $DEFAULT_SOURCE      => $BOOK_FIRST_EDITION;
 
 my %SOURCE_TRANSLATION  = (
     $BOOK               => $BOOK_FIRST_EDITION,
@@ -32,16 +34,16 @@ my %SOURCE_TRANSLATION  = (
     $M_S_PBP_0_0_3      => $M_S_PBP_0_0_3,
 );
 
-my $EN_AU                       = 'en_AU';
-my $EN_US                       = 'en_US';
-my $ORIGINAL_MODULE_VERSION     = 'original';
+Readonly::Scalar my $EN_AU                       => 'en_AU';
+Readonly::Scalar my $EN_US                       => 'en_US';
+Readonly::Scalar my $ORIGINAL_MODULE_VERSION     => 'original';
 
-my %SOURCE_DEFAULT_LANGUAGE     = (
+Readonly::Hash my %SOURCE_DEFAULT_LANGUAGE     => (
     $BOOK_FIRST_EDITION => $ORIGINAL_MODULE_VERSION,
     $M_S_PBP_0_0_3      => $EN_AU,
 );
 
-my $BOOK_FIRST_EDITION_US_LIB_SECTIONS =
+Readonly::Scalar my $BOOK_FIRST_EDITION_US_LIB_SECTIONS =>
     [
         'NAME',
         'VERSION',
@@ -57,7 +59,7 @@ my $BOOK_FIRST_EDITION_US_LIB_SECTIONS =
         'LICENSE AND COPYRIGHT',
     ];
 
-my %DEFAULT_LIB_SECTIONS = (
+Readonly::Hash my %DEFAULT_LIB_SECTIONS => (
     $BOOK_FIRST_EDITION => {
         $ORIGINAL_MODULE_VERSION => $BOOK_FIRST_EDITION_US_LIB_SECTIONS,
         $EN_AU => [
@@ -110,7 +112,7 @@ my %DEFAULT_LIB_SECTIONS = (
     },
 );
 
-my %DEFAULT_SCRIPT_SECTIONS = (
+Readonly::Hash my %DEFAULT_SCRIPT_SECTIONS => (
     $BOOK_FIRST_EDITION => {
         $ORIGINAL_MODULE_VERSION => [
             'NAME',
@@ -200,9 +202,9 @@ sub supported_parameters {
     return qw( lib_sections script_sections source language )
 }
 
-sub default_severity     { return $SEVERITY_LOW            }
-sub default_themes       { return qw(core pbp maintenance) }
-sub applies_to           { return 'PPI::Document'          }
+sub default_severity { return $SEVERITY_LOW            }
+sub default_themes   { return qw(core pbp maintenance) }
+sub applies_to       { return 'PPI::Document'          }
 
 #-----------------------------------------------------------------------------
 

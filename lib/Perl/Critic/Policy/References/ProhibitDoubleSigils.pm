@@ -9,6 +9,8 @@ package Perl::Critic::Policy::References::ProhibitDoubleSigils;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
@@ -16,15 +18,15 @@ our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{Double-sigil dereference};
-my $expl = [ 228 ];
+Readonly::Scalar my $DESC => q{Double-sigil dereference};
+Readonly::Scalar my $EXPL => [ 228 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return() }
-sub default_severity { return $SEVERITY_LOW       }
-sub default_themes   { return qw(core pbp cosmetic) }
-sub applies_to       { return 'PPI::Token::Cast'  }
+sub supported_parameters { return ()                    }
+sub default_severity     { return $SEVERITY_LOW         }
+sub default_themes       { return qw(core pbp cosmetic) }
+sub applies_to           { return 'PPI::Token::Cast'    }
 
 #-----------------------------------------------------------------------------
 
@@ -35,7 +37,7 @@ sub violates {
     my $sib = $elem->snext_sibling;
     return if !$sib;
     if ( ! $sib->isa('PPI::Structure::Block') ) {
-        return $self->violation( $desc, $expl, $elem );
+        return $self->violation( $DESC, $EXPL, $elem );
     }
     return; #ok!
 }

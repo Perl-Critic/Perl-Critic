@@ -9,6 +9,8 @@ package Perl::Critic::Policy::Modules::RequireExplicitPackage;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities :classification };
 use base 'Perl::Critic::Policy';
 
@@ -16,15 +18,15 @@ our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
-my $expl = q{Violates encapsulation};
-my $desc = q{Code not contained in explicit package};
+Readonly::Scalar my $EXPL => q{Violates encapsulation};
+Readonly::Scalar my $DESC => q{Code not contained in explicit package};
 
 #-----------------------------------------------------------------------------
 
 sub supported_parameters { return qw( exempt_scripts ) }
-sub default_severity  { return $SEVERITY_HIGH       }
-sub default_themes    { return qw( core bugs )      }
-sub applies_to        { return 'PPI::Document'      }
+sub default_severity { return $SEVERITY_HIGH  }
+sub default_themes   { return qw( core bugs ) }
+sub applies_to       { return 'PPI::Document' }
 
 #-----------------------------------------------------------------------------
 
@@ -68,7 +70,7 @@ sub violates {
         # location.
         my $stmnt_line = $stmnt->location() ? $stmnt->location()->[0] : -1;
         if ( (! defined $package_line) || ($stmnt_line < $package_line) ) {
-            push @viols, $self->violation( $desc, $expl, $stmnt );
+            push @viols, $self->violation( $DESC, $EXPL, $stmnt );
         }
     }
 

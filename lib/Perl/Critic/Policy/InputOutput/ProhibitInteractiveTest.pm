@@ -9,6 +9,8 @@ package Perl::Critic::Policy::InputOutput::ProhibitInteractiveTest;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
@@ -16,22 +18,22 @@ our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{Use IO::Interactive::is_interactive() instead of -t};
-my $expl = [ 218 ];
+Readonly::Scalar my $DESC => q{Use IO::Interactive::is_interactive() instead of -t};
+Readonly::Scalar my $EXPL => [ 218 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return() }
-sub default_severity { return $SEVERITY_HIGHEST      }
-sub default_themes    { return qw( core pbp bugs )       }
-sub applies_to       { return 'PPI::Token::Operator' }
+sub supported_parameters { return ()                     }
+sub default_severity     { return $SEVERITY_HIGHEST      }
+sub default_themes       { return qw( core pbp bugs )    }
+sub applies_to           { return 'PPI::Token::Operator' }
 
 #-----------------------------------------------------------------------------
 
 sub violates {
     my ($self, $elem, $doc) = @_;
     return if $elem ne '-t';
-    return $self->violation( $desc, $expl, $elem );
+    return $self->violation( $DESC, $EXPL, $elem );
 }
 
 1;

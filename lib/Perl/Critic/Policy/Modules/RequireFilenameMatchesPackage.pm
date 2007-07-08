@@ -9,7 +9,10 @@ package Perl::Critic::Policy::Modules::RequireFilenameMatchesPackage;
 
 use strict;
 use warnings;
+use Readonly;
+
 use File::Spec;
+
 use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
@@ -17,15 +20,15 @@ our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{Package declaration must match filename};
-my $expl = q{Correct the filename or package statement};
+Readonly::Scalar my $DESC => q{Package declaration must match filename};
+Readonly::Scalar my $EXPL => q{Correct the filename or package statement};
 
 #-----------------------------------------------------------------------------
 
 sub supported_parameters { return ()                }
-sub default_severity  { return $SEVERITY_HIGHEST }
-sub default_themes    { return qw(core bugs)     }
-sub applies_to        { return 'PPI::Document'   }
+sub default_severity     { return $SEVERITY_HIGHEST }
+sub default_themes       { return qw(core bugs)     }
+sub applies_to           { return 'PPI::Document'   }
 
 #-----------------------------------------------------------------------------
 
@@ -63,11 +66,11 @@ sub violates {
         last if ($path_part =~ m/\W/mx);
 
         # Mismatched name
-        return $self->violation( $desc, $expl, $pkg_node );
+        return $self->violation( $DESC, $EXPL, $pkg_node );
     }
 
     return if $matched_any;
-    return $self->violation( $desc, $expl, $pkg_node );
+    return $self->violation( $DESC, $EXPL, $pkg_node );
 }
 
 1;

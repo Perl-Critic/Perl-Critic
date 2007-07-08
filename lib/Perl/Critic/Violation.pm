@@ -9,14 +9,16 @@ package Perl::Critic::Violation;
 
 use strict;
 use warnings;
-use Carp qw(confess);
 use English qw(-no_match_vars);
+use Carp qw(confess);
+
 use File::Basename qw(basename);
 use IO::String qw();
 use Pod::PlainText qw();
-use Perl::Critic::Utils qw{ :characters :internal_lookup };
 use String::Format qw(stringf);
 use overload ( q{""} => 'to_string', cmp => '_compare' );
+
+use Perl::Critic::Utils qw{ :characters :internal_lookup };
 
 our $VERSION = 1.06;
 

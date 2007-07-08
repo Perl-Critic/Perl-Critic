@@ -9,15 +9,19 @@ package Perl::Critic::Policy::Miscellanea::RequireRcsKeywords;
 
 use strict;
 use warnings;
-use Perl::Critic::Utils qw{ :severities :data_conversion };
+use Readonly;
+
 use List::MoreUtils qw(none);
+
+use Perl::Critic::Utils qw{ :characters :severities :data_conversion };
+
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
-my $expl = [ 441 ];
+Readonly::Scalar my $EXPL => [ 441 ];
 
 #-----------------------------------------------------------------------------
 
@@ -68,7 +72,7 @@ sub violates {
             my $desc = 'RCS keywords '
                 . join( ', ', map {"\$$_\$"} @{$keywordset_ref} )
                 . ' not found';
-            push @viols, $self->violation( $desc, $expl, $doc );
+            push @viols, $self->violation( $desc, $EXPL, $doc );
         }
         else {
             my @missing_keywords = grep {
@@ -85,7 +89,7 @@ sub violates {
                 my $desc = 'RCS keywords '
                     . join( ', ', map {"\$$_\$"} @missing_keywords )
                     . ' not found';
-                push @viols, $self->violation( $desc, $expl, $doc );
+                push @viols, $self->violation( $desc, $EXPL, $doc );
             }
             else {
 

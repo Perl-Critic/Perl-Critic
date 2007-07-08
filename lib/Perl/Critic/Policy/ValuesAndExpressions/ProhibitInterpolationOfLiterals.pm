@@ -9,6 +9,8 @@ package Perl::Critic::Policy::ValuesAndExpressions::ProhibitInterpolationOfLiter
 
 use strict;
 use warnings;
+use Readonly;
+
 use List::MoreUtils qw(any);
 use Perl::Critic::Utils qw{ :severities :data_conversion };
 use base 'Perl::Critic::Policy';
@@ -17,16 +19,16 @@ our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{Useless interpolation of literal string};
-my $expl = [51];
+Readonly::Scalar my $DESC => q{Useless interpolation of literal string};
+Readonly::Scalar my $EXPL => [51];
 
 #-----------------------------------------------------------------------------
 
 sub supported_parameters  { return qw( allow )             }
-sub default_severity   { return $SEVERITY_LOWEST        }
-sub default_themes     { return qw( core pbp cosmetic ) }
-sub applies_to         { return qw(PPI::Token::Quote::Double
-                                   PPI::Token::Quote::Interpolate) }
+sub default_severity { return $SEVERITY_LOWEST        }
+sub default_themes   { return qw( core pbp cosmetic ) }
+sub applies_to       { return qw(PPI::Token::Quote::Double
+                                 PPI::Token::Quote::Interpolate) }
 
 #-----------------------------------------------------------------------------
 
@@ -66,7 +68,7 @@ sub violates {
     return if any { $elem =~ m{ \A \Q$_\E }mx } @{ $self->{_allow} };
 
     # Must be a violation
-    return $self->violation( $desc, $expl, $elem );
+    return $self->violation( $DESC, $EXPL, $elem );
 }
 
 #-----------------------------------------------------------------------------

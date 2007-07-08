@@ -9,6 +9,8 @@ package Perl::Critic::Policy::Subroutines::ProhibitExplicitReturnUndef;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities :classification };
 use base 'Perl::Critic::Policy';
 
@@ -16,15 +18,15 @@ our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{"return" statement with explicit "undef"};
-my $expl = [ 199 ];
+Readonly::Scalar my $DESC => q{"return" statement with explicit "undef"};
+Readonly::Scalar my $EXPL => [ 199 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return() }
-sub default_severity { return $SEVERITY_HIGHEST  }
-sub default_themes    { return qw(core pbp bugs)     }
-sub applies_to       { return 'PPI::Token::Word' }
+sub supported_parameters { return ()                 }
+sub default_severity     { return $SEVERITY_HIGHEST  }
+sub default_themes       { return qw(core pbp bugs)  }
+sub applies_to           { return 'PPI::Token::Word' }
 
 #-----------------------------------------------------------------------------
 
@@ -39,7 +41,7 @@ sub violates {
     return if $sib ne 'undef';
 
     # Must be 'return undef'
-    return $self->violation( $desc, $expl, $elem );
+    return $self->violation( $DESC, $EXPL, $elem );
 }
 
 1;

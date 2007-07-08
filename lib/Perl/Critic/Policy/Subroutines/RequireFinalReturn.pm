@@ -9,23 +9,26 @@ package Perl::Critic::Policy::Subroutines::RequireFinalReturn;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Carp qw(confess);
-use Perl::Critic::Utils qw{ :severities :data_conversion };
+
+use Perl::Critic::Utils qw{ :characters :severities :data_conversion };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{Subroutine does not end with "return"};
-my $expl = [ 197 ];
+Readonly::Scalar my $DESC => q{Subroutine does not end with "return"};
+Readonly::Scalar my $EXPL => [ 197 ];
 
 #-----------------------------------------------------------------------------
 
 sub supported_parameters { return qw(terminal_funcs)    }
-sub default_severity     { return $SEVERITY_HIGH        }
-sub default_themes       { return qw( core bugs pbp )   }
-sub applies_to           { return 'PPI::Statement::Sub' }
+sub default_severity { return $SEVERITY_HIGH        }
+sub default_themes   { return qw( core bugs pbp )   }
+sub applies_to       { return 'PPI::Statement::Sub' }
 
 #-----------------------------------------------------------------------------
 
@@ -71,7 +74,7 @@ sub violates {
     }
 
     # Must be a violation
-    return $self->violation( $desc, $expl, $elem );
+    return $self->violation( $DESC, $EXPL, $elem );
 }
 
 #-----------------------------------------------------------------------------

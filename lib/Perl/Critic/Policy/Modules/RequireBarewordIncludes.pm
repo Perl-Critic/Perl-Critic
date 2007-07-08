@@ -9,6 +9,8 @@ package Perl::Critic::Policy::Modules::RequireBarewordIncludes;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
@@ -16,14 +18,14 @@ our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
-my $expl = q{Use a bareword instead};
+Readonly::Scalar my $EXPL => q{Use a bareword instead};
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return() }
-sub default_severity   { return $SEVERITY_HIGHEST }
-sub default_themes      { return qw(core portability)   }
-sub applies_to         { return 'PPI::Statement::Include' }
+sub supported_parameters { return ()                        }
+sub default_severity     { return $SEVERITY_HIGHEST         }
+sub default_themes       { return qw(core portability)      }
+sub applies_to           { return 'PPI::Statement::Include' }
 
 #-----------------------------------------------------------------------------
 
@@ -36,7 +38,7 @@ sub violates {
     if ( $child->isa('PPI::Token::Quote') ) {
         my $type = $elem->type;
         my $desc = qq{"$type" statement with library name as string};
-        return $self->violation( $desc, $expl, $elem );
+        return $self->violation( $desc, $EXPL, $elem );
     }
     return; #ok!
 }

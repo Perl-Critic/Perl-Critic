@@ -9,6 +9,8 @@ package Perl::Critic::Policy::BuiltinFunctions::ProhibitVoidGrep;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities :classification &is_in_void_context };
 use base 'Perl::Critic::Policy';
 
@@ -16,15 +18,15 @@ our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{"grep" used in void context};
-my $expl = q{Use a "for" loop instead};
+Readonly::Scalar my $DESC => q{"grep" used in void context};
+Readonly::Scalar my $EXPL => q{Use a "for" loop instead};
 
 #-----------------------------------------------------------------------------
 
 sub supported_parameters { return ()                     }
-sub default_severity  { return $SEVERITY_MEDIUM       }
-sub default_themes    { return qw( core maintenance ) }
-sub applies_to        { return 'PPI::Token::Word'     }
+sub default_severity     { return $SEVERITY_MEDIUM       }
+sub default_themes       { return qw( core maintenance ) }
+sub applies_to           { return 'PPI::Token::Word'     }
 
 #-----------------------------------------------------------------------------
 
@@ -35,7 +37,7 @@ sub violates {
     return if not is_function_call($elem);
     return if not is_in_void_context($elem);
 
-    return $self->violation( $desc, $expl, $elem );
+    return $self->violation( $DESC, $EXPL, $elem );
 }
 
 

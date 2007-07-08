@@ -9,7 +9,9 @@ package Perl::Critic::Policy::Variables::ProhibitPackageVars;
 
 use strict;
 use warnings;
-use Perl::Critic::Utils qw{ :severities :data_conversion };
+use Readonly;
+
+use Perl::Critic::Utils qw{ :characters :severities :data_conversion };
 use List::MoreUtils qw(all any);
 use Carp qw( carp );
 use base 'Perl::Critic::Policy';
@@ -18,19 +20,20 @@ our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{Package variable declared or used};
-my $expl = [ 73, 75 ];
+Readonly::Scalar my $DESC => q{Package variable declared or used};
+Readonly::Scalar my $EXPL => [ 73, 75 ];
 
 #-----------------------------------------------------------------------------
 
 sub supported_parameters { return qw( packages add_packages ) }
-sub default_severity  { return $SEVERITY_MEDIUM            }
-sub default_themes    { return qw(core pbp maintenance)    }
-sub applies_to        { return qw(PPI::Token::Symbol
-                                  PPI::Statement::Variable
-                                  PPI::Statement::Include) }
+sub default_severity { return $SEVERITY_MEDIUM            }
+sub default_themes   { return qw(core pbp maintenance)    }
+sub applies_to       { return qw(PPI::Token::Symbol
+                                 PPI::Statement::Variable
+                                 PPI::Statement::Include) }
 
-our @DEFAULT_PACKAGE_EXCEPTIONS = qw( File::Find Data::Dumper );
+Readonly::Array our @DEFAULT_PACKAGE_EXCEPTIONS =>
+    qw( File::Find Data::Dumper );
 
 #-----------------------------------------------------------------------------
 
@@ -65,7 +68,7 @@ sub violates {
          _is_vars_pragma($elem) )
        {
 
-        return $self->violation( $desc, $expl, $elem );
+        return $self->violation( $DESC, $EXPL, $elem );
     }
 
     return;  # ok

@@ -9,6 +9,8 @@ package Perl::Critic::Policy::ValuesAndExpressions::RequireInterpolationOfMetach
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
@@ -18,13 +20,13 @@ our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{String *may* require interpolation};
-my $expl = [ 51 ];
+Readonly::Scalar my $DESC => q{String *may* require interpolation};
+Readonly::Scalar my $EXPL => [ 51 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return() }
-sub default_severity     { return $SEVERITY_LOWEST }
+sub supported_parameters { return ()                    }
+sub default_severity     { return $SEVERITY_LOWEST      }
 sub default_themes       { return qw(core pbp cosmetic) }
 sub applies_to           { return qw(PPI::Token::Quote::Single
                                      PPI::Token::Quote::Literal) }
@@ -36,7 +38,7 @@ sub violates {
     # The string() method strips off the quotes
     return if not _needs_interpolation( $elem->string() );
     return if _looks_like_email_address( $elem->string() );
-    return $self->violation( $desc, $expl, $elem );
+    return $self->violation( $DESC, $EXPL, $elem );
 }
 
 #-----------------------------------------------------------------------------

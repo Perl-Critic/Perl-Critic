@@ -9,6 +9,8 @@ package Perl::Critic::Policy::ValuesAndExpressions::RequireUpperCaseHeredocTermi
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
@@ -16,24 +18,24 @@ our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
-my $heredoc_rx = qr{ \A << \s* ["|']? [A-Z_] [A-Z0-9_]* ['|"]? \z }x;
-my $desc       = q{Heredoc terminator not alphanumeric and upper-case};
-my $expl       = [ 64 ];
+Readonly::Scalar my $HEREDOC_RX => qr{ \A << \s* ["|']? [A-Z_] [A-Z0-9_]* ['|"]? \z }x;
+Readonly::Scalar my $DESC       => q{Heredoc terminator not alphanumeric and upper-case};
+Readonly::Scalar my $EXPL       => [ 64 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return() }
-sub default_severity { return $SEVERITY_LOW         }
-sub default_themes   { return qw(core pbp cosmetic)   }
-sub applies_to       { return 'PPI::Token::HereDoc' }
+sub supported_parameters { return ()                    }
+sub default_severity     { return $SEVERITY_LOW         }
+sub default_themes       { return qw(core pbp cosmetic) }
+sub applies_to           { return 'PPI::Token::HereDoc' }
 
 #-----------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    if ( $elem !~ $heredoc_rx ) {
-        return $self->violation( $desc, $expl, $elem );
+    if ( $elem !~ $HEREDOC_RX ) {
+        return $self->violation( $DESC, $EXPL, $elem );
     }
     return;    #ok!
 }

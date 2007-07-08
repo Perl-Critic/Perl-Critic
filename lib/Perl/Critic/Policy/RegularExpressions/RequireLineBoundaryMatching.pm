@@ -9,6 +9,8 @@ package Perl::Critic::Policy::RegularExpressions::RequireLineBoundaryMatching;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
@@ -16,16 +18,16 @@ our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{Regular expression without "/m" flag};
-my $expl = [ 237 ];
+Readonly::Scalar my $DESC => q{Regular expression without "/m" flag};
+Readonly::Scalar my $EXPL => [ 237 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return() }
-sub default_severity { return $SEVERITY_LOW       }
-sub default_themes   { return qw(core pbp cosmetic) }
-sub applies_to       { return qw(PPI::Token::Regexp::Match
-                                 PPI::Token::Regexp::Substitute) }
+sub supported_parameters { return ()                    }
+sub default_severity     { return $SEVERITY_LOW         }
+sub default_themes       { return qw(core pbp cosmetic) }
+sub applies_to           { return qw(PPI::Token::Regexp::Match
+                                     PPI::Token::Regexp::Substitute) }
 
 #-----------------------------------------------------------------------------
 
@@ -36,7 +38,7 @@ sub violates {
     #API.  I'm cheating by accessing it here directly.
 
     if ( ! defined $elem->{modifiers}->{'m'} ) {
-        return $self->violation( $desc, $expl, $elem );
+        return $self->violation( $DESC, $EXPL, $elem );
     }
     return; #ok!;
 }

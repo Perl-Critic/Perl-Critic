@@ -9,14 +9,17 @@ package Perl::Critic::Policy::ControlStructures::ProhibitPostfixControls;
 
 use strict;
 use warnings;
-use Perl::Critic::Utils qw{ :severities :data_conversion :classification };
+use Readonly;
+
+use Perl::Critic::Utils qw{ :characters :severities :data_conversion :classification };
+
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
-my %pages_of = (
+Readonly::Hash my %PAGES_OF => (
     if     => [ 93, 94 ],
     unless => [ 96, 97 ],
     until  => [ 96, 97 ],
@@ -24,15 +27,15 @@ my %pages_of = (
     while  => [ 96     ],
 );
 
-my @exemptions = qw( warn die carp croak cluck confess goto exit );
-my %exemptions = hashify( @exemptions );
+Readonly::Array my @EXEMPTIONS => qw( warn die carp croak cluck confess goto exit );
+Readonly::Hash my %EXEMPTIONS => hashify( @EXEMPTIONS );
 
 #-----------------------------------------------------------------------------
 
 sub supported_parameters { return qw( allow )           }
-sub default_severity  { return $SEVERITY_LOW         }
-sub default_themes    { return qw(core pbp cosmetic) }
-sub applies_to        { return 'PPI::Token::Word'    }
+sub default_severity { return $SEVERITY_LOW         }
+sub default_themes   { return qw(core pbp cosmetic) }
+sub applies_to       { return 'PPI::Token::Word'    }
 
 #-----------------------------------------------------------------------------
 
@@ -58,7 +61,7 @@ sub new {
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    my $expl = $pages_of{$elem};
+    my $expl = $PAGES_OF{$elem};
     return if not $expl;
 
     return if is_hash_key($elem);
@@ -80,7 +83,7 @@ sub violates {
         #Postfix 'if' allowed with loop breaks, or other
         #flow-controls like 'die', 'warn', and 'croak'
         return if $stmnt->isa('PPI::Statement::Break');
-        return if defined $exemptions{ $stmnt->schild(0) };
+        return if defined $EXEMPTIONS{ $stmnt->schild(0) };
     }
 
     # If we get here, it must be postfix.

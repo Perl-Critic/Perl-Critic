@@ -9,6 +9,8 @@ package Perl::Critic::Policy::CodeLayout::ProhibitHardTabs;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :booleans :severities };
 use base 'Perl::Critic::Policy';
 
@@ -16,17 +18,17 @@ our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{Hard tabs used};
-my $expl = [ 20 ];
+Readonly::Scalar my $DESC => q{Hard tabs used};
+Readonly::Scalar my $EXPL => [ 20 ];
 
 my $DEFAULT_ALLOW_LEADING_TABS = $TRUE;
 
 #-----------------------------------------------------------------------------
 
 sub supported_parameters { return qw( allow_leading_tabs ) }
-sub default_severity  { return $SEVERITY_MEDIUM         }
-sub default_themes    { return qw( core cosmetic )      }
-sub applies_to        { return 'PPI::Token'             }
+sub default_severity { return $SEVERITY_MEDIUM    }
+sub default_themes   { return qw( core cosmetic ) }
+sub applies_to       { return 'PPI::Token'        }
 
 #-----------------------------------------------------------------------------
 
@@ -56,7 +58,7 @@ sub violates {
     return if $self->{_allow_leading_tabs} && $elem->location->[1] == 1;
 
     # Must be a violation...
-    return $self->violation( $desc, $expl, $elem );
+    return $self->violation( $DESC, $EXPL, $elem );
 }
 
 1;

@@ -9,6 +9,8 @@ package Perl::Critic::Policy::InputOutput::ProhibitBarewordFileHandles;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities :classification :ppi };
 use base 'Perl::Critic::Policy';
 
@@ -16,15 +18,15 @@ our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{Bareword file handle opened};
-my $expl = [ 202, 204 ];
+Readonly::Scalar my $DESC => q{Bareword file handle opened};
+Readonly::Scalar my $EXPL => [ 202, 204 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return ()                   }
-sub default_severity  { return $SEVERITY_HIGHEST    }
-sub default_themes    { return qw( core pbp bugs )  }
-sub applies_to        { return 'PPI::Token::Word'   }
+sub supported_parameters { return ()                  }
+sub default_severity     { return $SEVERITY_HIGHEST   }
+sub default_themes       { return qw( core pbp bugs ) }
+sub applies_to           { return 'PPI::Token::Word'  }
 
 #-----------------------------------------------------------------------------
 
@@ -41,7 +43,7 @@ sub violates {
 
     if ( $first_token->isa('PPI::Token::Word') ) {
         if ( ($first_token ne 'my') && ($first_token !~ m/^STD(IN|OUT|ERR)$/mx ) ) {
-            return $self->violation( $desc, $expl, $elem );
+            return $self->violation( $DESC, $EXPL, $elem );
         }
     }
     return; #ok!

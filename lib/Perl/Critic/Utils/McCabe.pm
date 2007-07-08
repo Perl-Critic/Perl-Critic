@@ -10,7 +10,9 @@ package Perl::Critic::Utils::McCabe;
 use strict;
 use warnings;
 
-use Perl::Critic::Utils qw{ &hashify &is_hash_key };
+use Readonly;
+
+use Perl::Critic::Utils qw{ :data_conversion :classification };
 
 use base 'Exporter';
 
@@ -20,7 +22,7 @@ our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
-our @EXPORT_OK =
+Readonly::Array our @EXPORT_OK =>
   qw( &calculate_mccabe_of_sub &calculate_mccabe_of_main );
 
 #-----------------------------------------------------------------------------

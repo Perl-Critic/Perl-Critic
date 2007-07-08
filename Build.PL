@@ -65,9 +65,10 @@ my $builder = Module::Build->new(
                      'PPI'                   => 1.118,
                      'Pod::PlainText'        => 0,
                      'Pod::Usage'            => 0,
+                     'Readonly'              => 1.03,
                      'Scalar::Util'          => 0,
                      'String::Format'        => 1.13,
-	            },
+                    },
 
   recommends     => {'File::HomeDir'         => 0,
                      'Perl::Tidy'            => 0,

@@ -9,6 +9,8 @@ package Perl::Critic::Policy::CodeLayout::ProhibitParensWithBuiltins;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{
     :severities :data_conversion :classification :language
 };
@@ -18,18 +20,18 @@ our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
-my @allow = qw( my our local return );
-my %allow = hashify( @allow );
+Readonly::Array my @ALLOW => qw( my our local return );
+Readonly::Hash my %ALLOW => hashify( @ALLOW );
 
-my $desc  = q{Builtin function called with parens};
-my $expl  = [ 13 ];
+Readonly::Scalar my $DESC  => q{Builtin function called with parens};
+Readonly::Scalar my $EXPL  => [ 13 ];
 
 #-----------------------------------------------------------------------------
 # These are all the functions that are considered named unary
 # operators.  These frequently require parens because they have lower
 # precedence than ordinary function calls.
 
-my @named_unary_ops = qw(
+Readonly::Array my @NAMED_UNARY_OPS => qw(
     alarm           glob        rand
     caller          gmtime      readlink
     chdir           hex         ref
@@ -47,21 +49,21 @@ my @named_unary_ops = qw(
     getprotobyname  quotemeta   umask
                                 undef
 );
-my %named_unary_ops = hashify( @named_unary_ops );
+Readonly::Hash my %NAMED_UNARY_OPS => hashify( @NAMED_UNARY_OPS );
 
 #-----------------------------------------------------------------------------
 
 sub supported_parameters { return ()                      }
-sub default_severity  { return $SEVERITY_LOWEST        }
-sub default_themes    { return qw( core pbp cosmetic ) }
-sub applies_to        { return 'PPI::Token::Word'      }
+sub default_severity     { return $SEVERITY_LOWEST        }
+sub default_themes       { return qw( core pbp cosmetic ) }
+sub applies_to           { return 'PPI::Token::Word'      }
 
 #-----------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    return if exists $allow{$elem};
+    return if exists $ALLOW{$elem};
     return if not is_perl_builtin($elem);
     return if not is_function_call($elem);
 
@@ -99,7 +101,7 @@ sub violates {
         }
 
         # If we get here, it must be a violation
-        return $self->violation( $desc, $expl, $elem );
+        return $self->violation( $DESC, $EXPL, $elem );
     }
     return;    #ok!
 }
@@ -108,7 +110,7 @@ sub violates {
 
 sub _is_named_unary {
     my $elem = shift;
-    return exists $named_unary_ops{$elem->content};
+    return exists $NAMED_UNARY_OPS{$elem->content};
 }
 
 1;

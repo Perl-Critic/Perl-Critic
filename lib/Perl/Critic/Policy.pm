@@ -10,6 +10,11 @@ package Perl::Critic::Policy;
 use strict;
 use warnings;
 use Carp qw(confess);
+
+use String::Format qw(stringf);
+
+use overload ( q{""} => 'to_string', cmp => '_compare' );
+
 use Perl::Critic::Utils qw{
     :characters
     :severities
@@ -18,8 +23,6 @@ use Perl::Critic::Utils qw{
     &policy_short_name
 };
 use Perl::Critic::Violation qw();
-use String::Format qw(stringf);
-use overload ( q{""} => 'to_string', cmp => '_compare' );
 
 our $VERSION = 1.06;
 

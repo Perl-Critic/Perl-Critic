@@ -9,6 +9,8 @@ package Perl::Critic::Policy::Modules::ProhibitAutomaticExportation;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities };
 use List::MoreUtils qw(any);
 use base 'Perl::Critic::Policy';
@@ -17,15 +19,15 @@ our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{Symbols are exported by default};
-my $expl = q{Use '@EXPORT_OK' or '%EXPORT_TAGS' instead};  ## no critic
+Readonly::Scalar my $DESC => q{Symbols are exported by default};
+Readonly::Scalar my $EXPL => q{Use '@EXPORT_OK' or '%EXPORT_TAGS' instead};  ## no critic
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return() }
-sub default_severity { return $SEVERITY_HIGH  }
-sub default_themes    { return qw( core bugs )     }
-sub applies_to       { return 'PPI::Document' }
+sub supported_parameters { return ()              }
+sub default_severity     { return $SEVERITY_HIGH  }
+sub default_themes       { return qw( core bugs ) }
+sub applies_to           { return 'PPI::Document' }
 
 #-----------------------------------------------------------------------------
 
@@ -34,7 +36,7 @@ sub violates {
 
     if ( _uses_exporter($doc) ) {
         if ( my $exp = _has_exports($doc) ) {
-            return $self->violation( $desc, $expl, $exp );
+            return $self->violation( $DESC, $EXPL, $exp );
         }
     }
     return; #ok

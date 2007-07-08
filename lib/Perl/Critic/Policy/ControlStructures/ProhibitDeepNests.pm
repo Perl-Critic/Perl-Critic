@@ -9,6 +9,8 @@ package Perl::Critic::Policy::ControlStructures::ProhibitDeepNests;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
@@ -16,17 +18,17 @@ our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{Code structure is deeply nested};
-my $expl = q{Consider refactoring};
+Readonly::Scalar my $DESC => q{Code structure is deeply nested};
+Readonly::Scalar my $EXPL => q{Consider refactoring};
 
 my $DEFAULT_MAX_NESTS = 5;
 
 #-----------------------------------------------------------------------------
 
 sub supported_parameters { return qw( max_nests )                 }
-sub default_severity  { return $SEVERITY_MEDIUM                }
-sub default_themes    { return qw(core maintenance complexity) }
-sub applies_to        { return 'PPI::Statement::Compound'      }
+sub default_severity { return $SEVERITY_MEDIUM                }
+sub default_themes   { return qw(core maintenance complexity) }
+sub applies_to       { return 'PPI::Statement::Compound'      }
 
 #-----------------------------------------------------------------------------
 
@@ -58,7 +60,7 @@ sub violates {
     }
 
     if ( $nest_count > $self->{_max_nests} ) {
-        return $self->violation( $desc, $expl, $elem );
+        return $self->violation( $DESC, $EXPL, $elem );
     }
     return;    #ok!
 }

@@ -9,8 +9,8 @@ package Perl::Critic::Policy::CodeLayout::ProhibitTrailingWhitespace;
 
 use strict;
 use warnings;
-
 use English qw(-no_match_vars);
+use Readonly;
 
 use charnames qw{};
 
@@ -23,10 +23,10 @@ our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
-my $description = q{Don't use whitespace at the end of lines};
+Readonly::Scalar my $DESCRIPTION => q{Don't use whitespace at the end of lines};
 
 ## no critic (RequireInterpolationOfMetachars)
-my %c_style_escapes =
+Readonly::Hash my %C_STYLE_ESCAPES =>
     (
         ord "\t" => q{\t},
         ord "\n" => q{\n},
@@ -63,14 +63,14 @@ sub violates {
     $explanation .= join $EMPTY, map { _escape($_) } split $EMPTY, $content;
     $explanation .= q{" at the end of the line};
 
-    return $self->violation( $description, $explanation, $token );
+    return $self->violation( $DESCRIPTION, $explanation, $token );
 }
 
 sub _escape {
     my $character = shift;
     my $ordinal = ord $character;
 
-    if (my $c_escape = $c_style_escapes{$ordinal}) {
+    if (my $c_escape = $C_STYLE_ESCAPES{$ordinal}) {
         return $c_escape;
     }
 

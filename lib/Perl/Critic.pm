@@ -9,24 +9,29 @@ package Perl::Critic;
 
 use strict;
 use warnings;
+use English qw(-no_match_vars);
+use Carp;
+use Readonly;
+
 use base qw(Exporter);
 
-use Carp;
 use File::Spec;
 use Scalar::Util qw(blessed);
-use English qw(-no_match_vars);
+
+use PPI::Document;
+use PPI::Document::File;
+
 use Perl::Critic::Config;
 use Perl::Critic::Violation;
 use Perl::Critic::Document;
 use Perl::Critic::Statistics;
 use Perl::Critic::Utils qw{ :characters };
-use PPI::Document;
-use PPI::Document::File;
 
 #-----------------------------------------------------------------------------
 
 our $VERSION = 1.06;
-our @EXPORT_OK = qw(&critique);
+
+Readonly::Array our @EXPORT_OK => qw(&critique);
 
 #-----------------------------------------------------------------------------
 

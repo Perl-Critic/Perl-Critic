@@ -9,6 +9,8 @@ package Perl::Critic::Policy::TestingAndDebugging::ProhibitProlongedStrictureOve
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
@@ -16,17 +18,17 @@ our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{Don't turn off strict for large blocks of code};
-my $expl = [ 433 ];
+Readonly::Scalar my $DESC => q{Don't turn off strict for large blocks of code};
+Readonly::Scalar my $EXPL => [ 433 ];
 
 my $DEFAULT_N_STATEMENTS = 3;
 
 #-----------------------------------------------------------------------------
 
 sub supported_parameters { return qw( statements )          }
-sub default_severity  { return $SEVERITY_HIGH            }
-sub default_themes    { return qw( core pbp bugs )       }
-sub applies_to        { return 'PPI::Statement::Include' }
+sub default_severity { return $SEVERITY_HIGH            }
+sub default_themes   { return qw( core pbp bugs )       }
+sub applies_to       { return 'PPI::Statement::Include' }
 
 #-----------------------------------------------------------------------------
 
@@ -62,7 +64,7 @@ sub violates {
        $sib = $sib->snext_sibling;
     }
 
-    return $self->violation( $desc, $expl, $elem );
+    return $self->violation( $DESC, $EXPL, $elem );
 }
 
 1;

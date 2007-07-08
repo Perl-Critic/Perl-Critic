@@ -9,6 +9,8 @@ package Perl::Critic::Policy::Miscellanea::ProhibitTies;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities :classification };
 use base 'Perl::Critic::Policy';
 
@@ -16,15 +18,15 @@ our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{Tied variable used};
-my $expl = [ 451 ];
+Readonly::Scalar my $DESC => q{Tied variable used};
+Readonly::Scalar my $EXPL => [ 451 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return() }
-sub default_severity { return $SEVERITY_LOW       }
-sub default_themes   { return qw(core pbp maintenance) }
-sub applies_to       { return 'PPI::Token::Word'  }
+sub supported_parameters { return ()                       }
+sub default_severity     { return $SEVERITY_LOW            }
+sub default_themes       { return qw(core pbp maintenance) }
+sub applies_to           { return 'PPI::Token::Word'       }
 
 #-----------------------------------------------------------------------------
 
@@ -32,7 +34,7 @@ sub violates {
     my ( $self, $elem, undef ) = @_;
     return if $elem ne 'tie';
     return if ! is_function_call( $elem );
-    return $self->violation( $desc, $expl, $elem );
+    return $self->violation( $DESC, $EXPL, $elem );
 }
 
 

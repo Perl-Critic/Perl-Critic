@@ -9,6 +9,8 @@ package Perl::Critic::Policy::Variables::ProtectPrivateVars;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
@@ -16,15 +18,15 @@ our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{Private variable used};
-my $expl = q{Use published APIs};
+Readonly::Scalar my $DESC => q{Private variable used};
+Readonly::Scalar my $EXPL => q{Use published APIs};
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return() }
-sub default_severity { return $SEVERITY_MEDIUM     }
-sub default_themes   { return qw(core maintenance)       }
-sub applies_to       { return 'PPI::Token::Symbol' }
+sub supported_parameters { return ()                   }
+sub default_severity     { return $SEVERITY_MEDIUM     }
+sub default_themes       { return qw(core maintenance) }
+sub applies_to           { return 'PPI::Token::Symbol' }
 
 #-----------------------------------------------------------------------------
 
@@ -32,7 +34,7 @@ sub violates {
     my ( $self, $elem, undef ) = @_;
 
     if ( $elem =~ m{ \w::_\w+ \z }xms ) {
-        return $self->violation( $desc, $expl, $elem );
+        return $self->violation( $DESC, $EXPL, $elem );
     }
     return;    #ok!
 }

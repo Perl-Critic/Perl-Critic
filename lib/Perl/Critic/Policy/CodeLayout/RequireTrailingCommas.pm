@@ -9,6 +9,8 @@ package Perl::Critic::Policy::CodeLayout::RequireTrailingCommas;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :characters :severities };
 use base 'Perl::Critic::Policy';
 
@@ -16,15 +18,15 @@ our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
-my $desc  = q{List declaration without trailing comma};
-my $expl  = [ 17 ];
+Readonly::Scalar my $DESC => q{List declaration without trailing comma};
+Readonly::Scalar my $EXPL => [ 17 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return() }
-sub default_severity { return $SEVERITY_LOWEST }
-sub default_themes    { return qw(core pbp cosmetic) }
-sub applies_to       { return 'PPI::Structure::List' }
+sub supported_parameters { return ()                     }
+sub default_severity     { return $SEVERITY_LOWEST       }
+sub default_themes       { return qw(core pbp cosmetic)  }
+sub applies_to           { return 'PPI::Structure::List' }
 
 #-----------------------------------------------------------------------------
 
@@ -50,7 +52,7 @@ sub violates {
     # Is the final element a comma?
     my $final = $children[-1];
     if ( ! ($final->isa('PPI::Token::Operator') && $final eq $COMMA) ) {
-        return $self->violation( $desc, $expl, $elem );
+        return $self->violation( $DESC, $EXPL, $elem );
     }
 
     return; #ok!

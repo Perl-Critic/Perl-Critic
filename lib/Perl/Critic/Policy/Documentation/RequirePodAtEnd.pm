@@ -9,24 +9,27 @@ package Perl::Critic::Policy::Documentation::RequirePodAtEnd;
 
 use strict;
 use warnings;
-use Perl::Critic::Utils qw{ :severities };
+use Readonly;
+
 use List::Util qw(first);
+
+use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
-my $pod_rx = qr{\A = (?: for|begin|end ) }mx;
-my $desc = q{POD before __END__};
-my $expl = [139, 140];
+Readonly::Scalar my $POD_RX => qr{\A = (?: for|begin|end ) }mx;
+Readonly::Scalar my $DESC => q{POD before __END__};
+Readonly::Scalar my $EXPL => [139, 140];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return() }
-sub default_severity { return $SEVERITY_LOWEST   }
-sub default_themes    { return qw( core cosmetic pbp ) }
-sub applies_to       { return 'PPI::Document'    }
+sub supported_parameters { return ()                      }
+sub default_severity     { return $SEVERITY_LOWEST        }
+sub default_themes       { return qw( core cosmetic pbp ) }
+sub applies_to           { return 'PPI::Document'         }
 
 #-----------------------------------------------------------------------------
 
@@ -38,7 +41,7 @@ sub violates {
     return if !$pods_ref;
 
     # Look for first POD tag that isn't =for, =begin, or =end
-    my $pod = first { $_ !~ $pod_rx} @{ $pods_ref };
+    my $pod = first { $_ !~ $POD_RX} @{ $pods_ref };
     return if !$pod;
 
     my $end = $doc->find_first('PPI::Statement::End');
@@ -51,7 +54,7 @@ sub violates {
         }
     }
 
-    return $self->violation( $desc, $expl, $pod );
+    return $self->violation( $DESC, $EXPL, $pod );
 }
 
 1;

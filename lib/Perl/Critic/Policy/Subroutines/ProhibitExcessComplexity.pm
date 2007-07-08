@@ -9,6 +9,7 @@ package Perl::Critic::Policy::Subroutines::ProhibitExcessComplexity;
 
 use strict;
 use warnings;
+use Readonly;
 
 use Perl::Critic::Utils qw{ :severities :data_conversion :classification };
 use Perl::Critic::Utils::McCabe qw{ &calculate_mccabe_of_sub };
@@ -19,14 +20,14 @@ our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
-my $expl = q{Consider refactoring};
+Readonly::Scalar my $EXPL => q{Consider refactoring};
 
 #-----------------------------------------------------------------------------
 
 sub supported_parameters { return qw( max_mccabe )                }
-sub default_severity  { return $SEVERITY_MEDIUM                }
-sub default_themes    { return qw(core complexity maintenance) }
-sub applies_to        { return 'PPI::Statement::Sub'           }
+sub default_severity { return $SEVERITY_MEDIUM                }
+sub default_themes   { return qw(core complexity maintenance) }
+sub applies_to       { return 'PPI::Statement::Sub'           }
 
 #-----------------------------------------------------------------------------
 
@@ -51,7 +52,7 @@ sub violates {
     return if $score <= $self->{_max_mccabe};
 
     my $desc = qq{Subroutine with high complexity score ($score)};
-    return $self->violation( $desc, $expl, $elem );
+    return $self->violation( $desc, $EXPL, $elem );
 }
 
 

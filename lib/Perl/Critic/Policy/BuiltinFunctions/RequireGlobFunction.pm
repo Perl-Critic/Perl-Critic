@@ -9,6 +9,8 @@ package Perl::Critic::Policy::BuiltinFunctions::RequireGlobFunction;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
@@ -16,24 +18,24 @@ our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
-my $glob_rx = qr{ [\*\?] }x;
-my $desc    = q{Glob written as <...>};
-my $expl    = [ 167 ];
+Readonly::Scalar my $GLOB_RX => qr{ [\*\?] }x;
+Readonly::Scalar my $DESC    => q{Glob written as <...>};
+Readonly::Scalar my $EXPL    => [ 167 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return() }
-sub default_severity { return $SEVERITY_HIGHEST }
-sub default_themes    { return qw( core pbp bugs )  }
-sub applies_to       { return 'PPI::Token::QuoteLike::Readline' }
+sub supported_parameters { return ()                                }
+sub default_severity     { return $SEVERITY_HIGHEST                 }
+sub default_themes       { return qw( core pbp bugs )               }
+sub applies_to           { return 'PPI::Token::QuoteLike::Readline' }
 
 #-----------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    if ( $elem =~ $glob_rx ) {
-        return $self->violation( $desc, $expl, $elem );
+    if ( $elem =~ $GLOB_RX ) {
+        return $self->violation( $DESC, $EXPL, $elem );
     }
     return;    #ok!
 }

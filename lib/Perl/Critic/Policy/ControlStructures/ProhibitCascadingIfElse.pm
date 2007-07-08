@@ -9,6 +9,8 @@ package Perl::Critic::Policy::ControlStructures::ProhibitCascadingIfElse;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
@@ -16,17 +18,17 @@ our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{Cascading if-elsif chain};
-my $expl = [ 117, 118 ];
+Readonly::Scalar my $DESC => q{Cascading if-elsif chain};
+Readonly::Scalar my $EXPL => [ 117, 118 ];
 
 my $DEFAULT_MAX_ELSIF = 2;
 
 #-----------------------------------------------------------------------------
 
 sub supported_parameters { return qw( max_elsif )                       }
-sub default_severity  { return $SEVERITY_MEDIUM                      }
-sub default_themes    { return qw( core pbp maintenance complexity ) }
-sub applies_to        { return 'PPI::Statement::Compound'            }
+sub default_severity { return $SEVERITY_MEDIUM                      }
+sub default_themes   { return qw( core pbp maintenance complexity ) }
+sub applies_to       { return 'PPI::Statement::Compound'            }
 
 #-----------------------------------------------------------------------------
 
@@ -51,7 +53,7 @@ sub violates {
     return if ($elem->type() ne 'if');
 
     if ( _count_elsifs($elem) > $self->{_max} ) {
-        return $self->violation( $desc, $expl, $elem );
+        return $self->violation( $DESC, $EXPL, $elem );
     }
     return;    #ok!
 }

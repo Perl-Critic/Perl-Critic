@@ -9,27 +9,27 @@ package Perl::Critic::Policy::ValuesAndExpressions::ProhibitQuotesAsQuotelikeOpe
 
 use strict;
 use warnings;
+use Readonly;
 
 use Perl::Critic::Utils qw{ :characters :severities :data_conversion };
-
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
-my %DESCRIPTIONS = (
+Readonly::Hash my %DESCRIPTIONS => (
     $QUOTE    => q{Single-quote used as quote-like operator delimiter},
     $DQUOTE   => q{Double-quote used as quote-like operator delimiter},
     $BACKTICK => q{Back-quote (back-tick) used as quote-like operator delimiter},
 );
 
-my $EXPL        =
+Readonly::Scalar my $EXPL =>
     q{Using quotes as delimiters for quote-like operators obfuscates code};
 
-my %OPERATORS = hashify( qw{ m q qq qr qw qx s tr y } );
+Readonly::Hash my %OPERATORS => hashify( qw{ m q qq qr qw qx s tr y } );
 
-my %INFO_RETRIEVERS_BY_PPI_CLASS = (
+Readonly::Hash my %INFO_RETRIEVERS_BY_PPI_CLASS => (
     'PPI::Token::Quote::Literal'        => \&_info_for_single_character_operator,
     'PPI::Token::Quote::Interpolate'    => \&_info_for_two_character_operator,
     'PPI::Token::QuoteLike::Command'    => \&_info_for_two_character_operator,

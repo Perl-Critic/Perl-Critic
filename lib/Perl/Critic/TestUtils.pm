@@ -9,20 +9,24 @@ package Perl::Critic::TestUtils;
 
 use strict;
 use warnings;
-use base 'Exporter';
-use Carp qw( confess );
 use English qw(-no_match_vars);
+use Readonly;
+use Carp qw( confess );
+
+use base 'Exporter';
+
 use File::Path ();
 use File::Spec ();
 use File::Spec::Unix ();
 use File::Temp ();
 use File::Find qw( find );
+
 use Perl::Critic;
 use Perl::Critic::Utils qw{ :data_conversion };
 use Perl::Critic::PolicyFactory (-test => 1);
 
 our $VERSION = 1.06;
-our @EXPORT_OK = qw(
+Readonly::Array our @EXPORT_OK => qw(
     pcritique pcritique_with_violations
     critique  critique_with_violations
     fcritique fcritique_with_violations

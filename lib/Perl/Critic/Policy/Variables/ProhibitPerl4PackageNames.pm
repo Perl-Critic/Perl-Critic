@@ -9,6 +9,8 @@ package Perl::Critic::Policy::Variables::ProhibitPerl4PackageNames;
 
 use strict;
 use warnings;
+use Readonly;
+
 use Perl::Critic::Utils qw{ :characters :severities :classification };
 use base 'Perl::Critic::Policy';
 
@@ -16,14 +18,15 @@ our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
-my $desc = q{Use double colon (::) to separate package name components instead of single quotes (').};
+Readonly::Scalar my $DESC =>
+    q{Use double colon (::) to separate package name components instead of single quotes (').};
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return() }
-sub default_severity     { return $SEVERITY_LOW                              }
-sub default_themes       { return qw(core maintenance)                       }
-sub applies_to           { return qw( PPI::Token::Word PPI::Token::Symbol )  }
+sub supported_parameters { return ()                                        }
+sub default_severity     { return $SEVERITY_LOW                             }
+sub default_themes       { return qw(core maintenance)                      }
+sub applies_to           { return qw( PPI::Token::Word PPI::Token::Symbol ) }
 
 #-----------------------------------------------------------------------------
 
@@ -41,7 +44,7 @@ sub violates {
 
     return
         $self->violation(
-            $desc,
+            $DESC,
             qq{"$content" uses the obsolete single quote package separator."},
             $elem
         );

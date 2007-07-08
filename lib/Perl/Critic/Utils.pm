@@ -9,6 +9,7 @@ package Perl::Critic::Utils;
 
 use strict;
 use warnings;
+use Readonly;
 
 use Carp qw(confess);
 use File::Spec qw();
@@ -22,7 +23,7 @@ our $VERSION = 1.06;
 #-----------------------------------------------------------------------------
 # Exportable symbols here.
 
-our @EXPORT_OK = qw(
+Readonly::Array our @EXPORT_OK => qw(
     $TRUE
     $FALSE
 
@@ -95,10 +96,10 @@ our @EXPORT_OK = qw(
 
 
 # Note: this is deprecated.
-our @EXPORT = @EXPORT_OK;  ## no critic (ProhibitAutomaticExport)
+Readonly::Array our @EXPORT => @EXPORT_OK;  ## no critic (ProhibitAutomaticExport)
 
 
-our %EXPORT_TAGS = (
+Readonly::Hash our %EXPORT_TAGS => (
     all             => [ @EXPORT_OK ],
     booleans        => [ qw{ $TRUE $FALSE } ],
     severities      => [
@@ -166,35 +167,35 @@ our %EXPORT_TAGS = (
 
 #-----------------------------------------------------------------------------
 
-our $POLICY_NAMESPACE = 'Perl::Critic::Policy';
+Readonly::Scalar our $POLICY_NAMESPACE => 'Perl::Critic::Policy';
 
 #-----------------------------------------------------------------------------
 
-our $SEVERITY_HIGHEST = 5;
-our $SEVERITY_HIGH    = 4;
-our $SEVERITY_MEDIUM  = 3;
-our $SEVERITY_LOW     = 2;
-our $SEVERITY_LOWEST  = 1;
+Readonly::Scalar our $SEVERITY_HIGHEST => 5;
+Readonly::Scalar our $SEVERITY_HIGH    => 4;
+Readonly::Scalar our $SEVERITY_MEDIUM  => 3;
+Readonly::Scalar our $SEVERITY_LOW     => 2;
+Readonly::Scalar our $SEVERITY_LOWEST  => 1;
 
 #-----------------------------------------------------------------------------
 
-our $COMMA        = q{,};
-our $FATCOMMA     = q{=>};
-our $COLON        = q{:};
-our $SCOLON       = q{;};
-our $QUOTE        = q{'};
-our $DQUOTE       = q{"};
-our $BACKTICK     = q{`};
-our $PERIOD       = q{.};
-our $PIPE         = q{|};
-our $SPACE        = q{ };
-our $SLASH        = q{/};
-our $BSLASH       = q{\\};
-our $LEFT_PAREN   = q{(};
-our $RIGHT_PAREN  = q{)};
-our $EMPTY        = q{};
-our $TRUE         = 1;
-our $FALSE        = 0;
+Readonly::Scalar our $COMMA        => q{,};
+Readonly::Scalar our $FATCOMMA     => q{=>};
+Readonly::Scalar our $COLON        => q{:};
+Readonly::Scalar our $SCOLON       => q{;};
+Readonly::Scalar our $QUOTE        => q{'};
+Readonly::Scalar our $DQUOTE       => q{"};
+Readonly::Scalar our $BACKTICK     => q{`};
+Readonly::Scalar our $PERIOD       => q{.};
+Readonly::Scalar our $PIPE         => q{|};
+Readonly::Scalar our $SPACE        => q{ };
+Readonly::Scalar our $SLASH        => q{/};
+Readonly::Scalar our $BSLASH       => q{\\};
+Readonly::Scalar our $LEFT_PAREN   => q{(};
+Readonly::Scalar our $RIGHT_PAREN  => q{)};
+Readonly::Scalar our $EMPTY        => q{};
+Readonly::Scalar our $TRUE         => 1;
+Readonly::Scalar our $FALSE        => 0;
 
 #-----------------------------------------------------------------------------
 
@@ -205,7 +206,7 @@ our $FALSE        = 0;
 #-----------------------------------------------------------------------------
 ## no critic (ProhibitNoisyQuotes);
 
-my %PRECEDENCE_OF = (
+Readonly::Hash my %PRECEDENCE_OF => (
   '->'  => 1,       '<'    => 10,      '//'  => 15,      '.='  => 19,
   '++'  => 2,       '>'    => 10,      '||'  => 15,     '^='  => 19,
   '--'  => 2,       '<='   => 10,      '..'  => 16,     '<<=' => 19,
@@ -265,7 +266,7 @@ sub _name_for_sub_or_stringified_element {
 #-----------------------------------------------------------------------------
 ## no critic (ProhibitPackageVars)
 
-my %BUILTINS = hashify( @B::Keywords::Functions );
+Readonly::Hash my %BUILTINS => hashify( @B::Keywords::Functions );
 
 sub is_perl_builtin {
     my $elem = shift;
@@ -276,7 +277,7 @@ sub is_perl_builtin {
 
 #-----------------------------------------------------------------------------
 
-my %BAREWORDS = hashify( @B::Keywords::Barewords );
+Readonly::Hash my %BAREWORDS => hashify( @B::Keywords::Barewords );
 
 sub is_perl_bareword {
     my $elem = shift;
@@ -287,11 +288,12 @@ sub is_perl_bareword {
 
 #-----------------------------------------------------------------------------
 
-my @GLOBALS_WITHOUT_SIGILS = map { substr $_, 1 }  @B::Keywords::Arrays,
-                                                   @B::Keywords::Hashes,
-                                                   @B::Keywords::Scalars;
+Readonly::Array my @GLOBALS_WITHOUT_SIGILS =>
+    map { substr $_, 1 }  @B::Keywords::Arrays,
+                          @B::Keywords::Hashes,
+                          @B::Keywords::Scalars;
 
-my %GLOBALS= hashify( @GLOBALS_WITHOUT_SIGILS );
+Readonly::Hash my %GLOBALS => hashify( @GLOBALS_WITHOUT_SIGILS );
 
 sub is_perl_global {
     my $elem = shift;
@@ -303,7 +305,7 @@ sub is_perl_global {
 
 #-----------------------------------------------------------------------------
 
-my %FILEHANDLES = hashify( @B::Keywords::Filehandles );
+Readonly::Hash my %FILEHANDLES => hashify( @B::Keywords::Filehandles );
 
 sub is_perl_filehandle {
     my $elem = shift;
@@ -316,7 +318,7 @@ sub is_perl_filehandle {
 #-----------------------------------------------------------------------------
 
 # egrep '=item.*LIST' perlfunc.pod
-my %BUILTINS_WHICH_PROVIDE_LIST_CONTEXT =
+Readonly::Hash my %BUILTINS_WHICH_PROVIDE_LIST_CONTEXT =>
     hashify(
         qw{
             chmod
@@ -364,7 +366,7 @@ sub is_perl_builtin_with_list_context {
 #-----------------------------------------------------------------------------
 
 # egrep '=item.*[A-Z],' perlfunc.pod
-my %BUILTINS_WHICH_TAKE_MULTIPLE_ARGUMENTS =
+Readonly::Hash my %BUILTINS_WHICH_TAKE_MULTIPLE_ARGUMENTS =>
     hashify(
         qw{
             accept
@@ -444,7 +446,7 @@ sub is_perl_builtin_with_multiple_arguments {
 
 #-----------------------------------------------------------------------------
 
-my %BUILTINS_WHICH_TAKE_NO_ARGUMENTS =
+Readonly::Hash my %BUILTINS_WHICH_TAKE_NO_ARGUMENTS =>
     hashify(
         qw{
             endgrent
@@ -485,7 +487,7 @@ sub is_perl_builtin_with_no_arguments {
 
 #-----------------------------------------------------------------------------
 
-my %BUILTINS_WHICH_TAKE_ONE_ARGUMENT =
+Readonly::Hash my %BUILTINS_WHICH_TAKE_ONE_ARGUMENT =>
     hashify(
         qw{
             closedir
@@ -538,7 +540,7 @@ sub is_perl_builtin_with_one_argument {
 #-----------------------------------------------------------------------------
 
 ## no critic (ProhibitPackageVars)
-my %BUILTINS_WHICH_TAKE_OPTIONAL_ARGUMENT =
+Readonly::Hash my %BUILTINS_WHICH_TAKE_OPTIONAL_ARGUMENT =>
     hashify(
         grep { not exists $BUILTINS_WHICH_TAKE_ONE_ARGUMENT{ $_ } }
         grep { not exists $BUILTINS_WHICH_TAKE_NO_ARGUMENTS{ $_ } }
@@ -848,7 +850,7 @@ sub _split_nodes_on_comma {
 
 # XXX: You must keep the regular expressions in extras/perlcritic.el in sync
 # if you change these.
-my %FORMAT_OF = (
+Readonly::Hash my %FORMAT_OF => (
     1 => "%f:%l:%c:%m\n",
     2 => "%f: (%l:%c) %m\n",
     3 => "%m at %f line %l\n",
@@ -862,9 +864,9 @@ my %FORMAT_OF = (
    11 => "%m at line %l, near '%r'.\n  %p (Severity: %s)\n%d\n",
 );
 
-our $DEFAULT_VERBOSITY = 4;
-our $DEFAULT_VERBOSITY_WITH_FILE_NAME = 5;
-my $DEFAULT_FORMAT = $FORMAT_OF{$DEFAULT_VERBOSITY};
+Readonly::Scalar our $DEFAULT_VERBOSITY => 4;
+Readonly::Scalar our $DEFAULT_VERBOSITY_WITH_FILE_NAME => 5;
+Readonly::Scalar my $DEFAULT_FORMAT => $FORMAT_OF{$DEFAULT_VERBOSITY};
 
 sub is_valid_numeric_verbosity {
     my ($verbosity) = @_;
@@ -881,7 +883,7 @@ sub verbosity_to_format {
 
 #-----------------------------------------------------------------------------
 
-my %SEVERITY_NUMBER_OF = (
+Readonly::Hash my %SEVERITY_NUMBER_OF => (
    gentle  => 5,
    stern   => 4,
    harsh   => 3,
@@ -889,8 +891,10 @@ my %SEVERITY_NUMBER_OF = (
    brutal  => 1,
 );
 
-our @SEVERITY_NAMES = sort { $SEVERITY_NUMBER_OF{$a} <=> $SEVERITY_NUMBER_OF{$b} }
-    keys %SEVERITY_NUMBER_OF;  #This is exported!
+Readonly::Array our @SEVERITY_NAMES =>  #This is exported!
+    sort
+        { $SEVERITY_NUMBER_OF{$a} <=> $SEVERITY_NUMBER_OF{$b} }
+        keys %SEVERITY_NUMBER_OF;
 
 sub severity_to_number {
     my ($severity) = @_;
@@ -909,8 +913,8 @@ sub _normalize_severity {
 
 #-----------------------------------------------------------------------------
 
-my @skip_dir = qw( CVS RCS .svn _darcs {arch} .bzr _build blib );
-my %skip_dir = hashify( @skip_dir );
+Readonly::Array my @skip_dir => qw( CVS RCS .svn _darcs {arch} .bzr _build blib );
+Readonly::Hash my %skip_dir => hashify( @skip_dir );
 
 sub all_perl_files {
 
