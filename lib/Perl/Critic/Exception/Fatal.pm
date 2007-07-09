@@ -5,7 +5,7 @@
 # $Revision$
 ##############################################################################
 
-package Perl::Critic::Exception::Generic;
+package Perl::Critic::Exception::Fatal;
 
 use strict;
 use warnings;
@@ -15,16 +15,12 @@ our $VERSION = 1.06;
 #-----------------------------------------------------------------------------
 
 use Exception::Class (
-    'Perl::Critic::Exception::Generic' => {
+    'Perl::Critic::Exception::Fatal' => {
         isa         => 'Perl::Critic::Exception',
-        description => 'A general problem was found.',
-        alias       => 'throw_generic',
+        description =>
+            'A problem that should cause Perl::Critic to stop running.',
     },
 );
-
-#-----------------------------------------------------------------------------
-
-our @EXPORT_OK = qw{ &throw_generic };
 
 #-----------------------------------------------------------------------------
 
@@ -35,6 +31,22 @@ sub new {
     $self->show_trace(1);
 
     return $self;
+}
+
+#-----------------------------------------------------------------------------
+
+sub full_message {
+    my ( $self ) = @_;
+
+    return
+          $self->short_class_name()
+        . q{: }
+        . $self->description()
+        . "\n\n"
+        . $self->message()
+        . "\n\n"
+        . gmtime $self->time()
+        . "\n\n";
 }
 
 
@@ -50,19 +62,29 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Exception::Generic - A problem for which there is no specialized information
+Perl::Critic::Exception::Fatal - A problem that should cause L<Perl::Critic> to stop running
 
 =head1 DESCRIPTION
 
-A general problem, e.g. I/O errors and problems that may or not be bugs.
+Something went wrong and processing should not continue.  You should
+never specifically look for this exception or one of its subclasses.
 
 Note: the constructor invokes L<Exception::Class/"show_trace"> to
 force stack-traces to be included in the standard stringification.
 
+This is an abstract class.  It should never be instantiated.
+
 
 =head1 METHODS
 
-Only inherited ones.
+=over
+
+=item C<full_message()>
+
+Overrides L<Exception::Class/"full_message"> to include extra information.
+
+
+=back
 
 
 =head1 AUTHOR

@@ -27,7 +27,8 @@ use Perl::Critic::Exception::AggregateConfiguration;
 use Perl::Critic::Exception::Configuration;
 use Perl::Critic::Exception::Configuration::Option::Policy::ExtraParameter;
 use Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue;
-use Perl::Critic::Exception::PolicyDefinition qw{ &throw_policy_definition };
+use Perl::Critic::Exception::Fatal::PolicyDefinition
+    qw{ &throw_policy_definition };
 use Perl::Critic::PolicyParameter qw();
 use Perl::Critic::Violation qw();
 

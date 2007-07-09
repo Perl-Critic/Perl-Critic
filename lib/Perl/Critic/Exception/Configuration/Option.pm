@@ -14,7 +14,7 @@ our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
-use Perl::Critic::Exception::Internal;
+use Perl::Critic::Exception::Fatal::Internal;
 
 use Exception::Class (   # this must come after "use P::C::Exception::*"
     'Perl::Critic::Exception::Configuration::Option' => {
@@ -44,7 +44,7 @@ sub error {
 
 ## no critic (Subroutines::RequireFinalReturn)
 sub full_message {
-    Perl::Critic::Exception::Internal->throw(
+    Perl::Critic::Exception::Fatal::Internal->throw(
         'Subclass failed to override abstract method.'
     );
 }

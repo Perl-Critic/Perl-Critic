@@ -15,8 +15,6 @@ use warnings;
 use English qw(-no_match_vars);
 use Readonly;
 
-use Carp qw(confess);
-
 use Getopt::Long qw(GetOptions);
 use List::Util qw(first);
 use Pod::Usage qw(pod2usage);
@@ -171,7 +169,7 @@ sub get_input {
             $code_string = q{};
         }
 
-        $code_string =~ m{ \S+ }mx || confess qq{Nothing to critique.\n};
+        $code_string =~ m{ \S+ }mx || die qq{Nothing to critique.\n};
         return \$code_string;    #Convert to SCALAR ref for PPI
     }
     else {
@@ -221,8 +219,13 @@ sub critique {
             }
         };
 
-        confess qq{Fatal error while critiquing "$file": $EVAL_ERROR}
+        # P::C::Exception::Fatal includes the stack trace in its
+        # stringification.
+
+        ## no critic (RequireCarping)
+        die qq{Fatal error while critiquing "$file": $EVAL_ERROR}
             if $EVAL_ERROR;
+        ## use critic
     }
 
     if ( $opts_ref->{-statistics} or $opts_ref->{'-statistics-only'} ) {

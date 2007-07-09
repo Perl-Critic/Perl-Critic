@@ -17,7 +17,8 @@ Readonly::Array our @EXPORT_OK => qw{ $NO_DESCRIPTION_AVAILABLE };
 
 use String::Format qw{ stringf };
 
-use Perl::Critic::Exception::PolicyDefinition qw{ throw_policy_definition };
+use Perl::Critic::Exception::Fatal::PolicyDefinition
+    qw{ throw_policy_definition };
 use Perl::Critic::PolicyParameter::Behavior;
 use Perl::Critic::PolicyParameter::Behavior::Boolean;
 use Perl::Critic::PolicyParameter::Behavior::Enumeration;

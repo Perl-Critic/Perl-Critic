@@ -21,8 +21,8 @@ use File::Temp ();
 use File::Find qw( find );
 
 use Perl::Critic;
-use Perl::Critic::Exception::Generic qw{ &throw_generic };
-use Perl::Critic::Exception::Internal qw{ &throw_internal };
+use Perl::Critic::Exception::Fatal::Generic qw{ &throw_generic };
+use Perl::Critic::Exception::Fatal::Internal qw{ &throw_internal };
 use Perl::Critic::Utils qw{ :data_conversion };
 use Perl::Critic::PolicyFactory (-test => 1);
 

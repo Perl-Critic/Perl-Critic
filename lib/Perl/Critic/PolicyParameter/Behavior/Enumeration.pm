@@ -10,7 +10,8 @@ package Perl::Critic::PolicyParameter::Behavior::Enumeration;
 use strict;
 use warnings;
 
-use Perl::Critic::Exception::PolicyDefinition qw{ &throw_policy_definition };
+use Perl::Critic::Exception::Fatal::PolicyDefinition
+    qw{ &throw_policy_definition };
 use Perl::Critic::Utils qw{ :characters &words_from_string &hashify };
 
 use base qw{ Perl::Critic::PolicyParameter::Behavior };

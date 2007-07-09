@@ -18,7 +18,7 @@ use Scalar::Util qw(blessed);
 use Perl::Critic::Exception::AggregateConfiguration;
 use Perl::Critic::Exception::Configuration;
 use Perl::Critic::Exception::Configuration::Option::Global::ParameterValue;
-use Perl::Critic::Exception::Internal qw{ &throw_internal };
+use Perl::Critic::Exception::Fatal::Internal qw{ &throw_internal };
 use Perl::Critic::PolicyFactory;
 use Perl::Critic::Theme qw( $RULE_INVALID_CHARACTER_REGEX &cook_rule );
 use Perl::Critic::UserProfile qw();

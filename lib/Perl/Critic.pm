@@ -20,7 +20,7 @@ use Scalar::Util qw(blessed);
 use PPI::Document;
 use PPI::Document::File;
 
-use Perl::Critic::Exception::Generic qw{ throw_generic };
+use Perl::Critic::Exception::Fatal::Generic qw{ throw_generic };
 use Perl::Critic::Config;
 use Perl::Critic::Violation;
 use Perl::Critic::Document;

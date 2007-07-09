@@ -17,7 +17,7 @@ use File::Spec qw();
 
 use Perl::Critic::Defaults qw();
 use Perl::Critic::Utils qw{ :characters &policy_long_name &policy_short_name };
-use Perl::Critic::Exception::Internal qw{ throw_internal };
+use Perl::Critic::Exception::Fatal::Internal qw{ throw_internal };
 use Perl::Critic::Exception::Configuration::Generic qw{ throw_generic };
 
 our $VERSION = 1.06;

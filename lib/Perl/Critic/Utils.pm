@@ -15,7 +15,7 @@ use File::Spec qw();
 use Scalar::Util qw( blessed );
 use B::Keywords qw();
 
-use Perl::Critic::Exception::Generic qw{ throw_generic };
+use Perl::Critic::Exception::Fatal::Generic qw{ throw_generic };
 
 use base 'Exporter';
 

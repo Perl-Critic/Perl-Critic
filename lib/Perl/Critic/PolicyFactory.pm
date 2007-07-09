@@ -24,9 +24,10 @@ use Perl::Critic::Utils qw{
 };
 use Perl::Critic::Exception::AggregateConfiguration;
 use Perl::Critic::Exception::Configuration;
-use Perl::Critic::Exception::Generic qw{ &throw_generic };
-use Perl::Critic::Exception::Internal qw{ &throw_internal };
-use Perl::Critic::Exception::PolicyDefinition qw{ &throw_policy_definition };
+use Perl::Critic::Exception::Fatal::Generic qw{ &throw_generic };
+use Perl::Critic::Exception::Fatal::Internal qw{ &throw_internal };
+use Perl::Critic::Exception::Fatal::PolicyDefinition
+    qw{ &throw_policy_definition };
 
 use Exception::Class;   # this must come after "use P::C::Exception::*"
 

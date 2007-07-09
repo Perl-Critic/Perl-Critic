@@ -5,7 +5,7 @@
 # $Revision$
 ##############################################################################
 
-package Perl::Critic::Exception;
+package Perl::Critic::Exception::Fatal::Generic;
 
 use strict;
 use warnings;
@@ -15,21 +15,16 @@ our $VERSION = 1.06;
 #-----------------------------------------------------------------------------
 
 use Exception::Class (
-    'Perl::Critic::Exception' => {
-        isa         => 'Exception::Class::Base',
-        description => 'A problem discovered by Perl::Critic.',
+    'Perl::Critic::Exception::Fatal::Generic' => {
+        isa         => 'Perl::Critic::Exception::Fatal',
+        description => 'A general problem was found.',
+        alias       => 'throw_generic',
     },
 );
 
-use base 'Exporter';
-
 #-----------------------------------------------------------------------------
 
-sub short_class_name {
-    my ( $self ) = @_;
-
-    return substr ref $self, (length 'Perl::Critic') + 2;
-}
+our @EXPORT_OK = qw{ &throw_generic };
 
 #-----------------------------------------------------------------------------
 
@@ -46,28 +41,16 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Exception - A problem identified by L<Perl::Critic>
+Perl::Critic::Exception::Fatal::Generic - A problem for which there is no specialized information
 
 =head1 DESCRIPTION
 
-A base class for all problems discovered by L<Perl::Critic>.  This
-exists to enable differentiating exceptions from L<Perl::Critic> code
-from those originating in other modules.
-
-This is an abstract class.  It should never be instantiated.
+A general problem, e.g. I/O errors and problems that may or not be bugs.
 
 
 =head1 METHODS
 
-=over
-
-=item C<short_class_name()>
-
-Retrieve the name of the class of this object with C<'Perl::Critic::'>
-stripped off.
-
-
-=back
+Only inherited ones.
 
 
 =head1 AUTHOR

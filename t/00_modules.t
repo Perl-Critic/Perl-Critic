@@ -31,9 +31,9 @@ my @concrete_exceptions = qw{
     Configuration::Option::Global::ParameterValue
     Configuration::Option::Policy::ExtraParameter
     Configuration::Option::Policy::ParameterValue
-    Generic
-    Internal
-    PolicyDefinition
+    Fatal::Generic
+    Fatal::Internal
+    Fatal::PolicyDefinition
 };
 
 plan tests =>

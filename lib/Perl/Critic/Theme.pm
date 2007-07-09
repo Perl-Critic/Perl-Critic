@@ -17,7 +17,7 @@ use base qw{ Exporter };
 use List::MoreUtils qw(any);
 
 use Perl::Critic::Utils qw{ :characters :data_conversion };
-use Perl::Critic::Exception::Internal qw{ &throw_internal };
+use Perl::Critic::Exception::Fatal::Internal qw{ &throw_internal };
 use Perl::Critic::Exception::Configuration::Option::Global::ParameterValue
     qw{ &throw_global_value };
 

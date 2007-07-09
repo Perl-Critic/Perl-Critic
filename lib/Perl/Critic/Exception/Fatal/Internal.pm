@@ -5,7 +5,7 @@
 # $Revision$
 ##############################################################################
 
-package Perl::Critic::Exception::PolicyDefinition;
+package Perl::Critic::Exception::Fatal::Internal;
 
 use strict;
 use warnings;
@@ -15,27 +15,18 @@ our $VERSION = 1.06;
 #-----------------------------------------------------------------------------
 
 use Exception::Class (
-    'Perl::Critic::Exception::PolicyDefinition' => {
-        isa         => 'Perl::Critic::Exception',
-        description => 'A bug in a policy was found.',
-        alias       => 'throw_policy_definition',
+    'Perl::Critic::Exception::Fatal::Internal' => {
+        isa         => 'Perl::Critic::Exception::Fatal',
+        description => 'A problem with the Perl::Critic code was found, a.k.a. a bug.',
+        alias       => 'throw_internal',
     },
 );
 
 #-----------------------------------------------------------------------------
 
-our @EXPORT_OK = qw{ &throw_policy_definition };
+our @EXPORT_OK = qw{ &throw_internal };
 
 #-----------------------------------------------------------------------------
-
-sub new {
-    my $class = shift;
-    my $self = $class->SUPER::new(@_);
-
-    $self->show_trace(1);
-
-    return $self;
-}
 
 
 1;
@@ -50,15 +41,11 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Exception::PolicyDefinition - A bug in a policy
+Perl::Critic::Exception::Fatal::Internal - A problem with the L<Perl::Critic> implementation, i.e. a bug
 
 =head1 DESCRIPTION
 
-A bug in a policy was found, e.g. it didn't implement a method that it should
-have.
-
-Note: the constructor invokes L<Exception::Class/"show_trace"> to
-force stack-traces to be included in the standard stringification.
+A representation of a bug found in the code of L<Perl::Critic>.
 
 
 =head1 METHODS
