@@ -109,7 +109,8 @@ sub fcritique_with_violations {
         close $fh or throw_generic "unable to close $file: $!";
     }
 
-    # Use eval so we can clean up before die() in case of error.
+    # Use eval so we can clean up before throwing an exception in case of
+    # error.
     my @v = eval {$c->critique($file)};
     my $err = $EVAL_ERROR;
     File::Path::rmtree($dir, 0, 1);
