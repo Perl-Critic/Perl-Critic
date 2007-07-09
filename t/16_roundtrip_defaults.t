@@ -11,8 +11,6 @@ use strict;
 use warnings;
 use English qw(-no_match_vars);
 
-use Carp::Always;
-
 use Test::More;
 
 use Perl::Critic::PolicyFactory (-test => 1);
