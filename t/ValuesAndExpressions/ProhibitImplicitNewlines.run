@@ -1,0 +1,65 @@
+## name Basic passing
+## failures 0
+## cut
+
+$x = "foo";
+$x = 'foo';
+$x = q{foo};
+$x = qq{foo};
+$x = "foo\n";
+$x = "foo\r";
+
+$x = <<'EOF';
+1
+2
+EOF
+
+$x = <<"EOF";
+1
+2
+EOF
+
+#-----------------------------------------------------------------------------
+
+## name Basic failure
+## failures 4
+## cut
+
+$x = "1
+2";
+$x = '1
+2';
+$x = qq{1
+2};
+$x = q{1
+2};
+
+#-----------------------------------------------------------------------------
+
+## name Bad whitespace usage, but allowed
+## failures 0
+## cut
+
+$x = q
+<1>;
+
+$x = qq
+<1>;
+
+#-----------------------------------------------------------------------------
+
+##############################################################################
+#      $URL
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :

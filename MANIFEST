@@ -96,6 +96,7 @@ lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitCommaSeparatedStatements.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitConstantPragma.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitEmptyQuotes.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitEscapedCharacters.pm
+lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitImplicitNewlines.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitInterpolationOfLiterals.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitLeadingZeros.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitLongChainsOfMethodCalls.pm
@@ -248,6 +249,7 @@ t/ValuesAndExpressions/ProhibitCommaSeparatedStatements.run
 t/ValuesAndExpressions/ProhibitConstantPragma.run
 t/ValuesAndExpressions/ProhibitEmptyQuotes.run
 t/ValuesAndExpressions/ProhibitEscapedCharacters.run
+t/ValuesAndExpressions/ProhibitImplicitNewlines.run
 t/ValuesAndExpressions/ProhibitInterpolationOfLiterals.run
 t/ValuesAndExpressions/ProhibitLeadingZeros.run
 t/ValuesAndExpressions/ProhibitLongChainsOfMethodCalls.run

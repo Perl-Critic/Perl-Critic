@@ -347,6 +347,10 @@ Write C<q{}> instead of C<''> [Severity 2]
 
 Write C<"\N{DELETE}"> instead of C<"\x7F">, etc. [Severity 2]
 
+=head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitImplicitNewlines>
+
+Use concatenation or heredocs instead of literal line breaks in strings [Severity 3]
+
 =head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitInterpolationOfLiterals>
 
 Always use single quotes for literal strings. [Severity 1]

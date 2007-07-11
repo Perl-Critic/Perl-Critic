@@ -7,9 +7,10 @@
 
 [1.xxx]  Released on 2007-xx-xx
 
-     New Policies:
+     New Policies: (funded by a Perl Foundation grant)
      * BuiltinFunctions::ProhibitBooleanGrep
      * BuiltinFunctions::ProhibitComplexMappings
+     * ValuesAndExpressions::ProhibitImplicitNewlines
 
      Bug Fixes:
      * Fix P::C::Theme-- Exporter in Perl 5.6 does not export import(), so you
