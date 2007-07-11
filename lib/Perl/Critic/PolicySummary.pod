@@ -23,6 +23,10 @@ each module for its specific details.
 
 =head1 POLICIES
 
+=head2 L<Perl::Critic::Policy::BuiltinFunctions::ProhibitBooleanGrep>
+
+Use C<List::MoreUtils::any> instead of C<grep> in boolean context [Severity 2]
+
 =head2 L<Perl::Critic::Policy::BuiltinFunctions::ProhibitComplexMappings>
 
 Map blocks should have a single statement [Severity 3]

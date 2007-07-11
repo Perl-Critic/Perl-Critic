@@ -101,22 +101,6 @@ L<http://www.perlfoundation.org/april_1_2007_new_grant_awards>
 
 =over 4
 
-=item * ValuesAndExpressions::RequireListParens (p71)
-
-Detect this error:
-
-  @list = 1, 2, 3;
-
-and recommend this:
-
-  @list = (1, 2, 3);
-
-The former really means
-
-  @list = 1; 2; 3;
-
-See also ValuesAndExpressions::ProhibitCommaSeparatedStatements
-
 =item * ValuesAndExpressions::ProhibitScalarGrep (p71)
 
 Look for C<grep> in a scalar context and recommend C<any()> instead.

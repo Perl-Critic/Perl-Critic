@@ -102,7 +102,7 @@ sub _is_explicit_return {
 
     return if $self->_is_conditional_stmnt( $final );
     return $self->_is_return_or_goto_stmnt( $final )
-        || $self->_is_terminal_stmnt( $final, );
+        || $self->_is_terminal_stmnt( $final );
 }
 
 #-----------------------------------------------------------------------------
