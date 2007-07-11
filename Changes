@@ -15,6 +15,11 @@
      Bug Fixes:
      * Fix P::C::Theme-- Exporter in Perl 5.6 does not export import(), so you
        must subclass it.  *sigh*
+     * Fix P::C::Config::_validate_and_save_theme()-- eval of an empty string
+       does not reset $@/$EVAL_ERROR in Perl 5.6.
+
+     Big thanks to Anirvan Chatterjee for identifying and helping debug these
+     issues.
 
      Other Stuff:
      * Now requires the Readonly module in order to be more self-compliant.

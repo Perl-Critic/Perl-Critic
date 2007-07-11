@@ -484,8 +484,10 @@ sub _validate_and_save_theme {
     }
     else {
         my $rule_as_code = cook_rule($theme_rule);
-
         $rule_as_code =~ s/ [\w\d]+ / 1 /gxms;
+
+        # eval of an empty string does not reset $@ in Perl 5.6
+        $EVAL_ERROR = $EMPTY;
         eval $rule_as_code;  ## no critic (ProhibitStringyEval)
 
         if ($EVAL_ERROR) {
