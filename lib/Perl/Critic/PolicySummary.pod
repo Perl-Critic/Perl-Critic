@@ -349,7 +349,7 @@ Write C<"\N{DELETE}"> instead of C<"\x7F">, etc. [Severity 2]
 
 =head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitImplicitNewlines>
 
-Use concatenation or heredocs instead of literal line breaks in strings [Severity 3]
+Use concatenation or HEREDOCs instead of literal line breaks in strings [Severity 3]
 
 =head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitInterpolationOfLiterals>
 

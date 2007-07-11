@@ -53,7 +53,7 @@ Perl::Critic::Policy::ValuesAndExpressions::ProhibitImplicitNewlines
 =head1 DESCRIPTION
 
 Strings with embedded line breaks are hard to read.  Use concatenation
-or heredocs instead.
+or HEREDOCs instead.
 
   my $foo = "Line one is quite long
   Line two";                                    # Bad
