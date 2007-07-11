@@ -23,6 +23,8 @@ our $VERSION = 1.06;
 Readonly::Scalar my $DESC => q{Subroutine does not end with "return"};
 Readonly::Scalar my $EXPL => [ 197 ];
 
+Readonly::Hash my %CONDITIONALS => hashify( qw(if unless for foreach) );
+
 #-----------------------------------------------------------------------------
 
 sub supported_parameters { return qw(terminal_funcs)    }
@@ -44,7 +46,6 @@ sub new {
         qw(exit die croak confess throw Carp::confess Carp::croak);
 
     $self->{_terminals} = { hashify(@default_terminals, @user_terminals) };
-    $self->{_conditionals} = { hashify( qw(if unless for foreach) ) };
     return $self;
 }
 
@@ -163,7 +164,7 @@ sub _is_conditional_stmnt {
     return if not $stmnt->isa('PPI::Statement');
     for my $elem ( $stmnt->schildren() ) {
         return 1 if $elem->isa('PPI::Token::Word')
-            && exists $self->{_conditionals}->{$elem};
+            && exists $CONDITIONALS{$elem};
     }
     return;
 }

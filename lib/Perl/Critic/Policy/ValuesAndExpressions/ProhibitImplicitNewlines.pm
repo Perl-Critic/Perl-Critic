@@ -57,12 +57,12 @@ or HEREDOCs instead.
 
   my $foo = "Line one is quite long
   Line two";                                    # Bad
-  
+
   my $foo = "Line one is quite long\nLine two"; # Better, but still hard to read
-  
+
   my $foo = "Line one is quite long\n"
     . "Line two";                               # Better still
-  
+
   my $foo = <<'EOF';                            # Use heredoc for longer passages
   Line one is quite long
   Line two
