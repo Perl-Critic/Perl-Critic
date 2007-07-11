@@ -23,6 +23,10 @@ each module for its specific details.
 
 =head1 POLICIES
 
+=head2 L<Perl::Critic::Policy::BuiltinFunctions::ProhibitBooleanGrep>
+
+Use C<List::MoreUtils::any> instead of C<grep> in boolean context [Severity 2]
+
 =head2 L<Perl::Critic::Policy::BuiltinFunctions::ProhibitComplexMappings>
 
 Map blocks should have a single statement [Severity 3]
@@ -342,6 +346,10 @@ Write C<q{}> instead of C<''> [Severity 2]
 =head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitEscapedCharacters>
 
 Write C<"\N{DELETE}"> instead of C<"\x7F">, etc. [Severity 2]
+
+=head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitImplicitNewlines>
+
+Use concatenation or HEREDOCs instead of literal line breaks in strings [Severity 3]
 
 =head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitInterpolationOfLiterals>
 

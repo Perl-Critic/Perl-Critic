@@ -1,0 +1,91 @@
+## name Basic passing
+## failures 0
+## cut
+
+print grep("$foo", @list);
+print ( grep "$foo", @list );
+@list = ( grep "$foo", @list );
+$aref = [ grep "$foo", @list ];
+$href = { grep "$foo", @list };
+
+#-----------------------------------------------------------------------------
+
+## name Counting is allowed
+## failures 0
+## cut
+
+$count = grep {m/./xms} @list
+
+#-----------------------------------------------------------------------------
+
+## name Non-boolean in conditional
+## failures 0
+## cut
+
+if (0 == grep {m/./xms} @list) {}
+
+#-----------------------------------------------------------------------------
+
+## name For loop is not conditional
+## failures 0
+## cut
+
+for( grep { foo($_) } @list ) {}
+foreach( grep { foo($_) } @list ) {}
+
+#-----------------------------------------------------------------------------
+
+## name Control structures
+## failures 4
+## cut
+
+if( grep { foo($_) } @list ) {}
+unless( grep { foo($_) } @list ) {}
+while( grep { foo($_) } @list ) {}
+until( grep { foo($_) } @list ) {}
+
+#-----------------------------------------------------------------------------
+
+## name Postfix control structures
+## failures 4
+## cut
+
+foo() if grep { bar($_) } @list;
+foo() unless grep { bar($_) } @list;
+foo() while grep { bar($_) } @list;
+foo() until grep { bar($_) } @list;
+
+#-----------------------------------------------------------------------------
+
+## name Complex booleans
+## failures 1
+## cut
+
+if( 1 && grep { foo($_) } @list ) {}
+
+#-----------------------------------------------------------------------------
+
+## name Complex booleans
+## failures 1
+## TODO need to detect assignment
+## cut
+
+$bar = grep({foo()} @list) && 1;
+
+#-----------------------------------------------------------------------------
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :

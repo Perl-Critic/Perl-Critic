@@ -32,6 +32,7 @@ lib/Perl/Critic/Exception/Fatal/Generic.pm
 lib/Perl/Critic/Exception/Fatal/Internal.pm
 lib/Perl/Critic/Exception/Fatal/PolicyDefinition.pm
 lib/Perl/Critic/Policy.pm
+lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitBooleanGrep.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitComplexMappings.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitLvalueSubstr.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitReverseSortBlock.pm
@@ -112,6 +113,7 @@ lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitCommaSeparatedStatements.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitConstantPragma.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitEmptyQuotes.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitEscapedCharacters.pm
+lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitImplicitNewlines.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitInterpolationOfLiterals.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitLeadingZeros.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitLongChainsOfMethodCalls.pm
@@ -198,6 +200,7 @@ t/95_kwalitee.t
 t/97_spelling.t
 t/98_pod_syntax.t
 t/99_pod_coverage.t
+t/BuiltinFunctions/ProhibitBooleanGrep.run
 t/BuiltinFunctions/ProhibitComplexMappings.run
 t/BuiltinFunctions/ProhibitLvalueSubstr.run
 t/BuiltinFunctions/ProhibitReverseSortBlock.run
@@ -277,6 +280,7 @@ t/ValuesAndExpressions/ProhibitCommaSeparatedStatements.run
 t/ValuesAndExpressions/ProhibitConstantPragma.run
 t/ValuesAndExpressions/ProhibitEmptyQuotes.run
 t/ValuesAndExpressions/ProhibitEscapedCharacters.run
+t/ValuesAndExpressions/ProhibitImplicitNewlines.run
 t/ValuesAndExpressions/ProhibitInterpolationOfLiterals.run
 t/ValuesAndExpressions/ProhibitLeadingZeros.run
 t/ValuesAndExpressions/ProhibitLongChainsOfMethodCalls.run

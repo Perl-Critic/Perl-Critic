@@ -18,9 +18,17 @@ my $subtests = subtests_in_tree( 't' );
 
 # Check for cmdline limit on policies.  Example:
 #   perl -Ilib t/20_policies.t BuiltinFunctions::ProhibitLvalueSubstr
+# or
+#   perl -Ilib t/20_policies.t t/BuiltinFunctions/ProhibitLvalueSubstr.run
 if (@ARGV) {
-    my @policies = keys %{$subtests};
+    my @policies = keys %{$subtests}; # get a list of all tests
     # This is inefficient, but who cares...
+    for (@ARGV) {
+        next if m/::/xms;
+        if (!s{\A t[\\/](\w+)[\\/](\w+)\.run \z}{$1\::$2}xms) {
+            die 'Unknown argument ' . $_;
+        }
+    }
     for my $p (@policies) {
         if (0 == grep {$_ eq $p} @ARGV) {
             delete $subtests->{$p};

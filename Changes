@@ -33,17 +33,24 @@
        There is a discussion of the design considerations for this facility in
        the distribution in doc/PolicyParameter_Notes.pod.
 
-     Other Stuff:
-     * Now requires the Readonly module in order to be more self-compliant.
-
 [1.xxx]  Released on 2007-xx-xx
 
-     New Policies:
+     New Policies: (funded by a Perl Foundation grant)
+     * BuiltinFunctions::ProhibitBooleanGrep
      * BuiltinFunctions::ProhibitComplexMappings
+     * ValuesAndExpressions::ProhibitImplicitNewlines
 
      Bug Fixes:
      * Fix P::C::Theme-- Exporter in Perl 5.6 does not export import(), so you
        must subclass it.  *sigh*
+     * Fix P::C::Config::_validate_and_save_theme()-- eval of an empty string
+       does not reset $@/$EVAL_ERROR in Perl 5.6.
+
+     Big thanks to Anirvan Chatterjee for identifying and helping debug these
+     issues.
+
+     Other Stuff:
+     * Now requires the Readonly module in order to be more self-compliant.
 
 [1.06]  Released on 2007-06-27
 

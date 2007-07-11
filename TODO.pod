@@ -101,37 +101,6 @@ L<http://www.perlfoundation.org/april_1_2007_new_grant_awards>
 
 =over 4
 
-=item * ValuesAndExpressions::RequireListParens (p71)
-
-Detect this error:
-
-  @list = 1, 2, 3;
-
-and recommend this:
-
-  @list = (1, 2, 3);
-
-The former really means
-
-  @list = 1; 2; 3;
-
-See also ValuesAndExpressions::ProhibitCommaSeparatedStatements
-
-=item * ValuesAndExpressions::ProhibitScalarGrep (p71)
-
-Look for C<grep> in a scalar context and recommend C<any()> instead.
-Perhaps we need to distinguish cases like:
-
-    $count += grep {qr/foo/} @list;
-
-OTOH, this assumes that the common use of scalar grep is to check
-for existence.  I'm not sure that's the case.
-
-=item * ValuesAndExpressions::ProhibitImplicitNewlines (p60-61)
-
-Forbid multi-line strings with implicit newlines.  Use concatenation or
-heredoc instead.
-
 =item * Variables::RequireLocalizedPunctuationVars (p81)
 
 Flag assignments to magic variables that are not declared local.  Detect both

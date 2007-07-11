@@ -22,6 +22,8 @@ our $VERSION = 1.06;
 Readonly::Scalar my $DESC => q{Subroutine does not end with "return"};
 Readonly::Scalar my $EXPL => [ 197 ];
 
+Readonly::Hash my %CONDITIONALS => hashify( qw(if unless for foreach) );
+
 #-----------------------------------------------------------------------------
 
 sub supported_parameters {
@@ -40,17 +42,6 @@ sub supported_parameters {
 sub default_severity { return $SEVERITY_HIGH        }
 sub default_themes   { return qw( core bugs pbp )   }
 sub applies_to       { return 'PPI::Statement::Sub' }
-
-#-----------------------------------------------------------------------------
-
-sub new {
-    my $class = shift;
-    my $self = $class->SUPER::new(@_);
-
-    $self->{_conditionals} = { hashify( qw(if unless for foreach) ) };
-
-    return $self;
-}
 
 #-----------------------------------------------------------------------------
 
@@ -106,7 +97,7 @@ sub _is_explicit_return {
 
     return if $self->_is_conditional_stmnt( $final );
     return $self->_is_return_or_goto_stmnt( $final )
-        || $self->_is_terminal_stmnt( $final, );
+        || $self->_is_terminal_stmnt( $final );
 }
 
 #-----------------------------------------------------------------------------
@@ -167,7 +158,7 @@ sub _is_conditional_stmnt {
     return if not $stmnt->isa('PPI::Statement');
     for my $elem ( $stmnt->schildren() ) {
         return 1 if $elem->isa('PPI::Token::Word')
-            && exists $self->{_conditionals}->{$elem};
+            && exists $CONDITIONALS{$elem};
     }
     return;
 }

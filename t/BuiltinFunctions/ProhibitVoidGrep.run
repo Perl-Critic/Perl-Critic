@@ -2,7 +2,6 @@
 ## failures 0
 ## cut
 
-$baz, grep "$foo", @list;
 print grep("$foo", @list);
 print ( grep "$foo", @list );
 @list = ( grep "$foo", @list );
@@ -29,13 +28,23 @@ for( @list ){ grep { foo($_) } @list }
 
 #-----------------------------------------------------------------------------
 
+## name Comma operator
+## failures 1
+## TODO not handled properly
+## cut
+
+$baz, grep "$foo", @list;
+
+#-----------------------------------------------------------------------------
+
 ## name Chained void grep
 ## failures 1
 ## cut
 
-grep { foo($_) }
-  grep { bar($_) }
-    grep { baz($_) } @list;
+grep { spam($_) }
+  grep { foo($_) }
+    grep { bar($_) }
+      grep { baz($_) } @list;
 
 #-----------------------------------------------------------------------------
 
