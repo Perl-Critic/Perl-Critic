@@ -101,12 +101,6 @@ L<http://www.perlfoundation.org/april_1_2007_new_grant_awards>
 
 =over 4
 
-=item * Variables::RequireLocalizedPunctuationVars (p81)
-
-Flag assignments to magic variables that are not declared local.  Detect both
-the punctation forms and the English forms.  Don't flag C<$_>.  Other
-exceptions?
-
 =item * Documentation::PodSpelling (p148)
 
 Base it on Pod::Spell or Test::Spelling. Add a "=for stopwords"
