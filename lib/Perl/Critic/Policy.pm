@@ -106,7 +106,7 @@ sub violates {
 
 sub violation {
     my ( $self, $desc, $expl, $elem ) = @_;
-    # Use goto instead of an explicit call because P::C::V::new() uses caller()
+    # HACK!! Use goto instead of an explicit call because P::C::V::new() uses caller()
     my $sev = $self->get_severity();
     @_ = ('Perl::Critic::Violation', $desc, $expl, $elem, $sev );
     goto &Perl::Critic::Violation::new;

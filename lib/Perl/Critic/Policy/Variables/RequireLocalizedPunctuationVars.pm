@@ -63,7 +63,6 @@ sub _is_non_local_magic_dest {
     # unfortunately, because we need English too
 
     if ($elem->isa('PPI::Token::Symbol')) {
-        return 1 if $elem->isa('PPI::Token::Magic'); # optimization(?), and helps with PPI 1.118 carat bug
         return _is_magic_var($elem);
     } elsif ($elem->isa('PPI::Structure::List') || $elem->isa('PPI::Statement::Expression')) {
         for my $child ($elem->schildren) {
@@ -80,9 +79,10 @@ sub _is_magic_var {
 
     my $elem = shift;
     #print "checking $elem\n";
-    return if ! is_perl_global( $elem );
-    my $variable_name = $elem->content;
+    my $variable_name = "$elem";
     return if $EXCEPTIONS{$variable_name};
+    return 1 if $elem->isa('PPI::Token::Magic'); # optimization(?), and helps with PPI 1.118 carat bug
+    return if ! is_perl_global( $elem );
     #print "  MAGIC\n";
     return 1;
 }
