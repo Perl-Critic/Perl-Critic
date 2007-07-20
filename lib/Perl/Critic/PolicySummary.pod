@@ -437,7 +437,7 @@ Write C<for my $element (@list) {...}> instead of C<for $element (@list) {...}>
 
 =head2 L<Perl::Critic::Policy::Variables::RequireLocalizedPunctuationVars>
 
-Magic variable should be assigned as "local" [Severity 3]
+Magic variables should be assigned as "local" [Severity 2]
 
 =head2 L<Perl::Critic::Policy::Variables::RequireNegativeIndices>
 
