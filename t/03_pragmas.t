@@ -21,6 +21,7 @@ Perl::Critic::TestUtils::block_perlcriticrc();
 # just makes it a little easier to create test cases
 my $profile = {
     '-CodeLayout::RequireTidyCode'                 => {},
+    '-Documentation::PodSpelling'                  => {},
     '-Miscellanea::RequireRcsKeywords'             => {},
 };
 

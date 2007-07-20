@@ -101,11 +101,6 @@ L<http://www.perlfoundation.org/april_1_2007_new_grant_awards>
 
 =over 4
 
-=item * Documentation::PodSpelling (p148)
-
-Base it on Pod::Spell or Test::Spelling. Add a "=for stopwords"
-section for words to skip, as per Pod::Spell.
-
 =item * Subroutines::RequireArgUnpacking (p178)
 
 Ensure that the first child of a sub is PPI::Statement::Variable

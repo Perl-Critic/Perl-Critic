@@ -21,3 +21,7 @@ keywords = URL Date Author Revision
 [CodeLayout::ProhibitHardTabs]
 allow_leading_tabs = 0
 
+[Documentation::PodSpelling]
+# this list should match t/40_perlcriticrc
+
+stopwords = autoflushes BBEdit CGI CPAN CVS Dolan exponentials filename Guzis HEREDOC HEREDOCS HEREDOCs IDE Maxia Mehner multi-line namespace namespaces PBP perlcritic perlcriticrc PolicyListing postfix programmatically PPI Readonly refactor refactoring runtime sigil sigils SQL STDERR STDIN STDOUT subdirectories TerMarsch Thalhammer TODO UI unblessed vice-versa

@@ -155,6 +155,10 @@ Don't write code after an unconditional C<die, exit, or next>.  [Severity 4]
 
 Write C<while(! $condition)> instead of C<until($condition)> [Severity 2]
 
+=head2 L<Perl::Critic::Policy::Documentation::PodSpelling>
+
+Check your spelling [Severity 1]
+
 =head2 L<Perl::Critic::Policy::Documentation::RequirePodAtEnd>
 
 All POD should be after C<__END__> [Severity 1]

@@ -72,6 +72,13 @@ my $builder = Module::Build->new(
 
   recommends     => {'File::HomeDir'         => 0,
                      'Perl::Tidy'            => 0,
+
+                     # All of these are for Documentation::PodSpelling
+                     'Pod::Spell'            => 1,
+                     'File::Which'           => 0,
+                     'IO::String'            => 1,
+                     'IPC::Open2'            => 1,
+                     'Text::ParseWords'      => 3,
                     },
 
   build_requires => {'Test::More'            => 0,
