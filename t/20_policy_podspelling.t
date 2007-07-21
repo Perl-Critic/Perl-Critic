@@ -18,7 +18,8 @@ Perl::Critic::TestUtils::block_perlcriticrc();
 my $code;
 my $policy = 'Documentation::PodSpelling';
 my %config;
-my $can_podspell = eval {require Pod::Spell};
+my $can_podspell = eval {require Pod::Spell} &&
+  Perl::Critic::Policy::Documentation::PodSpelling->new->_get_spell_command;
 
 #-----------------------------------------------------------------------------
 SKIP: {
