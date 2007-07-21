@@ -13,6 +13,7 @@
      * ValuesAndExpressions::ProhibitImplicitNewlines
      * Variables::RequireLocalizedPunctuationVars
      * Documentation::PodSpelling
+     * Subroutines::RequireArgUnpacking
 
      Other Stuff:
      * Now requires the Readonly module in order to be more self-compliant.

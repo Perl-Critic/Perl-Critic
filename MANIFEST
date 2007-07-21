@@ -86,6 +86,7 @@ lib/Perl/Critic/Policy/Subroutines/ProhibitExcessComplexity.pm
 lib/Perl/Critic/Policy/Subroutines/ProhibitExplicitReturnUndef.pm
 lib/Perl/Critic/Policy/Subroutines/ProhibitSubroutinePrototypes.pm
 lib/Perl/Critic/Policy/Subroutines/ProtectPrivateSubs.pm
+lib/Perl/Critic/Policy/Subroutines/RequireArgUnpacking.pm
 lib/Perl/Critic/Policy/Subroutines/RequireFinalReturn.pm
 lib/Perl/Critic/Policy/TestingAndDebugging/ProhibitNoStrict.pm
 lib/Perl/Critic/Policy/TestingAndDebugging/ProhibitNoWarnings.pm
@@ -238,6 +239,7 @@ t/Subroutines/ProhibitExcessComplexity.run
 t/Subroutines/ProhibitExplicitReturnUndef.run
 t/Subroutines/ProhibitSubroutinePrototypes.run
 t/Subroutines/ProtectPrivateSubs.run
+t/Subroutines/RequireArgUnpacking.run
 t/Subroutines/RequireFinalReturn.run
 t/TestingAndDebugging/ProhibitNoStrict.run
 t/TestingAndDebugging/ProhibitNoWarnings.run
