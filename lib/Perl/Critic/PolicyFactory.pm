@@ -44,6 +44,7 @@ sub import {
 
     my ( $class, %args ) = @_;
     my $test_mode = $args{-test};
+    my $extra_test_policies = $args{'-extra-test-policies'};
 
     if ( not @SITE_POLICY_NAMES ) {
         eval {
@@ -66,6 +67,13 @@ sub import {
     # In test mode, only load native policies, not third-party ones
     if ( $test_mode && any {m/\b blib \b/xms} @INC ) {
         @SITE_POLICY_NAMES = _modules_from_blib( @SITE_POLICY_NAMES );
+
+        if ($extra_test_policies) {
+            my @extra_policy_full_names =
+                map { "${POLICY_NAMESPACE}::$_" } @{$extra_test_policies};
+
+            push @SITE_POLICY_NAMES, @extra_policy_full_names;
+        }
     }
 
     return 1;
