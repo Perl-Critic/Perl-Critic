@@ -39,6 +39,7 @@
      * BuiltinFunctions::ProhibitBooleanGrep
      * BuiltinFunctions::ProhibitComplexMappings
      * ValuesAndExpressions::ProhibitImplicitNewlines
+     * Variables::RequireLocalizedPunctuationVars
 
      Other Stuff:
      * Now requires the Readonly module in order to be more self-compliant.

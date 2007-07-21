@@ -435,6 +435,10 @@ Write C<local $foo = $bar;> instead of just C<local $foo;> [Severity 3]
 
 Write C<for my $element (@list) {...}> instead of C<for $element (@list) {...}>
 
+=head2 L<Perl::Critic::Policy::Variables::RequireLocalizedPunctuationVars>
+
+Magic variables should be assigned as "local" [Severity 2]
+
 =head2 L<Perl::Critic::Policy::Variables::RequireNegativeIndices>
 
 Negative array index should be used [Severity 4]
