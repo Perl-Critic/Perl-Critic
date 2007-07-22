@@ -43,7 +43,7 @@ sub violates {
 
 #-----------------------------------------------------------------------------
 
-sub _is_VERSION_declaration {
+sub _is_VERSION_declaration {  ##no critic(ArgUnpacking)
     return 1 if _is_our_VERSION(@_);
     return 1 if _is_vars_VERSION(@_);
     return 1 if _is_package_VERSION(@_);

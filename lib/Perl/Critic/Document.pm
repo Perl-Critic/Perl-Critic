@@ -19,11 +19,11 @@ our $VERSION = 1.06;
 #-----------------------------------------------------------------------------
 
 our $AUTOLOAD;
-sub AUTOLOAD {  ## no critic(ProhibitAutoloading)
-   my ( $function_name ) = $AUTOLOAD =~ m/ ([^:\']+) \z /xms;
-   return if $function_name eq 'DESTROY';
-   my $self = shift;
-   return $self->{_doc}->$function_name(@_);
+sub AUTOLOAD {  ## no critic(ProhibitAutoloading,ArgUnpacking)
+    my ( $function_name ) = $AUTOLOAD =~ m/ ([^:\']+) \z /xms;
+    return if $function_name eq 'DESTROY';
+    my $self = shift;
+    return $self->{_doc}->$function_name(@_);
 }
 
 #-----------------------------------------------------------------------------
@@ -36,20 +36,20 @@ sub new {
 #-----------------------------------------------------------------------------
 
 sub isa {
-    my $self = shift;
-    return $self->SUPER::isa(@_)
-        || ( (ref $self) && $self->{_doc} && $self->{_doc}->isa(@_) );
+    my ($self, @args) = @_;
+    return $self->SUPER::isa(@args)
+        || ( (ref $self) && $self->{_doc} && $self->{_doc}->isa(@args) );
 }
 
 #-----------------------------------------------------------------------------
 
 sub find {
-    my ($self, $wanted) = @_;
+    my ($self, $wanted, @more_args) = @_;
 
     # This method can only find elements by their class names.  For
     # other types of searches, delegate to the PPI::Document
     if ( ( ref $wanted ) || !$wanted || $wanted !~ m/ \A PPI:: /xms ) {
-        return $self->{_doc}->find($wanted, @_);
+        return $self->{_doc}->find($wanted, @more_args);
     }
 
     # Build the class cache if it doesn't exist.  This happens at most
@@ -78,12 +78,12 @@ sub find {
 #-----------------------------------------------------------------------------
 
 sub find_first {
-    my ($self, $wanted) = @_;
+    my ($self, $wanted, @more_args) = @_;
 
     # This method can only find elements by their class names.  For
     # other types of searches, delegate to the PPI::Document
     if ( ( ref $wanted ) || !$wanted || $wanted !~ m/ \A PPI:: /xms ) {
-        return $self->{_doc}->find_first($wanted, @_);
+        return $self->{_doc}->find_first($wanted, @more_args);
     }
 
     my $result = $self->find($wanted);
@@ -93,12 +93,12 @@ sub find_first {
 #-----------------------------------------------------------------------------
 
 sub find_any {
-    my ($self, $wanted) = @_;
+    my ($self, $wanted, @more_args) = @_;
 
     # This method can only find elements by their class names.  For
     # other types of searches, delegate to the PPI::Document
     if ( ( ref $wanted ) || !$wanted || $wanted !~ m/ \A PPI:: /xms ) {
-        return $self->{_doc}->find_any($wanted, @_);
+        return $self->{_doc}->find_any($wanted, @more_args);
     }
 
     my $result = $self->find($wanted);
@@ -126,7 +126,7 @@ sub _caching_finder {
     # However, PPI::* doesn't do multiple inheritance, so we are safe
 
     return sub {
-        my $element = $_[1];
+        my (undef, $element) = @_;
         my $classes = $isa_cache{ref $element};
         if ( !$classes ) {
             $classes = [ ref $element ];

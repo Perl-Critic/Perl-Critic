@@ -33,10 +33,10 @@ sub applies_to       { return 'PPI::Structure::List' }
 #-----------------------------------------------------------------------------
 
 sub new {
-    my $class = shift;
-    my $self = $class->SUPER::new(@_);
+    my ($class, @args) = @_;
+    my $self = $class->SUPER::new(@args);
 
-    my (%config) = @_;
+    my %config = @args;
 
     #Set configuration if defined
     $self->{_min} = defined $config{min_elements} ? $config{min_elements}

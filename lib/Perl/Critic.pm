@@ -75,7 +75,7 @@ sub statistics {
 
 #-----------------------------------------------------------------------------
 
-sub critique {
+sub critique {  ##no critic (ArgUnpacking)
 
     #-------------------------------------------------------------------
     # This subroutine can be called as an object method or as a static

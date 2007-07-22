@@ -53,7 +53,7 @@ sub run {
 
 #-----------------------------------------------------------------------------
 
-sub get_options() {
+sub get_options {
 
     my %opts = _parse_command_line();
     _dispatch_special_requests( %opts );

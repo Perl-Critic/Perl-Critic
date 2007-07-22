@@ -62,7 +62,7 @@ sub pcritique_with_violations {
 # Criticize a code snippet using only one policy.  Returns the number
 # of violations
 
-sub pcritique {
+sub pcritique {  ##no critic(ArgUnpacking)
     return scalar pcritique_with_violations(@_);
 }
 
@@ -79,7 +79,7 @@ sub critique_with_violations {
 # Criticize a code snippet using a specified config.  Returns the
 # number of violations
 
-sub critique {
+sub critique {  ##no critic(ArgUnpacking)
     return scalar critique_with_violations(@_);
 }
 
@@ -121,7 +121,7 @@ sub fcritique_with_violations {
 # Like pcritique, but forces a PPI::Document::File context.  The
 # $filename arg is a Unix-style relative path, like 'Foo/Bar.pm'
 
-sub fcritique {
+sub fcritique {  ##no critic(ArgUnpacking)
     return scalar fcritique_with_violations(@_);
 }
 

@@ -33,10 +33,10 @@ sub applies_to       { return 'PPI::Token'        }
 #-----------------------------------------------------------------------------
 
 sub new {
-    my $class = shift;
-    my $self = $class->SUPER::new(@_);
+    my ($class, @args) = @_;
+    my $self = $class->SUPER::new(@args);
 
-    my (%config) = @_;
+    my %config = @args;
 
     #Set config, if defined
     $self->{_allow_leading_tabs} =

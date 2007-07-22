@@ -36,10 +36,10 @@ sub applies_to       { return qw(PPI::Token::QuoteLike::Backtick
 #-----------------------------------------------------------------------------
 
 sub new {
-    my $class = shift;
-    my $self = $class->SUPER::new(@_);
+    my ($class, @args) = @_;
+    my $self = $class->SUPER::new(@args);
 
-    my (%config) = @_;
+    my %config = @args;
 
     $self->{_only_in_void_context} = $config{only_in_void_context};
 

@@ -104,7 +104,7 @@ sub violates {
 
 #-----------------------------------------------------------------------------
 
-sub violation {
+sub violation {  ##no critic(ArgUnpacking)
     my ( $self, $desc, $expl, $elem ) = @_;
     # HACK!! Use goto instead of an explicit call because P::C::V::new() uses caller()
     my $sev = $self->get_severity();
@@ -116,17 +116,17 @@ sub violation {
 #-----------------------------------------------------------------------------
 # Static methods.
 
-sub set_format { return $FORMAT = $_[0] }
+sub set_format { return $FORMAT = $_[0] }  ##no critic(ArgUnpacking)
 sub get_format { return $FORMAT         }
 
 #-----------------------------------------------------------------------------
 
 sub to_string {
-    my $self = shift;
+    my ($self, @args) = @_;
 
     # Wrap the more expensive ones in sub{} to postpone evaluation
     my %fspec = (
-         'O' => sub { $self->_format_supported_parameters(@_) },
+         'O' => sub { $self->_format_supported_parameters(@args) },
          'P' => ref $self,
          'p' => sub { policy_short_name( ref $self ) },
          'T' => sub { join $SPACE, $self->default_themes() },

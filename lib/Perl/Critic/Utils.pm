@@ -230,7 +230,7 @@ Readonly::Hash my %PRECEDENCE_OF => (
 ## use critic
 #-----------------------------------------------------------------------------
 
-sub hashify {
+sub hashify {  ##no critic(ArgUnpacking)
     return map { $_ => 1 } @_;
 }
 
@@ -642,9 +642,10 @@ sub is_included_module_name {
 #-----------------------------------------------------------------------------
 
 sub is_integer {
-    return 0 if not defined $_[0];
+    my ($value) = @_;
+    return 0 if not defined $value;
 
-    return $_[0] =~  m{ \A [+-]? \d+ \z }mx;
+    return $value =~ m{ \A [+-]? \d+ \z }mx;
 }
 
 #-----------------------------------------------------------------------------
@@ -833,17 +834,19 @@ sub parse_arg_list {
 #---------------------------------
 
 sub _split_nodes_on_comma {
-    my @nodes = ();
+    my @nodes = @_;
+
     my $i = 0;
-    for my $node (@_) {
+    my @node_stacks;
+    for my $node (@nodes) {
         if ( $node->isa('PPI::Token::Operator') &&
                 (($node eq $COMMA) || ($node eq $FATCOMMA)) ) {
             $i++; #Move forward to next 'node stack'
             next;
         }
-        push @{ $nodes[$i] }, $node;
+        push @{ $node_stacks[$i] }, $node;
     }
-    return @nodes;
+    return @node_stacks;
 }
 
 #-----------------------------------------------------------------------------

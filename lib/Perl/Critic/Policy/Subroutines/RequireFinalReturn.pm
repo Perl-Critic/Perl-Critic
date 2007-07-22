@@ -35,10 +35,10 @@ sub applies_to       { return 'PPI::Statement::Sub' }
 #-----------------------------------------------------------------------------
 
 sub new {
-    my $class = shift;
-    my $self = $class->SUPER::new(@_);
+    my ($class, @args) = @_;
+    my $self = $class->SUPER::new(@args);
 
-    my (%config) = @_;
+    my %config = @args;
 
     my $user_terminals = $config{terminal_funcs} || q{};
     my @user_terminals = words_from_string( $user_terminals );

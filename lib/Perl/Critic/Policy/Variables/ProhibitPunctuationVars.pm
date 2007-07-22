@@ -34,10 +34,10 @@ sub applies_to       { return 'PPI::Token::Magic'   }
 #-----------------------------------------------------------------------------
 
 sub new {
-    my $class = shift;
-    my $self = $class->SUPER::new(@_);
+    my ($class, @args) = @_;
+    my $self = $class->SUPER::new(@args);
 
-    my (%config) = @_;
+    my (%config) = @args;
 
     $self->{_exempt} = \%default_exempt;
     if ( defined $config{allow} ) {

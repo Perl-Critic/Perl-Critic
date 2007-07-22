@@ -65,10 +65,10 @@ sub applies_to       { return 'PPI::Token::Word' }
 #-----------------------------------------------------------------------------
 
 sub new {
-    my $class = shift;
-    my $self = $class->SUPER::new(@_);
+    my ($class, @args) = @_;
+    my $self = $class->SUPER::new(@args);
 
-    my (%config) = @_;
+    my %config = @args;
 
     my @list_funcs = $config{list_funcs}
         ? $config{list_funcs} =~ m/(\S+)/gxms
@@ -197,14 +197,18 @@ sub _is_topic_mutating_substr {
 
 #-----------------------------------------------------------------------------
 
-my %assignment_ops = hashify qw( = *= /= += -= %= **= x= .= &= |= ^=  &&= ||= ++ -- );
-sub _is_assignment_operator { return exists $assignment_ops{$_[0]} }
+{
+    ##no critic(ArgUnpacking)
 
-my %increment_ops = hashify qw( ++ -- );
-sub _is_increment_operator { return exists $increment_ops{$_[0]} }
+    my %assignment_ops = hashify qw( = *= /= += -= %= **= x= .= &= |= ^=  &&= ||= ++ -- );
+    sub _is_assignment_operator { return exists $assignment_ops{$_[0]} }
 
-my %binding_ops = hashify qw( =~ !~ );
-sub _is_binding_operator { return exists $binding_ops{$_[0]} }
+    my %increment_ops = hashify qw( ++ -- );
+    sub _is_increment_operator { return exists $increment_ops{$_[0]} }
+
+    my %binding_ops = hashify qw( =~ !~ );
+    sub _is_binding_operator { return exists $binding_ops{$_[0]} }
+}
 
 1;
 

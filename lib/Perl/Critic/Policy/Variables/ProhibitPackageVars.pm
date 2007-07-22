@@ -38,10 +38,10 @@ Readonly::Array our @DEFAULT_PACKAGE_EXCEPTIONS =>
 #-----------------------------------------------------------------------------
 
 sub new {
-    my $class = shift;
-    my $self = $class->SUPER::new(@_);
+    my ($class, @args) = @_;
+    my $self = $class->SUPER::new(@args);
 
-    my (%config) = @_;
+    my (%config) = @args;
 
     # Set list of package exceptions from configuration, if defined.
     $self->{_packages} =
@@ -117,7 +117,7 @@ sub _is_vars_pragma {
     return 1;
 }
 
-sub _all_upcase {
+sub _all_upcase {  ##no critic(ArgUnpacking)
     return all { $_ eq uc $_ } @_;
 }
 
