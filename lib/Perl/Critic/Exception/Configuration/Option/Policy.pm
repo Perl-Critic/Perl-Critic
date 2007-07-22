@@ -27,8 +27,7 @@ use Exception::Class (
 #-----------------------------------------------------------------------------
 
 sub new {
-    my $class = shift;
-    my %options = @_;
+    my ($class, %options) = @_;
 
     my $policy = $options{policy};
     if ($policy) {

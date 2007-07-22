@@ -1,0 +1,202 @@
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+## name basic passes
+## failures 0
+## cut
+
+sub forward;
+
+sub foo {
+   my ($self, $bar) = @_;
+   print $bar;
+   return;
+}
+
+sub fu {
+   my $self = shift;
+   my $bar = shift;
+   print $bar;
+   return;
+}
+
+#-----------------------------------------------------------------------------
+
+## name prototype passes
+## failures 0
+## cut
+
+sub foo() {
+   print $bar;
+   return;
+}
+
+#-----------------------------------------------------------------------------
+
+## name scheduled subs
+## failures 0
+## cut
+
+BEGIN {
+  print 1;
+  print 2;
+  print 3;
+}
+
+INIT {
+  print 1;
+  print 2;
+  print 3;
+}
+
+CHECK {
+  print 1;
+  print 2;
+  print 3;
+}
+
+END {
+  print 1;
+  print 2;
+  print 3;
+}
+
+#-----------------------------------------------------------------------------
+
+## name passes - no arguments
+## failures 0
+## cut
+
+sub few { }
+sub phu { 1; }
+sub phoo { return; }
+
+#-----------------------------------------------------------------------------
+
+## name failure - not idiomatic enough
+## failures 2
+## cut
+
+sub quux {
+    my $self = shift @_;
+    print $self;
+}
+
+sub cwux {
+    my ($self) = ($_[0]);
+    print $self;
+}
+
+#-----------------------------------------------------------------------------
+
+## name basic failures
+## failures 2
+## cut
+
+sub bar {
+  print $_[0];
+  print $_[1];
+  print $_[2];
+  print $_[3];
+}
+
+sub barr { 
+  print $_[1];
+}
+
+#-----------------------------------------------------------------------------
+
+## name failure in an anonymous sub
+## failures 1
+## TODO PPI v1.118 doesn't recognize anonymous subroutines
+## cut
+
+my $x = bar {
+  print $_[0];
+  print $_[1];
+  print $_[2];
+  print $_[3];
+}
+
+#-----------------------------------------------------------------------------
+
+## name basic failures, set config higher
+## failures 1
+## parms {short_subroutine_statements => 1}
+## cut
+
+sub bar {
+  print $_[0];
+  print $_[1];
+  print $_[2];
+  print $_[3];
+}
+
+sub barr { 
+  print $_[1];
+}
+
+#-----------------------------------------------------------------------------
+
+## name mixed failures
+## failures 2
+## cut
+
+sub baz {
+  my $self = shift;
+  print $_[0];
+  print $_[1];
+  print $_[2];
+  print $_[3];
+}
+
+sub baaz {
+  my ($self) = @_;
+  print $_[0];
+  print $_[1];
+  print $_[2];
+  print $_[3];
+}
+
+#-----------------------------------------------------------------------------
+
+## name nested anon sub
+## failures 0
+## cut
+
+sub baz {
+    print "here\n";
+    return sub {
+        my ($self) = @_;
+        print $self->{bar};
+    };
+}
+
+#-----------------------------------------------------------------------------
+
+## name nested name sub
+## failures 0
+## cut
+
+sub baz {
+    print "here\n";
+    sub bar {
+        my ($self) = @_;
+        print $self->{bar};
+    }
+    $x->bar();
+}
+
+#-----------------------------------------------------------------------------
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :

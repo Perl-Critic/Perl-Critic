@@ -158,7 +158,9 @@ sub _validate_options {
 
 sub get_input {
 
-    if ( !@_ || (@_ == 1 && $_[0] eq q{-}) )  {
+    my @args = @_;
+
+    if ( !@args || (@args == 1 && $args[0] eq q{-}) )  {
 
         # Reading code from STDIN.  All the code is slurped into
         # a string.  PPI will barf if the string is just whitespace.
@@ -176,7 +178,7 @@ sub get_input {
 
         # Test to make sure all the specified files or directories
         # actually exist.  If any one of them is bogus, then die.
-        if ( my $nonexistant = first { ! -e $_ } @_ ) {
+        if ( my $nonexistant = first { ! -e $_ } @args ) {
             my $msg = qq{No such file or directory: '$nonexistant'};
             pod2usage( -exitstatus => 1, -message => $msg, -verbose => 0);
         }
@@ -185,7 +187,7 @@ sub get_input {
         # then we process it as-is (even though it may not actually
         # be Perl code).  If argument is a directory, recursively
         # search the directory for files that look like Perl code.
-        return map { -d $_ ? Perl::Critic::Utils::all_perl_files($_) : $_ } @_;
+        return map { -d $_ ? Perl::Critic::Utils::all_perl_files($_) : $_ } @args;
     }
 }
 

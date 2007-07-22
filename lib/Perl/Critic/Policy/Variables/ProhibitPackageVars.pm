@@ -52,8 +52,8 @@ sub applies_to       { return qw(PPI::Token::Symbol
 #-----------------------------------------------------------------------------
 
 sub new {
-    my $class = shift;
-    my $self = $class->SUPER::new(@_);
+    my ($class, @args) = @_;
+    my $self = $class->SUPER::new(@args);
 
     $self->{_all_packages} = {
         hashify keys %{ $self->{_packages} }, keys %{ $self->{_add_packages} }
@@ -121,7 +121,7 @@ sub _is_vars_pragma {
     return 1;
 }
 
-sub _all_upcase {
+sub _all_upcase {  ##no critic(ArgUnpacking)
     return all { $_ eq uc $_ } @_;
 }
 

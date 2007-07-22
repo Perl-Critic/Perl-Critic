@@ -43,8 +43,7 @@ my $FORMAT = "%p\n"; #Default stringy format
 #-----------------------------------------------------------------------------
 
 sub new {
-    my $class = shift;
-    my %config = @_;
+    my ($class, %config) = @_;
 
     my $self = bless {}, $class;
 
@@ -221,7 +220,7 @@ sub violates {
 
 #-----------------------------------------------------------------------------
 
-sub violation {
+sub violation {  ##no critic(ArgUnpacking)
     my ( $self, $desc, $expl, $elem ) = @_;
     # HACK!! Use goto instead of an explicit call because P::C::V::new() uses caller()
     my $sev = $self->get_severity();
@@ -250,13 +249,13 @@ sub throw_parameter_value_exception {
 
 # Static methods.
 
-sub set_format { return $FORMAT = $_[0] }
+sub set_format { return $FORMAT = $_[0] }  ##no critic(ArgUnpacking)
 sub get_format { return $FORMAT         }
 
 #-----------------------------------------------------------------------------
 
 sub to_string {
-    my $self = shift;
+    my ($self, @args) = @_;
 
     # Wrap the more expensive ones in sub{} to postpone evaluation
     my %fspec = (

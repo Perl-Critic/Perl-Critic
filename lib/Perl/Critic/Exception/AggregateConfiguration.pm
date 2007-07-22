@@ -35,8 +35,7 @@ our @EXPORT_OK = qw{ &throw_aggregate };
 #-----------------------------------------------------------------------------
 
 sub new {
-    my $class = shift;
-    my %options = @_;
+    my ($class, %options) = @_;
 
     my $exceptions = $options{exceptions};
     if (not $exceptions) {

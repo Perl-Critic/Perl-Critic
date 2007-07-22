@@ -71,12 +71,12 @@ sub new {
 
 #-----------------------------------------------------------------------------
 
-sub set_format { return $FORMAT = verbosity_to_format( $_[0] ); }
+sub set_format { return $FORMAT = verbosity_to_format( $_[0] ); }  ##no critic(ArgUnpacking)
 sub get_format { return $FORMAT;         }
 
 #-----------------------------------------------------------------------------
 
-sub sort_by_location {
+sub sort_by_location {  ##no critic(ArgUnpacking)
 
     ref $_[0] || shift;              #Can call as object or class method
     return scalar @_ if ! wantarray; #In case we are called in scalar context
@@ -92,7 +92,7 @@ sub sort_by_location {
 
 #-----------------------------------------------------------------------------
 
-sub sort_by_severity {
+sub sort_by_severity {  ##no critic(ArgUnpacking)
 
     ref $_[0] || shift;              #Can call as object or class method
     return scalar @_ if ! wantarray; #In case we are called in scalar context

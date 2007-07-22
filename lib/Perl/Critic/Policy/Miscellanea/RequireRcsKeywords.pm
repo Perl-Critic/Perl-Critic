@@ -42,8 +42,8 @@ sub applies_to        { return 'PPI::Document'       }
 #-----------------------------------------------------------------------------
 
 sub new {
-    my $class = shift;
-    my $self = $class->SUPER::new(@_);
+    my ($class, @args) = @_;
+    my $self = $class->SUPER::new(@args);
 
     # Any of these lists
     $self->{_keyword_sets} = [

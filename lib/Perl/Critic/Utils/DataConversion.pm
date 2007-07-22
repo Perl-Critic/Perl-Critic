@@ -26,13 +26,13 @@ Readonly::Array our @EXPORT_OK => qw(
 
 #-----------------------------------------------------------------------------
 
-sub boolean_to_number {
+sub boolean_to_number {  ## no critic (RequireArgUnpacking)
     return $_[0] ? $TRUE : $FALSE;
 }
 
 #-----------------------------------------------------------------------------
 
-sub defined_or_empty {
+sub defined_or_empty {  ## no critic (RequireArgUnpacking)
     return defined $_[0] ? $_[0] : $EMPTY;
 }
 
