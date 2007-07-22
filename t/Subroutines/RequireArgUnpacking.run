@@ -37,17 +37,6 @@ sub foo() {
 
 #-----------------------------------------------------------------------------
 
-## name prototype fails
-## failures 1
-## cut
-
-sub fu(_) {
-   print $_;
-   return;
-}
-
-#-----------------------------------------------------------------------------
-
 ## name scheduled subs
 ## failures 0
 ## cut
@@ -121,6 +110,38 @@ sub barr {
 
 #-----------------------------------------------------------------------------
 
+## name failure in an anonymous sub
+## failures 1
+## TODO PPI v1.118 doesn't recognize anonymous subroutines
+## cut
+
+my $x = bar {
+  print $_[0];
+  print $_[1];
+  print $_[2];
+  print $_[3];
+}
+
+#-----------------------------------------------------------------------------
+
+## name basic failures, set config higher
+## failures 1
+## parms {short_subroutine_statements => 1}
+## cut
+
+sub bar {
+  print $_[0];
+  print $_[1];
+  print $_[2];
+  print $_[3];
+}
+
+sub barr { 
+  print $_[1];
+}
+
+#-----------------------------------------------------------------------------
+
 ## name mixed failures
 ## failures 2
 ## cut
@@ -143,54 +164,31 @@ sub baaz {
 
 #-----------------------------------------------------------------------------
 
-## name config: forbid_array_form
+## name nested anon sub
 ## failures 0
-## parms {forbid_array_form => 1}
 ## cut
 
 sub baz {
-  my $self = shift;
-  print $self;
-  return;
+    print "here\n";
+    return sub {
+        my ($self) = @_;
+        print $self->{bar};
+    };
 }
 
 #-----------------------------------------------------------------------------
 
-## name config: forbid_shift_form
+## name nested name sub
 ## failures 0
-## parms {forbid_shift_form => 1}
 ## cut
 
 sub baz {
-  my ($self) = @_;
-  print $self;
-  return;
-}
-
-#-----------------------------------------------------------------------------
-
-## name config: forbid_shift_form failure
-## failures 1
-## parms {forbid_shift_form => 1}
-## cut
-
-sub baz {
-  my $self = shift;
-  print $self;
-  return;
-}
-
-#-----------------------------------------------------------------------------
-
-## name config: forbid_array_form failure
-## failures 1
-## parms {forbid_array_form => 1}
-## cut
-
-sub baz {
-  my ($self) = @_;
-  print $self;
-  return;
+    print "here\n";
+    sub bar {
+        my ($self) = @_;
+        print $self->{bar};
+    }
+    $x->bar();
 }
 
 #-----------------------------------------------------------------------------

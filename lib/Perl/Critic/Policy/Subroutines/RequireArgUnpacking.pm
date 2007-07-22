@@ -24,13 +24,15 @@ our $VERSION = 1.06;
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $DESC => q{Always unpack @_ first};
+Readonly::Scalar my $AT => q{@}; ##no critic(Interpolation)
+Readonly::Scalar my $AT_ARG => q{@_}; ##no critic(Interpolation)
+
+Readonly::Scalar my $DESC => qq{Always unpack $AT_ARG first};
 Readonly::Scalar my $EXPL => [178];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return qw(forbid_array_form forbid_shift_form
-                                     short_subroutine_statements) }
+sub supported_parameters { return qw(short_subroutine_statements) }
 sub default_severity     { return $SEVERITY_HIGH           }
 sub default_themes       { return qw( core pbp maintance ) }
 sub applies_to           { return 'PPI::Statement::Sub'    }
@@ -38,22 +40,15 @@ sub applies_to           { return 'PPI::Statement::Sub'    }
 #-----------------------------------------------------------------------------
 
 sub new {
-    my $class = shift;
-    my $self = $class->SUPER::new(@_);
+    my ($class, @args) = @_;
+    my $self = $class->SUPER::new(@args);
 
-    my (%config) = @_;
+    my %config = @args;
 
     #Set configuration if defined
-    $self->{_forbid_array_form} = $config{forbid_array_form} ? 1 : 0;
-    $self->{_forbid_shift_form} = $config{forbid_shift_form} ? 1 : 0;
-    if ($self->{_forbid_array_form} && $self->{_forbid_shift_form}) {
-       croak q{Don't set both forbid_array_form and forbid_shift_form in your } .
-           __PACKAGE__ . q{ configuration};
-    }
-
     $self->{_short_subroutine_statements} = defined $config{short_subroutine_statements}
         && $config{short_subroutine_statements} =~ m/(\d+)/xms
-            ? $1 : 1;
+            ? $1 : 0;
 
     return $self;
 }
@@ -63,28 +58,13 @@ sub new {
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    # BEGIN, END, etc don't take arguments
-    return if $elem->isa('PPI::Statement::Scheduled');
-
     # forward declaration?
     return if !$elem->block;
-
-    # Ignore subs that are declared to take no args
-    return if '()' eq $elem->prototype;
 
     my @statements = $elem->block->schildren;
 
     # empty sub?
     return if !@statements;
-
-    # look for explicit dereferences of @_ (e.g. '$_[0]')
-    # This is a violation even if the subroutine is short
-    for my $statement (@statements) {
-        if (any {'@_' eq $_->symbol && '$' eq $_->raw_type}
-            @{$statement->find('PPI::Token::Magic') || []}) {
-           return $self->violation( $DESC, $EXPL, $elem );
-        }
-    }
 
     # Don't apply policy to short subroutines
 
@@ -93,23 +73,69 @@ sub violates {
     # just top-level statements?
     return if $self->{_short_subroutine_statements} >= @statements;
 
-    # Now, examine the first statement to see if it unpacks @_
-    my $first = $statements[0];
+    # look for explicit dereferences of @_, including '$_[0]'
+    # You may use "... = @_;" in the first paragraph of the sub
+    # Don't descend into nested or anonymous subs
+    my $beginning = 1;
+    for my $statement (@statements) {
 
-    # If the first statement is not a "my" declaration, it's no good
-    if ($first->isa('PPI::Statement::Variable') && $first->type && 'my' eq $first->type) {
-        # look for 'my $foo = shift;' or 'my ($foo) = @_;'
-        my @children = $first->schildren();
-        my $content = join q{ }, @children;
+        my @magic = _get_arg_symbols($statement);
 
-        return if !$self->{_forbid_shift_form} &&
-            $content =~ m/\A my [ ] .*? [ ] = [ ] shift (?: [ ] ;)* \z/xms;
-        return if !$self->{_forbid_array_form} &&
-            $content =~ m/\A my [ ] .*? [ ] = [ ] \@_ (?: [ ] ;)* \z/xms;
+        my $still_beginning = 0;
+      MAGIC:
+        for my $magic (@magic) {
+            if ($AT eq $magic->raw_type) {
+                my $prev = $magic->sprevious_sibling;
+                my $next = $magic->snext_sibling;
+
+                # allow conditional checks on the size of @_
+                next MAGIC if !$next && $prev && $prev->isa('PPI::Token::Operator') &&
+                  (q{==} eq $prev || q{!=} eq $prev);
+                next MAGIC if !$prev && $next && $next->isa('PPI::Token::Operator') &&
+                  (q{==} eq $next || q{!=} eq $next);
+
+                if ($beginning) {
+                    if ($prev && $prev->isa('PPI::Token::Operator') && q{=} eq $prev &&
+                        (!$next || ($next->isa('PPI::Token::Structure') && q{;} eq $next))) {
+                        $still_beginning = 1;
+                    } else {
+                        return $self->violation( $DESC, $EXPL, $elem );
+                    }
+                }
+            } else {
+                return $self->violation( $DESC, $EXPL, $elem );
+            }
+        }
+        if (!$still_beginning) {
+            $beginning = 0;
+        }
+    }
+    return;  # OK
+}
+
+sub _get_arg_symbols {
+    my ($statement) = @_;
+
+    return grep {$AT_ARG eq $_->symbol} @{$statement->find(\&_magic_finder) || []};
+}
+
+sub _magic_finder {
+    # Find all @_ and $_[\d+] not inside of nested subs
+    my (undef, $elem) = @_;
+    return 1 if $elem->isa('PPI::Token::Magic'); # match
+
+    if ($elem->isa('PPI::Structure::Block')) {
+        # don't descend into a nested named sub
+        return if $elem->statement->isa('PPI::Statement::Sub');
+
+        my $prev = $elem->sprevious_sibling;
+        # don't descend into a nested anon sub block
+        return if $prev && $prev->isa('PPI::Token::Word') && 'sub' eq $prev;
     }
 
-    return $self->violation( $DESC, $EXPL, $elem );
+    return 0; # no match, descend
 }
+
 
 1;
 
@@ -125,26 +151,48 @@ Perl::Critic::Policy::Subroutines::RequireArgUnpacking
 
 =head1 DESCRIPTION
 
-WRITEIT!!
+Subroutines that use C<@_> directly instead of unpacking the arguments to
+local variables first have two major problems.  First, they are very hard to
+read.  If you're going to refer to your variables by number instead of by
+name, you may as well be writing assembler code!  Second, C<@_> contains
+aliases to the original variables!  If you modify the contents of a C<@_>
+entry, then you are modifying the variable outside of your subroutine.  For
+example:
+
+   sub print_local_var_plus_one {
+       my ($var) = @_;
+       print ++$var;
+   }
+   sub print_var_plus_one {
+       print ++$_[0];
+   }
+
+   my $x = 2;
+   print_local_var_plus_one($x); # prints "3", $x is still 2
+   print_var_plus_one($x);       # prints "3", $x is now 3 !
+   print $x;                     # prints "3"
+
+This is spooky action-at-a-distance and is very hard to debug if it's not
+intentional and well-documented (like C<chop> or C<chomp>).
 
 =head1 CONFIGURATION
 
-Do you have a preference for C<my $foo = shift;> or C<my ($foo) =
-@_;>?  You can set one of the C<forbid_array_form> or
-C<forbid_shift_form> parameters to true to block the one you don't
-like.  It's an error to set both of them.
-
-This policy is lenient for subroutines which have C<N> or fewer
-top-level statements, where C<N> defaults to C<1>.  You can override
-this to set it to a higher (or lower!) number with the
-C<short_subroutine_statements> setting.
-
-To make changes like these, put entries in a F<.perlcriticrc> file
-like this:
+This policy is lenient for subroutines which have C<N> or fewer top-level
+statements, where C<N> defaults to ZERO.  You can override this to set it to a
+higher number with the C<short_subroutine_statements> setting.  This is very
+much not recommended but perhaps you REALLY need high performance.  To do
+this, put entries in a F<.perlcriticrc> file like this:
 
   [Subroutines::RequireArgUnpacking]
-  forbid_shift_form = true
   short_subroutine_statements = 2
+
+=head1 CAVEATS
+
+PPI doesn't currently detect anonymous subroutines, so we don't check those.
+This should just work when PPI gains that feature.
+
+We don't check for C<@ARG>, the alias for C<@_> from English.pm.  That's
+deprecated anyway.
 
 =head1 CREDITS
 
