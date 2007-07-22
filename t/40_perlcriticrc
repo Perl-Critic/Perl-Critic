@@ -21,3 +21,5 @@ keywords = URL Date Author Revision
 [CodeLayout::ProhibitHardTabs]
 allow_leading_tabs = 0
 
+[Documentation::PodSpelling]
+stopwords = autoflushes BBEdit CGI CPAN CVS Dolan exponentials filename Guzis HEREDOC HEREDOCs IDE Maxia Mehner metadata multi-line namespace namespaces PBP perlcritic perlcriticrc PolicyListing PolicyParameter postfix PPI programmatically Readonly refactor refactoring runtime sigil sigils SQL STDERR STDIN STDOUT subdirectories TerMarsch Thalhammer TODO UI unblessed vice-versa

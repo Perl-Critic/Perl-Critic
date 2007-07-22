@@ -65,6 +65,7 @@ lib/Perl/Critic/Policy/ControlStructures/ProhibitPostfixControls.pm
 lib/Perl/Critic/Policy/ControlStructures/ProhibitUnlessBlocks.pm
 lib/Perl/Critic/Policy/ControlStructures/ProhibitUnreachableCode.pm
 lib/Perl/Critic/Policy/ControlStructures/ProhibitUntilBlocks.pm
+lib/Perl/Critic/Policy/Documentation/PodSpelling.pm
 lib/Perl/Critic/Policy/Documentation/RequirePodAtEnd.pm
 lib/Perl/Critic/Policy/Documentation/RequirePodSections.pm
 lib/Perl/Critic/Policy/ErrorHandling/RequireCarping.pm
@@ -187,6 +188,7 @@ t/14_policy_parameters.t
 t/15_statistics.t
 t/16_roundtrip_defaults.t
 t/20_policies.t
+t/20_policy_podspelling.t
 t/20_policy_prohibithardtabs.t
 t/20_policy_prohibittrailingwhitespace.t
 t/20_policy_requireconsistentnewlines.t

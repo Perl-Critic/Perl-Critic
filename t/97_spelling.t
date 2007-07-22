@@ -41,7 +41,6 @@ exponentials
 filename
 Guzis
 HEREDOC
-HEREDOCS
 HEREDOCs
 IDE
 Maxia

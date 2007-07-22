@@ -77,7 +77,7 @@ editor can be configured to expand tabs into spaces.  L<Perl::Tidy>
 also does this for you.
 
 This Policy catches all tabs in your source code, including POD,
-quotes, and HEREDOCS.  The contents of the C<__DATA__> section are not
+quotes, and HEREDOCs.  The contents of the C<__DATA__> section are not
 examined.
 
 =head1 CONFIGURATION
