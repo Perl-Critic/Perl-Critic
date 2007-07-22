@@ -76,41 +76,59 @@ sub violates {
     # look for explicit dereferences of @_, including '$_[0]'
     # You may use "... = @_;" in the first paragraph of the sub
     # Don't descend into nested or anonymous subs
-    my $beginning = 1;
+    my $state = 'unpacking'; # still in unpacking paragraph
     for my $statement (@statements) {
 
         my @magic = _get_arg_symbols($statement);
 
-        my $still_beginning = 0;
+        my $saw_unpack = 0;
       MAGIC:
         for my $magic (@magic) {
-            if ($AT eq $magic->raw_type) {
+            if ($AT eq $magic->raw_type) {  # this is '@_', not '$_[0]'
                 my $prev = $magic->sprevious_sibling;
                 my $next = $magic->snext_sibling;
 
                 # allow conditional checks on the size of @_
-                next MAGIC if !$next && $prev && $prev->isa('PPI::Token::Operator') &&
-                  (q{==} eq $prev || q{!=} eq $prev);
-                next MAGIC if !$prev && $next && $next->isa('PPI::Token::Operator') &&
-                  (q{==} eq $next || q{!=} eq $next);
+                next MAGIC if _is_size_check($magic);
 
-                if ($beginning) {
-                    if ($prev && $prev->isa('PPI::Token::Operator') && q{=} eq $prev &&
-                        (!$next || ($next->isa('PPI::Token::Structure') && q{;} eq $next))) {
-                        $still_beginning = 1;
-                    } else {
-                        return $self->violation( $DESC, $EXPL, $elem );
+                if ('unpacking' eq $state) {
+                    if (_is_unpack($magic)) {
+                        $saw_unpack = 1;
+                        next MAGIC;
                     }
                 }
-            } else {
-                return $self->violation( $DESC, $EXPL, $elem );
             }
+            return $self->violation( $DESC, $EXPL, $elem );
         }
-        if (!$still_beginning) {
-            $beginning = 0;
+        if (!$saw_unpack) {
+            $state = 'post_unpacking';
         }
     }
     return;  # OK
+}
+
+sub _is_unpack {
+    my ($magic) = @_;
+
+    my $prev = $magic->sprevious_sibling;
+    my $next = $magic->snext_sibling;
+
+    return 1 if ($prev && $prev->isa('PPI::Token::Operator') && q{=} eq $prev &&
+                 (!$next || ($next->isa('PPI::Token::Structure') && q{;} eq $next)));
+    return;
+}
+
+sub _is_size_check {
+    my ($magic) = @_;
+
+    my $prev = $magic->sprevious_sibling;
+    my $next = $magic->snext_sibling;
+
+    return 1 if !$next && $prev && $prev->isa('PPI::Token::Operator') &&
+      (q{==} eq $prev || q{!=} eq $prev);
+    return 1 if !$prev && $next && $next->isa('PPI::Token::Operator') &&
+      (q{==} eq $next || q{!=} eq $next);
+    return;
 }
 
 sub _get_arg_symbols {
