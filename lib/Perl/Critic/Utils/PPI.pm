@@ -25,6 +25,10 @@ Readonly::Array our @EXPORT_OK => qw(
     &is_ppi_statement_subclass
 );
 
+our %EXPORT_TAGS = (
+    all => \@EXPORT_OK,
+);
+
 #-----------------------------------------------------------------------------
 
 sub is_ppi_expression_or_generic_statement {
