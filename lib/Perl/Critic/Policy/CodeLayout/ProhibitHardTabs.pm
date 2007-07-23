@@ -32,15 +32,13 @@ sub applies_to       { return 'PPI::Token'        }
 
 #-----------------------------------------------------------------------------
 
-sub new {
-    my ($class, @args) = @_;
-    my $self = $class->SUPER::new(@args);
-
-    my %config = @args;
+sub initialize_if_enabled {
+    my ($self, $config) = @_;
 
     #Set config, if defined
+    my $allow_leading_tabs = $config->{allow_leading_tabs};
     $self->{_allow_leading_tabs} =
-      defined $config{allow_leading_tabs} ? $config{allow_leading_tabs} : $TRUE;
+        defined $allow_leading_tabs ? $allow_leading_tabs : $TRUE;
 
     return $self;
 }

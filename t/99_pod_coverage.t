@@ -45,6 +45,7 @@ all_pod_coverage_ok( {trustme => [$trusted_rx]} );
 sub get_trusted_methods {
     return qw(
         new
+        initialize_if_enabled
         violates
         applies_to
         default_themes

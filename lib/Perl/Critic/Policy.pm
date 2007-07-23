@@ -17,6 +17,7 @@ use overload ( q{""} => 'to_string', cmp => '_compare' );
 
 use Perl::Critic::Utils qw{
     :characters
+    :booleans
     :severities
     :data_conversion
     &interpolate
@@ -35,6 +36,29 @@ my $FORMAT = "%p\n"; #Default stringy format
 sub new {
     my $class = shift;
     return bless {}, $class;
+}
+
+#-----------------------------------------------------------------------------
+
+# Reference to a hash.
+sub __get_parameters {
+    my ($self) = @_;
+
+    return $self->{_parameters};
+}
+
+sub __set_parameters {
+    my ($self, $parameters) = @_;
+
+    $self->{_parameters} = $parameters;
+
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
+sub initialize_if_enabled {
+    return $TRUE;
 }
 
 #-----------------------------------------------------------------------------
@@ -189,12 +213,30 @@ distribution.
 
 =item C<< new(key1 => value1, key2 => value2 ... ) >>
 
-Returns a reference to a new subclass of Perl::Critic::Policy. If
-your Policy requires any special arguments, they should be passed
-in here as key-value pairs.  Users of L<perlcritic> can specify
-these in their config file.  Unless you override the C<new> method,
-the default method simply returns a reference to an empty hash that
-has been blessed into your subclass.
+Returns a reference to a new subclass of Perl::Critic::Policy. If your
+Policy requires any special arguments, they will be passed in here as
+key-value pairs.  Users of L<perlcritic> can specify these in their
+config file.  Unless you override the C<new> method, the default
+method simply returns a reference to an empty hash that has been
+blessed into your subclass.  However, you really should not override
+this; override C<initialize_if_enabled()> instead.
+
+This constructor is always called regardless of whether the user has
+enabled this Policy or not.
+
+=item C<< initialize_if_enabled( { key1 => value1, key2 => value2 ... } ) >>
+
+This receives the same parameters as C<new()>, but as a reference to a
+hash, and is only invoked if this Policy is enabled by the user.
+Thus, this is the preferred place for subclasses to do any
+initialization.
+
+Implementations of this method should return a boolean value
+indicating whether the Policy should continue to be enabled.  For most
+subclasses, this will always be C<$TRUE>.  Policies that depend upon
+external modules or other system facilities that may or may not be
+available should test for the availability of these dependencies and
+return C<$FALSE> if they are not.
 
 =item C< violates( $element, $document ) >
 

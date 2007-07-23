@@ -147,7 +147,6 @@ sub create_policy {
     my $policy_params = $args{-params}
         || $profile->policy_params($policy_name) || {};
 
-
     # This function will delete keys from $policy_params, so we copy them to
     # avoid modifying the callers's hash.  What a pain in the ass!
     my %policy_params_copy = $policy_params ? %{$policy_params} : ();
@@ -183,6 +182,8 @@ sub create_policy {
         my @add_themes = words_from_string( $user_add_themes );
         $policy->add_themes( @add_themes );
     }
+
+    $policy->__set_parameters(\%policy_params_copy);
 
     return $policy;
 }
@@ -307,11 +308,19 @@ B<-params> is an optional reference to hash of parameters that will be passed
 into the constructor of the Policy.  If C<-params> is not defined, we will use
 the appropriate Policy parameters from the L<Perl::Critic::UserProfile>.
 
+Note that the Policy will not have had
+L<Perl::Critic::Policy/"initialize_if_enabled"> invoked on it, so it may not
+yet be usable.
+
 =item C< create_all_policies() >
 
 Constructs and returns one instance of each L<Perl::Critic::Policy> subclass
 that is installed on the local system.  Each Policy will be created with the
 appropriate parameters from the user's configuration profile.
+
+Note that the Policies will not have had
+L<Perl::Critic::Policy/"initialize_if_enabled"> invoked on them, so they may
+not yet be usable.
 
 =back
 
