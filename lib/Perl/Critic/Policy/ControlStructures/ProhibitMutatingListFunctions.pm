@@ -13,7 +13,7 @@ use Perl::Critic::Utils qw{ :severities :data_conversion :classification :ppi };
 use List::MoreUtils qw( none any );
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 1.06;
+our $VERSION = 1.061;
 
 #-----------------------------------------------------------------------------
 
