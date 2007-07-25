@@ -15,7 +15,7 @@ use Perl::Critic::Utils qw{
     :booleans :characters :severities :data_conversion $DEFAULT_VERBOSITY
 };
 
-our $VERSION = 1.06;
+our $VERSION = 1.061;
 
 #-----------------------------------------------------------------------------
 
