@@ -46,7 +46,7 @@
      Other Stuff:
      * Now requires the Readonly module in order to be more self-compliant.
 
-[1.xxx]  Released on 2007-xx-xx
+[1.061]  Released on 2007-07-24
 
      Bug Fixes:
      * Fix P::C::Theme-- Exporter in Perl 5.6 does not export import(), so you

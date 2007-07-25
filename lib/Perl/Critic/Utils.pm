@@ -19,7 +19,7 @@ use Perl::Critic::Exception::Fatal::Generic qw{ throw_generic };
 
 use base 'Exporter';
 
-our $VERSION = 1.06;
+our $VERSION = 1.061;
 
 #-----------------------------------------------------------------------------
 # Exportable symbols here.

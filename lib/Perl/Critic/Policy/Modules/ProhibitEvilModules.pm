@@ -19,7 +19,7 @@ use Perl::Critic::Utils qw{ :characters :severities :data_conversion };
 
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 1.06;
+our $VERSION = 1.061;
 
 #-----------------------------------------------------------------------------
 
