@@ -13,7 +13,7 @@ use Readonly;
 
 use List::MoreUtils qw(any);
 use Perl::Critic::Utils qw{
-    :severities :data_conversion :classification :ppi
+    :booleans :severities :data_conversion :classification :ppi
 };
 use base 'Perl::Critic::Policy';
 
@@ -47,20 +47,17 @@ sub applies_to       { return 'PPI::Token::Word'           }
 
 #-----------------------------------------------------------------------------
 
-sub new {
-    my ($class, @args) = @_;
-    my $self = $class->SUPER::new(@args);
-
-    my %config = @args;
+sub initialize_if_enabled {
+    my ($self, $config) = @_;
 
     $self->{_test_modules} = \%default_test_modules;
-    if (defined $config{modules}) {
-        my @modules = words_from_string( $config{modules} );
+    if (defined $config->{modules}) {
+        my @modules = words_from_string( $config->{modules} );
         my %all_test_modules = ( %default_test_modules, hashify(@modules) );
         $self->{_test_modules} = \%all_test_modules;
     }
 
-    return $self;
+    return $TRUE;
 }
 
 #-----------------------------------------------------------------------------

@@ -11,7 +11,7 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :severities };
+use Perl::Critic::Utils qw{ :booleans :severities };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.06;
@@ -32,18 +32,15 @@ sub applies_to       { return 'PPI::Statement::Include' }
 
 #-----------------------------------------------------------------------------
 
-sub new {
-    my ($class, @args) = @_;
-    my $self = $class->SUPER::new(@args);
-
-    my %config = @args;
+sub initialize_if_enabled {
+    my ($self, $config) = @_;
 
     $self->{_nstatements} = $DEFAULT_N_STATEMENTS;
-    if ( defined $config{statements} ) {
-        $self->{_nstatements} = $config{statements};
+    if ( defined $config->{statements} ) {
+        $self->{_nstatements} = $config->{statements};
     }
 
-    return $self;
+    return $TRUE;
 }
 
 #-----------------------------------------------------------------------------

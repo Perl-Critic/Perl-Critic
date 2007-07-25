@@ -12,7 +12,8 @@ use warnings;
 use Readonly;
 
 use List::MoreUtils qw(all);
-use Perl::Critic::Utils qw{ :severities :data_conversion };
+
+use Perl::Critic::Utils qw{ :booleans :severities :data_conversion };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.06;
@@ -31,21 +32,18 @@ sub applies_to       { return 'PPI::Statement::Include' }
 
 #-----------------------------------------------------------------------------
 
-sub new {
-    my ($class, @args) = @_;
-    my $self = $class->SUPER::new(@args);
-
-    my %config = @args;
+sub initialize_if_enabled {
+    my ($self, $config) = @_;
 
     $self->{_allow} = {};
 
-    if( defined $config{allow} ) {
-        my $allowed = lc $config{allow}; #String of words
+    if ( defined $config->{allow} ) {
+        my $allowed = lc $config->{allow}; #String of words
         my %allowed = hashify( $allowed =~ m/ (\w+) /gmx );
         $self->{_allow} = \%allowed;
     }
 
-    return $self;
+    return $TRUE;
 }
 
 #-----------------------------------------------------------------------------

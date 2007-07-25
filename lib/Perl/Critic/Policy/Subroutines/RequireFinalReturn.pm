@@ -13,7 +13,9 @@ use Readonly;
 
 use Carp qw(confess);
 
-use Perl::Critic::Utils qw{ :characters :severities :data_conversion };
+use Perl::Critic::Utils qw{
+    :booleans :characters :severities :data_conversion
+};
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.06;
@@ -34,19 +36,17 @@ sub applies_to       { return 'PPI::Statement::Sub' }
 
 #-----------------------------------------------------------------------------
 
-sub new {
-    my ($class, @args) = @_;
-    my $self = $class->SUPER::new(@args);
+sub initialize_if_enabled {
+    my ($self, $config) = @_;
 
-    my %config = @args;
-
-    my $user_terminals = $config{terminal_funcs} || q{};
+    my $user_terminals = $config->{terminal_funcs} || q{};
     my @user_terminals = words_from_string( $user_terminals );
     my @default_terminals =
         qw(exit die croak confess throw Carp::confess Carp::croak);
 
     $self->{_terminals} = { hashify(@default_terminals, @user_terminals) };
-    return $self;
+
+    return $TRUE;
 }
 
 #-----------------------------------------------------------------------------

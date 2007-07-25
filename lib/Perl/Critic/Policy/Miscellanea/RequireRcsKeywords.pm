@@ -13,7 +13,9 @@ use Readonly;
 
 use List::MoreUtils qw(none);
 
-use Perl::Critic::Utils qw{ :characters :severities :data_conversion };
+use Perl::Critic::Utils qw{
+    :booleans :characters :severities :data_conversion
+};
 
 use base 'Perl::Critic::Policy';
 
@@ -32,11 +34,8 @@ sub applies_to        { return 'PPI::Document'       }
 
 #-----------------------------------------------------------------------------
 
-sub new {
-    my ($class, @args) = @_;
-    my $self = $class->SUPER::new(@args);
-
-    my %config = @args;
+sub initialize_if_enabled {
+    my ($self, $config) = @_;
 
     # Any of these lists
     $self->{_keywords} = [
@@ -52,12 +51,12 @@ sub new {
     ];
 
     #Set configuration, if defined.
-    if ( defined $config{keywords} ) {
+    if ( defined $config->{keywords} ) {
         ## no critic ProhibitEmptyQuotes
-        $self->{_keywords} = [ [ words_from_string( $config{keywords} ) ] ];
+        $self->{_keywords} = [ [ words_from_string( $config->{keywords} ) ] ];
     }
 
-    return $self;
+    return $TRUE;
 }
 
 #-----------------------------------------------------------------------------

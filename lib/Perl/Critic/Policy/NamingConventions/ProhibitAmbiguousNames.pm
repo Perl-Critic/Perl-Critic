@@ -11,7 +11,7 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :severities :data_conversion };
+use Perl::Critic::Utils qw{ :booleans :severities :data_conversion };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.06;
@@ -40,23 +40,20 @@ sub applies_to       { return qw(PPI::Statement::Sub
 
 #-----------------------------------------------------------------------------
 
-sub new {
-    my ($class, @args) = @_;
-    my $self = $class->SUPER::new(@args);
-
-    my %config = @args;
+sub initialize_if_enabled {
+    my ($self, $config) = @_;
 
     #Set configuration, if defined
     my @forbid;
-    if ( defined $config{forbid} ) {
-        @forbid = words_from_string( $config{forbid} );
+    if ( defined $config->{forbid} ) {
+        @forbid = words_from_string( $config->{forbid} );
     }
     else {
         @forbid = @DEFAULT_FORBID;
     }
     $self->{_forbid} = { hashify( @forbid ) };
 
-    return $self;
+    return $TRUE;
 }
 
 #-----------------------------------------------------------------------------

@@ -11,7 +11,7 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :severities :classification };
+use Perl::Critic::Utils qw{ :booleans :severities :classification };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.06;
@@ -30,17 +30,14 @@ sub applies_to       { return 'PPI::Document' }
 
 #-----------------------------------------------------------------------------
 
-sub new {
-    my ($class, @args) = @_;
-    my $self = $class->SUPER::new(@args);
-
-    my %config = @args;
+sub initialize_if_enabled {
+    my ($self, $config) = @_;
 
     #Set config, if defined
     $self->{_exempt_scripts} =
-        defined $config{exempt_scripts} ? $config{exempt_scripts} : 1;
+        defined $config->{exempt_scripts} ? $config->{exempt_scripts} : 1;
 
-    return $self;
+    return $TRUE;
 }
 
 #-----------------------------------------------------------------------------

@@ -11,7 +11,7 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :characters :severities };
+use Perl::Critic::Utils qw{ :booleans :characters :severities };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.06;
@@ -32,17 +32,15 @@ sub applies_to       { return 'PPI::Structure::List' }
 
 #-----------------------------------------------------------------------------
 
-sub new {
-    my ($class, @args) = @_;
-    my $self = $class->SUPER::new(@args);
-
-    my %config = @args;
+sub initialize_if_enabled {
+    my ($self, $config) = @_;
 
     #Set configuration if defined
-    $self->{_min} = defined $config{min_elements} ? $config{min_elements}
-                                                  : $DEFAULT_MIN_ELEMENTS;
+    $self->{_min} =
+        defined $config->{min_elements} ? $config->{min_elements}
+                                        : $DEFAULT_MIN_ELEMENTS;
 
-    return $self;
+    return $TRUE;
 }
 
 #-----------------------------------------------------------------------------

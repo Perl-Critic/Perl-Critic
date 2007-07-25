@@ -11,7 +11,9 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :characters :severities :data_conversion };
+use Perl::Critic::Utils qw{
+    :booleans :characters :severities :data_conversion
+};
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.06;
@@ -33,21 +35,18 @@ sub applies_to       { return 'PPI::Token::Magic'   }
 
 #-----------------------------------------------------------------------------
 
-sub new {
-    my ($class, @args) = @_;
-    my $self = $class->SUPER::new(@args);
-
-    my (%config) = @args;
+sub initialize_if_enabled {
+    my ($self, $config) = @_;
 
     $self->{_exempt} = \%default_exempt;
-    if ( defined $config{allow} ) {
-        my @allow = words_from_string( $config{allow} );
+    if ( defined $config->{allow} ) {
+        my @allow = words_from_string( $config->{allow} );
         for my $varname (@allow) {
             $self->{_exempt}->{$varname} = 1;
         }
     }
 
-    return $self;
+    return $TRUE;
 }
 
 #-----------------------------------------------------------------------------

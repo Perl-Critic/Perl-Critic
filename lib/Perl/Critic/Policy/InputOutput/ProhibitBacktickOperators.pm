@@ -11,7 +11,7 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :severities &is_in_void_context };
+use Perl::Critic::Utils qw{ :booleans :severities &is_in_void_context };
 
 use base 'Perl::Critic::Policy';
 
@@ -35,15 +35,12 @@ sub applies_to       { return qw(PPI::Token::QuoteLike::Backtick
 
 #-----------------------------------------------------------------------------
 
-sub new {
-    my ($class, @args) = @_;
-    my $self = $class->SUPER::new(@args);
+sub initialize_if_enabled {
+    my ($self, $config) = @_;
 
-    my %config = @args;
+    $self->{_only_in_void_context} = $config->{only_in_void_context};
 
-    $self->{_only_in_void_context} = $config{only_in_void_context};
-
-    return $self;
+    return $TRUE;
 }
 
 #-----------------------------------------------------------------------------

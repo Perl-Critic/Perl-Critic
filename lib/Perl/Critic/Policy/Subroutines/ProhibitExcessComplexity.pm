@@ -11,7 +11,9 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :severities :data_conversion :classification };
+use Perl::Critic::Utils qw{
+    :booleans :severities :data_conversion :classification
+};
 use Perl::Critic::Utils::McCabe qw{ &calculate_mccabe_of_sub };
 
 use base 'Perl::Critic::Policy';
@@ -31,14 +33,12 @@ sub applies_to       { return 'PPI::Statement::Sub'           }
 
 #-----------------------------------------------------------------------------
 
-sub new {
-    my ($class, @args) = @_;
-    my $self = $class->SUPER::new(@args);
+sub initialize_if_enabled {
+    my ($self, $config) = @_;
 
-    my %config = @args;
+    $self->{_max_mccabe} = $config->{max_mccabe} || 20;
 
-    $self->{_max_mccabe} = $config{max_mccabe} || 20;
-    return $self;
+    return $TRUE;
 }
 
 #-----------------------------------------------------------------------------

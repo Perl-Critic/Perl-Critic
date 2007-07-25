@@ -11,7 +11,9 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :characters :severities :data_conversion };
+use Perl::Critic::Utils qw{
+    :booleans :characters :severities :data_conversion
+};
 use List::MoreUtils qw(all any);
 use Carp qw( carp );
 use base 'Perl::Critic::Policy';
@@ -37,25 +39,22 @@ Readonly::Array our @DEFAULT_PACKAGE_EXCEPTIONS =>
 
 #-----------------------------------------------------------------------------
 
-sub new {
-    my ($class, @args) = @_;
-    my $self = $class->SUPER::new(@args);
-
-    my (%config) = @args;
+sub initialize_if_enabled {
+    my ($self, $config) = @_;
 
     # Set list of package exceptions from configuration, if defined.
     $self->{_packages} =
-        defined $config{packages}
-            ? [ words_from_string( $config{packages} ) ]
+        defined $config->{packages}
+            ? [ words_from_string( $config->{packages} ) ]
             : [ @DEFAULT_PACKAGE_EXCEPTIONS ];
 
     # Add to list of packages
-    my $packages = delete $config{add_packages};
+    my $packages = delete $config->{add_packages};
     if ( defined $packages ) {
         push @{$self->{_packages}}, words_from_string( $packages );
     }
 
-    return $self;
+    return $TRUE;
 }
 
 #-----------------------------------------------------------------------------

@@ -10,7 +10,7 @@ package Perl::Critic::Policy::ValuesAndExpressions::ProhibitLongChainsOfMethodCa
 use strict;
 use warnings;
 
-use Perl::Critic::Utils qw{ :characters :severities };
+use Perl::Critic::Utils qw{ :booleans :characters :severities };
 use Perl::Critic::Utils::PPI qw{ &is_ppi_expression_or_generic_statement };
 use base 'Perl::Critic::Policy';
 
@@ -35,13 +35,10 @@ sub applies_to       { return qw{ PPI::Statement };  }
 
 #-----------------------------------------------------------------------------
 
-sub new {
-    my ($class, @args) = @_;
-    my $self = $class->SUPER::new(@args);
+sub initialize_if_enabled {
+    my ($self, $config) = @_;
 
-    my %config = @args;
-
-    my $max_chain_length = $config{max_chain_length};
+    my $max_chain_length = $config->{max_chain_length};
     if (
             not $max_chain_length
         or  $max_chain_length !~ m/ \A \d+ \z /xms
@@ -52,7 +49,7 @@ sub new {
 
     $self->{_max_chain_length} = $max_chain_length;
 
-    return $self;
+    return $TRUE;
 }
 
 #-----------------------------------------------------------------------------

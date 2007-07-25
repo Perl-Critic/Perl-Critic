@@ -12,7 +12,8 @@ use warnings;
 use Readonly;
 
 use List::MoreUtils qw(any);
-use Perl::Critic::Utils qw{ :severities :data_conversion };
+
+use Perl::Critic::Utils qw{ :booleans :severities :data_conversion };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.06;
@@ -34,17 +35,14 @@ sub applies_to       { return qw(PPI::Token::Quote::Double
 
 Readonly::Scalar my $MAX_SPECIFICATION_LENGTH => 3;
 
-sub new {
-    my ($class, @args) = @_;
-    my $self = $class->SUPER::new(@args);
-
-    my %config = @args;
+sub initialize_if_enabled {
+    my ($self, $config) = @_;
 
     $self->{_allow} = [];
 
     #Set configuration, if defined
-    if ( defined $config{allow} ) {
-        my @allow = words_from_string( $config{allow} );
+    if ( defined $config->{allow} ) {
+        my @allow = words_from_string( $config->{allow} );
         #Try to be forgiving with the configuration...
         for (@allow) {
             m{ \A qq }mx || ($_ = 'qq' . $_)
@@ -55,7 +53,7 @@ sub new {
         $self->{_allow} = \@allow;
     }
 
-    return $self;
+    return $TRUE;
 }
 
 #-----------------------------------------------------------------------------

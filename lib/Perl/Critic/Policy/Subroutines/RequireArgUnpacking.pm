@@ -17,7 +17,7 @@ use List::MoreUtils qw(uniq any);
 use English qw(-no_match_vars);
 use Carp;
 
-use Perl::Critic::Utils qw{ :severities &words_from_string };
+use Perl::Critic::Utils qw{ :booleans :severities &words_from_string };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.06;
@@ -39,18 +39,17 @@ sub applies_to           { return 'PPI::Statement::Sub'    }
 
 #-----------------------------------------------------------------------------
 
-sub new {
-    my ($class, @args) = @_;
-    my $self = $class->SUPER::new(@args);
-
-    my %config = @args;
+sub initialize_if_enabled {
+    my ($self, $config) = @_;
 
     #Set configuration if defined
-    $self->{_short_subroutine_statements} = defined $config{short_subroutine_statements}
-        && $config{short_subroutine_statements} =~ m/(\d+)/xms
+    $self->{_short_subroutine_statements} =
+            defined $config->{short_subroutine_statements}
+        &&  $config->{short_subroutine_statements} =~ m/(\d+)/xms
+
             ? $1 : 0;
 
-    return $self;
+    return $TRUE;
 }
 
 #-----------------------------------------------------------------------------

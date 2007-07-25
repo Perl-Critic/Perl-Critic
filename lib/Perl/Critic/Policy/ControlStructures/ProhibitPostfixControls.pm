@@ -11,7 +11,9 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :characters :severities :data_conversion :classification };
+use Perl::Critic::Utils qw{
+    :booleans :characters :severities :data_conversion :classification
+};
 
 use base 'Perl::Critic::Policy';
 
@@ -39,21 +41,18 @@ sub applies_to       { return 'PPI::Token::Word'    }
 
 #-----------------------------------------------------------------------------
 
-sub new {
-    my ($class, @args) = @_;
-    my $self = $class->SUPER::new(@args);
-
-    my %config = @args;
+sub initialize_if_enabled {
+    my ($self, $config) = @_;
 
     $self->{_allow} = {};
 
     #Set config, if defined
-    if ( defined $config{allow} ) {
-        my %allowed = hashify( words_from_string( $config{allow} ) );
+    if ( defined $config->{allow} ) {
+        my %allowed = hashify( words_from_string( $config->{allow} ) );
         $self->{_allow} = \%allowed;
     }
 
-    return $self;
+    return $TRUE;
 }
 
 #-----------------------------------------------------------------------------

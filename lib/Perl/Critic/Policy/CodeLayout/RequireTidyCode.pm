@@ -12,7 +12,7 @@ use warnings;
 use Readonly;
 
 use English qw(-no_match_vars);
-use Perl::Critic::Utils qw{ :characters :severities };
+use Perl::Critic::Utils qw{ :booleans :characters :severities };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.06;
@@ -31,29 +31,26 @@ sub applies_to       { return 'PPI::Document'       }
 
 #-----------------------------------------------------------------------------
 
-sub new {
-    my ($class, @args) = @_;
-    my $self = $class->SUPER::new(@args);
+sub initialize_if_enabled {
+    my ($self, $config) = @_;
 
-    my %config = @args;
+    # If Perl::Tidy is missing, bow out.
+    eval { require Perl::Tidy; };
+    return $FALSE if $EVAL_ERROR;
 
     #Set configuration if defined
-    $self->{_perltidyrc} = $config{perltidyrc};
+    $self->{_perltidyrc} = $config->{perltidyrc};
     if (defined $self->{_perltidyrc} && $self->{_perltidyrc} eq $EMPTY) {
         $self->{_perltidyrc} = \$EMPTY;
     }
 
-    return $self;
+    return $TRUE;
 }
 
 #-----------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-
-    # If Perl::Tidy is missing, silently pass this test
-    eval { require Perl::Tidy; };
-    return if $EVAL_ERROR;
 
     # Perl::Tidy seems to produce slightly different output, depending
     # on the trailing whitespace in the input.  As best I can tell,

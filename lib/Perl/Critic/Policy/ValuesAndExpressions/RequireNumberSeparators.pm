@@ -11,7 +11,7 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :severities };
+use Perl::Critic::Utils qw{ :booleans :severities };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.06;
@@ -30,16 +30,16 @@ sub applies_to        { return 'PPI::Token::Number'    }
 
 #-----------------------------------------------------------------------------
 
-sub new {
-    my ($class, @args) = @_;
-    my $self = $class->SUPER::new(@args);
-
-    my %config = @args;
+sub initialize_if_enabled {
+    my ($self, $config) = @_;
 
     #Set configuration, if defined
-    $self->{_min} = defined $config{min_value} ? $config{min_value} : 10_000;
+    $self->{_min} =
+        defined $config->{min_value}
+            ? $config->{min_value}
+            : 10_000;
 
-    return $self;
+    return $TRUE;
 }
 
 #-----------------------------------------------------------------------------

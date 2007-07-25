@@ -34,19 +34,16 @@ sub applies_to        { return 'PPI::Token::Word'                        }
 
 #-----------------------------------------------------------------------------
 
-sub new {
-    my ($class, @args) = @_;
-    my $self = $class->SUPER::new(@args);
-
-    my %config = @args;
+sub initialize_if_enabled {
+    my ($self, $config) = @_;
 
     my $allow_newlines = 1;
-    if ( defined $config{allow_messages_ending_with_newlines} ) {
-        $allow_newlines = $config{allow_messages_ending_with_newlines};
+    if ( defined $config->{allow_messages_ending_with_newlines} ) {
+        $allow_newlines = $config->{allow_messages_ending_with_newlines};
     }
     $self->{allow_newlines} = $allow_newlines;
 
-    return $self;
+    return $TRUE;
 }
 
 sub violates {

@@ -11,7 +11,7 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :severities };
+use Perl::Critic::Utils qw{ :booleans :severities };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.06;
@@ -32,17 +32,14 @@ sub applies_to       { return 'PPI::Statement::Compound'      }
 
 #-----------------------------------------------------------------------------
 
-sub new {
-    my ($class, @args) = @_;
-    my $self = $class->SUPER::new(@args);
-
-    my %config = @args;
+sub initialize_if_enabled {
+    my ($self, $config) = @_;
 
     #Set configuration
-    $self->{_max_nests} = defined $config{max_nests} ? $config{max_nests}
-                                                     : $DEFAULT_MAX_NESTS;
+    $self->{_max_nests} = defined $config->{max_nests} ? $config->{max_nests}
+                                                       : $DEFAULT_MAX_NESTS;
 
-    return $self;
+    return $TRUE;
 }
 
 #-----------------------------------------------------------------------------

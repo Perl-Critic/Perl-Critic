@@ -10,7 +10,7 @@ package Perl::Critic::Policy::Modules::ProhibitExcessMainComplexity;
 use strict;
 use warnings;
 
-use Perl::Critic::Utils qw{ :severities };
+use Perl::Critic::Utils qw{ :booleans :severities };
 use Perl::Critic::Utils::McCabe qw{ &calculate_mccabe_of_main };
 
 use base 'Perl::Critic::Policy';
@@ -37,13 +37,10 @@ sub applies_to       { return 'PPI::Document'                 }
 
 #-----------------------------------------------------------------------------
 
-sub new {
-    my ($class, @args) = @_;
-    my $self = $class->SUPER::new(@args);
+sub initialize_if_enabled {
+    my ($self, $config) = @_;
 
-    my %config = @args;
-
-    my $max_mccabe = $config{max_mccabe};
+    my $max_mccabe = $config->{max_mccabe};
     if (
             not $max_mccabe
         or  $max_mccabe !~ m/ \A \d+ \z /xms
@@ -54,7 +51,7 @@ sub new {
 
     $self->{_max_mccabe} = $max_mccabe;
 
-    return $self;
+    return $TRUE;
 }
 
 #-----------------------------------------------------------------------------

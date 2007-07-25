@@ -14,7 +14,7 @@ use Readonly;
 use List::MoreUtils qw( none any );
 
 use Perl::Critic::Utils qw{
-    :characters :severities :data_conversion :classification :ppi
+    :booleans :characters :severities :data_conversion :classification :ppi
 };
 
 use base 'Perl::Critic::Policy';
@@ -64,24 +64,21 @@ sub applies_to       { return 'PPI::Token::Word' }
 
 #-----------------------------------------------------------------------------
 
-sub new {
-    my ($class, @args) = @_;
-    my $self = $class->SUPER::new(@args);
+sub initialize_if_enabled {
+    my ($self, $config) = @_;
 
-    my %config = @args;
-
-    my @list_funcs = $config{list_funcs}
-        ? $config{list_funcs} =~ m/(\S+)/gxms
+    my @list_funcs = $config->{list_funcs}
+        ? $config->{list_funcs} =~ m/(\S+)/gxms
         : ( @BUILTIN_LIST_FUNCS, @CPAN_LIST_FUNCS );
 
-    if ( $config{add_list_funcs} ) {
-        push @list_funcs, $config{add_list_funcs} =~ m/(\S+)/gxms;
+    if ( $config->{add_list_funcs} ) {
+        push @list_funcs, $config->{add_list_funcs} =~ m/(\S+)/gxms;
     }
 
     # Hashify also removes duplicates!
     $self->{_list_funcs} = { hashify @list_funcs };
 
-    return $self;
+    return $TRUE;
 }
 
 #-----------------------------------------------------------------------------
