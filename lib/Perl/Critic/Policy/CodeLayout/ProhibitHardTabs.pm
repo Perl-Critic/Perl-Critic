@@ -50,10 +50,18 @@ sub violates {
     return if $elem->parent->isa('PPI::Statement::Data');
 
     # Permit leading tabs, if allowed
-    return if $self->{_allow_leading_tabs} && $elem->location->[1] == 1;
+    return if $self->_allow_leading_tabs() && $elem->location->[1] == 1;
 
     # Must be a violation...
     return $self->violation( $DESC, $EXPL, $elem );
+}
+
+#-----------------------------------------------------------------------------
+
+sub _allow_leading_tabs {
+    my ( $self ) = @_;
+
+    return $self->{_allow_leading_tabs};
 }
 
 1;

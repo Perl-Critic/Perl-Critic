@@ -76,6 +76,87 @@ sub initialize_if_enabled {
 
 #-----------------------------------------------------------------------------
 
+sub violates {
+    my ( $self, $elem, $doc ) = @_;
+
+    my $code = $doc->serialize;
+    my $text;
+    my $infh = IO::String->new( $code );
+    my $outfh = IO::String->new( $text );
+    my @words;
+    {
+       # temporarily add our special wordlist to this annoying global
+       my @stop_words = keys %{ $self->_get_stop_words() };
+       local @Pod::Wordlist::Wordlist{ @stop_words } ##no critic(ProhibitPackageVars)
+           = (1) x @stop_words;
+       Pod::Spell->new()->parse_from_filehandle($infh, $outfh);
+
+       # shortcut if no words to spellcheck
+       return if $text !~ m/\S/xms;
+
+       # run spell command and fetch output
+       my $command_line = $self->_get_spell_command_line();
+       my $reader_fh;
+       my $writer_fh;
+       my $pid = IPC::Open2::open2($reader_fh, $writer_fh, @{$command_line});
+       return if ! $pid;
+
+       print {$writer_fh} $text;
+       close $writer_fh
+           or throw_internal 'Failed to close pipe to spelling program';
+       @words = uniq <$reader_fh>;
+       close $reader_fh
+           or throw_internal 'Failed to close pipe to spelling program';
+       waitpid $pid, 0;
+
+       for (@words) {
+          chomp;
+       }
+
+       # Why is this extra step needed???
+       @words = grep { ! exists $Pod::Wordlist::Wordlist{$_} } @words;  ##no critic(ProhibitPackageVars)
+    }
+    return if !@words;
+
+    return $self->violation( "$DESC: @words", $EXPL, $doc );
+}
+
+#-----------------------------------------------------------------------------
+
+sub _get_spell_command_line {
+    my ($self) = @_;
+
+    return if $self->_get_failed();
+
+    if (! ref $self->{_spell_command_line}) {
+        eval {
+            require File::Which;
+            require Text::ParseWords;
+        };
+        if ($EVAL_ERROR) {
+            $self->_set_failed($TRUE);
+            return;
+        }
+        my @words = Text::ParseWords::shellwords($self->_get_spell_command());
+        if (!@words) {
+            $self->_set_failed($TRUE);
+            return;
+        }
+        if (! File::Spec->file_name_is_absolute($words[0])) {
+           $words[0] = File::Which::which($words[0]);
+        }
+        if (! $words[0] || ! -x $words[0]) {
+            $self->_set_failed($TRUE);
+            return;
+        }
+        $self->{_spell_command_line} = \@words;
+    }
+
+    return $self->{_spell_command_line};
+}
+
+#-----------------------------------------------------------------------------
+
 sub _get_spell_command {
     my ( $self ) = @_;
 
@@ -123,85 +204,6 @@ sub _set_failed {
 }
 
 #-----------------------------------------------------------------------------
-
-sub _get_spell_command_line {
-    my ($self) = @_;
-
-    return if $self->_get_failed();
-
-    if (! ref $self->{_spell_command_line}) {
-        eval {
-            require File::Which;
-            require Text::ParseWords;
-        };
-        if ($EVAL_ERROR) {
-            $self->_set_failed($TRUE);
-            return;
-        }
-        my @words = Text::ParseWords::shellwords($self->_get_spell_command());
-        if (!@words) {
-            $self->_set_failed($TRUE);
-            return;
-        }
-        if (! File::Spec->file_name_is_absolute($words[0])) {
-           $words[0] = File::Which::which($words[0]);
-        }
-        if (! $words[0] || ! -x $words[0]) {
-            $self->_set_failed($TRUE);
-            return;
-        }
-        $self->{_spell_command_line} = \@words;
-    }
-
-    return $self->{_spell_command_line};
-}
-
-#-----------------------------------------------------------------------------
-
-sub violates {
-    my ( $self, $elem, $doc ) = @_;
-
-    my $code = $doc->serialize;
-    my $text;
-    my $infh = IO::String->new( $code );
-    my $outfh = IO::String->new( $text );
-    my @words;
-    {
-       # temporarily add our special wordlist to this annoying global
-       my @stop_words = keys %{ $self->_get_stop_words() };
-       local @Pod::Wordlist::Wordlist{ @stop_words } ##no critic(ProhibitPackageVars)
-           = (1) x @stop_words;
-       Pod::Spell->new()->parse_from_filehandle($infh, $outfh);
-
-       # shortcut if no words to spellcheck
-       return if $text !~ m/\S/xms;
-
-       # run spell command and fetch output
-       my $command_line = $self->_get_spell_command_line();
-       my $reader_fh;
-       my $writer_fh;
-       my $pid = IPC::Open2::open2($reader_fh, $writer_fh, @{$command_line});
-       return if ! $pid;
-
-       print {$writer_fh} $text;
-       close $writer_fh
-           or throw_internal 'Failed to close pipe to spelling program';
-       @words = uniq <$reader_fh>;
-       close $reader_fh
-           or throw_internal 'Failed to close pipe to spelling program';
-       waitpid $pid, 0;
-
-       for (@words) {
-          chomp;
-       }
-
-       # Why is this extra step needed???
-       @words = grep { ! exists $Pod::Wordlist::Wordlist{$_} } @words;  ##no critic(ProhibitPackageVars)
-    }
-    return if !@words;
-
-    return $self->violation( "$DESC: @words", $EXPL, $doc );
-}
 
 1;
 
