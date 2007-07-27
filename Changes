@@ -15,6 +15,13 @@
      * Documentation::PodSpelling
      * Subroutines::RequireArgUnpacking
 
+     New Developer Features:
+     * Perl::Critic::Policy now has an overridable initialize_if_enabled()
+       method which allows a Policy to perform expensive initialization after
+       it has been determined whether the user has it enabled or not.  Also,
+       this method allows a Policy to say that it should be disabled
+       regardless of what the user says.
+
      Other Stuff:
      * Now requires the Readonly module in order to be more self-compliant.
 
