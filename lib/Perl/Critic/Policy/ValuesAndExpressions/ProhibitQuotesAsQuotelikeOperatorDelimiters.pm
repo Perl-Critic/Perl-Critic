@@ -11,7 +11,9 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :characters :severities };
+use Perl::Critic::Utils qw{
+    :booleans :characters :severities :data_conversion
+};
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.061;
@@ -92,9 +94,8 @@ sub applies_to {
 
 #-----------------------------------------------------------------------------
 
-sub new {
-    my ($class, @args) = @_;
-    my $self = $class->SUPER::new(@args);
+sub initialize_if_enabled {
+    my ($self, $config) = @_;
 
     $self->{_allowed_operators_by_delimiter} = {
         $QUOTE    => $self->_single_quote_allowed_operators(),
@@ -102,7 +103,7 @@ sub new {
         $BACKTICK => $self->_back_quote_allowed_operators(),
     };
 
-    return $self;
+    return $TRUE;
 }
 
 #-----------------------------------------------------------------------------

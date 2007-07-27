@@ -11,7 +11,9 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :characters :severities :data_conversion };
+use Perl::Critic::Utils qw{
+    :booleans :characters :severities :data_conversion
+};
 use List::MoreUtils qw(all);
 use Carp qw( carp );
 use base 'Perl::Critic::Policy';
@@ -51,15 +53,14 @@ sub applies_to       { return qw(PPI::Token::Symbol
 
 #-----------------------------------------------------------------------------
 
-sub new {
-    my ($class, @args) = @_;
-    my $self = $class->SUPER::new(@args);
+sub initialize_if_enabled {
+    my ($self, $config) = @_;
 
     $self->{_all_packages} = {
         hashify keys %{ $self->{_packages} }, keys %{ $self->{_add_packages} }
     };
 
-    return $self;
+    return $TRUE;
 }
 
 #-----------------------------------------------------------------------------

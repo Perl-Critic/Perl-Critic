@@ -14,7 +14,7 @@ use Readonly;
 use List::MoreUtils qw( none any );
 
 use Perl::Critic::Utils qw{
-    :characters :severities :data_conversion :classification :ppi
+    :booleans :characters :severities :data_conversion :classification :ppi
 };
 use base 'Perl::Critic::Policy';
 
@@ -79,15 +79,14 @@ sub applies_to       { return 'PPI::Token::Word' }
 
 #-----------------------------------------------------------------------------
 
-sub new {
-    my ($class, @args) = @_;
-    my $self = $class->SUPER::new(@args);
+sub initialize_if_enabled {
+    my ($self, $config) = @_;
 
     $self->{_all_list_funcs} = {
         hashify keys %{ $self->{_list_funcs} }, keys %{ $self->{_add_list_funcs} }
     };
 
-    return $self;
+    return $TRUE;
 }
 
 #-----------------------------------------------------------------------------

@@ -15,7 +15,9 @@ use List::MoreUtils qw(any);
 
 use Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue
     qw{ &throw_policy_value };
-use Perl::Critic::Utils qw{ :characters :severities :data_conversion };
+use Perl::Critic::Utils qw{
+    :booleans :characters :severities :data_conversion
+};
 
 use base 'Perl::Critic::Policy';
 
@@ -45,9 +47,8 @@ sub applies_to        { return 'PPI::Statement::Include' }
 
 #-----------------------------------------------------------------------------
 
-sub new {
-    my ($class, @args) = @_;
-    my $self = $class->SUPER::new(@args);
+sub initialize_if_enabled {
+    my ($self, $config) = @_;
 
     $self->{_evil_modules}    = {};  #Hash
     $self->{_evil_modules_rx} = [];  #Array
@@ -56,7 +57,6 @@ sub new {
     if ( defined $self->{_modules} ) {
         my @modules = sort keys %{ $self->{_modules} };
         for my $module ( @modules ) {
-
             if ( $module =~ m{ \A [/] (.+) [/] \z }mx ) {
 
                 # These are module name patterns (e.g. /Acme/)
@@ -80,7 +80,8 @@ sub new {
             }
         }
     }
-    return $self;
+
+    return $TRUE;
 }
 
 #-----------------------------------------------------------------------------

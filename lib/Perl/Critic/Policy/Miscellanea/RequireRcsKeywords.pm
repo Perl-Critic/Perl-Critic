@@ -13,7 +13,9 @@ use Readonly;
 
 use List::MoreUtils qw(none);
 
-use Perl::Critic::Utils qw{ :characters :severities :data_conversion };
+use Perl::Critic::Utils qw{
+    :booleans :characters :severities :data_conversion
+};
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.061;
@@ -41,9 +43,8 @@ sub applies_to        { return 'PPI::Document'       }
 
 #-----------------------------------------------------------------------------
 
-sub new {
-    my ($class, @args) = @_;
-    my $self = $class->SUPER::new(@args);
+sub initialize_if_enabled {
+    my ($self, $config) = @_;
 
     # Any of these lists
     $self->{_keyword_sets} = [
@@ -65,7 +66,7 @@ sub new {
         $self->{_keyword_sets} = [ [ @keywords ] ];
     }
 
-    return $self;
+    return $TRUE;
 }
 
 #-----------------------------------------------------------------------------

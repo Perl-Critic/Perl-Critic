@@ -11,7 +11,7 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :characters :severities :classification };
+use Perl::Critic::Utils qw{ :booleans :characters :severities :classification };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.061;
@@ -265,9 +265,8 @@ sub _parse_script_sections {
 
 #-----------------------------------------------------------------------------
 
-sub new {
-    my ($class, @args) = @_;
-    my $self = $class->SUPER::new(@args);
+sub initialize_if_enabled {
+    my ($self, $config) = @_;
 
     my $source = $self->{_source};
     if ( not defined $source or not defined $DEFAULT_LIB_SECTIONS{$source} ) {
@@ -290,7 +289,7 @@ sub new {
             $DEFAULT_SCRIPT_SECTIONS{$source}{$language};
     }
 
-    return $self;
+    return $TRUE;
 }
 
 sub _sections_specified {
