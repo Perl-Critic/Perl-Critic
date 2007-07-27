@@ -14,9 +14,15 @@ use Readonly;
 use File::Spec;
 use List::MoreUtils qw(uniq);
 use English qw(-no_match_vars);
-use Carp;
 
-use Perl::Critic::Utils qw{ :characters :severities &words_from_string };
+use Perl::Critic::Utils qw{
+    :characters
+    :booleans
+    :severities
+    &words_from_string
+};
+use Perl::Critic::Exception::Fatal::Internal qw{ &throw_internal };
+
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.061;
@@ -24,7 +30,7 @@ our $VERSION = 1.061;
 #-----------------------------------------------------------------------------
 
 Readonly::Scalar my $POD_RX => qr{\A = (?: for|begin|end ) }mx;
-Readonly::Scalar my $DESC => q{Check your spelling};
+Readonly::Scalar my $DESC => q{Check the spelling in your POD};
 Readonly::Scalar my $EXPL => [148];
 
 #-----------------------------------------------------------------------------
@@ -32,13 +38,13 @@ Readonly::Scalar my $EXPL => [148];
 sub supported_parameters {
     return (
         {
-            name            => 'spellcommand',
+            name            => 'spell_command',
             description     => 'The command to invoke to check spelling.',
             default_string  => 'aspell list',
             behavior        => 'string',
         },
         {
-            name            => 'stopwords',
+            name            => 'stop_words',
             description     => 'The words to not consider as misspelled.',
             default_string  => $EMPTY,
             behavior        => 'string list',
@@ -52,51 +58,108 @@ sub applies_to           { return 'PPI::Document'         }
 
 #-----------------------------------------------------------------------------
 
-sub _get_spell_command {
-    my ($self) = @_;
+sub initialize_if_enabled {
+    my ( $self, $config ) = @_;
 
-    return if $self->{_failed};
-
-    if (! ref $self->{_spellexe}) {
-        eval {
-            require File::Which;
-            require Text::ParseWords;
-        };
-        if ($EVAL_ERROR) {
-            $self->{_failed} = 1;
-            return;
-        }
-        my @words = Text::ParseWords::shellwords($self->{_spellcommand});
-        if (!@words) {
-            $self->{_failed} = 1;
-            return;
-        }
-        if (! File::Spec->file_name_is_absolute($words[0])) {
-           $words[0] = File::Which::which($words[0]);
-        }
-        if (! $words[0] || ! -x $words[0]) {
-            $self->{_failed} = 1;
-            return;
-        }
-        $self->{_spellexe} = \@words;
-    }
-
-    return $self->{_spellexe};
-}
-
-
-sub violates {
-    my ( $self, $elem, $doc ) = @_;
-
-    my $exe = $self->_get_spell_command;
-    return if !$exe;
+    my $exe = $self->_get_spell_command_line();
+    return $FALSE if ! $exe;
 
     eval {
         require Pod::Spell;
         require IO::String;
         require IPC::Open2;
     };
-    return if $EVAL_ERROR;
+    return $FALSE if $EVAL_ERROR;
+
+    return $TRUE;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _get_spell_command {
+    my ( $self ) = @_;
+
+    return $self->{_spell_command};
+}
+
+sub _set_spell_command {
+    my ( $self, $spell_command ) = @_;
+
+    $self->{_spell_command} = $spell_command;
+
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _get_stop_words {
+    my ( $self ) = @_;
+
+    return $self->{_stop_words};
+}
+
+sub _set_stop_words {
+    my ( $self, $stop_words ) = @_;
+
+    $self->{_stop_words} = $stop_words;
+
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _get_failed {
+    my ( $self ) = @_;
+
+    return $self->{_failed};
+}
+
+sub _set_failed {
+    my ( $self, $failed ) = @_;
+
+    $self->{_failed} = $failed;
+
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _get_spell_command_line {
+    my ($self) = @_;
+
+    return if $self->_get_failed();
+
+    if (! ref $self->{_spell_command_line}) {
+        eval {
+            require File::Which;
+            require Text::ParseWords;
+        };
+        if ($EVAL_ERROR) {
+            $self->_set_failed($TRUE);
+            return;
+        }
+        my @words = Text::ParseWords::shellwords($self->_get_spell_command());
+        if (!@words) {
+            $self->_set_failed($TRUE);
+            return;
+        }
+        if (! File::Spec->file_name_is_absolute($words[0])) {
+           $words[0] = File::Which::which($words[0]);
+        }
+        if (! $words[0] || ! -x $words[0]) {
+            $self->_set_failed($TRUE);
+            return;
+        }
+        $self->{_spell_command_line} = \@words;
+    }
+
+    return $self->{_spell_command_line};
+}
+
+#-----------------------------------------------------------------------------
+
+sub violates {
+    my ( $self, $elem, $doc ) = @_;
 
     my $code = $doc->serialize;
     my $text;
@@ -105,23 +168,27 @@ sub violates {
     my @words;
     {
        # temporarily add our special wordlist to this annoying global
-       local @Pod::Wordlist::Wordlist{keys %{$self->{_stopwords}}}   ##no critic(ProhibitPackageVars)
-           = values %{$self->{_stopwords}};
+       my @stop_words = keys %{ $self->_get_stop_words() };
+       local @Pod::Wordlist::Wordlist{ @stop_words } ##no critic(ProhibitPackageVars)
+           = (1) x @stop_words;
        Pod::Spell->new()->parse_from_filehandle($infh, $outfh);
 
        # shortcut if no words to spellcheck
        return if $text !~ m/\S/xms;
 
        # run spell command and fetch output
+       my $command_line = $self->_get_spell_command_line();
        my $reader_fh;
        my $writer_fh;
-       my $pid = IPC::Open2::open2($reader_fh, $writer_fh, @{$exe});
+       my $pid = IPC::Open2::open2($reader_fh, $writer_fh, @{$command_line});
        return if ! $pid;
 
        print {$writer_fh} $text;
-       close $writer_fh or croak 'Failed to close pipe to spelling program';
+       close $writer_fh
+           or throw_internal 'Failed to close pipe to spelling program';
        @words = uniq <$reader_fh>;
-       close $reader_fh or croak 'Failed to close pipe to spelling program';
+       close $reader_fh
+           or throw_internal 'Failed to close pipe to spelling program';
        waitpid $pid, 0;
 
        for (@words) {

@@ -136,19 +136,37 @@ sub add_policy {
 
     # If the -policy is already a blessed object, then just add it directly.
     if ( blessed $policy ) {
-        push @{ $self->{_policies} }, $policy;
+        $self->_add_policy_if_enabled($policy);
         return $self;
     }
 
     # NOTE: The "-config" option is supported for backward compatibility.
     my $params = $args{-params} || $args{-config};
 
-    my $factory    = $self->{_factory};
-    my $policy_obj = $factory->create_policy(-name=>$policy, -params=>$params);
-    push @{ $self->{_policies} }, $policy_obj;
+    my $factory       = $self->{_factory};
+    my $policy_object =
+        $factory->create_policy(-name=>$policy, -params=>$params);
+    $self->_add_policy_if_enabled($policy_object);
 
 
     return $self;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _add_policy_if_enabled {
+    my ( $self, $policy_object ) = @_;
+
+    my $parameters = $policy_object->get_parameters()
+        or throw_internal
+            q{Policy was not set up properly because it doesn't have }
+                . q{a value for its parameters attribute.};
+
+    if ( $policy_object->initialize_if_enabled( $parameters ) ) {
+        push @{ $self->{_policies} }, $policy_object;
+    }
+
+    return;
 }
 
 #-----------------------------------------------------------------------------
