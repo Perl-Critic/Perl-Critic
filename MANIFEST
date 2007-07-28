@@ -172,6 +172,7 @@ t/02_policy.t
 t/03_pragmas.t
 t/04_defaults.t
 t/05_utils.t
+t/05_utils_ppi.t
 t/06_violation.t
 t/07_perlcritic.t
 t/08_document.t
@@ -279,6 +280,7 @@ t/TestingAndDebugging/RequireTestLabels.run
 t/TestingAndDebugging/RequireUseStrict.run
 t/TestingAndDebugging/RequireUseWarnings.run
 t/tlib/Perl/Critic/Policy/Test.pm
+t/tlib/Perl/Critic/Policy/test_02_policy/StringParameterTest.pm
 t/tlib/ViolationTest.pm
 t/tlib/ViolationTest2.pm
 t/ValuesAndExpressions/ProhibitCommaSeparatedStatements.run
