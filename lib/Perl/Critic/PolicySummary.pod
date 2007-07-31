@@ -299,6 +299,10 @@ Minimize complexity by factoring code into smaller subroutines. [Severity 3]
 
 Return failure with bare C<return> instead of C<return undef> [Severity 5]
 
+=head2 L<Perl::Critic::Policy::Subroutines::ProhibitNestedSubs>
+
+C<sub never { sub correct {} }> [Severity 4]
+
 =head2 L<Perl::Critic::Policy::Subroutines::ProhibitSubroutinePrototypes>
 
 Don't write C<sub my_function (@@) {}> [Severity 5]

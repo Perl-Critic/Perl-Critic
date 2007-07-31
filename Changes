@@ -15,6 +15,9 @@
      * Documentation::PodSpelling
      * Subroutines::RequireArgUnpacking
 
+     Other New Policies
+     * Subroutines::ProhibitNestedSubs
+
      New Developer Features:
      * Perl::Critic::Policy now has an overridable initialize_if_enabled()
        method which allows a Policy to perform expensive initialization after

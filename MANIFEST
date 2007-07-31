@@ -1,6 +1,7 @@
 bin/perlcritic
 Build.PL
 Changes
+Changes.long_initialize_discussion
 examples/generatestats
 examples/loadanalysisdb
 examples/perlcriticrc
@@ -84,6 +85,7 @@ lib/Perl/Critic/Policy/Subroutines/ProhibitAmpersandSigils.pm
 lib/Perl/Critic/Policy/Subroutines/ProhibitBuiltinHomonyms.pm
 lib/Perl/Critic/Policy/Subroutines/ProhibitExcessComplexity.pm
 lib/Perl/Critic/Policy/Subroutines/ProhibitExplicitReturnUndef.pm
+lib/Perl/Critic/Policy/Subroutines/ProhibitNestedSubs.pm
 lib/Perl/Critic/Policy/Subroutines/ProhibitSubroutinePrototypes.pm
 lib/Perl/Critic/Policy/Subroutines/ProtectPrivateSubs.pm
 lib/Perl/Critic/Policy/Subroutines/RequireArgUnpacking.pm
@@ -147,6 +149,7 @@ t/02_policy.t
 t/03_pragmas.t
 t/04_defaults.t
 t/05_utils.t
+t/05_utils_ppi.t
 t/06_violation.t
 t/07_perlcritic.t
 t/08_document.t
@@ -237,6 +240,7 @@ t/Subroutines/ProhibitAmpersandSigils.run
 t/Subroutines/ProhibitBuiltinHomonyms.run
 t/Subroutines/ProhibitExcessComplexity.run
 t/Subroutines/ProhibitExplicitReturnUndef.run
+t/Subroutines/ProhibitNestedSubs.run
 t/Subroutines/ProhibitSubroutinePrototypes.run
 t/Subroutines/ProtectPrivateSubs.run
 t/Subroutines/RequireArgUnpacking.run
