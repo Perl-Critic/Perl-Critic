@@ -101,6 +101,7 @@ lib/Perl/Critic/Policy/Subroutines/ProhibitAmpersandSigils.pm
 lib/Perl/Critic/Policy/Subroutines/ProhibitBuiltinHomonyms.pm
 lib/Perl/Critic/Policy/Subroutines/ProhibitExcessComplexity.pm
 lib/Perl/Critic/Policy/Subroutines/ProhibitExplicitReturnUndef.pm
+lib/Perl/Critic/Policy/Subroutines/ProhibitNestedSubs.pm
 lib/Perl/Critic/Policy/Subroutines/ProhibitSubroutinePrototypes.pm
 lib/Perl/Critic/Policy/Subroutines/ProtectPrivateSubs.pm
 lib/Perl/Critic/Policy/Subroutines/RequireArgUnpacking.pm
@@ -269,6 +270,7 @@ t/Subroutines/ProhibitAmpersandSigils.run
 t/Subroutines/ProhibitBuiltinHomonyms.run
 t/Subroutines/ProhibitExcessComplexity.run
 t/Subroutines/ProhibitExplicitReturnUndef.run
+t/Subroutines/ProhibitNestedSubs.run
 t/Subroutines/ProhibitSubroutinePrototypes.run
 t/Subroutines/ProtectPrivateSubs.run
 t/Subroutines/RequireArgUnpacking.run

@@ -1,0 +1,33 @@
+## name Basic passing
+## failures 0
+## cut
+
+sub foo { my $bar = sub { 1 } }
+sub foo { } sub bar { }
+
+#-----------------------------------------------------------------------------
+
+## name Basic failure
+## failures 2
+## cut
+
+sub foo { sub bar { 1 } }
+sub foo { if (1) { do { sub bar { 1 } } } }
+
+#-----------------------------------------------------------------------------
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :
