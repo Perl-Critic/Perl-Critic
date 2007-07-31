@@ -1,7 +1,6 @@
 bin/perlcritic
 Build.PL
 Changes
-Changes.long_initialize_discussion
 examples/generatestats
 examples/loadanalysisdb
 examples/perlcriticrc
