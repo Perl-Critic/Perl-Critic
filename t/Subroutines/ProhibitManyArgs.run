@@ -1,0 +1,105 @@
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+## name basic passes
+## failures 0
+## cut
+
+sub forward;
+
+sub foo {
+   my ($self, $bar) = @_;
+}
+
+sub fu {
+   my $self = shift;
+   my $bar = shift;
+}
+
+sub foo($$) {
+   print $_[0];
+   return;
+}
+
+#-----------------------------------------------------------------------------
+
+## name simple failures
+## failures 3
+## cut
+
+sub foo {
+   my ($self, $bar1, $bar2, $bar3, $bar4, $bar5) = @_;
+}
+
+sub fu {
+   my $self = shift;
+   my $bar1 = shift;
+   my $bar2 = shift;
+   my $bar3 = shift;
+   my $bar4 = shift;
+   my $bar5 = shift;
+}
+
+sub foo($$$$$$) {
+   print $_[0];
+   return;
+}
+
+#-----------------------------------------------------------------------------
+
+## name configured failures
+## failures 3
+## parms {max_arguments => 3}
+## cut
+
+sub foo {
+   my ($self, $bar1, $bar2, $bar3) = @_;
+}
+
+sub fu {
+   my $self = shift;
+   my $bar1 = shift;
+   my $bar2 = shift;
+   my $bar3 = shift;
+}
+
+sub foo($$$$) {
+   print $_[0];
+   return;
+}
+
+#-----------------------------------------------------------------------------
+
+## name configured successes
+## failures 0
+## parms {max_arguments => 3}
+## cut
+
+sub foo_ok {
+   my ($self, $bar1, $bar2) = @_;
+}
+
+sub fu_ok {
+   my $self = shift;
+   my $bar1 = shift;
+   my $bar2 = shift;
+}
+
+sub foo_ok($$$) {
+   print $_[0];
+   return;
+}
+
+#-----------------------------------------------------------------------------
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :

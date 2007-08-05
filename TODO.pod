@@ -101,16 +101,6 @@ L<http://www.perlfoundation.org/april_1_2007_new_grant_awards>
 
 =over 4
 
-=item * Subroutines::ProhibitManyArgs (p182)
-
-If first L<PPI::Statement::Variable> is a list C<my>, and @_ is used, make
-sure it's fewer than N elements.  Otherwise make sure there are less than N
-L<PPI::Statement::Variable>s in a row at the beginning which shift @_ or shift
-with no argument.  Furthermore, look for C<$_[\d+]> where C<\d+> is a large
-number.
-
-Crib from Subroutines::RequireArgUnpacking.
-
 =item * InputOutput::RequireChecked* for system calls (p208)
 
 Add policies to ensure checking the return values of system calls.  See

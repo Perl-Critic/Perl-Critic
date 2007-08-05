@@ -90,6 +90,7 @@ Readonly::Array our @EXPORT_OK => qw(
     &precedence_of
     &severity_to_number
     &shebang_line
+    &split_nodes_on_comma
     &verbosity_to_format
     &words_from_string
 );
@@ -815,7 +816,7 @@ sub parse_arg_list {
         #Pull siblings from list
         my $expr = $sib->schild(0);
         return if !$expr;
-        return _split_nodes_on_comma( $expr->schildren() );
+        return split_nodes_on_comma( $expr->schildren() );
     }
     else {
 
@@ -827,13 +828,13 @@ sub parse_arg_list {
             last if $iter->isa('PPI::Token::Structure') and $iter eq $SCOLON;
             push @arg_list, $iter;
         }
-        return  _split_nodes_on_comma( @arg_list );
+        return  split_nodes_on_comma( @arg_list );
     }
 }
 
 #---------------------------------
 
-sub _split_nodes_on_comma {
+sub split_nodes_on_comma {
     my @nodes = @_;
 
     my $i = 0;
@@ -1271,6 +1272,13 @@ them very differently.  So this method is a poor-man's parse tree of PPI
 nodes.  It's not bullet-proof because it doesn't respect precedence.  In
 general, I don't like the way this function works, so don't count on it to be
 stable (or even present).
+
+=item C<split_nodes_on_comma( @nodes )>
+
+This has the same return type as C<parse_arg_list()> but expects to be passed
+the nodes that represent the interior of a list, like:
+
+  'foo', 1, 2, 'bar'
 
 =item C<is_script( $document )>
 

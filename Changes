@@ -8,6 +8,7 @@
 [1.xxx]  Released on 2007-xx-xx
 
      New Policies: (funded by a Perl Foundation grant)
+     * Subroutines::ProhibitManyArgs
      * BuiltinFunctions::ProhibitBooleanGrep
      * BuiltinFunctions::ProhibitComplexMappings
      * ValuesAndExpressions::ProhibitImplicitNewlines
