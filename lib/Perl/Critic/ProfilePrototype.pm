@@ -42,6 +42,7 @@ sub _proto_format {
     return <<'END_OF_FORMAT';
 [%p]
 # set_themes = %t
+# add_themes =
 # severity   = %s
 %{# %s = \n}O
 

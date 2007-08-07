@@ -150,7 +150,7 @@ sub to_string {
 
     # Wrap the more expensive ones in sub{} to postpone evaluation
     my %fspec = (
-         'O' => sub { $self->_format_supported_parameters(@args) },
+         'O' => sub { $self->_format_supported_parameters(@_) },
          'P' => ref $self,
          'p' => sub { policy_short_name( ref $self ) },
          'T' => sub { join $SPACE, $self->default_themes() },
