@@ -30,6 +30,7 @@ add_stopwords(<DATA>);
 set_spell_cmd("$aspell_path list");
 all_pod_files_spelling_ok( starting_points_including_examples() );
 
+# this list should match t/40_perlcriticrc
 __DATA__
 autoflushes
 BBEdit

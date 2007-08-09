@@ -55,6 +55,7 @@ lib/Perl/Critic/Policy/ErrorHandling/RequireCarping.pm
 lib/Perl/Critic/Policy/InputOutput/ProhibitBacktickOperators.pm
 lib/Perl/Critic/Policy/InputOutput/ProhibitBarewordFileHandles.pm
 lib/Perl/Critic/Policy/InputOutput/ProhibitInteractiveTest.pm
+lib/Perl/Critic/Policy/InputOutput/ProhibitJoinedReadline.pm
 lib/Perl/Critic/Policy/InputOutput/ProhibitOneArgSelect.pm
 lib/Perl/Critic/Policy/InputOutput/ProhibitReadlineInForLoop.pm
 lib/Perl/Critic/Policy/InputOutput/ProhibitTwoArgOpen.pm
@@ -211,6 +212,7 @@ t/ErrorHandling/RequireCarping.run
 t/InputOutput/ProhibitBacktickOperators.run
 t/InputOutput/ProhibitBarewordFileHandles.run
 t/InputOutput/ProhibitInteractiveTest.run
+t/InputOutput/ProhibitJoinedReadline.run
 t/InputOutput/ProhibitOneArgSelect.run
 t/InputOutput/ProhibitReadlineInForLoop.run
 t/InputOutput/ProhibitTwoArgOpen.run
