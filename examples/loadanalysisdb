@@ -167,7 +167,7 @@ END_SQL
 }
 
 
-sub execute_insert_statement {
+sub execute_insert_statement {  ##no critic(ProhibitManyArgs)
     my (
         $statement,
         $file_path,

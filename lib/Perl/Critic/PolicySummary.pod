@@ -303,6 +303,10 @@ Return failure with bare C<return> instead of C<return undef> [Severity 5]
 
 C<sub never { sub correct {} }> [Severity 5]
 
+=head2 L<Perl::Critic::Policy::Subroutines::ProhibitManyArgs>
+
+Too many arguments [Severity 3]
+
 =head2 L<Perl::Critic::Policy::Subroutines::ProhibitSubroutinePrototypes>
 
 Don't write C<sub my_function (@@) {}> [Severity 5]
