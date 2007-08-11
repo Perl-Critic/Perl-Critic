@@ -43,6 +43,7 @@
      * Variables::RequireLocalizedPunctuationVars
      * Documentation::PodSpelling
      * Subroutines::RequireArgUnpacking
+     * InputOutput::ProhibitJoinedReadline
 
      Other New Policies
      * Subroutines::ProhibitNestedSubs

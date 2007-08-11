@@ -1,0 +1,55 @@
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+## name basic passes
+## failures 0
+## cut
+
+$content = do {local $/ = undef; <>};
+@content = <>;
+$content = do {local $/ = undef; <$fh>};
+@content = <$fh>;
+$content = do {local $/ = undef; <STDIN>};
+@content = <STDIN>;
+
+#-----------------------------------------------------------------------------
+
+## name basic failures
+## failures 4
+## cut
+
+$content = join '', <>;
+$content = join('', <>);
+$content = join $var, <>;
+$content = join($var, <>);
+
+#-----------------------------------------------------------------------------
+
+## name ppi failures
+## failures 8
+## TODO PPI bug -- readline misinterpreted as gt/lt after comma
+## cut
+
+$content = join '', <$fh>;
+$content = join '', <STDIN>;
+$content = join('', <$fh>);
+$content = join('', <STDIN>);
+$content = join $var, <$fh>;
+$content = join $var, <STDIN>;
+$content = join($var, <$fh>);
+$content = join($var, <STDIN>);
+
+#-----------------------------------------------------------------------------
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :

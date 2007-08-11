@@ -112,10 +112,6 @@ to take into account the Fatal and Fatal::Exception modules.
 Make sure there's a close within N statements of an open, both with
 same lexical FH
 
-=item * InputOutput::ProhibitJoinedReadline (p213)
-
-Recommend C<local $/ = undef> instead.
-
 =item * InputOutput::ProhibitExplicitStdin (p216)
 
 If you're reading from STDIN, chances are you're really wanting to
