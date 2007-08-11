@@ -164,6 +164,7 @@ sub _proto_format {
     return <<"END_OF_FORMAT";
 [%p]
 ${prefix}set_themes = %t
+${prefix}add_themes =
 ${prefix}severity   = %s
 %{\\n%\\x7b# \\x7df\\n${prefix}%n = %D\\n}O%{${prefix}Cannot programmatically discover what parameters this policy takes.\\n}U
 
