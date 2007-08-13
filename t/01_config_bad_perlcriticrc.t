@@ -22,7 +22,7 @@ use Test::More;
 use Perl::Critic::PolicyFactory (-test => 1);
 use Perl::Critic;
 
-my $test_count = 10;
+my $test_count = 11;
 plan tests => $test_count;
 
 my $profile = 't/01_bad_perlcriticrc';
@@ -50,7 +50,14 @@ SKIP: {
         my @messages = @{ $eval_result->messages() };
 
         my @parameters = qw{
-            exclude include severity single-policy theme top verbose
+            exclude
+            include
+            profile-strictness
+            severity
+            single-policy
+            theme
+            top
+            verbose
         };
 
         my %expected_regexes =

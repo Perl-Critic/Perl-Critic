@@ -50,6 +50,7 @@ RCS
 \.\#.+
 \#$
 \.swp$
+\.vim_backup$
 
 # Mac/SMB files
 \.DS_Store

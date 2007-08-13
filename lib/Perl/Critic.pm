@@ -423,7 +423,7 @@ interface to the service are subject to change.
 
 =over 8
 
-=item C<< new( [ -profile => $FILE, -severity => $N, -theme => $string, -include => \@PATTERNS, -exclude => \@PATTERNS, -top => $N, -only => $B, -strict-profile => $B, -force => $B, -verbose => $N ], -color => $B ) >>
+=item C<< new( [ -profile => $FILE, -severity => $N, -theme => $string, -include => \@PATTERNS, -exclude => \@PATTERNS, -top => $N, -only => $B, -profile-strictness => $PROFILE_STRICTNESS_{WARN|FATAL|QUIET}, -force => $B, -verbose => $N ], -color => $B ) >>
 
 =item C<< new( -config => Perl::Critic::Config->new() ) >>
 
@@ -519,11 +519,19 @@ false value (which is the default), then Perl::Critic chooses from all the
 Policies that it finds at your site.  You can set the default value for this
 option in your F<.perlcriticrc> file.
 
-B<-strict-profile> is a boolean value.  If set to a true value, Perl::Critic
-will make certain warnings about problems found in a F<.perlcriticrc> or file
-specified via the B<-profile> option fatal.  In particular, Perl::Critic
-normally only C<warn>s about profiles referring to non-existent Policies, but
-this option makes this situation fatal.
+B<-profile-strictness> is an enumerated value, one of
+L<Perl::Critic::Utils::Constants/"$PROFILE_STRICTNESS_WARN"> (the
+default),
+L<Perl::Critic::Utils::Constants/"$PROFILE_STRICTNESS_FATAL">, and
+L<Perl::Critic::Utils::Constants/"$PROFILE_STRICTNESS_QUIET">.  If set
+to L<Perl::Critic::Utils::Constants/"$PROFILE_STRICTNESS_FATAL">,
+Perl::Critic will make certain warnings about problems found in a
+F<.perlcriticrc> or file specified via the B<-profile> option fatal.
+For example, Perl::Critic normally only C<warn>s about profiles
+referring to non-existent Policies, but this value makes this
+situation fatal.  Correspondingly,
+L<Perl::Critic::Utils::Constants/"$PROFILE_STRICTNESS_QUIET"> makes
+Perl::Critic shut up about these things.
 
 B<-force> is a boolean value that controls whether Perl::Critic observes the
 magical C<"## no critic"> pseudo-pragmas in your code.  If set to a true

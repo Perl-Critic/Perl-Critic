@@ -8,17 +8,25 @@
 [1.xxx]  Released on 2007-xx-xx
 
      New Policies: (funded by a Perl Foundation grant)
-     * Subroutines::ProhibitManyArgs
      * BuiltinFunctions::ProhibitBooleanGrep
      * BuiltinFunctions::ProhibitComplexMappings
+     * Documentation::PodSpelling
+     * InputOutput::ProhibitJoinedReadline
+     * Subroutines::ProhibitManyArgs
+     * Subroutines::RequireArgUnpacking
      * ValuesAndExpressions::ProhibitImplicitNewlines
      * Variables::RequireLocalizedPunctuationVars
-     * Documentation::PodSpelling
-     * Subroutines::RequireArgUnpacking
-     * InputOutput::ProhibitJoinedReadline
 
      Other New Policies
      * Subroutines::ProhibitNestedSubs
+
+     New Features:
+     * The "perlcritic --profile-proto" output now includes the "add_themes"
+       parameter for each policy.
+     * The perlcritic "--strict-profile" option has been replaced with a
+       "--profile-strictness" option.  This new option takes values of "warn"
+       (the default), "fatal", and "quiet", which controls what happens with
+       ignorable problems in a .perlcriticrc file.
 
      New Developer Features:
      * Perl::Critic::Policy now has an overridable initialize_if_enabled()
@@ -26,6 +34,9 @@
        it has been determined whether the user has it enabled or not.  Also,
        this method allows a Policy to say that it should be disabled
        regardless of what the user says.
+
+       Actually, use of this method is now encouraged over using a
+       constructor.
 
      Other Stuff:
      * Now requires the Readonly module in order to be more self-compliant.

@@ -264,7 +264,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::UserProfile - Interface to the user's profile
+Perl::Critic::UserProfile - The contents of the user's profile, often F<.perlcriticrc>.
 
 =head1 DESCRIPTION
 
@@ -282,6 +282,9 @@ B<-profile> is the path to the user's profile.  If -profile is not
 defined, then it looks for the profile at F<./.perlcriticrc> and then
 F<$HOME/.perlcriticrc>.  If neither of those files exists, then the
 UserProfile is created with default values.
+
+This object does not take into account any command-line overrides;
+L<Perl::Critic::Config> does that.
 
 =back
 

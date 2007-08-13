@@ -134,6 +134,7 @@ lib/Perl/Critic/TestUtils.pm
 lib/Perl/Critic/Theme.pm
 lib/Perl/Critic/UserProfile.pm
 lib/Perl/Critic/Utils.pm
+lib/Perl/Critic/Utils/Constants.pm
 lib/Perl/Critic/Utils/McCabe.pm
 lib/Perl/Critic/Utils/PPI.pm
 lib/Perl/Critic/Violation.pm

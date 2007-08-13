@@ -5,6 +5,9 @@
 # $Revision$
 ##############################################################################
 
+# NOTE: This module is way too large.  Please think about adding new
+# functionality into a P::C::Utils::* module instead.
+
 package Perl::Critic::Utils;
 
 use strict;
@@ -1289,11 +1292,11 @@ judged to be a script instead of a module.  See C<shebang_line()>.
 
 Given a L<PPI::Token>, answer whether it appears to be in a void context.
 
-=item C< policy_long_name( $policy_name ) >
+=item C<policy_long_name( $policy_name )>
 
 Given a policy class name in long or short form, return the long form.
 
-=item C< policy_short_name( $policy_name ) >
+=item C<policy_short_name( $policy_name )>
 
 Given a policy class name in long or short form, return the short form.
 
@@ -1502,6 +1505,8 @@ C<&is_subroutine_name>,
 C<&is_unchecked_call>
 C<&is_valid_numeric_verbosity>
 
+See also L<Perl::Critic::Utils::PPI>.
+
 =item C<:data_conversion>
 
 Generic manipulation, not having anything specific to do with Perl::Critic.
@@ -1518,6 +1523,8 @@ Things for dealing with L<PPI>, other than classification.
 Includes:
 C<&first_arg>,
 C<&parse_arg_list>
+
+See also L<Perl::Critic::Utils::PPI>.
 
 =item C<:internal_lookup>
 
@@ -1544,6 +1551,12 @@ Includes:
 C<&find_keywords>
 
 =back
+
+=head1 SEE ALSO
+
+L<Perl::Critic::Utils::Constants>,
+L<Perl::Critic::Utils::McCabe>,
+L<Perl::Critic::Utils::PPI>,
 
 =head1 AUTHOR
 

@@ -23,7 +23,7 @@ our $VERSION = 1.061;
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 my @bundled_policy_names = bundled_policy_names();
-plan tests => 106 + 14 * scalar @bundled_policy_names;
+plan tests => 113 + 14 * scalar @bundled_policy_names;
 
 # pre-compute for version comparisons
 my $version_string = __PACKAGE__->VERSION;
@@ -49,15 +49,19 @@ is($critic->VERSION(), $version_string, 'Perl::Critic version');
 use_ok('Perl::Critic::Config');
 can_ok('Perl::Critic::Config', 'new');
 can_ok('Perl::Critic::Config', 'add_policy');
+can_ok('Perl::Critic::Config', 'policies');
 can_ok('Perl::Critic::Config', 'exclude');
 can_ok('Perl::Critic::Config', 'force');
 can_ok('Perl::Critic::Config', 'include');
 can_ok('Perl::Critic::Config', 'only');
-can_ok('Perl::Critic::Config', 'policies');
-can_ok('Perl::Critic::Config', 'site_policy_names');
+can_ok('Perl::Critic::Config', 'profile_strictness');
+can_ok('Perl::Critic::Config', 'severity');
+can_ok('Perl::Critic::Config', 'single_policy');
 can_ok('Perl::Critic::Config', 'theme');
 can_ok('Perl::Critic::Config', 'top');
 can_ok('Perl::Critic::Config', 'verbose');
+can_ok('Perl::Critic::Config', 'color');
+can_ok('Perl::Critic::Config', 'site_policy_names');
 
 #Set -profile to avoid messing with .perlcriticrc
 my $config = Perl::Critic::Config->new( -profile => 'NONE');
@@ -83,13 +87,16 @@ is($errors->VERSION(), $version_string, 'Perl::Critic::ConfigErrors version');
 use_ok('Perl::Critic::Defaults');
 can_ok('Perl::Critic::Defaults', 'new');
 can_ok('Perl::Critic::Defaults', 'exclude');
-can_ok('Perl::Critic::Defaults', 'force');
 can_ok('Perl::Critic::Defaults', 'include');
+can_ok('Perl::Critic::Defaults', 'force');
 can_ok('Perl::Critic::Defaults', 'only');
+can_ok('Perl::Critic::Defaults', 'profile_strictness');
+can_ok('Perl::Critic::Defaults', 'single_policy');
 can_ok('Perl::Critic::Defaults', 'severity');
 can_ok('Perl::Critic::Defaults', 'theme');
 can_ok('Perl::Critic::Defaults', 'top');
 can_ok('Perl::Critic::Defaults', 'verbose');
+can_ok('Perl::Critic::Defaults', 'color');
 
 my $defaults = Perl::Critic::Defaults->new();
 isa_ok($defaults, 'Perl::Critic::Defaults');

@@ -22,6 +22,7 @@ use Perl::Critic::UserProfile qw();
 use Perl::Critic::Utils qw{
     :booleans :characters :severities :internal_lookup :classification
 };
+use Perl::Critic::Utils::Constants qw{ :profile_strictness };
 
 #-----------------------------------------------------------------------------
 
@@ -57,6 +58,11 @@ sub _init {
     my $defaults = $profile->defaults();
     $self->{_profile} = $profile;
 
+    $self->_validate_and_save_profile_strictness(
+        $args{'-profile-strictness'},
+        $errors,
+    );
+
     # If given, these options should always have a true value.
     $self->_validate_and_save_regex(
         'include', $args{-include}, $defaults->include(), $errors
@@ -82,8 +88,6 @@ sub _init {
         $self->{_force} = 1 * _dor( $args{-force}, $defaults->force() );
         $self->{_only}  = 1 * _dor( $args{-only},  $defaults->only()  );
         $self->{_color} = 1 * _dor( $args{-color}, $defaults->color() );
-        $self->{_strict_profile} =
-            1 * _dor( $args{'-strict-profile'}, $defaults->strict_profile() );
     }
 
     $self->_validate_and_save_theme($args{-theme}, $errors);
@@ -91,9 +95,9 @@ sub _init {
     # Construct a Factory with the Profile
     my $factory =
         Perl::Critic::PolicyFactory->new(
-            -profile          => $profile,
-            -errors           => $errors,
-            '-strict-profile' => $self->strict_profile(),
+            -profile              => $profile,
+            -errors               => $errors,
+            '-profile-strictness' => $self->profile_strictness(),
         );
     $self->{_factory} = $factory;
 
@@ -345,6 +349,45 @@ sub _validate_and_save_regex {
 
 #-----------------------------------------------------------------------------
 
+sub _validate_and_save_profile_strictness {
+    my ($self, $args_value, $errors) = @_;
+
+    my $option_name;
+    my $source;
+    my $profile_strictness;
+
+    if ($args_value) {
+        $option_name = '-profile-strictness';
+        $profile_strictness = $args_value;
+    }
+    else {
+        $option_name = 'profile-strictness';
+
+        my $profile = $self->_profile();
+        $source = $profile->source();
+        $profile_strictness = $profile->defaults()->profile_strictness();
+    }
+
+    if ( not $PROFILE_STRICTNESSES{$profile_strictness} ) {
+        $errors->add_bad_option_message(
+            $option_name,
+            $profile_strictness,
+            $source,
+            q{is not one of "}
+                . join ( q{", "}, (sort keys %PROFILE_STRICTNESSES) )
+                . q{".},
+        );
+
+        $profile_strictness = $PROFILE_STRICTNESS_FATAL;
+    }
+
+    $self->{_profile_strictness} = $profile_strictness;
+
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
 sub _validate_and_save_verbosity {
     my ($self, $args_value, $errors) = @_;
 
@@ -576,9 +619,9 @@ sub only {
 
 #-----------------------------------------------------------------------------
 
-sub strict_profile {
+sub profile_strictness {
     my $self = shift;
-    return $self->{_strict_profile};
+    return $self->{_profile_strictness};
 }
 
 #-----------------------------------------------------------------------------
@@ -641,7 +684,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Config - Find and load Perl::Critic user-preferences
+Perl::Critic::Config - The Perl::Critic user-preferences, combined from any profile file and command-line parameters.
 
 =head1 DESCRIPTION
 
@@ -656,7 +699,7 @@ constructor will do it for you.
 
 =over 8
 
-=item C<< new( [ -profile => $FILE, -severity => $N, -theme => $string, -include => \@PATTERNS, -exclude => \@PATTERNS, -single-policy => $PATTERN, -top => $N, -only => $B, -strict-profile => $B, -force => $B, -verbose => $N, -color => $B ] ) >>
+=item C<< new( [ -profile => $FILE, -severity => $N, -theme => $string, -include => \@PATTERNS, -exclude => \@PATTERNS, -single-policy => $PATTERN, -top => $N, -only => $B, -profile-strictness => $PROFILE_STRICTNESS_{WARN|FATAL|QUIET}, -force => $B, -verbose => $N, -color => $B ] ) >>
 
 =item C<< new() >>
 
@@ -717,12 +760,19 @@ will only choose from Policies that are mentioned in the user's
 profile.  If set to a false value (which is the default), then
 Perl::Critic chooses from all the Policies that it finds at your site.
 
-B<-strict-profile> is a boolean value.  If set to a true value,
+B<-profile-strictness> is an enumerated value, one of
+L<Perl::Critic::Utils::Constants/"$PROFILE_STRICTNESS_WARN"> (the
+default),
+L<Perl::Critic::Utils::Constants/"$PROFILE_STRICTNESS_FATAL">, and
+L<Perl::Critic::Utils::Constants/"$PROFILE_STRICTNESS_QUIET">.  If set
+to L<Perl::Critic::Utils::Constants/"$PROFILE_STRICTNESS_FATAL">,
 Perl::Critic will make certain warnings about problems found in a
 F<.perlcriticrc> or file specified via the B<-profile> option fatal.
-In particular, Perl::Critic normally only C<warn>s about profiles
-referring to non-existent Policies, but this option makes this
-situation fatal.
+For example, Perl::Critic normally only C<warn>s about profiles
+referring to non-existent Policies, but this value makes this
+situation fatal.  Correspondingly,
+L<Perl::Critic::Utils::Constants/"$PROFILE_STRICTNESS_QUIET"> makes
+Perl::Critic shut up about these things.
 
 B<-force> controls whether Perl::Critic observes the magical C<"## no
 critic"> pseudo-pragmas in your code.  If set to a true value,
@@ -780,9 +830,10 @@ Returns the value of the C<-force> attribute for this Config.
 
 Returns the value of the C<-only> attribute for this Config.
 
-=item C< strict_profile() >
+=item C< profile_strictness() >
 
-Returns the value of the C<-strict-profile> attribute for this Config.
+Returns the value of the C<-profile-strictness> attribute for this
+Config.
 
 =item C< severity() >
 
