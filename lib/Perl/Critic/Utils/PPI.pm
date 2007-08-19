@@ -81,7 +81,8 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Utils::PPI
+Perl::Critic::Utils::PPI - Utility functions for dealing with PPI objects.
+
 
 =head1 DESCRIPTION
 

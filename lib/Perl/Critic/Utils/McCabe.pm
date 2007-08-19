@@ -146,7 +146,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Utils::McCabe
+Perl::Critic::Utils::McCabe - Functions that calculate the McCabe score of source code.
 
 =head1 DESCRIPTION
 
