@@ -37,7 +37,7 @@ sub supported_parameters {
         {
             name            => 'max_arguments',
             description     =>
-                'The maximum number of arguments to allow without unpacking.',
+                'The maximum number of arguments to allow a subroutine to have.',
             default_string  => '5',
             behavior        => 'integer',
             integer_minimum => 1,
