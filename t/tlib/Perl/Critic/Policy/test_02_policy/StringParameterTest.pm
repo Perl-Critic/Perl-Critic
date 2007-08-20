@@ -18,12 +18,13 @@ our $VERSION = 1.061;
 
 #-----------------------------------------------------------------------------
 
-parameter 'foo',
-    is_a 'string',
-    with_description 'frobnicates the frobulator',
-    with_default_string 'bar';
+parameter 'foo', {
+    is_a                => 'string',
+    with_description    => 'frobnicates the frobulator',
+    with_default_string => 'bar'
+};
 #    which must be defined
-#    and which must not be the empty string
+#    and with the empty string being equivalent to undef
 
 #-----------------------------------------------------------------------------
 

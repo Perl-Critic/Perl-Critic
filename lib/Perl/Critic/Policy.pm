@@ -45,54 +45,22 @@ my $FORMAT = "%p\n"; #Default stringy format
 
 #-----------------------------------------------------------------------------
 
-my %CHAINABLE_SPECIFICATION_SUB_FOR_SPECIFIABLE;
-
-BEGIN {
-    %CHAINABLE_SPECIFICATION_SUB_FOR_SPECIFIABLE = (
-        behavior => 'is_a',
-        description => 'with_description',
-        default_string => 'with_default_string',
-    );
-
-    foreach my $specifiable (
-        keys %CHAINABLE_SPECIFICATION_SUB_FOR_SPECIFIABLE
-    ) {
-        my $chainable_specification_sub =
-            $CHAINABLE_SPECIFICATION_SUB_FOR_SPECIFIABLE{$specifiable};
-
-        eval <<"END_CODE";
-sub $chainable_specification_sub(\$;%) {
-    throw_policy_definition '$chainable_specification_sub() invoked in a void context'
-        if not defined wantarray;
-
-    my (\$$specifiable, %specification) = \@_;
-
-    return ($specifiable => \$$specifiable, %specification);
-}
-END_CODE
-
-        if ($EVAL_ERROR) {
-            throw_internal
-                q{Could not create }
-                    . __PACKAGE__
-                    . q{::}
-                    . $chainable_specification_sub
-                    . q{(): }
-                    . $EVAL_ERROR;
-        }
-    }
-}
-
-#-----------------------------------------------------------------------------
-
-sub parameter($%) {
-    throw_policy_definition 'parameter() invoked in a non-void context'
+sub parameter($$) {
+    throw_policy_definition 'parameter() invoked in a non-void context.'
         if defined wantarray;
 
-    my ( $name, %specification ) = @_;
+    my ( $name, $specification ) = @_;
+
+    throw_policy_definition
+            qq{"$name" is not a parameter name (i.e. a string).}
+        if ref $name;
+    throw_policy_definition
+            qq{"$specification" is not a reference to a hash containing }
+            . q{Policy parameter attributes.}
+        if 'HASH' ne ref $specification;
 
     print "parameter: $name\n";
-    print "specified: $_ => $specification{$_}\n" foreach sort keys %specification;
+    print "specified: $_ => $specification->{$_}\n" foreach sort keys %{$specification};
 }
 
 #-----------------------------------------------------------------------------
@@ -102,7 +70,6 @@ sub import {
 
     print "class: $class\n";
     if ($class !~ m/ \A $POLICY_NAMESPACE :: /xmso) {
-        print "escaping early\n";
         return;
     }
 
@@ -111,14 +78,6 @@ sub import {
 
         unshift @{$class . '::ISA'}, __PACKAGE__;
         *{$class . '::parameter'} = \&parameter;
-
-        foreach my $subroutine (
-            values %CHAINABLE_SPECIFICATION_SUB_FOR_SPECIFIABLE
-        ) {
-            *{$class . "::$subroutine"} = \&$subroutine;
-        }
-
-        *{$class . '::is_an'} = \&is_a;
     }
 
     return;
