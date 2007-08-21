@@ -5,7 +5,7 @@
 # $Revision$
 ##############################################################################
 
-[1.xxx]  Released on 2007-xx-xx
+[1.07]  Released on 2007-08-21
 
      New Policies: (funded by a Perl Foundation grant)
      * BuiltinFunctions::ProhibitBooleanGrep
