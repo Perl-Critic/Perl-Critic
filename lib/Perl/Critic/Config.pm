@@ -778,7 +778,8 @@ B<-force> controls whether Perl::Critic observes the magical C<"## no
 critic"> pseudo-pragmas in your code.  If set to a true value,
 Perl::Critic will analyze all code.  If set to a false value (which is
 the default) Perl::Critic will ignore code that is tagged with these
-comments.  See L<"BENDING THE RULES"> for more information.
+comments.  See L<Perl::Critic/"BENDING THE RULES"> for more
+information.
 
 B<-verbose> can be a positive integer (from 1 to 10), or a literal
 format specification.  See L<Perl::Critic::Violations> for an

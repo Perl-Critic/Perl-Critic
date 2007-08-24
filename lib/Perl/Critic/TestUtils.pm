@@ -22,7 +22,8 @@ use File::Temp ();
 use File::Find qw( find );
 
 use Perl::Critic;
-use Perl::Critic::Utils qw{ :data_conversion };
+use Perl::Critic::Config;
+use Perl::Critic::Utils qw{ :severities :data_conversion &policy_long_name };
 use Perl::Critic::PolicyFactory (-test => 1);
 
 our $VERSION = 1.07;
@@ -35,6 +36,7 @@ Readonly::Array our @EXPORT_OK => qw(
     get_author_test_skip_message
     starting_points_including_examples
     bundled_policy_names
+    names_of_policies_willing_to_work
 );
 
 #-----------------------------------------------------------------------------
@@ -276,6 +278,15 @@ sub bundled_policy_names {
     return sort @policies;
 }
 
+sub names_of_policies_willing_to_work {
+    my @policies_willing_to_work =
+        Perl::Critic::Config
+            ->new( -severity => $SEVERITY_LOWEST )
+            ->policies();
+
+    return map { ref $_ } @policies_willing_to_work;
+}
+
 1;
 
 __END__
@@ -400,6 +411,11 @@ is desired that the examples be included.
 Returns a list of Policy packages that come bundled with this package.  This
 functions by searching F<MANIFEST> for F<lib/Perl/Critic/Policy/*.pm> and
 converts the results to package names.
+
+=item names_of_policies_willing_to_work()
+
+Returns a list of the packages of policies that are willing to function on
+the current system.
 
 =back
 

@@ -146,6 +146,7 @@ README
 t/00_modules.t
 t/01_bad_perlcriticrc
 t/01_config.t
+t/01_config.t_without_optional_dependencies.t
 t/01_config_bad_perlcriticrc.t
 t/02_policy.t
 t/03_pragmas.t
@@ -160,6 +161,7 @@ t/10_userprofile.t
 t/11_policyfactory.t
 t/12_policylisting.t
 t/13_bundled_policies.t
+t/13_bundled_policies.t_without_optional_dependencies.t
 t/14_policy_parameters.t
 t/15_statistics.t
 t/20_policies.t
@@ -256,6 +258,7 @@ t/TestingAndDebugging/RequireTestLabels.run
 t/TestingAndDebugging/RequireUseStrict.run
 t/TestingAndDebugging/RequireUseWarnings.run
 t/tlib/Perl/Critic/Policy/Test.pm
+t/tlib/Perl/Critic/TestUtilitiesWithMinimalDependencies.pm
 t/tlib/ViolationTest.pm
 t/tlib/ViolationTest2.pm
 t/ValuesAndExpressions/ProhibitCommaSeparatedStatements.run
