@@ -21,7 +21,7 @@ use B::Keywords qw();
 
 use base 'Exporter';
 
-our $VERSION = 1.07;
+our $VERSION = 1.071;
 
 #-----------------------------------------------------------------------------
 # Exportable symbols here.
