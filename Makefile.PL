@@ -89,7 +89,7 @@ tags:
 \t\t--exclude='*~' \\
 \t\t\\
 \t\t--languages=Perl \\
-\t\t--langmap=Perl:+.t \\
+\t\t--langmap=Perl:+.t
 MAKE_FRAG
 }
 
