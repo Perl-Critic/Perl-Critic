@@ -109,8 +109,8 @@ is(
 #-----------------------------------------------------------------------------
 
 is(
-    $derived_configuration->strict_profile(),
-    $default_configuration->strict_profile(),
+    $derived_configuration->profile_strictness(),
+    $default_configuration->profile_strictness(),
     'force',
 );
 

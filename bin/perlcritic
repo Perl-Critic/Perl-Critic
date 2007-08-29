@@ -387,7 +387,7 @@ sub _get_option_specification {
         stern
         statistics!
         statistics-only!
-        strict-profile!
+        profile-strictness=s
         theme=s
         top:i
         verbose=s
@@ -500,13 +500,15 @@ C<perlcritic> - Command-line interface to critique Perl source
              [-severity number | name] [-profile file | -noprofile]
              [-top [ number ]] [-theme expression] [-include pattern]
              [-exclude pattern] [-single-policy pattern] [-only | -noonly]
-             [-strict-profile | -nostrict-profile] [-force | -noforce]
+             [-profile-strictness {warn|fatal|quiet}] [-force | -noforce]
              [-statistics] [-statistics-only] [-verbose number | format]
              [-color | -nocolor] [-quiet] {FILE | DIRECTORY | STDIN}
 
-  perlcritic -doc pattern [...]
+  perlcritic -profile-proto
 
-  perlcritic {-list | -profile-proto | -help | -options | -man | -Version}
+  perlcritic { -list | -doc pattern [...] }
+
+  perlcritic { -help | -options | -man | -Version }
 
 =head1 DESCRIPTION
 
@@ -810,13 +812,14 @@ your F<.perlcriticrc> file.  This is useful if you want to use just a small
 subset of Policies without having to disable all the others.  You can set the
 default value for this option in your F<.perlcriticrc> file.
 
-=item C<-strict-profile>
+=item C<-profile-strictness {warn|fatal|quiet}>
 
-Directs perlcritic to make certain warnings about problems found in a
-F<.perlcriticrc> or file specified via the C<-profile> option fatal.  In
-particular, perlcritic normally only warns about profiles referring to
-non-existent Policies, but this option makes this situation fatal.  You can
-set the default value for this option in your F<.perlcriticrc> file.
+Directs perlcritic how to treat certain recoverable problems found in a
+F<.perlcriticrc> or file specified via the C<-profile> option.  Valid values
+are C<warn> (the default), C<fatal>, and C<quiet>.  For example, perlcritic
+normally only warns about profiles referring to non-existent Policies, but
+this option can make this situation fatal.  You can set the default value for
+this option in your F<.perlcriticrc> file.
 
 =item C<-count>
 
@@ -836,7 +839,8 @@ NOTE: This feature is not implemented yet.
 This option is on by default.  When set, Severity 5 and 4 are colored red and
 yellow, respectively.  Colorization only happens if STDOUT is a tty and
 L<Term::ANSIColor> is installed.  And it only works on non-Windows
-environments.  Negate this switch to disable color.
+environments.  Negate this switch to disable color.  You can set the default
+value for this option in your F<.perlcriticrc> file.
 
 =item C<-doc PATTERN>
 

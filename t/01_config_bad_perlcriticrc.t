@@ -22,7 +22,7 @@ use Test::More;
 use Perl::Critic::PolicyFactory (-test => 1);
 use Perl::Critic;
 
-Readonly::Scalar my $TEST_COUNT => 12;
+Readonly::Scalar my $TEST_COUNT => 13;
 plan tests => $TEST_COUNT;
 
 Readonly::Scalar my $PROFILE => 't/01_bad_perlcriticrc';
@@ -55,7 +55,14 @@ die "No point in continuing.\n" if not $test_passed;
 my @exceptions = @{ $eval_result->exceptions() };
 
 my @parameters = qw{
-    exclude include severity single-policy theme top verbose
+    exclude
+    include
+    profile-strictness
+    severity
+    single-policy
+    theme
+    top
+    verbose
 };
 
 my %expected_regexes =

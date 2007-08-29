@@ -28,6 +28,7 @@ use Perl::Critic::Exception::Fatal::Generic qw{ &throw_generic };
 use Perl::Critic::Exception::Fatal::Internal qw{ &throw_internal };
 use Perl::Critic::Exception::Fatal::PolicyDefinition
     qw{ &throw_policy_definition };
+use Perl::Critic::Utils::Constants qw{ :profile_strictness };
 
 use Exception::Class;   # this must come after "use P::C::Exception::*"
 
@@ -119,28 +120,32 @@ sub _init {
         or throw_internal q{The -profile argument is required};
 
     my $incoming_errors = $args{-errors};
-    my $strict_profile = $args{'-strict-profile'};
-    my $errors;
+    my $profile_strictness = $args{'-profile-strictness'};
+    $profile_strictness ||= $PROFILE_STRICTNESS_DEFAULT;
 
-    # If we're supposed to be strict or problems have already been found...
-    if (
-            $strict_profile
-        or  ( $incoming_errors and @{ $incoming_errors->exceptions() } )
-    ) {
-        $errors =
-            $incoming_errors
-                ? $incoming_errors
-                : Perl::Critic::Exception::AggregateConfiguration->new();
-    }
+    if ( $profile_strictness ne $PROFILE_STRICTNESS_QUIET ) {
+        my $errors;
 
-    $self->_validate_policies_in_profile( $errors );
+        # If we're supposed to be strict or problems have already been found...
+        if (
+                $profile_strictness eq $PROFILE_STRICTNESS_FATAL
+            or  ( $incoming_errors and @{ $incoming_errors->exceptions() } )
+        ) {
+            $errors =
+                $incoming_errors
+                    ? $incoming_errors
+                    : Perl::Critic::Exception::AggregateConfiguration->new();
+        }
 
-    if (
-            not $incoming_errors
-        and $errors
-        and $errors->has_exceptions()
-    ) {
-        $errors->rethrow();
+        $self->_validate_policies_in_profile( $errors );
+
+        if (
+                not $incoming_errors
+            and $errors
+            and $errors->has_exceptions()
+        ) {
+            $errors->rethrow();
+        }
     }
 
     return $self;
@@ -300,12 +305,16 @@ the user's preferred parameters. There are no user-serviceable parts here.
 
 =over 8
 
-=item C<< new( -profile => $profile >>
+=item C<< new( -profile => $profile, -errors => $config_errors ) >>
 
 Returns a reference to a new Perl::Critic::PolicyFactory object.
 
 B<-profile> is a reference to a L<Perl::Critic::UserProfile> object.  This
 argument is required.
+
+B<-errors> is a reference to an instance of L<Perl::Critic::ConfigErrors>.
+This argument is optional.  If specified, than any problems found will be
+added to the object.
 
 =back
 

@@ -98,8 +98,8 @@ sub to_string {
     $prototype .= "\n";
 
     $prototype .= $prefix;
-    $prototype .= q{strict-profile = };
-    $prototype .= $configuration->strict_profile();
+    $prototype .= q{profile-strictness = };
+    $prototype .= $configuration->profile_strictness();
     $prototype .= "\n";
 
     $prototype .= $prefix;

@@ -16,6 +16,7 @@ use Perl::Critic::Utils qw{
 };
 use Perl::Critic::Exception::AggregateConfiguration;
 use Perl::Critic::Exception::Configuration::Option::Global::ExtraParameter;
+use Perl::Critic::Utils::Constants qw{ $PROFILE_STRICTNESS_DEFAULT };
 
 our $VERSION = 1.061;
 
@@ -44,7 +45,8 @@ sub _init {
     # Single-value defaults
     $self->{_force}          = delete $args{force}            || $FALSE;
     $self->{_only}           = delete $args{only}             || $FALSE;
-    $self->{_strict_profile} = delete $args{'strict-profile'} || $FALSE;
+    $self->{_profile_strictness} =
+        delete $args{'profile-strictness'} || $PROFILE_STRICTNESS_DEFAULT;
     $self->{_single_policy}  = delete $args{'single-policy'}  || $EMPTY;
     $self->{_severity}       = delete $args{severity}         || $SEVERITY_HIGHEST;
     $self->{_theme}          = delete $args{theme}            || $EMPTY;
@@ -118,9 +120,9 @@ sub only {
 
 #-----------------------------------------------------------------------------
 
-sub strict_profile {
+sub profile_strictness {
     my ($self) = @_;
-    return $self->{_strict_profile};
+    return $self->{_profile_strictness};
 }
 
 #-----------------------------------------------------------------------------
@@ -169,7 +171,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Defaults - Manage default settings for Perl::Critic
+Perl::Critic::Defaults - The global configuration default values.
 
 =head1 DESCRIPTION
 
@@ -183,9 +185,13 @@ user-serviceable parts here.
 
 =item C< new( %DEFAULT_PARAMS ) >
 
-Returns a reference to a new C<Perl::Critic::Defaults> object.  The
-arguments are name-value pairs that correspond to the methods listed
-below.
+Returns a reference to a new C<Perl::Critic::Defaults> object.  You
+can override the coded defaults by passing in name-value pairs that
+correspond to the methods listed below.
+
+This is usually only invoked by L<Perl::Critic::UserProfile>, which
+passes in the global values from a F<.perlcriticrc> file.  This object
+contains no information for individual Policies.
 
 =back
 
@@ -211,10 +217,10 @@ there are no default exclusion patterns, then the list will be empty.
 
 Returns the default value of the C<only> flag (Either 1 or 0).
 
-=item C< strict_profile() >
+=item C< profile_strictness() >
 
-Returns the default value of the C<strict_profile> flag (Either 1 or
-0).
+Returns the default value of C<profile_strictness> as an unvalidated
+string.
 
 =item C< single_policy() >
 
