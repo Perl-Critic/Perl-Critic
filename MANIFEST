@@ -7,6 +7,7 @@ examples/perlcriticrc
 examples/perlcriticrc-conway
 extras/KomodoIntegration.pod
 extras/perlcritic.el
+inc/Perl/Critic/BuildUtilities.pm
 INSTALL
 lib/Perl/Critic.pm
 lib/Perl/Critic/Config.pm
@@ -146,7 +147,6 @@ README
 t/00_modules.t
 t/01_bad_perlcriticrc
 t/01_config.t
-t/01_config.t_without_optional_dependencies.t
 t/01_config_bad_perlcriticrc.t
 t/02_policy.t
 t/03_pragmas.t
@@ -161,7 +161,6 @@ t/10_userprofile.t
 t/11_policyfactory.t
 t/12_policylisting.t
 t/13_bundled_policies.t
-t/13_bundled_policies.t_without_optional_dependencies.t
 t/14_policy_parameters.t
 t/15_statistics.t
 t/20_policies.t
@@ -212,6 +211,7 @@ t/ControlStructures/ProhibitUntilBlocks.run
 t/Documentation/RequirePodAtEnd.run
 t/Documentation/RequirePodSections.run
 t/ErrorHandling/RequireCarping.run
+t/generate_without_optional_dependencies_wrappers.PL
 t/InputOutput/ProhibitBacktickOperators.run
 t/InputOutput/ProhibitBarewordFileHandles.run
 t/InputOutput/ProhibitInteractiveTest.run

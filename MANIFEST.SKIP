@@ -40,6 +40,7 @@ RCS
 ^tmon\.out$
 \.gdb_history$
 \.ERR$
+^t/.*_without_optional_dependencies.t$
 
 # Temp/backup files
 ~$

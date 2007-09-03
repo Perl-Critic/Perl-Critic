@@ -42,6 +42,12 @@ for my $line ( @listing_lines ) {
 }
 
 #-----------------------------------------------------------------------------
+
+# ensure we run true if this test is loaded by
+# t/12_policylisting.t_without_optional_dependencies.t
+1;
+
+#-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

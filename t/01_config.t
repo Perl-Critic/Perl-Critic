@@ -307,8 +307,10 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
     like( $EVAL_ERROR, qr/No policies matched/, 'invalid -single-policy' );
 }
 
+#-----------------------------------------------------------------------------
+
 # ensure we run true if this test is loaded by
-# t/01_config.t.without_optional_dependencies.t
+# t/01_config.t_without_optional_dependencies.t
 1;
 
 ##############################################################################

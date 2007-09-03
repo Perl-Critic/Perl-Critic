@@ -92,6 +92,12 @@ sub generate_message_regex {
         /xms;
 }
 
+#-----------------------------------------------------------------------------
+
+# ensure we run true if this test is loaded by
+# t/01_config_bad_perlcriticrc.t_without_optional_dependencies.t
+1;
+
 
 ##############################################################################
 # Local Variables:

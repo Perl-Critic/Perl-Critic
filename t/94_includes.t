@@ -3,12 +3,17 @@
 use warnings;
 use strict;
 
+use lib 't/tlib';
+
 use Test::More;
 
 use File::Find;
 use PPI::Document;
 
-use Perl::Critic::TestUtils qw{ should_skip_author_tests get_author_test_skip_message };
+use Perl::Critic::TestUtilitiesWithMinimalDependencies qw{
+    should_skip_author_tests
+    get_author_test_skip_message
+};
 
 if (should_skip_author_tests()) {
     plan skip_all => get_author_test_skip_message();
@@ -80,6 +85,12 @@ sub match {
     return 1 if ($pkg eq 1);
     return match($pkg, $deps, $thispkg);
 }
+
+#-----------------------------------------------------------------------------
+
+# ensure we run true if this test is loaded by
+# t/94_includes.t.t.without_optional_dependencies.t
+1;
 
 # Local Variables:
 #   mode: cperl

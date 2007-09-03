@@ -7,14 +7,18 @@
 # $Revision$
 ##############################################################################
 
-
 use strict;
 use warnings;
+
+use lib 't/tlib';
+
 use Test::More;
-use Perl::Critic::TestUtils qw{
-    should_skip_author_tests get_author_test_skip_message
-    starting_points_including_examples
+
+use Perl::Critic::TestUtilitiesWithMinimalDependencies qw{
+    should_skip_author_tests
+    get_author_test_skip_message
 };
+use Perl::Critic::TestUtils qw{ starting_points_including_examples };
 
 #-----------------------------------------------------------------------------
 

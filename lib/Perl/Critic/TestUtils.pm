@@ -32,8 +32,6 @@ Readonly::Array our @EXPORT_OK => qw(
     critique  critique_with_violations
     fcritique fcritique_with_violations
     subtests_in_tree
-    should_skip_author_tests
-    get_author_test_skip_message
     starting_points_including_examples
     bundled_policy_names
     names_of_policies_willing_to_work
@@ -146,17 +144,6 @@ sub subtests_in_tree {
                $subtests{ $policy } = [ @subtests ];
            }, no_chdir => 1}, $start );
     return \%subtests;
-}
-
-# Answer whether author test should be run.
-
-sub should_skip_author_tests {
-    return !-d '.svn' && !$ENV{TEST_AUTHOR}
-}
-
-sub get_author_test_skip_message {
-    ## no critic (RequireInterpolation);
-    return 'Author test.  Set $ENV{TEST_AUTHOR} to a true value to run.';
 }
 
 sub starting_points_including_examples {
@@ -392,15 +379,6 @@ hash specifies a single test to be handed to C<pcritique()> or C<fcritique()>,
 including the code string, test name, etc.  See below for the syntax of the
 F<.run> files.
 
-=item should_skip_author_tests()
-
-Answers whether author tests should run.
-
-=item get_author_test_skip_message()
-
-Returns a string containing the message that should be emitted when a test
-is skipped due to it being an author test when author tests are not enabled.
-
 =item starting_points_including_examples()
 
 Returns a list of the directories contain code that needs to be tested when it
@@ -461,7 +439,10 @@ POD.
 If you need to pass any configuration parameters for your subtest, do so like
 this:
 
-    ## parms { allow_y => 0 }
+    ## parms { allow_y => '0' }
+
+Note that all the values in this hash must be strings because that's what
+Perl::Critic will hand you from a F<.perlcriticrc>.
 
 If it's a TODO subtest (probably because of some weird corner of
 PPI that we exercised that Adam is getting around to fixing, right?),

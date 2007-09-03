@@ -76,6 +76,12 @@ can_ok('Perl::Critic::Document', 'find_any');
     }
 }
 
+#-----------------------------------------------------------------------------
+
+# ensure we run true if this test is loaded by
+# t/08_document.t_without_optional_dependencies.t
+1;
+
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4
