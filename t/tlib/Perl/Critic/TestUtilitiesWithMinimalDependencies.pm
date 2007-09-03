@@ -14,7 +14,7 @@ use Readonly;
 
 use base 'Exporter';
 
-our $VERSION = 1.071;
+our $VERSION = 1.072;
 Readonly::Array our @EXPORT_OK => qw(
     should_skip_author_tests
     get_author_test_skip_message

@@ -20,7 +20,7 @@ use Perl::Critic::Utils qw{ :characters &policy_long_name &policy_short_name };
 use Perl::Critic::Exception::Fatal::Internal qw{ throw_internal };
 use Perl::Critic::Exception::Configuration::Generic qw{ throw_generic };
 
-our $VERSION = 1.071;
+our $VERSION = 1.072;
 
 #-----------------------------------------------------------------------------
 

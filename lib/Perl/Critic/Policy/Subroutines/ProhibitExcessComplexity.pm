@@ -16,7 +16,7 @@ use Perl::Critic::Utils::McCabe qw{ &calculate_mccabe_of_sub };
 
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 1.071;
+our $VERSION = 1.072;
 
 #-----------------------------------------------------------------------------
 

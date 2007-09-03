@@ -25,7 +25,7 @@ use Perl::Critic::Exception::Fatal::Internal qw{ &throw_internal };
 
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 1.071;
+our $VERSION = 1.072;
 
 #-----------------------------------------------------------------------------
 

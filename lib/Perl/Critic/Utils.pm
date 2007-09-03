@@ -22,7 +22,7 @@ use Perl::Critic::Exception::Fatal::Generic qw{ throw_generic };
 
 use base 'Exporter';
 
-our $VERSION = 1.071;
+our $VERSION = 1.072;
 
 #-----------------------------------------------------------------------------
 # Exportable symbols here.
