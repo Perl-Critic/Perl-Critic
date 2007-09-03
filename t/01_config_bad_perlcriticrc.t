@@ -94,6 +94,8 @@ is(
     "should have received an extra-parameter exception",
 );
 
+# Test that we get an exception for bad individual policy configuration.
+# The selection of RequirePodSections is arbitrary.
 is(
     ( scalar grep { is_require_pod_sections_source_exception($_) } @exceptions ),
     1,
@@ -124,6 +126,12 @@ sub is_require_pod_sections_source_exception {
 
     return $prefix eq $REQUIRE_POD_SECTIONS_SOURCE_MESSAGE_PREFIX;
 }
+
+#-----------------------------------------------------------------------------
+
+# ensure we run true if this test is loaded by
+# t/01_config_bad_perlcriticrc.t_without_optional_dependencies.t
+1;
 
 ##############################################################################
 # Local Variables:

@@ -73,6 +73,12 @@ my $expected_string = 'PolicyTest 3 [a b c d e f]';
 is( $p->to_string(), $expected_string, 'Stringification by to_string()');
 is( "$p", $expected_string, 'Stringification by overloading');
 
+#-----------------------------------------------------------------------------
+
+# ensure we run true if this test is loaded by
+# t/02_policy.t_without_optional_dependencies.t
+1;
+
 
 ##############################################################################
 # Local Variables:

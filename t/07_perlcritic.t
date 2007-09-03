@@ -174,7 +174,12 @@ is( $options{-quiet}, 1);
     eval { @ARGV = qw( -severity 6 ); get_options() };
     like( $EVAL_ERROR, qr/out of range/, '-severity too large' );
 }
+
 #-----------------------------------------------------------------------------
+
+# ensure we run true if this test is loaded by
+# t/07_perlcritic.t_without_optional_dependencies.t
+1;
 
 # Local Variables:
 #   mode: cperl

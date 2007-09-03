@@ -5,7 +5,17 @@
 # $Revision$
 ##############################################################################
 
+profile-strictness = quiet
 severity = 1
+
+#-----------------------------------------------------------------------------
+
+# Policies from other distributions that we don't want.
+[-CodeLayout::RequireUseUTF8]
+[-Documentation::RequirePODUseEncodingUTF8]
+# Perl::MinimumVersion is buggy.
+[-Modules::PerlMinimumVersion]
+[-Modules::RequirePerlVersion]
 
 #-----------------------------------------------------------------------------
 

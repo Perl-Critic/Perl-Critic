@@ -44,7 +44,7 @@ our %EXPORT_TAGS = (
 
 Readonly::Scalar our $PROFILE_STRICTNESS_WARN    => 'warn';
 Readonly::Scalar our $PROFILE_STRICTNESS_FATAL   => 'fatal';
-Readonly::Scalar our $PROFILE_STRICTNESS_QUIET   => 'fatal';
+Readonly::Scalar our $PROFILE_STRICTNESS_QUIET   => 'quiet';
 Readonly::Scalar our $PROFILE_STRICTNESS_DEFAULT => $PROFILE_STRICTNESS_WARN;
 
 Readonly::Hash our %PROFILE_STRICTNESSES =>

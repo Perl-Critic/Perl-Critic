@@ -8,7 +8,14 @@
 
 use strict;
 use warnings;
+
+use lib 'inc';
+use lib 'lib';
+
 use ExtUtils::MakeMaker;
+
+use Perl::Critic::BuildUtilities qw{ &test_wrappers_to_generate };
+use Perl::Critic::Utils qw{ :characters };
 
 my $warning = <<'END_WARNING';
 
@@ -54,7 +61,11 @@ WriteMakefile(
     ABSTRACT_FROM  => 'lib/Perl/Critic.pm',
     VERSION_FROM   => 'lib/Perl/Critic.pm',
     EXE_FILES      => ['bin/perlcritic'],
-    PL_FILES       => {},
+    PL_FILES       => {
+        't/generate_without_optional_dependencies_wrappers.PL' => [
+            test_wrappers_to_generate()
+        ]
+    },
     PREREQ_PM      => {
         'B::Keywords'           => 1.05,
         'Config::Tiny'          => 2,
@@ -73,6 +84,7 @@ WriteMakefile(
         'String::Format'        => 1.13,
         'Test::More'            => 0,
     },
+    realclean      => {FILES => join $SPACE, test_wrappers_to_generate() },
 );
 
 sub MY::postamble {
