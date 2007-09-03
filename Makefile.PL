@@ -76,21 +76,21 @@ WriteMakefile(
 );
 
 sub MY::postamble {
-    return <<'MAKE_FRAG';
+    return <<"MAKE_FRAG";
 .PHONY: tags
 
 tags:
-        ctags -f tags \
-                --recurse \
-                --totals \
-                \
-                --exclude=blib/ \
-                --exclude=t/lib \
-                --exclude=.svn \
-                --exclude='*~' \
-                \
-                --languages=Perl \
-                --langmap=Perl:+.t \
+\tctags -f tags \\
+\t\t--recurse \\
+\t\t--totals \\
+\t\t\\
+\t\t--exclude=blib/ \\
+\t\t--exclude=t/lib \\
+\t\t--exclude=.svn \\
+\t\t--exclude='*~' \\
+\t\t\\
+\t\t--languages=Perl \\
+\t\t--langmap=Perl:+.t
 MAKE_FRAG
 }
 
