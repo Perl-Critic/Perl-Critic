@@ -15,7 +15,7 @@ use Perl::Critic::Utils qw{ :data_conversion :classification };
 
 use base 'Exporter';
 
-our $VERSION = 1.061;
+our $VERSION = 1.071;
 
 #-----------------------------------------------------------------------------
 
@@ -82,7 +82,8 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Utils::PPI
+Perl::Critic::Utils::PPI - Utility functions for dealing with PPI objects.
+
 
 =head1 DESCRIPTION
 

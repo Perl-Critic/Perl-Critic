@@ -29,7 +29,7 @@ use Perl::Critic::Utils qw{ :characters };
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = 1.061;
+our $VERSION = 1.071;
 
 Readonly::Array our @EXPORT_OK => qw(&critique);
 
@@ -764,7 +764,8 @@ C<m/PATTERN/imx>
 
 There are a number of distributions of additional policies on CPAN.  If
 L<Perl::Critic> doesn't contain a policy that you want, some one may have
-already written it.  Some of these can be found via L<Bundle::Perl::Critic>.
+already written it.  See the L</"SEE ALSO"> section below for a list of some
+of these distributions.
 
 
 =head1 POLICY THEMES
@@ -1025,18 +1026,36 @@ L<Module::Pluggable>
 
 L<PPI>
 
-L<Pod::Usage>
-
 L<Pod::PlainText>
 
+L<Pod::Usage>
+
+L<Readonly>
+
 L<String::Format>
+
+L<String::Util>
 
 The following modules are optional, but recommended for complete
 testing:
 
+L<File::HomeDir>
+
+L<File::Which>
+
+L<IO::String>
+
+L<IPC::Open2>
+
+L<Perl::Tidy>
+
+L<Pod::Spell>
+
 L<Test::Pod>
 
 L<Test::Pod::Coverage>
+
+L<Text::ParseWords>
 
 =head1 CONTACTING THE DEVELOPMENT TEAM
 
@@ -1054,21 +1073,35 @@ There are a number of distributions of additional Policies available.  A few
 are listed here:
 
 L<Perl::Critic::More>
+
 L<Perl::Critic::Bangs>
+
 L<Perl::Critic::Lax>
+
 L<Perl::Critic::StricterSubs>
+
 L<Perl::Critic::Swift>
+
+L<Perl::Critic::Tics>
 
 These distributions enable you to use Perl::Critic in your unit tests:
 
 L<Test::Perl::Critic>
+
 L<Test::Perl::Critic::Progressive>
 
 There are also a couple of distributions that will install all the
 Perl::Critic related modules known to the development team:
 
 L<Bundle::Perl::Critic>
+
 L<Task::Perl::Critic>
+
+If you want to make sure you have absolutely everything, you can use these:
+
+L<Bundle::Perl::Critic::IncludingOptionalDependencies>
+
+L<Task::Perl::Critic::IncludingOptionalDependencies>
 
 =head1 BUGS
 

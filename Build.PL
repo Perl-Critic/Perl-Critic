@@ -75,10 +75,9 @@ my $builder = Module::Build->new(
                      'Perl::Tidy'            => 0,
 
                      # All of these are for Documentation::PodSpelling
-                     'Pod::Spell'            => 1,
                      'File::Which'           => 0,
-                     'IO::String'            => 1,
                      'IPC::Open2'            => 1,
+                     'Pod::Spell'            => 1,
                      'Text::ParseWords'      => 3,
                     },
 

@@ -25,7 +25,7 @@ use Perl::Critic::Exception::Fatal::Internal qw{ &throw_internal };
 
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 1.061;
+our $VERSION = 1.071;
 
 #-----------------------------------------------------------------------------
 
@@ -61,15 +61,16 @@ sub applies_to           { return 'PPI::Document'         }
 sub initialize_if_enabled {
     my ( $self, $config ) = @_;
 
-    my $exe = $self->_get_spell_command_line();
-    return $FALSE if ! $exe;
-
     eval {
+        require File::Which;
+        require Text::ParseWords;
         require Pod::Spell;
         require IO::String;
         require IPC::Open2;
     };
     return $FALSE if $EVAL_ERROR;
+
+    return $FALSE if not $self->_derive_spell_command_line();
 
     return $TRUE;
 }
@@ -123,34 +124,20 @@ sub violates {
 
 #-----------------------------------------------------------------------------
 
-sub _get_spell_command_line {
+sub _derive_spell_command_line {
     my ($self) = @_;
 
-    return if $self->_get_failed();
-
-    if (! ref $self->{_spell_command_line}) {
-        eval {
-            require File::Which;
-            require Text::ParseWords;
-        };
-        if ($EVAL_ERROR) {
-            $self->_set_failed($TRUE);
-            return;
-        }
-        my @words = Text::ParseWords::shellwords($self->_get_spell_command());
-        if (!@words) {
-            $self->_set_failed($TRUE);
-            return;
-        }
-        if (! File::Spec->file_name_is_absolute($words[0])) {
-           $words[0] = File::Which::which($words[0]);
-        }
-        if (! $words[0] || ! -x $words[0]) {
-            $self->_set_failed($TRUE);
-            return;
-        }
-        $self->{_spell_command_line} = \@words;
+    my @words = Text::ParseWords::shellwords($self->_get_spell_command());
+    if (!@words) {
+        return;
     }
+    if (! File::Spec->file_name_is_absolute($words[0])) {
+       $words[0] = File::Which::which($words[0]);
+    }
+    if (! $words[0] || ! -x $words[0]) {
+        return;
+    }
+    $self->{_spell_command_line} = \@words;
 
     return $self->{_spell_command_line};
 }
@@ -173,6 +160,22 @@ sub _set_spell_command {
 
 #-----------------------------------------------------------------------------
 
+sub _get_spell_command_line {
+    my ( $self ) = @_;
+
+    return $self->{_spell_command_line};
+}
+
+sub _set_spell_command_line {
+    my ( $self, $spell_command_line ) = @_;
+
+    $self->{_spell_command_line} = $spell_command_line;
+
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
 sub _get_stop_words {
     my ( $self ) = @_;
 
@@ -183,22 +186,6 @@ sub _set_stop_words {
     my ( $self, $stop_words ) = @_;
 
     $self->{_stop_words} = $stop_words;
-
-    return;
-}
-
-#-----------------------------------------------------------------------------
-
-sub _get_failed {
-    my ( $self ) = @_;
-
-    return $self->{_failed};
-}
-
-sub _set_failed {
-    my ( $self, $failed ) = @_;
-
-    $self->{_failed} = $failed;
 
     return;
 }
@@ -243,9 +230,9 @@ To add exceptions on a module-by-module basis, add "stopwords" as
 described in L<Pod::Spell>.  For example:
 
    =for stopword gibbles
-   
+
    =head1 Gibble::Manip -- manipulate your gibbles
-   
+
    =cut
 
 =head1 CONFIGURATION

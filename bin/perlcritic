@@ -27,7 +27,7 @@ use Perl::Critic::Violation qw();
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = 1.061;
+our $VERSION = 1.071;
 
 Readonly::Scalar my $DEFAULT_VIOLATIONS_FOR_TOP => 20;
 
@@ -1021,7 +1021,8 @@ C<m/PATTERN/imx>
 
 There are a number of distributions of additional policies on CPAN.  If
 L<Perl::Critic> doesn't contain a policy that you want, some one may have
-already written it.  Some of these can be found via L<Bundle::Perl::Critic>.
+already written it.  See L<Perl::Critic/"SEE ALSO"> for a list of some of
+these distributions.
 
 =head1 POLICY THEMES
 

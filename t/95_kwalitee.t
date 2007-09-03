@@ -12,7 +12,7 @@ if (should_skip_author_tests()) {
 eval
 {
    require Test::Kwalitee;
-   Test::Kwalitee->import( tests => [ '-no_symlinks' ] );
+   Test::Kwalitee->import( tests => [ qw{ -no_pod_errors -no_symlinks } ] );
 };
 plan( skip_all => 'Test::Kwalitee not installed; skipping' ) if $@;
 

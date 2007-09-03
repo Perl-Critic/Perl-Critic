@@ -22,8 +22,10 @@ DESCRIPTION
     For a command-line interface to Perl::Critic, see the documentation for
     perlcritic. If you want to integrate Perl::Critic with your build
     process, Test::Perl::Critic provides an interface that is suitable for
-    test scripts. For the ultimate convenience (at the expense of some
-    flexibility) see the criticism pragma.
+    test scripts. Also, Test::Perl::Critic::Progressive is useful for
+    gradually applying coding standards to legacy code. For the ultimate
+    convenience (at the expense of some flexibility) see the criticism
+    pragma.
 
     Win32 and ActivePerl users can find PPM distributions of Perl::Critic at
     <http://theoryx5.uwinnipeg.ca/ppms/>.
@@ -44,8 +46,9 @@ DESCRIPTION
 
 CONSTRUCTOR
     "new( [ -profile => $FILE, -severity => $N, -theme => $string, -include
-    => \@PATTERNS, -exclude => \@PATTERNS, -top => $N, -only => $B, -force
-    => $B, -verbose => $N ] )"
+    => \@PATTERNS, -exclude => \@PATTERNS, -top => $N, -only => $B,
+    -profile-strictness => $PROFILE_STRICTNESS_{WARN|FATAL|QUIET}, -force =>
+    $B, -verbose => $N ], -color => $B )"
     "new( -config => Perl::Critic::Config->new() )"
     "new()" Returns a reference to a new Perl::Critic object. Most arguments
             are just passed directly into Perl::Critic::Config, but I have
@@ -126,7 +129,7 @@ CONSTRUCTOR
             "-include" option. Note that "-exclude" takes precedence over
             "-include" when a Policy matches both patterns.
 
-            -singlepolicy is a string "PATTERN". Only one policy that
+            -single-policy is a string "PATTERN". Only one policy that
             matches "m/$PATTERN/imx" will be used. Policies that do not
             match will be excluded. This option has precedence over the
             "-severity", "-theme", "-include", "-exclude", and "-only"
@@ -148,6 +151,20 @@ CONSTRUCTOR
             site. You can set the default value for this option in your
             .perlcriticrc file.
 
+            -profile-strictness is an enumerated value, one of
+            "$PROFILE_STRICTNESS_WARN" in Perl::Critic::Utils::Constants
+            (the default), "$PROFILE_STRICTNESS_FATAL" in
+            Perl::Critic::Utils::Constants, and "$PROFILE_STRICTNESS_QUIET"
+            in Perl::Critic::Utils::Constants. If set to
+            "$PROFILE_STRICTNESS_FATAL" in Perl::Critic::Utils::Constants,
+            Perl::Critic will make certain warnings about problems found in
+            a .perlcriticrc or file specified via the -profile option fatal.
+            For example, Perl::Critic normally only "warn"s about profiles
+            referring to non-existent Policies, but this value makes this
+            situation fatal. Correspondingly, "$PROFILE_STRICTNESS_QUIET" in
+            Perl::Critic::Utils::Constants makes Perl::Critic shut up about
+            these things.
+
             -force is a boolean value that controls whether Perl::Critic
             observes the magical "## no critic" pseudo-pragmas in your code.
             If set to a true value, Perl::Critic will analyze all code. If
@@ -160,6 +177,9 @@ CONSTRUCTOR
             format specification. See Perl::Critic::Violations for an
             explanation of format specifications. You can set the default
             value for this option in your .perlcriticrc file.
+
+            -color is not used by Perl::Critic but is provided for the
+            benefit of perlcritic.
 
             -config is a reference to a Perl::Critic::Config object. If you
             have created your own Config object for some reason, you can
@@ -203,6 +223,11 @@ METHODS
     " config() "
             Returns the Perl::Critic::Config object that was created for or
             given to this Critic.
+
+    " statistics() "
+            Returns the Perl::Critic::Statistics object that was created for
+            this Critic. The Statistics object accumulates data for all
+            files that are analyzed by this Critic.
 
 FUNCTIONAL INTERFACE
     For those folks who prefer to have a functional interface, The
@@ -255,6 +280,7 @@ CONFIGURATION
         theme     = (pbp || security) && bugs             #A theme expression
         include   = NamingConventions ClassHierarchies    #Space-delimited list
         exclude   = Variables  Modules::RequirePackage    #Space-delimited list
+        color     = 1                                     #Zero or One
 
     The remainder of the configuration file is a series of blocks like this:
 
@@ -360,6 +386,11 @@ THE POLICIES
     Perl::Critic::PolicySummary and in more detail in the individual modules
     themselves. Say ""perlcritic -doc PATTERN"" to see the perldoc for all
     Policy modules that match the regex "m/PATTERN/imx"
+
+    There are a number of distributions of additional policies on CPAN. If
+    Perl::Critic doesn't contain a policy that you want, some one may have
+    already written it. See the "SEE ALSO" section below for a list of some
+    of these distributions.
 
 POLICY THEMES
     Each Policy is defined with one or more "themes". Themes can be used to
@@ -613,24 +644,89 @@ PREREQUISITES
 
     PPI
 
-    Pod::Usage
-
     Pod::PlainText
 
+    Pod::Usage
+
+    Readonly
+
     String::Format
+
+    String::Util
 
     The following modules are optional, but recommended for complete
     testing:
 
+    File::HomeDir
+
+    File::Which
+
+    IO::String
+
+    IPC::Open2
+
+    Perl::Tidy
+
+    Pod::Spell
+
     Test::Pod
 
     Test::Pod::Coverage
+
+    Text::ParseWords
+
+CONTACTING THE DEVELOPMENT TEAM
+    You are encouraged to subscribe to the mailing list; send a message to
+    "<users-subscribe@perlcritic.tigris.org>". See also the archives. You
+    can also contact the author at "<thaljef@cpan.org>".
+
+    At least one member of the development team has started hanging around
+    in <irc://irc.perl.org/#perlcritic>.
+
+SEE ALSO
+    There are a number of distributions of additional Policies available. A
+    few are listed here:
+
+    Perl::Critic::More
+
+    Perl::Critic::Bangs
+
+    Perl::Critic::Lax
+
+    Perl::Critic::StricterSubs
+
+    Perl::Critic::Swift
+
+    Perl::Critic::Tics
+
+    These distributions enable you to use Perl::Critic in your unit tests:
+
+    Test::Perl::Critic
+
+    Test::Perl::Critic::Progressive
+
+    There are also a couple of distributions that will install all the
+    Perl::Critic related modules known to the development team:
+
+    Bundle::Perl::Critic
+
+    Task::Perl::Critic
+
+    If you want to make sure you have absolutely everything, you can use
+    these:
+
+    Bundle::Perl::Critic::IncludingOptionalDependencies
+
+    Task::Perl::Critic::IncludingOptionalDependencies
 
 BUGS
     Scrutinizing Perl code is hard for humans, let alone machines. If you
     find any bugs, particularly false-positives or false-negatives from a
     Perl::Critic::Policy, please submit them to
     <http://rt.cpan.org/NoAuth/Bugs.html?Dist=Perl-Critic>. Thanks.
+
+    Most policies will produce false-negatives if they cannot understand a
+    particular block of code.
 
 CREDITS
     Adam Kennedy - For creating PPI, the heart and soul of Perl::Critic.
@@ -646,6 +742,10 @@ CREDITS
     Giuseppe Maxia - For all the great ideas and positive encouragement.
 
     and Sharon, my wife - For putting up with my all-night code sessions.
+
+    Thanks also to the Perl Foundation for providing a grant to support
+    Chris Dolan's project to implement twenty PBP policies.
+    <http://www.perlfoundation.org/april_1_2007_new_grant_awards>
 
 AUTHOR
     Jeffrey Ryan Thalhammer <thaljef@cpan.org>

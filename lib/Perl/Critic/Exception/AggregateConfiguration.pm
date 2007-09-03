@@ -15,7 +15,7 @@ use Carp qw{ confess };
 
 use Perl::Critic::Utils qw{ :characters };
 
-our $VERSION = 1.061;
+our $VERSION = 1.071;
 
 #-----------------------------------------------------------------------------
 

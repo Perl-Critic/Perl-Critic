@@ -15,7 +15,7 @@ use Perl::Critic::Utils qw{ &hashify };
 
 use base 'Exporter';
 
-our $VERSION = 1.061;
+our $VERSION = 1.071;
 
 #-----------------------------------------------------------------------------
 
@@ -68,7 +68,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Utils::Constants
+Perl::Critic::Utils::Constants - Global constants
 
 =head1 DESCRIPTION
 

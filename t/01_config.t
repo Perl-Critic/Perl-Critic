@@ -18,15 +18,18 @@ use Perl::Critic::Utils qw{ :severities };
 use Test::More (tests => 67);
 
 # common P::C testing tools
-use Perl::Critic::TestUtils qw(bundled_policy_names);
+use Perl::Critic::TestUtils qw{
+    bundled_policy_names
+    names_of_policies_willing_to_work
+    };
+
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 #-----------------------------------------------------------------------------
 
-my $config       = Perl::Critic::Config->new( -severity => $SEVERITY_LOWEST );
-my @native_policies  = bundled_policy_names();
-my @site_policies    = Perl::Critic::Config::site_policy_names();
-my $total_policies   = scalar @site_policies;
+my @names_of_policies_willing_to_work = names_of_policies_willing_to_work();
+my @native_policy_names  = bundled_policy_names();
+my $total_policies   = scalar @names_of_policies_willing_to_work;
 
 #-----------------------------------------------------------------------------
 # Test default config.  Increasing the severity should yield
@@ -49,7 +52,7 @@ my $total_policies   = scalar @site_policies;
 # Same tests as above, but using a generated config
 
 {
-    my %profile = map { $_ => {} } @native_policies;
+    my %profile = map { $_ => {} } @native_policy_names;
     my $last_policy_count = $total_policies + 1;
     for my $severity ($SEVERITY_LOWEST .. $SEVERITY_HIGHEST) {
         my %pc_args = (-profile => \%profile, -severity => $severity);
@@ -67,7 +70,7 @@ my $total_policies   = scalar @site_policies;
 # turned them all off in the profile.
 
 {
-    my %profile = map { '-' . $_ => {} } @native_policies;
+    my %profile = map { '-' . $_ => {} } @native_policy_names;
     for my $severity (undef, $SEVERITY_LOWEST .. $SEVERITY_HIGHEST) {
         my %pc_args = (-profile => \%profile, -severity => $severity);
         my @policies = Perl::Critic::Config->new( %pc_args )->policies();
@@ -87,10 +90,11 @@ my $total_policies   = scalar @site_policies;
     my %profile = ();
     my $last_policy_count = 0;
     my $severity = $SEVERITY_HIGHEST;
-    for my $index ( 0 .. $#native_policies ){
+    for my $index ( 0 .. $#names_of_policies_willing_to_work ) {
         $severity-- if $index && $index % 10 == 0;
         $severity = $SEVERITY_LOWEST if $severity < $SEVERITY_LOWEST;
-        $profile{$native_policies[$index]} = {severity => $severity};
+        $profile{$names_of_policies_willing_to_work[$index]} =
+            {severity => $severity};
     }
 
     for my $severity ( reverse $SEVERITY_LOWEST+1 .. $SEVERITY_HIGHEST ) {
@@ -302,6 +306,10 @@ my $total_policies   = scalar @site_policies;
     eval{ Perl::Critic::Config->new( '-single-policy' => 'bogus' ) };
     like( $EVAL_ERROR, qr/did not match any policies/, 'invalid -single-policy' );
 }
+
+# ensure we run true if this test is loaded by
+# t/01_config.t.without_optional_dependencies.t
+1;
 
 ##############################################################################
 # Local Variables:
