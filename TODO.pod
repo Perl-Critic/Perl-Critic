@@ -140,11 +140,6 @@ multiple lines?
 Not sure if this is easy or hard.  Need to look at what PPI emits
 for regexps.  Make an exception for qr/ [ ] /x.
 
-=item * RegularExpressions::ProhibitFixedStringMatches (p271)
-
-Can't be C<qr/\s*\\A\s*\((?:\?:)?(?:\s*\w+\s*\|)*\s*\w+\s*\)\s*\\z/>
-or C<qr/\s*\\A\s*\w+\s*\\z/>
-
 =back
 
 =head1 NON-PBP POLICIES WANTED
