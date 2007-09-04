@@ -15,7 +15,8 @@ use lib 'lib';
 use ExtUtils::MakeMaker;
 
 use Perl::Critic::BuildUtilities qw{ &test_wrappers_to_generate };
-use Perl::Critic::Utils qw{ :characters };
+
+my $SPACE = q{ };
 
 my $warning = <<'END_WARNING';
 
