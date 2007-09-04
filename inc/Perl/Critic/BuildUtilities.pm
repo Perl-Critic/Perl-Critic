@@ -10,7 +10,7 @@ package Perl::Critic::BuildUtilities;
 use strict;
 use warnings;
 
-our $VERSION = 1.072;
+our $VERSION = 1.073;
 
 use base qw{ Exporter };
 

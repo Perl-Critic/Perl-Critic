@@ -17,6 +17,12 @@
        APIs, so this package hides away the igly fiddling with PPI
        internals.
 
+[1.073]  Released on 2007-09-04
+
+     Bug Fixes:
+     Work around problems with the combination of Exporter & Readonly in
+     Makefile.PL on some machines.
+
 [1.072]  Released on 2007-09-03
 
      Bug Fixes:
