@@ -18,7 +18,7 @@ our $VERSION = 1.072;
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $GLOB_RX => qr{ [\*\?] }x;
+Readonly::Scalar my $GLOB_RX => qr{ [\*\?] }mx;
 Readonly::Scalar my $DESC    => q{Glob written as <...>};
 Readonly::Scalar my $EXPL    => [ 167 ];
 

@@ -1,4 +1,11 @@
-## name baisc passes
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+## name basic passes
 ## failures 0
 ## cut
 my $string =~ m{pattern}x;
@@ -21,10 +28,12 @@ my $string =~ s/pattern/foo/gimx;
 my $string =~ s/pattern/foo/gixs;
 my $string =~ s/pattern/foo/xgms;
 
+my $re =~ qr/pattern/x;
+
 #-----------------------------------------------------------------------------
 
 ## name basic failures
-## failures 16
+## failures 17
 ## cut
 my $string =~ m{pattern};
 my $string =~ m{pattern}gim;
@@ -46,6 +55,8 @@ my $string =~ s/pattern/foo/gim;
 my $string =~ s/pattern/foo/gis;
 my $string =~ s/pattern/foo/gms;
 
+my $re =~ qr/pattern/;
+
 #-----------------------------------------------------------------------------
 
 ## name tr and y formatting
@@ -62,3 +73,13 @@ my $string =~ y{[A-Z]}{[a-z]};
 
 my $string =~ tr/[A-Z]/[a-z]/cds;
 my $string =~ y/[A-Z]/[a-z]/cds;
+
+#-----------------------------------------------------------------------------
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :

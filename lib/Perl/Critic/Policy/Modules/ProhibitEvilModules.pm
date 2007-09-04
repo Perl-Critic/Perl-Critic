@@ -49,7 +49,7 @@ sub initialize_if_enabled {
 
                 # These are module name patterns (e.g. /Acme/)
                 my $re = $1; # Untainting
-                my $pattern = eval { qr/$re/ };
+                my $pattern = eval { qr/$re/ };  ##no critic (RegularExpressions::.*)
 
                 die qq{Regexp syntax error in your profile: "$module"\n}
                     if $EVAL_ERROR;

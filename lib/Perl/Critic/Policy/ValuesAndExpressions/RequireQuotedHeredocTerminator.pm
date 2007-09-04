@@ -18,7 +18,7 @@ our $VERSION = 1.072;
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $HEREDOC_RX => qr/ \A << \s* ["|'] .* ['|"] \z /x;
+Readonly::Scalar my $HEREDOC_RX => qr/ \A << \s* ["|'] .* ['|"] \z /mx;
 Readonly::Scalar my $DESC       => q{Heredoc terminator must be quoted};
 Readonly::Scalar my $EXPL       => [ 64 ];
 

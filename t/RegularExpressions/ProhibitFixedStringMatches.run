@@ -1,0 +1,112 @@
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+## name basic passes
+## failures 0
+## cut
+
+/foo/;
+/foo/s;
+/ bar /;
+/(bar)/;
+/(foo|bar)/;
+
+s/foo//;
+qr/ bar /;
+
+## name failures mentioned in perldoc
+## failures 7
+## cut
+
+    m/^foo$/;
+    m/\A foo \z/x;
+    m/\A foo \z/xm;
+    m/\A(foo)\z/;
+    m/\A(?:foo)\z/;
+    m/\A(foo|bar)\z/;
+    m/\A(?:foo|bar)\z/;
+
+## name anchored passes
+## failures 0
+## cut
+
+/\A \s* \z/sx;
+/ \A \s* \z /sx;
+/^ \w+ $/x;
+/^ foo $/mx;
+
+s/\A \s* \z//sx;
+s/^ \w+ $//x;
+s/^ foo $//m;
+
+qr/\A \s* \z/s;
+qr/^ \w+ $/x;
+qr/^ foo $/m;
+
+## name escapes
+## failures 0
+## cut
+
+/\\A foo \\z/s;
+/\^ foo \$/;
+
+## name alternating passes
+## failures 0
+## cut
+
+/\A (foo|\w+) \z/x;
+/^ (foo|bar) \z/mx;
+
+## name basic failures, m//
+## failures 5
+## cut
+
+/\A foo \z/x;
+/\A foo \z/s;
+/\A foo \z/xs;
+/^ foo $/sx;
+/\A foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo \z/;
+
+## name basic failures, s///
+## failures 5
+## cut
+
+s/\A foo \z//;
+s/\A foo \z//s;
+s/\A foo \z//xs;
+s/^ foo $//s;
+s/\A foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo \z//;
+
+## name basic failures, qr//
+## failures 5
+## cut
+
+qr/\A foo \z/;
+qr/\A foo \z/s;
+qr/\A foo \z/xs;
+qr/^ foo $/s;
+qr/\A foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo \z/;
+
+## name alternating failures
+## failures 5
+## cut
+
+qr/\A(foo|bar)\z/;
+qr/\A(foo|)\z/;
+qr/\A(?:foo|bar)\z/;
+/^(?:foo|bar)$/;
+/^(?:foo|bar|baz|spam|splunge)$/;
+
+#-----------------------------------------------------------------------------
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :

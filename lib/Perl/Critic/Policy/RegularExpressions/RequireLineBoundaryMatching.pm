@@ -12,6 +12,7 @@ use warnings;
 use Readonly;
 
 use Perl::Critic::Utils qw{ :severities };
+use Perl::Critic::Utils::PPIRegexp qw{ &get_modifiers };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.072;
@@ -27,17 +28,16 @@ sub supported_parameters { return ()                    }
 sub default_severity     { return $SEVERITY_LOW         }
 sub default_themes       { return qw(core pbp cosmetic) }
 sub applies_to           { return qw(PPI::Token::Regexp::Match
-                                     PPI::Token::Regexp::Substitute) }
+                                     PPI::Token::Regexp::Substitute
+                                     PPI::Token::QuoteLike::Regexp) }
 
 #-----------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    #Note: as of PPI 1.103, 'modifiers' is not part of the published
-    #API.  I'm cheating by accessing it here directly.
-
-    if ( ! defined $elem->{modifiers}->{'m'} ) {
+    my %mods = get_modifiers($elem);
+    if ( ! $mods{m} ) {
         return $self->violation( $DESC, $EXPL, $elem );
     }
     return; #ok!;

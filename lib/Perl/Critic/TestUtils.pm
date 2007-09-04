@@ -247,7 +247,7 @@ sub _finalize_subtest {
 
     if (defined $subtest->{error}) {
         if ( $subtest->{error} =~ m{ \A / (.*) / \z }xms) {
-            $subtest->{error} = eval {qr/$1/};
+            $subtest->{error} = eval {qr/$1/}; ##no critic (RegularExpressions::)
             if ($EVAL_ERROR) {
                 confess "$subtest->{name} 'error' has a malformed regular expression";
             }

@@ -1,0 +1,60 @@
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+## name basic passes
+## failures 0
+## cut
+
+$foo = 'STDIN';
+my $STDIN = 1;
+close STDIN;
+while (<>) {
+  print;
+}
+while (<FOO>) {
+  print;
+}
+while (<$fh>) {
+  print;
+}
+
+#-----------------------------------------------------------------------------
+
+## name basic failures
+## failures 3
+## cut
+
+$answer = <STDIN>;
+while (<STDIN>) {
+  print;
+}
+if (<STDIN> =~ /y/) {
+  remove 'tmp.txt';
+}
+
+#-----------------------------------------------------------------------------
+
+## name ppi failures
+## failures 4
+## TODO PPI bug -- readline misinterpreted as gt/lt after comma
+## cut
+
+$content = join '', <STDIN>;
+$content = join('', <STDIN>);
+$content = join $var, <STDIN>;
+$content = join($var, <STDIN>);
+
+#-----------------------------------------------------------------------------
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :

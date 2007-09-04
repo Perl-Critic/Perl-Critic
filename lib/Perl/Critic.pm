@@ -330,7 +330,7 @@ sub _unfix_shebang {
     # fixing strings.  This matches most of the ones I've found in my own Perl
     # distribution, but it may not be bullet-proof.
 
-    my $fixin_rx = qr{^eval 'exec .* \$0 \${1\+"\$@"}'\s*[\r\n]\s*if.+;};
+    my $fixin_rx = qr{^eval 'exec .* \$0 \${1\+"\$@"}'\s*[\r\n]\s*if.+;}m;  ##no critic(RequireExtendedFormatting)
     if ( $first_stmnt =~ $fixin_rx ) {
         my $line = $first_stmnt->location()->[0];
         return ( $line => {ALL => 1}, $line + 1 => {ALL => 1} );

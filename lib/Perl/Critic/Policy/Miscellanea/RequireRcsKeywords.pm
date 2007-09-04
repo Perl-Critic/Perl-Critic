@@ -75,7 +75,7 @@ sub violates {
         }
         else {
             my @missing_keywords = grep {
-                my $keyword_rx = qr/\$$_.*\$/;
+                my $keyword_rx = qr/\$$_.*\$/xms;
                 !!none {
                     /$keyword_rx/    ## no critic
                     }

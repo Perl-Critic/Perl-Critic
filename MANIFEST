@@ -55,6 +55,7 @@ lib/Perl/Critic/Policy/Documentation/RequirePodSections.pm
 lib/Perl/Critic/Policy/ErrorHandling/RequireCarping.pm
 lib/Perl/Critic/Policy/InputOutput/ProhibitBacktickOperators.pm
 lib/Perl/Critic/Policy/InputOutput/ProhibitBarewordFileHandles.pm
+lib/Perl/Critic/Policy/InputOutput/ProhibitExplicitStdin.pm
 lib/Perl/Critic/Policy/InputOutput/ProhibitInteractiveTest.pm
 lib/Perl/Critic/Policy/InputOutput/ProhibitJoinedReadline.pm
 lib/Perl/Critic/Policy/InputOutput/ProhibitOneArgSelect.pm
@@ -80,6 +81,7 @@ lib/Perl/Critic/Policy/NamingConventions/ProhibitMixedCaseSubs.pm
 lib/Perl/Critic/Policy/NamingConventions/ProhibitMixedCaseVars.pm
 lib/Perl/Critic/Policy/References/ProhibitDoubleSigils.pm
 lib/Perl/Critic/Policy/RegularExpressions/ProhibitCaptureWithoutTest.pm
+lib/Perl/Critic/Policy/RegularExpressions/ProhibitFixedStringMatches.pm
 lib/Perl/Critic/Policy/RegularExpressions/RequireExtendedFormatting.pm
 lib/Perl/Critic/Policy/RegularExpressions/RequireLineBoundaryMatching.pm
 lib/Perl/Critic/Policy/Subroutines/ProhibitAmpersandSigils.pm
@@ -138,6 +140,7 @@ lib/Perl/Critic/Utils.pm
 lib/Perl/Critic/Utils/Constants.pm
 lib/Perl/Critic/Utils/McCabe.pm
 lib/Perl/Critic/Utils/PPI.pm
+lib/Perl/Critic/Utils/PPIRegexp.pm
 lib/Perl/Critic/Violation.pm
 LICENSE
 Makefile.PL
@@ -214,6 +217,7 @@ t/ErrorHandling/RequireCarping.run
 t/generate_without_optional_dependencies_wrappers.PL
 t/InputOutput/ProhibitBacktickOperators.run
 t/InputOutput/ProhibitBarewordFileHandles.run
+t/InputOutput/ProhibitExplicitStdin.run
 t/InputOutput/ProhibitInteractiveTest.run
 t/InputOutput/ProhibitJoinedReadline.run
 t/InputOutput/ProhibitOneArgSelect.run
@@ -239,6 +243,7 @@ t/NamingConventions/ProhibitMixedCaseSubs.run
 t/NamingConventions/ProhibitMixedCaseVars.run
 t/References/ProhibitDoubleSigils.run
 t/RegularExpressions/ProhibitCaptureWithoutTest.run
+t/RegularExpressions/ProhibitFixedStringMatches.run
 t/RegularExpressions/RequireExtendedFormatting.run
 t/RegularExpressions/RequireLineBoundaryMatching.run
 t/Subroutines/ProhibitAmpersandSigils.run

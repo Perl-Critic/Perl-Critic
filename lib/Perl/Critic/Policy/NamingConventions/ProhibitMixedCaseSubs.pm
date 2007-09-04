@@ -18,7 +18,7 @@ our $VERSION = 1.072;
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $MIXED_RX => qr/ [A-Z][a-z] | [a-z][A-Z] /x;
+Readonly::Scalar my $MIXED_RX => qr/ [A-Z][a-z] | [a-z][A-Z] /mx;
 Readonly::Scalar my $DESC     => 'Mixed-case subroutine name';
 Readonly::Scalar my $EXPL     => [ 44 ];
 
