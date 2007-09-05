@@ -90,6 +90,10 @@ policy.
 
 These policies should not report violations if 'use Fatal' is in effect.
 
+=item * TestingAndDebugging::RequireUseWarnings
+
+Check for -w on the shbang line.
+
 =back
 
 =head1 OTHER PBP POLICIES THAT SEEM FEASIBLE TO IMPLEMENT
