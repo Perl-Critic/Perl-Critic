@@ -15,7 +15,7 @@ use Perl::Critic::Utils qw{ &hashify };
 
 use base 'Exporter';
 
-our $VERSION = 1.073;
+our $VERSION = 1.074;
 
 #-----------------------------------------------------------------------------
 

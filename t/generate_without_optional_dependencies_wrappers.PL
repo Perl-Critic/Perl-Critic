@@ -19,7 +19,7 @@ use Fatal qw{ open close };
 
 use Perl::Critic::BuildUtilities qw{ &recommended_module_versions };
 
-our $VERSION = 1.073;
+our $VERSION = 1.074;
 
 my $SPACE = q{ };
 
