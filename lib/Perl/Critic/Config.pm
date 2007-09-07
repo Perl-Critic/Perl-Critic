@@ -17,7 +17,7 @@ use Scalar::Util qw(blessed);
 
 use Perl::Critic::ConfigErrors;
 use Perl::Critic::PolicyFactory;
-use Perl::Critic::Theme qw( $RULE_INVALID_CHARACTER_REGEX &cook_rule );
+use Perl::Critic::Theme qw( $RULE_INVALID_CHARACTER_REGEX cook_rule );
 use Perl::Critic::UserProfile qw();
 use Perl::Critic::Utils qw{
     :booleans :characters :severities :internal_lookup :classification

@@ -11,7 +11,7 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ &hashify };
+use Perl::Critic::Utils qw{ hashify };
 
 use base 'Exporter';
 

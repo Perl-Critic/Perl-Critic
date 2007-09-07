@@ -14,7 +14,7 @@ use Config::Tiny qw();
 use English qw(-no_match_vars);
 use File::Spec qw();
 use Perl::Critic::Defaults qw();
-use Perl::Critic::Utils qw{ :characters &policy_long_name &policy_short_name };
+use Perl::Critic::Utils qw{ :characters policy_long_name policy_short_name };
 
 our $VERSION = 1.074;
 

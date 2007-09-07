@@ -20,8 +20,8 @@ use Perl::Critic::Utils qw{
     :booleans
     :severities
     :data_conversion
-    &interpolate
-    &policy_short_name
+    interpolate
+    policy_short_name
 };
 use Perl::Critic::Violation qw();
 

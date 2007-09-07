@@ -11,7 +11,7 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :severities :classification &hashify};
+use Perl::Critic::Utils qw{ :severities :classification hashify};
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.074;

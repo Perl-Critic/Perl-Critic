@@ -13,7 +13,7 @@ use Readonly;
 
 
 use Perl::Critic::Utils qw{ :characters :severities :classification };
-use Perl::Critic::Utils::PPI qw{ &is_ppi_statement_subclass };
+use Perl::Critic::Utils::PPI qw{ is_ppi_statement_subclass };
 
 use base 'Perl::Critic::Policy';
 

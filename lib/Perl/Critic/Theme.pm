@@ -26,7 +26,7 @@ our $VERSION = 1.074;
 
 Readonly::Array our @EXPORT_OK => qw{
     $RULE_INVALID_CHARACTER_REGEX
-    &cook_rule
+    cook_rule
 };
 
 #-----------------------------------------------------------------------------

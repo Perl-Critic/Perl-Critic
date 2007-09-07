@@ -58,44 +58,44 @@ Readonly::Array our @EXPORT_OK => qw(
     $LEFT_PAREN
     $RIGHT_PAREN
 
-    &all_perl_files
-    &find_keywords
-    &first_arg
-    &hashify
-    &interpolate
-    &is_class_name
-    &is_function_call
-    &is_hash_key
-    &is_in_void_context
-    &is_included_module_name
-    &is_integer
-    &is_label_pointer
-    &is_method_call
-    &is_package_declaration
-    &is_perl_bareword
-    &is_perl_builtin
-    &is_perl_builtin_with_list_context
-    &is_perl_builtin_with_multiple_arguments
-    &is_perl_builtin_with_no_arguments
-    &is_perl_builtin_with_one_argument
-    &is_perl_builtin_with_optional_argument
-    &is_perl_builtin_with_zero_and_or_one_arguments
-    &is_perl_filehandle
-    &is_perl_global
-    &is_qualified_name
-    &is_script
-    &is_subroutine_name
-    &is_unchecked_call
-    &is_valid_numeric_verbosity
-    &parse_arg_list
-    &policy_long_name
-    &policy_short_name
-    &precedence_of
-    &severity_to_number
-    &shebang_line
-    &split_nodes_on_comma
-    &verbosity_to_format
-    &words_from_string
+    all_perl_files
+    find_keywords
+    first_arg
+    hashify
+    interpolate
+    is_class_name
+    is_function_call
+    is_hash_key
+    is_in_void_context
+    is_included_module_name
+    is_integer
+    is_label_pointer
+    is_method_call
+    is_package_declaration
+    is_perl_bareword
+    is_perl_builtin
+    is_perl_builtin_with_list_context
+    is_perl_builtin_with_multiple_arguments
+    is_perl_builtin_with_no_arguments
+    is_perl_builtin_with_one_argument
+    is_perl_builtin_with_optional_argument
+    is_perl_builtin_with_zero_and_or_one_arguments
+    is_perl_filehandle
+    is_perl_global
+    is_qualified_name
+    is_script
+    is_subroutine_name
+    is_unchecked_call
+    is_valid_numeric_verbosity
+    parse_arg_list
+    policy_long_name
+    policy_short_name
+    precedence_of
+    severity_to_number
+    shebang_line
+    split_nodes_on_comma
+    verbosity_to_format
+    words_from_string
 );
 
 
@@ -137,36 +137,36 @@ Readonly::Hash our %EXPORT_TAGS => (
     ],
     classification  => [
         qw{
-            &is_class_name
-            &is_function_call
-            &is_hash_key
-            &is_included_module_name
-            &is_integer
-            &is_label_pointer
-            &is_method_call
-            &is_package_declaration
-            &is_perl_bareword
-            &is_perl_builtin
-            &is_perl_filehandle
-            &is_perl_global
-            &is_perl_builtin_with_list_context
-            &is_perl_builtin_with_multiple_arguments
-            &is_perl_builtin_with_no_arguments
-            &is_perl_builtin_with_one_argument
-            &is_perl_builtin_with_optional_argument
-            &is_perl_builtin_with_zero_and_or_one_arguments
-            &is_qualified_name
-            &is_script
-            &is_subroutine_name
-            &is_unchecked_call
-            &is_valid_numeric_verbosity
+            is_class_name
+            is_function_call
+            is_hash_key
+            is_included_module_name
+            is_integer
+            is_label_pointer
+            is_method_call
+            is_package_declaration
+            is_perl_bareword
+            is_perl_builtin
+            is_perl_filehandle
+            is_perl_global
+            is_perl_builtin_with_list_context
+            is_perl_builtin_with_multiple_arguments
+            is_perl_builtin_with_no_arguments
+            is_perl_builtin_with_one_argument
+            is_perl_builtin_with_optional_argument
+            is_perl_builtin_with_zero_and_or_one_arguments
+            is_qualified_name
+            is_script
+            is_subroutine_name
+            is_unchecked_call
+            is_valid_numeric_verbosity
         }
     ],
-    data_conversion => [ qw{ &hashify &words_from_string &interpolate } ],
-    ppi             => [ qw{ &first_arg &parse_arg_list } ],
-    internal_lookup => [ qw{ &severity_to_number &verbosity_to_format } ],
-    language        => [ qw{ &precedence_of } ],
-    deprecated      => [ qw{ &find_keywords } ],
+    data_conversion => [ qw{ hashify words_from_string interpolate } ],
+    ppi             => [ qw{ first_arg parse_arg_list } ],
+    internal_lookup => [ qw{ severity_to_number verbosity_to_format } ],
+    language        => [ qw{ precedence_of } ],
+    deprecated      => [ qw{ find_keywords } ],
 );
 
 #-----------------------------------------------------------------------------
@@ -1486,24 +1486,24 @@ C<$RIGHT_PAREN>
 =item C<:classification>
 
 Includes:
-C<&is_function_call>,
-C<&is_hash_key>,
-C<&is_included_module_name>,
-C<&is_integer>,
-C<&is_method_call>,
-C<&is_package_declaration>,
-C<&is_perl_builtin>,
-C<&is_perl_global>,
-C<&is_perl_builtin_with_list_context>
-C<&is_perl_builtin_with_multiple_arguments>
-C<&is_perl_builtin_with_no_arguments>
-C<&is_perl_builtin_with_one_argument>
-C<&is_perl_builtin_with_optional_argument>
-C<&is_perl_builtin_with_zero_and_or_one_arguments>
-C<&is_script>,
-C<&is_subroutine_name>,
-C<&is_unchecked_call>
-C<&is_valid_numeric_verbosity>
+C<is_function_call>,
+C<is_hash_key>,
+C<is_included_module_name>,
+C<is_integer>,
+C<is_method_call>,
+C<is_package_declaration>,
+C<is_perl_builtin>,
+C<is_perl_global>,
+C<is_perl_builtin_with_list_context>
+C<is_perl_builtin_with_multiple_arguments>
+C<is_perl_builtin_with_no_arguments>
+C<is_perl_builtin_with_one_argument>
+C<is_perl_builtin_with_optional_argument>
+C<is_perl_builtin_with_zero_and_or_one_arguments>
+C<is_script>,
+C<is_subroutine_name>,
+C<is_unchecked_call>
+C<is_valid_numeric_verbosity>
 
 See also L<Perl::Critic::Utils::PPI>.
 
@@ -1512,17 +1512,17 @@ See also L<Perl::Critic::Utils::PPI>.
 Generic manipulation, not having anything specific to do with Perl::Critic.
 
 Includes:
-C<&hashify>,
-C<&words_from_string>,
-C<&interpolate>
+C<hashify>,
+C<words_from_string>,
+C<interpolate>
 
 =item C<:ppi>
 
 Things for dealing with L<PPI>, other than classification.
 
 Includes:
-C<&first_arg>,
-C<&parse_arg_list>
+C<first_arg>,
+C<parse_arg_list>
 
 See also L<Perl::Critic::Utils::PPI>.
 
@@ -1531,15 +1531,15 @@ See also L<Perl::Critic::Utils::PPI>.
 Translations between internal representations.
 
 Includes:
-C<&severity_to_number>,
-C<&verbosity_to_format>
+C<severity_to_number>,
+C<verbosity_to_format>
 
 =item C<:language>
 
 Information about Perl not programmatically available elsewhere.
 
 Includes:
-C<&precedence_of>
+C<precedence_of>
 
 =item C<:deprecated>
 
@@ -1548,7 +1548,7 @@ to get to these functions, rather than the function names themselves, so as to
 mark any module using them as needing cleanup.
 
 Includes:
-C<&find_keywords>
+C<find_keywords>
 
 =back
 

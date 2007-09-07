@@ -13,8 +13,8 @@ use lib 'inc';
 use Module::Build;
 
 use Perl::Critic::BuildUtilities qw{
-    &recommended_module_versions
-    &test_wrappers_to_generate
+    recommended_module_versions
+    test_wrappers_to_generate
 };
 
 my $warning = <<'END_WARNING';

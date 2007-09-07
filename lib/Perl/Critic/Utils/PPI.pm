@@ -19,9 +19,9 @@ our $VERSION = 1.074;
 #-----------------------------------------------------------------------------
 
 our @EXPORT_OK = qw(
-    &is_ppi_expression_or_generic_statement
-    &is_ppi_generic_statement
-    &is_ppi_statement_subclass
+    is_ppi_expression_or_generic_statement
+    is_ppi_generic_statement
+    is_ppi_statement_subclass
 );
 
 our %EXPORT_TAGS = (

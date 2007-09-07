@@ -20,7 +20,7 @@ use Perl::Critic::Utils qw{
     :characters
     :booleans
     :severities
-    &words_from_string
+    words_from_string
 };
 use base 'Perl::Critic::Policy';
 

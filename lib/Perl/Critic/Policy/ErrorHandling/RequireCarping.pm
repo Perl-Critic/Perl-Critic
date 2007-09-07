@@ -14,7 +14,7 @@ use Readonly;
 use Perl::Critic::Utils qw{
     :booleans :characters :severities :classification :data_conversion
 };
-use Perl::Critic::Utils::PPI qw{ &is_ppi_expression_or_generic_statement };
+use Perl::Critic::Utils::PPI qw{ is_ppi_expression_or_generic_statement };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.074;

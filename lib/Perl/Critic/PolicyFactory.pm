@@ -17,7 +17,7 @@ use Perl::Critic::Utils qw{
     :characters
     $POLICY_NAMESPACE
     :data_conversion
-    &policy_long_name
+    policy_long_name
     :internal_lookup
 };
 use Perl::Critic::Utils::Constants qw{ :profile_strictness };

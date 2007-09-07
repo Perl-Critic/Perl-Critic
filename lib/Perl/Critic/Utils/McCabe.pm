@@ -23,7 +23,7 @@ our $VERSION = 1.074;
 #-----------------------------------------------------------------------------
 
 Readonly::Array our @EXPORT_OK =>
-  qw( &calculate_mccabe_of_sub &calculate_mccabe_of_main );
+  qw( calculate_mccabe_of_sub calculate_mccabe_of_main );
 
 #-----------------------------------------------------------------------------
 

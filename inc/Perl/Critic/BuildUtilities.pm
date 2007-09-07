@@ -15,8 +15,8 @@ our $VERSION = 1.074;
 use base qw{ Exporter };
 
 our @EXPORT_OK = qw{
-    &recommended_module_versions
-    &test_wrappers_to_generate
+    recommended_module_versions
+    test_wrappers_to_generate
 };
 
 sub recommended_module_versions {

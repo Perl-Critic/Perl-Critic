@@ -11,7 +11,7 @@ use strict;
 use warnings;
 
 use Perl::Critic::Utils qw{ :booleans :severities };
-use Perl::Critic::Utils::McCabe qw{ &calculate_mccabe_of_main };
+use Perl::Critic::Utils::McCabe qw{ calculate_mccabe_of_main };
 
 use base 'Perl::Critic::Policy';
 

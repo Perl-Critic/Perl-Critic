@@ -12,7 +12,7 @@ use warnings;
 
 use English qw(-no_match_vars);
 
-use Perl::Critic::Utils::McCabe qw{ &calculate_mccabe_of_sub };
+use Perl::Critic::Utils::McCabe qw{ calculate_mccabe_of_sub };
 
 #-----------------------------------------------------------------------------
 

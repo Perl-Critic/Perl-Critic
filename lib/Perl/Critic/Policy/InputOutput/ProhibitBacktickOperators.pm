@@ -11,7 +11,7 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :booleans :severities &is_in_void_context };
+use Perl::Critic::Utils qw{ :booleans :severities is_in_void_context };
 
 use base 'Perl::Critic::Policy';
 
