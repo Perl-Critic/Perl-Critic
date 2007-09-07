@@ -62,7 +62,7 @@ WriteMakefile(
     NAME           => 'Perl::Critic',
     AUTHOR         => 'Jeffrey Thalhammer <thaljef@cpan.org>',
     ABSTRACT_FROM  => 'lib/Perl/Critic.pm',
-    VERSION        => '1.075_001',
+    VERSION_FROM   => 'lib/Perl/Critic.pm',
     EXE_FILES      => ['bin/perlcritic'],
     PL_FILES       => {
         't/generate_without_optional_dependencies_wrappers.PL' => [

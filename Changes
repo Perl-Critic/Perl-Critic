@@ -5,7 +5,7 @@
 # $Revision$
 ##############################################################################
 
-[1.075_001]  Released on 2007-09-06
+[1.076]  Released on 2007-09-06
 
      Bug Fixes:
      Undo the changes in 1.073 and 1.074.  Instead, stop using the subroutine
