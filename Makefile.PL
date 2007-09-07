@@ -14,8 +14,11 @@ use lib 'lib';
 
 use ExtUtils::MakeMaker;
 
-use Perl::Critic::BuildUtilities qw{ test_wrappers_to_generate };
-use Perl::Critic::Utils qw{ :characters };
+use Perl::Critic::BuildUtilities qw<
+    test_wrappers_to_generate
+    dump_unlisted_or_optional_module_versions
+>;
+use Perl::Critic::Utils qw< :characters >;
 
 my $warning = <<'END_WARNING';
 
@@ -104,6 +107,8 @@ tags:
 \t\t--langmap=Perl:+.t
 MAKE_FRAG
 }
+
+dump_unlisted_or_optional_module_versions();
 
 ##############################################################################
 # Local Variables:

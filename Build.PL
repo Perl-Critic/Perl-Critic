@@ -12,10 +12,11 @@ use lib 'inc';
 
 use Module::Build;
 
-use Perl::Critic::BuildUtilities qw{
+use Perl::Critic::BuildUtilities qw<
     recommended_module_versions
     test_wrappers_to_generate
-};
+    dump_unlisted_or_optional_module_versions
+>;
 
 my $warning = <<'END_WARNING';
 
@@ -92,17 +93,19 @@ my $builder = Module::Build->new(
   script_files   => ['bin/perlcritic'],
 
   add_to_cleanup => [
-                    qw{
+                    qw<
                         MANIFEST.bak
                         Makefile
                         Makefile.old
                         pm_to_blib
-                    },
+                    >,
                     test_wrappers_to_generate(),
   ],
 );
 
 $builder->create_build_script();
+
+dump_unlisted_or_optional_module_versions();
 
 ##############################################################################
 # Local Variables:
