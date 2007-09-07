@@ -68,7 +68,7 @@ object-oriented interface to filehandles, which I think is more
 elegant anyway.
 
   open( $fh, '>output.txt' );          # not ok
-  open( $fh, q{>}, 'output.txt );      # ok
+  open( $fh, q{>}, 'output.txt' );     # ok
 
   use IO::File;
   my $fh = IO::File->new( 'output.txt', q{>} ); # even better!

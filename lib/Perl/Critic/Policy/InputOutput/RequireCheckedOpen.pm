@@ -59,9 +59,9 @@ The perl builtin I/O function C<open> returns a false value on failure. That
 value should always be checked to ensure that the open was successful.
 
 
-  my $error = open( $filehanle, $mode, $filname );                  # ok
-  open( $filehanle, $mode, $filname ) or die "unable to open: $!";  # ok
-  open( $filehanle, $mode, $filname );                              # not ok
+  my $error = open( $filehandle, $mode, $filename );                  # ok
+  open( $filehandle, $mode, $filename ) or die "unable to open: $!";  # ok
+  open( $filehandle, $mode, $filename );                              # not ok
 
 =head1 AUTHOR
 

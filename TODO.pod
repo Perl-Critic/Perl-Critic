@@ -33,6 +33,15 @@ policies.  It contains its own TODO.pod.
 Primarily for things like C<RequireUseStrict> and C<ProhibitMagicNumbers>.
 Replace current workaround for C<RequireUseStrict>.
 
+=item * Add --prohibit-unrestricted-no-critic option to F<perlcritic>.
+
+Requires C<## no critic> to take an argument:
+
+  ## no critic (SomePolicyPattern)     # ok
+  ## no critic                         # not ok
+
+Can't be done as a Policy because any line that violated it would disable it.
+
 =back
 
 =head1 BUGS/LIMITATIONS
