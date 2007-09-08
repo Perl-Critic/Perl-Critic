@@ -1,0 +1,62 @@
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+## name short match regexps
+## failures 0
+## cut
+
+/foo/;
+/foo\nbar/;
+/ bar .* baz /m;
+s/foo/
+  bar
+ /;
+
+## name proper delimiters
+## failures 0
+## cut
+
+m{
+   foo
+ }x;
+m{
+   foo
+ };
+s{foo
+  bar}
+ {baz
+  fzz};
+qr{
+   foo
+  };
+
+## name basic failures
+## failures 4
+## cut
+
+m/
+ foo
+ /;
+s/
+ foo
+ //;
+qr/
+  foo
+ /;
+m#
+ foo
+ #;
+
+#-----------------------------------------------------------------------------
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :

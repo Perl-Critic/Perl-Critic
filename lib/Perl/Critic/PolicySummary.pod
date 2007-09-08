@@ -61,11 +61,11 @@ Write C<< eval { $foo->isa($pkg) } >> instead of C<UNIVERSAL::isa($foo, $pkg)> [
 
 =head2 L<Perl::Critic::Policy::BuiltinFunctions::ProhibitVoidGrep>
 
-Don't use C<grep> in void contexts. [Severity 3]
+Don't use C<grep> in void contexts [Severity 3]
 
 =head2 L<Perl::Critic::Policy::BuiltinFunctions::ProhibitVoidMap>
 
-Don't use C<map> in void contexts. [Severity 3]
+Don't use C<map> in void contexts [Severity 3]
 
 =head2 L<Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep>
 
@@ -97,7 +97,7 @@ Write C<bless {}, $class;> instead of just C<bless {};> [Severity 5]
 
 =head2 L<Perl::Critic::Policy::CodeLayout::ProhibitHardTabs>
 
-Use spaces instead of tabs. [Severity 3]
+Use spaces instead of tabs [Severity 3]
 
 =head2 L<Perl::Critic::Policy::CodeLayout::ProhibitParensWithBuiltins>
 
@@ -109,7 +109,7 @@ Write C<qw(foo bar baz)> instead of C<('foo', 'bar', 'baz')> [Severity 2]
 
 =head2 L<Perl::Critic::Policy::CodeLayout::ProhibitTrailingWhitespace>
 
-Don't use whitespace at the end of lines. [Severity 1]
+Don't use whitespace at the end of lines [Severity 1]
 
 =head2 L<Perl::Critic::Policy::CodeLayout::RequireConsistentNewlines>
 
@@ -117,11 +117,11 @@ Use the same newline through the source [Severity 4]
 
 =head2 L<Perl::Critic::Policy::CodeLayout::RequireTidyCode>
 
-Must run code through L<perltidy>. [Severity 1]
+Must run code through L<perltidy> [Severity 1]
 
 =head2 L<Perl::Critic::Policy::CodeLayout::RequireTrailingCommas>
 
-Put a comma at the end of every multi-line list declaration, including the last one. [Severity 1]
+Put a comma at the end of every multi-line list declaration, including the last one [Severity 1]
 
 =head2 L<Perl::Critic::Policy::ControlStructures::ProhibitCStyleForLoops>
 
@@ -129,11 +129,11 @@ Write C<for(0..20)> instead of C<for($i=0; $i<=20; $i++)> [Severity 2]
 
 =head2 L<Perl::Critic::Policy::ControlStructures::ProhibitCascadingIfElse>
 
-Don't write long "if-elsif-elsif-elsif-elsif...else" chains. [Severity 3]
+Don't write long "if-elsif-elsif-elsif-elsif...else" chains [Severity 3]
 
 =head2 L<Perl::Critic::Policy::ControlStructures::ProhibitDeepNests>
 
-Don't write deeply nested loops and conditionals. [Severity 2]
+Don't write deeply nested loops and conditionals [Severity 2]
 
 =head2 L<Perl::Critic::Policy::ControlStructures::ProhibitMutatingListFunctions>
 
@@ -149,7 +149,7 @@ Write C<if(! $condition)> instead of C<unless($condition)> [Severity 2]
 
 =head2 L<Perl::Critic::Policy::ControlStructures::ProhibitUnreachableCode>
 
-Don't write code after an unconditional C<die, exit, or next>.  [Severity 4]
+Don't write code after an unconditional C<die, exit, or next>  [Severity 4]
 
 =head2 L<Perl::Critic::Policy::ControlStructures::ProhibitUntilBlocks>
 
@@ -165,11 +165,11 @@ All POD should be after C<__END__> [Severity 1]
 
 =head2 L<Perl::Critic::Policy::Documentation::RequirePodSections>
 
-Organize your POD into the customary sections. [Severity 2]
+Organize your POD into the customary sections [Severity 2]
 
 =head2 L<Perl::Critic::Policy::ErrorHandling::RequireCarping>
 
-Use functions from L<Carp> instead of C<warn> or C<die>. [Severity 3]
+Use functions from L<Carp> instead of C<warn> or C<die> [Severity 3]
 
 =head2 L<Perl::Critic::Policy::InputOutput::ProhibitBacktickOperators>
 
@@ -217,31 +217,31 @@ Write C<print {$FH} $foo, $bar;> instead of C<print $FH $foo, $bar;> [Severity 1
 
 =head2 L<Perl::Critic::Policy::Miscellanea::ProhibitFormats>
 
-Do not use C<format>. [Severity 3]
+Do not use C<format> [Severity 3]
 
 =head2 L<Perl::Critic::Policy::Miscellanea::ProhibitTies>
 
-Do not use C<tie>. [Severity 2]
+Do not use C<tie> [Severity 2]
 
 =head2 L<Perl::Critic::Policy::Miscellanea::RequireRcsKeywords>
 
-Put source-control keywords in every file. [Severity 2]
+Put source-control keywords in every file [Severity 2]
 
 =head2 L<Perl::Critic::Policy::Modules::ProhibitAutomaticExportation>
 
-Export symbols via C<@EXPORT_OK> or C<%EXPORT_TAGS> instead of C<@EXPORT>.  [Severity 3]
+Export symbols via C<@EXPORT_OK> or C<%EXPORT_TAGS> instead of C<@EXPORT>  [Severity 3]
 
 =head2 L<Perl::Critic::Policy::Modules::ProhibitEvilModules>
 
-Ban modules that aren't blessed by your shop. [Severity 5]
+Ban modules that aren't blessed by your shop [Severity 5]
 
 =head2 L<Perl::Critic::Policy::Modules::ProhibitExcessMainComplexity>
 
-Minimize complexity in code that is B<outside> of subroutines. [Severity 3]
+Minimize complexity in code that is B<outside> of subroutines [Severity 3]
 
 =head2 L<Perl::Critic::Policy::Modules::ProhibitMultiplePackages>
 
-Put packages (especially subclasses) in separate files. [Severity 4]
+Put packages (especially subclasses) in separate files [Severity 4]
 
 =head2 L<Perl::Critic::Policy::Modules::RequireBarewordIncludes>
 
@@ -249,11 +249,11 @@ Write C<require Module> instead of C<require 'Module.pm'> [Severity 5]
 
 =head2 L<Perl::Critic::Policy::Modules::RequireEndWithOne>
 
-End each module with an explicitly C<1;> instead of some funky expression. [Severity 4]
+End each module with an explicitly C<1;> instead of some funky expression [Severity 4]
 
 =head2 L<Perl::Critic::Policy::Modules::RequireExplicitPackage>
 
-Always make the C<package> explicit. [Severity 4]
+Always make the C<package> explicit [Severity 4]
 
 =head2 L<Perl::Critic::Policy::Modules::RequireFilenameMatchesPackage>
 
@@ -261,11 +261,11 @@ Package declaration must match filename [Severity 5]
 
 =head2 L<Perl::Critic::Policy::Modules::RequireVersionVar>
 
-Give every module a C<$VERSION> number. [Severity 2]
+Give every module a C<$VERSION> number [Severity 2]
 
 =head2 L<Perl::Critic::Policy::NamingConventions::ProhibitAmbiguousNames>
 
-Don't use vague variable or subroutine names like 'last' or 'record'. [Severity 3]
+Don't use vague variable or subroutine names like 'last' or 'record' [Severity 3]
 
 =head2 L<Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseSubs>
 
@@ -287,25 +287,33 @@ Capture variable used outside conditional [Severity 3]
 
 Use C<eq> or hash instead of fixed-pattern regexps [Severity 2]
 
+=head2 L<Perl::Critic::Policy::RegularExpressions::ProhibitUnusualDelimiters>
+
+Use only C<//> or C<{}> to delimit regexps [Severity 5]
+
+=head2 L<Perl::Critic::Policy::RegularExpressions::RequireBracesForMultiline>
+
+Use C<{> and C<}> to delimit multi-line regexps [Severity 5]
+
 =head2 L<Perl::Critic::Policy::RegularExpressions::RequireExtendedFormatting>
 
-Always use the C</x> modifier with regular expressions. [Severity 2]
+Always use the C</x> modifier with regular expressions [Severity 2]
 
 =head2 L<Perl::Critic::Policy::RegularExpressions::RequireLineBoundaryMatching>
 
-Always use the C</m> modifier with regular expressions. [Severity 3]
+Always use the C</m> modifier with regular expressions [Severity 3]
 
 =head2 L<Perl::Critic::Policy::Subroutines::ProhibitAmpersandSigils>
 
-Don't call functions with a leading ampersand sigil. [Severity 2]
+Don't call functions with a leading ampersand sigil [Severity 2]
 
 =head2 L<Perl::Critic::Policy::Subroutines::ProhibitBuiltinHomonyms>
 
-Don't declare your own C<open> function. [Severity 4]
+Don't declare your own C<open> function [Severity 4]
 
 =head2 L<Perl::Critic::Policy::Subroutines::ProhibitExcessComplexity>
 
-Minimize complexity by factoring code into smaller subroutines. [Severity 3]
+Minimize complexity by factoring code into smaller subroutines [Severity 3]
 
 =head2 L<Perl::Critic::Policy::Subroutines::ProhibitExplicitReturnUndef>
 
@@ -333,7 +341,7 @@ Always unpack C<@_> first [Severity 4]
 
 =head2 L<Perl::Critic::Policy::Subroutines::RequireFinalReturn>
 
-End every path through a subroutine with an explicit C<return> statement. [Severity 4]
+End every path through a subroutine with an explicit C<return> statement [Severity 4]
 
 =head2 L<Perl::Critic::Policy::TestingAndDebugging::ProhibitNoStrict>
 
@@ -361,7 +369,7 @@ Always C<use warnings> [Severity 4]
 
 =head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitCommaSeparatedStatements>
 
-Don't use the comma operator as a statement separator. [Severity 4]
+Don't use the comma operator as a statement separator [Severity 4]
 
 =head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitConstantPragma>
 
@@ -381,7 +389,7 @@ Use concatenation or HEREDOCs instead of literal line breaks in strings [Severit
 
 =head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitInterpolationOfLiterals>
 
-Always use single quotes for literal strings. [Severity 1]
+Always use single quotes for literal strings [Severity 1]
 
 =head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitLeadingZeros>
 
@@ -393,7 +401,7 @@ Long chains of method calls indicate tightly coupled code [Severity 2]
 
 =head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitMismatchedOperators>
 
-Don't mix numeric operators with string operands, or vice-versa. [Severity 3]
+Don't mix numeric operators with string operands, or vice-versa [Severity 3]
 
 =head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitMixedBooleanOperators>
 
@@ -401,19 +409,19 @@ Write C< !$foo && $bar || $baz > instead of C< not $foo && $bar or $baz> [Severi
 
 =head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitNoisyQuotes>
 
-Use C<q{}> or C<qq{}> instead of quotes for awkward-looking strings. [Severity 2]
+Use C<q{}> or C<qq{}> instead of quotes for awkward-looking strings [Severity 2]
 
 =head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitQuotesAsQuotelikeOperatorDelimiters>
 
-Don't use quotes (C<'>, C<">, C<`>) as delimiters for the quote-like operators. [Severity 3]
+Don't use quotes (C<'>, C<">, C<`>) as delimiters for the quote-like operators [Severity 3]
 
 =head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitVersionStrings>
 
-Don't use strings like C<v1.4> or C<1.4.5> when including other modules. [Severity 3]
+Don't use strings like C<v1.4> or C<1.4.5> when including other modules [Severity 3]
 
 =head2 L<Perl::Critic::Policy::ValuesAndExpressions::RequireInterpolationOfMetachars>
 
-Warns that you might have used single quotes when you really wanted double-quotes. [Severity 1]
+Warns that you might have used single quotes when you really wanted double-quotes [Severity 1]
 
 =head2 L<Perl::Critic::Policy::ValuesAndExpressions::RequireNumberSeparators>
 
@@ -433,11 +441,11 @@ Do not write C< my $foo = $bar if $baz; > [Severity 5]
 
 =head2 L<Perl::Critic::Policy::Variables::ProhibitLocalVars>
 
-Use C<my> instead of C<local>, except when you have to. [Severity 2]
+Use C<my> instead of C<local>, except when you have to [Severity 2]
 
 =head2 L<Perl::Critic::Policy::Variables::ProhibitMatchVars>
 
-Avoid C<$`>, C<$&>, C<$'> and their English equivalents. [Severity 4]
+Avoid C<$`>, C<$&>, C<$'> and their English equivalents [Severity 4]
 
 =head2 L<Perl::Critic::Policy::Variables::ProhibitPackageVars>
 
@@ -445,7 +453,7 @@ Eliminate globals declared with C<our> or C<use vars> [Severity 3]
 
 =head2 L<Perl::Critic::Policy::Variables::ProhibitPerl4PackageNames>
 
-Use double colon (::) to separate package name components instead of single quotes ('). [Severity 2]
+Use double colon (::) to separate package name components instead of single quotes (') [Severity 2]
 
 =head2 L<Perl::Critic::Policy::Variables::ProhibitPunctuationVars>
 

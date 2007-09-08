@@ -20,6 +20,7 @@ our @EXPORT_OK = qw(
     &get_match_string
     &get_substitute_string
     &get_modifiers
+    &get_delimiters
 );
 
 our %EXPORT_TAGS = (
@@ -52,6 +53,18 @@ sub get_modifiers {
     my ($elem) = @_;
     return if !$elem->{modifiers};
     return %{ $elem->{modifiers} };
+}
+
+#-----------------------------------------------------------------------------
+
+sub get_delimiters {
+    my ($elem) = @_;
+    return if !$elem->{sections};
+    my @delimiters = ($elem->{sections}->[0]->{type});
+    if ($elem->{sections}->[1]) {
+        push @delimiters, $elem->{sections}->[1]->{type} || $delimiters[0];
+    }
+    return @delimiters;
 }
 
 1;
@@ -116,6 +129,20 @@ undef if the token is not a regexp.
   /foo/xms;  # yields (m => 1, s => 1, x => 1)
   s/foo//;   # yields ()
   qr/foo/i;  # yields (i => 1)
+
+=item C<get_delimiters( $token )>
+
+Returns one (or two for a substitution regexp) two-character strings
+indicating the delimiters of the regexp, or an empty list if the token is not
+a regular expression token.  For example:
+
+   m/foo/;      # yields ('//')
+   m#foo#;      # yields ('##')
+   m<foo>;      # yields ('<>')
+   s/foo/bar/;  # yields ('//', '//')
+   s{foo}{bar}; # yields ('{}', '{}')
+   s{foo}/bar/; # yields ('{}', '//')   valid, but yuck!
+   qr/foo/;     # yields ('//')
 
 =back
 

@@ -125,10 +125,6 @@ to take into account the Fatal and Fatal::Exception modules.
 Make sure there's a close within N statements of an open, both with
 same lexical FH
 
-=item * RegularExpressions::RequireBracesForMultiline (p242)
-
-=item * RegularExpressions::ProhibitUnusualDelimiters (p246)
-
 =item * RegularExpressions::ProhibitEscapedMetacharacters (p247)
 
 =item * RegularExpressions::ProhibitEnumeratedClasses (p248)
@@ -227,6 +223,11 @@ L<http://rt.cpan.org/Ticket/Display.html?id=20439>
 
 These are simplified versions of Documentation::RequirePodSections.
 
+=item * Documentation::RequireValidSynopsis
+
+The Synopsis section must be all indented and must be syntactically valid Perl
+(as validated by PPI).
+
 =item * Miscellaneous::ProhibitBoilerplate
 
 Complain about copy-and-paste code or docs from h2xs, Module::Starter::*,
@@ -238,6 +239,23 @@ L<http://search.cpan.org/src/JJORE/Carp-Clan-5.8/t/04boilerplate.t>
 =item * BuiltinFunctions::ProhibitExtraneousScalarCall
 
 Recommend that C<if (scalar @array)> be rewritten as C<if (@array)>.
+
+=item * RegularExpressions::ProhibitMixedDelimiters
+
+Ban s{foo}(bar)
+
+=item * ValuesAndExpressions::RequireInterpolatedStringyEval
+
+Ensure that the argument to a stringy eval is not a constant string.  That's
+just wasteful.  Real world examples include:
+
+  eval 'use Optional::Module';
+
+which is better written as
+
+  eval { require Optional::Module; Optional::Module->import };
+
+for performance gains and compile-time syntax checking.
 
 =back
 
@@ -377,6 +395,13 @@ ValuesAndExpressions::ProhibitMismatchedOperators has two workarounds
 for PPI bugs with parsing operators.  Many of these bugs have been
 fixed in PPI, so it would be good to check if those workarounds are
 still needed.
+
+=item Regexp methods
+
+Not strictly a bug -- the PPI Regexp classes have a dearth of accessor methods
+as of v1.118, meaning that we have to do messy digging into internals.  I
+wrote Perl::Critic:Utils::PPIRegexp to encapsulate this messiness, but it
+would be nicer to have an official interface in PPI.
 
 =back
 

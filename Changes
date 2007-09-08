@@ -10,11 +10,13 @@
      New Policies: (funded by a Perl Foundation grant)
      * InputOutput::ProhibitExplicitStdin
      * RegularExpressions::ProhibitFixedStringMatches
+     * RegularExpressions::RequireBracesForMultiline
+     * RegularExpressions::ProhibitUnusualDelimiters
 
      New Developer Features:
      * Perl::Critic::Utils::PPIRegexp encapsulates interaction with
        the PPI Regexp token classes.  Those classes have very sparse
-       APIs, so this package hides away the igly fiddling with PPI
+       APIs, so this package hides away the ugly fiddling with PPI
        internals.
 
 [1.073]  Released on 2007-09-04

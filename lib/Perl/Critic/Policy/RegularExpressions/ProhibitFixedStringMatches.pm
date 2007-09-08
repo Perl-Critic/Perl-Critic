@@ -15,7 +15,7 @@ use English qw(-no_match_vars);
 use Carp;
 
 use Perl::Critic::Utils qw{ :booleans :severities };
-use Perl::Critic::Utils::PPIRegexp qw{ :all };
+use Perl::Critic::Utils::PPIRegexp qw{ get_match_string get_modifiers };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.073;
