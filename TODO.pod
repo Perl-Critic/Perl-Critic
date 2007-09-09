@@ -127,27 +127,41 @@ same lexical FH
 
 =item * RegularExpressions::ProhibitEscapedMetacharacters (p247)
 
+Strictly, requires parsing the regexp to find the escapes.
+
 =item * RegularExpressions::ProhibitEnumeratedClasses (p248)
 
-This will be avoided for ASCII-only code.
+  [A-Z]     => \p{Uppercase}
+  [A-Za-z]  => \p{Alphabetic}
+  [A-Za-z_] => \p{ID_Start}
+  [0-9]     => \d
+  (others?)
+
+People writing ASCII-only code will want to disable this policy or put in ##
+no critic flags.
+
+Strictly, requires parsing the regexp to find the enumerations.
 
 =item * RegularExpressions::ProhibitUnusedCapture (p252)
 
 Look for LHS of regexp or use of C<$1>, C<$2>, ... before next
 regexp.
 
+Requires parsing the regexp to find the captures.
+
 =item * RegularExpressions::ProhibitComplexRegexes (p261)
 
-If regexp is longer than N characters/lines, require it be split
-into C<qr//> pieces.
+If regexp is longer than N characters/lines, require it be split into C<qr//>
+pieces.
 
-Even if the x modifier is used and the regex is split across
-multiple lines?
+Even if the x modifier is used and the regex is split across multiple lines?
+Perhaps don't count comments toward the character limit.
 
 =item * RegularExpressions::ProhibitSingleCharAlternation (p265)
 
-Not sure if this is easy or hard.  Need to look at what PPI emits
-for regexps.  Make an exception for qr/ [ ] /x.
+Make an exception for qr/ [ ] /x.
+
+Strictly, requires parsing the regexp.
 
 =back
 
