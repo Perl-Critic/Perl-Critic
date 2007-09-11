@@ -157,7 +157,7 @@ sub starting_points_including_examples {
 sub _subtests_from_file {
     my $test_file = shift;
 
-    my %valid_keys = hashify qw( name failures parms TODO error filename );
+    my %valid_keys = hashify qw( name failures parms TODO error filename optional_modules );
 
     # XXX Remove me once all subtest files are populated
     return if -z $test_file;

@@ -92,7 +92,21 @@ for my $policy ( sort keys %$subtests ) {
             }
         }
         else {
-            $test_passed = is(scalar @violations, $subtest->{failures}, $desc);
+            my $expected_failures = $subtest->{failures};
+
+            # If any optional modules are NOT installed, then there should be no failures.
+            if ($subtest->{optional_modules}) {
+              MODULE:
+                for my $module (split m/,\s*/xms, $subtest->{optional_modules}) {
+                    eval "require $module";
+                    if ($EVAL_ERROR) {
+                        $expected_failures = 0;
+                        last MODULE;
+                    }
+                }
+            }
+
+            $test_passed = is(scalar @violations, $expected_failures, $desc);
         }
 
         if (not $test_passed) {
