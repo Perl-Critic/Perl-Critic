@@ -82,6 +82,7 @@ my $builder = Module::Build->new(
   recommends     => { recommended_module_versions() },
 
   build_requires => {'Test::More'            => 0,
+                     'Readonly'              => 1.03,
                     },
 
   PL_files       => {
