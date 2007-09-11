@@ -12,12 +12,14 @@
      * RegularExpressions::ProhibitFixedStringMatches
      * RegularExpressions::RequireBracesForMultiline
      * RegularExpressions::ProhibitUnusualDelimiters
+     * RegularExpressions::ProhibitUnusedCapture (still a little rough)
 
      New Developer Features:
      * Perl::Critic::Utils::PPIRegexp encapsulates interaction with
        the PPI Regexp token classes.  Those classes have very sparse
        APIs, so this package hides away the ugly fiddling with PPI
        internals.
+     * Added a new optional_modules parameter for the .run syntax.
 
 [1.073]  Released on 2007-09-04
 

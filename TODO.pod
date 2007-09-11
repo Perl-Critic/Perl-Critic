@@ -142,13 +142,6 @@ no critic flags.
 
 Strictly, requires parsing the regexp to find the enumerations.
 
-=item * RegularExpressions::ProhibitUnusedCapture (p252)
-
-Look for LHS of regexp or use of C<$1>, C<$2>, ... before next
-regexp.
-
-Requires parsing the regexp to find the captures.
-
 =item * RegularExpressions::ProhibitComplexRegexes (p261)
 
 If regexp is longer than N characters/lines, require it be split into C<qr//>
@@ -241,6 +234,14 @@ These are simplified versions of Documentation::RequirePodSections.
 
 The Synopsis section must be all indented and must be syntactically valid Perl
 (as validated by PPI).
+
+=item * Documentation::ProhibitEmptySections
+
+Any C<=headN> and C<=over> sections must not be empty.  This helps catch
+boilerplate (althought Test::Pod should catch empty C<=over> blocks).
+
+On the other hand, C<=item ...> sections can be empty, since the item label is
+content.
 
 =item * Miscellaneous::ProhibitBoilerplate
 

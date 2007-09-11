@@ -23,6 +23,7 @@ sub recommended_module_versions {
     return (
         'File::HomeDir'         => 0,
         'Perl::Tidy'            => 0,
+        'Regexp::Parser'        => '0.20',
 
         # All of these are for Documentation::PodSpelling
         'File::Which'           => 0,

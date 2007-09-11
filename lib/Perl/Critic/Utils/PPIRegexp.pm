@@ -9,6 +9,7 @@ package Perl::Critic::Utils::PPIRegexp;
 
 use strict;
 use warnings;
+use English qw(-no_match_vars);
 
 use base 'Exporter';
 
@@ -17,6 +18,7 @@ our $VERSION = 1.073;
 #-----------------------------------------------------------------------------
 
 our @EXPORT_OK = qw(
+    &parse_regexp
     &get_match_string
     &get_substitute_string
     &get_modifiers
@@ -26,6 +28,35 @@ our @EXPORT_OK = qw(
 our %EXPORT_TAGS = (
     all => \@EXPORT_OK,
 );
+
+#-----------------------------------------------------------------------------
+
+sub parse_regexp {
+    my ($elem) = @_;
+
+    eval { require Regexp::Parser; };
+    return if $EVAL_ERROR;
+
+    my $re = get_match_string($elem);
+    return if !defined $re;
+
+    # Are there any external regexp modifiers?  If so, embed the ones
+    # that matter before parsing.
+    my %modifiers = get_modifiers($elem);
+    my $mods = join q{}, map {$modifiers{$_} ? $_ : q{}} qw(i m x s);
+    if ($mods) {
+       $re = "(?$mods:$re)";
+    }
+
+    my $parser = Regexp::Parser->new;
+    # If we can't parse the regexp, don't return a parse tree
+    {
+        local $SIG{__WARN__} = sub {};  # blissful silence...
+        return if ! $parser->regex($re);
+    }
+
+    return $parser;
+}
 
 #-----------------------------------------------------------------------------
 
@@ -102,6 +133,17 @@ using those.
 =head1 IMPORTABLE SUBS
 
 =over
+
+=item C<parse_regexp( $token )>
+
+Parse the regexp token with L<Regexp::Parser>.  If that module is not
+available or if there is a parse error, returns undef.  If a parse success,
+returns a Regexp::Parser instance that can be used to walk the regexp object
+model.
+
+CAVEAT: This method pays special attention to the C<x> modifier to the regexp.
+If present, we wrap the regexp string in C<(?x:...)> to ensure a proper parse.
+This does change the object model though.
 
 =item C<get_match_string( $token )>
 

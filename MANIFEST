@@ -82,6 +82,7 @@ lib/Perl/Critic/Policy/NamingConventions/ProhibitMixedCaseVars.pm
 lib/Perl/Critic/Policy/References/ProhibitDoubleSigils.pm
 lib/Perl/Critic/Policy/RegularExpressions/ProhibitCaptureWithoutTest.pm
 lib/Perl/Critic/Policy/RegularExpressions/ProhibitFixedStringMatches.pm
+lib/Perl/Critic/Policy/RegularExpressions/ProhibitUnusedCapture.pm
 lib/Perl/Critic/Policy/RegularExpressions/ProhibitUnusualDelimiters.pm
 lib/Perl/Critic/Policy/RegularExpressions/RequireBracesForMultiline.pm
 lib/Perl/Critic/Policy/RegularExpressions/RequireExtendedFormatting.pm
@@ -246,6 +247,7 @@ t/NamingConventions/ProhibitMixedCaseVars.run
 t/References/ProhibitDoubleSigils.run
 t/RegularExpressions/ProhibitCaptureWithoutTest.run
 t/RegularExpressions/ProhibitFixedStringMatches.run
+t/RegularExpressions/ProhibitUnusedCapture.run
 t/RegularExpressions/ProhibitUnusualDelimiters.run
 t/RegularExpressions/RequireBracesForMultiline.run
 t/RegularExpressions/RequireExtendedFormatting.run

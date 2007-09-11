@@ -1,0 +1,236 @@
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+## name non-captures
+## failures 0
+## cut
+
+m/foo/;
+m/(?:foo)/;
+
+if (m/foo/) {
+   print "bar";
+}
+
+## name assignment captures
+## failures 0
+## cut
+
+my ($foo) = m/(foo)/;
+my ($foo) = m/(foo|bar)/;
+my ($foo) = m/(foo)(?:bar)/;
+my @foo = m/(foo)/;
+my @foo = m/(foo)/g;
+
+my ($foo, $bar) = m/(foo)(bar)/;
+my @foo = m/(foo)(bar)/;
+my ($foo, @bar) = m/(foo)(bar)/;
+my ($foo, @bar) = m/(foo)(bar)(baz)/;
+
+## name undef array captures
+## failures 0
+## cut
+
+() = m/(foo)/;
+(undef) = m/(foo)/;
+my ($foo) =()= m/(foo)/g;
+
+## name complex array assignment captures
+## failures 0
+## cut
+
+@$foo = m/(foo)(bar)/;
+@{$foo} = m/(foo)(bar)/;
+
+($foo,@$foo) = m/(foo)(bar)/;
+($foo,@{$foo}) = m/(foo)(bar)/;
+
+## name conditional captures
+## failures 0
+## cut
+
+if (m/(foo)/) {
+   my $foo = $1;
+   print $foo;
+}
+if (m/(foo)(bar)/) {
+   my $foo = $1;
+   my $bar = $2;
+   print $foo, $bar;
+}
+if (m/(foo)(bar)/) {
+   my ($foo, $bar) = ($1, $2);
+   print $foo, $bar;
+}
+if (m/(foo)(bar)/) {
+   my (@foo) = ($1, $2);
+   print @foo;
+}
+
+if (m/(foo)/) {
+   # bug, but not a violation of THIS policy
+   my (@foo) = ($1, $2);
+   print @foo;
+}
+
+## name boolean and ternary captures
+## failures 0
+## cut
+
+m/(foo)/ && print $1;
+m/(foo)/ ? print $1 : die;
+m/(foo)/ && ($1 == 'foo') ? print 1 : die;
+
+## name loop captures
+## failures 0
+## cut
+
+for (m/(foo)/) {
+   my $foo = $1;
+   print $foo;
+}
+
+## name slurpy array loop captures
+## failures 0
+## cut
+
+map {print} m/(foo)/;
+foo(m/(foo)/);
+foo('bar', m/(foo)/);
+foo(m/(foo)/, 'bar');
+foo m/(foo)/;
+foo 'bar', m/(foo)/;
+foo m/(foo)/, 'bar';
+
+## name slurpy with assignment
+## failures 0
+## cut
+
+my ($foo) = grep {$b++ == 2} m/(foo)/g;
+my ($foo) = grep {$b++ == 2} $str =~ m/(foo)/g;
+
+## name slurpy with array assignment
+## failures 0
+## cut
+
+my @foo = grep {$b++ > 2} m/(foo)/g;
+my @foo = grep {$b++ > 2} $str =~ m/(foo)/g;
+
+## name assignment captures on string
+## failures 0
+## cut
+
+my ($foo) = $str =~ m/(foo)/;
+my ($foo) = $str =~ m/(foo|bar)/;
+my ($foo) = $str =~ m/(foo)(?:bar)/;
+my @foo = $str =~ m/(foo)/;
+my @foo = $str =~ m/(foo)/g;
+
+my ($foo, $bar) = $str =~ m/(foo)(bar)/;
+my @foo = $str =~ m/(foo)(bar)/;
+my ($foo, @bar) = $str =~ m/(foo)(bar)/;
+my (@bar) = $str =~ m/(foo)(bar)/;
+my ($foo, @bar) = $str =~ m/(foo)(bar)(baz)/;
+
+## name slurpy captures on string
+## failures 0
+## cut
+
+map {print} $str =~ m/(foo)/g;
+
+## name self captures
+## failures 0
+## cut
+
+m/(foo)\1/;
+
+## name basic failures
+## failures 5
+## optional_modules Regexp::Parser
+## cut
+
+m/(foo)/;
+my ($foo) = m/(foo)/g;
+
+if (m/(foo)/) {
+   print "bar";
+}
+if (m/(foo)(bar)/) {
+   my $foo = $1;
+   print $foo;
+}
+
+for (m/(foo)/) {
+   print "bar";
+}
+
+## name negated regexp failures
+## failures 1
+## optional_modules Regexp::Parser
+## cut
+
+my ($foo) = $str !~ m/(foo)/;
+
+## name statement failures
+## failures 1
+## optional_modules Regexp::Parser
+## cut
+
+m/(foo)/ && m/(bar)/ && print $1;
+
+## name sub failures
+## failures 1
+## optional_modules Regexp::Parser
+## cut
+
+sub foo {
+  m/(foo)/;
+  return;
+}
+print $1;
+
+## name anon sub failures
+## failures 1
+## optional_modules Regexp::Parser
+## TODO PPI v1.118 doesn't recognize anonymous subroutines
+## cut
+
+my $sub = sub foo {
+  m/(foo)/;
+  return;
+};
+print $1;
+
+## name ref constructors
+## failures 0
+## cut
+
+$f = { m/(\w+)=(\w+)/g };
+$f = [ m/(\w+)/g ];
+
+## name sub returns
+## failures 0
+## cut
+
+sub foo {
+   m/(foo)/;
+}
+sub foo {
+   return m/(foo)/;
+}
+map { m/(foo)/ } (1, 2, 3);
+
+
+#-----------------------------------------------------------------------------
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :
