@@ -29,9 +29,9 @@ use Perl::Critic::Utils qw{ :characters };
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = 1.074;
+our $VERSION = 1.075_001;
 
-Readonly::Array our @EXPORT_OK => qw(&critique);
+Readonly::Array our @EXPORT_OK => qw(critique);
 
 #-----------------------------------------------------------------------------
 

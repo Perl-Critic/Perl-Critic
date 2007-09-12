@@ -14,9 +14,11 @@ use lib 'lib';
 
 use ExtUtils::MakeMaker;
 
-use Perl::Critic::BuildUtilities qw{ &test_wrappers_to_generate };
-
-my $SPACE = q{ };
+use Perl::Critic::BuildUtilities qw<
+    test_wrappers_to_generate
+    dump_unlisted_or_optional_module_versions
+>;
+use Perl::Critic::Utils qw< :characters >;
 
 my $warning = <<'END_WARNING';
 
@@ -60,7 +62,7 @@ WriteMakefile(
     NAME           => 'Perl::Critic',
     AUTHOR         => 'Jeffrey Thalhammer <thaljef@cpan.org>',
     ABSTRACT_FROM  => 'lib/Perl/Critic.pm',
-    VERSION_FROM   => 'lib/Perl/Critic.pm',
+    VERSION        => '1.075_001',
     EXE_FILES      => ['bin/perlcritic'],
     PL_FILES       => {
         't/generate_without_optional_dependencies_wrappers.PL' => [
@@ -105,6 +107,8 @@ tags:
 \t\t--langmap=Perl:+.t
 MAKE_FRAG
 }
+
+dump_unlisted_or_optional_module_versions();
 
 ##############################################################################
 # Local Variables:

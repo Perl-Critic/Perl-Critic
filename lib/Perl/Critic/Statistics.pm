@@ -12,11 +12,11 @@ use warnings;
 
 use English qw(-no_match_vars);
 
-use Perl::Critic::Utils::McCabe qw{ &calculate_mccabe_of_sub };
+use Perl::Critic::Utils::McCabe qw{ calculate_mccabe_of_sub };
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = 1.074;
+our $VERSION = 1.075_001;
 
 #-----------------------------------------------------------------------------
 

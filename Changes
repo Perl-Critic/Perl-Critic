@@ -21,6 +21,13 @@
        internals.
      * Added a new optional_modules parameter for the .run syntax.
 
+[1.075_001]  Released on 2007-09-06
+
+     Bug Fixes:
+     Undo the changes in 1.073 and 1.074.  Instead, stop using the subroutine
+     sigil in import and export lists.  It is suspected that the problem lies
+     with Exporter stripping off ampersands.
+
 [1.074]  Released on 2007-09-04
 
      Bug Fixes:

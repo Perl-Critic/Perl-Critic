@@ -20,11 +20,11 @@ use Perl::Critic::Utils qw{
     :characters
     :booleans
     :severities
-    &words_from_string
+    words_from_string
 };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 1.074;
+our $VERSION = 1.075_001;
 
 #-----------------------------------------------------------------------------
 

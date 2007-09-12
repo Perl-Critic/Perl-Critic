@@ -17,10 +17,10 @@ use List::MoreUtils qw(uniq any);
 use English qw(-no_match_vars);
 use Carp;
 
-use Perl::Critic::Utils qw{ :booleans :severities &words_from_string };
+use Perl::Critic::Utils qw{ :booleans :severities words_from_string };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 1.074;
+our $VERSION = 1.075_001;
 
 #-----------------------------------------------------------------------------
 

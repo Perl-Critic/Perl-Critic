@@ -11,11 +11,11 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ &hashify };
+use Perl::Critic::Utils qw{ hashify };
 
 use base 'Exporter';
 
-our $VERSION = 1.074;
+our $VERSION = 1.075_001;
 
 #-----------------------------------------------------------------------------
 

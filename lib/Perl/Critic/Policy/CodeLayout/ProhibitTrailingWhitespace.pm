@@ -19,7 +19,7 @@ use Perl::Critic::Utils qw{ :characters :severities };
 
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 1.074;
+our $VERSION = 1.075_001;
 
 #-----------------------------------------------------------------------------
 

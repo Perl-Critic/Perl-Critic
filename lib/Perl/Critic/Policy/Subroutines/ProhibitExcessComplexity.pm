@@ -14,11 +14,11 @@ use Readonly;
 use Perl::Critic::Utils qw{
     :booleans :severities :data_conversion :classification
 };
-use Perl::Critic::Utils::McCabe qw{ &calculate_mccabe_of_sub };
+use Perl::Critic::Utils::McCabe qw{ calculate_mccabe_of_sub };
 
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 1.074;
+our $VERSION = 1.075_001;
 
 #-----------------------------------------------------------------------------
 

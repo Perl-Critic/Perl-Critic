@@ -11,10 +11,10 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :severities :classification &is_in_void_context };
+use Perl::Critic::Utils qw{ :severities :classification is_in_void_context };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 1.074;
+our $VERSION = 1.075_001;
 
 #-----------------------------------------------------------------------------
 
