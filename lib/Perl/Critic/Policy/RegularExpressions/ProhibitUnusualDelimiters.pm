@@ -18,7 +18,7 @@ use Perl::Critic::Utils qw{ :booleans :severities };
 use Perl::Critic::Utils::PPIRegexp qw{ get_delimiters };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = 1.075_001;
+our $VERSION = 1.076;
 
 #-----------------------------------------------------------------------------
 
