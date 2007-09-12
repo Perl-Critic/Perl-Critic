@@ -21,6 +21,13 @@
        internals.
      * Added a new optional_modules parameter for the .run syntax.
 
+[1.074]  Released on 2007-09-04
+
+     Bug Fixes:
+     Repeat the Makefile.PL change on
+     t/generate_without_optional_dependencies_wrappers.PL.
+     I love CPAN Testers.
+
 [1.073]  Released on 2007-09-04
 
      Bug Fixes:

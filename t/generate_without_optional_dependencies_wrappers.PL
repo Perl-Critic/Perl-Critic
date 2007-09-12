@@ -18,9 +18,10 @@ use Carp qw{ confess };
 use Fatal qw{ open close };
 
 use Perl::Critic::BuildUtilities qw{ &recommended_module_versions };
-use Perl::Critic::Utils qw{ :characters };
 
-our $VERSION = 1.073;
+our $VERSION = 1.074;
+
+my $SPACE = q{ };
 
 print "Generating tests that hide modules and then run other tests.\n";
 

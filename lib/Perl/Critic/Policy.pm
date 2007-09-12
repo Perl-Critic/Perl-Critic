@@ -25,7 +25,7 @@ use Perl::Critic::Utils qw{
 };
 use Perl::Critic::Violation qw();
 
-our $VERSION = 1.073;
+our $VERSION = 1.074;
 
 #-----------------------------------------------------------------------------
 

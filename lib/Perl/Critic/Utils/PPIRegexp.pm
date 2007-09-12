@@ -13,7 +13,7 @@ use English qw(-no_match_vars);
 
 use base 'Exporter';
 
-our $VERSION = 1.073;
+our $VERSION = 1.074;
 
 #-----------------------------------------------------------------------------
 
