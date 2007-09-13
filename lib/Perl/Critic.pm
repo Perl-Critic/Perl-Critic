@@ -215,22 +215,38 @@ sub _critique {
 sub _filter_code {
 
     my ($doc, @site_policies)= @_;
+
     my $nodes_ref  = $doc->find('PPI::Token::Comment') || return;
-    my $no_critic  = qr{\A \s* \#\# \s* no  \s+ critic}mx;
-    my $use_critic = qr{\A \s* \#\# \s* use \s+ critic}mx;
-    my $shebang_no_critic  = qr{\A \#! .*? \#\# \s* no  \s+ critic}mx;
     my %disabled_lines;
+
+    _filter_shebang_line($nodes_ref, \%disabled_lines, \@site_policies);
+    _filter_other_lines($nodes_ref, \%disabled_lines, \@site_policies);
+    return %disabled_lines;
+}
+
+sub _filter_shebang_line {
+    my ($nodes_ref, $disabled_lines, $site_policies) = @_;
+
+    my $shebang_no_critic  = qr{\A \#! .*? \#\# \s* no  \s+ critic}mx;
 
     # Special case for the very beginning of the file: allow "##no critic" after the shebang
     if (0 < @{$nodes_ref}) {
         my $loc = $nodes_ref->[0]->location;
         if (1 == $loc->[0] && 1 == $loc->[1] && $nodes_ref->[0] =~ $shebang_no_critic) {
             my $pragma = shift @{$nodes_ref};
-            for my $policy (_parse_nocritic_import($pragma, \@site_policies)) {
-                $disabled_lines{ 1 }->{$policy} = 1;
+            for my $policy (_parse_nocritic_import($pragma, $site_policies)) {
+                $disabled_lines->{ 1 }->{$policy} = 1;
             }
         }
     }
+    return;
+}
+
+sub _filter_other_lines {
+    my ($nodes_ref, $disabled_lines, $site_policies) = @_;
+
+    my $no_critic  = qr{\A \s* \#\# \s* no  \s+ critic}mx;
+    my $use_critic = qr{\A \s* \#\# \s* use \s+ critic}mx;
 
   PRAGMA:
     for my $pragma ( grep { $_ =~ $no_critic } @{$nodes_ref} ) {
@@ -238,7 +254,7 @@ sub _filter_code {
         # Parse out the list of Policy names after the
         # 'no critic' pragma.  I'm thinking of this just
         # like a an C<import> argument for real pragmas.
-        my @no_policies = _parse_nocritic_import($pragma, \@site_policies);
+        my @no_policies = _parse_nocritic_import($pragma, $site_policies);
 
         # Grab surrounding nodes to determine the context.
         # This determines whether the pragma applies to
@@ -252,7 +268,7 @@ sub _filter_code {
         if ( $sib && $sib->location->[0] == $pragma->location->[0] ) {
             my $line = $pragma->location->[0];
             for my $policy ( @no_policies ) {
-                $disabled_lines{ $line }->{$policy} = 1;
+                $disabled_lines->{ $line }->{$policy} = 1;
             }
             next PRAGMA;
         }
@@ -265,7 +281,7 @@ sub _filter_code {
                 if ( $parent->location->[0] == $pragma->location->[0] ) {
                     my $line = $grandparent->location->[0];
                     for my $policy ( @no_policies ) {
-                        $disabled_lines{ $line }->{$policy} = 1;
+                        $disabled_lines->{ $line }->{$policy} = 1;
                     }
                     next PRAGMA;
                 }
@@ -293,12 +309,12 @@ sub _filter_code {
         # Flag all intervening lines
         for my $line ( $start->location->[0] .. $end->location->[0] ) {
             for my $policy ( @no_policies ) {
-                $disabled_lines{ $line }->{$policy} = 1;
+                $disabled_lines->{ $line }->{$policy} = 1;
             }
         }
     }
 
-    return %disabled_lines;
+    return;
 }
 
 #-----------------------------------------------------------------------------

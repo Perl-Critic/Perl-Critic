@@ -1,0 +1,51 @@
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+## name basic passes
+## failures 0
+## cut
+
+m/foo/;
+m/foo foo foo foo foo foo foo foo foo foo foo foo/;
+m/foo
+  foo/;
+
+m/foo # this is a foo
+  bar # this is a bar
+  baz # this is a baz
+  more # more more more more more
+ /x;
+
+m/
+
+
+
+
+
+/;
+
+## name basic failures
+## failures 2
+## cut
+
+m/ foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo/;
+
+m/foo # this is a foo
+  bar # this is a bar
+  baz # this is a baz
+  1234567890 1234567890 1234567890 1234567890 1234567890 # this is too long
+ /x;
+
+#-----------------------------------------------------------------------------
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :

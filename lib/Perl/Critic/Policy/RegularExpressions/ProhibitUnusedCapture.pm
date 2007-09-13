@@ -89,21 +89,16 @@ sub _enough_assignments {  ##no critic(ExcessComplexity) # TODO
 
     $psib = $psib->sprevious_sibling;
     return if !$psib;  # syntax error: '=' at the beginning of a statement???
+
     if ($psib->isa('PPI::Token::Symbol')) {
         # @foo = m/(foo)/
         # @$foo = m/(foo)/
-        if (q{@} eq substr $psib->content, 0, 1) {
-            return 1;  # slurpy array context
-        } else {
-            if (_is_preceded_by_array_cast($psib)) {
-                return 1;  # slurpy array context
-            }
-        }
+        return 1 if _symbol_is_array($psib);
+
     } elsif ($psib->isa('PPI::Structure::Block')) {
         # @{$foo} = m/(foo)/
-        if (_is_preceded_by_array_cast($psib)) {
-            return 1;  # slurpy array context
-        }
+        return 1 if _block_is_array($psib);
+
     } elsif ($psib->isa('PPI::Structure::List')) {
         # () = m/(foo)/
         # ($foo) = m/(foo)/
@@ -114,30 +109,48 @@ sub _enough_assignments {  ##no critic(ExcessComplexity) # TODO
         # ($foo,@{$foo}) = m/(foo)(bar)/
 
         my @args = $psib->schildren;
-        if (0 == @args) {
-            # empty list (perhaps the "goatse" operator) is slurpy
-            return 1;
-        }
+        return 1 if !@args;   # empty list (perhaps the "goatse" operator) is slurpy
+
         # Forward looking: PPI might change in v1.200 so schild(0) is a PPI::Statement::Expression
         if ( 1 == @args && $args[0]->isa('PPI::Statement::Expression') ) {
             @args = $args[0]->schildren;
         }
+
         my @parts = split_nodes_on_comma(@args);
       PART:
         for my $i (0 .. $#parts) {
             if (1 == @{$parts[$i]}) {
                 my $var = $parts[$i]->[0];
                 if ($var->isa('PPI::Token::Symbol') || $var->isa('PPI::Token::Cast')) {
-                    if (q{@} eq substr $var->content, 0, 1) {
-                        return 1;  # slurpy array context
-                    }
+                    return 1 if _has_array_sigil($var);
                 }
             }
-            $captures->[$i] = 1;
+            $captures->[$i] = 1;  # ith evariable captures
         }
     }
 
     return none {! defined $_} @{$captures};
+}
+
+sub _symbol_is_array {
+    my ($symbol) = @_;
+
+    return 1 if _has_array_sigil($symbol);
+    return 1 if _is_preceded_by_array_cast($symbol);
+    return;
+}
+
+sub _has_array_sigil {
+    my ($elem) = @_;  # Works on PPI::Token::Symbol and ::Cast
+
+    return q{@} eq substr $elem->content, 0, 1;
+}
+
+sub _block_is_array {
+    my ($block) = @_;
+
+    return 1 if _is_preceded_by_array_cast($block);
+    return;
 }
 
 sub _is_preceded_by_array_cast {
@@ -154,7 +167,8 @@ sub _is_preceded_by_array_cast {
 sub _is_in_slurpy_array_context {
     my ($elem) = @_;
 
-    # return true is the result of the regexp is passed to a subroutine
+    # return true is the result of the regexp is passed to a subroutine.
+    # doesn't check for array context due to assignment.
 
     # look backward for explict regex operator
     my $psib = $elem->sprevious_sibling;
@@ -282,6 +296,8 @@ __END__
 #-----------------------------------------------------------------------------
 
 =pod
+
+=for stopwords refactored
 
 =head1 NAME
 

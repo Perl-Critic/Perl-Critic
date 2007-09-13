@@ -142,14 +142,6 @@ no critic flags.
 
 Strictly, requires parsing the regexp to find the enumerations.
 
-=item * RegularExpressions::ProhibitComplexRegexes (p261)
-
-If regexp is longer than N characters/lines, require it be split into C<qr//>
-pieces.
-
-Even if the x modifier is used and the regex is split across multiple lines?
-Perhaps don't count comments toward the character limit.
-
 =item * RegularExpressions::ProhibitSingleCharAlternation (p265)
 
 Make an exception for qr/ [ ] /x.

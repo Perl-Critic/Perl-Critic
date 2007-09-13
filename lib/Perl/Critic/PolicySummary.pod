@@ -283,6 +283,10 @@ Write C<@{ $array_ref }> instead of C<@$array_ref> [Severity 2]
 
 Capture variable used outside conditional [Severity 3]
 
+=head2 L<Perl::Critic::Policy::RegularExpressions::ProhibitComplexRegexes>
+
+Split long regexps into smaller C<qr//> chunks [Severity 3]
+
 =head2 L<Perl::Critic::Policy::RegularExpressions::ProhibitFixedStringMatches>
 
 Use C<eq> or hash instead of fixed-pattern regexps [Severity 2]
