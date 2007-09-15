@@ -100,8 +100,8 @@ not enabled.
 =item C< get_skip_all_tests_tap() >
 
 Returns a string representing the TAP (Test Anything Protocol) output
-for skipping an entire file.  This is useful if you don't want to load any
-Test::* modules.
+for skipping an entire file.  This is useful if you don't want to load
+any Test::* modules.
 
 
 =head1 AUTHOR

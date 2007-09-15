@@ -12,6 +12,13 @@
        were having when trying to compile the code from the source code
        repository.
 
+     Minor changes:
+     * Don't run author tests if there's a .svn directory present because
+       users who grabbed the code from the source repository were executing
+       them and getting failures.
+     * Don't generate optional, module-hiding test wrappers if author tests
+       are not enabled.
+
 
 [1.076]  Released on 2007-09-07
 

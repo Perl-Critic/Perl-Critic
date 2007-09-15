@@ -16,6 +16,7 @@ use ExtUtils::MakeMaker;
 
 use Perl::Critic::BuildUtilities qw<
     test_wrappers_to_generate
+    get_PL_files
     dump_unlisted_or_optional_module_versions
 >;
 
@@ -63,11 +64,7 @@ WriteMakefile(
     ABSTRACT_FROM  => 'lib/Perl/Critic.pm',
     VERSION_FROM   => 'lib/Perl/Critic.pm',
     EXE_FILES      => ['bin/perlcritic'],
-    PL_FILES       => {
-        't/generate_without_optional_dependencies_wrappers.PL' => [
-            test_wrappers_to_generate()
-        ]
-    },
+    PL_FILES       => get_PL_files(),
     PREREQ_PM      => {
         'B::Keywords'           => 1.05,
         'Config::Tiny'          => 2,
@@ -85,7 +82,7 @@ WriteMakefile(
         'String::Format'        => 1.13,
         'Test::More'            => 0,
     },
-    realclean      => {FILES => join q< >, test_wrappers_to_generate() },
+    realclean      => { FILES => join q< >, test_wrappers_to_generate() },
 );
 
 sub MY::postamble {
