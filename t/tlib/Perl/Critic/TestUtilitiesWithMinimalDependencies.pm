@@ -14,7 +14,7 @@ use warnings;
 
 use base 'Exporter';
 
-our $VERSION = 1.076;
+our $VERSION = 1.077;
 our @EXPORT_OK = qw(
     should_skip_author_tests
     get_author_test_skip_message

@@ -23,7 +23,7 @@ use Perl::Critic::Utils qw{
 use Perl::Critic::Utils::Constants qw{ :profile_strictness };
 use Perl::Critic::ConfigErrors;
 
-our $VERSION = 1.076;
+our $VERSION = 1.077;
 
 #-----------------------------------------------------------------------------
 
