@@ -16,7 +16,7 @@ use File::Spec qw();
 use Perl::Critic::Defaults qw();
 use Perl::Critic::Utils qw{ :characters policy_long_name policy_short_name };
 
-our $VERSION = 1.076;
+our $VERSION = 1.077;
 
 #-----------------------------------------------------------------------------
 

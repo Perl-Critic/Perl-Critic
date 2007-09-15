@@ -22,7 +22,7 @@ use overload ( q{""} => 'to_string', cmp => '_compare' );
 
 use Perl::Critic::Utils qw{ :characters :internal_lookup };
 
-our $VERSION = 1.076;
+our $VERSION = 1.077;
 
 #Class variables...
 our $FORMAT = "%m at line %l, column %c. %e.\n"; #Default stringy format

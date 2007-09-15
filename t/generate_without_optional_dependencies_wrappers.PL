@@ -18,16 +18,15 @@ use Carp qw{ confess };
 use Fatal qw{ open close };
 
 use Perl::Critic::BuildUtilities qw{ recommended_module_versions };
-use Perl::Critic::Utils qw{ :characters };
 
-our $VERSION = 1.076;
+our $VERSION = 1.077;
 
 print "Generating tests that hide modules and then run other tests.\n";
 
 my $this_program = __FILE__;
 
 my @modules_to_hide = sort keys %{ { recommended_module_versions } };
-my $modules_to_hide = join "\n" . $SPACE x 4, @modules_to_hide;
+my $modules_to_hide = join "\n" . q< > x 4, @modules_to_hide;
 
 foreach my $test_program_name (@ARGV) {
     my ($wrapped_test_name) =

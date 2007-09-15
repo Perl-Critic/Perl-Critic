@@ -9,12 +9,14 @@ use strict;
 use warnings;
 
 use lib 'inc';
+use lib 't/tlib';
 
 use Module::Build;
 
 use Perl::Critic::BuildUtilities qw<
     recommended_module_versions
     test_wrappers_to_generate
+    get_PL_files
     dump_unlisted_or_optional_module_versions
 >;
 
@@ -82,14 +84,9 @@ my $builder = Module::Build->new(
   recommends     => { recommended_module_versions() },
 
   build_requires => {'Test::More'            => 0,
-                     'Readonly'              => 1.03,
                     },
 
-  PL_files       => {
-      't/generate_without_optional_dependencies_wrappers.PL' => [
-          test_wrappers_to_generate()
-      ]
-  },
+  PL_files       => get_PL_files(),
 
   script_files   => ['bin/perlcritic'],
 

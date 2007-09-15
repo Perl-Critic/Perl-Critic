@@ -10,12 +10,12 @@ package Perl::Critic::TestUtilitiesWithMinimalDependencies;
 use strict;
 use warnings;
 
-use Readonly;
+# do not use Readonly-- this module is used at build-time.
 
 use base 'Exporter';
 
-our $VERSION = 1.076;
-Readonly::Array our @EXPORT_OK => qw(
+our $VERSION = 1.077;
+our @EXPORT_OK = qw(
     should_skip_author_tests
     get_author_test_skip_message
     get_skip_all_tests_tap
@@ -24,7 +24,7 @@ Readonly::Array our @EXPORT_OK => qw(
 #-----------------------------------------------------------------------------
 
 sub should_skip_author_tests {
-    return !-d '.svn' && !$ENV{TEST_AUTHOR}
+    return !$ENV{TEST_AUTHOR};
 }
 
 #-----------------------------------------------------------------------------
@@ -100,8 +100,8 @@ not enabled.
 =item C< get_skip_all_tests_tap() >
 
 Returns a string representing the TAP (Test Anything Protocol) output
-for skipping an entire file.  This is useful if you don't want to load any
-Test::* modules.
+for skipping an entire file.  This is useful if you don't want to load
+any Test::* modules.
 
 
 =head1 AUTHOR
