@@ -5,6 +5,14 @@
 # $Revision$
 ##############################################################################
 
+[1.07x]  Released on 2007-09-xx
+
+     Bug Fixes:
+     * Removed build-time use of Readonly, again, due to problems some people
+       were having when trying to compile the code from the source code
+       repository.
+
+
 [1.076]  Released on 2007-09-07
 
      It appears from reports on the 1.075_001 release that the subroutine

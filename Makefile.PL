@@ -18,7 +18,6 @@ use Perl::Critic::BuildUtilities qw<
     test_wrappers_to_generate
     dump_unlisted_or_optional_module_versions
 >;
-use Perl::Critic::Utils qw< :characters >;
 
 my $warning = <<'END_WARNING';
 
@@ -86,7 +85,7 @@ WriteMakefile(
         'String::Format'        => 1.13,
         'Test::More'            => 0,
     },
-    realclean      => {FILES => join $SPACE, test_wrappers_to_generate() },
+    realclean      => {FILES => join q< >, test_wrappers_to_generate() },
 );
 
 sub MY::postamble {

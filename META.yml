@@ -23,7 +23,6 @@ requires:
   Scalar::Util: 0
   String::Format: 1.13
 build_requires:
-  Readonly: 1.03
   Test::More: 0
 recommends:
   File::HomeDir: 0
