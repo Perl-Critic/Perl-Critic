@@ -25,6 +25,8 @@ our $VERSION = 1.077;
 Readonly::Scalar my $DESC => q{Split long regexps into smaller qr// chunks};
 Readonly::Scalar my $EXPL => [261];
 
+Readonly::Scalar my $DEFAULT_MAX_COMPLEXITY => 60;
+
 #-----------------------------------------------------------------------------
 
 sub supported_parameters { return qw()                       }
@@ -44,7 +46,7 @@ sub initialize_if_enabled {
             defined $config->{max_characters}
         &&  $config->{max_characters} =~ m/(\d+)/xms
         &&  $1 > 0
-            ? $1 : 50;
+            ? $1 : $DEFAULT_MAX_COMPLEXITY;
 
     return $TRUE;
 }
@@ -91,7 +93,7 @@ Perl::Critic::Policy::RegularExpressions::ProhibitComplexRegexes
 Big regexps are hard to read, perhaps even the hardest part of Perl.
 A good practice to write digestible chunks of regexp and put them
 together.  This policy flags any regexp that is longer than C<N>
-characters, where C<N> is a configurable value that defaults to 50.
+characters, where C<N> is a configurable value that defaults to 60.
 If the regexp uses the C<x> flag, then the length is computed after
 parsing out any comments or whitespace.
 
@@ -148,7 +150,7 @@ implementation is sound even before running tests.
 =head1 CONFIGURATION
 
 This policy allows regexps up to C<N> characters long, where C<N>
-defaults to 50.  You can override this to set it to a different number
+defaults to 60.  You can override this to set it to a different number
 with the C<max_characters> setting.  To do this, put entries in a
 F<.perlcriticrc> file like this:
 
