@@ -17,7 +17,7 @@ use English qw(-no_match_vars);
 use Carp;
 
 use Perl::Critic::Utils qw{ :booleans :severities split_nodes_on_comma };
-use Perl::Critic::Utils::PPIRegexp qw{ parse_regexp get_match_string get_modifiers };
+use Perl::Critic::Utils::PPIRegexp qw{ parse_regexp get_match_string get_substitute_string get_modifiers };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.077;
@@ -50,10 +50,21 @@ sub violates {
     my @captures;  # List of expected captures
     $#captures = $ncaptures - 1;
 
+    # Look for references to the capture in the regex itself
     my $iter = $re->walker;
     while (my $token = $iter->()) {
         if ($token->isa('Regexp::Parser::ref')) {
             my ($num) = $token->raw =~ m/ (\d+) /xms;
+            $captures[$num-1] = 1;
+        }
+    }
+    my $subst = get_substitute_string($elem);
+    if ($subst) {
+
+        # TODO: This is a quick hack.  Really, we should parse the string.  It could
+        # be false positive (s///e) or false negative (s/(.)/\$1/)
+
+        for my $num ($subst =~ m/\$(\d+)/xms) {
             $captures[$num-1] = 1;
         }
     }

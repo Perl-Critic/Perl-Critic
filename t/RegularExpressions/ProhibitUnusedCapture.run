@@ -147,6 +147,7 @@ map {print} $str =~ m/(foo)/g;
 ## cut
 
 m/(foo)\1/;
+s/(foo)/$1/;
 
 ## name basic failures
 ## failures 5
