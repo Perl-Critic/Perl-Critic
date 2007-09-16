@@ -29,7 +29,7 @@ Readonly::Scalar my $DEFAULT_MAX_COMPLEXITY => 60;
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return qw()                       }
+sub supported_parameters { return qw(max_characters)         }
 sub default_severity     { return $SEVERITY_MEDIUM           }
 sub default_themes       { return qw( core pbp maintenance ) }
 sub applies_to           { return qw(PPI::Token::Regexp::Match
