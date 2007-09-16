@@ -127,6 +127,20 @@ the global and change it for as short a time as possible.
 
 =head1 CAVEATS
 
+=head2 Hash/array support
+
+There is a limitation in this policy that we don't detect violations where the
+variable is a dereferenced array or hash.  The raw form of the variable is
+detected, but that's rarely used.  For example:
+
+   %SIG = ();          # violation detected
+   local %SIG = ();    # no violation
+
+   $SIG{__DIE__} = sub {};        # BUG: violation overlooked
+   local $SIG{__DIE__} = sub {};  # no violation
+
+=head2 PPI limitations
+
 The current PPI (v1.118) has a bug where $^ variables absorb following
 whitespace by mistake.  This makes it harder to spot those as magic
 variables.  Hopefully this will be fixed by PPI 1.200.  In the
