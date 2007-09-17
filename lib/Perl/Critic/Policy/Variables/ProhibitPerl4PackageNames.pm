@@ -18,7 +18,7 @@ our $VERSION = 1.077;
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $DESC =>
+Readonly::Scalar my $EXPL =>
     q{Use double colon (::) to separate package name components instead of single quotes (').};
 
 #-----------------------------------------------------------------------------
@@ -44,8 +44,8 @@ sub violates {
 
     return
         $self->violation(
-            $DESC,
             qq{"$content" uses the obsolete single quote package separator."},
+            $EXPL,
             $elem
         );
 }

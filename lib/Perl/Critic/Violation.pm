@@ -325,12 +325,14 @@ the violation, and the severity of the violation (as an integer).
 
 =item C<description()>
 
-Returns a brief description of the policy that has been violated as a string.
+Returns a brief description of the specific violation.  In other
+words, this value may change on a per violation basis.
 
 =item C<explanation()>
 
 Returns an explanation of the policy as a string or as reference to
-an array of page numbers in PBP.
+an array of page numbers in PBP.  This value will generally not change
+based upon the specific code violating the policy.
 
 =item C<location()>
 
