@@ -94,14 +94,14 @@ we don't C<use constant>.)
   Readonly::Scalar my $DESC => q{Expression form of "grep"};
   Readonly::Scalar my $EXPL => [ 169 ];
 
-Most policies don't need to override the C<new()> method provided by
-L<Perl::Critic::Policy>.  However, if your Policy is configurable via
-F<.perlcriticrc> you should implement a C<supported_parameters()>
-method and need to override the constructor to examine the C<%config>
-values.  (To future-proof your policy, make sure that your constructor
-invokes the super-constructor.)  Since this Policy isn't configurable,
-we'll declare that by providing an implementation of
-C<supported_parameters()> that returns an empty list.
+Most policies don't need to override the C<initialize_if_enabled()>
+method provided by L<Perl::Critic::Policy>.  However, if your Policy
+is configurable via F<.perlcriticrc>, you should implement a
+C<supported_parameters()> method and need to implement
+C<initialize_if_enabled()> to examine the C<%config> values.  Since
+this Policy isn't configurable, we'll declare that by providing an
+implementation of C<supported_parameters()> that returns an empty
+list.
 
   sub supported_parameters { return ()                  }
 
