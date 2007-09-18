@@ -154,6 +154,8 @@ Strictly, requires parsing the regexp.
 
 =over 4
 
+=item * ErrorHandling::RequireCheckOfEvalErrorAfterEval
+
 =item * TBD::VariableNotUsed
 
 Detect a variable that has a value assigned to it, but never used.
