@@ -5,6 +5,12 @@
 # $Revision$
 ##############################################################################
 
+[1.078]  Released on 2007-09-19
+
+     Restore Perl::Critic::TestUtils::should_skip_author_tests() and
+     get_author_test_skip_message().  Some Perl::Critic add-on distributions
+     are using them.
+
 [1.077]  Released on 2007-09-15
 
      Note: if you don't have any problems installing Perl::Critic 1.076, there

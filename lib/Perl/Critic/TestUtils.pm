@@ -32,6 +32,8 @@ Readonly::Array our @EXPORT_OK => qw(
     critique  critique_with_violations
     fcritique fcritique_with_violations
     subtests_in_tree
+    should_skip_author_tests
+    get_author_test_skip_message
     starting_points_including_examples
     bundled_policy_names
     names_of_policies_willing_to_work
@@ -146,6 +148,22 @@ sub subtests_in_tree {
     return \%subtests;
 }
 
+# Answer whether author test should be run.
+#
+# Note: this code is duplicated in
+# t/tlib/Perl/Critic/TestUtilitiesWithMinimalDependencies.pm.
+# If you change this here, make sure to change it there.
+
+sub should_skip_author_tests {
+    return !$ENV{TEST_AUTHOR}
+}
+
+sub get_author_test_skip_message {
+    ## no critic (RequireInterpolation);
+    return 'Author test.  Set $ENV{TEST_AUTHOR} to a true value to run.';
+}
+
+
 sub starting_points_including_examples {
     return (-e 'blib' ? 'blib' : 'lib', 'examples');
 }
@@ -159,8 +177,7 @@ sub _subtests_from_file {
 
     my %valid_keys = hashify qw( name failures parms TODO error filename );
 
-    # XXX Remove me once all subtest files are populated
-    return if -z $test_file;
+    return if -z $test_file;  # Skip if the Policy has a regular .t file.
 
     open my $fh, '<', $test_file
       or confess "Couldn't open $test_file: $OS_ERROR";
@@ -378,6 +395,15 @@ keyed on policy short name, like C<Modules::RequireEndWithOne>.  The inner
 hash specifies a single test to be handed to C<pcritique()> or C<fcritique()>,
 including the code string, test name, etc.  See below for the syntax of the
 F<.run> files.
+
+=item should_skip_author_tests()
+
+Answers whether author tests should run.
+
+=item get_author_test_skip_message()
+
+Returns a string containing the message that should be emitted when a test
+is skipped due to it being an author test when author tests are not enabled.
 
 =item starting_points_including_examples()
 

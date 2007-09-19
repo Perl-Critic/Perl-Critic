@@ -23,6 +23,9 @@ our @EXPORT_OK = qw(
 
 #-----------------------------------------------------------------------------
 
+# Note: this code is duplicated in lib/Perl/Critic/TestUtils.pm.
+# If you change this here, make sure to change it there.
+
 sub should_skip_author_tests {
     return !$ENV{TEST_AUTHOR};
 }
