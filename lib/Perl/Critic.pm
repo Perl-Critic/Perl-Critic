@@ -571,7 +571,7 @@ See L<"BENDING THE RULES"> for more information.  You can set the default
 value for this option in your F<.perlcriticrc> file.
 
 B<-verbose> can be a positive integer (from 1 to 11), or a literal format
-specification.  See L<Perl::Critic::Violations> for an explanation of format
+specification.  See L<Perl::Critic::Violation> for an explanation of format
 specifications.  You can set the default value for this option in your
 F<.perlcriticrc> file.
 
