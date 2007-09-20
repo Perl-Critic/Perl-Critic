@@ -14,7 +14,7 @@ use warnings;
 
 use base 'Exporter';
 
-our $VERSION = 1.077;
+our $VERSION = 1.078;
 our @EXPORT_OK = qw(
     should_skip_author_tests
     get_author_test_skip_message
@@ -22,6 +22,9 @@ our @EXPORT_OK = qw(
 );
 
 #-----------------------------------------------------------------------------
+
+# Note: this code is duplicated in lib/Perl/Critic/TestUtils.pm.
+# If you change this here, make sure to change it there.
 
 sub should_skip_author_tests {
     return !$ENV{TEST_AUTHOR};

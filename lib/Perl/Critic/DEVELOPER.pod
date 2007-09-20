@@ -268,6 +268,22 @@ L<perlcritic> with a C<--verbose> parameter of C<10> or C<11> to see
 it along with the rest of the output for violations of your policy.
 
 
+=head1 HINT
+
+When you're trying to figure out what L<PPI> is going to hand you for
+a chunk of code, there is a F<tools/ppidump> program in the
+L<Perl::Critic> distribution that will help you.  For example, when
+developing the above RequireBlockGrep example, you might want to try
+
+  tools/ppidump '@matches = grep /pattern/, @list;'
+
+and
+
+  tools/ppidump '@matches = grep { /pattern/ } @list;'
+
+to see the differences between the two cases.
+
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
