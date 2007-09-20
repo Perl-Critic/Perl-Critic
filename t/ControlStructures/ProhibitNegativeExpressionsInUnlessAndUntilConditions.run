@@ -1,0 +1,152 @@
+## name "!" within positive control structures
+## failures 0
+## cut
+
+if (! $foo) {
+    blah();
+}
+
+if ($foo) {
+    blah($foo);
+}
+elsif (! $bar) {
+    blah($bar);
+}
+else {
+    blah(undef);
+}
+
+while (! $foo) {
+    blah();
+}
+
+foreach my $bar ( grep { ! $_ } @foo ) {
+    blah($bar);
+}
+
+for (my $bar = 0; ! $bar; $bar++) {
+    blah($bar);
+}
+
+#-----------------------------------------------------------------------------
+
+## name "!" within positive postfix statement modifiers
+## failures 0
+## cut
+
+blah() if ! $foo;
+
+blah() while ! $foo;
+
+blah($_) for grep { ! $_ } @foo;
+
+#-----------------------------------------------------------------------------
+
+## name "!" within negative control structures
+## failures 2
+## cut
+
+unless (! $foo) {
+    blah();
+}
+
+until (! $foo) {
+    blah();
+}
+
+#-----------------------------------------------------------------------------
+
+## name "!" within negative postfix statement modifiers
+## failures 2
+## cut
+
+blah() unless ! $foo;
+
+blah() until ! $foo;
+
+#-----------------------------------------------------------------------------
+
+## name "not" within positive control structures
+## failures 0
+## cut
+
+if (not $foo) {
+    blah();
+}
+
+if ($foo) {
+    blah($foo);
+}
+elsif (not $bar) {
+    blah($bar);
+}
+else {
+    blah(undef);
+}
+
+while (not $foo) {
+    blah();
+}
+
+foreach my $bar ( grep { not $_ } @foo ) {
+    blah($bar);
+}
+
+for (my $bar = 0; not $bar; $bar++) {
+    blah($bar);
+}
+
+#-----------------------------------------------------------------------------
+
+## name "!" within positive postfix statement modifiers
+## failures 0
+## cut
+
+blah() if not $foo;
+
+blah() while not $foo;
+
+blah($_) for grep { not $_ } @foo;
+
+#-----------------------------------------------------------------------------
+
+## name "!" within negative control structures
+## failures 2
+## cut
+
+unless (not $foo) {
+    blah();
+}
+
+until (not $foo) {
+    blah();
+}
+
+#-----------------------------------------------------------------------------
+
+## name "!" within negative postfix statement modifiers
+## failures 2
+## cut
+
+blah() unless not $foo;
+
+blah() until not $foo;
+
+#-----------------------------------------------------------------------------
+
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :

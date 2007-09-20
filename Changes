@@ -16,6 +16,9 @@
      * RegularExpressions::ProhibitComplexRegexes
      * RegularExpressions::ProhibitSingleCharAlternation
 
+     Other New Policies
+     * ControlStructures::ProhibitNegativeExpressionsInUnlessAndUntilConditions
+
      New Features:
      * Allow a "## no critic" statement after a shebang on line 1 of a
        file.  This allows users to block violations that apply to

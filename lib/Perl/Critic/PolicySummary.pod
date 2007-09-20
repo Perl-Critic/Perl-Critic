@@ -139,6 +139,10 @@ Don't write deeply nested loops and conditionals [Severity 2]
 
 Don't modify C<$_> in list functions [Severity 5]
 
+=head2 L<Perl::Critic::Policy::ControlStructures::ProhibitNegativeExpressionsInUnlessAndUntilConditions>
+
+Don't use operators like C<not>, C<!~>, and C<le> within C<until> and C<unless> [Severity 3]
+
 =head2 L<Perl::Critic::Policy::ControlStructures::ProhibitPostfixControls>
 
 Write C<if($condition){ do_something() }> instead of C<do_something() if $condition> [Severity 2]
