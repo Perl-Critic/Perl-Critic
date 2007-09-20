@@ -10,6 +10,8 @@ package Perl::Critic::Utils::PPIRegexp;
 use strict;
 use warnings;
 use English qw(-no_match_vars);
+use PPI::Node;
+use Carp qw(croak);
 
 use base 'Exporter';
 
@@ -23,6 +25,7 @@ our @EXPORT_OK = qw(
     &get_substitute_string
     &get_modifiers
     &get_delimiters
+    &ppiify
 );
 
 our %EXPORT_TAGS = (
@@ -98,6 +101,90 @@ sub get_delimiters {
     return @delimiters;
 }
 
+#-----------------------------------------------------------------------------
+
+{
+    ## This nastiness is to auto-vivify PPI packages from Regexp::Parser classes
+
+    # Track which ones are already created
+    my %seen = ('Regexp::Parser::__object__' => 1);
+
+    sub _get_ppi_package {
+        my ($src_class, $re_node) = @_;
+        (my $dest_class = $src_class) =~ s/\A Regexp::Parser::/Perl::Critic::PPIRegexp::/xms;
+        if (!$seen{$src_class}) {
+            $seen{$src_class} = 1;
+            croak 'Regexp node which is not in the Regexp::Parser namespace'
+              if $dest_class eq $src_class;
+            my $src_isa_name = $src_class . '::ISA';
+            my $dest_isa_name = $dest_class . '::ISA';
+            my @isa;
+            for my $isa (eval "\@$src_isa_name") { ##no critic(Eval)
+                my $dest_isa = _get_ppi_package($isa, $re_node);
+                push @isa, $dest_isa;
+            }
+            eval "\@$dest_isa_name = qw(@isa)"; ##no critic(Eval)
+            croak $EVAL_ERROR if $EVAL_ERROR;
+        }
+        return $dest_class;
+    }
+}
+
+sub ppiify {
+    my ($re) = @_;
+    return if !$re;
+
+    # walk the Regexp::Parser tree, converting to PPI nodes as we go
+
+    my $ppire = PPI::Node->new;
+    my @stack = ($ppire);
+    my $iter = $re->walker;
+    my $last_depth = -1;
+    while (my ($node, $depth) = $iter->()) {
+        if ($last_depth > $depth) { # -> parent
+            # walker() creates pseudo-closing nodes for reasons I don't understand
+            while ($last_depth-- > $depth) {
+                pop @stack;
+            }
+        } else {
+            my $src_class = ref $node;
+            my $ppipkg = _get_ppi_package($src_class, $node);
+            my $ppinode = $ppipkg->new($node);
+            if ($last_depth == $depth) { # -> sibling
+                $stack[-1] = $ppinode;
+            } else {            # -> child
+                push @stack, $ppinode;
+            }
+            $stack[-2]->add_element($ppinode);
+        }
+        $last_depth = $depth;
+    }
+    return $ppire;
+}
+
+{
+    package   ##no critic (Package)  # hide from PAUSE
+      Perl::Critic::PPIRegexp::__object__;
+    use base 'PPI::Node';
+
+    # Base wrapper class for PPI versions of Regexp::Parser classes
+
+    # This is a hack because we call everything PPI::Node instances instead of
+    # PPI::Token instances.  One downside is that PPI::Dumper doesn't work on
+    # regexps.
+
+    sub new {
+        my ($class, $re_node) = @_;
+        my $self = $class->SUPER::new();
+        $self->{_re} = $re_node;
+        return $self;
+    }
+    sub content {
+        my ($self) = @_;
+        return $self->{_re}->visual;
+    }
+}
+
 1;
 
 __END__
@@ -144,6 +231,17 @@ model.
 CAVEAT: This method pays special attention to the C<x> modifier to the regexp.
 If present, we wrap the regexp string in C<(?x:...)> to ensure a proper parse.
 This does change the object model though.
+
+Someday if PPI gets native Regexp support, this method may become deprecated.
+
+=item C<ppiify( $regexp )>
+
+Given a L<Regexp::Parser> instance (perhaps as returned from C<parse_regexp>)
+convert it to a tree of L<PPI::Node> instances.  This is useful because PPI
+has a more familiar and powerful programming model than the Regexp::Parser
+object tree.
+
+Someday if PPI gets native Regexp support, this method may become a no-op.
 
 =item C<get_match_string( $token )>
 

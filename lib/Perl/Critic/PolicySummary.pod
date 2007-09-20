@@ -291,6 +291,10 @@ Split long regexps into smaller C<qr//> chunks [Severity 3]
 
 Use C<eq> or hash instead of fixed-pattern regexps [Severity 2]
 
+=head2 L<Perl::Critic::Policy::RegularExpressions::ProhibitSingleCharAlternation>
+
+Use C<[abc]> instead of C<a|b|c> [Severity 5]
+
 =head2 L<Perl::Critic::Policy::RegularExpressions::ProhibitUnusedCapture>
 
 Only use a capturing group if you plan to use the captured value [Severity 3]

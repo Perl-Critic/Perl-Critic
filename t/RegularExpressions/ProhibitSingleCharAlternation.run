@@ -9,36 +9,32 @@
 ## failures 0
 ## cut
 
-m/foo/;
-m/foo foo foo foo foo foo foo foo foo foo foo foo/;
-m/foo
-  foo/;
+m/\A [adiqrwx] \z/xms;
+m/\A (?: qq | qr | qx | [qsy] | tr ) \z/xms;
+m/\A (?: q[qrx] | [qsy] | tr ) \z/xms;
 
-m/foo # this is a foo
-  bar # this is a bar
-  baz # this is a baz
-  more # more more more more more
- /x;
-
-m/
+m/\A (?: a ) \z/xms;   # bad form, but not a violation of this policy
+m/\A (?: [a] ) \z/xms; # bad form, but not a violation of this policy
 
 
+## name metacharacters
+## failures 0
+## cut
 
+m/(?: ^ | . | \d | $ )/xms;
 
+## name allowed to have one single character alternation
+## failures 0
+## cut
 
-/;
+m/\A (?: a | do | in | queue | rue | woe | xray ) \z/xms;
 
 ## name basic failures
 ## failures 2
 ## cut
 
-m/ foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo/;
-
-m/foo # this is a foo
-  bar # this is a bar
-  baz # this is a baz
-  1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 # this is too long
- /x;
+m/\A (?: a | d | i | q | r | w | x ) \z/xms;
+m/\A (?: qq| qr | qx | q | s | y | tr ) \z/xms;
 
 #-----------------------------------------------------------------------------
 # Local Variables:

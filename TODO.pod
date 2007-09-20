@@ -142,12 +142,6 @@ no critic flags.
 
 Strictly, requires parsing the regexp to find the enumerations.
 
-=item * RegularExpressions::ProhibitSingleCharAlternation (p265)
-
-Make an exception for qr/ [ ] /x.
-
-Strictly, requires parsing the regexp.
-
 =back
 
 =head1 NON-PBP POLICIES WANTED

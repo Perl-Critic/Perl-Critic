@@ -973,9 +973,9 @@ sub _is_perl {
     my ($file) = @_;
 
     #Check filename extensions
-    return 1 if $file =~ m{ [.] PL          \z}mx;
-    return 1 if $file =~ m{ [.] p (?: l|m ) \z}mx;
-    return 1 if $file =~ m{ [.] t           \z}mx;
+    return 1 if $file =~ m{ [.] PL    \z}mx;
+    return 1 if $file =~ m{ [.] p[lm] \z}mx;
+    return 1 if $file =~ m{ [.] t     \z}mx;
 
     #Check for shebang
     open my ($fh), '<', $file or return;
