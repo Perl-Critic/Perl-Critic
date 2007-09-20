@@ -44,22 +44,33 @@ for my $file (@pm) {
     {
         my $doc = PPI::Document->new($file) || die 'Failed to parse '.$file;
 
-        my %deps = map {$_->module() => 1} @{$doc->find('PPI::Statement::Include')};
-        my $thispkg = $doc->find('PPI::Statement::Package')->[0]->namespace();
+        my @incs = @{$doc->find('PPI::Statement::Include') || []};
+        my %deps = map {$_->module => 1} grep {$_->type eq 'use' || $_->type eq 'require'} @incs;
+        my %thispkg = map {$_->namespace => 1} @{$doc->find('PPI::Statement::Package') || []};
         my @pkgs = @{$doc->find('PPI::Token::Word')};
         my %failed;
 
         for my $pkg (@pkgs) {
             my $name = "$pkg";
-            next if ($name !~ m/::/xms);
+            next if $name !~ m/::/xms;
+            next if $name =~ m/::_private::/xms;
+            next if $name =~ m/List::Util::[a-z]+/xms;
 
-            my $token = $pkg->next_sibling();
+            # subroutine declaration with absolute name?
+            # (bad form, but legal)
+            my $prev_sib = $pkg->sprevious_sibling;
+            next if ($prev_sib &&
+                     $prev_sib eq 'sub' &&
+                     !$prev_sib->sprevious_sibling &&
+                     $pkg->parent->isa('PPI::Statement::Sub'));
+
+            my $token = $pkg->next_sibling;
 
             if ($token =~ m/\A \(/xms) {
                 $name =~ s/::\w+\z//xms;
             }
 
-            if ( !match($name, \%deps, $thispkg) ) {
+            if ( !match($name, \%deps, \%thispkg) ) {
                 $failed{$name} = 1;
             }
         }
@@ -78,11 +89,11 @@ sub match {
     my $deps = shift;
     my $thispkg = shift;
 
-    return 1 if ($pkg eq $thispkg);
-    return 1 if ($deps->{$pkg});
+    return 1 if $thispkg->{$pkg};
+    return 1 if $deps->{$pkg};
     $pkg = $implied{$pkg};
-    return 0 if (!defined $pkg);
-    return 1 if ($pkg eq 1);
+    return 0 if !defined $pkg;
+    return 1 if 1 eq $pkg;
     return match($pkg, $deps, $thispkg);
 }
 
