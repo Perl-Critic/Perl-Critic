@@ -260,6 +260,20 @@ which is better written as
 
 for performance gains and compile-time syntax checking.
 
+=item * RegularExpressions::ProhibitUnnecessaryEscapes
+
+Complain if user puts a backslash escape in front of non-special characters.  For example:
+
+   m/\!/;
+
+Make exceptions for C<\">, C<\'> and C<\`> since those are often inserted to
+workaround bugs in syntax highlighting.
+
+Note that this is different inside character classes, where only C<^>, C<]>
+and C<-> need to be escaped, I think.  Caret only needs to be escaped at the
+beginning, and dash does NOT need to be escaped at the beginning and end.  See
+L<perlreref>.
+
 =back
 
 =head1 REFACTORINGS and ENHANCEMENTS
