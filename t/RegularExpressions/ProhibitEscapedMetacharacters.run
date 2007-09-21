@@ -1,0 +1,63 @@
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+## name basic passes
+## failures 0
+## cut
+
+m/ [{] . [.] \d{2} [}] /xms;
+$name =~ m{ harry [ ] s [ ] truman
+          | harry [ ] j [ ] potter
+          }ixms;
+
+## name basic failures
+## failures 2
+## optional_modules Regexp::Parser
+## cut
+
+m/ \{ . \. \d{2} \} /xms;
+$name =~ m{ harry \ s \ truman
+          | harry \ j \ potter
+          }ixms;
+
+## name failure for comment character in //x mode
+## failures 2
+## optional_modules Regexp::Parser
+## cut
+
+m/\#/x;
+m/\#/;
+
+## name allowed escapes
+## failures 0
+## cut
+
+# omit \N{}, \p{}, \P{}, \xfe \cx
+m/\Q\E \L\U \l\u /;  # matched pairs of specials
+m/\A\B\C\D  \F\G\H\I\J\K \M  \O   \R\S\T \V\W\X\Y\Z /;
+m/\a\b  \d\e\f\g\h\i\j\k \m\n\o \q\r\s\t \v\w  \y\z /;
+m/(.)(.)(.)(.)(.)(.)(.)(.)(.)
+  \1\2\3\4\5\6\7\8\9 /;
+m/\!\@\%\&\-\_\= /;
+m/\\ \'\"\` \~\,\<\> \/ /;
+m/ \[\] /x;
+
+## name unexpected failures
+## failures 0
+## cut
+
+s{\%[fF]}{STDIN}mx;
+
+#-----------------------------------------------------------------------------
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :

@@ -15,6 +15,7 @@
      * RegularExpressions::ProhibitUnusedCapture
      * RegularExpressions::ProhibitComplexRegexes
      * RegularExpressions::ProhibitSingleCharAlternation
+     * RegularExpressions::ProhibitEscapedMetacharacters
 
      Other New Policies
      * ControlStructures::ProhibitNegativeExpressionsInUnlessAndUntilConditions

@@ -25,7 +25,7 @@ our $VERSION = 1.078;
 Readonly::Scalar my $DESC => q{Use 'eq' or hash instead of fixed-pattern regexps};
 Readonly::Scalar my $EXPL => [271,272];
 
-Readonly::Scalar my $RE_METACHAR => qr/[\\\#\$\(\)\*\+\.\?\@\[\]\^\{\|\}]/xms;
+Readonly::Scalar my $RE_METACHAR => qr/[\\#\$()*+.?\@\[\]^{|}]/xms;
 
 #-----------------------------------------------------------------------------
 
@@ -60,13 +60,13 @@ sub violates {
 
         # check for grouping and optional alternation.  Grouping may or may not capture
         if ($words =~ m{\A \s*
-                        \(               # start group
-                          (?:\?:)?       # optional non-capturing indicator
+                        [(]              # start group
+                          (?:[?]:)?      # optional non-capturing indicator
                           \s* (.*?) \s*  # interior of group
-                        \)               # end of group
+                        [)]              # end of group
                         \s* \z}xms) {
             $words = $1;
-            $words =~ s/\|//gxms; # ignore alternation inside of parens -- just look at words
+            $words =~ s/[|]//gxms; # ignore alternation inside of parens -- just look at words
         }
 
         # Regexps that contain metachars are not fixed strings

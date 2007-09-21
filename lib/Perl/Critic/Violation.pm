@@ -236,7 +236,7 @@ sub _get_diagnostics {
 
     my $file = shift;
 
-    (my $podfile = $file) =~ s{\.[^\.]+ \z}{.pod}mx;
+    (my $podfile = $file) =~ s{[.][^.]+ \z}{.pod}mx;
     if (-f $podfile)
     {
        $file = $podfile;

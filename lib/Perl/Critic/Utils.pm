@@ -982,7 +982,7 @@ sub _is_perl {
     my $first = <$fh>;
     close $fh or confess "unable to close $file: $!";
 
-    return 1 if defined $first && ( $first =~ m{ \A \#![ ]*\S*perl }mx );
+    return 1 if defined $first && ( $first =~ m{ \A [#]![ ]*\S*perl }mx );
     return;
 }
 
@@ -999,7 +999,7 @@ sub shebang_line {
     return if $location->[0] != 1; # line number
     return if $location->[1] != 1; # column number
     my $shebang = $first_comment->content;
-    return if $shebang !~ m{ \A \#\! }mx;
+    return if $shebang !~ m{ \A [#]! }mx;
     return $shebang;
 }
 

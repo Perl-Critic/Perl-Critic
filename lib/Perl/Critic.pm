@@ -227,7 +227,7 @@ sub _filter_code {
 sub _filter_shebang_line {
     my ($nodes_ref, $disabled_lines, $site_policies) = @_;
 
-    my $shebang_no_critic  = qr{\A \#! .*? \#\# \s* no  \s+ critic}mx;
+    my $shebang_no_critic  = qr{\A [#]! .*? [#][#] \s* no  \s+ critic}mx;
 
     # Special case for the very beginning of the file: allow "##no critic" after the shebang
     if (0 < @{$nodes_ref}) {
@@ -245,8 +245,8 @@ sub _filter_shebang_line {
 sub _filter_other_lines {
     my ($nodes_ref, $disabled_lines, $site_policies) = @_;
 
-    my $no_critic  = qr{\A \s* \#\# \s* no  \s+ critic}mx;
-    my $use_critic = qr{\A \s* \#\# \s* use \s+ critic}mx;
+    my $no_critic  = qr{\A \s* [#][#] \s* no  \s+ critic}mx;
+    my $use_critic = qr{\A \s* [#][#] \s* use \s+ critic}mx;
 
   PRAGMA:
     for my $pragma ( grep { $_ =~ $no_critic } @{$nodes_ref} ) {
@@ -326,8 +326,8 @@ sub _parse_nocritic_import {
     my $module    = qr{ [\w:]+ }mx;
     my $delim     = qr{ \s* [,\s] \s* }mx;
     my $qw        = qr{ (?: qw )? }mx;
-    my $qualifier = qr{ $qw \(? \s* ( $module (?: $delim $module)* ) \s* \)? }mx;
-    my $no_critic = qr{ \#\# \s* no \s+ critic \s* $qualifier }mx;
+    my $qualifier = qr{ $qw [(]? \s* ( $module (?: $delim $module)* ) \s* [)]? }mx;
+    my $no_critic = qr{ \#\# \s* no \s+ critic \s* $qualifier }mx;  ##no critic(EscapedMetacharacters)
 
     if ( my ($module_list) = $pragma =~ $no_critic ) {
         my @modules = split $delim, $module_list;

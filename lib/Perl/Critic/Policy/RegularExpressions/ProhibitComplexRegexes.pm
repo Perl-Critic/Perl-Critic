@@ -67,7 +67,7 @@ sub violates {
        my $qr = $re->visual;
 
        # HACK: Remove any (?xism:...) wrapper we may have added in the parse process...
-       $qr =~ s/\A \(\?[xism]+(?:-[xism]+)?: (.*) \) \z/$1/xms;
+       $qr =~ s/\A [(][?][xism]+(?:-[xism]+)?: (.*) [)] \z/$1/xms;
        return if $self->{_max_characters} >= length $qr;
     }
 

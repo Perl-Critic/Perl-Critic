@@ -84,7 +84,7 @@ sub _arrayindex {
     # return (varname, isref=0|1, isindex=0|1) if this could be a violation
     my ( $expr ) = @_;
     my $arrindex = shift @{$expr};
-    if ($arrindex->content =~ m/\A \$\# (.*) \z /xms) { # What else could it be???
+    if ($arrindex->content =~ m/\A \$[#] (.*) \z /xms) { # What else could it be???
        return $1, 0, 1;
     }
     return;

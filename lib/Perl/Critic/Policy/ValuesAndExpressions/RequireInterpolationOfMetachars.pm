@@ -53,7 +53,7 @@ sub _needs_interpolation {
 
 sub _looks_like_email_address {
     my $string = shift;
-    return $string =~ m{\A [^\@\s]+ \@ [\w\-\.]+ \z}mxo;
+    return $string =~ m{\A [^\@\s]+ \@ [\w\-.]+ \z}mxo;
 }
 
 1;

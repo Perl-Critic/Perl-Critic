@@ -125,10 +125,6 @@ to take into account the Fatal and Fatal::Exception modules.
 Make sure there's a close within N statements of an open, both with
 same lexical FH
 
-=item * RegularExpressions::ProhibitEscapedMetacharacters (p247)
-
-Strictly, requires parsing the regexp to find the escapes.
-
 =item * RegularExpressions::ProhibitEnumeratedClasses (p248)
 
   [A-Z]     => \p{Uppercase}

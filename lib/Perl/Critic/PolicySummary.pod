@@ -5,6 +5,8 @@
 # $Revision$
 ##############################################################################
 
+=for stopwords metachars
+
 =head1 NAME
 
 Perl::Critic::PolicySummary - Description of the bundled Policy modules

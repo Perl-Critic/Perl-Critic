@@ -134,7 +134,7 @@ sub subtests_in_tree {
 
     find( {wanted => sub {
                return if ! -f $_;
-               my ($fileroot) = m{(.+)\.run\z}mx;
+               my ($fileroot) = m{(.+)[.]run\z}mx;
                return if !$fileroot;
                my @pathparts = File::Spec->splitdir($fileroot);
                if (@pathparts < 2) {
@@ -195,8 +195,8 @@ sub _subtests_from_file {
         my $line = $_;
 
         if ( $inheader ) {
-            $line =~ m/\A\#/mx or confess "Code before cut: $test_file";
-            my ($key,$value) = $line =~ m/\A\#\#[ ](\S+)(?:\s+(.+))?/mx;
+            $line =~ m/\A [#]/mx or confess "Code before cut: $test_file";
+            my ($key,$value) = $line =~ m/\A [#][#] [ ] (\S+) (?:\s+(.+))? /mx;
             next if !$key;
             next if $key eq 'cut';
             confess "Unknown key $key in $test_file" if !$valid_keys{$key};

@@ -149,7 +149,7 @@ Perl::Critic::Policy::ControlStructures::ProhibitNegativeExpressionsInUnlessAndU
 
 A number of people have problems figuring out the meaning of doubly
 negated expressions.  Cunless> and C<until> are both negative
-constructs, so any negative (e.g. C<!~>) or reversable operators (e.g.
+constructs, so any negative (e.g. C<!~>) or reversible operators (e.g.
 C<le>) included in their conditional expressions are double negations.
 Conway considers the following operators to be difficult to understand
 within C<unless> and C<until>:
