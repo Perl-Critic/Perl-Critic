@@ -31,6 +31,7 @@ m/\A (?: a | do | in | queue | rue | woe | xray ) \z/xms;
 
 ## name basic failures
 ## failures 2
+## optional_modules Regexp::Parser
 ## cut
 
 m/\A (?: a | d | i | q | r | w | x ) \z/xms;
