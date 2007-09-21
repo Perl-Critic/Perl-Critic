@@ -49,7 +49,7 @@ Write C<eval { my $foo; bar($foo) }> instead of C<eval "my $foo; bar($foo);"> [S
 
 =head2 L<Perl::Critic::Policy::BuiltinFunctions::ProhibitStringySplit>
 
-Write C<split /-/, $string> instead of C<split '-', $string> [Severity 3]
+Write C<split /-/, $string> instead of C<split '-', $string> [Severity 2]
 
 =head2 L<Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalCan>
 
@@ -133,7 +133,7 @@ Don't write long "if-elsif-elsif-elsif-elsif...else" chains [Severity 3]
 
 =head2 L<Perl::Critic::Policy::ControlStructures::ProhibitDeepNests>
 
-Don't write deeply nested loops and conditionals [Severity 2]
+Don't write deeply nested loops and conditionals [Severity 3]
 
 =head2 L<Perl::Critic::Policy::ControlStructures::ProhibitMutatingListFunctions>
 
@@ -213,7 +213,7 @@ Write C<< my $error = open $fh, $mode, $filename; >> instead of C<< open $fh, $m
 
 =head2 L<Perl::Critic::Policy::InputOutput::RequireCheckedClose>
 
-Write C<< my $error = close $fh; >> instead of C<< close $fh; >> [Severity 3]
+Write C<< my $error = close $fh; >> instead of C<< close $fh; >> [Severity 2]
 
 =head2 L<Perl::Critic::Policy::InputOutput::RequireBracedFileHandleWithPrint>
 
@@ -233,7 +233,7 @@ Put source-control keywords in every file [Severity 2]
 
 =head2 L<Perl::Critic::Policy::Modules::ProhibitAutomaticExportation>
 
-Export symbols via C<@EXPORT_OK> or C<%EXPORT_TAGS> instead of C<@EXPORT>  [Severity 3]
+Export symbols via C<@EXPORT_OK> or C<%EXPORT_TAGS> instead of C<@EXPORT>  [Severity 4]
 
 =head2 L<Perl::Critic::Policy::Modules::ProhibitEvilModules>
 
@@ -291,13 +291,17 @@ Capture variable used outside conditional [Severity 3]
 
 Split long regexps into smaller C<qr//> chunks [Severity 3]
 
+=head2 L<Perl::Critic::Policy::RegularExpressions::ProhibitEscapedMetacharacters>
+
+Use character classes for literal metachars instead of escapes [Severity 1]
+
 =head2 L<Perl::Critic::Policy::RegularExpressions::ProhibitFixedStringMatches>
 
 Use C<eq> or hash instead of fixed-pattern regexps [Severity 2]
 
 =head2 L<Perl::Critic::Policy::RegularExpressions::ProhibitSingleCharAlternation>
 
-Use C<[abc]> instead of C<a|b|c> [Severity 5]
+Use C<[abc]> instead of C<a|b|c> [Severity 1]
 
 =head2 L<Perl::Critic::Policy::RegularExpressions::ProhibitUnusedCapture>
 
@@ -305,19 +309,19 @@ Only use a capturing group if you plan to use the captured value [Severity 3]
 
 =head2 L<Perl::Critic::Policy::RegularExpressions::ProhibitUnusualDelimiters>
 
-Use only C<//> or C<{}> to delimit regexps [Severity 5]
+Use only C<//> or C<{}> to delimit regexps [Severity 1]
 
 =head2 L<Perl::Critic::Policy::RegularExpressions::RequireBracesForMultiline>
 
-Use C<{> and C<}> to delimit multi-line regexps [Severity 5]
+Use C<{> and C<}> to delimit multi-line regexps [Severity 1]
 
 =head2 L<Perl::Critic::Policy::RegularExpressions::RequireExtendedFormatting>
 
-Always use the C</x> modifier with regular expressions [Severity 2]
+Always use the C</x> modifier with regular expressions [Severity 3]
 
 =head2 L<Perl::Critic::Policy::RegularExpressions::RequireLineBoundaryMatching>
 
-Always use the C</m> modifier with regular expressions [Severity 3]
+Always use the C</m> modifier with regular expressions [Severity 2]
 
 =head2 L<Perl::Critic::Policy::Subroutines::ProhibitAmpersandSigils>
 
@@ -449,7 +453,7 @@ Write C< print <<'THE_END' > or C< print <<"THE_END" > [Severity 3]
 
 =head2 L<Perl::Critic::Policy::ValuesAndExpressions::RequireUpperCaseHeredocTerminator>
 
-Write C< <<'THE_END'; > instead of C< <<'theEnd'; > [Severity 1]
+Write C< <<'THE_END'; > instead of C< <<'theEnd'; > [Severity 2]
 
 =head2 L<Perl::Critic::Policy::Variables::ProhibitConditionalDeclarations>
 
@@ -485,11 +489,11 @@ Write C<local $foo = $bar;> instead of just C<local $foo;> [Severity 3]
 
 =head2 L<Perl::Critic::Policy::Variables::RequireLexicalLoopIterators>
 
-Write C<for my $element (@list) {...}> instead of C<for $element (@list) {...}>
+Write C<for my $element (@list) {...}> instead of C<for $element (@list) {...}> [Severity 5]
 
 =head2 L<Perl::Critic::Policy::Variables::RequireLocalizedPunctuationVars>
 
-Magic variables should be assigned as "local" [Severity 2]
+Magic variables should be assigned as "local" [Severity 4]
 
 =head2 L<Perl::Critic::Policy::Variables::RequireNegativeIndices>
 
