@@ -68,6 +68,10 @@ sub violates {
 
        # HACK: Remove any (?xism:...) wrapper we may have added in the parse process...
        $qr =~ s/\A [(][?][xism]+(?:-[xism]+)?: (.*) [)] \z/$1/xms;
+
+       # Hack: don't count long \p{...} expressions against us so badly
+       $qr =~ s/\\[pP][{]\w+[}]/\\p{...}/gmx;
+
        return if $self->{_max_characters} >= length $qr;
     }
 
