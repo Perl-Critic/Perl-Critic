@@ -15,7 +15,7 @@ use English qw(-no_match_vars);
 use List::MoreUtils qw(any);
 
 use Perl::Critic::Utils qw{ :booleans :severities hashify };
-use Perl::Critic::Utils::PPIRegexp qw{ ppiify parse_regexp get_modifiers };
+use Perl::Critic::Utils::PPIRegexp qw{ ppiify parse_regexp };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = 1.078;
@@ -45,17 +45,12 @@ sub violates {
     my $re = ppiify(parse_regexp($elem));
     return if !$re;
 
-    #my %modifiers = get_modifiers($elem);
-
     # Must pass a sub to find() because our node classes don't start with PPI::
     my $exacts = $re->find(sub {$_[1]->isa('Perl::Critic::PPIRegexp::exact')});
     return if !$exacts;
     for my $exact (@{$exacts}) {
        my @escapes = $exact =~ m/\\(.)/gxms;
        return $self->violation( $DESC, $EXPL, $elem ) if any { $REGEXP_METACHARS{$_} } @escapes;
-       #if ($modifiers{x}) {
-       #   return $self->violation( $DESC, $EXPL, $elem ) if any { $_ eq q{#} } @escapes;
-       #}
     }
 
     return;  # OK

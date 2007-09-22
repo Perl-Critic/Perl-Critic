@@ -19,7 +19,7 @@ our $VERSION = 1.078;
 #-----------------------------------------------------------------------------
 
 Readonly::Scalar my $DESC     => q{Numeric escapes in interpolated string};
-Readonly::Scalar my $EXPL     => [ 56 ];
+Readonly::Scalar my $EXPL     => [ 54 ];
 
 #-----------------------------------------------------------------------------
 
@@ -33,7 +33,12 @@ sub applies_to           { return qw(PPI::Token::Quote::Double
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
-    if ($elem->content =~ m/(?<!\\)(?:\\\\)*(?:\\x[0-9A-F]|\\[01][0-7])/mx) {
+
+    my $not_escaped = qr/(?<!\\)(?:\\\\)*/mx;
+    my $hex         = qr/\\x[\dA-Fa-f]{2}/mx;
+    my $widehex     = qr/\\x[{][\dA-Fa-f]+[}]/mx;
+    my $oct         = qr/\\[01][0-7]/mx;
+    if ($elem->content =~ m/$not_escaped (?:$hex|$widehex|$oct)/mxo) {
         return $self->violation( $DESC, $EXPL, $elem );
     }
     return;    #ok!
@@ -56,7 +61,7 @@ Perl::Critic::Policy::ValuesAndExpressions::ProhibitEscapedCharacters
 Escaped numeric values are hard to read and debug.  Instead, use named
 values.  The syntax is less compact, but dramatically more readable.
 
-  $str = "\X7F\x06\x22Z";                         # not ok
+  $str = "\x7F\x06\x22Z";                         # not ok
 
   use charnames ':full';
   $str = "\N{DELETE}\N{ACKNOWLEDGE}\N{CANCEL}Z";  # ok

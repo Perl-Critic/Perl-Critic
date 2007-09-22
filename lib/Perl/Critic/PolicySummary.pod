@@ -293,6 +293,10 @@ Capture variable used outside conditional [Severity 3]
 
 Split long regexps into smaller C<qr//> chunks [Severity 3]
 
+=head2 L<Perl::Critic::Policy::RegularExpressions::ProhibitEnumeratedClasses>
+
+Use named character classes instead of explicit character lists [Severity 1]
+
 =head2 L<Perl::Critic::Policy::RegularExpressions::ProhibitEscapedMetacharacters>
 
 Use character classes for literal metachars instead of escapes [Severity 1]

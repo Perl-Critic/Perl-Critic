@@ -183,6 +183,10 @@ sub ppiify {
         my ($self) = @_;
         return $self->{_re}->visual;
     }
+    sub re {
+        my ($self) = @_;
+        return $self->{_re};
+    }
 }
 
 1;

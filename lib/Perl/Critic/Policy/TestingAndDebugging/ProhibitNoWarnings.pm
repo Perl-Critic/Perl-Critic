@@ -62,10 +62,15 @@ sub violates {
     #I just use a regext to split the statement into words.  This is
     #kinda lame, but it does the trick for now.
 
+    # TODO consider: a possible alternate implementation:
+    #   my $re = join q{|}, keys %{$self->{allow}};
+    #   return if $re && $stmnt =~ m/\b(?:$re)\b/mx;
+    # May need to detaint for that to work...  Not sure.
+
     my $stmnt = $elem->statement();
     return if !$stmnt;
-    my @words = split m{ [^a-z]+ }mx, $stmnt;
-    @words = grep { $_ !~ m{ qw|no|warnings }mx } @words;
+    my @words = $stmnt =~ m{ (\p{IsLowercase}+) }gmx;
+    @words = grep { $_ ne 'qw' && $_ ne 'no' && $_ ne 'warnings' } @words;
     return if all { exists $self->{_allow}->{$_} } @words;
 
     #If we get here, then it must be a violation

@@ -125,19 +125,6 @@ to take into account the Fatal and Fatal::Exception modules.
 Make sure there's a close within N statements of an open, both with
 same lexical FH
 
-=item * RegularExpressions::ProhibitEnumeratedClasses (p248)
-
-  [A-Z]     => \p{Uppercase}
-  [A-Za-z]  => \p{Alphabetic}
-  [A-Za-z_] => \p{ID_Start}
-  [0-9]     => \d
-  (others?)
-
-People writing ASCII-only code will want to disable this policy or put in ##
-no critic flags.
-
-Strictly, requires parsing the regexp to find the enumerations.
-
 =back
 
 =head1 NON-PBP POLICIES WANTED

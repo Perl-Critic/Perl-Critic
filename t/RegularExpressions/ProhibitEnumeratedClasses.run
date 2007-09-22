@@ -1,0 +1,72 @@
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+## name basic passes
+## failures 0
+## cut
+
+m/\w\d\p{Uppercase}/;
+
+## name allowed classes
+## failures 0
+## cut
+
+m/[B-Y]/;
+m/[0-8]/;
+
+## name basic failures
+## failures 8
+## optional_modules Regexp::Parser
+## cut
+
+m/[A-Z]/;      # \p{Uppercase}
+m/[a-z]/;      # \p{Lowercase}
+m/[0-9]/;      # \d
+m/[A-Za-z_]/;  # \w
+m/[a-z_A-Z]/;  # \w
+m/[a-zA-Z]/;   # \p{Alphabetic}
+m/[ \t\r\n\f]/;# \s
+m/[\ \t\r\n]/; # \s
+
+## name alterate representations of line endings
+## failures 3
+## optional_modules Regexp::Parser
+## cut
+
+m/[\ \t\012\015]/; # \s
+m/[\ \t\x0a\x0d]/; # \s
+m/[\ \t\x{0a}\x{0d}]/; # \s
+
+## name negative failures
+## failures 8
+## optional_modules Regexp::Parser
+## cut
+
+m/[^\w]/;       # \W
+m/[^\s]/;       # \S
+m/[^0-9]/;      # \D
+m/[^A-Za-z_]/;  # \W
+m/[^a-z_A-Z]/;  # \W
+m/[^a-zA-Z]/;   # \P{Alphabetic}
+m/[^ \t\r\n\f]/;# \S
+m/[^\ \t\r\n]/; # \S
+
+## name special negative successes
+## failures 0
+## cut
+
+m/[^\s\w]/;
+
+#-----------------------------------------------------------------------------
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :
