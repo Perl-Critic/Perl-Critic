@@ -120,11 +120,6 @@ Add policies to ensure checking the return values of system calls.  See
 InputOutput::RequireCheckedOpen and InputOutput::RequireCheckedClose.  Needs
 to take into account the Fatal and Fatal::Exception modules.
 
-=item * InputOutput::RequireBriefOpen (p209)
-
-Make sure there's a close within N statements of an open, both with
-same lexical FH
-
 =back
 
 =head1 NON-PBP POLICIES WANTED

@@ -158,8 +158,8 @@ defaults to 60.  You can override this to set it to a different number
 with the C<max_characters> setting.  To do this, put entries in a
 F<.perlcriticrc> file like this:
 
-[RegularExpressions::ProhibitComplexRegexes]
-max_characters = 40
+  [RegularExpressions::ProhibitComplexRegexes]
+  max_characters = 40
 
 =head1 CREDITS
 

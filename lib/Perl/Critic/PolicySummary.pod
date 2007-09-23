@@ -209,6 +209,10 @@ Write C<< while( $line = <> ){...} >> instead of C<< for(<>){...} >> [Severity 4
 
 Write C<< open $fh, q{<}, $filename; >> instead of C<< open $fh, "<$filename"; >> [Severity 5]
 
+=head2 L<Perl::Critic::Policy::InputOutput::RequireBriefOpen>
+
+Close filehandles as soon as possible after opening them [Severity 4]
+
 =head2 L<Perl::Critic::Policy::InputOutput::RequireCheckedOpen>
 
 Write C<< my $error = open $fh, $mode, $filename; >> instead of C<< open $fh, $mode, $filename; >> [Severity 3]

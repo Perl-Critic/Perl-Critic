@@ -253,6 +253,7 @@ sub _get_diagnostics {
     # Pod::Parser::parse_from_file
     return $EMPTY if not (open my $fh, '<', $file);
     $parser->parse_from_filehandle( $fh, $handle );
+    return $EMPTY if not close $fh;
 
     # Remove header and trailing whitespace.
     $pod_string =~ s{ \A \s* DESCRIPTION \s* \n}{}mx;

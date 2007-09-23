@@ -978,7 +978,7 @@ sub _is_perl {
     return 1 if $file =~ m{ [.] t     \z}mx;
 
     #Check for shebang
-    open my ($fh), '<', $file or return;
+    open my $fh, '<', $file or return;
     my $first = <$fh>;
     close $fh or confess "unable to close $file: $!";
 

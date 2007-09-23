@@ -1,0 +1,231 @@
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+## name open .. close
+## failures 0
+## cut
+
+open my $fh1, '<', $filename or die;
+close $fh1;
+open my $fh2, '<', $filename or die;
+close $fh2;
+if (open my $fh3, '<', $filename) {
+    close $fh3;
+}
+
+#-----------------------------------------------------------------------------
+
+## name OO
+## failures 0
+## cut
+
+open my $fh1, '<', $filename or die;
+$fh1->close;
+
+#-----------------------------------------------------------------------------
+
+## name else
+## failures 0
+## cut
+
+if (!open my $fh3, '<', $filename) {
+    croak;
+} else {
+    close $fh3;
+}
+
+#-----------------------------------------------------------------------------
+
+## name while .. print
+## failures 0
+## cut
+
+open my $fh1, '<', $filename or die;
+while (<$fh1>) {
+    print;
+}
+close $fh1;
+
+if (open my $fh2, '<', $filename) {
+    while (<$fh2>) {
+        print;
+    }
+    close $fh2;
+}
+
+#-----------------------------------------------------------------------------
+
+## name basic failures
+## failures 2
+## cut
+
+open my $fh1, '<', $filename or die;
+close $fh0;
+if (open my $fh2, '<', $filename) {
+    while (<$fh2>) {
+        print;
+    }
+}
+
+#-----------------------------------------------------------------------------
+
+## name scope failure
+## failures 1
+## cut
+
+{
+    open my $fh1, '<', $filename;
+}
+close $fh1;
+
+#-----------------------------------------------------------------------------
+
+## name glob scope failure
+## failures 1
+## cut
+
+{
+    open FH1, '<', $filename;
+}
+close FH1;
+
+#-----------------------------------------------------------------------------
+
+## name glob filehandle
+## failures 0
+## cut
+
+local (*FH1);
+open FH1, '<', $filename or die;
+close FH1;
+
+#-----------------------------------------------------------------------------
+
+## name glob failure
+## failures 1
+## cut
+
+local (*FH2);
+open FH2, '<', $filename or die;
+
+#-----------------------------------------------------------------------------
+
+## name config
+## failures 0
+## cut
+
+open my $fh1, '<', $filename;
+# 1
+# 2
+# 3
+# 4
+# 5
+# 6
+# 7
+# 8
+close $fh1;
+
+#-----------------------------------------------------------------------------
+
+## name config
+## failures 1
+## cut
+
+open my $fh1, '<', $filename;
+# 1
+# 2
+# 3
+# 4
+# 5
+# 6
+# 7
+# 8
+# 9
+close $fh1;
+
+#-----------------------------------------------------------------------------
+
+## name config
+## failures 1
+## parms {lines => " 2 "}
+## cut
+
+open my $fh1, '<', $filename;
+# 1
+close $fh1;
+
+open my $fh2, '<', $filename;
+# 1
+# 2
+close $fh2;
+
+#-----------------------------------------------------------------------------
+
+## name nested sub
+## failures 1
+## cut
+
+open my $fh1, '<', $filename;
+sub not_a_recommended_idiom {
+    close $fh1;
+}
+
+#-----------------------------------------------------------------------------
+
+## name opener sub
+## failures 0
+## cut
+
+sub my_open {
+    my ($filename) = @_;
+    open my $fh1, '<', $filename or return;
+    return $fh1;
+}
+
+#-----------------------------------------------------------------------------
+
+## name long opener sub failure
+## failures 1
+## cut
+
+sub my_open {
+    my ($filename) = @_;
+    open my $fh1, '<', $filename or return;
+    # 1
+    # 2
+    # 3
+    # 4
+    # 5
+    # 6
+    # 7
+    # 8
+    # 9
+    return $fh1;
+}
+
+#-----------------------------------------------------------------------------
+
+## name opener sub failure
+## failures 1
+## cut
+
+sub my_open {
+    my ($filename) = @_;
+    open my $fh1, '<', $filename or return;
+    return $fh2;
+}
+
+#-----------------------------------------------------------------------------
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :

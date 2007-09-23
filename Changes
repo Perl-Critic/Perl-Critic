@@ -17,6 +17,7 @@
      * RegularExpressions::ProhibitSingleCharAlternation
      * RegularExpressions::ProhibitEscapedMetacharacters
      * RegularExpressions::ProhibitEnumeratedClasses
+     * InputOutput::RequireBriefOpen
 
      Other New Policies
      * ControlStructures::ProhibitNegativeExpressionsInUnlessAndUntilConditions

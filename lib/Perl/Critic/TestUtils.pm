@@ -179,7 +179,7 @@ sub _subtests_from_file {
 
     return if -z $test_file;  # Skip if the Policy has a regular .t file.
 
-    open my $fh, '<', $test_file
+    open my $fh, '<', $test_file   ## no critic (RequireBriefOpen)
       or confess "Couldn't open $test_file: $OS_ERROR";
 
     my @subtests;
