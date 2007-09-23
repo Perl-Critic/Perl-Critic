@@ -42,6 +42,9 @@ Readonly::Scalar my $NUM_CAPTURES_FOR_GLOBAL => 100; # arbitrarily large number
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
+    # optimization: don't bother parsing the regexp if there are no parens
+    return if $elem !~ m/[(]/xms;
+
     my $re = parse_regexp($elem);
     return if ! $re;
     my $ncaptures = @{$re->captures};

@@ -42,6 +42,9 @@ sub applies_to           { return qw(PPI::Token::Regexp::Match
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
+    # optimization: don't bother parsing the regexp if there are no escapes
+    return if $elem !~ m/\\/xms;
+
     my $re = ppiify(parse_regexp($elem));
     return if !$re;
 

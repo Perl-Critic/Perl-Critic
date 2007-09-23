@@ -51,6 +51,9 @@ sub applies_to           { return qw(PPI::Token::Regexp::Match
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
+    # optimization: don't bother parsing the regexp if there are no character classes
+    return if $elem !~ m/\[/xms;
+
     my $re = ppiify(parse_regexp($elem));
     return if !$re;
 
@@ -62,7 +65,7 @@ sub violates {
        for my $element ($anyof->children) {
           if ($element->isa('Perl::Critic::PPIRegexp::exact')) {
              my @tokens = split m/(\\.[^\\]*)/xms, $element->content;
-             for my $token (map { split m/\A (\\[nrf])/xms, _fixup($_); } @tokens) {  ##no critic(Comma) ## FALSE POSITIVE
+             for my $token (map { split m/\A (\\[nrf])/xms, _fixup($_); } @tokens) {  ##no critic(Comma) ## TODO: FALSE POSITIVE
                 $elements{$token} = 1;
              }
           } elsif ($element->isa('Perl::Critic::PPIRegexp::anyof_char') ||
