@@ -61,39 +61,47 @@ sub violates {
     my $anyofs = $re->find(sub {$_[1]->isa('Perl::Critic::PPIRegexp::anyof')});
     return if !$anyofs;
     for my $anyof (@{$anyofs}) {
-       my %elements;
-       for my $element ($anyof->children) {
-          if ($element->isa('Perl::Critic::PPIRegexp::exact')) {
-             my @tokens = split m/(\\.[^\\]*)/xms, $element->content;
-             for my $token (map { split m/\A (\\[nrf])/xms, _fixup($_); } @tokens) {  ##no critic(Comma) ## TODO: FALSE POSITIVE
-                $elements{$token} = 1;
-             }
-          } elsif ($element->isa('Perl::Critic::PPIRegexp::anyof_char') ||
-                   $element->isa('Perl::Critic::PPIRegexp::anyof_range') ||
-                   $element->isa('Perl::Critic::PPIRegexp::anyof_class')) {
-             for my $token (split m/\A (\\[nrf])/xms, _fixup($element->content)) {
-                $elements{$token} = 1;
-             }
-          } else {
-             carp 'Unexpected type inside a character class: ' . (ref $element) . " '$element'";
-          }
-       }
-       for (my $i = 0; $i < @PATTERNS; $i += 2) {  ##no critic (CStyleForLoop)
-          if (all { exists $elements{$_} } @{$PATTERNS[$i]}) {
-             my $neg = $anyof->re->neg;
-             my $improvement = $PATTERNS[$i + 1]->[$neg ? 1 : 0];
-             next if !defined $improvement;
+        my $violation = $self->_get_character_class_violations($elem, $anyof);
+        return $violation if $violation;
+    }
+    return;  # OK
+}
 
-             if ($neg && ! defined $PATTERNS[$i + 1]->[0]) {
+sub _get_character_class_violations {
+    my ($self, $elem, $anyof) = @_;
+
+    my %elements;
+    for my $element ($anyof->children) {
+        if ($element->isa('Perl::Critic::PPIRegexp::exact')) {
+            my @tokens = split m/(\\.[^\\]*)/xms, $element->content;
+            for my $token (map { split m/\A (\\[nrf])/xms, _fixup($_); } @tokens) {  ##no critic(Comma) ## TODO: FALSE POSITIVE
+                $elements{$token} = 1;
+            }
+        } elsif ($element->isa('Perl::Critic::PPIRegexp::anyof_char') ||
+                 $element->isa('Perl::Critic::PPIRegexp::anyof_range') ||
+                 $element->isa('Perl::Critic::PPIRegexp::anyof_class')) {
+            for my $token (split m/\A (\\[nrf])/xms, _fixup($element->content)) {
+                $elements{$token} = 1;
+            }
+        } else {
+            carp 'Unexpected type inside a character class: ' . (ref $element) . " '$element'";
+        }
+    }
+    for (my $i = 0; $i < @PATTERNS; $i += 2) {  ##no critic (CStyleForLoop)
+        if (all { exists $elements{$_} } @{$PATTERNS[$i]}) {
+            my $neg = $anyof->re->neg;
+            my $improvement = $PATTERNS[$i + 1]->[$neg ? 1 : 0];
+            next if !defined $improvement;
+
+            if ($neg && ! defined $PATTERNS[$i + 1]->[0]) {
                 # the [^\w] => \W rule only applies if \w is the only token.
                 # that is it does not apply to [^\w\s]
                 next if 1 != scalar keys %elements;
-             }
+            }
 
-             my $orig = join q{}, '[', ($neg ? q{^} : ()), @{$PATTERNS[$i]}, ']';
-             return $self->violation( $DESC . " ($orig vs. $improvement)", $EXPL, $elem );
-          }
-       }
+            my $orig = join q{}, '[', ($neg ? q{^} : ()), @{$PATTERNS[$i]}, ']';
+            return $self->violation( $DESC . " ($orig vs. $improvement)", $EXPL, $elem );
+        }
     }
 
     return;  # OK
