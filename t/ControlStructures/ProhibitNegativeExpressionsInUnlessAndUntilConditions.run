@@ -98,7 +98,7 @@ for (my $bar = 0; not $bar; $bar++) {
 
 #-----------------------------------------------------------------------------
 
-## name "!" within positive postfix statement modifiers
+## name "not" within positive postfix statement modifiers
 ## failures 0
 ## cut
 
@@ -110,7 +110,7 @@ blah($_) for grep { not $_ } @foo;
 
 #-----------------------------------------------------------------------------
 
-## name "!" within negative control structures
+## name "not" within negative control structures
 ## failures 2
 ## cut
 
@@ -124,7 +124,7 @@ until (not $foo) {
 
 #-----------------------------------------------------------------------------
 
-## name "!" within negative postfix statement modifiers
+## name "not" within negative postfix statement modifiers
 ## failures 2
 ## cut
 
