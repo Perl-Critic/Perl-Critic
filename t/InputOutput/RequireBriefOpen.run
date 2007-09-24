@@ -17,6 +17,10 @@ if (open my $fh3, '<', $filename) {
     close $fh3;
 }
 
+my $fh4;
+open $fh4, '<', $filename or die;
+close $fh4;
+
 #-----------------------------------------------------------------------------
 
 ## name OO
@@ -73,6 +77,17 @@ if (open my $fh2, '<', $filename) {
 
 #-----------------------------------------------------------------------------
 
+## name lexical wrong name failure
+## failures 2
+## cut
+
+open my $fh1, '<', $filename or die;
+close $fh2;
+open my $fh3, '<', $filename or die;
+$fh4->close;
+
+#-----------------------------------------------------------------------------
+
 ## name scope failure
 ## failures 1
 ## cut
@@ -111,6 +126,25 @@ close FH1;
 
 local (*FH2);
 open FH2, '<', $filename or die;
+
+#-----------------------------------------------------------------------------
+
+## name glob wrong name failure
+## failures 1
+## cut
+
+local (*FH1);
+open FH1, '<', $filename or die;
+close FH2;
+
+#-----------------------------------------------------------------------------
+
+## name we do not flag non-uppercase globs -- maybe it is a sub call
+## failures 0
+## cut
+
+local (*fh1);
+open fh1, '<', $filename or die;
 
 #-----------------------------------------------------------------------------
 
@@ -218,6 +252,77 @@ sub my_open {
     open my $fh1, '<', $filename or return;
     return $fh2;
 }
+
+#-----------------------------------------------------------------------------
+
+## name unusual lexical syntax
+## failures 1
+## TODO we do not recognize parenthesized lexical declarations
+## cut
+
+open my ($fh1), '<', $filename;
+
+#-----------------------------------------------------------------------------
+
+## name code coverage - invalid config
+## failures 0
+## parms {lines => 'two'}
+## cut
+
+open my $fh2, '<', $filename;
+# 1
+# 2
+close $fh2;
+
+#-----------------------------------------------------------------------------
+
+## name code coverage - zero config
+## failures 0
+## parms {lines => 0}
+## cut
+
+open my $fh2, '<', $filename;
+# 1
+close $fh2;
+
+#-----------------------------------------------------------------------------
+
+## name code coverage - unsupported open() calls
+## failures 0
+## cut
+
+$self->open($door);
+open($fh); # erroneous call
+open(get_fh(), '<', $filename); # first arg returns a filehandle -- bad form
+open(1 + 1, '<', $filename); # nonsense
+
+#-----------------------------------------------------------------------------
+
+## name code coverage - glob topic for method call
+## failures 1
+## cut
+
+open FH1, '<', $filename;
+FH1->close; # invalid code
+
+#-----------------------------------------------------------------------------
+
+## name code coverage - close is not a function or method call
+## failures 1
+## cut
+
+open my $fh, '<', $filename;
+$hash->{close};
+
+#-----------------------------------------------------------------------------
+
+## name code coverage - FH is not a glob or scalar
+## failures 0
+## cut
+
+open @foo, '<', $filename; # nonsense
+open @$foo, '<', $filename; # nonsense
+open my @bar, '<', $filename; # nonsense
 
 #-----------------------------------------------------------------------------
 

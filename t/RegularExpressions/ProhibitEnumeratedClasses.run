@@ -10,6 +10,9 @@
 ## cut
 
 m/\w\d\p{Uppercase}/;
+m/[\w\s]/;
+
+#-----------------------------------------------------------------------------
 
 ## name allowed classes
 ## failures 0
@@ -17,6 +20,9 @@ m/\w\d\p{Uppercase}/;
 
 m/[B-Y]/;
 m/[0-8]/;
+m/[\x{ffef}]/; # for code coverage
+
+#-----------------------------------------------------------------------------
 
 ## name basic failures
 ## failures 8
@@ -32,6 +38,8 @@ m/[a-zA-Z]/;   # \p{Alphabetic}
 m/[ \t\r\n\f]/;# \s
 m/[\ \t\r\n]/; # \s
 
+#-----------------------------------------------------------------------------
+
 ## name alterate representations of line endings
 ## failures 3
 ## optional_modules Regexp::Parser
@@ -40,6 +48,8 @@ m/[\ \t\r\n]/; # \s
 m/[\ \t\012\015]/; # \s
 m/[\ \t\x0a\x0d]/; # \s
 m/[\ \t\x{0a}\x{0d}]/; # \s
+
+#-----------------------------------------------------------------------------
 
 ## name negative failures
 ## failures 8
@@ -55,11 +65,21 @@ m/[^a-zA-Z]/;   # \P{Alphabetic}
 m/[^ \t\r\n\f]/;# \S
 m/[^\ \t\r\n]/; # \S
 
+#-----------------------------------------------------------------------------
+
 ## name special negative successes
 ## failures 0
 ## cut
 
 m/[^\s\w]/;
+
+#-----------------------------------------------------------------------------
+
+## name failing regexp with syntax error
+## failures 0
+## cut
+
+m/[^\w] (/;
 
 #-----------------------------------------------------------------------------
 # Local Variables:

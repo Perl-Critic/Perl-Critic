@@ -84,6 +84,7 @@ sub _get_character_class_violations {
                 $elements{$token} = 1;
             }
         } else {
+            # no known way to get to this branch; just for forward compatibility
             carp 'Unexpected type inside a character class: ' . (ref $element) . " '$element'";
         }
     }

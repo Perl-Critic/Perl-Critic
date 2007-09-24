@@ -45,6 +45,14 @@ $content = join($var, <STDIN>);
 
 #-----------------------------------------------------------------------------
 
+## name code coverage
+## failures 0
+## cut
+
+$self->join($chain_link_1, $chain_link_2);
+
+#-----------------------------------------------------------------------------
+
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

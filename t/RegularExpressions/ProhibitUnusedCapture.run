@@ -16,6 +16,8 @@ if (m/foo/) {
    print "bar";
 }
 
+#-----------------------------------------------------------------------------
+
 ## name assignment captures
 ## failures 0
 ## cut
@@ -25,11 +27,14 @@ my ($foo) = m/(foo|bar)/;
 my ($foo) = m/(foo)(?:bar)/;
 my @foo = m/(foo)/;
 my @foo = m/(foo)/g;
+my %foo = m/(foo)(bar)/g;
 
 my ($foo, $bar) = m/(foo)(bar)/;
 my @foo = m/(foo)(bar)/;
 my ($foo, @bar) = m/(foo)(bar)/;
 my ($foo, @bar) = m/(foo)(bar)(baz)/;
+
+#-----------------------------------------------------------------------------
 
 ## name undef array captures
 ## failures 0
@@ -39,15 +44,21 @@ my ($foo, @bar) = m/(foo)(bar)(baz)/;
 (undef) = m/(foo)/;
 my ($foo) =()= m/(foo)/g;
 
+#-----------------------------------------------------------------------------
+
 ## name complex array assignment captures
 ## failures 0
 ## cut
 
 @$foo = m/(foo)(bar)/;
 @{$foo} = m/(foo)(bar)/;
+%$foo = m/(foo)(bar)/;
+%{$foo} = m/(foo)(bar)/;
 
 ($foo,@$foo) = m/(foo)(bar)/;
 ($foo,@{$foo}) = m/(foo)(bar)/;
+
+#-----------------------------------------------------------------------------
 
 ## name conditional captures
 ## failures 0
@@ -77,6 +88,8 @@ if (m/(foo)/) {
    print @foo;
 }
 
+#-----------------------------------------------------------------------------
+
 ## name boolean and ternary captures
 ## failures 0
 ## cut
@@ -84,6 +97,8 @@ if (m/(foo)/) {
 m/(foo)/ && print $1;
 m/(foo)/ ? print $1 : die;
 m/(foo)/ && ($1 == 'foo') ? print 1 : die;
+
+#-----------------------------------------------------------------------------
 
 ## name loop captures
 ## failures 0
@@ -93,6 +108,8 @@ for (m/(foo)/) {
    my $foo = $1;
    print $foo;
 }
+
+#-----------------------------------------------------------------------------
 
 ## name slurpy array loop captures
 ## failures 0
@@ -113,12 +130,16 @@ foo m/(foo)/, 'bar';
 my ($foo) = grep {$b++ == 2} m/(foo)/g;
 my ($foo) = grep {$b++ == 2} $str =~ m/(foo)/g;
 
+#-----------------------------------------------------------------------------
+
 ## name slurpy with array assignment
 ## failures 0
 ## cut
 
 my @foo = grep {$b++ > 2} m/(foo)/g;
 my @foo = grep {$b++ > 2} $str =~ m/(foo)/g;
+
+#-----------------------------------------------------------------------------
 
 ## name assignment captures on string
 ## failures 0
@@ -136,11 +157,15 @@ my ($foo, @bar) = $str =~ m/(foo)(bar)/;
 my (@bar) = $str =~ m/(foo)(bar)/;
 my ($foo, @bar) = $str =~ m/(foo)(bar)(baz)/;
 
+#-----------------------------------------------------------------------------
+
 ## name slurpy captures on string
 ## failures 0
 ## cut
 
 map {print} $str =~ m/(foo)/g;
+
+#-----------------------------------------------------------------------------
 
 ## name self captures
 ## failures 0
@@ -148,6 +173,8 @@ map {print} $str =~ m/(foo)/g;
 
 m/(foo)\1/;
 s/(foo)/$1/;
+
+#-----------------------------------------------------------------------------
 
 ## name basic failures
 ## failures 5
@@ -169,6 +196,8 @@ for (m/(foo)/) {
    print "bar";
 }
 
+#-----------------------------------------------------------------------------
+
 ## name negated regexp failures
 ## failures 1
 ## optional_modules Regexp::Parser
@@ -176,12 +205,16 @@ for (m/(foo)/) {
 
 my ($foo) = $str !~ m/(foo)/;
 
+#-----------------------------------------------------------------------------
+
 ## name statement failures
 ## failures 1
 ## optional_modules Regexp::Parser
 ## cut
 
 m/(foo)/ && m/(bar)/ && print $1;
+
+#-----------------------------------------------------------------------------
 
 ## name sub failures
 ## failures 1
@@ -193,6 +226,8 @@ sub foo {
   return;
 }
 print $1;
+
+#-----------------------------------------------------------------------------
 
 ## name anon sub failures
 ## failures 1
@@ -206,12 +241,16 @@ my $sub = sub foo {
 };
 print $1;
 
+#-----------------------------------------------------------------------------
+
 ## name ref constructors
 ## failures 0
 ## cut
 
 $f = { m/(\w+)=(\w+)/g };
 $f = [ m/(\w+)/g ];
+
+#-----------------------------------------------------------------------------
 
 ## name sub returns
 ## failures 0
@@ -225,8 +264,45 @@ sub foo {
 }
 map { m/(foo)/ } (1, 2, 3);
 
+#-----------------------------------------------------------------------------
+
+## name failing regexp with syntax error
+## failures 0
+## cut
+
+m/(foo)(/;
 
 #-----------------------------------------------------------------------------
+
+## name lvalue sub assigment pass
+## failures 0
+## cut
+
+(substr $str, 0, 1) = m/(\w+)/;
+
+#-----------------------------------------------------------------------------
+
+## name lvalue sub assigment failure
+## failures 1
+## optional_modules Regexp::Parser
+## TODO lvalue subs are too complex to support
+## cut
+
+(substr $str, 0, 1) = m/(\w+)(\d+)/;
+
+#-----------------------------------------------------------------------------
+
+## name code coverage
+## failures 1
+## cut
+
+m/(foo)/;
+print $0;
+print @ARGV;
+print $_;
+
+#-----------------------------------------------------------------------------
+
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

@@ -37,6 +37,12 @@ m/\A (?: a | do | in | queue | rue | woe | xray ) \z/xms;
 m/\A (?: a | d | i | q | r | w | x ) \z/xms;
 m/\A (?: qq| qr | qx | q | s | y | tr ) \z/xms;
 
+## name failing regexp with syntax error
+## failures 0
+## cut
+
+m/\A (?: a | d | i | q | r | w | x ) ( \z/xms;
+
 #-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl

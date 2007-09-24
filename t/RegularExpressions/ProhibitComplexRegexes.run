@@ -28,6 +28,8 @@ m/
 
 /;
 
+#-----------------------------------------------------------------------------
+
 ## name basic failures
 ## failures 2
 ## cut
@@ -39,6 +41,41 @@ m/foo # this is a foo
   baz # this is a baz
   1234567890 1234567890 1234567890 1234567890 1234567890 1234567890 # this is too long
  /x;
+
+#-----------------------------------------------------------------------------
+
+## name config
+## failures 1
+## parms {max_characters => 2}
+## cut
+
+m/ foo /;
+
+#-----------------------------------------------------------------------------
+
+## name config errors
+## failures 0
+## parms {max_characters => 'two'}
+## cut
+
+m/ foo /;
+
+#-----------------------------------------------------------------------------
+
+## name config errors
+## failures 0
+## parms {max_characters => 0}
+## cut
+
+m/ foo /;
+
+#-----------------------------------------------------------------------------
+
+## name failing regexp with syntax error
+## failures 0
+## cut
+
+m/foofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoo(/x;
 
 #-----------------------------------------------------------------------------
 # Local Variables:

@@ -107,11 +107,14 @@ sub _enough_assignments {  ##no critic(ExcessComplexity) # TODO
     if ($psib->isa('PPI::Token::Symbol')) {
         # @foo = m/(foo)/
         # @$foo = m/(foo)/
-        return 1 if _symbol_is_array($psib);
+        # %foo = m/(foo)/
+        # %$foo = m/(foo)/
+        return 1 if _symbol_is_slurpy($psib);
 
     } elsif ($psib->isa('PPI::Structure::Block')) {
         # @{$foo} = m/(foo)/
-        return 1 if _block_is_array($psib);
+        # %{$foo} = m/(foo)/
+        return 1 if _block_is_slurpy($psib);
 
     } elsif ($psib->isa('PPI::Structure::List')) {
         # () = m/(foo)/
@@ -146,11 +149,12 @@ sub _enough_assignments {  ##no critic(ExcessComplexity) # TODO
     return none {! defined $_} @{$captures};
 }
 
-sub _symbol_is_array {
+sub _symbol_is_slurpy {
     my ($symbol) = @_;
 
     return 1 if _has_array_sigil($symbol);
-    return 1 if _is_preceded_by_array_cast($symbol);
+    return 1 if _has_hash_sigil($symbol);
+    return 1 if _is_preceded_by_array_or_hash_cast($symbol);
     return;
 }
 
@@ -160,14 +164,20 @@ sub _has_array_sigil {
     return q{@} eq substr $elem->content, 0, 1;
 }
 
-sub _block_is_array {
+sub _has_hash_sigil {
+    my ($elem) = @_;  # Works on PPI::Token::Symbol and ::Cast
+
+    return q{%} eq substr $elem->content, 0, 1;
+}
+
+sub _block_is_slurpy {
     my ($block) = @_;
 
-    return 1 if _is_preceded_by_array_cast($block);
+    return 1 if _is_preceded_by_array_or_hash_cast($block);
     return;
 }
 
-sub _is_preceded_by_array_cast {
+sub _is_preceded_by_array_or_hash_cast {
     my ($elem) = @_;
     my $psib = $elem->sprevious_sibling;
     my $cast;
@@ -175,7 +185,9 @@ sub _is_preceded_by_array_cast {
         $cast = $psib;
         $psib = $psib->sprevious_sibling;
     }
-    return $cast && q{@} eq substr $cast->content, 0, 1;  # slurpy array context
+    return if !$cast;
+    my $sigil = substr $cast->content, 0, 1;
+    return q{@} eq $sigil || q{%} eq $sigil;
 }
 
 sub _is_in_slurpy_array_context {

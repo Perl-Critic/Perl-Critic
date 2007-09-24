@@ -84,8 +84,12 @@ sub violates {
 
 sub _find_close_invocations_or_return {
     my ($self, $elem) = @_;
-    my $parent = _get_scope($elem) || return;
+
+    my $parent = _get_scope($elem);
+    return if !$parent; # I can't think of a scenario where this would happen
+
     my $open_loc = $elem->location;
+    # we don't actually allow _lines to be zero or undef, but maybe we will
     my $end_line = $self->{_lines} ? $open_loc->[0] + $self->{_lines} : undef;
 
     my $closes = $parent->find(sub {
