@@ -229,8 +229,8 @@ set a global list of spelling exceptions.  To do this, put entries in
 a F<.perlcriticrc> file like this:
 
   [Documentation::PodSpelling]
-  spellcommand = aspell list
-  stopwords = gibbles foobar
+  spell_command = aspell list
+  stop_words = gibbles foobar
 
 The default spell command is C<aspell list> and it is interpreted as a
 shell command.  We parse the individual arguments via
