@@ -114,20 +114,8 @@ Check for -w on the shbang line.
 
 =head1 OTHER PBP POLICIES THAT SEEM FEASIBLE TO IMPLEMENT
 
-Chris Dolan is in the process of implementing the ideas below (but don't let
-that stop you from contributing!!!).  That work is supported by a Perl
-Foundation grant.  More details about the grant:
-L<http://www.perlfoundation.org/april_1_2007_new_grant_awards>
-
-=over 4
-
-=item * InputOutput::RequireChecked* for system calls (p208, p278)
-
-Add policies to ensure checking the return values of system calls.  See
-InputOutput::RequireCheckedOpen and InputOutput::RequireCheckedClose.  Needs
-to take into account the Fatal and Fatal::Exception modules.
-
-=back
+All the ones we formerly listed here are now done.  Feel free to thumb through
+PBP and add more here.
 
 =head1 NON-PBP POLICIES WANTED
 

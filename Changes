@@ -18,6 +18,7 @@
      * RegularExpressions::ProhibitEscapedMetacharacters
      * RegularExpressions::ProhibitEnumeratedClasses
      * InputOutput::RequireBriefOpen
+     * InputOutput::RequireCheckedSyscalls
 
      Other New Policies
      * ControlStructures::ProhibitNegativeExpressionsInUnlessAndUntilConditions

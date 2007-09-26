@@ -1,0 +1,328 @@
+## name passes by assigning error variable
+## failures 0
+## cut
+
+my $error = open( $filehandle, $mode, $filename );
+my $error = open  $filehandle, $mode, $filename;
+my $error = open  OPEN, $open, 'open';
+my $error = open  OR, $or, 'or';
+
+#-----------------------------------------------------------------------------
+
+## name passes by "or die"
+## failures 0
+## cut
+
+open  $filehandle, $mode, $filename   or die 'could not open';
+open( $filehandle, $mode, $filename ) or die 'could not open';
+open( $filehandle, $mode, $filename ) or croak 'could not open';
+
+#-----------------------------------------------------------------------------
+
+## name passes by "|| die"
+## failures 0
+## cut
+
+open  $filehandle, $mode, $filename   or die 'could not open';
+open( $filehandle, $mode, $filename ) || die 'could not open';
+open( $filehandle, $mode, $filename ) || croak 'could not open';
+
+#-----------------------------------------------------------------------------
+
+## name passes by "unless"
+## failures 0
+## cut
+
+die unless open( $filehandle, $mode, $filename );
+die unless open  $filehandle, $mode, $filename;
+
+croak unless open( $filehandle, $mode, $filename );
+croak unless open  $filehandle, $mode, $filename;
+
+#-----------------------------------------------------------------------------
+
+## name passes by "if not"
+## failures 0
+## cut
+
+die if not open( $filehandle, $mode, $filename );
+die if not open  $filehandle, $mode, $filename;
+
+croak if not open( $filehandle, $mode, $filename );
+croak if not open  $filehandle, $mode, $filename;
+
+die if !open( $filehandle, $mode, $filename );
+die if !open  $filehandle, $mode, $filename;
+
+croak if !open( $filehandle, $mode, $filename );
+croak if !open  $filehandle, $mode, $filename;
+
+#-----------------------------------------------------------------------------
+
+## name passes with "if" statement
+## failures 0
+## cut
+
+if ( open( $filehandle, $mode, $filename ) ) { dosomething(); };
+
+#-----------------------------------------------------------------------------
+
+## name Basic failure with parens
+## failures 2
+## cut
+
+open( $filehandle, $mode, $filename );
+open( $filehandle, $filename );
+
+#-----------------------------------------------------------------------------
+
+## name Basic failure no parens
+## failures 2
+## cut
+
+open $filehandle, $mode, $filename;
+open $filehandle, $filename;
+
+#-----------------------------------------------------------------------------
+
+## name Fatal.pm on
+## failures 0
+## cut
+
+use Fatal qw(open);
+open $filehandle, $filename;
+
+#-----------------------------------------------------------------------------
+
+## name Fatal.pm on
+## failures 0
+## cut
+
+use Fatal 'open';
+open $filehandle, $filename;
+
+#-----------------------------------------------------------------------------
+
+## name Fatal.pm on
+## failures 0
+## cut
+
+use Fatal ('open');
+open $filehandle, $filename;
+
+#-----------------------------------------------------------------------------
+
+## name Fatal::Exception on
+## failures 0
+## cut
+
+use Fatal::Exception 'Exception' => qw(open);
+open $filehandle, $filename;
+
+#-----------------------------------------------------------------------------
+
+## name Fatal.pm off
+## failures 1
+## cut
+
+use Fatal qw(close);
+open $filehandle, $filename;
+
+#-----------------------------------------------------------------------------
+
+## name passes by assigning error variable
+## failures 0
+## cut
+
+my $error = close( $filehandle );
+my $error = close  $filehandle;
+my $error = close  CLOSE;
+my $error = close  OR;
+
+#-----------------------------------------------------------------------------
+
+## name passes by "or die"
+## failures 0
+## cut
+
+close  $filehandle  or die 'could not close';
+close ($filehandle) or die 'could not close';
+close ($filehandle) or croak 'could not close';
+
+#-----------------------------------------------------------------------------
+
+## name passes by "|| die"
+## failures 0
+## cut
+
+close  $filehandle  || die 'could not close';
+close ($filehandle) || die 'could not close';
+close ($filehandle) || croak 'could not close';
+
+#-----------------------------------------------------------------------------
+
+## name passes by "unless"
+## failures 0
+## cut
+
+die unless close ( $filehandle );
+die unless close   $filehandle;
+
+croak unless close ( $filehandle );
+croak unless close   $filehandle;
+
+#-----------------------------------------------------------------------------
+
+## name passes by "if not"
+## failures 0
+## cut
+
+die if not close ( $filehandle );
+die if not close   $filehandle;
+
+croak if not close ( $filehandle );
+croak if not close   $filehandle;
+
+die if !close ( $filehandle );
+die if !close   $filehandle;
+
+croak if !close ( $filehandle );
+croak if !close   $filehandle;
+
+#-----------------------------------------------------------------------------
+
+## name passes with "if" statement
+## failures 0
+## cut
+
+if ( close $filehandle ) { dosomething(); };
+
+#-----------------------------------------------------------------------------
+
+## name Basic failure with parens
+## failures 1
+## cut
+
+close( $filehandle );
+
+#-----------------------------------------------------------------------------
+
+## name Basic failure no parens
+## failures 1
+## cut
+
+close $filehandle;
+
+#-----------------------------------------------------------------------------
+
+## name Fatal.pm on
+## failures 0
+## cut
+
+use Fatal qw(close);
+close $filehandle;
+
+#-----------------------------------------------------------------------------
+
+## name Fatal.pm on
+## failures 0
+## cut
+
+use Fatal 'close';
+close $filehandle;
+
+#-----------------------------------------------------------------------------
+
+## name Fatal.pm on
+## failures 0
+## cut
+
+use Fatal ('close');
+close $filehandle;
+
+#-----------------------------------------------------------------------------
+
+## name Fatal::Exception on
+## failures 0
+## cut
+
+use Fatal::Exception 'Exception' => qw(close);
+close $filehandle;
+
+#-----------------------------------------------------------------------------
+
+## name Fatal.pm off
+## failures 1
+## cut
+
+use Fatal qw(open);
+close $filehandle;
+
+#-----------------------------------------------------------------------------
+
+## name config
+## failures 0
+## cut
+
+accept NEWSOCK, SOCKET;
+
+#-----------------------------------------------------------------------------
+
+## name config
+## parms {functions => 'accept'}
+## failures 1
+## cut
+
+accept NEWSOCK, SOCKET;
+
+#-----------------------------------------------------------------------------
+
+## name config
+## parms {functions => ':builtins'}
+## failures 1
+## cut
+
+accept NEWSOCK, SOCKET;
+
+#-----------------------------------------------------------------------------
+
+## name insane config
+## parms {functions => ':all'}
+## failures 2
+## cut
+
+sub foo {
+  return 1;
+}
+foo();
+
+#-----------------------------------------------------------------------------
+
+
+## name insane config
+## parms {functions => ':all'}
+## failures 0
+## cut
+
+sub foo {
+  return 1 or die;
+}
+foo() or die;
+
+#-----------------------------------------------------------------------------
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :

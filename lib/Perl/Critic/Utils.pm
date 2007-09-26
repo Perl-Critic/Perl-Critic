@@ -18,6 +18,7 @@ use Carp qw(confess);
 use File::Spec qw();
 use Scalar::Util qw( blessed );
 use B::Keywords qw();
+use PPI::Token::Quote::Single;
 
 use base 'Exporter';
 

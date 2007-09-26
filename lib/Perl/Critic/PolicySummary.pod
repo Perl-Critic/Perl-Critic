@@ -213,13 +213,17 @@ Write C<< open $fh, q{<}, $filename; >> instead of C<< open $fh, "<$filename"; >
 
 Close filehandles as soon as possible after opening them [Severity 4]
 
+=head2 L<Perl::Critic::Policy::InputOutput::RequireCheckedClose>
+
+Write C<< my $error = close $fh; >> instead of C<< close $fh; >> [Severity 2]
+
 =head2 L<Perl::Critic::Policy::InputOutput::RequireCheckedOpen>
 
 Write C<< my $error = open $fh, $mode, $filename; >> instead of C<< open $fh, $mode, $filename; >> [Severity 3]
 
-=head2 L<Perl::Critic::Policy::InputOutput::RequireCheckedClose>
+=head2 L<Perl::Critic::Policy::InputOutput::RequireCheckedSyscalls>
 
-Write C<< my $error = close $fh; >> instead of C<< close $fh; >> [Severity 2]
+Return value of flagged function ignored [Severity 1]
 
 =head2 L<Perl::Critic::Policy::InputOutput::RequireBracedFileHandleWithPrint>
 

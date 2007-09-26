@@ -66,6 +66,7 @@ lib/Perl/Critic/Policy/InputOutput/RequireBracedFileHandleWithPrint.pm
 lib/Perl/Critic/Policy/InputOutput/RequireBriefOpen.pm
 lib/Perl/Critic/Policy/InputOutput/RequireCheckedClose.pm
 lib/Perl/Critic/Policy/InputOutput/RequireCheckedOpen.pm
+lib/Perl/Critic/Policy/InputOutput/RequireCheckedSyscalls.pm
 lib/Perl/Critic/Policy/Miscellanea/ProhibitFormats.pm
 lib/Perl/Critic/Policy/Miscellanea/ProhibitTies.pm
 lib/Perl/Critic/Policy/Miscellanea/RequireRcsKeywords.pm
@@ -237,6 +238,7 @@ t/InputOutput/RequireBracedFileHandleWithPrint.run
 t/InputOutput/RequireBriefOpen.run
 t/InputOutput/RequireCheckedClose.run
 t/InputOutput/RequireCheckedOpen.run
+t/InputOutput/RequireCheckedSyscalls.run
 t/Miscellanea/ProhibitFormats.run
 t/Miscellanea/ProhibitTies.run
 t/Miscellanea/RequireRcsKeywords.run
