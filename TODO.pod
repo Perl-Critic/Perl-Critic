@@ -114,7 +114,7 @@ L<http://www.perlfoundation.org/april_1_2007_new_grant_awards>
 
 =over 4
 
-=item * InputOutput::RequireChecked* for system calls (p208)
+=item * InputOutput::RequireChecked* for system calls (p208, p278)
 
 Add policies to ensure checking the return values of system calls.  See
 InputOutput::RequireCheckedOpen and InputOutput::RequireCheckedClose.  Needs

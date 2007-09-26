@@ -35,6 +35,13 @@ sub new {
 
 #-----------------------------------------------------------------------------
 
+sub ppi_document {
+    my ($self) = @_;
+    return $self->{_doc};
+}
+
+#-----------------------------------------------------------------------------
+
 sub isa {
     my ($self, @args) = @_;
     return $self->SUPER::isa(@args)
@@ -197,6 +204,12 @@ better than we do here?
 =item $pkg->new($doc)
 
 Create a new instance referencing a PPI::Document instance.
+
+=item $self->ppi_document()
+
+Accessor for the wrapped PPI::Document instance.  Note that altering this
+instance in any way can cause unpredictable failures in Perl::Critic's
+subsequent analysis because some caches may fall out of date.
 
 =item $self->find($wanted)
 

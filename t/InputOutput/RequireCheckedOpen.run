@@ -85,6 +85,51 @@ open $filehandle, $filename;
 
 #-----------------------------------------------------------------------------
 
+## name Fatal.pm on
+## failures 0
+## cut
+
+use Fatal qw(open);
+open $filehandle, $filename;
+
+#-----------------------------------------------------------------------------
+
+## name Fatal.pm on
+## failures 0
+## cut
+
+use Fatal 'open';
+open $filehandle, $filename;
+
+#-----------------------------------------------------------------------------
+
+## name Fatal.pm on
+## failures 0
+## cut
+
+use Fatal ('open');
+open $filehandle, $filename;
+
+#-----------------------------------------------------------------------------
+
+## name Fatal::Exception on
+## failures 0
+## cut
+
+use Fatal::Exception 'Exception' => qw(open);
+open $filehandle, $filename;
+
+#-----------------------------------------------------------------------------
+
+## name Fatal.pm off
+## failures 1
+## cut
+
+use Fatal qw(close);
+open $filehandle, $filename;
+
+#-----------------------------------------------------------------------------
+
 
 ##############################################################################
 #      $URL$

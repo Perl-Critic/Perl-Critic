@@ -831,7 +831,7 @@ sub parse_arg_list {
             last if $iter->isa('PPI::Token::Structure') and $iter eq $SCOLON;
             push @arg_list, $iter;
         }
-        return  split_nodes_on_comma( @arg_list );
+        return split_nodes_on_comma( @arg_list );
     }
 }
 
@@ -846,6 +846,16 @@ sub split_nodes_on_comma {
         if ( $node->isa('PPI::Token::Operator') &&
                 (($node eq $COMMA) || ($node eq $FATCOMMA)) ) {
             $i++; #Move forward to next 'node stack'
+            next;
+        } elsif ( $node->isa('PPI::Token::QuoteLike::Words' )) {
+            my $section = $node->{sections}->[0];
+            my @words = words_from_string(substr $node->content, $section->{position}, $section->{size});
+            my $loc = $node->location;
+            for my $word (@words) {
+                my $token = PPI::Token::Quote::Single->new(q{'} . $word . q{'});
+                $token->{_location} = $loc;
+                push @{ $node_stacks[$i++] }, $token;
+            }
             next;
         }
         push @{ $node_stacks[$i] }, $node;
@@ -1058,10 +1068,36 @@ sub is_unchecked_call {
         }
     }
 
+    return if _is_fatal($elem);
+
     # Otherwise, return. this system call is unchecked.
     return 1;
 }
 
+sub _is_fatal {
+    my ($elem) = @_;
+
+    my $top = $elem->top;
+    return if !$top->isa('PPI::Document');
+    my $includes = $top->find('PPI::Statement::Include');
+    return if !$includes;
+    for my $include (@{$includes}) {
+        next if 'use' ne $include->type;
+        if ('Fatal' eq $include->module) {
+            my @args = parse_arg_list($include->schild(1));
+            for my $arg (@args) {
+                return 1 if $arg->[0]->isa('PPI::Token::Quote') && $elem eq $arg->[0]->string;
+            }
+        } elsif ('Fatal::Exception' eq $include->module) {
+            my @args = parse_arg_list($include->schild(1));
+            shift @args;  # skip exception class name
+            for my $arg (@args) {
+                return 1 if $arg->[0]->isa('PPI::Token::Quote') && $elem eq $arg->[0]->string;
+            }
+        }
+    }
+    return;
+}
 
 1;
 
