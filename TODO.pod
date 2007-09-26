@@ -46,6 +46,9 @@ Can't be done as a Policy because any line that violated it would disable it.
 
 For code generators and template languages that allow inline Perl code.
 
+Yes, somebody has an in-house templating system where they've written a custom
+test module that extracts the perl code from a template and critiques it.
+
 =back
 
 =head1 BUGS/LIMITATIONS
