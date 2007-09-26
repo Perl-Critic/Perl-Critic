@@ -42,6 +42,10 @@ Requires C<## no critic> to take an argument:
 
 Can't be done as a Policy because any line that violated it would disable it.
 
+=item * Support for C<#line 123 "filename"> directives.
+
+For code generators and template languages that allow inline Perl code.
+
 =back
 
 =head1 BUGS/LIMITATIONS
