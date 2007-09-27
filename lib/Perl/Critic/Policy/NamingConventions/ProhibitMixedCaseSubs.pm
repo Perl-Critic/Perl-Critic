@@ -35,7 +35,7 @@ sub applies_to           { return 'PPI::Statement::Sub'   }
 sub violates {
     my ( $self, $elem, undef ) = @_;
     (my $name = $elem->name() ) =~ s/\A.*:://mx;
-    if ( $name =~ $MIXED_RX ) {
+    if ( $name =~ m/$MIXED_RX/xms ) {
         return $self->violation( $DESC, $EXPL, $elem );
     }
     return;    #ok!

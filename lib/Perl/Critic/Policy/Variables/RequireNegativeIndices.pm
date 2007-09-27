@@ -129,8 +129,7 @@ sub _symbol {
     return;
 }
 
-sub _is_minus_number  # return true if @expr looks like "- n"
-{
+sub _is_minus_number {  # return true if @expr looks like "- n"
     my @expr = @_;
 
     return if !@expr;

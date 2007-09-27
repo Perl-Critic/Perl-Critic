@@ -50,8 +50,8 @@ sub _has_mixed_case_vars {
         #because we can't really be responsible for symbols that
         #are defined in other packages.
 
-        next if $elem->type() eq 'local' && $variable_name =~ $PACKAGE_RX;
-        return 1 if $variable_name =~ $MIXED_RX;
+        next if $elem->type() eq 'local' && $variable_name =~ m/$PACKAGE_RX/xms;
+        return 1 if $variable_name =~ m/$MIXED_RX/xms;
     }
     return 0;
 }

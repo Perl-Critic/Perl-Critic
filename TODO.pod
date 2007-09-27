@@ -220,6 +220,21 @@ Recommend that C<if (scalar @array)> be rewritten as C<if (@array)>.
 
 Ban s{foo}(bar)
 
+=item * RegularExpressions::ProhibitScalarAsRegexp
+
+Ban naked srtings as regexps, like:
+
+    print 1 if $str =~ $regexp;
+
+Instead, it should be:
+
+    print 1 if $str =~ m/$regexp/;
+
+or
+
+    print 1 if $str =~ m/$regexp/xms;
+
+
 =item * ValuesAndExpressions::RequireInterpolatedStringyEval
 
 Ensure that the argument to a stringy eval is not a constant string.  That's
