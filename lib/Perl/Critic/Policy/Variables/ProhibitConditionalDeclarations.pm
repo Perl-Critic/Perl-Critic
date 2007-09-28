@@ -32,6 +32,7 @@ sub applies_to           { return 'PPI::Statement::Variable' }
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
+    return if $elem->type() eq 'local';
 
     if ( $elem->find(\&_is_conditional) ) {
         return $self->violation( $DESC, $EXPL, $elem );
