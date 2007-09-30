@@ -70,7 +70,7 @@ sub violates {
     return if $self->{_functions}->{':all'} ? is_perl_bareword($elem) : !$self->{_functions}->{$elem};
     return if ! is_unchecked_call( $elem );
 
-    return $self->violation( $DESC, $EXPL, $elem );
+    return $self->violation( $DESC . ' - ' . $elem, $EXPL, $elem );
 }
 
 
