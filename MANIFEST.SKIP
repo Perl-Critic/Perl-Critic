@@ -41,6 +41,7 @@ RCS
 \.gdb_history$
 \.ERR$
 ^t/.*_without_optional_dependencies.t$
+^t/ControlStructures/ProhibitNegativeExpressionsInUnlessAndUntilConditions.run$
 
 # Temp/backup files
 ~$

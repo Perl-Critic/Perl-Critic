@@ -147,8 +147,16 @@ Perl::Critic::Policy::ControlStructures::ProhibitNegativeExpressionsInUnlessAndU
 
 =head1 DESCRIPTION
 
+  until ($foo ne 'blah') {          #not ok
+      ...
+  }
+
+  while ($foo eq 'blah') {          #ok
+      ...
+  }
+
 A number of people have problems figuring out the meaning of doubly
-negated expressions.  Cunless> and C<until> are both negative
+negated expressions.  C<unless> and C<until> are both negative
 constructs, so any negative (e.g. C<!~>) or reversible operators (e.g.
 C<le>) included in their conditional expressions are double negations.
 Conway considers the following operators to be difficult to understand
@@ -159,6 +167,10 @@ within C<unless> and C<until>:
   <   >   <=  >=  <=>
   lt  gt  le  ge  cmp
 
+
+=head1 SEE ALSO
+
+L<Perl::Critic::Policy::ControlStructures::ProhibitUnlessBlocks>
 
 =head1 AUTHOR
 

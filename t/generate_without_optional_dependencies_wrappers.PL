@@ -21,7 +21,7 @@ use Perl::Critic::BuildUtilities qw{ recommended_module_versions };
 
 our $VERSION = 1.078;
 
-print "Generating tests that hide modules and then run other tests.\n";
+print "\n\nGenerating tests that hide modules and then run other tests.\n";
 
 my $this_program = __FILE__;
 
@@ -96,7 +96,7 @@ END_TEST_PROGRAM
     close $test_program;
 }
 
-print "Done.\n";
+print "Done.\n\n";
 
 __END__
 

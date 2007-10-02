@@ -20,7 +20,7 @@ if ($this_program eq $test_file_name) {
         . "This program: $this_program.";
 }
 
-print "Generating $test_file_name.\n";
+print "\n\nGenerating $test_file_name.\n";
 
 
 
@@ -42,7 +42,7 @@ foreach my $operator ( qw/ ne != < > <= >= <=> lt gt le ge cmp / ) {
 
 
 close $test_file;
-print "Done.\n";
+print "Done.\n\n";
 
 #-----------------------------------------------------------------------------
 

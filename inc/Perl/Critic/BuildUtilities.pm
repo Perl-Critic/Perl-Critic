@@ -80,19 +80,23 @@ sub test_wrappers_to_generate {
 }
 
 sub get_PL_files {
+    my %PL_files;
+
+    $PL_files{'t/ControlStructures/ProhibitNegativeExpressionsInUnlessAndUntilConditions.run.PL'} =
+        't/ControlStructures/ProhibitNegativeExpressionsInUnlessAndUntilConditions.run';
+
     if (should_skip_author_tests()) {
         print
               "\nWill not generate extra author tests.  Set "
             . '$ENV{TEST_AUTHOR} to a true value to have them generated.'
             . "\n\n";
-        return {};
+    }
+    else {
+        $PL_files{'t/generate_without_optional_dependencies_wrappers.PL'} =
+            [ test_wrappers_to_generate() ];
     }
 
-    return {
-        't/generate_without_optional_dependencies_wrappers.PL' => [
-            test_wrappers_to_generate()
-        ],
-    };
+    return \%PL_files;
 }
 
 sub dump_unlisted_or_optional_module_versions {

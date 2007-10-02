@@ -82,7 +82,13 @@ WriteMakefile(
         'String::Format'        => 1.13,
         'Test::More'            => 0,
     },
-    realclean      => { FILES => join q< >, test_wrappers_to_generate() },
+    realclean      => {
+        FILES =>
+            join
+                q< >,
+                test_wrappers_to_generate(),
+                't/ControlStructures/ProhibitNegativeExpressionsInUnlessAndUntilConditions.run'
+    },
 );
 
 sub MY::postamble {

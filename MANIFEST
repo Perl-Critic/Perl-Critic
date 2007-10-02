@@ -217,7 +217,7 @@ t/ControlStructures/ProhibitCascadingIfElse.run
 t/ControlStructures/ProhibitCStyleForLoops.run
 t/ControlStructures/ProhibitDeepNests.run
 t/ControlStructures/ProhibitMutatingListFunctions.run
-t/ControlStructures/ProhibitNegativeExpressionsInUnlessAndUntilConditions.run
+t/ControlStructures/ProhibitNegativeExpressionsInUnlessAndUntilConditions.run.PL
 t/ControlStructures/ProhibitPostfixControls.run
 t/ControlStructures/ProhibitUnlessBlocks.run
 t/ControlStructures/ProhibitUnreachableCode.run

@@ -96,6 +96,7 @@ my $builder = Module::Build->new(
                         Makefile
                         Makefile.old
                         pm_to_blib
+                        t/ControlStructures/ProhibitNegativeExpressionsInUnlessAndUntilConditions.run
                     >,
                     test_wrappers_to_generate(),
   ],
