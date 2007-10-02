@@ -34,6 +34,9 @@ sub applies_to       { return 'PPI::Document'       }
 sub initialize_if_enabled {
     my ($self, $config) = @_;
 
+    # workaround for Test::Without::Module v0.11
+    local $EVAL_ERROR = undef;
+
     # If Perl::Tidy is missing, bow out.
     eval { require Perl::Tidy; };
     return $FALSE if $EVAL_ERROR;

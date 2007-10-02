@@ -27,6 +27,10 @@ sub can_determine_spell_command {
     return $policy->_get_spell_command_line();
 }
 
+sub can_podspell {
+    return $can_podspell && ! Perl::Critic::Policy::Documentation::PodSpelling->got_sigpipe();
+}
+
 #-----------------------------------------------------------------------------
 SKIP: {
 
@@ -48,7 +52,7 @@ $code = <<'END_PERL';
 =cut
 END_PERL
 
-is( pcritique($policy, \$code, \%config), $can_podspell ? 1 : 0, 'Mispelled header' );
+is( pcritique($policy, \$code, \%config), can_podspell() ? 1 : 0, 'Mispelled header' );
 
 #-----------------------------------------------------------------------------
 
@@ -60,7 +64,7 @@ arglbargl
 =cut
 END_PERL
 
-is( pcritique($policy, \$code, \%config), $can_podspell ? 1 : 0, 'Mispelled body' );
+is( pcritique($policy, \$code, \%config), can_podspell() ? 1 : 0, 'Mispelled body' );
 
 #-----------------------------------------------------------------------------
 
