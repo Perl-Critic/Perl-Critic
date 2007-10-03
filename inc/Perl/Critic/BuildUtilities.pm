@@ -84,6 +84,8 @@ sub get_PL_files {
 
     $PL_files{'t/ControlStructures/ProhibitNegativeExpressionsInUnlessAndUntilConditions.run.PL'} =
         't/ControlStructures/ProhibitNegativeExpressionsInUnlessAndUntilConditions.run';
+    $PL_files{'t/Variables/RequireLocalizedPunctuationVars.run.PL'} =
+        't/Variables/RequireLocalizedPunctuationVars.run';
 
     if (should_skip_author_tests()) {
         print
