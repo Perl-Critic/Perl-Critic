@@ -101,7 +101,7 @@ sub violates {
        my $writer_fh;
        ## TODO: block STDERR.  Use open3?
        my $pid = IPC::Open2::open2($reader_fh, $writer_fh, @{$command_line});
-       return if ! $pid;
+       return if not $pid;
 
        print {$writer_fh} $text or croak 'Failed to send data to spelling program';
        close $writer_fh or croak 'Failed to close pipe to spelling program';
@@ -114,7 +114,7 @@ sub violates {
        }
 
        # Why is this extra step needed???
-       @words = grep { ! exists $Pod::Wordlist::Wordlist{$_} } @words;  ##no critic(ProhibitPackageVars)
+       @words = grep { not exists $Pod::Wordlist::Wordlist{$_} } @words;  ##no critic(ProhibitPackageVars)
     };
     return if !@words;
 
