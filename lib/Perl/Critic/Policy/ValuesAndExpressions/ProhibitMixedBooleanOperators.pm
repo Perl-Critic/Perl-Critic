@@ -75,6 +75,7 @@ sub violates {
 
 sub _low_boolean {
     my (undef, $elem) = @_;
+    return undef if $elem->isa('PPI::Statement');
     $elem->isa('PPI::Token::Operator') || return 0;
     return exists $LOW_BOOLEANS{$elem};
 }
@@ -83,6 +84,7 @@ sub _low_boolean {
 
 sub _high_boolean {
     my (undef, $elem) = @_;
+    return undef if $elem->isa('PPI::Statement');
     $elem->isa('PPI::Token::Operator') || return 0;
     return exists $HIGH_BOOLEANS{$elem};
 }
