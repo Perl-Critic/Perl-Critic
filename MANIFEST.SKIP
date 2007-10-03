@@ -1,7 +1,6 @@
 ^tags$
 ^README\.developer$
 \.PPI$
-RequireLocalizedPunctuationVars\.generator$
 
 # Version Control files
 ^\.cvsignore$

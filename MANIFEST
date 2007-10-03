@@ -312,6 +312,6 @@ t/Variables/ProhibitPunctuationVars.run
 t/Variables/ProtectPrivateVars.run
 t/Variables/RequireInitializationForLocalVars.run
 t/Variables/RequireLexicalLoopIterators.run
-t/Variables/RequireLocalizedPunctuationVars.run
+t/Variables/RequireLocalizedPunctuationVars.run.PL
 t/Variables/RequireNegativeIndices.run
 TODO.pod

@@ -8,6 +8,8 @@
 use warnings;
 use strict;
 use B::Keywords qw();
+use Carp qw(confess);
+use English qw(-no_match_vars);
 
 my $this_program = __FILE__;
 (my $test_file_name = $this_program) =~ s/ \.PL \z //xms;
