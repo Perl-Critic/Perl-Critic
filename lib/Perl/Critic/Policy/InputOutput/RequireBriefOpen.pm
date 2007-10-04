@@ -41,7 +41,7 @@ sub initialize_if_enabled {
     #Set configuration if defined
     $self->{_lines} =
             defined $config->{lines}
-        &&  $config->{lines} =~ m/(\d+)/xms
+        &&  $config->{lines} =~ m/(\d+)/mx
         &&  $1 > 0
             ? $1 : $DEFAULT_LINES;
 
@@ -97,6 +97,7 @@ sub _find_close_invocations_or_return {
         my ($parent, $candidate) = @_;
         return undef if $candidate->isa('PPI::Statement::Sub');
         my $candidate_loc = $candidate->location;
+        return undef if !defined $candidate_loc->[0];
         return 0 if $candidate_loc->[0] < $open_loc->[0];
         return 0 if $candidate_loc->[0] == $open_loc->[0] && $candidate_loc->[1] <= $open_loc->[1];
         return undef if defined $end_line && $candidate_loc->[0] > $end_line;

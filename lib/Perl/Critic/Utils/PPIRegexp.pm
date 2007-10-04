@@ -94,9 +94,18 @@ sub get_modifiers {
 sub get_delimiters {
     my ($elem) = @_;
     return if !$elem->{sections};
-    my @delimiters = ($elem->{sections}->[0]->{type});
-    if ($elem->{sections}->[1]) {
-        push @delimiters, $elem->{sections}->[1]->{type} || $delimiters[0];
+    my @delimiters;
+    if (!$elem->{sections}->[0]->{type}) {
+        # PPI v1.118 workaround: the delimiters were not recorded in some cases
+        # hack: pull them out ourselves
+        # limitation: this regexp fails on s{foo}<bar>
+        my $operator = defined $elem->{operator} ? $elem->{operator} : q{};
+        @delimiters = join q{}, $elem =~ m/\A $operator (.).*?(.) (?:[xmsocgie]*) \z/mx;
+    } else {
+        @delimiters = ($elem->{sections}->[0]->{type});
+        if ($elem->{sections}->[1]) {
+            push @delimiters, $elem->{sections}->[1]->{type} || $delimiters[0];
+        }
     }
     return @delimiters;
 }
@@ -111,7 +120,7 @@ sub get_delimiters {
 
     sub _get_ppi_package {
         my ($src_class, $re_node) = @_;
-        (my $dest_class = $src_class) =~ s/\A Regexp::Parser::/Perl::Critic::PPIRegexp::/xms;
+        (my $dest_class = $src_class) =~ s/\A Regexp::Parser::/Perl::Critic::PPIRegexp::/mx;
         if (!$seen{$src_class}) {
             $seen{$src_class} = 1;
             croak 'Regexp node which is not in the Regexp::Parser namespace'
