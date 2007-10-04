@@ -31,10 +31,15 @@ m/
 #-----------------------------------------------------------------------------
 
 ## name basic failures
-## failures 2
+## failures 1
 ## cut
 
 m/ foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo/;
+
+## name basic failures, m//x
+## failures 1
+## optional_modules Regexp::Parser
+## cut
 
 m/foo # this is a foo
   bar # this is a bar

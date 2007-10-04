@@ -294,6 +294,7 @@ m/(foo)(/;
 
 ## name code coverage
 ## failures 1
+## optional_modules Regexp::Parser
 ## cut
 
 m/(foo)/;
