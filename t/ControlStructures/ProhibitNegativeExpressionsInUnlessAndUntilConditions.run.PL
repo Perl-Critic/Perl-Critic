@@ -8,7 +8,7 @@ use English qw{-no_match_vars};
 use Carp qw{ confess };
 use Fatal qw{ open close };
 
-our $VERSION = '1.078';
+our $VERSION = '1.079_001';
 
 
 

@@ -5,7 +5,7 @@
 # $Revision$
 ##############################################################################
 
-[1.0xx]  Released on 2007-xx-xx
+[1.079_001]  Released on 2007-10-09
 
      New Policies: (funded by a Perl Foundation grant)
      * InputOutput::ProhibitExplicitStdin

@@ -15,7 +15,7 @@ use Perl::Critic::Utils qw{ :severities :classification :booleans
                             hashify words_from_string is_perl_bareword };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.078';
+our $VERSION = '1.079_001';
 
 #-----------------------------------------------------------------------------
 
