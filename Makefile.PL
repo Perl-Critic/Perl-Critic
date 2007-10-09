@@ -18,6 +18,7 @@ use Perl::Critic::BuildUtilities qw<
     test_wrappers_to_generate
     get_PL_files
     dump_unlisted_or_optional_module_versions
+    emit_tar_warning_if_necessary
 >;
 
 my $warning = <<'END_WARNING';
@@ -56,6 +57,9 @@ eval {
     require Perl::Critic;
     warn $warning if $Perl::Critic::VERSION < 0.14;
 };
+
+
+emit_tar_warning_if_necessary();
 
 
 WriteMakefile(

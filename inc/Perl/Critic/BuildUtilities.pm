@@ -10,7 +10,7 @@ package Perl::Critic::BuildUtilities;
 use strict;
 use warnings;
 
-use English q<-_no_match_vars>;
+use English q<-no_match_vars>;
 
 our $VERSION = '1.078';
 
@@ -21,10 +21,13 @@ our @EXPORT_OK = qw<
     test_wrappers_to_generate
     get_PL_files
     dump_unlisted_or_optional_module_versions
+    emit_tar_warning_if_necessary
 >;
 
 
 use lib 't/tlib';
+
+use Devel::CheckOS qw< os_is >;
 
 use Perl::Critic::TestUtilitiesWithMinimalDependencies qw<
     should_skip_author_tests
@@ -131,6 +134,19 @@ sub dump_unlisted_or_optional_module_versions {
     return;
 }
 
+sub emit_tar_warning_if_necessary {
+    if ( os_is( qw<Solaris> ) ) {
+        print <<'END_OF_TAR_WARNING';
+NOTE: tar(1) on some Solaris systems cannot deal well with long file
+names.
+
+If you get warnings about missing files below, please ensure that you
+extracted the Perl::Critic tarball using GNU tar.
+
+END_OF_TAR_WARNING
+    }
+}
+
 1;
 
 __END__
@@ -177,6 +193,13 @@ Prints to C<STDOUT> a list of all the unlisted (e.g. things in core
 like L<Exporter>), optional (e.g. L<File::Which>), or potentially
 indirect (e.g. L<Readonly::XS>) dependencies, plus their versions, if
 they're installed.
+
+
+=item C<emit_tar_warning_if_necessary()>
+
+On some Solaris systems, C<tar(1)> can't deal with long file names and
+thus files are not correctly extracted from the tarball.  So this
+prints a warning if the current system is Solaris.
 
 
 =back
