@@ -86,9 +86,9 @@ __END__
 
 =pod
 
-=head1 NAME
-
 =for stopwords BNF Tatsuhiko Miyagawa
+
+=head1 NAME
 
 Perl::Critic::Policy::RegularExpressions::ProhibitComplexRegexes
 
