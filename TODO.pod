@@ -349,35 +349,6 @@ now, it's implemented by pulling the source out of the file and skipping PPI.
 
 It's unlikely that PPI will support mixde newlines anytime soon.
 
-=item Hash constructors with a parenthesis directly to the left.
-
-The L<PPI::Statement> surrounding the L<PPI::Constructor> returns undef
-for C<location()> for the following:
-
-  ({})
-
-The same problem exists for
-
-  ({} )
-
-but not for
-
-  ( {})
-
-Logged as RT #23788.
-
-Remove trinary operator usage in RequireUseStrict, RequireUseWarnings, and
-RequireExplicitPackage once this is fixed.
-
-=item L<PPI::Structure::Block>s being generated instead of L<PPI::Structure::Constructor>
-
-For complicated data structures, C<< { blah => blah } >> will result in a
-L<PPI::Structure::Block> being created, instead of a
-L<PPI::Structure::Constructor>.
-
-ValuesAndExpressions::ProhibitCommaSeparatedStatements and other policies have
-workarounds for this.
-
 =item Operators
 
 ValuesAndExpressions::ProhibitMismatchedOperators has two workarounds
