@@ -52,12 +52,6 @@ sub violates {
             if ( $child->content() eq $COMMA ) {
                 return $self->violation($DESC, $EXPL, $elem);
             };
-
-            # Handle hash constructors that PPI incorrectly reports as
-            # blocks.
-            if ( $child->content() eq q{=>} ) {
-                return;
-            }
         }
     }
 
@@ -92,7 +86,12 @@ sub _is_parent_a_foreach_loop {
 sub _succeeding_commas_are_list_element_separators {
     my $elem = shift;
 
-    return if is_perl_builtin_with_zero_and_or_one_arguments($elem);
+    if (
+            is_perl_builtin_with_zero_and_or_one_arguments($elem)
+        and not is_perl_builtin_with_multiple_arguments($elem)
+    ) {
+        return;
+    }
 
     my $sibling = $elem->snext_sibling();
 
