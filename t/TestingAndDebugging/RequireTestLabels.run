@@ -85,7 +85,6 @@ ok($foo);
 
 ## name RT 24924, is_deeply
 ## failures 0
-## TODO PPI 1.118 bug, fixed in PPI SVN
 ## cut
 
 use Test::More;

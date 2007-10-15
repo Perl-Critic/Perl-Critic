@@ -40,7 +40,6 @@ if (<STDIN> =~ /y/) {
 
 ## name ppi failures
 ## failures 4
-## TODO PPI bug -- readline misinterpreted as gt/lt after comma
 ## cut
 
 $content = join '', <STDIN>;

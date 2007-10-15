@@ -29,7 +29,6 @@ our ($foo, $bar);
 #-----------------------------------------------------------------------------
 
 ## name key named "local"
-## TODO PPI bug prevents this from working
 ## failures 0
 ## cut
 

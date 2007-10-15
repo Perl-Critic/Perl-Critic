@@ -31,7 +31,6 @@ $content = join($var, <>);
 
 ## name ppi failures
 ## failures 8
-## TODO PPI bug -- readline misinterpreted as gt/lt after comma
 ## cut
 
 $content = join '', <$fh>;

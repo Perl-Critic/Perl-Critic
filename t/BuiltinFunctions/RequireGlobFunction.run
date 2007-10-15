@@ -18,7 +18,6 @@ foreach my $file (<*.pl>) {
 
 ## name Multiple globs via <...>
 ## failures 2
-## TODO readline parse error in PPI, fixed in PPI v1.119_04+
 ## cut
 
 @files = (<*.pl>, <*.pm>);
