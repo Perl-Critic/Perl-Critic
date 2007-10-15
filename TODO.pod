@@ -341,14 +341,6 @@ We're waiting on the following bugs to get fixed in a CPAN release of PPI:
 
 =over 4
 
-=item literal()
-
-ValuesAndExpressions::RequireNumberSeparators uses a stringy eval to
-numify.  Current PPI SVN has code for the
-PPI::Token::Number->literal() method which numifies from source.  When
-we depend on a PPI version higher than 1.118, the _to_number()
-function in that policy can be removed in favor of literal().
-
 =item Newlines
 
 PPI does not preserve newlines.  That makes
@@ -356,14 +348,6 @@ CodeLayout::RequireConsistentNewlines impossible to implement under PPI.  For
 now, it's implemented by pulling the source out of the file and skipping PPI.
 
 It's unlikely that PPI will support mixde newlines anytime soon.
-
-=item Anonymous constructors in lists
-
-The following parses wrong in PPI v1.118.  A PPI fix is in progress.
-
-  bless( {} );
-
-When this is fixed, uncomment a few tests in t/20_policies_classhierarchies.t
 
 =item Hash constructors with a parenthesis directly to the left.
 
