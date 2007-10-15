@@ -139,7 +139,6 @@ print {$test_file} <<"EOF";
 
 ## name Named magic variables, fail non-local, carats
 ## failures $numcarats
-### TODO PPI bug parsing vars like \$^X, fixed in PPI v1.119_04+
 ## cut
 
 EOF
