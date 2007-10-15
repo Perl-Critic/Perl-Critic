@@ -56,9 +56,6 @@ sub violates {
     my $prev_elem = $elem->sprevious_sibling();
     return if not $prev_elem;
 
-    # work around PPI operator parsing bugs
-    return if $prev_elem->isa('PPI::Token::Operator');
-
     my $next_elem = $elem->snext_sibling();
     return if not $next_elem;
 
