@@ -5,6 +5,18 @@
 # $Revision$
 ##############################################################################
 
+[1.xxx]  Released on 2007-xx-xx
+
+     Prerequisites:
+     * Now requires PPI 1.200.  A number of workarounds for PPI bugs have been
+       removed.
+
+     Bug fixes:
+     * ValuesAndExpressions::ProhibitCommaSeparatedStatements was reporting
+       false positives when builtins which accept both no and multiple
+       arguments were involved.
+       http://rt.cpan.org/Public/Bug/Display.html?id=27654
+
 [1.079_001]  Released on 2007-10-09
 
      New Policies: (funded by a Perl Foundation grant)

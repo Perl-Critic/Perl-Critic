@@ -42,8 +42,6 @@ sub initialize_if_enabled {
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $PPI_BUG_MISSING_LINE_NUMBER => -1;
-
 sub violates {
     my ( $self, $elem, $doc ) = @_;
 
@@ -65,12 +63,7 @@ sub violates {
 
     my @viols = ();
     for my $stmnt ( @non_packages ) {
-        # work around PPI bug: C<({})> results in a statement without a
-        # location.
-        my $stmnt_line =
-            $stmnt->location()
-                ? $stmnt->location()->[0]
-                : $PPI_BUG_MISSING_LINE_NUMBER;
+        my $stmnt_line = $stmnt->location()->[0];
         if ( (! defined $package_line) || ($stmnt_line < $package_line) ) {
             push @viols, $self->violation( $DESC, $EXPL, $stmnt );
         }
