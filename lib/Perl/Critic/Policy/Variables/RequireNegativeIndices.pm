@@ -134,16 +134,6 @@ sub _is_minus_number {  # return true if @expr looks like "- n"
 
     return if !@expr;
 
-    ## Workaround for PPI 1.115 bug "t/data/08_regression/14_minus.code"
-    # Consider deleting this block when we depend on a later PPI
-    if ( @expr == 1 ) {
-        my $number = shift @expr;
-        return if !$number->isa('PPI::Token::Number');
-        return if $number !~ m/\A \-/xms;
-        return 1;
-    }
-    ## End workaround
-
     return if @expr != 2;
 
     my $op = shift @expr;
