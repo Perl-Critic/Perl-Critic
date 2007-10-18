@@ -39,7 +39,7 @@ RCS
 \.old$
 ^t/00_local_.*t$
 ^t/perlcriticrc$
-^tools
+tools
 ^tmon\.out$
 \.gdb_history$
 \.ERR$
