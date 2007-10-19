@@ -9,7 +9,7 @@
 
 use strict;
 use warnings;
-use English qw(-no_mactch_vars);
+use English qw(-no_match_vars);
 use Test::More (tests => 10);
 use Perl::Critic::UserProfile;
 use Perl::Critic::PolicyFactory (-test => 1);
