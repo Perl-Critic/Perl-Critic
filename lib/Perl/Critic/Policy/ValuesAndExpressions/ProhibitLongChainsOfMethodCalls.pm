@@ -12,6 +12,7 @@ use warnings;
 
 use Perl::Critic::Utils qw{ :booleans :characters :severities };
 use Perl::Critic::Utils::PPI qw{ is_ppi_expression_or_generic_statement };
+
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.079_002';
@@ -87,13 +88,16 @@ sub violates {
                 $child->isa('PPI::Token::Word')
             or  $child->isa('PPI::Token::Symbol')
         ) {
-            if (
-                    @children
-                and $children[0]->isa('PPI::Token::Operator')
-                and q{->} eq $children[0]->content()
-            ) {
-                $chain_length++;
-                shift @children;
+            if ( @children ) {
+                if ( $children[0]->isa('PPI::Token::Operator') ) {
+                    if ( q{->} eq $children[0]->content() ) {
+                        $chain_length++;
+                        shift @children;
+                    }
+                }
+                elsif ( not  $children[0]->isa('PPI::Token::Structure') ) {
+                    $chain_length = 0;
+                }
             }
         }
         else {
