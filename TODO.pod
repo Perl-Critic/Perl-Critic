@@ -8,6 +8,7 @@
 
 Perl::Critic::TODO - Things for Perl::Critic developers to do
 
+
 =head1 SOURCE
 
     #######################################################################
@@ -17,21 +18,25 @@ Perl::Critic::TODO - Things for Perl::Critic developers to do
     # $Revision$
     #######################################################################
 
+
 =head1 SEE ALSO
 
 Perl-Critic-More is a separate distribution for less-widely-accepted
 policies.  It contains its own TODO.pod.
 
+
 =head1 NEW FEATURES
 
-=over 4
+=over
 
 =item * Report Safari sections in addition to book page numbers.
+
 
 =item * Allow policies to say that they've had enough and to not use them for the rest of the current document.
 
 Primarily for things like C<RequireUseStrict> and C<ProhibitMagicNumbers>.
 Replace current workaround for C<RequireUseStrict>.
+
 
 =item * Add --prohibit-unrestricted-no-critic option to F<perlcritic>.
 
@@ -42,6 +47,7 @@ Requires C<## no critic> to take an argument:
 
 Can't be done as a Policy because any line that violated it would disable it.
 
+
 =item * Support for C<#line 123 "filename"> directives.
 
 For code generators and template languages that allow inline Perl code.
@@ -49,15 +55,18 @@ For code generators and template languages that allow inline Perl code.
 Yes, somebody has an in-house templating system where they've written a custom
 test module that extracts the perl code from a template and critiques it.
 
+
 =back
+
 
 =head1 BUGS/LIMITATIONS
 
-=over 4
+=over
 
 =item * Modules::RequireVersionVar
 
 Doesn't enforce three-part versions
+
 
 =item * NamingConventions::ProhibitAmbiguousNames
 
@@ -67,10 +76,12 @@ Allow forbidden words in RHS of variable declarations
 Also, we should make it easeir to add (or delete) words from the
 forbbiden list.
 
+
 =item * Subroutines::ProtectPrivateSubs
 
 Doesn't forbid C<< $pkg->_foo() >> because it can't tell the
 difference between that and C<< $self->_foo() >>
+
 
 =item * ErrorHandling::RequireCarping
 
@@ -78,6 +89,7 @@ This should not complain about using C<warn> or C<die> if it's not in a
 function, or if it's not in a non-main:: package.
 
 Also, should allow C<die> when it is obvious that the "message" is a reference.
+
 
 =item * RegularExpressions::ProhibitCaptureWithoutTest
 
@@ -95,6 +107,7 @@ Right now, P::C thinks that the C<$1> isn't legal to use because it's
 if the regex matched.
     while ( $str =~ /(expression)/ )
 
+
 =item * CodeLayout::ProhibitParensWithBuiltins
 
 Some builtin functions (particularly those that take a variable number of
@@ -102,45 +115,56 @@ scalar arguments) should probably get parens.  This policy should be enhanced
 to allow the user to specify a list of builtins that are expempt from the
 policy.
 
+
 =item * InputOutput::RequireCheckedOpen and RequireCheckedClose
 
 These policies should not report violations if 'use Fatal' is in effect.
+
 
 =item * TestingAndDebugging::RequireUseWarnings
 
 Check for -w on the shbang line.
 
+
 =back
+
 
 =head1 OTHER PBP POLICIES THAT SEEM FEASIBLE TO IMPLEMENT
 
 All the ones we formerly listed here are now done.  Feel free to thumb through
 PBP and add more here.
 
+
 =head1 NON-PBP POLICIES WANTED
 
-=over 4
+=over
 
 =item * ErrorHandling::RequireCheckOfEvalErrorAfterEval
+
 
 =item * TBD::VariableNotUsed
 
 Detect a variable that has a value assigned to it, but never used.
 
+
 =item * TBD::AllProgramsNeedShebangs
 
 Anything that is a program should have a shebang line.  This includes .t files.
 
+
 =item * BuiltInFunctions::RequireConstantSprintfFormat
+
 
 =item * BuiltInFunctions::RequireConstantUnpackFormat
 
 L<http://diotalevi.isa-geek.net/~josh/yapc-lint/slides/slide5.html>
 
+
 =item * Miscellanea::ProhibitObnoxiousComments
 
 Forbid excessive hash marks e.g. "#### This is a loud comment ####".
 Make the obnoxious pattern configurable
+
 
 =item * ValuesAndExpressions::RequireNotOperator
 
@@ -148,10 +172,12 @@ Require the use of "not" instead of "!", except when this would contradict
 ProhibitMixedBooleanOperators.  This may be better suited for
 Perl::Critic::More.
 
+
 =item * Modules::RequireExplicitImporting
 
 Require every C<use> statement to have an explicit import list.  You could
 still get around this by calling C<import> directly.
+
 
 =item * Modules::ForbidImporting
 
@@ -159,9 +185,11 @@ Require every C<use> to have an explicitly empty import list.  This is for
 folks who like to see fully-qualified function names.  Should probably provide
 a list of exempt modules (like FindBin);
 
+
 =item * ControlStructures::ProhibitIncludeViaDo
 
 Forbid C<do "foo.pl">.  Not sure about this policy name.
+
 
 =item * Variables::ProhibitUseVars
 
@@ -169,32 +197,40 @@ Disallow C<use vars qw(...)> and require C<our $foo> instead.  This
 contradicts Miscellanea::Prohibit5006isms.  Maybe verify C<use 5.6>
 before applying this policy.  Low severity.
 
+
 =item * VariablesAndExpressions::ProhibitQuotedHashKeys
 
 Forbid quotes around hash keys, unless they are really needed.  This
 is against what Damian says.  Suggested by Adam Kennedy.  Low
 severity.
 
+
 =item * CodeLayout::ProhibitFunctionalNew
 
 Good: C<< Foo::Bar->new >>, Bad: C<< new Foo::Bar >>
 
+
 =item * VariablesAndExpressions::RequireConstantVersion (low severity)
+
 
 =item * VariablesAndExpressions::ProhibitComplexVersion (medium severity)
 
 L<http://rt.cpan.org/Ticket/Display.html?id=20439>
 
+
 =item * Documentation::RequireSynopsis
+
 
 =item * Documentation::RequireLicense
 
 These are simplified versions of Documentation::RequirePodSections.
 
+
 =item * Documentation::RequireValidSynopsis
 
 The Synopsis section must be all indented and must be syntactically valid Perl
 (as validated by PPI).
+
 
 =item * Documentation::ProhibitEmptySections
 
@@ -204,6 +240,7 @@ boilerplate (althought Test::Pod should catch empty C<=over> blocks).
 On the other hand, C<=item ...> sections can be empty, since the item label is
 content.
 
+
 =item * Miscellaneous::ProhibitBoilerplate
 
 Complain about copy-and-paste code or docs from h2xs, Module::Starter::*,
@@ -212,13 +249,16 @@ etc.
 Here's a non-PPI implementation:
 L<http://search.cpan.org/src/JJORE/Carp-Clan-5.8/t/04boilerplate.t>
 
+
 =item * BuiltinFunctions::ProhibitExtraneousScalarCall
 
 Recommend that C<if (scalar @array)> be rewritten as C<if (@array)>.
 
+
 =item * RegularExpressions::ProhibitMixedDelimiters
 
 Ban s{foo}(bar)
+
 
 =item * RegularExpressions::ProhibitScalarAsRegexp
 
@@ -248,6 +288,7 @@ which is better written as
 
 for performance gains and compile-time syntax checking.
 
+
 =item * RegularExpressions::ProhibitUnnecessaryEscapes
 
 Complain if user puts a backslash escape in front of non-special characters.  For example:
@@ -262,13 +303,16 @@ and C<-> need to be escaped, I think.  Caret only needs to be escaped at the
 beginning, and dash does NOT need to be escaped at the beginning and end.  See
 L<perlreref>.
 
+
 =back
+
 
 =head1 REFACTORINGS and ENHANCEMENTS
 
-=over 4
+=over
 
 =item * Create constants for the PPI location array elements.
+
 
 =item * MOVE THE LINE-DISABLING INTO P::C::Document
 
@@ -286,6 +330,7 @@ in Perl::Critic might look something like this:
      }
   }
 
+
 =item * Some means of detecting "runnaway" C<##no critic>
 
 Elliot was talking to a couple of users at ETech and one of their major
@@ -293,11 +338,13 @@ concerns was that they were using C<##no critic> and forgetting to do a
 C<##use critic> after the problematic section.  Perhaps an option to
 F<perlcritic> to scan for such things is in order.
 
+
 =item * Change API to use named parameters
 
 Most of the methods on the public classes use named parameters for passing
 arguments.  I'd like to extend that pattern to include all object-methods.
 Static methods can still use positional parameters.
+
 
 =item * Allow more flexible Policy parameter parsing
 
@@ -306,9 +353,11 @@ words.  This function is currently limited to splitting on whitespace.  It
 would be nice to allow some lattitude for users who might try and use commas
 or some other kind of delimiter.
 
+
 =item * Enhance P::C::critique() to accept files, directories, or code strings
 
 Just like F<bin/perlcritic> does now.
+
 
 =item * Add C<-cache> flag to F<bin/perlcritic>
 
@@ -324,6 +373,7 @@ until PPI incorporates its own version number in the cache.
 
 (see F<t/40_criticize.t> for a more robust implementation)
 
+
 =item * Use hash-lookup instead of C<List::MoreUtils::any> function.
 
 In several places, Perl::Critic uses C<List::MoreUtils::any> to see if
@@ -333,13 +383,20 @@ subroutine that does a hash-lookup like this:
     my %logical_ops = hashify( qw( ! || && ||= &&= and or not ) );
     sub is_logical_op { return exists $logical_ops{ $_[0] }; }
 
+
+=item * Allow color output to work through a pipe.
+
+http://rt.cpan.org/Ticket/Display.html?id=30140
+
+
 =back
 
 =head1 PPI BUGS
 
 We're waiting on the following bugs to get fixed in a CPAN release of PPI:
 
-=over 4
+
+=over
 
 =item Newlines
 
@@ -349,6 +406,7 @@ now, it's implemented by pulling the source out of the file and skipping PPI.
 
 It's unlikely that PPI will support mixde newlines anytime soon.
 
+
 =item Operators
 
 ValuesAndExpressions::ProhibitMismatchedOperators has two workarounds
@@ -356,12 +414,14 @@ for PPI bugs with parsing operators.  Many of these bugs have been
 fixed in PPI, so it would be good to check if those workarounds are
 still needed.
 
+
 =item Regexp methods
 
 Not strictly a bug -- the PPI Regexp classes have a dearth of accessor methods
 as of v1.118, meaning that we have to do messy digging into internals.  I
 wrote Perl::Critic:Utils::PPIRegexp to encapsulate this messiness, but it
 would be nicer to have an official interface in PPI.
+
 
 =back
 
