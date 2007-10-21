@@ -5,7 +5,7 @@
 # $Revision$
 ##############################################################################
 
-[1.xxx]  Released on 2007-xx-xx
+[1.079_002]  Released on 2007-10-21
 
      Prerequisites:
      * Now requires PPI 1.200.  A number of workarounds for PPI bugs have been

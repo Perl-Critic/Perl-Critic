@@ -22,7 +22,7 @@ use PPI::Token::Quote::Single;
 
 use base 'Exporter';
 
-our $VERSION = '1.079_001';
+our $VERSION = '1.079_002';
 
 #-----------------------------------------------------------------------------
 # Exportable symbols here.
