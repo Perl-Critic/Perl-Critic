@@ -49,22 +49,9 @@ sub violates {
     my $min = $self->{_min};
 
     return if $elem !~ m{ \d{4} }mx;
-    return if abs _to_number($elem) < $min;
+    return if abs $elem->literal() < $min;
 
     return $self->violation( $DESC, $EXPL, $elem );
-}
-
-#-----------------------------------------------------------------------------
-
-sub _to_number {
-    my $elem  = shift;
-
-    # This eval is necessary because Perl only supports the underscore
-    # during compilation, not numification.
-
-    my $value = $elem->content;
-    $value = eval $value;    ## no critic
-    return $value;
 }
 
 1;
