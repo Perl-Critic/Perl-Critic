@@ -10,8 +10,6 @@ package Perl::Critic::Utils::PPI;
 use strict;
 use warnings;
 
-use Perl::Critic::Utils qw{ :data_conversion :classification };
-
 use base 'Exporter';
 
 our $VERSION = '1.079_002';

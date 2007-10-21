@@ -20,6 +20,8 @@ use Scalar::Util qw( blessed );
 use B::Keywords qw();
 use PPI::Token::Quote::Single;
 
+use Perl::Critic::Utils::PPI qw< is_ppi_expression_or_generic_statement >;
+
 use base 'Exporter';
 
 our $VERSION = '1.079_002';
@@ -818,9 +820,24 @@ sub parse_arg_list {
     if ( $sib->isa('PPI::Structure::List') ) {
 
         #Pull siblings from list
-        my $expr = $sib->schild(0);
-        return if !$expr;
-        return split_nodes_on_comma( $expr->schildren() );
+        my @list_contents = $sib->schildren();
+        return if not @list_contents;
+
+        my @list_expressions;
+        foreach my $item (@list_contents) {
+            if (
+                is_ppi_expression_or_generic_statement($item)
+            ) {
+                push
+                    @list_expressions,
+                    split_nodes_on_comma( $item->schildren() );
+            }
+            else {
+                push @list_expressions, $item;
+            }
+        }
+
+        return @list_expressions;
     }
     else {
 
@@ -844,9 +861,13 @@ sub split_nodes_on_comma {
     my $i = 0;
     my @node_stacks;
     for my $node (@nodes) {
-        if ( $node->isa('PPI::Token::Operator') &&
-                (($node eq $COMMA) || ($node eq $FATCOMMA)) ) {
-            $i++; #Move forward to next 'node stack'
+        if (
+                $node->isa('PPI::Token::Operator')
+            and ($node eq $COMMA or $node eq $FATCOMMA)
+        ) {
+            if (@node_stacks) {
+                $i++; #Move forward to next 'node stack'
+            }
             next;
         } elsif ( $node->isa('PPI::Token::QuoteLike::Words' )) {
             my $section = $node->{sections}->[0];

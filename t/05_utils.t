@@ -10,7 +10,7 @@
 use strict;
 use warnings;
 use PPI::Document;
-use Test::More tests => 91;
+use Test::More tests => 94;
 
 #-----------------------------------------------------------------------------
 
@@ -259,6 +259,39 @@ is( interpolate( 'literal'    ), "literal",    'Interpolation' );
         my $doc = PPI::Document->new(\$code);
         my $got = first_arg($doc->first_token());
         is($got ? "$got" : undef, $expect, 'first_arg - '.$code);
+    }
+}
+
+#-----------------------------------------------------------------------------
+# parse_arg_list tests
+
+{
+    my @tests = (
+        [ q/foo($bar, 'baz', 1)/ => [ [ q<$bar> ],  [ q<'baz'> ],  [ q<1> ], ] ],
+        [
+                q/foo( { bar => 1 }, { bar => 1 }, 'blah' )/
+            =>  [
+                    [ '{ bar => 1 }' ],
+                    [ '{ bar => 1 }' ],
+                    [ q<'blah'> ],
+                ],
+        ],
+        [
+                q/foo( { bar() }, {}, 'blah' )/
+            =>  [
+                    ' { bar() }',
+                    [ qw< {} > ],
+                    [ q<'blah'> ],
+                ],
+        ],
+    );
+
+    foreach my $test (@tests) {
+        my ($code, $expected) = @{ $test };
+
+        my $document = PPI::Document->new( \$code );
+        my @got = parse_arg_list( $document->first_token() );
+        is_deeply( \@got, $expected, "parse_arg_list: $code" );
     }
 }
 
