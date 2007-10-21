@@ -61,47 +61,49 @@ eval {
 emit_tar_warning_if_necessary();
 
 my $builder = Module::Build->new(
+    module_name    => 'Perl::Critic',
+    dist_author    => 'Jeffrey Thalhammer <thaljef@cpan.org>',
+    dist_abstract  => 'Critique Perl source code for best-practices',
+    license        => 'perl',
 
-  module_name    => 'Perl::Critic',
-  dist_author    => 'Jeffrey Thalhammer <thaljef@cpan.org>',
-  dist_abstract  => 'Critique Perl source code for best-practices',
-  license        => 'perl',
+    requires       => {
+        'B::Keywords'           => 1.05,
+        'Config::Tiny'          => 2,
+        'Exception::Class'      => 1.23,
+        'File::Spec'            => 0,
+        'File::Spec::Unix'      => 0,
+        'IO::String'            => 0,
+        'List::MoreUtils'       => 0,
+        'List::Util'            => 0,
+        'Module::Pluggable'     => 3.1,
+        'PPI'                   => 1.200,
+        'Pod::PlainText'        => 0,
+        'Pod::Usage'            => 0,
+        'Readonly'              => 1.03,
+        'Scalar::Util'          => 0,
+        'String::Format'        => 1.13,
+    },
 
-  requires       => {'B::Keywords'           => 1.05,
-                     'Config::Tiny'          => 2,
-                     'File::Spec'            => 0,
-                     'File::Spec::Unix'      => 0,
-                     'IO::String'            => 0,
-                     'List::MoreUtils'       => 0,
-                     'List::Util'            => 0,
-                     'Module::Pluggable'     => 3.1,
-                     'PPI'                   => 1.200,
-                     'Pod::PlainText'        => 0,
-                     'Pod::Usage'            => 0,
-                     'Readonly'              => 1.03,
-                     'Scalar::Util'          => 0,
-                     'String::Format'        => 1.13,
-                    },
+    recommends     => { recommended_module_versions() },
 
-  recommends     => { recommended_module_versions() },
+    build_requires => {
+        'Test::More'            => 0,
+    },
 
-  build_requires => {'Test::More'            => 0,
-                    },
+    PL_files       => get_PL_files(),
 
-  PL_files       => get_PL_files(),
+    script_files   => ['bin/perlcritic'],
 
-  script_files   => ['bin/perlcritic'],
-
-  add_to_cleanup => [
-                    qw<
-                        MANIFEST.bak
-                        Makefile
-                        Makefile.old
-                        pm_to_blib
-                        t/ControlStructures/ProhibitNegativeExpressionsInUnlessAndUntilConditions.run
-                    >,
-                    test_wrappers_to_generate(),
-  ],
+    add_to_cleanup => [
+        qw<
+            MANIFEST.bak
+            Makefile
+            Makefile.old
+            pm_to_blib
+            t/ControlStructures/ProhibitNegativeExpressionsInUnlessAndUntilConditions.run
+        >,
+        test_wrappers_to_generate(),
+    ],
 );
 
 $builder->create_build_script();

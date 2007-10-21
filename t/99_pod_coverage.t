@@ -51,6 +51,8 @@ sub get_trusted_methods {
         default_themes
         default_severity
         supported_parameters
+        description
+        Fields
         got_sigpipe
     );
 }

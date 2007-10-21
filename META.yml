@@ -48,6 +48,51 @@ provides:
   Perl::Critic::Document:
     file: lib/Perl/Critic/Document.pm
     version: 1.079_002
+  Perl::Critic::Exception:
+    file: lib/Perl/Critic/Exception.pm
+    version: 1.079_002
+  Perl::Critic::Exception::AggregateConfiguration:
+    file: lib/Perl/Critic/Exception/AggregateConfiguration.pm
+    version: 1.079_002
+  Perl::Critic::Exception::Configuration:
+    file: lib/Perl/Critic/Exception/Configuration.pm
+    version: 1.079_002
+  Perl::Critic::Exception::Configuration::Generic:
+    file: lib/Perl/Critic/Exception/Configuration/Generic.pm
+    version: 1.079_002
+  Perl::Critic::Exception::Configuration::Option:
+    file: lib/Perl/Critic/Exception/Configuration/Option.pm
+    version: 1.079_002
+  Perl::Critic::Exception::Configuration::Option::Global:
+    file: lib/Perl/Critic/Exception/Configuration/Option/Global.pm
+    version: 1.079_002
+  Perl::Critic::Exception::Configuration::Option::Global::ExtraParameter:
+    file: lib/Perl/Critic/Exception/Configuration/Option/Global/ExtraParameter.pm
+    version: 1.079_002
+  Perl::Critic::Exception::Configuration::Option::Global::ParameterValue:
+    file: lib/Perl/Critic/Exception/Configuration/Option/Global/ParameterValue.pm
+    version: 1.079_002
+  Perl::Critic::Exception::Configuration::Option::Policy:
+    file: lib/Perl/Critic/Exception/Configuration/Option/Policy.pm
+    version: 1.079_002
+  Perl::Critic::Exception::Configuration::Option::Policy::ExtraParameter:
+    file: lib/Perl/Critic/Exception/Configuration/Option/Policy/ExtraParameter.pm
+    version: 1.079_002
+  Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue:
+    file: lib/Perl/Critic/Exception/Configuration/Option/Policy/ParameterValue.pm
+    version: 1.079_002
+  Perl::Critic::Exception::Fatal:
+    file: lib/Perl/Critic/Exception/Fatal.pm
+    version: 1.079_002
+  Perl::Critic::Exception::Fatal::Generic:
+    file: lib/Perl/Critic/Exception/Fatal/Generic.pm
+    version: 1.079_002
+  Perl::Critic::Exception::Fatal::Internal:
+    file: lib/Perl/Critic/Exception/Fatal/Internal.pm
+    version: 1.079_002
+  Perl::Critic::Exception::Fatal::PolicyDefinition:
+    file: lib/Perl/Critic/Exception/Fatal/PolicyDefinition.pm
+    version: 1.079_002
   Perl::Critic::Policy:
     file: lib/Perl/Critic/Policy.pm
     version: 1.079_002
