@@ -10,6 +10,8 @@ package Perl::Critic::Exception::Fatal::Generic;
 use strict;
 use warnings;
 
+use Readonly;
+
 our $VERSION = '1.079_002';
 
 #-----------------------------------------------------------------------------
@@ -24,7 +26,7 @@ use Exception::Class (
 
 #-----------------------------------------------------------------------------
 
-our @EXPORT_OK = qw{ &throw_generic };
+Readonly::Array our @EXPORT_OK => qw< throw_generic >;
 
 #-----------------------------------------------------------------------------
 

@@ -9,9 +9,10 @@ package Perl::Critic::Exception::AggregateConfiguration;
 
 use strict;
 use warnings;
-use English qw(-no_match_vars);
 
 use Carp qw{ confess };
+use English qw(-no_match_vars);
+use Readonly;
 
 use Perl::Critic::Utils qw{ :characters };
 
@@ -30,7 +31,7 @@ use Exception::Class (
 
 #-----------------------------------------------------------------------------
 
-our @EXPORT_OK = qw{ &throw_aggregate };
+Readonly::Array our @EXPORT_OK => qw< throw_aggregate >;
 
 #-----------------------------------------------------------------------------
 

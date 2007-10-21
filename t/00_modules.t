@@ -23,7 +23,23 @@ our $VERSION = '1.079_002';
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 my @bundled_policy_names = bundled_policy_names();
-plan tests => 113 + 14 * scalar @bundled_policy_names;
+
+my @concrete_exceptions = qw{
+    AggregateConfiguration
+    Configuration::Generic
+    Configuration::Option::Global::ExtraParameter
+    Configuration::Option::Global::ParameterValue
+    Configuration::Option::Policy::ExtraParameter
+    Configuration::Option::Policy::ParameterValue
+    Fatal::Generic
+    Fatal::Internal
+    Fatal::PolicyDefinition
+};
+
+plan tests =>
+        113
+    +   (  9 * scalar @concrete_exceptions  )
+    +   ( 14 * scalar @bundled_policy_names );
 
 # pre-compute for version comparisons
 my $version_string = __PACKAGE__->VERSION;
@@ -208,6 +224,27 @@ can_ok('Perl::Critic::ProfilePrototype', 'to_string');
 my $prototype = Perl::Critic::ProfilePrototype->new();
 isa_ok($prototype, 'Perl::Critic::ProfilePrototype');
 is($listing->VERSION(), $version_string, 'Perl::Critic::ProfilePrototype version');
+
+#-----------------------------------------------------------------------------
+# Test module interface for exceptions
+
+{
+    foreach my $class (
+        map { "Perl::Critic::Exception::$_" } @concrete_exceptions
+    ) {
+        use_ok($class);
+        can_ok($class, 'new');
+        can_ok($class, 'throw');
+        can_ok($class, 'message');
+        can_ok($class, 'error');
+        can_ok($class, 'full_message');
+        can_ok($class, 'as_string');
+
+        my $exception = $class->new();
+        isa_ok($exception, $class);
+        is($exception->VERSION(), $version_string, "$class version");
+    }
+}
 
 #-----------------------------------------------------------------------------
 # Test module interface for each Policy subclass

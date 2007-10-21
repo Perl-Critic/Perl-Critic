@@ -10,6 +10,8 @@ package Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue;
 use strict;
 use warnings;
 
+use Readonly;
+
 use Perl::Critic::Utils qw{ :characters };
 
 our $VERSION = '1.079_002';
@@ -26,7 +28,7 @@ use Exception::Class (
 
 #-----------------------------------------------------------------------------
 
-our @EXPORT_OK = qw{ &throw_policy_value };
+Readonly::Array our @EXPORT_OK => qw< throw_policy_value >;
 
 #-----------------------------------------------------------------------------
 
