@@ -12,7 +12,7 @@ use warnings;
 
 use English q<-no_match_vars>;
 
-our $VERSION = '1.079_002';
+our $VERSION = '1.079_003';
 
 use base qw{ Exporter };
 
