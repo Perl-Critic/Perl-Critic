@@ -79,7 +79,7 @@ WriteMakefile(
         'List::MoreUtils'       => 0,
         'List::Util'            => 0,
         'Module::Pluggable'     => 3.1,
-        'PPI'                   => 1.200,
+        'PPI'                   => 1.201,
         'Pod::PlainText'        => 0,
         'Pod::Usage'            => 0,
         'Readonly'              => 1.03,
