@@ -1,3 +1,20 @@
+[1.079_003]  Released on 2007-10-22
+
+     Prerequisites:
+     * Now requires PPI 1.201  to get rid of the annoying warning about
+       PPI::Exception::ParserTimeout subclassing from itself.
+
+     Bug fixes:
+     * PPI::Structure::List can now contain multiple children,
+       so P::C::Utils::parse_arg_list() needs to handle it.
+
+       This was done in the process of fixing
+       http://rt.cpan.org/Ticket/Display.html?id=24924, which was a problem
+       with TestingAndDebugging::RequireTestLabels.
+
+     * ValuesAndExpressions::ProhibitLongChainsOfMethodCalls wasn't resetting
+       chain length when it ran into the end of a sub-expression.
+
 [1.079_002]  Released on 2007-10-21
 
      Prerequisites:
