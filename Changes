@@ -15,6 +15,8 @@
      * ValuesAndExpressions::ProhibitLongChainsOfMethodCalls wasn't resetting
        chain length when it ran into the end of a sub-expression.
 
+       http://rt.cpan.org/Public/Bug/Display.html?id=30040
+
 [1.079_002]  Released on 2007-10-21
 
      Prerequisites:

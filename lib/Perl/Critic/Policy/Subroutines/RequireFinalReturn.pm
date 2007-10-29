@@ -217,6 +217,9 @@ solves the problem.
 
 The only exception allowed is an empty subroutine.
 
+Be careful when fixing problems identified by this Policy; don't blindly put
+a C<return;> statement at the end of every subroutine.
+
 =head1 CONFIGURATION
 
 If you've created your own terminal functions that behave like C<die> or
