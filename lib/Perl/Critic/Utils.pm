@@ -14,12 +14,12 @@ use strict;
 use warnings;
 use Readonly;
 
-use Carp qw(confess);
 use File::Spec qw();
 use Scalar::Util qw( blessed );
 use B::Keywords qw();
 use PPI::Token::Quote::Single;
 
+use Perl::Critic::Exception::Fatal::Generic qw{ throw_generic };
 use Perl::Critic::Utils::PPI qw< is_ppi_expression_or_generic_statement >;
 
 use base 'Exporter';
@@ -939,7 +939,11 @@ sub severity_to_number {
     my ($severity) = @_;
     return _normalize_severity( $severity ) if is_integer( $severity );
     my $severity_number = $SEVERITY_NUMBER_OF{lc $severity};
-    confess qq{Invalid severity: "$severity"} if not defined $severity_number;
+
+    if ( not defined $severity_number ) {
+        throw_generic qq{Invalid severity: "$severity"};
+    }
+
     return $severity_number;
 }
 
@@ -1012,7 +1016,7 @@ sub _is_perl {
     #Check for shebang
     open my $fh, '<', $file or return;
     my $first = <$fh>;
-    close $fh or confess "unable to close $file: $!";
+    close $fh or throw_generic "unable to close $file: $!";
 
     return 1 if defined $first && ( $first =~ m{ \A [#]![ ]*\S*perl }mx );
     return;
