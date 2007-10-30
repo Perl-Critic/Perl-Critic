@@ -5,11 +5,9 @@
 #     $Date$
 #   $Author$
 # $Revision$
-#       $Id$
-#  $HeadURL$
-#   $Source$
 ##############################################################################
 
+## no critic (ErrorHandling::RequireUseOfExceptions)
 use 5.008001;
 use strict;
 use warnings;
