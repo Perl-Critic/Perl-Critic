@@ -1,0 +1,162 @@
+=pod
+
+=head1 Notes on PolicyParameter design
+
+Most of the following came out of discussion on the dev list in
+December '06.
+
+=over
+
+=item Must not require any changes to existing Policies.
+
+The extant optional C<supported_parameters()> method continues to be
+used.  The values returned by extant Policies are still valid.
+
+The existing implementations of the method return a list of parameter
+names.  The new C<PolicyParameter> object can be constructed around a
+string, in which case the string is used as the parameter name, or
+around the new hash reference specifications.
+
+The absence of a requirement for a Policy's constructor to call the
+base L<Perl::Critic::Policy> constructor did cause problems that had
+to be worked around.
+
+=item Must not require configuration items to be parsed multiple times.
+
+The value validation and parsing happens in the same method.  There is
+no need for a Policy constructor to re-parse the value to initialize
+itself.
+
+=item Declarations must be easy to read.
+
+The parameter specifications use hash references, rather than calls to
+a constructor.  Compare
+
+  sub supported_parameters {
+      return (
+          {
+              name            => 'lib_sections',
+              description     => 'The sections to require for modules (separated by qr/\s* [|] \s*/xm).',
+              default_string  => $EMPTY,
+              parser          => \&_parse_lib_sections,
+          },
+          {
+              name            => 'script_sections',
+              description     => 'The sections to require for programs (separated by qr/\s* [|] \s*/xm).',
+              default_string  => $EMPTY,
+              parser          => \&_parse_script_sections,
+          },
+          {
+              name            => 'source',
+              description     => 'The origin of sections to use.',
+              default_string  => $DEFAULT_SOURCE,
+              behavior        => 'enumeration',
+              enumeration_values => [ keys %SOURCE_TRANSLATION ],
+          },
+          {
+              name            => 'language',
+              description     => 'The spelling of sections to use.',
+              default_string  => $EMPTY,
+              behavior        => 'enumeration',
+              enumeration_values => [ $EN_AU, $EN_US ],
+          },
+      );
+  }
+
+with
+
+  sub supported_parameters {
+      return (
+          Perl::Critic::PolicyParameter->new(
+              name            => 'lib_sections',
+              description     => 'The sections to require for modules (separated by qr/\s* [|] \s*/xm).',
+              default_string  => $EMPTY,
+              parser          => \&_parse_lib_sections,
+          ),
+          Perl::Critic::PolicyParameter->new(
+              name            => 'script_sections',
+              description     => 'The sections to require for programs (separated by qr/\s* [|] \s*/xm).',
+              default_string  => $EMPTY,
+              parser          => \&_parse_script_sections,
+          ),
+          Perl::Critic::PolicyParameter->new(
+              name            => 'source',
+              description     => 'The origin of sections to use.',
+              default_string  => $DEFAULT_SOURCE,
+              behavior        => 'enumeration',
+              enumeration_values => [ keys %SOURCE_TRANSLATION ],
+          ),
+          Perl::Critic::PolicyParameter->new(
+              name            => 'language',
+              description     => 'The spelling of sections to use.',
+              default_string  => $EMPTY,
+              behavior        => 'enumeration',
+              enumeration_values => [ $EN_AU, $EN_US ],
+          ),
+      );
+  }
+
+or
+
+  sub supported_parameters {
+      return (
+          Perl::Critic::GenericPolicyParameter->new(
+              name            => 'lib_sections',
+              description     => 'The sections to require for modules (separated by qr/\s* [|] \s*/xm).',
+              default_string  => $EMPTY,
+              parser          => \&_parse_lib_sections,
+          ),
+          Perl::Critic::PolicyParameter->new(
+              name            => 'script_sections',
+              description     => 'The sections to require for programs (separated by qr/\s* [|] \s*/xm).',
+              default_string  => $EMPTY,
+              parser          => \&_parse_script_sections,
+          ),
+          Perl::Critic::EnumerationPolicyParameter->new(
+              name            => 'source',
+              description     => 'The origin of sections to use.',
+              default_string  => $DEFAULT_SOURCE,
+              enumeration_values => [ keys %SOURCE_TRANSLATION ],
+          ),
+          Perl::Critic::EnumerationPolicyParameter->new(
+              name            => 'language',
+              description     => 'The spelling of sections to use.',
+              default_string  => $EMPTY,
+              enumeration_values => [ $EN_AU, $EN_US ],
+          ),
+      );
+  }
+
+=item Must be extensible without modifying Policies.
+
+Using named values in the parameter specifications, rather than
+positional ones, allows additional options to be added in the future.
+Also, the Policies don't make references to the C<Behavior> classes,
+just symbolic names for them, so these can be completely reorganized
+without breaking anything.
+
+=item Policies must be able to override most things.
+
+Rather than using I<is a> relationships, C<PolicyParameter> objects
+I<have a> C<Behavior>.  This means that a developer can use the base
+functionality of a C<Behavior>, but override the parts that they
+want.
+
+=back
+
+
+=cut
+
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=70 ft=pod expandtab :
