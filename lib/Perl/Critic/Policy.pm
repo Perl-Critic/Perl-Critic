@@ -9,7 +9,8 @@ package Perl::Critic::Policy;
 
 use strict;
 use warnings;
-use Carp qw(confess);
+
+use Readonly;
 
 use String::Format qw(stringf);
 
@@ -21,11 +22,27 @@ use Perl::Critic::Utils qw{
     :severities
     :data_conversion
     interpolate
+    policy_long_name
     policy_short_name
+    $POLICY_NAMESPACE
 };
-use Perl::Critic::Violation qw();
+use Perl::Critic::Exception::AggregateConfiguration;
+use Perl::Critic::Exception::Configuration;
+use Perl::Critic::Exception::Configuration::Option::Policy::ExtraParameter;
+use Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue;
+use Perl::Critic::Exception::Fatal::PolicyDefinition
+    qw< throw_policy_definition >;
+use Perl::Critic::Exception::Fatal::Internal qw< throw_internal >;
+use Perl::Critic::Violation qw<>;
+
+use Exception::Class;   # this must come after "use P::C::Exception::*"
 
 our $VERSION = '1.079_003';
+
+#-----------------------------------------------------------------------------
+
+Readonly::Scalar my $IN_POLICY_NAMESPACE_REGEX =>
+    qr/ \A $POLICY_NAMESPACE :: /xmso;
 
 #-----------------------------------------------------------------------------
 
@@ -59,6 +76,22 @@ sub __set_parameters {
 
 sub initialize_if_enabled {
     return $TRUE;
+}
+
+#-----------------------------------------------------------------------------
+
+sub get_long_name {
+    my ($self) = @_;
+
+    return policy_long_name(ref $self);
+}
+
+#-----------------------------------------------------------------------------
+
+sub get_short_name {
+    my ($self) = @_;
+
+    return policy_short_name(ref $self);
 }
 
 #-----------------------------------------------------------------------------
@@ -123,7 +156,10 @@ sub default_themes {
 #-----------------------------------------------------------------------------
 
 sub violates {
-    return confess q{Can't call abstract method};
+    my ($self) = @_;
+
+    return throw_policy_definition
+        $self->get_short_name() . q/ does not implement violates()./;
 }
 
 #-----------------------------------------------------------------------------
@@ -138,6 +174,7 @@ sub violation {  ##no critic(ArgUnpacking)
 
 
 #-----------------------------------------------------------------------------
+
 # Static methods.
 
 sub set_format { return $FORMAT = $_[0] }  ##no critic(ArgUnpacking)
@@ -150,9 +187,9 @@ sub to_string {
 
     # Wrap the more expensive ones in sub{} to postpone evaluation
     my %fspec = (
-         'O' => sub { $self->_format_supported_parameters(@_) },
-         'P' => ref $self,
-         'p' => sub { policy_short_name( ref $self ) },
+         'O' => sub { $self->_format_parameters(@_) },
+         'P' => sub { $self->get_long_name() },
+         'p' => sub { $self->get_short_name() },
          'T' => sub { join $SPACE, $self->default_themes() },
          't' => sub { join $SPACE, $self->get_themes() },
          'S' => sub { $self->default_severity() },
@@ -161,7 +198,7 @@ sub to_string {
     return stringf($FORMAT, %fspec);
 }
 
-sub _format_supported_parameters {
+sub _format_parameters {
     my ($self, $format) = @_;
     return $EMPTY if not $self->can('supported_parameters');
     $format = Perl::Critic::Utils::interpolate( $format );
@@ -261,6 +298,15 @@ the violation.
 These are the same as the constructor to L<Perl::Critic::Violation>,
 but without the severity.  The Policy itself knows the severity.
 
+=item C< get_long_name() >
+
+Return the full package name of this policy.
+
+=item C< get_short_name() >
+
+Return the name of this policy without the "Perl::Critic::Policy::"
+prefix.
+
 =item C< applies_to() >
 
 Returns a list of the names of PPI classes that this Policy cares
@@ -319,14 +365,14 @@ preserved.  Duplicate themes will be removed.
 
 =item C<set_format( $FORMAT )>
 
-Class method.  Sets the format for all Policy objects when they are evaluated
-in string context.  The default is C<"%p\n">.  See L<"OVERLOADS"> for
-formatting options.
+Class method.  Sets the format for all Policy objects when they are
+evaluated in string context.  The default is C<"%p\n">.  See
+L<"OVERLOADS"> for formatting options.
 
 =item C<get_format()>
 
-Class method. Returns the current format for all Policy objects when they are
-evaluated in string context.
+Class method. Returns the current format for all Policy objects when
+they are evaluated in string context.
 
 =item C<to_string()>
 
