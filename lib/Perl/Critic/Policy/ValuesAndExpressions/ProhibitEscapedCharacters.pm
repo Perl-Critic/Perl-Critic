@@ -19,7 +19,7 @@ our $VERSION = '1.079_003';
 #-----------------------------------------------------------------------------
 
 Readonly::Scalar my $DESC     => q{Numeric escapes in interpolated string};
-Readonly::Scalar my $EXPL     => [ 54 ];
+Readonly::Scalar my $EXPL     => [ 56 ];
 
 #-----------------------------------------------------------------------------
 
