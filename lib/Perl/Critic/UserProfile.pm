@@ -9,12 +9,17 @@ package Perl::Critic::UserProfile;
 
 use strict;
 use warnings;
-use Carp qw(carp croak confess);
-use Config::Tiny qw();
+
 use English qw(-no_match_vars);
+use Readonly;
+
+use Config::Tiny qw();
 use File::Spec qw();
+
 use Perl::Critic::Defaults qw();
 use Perl::Critic::Utils qw{ :characters policy_long_name policy_short_name };
+use Perl::Critic::Exception::Fatal::Internal qw{ throw_internal };
+use Perl::Critic::Exception::Configuration::Generic qw{ throw_generic };
 
 our $VERSION = '1.079_003';
 
@@ -34,8 +39,8 @@ sub _init {
 
     my ( $self, %args ) = @_;
     # The profile can be defined, undefined, or an empty string.
-    my $prof = defined $args{-profile} ? $args{-profile} : _find_profile_path();
-    $self->_load_profile( $prof );
+    my $profile = defined $args{-profile} ? $args{-profile} : _find_profile_path();
+    $self->_load_profile( $profile );
     $self->_set_defaults();
     return $self;
 }
@@ -125,20 +130,23 @@ sub _set_source {
 #-----------------------------------------------------------------------------
 # Begin PRIVATE methods
 
+Readonly::Hash my %LOADER_FOR => (
+    ARRAY   => \&_load_profile_from_array,
+    DEFAULT => \&_load_profile_from_file,
+    HASH    => \&_load_profile_from_hash,
+    SCALAR  => \&_load_profile_from_string,
+);
+
 sub _load_profile {
 
     my ( $self, $profile ) = @_;
 
-    my %loader_for = (
-        ARRAY   => \&_load_profile_from_array,
-        DEFAULT => \&_load_profile_from_file,
-        HASH    => \&_load_profile_from_hash,
-        SCALAR  => \&_load_profile_from_string,
-    );
-
     my $ref_type = ref $profile || 'DEFAULT';
-    my $loader = $loader_for{$ref_type};
-    confess qq{Can't load UserProfile from type "$ref_type"} if ! $loader;
+    my $loader = $LOADER_FOR{$ref_type};
+
+    if (not $loader) {
+        throw_internal qq{Can't load UserProfile from type "$ref_type"};
+    }
 
     $self->{_profile} = $loader->($self, $profile);
     return $self;
@@ -167,20 +175,17 @@ sub _load_profile_from_file {
 
     $self->_set_source( $file );
 
-    my $prof = Config::Tiny->read( $file );
-    if (defined $prof) {
-        # !$%@$%^ Config::Tiny uses a completely non-descriptive name for
-        # glabal values.
-        my $defaults = delete $prof->{_};
-        if ($defaults) {
-            $prof->{__defaults__} = $defaults;
-        }
-
-        return $prof;
-    } else {
+    my $profile = Config::Tiny->read( $file );
+    if (not defined $profile) {
         my $errstr = Config::Tiny::errstr();
-        die qq{Could not parse profile "$file": $errstr\n};
+        throw_generic
+            message => qq{Could not parse profile "$file": $errstr},
+            source  => $file;
     }
+
+    _fix_defaults_key( $profile );
+
+    return $profile;
 }
 
 #-----------------------------------------------------------------------------
@@ -188,18 +193,30 @@ sub _load_profile_from_file {
 sub _load_profile_from_array {
     my ( $self, $array_ref ) = @_;
     my $joined    = join qq{\n}, @{ $array_ref };
-    my $prof = Config::Tiny->read_string( $joined );
-    croak( 'Profile error: ' . Config::Tiny::errstr() ) if not defined $prof;
-    return $prof;
+    my $profile = Config::Tiny->read_string( $joined );
+
+    if (not defined $profile) {
+        throw_generic 'Profile error: ' . Config::Tiny::errstr();
+    }
+
+    _fix_defaults_key( $profile );
+
+    return $profile;
 }
 
 #-----------------------------------------------------------------------------
 
 sub _load_profile_from_string {
     my ( $self, $string ) = @_;
-    my $prof = Config::Tiny->read_string( ${ $string } );
-    croak( 'Profile error: ' . Config::Tiny::errstr() ) if not defined $prof;
-    return $prof;
+    my $profile = Config::Tiny->read_string( ${ $string } );
+
+    if (not defined $profile) {
+        throw_generic 'Profile error: ' . Config::Tiny::errstr();
+    }
+
+    _fix_defaults_key( $profile );
+
+    return $profile;
 }
 
 #-----------------------------------------------------------------------------
@@ -249,6 +266,21 @@ sub _find_home_dir {
     }
 
     #No home directory defined
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
+# !$%@$%^ Config::Tiny uses a completely non-descriptive name for global
+# values.
+sub _fix_defaults_key {
+    my ( $profile ) = @_;
+
+    my $defaults = delete $profile->{_};
+    if ($defaults) {
+        $profile->{__defaults__} = $defaults;
+    }
+
     return;
 }
 
