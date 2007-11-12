@@ -1,3 +1,10 @@
+[1.080] Released on 2007-11-11
+
+     Internals:
+     * Continued movement towards removing all use of Carp in favor of
+       exceptions.  Notes for 1.079_003 should have included mention of new
+       dependency upon Exception::Class.
+
 [1.079_003]  Released on 2007-10-22
 
      Prerequisites:
