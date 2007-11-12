@@ -1,6 +1,9 @@
 bin/perlcritic
 Build.PL
 Changes
+doc/PerlCriticClasses.graffle
+doc/PerlCriticClasses.pdf
+doc/PolicyParameter_Notes.pod
 examples/generatestats
 examples/loadanalysisdb
 examples/perlcriticrc

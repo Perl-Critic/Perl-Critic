@@ -10,7 +10,7 @@ package Perl::Critic::Exception::Configuration::Option::Global;
 use strict;
 use warnings;
 
-our $VERSION = '1.079_003';
+our $VERSION = '1.080';
 
 #-----------------------------------------------------------------------------
 
