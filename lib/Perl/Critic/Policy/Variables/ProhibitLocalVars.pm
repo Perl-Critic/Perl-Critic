@@ -46,6 +46,8 @@ sub _all_global_vars {
     my $elem = shift;
     for my $variable_name ( $elem->variables() ) {
         next if $variable_name =~ $PACKAGE_RX;
+        # special exception for Test::More
+        next if $variable_name eq '$TODO'; ##no critic(Interpolat)
         return if ! is_perl_global( $variable_name );
     }
     return 1;
