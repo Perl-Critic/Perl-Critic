@@ -26,7 +26,7 @@ Readonly::Scalar my $DESC => q{Use character classes for literal metachars inste
 Readonly::Scalar my $EXPL => [247];
 
 Readonly::Hash my %REGEXP_METACHARS =>
-    hashify split m/ /xms, '{ } ( ) . * + ? | #'; ##no critic(Interpolation)
+    hashify split m/ /xms, '{ } ( ) . * + ? |'; ##no critic(Interpolation)
 
 #-----------------------------------------------------------------------------
 

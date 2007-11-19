@@ -24,9 +24,8 @@ $name =~ m{ harry \ s \ truman
           | harry \ j \ potter
           }ixms;
 
-## name failure for comment character in //x mode
-## failures 2
-## optional_modules Regexp::Parser
+## name allow comment character in //x mode -- http://rt.perl.org/rt3/Public/Bug/Display.html?id=45667
+## failures 0
 ## cut
 
 m/\#/x;
