@@ -27,7 +27,7 @@ our @EXPORT_OK = qw(
 # If you change this here, make sure to change it there.
 
 sub should_skip_author_tests {
-    return !$ENV{TEST_AUTHOR};
+    return !$ENV{TEST_AUTHOR} && !$ENV{TEST_AUTHOR_PERL_CRITIC};
 }
 
 #-----------------------------------------------------------------------------
