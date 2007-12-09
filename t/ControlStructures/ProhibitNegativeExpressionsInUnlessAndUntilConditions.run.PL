@@ -49,76 +49,79 @@ print "Done.\n\n";
 sub emit_not_operator_code {
     my ($test_file, $operator) = @_;
 
-    print {$test_file} <<"END_NOT_OPERATOR_CODE";
+    my $code_template = <<'END_NOT_OPERATOR_CODE';
 
-## name "$operator" within positive control structures
+## name "%OPERATOR%" within positive control structures
 ## failures 0
 ## cut
 
-if ($operator \$foo) {
+if (%OPERATOR% $foo) {
     blah();
 }
 
-if (\$foo) {
-    blah(\$foo);
+if ($foo) {
+    blah($foo);
 }
-elsif ($operator \$bar) {
-    blah(\$bar);
+elsif (%OPERATOR% $bar) {
+    blah($bar);
 }
 else {
     blah(undef);
 }
 
-while ($operator \$foo) {
+while (%OPERATOR% $foo) {
     blah();
 }
 
-foreach my \$bar ( grep { $operator \$_ } \@foo ) {
-    blah(\$bar);
+foreach my $bar ( grep { %OPERATOR% $_ } \@foo ) {
+    blah($bar);
 }
 
-for (my \$bar = 0; $operator \$bar; \$bar++) {
-    blah(\$bar);
+for (my $bar = 0; %OPERATOR% $bar; $bar++) {
+    blah($bar);
 }
 
 #-----------------------------------------------------------------------------
 
-## name "$operator" within positive postfix statement modifiers
+## name "%OPERATOR%" within positive postfix statement modifiers
 ## failures 0
 ## cut
 
-blah() if $operator \$foo;
+blah() if %OPERATOR% $foo;
 
-blah() while $operator \$foo;
+blah() while %OPERATOR% $foo;
 
-blah(\$_) for grep { $operator \$_ } \@foo;
-
-#-----------------------------------------------------------------------------
-
-## name "$operator" within negative control structures
-## failures 2
-## cut
-
-unless ($operator \$foo) {
-    blah();
-}
-
-until ($operator \$foo) {
-    blah();
-}
+blah($_) for grep { %OPERATOR% $_ } \@foo;
 
 #-----------------------------------------------------------------------------
 
-## name "$operator" within negative postfix statement modifiers
+## name "%OPERATOR%" within negative control structures
 ## failures 2
 ## cut
 
-blah() unless $operator \$foo;
+unless (%OPERATOR% $foo) {
+    blah();
+}
 
-blah() until $operator \$foo;
+until (%OPERATOR% $foo) {
+    blah();
+}
+
+#-----------------------------------------------------------------------------
+
+## name "%OPERATOR%" within negative postfix statement modifiers
+## failures 2
+## cut
+
+blah() unless %OPERATOR% $foo;
+
+blah() until %OPERATOR% $foo;
 
 #-----------------------------------------------------------------------------
 END_NOT_OPERATOR_CODE
+
+    $code_template =~ s{%OPERATOR%}{$operator}gmx;
+    print {$test_file} $code_template;
 }
 
 #-----------------------------------------------------------------------------
@@ -203,76 +206,79 @@ END_NOT_MATCH_CODE
 sub emit_comparator_code {
     my ($test_file, $operator) = @_;
 
-    print {$test_file} <<"END_COMPARATOR_CODE";
+    my $code_template = <<'END_COMPARATOR_CODE';
 
-## name "$operator" within positive control structures
+## name "%OPERATOR%" within positive control structures
 ## failures 0
 ## cut
 
-if (\$foo $operator \$bar) {
+if ($foo %OPERATOR% $bar) {
     blah();
 }
 
-if (\$foo $operator \$bar) {
-    blah(\$foo);
+if ($foo %OPERATOR% $bar) {
+    blah($foo);
 }
-elsif (\$bar $operator \$baz) {
-    blah(\$bar);
+elsif ($bar %OPERATOR% $baz) {
+    blah($bar);
 }
 else {
     blah(undef);
 }
 
-while (\$foo $operator \$bar) {
+while ($foo %OPERATOR% $bar) {
     blah();
 }
 
-foreach my \$bar ( grep { \$_ $operator \$baz } \@foo ) {
-    blah(\$bar);
+foreach my $bar ( grep { $_ %OPERATOR% $baz } \@foo ) {
+    blah($bar);
 }
 
-for (my \$bar = 0; \$bar $operator \$baz; \$bar++) {
-    blah(\$bar);
+for (my $bar = 0; $bar %OPERATOR% $baz; $bar++) {
+    blah($bar);
 }
 
 #-----------------------------------------------------------------------------
 
-## name "$operator" within positive postfix statement modifiers
+## name "%OPERATOR%" within positive postfix statement modifiers
 ## failures 0
 ## cut
 
-blah() if \$foo $operator \$bar;
+blah() if $foo %OPERATOR% $bar;
 
-blah() while \$foo $operator \$bar;
+blah() while $foo %OPERATOR% $bar;
 
-blah(\$_) for grep { \$_ $operator \$bar } \@foo;
-
-#-----------------------------------------------------------------------------
-
-## name "$operator" within negative control structures
-## failures 2
-## cut
-
-unless (\$foo $operator \$bar) {
-    blah();
-}
-
-until (\$foo $operator \$bar) {
-    blah();
-}
+blah($_) for grep { $_ %OPERATOR% $bar } \@foo;
 
 #-----------------------------------------------------------------------------
 
-## name "$operator" within negative postfix statement modifiers
+## name "%OPERATOR%" within negative control structures
 ## failures 2
 ## cut
 
-blah() unless \$foo $operator \$bar;
+unless ($foo %OPERATOR% $bar) {
+    blah();
+}
 
-blah() until \$foo $operator \$bar;
+until ($foo %OPERATOR% $bar) {
+    blah();
+}
+
+#-----------------------------------------------------------------------------
+
+## name "%OPERATOR%" within negative postfix statement modifiers
+## failures 2
+## cut
+
+blah() unless $foo %OPERATOR% $bar;
+
+blah() until $foo %OPERATOR% $bar;
 
 #-----------------------------------------------------------------------------
 END_COMPARATOR_CODE
+
+    $code_template =~ s{%OPERATOR%}{$operator}gmx;
+    print {$test_file} $code_template;
 }
 
 #-----------------------------------------------------------------------------
