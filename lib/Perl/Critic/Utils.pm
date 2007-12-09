@@ -1018,7 +1018,7 @@ sub _is_perl {
     my $first = <$fh>;
     close $fh or throw_generic "unable to close $file: $!";
 
-    return 1 if defined $first && ( $first =~ m{ \A [#]![ ]*\S*perl }mx );
+    return 1 if defined $first && ( $first =~ m{ \A [#]!.*perl }mx );
     return;
 }
 
