@@ -13,6 +13,8 @@ require Foo 1.0203 qw(foo bar);
 
 is( pcritique($policy, \$code), 0, $policy);
 
+use lib '/usr/lib/perl5/vendor_perl/5.8.8'; # RT #30388
+
 #-----------------------------------------------------------------------------
 
 ## name use failure
