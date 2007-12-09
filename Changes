@@ -1,3 +1,8 @@
+[1.xxx] Released on ????-??-??
+
+     Bug Fixes:
+     * RT #31281 perlcritic doesn't recognize "#!/bin/env perl" shebang 
+
 [1.080] Released on 2007-11-11
 
      Internals:
