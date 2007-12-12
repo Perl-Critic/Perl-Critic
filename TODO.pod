@@ -139,6 +139,8 @@ PBP and add more here.
 
 =over
 
+=item * Expressions::RequireFatCommasInHashConstructors
+
 =item * Modules::RequireNoMatchVarsWithUseEnglish
 
 =item * ErrorHandling::RequireCheckOfEvalErrorAfterEval
