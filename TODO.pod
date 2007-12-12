@@ -63,6 +63,11 @@ test module that extracts the perl code from a template and critiques it.
 
 =over
 
+=item * TestingAndDebugging::RequireUseStrict
+
+Treat "use Moose" as equivalent to "use strict" because Moose always turns on
+strictness.
+
 =item * Modules::RequireVersionVar
 
 Doesn't enforce three-part versions
