@@ -160,7 +160,7 @@ is( $options{-quiet}, 1);
     ok( $EVAL_ERROR, '-man option' );
 
     eval { @ARGV = qw( -noprofile -profile foo ); get_options() };
-    like( $EVAL_ERROR, qr/-noprofile with -profile/, '-noprofile & -profile');
+    like( $EVAL_ERROR, qr/-noprofile with -profile/, '-noprofile with -profile');
 
     eval { @ARGV = qw( -verbose bogus ); get_options() };
     like( $EVAL_ERROR, qr/looks odd/, 'Invalid -verbose option' );
