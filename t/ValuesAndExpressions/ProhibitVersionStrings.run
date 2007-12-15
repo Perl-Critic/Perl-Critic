@@ -1,6 +1,5 @@
 ## name Basic passing
 ## failures 0
-## TODO temporarily commented out so that a developer release can be made.
 ## cut
 
 use 5.006_001;
