@@ -225,6 +225,7 @@ my @arr1;
 
 ## name RT #27654 - NKH example 1
 ## failures 0
+## TODO PPI parses this code as a block and not a hash constructor.
 ## cut
 
 return
@@ -235,8 +236,17 @@ return
 
 #-----------------------------------------------------------------------------
 
-## name RT #27654 - NKH example 2
+## name RT #27654 - NKH example 2 - without allow_last_statement_to_be_comma_separated_in_map_and_grep
+## failures 1
+## cut
+
+%hash = map {$_, 1} @list ;
+
+#-----------------------------------------------------------------------------
+
+## name RT #27654 - NKH example 2 - with allow_last_statement_to_be_comma_separated_in_map_and_grep
 ## failures 0
+## parms { allow_last_statement_to_be_comma_separated_in_map_and_grep => 1 }
 ## cut
 
 %hash = map {$_, 1} @list ;
@@ -245,6 +255,7 @@ return
 
 ## name RT #27654 - NKH example 3
 ## failures 0
+## TODO PPI parses this code as blocks and not hash constructors.
 ## cut
 
 $self->DoSomething

@@ -12,7 +12,7 @@ use warnings;
 use Readonly;
 
 
-use Perl::Critic::Utils qw{ :characters :severities :classification };
+use Perl::Critic::Utils qw{ :characters :booleans :severities :classification };
 use Perl::Critic::Utils::PPI qw{ is_ppi_statement_subclass };
 
 use base 'Perl::Critic::Policy';
@@ -26,10 +26,26 @@ Readonly::Scalar my $EXPL => [ 68, 71 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return ()                  }
+sub supported_parameters {
+    return qw<
+        allow_last_statement_to_be_comma_separated_in_map_and_grep
+    >;
+}
+
 sub default_severity     { return $SEVERITY_HIGH      }
 sub default_themes       { return qw( core bugs pbp ) }
 sub applies_to           { return 'PPI::Statement'    }
+
+#-----------------------------------------------------------------------------
+
+sub initialize_if_enabled {
+    my ($self, $config) = @_;
+
+    $self->{_allow_last_statement_to_be_comma_separated_in_map_and_grep} =
+        $config->{allow_last_statement_to_be_comma_separated_in_map_and_grep};
+
+    return $TRUE;
+}
 
 #-----------------------------------------------------------------------------
 
@@ -43,15 +59,26 @@ sub violates {
     # got an element who's class really is PPI::Statement.
 
     return if _is_parent_a_constructor_or_list($elem);
-    return if _is_parent_a_foreach_loop($elem);
+    return if _is_parent_a_for_loop($elem);
+
+    if (
+        $self->{_allow_last_statement_to_be_comma_separated_in_map_and_grep}
+    ) {
+        return if not _is_direct_part_of_map_or_grep_block($elem);
+    }
 
     foreach my $child ( $elem->schildren() ) {
-        if ( $child->isa('PPI::Token::Word') ) {
-            return if _succeeding_commas_are_list_element_separators($child);
-        } elsif ( $child->isa('PPI::Token::Operator') ) {
-            if ( $child->content() eq $COMMA ) {
-                return $self->violation($DESC, $EXPL, $elem);
-            };
+        if (
+                not $self->{_allow_last_statement_to_be_comma_separated_in_map_and_grep}
+            and not _is_last_statement_in_a_block($child)
+        ) {
+            if ( $child->isa('PPI::Token::Word') ) {
+                return if _succeeding_commas_are_list_element_separators($child);
+            } elsif ( $child->isa('PPI::Token::Operator') ) {
+                if ( $child->content() eq $COMMA ) {
+                    return $self->violation($DESC, $EXPL, $elem);
+                };
+            }
         }
     }
 
@@ -59,7 +86,7 @@ sub violates {
 }
 
 sub _is_parent_a_constructor_or_list {
-    my $elem = shift;
+    my ($elem) = @_;
 
     my $parent = $elem->parent();
 
@@ -71,8 +98,8 @@ sub _is_parent_a_constructor_or_list {
     );
 }
 
-sub _is_parent_a_foreach_loop {
-    my $elem = shift;
+sub _is_parent_a_for_loop {
+    my ($elem) = @_;
 
     my $parent = $elem->parent();
 
@@ -83,8 +110,35 @@ sub _is_parent_a_foreach_loop {
     return 1 == scalar $parent->schildren(); # Multiple means C-style loop.
 }
 
+sub _is_direct_part_of_map_or_grep_block {
+    my ($elem) = @_;
+
+    my $parent = $elem->parent();
+    return if not $parent;
+    return if not $parent->isa('PPI::Structure::Block');
+
+    my $block_prior_sibling = $parent->sprevious_sibling();
+    return if not $block_prior_sibling;
+    return if not $block_prior_sibling->isa('PPI::Token::Word');
+
+    return $block_prior_sibling eq 'map' || $block_prior_sibling eq 'grep';
+}
+
+sub _is_last_statement_in_a_block {
+    my ($elem) = @_;
+
+    my $parent = $elem->parent();
+    return if not $parent;
+    return if not $parent->isa('PPI::Structure::Block');
+
+    my $next_sibling = $elem->snext_sibling();
+    return if not $next_sibling;
+
+    return 1;
+}
+
 sub _succeeding_commas_are_list_element_separators {
-    my $elem = shift;
+    my ($elem) = @_;
 
     if (
             is_perl_builtin_with_zero_and_or_one_arguments($elem)
@@ -152,6 +206,26 @@ will not, because it is equivalent to
 
   print( join q{, }, 2, 3, 5, 7 );
   ": the single-digit primes.\n";
+
+
+=head1 CONFIGURATION
+
+This policy can be configured to allow the last statement in a C<map>
+or C<grep> block to be comma separated.  This is done via the
+C<allow_last_statement_to_be_comma_separated_in_map_and_grep> option
+like so:
+
+  [ValuesAndExpressions::ProhibitCommaSeparatedStatements]
+  allow_last_statement_to_be_comma_separated_in_map_and_grep = 1
+
+Actually, any true value will work.  With this option off (the
+default), the following code violates this policy.
+
+  %hash = map {$_, 1} @list;
+
+With this option on, this statement is allowed.  Even if this option
+is off, using a fat comma C<< => >> works, but that forces
+stringification on the first value, which may not be what you want.
 
 =head1 AUTHOR
 

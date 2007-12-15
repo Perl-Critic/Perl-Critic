@@ -1,7 +1,12 @@
 [1.xxx] Released on ????-??-??
 
+     Policy Changes:
+     * Added an allow_last_statement_to_be_comma_separated_in_map_and_grep
+       option to ValuesAndExpressions::ProhibitCommaSeparatedStatements.
+       Partial response to http://rt.cpan.org/Public/Bug/Display.html?id=27654.
+
      Bug Fixes:
-     * RT #31281 perlcritic doesn't recognize "#!/bin/env perl" shebang 
+     * RT #31281 perlcritic doesn't recognize "#!/bin/env perl" shebang
 
 [1.080] Released on 2007-11-11
 
