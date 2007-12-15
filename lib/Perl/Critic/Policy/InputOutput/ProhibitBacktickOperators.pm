@@ -15,7 +15,7 @@ use Perl::Critic::Utils qw{ :booleans :severities is_in_void_context };
 
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.080';
+our $VERSION = '1.081_001';
 
 #-----------------------------------------------------------------------------
 

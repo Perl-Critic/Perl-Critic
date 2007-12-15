@@ -19,7 +19,7 @@ use Fatal qw{ open close };
 
 use Perl::Critic::BuildUtilities qw{ recommended_module_versions };
 
-our $VERSION = '1.080';
+our $VERSION = '1.081_001';
 
 print "\n\nGenerating tests that hide modules and then run other tests.\n";
 

@@ -21,7 +21,7 @@ use overload ( q{""} => 'to_string', cmp => '_compare' );
 use Perl::Critic::Utils qw{ :characters :internal_lookup };
 use Perl::Critic::Exception::Fatal::Internal qw{ &throw_internal };
 
-our $VERSION = '1.080';
+our $VERSION = '1.081_001';
 
 #Class variables...
 our $FORMAT = "%m at line %l, column %c. %e.\n"; #Default stringy format
