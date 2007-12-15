@@ -65,3 +65,5 @@ tools
 \.swd$
 ^test\.swf$
 
+# Developer docs
+\bdoc\b
