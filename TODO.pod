@@ -136,8 +136,13 @@ Check for -w on the shbang line.
 
 =head1 OTHER PBP POLICIES THAT SEEM FEASIBLE TO IMPLEMENT
 
-All the ones we formerly listed here are now done.  Feel free to thumb through
-PBP and add more here.
+=over
+
+=item * Modules::RequireUseVersion [405-406]
+
+=item * Modules::RequireThreePartVersion [405-406]
+
+=back
 
 
 =head1 NON-PBP POLICIES WANTED
