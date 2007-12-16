@@ -1,6 +1,6 @@
 ---
 name: Perl-Critic
-version: 1.081_001
+version: 1.081_002
 author:
   - 'Jeffrey Thalhammer <thaljef@cpan.org>'
 abstract: Critique Perl source code for best-practices

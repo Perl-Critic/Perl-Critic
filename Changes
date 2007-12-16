@@ -1,10 +1,10 @@
-[1.xxx] Released on ????-??-??
+[1.081_002] Released on 2007-12-16
 
      Bug fixes:
      * Use \p{IsUpper} and \b{IsLower} instead of \p{IsUppercase} and
        \b{IsLowercase} in order to restore compatibility with perl 5.6.
 
-[1.080_001] Released on 2007-12-15
+[1.081_001] Released on 2007-12-15
 
      Policy Changes:
      * Added an allow_last_statement_to_be_comma_separated_in_map_and_grep
