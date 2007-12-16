@@ -59,7 +59,7 @@ sub violates {
 
     #Arguments to 'no warnings' are usually a list of literals or a
     #qw() list.  Rather than trying to parse the various PPI elements,
-    #I just use a regext to split the statement into words.  This is
+    #I just use a regex to split the statement into words.  This is
     #kinda lame, but it does the trick for now.
 
     # TODO consider: a possible alternate implementation:
@@ -69,7 +69,7 @@ sub violates {
 
     my $stmnt = $elem->statement();
     return if !$stmnt;
-    my @words = $stmnt =~ m{ (\p{IsLowercase}+) }gmx;
+    my @words = $stmnt =~ m/ (\p{IsLower}+) /gmx;
     @words = grep { $_ ne 'qw' && $_ ne 'no' && $_ ne 'warnings' } @words;
     return if all { exists $self->{_allow}->{$_} } @words;
 

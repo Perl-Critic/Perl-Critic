@@ -67,7 +67,7 @@ sub violates {
 
     my $stmnt = $elem->statement();
     return if !$stmnt;
-    my @words = $stmnt =~ m{ (\p{IsLowercase}+) }gmx;
+    my @words = $stmnt =~ m/ (\p{IsLower}+) /gmx;
     @words = grep { $_ ne 'qw' && $_ ne 'no' && $_ ne 'strict' } @words;
     return if all { exists $self->{_allow}->{$_} } @words;
 

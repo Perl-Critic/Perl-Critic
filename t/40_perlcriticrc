@@ -8,6 +8,7 @@
 profile-strictness = quiet
 severity = 1
 theme = core
+verbose = %f: %m at line %l, column %c.  %e.  (Severity: %s, %p)\n
 
 #-----------------------------------------------------------------------------
 

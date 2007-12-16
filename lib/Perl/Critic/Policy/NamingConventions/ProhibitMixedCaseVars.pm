@@ -19,8 +19,8 @@ our $VERSION = '1.081_001';
 #-----------------------------------------------------------------------------
 
 Readonly::Scalar my $PACKAGE_RX => qr/ :: /mx;
-Readonly::Scalar my $MIXED_RX   => qr{ \p{IsUppercase}\p{IsLowercase} |
-                                       \p{IsLowercase}\p{IsUppercase} }mx;
+Readonly::Scalar my $MIXED_RX   => qr{ \p{IsUpper}\p{IsLower} |
+                                       \p{IsLower}\p{IsUpper} }mx;
 Readonly::Scalar my $DESC       => 'Mixed-case variable name(s)';
 Readonly::Scalar my $EXPL       => [ 44 ];
 
