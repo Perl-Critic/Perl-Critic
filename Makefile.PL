@@ -6,7 +6,10 @@
 #        ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :
 ########################################################################
 
-require 5.006001;
+BEGIN {
+    require 5.006001;
+}
+
 use strict;
 use warnings;
 
