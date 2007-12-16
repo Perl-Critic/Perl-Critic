@@ -1,3 +1,9 @@
+[1.081_003] Released on 2007-12-16
+
+     Bug fixes:
+     * Missed some usage of IsUppercase in 1.081_002.
+     * Hope to finally kill off usage under 5.5.5.
+
 [1.081_002] Released on 2007-12-16
 
      Bug fixes:
