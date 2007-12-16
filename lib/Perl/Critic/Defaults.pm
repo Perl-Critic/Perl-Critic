@@ -16,7 +16,7 @@ use Perl::Critic::Utils qw{
 };
 use Perl::Critic::Utils::Constants qw{ $PROFILE_STRICTNESS_DEFAULT };
 
-our $VERSION = '1.081_001';
+our $VERSION = '1.081_002';
 
 #-----------------------------------------------------------------------------
 
