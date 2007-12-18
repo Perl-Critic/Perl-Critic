@@ -20,12 +20,12 @@ our $VERSION = '1.081_003';
 #-----------------------------------------------------------------------------
 
 our @EXPORT_OK = qw(
-    &parse_regexp
-    &get_match_string
-    &get_substitute_string
-    &get_modifiers
-    &get_delimiters
-    &ppiify
+    parse_regexp
+    get_match_string
+    get_substitute_string
+    get_modifiers
+    get_delimiters
+    ppiify
 );
 
 our %EXPORT_TAGS = (
