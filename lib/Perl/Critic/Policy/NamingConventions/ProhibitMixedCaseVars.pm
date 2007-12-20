@@ -12,6 +12,7 @@ use warnings;
 use Readonly;
 
 use Perl::Critic::Utils qw{ :severities };
+
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.081_003';
@@ -19,8 +20,8 @@ our $VERSION = '1.081_003';
 #-----------------------------------------------------------------------------
 
 Readonly::Scalar my $PACKAGE_RX => qr/ :: /mx;
-Readonly::Scalar my $MIXED_RX   => qr{ \p{IsUpper}\p{IsLower} |
-                                       \p{IsLower}\p{IsUpper} }mx;
+Readonly::Scalar my $MIXED_RX => qr{ [[:upper:]] [[:lower:]] |
+                                     [[:lower:]]  [[:upper:]] }mx;
 Readonly::Scalar my $DESC       => 'Mixed-case variable name(s)';
 Readonly::Scalar my $EXPL       => [ 44 ];
 

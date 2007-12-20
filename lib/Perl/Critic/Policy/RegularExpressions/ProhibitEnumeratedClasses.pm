@@ -17,6 +17,7 @@ use Carp qw(carp);
 
 use Perl::Critic::Utils qw{ :booleans :severities hashify };
 use Perl::Critic::Utils::PPIRegexp qw{ ppiify parse_regexp get_modifiers };
+
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.081_003';
@@ -29,9 +30,9 @@ Readonly::Scalar my $EXPL => [248];
 Readonly::Array my @PATTERNS => (  # order matters: most to least specific
    [q{ },'\\t','\\r','\\n']      => ['\\s', '\\S'],  ##no critic (Interpolation)
    ['A-Z','a-z','_']             => ['\\w', '\\W'],
-   ['A-Z','a-z']                 => ['\\p{IsAlphabetic}','\\P{IsAlphabetic}'],
-   ['A-Z']                       => ['\\p{IsUpper}','\\P{IsUpper}'],
-   ['a-z']                       => ['\\p{IsLower}','\\P{IsLower}'],
+   ['A-Z','a-z']                 => ['[[:alpha:]]','[[:^alpha:]]'],
+   ['A-Z']                       => ['[[:upper:]]','[[:^upper:]]'],
+   ['a-z']                       => ['[[:lower:]]','[[:^lower:]]'],
    ['0-9']                       => ['\\d','\\D'],
    ['\w']                        => [undef, '\\W'],
    ['\s']                        => [undef, '\\S'],
