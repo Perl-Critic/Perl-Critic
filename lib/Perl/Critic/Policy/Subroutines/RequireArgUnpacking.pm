@@ -20,7 +20,7 @@ use Carp;
 use Perl::Critic::Utils qw{ :booleans :severities words_from_string };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.081_003';
+our $VERSION = '1.081_004';
 
 #-----------------------------------------------------------------------------
 
