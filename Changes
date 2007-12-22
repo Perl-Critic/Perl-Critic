@@ -1,3 +1,8 @@
+[1.081_005] Released on 2007-12-xx
+     Bug fixes:
+     * RT #30388 ValuesAndExpressions::ProhibitVersionStrings complained
+       about numbered directories in "use lib".
+
 [1.081_004] Released on 2007-12-20
 
      Bug fixes:

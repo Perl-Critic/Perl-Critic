@@ -32,8 +32,13 @@ sub applies_to           { return 'PPI::Statement::Include' }
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
-    if ( $elem->type() eq 'use' || $elem->type() eq 'require' ) {
-
+    if (
+        (
+                $elem->type() eq 'use'
+            or  $elem->type() eq 'require'
+        )
+        and $elem->module ne 'lib'
+    ) {
         #This is a pretty crude way to verify that a version string is
         #being used.  But there are several permutations of the syntax
         #for C<use> and C<require>.  Also PPI doesn't parses strings
