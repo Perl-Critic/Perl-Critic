@@ -37,7 +37,7 @@ my @concrete_exceptions = qw{
 };
 
 plan tests =>
-        113
+        106
     +   (  9 * scalar @concrete_exceptions  )
     +   ( 14 * scalar @bundled_policy_names );
 
@@ -83,19 +83,6 @@ can_ok('Perl::Critic::Config', 'site_policy_names');
 my $config = Perl::Critic::Config->new( -profile => 'NONE');
 isa_ok($config, 'Perl::Critic::Config');
 is($config->VERSION(), $version_string, 'Perl::Critic::Config version');
-
-#-----------------------------------------------------------------------------
-# Test Perl::Critic::ConfigErrors module interface
-
-use_ok('Perl::Critic::ConfigErrors');
-can_ok('Perl::Critic::ConfigErrors', 'new');
-can_ok('Perl::Critic::ConfigErrors', 'messages');
-can_ok('Perl::Critic::ConfigErrors', 'add_message');
-can_ok('Perl::Critic::ConfigErrors', 'add_bad_option_message');
-
-my $errors = Perl::Critic::ConfigErrors->new();
-isa_ok($errors, 'Perl::Critic::ConfigErrors');
-is($errors->VERSION(), $version_string, 'Perl::Critic::ConfigErrors version');
 
 #-----------------------------------------------------------------------------
 # Test Perl::Critic::Config::Defaults module interface
@@ -223,7 +210,7 @@ can_ok('Perl::Critic::ProfilePrototype', 'to_string');
 
 my $prototype = Perl::Critic::ProfilePrototype->new();
 isa_ok($prototype, 'Perl::Critic::ProfilePrototype');
-is($listing->VERSION(), $version_string, 'Perl::Critic::ProfilePrototype version');
+is($prototype->VERSION(), $version_string, 'Perl::Critic::ProfilePrototype version');
 
 #-----------------------------------------------------------------------------
 # Test module interface for exceptions

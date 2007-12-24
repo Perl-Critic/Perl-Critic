@@ -62,8 +62,8 @@ use Perl::Critic::Defaults;
     );
 
     eval { Perl::Critic::Defaults->new( %invalid_defaults ) };
-    like( $EVAL_ERROR, qr/^Setting "foo" is not/m, 'First invalid default' );
-    like( $EVAL_ERROR, qr/^Setting "bar" is not/m, 'Second invalid default' );
+    like( $EVAL_ERROR, qr/"foo" is not a supported option/m, 'First invalid default' );
+    like( $EVAL_ERROR, qr/"bar" is not a supported option/m, 'Second invalid default' );
 
 }
 

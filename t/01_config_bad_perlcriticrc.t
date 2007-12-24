@@ -16,80 +16,124 @@ use strict;
 use warnings;
 
 use English qw{ -no_match_vars };
+use Readonly;
 
 use Test::More;
 
 use Perl::Critic::PolicyFactory (-test => 1);
 use Perl::Critic;
 
-my $test_count = 11;
-plan tests => $test_count;
+Readonly::Scalar my $TEST_COUNT => 13;
+plan tests => $TEST_COUNT;
 
-my $profile = 't/01_bad_perlcriticrc';
+Readonly::Scalar my $PROFILE => 't/01_bad_perlcriticrc';
+Readonly::Scalar my $INVALID_PARAMETER_MESSAGE =>
+    q{The BuiltinFunctions::RequireBlockGrep policy doesn't take a "no_such_parameter" option.};
+Readonly::Scalar my $REQUIRE_POD_SECTIONS_SOURCE_MESSAGE_PREFIX =>
+    q{The value for the Documentation::RequirePodSections "source" option ("Zen_and_the_Art_of_Motorcycle_Maintenance") is not one of the allowed values: };
 
 eval {
-    my $critic = Perl::Critic->new( '-profile' => $profile );
+    my $critic = Perl::Critic->new( '-profile' => $PROFILE );
 };
 
+my $test_passed;
 my $eval_result = $EVAL_ERROR;
 
-ok( $eval_result, 'should get an exception when using a bad rc file' );
+$test_passed =
+    ok( $eval_result, 'should get an exception when using a bad rc file' );
 
-SKIP: {
-    skip 'because there was no exception', $test_count - 1
-        if not $eval_result;
+die "No point in continuing.\n" if not $test_passed;
 
-    isa_ok($eval_result, 'Perl::Critic::ConfigErrors', '$EVAL_ERROR');
+$test_passed =
+    isa_ok(
+        $eval_result,
+        'Perl::Critic::Exception::AggregateConfiguration',
+        '$EVAL_ERROR',
+    );
 
-    SKIP: {
-        skip
-            q{because the exception wasn't an instance of ConfigErrors},
-            $test_count - 2
-            if not $eval_result->isa('Perl::Critic::ConfigErrors');
-
-        my @messages = @{ $eval_result->messages() };
-
-        my @parameters = qw{
-            exclude
-            include
-            profile-strictness
-            severity
-            single-policy
-            theme
-            top
-            verbose
-        };
-
-        my %expected_regexes =
-            map { $_ => generate_message_regex( $_, $profile ) } @parameters;
-
-        is(
-            scalar @messages,
-            scalar @parameters,
-            'should have received the correct number of error messages'
-        );
-
-        while (my ($parameter, $regex) = each %expected_regexes) {
-            is(
-                ( scalar grep { m/$regex/ } @messages ),
-                1,
-                "should have received one and only one message for $parameter",
-            );
-        }
-    }
+if ( not $test_passed ) {
+    diag( $eval_result );
+    die "No point in continuing.\n";
 }
 
-sub generate_message_regex {
+my @exceptions = @{ $eval_result->exceptions() };
+
+my @parameters = qw{
+    exclude
+    include
+    profile-strictness
+    severity
+    single-policy
+    theme
+    top
+    verbose
+};
+
+my %expected_regexes =
+    map
+        { $_ => generate_global_message_regex( $_, $PROFILE ) }
+        @parameters;
+
+# TODO: my $expected_exceptions = 2 + scalar @parameters;
+my $expected_exceptions = 1 + scalar @parameters;
+is(
+    scalar @exceptions,
+    $expected_exceptions,
+    'should have received the correct number of exceptions'
+);
+if (@exceptions != $expected_exceptions) {
+    diag "Exception: $_" foreach @exceptions;
+}
+
+while (my ($parameter, $regex) = each %expected_regexes) {
+    is(
+        ( scalar grep { m/$regex/ } @exceptions ),
+        1,
+        "should have received one and only one exception for $parameter",
+    );
+}
+
+is(
+    ( scalar grep { $INVALID_PARAMETER_MESSAGE eq $_ } @exceptions ),
+    1,
+    "should have received an extra-parameter exception",
+);
+
+TODO: {
+    local $TODO = q<This won't pass until parameters are in place.>;
+
+    # Test that we get an exception for bad individual policy configuration.
+    # The selection of RequirePodSections is arbitrary.
+    is(
+        ( scalar grep { is_require_pod_sections_source_exception($_) } @exceptions ),
+        1,
+        "should have received an invalid source exception for RequirePodSections",
+    );
+}
+
+sub generate_global_message_regex {
     my ($parameter, $file) = @_;
 
     return
         qr/
             \A
-            The [ ] value [ ] for [ ]
+            The [ ] value [ ] for [ ] the [ ] global [ ]
             "$parameter"
             .*
             found [ ] in [ ] "$file"
         /xms;
+}
+
+sub is_require_pod_sections_source_exception {
+    my ($exception) = @_;
+
+    my $prefix =
+        substr
+            $exception,
+            0,
+            length $REQUIRE_POD_SECTIONS_SOURCE_MESSAGE_PREFIX;
+
+    return $prefix eq $REQUIRE_POD_SECTIONS_SOURCE_MESSAGE_PREFIX;
 }
 
 #-----------------------------------------------------------------------------

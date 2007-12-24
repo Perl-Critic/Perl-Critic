@@ -40,9 +40,6 @@ provides:
   Perl::Critic::Config:
     file: lib/Perl/Critic/Config.pm
     version: 1.081_004
-  Perl::Critic::ConfigErrors:
-    file: lib/Perl/Critic/ConfigErrors.pm
-    version: 1.081_004
   Perl::Critic::Defaults:
     file: lib/Perl/Critic/Defaults.pm
     version: 1.081_004
@@ -489,6 +486,9 @@ provides:
     version: 1.081_004
   Perl::Critic::Utils::Constants:
     file: lib/Perl/Critic/Utils/Constants.pm
+    version: 1.081_004
+  Perl::Critic::Utils::DataConversion:
+    file: lib/Perl/Critic/Utils/DataConversion.pm
     version: 1.081_004
   Perl::Critic::Utils::McCabe:
     file: lib/Perl/Critic/Utils/McCabe.pm

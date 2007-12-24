@@ -11,6 +11,13 @@ profile-strictness = silly
 top = -1
 verbose = 2095
 
+# Test non-existent parameter
+[BuiltinFunctions::RequireBlockGrep]
+no_such_parameter = foo
+
+# Test invalid parameter value
+[Documentation::RequirePodSections]
+source = Zen_and_the_Art_of_Motorcycle_Maintenance
 
 # Local Variables:
 #   mode: cperl

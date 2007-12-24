@@ -294,17 +294,17 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
     eval{ Perl::Critic::Config->new( -severity => 'bogus' ) };
     like(
         $EVAL_ERROR,
-        qr/The value for "-severity" \("bogus"\) is not one of the valid severity names/,
+        qr/The value for the global "-severity" option \("bogus"\) is not one of the valid severity names/,
         'invalid severity'
     );
 
     # Try using vague -single-policy option
     eval{ Perl::Critic::Config->new( '-single-policy' => '.*' ) };
-    like( $EVAL_ERROR, qr/Multiple policies matched/, 'vague -single-policy' );
+    like( $EVAL_ERROR, qr/matched multiple policies/, 'vague -single-policy' );
 
     # Try using invalid -single-policy option
     eval{ Perl::Critic::Config->new( '-single-policy' => 'bogus' ) };
-    like( $EVAL_ERROR, qr/No policies matched/, 'invalid -single-policy' );
+    like( $EVAL_ERROR, qr/did not match any policies/, 'invalid -single-policy' );
 }
 
 #-----------------------------------------------------------------------------

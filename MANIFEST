@@ -56,7 +56,6 @@ inc/Perl/Critic/BuildUtilities.pm
 INSTALL
 lib/Perl/Critic.pm
 lib/Perl/Critic/Config.pm
-lib/Perl/Critic/ConfigErrors.pm
 lib/Perl/Critic/Defaults.pm
 lib/Perl/Critic/DEVELOPER.pod
 lib/Perl/Critic/Document.pm
@@ -208,6 +207,7 @@ lib/Perl/Critic/Theme.pm
 lib/Perl/Critic/UserProfile.pm
 lib/Perl/Critic/Utils.pm
 lib/Perl/Critic/Utils/Constants.pm
+lib/Perl/Critic/Utils/DataConversion.pm
 lib/Perl/Critic/Utils/McCabe.pm
 lib/Perl/Critic/Utils/PPI.pm
 lib/Perl/Critic/Utils/PPIRegexp.pm
