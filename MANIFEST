@@ -199,6 +199,13 @@ lib/Perl/Critic/Policy/Variables/RequireLocalizedPunctuationVars.pm
 lib/Perl/Critic/Policy/Variables/RequireNegativeIndices.pm
 lib/Perl/Critic/PolicyFactory.pm
 lib/Perl/Critic/PolicyListing.pm
+lib/Perl/Critic/PolicyParameter.pm
+lib/Perl/Critic/PolicyParameter/Behavior.pm
+lib/Perl/Critic/PolicyParameter/Behavior/Boolean.pm
+lib/Perl/Critic/PolicyParameter/Behavior/Enumeration.pm
+lib/Perl/Critic/PolicyParameter/Behavior/Integer.pm
+lib/Perl/Critic/PolicyParameter/Behavior/String.pm
+lib/Perl/Critic/PolicyParameter/Behavior/StringList.pm
 lib/Perl/Critic/PolicySummary.pod
 lib/Perl/Critic/ProfilePrototype.pm
 lib/Perl/Critic/Statistics.pm

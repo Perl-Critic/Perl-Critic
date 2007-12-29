@@ -469,6 +469,27 @@ provides:
   Perl::Critic::PolicyListing:
     file: lib/Perl/Critic/PolicyListing.pm
     version: 1.081_004
+  Perl::Critic::PolicyParameter:
+    file: lib/Perl/Critic/PolicyParameter.pm
+    version: 1.081_004
+  Perl::Critic::PolicyParameter::Behavior:
+    file: lib/Perl/Critic/PolicyParameter/Behavior.pm
+    version: 1.081_004
+  Perl::Critic::PolicyParameter::Behavior::Boolean:
+    file: lib/Perl/Critic/PolicyParameter/Behavior/Boolean.pm
+    version: 1.081_004
+  Perl::Critic::PolicyParameter::Behavior::Enumeration:
+    file: lib/Perl/Critic/PolicyParameter/Behavior/Enumeration.pm
+    version: 1.081_004
+  Perl::Critic::PolicyParameter::Behavior::Integer:
+    file: lib/Perl/Critic/PolicyParameter/Behavior/Integer.pm
+    version: 1.081_004
+  Perl::Critic::PolicyParameter::Behavior::String:
+    file: lib/Perl/Critic/PolicyParameter/Behavior/String.pm
+    version: 1.081_004
+  Perl::Critic::PolicyParameter::Behavior::StringList:
+    file: lib/Perl/Critic/PolicyParameter/Behavior/StringList.pm
+    version: 1.081_004
   Perl::Critic::ProfilePrototype:
     file: lib/Perl/Critic/ProfilePrototype.pm
     version: 1.081_004
