@@ -101,6 +101,8 @@ __END__
 
 =pod
 
+=for stopwords flowcontrol
+
 =head1 NAME
 
 Perl::Critic::Policy::ControlStructures::ProhibitPostfixControls
