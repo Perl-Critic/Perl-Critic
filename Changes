@@ -1,4 +1,10 @@
 [1.081_005] Released on 2007-12-xx
+
+     Policy Changes:
+     * ControlStructures::ProhibitPostfixControls gains the ability to have
+       the flow control statements allowed to be modified.  This in response
+       to RT #29540.
+
      Bug fixes:
      * RT #30388 ValuesAndExpressions::ProhibitVersionStrings complained
        about numbered directories in "use lib".
