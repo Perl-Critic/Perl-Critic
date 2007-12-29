@@ -66,6 +66,10 @@ eval {
 emit_tar_warning_if_necessary();
 
 
+# An attempt was made by Elliot to get the "resources" META.yml entry going
+# here, but he failed.  The version in Build.PL works.  See the Makefile.PL
+# in the ack distribution for an example.
+
 WriteMakefile(
     NAME           => 'Perl::Critic',
     AUTHOR         => 'Jeffrey Thalhammer <thaljef@cpan.org>',

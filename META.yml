@@ -6,6 +6,9 @@ author:
 abstract: Critique Perl source code for best-practices
 license: perl
 resources:
+  MailingList: http://perlcritic.tigris.org/servlets/SummarizeList?listName=users
+  Repository: http://perlcritic.tigris.org/source/browse/perlcritic/
+  homepage: http://perlcritic.com
   license: http://dev.perl.org/licenses/
 requires:
   B::Keywords: 1.05

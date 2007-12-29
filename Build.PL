@@ -98,6 +98,15 @@ my $builder = Module::Build->new(
 
     script_files   => ['bin/perlcritic'],
 
+    meta_merge     => {
+        resources   => {
+            homepage    => 'http://perlcritic.com',
+            license     => 'http://dev.perl.org/licenses/',
+            Repository  => 'http://perlcritic.tigris.org/source/browse/perlcritic/',
+            MailingList => 'http://perlcritic.tigris.org/servlets/SummarizeList?listName=users',
+        }
+    },
+
     add_to_cleanup => [
         qw<
             MANIFEST.bak
