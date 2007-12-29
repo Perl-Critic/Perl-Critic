@@ -8,8 +8,6 @@ do_something() until $condition;
 do_something() unless $condition;
 do_something() for @list;
 
-is( pcritique($policy, \$code), 5, $policy);
-
 #-----------------------------------------------------------------------------
 
 ## name Configured to allow all
@@ -23,22 +21,17 @@ do_something() until $condition;
 do_something() unless $condition;
 do_something() for @list;
 
-is( pcritique($policy, \$code, \%config), 0, $policy);
-
 #-----------------------------------------------------------------------------
 
 ## name Configured to allow all, all regular control structures
 ## failures 0
-## parms {allow => 'qq( qq{ qq[ qq/'}
+## parms {allow => 'if unless until for while'}
 ## cut
 
 if($condition){ do_something() } 
 while($condition){ do_something() }
 until($condition){ do_something() }
 unless($condition){ do_something() }
-
-%config = (allow => 'if while until unless for');
-is( pcritique($policy, \$code, \%config), 0, $policy);
 
 #-----------------------------------------------------------------------------
 
@@ -87,6 +80,36 @@ confess if $condition;
 
 exit 0 if $condition;
 exit if $condition;
+
+#-----------------------------------------------------------------------------
+
+## name override exempt flowcontrols
+## failures 0
+## parms {flowcontrol => 'assert'}
+## cut
+
+use Carp::Assert;
+
+assert $something if $condition;
+
+
+#-----------------------------------------------------------------------------
+
+## name overriding exempt flowcontrols restores the defaults
+## failures 8
+## parms {flowcontrol => 'assert'}
+## cut
+
+use Carp::Assert;
+
+warn    $something if $condition;
+die     $something if $condition;
+carp    $something if $condition;
+croak   $something if $condition;
+cluck   $something if $condition;
+confess $something if $condition;
+exit    $something if $condition;
+do_something() if $condition;
 
 #-----------------------------------------------------------------------------
 

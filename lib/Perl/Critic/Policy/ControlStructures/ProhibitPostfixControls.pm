@@ -29,15 +29,15 @@ Readonly::Hash my %PAGES_OF => (
     while  => [ 96     ],
 );
 
-Readonly::Array my @EXEMPTIONS => qw( warn die carp croak cluck confess goto exit );
-Readonly::Hash my %EXEMPTIONS => hashify( @EXEMPTIONS );
+# These functions can have postfix 'if'.
+my @DEFAULT_FLOW_CONTROL = qw( warn die carp croak cluck confess exit );
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return qw( allow )           }
-sub default_severity { return $SEVERITY_LOW         }
-sub default_themes   { return qw(core pbp cosmetic) }
-sub applies_to       { return 'PPI::Token::Word'    }
+sub supported_parameters { return qw( allow flowcontrol ) }
+sub default_severity     { return $SEVERITY_LOW           }
+sub default_themes       { return qw(core pbp cosmetic)   }
+sub applies_to           { return 'PPI::Token::Word'      }
 
 #-----------------------------------------------------------------------------
 
@@ -46,11 +46,16 @@ sub initialize_if_enabled {
 
     $self->{_allow} = {};
 
-    #Set config, if defined
+    # Set configuration for allowed postfix operators.
     if ( defined $config->{allow} ) {
         my %allowed = hashify( words_from_string( $config->{allow} ) );
         $self->{_allow} = \%allowed;
     }
+
+    # set configuration for exempt flow-control functions that can have postfix 'if' on them
+    $self->{_flowcontrol} = defined $config->{flowcontrol} ?
+        { hashify( words_from_string( $config->{flowcontrol} ) ) } :
+        { hashify( @DEFAULT_FLOW_CONTROL ) };
 
     return $TRUE;
 }
@@ -77,12 +82,12 @@ sub violates {
     return if !$stmnt;
     return if $stmnt->isa('PPI::Statement::Compound');
 
-    #Handle special cases
+    # Handle special cases
     if ( $elem eq 'if' ) {
-        #Postfix 'if' allowed with loop breaks, or other
-        #flow-controls like 'die', 'warn', and 'croak'
+        # Postfix 'if' allowed with loop breaks, or other
+        # flow-controls like 'die', 'warn', and 'croak'
         return if $stmnt->isa('PPI::Statement::Break');
-        return if defined $EXEMPTIONS{ $stmnt->schild(0) };
+        return if defined $self->{_flowcontrol}{ $stmnt->schild(0) };
     }
 
     # If we get here, it must be postfix.
@@ -143,6 +148,12 @@ flow-control structures in a F<.perlcriticrc> file:
 
 By default, all postfix control keywords are prohibited.
 
+The set of flow-control functions can also be configured with the
+'flowcontrol' directive in your F<.perlcriticrc> file:
+
+ [ControlStructures::ProhibitPostfixControls]
+ flowcontrol = warn die carp croak cluck confess goto exit
+
 =head1 NOTES
 
 The C<die>, C<croak>, and C<confess> functions are frequently used as
@@ -150,6 +161,7 @@ flow-controls just like C<next> or C<last>.  So this Policy does
 permit you to use a postfix C<if> when the statement begins with one
 of those functions.  It is also pretty common to use C<warn>, C<carp>,
 and C<cluck> with a postfix C<if>, so those are allowed too.
+
 
 =head1 AUTHOR
 
