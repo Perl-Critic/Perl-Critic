@@ -35,7 +35,7 @@ sub can_podspell {
 SKIP: {
 
 $code = <<'END_PERL';
-=head1 Test
+=head1 Silly
 
 =cut
 END_PERL
