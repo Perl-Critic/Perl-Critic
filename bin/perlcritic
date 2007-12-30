@@ -28,7 +28,7 @@ use Perl::Critic::Violation qw();
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '1.081_004';
+our $VERSION = '1.081_005';
 
 Readonly::Scalar my $DEFAULT_VIOLATIONS_FOR_TOP => 20;
 
