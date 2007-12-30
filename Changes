@@ -1,4 +1,4 @@
-[1.081_005] Released on 2007-12-xx
+[1.081_005] Released on 2007-12-29
 
      Policy Changes:
      * ControlStructures::ProhibitPostfixControls gains the ability to have
@@ -8,6 +8,9 @@
      Bug fixes:
      * RT #30388 ValuesAndExpressions::ProhibitVersionStrings complained
        about numbered directories in "use lib".
+     * Attempt to find a word in English that is spelled identically by the
+       British and Americans, yet does not exist in any other language, even
+       with a completely different meaning for testing of PodSpelling.
 
 [1.081_004] Released on 2007-12-20
 
