@@ -142,7 +142,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Theme - Construct thematic sets of policies
+Perl::Critic::Theme - Construct thematic sets of policies.
 
 =head1 DESCRIPTION
 

@@ -50,7 +50,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Exception::Configuration::Option::Policy - A problem with configuration of a policy
+Perl::Critic::Exception::Configuration::Option::Policy - A problem with configuration of a policy.
 
 =head1 DESCRIPTION
 

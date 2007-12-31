@@ -62,7 +62,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::PolicyParameter::Behavior::Boolean - Actions appropriate for a boolean.
+Perl::Critic::PolicyParameter::Behavior::Boolean - Actions appropriate for a boolean parameter.
 
 
 =head1 DESCRIPTION

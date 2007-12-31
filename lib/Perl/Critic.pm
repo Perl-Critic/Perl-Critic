@@ -404,7 +404,7 @@ ben Jore Dolan's
 
 =head1 NAME
 
-Perl::Critic - Critique Perl source code for best-practices
+Perl::Critic - Critique Perl source code for best-practices.
 
 =head1 SYNOPSIS
 

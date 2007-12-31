@@ -57,7 +57,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::PolicyParameter::Behavior::String - Actions appropriate for a simple string.
+Perl::Critic::PolicyParameter::Behavior::String - Actions appropriate for a simple string parameter.
 
 
 =head1 DESCRIPTION

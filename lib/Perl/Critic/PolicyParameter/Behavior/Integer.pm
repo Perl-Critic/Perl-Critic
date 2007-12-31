@@ -130,7 +130,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::PolicyParameter::Behavior::Integer - Actions appropriate for an integer.
+Perl::Critic::PolicyParameter::Behavior::Integer - Actions appropriate for an integer parameter.
 
 
 =head1 DESCRIPTION

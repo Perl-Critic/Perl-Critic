@@ -326,7 +326,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::PolicyFactory - Instantiate Policy objects
+Perl::Critic::PolicyFactory - Instantiates Policy objects.
 
 =head1 DESCRIPTION
 

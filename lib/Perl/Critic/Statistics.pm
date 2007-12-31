@@ -166,7 +166,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Statistics - Compile stats on Perl::Critic violations
+Perl::Critic::Statistics - Compile stats on Perl::Critic violations.
 
 =head1 DESCRIPTION
 

@@ -68,7 +68,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Utils::Constants - Global constants
+Perl::Critic::Utils::Constants - Global constants.
 
 =head1 DESCRIPTION
 

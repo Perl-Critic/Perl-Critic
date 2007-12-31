@@ -35,7 +35,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Exception::Configuration::Option::Global - A problem with L<Perl::Critic> global configuration
+Perl::Critic::Exception::Configuration::Option::Global - A problem with L<Perl::Critic> global configuration.
 
 =head1 DESCRIPTION
 

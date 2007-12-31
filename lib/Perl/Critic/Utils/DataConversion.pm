@@ -48,7 +48,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Utils::DataConversion
+Perl::Critic::Utils::DataConversion - Utilities for converting from one type of data to another.
 
 =head1 DESCRIPTION
 

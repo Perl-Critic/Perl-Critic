@@ -43,7 +43,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Exception::Fatal::PolicyDefinition - A bug in a policy
+Perl::Critic::Exception::Fatal::PolicyDefinition - A bug in a policy.
 
 =head1 DESCRIPTION
 

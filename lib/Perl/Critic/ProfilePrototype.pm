@@ -62,7 +62,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::ProfilePrototype - Generate a Perl::Critic profile
+Perl::Critic::ProfilePrototype - Generate an initial Perl::Critic profile.
 
 =head1 DESCRIPTION
 

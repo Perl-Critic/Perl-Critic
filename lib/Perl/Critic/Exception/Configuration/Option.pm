@@ -63,7 +63,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Exception::Configuration::Option - A problem with an option in the L<Perl::Critic> configuration
+Perl::Critic::Exception::Configuration::Option - A problem with an option in the L<Perl::Critic> configuration.
 
 =head1 DESCRIPTION
 

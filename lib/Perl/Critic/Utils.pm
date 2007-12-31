@@ -1133,7 +1133,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Utils - Utility subs and vars for Perl::Critic
+Perl::Critic::Utils - General utility subroutines and constants for Perl::Critic and derivative distributions.
 
 =head1 DESCRIPTION
 

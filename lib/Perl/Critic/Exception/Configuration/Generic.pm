@@ -43,7 +43,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Exception::Configuration::Generic - A problem with L<Perl::Critic> configuration that doesn't involve an option
+Perl::Critic::Exception::Configuration::Generic - A problem with L<Perl::Critic> configuration that doesn't involve an option.
 
 =head1 DESCRIPTION
 

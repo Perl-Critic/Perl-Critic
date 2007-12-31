@@ -232,7 +232,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy - Base class for all Policy modules
+Perl::Critic::Policy - Base class for all Policy modules.
 
 =head1 DESCRIPTION
 

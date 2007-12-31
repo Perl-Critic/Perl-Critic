@@ -69,7 +69,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue - A problem with the value of a parameter for a policy
+Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue - A problem with the value of a parameter for a policy.
 
 =head1 DESCRIPTION
 

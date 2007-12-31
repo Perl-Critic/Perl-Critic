@@ -43,7 +43,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Exception::Fatal::Generic - A problem for which there is no specialized information
+Perl::Critic::Exception::Fatal::Generic - A problem for which there is no specialized information.
 
 =head1 DESCRIPTION
 

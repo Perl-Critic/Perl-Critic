@@ -46,7 +46,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Exception - A problem identified by L<Perl::Critic>
+Perl::Critic::Exception - A problem identified by L<Perl::Critic>.
 
 =head1 DESCRIPTION
 

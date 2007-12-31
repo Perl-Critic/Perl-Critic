@@ -68,7 +68,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Exception::Configuration::Option::Global::ParameterValue - A problem with the value of a global parameter
+Perl::Critic::Exception::Configuration::Option::Global::ParameterValue - A problem with the value of a global parameter.
 
 =head1 DESCRIPTION
 

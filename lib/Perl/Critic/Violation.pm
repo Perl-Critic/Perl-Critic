@@ -283,7 +283,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Violation - Represents policy violations
+Perl::Critic::Violation - A violation of a Policy found in some source code.
 
 =head1 SYNOPSIS
 

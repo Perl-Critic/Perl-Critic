@@ -36,7 +36,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Exception::Configuration - A problem with L<Perl::Critic> configuration
+Perl::Critic::Exception::Configuration - A problem with L<Perl::Critic> configuration.
 
 =head1 DESCRIPTION
 

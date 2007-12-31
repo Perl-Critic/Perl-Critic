@@ -166,7 +166,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Document - Caching wrapper around PPI::Document
+Perl::Critic::Document - Caching wrapper around a PPI::Document.
 
 =head1 SYNOPSIS
 

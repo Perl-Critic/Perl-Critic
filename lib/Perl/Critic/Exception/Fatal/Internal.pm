@@ -43,7 +43,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Exception::Fatal::Internal - A problem with the L<Perl::Critic> implementation, i.e. a bug
+Perl::Critic::Exception::Fatal::Internal - A problem with the L<Perl::Critic> implementation, i.e. a bug.
 
 =head1 DESCRIPTION
 

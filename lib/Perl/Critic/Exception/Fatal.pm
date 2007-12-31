@@ -62,7 +62,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Exception::Fatal - A problem that should cause L<Perl::Critic> to stop running
+Perl::Critic::Exception::Fatal - A problem that should cause L<Perl::Critic> to stop running.
 
 =head1 DESCRIPTION
 

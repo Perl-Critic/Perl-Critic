@@ -48,7 +48,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::PolicyListing - Display information about Policies
+Perl::Critic::PolicyListing - Display minimal information about Policies.
 
 =head1 DESCRIPTION
 

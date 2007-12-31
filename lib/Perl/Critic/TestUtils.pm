@@ -311,7 +311,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::TestUtils - Utility functions for testing new Policies
+Perl::Critic::TestUtils - Utility functions for testing new Policies.
 
 =head1 SYNOPSIS
 
