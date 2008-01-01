@@ -41,6 +41,8 @@ sub default_severity     { return $SEVERITY_LOWEST        }
 sub default_themes       { return qw( core cosmetic pbp ) }
 sub applies_to           { return 'PPI::Document'         }
 
+#-----------------------------------------------------------------------------
+
 my $got_sigpipe = 0;
 sub got_sigpipe {
     return $got_sigpipe;
@@ -62,10 +64,10 @@ sub initialize_if_enabled {
 
     eval {
         require File::Which;
+        require File::Temp;
         require Text::ParseWords;
         require Pod::Spell;
         require IO::String;
-        require IPC::Open2;
     };
     return $FALSE if $EVAL_ERROR;
 
@@ -79,45 +81,44 @@ sub initialize_if_enabled {
 sub violates {
     my ( $self, $elem, $doc ) = @_;
 
-    my $code = $doc->serialize;
-    my $text;
+    my $code = $doc->serialize();
     my $infh = IO::String->new( $code );
-    my $outfh = IO::String->new( $text );
+
+    my $outfh = File::Temp->new()
+      or croak "Unable to create temfile: $OS_ERROR";
+
+    my $outfile = $outfh->filename();
     my @words;
+
     eval {
-       # temporarily add our special wordlist to this annoying global
-       my @stop_words = @{ $self->_get_stop_words() };
-       local @Pod::Wordlist::Wordlist{ @stop_words } ##no critic(ProhibitPackageVars)
-           = (1) x @stop_words;
-       Pod::Spell->new()->parse_from_filehandle($infh, $outfh);
+        # temporarily add our special wordlist to this annoying global
+        my @stop_words = @{ $self->_get_stop_words() };
+        local @Pod::Wordlist::Wordlist{ @stop_words } ##no critic(ProhibitPackageVars)
+          = (1) x @stop_words;
 
-       # shortcut if no words to spellcheck
-       return if $text !~ m/\S/xms;
+        Pod::Spell->new()->parse_from_filehandle($infh, $outfh);
+        close $outfh or croak "Failed to close pod temp file: $OS_ERROR";
+        return if not -s $outfile; # Bail out if no words to spellcheck
 
-       # run spell command and fetch output
-       local $SIG{PIPE} = sub { $got_sigpipe = 1; };
-       my $command_line = $self->_get_spell_command_line();
-       my $reader_fh;
-       my $writer_fh;
-       ## TODO: block STDERR.  Use open3?
-       my $pid = IPC::Open2::open2($reader_fh, $writer_fh, @{$command_line});
-       return if not $pid;
+        # run spell command and fetch output
+        local $SIG{PIPE} = sub { $got_sigpipe = 1; };
+        my $command_line = join ' ', @{$self->_get_spell_command_line()};
+        open(my $aspell_out_fh, q{-|}, "$command_line < $outfile")  ## Is this portable??
+          or croak "Failed to open handle to spelling program: $OS_ERROR";
 
-       print {$writer_fh} $text or croak 'Failed to send data to spelling program';
-       close $writer_fh or croak 'Failed to close pipe to spelling program';
-       @words = uniq <$reader_fh>;
-       close $reader_fh or croak 'Failed to close pipe to spelling program';
-       waitpid $pid, 0;
+        @words = uniq( <$aspell_out_fh> );
+        close $aspell_out_fh
+          or croak "Failed to close handle to spelling program: $OS_ERROR";
 
-       for (@words) {
-          chomp;
-       }
+        for (@words) {
+            chomp;
+        }
 
-       # Why is this extra step needed???
-       @words = grep { not exists $Pod::Wordlist::Wordlist{$_} } @words;  ##no critic(ProhibitPackageVars)
+        # Why is this extra step needed???
+        @words = grep { not exists $Pod::Wordlist::Wordlist{$_} } @words;  ##no critic(ProhibitPackageVars)
     };
-    return if !@words;
 
+    return if !@words;
     return $self->violation( "$DESC: @words", $EXPL, $doc );
 }
 
