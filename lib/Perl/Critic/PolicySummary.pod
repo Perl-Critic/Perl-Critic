@@ -274,6 +274,10 @@ Always make the C<package> explicit. [Severity 4]
 
 Package declaration must match filename. [Severity 5]
 
+=head2 L<Perl::Critic::Policy::Modules::RequireNoMatchVarsWithUseEnglish>
+
+C<use English> must be passed a C<-no_match_vars> argument. [Severity 2]
+
 =head2 L<Perl::Critic::Policy::Modules::RequireVersionVar>
 
 Give every module a C<$VERSION> number. [Severity 2]

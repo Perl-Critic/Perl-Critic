@@ -283,6 +283,9 @@ provides:
   Perl::Critic::Policy::Modules::RequireFilenameMatchesPackage:
     file: lib/Perl/Critic/Policy/Modules/RequireFilenameMatchesPackage.pm
     version: 1.081_005
+  Perl::Critic::Policy::Modules::RequireNoMatchVarsWithUseEnglish:
+    file: lib/Perl/Critic/Policy/Modules/RequireNoMatchVarsWithUseEnglish.pm
+    version: 1.081_005
   Perl::Critic::Policy::Modules::RequireVersionVar:
     file: lib/Perl/Critic/Policy/Modules/RequireVersionVar.pm
     version: 1.081_005

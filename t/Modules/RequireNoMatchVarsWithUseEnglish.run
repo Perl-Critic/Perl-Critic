@@ -1,0 +1,232 @@
+## name Passing with no "use English".
+## failures 0
+## cut
+
+use strict;
+use warnings;
+
+my $doodle_doodle_dee = 'wubba wubba wubba';
+
+#-----------------------------------------------------------------------------
+
+## name Passing single quotes.
+## failures 0
+## cut
+
+use English '-no_match_vars';
+
+#-----------------------------------------------------------------------------
+
+## name Passing double quotes
+## failures 0
+## cut
+
+use English "-no_match_vars";
+
+#-----------------------------------------------------------------------------
+
+## name Passing literal quotes.
+## failures 0
+## cut
+
+use English q/-no_match_vars/;
+use English q{-no_match_vars};
+use English q(-no_match_vars);
+use English q[-no_match_vars];
+use English q<-no_match_vars>;
+use English q!-no_match_vars!;
+use English q#-no_match_vars#;
+use English q'-no_match_vars';
+use English q"-no_match_vars";
+
+#-----------------------------------------------------------------------------
+
+## name Passing literal quotes with whitespace before delimiter.
+## failures 0
+## cut
+
+use English q              /-no_match_vars/;
+use English q              {-no_match_vars};
+use English q              (-no_match_vars);
+use English q              [-no_match_vars];
+use English q              <-no_match_vars>;
+use English q              !-no_match_vars!;
+use English q              '-no_match_vars';
+use English q              "-no_match_vars";
+
+#-----------------------------------------------------------------------------
+
+## name Passing interpolating quotes.
+## failures 0
+## cut
+
+use English qq/-no_match_vars/;
+use English qq{-no_match_vars};
+use English qq(-no_match_vars);
+use English qq[-no_match_vars];
+use English qq<-no_match_vars>;
+use English qq!-no_match_vars!;
+use English qq#-no_match_vars#;
+use English qq'-no_match_vars';
+use English qq"-no_match_vars";
+
+#-----------------------------------------------------------------------------
+
+## name Passing interpolating quotes with whitespace before delimiter.
+## failures 0
+## cut
+
+use English qq             /-no_match_vars/;
+use English qq             {-no_match_vars};
+use English qq             (-no_match_vars);
+use English qq             [-no_match_vars];
+use English qq             <-no_match_vars>;
+use English qq             !-no_match_vars!;
+use English qq             '-no_match_vars';
+use English qq             "-no_match_vars";
+
+#-----------------------------------------------------------------------------
+
+## name Passing quotelike words.
+## failures 0
+## cut
+
+use English qw/  -no_match_vars  /;
+use English qw{  -no_match_vars  };
+use English qw(  -no_match_vars  );
+use English qw[  -no_match_vars  ];
+use English qw<  -no_match_vars  >;
+use English qw!  -no_match_vars  !;
+use English qw#  -no_match_vars  #;
+use English qw'  -no_match_vars  ';
+use English qw"  -no_match_vars  ";
+
+#-----------------------------------------------------------------------------
+
+## name Passing quotelike words with whitespace before delimiter.
+## failures 0
+## cut
+
+use English qw            /  -no_match_vars  /;
+use English qw            {  -no_match_vars  };
+use English qw            (  -no_match_vars  );
+use English qw            [  -no_match_vars  ];
+use English qw            <  -no_match_vars  >;
+use English qw            !  -no_match_vars  !;
+use English qw            '  -no_match_vars  ';
+use English qw            "  -no_match_vars  ";
+
+#-----------------------------------------------------------------------------
+
+## name Passing quotelike words with things in addition to -no_match_vars.
+## failures 0
+## cut
+
+use English qw/ $ERRNO -no_match_vars $EVAL_ERROR /;
+
+#-----------------------------------------------------------------------------
+
+## name Passing parenthesized list.
+## failures 0
+## cut
+
+use English ( '-no_match_vars' );
+
+#-----------------------------------------------------------------------------
+
+## name Passing parenthesized list with things in addition to -no_match_vars.
+## failures 0
+## cut
+
+use English ( '$ERRNO', "-no_match_vars", "$EVAL_ERROR" );
+
+#-----------------------------------------------------------------------------
+
+## name Passing unparenthesized list with things in addition to -no_match_vars.
+## failures 0
+## cut
+
+use English '$ERRNO', "-no_match_vars", "$EVAL_ERROR";
+
+#-----------------------------------------------------------------------------
+
+## name Passing version.
+## failures 0
+## cut
+
+use English 1.02 '-no_match_vars';
+
+#-----------------------------------------------------------------------------
+
+## name Passing v-string version.
+## failures 0
+## cut
+
+use English v1.02 '-no_match_vars';
+
+#-----------------------------------------------------------------------------
+
+## name Passing parenthesized list and version.
+## failures 0
+## cut
+
+use English 1.02 ('-no_match_vars');
+
+#-----------------------------------------------------------------------------
+
+## name Basic failure.
+## failures 1
+## cut
+
+use English;
+
+#-----------------------------------------------------------------------------
+
+## name Failure with version.
+## failures 1
+## cut
+
+use English 1.02;
+
+#-----------------------------------------------------------------------------
+
+## name Failure with v-string.
+## failures 1
+## cut
+
+use English v1.02;
+
+#-----------------------------------------------------------------------------
+
+## name Failure with random garbage.
+## failures 2
+## cut
+
+use English 'oink oink';
+use English qw< blah blah blah >;
+
+#-----------------------------------------------------------------------------
+
+## name Failure with typo that Ovid noticed.
+## failures 1
+## cut
+
+use English qw(-no_mactch_vars);
+
+#-----------------------------------------------------------------------------
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :

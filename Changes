@@ -1,3 +1,8 @@
+[1.xxx] Released on 2008-01-??
+
+     New Policy:
+     * Module::RequireNoMatchVarsWithUseEnglish
+
 [1.081_005] Released on 2007-12-29
 
      Policy Changes:

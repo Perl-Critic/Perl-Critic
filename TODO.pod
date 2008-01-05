@@ -45,7 +45,7 @@ Requires C<## no critic> to take an argument:
   ## no critic (SomePolicyPattern)     # ok
   ## no critic                         # not ok
 
-Can't be done as a Policy because any line that violated it would disable it.
+Can't be done as a regular Policy because any line that violated it would disable it.
 
 
 =item * Support for C<#line 123 "filename"> directives.
@@ -150,8 +150,6 @@ Check for -w on the shbang line.
 =over
 
 =item * Expressions::RequireFatCommasInHashConstructors
-
-=item * Modules::RequireNoMatchVarsWithUseEnglish
 
 =item * ErrorHandling::RequireCheckOfEvalErrorAfterEval
 

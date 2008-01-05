@@ -137,6 +137,7 @@ lib/Perl/Critic/Policy/Modules/RequireBarewordIncludes.pm
 lib/Perl/Critic/Policy/Modules/RequireEndWithOne.pm
 lib/Perl/Critic/Policy/Modules/RequireExplicitPackage.pm
 lib/Perl/Critic/Policy/Modules/RequireFilenameMatchesPackage.pm
+lib/Perl/Critic/Policy/Modules/RequireNoMatchVarsWithUseEnglish.pm
 lib/Perl/Critic/Policy/Modules/RequireVersionVar.pm
 lib/Perl/Critic/Policy/NamingConventions/ProhibitAmbiguousNames.pm
 lib/Perl/Critic/Policy/NamingConventions/ProhibitMixedCaseSubs.pm
@@ -316,6 +317,7 @@ t/Modules/RequireBarewordIncludes.run
 t/Modules/RequireEndWithOne.run
 t/Modules/RequireExplicitPackage.run
 t/Modules/RequireFilenameMatchesPackage.run
+t/Modules/RequireNoMatchVarsWithUseEnglish.run
 t/Modules/RequireVersionVar.run
 t/NamingConventions/ProhibitAmbiguousNames.run
 t/NamingConventions/ProhibitMixedCaseSubs.run
