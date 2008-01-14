@@ -3,6 +3,11 @@
      New Policy:
      * Module::RequireNoMatchVarsWithUseEnglish
 
+     Miscellanea:
+     * Added support for "criticism-fatal" option in your perlcriticrc
+       file.  This will be used by the criticism pragma to cause execution
+       to abort if the file contains any violations.
+
 [1.081_005] Released on 2007-12-29
 
      Policy Changes:

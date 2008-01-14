@@ -10,7 +10,7 @@
 use strict;
 use warnings;
 use English qw(-no_match_vars);
-use Test::More tests => 18;
+use Test::More tests => 21;
 use Perl::Critic::Defaults;
 
 #-----------------------------------------------------------------------------
@@ -22,7 +22,9 @@ use Perl::Critic::Defaults;
     is($d->severity(), 5,           'native default severity');
     is($d->theme(),    q{},         'native default theme');
     is($d->top(),      0,           'native default top');
+    is($d->color(),    1,           'native default color');
     is($d->verbose(),  4,           'native default verbose');
+    is($d->criticism_fatal,   0,    'native default criticism-fatal');
     is_deeply($d->include(), [],    'native default include');
     is_deeply($d->exclude(), [],    'native default exclude');
 }
@@ -36,7 +38,9 @@ use Perl::Critic::Defaults;
          severity  => 4,
          theme     => 'pbp',
          top       => 50,
+         color     => 1,
          verbose   => 7,
+         'criticism-fatal'   => 1,
          include   => 'foo bar',
          exclude   => 'baz nuts',
     );
@@ -48,6 +52,7 @@ use Perl::Critic::Defaults;
     is($d->theme(),    'pbp',       'user default theme');
     is($d->top(),      50,          'user default top');
     is($d->verbose(),  7,           'user default verbose');
+    is($d->criticism_fatal(),  1,   'user default criticism_fatal');
     is_deeply($d->include(), [ qw(foo bar) ], 'user default include');
     is_deeply($d->exclude(), [ qw(baz nuts)], 'user default exclude');
 }

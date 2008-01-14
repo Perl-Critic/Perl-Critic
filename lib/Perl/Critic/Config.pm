@@ -95,6 +95,8 @@ sub _init {
         $self->{_force} = boolean_to_number( _dor( $args{-force}, $defaults->force() ) );
         $self->{_only}  = boolean_to_number( _dor( $args{-only},  $defaults->only()  ) );
         $self->{_color} = boolean_to_number( _dor( $args{-color}, $defaults->color() ) );
+        $self->{_criticism_fatal} =
+          boolean_to_number(_dor( $args{'-criticism_fatal'}, $defaults->criticism_fatal() ) );
     }
 
     $self->_validate_and_save_theme($args{-theme}, $errors);
@@ -726,6 +728,13 @@ sub color {
 
 #-----------------------------------------------------------------------------
 
+sub criticism_fatal {
+    my $self = shift;
+    return $self->{_criticism_fatal};
+}
+
+#-----------------------------------------------------------------------------
+
 sub site_policy_names {
     return Perl::Critic::PolicyFactory::site_policy_names();
 }
@@ -757,7 +766,7 @@ constructor will do it for you.
 
 =over 8
 
-=item C<< new( [ -profile => $FILE, -severity => $N, -theme => $string, -include => \@PATTERNS, -exclude => \@PATTERNS, -single-policy => $PATTERN, -top => $N, -only => $B, -profile-strictness => $PROFILE_STRICTNESS_{WARN|FATAL|QUIET}, -force => $B, -verbose => $N, -color => $B ] ) >>
+=item C<< new( [ -profile => $FILE, -severity => $N, -theme => $string, -include => \@PATTERNS, -exclude => \@PATTERNS, -single-policy => $PATTERN, -top => $N, -only => $B, -profile-strictness => $PROFILE_STRICTNESS_{WARN|FATAL|QUIET}, -force => $B, -verbose => $N, -color => $B, -criticism-fatal => $B] ) >>
 
 =item C<< new() >>
 
@@ -846,6 +855,11 @@ explanation of format specifications.
 B<-color> is not used by Perl::Critic but is provided for the benefit
 of L<perlcritic>.
 
+B<-criticism-fatal> is not used by Perl::Critic but is provided for the benefit
+of L<criticism>.
+
+
+
 =back
 
 =head1 METHODS
@@ -918,6 +932,10 @@ Returns the value of the C<-verbose> attribute for this Config.
 =item C< color() >
 
 Returns the value of the C<-color> attribute for this Config.
+
+=item C< criticism_fatal() >
+
+Returns the value of the C<-criticsm-fatal> attribute for this Config.
 
 =back
 

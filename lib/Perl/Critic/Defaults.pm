@@ -54,6 +54,7 @@ sub _init {
     $self->{_top}            = delete $args{top}              || $FALSE;
     $self->{_verbose}        = delete $args{verbose}          || $DEFAULT_VERBOSITY;
     $self->{_color}          = delete $args{color}            || $TRUE;
+    $self->{_criticism_fatal} = delete $args{'criticism-fatal'} || $FALSE;
 
     # If there's anything left, complain.
     _check_for_extra_options(%args);
@@ -149,6 +150,13 @@ sub color {
 
 #-----------------------------------------------------------------------------
 
+sub criticism_fatal {
+    my ($self) = @_;
+    return $self->{_criticism_fatal};
+}
+
+#-----------------------------------------------------------------------------
+
 sub force {
     my ($self) = @_;
     return $self->{_force};
@@ -225,7 +233,7 @@ string.
 
 =item C< single_policy() >
 
-Returns the default single-policy pattern.  (As a string.)
+Returns the default C<single-policy> pattern.  (As a string.)
 
 =item C< severity() >
 
@@ -247,6 +255,10 @@ string).
 =item C< color() >
 
 Returns the default C<color> setting. (Either 1 or 0).
+
+=item C< criticism_fatal() >
+
+Returns the default C<criticism-fatal> setting (Either 1 or 0).
 
 =back
 

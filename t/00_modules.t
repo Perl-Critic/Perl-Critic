@@ -37,7 +37,7 @@ my @concrete_exceptions = qw{
 };
 
 plan tests =>
-        106
+        108
     +   (  9 * scalar @concrete_exceptions  )
     +   ( 14 * scalar @bundled_policy_names );
 
@@ -77,6 +77,7 @@ can_ok('Perl::Critic::Config', 'theme');
 can_ok('Perl::Critic::Config', 'top');
 can_ok('Perl::Critic::Config', 'verbose');
 can_ok('Perl::Critic::Config', 'color');
+can_ok('Perl::Critic::Config', 'criticism_fatal');
 can_ok('Perl::Critic::Config', 'site_policy_names');
 
 #Set -profile to avoid messing with .perlcriticrc
@@ -100,6 +101,7 @@ can_ok('Perl::Critic::Defaults', 'theme');
 can_ok('Perl::Critic::Defaults', 'top');
 can_ok('Perl::Critic::Defaults', 'verbose');
 can_ok('Perl::Critic::Defaults', 'color');
+can_ok('Perl::Critic::Defaults', 'criticism_fatal');
 
 my $defaults = Perl::Critic::Defaults->new();
 isa_ok($defaults, 'Perl::Critic::Defaults');

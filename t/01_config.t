@@ -15,7 +15,7 @@ use List::MoreUtils qw(all any);
 use Perl::Critic::PolicyFactory (-test => 1);
 use Perl::Critic::Config qw();
 use Perl::Critic::Utils qw{ :severities };
-use Test::More (tests => 67);
+use Test::More (tests => 73);
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw{
@@ -193,7 +193,17 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
 # Test the switch behavior
 
 {
-    my @switches = qw(-top -verbose -theme -severity -only -force);
+    my @switches = qw(
+        -top
+        -verbose
+        -theme
+        -severity
+        -only
+        -force
+        -color
+        -criticism-fatal
+    );
+
     my %undef_args = map { $_ => undef } @switches;
     my $c = Perl::Critic::Config->new( %undef_args );
     is( $c->force(),     0,     'Undefined -force');
@@ -201,7 +211,9 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
     is( $c->severity(),  5,     'Undefined -severity');
     is( $c->theme()->rule(),   q{},   'Undefined -theme');
     is( $c->top(),       0,     'Undefined -top');
+    is( $c->color(),     1,     'Undefined -color');
     is( $c->verbose(),   4,     'Undefined -verbose');
+    is( $c->criticism_fatal(), 0, 'Undefined -criticism-fatal');
 
     my %zero_args = map { $_ => 0 } @switches;
     $c = Perl::Critic::Config->new( %zero_args );
@@ -210,7 +222,9 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
     is( $c->severity(),  1,       'zero -severity');
     is( $c->theme()->rule(),     q{},     'zero -theme');
     is( $c->top(),       0,       'zero -top');
+    is( $c->color(),     0,       'zero -color');
     is( $c->verbose(),   4,       'zero -verbose');
+    is( $c->criticism_fatal(), 0, 'zero -criticism-fatal');
 
     my %empty_args = map { $_ => q{} } @switches;
     $c = Perl::Critic::Config->new( %empty_args );
@@ -219,7 +233,9 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
     is( $c->severity(),  1,       'empty -severity');
     is( $c->theme->rule(),     q{},     'empty -theme');
     is( $c->top(),       0,       'empty -top');
+    is( $c->color(),     0,       'empty -color');
     is( $c->verbose(),   4,       'empty -verbose');
+    is( $c->criticism_fatal(), 0, 'empty -criticism-fatal');
 }
 
 #-----------------------------------------------------------------------------
