@@ -94,7 +94,7 @@ sub violates {
         # temporarily add our special wordlist to this annoying global
         my @stop_words = @{ $self->_get_stop_words() };
         local @Pod::Wordlist::Wordlist{ @stop_words } ##no critic(ProhibitPackageVars)
-          = (1) x @stop_words;
+            = (1) x @stop_words;
 
         Pod::Spell->new()->parse_from_filehandle($infh, $outfh);
         close $outfh or croak "Failed to close pod temp file: $OS_ERROR";
@@ -102,13 +102,13 @@ sub violates {
 
         # run spell command and fetch output
         local $SIG{PIPE} = sub { $got_sigpipe = 1; };
-        my $command_line = join ' ', @{$self->_get_spell_command_line()};
-        open(my $aspell_out_fh, q{-|}, "$command_line < $outfile")  ## Is this portable??
-          or croak "Failed to open handle to spelling program: $OS_ERROR";
+        my $command_line = join $SPACE, @{$self->_get_spell_command_line()};
+        open my $aspell_out_fh, q{-|}, "$command_line < $outfile"  ## Is this portable??
+            or croak "Failed to open handle to spelling program: $OS_ERROR";
 
         @words = uniq( <$aspell_out_fh> );
         close $aspell_out_fh
-          or croak "Failed to close handle to spelling program: $OS_ERROR";
+            or croak "Failed to close handle to spelling program: $OS_ERROR";
 
         for (@words) {
             chomp;
