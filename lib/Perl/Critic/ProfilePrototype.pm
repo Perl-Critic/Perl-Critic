@@ -12,7 +12,10 @@ use strict;
 use warnings;
 
 use English qw(-no_match_vars);
-use Perl::Critic::Policy qw();
+
+use Perl::Critic::Config qw{};
+use Perl::Critic::Policy qw{};
+use Perl::Critic::Utils qw{ :characters };
 use overload ( q{""} => 'to_string' );
 
 our $VERSION = '1.081_005';
@@ -22,29 +25,149 @@ our $VERSION = '1.081_005';
 sub new {
     my ($class, %args) = @_;
     my $self = bless {}, $class;
+
     my $policies = $args{-policies} || [];
     $self->{_policies} = [ sort _by_type @{ $policies } ];
+
+    my $comment_out_parameters = $args{'-comment-out-parameters'};
+    if (not defined $comment_out_parameters) {
+        $comment_out_parameters = 1;
+    }
+    $self->{_comment_out_parameters} = $comment_out_parameters;
+
+    my $configuration = $args{'-config'};
+    if (not $configuration) {
+        $configuration = Perl::Critic::Config->new(-profile => $EMPTY);
+    }
+    $self->{_configuration} = $configuration;
+
+
     return $self;
 }
 
 #-----------------------------------------------------------------------------
 
-sub to_string {
-    my $self = shift;
-    my $format = _proto_format();
-    Perl::Critic::Policy::set_format( $format );
-    return join q{}, map { "$_" } @{ $self->{_policies} };
+sub _get_policies {
+    my ($self) = @_;
+
+    return $self->{_policies};
+}
+
+sub _comment_out_parameters {
+    my ($self) = @_;
+
+    return $self->{_comment_out_parameters};
+}
+
+sub _configuration {
+    my ($self) = @_;
+
+    return $self->{_configuration};
 }
 
 #-----------------------------------------------------------------------------
 
+sub _line_prefix {
+    my ($self) = @_;
+
+    return $self->_comment_out_parameters() ? q{# } : $EMPTY;
+}
+
+#-----------------------------------------------------------------------------
+
+sub to_string {
+    my ($self) = @_;
+
+    my $prefix = $self->_line_prefix();
+    my $configuration = $self->_configuration();
+
+    my $prototype = "# Globals\n";
+
+    $prototype .= $prefix;
+    $prototype .= q{severity = };
+    $prototype .= $configuration->severity();
+    $prototype .= "\n";
+
+    $prototype .= $prefix;
+    $prototype .= q{force = };
+    $prototype .= $configuration->force();
+    $prototype .= "\n";
+
+    $prototype .= $prefix;
+    $prototype .= q{only = };
+    $prototype .= $configuration->only();
+    $prototype .= "\n";
+
+    $prototype .= $prefix;
+    $prototype .= q{profile-strictness = };
+    $prototype .= $configuration->profile_strictness();
+    $prototype .= "\n";
+
+    $prototype .= $prefix;
+    $prototype .= q{color = };
+    $prototype .= $configuration->color();
+    $prototype .= "\n";
+
+    $prototype .= $prefix;
+    $prototype .= q{top = };
+    $prototype .= $configuration->top();
+    $prototype .= "\n";
+
+    $prototype .= $prefix;
+    $prototype .= q{verbose = };
+    $prototype .= $configuration->verbose();
+    $prototype .= "\n";
+
+    $prototype .= $prefix;
+    $prototype .= q{include = };
+    $prototype .= join $SPACE, $configuration->include();
+    $prototype .= "\n";
+
+    $prototype .= $prefix;
+    $prototype .= q{exclude = };
+    $prototype .= join $SPACE, $configuration->exclude();
+    $prototype .= "\n";
+
+    $prototype .= $prefix;
+    $prototype .= q{single-policy = };
+    $prototype .= join $SPACE, $configuration->single_policy();
+    $prototype .= "\n";
+
+    $prototype .= $prefix;
+    $prototype .= q{theme = };
+    $prototype .= $configuration->theme()->rule();
+    $prototype .= "\n";
+
+    Perl::Critic::Policy::set_format( $self->_proto_format() );
+
+    return $prototype . "\n" . join q{}, map { "$_" } @{ $self->_get_policies() };
+}
+
+#-----------------------------------------------------------------------------
+
+# About "%{\\n%\\x7b# \\x7df\n${prefix}%n = %D\\n}O" below:
+#
+# The %0 format for a policy specifies how to format parameters.
+# For a parameter %f specifies the full description.
+#
+# The problem is that both of these need to take options, but String::Format
+# doesn't allow nesting of {}.  So, to get the option to the %f, the braces
+# are hex encoded.  I.e., assuming that comment_out_parameters is in effect,
+# the parameter sees:
+#
+#    \n%{# }f\n# %n = %D\n
+
 sub _proto_format {
-    return <<'END_OF_FORMAT';
+    my ($self) = @_;
+
+    my $prefix = $self->_line_prefix();
+
+    return <<"END_OF_FORMAT";
 [%p]
-# set_themes = %t
-# add_themes =
-# severity   = %s
-%{# %s = \n}O
+${prefix}set_themes = %t
+${prefix}add_themes =
+${prefix}severity   = %s
+%{\\n%\\x7b# \\x7df\\n${prefix}%n = %D\\n}O%{${prefix}Cannot programmatically discover what parameters this policy takes.\\n}U
 
 END_OF_FORMAT
 
