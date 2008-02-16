@@ -1,5 +1,27 @@
 [1.xxx] Released on 2008-01-??
 
+     New Features:
+     * A new metadata system for defining policy parameters/options has been
+       added.  This makes the life of policy authors easier because
+       configuration validation and parsing can be taken care of
+       automatically, in most cases.  This allows greater integration with
+       IDEs and allows the perlcritic "--profile-proto" option to produce
+       better output.  A standalone GUI configuration editor for Perl::Critic
+       is being written based upon this information.
+
+       Note: This change does NOT REQUIRE ANY CHANGES to policies outside of
+       this distribution; they should continue to work as is.  However, use
+       of this facility can reduce the size of your code and provide the
+       means for tools to discover more about your policy.  If this change
+       does break any of your policies, please let us know.
+
+       To learn how to take advantage of this facility, read
+       Perl::Critic::DEVELOPER and look at the source of any of the
+       configurable policies included in this distribution.
+
+       There is a discussion of the design considerations for this facility in
+       the distribution in doc/PolicyParameter_Notes.pod.
+
      New Policy:
      * Module::RequireNoMatchVarsWithUseEnglish
 
