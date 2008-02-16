@@ -268,6 +268,513 @@ L<perlcritic> with a C<--verbose> parameter of C<10> or C<11> to see
 it along with the rest of the output for violations of your policy.
 
 
+=head1 MAKING YOUR POLICY CONFIGURABLE
+
+L<Perl::Critic> takes care of gathering configuration information for
+your Policy, from whatever source the user specifies.  (See
+L<perlcritic/"CONFIGURATION"> for the details of how a user specifies
+the values you're going to receive.)  What your Policy ends up
+receiving for the value of a parameter is a string with leading and
+trailing whitespace removed.  By default, you will need to handle
+conversion of that string to a useful form yourself.  However, if you
+provide some metadata about your parameters, the parameter handling
+will be taken care of for you.  (Additionally, tools that deal with
+Policies themselves can use this information to enhance their
+functionality.  See the L<perlcritic> C<--profile-proto> option for an
+example.)
+
+You can look at
+L<Perl::Critic::Policy::ControlStructures::ProhibitCascadingIfElse>
+for a simple example of a configurable Policy and
+L<Perl::Critic::Policy::Documentation::RequirePodSections> for a more
+complex one.
+
+=head2 Do It All Yourself
+
+The constructor for a Policy receives two arguments: the standard
+class name argument, plus a hash of the configuration for the Policy;
+this is a regular hash, and not a reference to one.  Unfortunately,
+Policies are not required to call the super constructor; however, in
+order to work correctly, a Policy must be a blessed hash.  An example
+minimal constructor:
+
+  sub new {
+      my ( $class, %config ) = @_;
+      my $self = bless {}, $class;
+
+      return $self;
+  }
+
+Actually using the above code is pretty useless since this is what the
+superclass constructor does.  The reason to actually create a
+constructor is to do something with C<%config>.
+
+As stated above, what you get in C<%config> are trimmed strings.  For
+example, if the user's F<.perlcritic> contains
+
+  [Your::Policy]
+  foo          = bar baz
+  factor   =     5.52
+  selections =   2 78 92
+
+then C<%config> will contain the equivalent of
+
+  my %config = (
+      foo => 'bar baz'
+      factor => '5.52'
+      selections => '2 78 92'
+  );
+
+To make this available to the C<violates()> method, the values are
+usually put into C<$self> under the name of the configuration item
+prefixed with an underscore.  E.g.
+
+  sub new {
+      my ( $class, %config ) = @_;
+      my $self = bless {}, $class;
+
+      $self->{_foo} = $config{foo};
+      $self->{_factor} = $config{factor};
+      $self->{_selections} = $config{selections};
+
+      return $self;
+  }
+
+Often, you'll want to convert the configuration values into something
+more useful.  In this example, C<selections> is supposed to be a list
+of integers.  L<Perl::Critic::Utils> contains a number of functions
+that can help you with this.  Assuming that C<violates()> wants to
+have C<selections> as an array, you'll want to have something like
+this:
+
+  use Perl::Critic::Utils qw{ :data_conversion };
+
+  sub new {
+      my ( $class, %config ) = @_;
+      my $self = bless {}, $class;
+
+      $self->{_foo} = $config{foo};
+      $self->{_factor} = $config{factor};
+      $self->{_selections} = [ words_from_string( $config{selections} ) ];
+
+      return $self;
+  }
+
+Since C<selections> contains numbers, it may be desirable to change
+the assignment to look like
+
+  $self->{_selections} = [ map { $_ + 0 } words_from_string($config{selections}) ];
+
+If C<violates()> needs to quickly determine whether a particular value
+is in C<selections>, you would want to use a hash instead of an array,
+like this:
+
+  $self->{_selections} = { hashify( words_from_string( $config{selections} ) ) };
+
+For an example of a Policy that has some simple, but non-standard
+configuration handling, see
+L<Perl::Critic::Policy::CodeLayout::RequireTidyCode>.
+
+
+=head2 Providing Basic Configuration Information Via C<supported_parameters()>
+
+As minimum for a well behaved Policy, you should implement
+C<supported_parameters()> in order to tell the rest of C<Perl::Critic>
+what configuration values the Policy looks for, even if it is only to say
+that the Policy is not configurable.  In the simple form, this
+function returns a list of the names of the parameters the Policy
+supports.  So, for an non-configurable Policy, as in the
+C<RequireBlockGrep> example above, this looked like
+
+  sub supported_parameters { return ()                  }
+
+For the example being used in the constructor section above, this
+would be
+
+  sub supported_parameters { return qw{ foo factor selections }; }
+
+Given this information, C<Perl::Critic> can tell the user when they
+have specified a parameter for a Policy which isn't valid, e.g. when
+they've misspelled the name of the parameter, and can emit the
+parameter as part of a F<.perlcritic> prototype.
+
+You can provide even more information about your Policy's
+configuration by giving each parameter a description and a string
+representation of the default value for the parameter.  You do this by
+having the values in the list returned by C<supported_parameters()> be
+hash references instead of strings, with keys of C<name>,
+C<description>, and C<default_string>.  For example,
+
+  sub supported_parameters {
+      return (
+          {
+              name           => 'allowed_values',
+              description    => 'Individual and ranges of values to allow, and/or "all_integers".',
+              default_string => '0 1 2',
+          },
+          {
+              name           => 'allowed_types',
+              description    => 'Kind of literals to allow.',
+              default_string => 'Float',
+          },
+      );
+  }
+
+From this C<perlcritic> can emit a better F<.perlcriticrc> prototype.
+
+
+=head2 Using C<supported_parameters()> to Get It Done For You
+
+The C<supported_parameters()> discussion above showed how you could
+help others with your Policy, but didn't do anything to make your life
+as a Policy author easier; you still need to implement a constructor
+to access any configuration that the user has specified.  To have the
+configuration automatically handled for you, you need to declare how
+your parameters act by specifying a value for their C<behavior>.  For
+example, the following declares that a parameter allows the user to
+choose from five specific values and that the user can select any
+combination of them:
+
+  sub supported_parameters {
+      return (
+          {
+              name               => 'allowed_types',
+              description        => 'Kind of literals to allow.',
+              default_string     => 'Float',
+              behavior           => 'enumeration',
+              enumeration_values => [ qw{ Binary Exp Float Hex Octal } ],
+              enumeration_allow_multiple_values => 1,
+          },
+      );
+  }
+
+When you specify a behavior, parsing and validation of the
+user-specified and default values is done for you and your
+C<violates()> method can retrieve the value under the key of the
+parameter name prefixed with an underscore, e.g., for the above
+declaration, the parsed and validated value can be accessed via
+C<<$self->{_allowed_types}>>.
+
+The behaviors provide additional functionality to C<Perl::Critic>; for
+more on this, see L<Perl::Critic::PolicyParameter> and
+L<Perl::Critic::PolicyParameter::Behavior>.
+
+The following discusses each of the supported behaviors and the
+options they support.  For the full details of a behavior, see the
+documentation for the implementing class.
+
+
+=head3 "string"
+
+Implemented in L<Perl::Critic::PolicyParameter::Behavior::String>.
+
+The most basic of behaviors, the value of the parameter will be stored
+in the Policy as a string.
+
+This behavior is not configurable.
+
+B<Example:>
+
+  sub supported_parameters {
+      return (
+          {
+              name           => 'a_string',
+              description    => 'An example string.',
+              default_string => 'blah blah blah',
+              behavior       => 'string',
+          },
+      );
+  }
+
+
+=head3 "boolean"
+
+Implemented in L<Perl::Critic::PolicyParameter::Behavior::Boolean>.
+
+The value of the parameter will be either L<Perl::Critic::Utils/$TRUE>
+or L<Perl::Critic::Utils/$FALSE>.
+
+This behavior is not configurable.
+
+B<Example:>
+
+  sub supported_parameters {
+      return (
+          {
+              name           => 'a_boolean',
+              description    => 'An example boolean.',
+              default_string => '1',
+              behavior       => 'boolean',
+          },
+      );
+  }
+
+
+=head3 "integer"
+
+Implemented in L<Perl::Critic::PolicyParameter::Behavior::Integer>.
+
+The value is validated against C<m/ \A [-+]? [1-9] [\d_]* \z /xms>
+(with an special check for "0").  Notice that this means that
+underscores are allowed in input values as with Perl numeric literals.
+
+This takes two options, C<integer_minimum> and
+C<integer_maximum>, which specify endpoints of an inclusive range to
+restrict the value to.  Either, neither, or both may be specified.
+
+B<Example:>
+
+  sub supported_parameters {
+      return (
+          {
+              name            => 'an_integer',
+              description     => 'An example integer.',
+              default_string  => '5',
+              behavior        => 'integer',
+              integer_minimum => 0,
+              integer_maximum => 10,
+          },
+      );
+  }
+
+
+=head3 "string list"
+
+Implemented in L<Perl::Critic::PolicyParameter::Behavior::StringList>.
+
+The values will be derived by splitting the input string on blanks.
+(See L<Perl::Critic::Utils/"words_from_string">.) The parameter will
+be stored as a reference to a hash, with the values being the keys.
+
+This takes one optional option, C<always_present_values>, of a
+reference to an array of strings that will always be included in the
+parameter value, e.g. if the value of this option is
+C<[ qw{ a b c } ]> and the user specifies a value of C<'c d e'>, then
+the value of the parameter will contain C<'a'>, C<'b'>, C<'c'>,
+C<'d'>, and C<'e'>.
+
+B<Example:>
+
+  sub supported_parameters {
+      return (
+          {
+              name                  => 'a_string_list',
+              description           => 'An example list.',
+              default_string        => 'red pink blue',
+              behavior              => 'string list',
+              always_present_values => [ qw{ green purple} ],
+          },
+      );
+  }
+
+
+=head3 "enumeration"
+
+Implemented in L<Perl::Critic::PolicyParameter::Behavior::Enumeration>.
+
+The values will be derived by splitting the input string on blanks.
+(See L<Perl::Critic::Utils/"words_from_string">.)  Depending upon the
+value of the C<enumeration_allow_multiple_values> option, the
+parameter will be stored as a string or a reference to a hash, with
+the values being the keys.
+
+This behavior takes one required option and one optional one.  A value
+for C<enumeration_values> of a reference to an array of valid strings
+is required.  A true value can be specified for
+C<enumeration_allow_multiple_values> to allow the user to pick more
+than one value, but this defaults to false.
+
+B<Example:>
+
+  use Perl::Critic::Utils qw{ :characters };
+
+  sub supported_parameters {
+      return (
+          {
+              name               => 'an_enumeration',
+              description        => 'An example enumeration.',
+              default_string     => $EMPTY,
+              behavior           => 'enumeration',
+              enumeration_values => [ qw{ block statement pod operator } ],
+              enumeration_allow_multiple_values => 1,
+          },
+      );
+  }
+
+
+=head2 Using a Custom Parser
+
+If none of the behaviors does exactly what you want it to, you can
+provide your own parser for a parameter.  The reason for doing this as
+opposed to using a constructor is that it allows you to use a behavior
+to provide its extra functionality and it provides a means for a
+C<Perl::Critic> configuration program, e.g. an IDE that integrates
+C<Perl::Critic>, to validate your parameter as the user
+modifies its value.
+
+The way you declare that you have a custom parser is to include a
+reference to it in the parameter specification with the C<parser> key.
+For example:
+
+  sub supported_parameters {
+      return (
+          {
+              name           => 'file_name',
+              description    => 'A file for to read a list of values from.',
+              default_string => undef,
+              behavior       => 'string',
+              parser         => \&_parse_file_name,
+          },
+      );
+  }
+
+A parser is a method on a subclass of L<Perl::Critic::Policy> that
+takes two parameters: the L<Perl::Critic::PolicyParameter> that is
+being specified and the value string provided by the user.  The method
+is responsible for dealing with any default value and for saving the
+parsed value for later use by the C<violates()> method.
+
+An example parser (without enough error handling) for the above
+example declaration:
+
+  use File::Slurp qw{ slurp };
+
+  sub _parse_file_name {
+      my ($self, $parameter, $config_string) = @_;
+
+      my @thingies;
+
+      if ($config_string) {
+          if (not -r $config_string) {
+              die q{Invalid value for },
+                  $parameter->get_name(),
+                  qq{: $config_string is not readable.\n};
+          }
+
+          @thingies = slurp $config_string;
+      }
+
+      $self->{_thingies} = \@thingies;
+
+      return;
+  }
+
+Note that, if the value for the parameter is not valid, C<die> is used
+instead of C<confess> because the problem is not a bug in the code but
+a problem with user input.
+
+
+=head2 Using Both C<supported_parameters()> and a Constructor
+
+There are cases where a Policy needs additional initialization beyond
+configuration or where the way it acts depends upon the combination of
+multiple parameters.  In such situations, you will need to create a
+constructor.  If you want to take advantage of the supplied parameter
+handling from within the constructor, there's a problem because
+L<Perl::Critic> can't do its initialization of a Policy until the
+Policy has been created.  (Due to the lack of a requirement for a
+Policy to invoke the super-constructor.)  The way around this is to
+invoke C<__finish_standard_initialization()> on the Policy before
+accessing the parsed parameter values.
+
+This is done like so:
+
+  sub new {
+      my ( $class, %config ) = @_;
+      my $self = bless {}, $class;
+
+      $self->__finish_standard_initialization( \%config );
+
+      # do additional setup that requires the parameter values
+
+      return $self;
+  }
+
+An example of a Policy that does this is
+L<Perl::Critic::Policy::Documentation::RequirePodSections>.
+
+
+=head2 Summary of permitted hash keys in C<supported_parameters()>.
+
+
+=head3 All types
+
+
+=over
+
+=item - "name" (mandatory)
+
+=item - "description" (optional)
+
+=item - "behavior" (optional)
+
+Currently, one of:
+
+=over
+
+=item "boolean"
+
+=item "enumeration"
+
+=item "integer"
+
+=item "string"
+
+=item "string list"
+
+=back
+
+(A "file" one will be added soon)
+
+=item - "default_string" (optional)
+
+A string representation of the default value of the parameter.
+
+=item - "parser" (optional)
+
+A code ref to a custom parser for the parameter.
+
+=back
+
+=head3 Enumerations
+
+=over
+
+=item - "enumeration_values" (mandatory)
+
+A mandatory reference to an array of strings.
+
+=item - "enumeration_allow_multiple_values" (optional)
+
+Boolean indicating whether or not the user is restricted to a single value.
+
+=back
+
+=head3 Integers
+
+=over
+
+=item - "integer_minimum" (optional)
+
+Minimum allowed value, inclusive.
+
+=item - "integer_maximum" (optional)
+
+Maximum allowed value, inclusive.
+
+=back
+
+=head3 String lists
+
+=over
+
+=item - "list_always_present_values" (optional)
+
+A reference to an array of values that should always be included in the value of the parameter.
+
+=back
+
+
 =head1 HINT
 
 When you're trying to figure out what L<PPI> is going to hand you for
