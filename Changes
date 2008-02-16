@@ -3,6 +3,10 @@
      New Policy:
      * Module::RequireNoMatchVarsWithUseEnglish
 
+     Policy Changes:
+     * TestingAndDebugging::RequireUseStrict now accepts "use Moose" as
+       equivalent to "use strict".
+
      Miscellanea:
      * Added support for "criticism-fatal" option in your perlcriticrc
        file.  This will be used by the criticism pragma to cause execution

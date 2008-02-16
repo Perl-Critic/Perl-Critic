@@ -62,7 +62,7 @@ sub _is_use_strict {
 
     return 0 if !$elem->isa('PPI::Statement::Include');
     return 0 if $elem->type() ne 'use';
-    return 0 if $elem->pragma() ne 'strict';
+    return 0 if $elem->pragma() ne 'strict' && $elem->module() ne 'Moose';
     return 1;
 }
 
@@ -93,6 +93,9 @@ Using strictures is probably the single most effective way to improve the
 quality of your code.  This policy requires that the C<'use strict'> statement
 must come before any other statements except C<package>, C<require>, and other
 C<use> statements.  Thus, all the code in the entire package will be affected.
+
+There is a special exemption for L<Moose> because it enforces strictness; i.e.
+C<'use Moose'> is treated as equivalent to C<'use strict'>.
 
 =head1 SEE ALSO
 
