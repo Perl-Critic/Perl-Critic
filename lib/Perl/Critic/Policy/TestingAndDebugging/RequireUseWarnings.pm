@@ -64,7 +64,7 @@ sub _is_use_warnings {
 
     return 0 if !$elem->isa('PPI::Statement::Include');
     return 0 if $elem->type() ne 'use';
-    return 0 if $elem->pragma() ne 'warnings';
+    return 0 if $elem->pragma() ne 'warnings' && $elem->module ne 'Moose';
     return 1;
 }
 
@@ -95,6 +95,9 @@ single most effective way to improve the quality of your code.  This
 policy requires that the C<'use warnings'> statement must come before
 any other statements except C<package>, C<require>, and other C<use>
 statements.  Thus, all the code in the entire package will be affected.
+
+There is a special exemption for L<Moose> because it enforces warnings; i.e.
+C<'use Moose'> is treated as equivalent to C<'use warnings'>.
 
 =head1 SEE ALSO
 

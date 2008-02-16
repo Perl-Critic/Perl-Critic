@@ -6,6 +6,8 @@
      Policy Changes:
      * TestingAndDebugging::RequireUseStrict now accepts "use Moose" as
        equivalent to "use strict".
+     * TestingAndDebugging::RequireUseWarnings now accepts "use Moose" as
+       equivalent to "use warnings".
 
      Miscellanea:
      * Added support for "criticism-fatal" option in your perlcriticrc
