@@ -311,7 +311,7 @@ for in the F<.perlcriticrc>.
 =item C<get_description()>
 
 Return an explanation of the significance of the parameter, as
-provided by the developer of the policy..
+provided by the developer of the policy.
 
 
 =item C<get_default_string()>

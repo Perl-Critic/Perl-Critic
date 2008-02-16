@@ -18,7 +18,7 @@ use Scalar::Util qw(blessed);
 use Perl::Critic::Exception::AggregateConfiguration;
 use Perl::Critic::Exception::Configuration;
 use Perl::Critic::Exception::Configuration::Option::Global::ParameterValue;
-use Perl::Critic::Exception::Fatal::Internal qw{ &throw_internal };
+use Perl::Critic::Exception::Fatal::Internal qw{ throw_internal };
 use Perl::Critic::PolicyFactory;
 use Perl::Critic::Theme qw( $RULE_INVALID_CHARACTER_REGEX cook_rule );
 use Perl::Critic::UserProfile qw();
@@ -161,12 +161,12 @@ sub add_policy {
 sub _add_policy_if_enabled {
     my ( $self, $policy_object ) = @_;
 
-    my $parameters = $policy_object->__get_parameters()
+    my $config = $policy_object->__get_config()
         or throw_internal
             q{Policy was not set up properly because it doesn't have }
-                . q{a value for its parameters attribute.};
+                . q{a value for its config attribute.};
 
-    if ( $policy_object->initialize_if_enabled( $parameters ) ) {
+    if ( $policy_object->initialize_if_enabled( $config ) ) {
         push @{ $self->{_policies} }, $policy_object;
     }
 

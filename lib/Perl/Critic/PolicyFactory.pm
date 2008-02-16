@@ -24,7 +24,6 @@ use Perl::Critic::Utils qw{
 };
 use Perl::Critic::Exception::AggregateConfiguration;
 use Perl::Critic::Exception::Configuration;
-use Perl::Critic::Exception::Configuration::Option::Policy::ExtraParameter;
 use Perl::Critic::Exception::Fatal::Generic qw{ &throw_generic };
 use Perl::Critic::Exception::Fatal::Internal qw{ &throw_internal };
 use Perl::Critic::Exception::Fatal::PolicyDefinition
@@ -46,6 +45,7 @@ sub import {
 
     my ( $class, %args ) = @_;
     my $test_mode = $args{-test};
+    my $extra_test_policies = $args{'-extra-test-policies'};
 
     if ( not @SITE_POLICY_NAMES ) {
         eval {
@@ -68,6 +68,13 @@ sub import {
     # In test mode, only load native policies, not third-party ones
     if ( $test_mode && any {m/\b blib \b/xms} @INC ) {
         @SITE_POLICY_NAMES = _modules_from_blib( @SITE_POLICY_NAMES );
+
+        if ($extra_test_policies) {
+            my @extra_policy_full_names =
+                map { "${POLICY_NAMESPACE}::$_" } @{$extra_test_policies};
+
+            push @SITE_POLICY_NAMES, @extra_policy_full_names;
+        }
     }
 
     return 1;
@@ -174,11 +181,6 @@ sub create_policy {
     my $user_add_themes = delete $policy_config_copy{add_themes};
     my $user_severity   = delete $policy_config_copy{severity};
 
-
-    # Validate remaining parameters. This dies on failure
-    $self->_validate_policy_params( $policy_name, \%policy_config_copy );
-
-
     # Construct policy from remaining params.  Trap errors.
     my $policy = eval { $policy_name->new( %policy_config_copy ) };
 
@@ -192,6 +194,8 @@ sub create_policy {
         throw_policy_definition
             qq{Unable to create policy '$policy_name': $EVAL_ERROR};
     }
+
+    $policy->__set_config( \%policy_config_copy );
 
     # Set base attributes on policy
     if ( defined $user_severity ) {
@@ -208,8 +212,6 @@ sub create_policy {
         my @add_themes = words_from_string( $user_add_themes );
         $policy->add_themes( @add_themes );
     }
-
-    $policy->__set_parameters(\%policy_config_copy);
 
     return $policy;
 }
@@ -255,38 +257,6 @@ sub _profile {
     my ($self) = @_;
 
     return $self->{_profile};
-}
-
-#-----------------------------------------------------------------------------
-
-sub _validate_policy_params {
-    my ($self, $policy, $params) = @_;
-
-    # If the Policy author hasn't provided the "supported_parameters" method,
-    # then we can't tell which parameters it supports.  So we let it go.
-    return if not $policy->can('supported_parameters');
-    my @supported_params = $policy->supported_parameters();
-
-    my %is_supported = hashify( @supported_params );
-    my $errors = Perl::Critic::Exception::AggregateConfiguration->new();
-
-    for my $offered_param ( keys %{ $params } ) {
-        if ( not defined $is_supported{$offered_param} ) {
-            $errors->add_exception(
-                Perl::Critic::Exception::Configuration::Option::Policy::ExtraParameter->new(
-                    policy          => $policy,
-                    option_name     => $offered_param,
-                    source          => undef,
-                )
-            );
-        }
-    }
-
-    if ( $errors->has_exceptions() ) {
-        $errors->rethrow();
-    }
-
-    return 1;
 }
 
 #-----------------------------------------------------------------------------

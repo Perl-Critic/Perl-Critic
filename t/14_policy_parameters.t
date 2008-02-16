@@ -13,30 +13,27 @@ use Test::More; #plan set below!
 use English qw(-no_match_vars);
 use Perl::Critic::UserProfile qw();
 use Perl::Critic::PolicyFactory (-test => 1);
+use Perl::Critic::PolicyParameter qw{ $NO_DESCRIPTION_AVAILABLE };
+use Perl::Critic::Utils qw( policy_short_name );
 use Perl::Critic::TestUtils qw(bundled_policy_names);
 
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 #-----------------------------------------------------------------------------
-# This script just proves that each policy that ships with Perl::Critic
-# overrides the supported_parameters() method.  It tries to create each Policy
-# using the parameters that it claims to support, but it uses a dummy value
-# for the parameter.  So this doesn't actually prove if we can create the
-# Policy using the parameters that it claims to support.
+# This script proves that each policy that ships with Perl::Critic overrides
+# the supported_parameters() method and, assuming that the policy is
+# configurable, that each parameter can parse its own default_string.
 #
 # This script also verifies that Perl::Critic::PolicyFactory throws an
 # exception when we try to create a policy with bogus parameters.  However, it
 # is your responsibility to verify that valid parameters actually work as
 # expected.  You can do this by using the #parms directive in the *.run files.
-#
-# When/if the individual policies start validating the value of the parameters
-# that are passed in, these tests will fail.
 #-----------------------------------------------------------------------------
 
 # Figure out how many tests there will be...
 my @all_policies = bundled_policy_names();
 my @all_params   = map { $_->supported_parameters() } @all_policies;
-my $ntests       = @all_policies + @all_params;
+my $ntests       = @all_policies + 2 * @all_params;
 plan( tests => $ntests );
 
 #-----------------------------------------------------------------------------
@@ -50,15 +47,37 @@ for my $policy ( @all_policies ) {
 #-----------------------------------------------------------------------------
 
 sub test_supported_parameters {
-    my $policy = shift;
-    my @supported_params = $policy->supported_parameters();
+    my $policy_name = shift;
+    my @supported_params = $policy_name->supported_parameters();
     my $config = Perl::Critic::Config->new( -profile => 'NONE' );
 
-    for my $param_name ( @supported_params ) {
-        my %args = ( -policy => $policy, -params => {$param_name => 'dummy'} );
+    for my $param_specification ( @supported_params ) {
+        my $parameter =
+            Perl::Critic::PolicyParameter->new($param_specification);
+        my $param_name = $parameter->get_name();
+        my $description = $parameter->get_description();
+
+        TODO: {
+            local $TODO = q<Descriptions won't be present until core Policies are converted to use Parameter objects.>;
+
+            ok(
+                $description && $description ne $NO_DESCRIPTION_AVAILABLE,
+                qq{Param "$param_name" for policy "$policy_name" has a description},
+            );
+        }
+
+        my %args = (
+            -policy => $policy_name,
+            -params => {
+                 $param_name => $parameter->get_default_string(),
+            }
+        );
         eval { $config->add_policy( %args ) };
-        my $label = qq{Created policy "$policy" with param "$param_name"};
-        is( $EVAL_ERROR, q{}, $label );
+        is(
+            $EVAL_ERROR,
+            q{},
+            qq{Created policy "$policy_name" with param "$param_name"},
+        );
     }
 }
 
@@ -69,9 +88,16 @@ sub test_invalid_parameters {
     my $bogus_params  = { bogus => 'shizzle' };
     my $profile = Perl::Critic::UserProfile->new( -profile => 'NONE' );
     my $factory = Perl::Critic::PolicyFactory->new( -profile => $profile );
+
+    my $policy_name = policy_short_name($policy);
+    my $label = qq{Created $policy_name with bogus parameters};
+
     eval { $factory->create_policy(-name => $policy, -params => $bogus_params) };
-    my $label = qq{Created $policy with bogus parameters};
-    like( $EVAL_ERROR, qr/policy doesn't take a "bogus" option/, $label);
+    like(
+        $EVAL_ERROR,
+        qr/The $policy_name policy doesn't take a "bogus" option/,
+        $label
+    );
 }
 
 #-----------------------------------------------------------------------------
