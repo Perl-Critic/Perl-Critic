@@ -9,8 +9,9 @@ package Perl::Critic::Policy::Modules::ProhibitExcessMainComplexity;
 
 use strict;
 use warnings;
+use Readonly;
 
-use Perl::Critic::Utils qw{ :booleans :severities };
+use Perl::Critic::Utils qw{ :severities };
 use Perl::Critic::Utils::McCabe qw{ calculate_mccabe_of_main };
 
 use base 'Perl::Critic::Policy';
@@ -21,38 +22,25 @@ our $VERSION = '1.081_005';
 
 #-----------------------------------------------------------------------------
 
-my $EXPL = q{Consider refactoring};
+Readonly::Scalar my $EXPL => q{Consider refactoring};
 
 #-----------------------------------------------------------------------------
 
-my $DEFAULT_MAX_MCCABE = 20;
-
 sub supported_parameters {
-    return qw{ max_mccabe };
+    return (
+        {
+            name            => 'max_mccabe',
+            description     => 'The maximum complexity score allowed.',
+            default_string  => '20',
+            behavior        => 'integer',
+            integer_minimum => 1,
+        },
+    );
 }
 
 sub default_severity { return $SEVERITY_MEDIUM                }
 sub default_themes   { return qw(core complexity maintenance) }
 sub applies_to       { return 'PPI::Document'                 }
-
-#-----------------------------------------------------------------------------
-
-sub initialize_if_enabled {
-    my ($self, $config) = @_;
-
-    my $max_mccabe = $config->{max_mccabe};
-    if (
-            not $max_mccabe
-        or  $max_mccabe !~ m/ \A \d+ \z /xms
-        or  $max_mccabe < 1
-    ) {
-        $max_mccabe = $DEFAULT_MAX_MCCABE;
-    }
-
-    $self->{_max_mccabe} = $max_mccabe;
-
-    return $TRUE;
-}
 
 #-----------------------------------------------------------------------------
 
