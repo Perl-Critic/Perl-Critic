@@ -1,5 +1,5 @@
 ## name Basic failure
-## failures 5
+## failures 6
 ## cut
 
 do_something() if $condition;
@@ -7,12 +7,13 @@ do_something() while $condition;
 do_something() until $condition;
 do_something() unless $condition;
 do_something() for @list;
+do_something() foreach @list;
 
 #-----------------------------------------------------------------------------
 
 ## name Configured to allow all
 ## failures 0
-## parms {allow => 'if while until unless for'}
+## parms {allow => 'if while until unless for foreach'}
 ## cut
 
 do_something() if $condition;
@@ -20,15 +21,16 @@ do_something() while $condition;
 do_something() until $condition;
 do_something() unless $condition;
 do_something() for @list;
+do_something() foreach @list;
 
 #-----------------------------------------------------------------------------
 
 ## name Configured to allow all, all regular control structures
 ## failures 0
-## parms {allow => 'if unless until for while'}
+## parms {allow => 'if unless until while'}
 ## cut
 
-if($condition){ do_something() } 
+if($condition){ do_something() }
 while($condition){ do_something() }
 until($condition){ do_something() }
 unless($condition){ do_something() }
@@ -42,6 +44,8 @@ unless($condition){ do_something() }
 #PPI versions < 1.03 had problems with this
 for my $element (@list){ do_something() }
 for (@list){ do_something_else() }
+foreach my $element (@list){ do_something() }
+foreach (@list){ do_something_else() }
 
 #-----------------------------------------------------------------------------
 
@@ -123,6 +127,7 @@ $hash{unless} = 1;
 $hash{until} = 1;
 $hash{while} = 1;
 $hash{for} = 1;
+$hash{foreach} = 1;
 
 #-----------------------------------------------------------------------------
 
@@ -130,7 +135,14 @@ $hash{for} = 1;
 ## failures 0
 ## cut
 
-my %hash = (if => 1, unless => 1, until => 1, while => 1, for => 1);
+my %hash = (
+    if => 1,
+    unless => 1,
+    until => 1,
+    while => 1,
+    for => 1,
+    foreach => 1,
+);
 
 #-----------------------------------------------------------------------------
 

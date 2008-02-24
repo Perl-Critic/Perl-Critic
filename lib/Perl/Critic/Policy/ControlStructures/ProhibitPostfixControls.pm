@@ -11,10 +11,7 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{
-    :booleans :characters :severities :data_conversion :classification
-};
-
+use Perl::Critic::Utils qw{ :characters :severities :data_conversion :classification };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.081_005';
@@ -22,43 +19,41 @@ our $VERSION = '1.081_005';
 #-----------------------------------------------------------------------------
 
 Readonly::Hash my %PAGES_OF => (
-    if     => [ 93, 94 ],
-    unless => [ 96, 97 ],
-    until  => [ 96, 97 ],
-    for    => [ 96     ],
-    while  => [ 96     ],
+    if      => [ 93, 94 ],
+    unless  => [ 96, 97 ],
+    until   => [ 96, 97 ],
+    for     => [ 96     ],
+    foreach => [ 96     ],
+    while   => [ 96     ],
 );
 
 # These functions can have postfix 'if'.
-my @DEFAULT_FLOW_CONTROL = qw( warn die carp croak cluck confess exit );
+my @DEFAULT_FLOW_CONTROL = qw( warn die carp croak cluck confess goto exit );
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return qw( allow flowcontrol ) }
-sub default_severity     { return $SEVERITY_LOW           }
-sub default_themes       { return qw(core pbp cosmetic)   }
-sub applies_to           { return 'PPI::Token::Word'      }
-
-#-----------------------------------------------------------------------------
-
-sub initialize_if_enabled {
-    my ($self, $config) = @_;
-
-    $self->{_allow} = {};
-
-    # Set configuration for allowed postfix operators.
-    if ( defined $config->{allow} ) {
-        my %allowed = hashify( words_from_string( $config->{allow} ) );
-        $self->{_allow} = \%allowed;
-    }
-
-    # set configuration for exempt flow-control functions that can have postfix 'if' on them
-    $self->{_flowcontrol} = defined $config->{flowcontrol} ?
-        { hashify( words_from_string( $config->{flowcontrol} ) ) } :
-        { hashify( @DEFAULT_FLOW_CONTROL ) };
-
-    return $TRUE;
+sub supported_parameters {
+    return (
+        {
+            name               => 'allow',
+            description        => 'The permitted postfix controls.',
+            default_string     => $EMPTY,
+            behavior           => 'enumeration',
+            enumeration_values => [ sort keys %PAGES_OF ],
+            enumeration_allow_multiple_values   => 1,
+        },
+        {
+            name               => 'flowcontrol',
+            description        => 'The exempt flow control functions.',
+            default_string     => 'carp cluck confess croak die exit goto warn',
+            behavior           => 'string list',
+        },
+    );
 }
+
+sub default_severity { return $SEVERITY_LOW         }
+sub default_themes   { return qw(core pbp cosmetic) }
+sub applies_to       { return 'PPI::Token::Word'    }
 
 #-----------------------------------------------------------------------------
 
@@ -150,8 +145,9 @@ flow-control structures in a F<.perlcriticrc> file:
 
 By default, all postfix control keywords are prohibited.
 
-The set of flow-control functions can also be configured with the
-'flowcontrol' directive in your F<.perlcriticrc> file:
+The set of flow-control functions that are exempt from the restriction
+can also be configured with the 'flowcontrol' directive in your
+F<.perlcriticrc> file:
 
  [ControlStructures::ProhibitPostfixControls]
  flowcontrol = warn die carp croak cluck confess goto exit
