@@ -22,31 +22,25 @@ our $VERSION = '1.081_005';
 Readonly::Scalar my $DESC => q{Close filehandles as soon as possible after opening them};
 Readonly::Scalar my $EXPL => [209];
 
-Readonly::Scalar my $DEFAULT_LINES => 9;
-
 Readonly::Scalar my $DOLLAR => q{$};  ## no critic (Interpolation)
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return qw(lines)              }
+sub supported_parameters {
+    return (
+        {
+            name            => 'lines',
+            description     => 'The maximum number of lines between an open() and a close().',
+            default_string  => '9',
+            behavior        => 'integer',
+            integer_minimum => 1,
+        },
+    );
+}
+
 sub default_severity     { return $SEVERITY_HIGH         }
 sub default_themes       { return qw( core pbp maintenance ) }
 sub applies_to           { return 'PPI::Token::Word'     }
-
-#-----------------------------------------------------------------------------
-
-sub initialize_if_enabled {
-    my ($self, $config) = @_;
-
-    #Set configuration if defined
-    $self->{_lines} =
-            defined $config->{lines}
-        &&  $config->{lines} =~ m/(\d+)/mx
-        &&  $1 > 0
-            ? $1 : $DEFAULT_LINES;
-
-    return $TRUE;
-}
 
 #-----------------------------------------------------------------------------
 
