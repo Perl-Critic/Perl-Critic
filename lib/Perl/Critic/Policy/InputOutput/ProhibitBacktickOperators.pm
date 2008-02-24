@@ -11,7 +11,7 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :booleans :severities is_in_void_context };
+use Perl::Critic::Utils qw{ :severities is_in_void_context };
 
 use base 'Perl::Critic::Policy';
 
@@ -27,21 +27,20 @@ Readonly::Scalar my $VOID_DESC => q{Backtick operator used in void context};
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return qw( only_in_void_context ) }
+sub supported_parameters {
+    return (
+        {
+            name        => 'only_in_void_context',
+            description => 'Allow backticks everywhere except in void contexts.',
+            behavior    => 'boolean',
+        },
+    );
+}
+
 sub default_severity { return $SEVERITY_MEDIUM }
 sub default_themes   { return qw(core maintenance)   }
 sub applies_to       { return qw(PPI::Token::QuoteLike::Backtick
                                  PPI::Token::QuoteLike::Command ) }
-
-#-----------------------------------------------------------------------------
-
-sub initialize_if_enabled {
-    my ($self, $config) = @_;
-
-    $self->{_only_in_void_context} = $config->{only_in_void_context};
-
-    return $TRUE;
-}
 
 #-----------------------------------------------------------------------------
 
