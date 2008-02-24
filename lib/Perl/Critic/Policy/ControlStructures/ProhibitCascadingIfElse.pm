@@ -11,7 +11,7 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :booleans :severities };
+use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.081_005';
@@ -21,26 +21,23 @@ our $VERSION = '1.081_005';
 Readonly::Scalar my $DESC => q{Cascading if-elsif chain};
 Readonly::Scalar my $EXPL => [ 117, 118 ];
 
-my $DEFAULT_MAX_ELSIF = 2;
-
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return qw( max_elsif )                       }
+sub supported_parameters {
+    return (
+        {
+            name            => 'max_elsif',
+            description     => 'The maximum number of alternatives that will be allowed.',
+            default_string  => '2',
+            behavior        => 'integer',
+            integer_minimum => 1,
+        },
+    );
+}
+
 sub default_severity { return $SEVERITY_MEDIUM                      }
 sub default_themes   { return qw( core pbp maintenance complexity ) }
 sub applies_to       { return 'PPI::Statement::Compound'            }
-
-#-----------------------------------------------------------------------------
-
-sub initialize_if_enabled {
-    my ($self, $config) = @_;
-
-    #Set configuration
-    $self->{_max} = defined $config->{max_elsif} ? $config->{max_elsif}
-                                                 : $DEFAULT_MAX_ELSIF;
-
-    return $TRUE;
-}
 
 #-----------------------------------------------------------------------------
 
@@ -49,7 +46,7 @@ sub violates {
 
     return if ($elem->type() ne 'if');
 
-    if ( _count_elsifs($elem) > $self->{_max} ) {
+    if ( _count_elsifs($elem) > $self->{_max_elsif} ) {
         return $self->violation( $DESC, $EXPL, $elem );
     }
     return;    #ok!
