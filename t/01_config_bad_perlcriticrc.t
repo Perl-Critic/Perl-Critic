@@ -74,8 +74,7 @@ my %expected_regexes =
         { $_ => generate_global_message_regex( $_, $PROFILE ) }
         @parameters;
 
-# TODO: my $expected_exceptions = 2 + scalar @parameters;
-my $expected_exceptions = 1 + scalar @parameters;
+my $expected_exceptions = 2 + scalar @parameters;
 is(
     scalar @exceptions,
     $expected_exceptions,
@@ -99,17 +98,13 @@ is(
     "should have received an extra-parameter exception",
 );
 
-TODO: {
-    local $TODO = q<This won't pass until parameters are in place.>;
-
-    # Test that we get an exception for bad individual policy configuration.
-    # The selection of RequirePodSections is arbitrary.
-    is(
-        ( scalar grep { is_require_pod_sections_source_exception($_) } @exceptions ),
-        1,
-        "should have received an invalid source exception for RequirePodSections",
-    );
-}
+# Test that we get an exception for bad individual policy configuration.
+# The selection of RequirePodSections is arbitrary.
+is(
+    ( scalar grep { is_require_pod_sections_source_exception($_) } @exceptions ),
+    1,
+    "should have received an invalid source exception for RequirePodSections",
+);
 
 sub generate_global_message_regex {
     my ($parameter, $file) = @_;
