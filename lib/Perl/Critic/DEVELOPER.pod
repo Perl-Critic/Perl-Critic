@@ -203,10 +203,10 @@ C<snext_sibling> stands for 'significant').
 
 In Perl, the parenthesis around argument lists are usually optional,
 and PPI packs the elements into a L<PPI::Structure::List> object when
-parens are used.  So if the sibling is a PPI::Structure::List, we pull
-out the first (significant) child of that list.  This child will be
-the first argument to C<grep>.  If parens were not used, then the
-sibling itself is the first argument.
+parentheses are used.  So if the sibling is a PPI::Structure::List, we
+pull out the first (significant) child of that list.  This child will
+be the first argument to C<grep>.  If parentheses were not used, then
+the sibling itself is the first argument.
 
       my $arg = $sib->isa('PPI::Structure::List') ? $sib->schild(0) : $sib;
 

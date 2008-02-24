@@ -14,7 +14,6 @@ use Readonly;
 use File::Spec;
 use List::MoreUtils qw(uniq);
 use English qw(-no_match_vars);
-use Carp;
 
 use Perl::Critic::Utils qw{
     :characters
@@ -22,6 +21,8 @@ use Perl::Critic::Utils qw{
     :severities
     words_from_string
 };
+use Perl::Critic::Exception::Fatal::Generic qw{ throw_generic };
+
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.081_005';
@@ -32,11 +33,25 @@ Readonly::Scalar my $POD_RX => qr{\A = (?: for|begin|end ) }mx;
 Readonly::Scalar my $DESC => q{Check the spelling in your POD};
 Readonly::Scalar my $EXPL => [148];
 
-Readonly::Scalar my $DEFAULT_SPELL_COMMAND => 'aspell list';
-
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return qw(spell_command stop_words) }
+sub supported_parameters {
+    return (
+        {
+            name            => 'spell_command',
+            description     => 'The command to invoke to check spelling.',
+            default_string  => 'aspell list',
+            behavior        => 'string',
+        },
+        {
+            name            => 'stop_words',
+            description     => 'The words to not consider as misspelled.',
+            default_string  => $EMPTY,
+            behavior        => 'string list',
+        },
+    );
+}
+
 sub default_severity     { return $SEVERITY_LOWEST        }
 sub default_themes       { return qw( core cosmetic pbp ) }
 sub applies_to           { return 'PPI::Document'         }
@@ -52,12 +67,6 @@ sub got_sigpipe {
 
 sub initialize_if_enabled {
     my ( $self, $config ) = @_;
-
-    #Set configuration if defined
-    $self->_set_spell_command( $config->{spell_command} || $DEFAULT_SPELL_COMMAND );
-    $self->_set_stop_words(
-        [ words_from_string($config->{stop_words} || $EMPTY) ]
-    );
 
     # workaround for Test::Without::Module v0.11
     local $EVAL_ERROR = undef;
@@ -85,30 +94,29 @@ sub violates {
     my $infh = IO::String->new( $code );
 
     my $outfh = File::Temp->new()
-      or croak "Unable to create temfile: $OS_ERROR";
+      or throw_generic "Unable to create tempfile: $OS_ERROR";
 
     my $outfile = $outfh->filename();
     my @words;
 
-    eval {
+    {
         # temporarily add our special wordlist to this annoying global
-        my @stop_words = @{ $self->_get_stop_words() };
-        local @Pod::Wordlist::Wordlist{ @stop_words } ##no critic(ProhibitPackageVars)
-            = (1) x @stop_words;
+        local %Pod::Wordlist::Wordlist =    ##no critic(ProhibitPackageVars)
+            %{ $self->_get_stop_words() };
 
         Pod::Spell->new()->parse_from_filehandle($infh, $outfh);
-        close $outfh or croak "Failed to close pod temp file: $OS_ERROR";
+        close $outfh or throw_generic "Failed to close pod temp file: $OS_ERROR";
         return if not -s $outfile; # Bail out if no words to spellcheck
 
         # run spell command and fetch output
         local $SIG{PIPE} = sub { $got_sigpipe = 1; };
         my $command_line = join $SPACE, @{$self->_get_spell_command_line()};
         open my $aspell_out_fh, q{-|}, "$command_line < $outfile"  ## Is this portable??
-            or croak "Failed to open handle to spelling program: $OS_ERROR";
+            or throw_generic "Failed to open handle to spelling program: $OS_ERROR";
 
         @words = uniq( <$aspell_out_fh> );
         close $aspell_out_fh
-            or croak "Failed to close handle to spelling program: $OS_ERROR";
+            or throw_generic "Failed to close handle to spelling program: $OS_ERROR";
 
         for (@words) {
             chomp;
@@ -119,6 +127,7 @@ sub violates {
     };
 
     return if !@words;
+
     return $self->violation( "$DESC: @words", $EXPL, $doc );
 }
 
@@ -137,9 +146,9 @@ sub _derive_spell_command_line {
     if (! $words[0] || ! -x $words[0]) {
         return;
     }
-    $self->{_spell_command_line} = \@words;
+    $self->_set_spell_command_line(\@words);
 
-    return $self->{_spell_command_line};
+    return $self->_get_spell_command_line();
 }
 
 #-----------------------------------------------------------------------------

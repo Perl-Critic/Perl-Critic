@@ -44,7 +44,7 @@ sub violates {
     $sib[0] = $elem->snext_sibling();
     return if !$sib[0];
 
-    # Deal with situations where 'print' is called with parens
+    # Deal with situations where 'print' is called with parentheses
     if ( $sib[0]->isa('PPI::Structure::List') ) {
         my $expr = $sib[0]->schild(0);
         return if !$expr;

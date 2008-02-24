@@ -59,8 +59,9 @@ Perl::Critic::Policy::ValuesAndExpressions::ProhibitNoisyQuotes
 
 Don't use quotes for one or two-character strings of non-alphanumeric
 characters (i.e. noise).  These tend to be hard to read.  For
-legibility, use C<q{}> or a named value.  However, braces, parens, and
-brackets tend do to look better in quotes, so those are allowed.
+legibility, use C<q{}> or a named value.  However, braces,
+parentheses, and brackets tend do to look better in quotes, so those
+are allowed.
 
   $str = join ',', @list;     #not ok
   $str = join ",", @list;     #not ok

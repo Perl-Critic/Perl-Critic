@@ -489,7 +489,7 @@ __END__
 
 =for stopwords DGR INI-style vim-fu minibuffer -noprofile API -singlepolicy
 singlepolicy -profileproto -profile-proto ben Jore formatter Peshak pbp Komodo
-screenshots
+screenshots tty emacs gVIM plugin Perlish templating ActiveState
 
 =head1 NAME
 
@@ -1041,7 +1041,7 @@ for more information about that.
 
 Using the C<--theme> command-line option, you can create an arbitrarily complex
 rule that determines which Policies to apply.  Precedence is the same as
-regular Perl code, and you can use parens to enforce precedence as well.
+regular Perl code, and you can use parentheses to enforce precedence as well.
 Supported operators are:
 
   Operator    Altertative    Example
@@ -1118,7 +1118,7 @@ family of Policies in one shot like this:
   # Now exempt from NamingConventions::ProhibitMixedCaseSubs
   sub camelHumpSub {}
 
-The argument list must be enclosed in parens and must contain one or more
+The argument list must be enclosed in parentheses and must contain one or more
 comma-separated barewords (i.e. don't use quotes).  The C<"## no critic">
 pragmas can be nested, and Policies named by an inner pragma will be disabled
 along with those already disabled an outer pragma.

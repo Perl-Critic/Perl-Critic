@@ -111,9 +111,9 @@ if the regex matched.
 =item * CodeLayout::ProhibitParensWithBuiltins
 
 Some builtin functions (particularly those that take a variable number of
-scalar arguments) should probably get parens.  This policy should be enhanced
-to allow the user to specify a list of builtins that are expempt from the
-policy.
+scalar arguments) should probably get parentheses.  This policy should be
+enhanced to allow the user to specify a list of builtins that are expempt
+from the policy.
 
 
 =item * InputOutput::RequireCheckedOpen and RequireCheckedClose

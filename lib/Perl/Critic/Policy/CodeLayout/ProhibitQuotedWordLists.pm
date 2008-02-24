@@ -120,10 +120,10 @@ four or more words.
 
 =head1 NOTES
 
-In the PPI parlance, a "list" is almost anything with parens.  I've
-tried to make this Policy smart by targeting only "lists" that could
-be sensibly expressed with C<qw()>.  However, there may be some edge
-cases that I haven't covered.  If you find one, send me a note.
+In the PPI parlance, a "list" is almost anything with parentheses.
+I've tried to make this Policy smart by targeting only "lists" that
+could be sensibly expressed with C<qw()>.  However, there may be some
+edge cases that I haven't covered.  If you find one, send me a note.
 
 =head1 IMPORTANT CHANGES
 

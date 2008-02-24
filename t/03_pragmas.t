@@ -568,7 +568,7 @@ use strict;
 use warnings;
 our $VERSION = 1.0;
 
-# with parens
+# with parentheses
 my $noisy = '!';           ##no critic (NoisyQuotes)
 barf() unless $$ eq '';    ##no critic (Postfix,Empty,Punctuation)
 barf() unless $$ eq '';    ##no critic (Postfix , Empty , Punctuation)
@@ -580,7 +580,7 @@ barf() unless $$ eq '';    ##no critic qw(Postfix,Empty,Punctuation)
 barf() unless $$ eq '';    ##no critic qw(Postfix , Empty , Punctuation)
 barf() unless $$ eq '';    ##no critic qw(Postfix Empty Punctuation)
 
-# no parens
+# no parentheses
 my $noisy = '!';           ##no critic NoisyQuotes;
 barf() unless $$ eq '';    ##no critic Postfix,Empty,Punctuation;
 barf() unless $$ eq '';    ##no critic Postfix , Empty , Punctuation;

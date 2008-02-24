@@ -1332,9 +1332,9 @@ which returns C<($x + $y)> as a L<PPI::Structure::List> instance.
 Given a L<PPI::Element> that is presumed to be a function call (which is
 usually a L<PPI::Token::Word>), splits the argument expressions into arrays of
 tokens.  Returns a list containing references to each of those arrays.  This
-is useful because parens are optional when calling a function, and PPI parses
-them very differently.  So this method is a poor-man's parse tree of PPI
-nodes.  It's not bullet-proof because it doesn't respect precedence.  In
+is useful because parentheses are optional when calling a function, and PPI
+parses them very differently.  So this method is a poor-man's parse tree of
+PPI nodes.  It's not bullet-proof because it doesn't respect precedence.  In
 general, I don't like the way this function works, so don't count on it to be
 stable (or even present).
 

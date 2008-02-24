@@ -84,11 +84,11 @@ little easier to re-order the list by cutting and pasting.
 
 =head1 NOTES
 
-In the PPI parlance, a "list" is almost anything with parens.  I've
-tried to make this Policy smart by targeting only "lists" that have at
-least one element and are being assigned to something.  However, there
-may be some edge cases that I haven't covered.  If you find one, send
-me a note.
+In the PPI parlance, a "list" is almost anything with parentheses.
+I've tried to make this Policy smart by targeting only "lists" that
+have at least one element and are being assigned to something.
+However, there may be some edge cases that I haven't covered.  If you
+find one, send me a note.
 
 =head1 AUTHOR
 

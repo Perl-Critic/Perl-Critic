@@ -180,7 +180,7 @@ of any of the themes associated with the Perl::Critic::Polices.
 
 Theme names can be combined with logical operators to form arbitrarily complex
 expressions.  Precedence is the same as normal mathematics, but you can use
-parens to enforce precedence as well.  Supported operators are:
+parentheses to enforce precedence as well.  Supported operators are:
 
    Operator    Altertative    Example
    ----------------------------------------------------------------------------

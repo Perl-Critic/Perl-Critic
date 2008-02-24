@@ -23,12 +23,12 @@ our $VERSION = '1.081_005';
 Readonly::Array my @ALLOW => qw( my our local return );
 Readonly::Hash my %ALLOW => hashify( @ALLOW );
 
-Readonly::Scalar my $DESC  => q{Builtin function called with parens};
+Readonly::Scalar my $DESC  => q{Builtin function called with parentheses};
 Readonly::Scalar my $EXPL  => [ 13 ];
 
 #-----------------------------------------------------------------------------
 # These are all the functions that are considered named unary
-# operators.  These frequently require parens because they have lower
+# operators.  These frequently require parentheses because they have lower
 # precedence than ordinary function calls.
 
 Readonly::Array my @NAMED_UNARY_OPS => qw(
@@ -74,7 +74,7 @@ sub violates {
         my $elem_after_parens = $sib->snext_sibling();
 
         # EXCEPTION 1: If the function is a named unary and there is an
-        # operator with higher precedence right after the parens.
+        # operator with higher precedence right after the parentheses.
         # Example: int( 1.5 ) + 0.5;
 
         if ( _is_named_unary( $elem ) && $elem_after_parens ){
@@ -83,8 +83,9 @@ sub violates {
             return if defined $precedence  && $precedence < 9;
         }
 
-        # EXCEPTION 2, If there is an operator immediately adfter the parens,
-        # and that operator has precedence greater than or eqaul to a comma.
+        # EXCEPTION 2, If there is an operator immediately adfter the
+        # parentheses, and that operator has precedence greater than
+        # or equal to a comma.
         # Example: join($delim, @list) . "\n";
 
         if ( $elem_after_parens ){
@@ -93,7 +94,7 @@ sub violates {
             return if defined $precedence && $precedence <= 20;
         }
 
-        # EXCEPTION 3: If the first operator within the parens is '='
+        # EXCEPTION 3: If the first operator within the parentheses is '='
         # Example: chomp( my $foo = <STDIN> );
 
         if ( my $first_op = $sib->find_first('PPI::Token::Operator') ){
@@ -143,13 +144,14 @@ called with multiple arguments.
 
 =head1 NOTES
 
-Coding with parens can sometimes lead to verbose and awkward
+Coding with parentheses can sometimes lead to verbose and awkward
 constructs, so I think the intent of Conway's guideline is to remove
-only the F<unnecessary> parens.  This policy makes exceptions for some
-common situations where parens are usually required.  However, you may
-find other situations where the parens are necessary to enforce
-precedence, but they cause still violations.  In those cases, consider
-using the '## no critic' comments to silence Perl::Critic.
+only the F<unnecessary> parentheses.  This policy makes exceptions for
+some common situations where parentheses are usually required.
+However, you may find other situations where the parentheses are
+necessary to enforce precedence, but they cause still violations.  In
+those cases, consider using the '## no critic' comments to silence
+Perl::Critic.
 
 =head1 AUTHOR
 

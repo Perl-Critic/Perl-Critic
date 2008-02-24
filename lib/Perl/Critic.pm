@@ -399,7 +399,7 @@ __END__
 
 =pod
 
-=for stopwords DGR INI-style API -params pbp refactored
+=for stopwords DGR INI-style API -params pbp refactored ActivePerl
 ben Jore Dolan's
 
 =head1 NAME
@@ -835,8 +835,8 @@ file.  See the L<"CONFIGURATION"> section for more information about that.
 
 Using the C<-theme> option, you can create an arbitrarily complex rule that
 determines which Policies will be loaded.  Precedence is the same as regular
-Perl code, and you can use parens to enforce precedence as well.  Supported
-operators are:
+Perl code, and you can use parentheses to enforce precedence as well.
+Supported operators are:
 
    Operator    Altertative    Example
    ----------------------------------------------------------------------------
@@ -912,7 +912,7 @@ family of Policies in one shot like this:
   # Now exempt from NamingConventions::ProhibitMixedCaseSubs
   sub camelHumpSub {}
 
-The argument list must be enclosed in parens and must contain one or more
+The argument list must be enclosed in parentheses and must contain one or more
 comma-separated barewords (e.g. don't use quotes).  The C<"## no critic">
 pragmas can be nested, and Policies named by an inner pragma will be disabled
 along with those already disabled an outer pragma.
