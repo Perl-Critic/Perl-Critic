@@ -57,7 +57,23 @@ Readonly::Scalar my $EXPL => [ 114 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return qw( list_funcs add_list_funcs) }
+sub supported_parameters {
+    return (
+        {
+            name            => 'list_funcs',
+            description     => 'The base set of functions to check.',
+            default_string  => join ($SPACE, @BUILTIN_LIST_FUNCS, @CPAN_LIST_FUNCS ),
+            behavior        => 'string list',
+        },
+        {
+            name            => 'add_list_funcs',
+            description     => 'The set of functions to check, in addition to those given in list_funcs.',
+            default_string  => $EMPTY,
+            behavior        => 'string list',
+        },
+    );
+}
+
 sub default_severity { return $SEVERITY_HIGHEST  }
 sub default_themes   { return qw(core bugs pbp)  }
 sub applies_to       { return 'PPI::Token::Word' }
@@ -67,16 +83,9 @@ sub applies_to       { return 'PPI::Token::Word' }
 sub initialize_if_enabled {
     my ($self, $config) = @_;
 
-    my @list_funcs = $config->{list_funcs}
-        ? $config->{list_funcs} =~ m/(\S+)/gxms
-        : ( @BUILTIN_LIST_FUNCS, @CPAN_LIST_FUNCS );
-
-    if ( $config->{add_list_funcs} ) {
-        push @list_funcs, $config->{add_list_funcs} =~ m/(\S+)/gxms;
-    }
-
-    # Hashify also removes duplicates!
-    $self->{_list_funcs} = { hashify @list_funcs };
+    $self->{_all_list_funcs} = {
+        hashify keys %{ $self->{_list_funcs} }, keys %{ $self->{_add_list_funcs} }
+    };
 
     return $TRUE;
 }
@@ -87,7 +96,7 @@ sub violates {
     my ($self, $elem, $doc) = @_;
 
     # Is this element a list function?
-    return if not $self->{_list_funcs}->{$elem};
+    return if not $self->{_all_list_funcs}->{$elem};
     return if not is_function_call($elem);
 
     # Only the block form of list functions can be analyzed.
