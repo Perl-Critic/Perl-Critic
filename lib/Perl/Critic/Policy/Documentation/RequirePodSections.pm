@@ -199,7 +199,34 @@ Readonly::Hash my %DEFAULT_SCRIPT_SECTIONS => (
 #-----------------------------------------------------------------------------
 
 sub supported_parameters {
-    return qw( lib_sections script_sections source language )
+    return (
+        {
+            name            => 'lib_sections',
+            description     => 'The sections to require for modules (separated by qr/\s* [|] \s*/xm).',
+            default_string  => $EMPTY,
+            parser          => \&_parse_lib_sections,
+        },
+        {
+            name            => 'script_sections',
+            description     => 'The sections to require for programs (separated by qr/\s* [|] \s*/xm).',
+            default_string  => $EMPTY,
+            parser          => \&_parse_script_sections,
+        },
+        {
+            name            => 'source',
+            description     => 'The origin of sections to use.',
+            default_string  => $DEFAULT_SOURCE,
+            behavior        => 'enumeration',
+            enumeration_values => [ keys %SOURCE_TRANSLATION ],
+        },
+        {
+            name            => 'language',
+            description     => 'The spelling of sections to use.',
+            default_string  => $EMPTY,
+            behavior        => 'enumeration',
+            enumeration_values => [ $EN_AU, $EN_US ],
+        },
+    );
 }
 
 sub default_severity { return $SEVERITY_LOW            }
@@ -208,24 +235,45 @@ sub applies_to       { return 'PPI::Document'          }
 
 #-----------------------------------------------------------------------------
 
+sub _parse_sections {
+    my $config_string = shift;
+
+    my @sections = split m{ \s* [|] \s* }mx, $config_string;
+
+    return map { uc $_ } @sections;  #Nomalize CaSe!
+}
+
+sub _parse_lib_sections {
+    my ($self, $parameter, $config_string) = @_;
+
+    if ( defined $config_string ) {
+        $self->{_lib_sections} = [ _parse_sections( $config_string ) ];
+    }
+
+    return;
+}
+
+sub _parse_script_sections {
+    my ($self, $parameter, $config_string) = @_;
+
+    if ( defined $config_string ) {
+        $self->{_script_sections} = [ _parse_sections( $config_string ) ];
+    }
+
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
 sub initialize_if_enabled {
     my ($self, $config) = @_;
 
-    # Set config, if defined
-    for my $section_type ( qw(lib_sections script_sections) ) {
-        if ( defined $config->{$section_type} ) {
-            my @sections = split m{ \s* [|] \s* }mx, $config->{$section_type};
-            @sections = map { uc $_ } @sections;  #Nomalize CaSe!
-            $self->{ "_$section_type" } = \@sections;
-        }
-    }
-
-    my $source = $config->{source};
+    my $source = $self->{_source};
     if ( not defined $source or not defined $DEFAULT_LIB_SECTIONS{$source} ) {
         $source = $DEFAULT_SOURCE;
     }
 
-    my $language = $config->{language};
+    my $language = $self->{_language};
     if (
             not defined $language
         or  not defined $DEFAULT_LIB_SECTIONS{$source}{$language}
@@ -233,15 +281,25 @@ sub initialize_if_enabled {
         $language = $SOURCE_DEFAULT_LANGUAGE{$source};
     }
 
-    if (not defined $self->{_lib_sections}) {
+    if ( not $self->_sections_specified('_lib_sections') ) {
         $self->{_lib_sections} = $DEFAULT_LIB_SECTIONS{$source}{$language};
     }
-    if (not defined $self->{_script_sections}) {
+    if ( not $self->_sections_specified('_script_sections') ) {
         $self->{_script_sections} =
             $DEFAULT_SCRIPT_SECTIONS{$source}{$language};
     }
 
     return $TRUE;
+}
+
+sub _sections_specified {
+    my ( $self, $sections_key ) = @_;
+
+    my $sections = $self->{$sections_key};
+
+    return 0 if not defined $sections;
+
+    return scalar @{ $sections };
 }
 
 #-----------------------------------------------------------------------------
