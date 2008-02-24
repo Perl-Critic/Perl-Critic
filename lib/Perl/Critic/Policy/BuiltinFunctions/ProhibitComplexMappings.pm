@@ -11,7 +11,7 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :booleans :severities :classification };
+use Perl::Critic::Utils qw{ :severities :classification };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.081_005';
@@ -23,22 +23,24 @@ Readonly::Scalar my $EXPL => [ 113 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return qw( max_statements )              }
+sub supported_parameters {
+    return (
+        {
+            name            => 'max_statements',
+            description     =>
+                'The maximum number of statements to allow within a map block.',
+            default_string  => '1',
+            behavior        => 'integer',
+            integer_minimum => 1,
+        },
+    );
+}
+
 sub default_severity  { return $SEVERITY_MEDIUM                     }
 sub default_themes    { return qw( core pbp maintenance complexity) }
 sub applies_to        { return 'PPI::Token::Word'                   }
 
 #-----------------------------------------------------------------------------
-
-sub initialize_if_enabled {
-    my ($self, $config) = @_;
-
-    #Set configuration, if defined
-    $self->{_max_statements} =
-        defined $config->{max_statements} ? $config->{max_statements} : 1;
-
-    return $TRUE;
-}
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
