@@ -11,7 +11,7 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :booleans :characters :severities };
+use Perl::Critic::Utils qw{ :characters :severities };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.081_005';
@@ -21,27 +21,23 @@ our $VERSION = '1.081_005';
 Readonly::Scalar my $DESC => q{List of quoted literal words};
 Readonly::Scalar my $EXPL => q{Use 'qw()' instead};
 
-my $DEFAULT_MIN_ELEMENTS = 2;
-
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return qw( min_elements )     }
+sub supported_parameters {
+    return (
+        {
+            name            => 'min_elements',
+            description     => 'The minimum number of words in a list that will be complained about.',
+            default_string  => '2',
+            behavior        => 'integer',
+            integer_minimum => 1,
+        },
+    );
+}
+
 sub default_severity { return $SEVERITY_LOW          }
 sub default_themes   { return qw( core cosmetic )    }
 sub applies_to       { return 'PPI::Structure::List' }
-
-#-----------------------------------------------------------------------------
-
-sub initialize_if_enabled {
-    my ($self, $config) = @_;
-
-    #Set configuration if defined
-    $self->{_min} =
-        defined $config->{min_elements} ? $config->{min_elements}
-                                        : $DEFAULT_MIN_ELEMENTS;
-
-    return $TRUE;
-}
 
 #-----------------------------------------------------------------------------
 
@@ -76,7 +72,7 @@ sub violates {
     }
 
     #Were there enough?
-    return if $count < $self->{_min};
+    return if $count < $self->{_min_elements};
 
     #If we get here, then all elements were literals
     return $self->violation( $DESC, $EXPL, $elem );
