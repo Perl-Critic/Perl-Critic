@@ -11,8 +11,9 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :severities :classification :booleans
-                            hashify words_from_string is_perl_bareword };
+use Perl::Critic::Utils qw{ :booleans :characters :severities :classification
+                            hashify is_perl_bareword };
+
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.081_005';
@@ -39,7 +40,17 @@ Readonly::Array my @BUILTIN_FUNCTIONS => qw(
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return qw(functions)          }
+sub supported_parameters {
+    return (
+        {
+            name            => 'functions',
+            description     => 'The set of functions to require checking the return value of.',
+            default_string  => join( $SPACE, @DEFAULT_FUNCTIONS ),
+            behavior        => 'string list',
+        },
+    );
+}
+
 sub default_severity     { return $SEVERITY_LOWEST       }
 sub default_themes       { return qw( core maintenance ) }
 sub applies_to           { return 'PPI::Token::Word'     }
@@ -49,15 +60,22 @@ sub applies_to           { return 'PPI::Token::Word'     }
 sub initialize_if_enabled {
     my ($self, $config) = @_;
 
-    #Set configuration if defined
-    if (defined $config->{functions}) {
-        my $functions = $config->{functions};
-        $functions =~ s/ :defaults / @DEFAULT_FUNCTIONS /gxms;
-        $functions =~ s/ :builtins / @BUILTIN_FUNCTIONS /gxms;
-        $self->{_functions} = { hashify words_from_string($functions) };
-    } else {
-        $self->{_functions} = { hashify @DEFAULT_FUNCTIONS };
+    my @specified_functions = keys %{ $self->{_functions} };
+    my @resulting_functions;
+
+    foreach my $function (@specified_functions) {
+        if ( $function eq ':defaults' ) {
+            push @resulting_functions, @DEFAULT_FUNCTIONS;
+        }
+        elsif ( $function eq ':builtins' ) {
+            push @resulting_functions, @BUILTIN_FUNCTIONS;
+        }
+        else {
+            push @resulting_functions, $function;
+        }
     }
+
+    $self->{_functions} = { hashify(@resulting_functions) };
 
     return $TRUE;
 }
@@ -90,11 +108,13 @@ Perl::Critic::Policy::InputOutput::RequireCheckedSyscalls
 
 =head1 DESCRIPTION
 
-This performs identically to InputOutput::RequireCheckedOpen/Close except that
-this is configurable to apply to any function, whether core or user-defined.
+This performs identically to InputOutput::RequireCheckedOpen/Close
+except that this is configurable to apply to any function, whether
+core or user-defined.
 
-If your module uses L<Fatal> or C<Fatal::Exception>, then any functions
-wrapped by those modules will not trigger this policy.  For example:
+If your module uses L<Fatal> or C<Fatal::Exception>, then any
+functions wrapped by those modules will not trigger this policy.  For
+example:
 
    use Fatal qw(open);
    open my $fh, $filename;  # no violation
@@ -102,10 +122,11 @@ wrapped by those modules will not trigger this policy.  For example:
 
 =head1 CONFIGURATION
 
-This policy watches for a configurable list of function names.  By default, it
-applies to C<open>, C<print> and C<close>.  You can override this to set it to
-a different list of functions with the C<functions> setting.  To do this, put
-entries in a F<.perlcriticrc> file like this:
+This policy watches for a configurable list of function names.  By
+default, it applies to C<open>, C<print> and C<close>.  You can
+override this to set it to a different list of functions with the
+C<functions> setting.  To do this, put entries in a F<.perlcriticrc>
+file like this:
 
   [InputOutput::RequireCheckedSyscalls]
   functions = open opendir read readline readdir close closedir
@@ -121,19 +142,22 @@ We have defined a few shortcuts for creating this list
   [InputOutput::RequireCheckedSyscalls]
   functions = :all
 
-The C<:builtins> shortcut above represents all of the builtin functions that
-have error conditions (about 65 of them, many of them rather obscure).
+The C<:builtins> shortcut above represents all of the builtin
+functions that have error conditions (about 65 of them, many of them
+rather obscure).
 
-The C<:all> is the insane case: you must check the return value of EVERY
-function call, even C<return> and C<exit>.  Yes, this "feature" is overkill
-and is wasting CPU cycles on your computer by just existing.  Nyah nyah.  I
-shouldn't code after midnight.
+The C<:all> is the insane case: you must check the return value of
+EVERY function call, even C<return> and C<exit>.  Yes, this "feature"
+is overkill and is wasting CPU cycles on your computer by just
+existing.  Nyah nyah.  I shouldn't code after midnight.
 
 =head1 CREDITS
 
-Initial development of this policy was supported by a grant from the Perl Foundation.
+Initial development of this policy was supported by a grant from the
+Perl Foundation.
 
-This policy module is based heavily on policies written by Andrew Moore <amoore@mooresystems.com>
+This policy module is based heavily on policies written by Andrew
+Moore <amoore@mooresystems.com>.
 
 =head1 AUTHOR
 
