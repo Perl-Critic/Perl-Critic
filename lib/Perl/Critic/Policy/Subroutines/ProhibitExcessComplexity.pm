@@ -11,9 +11,7 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{
-    :booleans :severities :data_conversion :classification
-};
+use Perl::Critic::Utils qw{ :severities :data_conversion :classification };
 use Perl::Critic::Utils::McCabe qw{ calculate_mccabe_of_sub };
 
 use base 'Perl::Critic::Policy';
@@ -26,20 +24,21 @@ Readonly::Scalar my $EXPL => q{Consider refactoring};
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return qw( max_mccabe )                }
+sub supported_parameters {
+    return (
+        {
+            name            => 'max_mccabe',
+            description     => 'The maximum complexity score allowed.',
+            default_string  => '20',
+            behavior        => 'integer',
+            integer_minimum => 1,
+        },
+    );
+}
+
 sub default_severity { return $SEVERITY_MEDIUM                }
 sub default_themes   { return qw(core complexity maintenance) }
 sub applies_to       { return 'PPI::Statement::Sub'           }
-
-#-----------------------------------------------------------------------------
-
-sub initialize_if_enabled {
-    my ($self, $config) = @_;
-
-    $self->{_max_mccabe} = $config->{max_mccabe} || 20;
-
-    return $TRUE;
-}
 
 #-----------------------------------------------------------------------------
 
