@@ -12,7 +12,7 @@ use warnings;
 use Readonly;
 
 
-use Perl::Critic::Utils qw{ :characters :booleans :severities :classification };
+use Perl::Critic::Utils qw{ :booleans :characters :severities :classification };
 use Perl::Critic::Utils::PPI qw{ is_ppi_statement_subclass };
 
 use base 'Perl::Critic::Policy';
@@ -27,25 +27,19 @@ Readonly::Scalar my $EXPL => [ 68, 71 ];
 #-----------------------------------------------------------------------------
 
 sub supported_parameters {
-    return qw<
-        allow_last_statement_to_be_comma_separated_in_map_and_grep
-    >;
+    return (
+        {
+            name           => 'allow_last_statement_to_be_comma_separated_in_map_and_grep',
+            description    => 'Allow map and grep blocks to return lists.',
+            default_string => $FALSE,
+            behavior       => 'boolean',
+        },
+    );
 }
 
 sub default_severity     { return $SEVERITY_HIGH      }
 sub default_themes       { return qw( core bugs pbp ) }
 sub applies_to           { return 'PPI::Statement'    }
-
-#-----------------------------------------------------------------------------
-
-sub initialize_if_enabled {
-    my ($self, $config) = @_;
-
-    $self->{_allow_last_statement_to_be_comma_separated_in_map_and_grep} =
-        $config->{allow_last_statement_to_be_comma_separated_in_map_and_grep};
-
-    return $TRUE;
-}
 
 #-----------------------------------------------------------------------------
 
@@ -218,8 +212,8 @@ like so:
   [ValuesAndExpressions::ProhibitCommaSeparatedStatements]
   allow_last_statement_to_be_comma_separated_in_map_and_grep = 1
 
-Actually, any true value will work.  With this option off (the
-default), the following code violates this policy.
+With this option off (the default), the following code violates this
+policy.
 
   %hash = map {$_, 1} @list;
 
