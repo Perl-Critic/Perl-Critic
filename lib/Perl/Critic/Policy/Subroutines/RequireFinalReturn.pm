@@ -11,11 +11,8 @@ use strict;
 use warnings;
 use Readonly;
 
-use Carp qw(confess);
-
-use Perl::Critic::Utils qw{
-    :booleans :characters :severities :data_conversion
-};
+use Perl::Critic::Exception::Fatal::Internal qw{ throw_internal };
+use Perl::Critic::Utils qw{ :characters :severities :data_conversion };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.081_005';
@@ -29,25 +26,22 @@ Readonly::Hash my %CONDITIONALS => hashify( qw(if unless for foreach) );
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return qw(terminal_funcs)    }
+sub supported_parameters {
+    return (
+        {
+            name            => 'terminal_funcs',
+            description     => 'The additional subroutines to treat as terminal.',
+            default_string  => $EMPTY,
+            behavior        => 'string list',
+            list_always_present_values =>
+                [ qw( exit die croak confess throw Carp::confess Carp::croak ) ],
+        },
+    );
+}
+
 sub default_severity { return $SEVERITY_HIGH        }
 sub default_themes   { return qw( core bugs pbp )   }
 sub applies_to       { return 'PPI::Statement::Sub' }
-
-#-----------------------------------------------------------------------------
-
-sub initialize_if_enabled {
-    my ($self, $config) = @_;
-
-    my $user_terminals = $config->{terminal_funcs} || q{};
-    my @user_terminals = words_from_string( $user_terminals );
-    my @default_terminals =
-        qw(exit die croak confess throw Carp::confess Carp::croak);
-
-    $self->{_terminals} = { hashify(@default_terminals, @user_terminals) };
-
-    return $TRUE;
-}
 
 #-----------------------------------------------------------------------------
 
@@ -60,7 +54,7 @@ sub violates {
     my @blocks = grep {$_->isa('PPI::Structure::Block')} $elem->schildren();
     if (@blocks > 1) {
        # sanity check
-       confess 'Internal error: subroutine should have no more than one block';
+       throw_internal 'Subroutine should have no more than one block';
     }
     elsif (@blocks == 0) {
        #Technically, subroutines don't have to have a block at all. In
@@ -126,8 +120,8 @@ sub _is_compound_return {
                        !$_->isa('PPI::Token')} $final->schildren();
     # Sanity check:
     if (scalar grep {!$_->isa('PPI::Structure::Block')} @blocks) {
-        confess 'Internal error: expected only conditions, blocks and tokens in the if statement';
-        return; ## no critic (UnreachableCode)
+        throw_internal
+            'Expected only conditions, blocks and tokens in the if statement';
     }
 
     for my $block (@blocks) {
@@ -154,7 +148,7 @@ sub _is_terminal_stmnt {
     my ( $self, $stmnt ) = @_;
     return if not $stmnt->isa('PPI::Statement');
     my $first_token = $stmnt->schild(0) || return;
-    return exists $self->{_terminals}->{$first_token};
+    return exists $self->{_terminal_funcs}->{$first_token};
 }
 
 #-----------------------------------------------------------------------------
