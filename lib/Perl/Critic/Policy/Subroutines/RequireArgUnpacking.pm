@@ -17,7 +17,7 @@ use List::MoreUtils qw(uniq any);
 use English qw(-no_match_vars);
 use Carp;
 
-use Perl::Critic::Utils qw{ :booleans :severities words_from_string };
+use Perl::Critic::Utils qw{ :severities words_from_string };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.081_005';
@@ -32,25 +32,22 @@ Readonly::Scalar my $EXPL => [178];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return qw(short_subroutine_statements) }
+sub supported_parameters {
+    return (
+        {
+            name            => 'short_subroutine_statements',
+            description     =>
+                'The number of statements to allow without unpacking.',
+            default_string  => '0',
+            behavior        => 'integer',
+            integer_minimum => 0,
+        },
+    );
+}
+
 sub default_severity     { return $SEVERITY_HIGH           }
 sub default_themes       { return qw( core pbp maintance ) }
 sub applies_to           { return 'PPI::Statement::Sub'    }
-
-#-----------------------------------------------------------------------------
-
-sub initialize_if_enabled {
-    my ($self, $config) = @_;
-
-    #Set configuration if defined
-    $self->{_short_subroutine_statements} =
-            defined $config->{short_subroutine_statements}
-        &&  $config->{short_subroutine_statements} =~ m/(\d+)/xms
-
-            ? $1 : 0;
-
-    return $TRUE;
-}
 
 #-----------------------------------------------------------------------------
 
