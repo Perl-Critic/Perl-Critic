@@ -11,7 +11,7 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :booleans :severities };
+use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.081_005';
@@ -21,27 +21,23 @@ our $VERSION = '1.081_005';
 Readonly::Scalar my $DESC => q{Don't turn off strict for large blocks of code};
 Readonly::Scalar my $EXPL => [ 433 ];
 
-my $DEFAULT_N_STATEMENTS = 3;
-
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return qw( statements )          }
+sub supported_parameters {
+    return (
+        {
+            name            => 'statements',
+            description     => 'The maximum number of statements in a no strict block.',
+            default_string  => '3',
+            behavior        => 'integer',
+            integer_minimum => 1,
+        },
+    );
+}
+
 sub default_severity { return $SEVERITY_HIGH            }
 sub default_themes   { return qw( core pbp bugs )       }
 sub applies_to       { return 'PPI::Statement::Include' }
-
-#-----------------------------------------------------------------------------
-
-sub initialize_if_enabled {
-    my ($self, $config) = @_;
-
-    $self->{_nstatements} = $DEFAULT_N_STATEMENTS;
-    if ( defined $config->{statements} ) {
-        $self->{_nstatements} = $config->{statements};
-    }
-
-    return $TRUE;
-}
 
 #-----------------------------------------------------------------------------
 
@@ -53,7 +49,7 @@ sub violates {
 
     my $sib = $elem->snext_sibling;
     my $nstatements = 0;
-    while ($nstatements++ <= $self->{_nstatements}) {
+    while ($nstatements++ <= $self->{_statements}) {
         return if !$sib;
         return if $sib->isa('PPI::Statement::Include') &&
             $sib->type eq 'use' &&
