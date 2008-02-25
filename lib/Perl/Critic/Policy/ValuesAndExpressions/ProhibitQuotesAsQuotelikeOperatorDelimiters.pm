@@ -29,7 +29,7 @@ Readonly::Hash my %DESCRIPTIONS => (
 Readonly::Scalar my $EXPL =>
     q{Using quotes as delimiters for quote-like operators obfuscates code};
 
-Readonly::Hash my %OPERATORS => hashify( qw{ m q qq qr qw qx s tr y } );
+Readonly::Array my @OPERATORS => qw{ m q qq qr qw qx s tr y };
 
 Readonly::Hash my %INFO_RETRIEVERS_BY_PPI_CLASS => (
     'PPI::Token::Quote::Literal'        => \&_info_for_single_character_operator,
@@ -45,11 +45,35 @@ Readonly::Hash my %INFO_RETRIEVERS_BY_PPI_CLASS => (
 #-----------------------------------------------------------------------------
 
 sub supported_parameters {
-    return qw{
-        single_quote_allowed_operators
-        double_quote_allowed_operators
-        back_quote_allowed_operators
-    };
+    return (
+        {
+            name               => 'single_quote_allowed_operators',
+            description        =>
+                'The operators to allow single-quotes as delimiters for.',
+            default_string     => 'm s qr qx',
+            behavior           => 'enumeration',
+            enumeration_values => [ @OPERATORS ],
+            enumeration_allow_multiple_values => 1,
+        },
+        {
+            name               => 'double_quote_allowed_operators',
+            description        =>
+                'The operators to allow double-quotes as delimiters for.',
+            default_string     => $EMPTY,
+            behavior           => 'enumeration',
+            enumeration_values => [ @OPERATORS ],
+            enumeration_allow_multiple_values => 1,
+        },
+        {
+            name               => 'back_quote_allowed_operators',
+            description        =>
+                'The operators to allow back-quotes (back-ticks) as delimiters for.',
+            default_string     => $EMPTY,
+            behavior           => 'enumeration',
+            enumeration_values => [ @OPERATORS ],
+            enumeration_allow_multiple_values => 1,
+        },
+    );
 }
 
 sub default_severity { return $SEVERITY_MEDIUM       }
@@ -72,22 +96,6 @@ sub applies_to {
 
 sub initialize_if_enabled {
     my ($self, $config) = @_;
-
-    $self->_parse_parameter(
-        'single_quote_allowed_operators',
-        $config,
-        'm s qr qx'
-    );
-    $self->_parse_parameter(
-        'double_quote_allowed_operators',
-        $config,
-        $EMPTY
-    );
-    $self->_parse_parameter(
-        'back_quote_allowed_operators',
-        $config,
-        $EMPTY
-    );
 
     $self->{_allowed_operators_by_delimiter} = {
         $QUOTE    => $self->_single_quote_allowed_operators(),
@@ -122,32 +130,6 @@ sub _allowed_operators_by_delimiter {
     my ( $self ) = @_;
 
     return $self->{_allowed_operators_by_delimiter};
-}
-
-#-----------------------------------------------------------------------------
-
-sub _parse_parameter {
-    my ( $self, $parameter_name, $config, $default_value ) = @_;
-
-    my @potential_values;
-    my $value_string = $default_value;
-    my $parameter_value = $config->{$parameter_name};
-
-    if (defined $parameter_value) {
-        $value_string = $parameter_value;
-    }
-
-    if ( defined $value_string ) {
-        @potential_values = words_from_string($value_string);
-
-        @potential_values = grep { exists $OPERATORS{$_} } @potential_values;
-    }
-
-    my %actual_values = hashify( @potential_values );
-
-    $self->{"_$parameter_name"} = \%actual_values;
-
-    return;
 }
 
 #-----------------------------------------------------------------------------
