@@ -9,13 +9,16 @@
 
 use strict;
 use warnings;
-use Test::More; #plan set below!
+
 use English qw(-no_match_vars);
+
 use Perl::Critic::UserProfile qw();
 use Perl::Critic::PolicyFactory (-test => 1);
 use Perl::Critic::PolicyParameter qw{ $NO_DESCRIPTION_AVAILABLE };
 use Perl::Critic::Utils qw( policy_short_name );
 use Perl::Critic::TestUtils qw(bundled_policy_names);
+
+use Test::More; #plan set below!
 
 Perl::Critic::TestUtils::block_perlcriticrc();
 
@@ -57,14 +60,10 @@ sub test_supported_parameters {
         my $param_name = $parameter->get_name();
         my $description = $parameter->get_description();
 
-        TODO: {
-            local $TODO = q<Descriptions won't be present until core Policies are converted to use Parameter objects.>;
-
-            ok(
-                $description && $description ne $NO_DESCRIPTION_AVAILABLE,
-                qq{Param "$param_name" for policy "$policy_name" has a description},
-            );
-        }
+        ok(
+            $description && $description ne $NO_DESCRIPTION_AVAILABLE,
+            qq{Param "$param_name" for policy "$policy_name" has a description},
+        );
 
         my %args = (
             -policy => $policy_name,
