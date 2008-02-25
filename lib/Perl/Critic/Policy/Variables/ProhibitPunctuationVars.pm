@@ -11,9 +11,7 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{
-    :booleans :characters :severities :data_conversion
-};
+use Perl::Critic::Utils qw{ :characters :severities :data_conversion };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.081_005';
@@ -23,37 +21,30 @@ our $VERSION = '1.081_005';
 Readonly::Scalar my $DESC => q{Magic punctuation variable used};
 Readonly::Scalar my $EXPL => [ 79 ];
 
-
-my %default_exempt = hashify( qw( $_ @_ $1 $2 $3 $4 $5 $6 $7 $8 $9 _ ) );
-
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return qw( allow )           }
+sub supported_parameters {
+    return (
+        {
+            name            => 'allow',
+            description     => 'The additional variables to allow.',
+            default_string  => $EMPTY,
+            behavior        => 'string list',
+            list_always_present_values =>
+                                 [ qw( $_ @_ $1 $2 $3 $4 $5 $6 $7 $8 $9 _ ) ],
+        },
+    );
+}
+
 sub default_severity { return $SEVERITY_LOW         }
 sub default_themes   { return qw(core pbp cosmetic) }
 sub applies_to       { return 'PPI::Token::Magic'   }
 
 #-----------------------------------------------------------------------------
 
-sub initialize_if_enabled {
-    my ($self, $config) = @_;
-
-    $self->{_exempt} = \%default_exempt;
-    if ( defined $config->{allow} ) {
-        my @allow = words_from_string( $config->{allow} );
-        for my $varname (@allow) {
-            $self->{_exempt}->{$varname} = 1;
-        }
-    }
-
-    return $TRUE;
-}
-
-#-----------------------------------------------------------------------------
-
 sub violates {
     my ( $self, $elem, undef ) = @_;
-    if ( !exists $self->{_exempt}->{$elem} ) {
+    if ( !exists $self->{_allow}->{$elem} ) {
         return $self->violation( $DESC, $EXPL, $elem );
     }
     return;  #ok!
