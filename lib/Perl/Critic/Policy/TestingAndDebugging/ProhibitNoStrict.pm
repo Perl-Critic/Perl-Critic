@@ -13,7 +13,7 @@ use Readonly;
 
 use List::MoreUtils qw(all);
 
-use Perl::Critic::Utils qw{ :booleans :severities :data_conversion };
+use Perl::Critic::Utils qw{ :characters :severities :data_conversion };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.081_005';
@@ -25,25 +25,35 @@ Readonly::Scalar my $EXPL => [ 429 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return qw( allow )               }
+sub supported_parameters {
+    return (
+        {
+            name            => 'allow',
+            description     => 'Allow vars, subs, and/or refs.',
+            default_string  => $EMPTY,
+            parser          => \&_parse_allow,
+        },
+    );
+}
+
 sub default_severity { return $SEVERITY_HIGHEST         }
 sub default_themes   { return qw( core pbp bugs )       }
 sub applies_to       { return 'PPI::Statement::Include' }
 
 #-----------------------------------------------------------------------------
 
-sub initialize_if_enabled {
-    my ($self, $config) = @_;
+sub _parse_allow {
+    my ($self, $parameter, $config_string) = @_;
 
     $self->{_allow} = {};
 
-    if ( defined $config->{allow} ) {
-        my $allowed = lc $config->{allow}; #String of words
+    if( defined $config_string ) {
+        my $allowed = lc $config_string; #String of words
         my %allowed = hashify( $allowed =~ m/ (\w+) /gmx );
         $self->{_allow} = \%allowed;
     }
 
-    return $TRUE;
+    return;
 }
 
 #-----------------------------------------------------------------------------
@@ -94,7 +104,7 @@ if you were wise enough to C<use strict> in the first place, then it
 doesn't make sense to disable it completely.  By default, any C<no
 strict> statement will violate this policy.  However, you can
 configure this Policy to allow certain types of strictures to be
-disabled (See L<CONFIGURATION>).  A bare C<no strict> statement will
+disabled (See L</CONFIGURATION>).  A bare C<no strict> statement will
 always raise a violation.
 
 =head1 CONFIGURATION
