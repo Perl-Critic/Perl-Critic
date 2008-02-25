@@ -21,9 +21,6 @@ use Perl::Critic::Utils qw{ :characters :severities };
 
 #-----------------------------------------------------------------------------
 
-plan skip_all =>
-    q<This test won't work until the core Policies have been converted to use parameter objects.>;
-
 eval 'use Test::Deep'; ## no critic (
 plan( skip_all => 'Test::Deep requried to test round-trip of default values')
     if $EVAL_ERROR;
