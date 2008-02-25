@@ -13,7 +13,7 @@ use Readonly;
 
 use List::MoreUtils qw(any);
 
-use Perl::Critic::Utils qw{ :booleans :severities :data_conversion };
+use Perl::Critic::Utils qw{ :characters :severities :data_conversion };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.081_005';
@@ -25,7 +25,18 @@ Readonly::Scalar my $EXPL => [51];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters  { return qw( allow )             }
+sub supported_parameters {
+    return (
+        {
+            name               => 'allow',
+            description        =>
+                'Kinds of delimiters to permit, e.g. "qq{", "qq(", "qq[", "qq/".',
+            default_string     => $EMPTY,
+            parser             => \&_parse_allow,
+        },
+    );
+}
+
 sub default_severity { return $SEVERITY_LOWEST        }
 sub default_themes   { return qw( core pbp cosmetic ) }
 sub applies_to       { return qw(PPI::Token::Quote::Double
@@ -35,14 +46,13 @@ sub applies_to       { return qw(PPI::Token::Quote::Double
 
 Readonly::Scalar my $MAX_SPECIFICATION_LENGTH => 3;
 
-sub initialize_if_enabled {
-    my ($self, $config) = @_;
+sub _parse_allow {
+    my ($self, $parameter, $config_string) = @_;
 
-    $self->{_allow} = [];
+    my @allow;
 
-    #Set configuration, if defined
-    if ( defined $config->{allow} ) {
-        my @allow = words_from_string( $config->{allow} );
+    if (defined $config_string) {
+        @allow = words_from_string( $config_string );
         #Try to be forgiving with the configuration...
         for (@allow) {
             m{ \A qq }mx || ($_ = 'qq' . $_)
@@ -50,10 +60,11 @@ sub initialize_if_enabled {
         for (@allow) {
             (length $_ <= $MAX_SPECIFICATION_LENGTH) || chop
         }    #Chop closing char
-        $self->{_allow} = \@allow;
     }
 
-    return $TRUE;
+    $self->{_allow} = \@allow;
+
+    return;
 }
 
 #-----------------------------------------------------------------------------
@@ -64,7 +75,7 @@ sub violates {
     # Skip if this string needs interpolation
     return if _has_interpolation($elem);
 
-    #Overlook allowed quote styles
+    # Overlook allowed quote styles
     return if any { $elem =~ m{ \A \Q$_\E }mx } @{ $self->{_allow} };
 
     # Must be a violation
