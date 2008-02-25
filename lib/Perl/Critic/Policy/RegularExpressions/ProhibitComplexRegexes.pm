@@ -25,31 +25,26 @@ our $VERSION = '1.081_005';
 Readonly::Scalar my $DESC => q{Split long regexps into smaller qr// chunks};
 Readonly::Scalar my $EXPL => [261];
 
-Readonly::Scalar my $DEFAULT_MAX_COMPLEXITY => 60;
-
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return qw(max_characters)         }
+sub supported_parameters {
+    return (
+        {
+            name            => 'max_characters',
+            description     =>
+                'The maximum number of characters to allow in a regular expression.',
+            default_string  => '60',
+            behavior        => 'integer',
+            integer_minimum => 1,
+        },
+    );
+}
+
 sub default_severity     { return $SEVERITY_MEDIUM           }
 sub default_themes       { return qw( core pbp maintenance ) }
 sub applies_to           { return qw(PPI::Token::Regexp::Match
                                      PPI::Token::Regexp::Substitute
                                      PPI::Token::QuoteLike::Regexp) }
-
-#-----------------------------------------------------------------------------
-
-sub initialize_if_enabled {
-    my ($self, $config) = @_;
-
-    #Set configuration if defined
-    $self->{_max_characters} =
-            defined $config->{max_characters}
-        &&  $config->{max_characters} =~ m/(\d+)/xms
-        &&  $1 > 0
-            ? $1 : $DEFAULT_MAX_COMPLEXITY;
-
-    return $TRUE;
-}
 
 #-----------------------------------------------------------------------------
 

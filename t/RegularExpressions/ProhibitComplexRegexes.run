@@ -58,24 +58,6 @@ m/ foo /;
 
 #-----------------------------------------------------------------------------
 
-## name config errors
-## failures 0
-## parms {max_characters => 'two'}
-## cut
-
-m/ foo /;
-
-#-----------------------------------------------------------------------------
-
-## name config errors
-## failures 0
-## parms {max_characters => 0}
-## cut
-
-m/ foo /;
-
-#-----------------------------------------------------------------------------
-
 ## name failing regexp with syntax error
 ## failures 0
 ## cut
