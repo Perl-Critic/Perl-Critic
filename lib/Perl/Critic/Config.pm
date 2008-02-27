@@ -751,7 +751,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Config - The Perl::Critic user-preferences, combined from any profile file and command-line parameters.
+Perl::Critic::Config - The final derived Perl::Critic configuration, combined from any profile file and command-line parameters.
 
 =head1 DESCRIPTION
 
@@ -1139,6 +1139,11 @@ Theme names are case-insensitive.  If C<-theme> is set to an empty string,
 then it is equivalent to the set of all Policies.  A theme name that doesn't
 exist is equivalent to an empty set.  Please See
 L<http://en.wikipedia.org/wiki/Set> for a discussion on set theory.
+
+=head1 SEE ALSO
+
+L<Perl::Critic::Defaults>, L<Perl::Critic::UserProfile>
+
 
 =head1 AUTHOR
 

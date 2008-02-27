@@ -359,6 +359,10 @@ Usually the path to a F<.perlcriticrc>.
 
 =back
 
+=head1 SEE ALSO
+
+L<Perl::Critic::Config>, L<Perl::Critic::Defaults>
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>

@@ -180,7 +180,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Defaults - The global configuration default values.
+Perl::Critic::Defaults - The global configuration default values, combined with command-line values.
 
 =head1 DESCRIPTION
 
@@ -261,6 +261,10 @@ Returns the default C<color> setting. (Either 1 or 0).
 Returns the default C<criticism-fatal> setting (Either 1 or 0).
 
 =back
+
+=head1 SEE ALSO
+
+L<Perl::Critic::Config>, L<Perl::Critic::UserProfile>
 
 =head1 AUTHOR
 
