@@ -242,8 +242,14 @@ t/10_userprofile.t
 t/11_policyfactory.t
 t/12_policylisting.t
 t/13_bundled_policies.t
+t/14_policy_parameter_behavior_boolean.t
+t/14_policy_parameter_behavior_enumeration.t
+t/14_policy_parameter_behavior_integer.t
+t/14_policy_parameter_behavior_list_string.t
+t/14_policy_parameter_behavior_string.t
 t/14_policy_parameters.t
 t/15_statistics.t
+t/16_roundtrip_defaults.t
 t/20_policies.t
 t/20_policy_podspelling.t
 t/20_policy_prohibithardtabs.t
@@ -383,3 +389,4 @@ t/Variables/RequireLexicalLoopIterators.run
 t/Variables/RequireLocalizedPunctuationVars.run.PL
 t/Variables/RequireNegativeIndices.run
 TODO.pod
+tools/ppidump
