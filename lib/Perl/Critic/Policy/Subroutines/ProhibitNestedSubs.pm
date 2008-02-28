@@ -86,7 +86,7 @@ Ricardo SIGNES <rjbs@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2007 Ricardo SIGNES.
+Copyright (c) 2007-2008 Ricardo SIGNES.
 
 This program is free software; you can redistribute it and/or modify it under
 the same terms as Perl itself.

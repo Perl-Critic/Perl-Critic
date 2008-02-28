@@ -81,7 +81,7 @@ L<Perl::Critic::Policy::Modules::RequireExplicitPackage>.
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2007 Chris Dolan and Jeffrey Ryan Thalhammer.  All
+Copyright (c) 2005-2008 Chris Dolan and Jeffrey Ryan Thalhammer.  All
 rights reserved.
 
 This program is free software; you can redistribute it and/or modify
