@@ -19,13 +19,21 @@ use English qw( -no_match_vars );
 use File::Spec qw();
 use Test::More;
 
-use Perl::Critic::PolicyFactory ( -test => 1 );
 use Perl::Critic::Utils qw{ :characters };
 use Perl::Critic::TestUtilitiesWithMinimalDependencies qw{
     should_skip_author_tests
     get_author_test_skip_message
 };
 use Perl::Critic::TestUtils qw{ starting_points_including_examples };
+
+# Note: "use PolicyFactory" *must* appear after "use TestUtils" for the
+# -extra-test-policies option to work.
+use Perl::Critic::PolicyFactory (
+    '-test' => 1,
+    '-extra-test-policies' => [ qw{ ErrorHandling::RequireUseOfExceptions } ],
+);
+
+#-----------------------------------------------------------------------------
 
 if (should_skip_author_tests()) {
     plan skip_all => get_author_test_skip_message();
@@ -35,6 +43,14 @@ if (should_skip_author_tests()) {
 
 eval { require Test::Perl::Critic; };
 plan skip_all => 'Test::Perl::Critic required to criticise code' if $EVAL_ERROR;
+
+#-----------------------------------------------------------------------------
+
+eval { require Perl::Critic::Policy::ErrorHandling::RequireUseOfExceptions; };
+plan skip_all =>
+    'ErrorHandling::RequireUseOfExceptions policy required to criticise code.'
+        . ' This policy is part of the Perl::Critic::More distribution.'
+    if $EVAL_ERROR;
 
 #-----------------------------------------------------------------------------
 # Set up PPI caching for speed (used primarily during development)
@@ -56,7 +72,7 @@ if ( $ENV{PERL_CRITIC_CACHE} ) {
 
 eval { require Devel::EnforceEncapsulation; };
 if ( !$EVAL_ERROR ) {
-    for my $pkg ( '', '::Config', '::Policy', '::Violation' ) {
+    for my $pkg ( $EMPTY, '::Config', '::Policy', '::Violation' ) {
         Devel::EnforceEncapsulation->apply_to('Perl::Critic'.$pkg);
     }
 }
