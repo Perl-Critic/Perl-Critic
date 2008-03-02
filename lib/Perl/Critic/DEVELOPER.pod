@@ -98,7 +98,7 @@ Most policies don't need to override the C<initialize_if_enabled()>
 method provided by L<Perl::Critic::Policy>.  However, if your Policy
 is configurable via F<.perlcriticrc>, you should implement a
 C<supported_parameters()> method and need to implement
-C<initialize_if_enabled()> to examine the C<%config> values.  Since
+C<initialize_if_enabled()> to examine the C<$config> values.  Since
 this Policy isn't configurable, we'll declare that by providing an
 implementation of C<supported_parameters()> that returns an empty
 list.
@@ -170,9 +170,10 @@ have the right "type" of element.  In our example, we know that the
 element will be a L<PPI::Token::Word> because that's what we declared
 back in the C<applies_to()> method.  However, we didn't specify
 exactly which "word" we were looking for.  Evaluating a PPI element in
-a string context returns the literal form of the code.  So we make
-sure that this PPI::Token::Word is, in fact, "grep".  If it's not,
-then we don't' need to bother examining it.
+a string context returns the literal form of the code.  (You can also
+use the c<content()> method.)  So we make sure that this
+PPI::Token::Word is, in fact, "grep".  If it's not, then we don't'
+need to bother examining it.
 
       return if $elem ne 'grep';
 
@@ -196,10 +197,10 @@ L<Perl::Critic::Utils> to get this done.
 
 Every PPI element is linked to its siblings, parent, and children (if
 it has any).  Since those siblings could just be whitespace, we use
-the C<snext_sibling()> to get the next code-sibling (the 's' in
-C<snext_sibling> stands for 'significant').
+the C<snext_sibling()> to get the next code-sibling (the "s" in
+C<snext_sibling> stands for "significant").
 
-      my $sib = $elem->snext_sibling() || return;
+      my $sib = $elem->snext_sibling() or return;
 
 In Perl, the parenthesis around argument lists are usually optional,
 and PPI packs the elements into a L<PPI::Structure::List> object when
@@ -291,25 +292,29 @@ complex one.
 
 =head2 Do It All Yourself
 
-The constructor for a Policy receives two arguments: the standard
-class name argument, plus a hash of the configuration for the Policy;
-this is a regular hash, and not a reference to one.  Unfortunately,
-Policies are not required to call the super constructor; however, in
-order to work correctly, a Policy must be a blessed hash.  An example
-minimal constructor:
+The C<initialize_if_enabled()> method for a Policy receives one
+argument: a reference to a hash of the configuration for the Policy.
+This method is only called if the user's configuration has enabled the
+policy.  It returns a boolean stating whether the Policy should
+continue to be enabled.  Generally, the only reason to return
+C<$FALSE> is when some external requirement is missing.  For example,
+L<Perl::Critic::Policy::CodeLayout::RequireTidyCode> disables itself
+if L<Perl::Tidy> is not installed.
 
-  sub new {
-      my ( $class, %config ) = @_;
-      my $self = bless {}, $class;
+A basic, do-nothing implementation of C<initialize_if_enabled()> would
+be:
 
-      return $self;
+  use Perl::Critic::Utils qw< :booleans >;
+
+  ...
+
+  sub initialize_if_enabled {
+      my ( $self, $config ) = @_;
+
+      return $TRUE;
   }
 
-Actually using the above code is pretty useless since this is what the
-superclass constructor does.  The reason to actually create a
-constructor is to do something with C<%config>.
-
-As stated above, what you get in C<%config> are trimmed strings.  For
+As stated above, what you get in C<$config> are trimmed strings.  For
 example, if the user's F<.perlcritic> contains
 
   [Your::Policy]
@@ -317,27 +322,26 @@ example, if the user's F<.perlcritic> contains
   factor   =     5.52
   selections =   2 78 92
 
-then C<%config> will contain the equivalent of
+then C<$config> will contain the equivalent of
 
-  my %config = (
-      foo => 'bar baz'
-      factor => '5.52'
-      selections => '2 78 92'
-  );
+  my $config = {
+      foo        => 'bar baz',
+      factor     => '5.52',
+      selections => '2 78 92',
+  };
 
 To make this available to the C<violates()> method, the values are
 usually put into C<$self> under the name of the configuration item
 prefixed with an underscore.  E.g.
 
-  sub new {
-      my ( $class, %config ) = @_;
-      my $self = bless {}, $class;
+  sub initialize_if_enabled {
+      my ( $self, $config ) = @_;
 
-      $self->{_foo} = $config{foo};
-      $self->{_factor} = $config{factor};
-      $self->{_selections} = $config{selections};
+      $self->{_foo} = $config->{foo};
+      $self->{_factor} = $config->{factor};
+      $self->{_selections} = $config->{selections};
 
-      return $self;
+      return $TRUE;
   }
 
 Often, you'll want to convert the configuration values into something
@@ -347,17 +351,16 @@ that can help you with this.  Assuming that C<violates()> wants to
 have C<selections> as an array, you'll want to have something like
 this:
 
-  use Perl::Critic::Utils qw{ :data_conversion };
+  use Perl::Critic::Utils qw{ :booleans :data_conversion };
 
-  sub new {
-      my ( $class, %config ) = @_;
-      my $self = bless {}, $class;
+  sub initialize_if_enabled {
+      my ( $self, $config ) = @_;
 
       $self->{_foo} = $config{foo};
       $self->{_factor} = $config{factor};
       $self->{_selections} = [ words_from_string( $config{selections} ) ];
 
-      return $self;
+      return $TRUE;
   }
 
 Since C<selections> contains numbers, it may be desirable to change
@@ -376,6 +379,22 @@ configuration handling, see
 L<Perl::Critic::Policy::CodeLayout::RequireTidyCode>.
 
 
+=head2 Note On Constructors
+
+It used to be the case that Policies handled configuration by
+implementing a constructor.  However, there was no requirement to call
+the base constructor; as long as the Policy ended up being a blessed
+hash reference, everything was fine.  Unfortunately, this meant that
+Policies would be loaded and their prerequisites would be C<use>d,
+even if the Policy wasn't enabled, slowing things down.  Also, this
+severely restricted the core of L<Perl::Critic>'s ability to enhance
+things.  Use of constructors is deprecated and is incompatible with
+C<supported_parameters()> metadata below.  Kindly use
+C<initialize_if_enabled()>, instead, to do any sort of set up that you
+need.
+
+
+
 =head2 Providing Basic Configuration Information Via C<supported_parameters()>
 
 As minimum for a well behaved Policy, you should implement
@@ -388,10 +407,10 @@ C<RequireBlockGrep> example above, this looked like
 
   sub supported_parameters { return ()                  }
 
-For the example being used in the constructor section above, this
-would be
+For the example being used in the C<initialize_if_enabled()> section
+above, this would be
 
-  sub supported_parameters { return qw{ foo factor selections }; }
+  sub supported_parameters { return qw< foo factor selections >; }
 
 Given this information, C<Perl::Critic> can tell the user when they
 have specified a parameter for a Policy which isn't valid, e.g. when
@@ -422,18 +441,22 @@ C<description>, and C<default_string>.  For example,
 
 From this C<perlcritic> can emit a better F<.perlcriticrc> prototype.
 
+Note that use of constructors is
+L<incompatible|/"Note On Constructors"> with specifying parameters in
+this way.
+
 
 =head2 Using C<supported_parameters()> to Get It Done For You
 
 The C<supported_parameters()> discussion above showed how you could
 help others with your Policy, but didn't do anything to make your life
-as a Policy author easier; you still need to implement a constructor
-to access any configuration that the user has specified.  To have the
-configuration automatically handled for you, you need to declare how
-your parameters act by specifying a value for their C<behavior>.  For
-example, the following declares that a parameter allows the user to
-choose from five specific values and that the user can select any
-combination of them:
+as a Policy author easier; you still need to implement
+C<initialize_if_enabled()> to access any configuration that the user
+has specified.  To have the configuration automatically handled for
+you, you need to declare how your parameters act by specifying a value
+for their C<behavior>.  For example, the following declares that a
+parameter allows the user to choose from five specific values and that
+the user can select any combination of them:
 
   sub supported_parameters {
       return (
@@ -606,11 +629,11 @@ B<Example:>
 
 If none of the behaviors does exactly what you want it to, you can
 provide your own parser for a parameter.  The reason for doing this as
-opposed to using a constructor is that it allows you to use a behavior
-to provide its extra functionality and it provides a means for a
-C<Perl::Critic> configuration program, e.g. an IDE that integrates
-C<Perl::Critic>, to validate your parameter as the user
-modifies its value.
+opposed to using an implementation of C<initialize_if_enabled()> is
+that it allows you to use a behavior to provide its extra
+functionality and it provides a means for a C<Perl::Critic>
+configuration program, e.g. an IDE that integrates C<Perl::Critic>, to
+validate your parameter as the user modifies its value.
 
 The way you declare that you have a custom parser is to include a
 reference to it in the parameter specification with the C<parser> key.
@@ -637,7 +660,10 @@ parsed value for later use by the C<violates()> method.
 An example parser (without enough error handling) for the above
 example declaration:
 
-  use File::Slurp qw{ slurp };
+  use File::Slurp qw< slurp >;
+
+  use Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue
+      qw{ throw_policy_value };
 
   sub _parse_file_name {
       my ($self, $parameter, $config_string) = @_;
@@ -646,9 +672,11 @@ example declaration:
 
       if ($config_string) {
           if (not -r $config_string) {
-              die q{Invalid value for },
-                  $parameter->get_name(),
-                  qq{: $config_string is not readable.\n};
+              throw_policy_value
+                  policy         => $self->get_short_name(),
+                  option_name    => $parameter->get_name(),
+                  option_value   => $config_string,
+                  message_suffix => 'is not readable.';
           }
 
           @thingies = slurp $config_string;
@@ -659,39 +687,28 @@ example declaration:
       return;
   }
 
-Note that, if the value for the parameter is not valid, C<die> is used
-instead of C<confess> because the problem is not a bug in the code but
-a problem with user input.
+Note that, if the value for the parameter is not valid, an instance of
+L<Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue>
+is thrown.  This allows C<Perl::Critic> to include that problem along
+with any other problems found with the user's configuration in a
+single error message.
 
 
-=head2 Using Both C<supported_parameters()> and a Constructor
+=head2 Using Both C<supported_parameters()> and C<initialize_if_enabled()>
 
 There are cases where a Policy needs additional initialization beyond
 configuration or where the way it acts depends upon the combination of
-multiple parameters.  In such situations, you will need to create a
-constructor.  If you want to take advantage of the supplied parameter
-handling from within the constructor, there's a problem because
-L<Perl::Critic> can't do its initialization of a Policy until the
-Policy has been created.  (Due to the lack of a requirement for a
-Policy to invoke the super-constructor.)  The way around this is to
-invoke C<__finish_standard_initialization()> on the Policy before
-accessing the parsed parameter values.
+multiple parameters.  In such situations, you will need to create an
+implementation of C<initialize_if_enabled()>.  If you want to take
+advantage of the supplied parameter handling from within
+implementation of C<initialize_if_enabled()>, note that the
+information from C<supported_parameters()> will already have been
+used, with user-supplied parameter values valididated and placed into
+the Policy by the time C<initialize_if_enabled()> has been called.  It
+is likely that you will not need to refer the contents of the
+C<$config> parameter; just pull the information you need out of
+C<$self>.
 
-This is done like so:
-
-  sub new {
-      my ( $class, %config ) = @_;
-      my $self = bless {}, $class;
-
-      $self->__finish_standard_initialization( \%config );
-
-      # do additional setup that requires the parameter values
-
-      return $self;
-  }
-
-An example of a Policy that does this is
-L<Perl::Critic::Policy::Documentation::RequirePodSections>.
 
 
 =head2 Summary of permitted hash keys in C<supported_parameters()>.
@@ -746,7 +763,8 @@ A mandatory reference to an array of strings.
 
 =item - "enumeration_allow_multiple_values" (optional)
 
-Boolean indicating whether or not the user is restricted to a single value.
+Boolean indicating whether or not the user is restricted to a single
+value.
 
 =back
 
@@ -770,7 +788,8 @@ Maximum allowed value, inclusive.
 
 =item - "list_always_present_values" (optional)
 
-A reference to an array of values that should always be included in the value of the parameter.
+A reference to an array of values that should always be included in
+the value of the parameter.
 
 =back
 
