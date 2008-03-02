@@ -18,13 +18,29 @@ Perl::Critic::TestUtils::block_perlcriticrc();
 my $code;
 my $policy = 'Documentation::PodSpelling';
 my %config;
-my $can_podspell = eval {require Pod::Spell} && can_determine_spell_command();
+my $can_podspell =
+        eval {require Pod::Spell}
+    &&  can_determine_spell_command()
+    &&  can_run_spell_command();
 
 sub can_determine_spell_command {
     my $policy = Perl::Critic::Policy::Documentation::PodSpelling->new();
     $policy->initialize_if_enabled();
 
     return $policy->_get_spell_command_line();
+}
+
+sub can_run_spell_command {
+    my $policy = Perl::Critic::Policy::Documentation::PodSpelling->new();
+    $policy->initialize_if_enabled();
+
+    return $policy->_run_spell_command( <<'END_TEST_CODE' );
+=pod
+
+=head1 Test The Spell Command
+
+=cut
+END_TEST_CODE
 }
 
 sub can_podspell {

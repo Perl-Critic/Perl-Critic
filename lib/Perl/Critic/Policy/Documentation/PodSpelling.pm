@@ -9,11 +9,12 @@ package Perl::Critic::Policy::Documentation::PodSpelling;
 
 use strict;
 use warnings;
+
+use English qw(-no_match_vars);
 use Readonly;
 
 use File::Spec;
 use List::MoreUtils qw(uniq);
-use English qw(-no_match_vars);
 
 use Perl::Critic::Utils qw{
     :characters
@@ -82,6 +83,14 @@ sub initialize_if_enabled {
 
     return $FALSE if not $self->_derive_spell_command_line();
 
+    return $FALSE if not $self->_run_spell_command( <<'END_TEST_CODE' );
+=pod
+
+=head1 Test The Spell Command
+
+=cut
+END_TEST_CODE
+
     return $TRUE;
 }
 
@@ -91,53 +100,14 @@ sub violates {
     my ( $self, $elem, $doc ) = @_;
 
     my $code = $doc->serialize();
-    my $infh = IO::String->new( $code );
 
-    my $outfh = File::Temp->new()
-      or throw_generic "Unable to create tempfile: $OS_ERROR";
+    my $words = $self->_run_spell_command($code);
 
-    my $outfile = $outfh->filename();
-    my @words;
+    return if not $words;       # error running spell command
 
-    local $EVAL_ERROR = undef;
+    return if not @{$words};    # no problems found
 
-    eval {
-        # temporarily add our special wordlist to this annoying global
-        local %Pod::Wordlist::Wordlist =    ##no critic(ProhibitPackageVars)
-            %{ $self->_get_stop_words() };
-
-        Pod::Spell->new()->parse_from_filehandle($infh, $outfh);
-        close $outfh or throw_generic "Failed to close pod temp file: $OS_ERROR";
-        return if not -s $outfile; # Bail out if no words to spellcheck
-
-        # run spell command and fetch output
-        local $SIG{PIPE} = sub { $got_sigpipe = 1; };
-        my $command_line = join $SPACE, @{$self->_get_spell_command_line()};
-        open my $aspell_out_fh, q{-|}, "$command_line < $outfile"  ## Is this portable??
-            or throw_generic "Failed to open handle to spelling program: $OS_ERROR";
-
-        @words = uniq( <$aspell_out_fh> );
-        close $aspell_out_fh
-            or throw_generic "Failed to close handle to spelling program: $OS_ERROR";
-
-        for (@words) {
-            chomp;
-        }
-
-        # Why is this extra step needed???
-        @words = grep { not exists $Pod::Wordlist::Wordlist{$_} } @words;  ##no critic(ProhibitPackageVars)
-    };
-
-    if ($EVAL_ERROR) {
-        # Eat anything we did ourselves above, propagate anything else.
-        if (not ref Perl::Critic::Exception::Fatal::Generic->caught()) {
-            ref $EVAL_ERROR ? $EVAL_ERROR->rethrow() : die $EVAL_ERROR;
-        }
-    }
-
-    return if !@words;
-
-    return $self->violation( "$DESC: @words", $EXPL, $doc );
+    return $self->violation( "$DESC: @{$words}", $EXPL, $doc );
 }
 
 #-----------------------------------------------------------------------------
@@ -206,6 +176,60 @@ sub _set_stop_words {
     $self->{_stop_words} = $stop_words;
 
     return;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _run_spell_command {
+    my ($self, $code) = @_;
+
+    my $infh = IO::String->new( $code );
+
+    my $outfh = File::Temp->new()
+      or throw_generic "Unable to create tempfile: $OS_ERROR";
+
+    my $outfile = $outfh->filename();
+    my @words;
+
+    local $EVAL_ERROR = undef;
+
+    eval {
+        # temporarily add our special wordlist to this annoying global
+        local %Pod::Wordlist::Wordlist =    ##no critic(ProhibitPackageVars)
+            %{ $self->_get_stop_words() };
+
+        Pod::Spell->new()->parse_from_filehandle($infh, $outfh);
+        close $outfh or throw_generic "Failed to close pod temp file: $OS_ERROR";
+        return if not -s $outfile; # Bail out if no words to spellcheck
+
+        # run spell command and fetch output
+        local $SIG{PIPE} = sub { $got_sigpipe = 1; };
+        my $command_line = join $SPACE, @{$self->_get_spell_command_line()};
+        open my $aspell_out_fh, q{-|}, "$command_line < $outfile"  ## Is this portable??
+            or throw_generic "Failed to open handle to spelling program: $OS_ERROR";
+
+        @words = uniq( <$aspell_out_fh> );
+        close $aspell_out_fh
+            or throw_generic "Failed to close handle to spelling program: $OS_ERROR";
+
+        for (@words) {
+            chomp;
+        }
+
+        # Why is this extra step needed???
+        @words = grep { not exists $Pod::Wordlist::Wordlist{$_} } @words;  ## no critic(ProhibitPackageVars)
+    };
+
+    if ($EVAL_ERROR) {
+        # Eat anything we did ourselves above, propagate anything else.
+        if (not ref Perl::Critic::Exception::Fatal::Generic->caught()) {
+            ref $EVAL_ERROR ? $EVAL_ERROR->rethrow() : die $EVAL_ERROR;  ## no critic (ErrorHandling::RequireCarping)
+        }
+
+        return;
+    }
+
+    return [ @words ];
 }
 
 #-----------------------------------------------------------------------------
