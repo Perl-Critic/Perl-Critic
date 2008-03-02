@@ -99,7 +99,9 @@ sub violates {
     my $outfile = $outfh->filename();
     my @words;
 
-    {
+    local $EVAL_ERROR = undef;
+
+    eval {
         # temporarily add our special wordlist to this annoying global
         local %Pod::Wordlist::Wordlist =    ##no critic(ProhibitPackageVars)
             %{ $self->_get_stop_words() };
@@ -125,6 +127,13 @@ sub violates {
         # Why is this extra step needed???
         @words = grep { not exists $Pod::Wordlist::Wordlist{$_} } @words;  ##no critic(ProhibitPackageVars)
     };
+
+    if ($EVAL_ERROR) {
+        # Eat anything we did ourselves above, propagate anything else.
+        if (not ref Perl::Critic::Exception::Fatal::Generic->caught()) {
+            ref $EVAL_ERROR ? $EVAL_ERROR->rethrow() : die $EVAL_ERROR;
+        }
+    }
 
     return if !@words;
 
