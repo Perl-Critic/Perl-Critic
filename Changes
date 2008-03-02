@@ -1,4 +1,4 @@
-[1.xxx] Released on 2008-01-??
+[1.081_006] Released on 2008-03-02
 
      New Features:
      * A new metadata system for defining policy parameters/options has been
@@ -35,6 +35,9 @@
      * Added support for "criticism-fatal" option in your perlcriticrc
        file.  This will be used by the criticism pragma to cause execution
        to abort if the file contains any violations.
+
+     Bug fixes:
+     * Believe that we have finally, truly whacked the PodSpelling problem.
 
 [1.081_005] Released on 2007-12-29
 
