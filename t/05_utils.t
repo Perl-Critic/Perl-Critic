@@ -256,7 +256,7 @@ is( interpolate( 'literal'    ), "literal",    'Interpolation' );
         ok( ! Perl::Critic::Utils::_is_perl($_), qq{Is not perl: '$_'});
     }
 }
-     
+
 #-----------------------------------------------------------------------------
 # _is_backup() tests
 
