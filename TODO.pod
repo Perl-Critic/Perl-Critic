@@ -38,6 +38,14 @@ Primarily for things like C<RequireUseStrict> and C<ProhibitMagicNumbers>.
 Replace current workaround for C<RequireUseStrict>.
 
 
+=item * Add --files-with-violations/-l and --files-without-violations/-L options to F<perlcritic>.
+
+Just print out file names.  I could have used this at work when combined with
+C<--single-policy>.
+
+    gvim `perlcritic --single-policy QuotedWordLists -l`
+
+
 =item * Add --prohibit-unrestricted-no-critic option to F<perlcritic>.
 
 Requires C<## no critic> to take an argument:
