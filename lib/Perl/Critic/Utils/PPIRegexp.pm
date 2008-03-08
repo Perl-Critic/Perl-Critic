@@ -9,9 +9,12 @@ package Perl::Critic::Utils::PPIRegexp;
 
 use strict;
 use warnings;
+
 use English qw(-no_match_vars);
-use PPI::Node;
+use Readonly;
 use Carp qw(croak);
+
+use PPI::Node;
 
 use base 'Exporter';
 
@@ -139,6 +142,8 @@ sub get_delimiters {
     }
 }
 
+Readonly::Scalar my $NO_DEPTH_USED  => -1;
+
 sub ppiify {
     my ($re) = @_;
     return if !$re;
@@ -148,7 +153,7 @@ sub ppiify {
     my $ppire = PPI::Node->new;
     my @stack = ($ppire);
     my $iter = $re->walker;
-    my $last_depth = -1;
+    my $last_depth = $NO_DEPTH_USED;
     while (my ($node, $depth) = $iter->()) {
         if ($last_depth > $depth) { # -> parent
             # walker() creates pseudo-closing nodes for reasons I don't understand

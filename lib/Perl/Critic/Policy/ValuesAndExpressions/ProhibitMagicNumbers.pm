@@ -28,13 +28,16 @@ Readonly::Scalar my $TYPE_NOT_ALLOWED_SUFFIX =>
     ") are not allowed.$USE_READONLY_OR_CONSTANT";
 
 Readonly::Scalar my $UNSIGNED_NUMBER =>
-    qr<
+    qr{
             \d+ (?: [$PERIOD] \d+ )?  # 1, 1.5, etc.
         |   [$PERIOD] \d+             # .3, .7, etc.
-    >xms;
+    }xms;
 Readonly::Scalar my $SIGNED_NUMBER => qr/ [-+]? $UNSIGNED_NUMBER /xms;
+
+# The regex is already simplified.  There's just a lot of variable use.
+## no critic (ProhibitComplexRegexes)
 Readonly::Scalar my $RANGE =>
-    qr<
+    qr{
         \A
         ($SIGNED_NUMBER)
         [$PERIOD] [$PERIOD]
@@ -45,7 +48,8 @@ Readonly::Scalar my $RANGE =>
             [$RIGHT_PAREN]
         )?
         \z
-    >xms;
+    }xms;
+## use critic
 
 Readonly::Scalar my $SPECIAL_ARRAY_SUBSCRIPT_EXEMPTION => -1;
 

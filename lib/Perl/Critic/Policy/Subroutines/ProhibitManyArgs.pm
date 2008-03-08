@@ -60,7 +60,7 @@ sub violates {
     my $num_args;
     if ($elem->prototype) {
        # subtract two for the "()" on the prototype
-       $num_args = -2 + length $elem->prototype;
+       $num_args = -2 + length $elem->prototype;  ## no critic (ProhibitMagicNumbers)
     } else {
        $num_args = _count_args($elem->block->schildren);
     }

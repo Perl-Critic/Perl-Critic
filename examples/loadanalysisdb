@@ -155,13 +155,16 @@ END_SQL
     # the driver what the parameter types are so that we can use execute()
     # without calling bind_param() each time. See "Binding Values Without
     # bind_param()" on pages 126-7 of "Programming the Perl DBI".
+
+    ## no critic (ProhibitMagicNumbers)
     $insert_statement->bind_param( 1, 'x', SQL_VARCHAR);
     $insert_statement->bind_param( 2,   1, SQL_INTEGER);
     $insert_statement->bind_param( 3,   1, SQL_INTEGER);
     $insert_statement->bind_param( 4,   1, SQL_INTEGER);
     $insert_statement->bind_param( 5, 'x', SQL_VARCHAR);
     $insert_statement->bind_param( 6, 'x', SQL_VARCHAR);
-    $insert_statement->bind_param( 6, 'x', SQL_VARCHAR);
+    $insert_statement->bind_param( 7, 'x', SQL_VARCHAR);
+    ## use critic
 
     return $insert_statement;
 }
