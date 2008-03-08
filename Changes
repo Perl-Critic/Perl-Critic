@@ -19,7 +19,7 @@
        configurable policies included in this distribution.
 
        There is a discussion of the design considerations for this facility in
-       the distribution in doc/PolicyParameter_Notes.pod.
+       the source repository under doc/PolicyParameter_Notes.pod.
 
      * Added support for "criticism-fatal" option in your perlcriticrc
        file.  This will be used by the criticism pragma to cause execution
