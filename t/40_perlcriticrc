@@ -29,3 +29,6 @@ stop_words = accessor accessors autoflushes backticks bareword barewords BBEdit 
 
 [InputOutput::RequireCheckedSyscalls]
 functions = open close
+
+[ValuesAndExpressions::ProhibitMagicNumbers]
+allowed_values = -1 0 1 2

@@ -178,6 +178,7 @@ lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitImplicitNewlines.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitInterpolationOfLiterals.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitLeadingZeros.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitLongChainsOfMethodCalls.pm
+lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitMagicNumbers.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitMismatchedOperators.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitMixedBooleanOperators.pm
 lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitNoisyQuotes.pm
@@ -253,6 +254,7 @@ t/16_roundtrip_defaults.t
 t/20_policies.t
 t/20_policy_podspelling.t
 t/20_policy_prohibithardtabs.t
+t/20_policy_prohibitmagicnumbers.t
 t/20_policy_prohibittrailingwhitespace.t
 t/20_policy_requireconsistentnewlines.t
 t/20_policy_requiretidycode.t

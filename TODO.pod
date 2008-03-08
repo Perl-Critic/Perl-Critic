@@ -142,6 +142,13 @@ from the policy.
 These policies should not report violations if 'use Fatal' is in effect.
 
 
+=item * ValuesAndExpressions::ProhibitMagicNumbers
+
+The C<allowed_values> option needs to handle ranges.
+
+Needs to be tested against a wider range of $VERSION declarations.
+
+
 =item * TestingAndDebugging::RequireUseWarnings
 
 Check for -w on the shbang line.
@@ -453,6 +460,23 @@ Not strictly a bug -- the PPI Regexp classes have a dearth of accessor methods
 as of v1.118, meaning that we have to do messy digging into internals.  I
 wrote Perl::Critic:Utils::PPIRegexp to encapsulate this messiness, but it
 would be nicer to have an official interface in PPI.
+
+
+=item Hash constructors being parsed as blocks
+
+ValuesAndExpressions::ProhibitMagicNumbers has a performance optimization that
+can't be done because it can't tell whether a block is really a block or not.
+
+When fixed, uncomment the lines in
+_element_is_in_an_include_or_readonly_statement().
+
+
+=item literal()
+
+This method has been added in PPI v1.199_xx.  When v1.200 is released,
+we can remove the special 1.118 checks from
+ValuesAndExpressions::ProhibitMagicNumbers and
+F<t/20_policies_prohibitmagicnumbers.t>.
 
 
 =back

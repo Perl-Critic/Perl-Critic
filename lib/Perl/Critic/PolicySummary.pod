@@ -438,6 +438,10 @@ Write C<oct(755)> instead of C<0755>. [Severity 5]
 
 Long chains of method calls indicate tightly coupled code. [Severity 2]
 
+=head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitMagicNumbers>
+
+Don't mix numeric operators with string operands, or vice-versa. [Severity 2]
+
 =head2 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitMismatchedOperators>
 
 Don't mix numeric operators with string operands, or vice-versa. [Severity 3]
