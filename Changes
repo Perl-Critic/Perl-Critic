@@ -1,4 +1,4 @@
-[1.081_006] Released on 2008-03-02
+[1.082] Released on 2008-03-08
 
      New Features:
      * A new metadata system for defining policy parameters/options has been
@@ -6,8 +6,7 @@
        configuration validation and parsing can be taken care of
        automatically, in most cases.  This allows greater integration with
        IDEs and allows the perlcritic "--profile-proto" option to produce
-       better output.  A standalone GUI configuration editor for Perl::Critic
-       is being written based upon this information.
+       better output.
 
        Note: This change does NOT REQUIRE ANY CHANGES to policies outside of
        this distribution; they should continue to work as is.  However, use
@@ -22,104 +21,49 @@
        There is a discussion of the design considerations for this facility in
        the distribution in doc/PolicyParameter_Notes.pod.
 
-     New Policy:
-     * Module::RequireNoMatchVarsWithUseEnglish
-
-     Policy Changes:
-     * TestingAndDebugging::RequireUseStrict now accepts "use Moose" as
-       equivalent to "use strict".
-     * TestingAndDebugging::RequireUseWarnings now accepts "use Moose" as
-       equivalent to "use warnings".
-
-     Miscellanea:
      * Added support for "criticism-fatal" option in your perlcriticrc
        file.  This will be used by the criticism pragma to cause execution
        to abort if the file contains any violations.
 
-     Bug fixes:
-     * Believe that we have finally, truly whacked the PodSpelling problem.
-
-[1.081_005] Released on 2007-12-29
-
-     Policy Changes:
-     * ControlStructures::ProhibitPostfixControls gains the ability to have
-       the flow control statements allowed to be modified.  This in response
-       to RT #29540.
-
-     Bug fixes:
-     * RT #30388 ValuesAndExpressions::ProhibitVersionStrings complained
-       about numbered directories in "use lib".
-     * Attempt to find a word in English that is spelled identically by the
-       British and Americans, yet does not exist in any other language, even
-       with a completely different meaning for testing of PodSpelling.
-
-[1.081_004] Released on 2007-12-20
-
-     Bug fixes:
-     * Hopefully have finally solved the problems under 5.6: Replace usage
-       of Unicode property escapes with POSIX character classes.
-
-[1.081_003] Released on 2007-12-16
-
-     Bug fixes:
-     * Missed some usage of IsUppercase in 1.081_002.
-     * Hope to finally kill off usage under 5.5.5.
-
-[1.081_002] Released on 2007-12-16
-
-     Bug fixes:
-     * Use \p{IsUpper} and \b{IsLower} instead of \p{IsUppercase} and
-       \b{IsLowercase} in order to restore compatibility with perl 5.6.
-
-[1.081_001] Released on 2007-12-15
+     New Policy:
+     * Module::RequireNoMatchVarsWithUseEnglish
 
      Policy Changes:
      * Added an allow_last_statement_to_be_comma_separated_in_map_and_grep
        option to ValuesAndExpressions::ProhibitCommaSeparatedStatements.
        Partial response to http://rt.cpan.org/Public/Bug/Display.html?id=27654.
+     * ControlStructures::ProhibitPostfixControls gains the ability to have
+       the flow control statements allowed to be modified.  This in response
+       to RT #29540.
+     * TestingAndDebugging::RequireUseStrict now accepts "use Moose" as
+       equivalent to "use strict".
+     * TestingAndDebugging::RequireUseWarnings now accepts "use Moose" as
+       equivalent to "use warnings".
 
      Bug Fixes:
      * RT #31281 perlcritic doesn't recognize "#!/bin/env perl" shebang
+     * Replace usage of Unicode property escapes with POSIX character classes
+       order to restore 5.6 compatability.
+     * RT #30388 ValuesAndExpressions::ProhibitVersionStrings complained
+       about numbered directories in "use lib".
+     * Fixed handling of badly behaved spelling programs in PodSpelling.
+
+[1.081_006] Released on 2008-03-02
+[1.081_005] Released on 2007-12-29
+[1.081_004] Released on 2007-12-20
+[1.081_003] Released on 2007-12-16
+[1.081_002] Released on 2007-12-16
+[1.081_001] Released on 2007-12-15
+
+     Changes summarized into 1.082 above.  For exact details, see Changes in
+     1.081_006 on BackPAN.
 
 [1.080] Released on 2007-11-11
 
-     Internals:
-     * Continued movement towards removing all use of Carp in favor of
-       exceptions.  Notes for 1.079_003 should have included mention of new
-       dependency upon Exception::Class.
-
-[1.079_003]  Released on 2007-10-22
-
-     Prerequisites:
-     * Now requires PPI 1.201  to get rid of the annoying warning about
-       PPI::Exception::ParserTimeout subclassing from itself.
-
-     Bug fixes:
-     * PPI::Structure::List can now contain multiple children,
-       so P::C::Utils::parse_arg_list() needs to handle it.
-
-       This was done in the process of fixing
-       http://rt.cpan.org/Ticket/Display.html?id=24924, which was a problem
-       with TestingAndDebugging::RequireTestLabels.
-
-     * ValuesAndExpressions::ProhibitLongChainsOfMethodCalls wasn't resetting
-       chain length when it ran into the end of a sub-expression.
-
-       http://rt.cpan.org/Public/Bug/Display.html?id=30040
-
-[1.079_002]  Released on 2007-10-21
-
-     Prerequisites:
-     * Now requires PPI 1.200.  A number of workarounds for PPI bugs have been
-       removed.
-
-     Bug fixes:
-     * ValuesAndExpressions::ProhibitCommaSeparatedStatements was reporting
-       false positives when builtins which accept both no and multiple
-       arguments were involved.
-       http://rt.cpan.org/Public/Bug/Display.html?id=27654
-
-[1.079_001]  Released on 2007-10-09
+     New Features:
+     * Allow a "## no critic" statement after a shebang on line 1 of a
+       file.  This allows users to block violations that apply to
+       whole files and still allow shebangs.
 
      New Policies: (funded by a Perl Foundation grant)
      * InputOutput::ProhibitExplicitStdin
@@ -143,11 +87,6 @@
        C<local> is actually a variable modifier, rather than a declaration.
        Thanks to David Golden for reporting this.
 
-     New Features:
-     * Allow a "## no critic" statement after a shebang on line 1 of a
-       file.  This allows users to block violations that apply to
-       whole files and still allow shebangs.
-
      New Developer Features:
      * Perl::Critic::Utils::PPIRegexp encapsulates interaction with
        the PPI Regexp token classes.  Those classes have very sparse
@@ -155,10 +94,44 @@
        internals.
      * Added a new optional_modules parameter for the .run syntax.
 
+     Bug fixes:
+     * PPI::Structure::List can now contain multiple children,
+       so P::C::Utils::parse_arg_list() needs to handle it.
+
+       This was done in the process of fixing
+       http://rt.cpan.org/Ticket/Display.html?id=24924, which was a problem
+       with TestingAndDebugging::RequireTestLabels.
+
+     * ValuesAndExpressions::ProhibitLongChainsOfMethodCalls wasn't resetting
+       chain length when it ran into the end of a sub-expression.
+
+       http://rt.cpan.org/Public/Bug/Display.html?id=30040
+
+     * ValuesAndExpressions::ProhibitCommaSeparatedStatements was reporting
+       false positives when builtins which accept both no and multiple
+       arguments were involved.
+
+       http://rt.cpan.org/Public/Bug/Display.html?id=27654
+
+     Internals:
+     * Removed all use of Carp in favor of exceptions.
+
+     Prerequisites:
+     * Now requires PPI 1.201.  A number of workarounds for PPI bugs have been
+       removed.
+     * New dependency upon Exception::Class.
+
      Installation:
      * Use Devel::CheckOS to see whether Perl::Critic is being installed on
        a Solaris system and warn about tar(1) chopping file names off if it
        is.
+
+[1.079_003]  Released on 2007-10-22
+[1.079_002]  Released on 2007-10-21
+[1.079_001]  Released on 2007-10-09
+
+     Changes summarized into 1.080 above.  For exact details, see Changes in
+     1.079_003 on BackPAN.
 
 [1.078]  Released on 2007-09-19
 
