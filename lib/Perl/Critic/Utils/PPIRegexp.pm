@@ -169,7 +169,7 @@ sub ppiify {
             } else {            # -> child
                 push @stack, $ppinode;
             }
-            $stack[-2]->add_element($ppinode);
+            $stack[-2]->add_element($ppinode); ## no critic qw(MagicNumbers)
         }
         $last_depth = $depth;
     }

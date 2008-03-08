@@ -26,6 +26,9 @@ Readonly::Hash my %ALLOW => hashify( @ALLOW );
 Readonly::Scalar my $DESC  => q{Builtin function called with parentheses};
 Readonly::Scalar my $EXPL  => [ 13 ];
 
+Readonly::Scalar my $PRECENDENCE_OF_LIST => precedence_of(q{>>}) + 1;
+Readonly::Scalar my $PRECEDENCE_OF_COMMA => precedence_of(q{,});
+
 #-----------------------------------------------------------------------------
 # These are all the functions that are considered named unary
 # operators.  These frequently require parentheses because they have lower
@@ -80,7 +83,7 @@ sub violates {
         if ( _is_named_unary( $elem ) && $elem_after_parens ){
             # Smaller numbers mean higher precedence
             my $precedence = precedence_of( $elem_after_parens );
-            return if defined $precedence  && $precedence < 9;
+            return if defined $precedence && $precedence < $PRECENDENCE_OF_LIST;
         }
 
         # EXCEPTION 2, If there is an operator immediately adfter the
@@ -91,7 +94,7 @@ sub violates {
         if ( $elem_after_parens ){
             # Smaller numbers mean higher precedence
             my $precedence = precedence_of( $elem_after_parens );
-            return if defined $precedence && $precedence <= 20;
+            return if defined $precedence && $precedence <= $PRECEDENCE_OF_COMMA;
         }
 
         # EXCEPTION 3: If the first operator within the parentheses is '='
