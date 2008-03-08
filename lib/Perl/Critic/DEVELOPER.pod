@@ -273,7 +273,7 @@ it along with the rest of the output for violations of your policy.
 
 L<Perl::Critic> takes care of gathering configuration information for
 your Policy, from whatever source the user specifies.  (See
-L<perlcritic/"CONFIGURATION"> for the details of how a user specifies
+L<Perl::Critic/"CONFIGURATION"> for the details of how a user specifies
 the values you're going to receive.)  What your Policy ends up
 receiving for the value of a parameter is a string with leading and
 trailing whitespace removed.  By default, you will need to handle
@@ -351,14 +351,17 @@ that can help you with this.  Assuming that C<violates()> wants to
 have C<selections> as an array, you'll want to have something like
 this:
 
-  use Perl::Critic::Utils qw{ :booleans :data_conversion };
+  use Perl::Critic::Utils qw{ :booleans :characters :data_conversion };
 
   sub initialize_if_enabled {
       my ( $self, $config ) = @_;
 
-      $self->{_foo} = $config{foo};
-      $self->{_factor} = $config{factor};
-      $self->{_selections} = [ words_from_string( $config{selections} ) ];
+      $self->{_foo} = $config->{foo};
+      $self->{_factor} = $config->{factor};
+
+      my $selections = $config->{selections};
+      $selections = defined $selections ? $selections : $EMPTY_STRING;
+      $self->{_selections} = [ words_from_string($selections) ];
 
       return $TRUE;
   }
@@ -366,13 +369,13 @@ this:
 Since C<selections> contains numbers, it may be desirable to change
 the assignment to look like
 
-  $self->{_selections} = [ map { $_ + 0 } words_from_string($config{selections}) ];
+  $self->{_selections} = [ map { $_ + 0 } words_from_string($selections) ];
 
 If C<violates()> needs to quickly determine whether a particular value
 is in C<selections>, you would want to use a hash instead of an array,
 like this:
 
-  $self->{_selections} = { hashify( words_from_string( $config{selections} ) ) };
+  $self->{_selections} = { hashify( words_from_string($selections) ) };
 
 For an example of a Policy that has some simple, but non-standard
 configuration handling, see
@@ -438,8 +441,6 @@ C<description>, and C<default_string>.  For example,
           },
       );
   }
-
-From this C<perlcritic> can emit a better F<.perlcriticrc> prototype.
 
 Note that use of constructors is
 L<incompatible|/"Note On Constructors"> with specifying parameters in
@@ -740,8 +741,6 @@ Currently, one of:
 =item "string list"
 
 =back
-
-(A "file" one will be added soon)
 
 =item - "default_string" (optional)
 
