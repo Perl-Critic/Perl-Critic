@@ -46,6 +46,19 @@ C<--single-policy>.
     gvim `perlcritic --single-policy QuotedWordLists -l`
 
 
+=item * Add a file Behavior.
+
+
+=item * Allow values of (at least) string-list Parameters to be specified in a file.
+
+For the benefit of PodSpelling, etc.
+
+
+=item * Enhance string-list Behavior to allow specification of delimiters.
+
+For things like RequirePodSections.
+
+
 =item * Add --prohibit-unrestricted-no-critic option to F<perlcritic>.
 
 Requires C<## no critic> to take an argument:
