@@ -15,7 +15,7 @@ use Perl::Critic::Utils qw{ :severities };
 use Perl::Critic::Utils::PPIRegexp qw{ &get_modifiers };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.081_006';
+our $VERSION = '1.082';
 
 #-----------------------------------------------------------------------------
 

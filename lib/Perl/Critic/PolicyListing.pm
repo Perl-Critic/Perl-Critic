@@ -16,7 +16,7 @@ use English qw(-no_match_vars);
 use Perl::Critic::Policy qw();
 use overload ( q{""} => 'to_string');
 
-our $VERSION = '1.081_006';
+our $VERSION = '1.082';
 
 #-----------------------------------------------------------------------------
 

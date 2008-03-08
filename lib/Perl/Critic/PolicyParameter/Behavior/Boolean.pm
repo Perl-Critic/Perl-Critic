@@ -13,7 +13,7 @@ use Perl::Critic::Utils;
 
 use base qw{ Perl::Critic::PolicyParameter::Behavior };
 
-our $VERSION = '1.081_006';
+our $VERSION = '1.082';
 
 #-----------------------------------------------------------------------------
 
