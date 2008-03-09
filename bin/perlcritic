@@ -502,7 +502,7 @@ C<perlcritic> - Command-line interface to critique Perl source
              [--top [ number ]] [--theme expression] [--include pattern]
              [--exclude pattern] [--single-policy pattern] [--only | --noonly]
              [--profile-strictness {warn|fatal|quiet}] [--force | --noforce]
-             [--statistics] [--statistics-only] [--verbose number | format]
+             [--statistics] [--statistics-only] [--verbose {number | format}]
              [--color | --nocolor] [--quiet] {FILE | DIRECTORY | STDIN}
 
   perlcritic --profile-proto
