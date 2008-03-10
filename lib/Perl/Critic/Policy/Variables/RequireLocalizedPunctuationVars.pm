@@ -57,7 +57,11 @@ sub _is_non_local_magic_dest {
 
     # Quick exit if in good form
     my $modifier = $elem->sprevious_sibling;
-    return if $modifier && $modifier->isa('PPI::Token::Word') && $modifier eq 'local';
+    return
+        if
+                $modifier
+            &&  $modifier->isa('PPI::Token::Word')
+            &&  ($modifier eq 'local' || $modifier eq 'my');
 
     # Implementation note: Can't rely on PPI::Token::Magic,
     # unfortunately, because we need English too
@@ -124,6 +128,12 @@ the global and change it for as short a time as possible.
    # A popular idiom:
    my $content = do { local $/ = undef; <$fh> };
 
+This policy also allows the use of C<my>.  Perl prevents using C<my>
+with "proper" punctuation, but allows C<$a>, C<@ARGV>, the names
+declared by L<English>, etc.  This is not a good coding practice,
+however it is not the concern of this specific policy to complain
+about that.
+
 =head1 CAVEATS
 
 The current PPI (v1.118) has a bug where $^ variables absorb following
@@ -137,7 +147,8 @@ no workaround for that bug right now.
 
 =head1 CREDITS
 
-Initial development of this policy was supported by a grant from the Perl Foundation.
+Initial development of this policy was supported by a grant from the
+Perl Foundation.
 
 =head1 AUTHOR
 

@@ -4,6 +4,11 @@
      * The ValuesAndExpressions::ProhibitMagicNumbers policy has been moved
        from Perl::Critic::More into the primary Perl::Critic distribution.
 
+     Policy Changes:
+     Variables::RequireLocalizedPunctuationVars now allows the use of "my".
+
+     http://rt.cpan.org/Ticket/Display.html?id=33937
+
 [1.082] Released on 2008-03-08
 
      New Features:
