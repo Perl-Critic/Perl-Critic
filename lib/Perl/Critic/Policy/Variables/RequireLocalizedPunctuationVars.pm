@@ -129,10 +129,10 @@ the global and change it for as short a time as possible.
    my $content = do { local $/ = undef; <$fh> };
 
 This policy also allows the use of C<my>.  Perl prevents using C<my>
-with "proper" punctuation, but allows C<$a>, C<@ARGV>, the names
-declared by L<English>, etc.  This is not a good coding practice,
-however it is not the concern of this specific policy to complain
-about that.
+with "proper" punctuation variables, but allows C<$a>, C<@ARGV>, the
+names declared by L<English>, etc.  This is not a good coding
+practice, however it is not the concern of this specific policy to
+complain about that.
 
 =head1 CAVEATS
 
