@@ -181,6 +181,11 @@ Check for -w on the shbang line.
 =item * Expressions::ProhibitStringsWithBitwiseOperator
 
 
+=item * InputOutput::ProhibitMagicDiamond
+
+Steal the idea from L<B::Lint>.
+
+
 =item * TBD::VariableNotUsed
 
 Detect a variable that has a value assigned to it, but never used.
