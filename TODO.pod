@@ -59,6 +59,11 @@ For the benefit of PodSpelling, etc.
 For things like RequirePodSections.
 
 
+=item * Add queries to --list option to F<perlcritic>.
+
+List Policies based upon severity, theme, and (what I want this second)
+applies_to.
+
 =item * Add --prohibit-unrestricted-no-critic option to F<perlcritic>.
 
 Requires C<## no critic> to take an argument:
