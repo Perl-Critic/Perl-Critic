@@ -206,7 +206,7 @@ Steal the idea from L<B::Lint>.
 
 =item * TBD::VariableNotUsed
 
-Detect a variable that has a value assigned to it, but never used.
+Detect a variable that is declared, but never used.
 
 
 =item * TBD::AllProgramsNeedShebangs
