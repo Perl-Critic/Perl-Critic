@@ -82,6 +82,19 @@ Yes, somebody has an in-house templating system where they've written a custom
 test module that extracts the perl code from a template and critiques it.
 
 
+=item * Enhance statistics.
+
+- Blank line count
+
+- POD line count
+
+- Comment line count
+
+- Data section count
+
+- Violations / statement
+
+
 =back
 
 
