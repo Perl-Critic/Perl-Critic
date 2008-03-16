@@ -24,7 +24,7 @@ use_ok( $pkg );
 
 my @methods = qw(
     average_sub_mccabe
-    lines_of_code
+    lines
     modules
     new
     statements
@@ -69,7 +69,7 @@ my @violations = $critic->critique( \$code );
 
 my %expected_stats = (
     average_sub_mccabe            => 2,
-    lines_of_code                 => 5,
+    lines                         => 5,
     modules                       => 1,
     statements                    => 6,
     statements_other_than_subs    => 5,

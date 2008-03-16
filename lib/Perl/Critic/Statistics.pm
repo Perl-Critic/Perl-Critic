@@ -28,7 +28,7 @@ sub new {
     $self->{_modules} = 0;
     $self->{_subs} = 0;
     $self->{_statements} = 0;
-    $self->{_lines_of_code} = 0;
+    $self->{_lines} = 0;
     $self->{_violations_by_policy} = {};
     $self->{_violations_by_severity} = {};
     $self->{_total_violations} = 0;
@@ -55,9 +55,9 @@ sub accumulate {
     $self->{_statements} += $statements ? scalar @{$statements} : 0;
 
     ## no critic (RequireExtendedFormatting, RequireLineBoundaryMatching)
-    my @lines_of_code = split /$INPUT_RECORD_SEPARATOR/, $doc->serialize();
+    my @lines = split /$INPUT_RECORD_SEPARATOR/, $doc->serialize();
     ## use critic
-    $self->{_lines_of_code} += scalar @lines_of_code;
+    $self->{_lines} += scalar @lines;
 
     foreach my $violation ( @{ $violations } ) {
         $self->{_violations_by_severity}->{ $violation->severity() }++;
@@ -94,10 +94,10 @@ sub statements {
 
 #-----------------------------------------------------------------------------
 
-sub lines_of_code {
+sub lines {
     my ( $self ) = @_;
 
-    return $self->{_lines_of_code};
+    return $self->{_lines};
 }
 
 #-----------------------------------------------------------------------------
@@ -177,9 +177,9 @@ sub violations_per_statement {
 sub violations_per_line_of_code {
     my ( $self ) = @_;
 
-    return if $self->lines_of_code() == 0;
+    return if $self->lines() == 0;
 
-    return $self->total_violations() / $self->lines_of_code();
+    return $self->total_violations() / $self->lines();
 }
 
 #-----------------------------------------------------------------------------
@@ -236,7 +236,7 @@ The total number of subroutines analyzed by this Critic.
 The total number of statements analyzed by this Critic.
 
 
-=item C<lines_of_code()>
+=item C<lines()>
 
 The total number of lines of code analyzed by this Critic.
 

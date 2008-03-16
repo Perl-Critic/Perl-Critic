@@ -295,7 +295,7 @@ sub report_statistics {
     print _commaify($statistics->modules()), " files.\n";
     print _commaify($statistics->subs()), " subroutines/methods.\n";
     print _commaify($statistics->statements_other_than_subs()), " statements.\n";
-    print _commaify($statistics->lines_of_code()), " lines of code.\n";
+    print _commaify($statistics->lines()), " lines.\n";
 
     my $average_sub_mccabe = $statistics->average_sub_mccabe();
     if (defined $average_sub_mccabe) {
