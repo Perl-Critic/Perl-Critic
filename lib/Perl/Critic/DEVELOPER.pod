@@ -497,7 +497,7 @@ in the Policy as a string.
 
 This behavior is not configurable.
 
-B<Example:>
+=head4 C<supported_parameters()> example
 
   sub supported_parameters {
       return (
@@ -511,6 +511,17 @@ B<Example:>
   }
 
 
+=head4 Access example
+
+  sub violates {
+      my ($self, $element, $document) = @_;
+
+      ...
+      my $string = $self->{_a_string};
+      ...
+  }
+
+
 =head3 "boolean"
 
 Implemented in L<Perl::Critic::PolicyParameter::Behavior::Boolean>.
@@ -520,7 +531,7 @@ or L<Perl::Critic::Utils/$FALSE>.
 
 This behavior is not configurable.
 
-B<Example:>
+=head4 C<supported_parameters()> example
 
   sub supported_parameters {
       return (
@@ -531,6 +542,20 @@ B<Example:>
               behavior       => 'boolean',
           },
       );
+  }
+
+
+=head4 Access example
+
+  sub violates {
+      my ($self, $element, $document) = @_;
+
+      ...
+      my $is_whatever = $self->{_a_boolean};
+      if ($is_whatever) {
+          ...
+      }
+      ...
   }
 
 
@@ -546,7 +571,7 @@ This takes two options, C<integer_minimum> and
 C<integer_maximum>, which specify endpoints of an inclusive range to
 restrict the value to.  Either, neither, or both may be specified.
 
-B<Example:>
+=head4 C<supported_parameters()> example
 
   sub supported_parameters {
       return (
@@ -559,6 +584,20 @@ B<Example:>
               integer_maximum => 10,
           },
       );
+  }
+
+
+=head4 Access example
+
+  sub violates {
+      my ($self, $element, $document) = @_;
+
+      ...
+      my $integer = $self->{_an_integer};
+      if ($integer > $TURNING_POINT) {
+          ...
+      }
+      ...
   }
 
 
@@ -577,7 +616,7 @@ C<[ qw{ a b c } ]> and the user specifies a value of C<'c d e'>, then
 the value of the parameter will contain C<'a'>, C<'b'>, C<'c'>,
 C<'d'>, and C<'e'>.
 
-B<Example:>
+=head4 C<supported_parameters()> example
 
   sub supported_parameters {
       return (
@@ -589,6 +628,20 @@ B<Example:>
               always_present_values => [ qw{ green purple} ],
           },
       );
+  }
+
+
+=head4 Access example
+
+  sub violates {
+      my ($self, $element, $document) = @_;
+
+      ...
+      my $list = $self->{_a_string_list};
+      my @list = keys %{$list};
+      ...
+      return if not $list->{ $element->content() };
+      ...
   }
 
 
@@ -608,21 +661,47 @@ is required.  A true value can be specified for
 C<enumeration_allow_multiple_values> to allow the user to pick more
 than one value, but this defaults to false.
 
-B<Example:>
+=head4 C<supported_parameters()> example
 
   use Perl::Critic::Utils qw{ :characters };
 
   sub supported_parameters {
       return (
           {
-              name               => 'an_enumeration',
-              description        => 'An example enumeration.',
+              name               => 'a_single_valued_enumeration',
+              description        =>
+                  'An example enumeration that can only have a single value.',
               default_string     => $EMPTY,
               behavior           => 'enumeration',
               enumeration_values => [ qw{ block statement pod operator } ],
+              enumeration_allow_multiple_values => 0,
+          },
+          {
+              name               => 'a_multi_valued_enumeration',
+              description        =>
+                  'An example enumeration that can have multiple values.',
+              default_string     => 'fe',
+              behavior           => 'enumeration',
+              enumeration_values => [ qw{ fe fi fo fum } ],
               enumeration_allow_multiple_values => 1,
           },
       );
+  }
+
+
+=head4 Access example
+
+  sub violates {
+      my ($self, $element, $document) = @_;
+
+      ...
+      my $single_value = $self->{_a_single_valued_enumeration};
+      ...
+      my $multi_value = $self->{_a_multi_valued_enumeration};
+      if ( $multi_value->{fum} ) {
+          ...
+      }
+      ...
   }
 
 
