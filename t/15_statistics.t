@@ -10,7 +10,7 @@
 use strict;
 use warnings;
 
-use Test::More (tests => 19);
+use Test::More (tests => 25);
 use English qw(-no_match_vars);
 use Perl::Critic::PolicyFactory (-test => 1);
 use Perl::Critic::TestUtils;
@@ -32,6 +32,9 @@ my @methods = qw(
     total_violations
     violations_by_policy
     violations_by_severity
+    statements_other_than_subs
+    violations_per_file
+    violations_per_statement
     violations_per_line_of_code
 );
 
@@ -53,7 +56,12 @@ END_PERL
 
 # User may not have Perl::Tidy installed...
 my $profile = { '-CodeLayout::RequireTidyCode' => {} };
-my $critic = Perl::Critic->new( -severity => 1, -profile => $profile );
+my $critic =
+    Perl::Critic->new(
+        -severity => 1,
+        -profile => $profile,
+        -theme => 'core',
+    );
 my @violations = $critic->critique( \$code );
 
 #print @violations;
@@ -64,9 +72,12 @@ my %expected_stats = (
     lines_of_code                 => 5,
     modules                       => 1,
     statements                    => 6,
+    statements_other_than_subs    => 5,
     subs                          => 1,
     total_violations              => 10,
+    violations_per_file           => 10,
     violations_per_line_of_code   => 2,
+    violations_per_statement      => 2,
 );
 
 my $stats = $critic->statistics();

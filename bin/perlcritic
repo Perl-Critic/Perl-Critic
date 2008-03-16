@@ -292,12 +292,9 @@ sub report_statistics {
         print "\n"; # There's prior output that we want to separate from.
     }
 
-    my $subs = $statistics->subs();
-    my $statements = $statistics->statements() - $subs;
-
     print _commaify($statistics->modules()), " files.\n";
-    print _commaify($subs), " subroutines/methods.\n";
-    print _commaify($statements), " statements.\n";
+    print _commaify($statistics->subs()), " subroutines/methods.\n";
+    print _commaify($statistics->statements_other_than_subs()), " statements.\n";
     print _commaify($statistics->lines_of_code()), " lines of code.\n";
 
     my $average_sub_mccabe = $statistics->average_sub_mccabe();
@@ -311,6 +308,18 @@ sub report_statistics {
 
     print _commaify($statistics->total_violations()), " violations.\n";
 
+    my $violations_per_file = $statistics->violations_per_file();
+    if (defined $violations_per_file) {
+        printf
+            "Violations per file was %.3f.\n",
+            $violations_per_file;
+    }
+    my $violations_per_statement = $statistics->violations_per_statement();
+    if (defined $violations_per_statement) {
+        printf
+            "Violations per statement was %.3f.\n",
+            $violations_per_statement;
+    }
     my $violations_per_line = $statistics->violations_per_line_of_code();
     if (defined $violations_per_line) {
         printf

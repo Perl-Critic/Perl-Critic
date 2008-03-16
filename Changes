@@ -5,9 +5,13 @@
        from Perl::Critic::More into the primary Perl::Critic distribution.
 
      Policy Changes:
-     Variables::RequireLocalizedPunctuationVars now allows the use of "my".
+     * Variables::RequireLocalizedPunctuationVars now allows the use of "my".
 
      http://rt.cpan.org/Ticket/Display.html?id=33937
+
+     Minor Changes:
+     * A few more statistics are emitted by perlcritic with the --statistics
+       option.
 
 [1.082] Released on 2008-03-08
 

@@ -134,12 +134,42 @@ sub total_violations {
 
 #-----------------------------------------------------------------------------
 
+sub statements_other_than_subs {
+    my ( $self ) = @_;
+
+    return $self->statements() - $self->subs();
+}
+
+#-----------------------------------------------------------------------------
+
 sub average_sub_mccabe {
     my ( $self ) = @_;
 
     return if $self->subs() == 0;
 
     return $self->_subs_total_mccabe() / $self->subs();
+}
+
+#-----------------------------------------------------------------------------
+
+sub violations_per_file {
+    my ( $self ) = @_;
+
+    return if $self->modules() == 0;
+
+    return $self->total_violations() / $self->modules();
+}
+
+#-----------------------------------------------------------------------------
+
+sub violations_per_statement {
+    my ( $self ) = @_;
+
+    my $statements = $self->statements_other_than_subs();
+
+    return if $statements == 0;
+
+    return $self->total_violations() / $statements;
 }
 
 #-----------------------------------------------------------------------------
@@ -168,10 +198,12 @@ __END__
 
 Perl::Critic::Statistics - Compile stats on Perl::Critic violations.
 
+
 =head1 DESCRIPTION
 
 This class accumulates statistics on Perl::Critic violations across one or
 more files.  NOTE: This class is experimental and subject to change.
+
 
 =head1 METHODS
 
@@ -182,48 +214,76 @@ more files.  NOTE: This class is experimental and subject to change.
 Create a new instance of Perl::Critic::Statistics.  No arguments are supported
 at this time.
 
+
 =item C< accumulate( $doc, \@violations ) >
 
 Accumulates statistics about the C<$doc> and the C<@violations> that were
 found.
 
+
 =item C<modules()>
 
 The number of chunks of code (usually files) that have been analyzed.
+
 
 =item C<subs()>
 
 The total number of subroutines analyzed by this Critic.
 
+
 =item C<statements()>
 
 The total number of statements analyzed by this Critic.
 
+
 =item C<lines_of_code()>
 
 The total number of lines of code analyzed by this Critic.
+
 
 =item C<violations_by_severity()>
 
 The number of violations of each severity found by this Critic as a
 reference to a hash keyed by severity.
 
+
 =item C<violations_by_policy()>
 
 The number of violations of each policy found by this Critic as a
 reference to a hash keyed by full policy name.
 
+
 =item C<total_violations()>
 
 The the total number of violations found by this Critic.
+
+
+=item C<statements_other_than_subs()>
+
+The total number of statements minus the number of subroutines.
+Useful because a subroutine is considered a statement by PPI.
+
 
 =item C<average_sub_mccabe()>
 
 The average McCabe score of all scanned subroutines.
 
+
+=item C<violations_per_file()>
+
+The total violations divided by the number of modules.
+
+
+=item C<violations_per_statement()>
+
+The total violations divided by the number statements minus
+subroutines.
+
+
 =item C<violations_per_line_of_code()>
 
 The total violations divided by the lines of code.
+
 
 =back
 
@@ -231,6 +291,7 @@ The total violations divided by the lines of code.
 =head1 AUTHOR
 
 Elliot Shank C<< <perl@galumph.com> >>
+
 
 =head1 COPYRIGHT
 
