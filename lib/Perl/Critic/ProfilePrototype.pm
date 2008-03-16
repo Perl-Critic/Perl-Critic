@@ -3,7 +3,6 @@
 #     $Date: 2006-12-13 21:35:21 -0800 (Wed, 13 Dec 2006) $
 #   $Author: thaljef $
 # $Revision: 1089 $
-#        ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :
 ##############################################################################
 
 package Perl::Critic::ProfilePrototype;
