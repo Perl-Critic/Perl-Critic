@@ -393,4 +393,4 @@ is( scalar @found_policies, scalar @native_policies, 'Find all perl code');
 #   indent-tabs-mode: nil
 #   c-indentation-style: bsd
 # End:
-# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab shiftround :

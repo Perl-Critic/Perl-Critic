@@ -676,6 +676,6 @@ require that the perl document exist in a file anywhere."
 ;; fill-column: 78
 ;; indent-tabs-mode: nil
 ;; End:
-;; ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :
+;; ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab shiftround :
 
 ;;; perlcritic.el ends here

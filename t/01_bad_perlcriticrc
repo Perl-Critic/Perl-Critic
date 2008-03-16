@@ -26,4 +26,4 @@ source = Zen_and_the_Art_of_Motorcycle_Maintenance
 #   indent-tabs-mode: nil
 #   c-indentation-style: bsd
 # End:
-# ex: set ts=8 sts=4 sw=4 tw=78 ft=conf expandtab :
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=conf expandtab shiftround :

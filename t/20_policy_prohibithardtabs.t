@@ -103,4 +103,4 @@ is( pcritique($policy, \$code, \%config), 0, 'Tabs in __DATA__' );
 #   indent-tabs-mode: nil
 #   c-indentation-style: bsd
 # End:
-# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab shiftround :

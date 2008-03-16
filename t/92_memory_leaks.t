@@ -68,4 +68,4 @@ plan( skip_all => 'Test::Memory::Cycle requried to test memory leaks') if $@;
 #   indent-tabs-mode: nil
 #   c-indentation-style: bsd
 # End:
-# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab shiftround :

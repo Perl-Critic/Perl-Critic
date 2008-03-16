@@ -123,4 +123,4 @@ for my $policy ( sort keys %$subtests ) {
 #   indent-tabs-mode: nil
 #   c-indentation-style: bsd
 # End:
-# ex: set ts=8 sts=4 sw=4 tw=78 expandtab ft=perl:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab shiftround :

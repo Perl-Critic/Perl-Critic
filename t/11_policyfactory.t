@@ -114,4 +114,4 @@ Perl::Critic::TestUtils::block_perlcriticrc();
 #   indent-tabs-mode: nil
 #   c-indentation-style: bsd
 # End:
-# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab :
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab shiftround :

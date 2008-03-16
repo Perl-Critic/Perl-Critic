@@ -159,4 +159,4 @@ want.
 #   indent-tabs-mode: nil
 #   c-indentation-style: bsd
 # End:
-# ex: set ts=8 sts=4 sw=4 tw=70 ft=pod expandtab :
+# ex: set ts=8 sts=4 sw=4 tw=70 ft=pod expandtab shiftround :
