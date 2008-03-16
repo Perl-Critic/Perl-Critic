@@ -125,13 +125,13 @@ sub _validate_options {
     }
 
     if ( $opts{verbose} && $opts{verbose} !~ m{(?: \d+ | %[mfFlcedrpPs] )}mx) {
-        $msg .= qq{Warning: --verbose arg "$opts{verbose}" looks odd.  };
-        $msg .= qq{Perhaps you meant to say "--verbose 3 $opts{verbose}"\n};
+        $msg .= qq<Warning: --verbose arg "$opts{verbose}" looks odd.  >;
+        $msg .= qq<Perhaps you meant to say "--verbose 3 $opts{verbose}"\n>;
     }
 
     if ( exists $opts{top} && $opts{top} < 0 ) {
-        $msg .= qq{Warning: --top argument "$opts{top}" is negative.  };
-        $msg .= qq{Perhaps you meant to say "$opts{top} --top".\n};
+        $msg .= qq<Warning: --top argument "$opts{top}" is negative.  >;
+        $msg .= qq<Perhaps you meant to say "$opts{top} --top".\n>;
     }
 
     if (
@@ -141,9 +141,9 @@ sub _validate_options {
                 ||  $opts{severity} > $SEVERITY_HIGHEST
             )
     ) {
-        $msg .= qq{Warning: --severity arg "$opts{severity}" out of range.  };
-        $msg .= qq{Severities range from "$SEVERITY_LOWEST" (lowest) to };
-        $msg .= qq{"$SEVERITY_HIGHEST" (highest).\n};
+        $msg .= qq<Warning: --severity arg "$opts{severity}" out of range.  >;
+        $msg .= qq<Severities range from "$SEVERITY_LOWEST" (lowest) to >;
+        $msg .= qq<"$SEVERITY_HIGHEST" (highest).\n>;
     }
 
 
