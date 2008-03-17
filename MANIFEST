@@ -213,6 +213,7 @@ lib/Perl/Critic/ProfilePrototype.pm
 lib/Perl/Critic/Statistics.pm
 lib/Perl/Critic/TestUtils.pm
 lib/Perl/Critic/Theme.pm
+lib/Perl/Critic/ThemeListing.pm
 lib/Perl/Critic/UserProfile.pm
 lib/Perl/Critic/Utils.pm
 lib/Perl/Critic/Utils/Constants.pm
@@ -242,6 +243,7 @@ t/09_theme.t
 t/10_userprofile.t
 t/11_policyfactory.t
 t/12_policylisting.t
+t/12_themelisting.t
 t/13_bundled_policies.t
 t/14_policy_parameter_behavior_boolean.t
 t/14_policy_parameter_behavior_enumeration.t

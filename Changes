@@ -1,5 +1,8 @@
 [1.xxx] Released on 2008-xx-xx
 
+     New Features:
+     * perlcritic now supports a --list-themes option.
+
      Policy Moved:
      * The ValuesAndExpressions::ProhibitMagicNumbers policy has been moved
        from Perl::Critic::More into the primary Perl::Critic distribution.

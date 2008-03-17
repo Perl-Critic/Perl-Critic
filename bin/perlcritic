@@ -107,6 +107,7 @@ sub _dispatch_special_requests {
     if ( $opts{man}             ) { pod2usage( -verbose => 2 )  }  #Exits
     if ( $opts{Version}         ) { print "$VERSION\n"; exit 0; }  #Exits
     if ( $opts{list}            ) { render_policy_listing();    }  #Exits
+    if ( $opts{'list-themes'}   ) { render_theme_listing();     }  #Exits
     if ( $opts{'profile-proto'} ) { render_profile_prototype(); }  #Exits
     if ( $opts{doc}             ) { policy_docs( $opts{doc} );  }  #Exits
     return 1;
@@ -383,6 +384,7 @@ sub _get_option_specification {
         help|?|H
         include=s@
         list
+        list-themes
         man
         color!
         noprofile
@@ -444,13 +446,25 @@ sub _at_tty {
 
 sub render_policy_listing {
 
-    my $type = shift;
     require Perl::Critic::PolicyListing;
     require Perl::Critic;
 
     my %pc_params = (-profile => $EMPTY, -severity => $SEVERITY_LOWEST);
-    my @pols = Perl::Critic->new( %pc_params )->policies();
-    my $listing = Perl::Critic::PolicyListing->new( -policies => \@pols );
+    my @policies = Perl::Critic->new( %pc_params )->policies();
+    my $listing = Perl::Critic::PolicyListing->new( -policies => \@policies );
+    print $listing;
+    exit 0;
+}
+
+#-----------------------------------------------------------------------------
+
+sub render_theme_listing {
+    require Perl::Critic::ThemeListing;
+    require Perl::Critic;
+
+    my %pc_params = (-profile => $EMPTY, -severity => $SEVERITY_LOWEST);
+    my @policies = Perl::Critic->new( %pc_params )->policies();
+    my $listing = Perl::Critic::ThemeListing->new( -policies => \@policies );
     print $listing;
     exit 0;
 }
@@ -463,8 +477,8 @@ sub render_profile_prototype {
     require Perl::Critic;
 
     my %pc_params = (-profile => $EMPTY, -severity => $SEVERITY_LOWEST);
-    my @pols = Perl::Critic->new( %pc_params )->policies();
-    my $prototype = Perl::Critic::ProfilePrototype->new( -policies => \@pols );
+    my @policies = Perl::Critic->new( %pc_params )->policies();
+    my $prototype = Perl::Critic::ProfilePrototype->new( -policies => \@policies );
     print $prototype;
     exit 0;
 }
@@ -515,7 +529,7 @@ C<perlcritic> - Command-line interface to critique Perl source
 
   perlcritic --profile-proto
 
-  perlcritic { --list | --doc pattern [...] }
+  perlcritic { --list | --list-themes | --doc pattern [...] }
 
   perlcritic { --help | --options | --man | --Version }
 
@@ -790,6 +804,11 @@ L<"EDITOR INTEGRATION"> for more information about that.
 Displays a condensed listing of all the L<Perl::Critic::Policy> modules that
 are found on this machine.  For each Policy, the name, default severity and
 default themes are shown.
+
+=item C<--list-themes>
+
+Displays a list of all the themes of the L<Perl::Critic::Policy> modules that
+are found on this machine.
 
 =item C<--profile-proto>
 

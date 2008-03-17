@@ -406,6 +406,9 @@ provides:
   Perl::Critic::Policy::ValuesAndExpressions::ProhibitLongChainsOfMethodCalls:
     file: lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitLongChainsOfMethodCalls.pm
     version: 1.082
+  Perl::Critic::Policy::ValuesAndExpressions::ProhibitMagicNumbers:
+    file: lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitMagicNumbers.pm
+    version: 1.082
   Perl::Critic::Policy::ValuesAndExpressions::ProhibitMismatchedOperators:
     file: lib/Perl/Critic/Policy/ValuesAndExpressions/ProhibitMismatchedOperators.pm
     version: 1.082
@@ -504,6 +507,9 @@ provides:
     version: 1.082
   Perl::Critic::Theme:
     file: lib/Perl/Critic/Theme.pm
+    version: 1.082
+  Perl::Critic::ThemeListing:
+    file: lib/Perl/Critic/ThemeListing.pm
     version: 1.082
   Perl::Critic::UserProfile:
     file: lib/Perl/Critic/UserProfile.pm

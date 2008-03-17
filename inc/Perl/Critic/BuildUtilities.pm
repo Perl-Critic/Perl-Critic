@@ -66,6 +66,7 @@ sub test_wrappers_to_generate {
         t/10_userprofile.t
         t/11_policyfactory.t
         t/12_policylisting.t
+        t/12_themelisting.t
         t/13_bundled_policies.t
         t/14_policy_parameters.t
         t/15_statistics.t
