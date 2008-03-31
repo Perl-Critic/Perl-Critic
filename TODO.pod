@@ -105,6 +105,11 @@ For example, treat C<say> as equivalent to C<print>.
 
 =over
 
+=item * Don't kill entire run if PPI::Document cannot be instantiated.
+
+Just say that the individual file is bad and skip to the next one.
+
+
 =item * Modules::RequireVersionVar
 
 Doesn't enforce three-part versions
