@@ -12,7 +12,7 @@ use PPI;
 if (PPI->VERSION le '1.118') {
    plan skip_all => 'Policy only works for PPI versions after 1.118';
 }
-plan tests => 117;
+plan tests => 118;
 
 # The variables in this test suite have been brought to you by the
 # wonders of Acme::Metasyntactic, in the guise of the currently
@@ -71,6 +71,19 @@ is(
     pcritique($policy, \$code),
     0,
     "$policy: all numbers are allowed on any use statement"
+);
+
+#----------------------------------------------------------------
+
+# TEST
+$code = <<'END_PERL';
+plan tests => 2349;
+END_PERL
+
+is(
+    pcritique($policy, \$code),
+    0,
+    "$policy: numbers allowed on plan statements"
 );
 
 #----------------------------------------------------------------

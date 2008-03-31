@@ -208,9 +208,8 @@ sub _determine_checked_types {
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    return if PPI->VERSION le '1.118';
-
     return if _element_is_in_an_include_readonly_or_version_statement($elem);
+    return if _element_is_in_a_plan_statement($elem);
 
     my $literal = $elem->literal();
     if (
@@ -286,7 +285,7 @@ sub _element_is_in_an_include_readonly_or_version_statement {
                     my @variables = $parent->variables();
                     if (
                             scalar @variables == 1
-                        and $variables[0] eq '$VERSION' ##no critic (RequireInterpolationOfMetachars)
+                        and $variables[0] eq '$VERSION' ## no critic (RequireInterpolationOfMetachars)
                     ) {
                         return 1;
                     }
@@ -300,17 +299,42 @@ sub _element_is_in_an_include_readonly_or_version_statement {
                 if ( exists $READONLY_SUBROUTINES{$first_token} ) {
                     return 1;
                 }
+            } elsif ($parent->isa('PPI::Structure::Block')) {
+                return 0;
             }
-
-            # Uncomment once PPI bug fixed.
-            #        } elsif ($parent->isa('PPI::Structure::Block')) {
-            #            return 0;
         }
 
         $parent = $parent->parent();
     }
 
     return 0;
+}
+
+# Allow "plan tests => 39".
+
+Readonly::Scalar my $PLAN_STATEMENT_MINIMUM_TOKENS => 4;
+
+sub _element_is_in_a_plan_statement {
+    my $elem = shift;
+
+    my $parent = $elem->parent();
+    return 0 if not $parent;
+
+    return 0 if not $parent->isa('PPI::Statement');
+
+    my @children = $parent->schildren();
+    return 0 if @children < $PLAN_STATEMENT_MINIMUM_TOKENS;
+
+    return 0 if not $children[0]->isa('PPI::Token::Word');
+    return 0 if $children[0]->content() ne 'plan';
+
+    return 0 if not $children[1]->isa('PPI::Token::Word');
+    return 0 if $children[1]->content() ne 'tests';
+
+    return 0 if not $children[2]->isa('PPI::Token::Operator');
+    return 0 if $children[2]->content() ne '=>';
+
+    return 1;
 }
 
 1;
