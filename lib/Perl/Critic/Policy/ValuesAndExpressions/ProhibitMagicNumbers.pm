@@ -411,6 +411,7 @@ array, i.e. C<$x[-1]>.
 
   use 5.6.1;                                #ok
   use Test::More plan => 57;                #ok
+  plan tests => 39;                         #ok
   our $VERSION = 0.22;                      #ok
 
 
