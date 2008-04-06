@@ -17,7 +17,7 @@ use Test::More tests => 26;
 
 #-----------------------------------------------------------------------------
 # Perl::Critic::Policy is an abstract class, so it can't be instantiated
-# directly.  So we test it by declaring test classes that inherits from it.
+# directly.  So we test it by declaring test classes that inherit from it.
 
 package PolicyTest;
 use base 'Perl::Critic::Policy';

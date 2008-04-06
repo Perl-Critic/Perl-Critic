@@ -49,6 +49,7 @@ sub get_trusted_methods {
         violates
         applies_to
         default_themes
+        default_maximum_violations_per_document
         default_severity
         supported_parameters
         description

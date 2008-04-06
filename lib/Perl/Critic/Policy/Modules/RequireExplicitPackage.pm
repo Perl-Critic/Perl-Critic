@@ -38,6 +38,8 @@ sub default_severity { return $SEVERITY_HIGH  }
 sub default_themes   { return qw( core bugs ) }
 sub applies_to       { return 'PPI::Document' }
 
+sub default_maximum_violations_per_document { return 1; }
+
 #-----------------------------------------------------------------------------
 
 
@@ -83,6 +85,7 @@ __END__
 
 Perl::Critic::Policy::Modules::RequireExplicitPackage
 
+
 =head1 DESCRIPTION
 
 In general, the first statement of any Perl module or
@@ -104,6 +107,9 @@ There are some valid reasons for not having a C<package> statement at
 all.  But make sure you understand them before assuming that you
 should do it too.
 
+The maximum number of violations for this policy defaults to 1.
+
+
 =head1 IMPORTANT CHANGES
 
 This policy was formerly called C<ProhibitUnpackagedCode> which sounded
@@ -111,9 +117,11 @@ a bit odd.  If you get lots of "Cannot load policy module" errors,
 then you probably need to change C<ProhibitUnpackagedCode> to
 C<RequireExplicitPackage> in your F<.perlcriticrc> file.
 
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+
 
 =head1 COPYRIGHT
 

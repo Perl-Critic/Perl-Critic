@@ -152,10 +152,6 @@ sub _gather_violations {
     my @pols = $self->config->policies();
     my @violations = map { _critique( $_, $doc, \%is_line_disabled) } @pols;
 
-    # Some policies emit multiple violations, which tend to drown out the
-    # others.  So for those, we squelch out all but the first violation.
-    @violations = _squelch_noisy_violations( @violations );
-
     # Accumulate statistics
     $self->statistics->accumulate( $doc, \@violations );
 
@@ -183,6 +179,11 @@ sub _critique {
 
     my ($policy, $doc, $is_line_disabled) = @_;
     my @violations = ();
+    my $maximum_violations = $policy->get_maximum_violations_per_document();
+
+    if (defined $maximum_violations && $maximum_violations == 0) {
+        return;
+    }
 
   TYPE:
     for my $type ( $policy->applies_to() ) {
@@ -203,7 +204,14 @@ sub _critique {
                     next VIOLATION if $is_line_disabled->{$line}->{$policy_name};
                     next VIOLATION if $is_line_disabled->{$line}->{ALL};
                 }
+
                 push @violations, $violation;
+                if (
+                        defined $maximum_violations
+                    and @violations >= $maximum_violations
+                ) {
+                    last TYPE;
+                }
             }
         }
     }
@@ -372,24 +380,6 @@ sub _unfix_shebang {
 }
 
 #-----------------------------------------------------------------------------
-# TODO: This sub makes my head hurt.  Refactor soon.
-
-sub _squelch_noisy_violations {
-    my @violations = @_;
-    my %seen = ();
-    return grep { my $pol = $_->policy();
-                  !( _is_noisy($pol) && $seen{$pol}++ ) } @violations;
-}
-
-#-----------------------------------------------------------------------------
-
-sub _is_noisy {
-    my $policy_name = shift;
-    my $ns = 'Perl::Critic::Policy';
-    return $policy_name eq "${ns}::TestingAndDebugging::RequireUseStrict"
-        || $policy_name eq "${ns}::TestingAndDebugging::RequireUseWarnings"
-        || $policy_name eq "${ns}::Modules::RequireExplicitPackage";
-}
 
 1;
 

@@ -28,6 +28,8 @@ sub default_severity     { return $SEVERITY_HIGHEST   }
 sub default_themes       { return qw( core pbp bugs ) }
 sub applies_to           { return 'PPI::Document'     }
 
+sub default_maximum_violations_per_document { return 1; }
+
 #-----------------------------------------------------------------------------
 
 sub violates {
@@ -87,6 +89,7 @@ __END__
 
 Perl::Critic::Policy::TestingAndDebugging::RequireUseStrict
 
+
 =head1 DESCRIPTION
 
 Using strictures is probably the single most effective way to improve the
@@ -97,13 +100,18 @@ C<use> statements.  Thus, all the code in the entire package will be affected.
 There is a special exemption for L<Moose> because it enforces strictness; i.e.
 C<'use Moose'> is treated as equivalent to C<'use strict'>.
 
+The maximum number of violations for this policy defaults to 1.
+
+
 =head1 SEE ALSO
 
 L<Perl::Critic::Policy::TestingAndDebugging::ProhibitNoStrict>
 
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+
 
 =head1 COPYRIGHT
 

@@ -30,6 +30,8 @@ sub default_severity     { return $SEVERITY_HIGH      }
 sub default_themes       { return qw( core bugs pbp ) }
 sub applies_to           { return 'PPI::Document'     }
 
+sub default_maximum_violations_per_document { return 1; }
+
 #-----------------------------------------------------------------------------
 
 sub violates {
@@ -88,6 +90,7 @@ __END__
 
 Perl::Critic::Policy::TestingAndDebugging::RequireUseWarnings
 
+
 =head1 DESCRIPTION
 
 Using warnings, and paying attention to what they say, is probably the
@@ -99,13 +102,18 @@ statements.  Thus, all the code in the entire package will be affected.
 There is a special exemption for L<Moose> because it enforces warnings; i.e.
 C<'use Moose'> is treated as equivalent to C<'use warnings'>.
 
+The maximum number of violations for this policy defaults to 1.
+
+
 =head1 SEE ALSO
 
 L<Perl::Critic::Policy::TestingAndDebugging::ProhibitNoWarnings>
 
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+
 
 =head1 COPYRIGHT
 

@@ -2,6 +2,10 @@
 
      New Features:
      * perlcritic now supports a --list-themes option.
+     * You can specify the maximum number of violations you want per Policly
+       per document.  Developers can give a default value for this for a
+       Policy by overriding default_maximum_violations_per_document().
+       See RequireUseStrict and ProhibitMagicNumbers for examples.
 
      Policy Moved:
      * The ValuesAndExpressions::ProhibitMagicNumbers policy has been moved
