@@ -9,16 +9,23 @@
 
 use strict;
 use warnings;
-use English qw(-no_match_vars);
-use Test::More tests => 17;
+
+use English qw<-no_match_vars>;
+
+use Test::More tests => 26;
 
 
 #-----------------------------------------------------------------------------
 # Perl::Critic::Policy is an abstract class, so it can't be instantiated
-# directly.  So we test it be declaring a test class that inherits from it.
+# directly.  So we test it by declaring test classes that inherits from it.
 
 package PolicyTest;
 use base 'Perl::Critic::Policy';
+
+package PolicyTestOverriddenDefaultMaximumViolations;
+use base 'Perl::Critic::Policy';
+
+sub default_maximum_violations_per_document { return 31; }
 
 #-----------------------------------------------------------------------------
 
@@ -27,42 +34,106 @@ package main;
 my $p = PolicyTest->new();
 isa_ok($p, 'PolicyTest');
 
+
 eval { $p->violates(); };
-ok($EVAL_ERROR, 'abstract violates');
+ok($EVAL_ERROR, 'abstract violates() throws exception');
 
-#Test default application...
-is($p->applies_to(), 'PPI::Element', 'applies_to');
 
-#Test default severity...
-is( $p->default_severity(), 1, 'default_severity');
-is( $p->get_severity(), 1, 'get_severity' );
+# Test default application...
+is($p->applies_to(), 'PPI::Element', 'applies_to()');
 
-#Change severity level...
+
+# Test default maximum violations per document...
+is(
+    $p->default_maximum_violations_per_document(),
+    undef,
+    'default_maximum_violations_per_document()',
+);
+is(
+    $p->get_maximum_violations_per_document(),
+    undef,
+    'get_maximum_violations_per_document()',
+);
+
+# Change maximum violations level...
+$p->set_maximum_violations_per_document(3);
+
+# Test maximum violations again...
+is(
+    $p->default_maximum_violations_per_document(),
+    undef,
+    q<default_maximum_violations_per_document() hasn't changed>,
+);
+is(
+    $p->get_maximum_violations_per_document(),
+    3,
+    q<get_maximum_violations_per_document() returns new value>,
+);
+
+
+my $overridden_default = PolicyTestOverriddenDefaultMaximumViolations->new();
+isa_ok($overridden_default, 'PolicyTestOverriddenDefaultMaximumViolations');
+
+# Test default maximum violations per document...
+is(
+    $overridden_default->default_maximum_violations_per_document(),
+    31,
+    'default_maximum_violations_per_document() overridden',
+);
+is(
+    $overridden_default->get_maximum_violations_per_document(),
+    31,
+    'get_maximum_violations_per_document() overridden',
+);
+
+# Change maximum violations level...
+$overridden_default->set_maximum_violations_per_document(undef);
+
+# Test maximum violations again...
+is(
+    $overridden_default->default_maximum_violations_per_document(),
+    31,
+    q<default_maximum_violations_per_document() overridden hasn't changed>,
+);
+is(
+    $overridden_default->get_maximum_violations_per_document(),
+    undef,
+    q<get_maximum_violations_per_document() overridden returns new undefined value>,
+);
+
+
+# Test default severity...
+is( $p->default_severity(), 1, 'default_severity()');
+is( $p->get_severity(), 1, 'get_severity()' );
+
+# Change severity level...
 $p->set_severity(3);
 
-#Test severity again...
+# Test severity again...
 is( $p->default_severity(), 1 ); #Still the same
 is( $p->get_severity(), 3 );     #Should have new value
 
-#Test default theme...
-is_deeply( [$p->default_themes()], [], 'default_themes');
-is_deeply( [$p->get_themes()], [], 'get_themes');
 
-#Change theme
+# Test default theme...
+is_deeply( [$p->default_themes()], [], 'default_themes()');
+is_deeply( [$p->get_themes()], [], 'get_themes()');
+
+# Change theme
 $p->set_themes( qw(c b a) ); #unsorted
 
-#Test theme again...
+# Test theme again...
 is_deeply( [$p->default_themes()], [] ); #Still the same
 is_deeply( [$p->get_themes()], [qw(a b c)] );  #Should have new value, sorted
 
-#Append theme
+# Append theme
 $p->add_themes( qw(f e d) ); #unsorted
 
-#Test theme again...
+# Test theme again...
 is_deeply( [$p->default_themes()], [] ); #Still the same
 is_deeply( [$p->get_themes()], [ qw(a b c d e f) ] );  #Should have new value, sorted
 
-#Test format getter/setters
+
+# Test format getter/setters
 is( Perl::Critic::Policy::get_format, "%p\n", 'Default policy format');
 
 my $new_format = '%p %s [%t]';
@@ -72,6 +143,7 @@ is( Perl::Critic::Policy::get_format, $new_format, 'Changed policy format');
 my $expected_string = 'PolicyTest 3 [a b c d e f]';
 is( $p->to_string(), $expected_string, 'Stringification by to_string()');
 is( "$p", $expected_string, 'Stringification by overloading');
+
 
 #-----------------------------------------------------------------------------
 

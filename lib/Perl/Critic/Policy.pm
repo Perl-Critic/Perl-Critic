@@ -17,7 +17,7 @@ use String::Format qw(stringf);
 
 use overload ( q{""} => 'to_string', cmp => '_compare' );
 
-use Perl::Critic::Utils qw{
+use Perl::Critic::Utils qw<
     :characters
     :booleans
     :severities
@@ -25,7 +25,7 @@ use Perl::Critic::Utils qw{
     interpolate
     policy_long_name
     policy_short_name
-};
+>;
 use Perl::Critic::Exception::AggregateConfiguration;
 use Perl::Critic::Exception::Configuration;
 use Perl::Critic::Exception::Configuration::Option::Policy::ExtraParameter;
@@ -166,6 +166,34 @@ sub get_short_name {
 
 sub applies_to {
     return qw(PPI::Element);
+}
+
+#-----------------------------------------------------------------------------
+
+sub set_maximum_violations_per_document {
+    my ($self, $maximum_violations_per_document) = @_;
+
+    $self->{_maximum_violations_per_document} =
+        $maximum_violations_per_document;
+
+    return $self;
+}
+
+#-----------------------------------------------------------------------------
+
+sub get_maximum_violations_per_document {
+    my ($self) = @_;
+
+    return
+        exists $self->{_maximum_violations_per_document}
+            ? $self->{_maximum_violations_per_document}
+            : $self->default_maximum_violations_per_document();
+}
+
+#-----------------------------------------------------------------------------
+
+sub default_maximum_violations_per_document {
+    return;
 }
 
 #-----------------------------------------------------------------------------
@@ -355,6 +383,7 @@ __END__
 
 Perl::Critic::Policy - Base class for all Policy modules.
 
+
 =head1 DESCRIPTION
 
 Perl::Critic::Policy is the abstract base class for all Policy
@@ -365,9 +394,10 @@ below.  For a detailed explanation on how to make new Policy modules,
 please see the L<Perl::Critic::DEVELOPER> document included in this
 distribution.
 
+
 =head1 METHODS
 
-=over 8
+=over
 
 =item C<< new(key1 => value1, key2 => value2 ... ) >>
 
@@ -381,6 +411,7 @@ this; override C<initialize_if_enabled()> instead.
 
 This constructor is always called regardless of whether the user has
 enabled this Policy or not.
+
 
 =item C<< initialize_if_enabled( { key1 => value1, key2 => value2 ... } ) >>
 
@@ -396,6 +427,7 @@ external modules or other system facilities that may or may not be
 available should test for the availability of these dependencies and
 return C<$FALSE> if they are not.
 
+
 =item C< violates( $element, $document ) >
 
 Given a L<PPI::Element> and a L<PPI::Document>, returns one or more
@@ -408,6 +440,7 @@ C<violates()> is an abstract method and it will abort if you attempt
 to invoke it directly.  It is the heart of all Policy modules, and
 your subclass B<must> override this method.
 
+
 =item C< violation( $description, $explanation, $element ) >
 
 Returns a reference to a new C<Perl::Critic::Violation> object. The
@@ -419,20 +452,24 @@ the violation.
 These are the same as the constructor to L<Perl::Critic::Violation>,
 but without the severity.  The Policy itself knows the severity.
 
+
 =item C< throw_parameter_value_exception( $option_name, $option_value, $source, $message_suffix ) >
 
 Create and throw a
 L<Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue>.
 Useful in parameter parser implementations.
 
+
 =item C< get_long_name() >
 
 Return the full package name of this policy.
+
 
 =item C< get_short_name() >
 
 Return the name of this policy without the "Perl::Critic::Policy::"
 prefix.
+
 
 =item C< applies_to() >
 
@@ -440,6 +477,28 @@ Returns a list of the names of PPI classes that this Policy cares
 about.  By default, the result is C<PPI::Element>.  Overriding this
 method in Policy subclasses should lead to significant performance
 increases.
+
+
+=item C< default_maximum_violations_per_document() >
+
+Returns the default maximum number of violations for this policy to
+report per document.  By default, this not defined, but subclasses may
+override this.
+
+
+=item C< get_maximum_violations_per_document() >
+
+Returns the maximum number of violations this policy will report for a
+single document.  If this is not defined, then there is no limit.  If
+L<set_maximum_violations_per_document()> has not been invoked, then
+L<default_maximum_violations_per_document()> is returned.
+
+
+=item C< set_maximum_violations_per_document() >
+
+Specify the maximum violations that this policy should report for a
+document.
+
 
 =item C< default_severity() >
 
@@ -452,12 +511,14 @@ appropriate for their Policy.  In general, Polices that are widely
 accepted or tend to prevent bugs should have a higher severity than
 those that are more subjective or cosmetic in nature.
 
+
 =item C< get_severity() >
 
 Returns the severity of violating this Policy.  If the severity has
 not been explicitly defined by calling C<set_severity>, then the
 C<default_severity> is returned.  See the C<$SEVERITY> constants in
 L<Perl::Critic::Utils> for an enumeration of possible severity values.
+
 
 =item C< set_severity( $N ) >
 
@@ -467,6 +528,7 @@ different severity to the Policy if they don't agree with the
 C<default_severity>.  See the C<$SEVERITY> constants in
 L<Perl::Critic::Utils> for an enumeration of possible values.
 
+
 =item C< default_themes() >
 
 Returns a sorted list of the default themes associated with this
@@ -474,25 +536,30 @@ Policy.  The default method returns an empty list.  Policy authors
 should override this method to return a list of themes that are
 appropriate for their policy.
 
+
 =item C< get_themes() >
 
 Returns a sorted list of the themes associated with this Policy.  If
 you haven't added themes or set the themes explicitly, this method
 just returns the default themes.
 
+
 =item C< set_themes( @THEME_LIST ) >
 
 Sets the themes associated with this Policy.  Any existing themes are
 overwritten.  Duplicate themes will be removed.
+
 
 =item C< add_themes( @THEME_LIST ) >
 
 Appends additional themes to this Policy.  Any existing themes are
 preserved.  Duplicate themes will be removed.
 
+
 =item C< parameter_metadata_available() >
 
 Returns whether information about the parameters is available.
+
 
 =item C< get_parameters() >
 
@@ -504,9 +571,11 @@ policy are unknown.  In order to differentiate between this
 circumstance and the one where this policy does not take any
 parameters, it is necessary to call C<parameter_metadata_available()>.
 
+
 =item C< get_parameter( $parameter_name ) >
 
 Returns the L<Perl::Critic::PolicyParameter> with the specified name.
+
 
 =item C<set_format( $FORMAT )>
 
@@ -514,10 +583,12 @@ Class method.  Sets the format for all Policy objects when they are
 evaluated in string context.  The default is C<"%p\n">.  See
 L<"OVERLOADS"> for formatting options.
 
+
 =item C<get_format()>
 
 Class method. Returns the current format for all Policy objects when
 they are evaluated in string context.
+
 
 =item C<to_string()>
 
@@ -525,7 +596,9 @@ Returns a string representation of the policy.  The content of the
 string depends on the current value of the C<$FORMAT> package
 variable.  See L<"OVERLOADS"> for the details.
 
+
 =back
+
 
 =head1 DOCUMENTATION
 
@@ -534,6 +607,7 @@ will try and extract the DESCRIPTION section of your Policy module's
 POD.  This information is displayed by Perl::Critic if the verbosity
 level is set accordingly.  Therefore, please include a DESCRIPTION
 section in the POD for any Policy modules that you author.  Thanks.
+
 
 =head1 OVERLOADS
 
@@ -545,6 +619,7 @@ Formats are a combination of literal and escape characters similar to
 the way C<sprintf> works.  If you want to know the specific formatting
 capabilities, look at L<String::Format>. Valid escape characters are:
 
+
 =over
 
 =item C<%O>
@@ -553,6 +628,7 @@ List of supported policy parameters.  Takes an option of a format
 string for L<Perl::Critic::PolicyParameter/"to_formatted_string">.
 For example, this can be used like C<%{%n - %d\n}O> to get a list of
 parameter names followed by their descriptions.
+
 
 =item C<%U>
 
@@ -563,29 +639,36 @@ discover what parameters this policy takes.".  The value of this
 option is interpolated in order to expand the standard escape
 sequences (C<\n>, C<\t>, etc.).
 
+
 =item C<%P>
 
 Name of the Policy module.
+
 
 =item C<%p>
 
 Name of the Policy without the C<Perl::Critic::Policy::> prefix.
 
+
 =item C<%S>
 
 The default severity level of the policy.
+
 
 =item C<%s>
 
 The current severity level of the policy.
 
+
 =item C<%T>
 
 The default themes for the policy.
 
+
 =item C<%t>
 
 The current themes for the policy.
+
 
 =back
 
@@ -593,6 +676,7 @@ The current themes for the policy.
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+
 
 =head1 COPYRIGHT
 
