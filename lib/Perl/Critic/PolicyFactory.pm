@@ -180,6 +180,8 @@ sub create_policy {
     my $user_set_themes = delete $policy_config_copy{set_themes};
     my $user_add_themes = delete $policy_config_copy{add_themes};
     my $user_severity   = delete $policy_config_copy{severity};
+    my $user_maximum_violations
+        = delete $policy_config_copy{maximum_violations_per_document};
 
     # Construct policy from remaining params.  Trap errors.
     my $policy = eval { $policy_name->new( %policy_config_copy ) };
@@ -198,6 +200,12 @@ sub create_policy {
     $policy->__set_config( \%policy_config_copy );
 
     # Set base attributes on policy
+    if ( defined $user_maximum_violations ) {
+        $policy->set_maximum_violations_per_document(
+            $user_maximum_violations
+        );
+    }
+
     if ( defined $user_severity ) {
         my $normalized_severity = severity_to_number( $user_severity );
         $policy->set_severity( $normalized_severity );

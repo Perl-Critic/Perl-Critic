@@ -18,6 +18,18 @@ use strict;
 
 #-----------------------------------------------------------------------------
 
+## name several statements before strict with maximum violations changed
+## failures 2
+## parms { maximum_violations_per_document => 2 }
+## cut
+
+$foo = $bar;   ## This one violates.
+$baz = $nuts;  ## This one violates.
+$blamo;        ## This one should be squelched
+use strict;
+
+#-----------------------------------------------------------------------------
+
 ## name no strict at all
 ## failures 1
 ## cut
