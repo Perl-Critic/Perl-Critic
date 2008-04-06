@@ -26,7 +26,7 @@ use Perl::Critic::Utils qw{
     :booleans :characters :severities :internal_lookup :classification
 };
 use Perl::Critic::Utils::Constants qw{ :profile_strictness };
-use Perl::Critic::Utils::DataConversion qw{ boolean_to_number };
+use Perl::Critic::Utils::DataConversion qw{ boolean_to_number dor };
 
 #-----------------------------------------------------------------------------
 
@@ -92,11 +92,11 @@ sub _init {
     # If given, these options can be true or false (but defined)
     # We normalize these to numeric values by multiplying them by 1;
     {
-        $self->{_force} = boolean_to_number( _dor( $args{-force}, $defaults->force() ) );
-        $self->{_only}  = boolean_to_number( _dor( $args{-only},  $defaults->only()  ) );
-        $self->{_color} = boolean_to_number( _dor( $args{-color}, $defaults->color() ) );
+        $self->{_force} = boolean_to_number( dor( $args{-force}, $defaults->force() ) );
+        $self->{_only}  = boolean_to_number( dor( $args{-only},  $defaults->only()  ) );
+        $self->{_color} = boolean_to_number( dor( $args{-color}, $defaults->color() ) );
         $self->{_criticism_fatal} =
-          boolean_to_number(_dor( $args{'-criticism_fatal'}, $defaults->criticism_fatal() ) );
+          boolean_to_number(dor( $args{'-criticism_fatal'}, $defaults->criticism_fatal() ) );
     }
 
     $self->_validate_and_save_theme($args{-theme}, $errors);
@@ -624,14 +624,6 @@ sub _validate_and_save_theme {
     }
 
     return;
-}
-
-#-----------------------------------------------------------------------------
-
-sub _dor {
-    #The defined-or //
-    my ($this, $that) = @_;
-    return defined $this ? $this : $that;
 }
 
 #-----------------------------------------------------------------------------

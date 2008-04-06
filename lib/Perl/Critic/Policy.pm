@@ -28,7 +28,7 @@ use Perl::Critic::Utils qw<
     policy_short_name
     severity_to_number
 >;
-use Perl::Critic::Utils::DataConversion qw< defined_or_empty >;
+use Perl::Critic::Utils::DataConversion qw< dor >;
 use Perl::Critic::Exception::AggregateConfiguration;
 use Perl::Critic::Exception::Configuration;
 use Perl::Critic::Exception::Configuration::Option::Policy::ExtraParameter;
@@ -41,6 +41,10 @@ use Perl::Critic::Violation qw<>;
 use Exception::Class;   # this must come after "use P::C::Exception::*"
 
 our $VERSION = '1.082';
+
+#-----------------------------------------------------------------------------
+
+Readonly::Scalar my $NO_LIMIT => 'no_limit';
 
 #-----------------------------------------------------------------------------
 
@@ -176,7 +180,7 @@ sub _set_maximum_violations_per_document {
 
     if ( defined $user_maximum_violations ) {
         if (
-                $user_maximum_violations =~ m/no_limit/xmsi
+                $user_maximum_violations =~ m/$NO_LIMIT/xmsio
             or  $user_maximum_violations eq $EMPTY
         ) {
             $user_maximum_violations = undef;
@@ -418,8 +422,8 @@ sub to_string {
          'p' => sub { $self->get_short_name() },
          'T' => sub { join $SPACE, $self->default_themes() },
          't' => sub { join $SPACE, $self->get_themes() },
-         'V' => sub { defined_or_empty( $self->default_maximum_violations_per_document() ) },
-         'v' => sub { defined_or_empty( $self->get_maximum_violations_per_document() ) },
+         'V' => sub { dor( $self->default_maximum_violations_per_document(), $NO_LIMIT ) },
+         'v' => sub { dor( $self->get_maximum_violations_per_document(), $NO_LIMIT ) },
          'S' => sub { $self->default_severity() },
          's' => sub { $self->get_severity() },
     );
