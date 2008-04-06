@@ -158,12 +158,12 @@ sub subtests_in_tree {
 # If you change this here, make sure to change it there.
 
 sub should_skip_author_tests {
-    return !$ENV{TEST_AUTHOR}
+    return not $ENV{TEST_AUTHOR_PERL_CRITIC}
 }
 
 sub get_author_test_skip_message {
     ## no critic (RequireInterpolation);
-    return 'Author test.  Set $ENV{TEST_AUTHOR} to a true value to run.';
+    return 'Author test.  Set $ENV{TEST_AUTHOR_PERL_CRITIC} to a true value to run.';
 }
 
 

@@ -94,7 +94,7 @@ sub get_PL_files {
     if (should_skip_author_tests()) {
         print
               "\nWill not generate extra author tests.  Set "
-            . '$ENV{TEST_AUTHOR} to a true value to have them generated.'
+            . '$ENV{TEST_AUTHOR_PERL_CRITIC} to a true value to have them generated.'
             . "\n\n";
     }
     else {
