@@ -688,6 +688,7 @@ The remainder of the configuration file is a series of blocks like this:
     severity = 1
     set_themes = foo bar
     add_themes = baz
+    maximum_violations_per_document = 57
     arg1 = value1
     arg2 = value2
 
@@ -720,6 +721,12 @@ information.
 C<add_themes> appends to the default themes for this Policy.  The argument is
 a string of one or more whitespace-delimited words.  Themes are
 case-insensitive.  See L<"POLICY THEMES"> for more information.
+
+C<maximum_violations_per_document> limits the number of Violations the Policy
+will return for a given document.  Some Policies have a default limit; see the
+documentation for the individual Policies to see whether there is one.  To
+force a Policy to not have a limit, specify "no_limit" or the empty string for
+the value of this parameter.
 
 The remaining key-value pairs are configuration parameters that will be passed
 into the constructor for that Policy.  The constructors for most Policy
