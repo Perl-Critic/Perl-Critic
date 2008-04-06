@@ -371,7 +371,6 @@ sub violation {  ##no critic(ArgUnpacking)
 
 #-----------------------------------------------------------------------------
 
-## no critic (Subroutines::RequireFinalReturn)
 sub new_parameter_value_exception {
     my ( $self, $option_name, $option_value, $source, $message_suffix ) = @_;
 
@@ -383,7 +382,6 @@ sub new_parameter_value_exception {
         message_suffix  => $message_suffix
     );
 }
-## use critic
 
 
 #-----------------------------------------------------------------------------
