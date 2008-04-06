@@ -177,51 +177,17 @@ sub create_policy {
 
 
     # Pull out base parameters.
-    my $user_set_themes = delete $policy_config_copy{set_themes};
-    my $user_add_themes = delete $policy_config_copy{add_themes};
-    my $user_severity   = delete $policy_config_copy{severity};
-    my $user_maximum_violations
-        = delete $policy_config_copy{maximum_violations_per_document};
-
-    # Construct policy from remaining params.  Trap errors.
-    my $policy = eval { $policy_name->new( %policy_config_copy ) };
-
-    if ($EVAL_ERROR) {
-        my $exception = Exception::Class->caught();
-
-        if (ref $exception) {
-            $exception->rethrow();
-        }
-
-        throw_policy_definition
-            qq{Unable to create policy '$policy_name': $EVAL_ERROR};
+    my %base_parameters;
+    foreach my $parameter_name (
+        qw< set_themes add_themes severity maximum_violations_per_document >
+    ) {
+        $base_parameters{$parameter_name} =
+            delete $policy_config_copy{$parameter_name};
     }
 
-    $policy->__set_config( \%policy_config_copy );
-
-    # Set base attributes on policy
-    if ( defined $user_maximum_violations ) {
-        $policy->set_maximum_violations_per_document(
-            $user_maximum_violations
-        );
-    }
-
-    if ( defined $user_severity ) {
-        my $normalized_severity = severity_to_number( $user_severity );
-        $policy->set_severity( $normalized_severity );
-    }
-
-    if ( defined $user_set_themes ) {
-        my @set_themes = words_from_string( $user_set_themes );
-        $policy->set_themes( @set_themes );
-    }
-
-    if ( defined $user_add_themes ) {
-        my @add_themes = words_from_string( $user_add_themes );
-        $policy->add_themes( @add_themes );
-    }
-
-    return $policy;
+    return _instantiate_policy(
+        $policy_name, \%policy_config_copy, \%base_parameters
+    );
 }
 
 #-----------------------------------------------------------------------------
@@ -265,6 +231,41 @@ sub _profile {
     my ($self) = @_;
 
     return $self->{_profile};
+}
+
+#-----------------------------------------------------------------------------
+
+# This two-phase initialization is caused by the historical lack of a
+# requirement for Policies to invoke their super-constructor.
+sub _instantiate_policy {
+    my ($policy_name, $policy_config, $base_parameters) = @_;
+
+    my $policy = eval { $policy_name->new( %{$policy_config} ) };
+    _handle_policy_instantiation_exception($policy_name, $EVAL_ERROR);
+
+    eval { $policy->__set_base_parameters( $base_parameters ) };
+    _handle_policy_instantiation_exception($policy_name, $EVAL_ERROR);
+
+    $policy->__set_config( $policy_config );
+
+    return $policy;
+}
+
+sub _handle_policy_instantiation_exception {
+    my ($policy_name, $eval_error) = @_;
+
+    if ($eval_error) {
+        my $exception = Exception::Class->caught();
+
+        if (ref $exception) {
+            $exception->rethrow();
+        }
+
+        throw_policy_definition
+            qq{Unable to create policy '$policy_name': $eval_error};
+    }
+
+    return;
 }
 
 #-----------------------------------------------------------------------------

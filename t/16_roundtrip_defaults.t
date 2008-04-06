@@ -31,12 +31,13 @@ my $default_configuration =
     Perl::Critic::Config->new(
         -profile => $EMPTY,
         -severity => 1,
+        -theme => 'core',
     );
 my @default_policies = $default_configuration->policies();
 
 my $policy_test_count;
 
-$policy_test_count = 3 * @default_policies;
+$policy_test_count = 4 * @default_policies;
 foreach my $policy (@default_policies) {
     if (
             $policy->parameter_metadata_available()
@@ -183,6 +184,11 @@ SKIP: {
             $derived_policy->get_short_name(),
             $default_policy->get_short_name(),
             'policy names match',
+        );
+        is(
+            $derived_policy->get_maximum_violations_per_document(),
+            $default_policy->get_maximum_violations_per_document(),
+            $default_policy->get_short_name() . ' maximum violations per document match',
         );
         is(
             $derived_policy->get_severity(),

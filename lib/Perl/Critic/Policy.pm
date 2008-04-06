@@ -13,9 +13,9 @@ use warnings;
 use English qw< -no_match_vars >;
 use Readonly;
 
-use String::Format qw(stringf);
+use String::Format qw< stringf >;
 
-use overload ( q{""} => 'to_string', cmp => '_compare' );
+use overload ( q<""> => 'to_string', cmp => '_compare' );
 
 use Perl::Critic::Utils qw<
     :characters
@@ -23,9 +23,12 @@ use Perl::Critic::Utils qw<
     :severities
     :data_conversion
     interpolate
+    is_integer
     policy_long_name
     policy_short_name
+    severity_to_number
 >;
+use Perl::Critic::Utils::DataConversion qw< defined_or_empty >;
 use Perl::Critic::Exception::AggregateConfiguration;
 use Perl::Critic::Exception::Configuration;
 use Perl::Critic::Exception::Configuration::Option::Policy::ExtraParameter;
@@ -125,6 +128,88 @@ sub __set_parameter_value {
     my ( $self, $parameter, $value ) = @_;
 
     $self->{ $self->__get_parameter_name($parameter) } = $value;
+
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
+sub __set_base_parameters {
+    my ($self, $base_parameters) = @_;
+
+    my $errors = Perl::Critic::Exception::AggregateConfiguration->new();
+
+    $self->_set_maximum_violations_per_document(
+        $base_parameters->{maximum_violations_per_document},
+        $errors,
+    );
+
+    my $user_severity = $base_parameters->{severity};
+    if ( defined $user_severity ) {
+        my $normalized_severity = severity_to_number( $user_severity );
+        $self->set_severity( $normalized_severity );
+    }
+
+    my $user_set_themes = $base_parameters->{set_themes};
+    if ( defined $user_set_themes ) {
+        my @set_themes = words_from_string( $user_set_themes );
+        $self->set_themes( @set_themes );
+    }
+
+    my $user_add_themes = $base_parameters->{add_themes};
+    if ( defined $user_add_themes ) {
+        my @add_themes = words_from_string( $user_add_themes );
+        $self->add_themes( @add_themes );
+    }
+
+    if ( $errors->has_exceptions() ) {
+        $errors->rethrow();
+    }
+
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _set_maximum_violations_per_document {
+    my ($self, $user_maximum_violations, $errors) = @_;
+
+    if ( defined $user_maximum_violations ) {
+        if (
+                $user_maximum_violations =~ m/no_limit/xmsi
+            or  $user_maximum_violations eq $EMPTY
+        ) {
+            $user_maximum_violations = undef;
+        }
+        elsif ( not is_integer($user_maximum_violations) ) {
+            $errors->add_exception(
+                new_parameter_value_exception(
+                    'maximum_violations_per_document',
+                    $user_maximum_violations,
+                    undef,
+                    "does not look like an integer.\n"
+                )
+            );
+
+            return;
+        }
+        elsif ( $user_maximum_violations < 0 ) {
+            $errors->add_exception(
+                new_parameter_value_exception(
+                    'maximum_violations_per_document',
+                    $user_maximum_violations,
+                    undef,
+                    "is not greater than or equal to zero.\n"
+                )
+            );
+
+            return;
+        }
+
+        $self->set_maximum_violations_per_document(
+            $user_maximum_violations
+        );
+    }
 
     return;
 }
@@ -287,16 +372,30 @@ sub violation {  ##no critic(ArgUnpacking)
 #-----------------------------------------------------------------------------
 
 ## no critic (Subroutines::RequireFinalReturn)
-sub throw_parameter_value_exception {
+sub new_parameter_value_exception {
     my ( $self, $option_name, $option_value, $source, $message_suffix ) = @_;
 
-    Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue->throw(
+    return Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue->new(
         policy          => $self->get_short_name(),
         option_name     => $option_name,
         option_value    => $option_value,
         source          => $source,
         message_suffix  => $message_suffix
     );
+}
+## use critic
+
+
+#-----------------------------------------------------------------------------
+
+## no critic (Subroutines::RequireFinalReturn)
+sub throw_parameter_value_exception {
+    my ( $self, $option_name, $option_value, $source, $message_suffix ) = @_;
+
+    $self->new_parameter_value_exception(
+        $option_name, $option_value, $source, $message_suffix
+    )
+        ->throw();
 }
 ## use critic
 
@@ -321,6 +420,8 @@ sub to_string {
          'p' => sub { $self->get_short_name() },
          'T' => sub { join $SPACE, $self->default_themes() },
          't' => sub { join $SPACE, $self->get_themes() },
+         'V' => sub { defined_or_empty( $self->default_maximum_violations_per_document() ) },
+         'v' => sub { defined_or_empty( $self->get_maximum_violations_per_document() ) },
          'S' => sub { $self->default_severity() },
          's' => sub { $self->get_severity() },
     );
@@ -451,6 +552,13 @@ the violation.
 
 These are the same as the constructor to L<Perl::Critic::Violation>,
 but without the severity.  The Policy itself knows the severity.
+
+
+=item C< new_parameter_value_exception( $option_name, $option_value, $source, $message_suffix ) >
+
+Create a
+L<Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue>
+for this Policy.
 
 
 =item C< throw_parameter_value_exception( $option_name, $option_value, $source, $message_suffix ) >
@@ -648,6 +756,16 @@ Name of the Policy module.
 =item C<%p>
 
 Name of the Policy without the C<Perl::Critic::Policy::> prefix.
+
+
+=item C<%V>
+
+The default maximum number of violations per document of the policy.
+
+
+=item C<%V>
+
+The current maximum number of violations per document of the policy.
 
 
 =item C<%S>

@@ -32,12 +32,6 @@ policies.  It contains its own TODO.pod.
 =item * Report Safari sections in addition to book page numbers.
 
 
-=item * Allow policies to say that they've had enough and to not use them for the rest of the current document.
-
-Primarily for things like C<RequireUseStrict> and C<ProhibitMagicNumbers>.
-Replace current workaround for C<RequireUseStrict>.
-
-
 =item * Add --files-with-violations/-l and --files-without-violations/-L options to F<perlcritic>.
 
 Just print out file names.  I could have used this at work when combined with
