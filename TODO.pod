@@ -378,6 +378,9 @@ L<perlreref>.
 =item * Create constants for the PPI location array elements.
 
 
+=item * Document maximum_violations_per_document in DEVELOPER.pod.
+
+
 =item * Generate PolicySummary.pod instead of maintaining it.
 
 Move all the descriptions to the NAME section of each Policy and generate
