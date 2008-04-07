@@ -7,6 +7,11 @@
        Policy by overriding default_maximum_violations_per_document().
        See RequireUseStrict and ProhibitMagicNumbers for examples.
 
+     New Developer Features:
+     * If a document specifies a minimum perl version, e.g. "use 5.008003",
+       P::C::Document::highest_explicit_perl_version() will tell you what it
+       is.
+
      Policy Moved:
      * The ValuesAndExpressions::ProhibitMagicNumbers policy has been moved
        from Perl::Critic::More into the primary Perl::Critic distribution.
@@ -19,6 +24,9 @@
      Minor Changes:
      * A few more statistics are emitted by perlcritic with the --statistics
        option.
+
+     Prerequisites:
+     * New dependency upon version.
 
 [1.082] Released on 2008-03-08
 

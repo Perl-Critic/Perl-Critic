@@ -9,8 +9,11 @@ package Perl::Critic::Document;
 
 use strict;
 use warnings;
+
+use List::Util qw< max >;
 use PPI::Document;
-use Scalar::Util qw(weaken);
+use Scalar::Util qw< weaken >;
+use version;
 
 #-----------------------------------------------------------------------------
 
@@ -121,6 +124,41 @@ sub filename {
 
 #-----------------------------------------------------------------------------
 
+sub highest_explicit_perl_version {
+    my ($self) = @_;
+
+    my $highest_explicit_perl_version =
+        $self->{_highest_explicit_perl_version};
+
+    if ( not exists $self->{_highest_explicit_perl_version} ) {
+        my $includes = $self->find( \&_is_a_version_statement );
+
+        if ($includes) {
+            $highest_explicit_perl_version =
+                max map { version->new( $_->version() ) } @{$includes};
+        }
+        else {
+            $highest_explicit_perl_version = undef;
+        }
+
+        $self->{_highest_explicit_perl_version} =
+            $highest_explicit_perl_version;
+    }
+
+    return $highest_explicit_perl_version if $highest_explicit_perl_version;
+    return;
+}
+
+sub _is_a_version_statement {
+    my (undef, $element) = @_;
+
+    return 0 if not $element->isa('PPI::Statement::Include');
+    return 1 if $element->version();
+    return 0;
+}
+
+#-----------------------------------------------------------------------------
+
 sub _caching_finder {
 
     my $cache_ref = shift;  # These vars will persist for the life
@@ -168,6 +206,7 @@ __END__
 
 Perl::Critic::Document - Caching wrapper around a PPI::Document.
 
+
 =head1 SYNOPSIS
 
     use PPI::Document;
@@ -175,6 +214,7 @@ Perl::Critic::Document - Caching wrapper around a PPI::Document.
     my $doc = PPI::Document->new('Foo.pm');
     $doc = Perl::Critic::Document->new($doc);
     ## Then use the instance just like a PPI::Document
+
 
 =head1 DESCRIPTION
 
@@ -185,6 +225,7 @@ Then, on subsequent requests we return the cached data.
 
 This is implemented as a facade, where method calls are handed to the
 stored C<PPI::Document> instance.
+
 
 =head1 CAVEATS
 
@@ -197,45 +238,72 @@ $source = $doc->content();>
 Perhaps there is a CPAN module out there which implements a facade
 better than we do here?
 
+
+=head1 CONSTRUCTOR
+
+=over
+
+=item C<< new($doc) >>
+
+Create a new instance referencing a PPI::Document instance.
+
+
+=back
+
+
 =head1 METHODS
 
 =over
 
-=item $pkg->new($doc)
+=item C<< new($doc) >>
 
 Create a new instance referencing a PPI::Document instance.
 
-=item $self->ppi_document()
+
+=item C<< ppi_document() >>
 
 Accessor for the wrapped PPI::Document instance.  Note that altering this
 instance in any way can cause unpredictable failures in Perl::Critic's
 subsequent analysis because some caches may fall out of date.
 
-=item $self->find($wanted)
 
-=item $self->find_first($wanted)
+=item C<< find($wanted) >>
 
-=item $self->find_any($wanted)
+=item C<< find_first($wanted) >>
+
+=item C<< find_any($wanted) >>
 
 If C<$wanted> is a simple PPI class name, then the cache is employed.
 Otherwise we forward the call to the corresponding method of the
 C<PPI::Document> instance.
 
-=item $self->filename()
+
+=item C<< filename() >>
 
 Returns the filename for the source code if applicable
 (PPI::Document::File) or C<undef> otherwise (PPI::Document).
 
-=item $self->isa( $classname )
+
+=item C<< isa( $classname ) >>
 
 To be compatible with other modules that expect to get a PPI::Document, the
 Perl::Critic::Document class masquerades as the PPI::Document class.
 
+
+=item C<< highest_explicit_perl_version() >>
+
+Returns a L<version> object for the highest Perl version requirement declared
+in the document via a C<use> or C<require> statement.  Returns nothing if
+there is no version statement.
+
+
 =back
+
 
 =head1 AUTHOR
 
 Chris Dolan <cdolan@cpan.org>
+
 
 =head1 COPYRIGHT
 

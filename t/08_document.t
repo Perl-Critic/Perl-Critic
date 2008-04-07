@@ -9,15 +9,23 @@
 
 use strict;
 use warnings;
-use Test::More tests => 18;
+
+use version;
+
+use Perl::Critic::Utils::DataConversion qw< dor >;
+
+use Test::More tests => 25;
 
 #-----------------------------------------------------------------------------
 
 use_ok('Perl::Critic::Document');
 can_ok('Perl::Critic::Document', 'new');
+can_ok('Perl::Critic::Document', 'filename');
 can_ok('Perl::Critic::Document', 'find');
 can_ok('Perl::Critic::Document', 'find_first');
 can_ok('Perl::Critic::Document', 'find_any');
+can_ok('Perl::Critic::Document', 'highest_explicit_perl_version');
+can_ok('Perl::Critic::Document', 'ppi_document');
 
 {
     my $code = q{'print 'Hello World';};  #Has 6 PPI::Element
@@ -74,6 +82,35 @@ can_ok('Perl::Critic::Document', 'find_any');
         is( $found, undef, 'find_any by empty class name');
 
     }
+}
+
+#-----------------------------------------------------------------------------
+
+{
+    test_version( 'sub { 1 }', undef );
+    test_version( 'use 5.006', version->new('5.006') );
+    test_version( 'use 5.8.3', version->new('5.8.3') );
+    test_version(
+        'use 5.006; use 5.8.3; use 5.005005',
+        version->new('5.8.3'),
+    );
+}
+
+sub test_version {
+    my ($code, $expected_version) = @_;
+
+    my $description_version = dor( $expected_version, '<undef>' );
+
+    my $document =
+        Perl::Critic::Document->new(
+            PPI::Document->new( \$code )
+        );
+
+    is(
+        $document->highest_explicit_perl_version(),
+        $expected_version,
+        qq<Get "$description_version" for "$code".>,
+    );
 }
 
 #-----------------------------------------------------------------------------
