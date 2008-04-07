@@ -388,6 +388,11 @@ PolicySummary.pod from that.  Also can be used to enhance ProfilePrototype
 output.
 
 
+=item * Replace policy configuration hashes with a PolicyConfig object.
+
+Encapsulate parameter parsing.
+
+
 =item * MOVE THE LINE-DISABLING INTO P::C::Document
 
 All the code that deals with finding all the '##no critic' comments and noting
@@ -461,6 +466,8 @@ subroutine that does a hash-lookup like this:
 =item * Allow color output to work through a pipe.
 
 http://rt.cpan.org/Ticket/Display.html?id=30140
+
+F<ack> now supports this.
 
 
 =back
