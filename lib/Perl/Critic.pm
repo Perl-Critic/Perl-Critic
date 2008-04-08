@@ -185,6 +185,8 @@ sub _critique {
         return;
     }
 
+    my $policy_name = $policy->get_long_name();
+
   TYPE:
     for my $type ( $policy->applies_to() ) {
 
@@ -200,7 +202,6 @@ sub _critique {
             for my $violation ( $policy->violates( $element, $doc ) ) {
                 my $line = $violation->location()->[0];
                 if (exists $is_line_disabled->{$line}) {
-                    my $policy_name = ref $policy;
                     next VIOLATION if $is_line_disabled->{$line}->{$policy_name};
                     next VIOLATION if $is_line_disabled->{$line}->{ALL};
                 }
