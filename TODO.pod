@@ -162,6 +162,11 @@ from the policy.
 These policies should not report violations if 'use Fatal' is in effect.
 
 
+=item * ValuesAndExpressions::ProhibitCommaSeparatedStatements
+
+Needs to check for C<scalar( something, something )>.
+
+
 =item * ValuesAndExpressions::ProhibitMagicNumbers
 
 The C<allowed_values> option needs to handle ranges.
