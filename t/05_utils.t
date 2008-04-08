@@ -9,8 +9,10 @@
 
 use strict;
 use warnings;
+
 use PPI::Document;
-use Test::More tests => 101;
+
+use Test::More tests => 103;
 
 #-----------------------------------------------------------------------------
 
@@ -146,18 +148,24 @@ for my $code (@bad) {
 # is_perl_global tests
 
 {
-    is(   is_perl_global('$OSNAME'),  1, 'Is perl global var'     );
-    isnt( is_perl_global('%FOOBAR'),  1, 'Is not perl global var' );
+    is(   is_perl_global('$OSNAME'),  1, '$OSNAME is a perl global var'     );
+    is(   is_perl_global('*STDOUT'),  1, '*STDOUT is a perl global var'     );
+    isnt( is_perl_global('%FOOBAR'),  1, '%FOOBAR is a not perl global var' );
 
     my $code = '$OSNAME';
     my $doc  = make_doc($code);
     my $var  = $doc->find_first('Token::Symbol');
-    is( is_perl_global($var), 1, 'Is perl global var (PPI)' );
+    is( is_perl_global($var), 1, '$OSNAME is perl a global var (PPI)' );
+
+    $code = '*STDOUT';
+    $doc  = make_doc($code);
+    $var  = $doc->find_first('Token::Symbol');
+    is( is_perl_global($var), 1, '*STDOUT is perl a global var (PPI)' );
 
     $code = '%FOOBAR';
     $doc  = make_doc($code);
     $var  = $doc->find_first('Token::Symbol');
-    isnt( is_perl_global($var), 1, 'Is not perl global var (PPI)' );
+    isnt( is_perl_global($var), 1, '%FOOBAR is not a perl global var (PPI)' );
 
 }
 
