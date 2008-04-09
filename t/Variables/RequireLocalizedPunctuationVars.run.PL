@@ -5,11 +5,15 @@
 #   $Author$
 # $Revision$
 ##############################################################################
-use warnings;
+
 use strict;
-use B::Keywords qw();
-use Carp qw(confess);
+use warnings;
+
 use English qw(-no_match_vars);
+use Carp qw(confess);
+
+use B::Keywords qw();
+use List::MoreUtils qw< apply uniq >;
 
 my $this_program = __FILE__;
 (my $test_file_name = $this_program) =~ s/ \.PL \z //xms;
@@ -31,6 +35,7 @@ my @globals = (
     @B::Keywords::Hashes,
     @B::Keywords::Scalars,
 );
+push @globals, uniq apply { s/ \A ([^*]) /*$1/xms } @B::Keywords::Filehandles;
 my %exceptions = map {$_ => 1} qw(
     $_
     $ARG
