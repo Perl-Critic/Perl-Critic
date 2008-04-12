@@ -18,7 +18,7 @@ our $VERSION = '1.082';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $DESC => q{Private variable used};
+Readonly::Scalar my $DESC => q{Private subroutine/method used};
 Readonly::Scalar my $EXPL => q{Use published APIs};
 
 #-----------------------------------------------------------------------------
