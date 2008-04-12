@@ -29,3 +29,6 @@ stop_words = accessor accessors autoflushes backticks bareword barewords BBEdit 
 
 [InputOutput::RequireCheckedSyscalls]
 functions = open close
+
+[RegularExpressions::ProhibitUnusualDelimiters]
+allow_all_brackets = 1

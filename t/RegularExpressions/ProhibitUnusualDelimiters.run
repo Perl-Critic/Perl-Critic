@@ -48,6 +48,36 @@ qr"foo";
 qr;foo;;
 qr,foo,;
 
+## name allow brackets
+## failures 0
+## parms { allow_all_brackets => 1 }
+## cut
+
+m{foo};
+m(foo);
+m[foo];
+m<foo>;
+
+s{foo}{};
+s(foo){};
+s[foo]{};
+s<foo>{};
+
+s{foo}();
+s(foo)();
+s[foo]();
+s<foo>();
+
+s{foo}[];
+s(foo)[];
+s[foo][];
+s<foo>[];
+
+s{foo}<>;
+s(foo)<>;
+s[foo]<>;
+s<foo><>;
+
 #-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl
