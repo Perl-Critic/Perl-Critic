@@ -783,7 +783,7 @@ implementation of C<initialize_if_enabled()>.  If you want to take
 advantage of the supplied parameter handling from within
 implementation of C<initialize_if_enabled()>, note that the
 information from C<supported_parameters()> will already have been
-used, with user-supplied parameter values valididated and placed into
+used, with user-supplied parameter values validated and placed into
 the Policy by the time C<initialize_if_enabled()> has been called.  It
 is likely that you will not need to refer the contents of the
 C<$config> parameter; just pull the information you need out of
