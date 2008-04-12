@@ -20,6 +20,8 @@
      * Variables::RequireLocalizedPunctuationVars now allows the use of "my".
      * RegularExpressions::ProhibitUnusualDelimiters now supports an
        "allow_all_brackets" option.
+     * RegularExpressions::RequireBracesForMultiline now supports an
+       "allow_all_brackets" option.
 
      http://rt.cpan.org/Ticket/Display.html?id=33937
 

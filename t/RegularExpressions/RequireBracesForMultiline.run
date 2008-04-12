@@ -51,6 +51,53 @@ m#
  foo
  #;
 
+## name allow_all_brackets
+## failures 0
+## parms { allow_all_brackets => 1 }
+## cut
+
+m(
+   foo
+ )x;
+m(
+   foo
+ );
+s(foo
+  bar)
+ (baz
+  fzz);
+qr(
+   foo
+   );
+
+m[
+   foo
+ ]x;
+m[
+   foo
+ ];
+s[foo
+  bar]
+ [baz
+  fzz];
+qr[
+   foo
+   ];
+
+m<
+   foo
+ >x;
+m<
+   foo
+ >;
+s<foo
+  bar>
+ <baz
+  fzz>;
+qr<
+   foo
+   >;
+
 #-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl

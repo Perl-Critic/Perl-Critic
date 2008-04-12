@@ -22,17 +22,42 @@ our $VERSION = '1.082';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $DESC => q{Use '{' and '}' to delimit multi-line regexps};
+Readonly::Scalar my $DESC => q<Use '{' and '}' to delimit multi-line regexps>;
 Readonly::Scalar my $EXPL => [242];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return qw()                    }
+sub supported_parameters {
+    return (
+        {
+            name               => 'allow_all_brackets',
+            description        =>
+                q[In addition to allowing '{}', allow '()', '[]', and '{}'.],
+            behavior           => 'boolean',
+        },
+    );
+}
+
 sub default_severity     { return $SEVERITY_LOWEST        }
 sub default_themes       { return qw( core pbp cosmetic ) }
 sub applies_to           { return qw(PPI::Token::Regexp::Match
                                      PPI::Token::Regexp::Substitute
                                      PPI::Token::QuoteLike::Regexp) }
+
+#-----------------------------------------------------------------------------
+
+sub initialize_if_enabled {
+    my ( $self, $config ) = @_;
+
+    my %delimiters = ( q<{}> => 1 );
+    if ( $self->{_allow_all_brackets} ) {
+        @delimiters{ qw{ () [] <> } } = (1) x 3;
+    }
+
+    $self->{_allowed_delimiters} = \%delimiters;
+
+    return $TRUE;
+}
 
 #-----------------------------------------------------------------------------
 
@@ -43,7 +68,7 @@ sub violates {
     return if $re !~ m/\n/xms;
 
     my ($match_delim) = get_delimiters($elem);
-    return if '{}' eq $match_delim;
+    return if $self->{_allowed_delimiters}{$match_delim};
 
     return $self->violation( $DESC, $EXPL, $elem );
 }
@@ -59,6 +84,7 @@ __END__
 =head1 NAME
 
 Perl::Critic::Policy::RegularExpressions::RequireBracesForMultiline
+
 
 =head1 DESCRIPTION
 
@@ -86,15 +112,27 @@ vs.
      }
      {link=$1, text=$2}xms;
 
-Is that an improvement?  Marginally, but yes.  The curly braces lead the eye better.
+Is that an improvement?  Marginally, but yes.  The curly braces lead
+the eye better.
+
+
+=head1 CONFIGURATION
+
+Thers is one option for this policy, C<allow_all_brackets>.  If this
+is true, then, in addition to allowing C<{}>, the other matched pairs
+of C<()>, C<[]>, and C<< <> >> are allowed.
+
 
 =head1 CREDITS
 
-Initial development of this policy was supported by a grant from the Perl Foundation.
+Initial development of this policy was supported by a grant from the
+Perl Foundation.
+
 
 =head1 AUTHOR
 
 Chris Dolan <cdolan@cpan.org>
+
 
 =head1 COPYRIGHT
 

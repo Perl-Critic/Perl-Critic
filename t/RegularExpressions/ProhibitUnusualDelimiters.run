@@ -48,7 +48,7 @@ qr"foo";
 qr;foo;;
 qr,foo,;
 
-## name allow brackets
+## name allow_all_brackets
 ## failures 0
 ## parms { allow_all_brackets => 1 }
 ## cut
