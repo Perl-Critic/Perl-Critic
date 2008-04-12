@@ -101,7 +101,7 @@ but most choices are illegible.  Compare these equivalent expressions:
 =head1 CONFIGURATION
 
 Thers is one option for this policy, C<allow_all_brackets>.  If this
-is true, then, in addition to allowing C<//> and C<{}>, then the other
+is true, then, in addition to allowing C<//> and C<{}>, the other
 matched pairs of C<()>, C<[]>, and C<< <> >> are allowed.
 
 
