@@ -25,6 +25,8 @@ our $VERSION = '1.082';
 Readonly::Scalar my $DESC => q<Use '{' and '}' to delimit multi-line regexps>;
 Readonly::Scalar my $EXPL => [242];
 
+Readonly::Array my @EXTRA_BRACKETS => qw{ () [] <> };
+
 #-----------------------------------------------------------------------------
 
 sub supported_parameters {
@@ -51,7 +53,7 @@ sub initialize_if_enabled {
 
     my %delimiters = ( q<{}> => 1 );
     if ( $self->{_allow_all_brackets} ) {
-        @delimiters{ qw{ () [] <> } } = (1) x 3;
+        @delimiters{ @EXTRA_BRACKETS } = (1) x @EXTRA_BRACKETS;
     }
 
     $self->{_allowed_delimiters} = \%delimiters;
@@ -118,7 +120,7 @@ the eye better.
 
 =head1 CONFIGURATION
 
-Thers is one option for this policy, C<allow_all_brackets>.  If this
+There's is one option for this policy, C<allow_all_brackets>.  If this
 is true, then, in addition to allowing C<{}>, the other matched pairs
 of C<()>, C<[]>, and C<< <> >> are allowed.
 
