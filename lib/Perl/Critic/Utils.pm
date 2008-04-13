@@ -295,10 +295,21 @@ sub is_perl_bareword {
 
 #-----------------------------------------------------------------------------
 
-Readonly::Array my @GLOBALS_WITHOUT_SIGILS =>
-    map { substr $_, 1 }  @B::Keywords::Arrays,
-                          @B::Keywords::Hashes,
-                          @B::Keywords::Scalars;
+sub _build_globals_without_sigils {
+    my @globals = map { substr $_, 1 }  @B::Keywords::Arrays,
+                                        @B::Keywords::Hashes,
+                                        @B::Keywords::Scalars;
+
+    # Not all of these have sigils
+    foreach my $filehandle (@B::Keywords::Filehandles) {
+        (my $stripped = $filehandle) =~ s< \A [*] ><>xms;
+        push @globals, $stripped;
+    }
+
+    return @globals;
+}
+
+Readonly::Array my @GLOBALS_WITHOUT_SIGILS => _build_globals_without_sigils();
 
 Readonly::Hash my %GLOBALS => hashify( @GLOBALS_WITHOUT_SIGILS );
 
@@ -306,7 +317,7 @@ sub is_perl_global {
     my $elem = shift;
     return if !$elem;
     my $var_name = "$elem"; #Convert Token::Symbol to string
-    $var_name =~ s{\A [\$@%] }{}mx;  #Chop off the sigil
+    $var_name =~ s{\A [\$@%*] }{}mx;  #Chop off the sigil
     return exists $GLOBALS{ $var_name };
 }
 
