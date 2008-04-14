@@ -49,7 +49,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::ClassHierarchies::ProhibitAutoloading
+Perl::Critic::Policy::ClassHierarchies::ProhibitAutoloading - AUTOLOAD methods should be avoided.
 
 =head1 DESCRIPTION
 
