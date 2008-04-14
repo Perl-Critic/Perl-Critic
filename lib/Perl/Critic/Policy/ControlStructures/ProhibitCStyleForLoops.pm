@@ -57,7 +57,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::ControlStructures::ProhibitCStyleForLoops
+Perl::Critic::Policy::ControlStructures::ProhibitCStyleForLoops - Write C<for(0..20)> instead of C<for($i=0; $i<=20; $i++)>.
 
 =head1 DESCRIPTION
 

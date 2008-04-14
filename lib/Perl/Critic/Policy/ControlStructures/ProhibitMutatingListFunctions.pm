@@ -226,7 +226,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::ControlStructures::ProhibitMutatingListFunctions
+Perl::Critic::Policy::ControlStructures::ProhibitMutatingListFunctions - Don't modify C<$_> in list functions.
 
 =head1 DESCRIPTION
 

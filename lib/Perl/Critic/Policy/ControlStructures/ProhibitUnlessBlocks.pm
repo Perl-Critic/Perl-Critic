@@ -49,7 +49,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::ControlStructures::ProhibitUnlessBlocks
+Perl::Critic::Policy::ControlStructures::ProhibitUnlessBlocks - Write C<if(! $condition)> instead of C<unless($condition)>.
 
 =head1 DESCRIPTION
 

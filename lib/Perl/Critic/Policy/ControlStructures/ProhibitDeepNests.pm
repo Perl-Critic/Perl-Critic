@@ -73,7 +73,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::ControlStructures::ProhibitDeepNests
+Perl::Critic::Policy::ControlStructures::ProhibitDeepNests - Don't write deeply nested loops and conditionals.
 
 =head1 DESCRIPTION
 

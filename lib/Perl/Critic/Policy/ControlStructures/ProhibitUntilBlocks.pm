@@ -48,7 +48,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::ControlStructures::ProhibitUntilBlocks
+Perl::Critic::Policy::ControlStructures::ProhibitUntilBlocks - Write C<while(! $condition)> instead of C<until($condition)>.
 
 =head1 DESCRIPTION
 

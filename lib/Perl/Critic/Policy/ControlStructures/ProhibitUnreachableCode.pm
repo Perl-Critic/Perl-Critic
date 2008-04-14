@@ -96,7 +96,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::ControlStructures::ProhibitUnreachableCode
+Perl::Critic::Policy::ControlStructures::ProhibitUnreachableCode - Don't write code after an unconditional C<die, exit, or next>.
 
 =head1 DESCRIPTION
 

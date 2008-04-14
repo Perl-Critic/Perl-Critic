@@ -143,7 +143,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::ControlStructures::ProhibitNegativeExpressionsInUnlessAndUntilConditions
+Perl::Critic::Policy::ControlStructures::ProhibitNegativeExpressionsInUnlessAndUntilConditions - Don't use operators like C<not>, C<!~>, and C<le> within C<until> and C<unless>.
 
 =head1 DESCRIPTION
 

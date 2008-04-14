@@ -100,7 +100,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::ControlStructures::ProhibitPostfixControls
+Perl::Critic::Policy::ControlStructures::ProhibitPostfixControls - Write C<if($condition){ do_something() }> instead of C<do_something() if $condition>.
 
 =head1 DESCRIPTION
 
