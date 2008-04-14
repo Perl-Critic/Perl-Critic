@@ -1,3 +1,10 @@
+[1.xxx] Released on 2008-0x-xx
+     Policly Changes:
+     * TestingAndDebugging::RequireUseStrict now accepts "use Moose::Role"
+       as equivalent to "use strict".
+     * TestingAndDebugging::RequireUseWarnings now accepts "use Moose::Role"
+       as equivalent to "use warnings".
+
 [1.083_001] Released on 2008-04-13
 
      New Features:
