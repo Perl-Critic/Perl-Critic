@@ -948,15 +948,14 @@ and find a compliant solution before resorting to this feature.
 
 =head1 THE L<Perl::Critic> PHILOSOPHY
 
-  Coding standards are deeply personal and highly subjective.  The
-  goal of Perl::Critic is to help you write code that conforms with a
-  set of best practices.  Our primary goal is not to dictate what
-  those practices are, but rather, to implement the practices
-  discovered by others.  Ultimately, you make the rules --
-  Perl::Critic is merely a tool for encouraging consistency.  If there
-  is a policy that you think is important or that we have overlooked,
-  we would be very grateful for contributions, or you can simply load
-  your own private set of policies into Perl::Critic.
+Coding standards are deeply personal and highly subjective.  The goal of
+Perl::Critic is to help you write code that conforms with a set of best
+practices.  Our primary goal is not to dictate what those practices are, but
+rather, to implement the practices discovered by others.  Ultimately, you make
+the rules -- Perl::Critic is merely a tool for encouraging consistency.  If
+there is a policy that you think is important or that we have overlooked, we
+would be very grateful for contributions, or you can simply load your own
+private set of policies into Perl::Critic.
 
 
 =head1 EXTENDING THE CRITIC
@@ -991,13 +990,17 @@ L<B::Keywords>
 
 L<Config::Tiny>
 
+L<Exception::Class>
+
 L<File::Spec>
+
+L<File::Spec::Unix>
 
 L<IO::String>
 
-L<List::Util>
-
 L<List::MoreUtils>
+
+L<List::Util>
 
 L<Module::Pluggable>
 
@@ -1009,9 +1012,11 @@ L<Pod::Usage>
 
 L<Readonly>
 
+L<Scalar::Util>
+
 L<String::Format>
 
-L<String::Util>
+L<version>
 
 
 The following modules are optional, but recommended for complete
