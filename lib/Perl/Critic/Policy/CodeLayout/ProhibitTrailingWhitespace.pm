@@ -102,7 +102,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::CodeLayout::ProhibitTrailingWhitespace
+Perl::Critic::Policy::CodeLayout::ProhibitTrailingWhitespace - Don't use whitespace at the end of lines.
 
 =head1 DESCRIPTION
 

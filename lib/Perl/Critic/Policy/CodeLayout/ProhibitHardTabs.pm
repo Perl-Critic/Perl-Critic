@@ -72,7 +72,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::CodeLayout::ProhibitHardTabs
+Perl::Critic::Policy::CodeLayout::ProhibitHardTabs - Use spaces instead of tabs.
 
 =head1 DESCRIPTION
 

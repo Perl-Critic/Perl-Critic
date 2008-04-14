@@ -66,7 +66,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::CodeLayout::RequireTrailingCommas
+Perl::Critic::Policy::CodeLayout::RequireTrailingCommas - Put a comma at the end of every multi-line list declaration, including the last one.
 
 =head1 DESCRIPTION
 

@@ -76,7 +76,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::CodeLayout::RequireConsistentNewlines
+Perl::Critic::Policy::CodeLayout::RequireConsistentNewlines - Use the same newline through the source.
 
 =head1 CAVEAT
 

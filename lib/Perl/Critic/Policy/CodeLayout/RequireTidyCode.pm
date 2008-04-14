@@ -126,7 +126,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::CodeLayout::RequireTidyCode
+Perl::Critic::Policy::CodeLayout::RequireTidyCode - Must run code through L<perltidy>.
 
 =head1 DESCRIPTION
 

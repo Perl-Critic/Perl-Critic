@@ -129,7 +129,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::CodeLayout::ProhibitParensWithBuiltins
+Perl::Critic::Policy::CodeLayout::ProhibitParensWithBuiltins - Write C<open $handle, $path> instead of C<open($handle, $path)>.
 
 =head1 DESCRIPTION
 

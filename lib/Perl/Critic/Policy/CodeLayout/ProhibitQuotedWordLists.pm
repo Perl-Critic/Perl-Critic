@@ -92,7 +92,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::CodeLayout::ProhibitQuotedWordLists
+Perl::Critic::Policy::CodeLayout::ProhibitQuotedWordLists - Write C<qw(foo bar baz)> instead of C<('foo', 'bar', 'baz')>.
 
 =head1 DESCRIPTION
 
