@@ -64,7 +64,15 @@ sub _is_use_strict {
 
     return 0 if !$elem->isa('PPI::Statement::Include');
     return 0 if $elem->type() ne 'use';
-    return 0 if $elem->pragma() ne 'strict' && $elem->module() ne 'Moose';
+
+    if (
+            $elem->pragma() ne 'strict'
+        and $elem->module() ne 'Moose'
+        and $elem->module() ne 'Moose::Role'
+    ) {
+        return 0;
+    }
+
     return 1;
 }
 
@@ -97,8 +105,9 @@ quality of your code.  This policy requires that the C<'use strict'> statement
 must come before any other statements except C<package>, C<require>, and other
 C<use> statements.  Thus, all the code in the entire package will be affected.
 
-There is a special exemption for L<Moose> because it enforces strictness; i.e.
-C<'use Moose'> is treated as equivalent to C<'use strict'>.
+There are special exemptions for L<Moose> and L<Moose::Role> because they
+enforces strictness; e.g. C<'use Moose'> is treated as equivalent to
+C<'use strict'>.
 
 The maximum number of violations for this policy defaults to 1.
 
