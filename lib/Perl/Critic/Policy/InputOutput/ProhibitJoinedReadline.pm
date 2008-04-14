@@ -15,7 +15,7 @@ use List::MoreUtils qw(any);
 use Perl::Critic::Utils qw{ :severities :classification parse_arg_list };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.082';
+our $VERSION = '1.083_001';
 
 #-----------------------------------------------------------------------------
 

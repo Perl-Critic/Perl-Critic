@@ -10,7 +10,7 @@ package Perl::Critic::Exception::Fatal;
 use strict;
 use warnings;
 
-our $VERSION = '1.082';
+our $VERSION = '1.083_001';
 
 #-----------------------------------------------------------------------------
 

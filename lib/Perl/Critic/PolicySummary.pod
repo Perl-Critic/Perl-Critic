@@ -527,7 +527,7 @@ Negative array index should be used. [Severity 4]
 
 =head1 VERSION
 
-This is part of L<Perl::Critic> version 1.082.
+This is part of L<Perl::Critic> version 1.083_001.
 
 
 =head1 AUTHOR
