@@ -92,6 +92,8 @@ WriteMakefile(
         'Readonly'              => 1.03,
         'Scalar::Util'          => 0,
         'String::Format'        => 1.13,
+        'version'               => 0,
+
         'Test::More'            => 0,
     },
     realclean      => {
