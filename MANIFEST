@@ -199,6 +199,7 @@ lib/Perl/Critic/Policy/Variables/RequireInitializationForLocalVars.pm
 lib/Perl/Critic/Policy/Variables/RequireLexicalLoopIterators.pm
 lib/Perl/Critic/Policy/Variables/RequireLocalizedPunctuationVars.pm
 lib/Perl/Critic/Policy/Variables/RequireNegativeIndices.pm
+lib/Perl/Critic/PolicyConfig.pm
 lib/Perl/Critic/PolicyFactory.pm
 lib/Perl/Critic/PolicyListing.pm
 lib/Perl/Critic/PolicyParameter.pm
@@ -231,6 +232,7 @@ t/00_modules.t
 t/01_bad_perlcriticrc
 t/01_config.t
 t/01_config_bad_perlcriticrc.t
+t/01_policy_config.t
 t/02_policy.t
 t/03_pragmas.t
 t/04_defaults.t
