@@ -49,7 +49,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalIsa
+Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalIsa - Write C<< eval { $foo->isa($pkg) } >> instead of C<UNIVERSAL::isa($foo, $pkg)>.
 
 =head1 DESCRIPTION
 

@@ -51,7 +51,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::BuiltinFunctions::ProhibitVoidMap
+Perl::Critic::Policy::BuiltinFunctions::ProhibitVoidMap - Don't use C<map> in void contexts.
 
 =head1 DESCRIPTION
 

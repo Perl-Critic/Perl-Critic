@@ -49,7 +49,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalCan
+Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalCan - Write C<< eval { $foo->can($name) } >> instead of C<UNIVERSAL::can($foo, $name)>.
 
 =head1 DESCRIPTION
 

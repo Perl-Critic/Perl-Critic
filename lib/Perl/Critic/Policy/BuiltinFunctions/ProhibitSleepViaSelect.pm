@@ -56,7 +56,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::BuiltinFunctions::ProhibitSleepViaSelect
+Perl::Critic::Policy::BuiltinFunctions::ProhibitSleepViaSelect - Use L<Time::HiRes> instead of something like C<select(undef, undef, undef, .05)>.
 
 =head1 DESCRIPTION
 

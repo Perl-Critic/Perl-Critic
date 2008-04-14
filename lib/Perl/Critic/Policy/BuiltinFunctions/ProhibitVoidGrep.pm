@@ -51,7 +51,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::BuiltinFunctions::ProhibitVoidGrep
+Perl::Critic::Policy::BuiltinFunctions::ProhibitVoidGrep - Don't use C<grep> in void contexts.
 
 =head1 DESCRIPTION
 

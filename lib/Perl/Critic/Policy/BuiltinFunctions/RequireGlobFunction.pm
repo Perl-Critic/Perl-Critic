@@ -50,7 +50,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::BuiltinFunctions::RequireGlobFunction
+Perl::Critic::Policy::BuiltinFunctions::RequireGlobFunction - Use C<glob q{*}> instead of <*>.
 
 =head1 DESCRIPTION
 

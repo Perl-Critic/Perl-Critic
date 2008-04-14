@@ -53,7 +53,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::BuiltinFunctions::RequireBlockMap
+Perl::Critic::Policy::BuiltinFunctions::RequireBlockMap - Write C<map { $_ =~ /$pattern/ } @list> instead of C<map /$pattern/, @list>.
 
 =head1 DESCRIPTION
 

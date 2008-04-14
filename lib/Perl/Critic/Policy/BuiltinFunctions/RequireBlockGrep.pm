@@ -57,7 +57,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep
+Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep - Write C<grep { $_ =~ /$pattern/ } @list> instead of C<grep /$pattern/, @list>.
 
 =head1 DESCRIPTION
 

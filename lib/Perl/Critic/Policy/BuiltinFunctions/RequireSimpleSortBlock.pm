@@ -66,7 +66,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::BuiltinFunctions::RequireSimpleSortBlock
+Perl::Critic::Policy::BuiltinFunctions::RequireSimpleSortBlock - Sort blocks should have a single statement.
 
 =head1 DESCRIPTION
 

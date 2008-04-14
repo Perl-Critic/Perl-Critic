@@ -94,7 +94,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::BuiltinFunctions::ProhibitBooleanGrep
+Perl::Critic::Policy::BuiltinFunctions::ProhibitBooleanGrep - Use C<List::MoreUtils::any> instead of C<grep> in boolean context.
 
 =head1 DESCRIPTION
 

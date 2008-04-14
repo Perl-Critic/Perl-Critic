@@ -81,7 +81,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::BuiltinFunctions::ProhibitComplexMappings
+Perl::Critic::Policy::BuiltinFunctions::ProhibitComplexMappings - Map blocks should have a single statement.
 
 =head1 DESCRIPTION
 

@@ -57,7 +57,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::BuiltinFunctions::ProhibitStringySplit
+Perl::Critic::Policy::BuiltinFunctions::ProhibitStringySplit - Write C<split /-/, $string> instead of C<split '-', $string>.
 
 =head1 DESCRIPTION
 

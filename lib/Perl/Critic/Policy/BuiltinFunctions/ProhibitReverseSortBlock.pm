@@ -84,7 +84,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::BuiltinFunctions::ProhibitReverseSortBlock
+Perl::Critic::Policy::BuiltinFunctions::ProhibitReverseSortBlock - Forbid $b before $a in sort blocks.
 
 =head1 DESCRIPTION
 
