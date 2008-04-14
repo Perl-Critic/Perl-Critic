@@ -16,11 +16,12 @@ our $VERSION = '1.082';
 
 use Perl::Critic::Exception::AggregateConfiguration;
 use Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue;
-use Perl::Critic::Utils qw< :characters severity_to_number >;
+use Perl::Critic::Utils qw< :booleans :characters severity_to_number >;
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $NO_LIMIT => 'no_limit';
+Readonly::Scalar my $NON_PUBLIC_DATA    => '_non_public_data';
+Readonly::Scalar my $NO_LIMIT           => 'no_limit';
 
 #-----------------------------------------------------------------------------
 
@@ -41,7 +42,7 @@ sub new {
         }
     }
 
-    $self{_non_public_data} = \%non_public_data;
+    $self{$NON_PUBLIC_DATA} = \%non_public_data;
 
 
     return bless \%self, $class;
@@ -100,7 +101,7 @@ sub _validate_maximum_violations_per_document {
 sub _get_non_public_data {
     my $self = shift;
 
-    return $self->{_non_public_data};
+    return $self->{$NON_PUBLIC_DATA};
 }
 
 #-----------------------------------------------------------------------------
@@ -137,6 +138,23 @@ sub get_severity {
 
 #-----------------------------------------------------------------------------
 
+sub is_maximum_violations_per_document_unlimited {
+    my ($self) = @_;
+
+    my $maximum_violations = $self->get_maximum_violations_per_document();
+    if (
+            not defined $maximum_violations
+        or  $maximum_violations eq $EMPTY
+        or  $maximum_violations =~ m<\A $NO_LIMIT \z>xmsio
+    ) {
+        return $TRUE;
+    }
+
+    return $FALSE;
+}
+
+#-----------------------------------------------------------------------------
+
 sub get_maximum_violations_per_document {
     my ($self) = @_;
 
@@ -148,7 +166,37 @@ sub get_maximum_violations_per_document {
 sub get {
     my ($self, $parameter) = @_;
 
+    return if $parameter eq $NON_PUBLIC_DATA;
+
     return $self->{$parameter};
+}
+
+#-----------------------------------------------------------------------------
+
+sub remove {
+    my ($self, $parameter) = @_;
+
+    return if $parameter eq $NON_PUBLIC_DATA;
+
+    delete $self->{$parameter};
+
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
+sub is_empty {
+    my ($self) = @_;
+
+    return 1 >= keys %{$self};
+}
+
+#-----------------------------------------------------------------------------
+
+sub get_parameter_names {
+    my ($self) = @_;
+
+    return grep { $_ ne $NON_PUBLIC_DATA } keys %{$self};
 }
 
 #-----------------------------------------------------------------------------
@@ -198,6 +246,12 @@ The value of C<add_themes> in the user's F<.perlcriticrc>.
 The value of C<severity> in the user's F<.perlcriticrc>.
 
 
+=item C< is_maximum_violations_per_document_unlimited() >
+
+Answer whether the value of C<maximum_violations_per_document> should
+be considered to be unlimited.
+
+
 =item C< get_maximum_violations_per_document() >
 
 The value of C<maximum_violations_per_document> in the user's
@@ -208,6 +262,22 @@ F<.perlcriticrc>.
 
 Retrieve the value of the specified parameter in the user's
 F<.perlcriticrc>.
+
+
+=item C< remove($parameter) >
+
+Delete the value of the specified parameter.
+
+
+=item C< is_empty() >
+
+Answer whether there is any non-standard configuration information
+left.
+
+
+=item C< get_parameter_names() >
+
+Retrieve the names of the parameters in this object.
 
 
 =back

@@ -20,6 +20,7 @@ use Perl::Critic::Defaults qw();
 use Perl::Critic::Utils qw{ :characters policy_long_name policy_short_name };
 use Perl::Critic::Exception::Fatal::Internal qw{ throw_internal };
 use Perl::Critic::Exception::Configuration::Generic qw{ throw_generic };
+use Perl::Critic::PolicyConfig;
 
 our $VERSION = '1.082';
 
@@ -58,15 +59,30 @@ sub defaults {
 sub policy_params {
 
     my ( $self, $policy ) = @_;
+
+    my $short_name = policy_short_name($policy);
+
+    return Perl::Critic::PolicyConfig->new(
+        $short_name,
+        $self->raw_policy_params($policy),
+    );
+}
+
+#-----------------------------------------------------------------------------
+
+sub raw_policy_params {
+
+    my ( $self, $policy ) = @_;
     my $profile = $self->{_profile};
     my $long_name  = ref $policy || policy_long_name( $policy );
     my $short_name = policy_short_name( $long_name );
 
-    return $profile->{$short_name}
-        || $profile->{$long_name}
-        || $profile->{"-$short_name"}
-        || $profile->{"-$long_name"}
-        || {};
+    return
+            $profile->{$short_name}
+        ||  $profile->{$long_name}
+        ||  $profile->{"-$short_name"}
+        ||  $profile->{"-$long_name"}
+        ||  {};
 }
 
 #-----------------------------------------------------------------------------
@@ -298,15 +314,17 @@ __END__
 
 Perl::Critic::UserProfile - The contents of the user's profile, often F<.perlcriticrc>.
 
+
 =head1 DESCRIPTION
 
 This is a helper class that encapsulates the contents of the user's
 profile, which is usually stored in a F<.perlcriticrc> file. There are
 no user-serviceable parts here.
 
+
 =head1 CONSTRUCTOR
 
-=over 8
+=over
 
 =item C< new( -profile => $p ) >
 
@@ -318,15 +336,18 @@ UserProfile is created with default values.
 This object does not take into account any command-line overrides;
 L<Perl::Critic::Config> does that.
 
+
 =back
+
 
 =head1 METHODS
 
-=over 8
+=over
 
 =item C< defaults() >
 
 Returns the L<Perl::Critic::Defaults> object for this UserProfile.
+
 
 =item C< policy_is_disabled( $policy ) >
 
@@ -334,17 +355,27 @@ Given a reference to a L<Perl::Critic::Policy> object or the name of
 one, returns true if the user has disabled that policy in their
 profile.
 
+
 =item C< policy_is_enabled( $policy ) >
 
 Given a reference to a L<Perl::Critic::Policy> object or the name of
 one, returns true if the user has explicitly enabled that policy in
 their user profile.
 
+
 =item C< policy_params( $policy ) >
+
+Given a reference to a L<Perl::Critic::Policy> object or the name of
+one, returns a L<Perl::Critic::PolicyConfig> for the user's
+configuration parameters for that policy.
+
+
+=item C< raw_policy_params( $policy ) >
 
 Given a reference to a L<Perl::Critic::Policy> object or the name of
 one, returns a reference to a hash of the user's configuration
 parameters for that policy.
+
 
 =item C< listed_policies() >
 
@@ -352,20 +383,25 @@ Returns a list of the names of all the Policies that are mentioned in
 the profile.  The Policy names will be fully qualified (e.g.
 Perl::Critic::Foo).
 
+
 =item C< source() >
 
 The place where the profile information came from, if available.
 Usually the path to a F<.perlcriticrc>.
 
+
 =back
+
 
 =head1 SEE ALSO
 
 L<Perl::Critic::Config>, L<Perl::Critic::Defaults>
 
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+
 
 =head1 COPYRIGHT
 

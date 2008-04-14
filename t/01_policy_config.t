@@ -12,7 +12,7 @@ use warnings;
 
 use Carp qw< confess >;
 
-use Test::More tests => 20;
+use Test::More tests => 29;
 
 #-----------------------------------------------------------------------------
 
@@ -49,6 +49,17 @@ BEGIN {
         $config->get_maximum_violations_per_document(),
         undef,
         'maximum_violations_per_document is undef when not specified.',
+    );
+    ok(
+        $config->is_empty(),
+        'is_empty() is true when there were no configuration values.',
+    );
+
+    my @parameter_names = $config->get_parameter_names();
+    is(
+        scalar @parameter_names,
+        0,
+        'There are no parameter names left.',
     );
 
     test_standard_parameters_undef_via_get($config);
@@ -99,8 +110,37 @@ BEGIN {
         'blargh',
         'custom_parameter gets saved.',
     );
+    ok(
+        ! $config->is_empty(),
+        'is_empty() is false when there were configuration values.',
+    );
+
+    my @parameter_names = $config->get_parameter_names();
+    is(
+        scalar @parameter_names,
+        1,
+        'There is one parameter name left after construction.',
+    );
+    is(
+        $parameter_names[0],
+        'custom_parameter',
+        'There parameter name is the expected value.',
+    );
 
     test_standard_parameters_undef_via_get($config);
+
+    $config->remove('custom_parameter');
+    ok(
+        $config->is_empty(),
+        'is_empty() is true after removing "custom_parameter".',
+    );
+
+    @parameter_names = $config->get_parameter_names();
+    is(
+        scalar @parameter_names,
+        0,
+        'There are no parameter names left after removing "custom_parameter".',
+    );
 }
 
 
@@ -109,7 +149,13 @@ sub test_standard_parameters_undef_via_get {
     my $policy_short_name = $config->get_policy_short_name();
 
     foreach my $parameter (
-        qw< set_themes add_themes severity maximum_violations_per_document >
+        qw<
+            set_themes
+            add_themes
+            severity
+            maximum_violations_per_document
+            _non_public_data
+        >
     ) {
         is(
             $config->get($parameter),

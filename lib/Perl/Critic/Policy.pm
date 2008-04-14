@@ -35,6 +35,7 @@ use Perl::Critic::Exception::Configuration::Option::Policy::ExtraParameter;
 use Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue;
 use Perl::Critic::Exception::Fatal::PolicyDefinition
     qw< throw_policy_definition >;
+use Perl::Critic::PolicyConfig qw<>;
 use Perl::Critic::PolicyParameter qw<>;
 use Perl::Critic::Violation qw<>;
 
@@ -57,7 +58,19 @@ sub new {
 
     my $self = bless {}, $class;
 
-    $self->__set_config( \%config );
+    my $config_object;
+    if ($config{_config_object}) {
+        $config_object = $config{_config_object};
+    }
+    else {
+        $config_object =
+            Perl::Critic::PolicyConfig->new(
+                $self->get_short_name(),
+                \%config,
+            );
+    }
+
+    $self->__set_config( $config_object );
 
     my @parameters;
     my $parameter_metadata_available = 0;
@@ -75,16 +88,16 @@ sub new {
     my $errors = Perl::Critic::Exception::AggregateConfiguration->new();
     foreach my $parameter ( @parameters ) {
         eval {
-            $parameter->parse_and_validate_config_value( $self, \%config );
+            $parameter->parse_and_validate_config_value( $self, $config_object );
         };
 
         $errors->add_exception_or_rethrow($EVAL_ERROR);
 
-        delete $config{ $parameter->get_name() };
+        $config_object->remove( $parameter->get_name() );
     }
 
     if ($parameter_metadata_available) {
-        $self->_validate_config_keys($errors, \%config);
+        $self->_validate_config_keys($errors, $config_object);
     }
 
     if ( $errors->has_exceptions() ) {
@@ -105,7 +118,7 @@ sub initialize_if_enabled {
 sub _validate_config_keys {
     my ( $self, $errors, $config ) = @_;
 
-    for my $offered_param ( keys %{ $config } ) {
+    for my $offered_param ( $config->get_parameter_names() ) {
         $errors->add_exception(
             Perl::Critic::Exception::Configuration::Option::Policy::ExtraParameter->new(
                 policy          => $self->get_short_name(),
@@ -139,28 +152,26 @@ sub __set_parameter_value {
 #-----------------------------------------------------------------------------
 
 sub __set_base_parameters {
-    my ($self, $base_parameters) = @_;
+    my ($self) = @_;
 
+    my $config = $self->__get_config();
     my $errors = Perl::Critic::Exception::AggregateConfiguration->new();
 
-    $self->_set_maximum_violations_per_document(
-        $base_parameters->{maximum_violations_per_document},
-        $errors,
-    );
+    $self->_set_maximum_violations_per_document($errors);
 
-    my $user_severity = $base_parameters->{severity};
+    my $user_severity = $config->get_severity();
     if ( defined $user_severity ) {
         my $normalized_severity = severity_to_number( $user_severity );
         $self->set_severity( $normalized_severity );
     }
 
-    my $user_set_themes = $base_parameters->{set_themes};
+    my $user_set_themes = $config->get_set_themes();
     if ( defined $user_set_themes ) {
         my @set_themes = words_from_string( $user_set_themes );
         $self->set_themes( @set_themes );
     }
 
-    my $user_add_themes = $base_parameters->{add_themes};
+    my $user_add_themes = $config->get_add_themes();
     if ( defined $user_add_themes ) {
         my @add_themes = words_from_string( $user_add_themes );
         $self->add_themes( @add_themes );
@@ -176,51 +187,52 @@ sub __set_base_parameters {
 #-----------------------------------------------------------------------------
 
 sub _set_maximum_violations_per_document {
-    my ($self, $user_maximum_violations, $errors) = @_;
+    my ($self, $errors) = @_;
 
-    if ( defined $user_maximum_violations ) {
-        if (
-                $user_maximum_violations =~ m/$NO_LIMIT/xmsio
-            or  $user_maximum_violations eq $EMPTY
-        ) {
-            $user_maximum_violations = undef;
-        }
-        elsif ( not is_integer($user_maximum_violations) ) {
-            $errors->add_exception(
-                new_parameter_value_exception(
-                    'maximum_violations_per_document',
-                    $user_maximum_violations,
-                    undef,
-                    "does not look like an integer.\n"
-                )
-            );
+    my $config = $self->__get_config();
 
-            return;
-        }
-        elsif ( $user_maximum_violations < 0 ) {
-            $errors->add_exception(
-                new_parameter_value_exception(
-                    'maximum_violations_per_document',
-                    $user_maximum_violations,
-                    undef,
-                    "is not greater than or equal to zero.\n"
-                )
-            );
-
-            return;
-        }
-
-        $self->set_maximum_violations_per_document(
-            $user_maximum_violations
-        );
+    if ( $config->is_maximum_violations_per_document_unlimited() ) {
+        return;
     }
+
+    my $user_maximum_violations =
+        $config->get_maximum_violations_per_document();
+
+    if ( not is_integer($user_maximum_violations) ) {
+        $errors->add_exception(
+            new_parameter_value_exception(
+                'maximum_violations_per_document',
+                $user_maximum_violations,
+                undef,
+                "does not look like an integer.\n"
+            )
+        );
+
+        return;
+    }
+    elsif ( $user_maximum_violations < 0 ) {
+        $errors->add_exception(
+            new_parameter_value_exception(
+                'maximum_violations_per_document',
+                $user_maximum_violations,
+                undef,
+                "is not greater than or equal to zero.\n"
+            )
+        );
+
+        return;
+    }
+
+    $self->set_maximum_violations_per_document(
+        $user_maximum_violations
+    );
 
     return;
 }
 
 #-----------------------------------------------------------------------------
 
-# Reference to a hash.  Unparsed form.  Compare with get_parameters().
+# Unparsed configuration, P::C::PolicyConfig.  Compare with get_parameters().
 sub __get_config {
     my ($self) = @_;
 

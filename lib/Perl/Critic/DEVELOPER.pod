@@ -293,11 +293,11 @@ complex one.
 =head2 Do It All Yourself
 
 The C<initialize_if_enabled()> method for a Policy receives one
-argument: a reference to a hash of the configuration for the Policy.
-This method is only called if the user's configuration has enabled the
-policy.  It returns a boolean stating whether the Policy should
-continue to be enabled.  Generally, the only reason to return
-C<$FALSE> is when some external requirement is missing.  For example,
+argument: an instance of L<Perl::Critic::PolicyConfig>.  This method
+is only called if the user's configuration has enabled the policy.  It
+returns a boolean stating whether the Policy should continue to be
+enabled.  Generally, the only reason to return C<$FALSE> is when some
+external requirement is missing.  For example,
 L<Perl::Critic::Policy::CodeLayout::RequireTidyCode> disables itself
 if L<Perl::Tidy> is not installed.
 
@@ -337,9 +337,9 @@ prefixed with an underscore.  E.g.
   sub initialize_if_enabled {
       my ( $self, $config ) = @_;
 
-      $self->{_foo} = $config->{foo};
-      $self->{_factor} = $config->{factor};
-      $self->{_selections} = $config->{selections};
+      $self->{_foo} = $config->get{foo};
+      $self->{_factor} = $config->get{factor};
+      $self->{_selections} = $config->get{selections};
 
       return $TRUE;
   }
@@ -356,10 +356,10 @@ this:
   sub initialize_if_enabled {
       my ( $self, $config ) = @_;
 
-      $self->{_foo} = $config->{foo};
-      $self->{_factor} = $config->{factor};
+      $self->{_foo} = $config->get{foo};
+      $self->{_factor} = $config->get{factor};
 
-      my $selections = $config->{selections};
+      my $selections = $config->get{selections};
       $selections = defined $selections ? $selections : $EMPTY_STRING;
       $self->{_selections} = [ words_from_string($selections) ];
 
@@ -787,7 +787,7 @@ used, with user-supplied parameter values validated and placed into
 the Policy by the time C<initialize_if_enabled()> has been called.  It
 is likely that you will not need to refer the contents of the
 C<$config> parameter; just pull the information you need out of
-C<$self>.
+C<$self>.  In fact, any value for the parameter values will be gone.
 
 
 

@@ -20,8 +20,10 @@ use Perl::Critic::Utils qw{
     $POLICY_NAMESPACE
     :data_conversion
     policy_long_name
+    policy_short_name
     :internal_lookup
 };
+use Perl::Critic::PolicyConfig;
 use Perl::Critic::Exception::AggregateConfiguration;
 use Perl::Critic::Exception::Configuration;
 use Perl::Critic::Exception::Fatal::Generic qw{ &throw_generic };
@@ -162,32 +164,27 @@ sub create_policy {
 
     # Normalize policy name to a fully-qualified package name
     $policy_name = policy_long_name( $policy_name );
+    my $policy_short_name = policy_short_name( $policy_name );
 
 
     # Get the policy parameters from the user profile if they were
     # not given to us directly.  If none exist, use an empty hash.
     my $profile = $self->_profile();
-    my $policy_config = $args{-params}
-        || $profile->policy_params($policy_name) || {};
-
-
-    # This function will delete keys from $policy_config, so we copy them to
-    # avoid modifying the callers's hash.  What a pain in the ass!
-    my %policy_config_copy = $policy_config ? %{$policy_config} : ();
-
-
-    # Pull out base parameters.
-    my %base_parameters;
-    foreach my $parameter_name (
-        qw< set_themes add_themes severity maximum_violations_per_document >
-    ) {
-        $base_parameters{$parameter_name} =
-            delete $policy_config_copy{$parameter_name};
+    my $policy_config;
+    if ( $args{-params} ) {
+        $policy_config =
+            Perl::Critic::PolicyConfig->new(
+                $policy_short_name, $args{-params}
+            );
+    }
+    else {
+        $policy_config = $profile->policy_params($policy_name);
+        $policy_config ||=
+            Perl::Critic::PolicyConfig->new( $policy_short_name );
     }
 
-    return _instantiate_policy(
-        $policy_name, \%policy_config_copy, \%base_parameters
-    );
+    # Pull out base parameters.
+    return _instantiate_policy( $policy_name, $policy_config );
 }
 
 #-----------------------------------------------------------------------------
@@ -238,15 +235,15 @@ sub _profile {
 # This two-phase initialization is caused by the historical lack of a
 # requirement for Policies to invoke their super-constructor.
 sub _instantiate_policy {
-    my ($policy_name, $policy_config, $base_parameters) = @_;
+    my ($policy_name, $policy_config) = @_;
 
     my $policy = eval { $policy_name->new( %{$policy_config} ) };
     _handle_policy_instantiation_exception($policy_name, $EVAL_ERROR);
 
-    eval { $policy->__set_base_parameters( $base_parameters ) };
-    _handle_policy_instantiation_exception($policy_name, $EVAL_ERROR);
-
     $policy->__set_config( $policy_config );
+
+    eval { $policy->__set_base_parameters() };
+    _handle_policy_instantiation_exception($policy_name, $EVAL_ERROR);
 
     return $policy;
 }
