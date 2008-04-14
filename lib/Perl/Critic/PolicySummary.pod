@@ -11,6 +11,7 @@
 
 Perl::Critic::PolicySummary - Descriptions of the Policy modules included with L<Perl::Critic> itself.
 
+
 =head1 DESCRIPTION
 
 The following Policy modules are distributed with Perl::Critic.
@@ -23,6 +24,7 @@ C<RequireSomething> or C<ProhibitSomething>.  Each Policy is listed
 here with its default severity.  If you don't agree with the default
 severity, you can change it in your F<.perlcriticrc> file.  See the
 documentation of each module for its specific details.
+
 
 =head1 POLICIES
 
@@ -521,6 +523,12 @@ Magic variables should be assigned as "local". [Severity 4]
 =head2 L<Perl::Critic::Policy::Variables::RequireNegativeIndices>
 
 Negative array index should be used. [Severity 4]
+
+
+=head1 VERSION
+
+This is part of L<Perl::Critic> version 1.082.
+
 
 =head1 AUTHOR
 

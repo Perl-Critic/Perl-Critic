@@ -3,7 +3,6 @@
 #     $Date$
 #   $Author$
 # $Revision$
-# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab shiftround :
 ##############################################################################
 
 =pod
@@ -13,6 +12,7 @@
 =head1 NAME
 
 Perl::Critic::DEVELOPER - How to make new Perl::Critic::Policy modules.
+
 
 =head1 DESCRIPTION
 
@@ -26,6 +26,7 @@ preference, or style that you want to follow.  You can even write
 Policies to enforce contradictory guidelines.  All you need to do is
 write a corresponding L<Perl::Critic::Policy> subclass, which may
 require as little as 10 lines of code.
+
 
 =head1 BACKGROUND
 
@@ -51,6 +52,7 @@ relatively simple and demonstrates most of the important issues.  The
 goal of this Policy is to enforce that every call to C<grep> uses a
 block for the first argument and not an expression.  The reasons for
 this Policy are discussed in detail in I<PBP>.
+
 
 =head1 EXAMPLE POLICY
 
@@ -250,6 +252,7 @@ bad code.  Here's an example:
   =head1 NAME
 
   Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep
+
 
   =head1 DESCRIPTION
 
@@ -888,9 +891,15 @@ and
 to see the differences between the two cases.
 
 
+=head1 VERSION
+
+This is part of L<Perl::Critic> version 1.082.
+
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+
 
 =head1 COPYRIGHT
 
