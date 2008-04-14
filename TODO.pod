@@ -373,6 +373,9 @@ beginning, and dash does NOT need to be escaped at the beginning and end.  See
 L<perlreref>.
 
 
+=item * Steal ideas from L<Dunce::Files>.
+
+
 =back
 
 
