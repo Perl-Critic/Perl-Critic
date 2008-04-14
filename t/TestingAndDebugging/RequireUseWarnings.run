@@ -18,7 +18,7 @@ use warnings;
 
 #-----------------------------------------------------------------------------
 
-## name several statements before strict with maximum violations changed
+## name several statements before warnings with maximum violations changed
 ## failures 2
 ## parms { maximum_violations_per_document => 2 }
 ## cut
