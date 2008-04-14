@@ -1,4 +1,4 @@
-[1.xxx] Released on 2008-xx-xx
+[1.083_001] Released on 2008-04-13
 
      New Features:
      * perlcritic now supports a --list-themes option.
@@ -6,11 +6,6 @@
        per document.  Developers can give a default value for this for a
        Policy by overriding default_maximum_violations_per_document().
        See RequireUseStrict and ProhibitMagicNumbers for examples.
-
-     New Developer Features:
-     * If a document specifies a minimum perl version, e.g. "use 5.008003",
-       P::C::Document::highest_explicit_perl_version() will tell you what it
-       is.
 
      Policy Moved:
      * The ValuesAndExpressions::ProhibitMagicNumbers policy has been moved
@@ -24,6 +19,13 @@
        "allow_all_brackets" option.
 
      http://rt.cpan.org/Ticket/Display.html?id=33937
+
+     New Developer Features:
+     * If a document specifies a minimum perl version, e.g. "use 5.008003",
+       P::C::Document::highest_explicit_perl_version() will tell you what it
+       is.
+     * The parameter to P::C::Policy::initialize_if_enabled is now a
+       P::C::PolicyConfig object instead of a hash reference.
 
      Minor Changes:
      * A few more statistics are emitted by perlcritic with the --statistics
