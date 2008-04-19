@@ -107,7 +107,7 @@ There are some valid reasons for not having a C<package> statement at
 all.  But make sure you understand them before assuming that you
 should do it too.
 
-The maximum number of violations for this policy defaults to 1.
+The maximum number of violations per document for this policy defaults to 1.
 
 
 =head1 IMPORTANT CHANGES

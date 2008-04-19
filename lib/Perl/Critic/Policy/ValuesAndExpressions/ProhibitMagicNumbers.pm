@@ -83,7 +83,7 @@ sub default_severity { return $SEVERITY_LOW          }
 sub default_themes   { return qw( core maintenance ) }
 sub applies_to       { return 'PPI::Token::Number'   }
 
-sub default_maximum_violations_per_document { return 5; }  ## no critic (ProhibitMagicNumbers)
+sub default_maximum_violations_per_document { return 10; }  ## no critic (ProhibitMagicNumbers)
 
 #----------------------------------------------------------------------------
 
@@ -371,7 +371,8 @@ One good example is positioning of objects in some container like
 shapes on a blueprint or widgets in a user interface.  In these cases,
 the significance of a number can readily be determined by context.
 
-The maximum number of violations for this policy defaults to 5.
+The maximum number of violations per document for this policy defaults
+to 10.
 
 
 =head2 Ways in which this module applies this rule.

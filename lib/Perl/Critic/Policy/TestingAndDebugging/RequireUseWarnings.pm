@@ -111,7 +111,7 @@ There are special exemptions for L<Moose> and L<Moose::Role> because they
 enforces strictness; e.g. C<'use Moose'> is treated as equivalent to
 C<'use warnings'>.
 
-The maximum number of violations for this policy defaults to 1.
+The maximum number of violations per document for this policy defaults to 1.
 
 
 =head1 SEE ALSO
