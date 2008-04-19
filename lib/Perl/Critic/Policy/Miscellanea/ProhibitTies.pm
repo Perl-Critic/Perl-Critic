@@ -48,7 +48,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Miscellanea::ProhibitTies
+Perl::Critic::Policy::Miscellanea::ProhibitTies - Do not use C<tie>.
 
 =head1 DESCRIPTION
 

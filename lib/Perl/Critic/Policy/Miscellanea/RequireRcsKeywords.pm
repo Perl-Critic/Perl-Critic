@@ -133,7 +133,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Miscellanea::RequireRcsKeywords
+Perl::Critic::Policy::Miscellanea::RequireRcsKeywords - Put source-control keywords in every file.
 
 =head1 DESCRIPTION
 

@@ -48,7 +48,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Miscellanea::ProhibitFormats
+Perl::Critic::Policy::Miscellanea::ProhibitFormats - Do not use C<format>.
 
 =head1 DESCRIPTION
 
