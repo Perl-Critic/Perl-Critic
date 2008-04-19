@@ -53,7 +53,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseSubs
+Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseSubs - Write C<sub my_function{}> instead of C<sub MyFunction{}>.
 
 =head1 DESCRIPTION
 

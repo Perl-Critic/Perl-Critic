@@ -106,7 +106,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::NamingConventions::ProhibitAmbiguousNames
+Perl::Critic::Policy::NamingConventions::ProhibitAmbiguousNames - Don't use vague variable or subroutine names like 'last' or 'record'.
 
 =head1 DESCRIPTION
 

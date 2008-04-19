@@ -68,7 +68,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars
+Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars - Write C<$my_variable = 42> instead of C<$MyVariable = 42>.
 
 =head1 DESCRIPTION
 
