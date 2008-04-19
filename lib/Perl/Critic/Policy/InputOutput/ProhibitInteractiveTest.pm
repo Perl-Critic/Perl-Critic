@@ -46,7 +46,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::InputOutput::ProhibitInteractiveTest
+Perl::Critic::Policy::InputOutput::ProhibitInteractiveTest - Use prompt() instead of -t.
 
 =head1 DESCRIPTION
 

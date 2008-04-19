@@ -52,7 +52,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::InputOutput::ProhibitOneArgSelect
+Perl::Critic::Policy::InputOutput::ProhibitOneArgSelect - Never write C<select($fh)>.
 
 =head1 DESCRIPTION
 

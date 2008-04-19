@@ -104,7 +104,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::InputOutput::RequireCheckedSyscalls
+Perl::Critic::Policy::InputOutput::RequireCheckedSyscalls - Return value of flagged function ignored.
 
 =head1 DESCRIPTION
 

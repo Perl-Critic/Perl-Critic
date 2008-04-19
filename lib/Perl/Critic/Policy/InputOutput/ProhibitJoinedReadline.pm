@@ -57,7 +57,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::InputOutput::ProhibitJoinedReadline
+Perl::Critic::Policy::InputOutput::ProhibitJoinedReadline - Use C<local $/ = undef> or L<File::Slurp> instead of joined readline.
 
 =head1 DESCRIPTION
 

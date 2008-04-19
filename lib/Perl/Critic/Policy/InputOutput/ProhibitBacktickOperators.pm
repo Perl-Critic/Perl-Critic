@@ -66,7 +66,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::InputOutput::ProhibitBacktickOperators
+Perl::Critic::Policy::InputOutput::ProhibitBacktickOperators - Discourage stuff like C<@files = `ls $directory`>.
 
 =head1 DESCRIPTION
 

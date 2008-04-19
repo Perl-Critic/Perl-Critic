@@ -51,7 +51,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::InputOutput::RequireCheckedOpen
+Perl::Critic::Policy::InputOutput::RequireCheckedOpen - Write C<< my $error = open $fh, $mode, $filename; >> instead of C<< open $fh, $mode, $filename; >>.
 
 =head1 DESCRIPTION
 

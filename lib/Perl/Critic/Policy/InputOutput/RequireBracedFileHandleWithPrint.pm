@@ -89,7 +89,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::InputOutput::RequireBracedFileHandleWithPrint
+Perl::Critic::Policy::InputOutput::RequireBracedFileHandleWithPrint - Write C<print {$FH} $foo, $bar;> instead of C<print $FH $foo, $bar;>.
 
 =head1 DESCRIPTION
 

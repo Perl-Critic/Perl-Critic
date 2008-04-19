@@ -57,7 +57,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::InputOutput::ProhibitTwoArgOpen
+Perl::Critic::Policy::InputOutput::ProhibitTwoArgOpen - Write C<< open $fh, q{<}, $filename; >> instead of C<< open $fh, "<$filename"; >>.
 
 =head1 DESCRIPTION
 

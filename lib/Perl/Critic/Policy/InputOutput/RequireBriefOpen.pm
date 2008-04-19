@@ -159,7 +159,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::InputOutput::RequireBriefOpen
+Perl::Critic::Policy::InputOutput::RequireBriefOpen - Close filehandles as soon as possible after opening them.
 
 =head1 DESCRIPTION
 

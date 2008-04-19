@@ -50,7 +50,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::InputOutput::ProhibitReadlineInForLoop
+Perl::Critic::Policy::InputOutput::ProhibitReadlineInForLoop - Write C<< while( $line = <> ){...} >> instead of C<< for(<>){...} >>.
 
 =head1 DESCRIPTION
 

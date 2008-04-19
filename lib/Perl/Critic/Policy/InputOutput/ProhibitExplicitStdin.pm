@@ -49,7 +49,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::InputOutput::ProhibitExplicitStdin
+Perl::Critic::Policy::InputOutput::ProhibitExplicitStdin - Use "<>" or "<ARGV>" or a prompting module instead of "<STDIN>".
 
 =head1 DESCRIPTION
 

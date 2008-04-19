@@ -59,7 +59,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::InputOutput::ProhibitBarewordFileHandles
+Perl::Critic::Policy::InputOutput::ProhibitBarewordFileHandles - Write C<open my $fh, q{<}, $filename;> instead of C<open FH, q{<}, $filename;>.
 
 =head1 DESCRIPTION
 
