@@ -129,7 +129,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::ValuesAndExpressions::ProhibitLongChainsOfMethodCalls
+Perl::Critic::Policy::ValuesAndExpressions::ProhibitLongChainsOfMethodCalls - Long chains of method calls indicate tightly coupled code.
 
 
 =head1 DESCRIPTION

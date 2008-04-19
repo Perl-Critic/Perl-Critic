@@ -63,7 +63,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::ValuesAndExpressions::RequireNumberSeparators
+Perl::Critic::Policy::ValuesAndExpressions::RequireNumberSeparators - Write C< 141_234_397.0145 > instead of C< 141234397.0145 >.
 
 =head1 DESCRIPTION
 

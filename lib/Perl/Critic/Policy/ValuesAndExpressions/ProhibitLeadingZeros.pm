@@ -50,7 +50,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::ValuesAndExpressions::ProhibitLeadingZeros
+Perl::Critic::Policy::ValuesAndExpressions::ProhibitLeadingZeros - Write C<oct(755)> instead of C<0755>.
 
 =head1 DESCRIPTION
 

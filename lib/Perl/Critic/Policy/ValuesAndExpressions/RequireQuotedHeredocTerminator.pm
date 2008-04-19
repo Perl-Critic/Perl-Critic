@@ -49,7 +49,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::ValuesAndExpressions::RequireQuotedHeredocTerminator
+Perl::Critic::Policy::ValuesAndExpressions::RequireQuotedHeredocTerminator - Write C< print <<'THE_END' > or C< print <<"THE_END" >.
 
 =head1 DESCRIPTION
 

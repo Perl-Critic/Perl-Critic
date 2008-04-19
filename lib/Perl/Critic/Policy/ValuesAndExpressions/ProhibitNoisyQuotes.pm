@@ -53,7 +53,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::ValuesAndExpressions::ProhibitNoisyQuotes
+Perl::Critic::Policy::ValuesAndExpressions::ProhibitNoisyQuotes - Use C<q{}> or C<qq{}> instead of quotes for awkward-looking strings.
 
 =head1 DESCRIPTION
 

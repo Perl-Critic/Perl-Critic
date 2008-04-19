@@ -158,7 +158,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::ValuesAndExpressions::ProhibitCommaSeparatedStatements
+Perl::Critic::Policy::ValuesAndExpressions::ProhibitCommaSeparatedStatements - Don't use the comma operator as a statement separator.
 
 =head1 DESCRIPTION
 

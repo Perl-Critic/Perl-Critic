@@ -54,7 +54,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::ValuesAndExpressions::ProhibitEscapedCharacters
+Perl::Critic::Policy::ValuesAndExpressions::ProhibitEscapedCharacters - Write C<"\N{DELETE}"> instead of C<"\x7F">, etc.
 
 =head1 DESCRIPTION
 

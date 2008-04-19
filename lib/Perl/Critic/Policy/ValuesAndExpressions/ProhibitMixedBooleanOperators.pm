@@ -99,7 +99,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::ValuesAndExpressions::ProhibitMixedBooleanOperators
+Perl::Critic::Policy::ValuesAndExpressions::ProhibitMixedBooleanOperators - Write C< !$foo && $bar || $baz > instead of C< not $foo && $bar or $baz>.
 
 =head1 DESCRIPTION
 

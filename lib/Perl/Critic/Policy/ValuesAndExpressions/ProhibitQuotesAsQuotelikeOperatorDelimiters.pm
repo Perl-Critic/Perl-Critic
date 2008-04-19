@@ -210,7 +210,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::ValuesAndExpressions::ProhibitQuotesAsQuotelikeOperatorDelimiters
+Perl::Critic::Policy::ValuesAndExpressions::ProhibitQuotesAsQuotelikeOperatorDelimiters - Don't use quotes (C<'>, C<">, C<`>) as delimiters for the quote-like operators.
 
 
 =head1 DESCRIPTION

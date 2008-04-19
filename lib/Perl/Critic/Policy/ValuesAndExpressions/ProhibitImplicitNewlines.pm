@@ -48,7 +48,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::ValuesAndExpressions::ProhibitImplicitNewlines
+Perl::Critic::Policy::ValuesAndExpressions::ProhibitImplicitNewlines - Use concatenation or HEREDOCs instead of literal line breaks in strings.
 
 =head1 DESCRIPTION
 

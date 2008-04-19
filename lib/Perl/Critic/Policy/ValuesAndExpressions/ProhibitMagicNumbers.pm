@@ -351,7 +351,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::ValuesAndExpressions::ProhibitMagicNumbers
+Perl::Critic::Policy::ValuesAndExpressions::ProhibitMagicNumbers - Don't mix numeric operators with string operands, or vice-versa.
 
 
 =head1 DESCRIPTION

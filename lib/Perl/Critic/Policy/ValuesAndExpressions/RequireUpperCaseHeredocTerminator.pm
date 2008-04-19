@@ -50,7 +50,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::ValuesAndExpressions::RequireUpperCaseHeredocTerminator
+Perl::Critic::Policy::ValuesAndExpressions::RequireUpperCaseHeredocTerminator - Write C< <<'THE_END'; > instead of C< <<'theEnd'; >.
 
 =head1 DESCRIPTION
 

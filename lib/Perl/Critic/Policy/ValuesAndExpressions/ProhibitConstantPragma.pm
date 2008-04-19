@@ -48,7 +48,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::ValuesAndExpressions::ProhibitConstantPragma
+Perl::Critic::Policy::ValuesAndExpressions::ProhibitConstantPragma - Don't C<< use constant $FOO => 15 >>.
 
 =head1 DESCRIPTION
 
