@@ -14,6 +14,6 @@ Steps for adding a new Policy:
    failure in t/13_bundled_policies.t
  * Mention it in Changes
  * svn add t/[category]/[name].run lib/Perl/Critic/Policy/[category]/[name].pm
- * svn propset svn:keywords 'URL Author Revision Date' t/[category]/[name].run lib/Perl/Critic/Policy/[category]/[name].pm
+ * tools/svnkeywords t/[category]/[name].run lib/Perl/Critic/Policy/[category]/[name].pm
 
  * Remove from TODO
