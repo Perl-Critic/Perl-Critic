@@ -49,7 +49,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Variables::ProtectPrivateVars
+Perl::Critic::Policy::Variables::ProtectPrivateVars - Prevent access to private vars in other packages.
 
 =head1 DESCRIPTION
 

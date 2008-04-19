@@ -62,7 +62,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Variables::ProhibitPerl4PackageNames
+Perl::Critic::Policy::Variables::ProhibitPerl4PackageNames - Use double colon (::) to separate package name components instead of single quotes (').
 
 =head1 DESCRIPTION
 

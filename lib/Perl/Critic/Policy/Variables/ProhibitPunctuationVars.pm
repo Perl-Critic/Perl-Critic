@@ -60,7 +60,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Variables::ProhibitPunctuationVars
+Perl::Critic::Policy::Variables::ProhibitPunctuationVars - Write C<$EVAL_ERROR> instead of C<$@>.
 
 =head1 DESCRIPTION
 

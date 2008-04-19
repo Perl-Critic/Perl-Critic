@@ -60,7 +60,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Variables::RequireLexicalLoopIterators
+Perl::Critic::Policy::Variables::RequireLexicalLoopIterators - Write C<for my $element (@list) {.
 
 =head1 DESCRIPTION
 

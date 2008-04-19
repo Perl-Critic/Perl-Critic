@@ -70,7 +70,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Variables::ProhibitMatchVars
+Perl::Critic::Policy::Variables::ProhibitMatchVars - Avoid C<$`>, C<$&>, C<$'> and their English equivalents.
 
 =head1 DESCRIPTION
 

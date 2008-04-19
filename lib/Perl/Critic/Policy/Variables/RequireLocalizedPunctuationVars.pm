@@ -100,7 +100,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Variables::RequireLocalizedPunctuationVars
+Perl::Critic::Policy::Variables::RequireLocalizedPunctuationVars - Magic variables should be assigned as "local".
 
 =head1 DESCRIPTION
 

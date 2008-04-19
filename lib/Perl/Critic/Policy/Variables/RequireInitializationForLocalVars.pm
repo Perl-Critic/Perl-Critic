@@ -56,7 +56,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Variables::RequireInitializationForLocalVars
+Perl::Critic::Policy::Variables::RequireInitializationForLocalVars - Write C<local $foo = $bar;> instead of just C<local $foo;>.
 
 =head1 DESCRIPTION
 

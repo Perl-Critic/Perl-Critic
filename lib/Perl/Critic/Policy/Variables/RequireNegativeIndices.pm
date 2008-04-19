@@ -190,7 +190,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Variables::RequireNegativeIndices
+Perl::Critic::Policy::Variables::RequireNegativeIndices - Negative array index should be used.
 
 =head1 DESCRIPTION
 

@@ -63,7 +63,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Variables::ProhibitLocalVars
+Perl::Critic::Policy::Variables::ProhibitLocalVars - Use C<my> instead of C<local>, except when you have to.
 
 =head1 DESCRIPTION
 

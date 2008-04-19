@@ -140,7 +140,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Variables::ProhibitPackageVars
+Perl::Critic::Policy::Variables::ProhibitPackageVars - Eliminate globals declared with C<our> or C<use vars>.
 
 =head1 DESCRIPTION
 

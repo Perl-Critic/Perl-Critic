@@ -64,7 +64,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Variables::ProhibitConditionalDeclarations
+Perl::Critic::Policy::Variables::ProhibitConditionalDeclarations - Do not write C< my $foo = $bar if $baz; >.
 
 =head1 DESCRIPTION
 
