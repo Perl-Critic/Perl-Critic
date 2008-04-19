@@ -85,7 +85,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::RegularExpressions::ProhibitUnusualDelimiters
+Perl::Critic::Policy::RegularExpressions::ProhibitUnusualDelimiters - Use only C<//> or C<{}> to delimit regexps.
 
 
 =head1 DESCRIPTION

@@ -89,7 +89,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::RegularExpressions::ProhibitFixedStringMatches
+Perl::Critic::Policy::RegularExpressions::ProhibitFixedStringMatches - Use C<eq> or hash instead of fixed-pattern regexps.
 
 =head1 DESCRIPTION
 

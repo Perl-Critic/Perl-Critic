@@ -69,7 +69,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::RegularExpressions::ProhibitSingleCharAlternation
+Perl::Critic::Policy::RegularExpressions::ProhibitSingleCharAlternation - Use C<[abc]> instead of C<a|b|c>.
 
 =head1 DESCRIPTION
 

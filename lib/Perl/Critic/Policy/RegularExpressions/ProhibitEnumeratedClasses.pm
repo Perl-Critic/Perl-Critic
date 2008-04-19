@@ -143,7 +143,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::RegularExpressions::ProhibitEnumeratedClasses
+Perl::Critic::Policy::RegularExpressions::ProhibitEnumeratedClasses - Use named character classes instead of explicit character lists.
 
 =head1 DESCRIPTION
 

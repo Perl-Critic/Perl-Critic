@@ -85,7 +85,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::RegularExpressions::RequireBracesForMultiline
+Perl::Critic::Policy::RegularExpressions::RequireBracesForMultiline - Use C<{> and C<}> to delimit multi-line regexps.
 
 
 =head1 DESCRIPTION

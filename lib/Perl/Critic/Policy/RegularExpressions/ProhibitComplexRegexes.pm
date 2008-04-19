@@ -85,7 +85,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::RegularExpressions::ProhibitComplexRegexes
+Perl::Critic::Policy::RegularExpressions::ProhibitComplexRegexes - Split long regexps into smaller C<qr//> chunks.
 
 =head1 DESCRIPTION
 

@@ -53,7 +53,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::RegularExpressions::RequireExtendedFormatting
+Perl::Critic::Policy::RegularExpressions::RequireExtendedFormatting - Always use the C</x> modifier with regular expressions.
 
 =head1 DESCRIPTION
 

@@ -111,7 +111,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::RegularExpressions::ProhibitCaptureWithoutTest
+Perl::Critic::Policy::RegularExpressions::ProhibitCaptureWithoutTest - Capture variable used outside conditional.
 
 =head1 DESCRIPTION
 

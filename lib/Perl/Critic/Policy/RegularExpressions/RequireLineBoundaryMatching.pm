@@ -53,7 +53,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::RegularExpressions::RequireLineBoundaryMatching
+Perl::Critic::Policy::RegularExpressions::RequireLineBoundaryMatching - Always use the C</m> modifier with regular expressions.
 
 =head1 DESCRIPTION
 
