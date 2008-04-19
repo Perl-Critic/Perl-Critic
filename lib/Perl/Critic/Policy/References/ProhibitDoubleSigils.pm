@@ -52,7 +52,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::References::ProhibitDoubleSigils
+Perl::Critic::Policy::References::ProhibitDoubleSigils - Write C<@{ $array_ref }> instead of C<@$array_ref>.
 
 =head1 DESCRIPTION
 
