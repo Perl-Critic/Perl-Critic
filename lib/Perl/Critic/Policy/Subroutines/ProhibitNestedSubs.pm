@@ -54,7 +54,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Subroutines::ProhibitNestedSubs
+Perl::Critic::Policy::Subroutines::ProhibitNestedSubs - Too many arguments.
 
 =head1 DESCRIPTION
 

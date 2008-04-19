@@ -54,7 +54,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Subroutines::ProhibitExplicitReturnUndef
+Perl::Critic::Policy::Subroutines::ProhibitExplicitReturnUndef - Return failure with bare C<return> instead of C<return undef>.
 
 =head1 DESCRIPTION
 

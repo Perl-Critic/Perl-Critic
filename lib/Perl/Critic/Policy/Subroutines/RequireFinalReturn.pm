@@ -173,7 +173,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Subroutines::RequireFinalReturn
+Perl::Critic::Policy::Subroutines::RequireFinalReturn - End every path through a subroutine with an explicit C<return> statement.
 
 =head1 DESCRIPTION
 

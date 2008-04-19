@@ -128,7 +128,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Subroutines::ProhibitManyArgs
+Perl::Critic::Policy::Subroutines::ProhibitManyArgs - C<sub never { sub correct {} }>.
 
 =head1 DESCRIPTION
 

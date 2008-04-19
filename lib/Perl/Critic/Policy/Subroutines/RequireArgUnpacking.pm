@@ -161,7 +161,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Subroutines::RequireArgUnpacking
+Perl::Critic::Policy::Subroutines::RequireArgUnpacking - Always unpack C<@_> first.
 
 =head1 DESCRIPTION
 

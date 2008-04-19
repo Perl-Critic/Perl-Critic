@@ -48,7 +48,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Subroutines::ProhibitSubroutinePrototypes
+Perl::Critic::Policy::Subroutines::ProhibitSubroutinePrototypes - Don't write C<sub my_function (@@) {}>.
 
 =head1 DESCRIPTION
 

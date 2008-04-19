@@ -52,7 +52,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Subroutines::ProhibitBuiltinHomonyms
+Perl::Critic::Policy::Subroutines::ProhibitBuiltinHomonyms - Don't declare your own C<open> function.
 
 =head1 DESCRIPTION
 

@@ -67,7 +67,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Subroutines::ProhibitExcessComplexity
+Perl::Critic::Policy::Subroutines::ProhibitExcessComplexity - Minimize complexity by factoring code into smaller subroutines.
 
 =head1 DESCRIPTION
 

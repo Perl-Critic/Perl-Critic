@@ -76,7 +76,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Subroutines::ProtectPrivateSubs
+Perl::Critic::Policy::Subroutines::ProtectPrivateSubs - Prevent access to private subs in other packages.
 
 =head1 DESCRIPTION
 
