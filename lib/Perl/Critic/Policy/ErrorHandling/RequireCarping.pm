@@ -353,7 +353,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::ErrorHandling::RequireCarping
+Perl::Critic::Policy::ErrorHandling::RequireCarping - Use functions from L<Carp> instead of C<warn> or C<die>.
 
 =head1 DESCRIPTION
 
