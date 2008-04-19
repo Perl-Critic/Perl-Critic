@@ -67,7 +67,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Documentation::RequirePodAtEnd
+Perl::Critic::Policy::Documentation::RequirePodAtEnd - All POD should be after C<__END__>.
 
 =head1 DESCRIPTION
 

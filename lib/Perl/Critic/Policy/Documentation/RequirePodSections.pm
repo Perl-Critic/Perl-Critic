@@ -354,7 +354,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Documentation::RequirePodSections
+Perl::Critic::Policy::Documentation::RequirePodSections - Organize your POD into the customary sections.
 
 =head1 DESCRIPTION
 

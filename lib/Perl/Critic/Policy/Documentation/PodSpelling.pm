@@ -246,7 +246,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Documentation::PodSpelling
+Perl::Critic::Policy::Documentation::PodSpelling - Check your spelling.
 
 =head1 DESCRIPTION
 
