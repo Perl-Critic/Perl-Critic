@@ -96,7 +96,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::TestingAndDebugging::RequireUseWarnings
+Perl::Critic::Policy::TestingAndDebugging::RequireUseWarnings - Always C<use warnings>.
 
 
 =head1 DESCRIPTION

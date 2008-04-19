@@ -70,7 +70,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::TestingAndDebugging::ProhibitProlongedStrictureOverride
+Perl::Critic::Policy::TestingAndDebugging::ProhibitProlongedStrictureOverride - Don't turn off strict for large blocks of code.
 
 =head1 DESCRIPTION
 

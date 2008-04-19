@@ -95,7 +95,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::TestingAndDebugging::RequireUseStrict
+Perl::Critic::Policy::TestingAndDebugging::RequireUseStrict - Always C<use strict>.
 
 
 =head1 DESCRIPTION

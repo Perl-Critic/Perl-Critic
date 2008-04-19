@@ -98,7 +98,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::TestingAndDebugging::RequireTestLabels
+Perl::Critic::Policy::TestingAndDebugging::RequireTestLabels - Tests should all have labels.
 
 =head1 DESCRIPTION
 

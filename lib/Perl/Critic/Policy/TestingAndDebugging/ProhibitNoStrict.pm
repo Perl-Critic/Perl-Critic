@@ -95,7 +95,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::TestingAndDebugging::ProhibitNoStrict
+Perl::Critic::Policy::TestingAndDebugging::ProhibitNoStrict - Prohibit various flavors of C<no strict>.
 
 =head1 DESCRIPTION
 

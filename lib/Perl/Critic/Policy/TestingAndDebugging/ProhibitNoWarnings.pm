@@ -95,7 +95,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::TestingAndDebugging::ProhibitNoWarnings
+Perl::Critic::Policy::TestingAndDebugging::ProhibitNoWarnings - Prohibit various flavors of C<no warnings>.
 
 =head1 DESCRIPTION
 
