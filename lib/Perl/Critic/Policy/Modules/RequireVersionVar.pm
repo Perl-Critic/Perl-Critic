@@ -110,7 +110,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Modules::RequireVersionVar
+Perl::Critic::Policy::Modules::RequireVersionVar - Give every module a C<$VERSION> number.
 
 =head1 DESCRIPTION
 

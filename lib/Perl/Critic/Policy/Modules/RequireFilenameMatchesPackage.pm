@@ -83,7 +83,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Modules::RequireFilenameMatchesPackage
+Perl::Critic::Policy::Modules::RequireFilenameMatchesPackage - Package declaration must match filename.
 
 =head1 DESCRIPTION
 

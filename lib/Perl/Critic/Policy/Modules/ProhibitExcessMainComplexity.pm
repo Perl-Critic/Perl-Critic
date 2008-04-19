@@ -69,7 +69,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Modules::ProhibitExcessMainComplexity
+Perl::Critic::Policy::Modules::ProhibitExcessMainComplexity - Minimize complexity in code that is B<outside> of subroutines.
 
 =head1 DESCRIPTION
 

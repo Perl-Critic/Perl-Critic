@@ -109,7 +109,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Modules::ProhibitEvilModules
+Perl::Critic::Policy::Modules::ProhibitEvilModules - Ban modules that aren't blessed by your shop.
 
 =head1 DESCRIPTION
 

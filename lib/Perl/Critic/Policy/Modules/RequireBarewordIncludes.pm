@@ -54,7 +54,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Modules::RequireBarewordIncludes
+Perl::Critic::Policy::Modules::RequireBarewordIncludes - Write C<require Module> instead of C<require 'Module.pm'>.
 
 =head1 DESCRIPTION
 

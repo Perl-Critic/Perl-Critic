@@ -83,7 +83,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Modules::RequireExplicitPackage
+Perl::Critic::Policy::Modules::RequireExplicitPackage - Always make the C<package> explicit.
 
 
 =head1 DESCRIPTION

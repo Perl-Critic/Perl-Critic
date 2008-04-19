@@ -97,7 +97,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Modules::ProhibitAutomaticExportation
+Perl::Critic::Policy::Modules::ProhibitAutomaticExportation - Export symbols via C<@EXPORT_OK> or C<%EXPORT_TAGS> instead of C<@EXPORT>.
 
 =head1 DESCRIPTION
 

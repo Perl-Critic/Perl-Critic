@@ -49,7 +49,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Modules::ProhibitMultiplePackages
+Perl::Critic::Policy::Modules::ProhibitMultiplePackages - Put packages (especially subclasses) in separate files.
 
 =head1 DESCRIPTION
 

@@ -61,7 +61,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Modules::RequireEndWithOne
+Perl::Critic::Policy::Modules::RequireEndWithOne - End each module with an explicitly C<1;> instead of some funky expression.
 
 =head1 DESCRIPTION
 

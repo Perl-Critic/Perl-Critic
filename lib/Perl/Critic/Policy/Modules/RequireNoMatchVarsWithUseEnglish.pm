@@ -145,7 +145,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Modules::RequireNoMatchVarsWithUseEnglish
+Perl::Critic::Policy::Modules::RequireNoMatchVarsWithUseEnglish - C<use English> must be passed a C<-no_match_vars> argument.
 
 
 =head1 DESCRIPTION
