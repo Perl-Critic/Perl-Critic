@@ -71,7 +71,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::RegularExpressions::ProhibitEscapedMetacharacters - Use character classes for literal metachars instead of escapes.
+Perl::Critic::Policy::RegularExpressions::ProhibitEscapedMetacharacters - Use character classes for literal meta-characters instead of escapes.
 
 =head1 DESCRIPTION
 
