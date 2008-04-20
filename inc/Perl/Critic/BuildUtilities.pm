@@ -29,10 +29,6 @@ use lib 't/tlib';
 
 use Devel::CheckOS qw< os_is >;
 
-use Perl::Critic::TestUtilitiesWithMinimalDependencies qw<
-    should_skip_author_tests
->;
-
 
 sub recommended_module_versions {
     return (
@@ -60,6 +56,7 @@ sub test_wrappers_to_generate {
         t/04_defaults.t
         t/05_utils.t
         t/05_utils_ppi.t
+        t/05_utils_pod.t
         t/06_violation.t
         t/07_perlcritic.t
         t/08_document.t
@@ -73,14 +70,14 @@ sub test_wrappers_to_generate {
         t/15_statistics.t
         t/20_policy_podspelling.t
         t/20_policy_requiretidycode.t
-        t/80_policysummary.t
+        xt/author/80_policysummary.t
         t/92_memory_leaks.t
-        t/94_includes.t
+        xt/author/94_includes.t
     >;
 
     return
         map
-            { $_ . '_without_optional_dependencies.t' }
+            { "xt/author/generated/${_}_without_optional_dependencies.t" }
             @tests_to_be_wrapped;
 }
 
@@ -92,16 +89,8 @@ sub get_PL_files {
     $PL_files{'t/Variables/RequireLocalizedPunctuationVars.run.PL'} =
         't/Variables/RequireLocalizedPunctuationVars.run';
 
-    if (should_skip_author_tests()) {
-        print
-              "\nWill not generate extra author tests.  Set "
-            . '$ENV{TEST_AUTHOR_PERL_CRITIC} to a true value to have them generated.'
-            . "\n\n";
-    }
-    else {
-        $PL_files{'t/generate_without_optional_dependencies_wrappers.PL'} =
-            [ test_wrappers_to_generate() ];
-    }
+    $PL_files{'t/generate_without_optional_dependencies_wrappers.PL'} =
+        [ test_wrappers_to_generate() ];
 
     return \%PL_files;
 }

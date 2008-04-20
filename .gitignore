@@ -2,3 +2,5 @@ cover_db
 t/*_without_optional_dependencies.t
 t/ControlStructures/ProhibitNegativeExpressionsInUnlessAndUntilConditions.run
 t/Variables/RequireLocalizedPunctuationVars.run
+xt/author/generated/t/*_without_optional_dependencies.t
+xt/author/generated/xt/author/*_without_optional_dependencies.t

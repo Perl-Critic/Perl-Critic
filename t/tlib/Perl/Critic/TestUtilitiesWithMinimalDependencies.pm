@@ -16,26 +16,8 @@ use base 'Exporter';
 
 our $VERSION = '1.083_001';
 our @EXPORT_OK = qw(
-    should_skip_author_tests
-    get_author_test_skip_message
     get_skip_all_tests_tap
 );
-
-#-----------------------------------------------------------------------------
-
-# Note: this code is duplicated in lib/Perl/Critic/TestUtils.pm.
-# If you change this here, make sure to change it there.
-
-sub should_skip_author_tests {
-    return not $ENV{TEST_AUTHOR_PERL_CRITIC};
-}
-
-#-----------------------------------------------------------------------------
-
-sub get_author_test_skip_message {
-    ## no critic (RequireInterpolation);
-    return 'Author test.  Set $ENV{TEST_AUTHOR_PERL_CRITIC} to a true value to run.';
-}
 
 #-----------------------------------------------------------------------------
 
@@ -60,21 +42,13 @@ Perl::Critic::TestUtilitiesWithMinimalDependencies - Testing functions that only
 =head1 SYNOPSIS
 
   use Perl::Critic::TestUtilitiesWithMinimalDependencies qw{
-      should_skip_author_tests
-      get_author_test_skip_message
       get_skip_all_tests_tap
   };
 
-  if ( should_skip_author_tests() ) {
-      print get_skip_all_tests_tap(), get_author_test_skip_message(), "\n";
-      exit 0;
-  }
-
-
   use Test::More;
 
-  if (should_skip_author_tests()) {
-      plan skip_all => get_author_test_skip_message();
+  if ($should_not_run) {
+      plan skip_all => 'Hey!  I shouldn't be run!';
   }
 
 =head1 DESCRIPTION
@@ -88,23 +62,14 @@ that need to hide the presence of other modules before starting.
 
 =over
 
-=item C< should_skip_author_tests() >
-
-Answers whether author tests should run.
-
-
-=item C< get_author_test_skip_message() >
-
-Returns a string containing the message that should be emitted when a
-test is skipped due to it being an author test when author tests are
-not enabled.
-
-
 =item C< get_skip_all_tests_tap() >
 
 Returns a string representing the TAP (Test Anything Protocol) output
 for skipping an entire file.  This is useful if you don't want to load
 any Test::* modules.
+
+
+=back
 
 
 =head1 AUTHOR

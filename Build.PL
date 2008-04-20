@@ -6,7 +6,7 @@
 ########################################################################
 
 BEGIN {
-    require 5.006001;
+    use 5.006001;
 }
 
 use strict;
@@ -25,46 +25,37 @@ use Perl::Critic::BuildUtilities qw<
     emit_tar_warning_if_necessary
 >;
 
-my $warning = <<'END_WARNING';
-
-###################################################
-# NOTICE! NOTICE! NOTICE! NOTICE! NOTICE! NOTICE! #
-#-------------------------------------------------#
-# In this version of Perl::Critic, some of        #
-# the Policy modules have been renamed to better  #
-# better reflect the intent of the Policy.  If    #
-# you have an older version of Perl::Critic       #
-# already installed, it will cause many of the    #
-# tests to fail and the new version will not work #
-# properly.                                       #
-#                                                 #
-# I strongly advise you to remove the current     #
-# version of Perl::Critic before proceeding with  #
-# this installation.  In most cases, this can be  #
-# done by deleting everything below the           #
-# Perl/Critic/Policy directory in your site_perl  #
-# location.                                       #
-#                                                 #
-# Also, if you have created a .perlcriticrc file, #
-# you will need to update it to match the new     #
-# Policy module names.                            #
-#                                                 #
-# Sorry for the inconvenience.                    #
-#                                                 #
-# -Jeff <thaljef@cpan.org>                        #
-###################################################
-
-END_WARNING
-
-
-eval {
-    require Perl::Critic;
-    warn $warning if $Perl::Critic::VERSION < 0.14;
-};
-
 emit_tar_warning_if_necessary();
 
-my $builder = Module::Build->new(
+
+my $class = Module::Build->subclass( code => <<'END_SUBCLASS' );
+
+    sub ACTION_authortest {
+        my ($self) = @_;
+
+        $self->depends_on('build');
+        $self->depends_on('manifest');
+        $self->depends_on('distmeta');
+
+        $self->test_files( qw< t xt/author > );
+        $self->recursive_test_files(1);
+
+        $self->depends_on('test');
+
+        return;
+    } # end ACTION_authortest()
+
+    sub ACTION_distdir {
+        my ($self) = @_;
+
+        $self->depends_on('authortest');
+
+        return $self->SUPER::ACTION_distdir;
+    } # end ACTION_distdir
+
+END_SUBCLASS
+
+my $builder = $class->new(
     module_name    => 'Perl::Critic',
     dist_author    => 'Jeffrey Thalhammer <thaljef@cpan.org>',
     dist_abstract  => 'Critique Perl source code for best-practices.',

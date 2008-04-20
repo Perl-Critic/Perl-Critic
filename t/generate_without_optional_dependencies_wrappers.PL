@@ -30,12 +30,13 @@ my $modules_to_hide = join "\n" . q< > x 4, @modules_to_hide;
 
 foreach my $test_program_name (@ARGV) {
     my ($wrapped_test_name) =
-        $test_program_name =~ m{
+        $test_program_name =~ m<
             \A
-            ( t/ [\w.]+ \.t )                  # test to be wrapped
-            _without_optional_dependencies\.t  # suffix the new test will have
+            xt/author/generated/
+            ( (?: t | xt/author ) / [\w.]+ \.t ) # test to be wrapped
+            _without_optional_dependencies\.t   # suffix the new test will have
             \z
-        }xms;
+        >xms;
     if (not $wrapped_test_name) {
         confess
               'Could not figure out the name of the test to wrap from "'
@@ -54,26 +55,18 @@ foreach my $test_program_name (@ARGV) {
 
 use strict;
 use warnings;
-use English qw{-no_match_vars};
 
-our \$VERSION = $VERSION;
+use English qw{-no_match_vars};
 
 use lib 't/tlib';
 
-use English qw(-no_match_vars);
-
 use Perl::Critic::TestUtilitiesWithMinimalDependencies qw{
-    should_skip_author_tests
-    get_author_test_skip_message
     get_skip_all_tests_tap
 };
 
-#-----------------------------------------------------------------------------
+our \$VERSION = $VERSION;
 
-if ( should_skip_author_tests() ) {
-    print get_skip_all_tests_tap(), get_author_test_skip_message(), "\\n";
-    exit 0;
-}
+#-----------------------------------------------------------------------------
 
 eval <<'END_HIDE_MODULES';
 use Test::Without::Module qw{

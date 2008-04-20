@@ -1,6 +1,6 @@
 ^README\.developer$
 \.PPI$
-^t/.*_without_optional_dependencies.t$
+_without_optional_dependencies.t$
 ^t/ControlStructures/ProhibitNegativeExpressionsInUnlessAndUntilConditions.run$
 ^t/Variables/RequireLocalizedPunctuationVars.run$
 

@@ -10,24 +10,14 @@
 use strict;
 use warnings;
 
-use lib 't/tlib';
-
 use File::Spec;
 use Test::More;
 use List::MoreUtils qw(any);
 
 use Perl::Critic::PolicyFactory ( -test => 1 );
-use Perl::Critic::TestUtilitiesWithMinimalDependencies qw{
-    should_skip_author_tests
-    get_author_test_skip_message
-};
 use Perl::Critic::TestUtils qw{ bundled_policy_names };
 
 #-----------------------------------------------------------------------------
-
-if (should_skip_author_tests()) {
-    plan skip_all => get_author_test_skip_message();
-}
 
 if (open my ($fh), '<', File::Spec->catfile(qw(lib Perl Critic PolicySummary.pod))) {
 

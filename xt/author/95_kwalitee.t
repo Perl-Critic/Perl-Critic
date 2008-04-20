@@ -3,21 +3,9 @@
 use strict;
 use warnings;
 
-use lib 't/tlib';
-
 use Test::More;
 
-use Perl::Critic::TestUtilitiesWithMinimalDependencies qw{
-    should_skip_author_tests
-    get_author_test_skip_message
-};
-
-if (should_skip_author_tests()) {
-    plan skip_all => get_author_test_skip_message();
-}
-
-eval
-{
+eval {
    require Test::Kwalitee;
    Test::Kwalitee->import( tests => [ qw{ -no_pod_errors -no_symlinks } ] );
 };

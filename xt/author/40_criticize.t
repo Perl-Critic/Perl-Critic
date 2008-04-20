@@ -12,18 +12,12 @@
 use strict;
 use warnings;
 
-use lib 't/tlib';
-
 use English qw( -no_match_vars );
 
 use File::Spec qw();
 use Test::More;
 
 use Perl::Critic::Utils qw{ :characters };
-use Perl::Critic::TestUtilitiesWithMinimalDependencies qw{
-    should_skip_author_tests
-    get_author_test_skip_message
-};
 use Perl::Critic::TestUtils qw{ starting_points_including_examples };
 
 # Note: "use PolicyFactory" *must* appear after "use TestUtils" for the
@@ -32,12 +26,6 @@ use Perl::Critic::PolicyFactory (
     '-test' => 1,
     '-extra-test-policies' => [ qw{ ErrorHandling::RequireUseOfExceptions } ],
 );
-
-#-----------------------------------------------------------------------------
-
-if (should_skip_author_tests()) {
-    plan skip_all => get_author_test_skip_message();
-}
 
 #-----------------------------------------------------------------------------
 
@@ -87,7 +75,7 @@ else {
 #-----------------------------------------------------------------------------
 # Run critic against all of our own files
 
-my $rcfile = File::Spec->catfile( 't', '40_perlcriticrc' );
+my $rcfile = File::Spec->catfile( 'xt', 'author', '40_perlcriticrc' );
 Test::Perl::Critic->import( -profile => $rcfile );
 
 all_critic_ok( starting_points_including_examples() );
