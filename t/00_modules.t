@@ -34,6 +34,7 @@ my @concrete_exceptions = qw{
     Fatal::Generic
     Fatal::Internal
     Fatal::PolicyDefinition
+    IO
 };
 
 plan tests =>

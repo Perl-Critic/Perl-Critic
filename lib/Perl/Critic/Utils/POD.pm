@@ -15,6 +15,7 @@ use English qw< -no_match_vars >;
 use IO::String ();
 use Pod::Select ();
 
+use Perl::Critic::Exception::Fatal::Generic qw< throw_generic >;
 use Perl::Critic::Exception::IO qw< throw_io >;
 use Perl::Critic::Utils qw< :characters >;
 
@@ -28,6 +29,8 @@ our @EXPORT_OK = qw(
     get_pod_section_from_file
     get_pod_section_from_filehandle
     trim_pod_section
+    get_module_abstract_from_file
+    get_module_abstract_from_filehandle
 );
 
 our %EXPORT_TAGS = (
@@ -83,6 +86,81 @@ sub trim_pod_section {
     $pod =~ s< \s+ \z ><>xms;
 
     return $pod;
+}
+
+#-----------------------------------------------------------------------------
+
+sub get_module_abstract_from_file {
+    my ($file_name) = @_;
+
+    open my $file_handle, '<', $file_name
+        or throw_io
+            message     => qq<Could not open "$file_name": $ERRNO>,
+            file_name   => $file_name,
+            errno       => $ERRNO;
+
+    my $abstract = get_module_abstract_from_filehandle( $file_handle );
+
+    close $file_handle
+        or throw_io
+            message     => qq<Could not close "$file_name": $ERRNO>,
+            file_name   => $file_name,
+            errno       => $ERRNO;
+
+    return $abstract;
+}
+
+#-----------------------------------------------------------------------------
+
+sub get_module_abstract_from_filehandle {
+    my ($file_handle) = @_;
+
+    my $name_section = get_pod_section_from_filehandle( $file_handle, 'NAME');
+    return if not $name_section;
+
+    $name_section = trim_pod_section($name_section);
+    return if not $name_section;
+
+    if ( $name_section =~ m< \n >xms ) {
+        throw_generic
+            qq<Malformed NAME section in "$name_section". >
+            . q<It must be on a single line>;
+    }
+
+    if (
+        $name_section =~ m<
+            \A
+            \s*
+            [\w:]+              # Module name.
+            \s+
+            -                   # The required single hyphen.
+            \s+
+            (
+                \S              # At least one non-whitespace.
+                (?: .* \S)?     # Everything up to the last non-whitespace.
+            )
+            \s*
+            \z
+        >xms
+    ) {
+        my $abstract = $1;
+        return $abstract;
+    }
+
+    if (
+        $name_section =~ m<
+            \A
+            \s*
+            [\w:]+              # Module name.
+            (?: \s* - )?        # The single hyphen is now optional.
+            \s*
+            \z
+        >xms
+    ) {
+        return;
+    }
+
+    throw_generic qq<Malformed NAME section in "$name_section".>;
 }
 
 #-----------------------------------------------------------------------------

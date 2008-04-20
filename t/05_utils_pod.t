@@ -10,11 +10,12 @@
 use strict;
 use warnings;
 
+use English qw< -no_match_vars >;
 use Carp qw< confess >;
 
 use IO::String;
 
-use Test::More tests => 13;
+use Test::More tests => 26;
 
 #-----------------------------------------------------------------------------
 
@@ -27,6 +28,8 @@ BEGIN {
 can_ok('main', 'get_pod_section_from_file');
 can_ok('main', 'get_pod_section_from_filehandle');
 can_ok('main', 'trim_pod_section');
+can_ok('main', 'get_module_abstract_from_file');
+can_ok('main', 'get_module_abstract_from_filehandle');
 
 
 {
@@ -244,6 +247,197 @@ END_VOCAL_SAMPLE
         $expected,
         'trim_pod_section() without section header',
     );
+}
+
+#-----------------------------------------------------------------------------
+
+{
+    my $source = <<'END_MODULE';
+
+=head1 NAME
+
+A::Stupendous::Module - An abstract.
+
+END_MODULE
+
+    my $source_handle = IO::String->new($source);
+    my $result = get_module_abstract_from_filehandle( $source_handle );
+
+    my $expected = q<An abstract.>;
+
+    is(
+        $result,
+        $expected,
+        q<get_module_abstract_from_filehandle() with proper abstract>,
+    );
+}
+
+
+{
+    my $source = <<'END_MODULE';
+
+=head1 NOT NAME
+
+There's nobody home.
+
+END_MODULE
+
+    my $source_handle = IO::String->new($source);
+    my $result = get_module_abstract_from_filehandle( $source_handle );
+
+    is(
+        $result,
+        undef,
+        q<get_module_abstract_from_filehandle() with no name section>,
+    );
+}
+
+
+{
+    my $source = <<'END_MODULE';
+
+=head1 NAME
+
+=head1 DESCRIPTION
+
+END_MODULE
+
+    my $source_handle = IO::String->new($source);
+    my $result = get_module_abstract_from_filehandle( $source_handle );
+
+    is(
+        $result,
+        undef,
+        q<get_module_abstract_from_filehandle() without NAME section content>,
+    );
+}
+
+
+{
+    my $source = <<'END_MODULE';
+
+=head1 NAME
+
+A::Not::So::Stupendous::Module
+
+END_MODULE
+
+    my $source_handle = IO::String->new($source);
+    my $result = get_module_abstract_from_filehandle( $source_handle );
+
+    is(
+        $result,
+        undef,
+        q<get_module_abstract_from_filehandle() with no abstract>,
+    );
+}
+
+
+{
+    my $source = <<'END_MODULE';
+
+=head1 NAME
+
+A::Not::So::Stupendous::Module -
+
+END_MODULE
+
+    my $source_handle = IO::String->new($source);
+    my $result = get_module_abstract_from_filehandle( $source_handle );
+
+    is(
+        $result,
+        undef,
+        q<get_module_abstract_from_filehandle() with hyphen but no abstract>,
+    );
+}
+
+
+{
+    my $source = <<'END_MODULE';
+
+=head1 NAME
+
+A::Not::So::Stupendous::Module No hyphen.
+
+END_MODULE
+
+    test_exception_from_get_module_abstract_from_filehandle(
+        $source, q<with abstract but no hyphen>,
+    )
+}
+
+
+{
+    my $source = <<'END_MODULE';
+
+=head1 NAME
+
+A::Not::So::Stupendous::Module -- Double hyphen.
+
+END_MODULE
+
+    test_exception_from_get_module_abstract_from_filehandle(
+        $source, q<with double hyphen>,
+    )
+}
+
+
+{
+    my $source = <<'END_MODULE';
+
+=head1 NAME
+
+A::Not::So::Stupendous::Module - Summary goes across
+multiple lines.
+
+END_MODULE
+
+    test_exception_from_get_module_abstract_from_filehandle(
+        $source, q<with multiple lines>,
+    )
+}
+
+#-----------------------------------------------------------------------------
+
+sub test_exception_from_get_module_abstract_from_filehandle {
+    my ($source, $name) = @_;
+
+    my $exception_message_regex = qr<malformed [ ] name [ ] section>xmsi;
+    my $result;
+
+    my $source_handle = IO::String->new($source);
+
+    local $EVAL_ERROR = undef;
+    eval {
+        $result = get_module_abstract_from_filehandle( $source_handle );
+    };
+    my $eval_error = $EVAL_ERROR;
+    my $exception = Perl::Critic::Exception::Fatal::Generic->caught();
+    my $message_like_name = qq<Got expected message for get_module_abstract_from_filehandle() $name>;
+
+    if (
+        ok(
+            ref $exception,
+            qq<Got the right kind of exception for get_module_abstract_from_filehandle() $name>,
+        )
+    ) {
+        like( $exception->message(), $exception_message_regex, $message_like_name );
+    }
+    else {
+        diag( 'Result: ', (defined $result ? ">$result<" : '<undef>') );
+        if ($eval_error) {
+            diag(
+                qq<However, did get an exception: $eval_error>,
+            );
+            like( $eval_error, $exception_message_regex, $message_like_name );
+        }
+        else {
+            fail($message_like_name);
+        }
+    }
+
+    return;
 }
 
 #-----------------------------------------------------------------------------
