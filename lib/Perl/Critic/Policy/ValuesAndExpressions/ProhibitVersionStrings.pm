@@ -62,7 +62,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::ValuesAndExpressions::ProhibitVersionStrings - Don't use strings like C<v1.
+Perl::Critic::Policy::ValuesAndExpressions::ProhibitVersionStrings - Don't use strings like C<v1.4> or C<1.4.5> when including other modules.
 
 =head1 DESCRIPTION
 
