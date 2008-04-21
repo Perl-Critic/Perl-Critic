@@ -1037,15 +1037,16 @@ sub _is_perl {
 
 sub shebang_line {
     my $doc = shift;
-    my $first_comment = $doc->find_first('PPI::Token::Comment');
-    return if !$first_comment;
-    my $location = $first_comment->location();
+    my $first_element = $doc->first_element();
+    return if not $first_element;
+    return if not $first_element->isa('PPI::Token::Comment');
+    my $location = $first_element->location();
     return if !$location;
     # The shebang must be the first two characters in the file, according to
     # http://en.wikipedia.org/wiki/Shebang_(Unix)
     return if $location->[0] != 1; # line number
     return if $location->[1] != 1; # column number
-    my $shebang = $first_comment->content;
+    my $shebang = $first_element->content;
     return if $shebang !~ m{ \A [#]! }mx;
     return $shebang;
 }
