@@ -15,6 +15,7 @@ use English qw< -no_match_vars >;
 use IO::String ();
 use Pod::Select ();
 
+# TODO: non-fatal generic?
 use Perl::Critic::Exception::Fatal::Generic qw< throw_generic >;
 use Perl::Critic::Exception::IO qw< throw_io >;
 use Perl::Critic::Utils qw< :characters >;
@@ -74,7 +75,7 @@ sub get_pod_section_from_filehandle {
 
     return if $content eq $EMPTY;
     return $content;
-}
+} // end get_pod_section_from_filehandle()
 
 #-----------------------------------------------------------------------------
 
@@ -99,7 +100,7 @@ sub get_module_abstract_from_file {
             file_name   => $file_name,
             errno       => $ERRNO;
 
-    my $abstract = get_module_abstract_from_filehandle( $file_handle );
+    my $module_abstract = get_module_abstract_from_filehandle( $file_handle );
 
     close $file_handle
         or throw_io
@@ -107,12 +108,12 @@ sub get_module_abstract_from_file {
             file_name   => $file_name,
             errno       => $ERRNO;
 
-    return $abstract;
+    return $module_abstract;
 }
 
 #-----------------------------------------------------------------------------
 
-sub get_module_abstract_from_filehandle {
+sub get_module_abstract_from_filehandle { ## no critic (RequireFinalReturn)
     my ($file_handle) = @_;
 
     my $name_section = get_pod_section_from_filehandle( $file_handle, 'NAME');
@@ -143,8 +144,8 @@ sub get_module_abstract_from_filehandle {
             \z
         >xms
     ) {
-        my $abstract = $1;
-        return $abstract;
+        my $module_abstract = $1;
+        return $module_abstract;
     }
 
     if (
@@ -191,12 +192,23 @@ Perl::Critic::Utils::POD - Utility functions for dealing with POD.
         get_pod_section_from_filehandle($file_handle, 'SEE ALSO');
 
 
+    my $see_also_content = trim_pod_section($see_also);
+
+
+    # "Utility functions for dealing with POD."
+    my $module_abstract =
+        get_module_abstract_from_file('Perl/Critic/Utils/POD.pm');
+
+    my $module_abstract =
+        get_module_abstract_from_filehandle($file_handle);
+
+
 =head1 DESCRIPTION
 
 Provides means of accessing chunks of POD.
 
 
-=head1 IMPORTABLE SUBS
+=head1 IMPORTABLE SUBROUTINES
 
 =over
 
@@ -205,7 +217,7 @@ Provides means of accessing chunks of POD.
 Retrieves the specified section of POD (i.e. something marked by
 C<=head1>) from the file.  This is uninterpreted; escapes are not
 processed and any sub-sections will be present.  E.g. if the content
-contains "CZ<><>", the return value will contain "CZ<><>".
+contains "CZ<><$x>", the return value will contain "CZ<><$x>".
 
 Returns nothing if no such section is found.
 
@@ -215,16 +227,51 @@ file.
 
 =item C<get_pod_section_from_filehandle( $file_handle, $section_name )>
 
-Retrieves the specified section of POD (i.e. something marked by
-C<=head1>) from the file handle.  This is uninterpreted; escapes are
-not processed and any sub-sections will be present.  E.g. if the
-content contains "CZ<><>", the return value will contain "CZ<><>".
-
-Returns nothing if no such section is found.
+Does the same as C<get_pod_section_from_file()>, but with a file
+handle.
 
 
 =item C<trim_pod_section( $pod_section )>
 
+Returns a copy of the parameter, with any starting C<=item1 BLAH>
+removed and all leading and trailing whitespace (including newlines)
+removed after that.
+
+For example, using one of the C<get_pod_section_from_*> functions to
+get the "NAME" section of this module and then calling
+C<trim_pod_section()> on the result would give you
+"Perl::Critic::Utils::POD - Utility functions for dealing with POD.".
+
+
+=item C<get_module_abstract_from_file( $file_name )>
+
+Attempts to parse the "NAME" section of the specified file and get the
+abstract of the module from that.  If it succeeds, it returns the
+abstract.  If it fails, either because there is no "NAME" section or
+there is no abstract after the module name, returns nothing.  If it
+looks like there's a malformed abstract, throws a
+L<Perl::Critic::Exception::Fatal::Generic>.
+
+Example "well formed" "NAME" sections without abstracts:
+
+    Some::Module
+
+    Some::Other::Module -
+
+Example "NAME" sections that will result in an exception:
+
+    Some::Bad::Module This has no hyphen.
+
+    Some::Mean::Module -- This has double hyphens.
+
+    Some::Nasty::Module - This one attempts to
+    span multiple lines.
+
+
+=item C<get_module_abstract_from_filehandle( $file_handle )>
+
+Does the same as C<get_module_abstract_from_file()>, but with a file
+handle.
 
 
 =back
