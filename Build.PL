@@ -105,8 +105,10 @@ my $builder = $class->new(
             MANIFEST.bak
             Makefile
             Makefile.old
+            lib/Perl/Critic/PolicySummary.pod
             pm_to_blib
             t/ControlStructures/ProhibitNegativeExpressionsInUnlessAndUntilConditions.run
+            t/Variables/RequireLocalizedPunctuationVars.run
         >,
         test_wrappers_to_generate(),
     ],

@@ -1,4 +1,5 @@
 cover_db
+lib/Perl/Critic/PolicySummary.pod
 t/*_without_optional_dependencies.t
 t/ControlStructures/ProhibitNegativeExpressionsInUnlessAndUntilConditions.run
 t/Variables/RequireLocalizedPunctuationVars.run

@@ -84,6 +84,8 @@ sub test_wrappers_to_generate {
 sub get_PL_files {
     my %PL_files;
 
+    $PL_files{'lib/Perl/Critic/PolicySummary.pod.PL'} =
+        'lib/Perl/Critic/PolicySummary.pod';
     $PL_files{'t/ControlStructures/ProhibitNegativeExpressionsInUnlessAndUntilConditions.run.PL'} =
         't/ControlStructures/ProhibitNegativeExpressionsInUnlessAndUntilConditions.run';
     $PL_files{'t/Variables/RequireLocalizedPunctuationVars.run.PL'} =

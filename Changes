@@ -20,12 +20,13 @@
 
      Policy Changes:
      * Variables::RequireLocalizedPunctuationVars now allows the use of "my".
+
+     http://rt.cpan.org/Ticket/Display.html?id=33937
+
      * RegularExpressions::ProhibitUnusualDelimiters now supports an
        "allow_all_brackets" option.
      * RegularExpressions::RequireBracesForMultiline now supports an
        "allow_all_brackets" option.
-
-     http://rt.cpan.org/Ticket/Display.html?id=33937
 
      New Developer Features:
      * If a document specifies a minimum perl version, e.g. "use 5.008003",

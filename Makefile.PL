@@ -63,8 +63,10 @@ WriteMakefile(
         FILES =>
             join
                 q< >,
+                'lib/Perl/Critic/PolicySummary.pod',
                 test_wrappers_to_generate(),
-                't/ControlStructures/ProhibitNegativeExpressionsInUnlessAndUntilConditions.run'
+                't/ControlStructures/ProhibitNegativeExpressionsInUnlessAndUntilConditions.run',
+                't/Variables/RequireLocalizedPunctuationVars.run',
     },
 );
 

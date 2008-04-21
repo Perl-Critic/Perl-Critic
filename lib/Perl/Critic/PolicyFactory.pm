@@ -43,6 +43,8 @@ my @SITE_POLICY_NAMES = ();
 
 #-----------------------------------------------------------------------------
 
+# Blech!!!  This is ug-lee.  Belongs in the constructor.  And it shouldn't be
+# called "test" mode.
 sub import {
 
     my ( $class, %args ) = @_;
