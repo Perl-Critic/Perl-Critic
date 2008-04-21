@@ -10,16 +10,21 @@
 use strict;
 use warnings;
 
+use English qw< -no_match_vars >;
+
 use File::Spec;
-use Test::More;
 use List::MoreUtils qw(any);
 
 use Perl::Critic::PolicyFactory ( -test => 1 );
 use Perl::Critic::TestUtils qw{ bundled_policy_names };
 
+use Test::More;
+
 #-----------------------------------------------------------------------------
 
-if (open my ($fh), '<', File::Spec->catfile(qw(lib Perl Critic PolicySummary.pod))) {
+my $summary_file =
+    File::Spec->catfile( qw< lib Perl Critic PolicySummary.pod > );
+if (open my ($fh), '<', $summary_file) {
 
     my $content = do {local $/=undef; <$fh> };
     close $fh;
@@ -71,7 +76,8 @@ if (open my ($fh), '<', File::Spec->catfile(qw(lib Perl Critic PolicySummary.pod
     }
 }
 else {
-    fail 'Cannot locate the PolicySummary.pod file';
+    plan 'no_plan';
+    fail qq<Cannot open "$summary_file": $ERRNO>;
 }
 
 #-----------------------------------------------------------------------------
