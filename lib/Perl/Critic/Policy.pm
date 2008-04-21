@@ -13,6 +13,7 @@ use warnings;
 use English qw< -no_match_vars >;
 use Readonly;
 
+use File::Spec ();
 use String::Format qw< stringf >;
 
 use overload ( q<""> => 'to_string', cmp => '_compare' );
@@ -469,6 +470,15 @@ sub _format_lack_of_parameter_metadata {
 
     return
         'Cannot programmatically discover what parameters this policy takes.';
+}
+
+sub _get_source_file {
+    my ($self) = @_;
+
+    my $relative_path =
+        File::Spec->catfile( split m/::/xms, ref $self ) . '.pm';
+
+    return $INC{$relative_path};
 }
 
 
