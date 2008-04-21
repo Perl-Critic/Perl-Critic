@@ -32,3 +32,6 @@ functions = open close
 
 [RegularExpressions::ProhibitUnusualDelimiters]
 allow_all_brackets = 1
+
+[RegularExpressions::RequireBracesForMultiline]
+allow_all_brackets = 1
