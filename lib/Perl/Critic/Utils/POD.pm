@@ -75,7 +75,7 @@ sub get_pod_section_from_filehandle {
 
     return if $content eq $EMPTY;
     return $content;
-} // end get_pod_section_from_filehandle()
+}
 
 #-----------------------------------------------------------------------------
 
