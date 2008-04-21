@@ -70,7 +70,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::ControlStructures::ProhibitCascadingIfElse - Don't write long "if-elsif-elsif-elsif-elsif.
+Perl::Critic::Policy::ControlStructures::ProhibitCascadingIfElse - Don't write long "if-elsif-elsif-elsif-elsif...else" chains.
 
 =head1 DESCRIPTION
 
