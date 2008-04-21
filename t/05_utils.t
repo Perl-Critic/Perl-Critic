@@ -12,7 +12,7 @@ use warnings;
 
 use PPI::Document;
 
-use Test::More tests => 103;
+use Test::More tests => 115;
 
 #-----------------------------------------------------------------------------
 
@@ -40,6 +40,7 @@ can_ok('main', 'policy_long_name');
 can_ok('main', 'policy_short_name');
 can_ok('main', 'precedence_of');
 can_ok('main', 'severity_to_number');
+can_ok('main', 'shebang_line');
 can_ok('main', 'verbosity_to_format');
 can_ok('main', 'is_unchecked_call');
 
@@ -225,8 +226,7 @@ is( interpolate( 'literal'    ), "literal",    'Interpolation' );
 
 
 #-----------------------------------------------------------------------------
-# Test _is_perl() subroutine.  This used to be part of `perlcritic` but I
-# moved it into the Utils module so it could be shared with Test::P::C
+# Test _is_perl() and shebang_line() subroutines.
 
 {
     for ( qw(foo.t foo.pm foo.pl foo.PL) ) {
@@ -239,17 +239,26 @@ is( interpolate( 'literal'    ), "literal",    'Interpolation' );
 
     use File::Temp qw<tempfile>;
 
-    my @perl_shebangs = ( 
-        '#!perl', 
-        '#!/usr/local/bin/perl', 
+    my @perl_shebangs = (
+        '#!perl',
+        '#!/usr/local/bin/perl',
         '#!/usr/local/bin/perl-5.8',
         '#!/bin/env perl',
+        '#!perl ## no critic',
+        '#!perl ## no critic (foo)',
     );
 
-    for (@perl_shebangs) {
+    for my $shebang (@perl_shebangs) {
         my ($fh, $filename) = tempfile() or die 'Could not open tempfile';
-        print {$fh} "$_\n"; close $fh; # Must close to flush buffer
-        ok( Perl::Critic::Utils::_is_perl($filename), qq{Is perl: '$_'});
+        print {$fh} "$shebang\n"; close $fh; # Must close to flush buffer
+        ok( Perl::Critic::Utils::_is_perl($filename), qq{Is perl: '$shebang'});
+
+        my $document = PPI::Document->new(\$shebang);
+        is(
+            Perl::Critic::Utils::shebang_line($document),
+            $shebang,
+            qq<shebang_line($shebang)>,
+        );
     }
 
     my @not_perl_shebangs = (
@@ -258,10 +267,17 @@ is( interpolate( 'literal'    ), "literal",    'Interpolation' );
         '#!/bin/env python',
     );
 
-    for (@not_perl_shebangs) {
+    for my $shebang (@not_perl_shebangs) {
         my ($fh, $filename) = tempfile or die 'Could not open tempfile';
-        print {$fh} "$_\n"; close $fh; # Must close to flush buffer
-        ok( ! Perl::Critic::Utils::_is_perl($_), qq{Is not perl: '$_'});
+        print {$fh} "$shebang\n"; close $fh; # Must close to flush buffer
+        ok( ! Perl::Critic::Utils::_is_perl($filename), qq{Is not perl: '$shebang'});
+
+        my $document = PPI::Document->new(\$shebang);
+        is(
+            Perl::Critic::Utils::shebang_line($document),
+            ($shebang eq 'shazbot' ? undef : $shebang),
+            qq<shebang_line($shebang)>,
+        );
     }
 }
 
