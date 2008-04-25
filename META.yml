@@ -3,7 +3,7 @@ name: Perl-Critic
 version: 1.083_001
 author:
   - 'Jeffrey Thalhammer <thaljef@cpan.org>'
-abstract: Critique Perl source code for best-practices
+abstract: Critique Perl source code for best-practices.
 license: perl
 resources:
   MailingList: http://perlcritic.tigris.org/servlets/SummarizeList?listName=users
@@ -22,6 +22,7 @@ requires:
   Module::Pluggable: 3.1
   PPI: 1.201
   Pod::PlainText: 0
+  Pod::Select: 0
   Pod::Usage: 0
   Readonly: 1.03
   Scalar::Util: 0
@@ -94,6 +95,9 @@ provides:
     version: 1.083_001
   Perl::Critic::Exception::Fatal::PolicyDefinition:
     file: lib/Perl/Critic/Exception/Fatal/PolicyDefinition.pm
+    version: 1.083_001
+  Perl::Critic::Exception::IO:
+    file: lib/Perl/Critic/Exception/IO.pm
     version: 1.083_001
   Perl::Critic::Policy:
     file: lib/Perl/Critic/Policy.pm
@@ -529,6 +533,9 @@ provides:
     version: 1.083_001
   Perl::Critic::Utils::McCabe:
     file: lib/Perl/Critic/Utils/McCabe.pm
+    version: 1.083_001
+  Perl::Critic::Utils::POD:
+    file: lib/Perl/Critic/Utils/POD.pm
     version: 1.083_001
   Perl::Critic::Utils::PPI:
     file: lib/Perl/Critic/Utils/PPI.pm
