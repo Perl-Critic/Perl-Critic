@@ -81,15 +81,14 @@ sub test_wrappers_to_generate {
             @tests_to_be_wrapped;
 }
 
-sub get_PL_files {
-    my %PL_files;
+my @TARGET_FILES = qw<
+    lib/Perl/Critic/PolicySummary.pod
+    t/ControlStructures/ProhibitNegativeExpressionsInUnlessAndUntilConditions.run
+    t/Variables/RequireLocalizedPunctuationVars.run
+>;
 
-    $PL_files{'lib/Perl/Critic/PolicySummary.pod.PL'} =
-        'lib/Perl/Critic/PolicySummary.pod';
-    $PL_files{'t/ControlStructures/ProhibitNegativeExpressionsInUnlessAndUntilConditions.run.PL'} =
-        't/ControlStructures/ProhibitNegativeExpressionsInUnlessAndUntilConditions.run';
-    $PL_files{'t/Variables/RequireLocalizedPunctuationVars.run.PL'} =
-        't/Variables/RequireLocalizedPunctuationVars.run';
+sub get_PL_files {
+    my %PL_files = map { ( "$_.PL" => $_ ) } @TARGET_FILES;
 
     $PL_files{'t/generate_without_optional_dependencies_wrappers.PL'} =
         [ test_wrappers_to_generate() ];
