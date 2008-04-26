@@ -279,6 +279,11 @@ severity.
 Good: C<< Foo::Bar->new >>, Bad: C<< new Foo::Bar >>
 
 
+=item * RegularExpressions::ProhibitSWSWSW
+
+Require C<split> instead of C<m/\s*\w*\s*\w*\s*/>.  From MJD's Red Flags.
+
+
 =item * VariablesAndExpressions::RequireConstantVersion (low severity)
 
 
