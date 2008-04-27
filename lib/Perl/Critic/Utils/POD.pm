@@ -38,6 +38,7 @@ our @EXPORT_OK = qw(
     get_pod_section_from_filehandle
     get_pod_section_from_string
     get_pod_section_for_module
+    trim_raw_pod_section
     trim_pod_section
     get_raw_module_abstract_from_file
     get_raw_module_abstract_from_filehandle
@@ -222,6 +223,8 @@ sub _get_pod_section_from_string {
 sub trim_raw_pod_section {
     my ($pod) = @_;
 
+    return if not defined $pod;
+
     $pod =~ s< \A =head1 \b [^\n]* \n $ ><>xms;
     $pod =~ s< \A \s+ ><>xms;
     $pod =~ s< \s+ \z ><>xms;
@@ -234,8 +237,10 @@ sub trim_raw_pod_section {
 sub trim_pod_section {
     my ($pod) = @_;
 
+    return if not defined $pod;
+
     $pod =~ s< \A [^\n]* \n ><>xms;
-    $pod =~ s< \A \s+ ><>xms;
+    $pod =~ s< \A \s* \n ><>xms;
     $pod =~ s< \s+ \z ><>xms;
 
     return $pod;
@@ -394,6 +399,7 @@ sub _get_module_abstract_from_filehandle { ## no critic (RequireFinalReturn)
         if (
             $name_section =~ m<
                 \A
+                \s*
                 (
                     \w [ \w:]+ \w
                 )
@@ -589,16 +595,19 @@ removed after that.
 
 For example, using one of the C<get_raw_pod_section_from_*> functions
 to get the "NAME" section of this module and then calling
-C<trim_pod_section()> on the result would give you
+C<trim_raw_pod_section()> on the result would give you
 "Perl::Critic::Utils::POD - Utility functions for dealing with POD.".
 
 
 =item C<trim_pod_section( $pod_section )>
 
 Returns a copy of the parameter, with any starting line removed and
-all leading and trailing whitespace (including newlines) removed after
-that.  Since this cannot count upon a C<=item1> marker, this is much
-less reliable than C<trim_raw_pod_section()>.
+leading blank lines and trailing whitespace (including newlines)
+removed after that.  Note that only leading whitespace on the first
+real line of the section will remain.
+
+Since this cannot count upon a C<=item1> marker, this is much less
+reliable than C<trim_raw_pod_section()>.
 
 
 =item C<get_raw_module_abstract_from_file( $file_name )>

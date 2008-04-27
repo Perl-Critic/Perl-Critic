@@ -14,7 +14,7 @@ use English qw< -no_match_vars >;
 use Readonly;
 use Carp qw< confess >;
 
-use Test::More tests => 57;
+use Test::More tests => 62;
 
 #-----------------------------------------------------------------------------
 
@@ -38,6 +38,7 @@ can_ok('main', 'get_pod_section_from_file');
 can_ok('main', 'get_pod_section_from_filehandle');
 can_ok('main', 'get_pod_section_from_string');
 can_ok('main', 'get_pod_section_for_module');
+can_ok('main', 'trim_raw_pod_section');
 can_ok('main', 'trim_pod_section');
 can_ok('main', 'get_raw_module_abstract_from_file');
 can_ok('main', 'get_raw_module_abstract_from_filehandle');
@@ -299,12 +300,20 @@ stink.
 
 END_POD
 
-    my $trimmed = trim_pod_section( $original );
+    my $trimmed = trim_raw_pod_section( $original );
 
     my $expected =
         q<We like talking dirty. We smoke and we drink. >
         . qq<We're KMFDM and all other bands\n>
         . q<stink.>;
+
+    is(
+        $trimmed,
+        $expected,
+        'trim_raw_pod_section() with section header',
+    );
+
+    $trimmed = trim_pod_section( $original );
 
     is(
         $trimmed,
@@ -322,7 +331,7 @@ And I hope someday to be in a position where I can do even less.
 
 END_VOCAL_SAMPLE
 
-    my $trimmed = trim_pod_section( $original );
+    my $trimmed = trim_raw_pod_section( $original );
 
     my $expected =
         q<You see, I believe in the noble, aristocratic art of doin' >
@@ -333,7 +342,44 @@ END_VOCAL_SAMPLE
     is(
         $trimmed,
         $expected,
+        'trim_raw_pod_section() without section header',
+    );
+
+    $trimmed = trim_pod_section( $original );
+
+    is(
+        $trimmed,
+        $expected,
         'trim_pod_section() without section header',
+    );
+}
+
+
+{
+    my $original = <<'END_INDENTATION';
+
+    Some indented text.
+
+END_INDENTATION
+
+    my $trimmed = trim_raw_pod_section( $original );
+
+    my $expected = q<Some indented text.>;
+
+    is(
+        $trimmed,
+        $expected,
+        'trim_raw_pod_section() indented',
+    );
+
+    $trimmed = trim_pod_section( $original );
+
+    $expected = q<    > . $expected;
+
+    is(
+        $trimmed,
+        $expected,
+        'trim_pod_section() indented',
     );
 }
 

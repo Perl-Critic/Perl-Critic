@@ -16,10 +16,15 @@ use File::Basename qw(basename);
 use IO::String qw();
 use Pod::PlainText qw();
 use String::Format qw(stringf);
+
 use overload ( q{""} => 'to_string', cmp => '_compare' );
 
-use Perl::Critic::Utils qw{ :characters :internal_lookup };
-use Perl::Critic::Exception::Fatal::Internal qw{ &throw_internal };
+use Perl::Critic::Utils qw< :characters :internal_lookup >;
+use Perl::Critic::Utils::POD qw<
+    get_pod_section_for_module
+    trim_pod_section
+>;
+use Perl::Critic::Exception::Fatal::Internal qw< &throw_internal >;
 
 our $VERSION = '1.083_001';
 
@@ -117,17 +122,20 @@ sub location {
 #-----------------------------------------------------------------------------
 
 sub diagnostics {
-    my $self = shift;
-    my $pol = $self->policy();
-    if (!$DIAGNOSTICS{$pol}) {
-        if ( my $file = _mod2file($pol) ) {
-            if ( my $diags = _get_diagnostics($file) ) {
-               $DIAGNOSTICS{$pol} = $diags;
-            }
-        }
-        $DIAGNOSTICS{$pol} ||= "    No diagnostics available\n";
+    my ($self) = @_;
+    my $policy = $self->policy();
+
+    if ( not $DIAGNOSTICS{$policy} ) {
+        eval {
+            my $module_name = ref $policy || $policy;
+            $DIAGNOSTICS{$policy} =
+                trim_pod_section(
+                    get_pod_section_for_module( $module_name, 'DESCRIPTION' )
+                );
+        };
+        $DIAGNOSTICS{$policy} ||= "    No diagnostics available\n";
     }
-    return $DIAGNOSTICS{$pol};
+    return $DIAGNOSTICS{$policy};
 }
 
 #-----------------------------------------------------------------------------
@@ -220,46 +228,6 @@ sub to_string {
 # place.
 
 sub _compare { return "$_[0]" cmp "$_[1]" }
-
-#-----------------------------------------------------------------------------
-
-sub _mod2file {
-    my $module = shift;
-    $module  =~ s{::}{/}mxg;
-    $module .= '.pm';
-    return $INC{$module} || $EMPTY;
-}
-
-#-----------------------------------------------------------------------------
-
-sub _get_diagnostics {
-
-    my $file = shift;
-
-    (my $podfile = $file) =~ s{[.][^.]+ \z}{.pod}mx;
-    if (-f $podfile)
-    {
-       $file = $podfile;
-    }
-    # Extract POD into a string
-    my $pod_string = $EMPTY;
-    my $handle     = IO::String->new( \$pod_string );
-    my $parser     = Pod::PlainText->new();
-    $parser->select('DESCRIPTION');
-
-    # Use parse_from_filehandle instead of parse_from_file as a
-    # workaround for RT bug #21009 and #21010, which document a bad
-    # interaction with Devel::Cover 0.58 and
-    # Pod::Parser::parse_from_file
-    return $EMPTY if not (open my $fh, '<', $file);
-    $parser->parse_from_filehandle( $fh, $handle );
-    return $EMPTY if not close $fh;
-
-    # Remove header and trailing whitespace.
-    $pod_string =~ s{ \A \s* DESCRIPTION \s* \n}{}mx;
-    $pod_string =~ s{ \s* \z}{}mx;
-    return $pod_string;
-}
 
 #-----------------------------------------------------------------------------
 

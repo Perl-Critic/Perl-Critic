@@ -25,7 +25,7 @@ keywords = URL Date Author Revision
 allow_leading_tabs = 0
 
 [Documentation::PodSpelling]
-stop_words = accessor accessors autoflushes AUTOLOAD backticks bareword barewords BBEdit bitwise boolean booleans builtin CGI config CPAN CVS dereference dereferencing Dolan Dominus elsif exponentials filehandle filehandle filehandles filename globals globbing Guzis hashref HEREDOC HEREDOCs IDE lvalue Maxia Mehner memoization metacharacters Metadata metadata multi-line mutators namespace namespaces PBP perl perlcritic perlcriticrc perldoc Perlish perls PolicyListing postfix PPI pragma pragmas prepend prepending programmatically readline Readonly refactor refactoring regex runtime Schwartzian sigil sigils SQL STDERR STDIN STDOUT stringification subdirectories superclass TerMarsch Thalhammer TODO typeglob UI unblessed undef unescaped vice-versa whitespace
+stop_words = accessor accessors autoflushes AUTOLOAD backticks bareword barewords BBEdit bitwise boolean booleans builtin CGI config CPAN CVS dereference dereferencing Dolan Dominus elsif exponentials filehandle filehandle filehandles filename globals globbing Guzis hashref HEREDOC HEREDOCs IDE lvalue Maxia Mehner memoization metacharacters Metadata metadata multi-line mutators namespace namespaces PBP perl perlcritic perlcriticrc perldoc Perlish perls PolicyListing postfix PPI pragma pragmas prepend prepending programmatically readline Readonly refactor refactoring regex runtime Schwartzian sigil sigils SQL STDERR STDIN STDOUT stringification subdirectories superclass TerMarsch Thalhammer TODO typeglob UI unblessed undef unescaped unparsed vice-versa whitespace
 
 [InputOutput::RequireCheckedSyscalls]
 functions = open close

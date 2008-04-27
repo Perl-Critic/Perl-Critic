@@ -59,7 +59,7 @@ my $doc = PPI::Document->new(\$code);
 my $no_diagnostics_msg = qr/ \s* No [ ] diagnostics [ ] available \s* /xms;
 my $viol = Perl::Critic::Violation->new( 'Foo', 'Bar', $doc, 99, );
 
-my $expected_location = $PPI::VERSION ge '1.116' ? [1,1,1] : [0,0,0];
+my $expected_location = [1,1,1];
 
 is(        $viol->description(), 'Foo',    'description');
 is(        $viol->explanation(), 'Bar',    'explanation');
