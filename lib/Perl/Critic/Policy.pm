@@ -30,6 +30,7 @@ use Perl::Critic::Utils qw<
     severity_to_number
 >;
 use Perl::Critic::Utils::DataConversion qw< dor >;
+use Perl::Critic::Utils::POD qw< get_module_abstract_for_module >;
 use Perl::Critic::Exception::AggregateConfiguration;
 use Perl::Critic::Exception::Configuration;
 use Perl::Critic::Exception::Configuration::Option::Policy::ExtraParameter;
@@ -353,6 +354,14 @@ sub default_themes {
 
 #-----------------------------------------------------------------------------
 
+sub get_abstract {
+    my ($self) = @_;
+
+    return get_module_abstract_for_module( ref $self );
+}
+
+#-----------------------------------------------------------------------------
+
 sub parameter_metadata_available {
     my ($self) = @_;
 
@@ -429,16 +438,17 @@ sub to_string {
 
     # Wrap the more expensive ones in sub{} to postpone evaluation
     my %fspec = (
-         'O' => sub { $self->_format_parameters(@_) },
-         'U' => sub { $self->_format_lack_of_parameter_metadata(@_) },
          'P' => sub { $self->get_long_name() },
          'p' => sub { $self->get_short_name() },
+         'a' => sub { dor($self->get_abstract(), $EMPTY) },
+         'O' => sub { $self->_format_parameters(@_) },
+         'U' => sub { $self->_format_lack_of_parameter_metadata(@_) },
+         'S' => sub { $self->default_severity() },
+         's' => sub { $self->get_severity() },
          'T' => sub { join $SPACE, $self->default_themes() },
          't' => sub { join $SPACE, $self->get_themes() },
          'V' => sub { dor( $self->default_maximum_violations_per_document(), $NO_LIMIT ) },
          'v' => sub { dor( $self->get_maximum_violations_per_document(), $NO_LIMIT ) },
-         'S' => sub { $self->default_severity() },
-         's' => sub { $self->get_severity() },
     );
     return stringf($FORMAT, %fspec);
 }
@@ -688,6 +698,12 @@ Appends additional themes to this Policy.  Any existing themes are
 preserved.  Duplicate themes will be removed.
 
 
+=item C< get_abstract() >
+
+Retrieve the abstract for this policy (the part of the NAME section of
+the POD after the module name), if it is available.
+
+
 =item C< parameter_metadata_available() >
 
 Returns whether information about the parameters is available.
@@ -754,6 +770,21 @@ capabilities, look at L<String::Format>. Valid escape characters are:
 
 =over
 
+=item C<%P>
+
+Name of the Policy module.
+
+
+=item C<%p>
+
+Name of the Policy without the C<Perl::Critic::Policy::> prefix.
+
+
+=item C<%a>
+
+The policy abstract.
+
+
 =item C<%O>
 
 List of supported policy parameters.  Takes an option of a format
@@ -770,26 +801,6 @@ what the message should be, which defaults to "Cannot programmatically
 discover what parameters this policy takes.".  The value of this
 option is interpolated in order to expand the standard escape
 sequences (C<\n>, C<\t>, etc.).
-
-
-=item C<%P>
-
-Name of the Policy module.
-
-
-=item C<%p>
-
-Name of the Policy without the C<Perl::Critic::Policy::> prefix.
-
-
-=item C<%V>
-
-The default maximum number of violations per document of the policy.
-
-
-=item C<%V>
-
-The current maximum number of violations per document of the policy.
 
 
 =item C<%S>
@@ -810,6 +821,16 @@ The default themes for the policy.
 =item C<%t>
 
 The current themes for the policy.
+
+
+=item C<%V>
+
+The default maximum number of violations per document of the policy.
+
+
+=item C<%v>
+
+The current maximum number of violations per document of the policy.
 
 
 =back
