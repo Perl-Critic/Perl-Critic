@@ -78,8 +78,7 @@ my $format = <<'END_POLICY';
 END_POLICY
 
 foreach my $policy (@policies) {
-    my $source_file = $policy->_get_source_file();
-    my $module_abstract = get_module_abstract_from_file( $source_file );
+    my $module_abstract = $policy->get_raw_abstract();
 
     printf
         {$pod_file}

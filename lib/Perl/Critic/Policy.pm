@@ -30,7 +30,10 @@ use Perl::Critic::Utils qw<
     severity_to_number
 >;
 use Perl::Critic::Utils::DataConversion qw< dor >;
-use Perl::Critic::Utils::POD qw< get_module_abstract_for_module >;
+use Perl::Critic::Utils::POD qw<
+    get_module_abstract_for_module
+    get_raw_module_abstract_for_module
+>;
 use Perl::Critic::Exception::AggregateConfiguration;
 use Perl::Critic::Exception::Configuration;
 use Perl::Critic::Exception::Configuration::Option::Policy::ExtraParameter;
@@ -358,6 +361,14 @@ sub get_abstract {
     my ($self) = @_;
 
     return get_module_abstract_for_module( ref $self );
+}
+
+#-----------------------------------------------------------------------------
+
+sub get_raw_abstract {
+    my ($self) = @_;
+
+    return get_raw_module_abstract_for_module( ref $self );
 }
 
 #-----------------------------------------------------------------------------
@@ -702,6 +713,13 @@ preserved.  Duplicate themes will be removed.
 
 Retrieve the abstract for this policy (the part of the NAME section of
 the POD after the module name), if it is available.
+
+
+=item C< get_raw_abstract() >
+
+Retrieve the abstract for this policy (the part of the NAME section of
+the POD after the module name), if it is available, in the unparsed
+form.
 
 
 =item C< parameter_metadata_available() >
