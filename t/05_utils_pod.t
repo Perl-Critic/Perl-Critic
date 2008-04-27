@@ -11,11 +11,15 @@ use strict;
 use warnings;
 
 use English qw< -no_match_vars >;
+use Readonly;
 use Carp qw< confess >;
 
-use IO::String;
+use Test::More tests => 57;
 
-use Test::More tests => 26;
+#-----------------------------------------------------------------------------
+
+Readonly::Scalar my $EXCEPTION_MESSAGE_REGEX =>
+    qr<malformed [ ] name [ ] section>xmsi;
 
 #-----------------------------------------------------------------------------
 
@@ -25,23 +29,43 @@ BEGIN {
 }
 
 
+can_ok('main', 'get_pod_file_for_module');
+can_ok('main', 'get_raw_pod_section_from_file');
+can_ok('main', 'get_raw_pod_section_from_filehandle');
+can_ok('main', 'get_raw_pod_section_from_string');
+can_ok('main', 'get_raw_pod_section_for_module');
 can_ok('main', 'get_pod_section_from_file');
 can_ok('main', 'get_pod_section_from_filehandle');
+can_ok('main', 'get_pod_section_from_string');
+can_ok('main', 'get_pod_section_for_module');
 can_ok('main', 'trim_pod_section');
+can_ok('main', 'get_raw_module_abstract_from_file');
+can_ok('main', 'get_raw_module_abstract_from_filehandle');
+can_ok('main', 'get_raw_module_abstract_from_string');
+can_ok('main', 'get_raw_module_abstract_for_module');
 can_ok('main', 'get_module_abstract_from_file');
 can_ok('main', 'get_module_abstract_from_filehandle');
+can_ok('main', 'get_module_abstract_from_string');
+can_ok('main', 'get_module_abstract_for_module');
 
 
 {
     my $code = q<my $x = 3;>;
-    my $code_handle = IO::String->new($code);
 
-    my $pod = get_pod_section_from_filehandle( $code_handle, 'SYNOPSIS' );
+    my $pod = get_raw_pod_section_from_string( $code, 'SYNOPSIS' );
 
     is(
         $pod,
         undef,
-        qq<get_pod_section_from_filehandle($code, 'SYNOPSIS')>,
+        qq<get_raw_pod_section_from_string($code, 'SYNOPSIS')>,
+    );
+
+    $pod = get_pod_section_from_string( $code, 'SYNOPSIS' );
+
+    is(
+        $pod,
+        undef,
+        qq<get_pod_section_from_string($code, 'SYNOPSIS')>,
     );
 }
 
@@ -50,14 +74,21 @@ can_ok('main', 'get_module_abstract_from_filehandle');
     my $code = <<'END_CODE';
 =pod
 END_CODE
-    my $code_handle = IO::String->new($code);
 
-    my $pod = get_pod_section_from_filehandle( $code_handle, 'SYNOPSIS' );
+    my $pod = get_raw_pod_section_from_string( $code, 'SYNOPSIS' );
 
     is(
         $pod,
         undef,
-        q<get_pod_section_from_filehandle('=pod', 'SYNOPSIS')>,
+        q<get_raw_pod_section_from_string('=pod', 'SYNOPSIS')>,
+    );
+
+    $pod = get_pod_section_from_string( $code, 'SYNOPSIS' );
+
+    is(
+        $pod,
+        undef,
+        q<get_pod_section_from_string('=pod', 'SYNOPSIS')>,
     );
 }
 
@@ -72,9 +103,8 @@ Some plain text.
 
 =cut
 END_CODE
-    my $code_handle = IO::String->new($code);
 
-    my $pod = get_pod_section_from_filehandle( $code_handle, 'FOO' );
+    my $pod = get_raw_pod_section_from_string( $code, 'FOO' );
 
     my $expected = <<'END_EXPECTED';
 =head1 FOO
@@ -85,7 +115,20 @@ END_EXPECTED
     is(
         $pod,
         $expected,
-        q<get_pod_section_from_filehandle('=head1 FOO Some plain text.', 'FOO')>,
+        q<get_raw_pod_section_from_string('=head1 FOO Some plain text.', 'FOO')>,
+    );
+
+    $pod = get_pod_section_from_string( $code, 'FOO' );
+
+    $expected = <<'END_EXPECTED';
+FOO
+    Some plain text.
+
+END_EXPECTED
+    is(
+        $pod,
+        $expected,
+        q<get_pod_section_from_string('=head1 FOO Some plain text.', 'FOO')>,
     );
 }
 
@@ -100,9 +143,8 @@ Some C<escaped> text.
 
 =cut
 END_CODE
-    my $code_handle = IO::String->new($code);
 
-    my $pod = get_pod_section_from_filehandle( $code_handle, 'FOO' );
+    my $pod = get_raw_pod_section_from_string( $code, 'FOO' );
 
     my $expected = <<'END_EXPECTED';
 =head1 FOO
@@ -113,7 +155,20 @@ END_EXPECTED
     is(
         $pod,
         $expected,
-        q/get_pod_section_from_filehandle('=head1 FOO Some C<escaped> text.', 'FOO')/,
+        q/get_raw_pod_section_from_string('=head1 FOO Some C<escaped> text.', 'FOO')/,
+    );
+
+    $pod = get_pod_section_from_string( $code, 'FOO' );
+
+    $expected = <<'END_EXPECTED';
+FOO
+    Some `escaped' text.
+
+END_EXPECTED
+    is(
+        $pod,
+        $expected,
+        q/get_pod_section_from_string('=head1 FOO Some C<escaped> text.', 'FOO')/,
     );
 }
 
@@ -130,9 +185,8 @@ Some plain text.
 
 =cut
 END_CODE
-    my $code_handle = IO::String->new($code);
 
-    my $pod = get_pod_section_from_filehandle( $code_handle, 'FOO' );
+    my $pod = get_raw_pod_section_from_string( $code, 'FOO' );
 
     my $expected = <<'END_EXPECTED';
 =head1 FOO
@@ -143,7 +197,20 @@ END_EXPECTED
     is(
         $pod,
         $expected,
-        q<get_pod_section_from_filehandle('=head1 FOO ... =head1 BAR', 'FOO')>,
+        q<get_raw_pod_section_from_string('=head1 FOO ... =head1 BAR', 'FOO')>,
+    );
+
+    $pod = get_pod_section_from_string( $code, 'FOO' );
+
+    $expected = <<'END_EXPECTED';
+FOO
+    Some plain text.
+
+END_EXPECTED
+    is(
+        $pod,
+        $expected,
+        q<get_pod_section_from_string('=head1 FOO ... =head1 BAR', 'FOO')>,
     );
 }
 
@@ -160,9 +227,8 @@ Some plain text.
 
 =cut
 END_CODE
-    my $code_handle = IO::String->new($code);
 
-    my $pod = get_pod_section_from_filehandle( $code_handle, 'FOO' );
+    my $pod = get_raw_pod_section_from_string( $code, 'FOO' );
 
     my $expected = <<'END_EXPECTED';
 =head1 FOO
@@ -175,7 +241,22 @@ END_EXPECTED
     is(
         $pod,
         $expected,
-        q<get_pod_section_from_filehandle('=head1 FOO ... =head2 BAR', 'FOO')>,
+        q<get_raw_pod_section_from_string('=head1 FOO ... =head2 BAR', 'FOO')>,
+    );
+
+    $pod = get_pod_section_from_string( $code, 'FOO' );
+
+    $expected = <<'END_EXPECTED';
+FOO
+    Some plain text.
+
+  BAR
+
+END_EXPECTED
+    is(
+        $pod,
+        $expected,
+        q<get_pod_section_from_string('=head1 FOO ... =head2 BAR', 'FOO')>,
     );
 }
 
@@ -189,14 +270,21 @@ Some plain text.
 
 =cut
 END_CODE
-    my $code_handle = IO::String->new($code);
 
-    my $pod = get_pod_section_from_filehandle( $code_handle, 'FOO' );
+    my $pod = get_raw_pod_section_from_string( $code, 'FOO' );
 
     is(
         $pod,
         undef,
-        q<get_pod_section_from_filehandle('=head2 FOO Some plain text.', 'FOO')>,
+        q<get_raw_pod_section_from_string('=head2 FOO Some plain text.', 'FOO')>,
+    );
+
+    $pod = get_pod_section_from_string( $code, 'FOO' );
+
+    is(
+        $pod,
+        undef,
+        q<get_pod_section_from_string('=head2 FOO Some plain text.', 'FOO')>,
     );
 }
 
@@ -260,15 +348,53 @@ A::Stupendous::Module - An abstract.
 
 END_MODULE
 
-    my $source_handle = IO::String->new($source);
-    my $result = get_module_abstract_from_filehandle( $source_handle );
-
     my $expected = q<An abstract.>;
+
+    my $result = get_raw_module_abstract_from_string( $source );
 
     is(
         $result,
         $expected,
-        q<get_module_abstract_from_filehandle() with proper abstract>,
+        q<get_raw_module_abstract_from_string() with proper abstract>,
+    );
+
+    $result = get_module_abstract_from_string( $source );
+
+    is(
+        $result,
+        $expected,
+        q<get_module_abstract_from_string() with proper abstract>,
+    );
+}
+
+
+{
+    my $source = <<'END_MODULE';
+
+=head1 NAME
+
+A::Stupendous::Code::Module - An abstract involving C<$code>.
+
+END_MODULE
+
+    my $expected = q<An abstract involving C<$code>.>;
+
+    my $result = get_raw_module_abstract_from_string( $source );
+
+    is(
+        $result,
+        $expected,
+        q<get_raw_module_abstract_from_string() with proper abstract>,
+    );
+
+    $expected = q<An abstract involving `$code'.>;
+
+    $result = get_module_abstract_from_string( $source );
+
+    is(
+        $result,
+        $expected,
+        q<get_module_abstract_from_string() with proper abstract>,
     );
 }
 
@@ -282,13 +408,20 @@ There's nobody home.
 
 END_MODULE
 
-    my $source_handle = IO::String->new($source);
-    my $result = get_module_abstract_from_filehandle( $source_handle );
+    my $result = get_raw_module_abstract_from_string( $source );
 
     is(
         $result,
         undef,
-        q<get_module_abstract_from_filehandle() with no name section>,
+        q<get_raw_module_abstract_from_string() with no name section>,
+    );
+
+    $result = get_module_abstract_from_string( $source );
+
+    is(
+        $result,
+        undef,
+        q<get_module_abstract_from_string() with no name section>,
     );
 }
 
@@ -302,13 +435,20 @@ END_MODULE
 
 END_MODULE
 
-    my $source_handle = IO::String->new($source);
-    my $result = get_module_abstract_from_filehandle( $source_handle );
+    my $result = get_raw_module_abstract_from_string( $source );
 
     is(
         $result,
         undef,
-        q<get_module_abstract_from_filehandle() without NAME section content>,
+        q<get_raw_module_abstract_from_string() without NAME section content>,
+    );
+
+    $result = get_module_abstract_from_string( $source );
+
+    is(
+        $result,
+        undef,
+        q<get_module_abstract_from_string() without NAME section content>,
     );
 }
 
@@ -322,13 +462,20 @@ A::Not::So::Stupendous::Module
 
 END_MODULE
 
-    my $source_handle = IO::String->new($source);
-    my $result = get_module_abstract_from_filehandle( $source_handle );
+    my $result = get_raw_module_abstract_from_string( $source );
 
     is(
         $result,
         undef,
-        q<get_module_abstract_from_filehandle() with no abstract>,
+        q<get_raw_module_abstract_from_string() with no abstract>,
+    );
+
+    $result = get_module_abstract_from_string( $source );
+
+    is(
+        $result,
+        undef,
+        q<get_module_abstract_from_string() with no abstract>,
     );
 }
 
@@ -342,13 +489,20 @@ A::Not::So::Stupendous::Module -
 
 END_MODULE
 
-    my $source_handle = IO::String->new($source);
-    my $result = get_module_abstract_from_filehandle( $source_handle );
+    my $result = get_raw_module_abstract_from_string( $source );
 
     is(
         $result,
         undef,
-        q<get_module_abstract_from_filehandle() with hyphen but no abstract>,
+        q<get_raw_module_abstract_from_string() with hyphen but no abstract>,
+    );
+
+    $result = get_module_abstract_from_string( $source );
+
+    is(
+        $result,
+        undef,
+        q<get_module_abstract_from_string() with hyphen but no abstract>,
     );
 }
 
@@ -362,9 +516,13 @@ A::Not::So::Stupendous::Module No hyphen.
 
 END_MODULE
 
-    test_exception_from_get_module_abstract_from_filehandle(
+    test_exception_from_get_raw_module_abstract_from_string(
         $source, q<with abstract but no hyphen>,
-    )
+    );
+
+    test_exception_from_get_module_abstract_from_string(
+        $source, q<with abstract but no hyphen>,
+    );
 }
 
 
@@ -377,9 +535,13 @@ A::Not::So::Stupendous::Module -- Double hyphen.
 
 END_MODULE
 
-    test_exception_from_get_module_abstract_from_filehandle(
+    test_exception_from_get_raw_module_abstract_from_string(
         $source, q<with double hyphen>,
-    )
+    );
+
+    test_exception_from_get_module_abstract_from_string(
+        $source, q<with double hyphen>,
+    );
 }
 
 
@@ -388,41 +550,72 @@ END_MODULE
 
 =head1 NAME
 
-A::Not::So::Stupendous::Module - Summary goes across
+A::Not::So::Stupendous::Module - Abstract goes across
 multiple lines.
 
 END_MODULE
 
-    test_exception_from_get_module_abstract_from_filehandle(
+    test_exception_from_get_raw_module_abstract_from_string(
         $source, q<with multiple lines>,
-    )
+    );
+
+# Cannot do this test: Pod::PlainText merges the lines.
+#    test_exception_from_get_module_abstract_from_string(
+#        $source, q<with multiple lines>,
+#    );
 }
 
 #-----------------------------------------------------------------------------
 
-sub test_exception_from_get_module_abstract_from_filehandle {
+sub test_exception_from_get_raw_module_abstract_from_string {
     my ($source, $name) = @_;
 
-    my $exception_message_regex = qr<malformed [ ] name [ ] section>xmsi;
     my $result;
-
-    my $source_handle = IO::String->new($source);
+    my $message_like_name =
+        qq<Got expected message for get_raw_module_abstract_from_string() $name>;
 
     local $EVAL_ERROR = undef;
     eval {
-        $result = get_module_abstract_from_filehandle( $source_handle );
+        $result = get_raw_module_abstract_from_string( $source );
     };
+    _test_exception_from_get_module_abstract_from_string(
+        $source, $name, $result, $message_like_name,
+    );
+
+    return;
+}
+
+sub test_exception_from_get_module_abstract_from_string {
+    my ($source, $name) = @_;
+
+    my $result;
+    my $message_like_name =
+        qq<Got expected message for get_module_abstract_from_string() $name>;
+
+    local $EVAL_ERROR = undef;
+    eval {
+        $result = get_module_abstract_from_string( $source );
+    };
+    _test_exception_from_get_module_abstract_from_string(
+        $source, $name, $result, $message_like_name,
+    );
+
+    return;
+}
+
+sub _test_exception_from_get_module_abstract_from_string {
+    my ($source, $name, $result, $message_like_name) = @_;
+
     my $eval_error = $EVAL_ERROR;
     my $exception = Perl::Critic::Exception::Fatal::Generic->caught();
-    my $message_like_name = qq<Got expected message for get_module_abstract_from_filehandle() $name>;
 
     if (
         ok(
             ref $exception,
-            qq<Got the right kind of exception for get_module_abstract_from_filehandle() $name>,
+            qq<Got the right kind of exception for get_module_abstract_from_string() $name>,
         )
     ) {
-        like( $exception->message(), $exception_message_regex, $message_like_name );
+        like( $exception->message(), $EXCEPTION_MESSAGE_REGEX, $message_like_name );
     }
     else {
         diag( 'Result: ', (defined $result ? ">$result<" : '<undef>') );
@@ -430,7 +623,7 @@ sub test_exception_from_get_module_abstract_from_filehandle {
             diag(
                 qq<However, did get an exception: $eval_error>,
             );
-            like( $eval_error, $exception_message_regex, $message_like_name );
+            like( $eval_error, $EXCEPTION_MESSAGE_REGEX, $message_like_name );
         }
         else {
             fail($message_like_name);
