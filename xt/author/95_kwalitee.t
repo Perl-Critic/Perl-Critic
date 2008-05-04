@@ -7,7 +7,7 @@ use Test::More;
 
 eval {
    require Test::Kwalitee;
-   Test::Kwalitee->import( tests => [ qw{ -no_pod_errors -no_symlinks } ] );
+   Test::Kwalitee->import( tests => [ qw{ -no_symlinks } ] );
 };
 plan( skip_all => 'Test::Kwalitee not installed; skipping' ) if $@;
 
