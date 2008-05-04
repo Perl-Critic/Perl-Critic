@@ -261,7 +261,6 @@ t/16_roundtrip_defaults.t
 t/20_policies.t
 t/20_policy_podspelling.t
 t/20_policy_prohibithardtabs.t
-t/20_policy_prohibitmagicnumbers.t
 t/20_policy_prohibittrailingwhitespace.t
 t/20_policy_requireconsistentnewlines.t
 t/20_policy_requiretidycode.t
