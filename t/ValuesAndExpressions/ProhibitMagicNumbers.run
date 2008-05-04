@@ -150,6 +150,27 @@ use Readonly;
 
 Readonly::Hash1 %frobnication_factors => ( 57 => 290 );
 
+## name Constant subroutines containing just a number are allowed.
+## failures 0
+## cut
+
+sub constant_subroutine { 104598 }
+
+## name Constant subroutines containing "return" and a number are allowed.
+## failures 0
+## cut
+
+sub constant_subroutine { return 9068; }
+
+## name Subroutines that contain something other than a constant return value are not allowed.
+## failures 1
+## cut
+
+sub constant_subroutine {
+    print 'blah';
+    return 9068;
+}
+
 ## name Magic numbers not allowed in ranges.
 ## failures 1
 ## cut

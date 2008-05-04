@@ -371,6 +371,7 @@ t/ValuesAndExpressions/ProhibitImplicitNewlines.run
 t/ValuesAndExpressions/ProhibitInterpolationOfLiterals.run
 t/ValuesAndExpressions/ProhibitLeadingZeros.run
 t/ValuesAndExpressions/ProhibitLongChainsOfMethodCalls.run
+t/ValuesAndExpressions/ProhibitMagicNumbers.run
 t/ValuesAndExpressions/ProhibitMismatchedOperators.run
 t/ValuesAndExpressions/ProhibitMixedBooleanOperators.run
 t/ValuesAndExpressions/ProhibitNoisyQuotes.run

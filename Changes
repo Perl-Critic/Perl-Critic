@@ -4,6 +4,8 @@
        as equivalent to "use strict".
      * TestingAndDebugging::RequireUseWarnings now accepts "use Moose::Role"
        as equivalent to "use warnings".
+     * ValuesAndExpressions::ProhibitMagicNumbers now accepts constant
+       subroutines.
 
 [1.083_001] Released on 2008-04-13
 

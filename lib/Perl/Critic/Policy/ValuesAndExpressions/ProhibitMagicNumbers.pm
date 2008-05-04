@@ -83,7 +83,7 @@ sub default_severity { return $SEVERITY_LOW          }
 sub default_themes   { return qw( core maintenance ) }
 sub applies_to       { return 'PPI::Token::Number'   }
 
-sub default_maximum_violations_per_document { return 10; }  ## no critic (ProhibitMagicNumbers)
+sub default_maximum_violations_per_document { return 10; }
 
 #----------------------------------------------------------------------------
 
@@ -121,7 +121,7 @@ sub _parse_allowed_values {
 }
 
 sub _determine_allowed_values {
-    my $config_string = shift;
+    my ($config_string) = @_;
 
     my @allowed_values;
     my @potential_allowed_values;
@@ -176,7 +176,7 @@ sub _determine_allowed_values {
 }
 
 sub _determine_checked_types {
-    my $self = shift;
+    my ($self) = @_;
 
     my %checked_types = (
         'PPI::Token::Number::Binary'  => 'Binary literals (',
@@ -212,6 +212,7 @@ sub violates {
 
     return if _element_is_in_an_include_readonly_or_version_statement($elem);
     return if _element_is_in_a_plan_statement($elem);
+    return if _element_is_in_a_constant_subroutine($elem);
 
     my $literal = $elem->literal();
     if (
@@ -254,7 +255,7 @@ sub violates {
 }
 
 sub _element_is_sole_component_of_a_subscript {
-    my $elem = shift;
+    my ($elem) = @_;
 
     my $parent = $elem->parent();
     if ( $parent and $parent->isa('PPI::Statement::Expression') ) {
@@ -275,7 +276,7 @@ sub _element_is_sole_component_of_a_subscript {
 }
 
 sub _element_is_in_an_include_readonly_or_version_statement {
-    my $elem = shift;
+    my ($elem) = @_;
 
     my $parent = $elem->parent();
     while ($parent) {
@@ -312,12 +313,12 @@ sub _element_is_in_an_include_readonly_or_version_statement {
     return 0;
 }
 
-# Allow "plan tests => 39".
+# Allow "plan tests => 39;".
 
 Readonly::Scalar my $PLAN_STATEMENT_MINIMUM_TOKENS => 4;
 
 sub _element_is_in_a_plan_statement {
-    my $elem = shift;
+    my ($elem) = @_;
 
     my $parent = $elem->parent();
     return 0 if not $parent;
@@ -335,6 +336,43 @@ sub _element_is_in_a_plan_statement {
 
     return 0 if not $children[2]->isa('PPI::Token::Operator');
     return 0 if $children[2]->content() ne '=>';
+
+    return 1;
+}
+
+sub _element_is_in_a_constant_subroutine {
+    my ($elem) = @_;
+
+    my $parent = $elem->parent();
+    return 0 if not $parent;
+
+    return 0 if not $parent->isa('PPI::Statement');
+
+    my $following = $elem->snext_sibling();
+    if ($following) {
+        return 0 if not $following->isa('PPI::Token::Structure');
+        return 0 if not $following->content() eq $SCOLON;
+        return 0 if $following->snext_sibling();
+    }
+
+    my $preceding = $elem->sprevious_sibling();
+    if ($preceding) {
+        return 0 if not $preceding->isa('PPI::Token::Word');
+        return 0 if not $preceding->content() eq 'return';
+        return 0 if $preceding->sprevious_sibling();
+    }
+
+    return 0 if $parent->snext_sibling();
+    return 0 if $parent->sprevious_sibling();
+
+    my $grandparent = $parent->parent();
+    return 0 if not $grandparent;
+
+    return 0 if not $grandparent->isa('PPI::Structure::Block');
+
+    my $greatgrandparent = $grandparent->parent();
+    return 0 if not $greatgrandparent;
+    return 0 if not $greatgrandparent->isa('PPI::Statement::Sub');
 
     return 1;
 }
