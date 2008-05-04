@@ -9,25 +9,33 @@
 
 use strict;
 use warnings;
-use File::Spec;
-use English qw(-no_match_vars);
-use List::MoreUtils qw(all any);
-use Perl::Critic::PolicyFactory (-test => 1);
-use Perl::Critic::Config qw();
-use Perl::Critic::Utils qw{ :severities };
-use Test::More (tests => 73);
 
-# common P::C testing tools
-use Perl::Critic::TestUtils qw{
+use English qw< -no_match_vars >;
+
+use File::Spec;
+use List::MoreUtils qw(all any);
+
+use Perl::Critic::Exception::AggregateConfiguration;
+use Perl::Critic::Config qw<>;
+use Perl::Critic::PolicyFactory (-test => 1);
+use Perl::Critic::TestUtils qw<
     bundled_policy_names
     names_of_policies_willing_to_work
-    };
+>;
+use Perl::Critic::Utils qw< :severities >;
+
+use Test::More (tests => 80);
+
 
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 #-----------------------------------------------------------------------------
 
-my @names_of_policies_willing_to_work = names_of_policies_willing_to_work();
+my @names_of_policies_willing_to_work =
+    names_of_policies_willing_to_work(
+        -severity   => $SEVERITY_LOWEST,
+        -theme      => 'core',
+    );
 my @native_policy_names  = bundled_policy_names();
 my $total_policies   = scalar @names_of_policies_willing_to_work;
 
@@ -39,8 +47,12 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
 {
     my $last_policy_count = $total_policies + 1;
     for my $severity ($SEVERITY_LOWEST .. $SEVERITY_HIGHEST) {
-        my $c = Perl::Critic::Config->new( -severity => $severity);
-        my $policy_count = scalar $c->policies();
+        my $configuration =
+            Perl::Critic::Config->new(
+                -severity   => $severity,
+                -theme      => 'core',
+            );
+        my $policy_count = scalar $configuration->policies();
         my $test_name = "Count native policies, severity: $severity";
         cmp_ok($policy_count, '<', $last_policy_count, $test_name);
         $last_policy_count = $policy_count;
@@ -55,7 +67,11 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
     my %profile = map { $_ => {} } @native_policy_names;
     my $last_policy_count = $total_policies + 1;
     for my $severity ($SEVERITY_LOWEST .. $SEVERITY_HIGHEST) {
-        my %pc_args = (-profile => \%profile, -severity => $severity);
+        my %pc_args = (
+            -profile    => \%profile,
+            -severity   => $severity,
+            -theme      => 'core',
+        );
         my $critic = Perl::Critic::Config->new( %pc_args );
         my $policy_count = scalar $critic->policies();
         my $test_name = "Count all policies, severity: $severity";
@@ -72,10 +88,26 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
 {
     my %profile = map { '-' . $_ => {} } @native_policy_names;
     for my $severity (undef, $SEVERITY_LOWEST .. $SEVERITY_HIGHEST) {
-        my %pc_args = (-profile => \%profile, -severity => $severity);
-        my @policies = Perl::Critic::Config->new( %pc_args )->policies();
-        my $test_name = 'no policies, severity ' . ($severity || 'undef');
-        is_deeply( \@policies, [], $test_name);
+        my $severity_string = $severity ? $severity : '<undef>';
+        my %pc_args = (
+            -profile    => \%profile,
+            -severity   => $severity,
+            -theme      => 'core',
+        );
+
+        eval {
+            Perl::Critic::Config->new( %pc_args )->policies();
+        };
+        my $exception = Perl::Critic::Exception::AggregateConfiguration->caught();
+        ok(
+            defined $exception,
+            "got exception when no policies were enabled at severity $severity_string.",
+        );
+        like(
+            $exception,
+            qr<There are no enabled policies>,
+            "got correct exception message when no policies were enabled at severity $severity_string.",
+        );
     }
 }
 
@@ -98,7 +130,11 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
     }
 
     for my $severity ( reverse $SEVERITY_LOWEST+1 .. $SEVERITY_HIGHEST ) {
-        my %pc_args = (-profile => \%profile, -severity => $severity);
+        my %pc_args = (
+            -profile    => \%profile,
+            -severity   => $severity,
+            -theme      => 'core',
+        );
         my $critic = Perl::Critic::Config->new( %pc_args );
         my $policy_count = scalar $critic->policies();
         my $expected_count = ($SEVERITY_HIGHEST - $severity + 1) * 10;
@@ -153,10 +189,15 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
         '-Miscellanea::RequireRcsKeywords' => {},
     );
 
-    my @in = qw(mixedcase RCS);
-    my %pc_config = (-severity => 1, -profile => \%profile, -include => \@in);
-    my @pols = Perl::Critic::Config->new( %pc_config )->policies();
-    is(scalar @pols, $total_policies, 'pattern matching');
+    my @include = qw(mixedcase RCS);
+    my %pc_args = (
+        -profile    => \%profile,
+        -severity   => 1,
+        -include    => \@include,
+        -theme      => 'core',
+    );
+    my @policies = Perl::Critic::Config->new( %pc_args )->policies();
+    is(scalar @policies, $total_policies, 'include pattern matching');
 }
 
 #-----------------------------------------------------------------------------
@@ -166,10 +207,14 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
     # the policies using the -exclude option.  Then we make sure that none
     # of the remaining policies match the -exclude patterns.
 
-    my @ex = qw(quote mixed VALUES); #Some assorted pattterns
-    my @pols = Perl::Critic::Config->new( -severity => 1, -exclude => \@ex )->policies();
-    my $matches = grep { my $pol = ref $_; grep { $pol !~ /$_/imx} @ex } @pols;
-    is(scalar @pols, $matches, 'pattern matching');
+    my @exclude = qw(quote mixed VALUES); #Some assorted pattterns
+    my %pc_args = (
+        -severity   => 1,
+        -exclude    => \@exclude,
+    );
+    my @policies = Perl::Critic::Config->new( %pc_args )->policies();
+    my $matches = grep { my $pol = ref $_; grep { $pol !~ /$_/imx} @exclude } @policies;
+    is(scalar @policies, $matches, 'exclude pattern matching');
 }
 
 #-----------------------------------------------------------------------------
@@ -179,14 +224,25 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
     # some of the same policies.  The -exclude option should have
     # precendece.
 
-    my @in = qw(builtinfunc); #Include BuiltinFunctions::*
-    my @ex = qw(block);       #Exclude RequireBlockGrep, RequireBlockMap
-    my %pc_config = ( -severity => 1, -include => \@in, -exclude => \@ex );
-    my @pols = Perl::Critic::Config->new( %pc_config )->policies();
-    my @pol_names = map {ref $_} @pols;
-    is_deeply( [grep {/block/imx} @pol_names], [], 'pattern match' );
+    my @include = qw(builtinfunc); #Include BuiltinFunctions::*
+    my @exclude = qw(block);       #Exclude RequireBlockGrep, RequireBlockMap
+    my %pc_args = (
+        -severity   => 1,
+        -include    => \@include,
+        -exclude    => \@exclude,
+    );
+    my @policies = Perl::Critic::Config->new( %pc_args )->policies();
+    my @pol_names = map {ref $_} @policies;
+    is_deeply(
+        [grep {/block/imx} @pol_names],
+        [],
+        'include/exclude pattern match had no "block" policies',
+    );
     # This odd construct arises because "any" can't be used with parens without syntax error(!)
-    ok( @{[any {/builtinfunc/imx} @pol_names]}, 'pattern match' );
+    ok(
+        @{[any {/builtinfunc/imx} @pol_names]},
+        'include/exclude pattern match had "builtinfunc" policies',
+    );
 }
 
 #-----------------------------------------------------------------------------
@@ -206,6 +262,7 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
 
     my %undef_args = map { $_ => undef } @switches;
     my $c = Perl::Critic::Config->new( %undef_args );
+    $c = Perl::Critic::Config->new( %undef_args );
     is( $c->force(),     0,     'Undefined -force');
     is( $c->only(),      0,     'Undefined -only');
     is( $c->severity(),  5,     'Undefined -severity');
@@ -249,12 +306,21 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
     );
 
     my %pc_config = (-severity => 1, -only => 1, -profile => \%profile);
-    my @pols = Perl::Critic::Config->new( %pc_config )->policies();
-    is(scalar @pols, 2, '-only switch');
+    my @policies = Perl::Critic::Config->new( %pc_config )->policies();
+    is(scalar @policies, 2, '-only switch');
 
     %pc_config = ( -severity => 1, -only => 1, -profile => {} );
-    @pols = Perl::Critic::Config->new( %pc_config )->policies();
-    is(scalar @pols, 0, '-only switch, empty profile');
+    eval { Perl::Critic::Config->new( %pc_config )->policies() };
+    my $exception = Perl::Critic::Exception::AggregateConfiguration->caught();
+    ok(
+        defined $exception,
+        "got exception with -only switch, empty profile.",
+    );
+    like(
+        $exception,
+        qr<There are no enabled policies>,
+        "got correct exception message with -only switch, empty profile.",
+    );
 }
 
 #-----------------------------------------------------------------------------
@@ -262,8 +328,8 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
 
 {
     my %pc_config = ('-single-policy' => 'ProhibitEvilModules');
-    my @pols = Perl::Critic::Config->new( %pc_config )->policies();
-    is(scalar @pols, 1, '-single-policy switch');
+    my @policies = Perl::Critic::Config->new( %pc_config )->policies();
+    is(scalar @policies, 1, '-single-policy switch');
 }
 
 #-----------------------------------------------------------------------------

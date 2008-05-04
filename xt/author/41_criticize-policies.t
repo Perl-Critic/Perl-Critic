@@ -50,7 +50,7 @@ Test::Perl::Critic->import( -profile => $rcfile );
 
 my $path =
     File::Spec->catfile(
-        -e 'blib' ? 'blib' : 'lib',
+        -e 'blib' ? 'blib/lib' : 'lib',
         qw< Perl Critic Policy >,
     );
 all_critic_ok( $path );

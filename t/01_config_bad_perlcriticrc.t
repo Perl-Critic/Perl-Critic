@@ -15,7 +15,7 @@
 use strict;
 use warnings;
 
-use English qw{ -no_match_vars };
+use English qw< -no_match_vars >;
 use Readonly;
 
 use Test::More;
@@ -23,14 +23,16 @@ use Test::More;
 use Perl::Critic::PolicyFactory (-test => 1);
 use Perl::Critic;
 
-Readonly::Scalar my $TEST_COUNT => 13;
+Readonly::Scalar my $TEST_COUNT => 14;
 plan tests => $TEST_COUNT;
 
 Readonly::Scalar my $PROFILE => 't/01_bad_perlcriticrc';
+Readonly::Scalar my $NO_ENABLED_POLICIES_MESSAGE =>
+    q<There are no enabled policies.>;
 Readonly::Scalar my $INVALID_PARAMETER_MESSAGE =>
-    q{The BuiltinFunctions::RequireBlockGrep policy doesn't take a "no_such_parameter" option.};
+    q<The BuiltinFunctions::RequireBlockGrep policy doesn't take a "no_such_parameter" option.>;
 Readonly::Scalar my $REQUIRE_POD_SECTIONS_SOURCE_MESSAGE_PREFIX =>
-    q{The value for the Documentation::RequirePodSections "source" option ("Zen_and_the_Art_of_Motorcycle_Maintenance") is not one of the allowed values: };
+    q<The value for the Documentation::RequirePodSections "source" option ("Zen_and_the_Art_of_Motorcycle_Maintenance") is not one of the allowed values: >;
 
 eval {
     my $critic = Perl::Critic->new( '-profile' => $PROFILE );
@@ -58,7 +60,7 @@ if ( not $test_passed ) {
 
 my @exceptions = @{ $eval_result->exceptions() };
 
-my @parameters = qw{
+my @parameters = qw<
     exclude
     include
     profile-strictness
@@ -67,14 +69,14 @@ my @parameters = qw{
     theme
     top
     verbose
-};
+>;
 
 my %expected_regexes =
     map
         { $_ => generate_global_message_regex( $_, $PROFILE ) }
         @parameters;
 
-my $expected_exceptions = 2 + scalar @parameters;
+my $expected_exceptions = 3 + scalar @parameters;
 is(
     scalar @exceptions,
     $expected_exceptions,
@@ -104,6 +106,12 @@ is(
     ( scalar grep { is_require_pod_sections_source_exception($_) } @exceptions ),
     1,
     "should have received an invalid source exception for RequirePodSections",
+);
+
+is(
+    ( scalar grep { $NO_ENABLED_POLICIES_MESSAGE eq $_ } @exceptions ),
+    1,
+    "should have received an no enabled policies exception",
 );
 
 sub generate_global_message_regex {

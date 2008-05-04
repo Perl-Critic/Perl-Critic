@@ -291,9 +291,11 @@ sub bundled_policy_names {
 }
 
 sub names_of_policies_willing_to_work {
+    my %configuration = @_;
+
     my @policies_willing_to_work =
         Perl::Critic::Config
-            ->new( -severity => $SEVERITY_LOWEST )
+            ->new( %configuration )
             ->policies();
 
     return map { ref $_ } @policies_willing_to_work;
@@ -424,10 +426,10 @@ Returns a list of Policy packages that come bundled with this package.  This
 functions by searching F<MANIFEST> for F<lib/Perl/Critic/Policy/*.pm> and
 converts the results to package names.
 
-=item names_of_policies_willing_to_work()
+=item names_of_policies_willing_to_work( %configuration )
 
 Returns a list of the packages of policies that are willing to function on
-the current system.
+the current system using the specified configuration.
 
 =back
 

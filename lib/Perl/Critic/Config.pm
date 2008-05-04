@@ -17,6 +17,7 @@ use Scalar::Util qw(blessed);
 
 use Perl::Critic::Exception::AggregateConfiguration;
 use Perl::Critic::Exception::Configuration;
+use Perl::Critic::Exception::Configuration::Generic;
 use Perl::Critic::Exception::Configuration::Option::Global::ParameterValue;
 use Perl::Critic::Exception::Fatal::Internal qw{ throw_internal };
 use Perl::Critic::PolicyFactory;
