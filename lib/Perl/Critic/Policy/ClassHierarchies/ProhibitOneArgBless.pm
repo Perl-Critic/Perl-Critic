@@ -54,6 +54,11 @@ __END__
 
 Perl::Critic::Policy::ClassHierarchies::ProhibitOneArgBless - Write C<bless {}, $class;> instead of just C<bless {};>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Always use the two-argument form of C<bless> because it allows

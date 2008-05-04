@@ -55,6 +55,11 @@ __END__
 
 Perl::Critic::Policy::RegularExpressions::RequireExtendedFormatting - Always use the C</x> modifier with regular expressions.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Extended regular expression formatting allows you mix whitespace and

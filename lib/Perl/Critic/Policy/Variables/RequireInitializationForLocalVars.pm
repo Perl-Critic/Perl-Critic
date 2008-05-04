@@ -58,6 +58,11 @@ __END__
 
 Perl::Critic::Policy::Variables::RequireInitializationForLocalVars - Write C<local $foo = $bar;> instead of just C<local $foo;>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Most people don't realize that a localized copy of a variable does not

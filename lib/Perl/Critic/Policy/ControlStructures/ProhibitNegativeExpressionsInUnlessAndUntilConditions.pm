@@ -145,6 +145,11 @@ __END__
 
 Perl::Critic::Policy::ControlStructures::ProhibitNegativeExpressionsInUnlessAndUntilConditions - Don't use operators like C<not>, C<!~>, and C<le> within C<until> and C<unless>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
   until ($foo ne 'blah') {          #not ok

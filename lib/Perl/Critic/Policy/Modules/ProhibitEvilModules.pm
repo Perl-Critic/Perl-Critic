@@ -111,6 +111,11 @@ __END__
 
 Perl::Critic::Policy::Modules::ProhibitEvilModules - Ban modules that aren't blessed by your shop.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Use this policy if you wish to prohibit the use of specific modules.

@@ -70,6 +70,11 @@ __END__
 
 Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars - Write C<$my_variable = 42> instead of C<$MyVariable = 42>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Conway's recommended naming convention is to use lower-case words

@@ -100,6 +100,11 @@ __END__
 
 Perl::Critic::Policy::TestingAndDebugging::RequireTestLabels - Tests should all have labels.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Most Perl modules with regression tests use L<Test::More> as

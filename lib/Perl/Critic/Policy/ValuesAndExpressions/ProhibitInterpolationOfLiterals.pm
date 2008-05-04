@@ -102,6 +102,11 @@ __END__
 
 Perl::Critic::Policy::ValuesAndExpressions::ProhibitInterpolationOfLiterals - Always use single quotes for literal strings.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Don't use double-quotes or C<qq//> if your string doesn't require

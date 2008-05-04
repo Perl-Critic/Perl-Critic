@@ -394,8 +394,12 @@ t/Variables/RequireNegativeIndices.run
 TODO.pod
 tools/ppidump
 tools/svnkeywords
+xt/author/40_criticize-code.t
 xt/author/40_criticize.t
 xt/author/40_perlcriticrc
+xt/author/40_perlcriticrc-code
+xt/author/41_criticize-policies.t
+xt/author/41_perlcriticrc-policies
 xt/author/80_policysummary.t
 xt/author/93_version.t
 xt/author/94_includes.t

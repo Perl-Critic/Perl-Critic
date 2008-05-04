@@ -91,6 +91,11 @@ __END__
 
 Perl::Critic::Policy::RegularExpressions::ProhibitFixedStringMatches - Use C<eq> or hash instead of fixed-pattern regexps.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 A regular expression that matches just a fixed set of constant strings is wasteful

@@ -69,6 +69,11 @@ __END__
 
 Perl::Critic::Policy::Documentation::RequirePodAtEnd - All POD should be after C<__END__>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Perl stops processing code when it sees an C<__END__> statement.  So,

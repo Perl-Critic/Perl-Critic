@@ -71,6 +71,11 @@ __END__
 
 Perl::Critic::Policy::RegularExpressions::ProhibitSingleCharAlternation - Use C<[abc]> instead of C<a|b|c>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Character classes (like C<[abc]>) are significantly faster than single

@@ -85,6 +85,11 @@ __END__
 
 Perl::Critic::Policy::Modules::RequireFilenameMatchesPackage - Package declaration must match filename.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 The package declaration should always match the name of the file that

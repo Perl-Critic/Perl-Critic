@@ -63,6 +63,11 @@ __END__
 
 Perl::Critic::Policy::Modules::RequireEndWithOne - End each module with an explicitly C<1;> instead of some funky expression.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 All files included via C<use> or C<require> must end with a true value

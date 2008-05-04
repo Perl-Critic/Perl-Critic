@@ -53,6 +53,11 @@ __END__
 
 Perl::Critic::Policy::BuiltinFunctions::ProhibitVoidMap - Don't use C<map> in void contexts.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 C<map> and C<grep> are intended to be pure functions, not mutators.

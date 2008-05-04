@@ -72,6 +72,11 @@ __END__
 
 Perl::Critic::Policy::TestingAndDebugging::ProhibitProlongedStrictureOverride - Don't turn off strict for large blocks of code.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Every agrees that C<use strict> is the first step to writing maintainable code

@@ -51,6 +51,11 @@ __END__
 
 Perl::Critic::Policy::ClassHierarchies::ProhibitAutoloading - AUTOLOAD methods should be avoided.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Declaring a subroutine with the name C<"AUTOLOAD"> will violate this

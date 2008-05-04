@@ -54,6 +54,11 @@ __END__
 
 Perl::Critic::Policy::Subroutines::ProhibitBuiltinHomonyms - Don't declare your own C<open> function.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Common sense dictates that you shouldn't declare subroutines with the

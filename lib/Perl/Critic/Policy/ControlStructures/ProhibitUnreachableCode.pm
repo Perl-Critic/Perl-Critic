@@ -98,6 +98,11 @@ __END__
 
 Perl::Critic::Policy::ControlStructures::ProhibitUnreachableCode - Don't write code after an unconditional C<die, exit, or next>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 This policy prohibits code following a statement which unconditionally alters

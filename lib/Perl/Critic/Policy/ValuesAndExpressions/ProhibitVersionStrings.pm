@@ -64,6 +64,11 @@ __END__
 
 Perl::Critic::Policy::ValuesAndExpressions::ProhibitVersionStrings - Don't use strings like C<v1.4> or C<1.4.5> when including other modules.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Whenever you C<use> or C<require> a module, you can specify a minimum

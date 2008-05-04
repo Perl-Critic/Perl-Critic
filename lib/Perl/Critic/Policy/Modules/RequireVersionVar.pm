@@ -112,6 +112,11 @@ __END__
 
 Perl::Critic::Policy::Modules::RequireVersionVar - Give every module a C<$VERSION> number.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Every Perl file (modules, libraries, and programs) should have a

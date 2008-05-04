@@ -99,6 +99,11 @@ __END__
 Perl::Critic::Policy::TestingAndDebugging::RequireUseWarnings - Always C<use warnings>.
 
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Using warnings, and paying attention to what they say, is probably the

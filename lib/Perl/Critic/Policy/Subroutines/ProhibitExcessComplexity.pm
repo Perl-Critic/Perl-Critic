@@ -69,6 +69,11 @@ __END__
 
 Perl::Critic::Policy::Subroutines::ProhibitExcessComplexity - Minimize complexity by factoring code into smaller subroutines.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 All else being equal, complicated code is more error-prone and more

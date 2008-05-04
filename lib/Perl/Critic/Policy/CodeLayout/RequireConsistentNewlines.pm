@@ -84,6 +84,11 @@ This policy works outside of PPI because PPI automatically normalizes
 source code to local newline conventions.  So, this will only work if
 we know the filename of the source code.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Source code files are divided into lines with line endings of C<\r>,

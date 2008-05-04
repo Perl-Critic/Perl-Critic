@@ -142,6 +142,11 @@ __END__
 
 Perl::Critic::Policy::Variables::ProhibitPackageVars - Eliminate globals declared with C<our> or C<use vars>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Conway suggests avoiding package variables completely, because they

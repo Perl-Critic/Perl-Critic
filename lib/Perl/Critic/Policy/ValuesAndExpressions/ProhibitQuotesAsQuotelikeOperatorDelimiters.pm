@@ -213,6 +213,11 @@ __END__
 Perl::Critic::Policy::ValuesAndExpressions::ProhibitQuotesAsQuotelikeOperatorDelimiters - Don't use quotes (C<'>, C<">, C<`>) as delimiters for the quote-like operators.
 
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 With the obvious exception of using single-quotes to prevent

@@ -59,6 +59,11 @@ __END__
 
 Perl::Critic::Policy::InputOutput::ProhibitTwoArgOpen - Write C<< open $fh, q{<}, $filename; >> instead of C<< open $fh, "<$filename"; >>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 The three-argument form of C<open> (introduced in Perl 5.6) prevents

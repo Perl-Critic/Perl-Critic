@@ -128,6 +128,11 @@ __END__
 
 Perl::Critic::Policy::CodeLayout::RequireTidyCode - Must run code through L<perltidy>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Conway does make specific recommendations for whitespace and

@@ -59,6 +59,11 @@ __END__
 
 Perl::Critic::Policy::BuiltinFunctions::ProhibitStringySplit - Write C<split /-/, $string> instead of C<split '-', $string>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 The C<split> function always interprets the PATTERN argument as a

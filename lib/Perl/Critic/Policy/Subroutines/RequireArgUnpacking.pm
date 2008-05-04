@@ -163,6 +163,11 @@ __END__
 
 Perl::Critic::Policy::Subroutines::RequireArgUnpacking - Always unpack C<@_> first.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Subroutines that use C<@_> directly instead of unpacking the arguments to

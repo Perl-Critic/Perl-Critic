@@ -50,6 +50,11 @@ __END__
 
 Perl::Critic::Policy::Miscellanea::ProhibitFormats - Do not use C<format>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Formats are one of the oldest features of Perl.  Unfortunately, they suffer

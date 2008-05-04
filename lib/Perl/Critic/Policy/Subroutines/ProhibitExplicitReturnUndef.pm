@@ -56,6 +56,11 @@ __END__
 
 Perl::Critic::Policy::Subroutines::ProhibitExplicitReturnUndef - Return failure with bare C<return> instead of C<return undef>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Returning C<undef> upon failure from a subroutine is pretty common.

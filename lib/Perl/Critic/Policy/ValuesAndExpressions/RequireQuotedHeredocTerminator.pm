@@ -51,6 +51,11 @@ __END__
 
 Perl::Critic::Policy::ValuesAndExpressions::RequireQuotedHeredocTerminator - Write C< print <<'THE_END' > or C< print <<"THE_END" >.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Putting single or double-quotes around your HEREDOC terminator make it obvious

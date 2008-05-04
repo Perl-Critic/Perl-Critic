@@ -175,6 +175,11 @@ __END__
 
 Perl::Critic::Policy::Subroutines::RequireFinalReturn - End every path through a subroutine with an explicit C<return> statement.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Require all subroutines to terminate explicitly with one of the following:

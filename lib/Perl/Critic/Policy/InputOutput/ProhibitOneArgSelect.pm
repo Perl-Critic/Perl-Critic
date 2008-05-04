@@ -54,6 +54,11 @@ __END__
 
 Perl::Critic::Policy::InputOutput::ProhibitOneArgSelect - Never write C<select($fh)>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Conway discourages the use of a raw C<select()> when setting

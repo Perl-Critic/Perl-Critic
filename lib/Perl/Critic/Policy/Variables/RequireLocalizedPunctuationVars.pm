@@ -102,6 +102,11 @@ __END__
 
 Perl::Critic::Policy::Variables::RequireLocalizedPunctuationVars - Magic variables should be assigned as "local".
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Punctuation variables (and their English.pm equivalents) are global

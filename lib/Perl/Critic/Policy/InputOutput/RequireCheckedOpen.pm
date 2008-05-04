@@ -53,6 +53,11 @@ __END__
 
 Perl::Critic::Policy::InputOutput::RequireCheckedOpen - Write C<< my $error = open $fh, $mode, $filename; >> instead of C<< open $fh, $mode, $filename; >>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 The perl builtin I/O function C<open> returns a false value on failure. That

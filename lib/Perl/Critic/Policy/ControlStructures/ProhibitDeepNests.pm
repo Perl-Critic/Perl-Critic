@@ -75,6 +75,11 @@ __END__
 
 Perl::Critic::Policy::ControlStructures::ProhibitDeepNests - Don't write deeply nested loops and conditionals.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Deeply nested code is often hard to understand and may be a sign that

@@ -228,6 +228,11 @@ __END__
 
 Perl::Critic::Policy::ControlStructures::ProhibitMutatingListFunctions - Don't modify C<$_> in list functions.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 C<map>, C<grep> and other list operators are intended to transform arrays into

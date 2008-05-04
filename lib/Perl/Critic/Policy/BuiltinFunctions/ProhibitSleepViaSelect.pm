@@ -58,6 +58,11 @@ __END__
 
 Perl::Critic::Policy::BuiltinFunctions::ProhibitSleepViaSelect - Use L<Time::HiRes> instead of something like C<select(undef, undef, undef, .05)>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Conway discourages the use of C<select()> for performing non-integer

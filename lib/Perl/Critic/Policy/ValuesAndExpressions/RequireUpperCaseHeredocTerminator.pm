@@ -52,6 +52,11 @@ __END__
 
 Perl::Critic::Policy::ValuesAndExpressions::RequireUpperCaseHeredocTerminator - Write C< <<'THE_END'; > instead of C< <<'theEnd'; >.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 For legibility, HEREDOC terminators should be all UPPER CASE letters

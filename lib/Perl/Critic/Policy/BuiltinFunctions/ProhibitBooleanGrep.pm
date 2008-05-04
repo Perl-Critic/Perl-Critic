@@ -96,6 +96,11 @@ __END__
 
 Perl::Critic::Policy::BuiltinFunctions::ProhibitBooleanGrep - Use C<List::MoreUtils::any> instead of C<grep> in boolean context.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Using C<grep> in boolean context is a common idiom for checking if any

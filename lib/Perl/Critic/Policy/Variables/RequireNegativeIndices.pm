@@ -192,6 +192,11 @@ __END__
 
 Perl::Critic::Policy::Variables::RequireNegativeIndices - Negative array index should be used.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Conway points out that

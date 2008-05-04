@@ -59,6 +59,11 @@ __END__
 
 Perl::Critic::Policy::ControlStructures::ProhibitCStyleForLoops - Write C<for(0..20)> instead of C<for($i=0; $i<=20; $i++)>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 The 3-part C<for> loop that Perl inherits from C is butt-ugly, and only

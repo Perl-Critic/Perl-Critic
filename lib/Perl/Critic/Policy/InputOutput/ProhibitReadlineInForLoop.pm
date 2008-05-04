@@ -52,6 +52,11 @@ __END__
 
 Perl::Critic::Policy::InputOutput::ProhibitReadlineInForLoop - Write C<< while( $line = <> ){...} >> instead of C<< for(<>){...} >>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Using the readline operator in a C<for> or C<foreach> loop is very

@@ -55,6 +55,11 @@ __END__
 
 Perl::Critic::Policy::ValuesAndExpressions::ProhibitNoisyQuotes - Use C<q{}> or C<qq{}> instead of quotes for awkward-looking strings.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Don't use quotes for one or two-character strings of non-alphanumeric

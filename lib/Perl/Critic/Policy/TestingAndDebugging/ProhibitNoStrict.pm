@@ -97,6 +97,11 @@ __END__
 
 Perl::Critic::Policy::TestingAndDebugging::ProhibitNoStrict - Prohibit various flavors of C<no strict>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 There are good reasons for disabling certain kinds of strictures, But

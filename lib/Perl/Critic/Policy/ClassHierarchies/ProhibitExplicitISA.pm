@@ -51,6 +51,11 @@ __END__
 
 Perl::Critic::Policy::ClassHierarchies::ProhibitExplicitISA - Employ C<use base> instead of C<@ISA>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Conway recommends employing C<use base qw(Foo)> instead of the usual

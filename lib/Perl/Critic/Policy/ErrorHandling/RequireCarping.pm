@@ -355,6 +355,11 @@ __END__
 
 Perl::Critic::Policy::ErrorHandling::RequireCarping - Use functions from L<Carp> instead of C<warn> or C<die>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 The C<die> and C<warn> functions both report the file and line number

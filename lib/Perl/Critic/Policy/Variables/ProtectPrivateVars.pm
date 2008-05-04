@@ -51,6 +51,11 @@ __END__
 
 Perl::Critic::Policy::Variables::ProtectPrivateVars - Prevent access to private vars in other packages.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 By convention Perl authors (like authors in many other languages)

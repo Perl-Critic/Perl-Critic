@@ -97,6 +97,11 @@ __END__
 
 Perl::Critic::Policy::TestingAndDebugging::ProhibitNoWarnings - Prohibit various flavors of C<no warnings>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 There are good reasons for disabling certain kinds of warnings.  But if you

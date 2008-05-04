@@ -71,6 +71,11 @@ __END__
 
 Perl::Critic::Policy::Modules::ProhibitExcessMainComplexity - Minimize complexity in code that is B<outside> of subroutines.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 All else being equal, complicated code is more error-prone and more expensive

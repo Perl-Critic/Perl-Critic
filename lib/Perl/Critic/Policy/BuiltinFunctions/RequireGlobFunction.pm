@@ -52,6 +52,11 @@ __END__
 
 Perl::Critic::Policy::BuiltinFunctions::RequireGlobFunction - Use C<glob q{*}> instead of <*>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Conway discourages the use of the C< <..> > construct for globbing, as

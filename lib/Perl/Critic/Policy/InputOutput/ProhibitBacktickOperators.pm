@@ -68,6 +68,11 @@ __END__
 
 Perl::Critic::Policy::InputOutput::ProhibitBacktickOperators - Discourage stuff like C<@files = `ls $directory`>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Backticks are super-convenient, especially for CGI programs, but I

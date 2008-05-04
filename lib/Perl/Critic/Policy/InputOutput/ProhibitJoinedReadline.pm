@@ -59,6 +59,11 @@ __END__
 
 Perl::Critic::Policy::InputOutput::ProhibitJoinedReadline - Use C<local $/ = undef> or L<File::Slurp> instead of joined readline.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 It's really easy to slurp a whole filehandle in at once with C<join

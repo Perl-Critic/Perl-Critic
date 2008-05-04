@@ -86,6 +86,11 @@ __END__
 Perl::Critic::Policy::Modules::RequireExplicitPackage - Always make the C<package> explicit.
 
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 In general, the first statement of any Perl module or

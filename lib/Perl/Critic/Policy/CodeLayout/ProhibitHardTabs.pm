@@ -74,6 +74,11 @@ __END__
 
 Perl::Critic::Policy::CodeLayout::ProhibitHardTabs - Use spaces instead of tabs.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Putting hard tabs in your source code (or POD) is one of the worst

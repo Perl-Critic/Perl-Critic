@@ -130,6 +130,11 @@ __END__
 
 Perl::Critic::Policy::Subroutines::ProhibitManyArgs - C<sub never { sub correct {} }>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Subroutines that expect large numbers of arguments are hard to use

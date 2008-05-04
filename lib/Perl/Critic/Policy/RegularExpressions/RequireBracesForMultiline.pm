@@ -88,6 +88,11 @@ __END__
 Perl::Critic::Policy::RegularExpressions::RequireBracesForMultiline - Use C<{> and C<}> to delimit multi-line regexps.
 
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Long regular expressions are hard to read.  A good practice is to use

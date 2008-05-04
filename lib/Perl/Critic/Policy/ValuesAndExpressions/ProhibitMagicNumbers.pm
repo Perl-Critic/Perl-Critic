@@ -392,6 +392,11 @@ __END__
 Perl::Critic::Policy::ValuesAndExpressions::ProhibitMagicNumbers - Don't mix numeric operators with string operands, or vice-versa.
 
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 What is a "magic number"?  A magic number is a number that appears in

@@ -61,6 +61,11 @@ __END__
 
 Perl::Critic::Policy::InputOutput::ProhibitBarewordFileHandles - Write C<open my $fh, q{<}, $filename;> instead of C<open FH, q{<}, $filename;>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Using bareword symbols to refer to file handles is particularly evil

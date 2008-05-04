@@ -132,6 +132,11 @@ __END__
 Perl::Critic::Policy::ValuesAndExpressions::ProhibitLongChainsOfMethodCalls - Long chains of method calls indicate tightly coupled code.
 
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 A long chain of method calls usually indicates that the code knows too

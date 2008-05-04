@@ -66,6 +66,11 @@ __END__
 
 Perl::Critic::Policy::Variables::ProhibitConditionalDeclarations - Do not write C< my $foo = $bar if $baz; >.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Declaring a variable with a postfix conditional is really confusing.

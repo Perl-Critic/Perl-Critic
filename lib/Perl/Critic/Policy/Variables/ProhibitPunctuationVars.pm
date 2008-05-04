@@ -62,6 +62,11 @@ __END__
 
 Perl::Critic::Policy::Variables::ProhibitPunctuationVars - Write C<$EVAL_ERROR> instead of C<$@>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Perl's vocabulary of punctuation variables such as C<$!>, C<$.>, and

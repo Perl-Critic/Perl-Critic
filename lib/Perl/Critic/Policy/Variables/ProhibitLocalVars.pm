@@ -65,6 +65,11 @@ __END__
 
 Perl::Critic::Policy::Variables::ProhibitLocalVars - Use C<my> instead of C<local>, except when you have to.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Since Perl 5, there are very few reasons to declare C<local>

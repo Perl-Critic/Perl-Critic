@@ -51,6 +51,11 @@ __END__
 
 Perl::Critic::Policy::ControlStructures::ProhibitUnlessBlocks - Write C<if(! $condition)> instead of C<unless($condition)>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Conway discourages using C<unless> because it leads to double-negatives

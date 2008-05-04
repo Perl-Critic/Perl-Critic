@@ -62,6 +62,11 @@ __END__
 
 Perl::Critic::Policy::Variables::RequireLexicalLoopIterators - Write C<for my $element (@list) {...}> instead of C<for $element (@list) {...}>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 C<for>/C<foreach> loops I<always> create new lexical variables for named

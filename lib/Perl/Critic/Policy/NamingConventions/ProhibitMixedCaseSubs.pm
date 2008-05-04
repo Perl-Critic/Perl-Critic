@@ -55,6 +55,11 @@ __END__
 
 Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseSubs - Write C<sub my_function{}> instead of C<sub MyFunction{}>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Conway's recommended naming convention is to use lower-case words

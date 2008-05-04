@@ -131,6 +131,11 @@ __END__
 
 Perl::Critic::Policy::CodeLayout::ProhibitParensWithBuiltins - Write C<open $handle, $path> instead of C<open($handle, $path)>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Conway suggests that all built-in functions be called without

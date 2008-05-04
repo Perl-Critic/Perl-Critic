@@ -65,6 +65,11 @@ __END__
 
 Perl::Critic::Policy::ValuesAndExpressions::RequireNumberSeparators - Write C< 141_234_397.0145 > instead of C< 141234397.0145 >.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Long numbers can be difficult to read.  To improve legibility, Perl

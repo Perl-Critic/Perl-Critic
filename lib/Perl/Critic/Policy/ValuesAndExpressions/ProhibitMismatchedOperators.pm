@@ -100,6 +100,11 @@ __END__
 
 Perl::Critic::Policy::ValuesAndExpressions::ProhibitMismatchedOperators - Don't mix numeric operators with string operands, or vice-versa.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Using the wrong operator type for a value can obscure coding intent

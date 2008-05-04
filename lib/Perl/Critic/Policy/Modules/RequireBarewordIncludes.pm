@@ -56,6 +56,11 @@ __END__
 
 Perl::Critic::Policy::Modules::RequireBarewordIncludes - Write C<require Module> instead of C<require 'Module.pm'>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 When including another module (or library) via the C<require> or

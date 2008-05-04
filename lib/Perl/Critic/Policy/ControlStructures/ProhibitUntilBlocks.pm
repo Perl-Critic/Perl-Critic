@@ -50,6 +50,11 @@ __END__
 
 Perl::Critic::Policy::ControlStructures::ProhibitUntilBlocks - Write C<while(! $condition)> instead of C<until($condition)>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Conway discourages using C<until> because it leads to double-negatives

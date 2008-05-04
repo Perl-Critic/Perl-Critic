@@ -102,6 +102,11 @@ __END__
 
 Perl::Critic::Policy::ControlStructures::ProhibitPostfixControls - Write C<if($condition){ do_something() }> instead of C<do_something() if $condition>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Conway discourages using postfix control structures (C<if>, C<for>,

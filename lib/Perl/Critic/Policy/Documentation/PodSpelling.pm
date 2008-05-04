@@ -248,6 +248,11 @@ __END__
 
 Perl::Critic::Policy::Documentation::PodSpelling - Check your spelling.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Did you write the documentation?  Check.

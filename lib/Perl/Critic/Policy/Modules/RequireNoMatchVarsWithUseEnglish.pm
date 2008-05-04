@@ -148,6 +148,11 @@ __END__
 Perl::Critic::Policy::Modules::RequireNoMatchVarsWithUseEnglish - C<use English> must be passed a C<-no_match_vars> argument.
 
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Due to unfortunate history, if you use the L<English> module but don't

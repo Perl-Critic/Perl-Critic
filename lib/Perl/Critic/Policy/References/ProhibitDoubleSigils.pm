@@ -54,6 +54,11 @@ __END__
 
 Perl::Critic::Policy::References::ProhibitDoubleSigils - Write C<@{ $array_ref }> instead of C<@$array_ref>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 When dereferencing a reference, put braces around the reference to

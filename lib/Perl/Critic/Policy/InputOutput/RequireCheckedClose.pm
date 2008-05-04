@@ -53,6 +53,11 @@ __END__
 
 Perl::Critic::Policy::InputOutput::RequireCheckedClose - Write C<< my $error = close $fh; >> instead of C<< close $fh; >>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 The perl builtin I/O function C<close> returns a false value on failure. That

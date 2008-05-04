@@ -94,6 +94,11 @@ __END__
 
 Perl::Critic::Policy::CodeLayout::ProhibitQuotedWordLists - Write C<qw(foo bar baz)> instead of C<('foo', 'bar', 'baz')>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Conway doesn't mention this, but I think C<qw()> is an underused

@@ -50,6 +50,11 @@ __END__
 
 Perl::Critic::Policy::Subroutines::ProhibitSubroutinePrototypes - Don't write C<sub my_function (@@) {}>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Contrary to common belief, subroutine prototypes do not enable

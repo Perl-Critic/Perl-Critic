@@ -113,6 +113,11 @@ __END__
 
 Perl::Critic::Policy::RegularExpressions::ProhibitCaptureWithoutTest - Capture variable used outside conditional.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 If a regexp match fails, then any capture variables (C<$1>, C<$2>,

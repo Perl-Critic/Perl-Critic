@@ -91,6 +91,11 @@ __END__
 
 Perl::Critic::Policy::InputOutput::RequireBracedFileHandleWithPrint - Write C<print {$FH} $foo, $bar;> instead of C<print $FH $foo, $bar;>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 The C<print> function has a unique syntax that supports an optional

@@ -87,6 +87,11 @@ __END__
 
 Perl::Critic::Policy::RegularExpressions::ProhibitComplexRegexes - Split long regexps into smaller C<qr//> chunks.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Big regexps are hard to read, perhaps even the hardest part of Perl.

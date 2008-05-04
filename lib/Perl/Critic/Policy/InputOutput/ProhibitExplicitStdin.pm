@@ -51,6 +51,11 @@ __END__
 
 Perl::Critic::Policy::InputOutput::ProhibitExplicitStdin - Use "<>" or "<ARGV>" or a prompting module instead of "<STDIN>".
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Perl has a useful magic filehandle called C<*ARGV> that checks the

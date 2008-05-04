@@ -72,6 +72,11 @@ __END__
 
 Perl::Critic::Policy::ControlStructures::ProhibitCascadingIfElse - Don't write long "if-elsif-elsif-elsif-elsif...else" chains.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Long C<if-elsif> chains are hard to digest, especially if they are

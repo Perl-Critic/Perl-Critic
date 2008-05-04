@@ -160,6 +160,11 @@ __END__
 
 Perl::Critic::Policy::ValuesAndExpressions::ProhibitCommaSeparatedStatements - Don't use the comma operator as a statement separator.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Perl's comma statement separator has really low precedence, which

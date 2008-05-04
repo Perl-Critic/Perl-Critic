@@ -51,6 +51,11 @@ __END__
 
 Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalIsa - Write C<< eval { $foo->isa($pkg) } >> instead of C<UNIVERSAL::isa($foo, $pkg)>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
   print UNIVERSAL::isa($obj, 'Foo::Bar') ? 'yes' : 'no';  #not ok

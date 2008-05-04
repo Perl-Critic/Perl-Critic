@@ -55,6 +55,11 @@ __END__
 
 Perl::Critic::Policy::BuiltinFunctions::ProhibitStringyEval - Write C<eval { my $foo; bar($foo) }> instead of C<eval "my $foo; bar($foo);">.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 The string form of C<eval> is recompiled every time it is executed,

@@ -88,6 +88,11 @@ __END__
 Perl::Critic::Policy::RegularExpressions::ProhibitUnusualDelimiters - Use only C<//> or C<{}> to delimit regexps.
 
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Perl lets you delimit regular expressions with almost any character,

@@ -56,6 +56,11 @@ __END__
 
 Perl::Critic::Policy::Subroutines::ProhibitNestedSubs - Too many arguments.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 B<Attention would-be clever Perl writers (including Younger RJBS):>

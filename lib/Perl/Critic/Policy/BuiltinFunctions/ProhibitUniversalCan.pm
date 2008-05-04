@@ -51,6 +51,11 @@ __END__
 
 Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalCan - Write C<< eval { $foo->can($name) } >> instead of C<UNIVERSAL::can($foo, $name)>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
   print UNIVERSAL::can($obj, 'Foo::Bar') ? 'yes' : 'no';  #not ok

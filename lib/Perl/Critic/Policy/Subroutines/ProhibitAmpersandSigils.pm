@@ -61,6 +61,11 @@ __END__
 
 Perl::Critic::Policy::Subroutines::ProhibitAmpersandSigils - Don't call functions with a leading ampersand sigil.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Since Perl 5, the ampersand sigil is completely optional when invoking

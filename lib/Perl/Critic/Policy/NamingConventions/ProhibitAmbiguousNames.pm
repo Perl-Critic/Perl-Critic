@@ -108,6 +108,11 @@ __END__
 
 Perl::Critic::Policy::NamingConventions::ProhibitAmbiguousNames - Don't use vague variable or subroutine names like 'last' or 'record'.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Conway lists a collection of English words which are highly ambiguous

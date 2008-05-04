@@ -106,6 +106,11 @@ __END__
 
 Perl::Critic::Policy::InputOutput::RequireCheckedSyscalls - Return value of flagged function ignored.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 This performs identically to InputOutput::RequireCheckedOpen/Close

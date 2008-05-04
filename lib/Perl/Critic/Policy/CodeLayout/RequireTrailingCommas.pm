@@ -68,6 +68,11 @@ __END__
 
 Perl::Critic::Policy::CodeLayout::RequireTrailingCommas - Put a comma at the end of every multi-line list declaration, including the last one.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Conway suggests that all elements in a multi-line list should be

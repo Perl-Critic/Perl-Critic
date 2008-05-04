@@ -104,6 +104,11 @@ __END__
 
 Perl::Critic::Policy::CodeLayout::ProhibitTrailingWhitespace - Don't use whitespace at the end of lines.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Anything that is not readily visually detectable is a bad thing in

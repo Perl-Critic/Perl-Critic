@@ -50,6 +50,11 @@ __END__
 
 Perl::Critic::Policy::Miscellanea::ProhibitTies - Do not use C<tie>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Conway discourages using C<tie> to bind Perl primitive variables to

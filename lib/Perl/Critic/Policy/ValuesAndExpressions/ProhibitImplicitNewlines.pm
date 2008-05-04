@@ -50,6 +50,11 @@ __END__
 
 Perl::Critic::Policy::ValuesAndExpressions::ProhibitImplicitNewlines - Use concatenation or HEREDOCs instead of literal line breaks in strings.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Strings with embedded line breaks are hard to read.  Use concatenation

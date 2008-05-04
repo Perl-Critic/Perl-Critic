@@ -101,6 +101,11 @@ __END__
 
 Perl::Critic::Policy::ValuesAndExpressions::ProhibitMixedBooleanOperators - Write C< !$foo && $bar || $baz > instead of C< not $foo && $bar or $baz>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Conway advises against combining the low-precedence booleans ( C<and

@@ -355,6 +355,11 @@ __END__
 
 Perl::Critic::Policy::Documentation::RequirePodSections - Organize your POD into the customary sections.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 This Policy requires your POD to contain certain C<=head1> sections.

@@ -135,6 +135,11 @@ __END__
 
 Perl::Critic::Policy::Miscellanea::RequireRcsKeywords - Put source-control keywords in every file.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Every code file, no matter how small, should be kept in a

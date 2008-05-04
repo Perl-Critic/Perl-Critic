@@ -50,6 +50,11 @@ __END__
 
 Perl::Critic::Policy::ValuesAndExpressions::ProhibitConstantPragma - Don't C<< use constant $FOO => 15 >>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Named constants are a good thing.  But don't use the C<constant>

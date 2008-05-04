@@ -55,6 +55,11 @@ __END__
 
 Perl::Critic::Policy::RegularExpressions::RequireLineBoundaryMatching - Always use the C</m> modifier with regular expressions.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Folks coming from a C<sed> or C<awk> background tend to assume that

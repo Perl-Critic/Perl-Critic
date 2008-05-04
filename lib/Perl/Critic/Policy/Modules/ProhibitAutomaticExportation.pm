@@ -99,6 +99,11 @@ __END__
 
 Perl::Critic::Policy::Modules::ProhibitAutomaticExportation - Export symbols via C<@EXPORT_OK> or C<%EXPORT_TAGS> instead of C<@EXPORT>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 When using L<Exporter>, symbols placed in the C<@EXPORT> variable are

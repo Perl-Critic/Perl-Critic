@@ -51,6 +51,11 @@ __END__
 
 Perl::Critic::Policy::Modules::ProhibitMultiplePackages - Put packages (especially subclasses) in separate files.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Conway doesn't specifically mention this, but I find it annoying when

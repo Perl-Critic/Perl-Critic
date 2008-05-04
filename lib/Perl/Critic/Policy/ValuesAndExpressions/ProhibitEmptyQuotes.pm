@@ -51,6 +51,11 @@ __END__
 
 Perl::Critic::Policy::ValuesAndExpressions::ProhibitEmptyQuotes - Write C<q{}> instead of C<''>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Don't use quotes for an empty string or any string that is pure whitespace.

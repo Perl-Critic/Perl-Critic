@@ -161,6 +161,11 @@ __END__
 
 Perl::Critic::Policy::InputOutput::RequireBriefOpen - Close filehandles as soon as possible after opening them.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 One way that production systems fail unexpectedly is by running out of

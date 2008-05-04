@@ -55,6 +55,11 @@ __END__
 
 Perl::Critic::Policy::BuiltinFunctions::RequireBlockMap - Write C<map { $_ =~ /$pattern/ } @list> instead of C<map /$pattern/, @list>.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 The expression forms of C<grep> and C<map> are awkward and hard to read.

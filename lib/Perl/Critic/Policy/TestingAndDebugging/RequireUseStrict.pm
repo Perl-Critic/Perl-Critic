@@ -98,6 +98,11 @@ __END__
 Perl::Critic::Policy::TestingAndDebugging::RequireUseStrict - Always C<use strict>.
 
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Using strictures is probably the single most effective way to improve the

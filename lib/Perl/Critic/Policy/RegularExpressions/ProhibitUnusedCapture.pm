@@ -329,6 +329,11 @@ __END__
 
 Perl::Critic::Policy::RegularExpressions::ProhibitUnusedCapture - Only use a capturing group if you plan to use the captured value.
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Perl regular expressions have multiple types of grouping syntax.  The basic

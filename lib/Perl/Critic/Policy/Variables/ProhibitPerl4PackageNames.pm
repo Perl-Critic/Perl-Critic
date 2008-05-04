@@ -64,6 +64,11 @@ __END__
 
 Perl::Critic::Policy::Variables::ProhibitPerl4PackageNames - Use double colon (::) to separate package name components instead of single quotes (').
 
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
+
+
 =head1 DESCRIPTION
 
 Perl 5 kept single quotes (C<'>) as package component separators in
