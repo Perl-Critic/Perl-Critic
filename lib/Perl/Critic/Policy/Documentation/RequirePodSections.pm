@@ -240,7 +240,7 @@ sub _parse_sections {
 
     my @sections = split m{ \s* [|] \s* }mx, $config_string;
 
-    return map { uc $_ } @sections;  #Nomalize CaSe!
+    return map { uc $_ } @sections;  # Normalize CaSe!
 }
 
 sub _parse_lib_sections {
@@ -320,20 +320,19 @@ sub violates {
                                             : @{ $self->{_lib_sections} };
 
     my $pods_ref = $doc->find('PPI::Token::Pod');
-    return if !$pods_ref;
-    my $counter  = 0;  #Might use this to enforce ordering.
+    return if not $pods_ref;
 
     # Round up the names of all the =head1 sections
     for my $pod ( @{ $pods_ref } ) {
         for my $found ( $pod =~ m{ ^ =head1 \s+ ( .+? ) \s* $ }gmx ) {
             #Leading/trailing whitespace is already removed
-            $found_sections{ uc $found } = ++$counter;
+            $found_sections{ uc $found } = 1;
         }
     }
 
     # Compare the required sections against those we found
     for my $required ( @required_sections ) {
-        if ( ! exists $found_sections{$required} ) {
+        if ( not exists $found_sections{$required} ) {
             my $desc = qq{Missing "$required" section in POD};
             push @violations, $self->violation( $desc, $EXPL, $doc );
         }

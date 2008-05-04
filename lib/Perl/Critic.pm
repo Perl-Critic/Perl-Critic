@@ -63,6 +63,7 @@ sub add_policy {
 
 sub policies {
     my $self = shift;
+
     #Delegate to Perl::Critic::Config
     return $self->config()->policies();
 }
@@ -149,8 +150,9 @@ sub _gather_violations {
     }
 
     # Evaluate each policy
-    my @pols = $self->config->policies();
-    my @violations = map { _critique( $_, $doc, \%is_line_disabled) } @pols;
+    my @policies = $self->config->policies();
+    my @violations =
+        map { _critique( $_, $doc, \%is_line_disabled) } @policies;
 
     # Accumulate statistics
     $self->statistics->accumulate( $doc, \@violations );

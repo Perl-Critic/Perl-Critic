@@ -117,6 +117,15 @@ sub _init {
     if ( not defined $profile_source or $profile_source ne 'NONE' ) {
         # Heavy lifting here...
         $self->_load_policies($errors);
+
+        if ( 0 == $self->policies() ) {
+            $errors->add_exception(
+                Perl::Critic::Exception::Configuration::Generic->new(
+                    message => 'There are no enabled policies.',
+                    source  => $profile_source,
+                )
+            );
+        }
     }
 
     if ( $errors->has_exceptions() ) {
