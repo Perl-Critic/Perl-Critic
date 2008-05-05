@@ -65,7 +65,7 @@ arguments to C<grep> and it comes from the "Builtin Functions" chapter
 of I<PBP>, we call it
 C<"Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep">.
 
-  package Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep;
+    package Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep;
 
 Next, we set some pragmas and load the modules that we'll need.  All
 Policy modules inherit from the L<Perl::Critic::Policy> class, which
@@ -75,14 +75,15 @@ override these methods to make them do something useful.
 Technically, C<use strict> and C<use warnings> are optional, but we
 don't want Perl::Critic to be a hypocrite, now do we?
 
-  use strict;
-  use warnings;
-  use Readonly;
+    use strict;
+    use warnings;
 
-  use Perl::Critic::Utils qw{ :severities :classification :ppi };
-  use base 'Perl::Critic::Policy';
+    use Readonly;
 
-  our $VERSION = '1.05';
+    use Perl::Critic::Utils qw{ :severities :classification :ppi };
+    use base 'Perl::Critic::Policy';
+
+    our $VERSION = '1.05';
 
 Next, we'll declare a description and explanation for this Policy.
 The description is always just a string that basically says "this is
@@ -93,8 +94,8 @@ change.  (See
 L<Perl::Critic::ValuesAndExpressions/ProhibitConstantPragma> for why
 we don't C<use constant>.)
 
-  Readonly::Scalar my $DESC => q{Expression form of "grep"};
-  Readonly::Scalar my $EXPL => [ 169 ];
+    Readonly::Scalar my $DESC => q{Expression form of "grep"};
+    Readonly::Scalar my $EXPL => [ 169 ];
 
 Most policies don't need to override the C<initialize_if_enabled()>
 method provided by L<Perl::Critic::Policy>.  However, if your Policy
@@ -105,7 +106,7 @@ this Policy isn't configurable, we'll declare that by providing an
 implementation of C<supported_parameters()> that returns an empty
 list.
 
-  sub supported_parameters { return ()                  }
+    sub supported_parameters { return ()                  }
 
 Next, we define the C<default_severity()> method, which must return an
 integer indicating the severity of violating this Policy.  Severity
@@ -115,7 +116,7 @@ cause bugs.  Level 1 is for things that are highly subjective or
 purely cosmetic.  The L<Perl::Critic::Utils> package exports several
 severity constants that you can use here via the C<:severities> tag.
 
-  sub default_severity     { return $SEVERITY_HIGH      }
+    sub default_severity     { return $SEVERITY_HIGH      }
 
 Likewise, the C<default_themes()> method returns a list of theme
 names.  Themes are intended to be named groups of Policies.  All
@@ -124,7 +125,7 @@ use of C<grep> without blocks often leads to bugs, we include a
 C<"bugs"> theme.  And since this Policy comes directly from I<PBP>,
 this Policy should be a member of the C<"pbp"> theme.
 
-  sub default_themes       { return qw( core bugs pbp ) }
+    sub default_themes       { return qw( core bugs pbp ) }
 
 As a Policy author, you can assign any themes you want to the Policy.
 If you're publishing a suite of custom Policies, we suggest that you
@@ -146,7 +147,7 @@ this case, we just want to test calls to C<grep>.  Since the token
 "grep" is a L<PPI::Token::Word>, we return that package name from the
 C<applies_to()> method.
 
-  sub applies_to           { return 'PPI::Token::Word'  }
+    sub applies_to           { return 'PPI::Token::Word'  }
 
 If your Policy needs to analyze several different types of elements,
 the C<applies_to> method may return the name of several PPI packages.
@@ -164,8 +165,8 @@ will be an additional argument that is a reference to this object
 need access to the document as a whole, we ignore the last parameter
 by assigning to C<undef>.
 
-  sub violates {
-      my ( $self, $elem, undef ) = @_;
+    sub violates {
+        my ( $self, $elem, undef ) = @_;
 
 The violates() method then often performs some tests to make sure we
 have the right "type" of element.  In our example, we know that the
@@ -177,7 +178,7 @@ use the c<content()> method.)  So we make sure that this
 PPI::Token::Word is, in fact, "grep".  If it's not, then we don't'
 need to bother examining it.
 
-      return if $elem ne 'grep';
+        return if $elem ne 'grep';
 
 The C<PPI::Token::Word> class is also used for barewords and methods
 called on object references.  It is possible for someone to declare a
@@ -188,7 +189,7 @@ L<Perl::Critic::Utils> to make sure that this "grep" is actually in
 the right context.  (The C<is_function_call()> subroutine is brought
 in via the C<:classification> tag.)
 
-      return if ! is_function_call($elem);
+        return if ! is_function_call($elem);
 
 Now that we know this element is a call to the C<grep> function, we
 can look at the nearby elements to see what kind of arguments are
@@ -202,7 +203,7 @@ it has any).  Since those siblings could just be whitespace, we use
 the C<snext_sibling()> to get the next code-sibling (the "s" in
 C<snext_sibling> stands for "significant").
 
-      my $sib = $elem->snext_sibling() or return;
+        my $sib = $elem->snext_sibling() or return;
 
 In Perl, the parenthesis around argument lists are usually optional,
 and PPI packs the elements into a L<PPI::Structure::List> object when
@@ -211,21 +212,21 @@ pull out the first (significant) child of that list.  This child will
 be the first argument to C<grep>.  If parentheses were not used, then
 the sibling itself is the first argument.
 
-      my $arg = $sib->isa('PPI::Structure::List') ? $sib->schild(0) : $sib;
+        my $arg = $sib->isa('PPI::Structure::List') ? $sib->schild(0) : $sib;
 
 In actuality, this sort of function argument lookup is common, so
 there is a L<Perl::Critic::Utils/"first_arg"> subroutine available via
 the C<:ppi> tag.  So we use that instead.
 
-      my $arg = first_arg($elem);
+        my $arg = first_arg($elem);
 
 Finally, we now have a reference to the first argument to C<grep>.  If
 that argument is a block (i.e. something in curly braces), then it
 will be a L<PPI::Structure::Block>, in which case our Policy is
 satisfied and we just return nothing.
 
-      return if !$arg;
-      return if $arg->isa('PPI::Structure::Block');
+        return if !$arg;
+        return if $arg->isa('PPI::Structure::Block');
 
 But if it is not a L<PPI::Structure::Block>, then we know that this
 call to C<grep> must be using the expression form, and that violates
@@ -234,10 +235,10 @@ object via the L<Perl::Critic::Policy/"violation"> method, passing in
 the description, explanation, and a reference to the PPI element that
 caused the violation.  And that's all there is to it!
 
-      return $self->violation( $DESC, $EXPL, $elem );
-  }
+        return $self->violation( $DESC, $EXPL, $elem );
+    }
 
-  1;
+    1;
 
 One last thing -- people are going to need to understand what is wrong
 with the code when your Policy finds a problem.  It isn't reasonable
@@ -247,29 +248,34 @@ your Policy.  It should succinctly describe the behavior and
 motivation for your Policy and include a few examples of both good and
 bad code.  Here's an example:
 
-  =pod
+    =pod
 
-  =head1 NAME
+    =head1 NAME
 
-  Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep
+    Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep
 
 
-  =head1 DESCRIPTION
+    =head1 DESCRIPTION
 
-  The expression forms of C<grep> and C<map> are awkward and hard to read.
-  Use the block forms instead.
+    The expression forms of C<grep> and C<map> are awkward and hard to read.
+    Use the block forms instead.
 
-    @matches = grep  /pattern/,    @list;        #not ok
-    @matches = grep { /pattern/ }  @list;        #ok
+        @matches = grep  /pattern/,    @list;        #not ok
+        @matches = grep { /pattern/ }  @list;        #ok
 
-    @mapped = map  transform($_),    @list;      #not ok
-    @mapped = map { transform($_) }  @list;      #ok
+        @mapped = map  transform($_),    @list;      #not ok
+        @mapped = map { transform($_) }  @list;      #ok
 
-  =cut
+    =cut
 
 When your policy has a section like this, users can invoke
 L<perlcritic> with a C<--verbose> parameter of C<10> or C<11> to see
 it along with the rest of the output for violations of your policy.
+
+
+=head2 Theme
+
+Users can use themes to select which Policies they want to use
 
 
 =head1 MAKING YOUR POLICY CONFIGURABLE
@@ -307,45 +313,45 @@ if L<Perl::Tidy> is not installed.
 A basic, do-nothing implementation of C<initialize_if_enabled()> would
 be:
 
-  use Perl::Critic::Utils qw< :booleans >;
+    use Perl::Critic::Utils qw< :booleans >;
 
-  ...
+    ...
 
-  sub initialize_if_enabled {
-      my ( $self, $config ) = @_;
+    sub initialize_if_enabled {
+        my ( $self, $config ) = @_;
 
-      return $TRUE;
-  }
+        return $TRUE;
+    }
 
 As stated above, what you get in C<$config> are trimmed strings.  For
 example, if the user's F<.perlcritic> contains
 
-  [Your::Policy]
-  foo          = bar baz
-  factor   =     5.52
-  selections =   2 78 92
+    [Your::Policy]
+    foo          = bar baz
+    factor   =     5.52
+    selections =   2 78 92
 
 then C<$config> will contain the equivalent of
 
-  my $config = {
-      foo        => 'bar baz',
-      factor     => '5.52',
-      selections => '2 78 92',
-  };
+    my $config = {
+        foo        => 'bar baz',
+        factor     => '5.52',
+        selections => '2 78 92',
+    };
 
 To make this available to the C<violates()> method, the values are
 usually put into C<$self> under the name of the configuration item
 prefixed with an underscore.  E.g.
 
-  sub initialize_if_enabled {
-      my ( $self, $config ) = @_;
+    sub initialize_if_enabled {
+        my ( $self, $config ) = @_;
 
-      $self->{_foo} = $config->get{foo};
-      $self->{_factor} = $config->get{factor};
-      $self->{_selections} = $config->get{selections};
+        $self->{_foo} = $config->get{foo};
+        $self->{_factor} = $config->get{factor};
+        $self->{_selections} = $config->get{selections};
 
-      return $TRUE;
-  }
+        return $TRUE;
+    }
 
 Often, you'll want to convert the configuration values into something
 more useful.  In this example, C<selections> is supposed to be a list
@@ -354,31 +360,31 @@ that can help you with this.  Assuming that C<violates()> wants to
 have C<selections> as an array, you'll want to have something like
 this:
 
-  use Perl::Critic::Utils qw{ :booleans :characters :data_conversion };
+    use Perl::Critic::Utils qw{ :booleans :characters :data_conversion };
 
-  sub initialize_if_enabled {
-      my ( $self, $config ) = @_;
+    sub initialize_if_enabled {
+        my ( $self, $config ) = @_;
 
-      $self->{_foo} = $config->get{foo};
-      $self->{_factor} = $config->get{factor};
+        $self->{_foo} = $config->get{foo};
+        $self->{_factor} = $config->get{factor};
 
-      my $selections = $config->get{selections};
-      $selections = defined $selections ? $selections : $EMPTY_STRING;
-      $self->{_selections} = [ words_from_string($selections) ];
+        my $selections = $config->get{selections};
+        $selections = defined $selections ? $selections : $EMPTY_STRING;
+        $self->{_selections} = [ words_from_string($selections) ];
 
-      return $TRUE;
-  }
+        return $TRUE;
+    }
 
 Since C<selections> contains numbers, it may be desirable to change
 the assignment to look like
 
-  $self->{_selections} = [ map { $_ + 0 } words_from_string($selections) ];
+    $self->{_selections} = [ map { $_ + 0 } words_from_string($selections) ];
 
 If C<violates()> needs to quickly determine whether a particular value
 is in C<selections>, you would want to use a hash instead of an array,
 like this:
 
-  $self->{_selections} = { hashify( words_from_string($selections) ) };
+    $self->{_selections} = { hashify( words_from_string($selections) ) };
 
 For an example of a Policy that has some simple, but non-standard
 configuration handling, see
@@ -411,12 +417,12 @@ function returns a list of the names of the parameters the Policy
 supports.  So, for an non-configurable Policy, as in the
 C<RequireBlockGrep> example above, this looked like
 
-  sub supported_parameters { return ()                  }
+    sub supported_parameters { return ()                  }
 
 For the example being used in the C<initialize_if_enabled()> section
 above, this would be
 
-  sub supported_parameters { return qw< foo factor selections >; }
+    sub supported_parameters { return qw< foo factor selections >; }
 
 Given this information, C<Perl::Critic> can tell the user when they
 have specified a parameter for a Policy which isn't valid, e.g. when
@@ -430,20 +436,21 @@ having the values in the list returned by C<supported_parameters()> be
 hash references instead of strings, with keys of C<name>,
 C<description>, and C<default_string>.  For example,
 
-  sub supported_parameters {
-      return (
-          {
-              name           => 'allowed_values',
-              description    => 'Individual and ranges of values to allow, and/or "all_integers".',
-              default_string => '0 1 2',
-          },
-          {
-              name           => 'allowed_types',
-              description    => 'Kind of literals to allow.',
-              default_string => 'Float',
-          },
-      );
-  }
+    sub supported_parameters {
+        return (
+            {
+                name           => 'allowed_values',
+                description    =>
+                    'Individual and ranges of values to allow, and/or "all_integers".',
+                default_string => '0 1 2',
+            },
+            {
+                name           => 'allowed_types',
+                description    => 'Kind of literals to allow.',
+                default_string => 'Float',
+            },
+        );
+    }
 
 Note that use of constructors is
 L<incompatible|/"Note On Constructors"> with specifying parameters in
@@ -462,18 +469,18 @@ for their C<behavior>.  For example, the following declares that a
 parameter allows the user to choose from five specific values and that
 the user can select any combination of them:
 
-  sub supported_parameters {
-      return (
-          {
-              name               => 'allowed_types',
-              description        => 'Kind of literals to allow.',
-              default_string     => 'Float',
-              behavior           => 'enumeration',
-              enumeration_values => [ qw{ Binary Exp Float Hex Octal } ],
-              enumeration_allow_multiple_values => 1,
-          },
-      );
-  }
+    sub supported_parameters {
+        return (
+            {
+                name               => 'allowed_types',
+                description        => 'Kind of literals to allow.',
+                default_string     => 'Float',
+                behavior           => 'enumeration',
+                enumeration_values => [ qw{ Binary Exp Float Hex Octal } ],
+                enumeration_allow_multiple_values => 1,
+            },
+        );
+    }
 
 When you specify a behavior, parsing and validation of the
 user-specified and default values is done for you and your
@@ -502,27 +509,27 @@ This behavior is not configurable.
 
 =head4 C<supported_parameters()> example
 
-  sub supported_parameters {
-      return (
-          {
-              name           => 'a_string',
-              description    => 'An example string.',
-              default_string => 'blah blah blah',
-              behavior       => 'string',
-          },
-      );
-  }
+    sub supported_parameters {
+        return (
+            {
+                name           => 'a_string',
+                description    => 'An example string.',
+                default_string => 'blah blah blah',
+                behavior       => 'string',
+            },
+        );
+    }
 
 
 =head4 Access example
 
-  sub violates {
-      my ($self, $element, $document) = @_;
+    sub violates {
+        my ($self, $element, $document) = @_;
 
-      ...
-      my $string = $self->{_a_string};
-      ...
-  }
+        ...
+        my $string = $self->{_a_string};
+        ...
+    }
 
 
 =head3 "boolean"
@@ -536,30 +543,30 @@ This behavior is not configurable.
 
 =head4 C<supported_parameters()> example
 
-  sub supported_parameters {
-      return (
-          {
-              name           => 'a_boolean',
-              description    => 'An example boolean.',
-              default_string => '1',
-              behavior       => 'boolean',
-          },
-      );
-  }
+    sub supported_parameters {
+        return (
+            {
+                name           => 'a_boolean',
+                description    => 'An example boolean.',
+                default_string => '1',
+                behavior       => 'boolean',
+            },
+        );
+    }
 
 
 =head4 Access example
 
-  sub violates {
-      my ($self, $element, $document) = @_;
+    sub violates {
+        my ($self, $element, $document) = @_;
 
-      ...
-      my $is_whatever = $self->{_a_boolean};
-      if ($is_whatever) {
-          ...
-      }
-      ...
-  }
+        ...
+        my $is_whatever = $self->{_a_boolean};
+        if ($is_whatever) {
+            ...
+        }
+        ...
+    }
 
 
 =head3 "integer"
@@ -576,32 +583,32 @@ restrict the value to.  Either, neither, or both may be specified.
 
 =head4 C<supported_parameters()> example
 
-  sub supported_parameters {
-      return (
-          {
-              name            => 'an_integer',
-              description     => 'An example integer.',
-              default_string  => '5',
-              behavior        => 'integer',
-              integer_minimum => 0,
-              integer_maximum => 10,
-          },
-      );
-  }
+    sub supported_parameters {
+        return (
+            {
+                name            => 'an_integer',
+                description     => 'An example integer.',
+                default_string  => '5',
+                behavior        => 'integer',
+                integer_minimum => 0,
+                integer_maximum => 10,
+            },
+        );
+    }
 
 
 =head4 Access example
 
-  sub violates {
-      my ($self, $element, $document) = @_;
+    sub violates {
+        my ($self, $element, $document) = @_;
 
-      ...
-      my $integer = $self->{_an_integer};
-      if ($integer > $TURNING_POINT) {
-          ...
-      }
-      ...
-  }
+        ...
+        my $integer = $self->{_an_integer};
+        if ($integer > $TURNING_POINT) {
+            ...
+        }
+        ...
+    }
 
 
 =head3 "string list"
@@ -621,31 +628,31 @@ C<'d'>, and C<'e'>.
 
 =head4 C<supported_parameters()> example
 
-  sub supported_parameters {
-      return (
-          {
-              name                  => 'a_string_list',
-              description           => 'An example list.',
-              default_string        => 'red pink blue',
-              behavior              => 'string list',
-              always_present_values => [ qw{ green purple} ],
-          },
-      );
-  }
+    sub supported_parameters {
+        return (
+            {
+                name                  => 'a_string_list',
+                description           => 'An example list.',
+                default_string        => 'red pink blue',
+                behavior              => 'string list',
+                always_present_values => [ qw{ green purple} ],
+            },
+        );
+    }
 
 
 =head4 Access example
 
-  sub violates {
-      my ($self, $element, $document) = @_;
+    sub violates {
+        my ($self, $element, $document) = @_;
 
-      ...
-      my $list = $self->{_a_string_list};
-      my @list = keys %{$list};
-      ...
-      return if not $list->{ $element->content() };
-      ...
-  }
+        ...
+        my $list = $self->{_a_string_list};
+        my @list = keys %{$list};
+        ...
+        return if not $list->{ $element->content() };
+        ...
+    }
 
 
 =head3 "enumeration"
@@ -666,46 +673,46 @@ than one value, but this defaults to false.
 
 =head4 C<supported_parameters()> example
 
-  use Perl::Critic::Utils qw{ :characters };
+    use Perl::Critic::Utils qw{ :characters };
 
-  sub supported_parameters {
-      return (
-          {
-              name               => 'a_single_valued_enumeration',
-              description        =>
-                  'An example enumeration that can only have a single value.',
-              default_string     => $EMPTY,
-              behavior           => 'enumeration',
-              enumeration_values => [ qw{ block statement pod operator } ],
-              enumeration_allow_multiple_values => 0,
-          },
-          {
-              name               => 'a_multi_valued_enumeration',
-              description        =>
-                  'An example enumeration that can have multiple values.',
-              default_string     => 'fe',
-              behavior           => 'enumeration',
-              enumeration_values => [ qw{ fe fi fo fum } ],
-              enumeration_allow_multiple_values => 1,
-          },
-      );
-  }
+    sub supported_parameters {
+        return (
+            {
+                name               => 'a_single_valued_enumeration',
+                description        =>
+                    'An example enumeration that can only have a single value.',
+                default_string     => $EMPTY,
+                behavior           => 'enumeration',
+                enumeration_values => [ qw{ block statement pod operator } ],
+                enumeration_allow_multiple_values => 0,
+            },
+            {
+                name               => 'a_multi_valued_enumeration',
+                description        =>
+                    'An example enumeration that can have multiple values.',
+                default_string     => 'fe',
+                behavior           => 'enumeration',
+                enumeration_values => [ qw{ fe fi fo fum } ],
+                enumeration_allow_multiple_values => 1,
+            },
+        );
+    }
 
 
 =head4 Access example
 
-  sub violates {
-      my ($self, $element, $document) = @_;
+    sub violates {
+        my ($self, $element, $document) = @_;
 
-      ...
-      my $single_value = $self->{_a_single_valued_enumeration};
-      ...
-      my $multi_value = $self->{_a_multi_valued_enumeration};
-      if ( $multi_value->{fum} ) {
-          ...
-      }
-      ...
-  }
+        ...
+        my $single_value = $self->{_a_single_valued_enumeration};
+        ...
+        my $multi_value = $self->{_a_multi_valued_enumeration};
+        if ( $multi_value->{fum} ) {
+            ...
+        }
+        ...
+    }
 
 
 =head2 Using a Custom Parser
@@ -722,17 +729,17 @@ The way you declare that you have a custom parser is to include a
 reference to it in the parameter specification with the C<parser> key.
 For example:
 
-  sub supported_parameters {
-      return (
-          {
-              name           => 'file_name',
-              description    => 'A file for to read a list of values from.',
-              default_string => undef,
-              behavior       => 'string',
-              parser         => \&_parse_file_name,
-          },
-      );
-  }
+    sub supported_parameters {
+        return (
+            {
+                name           => 'file_name',
+                description    => 'A file for to read a list of values from.',
+                default_string => undef,
+                behavior       => 'string',
+                parser         => \&_parse_file_name,
+            },
+        );
+    }
 
 A parser is a method on a subclass of L<Perl::Critic::Policy> that
 takes two parameters: the L<Perl::Critic::PolicyParameter> that is
@@ -743,32 +750,32 @@ parsed value for later use by the C<violates()> method.
 An example parser (without enough error handling) for the above
 example declaration:
 
-  use File::Slurp qw< slurp >;
+    use File::Slurp qw< slurp >;
 
-  use Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue
-      qw{ throw_policy_value };
+    use Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue
+        qw{ throw_policy_value };
 
-  sub _parse_file_name {
-      my ($self, $parameter, $config_string) = @_;
+    sub _parse_file_name {
+        my ($self, $parameter, $config_string) = @_;
 
-      my @thingies;
+        my @thingies;
 
-      if ($config_string) {
-          if (not -r $config_string) {
-              throw_policy_value
-                  policy         => $self->get_short_name(),
-                  option_name    => $parameter->get_name(),
-                  option_value   => $config_string,
-                  message_suffix => 'is not readable.';
-          }
+        if ($config_string) {
+            if (not -r $config_string) {
+                throw_policy_value
+                    policy         => $self->get_short_name(),
+                    option_name    => $parameter->get_name(),
+                    option_value   => $config_string,
+                    message_suffix => 'is not readable.';
+            }
 
-          @thingies = slurp $config_string;
-      }
+            @thingies = slurp $config_string;
+        }
 
-      $self->{_thingies} = \@thingies;
+        $self->{_thingies} = \@thingies;
 
-      return;
-  }
+        return;
+    }
 
 Note that, if the value for the parameter is not valid, an instance of
 L<Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue>
@@ -897,6 +904,118 @@ and L<Perl::Critic::Policy::TestingAndDebugging::RequireUseWarnings>
 for examples.
 
 
+=head1 DISTRIBUTING YOUR POLICIES
+
+=head2 Create a Distribution
+
+You need to come up with a name for your set of policies.  Sets of
+add-on policies are generally named C<Perl::Critic::I<something>>,
+e.g. L<Perl::Critic::More>.
+
+The module representing the distribution will not actually have any
+functionality; it's just documentation and a name for users to use
+when installing via L<CPAN>/L<CPANPLUS>.  The important part is that
+this will include a list of the included policies, with descriptions
+of each.
+
+A typical implementation will look like:
+
+    package Perl::Critic::Example;
+
+    use strict;
+    use warnings;
+
+    our $VERSION = '1.000000';
+
+    1; # Magic true value required at end of module
+
+    __END__
+
+    =head1 NAME
+
+    Perl::Critic::Example - Policies for Perl::Critic that act as an example.
+
+    =head1 AFFILIATION
+
+    This module has no functionality, but instead contains documentation
+    for this distribution and acts as a means of pulling other modules
+    into a bundle.  All of the Policy modules contained herein will have
+    an "AFFILIATION" section announcing their participation in this
+    grouping.
+
+
+    =head1 SYNOPSIS
+
+    Some L<Perl::Critic> policies that will help you keep your code
+    nice and compliant.
+
+
+    =head1 DESCRIPTION
+
+    The included policies are:
+
+    =over
+
+    =item L<Perl::Critic::Policy::Documentation::Example>
+
+    Complains about some example documentation issues.  [Severity: 3]
+
+
+    =item L<Perl::Critic::Policy::Variables::Example>
+
+    All modules must have at least one variable.  [Severity: 3]
+
+
+    =back
+
+
+    =head1 CONFIGURATION AND ENVIRONMENT
+
+    All policies included are in the "example" theme.  See the
+    L<Perl::Critic> documentation for how to make use of this.
+
+
+=head2 Themes
+
+Users can choose which policies to enable using themes.  You should
+implement C<default_themes()> so that users can take advantage of
+this.  In particular, you should use a theme named after your
+distribution in all your policies; this should match the value listed
+in the C<CONFIGURATION AND ENVIRONMENT> POD section as shown above.
+
+    default_themes { return qw< example math > }
+
+If you're looking for ideas of what themes to do, have a look at the
+output of C<perlcritic --list-themes>.
+
+
+=head2 Documentation
+
+=head3 AFFILIATION
+
+Since all policies have to go somewhere under the
+C<Perl::Critic::Policy::> namespace, it isn't always clear what
+distribution a policy came from when browsing through their
+documentation.  For this reason, you should include an C<AFFILIATION>
+section in the POD for all of your policies that state where the
+policy comes from.  For example:
+
+    =head1 AFFILIATION
+
+    This policy is part of L<Perl::Critic::Example>.
+
+
+=head3 CONFIGURATION
+
+In order to make it clear what can be done with a policy, you should
+always include a C<CONFIGURATION> section in your POD, even if it's
+only to say:
+
+    =head1 CONFIGURATION
+
+    This Policy is not configurable except for the standard options.
+
+
 =head1 HINT
 
 When you're trying to figure out what L<PPI> is going to hand you for
@@ -904,11 +1023,11 @@ a chunk of code, there is a F<tools/ppidump> program in the
 L<Perl::Critic> distribution that will help you.  For example, when
 developing the above RequireBlockGrep example, you might want to try
 
-  tools/ppidump '@matches = grep /pattern/, @list;'
+    tools/ppidump '@matches = grep /pattern/, @list;'
 
 and
 
-  tools/ppidump '@matches = grep { /pattern/ } @list;'
+    tools/ppidump '@matches = grep { /pattern/ } @list;'
 
 to see the differences between the two cases.
 

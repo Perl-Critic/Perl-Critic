@@ -228,6 +228,7 @@ lib/Perl/Critic/Violation.pm
 LICENSE
 Makefile.PL
 MANIFEST			This list of files
+META.yml
 README
 t/00_modules.t
 t/01_bad_perlcriticrc
@@ -401,4 +402,3 @@ xt/author/80_policysummary.t
 xt/author/93_version.t
 xt/author/94_includes.t
 xt/author/95_kwalitee.t
-META.yml
