@@ -227,7 +227,7 @@ does not recognize any of these more complex examples:
 
 =head1 CONFIGURATION
 
-This Policy is not configurable.
+This Policy is not configurable except for the standard options.
 
 
 =head1 AUTHOR

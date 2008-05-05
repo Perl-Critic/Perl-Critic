@@ -79,7 +79,7 @@ the C<Time::HiRes> module when you want to sleep.
 
 =head1 CONFIGURATION
 
-This Policy is not configurable.
+This Policy is not configurable except for the standard options.
 
 
 =head1 SEE ALSO

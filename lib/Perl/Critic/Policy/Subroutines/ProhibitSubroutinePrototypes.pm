@@ -63,7 +63,7 @@ compile-time checks for proper arguments.  Don't use them.
 
 =head1 CONFIGURATION
 
-This Policy is not configurable.
+This Policy is not configurable except for the standard options.
 
 
 =head1 AUTHOR

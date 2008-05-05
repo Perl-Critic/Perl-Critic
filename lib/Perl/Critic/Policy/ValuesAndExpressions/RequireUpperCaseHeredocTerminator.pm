@@ -74,7 +74,7 @@ standard prefix like "END_" but this policy doesn't enforce that.
 
 =head1 CONFIGURATION
 
-This Policy is not configurable.
+This Policy is not configurable except for the standard options.
 
 
 =head1 SEE ALSO

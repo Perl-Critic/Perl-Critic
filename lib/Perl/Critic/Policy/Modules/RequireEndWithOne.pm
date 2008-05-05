@@ -80,7 +80,7 @@ can, but we don't recommend it since it confuses the newcomers.
 
 =head1 CONFIGURATION
 
-This Policy is not configurable.
+This Policy is not configurable except for the standard options.
 
 
 =head1 AUTHOR

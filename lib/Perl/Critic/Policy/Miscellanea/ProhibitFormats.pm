@@ -67,7 +67,7 @@ like L<Template> or try the L<Perl6::Form> module.
 
 =head1 CONFIGURATION
 
-This Policy is not configurable.
+This Policy is not configurable except for the standard options.
 
 
 =head1 AUTHOR

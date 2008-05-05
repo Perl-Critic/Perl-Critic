@@ -82,7 +82,7 @@ name.
 
 =head1 CONFIGURATION
 
-This Policy is not configurable.
+This Policy is not configurable except for the standard options.
 
 
 =head1 SEE ALSO

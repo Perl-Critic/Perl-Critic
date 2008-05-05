@@ -84,7 +84,7 @@ version numbers as floats is: version + (patch level / 1000).
 
 =head1 CONFIGURATION
 
-This Policy is not configurable.
+This Policy is not configurable except for the standard options.
 
 
 =head1 AUTHOR

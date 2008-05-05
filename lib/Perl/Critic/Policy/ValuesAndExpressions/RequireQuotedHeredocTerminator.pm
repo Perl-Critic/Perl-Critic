@@ -76,7 +76,7 @@ to the reader whether the content is going to be interpolated or not.
 
 =head1 CONFIGURATION
 
-This Policy is not configurable.
+This Policy is not configurable except for the standard options.
 
 
 =head1 SEE ALSO

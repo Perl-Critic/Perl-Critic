@@ -77,7 +77,7 @@ as well as C<AUTOLOAD>, C<DESTROY>, and C<import> subroutines.
 
 =head1 CONFIGURATION
 
-This Policy is not configurable.
+This Policy is not configurable except for the standard options.
 
 
 =head1 CAVEATS

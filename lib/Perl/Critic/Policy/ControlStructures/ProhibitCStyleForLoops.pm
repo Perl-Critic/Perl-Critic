@@ -81,7 +81,7 @@ C<..> operator is much more elegant and readable.
 
 =head1 CONFIGURATION
 
-This Policy is not configurable.
+This Policy is not configurable except for the standard options.
 
 
 =head1 AUTHOR
