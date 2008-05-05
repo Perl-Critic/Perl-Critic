@@ -76,6 +76,12 @@ the C<Time::HiRes> module when you want to sleep.
   use Time::HiRes;
   sleep( 0.25 );                            # ok
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 SEE ALSO
 
 L<Time::HiRes>.

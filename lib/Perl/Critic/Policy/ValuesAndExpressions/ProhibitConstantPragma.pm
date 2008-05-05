@@ -67,6 +67,12 @@ L<Readonly> module.
   Readonly my $FOOBAR => 42;  #ok
   Readonly::Scalar my $FOOBAR => 42;  #ok
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>

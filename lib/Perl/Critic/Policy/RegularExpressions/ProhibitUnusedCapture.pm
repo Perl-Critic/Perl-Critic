@@ -347,6 +347,12 @@ capturing vs. non-capturing groups, because that programmer can tell more
 easily which regexps can be refactored without breaking surrounding code which
 may use the captured values.
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 CAVEATS
 
 =head2 Regexp::Parser

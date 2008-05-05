@@ -90,6 +90,9 @@ output and let the application decide what to do with it.
   @output = <$reader>;  #Output here
   @errors = <$err>;     #Errors here, instead of the console
 
+
+=head1 CONFIGURATION
+
 Alternatively, if you do want to use backticks, you can restrict
 checks to void contexts by adding the following to your
 F<.perlcriticrc> file:
@@ -105,6 +108,7 @@ assign the result to a variable.
   `some_command`;                      #not ok
   $output = `some_command`;            #ok
   @output = `some_command`;            #ok
+
 
 =head1 NOTES
 

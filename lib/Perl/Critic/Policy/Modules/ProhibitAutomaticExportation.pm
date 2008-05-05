@@ -120,6 +120,12 @@ the caller choose exactly which symbols to export.
   our @EXPORT_OK   = qw(&foo &bar);                  # ok
   our %EXPORT_TAGS = ( all => [ qw(&foo &bar) ] );   # ok
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>

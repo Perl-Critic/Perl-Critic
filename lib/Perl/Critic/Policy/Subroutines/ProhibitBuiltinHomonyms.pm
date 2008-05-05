@@ -74,6 +74,12 @@ perlfunc`> for a list of built-ins.
 Exceptions are made for C<BEGIN>, C<END>, C<INIT> and C<CHECK> blocks,
 as well as C<AUTOLOAD>, C<DESTROY>, and C<import> subroutines.
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 CAVEATS
 
 It is reasonable to declare an B<object> method with the same name as

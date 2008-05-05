@@ -81,6 +81,12 @@ version numbers as floats is: version + (patch level / 1000).
   use Foo 1.2.03  qw(foo bar);  # not ok
   use Foo 1.00203 qw(foo bar);  # ok
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>

@@ -86,6 +86,12 @@ plain C<use English;> so you should instead employ C<use English
 '-no_match_vars';> which avoids the match variables.  See B<perldoc
 English> or PBP page 82 for more information.
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 AUTHOR
 
 Chris Dolan <cdolan@cpan.org>

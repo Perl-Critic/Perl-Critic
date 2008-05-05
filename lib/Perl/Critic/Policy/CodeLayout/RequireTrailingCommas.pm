@@ -87,6 +87,12 @@ little easier to re-order the list by cutting and pasting.
               $bar,
               $baz,); #ok
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 NOTES
 
 In the PPI parlance, a "list" is almost anything with parentheses.

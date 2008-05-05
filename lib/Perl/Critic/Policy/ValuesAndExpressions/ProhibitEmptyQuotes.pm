@@ -75,6 +75,12 @@ like this.  Use the C<x> operator to repeat characters.
   $SPACE = q{ };
   $message = $SPACE x 5;  #best
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 SEE ALSO
 
 L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitNoisyStrings>

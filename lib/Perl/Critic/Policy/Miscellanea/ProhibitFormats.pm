@@ -64,6 +64,12 @@ at run time.  Also, formats depend on several obscure global variables.
 For more modern reporting tools, consider using one of the template frameworks
 like L<Template> or try the L<Perl6::Form> module.
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>

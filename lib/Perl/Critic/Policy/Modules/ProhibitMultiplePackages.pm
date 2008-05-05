@@ -64,6 +64,12 @@ methods or keywords in your editor, it makes it hard to find the right
 chunk of code, especially if each package is a subclass of the same
 base.
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>

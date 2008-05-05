@@ -67,6 +67,12 @@ it much more obvious what you're attempting to do.
   @files = <*.pl>;              # not ok
   @files = glob( "*.pl" );      # ok
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 AUTHOR
 
 Graham TerMarsch <graham@howlingfrog.com>

@@ -81,6 +81,12 @@ So, unless you're trying to obfuscate your code, don't use them.
   package Foo::Bar::Baz;    #ok
   package Foo'Bar'Baz;      #not ok
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 SEE ALSO
 
 L<perlmod>

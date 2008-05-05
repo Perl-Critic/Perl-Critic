@@ -71,6 +71,12 @@ standard prefix like "END_" but this policy doesn't enforce that.
   Hello World
   THE_END
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 SEE ALSO
 
 L<Perl::Critic::Policy::ValuesAndExpressions::RequireQuotedHeredocTerminator>

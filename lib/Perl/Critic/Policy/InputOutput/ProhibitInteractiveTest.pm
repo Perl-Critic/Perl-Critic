@@ -59,6 +59,12 @@ The C<-t> operator is fragile and complicated.  When you are testing
 whether C<STDIN> is interactive, It's much more robust to use
 well-tested CPAN modules like L<IO::Interactive>.
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 AUTHOR
 
 Chris Dolan <cdolan@cpan.org>

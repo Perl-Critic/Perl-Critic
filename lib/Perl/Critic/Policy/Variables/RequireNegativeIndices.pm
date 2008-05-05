@@ -224,6 +224,12 @@ does not recognize any of these more complex examples:
    my $ref = \@arr;
    $ref->[$#arr];
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 AUTHOR
 
 Chris Dolan <cdolan@cpan.org>

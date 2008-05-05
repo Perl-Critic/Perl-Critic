@@ -68,6 +68,12 @@ which only reads one line at a time.
   for my $line ( <$file_handle> ){ do_something($line) }      #not ok
   while ( my $line = <$file_handle> ){ do_something($line) }  #ok
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>

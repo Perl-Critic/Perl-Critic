@@ -65,6 +65,12 @@ you really want, its better to use C<oct> and make it obvious.
   $var = 041;     #not ok, actually 33
   $var = oct(41); #ok
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>

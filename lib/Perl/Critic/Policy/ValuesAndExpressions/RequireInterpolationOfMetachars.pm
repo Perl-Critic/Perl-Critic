@@ -82,6 +82,12 @@ looking into the symbol table.  This policy just makes an educated
 guess by looking for metacharacters and sigils which usually indicate that
 the string should be interpolated.
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 NOTES
 
 Perl's own C<warnings> pragma also warns you about this.

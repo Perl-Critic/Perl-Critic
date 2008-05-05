@@ -71,6 +71,12 @@ values.  The syntax is less compact, but dramatically more readable.
   use charnames ':full';
   $str = "\N{DELETE}\N{ACKNOWLEDGE}\N{CANCEL}Z";  # ok
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 SEE ALSO
 
 

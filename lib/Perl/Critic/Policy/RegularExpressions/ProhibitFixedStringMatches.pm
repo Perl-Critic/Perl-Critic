@@ -142,6 +142,12 @@ violations:
 Furthermore, this policy detects violations in C<m//>, C<s///> and C<qr//>
 constructs, as you would expect.
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 CREDITS
 
 Initial development of this policy was supported by a grant from the Perl Foundation.

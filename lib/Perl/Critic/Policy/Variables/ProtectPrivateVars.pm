@@ -63,6 +63,12 @@ indicate private methods and variables by inserting a leading
 underscore before the identifier.  This policy catches attempts to
 access private variables from outside the package itself.
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 HISTORY
 
 This policy is inspired by a similar test in L<B::Lint>

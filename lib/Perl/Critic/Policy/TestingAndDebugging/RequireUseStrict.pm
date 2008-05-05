@@ -117,6 +117,12 @@ C<'use strict'>.
 The maximum number of violations per document for this policy defaults to 1.
 
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 SEE ALSO
 
 L<Perl::Critic::Policy::TestingAndDebugging::ProhibitNoStrict>

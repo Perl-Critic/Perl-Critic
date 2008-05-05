@@ -76,6 +76,12 @@ one of the following two equivalent forms:
 If you want to prompt for user input, try special purpose modules like
 L<IO::Prompt>.
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 CAVEATS
 
 Due to a bug in the current version of PPI (v1.119_03) and earlier,

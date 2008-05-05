@@ -80,6 +80,12 @@ Either write your subs without nesting or use anonymous code
 references.
 
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 NOTE
 
 Originally part of L<Perl::Critic::Tics>.

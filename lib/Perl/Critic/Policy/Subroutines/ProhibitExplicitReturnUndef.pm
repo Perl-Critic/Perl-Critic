@@ -108,6 +108,12 @@ also false).
       #Continue reading file...
   }
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 NOTES
 
 You can fool this policy pretty easily by hiding C<undef> in a boolean

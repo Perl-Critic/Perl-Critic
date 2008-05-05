@@ -88,6 +88,12 @@ optimizations which may mitigate the performance penalty of
 alternations, which will be rewritten behind the scenes as something
 like character classes.
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 CREDITS
 
 Initial development of this policy was supported by a grant from the Perl Foundation.

@@ -74,6 +74,12 @@ or HEREDOCs instead.
   Line three breaks the camel's back
   EOF
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 AUTHOR
 
 Chris Dolan <cdolan@cpan.org>

@@ -75,6 +75,12 @@ encourages people to write '*.pm' modules instead of the old-school
   use 'My/Perl/Module.pm';  #not ok
   use My::Perl::Module;     #ok
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 NOTES
 
 This Policy is a replacement for C<ProhibitRequireStatements>, which

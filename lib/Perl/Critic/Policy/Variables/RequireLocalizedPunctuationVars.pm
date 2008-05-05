@@ -139,6 +139,12 @@ names declared by L<English>, etc.  This is not a good coding
 practice, however it is not the concern of this specific policy to
 complain about that.
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 CAVEATS
 
 The current PPI (v1.118) has a bug where $^ variables absorb following

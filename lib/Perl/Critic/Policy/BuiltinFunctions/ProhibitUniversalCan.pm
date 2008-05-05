@@ -72,6 +72,12 @@ facades.
 See the CPAN module L<UNIVERSAL::can> for a more thorough discussion
 of this topic.
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 SEE ALSO
 
 L<Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalIsa>

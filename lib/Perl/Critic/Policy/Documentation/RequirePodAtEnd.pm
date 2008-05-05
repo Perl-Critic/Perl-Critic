@@ -83,6 +83,12 @@ place usually leads to a more cohesive document, rather than being
 forced to follow the layout of your code.  This policy issues
 violations if any POD is found before an C<__END__>.
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 NOTES
 
 Some folks like to use C<=for>, and C<=begin>, and C<=end> tags to

@@ -116,6 +116,12 @@ string equality operator with a numeric value, or vice-versa.
   if ($foo eq 123) {}       #not ok
   if ($foo == 123) {}       #ok
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 NOTES
 
 If L<warnings> are enabled, the Perl interpreter usually warns you

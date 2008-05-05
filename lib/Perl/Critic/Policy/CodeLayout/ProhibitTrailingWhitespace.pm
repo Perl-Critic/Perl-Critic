@@ -117,6 +117,12 @@ code, their editors may automatically strip out trailing whitespace,
 causing spurious differences between different versions of the same
 file (i.e. code in a source control system).
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 AUTHOR
 
 Elliot Shank C<< <perl@galumph.com> >>

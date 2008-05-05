@@ -80,6 +80,12 @@ comments into the pattern, thus making them much more readable.
        '           # a closing single quote
      }x;
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 NOTES
 
 For common regular expressions like e-mail addresses, phone numbers,

@@ -86,6 +86,12 @@ blocks: multiple statements.  Future policies may wish to examine the
 sort block in more detail -- looking for subroutine calls or large
 numbers of operations.
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 AUTHOR
 
 Chris Dolan <cdolan@cpan.org>

@@ -71,6 +71,12 @@ potential confusion about the relative precedence of the sigils.
   foreach ( keys %$hash_ref ){}               #not ok
   foreach ( keys %{ $hash_ref } ){}           #ok
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>

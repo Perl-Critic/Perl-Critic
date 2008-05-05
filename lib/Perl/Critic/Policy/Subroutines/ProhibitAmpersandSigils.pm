@@ -74,6 +74,12 @@ subroutines.  And it's easily confused with the bitwise 'and' operator.
   @result = &some_function(); #Not ok
   @result = some_function();  #ok
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>

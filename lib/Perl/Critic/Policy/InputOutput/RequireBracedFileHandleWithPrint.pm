@@ -112,6 +112,12 @@ else it won't compile under C<use strict 'subs'>.
   print  {STDERR}  $foo, $bar, $baz;  #won't compile under 'strict'
   print {*STDERR}  $foo, $bar, $baz;  #perfect!
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>

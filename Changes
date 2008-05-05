@@ -7,6 +7,9 @@
      * ValuesAndExpressions::ProhibitMagicNumbers now accepts constant
        subroutines.
 
+     Minor Changes
+     * LOTS of documentation updates.
+
 [1.083_001] Released on 2008-04-13
 
      New Features:

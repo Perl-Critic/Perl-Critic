@@ -75,6 +75,12 @@ Param::Util, which is faster.
 See the CPAN module L<UNIVERSAL::isa> for an incendiary discussion of
 this topic.
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 SEE ALSO
 
 L<Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalCan>

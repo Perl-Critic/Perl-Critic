@@ -69,6 +69,12 @@ doesn't give compile-time warnings.
   eval "print $foo";        #not ok
   eval {print $foo};        #ok
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 SEE ALSO
 
 L<Perl::Critic::Policy::ControlStrucutres::RequireBlockGrep>

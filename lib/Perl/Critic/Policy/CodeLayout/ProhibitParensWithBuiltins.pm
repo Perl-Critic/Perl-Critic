@@ -150,6 +150,12 @@ called with multiple arguments.
   split(/$pattern/, @list); #not ok
   split /$pattern/, @list;  #ok
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 NOTES
 
 Coding with parentheses can sometimes lead to verbose and awkward

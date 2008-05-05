@@ -67,6 +67,12 @@ that are hard to understand.  Instead, reverse the logic and use C<while>.
 This Policy only covers the block-form of C<until>.  For the postfix
 variety, see C<ProhibitPostfixControls>.
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 SEE ALSO
 
 L<Perl::Critic::Policy::ControlStructures::ProhibitPostfixControls>

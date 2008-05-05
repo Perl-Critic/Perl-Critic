@@ -68,6 +68,12 @@ value should always be checked to ensure that the open was successful.
   open( $filehandle, $mode, $filename ) or die "unable to open: $!";  # ok
   open( $filehandle, $mode, $filename );                              # not ok
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 AUTHOR
 
 Andrew Moore <amoore@mooresystems.com>

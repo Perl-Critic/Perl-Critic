@@ -83,6 +83,12 @@ to make variable declarations separately.
   our $foo = $baz for @list;       #not ok
   local $foo = $baz foreach @list; #not ok
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 AUTHOR
 
 Jeffrey R. Thalhammer <thaljef@cpan.org>

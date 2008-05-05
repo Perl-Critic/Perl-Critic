@@ -181,6 +181,12 @@ B<C<[^\w]>> vs. B<C<\W>>
 
 B<C<[^\s]>> vs. B<C<\S>>
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 CREDITS
 
 Initial development of this policy was supported by a grant from the Perl Foundation.

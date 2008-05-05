@@ -117,6 +117,12 @@ to represent in character classes.
 Note that this policy does not forbid unnecessary escaping.  So go
 ahead and (pointlessly) escape C<!> characters.
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 BUGS
 
 Perl treats C<m/[#]/x> in unexpected ways.

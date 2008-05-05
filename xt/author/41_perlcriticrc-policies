@@ -12,4 +12,4 @@ verbose = %f: %m at line %l, column %c.  %e.  (Severity: %s, %p)\n
 #-----------------------------------------------------------------------------
 
 [Documentation::RequirePodSections]
-lib_sections = NAME|AFFILIATION|DESCRIPTION|AUTHOR|COPYRIGHT
+lib_sections = NAME|AFFILIATION|DESCRIPTION|CONFIGURATION|AUTHOR|COPYRIGHT

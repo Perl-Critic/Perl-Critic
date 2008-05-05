@@ -68,6 +68,12 @@ value should be checked to ensure that the close was successful.
   close $filehandle or die "unable to close: $!";  # ok
   close $filehandle;                               # not ok
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 AUTHOR
 
 Andrew Moore <amoore@mooresystems.com>

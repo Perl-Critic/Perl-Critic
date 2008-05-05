@@ -60,6 +60,12 @@ This Policy is part of the core L<Perl::Critic> distribution.
 Contrary to common belief, subroutine prototypes do not enable
 compile-time checks for proper arguments.  Don't use them.
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>

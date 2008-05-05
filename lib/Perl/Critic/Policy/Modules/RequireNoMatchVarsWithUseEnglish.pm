@@ -166,6 +166,12 @@ details.
   use English qw< $ERRNO -no_match_vars>;   # ok
 
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 AUTHOR
 
 Elliot Shank C<< <perl@galumph.com> >>

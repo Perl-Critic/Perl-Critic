@@ -106,6 +106,12 @@ because the C<$bicycle> outside the loop is different from the C<$bicycle>
 inside the loop.  You may have freed your bicycle, but you can't remember
 which one it was.
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>

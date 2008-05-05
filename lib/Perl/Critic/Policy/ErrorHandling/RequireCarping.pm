@@ -391,12 +391,15 @@ none of the L<Carp> functions are necessary.
     die $message if $no_time;             #not ok, not obvious
 
 
+=head1 CONFIGURATION
+
 If you give this policy an C<allow_messages_ending_with_newlines>
 option in your F<.perlcriticrc> with a false value, then this policy
 will disallow all uses of C<die> and C<warn>.
 
     [ErrorHandling::RequireCarping]
     allow_messages_ending_with_newlines = 0
+
 
 =head1 SEE ALSO
 

@@ -70,6 +70,12 @@ regex makes it behave as most people expect it should.
   my $match = m{ ^ $pattern $ }x;  #not ok
   my $match = m{ ^ $pattern $ }xm; #ok
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 NOTES
 
 For common regular expressions like e-mail addresses, phone numbers,

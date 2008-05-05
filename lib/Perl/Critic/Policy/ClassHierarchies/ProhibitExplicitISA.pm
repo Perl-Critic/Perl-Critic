@@ -63,6 +63,12 @@ C<our @ISA = qw(Foo)> because the former happens at compile time and
 the latter at runtime.  The C<base> pragma also automatically loads
 C<Foo> for you so you save a line of easily-forgotten code.
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 AUTHOR
 
 Chris Dolan <cdolan@cpan.org>

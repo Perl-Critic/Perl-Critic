@@ -73,6 +73,12 @@ C<for> or C<foreach> loop.
   map{ push @frobbed, frobulate($_) } @list;   #not ok
   @frobbed = map { frobulate($_) } @list;      #ok
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>

@@ -67,6 +67,12 @@ dispatching more and more functions.  You're better off writing
 explicit accessor methods.  Editor macros can help make this a little
 easier.
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>

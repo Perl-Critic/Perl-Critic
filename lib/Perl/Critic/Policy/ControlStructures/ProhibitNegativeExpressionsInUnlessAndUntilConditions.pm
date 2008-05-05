@@ -173,6 +173,12 @@ within C<unless> and C<until>:
   lt  gt  le  ge  cmp
 
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 SEE ALSO
 
 L<Perl::Critic::Policy::ControlStructures::ProhibitUnlessBlocks>

@@ -92,6 +92,12 @@ name.
   my @fooBAR   #not ok
   my %fooBar   #not ok
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 SEE ALSO
 
 L<Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseSubs>

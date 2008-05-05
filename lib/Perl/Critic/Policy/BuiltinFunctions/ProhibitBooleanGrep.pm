@@ -114,6 +114,12 @@ Instead, a better solution is to use the C<any> function from
 L<List::MoreUtils>, which short-circuits after the first successful match to
 save time.
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 CAVEATS
 
 The algorithm for detecting boolean context takes a LOT of shortcuts.  There

@@ -70,6 +70,12 @@ recommending that the 4-argument version of C<substr()> be used instead.
   substr($something, 1, 2) = $newvalue;     # not ok
   substr($something, 1, 2, $newvalue);      # ok
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 AUTHOR
 
 Graham TerMarsch <graham@howlingfrog.com>

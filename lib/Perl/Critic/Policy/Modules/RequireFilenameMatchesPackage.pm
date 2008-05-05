@@ -96,6 +96,12 @@ The package declaration should always match the name of the file that
 contains it.  For example, C<package Foo::Bar;> should be in a file
 called C<Bar.pm>.
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 AUTHOR
 
 Chris Dolan <cdolan@cpan.org>

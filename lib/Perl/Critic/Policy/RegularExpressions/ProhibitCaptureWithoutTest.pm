@@ -131,6 +131,12 @@ This policy does not check whether that conditional is actually
 testing a regexp result, nor does it check whether a regexp actually
 has a capture in it.  Those checks are too hard.
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 AUTHOR
 
 Chris Dolan <cdolan@cpan.org>

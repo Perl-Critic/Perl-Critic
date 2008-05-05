@@ -79,6 +79,12 @@ When the PATTERN is a single space the C<split> function has special
 behavior, so Perl::Critic forgives that usage.  See C<"perldoc -f
 split"> for more information.
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 SEE ALSO
 
 L<Perl::Critic::Policy::ControlStrucutres::RequireBlockGrep>

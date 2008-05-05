@@ -138,6 +138,12 @@ define the C<$VERSION> variable like this:
 
   our ($VERSION) = '$Revision$' =~ m{ \$Revision: \s+ (\S+) }x;
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 NOTES
 
 Conway recommends using the C<version> pragma instead of raw numbers

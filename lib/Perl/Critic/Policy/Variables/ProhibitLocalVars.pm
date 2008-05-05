@@ -86,6 +86,12 @@ module to give those variables more meaningful names.
   local $RS                        #ok
   local $/;                        #not ok
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 NOTES
 
 If an external module uses package variables as its interface, then

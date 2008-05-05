@@ -63,6 +63,12 @@ object is used, other developers probably won't know that the variable
 has special behavior.  If you want to encapsulate complex behavior,
 just use a proper object or subroutine.
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>

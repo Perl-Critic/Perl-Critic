@@ -72,6 +72,12 @@ Use the block forms instead.
   @mapped = map { transform($_) }  @list;      #ok
 
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 SEE ALSO
 
 L<Perl::Critic::Policy::BuiltinFunctions::ProhibitStringyEval>

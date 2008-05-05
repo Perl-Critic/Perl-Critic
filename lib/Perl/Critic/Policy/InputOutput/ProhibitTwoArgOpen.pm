@@ -84,6 +84,12 @@ file, as in the difference between these two:
   open( $fh, 'foo.txt' );       # BAD: Reader must think what default mode is
   open( $fh, '<', 'foo.txt' );  # GOOD: Reader can see open mode
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 NOTES
 
 The only time you should use the two-argument form is when you re-open

@@ -119,6 +119,12 @@ them, it is not always clear if the author actually intended it.
   next if !$foo || $bar;     #ok
   next if !( $foo || $bar ); #ok
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>

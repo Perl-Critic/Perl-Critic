@@ -77,6 +77,12 @@ authors like to get clever and return some other true value like
 C<return "Club sandwich";>.  We cannot tolerate such frivolity!  OK, we
 can, but we don't recommend it since it confuses the newcomers.
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 AUTHOR
 
 Chris Dolan C<cdolan@cpan.org>

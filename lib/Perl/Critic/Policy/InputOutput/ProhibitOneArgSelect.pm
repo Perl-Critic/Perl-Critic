@@ -74,6 +74,12 @@ Conway recommends the use of C<IO::Handle> instead.
    $fh->autoflush();                   # ok
    *STDOUT->autoflush();               # ok
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 SEE ALSO
 
 L<IO::Handle>.

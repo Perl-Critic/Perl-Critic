@@ -83,6 +83,12 @@ L<IO::File> or L<FileHandle> modules for an object-oriented approach.
 There are three exceptions: STDIN, STDOUT and STDERR.  These three
 standard filehandles are always package variables.
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 SEE ALSO
 
 L<IO::Handle>

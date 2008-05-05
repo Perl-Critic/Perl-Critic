@@ -105,6 +105,12 @@ is faster even in old perls.
   my @foo = sort { $b <=> $a } @bar;         #not ok
   my @foo = reverse sort { $a <=> $b } @bar; #ok
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 AUTHOR
 
 Chris Dolan <cdolan@cpan.org>

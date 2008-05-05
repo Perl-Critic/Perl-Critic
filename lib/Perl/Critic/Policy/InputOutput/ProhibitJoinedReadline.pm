@@ -76,6 +76,12 @@ To save performance, either slurp the filehandle without splitting like so:
 
 or use L<File::Slurp>, which is even faster.
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 CAVEATS
 
 Due to a bug in the current version of PPI (v1.119_03) and earlier,

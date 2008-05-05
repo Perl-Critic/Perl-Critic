@@ -78,6 +78,12 @@ __END__
 
 Perl::Critic::Policy::CodeLayout::RequireConsistentNewlines - Use the same newline through the source.
 
+
+=head1 CONFIGURATION
+
+This Policy is not configurable.
+
+
 =head1 CAVEAT
 
 This policy works outside of PPI because PPI automatically normalizes
