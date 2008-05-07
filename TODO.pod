@@ -378,6 +378,21 @@ beginning, and dash does NOT need to be escaped at the beginning and end.  See
 L<perlreref>.
 
 
+=item * TBD::ProhibitLabelsWithSpecialBlockNames
+
+BEGIN { <...code...> }
+is a BEGIN block that gets executed at compile time.
+
+BEGIN: { <...code...> }
+is a labeled block that gets executed during run time.
+
+I suspect that any block named BEGIN, END, INIT or CHECK is an error.
+This should be a standard rule.
+
+xoxo,
+Andy
+
+
 =item * Steal ideas from L<Dunce::Files>.
 
 
