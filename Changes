@@ -2,7 +2,7 @@
 
      New Policies:
      * ControlStructures::ProhibitLabelsWithSpecialBlockNames
-       Initial implementation by Mike O'Regan.
+       Initial implementation by Mike O'Regan.  Kickin' ass, Mike.
 
      Policly Changes:
      * TestingAndDebugging::RequireUseStrict now accepts "use Moose::Role"
