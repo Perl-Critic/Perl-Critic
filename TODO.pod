@@ -75,6 +75,11 @@ For code generators and template languages that allow inline Perl code.
 Yes, somebody has an in-house templating system where they've written a custom
 test module that extracts the perl code from a template and critiques it.
 
+Actually, this would be useful for programs: Module::Build "fixes" shebang
+lines so that there's the bit about invoking perl if the program is attempted
+to be run by a Bourne shell, which throws the line numbers off when using
+Test::P::C on the contents of a C<blib> directory.
+
 
 =item * Enhance statistics.
 
@@ -90,6 +95,16 @@ test module that extracts the perl code from a template and critiques it.
 =item * Detect 5.10 source and enable stuff for that.
 
 For example, treat C<say> as equivalent to C<print>.
+
+
+=item * Support a means of failing if a Policy isn't installed.
+
+For example, the self compliance test now depends upon a Policy in the More
+distribution.
+
+Something like using a "+" sign in front of the Policy name in its
+configuration block, analogous to the "-" sign used for disabling a policy,
+e.g. "C<[+Example::Policy]>".
 
 
 =back
