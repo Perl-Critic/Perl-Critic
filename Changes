@@ -1,4 +1,9 @@
 [1.xxx] Released on 2008-0x-xx
+
+     New Policies:
+     * ControlStructures::ProhibitLabelsWithSpecialBlockNames
+       Initial implementation by Mike O'Regan.
+
      Policly Changes:
      * TestingAndDebugging::RequireUseStrict now accepts "use Moose::Role"
        as equivalent to "use strict".
