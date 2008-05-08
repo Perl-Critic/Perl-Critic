@@ -59,6 +59,7 @@ __END__
 
 Perl::Critic::Policy::ControlStructures::ProhibitLabelsWithSpecialBlockNames
 
+
 =head1 DESCRIPTION
 
 When using one of the special Perl blocks C<BEGIN>, C<END>, C<CHECK>,
@@ -74,13 +75,26 @@ end of the block name.  E.g.:
 The labels "BEGIN:", "END:", etc. are probably errors.  This policy
 prohibits the special Perl block names from being used as labels.
 
+
+=head1 SEE ALSO
+
+L<Perl Buzz article|http://perlbuzz.com/2008/05/colons-invalidate-your-begin-and-end-blocks.html>
+on this issue.
+
+
+=head1 ACKNOWLEDGEMENT
+
+Randy Lauen for identifying the problem.
+
+
 =head1 AUTHOR
 
 Mike O'Regan
 
+
 =head1 COPYRIGHT
 
-Copyright (C) 2008 Mike O'Regan.  All rights reserved.
+Copyright (c) 2008 Mike O'Regan.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
