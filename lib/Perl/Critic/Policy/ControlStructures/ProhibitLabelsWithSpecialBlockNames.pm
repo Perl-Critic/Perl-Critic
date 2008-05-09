@@ -53,11 +53,18 @@ sub violates {
 
 __END__
 
+=for stopwords Lauen O'Regan
+
 =pod
 
 =head1 NAME
 
-Perl::Critic::Policy::ControlStructures::ProhibitLabelsWithSpecialBlockNames
+Perl::Critic::Policy::ControlStructures::ProhibitLabelsWithSpecialBlockNames - Don't use labels that are the same as the special block names.
+
+
+=head1 AFFILIATION
+
+This Policy is part of the core L<Perl::Critic> distribution.
 
 
 =head1 DESCRIPTION
@@ -76,13 +83,18 @@ The labels "BEGIN:", "END:", etc. are probably errors.  This policy
 prohibits the special Perl block names from being used as labels.
 
 
+=head1 CONFIGURATION
+
+This Policy is not configurable except for the standard options.
+
+
 =head1 SEE ALSO
 
 L<Perl Buzz article|http://perlbuzz.com/2008/05/colons-invalidate-your-begin-and-end-blocks.html>
 on this issue.
 
 
-=head1 ACKNOWLEDGEMENT
+=head1 ACKNOWLEDGMENT
 
 Randy Lauen for identifying the problem.
 

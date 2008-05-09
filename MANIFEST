@@ -104,6 +104,7 @@ lib/Perl/Critic/Policy/CodeLayout/RequireTrailingCommas.pm
 lib/Perl/Critic/Policy/ControlStructures/ProhibitCascadingIfElse.pm
 lib/Perl/Critic/Policy/ControlStructures/ProhibitCStyleForLoops.pm
 lib/Perl/Critic/Policy/ControlStructures/ProhibitDeepNests.pm
+lib/Perl/Critic/Policy/ControlStructures/ProhibitLabelsWithSpecialBlockNames.pm
 lib/Perl/Critic/Policy/ControlStructures/ProhibitMutatingListFunctions.pm
 lib/Perl/Critic/Policy/ControlStructures/ProhibitNegativeExpressionsInUnlessAndUntilConditions.pm
 lib/Perl/Critic/Policy/ControlStructures/ProhibitPostfixControls.pm
@@ -291,6 +292,7 @@ t/CodeLayout/RequireTrailingCommas.run
 t/ControlStructures/ProhibitCascadingIfElse.run
 t/ControlStructures/ProhibitCStyleForLoops.run
 t/ControlStructures/ProhibitDeepNests.run
+t/ControlStructures/ProhibitLabelsWithSpecialBlockNames.run
 t/ControlStructures/ProhibitMutatingListFunctions.run
 t/ControlStructures/ProhibitNegativeExpressionsInUnlessAndUntilConditions.run.PL
 t/ControlStructures/ProhibitPostfixControls.run

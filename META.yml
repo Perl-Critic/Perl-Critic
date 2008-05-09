@@ -7,7 +7,7 @@ abstract: Critique Perl source code for best-practices.
 license: perl
 resources:
   MailingList: http://perlcritic.tigris.org/servlets/SummarizeList?listName=users
-  Repository: http://perlcritic.tigris.org/source/browse/perlcritic/
+  Repository: http://perlcritic.tigris.org/svn/perlcritic/trunk/Perl-Critic/
   homepage: http://perlcritic.com
   license: http://dev.perl.org/licenses/
 requires:
@@ -203,6 +203,9 @@ provides:
     version: 1.083_001
   Perl::Critic::Policy::ControlStructures::ProhibitDeepNests:
     file: lib/Perl/Critic/Policy/ControlStructures/ProhibitDeepNests.pm
+    version: 1.083_001
+  Perl::Critic::Policy::ControlStructures::ProhibitLabelsWithSpecialBlockNames:
+    file: lib/Perl/Critic/Policy/ControlStructures/ProhibitLabelsWithSpecialBlockNames.pm
     version: 1.083_001
   Perl::Critic::Policy::ControlStructures::ProhibitMutatingListFunctions:
     file: lib/Perl/Critic/Policy/ControlStructures/ProhibitMutatingListFunctions.pm
