@@ -56,7 +56,6 @@ inc/Perl/Critic/BuildUtilities.pm
 INSTALL
 lib/Perl/Critic.pm
 lib/Perl/Critic/Config.pm
-lib/Perl/Critic/Defaults.pm
 lib/Perl/Critic/DEVELOPER.pod
 lib/Perl/Critic/Document.pm
 lib/Perl/Critic/Exception.pm
@@ -75,6 +74,7 @@ lib/Perl/Critic/Exception/Fatal/Generic.pm
 lib/Perl/Critic/Exception/Fatal/Internal.pm
 lib/Perl/Critic/Exception/Fatal/PolicyDefinition.pm
 lib/Perl/Critic/Exception/IO.pm
+lib/Perl/Critic/OptionsProcessor.pm
 lib/Perl/Critic/Policy.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitBooleanGrep.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitComplexMappings.pm
@@ -238,7 +238,7 @@ t/01_config_bad_perlcriticrc.t
 t/01_policy_config.t
 t/02_policy.t
 t/03_pragmas.t
-t/04_defaults.t
+t/04_optionsprocessor.t
 t/05_utils.t
 t/05_utils_pod.t
 t/05_utils_ppi.t

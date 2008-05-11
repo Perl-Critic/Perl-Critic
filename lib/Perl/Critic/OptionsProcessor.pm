@@ -5,7 +5,7 @@
 # $Revision$
 ##############################################################################
 
-package Perl::Critic::Defaults;
+package Perl::Critic::OptionsProcessor;
 
 use strict;
 use warnings;
@@ -180,7 +180,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Defaults - The global configuration default values, combined with command-line values.
+Perl::Critic::OptionsProcessor - The global configuration default values, combined with command-line values.
 
 =head1 DESCRIPTION
 
@@ -194,7 +194,7 @@ user-serviceable parts here.
 
 =item C< new( %DEFAULT_PARAMS ) >
 
-Returns a reference to a new C<Perl::Critic::Defaults> object.  You
+Returns a reference to a new C<Perl::Critic::OptionsProcessor> object.  You
 can override the coded defaults by passing in name-value pairs that
 correspond to the methods listed below.
 

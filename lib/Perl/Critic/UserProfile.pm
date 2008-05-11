@@ -16,7 +16,7 @@ use Readonly;
 use Config::Tiny qw();
 use File::Spec qw();
 
-use Perl::Critic::Defaults qw();
+use Perl::Critic::OptionsProcessor qw();
 use Perl::Critic::Utils qw{ :characters policy_long_name policy_short_name };
 use Perl::Critic::Exception::Fatal::Internal qw{ throw_internal };
 use Perl::Critic::Exception::Configuration::Generic qw{ throw_generic };
@@ -42,16 +42,16 @@ sub _init {
     # The profile can be defined, undefined, or an empty string.
     my $profile = defined $args{-profile} ? $args{-profile} : _find_profile_path();
     $self->_load_profile( $profile );
-    $self->_set_defaults();
+    $self->_set_options_processor();
     return $self;
 }
 
 #-----------------------------------------------------------------------------
 
-sub defaults {
+sub options_processor {
 
     my ($self) = @_;
-    return $self->{_defaults};
+    return $self->{_options_processor};
 }
 
 #-----------------------------------------------------------------------------
@@ -170,12 +170,13 @@ sub _load_profile {
 
 #-----------------------------------------------------------------------------
 
-sub _set_defaults {
+sub _set_options_processor {
 
     my ($self) = @_;
     my $profile = $self->{_profile};
     my $defaults = delete $profile->{__defaults__} || {};
-    $self->{_defaults} = Perl::Critic::Defaults->new( %{ $defaults } );
+    $self->{_options_processor} =
+        Perl::Critic::OptionsProcessor->new( %{ $defaults } );
     return $self;
 }
 
@@ -344,9 +345,9 @@ L<Perl::Critic::Config> does that.
 
 =over
 
-=item C< defaults() >
+=item C< options_processor() >
 
-Returns the L<Perl::Critic::Defaults> object for this UserProfile.
+Returns the L<Perl::Critic::OptionsProcessor> object for this UserProfile.
 
 
 =item C< policy_is_disabled( $policy ) >
@@ -395,7 +396,7 @@ Usually the path to a F<.perlcriticrc>.
 
 =head1 SEE ALSO
 
-L<Perl::Critic::Config>, L<Perl::Critic::Defaults>
+L<Perl::Critic::Config>, L<Perl::Critic::OptionsProcessor>
 
 
 =head1 AUTHOR

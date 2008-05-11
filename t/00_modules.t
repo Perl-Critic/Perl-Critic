@@ -87,26 +87,26 @@ isa_ok($config, 'Perl::Critic::Config');
 is($config->VERSION(), $version_string, 'Perl::Critic::Config version');
 
 #-----------------------------------------------------------------------------
-# Test Perl::Critic::Config::Defaults module interface
+# Test Perl::Critic::Config::OptionsProcessor module interface
 
-use_ok('Perl::Critic::Defaults');
-can_ok('Perl::Critic::Defaults', 'new');
-can_ok('Perl::Critic::Defaults', 'exclude');
-can_ok('Perl::Critic::Defaults', 'include');
-can_ok('Perl::Critic::Defaults', 'force');
-can_ok('Perl::Critic::Defaults', 'only');
-can_ok('Perl::Critic::Defaults', 'profile_strictness');
-can_ok('Perl::Critic::Defaults', 'single_policy');
-can_ok('Perl::Critic::Defaults', 'severity');
-can_ok('Perl::Critic::Defaults', 'theme');
-can_ok('Perl::Critic::Defaults', 'top');
-can_ok('Perl::Critic::Defaults', 'verbose');
-can_ok('Perl::Critic::Defaults', 'color');
-can_ok('Perl::Critic::Defaults', 'criticism_fatal');
+use_ok('Perl::Critic::OptionsProcessor');
+can_ok('Perl::Critic::OptionsProcessor', 'new');
+can_ok('Perl::Critic::OptionsProcessor', 'exclude');
+can_ok('Perl::Critic::OptionsProcessor', 'include');
+can_ok('Perl::Critic::OptionsProcessor', 'force');
+can_ok('Perl::Critic::OptionsProcessor', 'only');
+can_ok('Perl::Critic::OptionsProcessor', 'profile_strictness');
+can_ok('Perl::Critic::OptionsProcessor', 'single_policy');
+can_ok('Perl::Critic::OptionsProcessor', 'severity');
+can_ok('Perl::Critic::OptionsProcessor', 'theme');
+can_ok('Perl::Critic::OptionsProcessor', 'top');
+can_ok('Perl::Critic::OptionsProcessor', 'verbose');
+can_ok('Perl::Critic::OptionsProcessor', 'color');
+can_ok('Perl::Critic::OptionsProcessor', 'criticism_fatal');
 
-my $defaults = Perl::Critic::Defaults->new();
-isa_ok($defaults, 'Perl::Critic::Defaults');
-is($defaults->VERSION(), $version_string, 'Perl::Critic::Defaults version');
+my $processor = Perl::Critic::OptionsProcessor->new();
+isa_ok($processor, 'Perl::Critic::OptionsProcessor');
+is($processor->VERSION(), $version_string, 'Perl::Critic::OptionsProcessor version');
 
 #-----------------------------------------------------------------------------
 # Test Perl::Critic::Policy module interface
@@ -157,7 +157,7 @@ is($viol->VERSION(), $version_string, 'Perl::Critic::Violation version');
 # Test Perl::Critic::UserProfile module interface
 
 use_ok('Perl::Critic::UserProfile');
-can_ok('Perl::Critic::UserProfile', 'defaults');
+can_ok('Perl::Critic::UserProfile', 'options_processor');
 can_ok('Perl::Critic::UserProfile', 'new');
 can_ok('Perl::Critic::UserProfile', 'policy_is_disabled');
 can_ok('Perl::Critic::UserProfile', 'policy_is_enabled');

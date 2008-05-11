@@ -53,7 +53,7 @@ sub test_wrappers_to_generate {
         t/01_policy_config.t
         t/02_policy.t
         t/03_pragmas.t
-        t/04_defaults.t
+        t/04_optionsprocessor.t
         t/05_utils.t
         t/05_utils_ppi.t
         t/05_utils_pod.t

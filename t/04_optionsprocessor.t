@@ -11,22 +11,22 @@ use strict;
 use warnings;
 use English qw(-no_match_vars);
 use Test::More tests => 21;
-use Perl::Critic::Defaults;
+use Perl::Critic::OptionsProcessor;
 
 #-----------------------------------------------------------------------------
 
 {
-    my $d = Perl::Critic::Defaults->new();
-    is($d->force(),    0,           'native default force');
-    is($d->only(),     0,           'native default only');
-    is($d->severity(), 5,           'native default severity');
-    is($d->theme(),    q{},         'native default theme');
-    is($d->top(),      0,           'native default top');
-    is($d->color(),    1,           'native default color');
-    is($d->verbose(),  4,           'native default verbose');
-    is($d->criticism_fatal,   0,    'native default criticism-fatal');
-    is_deeply($d->include(), [],    'native default include');
-    is_deeply($d->exclude(), [],    'native default exclude');
+    my $processor = Perl::Critic::OptionsProcessor->new();
+    is($processor->force(),    0,           'native default force');
+    is($processor->only(),     0,           'native default only');
+    is($processor->severity(), 5,           'native default severity');
+    is($processor->theme(),    q{},         'native default theme');
+    is($processor->top(),      0,           'native default top');
+    is($processor->color(),    1,           'native default color');
+    is($processor->verbose(),  4,           'native default verbose');
+    is($processor->criticism_fatal,   0,    'native default criticism-fatal');
+    is_deeply($processor->include(), [],    'native default include');
+    is_deeply($processor->exclude(), [],    'native default exclude');
 }
 
 #-----------------------------------------------------------------------------
@@ -45,16 +45,16 @@ use Perl::Critic::Defaults;
          exclude   => 'baz nuts',
     );
 
-    my $d = Perl::Critic::Defaults->new( %user_defaults );
-    is($d->force(),    1,           'user default force');
-    is($d->only(),     1,           'user default only');
-    is($d->severity(), 4,           'user default severity');
-    is($d->theme(),    'pbp',       'user default theme');
-    is($d->top(),      50,          'user default top');
-    is($d->verbose(),  7,           'user default verbose');
-    is($d->criticism_fatal(),  1,   'user default criticism_fatal');
-    is_deeply($d->include(), [ qw(foo bar) ], 'user default include');
-    is_deeply($d->exclude(), [ qw(baz nuts)], 'user default exclude');
+    my $processor = Perl::Critic::OptionsProcessor->new( %user_defaults );
+    is($processor->force(),    1,           'user default force');
+    is($processor->only(),     1,           'user default only');
+    is($processor->severity(), 4,           'user default severity');
+    is($processor->theme(),    'pbp',       'user default theme');
+    is($processor->top(),      50,          'user default top');
+    is($processor->verbose(),  7,           'user default verbose');
+    is($processor->criticism_fatal(),  1,   'user default criticism_fatal');
+    is_deeply($processor->include(), [ qw(foo bar) ], 'user default include');
+    is_deeply($processor->exclude(), [ qw(baz nuts)], 'user default exclude');
 }
 
 #-----------------------------------------------------------------------------
@@ -66,7 +66,7 @@ use Perl::Critic::Defaults;
         bar => 2,
     );
 
-    eval { Perl::Critic::Defaults->new( %invalid_defaults ) };
+    eval { Perl::Critic::OptionsProcessor->new( %invalid_defaults ) };
     like( $EVAL_ERROR, qr/"foo" is not a supported option/m, 'First invalid default' );
     like( $EVAL_ERROR, qr/"bar" is not a supported option/m, 'Second invalid default' );
 

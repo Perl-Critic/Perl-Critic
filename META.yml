@@ -62,9 +62,6 @@ provides:
   Perl::Critic::Config:
     file: lib/Perl/Critic/Config.pm
     version: 1.083_001
-  Perl::Critic::Defaults:
-    file: lib/Perl/Critic/Defaults.pm
-    version: 1.083_001
   Perl::Critic::Document:
     file: lib/Perl/Critic/Document.pm
     version: 1.083_001
@@ -115,6 +112,9 @@ provides:
     version: 1.083_001
   Perl::Critic::Exception::IO:
     file: lib/Perl/Critic/Exception/IO.pm
+    version: 1.083_001
+  Perl::Critic::OptionsProcessor:
+    file: lib/Perl/Critic/OptionsProcessor.pm
     version: 1.083_001
   Perl::Critic::Policy:
     file: lib/Perl/Critic/Policy.pm
