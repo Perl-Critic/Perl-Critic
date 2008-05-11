@@ -5,6 +5,9 @@
        Contributed by Mike O'Regan.  Kickin' ass, Mike.
 
      Policly Changes:
+     * InputOutput::RequireBriefOpen now ignores opens of STDIN, STDOUT,
+       and STDERR.  You're generally trying to make long-lasting global
+       effects when manipulating these.  (RT #35774)
      * TestingAndDebugging::RequireUseStrict now accepts "use Moose::Role"
        as equivalent to "use strict".
      * TestingAndDebugging::RequireUseWarnings now accepts "use Moose::Role"

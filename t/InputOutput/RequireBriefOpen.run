@@ -121,11 +121,12 @@ close FH1;
 #-----------------------------------------------------------------------------
 
 ## name glob failure
-## failures 1
+## failures 2
 ## cut
 
 local (*FH2);
 open FH2, '<', $filename or die;
+open *FH3, '<', $filename or die;
 
 #-----------------------------------------------------------------------------
 
@@ -145,6 +146,37 @@ close FH2;
 
 local (*fh1);
 open fh1, '<', $filename or die;
+
+#-----------------------------------------------------------------------------
+
+## name fail blocks
+## failures 2
+## cut
+
+my $foo;
+open {$foo}, '<', $filename or die;
+
+open {*BAR}, '<', $filename or die;
+
+#-----------------------------------------------------------------------------
+
+## name allow std handles
+## failures 0
+## cut
+
+open STDIN, '<', $filename or die;
+open STDOUT, '>', $filename or die;
+open STDERR, '>', $filename or die;
+
+#-----------------------------------------------------------------------------
+
+## name allow std globs in blocks
+## failures 0
+## cut
+
+open {*STDIN}, '<', $filename or die;
+open {*STDOUT}, '>', $filename or die;
+open {*STDERR}, '>', $filename or die;
 
 #-----------------------------------------------------------------------------
 

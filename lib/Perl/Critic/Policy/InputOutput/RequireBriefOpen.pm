@@ -9,7 +9,9 @@ package Perl::Critic::Policy::InputOutput::RequireBriefOpen;
 
 use strict;
 use warnings;
+
 use Readonly;
+
 use List::MoreUtils qw(any);
 
 use Perl::Critic::Utils qw{ :severities :classification :booleans parse_arg_list };
@@ -19,10 +21,11 @@ our $VERSION = '1.083_001';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $DESC => q{Close filehandles as soon as possible after opening them};
+Readonly::Scalar my $DESC => q<Close filehandles as soon as possible after opening them>;
 Readonly::Scalar my $EXPL => [209];
 
-Readonly::Scalar my $DOLLAR => q{$};  ## no critic (Interpolation)
+Readonly::Scalar my $SCALAR_SIGIL => q<$>;  ## no critic (InterpolationOfLiterals)
+Readonly::Scalar my $GLOB_SIGIL   => q<*>;
 
 #-----------------------------------------------------------------------------
 
@@ -38,9 +41,9 @@ sub supported_parameters {
     );
 }
 
-sub default_severity     { return $SEVERITY_HIGH         }
-sub default_themes       { return qw( core pbp maintenance ) }
-sub applies_to           { return 'PPI::Token::Word'     }
+sub default_severity     { return $SEVERITY_HIGH             }
+sub default_themes       { return qw< core pbp maintenance > }
+sub applies_to           { return 'PPI::Token::Word'         }
 
 #-----------------------------------------------------------------------------
 
@@ -54,20 +57,33 @@ sub violates {
     return if 2 > @open_args; # not a valid call to open()
 
     my ($is_lexical, $fh) = _get_opened_fh($open_args[0]);
-    if (!$fh) {
-        # not a lexical filehandle nor a glob fliehandle
-
-        #print {*STDERR} 'Failed to get fh: ', $elem->parent, "\n";
-        return;
-    }
+    return if not $fh;
+    return if $fh =~ m< \A [*]? STD (?: IN|OUT|ERR ) \z >xms;
 
     for my $close_token ($self->_find_close_invocations_or_return($elem)) {
         # The $close_token might be a close() or a return()
         #  It doesn't matter which -- both satisfy this policy
         if (is_function_call($close_token)) {
             my @close_args = parse_arg_list($close_token);
-            return if $close_args[0] && $fh eq $close_args[0]->[0];
-        } elsif ($is_lexical && is_method_call($close_token)) {
+
+            my $close_parameter = $close_args[0];
+            if ('ARRAY' eq ref $close_parameter) {
+                $close_parameter = ${$close_parameter}[0];
+            }
+            if ( $close_parameter ) {
+                $close_parameter = "$close_parameter";
+                return if $fh eq $close_parameter;
+
+                if ( any { m< \A [*] >xms } ($fh, $close_parameter) ) {
+                    (my $stripped_fh = $fh) =~ s< \A [*] ><>xms;
+                    (my $stripped_parameter = $close_parameter) =~
+                        s< \A [*] ><>xms;
+
+                    return if $stripped_fh eq $stripped_parameter;
+                }
+            }
+        }
+        elsif ($is_lexical && is_method_call($close_token)) {
             my $tok = $close_token->sprevious_sibling->sprevious_sibling;
             return if $fh eq $tok;
         }
@@ -117,35 +133,53 @@ sub _get_opened_fh {
     my $is_lexical;
     my $fh;
 
-    if (2 == @{$tokens}) {
+    if ( 2 == @{$tokens} ) {
+        if ('my' eq $tokens->[0] &&
+            $tokens->[1]->isa('PPI::Token::Symbol') &&
+            $SCALAR_SIGIL eq $tokens->[1]->raw_type) {
 
-       if ('my' eq $tokens->[0] &&
-           $tokens->[1]->isa('PPI::Token::Symbol') &&
-           $DOLLAR eq $tokens->[1]->raw_type) {
-
-          $is_lexical = 1;
-          $fh = $tokens->[1];
-       }
-
-    } elsif (1 == @{$tokens}) {
-
-       my $arg = $tokens->[0];
-       if ($arg->isa('PPI::Token::Symbol') &&
-           $DOLLAR eq $arg->raw_type) {
-
-          $is_lexical = 1;
-          $fh = $arg;
-
-       } elsif ($arg->isa('PPI::Token::Word') && $arg eq uc $arg) {
-
-          $is_lexical = 0;
-          $fh = $arg;
-       }
+            $is_lexical = 1;
+            $fh = $tokens->[1];
+        }
+    }
+    elsif (1 == @{$tokens}) {
+        my $argument = _unwrap_block( $tokens->[0] );
+        if ( $argument->isa('PPI::Token::Symbol') ) {
+            my $sigil = $argument->raw_type();
+            if ($SCALAR_SIGIL eq $sigil) {
+                $is_lexical = 1;
+                $fh = $argument;
+            }
+            elsif ($GLOB_SIGIL eq $sigil) {
+                $is_lexical = 0;
+                $fh = $argument;
+            }
+        }
+        elsif ($argument->isa('PPI::Token::Word') && $argument eq uc $argument) {
+            $is_lexical = 0;
+            $fh = $argument;
+        }
     }
 
     return ($is_lexical, $fh);
 }
 
+sub _unwrap_block {
+    my ($element) = @_;
+
+    return $element if not $element->isa('PPI::Structure::Block');
+
+    my @children = $element->schildren();
+    return $element if 1 != @children;
+    my $child = $children[0];
+
+    return $child if not $child->isa('PPI::Statement');
+
+    my @grandchildren = $child->schildren();
+    return $element if 1 != @grandchildren;
+
+    return $grandchildren[0];
+}
 
 1;
 
@@ -160,6 +194,7 @@ __END__
 =head1 NAME
 
 Perl::Critic::Policy::InputOutput::RequireBriefOpen - Close filehandles as soon as possible after opening them.
+
 
 =head1 AFFILIATION
 
@@ -206,6 +241,9 @@ the C<open> instead of closing it.  Just like the close, however, that
 C<return> has to be within the right number of lines.  From there, you're on
 your own to figure out whether the code is promptly closing the filehandle.
 
+The STDIN, STDOUT, and STDERR handles are exempt from this policy.
+
+
 =head1 CONFIGURATION
 
 This policy allows C<close()> invocations to be up to C<N> lines after their
@@ -216,12 +254,14 @@ put entries in a F<.perlcriticrc> file like this:
   [InputOutput::RequireBriefOpen]
   lines = 5
 
+
 =head1 CAVEATS
 
 =head2 C<IO::File-E<gt>new>
 
 This policy only looks for explicit C<open> calls.  It does not detect calls
 to C<CORE::open> or C<IO::File-E<gt>new> or the like.
+
 
 =head2 Is it the right lexical?
 
@@ -238,13 +278,16 @@ This is a contrived example, but it isn't uncommon for people to use C<$fh>
 for the name of the filehandle every time.  Perhaps it's time to think of
 better variable names...
 
+
 =head1 CREDITS
 
 Initial development of this policy was supported by a grant from the Perl Foundation.
 
+
 =head1 AUTHOR
 
 Chris Dolan <cdolan@cpan.org>
+
 
 =head1 COPYRIGHT
 
