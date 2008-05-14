@@ -24,7 +24,6 @@ UNITCHECK:  { $x = 1; }
 
 ## name Failure, uncuddled colon
 ## failures 5
-## TODO Waiting for PPI bug to handle this.
 ## cut
 
 BEGIN :     { $x = 1; }

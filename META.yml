@@ -5,6 +5,11 @@ author:
   - 'Jeffrey Thalhammer <thaljef@cpan.org>'
 abstract: Critique Perl source code for best-practices.
 license: perl
+resources:
+  MailingList: http://perlcritic.tigris.org/servlets/SummarizeList?listName=users
+  Repository: http://perlcritic.tigris.org/svn/perlcritic/trunk/Perl-Critic/
+  homepage: http://perlcritic.com
+  license: http://dev.perl.org/licenses/
 requires:
   B::Keywords: 1.05
   Carp: 0
@@ -51,10 +56,6 @@ recommends:
   Pod::Spell: 1
   Regexp::Parser: 0.20
   Text::ParseWords: 3
-generated_by: Module::Build version 0.2808
-meta-spec:
-  url: http://module-build.sourceforge.net/META-spec-v1.2.html
-  version: 1.2
 provides:
   Perl::Critic:
     file: lib/Perl/Critic.pm
@@ -566,8 +567,7 @@ provides:
   Perl::Critic::Violation:
     file: lib/Perl/Critic/Violation.pm
     version: 1.083_001
-resources:
-  MailingList: "http://perlcritic.tigris.org/servlets/SummarizeList?listName=users"
-  Repository: http://perlcritic.tigris.org/svn/perlcritic/trunk/Perl-Critic/
-  homepage: http://perlcritic.com
-  license: http://dev.perl.org/licenses/
+generated_by: Module::Build version 0.2808
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.2.html
+  version: 1.2

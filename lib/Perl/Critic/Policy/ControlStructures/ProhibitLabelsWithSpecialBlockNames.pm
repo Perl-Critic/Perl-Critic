@@ -40,7 +40,7 @@ sub violates {
 
     # Does the function call have enough arguments?
     my $label = $elem->content();
-    $label =~ s/ : \z //xms;
+    $label =~ s/ \s* : \z //xms;
     return if not $SPECIAL_BLOCK_NAMES{ $label };
 
     return $self->violation( $DESC, $EXPL, $elem );
