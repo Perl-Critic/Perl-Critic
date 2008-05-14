@@ -395,6 +395,30 @@ L<perlreref>.
 
 =item * Steal ideas from L<Dunce::Files>.
 
+Can someone expand this entry, please?
+
+=item * ControlStructures::ProhibitAssigmentInConditional
+
+=item * ValuesAndExpressions::RequireConstantBeforeEquals
+
+=item * ValuesAndExpressions::RequireConstantBeforeOperator
+
+L<http://use.perl.org/~stu42j/journal/36412>
+
+Just about everyone has been bitten by C<if ($x = 10) { ... }> when they meant
+to use C<==>.  A safer style is C<10 == $x> because omitting the second C<=>
+yields a noisy compile-time failure instead of silent runtime error.
+
+ProhibitAssigmentInConditional complains if the condition of a while, until,
+if or unless is solely an assignment.  If it's anything more complex (like
+C<if (($x=10)){}> or C<while ($x=$y=$z){}>), there is no warning.
+
+RequireConstantBeforeEquals complains if the left side of an C<==> is a
+variable while the right side is a constant.
+
+RequireConstantBeforeOperator complains if the left side of any comparison
+operator (C<==>, C<eq>, C<&lt;>, etc) is a variable while the right side is a
+constant.
 
 =back
 
