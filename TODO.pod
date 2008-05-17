@@ -189,6 +189,11 @@ The C<allowed_values> option needs to handle ranges.
 Needs to be tested against a wider range of $VERSION declarations.
 
 
+=item * Variables::ProhibitPunctuationVars
+
+Needs to look inside strings.  RT #35970.
+
+
 =item * TestingAndDebugging::RequireUseWarnings
 
 Check for -w on the shbang line.
@@ -548,14 +553,6 @@ can't be done because it can't tell whether a block is really a block or not.
 
 When fixed, uncomment the lines in
 _element_is_in_an_include_or_readonly_statement().
-
-
-=item Labels
-
-PPI doesn't treat labels with whitepace between them and the following colon
-as labels.  Remove TODO from
-F<t/ControlStructures/ProhibitLabelsWithSpecialBlockNames.run> once the fix is
-released.
 
 
 

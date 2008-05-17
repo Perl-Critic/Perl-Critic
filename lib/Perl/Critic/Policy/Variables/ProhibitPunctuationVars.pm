@@ -62,6 +62,7 @@ __END__
 
 Perl::Critic::Policy::Variables::ProhibitPunctuationVars - Write C<$EVAL_ERROR> instead of C<$@>.
 
+
 =head1 AFFILIATION
 
 This Policy is part of the core L<Perl::Critic> distribution.
@@ -79,6 +80,7 @@ give them clear names.
   use English qw(-no_match_vars);
   local $OUTPUT_AUTOFLUSH = undef;        #ok
 
+
 =head1 CONFIGURATION
 
 The scratch variables C<$_> and C<@_> are very common and are pretty
@@ -95,9 +97,16 @@ perlcriticrc file, add a block like this:
 The C<allow> property should be a whitespace-delimited list of
 punctuation variables.
 
+
+=head1 BUGS
+
+This doesn't find punctionation variables in strings.
+
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+
 
 =head1 COPYRIGHT
 
