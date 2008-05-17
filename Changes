@@ -1,4 +1,4 @@
-[1.xxx] Released on 2008-0x-xx
+[1.083_002] Released on 2008-05-17
 
      New Policies:
      * ControlStructures::ProhibitLabelsWithSpecialBlockNames
@@ -17,6 +17,9 @@
 
      Minor Changes
      * LOTS of documentation updates.
+
+     Prerequisites:
+     * Now depends upon PPI 1.203.
 
 [1.083_001] Released on 2008-04-13
 
