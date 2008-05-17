@@ -1,3 +1,4 @@
+^Perl-Critic-
 ^README\.developer$
 \.PPI$
 ^lib/Perl/Critic/PolicySummary.pod$

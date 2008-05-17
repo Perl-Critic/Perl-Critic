@@ -13,13 +13,22 @@ use warnings;
 use lib 'inc';
 
 use English qw{-no_match_vars};
-
+use Readonly;
 use Carp qw{ confess };
 use Fatal qw{ open close };
 
 use Perl::Critic::BuildUtilities qw{ recommended_module_versions };
 
 our $VERSION = '1.083_002';
+
+Readonly::Scalar my $GENERATED_DIRECTORY => 'xt/author/generated/';
+
+if ( not -d $GENERATED_DIRECTORY ) {
+    print
+        "\n\nSkipping generating tests because it doesn't ",
+        "look like we're in an author environment.\n\n";
+    exit 0;
+}
 
 print "\n\nGenerating tests that hide modules and then run other tests.\n";
 
@@ -28,15 +37,16 @@ my $this_program = __FILE__;
 my @modules_to_hide = sort keys %{ { recommended_module_versions } };
 my $modules_to_hide = join "\n" . q< > x 4, @modules_to_hide;
 
+print ">$_<\n" foreach @ARGV;
 foreach my $test_program_name (@ARGV) {
     my ($wrapped_test_name) =
         $test_program_name =~ m<
             \A
-            xt/author/generated/
+            $GENERATED_DIRECTORY
             ( (?: t | xt/author ) / [\w.]+ \.t ) # test to be wrapped
             _without_optional_dependencies\.t   # suffix the new test will have
             \z
-        >xms;
+        >xmso;
     if (not $wrapped_test_name) {
         confess
               'Could not figure out the name of the test to wrap from "'
