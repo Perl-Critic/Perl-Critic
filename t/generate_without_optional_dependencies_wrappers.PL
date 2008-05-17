@@ -37,7 +37,6 @@ my $this_program = __FILE__;
 my @modules_to_hide = sort keys %{ { recommended_module_versions } };
 my $modules_to_hide = join "\n" . q< > x 4, @modules_to_hide;
 
-print ">$_<\n" foreach @ARGV;
 foreach my $test_program_name (@ARGV) {
     my ($wrapped_test_name) =
         $test_program_name =~ m<
