@@ -30,7 +30,7 @@ use Perl::Critic::Utils qw{ :characters };
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '1.083_001';
+our $VERSION = '1.083_002';
 
 Readonly::Array our @EXPORT_OK => qw(critique);
 

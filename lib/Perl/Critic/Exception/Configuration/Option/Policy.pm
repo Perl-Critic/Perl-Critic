@@ -12,7 +12,7 @@ use warnings;
 
 use Perl::Critic::Utils qw{ &policy_short_name };
 
-our $VERSION = '1.083_001';
+our $VERSION = '1.083_002';
 
 #-----------------------------------------------------------------------------
 

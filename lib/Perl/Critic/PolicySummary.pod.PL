@@ -24,7 +24,7 @@ use Perl::Critic::PolicyFactory (-test => 1);
 use Perl::Critic::Utils qw< :characters >;
 use Perl::Critic::Utils::POD qw< get_module_abstract_from_file >;
 
-our $VERSION = '1.083_001';
+our $VERSION = '1.083_002';
 
 
 print "\n\nGenerating Perl::Critic::PolicySummary.\n";
@@ -91,7 +91,7 @@ print {$pod_file} <<'END_FOOTER';
 
 =head1 VERSION
 
-This is part of L<Perl::Critic> version 1.083_001.
+This is part of L<Perl::Critic> version 1.083_002.
 
 
 =head1 AUTHOR
