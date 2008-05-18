@@ -17,6 +17,8 @@ use warnings;
 use English qw< -no_match_vars >;
 use Carp qw< confess >;
 
+use File::Spec ();
+
 # We need both because the blib directory may or may not be in @INC at the
 # time this is run.
 use lib qw< blib lib >;
@@ -41,7 +43,8 @@ my $configuration =
 my @policies = $configuration->policies();
 
 
-my $policy_summary = 'lib/Perl/Critic/PolicySummary.pod';
+my $policy_summary =
+    File::Spec->catfile( qw< lib Perl Critic PolicySummary.pod > );
 
 ## no critic (RequireBriefOpen)
 open my $pod_file, '>', $policy_summary
