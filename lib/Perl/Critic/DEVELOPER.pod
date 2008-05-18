@@ -273,11 +273,6 @@ L<perlcritic> with a C<--verbose> parameter of C<10> or C<11> to see
 it along with the rest of the output for violations of your policy.
 
 
-=head2 Theme
-
-Users can use themes to select which Policies they want to use
-
-
 =head1 MAKING YOUR POLICY CONFIGURABLE
 
 L<Perl::Critic> takes care of gathering configuration information for
