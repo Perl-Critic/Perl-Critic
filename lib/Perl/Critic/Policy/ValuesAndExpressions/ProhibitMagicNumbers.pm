@@ -389,7 +389,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::ValuesAndExpressions::ProhibitMagicNumbers - Don't mix numeric operators with string operands, or vice-versa.
+Perl::Critic::Policy::ValuesAndExpressions::ProhibitMagicNumbers - Don't use values that don't explain themselves.
 
 
 =head1 AFFILIATION
