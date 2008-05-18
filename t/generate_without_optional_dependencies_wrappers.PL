@@ -19,7 +19,7 @@ use Fatal qw{ open close };
 
 use Perl::Critic::BuildUtilities qw{ recommended_module_versions };
 
-our $VERSION = '1.083_002';
+our $VERSION = '1.083_003';
 
 Readonly::Scalar my $GENERATED_DIRECTORY => 'xt/author/generated/';
 

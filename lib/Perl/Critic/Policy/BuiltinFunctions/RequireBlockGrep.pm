@@ -18,7 +18,7 @@ use Readonly;
 use Perl::Critic::Utils qw{ :severities :classification :ppi };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.083_002';
+our $VERSION = '1.083_003';
 
 #-----------------------------------------------------------------------------
 
