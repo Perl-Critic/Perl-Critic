@@ -533,15 +533,14 @@ BENDING THE RULES
     resorting to this feature.
 
 THE Perl::Critic PHILOSOPHY
-      Coding standards are deeply personal and highly subjective.  The
-      goal of Perl::Critic is to help you write code that conforms with a
-      set of best practices.  Our primary goal is not to dictate what
-      those practices are, but rather, to implement the practices
-      discovered by others.  Ultimately, you make the rules --
-      Perl::Critic is merely a tool for encouraging consistency.  If there
-      is a policy that you think is important or that we have overlooked,
-      we would be very grateful for contributions, or you can simply load
-      your own private set of policies into Perl::Critic.
+    Coding standards are deeply personal and highly subjective. The goal of
+    Perl::Critic is to help you write code that conforms with a set of best
+    practices. Our primary goal is not to dictate what those practices are,
+    but rather, to implement the practices discovered by others. Ultimately,
+    you make the rules -- Perl::Critic is merely a tool for encouraging
+    consistency. If there is a policy that you think is important or that we
+    have overlooked, we would be very grateful for contributions, or you can
+    simply load your own private set of policies into Perl::Critic.
 
 EXTENDING THE CRITIC
     The modular design of Perl::Critic is intended to facilitate the
@@ -572,13 +571,17 @@ PREREQUISITES
 
     Config::Tiny
 
+    Exception::Class
+
     File::Spec
+
+    File::Spec::Unix
 
     IO::String
 
-    List::Util
-
     List::MoreUtils
+
+    List::Util
 
     Module::Pluggable
 
@@ -590,9 +593,11 @@ PREREQUISITES
 
     Readonly
 
+    Scalar::Util
+
     String::Format
 
-    String::Util
+    version
 
     The following modules are optional, but recommended for complete
     testing:
