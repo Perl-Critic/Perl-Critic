@@ -1,3 +1,9 @@
+[1.083_003] Released on 2008-05-17
+
+     Bug fix:
+     * Generation of PolicySummary.pod failed depending upon when the build
+       included the blib directory in @INC.
+
 [1.083_002] Released on 2008-05-17
 
      New Policies:
@@ -15,7 +21,7 @@
      * ValuesAndExpressions::ProhibitMagicNumbers now accepts constant
        subroutines.
 
-     Minor Changes
+     Minor Changes:
      * LOTS of documentation updates.
 
      Prerequisites:
