@@ -1,3 +1,8 @@
+[1.083_004] Released on 2008-05-18
+
+     Bug fix:
+     * Attempt to work around build problem on MS Windows.
+
 [1.083_003] Released on 2008-05-17
 
      Bug fix:

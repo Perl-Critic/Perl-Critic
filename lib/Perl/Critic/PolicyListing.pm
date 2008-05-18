@@ -16,7 +16,7 @@ use Perl::Critic::Policy qw();
 
 use overload ( q<""> => 'to_string' );
 
-our $VERSION = '1.083_003';
+our $VERSION = '1.083_004';
 
 #-----------------------------------------------------------------------------
 
