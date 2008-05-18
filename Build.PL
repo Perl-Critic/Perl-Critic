@@ -30,6 +30,14 @@ emit_tar_warning_if_necessary();
 
 my $class = Module::Build->subclass( code => <<'END_SUBCLASS' );
 
+    sub ACTION_test {
+        my ($self) = @_;
+
+        $self->depends_on('manifest');
+
+        return $self->SUPER::ACTION_test();
+    } # end ACTION_distdir
+
     sub ACTION_authortest {
         my ($self) = @_;
 
@@ -50,7 +58,7 @@ my $class = Module::Build->subclass( code => <<'END_SUBCLASS' );
 
         $self->depends_on('authortest');
 
-        return $self->SUPER::ACTION_distdir;
+        return $self->SUPER::ACTION_distdir();
     } # end ACTION_distdir
 
 END_SUBCLASS
@@ -60,6 +68,10 @@ my $builder = $class->new(
     dist_author     => 'Jeffrey Thalhammer <thaljef@cpan.org>',
     dist_abstract   => 'Critique Perl source code for best-practices.',
     license         => 'perl',
+    dynamic_config  => 1,
+    create_readme   => 1,
+    create_packlist => 1,
+    sign            => 0,
 
     requires        => {
         'B::Keywords'               => 1.05,
@@ -124,11 +136,14 @@ my $builder = $class->new(
 
     add_to_cleanup => [
         qw<
-            MANIFEST.bak
+            lib/Perl/Critic/PolicySummary.pod
             Makefile
             Makefile.old
-            lib/Perl/Critic/PolicySummary.pod
+            MANIFEST
+            MANIFEST.bak
+            META.yml
             pm_to_blib
+            README
             t/ControlStructures/ProhibitNegativeExpressionsInUnlessAndUntilConditions.run
             t/Variables/RequireLocalizedPunctuationVars.run
         >,

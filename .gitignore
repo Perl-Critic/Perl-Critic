@@ -1,3 +1,8 @@
+Build
+MANIFEST
+META.yml
+Makefile
+README
 cover_db
 lib/Perl/Critic/PolicySummary.pod
 t/*_without_optional_dependencies.t
