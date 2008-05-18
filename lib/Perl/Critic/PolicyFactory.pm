@@ -100,7 +100,7 @@ sub _module2path {
 sub _was_loaded_from_blib {
     my $path = shift || return;
     my $full_path = $INC{$path};
-    return $full_path && $full_path =~ m/\b blib \b/xms;
+    return $full_path && $full_path =~ m/ \A b?lib \b /xms;
 }
 
 #-----------------------------------------------------------------------------

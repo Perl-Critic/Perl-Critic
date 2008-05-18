@@ -17,7 +17,9 @@ use warnings;
 use English qw< -no_match_vars >;
 use Carp qw< confess >;
 
-use lib 'lib';
+# We need both because the blib directory may or may not be in @INC at the
+# time this is run.
+use lib qw< blib lib >;
 
 use Perl::Critic::Config;
 use Perl::Critic::PolicyFactory (-test => 1);
