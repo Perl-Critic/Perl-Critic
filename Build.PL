@@ -36,7 +36,7 @@ my $class = Module::Build->subclass( code => <<'END_SUBCLASS' );
         $self->depends_on('manifest');
 
         return $self->SUPER::ACTION_test();
-    } # end ACTION_distdir
+    }
 
     sub ACTION_authortest {
         my ($self) = @_;
@@ -51,7 +51,7 @@ my $class = Module::Build->subclass( code => <<'END_SUBCLASS' );
         $self->depends_on('test');
 
         return;
-    } # end ACTION_authortest()
+    }
 
     sub ACTION_distdir {
         my ($self) = @_;
@@ -59,7 +59,7 @@ my $class = Module::Build->subclass( code => <<'END_SUBCLASS' );
         $self->depends_on('authortest');
 
         return $self->SUPER::ACTION_distdir();
-    } # end ACTION_distdir
+    }
 
 END_SUBCLASS
 
