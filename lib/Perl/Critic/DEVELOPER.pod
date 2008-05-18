@@ -91,7 +91,7 @@ what's wrong."  The explanation can be either a string with further
 details, or a reference to an array of integers that correspond to
 page numbers in I<PBP>.  We make them read-only because they never
 change.  (See
-L<Perl::Critic::ValuesAndExpressions/ProhibitConstantPragma> for why
+L<Perl::Critic::ValuesAndExpressions::ProhibitConstantPragma> for why
 we don't C<use constant>.)
 
     Readonly::Scalar my $DESC => q{Expression form of "grep"};
