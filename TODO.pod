@@ -172,21 +172,9 @@ enhanced to allow the user to specify a list of builtins that are expempt
 from the policy.
 
 
-=item * InputOutput::RequireCheckedOpen and RequireCheckedClose
-
-These policies should not report violations if 'use Fatal' is in effect.
-
-
 =item * ValuesAndExpressions::ProhibitCommaSeparatedStatements
 
 Needs to check for C<scalar( something, something )>.
-
-
-=item * ValuesAndExpressions::ProhibitMagicNumbers
-
-The C<allowed_values> option needs to handle ranges.
-
-Needs to be tested against a wider range of $VERSION declarations.
 
 
 =item * Variables::ProhibitPunctuationVars
@@ -229,11 +217,6 @@ Check for -w on the shbang line.
 =item * InputOutput::ProhibitMagicDiamond
 
 Steal the idea from L<B::Lint>.
-
-
-=item * TBD::VariableNotUsed
-
-Detect a variable that is declared, but never used.
 
 
 =item * TBD::AllProgramsNeedShebangs
@@ -467,14 +450,6 @@ arguments.  I'd like to extend that pattern to include all object-methods.
 Static methods can still use positional parameters.
 
 
-=item * Allow more flexible Policy parameter parsing
-
-Several policies use C<words_from_string()> to split their parameters into
-words.  This function is currently limited to splitting on whitespace.  It
-would be nice to allow some lattitude for users who might try and use commas
-or some other kind of delimiter.
-
-
 =item * Enhance P::C::critique() to accept files, directories, or code strings
 
 Just like F<bin/perlcritic> does now.
@@ -503,6 +478,8 @@ subroutine that does a hash-lookup like this:
 
     my %logical_ops = hashify( qw( ! || && ||= &&= and or not ) );
     sub is_logical_op { return exists $logical_ops{ $_[0] }; }
+
+Why?
 
 
 =item * Allow color output to work through a pipe.
@@ -544,17 +521,6 @@ Not strictly a bug -- the PPI Regexp classes have a dearth of accessor methods
 as of v1.118, meaning that we have to do messy digging into internals.  I
 wrote Perl::Critic:Utils::PPIRegexp to encapsulate this messiness, but it
 would be nicer to have an official interface in PPI.
-
-
-=item Hash constructors being parsed as blocks
-
-ValuesAndExpressions::ProhibitMagicNumbers has a performance optimization that
-can't be done because it can't tell whether a block is really a block or not.
-
-When fixed, uncomment the lines in
-_element_is_in_an_include_or_readonly_statement().
-
-
 
 
 =back
