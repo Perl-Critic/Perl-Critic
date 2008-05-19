@@ -8,7 +8,8 @@ use PPI::Dumper;
 
 my $whitespace = $ARGV[0] && $ARGV[0] eq '-w' ? shift : 0;
 my $code = $ARGV[0] ? (-f $ARGV[0] ? shift : \shift) : \join q{}, <STDIN>;
-my $doc  = PPI::Document->new( $code ) or die "Could not parse code.\n";
+my $doc  = PPI::Document->new( $code )
+    or die 'Could not parse code: ', PPI::Document::errstr(), "\n";
 my $dump = PPI::Dumper->new( $doc, whitespace => $whitespace );
 $dump->print();
 
@@ -51,3 +52,13 @@ it under the same terms as Perl itself.  The full text of this license
 can be found in the LICENSE file included with this module.
 
 =cut
+
+##############################################################################
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab shiftround :
