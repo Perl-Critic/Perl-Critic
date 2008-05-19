@@ -21,7 +21,7 @@ use Scalar::Util qw(blessed);
 use PPI::Document;
 use PPI::Document::File;
 
-use Perl::Critic::Exception::Fatal::Generic qw{ throw_generic };
+use Perl::Critic::Exception::Parse qw{ throw_parse };
 use Perl::Critic::Config;
 use Perl::Critic::Violation;
 use Perl::Critic::Document;
@@ -123,8 +123,9 @@ sub _create_perl_critic_document {
     if ( not defined $doc ) {
         my $errstr   = PPI::Document::errstr();
         my $file     = ref $source_code ? undef : $source_code;
-        my $for_file = $file ? qq{ for "$file"} : $EMPTY;
-        throw_generic qq{Warning: Can't parse code: $errstr} . $for_file;
+        throw_parse
+            message     => qq<Can't parse code: $errstr>,
+            file_name   => $file;
     }
 
     # Pre-index location of each node (for speed)

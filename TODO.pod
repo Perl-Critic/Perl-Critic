@@ -114,11 +114,6 @@ e.g. "C<[+Example::Policy]>".
 
 =over
 
-=item * Kill entire run if an error other than a parse error happens.
-
-Now will continue over everything.
-
-
 =item * Modules::RequireVersionVar
 
 Doesn't enforce three-part versions

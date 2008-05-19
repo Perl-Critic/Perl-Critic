@@ -20,6 +20,7 @@ use Getopt::Long qw< GetOptions >;
 use List::Util qw< first >;
 use Pod::Usage qw< pod2usage >;
 
+use Perl::Critic::Exception::Parse ();
 use Perl::Critic::Utils qw<
     :characters :severities policy_short_name
     $DEFAULT_VERBOSITY $DEFAULT_VERBOSITY_WITH_FILE_NAME
@@ -234,11 +235,14 @@ sub critique {
             }
         };
 
-        # P::C::Exception::Fatal includes the stack trace in its
-        # stringification.
-        if ($EVAL_ERROR) {
+        if ( my $exception = Perl::Critic::Exception::Parse->caught() ) {
             $had_error_in_file = 1;
             warn qq<Problem while critiquing "$file": $EVAL_ERROR\n>;
+        }
+        elsif ($EVAL_ERROR) {
+            # P::C::Exception::Fatal includes the stack trace in its
+            # stringification.
+            die qq<Fatal error while critiquing "$file": $EVAL_ERROR\n>;
         }
     }
 
