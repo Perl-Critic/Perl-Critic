@@ -114,9 +114,9 @@ e.g. "C<[+Example::Policy]>".
 
 =over
 
-=item * Don't kill entire run if PPI::Document cannot be instantiated.
+=item * Kill entire run if an error other than a parse error happens.
 
-Just say that the individual file is bad and skip to the next one.
+Now will continue over everything.
 
 
 =item * Modules::RequireVersionVar

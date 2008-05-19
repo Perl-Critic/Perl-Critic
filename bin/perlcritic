@@ -12,24 +12,30 @@ package main;
 
 use strict;
 use warnings;
-use English qw(-no_match_vars);
+
+use English qw< -no_match_vars >;
 use Readonly;
 
-use Getopt::Long qw(GetOptions);
-use List::Util qw(first);
-use Pod::Usage qw(pod2usage);
+use Getopt::Long qw< GetOptions >;
+use List::Util qw< first >;
+use Pod::Usage qw< pod2usage >;
 
-use Perl::Critic::Utils qw(
+use Perl::Critic::Utils qw<
     :characters :severities policy_short_name
     $DEFAULT_VERBOSITY $DEFAULT_VERBOSITY_WITH_FILE_NAME
-);
-use Perl::Critic::Violation qw();
+>;
+use Perl::Critic::Violation qw<>;
 
 #-----------------------------------------------------------------------------
 
 our $VERSION = '1.083_004';
 
 Readonly::Scalar my $DEFAULT_VIOLATIONS_FOR_TOP => 20;
+
+Readonly::Scalar my $EXIT_SUCCESS           => 0;
+Readonly::Scalar my $EXIT_NO_FILES          => 1;
+Readonly::Scalar my $EXIT_HAD_VIOLATIONS    => 2;
+Readonly::Scalar my $EXIT_HAD_FILE_PROBLEMS => 3;
 
 #-----------------------------------------------------------------------------
 # Begin script.  Don't run when loaded as a library
@@ -44,9 +50,14 @@ exit run() if not caller;
 sub run {
     my %options    = get_options();
     @FILES         = get_input(@ARGV);
-    my $violations = critique(\%options, @FILES);
-    my $status     = defined $violations ? ( $violations ? 2 : 0 ) : 1;
-    return $status;
+
+    my ($violations, $had_error_in_file) = critique(\%options, @FILES);
+
+    return $EXIT_HAD_FILE_PROBLEMS  if $had_error_in_file;
+    return $EXIT_NO_FILES           if not defined $violations;
+    return $EXIT_HAD_VIOLATIONS     if $violations;
+
+    return $EXIT_SUCCESS;
 }
 
 #-----------------------------------------------------------------------------
@@ -210,6 +221,7 @@ sub critique {
     $CRITIC->policies() || die "No policies selected.\n";
 
     my $number_of_violations = undef;
+    my $had_error_in_file = 0;
 
     for my $file (@files) {
 
@@ -224,11 +236,10 @@ sub critique {
 
         # P::C::Exception::Fatal includes the stack trace in its
         # stringification.
-
-        ## no critic (RequireCarping)
-        die qq{Fatal error while critiquing "$file": $EVAL_ERROR}
-            if $EVAL_ERROR;
-        ## use critic
+        if ($EVAL_ERROR) {
+            $had_error_in_file = 1;
+            warn qq<Problem while critiquing "$file": $EVAL_ERROR\n>;
+        }
     }
 
     if ( $opts_ref->{-statistics} or $opts_ref->{'-statistics-only'} ) {
@@ -236,7 +247,7 @@ sub critique {
         report_statistics( $opts_ref, $stats );
     }
 
-    return $number_of_violations;
+    return $number_of_violations, $had_error_in_file;
 }
 
 #------------------------------------------------------------------------------

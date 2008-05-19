@@ -3,6 +3,9 @@
      New Policies:
      * Variables::ProhibitUnusedVariables
 
+     Bug fix:
+     * No long falls over if a single file has a parse error.
+
 [1.083_004] Released on 2008-05-18
 
      Bug fix:
