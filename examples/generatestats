@@ -63,13 +63,10 @@ sub summarize {
     my %total_policies;
     my %types;
     my %files;
-    my %results;
 
     foreach my $file ( @{$files} ) {
         my $relative_path;
         my $type;
-        my %severities;
-        my %policies;
 
         if ($file eq $path) {
             $relative_path = $file;

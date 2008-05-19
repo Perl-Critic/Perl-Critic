@@ -1,0 +1,122 @@
+## name Simple unused, single, unassigned lexical.
+## failures 1
+## cut
+
+my $x;
+
+#-----------------------------------------------------------------------------
+
+## name Simple unused, multiple, unassigned lexicals.  Not going to handle this yet.
+## failures 0
+## cut
+
+my $x, @z, %y;
+
+#-----------------------------------------------------------------------------
+
+## name Simple unused assigned lexicals.  Not going to handle this yet.
+## failures 0
+## cut
+
+# Need to look out for RAII.
+my $y = foo();
+
+#-----------------------------------------------------------------------------
+
+## name Simple unused explicit global.
+## failures 0
+## cut
+
+our $x;
+
+#-----------------------------------------------------------------------------
+
+## name Simple unused implicit global.
+## failures 0
+## cut
+
+$x;
+
+#-----------------------------------------------------------------------------
+
+## name Simple unused localized.
+## failures 0
+## cut
+
+local $x;
+
+#-----------------------------------------------------------------------------
+
+## name Simple used lexical scalar.
+## failures 0
+## cut
+
+my $x = 1;
+
+print $x;
+
+#-----------------------------------------------------------------------------
+
+## name Simple used lexical array.
+## failures 0
+## cut
+
+my @x;
+
+$x[0] = 5;
+
+#-----------------------------------------------------------------------------
+
+## name Simple used lexical hash.
+## failures 0
+## cut
+
+my %foo;
+
+$foo{bar} = -24;
+
+#-----------------------------------------------------------------------------
+
+## name Shadowed variable.  No going to handle this yet.
+## failures 0
+## cut
+
+my $x = 2;
+
+{
+    my $x = 1;
+    blah();
+}
+
+#-----------------------------------------------------------------------------
+
+## name Separate lexicals.  No going to handle this yet.
+## failures 0
+## cut
+
+{
+    my $x = 2;
+}
+
+{
+    my $x = 1;
+    blah();
+}
+
+#-----------------------------------------------------------------------------
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab shiftround :
