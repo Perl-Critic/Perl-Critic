@@ -24,9 +24,12 @@ use File::Spec ();
 use lib qw< blib lib >;
 
 use Perl::Critic::Config;
+use Perl::Critic::Exception::IO ();
 use Perl::Critic::PolicyFactory (-test => 1);
 use Perl::Critic::Utils qw< :characters >;
 use Perl::Critic::Utils::POD qw< get_module_abstract_from_file >;
+
+use Exception::Class ();  # Must be after P::C::Exception::*
 
 our $VERSION = '1.083_004';
 
@@ -82,13 +85,38 @@ my $format = <<'END_POLICY';
 
 END_POLICY
 
-foreach my $policy (@policies) {
-    my $module_abstract = $policy->get_raw_abstract();
+eval {
+    foreach my $policy (@policies) {
+        my $module_abstract = $policy->get_raw_abstract();
 
-    printf
-        {$pod_file}
-        $format,
-        $policy->get_long_name(), $module_abstract, $policy->default_severity();
+        printf
+            {$pod_file}
+            $format,
+            $policy->get_long_name(),
+            $module_abstract,
+            $policy->default_severity();
+    }
+};
+if (my $exception = $EVAL_ERROR) {  # Yes, an assignment and not equality test.
+    my @extra_messages;
+
+    if ( Exception::Class->caught() ) {
+        $exception->show_trace(1);
+
+        if ( Perl::Critic::Exception::IO->caught() ) {
+            # Pretty ridiculous, huh?
+            my $file_name = $exception->file_name();
+            if (ref $file_name) {
+                push
+                    @extra_messages,
+                    "\nFile name was a reference: ",
+                    ref $file_name;
+            }
+        }
+    }
+
+    print {*STDERR} $exception, @extra_messages, "\n";
+    exit 1;
 }
 
 

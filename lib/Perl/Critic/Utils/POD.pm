@@ -296,7 +296,7 @@ sub get_raw_module_abstract_for_module {
 
     return
         get_raw_module_abstract_from_file(
-            get_pod_file_for_module($module_name), \&trim_raw_pod_section,
+            get_pod_file_for_module($module_name)
         );
 }
 
@@ -346,7 +346,7 @@ sub get_module_abstract_for_module {
 
     return
         get_module_abstract_from_file(
-            get_pod_file_for_module($module_name), \&trim_pod_section,
+            get_pod_file_for_module($module_name)
         );
 }
 
