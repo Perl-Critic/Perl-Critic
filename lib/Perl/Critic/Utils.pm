@@ -24,7 +24,7 @@ use Perl::Critic::Utils::PPI qw< is_ppi_expression_or_generic_statement >;
 
 use base 'Exporter';
 
-our $VERSION = '1.083_004';
+our $VERSION = '1.083_005';
 
 #-----------------------------------------------------------------------------
 # Exportable symbols here.

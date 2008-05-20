@@ -16,7 +16,7 @@ use List::Util qw(first);
 use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.083_004';
+our $VERSION = '1.083_005';
 
 #-----------------------------------------------------------------------------
 

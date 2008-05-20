@@ -19,7 +19,7 @@ use Perl::Critic::Exception::AggregateConfiguration;
 use Perl::Critic::Exception::Configuration::Option::Global::ExtraParameter;
 use Perl::Critic::Utils::Constants qw{ $PROFILE_STRICTNESS_DEFAULT };
 
-our $VERSION = '1.083_004';
+our $VERSION = '1.083_005';
 
 #-----------------------------------------------------------------------------
 

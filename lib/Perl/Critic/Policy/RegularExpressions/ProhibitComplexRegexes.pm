@@ -18,7 +18,7 @@ use Perl::Critic::Utils qw{ :booleans :severities };
 use Perl::Critic::Utils::PPIRegexp qw{ parse_regexp get_match_string get_modifiers };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.083_004';
+our $VERSION = '1.083_005';
 
 #-----------------------------------------------------------------------------
 
