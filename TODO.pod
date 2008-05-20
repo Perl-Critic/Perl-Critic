@@ -403,6 +403,12 @@ RequireConstantBeforeOperator complains if the left side of any comparison
 operator (C<==>, C<eq>, C<&lt;>, etc) is a variable while the right side is a
 constant.
 
+
+=item * InputOutput::ProhibitUTF8IOLayer
+
+http://www.perlfoundation.org/perl5/index.cgi?the_utf8_perlio_layer
+
+
 =back
 
 
