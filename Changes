@@ -1,10 +1,13 @@
-[1.xxx] Released on 2008-xx-xx
+[1.083_005] Released on 2008-05-19
 
      New Policies:
      * Variables::ProhibitUnusedVariables
 
      Bug fix:
      * No longer falls over if a single file has a parse error.
+     * Attempting to figure out problem in getting abtracts from Policies
+       when running on Windows.  This shouldn't fix the problem but should
+       give clues.
 
 [1.083_004] Released on 2008-05-18
 
