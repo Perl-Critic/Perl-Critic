@@ -1,17 +1,16 @@
-Naming standard: Things that are distribution-private (as opposed to class/package-private)
-begin with double underscore.
+General development: While there is Makefile.PL/EU::MM support within the
+distribution, a lot of the authoring stuff depends upon Build.PL/M::B, in
+particular, running author tests.
+
+Naming standard: Things that are distribution-private (as opposed to
+class/package-private) begin with double underscore.
 
 Steps for adding a new Policy:
 
  * Create tests in t/[category]/[name].run
  * Create the .pm in lib/Perl/Critic/Policy/[category]/[name].pm
- * Ensure the files are in the MANIFEST so that t/00_modules.t can find them.
-   Add it to MANIFEST via "./Build manifest".
  * If it applies_to() PPI::Document, perhaps add an exception in
    t/03_pragmas.t
- * Add it to the POD in lib/Perl/Critic/PolicySummary.pod.  You'll
-   need to put it in the correct alphabetical order, or you'll get a
-   failure in t/13_bundled_policies.t
  * Mention it in Changes
  * svn add t/[category]/[name].run lib/Perl/Critic/Policy/[category]/[name].pm
  * tools/svnkeywords t/[category]/[name].run lib/Perl/Critic/Policy/[category]/[name].pm
