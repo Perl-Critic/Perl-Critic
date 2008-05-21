@@ -1,4 +1,4 @@
-[1.083_006] Released on 2008-05-xx
+[1.083_006] Released on 2008-05-20
 
      Policy Changes:
      * Variables::ProhibitMatchVars no longer detects "use English;".
@@ -7,6 +7,8 @@
      Bug Fixes:
      * Variables::ProhibitPerl4PackageNames no longer complains about
        $'/$POSTMATCH.  RT #36059
+     * Theoretically, the problem with getting Policy abstracts on Windows has
+       been solved.
 
 [1.083_005] Released on 2008-05-19
 
