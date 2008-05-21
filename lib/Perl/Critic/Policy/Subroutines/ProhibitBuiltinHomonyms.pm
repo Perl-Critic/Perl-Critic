@@ -14,7 +14,7 @@ use Readonly;
 use Perl::Critic::Utils qw{ :severities :data_conversion :classification };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.083_005';
+our $VERSION = '1.083_006';
 
 #-----------------------------------------------------------------------------
 

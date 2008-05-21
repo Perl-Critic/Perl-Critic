@@ -15,7 +15,7 @@ use Perl::Critic::Utils qw{ :characters :booleans };
 
 use base 'Exporter';
 
-our $VERSION = '1.083_005';
+our $VERSION = '1.083_006';
 
 #-----------------------------------------------------------------------------
 
