@@ -131,7 +131,20 @@ my $builder = $class->new(
             license     => 'http://dev.perl.org/licenses/',
             Repository  => 'http://perlcritic.tigris.org/svn/perlcritic/trunk/Perl-Critic/',
             MailingList => 'http://perlcritic.tigris.org/servlets/SummarizeList?listName=users',
-        }
+        },
+        no_index    => {
+            file        => [
+                qw<
+                    TODO.pod
+                    lib/Perl/Critic/PolicySummary.pod.PL
+                >
+            ],
+            directory   => [
+                qw<
+                    doc
+                >
+            ],
+        },
     },
 
     add_to_cleanup => [
