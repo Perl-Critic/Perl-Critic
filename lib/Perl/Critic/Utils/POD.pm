@@ -12,7 +12,6 @@ use warnings;
 
 use English qw< -no_match_vars >;
 
-use File::Spec ();
 use IO::String ();
 use Pod::PlainText ();
 use Pod::Select ();
@@ -59,8 +58,9 @@ our %EXPORT_TAGS = (
 sub get_pod_file_for_module {
     my ($module_name) = @_;
 
-    my $relative_path =
-        File::Spec->catfile( split m/::/xms, $module_name ) . '.pm';
+    # No File::Spec: %INC always uses forward slashes.
+    (my $relative_path = $module_name) =~ s< :: ></>xmsg;
+    $relative_path .= '.pm';
 
     my $absolute_path = $INC{$relative_path} or return;
 
@@ -111,10 +111,10 @@ sub get_raw_pod_section_from_string {
 sub get_raw_pod_section_for_module {
     my ($module_name, $section_name) = @_;
 
-    return get_raw_pod_section_from_file(
-        get_pod_file_for_module($module_name),
-        $section_name,
-    );
+    my $file_name = get_pod_file_for_module($module_name)
+        or throw_generic qq<Could not find POD for "$module_name".>;
+
+    return get_raw_pod_section_from_file($file_name, $section_name);
 }
 
 #-----------------------------------------------------------------------------
@@ -158,10 +158,10 @@ sub get_pod_section_from_string {
 sub get_pod_section_for_module {
     my ($module_name, $section_name) = @_;
 
-    return get_pod_section_from_file(
-        get_pod_file_for_module($module_name),
-        $section_name,
-    );
+    my $file_name = get_pod_file_for_module($module_name)
+        or throw_generic qq<Could not find POD for "$module_name".>;
+
+    return get_pod_section_from_file($file_name, $section_name);
 }
 
 #-----------------------------------------------------------------------------
@@ -294,10 +294,10 @@ sub get_raw_module_abstract_from_string {
 sub get_raw_module_abstract_for_module {
     my ($module_name) = @_;
 
-    return
-        get_raw_module_abstract_from_file(
-            get_pod_file_for_module($module_name)
-        );
+    my $file_name = get_pod_file_for_module($module_name)
+        or throw_generic qq<Could not find POD for "$module_name".>;
+
+    return get_raw_module_abstract_from_file($file_name);
 }
 
 #-----------------------------------------------------------------------------
@@ -344,10 +344,10 @@ sub get_module_abstract_from_string {
 sub get_module_abstract_for_module {
     my ($module_name) = @_;
 
-    return
-        get_module_abstract_from_file(
-            get_pod_file_for_module($module_name)
-        );
+    my $file_name = get_pod_file_for_module($module_name)
+        or throw_generic qq<Could not find POD for "$module_name".>;
+
+    return get_module_abstract_from_file($file_name);
 }
 
 #-----------------------------------------------------------------------------
@@ -565,6 +565,9 @@ that contains the raw POD.
 Does the same as C<get_raw_pod_section_from_file()>, but with a module
 name.
 
+Throws a L<Perl::Critic::Exception::Generic> if a file containing POD
+for the module can't be found.
+
 
 =item C<get_pod_section_from_file( $file_name, $section_name )>
 
@@ -593,6 +596,9 @@ that contains the raw POD.
 
 Does the same as C<get_pod_section_from_file()>, but with a module
 name.
+
+Throws a L<Perl::Critic::Exception::Generic> if a file containing POD
+for the module can't be found.
 
 
 =item C<trim_raw_pod_section( $pod_section )>

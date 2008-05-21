@@ -17,8 +17,6 @@ use warnings;
 use English qw< -no_match_vars >;
 use Carp qw< confess >;
 
-use File::Spec ();
-
 # We need both because the blib directory may or may not be in @INC at the
 # time this is run.
 use lib qw< blib lib >;
@@ -46,8 +44,7 @@ my $configuration =
 my @policies = $configuration->policies();
 
 
-my $policy_summary =
-    File::Spec->catfile( qw< lib Perl Critic PolicySummary.pod > );
+my $policy_summary = 'lib/Perl/Critic/PolicySummary.pod';
 
 ## no critic (RequireBriefOpen)
 open my $pod_file, '>', $policy_summary
@@ -100,19 +97,8 @@ eval {
 if (my $exception = $EVAL_ERROR) {  # Yes, an assignment and not equality test.
     my @extra_messages;
 
-    if ( Exception::Class->caught() ) {
+    if ( ref $exception ) {
         $exception->show_trace(1);
-
-        if ( Perl::Critic::Exception::IO->caught() ) {
-            # Pretty ridiculous, huh?
-            my $file_name = $exception->file_name();
-            if (ref $file_name) {
-                push
-                    @extra_messages,
-                    "\nFile name was a reference: ",
-                    ref $file_name;
-            }
-        }
     }
 
     print {*STDERR} $exception, @extra_messages, "\n";
