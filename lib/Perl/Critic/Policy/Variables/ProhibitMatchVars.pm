@@ -49,7 +49,11 @@ sub _is_use_english {
     $elem->isa('PPI::Statement::Include') || return;
     $elem->type() eq 'use' || return;
     $elem->module() eq 'English' || return;
-    return 1 if ($elem =~ m/\A use \s+ English \s* ;\z/xms); # Bare, lacking -no_match_vars
+
+    # Bare, lacking -no_match_vars.  Now handled by
+    # Modules::RequireNoMatchVarsWithUseEnglish.
+    return 0 if ($elem =~ m/\A use \s+ English \s* ;\z/xms);
+
     return 1 if ($elem =~ m/\$(?:PRE|POST|)MATCH/xms);
     return;  # either "-no_match_vars" or a specific list
 }
@@ -81,10 +85,14 @@ This Policy is part of the core L<Perl::Critic> distribution.
 
 Using the "match variables" C<$`>, C<$&>, and/or C<$'> can
 significantly degrade the performance of a program.  This policy
-forbids using them or their English equivalents.  It also forbids
-plain C<use English;> so you should instead employ C<use English
-'-no_match_vars';> which avoids the match variables.  See B<perldoc
+forbids using them or their English equivalents.  See B<perldoc
 English> or PBP page 82 for more information.
+
+It used to forbid plain C<use English;> because it ends up causing the
+performance side-effects of the match variables.  However, the message
+emitted for that situation was not at all clear and there is now
+L<Perl::Critic::Policy::Modules::RequireNoMatchVarsWithUseEnglish>,
+which addresses this situation directly.
 
 
 =head1 CONFIGURATION

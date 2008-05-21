@@ -1,8 +1,7 @@
 ## name Basic
-## failures 10
+## failures 9
 ## cut
 
-use English;
 use English qw($PREMATCH);
 use English qw($MATCH);
 use English qw($POSTMATCH);
@@ -12,6 +11,13 @@ $';
 $PREMATCH;
 $MATCH;
 $POSTMATCH;
+
+
+## name Ignore case handled by RequireNoMatchVarsWithUseEnglish
+## failures 0
+## cut
+
+use English;
 
 
 ## name no_match_vars
