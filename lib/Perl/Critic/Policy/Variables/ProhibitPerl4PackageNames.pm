@@ -35,7 +35,12 @@ sub violates {
     my $content = $elem->content();
 
     if ( (index $content, $QUOTE) < 0 ) {
-                return;
+        return;
+    }
+
+    if ( $content =~ m< \A [\$@%&*] ' \z >xms ) {
+        # We've found $POSTMATCH.
+        return;
     }
 
     if ( $elem->isa('PPI::Token::Word') && is_hash_key($elem) ) {

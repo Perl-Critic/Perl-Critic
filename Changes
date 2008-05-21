@@ -1,9 +1,19 @@
+[1.083_006] Released on 2008-05-xx
+
+     Policy Changes:
+     * Variables::ProhibitMatchVars no longer detects "use English;".
+       This problem is detected by Modules::RequireNoMatchVarsWithUseEnglish.
+
+     Bug Fixes:
+     * Variables::ProhibitPerl4PackageNames no longer complains about
+       $'/$POSTMATCH.  RT #36059
+
 [1.083_005] Released on 2008-05-19
 
      New Policies:
      * Variables::ProhibitUnusedVariables
 
-     Bug fix:
+     Bug Fixes:
      * No longer falls over if a single file has a parse error.
      * Attempting to figure out problem in getting abtracts from Policies
        when running on Windows.  This shouldn't fix the problem but should
@@ -11,12 +21,12 @@
 
 [1.083_004] Released on 2008-05-18
 
-     Bug fix:
+     Bug Fix:
      * Attempt to work around build problem on MS Windows.
 
 [1.083_003] Released on 2008-05-17
 
-     Bug fix:
+     Bug Fix:
      * Generation of PolicySummary.pod failed depending upon when the build
        included the blib directory in @INC.
 
