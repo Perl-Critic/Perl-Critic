@@ -22,7 +22,7 @@ Readonly::Hash my %TERMINALS => hashify( @TERMINALS );
 Readonly::Array my @CONDITIONALS => qw( if unless foreach while for );
 Readonly::Hash my %CONDITIONALS => hashify( @CONDITIONALS );
 
-Readonly::Array my @OPERATORS => qw( && || and or ? );
+Readonly::Array my @OPERATORS => qw( && || // and or err ? );
 Readonly::Hash my %OPERATORS => hashify( @OPERATORS );
 
 #-----------------------------------------------------------------------------
@@ -116,7 +116,7 @@ Code is reachable if any of the following conditions are true:
 
 =item * Flow-altering statement has a conditional attached to it
 
-=item * Statement is on the right side of an operator C<&&>, C<||>, C<and>, or C<or>.
+=item * Statement is on the right side of an operator C<&&>, C<||>, C<//>, C<and>, C<or>, or C<err>.
 
 =item * Code is prefixed with a label (can potentially be reached via C<goto>)
 
