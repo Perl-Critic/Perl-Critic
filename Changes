@@ -1,3 +1,9 @@
+[1.083_007] Released on 2008-05-xx
+
+     Policy Changes:
+     * ControlStructures::ProhibitUnreachableCode now handles the perl 5.10
+       "//" and "err" operators.  RT #36080
+
 [1.083_006] Released on 2008-05-20
 
      Policy Changes:
@@ -43,9 +49,9 @@
        and STDERR.  You're generally trying to make long-lasting global
        effects when manipulating these.  (RT #35774)
      * TestingAndDebugging::RequireUseStrict now accepts "use Moose::Role"
-       as equivalent to "use strict".
+       as equivalent to "use strict".  (RT #34838)
      * TestingAndDebugging::RequireUseWarnings now accepts "use Moose::Role"
-       as equivalent to "use warnings".
+       as equivalent to "use warnings".  (RT #34838)
      * ValuesAndExpressions::ProhibitMagicNumbers now accepts constant
        subroutines.
 
@@ -70,6 +76,7 @@
 
      Policy Changes:
      * Variables::RequireLocalizedPunctuationVars now allows the use of "my".
+       RT #34838.
 
      http://rt.cpan.org/Ticket/Display.html?id=33937
 
