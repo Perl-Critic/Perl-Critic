@@ -14,7 +14,7 @@ use warnings;
 
 use base 'Exporter';
 
-our $VERSION = '1.083_006';
+our $VERSION = '1.084';
 our @EXPORT_OK = qw(
     get_skip_all_tests_tap
 );

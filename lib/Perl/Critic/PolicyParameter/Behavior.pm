@@ -12,7 +12,7 @@ use warnings;
 
 use Perl::Critic::Utils qw{ :characters };
 
-our $VERSION = '1.083_006';
+our $VERSION = '1.084';
 
 #-----------------------------------------------------------------------------
 
