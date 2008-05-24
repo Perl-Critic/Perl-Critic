@@ -1,67 +1,4 @@
-[1.083_007] Released on 2008-05-xx
-
-     Policy Changes:
-     * ControlStructures::ProhibitUnreachableCode now handles the perl 5.10
-       "//" and "err" operators.  RT #36080
-
-[1.083_006] Released on 2008-05-20
-
-     Policy Changes:
-     * Variables::ProhibitMatchVars no longer detects "use English;".
-       This problem is detected by Modules::RequireNoMatchVarsWithUseEnglish.
-
-     Bug Fixes:
-     * Variables::ProhibitPerl4PackageNames no longer complains about
-       $'/$POSTMATCH.  RT #36059
-     * Theoretically, the problem with getting Policy abstracts on Windows has
-       been solved.
-
-[1.083_005] Released on 2008-05-19
-
-     New Policies:
-     * Variables::ProhibitUnusedVariables
-
-     Bug Fixes:
-     * No longer falls over if a single file has a parse error.
-     * Attempting to figure out problem in getting abtracts from Policies
-       when running on Windows.  This shouldn't fix the problem but should
-       give clues.
-
-[1.083_004] Released on 2008-05-18
-
-     Bug Fix:
-     * Attempt to work around build problem on MS Windows.
-
-[1.083_003] Released on 2008-05-17
-
-     Bug Fix:
-     * Generation of PolicySummary.pod failed depending upon when the build
-       included the blib directory in @INC.
-
-[1.083_002] Released on 2008-05-17
-
-     New Policies:
-     * ControlStructures::ProhibitLabelsWithSpecialBlockNames
-       Contributed by Mike O'Regan.  Kickin' ass, Mike.
-
-     Policly Changes:
-     * InputOutput::RequireBriefOpen now ignores opens of STDIN, STDOUT,
-       and STDERR.  You're generally trying to make long-lasting global
-       effects when manipulating these.  (RT #35774)
-     * TestingAndDebugging::RequireUseStrict now accepts "use Moose::Role"
-       as equivalent to "use strict".  (RT #34838)
-     * TestingAndDebugging::RequireUseWarnings now accepts "use Moose::Role"
-       as equivalent to "use warnings".  (RT #34838)
-     * ValuesAndExpressions::ProhibitMagicNumbers now accepts constant
-       subroutines.
-
-     Minor Changes:
-     * LOTS of documentation updates.
-
-     Prerequisites:
-     * Now depends upon PPI 1.203.
-
-[1.083_001] Released on 2008-04-13
+[1.084] Released on 2008-05-24
 
      New Features:
      * perlcritic now supports a --list-themes option.
@@ -74,16 +11,38 @@
      * The ValuesAndExpressions::ProhibitMagicNumbers policy has been moved
        from Perl::Critic::More into the primary Perl::Critic distribution.
 
+     New Policies:
+     * Variables::ProhibitUnusedVariables (very dumb, limited initial
+       implementation.)
+     * ControlStructures::ProhibitLabelsWithSpecialBlockNames
+       Contributed by Mike O'Regan.  Kickin' ass, Mike.
+
      Policy Changes:
-     * Variables::RequireLocalizedPunctuationVars now allows the use of "my".
-       RT #34838.
-
-     http://rt.cpan.org/Ticket/Display.html?id=33937
-
+     * ControlStructures::ProhibitUnreachableCode now handles the perl 5.10
+       "//" and "err" operators.  RT #36080
+     * InputOutput::RequireBriefOpen now ignores opens of STDIN, STDOUT,
+       and STDERR.  You're generally trying to make long-lasting global
+       effects when manipulating these.  (RT #35774)
      * RegularExpressions::ProhibitUnusualDelimiters now supports an
        "allow_all_brackets" option.
      * RegularExpressions::RequireBracesForMultiline now supports an
        "allow_all_brackets" option.
+     * TestingAndDebugging::RequireUseStrict now accepts "use Moose::Role"
+       as equivalent to "use strict".  (RT #34838)
+     * TestingAndDebugging::RequireUseWarnings now accepts "use Moose::Role"
+       as equivalent to "use warnings".  (RT #34838)
+     * ValuesAndExpressions::ProhibitMagicNumbers now accepts constant
+       subroutines.
+     * Variables::ProhibitMatchVars no longer detects "use English;".
+       This problem is detected in a more clear way by
+       Modules::RequireNoMatchVarsWithUseEnglish.
+     * Variables::ProhibitPerl4PackageNames no longer complains about
+       $'/$POSTMATCH.  RT #36059
+     * Variables::RequireLocalizedPunctuationVars now allows the use of "my".
+       RT #33937
+
+     Bug Fixes:
+     * No longer falls over if a single file has a parse error.
 
      New Developer Features:
      * If a document specifies a minimum perl version, e.g. "use 5.008003",
@@ -93,11 +52,25 @@
        P::C::PolicyConfig object instead of a hash reference.
 
      Minor Changes:
+     * LOTS of documentation updates.
      * A few more statistics are emitted by perlcritic with the --statistics
        option.
+     * perlcritic --profile-proto now includes policy abstracts in its
+       output.
 
      Prerequisites:
+     * Now depends upon PPI 1.203.
      * New dependency upon version.
+
+[1.083_006] Released on 2008-05-20
+[1.083_005] Released on 2008-05-19
+[1.083_004] Released on 2008-05-18
+[1.083_003] Released on 2008-05-17
+[1.083_002] Released on 2008-05-17
+[1.083_001] Released on 2008-04-13
+
+     Changes summarized into 1.084 above.  For exact details, see Changes in
+     1.083_006 on BackPAN.
 
 [1.082] Released on 2008-03-08
 
