@@ -128,7 +128,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Subroutines::ProhibitManyArgs - C<sub never { sub correct {} }>.
+Perl::Critic::Policy::Subroutines::ProhibitManyArgs - Too many arguments.
 
 =head1 AFFILIATION
 
