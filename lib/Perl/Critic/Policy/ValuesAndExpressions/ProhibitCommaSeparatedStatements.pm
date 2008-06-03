@@ -68,10 +68,11 @@ sub violates {
         ) {
             if ( $child->isa('PPI::Token::Word') ) {
                 return if _succeeding_commas_are_list_element_separators($child);
-            } elsif ( $child->isa('PPI::Token::Operator') ) {
+            }
+            elsif ( $child->isa('PPI::Token::Operator') ) {
                 if ( $child->content() eq $COMMA ) {
                     return $self->violation($DESC, $EXPL, $elem);
-                };
+                }
             }
         }
     }
