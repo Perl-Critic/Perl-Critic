@@ -19,7 +19,7 @@ our $VERSION = '1.084';
 Readonly::Array my @TERMINALS => qw( die exit croak confess );
 Readonly::Hash my %TERMINALS => hashify( @TERMINALS );
 
-Readonly::Array my @CONDITIONALS => qw( if unless foreach while for );
+Readonly::Array my @CONDITIONALS => qw( if unless foreach while until for );
 Readonly::Hash my %CONDITIONALS => hashify( @CONDITIONALS );
 
 Readonly::Array my @OPERATORS => qw( && || // and or err ? );
