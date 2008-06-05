@@ -200,6 +200,19 @@ Check for -w on the shbang line.
 
 =over
 
+=item * Documentation::RequireModuleAbstract
+
+Require a C<=head1 NAME> POD section with content that matches
+C<\A \s* [\w:]+ \s+ - \s+ \S>.  The single hyphen is the important bit.  Also,
+must be a single line.
+
+
+=item * Documentation::RequirePackageNameMatchesNAMEInPOD
+
+Require that the part of the C<=head1 NAME> POD section contents match the
+first C<package> statment.
+
+
 =item * Expressions::RequireFatCommasInHashConstructors
 
 =item * ErrorHandling::RequireCheckOfEvalErrorAfterEval
