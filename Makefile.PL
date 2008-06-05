@@ -45,6 +45,7 @@ WriteMakefile(
         'Config::Tiny'              => 2,
         'English'                   => 0,
         'Exception::Class'          => 1.23,
+        'Exporter'                  => 0,
         'File::Basename'            => 0,
         'File::Find'                => 0,
         'File::Path'                => 0,

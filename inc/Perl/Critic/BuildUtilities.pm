@@ -34,6 +34,7 @@ sub recommended_module_versions {
     return (
         'File::HomeDir'         => 0,
         'Perl::Tidy'            => 0,
+        'Readonly::XS'          => 0,
         'Regexp::Parser'        => '0.20',
 
         # All of these are for Documentation::PodSpelling
@@ -102,8 +103,6 @@ sub dump_unlisted_or_optional_module_versions {
 
     my @unlisted_modules = (
         qw<
-            Exporter
-            Readonly::XS
         >,
         keys %{ { recommended_module_versions() } },
     );
