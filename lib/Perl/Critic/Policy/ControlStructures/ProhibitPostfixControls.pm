@@ -110,11 +110,11 @@ This Policy is part of the core L<Perl::Critic> distribution.
 =head1 DESCRIPTION
 
 Conway discourages using postfix control structures (C<if>, C<for>,
-C<unless>, C<until>, C<while>).  The C<unless> and C<until> controls
-are particularly evil because they lead to double-negatives that are
-hard to comprehend.  The only tolerable usage of a postfix C<if> is
-when it follows a loop break such as C<last>, C<next>, C<redo>, or
-C<continue>.
+C<unless>, C<until>, C<while>) because they hide control flow.  The
+C<unless> and C<until> controls are particularly evil because they
+lead to double-negatives that are hard to comprehend.  The only
+tolerable usage of a postfix C<if> is when it follows a loop break
+such as C<last>, C<next>, C<redo>, or C<continue>.
 
   do_something() if $condition;         #not ok
   if($condition){ do_something() }      #ok
@@ -140,10 +140,10 @@ C<continue>.
 
 =head1 CONFIGURATION
 
-A set of constructs to be ignored by this policy can specified by giving a
-value for 'allow' of a string of space-delimited keywords: C<if>, C<for>,
-C<unless>, C<until>, and/or C<while>.  An example of specifying allowed
-flow-control structures in a F<.perlcriticrc> file:
+A set of constructs to be ignored by this policy can specified by
+giving a value for 'allow' of a string of space-delimited keywords:
+C<if>, C<for>, C<unless>, C<until>, and/or C<while>.  An example of
+specifying allowed flow-control structures in a F<.perlcriticrc> file:
 
  [ControlStructures::ProhibitPostfixControls]
  allow = for if until
