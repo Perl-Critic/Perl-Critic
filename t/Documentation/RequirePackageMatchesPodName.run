@@ -1,0 +1,262 @@
+## name No POD
+## failures 0
+## cut
+print 'Hello World';
+
+#-----------------------------------------------------------------------------
+
+## name Script
+## failures 0
+## cut
+#!/usr/bin/perl
+print 'Hello World';
+
+=pod
+
+=head1 NAME
+
+helloworld.pl - Greetings!
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+## name No name
+## failures 0
+## cut
+=pod
+
+=head1 DESCRIPTION
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+## name Empty name
+## failures 1
+## cut
+package Foo;
+
+=pod
+
+=head1 NAME
+
+=head1 DESCRIPTION
+
+Blah...
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+## name Name without package
+## failures 1
+## cut
+
+=pod
+
+=head1 NAME  
+
+Foo - A module that does stuff
+
+=head1 DESCRIPTION
+
+Blah...
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+## name Name doesn't match package
+## failures 1
+## cut
+package Foo;
+
+=pod
+
+=head1 NAME
+
+Bar - a module that does something else
+
+=head1 DESCRIPTION
+
+Blah...
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+## name A good match
+## failures 0
+## cut
+package Foo;
+
+=pod
+
+=head1 NAME  
+
+Foo - A module that does stuff
+
+=head1 DESCRIPTION
+
+Blah...
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+## name Almost a match
+## failures 1
+## cut
+package Foo;
+
+=pod
+
+=head1 NAME  
+
+Foo! - A module that does stuff
+
+=head1 DESCRIPTION
+
+Blah...
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+## name A good match with C<>
+## failures 0
+## cut
+package Foo;
+
+=pod
+
+=head1 NAME  
+
+C<Foo> - A module that does stuff
+
+=head1 DESCRIPTION
+
+Blah...
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+## name A good match with L<>
+## failures 0
+## cut
+package Foo;
+
+=pod
+
+=head1 NAME  
+
+L<Foo> - A module that does stuff
+
+=head1 DESCRIPTION
+
+Blah...
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+## name Multiple packages
+## failures 0
+## cut
+package Foo;
+package Bar;
+package main;
+
+=pod
+
+=head1 NAME  
+
+Foo - A module that does stuff
+
+=head1 DESCRIPTION
+
+Blah...
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+## name Multiple packages and bad
+## failures 1
+## cut
+package Foo;
+package Bar;
+package main;
+
+=pod
+
+=head1 NAME  
+
+Bar - A module that does stuff
+
+=head1 DESCRIPTION
+
+Blah...
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+## name Perl 4
+## failures 0
+## cut
+package Foo'Bar;
+
+=pod
+
+=head1 NAME
+
+Foo::Bar - A module that does stuff
+
+=head1 DESCRIPTION
+
+Blah...
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+## name Whitespace
+## failures 0
+## cut
+package Foo;
+
+=pod
+
+=head1       NAME             
+
+
+
+
+
+
+Foo - A module that does stuff
+
+=head1 DESCRIPTION
+
+Blah...
+
+=cut
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab shiftround :
