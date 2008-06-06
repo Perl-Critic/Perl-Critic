@@ -78,6 +78,8 @@ sub test_supported_parameters {
             qq{Created policy "$policy_name" with param "$param_name"},
         );
     }
+
+    return;
 }
 
 #-----------------------------------------------------------------------------
@@ -106,8 +108,8 @@ sub test_has_declared_parameters {
     if ( not $policy->can('supported_parameters') ) {
         fail( qq{I don't know if $policy supports params} );
         diag( qq{This means $policy needs a supported_parameters() method} );
-        return;
     }
+    return;
 }
 
 #-----------------------------------------------------------------------------
