@@ -1,7 +1,9 @@
 package Perl::Critic::Policy::Test;
 
-use warnings;
+use 5.006001;
 use strict;
+use warnings;
+
 use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 

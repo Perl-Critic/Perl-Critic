@@ -7,6 +7,7 @@
 
 package Perl::Critic::Policy::Variables::ProhibitPerl4PackageNames;
 
+use 5.006001;
 use strict;
 use warnings;
 use Readonly;

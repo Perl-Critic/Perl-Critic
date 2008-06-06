@@ -1,7 +1,9 @@
 package ViolationTest;
 
-use warnings;
+use 5.006001;
 use strict;
+use warnings;
+
 use PPI::Document;
 use Perl::Critic::Violation;
 use Perl::Critic::Violation;  # this is duplicated for test coverage of repeated calls to import()

@@ -7,6 +7,7 @@
 
 package Perl::Critic::Policy::ControlStructures::ProhibitNegativeExpressionsInUnlessAndUntilConditions;
 
+use 5.006001;
 use strict;
 use warnings;
 use English qw(-no_match_vars);

@@ -7,6 +7,7 @@
 
 package Perl::Critic::UserProfile;
 
+use 5.006001;
 use strict;
 use warnings;
 

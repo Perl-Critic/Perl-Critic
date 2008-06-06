@@ -7,6 +7,7 @@
 
 package Perl::Critic::Policy::ValuesAndExpressions::RequireQuotedHeredocTerminator;
 
+use 5.006001;
 use strict;
 use warnings;
 use Readonly;

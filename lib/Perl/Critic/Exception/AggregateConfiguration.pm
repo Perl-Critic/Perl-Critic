@@ -7,6 +7,7 @@
 
 package Perl::Critic::Exception::AggregateConfiguration;
 
+use 5.006001;
 use strict;
 use warnings;
 

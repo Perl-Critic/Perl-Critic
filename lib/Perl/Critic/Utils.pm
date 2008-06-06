@@ -10,6 +10,7 @@
 
 package Perl::Critic::Utils;
 
+use 5.006001;
 use strict;
 use warnings;
 use Readonly;
