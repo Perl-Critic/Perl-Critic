@@ -43,12 +43,6 @@ m/\A (?: qq| qr | qx | q | s | y | tr ) \z/xms;
 
 m/\A (?: a | d | i | q | r | w | x ) ( \z/xms;
 
-## name problem found by ack
-## failures 0
-## cut
-
-return ('shell',TEXT)  if $header =~ /\b(?:ba|c|k|z)?sh\b/;
-
 #-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl
