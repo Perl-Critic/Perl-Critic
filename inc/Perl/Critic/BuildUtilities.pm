@@ -111,7 +111,12 @@ sub dump_unlisted_or_optional_module_versions {
     foreach my $module (sort @unlisted_modules) {
         my $version;
 
-        eval "use $module; \$version = \$${module}::VERSION;";
+        if ($module eq 'Readonly::XS') {
+            eval 'use Readonly; $version = $Readonly::XS::VERSION;';
+        }
+        else {
+            eval "use $module; \$version = \$${module}::VERSION;";
+        }
         if ($EVAL_ERROR) {
             $version = 'not installed';
         } elsif (not defined $version) {
