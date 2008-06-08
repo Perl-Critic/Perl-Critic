@@ -1,11 +1,15 @@
-[1.xxx] Released on 2008-??-??
+[1.085] Released on 2008-06-07
 
      New Policies:
      * Documentation::RequirePackageMatchesPodName
 
      Policy Changes:
-     * Variables::ProhibitUnusedVariables finds a few more cases of unused
-       variables.  It's still very limited, though.
+     * Variables::ProhibitUnusedVariables detects a few more cases.  It's
+       still very limited, though.
+
+     Bug fixes:
+     * ControlStructures::ProhibitUnreachableCode didn't notice "until" was an
+       conditional expression.
 
      Minor documentation updates.
 
