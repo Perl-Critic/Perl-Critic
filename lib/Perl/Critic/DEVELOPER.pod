@@ -1029,7 +1029,7 @@ to see the differences between the two cases.
 
 =head1 VERSION
 
-This is part of L<Perl::Critic> version 1.084.
+This is part of L<Perl::Critic> version 1.085.
 
 
 =head1 AUTHOR
