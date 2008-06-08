@@ -112,7 +112,7 @@ sub dump_unlisted_or_optional_module_versions {
         my $version;
 
         if ($module eq 'Readonly::XS') {
-            eval 'use Readonly; $version = $Readonly::XS::VERSION;';
+            eval 'use Readonly; use Readonly::XS; $version = $Readonly::XS::VERSION;';
         }
         else {
             eval "use $module; \$version = \$${module}::VERSION;";
