@@ -13,6 +13,7 @@ use warnings;
 
 use Readonly;
 
+use List::MoreUtils qw< any >;
 use PPI::Token::Symbol;
 
 use Perl::Critic::Utils qw< :characters :severities >;
@@ -34,9 +35,6 @@ sub applies_to           { return qw< PPI::Document >    }
 
 #-----------------------------------------------------------------------------
 
-# "my" "$x" ";"
-Readonly::Scalar my $TOKENS_IN_SIMPLE_DECLARATION   => 3;
-
 sub violates {
     my ( $self, $elem, $document ) = @_;
 
@@ -47,36 +45,28 @@ sub violates {
     return if not $declarations;
 
     my @violations;
+
+    DECLARATION:
     foreach my $declaration ( @{$declarations} ) {
-        next if 'my' ne $declaration->type();
+        next DECLARATION if 'my' ne $declaration->type();
 
         my @children = $declaration->schildren();
-        next if @children > $TOKENS_IN_SIMPLE_DECLARATION;
-        next if
-                @children == $TOKENS_IN_SIMPLE_DECLARATION
-            and $children[2] ne $SCOLON;
+        next DECLARATION if any { $_ eq q<=> } @children;
 
-        my @variables = $declaration->variables();
-        next if not @variables;
-        next if @variables > 1;
+        VARIABLE:
+        foreach my $variable ( $declaration->variables() ) {
+            my $count = $symbol_usage{ $variable };
+            next VARIABLE if not $count; # BUG!
+            next VARIABLE if $count > 1;
 
-        my $symbol = $variables[0];
-        if (not ref $symbol) {
-            # It's actually a string.  But test in case this changes
-            # in the future.
-            $symbol = PPI::Token::Symbol->new($symbol);
+            push
+                @violations,
+                $self->violation(
+                    qq<"$variable" is declared but not used.>,
+                    $EXPL,
+                    $declaration,
+                );
         }
-        my $count = $symbol_usage{ $symbol->symbol() };
-        next if not $count; # BUG!
-        next if $count > 1;
-
-        push
-            @violations,
-            $self->violation(
-                qq<"$symbol" is declared but not used.>,
-                $EXPL,
-                $declaration,
-            );
     }
 
     return @violations;

@@ -3,6 +3,12 @@
      New Policies:
      * Documentation::RequirePackageMatchesPodName
 
+     Policy Changes:
+     * Variables::ProhibitUnusedVariables finds a few more cases of unused
+       variables.  It's still very limited, though.
+
+     Minor documentation updates.
+
 [1.084] Released on 2008-05-24
 
      New Features:

@@ -6,11 +6,11 @@ my $x;
 
 #-----------------------------------------------------------------------------
 
-## name Simple unused, multiple, unassigned lexicals.  Not going to handle this yet.
-## failures 0
+## name Simple unused, multiple, unassigned lexicals.
+## failures 3
 ## cut
 
-my $x, @z, %y;
+my ($x, @z, %y);
 
 #-----------------------------------------------------------------------------
 
@@ -20,6 +20,16 @@ my $x, @z, %y;
 
 # Need to look out for RAII.
 my $y = foo();
+
+#-----------------------------------------------------------------------------
+
+## name List assignment.  Not going to handle this yet.
+## failures 0
+## cut
+
+sub foo {
+    my ($b, $y) = @_;
+}
 
 #-----------------------------------------------------------------------------
 
