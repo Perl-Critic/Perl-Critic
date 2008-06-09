@@ -4,6 +4,8 @@
      * The color option wasn't being correctly set from a .perlcriticrc.
        RT #36569.
 
+     Minor changes:
+     * --colour is now a synonym for --color.
 
 [1.085] Released on 2008-06-07
 

@@ -15,7 +15,7 @@ use English qw(-no_match_vars);
 
 use Perl::Critic::OptionsProcessor;
 
-use Test::More tests => 22;
+use Test::More tests => 24;
 
 #-----------------------------------------------------------------------------
 
@@ -60,6 +60,16 @@ use Test::More tests => 22;
     is($processor->criticism_fatal(),  1,   'user default criticism_fatal');
     is_deeply($processor->include(), [ qw(foo bar) ], 'user default include');
     is_deeply($processor->exclude(), [ qw(baz nuts)], 'user default exclude');
+}
+
+#-----------------------------------------------------------------------------
+
+{
+    my $processor = Perl::Critic::OptionsProcessor->new( 'colour' => 1 );
+    is($processor->color(), 1, 'user default colour true');
+
+    $processor = Perl::Critic::OptionsProcessor->new( 'colour' => 0 );
+    is($processor->color(), 0, 'user default colour false');
 }
 
 #-----------------------------------------------------------------------------

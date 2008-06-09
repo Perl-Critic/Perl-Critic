@@ -53,8 +53,9 @@ sub _init {
     $self->{_theme}          = dor(delete $args{theme},              $EMPTY);
     $self->{_top}            = dor(delete $args{top},                $FALSE);
     $self->{_verbose}        = dor(delete $args{verbose},            $DEFAULT_VERBOSITY);
-    $self->{_color}          = dor(delete $args{color},              $TRUE);
     $self->{_criticism_fatal} = dor(delete $args{'criticism-fatal'}, $FALSE);
+
+    $self->{_color} = dor(delete $args{color}, dor(delete $args{colour}, $TRUE));
 
     # If there's anything left, complain.
     _check_for_extra_options(%args);

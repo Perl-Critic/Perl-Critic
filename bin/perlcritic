@@ -402,7 +402,7 @@ sub _get_option_specification {
         list
         list-themes
         man
-        color!
+        color|colour!
         noprofile
         only!
         options
@@ -870,6 +870,8 @@ yellow, respectively.  Colorization only happens if STDOUT is a tty and
 L<Term::ANSIColor> is installed.  And it only works on non-Windows
 environments.  Negate this switch to disable color.  You can set the default
 value for this option in your F<.perlcriticrc> file.
+
+Can also be specified as C<--colour>.
 
 =item C<--doc PATTERN>
 
