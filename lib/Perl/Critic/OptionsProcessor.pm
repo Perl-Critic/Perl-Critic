@@ -13,19 +13,19 @@ use warnings;
 
 use English qw(-no_match_vars);
 
-use Perl::Critic::Utils qw{
-    :booleans :characters :severities :data_conversion $DEFAULT_VERBOSITY
-};
 use Perl::Critic::Exception::AggregateConfiguration;
 use Perl::Critic::Exception::Configuration::Option::Global::ExtraParameter;
-use Perl::Critic::Utils::Constants qw{ $PROFILE_STRICTNESS_DEFAULT };
+use Perl::Critic::Utils qw<
+    :booleans :characters :severities :data_conversion $DEFAULT_VERBOSITY
+>;
+use Perl::Critic::Utils::Constants qw< $PROFILE_STRICTNESS_DEFAULT >;
+use Perl::Critic::Utils::DataConversion qw< dor >;
 
 our $VERSION = '1.085';
 
 #-----------------------------------------------------------------------------
 
 sub new {
-
     my ($class, %args) = @_;
     my $self = bless {}, $class;
     $self->_init( %args );
@@ -35,27 +35,26 @@ sub new {
 #-----------------------------------------------------------------------------
 
 sub _init {
-
     my ( $self, %args ) = @_;
 
     # Multi-value defaults
-    my $exclude = delete $args{exclude} || $EMPTY;
+    my $exclude = dor(delete $args{exclude}, $EMPTY);
     $self->{_exclude}    = [ words_from_string( $exclude ) ];
-    my $include = delete $args{include} || $EMPTY;
+    my $include = dor(delete $args{include}, $EMPTY);
     $self->{_include}    = [ words_from_string( $include ) ];
 
     # Single-value defaults
-    $self->{_force}          = delete $args{force}            || $FALSE;
-    $self->{_only}           = delete $args{only}             || $FALSE;
+    $self->{_force}          = dor(delete $args{force},              $FALSE);
+    $self->{_only}           = dor(delete $args{only},               $FALSE);
     $self->{_profile_strictness} =
-        delete $args{'profile-strictness'} || $PROFILE_STRICTNESS_DEFAULT;
-    $self->{_single_policy}  = delete $args{'single-policy'}  || $EMPTY;
-    $self->{_severity}       = delete $args{severity}         || $SEVERITY_HIGHEST;
-    $self->{_theme}          = delete $args{theme}            || $EMPTY;
-    $self->{_top}            = delete $args{top}              || $FALSE;
-    $self->{_verbose}        = delete $args{verbose}          || $DEFAULT_VERBOSITY;
-    $self->{_color}          = delete $args{color}            || $TRUE;
-    $self->{_criticism_fatal} = delete $args{'criticism-fatal'} || $FALSE;
+        dor(delete $args{'profile-strictness'}, $PROFILE_STRICTNESS_DEFAULT);
+    $self->{_single_policy}  = dor(delete $args{'single-policy'},    $EMPTY);
+    $self->{_severity}       = dor(delete $args{severity},           $SEVERITY_HIGHEST);
+    $self->{_theme}          = dor(delete $args{theme},              $EMPTY);
+    $self->{_top}            = dor(delete $args{top},                $FALSE);
+    $self->{_verbose}        = dor(delete $args{verbose},            $DEFAULT_VERBOSITY);
+    $self->{_color}          = dor(delete $args{color},              $TRUE);
+    $self->{_criticism_fatal} = dor(delete $args{'criticism-fatal'}, $FALSE);
 
     # If there's anything left, complain.
     _check_for_extra_options(%args);

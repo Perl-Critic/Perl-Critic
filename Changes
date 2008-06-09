@@ -1,3 +1,10 @@
+[1.xxx] Released on 2008-0x-xx
+
+     Bug fixes:
+     * The color option wasn't being correctly set from a .perlcriticrc.
+       RT #36569.
+
+
 [1.085] Released on 2008-06-07
 
      New Policies:

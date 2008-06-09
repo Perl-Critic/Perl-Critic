@@ -10,9 +10,12 @@
 use 5.006001;
 use strict;
 use warnings;
+
 use English qw(-no_match_vars);
-use Test::More tests => 21;
+
 use Perl::Critic::OptionsProcessor;
+
+use Test::More tests => 22;
 
 #-----------------------------------------------------------------------------
 
@@ -39,7 +42,7 @@ use Perl::Critic::OptionsProcessor;
          severity  => 4,
          theme     => 'pbp',
          top       => 50,
-         color     => 1,
+         color     => 0,
          verbose   => 7,
          'criticism-fatal'   => 1,
          include   => 'foo bar',
@@ -52,6 +55,7 @@ use Perl::Critic::OptionsProcessor;
     is($processor->severity(), 4,           'user default severity');
     is($processor->theme(),    'pbp',       'user default theme');
     is($processor->top(),      50,          'user default top');
+    is($processor->color(),    0,           'user default color');
     is($processor->verbose(),  7,           'user default verbose');
     is($processor->criticism_fatal(),  1,   'user default criticism_fatal');
     is_deeply($processor->include(), [ qw(foo bar) ], 'user default include');
