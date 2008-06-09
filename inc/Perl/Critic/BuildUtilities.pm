@@ -37,6 +37,7 @@ sub recommended_module_versions {
         'Perl::Tidy'            => 0,
         'Readonly::XS'          => 0,
         'Regexp::Parser'        => '0.20',
+        'Term::ANSIColor'       => 0,
 
         # All of these are for Documentation::PodSpelling
         'File::Which'           => 0,
