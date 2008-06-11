@@ -1,5 +1,9 @@
 [1.xxx] Released on 2008-0x-xx
 
+     Policy Changes:
+     * NamingConventions::ProhibitAmbiguousNames now specifies the name that
+       it had problems with in its violation descriptions.
+
      Bug fixes:
      * The color option wasn't being correctly set from a .perlcriticrc.
        RT #36569.
