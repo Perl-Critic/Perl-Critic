@@ -1,94 +1,94 @@
 [1.xxx] Released on 2008-0x-xx
 
-     Policy Changes:
-     * NamingConventions::ProhibitAmbiguousNames now specifies the name that
-       it had problems with in its violation descriptions.
+    Policy Changes:
+    * NamingConventions::ProhibitAmbiguousNames now specifies the name that
+      it had problems with in its violation descriptions.
 
-     Bug fixes:
-     * The color option wasn't being correctly set from a .perlcriticrc.
-       RT #36569.
+    Bug fixes:
+    * The color option wasn't being correctly set from a .perlcriticrc.
+      RT #36569.
 
-     Minor changes:
-     * --colour is now a synonym for --color.
+    Minor changes:
+    * --colour is now a synonym for --color.
 
 [1.085] Released on 2008-06-07
 
-     New Policies:
-     * Documentation::RequirePackageMatchesPodName
+    New Policies:
+    * Documentation::RequirePackageMatchesPodName
 
-     Policy Changes:
-     * Variables::ProhibitUnusedVariables detects a few more cases.  It's
-       still very limited, though.
+    Policy Changes:
+    * Variables::ProhibitUnusedVariables detects a few more cases.  It's
+      still very limited, though.
 
-     Bug fixes:
-     * ControlStructures::ProhibitUnreachableCode didn't notice "until" was an
-       conditional expression.
+    Bug fixes:
+    * ControlStructures::ProhibitUnreachableCode didn't notice "until" was an
+      conditional expression.
 
-     Minor documentation updates.
+    Minor documentation updates.
 
 [1.084] Released on 2008-05-24
 
-     New Features:
-     * perlcritic now supports a --list-themes option.
-     * You can specify the maximum number of violations you want per Policy
-       per document.  Developers can give a default value for this for a
-       Policy by overriding default_maximum_violations_per_document().
-       See RequireUseStrict and ProhibitMagicNumbers for examples.
+    New Features:
+    * perlcritic now supports a --list-themes option.
+    * You can specify the maximum number of violations you want per Policy
+      per document.  Developers can give a default value for this for a
+      Policy by overriding default_maximum_violations_per_document().
+      See RequireUseStrict and ProhibitMagicNumbers for examples.
 
-     Policy Moved:
-     * The ValuesAndExpressions::ProhibitMagicNumbers policy has been moved
-       from Perl::Critic::More into the primary Perl::Critic distribution.
+    Policy Moved:
+    * The ValuesAndExpressions::ProhibitMagicNumbers policy has been moved
+      from Perl::Critic::More into the primary Perl::Critic distribution.
 
-     New Policies:
-     * Variables::ProhibitUnusedVariables (very dumb, limited initial
-       implementation.)
-     * ControlStructures::ProhibitLabelsWithSpecialBlockNames
-       Contributed by Mike O'Regan.  Kickin' ass, Mike.
+    New Policies:
+    * Variables::ProhibitUnusedVariables (very dumb, limited initial
+      implementation.)
+    * ControlStructures::ProhibitLabelsWithSpecialBlockNames
+      Contributed by Mike O'Regan.  Kickin' ass, Mike.
 
-     Policy Changes:
-     * ControlStructures::ProhibitUnreachableCode now handles the perl 5.10
-       "//" and "err" operators.  RT #36080
-     * InputOutput::RequireBriefOpen now ignores opens of STDIN, STDOUT,
-       and STDERR.  You're generally trying to make long-lasting global
-       effects when manipulating these.  (RT #35774)
-     * RegularExpressions::ProhibitUnusualDelimiters now supports an
-       "allow_all_brackets" option.
-     * RegularExpressions::RequireBracesForMultiline now supports an
-       "allow_all_brackets" option.
-     * TestingAndDebugging::RequireUseStrict now accepts "use Moose::Role"
-       as equivalent to "use strict".  (RT #34838)
-     * TestingAndDebugging::RequireUseWarnings now accepts "use Moose::Role"
-       as equivalent to "use warnings".  (RT #34838)
-     * ValuesAndExpressions::ProhibitMagicNumbers now accepts constant
-       subroutines.
-     * Variables::ProhibitMatchVars no longer detects "use English;".
-       This problem is detected in a more clear way by
-       Modules::RequireNoMatchVarsWithUseEnglish.
-     * Variables::ProhibitPerl4PackageNames no longer complains about
-       $'/$POSTMATCH.  RT #36059
-     * Variables::RequireLocalizedPunctuationVars now allows the use of "my".
-       RT #33937
+    Policy Changes:
+    * ControlStructures::ProhibitUnreachableCode now handles the perl 5.10
+      "//" and "err" operators.  RT #36080
+    * InputOutput::RequireBriefOpen now ignores opens of STDIN, STDOUT,
+      and STDERR.  You're generally trying to make long-lasting global
+      effects when manipulating these.  (RT #35774)
+    * RegularExpressions::ProhibitUnusualDelimiters now supports an
+      "allow_all_brackets" option.
+    * RegularExpressions::RequireBracesForMultiline now supports an
+      "allow_all_brackets" option.
+    * TestingAndDebugging::RequireUseStrict now accepts "use Moose::Role"
+      as equivalent to "use strict".  (RT #34838)
+    * TestingAndDebugging::RequireUseWarnings now accepts "use Moose::Role"
+      as equivalent to "use warnings".  (RT #34838)
+    * ValuesAndExpressions::ProhibitMagicNumbers now accepts constant
+      subroutines.
+    * Variables::ProhibitMatchVars no longer detects "use English;".
+      This problem is detected in a more clear way by
+      Modules::RequireNoMatchVarsWithUseEnglish.
+    * Variables::ProhibitPerl4PackageNames no longer complains about
+      $'/$POSTMATCH.  RT #36059
+    * Variables::RequireLocalizedPunctuationVars now allows the use of "my".
+      RT #33937
 
-     Bug Fixes:
-     * No longer falls over if a single file has a parse error.
+    Bug Fixes:
+    * No longer falls over if a single file has a parse error.
 
-     New Developer Features:
-     * If a document specifies a minimum perl version, e.g. "use 5.008003",
-       P::C::Document::highest_explicit_perl_version() will tell you what it
-       is.
-     * The parameter to P::C::Policy::initialize_if_enabled is now a
-       P::C::PolicyConfig object instead of a hash reference.
+    New Developer Features:
+    * If a document specifies a minimum perl version, e.g. "use 5.008003",
+      P::C::Document::highest_explicit_perl_version() will tell you what it
+      is.
+    * The parameter to P::C::Policy::initialize_if_enabled is now a
+      P::C::PolicyConfig object instead of a hash reference.
 
-     Minor Changes:
-     * LOTS of documentation updates.
-     * A few more statistics are emitted by perlcritic with the --statistics
-       option.
-     * perlcritic --profile-proto now includes policy abstracts in its
-       output.
+    Minor Changes:
+    * LOTS of documentation updates.
+    * A few more statistics are emitted by perlcritic with the --statistics
+      option.
+    * perlcritic --profile-proto now includes policy abstracts in its
+      output.
 
-     Prerequisites:
-     * Now depends upon PPI 1.203.
-     * New dependency upon version.
+    Prerequisites:
+    * Now depends upon PPI 1.203.
+    * New dependency upon version.
 
 [1.083_006] Released on 2008-05-20
 [1.083_005] Released on 2008-05-19
@@ -97,58 +97,58 @@
 [1.083_002] Released on 2008-05-17
 [1.083_001] Released on 2008-04-13
 
-     Changes summarized into 1.084 above.  For exact details, see Changes in
-     1.083_006 on BackPAN.
+    Changes summarized into 1.084 above.  For exact details, see Changes in
+    1.083_006 on BackPAN.
 
 [1.082] Released on 2008-03-08
 
-     New Features:
-     * A new metadata system for defining policy parameters/options has been
-       added.  This makes the life of policy authors easier because
-       configuration validation and parsing can be taken care of
-       automatically, in most cases.  This allows greater integration with
-       IDEs and allows the perlcritic "--profile-proto" option to produce
-       better output.
+    New Features:
+    * A new metadata system for defining policy parameters/options has been
+      added.  This makes the life of policy authors easier because
+      configuration validation and parsing can be taken care of
+      automatically, in most cases.  This allows greater integration with
+      IDEs and allows the perlcritic "--profile-proto" option to produce
+      better output.
 
-       Note: This change does NOT REQUIRE ANY CHANGES to policies outside of
-       this distribution; they should continue to work as is.  However, use
-       of this facility can reduce the size of your code and provide the
-       means for tools to discover more about your policy.  If this change
-       does break any of your policies, please let us know.
+      Note: This change does NOT REQUIRE ANY CHANGES to policies outside of
+      this distribution; they should continue to work as is.  However, use
+      of this facility can reduce the size of your code and provide the
+      means for tools to discover more about your policy.  If this change
+      does break any of your policies, please let us know.
 
-       To learn how to take advantage of this facility, read
-       Perl::Critic::DEVELOPER and look at the source of any of the
-       configurable policies included in this distribution.
+      To learn how to take advantage of this facility, read
+      Perl::Critic::DEVELOPER and look at the source of any of the
+      configurable policies included in this distribution.
 
-       There is a discussion of the design considerations for this facility in
-       the source repository under doc/PolicyParameter_Notes.pod.
+      There is a discussion of the design considerations for this facility in
+      the source repository under doc/PolicyParameter_Notes.pod.
 
-     * Added support for "criticism-fatal" option in your perlcriticrc
-       file.  This will be used by the criticism pragma to cause execution
-       to abort if the file contains any violations.
+    * Added support for "criticism-fatal" option in your perlcriticrc
+      file.  This will be used by the criticism pragma to cause execution
+      to abort if the file contains any violations.
 
-     New Policy:
-     * Module::RequireNoMatchVarsWithUseEnglish
+    New Policy:
+    * Module::RequireNoMatchVarsWithUseEnglish
 
-     Policy Changes:
-     * Added an allow_last_statement_to_be_comma_separated_in_map_and_grep
-       option to ValuesAndExpressions::ProhibitCommaSeparatedStatements.
-       Partial response to http://rt.cpan.org/Public/Bug/Display.html?id=27654.
-     * ControlStructures::ProhibitPostfixControls gains the ability to have
-       the flow control statements allowed to be modified.  This in response
-       to RT #29540.
-     * TestingAndDebugging::RequireUseStrict now accepts "use Moose" as
-       equivalent to "use strict".
-     * TestingAndDebugging::RequireUseWarnings now accepts "use Moose" as
-       equivalent to "use warnings".
+    Policy Changes:
+    * Added an allow_last_statement_to_be_comma_separated_in_map_and_grep
+      option to ValuesAndExpressions::ProhibitCommaSeparatedStatements.
+      Partial response to http://rt.cpan.org/Public/Bug/Display.html?id=27654.
+    * ControlStructures::ProhibitPostfixControls gains the ability to have
+      the flow control statements allowed to be modified.  This in response
+      to RT #29540.
+    * TestingAndDebugging::RequireUseStrict now accepts "use Moose" as
+      equivalent to "use strict".
+    * TestingAndDebugging::RequireUseWarnings now accepts "use Moose" as
+      equivalent to "use warnings".
 
-     Bug Fixes:
-     * RT #31281 perlcritic doesn't recognize "#!/bin/env perl" shebang
-     * Replace usage of Unicode property escapes with POSIX character classes
-       order to restore 5.6 compatability.
-     * RT #30388 ValuesAndExpressions::ProhibitVersionStrings complained
-       about numbered directories in "use lib".
-     * Fixed handling of badly behaved spelling programs in PodSpelling.
+    Bug Fixes:
+    * RT #31281 perlcritic doesn't recognize "#!/bin/env perl" shebang
+    * Replace usage of Unicode property escapes with POSIX character classes
+      order to restore 5.6 compatability.
+    * RT #30388 ValuesAndExpressions::ProhibitVersionStrings complained
+      about numbered directories in "use lib".
+    * Fixed handling of badly behaved spelling programs in PodSpelling.
 
 [1.081_006] Released on 2008-03-02
 [1.081_005] Released on 2007-12-29
@@ -157,1058 +157,1058 @@
 [1.081_002] Released on 2007-12-16
 [1.081_001] Released on 2007-12-15
 
-     Changes summarized into 1.082 above.  For exact details, see Changes in
-     1.081_006 on BackPAN.
+    Changes summarized into 1.082 above.  For exact details, see Changes in
+    1.081_006 on BackPAN.
 
 [1.080] Released on 2007-11-11
 
-     New Features:
-     * Allow a "## no critic" statement after a shebang on line 1 of a
-       file.  This allows users to block violations that apply to
-       whole files and still allow shebangs.
+    New Features:
+    * Allow a "## no critic" statement after a shebang on line 1 of a
+      file.  This allows users to block violations that apply to
+      whole files and still allow shebangs.
 
-     New Policies: (funded by a Perl Foundation grant)
-     * InputOutput::ProhibitExplicitStdin
-     * RegularExpressions::ProhibitFixedStringMatches
-     * RegularExpressions::RequireBracesForMultiline
-     * RegularExpressions::ProhibitUnusualDelimiters
-     * RegularExpressions::ProhibitUnusedCapture
-     * RegularExpressions::ProhibitComplexRegexes
-     * RegularExpressions::ProhibitSingleCharAlternation
-     * RegularExpressions::ProhibitEscapedMetacharacters
-     * RegularExpressions::ProhibitEnumeratedClasses
-     * InputOutput::RequireBriefOpen
-     * InputOutput::RequireCheckedSyscalls
+    New Policies: (funded by a Perl Foundation grant)
+    * InputOutput::ProhibitExplicitStdin
+    * RegularExpressions::ProhibitFixedStringMatches
+    * RegularExpressions::RequireBracesForMultiline
+    * RegularExpressions::ProhibitUnusualDelimiters
+    * RegularExpressions::ProhibitUnusedCapture
+    * RegularExpressions::ProhibitComplexRegexes
+    * RegularExpressions::ProhibitSingleCharAlternation
+    * RegularExpressions::ProhibitEscapedMetacharacters
+    * RegularExpressions::ProhibitEnumeratedClasses
+    * InputOutput::RequireBriefOpen
+    * InputOutput::RequireCheckedSyscalls
 
-     Other New Policies
-     * ControlStructures::ProhibitNegativeExpressionsInUnlessAndUntilConditions
+    Other New Policies
+    * ControlStructures::ProhibitNegativeExpressionsInUnlessAndUntilConditions
 
-     Policy Changes:
-     * Variables::ProhibitConditionalDeclarations now permits you to local-ize
-       variables in conditional declarations.  This makes sense, since
-       C<local> is actually a variable modifier, rather than a declaration.
-       Thanks to David Golden for reporting this.
+    Policy Changes:
+    * Variables::ProhibitConditionalDeclarations now permits you to local-ize
+      variables in conditional declarations.  This makes sense, since
+      C<local> is actually a variable modifier, rather than a declaration.
+      Thanks to David Golden for reporting this.
 
-     New Developer Features:
-     * Perl::Critic::Utils::PPIRegexp encapsulates interaction with
-       the PPI Regexp token classes.  Those classes have very sparse
-       APIs, so this package hides away the ugly fiddling with PPI
-       internals.
-     * Added a new optional_modules parameter for the .run syntax.
+    New Developer Features:
+    * Perl::Critic::Utils::PPIRegexp encapsulates interaction with
+      the PPI Regexp token classes.  Those classes have very sparse
+      APIs, so this package hides away the ugly fiddling with PPI
+      internals.
+    * Added a new optional_modules parameter for the .run syntax.
 
-     Bug fixes:
-     * PPI::Structure::List can now contain multiple children,
-       so P::C::Utils::parse_arg_list() needs to handle it.
+    Bug fixes:
+    * PPI::Structure::List can now contain multiple children,
+      so P::C::Utils::parse_arg_list() needs to handle it.
 
-       This was done in the process of fixing
-       http://rt.cpan.org/Ticket/Display.html?id=24924, which was a problem
-       with TestingAndDebugging::RequireTestLabels.
+      This was done in the process of fixing
+      http://rt.cpan.org/Ticket/Display.html?id=24924, which was a problem
+      with TestingAndDebugging::RequireTestLabels.
 
-     * ValuesAndExpressions::ProhibitLongChainsOfMethodCalls wasn't resetting
-       chain length when it ran into the end of a sub-expression.
+    * ValuesAndExpressions::ProhibitLongChainsOfMethodCalls wasn't resetting
+      chain length when it ran into the end of a sub-expression.
 
-       http://rt.cpan.org/Public/Bug/Display.html?id=30040
+      http://rt.cpan.org/Public/Bug/Display.html?id=30040
 
-     * ValuesAndExpressions::ProhibitCommaSeparatedStatements was reporting
-       false positives when builtins which accept both no and multiple
-       arguments were involved.
+    * ValuesAndExpressions::ProhibitCommaSeparatedStatements was reporting
+      false positives when builtins which accept both no and multiple
+      arguments were involved.
 
-       http://rt.cpan.org/Public/Bug/Display.html?id=27654
+      http://rt.cpan.org/Public/Bug/Display.html?id=27654
 
-     Internals:
-     * Removed all use of Carp in favor of exceptions.
+    Internals:
+    * Removed all use of Carp in favor of exceptions.
 
-     Prerequisites:
-     * Now requires PPI 1.201.  A number of workarounds for PPI bugs have been
-       removed.
-     * New dependency upon Exception::Class.
+    Prerequisites:
+    * Now requires PPI 1.201.  A number of workarounds for PPI bugs have been
+      removed.
+    * New dependency upon Exception::Class.
 
-     Installation:
-     * Use Devel::CheckOS to see whether Perl::Critic is being installed on
-       a Solaris system and warn about tar(1) chopping file names off if it
-       is.
+    Installation:
+    * Use Devel::CheckOS to see whether Perl::Critic is being installed on
+      a Solaris system and warn about tar(1) chopping file names off if it
+      is.
 
 [1.079_003]  Released on 2007-10-22
 [1.079_002]  Released on 2007-10-21
 [1.079_001]  Released on 2007-10-09
 
-     Changes summarized into 1.080 above.  For exact details, see Changes in
-     1.079_003 on BackPAN.
+    Changes summarized into 1.080 above.  For exact details, see Changes in
+    1.079_003 on BackPAN.
 
 [1.078]  Released on 2007-09-19
 
-     Restore Perl::Critic::TestUtils::should_skip_author_tests() and
-     get_author_test_skip_message().  Some Perl::Critic add-on distributions
-     are using them.
+    Restore Perl::Critic::TestUtils::should_skip_author_tests() and
+    get_author_test_skip_message().  Some Perl::Critic add-on distributions
+    are using them.
 
 [1.077]  Released on 2007-09-15
 
-     Note: if you don't have any problems installing Perl::Critic 1.076, there
-     is no need to upgrade to this version.  There are no functionality
-     changes.  This release only contains changes related to installation that
-     a few people were experiencing.
+    Note: if you don't have any problems installing Perl::Critic 1.076, there
+    is no need to upgrade to this version.  There are no functionality
+    changes.  This release only contains changes related to installation that
+    a few people were experiencing.
 
-     Minor changes:
-     * Removed build-time use of Readonly, again, due to problems some people
-       were having when trying to compile the code by hand, rather than using
-       CPAN(PLUS)?.
-     * Don't run author tests if there's a .svn directory present because
-       users who grabbed the code from the source repository were executing
-       them and getting failures.
-     * Don't generate optional, module-hiding test wrappers if author tests
-       are not enabled.
+    Minor changes:
+    * Removed build-time use of Readonly, again, due to problems some people
+      were having when trying to compile the code by hand, rather than using
+      CPAN(PLUS)?.
+    * Don't run author tests if there's a .svn directory present because
+      users who grabbed the code from the source repository were executing
+      them and getting failures.
+    * Don't generate optional, module-hiding test wrappers if author tests
+      are not enabled.
 
 
 [1.076]  Released on 2007-09-07
 
-     It appears from reports on the 1.075_001 release that the subroutine
-     sigils were indeed the problem.  Release to the general populace.
+    It appears from reports on the 1.075_001 release that the subroutine
+    sigils were indeed the problem.  Release to the general populace.
 
 
 [1.075_001]  Released on 2007-09-06
 
-     Bug Fixes:
-     Undo the changes in 1.073 and 1.074.  Instead, stop using the subroutine
-     sigil in import and export lists.  It is suspected that the problem lies
-     with Exporter stripping off ampersands.
+    Bug Fixes:
+    Undo the changes in 1.073 and 1.074.  Instead, stop using the subroutine
+    sigil in import and export lists.  It is suspected that the problem lies
+    with Exporter stripping off ampersands.
 
 [1.074]  Released on 2007-09-04
 
-     Bug Fixes:
-     Repeat the Makefile.PL change on
-     t/generate_without_optional_dependencies_wrappers.PL.
-     I love CPAN Testers.
+    Bug Fixes:
+    Repeat the Makefile.PL change on
+    t/generate_without_optional_dependencies_wrappers.PL.
+    I love CPAN Testers.
 
 [1.073]  Released on 2007-09-04
 
-     Bug Fixes:
-     Work around problems with the combination of Exporter & Readonly in
-     Makefile.PL on some machines.
+    Bug Fixes:
+    Work around problems with the combination of Exporter & Readonly in
+    Makefile.PL on some machines.
 
 [1.072]  Released on 2007-09-03
 
-     Bug Fixes:
-     * The Makefile generated by Makefile.PL was not syntactically correct
-       according to some versions of Solaris.  Thanks to Diab Jerius
-       (DJERIUS) for discovery and testing.
-     * Fixed mis-definition of "quiet" value for the "--profile-strictness"
-       option.
-     * Enhanced testing with the absence of optional modules.
+    Bug Fixes:
+    * The Makefile generated by Makefile.PL was not syntactically correct
+      according to some versions of Solaris.  Thanks to Diab Jerius
+      (DJERIUS) for discovery and testing.
+    * Fixed mis-definition of "quiet" value for the "--profile-strictness"
+      option.
+    * Enhanced testing with the absence of optional modules.
 
 [1.071]  Released on 2007-08-24
 
-     The "Brown Paper Bag" Release
+    The "Brown Paper Bag" Release
 
-     Bug Fixes:
-     * Tests would not pass in environments that did not have all optional
-       dependencies installed.
+    Bug Fixes:
+    * Tests would not pass in environments that did not have all optional
+      dependencies installed.
 
 [1.07]  Released on 2007-08-21
 
-     New Policies: (funded by a Perl Foundation grant)
-     * BuiltinFunctions::ProhibitBooleanGrep
-     * BuiltinFunctions::ProhibitComplexMappings
-     * Documentation::PodSpelling
-     * InputOutput::ProhibitJoinedReadline
-     * Subroutines::ProhibitManyArgs
-     * Subroutines::RequireArgUnpacking
-     * ValuesAndExpressions::ProhibitImplicitNewlines
-     * Variables::RequireLocalizedPunctuationVars
+    New Policies: (funded by a Perl Foundation grant)
+    * BuiltinFunctions::ProhibitBooleanGrep
+    * BuiltinFunctions::ProhibitComplexMappings
+    * Documentation::PodSpelling
+    * InputOutput::ProhibitJoinedReadline
+    * Subroutines::ProhibitManyArgs
+    * Subroutines::RequireArgUnpacking
+    * ValuesAndExpressions::ProhibitImplicitNewlines
+    * Variables::RequireLocalizedPunctuationVars
 
-     Other New Policies
-     * Subroutines::ProhibitNestedSubs
+    Other New Policies
+    * Subroutines::ProhibitNestedSubs
 
-     New Features:
-     * The "perlcritic --profile-proto" output now includes the "add_themes"
-       parameter for each policy.
-     * The perlcritic "--strict-profile" option has been replaced with a
-       "--profile-strictness" option.  This new option takes values of "warn"
-       (the default), "fatal", and "quiet", which controls what happens with
-       ignorable problems in a .perlcriticrc file.
+    New Features:
+    * The "perlcritic --profile-proto" output now includes the "add_themes"
+      parameter for each policy.
+    * The perlcritic "--strict-profile" option has been replaced with a
+      "--profile-strictness" option.  This new option takes values of "warn"
+      (the default), "fatal", and "quiet", which controls what happens with
+      ignorable problems in a .perlcriticrc file.
 
-     New Developer Features:
-     * Perl::Critic::Policy now has an overridable initialize_if_enabled()
-       method which allows a Policy to perform expensive initialization after
-       it has been determined whether the user has it enabled or not.  Also,
-       this method allows a Policy to say that it should be disabled
-       regardless of what the user says.
+    New Developer Features:
+    * Perl::Critic::Policy now has an overridable initialize_if_enabled()
+      method which allows a Policy to perform expensive initialization after
+      it has been determined whether the user has it enabled or not.  Also,
+      this method allows a Policy to say that it should be disabled
+      regardless of what the user says.
 
-       Actually, use of this method is now encouraged over using a
-       constructor.
+      Actually, use of this method is now encouraged over using a
+      constructor.
 
-     Other Stuff:
-     * Now requires the Readonly module in order to be more self-compliant.
+    Other Stuff:
+    * Now requires the Readonly module in order to be more self-compliant.
 
 [1.061]  Released on 2007-07-24
 
-     Bug Fixes:
-     * Fix P::C::Theme-- Exporter in Perl 5.6 does not export import(), so you
-       must subclass it.  *sigh*
-     * Fix P::C::Config::_validate_and_save_theme()-- eval of an empty string
-       does not reset $@/$EVAL_ERROR in Perl 5.6.
+    Bug Fixes:
+    * Fix P::C::Theme-- Exporter in Perl 5.6 does not export import(), so you
+      must subclass it.  *sigh*
+    * Fix P::C::Config::_validate_and_save_theme()-- eval of an empty string
+      does not reset $@/$EVAL_ERROR in Perl 5.6.
 
-     Big thanks to Anirvan Chatterjee for identifying and helping debug these
-     issues.
+    Big thanks to Anirvan Chatterjee for identifying and helping debug these
+    issues.
 
 [1.06]  Released on 2007-06-27
 
-     New Features:
-     * perlcritic now emits errors for all the problems it can find for the
-       global options in the command-line parameters and .perlcriticrc file,
-       rather than bailing on the first one it encounters.
+    New Features:
+    * perlcritic now emits errors for all the problems it can find for the
+      global options in the command-line parameters and .perlcriticrc file,
+      rather than bailing on the first one it encounters.
 
-     * perlcritic now has a "--strict-profile" option which will make warnings
-       about problems in a profile fatal.
+    * perlcritic now has a "--strict-profile" option which will make warnings
+      about problems in a profile fatal.
 
-     * perlcritic now has a "--statistics-only" option which suppresses the
-       display of individual violations and only shows the additional output
-       produced by the "--statistics" option.
+    * perlcritic now has a "--statistics-only" option which suppresses the
+      display of individual violations and only shows the additional output
+      produced by the "--statistics" option.
 
-     Feature requests:
-     * A value for "color" can now be specified in a .perlcriticrc.
-       http://rt.cpan.org/Ticket/Display.html?id=24877
+    Feature requests:
+    * A value for "color" can now be specified in a .perlcriticrc.
+      http://rt.cpan.org/Ticket/Display.html?id=24877
 
-     New Policies:
-     * ValuesAndExpressions::ProhibitQuotesAsQuotelikeOperatorDelimiters
-       As suggested in http://rt.cpan.org/Ticket/Display.html?id=23290.
-     * ValuesAndExpressions::ProhibitLongChainsOfMethodCalls
-     * Modules::ProhibitExcessMainComplexity
-       As suggested in http://rt.cpan.org/Ticket/Display.html?id=24699
+    New Policies:
+    * ValuesAndExpressions::ProhibitQuotesAsQuotelikeOperatorDelimiters
+      As suggested in http://rt.cpan.org/Ticket/Display.html?id=23290.
+    * ValuesAndExpressions::ProhibitLongChainsOfMethodCalls
+    * Modules::ProhibitExcessMainComplexity
+      As suggested in http://rt.cpan.org/Ticket/Display.html?id=24699
 
-     Minor changes:
-     * The perlcritic "--profile-proto" option now emits the short names for
-       policies, rather than the full ones.
+    Minor changes:
+    * The perlcritic "--profile-proto" option now emits the short names for
+      policies, rather than the full ones.
 
-     * The "-profileproto" and "-singlepolicy" options have been renamed to
-       "-profile-proto" and "-single-policy" in order to make the growing
-       number of command-line options comprehensible.  The change of
-       "singlepolicy" also affects your F<.perlcriticrc> file.
+    * The "-profileproto" and "-singlepolicy" options have been renamed to
+      "-profile-proto" and "-single-policy" in order to make the growing
+      number of command-line options comprehensible.  The change of
+      "singlepolicy" also affects your F<.perlcriticrc> file.
 
 [1.053]  Released on 2007-06-02
 
-     *DEVELOPMENT RELEASE*
+    *DEVELOPMENT RELEASE*
 
-     Bug Fixes:
-     Fixed bug in 15_statustics.t test script, which caused the build
-     to fail on machines that don't have Perl::Tidy installed.
+    Bug Fixes:
+    Fixed bug in 15_statustics.t test script, which caused the build
+    to fail on machines that don't have Perl::Tidy installed.
 
 [1.052]  Released on 2007-06-01
 
-     *DEVELOPMENT RELEASE*
+    *DEVELOPMENT RELEASE*
 
-     New Features:
-     * perlcritic now emits a summary about the scanned code when enabled by
-       the "-statistics" option.
+    New Features:
+    * perlcritic now emits a summary about the scanned code when enabled by
+      the "-statistics" option.
 
-     Policy Enhancements:
-     * InputOutput::ProhibitBacktickOperators can now be configured to only
-       check in void contexts.
+    Policy Enhancements:
+    * InputOutput::ProhibitBacktickOperators can now be configured to only
+      check in void contexts.
 
-     Bug Fixes:
-     * 27073: False positive in RequireUpperCaseHeredocTerminator
-     * 27065: CodeLayout::ProhibitTrailingWhitespace breaks under Perl 5.6.1
-     * 26462: ControlStructures::ProhibitCascadingIfElse pod typo
-     * ValuesAndExpressions::ProhibitCommaSeparatedStatements was complaining
-       about multiple values in the list to be iterated over by a foreach loop.
-     * Corrected PBP page numbers for some policies (Quinn Weaver).
+    Bug Fixes:
+    * 27073: False positive in RequireUpperCaseHeredocTerminator
+    * 27065: CodeLayout::ProhibitTrailingWhitespace breaks under Perl 5.6.1
+    * 26462: ControlStructures::ProhibitCascadingIfElse pod typo
+    * ValuesAndExpressions::ProhibitCommaSeparatedStatements was complaining
+      about multiple values in the list to be iterated over by a foreach loop.
+    * Corrected PBP page numbers for some policies (Quinn Weaver).
 
 [1.051]  Released on 2007-04-12
 
-     *DEVELOPMENT RELEASE*
+    *DEVELOPMENT RELEASE*
 
-     No new policies.
-     No particular bug fixes.
+    No new policies.
+    No particular bug fixes.
 
-     Internals:
-     * Added several new utility functions to support the StricterSubs distro.
-       Also, some of the existing functions in Perl-Critic-Utils have
-       changed in ways that might break your custom policies.
+    Internals:
+    * Added several new utility functions to support the StricterSubs distro.
+      Also, some of the existing functions in Perl-Critic-Utils have
+      changed in ways that might break your custom policies.
 
-     Miscellanea:
-     * Updated Emacs plugin (Courtesy Josh ben Jore).
-       See extras/perlcritic.el for details.
-     * Added copy of BBEdit plugin (Courtesy of Josh Clark).
-       See extras/perl_critic_for_bbedit-1_0.zip for details
+    Miscellanea:
+    * Updated Emacs plugin (Courtesy Josh ben Jore).
+      See extras/perlcritic.el for details.
+    * Added copy of BBEdit plugin (Courtesy of Josh Clark).
+      See extras/perl_critic_for_bbedit-1_0.zip for details
 
 [1.05]  Released on 2007-03-19
 
-     Bug Fixes:
-     * 25557: t/20_policy_prohibittrailingwhitespace.t fails on Perl 5.8.0
+    Bug Fixes:
+    * 25557: t/20_policy_prohibittrailingwhitespace.t fails on Perl 5.8.0
 
 [1.04]  Released on 2007-03-18
 
-     Bug Fixes:
-     * 25008: Subroutines::RequireFinalReturn should allow "throw"
-     * 25085: False Positive - Heredoc terminator must be quoted
-     * 18423: VERSION check does not notice Readonly::Scalar version
-     * 25449: Proposal of $VERSION declaration (DUPLICATE)
+    Bug Fixes:
+    * 25008: Subroutines::RequireFinalReturn should allow "throw"
+    * 25085: False Positive - Heredoc terminator must be quoted
+    * 18423: VERSION check does not notice Readonly::Scalar version
+    * 25449: Proposal of $VERSION declaration (DUPLICATE)
 
-     New Policies:
-     * CodeLayout::ProhibitTrailingWhitespace
-     * ValuesAndExpressions::ProhibitCommaSeparatedStatements
-     * Variables::ProhibitPerl4PackageNames
+    New Policies:
+    * CodeLayout::ProhibitTrailingWhitespace
+    * ValuesAndExpressions::ProhibitCommaSeparatedStatements
+    * Variables::ProhibitPerl4PackageNames
 
-     Policy Enhancements:
-     * Subroutines::RequireFinalReturn can now be configured to recognize
-       your custom functions that behave like "die" or "exit".
-     * Documentation::RequirePodSections can be configured to match
-       Module::Starter:PBP or to really match the PBP book.
+    Policy Enhancements:
+    * Subroutines::RequireFinalReturn can now be configured to recognize
+      your custom functions that behave like "die" or "exit".
+    * Documentation::RequirePodSections can be configured to match
+      Module::Starter:PBP or to really match the PBP book.
 
 [1.03]  Released on 2007-02-13
 
-     Bug Fixes:
-     * Fixed a few more problems with the %f, %F, and %r format escapes.
-     * I forgot to put Conway's perlcriticrc file in the MANIFEST. Sorry.
+    Bug Fixes:
+    * Fixed a few more problems with the %f, %F, and %r format escapes.
+    * I forgot to put Conway's perlcriticrc file in the MANIFEST. Sorry.
 
-     Interface Changes:
-     * Perl::Critic::Utils automatically exports everything.  However,
-       this is deprecated.  In the future, you must request your exports.
+    Interface Changes:
+    * Perl::Critic::Utils automatically exports everything.  However,
+      this is deprecated.  In the future, you must request your exports.
 
-     Policy Changes:
-     * Duplicate violations of RequireExcplicitPackage are now squelched,
-       in the same way as RequireUseStrict and RequireUseWarnings.
+    Policy Changes:
+    * Duplicate violations of RequireExcplicitPackage are now squelched,
+      in the same way as RequireUseStrict and RequireUseWarnings.
 
 [1.02]  Released on 2007-02-11
 
-     Bug Fixes:
-     * "undef" incorrectly triggered ProhibitMutatingListFunctions.
-     * 24876: %f and %F escapes not working in custom "verbose" format strings.
-     * 24875: Documentation bug in TestingAndDebugging::ProhibitNoStrict
+    Bug Fixes:
+    * "undef" incorrectly triggered ProhibitMutatingListFunctions.
+    * 24876: %f and %F escapes not working in custom "verbose" format strings.
+    * 24875: Documentation bug in TestingAndDebugging::ProhibitNoStrict
 
-     New Policies:
-     * InputOutput::RequireCheckedOpen
-     * InputOutput::RequireCheckedClose
+    New Policies:
+    * InputOutput::RequireCheckedOpen
+    * InputOutput::RequireCheckedClose
 
-     Other Cool Stuff:
-     * Added Conway's own suggested Perl::Critic configuration as
-       examples/perlcriticrc-conway.
+    Other Cool Stuff:
+    * Added Conway's own suggested Perl::Critic configuration as
+      examples/perlcriticrc-conway.
 
-     * See the examples/ directory for some neat demonstrations of using
-       the Perl::Critic API. Contributed by Elliot Shank.
+    * See the examples/ directory for some neat demonstrations of using
+      the Perl::Critic API. Contributed by Elliot Shank.
 
-     Interface Changes:
-     * Perl::Critic::Utils no longer exports anything by default.  Policies
-       outside the distribution will need to specify what exactly they need
-       from this module.  There are a number of tags that can be used in
-       addition to individual imports.
+    Interface Changes:
+    * Perl::Critic::Utils no longer exports anything by default.  Policies
+      outside the distribution will need to specify what exactly they need
+      from this module.  There are a number of tags that can be used in
+      addition to individual imports.
 
 [1.01]  Released on 2007-01-24
 
-     PRODUCTION RELEASE:  You may now consider the public Perl::Critic
-     API as "stable."  Future minor releases will focus on bug fixes,
-     new policies, and internal refactoring.
+    PRODUCTION RELEASE:  You may now consider the public Perl::Critic
+    API as "stable."  Future minor releases will focus on bug fixes,
+    new policies, and internal refactoring.
 
-     Bug Fixes:
-     * Fixed memory leak.  This was reported by the Parrot team at
-       http://rt.perl.org/rt3/Ticket/Display.html?id=41230
+    Bug Fixes:
+    * Fixed memory leak.  This was reported by the Parrot team at
+      http://rt.perl.org/rt3/Ticket/Display.html?id=41230
 
 [0.23]  Released on 2007-01-19
 
-     Bug Fixes:
-     * 23994: Test 56 in t/05_utils.t of Perl::Critic v0.22 fails
-     * 24005: test 95 in t/13_bundled_policies fails in 0.22
+    Bug Fixes:
+    * 23994: Test 56 in t/05_utils.t of Perl::Critic v0.22 fails
+    * 24005: test 95 in t/13_bundled_policies fails in 0.22
 
 
-     Groovy New Features:
-     * Added '%F' to the Violation format specifications.  This will
-       give you just the name of file where the violation occurred
-       (i.e. without the path).
+    Groovy New Features:
+    * Added '%F' to the Violation format specifications.  This will
+      give you just the name of file where the violation occurred
+      (i.e. without the path).
 
-     * Improved validation of .perlcriticrc file.  An invalid
-       default setting will now cause a fatal exception. A
-       strange-looking policy name will cause a warning.
-
-
-     Interface Changes:
-     * The syntax for theme expressions has changed.  Instead of using
-       mathematical operators qw(+ * -) you must now use the logical
-       operators qw(|| && !).  See the Perl::Critic docs for more info.
-
-     * The @GLOBALS and @BUILTINS variables are no longer exported by
-       Perl::Critic::Utils.  Use the is_perl_global() and is_perl_builtin()
-       functions instead.
-
-     * Perl::Critic::Policy::policy_parameters() has bee renamed to
-       Perl::Critic::Policy::supported_paramters().  This was an
-       undocumented feature anyway, so it shouldn't affect anyone.
+    * Improved validation of .perlcriticrc file.  An invalid
+      default setting will now cause a fatal exception. A
+      strange-looking policy name will cause a warning.
 
 
-     Other Internal Changes:
-     * Perl::Critic now requires B::Keywords v1.05 or newer.
+    Interface Changes:
+    * The syntax for theme expressions has changed.  Instead of using
+      mathematical operators qw(+ * -) you must now use the logical
+      operators qw(|| && !).  See the Perl::Critic docs for more info.
 
-     * A few internal classes have been refactored.  As a result,
-       Set::Scalar is no longer a required dependency.
+    * The @GLOBALS and @BUILTINS variables are no longer exported by
+      Perl::Critic::Utils.  Use the is_perl_global() and is_perl_builtin()
+      functions instead.
+
+    * Perl::Critic::Policy::policy_parameters() has bee renamed to
+      Perl::Critic::Policy::supported_paramters().  This was an
+      undocumented feature anyway, so it shouldn't affect anyone.
+
+
+    Other Internal Changes:
+    * Perl::Critic now requires B::Keywords v1.05 or newer.
+
+    * A few internal classes have been refactored.  As a result,
+      Set::Scalar is no longer a required dependency.
 
 
 [0.22]  Released on 2006-12-15
 
-     New Features:
-     * Introduced named severity levels: gentle, stern, harsh, cruel, brutal
-       You can use these named levels instead of the numeric ones.
-       For example: "perlcritic --severity=cruel MyModule.pm"
-       Or just:     "perlcritic --cruel MyModule.pm"
+    New Features:
+    * Introduced named severity levels: gentle, stern, harsh, cruel, brutal
+      You can use these named levels instead of the numeric ones.
+      For example: "perlcritic --severity=cruel MyModule.pm"
+      Or just:     "perlcritic --cruel MyModule.pm"
 
-     * For perlcritic, the "-List" option has been renamed to
-       "-profileproto".  The output now includes the names of the
-       parameters that each Policy supports, if any.
+    * For perlcritic, the "-List" option has been renamed to
+      "-profileproto".  The output now includes the names of the
+      parameters that each Policy supports, if any.
 
-     * Improved validation of Policy parameters in your F<.perlcriticrc>
-       Any invalid parameter now causes a fatal exception.
+    * Improved validation of Policy parameters in your F<.perlcriticrc>
+      Any invalid parameter now causes a fatal exception.
 
-     Major Changes:
-     * Reassigned themes for most policies.  Now there are fewer
-       themes and they are organized around programming concepts
-       instead of severity levels.  If you have assigned your own
-       themes to any Policies, they should still work as expected.
+    Major Changes:
+    * Reassigned themes for most policies.  Now there are fewer
+      themes and they are organized around programming concepts
+      instead of severity levels.  If you have assigned your own
+      themes to any Policies, they should still work as expected.
 
-     Policy Changes:
-     * ErrorHandling::RequireCarping will not complain if it can figure
-       out that the die or warn message will always end in a newline
-       ("\n").  The idea is that, if you put the newline there, you
-       don't indend for there to be any file/line/stack information
-       emitted, in which case you really don't want carp/croak.
+    Policy Changes:
+    * ErrorHandling::RequireCarping will not complain if it can figure
+      out that the die or warn message will always end in a newline
+      ("\n").  The idea is that, if you put the newline there, you
+      don't indend for there to be any file/line/stack information
+      emitted, in which case you really don't want carp/croak.
 
-       You can restore the old strict behavior by giving the policy
-       a false value for "allow_messages_ending_with_newlines" in your
-       configuration.
+      You can restore the old strict behavior by giving the policy
+      a false value for "allow_messages_ending_with_newlines" in your
+      configuration.
 
-     Misc Changes:
+    Misc Changes:
 
-     Added single-letter uppercase alternatives for some perlcritic options.
+    Added single-letter uppercase alternatives for some perlcritic options.
 
 [0.21_01] Released on 2006-12-03
 
-     New Policies:
-     * TestingAndDebugging::ProhibitProlongedStrictureOverride
-     * ControlStructures::ProhibitMutatingListFunctions
+    New Policies:
+    * TestingAndDebugging::ProhibitProlongedStrictureOverride
+    * ControlStructures::ProhibitMutatingListFunctions
 
-     New Features:
-     * Say "perlcritic -List" to get an expanded listing of all Policies.
-       The format is suitable for use as your .perlcriticrc file.
-     * Say "perlcritic -doc PATTERN" to get the documentation for all
-       Policies that match m/PATTERN/imx.  This is a little easier than
-       typing in the full name of the Policy module with "perldoc".
-     * Say "perlcritic --singlepolicy PATTERN" to use one and only one
-       policy.
-     * Can now specify exceptions to Variables::ProhibitPackageVars,
-       for packages like File::Find that only interface through
-       package variables.
+    New Features:
+    * Say "perlcritic -List" to get an expanded listing of all Policies.
+      The format is suitable for use as your .perlcriticrc file.
+    * Say "perlcritic -doc PATTERN" to get the documentation for all
+      Policies that match m/PATTERN/imx.  This is a little easier than
+      typing in the full name of the Policy module with "perldoc".
+    * Say "perlcritic --singlepolicy PATTERN" to use one and only one
+      policy.
+    * Can now specify exceptions to Variables::ProhibitPackageVars,
+      for packages like File::Find that only interface through
+      package variables.
 
-     Bug Fixes:
-     * 21713 false positive for parens used with substr and unpack.
-     * 22890 allow Rcs keywords in POD.
+    Bug Fixes:
+    * 21713 false positive for parens used with substr and unpack.
+    * 22890 allow Rcs keywords in POD.
 
-     Internals:
-     * Testing system overhauled.  Details on the Policy/subtest
-       framework is in t/run.t.
-     * Added Perl::Critic::Utils::words_from_string.  This is safer
-       than plain old C<split /\s+/>.
+    Internals:
+    * Testing system overhauled.  Details on the Policy/subtest
+      framework is in t/run.t.
+    * Added Perl::Critic::Utils::words_from_string.  This is safer
+      than plain old C<split /\s+/>.
 
 [0.21]  Released on 2006-11-05
 
-     New Policies:
-     * BuiltinFunctions::ProhibitReverseSortBlock
-     * BuiltinFunctions::ProhibitVoidGrep
-     * BuiltinFunctions::ProhibitVoidMap
-     * CodeLayout::RequireConsistentNewlines
-     * Modules::RequireFilenameMatchesPackage
-     * TestingAndDebugging::RequireTestLabels
-     * ValuesAndExpressions::ProhibitMismatchedOperators
+    New Policies:
+    * BuiltinFunctions::ProhibitReverseSortBlock
+    * BuiltinFunctions::ProhibitVoidGrep
+    * BuiltinFunctions::ProhibitVoidMap
+    * CodeLayout::RequireConsistentNewlines
+    * Modules::RequireFilenameMatchesPackage
+    * TestingAndDebugging::RequireTestLabels
+    * ValuesAndExpressions::ProhibitMismatchedOperators
 
-     New Features:
-     * Introduced policy "themes."  Themes are arbitrary names that can
-       be used to identify a group of related Policies.  You can select
-       your favorite policies by combining themes in a mathematic expression
-       such as "pbp * (danger + risky)".  See POD for details.
-     * perlcritic output is colorized if you have Term::ANSIColor.  This
-       only works on non-Win32 platforms.  Use -nocolor switch to disable.
-     * Say "perlcritic -count" to get just the the total number of
-       violations per file.  Use this feature to quickly identify hot-spots.
-     * Use the -only switch to choose only from policies mentioned in your
-       .perlcriticrc file.  This is useful if you usually only want to
-       work with a small subset of the policies.
-     * Default values for most of the perlcritic and Perl::Critic options
-       can now be defined in your .perlcriticrc file.  See POD for details.
+    New Features:
+    * Introduced policy "themes."  Themes are arbitrary names that can
+      be used to identify a group of related Policies.  You can select
+      your favorite policies by combining themes in a mathematic expression
+      such as "pbp * (danger + risky)".  See POD for details.
+    * perlcritic output is colorized if you have Term::ANSIColor.  This
+      only works on non-Win32 platforms.  Use -nocolor switch to disable.
+    * Say "perlcritic -count" to get just the the total number of
+      violations per file.  Use this feature to quickly identify hot-spots.
+    * Use the -only switch to choose only from policies mentioned in your
+      .perlcriticrc file.  This is useful if you usually only want to
+      work with a small subset of the policies.
+    * Default values for most of the perlcritic and Perl::Critic options
+      can now be defined in your .perlcriticrc file.  See POD for details.
 
-     Bug Fixes:
-     * 21236: wrong page number for "printing to filehandles"
-     * 21916: File handle ... wrong page reference in PBP [DUPE]
-     * 21714: false positive for capture var used in ternary condition
-     * 21718: No skip for File::Slurp in includes.t
-     * ProhibitBarewordFilehandles doesn't complain if you open
-       STDIN, STDOUT or STDERR.
-     * Parrot 40564: Subroutines::RequireFinalReturn should allow die,
-       exit, etc.
-     * Each "for" and "foreach" loop now adds one point to the McCabe
-       complexity score.
+    Bug Fixes:
+    * 21236: wrong page number for "printing to filehandles"
+    * 21916: File handle ... wrong page reference in PBP [DUPE]
+    * 21714: false positive for capture var used in ternary condition
+    * 21718: No skip for File::Slurp in includes.t
+    * ProhibitBarewordFilehandles doesn't complain if you open
+      STDIN, STDOUT or STDERR.
+    * Parrot 40564: Subroutines::RequireFinalReturn should allow die,
+      exit, etc.
+    * Each "for" and "foreach" loop now adds one point to the McCabe
+      complexity score.
 
-     Other Stuff:
-     * The internals of Perl::Critic have been significantly refactored,
-       but should still be compatible with existing third-party Policies.
-     * Added author-only tests to the release, but disabled by default
-     * New Perl::Critic::Utils::shebang_line() method
-     * Support for filename-based policies
-     * Additional prerequisite: Set::Scalar
-     * Now requires PPI version 1.118
+    Other Stuff:
+    * The internals of Perl::Critic have been significantly refactored,
+      but should still be compatible with existing third-party Policies.
+    * Added author-only tests to the release, but disabled by default
+    * New Perl::Critic::Utils::shebang_line() method
+    * Support for filename-based policies
+    * Additional prerequisite: Set::Scalar
+    * Now requires PPI version 1.118
 
 [0.20]  Released on 2006-09-10
 
-     Perl::Critic now requires PPI version 1.117, which fixes
-     several bugs that were introduced in version 1.116.
+    Perl::Critic now requires PPI version 1.117, which fixes
+    several bugs that were introduced in version 1.116.
 
-     Bug Fixes:
-     * 21079: grep clears @SITE_POLICIES
-     * 21352: Test failures with PPI 1.117
-     * 11365: sub DESTROY detected as a builtin homonym
+    Bug Fixes:
+    * 21079: grep clears @SITE_POLICIES
+    * 21352: Test failures with PPI 1.117
+    * 11365: sub DESTROY detected as a builtin homonym
 
 [0.19]  Released on 2006-08-20
 
-     New Policies:
-     * BuiltinFunctions::ProhibitStringySplit
-     * ControlStructures::ProhibitDeepNests
-     * RegularExpressions::ProhibitCaptureWithoutTest
-     * Variables::RequireLexicalLoopIterator
+    New Policies:
+    * BuiltinFunctions::ProhibitStringySplit
+    * ControlStructures::ProhibitDeepNests
+    * RegularExpressions::ProhibitCaptureWithoutTest
+    * Variables::RequireLexicalLoopIterator
 
-     New Features:
-     * "perlcritic -quiet" suppresses the "source OK" message.
-     * Variables::ProhibitPunctuationVars is now configurable.
+    New Features:
+    * "perlcritic -quiet" suppresses the "source OK" message.
+    * Variables::ProhibitPunctuationVars is now configurable.
 
-     Bug Fixes:
-     * 20965: "Hard tabs used at" shouldn't check __DATA__
-     * 21070: ProhibitNoisyQuotes hates overload
-     * Punctuation variables are now exempt from ProhibitLocalVars
+    Bug Fixes:
+    * 20965: "Hard tabs used at" shouldn't check __DATA__
+    * 21070: ProhibitNoisyQuotes hates overload
+    * Punctuation variables are now exempt from ProhibitLocalVars
 
-     Other Stuff:
-     * Test coverage is now over 95%
+    Other Stuff:
+    * Test coverage is now over 95%
 
 [0.18_01]  Released on 2006-08-06
 
-     New Policies:
-     * Variables::RequireNegativeIndices
-     * InputOutput::ProhibitInteractiveTest
-     * ErrorHandling::RequireCarping
+    New Policies:
+    * Variables::RequireNegativeIndices
+    * InputOutput::ProhibitInteractiveTest
+    * ErrorHandling::RequireCarping
 
-     Bug Fixes:
-     * RequireTidyCode tests fail if user has custom .perltidyrc file
-     * 20612: RequirePerlTidy was ignoring HEREDOCs
-     * 20659: __END__ statement considered "unreachable"
-     * Fix for PPI::XS (no C<use overload '""'> support)
-     * Support for 'goto' in ProhibitAmpersandSigils and
-       Subroutines::RequireFinalReturn
+    Bug Fixes:
+    * RequireTidyCode tests fail if user has custom .perltidyrc file
+    * 20612: RequirePerlTidy was ignoring HEREDOCs
+    * 20659: __END__ statement considered "unreachable"
+    * Fix for PPI::XS (no C<use overload '""'> support)
+    * Support for 'goto' in ProhibitAmpersandSigils and
+      Subroutines::RequireFinalReturn
 
-     Performance Enhancements:
-     * Introduced Perl::Critic::Document class.  This is a facade for
-       PPI::Document which internally caches search results.  This
-       reduces the running time by about 35%.  The facade should be
-       invisible, unless you are doing something really sneaky.
-     * Extraction of the 'diagnostics' information is postponed
-       until it is really needed.  Speedup has not been measured.
-     * Calls to helper-subs have been reordered for maximum efficiency.
+    Performance Enhancements:
+    * Introduced Perl::Critic::Document class.  This is a facade for
+      PPI::Document which internally caches search results.  This
+      reduces the running time by about 35%.  The facade should be
+      invisible, unless you are doing something really sneaky.
+    * Extraction of the 'diagnostics' information is postponed
+      until it is really needed.  Speedup has not been measured.
+    * Calls to helper-subs have been reordered for maximum efficiency.
 
-     Other Cool Stuff:
-     * Includes updated version of perlcritic mode for emacs.  See
-       "extras/perlcritic.el" for details.
+    Other Cool Stuff:
+    * Includes updated version of perlcritic mode for emacs.  See
+      "extras/perlcritic.el" for details.
 
 [0.18]  Released on 2006-07-16
 
-     Bug Fixes:
-     * 14855: Home discovery is dangerously naive.
-     * 20060: Incorrect page numbers in ProhibitLeadingZeros
-       and RequireNumberSeparator policies.
-     * 20068: .perlrc file - inconsistent documentation
-     * 20254: "use vars qw(@EXPORT_OK)" not recognized
-     * 20463: No-case heredoc terminator incorrectly detected as lower case.
-     * ProhibitOneArgBless doesn't understand "bless {} => $class;"
-     * ProhibitExcessComplexity doesn't count 'while' and 'until' stmnts
-     * ProhibitLeadingZeros was falsely hits '.0456'
+    Bug Fixes:
+    * 14855: Home discovery is dangerously naive.
+    * 20060: Incorrect page numbers in ProhibitLeadingZeros
+      and RequireNumberSeparator policies.
+    * 20068: .perlrc file - inconsistent documentation
+    * 20254: "use vars qw(@EXPORT_OK)" not recognized
+    * 20463: No-case heredoc terminator incorrectly detected as lower case.
+    * ProhibitOneArgBless doesn't understand "bless {} => $class;"
+    * ProhibitExcessComplexity doesn't count 'while' and 'until' stmnts
+    * ProhibitLeadingZeros was falsely hits '.0456'
 
-     Enhancements:
-     * If File::HomeDir is available, we use it to locate the
-       .perlcriticrc file.  This should help make Perl::Critic
-       more portable to Win32 platforms.  If File::HomeDir is
-       not installed, we resort to looking at the usual
-       environment variables.
+    Enhancements:
+    * If File::HomeDir is available, we use it to locate the
+      .perlcriticrc file.  This should help make Perl::Critic
+      more portable to Win32 platforms.  If File::HomeDir is
+      not installed, we resort to looking at the usual
+      environment variables.
 
-     Other Stuff:
-     * Added "perlcritic.el", which is a super-cool emacs minor-mode
-       that runs perl-critic on the current buffer and returns the
-       results in a sexy hot-linked "compiler" window.  You can run
-       it on demand, or have it run automatically every time you
-       save the buffer.  You can find this in the extras/ directory.
-       Thanks to Josh ben Jore for contributing this.
+    Other Stuff:
+    * Added "perlcritic.el", which is a super-cool emacs minor-mode
+      that runs perl-critic on the current buffer and returns the
+      results in a sexy hot-linked "compiler" window.  You can run
+      it on demand, or have it run automatically every time you
+      save the buffer.  You can find this in the extras/ directory.
+      Thanks to Josh ben Jore for contributing this.
 
-     * Moved "Perl::Critic::TestUtils" into the installed build.  This
-       module is only used for unit-testing Perl::Critic, but we
-       are putting it in the installation so folks who want to
-       extend Perl::Critic can make use of it.
+    * Moved "Perl::Critic::TestUtils" into the installed build.  This
+      module is only used for unit-testing Perl::Critic, but we
+      are putting it in the installation so folks who want to
+      extend Perl::Critic can make use of it.
 
 [0.17]  Released on 2006-06-13
 
-     Bug Fixes:
-     * 19836: Perl-Critic0.16 fails tests during install.  This was
-       caused by a bug in version 3.01 of Module::Pluggable.  See
-       http://rt.cpan.org/Ticket/Display.html?id=19857 for details.
-     * Fixed bug in no-critic pragma parser.
+    Bug Fixes:
+    * 19836: Perl-Critic0.16 fails tests during install.  This was
+      caused by a bug in version 3.01 of Module::Pluggable.  See
+      http://rt.cpan.org/Ticket/Display.html?id=19857 for details.
+    * Fixed bug in no-critic pragma parser.
 
-     New Policies:
-     * ValuesAndExpressions::ProhibitEscapedCharacters
-     * BuiltinFunctions::RequireSimpleSortBlock
+    New Policies:
+    * ValuesAndExpressions::ProhibitEscapedCharacters
+    * BuiltinFunctions::RequireSimpleSortBlock
 
-     Enhancements:
-     * Perl::Critic can export critique() as a static function.  This
-       may appeal to folks who dislike the object-oriented interface.
+    Enhancements:
+    * Perl::Critic can export critique() as a static function.  This
+      may appeal to folks who dislike the object-oriented interface.
 
 [0.16]  Released on 2006-05-14
 
-     Enhancements:
-     * Perl::Critic->critique() now accepts a PPI::Document as the
-       argument.  This feature creates an additional dependency on
-       Scalar::Util, but that shouldn't be a problem because it is
-       included with List::Util, which we already use.
+    Enhancements:
+    * Perl::Critic->critique() now accepts a PPI::Document as the
+      argument.  This feature creates an additional dependency on
+      Scalar::Util, but that shouldn't be a problem because it is
+      included with List::Util, which we already use.
 
-     Miscellanea:
-     * Increased PPI dependency from v1.110 to v1.112
+    Miscellanea:
+    * Increased PPI dependency from v1.110 to v1.112
 
 [0.15_03] Released on 2006-05-07
 
-     Bug Fixes:
-     * The "## no critic" feature is now implemented without eval-ing
-       the code.  This keeps Perl::Critic pure and safe :)
-     * 19082: Page number for AUTOLOAD is incorrect
+    Bug Fixes:
+    * The "## no critic" feature is now implemented without eval-ing
+      the code.  This keeps Perl::Critic pure and safe :)
+    * 19082: Page number for AUTOLOAD is incorrect
 
-     New Policies:
-     * ControlStructures::ProhibitUnreachableCode (by Peter Guzis)
-     * Modules::ProhibitAutomaticExportation
-     * ValuesAndExpressions::ProhibitVersionStrings
+    New Policies:
+    * ControlStructures::ProhibitUnreachableCode (by Peter Guzis)
+    * Modules::ProhibitAutomaticExportation
+    * ValuesAndExpressions::ProhibitVersionStrings
 
 [0.15_02] Released on 2006-04-26
 
-     Bug Fixes:
-     * Reimplemented the '##no critic' pragmas to have effect on the
-       line where the violation is reported, not on the line where
-       the candidate element lives.  This is because some policies
-       may report violations that are nowhere near the element that
-       is being evaluated.
-     * RequireUseStrict, RequireUseWarnings, and RequireExplcitPackage
-       all emit violations for _every_ statement that violates the
-       Policy.  This closes a loophole that allowed you to circumvent
-       the Policy by using '## no critic' on just the first statement
-       that violated the policy.
-     * Fixed the workaround for the magic shebang that is inserted
-       by EU::MM and M::B.  This had stopped working around version 13.
-     * Fixed -noprofile option on 'perlcritic'.  This also had stopped
-       working at some point.
+    Bug Fixes:
+    * Reimplemented the '##no critic' pragmas to have effect on the
+      line where the violation is reported, not on the line where
+      the candidate element lives.  This is because some policies
+      may report violations that are nowhere near the element that
+      is being evaluated.
+    * RequireUseStrict, RequireUseWarnings, and RequireExplcitPackage
+      all emit violations for _every_ statement that violates the
+      Policy.  This closes a loophole that allowed you to circumvent
+      the Policy by using '## no critic' on just the first statement
+      that violated the policy.
+    * Fixed the workaround for the magic shebang that is inserted
+      by EU::MM and M::B.  This had stopped working around version 13.
+    * Fixed -noprofile option on 'perlcritic'.  This also had stopped
+      working at some point.
 
 [0.15_01] Released on 2006-04-16
 
-     Enhancements:
-     * Added diagnostic messages if the .perlcriticrc contains entries
-       for Policy modules that don't seem to exist.
-     * Now you can specify which policies to disable with the
-       "## no critic" pseudo-pragmas.  This feature is still
-       experimental.  See docs for details.
-     * perlcritic's directory searching now skips backup files, such
-       as *.swp, *.bak and *~.  It also ignores version control system
-       directories, and the blib directory in module build directories.
+    Enhancements:
+    * Added diagnostic messages if the .perlcriticrc contains entries
+      for Policy modules that don't seem to exist.
+    * Now you can specify which policies to disable with the
+      "## no critic" pseudo-pragmas.  This feature is still
+      experimental.  See docs for details.
+    * perlcritic's directory searching now skips backup files, such
+      as *.swp, *.bak and *~.  It also ignores version control system
+      directories, and the blib directory in module build directories.
 
-     Bug Fixes:
-     * 18386: Bad example in POD for Documentation::RequirePodSections
-     * 18670: Test failure if Perl::Tidy is not installed
-     * 18698: Policy idea ProhibitUniversalFunctions (see New Policies)
-     * RequireInterpolationOfMetachars falsely hit strings like 'foo=s@'
-       which are commonly used with Getopt::Long.
+    Bug Fixes:
+    * 18386: Bad example in POD for Documentation::RequirePodSections
+    * 18670: Test failure if Perl::Tidy is not installed
+    * 18698: Policy idea ProhibitUniversalFunctions (see New Policies)
+    * RequireInterpolationOfMetachars falsely hit strings like 'foo=s@'
+      which are commonly used with Getopt::Long.
 
-     New Policies:
-     * BuiltinFunctions::ProhibitUniversalCan (by Chris Dolan)
-     * BuiltinFunctions::ProhibitUniversalIsa (by Chris Dolan)
+    New Policies:
+    * BuiltinFunctions::ProhibitUniversalCan (by Chris Dolan)
+    * BuiltinFunctions::ProhibitUniversalIsa (by Chris Dolan)
 
-     Miscellanea:
-     * All spurrious options for `perlcritic` are now fatal.
-     * Changed several of the -verbose formats to be more readable.
-     * Explicit -severity option now overrides -[12345] shortcuts instead
-       of being the other way around.
+    Miscellanea:
+    * All spurrious options for `perlcritic` are now fatal.
+    * Changed several of the -verbose formats to be more readable.
+    * Explicit -severity option now overrides -[12345] shortcuts instead
+      of being the other way around.
 
 
 
 [0.15] Released on 2006-03-26
 
-     Bug Fixes:
-     * 17964: Insists my code is not tidy (may not be fixed for all cases)
+    Bug Fixes:
+    * 17964: Insists my code is not tidy (may not be fixed for all cases)
 
 [0.14_02] Released on 2006-03-19
 
-     Bug Fixes:
-     * 15653: False positive in OneArgSelect (fixed for real this time)
+    Bug Fixes:
+    * 15653: False positive in OneArgSelect (fixed for real this time)
 
-     New Policies:
-     * ClassHierarchies::ProhibitAutoloading
-     * Documentation::RequirePodSections
-     * InputOutput::RequireBracedFileHandleWithPrint
-     * ValuesAndExpressions::ProhibitMixedBooleanOperators
-     * Variables::RequireInitializationForLocalVars
+    New Policies:
+    * ClassHierarchies::ProhibitAutoloading
+    * Documentation::RequirePodSections
+    * InputOutput::RequireBracedFileHandleWithPrint
+    * ValuesAndExpressions::ProhibitMixedBooleanOperators
+    * Variables::RequireInitializationForLocalVars
 
 [0.14_01] Released on 2006-03-05
 
-     Bug Fixes:
-     * 14731: False positive: Builtin function called with parens
-     * 17554: False positive in CodeLayout::RequireTrailingCommas
+    Bug Fixes:
+    * 14731: False positive: Builtin function called with parens
+    * 17554: False positive in CodeLayout::RequireTrailingCommas
 
-     New Policies:
-     * ClassHierarchies::ProhibitExplicitISA
-     * InputOutput::ProhibitReadlineInForLoop
-     * Miscellanea::ProhibitFormats
-     * Miscellanea::ProhibitTies
-     * Variables::ProhibitConditionalDeclarations
+    New Policies:
+    * ClassHierarchies::ProhibitExplicitISA
+    * InputOutput::ProhibitReadlineInForLoop
+    * Miscellanea::ProhibitFormats
+    * Miscellanea::ProhibitTies
+    * Variables::ProhibitConditionalDeclarations
 
 [0.14] Released on 2006-01-29
 
-     More documentation edits.
+    More documentation edits.
 
-     New Policies:
-     * Documentation::RequirePodAtEnd
-     * Subroutines::ProtectPrivateSubs
-     * Variables::ProhibitMatchVars
-     * Variables::ProtectPrivateVars
+    New Policies:
+    * Documentation::RequirePodAtEnd
+    * Subroutines::ProtectPrivateSubs
+    * Variables::ProhibitMatchVars
+    * Variables::ProtectPrivateVars
 
-     Bug Fixes:
-     * 15295: "## no critic" pragmas too aggresive on compound statements.
-     * t/01_config.t failed in the presence of third-party policies
+    Bug Fixes:
+    * 15295: "## no critic" pragmas too aggresive on compound statements.
+    * t/01_config.t failed in the presence of third-party policies
 
 [0.13_05] Not released
 
-     More documentation edits.
+    More documentation edits.
 
-     Implemented workaround for failing pod_coverage tests.
+    Implemented workaround for failing pod_coverage tests.
 
-     Bug Fixes:
-     * 16906:  tr/// created false-postives with RegularExpression polices.
+    Bug Fixes:
+    * 16906:  tr/// created false-postives with RegularExpression polices.
 
 [0.13_04] Released on 2005-12-31
 
-     Moved DEVELOPER.pod file into the Perl/Critic dir.
+    Moved DEVELOPER.pod file into the Perl/Critic dir.
 
-     More documentation edits.
+    More documentation edits.
 
 [0.13_03] Released on 20051230
 
-     perlcritic now prints 'source OK' if it doesn't find any
-     violations.  This gives folks a warm fuzzy feeling.
+    perlcritic now prints 'source OK' if it doesn't find any
+    violations.  This gives folks a warm fuzzy feeling.
 
-     Tweaked some test cases that were failing on my Solaris
-     environment at work.
+    Tweaked some test cases that were failing on my Solaris
+    environment at work.
 
 [0.13_02] Released on 2005-12-29
 
-     Fixed Config to recognize fully-qualified module names in the
-     .perlcriticrc file.
+    Fixed Config to recognize fully-qualified module names in the
+    .perlcriticrc file.
 
-     Various documentation edits.
+    Various documentation edits.
 
 [0.13_01] Released on 2005-12-28
 
-     Replaced 'priority' concept with 'severity'.  Now each Policy module
-     has a predefined severity level ranging from 1 to 5.  By default,
-     perlcritic only reports the most severe violations.  You can adjust
-     the severity threshold at the command line, and you can change
-     the severity for any Policy using the config file.
+    Replaced 'priority' concept with 'severity'.  Now each Policy module
+    has a predefined severity level ranging from 1 to 5.  By default,
+    perlcritic only reports the most severe violations.  You can adjust
+    the severity threshold at the command line, and you can change
+    the severity for any Policy using the config file.
 
-     Chris implemented the applies_to() mechanism, which allows each Policy
-     class to declare the types of PPI elements that it wants to examine.
-     When traversing the document, Perl::Critic invokes the Policy only
-     for elements that are of the correct type.  This improves performance
-     by about 33%.
+    Chris implemented the applies_to() mechanism, which allows each Policy
+    class to declare the types of PPI elements that it wants to examine.
+    When traversing the document, Perl::Critic invokes the Policy only
+    for elements that are of the correct type.  This improves performance
+    by about 33%.
 
-     Perl::Critic now uses a Plugin architecture to automatically
-     discover Policy modules.  So if you have custom Policies, all you
-     have to do is install them in the Perl::Critic::Policy namespace --
-     no need to add anything to your .perlcriticrc file.  If you write
-     policies in a different namespace, you can configure that too.  See
-     the Perl::Critic::Config docs for details.
+    Perl::Critic now uses a Plugin architecture to automatically
+    discover Policy modules.  So if you have custom Policies, all you
+    have to do is install them in the Perl::Critic::Policy namespace --
+    no need to add anything to your .perlcriticrc file.  If you write
+    policies in a different namespace, you can configure that too.  See
+    the Perl::Critic::Config docs for details.
 
-     New Policies:
-     * Modules::RequireEndWithOne
-     * NamingConventions::ProhibitAmbiguousNames
-     * References::ProhibitDoubleSigils
-     * Subroutines::RequireFinalReturn
-     * Subroutines::ProhibitAmpersandSigils
-     * Subroutines::ProhibitExcessComplexity
-     * TestingAndDebugging::ProhibitNoStrict
-     * TestingAndDebugging::ProhibitNoWarnings
+    New Policies:
+    * Modules::RequireEndWithOne
+    * NamingConventions::ProhibitAmbiguousNames
+    * References::ProhibitDoubleSigils
+    * Subroutines::RequireFinalReturn
+    * Subroutines::ProhibitAmpersandSigils
+    * Subroutines::ProhibitExcessComplexity
+    * TestingAndDebugging::ProhibitNoStrict
+    * TestingAndDebugging::ProhibitNoWarnings
 
-     Bug Fixes:
-     * 15101: Plugin architecture improves support for 3rd-party code
-     * 16319: Fixed incorrect PBP page number in ProhibitBarwordFilehandle
-     * 16321: Lists of empty quotes are now allowed by ProhibitQuotedWordLists
-     * 16288: Empty lists caused a fatal error RequireTrailingCommas
-     * 15653: Fixed false positive in OneArgSelect.
+    Bug Fixes:
+    * 15101: Plugin architecture improves support for 3rd-party code
+    * 16319: Fixed incorrect PBP page number in ProhibitBarwordFilehandle
+    * 16321: Lists of empty quotes are now allowed by ProhibitQuotedWordLists
+    * 16288: Empty lists caused a fatal error RequireTrailingCommas
+    * 15653: Fixed false positive in OneArgSelect.
 
 [0.13] Released on 2005-10-31
 
-     Official release of 0.12_03.  No code major changes.
+    Official release of 0.12_03.  No code major changes.
 
 [0.12_03] Not released
 
-     Renamed -Policy option to -include.  Added -exclude to give the
-     opposite effect.
+    Renamed -Policy option to -include.  Added -exclude to give the
+    opposite effect.
 
-     Refactored constructor of Perl::Critic.  Now, most of the work
-     is delegated to Perl::Critic::Config.  I'm not sure I like how
-     this turned out, but we'll see how it goes.
+    Refactored constructor of Perl::Critic.  Now, most of the work
+    is delegated to Perl::Critic::Config.  I'm not sure I like how
+    this turned out, but we'll see how it goes.
 
-     Renamed some Policy modules to be a bit more comprehensible.  Note
-     that you may need to change your .perlcriticrc file accordingly.
-     I also suggest removing your current Perl::Critic installation
-     before installing this one.
+    Renamed some Policy modules to be a bit more comprehensible.  Note
+    that you may need to change your .perlcriticrc file accordingly.
+    I also suggest removing your current Perl::Critic installation
+    before installing this one.
 
-     Name Changes:
-     * ProhibitUnpackagedCode => RequireExplicitPackage
-     * RequireQuotedWords     => ProhibitQuotedWordLists
+    Name Changes:
+    * ProhibitUnpackagedCode => RequireExplicitPackage
+    * RequireQuotedWords     => ProhibitQuotedWordLists
 
-     Improved error message when Perl::Critic dies because PPI can't
-     parsee the input code.
+    Improved error message when Perl::Critic dies because PPI can't
+    parsee the input code.
 
-     Changed output of -help to be more terse.
+    Changed output of -help to be more terse.
 
-     Edited POD.
+    Edited POD.
 
 [0.12_02] Not released
 
-     Added -Policy option to perlcritic.  The idea is to provide a
-     compact interface for selecting Policy modules at the command-line.
-     This feature is experimental and subject to change.
+    Added -Policy option to perlcritic.  The idea is to provide a
+    compact interface for selecting Policy modules at the command-line.
+    This feature is experimental and subject to change.
 
-     Added a warning message if -verbose value looks strange.  In most
-     applications, the -verbose option does not require a value, so people
-     might be puzzled when they write 'perlcritic -verbose my_file.pm' and
-     nothing seems to happen.
+    Added a warning message if -verbose value looks strange.  In most
+    applications, the -verbose option does not require a value, so people
+    might be puzzled when they write 'perlcritic -verbose my_file.pm' and
+    nothing seems to happen.
 
-     Command-line options to perlcritic are now case-sensitive.  This
-     makes it easier to abbreviate options that start with the same letters
-     (e.g. 'Version' and 'verbose')
+    Command-line options to perlcritic are now case-sensitive.  This
+    makes it easier to abbreviate options that start with the same letters
+    (e.g. 'Version' and 'verbose')
 
-     Fixed the new Policy modules that were misnamed and misplaced in the
-     previous distribution.
+    Fixed the new Policy modules that were misnamed and misplaced in the
+    previous distribution.
 
 [0.12_01] Not released
 
-     Rewrote some of the ControlStructures and BuiltinFunction
-     policies to be simpler (and probably a little faster).
+    Rewrote some of the ControlStructures and BuiltinFunction
+    policies to be simpler (and probably a little faster).
 
-     Edited POD.  Fixed some typos.  Added PREREQUISITES section
-     to Perl::Critic documentation.
+    Edited POD.  Fixed some typos.  Added PREREQUISITES section
+    to Perl::Critic documentation.
 
-     Fixed the -verbose FORMAT option so that you can put metachars
-     in the FORMAT specification.  If using perlcritic, be careful to
-     protect them from getting munged by the shell first.
+    Fixed the -verbose FORMAT option so that you can put metachars
+    in the FORMAT specification.  If using perlcritic, be careful to
+    protect them from getting munged by the shell first.
 
-     Replaced ProhibitRequireStatements with RequireBarewordIncludes
-     module. Courtesy of Chris Dolan <cdolan@cpan.org>
+    Replaced ProhibitRequireStatements with RequireBarewordIncludes
+    module. Courtesy of Chris Dolan <cdolan@cpan.org>
 
-     Added configuration to ProhibitInterpolationOfLiterals so that
-     certain flavors of quotes can be exempt.  This is for folks who
-     have configured their editor to use special syntax highlighting
-     for certain kinds of strings (SQL, for example).
+    Added configuration to ProhibitInterpolationOfLiterals so that
+    certain flavors of quotes can be exempt.  This is for folks who
+    have configured their editor to use special syntax highlighting
+    for certain kinds of strings (SQL, for example).
 
-     perlcritic now accepts multiple file arguments, so now you can
-     critique your entire distribution in one shot.  As a result, the
-     output-formats have changed slightly.
+    perlcritic now accepts multiple file arguments, so now you can
+    critique your entire distribution in one shot.  As a result, the
+    output-formats have changed slightly.
 
-     New Policy modules:
-     * BuiltinFunctions::ProhibitLvalueSubstr
-     * BuiltinFunctions::ProhibitSleepViaSelect
-     * ClassHierarchies::ProhibitOneArgBless
-     * CodeLayout::RequireTrailingCommas
-     * CodeLayout::RequireQuotedWordLists
-     * InputOutput::ProhibitTwoArgOpen
-     * InputOutput::ProhibitOneArgSelect
-     * InputOutput::ProhibitBarewordFileHandles
-     * Miscellanea::RequireRcsKeywords
-     * Modules::RequireVersionVar
-     * RegularExpressions::RequireExtendedFormatting
-     * RegularExpressions::RequireLineBoundaryMatching
+    New Policy modules:
+    * BuiltinFunctions::ProhibitLvalueSubstr
+    * BuiltinFunctions::ProhibitSleepViaSelect
+    * ClassHierarchies::ProhibitOneArgBless
+    * CodeLayout::RequireTrailingCommas
+    * CodeLayout::RequireQuotedWordLists
+    * InputOutput::ProhibitTwoArgOpen
+    * InputOutput::ProhibitOneArgSelect
+    * InputOutput::ProhibitBarewordFileHandles
+    * Miscellanea::RequireRcsKeywords
+    * Modules::RequireVersionVar
+    * RegularExpressions::RequireExtendedFormatting
+    * RegularExpressions::RequireLineBoundaryMatching
 
 
-     Bug fixes:
-     14923: 'require' is now permitted. See RequireBarewordIncludes.
-     15022: Fixed false-positives when keywords are used as hash keys.
-     15023: Fixed spurious Violations by removing magic shebang.
-     15031: Fixed spelling mistakes (and probably added some new ones).
-     15233: Postfix 'if' is now allowed with 'die', 'croak', etc.
+    Bug fixes:
+    14923: 'require' is now permitted. See RequireBarewordIncludes.
+    15022: Fixed false-positives when keywords are used as hash keys.
+    15023: Fixed spurious Violations by removing magic shebang.
+    15031: Fixed spelling mistakes (and probably added some new ones).
+    15233: Postfix 'if' is now allowed with 'die', 'croak', etc.
 
 [0.12] Released 2005-10-10
 
-     Redesigned the 'verbose' feature.  Now the output format
-     can be user-defined using a sprintf-like specification.
-     perlciritc also has a predefined output format that is
-     compatible with grep mode in editors like vim and emacs.
+    Redesigned the 'verbose' feature.  Now the output format
+    can be user-defined using a sprintf-like specification.
+    perlciritc also has a predefined output format that is
+    compatible with grep mode in editors like vim and emacs.
 
-     'return' is now exempt from ProhibitParensWithBuiltins.  I may
-     extend this exemption to all unary functions.
+    'return' is now exempt from ProhibitParensWithBuiltins.  I may
+    extend this exemption to all unary functions.
 
-     Edited POD. Added a super brief description of each policy
-     in the main Perl::Critic documentation.  Added details about
-     editor integration.
+    Edited POD. Added a super brief description of each policy
+    in the main Perl::Critic documentation.  Added details about
+    editor integration.
 
-     Additional Prerequisites:
-     * String::Format
+    Additional Prerequisites:
+    * String::Format
 
 [0.11] Not released
 
-     The internal dynamics and API of Perl::Critic have changed
-     considerably.  The result is a 300% increase in performance.
-     See the POD in Perl::Critic::Policy for details.
+    The internal dynamics and API of Perl::Critic have changed
+    considerably.  The result is a 300% increase in performance.
+    See the POD in Perl::Critic::Policy for details.
 
-     New Features:
-     * Added -verbose option to put more stuff in the output.  In the
-       extreme, you can get the POD from Policy attached to each
-       and every violation.
+    New Features:
+    * Added -verbose option to put more stuff in the output.  In the
+      extreme, you can get the POD from Policy attached to each
+      and every violation.
 
-     Additional Prerequisites:
-     * IO::String
-     * Pod::PlainText
+    Additional Prerequisites:
+    * IO::String
+    * Pod::PlainText
 
 [0.10] Released 2005-10-05
 
-     Fixed stupid bug in newest Policy modules.  They were returning
-     PPI objects instead of Perl::Critic::Violation objects.  Doh!
+    Fixed stupid bug in newest Policy modules.  They were returning
+    PPI objects instead of Perl::Critic::Violation objects.  Doh!
 
-     Fixed test scripts to prevent failures if the user already has a
-     .perlcriticrc file.
+    Fixed test scripts to prevent failures if the user already has a
+    .perlcriticrc file.
 
-     'ProhibitHardTabs' now allows leading tabs by default.
+    'ProhibitHardTabs' now allows leading tabs by default.
 
-     Put the Changes file in reverse-chronological order, so the most
-     recent stuff is easy to find at the top of the file
+    Put the Changes file in reverse-chronological order, so the most
+    recent stuff is easy to find at the top of the file
 
 [0.09] Released 2005-10-04
 
-     Fixed several bugs:
-     * 14810: Now you are allowed to create your own 'import' function,
-              since this is frequently done with fancy modules.
-     * 14817: Parens, brackets, and braces are now excluded from
-              'ProhibitNoisyQuotes' since they look better in quotes anyway.
-     * 14787: $1..$9 and '_' are exempt from ProhibitPunctuationVars
-     * 14899: Object methods with the same name as a built-in can
-              be called with parens (ProhibitParensWithBuiltins).
-     * 14901: Normalized the exit status of perlcritic to 0, 1, or 2.
-              See documentation for explanation.
-     * 14855: Partially fixed home directory discovery.  Still not
-              completely portable, but at least doesn't create warnings.
+    Fixed several bugs:
+    * 14810: Now you are allowed to create your own 'import' function,
+             since this is frequently done with fancy modules.
+    * 14817: Parens, brackets, and braces are now excluded from
+             'ProhibitNoisyQuotes' since they look better in quotes anyway.
+    * 14787: $1..$9 and '_' are exempt from ProhibitPunctuationVars
+    * 14899: Object methods with the same name as a built-in can
+             be called with parens (ProhibitParensWithBuiltins).
+    * 14901: Normalized the exit status of perlcritic to 0, 1, or 2.
+             See documentation for explanation.
+    * 14855: Partially fixed home directory discovery.  Still not
+             completely portable, but at least doesn't create warnings.
 
-     New features:
-     * 14734: Limit for number separators is now configurable
+    New features:
+    * 14734: Limit for number separators is now configurable
 
-     New Policy modules:
-     * CodeLayout::ProhibitHardTabs
-     * ControlStructures::ProhibitUnlessBlocks
-     * ControlStructures::ProhibitUntilBlocks
-     * ControlStructures::ProhibitCStyleForLoops
+    New Policy modules:
+    * CodeLayout::ProhibitHardTabs
+    * ControlStructures::ProhibitUnlessBlocks
+    * ControlStructures::ProhibitUntilBlocks
+    * ControlStructures::ProhibitCStyleForLoops
 
-     Changed the syntax for the magic comments.  Adam had the
-     idea of using a pragma-like notation.  I liked it.
+    Changed the syntax for the magic comments.  Adam had the
+    idea of using a pragma-like notation.  I liked it.
 
 [0.08_2] Released 2005-09-27
 
-     Fixed problems with Perl::Critic::Config that caused File::Spec
-     to emit 'uninitialized value' warnings during the build.
+    Fixed problems with Perl::Critic::Config that caused File::Spec
+    to emit 'uninitialized value' warnings during the build.
 
-     Added 1 Policy module contributed by Graham TerMarsch
+    Added 1 Policy module contributed by Graham TerMarsch
 
-     Switched from File::Spec::Functions to plain File::Spec because
-     I think its usage is more common.
+    Switched from File::Spec::Functions to plain File::Spec because
+    I think its usage is more common.
 
-     Removed 'FindBin' from the test files so I can be sure that the
-     right libraries are getting loaded.  This means I'll have to
-     use the -l option with C<prove>.
+    Removed 'FindBin' from the test files so I can be sure that the
+    right libraries are getting loaded.  This means I'll have to
+    use the -l option with C<prove>.
 
-     Edited more POD.
+    Edited more POD.
 
 [0.08_01] Not released
 
-     Fixed "ProhibitParensWithBuiltins" to allow parens to be used with
-     object method calls that have the same name as a builtin functions.
+    Fixed "ProhibitParensWithBuiltins" to allow parens to be used with
+    object method calls that have the same name as a builtin functions.
 
-     Introduced magical comments that allow developers to configure
-     Perl::Critic on-the-fly from within their code.
+    Introduced magical comments that allow developers to configure
+    Perl::Critic on-the-fly from within their code.
 
-     Added META.yml files and POD tests to the build.  I did this
-     mostly just to boost the Kwalitee score on CPANTS.
+    Added META.yml files and POD tests to the build.  I did this
+    mostly just to boost the Kwalitee score on CPANTS.
 
-     Switched from "Config::Std" to "Config::Tiny" because it doesn't
-     require those fancy Damian modules that don't seem to work on
-     some older versions of Perl.
+    Switched from "Config::Std" to "Config::Tiny" because it doesn't
+    require those fancy Damian modules that don't seem to work on
+    some older versions of Perl.
 
 [0.07] Released on 2005-09-21
 
-     Fixed bugs in the ProhibitCascadingIfElse policy.
+    Fixed bugs in the ProhibitCascadingIfElse policy.
 
-     Added ProhibitExplicitReturnUndef policy
+    Added ProhibitExplicitReturnUndef policy
 
-     Made ProhibitUnpackagedCode configurable so you can exempt scripts,
-     which typically don't have an explicit 'package' statement.
+    Made ProhibitUnpackagedCode configurable so you can exempt scripts,
+    which typically don't have an explicit 'package' statement.
 
-     ProhibitPackageVars policy now exempts vars in ALL_CAPS.  This
-     is to permit common package variables like @EXPORT and $VERSION.
+    ProhibitPackageVars policy now exempts vars in ALL_CAPS.  This
+    is to permit common package variables like @EXPORT and $VERSION.
 
-     Renamed "ProhibitStringyGrep and "ProhibitStringyMap" because
-     the so-called string form doesn't really exist.  Now called
-     "RequireBlockGrep" and "RequireBlockMap"
+    Renamed "ProhibitStringyGrep and "ProhibitStringyMap" because
+    the so-called string form doesn't really exist.  Now called
+    "RequireBlockGrep" and "RequireBlockMap"
 
-     Corrected documentation on defining Policy names within the
-     configuration file.  This still isn't very clear and needs
-     to be rewritten.
+    Corrected documentation on defining Policy names within the
+    configuration file.  This still isn't very clear and needs
+    to be rewritten.
 
-     Perl::Critic now requires PPI version 1.003, which has a few bug
-     fixes of its own.
+    Perl::Critic now requires PPI version 1.003, which has a few bug
+    fixes of its own.
 
-     Rewrite some code just to make Perl::Critic more self-compliant.
+    Rewrite some code just to make Perl::Critic more self-compliant.
 
-     Added test cases to verify the configuration functionality.  These
-     are not completely thorough and need more work.
+    Added test cases to verify the configuration functionality.  These
+    are not completely thorough and need more work.
 
 [0.06] Released on 2005-09-17
 
-     Now called 'Perl::Critic'.
+    Now called 'Perl::Critic'.
 
-     Added 4 new policy modules.
+    Added 4 new policy modules.
 
-     Fixed bugs in build process.
+    Fixed bugs in build process.
 
-     Added support for Module::Build.
+    Added support for Module::Build.
 
 [0.05] Released on 2005-09-17
 
-     End of 'Perl::Review' releases.  I have changed the name to
-     'Perl::Critic' to avoid possible confusion with "The Perl Review"
-     magazine.
+    End of 'Perl::Review' releases.  I have changed the name to
+    'Perl::Critic' to avoid possible confusion with "The Perl Review"
+    magazine.
 
 [0.04] Released on 2005-09-14
 
-     Version 0.03 was a bust because I uploaded the wrong tarball to PAUSE.
+    Version 0.03 was a bust because I uploaded the wrong tarball to PAUSE.
 
 [0.03] Released on 2005-09-13.
 
-     Fixed some POD links.
+    Fixed some POD links.
 
-     Removed test cases for missing policy module.
+    Removed test cases for missing policy module.
 
 [0.02] Released on 2005-09-13.
 
-     Major overhaul based on feedback from Perl community.
+    Major overhaul based on feedback from Perl community.
 
-     Factored coding standards into separate modules (known as
-     Policies).  The idea here is to allow other developers to easily
-     contribute additional coding standards.
+    Factored coding standards into separate modules (known as
+    Policies).  The idea here is to allow other developers to easily
+    contribute additional coding standards.
 
-     Reworked Perl::Review into a simple engine for loading and running
-     Policy modules.
+    Reworked Perl::Review into a simple engine for loading and running
+    Policy modules.
 
-     Gave perlreview a command-line interface and configuration file
-     for selecting which Policy modules to use.
+    Gave perlreview a command-line interface and configuration file
+    for selecting which Policy modules to use.
 
 [0.01] Released on 2005-08-16.
 
-     Initial version.
+    Initial version.
 
 ##############################################################################
 #      $URL$
