@@ -1,4 +1,4 @@
-[1.xxx] Released on 2008-0x-xx
+[1.086] Released on 2008-06-12
 
     Policy Changes:
     * NamingConventions::ProhibitAmbiguousNames now specifies the name that
