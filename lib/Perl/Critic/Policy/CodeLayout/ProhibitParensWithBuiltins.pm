@@ -105,6 +105,20 @@ sub violates {
             return if $first_op eq q{=};
         }
 
+        # EXCEPTION 4: sort with default comparator but a function for the list data
+        # Example: sort(foo(@x))
+
+        if ( $elem eq 'sort' ) {
+            my $first_arg = $sib->schild(0);
+            if ( $first_arg && $first_arg->isa('PPI::Statement::Expression') ) {
+                $first_arg = $first_arg->schild(0);
+            }
+            if ( $first_arg && $first_arg->isa('PPI::Token::Word') ) {
+                my $next_arg = $first_arg->snext_sibling;
+                return if $next_arg && $next_arg->isa('PPI::Structure::List');
+            }
+        }
+
         # If we get here, it must be a violation
         return $self->violation( $DESC, $EXPL, $elem );
     }

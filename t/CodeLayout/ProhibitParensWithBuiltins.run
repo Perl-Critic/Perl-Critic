@@ -116,6 +116,7 @@ chown( $file1, $file2 ) or die q{Couldn't chown};
 ## failures 0
 ## cut
 
+sort(foo(@x));
 [ sort ( modules_used_in_string( $code ) ) ]
 
 #-----------------------------------------------------------------------------
