@@ -79,9 +79,9 @@ sub violates {
 
     # Remove the shell fix code from the top of program, if applicable
     ## no critic(ProhibitComplexRegexes)
-    my $shebang_re = qr{[#]![^\015\012]+[\015\012]+}xms;
-    my $shell_re   = qr{eval [ ] 'exec [ ] [^\015\012]* [ ] \$0 [ ] \${1[+]"\$@"}'
-                        [ \t]*[\012\015]+ [ \t]*if[^\015\012]+[\015\012]+}xms;
+    my $shebang_re = qr< [#]! [^\015\012]+ [\015\012]+ >xms;
+    my $shell_re   = qr<eval [ ] 'exec [ ] [^\015\012]* [ ] \$0 [ ] \${1[+]"\$@"}'
+                        [ \t]*[\012\015]+ [ \t]*if[^\015\012]+[\015\012]+ >xms;
     $source =~ s/\A ($shebang_re) $shell_re /$1/xms;
 
     my $dest    = $EMPTY;
