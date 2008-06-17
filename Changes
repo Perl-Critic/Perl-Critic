@@ -1,3 +1,9 @@
+[1.xxx] Released on 2008-06-xx
+
+    Policy Changes:
+    * CodeLayout::ProhibitParensWithBuiltins no longer complains about
+      sort(foo(@x)).
+
 [1.086] Released on 2008-06-12
 
     Policy Changes:
