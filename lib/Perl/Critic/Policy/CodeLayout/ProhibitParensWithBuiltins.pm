@@ -13,7 +13,7 @@ use warnings;
 use Readonly;
 
 use Perl::Critic::Utils qw{
-    :severities :data_conversion :classification :language
+    :booleans :severities :data_conversion :classification :language
 };
 use base 'Perl::Critic::Policy';
 
@@ -71,53 +71,15 @@ sub violates {
     return if not is_perl_builtin($elem);
     return if not is_function_call($elem);
 
-    my $sib = $elem->snext_sibling();
-    return if !$sib;
-    if ( $sib->isa('PPI::Structure::List') ) {
+    my $sibling = $elem->snext_sibling();
+    return if not $sibling;
+    if ( $sibling->isa('PPI::Structure::List') ) {
+        my $elem_after_parens = $sibling->snext_sibling();
 
-        my $elem_after_parens = $sib->snext_sibling();
-
-        # EXCEPTION 1: If the function is a named unary and there is an
-        # operator with higher precedence right after the parentheses.
-        # Example: int( 1.5 ) + 0.5;
-
-        if ( _is_named_unary( $elem ) && $elem_after_parens ){
-            # Smaller numbers mean higher precedence
-            my $precedence = precedence_of( $elem_after_parens );
-            return if defined $precedence && $precedence < $PRECENDENCE_OF_LIST;
-        }
-
-        # EXCEPTION 2, If there is an operator immediately adfter the
-        # parentheses, and that operator has precedence greater than
-        # or equal to a comma.
-        # Example: join($delim, @list) . "\n";
-
-        if ( $elem_after_parens ){
-            # Smaller numbers mean higher precedence
-            my $precedence = precedence_of( $elem_after_parens );
-            return if defined $precedence && $precedence <= $PRECEDENCE_OF_COMMA;
-        }
-
-        # EXCEPTION 3: If the first operator within the parentheses is '='
-        # Example: chomp( my $foo = <STDIN> );
-
-        if ( my $first_op = $sib->find_first('PPI::Token::Operator') ){
-            return if $first_op eq q{=};
-        }
-
-        # EXCEPTION 4: sort with default comparator but a function for the list data
-        # Example: sort(foo(@x))
-
-        if ( $elem eq 'sort' ) {
-            my $first_arg = $sib->schild(0);
-            if ( $first_arg && $first_arg->isa('PPI::Statement::Expression') ) {
-                $first_arg = $first_arg->schild(0);
-            }
-            if ( $first_arg && $first_arg->isa('PPI::Token::Word') ) {
-                my $next_arg = $first_arg->snext_sibling;
-                return if $next_arg && $next_arg->isa('PPI::Structure::List');
-            }
-        }
+        return if _is_named_unary_exemption($elem, $elem_after_parens);
+        return if _is_precedence_exemption($elem_after_parens);
+        return if _is_equals_exemption($sibling);
+        return if _is_sort_exemption($elem, $sibling);
 
         # If we get here, it must be a violation
         return $self->violation( $DESC, $EXPL, $elem );
@@ -127,9 +89,78 @@ sub violates {
 
 #-----------------------------------------------------------------------------
 
+# EXCEPTION 1: If the function is a named unary and there is an
+# operator with higher precedence right after the parentheses.
+# Example: int( 1.5 ) + 0.5;
+
+sub _is_named_unary_exemption {
+    my ($elem, $elem_after_parens) = @_;
+
+    if ( _is_named_unary( $elem ) && $elem_after_parens ){
+        # Smaller numbers mean higher precedence
+        my $precedence = precedence_of( $elem_after_parens );
+        return $TRUE if defined $precedence && $precedence < $PRECENDENCE_OF_LIST;
+    }
+
+    return $FALSE;
+}
+
 sub _is_named_unary {
-    my $elem = shift;
+    my ($elem) = @_;
+
     return exists $NAMED_UNARY_OPS{$elem->content};
+}
+
+#-----------------------------------------------------------------------------
+
+# EXCEPTION 2, If there is an operator immediately after the
+# parentheses, and that operator has precedence greater than
+# or equal to a comma.
+# Example: join($delim, @list) . "\n";
+
+sub _is_precedence_exemption {
+    my ($elem_after_parens) = @_;
+
+    if ( $elem_after_parens ){
+        # Smaller numbers mean higher precedence
+        my $precedence = precedence_of( $elem_after_parens );
+        return $TRUE if defined $precedence && $precedence <= $PRECEDENCE_OF_COMMA;
+    }
+
+    return $FALSE;
+}
+
+# EXCEPTION 3: If the first operator within the parentheses is '='
+# Example: chomp( my $foo = <STDIN> );
+
+sub _is_equals_exemption {
+    my ($sibling) = @_;
+
+    if ( my $first_op = $sibling->find_first('PPI::Token::Operator') ){
+        return $TRUE if $first_op eq q{=};
+    }
+
+    return $FALSE;
+}
+
+# EXCEPTION 4: sort with default comparator but a function for the list data
+# Example: sort(foo(@x))
+
+sub _is_sort_exemption {
+    my ($elem, $sibling) = @_;
+
+    if ( $elem eq 'sort' ) {
+        my $first_arg = $sibling->schild(0);
+        if ( $first_arg && $first_arg->isa('PPI::Statement::Expression') ) {
+            $first_arg = $first_arg->schild(0);
+        }
+        if ( $first_arg && $first_arg->isa('PPI::Token::Word') ) {
+            my $next_arg = $first_arg->snext_sibling;
+            return $TRUE if $next_arg && $next_arg->isa('PPI::Structure::List');
+        }
+    }
+
+    return $FALSE;
 }
 
 1;
