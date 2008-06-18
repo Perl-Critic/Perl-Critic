@@ -3,6 +3,10 @@
     Policy Changes:
     * CodeLayout::ProhibitParensWithBuiltins no longer complains about
       sort(foo(@x)).
+    * TestingAndDebugging::RequireUseWarnings will not complain about files
+      that contain a "use 5.005" statement or similar for perls prior to 5.6.
+      Lesson of the day: computer conferences where you can meet in the real
+      world can clarify conversations greatly.  Good to finally meet you Adam.
 
 [1.086] Released on 2008-06-12
 

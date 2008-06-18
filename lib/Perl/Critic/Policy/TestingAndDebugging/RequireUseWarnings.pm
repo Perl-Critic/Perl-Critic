@@ -13,6 +13,7 @@ use warnings;
 use Readonly;
 
 use List::Util qw(first);
+use version ();
 
 use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
@@ -23,6 +24,8 @@ our $VERSION = '1.086';
 
 Readonly::Scalar my $DESC => q{Code before warnings are enabled};
 Readonly::Scalar my $EXPL => [431];
+
+Readonly::Scalar my $MINIMUM_VERSION => version->new(5.006);
 
 #-----------------------------------------------------------------------------
 
@@ -36,14 +39,17 @@ sub default_maximum_violations_per_document { return 1; }
 #-----------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, $doc ) = @_;
+    my ( $self, $elem, $document ) = @_;
+
+    my $version = $document->highest_explicit_perl_version();
+    return if $version and $version < $MINIMUM_VERSION;
 
     # Find the first 'use warnings' statement
-    my $warn_stmnt = $doc->find_first( \&_is_use_warnings );
+    my $warn_stmnt = $document->find_first( \&_is_use_warnings );
     my $warn_line  = $warn_stmnt ? $warn_stmnt->location()->[0] : undef;
 
     # Find all statements that aren't 'use', 'require', or 'package'
-    my $stmnts_ref = $doc->find( \&_isnt_include_or_package );
+    my $stmnts_ref = $document->find( \&_isnt_include_or_package );
     return if !$stmnts_ref;
 
     # If the 'use warnings' statement is not defined, or the other
@@ -111,14 +117,19 @@ Using warnings, and paying attention to what they say, is probably the
 single most effective way to improve the quality of your code.  This
 policy requires that the C<'use warnings'> statement must come before
 any other statements except C<package>, C<require>, and other C<use>
-statements.  Thus, all the code in the entire package will be affected.
+statements.  Thus, all the code in the entire package will be
+affected.
 
-There are special exemptions for L<Moose> and L<Moose::Role> because they
-enforces strictness; e.g. C<'use Moose'> is treated as equivalent to
-C<'use warnings'>.
+There are special exemptions for L<Moose> and L<Moose::Role> because
+they enforces strictness; e.g. C<'use Moose'> is treated as equivalent
+to C<'use warnings'>.
 
-The maximum number of violations per document for this policy defaults to 1.
+This policy will not complain if the file explicitly states that it is
+compatible with a version of perl prior to 5.6 via an include
+statement, e.g. by having C<require 5.005> in it.
 
+The maximum number of violations per document for this policy defaults
+to 1.
 
 
 =head1 CONFIGURATION
