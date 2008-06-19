@@ -7,6 +7,8 @@
       that contain a "use 5.005" statement or similar for perls prior to 5.6.
       Lesson of the day: computer conferences where you can meet in the real
       world can clarify conversations greatly.  Good to finally meet you Adam.
+    * InputOutput::ProhibitTwoArgOpen similarly will not complain if there's
+      a "use/require 5.005" statement in the file.
 
 [1.086] Released on 2008-06-12
 

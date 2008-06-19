@@ -10,7 +10,10 @@ package Perl::Critic::Policy::InputOutput::ProhibitTwoArgOpen;
 use 5.006001;
 use strict;
 use warnings;
+
 use Readonly;
+
+use version;
 
 use Perl::Critic::Utils qw{ :severities :classification :ppi };
 use base 'Perl::Critic::Policy';
@@ -23,6 +26,8 @@ Readonly::Scalar my $STDIO_HANDLES_RX => qr/\b STD (?: IN | OUT | ERR \b)/mx;
 Readonly::Scalar my $DESC => q{Two-argument "open" used};
 Readonly::Scalar my $EXPL => [ 207 ];
 
+Readonly::Scalar my $MINIMUM_VERSION => version->new(5.006);
+
 #-----------------------------------------------------------------------------
 
 sub supported_parameters { return ()                         }
@@ -33,10 +38,14 @@ sub applies_to           { return 'PPI::Token::Word'         }
 #-----------------------------------------------------------------------------
 
 sub violates {
-    my ($self, $elem, undef) = @_;
+    my ($self, $elem, $document) = @_;
 
     return if $elem ne 'open';
     return if ! is_function_call($elem);
+
+    my $version = $document->highest_explicit_perl_version();
+    return if $version and $version < $MINIMUM_VERSION;
+
     my @args = parse_arg_list($elem);
 
     if ( scalar @args == 2 ) {
@@ -45,7 +54,8 @@ sub violates {
         return if $args[1]->[0] =~ $STDIO_HANDLES_RX;
         return $self->violation( $DESC, $EXPL, $elem );
     }
-    return; #ok!
+
+    return; # ok!
 }
 
 1;
@@ -84,6 +94,10 @@ file, as in the difference between these two:
 
   open( $fh, 'foo.txt' );       # BAD: Reader must think what default mode is
   open( $fh, '<', 'foo.txt' );  # GOOD: Reader can see open mode
+
+This policy will not complain if the file explicitly states that it is
+compatible with a version of perl prior to 5.6 via an include
+statement, e.g. by having C<require 5.005> in it.
 
 
 =head1 CONFIGURATION

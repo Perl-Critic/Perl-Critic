@@ -57,3 +57,39 @@ open( \*STDOUT, '<&STDERR' );
 open( \*STDOUT, '+>&STDERR' );
 open( \*STDOUT, '+>>&STDERR' );
 open( \*STDOUT, '+<&STDERR' );
+
+#-----------------------------------------------------------------------------
+
+## name pass with "use 5.005"
+## failures 0
+## cut
+
+open $fh, ">$output";
+use 5.005;
+
+#-----------------------------------------------------------------------------
+
+## name fail with "use 5.006"
+## failures 1
+## cut
+
+open $fh, ">$output";
+use 5.006;
+
+#-----------------------------------------------------------------------------
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab shiftround :
