@@ -99,7 +99,7 @@ sub critique {  ##no critic (ArgUnpacking)
 
     my ( $self, $source_code ) = @_ >= 2 ? @_ : ( {}, $_[0] );
     $self = ref $self eq 'HASH' ? __PACKAGE__->new(%{ $self }) : $self;
-    return if not $source_code;  # If no code, then nothing to do.
+    return if not defined $source_code;  # If no code, then nothing to do.
 
     my $doc = $self->_create_perl_critic_document($source_code);
 

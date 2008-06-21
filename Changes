@@ -10,6 +10,10 @@
     * InputOutput::ProhibitTwoArgOpen similarly will not complain if there's
       a "use/require 5.005" statement in the file.
 
+    Bug fixes:
+    * Perl::Critic can now critique a file named "0".  However, PPI will give
+      a parse error until the next version comes out.  Fixes RT #36127.
+
 [1.086] Released on 2008-06-12
 
     Policy Changes:
