@@ -21,7 +21,7 @@ use Carp;
 use Perl::Critic::Utils qw{ :severities words_from_string };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.086';
+our $VERSION = '1.087';
 
 #-----------------------------------------------------------------------------
 

@@ -19,7 +19,7 @@ use Perl::Critic::Utils qw{ :booleans :severities hashify };
 use Perl::Critic::Utils::PPIRegexp qw{ get_delimiters };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.086';
+our $VERSION = '1.087';
 
 #-----------------------------------------------------------------------------
 

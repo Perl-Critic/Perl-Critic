@@ -17,7 +17,7 @@ use Perl::Critic::Utils qw{ :booleans :characters :severities :data_conversion }
 
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.086';
+our $VERSION = '1.087';
 
 #----------------------------------------------------------------------------
 

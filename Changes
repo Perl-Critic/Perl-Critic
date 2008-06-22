@@ -1,4 +1,4 @@
-[1.xxx] Released on 2008-06-xx
+[1.087] Released on 2008-06-21
 
     Policy Changes:
     * CodeLayout::ProhibitParensWithBuiltins no longer complains about

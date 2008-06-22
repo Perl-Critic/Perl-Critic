@@ -21,7 +21,7 @@ use Perl::Critic::Utils qw{ :booleans :severities split_nodes_on_comma };
 use Perl::Critic::Utils::PPIRegexp qw{ parse_regexp get_match_string get_substitute_string get_modifiers };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.086';
+our $VERSION = '1.087';
 
 #-----------------------------------------------------------------------------
 

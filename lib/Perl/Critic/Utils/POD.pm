@@ -24,7 +24,7 @@ use Perl::Critic::Utils qw< :characters >;
 
 use base 'Exporter';
 
-our $VERSION = '1.086';
+our $VERSION = '1.087';
 
 #-----------------------------------------------------------------------------
 

@@ -21,7 +21,7 @@ use Perl::Critic::Utils qw<
 use Perl::Critic::Utils::Constants qw< $PROFILE_STRICTNESS_DEFAULT >;
 use Perl::Critic::Utils::DataConversion qw< dor >;
 
-our $VERSION = '1.086';
+our $VERSION = '1.087';
 
 #-----------------------------------------------------------------------------
 

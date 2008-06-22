@@ -30,7 +30,7 @@ use Perl::Critic::PolicyParameter::Behavior::StringList;
 use Perl::Critic::Utils qw{ :characters &interpolate };
 use Perl::Critic::Utils::DataConversion qw{ &defined_or_empty };
 
-our $VERSION = '1.086';
+our $VERSION = '1.087';
 
 Readonly::Scalar our $NO_DESCRIPTION_AVAILABLE => 'No description available.';
 
