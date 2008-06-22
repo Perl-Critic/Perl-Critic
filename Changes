@@ -1,3 +1,9 @@
+[1.xxx] Released on 2008-xx-xx
+
+    Minor Changes:
+    * The perlcritic "--Version" option is now "--version" in order to act
+      like the rest of the world.
+
 [1.087] Released on 2008-06-21
 
     Policy Changes:

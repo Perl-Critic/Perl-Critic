@@ -118,7 +118,7 @@ sub _dispatch_special_requests {
     if ( $opts{help}            ) { pod2usage( -verbose => 0 )  }  #Exits
     if ( $opts{options}         ) { pod2usage( -verbose => 1 )  }  #Exits
     if ( $opts{man}             ) { pod2usage( -verbose => 2 )  }  #Exits
-    if ( $opts{Version}         ) { print "$VERSION\n"; exit 0; }  #Exits
+    if ( $opts{version}         ) { print "$VERSION\n"; exit 0; }  #Exits
     if ( $opts{list}            ) { render_policy_listing();    }  #Exits
     if ( $opts{'list-themes'}   ) { render_theme_listing();     }  #Exits
     if ( $opts{'profile-proto'} ) { render_profile_prototype(); }  #Exits
@@ -388,7 +388,7 @@ sub _get_option_specification {
     return qw(
         5 4 3 2 1
         Safari
-        Version
+        version
         brutal
         count|C
         cruel
@@ -547,7 +547,7 @@ C<perlcritic> - Command-line interface to critique Perl source.
 
   perlcritic { --list | --list-themes | --doc pattern [...] }
 
-  perlcritic { --help | --options | --man | --Version }
+  perlcritic { --help | --options | --man | --version }
 
 =head1 DESCRIPTION
 
@@ -902,7 +902,7 @@ long, it it nowhere near the length of the output of C<--man>.
 
 Displays the complete C<perlcritic> manual and exits.
 
-=item C<--Version>
+=item C<--version>
 
 =item C<-V>
 
