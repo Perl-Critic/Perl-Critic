@@ -48,7 +48,7 @@ sub violates {
 
     return if $elem !~ $LEADING_RX;
     return $self->_create_violation($elem) if $self->{_strict};
-    return if $self->_is_first_argument_of_chmod($elem);
+    return if $self->_is_first_argument_of_chmod_or_umask($elem);
     return if $self->_is_second_argument_of_mkdir($elem);
     return $self->_create_violation($elem);
 }
@@ -63,13 +63,14 @@ sub _create_violation {
     );
 }
 
-sub _is_first_argument_of_chmod {
+sub _is_first_argument_of_chmod_or_umask {
     my ($self, $elem) = @_;
 
     my $previous_token = _previous_token_that_isnt_a_parenthesis($elem);
     return if not $previous_token;
 
-    return $previous_token->content() eq 'chmod';
+    my $content = $previous_token->content();
+    return $content eq 'chmod' || $content eq 'umask';
 }
 
 sub _is_second_argument_of_mkdir {
