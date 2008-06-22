@@ -2,8 +2,8 @@
 
     Policy Changes:
     * ValuesAndExpressions::ProhibitLeadingZeros now accepts octal numbers
-      for the Unix permissions argument to chmod, by default.  Use the
-      "strict" option to get the old behavior.  RT #31977.
+      for the Unix permissions argument to chmod or mkdir, by default.  Use
+      the "strict" option to get the old behavior.  RT #31977.
 
     Minor Changes:
     * The perlcritic "--Version" option is now "--version" in order to act

@@ -49,6 +49,7 @@ sub violates {
     return if $elem !~ $LEADING_RX;
     return $self->_create_violation($elem) if $self->{_strict};
     return if $self->_is_first_argument_of_chmod($elem);
+    return if $self->_is_second_argument_of_mkdir($elem);
     return $self->_create_violation($elem);
 }
 
@@ -65,20 +66,48 @@ sub _create_violation {
 sub _is_first_argument_of_chmod {
     my ($self, $elem) = @_;
 
+    my $previous_token = _previous_token_that_isnt_a_parenthesis($elem);
+    return if not $previous_token;
+
+    return $previous_token->content() eq 'chmod';
+}
+
+sub _is_second_argument_of_mkdir {
+    my ($self, $elem) = @_;
+
+    # Preceding comma.
+    my $previous_token = _previous_token_that_isnt_a_parenthesis($elem);
+    return if not $previous_token;
+    return if $previous_token->content() ne $COMMA;  # Don't know what it is.
+
+    # Directory name.
+    $previous_token =
+        _previous_token_that_isnt_a_parenthesis($previous_token);
+    return if not $previous_token;
+
+    $previous_token =
+        _previous_token_that_isnt_a_parenthesis($previous_token);
+    return if not $previous_token;
+
+    return $previous_token->content() eq 'mkdir';
+}
+
+sub _previous_token_that_isnt_a_parenthesis {
+    my ($elem) = @_;
+
     my $previous_token = $elem->previous_token();
     while (
             $previous_token
         and (
                 not $previous_token->significant()
             or  $previous_token->content() eq $LEFT_PAREN
+            or  $previous_token->content() eq $RIGHT_PAREN
         )
     ) {
         $previous_token = $previous_token->previous_token();
     }
 
-    return if not $previous_token;
-
-    return $previous_token->content() eq 'chmod';
+    return $previous_token;
 }
 
 1;
