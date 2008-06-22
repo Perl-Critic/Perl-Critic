@@ -24,8 +24,7 @@ use Test::More;
 use Perl::Critic::PolicyFactory (-test => 1);
 use Perl::Critic;
 
-Readonly::Scalar my $TEST_COUNT => 14;
-plan tests => $TEST_COUNT;
+plan tests => 13;
 
 Readonly::Scalar my $PROFILE => 't/01_bad_perlcriticrc';
 Readonly::Scalar my $NO_ENABLED_POLICIES_MESSAGE =>
@@ -77,7 +76,7 @@ my %expected_regexes =
         { $_ => generate_global_message_regex( $_, $PROFILE ) }
         @parameters;
 
-my $expected_exceptions = 3 + scalar @parameters;
+my $expected_exceptions = 2 + scalar @parameters;
 is(
     scalar @exceptions,
     $expected_exceptions,
@@ -107,12 +106,6 @@ is(
     ( scalar grep { is_require_pod_sections_source_exception($_) } @exceptions ),
     1,
     "should have received an invalid source exception for RequirePodSections",
-);
-
-is(
-    ( scalar grep { $NO_ENABLED_POLICIES_MESSAGE eq $_ } @exceptions ),
-    1,
-    "should have received an no enabled policies exception",
 );
 
 sub generate_global_message_regex {

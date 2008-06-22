@@ -10,6 +10,7 @@
 use 5.006001;
 use strict;
 use warnings;
+
 use Test::More tests => 6;
 
 # common P::C testing tools
@@ -29,9 +30,12 @@ $baz   =   67;
 END_PERL
 
 my $has_perltidy = eval {require Perl::Tidy};
-my $expected_result = $has_perltidy ? 1 : 0;
 %config = (perltidyrc => q{});
-is( pcritique($policy, \$code, \%config), $expected_result, 'Untidy code' );
+is(
+    eval { pcritique($policy, \$code, \%config) },
+    $has_perltidy ? 1 : undef,
+    'Untidy code',
+);
 
 #-----------------------------------------------------------------------------
 
@@ -42,7 +46,11 @@ $bar = 56;
 END_PERL
 
 %config = (perltidyrc => q{});
-is( pcritique($policy, \$code, \%config), 0, 'Tidy with one trailing newline' );
+is(
+    eval { pcritique($policy, \$code, \%config) },
+    $has_perltidy ? 0 : undef,
+    'Tidy with one trailing newline',
+);
 
 #-----------------------------------------------------------------------------
 
@@ -54,7 +62,11 @@ $bar = 56;
 END_PERL
 
 %config = (perltidyrc => q{});
-is( pcritique($policy, \$code, \%config), 0, 'Tidy with two trailing newlines' );
+is(
+    eval { pcritique($policy, \$code, \%config) },
+    $has_perltidy ? 0 : undef,
+    'Tidy with two trailing newlines',
+);
 
 #-----------------------------------------------------------------------------
 
@@ -73,7 +85,11 @@ END_PERL
 
 
 %config = (perltidyrc => q{});
-is( pcritique($policy, \$code, \%config), 0, 'Tidy with several trailing newlines' );
+is(
+    eval { pcritique($policy, \$code, \%config) },
+    $has_perltidy ? 0 : undef,
+    'Tidy with several trailing newlines',
+);
 
 #-----------------------------------------------------------------------------
 
@@ -87,7 +103,11 @@ TEST
 END_PERL
 
 %config = (perltidyrc => q{});
-is( pcritique($policy, \$code, \%config), 0, 'Tidy with heredoc' );
+is(
+    eval { pcritique($policy, \$code, \%config) },
+    $has_perltidy ? 0 : undef,
+    'Tidy with heredoc',
+);
 
 #-----------------------------------------------------------------------------
 
@@ -101,7 +121,11 @@ package main;
 END_PERL
 
 %config = (perltidyrc => q{});
-is( pcritique($policy, \$code, \%config), 0, 'Tidy with shell escape' );
+is(
+    eval { pcritique($policy, \$code, \%config) },
+    $has_perltidy ? 0 : undef,
+    'Tidy with shell escape',
+);
 
 #-----------------------------------------------------------------------------
 

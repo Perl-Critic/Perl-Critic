@@ -57,7 +57,7 @@ $code = <<'END_PERL';
 =cut
 END_PERL
 
-if (pcritique($policy, \$code, \%config)) {
+if ( eval { pcritique($policy, \$code, \%config) } ) {
    skip 'Test environment is not English', 4
 }
 
@@ -69,7 +69,11 @@ $code = <<'END_PERL';
 =cut
 END_PERL
 
-is( pcritique($policy, \$code, \%config), can_podspell() ? 1 : 0, 'Mispelled header' );
+is(
+    eval { pcritique($policy, \$code, \%config) },
+    can_podspell() ? 1 : undef,
+    'Mispelled header',
+);
 
 #-----------------------------------------------------------------------------
 
@@ -81,7 +85,11 @@ arglbargl
 =cut
 END_PERL
 
-is( pcritique($policy, \$code, \%config), can_podspell() ? 1 : 0, 'Mispelled body' );
+is(
+    eval { pcritique($policy, \$code, \%config) },
+    can_podspell() ? 1 : undef,
+    'Mispelled body',
+);
 
 #-----------------------------------------------------------------------------
 
@@ -96,7 +104,11 @@ arglbargl
 =cut
 END_PERL
 
-is( pcritique($policy, \$code, \%config), 0, 'local stopwords' );
+is(
+    eval { pcritique($policy, \$code, \%config) },
+    can_podspell() ? 0 : undef,
+    'local stopwords',
+);
 
 #-----------------------------------------------------------------------------
 
@@ -110,7 +122,11 @@ END_PERL
 
 {
     local $config{stop_words} = 'foo arglbargl bar';
-    is( pcritique($policy, \$code, \%config), 0, 'global stopwords' );
+    is(
+        eval { pcritique($policy, \$code, \%config) },
+        can_podspell() ? 0 : undef ,
+        'global stopwords',
+    );
 }
 
 } # end skip

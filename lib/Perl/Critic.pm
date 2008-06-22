@@ -22,6 +22,7 @@ use Scalar::Util qw(blessed);
 use PPI::Document;
 use PPI::Document::File;
 
+use Perl::Critic::Exception::Configuration::Generic;
 use Perl::Critic::Exception::Parse qw{ throw_parse };
 use Perl::Critic::Config;
 use Perl::Critic::Violation;
@@ -102,6 +103,12 @@ sub critique {  ##no critic (ArgUnpacking)
     return if not defined $source_code;  # If no code, then nothing to do.
 
     my $doc = $self->_create_perl_critic_document($source_code);
+
+    if ( 0 == $self->policies() ) {
+        Perl::Critic::Exception::Configuration::Generic->throw(
+            message => 'There are no enabled policies.',
+        )
+    }
 
     return $self->_gather_violations($doc);
 }

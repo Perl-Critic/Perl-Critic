@@ -10,10 +10,14 @@
 use 5.006001;
 use strict;
 use warnings;
-use PPI::Document;
-use Test::More;
-use Perl::Critic::TestUtils qw(bundled_policy_names);
+
 use English qw(-no_match_vars);
+
+use PPI::Document;
+
+use Perl::Critic::TestUtils qw(bundled_policy_names);
+
+use Test::More;
 
 #-----------------------------------------------------------------------------
 
@@ -49,7 +53,7 @@ my $version_string = __PACKAGE__->VERSION;
 #-----------------------------------------------------------------------------
 # Test Perl::Critic module interface
 
-use_ok('Perl::Critic');
+use_ok('Perl::Critic') or BAIL_OUT(q<Can't continue.>);
 can_ok('Perl::Critic', 'new');
 can_ok('Perl::Critic', 'add_policy');
 can_ok('Perl::Critic', 'config');
@@ -64,7 +68,7 @@ is($critic->VERSION(), $version_string, 'Perl::Critic version');
 #-----------------------------------------------------------------------------
 # Test Perl::Critic::Config module interface
 
-use_ok('Perl::Critic::Config');
+use_ok('Perl::Critic::Config') or BAIL_OUT(q<Can't continue.>);
 can_ok('Perl::Critic::Config', 'new');
 can_ok('Perl::Critic::Config', 'add_policy');
 can_ok('Perl::Critic::Config', 'policies');
@@ -90,7 +94,7 @@ is($config->VERSION(), $version_string, 'Perl::Critic::Config version');
 #-----------------------------------------------------------------------------
 # Test Perl::Critic::Config::OptionsProcessor module interface
 
-use_ok('Perl::Critic::OptionsProcessor');
+use_ok('Perl::Critic::OptionsProcessor') or BAIL_OUT(q<Can't continue.>);
 can_ok('Perl::Critic::OptionsProcessor', 'new');
 can_ok('Perl::Critic::OptionsProcessor', 'exclude');
 can_ok('Perl::Critic::OptionsProcessor', 'include');
@@ -112,7 +116,7 @@ is($processor->VERSION(), $version_string, 'Perl::Critic::OptionsProcessor versi
 #-----------------------------------------------------------------------------
 # Test Perl::Critic::Policy module interface
 
-use_ok('Perl::Critic::Policy');
+use_ok('Perl::Critic::Policy') or BAIL_OUT(q<Can't continue.>);
 can_ok('Perl::Critic::Policy', 'add_themes');
 can_ok('Perl::Critic::Policy', 'applies_to');
 can_ok('Perl::Critic::Policy', 'default_severity');
@@ -133,7 +137,7 @@ is($policy->VERSION(), $version_string, 'Perl::Critic::Policy version');
 #-----------------------------------------------------------------------------
 # Test Perl::Critic::Violation module interface
 
-use_ok('Perl::Critic::Violation');
+use_ok('Perl::Critic::Violation') or BAIL_OUT(q<Can't continue.>);
 can_ok('Perl::Critic::Violation', 'description');
 can_ok('Perl::Critic::Violation', 'diagnostics');
 can_ok('Perl::Critic::Violation', 'explanation');
@@ -157,7 +161,7 @@ is($viol->VERSION(), $version_string, 'Perl::Critic::Violation version');
 #-----------------------------------------------------------------------------
 # Test Perl::Critic::UserProfile module interface
 
-use_ok('Perl::Critic::UserProfile');
+use_ok('Perl::Critic::UserProfile') or BAIL_OUT(q<Can't continue.>);
 can_ok('Perl::Critic::UserProfile', 'options_processor');
 can_ok('Perl::Critic::UserProfile', 'new');
 can_ok('Perl::Critic::UserProfile', 'policy_is_disabled');
@@ -170,7 +174,7 @@ is($up->VERSION(), $version_string, 'Perl::Critic::UserProfile version');
 #-----------------------------------------------------------------------------
 # Test Perl::Critic::PolicyFactory module interface
 
-use_ok('Perl::Critic::PolicyFactory');
+use_ok('Perl::Critic::PolicyFactory') or BAIL_OUT(q<Can't continue.>);
 can_ok('Perl::Critic::PolicyFactory', 'create_policy');
 can_ok('Perl::Critic::PolicyFactory', 'new');
 can_ok('Perl::Critic::PolicyFactory', 'site_policy_names');
@@ -184,7 +188,7 @@ is($factory->VERSION(), $version_string, 'Perl::Critic::PolicyFactory version');
 #-----------------------------------------------------------------------------
 # Test Perl::Critic::Theme module interface
 
-use_ok('Perl::Critic::Theme');
+use_ok('Perl::Critic::Theme') or BAIL_OUT(q<Can't continue.>);
 can_ok('Perl::Critic::Theme', 'new');
 can_ok('Perl::Critic::Theme', 'rule');
 can_ok('Perl::Critic::Theme', 'policy_is_thematic');
@@ -197,7 +201,7 @@ is($theme->VERSION(), $version_string, 'Perl::Critic::Theme version');
 #-----------------------------------------------------------------------------
 # Test Perl::Critic::PolicyListing module interface
 
-use_ok('Perl::Critic::PolicyListing');
+use_ok('Perl::Critic::PolicyListing') or BAIL_OUT(q<Can't continue.>);
 can_ok('Perl::Critic::PolicyListing', 'new');
 can_ok('Perl::Critic::PolicyListing', 'to_string');
 
@@ -208,7 +212,7 @@ is($listing->VERSION(), $version_string, 'Perl::Critic::PolicyListing version');
 #-----------------------------------------------------------------------------
 # Test Perl::Critic::ProfilePrototype module interface
 
-use_ok('Perl::Critic::ProfilePrototype');
+use_ok('Perl::Critic::ProfilePrototype') or BAIL_OUT(q<Can't continue.>);
 can_ok('Perl::Critic::ProfilePrototype', 'new');
 can_ok('Perl::Critic::ProfilePrototype', 'to_string');
 
@@ -223,7 +227,7 @@ is($prototype->VERSION(), $version_string, 'Perl::Critic::ProfilePrototype versi
     foreach my $class (
         map { "Perl::Critic::Exception::$_" } @concrete_exceptions
     ) {
-        use_ok($class);
+        use_ok($class) or BAIL_OUT(q<Can't continue.>);
         can_ok($class, 'new');
         can_ok($class, 'throw');
         can_ok($class, 'message');
@@ -243,7 +247,7 @@ is($prototype->VERSION(), $version_string, 'Perl::Critic::ProfilePrototype versi
 {
     for my $mod ( @bundled_policy_names ) {
 
-        use_ok($mod);
+        use_ok($mod) or BAIL_OUT(q<Can't continue.>);
         can_ok($mod, 'applies_to');
         can_ok($mod, 'default_severity');
         can_ok($mod, 'default_themes');

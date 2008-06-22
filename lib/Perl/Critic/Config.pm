@@ -18,7 +18,6 @@ use Scalar::Util qw(blessed);
 
 use Perl::Critic::Exception::AggregateConfiguration;
 use Perl::Critic::Exception::Configuration;
-use Perl::Critic::Exception::Configuration::Generic;
 use Perl::Critic::Exception::Configuration::Option::Global::ParameterValue;
 use Perl::Critic::Exception::Fatal::Internal qw{ throw_internal };
 use Perl::Critic::PolicyFactory;
@@ -119,15 +118,6 @@ sub _init {
     if ( not defined $profile_source or $profile_source ne 'NONE' ) {
         # Heavy lifting here...
         $self->_load_policies($errors);
-
-        if ( 0 == $self->policies() ) {
-            $errors->add_exception(
-                Perl::Critic::Exception::Configuration::Generic->new(
-                    message => 'There are no enabled policies.',
-                    source  => $profile_source,
-                )
-            );
-        }
     }
 
     if ( $errors->has_exceptions() ) {
@@ -162,7 +152,6 @@ sub add_policy {
     my $policy_object =
         $factory->create_policy(-name=>$policy, -params=>$params);
     $self->_add_policy_if_enabled($policy_object);
-
 
     return $self;
 }

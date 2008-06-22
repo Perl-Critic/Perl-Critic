@@ -13,6 +13,12 @@
     Bug fixes:
     * Perl::Critic can now critique a file named "0".  However, PPI will give
       a parse error until the next version comes out.  Fixes RT #36127.
+    * Moved detection of the lack of any enabled Policies from P::C::Config
+      to Perl::Critic.  This was causing the perlcritic.t in Parrot to fail.
+      Note, however, there are plans afoot to change how Perl::Critic is
+      configured and things that depend upon that may break.  Please contact
+      users@perlcritic.tigris.org and tell us how you're using P::C::Config
+      directly so that we can take your needs into account.
 
 [1.086] Released on 2008-06-12
 
