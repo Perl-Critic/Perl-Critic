@@ -1,5 +1,10 @@
 [1.xxx] Released on 2008-xx-xx
 
+    Policy Changes:
+    * ValuesAndExpressions::ProhibitLeadingZeros now accepts octal numbers
+      for the Unix permissions argument to chmod, by default.  Use the
+      "strict" option to get the old behavior.  RT #31977.
+
     Minor Changes:
     * The perlcritic "--Version" option is now "--version" in order to act
       like the rest of the world.
@@ -14,7 +19,7 @@
       Lesson of the day: computer conferences where you can meet in the real
       world can clarify conversations greatly.  Good to finally meet you Adam.
     * InputOutput::ProhibitTwoArgOpen similarly will not complain if there's
-      a "use/require 5.005" statement in the file.
+      a "use/require 5.005" statement in the file.  RT #34385.
 
     Bug fixes:
     * Perl::Critic can now critique a file named "0".  However, PPI will give
@@ -1244,3 +1249,5 @@
 #   $Author$
 # $Revision$
 ##############################################################################
+
+# ex: set ts=8 sts=4 sw=4 tw=78 ft= expandtab shiftround :

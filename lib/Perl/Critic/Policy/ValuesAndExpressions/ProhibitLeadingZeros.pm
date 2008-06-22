@@ -13,7 +13,7 @@ use warnings;
 
 use Readonly;
 
-use Perl::Critic::Utils qw{ :severities };
+use Perl::Critic::Utils qw{ :characters :severities };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.087';
@@ -25,7 +25,18 @@ Readonly::Scalar my $EXPL       => [ 58 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return ()                          }
+sub supported_parameters {
+    return (
+        {
+            name           => 'strict',
+            description    =>
+                "Don't allow any leading zeros at all.  Otherwise builtins that deal with Unix permissions, e.g. chmod, don't get flagged.",
+            default_string => '0',
+            behavior       => 'boolean',
+        },
+    );
+}
+
 sub default_severity     { return $SEVERITY_HIGHEST           }
 sub default_themes       { return qw< core pbp bugs >         }
 sub applies_to           { return 'PPI::Token::Number::Octal' }
@@ -35,15 +46,39 @@ sub applies_to           { return 'PPI::Token::Number::Octal' }
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    if ( $elem =~ $LEADING_RX ) {
-        return $self->violation(
-            qq<Integer with leading zeros: "$elem">,
-            $EXPL,
-            $elem
-        );
+    return if $elem !~ $LEADING_RX;
+    return $self->_create_violation($elem) if $self->{_strict};
+    return if $self->_is_first_argument_of_chmod($elem);
+    return $self->_create_violation($elem);
+}
+
+sub _create_violation {
+    my ($self, $elem) = @_;
+
+    return $self->violation(
+        qq<Integer with leading zeros: "$elem">,
+        $EXPL,
+        $elem
+    );
+}
+
+sub _is_first_argument_of_chmod {
+    my ($self, $elem) = @_;
+
+    my $previous_token = $elem->previous_token();
+    while (
+            $previous_token
+        and (
+                not $previous_token->significant()
+            or  $previous_token->content() eq $LEFT_PAREN
+        )
+    ) {
+        $previous_token = $previous_token->previous_token();
     }
 
-    return;    #ok!
+    return if not $previous_token;
+
+    return $previous_token->content() eq 'chmod';
 }
 
 1;
@@ -68,13 +103,18 @@ This Policy is part of the core L<Perl::Critic> distribution.
 Perl interprets numbers with leading zeros as octal.  If that's what
 you really want, its better to use C<oct> and make it obvious.
 
-  $var = 041;     #not ok, actually 33
-  $var = oct(41); #ok
+    $var = 041;         # not ok, actually 33
+    $var = oct(41);     # ok
 
+    chmod 0644, $file   # ok by default
 
 =head1 CONFIGURATION
 
-This Policy is not configurable except for the standard options.
+If you want to ban all leading zeros, set C<strict> to a true value in
+a F<.perlcriticrc> file.
+
+    [ValuesAndExpressions::ProhibitLeadingZeros]
+    strict = 1
 
 
 =head1 AUTHOR

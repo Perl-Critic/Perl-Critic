@@ -23,9 +23,6 @@ $var = +10;
 $var = +0.0;
 $var = +10.0;
 $var = +0.11;
-
-#These are legal, but PPI <= v1.118 doesn't parse them correctly.
-
 $var = +.011;
 $var = .011;
 $var = -.011;
@@ -48,6 +45,31 @@ $var = +01;
 $var = +010;
 $var = +001;
 $var = +0010;
+
+#-----------------------------------------------------------------------------
+
+## name chmod
+## failures 0
+## cut
+
+$cnt = chmod 0755, 'foo', 'bar';
+chmod 0755, @executables;
+
+$cnt = chmod ( 0755, 'foo', 'bar' );
+chmod ( 0755, @executables );
+
+#-----------------------------------------------------------------------------
+
+## name chmod with strict option
+## failures 4
+## parms { strict => 1 }
+## cut
+
+$cnt = chmod 0755, 'foo', 'bar';
+chmod 0755, @executables;
+
+$cnt = chmod ( 0755, 'foo', 'bar' );
+chmod ( 0755, @executables );
 
 #-----------------------------------------------------------------------------
 
