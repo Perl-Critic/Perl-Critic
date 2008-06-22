@@ -114,11 +114,6 @@ e.g. "C<[+Example::Policy]>".
 
 =over
 
-=item * Modules::RequireVersionVar
-
-Doesn't enforce three-part versions
-
-
 =item * NamingConventions::ProhibitAmbiguousNames
 
 Don't allow compound names with forbidden words, like "last_record".
@@ -192,6 +187,8 @@ Check for -w on the shbang line.
 =item * Modules::RequireUseVersion [405-406]
 
 =item * Modules::RequireThreePartVersion [405-406]
+
+=item * RegularExpressions::RequireDotMatchAnything [240-241]
 
 =back
 
