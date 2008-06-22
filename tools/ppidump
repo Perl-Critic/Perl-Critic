@@ -21,7 +21,7 @@ __END__
 
 =head1 NAME
 
-ppidump - Dump Perl code as PPI structure
+ppidump - Dump Perl code as PPI structure.
 
 =head1 SYNOPSIS
 

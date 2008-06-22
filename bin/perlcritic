@@ -531,7 +531,7 @@ screenshots tty emacs gVIM plugin Perlish templating ActiveState
 
 =head1 NAME
 
-C<perlcritic> - Command-line interface to critique Perl source
+C<perlcritic> - Command-line interface to critique Perl source.
 
 =head1 SYNOPSIS
 

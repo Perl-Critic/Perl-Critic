@@ -7,7 +7,7 @@
 
 =head1 NAME
 
-KomodoIntegration - Integrating perlcritic and Komodo
+KomodoIntegration - Integrating perlcritic and Komodo.
 
 =head1 DESCRIPTION
 
