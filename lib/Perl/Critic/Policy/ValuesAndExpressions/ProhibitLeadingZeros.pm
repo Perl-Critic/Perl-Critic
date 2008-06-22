@@ -30,7 +30,7 @@ sub supported_parameters {
         {
             name           => 'strict',
             description    =>
-                "Don't allow any leading zeros at all.  Otherwise builtins that deal with Unix permissions, e.g. chmod, don't get flagged.",
+                q<Don't allow any leading zeros at all.  Otherwise builtins that deal with Unix permissions, e.g. chmod, don't get flagged.>,
             default_string => '0',
             behavior       => 'boolean',
         },
