@@ -73,6 +73,25 @@ chmod ( 0755, @executables );
 
 #-----------------------------------------------------------------------------
 
+## name dbmopen
+## failures 0
+## cut
+
+dbmopen %database, 'foo.db', 0600;
+dbmopen ( %database, 'foo.db', 0600 );
+
+#-----------------------------------------------------------------------------
+
+## name dbmopen with strict option
+## failures 2
+## parms { strict => 1 }
+## cut
+
+dbmopen %database, 'foo.db', 0600;
+dbmopen ( %database, 'foo.db', 0600 );
+
+#-----------------------------------------------------------------------------
+
 ## name mkdir
 ## failures 0
 ## cut
@@ -92,6 +111,27 @@ mkdir ( $directory, 0755 );
 
 #-----------------------------------------------------------------------------
 
+## name sysopen
+## failures 0
+## cut
+
+sysopen $filehandle, $filename, O_RDWR, 0666;
+sysopen ( $filehandle, $filename, O_WRONLY | O_CREAT | O_EXCL, 0666 );
+sysopen ( $filehandle, $filename, (O_WRONLY | O_CREAT | O_EXCL), 0666 );
+
+#-----------------------------------------------------------------------------
+
+## name sysopen with strict option
+## failures 3
+## parms { strict => 1 }
+## cut
+
+sysopen $filehandle, $filename, O_RDWR, 0666;
+sysopen ( $filehandle, $filename, O_WRONLY | O_CREAT | O_EXCL, 0666 );
+sysopen ( $filehandle, $filename, (O_WRONLY | O_CREAT | O_EXCL), 0666 );
+
+#-----------------------------------------------------------------------------
+
 ## name umask
 ## failures 0
 ## cut
@@ -108,25 +148,6 @@ umask ( 002 );
 
 umask 002;
 umask ( 002 );
-
-#-----------------------------------------------------------------------------
-
-## name dbmopen
-## failures 0
-## cut
-
-dbmopen %database, 'foo.db', 0600;
-dbmopen ( %database, 'foo.db', 0600 );
-
-#-----------------------------------------------------------------------------
-
-## name dbmopen with strict option
-## failures 2
-## parms { strict => 1 }
-## cut
-
-dbmopen %database, 'foo.db', 0600;
-dbmopen ( %database, 'foo.db', 0600 );
 
 #-----------------------------------------------------------------------------
 

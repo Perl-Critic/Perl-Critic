@@ -51,6 +51,7 @@ sub violates {
     return if $self->_is_first_argument_of_chmod_or_umask($elem);
     return if $self->_is_second_argument_of_mkdir($elem);
     return if $self->_is_third_argument_of_dbmopen($elem);
+    return if $self->_is_fourth_argument_of_sysopen($elem);
     return $self->_create_violation($elem);
 }
 
@@ -125,6 +126,47 @@ sub _is_third_argument_of_dbmopen {
     return $previous_token->content() eq 'dbmopen';
 }
 
+sub _is_fourth_argument_of_sysopen {
+    my ($self, $elem) = @_;
+
+    # Preceding comma.
+    my $previous_token = _previous_token_that_isnt_a_parenthesis($elem);
+    return if not $previous_token;
+    return if $previous_token->content() ne $COMMA;  # Don't know what it is.
+
+    # Mode.
+    $previous_token =
+        _previous_token_that_isnt_a_parenthesis($previous_token);
+    while ($previous_token and $previous_token->content() ne $COMMA) {
+        $previous_token =
+            _previous_token_that_isnt_a_parenthesis($previous_token);
+    }
+    return if not $previous_token;
+    return if $previous_token->content() ne $COMMA;  # Don't know what it is.
+
+    # File name.
+    $previous_token =
+        _previous_token_that_isnt_a_parenthesis($previous_token);
+    return if not $previous_token;
+
+    # Yet another comma.
+    $previous_token =
+        _previous_token_that_isnt_a_parenthesis($previous_token);
+    return if not $previous_token;
+    return if $previous_token->content() ne $COMMA;  # Don't know what it is.
+
+    # File handle.
+    $previous_token =
+        _previous_token_that_isnt_a_parenthesis($previous_token);
+    return if not $previous_token;
+
+    $previous_token =
+        _previous_token_that_isnt_a_parenthesis($previous_token);
+    return if not $previous_token;
+
+    return $previous_token->content() eq 'sysopen';
+}
+
 sub _previous_token_that_isnt_a_parenthesis {
     my ($elem) = @_;
 
@@ -165,13 +207,14 @@ This Policy is part of the core L<Perl::Critic> distribution.
 Perl interprets numbers with leading zeros as octal.  If that's what
 you really want, its better to use C<oct> and make it obvious.
 
-    $var = 041;                         # not ok, actually 33
-    $var = oct(41);                     # ok
+    $var = 041;     # not ok, actually 33
+    $var = oct(41); # ok
 
-    chmod 0644, $file;                  # ok by default
-    dbmopen %database, 'foo.db', 0600;  # ok by default
-    mkdir $directory, 0755;             # ok by default
-    umask 0002;                         # ok by default
+    chmod 0644, $file;                              # ok by default
+    dbmopen %database, 'foo.db', 0600;              # ok by default
+    mkdir $directory, 0755;                         # ok by default
+    sysopen $filehandle, $filename, O_RDWR, 0666;   # ok by default
+    umask 0002;                                     # ok by default
 
 =head1 CONFIGURATION
 
