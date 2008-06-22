@@ -50,6 +50,7 @@ sub violates {
     return $self->_create_violation($elem) if $self->{_strict};
     return if $self->_is_first_argument_of_chmod_or_umask($elem);
     return if $self->_is_second_argument_of_mkdir($elem);
+    return if $self->_is_third_argument_of_dbmopen($elem);
     return $self->_create_violation($elem);
 }
 
@@ -93,6 +94,37 @@ sub _is_second_argument_of_mkdir {
     return $previous_token->content() eq 'mkdir';
 }
 
+sub _is_third_argument_of_dbmopen {
+    my ($self, $elem) = @_;
+
+    # Preceding comma.
+    my $previous_token = _previous_token_that_isnt_a_parenthesis($elem);
+    return if not $previous_token;
+    return if $previous_token->content() ne $COMMA;  # Don't know what it is.
+
+    # File path.
+    $previous_token =
+        _previous_token_that_isnt_a_parenthesis($previous_token);
+    return if not $previous_token;
+
+    # Another comma.
+    $previous_token =
+        _previous_token_that_isnt_a_parenthesis($previous_token);
+    return if not $previous_token;
+    return if $previous_token->content() ne $COMMA;  # Don't know what it is.
+
+    # Variable name.
+    $previous_token =
+        _previous_token_that_isnt_a_parenthesis($previous_token);
+    return if not $previous_token;
+
+    $previous_token =
+        _previous_token_that_isnt_a_parenthesis($previous_token);
+    return if not $previous_token;
+
+    return $previous_token->content() eq 'dbmopen';
+}
+
 sub _previous_token_that_isnt_a_parenthesis {
     my ($elem) = @_;
 
@@ -133,10 +165,13 @@ This Policy is part of the core L<Perl::Critic> distribution.
 Perl interprets numbers with leading zeros as octal.  If that's what
 you really want, its better to use C<oct> and make it obvious.
 
-    $var = 041;         # not ok, actually 33
-    $var = oct(41);     # ok
+    $var = 041;                         # not ok, actually 33
+    $var = oct(41);                     # ok
 
-    chmod 0644, $file   # ok by default
+    chmod 0644, $file;                  # ok by default
+    dbmopen %database, 'foo.db', 0600;  # ok by default
+    mkdir $directory, 0755;             # ok by default
+    umask 0002;                         # ok by default
 
 =head1 CONFIGURATION
 
