@@ -411,7 +411,7 @@ constant.
 
 http://www.perlfoundation.org/perl5/index.cgi?the_utf8_perlio_layer
 
-=item * BuiltinFunctions::ProhibitExit
+=item * BuiltinFunctions::ProhibitExit(?:InModules)?
 
 Forbid C<exit()> in files that lack a shebang.  Inspired by
 L<http://use.perl.org/~Ovid/journal/36746> and an analgous checker in
