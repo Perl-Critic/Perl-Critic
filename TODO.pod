@@ -207,6 +207,25 @@ must be a single line.
 
 =item * ErrorHandling::RequireCheckOfEvalErrorAfterEval
 
+=item * ErrorHandling::RequireLocalizingEvalErrorInDESTROY
+
+Prevent C<$@> from being cleared unexpectedly by DESTROY methods.
+
+    package Foo;
+
+    sub DESTROY {
+        die "Died in Foo::DESTROY()";
+    }
+
+    package main;
+
+    eval {
+        my $foo = Foo->new();
+
+        die "Died in eval."
+    }
+    print $@;   # "Died in Foo::DESTROY()", not "Died in eval.".
+
 =item * Expressions::ProhibitDecimalWithBitwiseOperator
 
 =item * Expressions::ProhibitStringsWithBitwiseOperator
