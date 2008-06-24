@@ -226,6 +226,8 @@ Prevent C<$@> from being cleared unexpectedly by DESTROY methods.
     }
     print $@;   # "Died in Foo::DESTROY()", not "Died in eval.".
 
+See L<http://use.perl.org/~Ovid/journal/36767>.
+
 =item * Expressions::ProhibitDecimalWithBitwiseOperator
 
 =item * Expressions::ProhibitStringsWithBitwiseOperator
