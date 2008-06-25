@@ -29,7 +29,7 @@ Readonly::Scalar my $EXPL =>
 #-----------------------------------------------------------------------------
 
 sub supported_parameters { return ()                     }
-sub default_severity     { return $SEVERITY_LOW          }
+sub default_severity     { return $SEVERITY_MEDIUM       }
 sub default_themes       { return qw< core maintenance > }
 sub applies_to           { return qw< PPI::Document >    }
 

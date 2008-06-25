@@ -5,6 +5,9 @@
       for the Unix permissions argument to chmod, dbmopen, mkdir, sysopen, or
       umask, by default.  Use the "strict" option to get the old behavior.
       RT #31977.
+    * Due to the consensus at YAPC::NA 2008,
+      Variables::ProhibitUnusedVariables default severity has been raised to
+      medium/3.
 
     Minor Changes:
     * The perlcritic "--Version" option is now "--version" in order to act
