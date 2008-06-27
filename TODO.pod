@@ -137,6 +137,12 @@ function, or if it's not in a non-main:: package.
 Also, should allow C<die> when it is obvious that the "message" is a reference.
 
 
+=item * ErrorHandling::RequireCheckingReturnValueOfEval
+
+See thread on perl5-porters starting here:
+L<http://www.xray.mpe.mpg.de/mailing-lists/perl5-porters/2008-06/msg00537.html>.
+
+
 =item * RegularExpressions::ProhibitCaptureWithoutTest
 
 Allow this construct:

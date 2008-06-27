@@ -234,16 +234,23 @@ sub critique {
             if (not $opts_ref->{'-statistics-only'}) {
                 render_report( $file, $opts_ref, @violations )
             }
-        };
-
-        if ( my $exception = Perl::Critic::Exception::Parse->caught() ) {
-            $had_error_in_file = 1;
-            warn qq<Problem while critiquing "$file": $EVAL_ERROR\n>;
+            1;
         }
-        elsif ($EVAL_ERROR) {
-            # P::C::Exception::Fatal includes the stack trace in its
-            # stringification.
-            die qq<Fatal error while critiquing "$file": $EVAL_ERROR\n>;
+        or do {
+            if ( my $exception = Perl::Critic::Exception::Parse->caught() ) {
+                $had_error_in_file = 1;
+                warn qq<Problem while critiquing "$file": $EVAL_ERROR\n>;
+            }
+            elsif ($EVAL_ERROR) {
+                # P::C::Exception::Fatal includes the stack trace in its
+                # stringification.
+                die qq<Fatal error while critiquing "$file": $EVAL_ERROR\n>;
+            }
+            else {
+                die qq<Fatal error while critiquing "$file". Unfortunately, >,
+                    q<$@/$EVAL_ERROR >, ## no critic (RequireInterpolationOfMetachars)
+                    qq<is empty, so the reason can't be shown.\n>;
+            }
         }
     }
 
