@@ -1,0 +1,271 @@
+### name Basic failure
+### failures 9
+### cut
+#
+#eval { foo; };
+#{ eval { baz; } };
+#[ eval { buz; } ];
+#( eval { blrfl; } );
+#
+#eval 'foo;';
+#{ eval 'baz;' };
+#[ eval 'buz;' ];
+#( eval 'blrfl;' );
+#
+#eval { something };
+#if ($@) {
+#    blahblah
+#}
+#
+##-----------------------------------------------------------------------------
+#
+### name Assignment
+### failures 0
+### cut
+#
+#$result = eval { foo; };
+#@result = eval { bar; };
+#$result = { eval { baz; } };
+#$result = [ eval { buz; } ];
+#@result = ( eval { blrfl; } );
+#
+#$result = eval 'foo;';
+#@result = eval 'bar;';
+#$result = { eval 'baz;' };
+#$result = [ eval 'buz;' ];
+#@result = ( eval 'blrfl;' );
+#
+##-----------------------------------------------------------------------------
+#
+### name if
+### failures 0
+### cut
+#
+#if ( eval { bar; } ) {
+#    something
+#}
+#
+#if ( ( eval { blrfl; } ) ) {
+#    something
+#}
+#
+#if ( 5 == eval { bar; } ) {
+#    something
+#}
+#
+#if ( scalar ( eval { blrfl; } ) ) {
+#    something
+#}
+#
+#if ( not eval { whatever; } ) {
+#    something
+#}
+#
+#
+#
+#if ( eval 'bar;' ) {
+#    something
+#}
+#
+#if ( ( eval 'blrfl;' ) ) {
+#    something
+#}
+#
+#if ( 5 == eval 'bar;' ) {
+#    something
+#}
+#
+#if ( scalar ( eval 'blrfl;' ) ) {
+#    something
+#}
+#
+#if ( ! eval 'whatever;' ) {
+#    something
+#}
+#
+##-----------------------------------------------------------------------------
+#
+### name foreach
+### failures 0
+### cut
+#
+#foreach my $thingy ( eval { bar; } ) {
+#    something
+#}
+#
+#foreach my $thingy ( ( eval { blrfl; } ) ) {
+#    something
+#}
+#
+#foreach my $thingy ( qw< one two >, eval { bar; } ) {
+#    something
+#}
+#
+#
+#foreach my $thingy ( eval 'bar;' ) {
+#    something
+#}
+#
+#foreach my $thingy ( ( eval 'blrfl;' ) ) {
+#    something
+#}
+#
+#foreach my $thingy ( qw< one two >, eval 'bar;' ) {
+#    something
+#}
+#
+##-----------------------------------------------------------------------------
+#
+### name C-style for
+### failures 0
+### cut
+#
+#for (blah; eval { bar; }; blah ) {
+#    something
+#}
+#
+#for (blah; ( eval { blrfl; } ); blah ) {
+#    something
+#}
+#
+#for (blah; eval { bar; } eq 'bing bang bong'; blah ) {
+#    something
+#}
+#
+#
+#for (blah; eval 'bar;'; blah ) {
+#    something
+#}
+#
+#for (blah; ( eval 'blrfl;' ); blah ) {
+#    something
+#}
+#
+#for (blah; eval 'bar;' eq 'bing bang bong'; blah ) {
+#    something
+#}
+#
+##-----------------------------------------------------------------------------
+#
+### name while
+### failures 0
+### cut
+#
+#while ( eval { bar; } ) {
+#    something
+#}
+#
+#while ( ( eval { blrfl; } ) ) {
+#    something
+#}
+#
+#
+#while ( eval 'bar;' ) {
+#    something
+#}
+#
+#while ( ( eval 'blrfl;' ) ) {
+#    something
+#}
+#
+##-----------------------------------------------------------------------------
+#
+### name Postfix if
+### failures 0
+### cut
+#
+#bleah if eval { yadda; };
+#bleah if ( eval { yadda; } );
+#bleah if 5 == eval { yadda; };
+#bleah if eval { yadda; } == 5;
+#
+#bleah if eval 'yadda;';
+#bleah if ( eval 'yadda;' );
+#bleah if 5 == eval 'yadda;';
+#bleah if eval 'yadda;' == 5;
+#
+##-----------------------------------------------------------------------------
+
+## name Postfix foreach
+## failures 0
+## cut
+
+foreach eval { bar; };
+foreach ( eval { blrfl; } );
+foreach qw< one two >, eval { bar; };
+
+foreach eval 'bar;';
+foreach ( eval 'blrfl;' );
+foreach qw< one two >, eval 'bar;';
+
+##-----------------------------------------------------------------------------
+#
+### name "Proper" handling of return value
+### failures 0
+### cut
+#
+#eval {
+#    something
+#}
+#    or do {
+#        if ($EVAL_ERROR) {
+#            yadda
+#        }
+#        else {
+#            blahdda
+#        };
+#
+#eval "something_else" or die;
+#
+## eval gets the thing following it before || does.
+#eval {
+#    something
+#}
+#    || do {
+#        if ($EVAL_ERROR) {
+#            yadda
+#        }
+#        else {
+#            blahdda
+#        }
+#    };
+#
+#eval "something_else" || die;
+#
+#
+#eval {
+#    something
+#}
+#    and do {
+#        yadda
+#    };
+#
+#eval "something_else" and thingy;
+#
+## eval gets the thing following it before && does.
+#eval {
+#    something
+#}
+#    && do {
+#        yadda
+#    };
+#
+#eval "something_else" && die;
+
+#-----------------------------------------------------------------------------
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab shiftround :

@@ -21,10 +21,11 @@ Perl::Critic::TestUtils::block_perlcriticrc();
 # Configure Critic not to load certain policies.  This
 # just makes it a little easier to create test cases
 my $profile = {
-    '-CodeLayout::RequireTidyCode'                 => {},
-    '-Documentation::PodSpelling'                  => {},
-    '-Miscellanea::RequireRcsKeywords'             => {},
-    '-ValuesAndExpressions::ProhibitMagicNumbers'  => {},
+    '-CodeLayout::RequireTidyCode'                      => {},
+    '-Documentation::PodSpelling'                       => {},
+    '-ErrorHandling::RequireCheckingReturnValueOfEval'  => {},
+    '-Miscellanea::RequireRcsKeywords'                  => {},
+    '-ValuesAndExpressions::ProhibitMagicNumbers'       => {},
 };
 
 my $code = undef;
