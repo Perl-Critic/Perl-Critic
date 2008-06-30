@@ -271,19 +271,18 @@ sub _find_profile_path {
 
 sub _find_home_dir {
 
-    #Try using File::HomeDir
-    eval { require File::HomeDir };
-    if ( not $EVAL_ERROR ) {
+    # Try using File::HomeDir
+    if ( eval { require File::HomeDir } ) {
         return File::HomeDir->my_home();
     }
 
-    #Check usual environment vars
+    # Check usual environment vars
     for my $key (qw(HOME USERPROFILE HOMESHARE)) {
         next if not defined $ENV{$key};
         return $ENV{$key} if -d $ENV{$key};
     }
 
-    #No home directory defined
+    # No home directory defined
     return;
 }
 

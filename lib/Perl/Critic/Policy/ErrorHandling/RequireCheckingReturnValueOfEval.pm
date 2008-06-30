@@ -13,7 +13,9 @@ use warnings;
 
 use Readonly;
 
-use Perl::Critic::Utils qw< :booleans :severities hashify >;
+use Scalar::Util qw< refaddr >;
+
+use Perl::Critic::Utils qw< :booleans :characters :severities hashify >;
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.087';
@@ -21,7 +23,7 @@ our $VERSION = '1.087';
 #-----------------------------------------------------------------------------
 
 Readonly::Scalar my $DESC => 'Return value of eval not tested.';
-Readonly::Scalar my $EXPL =>
+Readonly::Scalar my $EXPL =>    ## no critic (RequireInterpolationOfMetachars)
     q<You can't depend upon the value of $@/$EVAL_ERROR to tell whether an eval failed.>;
 
 Readonly::Hash my %BOOLEAN_OPERATORS => hashify qw< || && // or and >;
@@ -40,18 +42,19 @@ sub applies_to           { return 'PPI::Token::Word' }
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-warn "\n", $elem->statement(), q< statement on >, __LINE__, "\n";
     return if $elem->content() ne 'eval';
 
     my $evaluated = $elem->snext_sibling() or return; # Nothing to eval!
-
-warn 'line: ', __LINE__, "\n";
-    return if _is_in_condition_or_for_loop($elem);
-warn 'line: ', __LINE__, "\n";
-    return if _is_in_postfix_expression($elem);
-warn 'line: ', __LINE__, "\n";
-
     my $following = $evaluated->snext_sibling();
+
+    return if _is_in_right_hand_side_of_assignment($elem);
+    return if _is_in_postfix_expression($elem);
+    return if
+        _is_in_correct_position_in_a_condition_or_foreach_loop_collection(
+            $elem,
+            $following,
+        );
+
     if (
             $following
         and $following->isa('PPI::Token::Operator')
@@ -60,23 +63,145 @@ warn 'line: ', __LINE__, "\n";
         return;
     }
 
-warn 'line: ', __LINE__, "\n";
     return $self->violation($DESC, $EXPL, $elem);
 }
 
 #-----------------------------------------------------------------------------
 
-sub _is_in_condition_or_for_loop {
+sub _is_in_right_hand_side_of_assignment {
     my ($elem) = @_;
+
+    my $previous = $elem->sprevious_sibling();
+
+    if (not $previous) {
+        $previous =
+            _grandparent_for_is_in_right_hand_side_of_assignment($elem);
+    }
+
+    while ($previous) {
+        my $base_previous = $previous;
+
+        EQUALS_SCAN:
+        while ($previous) {
+            if ( $previous->isa('PPI::Token::Operator') ) {
+                return $TRUE if $previous->content() eq q<=>;
+                last EQUALS_SCAN if _is_effectively_a_comma($previous);
+            }
+            $previous = $previous->sprevious_sibling();
+        }
+
+        $previous =
+            _grandparent_for_is_in_right_hand_side_of_assignment($base_previous);
+    }
+
+    return;
+}
+
+sub _grandparent_for_is_in_right_hand_side_of_assignment {
+    my ($elem) = @_;
+
+    my $parent = $elem->parent() or return;
+    $parent->isa('PPI::Statement') or return;
+
+    my $grandparent = $parent->parent() or return;
+
+    if (
+            $grandparent->isa('PPI::Structure::Constructor')
+        or  $grandparent->isa('PPI::Structure::List')
+    ) {
+        return $grandparent;
+    }
+
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
+Readonly::Scalar my $CONDITION_POSITION_IN_C_STYLE_FOR_LOOP => 1;
+
+sub _is_in_correct_position_in_a_condition_or_foreach_loop_collection {
+    my ($elem, $following) = @_;
 
     my $parent = $elem->parent();
     while ($parent) {
-        return $TRUE if $parent->isa('PPI::Structure::Condition');
-        return $TRUE if $parent->isa('PPI::Structure::ForLoop');
+        if ( $parent->isa('PPI::Structure::Condition') ) {
+            return
+                _is_in_correct_position_in_a_structure_condition(
+                    $elem, $parent, $following,
+                );
+        }
+
+        if ( $parent->isa('PPI::Structure::ForLoop') ) {
+            my @for_loop_components = $parent->schildren();
+
+            return $TRUE if 1 == @for_loop_components;
+            my $condition =
+                $for_loop_components[$CONDITION_POSITION_IN_C_STYLE_FOR_LOOP]
+                or return;
+
+            return _descendant_of($elem, $condition);
+        }
+
         $parent = $parent->parent();
     }
 
     return;
+}
+
+sub _is_in_correct_position_in_a_structure_condition {
+    my ($elem, $parent, $following) = @_;
+
+    my $level = $elem;
+    while ($level and refaddr $level != $parent) {
+        my $cursor = refaddr $elem == refaddr $level ? $following : $level;
+
+        IS_FINAL_EXPRESSION_AT_DEPTH:
+        while ($cursor) {
+            if ( _is_effectively_a_comma($cursor) ) {
+                $cursor = $cursor->snext_sibling();
+                while ( _is_effectively_a_comma($cursor) ) {
+                    $cursor = $cursor->snext_sibling();
+                }
+
+                # Semicolon would be a syntax error here.
+                return if $cursor;
+                last IS_FINAL_EXPRESSION_AT_DEPTH;
+            }
+
+            $cursor = $cursor->snext_sibling();
+        }
+
+        my $statement = $level->parent();
+        return $TRUE if not $statement; # Shouldn't happen.
+        return $TRUE if not $statement->isa('PPI::Statement'); # Shouldn't happen.
+
+        $level = $statement->parent();
+        if (
+                not $level
+            or  (
+                    not $level->isa('PPI::Structure::List')
+                and not $level->isa('PPI::Structure::Condition')
+            )
+        ) {
+            # Shouldn't happen.
+            return $TRUE;
+        }
+    }
+
+    return $TRUE;
+}
+
+# Replace with PPI implementation once it is released.
+sub _descendant_of {
+    my ($cursor, $potential_ancestor) = @_;
+
+    return $EMPTY if not $potential_ancestor;
+
+    while ( refaddr $cursor != refaddr $potential_ancestor ) {
+        $cursor = $cursor->parent() or return $EMPTY;
+    }
+
+    return 1;
 }
 
 #-----------------------------------------------------------------------------
@@ -86,7 +211,6 @@ sub _is_in_postfix_expression {
 
     my $previous = $elem->sprevious_sibling();
     while ($previous) {
-warn $previous;
         if (
                 $previous->isa('PPI::Token::Word')
             and $POSTFIX_OPERATORS{ $previous->content() }
@@ -97,6 +221,21 @@ warn $previous;
     }
 
     return;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _is_effectively_a_comma {
+    my ($elem) = @_;
+
+    return if not $elem;
+
+    return
+            $elem->isa('PPI::Token::Operator')
+        &&  (
+                $elem->content() eq $COMMA
+            ||  $elem->content() eq $FATCOMMA
+        );
 }
 
 #-----------------------------------------------------------------------------
@@ -120,7 +259,8 @@ This Policy is part of the core L<Perl::Critic> distribution.
 
 =head1 DESCRIPTION
 
-TODO
+See thread on perl5-porters starting here:
+L<http://www.xray.mpe.mpg.de/mailing-lists/perl5-porters/2008-06/msg00537.html>.
 
 
 =head1 CONFIGURATION

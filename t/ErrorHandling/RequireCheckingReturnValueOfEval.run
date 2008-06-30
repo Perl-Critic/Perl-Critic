@@ -1,256 +1,378 @@
-### name Basic failure
-### failures 9
-### cut
-#
-#eval { foo; };
-#{ eval { baz; } };
-#[ eval { buz; } ];
-#( eval { blrfl; } );
-#
-#eval 'foo;';
-#{ eval 'baz;' };
-#[ eval 'buz;' ];
-#( eval 'blrfl;' );
-#
-#eval { something };
-#if ($@) {
-#    blahblah
-#}
-#
-##-----------------------------------------------------------------------------
-#
-### name Assignment
-### failures 0
-### cut
-#
-#$result = eval { foo; };
-#@result = eval { bar; };
-#$result = { eval { baz; } };
-#$result = [ eval { buz; } ];
-#@result = ( eval { blrfl; } );
-#
-#$result = eval 'foo;';
-#@result = eval 'bar;';
-#$result = { eval 'baz;' };
-#$result = [ eval 'buz;' ];
-#@result = ( eval 'blrfl;' );
-#
-##-----------------------------------------------------------------------------
-#
-### name if
-### failures 0
-### cut
-#
-#if ( eval { bar; } ) {
-#    something
-#}
-#
-#if ( ( eval { blrfl; } ) ) {
-#    something
-#}
-#
-#if ( 5 == eval { bar; } ) {
-#    something
-#}
-#
-#if ( scalar ( eval { blrfl; } ) ) {
-#    something
-#}
-#
-#if ( not eval { whatever; } ) {
-#    something
-#}
-#
-#
-#
-#if ( eval 'bar;' ) {
-#    something
-#}
-#
-#if ( ( eval 'blrfl;' ) ) {
-#    something
-#}
-#
-#if ( 5 == eval 'bar;' ) {
-#    something
-#}
-#
-#if ( scalar ( eval 'blrfl;' ) ) {
-#    something
-#}
-#
-#if ( ! eval 'whatever;' ) {
-#    something
-#}
-#
-##-----------------------------------------------------------------------------
-#
-### name foreach
-### failures 0
-### cut
-#
-#foreach my $thingy ( eval { bar; } ) {
-#    something
-#}
-#
-#foreach my $thingy ( ( eval { blrfl; } ) ) {
-#    something
-#}
-#
-#foreach my $thingy ( qw< one two >, eval { bar; } ) {
-#    something
-#}
-#
-#
-#foreach my $thingy ( eval 'bar;' ) {
-#    something
-#}
-#
-#foreach my $thingy ( ( eval 'blrfl;' ) ) {
-#    something
-#}
-#
-#foreach my $thingy ( qw< one two >, eval 'bar;' ) {
-#    something
-#}
-#
-##-----------------------------------------------------------------------------
-#
-### name C-style for
-### failures 0
-### cut
-#
-#for (blah; eval { bar; }; blah ) {
-#    something
-#}
-#
-#for (blah; ( eval { blrfl; } ); blah ) {
-#    something
-#}
-#
-#for (blah; eval { bar; } eq 'bing bang bong'; blah ) {
-#    something
-#}
-#
-#
-#for (blah; eval 'bar;'; blah ) {
-#    something
-#}
-#
-#for (blah; ( eval 'blrfl;' ); blah ) {
-#    something
-#}
-#
-#for (blah; eval 'bar;' eq 'bing bang bong'; blah ) {
-#    something
-#}
-#
-##-----------------------------------------------------------------------------
-#
-### name while
-### failures 0
-### cut
-#
-#while ( eval { bar; } ) {
-#    something
-#}
-#
-#while ( ( eval { blrfl; } ) ) {
-#    something
-#}
-#
-#
-#while ( eval 'bar;' ) {
-#    something
-#}
-#
-#while ( ( eval 'blrfl;' ) ) {
-#    something
-#}
-#
-##-----------------------------------------------------------------------------
-#
-### name Postfix if
-### failures 0
-### cut
-#
-#bleah if eval { yadda; };
-#bleah if ( eval { yadda; } );
-#bleah if 5 == eval { yadda; };
-#bleah if eval { yadda; } == 5;
-#
-#bleah if eval 'yadda;';
-#bleah if ( eval 'yadda;' );
-#bleah if 5 == eval 'yadda;';
-#bleah if eval 'yadda;' == 5;
-#
-##-----------------------------------------------------------------------------
+## name Basic failure
+## failures 9
+## cut
+
+eval { foo; };
+{ eval { baz; } };
+[ eval { buz; } ];
+( eval { blrfl; } );
+
+eval 'foo;';
+{ eval 'baz;' };
+[ eval 'buz;' ];
+( eval 'blrfl;' );
+
+eval { something };
+if ($@) {
+    blahblah
+}
+
+#-----------------------------------------------------------------------------
+
+## name Assignment
+## failures 0
+## cut
+
+$result = eval { foo; };
+@result = eval { bar; };
+$result = { eval { baz; } };
+$result = [ eval { buz; } ];
+@result = ( 0, eval { blrfl; } );
+@result = [ qw< one two >, { thrpt => ( eval { frlbfrnk; } ) } ];
+
+$result = eval 'foo;';
+@result = eval 'bar;';
+$result = { eval 'baz;' };
+$result = [ eval 'buz;' ];
+@result = ( 0, eval 'blrfl;' );
+@result = [ qw< one two >, { thrpt => ( eval 'frlbfrnk;' ) } ];
+
+#-----------------------------------------------------------------------------
+
+## name Assignment with comma separated statements.
+## failures 12
+## cut
+
+$result = 1, eval { foo; };
+@result = 1, eval { bar; };
+$result = 1, { eval { baz; } };
+$result = 1, [ eval { buz; } ];
+@result = 1, ( eval { blrfl; } );
+@result = 1, [ qw< one two >, { thrpt => ( eval { frlbfrnk; } ) } ];
+
+$result = 1, eval 'foo;';
+@result = 1, eval 'bar;';
+$result = 1, { eval 'baz;' };
+$result = 1, [ eval 'buz;' ];
+@result = 1, ( eval 'blrfl;' );
+@result = 1, [ qw< one two >, { thrpt => ( eval 'frlbfrnk;' ) } ];
+
+#-----------------------------------------------------------------------------
+
+## name if
+## failures 0
+## cut
+
+if ( eval { bar; } ) {
+    something
+}
+
+if ( ( eval { blrfl; } ) ) {
+    something
+}
+
+if ( 5 == eval { bar; } ) {
+    something
+}
+
+if ( scalar ( eval { blrfl; } ) ) {
+    something
+}
+
+if ( not eval { whatever; } ) {
+    something
+}
+
+
+
+if ( eval 'bar;' ) {
+    something
+}
+
+if ( ( eval 'blrfl;' ) ) {
+    something
+}
+
+if ( 5 == eval 'bar;' ) {
+    something
+}
+
+if ( scalar ( eval 'blrfl;' ) ) {
+    something
+}
+
+if ( ! eval 'whatever;' ) {
+    something
+}
+
+#-----------------------------------------------------------------------------
+
+## name foreach
+## failures 0
+## cut
+
+foreach my $thingy ( eval { bar; } ) {
+    something
+}
+
+foreach my $thingy ( ( eval { blrfl; } ) ) {
+    something
+}
+
+foreach my $thingy ( qw< one two >, eval { bar; } ) {
+    something
+}
+
+
+foreach my $thingy ( eval 'bar;' ) {
+    something
+}
+
+foreach my $thingy ( ( eval 'blrfl;' ) ) {
+    something
+}
+
+foreach my $thingy ( qw< one two >, eval 'bar;' ) {
+    something
+}
+
+#-----------------------------------------------------------------------------
+
+## name C-style for with eval in condition or assignment
+## failures 0
+## cut
+
+for (blah; eval { bar; }; blah ) {
+    something
+}
+
+for (blah; ( eval { blrfl; } ); blah ) {
+    something
+}
+
+for (blah; eval { bar; } eq 'bing bang bong'; blah ) {
+    something
+}
+
+for (my $x = eval { thrp; }; $x < 1587; $x = eval { thrp; } ) {
+    something
+}
+
+
+for (blah; eval 'bar;'; blah ) {
+    something
+}
+
+for (blah; ( eval 'blrfl;' ); blah ) {
+    something
+}
+
+for (blah; eval 'bar;' eq 'bing bang bong'; blah ) {
+    something
+}
+
+for (my $x = eval 'thrp;'; $x < 1587; $x = eval 'thrp;' ) {
+    something
+}
+
+#-----------------------------------------------------------------------------
+
+## name C-style for with eval in initialization or increment with no assignment
+## failures 4
+## cut
+
+for (eval { bar; }; blah; blah) {
+    something
+}
+
+for ( blah; blah; ( eval { blrfl; } ) ) {
+    something
+}
+
+
+for (eval 'bar;'; blah; blah) {
+    something
+}
+
+for ( blah; blah; ( eval 'blrfl;' ) ) {
+    something
+}
+
+#-----------------------------------------------------------------------------
+
+## name while
+## failures 0
+## cut
+
+while ( eval { bar; } ) {
+    something
+}
+
+while ( ( ( eval { blrfl; } ) ) ) {
+    something
+}
+
+
+while ( eval 'bar;' ) {
+    something
+}
+
+while ( ( ( eval 'blrfl;' ) ) ) {
+    something
+}
+
+#-----------------------------------------------------------------------------
+
+## name Postfix if
+## failures 0
+## cut
+
+bleah if eval { yadda; };
+bleah if ( eval { yadda; } );
+bleah if 5 == eval { yadda; };
+bleah if eval { yadda; } == 5;
+
+bleah if eval 'yadda;';
+bleah if ( eval 'yadda;' );
+bleah if 5 == eval 'yadda;';
+bleah if eval 'yadda;' == 5;
+
+#-----------------------------------------------------------------------------
 
 ## name Postfix foreach
 ## failures 0
 ## cut
 
-foreach eval { bar; };
-foreach ( eval { blrfl; } );
-foreach qw< one two >, eval { bar; };
+blargh($_) foreach eval { bar; };
+blargh($_) foreach ( eval { blrfl; } );
+blargh($_) foreach qw< one two >, eval { bar; };
+blargh($_) foreach eval { bar; }, qw< one two >;
 
-foreach eval 'bar;';
-foreach ( eval 'blrfl;' );
-foreach qw< one two >, eval 'bar;';
+blargh($_) foreach eval 'bar;';
+blargh($_) foreach ( eval 'blrfl;' );
+blargh($_) foreach eval 'bar;', qw< one two >;
 
-##-----------------------------------------------------------------------------
-#
-### name "Proper" handling of return value
-### failures 0
-### cut
-#
-#eval {
-#    something
-#}
-#    or do {
-#        if ($EVAL_ERROR) {
-#            yadda
-#        }
-#        else {
-#            blahdda
-#        };
-#
-#eval "something_else" or die;
-#
-## eval gets the thing following it before || does.
-#eval {
-#    something
-#}
-#    || do {
-#        if ($EVAL_ERROR) {
-#            yadda
-#        }
-#        else {
-#            blahdda
-#        }
-#    };
-#
-#eval "something_else" || die;
-#
-#
-#eval {
-#    something
-#}
-#    and do {
-#        yadda
-#    };
-#
-#eval "something_else" and thingy;
-#
-## eval gets the thing following it before && does.
-#eval {
-#    something
-#}
-#    && do {
-#        yadda
-#    };
-#
-#eval "something_else" && die;
+#-----------------------------------------------------------------------------
+
+## name First value in comma-separated list in condition
+## failures 4
+## cut
+
+if ( eval { 1 }, 0 ) {
+    blah blah blah
+}
+
+if ( ( eval { 1 }, 0 ) ) {
+    blah blah blah
+}
+
+if ( eval '1', 0 ) {
+    blah blah blah
+}
+
+if ( ( eval '1', 0 ) ) {
+    blah blah blah
+}
+
+#-----------------------------------------------------------------------------
+
+## name Last value in comma-separated list in condition
+## failures 0
+## cut
+
+if ( 0, eval { 1 }, ) {
+    blah blah blah
+}
+
+# Comma outside inner parentheses.
+if ( ( 0, eval { 1 } ), , ) {
+    blah blah blah
+}
+
+if ( 0, eval '1', ) {
+    blah blah blah
+}
+
+# Comma inside inner parentheses.
+if ( ( 0, eval '1', , ) ) {
+    blah blah blah
+}
+
+#-----------------------------------------------------------------------------
+
+## name Last value in comma-separated list that isn't the last element in another list in condition
+## failures 4
+## cut
+
+if ( ( 0, eval { 1 } ), 0 ) {
+    blah blah blah
+}
+
+if ( ( ( 0, eval { 1 } ) ), 0 ) {
+    blah blah blah
+}
+
+if ( ( 0, eval '1' ), 0 ) {
+    blah blah blah
+}
+
+if ( ( ( 0, eval '1' ) ), 0 ) {
+    blah blah blah
+}
+
+#-----------------------------------------------------------------------------
+
+## name "Proper" handling of return value
+## failures 0
+## cut
+
+eval {
+    something
+}
+    or do {
+        if ($EVAL_ERROR) {
+            yadda
+        }
+        else {
+            blahdda
+        };
+
+eval "something_else" or die;
+
+# eval gets the thing following it before || does.
+eval {
+    something
+}
+    || do {
+        if ($EVAL_ERROR) {
+            yadda
+        }
+        else {
+            blahdda
+        }
+    };
+
+eval "something_else" || die;
+
+
+eval {
+    something
+}
+    and do {
+        yadda
+    };
+
+eval "something_else" and thingy;
+
+# eval gets the thing following it before && does.
+eval {
+    something
+}
+    && do {
+        yadda
+    };
+
+eval "something_else" && die;
 
 #-----------------------------------------------------------------------------
 

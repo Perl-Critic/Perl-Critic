@@ -132,15 +132,9 @@ difference between that and C<< $self->_foo() >>
 =item * ErrorHandling::RequireCarping
 
 This should not complain about using C<warn> or C<die> if it's not in a
-function, or if it's not in a non-main:: package.
+function, or if it's in main::.
 
 Also, should allow C<die> when it is obvious that the "message" is a reference.
-
-
-=item * ErrorHandling::RequireCheckingReturnValueOfEval
-
-See thread on perl5-porters starting here:
-L<http://www.xray.mpe.mpg.de/mailing-lists/perl5-porters/2008-06/msg00537.html>.
 
 
 =item * RegularExpressions::ProhibitCaptureWithoutTest
@@ -210,8 +204,6 @@ C<\A \s* [\w:]+ \s+ - \s+ \S>.  The single hyphen is the important bit.  Also,
 must be a single line.
 
 =item * Expressions::RequireFatCommasInHashConstructors
-
-=item * ErrorHandling::RequireCheckOfEvalErrorAfterEval
 
 =item * ErrorHandling::RequireLocalizingEvalErrorInDESTROY
 
@@ -533,6 +525,11 @@ We're waiting on the following bugs to get fixed in a CPAN release of PPI:
 
 
 =over
+
+=item PPI::Token::descendant_of()
+
+Exists in svn.  Replace _descendant_of() in RequireCheckingReturnValueOfEval
+with that, once it is released, because it's faster and native.
 
 =item Newlines
 

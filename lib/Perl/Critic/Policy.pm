@@ -95,9 +95,10 @@ sub new {
     foreach my $parameter ( @parameters ) {
         eval {
             $parameter->parse_and_validate_config_value( $self, $config_object );
-        };
-
-        $errors->add_exception_or_rethrow($EVAL_ERROR);
+        }
+            or do {
+                $errors->add_exception_or_rethrow($EVAL_ERROR);
+            };
 
         $config_object->remove( $parameter->get_name() );
     }

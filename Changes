@@ -1,5 +1,8 @@
 [1.xxx] Released on 2008-xx-xx
 
+    New Policies
+    * ErrorHandling::RequireCheckingReturnValueOfEval
+
     Policy Changes:
     * ValuesAndExpressions::ProhibitLeadingZeros now accepts octal numbers
       for the Unix permissions argument to chmod, dbmopen, mkdir, sysopen, or
