@@ -23,8 +23,10 @@ our $VERSION = '1.087';
 #-----------------------------------------------------------------------------
 
 Readonly::Scalar my $DESC => 'Return value of eval not tested.';
-Readonly::Scalar my $EXPL =>    ## no critic (RequireInterpolationOfMetachars)
+## no critic (RequireInterpolationOfMetachars)
+Readonly::Scalar my $EXPL =>
     q<You can't depend upon the value of $@/$EVAL_ERROR to tell whether an eval failed.>;
+## use critic
 
 Readonly::Hash my %BOOLEAN_OPERATORS => hashify qw< || && // or and >;
 Readonly::Hash my %POSTFIX_OPERATORS =>

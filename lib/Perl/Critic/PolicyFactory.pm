@@ -27,10 +27,10 @@ use Perl::Critic::Utils qw{
 use Perl::Critic::PolicyConfig;
 use Perl::Critic::Exception::AggregateConfiguration;
 use Perl::Critic::Exception::Configuration;
-use Perl::Critic::Exception::Fatal::Generic qw{ &throw_generic };
-use Perl::Critic::Exception::Fatal::Internal qw{ &throw_internal };
+use Perl::Critic::Exception::Fatal::Generic qw{ throw_generic };
+use Perl::Critic::Exception::Fatal::Internal qw{ throw_internal };
 use Perl::Critic::Exception::Fatal::PolicyDefinition
-    qw{ &throw_policy_definition };
+    qw{ throw_policy_definition };
 use Perl::Critic::Utils::Constants qw{ :profile_strictness };
 
 use Exception::Class;   # this must come after "use P::C::Exception::*"
@@ -53,20 +53,27 @@ sub import {
     my $extra_test_policies = $args{'-extra-test-policies'};
 
     if ( not @SITE_POLICY_NAMES ) {
-        eval {
+        my $eval_worked = eval {
             require Module::Pluggable;
             Module::Pluggable->import(search_path => $POLICY_NAMESPACE,
                                       require => 1, inner => 0);
             @SITE_POLICY_NAMES = plugins(); #Exported by Module::Pluggable
+            1;
         };
 
-        if ( $EVAL_ERROR ) {
+        if (not $eval_worked) {
+            if ( $EVAL_ERROR ) {
+                throw_generic
+                    qq<Can't load Policies from namespace "$POLICY_NAMESPACE": $EVAL_ERROR>;
+            }
+
             throw_generic
-                qq{Can't load Policies from namespace "$POLICY_NAMESPACE": $EVAL_ERROR};
+                qq<Can't load Policies from namespace "$POLICY_NAMESPACE" for an unknown reason.>;
         }
-        elsif ( ! @SITE_POLICY_NAMES ) {
+
+        if ( not @SITE_POLICY_NAMES ) {
             throw_generic
-                qq{No Policies found in namespace "$POLICY_NAMESPACE"};
+                qq<No Policies found in namespace "$POLICY_NAMESPACE".>;
         }
     }
 
@@ -241,28 +248,39 @@ sub _instantiate_policy {
     my ($policy_name, $policy_config) = @_;
 
     my $policy = eval { $policy_name->new( %{$policy_config} ) };
-    _handle_policy_instantiation_exception($policy_name, $EVAL_ERROR);
+    _handle_policy_instantiation_exception(
+        $policy_name,
+        $policy,        # Note: being used as a boolean here.
+        $EVAL_ERROR,
+    );
 
     $policy->__set_config( $policy_config );
 
-    eval { $policy->__set_base_parameters() };
-    _handle_policy_instantiation_exception($policy_name, $EVAL_ERROR);
+    my $eval_worked = eval { $policy->__set_base_parameters(); 1; };
+    _handle_policy_instantiation_exception(
+        $policy_name, $eval_worked, $EVAL_ERROR,
+    );
 
     return $policy;
 }
 
 sub _handle_policy_instantiation_exception {
-    my ($policy_name, $eval_error) = @_;
+    my ($policy_name, $eval_worked, $eval_error) = @_;
 
-    if ($eval_error) {
-        my $exception = Exception::Class->caught();
+    if (not $eval_worked) {
+        if ($eval_error) {
+            my $exception = Exception::Class->caught();
 
-        if (ref $exception) {
-            $exception->rethrow();
+            if (ref $exception) {
+                $exception->rethrow();
+            }
+
+            throw_policy_definition
+                qq<Unable to create policy "$policy_name": $eval_error>;
         }
 
         throw_policy_definition
-            qq{Unable to create policy '$policy_name': $eval_error};
+            qq<Unable to create policy "$policy_name" for an unknown reason.>;
     }
 
     return;

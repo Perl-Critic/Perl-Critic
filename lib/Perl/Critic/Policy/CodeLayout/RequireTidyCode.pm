@@ -48,8 +48,7 @@ sub initialize_if_enabled {
     local $EVAL_ERROR = undef;
 
     # If Perl::Tidy is missing, bow out.
-    eval { require Perl::Tidy; };
-    return $FALSE if $EVAL_ERROR;
+    eval { require Perl::Tidy; } or return $FALSE;
 
     #Set configuration if defined
     if (defined $self->{_perltidyrc} && $self->{_perltidyrc} eq $EMPTY) {
@@ -95,7 +94,7 @@ sub violates {
     local @ARGV = qw(-nst -nse);  ## no critic
 
     # Trap Perl::Tidy errors, just in case it dies
-    eval {
+    my $eval_worked = eval {
         Perl::Tidy::perltidy(
             source      => \$source,
             destination => \$dest,
@@ -104,8 +103,7 @@ sub violates {
        );
     };
 
-    if ($stderr || $EVAL_ERROR) {
-
+    if ($stderr or not $eval_worked) {
         # Looks like perltidy had problems
         return $self->violation( 'perltidy had errors!!', $EXPL, $elem );
     }

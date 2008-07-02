@@ -94,17 +94,24 @@ eval {
             $module_abstract,
             $policy->default_severity();
     }
-};
-if (my $exception = $EVAL_ERROR) {  # Yes, an assignment and not equality test.
-    my @extra_messages;
 
-    if ( ref $exception ) {
-        $exception->show_trace(1);
-    }
-
-    print {*STDERR} $exception, @extra_messages, "\n";
-    exit 1;
+    1;
 }
+    or do {
+        # Yes, an assignment and not equality test.
+        if (my $exception = $EVAL_ERROR) {
+            if ( ref $exception ) {
+                $exception->show_trace(1);
+            }
+
+            print {*STDERR} "$exception\n";
+        }
+        else {
+            print {*STDERR} "Failed printing abstracts for an unknown reason.\n";
+        }
+
+        exit 1;
+    };
 
 
 print {$pod_file} <<'END_FOOTER';

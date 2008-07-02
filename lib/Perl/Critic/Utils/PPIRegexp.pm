@@ -41,8 +41,7 @@ our %EXPORT_TAGS = (
 sub parse_regexp {
     my ($elem) = @_;
 
-    eval { require Regexp::Parser; };
-    return if $EVAL_ERROR;
+    eval { require Regexp::Parser; } or return;
 
     my $re = get_match_string($elem);
     return if !defined $re;

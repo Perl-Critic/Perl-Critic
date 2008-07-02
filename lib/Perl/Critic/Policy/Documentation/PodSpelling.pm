@@ -79,8 +79,8 @@ sub initialize_if_enabled {
         require Text::ParseWords;
         require Pod::Spell;
         require IO::String;
-    };
-    return $FALSE if $EVAL_ERROR;
+    }
+        or return $FALSE;
 
     return $FALSE if not $self->_derive_spell_command_line();
 
@@ -219,16 +219,18 @@ sub _run_spell_command {
 
         # Why is this extra step needed???
         @words = grep { not exists $Pod::Wordlist::Wordlist{$_} } @words;  ## no critic(ProhibitPackageVars)
-    };
-
-    if ($EVAL_ERROR) {
-        # Eat anything we did ourselves above, propagate anything else.
-        if (not ref Perl::Critic::Exception::Fatal::Generic->caught()) {
-            ref $EVAL_ERROR ? $EVAL_ERROR->rethrow() : die $EVAL_ERROR;  ## no critic (ErrorHandling::RequireCarping)
-        }
-
-        return;
     }
+        or do {
+            # Eat anything we did ourselves above, propagate anything else.
+            if (
+                    $EVAL_ERROR
+                and not ref Perl::Critic::Exception::Fatal::Generic->caught()
+            ) {
+                ref $EVAL_ERROR ? $EVAL_ERROR->rethrow() : die $EVAL_ERROR;  ## no critic (ErrorHandling::RequireCarping)
+            }
+
+            return;
+        };
 
     return [ @words ];
 }

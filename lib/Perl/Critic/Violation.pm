@@ -127,7 +127,7 @@ sub diagnostics {
     my $policy = $self->policy();
 
     if ( not $DIAGNOSTICS{$policy} ) {
-        eval {
+        eval {              ## no critic (RequireCheckingReturnValueOfEval)
             my $module_name = ref $policy || $policy;
             $DIAGNOSTICS{$policy} =
                 trim_pod_section(
