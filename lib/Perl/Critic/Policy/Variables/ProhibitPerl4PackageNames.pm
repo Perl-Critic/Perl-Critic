@@ -20,7 +20,7 @@ our $VERSION = '1.087';
 #-----------------------------------------------------------------------------
 
 Readonly::Scalar my $EXPL =>
-    q{Use double colon (::) to separate package name components instead of single quotes (').};
+    q{Use double colon (::) to separate package name components instead of single quotes (')};
 
 #-----------------------------------------------------------------------------
 

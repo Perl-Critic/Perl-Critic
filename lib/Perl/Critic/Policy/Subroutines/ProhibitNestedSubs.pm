@@ -22,7 +22,7 @@ our $VERSION = '1.087';
 Readonly::Scalar my $DESC => q{Nested named subroutine};
 Readonly::Scalar my $EXPL =>
     q{Declaring a named sub inside another named sub does not prevent the }
-        . q{inner sub from being global.};
+        . q{inner sub from being global};
 
 #-----------------------------------------------------------------------------
 
