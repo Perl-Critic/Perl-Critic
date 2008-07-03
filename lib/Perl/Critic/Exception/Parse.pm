@@ -17,7 +17,7 @@ use Readonly;
 
 use Perl::Critic::Utils qw< :characters >;
 
-our $VERSION = '1.087';
+our $VERSION = '1.088';
 
 #-----------------------------------------------------------------------------
 
