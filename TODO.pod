@@ -177,6 +177,9 @@ Needs to look inside strings.  RT #35970.
 Check for -w on the shbang line.
 
 
+=item * Change formatting in Violation to eliminate double periods.
+
+
 =back
 
 
