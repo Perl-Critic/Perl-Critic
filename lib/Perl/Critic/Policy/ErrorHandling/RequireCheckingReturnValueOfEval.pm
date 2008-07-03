@@ -261,13 +261,84 @@ This Policy is part of the core L<Perl::Critic> distribution.
 
 =head1 DESCRIPTION
 
-See thread on perl5-porters starting here:
-L<http://www.xray.mpe.mpg.de/mailing-lists/perl5-porters/2008-06/msg00537.html>.
+A common idiom in perl for dealing with possible errors is to use C<eval>
+followed by a check of C<$@>/C<$EVAL_ERROR>:
+
+    eval {
+        ...
+    };
+    if ($EVAL_ERROR) {
+        ...
+    }
+
+There's a problem with this: the value of C<$EVAL_ERROR> can change between
+the end of the C<eval> and the C<if> statement.  The issue is object
+destructors:
+
+    package Foo;
+
+    ...
+
+    sub DESTROY {
+        ...
+        eval { ... };
+        ...
+    }
+
+    package main;
+
+    eval {
+        my $foo = Foo->new();
+        ...
+    };
+    if ($EVAL_ERROR) {
+        ...
+    }
+
+Assuming there are no other references to C<$foo> created, when the C<eval>
+block in C<main> is exited, C<Foo::DESTROY()> will be invoked, regardless of
+whether the C<eval> finished normally or not.  If the C<eval> in C<main>
+fails, but the C<eval> in C<Foo::DESTROY()> succeeds, then C<$EVAL_ERROR> will
+be empty by the time that the C<if> is executed.  Additional issues arise if
+you depend upon the exact contents of C<$EVAL_ERROR> and both C<eval>s fail,
+because the messages from both will be concatenated.
+
+The solution is to ensure that, upon normal exit, an C<eval> returns a true
+value and to test that value:
+
+    # Constructors are no problem.
+    my $object = eval { Class->new() };
+
+    # To cover the possiblity that an operation may correctly return a false
+    # value, end the block with "1":
+    if ( eval { something(); 1 } ) {
+        ...
+    }
+
+    eval {
+        ...
+        1;
+    }
+        or do {
+            # Error handling here
+        };
+
+Unfortunately, you can't use the C<defined> function to test the result;
+C<eval> returns an empty string on failure.
+
+"But we don't use DESTROY() anywhere in our code!" you say.  That may be the
+case, but do any of the third-party modules you use have them?
 
 
 =head1 CONFIGURATION
 
 This Policy is not configurable except for the standard options.
+
+
+=head1 SEE ALSO
+
+See thread on perl5-porters starting here:
+L<http://www.xray.mpe.mpg.de/mailing-lists/perl5-porters/2008-06/msg00537.html>.
 
 
 =head1 AUTHOR
