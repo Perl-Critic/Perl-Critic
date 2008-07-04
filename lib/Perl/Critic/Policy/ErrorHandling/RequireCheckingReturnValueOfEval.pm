@@ -250,6 +250,8 @@ __END__
 
 =pod
 
+=for stopwords destructors
+
 =head1 NAME
 
 Perl::Critic::Policy::ErrorHandling::RequireCheckingReturnValueOfEval - You can't depend upon the value of C<$@>/C<$EVAL_ERROR> to tell whether an C<eval> failed.
@@ -261,8 +263,8 @@ This Policy is part of the core L<Perl::Critic> distribution.
 
 =head1 DESCRIPTION
 
-A common idiom in perl for dealing with possible errors is to use C<eval>
-followed by a check of C<$@>/C<$EVAL_ERROR>:
+A common idiom in perl for dealing with possible errors is to use
+C<eval> followed by a check of C<$@>/C<$EVAL_ERROR>:
 
     eval {
         ...
@@ -271,9 +273,9 @@ followed by a check of C<$@>/C<$EVAL_ERROR>:
         ...
     }
 
-There's a problem with this: the value of C<$EVAL_ERROR> can change between
-the end of the C<eval> and the C<if> statement.  The issue is object
-destructors:
+There's a problem with this: the value of C<$EVAL_ERROR> can change
+between the end of the C<eval> and the C<if> statement.  The issue is
+object destructors:
 
     package Foo;
 
@@ -295,22 +297,27 @@ destructors:
         ...
     }
 
-Assuming there are no other references to C<$foo> created, when the C<eval>
-block in C<main> is exited, C<Foo::DESTROY()> will be invoked, regardless of
-whether the C<eval> finished normally or not.  If the C<eval> in C<main>
-fails, but the C<eval> in C<Foo::DESTROY()> succeeds, then C<$EVAL_ERROR> will
-be empty by the time that the C<if> is executed.  Additional issues arise if
-you depend upon the exact contents of C<$EVAL_ERROR> and both C<eval>s fail,
-because the messages from both will be concatenated.
+Assuming there are no other references to C<$foo> created, when the
+C<eval> block in C<main> is exited, C<Foo::DESTROY()> will be invoked,
+regardless of whether the C<eval> finished normally or not.  If the
+C<eval> in C<main> fails, but the C<eval> in C<Foo::DESTROY()>
+succeeds, then C<$EVAL_ERROR> will be empty by the time that the C<if>
+is executed.  Additional issues arise if you depend upon the exact
+contents of C<$EVAL_ERROR> and both C<eval>s fail, because the
+messages from both will be concatenated.
 
-The solution is to ensure that, upon normal exit, an C<eval> returns a true
-value and to test that value:
+Even if there isn't an C<eval> directly in the C<DESTROY()> method
+code, it may invoke code that does use C<eval> or otherwise affects
+C<$EVAL_ERROR>.
+
+The solution is to ensure that, upon normal exit, an C<eval> returns a
+true value and to test that value:
 
     # Constructors are no problem.
     my $object = eval { Class->new() };
 
-    # To cover the possiblity that an operation may correctly return a false
-    # value, end the block with "1":
+    # To cover the possiblity that an operation may correctly return a
+    # false value, end the block with "1":
     if ( eval { something(); 1 } ) {
         ...
     }
@@ -323,11 +330,13 @@ value and to test that value:
             # Error handling here
         };
 
-Unfortunately, you can't use the C<defined> function to test the result;
-C<eval> returns an empty string on failure.
+Unfortunately, you can't use the C<defined> function to test the
+result; C<eval> returns an empty string on failure.
 
-"But we don't use DESTROY() anywhere in our code!" you say.  That may be the
-case, but do any of the third-party modules you use have them?
+"But we don't use DESTROY() anywhere in our code!" you say.  That may
+be the case, but do any of the third-party modules you use have them?
+What about any you may use in the future or updated versions of the
+ones you already use?
 
 
 =head1 CONFIGURATION
