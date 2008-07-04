@@ -54,6 +54,22 @@ $foo{select};
 
 #-----------------------------------------------------------------------------
 
+## name With three undefs, none of them the timeout. RT #37416
+## failures 0
+## cut
+
+# Now block until the GUI passes the range back
+    my $rin = '';
+    my $rout = '';
+    vec($rin, $parent->fileno(), 1) = 1;
+    if (select($rout=$rin,undef,undef,undef)) {
+     my $line;
+     recv($parent, $line, 1000, 0);
+     ($first, $last) = split ' ', $line;
+    }
+
+#-----------------------------------------------------------------------------
+
 ##############################################################################
 #      $URL$
 #     $Date$

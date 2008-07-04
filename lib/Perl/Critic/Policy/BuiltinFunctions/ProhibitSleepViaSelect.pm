@@ -21,7 +21,7 @@ our $VERSION = '1.088';
 
 Readonly::Scalar my $DESC => q{"select" used to emulate "sleep"};
 Readonly::Scalar my $EXPL => [168];
-Readonly::Scalar my $UNDEFS_IN_SLEEP_SELECT => 3;
+Readonly::Scalar my $SELECT_ARGUMENT_COUNT => 4;
 
 #-----------------------------------------------------------------------------
 
@@ -38,12 +38,17 @@ sub violates {
     return if ($elem ne 'select');
     return if ! is_function_call($elem);
 
-    if (
-            $UNDEFS_IN_SLEEP_SELECT
-        ==  grep { $_->[0] eq 'undef' } parse_arg_list($elem)
-    ) {
+    my @arguments = parse_arg_list($elem);
+    return if $SELECT_ARGUMENT_COUNT != @arguments;
+
+    foreach my $argument ( @arguments[0..2] ) {
+        return if $argument->[0] ne 'undef';
+    }
+
+    if ( $arguments[-1]->[0] ne 'undef' ) {
         return $self->violation( $DESC, $EXPL, $elem );
     }
+
     return; #ok!
 }
 
