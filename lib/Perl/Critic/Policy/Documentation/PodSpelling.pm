@@ -15,6 +15,7 @@ use English qw(-no_match_vars);
 use Readonly;
 
 use File::Spec;
+use File::Temp;
 use List::MoreUtils qw(uniq);
 
 use Perl::Critic::Utils qw{
@@ -70,12 +71,8 @@ sub got_sigpipe {
 sub initialize_if_enabled {
     my ( $self, $config ) = @_;
 
-    # workaround for Test::Without::Module v0.11
-    local $EVAL_ERROR = undef;
-
     eval {
         require File::Which;
-        require File::Temp;
         require Text::ParseWords;
         require Pod::Spell;
         require IO::String;
@@ -219,6 +216,7 @@ sub _run_spell_command {
 
         # Why is this extra step needed???
         @words = grep { not exists $Pod::Wordlist::Wordlist{$_} } @words;  ## no critic(ProhibitPackageVars)
+        1;
     }
         or do {
             # Eat anything we did ourselves above, propagate anything else.
