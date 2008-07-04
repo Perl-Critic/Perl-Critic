@@ -101,6 +101,7 @@ sub violates {
             stderr      => \$stderr,
             defined $self->{_perltidyrc} ? (perltidyrc => $self->{_perltidyrc}) : (),
        );
+       1;
     };
 
     if ($stderr or not $eval_worked) {
