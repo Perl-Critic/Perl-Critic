@@ -70,23 +70,20 @@ use English qw{-no_match_vars};
 
 use lib 't/tlib';
 
-use Perl::Critic::TestUtilitiesWithMinimalDependencies qw{
-    get_skip_all_tests_tap
-};
-
 our \$VERSION = $VERSION;
 
 #-----------------------------------------------------------------------------
 
-eval <<'END_HIDE_MODULES';
+my \$module_loaded = eval <<'END_HIDE_MODULES';
 use Test::Without::Module qw{
     $modules_to_hide
 };
+1;
 END_HIDE_MODULES
 
-if ( \$EVAL_ERROR ) {
+if ( not \$module_loaded ) {
     print
-        get_skip_all_tests_tap(),
+        '1..0 # Skip ',
         'Test::Without::Module required to test with the ',
         "absence of optional modules\\n";
     exit 0;
