@@ -22,7 +22,7 @@ BEGIN
     use_ok('Perl::Critic::Violation');
 }
 
-use lib qw(t/tlib);
+use lib qw< t/06_violation.t.lib >;
 use ViolationTest;   # this is solely to test the import() method; has diagnostics
 use ViolationTest2;  # this is solely to test the import() method; no diagnostics
 use Perl::Critic::Policy::Test;    # this is to test violation formatting
