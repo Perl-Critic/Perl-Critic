@@ -28,6 +28,7 @@ m/(?: ^ | . | \d | $ )/xms;
 ## cut
 
 m/\A (?: a | do | in | queue | rue | woe | xray ) \z/xms;
+return 1 if $file =~ m/ [.] (?: p (?: l x? | m ) | t | PL ) \z /xms;
 
 ## name basic failures
 ## failures 2

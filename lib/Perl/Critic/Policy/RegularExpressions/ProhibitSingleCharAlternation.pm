@@ -23,7 +23,6 @@ our $VERSION = '1.088';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $DESC => q{Use [abc] instead of a|b|c};
 Readonly::Scalar my $EXPL => [265];
 
 #-----------------------------------------------------------------------------
@@ -50,6 +49,8 @@ sub violates {
     my $branches =
         $re->find(sub {$_[1]->isa('Perl::Critic::PPIRegexp::branch')});
     return if not $branches;
+
+    my @violations;
     for my $branch (@{$branches}) {
         my @singles =
             grep
@@ -64,11 +65,11 @@ sub violates {
                 . join( $EMPTY, @singles )
                 . '] instead of '
                 . join q<|>, @singles;
-            return $self->violation( $description, $EXPL, $elem );
+            push @violations, $self->violation( $description, $EXPL, $elem );
         }
     }
 
-    return;  # OK
+    return @violations;
 }
 
 1;
