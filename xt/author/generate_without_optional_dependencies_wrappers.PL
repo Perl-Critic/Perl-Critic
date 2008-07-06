@@ -68,8 +68,6 @@ use warnings;
 
 use English qw{-no_match_vars};
 
-use lib 't/tlib';
-
 our \$VERSION = $VERSION;
 
 #-----------------------------------------------------------------------------
