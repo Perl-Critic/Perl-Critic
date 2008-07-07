@@ -88,7 +88,7 @@ sub match {
     return 1 if $deps->{$pkg};
     $pkg = $implied{$pkg};
     return 0 if !defined $pkg;
-    return 1 if 1 eq $pkg;
+    return 1 if "1" eq $pkg;
     return match($pkg, $deps, $thispkg);
 }
 
