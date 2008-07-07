@@ -107,7 +107,7 @@ for my $policy ( sort keys %$subtests ) {
             if ($subtest->{optional_modules}) {
               MODULE:
                 for my $module (split m/,\s*/xms, $subtest->{optional_modules}) {
-                    eval "require $module";
+                    eval "require $module"; ## no critic (ProhibitStringyEval)
                     if ($EVAL_ERROR) {
                         $expected_failures = 0;
                         last MODULE;
