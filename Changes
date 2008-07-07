@@ -4,6 +4,8 @@
     * BuiltinFunctions::ProhibitSleepViaSelect would complain if there were
       three undefs as arguments to select(), but one of them was the timeout.
       RT #37416.
+    * RegularExpressions::ProhibitUnusedCapture would complain if there were
+      multiple captures used in a substitution, e.g. s/(.)(.)/$2$1/.
 
 [1.088] Released on 2008-07-04
 
