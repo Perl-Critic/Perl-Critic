@@ -29,10 +29,6 @@ Perl::Critic::TestUtils::block_perlcriticrc();
 
 my $code;
 my $policy = 'CodeLayout::ProhibitTrailingWhitespace';
-my %config;
-my @violations;
-my $violation_line_number;
-my $violation_column_number;
 
 #-----------------------------------------------------------------------------
 
