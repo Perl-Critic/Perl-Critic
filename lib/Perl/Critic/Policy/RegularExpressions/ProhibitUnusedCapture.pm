@@ -68,7 +68,7 @@ sub violates {
         # TODO: This is a quick hack.  Really, we should parse the string.  It could
         # be false positive (s///e) or false negative (s/(.)/\$1/)
 
-        for my $num ($subst =~ m/\$(\d+)/xms) {
+        for my $num ($subst =~ m/\$(\d+)/xmsg) {
             $captures[$num-1] = 1;
         }
     }

@@ -34,7 +34,7 @@ if (@ARGV) {
     # This is inefficient, but who cares...
     for (@ARGV) {
         next if m/::/xms;
-        if (!s{\A t[\\/](\w+)[\\/](\w+)\.run \z}{$1\::$2}xms) {
+        if (not s<\A t[\\/] (\w+) [\\/] (\w+) [.]run \z><$1\::$2>xms) {
             die 'Unknown argument ' . $_;
         }
     }
