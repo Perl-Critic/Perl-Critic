@@ -196,11 +196,9 @@ END_PROFILE
 # Test profile finding
 
 {
-    ## no critic (ProtectPrivateSubs)
     my $expected = $ENV{PERLCRITIC} = 'foo';
     my $got = Perl::Critic::UserProfile::_find_profile_path();
     is( $got, $expected, 'PERLCRITIC environment variable');
-    ## use critic
 }
 
 #-----------------------------------------------------------------------------

@@ -18,20 +18,23 @@ verbose = %f: %m at line %l, column %c.  %e.  (Severity: %s, %p)\n
 lib_sections    = NAME|DESCRIPTION|AUTHOR|COPYRIGHT
 script_sections = NAME|DESCRIPTION|AUTHOR|COPYRIGHT
 
-[Miscellanea::RequireRcsKeywords]
-keywords = URL Date Author Revision
-
 [CodeLayout::ProhibitHardTabs]
 allow_leading_tabs = 0
 
 [Documentation::PodSpelling]
-stop_words = accessor accessors autoflushes AUTOLOAD backticks bareword barewords BBEdit bitwise boolean booleans builtin CGI config CPAN CVS dereference dereferencing Dolan Dominus elsif exponentials filehandle filehandle filehandles filename globals globbing Guzis hashref HEREDOC HEREDOCs IDE lvalue Maxia Mehner memoization metacharacters Metadata metadata multi-line mutators namespace namespaces PBP perl perlcritic perlcriticrc perldoc Perlish perls PolicyListing postfix PPI pragma pragmas prepend prepending programmatically readline Readonly refactor refactoring regex runtime Schwartzian sigil sigils SQL STDERR STDIN STDOUT stringification subdirectories superclass TerMarsch Thalhammer TODO typeglob UI unblessed undef unescaped unparsed vice-versa whitespace
+stop_words =
 
 [InputOutput::RequireCheckedSyscalls]
 functions = open close
+
+[Miscellanea::RequireRcsKeywords]
+keywords = URL Date Author Revision
 
 [RegularExpressions::ProhibitUnusualDelimiters]
 allow_all_brackets = 1
 
 [RegularExpressions::RequireBracesForMultiline]
 allow_all_brackets = 1
+
+# Tests are allowed to peek.
+[-Subroutines::ProtectPrivateSubs]
