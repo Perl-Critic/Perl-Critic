@@ -106,6 +106,8 @@ sub test_invalid_parameters {
         qr/The $policy_name policy doesn't take a "bogus" option/,
         $label
     );
+
+    return;
 }
 
 #-----------------------------------------------------------------------------

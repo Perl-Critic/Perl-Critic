@@ -116,6 +116,8 @@ sub test_version {
         $expected_version,
         qq<Get "$description_version" for "$code".>,
     );
+
+    return;
 }
 
 #-----------------------------------------------------------------------------
