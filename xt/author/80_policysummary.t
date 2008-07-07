@@ -54,12 +54,20 @@ if (open my ($fh), '<', $summary_file) {
 
     my %descriptions = $content =~ m/^=head2 [ ]+ L<([\w:]+)>\n\n([^\n]+)/gxms;
     for my $policy_name (keys %descriptions) {
-        $descriptions{$policy_name} =~ s/[ ] \[Severity [ ] (\d+)\]//xms;
-        my $severity = $1;
+        my $severity;
+        if (
+            $descriptions{$policy_name} =~ s/ [ ] \[ Severity [ ] (\d+) \] //xms
+        ) {
+            $severity = $1;
+        }
+        else {
+            $severity = '<unknown>';
+        }
+
         $descriptions{$policy_name} = {
-                                       desc => $descriptions{$policy_name},
-                                       severity => $severity,
-                                      };
+            desc => $descriptions{$policy_name},
+            severity => $severity,
+        };
     }
 
     for my $policy_name ( @policy_names ) {
