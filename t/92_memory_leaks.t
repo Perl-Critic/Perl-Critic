@@ -11,15 +11,21 @@ use 5.006001;
 use strict;
 use warnings;
 
-use Test::More; #plan set below
-
-use Perl::Critic::PolicyFactory (-test => 1);
-use Perl::Critic::Document;
-use Perl::Critic;
-
 use PPI::Document;
 
+use Perl::Critic::PolicyFactory -test => 1;
+use Perl::Critic::Document;
+use Perl::Critic;
 use Perl::Critic::TestUtils qw();
+
+use Test::More; #plan set below
+
+#-----------------------------------------------------------------------------
+
+our $VERSION = '1.088';
+
+#-----------------------------------------------------------------------------
+
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 eval 'use Test::Memory::Cycle'; ## no critic

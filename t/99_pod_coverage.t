@@ -10,7 +10,14 @@
 use 5.006001;
 use strict;
 use warnings;
+
 use Test::More;
+
+#-----------------------------------------------------------------------------
+
+our $VERSION = '1.088';
+
+#-----------------------------------------------------------------------------
 
 eval 'use Test::Pod::Coverage 1.04'; ## no critic
 plan skip_all => 'Test::Pod::Coverage 1.00 requried to test POD' if $@;

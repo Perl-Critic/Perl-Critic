@@ -10,8 +10,16 @@
 use 5.006001;
 use strict;
 use warnings;
-use Test::More;
+
 use Perl::Critic::TestUtils qw{ starting_points_including_examples };
+
+use Test::More;
+
+#-----------------------------------------------------------------------------
+
+our $VERSION = '1.088';
+
+#-----------------------------------------------------------------------------
 
 eval 'use Test::Pod 1.00';  ## no critic
 plan skip_all => 'Test::Pod 1.00 required for testing POD' if $@;

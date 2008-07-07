@@ -19,6 +19,10 @@ use Test::More tests => 25;
 
 #-----------------------------------------------------------------------------
 
+our $VERSION = '1.088';
+
+#-----------------------------------------------------------------------------
+
 use_ok('Perl::Critic::Document');
 can_ok('Perl::Critic::Document', 'new');
 can_ok('Perl::Critic::Document', 'filename');

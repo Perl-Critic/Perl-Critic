@@ -10,10 +10,18 @@
 use 5.006001;
 use strict;
 use warnings;
-use Test::More tests => 5;
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique fcritique);
+
+use Test::More tests => 5;
+
+#-----------------------------------------------------------------------------
+
+our $VERSION = '1.088';
+
+#-----------------------------------------------------------------------------
+
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 # This specific policy is being tested without run.t because the .run file

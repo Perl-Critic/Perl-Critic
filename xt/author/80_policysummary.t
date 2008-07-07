@@ -22,6 +22,10 @@ use Test::More;
 
 #-----------------------------------------------------------------------------
 
+our $VERSION = '1.088';
+
+#-----------------------------------------------------------------------------
+
 my $summary_file =
     File::Spec->catfile( qw< lib Perl Critic PolicySummary.pod > );
 if (open my ($fh), '<', $summary_file) {

@@ -11,13 +11,18 @@ use 5.006001;
 use strict;
 use warnings;
 
-use Test::More (tests => 1);
-
 use Perl::Critic::UserProfile;
 use Perl::Critic::PolicyFactory (-test => 1);
-
-# common P::C testing tools
 use Perl::Critic::TestUtils qw(bundled_policy_names);
+
+use Test::More tests => 1;
+
+#-----------------------------------------------------------------------------
+
+our $VERSION = '1.088';
+
+#-----------------------------------------------------------------------------
+
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 #-----------------------------------------------------------------------------

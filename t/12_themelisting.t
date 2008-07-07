@@ -21,6 +21,10 @@ use Test::More tests => 1;
 
 #-----------------------------------------------------------------------------
 
+our $VERSION = '1.088';
+
+#-----------------------------------------------------------------------------
+
 my $profile = Perl::Critic::UserProfile->new( -profile => 'NONE' );
 my @policy_names = Perl::Critic::PolicyFactory::site_policy_names();
 my $factory = Perl::Critic::PolicyFactory->new( -profile => $profile );

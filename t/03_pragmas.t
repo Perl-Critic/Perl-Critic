@@ -16,6 +16,13 @@ use Perl::Critic::PolicyFactory (-test => 1);
 
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(critique);
+
+#-----------------------------------------------------------------------------
+
+our $VERSION = '1.088';
+
+#-----------------------------------------------------------------------------
+
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 # Configure Critic not to load certain policies.  This

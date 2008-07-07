@@ -13,11 +13,15 @@ use warnings;
 
 use English qw<-no_match_vars>;
 
-use Test::More;
-
 use Perl::Critic::UserProfile;
 use Perl::Critic::PolicyFactory (-test => 1);
 use Perl::Critic::PolicyListing;
+
+use Test::More;
+
+#-----------------------------------------------------------------------------
+
+our $VERSION = '1.088';
 
 #-----------------------------------------------------------------------------
 

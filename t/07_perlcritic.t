@@ -10,11 +10,19 @@
 use 5.006001;
 use strict;
 use warnings;
-use File::Spec;
+
 use English qw(-no_match_vars);
+
+use File::Spec;
+
 use Test::More tests => 36;
 
 #-----------------------------------------------------------------------------
+
+our $VERSION = '1.088';
+
+#-----------------------------------------------------------------------------
+
 # Load perlcritic like a library so we can test its subroutines.  If it is not
 # found in blib, then use the one in bin (for example, when using 'prove')
 

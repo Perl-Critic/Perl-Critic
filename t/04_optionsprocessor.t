@@ -19,6 +19,10 @@ use Test::More tests => 24;
 
 #-----------------------------------------------------------------------------
 
+our $VERSION = '1.088';
+
+#-----------------------------------------------------------------------------
+
 {
     my $processor = Perl::Critic::OptionsProcessor->new();
     is($processor->force(),    0,           'native default force');

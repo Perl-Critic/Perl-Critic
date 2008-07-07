@@ -10,9 +10,16 @@
 use 5.006001;
 use strict;
 use warnings;
-use PPI::Document;
+
 use English qw(-no_match_vars);
+
+use PPI::Document;
+
 use Test::More tests => 41;
+
+#-----------------------------------------------------------------------------
+
+our $VERSION = '1.088';
 
 #-----------------------------------------------------------------------------
 

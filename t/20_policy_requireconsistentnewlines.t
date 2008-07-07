@@ -10,10 +10,17 @@
 use 5.006001;
 use strict;
 use warnings;
+
+use Perl::Critic::TestUtils qw(pcritique fcritique);
+
 use Test::More tests => 29;
 
-# common P::C testing tools
-use Perl::Critic::TestUtils qw(pcritique fcritique);
+#-----------------------------------------------------------------------------
+
+our $VERSION = '1.088';
+
+#-----------------------------------------------------------------------------
+
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 my $code;

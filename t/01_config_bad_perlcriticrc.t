@@ -24,6 +24,12 @@ use Test::More;
 use Perl::Critic::PolicyFactory (-test => 1);
 use Perl::Critic;
 
+#-----------------------------------------------------------------------------
+
+our $VERSION = '1.088';
+
+#-----------------------------------------------------------------------------
+
 plan tests => 13;
 
 Readonly::Scalar my $PROFILE => 't/01_bad_perlcriticrc';

@@ -27,6 +27,11 @@ use Perl::Critic::Utils qw< :severities >;
 
 use Test::More tests => 66;
 
+#-----------------------------------------------------------------------------
+
+our $VERSION = '1.088';
+
+#-----------------------------------------------------------------------------
 
 Perl::Critic::TestUtils::block_perlcriticrc();
 

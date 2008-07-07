@@ -15,7 +15,6 @@ use warnings;
 use English qw( -no_match_vars );
 
 use File::Spec qw();
-use Test::More;
 
 use Perl::Critic::Utils qw{ :characters };
 use Perl::Critic::TestUtils qw{ starting_points_including_examples };
@@ -26,6 +25,12 @@ use Perl::Critic::PolicyFactory (
     '-test' => 1,
     '-extra-test-policies' => [ qw{ ErrorHandling::RequireUseOfExceptions } ],
 );
+
+use Test::More;
+
+#-----------------------------------------------------------------------------
+
+our $VERSION = '1.088';
 
 #-----------------------------------------------------------------------------
 

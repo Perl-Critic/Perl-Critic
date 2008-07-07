@@ -17,6 +17,11 @@ use Test::More tests => 26;
 
 
 #-----------------------------------------------------------------------------
+
+our $VERSION = '1.088';
+
+#-----------------------------------------------------------------------------
+
 # Perl::Critic::Policy is an abstract class, so it can't be instantiated
 # directly.  So we test it by declaring test classes that inherit from it.
 

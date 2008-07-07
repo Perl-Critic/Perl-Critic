@@ -1,12 +1,18 @@
 #!perl
 
-use warnings;
 use strict;
-
-use Test::More;
+use warnings;
 
 use File::Find;
 use PPI::Document;
+
+use Test::More;
+
+#-----------------------------------------------------------------------------
+
+our $VERSION = '1.088';
+
+#-----------------------------------------------------------------------------
 
 my %implied = (
     # Universal

@@ -10,13 +10,21 @@
 use 5.006001;
 use strict;
 use warnings;
+
 use English qw(-no_match_vars);
-use Test::More (tests => 10);
+
 use Perl::Critic::UserProfile;
 use Perl::Critic::PolicyFactory (-test => 1);
-
-# common P::C testing tools
 use Perl::Critic::TestUtils qw();
+
+use Test::More tests => 10;
+
+#-----------------------------------------------------------------------------
+
+our $VERSION = '1.088';
+
+#-----------------------------------------------------------------------------
+
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 #-----------------------------------------------------------------------------

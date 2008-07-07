@@ -11,16 +11,20 @@ use 5.006001;
 use strict;
 use warnings;
 
-use lib 'inc';
-
 use English qw{-no_match_vars};
 use Readonly;
 use Carp qw{ confess };
 use Fatal qw{ open close };
 
+use lib 'inc';
+
 use Perl::Critic::BuildUtilities qw{ recommended_module_versions };
 
+#-----------------------------------------------------------------------------
+
 our $VERSION = '1.088';
+
+#-----------------------------------------------------------------------------
 
 Readonly::Scalar my $GENERATED_DIRECTORY => 'xt/author/generated/';
 

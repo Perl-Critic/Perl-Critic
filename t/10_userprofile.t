@@ -10,11 +10,19 @@
 use 5.006001;
 use strict;
 use warnings;
-use Test::More tests => 41;
+
 use English qw(-no_match_vars);
+
 use Perl::Critic::UserProfile;
 
+use Test::More tests => 41;
+
 #-----------------------------------------------------------------------------
+
+our $VERSION = '1.088';
+
+#-----------------------------------------------------------------------------
+
 # Create profile from hash
 
 {

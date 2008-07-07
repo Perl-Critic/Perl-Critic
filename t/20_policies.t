@@ -3,16 +3,24 @@
 use 5.006001;
 use strict;
 use warnings;
-use Test::More;
+
 use English qw(-no_match_vars);
 
-# common P::C testing tools
 use Perl::Critic::Utils qw( :characters );
 use Perl::Critic::TestUtils qw(
     pcritique_with_violations
     fcritique_with_violations
     subtests_in_tree
 );
+
+use Test::More;
+
+#-----------------------------------------------------------------------------
+
+our $VERSION = '1.088';
+
+#-----------------------------------------------------------------------------
+
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 my $subtests = subtests_in_tree( 't' );

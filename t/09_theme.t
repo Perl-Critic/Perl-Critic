@@ -10,19 +10,25 @@
 use 5.006001;
 use strict;
 use warnings;
+
 use English qw(-no_match_vars);
 
 use List::MoreUtils qw(any all none);
-use Test::More (tests => 66);
 
 use Perl::Critic::TestUtils;
 use Perl::Critic::PolicyFactory;
 use Perl::Critic::UserProfile;
 use Perl::Critic::Theme;
 
+use Test::More tests => 66;
+
 #-----------------------------------------------------------------------------
 
-ILLEGAL_RULES:{
+our $VERSION = '1.088';
+
+#-----------------------------------------------------------------------------
+
+ILLEGAL_RULES: {
 
     my @invalid_rules = (
         '$cosmetic',
@@ -43,7 +49,7 @@ ILLEGAL_RULES:{
 
 #-----------------------------------------------------------------------------
 
-VALID_RULES:{
+VALID_RULES: {
 
     my @valid_rules = (
         'cosmetic',
@@ -74,8 +80,7 @@ VALID_RULES:{
 
 #-----------------------------------------------------------------------------
 
-TRANSLATIONS:
-{
+TRANSLATIONS: {
     my %expressions = (
         'cosmetic'                     =>  'cosmetic',
         '!cosmetic'                    =>  '!cosmetic',

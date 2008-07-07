@@ -15,7 +15,6 @@ use warnings;
 use English qw( -no_match_vars );
 
 use File::Spec qw();
-use Test::More;
 
 use Perl::Critic::Utils qw{ :characters };
 use Perl::Critic::TestUtils qw{ starting_points_including_examples };
@@ -23,6 +22,12 @@ use Perl::Critic::TestUtils qw{ starting_points_including_examples };
 # Note: "use PolicyFactory" *must* appear after "use TestUtils" for the
 # -extra-test-policies option to work.
 use Perl::Critic::PolicyFactory ( '-test' => 1 );
+
+use Test::More;
+
+#-----------------------------------------------------------------------------
+
+our $VERSION = '1.088';
 
 #-----------------------------------------------------------------------------
 

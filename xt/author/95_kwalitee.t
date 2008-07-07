@@ -5,6 +5,12 @@ use warnings;
 
 use Test::More;
 
+#-----------------------------------------------------------------------------
+
+our $VERSION = '1.088';
+
+#-----------------------------------------------------------------------------
+
 eval {
    require Test::Kwalitee;
    Test::Kwalitee->import( tests => [ qw{ -no_symlinks } ] );

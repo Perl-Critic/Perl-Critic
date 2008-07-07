@@ -11,11 +11,18 @@ use 5.006001;
 use strict;
 use warnings;
 
-use Test::More tests => 4;
 use English qw(-no_match_vars);
 
 use Perl::Critic::Policy;
 use Perl::Critic::PolicyParameter;
+
+use Test::More tests => 4;
+
+#-----------------------------------------------------------------------------
+
+our $VERSION = '1.088';
+
+#-----------------------------------------------------------------------------
 
 my $specification;
 my $parameter;
