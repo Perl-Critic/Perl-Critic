@@ -84,23 +84,25 @@ sub make_doc { my $code = shift; return PPI::Document->new( ref $code ? $code : 
 #  is_hash_key tests
 
 {
-   my $code = 'sub foo { return $h1{bar}, $h2->{baz}, $h3->{ nuts() } }';
-   my $doc = PPI::Document->new(\$code);
-   my @words = @{$doc->find('PPI::Token::Word')};
-   my @expect = (
-      ['sub', undef],
-      ['foo', undef],
-      ['return', undef],
-      ['bar', 1],
-      ['baz', 1],
-      ['nuts', undef],
-   );
-   is(scalar @words, scalar @expect, 'is_hash_key count');
-   for my $i (0 .. $#expect)
-   {
-      is($words[$i], $expect[$i][0], 'is_hash_key word');
-      is(is_hash_key($words[$i]), $expect[$i][1], 'is_hash_key boolean');
-   }
+    my $code = 'sub foo { return $h1{bar}, $h2->{baz}, $h3->{ nuts() } }';
+    my $doc = PPI::Document->new(\$code);
+    my @words = @{$doc->find('PPI::Token::Word')};
+    my @expect = (
+        ['sub', undef],
+        ['foo', undef],
+        ['return', undef],
+        ['bar', 1],
+        ['baz', 1],
+        ['nuts', undef],
+    );
+    is(scalar @words, scalar @expect, 'is_hash_key count');
+
+    ## no critic (ProhibitCStyleForLoops)
+    for my $i (0 .. $#expect) {
+        is($words[$i], $expect[$i][0], 'is_hash_key word');
+        is(is_hash_key($words[$i]), $expect[$i][1], 'is_hash_key boolean');
+    }
+    ## use critic
 }
 
 #-----------------------------------------------------------------------------
@@ -309,7 +311,7 @@ is( interpolate( 'literal'    ), "literal",    'Interpolation' );
         q{eval();}                 => undef,
     );
 
-    for (my $i = 0; $i < @tests; $i += 2) {
+    for (my $i = 0; $i < @tests; $i += 2) { ## no critic (ProhibitCStyleForLoops)
         my $code = $tests[$i];
         my $expect = $tests[$i+1];
         my $doc = PPI::Document->new(\$code);
