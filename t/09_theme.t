@@ -98,7 +98,7 @@ TRANSLATIONS: {
         'cosmetic * (bugs + pbp)'      =>  'cosmetic && (bugs || pbp)',
         'cosmetic || bugs',            =>  'cosmetic || bugs',
         '!cosmetic && bugs',           =>  '!cosmetic && bugs',
-        'cosmetic && not (bugs or pbp)'=>  'cosmetic && ! (bugs || pbp)'
+        'cosmetic && not (bugs or pbp)'=>  'cosmetic && ! (bugs || pbp)',
     );
 
     while ( my ($raw, $expected) = each %expressions ) {
