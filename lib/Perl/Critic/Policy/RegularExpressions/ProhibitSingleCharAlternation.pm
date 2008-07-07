@@ -14,6 +14,7 @@ use warnings;
 use English qw(-no_match_vars);
 use Readonly;
 use Carp;
+use List::MoreUtils qw(all);
 
 use Perl::Critic::Utils qw{ :booleans :characters :severities };
 use Perl::Critic::Utils::PPIRegexp qw{ ppiify parse_regexp };
@@ -52,20 +53,17 @@ sub violates {
 
     my @violations;
     for my $branch (@{$branches}) {
-        my @singles =
-            grep
-                {
-                        $_->isa('Perl::Critic::PPIRegexp::exact')
-                    and 1 == length $_
-                }
-                $branch->children;
-        if (1 < @singles) {
-            my $description =
-                  'Use ['
-                . join( $EMPTY, @singles )
-                . '] instead of '
-                . join q<|>, @singles;
-            push @violations, $self->violation( $description, $EXPL, $elem );
+        my @branch_children = $branch->children;
+        if (all { $_->isa('Perl::Critic::PPIRegexp::exact') } @branch_children) {
+            my @singles = grep { 1 == length $_ } @branch_children;
+            if (1 < @singles) {
+                my $description =
+                      'Use ['
+                    . join( $EMPTY, @singles )
+                    . '] instead of '
+                    . join q<|>, @singles;
+                push @violations, $self->violation( $description, $EXPL, $elem );
+            }
         }
     }
 
@@ -97,9 +95,10 @@ more than one instance of a single character in an alternation.  So
 C<(?:a|the)> is allowed, but C<(?:a|e|i|o|u)> is not.
 
 NOTE: Perl 5.10 (not released as of this writing) has major regexp
-optimizations which may mitigate the performance penalty of
-alternations, which will be rewritten behind the scenes as something
-like character classes.
+optimizations which may mitigate the performance penalty of alternations,
+which will be rewritten behind the scenes as something like character classes.
+Consequently, if you are deploying exclusively on 5.10, yo might consider
+ignoring this policy.
 
 
 =head1 CONFIGURATION

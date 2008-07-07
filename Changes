@@ -6,6 +6,9 @@
       RT #37416.
     * RegularExpressions::ProhibitUnusedCapture would complain if there were
       multiple captures used in a substitution, e.g. s/(.)(.)/$2$1/.
+    * Reduced false positives in
+      RegularExpressions::ProhibitSingleCharAlternation.  Thanks to
+      Andy Lester and Elliot Shank test cases.
 
 [1.088] Released on 2008-07-04
 

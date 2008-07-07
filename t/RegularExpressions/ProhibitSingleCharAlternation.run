@@ -16,6 +16,11 @@ m/\A (?: q[qrx] | [qsy] | tr ) \z/xms;
 m/\A (?: a ) \z/xms;   # bad form, but not a violation of this policy
 m/\A (?: [a] ) \z/xms; # bad form, but not a violation of this policy
 
+## name warnings reported by users (App::Ack)
+## failures 1
+## cut
+
+return ('shell',TEXT)  if $header =~ /\b(?:ba|c|k|z)?sh\b/;
 
 ## name metacharacters
 ## failures 0
