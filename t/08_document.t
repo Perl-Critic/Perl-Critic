@@ -11,6 +11,8 @@ use 5.006001;
 use strict;
 use warnings;
 
+use Carp qw< carp >;
+
 use version;
 
 use Perl::Critic::Utils::DataConversion qw< dor >;
@@ -75,7 +77,7 @@ can_ok('Perl::Critic::Document', 'ppi_document');
     {
         # Ignore "Cannot create search condition for 'PPI::': Not a PPI::Element"
         local $SIG{__WARN__} = sub {
-            $_[0] =~ m/\QCannot create search condition for\E/ || warn @_
+            $_[0] =~ m/\QCannot create search condition for\E/ || carp @_
         };
         $nodes_ref = $pc_doc->find( q{} );
         is( $nodes_ref, undef, 'find by empty class name');

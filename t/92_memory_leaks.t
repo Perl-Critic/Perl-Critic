@@ -11,6 +11,8 @@ use 5.006001;
 use strict;
 use warnings;
 
+use Carp qw< confess >;
+
 use PPI::Document;
 
 use Perl::Critic::PolicyFactory -test => 1;
@@ -51,7 +53,7 @@ plan( skip_all => 'Test::Memory::Cycle requried to test memory leaks') if $@;
     my $pc_doc  = Perl::Critic::Document->new( $ppi_doc );
     my $critic  = Perl::Critic->new( -severity => 1 );
     my @violations = $critic->critique( $pc_doc );
-    die "No violations were created" if not @violations;
+    confess "No violations were created" if not @violations;
 
     # One test for each violation, plus one each for Critic and Document.
     plan( tests => scalar @violations + 2 );

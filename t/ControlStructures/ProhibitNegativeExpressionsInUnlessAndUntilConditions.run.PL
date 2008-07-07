@@ -5,6 +5,7 @@ use strict;
 use warnings;
 
 use English qw{-no_match_vars};
+use Carp qw< confess >;
 
 use Carp qw{ confess };
 use Fatal qw{ open close };
@@ -26,7 +27,7 @@ print "\n\nGenerating $test_file_name.\n";
 
 
 open my $test_file, '>', $test_file_name    ## no critic (RequireBriefOpen)
-    or die "Could not open $test_file_name: $ERRNO";
+    or confess "Could not open $test_file_name: $ERRNO";
 
 
 print {$test_file} <<"END_HEADER";

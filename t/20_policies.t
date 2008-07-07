@@ -5,6 +5,7 @@ use strict;
 use warnings;
 
 use English qw(-no_match_vars);
+use Carp qw< confess >;
 
 use Perl::Critic::Utils qw( :characters );
 use Perl::Critic::TestUtils qw(
@@ -35,7 +36,7 @@ if (@ARGV) {
     for (@ARGV) {
         next if m/::/xms;
         if (not s<\A t[\\/] (\w+) [\\/] (\w+) [.]run \z><$1\::$2>xms) {
-            die 'Unknown argument ' . $_;
+            confess 'Unknown argument ' . $_;
         }
     }
     for my $p (@policies) {
@@ -97,7 +98,7 @@ for my $policy ( sort keys %$subtests ) {
                 $test_passed = 0;
             }
             else {
-                die $err;
+                confess $err;
             }
         }
         else {

@@ -3,6 +3,8 @@
 use strict;
 use warnings;
 
+use Carp qw< confess >;
+
 use File::Find;
 use PPI::Document;
 
@@ -37,7 +39,7 @@ plan tests => scalar @pm;
 for my $file (@pm) {
     SKIP:
     {
-        my $doc = PPI::Document->new($file) || die 'Failed to parse '.$file;
+        my $doc = PPI::Document->new($file) or confess qq<Failed to parse "$file">;
 
         my @incs = @{$doc->find('PPI::Statement::Include') || []};
         my %deps = map {$_->module => 1} grep {$_->type eq 'use' || $_->type eq 'require'} @incs;

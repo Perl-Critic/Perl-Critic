@@ -3,6 +3,8 @@
 use strict;
 use warnings;
 
+use Carp qw< confess >;
+
 use File::Find;
 
 use Test::More;
@@ -26,7 +28,7 @@ sub check_version {
 
     local $/ = undef;
     my $fh;
-    open $fh, '<', $_ or die $!;
+    open $fh, '<', $_ or confess $!;
     my $content = <$fh>;
     close $fh;
 

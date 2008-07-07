@@ -12,6 +12,7 @@ use strict;
 use warnings;
 
 use English qw(-no_match_vars);
+use Carp qw< confess >;
 
 use File::Spec;
 
@@ -157,7 +158,7 @@ is( $options{-quiet}, 1);
 
 {
     no warnings qw(redefine once); ## no critic (ProhibitNoWarnings)
-    local *main::pod2usage = sub { my %args = @_; die $args{-message} || q{} };
+    local *main::pod2usage = sub { my %args = @_; confess $args{-message} || q{} };
 
     local @ARGV = qw( -help );
     eval { get_options() };

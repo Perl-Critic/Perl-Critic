@@ -11,6 +11,8 @@ use 5.006001;
 use strict;
 use warnings;
 
+use Carp qw< confess >;
+
 use PPI::Document;
 
 use Test::More tests => 115;
@@ -122,13 +124,13 @@ my @bad = (
 );
 
 for my $code (@good) {
-    my $doc = PPI::Document->new(\$code) || die;
+    my $doc = PPI::Document->new(\$code) or confess;
     $doc->index_locations();
     ok(is_script($doc), 'is_script, true');
 }
 
 for my $code (@bad) {
-    my $doc = PPI::Document->new(\$code) || die;
+    my $doc = PPI::Document->new(\$code) or confess;
     $doc->index_locations();
     ok(!is_script($doc), 'is_script, false');
 }
@@ -256,7 +258,7 @@ is( interpolate( 'literal'    ), "literal",    'Interpolation' );
     );
 
     for my $shebang (@perl_shebangs) {
-        my ($fh, $filename) = tempfile() or die 'Could not open tempfile';
+        my ($fh, $filename) = tempfile() or confess 'Could not open tempfile';
         print {$fh} "$shebang\n"; close $fh; # Must close to flush buffer
         ok( Perl::Critic::Utils::_is_perl($filename), qq{Is perl: '$shebang'});
 
@@ -275,7 +277,7 @@ is( interpolate( 'literal'    ), "literal",    'Interpolation' );
     );
 
     for my $shebang (@not_perl_shebangs) {
-        my ($fh, $filename) = tempfile or die 'Could not open tempfile';
+        my ($fh, $filename) = tempfile or confess 'Could not open tempfile';
         print {$fh} "$shebang\n"; close $fh; # Must close to flush buffer
         ok( ! Perl::Critic::Utils::_is_perl($filename), qq{Is not perl: '$shebang'});
 
@@ -384,7 +386,7 @@ is( scalar @found_policies, scalar @native_policies, 'Find all perl code');
                   { code => q( open( $fh, $mode, $filename ); ),
                     pass => 1 },
                   # check the value with a trailing conditional
-                  { code => q( open( $fh, $mode, $filename ) or die 'unable to open'; ),
+                  { code => q( open( $fh, $mode, $filename ) or confess 'unable to open'; ),
                     pass => 0 },
                   # assign the return value to a variable (and assume that it's checked later)
                   { code => q( my $error = open( $fh, $mode, $filename ); ),
