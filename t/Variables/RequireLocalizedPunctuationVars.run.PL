@@ -27,10 +27,6 @@ if ($this_program eq $test_file_name) {
 print "\n\nGenerating $test_file_name.\n";
 
 
-
-open my $test_file, '>', $test_file_name    ## no critic (RequireBriefOpen)
-    or confess "Could not open $test_file_name: $ERRNO";
-
 my @globals = (
     @B::Keywords::Arrays,
     @B::Keywords::Hashes,
@@ -48,7 +44,24 @@ my $carat_re = qr/\A [\$%]\^\w+ /xms;
 my $numvars = @globals - keys %exceptions;
 my $numcarats = grep {!$exceptions{$_} && m/ $carat_re /xms} @globals;
 
-print {$test_file} <<'EOF';
+
+open my $test_file, '>', $test_file_name    ## no critic (RequireBriefOpen)
+    or confess "Could not open $test_file_name: $ERRNO";
+
+print_header($test_file);
+print_pass_local($test_file, \@globals);
+print_fail_non_local($test_file, \@globals, $numvars, $numcarats);
+print_footer($test_file);
+
+close $test_file
+    or confess "Could not close $test_file_name: $ERRNO";
+
+print "Done.\n\n";
+
+sub print_header {
+    my ($test_file) = @_;
+
+    print {$test_file} <<'END_CODE';
 
 ## name Named magic variables, special case passes
 ## failures 0
@@ -71,17 +84,26 @@ $SIG{__DIE__} = sub { print "AAAAAAARRRRRGGGGHHHHH....\n"; };
 
 #-----------------------------------------------------------------------------
 
+END_CODE
+
+    return;
+}
+
+sub print_pass_local {
+    my ($test_file, $globals) = @_;
+
+    print {$test_file} <<'END_CODE';
 ## name Named magic variables, pass local
 ## failures 0
 ## cut
 
-EOF
+END_CODE
 
-for my $varname (@globals) {
-    print {$test_file} "local $varname = ();\n";
-}
+    for my $varname (@{$globals}) {
+        print {$test_file} "local $varname = ();\n";
+    }
 
-print {$test_file} <<"EOF";
+    print {$test_file} <<"END_CODE";
 
 #-----------------------------------------------------------------------------
 
@@ -89,13 +111,13 @@ print {$test_file} <<"EOF";
 ## failures 0
 ## cut
 
-EOF
+END_CODE
 
-for my $varname (@globals) {
-    print {$test_file} "local ($varname) = ();\n";
-}
+    for my $varname (@{$globals}) {
+        print {$test_file} "local ($varname) = ();\n";
+    }
 
-print {$test_file} <<"EOF";
+    print {$test_file} <<"END_CODE";
 
 #-----------------------------------------------------------------------------
 
@@ -103,13 +125,13 @@ print {$test_file} <<"EOF";
 ## failures 0
 ## cut
 
-EOF
+END_CODE
 
-for my $varname (@globals) {
-    print {$test_file} "(local $varname) = ();\n";
-}
+    for my $varname (@{$globals}) {
+        print {$test_file} "(local $varname) = ();\n";
+    }
 
-print {$test_file} <<"EOF";
+    print {$test_file} <<"END_CODE";
 
 #-----------------------------------------------------------------------------
 
@@ -117,13 +139,20 @@ print {$test_file} <<"EOF";
 ## failures 0
 ## cut
 
-EOF
+END_CODE
 
-for my $varname (@globals) {
-    print {$test_file} "\@foo = (local $varname) = ();\n";
+    for my $varname (@{$globals}) {
+        print {$test_file} "\@foo = (local $varname) = ();\n";
+    }
+
+    return;
 }
 
-print {$test_file} <<"EOF";
+
+sub print_fail_non_local {
+    my ($test_file, $globals, $numvars, $numcarats) = @_;
+
+    print {$test_file} <<"END_CODE";
 
 #-----------------------------------------------------------------------------
 
@@ -131,15 +160,15 @@ print {$test_file} <<"EOF";
 ## failures @{[$numvars - $numcarats]}
 ## cut
 
-EOF
+END_CODE
 
-for my $varname (@globals) {
-    next if $exceptions{$varname};
-    next if $varname =~ m/ $carat_re /xms;
-    print {$test_file} "$varname = ();\n";
-}
+    for my $varname (@{$globals}) {
+        next if $exceptions{$varname};
+        next if $varname =~ m/ $carat_re /xms;
+        print {$test_file} "$varname = ();\n";
+    }
 
-print {$test_file} <<"EOF";
+    print {$test_file} <<"END_CODE";
 
 #-----------------------------------------------------------------------------
 
@@ -147,15 +176,15 @@ print {$test_file} <<"EOF";
 ## failures $numcarats
 ## cut
 
-EOF
+END_CODE
 
-for my $varname (@globals) {
-    next if $exceptions{$varname};
-    next if $varname !~ m/ $carat_re /xms;
-    print {$test_file} "$varname = ();\n";
-}
+    for my $varname (@{$globals}) {
+        next if $exceptions{$varname};
+        next if $varname !~ m/ $carat_re /xms;
+        print {$test_file} "$varname = ();\n";
+    }
 
-print {$test_file} <<"EOF";
+    print {$test_file} <<"END_CODE";
 
 #-----------------------------------------------------------------------------
 
@@ -163,15 +192,15 @@ print {$test_file} <<"EOF";
 ## failures $numcarats
 ## cut
 
-EOF
+END_CODE
 
-for my $varname (@globals) {
-    next if $exceptions{$varname};
-    next if $varname !~ m/ $carat_re /xms;
-    print {$test_file} "$varname= ();\n";
-}
+    for my $varname (@{$globals}) {
+        next if $exceptions{$varname};
+        next if $varname !~ m/ $carat_re /xms;
+        print {$test_file} "$varname= ();\n";
+    }
 
-print {$test_file} <<"EOF";
+    print {$test_file} <<"END_CODE";
 
 #-----------------------------------------------------------------------------
 
@@ -179,14 +208,14 @@ print {$test_file} <<"EOF";
 ## failures $numvars
 ## cut
 
-EOF
+END_CODE
 
-for my $varname (@globals) {
-    next if $exceptions{$varname};
-    print {$test_file} "\@foo = ($varname) = ();\n";
-}
+    for my $varname (@{$globals}) {
+        next if $exceptions{$varname};
+        print {$test_file} "\@foo = ($varname) = ();\n";
+    }
 
-print {$test_file} <<"EOF";
+    print {$test_file} <<"END_CODE";
 
 #-----------------------------------------------------------------------------
 
@@ -194,15 +223,21 @@ print {$test_file} <<"EOF";
 ## failures $numvars
 ## cut
 
-EOF
+END_CODE
 
-for my $varname (@globals) {
-    next if $exceptions{$varname};
-    print {$test_file} "($varname) = ();\n";
+    for my $varname (@{$globals}) {
+        next if $exceptions{$varname};
+        print {$test_file} "($varname) = ();\n";
+    }
+
+    return;
 }
 
 
-print {$test_file} <<'EOF';
+sub print_footer {
+    my ($test_file) = @_;
+
+    print {$test_file} <<'END_CODE';
 
 #-----------------------------------------------------------------------------
 
@@ -238,7 +273,16 @@ for my $entry (
 #   c-indentation-style: bsd
 # End:
 # ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab shiftround :
-EOF
+END_CODE
 
-close $test_file;
-print "Done.\n\n";
+    return;
+}
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab shiftround :

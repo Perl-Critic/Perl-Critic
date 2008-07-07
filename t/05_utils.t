@@ -15,6 +15,9 @@ use Carp qw< confess >;
 
 use PPI::Document;
 
+use Perl::Critic::PolicyFactory;
+use Perl::Critic::TestUtils qw(bundled_policy_names);
+
 use Test::More tests => 115;
 
 #-----------------------------------------------------------------------------
@@ -23,45 +26,66 @@ our $VERSION = '1.088';
 
 #-----------------------------------------------------------------------------
 
-BEGIN
-{
+BEGIN {
     # Needs to be in BEGIN for global vars
-    use_ok('Perl::Critic::Utils', qw{ :all } );
+    use_ok('Perl::Critic::Utils', qw{ :all } ) or confess;
 }
 
 #-----------------------------------------------------------------------------
-#  export tests
 
-can_ok('main', 'all_perl_files');
-can_ok('main', 'find_keywords');
-can_ok('main', 'interpolate');
-can_ok('main', 'is_hash_key');
-can_ok('main', 'is_method_call');
-can_ok('main', 'is_perl_builtin');
-can_ok('main', 'is_perl_global');
-can_ok('main', 'is_script');
-can_ok('main', 'is_subroutine_name');
-can_ok('main', 'first_arg');
-can_ok('main', 'parse_arg_list');
-can_ok('main', 'policy_long_name');
-can_ok('main', 'policy_short_name');
-can_ok('main', 'precedence_of');
-can_ok('main', 'severity_to_number');
-can_ok('main', 'shebang_line');
-can_ok('main', 'verbosity_to_format');
-can_ok('main', 'is_unchecked_call');
-
-is($SPACE, ' ', 'character constants');
-is($SEVERITY_LOWEST, 1, 'severity constants');
-is($POLICY_NAMESPACE, 'Perl::Critic::Policy', 'Policy namespace');
+test_export();
+test_find_keywords();
+test_is_hash_key();
+test_is_script();
+test_is_perl_builtin();
+test_is_perl_global();
+test_precedence_of();
+test_is_subroutine_name();
+test_policy_long_name_and_policy_short_name();
+test_interpolate();
+test_is_perl_and_shebang_line();
+test_is_backup();
+test_first_arg();
+test_parse_arg_list();
+test_is_function_call();
+test_find_bundled_policies();
+test_is_unchecked_call();
 
 #-----------------------------------------------------------------------------
-#  find_keywords tests
+
+sub test_export {
+    can_ok('main', 'all_perl_files');
+    can_ok('main', 'find_keywords');
+    can_ok('main', 'interpolate');
+    can_ok('main', 'is_hash_key');
+    can_ok('main', 'is_method_call');
+    can_ok('main', 'is_perl_builtin');
+    can_ok('main', 'is_perl_global');
+    can_ok('main', 'is_script');
+    can_ok('main', 'is_subroutine_name');
+    can_ok('main', 'first_arg');
+    can_ok('main', 'parse_arg_list');
+    can_ok('main', 'policy_long_name');
+    can_ok('main', 'policy_short_name');
+    can_ok('main', 'precedence_of');
+    can_ok('main', 'severity_to_number');
+    can_ok('main', 'shebang_line');
+    can_ok('main', 'verbosity_to_format');
+    can_ok('main', 'is_unchecked_call');
+
+    is($SPACE, ' ', 'character constants');
+    is($SEVERITY_LOWEST, 1, 'severity constants');
+    is($POLICY_NAMESPACE, 'Perl::Critic::Policy', 'Policy namespace');
+
+    return;
+}
+
+#-----------------------------------------------------------------------------
 
 sub count_matches { my $val = shift; return defined $val ? scalar @$val : 0; }
 sub make_doc { my $code = shift; return PPI::Document->new( ref $code ? $code : \$code); }
 
-{
+sub test_find_keywords {
     my $doc = PPI::Document->new(); #Empty doc
     is( count_matches( find_keywords($doc, 'return') ), 0, 'find_keywords, no doc' );
 
@@ -80,12 +104,13 @@ sub make_doc { my $code = shift; return PPI::Document->new( ref $code ? $code : 
     $code = 'sub foo { return 0 if @_; return 1; }';
     $doc = make_doc( $code );
     is( count_matches( find_keywords($doc, 'return') ), 2, 'find_keywords, find 2');
+
+    return;
 }
 
 #-----------------------------------------------------------------------------
-#  is_hash_key tests
 
-{
+sub test_is_hash_key {
     my $code = 'sub foo { return $h1{bar}, $h2->{baz}, $h3->{ nuts() } }';
     my $doc = PPI::Document->new(\$code);
     my @words = @{$doc->find('PPI::Token::Word')};
@@ -105,40 +130,44 @@ sub make_doc { my $code = shift; return PPI::Document->new( ref $code ? $code : 
         is(is_hash_key($words[$i]), $expect[$i][1], 'is_hash_key boolean');
     }
     ## use critic
+
+    return;
 }
 
 #-----------------------------------------------------------------------------
-#  is_script tests
 
-my @good = (
-    "#!perl\n",
-    "#! perl\n",
-    "#!/usr/bin/perl -w\n",
-    "#!C:\\Perl\\bin\\perl\n",
-    "#!/bin/sh\n",
-);
+sub test_is_script {
+    my @good = (
+        "#!perl\n",
+        "#! perl\n",
+        "#!/usr/bin/perl -w\n",
+        "#!C:\\Perl\\bin\\perl\n",
+        "#!/bin/sh\n",
+    );
 
-my @bad = (
-    "package Foo;\n",
-    "\n#!perl\n",
-);
+    my @bad = (
+        "package Foo;\n",
+        "\n#!perl\n",
+    );
 
-for my $code (@good) {
-    my $doc = PPI::Document->new(\$code) or confess;
-    $doc->index_locations();
-    ok(is_script($doc), 'is_script, true');
-}
+    for my $code (@good) {
+        my $doc = PPI::Document->new(\$code) or confess;
+        $doc->index_locations();
+        ok(is_script($doc), 'is_script, true');
+    }
 
-for my $code (@bad) {
-    my $doc = PPI::Document->new(\$code) or confess;
-    $doc->index_locations();
-    ok(!is_script($doc), 'is_script, false');
+    for my $code (@bad) {
+        my $doc = PPI::Document->new(\$code) or confess;
+        $doc->index_locations();
+        ok(!is_script($doc), 'is_script, false');
+    }
+
+    return;
 }
 
 #-----------------------------------------------------------------------------
-# is_perl_builtin tests
 
-{
+sub test_is_perl_builtin {
     is(   is_perl_builtin('print'),  1, 'Is perl builtin function'     );
     isnt( is_perl_builtin('foobar'), 1, 'Is not perl builtin function' );
 
@@ -152,12 +181,12 @@ for my $code (@bad) {
     $sub = $doc->find_first('Statement::Sub');
     isnt( is_perl_builtin($sub), 1, 'Is not perl builtin function (PPI)' );
 
+    return;
 }
 
 #-----------------------------------------------------------------------------
-# is_perl_global tests
 
-{
+sub test_is_perl_global {
     is(   is_perl_global('$OSNAME'),  1, '$OSNAME is a perl global var'     );
     is(   is_perl_global('*STDOUT'),  1, '*STDOUT is a perl global var'     );
     isnt( is_perl_global('%FOOBAR'),  1, '%FOOBAR is a not perl global var' );
@@ -177,13 +206,12 @@ for my $code (@bad) {
     $var  = $doc->find_first('Token::Symbol');
     isnt( is_perl_global($var), 1, '%FOOBAR is not a perl global var (PPI)' );
 
+    return;
 }
 
 #-----------------------------------------------------------------------------
-# precedence_of tests
 
-{
-
+sub test_precedence_of {
     cmp_ok( precedence_of('*'), '<', precedence_of('+'), 'Precedence' );
 
     my $code1 = '8 + 5';
@@ -196,13 +224,12 @@ for my $code (@bad) {
 
     cmp_ok( precedence_of($op2), '<', precedence_of($op1), 'Precedence (PPI)' );
 
+    return;
 }
 
 #-----------------------------------------------------------------------------
-# is_subroutine_name tests
 
-{
-
+sub test_is_subroutine_name {
     my $code = 'sub foo {}';
     my $doc  = make_doc( $code );
     my $word = $doc->find_first( sub { $_[1] eq 'foo' } );
@@ -213,31 +240,34 @@ for my $code (@bad) {
     $word = $doc->find_first( sub { $_[1] eq 'foo' } );
     isnt( is_subroutine_name( $word ), 1, 'Is not a subroutine name');
 
+    return;
 }
 
 #-----------------------------------------------------------------------------
-# policy_long_name and policy_short_name tests
 
-{
+sub test_policy_long_name_and_policy_short_name {
     my $short_name = 'Baz::Nuts';
     my $long_name  = "${POLICY_NAMESPACE}::$short_name";
     is( policy_long_name(  $short_name ), $long_name,  'policy_long_name'  );
     is( policy_long_name(  $long_name  ), $long_name,  'policy_long_name'  );
     is( policy_short_name( $short_name ), $short_name, 'policy_short_name' );
     is( policy_short_name( $long_name  ), $short_name, 'policy_short_name' );
+
+    return;
 }
 
 #-----------------------------------------------------------------------------
-# interpolate() tests
 
-is( interpolate( '\r%l\t%c\n' ), "\r%l\t%c\n", 'Interpolation' );
-is( interpolate( 'literal'    ), "literal",    'Interpolation' );
+sub test_interpolate {
+    is( interpolate( '\r%l\t%c\n' ), "\r%l\t%c\n", 'Interpolation' );
+    is( interpolate( 'literal'    ), "literal",    'Interpolation' );
 
+    return;
+}
 
 #-----------------------------------------------------------------------------
-# Test _is_perl() and shebang_line() subroutines.
 
-{
+sub test_is_perl_and_shebang_line {
     for ( qw(foo.t foo.pm foo.pl foo.PL) ) {
         ok( Perl::Critic::Utils::_is_perl($_), qq{Is perl: '$_'} );
     }
@@ -288,12 +318,13 @@ is( interpolate( 'literal'    ), "literal",    'Interpolation' );
             qq<shebang_line($shebang)>,
         );
     }
+
+    return;
 }
 
 #-----------------------------------------------------------------------------
-# _is_backup() tests
 
-{
+sub test_is_backup {
     for ( qw( foo.swp foo.bak foo~ ), '#foo#' ) {
         ok( Perl::Critic::Utils::_is_backup($_), qq{Is backup: '$_'} );
     }
@@ -301,12 +332,13 @@ is( interpolate( 'literal'    ), "literal",    'Interpolation' );
     for ( qw( swp.pm Bak ~foo ) ) {
         ok( ! Perl::Critic::Utils::_is_backup($_), qq{Is not backup: '$_'} );
     }
+
+    return;
 }
 
 #-----------------------------------------------------------------------------
-# first_arg tests
 
-{
+sub test_first_arg {
     my @tests = (
         q{eval { some_code() };}   => q{{ some_code() }},
         q{eval( {some_code() } );} => q{{some_code() }},
@@ -320,12 +352,13 @@ is( interpolate( 'literal'    ), "literal",    'Interpolation' );
         my $got = first_arg($doc->first_token());
         is($got ? "$got" : undef, $expect, 'first_arg - '.$code);
     }
+
+    return;
 }
 
 #-----------------------------------------------------------------------------
-# parse_arg_list tests
 
-{
+sub test_parse_arg_list {
     my @tests = (
         [ q/foo($bar, 'baz', 1)/ => [ [ q<$bar> ],  [ q<'baz'> ],  [ q<1> ], ] ],
         [
@@ -353,54 +386,57 @@ is( interpolate( 'literal'    ), "literal",    'Interpolation' );
         my @got = parse_arg_list( $document->first_token() );
         is_deeply( \@got, $expected, "parse_arg_list: $code" );
     }
+
+    return;
 }
 
 #-----------------------------------------------------------------------------
 
-{
+sub test_is_function_call {
     my $code = 'sub foo{}';
     my $doc = PPI::Document->new( \$code );
     my $words = $doc->find('PPI::Token::Word');
     is(scalar @{$words}, 2, 'count PPI::Token::Words');
     is((scalar grep {is_function_call($_)} @{$words}), 0, 'is_function_call');
+
+    return;
 }
 
 #-----------------------------------------------------------------------------
 
+sub test_find_bundled_policies {
+    Perl::Critic::TestUtils::block_perlcriticrc();
 
-use Perl::Critic::PolicyFactory;
-use Perl::Critic::TestUtils qw(bundled_policy_names);
-Perl::Critic::TestUtils::block_perlcriticrc();
+    my @native_policies = bundled_policy_names();
+    my $policy_dir = File::Spec->catfile( qw(lib Perl Critic Policy) );
+    my @found_policies  = all_perl_files( $policy_dir );
+    is( scalar @found_policies, scalar @native_policies, 'Find all perl code');
 
-
-my @native_policies = bundled_policy_names();
-my $policy_dir = File::Spec->catfile( qw(lib Perl Critic Policy) );
-my @found_policies  = all_perl_files( $policy_dir );
-is( scalar @found_policies, scalar @native_policies, 'Find all perl code');
+    return;
+}
 
 #-----------------------------------------------------------------------------
-# is_unchecked_call tests
-{
+sub test_is_unchecked_call {
     my @trials = (
-                  # just an obvious failure to check the return value
-                  { code => q( open( $fh, $mode, $filename ); ),
-                    pass => 1 },
-                  # check the value with a trailing conditional
-                  { code => q( open( $fh, $mode, $filename ) or confess 'unable to open'; ),
-                    pass => 0 },
-                  # assign the return value to a variable (and assume that it's checked later)
-                  { code => q( my $error = open( $fh, $mode, $filename ); ),
-                    pass => 0 },
-                  # the system call is in a conditional
-                  { code => q( return $EMPTY if not open my $fh, '<', $file; ),
-                    pass => 0 },
-                  # open call in list context, checked with 'not'
-                  { code => q( return $EMPTY if not ( open my $fh, '<', $file ); ),
-                    pass => 0 },
-                  # just putting the system call in a list context doesn't mean the return value is checked
-                  { code => q( ( open my $fh, '<', $file ); ),
-                    pass => 1 },
-                 );
+        # just an obvious failure to check the return value
+        { code => q( open( $fh, $mode, $filename ); ),
+        pass => 1 },
+        # check the value with a trailing conditional
+        { code => q( open( $fh, $mode, $filename ) or confess 'unable to open'; ),
+        pass => 0 },
+        # assign the return value to a variable (and assume that it's checked later)
+        { code => q( my $error = open( $fh, $mode, $filename ); ),
+        pass => 0 },
+        # the system call is in a conditional
+        { code => q( return $EMPTY if not open my $fh, '<', $file; ),
+        pass => 0 },
+        # open call in list context, checked with 'not'
+        { code => q( return $EMPTY if not ( open my $fh, '<', $file ); ),
+        pass => 0 },
+        # just putting the system call in a list context doesn't mean the return value is checked
+        { code => q( ( open my $fh, '<', $file ); ),
+        pass => 1 },
+    );
 
     foreach my $trial ( @trials ) {
         my $doc = make_doc( $trial->{'code'} );
@@ -411,6 +447,8 @@ is( scalar @found_policies, scalar @native_policies, 'Find all perl code');
             ok( ! is_unchecked_call( $statement ), 'is_unchecked_call returns false' );
         }
     }
+
+    return;
 }
 
 #-----------------------------------------------------------------------------

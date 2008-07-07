@@ -55,74 +55,94 @@ my $npolicies = scalar keys %$subtests; # one can() test per policy
 
 plan tests => $nsubtests + $npolicies;
 
-for my $policy ( sort keys %$subtests ) {
+for my $policy ( sort keys %{$subtests} ) {
     can_ok( "Perl::Critic::Policy::$policy", 'violates' );
     for my $subtest ( @{$subtests->{$policy}} ) {
         local $TODO = $subtest->{TODO}; # Is NOT a TODO if it's not set
 
-        my $desc =
+        my $description =
             join ' - ', $policy, "line $subtest->{lineno}", $subtest->{name};
 
-        my @violations = $subtest->{filename}
-            ? eval {
-                fcritique_with_violations(
-                    $policy,
-                    \$subtest->{code},
-                    $subtest->{filename},
-                    $subtest->{parms},
-                )
-            }
-            : eval {
-                pcritique_with_violations(
-                    $policy,
-                    \$subtest->{code},
-                    $subtest->{parms},
-                )
-            };
-        my $err = $EVAL_ERROR;
+        my ($error, @violations) = run_subtest($policy, $subtest);
 
-        my $test_passed;
-        if ($subtest->{error}) {
-            if ( 'Regexp' eq ref $subtest->{error} ) {
-                $test_passed = like($err, $subtest->{error}, $desc);
-            }
-            else {
-                $test_passed = ok($err, $desc);
-            }
-        }
-        elsif ($err) {
-            if ($err =~ m/\A Unable [ ] to [ ] create [ ] policy [ ] [']/xms) {
-                # We most likely hit a configuration that a parameter didn't like.
-                fail($desc);
-                diag($err);
-                $test_passed = 0;
-            }
-            else {
-                confess $err;
-            }
-        }
-        else {
-            my $expected_failures = $subtest->{failures};
-
-            # If any optional modules are NOT installed, then there should be no failures.
-            if ($subtest->{optional_modules}) {
-              MODULE:
-                for my $module (split m/,\s*/xms, $subtest->{optional_modules}) {
-                    eval "require $module"; ## no critic (ProhibitStringyEval)
-                    if ($EVAL_ERROR) {
-                        $expected_failures = 0;
-                        last MODULE;
-                    }
-                }
-            }
-
-            $test_passed = is(scalar @violations, $expected_failures, $desc);
-        }
+        my $test_passed =
+            evaluate_test_results(
+                $subtest, $description, $error, \@violations,
+            );
 
         if (not $test_passed) {
             diag("Violation found: $_") foreach @violations;
         }
     }
+}
+
+sub run_subtest {
+    my ($policy, $subtest) = @_;
+
+    my @violations = $subtest->{filename}
+        ? eval {
+            fcritique_with_violations(
+                $policy,
+                \$subtest->{code},
+                $subtest->{filename},
+                $subtest->{parms},
+            )
+        }
+        : eval {
+            pcritique_with_violations(
+                $policy,
+                \$subtest->{code},
+                $subtest->{parms},
+            )
+        };
+    my $error = $EVAL_ERROR;
+
+    return $error, @violations;
+}
+
+sub evaluate_test_results {
+    my ($subtest, $description, $error, $violations) = @_;
+
+    my $test_passed;
+    if ($subtest->{error}) {
+        if ( 'Regexp' eq ref $subtest->{error} ) {
+            $test_passed = like($error, $subtest->{error}, $description);
+        }
+        else {
+            $test_passed = ok($error, $description);
+        }
+    }
+    elsif ($error) {
+        if ($error =~ m/\A Unable [ ] to [ ] create [ ] policy [ ] [']/xms) {
+            # We most likely hit a configuration that a parameter didn't like.
+            fail($description);
+            diag($error);
+            $test_passed = 0;
+        }
+        else {
+            confess $error;
+        }
+    }
+    else {
+        my $expected_failures = $subtest->{failures};
+
+        # If any optional modules are NOT installed, then there should be no failures.
+        if ($subtest->{optional_modules}) {
+            MODULE:
+            for my $module (split m/,\s*/xms, $subtest->{optional_modules}) {
+                eval "require $module"; ## no critic (ProhibitStringyEval)
+                if ($EVAL_ERROR) {
+                    $expected_failures = 0;
+                    last MODULE;
+                }
+            }
+        }
+
+        $test_passed =
+            is(scalar @{$violations}, $expected_failures, $description);
+    }
+
+    return $test_passed;
 }
 
 #-----------------------------------------------------------------------------
