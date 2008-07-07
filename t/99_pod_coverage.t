@@ -38,7 +38,7 @@ plan skip_all => 'Test::Pod::Coverage 1.00 requried to test POD' if $@;
     # parsing.  I'll look for a better solution (or file a bug report)
     # when / if I have better understanding of the problem.
 
-    no warnings;
+    no warnings qw<redefine once>; ## no critic (ProhibitNoWarnings)
     require Perl::Critic::Violation;
     *Perl::Critic::Violation::import = sub { 1 };
 }

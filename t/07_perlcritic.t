@@ -156,7 +156,7 @@ is( $options{-quiet}, 1);
 # Intercept pod2usage so we can test invalid options and special switches
 
 {
-    no warnings qw(redefine once);
+    no warnings qw(redefine once); ## no critic (ProhibitNoWarnings)
     local *main::pod2usage = sub { my %args = @_; die $args{-message} || q{} };
 
     local @ARGV = qw( -help );
