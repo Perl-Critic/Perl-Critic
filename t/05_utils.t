@@ -13,6 +13,7 @@ use warnings;
 
 use Carp qw< confess >;
 
+use File::Temp qw<tempfile>;
 use PPI::Document;
 
 use Perl::Critic::PolicyFactory;
@@ -268,6 +269,7 @@ sub test_interpolate {
 #-----------------------------------------------------------------------------
 
 sub test_is_perl_and_shebang_line {
+    ## no critic (ProtectPrivateSubs)
     for ( qw(foo.t foo.pm foo.pl foo.PL) ) {
         ok( Perl::Critic::Utils::_is_perl($_), qq{Is perl: '$_'} );
     }
@@ -275,8 +277,6 @@ sub test_is_perl_and_shebang_line {
     for ( qw(foo.doc foo.txt foo.conf foo) ) {
         ok( ! Perl::Critic::Utils::_is_perl($_), qq{Is not perl: '$_'} );
     }
-
-    use File::Temp qw<tempfile>;
 
     my @perl_shebangs = (
         '#!perl',
@@ -318,6 +318,7 @@ sub test_is_perl_and_shebang_line {
             qq<shebang_line($shebang)>,
         );
     }
+    ## use critic
 
     return;
 }
@@ -325,6 +326,7 @@ sub test_is_perl_and_shebang_line {
 #-----------------------------------------------------------------------------
 
 sub test_is_backup {
+    ## no critic (ProtectPrivateSubs)
     for ( qw( foo.swp foo.bak foo~ ), '#foo#' ) {
         ok( Perl::Critic::Utils::_is_backup($_), qq{Is backup: '$_'} );
     }
@@ -332,6 +334,7 @@ sub test_is_backup {
     for ( qw( swp.pm Bak ~foo ) ) {
         ok( ! Perl::Critic::Utils::_is_backup($_), qq{Is not backup: '$_'} );
     }
+    ## use critic
 
     return;
 }
