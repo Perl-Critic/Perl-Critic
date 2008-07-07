@@ -59,7 +59,7 @@ foreach my $test_program_name (@ARGV) {
     }
 
     print "Generating $test_program_name.\n";
-    open my $test_program, '>', $test_program_name
+    open my $test_program, '>', $test_program_name ## no critic (RequireBriefOpen)
         or die "Could not open $test_program_name: $ERRNO";
 
     print {$test_program} <<"END_TEST_PROGRAM";
