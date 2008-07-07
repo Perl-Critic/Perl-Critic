@@ -41,114 +41,114 @@ my %options = ();
 
 #-----------------------------------------------------------------------------
 
-@ARGV = qw(-1 -2 -3 -4 -5);
+local @ARGV = qw(-1 -2 -3 -4 -5);
 %options = get_options();
 is( $options{-severity}, 1);
 
-@ARGV = qw(-5 -3 -4 -1 -2);
+local @ARGV = qw(-5 -3 -4 -1 -2);
 %options = get_options();
 is( $options{-severity}, 1);
 
-@ARGV = qw();
+local @ARGV = qw();
 %options = get_options();
 is( $options{-severity}, undef);
 
-@ARGV = qw(-2 -3 -severity 4);
+local @ARGV = qw(-2 -3 -severity 4);
 %options = get_options();
 is( $options{-severity}, 4);
 
-@ARGV = qw(-severity 2 -3 -4);
+local @ARGV = qw(-severity 2 -3 -4);
 %options = get_options();
 is( $options{-severity}, 2);
 
-@ARGV = qw(--severity=2 -3 -4);
+local @ARGV = qw(--severity=2 -3 -4);
 %options = get_options();
 is( $options{-severity}, 2);
 
-@ARGV = qw(-cruel);
+local @ARGV = qw(-cruel);
 %options = get_options();
 is( $options{-severity}, 'cruel');
 
-@ARGV = qw(-cruel --severity=1);
+local @ARGV = qw(-cruel --severity=1);
 %options = get_options();
 is( $options{-severity}, 1);
 
-@ARGV = qw(-stern --severity=1 -2);
+local @ARGV = qw(-stern --severity=1 -2);
 %options = get_options();
 is( $options{-severity}, 1);
 
-@ARGV = qw(-stern -severity 1 -2);
+local @ARGV = qw(-stern -severity 1 -2);
 %options = get_options();
 is( $options{-severity}, 1);
 
 #-----------------------------------------------------------------------------
 
-@ARGV = qw(-top);
+local @ARGV = qw(-top);
 %options = get_options();
 is( $options{-severity}, 1);
 is( $options{-top}, 20);
 
-@ARGV = qw(-top 10);
+local @ARGV = qw(-top 10);
 %options = get_options();
 is( $options{-severity}, 1);
 is( $options{-top}, 10);
 
-@ARGV = qw(-severity 4 -top);
+local @ARGV = qw(-severity 4 -top);
 %options = get_options();
 is( $options{-severity}, 4);
 is( $options{-top}, 20);
 
-@ARGV = qw(-severity 4 -top 10);
+local @ARGV = qw(-severity 4 -top 10);
 %options = get_options();
 is( $options{-severity}, 4);
 is( $options{-top}, 10);
 
-@ARGV = qw(-severity 5 -2 -top 5);
+local @ARGV = qw(-severity 5 -2 -top 5);
 %options = get_options();
 is( $options{-severity}, 5);
 is( $options{-top}, 5);
 
 #-----------------------------------------------------------------------------
 
-@ARGV = qw(-noprofile);
+local @ARGV = qw(-noprofile);
 %options = get_options();
 is( $options{-profile}, q{});
 
-@ARGV = qw(-profile foo);
+local @ARGV = qw(-profile foo);
 %options = get_options();
 is( $options{-profile}, 'foo');
 
 #-----------------------------------------------------------------------------
 
-@ARGV = qw(-single-policy nowarnings);
+local @ARGV = qw(-single-policy nowarnings);
 %options = get_options();
 is( $options{'-single-policy'}, 'nowarnings');
 
 #-----------------------------------------------------------------------------
 
-@ARGV = qw(-verbose 2);
+local @ARGV = qw(-verbose 2);
 %options = get_options();
 is( $options{-verbose}, 2);
 
-@ARGV = qw(-verbose %l:%c:%m);
+local @ARGV = qw(-verbose %l:%c:%m);
 %options = get_options();
 is( $options{-verbose}, '%l:%c:%m');
 
 #-----------------------------------------------------------------------------
 
-@ARGV = qw(-statistics);
+local @ARGV = qw(-statistics);
 %options = get_options();
 is( $options{-statistics}, 1);
 
 #-----------------------------------------------------------------------------
 
-@ARGV = qw(-statistics-only);
+local @ARGV = qw(-statistics-only);
 %options = get_options();
 is( $options{'-statistics-only'}, 1);
 
 #-----------------------------------------------------------------------------
 
-@ARGV = qw(-quiet);
+local @ARGV = qw(-quiet);
 %options = get_options();
 is( $options{-quiet}, 1);
 
@@ -159,28 +159,36 @@ is( $options{-quiet}, 1);
     no warnings qw(redefine once);
     local *main::pod2usage = sub { my %args = @_; die $args{-message} || q{} };
 
-    eval { @ARGV = qw( -help ); get_options() };
+    local @ARGV = qw( -help );
+    eval { get_options() };
     ok( $EVAL_ERROR, '-help option' );
 
-    eval { @ARGV = qw( -options ); get_options() };
+    local @ARGV = qw( -options );
+    eval { get_options() };
     ok( $EVAL_ERROR, '-options option' );
 
-    eval { @ARGV = qw( -man ); get_options() };
+    local @ARGV = qw( -man );
+    eval { get_options() };
     ok( $EVAL_ERROR, '-man option' );
 
-    eval { @ARGV = qw( -noprofile -profile foo ); get_options() };
+    local @ARGV = qw( -noprofile -profile foo );
+    eval { get_options() };
     like( $EVAL_ERROR, qr/-noprofile with -profile/, '-noprofile with -profile');
 
-    eval { @ARGV = qw( -verbose bogus ); get_options() };
+    local @ARGV = qw( -verbose bogus );
+    eval { get_options() };
     like( $EVAL_ERROR, qr/looks odd/, 'Invalid -verbose option' );
 
-    eval { @ARGV = qw( -top -9 ); get_options() };
+    local @ARGV = qw( -top -9 );
+    eval { get_options() };
     like( $EVAL_ERROR, qr/is negative/, 'Negative -verbose option' );
 
-    eval { @ARGV = qw( -severity 0 ); get_options() };
+    local @ARGV = qw( -severity 0 );
+    eval { get_options() };
     like( $EVAL_ERROR, qr/out of range/, '-severity too small' );
 
-    eval { @ARGV = qw( -severity 6 ); get_options() };
+    local @ARGV = qw( -severity 6 );
+    eval { get_options() };
     like( $EVAL_ERROR, qr/out of range/, '-severity too large' );
 }
 
