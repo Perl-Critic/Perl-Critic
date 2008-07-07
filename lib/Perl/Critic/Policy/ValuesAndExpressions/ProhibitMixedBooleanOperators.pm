@@ -104,21 +104,22 @@ Perl::Critic::Policy::ValuesAndExpressions::ProhibitMixedBooleanOperators - Writ
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
 Conway advises against combining the low-precedence booleans ( C<and
-or not> ) with the high-precedence boolean operators ( C<&& || !> )
-in the same expression.  Unless you fully understand the differences
+or not> ) with the high-precedence boolean operators ( C<&& || !> ) in
+the same expression.  Unless you fully understand the differences
 between the high and low-precedence operators, it is easy to
 misinterpret expressions that use both.  And even if you do understand
 them, it is not always clear if the author actually intended it.
 
-  next if not $foo || $bar;  #not ok
-  next if !$foo || $bar;     #ok
-  next if !( $foo || $bar ); #ok
+    next if not $foo || $bar;  #not ok
+    next if !$foo || $bar;     #ok
+    next if !( $foo || $bar ); #ok
 
 
 =head1 CONFIGURATION

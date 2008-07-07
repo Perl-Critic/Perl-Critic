@@ -70,19 +70,21 @@ __END__
 
 Perl::Critic::Policy::Documentation::RequirePodAtEnd - All POD should be after C<__END__>.
 
+
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
 Perl stops processing code when it sees an C<__END__> statement.  So,
-to save processing time, it's faster to put
-documentation after the C<__END__>.  Also, writing all the POD in one
-place usually leads to a more cohesive document, rather than being
-forced to follow the layout of your code.  This policy issues
-violations if any POD is found before an C<__END__>.
+to save processing time, it's faster to put documentation after the
+C<__END__>.  Also, writing all the POD in one place usually leads to a
+more cohesive document, rather than being forced to follow the layout
+of your code.  This policy issues violations if any POD is found
+before an C<__END__>.
 
 
 =head1 CONFIGURATION
@@ -93,23 +95,24 @@ This Policy is not configurable except for the standard options.
 =head1 NOTES
 
 Some folks like to use C<=for>, and C<=begin>, and C<=end> tags to
-create block comments in-line with their code.  Since those tags aren't
-usually part of the documentation, this Policy does allows them to
-appear before the C<__END__> statement.
+create block comments in-line with their code.  Since those tags
+aren't usually part of the documentation, this Policy does allows them
+to appear before the C<__END__> statement.
 
-  =begin comments
+    =begin comments
 
-  frobulate()
-  Accepts:  A list of things to frobulate
-  Returns:  True if succesful
+    frobulate()
+    Accepts:  A list of things to frobulate
+    Returns:  True if succesful
 
-  =end comments
+    =end comments
 
-  sub frobulate { ... }
+    sub frobulate { ... }
 
 =head1 AUTHOR
 
 Chris Dolan <cdolan@cpan.org>
+
 
 =head1 COPYRIGHT
 

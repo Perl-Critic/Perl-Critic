@@ -146,9 +146,11 @@ __END__
 
 Perl::Critic::Policy::RegularExpressions::ProhibitEnumeratedClasses - Use named character classes instead of explicit character lists.
 
+
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
@@ -190,11 +192,14 @@ This Policy is not configurable except for the standard options.
 
 =head1 CREDITS
 
-Initial development of this policy was supported by a grant from the Perl Foundation.
+Initial development of this policy was supported by a grant from the
+Perl Foundation.
+
 
 =head1 AUTHOR
 
 Chris Dolan <cdolan@cpan.org>
+
 
 =head1 COPYRIGHT
 

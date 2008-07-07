@@ -59,7 +59,8 @@ Perl::Critic::Policy::Subroutines::ProhibitNestedSubs - C<sub never { sub correc
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
@@ -76,9 +77,8 @@ This does not do what you think:
       ...
   }
 
-C<do_subprocess()> is global, despite where it is declared.
-Either write your subs without nesting or use anonymous code
-references.
+C<do_subprocess()> is global, despite where it is declared.  Either
+write your subs without nesting or use anonymous code references.
 
 
 
@@ -89,7 +89,7 @@ This Policy is not configurable except for the standard options.
 
 =head1 NOTE
 
-Originally part of L<Perl::Critic::Tics>.
+Originally part of L<Perl::Critic::Tics|Perl::Critic::Tics>.
 
 
 =head1 AUTHOR
@@ -100,8 +100,8 @@ Ricardo SIGNES <rjbs@cpan.org>
 
 Copyright (c) 2007-2008 Ricardo SIGNES.
 
-This program is free software; you can redistribute it and/or modify it under
-the same terms as Perl itself.
+This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
 
 =cut
 

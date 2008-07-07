@@ -151,20 +151,21 @@ Perl::Critic::Policy::Modules::RequireNoMatchVarsWithUseEnglish - C<use English>
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
-Due to unfortunate history, if you use the L<English> module but don't
-pass in a C<-no_match_vars> argument, all regular expressions in the
-entire program, not merely the module in question, suffer a
-significant performance penalty.  See the L<English> documentation for
-details.
+Due to unfortunate history, if you use the L<English|English> module
+but don't pass in a C<-no_match_vars> argument, all regular
+expressions in the entire program, not merely the module in question,
+suffer a significant performance penalty.  See the L<English|English>
+documentation for details.
 
-  use English;                              # not ok
-  use English '-no_match_vars';             # ok
-  use English qw< $ERRNO -no_match_vars>;   # ok
+    use English;                              # not ok
+    use English '-no_match_vars';             # ok
+    use English qw< $ERRNO -no_match_vars>;   # ok
 
 
 

@@ -74,9 +74,11 @@ __END__
 
 Perl::Critic::Policy::RegularExpressions::ProhibitEscapedMetacharacters - Use character classes for literal meta-characters instead of escapes.
 
+
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
@@ -92,8 +94,9 @@ Well, this policy doesn't solve that problem (write it as C<m{////}>
 instead!) but solves a related one.  As seen above, the escapes make
 the expression hard to parse visually.  One solution is to use
 character classes.  You see, inside of character classes, the only
-characters that are special are C<\>, C<]>, C<^> and C<->, so you don't need
-to escape the others.  So instead of the following loose IPv4 address matcher:
+characters that are special are C<\>, C<]>, C<^> and C<->, so you
+don't need to escape the others.  So instead of the following loose
+IPv4 address matcher:
 
     m/ \d+ \. \d+ \. \d+ \. \d+ /x;
 
@@ -103,9 +106,10 @@ You could write:
 
 which is certainly more readable, if less recognizable prior the
 publication of Perl Best Practices.  (Of course, you should really use
-L<Regexp::Common::net> to match IPv4 addresses!)
+L<Regexp::Common::net|Regexp::Common::net> to match IPv4 addresses!)
 
-Specifically, this policy forbids backslashes immediately prior to the following characters:
+Specifically, this policy forbids backslashes immediately prior to the
+following characters:
 
     { } ( ) . * + ? | #
 
@@ -132,26 +136,29 @@ not simply misunderstood...
 
 This part makes sense:
 
-  "#f" =~ m/[#]f/x;     # match
-  "#f" =~ m/[#]a/x;     # no match
+    "#f" =~ m/[#]f/x;     # match
+    "#f" =~ m/[#]a/x;     # no match
 
 This doesn't:
 
-  $qr  = qr/f/;
-  "#f" =~ m/[#]$qr/x; # no match
+    $qr  = qr/f/;
+    "#f" =~ m/[#]$qr/x; # no match
 
 Neither does this:
 
-  print qr/[#]$qr/x;  # yields '(?x-ism:[#]$qr
+    print qr/[#]$qr/x;  # yields '(?x-ism:[#]$qr
                                 )'
 
 =head1 CREDITS
 
-Initial development of this policy was supported by a grant from the Perl Foundation.
+Initial development of this policy was supported by a grant from the
+Perl Foundation.
+
 
 =head1 AUTHOR
 
 Chris Dolan <cdolan@cpan.org>
+
 
 =head1 COPYRIGHT
 

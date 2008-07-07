@@ -66,15 +66,16 @@ Perl::Critic::Policy::Variables::ProhibitPunctuationVars - Write C<$EVAL_ERROR> 
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
 Perl's vocabulary of punctuation variables such as C<$!>, C<$.>, and
 C<$^> are perhaps the leading cause of its reputation as inscrutable
-line noise.  The simple alternative is to use the L<English> module to
-give them clear names.
+line noise.  The simple alternative is to use the L<English|English>
+module to give them clear names.
 
   $| = undef;                      #not ok
 

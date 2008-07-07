@@ -59,7 +59,8 @@ Perl::Critic::Policy::Subroutines::ProhibitExplicitReturnUndef - Return failure 
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
@@ -120,8 +121,8 @@ This Policy is not configurable except for the standard options.
 You can fool this policy pretty easily by hiding C<undef> in a boolean
 expression.  But don't bother trying.  In fact, using return values to
 indicate failure is pretty poor technique anyway.  Consider using
-C<die> or C<croak> with C<eval>, or the L<Error> module for a much
-more robust exception-handling model.  Conway has a real nice
+C<die> or C<croak> with C<eval>, or the L<Error|Error> module for a
+much more robust exception-handling model.  Conway has a real nice
 discussion on error handling in chapter 13 of PBP.
 
 =head1 AUTHOR

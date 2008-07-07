@@ -62,25 +62,27 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::BuiltinFunctions::ProhibitSleepViaSelect - Use L<Time::HiRes> instead of something like C<select(undef, undef, undef, .05)>.
+Perl::Critic::Policy::BuiltinFunctions::ProhibitSleepViaSelect - Use L<Time::HiRes|Time::HiRes> instead of something like C<select(undef, undef, undef, .05)>.
+
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
 Conway discourages the use of C<select()> for performing non-integer
-sleeps.  Although documented in L<perlfunc>, it's something that
-generally requires the reader to read C<perldoc -f select> to figure
-out what it should be doing.  Instead, Conway recommends that you use
-the C<Time::HiRes> module when you want to sleep.
+sleeps.  Although documented in L<perlfunc|perlfunc>, it's something
+that generally requires the reader to read C<perldoc -f select> to
+figure out what it should be doing.  Instead, Conway recommends that
+you use the C<Time::HiRes> module when you want to sleep.
 
-  select undef, undef, undef, 0.25;         # not ok
+    select undef, undef, undef, 0.25;         # not ok
 
-  use Time::HiRes;
-  sleep( 0.25 );                            # ok
+    use Time::HiRes;
+    sleep( 0.25 );                            # ok
 
 
 =head1 CONFIGURATION
@@ -90,11 +92,13 @@ This Policy is not configurable except for the standard options.
 
 =head1 SEE ALSO
 
-L<Time::HiRes>.
+L<Time::HiRes|Time::HiRes>.
+
 
 =head1 AUTHOR
 
 Graham TerMarsch <graham@howlingfrog.com>
+
 
 =head1 COPYRIGHT
 

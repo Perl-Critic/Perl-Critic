@@ -35,7 +35,7 @@ ppidump - Dump Perl code as PPI structure.
 =head1 DESCRIPTION
 
 This is a simple tool for helping to develop Perl::Critic::Policy
-modules.  If you want to see how L<PPI> would parse a snippet of
+modules.  If you want to see how L<PPI|PPI> would parse a snippet of
 code, just feed it to C<ppidump>.
 
 By default, whitespace tokens are hidden.  Use the C<-w> flag to show

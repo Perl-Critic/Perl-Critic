@@ -100,9 +100,11 @@ __END__
 
 Perl::Critic::Policy::Variables::ProhibitUnusedVariables - Don't ask for storage you don't need.
 
+
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
@@ -137,6 +139,7 @@ This Policy is not configurable except for the standard options.
 =head1 AUTHOR
 
 Elliot Shank C<< <perl@galumph.com> >>
+
 
 =head1 COPYRIGHT
 

@@ -395,7 +395,8 @@ Perl::Critic::Policy::ValuesAndExpressions::ProhibitMagicNumbers - Don't use val
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
@@ -407,8 +408,8 @@ number came from.  Since you don't understand the significance of the
 number, you don't understand the code.
 
 In general, numeric literals other than C<0> or C<1> in should not be
-used.  Use the L<constant> pragma or the L<Readonly> module to give a
-descriptive name to the number.
+used.  Use the L<constant|constant> pragma or the L<Readonly|Readonly>
+module to give a descriptive name to the number.
 
 There are, of course, exceptions to when this rule should be applied.
 One good example is positioning of objects in some container like
@@ -425,12 +426,13 @@ By default, this rule is relaxed in that C<2> is permitted to allow
 for common things like alternation, the STDERR file handle, etc..
 
 Numeric literals are allowed in C<use> and C<require> statements to
-allow for things like Perl version restrictions and L<Test::More>
-plans.  Declarations of C<$VERSION> package variables are permitted.
-Use of C<Readonly>, C<Readonly::Scalar>, C<Readonly::Array>, and
-C<Readonly::Hash> from the L<Readonly> module are obviously valid, but
-use of C<Readonly::Scalar1>, C<Readonly::Array1>, and
-C<Readonly::Hash1> are specifically not supported.
+allow for things like Perl version restrictions and
+L<Test::More|Test::More> plans.  Declarations of C<$VERSION> package
+variables are permitted.  Use of C<Readonly>, C<Readonly::Scalar>,
+C<Readonly::Array>, and C<Readonly::Hash> from the
+L<Readonly|Readonly> module are obviously valid, but use of
+C<Readonly::Scalar1>, C<Readonly::Array1>, and C<Readonly::Hash1> are
+specifically not supported.
 
 Use of binary, exponential, hexadecimal, octal, and version numbers,
 even for C<0> and C<1>, outside of C<use>/C<require>/C<Readonly>
@@ -440,47 +442,47 @@ There is a special exemption for accessing the last element of an
 array, i.e. C<$x[-1]>.
 
 
-  $x = 0;                                   #ok
-  $x = 0.0;                                 #ok
-  $x = 1;                                   #ok
-  $x = 1.0;                                 #ok
-  $x = 1.5;                                 #not ok
-  $x = 0b0                                  #not ok
-  $x = 0b1                                  #not ok
-  $x = 0x00                                 #not ok
-  $x = 0x01                                 #not ok
-  $x = 000                                  #not ok
-  $x = 001                                  #not ok
-  $x = 0e1                                  #not ok
-  $x = 1e1                                  #not ok
+    $x = 0;                                   #ok
+    $x = 0.0;                                 #ok
+    $x = 1;                                   #ok
+    $x = 1.0;                                 #ok
+    $x = 1.5;                                 #not ok
+    $x = 0b0                                  #not ok
+    $x = 0b1                                  #not ok
+    $x = 0x00                                 #not ok
+    $x = 0x01                                 #not ok
+    $x = 000                                  #not ok
+    $x = 001                                  #not ok
+    $x = 0e1                                  #not ok
+    $x = 1e1                                  #not ok
 
-  $frobnication_factor = 42;                #not ok
-  use constant FROBNICATION_FACTOR => 42;   #ok
-
-
-  use 5.6.1;                                #ok
-  use Test::More plan => 57;                #ok
-  plan tests => 39;                         #ok
-  our $VERSION = 0.22;                      #ok
+    $frobnication_factor = 42;                #not ok
+    use constant FROBNICATION_FACTOR => 42;   #ok
 
 
-  $x = $y[-1]                               #ok
-  $x = $y[-2]                               #not ok
+    use 5.6.1;                                #ok
+    use Test::More plan => 57;                #ok
+    plan tests => 39;                         #ok
+    our $VERSION = 0.22;                      #ok
+
+
+    $x = $y[-1]                               #ok
+    $x = $y[-2]                               #not ok
 
 
 
-  foreach my $solid (1..5) {                #not ok
-      ...
-  }
+    foreach my $solid (1..5) {                #not ok
+        ...
+    }
 
 
-  use Readonly;
+    use Readonly;
 
-  Readonly my $REGULAR_GEOMETRIC_SOLIDS => 5;
+    Readonly my $REGULAR_GEOMETRIC_SOLIDS => 5;
 
-  foreach my $solid (1..$REGULAR_GEOMETRIC_SOLIDS) {  #ok
-      ...
-  }
+    foreach my $solid (1..$REGULAR_GEOMETRIC_SOLIDS) {  #ok
+        ...
+    }
 
 
 =head1 CONFIGURATION
@@ -495,17 +497,17 @@ permitted number I<values>; this does not affect the permitted formats
 for numbers.  The defaults are equivalent to having the following in
 your F<.perlcriticrc>:
 
-  [ValuesAndExpressions::ProhibitMagicNumbers]
-  allowed_values = 0 1 2
+    [ValuesAndExpressions::ProhibitMagicNumbers]
+    allowed_values = 0 1 2
 
 Note that this policy forces the values C<0> and C<1> into the
 permitted values.  Thus, specifying no values,
 
-  allowed_values =
+    allowed_values =
 
 is the same as simply listing C<0> and C<1>:
 
-  allowed_values = 0 1
+    allowed_values = 0 1
 
 The special C<all_integers> value, not surprisingly, allows all
 integral values to pass, subject to the restrictions on number types.
@@ -514,17 +516,17 @@ Ranges can be specified as two (possibly fractional) numbers separated
 by two periods, optionally suffixed with an increment using the Perl 6
 C<:by()> syntax.  E.g.
 
-  allowed_values = 7..10
+    allowed_values = 7..10
 
 will allow 0, 1, 7, 8, 9, and 10 as literal values.  Using fractional
 values like so
 
-  allowed_values = -3.5..-0.5:by(0.5)
+    allowed_values = -3.5..-0.5:by(0.5)
 
 will permit -3.5, -3, -2.5, -2, -2.5, -1, -0.5, 0, and 1.
 Unsurprisingly, the increment defaults to 1, which means that
 
-  allowed_values = -3.5..-0.5
+    allowed_values = -3.5..-0.5
 
 will make -3.5, -2.5, -2.5, -0.5, 0, and 1 valid.
 
@@ -542,14 +544,14 @@ Multiple ranges are permitted.
 To put this all together, the following is a valid, though not likely
 to be used, F<.perlcriticrc> entry:
 
-  [ValuesAndExpressions::ProhibitMagicNumbers]
-  allowed_values = 3.1415269 82..103 -507.4..57.8:by(0.2) all_integers
+    [ValuesAndExpressions::ProhibitMagicNumbers]
+    allowed_values = 3.1415269 82..103 -507.4..57.8:by(0.2) all_integers
 
 
 =head2 C<allowed_types>
 
 The C<allowed_types> parameter is a whitespace delimited set of
-subclasses of L<PPI::Token::Number>.
+subclasses of L<PPI::Token::Number|PPI::Token::Number>.
 
 Decimal integers are always allowed.  By default, floating-point
 numbers are also allowed.
@@ -557,8 +559,8 @@ numbers are also allowed.
 For example, to allow hexadecimal literals, you could configure this
 policy like
 
-  [ValuesAndExpressions::ProhibitMagicNumbers]
-  allowed_types = Hex
+    [ValuesAndExpressions::ProhibitMagicNumbers]
+    allowed_types = Hex
 
 but without specifying anything for C<allowed_values>, the allowed
 hexadecimal literals will be C<0x00>, C<0x01>, and C<0x02>.  Note,
@@ -567,12 +569,12 @@ include C<Float> in the list to continue to be able to use floating
 point literals.  This effect can be used to restrict literals to only
 decimal integers:
 
-  [ValuesAndExpressions::ProhibitMagicNumbers]
-  allowed_types =
+    [ValuesAndExpressions::ProhibitMagicNumbers]
+    allowed_types =
 
 If you permit exponential notation, you automatically also allow
 floating point values because an exponential is a subclass of
-floating-point in L<PPI>.
+floating-point in L<PPI|PPI>.
 
 
 =head1 BUGS

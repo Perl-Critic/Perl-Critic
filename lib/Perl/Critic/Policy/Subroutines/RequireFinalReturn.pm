@@ -178,20 +178,23 @@ Perl::Critic::Policy::Subroutines::RequireFinalReturn - End every path through a
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
-Require all subroutines to terminate explicitly with one of the following:
-C<return>, C<goto>, C<die>, C<exit>, C<throw>, C<carp> or C<croak>.
+Require all subroutines to terminate explicitly with one of the
+following: C<return>, C<goto>, C<die>, C<exit>, C<throw>, C<carp> or
+C<croak>.
 
-Subroutines without explicit return statements at their ends can be confusing.
-It can be challenging to deduce what the return value will be.
+Subroutines without explicit return statements at their ends can be
+confusing.  It can be challenging to deduce what the return value will
+be.
 
-Furthermore, if the programmer did not mean for there to be a significant
-return value, and omits a return statement, some of the subroutine's inner
-data can leak to the outside.  Consider this case:
+Furthermore, if the programmer did not mean for there to be a
+significant return value, and omits a return statement, some of the
+subroutine's inner data can leak to the outside.  Consider this case:
 
    package Password;
    # every time the user guesses the password wrong, its value
@@ -210,21 +213,22 @@ data can leak to the outside.  Consider this case:
    }
    1;
 
-In this case, the last statement in check_password() is the assignment.  The
-result of that assignment is the implicit return value, so a wrong guess
-returns the right password!  Adding a C<return;> at the end of that subroutine
-solves the problem.
+In this case, the last statement in check_password() is the
+assignment.  The result of that assignment is the implicit return
+value, so a wrong guess returns the right password!  Adding a
+C<return;> at the end of that subroutine solves the problem.
 
 The only exception allowed is an empty subroutine.
 
-Be careful when fixing problems identified by this Policy; don't blindly put
-a C<return;> statement at the end of every subroutine.
+Be careful when fixing problems identified by this Policy; don't
+blindly put a C<return;> statement at the end of every subroutine.
 
 =head1 CONFIGURATION
 
-If you've created your own terminal functions that behave like C<die> or
-C<exit>, then you can configure Perl::Critic to recognize those functions as
-well.  Just put something like this in your F<.perlcriticrc>:
+If you've created your own terminal functions that behave like C<die>
+or C<exit>, then you can configure Perl::Critic to recognize those
+functions as well.  Just put something like this in your
+F<.perlcriticrc>:
 
   [Subroutines::RequireFinalReturns]
   terminal_funcs = quit abort bailout

@@ -58,18 +58,21 @@ __END__
 
 Perl::Critic::Policy::BuiltinFunctions::ProhibitLvalueSubstr - Use 4-argument C<substr> instead of writing C<substr($foo, 2, 6) = $bar>.
 
+
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
 Conway discourages the use of C<substr()> as an lvalue, instead
-recommending that the 4-argument version of C<substr()> be used instead.
+recommending that the 4-argument version of C<substr()> be used
+instead.
 
-  substr($something, 1, 2) = $newvalue;     # not ok
-  substr($something, 1, 2, $newvalue);      # ok
+    substr($something, 1, 2) = $newvalue;     # not ok
+    substr($something, 1, 2, $newvalue);      # ok
 
 
 =head1 CONFIGURATION
@@ -80,6 +83,7 @@ This Policy is not configurable except for the standard options.
 =head1 AUTHOR
 
 Graham TerMarsch <graham@howlingfrog.com>
+
 
 =head1 COPYRIGHT
 

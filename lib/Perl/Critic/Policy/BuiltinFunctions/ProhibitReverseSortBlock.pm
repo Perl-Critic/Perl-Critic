@@ -87,24 +87,26 @@ __END__
 
 Perl::Critic::Policy::BuiltinFunctions::ProhibitReverseSortBlock - Forbid $b before $a in sort blocks.
 
+
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
-Conway says that it is much clearer to use C<reverse> than to flip C<$a> and
-C<$b> around in a C<sort> block.  He also suggests that, in newer perls,
-C<reverse> is specifically looked for and optimized, and in the case of a
-simple reversed string C<sort>, using C<reverse> with a C<sort> with no block
-is faster even in old perls.
+Conway says that it is much clearer to use C<reverse> than to flip
+C<$a> and C<$b> around in a C<sort> block.  He also suggests that, in
+newer perls, C<reverse> is specifically looked for and optimized, and
+in the case of a simple reversed string C<sort>, using C<reverse> with
+a C<sort> with no block is faster even in old perls.
 
-  my @foo = sort { $b cmp $a } @bar;         #not ok
-  my @foo = reverse sort @bar;               #ok
+    my @foo = sort { $b cmp $a } @bar;         #not ok
+    my @foo = reverse sort @bar;               #ok
 
-  my @foo = sort { $b <=> $a } @bar;         #not ok
-  my @foo = reverse sort { $a <=> $b } @bar; #ok
+    my @foo = sort { $b <=> $a } @bar;         #not ok
+    my @foo = reverse sort { $a <=> $b } @bar; #ok
 
 
 =head1 CONFIGURATION
@@ -115,6 +117,7 @@ This Policy is not configurable except for the standard options.
 =head1 AUTHOR
 
 Chris Dolan <cdolan@cpan.org>
+
 
 =head1 COPYRIGHT
 

@@ -199,27 +199,29 @@ Perl::Critic::Policy::InputOutput::RequireBriefOpen - Close filehandles as soon 
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
 One way that production systems fail unexpectedly is by running out of
-filehandles.  Filehandles are a finite resource on every operating system that
-I'm aware of, and running out of them is virtually impossible to recover from.
-The solution is to not run out in the first place.  What causes programs to
-run out of filehandles?  Usually, it's leaks: you open a filehandle and forget
-to close it, or just wait a really long time before closing it.
+filehandles.  Filehandles are a finite resource on every operating
+system that I'm aware of, and running out of them is virtually
+impossible to recover from.  The solution is to not run out in the
+first place.  What causes programs to run out of filehandles?
+Usually, it's leaks: you open a filehandle and forget to close it, or
+just wait a really long time before closing it.
 
-This problem is rarely exposed by test systems, because the tests rarely run
-long enough or have enough load to hit the filehandle limit.  So, the best way
-to avoid the problem is 1) always close all filehandles that you open and 2)
-close them as soon as is practical.
+This problem is rarely exposed by test systems, because the tests
+rarely run long enough or have enough load to hit the filehandle
+limit.  So, the best way to avoid the problem is 1) always close all
+filehandles that you open and 2) close them as soon as is practical.
 
-This policy takes note of calls to C<open()> where there is no matching
-C<close()> call within C<N> lines of code.  If you really need to do a lot of
-processing on an open filehandle, then you can move that processing to another
-method like this:
+This policy takes note of calls to C<open()> where there is no
+matching C<close()> call within C<N> lines of code.  If you really
+need to do a lot of processing on an open filehandle, then you can
+move that processing to another method like this:
 
     sub process_data_file {
         my ($self, $filename) = @_;
@@ -237,20 +239,22 @@ method like this:
         return;
     }
 
-As a special case, this policy also allows code to return the filehandle after
-the C<open> instead of closing it.  Just like the close, however, that
-C<return> has to be within the right number of lines.  From there, you're on
-your own to figure out whether the code is promptly closing the filehandle.
+As a special case, this policy also allows code to return the
+filehandle after the C<open> instead of closing it.  Just like the
+close, however, that C<return> has to be within the right number of
+lines.  From there, you're on your own to figure out whether the code
+is promptly closing the filehandle.
 
 The STDIN, STDOUT, and STDERR handles are exempt from this policy.
 
 
 =head1 CONFIGURATION
 
-This policy allows C<close()> invocations to be up to C<N> lines after their
-corresponding C<open()> calls, where C<N> defaults to 9.  You can override
-this to set it to a different number with the C<lines> setting.  To do this,
-put entries in a F<.perlcriticrc> file like this:
+This policy allows C<close()> invocations to be up to C<N> lines after
+their corresponding C<open()> calls, where C<N> defaults to 9.  You
+can override this to set it to a different number with the C<lines>
+setting.  To do this, put entries in a F<.perlcriticrc> file like
+this:
 
   [InputOutput::RequireBriefOpen]
   lines = 5
@@ -260,14 +264,15 @@ put entries in a F<.perlcriticrc> file like this:
 
 =head2 C<IO::File-E<gt>new>
 
-This policy only looks for explicit C<open> calls.  It does not detect calls
-to C<CORE::open> or C<IO::File-E<gt>new> or the like.
+This policy only looks for explicit C<open> calls.  It does not detect
+calls to C<CORE::open> or C<IO::File-E<gt>new> or the like.
 
 
 =head2 Is it the right lexical?
 
-We don't currently check for redeclared filehandles.  So the following code
-is false negative, for example, because the outer scoped filehandle is not closed:
+We don't currently check for redeclared filehandles.  So the following
+code is false negative, for example, because the outer scoped
+filehandle is not closed:
 
     open my $fh, '<', $file1 or croak;
     if (open my $fh, '<', $file2) {
@@ -275,14 +280,15 @@ is false negative, for example, because the outer scoped filehandle is not close
         close $fh;
     }
 
-This is a contrived example, but it isn't uncommon for people to use C<$fh>
-for the name of the filehandle every time.  Perhaps it's time to think of
-better variable names...
+This is a contrived example, but it isn't uncommon for people to use
+C<$fh> for the name of the filehandle every time.  Perhaps it's time
+to think of better variable names...
 
 
 =head1 CREDITS
 
-Initial development of this policy was supported by a grant from the Perl Foundation.
+Initial development of this policy was supported by a grant from the
+Perl Foundation.
 
 
 =head1 AUTHOR

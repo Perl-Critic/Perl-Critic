@@ -183,11 +183,13 @@ __END__
 
 Perl::Critic::OptionsProcessor - The global configuration default values, combined with command-line values.
 
+
 =head1 DESCRIPTION
 
 This is a helper class that encapsulates the default parameters for
-constructing a L<Perl::Critic::Config> object.  There are no
-user-serviceable parts here.
+constructing a L<Perl::Critic::Config|Perl::Critic::Config> object.
+There are no user-serviceable parts here.
+
 
 =head1 CONSTRUCTOR
 
@@ -195,12 +197,13 @@ user-serviceable parts here.
 
 =item C< new( %DEFAULT_PARAMS ) >
 
-Returns a reference to a new C<Perl::Critic::OptionsProcessor> object.  You
-can override the coded defaults by passing in name-value pairs that
-correspond to the methods listed below.
+Returns a reference to a new C<Perl::Critic::OptionsProcessor> object.
+You can override the coded defaults by passing in name-value pairs
+that correspond to the methods listed below.
 
-This is usually only invoked by L<Perl::Critic::UserProfile>, which
-passes in the global values from a F<.perlcriticrc> file.  This object
+This is usually only invoked by
+L<Perl::Critic::UserProfile|Perl::Critic::UserProfile>, which passes
+in the global values from a F<.perlcriticrc> file.  This object
 contains no information for individual Policies.
 
 =back
@@ -212,64 +215,82 @@ contains no information for individual Policies.
 =item C< exclude() >
 
 Returns a reference to a list of the default exclusion patterns.  If
-there are no default exclusion patterns, then the list will be empty.
+onto by
+L<Perl::Critic::PolicyParameter|Perl::Critic::PolicyParameter>.  there
+are no default exclusion patterns, then the list will be empty.
+
 
 =item C< force() >
 
 Returns the default value of the C<force> flag (Either 1 or 0).
+
 
 =item C< include() >
 
 Returns a reference to a list of the default inclusion patterns.  If
 there are no default exclusion patterns, then the list will be empty.
 
+
 =item C< only() >
 
 Returns the default value of the C<only> flag (Either 1 or 0).
+
 
 =item C< profile_strictness() >
 
 Returns the default value of C<profile_strictness> as an unvalidated
 string.
 
+
 =item C< single_policy() >
 
 Returns the default C<single-policy> pattern.  (As a string.)
+
 
 =item C< severity() >
 
 Returns the default C<severity> setting. (1..5).
 
+
 =item C< theme() >
 
 Returns the default C<theme> setting. (As a string).
 
+
 =item C< top() >
 
 Returns the default C<top> setting. (Either 0 or a positive integer).
+
 
 =item C< verbose() >
 
 Returns the default C<verbose> setting. (Either a number or format
 string).
 
+
 =item C< color() >
 
 Returns the default C<color> setting. (Either 1 or 0).
+
 
 =item C< criticism_fatal() >
 
 Returns the default C<criticism-fatal> setting (Either 1 or 0).
 
+
 =back
+
 
 =head1 SEE ALSO
 
-L<Perl::Critic::Config>, L<Perl::Critic::UserProfile>
+L<Perl::Critic::Config|Perl::Critic::Config>,
+L<Perl::Critic::UserProfile|Perl::Critic::UserProfile>
+
 
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+
 
 =head1 COPYRIGHT
 

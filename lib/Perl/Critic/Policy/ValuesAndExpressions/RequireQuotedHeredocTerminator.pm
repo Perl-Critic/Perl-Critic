@@ -54,25 +54,27 @@ Perl::Critic::Policy::ValuesAndExpressions::RequireQuotedHeredocTerminator - Wri
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
-Putting single or double-quotes around your HEREDOC terminator make it obvious
-to the reader whether the content is going to be interpolated or not.
+Putting single or double-quotes around your HEREDOC terminator make it
+obvious to the reader whether the content is going to be interpolated
+or not.
 
-  print <<END_MESSAGE;    #not ok
-  Hello World
-  END_MESSAGE
+    print <<END_MESSAGE;    #not ok
+    Hello World
+    END_MESSAGE
 
-  print <<'END_MESSAGE';  #ok
-  Hello World
-  END_MESSAGE
+    print <<'END_MESSAGE';  #ok
+    Hello World
+    END_MESSAGE
 
-  print <<"END_MESSAGE";  #ok
-  $greeting
-  END_MESSAGE
+    print <<"END_MESSAGE";  #ok
+    $greeting
+    END_MESSAGE
 
 
 =head1 CONFIGURATION
@@ -82,7 +84,7 @@ This Policy is not configurable except for the standard options.
 
 =head1 SEE ALSO
 
-L<Perl::Critic::Policy::ValuesAndExpressions::RequireUpperCaseHeredocTerminator>
+L<Perl::Critic::Policy::ValuesAndExpressions::RequireUpperCaseHeredocTerminator|Perl::Critic::Policy::ValuesAndExpressions::RequireUpperCaseHeredocTerminator>
 
 =head1 AUTHOR
 

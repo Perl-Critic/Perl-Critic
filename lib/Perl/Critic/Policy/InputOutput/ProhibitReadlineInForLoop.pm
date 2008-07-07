@@ -55,16 +55,17 @@ Perl::Critic::Policy::InputOutput::ProhibitReadlineInForLoop - Write C<< while( 
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
 Using the readline operator in a C<for> or C<foreach> loop is very
-slow.  The iteration list of the loop creates a list context,
-which causes the readline operator to read the entire input stream
-before iteration even starts.  Instead, just use a C<while> loop,
-which only reads one line at a time.
+slow.  The iteration list of the loop creates a list context, which
+causes the readline operator to read the entire input stream before
+iteration even starts.  Instead, just use a C<while> loop, which only
+reads one line at a time.
 
   for my $line ( <$file_handle> ){ do_something($line) }      #not ok
   while ( my $line = <$file_handle> ){ do_something($line) }  #ok

@@ -36,13 +36,13 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Exception::Configuration::Option::Global - A problem with L<Perl::Critic> global configuration.
+Perl::Critic::Exception::Configuration::Option::Global - A problem with L<Perl::Critic|Perl::Critic> global configuration.
 
 =head1 DESCRIPTION
 
 A representation of a problem found with the global configuration of
-L<Perl::Critic>, whether from a F<.perlcriticrc>, another profile
-file, or command line.
+L<Perl::Critic|Perl::Critic>, whether from a F<.perlcriticrc>, another
+profile file, or command line.
 
 This is an abstract class.  It should never be instantiated.
 

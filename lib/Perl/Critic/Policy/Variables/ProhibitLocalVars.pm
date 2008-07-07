@@ -66,9 +66,11 @@ __END__
 
 Perl::Critic::Policy::Variables::ProhibitLocalVars - Use C<my> instead of C<local>, except when you have to.
 
+
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
@@ -76,16 +78,17 @@ This Policy is part of the core L<Perl::Critic> distribution.
 Since Perl 5, there are very few reasons to declare C<local>
 variables.  The most common exceptions are Perl's magical global
 variables.  If you do need to modify one of those global variables,
-you should localize it first.  You should also use the L<English>
-module to give those variables more meaningful names.
+you should localize it first.  You should also use the
+L<English|English> module to give those variables more meaningful
+names.
 
-  local $foo;   #not ok
-  my $foo;      #ok
+    local $foo;   #not ok
+    my $foo;      #ok
 
-  use English qw(-no_match_vars);
-  local $INPUT_RECORD_SEPARATOR    #ok
-  local $RS                        #ok
-  local $/;                        #not ok
+    use English qw(-no_match_vars);
+    local $INPUT_RECORD_SEPARATOR    #ok
+    local $RS                        #ok
+    local $/;                        #not ok
 
 
 =head1 CONFIGURATION
@@ -104,7 +107,7 @@ suggest using accessor methods instead.
 
 =head1 SEE ALSO
 
-L<Perl::Critic::Policy::Variables::ProhibitPunctuationVars>
+L<Perl::Critic::Policy::Variables::ProhibitPunctuationVars|Perl::Critic::Policy::Variables::ProhibitPunctuationVars>
 
 =head1 AUTHOR
 

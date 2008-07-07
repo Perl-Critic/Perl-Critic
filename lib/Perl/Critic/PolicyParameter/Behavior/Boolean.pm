@@ -69,11 +69,12 @@ Perl::Critic::PolicyParameter::Behavior::Boolean - Actions appropriate for a boo
 =head1 DESCRIPTION
 
 Provides a standard set of functionality for a boolean
-L<Perl::Critic::PolicyParameter> so that the developer of a policy
-does not have to provide it her/himself.
+L<Perl::Critic::PolicyParameter|Perl::Critic::PolicyParameter> so that
+the developer of a policy does not have to provide it her/himself.
 
 NOTE: Do not instantiate this class.  Use the singleton instance held
-onto by L<Perl::Critic::PolicyParameter>.
+onto by
+L<Perl::Critic::PolicyParameter|Perl::Critic::PolicyParameter>.
 
 
 =head1 METHODS
@@ -85,12 +86,14 @@ onto by L<Perl::Critic::PolicyParameter>.
 Plug in the functionality this behavior provides into the parameter.
 At present, this behavior isn't customizable by the specification.
 
+
 =back
 
 
 =head1 AUTHOR
 
 Elliot Shank <perl@galumph.com>
+
 
 =head1 COPYRIGHT
 

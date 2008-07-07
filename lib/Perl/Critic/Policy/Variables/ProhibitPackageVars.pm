@@ -143,9 +143,11 @@ __END__
 
 Perl::Critic::Policy::Variables::ProhibitPackageVars - Eliminate globals declared with C<our> or C<use vars>.
 
+
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
@@ -161,34 +163,35 @@ variable declarations are not package variables by default.  Thus, it
 complains you declare a variable with C<our> or C<use vars>, or if you
 make reference to variable with a fully-qualified package name.
 
-  $Some::Package::foo = 1;    #not ok
-  our $foo            = 1;    #not ok
-  use vars '$foo';            #not ok
-  $foo = 1;                   #not allowed by 'strict'
-  local $foo = 1;             #bad taste, but technically ok.
-  use vars '$FOO';            #ok, because it's ALL CAPS
-  my $foo = 1;                #ok
+    $Some::Package::foo = 1;    #not ok
+    our $foo            = 1;    #not ok
+    use vars '$foo';            #not ok
+    $foo = 1;                   #not allowed by 'strict'
+    local $foo = 1;             #bad taste, but technically ok.
+    use vars '$FOO';            #ok, because it's ALL CAPS
+    my $foo = 1;                #ok
 
 In practice though, its not really practical to prohibit all package
 variables.  Common variables like C<$VERSION> and C<@EXPORT> need to
 be global, as do any variables that you want to Export.  To work
 around this, the Policy overlooks any variables that are in ALL_CAPS.
-This forces you to put all your exported variables in ALL_CAPS too, which
-seems to be the usual practice anyway.
+This forces you to put all your exported variables in ALL_CAPS too,
+which seems to be the usual practice anyway.
+
 
 =head1 CONFIGURATION
 
 There is room for exceptions.  Some modules, like the core File::Find
-module, use package variables as their only interface, and others
-like Data::Dumper use package variables as their most common
-interface.  These module can be specified from your F<.perlcriticrc>
-file, and the policy will ignore them.
+module, use package variables as their only interface, and others like
+Data::Dumper use package variables as their most common interface.
+These module can be specified from your F<.perlcriticrc> file, and the
+policy will ignore them.
 
     [Variables::ProhibitPackageVars]
     packages = File::Find Data::Dumper
 
-This is the default setting.  Using C<packages =>  will override
-these defaults.
+This is the default setting.  Using C<packages =>  will override these
+defaults.
 
 You can also add packages to the defaults like so:
 
@@ -198,15 +201,18 @@ You can also add packages to the defaults like so:
 You can add package C<main> to the list of packages, but that will
 only OK variables explicitly in the C<main> package.
 
+
 =head1 SEE ALSO
 
-L<Perl::Critic::Policy::Variables::ProhibitPunctuationVars>
+L<Perl::Critic::Policy::Variables::ProhibitPunctuationVars|Perl::Critic::Policy::Variables::ProhibitPunctuationVars>
 
-L<Perl::Critic::Policy::Variables::ProhibitLocalVars>
+L<Perl::Critic::Policy::Variables::ProhibitLocalVars|Perl::Critic::Policy::Variables::ProhibitLocalVars>
+
 
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+
 
 =head1 COPYRIGHT
 

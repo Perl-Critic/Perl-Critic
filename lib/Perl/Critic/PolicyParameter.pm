@@ -344,8 +344,8 @@ format.
 
 The format is a combination of literal and escape characters similar
 to the way C<sprintf> works.  If you want to know the specific
-formatting capabilities, look at L<String::Format>. Valid escape
-characters are:
+formatting capabilities, look at L<String::Format|String::Format>.
+Valid escape characters are:
 
 =over
 

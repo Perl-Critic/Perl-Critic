@@ -67,8 +67,9 @@ Perl::Critic::Exception::Configuration::Option::Policy::ExtraParameter - The con
 =head1 DESCRIPTION
 
 A representation of the configuration attempting to specify a value
-for a parameter that a L<Perl::Critic::Policy> doesn't have, whether
-from a F<.perlcriticrc>, another profile file, or command line.
+for a parameter that a L<Perl::Critic::Policy|Perl::Critic::Policy>
+doesn't have, whether from a F<.perlcriticrc>, another profile file,
+or command line.
 
 
 =head1 CLASS METHODS

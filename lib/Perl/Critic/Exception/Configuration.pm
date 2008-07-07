@@ -37,12 +37,12 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Exception::Configuration - A problem with L<Perl::Critic> configuration.
+Perl::Critic::Exception::Configuration - A problem with L<Perl::Critic|Perl::Critic> configuration.
 
 =head1 DESCRIPTION
 
 A representation of a problem found with the configuration of
-L<Perl::Critic>, whether from a F<.perlcriticrc>, another profile
+L<Perl::Critic|Perl::Critic>, whether from a F<.perlcriticrc>, another profile
 file, or command line.
 
 This is an abstract class.  It should never be instantiated.
@@ -62,8 +62,8 @@ Where the configuration information came from, if it could be determined.
 
 =head1 SEE ALSO
 
-L<Perl::Critic::Exception::Configuration::Generic>
-L<Perl::Critic::Exception::Configuration::Option>
+L<Perl::Critic::Exception::Configuration::Generic|Perl::Critic::Exception::Configuration::Generic>
+L<Perl::Critic::Exception::Configuration::Option|Perl::Critic::Exception::Configuration::Option>
 
 
 =head1 AUTHOR

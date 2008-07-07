@@ -95,34 +95,38 @@ __END__
 
 Perl::Critic::Policy::CodeLayout::ProhibitQuotedWordLists - Write C<qw(foo bar baz)> instead of C<('foo', 'bar', 'baz')>.
 
+
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
 Conway doesn't mention this, but I think C<qw()> is an underused
 feature of Perl.  Whenever you need to declare a list of one-word
-literals, the C<qw()> operator is wonderfully concise, and makes
-it easy to add to the list in the future.
+literals, the C<qw()> operator is wonderfully concise, and makes it
+easy to add to the list in the future.
 
-  @list = ('foo', 'bar', 'baz');  #not ok
-  @list = qw(foo bar baz);        #ok
+    @list = ('foo', 'bar', 'baz');  #not ok
+    @list = qw(foo bar baz);        #ok
+
 
 =head1 CONFIGURATION
 
 This policy can be configured to only pay attention to word lists with
-at least a particular number of elements.  By default, this value is 2,
-which means that lists containing zero or one elements are ignored.
+at least a particular number of elements.  By default, this value is
+2, which means that lists containing zero or one elements are ignored.
 The minimum list size to be looked at can be specified by giving a
 value for C<min_elements> in F<.perlcriticrc> like this:
 
-  [CodeLayout::ProhibitQuotedWordLists]
-  min_elements = 4
+    [CodeLayout::ProhibitQuotedWordLists]
+    min_elements = 4
 
 This would cause this policy to only complain about lists containing
 four or more words.
+
 
 =head1 NOTES
 
@@ -130,6 +134,7 @@ In the PPI parlance, a "list" is almost anything with parentheses.
 I've tried to make this Policy smart by targeting only "lists" that
 could be sensibly expressed with C<qw()>.  However, there may be some
 edge cases that I haven't covered.  If you find one, send me a note.
+
 
 =head1 IMPORTANT CHANGES
 
@@ -143,9 +148,10 @@ to C<ProhibitQuotedWordLists> in your F<.perlcriticrc> file.
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
 
-Copyright (c) 2005-2008 Jeffrey Ryan Thalhammer.  All rights reserved.
 
 =head1 COPYRIGHT
+
+Copyright (c) 2005-2008 Jeffrey Ryan Thalhammer.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

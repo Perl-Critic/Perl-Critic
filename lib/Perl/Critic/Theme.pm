@@ -145,10 +145,12 @@ __END__
 
 Perl::Critic::Theme - Construct thematic sets of policies.
 
+
 =head1 DESCRIPTION
 
-This is a helper class for evaluating theme expressions into sets of Policy
-objects.  There are no user-serviceable parts here.
+This is a helper class for evaluating theme expressions into sets of
+Policy objects.  There are no user-serviceable parts here.
+
 
 =head1 METHODS
 
@@ -156,41 +158,47 @@ objects.  There are no user-serviceable parts here.
 
 =item C<< new( -rule => $rule_expression ) >>
 
-Returns a reference to a new Perl::Critic::Theme object.  C<-rule> is a string
-expression that evaluates to true or false for each Policy.. See L<"THEME
-RULES"> for more information.
+Returns a reference to a new Perl::Critic::Theme object.  C<-rule> is
+a string expression that evaluates to true or false for each Policy..
+See L<"THEME RULES"> for more information.
+
 
 =item C<< policy_is_thematic( -policy => $policy ) >>
 
-Given a reference to a L<Perl::Critic::Policy> object, this method returns
-evaluates the rule against the themes that are associated with the Policy.
-Returns 1 if the Policy satisfies the rule, 0 otherwise.
+Given a reference to a L<Perl::Critic::Policy|Perl::Critic::Policy>
+object, this method returns evaluates the rule against the themes that
+are associated with the Policy.  Returns 1 if the Policy satisfies the
+rule, 0 otherwise.
+
 
 =item C< rule() >
 
-Returns the rule expression that was used to construct this Theme.  The rule
-may have been translated into a normalized expression.  See L<"THEME RULES">
-for more information.
+Returns the rule expression that was used to construct this Theme.
+The rule may have been translated into a normalized expression.  See
+L<"THEME RULES"> for more information.
 
 =back
 
+
 =head2 THEME RULES
 
-A theme rule is a simple boolean expression, where the operands are the names
-of any of the themes associated with the Perl::Critic::Polices.
+A theme rule is a simple boolean expression, where the operands are
+the names of any of the themes associated with the
+Perl::Critic::Polices.
 
-Theme names can be combined with logical operators to form arbitrarily complex
-expressions.  Precedence is the same as normal mathematics, but you can use
-parentheses to enforce precedence as well.  Supported operators are:
+Theme names can be combined with logical operators to form arbitrarily
+complex expressions.  Precedence is the same as normal mathematics,
+but you can use parentheses to enforce precedence as well.  Supported
+operators are:
 
    Operator    Altertative    Example
-   ----------------------------------------------------------------------------
+   ----------------------------------------------------------------
    &&          and            'pbp && core'
    ||          or             'pbp || (bugs && security)'
    !           not            'pbp && ! (portability || complexity)
 
-See L<Perl::Critic/"CONFIGURATION"> for more information about customizing the
-themes for each Policy.
+See L<Perl::Critic/"CONFIGURATION"> for more information about
+customizing the themes for each Policy.
 
 
 =head1 SUBROUTINES
@@ -199,8 +207,8 @@ themes for each Policy.
 
 =item C<cook_rule( $rule )>
 
-Standardize a rule into a almost executable Perl code.  The "almost" comes
-from the fact that theme names are left as is.
+Standardize a rule into a almost executable Perl code.  The "almost"
+comes from the fact that theme names are left as is.
 
 
 =back
@@ -212,8 +220,8 @@ from the fact that theme names are left as is.
 
 =item C<$RULE_INVALID_CHARACTER_REGEX>
 
-A regular expression that will return the first character in the matched
-expression that is not valid in a rule.
+A regular expression that will return the first character in the
+matched expression that is not valid in a rule.
 
 
 =back
@@ -222,6 +230,7 @@ expression that is not valid in a rule.
 =head1 AUTHOR
 
 Jeffrey Thalhammer  <thaljef@cpan.org>
+
 
 =head1 COPYRIGHT
 

@@ -92,16 +92,19 @@ __END__
 
 Perl::Critic::Policy::RegularExpressions::ProhibitFixedStringMatches - Use C<eq> or hash instead of fixed-pattern regexps.
 
+
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
-A regular expression that matches just a fixed set of constant strings is wasteful
-of performance and is hard on maintainers.  It is much more readable and
-often faster to use C<eq> or a hash to match such strings.
+A regular expression that matches just a fixed set of constant strings
+is wasteful of performance and is hard on maintainers.  It is much
+more readable and often faster to use C<eq> or a hash to match such
+strings.
 
     # Bad
     my $is_file_function = $token =~ m/\A (?: open | close | read ) \z/xms;
@@ -124,13 +127,14 @@ For larger numbers of strings, a hash is superior:
     );
     my $is_perl_keyword = $PERL_KEYWORD{$token};
 
+
 =head2 VARIANTS
 
-This policy detects both grouped and non-grouped strings.  The grouping may or
-may not be capturing.  The grouped body may or may not be alternating.  C<\A>
-and C<\z> are always considered anchoring which C<^> and C<$> are considered
-anchoring is the C<m> regexp option is not in use.  Thus, all of these are
-violations:
+This policy detects both grouped and non-grouped strings.  The
+grouping may or may not be capturing.  The grouped body may or may not
+be alternating.  C<\A> and C<\z> are always considered anchoring which
+C<^> and C<$> are considered anchoring is the C<m> regexp option is
+not in use.  Thus, all of these are violations:
 
     m/^foo$/;
     m/\A foo \z/x;
@@ -140,8 +144,8 @@ violations:
     m/\A(foo|bar)\z/;
     m/\A(?:foo|bar)\z/;
 
-Furthermore, this policy detects violations in C<m//>, C<s///> and C<qr//>
-constructs, as you would expect.
+Furthermore, this policy detects violations in C<m//>, C<s///> and
+C<qr//> constructs, as you would expect.
 
 
 =head1 CONFIGURATION
@@ -151,11 +155,14 @@ This Policy is not configurable except for the standard options.
 
 =head1 CREDITS
 
-Initial development of this policy was supported by a grant from the Perl Foundation.
+Initial development of this policy was supported by a grant from the
+Perl Foundation.
+
 
 =head1 AUTHOR
 
 Chris Dolan <cdolan@cpan.org>
+
 
 =head1 COPYRIGHT
 

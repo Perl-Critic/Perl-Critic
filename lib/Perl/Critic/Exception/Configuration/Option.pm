@@ -64,13 +64,13 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Exception::Configuration::Option - A problem with an option in the L<Perl::Critic> configuration.
+Perl::Critic::Exception::Configuration::Option - A problem with an option in the L<Perl::Critic|Perl::Critic> configuration.
 
 =head1 DESCRIPTION
 
 A representation of a problem found with an option in the
-configuration of L<Perl::Critic>, whether from a F<.perlcriticrc>,
-another profile file, or command line.
+configuration of L<Perl::Critic|Perl::Critic>, whether from a
+F<.perlcriticrc>, another profile file, or command line.
 
 This is an abstract class.  It should never be instantiated.
 
@@ -114,8 +114,8 @@ implement it.
 
 =head1 SEE ALSO
 
-L<Perl::Critic::Exception::Configuration::Option::Global>
-L<Perl::Critic::Exception::Configuration::Option::Policy>
+L<Perl::Critic::Exception::Configuration::Option::Global|Perl::Critic::Exception::Configuration::Option::Global>
+L<Perl::Critic::Exception::Configuration::Option::Policy|Perl::Critic::Exception::Configuration::Option::Policy>
 
 
 =head1 AUTHOR

@@ -73,31 +73,37 @@ __END__
 
 Perl::Critic::Policy::TestingAndDebugging::ProhibitProlongedStrictureOverride - Don't turn off strict for large blocks of code.
 
+
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
-Every agrees that C<use strict> is the first step to writing maintainable code
-in Perl.  However, sometimes C<strict> is a little too strict.  In those
-cases, you can turn it off briefly with a C<no strict> directive.
+Every agrees that C<use strict> is the first step to writing
+maintainable code in Perl.  However, sometimes C<strict> is a little
+too strict.  In those cases, you can turn it off briefly with a C<no
+strict> directive.
 
-This policy checks that C<no strict> is only in effect for a small number of
-statements.
+This policy checks that C<no strict> is only in effect for a small
+number of statements.
+
 
 =head1 CONFIGURATION
 
-The default number of statements allowed per C<no strict> is three.  To
-override this number, put the following in your F<.perlcriticrc>:
+The default number of statements allowed per C<no strict> is three.
+To override this number, put the following in your F<.perlcriticrc>:
 
- [TestingAndDebugging::ProhibitProlongedStrictureOverride]
- statements = 5
+    [TestingAndDebugging::ProhibitProlongedStrictureOverride]
+    statements = 5
+
 
 =head1 AUTHOR
 
 Chris Dolan <cdolan@cpan.org>
+
 
 =head1 COPYRIGHT
 

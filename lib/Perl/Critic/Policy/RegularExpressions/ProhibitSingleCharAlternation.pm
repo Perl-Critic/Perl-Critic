@@ -82,23 +82,25 @@ __END__
 
 Perl::Critic::Policy::RegularExpressions::ProhibitSingleCharAlternation - Use C<[abc]> instead of C<a|b|c>.
 
+
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
 Character classes (like C<[abc]>) are significantly faster than single
-character alternations (like C<(?:a|b|c)>).  This policy complains if you have
-more than one instance of a single character in an alternation.  So
-C<(?:a|the)> is allowed, but C<(?:a|e|i|o|u)> is not.
+character alternations (like C<(?:a|b|c)>).  This policy complains if
+you have more than one instance of a single character in an
+alternation.  So C<(?:a|the)> is allowed, but C<(?:a|e|i|o|u)> is not.
 
 NOTE: Perl 5.10 (not released as of this writing) has major regexp
-optimizations which may mitigate the performance penalty of alternations,
-which will be rewritten behind the scenes as something like character classes.
-Consequently, if you are deploying exclusively on 5.10, yo might consider
-ignoring this policy.
+optimizations which may mitigate the performance penalty of
+alternations, which will be rewritten behind the scenes as something
+like character classes.  Consequently, if you are deploying
+exclusively on 5.10, yo might consider ignoring this policy.
 
 
 =head1 CONFIGURATION
@@ -108,11 +110,14 @@ This Policy is not configurable except for the standard options.
 
 =head1 CREDITS
 
-Initial development of this policy was supported by a grant from the Perl Foundation.
+Initial development of this policy was supported by a grant from the
+Perl Foundation.
+
 
 =head1 AUTHOR
 
 Chris Dolan <cdolan@cpan.org>
+
 
 =head1 COPYRIGHT
 

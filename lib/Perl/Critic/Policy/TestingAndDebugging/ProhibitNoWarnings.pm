@@ -98,37 +98,44 @@ __END__
 
 Perl::Critic::Policy::TestingAndDebugging::ProhibitNoWarnings - Prohibit various flavors of C<no warnings>.
 
+
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
-There are good reasons for disabling certain kinds of warnings.  But if you
-were wise enough to C<use warnings> in the first place, then it doesn't make
-sense to disable them completely.  By default, any C<no warnings> statement
-will violate this policy.  However, you can configure this Policy to allow
-certain types of warnings to be disabled (See L<Configuration>).  A bare C<no
-warnings> statement will always raise a violation.
+There are good reasons for disabling certain kinds of warnings.  But
+if you were wise enough to C<use warnings> in the first place, then it
+doesn't make sense to disable them completely.  By default, any
+C<no warnings> statement will violate this policy.  However, you can
+configure this Policy to allow certain types of warnings to be
+disabled (See L<"CONFIGURATION">).  A bare C<no warnings>
+statement will always raise a violation.
+
 
 =head1 CONFIGURATION
 
-The permitted warning types can be configured via the C<allow> option.  The
-value is a list of whitespace-delimited warning types that you want to be able
-to disable.  See L<perllexwarn> for a list of possible warning types.  An
-example of this customization:
+The permitted warning types can be configured via the C<allow> option.
+The value is a list of whitespace-delimited warning types that you
+want to be able to disable.  See L<perllexwarn|perllexwarn> for a list
+of possible warning types.  An example of this customization:
 
-  [TestingAndDebugging::ProhibitNoWarnings]
-  allow = uninitialized once
+    [TestingAndDebugging::ProhibitNoWarnings]
+    allow = uninitialized once
+
 
 =head1 SEE ALSO
 
-L<Perl::Critic::Policy::TestingAndDebugging::RequireUseWarnings>
+L<Perl::Critic::Policy::TestingAndDebugging::RequireUseWarnings|Perl::Critic::Policy::TestingAndDebugging::RequireUseWarnings>
+
 
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+
 
 =head1 COPYRIGHT
 

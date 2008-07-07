@@ -545,8 +545,8 @@ contains "CZ<><$x>", the return value will contain "CZ<><$x>".
 
 Returns nothing if no such section is found.
 
-Throws a L<Perl::Critic::Exception::IO> if there's a problem with the
-file.
+Throws a L<Perl::Critic::Exception::IO|Perl::Critic::Exception::IO> if
+there's a problem with the file.
 
 
 =item C<get_raw_pod_section_from_filehandle( $file_handle, $section_name )>
@@ -566,8 +566,9 @@ that contains the raw POD.
 Does the same as C<get_raw_pod_section_from_file()>, but with a module
 name.
 
-Throws a L<Perl::Critic::Exception::Generic> if a file containing POD
-for the module can't be found.
+Throws a
+L<Perl::Critic::Exception::Generic|Perl::Critic::Exception::Generic>
+if a file containing POD for the module can't be found.
 
 
 =item C<get_pod_section_from_file( $file_name, $section_name )>
@@ -577,8 +578,8 @@ C<=head1>) from the file.  This is interpreted into plain text.
 
 Returns nothing if no such section is found.
 
-Throws a L<Perl::Critic::Exception::IO> if there's a problem with the
-file.
+Throws a L<Perl::Critic::Exception::IO|Perl::Critic::Exception::IO> if
+there's a problem with the file.
 
 
 =item C<get_pod_section_from_filehandle( $file_handle, $section_name )>
@@ -598,8 +599,9 @@ that contains the raw POD.
 Does the same as C<get_pod_section_from_file()>, but with a module
 name.
 
-Throws a L<Perl::Critic::Exception::Generic> if a file containing POD
-for the module can't be found.
+Throws a
+L<Perl::Critic::Exception::Generic|Perl::Critic::Exception::Generic>
+if a file containing POD for the module can't be found.
 
 
 =item C<trim_raw_pod_section( $pod_section )>
@@ -632,7 +634,7 @@ abstract of the module from that.  If it succeeds, it returns the
 abstract.  If it fails, either because there is no "NAME" section or
 there is no abstract after the module name, returns nothing.  If it
 looks like there's a malformed abstract, throws a
-L<Perl::Critic::Exception::Fatal::Generic>.
+L<Perl::Critic::Exception::Fatal::Generic|Perl::Critic::Exception::Fatal::Generic>.
 
 Example "well formed" "NAME" sections without abstracts:
 
@@ -698,6 +700,7 @@ name.
 =head1 AUTHOR
 
 Elliot Shank <perl@galumph.com>
+
 
 =head1 COPYRIGHT
 

@@ -751,11 +751,11 @@ Perl::Critic::Config - The final derived Perl::Critic configuration, combined fr
 =head1 DESCRIPTION
 
 Perl::Critic::Config takes care of finding and processing
-user-preferences for L<Perl::Critic>.  The Config object defines which
-Policy modules will be loaded into the Perl::Critic engine and how
-they should be configured.  You should never really need to
-instantiate Perl::Critic::Config directly because the Perl::Critic
-constructor will do it for you.
+user-preferences for L<Perl::Critic|Perl::Critic>.  The Config object
+defines which Policy modules will be loaded into the Perl::Critic
+engine and how they should be configured.  You should never really
+need to instantiate Perl::Critic::Config directly because the
+Perl::Critic constructor will do it for you.
 
 =head1 CONSTRUCTOR
 
@@ -806,8 +806,8 @@ Config, irrespective of the severity settings.  You can use it in
 conjunction with the C<-include> option.  Note that C<-exclude> takes
 precedence over C<-include> when a Policy matches both patterns.
 
-B<-single-policy> is a string C<PATTERN>.  Only the policy that matches
-C<m/$PATTERN/imx> will be used.  This value overrides the
+B<-single-policy> is a string C<PATTERN>.  Only the policy that
+matches C<m/$PATTERN/imx> will be used.  This value overrides the
 C<-severity>, C<-theme>, C<-include>, C<-exclude>, and C<-only>
 options.
 
@@ -844,14 +844,15 @@ comments.  See L<Perl::Critic/"BENDING THE RULES"> for more
 information.
 
 B<-verbose> can be a positive integer (from 1 to 10), or a literal
-format specification.  See L<Perl::Critic::Violations> for an
+format specification.  See
+L<Perl::Critic::Violations|Perl::Critic::Violations> for an
 explanation of format specifications.
 
 B<-color> is not used by Perl::Critic but is provided for the benefit
-of L<perlcritic>.
+of L<perlcritic|perlcritic>.
 
-B<-criticism-fatal> is not used by Perl::Critic but is provided for the benefit
-of L<criticism>.
+B<-criticism-fatal> is not used by Perl::Critic but is provided for
+the benefit of L<criticism|criticism>.
 
 
 
@@ -867,9 +868,10 @@ Creates a Policy object and loads it into this Config.  If the object
 cannot be instantiated, it will throw a fatal exception.  Otherwise,
 it returns a reference to this Critic.
 
-B<-policy> is the name of a L<Perl::Critic::Policy> subclass
-module.  The C<'Perl::Critic::Policy'> portion of the name can be
-omitted for brevity.  This argument is required.
+B<-policy> is the name of a
+L<Perl::Critic::Policy|Perl::Critic::Policy> subclass module.  The
+C<'Perl::Critic::Policy'> portion of the name can be omitted for
+brevity.  This argument is required.
 
 B<-params> is an optional reference to a hash of Policy parameters.
 The contents of this hash reference will be passed into to the
@@ -913,8 +915,8 @@ Returns the value of the C<-single-policy> attribute for this Config.
 
 =item C< theme() >
 
-Returns the L<Perl::Critic::Theme> object that was created for
-this Config.
+Returns the L<Perl::Critic::Theme|Perl::Critic::Theme> object that was
+created for this Config.
 
 =item C< top() >
 
@@ -954,18 +956,19 @@ have been installed.
 
 Most of the settings for Perl::Critic and each of the Policy modules
 can be controlled by a configuration file.  The default configuration
-file is called F<.perlcriticrc>.  L<Perl::Critic::Config> will look
-for this file in the current directory first, and then in your home
-directory.  Alternatively, you can set the C<PERLCRITIC> environment
-variable to explicitly point to a different file in another location.
-If none of these files exist, and the C<-profile> option is not given
-to the constructor, then all Policies will be loaded with their
-default configuration.
+file is called F<.perlcriticrc>.
+L<Perl::Critic::Config|Perl::Critic::Config> will look for this file
+in the current directory first, and then in your home directory.
+Alternatively, you can set the C<PERLCRITIC> environment variable to
+explicitly point to a different file in another location.  If none of
+these files exist, and the C<-profile> option is not given to the
+constructor, then all Policies will be loaded with their default
+configuration.
 
-The format of the configuration file is a series of INI-style
-blocks that contain key-value pairs separated by '='. Comments
-should start with '#' and can be placed on a separate line or after
-the name-value pairs if you desire.
+The format of the configuration file is a series of INI-style blocks
+that contain key-value pairs separated by '='. Comments should start
+with '#' and can be placed on a separate line or after the name-value
+pairs if you desire.
 
 Default settings for Perl::Critic itself can be set B<before the first
 named block.>  For example, putting any or all of these at the top of
@@ -996,8 +999,8 @@ C<Perl::Critic::Policy::Category::PolicyName> is the full name of a
 module that implements the policy.  The Policy modules distributed
 with Perl::Critic have been grouped into categories according to the
 table of contents in Damian Conway's book B<Perl Best Practices>. For
-brevity, you can omit the C<'Perl::Critic::Policy'> part of the
-module name.
+brevity, you can omit the C<'Perl::Critic::Policy'> part of the module
+name.
 
 C<severity> is the level of importance you wish to assign to the
 Policy.  All Policy modules are defined with a default severity value
@@ -1066,21 +1069,22 @@ that is included in this F<t/examples> directory of this distribution.
 
 A large number of Policy modules are distributed with Perl::Critic.
 They are described briefly in the companion document
-L<Perl::Critic::PolicySummary> and in more detail in the individual
-modules themselves.
+L<Perl::Critic::PolicySummary|Perl::Critic::PolicySummary> and in more
+detail in the individual modules themselves.
 
 =head1 POLICY THEMES
 
-Each Policy is defined with one or more "themes".  Themes can be used to
-create arbitrary groups of Policies.  They are intended to provide an
-alternative mechanism for selecting your preferred set of Policies.  For
-example, you may wish disable a certain subset of Policies when analyzing test
-scripts.  Conversely, you may wish to enable only a specific subset of
-Policies when analyzing modules.
+Each Policy is defined with one or more "themes".  Themes can be used
+to create arbitrary groups of Policies.  They are intended to provide
+an alternative mechanism for selecting your preferred set of Policies.
+For example, you may wish disable a certain subset of Policies when
+analyzing test scripts.  Conversely, you may wish to enable only a
+specific subset of Policies when analyzing modules.
 
 The Policies that ship with Perl::Critic are have been broken into the
-following themes.  This is just our attempt to provide some basic logical
-groupings.  You are free to invent new themes that suit your needs.
+following themes.  This is just our attempt to provide some basic
+logical groupings.  You are free to invent new themes that suit your
+needs.
 
     THEME             DESCRIPTION
     --------------------------------------------------------------------------
@@ -1099,9 +1103,10 @@ and the themes that are associated with each one.  You can also change
 the theme for any Policy in your F<.perlcriticrc> file.  See the
 L<"CONFIGURATION"> section for more information about that.
 
-Using the C<-theme> option, you can combine theme names with mathematical and
-boolean operators to create an arbitrarily complex expression that represents
-a custom "set" of Policies.  The following operators are supported
+Using the C<-theme> option, you can combine theme names with
+mathematical and boolean operators to create an arbitrarily complex
+expression that represents a custom "set" of Policies.  The following
+operators are supported
 
    Operator       Alternative         Meaning
    ----------------------------------------------------------------------------
@@ -1110,7 +1115,8 @@ a custom "set" of Policies.  The following operators are supported
    +              or                  Union
 
 Operator precedence is the same as that of normal mathematics.  You
-can also use parenthesis to enforce precedence.  Here are some examples:
+can also use parenthesis to enforce precedence.  Here are some
+examples:
 
    Expression                  Meaning
    ----------------------------------------------------------------------------
@@ -1130,14 +1136,15 @@ can also use parenthesis to enforce precedence.  Here are some examples:
                                     AND "complexity"
    (pbp not bugs) and complexity  Ditto
 
-Theme names are case-insensitive.  If C<-theme> is set to an empty string,
-then it is equivalent to the set of all Policies.  A theme name that doesn't
-exist is equivalent to an empty set.  Please See
+Theme names are case-insensitive.  If C<-theme> is set to an empty
+string, then it is equivalent to the set of all Policies.  A theme
+name that doesn't exist is equivalent to an empty set.  Please See
 L<http://en.wikipedia.org/wiki/Set> for a discussion on set theory.
 
 =head1 SEE ALSO
 
-L<Perl::Critic::OptionsProcessor>, L<Perl::Critic::UserProfile>
+L<Perl::Critic::OptionsProcessor|Perl::Critic::OptionsProcessor>,
+L<Perl::Critic::UserProfile|Perl::Critic::UserProfile>
 
 
 =head1 AUTHOR

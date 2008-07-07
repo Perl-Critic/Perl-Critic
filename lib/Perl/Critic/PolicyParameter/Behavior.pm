@@ -59,12 +59,13 @@ Perl::Critic::PolicyParameter::Behavior - Default type-specific actions for a pa
 =head1 DESCRIPTION
 
 Provides a standard set of functionality for a
-L<Perl::Critic::PolicyParameter> so that the developer of a policy
-does not have to provide it her/himself.  The developer can override
-most of the functionality in the subclasses; these are just defaults.
+L<Perl::Critic::PolicyParameter|Perl::Critic::PolicyParameter> so that
+the developer of a policy does not have to provide it her/himself.
+The developer can override most of the functionality in the
+subclasses; these are just defaults.
 
 All subclasses have singleton instances held onto by
-L<Perl::Critic::PolicyParameter>.
+L<Perl::Critic::PolicyParameter|Perl::Critic::PolicyParameter>.
 
 
 =head1 METHODS

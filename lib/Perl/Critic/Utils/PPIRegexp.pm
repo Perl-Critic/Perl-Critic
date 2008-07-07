@@ -217,6 +217,7 @@ __END__
 
 Perl::Critic::Utils::PPIRegexp - Utility functions for dealing with PPI regexp tokens.
 
+
 =head1 SYNOPSIS
 
    use Perl::Critic::Utils::PPIRegexp qw(:all);
@@ -225,15 +226,18 @@ Perl::Critic::Utils::PPIRegexp - Utility functions for dealing with PPI regexp t
    my $elem = $doc->find('PPI::Token::Regexp::Match')->[0];
    print get_match_string($elem);  # yields 'foo'
 
+
 =head1 DESCRIPTION
 
 As of PPI v1.1xx, the PPI regexp token classes
-(L<PPI::Token::Regexp::Match>, L<PPI::Token::Regexp::Substitute> and
-L<PPI::Token::QuoteLike::Regexp>) has a very weak interface, so it is
-necessary to dig into internals to learn anything useful.  This
-package contains subroutines to encapsulate that excess intimacy.  If
-future versions of PPI gain better accessors, this package will start
-using those.
+(L<PPI::Token::Regexp::Match|PPI::Token::Regexp::Match>,
+L<PPI::Token::Regexp::Substitute|PPI::Token::Regexp::Substitute> and
+L<PPI::Token::QuoteLike::Regexp|PPI::Token::QuoteLike::Regexp>) has a
+very weak interface, so it is necessary to dig into internals to learn
+anything useful.  This package contains subroutines to encapsulate
+that excess intimacy.  If future versions of PPI gain better
+accessors, this package will start using those.
+
 
 =head1 IMPORTABLE SUBS
 
@@ -241,72 +245,82 @@ using those.
 
 =item C<parse_regexp( $token )>
 
-Parse the regexp token with L<Regexp::Parser>.  If that module is not
-available or if there is a parse error, returns undef.  If a parse success,
-returns a Regexp::Parser instance that can be used to walk the regexp object
-model.
+Parse the regexp token with L<Regexp::Parser|Regexp::Parser>.  If that
+module is not available or if there is a parse error, returns undef.
+If a parse success, returns a Regexp::Parser instance that can be used
+to walk the regexp object model.
 
-CAVEAT: This method pays special attention to the C<x> modifier to the regexp.
-If present, we wrap the regexp string in C<(?x:...)> to ensure a proper parse.
-This does change the object model though.
+CAVEAT: This method pays special attention to the C<x> modifier to the
+regexp.  If present, we wrap the regexp string in C<(?x:...)> to
+ensure a proper parse.  This does change the object model though.
 
-Someday if PPI gets native Regexp support, this method may become deprecated.
+Someday if PPI gets native Regexp support, this method may become
+deprecated.
+
 
 =item C<ppiify( $regexp )>
 
-Given a L<Regexp::Parser> instance (perhaps as returned from C<parse_regexp>)
-convert it to a tree of L<PPI::Node> instances.  This is useful because PPI
-has a more familiar and powerful programming model than the Regexp::Parser
-object tree.
+Given a L<Regexp::Parser|Regexp::Parser> instance (perhaps as returned
+from C<parse_regexp>) convert it to a tree of L<PPI::Node|PPI::Node>
+instances.  This is useful because PPI has a more familiar and
+powerful programming model than the Regexp::Parser object tree.
 
-Someday if PPI gets native Regexp support, this method may become a no-op.
+Someday if PPI gets native Regexp support, this method may become a
+no-op.
+
 
 =item C<get_match_string( $token )>
 
 Returns the match portion of the regexp or undef if the specified
 token is not a regexp.  Examples:
 
-  m/foo/;         # yields 'foo'
-  s/foo/bar/;     # yields 'foo'
-  / \A a \z /xms; # yields ' \\A a \\z '
-  qr{baz};        # yields 'baz'
+    m/foo/;         # yields 'foo'
+    s/foo/bar/;     # yields 'foo'
+    / \A a \z /xms; # yields ' \\A a \\z '
+    qr{baz};        # yields 'baz'
+
 
 =item C<get_substitute_string( $token )>
 
 Returns the substitution portion of a search-and-replace regexp or
 undef if the specified token is not a valid regexp.  Examples:
 
-  m/foo/;         # yields undef
-  s/foo/bar/;     # yields 'bar'
+    m/foo/;         # yields undef
+    s/foo/bar/;     # yields 'bar'
+
 
 =item C<get_modifiers( $token )>
 
 Returns a hash containing booleans for the modifiers of the regexp, or
 undef if the token is not a regexp.
 
-  /foo/xms;  # yields (m => 1, s => 1, x => 1)
-  s/foo//;   # yields ()
-  qr/foo/i;  # yields (i => 1)
+    /foo/xms;  # yields (m => 1, s => 1, x => 1)
+    s/foo//;   # yields ()
+    qr/foo/i;  # yields (i => 1)
+
 
 =item C<get_delimiters( $token )>
 
 Returns one (or two for a substitution regexp) two-character strings
-indicating the delimiters of the regexp, or an empty list if the token is not
-a regular expression token.  For example:
+indicating the delimiters of the regexp, or an empty list if the token
+is not a regular expression token.  For example:
 
-   m/foo/;      # yields ('//')
-   m#foo#;      # yields ('##')
-   m<foo>;      # yields ('<>')
-   s/foo/bar/;  # yields ('//', '//')
-   s{foo}{bar}; # yields ('{}', '{}')
-   s{foo}/bar/; # yields ('{}', '//')   valid, but yuck!
-   qr/foo/;     # yields ('//')
+    m/foo/;      # yields ('//')
+    m#foo#;      # yields ('##')
+    m<foo>;      # yields ('<>')
+    s/foo/bar/;  # yields ('//', '//')
+    s{foo}{bar}; # yields ('{}', '{}')
+    s{foo}/bar/; # yields ('{}', '//')   valid, but yuck!
+    qr/foo/;     # yields ('//')
+
 
 =back
+
 
 =head1 AUTHOR
 
 Chris Dolan <cdolan@cpan.org>
+
 
 =head1 COPYRIGHT
 

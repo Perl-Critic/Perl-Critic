@@ -10,6 +10,7 @@ package Perl::Critic::Policy::ControlStructures::ProhibitCascadingIfElse;
 use 5.006001;
 use strict;
 use warnings;
+
 use Readonly;
 
 use Perl::Critic::Utils qw{ :severities };
@@ -75,39 +76,40 @@ Perl::Critic::Policy::ControlStructures::ProhibitCascadingIfElse - Don't write l
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
 Long C<if-elsif> chains are hard to digest, especially if they are
 longer than a single page or screen.  If testing for equality, use a
-hash lookup instead.  See L<Switch> for another approach.
+hash lookup instead.  See L<Switch|Switch> for another approach.
 
-  if ($condition1) {         #ok
-      $foo = 1;
-  }
-  elsif ($condition2) {      #ok
-      $foo = 2;
-  }
-  elsif ($condition3) {      #ok
-      $foo = 3;
-  }
-  elsif ($condition4) {      #too many!
-      $foo = 4;
-  }
-  else {                     #ok
-      $foo = $default;
-  }
+    if ($condition1) {         #ok
+        $foo = 1;
+    }
+    elsif ($condition2) {      #ok
+        $foo = 2;
+    }
+    elsif ($condition3) {      #ok
+        $foo = 3;
+    }
+    elsif ($condition4) {      #too many!
+        $foo = 4;
+    }
+    else {                     #ok
+        $foo = $default;
+    }
 
 =head1 CONFIGURATION
 
-This policy can be configured with a maximum number of C<elsif> alternatives
-to allow.  The default is 2.  This can be specified via a C<max_elsif> item in
-the F<.perlcriticrc> file:
+This policy can be configured with a maximum number of C<elsif>
+alternatives to allow.  The default is 2.  This can be specified via a
+C<max_elsif> item in the F<.perlcriticrc> file:
 
- [ControlStructures::ProhibitCascadingIfElse]
- max_elsif = 3
+    [ControlStructures::ProhibitCascadingIfElse]
+    max_elsif = 3
 
 =head1 AUTHOR
 

@@ -186,8 +186,9 @@ about what it is doing.
 =item C<dump_unlisted_or_optional_module_versions()>
 
 Prints to C<STDOUT> a list of all the unlisted (e.g. things in core
-like L<Exporter>), optional (e.g. L<File::Which>), or potentially
-indirect (e.g. L<Readonly::XS>) dependencies, plus their versions, if
+like L<Exporter|Exporter>), optional (e.g.
+L<File::Which|File::Which>), or potentially indirect (e.g.
+L<Readonly::XS|Readonly::XS>) dependencies, plus their versions, if
 they're installed.
 
 

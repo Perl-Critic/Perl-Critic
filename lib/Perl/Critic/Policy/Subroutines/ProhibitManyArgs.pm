@@ -133,7 +133,8 @@ Perl::Critic::Policy::Subroutines::ProhibitManyArgs - Too many arguments.
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
@@ -155,15 +156,16 @@ this:
 
 =head1 CAVEATS
 
-PPI doesn't currently detect anonymous subroutines, so we don't check those.
-This should just work when PPI gains that feature.
+PPI doesn't currently detect anonymous subroutines, so we don't check
+those.  This should just work when PPI gains that feature.
 
-We don't check for C<@ARG>, the alias for C<@_> from English.pm.  That's
-deprecated anyway.
+We don't check for C<@ARG>, the alias for C<@_> from English.pm.
+That's deprecated anyway.
 
 =head1 CREDITS
 
-Initial development of this policy was supported by a grant from the Perl Foundation.
+Initial development of this policy was supported by a grant from the
+Perl Foundation.
 
 =head1 AUTHOR
 

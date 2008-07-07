@@ -63,7 +63,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Exception::Fatal - A problem that should cause L<Perl::Critic> to stop running.
+Perl::Critic::Exception::Fatal - A problem that should cause L<Perl::Critic|Perl::Critic> to stop running.
 
 =head1 DESCRIPTION
 
@@ -82,7 +82,8 @@ This is an abstract class.  It should never be instantiated.
 
 =item C<full_message()>
 
-Overrides L<Exception::Class/"full_message"> to include extra information.
+Overrides L<Exception::Class/"full_message"> to include extra
+information.
 
 
 =back

@@ -51,19 +51,23 @@ __END__
 
 Perl::Critic::Policy::Miscellanea::ProhibitFormats - Do not use C<format>.
 
+
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
-Formats are one of the oldest features of Perl.  Unfortunately, they suffer
-from several limitations.  Formats are static and cannot be easily defined
-at run time.  Also, formats depend on several obscure global variables.
+Formats are one of the oldest features of Perl.  Unfortunately, they
+suffer from several limitations.  Formats are static and cannot be
+easily defined at run time.  Also, formats depend on several obscure
+global variables.
 
-For more modern reporting tools, consider using one of the template frameworks
-like L<Template> or try the L<Perl6::Form> module.
+For more modern reporting tools, consider using one of the template
+frameworks like L<Template|Template> or try the
+L<Perl6::Form|Perl6::Form> module.
 
 
 =head1 CONFIGURATION

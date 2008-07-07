@@ -52,15 +52,17 @@ __END__
 
 Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalCan - Write C<< eval { $foo->can($name) } >> instead of C<UNIVERSAL::can($foo, $name)>.
 
+
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
-  print UNIVERSAL::can($obj, 'Foo::Bar') ? 'yes' : 'no';  #not ok
-  print eval { $obj->can('Foo::Bar') } ? 'yes' : 'no';    #ok
+    print UNIVERSAL::can($obj, 'Foo::Bar') ? 'yes' : 'no';  #not ok
+    print eval { $obj->can('Foo::Bar') } ? 'yes' : 'no';    #ok
 
 As of Perl 5.9.3, the use of UNIVERSAL::can as a function has been
 deprecated and the method form is preferred instead.  Formerly, the
@@ -70,8 +72,8 @@ functional form makes it impossible for packages to override C<can()>,
 a technique which is crucial for implementing mock objects and some
 facades.
 
-See the CPAN module L<UNIVERSAL::can> for a more thorough discussion
-of this topic.
+See L<UNIVERSAL::can|UNIVERSAL::can> for a more thorough discussion of
+this topic.
 
 
 =head1 CONFIGURATION
@@ -81,11 +83,13 @@ This Policy is not configurable except for the standard options.
 
 =head1 SEE ALSO
 
-L<Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalIsa>
+L<Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalIsa|Perl::Critic::Policy::BuiltinFunctions::ProhibitUniversalIsa>
+
 
 =head1 AUTHOR
 
 Chris Dolan <cdolan@cpan.org>
+
 
 =head1 COPYRIGHT
 

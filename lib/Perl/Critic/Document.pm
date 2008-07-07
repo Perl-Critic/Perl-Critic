@@ -231,10 +231,10 @@ stored C<PPI::Document> instance.
 =head1 CAVEATS
 
 This facade does not implement the overloaded operators from
-L<PPI::Document> (that is, the C<use overload ...> work). Therefore,
-users of this facade must not rely on that syntactic sugar.  So, for
-example, instead of C<my $source = "$doc";> you should write C<my
-$source = $doc->content();>
+L<PPI::Document|PPI::Document> (that is, the C<use overload ...>
+work). Therefore, users of this facade must not rely on that syntactic
+sugar.  So, for example, instead of C<my $source = "$doc";> you should
+write C<my $source = $doc->content();>
 
 Perhaps there is a CPAN module out there which implements a facade
 better than we do here?
@@ -263,9 +263,10 @@ Create a new instance referencing a PPI::Document instance.
 
 =item C<< ppi_document() >>
 
-Accessor for the wrapped PPI::Document instance.  Note that altering this
-instance in any way can cause unpredictable failures in Perl::Critic's
-subsequent analysis because some caches may fall out of date.
+Accessor for the wrapped PPI::Document instance.  Note that altering
+this instance in any way can cause unpredictable failures in
+Perl::Critic's subsequent analysis because some caches may fall out of
+date.
 
 
 =item C<< find($wanted) >>
@@ -287,15 +288,16 @@ Returns the filename for the source code if applicable
 
 =item C<< isa( $classname ) >>
 
-To be compatible with other modules that expect to get a PPI::Document, the
-Perl::Critic::Document class masquerades as the PPI::Document class.
+To be compatible with other modules that expect to get a
+PPI::Document, the Perl::Critic::Document class masquerades as the
+PPI::Document class.
 
 
 =item C<< highest_explicit_perl_version() >>
 
-Returns a L<version> object for the highest Perl version requirement declared
-in the document via a C<use> or C<require> statement.  Returns nothing if
-there is no version statement.
+Returns a L<version|version> object for the highest Perl version
+requirement declared in the document via a C<use> or C<require>
+statement.  Returns nothing if there is no version statement.
 
 
 =back

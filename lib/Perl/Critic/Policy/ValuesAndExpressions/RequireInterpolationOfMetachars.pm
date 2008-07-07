@@ -69,19 +69,21 @@ __END__
 
 Perl::Critic::Policy::ValuesAndExpressions::RequireInterpolationOfMetachars - Warns that you might have used single quotes when you really wanted double-quotes.
 
+
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
 This policy warns you if you use single-quotes or C<q//> with a string
-that has unescaped metacharacters that may need interpolation. Its hard
-to know for sure if a string really should be interpolated without
-looking into the symbol table.  This policy just makes an educated
-guess by looking for metacharacters and sigils which usually indicate that
-the string should be interpolated.
+that has unescaped metacharacters that may need interpolation. Its
+hard to know for sure if a string really should be interpolated
+without looking into the symbol table.  This policy just makes an
+educated guess by looking for metacharacters and sigils which usually
+indicate that the string should be interpolated.
 
 
 =head1 CONFIGURATION
@@ -93,13 +95,16 @@ This Policy is not configurable except for the standard options.
 
 Perl's own C<warnings> pragma also warns you about this.
 
+
 =head1 SEE ALSO
 
-L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitInterpolationOfLiterals>
+L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitInterpolationOfLiterals|Perl::Critic::Policy::ValuesAndExpressions::ProhibitInterpolationOfLiterals>
+
 
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+
 
 =head1 COPYRIGHT
 

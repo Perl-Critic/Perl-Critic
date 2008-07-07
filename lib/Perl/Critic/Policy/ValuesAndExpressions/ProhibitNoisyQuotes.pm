@@ -56,9 +56,11 @@ __END__
 
 Perl::Critic::Policy::ValuesAndExpressions::ProhibitNoisyQuotes - Use C<q{}> or C<qq{}> instead of quotes for awkward-looking strings.
 
+
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
@@ -69,16 +71,16 @@ legibility, use C<q{}> or a named value.  However, braces,
 parentheses, and brackets tend do to look better in quotes, so those
 are allowed.
 
-  $str = join ',', @list;     #not ok
-  $str = join ",", @list;     #not ok
-  $str = join q{,}, @list;    #better
+    $str = join ',', @list;     #not ok
+    $str = join ",", @list;     #not ok
+    $str = join q{,}, @list;    #better
 
-  $COMMA = q{,};
-  $str = join $COMMA, @list;  #best
+    $COMMA = q{,};
+    $str = join $COMMA, @list;  #best
 
-  $lbrace = '(';          #ok
-  $rbrace = ')';          #ok
-  print '(', @list, ')';  #ok
+    $lbrace = '(';          #ok
+    $rbrace = ')';          #ok
+    print '(', @list, ')';  #ok
 
 
 =head1 CONFIGURATION
@@ -88,11 +90,13 @@ This Policy is not configurable except for the standard options.
 
 =head1 SEE ALSO
 
-L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitEmptyQuotes>
+L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitEmptyQuotes|Perl::Critic::Policy::ValuesAndExpressions::ProhibitEmptyQuotes>
+
 
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+
 
 =head1 COPYRIGHT
 

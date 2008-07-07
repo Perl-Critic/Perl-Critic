@@ -54,7 +54,7 @@ open my $pod_file, '>', $policy_summary
 print {$pod_file} <<'END_HEADER';
 =head1 NAME
 
-Perl::Critic::PolicySummary - Descriptions of the Policy modules included with L<Perl::Critic> itself.
+Perl::Critic::PolicySummary - Descriptions of the Policy modules included with L<Perl::Critic|Perl::Critic> itself.
 
 
 =head1 DESCRIPTION
@@ -118,12 +118,13 @@ print {$pod_file} <<'END_FOOTER';
 
 =head1 VERSION
 
-This is part of L<Perl::Critic> version 1.088.
+This is part of L<Perl::Critic|Perl::Critic> version 1.088.
 
 
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+
 
 =head1 COPYRIGHT
 

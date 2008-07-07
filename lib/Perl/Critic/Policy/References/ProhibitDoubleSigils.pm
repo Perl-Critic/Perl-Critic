@@ -57,7 +57,8 @@ Perl::Critic::Policy::References::ProhibitDoubleSigils - Write C<@{ $array_ref }
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION

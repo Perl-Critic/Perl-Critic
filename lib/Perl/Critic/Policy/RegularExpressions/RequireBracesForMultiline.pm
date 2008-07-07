@@ -91,7 +91,8 @@ Perl::Critic::Policy::RegularExpressions::RequireBracesForMultiline - Use C<{> a
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION

@@ -177,9 +177,11 @@ __END__
 
 Perl::Critic::Policy::CodeLayout::ProhibitParensWithBuiltins - Write C<open $handle, $path> instead of C<open($handle, $path)>.
 
+
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
@@ -190,11 +192,11 @@ disambiguates built-in functions from user functions.  Exceptions are
 made for C<my>, C<local>, and C<our> which require parentheses when
 called with multiple arguments.
 
-  open($handle, '>', $filename); #not ok
-  open $handle, '>', $filename;  #ok
+    open($handle, '>', $filename); #not ok
+    open $handle, '>', $filename;  #ok
 
-  split(/$pattern/, @list); #not ok
-  split /$pattern/, @list;  #ok
+    split(/$pattern/, @list); #not ok
+    split /$pattern/, @list;  #ok
 
 
 =head1 CONFIGURATION
@@ -213,9 +215,11 @@ necessary to enforce precedence, but they cause still violations.  In
 those cases, consider using the '## no critic' comments to silence
 Perl::Critic.
 
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+
 
 =head1 COPYRIGHT
 

@@ -51,14 +51,15 @@ Perl::Critic::Policy::InputOutput::ProhibitInteractiveTest - Use prompt() instea
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
 The C<-t> operator is fragile and complicated.  When you are testing
 whether C<STDIN> is interactive, It's much more robust to use
-well-tested CPAN modules like L<IO::Interactive>.
+well-tested CPAN modules like L<IO::Interactive|IO::Interactive>.
 
 
 =head1 CONFIGURATION

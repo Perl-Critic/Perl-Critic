@@ -105,7 +105,8 @@ Perl::Critic::Policy::ValuesAndExpressions::ProhibitInterpolationOfLiterals - Al
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
@@ -114,18 +115,18 @@ Don't use double-quotes or C<qq//> if your string doesn't require
 interpolation.  This saves the interpreter a bit of work and it lets
 the reader know that you really did intend the string to be literal.
 
-  print "foobar";     #not ok
-  print 'foobar';     #ok
-  print qq/foobar/;   #not ok
-  print q/foobar/;    #ok
+    print "foobar";     #not ok
+    print 'foobar';     #ok
+    print qq/foobar/;   #not ok
+    print q/foobar/;    #ok
 
-  print "$foobar";    #ok
-  print "foobar\n";   #ok
-  print qq/$foobar/;  #ok
-  print qq/foobar\n/; #ok
+    print "$foobar";    #ok
+    print "foobar\n";   #ok
+    print qq/$foobar/;  #ok
+    print qq/foobar\n/; #ok
 
-  print qq{$foobar};  #preferred
-  print qq{foobar\n}; #preferred
+    print qq{$foobar};  #preferred
+    print qq{foobar\n}; #preferred
 
 =head1 CONFIGURATION
 
@@ -141,12 +142,12 @@ everything that appears within C<qq{}> or C<qq[]> quotes.  But if
 those strings are literal, Perl::Critic will complain.  To prevent
 this, put the following in your F<.perlcriticrc> file:
 
-  [ValuesAndExpressions::ProhibitInterpolationOfLiterals]
-  allow = qq{} qq[]
+    [ValuesAndExpressions::ProhibitInterpolationOfLiterals]
+    allow = qq{} qq[]
 
 =head1 SEE ALSO
 
-L<Perl::Critic::Policy::ValuesAndExpressions::RequireInterpolationOfMetachars>
+L<Perl::Critic::Policy::ValuesAndExpressions::RequireInterpolationOfMetachars|Perl::Critic::Policy::ValuesAndExpressions::RequireInterpolationOfMetachars>
 
 =head1 AUTHOR
 

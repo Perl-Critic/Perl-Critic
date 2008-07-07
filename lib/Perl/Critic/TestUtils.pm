@@ -10,6 +10,7 @@ package Perl::Critic::TestUtils;
 use 5.006001;
 use strict;
 use warnings;
+
 use English qw(-no_match_vars);
 use Readonly;
 
@@ -316,35 +317,38 @@ __END__
 
 Perl::Critic::TestUtils - Utility functions for testing new Policies.
 
+
 =head1 SYNOPSIS
 
-  use Perl::Critic::TestUtils qw(critique pcritique fcritique);
+    use Perl::Critic::TestUtils qw(critique pcritique fcritique);
 
-  my $code = '<<END_CODE';
-  package Foo::Bar;
-  $foo = frobulator();
-  $baz = $foo ** 2;
-  1;
-  END_CODE
+    my $code = '<<END_CODE';
+    package Foo::Bar;
+    $foo = frobulator();
+    $baz = $foo ** 2;
+    1;
+    END_CODE
 
-  # Critique code against all loaded policies...
-  my $perl_critic_config = { -severity => 2 };
-  my $violation_count = critique( \$code, $perl_critic_config);
+    # Critique code against all loaded policies...
+    my $perl_critic_config = { -severity => 2 };
+    my $violation_count = critique( \$code, $perl_critic_config);
 
-  # Critique code against one policy...
-  my $custom_policy = 'Miscellanea::ProhibitFrobulation'
-  my $violation_count = pcritique( $custom_policy, \$code );
+    # Critique code against one policy...
+    my $custom_policy = 'Miscellanea::ProhibitFrobulation'
+    my $violation_count = pcritique( $custom_policy, \$code );
 
-  # Critique code against one filename-related policy...
-  my $custom_policy = 'Modules::RequireFilenameMatchesPackage'
-  my $violation_count = fcritique( $custom_policy, \$code, 'Foo/Bar.pm' );
+    # Critique code against one filename-related policy...
+    my $custom_policy = 'Modules::RequireFilenameMatchesPackage'
+    my $violation_count = fcritique( $custom_policy, \$code, 'Foo/Bar.pm' );
+
 
 =head1 DESCRIPTION
 
-This module is used by L<Perl::Critic> only for self-testing. It
-provides a few handy subroutines for testing new Perl::Critic::Policy
-modules.  Look at the test scripts that ship with Perl::Critic for
-more examples of how to use these subroutines.
+This module is used by L<Perl::Critic|Perl::Critic> only for
+self-testing. It provides a few handy subroutines for testing new
+Perl::Critic::Policy modules.  Look at the test scripts that ship with
+Perl::Critic for more examples of how to use these subroutines.
+
 
 =head1 EXPORTS
 
@@ -352,87 +356,107 @@ more examples of how to use these subroutines.
 
 =item block_perlcriticrc()
 
-If a user has a F<~/.perlcriticrc> file, this can interfere with testing.
-This handy method disables the search for that file -- simply call it at the
-top of your F<.t> program.  Note that this is not easily reversible, but that
-should not matter.
+If a user has a F<~/.perlcriticrc> file, this can interfere with
+testing.  This handy method disables the search for that file --
+simply call it at the top of your F<.t> program.  Note that this is
+not easily reversible, but that should not matter.
+
 
 =item critique_with_violations( $code_string_ref, $config_ref )
 
-Test a block of code against the specified Perl::Critic::Config instance (or
-C<undef> for the default).  Returns the violations that occurred.
+Test a block of code against the specified Perl::Critic::Config
+instance (or C<undef> for the default).  Returns the violations that
+occurred.
+
 
 =item critique( $code_string_ref, $config_ref )
 
-Test a block of code against the specified Perl::Critic::Config instance (or
-C<undef> for the default).  Returns the number of violations that occurred.
+Test a block of code against the specified Perl::Critic::Config
+instance (or C<undef> for the default).  Returns the number of
+violations that occurred.
+
 
 =item pcritique_with_violations( $policy_name, $code_string_ref, $config_ref )
 
-Like C<critique_with_violations()>, but tests only a single policy instead of
-the whole bunch.
+Like C<critique_with_violations()>, but tests only a single policy
+instead of the whole bunch.
+
 
 =item pcritique( $policy_name, $code_string_ref, $config_ref )
 
-Like C<critique()>, but tests only a single policy instead of the whole bunch.
+Like C<critique()>, but tests only a single policy instead of the
+whole bunch.
+
 
 =item fcritique_with_violations( $policy_name, $code_string_ref, $filename, $config_ref )
 
-Like C<pcritique_with_violations()>, but pretends that the code was loaded
-from the specified filename.  This is handy for testing policies like
-C<Modules::RequireFilenameMatchesPackage> which care about the filename that
-the source derived from.
+Like C<pcritique_with_violations()>, but pretends that the code was
+loaded from the specified filename.  This is handy for testing
+policies like C<Modules::RequireFilenameMatchesPackage> which care
+about the filename that the source derived from.
 
-The C<$filename> parameter must be a relative path, not absolute.  The file
-and all necessary subdirectories will be created via L<File::Temp> and will be
-automatically deleted.
+The C<$filename> parameter must be a relative path, not absolute.  The
+file and all necessary subdirectories will be created via
+L<File::Temp|File::Temp> and will be automatically deleted.
+
 
 =item fcritique( $policy_name, $code_string_ref, $filename, $config_ref )
 
-Like C<pcritique()>, but pretends that the code was loaded from the specified
-filename.  This is handy for testing policies like
-C<Modules::RequireFilenameMatchesPackage> which care about the filename that
-the source derived from.
+Like C<pcritique()>, but pretends that the code was loaded from the
+specified filename.  This is handy for testing policies like
+C<Modules::RequireFilenameMatchesPackage> which care about the
+filename that the source derived from.
 
-The C<$filename> parameter must be a relative path, not absolute.  The file
-and all necessary subdirectories will be created via L<File::Temp> and will be
-automatically deleted.
+The C<$filename> parameter must be a relative path, not absolute.  The
+file and all necessary subdirectories will be created via
+L<File::Temp|File::Temp> and will be automatically deleted.
+
 
 =item subtests_in_tree( $dir )
 
-Searches the specified directory recursively for F<.run> files.  Each one
-found is parsed and a hash-of-list-of-hashes is returned.  The outer hash is
-keyed on policy short name, like C<Modules::RequireEndWithOne>.  The inner
-hash specifies a single test to be handed to C<pcritique()> or C<fcritique()>,
-including the code string, test name, etc.  See below for the syntax of the
-F<.run> files.
+Searches the specified directory recursively for F<.run> files.  Each
+one found is parsed and a hash-of-list-of-hashes is returned.  The
+outer hash is keyed on policy short name, like
+C<Modules::RequireEndWithOne>.  The inner hash specifies a single test
+to be handed to C<pcritique()> or C<fcritique()>, including the code
+string, test name, etc.  See below for the syntax of the F<.run>
+files.
+
 
 =item should_skip_author_tests()
 
 Answers whether author tests should run.
 
+
 =item get_author_test_skip_message()
 
-Returns a string containing the message that should be emitted when a test
-is skipped due to it being an author test when author tests are not enabled.
+Returns a string containing the message that should be emitted when a
+test is skipped due to it being an author test when author tests are
+not enabled.
+
 
 =item starting_points_including_examples()
 
-Returns a list of the directories contain code that needs to be tested when it
-is desired that the examples be included.
+Returns a list of the directories contain code that needs to be tested
+when it is desired that the examples be included.
+
 
 =item bundled_policy_names()
 
-Returns a list of Policy packages that come bundled with this package.  This
-functions by searching F<MANIFEST> for F<lib/Perl/Critic/Policy/*.pm> and
-converts the results to package names.
+Returns a list of Policy packages that come bundled with this package.
+This functions by searching F<MANIFEST> for
+F<lib/Perl/Critic/Policy/*.pm> and converts the results to package
+names.
+
 
 =item names_of_policies_willing_to_work( %configuration )
 
-Returns a list of the packages of policies that are willing to function on
-the current system using the specified configuration.
+Returns a list of the packages of policies that are willing to
+function on the current system using the specified configuration.
+
 
 =back
+
 
 =head1 F<.run> file information
 
@@ -445,10 +469,10 @@ Testing a policy follows a very simple pattern:
         * Optional exception expected
         * Optional filename for code
 
-Each of the subtests for a policy is collected in a single F<.run> file, with
-test properties as comments in front of each code block that describes how we expect
-Perl::Critic to react to the code.  For example, say you have a policy called
-Variables::ProhibitVowels:
+Each of the subtests for a policy is collected in a single F<.run>
+file, with test properties as comments in front of each code block
+that describes how we expect Perl::Critic to react to the code.  For
+example, say you have a policy called Variables::ProhibitVowels:
 
     (In file t/Variables/ProhibitVowels.run)
 
@@ -468,38 +492,38 @@ Variables::ProhibitVowels:
     my $rhythm = 12;    # But here it is
 
 These are called "subtests", and two are shown above.  The beauty of
-incorporating multiple subtests in a file is that the F<.run> is itself a
-(mostly) valid Perl file, and not hidden in a HEREDOC, so your editor's
-color-coding still works, and it is much easier to work with the code and the
-POD.
+incorporating multiple subtests in a file is that the F<.run> is
+itself a (mostly) valid Perl file, and not hidden in a HEREDOC, so
+your editor's color-coding still works, and it is much easier to work
+with the code and the POD.
 
-If you need to pass any configuration parameters for your subtest, do so like
-this:
+If you need to pass any configuration parameters for your subtest, do
+so like this:
 
     ## parms { allow_y => '0' }
 
-Note that all the values in this hash must be strings because that's what
-Perl::Critic will hand you from a F<.perlcriticrc>.
+Note that all the values in this hash must be strings because that's
+what Perl::Critic will hand you from a F<.perlcriticrc>.
 
-If it's a TODO subtest (probably because of some weird corner of
-PPI that we exercised that Adam is getting around to fixing, right?),
-then make a C<##TODO> entry.
+If it's a TODO subtest (probably because of some weird corner of PPI
+that we exercised that Adam is getting around to fixing, right?), then
+make a C<##TODO> entry.
 
     ## TODO Should pass when PPI 1.xxx comes out
 
-If the code is expected to trigger an exception in the policy, indicate that
-like so:
+If the code is expected to trigger an exception in the policy,
+indicate that like so:
 
     ## error 1
 
-If you want to test the error message, mark it with C</.../> to indicate a
-C<like()> test:
+If you want to test the error message, mark it with C</.../> to
+indicate a C<like()> test:
 
     ## error /Can't load Foo::Bar/
 
-If the policy you are testing cares about the filename of the code, you can
-indicate that C<fcritique> should be used like so (see C<fcritique> for more
-details):
+If the policy you are testing cares about the filename of the code,
+you can indicate that C<fcritique> should be used like so (see
+C<fcritique> for more details):
 
     ## filename lib/Foo/Bar.pm
 
@@ -509,6 +533,7 @@ so be careful.
 Note that nowhere within the F<.run> file itself do you specify the
 policy that you're testing.  That's implicit within the filename.
 
+
 =head1 BUGS AND CAVEATS AND TODO ITEMS
 
 Test that we have a t/*/*.run for each lib/*/*.pm
@@ -517,10 +542,12 @@ Allow us to specify the nature of the failures, and which one.  If
 there are 15 lines of code, and six of them fail, how do we know
 they're the right six?
 
+
 =head1 AUTHOR
 
 Chris Dolan <cdolan@cpan.org>
-and the rest of the L<Perl::Critic> team.
+and the rest of the L<Perl::Critic|Perl::Critic> team.
+
 
 =head1 COPYRIGHT
 

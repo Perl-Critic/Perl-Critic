@@ -73,7 +73,8 @@ Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars - Write C<$my_var
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
@@ -83,15 +84,15 @@ separated by underscores.  Well-recognized acronyms can be in ALL
 CAPS, but must be separated by underscores from other parts of the
 name.
 
-  my $foo_bar   #ok
-  my $foo_BAR   #ok
-  my @FOO_bar   #ok
-  my %FOO_BAR   #ok
+    my $foo_bar   #ok
+    my $foo_BAR   #ok
+    my @FOO_bar   #ok
+    my %FOO_BAR   #ok
 
-  my $FooBar   #not ok
-  my $FOObar   #not ok
-  my @fooBAR   #not ok
-  my %fooBar   #not ok
+    my $FooBar   #not ok
+    my $FOObar   #not ok
+    my @fooBAR   #not ok
+    my %fooBar   #not ok
 
 
 =head1 CONFIGURATION
@@ -101,7 +102,7 @@ This Policy is not configurable except for the standard options.
 
 =head1 SEE ALSO
 
-L<Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseSubs>
+L<Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseSubs|Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseSubs>
 
 =head1 AUTHOR
 

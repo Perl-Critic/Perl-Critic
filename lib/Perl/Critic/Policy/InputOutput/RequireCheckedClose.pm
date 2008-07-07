@@ -56,13 +56,15 @@ Perl::Critic::Policy::InputOutput::RequireCheckedClose - Write C<< my $error = c
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
-The perl builtin I/O function C<close> returns a false value on failure. That
-value should be checked to ensure that the close was successful.
+The perl builtin I/O function C<close> returns a false value on
+failure. That value should be checked to ensure that the close was
+successful.
 
 
   my $error = close $filehandle;                   # ok
@@ -81,8 +83,8 @@ Andrew Moore <amoore@mooresystems.com>
 
 =head1 ACKNOWLEDGMENTS
 
-This policy module is based heavily on policies written by Jeffrey Ryan
-Thalhammer <thaljef@cpan.org>.
+This policy module is based heavily on policies written by Jeffrey
+Ryan Thalhammer <thaljef@cpan.org>.
 
 =head1 COPYRIGHT
 

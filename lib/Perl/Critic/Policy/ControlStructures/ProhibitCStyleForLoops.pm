@@ -62,22 +62,23 @@ Perl::Critic::Policy::ControlStructures::ProhibitCStyleForLoops - Write C<for(0.
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
-The 3-part C<for> loop that Perl inherits from C is butt-ugly, and only
-really necessary if you need irregular counting.  The very Perlish
-C<..> operator is much more elegant and readable.
+The 3-part C<for> loop that Perl inherits from C is butt-ugly, and
+only really necessary if you need irregular counting.  The very
+Perlish C<..> operator is much more elegant and readable.
 
-  for($i=0; $i<=$max; $i++){      #ick!
-      do_something($i);
-  }
+    for($i=0; $i<=$max; $i++){      #ick!
+        do_something($i);
+    }
 
-  for(0..$max){                   #very nice
-    do_something($_);
-  }
+    for(0..$max){                   #very nice
+        do_something($_);
+    }
 
 
 =head1 CONFIGURATION

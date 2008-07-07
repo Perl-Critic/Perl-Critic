@@ -122,7 +122,8 @@ Perl::Critic::Policy::NamingConventions::ProhibitAmbiguousNames - Don't use vagu
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
@@ -139,17 +140,17 @@ names.
 
 The default list of forbidden words is:
 
-  abstract bases close contract last left no record right second set
+    abstract bases close contract last left no record right second set
 
-This list can be changed by giving a value for C<forbid> of a series of
-forbidden words separated by spaces.
+This list can be changed by giving a value for C<forbid> of a series
+of forbidden words separated by spaces.
 
-For example, if you decide that C<bases> is an OK name for variables (e.g.
-in bioinformatics), then put something like the following in
+For example, if you decide that C<bases> is an OK name for variables
+(e.g.  in bioinformatics), then put something like the following in
 C<$HOME/.perlcriticrc>:
 
-  [NamingConventions::ProhibitAmbiguousNames]
-  forbid = last set left right no abstract contract record second close
+    [NamingConventions::ProhibitAmbiguousNames]
+    forbid = last set left right no abstract contract record second close
 
 
 =head1 METHODS

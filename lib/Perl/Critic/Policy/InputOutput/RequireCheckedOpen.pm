@@ -56,13 +56,15 @@ Perl::Critic::Policy::InputOutput::RequireCheckedOpen - Write C<< my $error = op
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
-The perl builtin I/O function C<open> returns a false value on failure. That
-value should always be checked to ensure that the open was successful.
+The perl builtin I/O function C<open> returns a false value on
+failure. That value should always be checked to ensure that the open
+was successful.
 
 
   my $error = open( $filehandle, $mode, $filename );                  # ok
@@ -81,8 +83,8 @@ Andrew Moore <amoore@mooresystems.com>
 
 =head1 ACKNOWLEDGMENTS
 
-This policy module is based heavily on policies written by Jeffrey Ryan
-Thalhammer <thaljef@cpan.org>.
+This policy module is based heavily on policies written by Jeffrey
+Ryan Thalhammer <thaljef@cpan.org>.
 
 =head1 COPYRIGHT
 

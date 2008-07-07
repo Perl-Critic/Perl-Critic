@@ -166,18 +166,19 @@ Perl::Critic::Policy::Subroutines::RequireArgUnpacking - Always unpack C<@_> fir
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
-Subroutines that use C<@_> directly instead of unpacking the arguments to
-local variables first have two major problems.  First, they are very hard to
-read.  If you're going to refer to your variables by number instead of by
-name, you may as well be writing assembler code!  Second, C<@_> contains
-aliases to the original variables!  If you modify the contents of a C<@_>
-entry, then you are modifying the variable outside of your subroutine.  For
-example:
+Subroutines that use C<@_> directly instead of unpacking the arguments
+to local variables first have two major problems.  First, they are
+very hard to read.  If you're going to refer to your variables by
+number instead of by name, you may as well be writing assembler code!
+Second, C<@_> contains aliases to the original variables!  If you
+modify the contents of a C<@_> entry, then you are modifying the
+variable outside of your subroutine.  For example:
 
    sub print_local_var_plus_one {
        my ($var) = @_;
@@ -192,31 +193,33 @@ example:
    print_var_plus_one($x);       # prints "3", $x is now 3 !
    print $x;                     # prints "3"
 
-This is spooky action-at-a-distance and is very hard to debug if it's not
-intentional and well-documented (like C<chop> or C<chomp>).
+This is spooky action-at-a-distance and is very hard to debug if it's
+not intentional and well-documented (like C<chop> or C<chomp>).
 
 =head1 CONFIGURATION
 
-This policy is lenient for subroutines which have C<N> or fewer top-level
-statements, where C<N> defaults to ZERO.  You can override this to set it to a
-higher number with the C<short_subroutine_statements> setting.  This is very
-much not recommended but perhaps you REALLY need high performance.  To do
-this, put entries in a F<.perlcriticrc> file like this:
+This policy is lenient for subroutines which have C<N> or fewer
+top-level statements, where C<N> defaults to ZERO.  You can override
+this to set it to a higher number with the
+C<short_subroutine_statements> setting.  This is very much not
+recommended but perhaps you REALLY need high performance.  To do this,
+put entries in a F<.perlcriticrc> file like this:
 
   [Subroutines::RequireArgUnpacking]
   short_subroutine_statements = 2
 
 =head1 CAVEATS
 
-PPI doesn't currently detect anonymous subroutines, so we don't check those.
-This should just work when PPI gains that feature.
+PPI doesn't currently detect anonymous subroutines, so we don't check
+those.  This should just work when PPI gains that feature.
 
 We don't check for C<@ARG>, the alias for C<@_> from English.pm.  That's
 deprecated anyway.
 
 =head1 CREDITS
 
-Initial development of this policy was supported by a grant from the Perl Foundation.
+Initial development of this policy was supported by a grant from the
+Perl Foundation.
 
 =head1 AUTHOR
 

@@ -53,17 +53,19 @@ Perl::Critic::Policy::ControlStructures::ProhibitUntilBlocks - Write C<while(! $
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
 Conway discourages using C<until> because it leads to double-negatives
-that are hard to understand.  Instead, reverse the logic and use C<while>.
+that are hard to understand.  Instead, reverse the logic and use
+C<while>.
 
-  until($condition)     { do_something() } #not ok
-  until(! $no_flag)     { do_something() } #really bad
-  while( ! $condition)  { do_something() } #ok
+    until($condition)     { do_something() } #not ok
+    until(! $no_flag)     { do_something() } #really bad
+    while( ! $condition)  { do_something() } #ok
 
 This Policy only covers the block-form of C<until>.  For the postfix
 variety, see C<ProhibitPostfixControls>.
@@ -76,7 +78,7 @@ This Policy is not configurable except for the standard options.
 
 =head1 SEE ALSO
 
-L<Perl::Critic::Policy::ControlStructures::ProhibitPostfixControls>
+L<Perl::Critic::Policy::ControlStructures::ProhibitPostfixControls|Perl::Critic::Policy::ControlStructures::ProhibitPostfixControls>
 
 =head1 AUTHOR
 

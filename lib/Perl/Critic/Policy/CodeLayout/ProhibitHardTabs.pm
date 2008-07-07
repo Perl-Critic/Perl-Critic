@@ -75,9 +75,11 @@ __END__
 
 Perl::Critic::Policy::CodeLayout::ProhibitHardTabs - Use spaces instead of tabs.
 
+
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
@@ -87,12 +89,13 @@ things you can do to your co-workers and colleagues, especially if
 those tabs are anywhere other than a leading position.  Because
 various applications and devices represent tabs differently, they can
 cause you code to look vastly different to other people.  Any decent
-editor can be configured to expand tabs into spaces.  L<Perl::Tidy>
-also does this for you.
+editor can be configured to expand tabs into spaces.
+L<Perl::Tidy|Perl::Tidy> also does this for you.
 
 This Policy catches all tabs in your source code, including POD,
 quotes, and HEREDOCs.  The contents of the C<__DATA__> section are not
 examined.
+
 
 =head1 CONFIGURATION
 
@@ -102,15 +105,18 @@ everywhere, put this to your F<.perlcriticrc> file:
     [CodeLayout::ProhibitHardTabs]
     allow_leading_tabs = 0
 
+
 =head1 NOTES
 
 Beware that Perl::Critic may report the location of the string that
 contains the tab, not the actual location of the tab, so you may need
 to do some hunting.  I'll try and fix this in the future.
 
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+
 
 =head1 COPYRIGHT
 

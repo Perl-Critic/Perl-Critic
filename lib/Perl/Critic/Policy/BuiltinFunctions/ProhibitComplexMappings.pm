@@ -84,9 +84,11 @@ __END__
 
 Perl::Critic::Policy::BuiltinFunctions::ProhibitComplexMappings - Map blocks should have a single statement.
 
+
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
@@ -102,13 +104,15 @@ The best solutions to a complex mapping are: 1) write a subroutine
 that performs the manipulation and call that from map; 2) rewrite the
 map as a for loop.
 
+
 =head1 CAVEATS
 
 This policy currently misses some compound statements inside of the
 map.  For example, the following code incorrectly does not trigger a
 violation:
 
-  map { do { foo(); bar() } } @list
+    map { do { foo(); bar() } } @list
+
 
 =head1 CONFIGURATION
 
@@ -116,16 +120,20 @@ By default this policy flags any mappings with more than one
 statement.  While we do not recommend it, you can increase this limit
 as follows in a F<.perlcriticrc> file:
 
-  [BuiltinFunctions::ProhibitComplexMappings]
-  max_statements = 2
+    [BuiltinFunctions::ProhibitComplexMappings]
+    max_statements = 2
+
 
 =head1 AUTHOR
 
 Chris Dolan <cdolan@cpan.org>
 
+
 =head1 CREDITS
 
-Initial development of this policy was supported by a grant from the Perl Foundation.
+Initial development of this policy was supported by a grant from the
+Perl Foundation.
+
 
 =head1 COPYRIGHT
 

@@ -97,23 +97,26 @@ __END__
 
 Perl::Critic::Policy::BuiltinFunctions::ProhibitBooleanGrep - Use C<List::MoreUtils::any> instead of C<grep> in boolean context.
 
+
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
 Using C<grep> in boolean context is a common idiom for checking if any
-elements in a list match a condition.  This works because boolean context is a
-subset of scalar context, and grep returns the number of matches in scalar
-context.  A non-zero number of matches means a match.
+elements in a list match a condition.  This works because boolean
+context is a subset of scalar context, and grep returns the number of
+matches in scalar context.  A non-zero number of matches means a
+match.
 
-But consider the case of a long array where the first element is a match.
-Boolean C<grep> still checks all of the rest of the elements needlessly.
-Instead, a better solution is to use the C<any> function from
-L<List::MoreUtils>, which short-circuits after the first successful match to
-save time.
+But consider the case of a long array where the first element is a
+match.  Boolean C<grep> still checks all of the rest of the elements
+needlessly.  Instead, a better solution is to use the C<any> function
+from L<List::MoreUtils|List::MoreUtils>, which short-circuits after
+the first successful match to save time.
 
 
 =head1 CONFIGURATION
@@ -123,18 +126,21 @@ This Policy is not configurable except for the standard options.
 
 =head1 CAVEATS
 
-The algorithm for detecting boolean context takes a LOT of shortcuts.  There
-are lots of known false negatives.  But, I was conservative in writing this,
-so I hope there are no false positives.
+The algorithm for detecting boolean context takes a LOT of shortcuts.
+There are lots of known false negatives.  But, I was conservative in
+writing this, so I hope there are no false positives.
+
 
 =head1 AUTHOR
 
 Chris Dolan <cdolan@cpan.org>
 
+
 =head1 CREDITS
 
-Initial development of this policy was supported by a grant from the Perl
-Foundation.
+Initial development of this policy was supported by a grant from the
+Perl Foundation.
+
 
 =head1 COPYRIGHT
 

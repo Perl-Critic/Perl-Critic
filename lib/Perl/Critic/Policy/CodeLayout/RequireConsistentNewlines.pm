@@ -80,20 +80,10 @@ __END__
 Perl::Critic::Policy::CodeLayout::RequireConsistentNewlines - Use the same newline through the source.
 
 
-=head1 CONFIGURATION
-
-This Policy is not configurable except for the standard options.
-
-
-=head1 CAVEAT
-
-This policy works outside of PPI because PPI automatically normalizes
-source code to local newline conventions.  So, this will only work if
-we know the filename of the source code.
-
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
@@ -102,9 +92,23 @@ Source code files are divided into lines with line endings of C<\r>,
 C<\n> or C<\r\n>.  Mixing these different line endings causes problems
 in many text editors and, notably, Module::Signature and GnuPG.
 
+
+=head1 CAVEAT
+
+This policy works outside of PPI because PPI automatically normalizes
+source code to local newline conventions.  So, this will only work if
+we know the filename of the source code.
+
+
+=head1 CONFIGURATION
+
+This Policy is not configurable except for the standard options.
+
+
 =head1 AUTHOR
 
 Chris Dolan <cdolan@cpan.org>
+
 
 =head1 COPYRIGHT
 

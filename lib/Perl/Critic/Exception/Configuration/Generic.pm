@@ -44,12 +44,13 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Exception::Configuration::Generic - A problem with L<Perl::Critic> configuration that doesn't involve an option.
+Perl::Critic::Exception::Configuration::Generic - A problem with L<Perl::Critic|Perl::Critic> configuration that doesn't involve an option.
 
 =head1 DESCRIPTION
 
-A representation of a problem found with the configuration of L<Perl::Critic>,
-whether from a F<.perlcriticrc>, another profile file, or command line.
+A representation of a problem found with the configuration of
+L<Perl::Critic|Perl::Critic>, whether from a F<.perlcriticrc>, another
+profile file, or command line.
 
 This covers things like file reading and parsing errors.
 

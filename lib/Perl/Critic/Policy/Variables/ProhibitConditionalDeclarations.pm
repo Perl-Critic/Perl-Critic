@@ -67,22 +67,24 @@ __END__
 
 Perl::Critic::Policy::Variables::ProhibitConditionalDeclarations - Do not write C< my $foo = $bar if $baz; >.
 
+
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
 Declaring a variable with a postfix conditional is really confusing.
-If the conditional is false, its not clear if the variable will
-be false, undefined, undeclared, or what.  It's much more straightforward
+If the conditional is false, its not clear if the variable will be
+false, undefined, undeclared, or what.  It's much more straightforward
 to make variable declarations separately.
 
-  my $foo = $baz if $bar;          #not ok
-  my $foo = $baz unless $bar;      #not ok
-  our $foo = $baz for @list;       #not ok
-  local $foo = $baz foreach @list; #not ok
+    my $foo = $baz if $bar;          #not ok
+    my $foo = $baz unless $bar;      #not ok
+    our $foo = $baz for @list;       #not ok
+    local $foo = $baz foreach @list; #not ok
 
 
 =head1 CONFIGURATION
@@ -93,6 +95,7 @@ This Policy is not configurable except for the standard options.
 =head1 AUTHOR
 
 Jeffrey R. Thalhammer <thaljef@cpan.org>
+
 
 =head1 COPYRIGHT
 

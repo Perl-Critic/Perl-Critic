@@ -56,10 +56,12 @@ __END__
 
 Perl::Critic::PolicyListing - Display minimal information about Policies.
 
+
 =head1 DESCRIPTION
 
 This is a helper class that formats a set of Policy objects for
 pretty-printing.  There are no user-serviceable parts here.
+
 
 =head1 CONSTRUCTOR
 
@@ -69,7 +71,9 @@ pretty-printing.  There are no user-serviceable parts here.
 
 Returns a reference to a new C<Perl::Critic::PolicyListing> object.
 
+
 =back
+
 
 =head1 METHODS
 
@@ -80,18 +84,23 @@ Returns a reference to a new C<Perl::Critic::PolicyListing> object.
 Returns a string representation of this C<PolicyListing>.  See
 L<"OVERLOADS"> for more information.
 
+
 =back
+
 
 =head1 OVERLOADS
 
-When a L<Perl::Critic::PolicyListing> is evaluated in string context,
-it produces a one-line summary of the default severity, policy name,
-and default themes for each L<Perl::Critic::Policy> object that was
-given to the constructor of this C<PolicyListing>.
+When a L<Perl::Critic::PolicyListing|Perl::Critic::PolicyListing> is
+evaluated in string context, it produces a one-line summary of the
+default severity, policy name, and default themes for each
+L<Perl::Critic::Policy|Perl::Critic::Policy> object that was given to
+the constructor of this C<PolicyListing>.
+
 
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+
 
 =head1 COPYRIGHT
 

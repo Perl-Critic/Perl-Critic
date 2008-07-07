@@ -60,7 +60,6 @@ sub _parse_allow {
 #-----------------------------------------------------------------------------
 
 sub violates {
-
     my ( $self, $elem, undef ) = @_;
 
     return if $elem->type()   ne 'no';
@@ -98,9 +97,11 @@ __END__
 
 Perl::Critic::Policy::TestingAndDebugging::ProhibitNoStrict - Prohibit various flavors of C<no strict>.
 
+
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
@@ -113,6 +114,7 @@ configure this Policy to allow certain types of strictures to be
 disabled (See L</CONFIGURATION>).  A bare C<no strict> statement will
 always raise a violation.
 
+
 =head1 CONFIGURATION
 
 The permitted strictures can be configured via the C<allow> option.
@@ -120,16 +122,19 @@ The value is a list of whitespace-delimited stricture types that you
 want to permit.  These can be C<vars>, C<subs> and/or C<refs>.  An
 example of this customization:
 
-  [TestingAndDebugging::ProhibitNoStrict]
-  allow = vars subs refs
+    [TestingAndDebugging::ProhibitNoStrict]
+    allow = vars subs refs
+
 
 =head1 SEE ALSO
 
-L<Perl::Critic::Policy::TestingAndDebugging::RequireUseStrict>
+L<Perl::Critic::Policy::TestingAndDebugging::RequireUseStrict|Perl::Critic::Policy::TestingAndDebugging::RequireUseStrict>
+
 
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+
 
 =head1 COPYRIGHT
 

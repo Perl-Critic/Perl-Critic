@@ -63,49 +63,51 @@ __END__
 
 Perl::Critic::Policy::Variables::RequireLexicalLoopIterators - Write C<for my $element (@list) {...}> instead of C<for $element (@list) {...}>.
 
+
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
-C<for>/C<foreach> loops I<always> create new lexical variables for named
-iterators.  In other words
+C<for>/C<foreach> loops I<always> create new lexical variables for
+named iterators.  In other words
 
-  for $zed (...) {
-     ...
-  }
+    for $zed (...) {
+        ...
+    }
 
 is equivalent to
 
-  for my $zed (...) {
-     ...
-  }
+    for my $zed (...) {
+        ...
+    }
 
 This may not seem like a big deal until you see code like
 
-  my $bicycle;
-  for $bicycle (@things_attached_to_the_bike_rack) {
-      if (
-              $bicycle->is_red()
-          and $bicycle->has_baseball_card_in_spokes()
-          and $bicycle->has_bent_kickstand()
-      ) {
-          $bicycle->remove_lock();
+    my $bicycle;
+    for $bicycle (@things_attached_to_the_bike_rack) {
+        if (
+                $bicycle->is_red()
+            and $bicycle->has_baseball_card_in_spokes()
+            and $bicycle->has_bent_kickstand()
+        ) {
+            $bicycle->remove_lock();
 
-          last;
-      }
-  }
+            last;
+        }
+    }
 
-  if ( $bicycle and $bicycle->is_unlocked() ) {
-      ride_home($bicycle);
-  }
+    if ( $bicycle and $bicycle->is_unlocked() ) {
+        ride_home($bicycle);
+    }
 
-which is not going to allow you to arrive in time for  dinner with your family
-because the C<$bicycle> outside the loop is different from the C<$bicycle>
-inside the loop.  You may have freed your bicycle, but you can't remember
-which one it was.
+which is not going to allow you to arrive in time for dinner with your
+family because the C<$bicycle> outside the loop is different from the
+C<$bicycle> inside the loop.  You may have freed your bicycle, but you
+can't remember which one it was.
 
 
 =head1 CONFIGURATION
@@ -116,6 +118,7 @@ This Policy is not configurable except for the standard options.
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+
 
 =head1 COPYRIGHT
 

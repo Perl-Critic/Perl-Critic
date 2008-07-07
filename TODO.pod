@@ -65,7 +65,8 @@ Requires C<## no critic> to take an argument:
   ## no critic (SomePolicyPattern)     # ok
   ## no critic                         # not ok
 
-Can't be done as a regular Policy because any line that violated it would disable it.
+Can't be done as a regular Policy because any line that violated it would
+disable it.
 
 
 =item * Support for C<#line 123 "filename"> directives.
@@ -134,7 +135,8 @@ difference between that and C<< $self->_foo() >>
 This should not complain about using C<warn> or C<die> if it's not in a
 function, or if it's in main::.
 
-Also, should allow C<die> when it is obvious that the "message" is a reference.
+Also, should allow C<die> when it is obvious that the "message" is a
+reference.
 
 
 =item * RegularExpressions::ProhibitCaptureWithoutTest
@@ -151,6 +153,7 @@ Allow this construct:
 Right now, P::C thinks that the C<$1> isn't legal to use because it's
 "outside" of the match.  The thing is, we can only get to the C<if>
 if the regex matched.
+
     while ( $str =~ /(expression)/ )
 
 
@@ -236,12 +239,13 @@ See L<http://use.perl.org/~Ovid/journal/36767>.
 
 =item * InputOutput::ProhibitMagicDiamond
 
-Steal the idea from L<B::Lint>.
+Steal the idea from L<B::Lint|B::Lint>.
 
 
 =item * TBD::AllProgramsNeedShebangs
 
-Anything that is a program should have a shebang line.  This includes .t files.
+Anything that is a program should have a shebang line.  This includes .t
+files.
 
 
 =item * BuiltInFunctions::RequireConstantSprintfFormat
@@ -286,15 +290,14 @@ Forbid C<do "foo.pl">.  Not sure about this policy name.
 =item * Variables::ProhibitUseVars
 
 Disallow C<use vars qw(...)> and require C<our $foo> instead.  This
-contradicts Miscellanea::Prohibit5006isms.  Maybe verify C<use 5.6>
-before applying this policy.  Low severity.
+contradicts Miscellanea::Prohibit5006isms.  Maybe verify C<use 5.6> before
+applying this policy.  Low severity.
 
 
 =item * VariablesAndExpressions::ProhibitQuotedHashKeys
 
-Forbid quotes around hash keys, unless they are really needed.  This
-is against what Damian says.  Suggested by Adam Kennedy.  Low
-severity.
+Forbid quotes around hash keys, unless they are really needed.  This is
+against what Damian says.  Suggested by Adam Kennedy.  Low severity.
 
 
 =item * CodeLayout::ProhibitFunctionalNew
@@ -340,8 +343,7 @@ content.
 
 =item * Miscellaneous::ProhibitBoilerplate
 
-Complain about copy-and-paste code or docs from h2xs, Module::Starter::*,
-etc.
+Complain about copy-and-paste code or docs from h2xs, Module::Starter::*, etc.
 
 Here's a non-PPI implementation:
 L<http://search.cpan.org/src/JJORE/Carp-Clan-5.8/t/04boilerplate.t>
@@ -388,7 +390,8 @@ for performance gains and compile-time syntax checking.
 
 =item * RegularExpressions::ProhibitUnnecessaryEscapes
 
-Complain if user puts a backslash escape in front of non-special characters.  For example:
+Complain if user puts a backslash escape in front of non-special characters.
+For example:
 
    m/\!/;
 
@@ -398,10 +401,10 @@ workaround bugs in syntax highlighting.
 Note that this is different inside character classes, where only C<^>, C<]>
 and C<-> need to be escaped, I think.  Caret only needs to be escaped at the
 beginning, and dash does NOT need to be escaped at the beginning and end.  See
-L<perlreref>.
+L<perlreref|perlreref>.
 
 
-=item * Steal ideas from L<Dunce::Files>.
+=item * Steal ideas from L<Dunce::Files|Dunce::Files>.
 
 Can someone expand this entry, please?
 
@@ -488,24 +491,24 @@ Just like F<bin/perlcritic> does now.
 
 =item * Add C<-cache> flag to F<bin/perlcritic>
 
-If enabled, this turns on L<PPI::Cache>:
+If enabled, this turns on L<PPI::Cache|PPI::Cache>:
 
     require PPI::Cache;
     my $cache_path = "/tmp/test-perl-critic-cache-$ENV{USER}";
     mkdir $cache_path, oct 700 if (! -d $cache_path);
     PPI::Cache->import(path => $cache_path);
 
-This cachedir should perhaps include the PPI version number!  At least
-until PPI incorporates its own version number in the cache.
+This cachedir should perhaps include the PPI version number!  At least until
+PPI incorporates its own version number in the cache.
 
 (see F<t/40_criticize.t> for a more robust implementation)
 
 
 =item * Use hash-lookup instead of C<List::MoreUtils::any> function.
 
-In several places, Perl::Critic uses C<List::MoreUtils::any> to see if
-a string is a member of a list.  Instead, I suggest using a named
-subroutine that does a hash-lookup like this:
+In several places, Perl::Critic uses C<List::MoreUtils::any> to see if a
+string is a member of a list.  Instead, I suggest using a named subroutine
+that does a hash-lookup like this:
 
     my %logical_ops = hashify( qw( ! || && ||= &&= and or not ) );
     sub is_logical_op { return exists $logical_ops{ $_[0] }; }
@@ -545,10 +548,9 @@ It's unlikely that PPI will support mixde newlines anytime soon.
 
 =item Operators
 
-ValuesAndExpressions::ProhibitMismatchedOperators has two workarounds
-for PPI bugs with parsing operators.  Many of these bugs have been
-fixed in PPI, so it would be good to check if those workarounds are
-still needed.
+ValuesAndExpressions::ProhibitMismatchedOperators has two workarounds for PPI
+bugs with parsing operators.  Many of these bugs have been fixed in PPI, so it
+would be good to check if those workarounds are still needed.
 
 
 =item Regexp methods

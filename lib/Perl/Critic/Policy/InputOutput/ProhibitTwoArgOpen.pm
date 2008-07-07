@@ -72,14 +72,15 @@ Perl::Critic::Policy::InputOutput::ProhibitTwoArgOpen - Write C<< open $fh, q{<}
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
 The three-argument form of C<open> (introduced in Perl 5.6) prevents
 subtle bugs that occur when the filename starts with funny characters
-like '>' or '<'.  The L<IO::File> module provides a nice
+like '>' or '<'.  The L<IO::File|IO::File> module provides a nice
 object-oriented interface to filehandles, which I think is more
 elegant anyway.
 
@@ -89,8 +90,8 @@ elegant anyway.
   use IO::File;
   my $fh = IO::File->new( 'output.txt', q{>} ); # even better!
 
-It's also more explicitly clear to define the input mode of the
-file, as in the difference between these two:
+It's also more explicitly clear to define the input mode of the file,
+as in the difference between these two:
 
   open( $fh, 'foo.txt' );       # BAD: Reader must think what default mode is
   open( $fh, '<', 'foo.txt' );  # GOOD: Reader can see open mode
@@ -113,9 +114,9 @@ that loophole.
 
 =head1 SEE ALSO
 
-L<IO::Handle>
+L<IO::Handle|IO::Handle>
 
-L<IO::File>
+L<IO::File|IO::File>
 
 =head1 AUTHOR
 

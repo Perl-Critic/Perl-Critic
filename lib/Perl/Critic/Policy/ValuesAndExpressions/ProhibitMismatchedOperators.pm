@@ -101,9 +101,11 @@ __END__
 
 Perl::Critic::Policy::ValuesAndExpressions::ProhibitMismatchedOperators - Don't mix numeric operators with string operands, or vice-versa.
 
+
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
@@ -112,10 +114,10 @@ Using the wrong operator type for a value can obscure coding intent
 and possibly lead to subtle errors.  An example of this is mixing a
 string equality operator with a numeric value, or vice-versa.
 
-  if ($foo == 'bar') {}     #not ok
-  if ($foo eq 'bar') {}     #ok
-  if ($foo eq 123) {}       #not ok
-  if ($foo == 123) {}       #ok
+    if ($foo == 'bar') {}     #not ok
+    if ($foo eq 'bar') {}     #ok
+    if ($foo eq 123) {}       #not ok
+    if ($foo == 123) {}       #ok
 
 
 =head1 CONFIGURATION
@@ -125,14 +127,16 @@ This Policy is not configurable except for the standard options.
 
 =head1 NOTES
 
-If L<warnings> are enabled, the Perl interpreter usually warns you
-about using mismatched operators at run-time.  This Policy does
-essentially the same thing, but at author-time.  That way, you can
-find our about them sooner.
+If L<warnings|warnings> are enabled, the Perl interpreter usually
+warns you about using mismatched operators at run-time.  This Policy
+does essentially the same thing, but at author-time.  That way, you
+can find our about them sooner.
+
 
 =head1 AUTHOR
 
 Peter Guzis <pguzis@cpan.org>
+
 
 =head1 COPYRIGHT
 

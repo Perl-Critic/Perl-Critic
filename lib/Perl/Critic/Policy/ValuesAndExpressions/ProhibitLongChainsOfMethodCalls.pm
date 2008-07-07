@@ -135,7 +135,8 @@ Perl::Critic::Policy::ValuesAndExpressions::ProhibitLongChainsOfMethodCalls - Lo
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
@@ -148,10 +149,10 @@ modified to deal with the change.  The code is too tightly coupled and
 is brittle.
 
 
-  $x = $y->a;           #ok
-  $x = $y->a->b;        #ok
-  $x = $y->a->b->c;     #questionable, but allowed by default
-  $x = $y->a->b->c->d;  #not ok
+    $x = $y->a;           #ok
+    $x = $y->a->b;        #ok
+    $x = $y->a->b->c;     #questionable, but allowed by default
+    $x = $y->a->b->c->d;  #not ok
 
 
 =head1 CONFIGURATION

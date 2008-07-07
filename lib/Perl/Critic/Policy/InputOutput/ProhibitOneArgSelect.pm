@@ -57,7 +57,8 @@ Perl::Critic::Policy::InputOutput::ProhibitOneArgSelect - Never write C<select($
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
@@ -83,7 +84,7 @@ This Policy is not configurable except for the standard options.
 
 =head1 SEE ALSO
 
-L<IO::Handle>.
+L<IO::Handle|IO::Handle>.
 
 =head1 AUTHOR
 

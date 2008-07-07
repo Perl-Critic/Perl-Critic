@@ -330,23 +330,25 @@ __END__
 
 Perl::Critic::Policy::RegularExpressions::ProhibitUnusedCapture - Only use a capturing group if you plan to use the captured value.
 
+
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
-Perl regular expressions have multiple types of grouping syntax.  The basic
-parentheses (e.g. C<m/(foo)/>) captures into the magic variable C<$1>.
-Non-capturing groups (e.g. C<m/(?:foo)/> are useful because they have better
-runtime performance and do not copy strings to the magic global capture
-variables.
+Perl regular expressions have multiple types of grouping syntax.  The
+basic parentheses (e.g. C<m/(foo)/>) captures into the magic variable
+C<$1>.  Non-capturing groups (e.g. C<m/(?:foo)/> are useful because
+they have better runtime performance and do not copy strings to the
+magic global capture variables.
 
 It's also easier on the maintenance programmer if you consistently use
-capturing vs. non-capturing groups, because that programmer can tell more
-easily which regexps can be refactored without breaking surrounding code which
-may use the captured values.
+capturing vs. non-capturing groups, because that programmer can tell
+more easily which regexps can be refactored without breaking
+surrounding code which may use the captured values.
 
 
 =head1 CONFIGURATION
@@ -358,30 +360,36 @@ This Policy is not configurable except for the standard options.
 
 =head2 Regexp::Parser
 
-We use L<Regexp::Parser> to analyze the regular expression syntax.  This is an
-optional module for Perl::Critic, so it will not be automatically installed by
-CPAN for you.  If you wish to use this policy, you must install that module
-first.
+We use L<Regexp::Parser|Regexp::Parser> to analyze the regular
+expression syntax.  This is an optional module for Perl::Critic, so it
+will not be automatically installed by CPAN for you.  If you wish to
+use this policy, you must install that module first.
+
 
 =head2 C<qr//> interpolation
 
-This policy can be confused by interpolation of C<qr//> elements, but those
-are always false negatives.  For example:
+This policy can be confused by interpolation of C<qr//> elements, but
+those are always false negatives.  For example:
 
     my $foo_re = qr/(foo)/;
     my ($foo) = m/$foo_re (bar)/x;
 
 A human can tell that this should be a violation because there are two
-captures but only the first capture is used, not the second.  The policy only
-notices that there is one capture in the regexp and remains happy.
+captures but only the first capture is used, not the second.  The
+policy only notices that there is one capture in the regexp and
+remains happy.
+
 
 =head1 CREDITS
 
-Initial development of this policy was supported by a grant from the Perl Foundation.
+Initial development of this policy was supported by a grant from the
+Perl Foundation.
+
 
 =head1 AUTHOR
 
 Chris Dolan <cdolan@cpan.org>
+
 
 =head1 COPYRIGHT
 

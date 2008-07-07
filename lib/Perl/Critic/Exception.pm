@@ -47,13 +47,14 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Exception - A problem identified by L<Perl::Critic>.
+Perl::Critic::Exception - A problem identified by L<Perl::Critic|Perl::Critic>.
 
 =head1 DESCRIPTION
 
-A base class for all problems discovered by L<Perl::Critic>.  This
-exists to enable differentiating exceptions from L<Perl::Critic> code
-from those originating in other modules.
+A base class for all problems discovered by
+L<Perl::Critic|Perl::Critic>.  This exists to enable differentiating
+exceptions from L<Perl::Critic|Perl::Critic> code from those
+originating in other modules.
 
 This is an abstract class.  It should never be instantiated.
 
@@ -74,6 +75,7 @@ stripped off.
 =head1 AUTHOR
 
 Elliot Shank <perl@galumph.com>
+
 
 =head1 COPYRIGHT
 

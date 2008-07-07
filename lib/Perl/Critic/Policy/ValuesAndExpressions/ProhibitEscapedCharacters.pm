@@ -59,7 +59,8 @@ Perl::Critic::Policy::ValuesAndExpressions::ProhibitEscapedCharacters - Write C<
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
@@ -67,10 +68,10 @@ This Policy is part of the core L<Perl::Critic> distribution.
 Escaped numeric values are hard to read and debug.  Instead, use named
 values.  The syntax is less compact, but dramatically more readable.
 
-  $str = "\x7F\x06\x22Z";                         # not ok
+    $str = "\x7F\x06\x22Z";                         # not ok
 
-  use charnames ':full';
-  $str = "\N{DELETE}\N{ACKNOWLEDGE}\N{CANCEL}Z";  # ok
+    use charnames ':full';
+    $str = "\N{DELETE}\N{ACKNOWLEDGE}\N{CANCEL}Z";  # ok
 
 
 =head1 CONFIGURATION

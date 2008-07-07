@@ -270,10 +270,10 @@ Perl::Critic::Violation - A violation of a Policy found in some source code.
 
 Perl::Critic::Violation is the generic representation of an individual
 Policy violation.  Its primary purpose is to provide an abstraction
-layer so that clients of L<Perl::Critic> don't have to know anything
-about L<PPI>.  The C<violations> method of all L<Perl::Critic::Policy>
-subclasses must return a list of these Perl::Critic::Violation
-objects.
+layer so that clients of L<Perl::Critic|Perl::Critic> don't have to
+know anything about L<PPI|PPI>.  The C<violations> method of all
+L<Perl::Critic::Policy|Perl::Critic::Policy> subclasses must return a
+list of these Perl::Critic::Violation objects.
 
 =head1 CONSTRUCTOR
 
@@ -284,14 +284,15 @@ objects.
 Returns a reference to a new C<Perl::Critic::Violation> object. The
 arguments are a description of the violation (as string), an
 explanation for the policy (as string) or a series of page numbers in
-PBP (as an ARRAY ref), a reference to the L<PPI> element that caused
-the violation, and the severity of the violation (as an integer).
+PBP (as an ARRAY ref), a reference to the L<PPI|PPI> element that
+caused the violation, and the severity of the violation (as an
+integer).
 
 =back
 
 =head1 METHODS
 
-=over 8
+=over
 
 =item C<description()>
 
@@ -300,15 +301,15 @@ words, this value may change on a per violation basis.
 
 =item C<explanation()>
 
-Returns an explanation of the policy as a string or as reference to
-an array of page numbers in PBP.  This value will generally not change
+Returns an explanation of the policy as a string or as reference to an
+array of page numbers in PBP.  This value will generally not change
 based upon the specific code violating the policy.
 
 =item C<location()>
 
-Returns a three-element array reference containing the line and real
-& virtual column numbers where this Violation occurred, as in
-L<PPI::Element>.
+Returns a three-element array reference containing the line and real &
+virtual column numbers where this Violation occurred, as in
+L<PPI::Element|PPI::Element>.
 
 =item C<filename()>
 
@@ -342,8 +343,8 @@ C<DESCRIPTION> section of the Policy module's POD.
 
 =item C<policy()>
 
-Returns the name of the L<Perl::Critic::Policy> that created this
-Violation.
+Returns the name of the L<Perl::Critic::Policy|Perl::Critic::Policy>
+that created this Violation.
 
 =item C<source()>
 
@@ -372,16 +373,17 @@ variable.  See L<"OVERLOADS"> for the details.
 
 =head1 FIELDS
 
-=over 8
+=over
 
 =item C<$Perl::Critic::Violation::FORMAT>
 
-B<DEPRECATED:> Use the C<set_format> and C<get_format> methods instead.
+B<DEPRECATED:> Use the C<set_format> and C<get_format> methods
+instead.
 
-Sets the format for all Violation objects when they are evaluated in string
-context.  The default is C<'%d at line %l, column %c. %e'>.  See
-L<"OVERLOADS"> for formatting options.  If you want to change C<$FORMAT>, you
-should probably localize it first.
+Sets the format for all Violation objects when they are evaluated in
+string context.  The default is C<'%d at line %l, column %c. %e'>.
+See L<"OVERLOADS"> for formatting options.  If you want to change
+C<$FORMAT>, you should probably localize it first.
 
 =back
 
@@ -393,10 +395,11 @@ on the current value of the C<$FORMAT> package variable.
 
 Formats are a combination of literal and escape characters similar to
 the way C<sprintf> works.  If you want to know the specific formatting
-capabilities, look at L<String::Format>. Valid escape characters are:
+capabilities, look at L<String::Format|String::Format>. Valid escape
+characters are:
 
     Escape    Meaning
-    -------   ----------------------------------------------------------------
+    -------   ------------------------------------------------------------
     %c        Column number where the violation occurred
     %d        Full diagnostic discussion of the violation
     %e        Explanation of violation or page numbers in PBP
@@ -422,10 +425,10 @@ Here are some examples:
 
   $Perl::Critic::Violation::FORMAT = "%m at line %l. %e. \n%d\n";
   #looks like "Mixed case variable name at line 6.  See page 44 of PBP.
-                    Conway's recommended naming convention is to use lower-case words
-                    separated by underscores.  Well-recognized acronyms can be in ALL
-                    CAPS, but must be separated by underscores from other parts of the
-                    name."
+    Conway's recommended naming convention is to use lower-case words
+    separated by underscores.  Well-recognized acronyms can be in ALL
+    CAPS, but must be separated by underscores from other parts of the
+    name."
 
 =head1 AUTHOR
 

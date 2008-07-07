@@ -18,8 +18,8 @@ string, in which case the string is used as the parameter name, or
 around the new hash reference specifications.
 
 The absence of a requirement for a Policy's constructor to call the
-base L<Perl::Critic::Policy> constructor did cause problems that had
-to be worked around.
+base L<Perl::Critic::Policy|Perl::Critic::Policy> constructor did
+cause problems that had to be worked around.
 
 =item Must not require configuration items to be parsed multiple times.
 
@@ -139,8 +139,7 @@ without breaking anything.
 
 Rather than using I<is a> relationships, C<PolicyParameter> objects
 I<have a> C<Behavior>.  This means that a developer can use the base
-functionality of a C<Behavior>, but override the parts that they
-want.
+functionality of a C<Behavior>, but override the parts that they want.
 
 =back
 

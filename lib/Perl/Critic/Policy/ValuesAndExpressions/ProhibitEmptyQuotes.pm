@@ -54,27 +54,29 @@ Perl::Critic::Policy::ValuesAndExpressions::ProhibitEmptyQuotes - Write C<q{}> i
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
-Don't use quotes for an empty string or any string that is pure whitespace.
-Instead, use C<q{}> to improve legibility.  Better still, created named values
-like this.  Use the C<x> operator to repeat characters.
+Don't use quotes for an empty string or any string that is pure
+whitespace.  Instead, use C<q{}> to improve legibility.  Better still,
+created named values like this.  Use the C<x> operator to repeat
+characters.
 
-  $message = '';      #not ok
-  $message = "";      #not ok
-  $message = "     "; #not ok
+    $message = '';      #not ok
+    $message = "";      #not ok
+    $message = "     "; #not ok
 
-  $message = q{};     #better
-  $message = q{     } #better
+    $message = q{};     #better
+    $message = q{     } #better
 
-  $EMPTY = q{};
-  $message = $EMPTY;      #best
+    $EMPTY = q{};
+    $message = $EMPTY;      #best
 
-  $SPACE = q{ };
-  $message = $SPACE x 5;  #best
+    $SPACE = q{ };
+    $message = $SPACE x 5;  #best
 
 
 =head1 CONFIGURATION
@@ -84,7 +86,7 @@ This Policy is not configurable except for the standard options.
 
 =head1 SEE ALSO
 
-L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitNoisyStrings>
+L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitNoisyStrings|Perl::Critic::Policy::ValuesAndExpressions::ProhibitNoisyStrings>
 
 =head1 AUTHOR
 

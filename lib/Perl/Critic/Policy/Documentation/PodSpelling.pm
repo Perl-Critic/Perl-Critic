@@ -249,9 +249,11 @@ __END__
 
 Perl::Critic::Policy::Documentation::PodSpelling - Check your spelling.
 
+
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
@@ -264,24 +266,25 @@ Is your documentation readable?  Hmm...
 
 Ideally, we'd like Perl::Critic to tell you when your documentation is
 inadequate.  That's hard to code, though.  So, inspired by
-L<Test::Spelling>, this module checks the spelling of your POD.  It
-does this by pulling the prose out of the code and passing it to an
-external spell checker.  It skips over words you flagged to ignore.
-If the spell checker returns any misspelled words, this policy emits a
-violation.
+L<Test::Spelling|Test::Spelling>, this module checks the spelling of
+your POD.  It does this by pulling the prose out of the code and
+passing it to an external spell checker.  It skips over words you
+flagged to ignore.  If the spell checker returns any misspelled words,
+this policy emits a violation.
 
 If anything else goes wrong -- you don't have Pod::Spell installed or
 we can't locate the spell checking program or (gasp!) your module has
 no POD -- then this policy passes.
 
 To add exceptions on a module-by-module basis, add "stopwords" as
-described in L<Pod::Spell>.  For example:
+described in L<Pod::Spell|Pod::Spell>.  For example:
 
-   =for stopword gibbles
+    =for stopword gibbles
 
-   =head1 Gibble::Manip -- manipulate your gibbles
+    =head1 Gibble::Manip -- manipulate your gibbles
 
-   =cut
+    =cut
+
 
 =head1 CONFIGURATION
 
@@ -289,31 +292,37 @@ This policy can be configured to tell which spell checker to use or to
 set a global list of spelling exceptions.  To do this, put entries in
 a F<.perlcriticrc> file like this:
 
-  [Documentation::PodSpelling]
-  spell_command = aspell list
-  stop_words = gibbles foobar
+    [Documentation::PodSpelling]
+    spell_command = aspell list
+    stop_words = gibbles foobar
 
 The default spell command is C<aspell list> and it is interpreted as a
 shell command.  We parse the individual arguments via
-L<Text::ParseWords> so feel free to use quotes around your arguments.
-If the executable path is an absolute file name, it is used as-is.  If
-it is a relative file name, we employ L<File::Which> to convert it to
-an absolute path via the C<PATH> environment variable.  As described
-in Pod::Spell and Test::Spelling, the spell checker must accept text
-on STDIN and print misspelled words one per line on STDOUT.
+L<Text::ParseWords|Text::ParseWords> so feel free to use quotes around
+your arguments.  If the executable path is an absolute file name, it
+is used as-is.  If it is a relative file name, we employ
+L<File::Which|File::Which> to convert it to an absolute path via the
+C<PATH> environment variable.  As described in Pod::Spell and
+Test::Spelling, the spell checker must accept text on STDIN and print
+misspelled words one per line on STDOUT.
+
 
 =head1 NOTES
 
-L<Pod::Spell> is not included with Perl::Critic, nor is a spell
-checking program.
+L<Pod::Spell|Pod::Spell> is not included with Perl::Critic, nor is a
+spell checking program.
+
 
 =head1 CREDITS
 
-Initial development of this policy was supported by a grant from the Perl Foundation.
+Initial development of this policy was supported by a grant from the
+Perl Foundation.
+
 
 =head1 AUTHOR
 
 Chris Dolan <cdolan@cpan.org>
+
 
 =head1 COPYRIGHT
 

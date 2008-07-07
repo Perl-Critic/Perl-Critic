@@ -77,9 +77,11 @@ __END__
 
 Perl::Critic::Policy::Variables::ProhibitMatchVars - Avoid C<$`>, C<$&>, C<$'> and their English equivalents.
 
+
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
@@ -92,7 +94,7 @@ English> or PBP page 82 for more information.
 It used to forbid plain C<use English;> because it ends up causing the
 performance side-effects of the match variables.  However, the message
 emitted for that situation was not at all clear and there is now
-L<Perl::Critic::Policy::Modules::RequireNoMatchVarsWithUseEnglish>,
+L<Perl::Critic::Policy::Modules::RequireNoMatchVarsWithUseEnglish|Perl::Critic::Policy::Modules::RequireNoMatchVarsWithUseEnglish>,
 which addresses this situation directly.
 
 
@@ -104,6 +106,7 @@ This Policy is not configurable except for the standard options.
 =head1 AUTHOR
 
 Chris Dolan <cdolan@cpan.org>
+
 
 =head1 COPYRIGHT
 

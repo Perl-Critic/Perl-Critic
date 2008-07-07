@@ -197,9 +197,11 @@ __END__
 
 Perl::Critic::Policy::ValuesAndExpressions::ProhibitLeadingZeros - Write C<oct(755)> instead of C<0755>.
 
+
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION

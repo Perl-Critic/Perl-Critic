@@ -64,7 +64,8 @@ Perl::Critic::Policy::InputOutput::ProhibitBarewordFileHandles - Write C<open my
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
@@ -74,8 +75,9 @@ because they are global, and you have no idea if that symbol already
 points to some other file handle.  You can mitigate some of that risk
 by C<local>izing the symbol first, but that's pretty ugly.  Since Perl
 5.6, you can use an undefined scalar variable as a lexical reference
-to an anonymous filehandle.  Alternatively, see the L<IO::Handle> or
-L<IO::File> or L<FileHandle> modules for an object-oriented approach.
+to an anonymous filehandle.  Alternatively, see the
+L<IO::Handle|IO::Handle> or L<IO::File|IO::File> or
+L<FileHandle|FileHandle> modules for an object-oriented approach.
 
     open FH, '<', $some_file;           #not ok
     open my $fh, '<', $some_file;       #ok
@@ -92,9 +94,9 @@ This Policy is not configurable except for the standard options.
 
 =head1 SEE ALSO
 
-L<IO::Handle>
+L<IO::Handle|IO::Handle>
 
-L<IO::File>
+L<IO::File|IO::File>
 
 =head1 AUTHOR
 

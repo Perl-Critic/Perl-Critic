@@ -101,16 +101,19 @@ __END__
 
 Perl::Critic::Policy::TestingAndDebugging::RequireTestLabels - Tests should all have labels.
 
+
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
-Most Perl modules with regression tests use L<Test::More> as
-infrastructure for writing and running those tests.  It has an easy,
-procedural syntax for writing comparisons of results to expectations.
+Most Perl modules with regression tests use L<Test::More|Test::More>
+as infrastructure for writing and running those tests.  It has an
+easy, procedural syntax for writing comparisons of results to
+expectations.
 
 Most of the Test::More functions allow the programmer to add an
 optional label that describes what each test is trying to judge.  When
@@ -122,6 +125,7 @@ applicable.  This only applies to code that has a C<use Test::More> or
 C<require Test::More> declaration (see below to add more test modules
 to the list).
 
+
 =head1 CONFIGURATION
 
 A list of additional modules to require label parameters be passed to
@@ -129,14 +133,16 @@ their methods can be specified with the C<modules> option.  The list
 must consist of whitespace-delimited, fully-qualified module names.
 For example:
 
- [TestingAndDebugging::RequireTestLabels]
- modules = My::Test::SubClass  Some::Other::Module
+    [TestingAndDebugging::RequireTestLabels]
+    modules = My::Test::SubClass  Some::Other::Module
 
-The module list always implicitly includes L<Test::More>.
+The module list always implicitly includes L<Test::More|Test::More>.
+
 
 =head1 AUTHOR
 
 Chris Dolan <cdolan@cpan.org>
+
 
 =head1 COPYRIGHT
 

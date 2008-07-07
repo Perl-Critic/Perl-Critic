@@ -101,22 +101,24 @@ Perl::Critic::Policy::TestingAndDebugging::RequireUseStrict - Always C<use stric
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
-Using strictures is probably the single most effective way to improve the
-quality of your code.  This policy requires that the C<'use strict'> statement
-must come before any other statements except C<package>, C<require>, and other
-C<use> statements.  Thus, all the code in the entire package will be affected.
+Using strictures is probably the single most effective way to improve
+the quality of your code.  This policy requires that the C<'use
+strict'> statement must come before any other statements except
+C<package>, C<require>, and other C<use> statements.  Thus, all the
+code in the entire package will be affected.
 
-There are special exemptions for L<Moose> and L<Moose::Role> because they
-enforces strictness; e.g. C<'use Moose'> is treated as equivalent to
-C<'use strict'>.
+There are special exemptions for L<Moose|Moose> and
+L<Moose::Role|Moose::Role> because they enforces strictness; e.g.
+C<'use Moose'> is treated as equivalent to C<'use strict'>.
 
-The maximum number of violations per document for this policy defaults to 1.
-
+The maximum number of violations per document for this policy defaults
+to 1.
 
 
 =head1 CONFIGURATION
@@ -126,7 +128,7 @@ This Policy is not configurable except for the standard options.
 
 =head1 SEE ALSO
 
-L<Perl::Critic::Policy::TestingAndDebugging::ProhibitNoStrict>
+L<Perl::Critic::Policy::TestingAndDebugging::ProhibitNoStrict|Perl::Critic::Policy::TestingAndDebugging::ProhibitNoStrict>
 
 
 =head1 AUTHOR

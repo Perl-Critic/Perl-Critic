@@ -189,10 +189,13 @@ __END__
 
 Perl::Critic::ProfilePrototype - Generate an initial Perl::Critic profile.
 
+
 =head1 DESCRIPTION
 
-This is a helper class that generates a prototype of a L<Perl::Critic> profile
-(e.g. a F<.perlcriticrc> file. There are no user-serviceable parts here.
+This is a helper class that generates a prototype of a
+L<Perl::Critic|Perl::Critic> profile (e.g. a F<.perlcriticrc> file.
+There are no user-serviceable parts here.
+
 
 =head1 CONSTRUCTOR
 
@@ -202,7 +205,9 @@ This is a helper class that generates a prototype of a L<Perl::Critic> profile
 
 Returns a reference to a new C<Perl::Critic::ProfilePrototype> object.
 
+
 =back
+
 
 =head1 METHODS
 
@@ -213,20 +218,27 @@ Returns a reference to a new C<Perl::Critic::ProfilePrototype> object.
 Returns a string representation of this C<ProfilePrototype>.  See
 L<"OVERLOADS"> for more information.
 
+
 =back
+
 
 =head1 OVERLOADS
 
-When a L<Perl::Critic::ProfilePrototype> is evaluated in string context, it
-produces a multi-line summary of the policy name, default themes, and default
-severity for each L<Perl::Critic::Policy> object that was given to the
-constructor of this C<ProfilePrototype>.  If the Policy supports an additional
-parameters, they will also be listed (but commented-out).  The format is
-suitable for use as a F<.perlcriticrc> file.
+When a
+L<Perl::Critic::ProfilePrototype|Perl::Critic::ProfilePrototype> is
+evaluated in string context, it produces a multi-line summary of the
+policy name, default themes, and default severity for each
+L<Perl::Critic::Policy|Perl::Critic::Policy> object that was given to
+the constructor of this C<ProfilePrototype>.  If the Policy supports
+an additional parameters, they will also be listed (but
+commented-out).  The format is suitable for use as a F<.perlcriticrc>
+file.
+
 
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+
 
 =head1 COPYRIGHT
 

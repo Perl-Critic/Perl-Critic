@@ -60,9 +60,11 @@ __END__
 
 Perl::Critic::Policy::BuiltinFunctions::ProhibitStringySplit - Write C<split /-/, $string> instead of C<split '-', $string>.
 
+
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
@@ -72,9 +74,9 @@ regular expression, even if you specify it as a string.  This causes
 much confusion if the string contains regex metacharacters.  So for
 clarity, always express the PATTERN argument as a regex.
 
-  $string = 'Fred|Barney';
-  @names = split '|', $string; #not ok, is ('F', 'r', 'e', 'd', '|', 'B', 'a' ...)
-  @names = split m/[|]/, $string; #ok, is ('Fred', Barney')
+    $string = 'Fred|Barney';
+    @names = split '|', $string; #not ok, is ('F', 'r', 'e', 'd', '|', 'B', 'a' ...)
+    @names = split m/[|]/, $string; #ok, is ('Fred', Barney')
 
 When the PATTERN is a single space the C<split> function has special
 behavior, so Perl::Critic forgives that usage.  See C<"perldoc -f
@@ -88,13 +90,15 @@ This Policy is not configurable except for the standard options.
 
 =head1 SEE ALSO
 
-L<Perl::Critic::Policy::ControlStrucutres::RequireBlockGrep>
+L<Perl::Critic::Policy::ControlStrucutres::RequireBlockGrep|Perl::Critic::Policy::ControlStrucutres::RequireBlockGrep>
 
-L<Perl::Critic::Policy::ControlStrucutres::RequireBlockMap>
+L<Perl::Critic::Policy::ControlStrucutres::RequireBlockMap|Perl::Critic::Policy::ControlStrucutres::RequireBlockMap>
+
 
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+
 
 =head1 COPYRIGHT
 

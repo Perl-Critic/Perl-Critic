@@ -109,7 +109,8 @@ Perl::Critic::Policy::InputOutput::RequireCheckedSyscalls - Return value of flag
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
@@ -118,7 +119,7 @@ This performs identically to InputOutput::RequireCheckedOpen/Close
 except that this is configurable to apply to any function, whether
 core or user-defined.
 
-If your module uses L<Fatal> or C<Fatal::Exception>, then any
+If your module uses L<Fatal|Fatal> or C<Fatal::Exception>, then any
 functions wrapped by those modules will not trigger this policy.  For
 example:
 

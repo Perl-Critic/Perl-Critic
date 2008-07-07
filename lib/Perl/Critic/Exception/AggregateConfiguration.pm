@@ -157,10 +157,11 @@ Returns a reference to an array of the collected exceptions.
 =item C<add_exception_or_rethrow( $eval_error )>
 
 If the parameter is an instance of
-L<Perl::Critic::Exception::Configuration> or
-L<Perl::Critic::Exception::AggregateConfiguration>, add it.
-Otherwise, C<die> with the parameter, if it is a reference, or
-C<confess> with it.  If the parameter is false, simply returns.
+L<Perl::Critic::Exception::Configuration|Perl::Critic::Exception::Configuration>
+or
+L<Perl::Critic::Exception::AggregateConfiguration|Perl::Critic::Exception::AggregateConfiguration>,
+add it.  Otherwise, C<die> with the parameter, if it is a reference,
+or C<confess> with it.  If the parameter is false, simply returns.
 
 
 =item C<has_exceptions()>

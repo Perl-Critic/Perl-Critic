@@ -85,7 +85,7 @@ Perl::Critic::Utils::PPI - Utility functions for dealing with PPI objects.
 
 =head1 DESCRIPTION
 
-Provides classification of L<PPI::Elements>.
+Provides classification of L<PPI::Elements|PPI::Elements>.
 
 
 =head1 IMPORTABLE SUBS
@@ -96,22 +96,23 @@ Provides classification of L<PPI::Elements>.
 
 Answers whether the parameter is an expression or an undifferentiated
 statement.  I.e. the parameter either is a
-L<PPI::Statement::Expression> or the class of the parameter is
-L<PPI::Statement> and not one of its subclasses other than
-C<Expression>.
+L<PPI::Statement::Expression|PPI::Statement::Expression> or the class
+of the parameter is L<PPI::Statement|PPI::Statement> and not one of
+its subclasses other than C<Expression>.
 
 
 =item C<is_ppi_generic_statement( $element )>
 
 Answers whether the parameter is an undifferentiated statement, i.e.
-the parameter is a L<PPI::Statement> but not one of its subclasses.
+the parameter is a L<PPI::Statement|PPI::Statement> but not one of its
+subclasses.
 
 
 =item C<is_ppi_statement_subclass( $element )>
 
 Answers whether the parameter is a specialized statement, i.e. the
-parameter is a L<PPI::Statement> but the class of the parameter is not
-L<PPI::Statement>.
+parameter is a L<PPI::Statement|PPI::Statement> but the class of the
+parameter is not L<PPI::Statement|PPI::Statement>.
 
 
 =back
@@ -120,6 +121,7 @@ L<PPI::Statement>.
 =head1 AUTHOR
 
 Elliot Shank <perl@galumph.com>
+
 
 =head1 COPYRIGHT
 

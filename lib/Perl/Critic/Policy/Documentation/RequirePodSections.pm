@@ -356,18 +356,21 @@ __END__
 
 Perl::Critic::Policy::Documentation::RequirePodSections - Organize your POD into the customary sections.
 
+
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
 This Policy requires your POD to contain certain C<=head1> sections.
 If the file doesn't contain any POD at all, then this Policy does not
-apply.  Tools like L<Module::Starter> make it really easy to ensure
-that every module has the same documentation framework, and they can
-save you lots of keystrokes.
+apply.  Tools like L<Module::Starter|Module::Starter> make it really
+easy to ensure that every module has the same documentation framework,
+and they can save you lots of keystrokes.
+
 
 =head1 DEFAULTS
 
@@ -375,34 +378,36 @@ Different POD sections are required, depending on whether the file is
 a library or program (which is determined by the presence or absence
 of a perl shebang line).
 
-             Default Required POD Sections
+                Default Required POD Sections
 
-   Perl Libraries                     Perl Programs
-   ------------------------------------------------------
-   NAME                               NAME
-   VERSION
-   SYNOPSIS                           USAGE
-   DESCRIPTION                        DESCRIPTION
-   SUBROUTINES/METHODS                REQUIRED ARGUMENTS
-                                      OPTIONS
-   DIAGNOSTICS                        DIAGNOSTICS
-                                      EXIT STATUS
-   CONFIGURATION AND ENVIRONMENT      CONFIGURATION
-   DEPENDENCIES                       DEPENDENCIES
-   INCOMPATIBILITIES                  INCOMPATIBILITIES
-   BUGS AND LIMITATIONS               BUGS AND LIMITATIONS
-   AUTHOR                             AUTHOR
-   LICENSE AND COPYRIGHT              LICENSE AND COPYRIGHT
+    Perl Libraries                     Perl Programs
+    ------------------------------------------------------
+    NAME                               NAME
+    VERSION
+    SYNOPSIS                           USAGE
+    DESCRIPTION                        DESCRIPTION
+    SUBROUTINES/METHODS                REQUIRED ARGUMENTS
+                                        OPTIONS
+    DIAGNOSTICS                        DIAGNOSTICS
+                                        EXIT STATUS
+    CONFIGURATION AND ENVIRONMENT      CONFIGURATION
+    DEPENDENCIES                       DEPENDENCIES
+    INCOMPATIBILITIES                  INCOMPATIBILITIES
+    BUGS AND LIMITATIONS               BUGS AND LIMITATIONS
+    AUTHOR                             AUTHOR
+    LICENSE AND COPYRIGHT              LICENSE AND COPYRIGHT
+
 
 =head1 CONFIGURATION
 
 The default sections above are derived from Damian Conway's I<Perl
 Best Practices> book.  Since the book has been published, Conway has
-released L<Module::Starter::PBP>, which has different names for some
-of the sections, and adds some more.  Also, the book and module use
-Australian spelling, while the authors of this module have previously
-used American spelling.  To sort this all out, there are a couple of
-options that can be used: C<source> and C<language>.
+released L<Module::Starter::PBP|Module::Starter::PBP>, which has
+different names for some of the sections, and adds some more.  Also,
+the book and module use Australian spelling, while the authors of this
+module have previously used American spelling.  To sort this all out,
+there are a couple of options that can be used: C<source> and
+C<language>.
 
 The C<source> option has two generic values, C<book> and
 C<module_starter_pbp>, and two version-specific values,
@@ -421,15 +426,15 @@ the addition of C<EXIT STATUS>.  To get precisely the sections as
 specified in the book, put the following in your F<.perlcriticrc>
 file:
 
-  [Documentation::RequirePodSections]
-  source   = book_first_edition
-  language = en_AU
+    [Documentation::RequirePodSections]
+    source   = book_first_edition
+    language = en_AU
 
 If you want to use
 
-  [Documentation::RequirePodSections]
-  source   = module_starter_pbp
-  language = en_US
+    [Documentation::RequirePodSections]
+    source   = module_starter_pbp
+    language = en_US
 
 you will need to modify your F<~/.module-starter/PBP/Module.pm>
 template because it is generated using Australian spelling.
@@ -443,9 +448,10 @@ giving values for C<script_sections> and C<lib_sections> of a string
 of pipe-delimited required POD section names.  An example of entries
 in a F<.perlcriticrc> file:
 
-  [Documentation::RequirePodSections]
-  lib_sections    = NAME | SYNOPSIS | BUGS AND LIMITATIONS | AUTHOR
-  script_sections = NAME | USAGE | OPTIONS | EXIT STATUS | AUTHOR
+    [Documentation::RequirePodSections]
+    lib_sections    = NAME | SYNOPSIS | BUGS AND LIMITATIONS | AUTHOR
+    script_sections = NAME | USAGE | OPTIONS | EXIT STATUS | AUTHOR
+
 
 =head1 LIMITATIONS
 
@@ -453,9 +459,11 @@ Currently, this Policy does not look for the required POD sections
 below the C<=head1> level.  Also, it does not require the sections to
 appear in any particular order.
 
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+
 
 =head1 COPYRIGHT
 

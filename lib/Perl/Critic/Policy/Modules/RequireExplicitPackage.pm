@@ -89,42 +89,44 @@ Perl::Critic::Policy::Modules::RequireExplicitPackage - Always make the C<packag
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
-In general, the first statement of any Perl module or
-library should be a C<package> statement.  Otherwise, all the code
-that comes before the C<package> statement is getting executed in the
-caller's package, and you have no idea who that is.  Good
-encapsulation and common decency require your module to keep its
-innards to itself.
+In general, the first statement of any Perl module or library should
+be a C<package> statement.  Otherwise, all the code that comes before
+the C<package> statement is getting executed in the caller's package,
+and you have no idea who that is.  Good encapsulation and common
+decency require your module to keep its innards to itself.
 
 There are some valid reasons for not having a C<package> statement at
 all.  But make sure you understand them before assuming that you
 should do it too.
 
-The maximum number of violations per document for this policy defaults to 1.
+The maximum number of violations per document for this policy defaults
+to 1.
 
 
 
 =head1 CONFIGURATION
 
-As for programs, most people understand that the default package is C<main>, so
-this Policy doesn't apply to files that begin with a perl shebang.  If you want
-to require an explicit C<package> declaration in all files, including programs,
-then add the following to your F<.perlcriticrc> file
+As for programs, most people understand that the default package is
+C<main>, so this Policy doesn't apply to files that begin with a perl
+shebang.  If you want to require an explicit C<package> declaration in
+all files, including programs, then add the following to your
+F<.perlcriticrc> file
 
-  [Modules::RequireExplicitPackage]
-  exempt_scripts = 0
+    [Modules::RequireExplicitPackage]
+    exempt_scripts = 0
 
 
 =head1 IMPORTANT CHANGES
 
-This policy was formerly called C<ProhibitUnpackagedCode> which sounded
-a bit odd.  If you get lots of "Cannot load policy module" errors,
-then you probably need to change C<ProhibitUnpackagedCode> to
+This policy was formerly called C<ProhibitUnpackagedCode> which
+sounded a bit odd.  If you get lots of "Cannot load policy module"
+errors, then you probably need to change C<ProhibitUnpackagedCode> to
 C<RequireExplicitPackage> in your F<.perlcriticrc> file.
 
 

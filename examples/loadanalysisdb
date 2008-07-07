@@ -227,23 +227,25 @@ C<loadanalysisdb> - Critique a body of code and load the results into a database
 
 =head1 USAGE
 
-  loadanalysisdb path [...]
+    loadanalysisdb path [...]
 
 
 =head1 DESCRIPTION
 
-Scan a body of code and, rather than emit the results in a textual format, put
-them into a database so that analyses can be made.
+Scan a body of code and, rather than emit the results in a textual
+format, put them into a database so that analyses can be made.
 
-This example doesn't put anything into the database that isn't available from
-L<Perl::Critic::Violation> in order to keep the code easier to understand.  In
-a full application of the idea presented here, one might want to include the
-current date and a distribution name in the database so that progress on
-cleaning up a code corpus can be tracked.
+This example doesn't put anything into the database that isn't
+available from L<Perl::Critic::Violation|Perl::Critic::Violation> in
+order to keep the code easier to understand.  In a full application of
+the idea presented here, one might want to include the current date
+and a distribution name in the database so that progress on cleaning
+up a code corpus can be tracked.
 
-Note the explanation attribute of L<Perl::Critic::Violation> is constant for
-most policies, but some of them do provide more specific diagnostics of the
-code in question.
+Note the explanation attribute of
+L<Perl::Critic::Violation|Perl::Critic::Violation> is constant for
+most policies, but some of them do provide more specific diagnostics
+of the code in question.
 
 
 =head1 REQUIRED ARGUMENTS
@@ -258,7 +260,7 @@ None.
 
 =head1 DIAGNOSTICS
 
-Errors from L<DBI>.
+Errors from L<DBI|DBI>.
 
 
 =head1 EXIT STATUS
@@ -273,13 +275,13 @@ None.
 
 =head1 DEPENDENCIES
 
-L<Perl::Critic>
-L<DBD::SQLite>
-L<Perl6::Say>
-L<Readonly>
+L<Perl::Critic|Perl::Critic>
+L<DBD::SQLite|DBD::SQLite>
+L<Perl6::Say|Perl6::Say>
+L<Readonly|Readonly>
 
-An SQLite database named "perl_critic_analysis.sqlite" with the following
-schema:
+An SQLite database named "perl_critic_analysis.sqlite" with the
+following schema:
 
   CREATE TABLE violation (
       file_path     VARCHAR(1024),
@@ -309,33 +311,35 @@ Elliot Shank  C<< <perl@galumph.com> >>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2006-2007, Elliot Shank C<< <perl@galumph.com> >>. All rights
-reserved.
+Copyright (c) 2006-2007, Elliot Shank C<< <perl@galumph.com> >>. All
+rights reserved.
 
-This module is free software; you can redistribute it and/or modify it under
-the same terms as Perl itself. See L<perlartistic>.
+This module is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself. See L<perlartistic|perlartistic>.
 
 
 =head1 DISCLAIMER OF WARRANTY
 
-BECAUSE THIS SOFTWARE IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY FOR THE
-SOFTWARE, TO THE EXTENT PERMITTED BY APPLICABLE LAW. EXCEPT WHEN OTHERWISE
-STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES PROVIDE THE
-SOFTWARE "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED,
-INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
-FITNESS FOR A PARTICULAR PURPOSE. THE ENTIRE RISK AS TO THE QUALITY AND
-PERFORMANCE OF THE SOFTWARE IS WITH YOU. SHOULD THE SOFTWARE PROVE DEFECTIVE,
-YOU ASSUME THE COST OF ALL NECESSARY SERVICING, REPAIR, OR CORRECTION.
+BECAUSE THIS SOFTWARE IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY
+FOR THE SOFTWARE, TO THE EXTENT PERMITTED BY APPLICABLE LAW. EXCEPT
+WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER
+PARTIES PROVIDE THE SOFTWARE "AS IS" WITHOUT WARRANTY OF ANY KIND,
+EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+PURPOSE. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE
+SOFTWARE IS WITH YOU. SHOULD THE SOFTWARE PROVE DEFECTIVE, YOU ASSUME
+THE COST OF ALL NECESSARY SERVICING, REPAIR, OR CORRECTION.
 
-IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING WILL ANY
-COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY AND/OR REDISTRIBUTE THE
-SOFTWARE AS PERMITTED BY THE ABOVE LICENSE, BE LIABLE TO YOU FOR DAMAGES,
-INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES ARISING
-OUT OF THE USE OR INABILITY TO USE THE SOFTWARE (INCLUDING BUT NOT LIMITED TO
-LOSS OF DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR
-THIRD PARTIES OR A FAILURE OF THE SOFTWARE TO OPERATE WITH ANY OTHER
-SOFTWARE), EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE
-POSSIBILITY OF SUCH DAMAGES.
+IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
+WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY AND/OR
+REDISTRIBUTE THE SOFTWARE AS PERMITTED BY THE ABOVE LICENSE, BE LIABLE
+TO YOU FOR DAMAGES, INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL, OR
+CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OR INABILITY TO USE THE
+SOFTWARE (INCLUDING BUT NOT LIMITED TO LOSS OF DATA OR DATA BEING
+RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD PARTIES OR A
+FAILURE OF THE SOFTWARE TO OPERATE WITH ANY OTHER SOFTWARE), EVEN IF
+SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH
+DAMAGES.
 
 =cut
 

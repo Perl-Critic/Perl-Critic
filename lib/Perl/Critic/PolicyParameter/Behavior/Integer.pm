@@ -137,14 +137,15 @@ Perl::Critic::PolicyParameter::Behavior::Integer - Actions appropriate for an in
 =head1 DESCRIPTION
 
 Provides a standard set of functionality for an integer
-L<Perl::Critic::PolicyParameter> so that the developer of a policy
-does not have to provide it her/himself.
+L<Perl::Critic::PolicyParameter|Perl::Critic::PolicyParameter> so that
+the developer of a policy does not have to provide it her/himself.
 
 The parser provided by this behavior allows underscores ("_") in input
 values as in a Perl numeric literal.
 
 NOTE: Do not instantiate this class.  Use the singleton instance held
-onto by L<Perl::Critic::PolicyParameter>.
+onto by
+L<Perl::Critic::PolicyParameter|Perl::Critic::PolicyParameter>.
 
 
 =head1 METHODS
@@ -164,11 +165,14 @@ This behavior looks for two configuration items:
 
 Optional.  The minimum acceptable value.  Inclusive.
 
+
 =item integer_maximum
 
 Optional.  The maximum acceptable value.  Inclusive.
 
+
 =back
+
 
 =item C<generate_parameter_description( $parameter )>
 
@@ -178,12 +182,14 @@ behavior.
 
 In this case, this means including the minimum and maximum values.
 
+
 =back
 
 
 =head1 AUTHOR
 
 Elliot Shank <perl@galumph.com>
+
 
 =head1 COPYRIGHT
 

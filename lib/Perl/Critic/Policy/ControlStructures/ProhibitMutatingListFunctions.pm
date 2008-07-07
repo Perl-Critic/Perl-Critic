@@ -231,57 +231,61 @@ Perl::Critic::Policy::ControlStructures::ProhibitMutatingListFunctions - Don't m
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
-C<map>, C<grep> and other list operators are intended to transform arrays into
-other arrays by applying code to the array elements one by one.  For speed,
-the elements are referenced via a C<$_> alias rather than copying them.  As a
-consequence, if the code block of the C<map> or C<grep> modify C<$_> in any
-way, then it is actually modifying the source array.  This IS technically
-allowed, but those side effects can be quite surprising, especially when the
-array being passed is C<@_> or perhaps C<values(%ENV)>!  Instead authors
-should restrict in-place array modification to C<for(@array) { ... }>
-constructs instead, or use C<List::MoreUtils::apply()>.
+C<map>, C<grep> and other list operators are intended to transform
+arrays into other arrays by applying code to the array elements one by
+one.  For speed, the elements are referenced via a C<$_> alias rather
+than copying them.  As a consequence, if the code block of the C<map>
+or C<grep> modify C<$_> in any way, then it is actually modifying the
+source array.  This IS technically allowed, but those side effects can
+be quite surprising, especially when the array being passed is C<@_>
+or perhaps C<values(%ENV)>!  Instead authors should restrict in-place
+array modification to C<for(@array) { ... }> constructs instead, or
+use C<List::MoreUtils::apply()>.
 
 =head1 CONFIGURATION
 
 By default, this policy applies to the following list functions:
 
-  map grep
-  List::Util qw(first)
-  List::MoreUtils qw(any all none notall true false firstidx first_index
-                     lastidx last_index insert_after insert_after_string)
+    map grep
+    List::Util qw(first)
+    List::MoreUtils qw(any all none notall true false firstidx
+                       first_index lastidx last_index insert_after
+                       insert_after_string)
 
 This list can be overridden the F<.perlcriticrc> file like this:
 
- [ControlStructures::ProhibitMutatingListFunctions]
- list_funcs = map grep List::Util::first
+    [ControlStructures::ProhibitMutatingListFunctions]
+    list_funcs = map grep List::Util::first
 
 Or, one can just append to the list like so:
 
- [ControlStructures::ProhibitMutatingListFunctions]
- add_list_funcs = Foo::Bar::listmunge
+    [ControlStructures::ProhibitMutatingListFunctions]
+    add_list_funcs = Foo::Bar::listmunge
 
 =head1 LIMITATIONS
 
 This policy deliberately does not apply to C<for (@array) { ... }> or
 C<List::MoreUtils::apply()>.
 
-Currently, the policy only detects explicit external module usage like this:
+Currently, the policy only detects explicit external module usage like
+this:
 
-  my @out = List::MoreUtils::any {s/^foo//} @in;
+    my @out = List::MoreUtils::any {s/^foo//} @in;
 
 and not like this:
 
-  use List::MoreUtils qw(any);
-  my @out = any {s/^foo//} @in;
+    use List::MoreUtils qw(any);
+    my @out = any {s/^foo//} @in;
 
-This policy looks only for modifications of C<$_>.  Other naughtiness could
-include modifying C<$a> and C<$b> in C<sort> and the like.  That's beyond the
-scope of this policy.
+This policy looks only for modifications of C<$_>.  Other naughtiness
+could include modifying C<$a> and C<$b> in C<sort> and the like.
+That's beyond the scope of this policy.
 
 =head1 AUTHOR
 

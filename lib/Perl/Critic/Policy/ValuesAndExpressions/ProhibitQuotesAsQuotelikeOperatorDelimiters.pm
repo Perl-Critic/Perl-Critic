@@ -216,7 +216,8 @@ Perl::Critic::Policy::ValuesAndExpressions::ProhibitQuotesAsQuotelikeOperatorDel
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
@@ -226,25 +227,25 @@ interpolation, using quotes with the quote-like operators kind of
 defeats the purpose of them and produces obfuscated code, causing
 problems for future maintainers and their editors/IDEs.
 
-  $x = q"q";                #not ok
-  $x = q'q';                #not ok
-  $x = q`q`;                #not ok
+    $x = q"q";                #not ok
+    $x = q'q';                #not ok
+    $x = q`q`;                #not ok
 
-  $x = qq"q";               #not ok
-  $x = qr"r";               #not ok
-  $x = qw"w";               #not ok
+    $x = qq"q";               #not ok
+    $x = qr"r";               #not ok
+    $x = qw"w";               #not ok
 
-  $x = qx`date`;            #not ok
+    $x = qx`date`;            #not ok
 
-  $x =~ m"m";               #not ok
-  $x =~ s"s"x";             #not ok
-  $x =~ tr"t"r";            #not ok
-  $x =~ y"x"y";             #not ok
+    $x =~ m"m";               #not ok
+    $x =~ s"s"x";             #not ok
+    $x =~ tr"t"r";            #not ok
+    $x =~ y"x"y";             #not ok
 
-  $x =~ m'$x';              #ok
-  $x =~ s'$x'y';            #ok
-  $x = qr'$x'm;             #ok
-  $x = qx'finger foo@bar';  #ok
+    $x =~ m'$x';              #ok
+    $x =~ s'$x'y';            #ok
+    $x = qr'$x'm;             #ok
+    $x = qx'finger foo@bar';  #ok
 
 
 =head1 CONFIGURATION
@@ -264,15 +265,15 @@ delimiters for the C<m>, C<qr>, C<qx>, and C<s> operators.  These
 defaults are equivalent to having the following in your
 F<.perlcriticrc>:
 
-  [ValuesAndExpressions::ProhibitQuotesAsQuotelikeOperatorDelimiters]
-  single_quote_allowed_operators = m s qr qx
-  double_quote_allowed_operators =
-  back_quote_allowed_operators =
+    [ValuesAndExpressions::ProhibitQuotesAsQuotelikeOperatorDelimiters]
+    single_quote_allowed_operators = m s qr qx
+    double_quote_allowed_operators =
+    back_quote_allowed_operators =
 
 
 =head1 SUGGESTED BY
 
-MSCHWERN
+Michael Schwern
 
 
 =head1 AUTHOR

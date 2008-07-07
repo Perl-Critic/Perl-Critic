@@ -74,9 +74,9 @@ Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue - A probl
 
 =head1 DESCRIPTION
 
-A representation of a problem found with the value of a parameter for a
-L<Perl::Critic::Policy>, whether from a F<.perlcriticrc>, another
-profile file, or command line.
+A representation of a problem found with the value of a parameter for
+a L<Perl::Critic::Policy|Perl::Critic::Policy>, whether from a
+F<.perlcriticrc>, another profile file, or command line.
 
 
 =head1 CLASS METHODS

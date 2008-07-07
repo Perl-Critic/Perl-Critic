@@ -56,9 +56,11 @@ __END__
 
 Perl::Critic::Policy::RegularExpressions::RequireExtendedFormatting - Always use the C</x> modifier with regular expressions.
 
+
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
@@ -90,16 +92,18 @@ This Policy is not configurable except for the standard options.
 =head1 NOTES
 
 For common regular expressions like e-mail addresses, phone numbers,
-dates, etc., have a look at the L<Regex::Common> module.  Also, be
-cautions about slapping modifier flags onto existing regular
+dates, etc., have a look at the L<Regex::Common|Regex::Common> module.
+Also, be cautions about slapping modifier flags onto existing regular
 expressions, as they can drastically alter their meaning.  See
 L<http://www.perlmonks.org/?node_id=484238> for an interesting
 discussion on the effects of blindly modifying regular expression
 flags.
 
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer  <thaljef@cpan.org>
+
 
 =head1 COPYRIGHT
 

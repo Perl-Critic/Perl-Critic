@@ -71,7 +71,8 @@ Perl::Critic::Policy::InputOutput::ProhibitBacktickOperators - Discourage stuff 
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
@@ -116,8 +117,8 @@ assign the result to a variable.
 This policy also prohibits the generalized form of backticks seen as
 C<qx{}>.
 
-See L<perlipc> for more discussion on using C<wait()> instead of
-C<$SIG{CHLD} = 'IGNORE'>.
+See L<perlipc|perlipc> for more discussion on using C<wait()> instead
+of C<$SIG{CHLD} = 'IGNORE'>.
 
 =head1 AUTHOR
 

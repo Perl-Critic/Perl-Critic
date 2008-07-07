@@ -103,9 +103,11 @@ __END__
 
 Perl::Critic::Policy::Variables::RequireLocalizedPunctuationVars - Magic variables should be assigned as "local".
 
+
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
@@ -117,26 +119,26 @@ magic variable in a non-trivial program, do it in a local scope.
 
 For example, to slurp a filehandle into a scalar, it's common to set
 the record separator to undef instead of a newline.  If you choose to
-do this (instead of using L<File::Slurp>!) then be sure to localize
-the global and change it for as short a time as possible.
+do this (instead of using L<File::Slurp|File::Slurp>!) then be sure to
+localize the global and change it for as short a time as possible.
 
-   # BAD:
-   $/ = undef;
-   my $content = <$fh>;
+    # BAD:
+    $/ = undef;
+    my $content = <$fh>;
 
-   # BETTER:
-   my $content;
-   {
-       local $/ = undef;
-       $content = <$fh>;
-   }
+    # BETTER:
+    my $content;
+    {
+        local $/ = undef;
+        $content = <$fh>;
+    }
 
-   # A popular idiom:
-   my $content = do { local $/ = undef; <$fh> };
+    # A popular idiom:
+    my $content = do { local $/ = undef; <$fh> };
 
 This policy also allows the use of C<my>.  Perl prevents using C<my>
 with "proper" punctuation variables, but allows C<$a>, C<@ARGV>, the
-names declared by L<English>, etc.  This is not a good coding
+names declared by L<English|English>, etc.  This is not a good coding
 practice, however it is not the concern of this specific policy to
 complain about that.
 
@@ -157,14 +159,17 @@ Additionally, PPI v1.118 fails to recognize %! and %^H as magic
 variables.  PPI instead sees the "%" as a modulus operator.  We have
 no workaround for that bug right now.
 
+
 =head1 CREDITS
 
 Initial development of this policy was supported by a grant from the
 Perl Foundation.
 
+
 =head1 AUTHOR
 
 Chris Dolan <cdolan@cpan.org>
+
 
 =head1 COPYRIGHT
 

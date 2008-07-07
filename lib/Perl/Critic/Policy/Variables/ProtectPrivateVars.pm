@@ -52,9 +52,11 @@ __END__
 
 Perl::Critic::Policy::Variables::ProtectPrivateVars - Prevent access to private vars in other packages.
 
+
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
@@ -72,15 +74,18 @@ This Policy is not configurable except for the standard options.
 
 =head1 HISTORY
 
-This policy is inspired by a similar test in L<B::Lint>
+This policy is inspired by a similar test in L<B::Lint|B::Lint>
+
 
 =head1 SEE ALSO
 
-L<Perl::Critic::Policy::Subroutines::ProtectPrivateSubs>
+L<Perl::Critic::Policy::Subroutines::ProtectPrivateSubs|Perl::Critic::Policy::Subroutines::ProtectPrivateSubs>
+
 
 =head1 AUTHOR
 
 Chris Dolan <cdolan@cpan.org>
+
 
 =head1 COPYRIGHT
 

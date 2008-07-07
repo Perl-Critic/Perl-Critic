@@ -105,7 +105,8 @@ Perl::Critic::Policy::ControlStructures::ProhibitPostfixControls - Write C<if($c
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
@@ -117,27 +118,27 @@ lead to double-negatives that are hard to comprehend.  The only
 tolerable usage of a postfix C<if> is when it follows a loop break
 such as C<last>, C<next>, C<redo>, or C<continue>.
 
-  do_something() if $condition;         #not ok
-  if($condition){ do_something() }      #ok
+    do_something() if $condition;         #not ok
+    if($condition){ do_something() }      #ok
 
-  do_something() while $condition;      #not ok
-  while($condition){ do_something() }   #ok
+    do_something() while $condition;      #not ok
+    while($condition){ do_something() }   #ok
 
-  do_something() unless $condition;     #not ok
-  do_something() unless ! $condition;   #really bad
-  if(! $condition){ do_something() }    #ok
+    do_something() unless $condition;     #not ok
+    do_something() unless ! $condition;   #really bad
+    if(! $condition){ do_something() }    #ok
 
-  do_something() until $condition;      #not ok
-  do_something() until ! $condition;    #really bad
-  while(! $condition){ do_something() } #ok
+    do_something() until $condition;      #not ok
+    do_something() until ! $condition;    #really bad
+    while(! $condition){ do_something() } #ok
 
-  do_something($_) for @list;           #not ok
+    do_something($_) for @list;           #not ok
 
- LOOP:
-  for my $n (0..100){
-      next if $condition;               #ok
-      last LOOP if $other_condition;    #also ok
-  }
+    LOOP:
+    for my $n (0..100){
+        next if $condition;               #ok
+        last LOOP if $other_condition;    #also ok
+    }
 
 =head1 CONFIGURATION
 
@@ -146,8 +147,8 @@ giving a value for 'allow' of a string of space-delimited keywords:
 C<if>, C<for>, C<unless>, C<until>, and/or C<while>.  An example of
 specifying allowed flow-control structures in a F<.perlcriticrc> file:
 
- [ControlStructures::ProhibitPostfixControls]
- allow = for if until
+    [ControlStructures::ProhibitPostfixControls]
+    allow = for if until
 
 By default, all postfix control keywords are prohibited.
 
@@ -155,8 +156,8 @@ The set of flow-control functions that are exempt from the restriction
 can also be configured with the 'flowcontrol' directive in your
 F<.perlcriticrc> file:
 
- [ControlStructures::ProhibitPostfixControls]
- flowcontrol = warn die carp croak cluck confess goto exit
+    [ControlStructures::ProhibitPostfixControls]
+    flowcontrol = warn die carp croak cluck confess goto exit
 
 =head1 NOTES
 

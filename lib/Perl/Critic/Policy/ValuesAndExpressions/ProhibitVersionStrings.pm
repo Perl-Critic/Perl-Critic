@@ -65,9 +65,11 @@ __END__
 
 Perl::Critic::Policy::ValuesAndExpressions::ProhibitVersionStrings - Don't use strings like C<v1.4> or C<1.4.5> when including other modules.
 
+
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
@@ -75,12 +77,13 @@ This Policy is part of the core L<Perl::Critic> distribution.
 Whenever you C<use> or C<require> a module, you can specify a minimum
 version requirement.  To ensure compatibility with older Perls, this
 version number should be expressed as a floating-point number.  Do not
-use v-strings or three-part numbers.  The Perl convention for expressing
-version numbers as floats is: version + (patch level / 1000).
+use v-strings or three-part numbers.  The Perl convention for
+expressing version numbers as floats is: version + (patch level /
+1000).
 
-  use Foo v1.2    qw(foo bar);  # not ok
-  use Foo 1.2.03  qw(foo bar);  # not ok
-  use Foo 1.00203 qw(foo bar);  # ok
+    use Foo v1.2    qw(foo bar);  # not ok
+    use Foo 1.2.03  qw(foo bar);  # not ok
+    use Foo 1.00203 qw(foo bar);  # ok
 
 
 =head1 CONFIGURATION

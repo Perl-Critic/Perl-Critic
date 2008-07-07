@@ -53,7 +53,8 @@ Perl::Critic::Policy::ValuesAndExpressions::ProhibitImplicitNewlines - Use conca
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
@@ -61,19 +62,19 @@ This Policy is part of the core L<Perl::Critic> distribution.
 Strings with embedded line breaks are hard to read.  Use concatenation
 or HEREDOCs instead.
 
-  my $foo = "Line one is quite long
-  Line two";                                    # Bad
+    my $foo = "Line one is quite long
+    Line two";                                    # Bad
 
-  my $foo = "Line one is quite long\nLine two"; # Better, but still hard to read
+    my $foo = "Line one is quite long\nLine two"; # Better, but still hard to read
 
-  my $foo = "Line one is quite long\n"
-    . "Line two";                               # Better still
+    my $foo = "Line one is quite long\n"
+        . "Line two";                               # Better still
 
-  my $foo = <<'EOF';                            # Use heredoc for longer passages
-  Line one is quite long
-  Line two
-  Line three breaks the camel's back
-  EOF
+    my $foo = <<'EOF';                            # Use heredoc for longer passages
+    Line one is quite long
+    Line two
+    Line three breaks the camel's back
+    EOF
 
 
 =head1 CONFIGURATION
@@ -85,12 +86,15 @@ This Policy is not configurable except for the standard options.
 
 Chris Dolan <cdolan@cpan.org>
 
+
 =head1 CREDITS
 
-Initial development of this policy was supported by a grant from the Perl
-Foundation.
+Initial development of this policy was supported by a grant from the
+Perl Foundation.
+
 
 =head1 COPYRIGHT
+
 
 Copyright (c) 2007-2008 Chris Dolan.  Many rights reserved.
 

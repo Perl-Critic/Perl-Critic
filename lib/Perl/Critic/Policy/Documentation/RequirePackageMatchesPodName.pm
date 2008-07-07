@@ -40,31 +40,32 @@ sub violates {
     return if !$pods_ref;
 
     for my $pod (@{$pods_ref}) {
-       my $content = $pod->content;
+        my $content = $pod->content;
 
-       next if $content !~ m{^=head1 [ \t]+ NAME [ \t]*$ \s*}cgxms;
+        next if $content !~ m{^=head1 [ \t]+ NAME [ \t]*$ \s*}cgxms;
 
-       my ($pod_pkg) = $content =~ m{\G (\S+) }cgxms;
+        my ($pod_pkg) = $content =~ m{\G (\S+) }cgxms;
 
-       if (!$pod_pkg) {
-          return $self->violation( $DESC, q{Empty name declaration}, $elem );
-       }
+        if (!$pod_pkg) {
+            return $self->violation( $DESC, q{Empty name declaration}, $elem );
+        }
 
-       # idea: force NAME to match the file name in scripts?
-       return if is_script($doc); # mismatch is normal in program entry points
+        # idea: force NAME to match the file name in scripts?
+        return if is_script($doc); # mismatch is normal in program entry points
 
-       # idea: worry about POD escapes?
-       $pod_pkg =~ s{\A [CL]<(.*)>\z}{$1}gxms; # unwrap
-       $pod_pkg =~ s{\'}{::}gxms;              # perl4 -> perl5
+        # idea: worry about POD escapes?
+        $pod_pkg =~ s{\A [CL]<(.*)>\z}{$1}gxms; # unwrap
+        $pod_pkg =~ s{\'}{::}gxms;              # perl4 -> perl5
 
-       my $pkgs = $doc->find('PPI::Statement::Package');
-       # no package statement means no possible match
-       my $pkg = $pkgs ? $pkgs->[0]->namespace : q{};
-       $pkg =~ s{\'}{::}gxms;
+        my $pkgs = $doc->find('PPI::Statement::Package');
+        # no package statement means no possible match
+        my $pkg = $pkgs ? $pkgs->[0]->namespace : q{};
+        $pkg =~ s{\'}{::}gxms;
 
-       return if $pkg eq $pod_pkg;
-       return $self->violation( $DESC, $EXPL, $pod );
+        return if $pkg eq $pod_pkg;
+        return $self->violation( $DESC, $EXPL, $pod );
     }
+
     return;  # no NAME section found
 }
 
@@ -80,9 +81,11 @@ __END__
 
 Perl::Critic::Policy::Documentation::RequirePackageMatchesPodName - The C<=head1 NAME> section should match the package.
 
+
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic> distribution.
+
 
 =head1 DESCRIPTION
 
@@ -91,9 +94,11 @@ This Policy is part of the core L<Perl::Critic> distribution.
 
 This Policy is not configurable except for the standard options.
 
+
 =head1 AUTHOR
 
 Chris Dolan <cdolan@cpan.org>
+
 
 =head1 COPYRIGHT
 

@@ -112,9 +112,11 @@ __END__
 
 Perl::Critic::Policy::Modules::ProhibitEvilModules - Ban modules that aren't blessed by your shop.
 
+
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
@@ -123,40 +125,46 @@ Use this policy if you wish to prohibit the use of specific modules.
 These may be modules that you feel are deprecated, buggy, unsupported,
 insecure, or just don't like.
 
+
 =head1 CONFIGURATION
 
-The set of prohibited modules is configurable via the C<modules> option.  The
-value of C<modules> should be a string of space-delimited, fully qualified
-module names and/or regular expressions.  An example of prohibiting two
-specific modules in a F<.perlcriticrc> file:
+The set of prohibited modules is configurable via the C<modules>
+option.  The value of C<modules> should be a string of
+space-delimited, fully qualified module names and/or regular
+expressions.  An example of prohibiting two specific modules in a
+F<.perlcriticrc> file:
 
-  [Modules::ProhibitEvilModules]
-  modules = Getopt::Std Autoload
+    [Modules::ProhibitEvilModules]
+    modules = Getopt::Std Autoload
 
-Regular expressions are identified by values beginning and ending with slashes.
-Any module with a name that matches C<m/pattern/> will be forbidden.  For
-example:
+Regular expressions are identified by values beginning and ending with
+slashes.  Any module with a name that matches C<m/pattern/> will be
+forbidden.  For example:
 
-  [Modules::ProhibitEvilModules]
-  modules = /Acme::/
+    [Modules::ProhibitEvilModules]
+    modules = /Acme::/
 
-would cause all modules that match C<m/Acme::/> to be forbidden.  You can add
-any of the C<imxs> switches to the end of a pattern, but be aware that patterns
-cannot contain whitespace because the configuration file parser uses it to
-delimit the module names and patterns.
+would cause all modules that match C<m/Acme::/> to be forbidden.  You
+can add any of the C<imxs> switches to the end of a pattern, but be
+aware that patterns cannot contain whitespace because the
+configuration file parser uses it to delimit the module names and
+patterns.
 
-By default, there are no prohibited modules (although I can think of a few that
-should be).
+By default, there are no prohibited modules (although I can think of a
+few that should be).
+
 
 =head1 NOTES
 
 Note that this policy doesn't apply to pragmas.  Future versions may
 allow you to specify an alternative for each prohibited module, which
-can be suggested by L<Perl::Critic>.
+can be suggested by L<Perl::Critic|Perl::Critic>.
+
 
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+
 
 =head1 COPYRIGHT
 

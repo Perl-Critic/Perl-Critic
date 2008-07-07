@@ -54,17 +54,19 @@ Perl::Critic::Policy::ControlStructures::ProhibitUnlessBlocks - Write C<if(! $co
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
-Conway discourages using C<unless> because it leads to double-negatives
-that are hard to understand.  Instead, reverse the logic and use C<if>.
+Conway discourages using C<unless> because it leads to
+double-negatives that are hard to understand.  Instead, reverse the
+logic and use C<if>.
 
-  unless($condition) { do_something() } #not ok
-  unless(! $no_flag) { do_something() } #really bad
-  if( ! $condition)  { do_something() } #ok
+    unless($condition) { do_something() } #not ok
+    unless(! $no_flag) { do_something() } #really bad
+    if( ! $condition)  { do_something() } #ok
 
 This Policy only covers the block-form of C<unless>.  For the postfix
 variety, see C<ProhibitPostfixControls>.
@@ -77,7 +79,7 @@ This Policy is not configurable except for the standard options.
 
 =head1 SEE ALSO
 
-L<Perl::Critic::Policy::ControlStructures::ProhibitPostfixControls>
+L<Perl::Critic::Policy::ControlStructures::ProhibitPostfixControls|Perl::Critic::Policy::ControlStructures::ProhibitPostfixControls>
 
 =head1 AUTHOR
 

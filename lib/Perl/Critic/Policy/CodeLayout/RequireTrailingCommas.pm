@@ -69,9 +69,11 @@ __END__
 
 Perl::Critic::Policy::CodeLayout::RequireTrailingCommas - Put a comma at the end of every multi-line list declaration, including the last one.
 
+
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
@@ -80,13 +82,13 @@ Conway suggests that all elements in a multi-line list should be
 separated by commas, including the last element.  This makes it a
 little easier to re-order the list by cutting and pasting.
 
-  my @list = ($foo,
-              $bar,
-              $baz);  #not ok
+    my @list = ($foo,
+                $bar,
+                $baz);  #not ok
 
-  my @list = ($foo,
-              $bar,
-              $baz,); #ok
+    my @list = ($foo,
+                $bar,
+                $baz,); #ok
 
 
 =head1 CONFIGURATION
@@ -102,9 +104,11 @@ have at least one element and are being assigned to something.
 However, there may be some edge cases that I haven't covered.  If you
 find one, send me a note.
 
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+
 
 =head1 COPYRIGHT
 

@@ -148,18 +148,19 @@ Perl::Critic::Policy::ControlStructures::ProhibitNegativeExpressionsInUnlessAndU
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
-  until ($foo ne 'blah') {          #not ok
-      ...
-  }
+    until ($foo ne 'blah') {          #not ok
+        ...
+    }
 
-  while ($foo eq 'blah') {          #ok
-      ...
-  }
+    while ($foo eq 'blah') {          #ok
+        ...
+    }
 
 A number of people have problems figuring out the meaning of doubly
 negated expressions.  C<unless> and C<until> are both negative
@@ -182,7 +183,7 @@ This Policy is not configurable except for the standard options.
 
 =head1 SEE ALSO
 
-L<Perl::Critic::Policy::ControlStructures::ProhibitUnlessBlocks>
+L<Perl::Critic::Policy::ControlStructures::ProhibitUnlessBlocks|Perl::Critic::Policy::ControlStructures::ProhibitUnlessBlocks>
 
 =head1 AUTHOR
 

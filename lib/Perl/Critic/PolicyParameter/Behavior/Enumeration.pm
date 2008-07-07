@@ -169,11 +169,12 @@ Perl::Critic::PolicyParameter::Behavior::Enumeration - Actions appropriate for a
 =head1 DESCRIPTION
 
 Provides a standard set of functionality for an enumerated
-L<Perl::Critic::PolicyParameter> so that the developer of a policy
-does not have to provide it her/himself.
+L<Perl::Critic::PolicyParameter|Perl::Critic::PolicyParameter> so that
+the developer of a policy does not have to provide it her/himself.
 
 NOTE: Do not instantiate this class.  Use the singleton instance held
-onto by L<Perl::Critic::PolicyParameter>.
+onto by
+L<Perl::Critic::PolicyParameter|Perl::Critic::PolicyParameter>.
 
 
 =head1 METHODS
@@ -194,12 +195,15 @@ This behavior looks for two configuration items:
 Mandatory.  The set of valid values for the parameter, as an array
 reference.
 
+
 =item enumeration_allow_multiple_values
 
 Optional, defaults to false.  Should the parameter support a single
 value or accept multiple?
 
+
 =back
+
 
 =item C<generate_parameter_description( $parameter )>
 
@@ -209,12 +213,14 @@ behavior.
 
 In this specific case, the universe of values is added at the end.
 
+
 =back
 
 
 =head1 AUTHOR
 
 Elliot Shank <perl@galumph.com>
+
 
 =head1 COPYRIGHT
 

@@ -71,9 +71,10 @@ __END__
 
 Perl::Critic::Utils::Constants - Global constants.
 
+
 =head1 DESCRIPTION
 
-Defines commonly used constants for L<Perl::Critic>.
+Defines commonly used constants for L<Perl::Critic|Perl::Critic>.
 
 
 =head1 IMPORTABLE CONSTANTS

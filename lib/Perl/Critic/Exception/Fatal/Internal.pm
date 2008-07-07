@@ -44,11 +44,12 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Exception::Fatal::Internal - A problem with the L<Perl::Critic> implementation, i.e. a bug.
+Perl::Critic::Exception::Fatal::Internal - A problem with the L<Perl::Critic|Perl::Critic> implementation, i.e. a bug.
 
 =head1 DESCRIPTION
 
-A representation of a bug found in the code of L<Perl::Critic>.
+A representation of a bug found in the code of
+L<Perl::Critic|Perl::Critic>.
 
 
 =head1 METHODS

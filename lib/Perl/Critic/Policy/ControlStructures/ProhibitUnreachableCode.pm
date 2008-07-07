@@ -101,15 +101,16 @@ Perl::Critic::Policy::ControlStructures::ProhibitUnreachableCode - Don't write c
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
-This policy prohibits code following a statement which unconditionally alters
-the program flow.  This includes calls to C<exit>, C<die>, C<return>, C<next>,
-C<last> and C<goto>.  Due to common usage, C<croak> and C<confess> from
-L<Carp> are also included.
+This policy prohibits code following a statement which unconditionally
+alters the program flow.  This includes calls to C<exit>, C<die>,
+C<return>, C<next>, C<last> and C<goto>.  Due to common usage,
+C<croak> and C<confess> from L<Carp|Carp> are also included.
 
 Code is reachable if any of the following conditions are true:
 
@@ -196,7 +197,7 @@ This Policy is not configurable except for the standard options.
 
 =head1 SEE ALSO
 
-L<Perl::Critic::Policy::ControlStructures::ProhibitPostfixControls>
+L<Perl::Critic::Policy::ControlStructures::ProhibitPostfixControls|Perl::Critic::Policy::ControlStructures::ProhibitPostfixControls>
 
 =head1 AUTHOR
 

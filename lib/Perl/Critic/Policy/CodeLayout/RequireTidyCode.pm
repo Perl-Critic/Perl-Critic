@@ -126,11 +126,13 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::CodeLayout::RequireTidyCode - Must run code through L<perltidy>.
+Perl::Critic::Policy::CodeLayout::RequireTidyCode - Must run code through L<perltidy|perltidy>.
+
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
@@ -138,40 +140,47 @@ This Policy is part of the core L<Perl::Critic> distribution.
 Conway does make specific recommendations for whitespace and
 curly-braces in your code, but the most important thing is to adopt a
 consistent layout, regardless of the specifics.  And the easiest way
-to do that is to use L<Perl::Tidy>.  This policy will complain if
-you're code hasn't been run through Perl::Tidy.
+to do that is to use L<Perl::Tidy|Perl::Tidy>.  This policy will
+complain if you're code hasn't been run through Perl::Tidy.
+
 
 =head1 CONFIGURATION
 
 This policy can be configured to tell Perl::Tidy to use a particular
-F<perltidyrc> file or no configuration at all.  By default, Perl::Tidy is told
-to look in its default location for configuration.  Perl::Critic can be told to
-tell Perl::Tidy to use a specific configuration file by putting an entry in a
-F<.perlcriticrc> file like this:
+F<perltidyrc> file or no configuration at all.  By default, Perl::Tidy
+is told to look in its default location for configuration.
+Perl::Critic can be told to tell Perl::Tidy to use a specific
+configuration file by putting an entry in a F<.perlcriticrc> file like
+this:
 
-  [CodeLayout::RequireTidyCode]
-  perltidyrc = /usr/share/perltidy.conf
+    [CodeLayout::RequireTidyCode]
+    perltidyrc = /usr/share/perltidy.conf
 
 As a special case, setting C<perltidyrc> to the empty string tells
 Perl::Tidy not to load any configuration file at all and just use
 Perl::Tidy's own default style.
 
-  [CodeLayout::RequireTidyCode]
-  perltidyrc =
+    [CodeLayout::RequireTidyCode]
+    perltidyrc =
+
 
 =head1 NOTES
 
-L<Perl::Tidy> is not included in the Perl::Critic distribution.  The
-latest version of Perl::Tidy can be downloaded from CPAN.  If
-Perl::Tidy is not installed, this policy is silently ignored.
+L<Perl::Tidy|Perl::Tidy> is not included in the Perl::Critic
+distribution.  The latest version of Perl::Tidy can be downloaded from
+CPAN.  If Perl::Tidy is not installed, this policy is silently
+ignored.
+
 
 =head1 SEE ALSO
 
-L<Perl::Tidy>
+L<Perl::Tidy|Perl::Tidy>
+
 
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+
 
 =head1 COPYRIGHT
 

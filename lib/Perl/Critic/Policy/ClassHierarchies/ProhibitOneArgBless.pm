@@ -55,9 +55,11 @@ __END__
 
 Perl::Critic::Policy::ClassHierarchies::ProhibitOneArgBless - Write C<bless {}, $class;> instead of just C<bless {};>.
 
+
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
@@ -65,12 +67,12 @@ This Policy is part of the core L<Perl::Critic> distribution.
 Always use the two-argument form of C<bless> because it allows
 subclasses to inherit your constructor.
 
-  sub new {
-      my $class = shift;
-      my $self = bless {};          # not ok
-      my $self = bless {}, $class;  # ok
-      return $self;
-  }
+    sub new {
+        my $class = shift;
+        my $self = bless {};          # not ok
+        my $self = bless {}, $class;  # ok
+        return $self;
+    }
 
 
 =head1 CONFIGURATION

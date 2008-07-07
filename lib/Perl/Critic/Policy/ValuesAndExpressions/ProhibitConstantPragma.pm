@@ -53,14 +53,14 @@ Perl::Critic::Policy::ValuesAndExpressions::ProhibitConstantPragma - Don't C<< u
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic> distribution.
 
 
 =head1 DESCRIPTION
 
 Named constants are a good thing.  But don't use the C<constant>
 pragma because barewords don't interpolate.  Instead use the
-L<Readonly> module.
+L<Readonly|Readonly> module.
 
   use constant FOOBAR => 42;  #not ok
 

@@ -62,19 +62,20 @@ Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep - Write C<grep { $_ =~ 
 
 =head1 AFFILIATION
 
-This Policy is part of the core L<Perl::Critic> distribution.
+This Policy is part of the core L<Perl::Critic|Perl::Critic>
+distribution.
 
 
 =head1 DESCRIPTION
 
-The expression forms of C<grep> and C<map> are awkward and hard to read.
-Use the block forms instead.
+The expression forms of C<grep> and C<map> are awkward and hard to
+read.  Use the block forms instead.
 
-  @matches = grep  /pattern/,    @list;        #not ok
-  @matches = grep { /pattern/ }  @list;        #ok
+    @matches = grep  /pattern/,    @list;        #not ok
+    @matches = grep { /pattern/ }  @list;        #ok
 
-  @mapped = map  transform($_),    @list;      #not ok
-  @mapped = map { transform($_) }  @list;      #ok
+    @mapped = map  transform($_),    @list;      #not ok
+    @mapped = map { transform($_) }  @list;      #ok
 
 
 
@@ -85,9 +86,9 @@ This Policy is not configurable except for the standard options.
 
 =head1 SEE ALSO
 
-L<Perl::Critic::Policy::BuiltinFunctions::ProhibitStringyEval>
+L<Perl::Critic::Policy::BuiltinFunctions::ProhibitStringyEval|Perl::Critic::Policy::BuiltinFunctions::ProhibitStringyEval>
 
-L<Perl::Critic::Policy::BuiltinFunctions::RequireBlockMap>
+L<Perl::Critic::Policy::BuiltinFunctions::RequireBlockMap|Perl::Critic::Policy::BuiltinFunctions::RequireBlockMap>
 
 =head1 AUTHOR
 

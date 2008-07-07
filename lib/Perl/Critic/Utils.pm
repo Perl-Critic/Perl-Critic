@@ -1148,11 +1148,14 @@ __END__
 
 Perl::Critic::Utils - General utility subroutines and constants for Perl::Critic and derivative distributions.
 
+
 =head1 DESCRIPTION
 
-This module provides several static subs and variables that are useful for
-developing L<Perl::Critic::Policy> subclasses.  Unless you are writing Policy
-modules, you probably don't care about this package.
+This module provides several static subs and variables that are useful
+for developing L<Perl::Critic::Policy|Perl::Critic::Policy>
+subclasses.  Unless you are writing Policy modules, you probably don't
+care about this package.
+
 
 =head1 IMPORTABLE SUBS
 
@@ -1160,227 +1163,285 @@ modules, you probably don't care about this package.
 
 =item C<find_keywords( $doc, $keyword )>
 
-B<DEPRECATED:> Since version 0.11, every Policy is evaluated at each element
-of the document.  So you shouldn't need to go looking for a particular
-keyword.  If you I<do> want to use this, please import it via the
-C<:deprecated> tag, rather than directly, to mark the module as needing
-updating.
+B<DEPRECATED:> Since version 0.11, every Policy is evaluated at each
+element of the document.  So you shouldn't need to go looking for a
+particular keyword.  If you I<do> want to use this, please import it
+via the C<:deprecated> tag, rather than directly, to mark the module
+as needing updating.
 
-Given a L<PPI::Document> as C<$doc>, returns a reference to an array
-containing all the L<PPI::Token::Word> elements that match C<$keyword>.  This
-can be used to find any built-in function, method call, bareword, or reserved
-keyword.  It will not match variables, subroutine names, literal strings,
-numbers, or symbols.  If the document doesn't contain any matches, returns
+Given a L<PPI::Document|PPI::Document> as C<$doc>, returns a reference
+to an array containing all the L<PPI::Token::Word|PPI::Token::Word>
+elements that match C<$keyword>.  This can be used to find any
+built-in function, method call, bareword, or reserved keyword.  It
+will not match variables, subroutine names, literal strings, numbers,
+or symbols.  If the document doesn't contain any matches, returns
 undef.
+
 
 =item C<is_perl_global( $element )>
 
-Given a L<PPI::Token::Symbol> or a string, returns true if that token
-represents one of the global variables provided by the L<English> module, or
-one of the builtin global variables like C<%SIG>, C<%ENV>, or C<@ARGV>.  The
-sigil on the symbol is ignored, so things like C<$ARGV> or C<$ENV> will still
-return true.
+Given a L<PPI::Token::Symbol|PPI::Token::Symbol> or a string, returns
+true if that token represents one of the global variables provided by
+the L<English|English> module, or one of the builtin global variables
+like C<%SIG>, C<%ENV>, or C<@ARGV>.  The sigil on the symbol is
+ignored, so things like C<$ARGV> or C<$ENV> will still return true.
+
 
 =item C<is_perl_builtin( $element )>
 
-Given a L<PPI::Token::Word>, L<PPI::Statement::Sub>, or string, returns true
-if that token represents a call to any of the builtin functions defined in
-Perl 5.8.8.
+Given a L<PPI::Token::Word|PPI::Token::Word>,
+L<PPI::Statement::Sub|PPI::Statement::Sub>, or string, returns true if
+that token represents a call to any of the builtin functions defined
+in Perl 5.8.8.
+
 
 =item C<is_perl_bareword( $element )>
 
-Given a L<PPI::Token::Word>, L<PPI::Statement::Sub>, or string, returns true
-if that token represents a bareword (e.g. "if", "else", "sub", "package")
+Given a L<PPI::Token::Word|PPI::Token::Word>,
+L<PPI::Statement::Sub|PPI::Statement::Sub>, or string, returns true if
+that token represents a bareword (e.g. "if", "else", "sub", "package")
 defined in Perl 5.8.8.
+
 
 =item C<is_perl_filehandle( $element )>
 
-Given a L<PPI::Token::Word>, or string, returns true if that token represents
-one of the global filehandles (e.g. C<STDIN>, C<STDERR>, C<STDOUT>, C<ARGV>)
-that are defined in Perl 5.8.8.  Note that this function will return false if
-given a filehandle that is represented as a typeglob (e.g. C<*STDIN>)
+Given a L<PPI::Token::Word|PPI::Token::Word>, or string, returns true
+if that token represents one of the global filehandles (e.g. C<STDIN>,
+C<STDERR>, C<STDOUT>, C<ARGV>) that are defined in Perl 5.8.8.  Note
+that this function will return false if given a filehandle that is
+represented as a typeglob (e.g. C<*STDIN>)
+
 
 =item C<is_perl_builtin_with_list_context( $element )>
 
-Given a L<PPI::Token::Word>, L<PPI::Statement::Sub>, or string, returns true
-if that token represents a call to any of the builtin functions defined in
-Perl 5.8.8 that provide a list context to the following tokens.
+Given a L<PPI::Token::Word|PPI::Token::Word>,
+L<PPI::Statement::Sub|PPI::Statement::Sub>, or string, returns true if
+that token represents a call to any of the builtin functions defined
+in Perl 5.8.8 that provide a list context to the following tokens.
+
 
 =item C<is_perl_builtin_with_multiple_arguments( $element )>
 
-Given a L<PPI::Token::Word>, L<PPI::Statement::Sub>, or string, returns true
-if that token represents a call to any of the builtin functions defined in
-Perl 5.8.8 that B<can> take multiple arguments.
+Given a L<PPI::Token::Word|PPI::Token::Word>,
+L<PPI::Statement::Sub|PPI::Statement::Sub>, or string, returns true if
+that token represents a call to any of the builtin functions defined
+in Perl 5.8.8 that B<can> take multiple arguments.
+
 
 =item C<is_perl_builtin_with_no_arguments( $element )>
 
-Given a L<PPI::Token::Word>, L<PPI::Statement::Sub>, or string, returns true
-if that token represents a call to any of the builtin functions defined in
-Perl 5.8.8 that B<cannot> take any arguments.
+Given a L<PPI::Token::Word|PPI::Token::Word>,
+L<PPI::Statement::Sub|PPI::Statement::Sub>, or string, returns true if
+that token represents a call to any of the builtin functions defined
+in Perl 5.8.8 that B<cannot> take any arguments.
+
 
 =item C<is_perl_builtin_with_one_argument( $element )>
 
-Given a L<PPI::Token::Word>, L<PPI::Statement::Sub>, or string, returns true
-if that token represents a call to any of the builtin functions defined in
-Perl 5.8.8 that takes B<one and only one> argument.
+Given a L<PPI::Token::Word|PPI::Token::Word>,
+L<PPI::Statement::Sub|PPI::Statement::Sub>, or string, returns true if
+that token represents a call to any of the builtin functions defined
+in Perl 5.8.8 that takes B<one and only one> argument.
+
 
 =item C<is_perl_builtin_with_optional_argument( $element )>
 
-Given a L<PPI::Token::Word>, L<PPI::Statement::Sub>, or string, returns true
-if that token represents a call to any of the builtin functions defined in
-Perl 5.8.8 that takes B<no more than one> argument.
+Given a L<PPI::Token::Word|PPI::Token::Word>,
+L<PPI::Statement::Sub|PPI::Statement::Sub>, or string, returns true if
+that token represents a call to any of the builtin functions defined
+in Perl 5.8.8 that takes B<no more than one> argument.
 
-The sets of values for which C<is_perl_builtin_with_multiple_arguments()>,
+The sets of values for which
+C<is_perl_builtin_with_multiple_arguments()>,
 C<is_perl_builtin_with_no_arguments()>,
 C<is_perl_builtin_with_one_argument()>, and
-C<is_perl_builtin_with_optional_argument()> return true are disjoint and
-their union is precisely the set of values that C<is_perl_builtin()> will
-return true for.
+C<is_perl_builtin_with_optional_argument()> return true are disjoint
+and their union is precisely the set of values that
+C<is_perl_builtin()> will return true for.
+
 
 =item C<is_perl_builtin_with_zero_and_or_one_arguments( $element )>
 
-Given a L<PPI::Token::Word>, L<PPI::Statement::Sub>, or string, returns true
-if that token represents a call to any of the builtin functions defined in
-Perl 5.8.8 that takes no and/or one argument.
+Given a L<PPI::Token::Word|PPI::Token::Word>,
+L<PPI::Statement::Sub|PPI::Statement::Sub>, or string, returns true if
+that token represents a call to any of the builtin functions defined
+in Perl 5.8.8 that takes no and/or one argument.
 
 Returns true if any of C<is_perl_builtin_with_no_arguments()>,
 C<is_perl_builtin_with_one_argument()>, and
 C<is_perl_builtin_with_optional_argument()> returns true.
 
+
 =item C<is_qualified_name( $name )>
 
-Given a string, L<PPI::Token::Word>, or L<PPI::Token::Symbol>, answers
-whether it has a module component, i.e. contains "::".
+Given a string, L<PPI::Token::Word|PPI::Token::Word>, or
+L<PPI::Token::Symbol|PPI::Token::Symbol>, answers whether it has a
+module component, i.e. contains "::".
+
 
 =item C<precedence_of( $element )>
 
-Given a L<PPI::Token::Operator> or a string, returns the precedence of the
-operator, where 1 is the highest precedence.  Returns undef if the precedence
-can't be determined (which is usually because it is not an operator).
+Given a L<PPI::Token::Operator|PPI::Token::Operator> or a string,
+returns the precedence of the operator, where 1 is the highest
+precedence.  Returns undef if the precedence can't be determined
+(which is usually because it is not an operator).
+
 
 =item C<is_hash_key( $element )>
 
-Given a L<PPI::Element>, returns true if the element is a literal hash key.
-PPI doesn't distinguish between regular barewords (like keywords or subroutine
-calls) and barewords in hash subscripts (which are considered literal).  So
-this subroutine is useful if your Policy is searching for L<PPI::Token::Word>
-elements and you want to filter out the hash subscript variety.  In both of
-the following examples, "foo" is considered a hash key:
+Given a L<PPI::Element|PPI::Element>, returns true if the element is a
+literal hash key.  PPI doesn't distinguish between regular barewords
+(like keywords or subroutine calls) and barewords in hash subscripts
+(which are considered literal).  So this subroutine is useful if your
+Policy is searching for L<PPI::Token::Word|PPI::Token::Word> elements
+and you want to filter out the hash subscript variety.  In both of the
+following examples, "foo" is considered a hash key:
 
-  $hash1{foo} = 1;
-  %hash2 = (foo => 1);
+    $hash1{foo} = 1;
+    %hash2 = (foo => 1);
 
-But if the bareword is followed by an argument list, then perl treats it as a
-function call.  So in these examples, "foo" is B<not> considered a hash key:
+But if the bareword is followed by an argument list, then perl treats
+it as a function call.  So in these examples, "foo" is B<not>
+considered a hash key:
 
-  $hash1{ foo() } = 1;
-  &hash2 = (foo() => 1);
+    $hash1{ foo() } = 1;
+    &hash2 = (foo() => 1);
+
 
 =item C<is_included_module_name( $element )>
 
-Given a L<PPI::Token::Word>, returns true if the element is the name of a
-module that is being included via C<use>, C<require>, or C<no>.
+Given a L<PPI::Token::Word|PPI::Token::Word>, returns true if the
+element is the name of a module that is being included via C<use>,
+C<require>, or C<no>.
+
 
 =item C<is_integer( $value )>
 
-Answers whether the parameter, as a string, looks like an integral value.
+Answers whether the parameter, as a string, looks like an integral
+value.
+
 
 =item C<is_class_name( $element )>
 
-Given a L<PPI::Token::Word>, returns true if the element that immediately
-follows this element is the dereference operator "->". When a bareword has a
-"->" on the B<right> side, it usually means that it is the name of the class
-(from which a method is being called).
+Given a L<PPI::Token::Word|PPI::Token::Word>, returns true if the
+element that immediately follows this element is the dereference
+operator "->". When a bareword has a "->" on the B<right> side, it
+usually means that it is the name of the class (from which a method is
+being called).
+
 
 =item C<is_label_pointer( $element )>
 
-Given a L<PPI::Token::Word>, returns true if the element is the label
-in a C<next>, C<last>, C<redo>, or C<goto> statement.  Note this is not the
-same thing as the label declaration.
+Given a L<PPI::Token::Word|PPI::Token::Word>, returns true if the
+element is the label in a C<next>, C<last>, C<redo>, or C<goto>
+statement.  Note this is not the same thing as the label declaration.
+
 
 =item C<is_method_call( $element )>
 
-Given a L<PPI::Token::Word>, returns true if the element that immediately
-precedes this element is the dereference operator "->". When a bareword has a
-"->" on the B<left> side, it usually means that it is the name of a method
-(that is being called from a class).
+Given a L<PPI::Token::Word|PPI::Token::Word>, returns true if the
+element that immediately precedes this element is the dereference
+operator "->". When a bareword has a "->" on the B<left> side, it
+usually means that it is the name of a method (that is being called
+from a class).
+
 
 =item C<is_package_declaration( $element )>
 
-Given a L<PPI::Token::Word>, returns true if the element is the name of a
-package that is being declared.
+Given a L<PPI::Token::Word|PPI::Token::Word>, returns true if the
+element is the name of a package that is being declared.
+
 
 =item C<is_subroutine_name( $element )>
 
-Given a L<PPI::Token::Word>, returns true if the element is the name of a
-subroutine declaration.  This is useful for distinguishing barewords and from
-function calls from subroutine declarations.
+Given a L<PPI::Token::Word|PPI::Token::Word>, returns true if the
+element is the name of a subroutine declaration.  This is useful for
+distinguishing barewords and from function calls from subroutine
+declarations.
+
 
 =item C<is_function_call( $element )>
 
-Given a L<PPI::Token::Word> returns true if the element appears to be call to
-a static function.  Specifically, this function returns true if
-C<is_hash_key>, C<is_method_call>, C<is_subroutine_name>,
-C<is_included_module_anme>, C<is_package_declaration>, C<is_perl_bareword>,
-C<is_perl_filehandle>, C<is_label_pointer> and C<is_subroutine_name> all
-return false for the given element.
+Given a L<PPI::Token::Word|PPI::Token::Word> returns true if the
+element appears to be call to a static function.  Specifically, this
+function returns true if C<is_hash_key>, C<is_method_call>,
+C<is_subroutine_name>, C<is_included_module_anme>,
+C<is_package_declaration>, C<is_perl_bareword>, C<is_perl_filehandle>,
+C<is_label_pointer> and C<is_subroutine_name> all return false for the
+given element.
+
 
 =item C<first_arg( $element )>
 
-Given a L<PPI::Element> that is presumed to be a function call (which is
-usually a L<PPI::Token::Word>), return the first argument.  This is similar of
-C<parse_arg_list()> and follows the same logic.  Note that for the code:
+Given a L<PPI::Element|PPI::Element> that is presumed to be a function
+call (which is usually a L<PPI::Token::Word|PPI::Token::Word>), return
+the first argument.  This is similar of C<parse_arg_list()> and
+follows the same logic.  Note that for the code:
 
-  int($x + 0.5)
+    int($x + 0.5)
 
-this function will return just the C<$x>, not the whole expression.  This is
-different from the behavior of C<parse_arg_list()>.  Another caveat is:
+this function will return just the C<$x>, not the whole expression.
+This is different from the behavior of C<parse_arg_list()>.  Another
+caveat is:
 
-  int(($x + $y) + 0.5)
+    int(($x + $y) + 0.5)
 
-which returns C<($x + $y)> as a L<PPI::Structure::List> instance.
+which returns C<($x + $y)> as a
+L<PPI::Structure::List|PPI::Structure::List> instance.
+
 
 =item C<parse_arg_list( $element )>
 
-Given a L<PPI::Element> that is presumed to be a function call (which is
-usually a L<PPI::Token::Word>), splits the argument expressions into arrays of
-tokens.  Returns a list containing references to each of those arrays.  This
-is useful because parentheses are optional when calling a function, and PPI
-parses them very differently.  So this method is a poor-man's parse tree of
-PPI nodes.  It's not bullet-proof because it doesn't respect precedence.  In
-general, I don't like the way this function works, so don't count on it to be
-stable (or even present).
+Given a L<PPI::Element|PPI::Element> that is presumed to be a function
+call (which is usually a L<PPI::Token::Word|PPI::Token::Word>), splits
+the argument expressions into arrays of tokens.  Returns a list
+containing references to each of those arrays.  This is useful because
+parentheses are optional when calling a function, and PPI parses them
+very differently.  So this method is a poor-man's parse tree of PPI
+nodes.  It's not bullet-proof because it doesn't respect precedence.
+In general, I don't like the way this function works, so don't count
+on it to be stable (or even present).
+
 
 =item C<split_nodes_on_comma( @nodes )>
 
-This has the same return type as C<parse_arg_list()> but expects to be passed
-the nodes that represent the interior of a list, like:
+This has the same return type as C<parse_arg_list()> but expects to be
+passed the nodes that represent the interior of a list, like:
 
-  'foo', 1, 2, 'bar'
+    'foo', 1, 2, 'bar'
+
 
 =item C<is_script( $document )>
 
-Given a L<PPI::Document>, test if it starts with C</#!.*/>.  If so, it is
-judged to be a script instead of a module.  See C<shebang_line()>.
+Given a L<PPI::Document|PPI::Document>, test if it starts with
+C</#!.*/>.  If so, it is judged to be a script instead of a module.
+See C<shebang_line()>.
+
 
 =item C<is_in_void_context( $token )>
 
-Given a L<PPI::Token>, answer whether it appears to be in a void context.
+Given a L<PPI::Token|PPI::Token>, answer whether it appears to be in a
+void context.
+
 
 =item C<policy_long_name( $policy_name )>
 
 Given a policy class name in long or short form, return the long form.
 
+
 =item C<policy_short_name( $policy_name )>
 
-Given a policy class name in long or short form, return the short form.
+Given a policy class name in long or short form, return the short
+form.
+
 
 =item C<all_perl_files( @directories )>
 
-Given a list of directories, recursively searches through all the directories
-(depth first) and returns a list of paths for all the files that are Perl code
-files.  Any administrative files for CVS or Subversion are skipped, as are
-things that look like temporary or backup files.
+Given a list of directories, recursively searches through all the
+directories (depth first) and returns a list of paths for all the
+files that are Perl code files.  Any administrative files for CVS or
+Subversion are skipped, as are things that look like temporary or
+backup files.
 
 A Perl code file is:
 
@@ -1392,54 +1453,68 @@ A Perl code file is:
 
 =back
 
+
 =item C<severity_to_number( $severity )>
 
-If C<$severity> is given as an integer, this function returns C<$severity> but
-normalized to lie between C<$SEVERITY_LOWEST> and C<$SEVERITY_HIGHEST>.  If
-C<$severity> is given as a string, this function returns the corresponding
-severity number.  If the string doesn't have a corresponding number, this
-function will throw an exception.
+If C<$severity> is given as an integer, this function returns
+C<$severity> but normalized to lie between C<$SEVERITY_LOWEST> and
+C<$SEVERITY_HIGHEST>.  If C<$severity> is given as a string, this
+function returns the corresponding severity number.  If the string
+doesn't have a corresponding number, this function will throw an
+exception.
+
 
 =item C<is_valid_numeric_verbosity( $severity )>
 
 Answers whether the argument has a translation to a Violation format.
 
+
 =item C<verbosity_to_format( $verbosity_level )>
 
-Given a verbosity level between 1 and 10, returns the corresponding predefined
-format string.  These formats are suitable for passing to the C<set_format>
-method in L<Perl::Critic::Violation>.  See the L<perlcritic> documentation for
-a listing of the predefined formats.
+Given a verbosity level between 1 and 10, returns the corresponding
+predefined format string.  These formats are suitable for passing to
+the C<set_format> method in
+L<Perl::Critic::Violation|Perl::Critic::Violation>.  See the
+L<perlcritic|perlcritic> documentation for a listing of the predefined
+formats.
+
 
 =item C<hashify( @list )>
 
-Given C<@list>, return a hash where C<@list> is in the keys and each value is
-1.  Duplicate values in C<@list> are silently squished.
+Given C<@list>, return a hash where C<@list> is in the keys and each
+value is 1.  Duplicate values in C<@list> are silently squished.
+
 
 =item C<interpolate( $literal )>
 
-Given a C<$literal> string that may contain control characters (e.g.. '\t'
-'\n'), this function does a double interpolation on the string and returns it
-as if it had been declared in double quotes.  For example:
+Given a C<$literal> string that may contain control characters (e.g..
+'\t' '\n'), this function does a double interpolation on the string
+and returns it as if it had been declared in double quotes.  For
+example:
 
-  'foo \t bar \n' ...becomes... "foo \t bar \n"
+    'foo \t bar \n' ...becomes... "foo \t bar \n"
+
 
 =item C<shebang_line( $document )>
 
-Given a L<PPI::Document>, test if it starts with C<#!>.  If so, return that
-line.  Otherwise return undef.
+Given a L<PPI::Document|PPI::Document>, test if it starts with C<#!>.
+If so, return that line.  Otherwise return undef.
+
 
 =item C<words_from_string( $str )>
 
-Given config string I<$str>, return all the words from the string.  This is
-safer than splitting on whitespace.
+Given config string I<$str>, return all the words from the string.
+This is safer than splitting on whitespace.
+
 
 =item C<is_unchecked_call( $element )>
 
-Given a L<PPI::Element>, test to see if it contains a function call whose
-return value is not checked.
+Given a L<PPI::Element|PPI::Element>, test to see if it contains a
+function call whose return value is not checked.
+
 
 =back
+
 
 =head1 IMPORTABLE VARIABLES
 
@@ -1475,9 +1550,9 @@ return value is not checked.
 
 =item C<$RIGHT_PAREN>
 
-These character constants give clear names to commonly-used strings that can
-be hard to read when surrounded by quotes and other punctuation.  Can be
-imported in one go via the C<:characters> tag.
+These character constants give clear names to commonly-used strings
+that can be hard to read when surrounded by quotes and other
+punctuation.  Can be imported in one go via the C<:characters> tag.
 
 =item C<$SEVERITY_HIGHEST>
 
@@ -1490,9 +1565,9 @@ imported in one go via the C<:characters> tag.
 =item C<$SEVERITY_LOWEST>
 
 These numeric constants define the relative severity of violating each
-L<Perl::Critic::Policy>.  The C<get_severity> and C<default_severity> methods
-of every Policy subclass must return one of these values. Can be imported via
-the C<:severities> tag.
+L<Perl::Critic::Policy|Perl::Critic::Policy>.  The C<get_severity> and
+C<default_severity> methods of every Policy subclass must return one
+of these values. Can be imported via the C<:severities> tag.
 
 =item C<$DEFAULT_VERBOSITY>
 
@@ -1507,16 +1582,18 @@ C<$DEFAULT_VERBOSITY>, but with the file name prefixed to it.
 
 =item C<$FALSE>
 
-These are simple booleans. 1 and 0 respectively.  Be mindful of using these
-with string equality.  C<$FALSE ne $EMPTY>.  Can be imported via the
-C<:booleans> tag.
+These are simple booleans. 1 and 0 respectively.  Be mindful of using
+these with string equality.  C<$FALSE ne $EMPTY>.  Can be imported via
+the C<:booleans> tag.
+
 
 =back
 
+
 =head1 IMPORT TAGS
 
-The following groups of functions and constants are available as parameters to
-a C<use Perl::Critic::Util> statement.
+The following groups of functions and constants are available as
+parameters to a C<use Perl::Critic::Util> statement.
 
 =over
 
@@ -1524,10 +1601,12 @@ a C<use Perl::Critic::Util> statement.
 
 The lot.
 
+
 =item C<:booleans>
 
 Includes:
 C<$TRUE>, C<$FALSE>
+
 
 =item C<:severities>
 
@@ -1538,6 +1617,7 @@ C<$SEVERITY_MEDIUM>,
 C<$SEVERITY_LOW>,
 C<$SEVERITY_LOWEST>,
 C<@SEVERITY_NAMES>
+
 
 =item C<:characters>
 
@@ -1557,6 +1637,7 @@ C<$SLASH>,
 C<$BSLASH>
 C<$LEFT_PAREN>
 C<$RIGHT_PAREN>
+
 
 =item C<:classification>
 
@@ -1580,26 +1661,30 @@ C<is_subroutine_name>,
 C<is_unchecked_call>
 C<is_valid_numeric_verbosity>
 
-See also L<Perl::Critic::Utils::PPI>.
+See also L<Perl::Critic::Utils::PPI|Perl::Critic::Utils::PPI>.
+
 
 =item C<:data_conversion>
 
-Generic manipulation, not having anything specific to do with Perl::Critic.
+Generic manipulation, not having anything specific to do with
+Perl::Critic.
 
 Includes:
 C<hashify>,
 C<words_from_string>,
 C<interpolate>
 
+
 =item C<:ppi>
 
-Things for dealing with L<PPI>, other than classification.
+Things for dealing with L<PPI|PPI>, other than classification.
 
 Includes:
 C<first_arg>,
 C<parse_arg_list>
 
-See also L<Perl::Critic::Utils::PPI>.
+See also L<Perl::Critic::Utils::PPI|Perl::Critic::Utils::PPI>.
+
 
 =item C<:internal_lookup>
 
@@ -1609,6 +1694,7 @@ Includes:
 C<severity_to_number>,
 C<verbosity_to_format>
 
+
 =item C<:language>
 
 Information about Perl not programmatically available elsewhere.
@@ -1616,26 +1702,31 @@ Information about Perl not programmatically available elsewhere.
 Includes:
 C<precedence_of>
 
+
 =item C<:deprecated>
 
-Not surprisingly, things that are deprecated.  It is preferred to use this tag
-to get to these functions, rather than the function names themselves, so as to
-mark any module using them as needing cleanup.
+Not surprisingly, things that are deprecated.  It is preferred to use
+this tag to get to these functions, rather than the function names
+themselves, so as to mark any module using them as needing cleanup.
 
 Includes:
 C<find_keywords>
 
+
 =back
+
 
 =head1 SEE ALSO
 
-L<Perl::Critic::Utils::Constants>,
-L<Perl::Critic::Utils::McCabe>,
-L<Perl::Critic::Utils::PPI>,
+L<Perl::Critic::Utils::Constants|Perl::Critic::Utils::Constants>,
+L<Perl::Critic::Utils::McCabe|Perl::Critic::Utils::McCabe>,
+L<Perl::Critic::Utils::PPI|Perl::Critic::Utils::PPI>,
+
 
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+
 
 =head1 COPYRIGHT
 
