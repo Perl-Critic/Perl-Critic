@@ -99,13 +99,21 @@ Perl::Critic::TestUtils::block_perlcriticrc();
     my $profile = { 'Perl::Critic::Bogus' => {} };
     my $userprof = Perl::Critic::UserProfile->new( -profile => $profile );
     my $pf = Perl::Critic::PolicyFactory->new( -profile  => $userprof );
-    like( $last_warning, qr/^Policy ".*Bogus" is not installed/m );
+    like(
+        $last_warning,
+        qr/^Policy ".*Bogus" is not installed/m,
+        'Got expected warning for positive configuration of Policy.',
+    );
     $last_warning = q{};
 
     $profile = { '-Perl::Critic::Shizzle' => {} };
     $userprof = Perl::Critic::UserProfile->new( -profile => $profile );
     $pf = Perl::Critic::PolicyFactory->new( -profile  => $userprof );
-    like( $last_warning, qr/^Policy ".*Shizzle" is not installed/m );
+    like(
+        $last_warning,
+        qr/^Policy ".*Shizzle" is not installed/m,
+        'Got expected warning for negative configuration of Policy.',
+    );
     $last_warning = q{};
 }
 

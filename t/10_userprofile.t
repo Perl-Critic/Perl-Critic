@@ -33,19 +33,55 @@ our $VERSION = '1.088';
     my $up = Perl::Critic::UserProfile->new( -profile => \%profile_hash );
 
     #Using short policy names
-    is($up->policy_is_enabled('Miscellanea::RequireRcsKeywords'), 1 );
-    is($up->policy_is_disabled('NamingConventions::ProhibitMixedCaseVars'), 1 );
-    is_deeply($up->raw_policy_params('Miscellanea::RequireRcsKeywords'), \%policy_params);
+    is(
+        $up->policy_is_enabled('Miscellanea::RequireRcsKeywords'),
+        1,
+        'Miscellanea::RequireRcsKeywords is enabled.',
+    );
+    is(
+        $up->policy_is_disabled('NamingConventions::ProhibitMixedCaseVars'),
+        1,
+        'NamingConventions::ProhibitMixedCaseVars is disabled.',
+    );
+    is_deeply(
+        $up->raw_policy_params('Miscellanea::RequireRcsKeywords'),
+        \%policy_params,
+        'Miscellanea::RequireRcsKeywords got the correct configuration.',
+    );
 
     #Now using long policy names
-    is($up->policy_is_enabled('Perl::Critic::Policy::Miscellanea::RequireRcsKeywords'), 1 );
-    is($up->policy_is_disabled('Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars'), 1 );
-    is_deeply($up->raw_policy_params('Perl::Critic::Policy::Miscellanea::RequireRcsKeywords'), \%policy_params);
+    is(
+        $up->policy_is_enabled('Perl::Critic::Policy::Miscellanea::RequireRcsKeywords'),
+        1,
+        'Perl::Critic::Policy::Miscellanea::RequireRcsKeywords is enabled.',
+    );
+    is(
+        $up->policy_is_disabled('Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars'),
+        1,
+        'Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars is disabled.',
+    );
+    is_deeply(
+        $up->raw_policy_params('Perl::Critic::Policy::Miscellanea::RequireRcsKeywords'),
+        \%policy_params,
+        'Perl::Critic::Policy::Miscellanea::RequireRcsKeywords got the correct configuration.',
+    );
 
     #Using bogus policy names
-    is($up->policy_is_enabled('Perl::Critic::Policy::Bogus'),   q{} );
-    is($up->policy_is_disabled('Perl::Critic::Policy::Bogus'),  q{} );
-    is_deeply($up->raw_policy_params('Perl::Critic::Policy::Bogus'), {} );
+    is(
+        $up->policy_is_enabled('Perl::Critic::Policy::Bogus'),
+        q{},
+        q<Bogus Policy isn't enabled>,
+    );
+    is(
+        $up->policy_is_disabled('Perl::Critic::Policy::Bogus'),
+        q{},
+        q<Bogus Policy isn't disabled>,
+    );
+    is_deeply(
+        $up->raw_policy_params('Perl::Critic::Policy::Bogus'),
+        {},
+        q<Bogus Policy doesn't have any configuration.>,
+    );
 }
 
 #-----------------------------------------------------------------------------
