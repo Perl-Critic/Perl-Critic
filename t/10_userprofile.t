@@ -32,7 +32,7 @@ our $VERSION = '1.088';
 
     my $up = Perl::Critic::UserProfile->new( -profile => \%profile_hash );
 
-    #Using short policy names
+    # Using short policy names
     is(
         $up->policy_is_enabled('Miscellanea::RequireRcsKeywords'),
         1,
@@ -49,7 +49,7 @@ our $VERSION = '1.088';
         'Miscellanea::RequireRcsKeywords got the correct configuration.',
     );
 
-    #Now using long policy names
+    # Now using long policy names
     is(
         $up->policy_is_enabled('Perl::Critic::Policy::Miscellanea::RequireRcsKeywords'),
         1,
@@ -66,7 +66,7 @@ our $VERSION = '1.088';
         'Perl::Critic::Policy::Miscellanea::RequireRcsKeywords got the correct configuration.',
     );
 
-    #Using bogus policy names
+    # Using bogus policy names
     is(
         $up->policy_is_enabled('Perl::Critic::Policy::Bogus'),
         q{},
@@ -97,20 +97,56 @@ our $VERSION = '1.088';
 
     my $up = Perl::Critic::UserProfile->new( -profile => \@profile_array );
 
-    #Now using long policy names
-    is($up->policy_is_enabled('Miscellanea::RequireRcsKeywords'), 1 );
-    is($up->policy_is_disabled('NamingConventions::ProhibitMixedCaseVars'), 1 );
-    is_deeply($up->raw_policy_params('Miscellanea::RequireRcsKeywords'), \%policy_params);
+    # Now using long policy names
+    is(
+        $up->policy_is_enabled('Miscellanea::RequireRcsKeywords'),
+        1,
+        'Miscellanea::RequireRcsKeywords is enabled.',
+    );
+    is(
+        $up->policy_is_disabled('NamingConventions::ProhibitMixedCaseVars'),
+        1,
+        'NamingConventions::ProhibitMixedCaseVars is disabled.',
+    );
+    is_deeply(
+        $up->raw_policy_params('Miscellanea::RequireRcsKeywords'),
+        \%policy_params,
+        'Miscellanea::RequireRcsKeywords got the correct configuration.',
+    );
 
-    #Now using long policy names
-    is($up->policy_is_enabled('Perl::Critic::Policy::Miscellanea::RequireRcsKeywords'), 1 );
-    is($up->policy_is_disabled('Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars'), 1 );
-    is_deeply($up->raw_policy_params('Perl::Critic::Policy::Miscellanea::RequireRcsKeywords'), \%policy_params);
+    # Now using long policy names
+    is(
+        $up->policy_is_enabled('Perl::Critic::Policy::Miscellanea::RequireRcsKeywords'),
+        1,
+        'Perl::Critic::Policy::Miscellanea::RequireRcsKeywords is enabled.',
+    );
+    is(
+        $up->policy_is_disabled('Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars'),
+        1,
+        'Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars is disabled.',
+    );
+    is_deeply(
+        $up->raw_policy_params('Perl::Critic::Policy::Miscellanea::RequireRcsKeywords'),
+        \%policy_params,
+        'Perl::Critic::Policy::Miscellanea::RequireRcsKeywords got the correct configuration.',
+    );
 
-    #Using bogus policy names
-    is($up->policy_is_enabled('Perl::Critic::Policy::Bogus'),   q{} );
-    is($up->policy_is_disabled('Perl::Critic::Policy::Bogus'),  q{} );
-    is_deeply($up->raw_policy_params('Perl::Critic::Policy::Bogus'), {} );
+    # Using bogus policy names
+    is(
+        $up->policy_is_enabled('Perl::Critic::Policy::Bogus'),
+        q{},
+        q<Bogus Policy isn't enabled>,
+    );
+    is(
+        $up->policy_is_disabled('Perl::Critic::Policy::Bogus'),
+        q{},
+        q<Bogus Policy isn't disabled>,
+    );
+    is_deeply(
+        $up->raw_policy_params('Perl::Critic::Policy::Bogus'),
+        {},
+        q<Bogus Policy doesn't have any configuration.>,
+    );
 }
 
 #-----------------------------------------------------------------------------
@@ -126,50 +162,122 @@ END_PROFILE
 
     my $up = Perl::Critic::UserProfile->new( -profile => \$profile_string );
 
-    #Now using long policy names
-    is($up->policy_is_enabled('Miscellanea::RequireRcsKeywords'), 1 );
-    is($up->policy_is_disabled('NamingConventions::ProhibitMixedCaseVars'), 1 );
-    is_deeply($up->raw_policy_params('Miscellanea::RequireRcsKeywords'), \%policy_params);
+    # Now using long policy names
+    is(
+        $up->policy_is_enabled('Miscellanea::RequireRcsKeywords'),
+        1,
+        'Miscellanea::RequireRcsKeywords is enabled.',
+    );
+    is(
+        $up->policy_is_disabled('NamingConventions::ProhibitMixedCaseVars'),
+        1,
+        'NamingConventions::ProhibitMixedCaseVars is disabled.',
+    );
+    is_deeply(
+        $up->raw_policy_params('Miscellanea::RequireRcsKeywords'),
+        \%policy_params,
+        'Miscellanea::RequireRcsKeywords got the correct configuration.',
+    );
 
-    #Now using long policy names
-    is($up->policy_is_enabled('Perl::Critic::Policy::Miscellanea::RequireRcsKeywords'), 1 );
-    is($up->policy_is_disabled('Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars'), 1 );
-    is_deeply($up->raw_policy_params('Perl::Critic::Policy::Miscellanea::RequireRcsKeywords'), \%policy_params);
+    # Now using long policy names
+    is(
+        $up->policy_is_enabled('Perl::Critic::Policy::Miscellanea::RequireRcsKeywords'),
+        1,
+        'Perl::Critic::Policy::Miscellanea::RequireRcsKeywords is enabled.',
+    );
+    is(
+        $up->policy_is_disabled('Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars'),
+        1,
+        'Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars is disabled.',
+    );
+    is_deeply(
+        $up->raw_policy_params('Perl::Critic::Policy::Miscellanea::RequireRcsKeywords'),
+        \%policy_params,
+        'Perl::Critic::Policy::Miscellanea::RequireRcsKeywords got the correct configuration.',
+    );
 
-    #Using bogus policy names
-    is($up->policy_is_enabled('Perl::Critic::Policy::Bogus'),   q{} );
-    is($up->policy_is_disabled('Perl::Critic::Policy::Bogus'),  q{} );
-    is_deeply($up->raw_policy_params('Perl::Critic::Policy::Bogus'), {} );
+    # Using bogus policy names
+    is(
+        $up->policy_is_enabled('Perl::Critic::Policy::Bogus'),
+        q{},
+        q<Bogus Policy isn't enabled>,
+    );
+    is(
+        $up->policy_is_disabled('Perl::Critic::Policy::Bogus'),
+        q{},
+        q<Bogus Policy isn't disabled>,
+    );
+    is_deeply(
+        $up->raw_policy_params('Perl::Critic::Policy::Bogus'),
+        {},
+        q<Bogus Policy doesn't have any configuration.>,
+    );
 }
 
 #-----------------------------------------------------------------------------
 # Test long policy names
 
 {
-       my %policy_params = (keywords => 'Revision');
-       my $long_profile_string = <<'END_PROFILE';
+    my %policy_params = (keywords => 'Revision');
+    my $long_profile_string = <<'END_PROFILE';
 [-Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars]
 [Perl::Critic::Policy::Miscellanea::RequireRcsKeywords]
 keywords = Revision
 END_PROFILE
 
-       my $up = Perl::Critic::UserProfile->new( -profile => \$long_profile_string );
+    my $up = Perl::Critic::UserProfile->new( -profile => \$long_profile_string );
 
-       #Now using long policy names
-       is($up->policy_is_enabled('Miscellanea::RequireRcsKeywords'), 1 );
-       is($up->policy_is_disabled('NamingConventions::ProhibitMixedCaseVars'), 1 );
-       is_deeply($up->raw_policy_params('Miscellanea::RequireRcsKeywords'), \%policy_params);
+    # Now using long policy names
+    is(
+        $up->policy_is_enabled('Miscellanea::RequireRcsKeywords'),
+        1,
+        'Miscellanea::RequireRcsKeywords is enabled.',
+    );
+    is(
+        $up->policy_is_disabled('NamingConventions::ProhibitMixedCaseVars'),
+        1,
+        'NamingConventions::ProhibitMixedCaseVars is disabled.',
+    );
+    is_deeply(
+        $up->raw_policy_params('Miscellanea::RequireRcsKeywords'),
+        \%policy_params,
+        'Miscellanea::RequireRcsKeywords got the correct configuration.',
+    );
 
-       #Now using long policy names
-       is($up->policy_is_enabled('Perl::Critic::Policy::Miscellanea::RequireRcsKeywords'), 1 );
-       is($up->policy_is_disabled('Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars'), 1 );
-       is_deeply($up->raw_policy_params('Perl::Critic::Policy::Miscellanea::RequireRcsKeywords'), \%policy_params);
+    # Now using long policy names
+    is(
+        $up->policy_is_enabled('Perl::Critic::Policy::Miscellanea::RequireRcsKeywords'),
+        1,
+        'Perl::Critic::Policy::Miscellanea::RequireRcsKeywords is enabled.',
+    );
+    is(
+        $up->policy_is_disabled('Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars'),
+        1,
+        'Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars is disabled.',
+    );
+    is_deeply(
+        $up->raw_policy_params('Perl::Critic::Policy::Miscellanea::RequireRcsKeywords'),
+        \%policy_params,
+        'Perl::Critic::Policy::Miscellanea::RequireRcsKeywords got the correct configuration.',
+    );
 
-       #Using bogus policy names
-       is($up->policy_is_enabled('Perl::Critic::Policy::Bogus'),   q{} );
-       is($up->policy_is_disabled('Perl::Critic::Policy::Bogus'),  q{} );
-       is_deeply($up->raw_policy_params('Perl::Critic::Policy::Bogus'), {} );
-   }
+    # Using bogus policy names
+    is(
+        $up->policy_is_enabled('Perl::Critic::Policy::Bogus'),
+        q{},
+        q<Bogus Policy isn't enabled>,
+    );
+    is(
+        $up->policy_is_disabled('Perl::Critic::Policy::Bogus'),
+        q{},
+        q<Bogus Policy isn't disabled>,
+    );
+    is_deeply(
+        $up->raw_policy_params('Perl::Critic::Policy::Bogus'),
+        {},
+        q<Bogus Policy doesn't have any configuration.>,
+    );
+}
 
 #-----------------------------------------------------------------------------
 # Test exception handling
@@ -182,11 +290,11 @@ END_PROFILE
     eval { Perl::Critic::UserProfile->new( -profile => 'bogus' ) };
     like( $EVAL_ERROR, qr/File 'bogus' does not exist/, 'Invalid profile path');
 
-    my $invalid_syntax = '[Foo::Bar'; #Missing "]"
+    my $invalid_syntax = '[Foo::Bar'; # Missing "]"
     eval { Perl::Critic::UserProfile->new( -profile => \$invalid_syntax ) };
     like( $EVAL_ERROR, qr/Syntax error at line/, 'Invalid profile syntax');
 
-    $invalid_syntax = 'severity 2'; #Missing "="
+    $invalid_syntax = 'severity 2'; # Missing "="
     eval { Perl::Critic::UserProfile->new( -profile => \$invalid_syntax ) };
     like( $EVAL_ERROR, qr/Syntax error at line/, 'Invalid profile syntax');
 
