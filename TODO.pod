@@ -58,6 +58,11 @@ For things like RequirePodSections.
 List Policies based upon severity, theme, and (what I want this second)
 applies_to.
 
+=item * Add formatting of --list output.
+
+Support Jeff Bisbee's use case (he dumps all the policies in severity order
+with full descriptions and other metadata).
+
 =item * Add --prohibit-unrestricted-no-critic option to F<perlcritic>.
 
 Requires C<## no critic> to take an argument:
