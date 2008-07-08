@@ -118,8 +118,8 @@ is( $p->get_severity(), 1, 'get_severity()' );
 $p->set_severity(3);
 
 # Test severity again...
-is( $p->default_severity(), 1 ); #Still the same
-is( $p->get_severity(), 3 );     #Should have new value
+is( $p->default_severity(), 1, q<default_severity() hasn't changed.>);
+is( $p->get_severity(), 3, q<get_severity() returns the new value.> );
 
 
 # Test default theme...
@@ -127,25 +127,33 @@ is_deeply( [$p->default_themes()], [], 'default_themes()');
 is_deeply( [$p->get_themes()], [], 'get_themes()');
 
 # Change theme
-$p->set_themes( qw(c b a) ); #unsorted
+$p->set_themes( qw(c b a) ); # unsorted
 
 # Test theme again...
-is_deeply( [$p->default_themes()], [] ); #Still the same
-is_deeply( [$p->get_themes()], [qw(a b c)] );  #Should have new value, sorted
+is_deeply( [$p->default_themes()], [], q<default_themes() hasn't changed.>);
+is_deeply(
+    [$p->get_themes()],
+    [qw(a b c)],
+    'get_themes() returns the new value, sorted.',
+);
 
 # Append theme
-$p->add_themes( qw(f e d) ); #unsorted
+$p->add_themes( qw(f e d) ); # unsorted
 
 # Test theme again...
-is_deeply( [$p->default_themes()], [] ); #Still the same
-is_deeply( [$p->get_themes()], [ qw(a b c d e f) ] );  #Should have new value, sorted
+is_deeply( [$p->default_themes()], [], q<default_themes() hasn't changed.>);
+is_deeply(
+    [$p->get_themes()],
+    [ qw(a b c d e f) ],
+    'get_themes() returns the new value, sorted.',
+);
 
 
 # Test format getter/setters
 is( Perl::Critic::Policy::get_format, "%p\n", 'Default policy format');
 
 my $new_format = '%p %s [%t]';
-Perl::Critic::Policy::set_format( $new_format ); #Set format
+Perl::Critic::Policy::set_format( $new_format ); # Set format
 is( Perl::Critic::Policy::get_format, $new_format, 'Changed policy format');
 
 my $expected_string = 'PolicyTest 3 [a b c d e f]';
