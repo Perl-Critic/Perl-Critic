@@ -10,9 +10,10 @@ package Perl::Critic::Policy::Subroutines::ProhibitAmpersandSigils;
 use 5.006001;
 use strict;
 use warnings;
+
 use Readonly;
 
-use Perl::Critic::Utils qw{ :severities };
+use Perl::Critic::Utils qw{ :severities hashify };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.088';
@@ -21,6 +22,9 @@ our $VERSION = '1.088';
 
 Readonly::Scalar my $DESC  => q{Subroutine called with "&" sigil};
 Readonly::Scalar my $EXPL  => [ 175 ];
+
+Readonly::Hash my %EXEMPTIONS =>
+    hashify( qw< defined exists goto sort > );
 
 #-----------------------------------------------------------------------------
 
@@ -42,10 +46,8 @@ sub violates {
 
     return if ( $elem !~ m{\A [&] }mx ); # ok
 
-    $psib = $elem->sprevious_sibling();
-    return if ( $psib eq 'goto'
-                or $psib eq 'exists'
-                or $psib eq 'defined' ); # ok
+    my $previous = $elem->sprevious_sibling();
+    return if $previous and $EXEMPTIONS{$previous};
 
     return $self->violation( $DESC, $EXPL, $elem );
 }
