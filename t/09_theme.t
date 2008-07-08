@@ -123,90 +123,150 @@ Perl::Critic::TestUtils::block_perlcriticrc();
     my $rule = 'cosmetic';
     my $theme = Perl::Critic::Theme->new( -rule => $rule );
     my @members = grep { $theme->policy_is_thematic( -policy => $_) }  @pols;
-    ok( all { has_theme( $_, 'cosmetic' ) } @members );
+    ok(
+        ( all { has_theme( $_, 'cosmetic' ) } @members ),
+        'theme rule: "cosmetic"',
+    );
 
     #--------------
 
     $rule = 'cosmetic - pbp';
     $theme = Perl::Critic::Theme->new( -rule => $rule );
     @members = grep { $theme->policy_is_thematic( -policy => $_) }  @pols;
-    ok( all  { has_theme( $_, 'cosmetic' ) } @members );
-    ok( none { has_theme( $_, 'pbp')       } @members );
+    ok(
+        ( all  { has_theme( $_, 'cosmetic' ) } @members ),
+        'theme rule: "cosmetic - pbp", all has_theme(cosmetic)',
+    );
+    ok(
+        ( none { has_theme( $_, 'pbp')       } @members ),
+        'theme rule: "cosmetic - pbp", none has_theme(pbp)',
+    );
 
     $rule = 'cosmetic and not pbp';
     $theme = Perl::Critic::Theme->new( -rule => $rule );
     @members = grep { $theme->policy_is_thematic( -policy => $_) }  @pols;
-    ok( all  { has_theme( $_, 'cosmetic' ) } @members );
-    ok( none { has_theme( $_, 'pbp')       } @members );
+    ok(
+        ( all  { has_theme( $_, 'cosmetic' ) } @members ),
+        'theme rule: "cosmetic and not pbp", all has_theme(cosmetic)',
+    );
+    ok(
+        ( none { has_theme( $_, 'pbp')       } @members ),
+        'theme rule: "cosmetic and not pbp", none has_theme(pbp)',
+    );
 
     $rule = 'cosmetic && ! pbp';
     $theme = Perl::Critic::Theme->new( -rule => $rule );
     @members = grep { $theme->policy_is_thematic( -policy => $_) }  @pols;
-    ok( all  { has_theme( $_, 'cosmetic' ) } @members );
-    ok( none { has_theme( $_, 'pbp')       } @members );
+    ok(
+        ( all  { has_theme( $_, 'cosmetic' ) } @members ),
+        'theme rule: "cosmetic && ! pbp", all has_theme(cosmetic)',
+    );
+    ok(
+        ( none { has_theme( $_, 'pbp')       } @members ),
+        'theme rule: "cosmetic && ! pbp", none has_theme(pbp)',
+    );
 
     #--------------
 
     $rule = 'cosmetic + pbp';
     $theme = Perl::Critic::Theme->new( -rule => $rule );
     @members = grep { $theme->policy_is_thematic( -policy => $_) } @pols;
-    ok( all  { has_theme($_, 'cosmetic') ||
-               has_theme($_, 'pbp') } @members );
+    ok(
+        ( all  { has_theme($_, 'cosmetic') || has_theme($_, 'pbp') } @members ),
+        'theme rule: "cosmetic + pbp"',
+    );
 
     $rule = 'cosmetic || pbp';
     $theme = Perl::Critic::Theme->new( -rule => $rule );
     @members = grep { $theme->policy_is_thematic( -policy => $_) } @pols;
-    ok( all  { has_theme($_, 'cosmetic') ||
-               has_theme($_, 'pbp') } @members );
+    ok(
+        ( all  { has_theme($_, 'cosmetic') || has_theme($_, 'pbp') } @members ),
+        'theme rule: "cosmetic || pbp"',
+    );
 
     $rule = 'cosmetic or pbp';
     $theme = Perl::Critic::Theme->new( -rule => $rule );
     @members = grep { $theme->policy_is_thematic( -policy => $_) } @pols;
-    ok( all  { has_theme($_, 'cosmetic') ||
-               has_theme($_, 'pbp') } @members );
+    ok(
+        ( all  { has_theme($_, 'cosmetic') || has_theme($_, 'pbp') } @members),
+        'theme rule: "cosmetic or pbp"',
+    );
 
     #--------------
 
     $rule = 'bugs * pbp';
     $theme = Perl::Critic::Theme->new( -rule => $rule );
     @members = grep { $theme->policy_is_thematic( -policy => $_) } @pols;
-    ok( all  { has_theme($_, 'bugs')  } @members );
-    ok( all  { has_theme($_, 'pbp')   } @members );
+    ok(
+        ( all  { has_theme($_, 'bugs')  } @members ),
+        'theme rule: "bugs * pbp", all has_theme(bugs)',
+    );
+    ok(
+        ( all  { has_theme($_, 'pbp')   } @members ),
+        'theme rule: "bugs * pbp", all has_theme(pbp)',
+    );
 
     $rule = 'bugs and pbp';
     $theme = Perl::Critic::Theme->new( -rule => $rule );
     @members = grep { $theme->policy_is_thematic( -policy => $_) } @pols;
-    ok( all  { has_theme($_, 'bugs')  } @members );
-    ok( all  { has_theme($_, 'pbp')   } @members );
+    ok(
+        ( all  { has_theme($_, 'bugs')  } @members ),
+        'theme rule: "bugs and pbp", all has_theme(bugs)',
+    );
+    ok(
+        ( all  { has_theme($_, 'pbp')   } @members ),
+        'theme rule: "bugs and pbp", all has_theme(pbp)',
+    );
 
     $rule = 'bugs && pbp';
     $theme = Perl::Critic::Theme->new( -rule => $rule );
     @members = grep { $theme->policy_is_thematic( -policy => $_) } @pols;
-    ok( all  { has_theme($_, 'bugs')  } @members );
-    ok( all  { has_theme($_, 'pbp')   } @members );
+    ok(
+        ( all  { has_theme($_, 'bugs')  } @members ),
+        'theme rule: "bugs && pbp", all has_theme(bugs)',
+    );
+    ok(
+        ( all  { has_theme($_, 'pbp')   } @members ),
+        'theme rule: "bugs && pbp", all has_theme(pbp)',
+    );
 
     #-------------
 
     $rule = 'pbp - (danger * security)';
     $theme = Perl::Critic::Theme->new( -rule => $rule );
     @members = grep { $theme->policy_is_thematic( -policy => $_) } @pols;
-    ok( all  { has_theme($_, 'pbp') } @members );
-    ok( none { has_theme($_, 'danger') &&
-               has_theme($_, 'security') } @members );
+    ok(
+        ( all  { has_theme($_, 'pbp') } @members ),
+        'theme rule: "pbp - (danger * security)", all has_theme(pbp)',
+    );
+    ok(
+        ( none { has_theme($_, 'danger') && has_theme($_, 'security') } @members ),
+        'theme rule: "pbp - (danger * security)", none has_theme(danger && security)',
+    );
 
     $rule = 'pbp and ! (danger and security)';
     $theme = Perl::Critic::Theme->new( -rule => $rule );
     @members = grep { $theme->policy_is_thematic( -policy => $_) } @pols;
-    ok( all  { has_theme($_, 'pbp') } @members );
-    ok( none { has_theme($_, 'danger') &&
-               has_theme($_, 'security') } @members );
+    ok(
+        ( all  { has_theme($_, 'pbp') } @members ),
+        'theme rule: "pbp and not (danger and security)", all has_theme(pbp)',
+    );
+    ok(
+        ( none { has_theme($_, 'danger') && has_theme($_, 'security') } @members ),
+        'theme rule: "pbp and not (danger and security)", none has_theme(danger && security)',
+    );
 
     $rule = 'pbp && not (danger && security)';
     $theme = Perl::Critic::Theme->new( -rule => $rule );
     @members = grep { $theme->policy_is_thematic( -policy => $_) } @pols;
-    ok( all  { has_theme($_, 'pbp') } @members );
-    ok( none { has_theme($_, 'danger') &&
-               has_theme($_, 'security') } @members );
+    ok(
+        ( all  { has_theme($_, 'pbp') } @members ),
+        'theme rule: "pbp && not (danger && security)", all has_theme(pbp)',
+    );
+    ok(
+        ( none { has_theme($_, 'danger') && has_theme($_, 'security') } @members ),
+        'theme rule: "pbp && not (danger && security)", none has_theme(danger && security)',
+    );
 
     #--------------
 
