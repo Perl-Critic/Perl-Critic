@@ -372,27 +372,43 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
 
     # Try adding a bogus policy
     eval{ $config->add_policy( -policy => 'Bogus::Policy') };
-    like( $EVAL_ERROR, qr/Unable to create policy/, 'add_policy w/ bad args' );
+    like(
+        $EVAL_ERROR,
+        qr/Unable [ ] to [ ] create [ ] policy/xms,
+        'add_policy w/ bad args',
+    );
 
     # Try adding w/o policy
     eval { $config->add_policy() };
-    like( $EVAL_ERROR, qr/The -policy argument is required/, 'add_policy w/o args' );
+    like(
+        $EVAL_ERROR,
+        qr/The [ ] -policy [ ] argument [ ] is [ ] required/xms,
+        'add_policy w/o args',
+    );
 
     # Try using bogus named severity level
     eval{ Perl::Critic::Config->new( -severity => 'bogus' ) };
     like(
         $EVAL_ERROR,
-        qr/The value for the global "-severity" option \("bogus"\) is not one of the valid severity names/,
+        qr/The value for the global "-severity" option \("bogus"\) is not one of the valid severity names/ms, ## no critic (RequireExtendedFormatting)
         'invalid severity'
     );
 
     # Try using vague -single-policy option
     eval{ Perl::Critic::Config->new( '-single-policy' => '.*' ) };
-    like( $EVAL_ERROR, qr/matched multiple policies/, 'vague -single-policy' );
+    like(
+        $EVAL_ERROR,
+        qr/matched [ ] multiple [ ] policies/xms,
+        'vague -single-policy',
+    );
 
     # Try using invalid -single-policy option
     eval{ Perl::Critic::Config->new( '-single-policy' => 'bogus' ) };
-    like( $EVAL_ERROR, qr/did not match any policies/, 'invalid -single-policy' );
+    like(
+        $EVAL_ERROR,
+        qr/did [ ] not [ ] match [ ] any [ ] policies/xms,
+        'invalid -single-policy',
+    );
 }
 
 #-----------------------------------------------------------------------------
