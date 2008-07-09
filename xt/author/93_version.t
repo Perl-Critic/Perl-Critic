@@ -3,6 +3,7 @@
 use strict;
 use warnings;
 
+use English qw< -no_match_vars >;
 use Carp qw< confess >;
 
 use File::Find;
@@ -28,9 +29,9 @@ sub check_version {
 
     local $/ = undef;
     my $fh;
-    open $fh, '<', $_ or confess $!;
+    open $fh, '<', $_ or confess "$OS_ERROR";
     my $content = <$fh>;
-    close $fh;
+    close $fh or confess "$OS_ERROR";
 
     # Skip POD
     $content =~ s/^__END__.*//xms;

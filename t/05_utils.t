@@ -11,6 +11,7 @@ use 5.006001;
 use strict;
 use warnings;
 
+use English qw< -no_match_vars >;
 use Carp qw< confess >;
 
 use PPI::Document;
@@ -289,7 +290,10 @@ sub test_is_perl_and_shebang_line {
 
     for my $shebang (@perl_shebangs) {
         my ($fh, $filename) = tempfile() or confess 'Could not open tempfile';
-        print {$fh} "$shebang\n"; close $fh; # Must close to flush buffer
+        print {$fh} "$shebang\n";
+        # Must close to flush buffer
+        close $fh or confess "Couldn't close $filename: $OS_ERROR";
+
         ok( Perl::Critic::Utils::_is_perl($filename), qq{Is perl: '$shebang'});
 
         my $document = PPI::Document->new(\$shebang);
@@ -308,7 +312,10 @@ sub test_is_perl_and_shebang_line {
 
     for my $shebang (@not_perl_shebangs) {
         my ($fh, $filename) = tempfile or confess 'Could not open tempfile';
-        print {$fh} "$shebang\n"; close $fh; # Must close to flush buffer
+        print {$fh} "$shebang\n";
+        # Must close to flush buffer
+        close $fh or confess "Couldn't close $filename: $OS_ERROR";
+
         ok( ! Perl::Critic::Utils::_is_perl($filename), qq{Is not perl: '$shebang'});
 
         my $document = PPI::Document->new(\$shebang);

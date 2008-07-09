@@ -11,6 +11,7 @@ use strict;
 use warnings;
 
 use English qw< -no_match_vars >;
+use Carp qw< confess >;
 
 use File::Spec;
 use List::MoreUtils qw(any);
@@ -31,7 +32,7 @@ my $summary_file =
 if (open my ($fh), '<', $summary_file) {
 
     my $content = do {local $/=undef; <$fh> };
-    close $fh;
+    close $fh or confess "Couldn't close $summary_file: $OS_ERROR";
 
     my @policy_names = bundled_policy_names();
     my @summaries    = $content =~ m/^=head2 [ ]+ L<([\w:]+)>/gxms;
