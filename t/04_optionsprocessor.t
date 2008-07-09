@@ -86,8 +86,16 @@ our $VERSION = '1.088';
     );
 
     eval { Perl::Critic::OptionsProcessor->new( %invalid_defaults ) };
-    like( $EVAL_ERROR, qr/"foo" is not a supported option/m, 'First invalid default' );
-    like( $EVAL_ERROR, qr/"bar" is not a supported option/m, 'Second invalid default' );
+    like(
+        $EVAL_ERROR,
+        qr/"foo" [ ] is [ ] not [ ] a [ ] supported [ ] option/xms,
+        'First invalid default',
+    );
+    like(
+        $EVAL_ERROR,
+        qr/"bar" [ ] is [ ] not [ ] a [ ] supported [ ] option/xms,
+        'Second invalid default',
+    );
 
 }
 

@@ -60,14 +60,14 @@ for my $keyword (qw( Pkg; heredoc_body HEREDOC POD_HEADER pod =cut
     my $nfail = $is_first_line ? @lines-1 : 1;
     for my $nl ("\012", "\015", "\015\012") {
         next if $nl eq "\n";
-        ($code = $base_code) =~ s/(\Q$keyword\E)\n/$1$nl/;
+        ($code = $base_code) =~ s/ (\Q$keyword\E) \n /$1$nl/xms;
         is( fcritique($policy, \$code), $nfail, $policy.' - '.$keyword );
     }
 }
 
 for my $nl ("\012", "\015", "\015\012") {
     next if $nl eq "\n";
-    ($code = $base_code) =~ s/\n/$nl/;
+    ($code = $base_code) =~ s/ \n /$nl/xms;
     is( pcritique($policy, \$code), 0, $policy.' - no filename' );
 }
 

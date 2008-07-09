@@ -43,7 +43,11 @@ ILLEGAL_RULES: {
 
     for my $invalid ( @invalid_rules ) {
         eval { Perl::Critic::Theme::->new( -rule => $invalid ) };
-        like( $EVAL_ERROR, qr/invalid character/, qq{Invalid rule: "$invalid"});
+        like(
+            $EVAL_ERROR,
+            qr/invalid [ ] character/xms,
+            qq{Invalid rule: "$invalid"},
+        );
     }
 }
 
@@ -296,7 +300,11 @@ Perl::Critic::TestUtils::block_perlcriticrc();
     $rule = 'cosmetic *(';
     $theme =  Perl::Critic::Theme->new( -rule => $rule );
     eval{ $theme->policy_is_thematic( -policy => $pols[0] ) };
-    like( $EVAL_ERROR, qr/syntax error/, 'invalid theme expression' );
+    like(
+        $EVAL_ERROR,
+        qr/syntax [ ] error/xms,
+        'invalid theme expression',
+    );
 
 }
 

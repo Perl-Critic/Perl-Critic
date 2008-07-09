@@ -198,23 +198,43 @@ is( $options{-quiet}, 1, $message);
 
     local @ARGV = qw( -noprofile -profile foo );
     eval { get_options() };
-    like( $EVAL_ERROR, qr/-noprofile with -profile/, '-noprofile with -profile');
+    like(
+        $EVAL_ERROR,
+        qr/-noprofile [ ] with [ ] -profile/xms,
+        '-noprofile with -profile',
+    );
 
     local @ARGV = qw( -verbose bogus );
     eval { get_options() };
-    like( $EVAL_ERROR, qr/looks odd/, 'Invalid -verbose option' );
+    like(
+        $EVAL_ERROR,
+        qr/looks [ ] odd/xms,
+        'Invalid -verbose option',
+    );
 
     local @ARGV = qw( -top -9 );
     eval { get_options() };
-    like( $EVAL_ERROR, qr/is negative/, 'Negative -verbose option' );
+    like(
+        $EVAL_ERROR,
+        qr/is [ ] negative/xms,
+        'Negative -verbose option',
+    );
 
     local @ARGV = qw( -severity 0 );
     eval { get_options() };
-    like( $EVAL_ERROR, qr/out of range/, '-severity too small' );
+    like(
+        $EVAL_ERROR,
+        qr/out [ ] of [ ] range/xms,
+        '-severity too small',
+    );
 
     local @ARGV = qw( -severity 6 );
     eval { get_options() };
-    like( $EVAL_ERROR, qr/out of range/, '-severity too large' );
+    like(
+        $EVAL_ERROR,
+        qr/out [ ] of [ ] range/xms,
+        '-severity too large',
+    );
 }
 
 #-----------------------------------------------------------------------------
