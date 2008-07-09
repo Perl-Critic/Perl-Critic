@@ -758,7 +758,19 @@ sub is_function_call {
 sub is_script {
     my $doc = shift;
 
-    return shebang_line($doc) ? 1 : 0;
+    return 1 if shebang_line($doc);
+    return 1 if _is_PL_file($doc);
+    return 0;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _is_PL_file {
+    my ($doc) = @_;
+    return if not $doc->can('filename');
+    my $filename = $doc->filename() || return;
+    return 1 if $filename =~ m/[.] PL \z/smx;
+    return 0;
 }
 
 #-----------------------------------------------------------------------------
@@ -1415,6 +1427,11 @@ passed the nodes that represent the interior of a list, like:
 
 Given a L<PPI::Document|PPI::Document>, test if it starts with
 C</#!.*/>.  If so, it is judged to be a script instead of a module.
+Also, if the filename of the document ends in ".PL" then it is
+also judged to be a script.  However, this only works if the
+document is a L<PPI::Document::File|PPI::Document::File>.  If it
+isn't, then the filename is not available and it has no bearing on
+how the document is judged.
 See C<shebang_line()>.
 
 

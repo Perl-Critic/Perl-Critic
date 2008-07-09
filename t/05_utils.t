@@ -15,11 +15,12 @@ use English qw< -no_match_vars >;
 use Carp qw< confess >;
 
 use PPI::Document;
+use PPI::Document::File;
 
 use Perl::Critic::PolicyFactory;
 use Perl::Critic::TestUtils qw(bundled_policy_names);
 
-use Test::More tests => 115;
+use Test::More tests => 116;
 
 #-----------------------------------------------------------------------------
 
@@ -38,6 +39,7 @@ test_export();
 test_find_keywords();
 test_is_hash_key();
 test_is_script();
+test_is_script_with_PL_files();
 test_is_perl_builtin();
 test_is_perl_global();
 test_precedence_of();
@@ -164,6 +166,24 @@ sub test_is_script {
     }
 
     return;
+}
+
+#-----------------------------------------------------------------------------
+
+sub test_is_script_with_PL_files {
+
+    # Testing for .PL files (e.g. Makefile.PL, Build.PL)
+    # See http://rt.cpan.org/Ticket/Display.html?id=20481
+    my $temp_file = File::Temp->new(SUFFIX => '.PL');
+
+    # The file must have content, or PPI will barf...
+    print {$temp_file} "some code\n";
+    close $temp_file; # Just to flush the buffer.
+
+    my $doc = PPI::Document::File->new($temp_file->filename());
+    $doc->index_locations();
+    ok(is_script($doc), 'is_script, false for .PL files');
+
 }
 
 #-----------------------------------------------------------------------------

@@ -14,6 +14,9 @@
       multiple captures used in a substitution, e.g. s/(.)(.)/$2$1/.
     * Subroutines::ProhibitAmpersandSigils no longer complains about
       "sort &foo(...)".
+    * Makefile.PL, Build.PL and other ".PL" scripts which typically do not
+      have a shebang are no longer mistaken as modules.  This prevents
+      spurrious warnings from Modules::RequireEndWithOne. RT #20481.
 
 [1.088] Released on 2008-07-04
 
