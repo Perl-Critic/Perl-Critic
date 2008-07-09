@@ -94,7 +94,7 @@ if (@exceptions != $expected_exceptions) {
 
 while (my ($parameter, $regex) = each %expected_regexes) {
     is(
-        ( scalar grep { m/$regex/ } @exceptions ),
+        ( scalar grep { m/$regex/xms } @exceptions ),
         1,
         "should have received one and only one exception for $parameter",
     );
