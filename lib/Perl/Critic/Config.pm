@@ -98,7 +98,7 @@ sub _init {
         $self->{_only}  = boolean_to_number( dor( $args{-only},  $options_processor->only()  ) );
         $self->{_color} = boolean_to_number( dor( $args{-color}, $options_processor->color() ) );
         $self->{_criticism_fatal} =
-          boolean_to_number(dor( $args{'-criticism_fatal'}, $options_processor->criticism_fatal() ) );
+          boolean_to_number(dor( $args{'-criticism-fatal'}, $options_processor->criticism_fatal() ) );
     }
 
     $self->_validate_and_save_theme($args{-theme}, $errors);
