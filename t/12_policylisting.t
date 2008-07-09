@@ -40,12 +40,12 @@ plan( tests => $policy_count + 1);
 # verifies that each core policy declares at least one theme.
 
 my $listing_as_string = "$listing";
-my @listing_lines = split /\n/, $listing_as_string;
+my @listing_lines = split m/ \n /xms, $listing_as_string;
 my $line_count = scalar @listing_lines;
 is( $line_count, $policy_count, qq{Listing has all $policy_count policies} );
 
 
-my $listing_pattern = qr{\A\d [\w:]+ \[[\w\s]+\]\z};
+my $listing_pattern = qr< \A \d [ ] [\w:]+ [ ] \[ [\w\s]+ \] \z >xms;
 for my $line ( @listing_lines ) {
     like($line, $listing_pattern, 'Listing format matches expected pattern');
 }

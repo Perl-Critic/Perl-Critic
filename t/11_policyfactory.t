@@ -76,17 +76,29 @@ Perl::Critic::TestUtils::block_perlcriticrc();
 
     # Try missing arguments
     eval{ $pf->create_policy() };
-    like( $EVAL_ERROR, qr/The -name argument/m, 'create without -name arg' );
+    like(
+        $EVAL_ERROR,
+        qr/The [ ] -name [ ] argument/xms,
+        'create without -name arg',
+    );
 
     # Try creating bogus policy
     eval{ $pf->create_policy( -name => 'Perl::Critic::Foo' ) };
-    like( $EVAL_ERROR, qr/Can't locate object method/m, 'create bogus policy' );
+    like(
+        $EVAL_ERROR,
+        qr/Can't [ ] locate [ ] object [ ] method/xms,
+        'create bogus policy',
+    );
 
     # Try using a bogus severity level
     my $policy_name = 'Modules::RequireVersionVar';
     my $policy_params = {severity => 'bogus'};
     eval{ $pf->create_policy( -name => $policy_name, -params => $policy_params)};
-    like( $EVAL_ERROR, qr/Invalid severity: "bogus"/m, 'create policy w/ bogus severity' );
+    like(
+        $EVAL_ERROR,
+        qr/Invalid [ ] severity: [ ] "bogus"/xms,
+        'create policy w/ bogus severity',
+    );
 }
 
 #-----------------------------------------------------------------------------
@@ -101,7 +113,7 @@ Perl::Critic::TestUtils::block_perlcriticrc();
     my $pf = Perl::Critic::PolicyFactory->new( -profile  => $userprof );
     like(
         $last_warning,
-        qr/^Policy ".*Bogus" is not installed/m,
+        qr/^Policy [ ] ".*Bogus" [ ] is [ ] not [ ] installed/xms,
         'Got expected warning for positive configuration of Policy.',
     );
     $last_warning = q{};
@@ -111,7 +123,7 @@ Perl::Critic::TestUtils::block_perlcriticrc();
     $pf = Perl::Critic::PolicyFactory->new( -profile  => $userprof );
     like(
         $last_warning,
-        qr/^Policy ".*Shizzle" is not installed/m,
+        qr/^Policy [ ] ".*Shizzle" [ ] is [ ] not [ ] installed/xms,
         'Got expected warning for negative configuration of Policy.',
     );
     $last_warning = q{};

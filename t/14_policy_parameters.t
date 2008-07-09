@@ -103,7 +103,7 @@ sub test_invalid_parameters {
     eval { $factory->create_policy(-name => $policy, -params => $bogus_params) };
     like(
         $EVAL_ERROR,
-        qr/The $policy_name policy doesn't take a "bogus" option/,
+        qr/The [ ] $policy_name [ ] policy [ ] doesn't [ ] take [ ] a [ ] "bogus" [ ] option/xms,
         $label
     );
 

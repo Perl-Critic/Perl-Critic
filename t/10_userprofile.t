@@ -285,18 +285,34 @@ END_PROFILE
 {
     my $code_ref = sub { return };
     eval { Perl::Critic::UserProfile->new( -profile => $code_ref ) };
-    like( $EVAL_ERROR, qr/Can't load UserProfile/, 'Invalid profile type');
+    like(
+        $EVAL_ERROR,
+        qr/Can't [ ] load [ ] UserProfile/xms,
+        'Invalid profile type',
+    );
 
     eval { Perl::Critic::UserProfile->new( -profile => 'bogus' ) };
-    like( $EVAL_ERROR, qr/File 'bogus' does not exist/, 'Invalid profile path');
+    like(
+        $EVAL_ERROR,
+        qr/File [ ] 'bogus' [ ] does [ ] not [ ] exist/xms,
+        'Invalid profile path',
+    );
 
     my $invalid_syntax = '[Foo::Bar'; # Missing "]"
     eval { Perl::Critic::UserProfile->new( -profile => \$invalid_syntax ) };
-    like( $EVAL_ERROR, qr/Syntax error at line/, 'Invalid profile syntax');
+    like(
+        $EVAL_ERROR,
+        qr/Syntax [ ] error [ ] at [ ] line/xms,
+        'Invalid profile syntax',
+    );
 
     $invalid_syntax = 'severity 2'; # Missing "="
     eval { Perl::Critic::UserProfile->new( -profile => \$invalid_syntax ) };
-    like( $EVAL_ERROR, qr/Syntax error at line/, 'Invalid profile syntax');
+    like(
+        $EVAL_ERROR,
+        qr/Syntax [ ] error [ ] at [ ] line/xms,
+        'Invalid profile syntax',
+    );
 
 }
 
