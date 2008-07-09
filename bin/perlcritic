@@ -417,7 +417,7 @@ sub _get_option_specification {
         profile-proto
         quiet
         severity=i
-        single-policy=s
+        single-policy|s=s
         stern
         statistics!
         statistics-only!
@@ -532,8 +532,8 @@ __END__
 
 =pod
 
-=for stopwords DGR INI-style vim-fu minibuffer -noprofile API -singlepolicy
-singlepolicy -profileproto -profile-proto ben Jore formatter Peshak pbp Komodo
+=for stopwords DGR INI-style vim-fu minibuffer -noprofile API
+-profileproto -profile-proto ben Jore formatter Peshak pbp Komodo
 screenshots tty emacs gVIM plugin Perlish templating ActiveState
 
 =head1 NAME
@@ -546,9 +546,10 @@ C<perlcritic> - Command-line interface to critique Perl source.
   perlcritic [-12345 | --brutal | --cruel | --harsh | --stern | --gentle]
              [--severity number | name] [--profile file | --noprofile]
              [--top [ number ]] [--theme expression] [--include pattern]
-             [--exclude pattern] [--single-policy pattern] [--only | --noonly]
-             [--profile-strictness {warn|fatal|quiet}] [--force | --noforce]
-             [--statistics] [--statistics-only] [--verbose {number | format}]
+             [--exclude pattern] [{-s | --single-policy} pattern]
+             [--only | --noonly] [--profile-strictness {warn|fatal|quiet}]
+             [--force | --noforce] [--statistics] [--statistics-only]
+             [--count | -C] [--verbose {number | format}]
              [--color | --nocolor] [--quiet] {FILE | DIRECTORY | STDIN}
 
   perlcritic --profile-proto
@@ -735,6 +736,8 @@ both patterns.  You can set the default value for this option in your
 F<.perlcriticrc> file.
 
 =item C<--single-policy PATTERN>
+
+=item C<-s PATTERN>
 
 Directs C<perlcritic> to apply just one Policy module matching the
 regex C</PATTERN/imx>, and exclude all other Policies.  This option

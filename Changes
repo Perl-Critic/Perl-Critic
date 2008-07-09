@@ -1,5 +1,8 @@
 [1.xxx] Released on 2008-xx-xx
 
+    Minor Enhancements:
+    * -s is now a synonym for --single-policy.
+
     Bug fixes:
     * BuiltinFunctions::ProhibitSleepViaSelect would complain if there were
       three undefs as arguments to select(), but one of them was the timeout.
