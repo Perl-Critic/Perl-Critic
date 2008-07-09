@@ -24,11 +24,17 @@ allow_leading_tabs = 0
 [Documentation::PodSpelling]
 stop_words =
 
+# Too endemic for me to deal with right now
+[-ErrorHandling::RequireCheckingReturnValueOfEval]
+
 [InputOutput::RequireCheckedSyscalls]
 functions = open close
 
 [Miscellanea::RequireRcsKeywords]
 keywords = URL Date Author Revision
+
+# Character length is not a proper measure of complexity.
+[-RegularExpressions::ProhibitComplexRegexes]
 
 [RegularExpressions::ProhibitUnusualDelimiters]
 allow_all_brackets = 1
