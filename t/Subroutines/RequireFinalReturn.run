@@ -147,6 +147,19 @@ sub foo  { if ($condition) { return 1; }else{ abort } }
 sub bar  { if ($condition) { bailout }else{ return 1 } }
 sub baz  { quit }
 
+#-----------------------------------------------------------------------------
+
+## name ForLoop is a QuoteLike::Words
+## failures 0
+## TODO PPI misparses the for loop.
+## cut
+
+sub foo {
+    for qw<blah> {}
+
+    return;
+}
+
 ##############################################################################
 # Local Variables:
 #   mode: cperl

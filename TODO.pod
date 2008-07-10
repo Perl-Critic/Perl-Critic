@@ -566,6 +566,11 @@ wrote Perl::Critic:Utils::PPIRegexp to encapsulate this messiness, but it
 would be nicer to have an official interface in PPI.
 
 
+=item QuoteLike::Words in the place of a ForLoop
+
+PPI mis-parses C<<for qw<blah> {}>>.
+
+
 =back
 
 =cut
