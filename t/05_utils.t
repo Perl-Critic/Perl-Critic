@@ -76,7 +76,7 @@ sub test_export {
     can_ok('main', 'verbosity_to_format');
     can_ok('main', 'is_unchecked_call');
 
-    is($SPACE, ' ', 'character constants');
+    is($SPACE, q< >, 'character constants');
     is($SEVERITY_LOWEST, 1, 'severity constants');
     is($POLICY_NAMESPACE, 'Perl::Critic::Policy', 'Policy namespace');
 

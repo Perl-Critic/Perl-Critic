@@ -15,6 +15,8 @@ use English qw(-no_match_vars);
 
 use PPI::Document;
 
+use Perl::Critic::Utils qw< :characters >;
+
 use Test::More tests => 41;
 
 #-----------------------------------------------------------------------------
@@ -23,8 +25,7 @@ our $VERSION = '1.088';
 
 #-----------------------------------------------------------------------------
 
-BEGIN
-{
+BEGIN {
     # Needs to be in BEGIN for global vars
     use_ok('Perl::Critic::Violation');
 }
@@ -113,12 +114,16 @@ END_PERL
 
     $doc = PPI::Document->new(\$code);
     my @children   = $doc->schildren();
-    my @violations = map {Perl::Critic::Violation->new('', '', $_, 0)} $doc, @children;
+    my @violations =
+        map { Perl::Critic::Violation->new($EMPTY, $EMPTY, $_, 0) }
+            $doc, @children;
     my @sorted = Perl::Critic::Violation->sort_by_location( reverse @violations);
     is_deeply(\@sorted, \@violations, 'sort_by_location');
 
     my @severities = (5, 3, 4, 0, 2, 1);
-    @violations = map {Perl::Critic::Violation->new('', '', $doc, $_)} @severities;
+    @violations =
+        map { Perl::Critic::Violation->new($EMPTY, $EMPTY, $doc, $_) }
+        @severities;
     @sorted = Perl::Critic::Violation->sort_by_severity( @violations );
     is_deeply( [map {$_->severity()} @sorted], [sort @severities], 'sort_by_severity');
 }
