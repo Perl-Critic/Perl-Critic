@@ -85,7 +85,7 @@ sub test_export {
 
 #-----------------------------------------------------------------------------
 
-sub count_matches { my $val = shift; return defined $val ? scalar @$val : 0; }
+sub count_matches { my $val = shift; return defined $val ? scalar @{$val} : 0; }
 sub make_doc { my $code = shift; return PPI::Document->new( ref $code ? $code : \$code); }
 
 sub test_find_keywords {
