@@ -48,7 +48,7 @@ plan skip_all => 'Test::Pod::Coverage 1.00 requried to test POD'
 
 my @trusted_methods  = get_trusted_methods();
 my $method_string = join ' | ', @trusted_methods;
-my $trusted_rx = qr{ \A (?: $method_string ) \z }x;
+my $trusted_rx = qr{ \A (?: $method_string ) \z }xms;
 all_pod_coverage_ok( {trustme => [$trusted_rx]} );
 
 #-----------------------------------------------------------------------------
