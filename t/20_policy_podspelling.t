@@ -128,7 +128,8 @@ arglbargl
 END_PERL
 
 {
-    local $config{stop_words} = 'foo arglbargl bar';
+    my %config;
+    $config{stop_words} = 'foo arglbargl bar';
     is(
         eval { pcritique($policy, \$code, \%config) },
         can_podspell() ? 0 : undef ,
