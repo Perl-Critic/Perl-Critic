@@ -155,7 +155,7 @@ sub baz  { quit }
 ## cut
 
 sub foo {
-    for qw<blah> {}
+    for my $thingy qw<blah> {}
 
     return;
 }
