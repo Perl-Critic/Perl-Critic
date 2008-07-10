@@ -34,7 +34,7 @@ if (! defined $last_version) {
 sub check_version {
     return if (! m{blib/script/}xms && ! m{\.pm \z}xms);
 
-    local $/ = undef;
+    local $INPUT_RECORD_SEPARATOR = undef;
     my $fh;
     open $fh, '<', $_ or confess "$OS_ERROR";
     my $content = <$fh>;

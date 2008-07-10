@@ -102,11 +102,6 @@ like(ViolationTest->get_violation()->diagnostics(),
 # Violation sorting
 
 SKIP: {
-
-    #For reasons I don't yet understand these tests fail
-    #on my perl at work.  So for now, I just skip them.
-    skip( 'Broken on perls <= 5.6.1', 2 ) if $] <= 5.006001;
-
     $code = <<'END_PERL';
 my $foo = 1; my $bar = 2;
 my $baz = 3;

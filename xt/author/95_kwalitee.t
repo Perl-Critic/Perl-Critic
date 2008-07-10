@@ -10,6 +10,8 @@
 use strict;
 use warnings;
 
+use English qw< -no_match_vars >;
+
 use Test::More;
 
 #-----------------------------------------------------------------------------
@@ -21,8 +23,9 @@ our $VERSION = '1.088';
 eval {
    require Test::Kwalitee;
    Test::Kwalitee->import( tests => [ qw{ -no_symlinks } ] );
-};
-plan( skip_all => 'Test::Kwalitee not installed; skipping' ) if $@;
+   1;
+}
+    or plan skip_all => 'Test::Kwalitee not installed; skipping';
 
 # Local Variables:
 #   mode: cperl

@@ -11,6 +11,8 @@ use 5.006001;
 use strict;
 use warnings;
 
+use English qw< -no_match_vars >;
+
 use Test::More;
 
 #-----------------------------------------------------------------------------
@@ -20,7 +22,8 @@ our $VERSION = '1.088';
 #-----------------------------------------------------------------------------
 
 eval 'use Test::Pod::Coverage 1.04'; ## no critic
-plan skip_all => 'Test::Pod::Coverage 1.00 requried to test POD' if $@;
+plan skip_all => 'Test::Pod::Coverage 1.00 requried to test POD'
+    if $EVAL_ERROR;
 
 {
     # HACK: Perl::Critic::Violation uses Pod::Parser to extract the

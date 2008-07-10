@@ -31,7 +31,7 @@ my $summary_file =
     File::Spec->catfile( qw< lib Perl Critic PolicySummary.pod > );
 if (open my ($fh), '<', $summary_file) {
 
-    my $content = do {local $/=undef; <$fh> };
+    my $content = do {local $INPUT_RECORD_SEPARATOR=undef; <$fh> };
     close $fh or confess "Couldn't close $summary_file: $OS_ERROR";
 
     my @policy_names = bundled_policy_names();

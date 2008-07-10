@@ -11,6 +11,7 @@ use 5.006001;
 use strict;
 use warnings;
 
+use English qw< -no_match_vars >;
 use Carp qw< confess >;
 
 use PPI::Document;
@@ -31,7 +32,8 @@ our $VERSION = '1.088';
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 eval 'use Test::Memory::Cycle'; ## no critic
-plan( skip_all => 'Test::Memory::Cycle requried to test memory leaks') if $@;
+plan skip_all => 'Test::Memory::Cycle requried to test memory leaks'
+    if $EVAL_ERROR;
 
 #-----------------------------------------------------------------------------
 {
