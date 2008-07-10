@@ -465,8 +465,6 @@ URL and interface to the service are subject to change.
 
 =item C<< new( [ -profile => $FILE, -severity => $N, -theme => $string, -include => \@PATTERNS, -exclude => \@PATTERNS, -top => $N, -only => $B, -profile-strictness => $PROFILE_STRICTNESS_{WARN|FATAL|QUIET}, -force => $B, -verbose => $N ], -color => $B, -criticism-fatal => $B) >>
 
-=item C<< new( -config => Perl::Critic::Config->new() ) >>
-
 =item C<< new() >>
 
 Returns a reference to a new Perl::Critic object.  Most arguments are
@@ -598,12 +596,6 @@ of L<perlcritic|perlcritic>.
 
 B<-criticism-fatal> is not used by Perl::Critic but is provided for
 the benefit of L<criticism|criticism>.
-
-B<-config> is a reference to a
-L<Perl::Critic::Config|Perl::Critic::Config> object.  If you have
-created your own Config object for some reason, you can pass it in
-here instead of having Perl::Critic create one for you.  Using the
-C<-config> option causes all the other options to be silently ignored.
 
 =back
 
