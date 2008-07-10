@@ -184,6 +184,7 @@ sub test_is_script_with_PL_files {
     $doc->index_locations();
     ok(is_script($doc), 'is_script, false for .PL files');
 
+    return;
 }
 
 #-----------------------------------------------------------------------------
