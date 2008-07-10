@@ -178,7 +178,8 @@ sub test_is_script_with_PL_files {
 
     # The file must have content, or PPI will barf...
     print {$temp_file} "some code\n";
-    close $temp_file; # Just to flush the buffer.
+    # Just to flush the buffer.
+    close $temp_file or confess "Couldn't close $temp_file: $OS_ERROR";
 
     my $doc = PPI::Document::File->new($temp_file->filename());
     $doc->index_locations();
