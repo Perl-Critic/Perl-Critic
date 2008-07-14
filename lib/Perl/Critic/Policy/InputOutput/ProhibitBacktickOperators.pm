@@ -65,6 +65,8 @@ __END__
 
 =pod
 
+=for stopwords perlipc
+
 =head1 NAME
 
 Perl::Critic::Policy::InputOutput::ProhibitBacktickOperators - Discourage stuff like C<@files = `ls $directory`>.
@@ -120,9 +122,11 @@ C<qx{}>.
 See L<perlipc|perlipc> for more discussion on using C<wait()> instead
 of C<$SIG{CHLD} = 'IGNORE'>.
 
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+
 
 =head1 COPYRIGHT
 

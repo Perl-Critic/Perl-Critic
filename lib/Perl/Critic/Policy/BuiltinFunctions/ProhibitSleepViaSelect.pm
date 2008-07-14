@@ -60,6 +60,8 @@ __END__
 
 =pod
 
+=for stopwords perlfunc
+
 =head1 NAME
 
 Perl::Critic::Policy::BuiltinFunctions::ProhibitSleepViaSelect - Use L<Time::HiRes|Time::HiRes> instead of something like C<select(undef, undef, undef, .05)>.

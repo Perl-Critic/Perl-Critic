@@ -124,6 +124,8 @@ __END__
 
 =pod
 
+=for stopwords perltidy
+
 =head1 NAME
 
 Perl::Critic::Policy::CodeLayout::RequireTidyCode - Must run code through L<perltidy|perltidy>.

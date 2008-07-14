@@ -207,7 +207,7 @@ __END__
 
 =pod
 
-=for stopwords MSCHWERN
+=for stopwords Schwern
 
 =head1 NAME
 

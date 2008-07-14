@@ -66,6 +66,8 @@ __END__
 
 =pod
 
+=for stopwords perlmod
+
 =head1 NAME
 
 Perl::Critic::Policy::Variables::ProhibitPerl4PackageNames - Use double colon (::) to separate package name components instead of single quotes (').
@@ -99,9 +101,11 @@ This Policy is not configurable except for the standard options.
 
 L<perlmod|perlmod>
 
+
 =head1 AUTHOR
 
 Elliot Shank C<< <perl@galumph.com> >>
+
 
 =head1 COPYRIGHT
 

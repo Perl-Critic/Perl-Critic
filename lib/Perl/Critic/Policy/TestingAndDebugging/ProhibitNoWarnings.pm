@@ -94,6 +94,8 @@ __END__
 
 =pod
 
+=for stopwords perllexwarn
+
 =head1 NAME
 
 Perl::Critic::Policy::TestingAndDebugging::ProhibitNoWarnings - Prohibit various flavors of C<no warnings>.
