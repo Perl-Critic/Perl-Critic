@@ -66,6 +66,25 @@ $sql = qq/select foo from bar/;
 
 #-----------------------------------------------------------------------------
 
+## name Allow double-quote if string contains single quote
+## failures 2
+## cut
+
+$sql = "it's me";
+$sql = "\'";
+
+#-----------------------------------------------------------------------------
+
+## name Configuration allowing double-quote for all single quote containing strings
+## failures 0
+## parms { allow_double_quote_if_string_contains_single_quote => 1 }
+## cut
+
+$sql = "it's me";
+$sql = "\'";
+
+#-----------------------------------------------------------------------------
+
 ##############################################################################
 #      $URL$
 #     $Date$

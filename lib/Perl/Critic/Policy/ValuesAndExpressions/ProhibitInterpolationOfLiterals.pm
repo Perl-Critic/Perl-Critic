@@ -35,6 +35,13 @@ sub supported_parameters {
             default_string     => $EMPTY,
             parser             => \&_parse_allow,
         },
+        {
+            name               => 'allow_double_quote_if_string_contains_single_quote',
+            description        =>
+                q<If the string contains ' characters, allow "" to quote it.>,
+            default_string     => '0',
+            behavior           => 'boolean',
+        },
     );
 }
 
@@ -79,6 +86,11 @@ sub violates {
     # Overlook allowed quote styles
     return if any { $elem =~ m{ \A \Q$_\E }mx } @{ $self->{_allow} };
 
+    # If the flag is set, allow "I'm here".
+    if ( $self->{_allow_double_quote_if_string_contains_single_quote} ) {
+        return if index ($elem, $QUOTE) >= 0;
+    }
+
     # Must be a violation
     return $self->violation( $DESC, $EXPL, $elem );
 }
@@ -87,8 +99,8 @@ sub violates {
 
 sub _has_interpolation {
     my $elem = shift;
-    return $elem =~ m{ (?<!\\) [\$\@] \S+ }mx      #Contains unescaped $. or @.
-        || $elem =~ m{ \\[tnrfbae0xcNLuLUEQ] }mx;   #Containts escaped metachars
+    return $elem =~ m{ (?<!\\) [\$\@] \S+ }mx     #Contains unescaped $. or @.
+        || $elem =~ m{ \\[tnrfbae0xcNLuLUEQ] }mx; #Containts escaped metachars
 }
 
 1;
@@ -102,6 +114,7 @@ __END__
 =head1 NAME
 
 Perl::Critic::Policy::ValuesAndExpressions::ProhibitInterpolationOfLiterals - Always use single quotes for literal strings.
+
 
 =head1 AFFILIATION
 
@@ -128,6 +141,12 @@ the reader know that you really did intend the string to be literal.
     print qq{$foobar};  #preferred
     print qq{foobar\n}; #preferred
 
+Use of double-quotes might be reasonable if the string contains single
+quote (') characters:
+
+    print "it's me";    # ok, if configuration flag set
+
+
 =head1 CONFIGURATION
 
 The types of quoting styles to exempt from this policy can be
@@ -144,6 +163,15 @@ this, put the following in your F<.perlcriticrc> file:
 
     [ValuesAndExpressions::ProhibitInterpolationOfLiterals]
     allow = qq{} qq[]
+
+The flag C<allow_double_quote_if_string_contains_single_quote> permits
+double-quoted strings if the string contains a single quote (')
+character.  It defaults to off; to turn it on put the following in
+your F<.perlcriticrc> file:
+
+    [ValuesAndExpressions::ProhibitInterpolationOfLiterals]
+    allow_double_quote_if_string_contains_single = 1
+
 
 =head1 SEE ALSO
 
