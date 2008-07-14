@@ -3,10 +3,13 @@
     Minor Enhancements:
     * -s is now a synonym for --single-policy.
 
-    Policy Changes:
+    Policy Changes: 
     * ValuesAndExpressions::ProhibitInterpolationOfLiterals now takes a
-      allow_if_string_contains_single_quote option.  Contributed by Ed Avis
-      <ed@membled.com>.  RT #36125.
+      allow_if_string_contains_single_quote option.  Contributed by Ed
+      Avis <ed@membled.com>.  RT #36125.
+    * Subroutines::ProhibitBuiltinHomonyms now also prohibits subroutines 
+      with the same name as a Perl keyword (e.g. if, foreach, while).  
+      Inspired by RT #37632.
 
     Bug fixes:
     * BuiltinFunctions::ProhibitSleepViaSelect would complain if there were

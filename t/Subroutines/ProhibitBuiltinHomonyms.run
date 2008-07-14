@@ -1,10 +1,13 @@
 ## name Basic failures
-## failures 3
+## failures 7
 ## cut
 sub open {}
 sub map {}
 sub eval {}
-
+sub if {}
+sub sub {}
+sub foreach {}
+sub while {}
 #-----------------------------------------------------------------------------
 
 ## name Basic passing
