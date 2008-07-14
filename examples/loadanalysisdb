@@ -218,7 +218,7 @@ __END__
 
 =pod
 
-=for stopwords SQLite analyses
+=for stopwords SQLite DBI analyses perlartistic
 
 =head1 NAME
 
