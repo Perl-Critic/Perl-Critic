@@ -5,8 +5,8 @@
 
     Policy Changes:
     * ValuesAndExpressions::ProhibitInterpolationOfLiterals now takes a
-      allow_double_quote_if_string_contains_single_quote option.  Contributed
-      by Ed Avis <ed@membled.com>.  RT #36125.
+      allow_if_string_contains_single_quote option.  Contributed by Ed Avis
+      <ed@membled.com>.  RT #36125.
 
     Bug fixes:
     * BuiltinFunctions::ProhibitSleepViaSelect would complain if there were

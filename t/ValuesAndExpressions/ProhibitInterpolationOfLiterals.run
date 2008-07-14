@@ -66,7 +66,7 @@ $sql = qq/select foo from bar/;
 
 #-----------------------------------------------------------------------------
 
-## name Allow double-quote if string contains single quote
+## name Disallow interpolationi f string contains single quote
 ## failures 2
 ## cut
 
@@ -75,9 +75,9 @@ $sql = "\'";
 
 #-----------------------------------------------------------------------------
 
-## name Configuration allowing double-quote for all single quote containing strings
+## name Allow interpolation if string contains single quote, with option on.
 ## failures 0
-## parms { allow_double_quote_if_string_contains_single_quote => 1 }
+## parms { allow_if_string_contains_single_quote => 1 }
 ## cut
 
 $sql = "it's me";

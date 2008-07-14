@@ -36,7 +36,7 @@ sub supported_parameters {
             parser             => \&_parse_allow,
         },
         {
-            name               => 'allow_double_quote_if_string_contains_single_quote',
+            name               => 'allow_if_string_contains_single_quote',
             description        =>
                 q<If the string contains ' characters, allow "" to quote it.>,
             default_string     => '0',
@@ -87,7 +87,7 @@ sub violates {
     return if any { $elem =~ m{ \A \Q$_\E }mx } @{ $self->{_allow} };
 
     # If the flag is set, allow "I'm here".
-    if ( $self->{_allow_double_quote_if_string_contains_single_quote} ) {
+    if ( $self->{_allow_if_string_contains_single_quote} ) {
         return if index ($elem, $QUOTE) >= 0;
     }
 
@@ -164,7 +164,7 @@ this, put the following in your F<.perlcriticrc> file:
     [ValuesAndExpressions::ProhibitInterpolationOfLiterals]
     allow = qq{} qq[]
 
-The flag C<allow_double_quote_if_string_contains_single_quote> permits
+The flag C<allow_if_string_contains_single_quote> permits
 double-quoted strings if the string contains a single quote (')
 character.  It defaults to off; to turn it on put the following in
 your F<.perlcriticrc> file:
