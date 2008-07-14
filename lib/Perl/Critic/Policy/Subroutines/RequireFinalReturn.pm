@@ -35,7 +35,7 @@ sub supported_parameters {
             default_string  => $EMPTY,
             behavior        => 'string list',
             list_always_present_values =>
-                [ qw( exit die croak confess throw Carp::confess Carp::croak ) ],
+                [ qw< croak confess die exec exit throw Carp::confess Carp::croak > ],
         },
     );
 }
@@ -185,8 +185,8 @@ distribution.
 =head1 DESCRIPTION
 
 Require all subroutines to terminate explicitly with one of the
-following: C<return>, C<goto>, C<die>, C<exit>, C<throw>, C<carp> or
-C<croak>.
+following: C<return>, C<carp>, C<croak>, C<die>, C<exec>, C<exit>,
+C<goto>, or C<throw>.
 
 Subroutines without explicit return statements at their ends can be
 confusing.  It can be challenging to deduce what the return value will
@@ -196,22 +196,22 @@ Furthermore, if the programmer did not mean for there to be a
 significant return value, and omits a return statement, some of the
 subroutine's inner data can leak to the outside.  Consider this case:
 
-   package Password;
-   # every time the user guesses the password wrong, its value
-   # is rotated by one character
-   my $password;
-   sub set_password {
-      $password = shift;
-   }
-   sub check_password {
-      my $guess = shift;
-      if ($guess eq $password) {
-         unlock_secrets();
-      } else {
-         $password = (substr $password, 1).(substr $password, 0, 1);
-      }
-   }
-   1;
+    package Password;
+    # every time the user guesses the password wrong, its value
+    # is rotated by one character
+    my $password;
+    sub set_password {
+        $password = shift;
+    }
+    sub check_password {
+        my $guess = shift;
+        if ($guess eq $password) {
+            unlock_secrets();
+        } else {
+            $password = (substr $password, 1).(substr $password, 0, 1);
+        }
+    }
+    1;
 
 In this case, the last statement in check_password() is the
 assignment.  The result of that assignment is the implicit return
@@ -230,8 +230,8 @@ or C<exit>, then you can configure Perl::Critic to recognize those
 functions as well.  Just put something like this in your
 F<.perlcriticrc>:
 
-  [Subroutines::RequireFinalReturns]
-  terminal_funcs = quit abort bailout
+    [Subroutines::RequireFinalReturns]
+    terminal_funcs = quit abort bailout
 
 =head1 LIMITATIONS
 

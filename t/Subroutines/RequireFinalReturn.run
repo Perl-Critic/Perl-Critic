@@ -11,6 +11,7 @@
 ## name basic passes
 ## failures 0
 ## cut
+
 sub foo { }
 sub bar;
 sub baz { return; }
@@ -21,6 +22,7 @@ sub quux { return {some => [qw(complicated data)], q{ } => /structure/}; }
 ## name complex passes
 ## failures 0
 ## cut
+
 sub foo { if ($bool) { return; } else { return; } }
 sub bar { unless ($bool) { return; } else { return; } }
 sub baz { if ($bool) { return; } elsif ($bool2) { return; } else { return; } }
@@ -32,6 +34,7 @@ sub quuz { unless ($bool) { return; } elsif ($bool2) { return; } else { return; 
 ## failures 0
 ## TODO We are not yet detecting ternaries
 ## cut
+
 sub foo { 1 ? return : 2 ? return : return; }
 
 #-----------------------------------------------------------------------------
@@ -39,6 +42,7 @@ sub foo { 1 ? return : 2 ? return : return; }
 ## name returning ternaries
 ## failures 0
 ## cut
+
 sub foo { return 1 ? 1 : 2 ? 2 : 3; }
 
 #-----------------------------------------------------------------------------
@@ -46,6 +50,7 @@ sub foo { return 1 ? 1 : 2 ? 2 : 3; }
 ## name implicit returns fail
 ## failures 2
 ## cut
+
 sub foo { 1 }
 sub foo { 'Club sandwich'; }
 
@@ -54,6 +59,7 @@ sub foo { 'Club sandwich'; }
 ## name return in a constant loop
 ## failures 1
 ## cut
+
 sub foo { while (1==1) { return; } }
 
 #-----------------------------------------------------------------------------
@@ -61,6 +67,7 @@ sub foo { while (1==1) { return; } }
 ## name not all code paths returns
 ## failures 3
 ## cut
+
 sub foo { if ($bool) { } else { } }
 sub foo { if ($bool) { $foo = 'bar'; } else { return; } }
 sub foo { unless ($bool) { $foo = 'bar'; } else { return; } }
@@ -70,6 +77,7 @@ sub foo { unless ($bool) { $foo = 'bar'; } else { return; } }
 ## name special blocks exemption
 ## failures 0
 ## cut
+
 BEGIN {
   print 'this should not need a return';
 }
@@ -88,6 +96,7 @@ END {
 ## name goto is equivalent to return
 ## failures 0
 ## cut
+
 sub foo { goto &bar; }
 END_PERL
 
@@ -96,6 +105,7 @@ END_PERL
 ## name next and last are not equivalent to return (and are invalid Perl)
 ## failures 2
 ## cut
+
 sub foo { next; }
 sub bar { last; }
 
@@ -104,21 +114,25 @@ sub bar { last; }
 ## name abnormal termination is allowed
 ## failures 0
 ## cut
+
 sub foo   { die; }
 sub bar   { croak; }
 sub baz   { confess; }
 sub bar_C { Carp::croak; }
 sub baz_C { Carp::confess; }
-sub quux  { exit; }
-sub quux2 { throw 'nuts'; }
+sub quux  { exec; }
+sub quux2 { exit; }
+sub quux3 { throw 'nuts'; }
 
 #-----------------------------------------------------------------------------
 
 ## name Final return is present, but conditional
-## failures 4
+## failures 5
 ## cut
+
 sub foo   { die if $condition }
 sub bar   { croak unless $condition }
+sub baz   { exec for @condition }
 sub baz   { exit for @condition }
 sub quux  { throw 'nuts'if not $condition }
 

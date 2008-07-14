@@ -8,8 +8,10 @@
       allow_if_string_contains_single_quote option.  Contributed by Ed
       Avis <ed@membled.com>.  RT #36125.
     * Subroutines::ProhibitBuiltinHomonyms now also prohibits subroutines 
-      with the same name as a Perl keyword (e.g. if, foreach, while).  
+      with the same name as a Perl keyword (e.g. if, foreach, while).
       Inspired by RT #37632.
+    * Subroutines::RequireFinalReturn now includes exec in the set of things
+      that mark a successful return.  RT #37672
 
     Bug fixes:
     * BuiltinFunctions::ProhibitSleepViaSelect would complain if there were
