@@ -12,6 +12,10 @@
       Inspired by RT #37632.
     * Subroutines::RequireFinalReturn now includes exec in the set of things
       that mark a successful return.  RT #37672
+    * Subroutines::ProtectPrivateSubs now allows expressions like
+      "shift->_some_private_method();".  Note that this *only* applies
+      to the "shift" function -- a private method call on the right of any
+      other bareword still causes a violation.  RT #34713.
 
     Bug fixes:
     * BuiltinFunctions::ProhibitSleepViaSelect would complain if there were

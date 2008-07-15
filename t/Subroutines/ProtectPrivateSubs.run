@@ -18,6 +18,29 @@ require My::Self::_private;
 
 #-----------------------------------------------------------------------------
 
+## name "shift" followed by private method call
+## failures 0
+## cut
+
+# See http://rt.cpan.org/Ticket/Display.html?id=34713
+# Also, see the test case below for a counter example.
+
+shift->_private_sub();
+shift->_private_sub;
+
+#-----------------------------------------------------------------------------
+
+## name other builtin-function followed by private method call
+## failures 2
+## cut
+
+# See http://rt.cpan.org/Ticket/Display.html?id=34713
+
+pop->_private_sub();
+pop->_private_sub;
+
+#-----------------------------------------------------------------------------
+
 ## name Difficult-to-detect pass
 # This one should be illegal, but it is too hard to distinguish from
 # the next one, which is legal

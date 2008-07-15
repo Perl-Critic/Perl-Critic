@@ -34,19 +34,20 @@ sub applies_to           { return 'PPI::Token::Word'     }
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    my $psib = $elem->sprevious_sibling;
-    my $psib_name = eval { $psib->content };
-    no warnings 'uninitialized';    ## no critic ProhibitNoWarnings
-    if (   $psib_name ne 'package'
-        && $psib_name ne 'require'
-        && $psib_name ne 'use'
-        && (   $self->_is_other_pkg_private_function($elem)
-            || $self->_is_other_pkg_private_method($elem) )
-        )
+    if (my $psib = $elem->sprevious_sibling()) {
+        my $psib_name = $psib->content();
+        return if $psib_name eq 'package';
+        return if $psib_name eq 'require';
+        return if $psib_name eq 'use';
+    }
+
+    if ( $self->_is_other_pkg_private_function($elem)
+         || $self->_is_other_pkg_private_method($elem) )
     {
         return $self->violation( $DESC, $EXPL, $elem );
     }
-    return;                         #ok!
+
+    return;  # ok!
 }
 
 sub _is_other_pkg_private_function {
@@ -62,8 +63,15 @@ sub _is_other_pkg_private_method {
     $elem =~ m{ \A _\w+ \z }xms || return;
     my $op = $elem->sprevious_sibling() || return;
     $op eq q{->} || return;
+
     my $pkg = $op->sprevious_sibling() || return;
     $pkg->isa('PPI::Token::Word') || return;
+
+    # sometimes the previous sib is a keyword, as in:
+    # shift->_private_method();  This is typically used as
+    # shorthand for "my $self=shift; $self->_private_method()"
+    $pkg ne 'shift' || return;
+
     return 1;
 }
 
