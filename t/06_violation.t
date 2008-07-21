@@ -95,8 +95,11 @@ is($viol->explanation(), 'See pages 28,30 of PBP', 'explanation');
 
 #-----------------------------------------------------------------------------
 # Import tests
-like(ViolationTest->get_violation()->diagnostics(),
-     qr/ \A \s* This [ ] is [ ] a [ ] test [ ] diagnostic\. \s*\z /xms, 'import diagnostics');
+like(
+    ViolationTest->get_violation()->diagnostics(),
+    qr/ \A \s* This [ ] is [ ] a [ ] test [ ] diagnostic [.] \s*\z /xms,
+    'import diagnostics',
+);
 
 #-----------------------------------------------------------------------------
 # Violation sorting

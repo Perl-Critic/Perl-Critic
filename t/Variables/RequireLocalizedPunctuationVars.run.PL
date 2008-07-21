@@ -17,7 +17,7 @@ use B::Keywords qw();
 use List::MoreUtils qw< apply uniq >;
 
 my $this_program = __FILE__;
-(my $test_file_name = $this_program) =~ s/ \.PL \z //xms;
+(my $test_file_name = $this_program) =~ s< [.] PL \z ><>xms;
 if ($this_program eq $test_file_name) {
     confess
         'Was not able to figure out the name of the file to generate.'

@@ -390,7 +390,7 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
     eval{ Perl::Critic::Config->new( -severity => 'bogus' ) };
     like(
         $EVAL_ERROR,
-        qr/The value for the global "-severity" option \("bogus"\) is not one of the valid severity names/ms, ## no critic (RequireExtendedFormatting)
+        qr/The value for the global "-severity" option [(]"bogus"[)] is not one of the valid severity names/ms, ## no critic (RequireExtendedFormatting)
         'invalid severity'
     );
 

@@ -47,8 +47,8 @@ foreach my $test_program_name (@ARGV) {
         $test_program_name =~ m<
             \A
             $GENERATED_DIRECTORY
-            ( (?: t | xt/author ) / [\w.]+ \.t ) # test to be wrapped
-            _without_optional_dependencies\.t   # suffix the new test will have
+            ( (?: t | xt/author ) / [\w.]+ [.] t ) # test to be wrapped
+            _without_optional_dependencies [.] t   # suffix the new test will have
             \z
         >xmso;
     if (not $wrapped_test_name) {

@@ -36,7 +36,7 @@ my %implied = (
 my @pm;
 find(
     {
-        wanted => sub { push @pm, $_ if m/\.pm \z/xms && !m/svn/xms },
+        wanted => sub { push @pm, $_ if m< [.] pm \z >xms && ! m<svn>xms },
         no_chdir => 1,
     },
     'lib'
@@ -70,7 +70,7 @@ for my $file (@pm) {
 
             my $token = $pkg->next_sibling;
 
-            if ($token =~ m/\A \(/xms) {
+            if ($token =~ m< \A [(] >xms) {
                 $name =~ s/::\w+\z//xms;
             }
 

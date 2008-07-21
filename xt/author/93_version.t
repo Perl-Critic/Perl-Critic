@@ -32,7 +32,7 @@ if (! defined $last_version) {
 }
 
 sub check_version {
-    return if (! m{blib/script/}xms && ! m{\.pm \z}xms);
+    return if (! m< blib/script/ >xms && ! m< [.] pm \z >xms);
 
     local $INPUT_RECORD_SEPARATOR = undef;
     my $fh;
