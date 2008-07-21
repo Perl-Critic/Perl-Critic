@@ -283,7 +283,7 @@ sub test_policy_long_name_and_policy_short_name {
 
 sub test_interpolate {
     is( interpolate( '\r%l\t%c\n' ), "\r%l\t%c\n", 'Interpolation' );
-    is( interpolate( 'literal'    ), "literal",    'Interpolation' );
+    is( interpolate( 'literal'    ), 'literal',    'Interpolation' );
 
     return;
 }

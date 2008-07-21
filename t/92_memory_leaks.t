@@ -55,7 +55,7 @@ plan skip_all => 'Test::Memory::Cycle requried to test memory leaks'
     my $pc_doc  = Perl::Critic::Document->new( $ppi_doc );
     my $critic  = Perl::Critic->new( -severity => 1 );
     my @violations = $critic->critique( $pc_doc );
-    confess "No violations were created" if not @violations;
+    confess 'No violations were created' if not @violations;
 
     # One test for each violation, plus one each for Critic and Document.
     plan( tests => scalar @violations + 2 );
