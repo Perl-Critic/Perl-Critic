@@ -399,9 +399,9 @@ capabilities, look at L<String::Format|String::Format>. Valid escape
 characters are:
 
     Escape    Meaning
-    -------   ------------------------------------------------------------
+    -------   ----------------------------------------------------------------
     %c        Column number where the violation occurred
-    %d        Full diagnostic discussion of the violation
+    %d        Full diagnostic discussion of the violation (DESCRIPTION in POD)
     %e        Explanation of violation or page numbers in PBP
     %F        Just the name of the file where the violation occurred.
     %f        Path to the file where the violation occurred.
