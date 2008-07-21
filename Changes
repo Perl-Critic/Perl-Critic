@@ -3,19 +3,22 @@
     Minor Enhancements:
     * -s is now a synonym for --single-policy.
 
-    Policy Changes: 
-    * ValuesAndExpressions::ProhibitInterpolationOfLiterals now takes a
-      allow_if_string_contains_single_quote option.  Contributed by Ed
-      Avis <ed@membled.com>.  RT #36125.
+    Policy Changes:
     * Subroutines::ProhibitBuiltinHomonyms now also prohibits subroutines 
       with the same name as a Perl keyword (e.g. if, foreach, while).
       Inspired by RT #37632.
-    * Subroutines::RequireFinalReturn now includes exec in the set of things
-      that mark a successful return.  RT #37672
     * Subroutines::ProtectPrivateSubs now allows expressions like
       "shift->_some_private_method();".  Note that this *only* applies
       to the "shift" function -- a private method call on the right of any
       other bareword still causes a violation.  RT #34713.
+    * Subroutines::RequireFinalReturn now includes exec in the set of things
+      that mark a successful return.  RT #37672
+    * ValuesAndExpressions::ProhibitInterpolationOfLiterals now takes a
+      allow_if_string_contains_single_quote option.  Contributed by Ed
+      Avis <ed@membled.com>.  RT #36125.
+    * ValuesAndExpressions::RequireInterpolationOfMetachars now supports a
+      rcs_keywords option to allow for the common case where those require
+      dollar signs.
 
     Bug fixes:
     * BuiltinFunctions::ProhibitSleepViaSelect would complain if there were

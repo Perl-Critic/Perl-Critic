@@ -12,7 +12,7 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :severities };
+use Perl::Critic::Utils qw< :booleans :characters :severities >;
 use base 'Perl::Critic::Policy';
 
 #-----------------------------------------------------------------------------
@@ -26,7 +26,17 @@ Readonly::Scalar my $EXPL => [ 51 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return ()                    }
+sub supported_parameters {
+    return (
+        {
+            name            => 'rcs_keywords',
+            description     => 'RCS keywords to ignore in potential interpolation.',
+            default_string  => $EMPTY,
+            behavior        => 'string list',
+        },
+    );
+}
+
 sub default_severity     { return $SEVERITY_LOWEST      }
 sub default_themes       { return qw(core pbp cosmetic) }
 sub applies_to           { return qw(PPI::Token::Quote::Single
@@ -34,18 +44,39 @@ sub applies_to           { return qw(PPI::Token::Quote::Single
 
 #-----------------------------------------------------------------------------
 
+sub initialize_if_enabled {
+    my ($self, $config) = @_;
+
+    my $rcs_keywords = $self->{_rcs_keywords};
+    my @rcs_keywords = keys %{$rcs_keywords};
+
+    if (@rcs_keywords) {
+        my $rcs_regexes = [ map { qr/ \$ $_ [^\n\$]* \$ /xms } @rcs_keywords ];
+        $self->{_rcs_regexes} = $rcs_regexes;
+    }
+
+    return $TRUE;
+}
+
 sub violates {
     my ( $self, $elem, undef ) = @_;
+
     # The string() method strips off the quotes
-    return if not _needs_interpolation( $elem->string() );
-    return if _looks_like_email_address( $elem->string() );
+    my $string = $elem->string();
+    return if not _needs_interpolation($string);
+    return if _looks_like_email_address($string);
+
+    my $rcs_regexes = $self->{_rcs_regexes};
+    return if $rcs_regexes and _contains_rcs_variable($string, $rcs_regexes);
+
     return $self->violation( $DESC, $EXPL, $elem );
 }
 
 #-----------------------------------------------------------------------------
 
 sub _needs_interpolation {
-    my $string = shift;
+    my ($string) = @_;
+
     return $string =~ m{ [\$\@] \S+ }mxo             #Contains a $ or @
         || $string =~ m{ \\[tnrfae0xcNLuLUEQ] }mxo;  #Contains metachars
 }
@@ -53,8 +84,21 @@ sub _needs_interpolation {
 #-----------------------------------------------------------------------------
 
 sub _looks_like_email_address {
-    my $string = shift;
+    my ($string) = @_;
+
     return $string =~ m{\A [^\@\s]+ \@ [\w\-.]+ \z}mxo;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _contains_rcs_variable {
+    my ($string, $rcs_regexes) = @_;
+
+    foreach my $regex ( @{$rcs_regexes} ) {
+        return 1 if $string =~ m/$regex/xms;
+    }
+
+    return;
 }
 
 1;

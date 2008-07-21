@@ -30,6 +30,10 @@ $sigil_at_end_of_word = q(list@ scalar$);
 $sigil_at_end_of_word = q(scalar$ list@);
 %options = (  'foo=s@' => \@foo);  #Like with Getopt::Long
 %options = ( q{foo=s@} => \@foo);  #Like with Getopt::Long
+$sigil_as_delimiter = q$blah$;
+$sigil_as_delimiter = q    $blah$;
+$sigil_as_delimiter = q@blah@;
+$sigil_as_delimiter = q    @blah@;
 
 #-----------------------------------------------------------------------------
 
@@ -49,6 +53,39 @@ $complex = q{don-quixote@man-from.lamancha.org};
 
 $simple  = 'Email: me@foo.bar';
 $complex = q{"don-quixote@man-from.lamancha.org" is my address};
+
+#-----------------------------------------------------------------------------
+
+## name Do complain about RCS variables, if not turned on.
+## failures 7
+## cut
+
+$VERSION = q<$Revision$>;
+($VERSION) = q<$Revision$> =~ m/(\d+)/mx;
+our $VERSION = substr(q/$Revision$/, 10);
+our ($VERSION) = q<$Revision$> =~ m/(\d+)/mx;
+our ($VERSION) = (q<$Revision$> =~ m/(\d+)/mx);
+our (undef, $AUTHOR, undef, undef, $VERSION) = split m/\s+/, q<$Author$ $Revision$>;
+
+# Yes, silly example, but still need to check it.
+if ( ($VERSION) = q<$Revision$> =~ m/(\d+)/mx ) {}
+
+#-----------------------------------------------------------------------------
+
+## name Don't complain about RCS variables, if turned on.
+## failures 0
+## parms { rcs_keywords => 'Revision Author' }
+## cut
+
+$VERSION = q<$Revision$>;
+($VERSION) = q<$Revision$> =~ m/(\d+)/mx;
+our $VERSION = substr(q/$Revision$/, 10);
+our ($VERSION) = q<$Revision$> =~ m/(\d+)/mx;
+our ($VERSION) = (q<$Revision$> =~ m/(\d+)/mx);
+our (undef, $AUTHOR, undef, undef, $VERSION) = split m/\s+/, q<$Author$ $Revision$>;
+
+# Yes, silly example, but still need to check it.
+if ( ($VERSION) = q<$Revision$> =~ m/(\d+)/mx ) {}
 
 #-----------------------------------------------------------------------------
 
