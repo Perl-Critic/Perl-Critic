@@ -118,13 +118,13 @@ sub generate_global_message_regex {
     my ($parameter, $file) = @_;
 
     return
-        qr/
+        qr<
             \A
             The [ ] value [ ] for [ ] the [ ] global [ ]
             "$parameter"
             .*
             found [ ] in [ ] "$file"
-        /xms;
+        >xms;
 }
 
 sub is_require_pod_sections_source_exception {
