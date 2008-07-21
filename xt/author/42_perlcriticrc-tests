@@ -44,3 +44,6 @@ allow_all_brackets = 1
 
 # Tests are allowed to peek.
 [-Subroutines::ProtectPrivateSubs]
+
+# Too endemic for me to deal with right now
+[-ValuesAndExpressions::ProhibitMagicNumbers]
