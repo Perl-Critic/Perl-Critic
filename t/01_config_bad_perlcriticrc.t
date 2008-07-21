@@ -56,7 +56,7 @@ $test_passed =
     isa_ok(
         $eval_result,
         'Perl::Critic::Exception::AggregateConfiguration',
-        '$EVAL_ERROR',
+        '$EVAL_ERROR',  ## no critic (RequireInterpolationOfMetachars)
     );
 
 if ( not $test_passed ) {

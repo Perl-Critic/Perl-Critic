@@ -56,7 +56,7 @@ can_ok('main', 'get_module_abstract_for_module');
 
 
 {
-    my $code = q<my $x = 3;>;
+    my $code = q<my $x = 3;>;  ## no critic (RequireInterpolationOfMetachars)
 
     my $pod = get_raw_pod_section_from_string( $code, 'SYNOPSIS' );
 
@@ -428,7 +428,7 @@ A::Stupendous::Code::Module - An abstract involving C<$code>.
 
 END_MODULE
 
-    my $expected = q<An abstract involving C<$code>.>;
+    my $expected = q<An abstract involving C<$code>.>; ## no critic (RequireInterpolationOfMetachars)
 
     my $result = get_raw_module_abstract_from_string( $source );
 
@@ -438,7 +438,7 @@ END_MODULE
         q<get_raw_module_abstract_from_string() with proper abstract>,
     );
 
-    $expected = q<An abstract involving `$code'.>;
+    $expected = q<An abstract involving `$code'.>; ## no critic (RequireInterpolationOfMetachars)
 
     $result = get_module_abstract_from_string( $source );
 

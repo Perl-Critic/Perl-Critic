@@ -50,7 +50,7 @@ plan skip_all => 'Test::Memory::Cycle requried to test memory leaks'
     # about it.  The particular input we use here does not seem to create
     # circular references.
 
-    my $code    = q{print foo(); split /this/, $that;};
+    my $code    = q<print foo(); split /this/, $that;>; ## no critic (RequireInterpolationOfMetachars)
     my $ppi_doc = PPI::Document->new( \$code );
     my $pc_doc  = Perl::Critic::Document->new( $ppi_doc );
     my $critic  = Perl::Critic->new( -severity => 1 );

@@ -161,7 +161,7 @@ END_PERL
     my $get_format = *Perl::Critic::Violation::get_format;
     my $set_format = *Perl::Critic::Violation::set_format;
 
-    my $fmt_literal = 'Found %m in file %f on line %l\n';
+    my $fmt_literal = 'Found %m in file %f on line %l\n';  ## no critic (RequireInterpolationOfMetachars)
     my $fmt_interp  = "Found %m in file %f on line %l\n"; #Same, but double-quotes
     is($set_format->($fmt_literal), $fmt_interp, 'set_format by spec');
     is($get_format->(), $fmt_interp, 'get_format by spec');
