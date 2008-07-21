@@ -395,7 +395,7 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
     );
 
     # Try using vague -single-policy option
-    eval{ Perl::Critic::Config->new( '-single-policy' => '.*' ) };
+    eval{ Perl::Critic::Config->new( '-single-policy' => q<.*> ) };
     like(
         $EVAL_ERROR,
         qr/matched [ ] multiple [ ] policies/xms,

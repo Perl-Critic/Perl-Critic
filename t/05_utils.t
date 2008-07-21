@@ -235,7 +235,7 @@ sub test_is_perl_global {
 #-----------------------------------------------------------------------------
 
 sub test_precedence_of {
-    cmp_ok( precedence_of('*'), '<', precedence_of('+'), 'Precedence' );
+    cmp_ok( precedence_of(q<*>), q[<], precedence_of(q<+>), 'Precedence' );
 
     my $code1 = '8 + 5';
     my $doc1  = make_doc($code1);

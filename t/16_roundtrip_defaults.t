@@ -133,7 +133,7 @@ is(
 
 cmp_ok(
     $derived_configuration->severity(),
-    '==',
+    q<==>,
     $default_configuration->severity(),
     'severity',
 );
@@ -142,7 +142,7 @@ cmp_ok(
 
 cmp_ok(
     $derived_configuration->top(),
-    '==',
+    q<==>,
     $default_configuration->top(),
     'top',
 );
@@ -151,7 +151,7 @@ cmp_ok(
 
 cmp_ok(
     $derived_configuration->verbose(),
-    '==',
+    q<==>,
     $default_configuration->verbose(),
     'verbose',
 );
