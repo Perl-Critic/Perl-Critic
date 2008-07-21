@@ -11,6 +11,8 @@ use 5.006001;
 use strict;
 use warnings;
 
+use charnames ':full';
+
 use Perl::Critic::TestUtils qw(pcritique fcritique);
 
 use Test::More tests => 29;
@@ -53,19 +55,29 @@ END_PERL
 is( fcritique($policy, \$base_code), 0, $policy );
 
 my @lines = split m/\n/mx, $base_code;
-for my $keyword (qw( Pkg; heredoc_body HEREDOC POD_HEADER pod =cut
-                     comment_line inline_comment
-                     __END__ end_body __DATA__ DataLine1 DataLine2 )) {
+for my $keyword (qw<
+    Pkg; heredoc_body HEREDOC POD_HEADER pod =cut
+    comment_line inline_comment
+    __END__ end_body __DATA__ DataLine1 DataLine2
+>) {
     my $is_first_line = $lines[0] =~ m/\Q$keyword\E\z/mx;
     my $nfail = $is_first_line ? @lines-1 : 1;
-    for my $nl ("\012", "\015", "\015\012") {
+    for my $nl (
+        "\N{LINE FEED}",
+        "\N{CARRIAGE RETURN}",
+        "\N{CARRIAGE RETURN}\N{LINE FEED}",
+    ) {
         next if $nl eq "\n";
         ($code = $base_code) =~ s/ (\Q$keyword\E) \n /$1$nl/xms;
         is( fcritique($policy, \$code), $nfail, $policy.' - '.$keyword );
     }
 }
 
-for my $nl ("\012", "\015", "\015\012") {
+for my $nl (
+    "\N{LINE FEED}",
+    "\N{CARRIAGE RETURN}",
+    "\N{CARRIAGE RETURN}\N{LINE FEED}",
+) {
     next if $nl eq "\n";
     ($code = $base_code) =~ s/ \n /$nl/xms;
     is( pcritique($policy, \$code), 0, $policy.' - no filename' );
