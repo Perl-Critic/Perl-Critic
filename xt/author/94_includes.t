@@ -58,7 +58,7 @@ for my $file (@pm) {
             my $name = "$pkg";
             next if $name !~ m/::/xms;
             next if $name =~ m/::_private::/xms;
-            next if $name =~ m/List::Util::[a-z]+/xms;
+            next if $name =~ m/List::Util::[[:lower:]]+/xms;
 
             # subroutine declaration with absolute name?
             # (bad form, but legal)
