@@ -36,10 +36,10 @@ my %implied = (
 my @pm;
 find(
     {
-        wanted => sub { push @pm, $_ if m< [.] pm \z >xms && ! m<svn>xms },
+        wanted => sub { if (m< [.] pm \z >xms && ! m<svn>xms) { push @pm, $_ } },
         no_chdir => 1,
     },
-    'lib'
+    'lib',
 );
 plan tests => scalar @pm;
 

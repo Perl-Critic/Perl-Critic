@@ -62,7 +62,9 @@ plan skip_all => 'Test::Memory::Cycle requried to test memory leaks'
 
     memory_cycle_ok( $pc_doc );
     memory_cycle_ok( $critic );
-    memory_cycle_ok($_) for @violations;
+    foreach my $violation (@violations) {
+        memory_cycle_ok($_);
+    }
 }
 
 #-----------------------------------------------------------------------------

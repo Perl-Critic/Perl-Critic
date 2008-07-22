@@ -89,7 +89,9 @@ is(
     'should have received the correct number of exceptions'
 );
 if (@exceptions != $expected_exceptions) {
-    diag "Exception: $_" foreach @exceptions;
+    foreach my $exception (@exceptions) {
+        diag "Exception: $exception";
+    }
 }
 
 while (my ($parameter, $regex) = each %expected_regexes) {

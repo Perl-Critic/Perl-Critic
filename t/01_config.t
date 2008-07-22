@@ -129,8 +129,13 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
     my $last_policy_count = 0;
     my $severity = $SEVERITY_HIGHEST;
     for my $index ( 0 .. $#names_of_policies_willing_to_work ) {
-        $severity-- if $index && $index % 10 == 0;
-        $severity = $SEVERITY_LOWEST if $severity < $SEVERITY_LOWEST;
+        if ($index and $index % 10 == 0) {
+            $severity--;
+        }
+        if ($severity < $SEVERITY_LOWEST) {
+            $severity = $SEVERITY_LOWEST;
+        }
+
         $profile{$names_of_policies_willing_to_work[$index]} =
             {severity => $severity};
     }

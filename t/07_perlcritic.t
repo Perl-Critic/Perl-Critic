@@ -30,7 +30,9 @@ our $VERSION = '1.088';
 # found in blib, then use the one in bin (for example, when using 'prove')
 
 my $perlcritic = File::Spec->catfile( qw(blib script perlcritic) );
-$perlcritic = File::Spec->catfile( qw(bin perlcritic) ) if ! -e $perlcritic;
+if (not -e $perlcritic) {
+    $perlcritic = File::Spec->catfile( qw(bin perlcritic) )
+}
 require $perlcritic;  ## no critic
 
 # Because bin/perlcritic does not declare a package, it has functions

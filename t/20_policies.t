@@ -78,7 +78,9 @@ for my $policy ( sort keys %{$subtests} ) {
             );
 
         if (not $test_passed) {
-            diag("Violation found: $_") foreach @violations;
+            foreach my $violation (@violations) {
+                diag("Violation found: $violation");
+            }
         }
     }
 }
