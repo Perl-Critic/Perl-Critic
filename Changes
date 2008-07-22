@@ -1,3 +1,8 @@
+[1.090] Released on 2008-07-22
+
+    Bug Fixes:
+    * Test was incorrectly failing when Regexp::Parser wasn't installed.
+
 [1.089] Released on 2008-07-21
 
     Minor Enhancements:
@@ -20,7 +25,7 @@
       rcs_keywords option to allow for the common case where those require
       dollar signs.
 
-    Bug fixes:
+    Bug Fixes:
     * BuiltinFunctions::ProhibitSleepViaSelect would complain if there were
       three undefs as arguments to select(), but one of them was the timeout.
       RT #37416.
