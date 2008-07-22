@@ -1,4 +1,4 @@
-[1.xxx] Released on 2008-xx-xx
+[1.089] Released on 2008-07-21
 
     Minor Enhancements:
     * -s is now a synonym for --single-policy.
@@ -33,7 +33,10 @@
       "sort &foo(...)".
     * Makefile.PL, Build.PL and other ".PL" scripts which typically do not
       have a shebang are no longer mistaken as modules.  This prevents
-      spurrious warnings from Modules::RequireEndWithOne.  RT #20481.
+      spurious warnings from Modules::RequireEndWithOne.  RT #20481.
+
+    Internals:
+    * Tests are now self compliant.
 
 [1.088] Released on 2008-07-04
 

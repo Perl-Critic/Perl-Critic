@@ -1051,7 +1051,7 @@ to see the differences between the two cases.
 
 =head1 VERSION
 
-This is part of L<Perl::Critic|Perl::Critic> version 1.088.
+This is part of L<Perl::Critic|Perl::Critic> version 1.089.
 
 
 =head1 AUTHOR
