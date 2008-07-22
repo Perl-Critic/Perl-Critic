@@ -155,6 +155,12 @@ sub evaluate_test_results {
 }
 
 #-----------------------------------------------------------------------------
+
+# ensure we run true if this test is loaded by
+# 20_policies.t_without_optional_dependencies.t
+1;
+
+#-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4
