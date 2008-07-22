@@ -27,6 +27,8 @@ flowcontrol = warn die carp croak cluck confess goto exit plan skip
 [Documentation::PodSpelling]
 stop_words =
 
+[-Documentation::RequirePodSections]
+
 # Too endemic for me to deal with right now
 [-ErrorHandling::RequireCheckingReturnValueOfEval]
 

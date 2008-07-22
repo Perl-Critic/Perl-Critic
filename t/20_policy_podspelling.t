@@ -1,4 +1,4 @@
-#!perl
+#!perl      ## no critic (Documentation::RequirePodSections)
 
 ##############################################################################
 #      $URL$
