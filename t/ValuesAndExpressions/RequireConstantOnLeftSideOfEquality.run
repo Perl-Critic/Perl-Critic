@@ -1,0 +1,36 @@
+## name basic pass
+## failures 0
+## cut
+
+if( 6 == $foo ){}
+if( 'bar' eq $foo ){}
+
+while( 6 == $foo ){}
+while( 'bar' eq $foo ){}
+
+unless( 6 == $foo ){}
+unless( 'bar' eq $foo ){}
+
+#-----------------------------------------------------------------------------
+## name basic failures
+## failures 6
+## cut
+
+if( $foo == 6 ){}
+if( $foo eq 'bar' ){}
+
+while( $foo == 6 ){}
+while( $foo eq 'bar' ){}
+
+unless( $foo == 6 ){}
+unless( $foo eq 'bar' ){}
+
+#-----------------------------------------------------------------------------
+## name with complex expressions on right hand side
+## TODO Not sure how to handle this
+## failures 3
+## cut
+
+if( $foo == foo() ){}
+if( $foo == (6+3+1) ){} 
+if( $foo == $object->method() ){}

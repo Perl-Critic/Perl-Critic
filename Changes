@@ -1,3 +1,9 @@
+[1.???] Released on 2008-??-??
+
+    New Policies:
+    * ValuesAndExpressions::RequireConstantOnLeftSideOfEquality -- In
+      case you accidentally say "if($foo = 42){...}"
+
 [1.090] Released on 2008-07-22
 
     Bug Fixes:
