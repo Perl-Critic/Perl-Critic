@@ -120,6 +120,12 @@ e.g. "C<[+Example::Policy]>".
 
 =over
 
+=item * ControlStructures::ProhibitPostfixControls
+
+Look for the do {} while case and change the explanation to point to page 123
+when it is found.
+
+
 =item * NamingConventions::ProhibitAmbiguousNames
 
 Don't allow compound names with forbidden words, like "last_record".
