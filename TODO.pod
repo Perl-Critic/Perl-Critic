@@ -123,7 +123,7 @@ e.g. "C<[+Example::Policy]>".
 =item * ControlStructures::ProhibitPostfixControls
 
 Look for the do {} while case and change the explanation to point to page 123
-when it is found.
+when it is found.  RT #37905.
 
 
 =item * NamingConventions::ProhibitAmbiguousNames
