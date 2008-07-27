@@ -45,13 +45,13 @@ sub applies_to       { return 'PPI::Structure::List' }
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    #Don't worry about subroutine calls
+    # Don't worry about subroutine calls
     my $sib = $elem->sprevious_sibling();
     return if !$sib;
     return if $sib->isa('PPI::Token::Word');
     return if $sib->isa('PPI::Token::Symbol');
 
-    #Get the list elements
+    # Get the list elements
     my $expr = $elem->schild(0);
     return if !$expr;
     my @children = $expr->schildren();
@@ -61,21 +61,20 @@ sub violates {
     for my $child ( @children ) {
         next if $child->isa('PPI::Token::Operator')  && $child eq $COMMA;
 
-        #All elements must be literal strings,
-        #of non-zero length, with no whitespace
+        # All elements must be literal strings,
+        # and must contain 1 or more word characters.
 
         return if ! _is_literal($child);
 
         my $string = $child->string();
-        return if $string =~ m{ \s }mx;
-        return if $string eq $EMPTY;
+        return if $string !~ m{\A [\w-]+ \z}mx;
         $count++;
     }
 
-    #Were there enough?
+    # Were there enough?
     return if $count < $self->{_min_elements};
 
-    #If we get here, then all elements were literals
+    # If we get here, then all elements were literals
     return $self->violation( $DESC, $EXPL, $elem );
 }
 

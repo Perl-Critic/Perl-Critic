@@ -4,6 +4,11 @@
     * ValuesAndExpressions::RequireConstantOnLeftSideOfEquality -- In
       case you accidentally say "if($foo = 42){...}"
 
+    Policy Changes:
+    * CodeLayout::ProhibitQuotedWordLists no longer applies if the
+      list contains any non-words.  A non-word is anything that
+      does not match /[\w-]+/.  RT #37886.
+
 [1.090] Released on 2008-07-22
 
     Bug Fixes:
