@@ -214,6 +214,15 @@ Check for -w on the shbang line.
 
 =over
 
+=item * NamingConventions::ProhibitMisspelledSymbolNames
+
+The idea behind this policy is to encourage better names for variables
+and subroutines by enforcing correct spelling and prohibiting the use of
+home-grown abbreviations.  Assumng that the author uses underscores or
+camel-case, it should be possible to split symbols into words, and then look
+them up in a dictionary (see PodSpelling).  This policy should probably have
+a similar stopwords feature as well.
+
 =item * Documentation::RequireModuleAbstract
 
 Require a C<=head1 NAME> POD section with content that matches
