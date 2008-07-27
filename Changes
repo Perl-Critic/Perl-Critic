@@ -8,6 +8,8 @@
     * CodeLayout::ProhibitQuotedWordLists no longer applies if the
       list contains any non-words.  A non-word is anything that
       does not match /[\w-]+/.  RT #37886.
+    * CodeLayout::ProhibitQuotedWordLists also now applies to the
+      import arguments of a C<use> statement.  RT #24467.
 
 [1.090] Released on 2008-07-22
 

@@ -12,7 +12,7 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :characters :severities };
+use Perl::Critic::Utils qw{ :characters :severities :classification};
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.090';
@@ -48,8 +48,10 @@ sub violates {
     # Don't worry about subroutine calls
     my $sib = $elem->sprevious_sibling();
     return if !$sib;
-    return if $sib->isa('PPI::Token::Word');
+
     return if $sib->isa('PPI::Token::Symbol');
+    return if $sib->isa('PPI::Token::Operator') && $sib eq '->';
+    return if $sib->isa('PPI::Token::Word') && !is_included_module_name($sib);
 
     # Get the list elements
     my $expr = $elem->schild(0);
@@ -111,6 +113,8 @@ easy to add to the list in the future.
     @list = ('foo', 'bar', 'baz');  #not ok
     @list = qw(foo bar baz);        #ok
 
+    use Foo ('foo', 'bar', 'baz');  #not ok
+    use Foo qw(foo bar baz);        #ok
 
 =head1 CONFIGURATION
 

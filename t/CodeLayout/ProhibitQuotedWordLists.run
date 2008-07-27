@@ -36,7 +36,9 @@
 @list = (foo => 'bar');
 %hash = ('foo' => 'bar', 'fo' => 'fum');
 my_function('foo', 'bar', 'fudge');
+&my_function('foo', 'bar', 'fudge');
 $an_object->a_method('foo', 'bar', 'fudge');
+$a_sub_routine_ref->('foo', 'bar', 'fudge');
 foreach ('foo', 'bar', 'nuts'){ do_something($_) }
 
 #-----------------------------------------------------------------------------
@@ -58,6 +60,20 @@ foreach ('foo', 'bar', 'nuts'){ do_something($_) }
 @list = ('foo', 'bar', 'baz', 'nuts');
 
 #-----------------------------------------------------------------------------
+## name Failing 'use' statements
+## failures 1
+## cut
+
+use Foo ('foo', 'bar', 'baz');
+
+#-----------------------------------------------------------------------------
+## name Passing 'use' statements
+## failures 0
+## cut
+
+use Foo ();
+use Foo ('foo', 1, 'bar', '1/2');
+use Foo ('foo' => 'bar', 'baz' => 'nuts');
 
 ##############################################################################
 #      $URL$
