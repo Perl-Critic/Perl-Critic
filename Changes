@@ -10,6 +10,8 @@
       does not match /[\w-]+/.  RT #37886.
     * CodeLayout::ProhibitQuotedWordLists also now applies to the
       import arguments of a C<use> statement.  RT #24467.
+    * ErrorHandling::RequireCheckingReturnValueOfEval now recognizes
+      ternary left-sides as valid checks
 
 [1.090] Released on 2008-07-22
 
