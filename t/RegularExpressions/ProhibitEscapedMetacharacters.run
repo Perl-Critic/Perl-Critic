@@ -51,6 +51,13 @@ m/ \[\] /x;
 
 s{\%[fF]}{STDIN}mx;
 
+## name escaped right parenthesis in character class in parentheses
+## failures 0
+## cut
+
+m/ ([\)]) /xms;
+
+
 #-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl
