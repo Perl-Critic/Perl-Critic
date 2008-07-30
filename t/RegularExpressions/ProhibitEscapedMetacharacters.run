@@ -51,11 +51,12 @@ m/ \[\] /x;
 
 s{\%[fF]}{STDIN}mx;
 
-## name escaped right parenthesis in character class in parentheses
+## name escaped characters in character classes
 ## failures 0
 ## cut
 
 m/ ([\)]) /xms;
+m/ [\.] /xms;
 
 
 #-----------------------------------------------------------------------------
