@@ -20,6 +20,7 @@ use Perl::Critic::TestUtils qw(
     fcritique_with_violations
     subtests_in_tree
 );
+use Perl::Critic::Violation qw<>;
 
 use Test::More;
 
@@ -30,6 +31,10 @@ our $VERSION = '1.090';
 #-----------------------------------------------------------------------------
 
 Perl::Critic::TestUtils::block_perlcriticrc();
+
+Perl::Critic::Violation::set_format(
+    '%f: %m at line %l, column %c.  %e. (%r)\n'
+);
 
 my $subtests = subtests_in_tree( 't' );
 
