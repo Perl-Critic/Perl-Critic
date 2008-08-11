@@ -44,7 +44,10 @@ Readonly::Scalar my $EXIT_HAD_FILE_PROBLEMS => 3;
 
 my @FILES = ();
 my $CRITIC = undef;
-exit run() if not caller;
+
+# This %ENV check is to allow perlcritic to function when bundled under PAR,
+# which invokes this program not as the top stack frame. -- rjbs, 2008-08-11
+exit run() if not caller() or $ENV{PAR_0};
 
 #-----------------------------------------------------------------------------
 # Begin subroutines
