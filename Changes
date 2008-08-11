@@ -2,7 +2,7 @@
 
     New Policies:
     * ValuesAndExpressions::RequireConstantOnLeftSideOfEquality -- In
-      case you accidentally say "if($foo = 42){...}"
+      case you accidentally say "if ($foo = 42) {...}"
 
     Policy Changes:
     * CodeLayout::ProhibitQuotedWordLists no longer applies if the
@@ -11,7 +11,10 @@
     * CodeLayout::ProhibitQuotedWordLists also now applies to the
       import arguments of a C<use> statement.  RT #24467.
     * ErrorHandling::RequireCheckingReturnValueOfEval now recognizes
-      ternary left-sides as valid checks
+      ternary left-sides as valid checks.
+
+    Bug Fixes:
+    * perlcritic should now work under PAR.  RT #38380.
 
 [1.090] Released on 2008-07-22
 
