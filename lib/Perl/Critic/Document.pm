@@ -135,6 +135,11 @@ sub highest_explicit_perl_version {
         my $includes = $self->find( \&_is_a_version_statement );
 
         if ($includes) {
+            # Note: this will complain about underscores, e.g. "use
+            # 5.008_000".  However, nothing important should be depending upon
+            # alpha perl versions and marking non-alpha versions as alpha is
+            # bad in and of itself.  Note that this contradicts an example in
+            # perlfunc about "use".
             $highest_explicit_perl_version =
                 max map { version->new( $_->version() ) } @{$includes};
         }
