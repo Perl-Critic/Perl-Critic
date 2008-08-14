@@ -54,8 +54,11 @@ sub _init {
     $self->{_top}            = dor(delete $args{top},                $FALSE);
     $self->{_verbose}        = dor(delete $args{verbose},            $DEFAULT_VERBOSITY);
     $self->{_criticism_fatal} = dor(delete $args{'criticism-fatal'}, $FALSE);
+    $self->{_pager}          = dor(delete $args{pager},              $EMPTY);
 
-    $self->{_color} = dor(delete $args{color}, dor(delete $args{colour}, $TRUE));
+    # If we're using a pager or not outputing to a tty don't use colors.
+    my $default_color = ($self->pager or !-t *STDOUT) ? 0 : 1;
+    $self->{_color} = dor(delete $args{color}, dor(delete $args{colour}, $default_color));
 
     # If there's anything left, complain.
     _check_for_extra_options(%args);
@@ -147,6 +150,13 @@ sub verbose {
 sub color {
     my ($self) = @_;
     return $self->{_color};
+}
+
+#-----------------------------------------------------------------------------
+
+sub pager {
+    my ($self) = @_;
+    return $self->{_pager};
 }
 
 #-----------------------------------------------------------------------------
@@ -271,6 +281,12 @@ string).
 =item C< color() >
 
 Returns the default C<color> setting. (Either 1 or 0).
+
+
+=item C< pager() >
+
+Returns the default C<pager> setting. (Either empty string or the pager
+command string).
 
 
 =item C< criticism_fatal() >

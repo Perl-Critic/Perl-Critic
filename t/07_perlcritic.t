@@ -18,7 +18,7 @@ use File::Spec;
 
 use Perl::Critic::Utils qw< :characters >;
 
-use Test::More tests => 36;
+use Test::More tests => 37;
 
 #-----------------------------------------------------------------------------
 
@@ -178,6 +178,14 @@ local @ARGV = qw(-quiet);
 $message = "@ARGV";
 %options = get_options();
 is( $options{-quiet}, 1, $message);
+
+
+#-----------------------------------------------------------------------------
+
+local @ARGV = qw(-pager foo);
+%options = eval { get_options() };
+is( $options{-pager}, "foo",  "@ARGV" );
+
 
 #-----------------------------------------------------------------------------
 # Intercept pod2usage so we can test invalid options and special switches

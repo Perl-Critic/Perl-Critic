@@ -25,7 +25,7 @@ use Perl::Critic::TestUtils qw<
 >;
 use Perl::Critic::Utils qw< :severities >;
 
-use Test::More tests => 66;
+use Test::More tests => 69;
 
 #-----------------------------------------------------------------------------
 
@@ -268,8 +268,11 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
         -only
         -force
         -color
+        -pager
         -criticism-fatal
     );
+
+    my $color = -t *STDOUT ? 1 : 0;
 
     my %undef_args = map { $_ => undef } @switches;
     my $c = Perl::Critic::Config->new( %undef_args );
@@ -279,7 +282,8 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
     is( $c->severity(),  5,     'Undefined -severity');
     is( $c->theme()->rule(),   q{},   'Undefined -theme');
     is( $c->top(),       0,     'Undefined -top');
-    is( $c->color(),     1,     'Undefined -color');
+    is( $c->color(),     $color, 'Undefined -color');
+    is( $c->pager(),     q{},   'Undefined -pager');
     is( $c->verbose(),   4,     'Undefined -verbose');
     is( $c->criticism_fatal(), 0, 'Undefined -criticism-fatal');
 
@@ -291,6 +295,7 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
     is( $c->theme()->rule(),     q{},     'zero -theme');
     is( $c->top(),       0,       'zero -top');
     is( $c->color(),     0,       'zero -color');
+    is( $c->pager(),     '',      'zero -pager');
     is( $c->verbose(),   4,       'zero -verbose');
     is( $c->criticism_fatal(), 0, 'zero -criticism-fatal');
 
@@ -302,6 +307,7 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
     is( $c->theme->rule(),     q{},     'empty -theme');
     is( $c->top(),       0,       'empty -top');
     is( $c->color(),     0,       'empty -color');
+    is( $c->pager(),     q{},     'empty -pager');
     is( $c->verbose(),   4,       'empty -verbose');
     is( $c->criticism_fatal(), 0, 'empty -criticism-fatal');
 }

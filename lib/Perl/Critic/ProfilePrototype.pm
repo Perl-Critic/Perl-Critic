@@ -109,6 +109,11 @@ sub to_string {
     $prototype .= "\n";
 
     $prototype .= $prefix;
+    $prototype .= q{pager = };
+    $prototype .= $configuration->pager();
+    $prototype .= "\n";
+
+    $prototype .= $prefix;
     $prototype .= q{top = };
     $prototype .= $configuration->top();
     $prototype .= "\n";

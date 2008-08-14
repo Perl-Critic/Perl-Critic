@@ -44,6 +44,7 @@ Readonly::Scalar my $EXIT_HAD_FILE_PROBLEMS => 3;
 
 my @FILES = ();
 my $CRITIC = undef;
+my $Output = \*STDOUT;
 
 # This %ENV check is to allow perlcritic to function when bundled under PAR,
 # which invokes this program not as the top stack frame. -- rjbs, 2008-08-11
@@ -51,6 +52,11 @@ exit run() if not caller() or $ENV{PAR_0};
 
 #-----------------------------------------------------------------------------
 # Begin subroutines
+
+sub out {
+    print $Output @_;
+}
+
 
 sub run {
     my %options    = get_options();
@@ -107,7 +113,7 @@ sub get_options {
 #-----------------------------------------------------------------------------
 
 sub _parse_command_line {
-    my %opts      = ( -color => 1 );
+    my %opts;
     my @opt_specs = _get_option_specification();
     Getopt::Long::Configure('no_ignore_case');
     GetOptions( \%opts, @opt_specs ) || pod2usage();           #Exits
@@ -121,7 +127,7 @@ sub _dispatch_special_requests {
     if ( $opts{help}            ) { pod2usage( -verbose => 0 )  }  #Exits
     if ( $opts{options}         ) { pod2usage( -verbose => 1 )  }  #Exits
     if ( $opts{man}             ) { pod2usage( -verbose => 2 )  }  #Exits
-    if ( $opts{version}         ) { print "$VERSION\n"; exit 0; }  #Exits
+    if ( $opts{version}         ) { out "$VERSION\n"; exit 0; }  #Exits
     if ( $opts{list}            ) { render_policy_listing();    }  #Exits
     if ( $opts{'list-themes'}   ) { render_theme_listing();     }  #Exits
     if ( $opts{'profile-proto'} ) { render_profile_prototype(); }  #Exits
@@ -225,6 +231,8 @@ sub critique {
     $CRITIC = Perl::Critic->new( %{$opts_ref} );
     $CRITIC->policies() || die "No policies selected.\n";
 
+    set_up_pager();
+
     my $number_of_violations = undef;
     my $had_error_in_file = 0;
 
@@ -274,15 +282,15 @@ sub render_report {
     # Only report the number of violations, if asked.
     my $number_of_violations = scalar @violations;
     if( $opts_ref->{-count} ){
-        ref $file || print "$file: ";
-        print "$number_of_violations\n";
+        ref $file || out "$file: ";
+        out "$number_of_violations\n";
         return $number_of_violations;
     }
 
     # Hail all-clear unless we should shut up.
     if( !@violations && !$opts_ref->{-quiet} ) {
-        ref $file || print "$file ";
-        print "source OK\n";
+        ref $file || out "$file ";
+        out "source OK\n";
         return 0;
     }
 
@@ -298,10 +306,20 @@ sub render_report {
     Perl::Critic::Violation::set_format( $fmt );
 
     my $color = $CRITIC->config->color();
-    print $color ? _colorize_by_severity(@violations) : @violations;
+    out $color ? _colorize_by_severity(@violations) : @violations;
 
     return $number_of_violations;
 }
+
+
+sub set_up_pager {
+    return unless _at_tty();
+
+    my $command = $CRITIC->config->pager;
+    open( my $pager, '|-', $command ) or die qq{Unable to pipe to pager "$command": $!};
+    $Output = $pager;
+}
+
 
 #-----------------------------------------------------------------------------
 
@@ -315,59 +333,59 @@ sub report_statistics {
             or  not $opts_ref->{-quiet} and $statistics->modules()
         )
     ) {
-        print "\n"; # There's prior output that we want to separate from.
+        out "\n"; # There's prior output that we want to separate from.
     }
 
-    print _commaify($statistics->modules()), " files.\n";
-    print _commaify($statistics->subs()), " subroutines/methods.\n";
-    print _commaify($statistics->statements_other_than_subs()), " statements.\n";
-    print _commaify($statistics->lines()), " lines.\n";
+    out _commaify($statistics->modules()), " files.\n";
+    out _commaify($statistics->subs()), " subroutines/methods.\n";
+    out _commaify($statistics->statements_other_than_subs()), " statements.\n";
+    out _commaify($statistics->lines()), " lines.\n";
 
     my $average_sub_mccabe = $statistics->average_sub_mccabe();
     if (defined $average_sub_mccabe) {
-        printf
+        out sprintf
             "\nAverage McCabe score of subroutines was %.2f.\n",
             $average_sub_mccabe;
     }
 
-    print "\n";
+    out "\n";
 
-    print _commaify($statistics->total_violations()), " violations.\n";
+    out _commaify($statistics->total_violations()), " violations.\n";
 
     my $violations_per_file = $statistics->violations_per_file();
     if (defined $violations_per_file) {
-        printf
+        out sprintf
             "Violations per file was %.3f.\n",
             $violations_per_file;
     }
     my $violations_per_statement = $statistics->violations_per_statement();
     if (defined $violations_per_statement) {
-        printf
+        out sprintf
             "Violations per statement was %.3f.\n",
             $violations_per_statement;
     }
     my $violations_per_line = $statistics->violations_per_line_of_code();
     if (defined $violations_per_line) {
-        printf
+        out sprintf
             "Violations per line of code was %.3f.\n",
             $violations_per_line;
     }
 
     if ( $statistics->total_violations() ) {
-        print "\n";
+        out "\n";
 
         my %severity_violations = %{ $statistics->violations_by_severity() };
         foreach my $severity ( reverse sort keys %severity_violations ) {
-            print
+            out
                 _commaify($severity_violations{$severity}),
                 " severity $severity violations.\n";
         }
 
-        print "\n";
+        out "\n";
 
         my %policy_violations = %{ $statistics->violations_by_policy() };
         foreach my $policy ( sort keys %policy_violations ) {
-            print
+            out
                 _commaify($policy_violations{$policy}),
                 ' violations of ',
                 policy_short_name($policy),
@@ -416,6 +434,7 @@ sub _get_option_specification {
         noprofile
         only!
         options
+        pager=s
         profile=s
         profile-proto
         quiet
@@ -435,7 +454,6 @@ sub _get_option_specification {
 
 sub _colorize_by_severity {
     my (@violations) = @_;
-    return @violations if not _at_tty();
     return @violations if _this_is_windows();
     return @violations if not eval { require Term::ANSIColor };
 
@@ -478,7 +496,7 @@ sub render_policy_listing {
     my %pc_params = (-profile => $EMPTY, -severity => $SEVERITY_LOWEST);
     my @policies = Perl::Critic->new( %pc_params )->policies();
     my $listing = Perl::Critic::PolicyListing->new( -policies => \@policies );
-    print $listing;
+    out $listing;
     exit 0;
 }
 
@@ -491,7 +509,7 @@ sub render_theme_listing {
     my %pc_params = (-profile => $EMPTY, -severity => $SEVERITY_LOWEST);
     my @policies = Perl::Critic->new( %pc_params )->policies();
     my $listing = Perl::Critic::ThemeListing->new( -policies => \@policies );
-    print $listing;
+    out $listing;
     exit 0;
 }
 
@@ -505,7 +523,7 @@ sub render_profile_prototype {
     my %pc_params = (-profile => $EMPTY, -severity => $SEVERITY_LOWEST);
     my @policies = Perl::Critic->new( %pc_params )->policies();
     my $prototype = Perl::Critic::ProfilePrototype->new( -policies => \@policies );
-    print $prototype;
+    out $prototype;
     exit 0;
 }
 
@@ -553,7 +571,8 @@ C<perlcritic> - Command-line interface to critique Perl source.
              [--only | --noonly] [--profile-strictness {warn|fatal|quiet}]
              [--force | --noforce] [--statistics] [--statistics-only]
              [--count | -C] [--verbose {number | format}]
-             [--color | --nocolor] [--quiet] {FILE | DIRECTORY | STDIN}
+             [--color | --nocolor] [--pager pager]
+             [--quiet] {FILE | DIRECTORY | STDIN}
 
   perlcritic --profile-proto
 
@@ -899,14 +918,20 @@ book.  NOTE: This feature is not implemented yet.
 
 =item C<--color>
 
-This option is on by default.  When set, Severity 5 and 4 are colored
-red and yellow, respectively.  Colorization only happens if STDOUT is
-a tty and L<Term::ANSIColor|Term::ANSIColor> is installed.  And it
-only works on non-Windows environments.  Negate this switch to disable
-color.  You can set the default value for this option in your
-F<.perlcriticrc> file.
+This option is on when outputting to a tty.  When set, Severity 5 and 4 are
+colored red and yellow, respectively.  Colorization only happens if
+L<Term::ANSIColor|Term::ANSIColor> is installed and it only works on
+non-Windows environments.  Negate this switch to disable color.  You can set
+the default value for this option in your F<.perlcriticrc> file.
 
 Can also be specified as C<--colour>.
+
+=item C<--pager PAGER>
+
+If set, perlcritic will pipe it's output to the given PAGER.
+
+Setting a pager turns off color by default.  You will have to turn color on
+manually.
 
 =item C<--doc PATTERN>
 

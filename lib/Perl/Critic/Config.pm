@@ -102,6 +102,7 @@ sub _init {
     }
 
     $self->_validate_and_save_theme($args{-theme}, $errors);
+    $self->_validate_and_save_pager($args{-pager}, $errors);
 
     # Construct a Factory with the Profile
     my $factory =
@@ -164,7 +165,7 @@ sub _add_policy_if_enabled {
 
     my $config = $policy_object->__get_config()
         or throw_internal
-            q{Policy was not set up properly because it doesn't have }
+            q{Policy was not set up properly because it does not have }
                 . q{a value for its config attribute.};
 
     if ( $policy_object->initialize_if_enabled( $config ) ) {
@@ -630,6 +631,31 @@ sub _validate_and_save_theme {
 }
 
 #-----------------------------------------------------------------------------
+
+sub _validate_and_save_pager {
+    my ($self, $args_value, $errors) = @_;
+
+    my $pager;
+    if( $args_value ) {
+        $pager = defined $args_value ? $args_value : '';
+    }
+    elsif( $ENV{PERLCRITIC_PAGER} ) {
+        $pager = $ENV{PERLCRITIC_PAGER};
+    }
+    else {
+        my $profile = $self->_profile();
+        $pager = $profile->options_processor()->pager();
+    }
+
+    $pager = $ENV{PAGER} if $pager eq '$PAGER';
+    $pager ||= '';
+
+    $self->{_pager} = $pager;
+
+    return;
+}
+
+#-----------------------------------------------------------------------------
 # Begin ACCESSSOR methods
 
 sub _profile {
@@ -719,6 +745,13 @@ sub verbose {
 sub color {
     my $self = shift;
     return $self->{_color};
+}
+
+#-----------------------------------------------------------------------------
+
+sub pager  {
+    my $self = shift;
+    return $self->{_pager};
 }
 
 #-----------------------------------------------------------------------------
@@ -848,8 +881,8 @@ format specification.  See
 L<Perl::Critic::Violations|Perl::Critic::Violations> for an
 explanation of format specifications.
 
-B<-color> is not used by Perl::Critic but is provided for the benefit
-of L<perlcritic|perlcritic>.
+B<-color> and B<-pager> are not used by Perl::Critic but is provided
+for the benefit of L<perlcritic|perlcritic>.
 
 B<-criticism-fatal> is not used by Perl::Critic but is provided for
 the benefit of L<criticism|criticism>.
@@ -929,6 +962,10 @@ Returns the value of the C<-verbose> attribute for this Config.
 =item C< color() >
 
 Returns the value of the C<-color> attribute for this Config.
+
+=item C< pager() >
+
+Returns the value of the C<-pager> attribute for this Config.
 
 =item C< criticism_fatal() >
 
