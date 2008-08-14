@@ -14,6 +14,7 @@ use warnings;
 use English qw(-no_match_vars);
 
 use Perl::Critic::OptionsProcessor;
+use Perl::Critic::Utils qw< :booleans >;
 
 use Test::More tests => 27;
 
@@ -24,7 +25,8 @@ our $VERSION = '1.090';
 #-----------------------------------------------------------------------------
 
 {
-    my $color = -t *STDOUT ? 1 : 0;
+    # Can't use IO::Interactive here because we /don't/ want to check STDIN.
+    my $color = -t *STDOUT ? $TRUE : $FALSE; ## no critic (ProhibitInteractiveTest)
 
     my $processor = Perl::Critic::OptionsProcessor->new();
     is($processor->force(),    0,           'native default force');
@@ -49,7 +51,7 @@ our $VERSION = '1.090';
          severity  => 4,
          theme     => 'pbp',
          top       => 50,
-         color     => 0,
+         color     => $FALSE,
          pager     => 'less',
          verbose   => 7,
          'criticism-fatal'   => 1,
@@ -63,7 +65,7 @@ our $VERSION = '1.090';
     is($processor->severity(), 4,           'user default severity');
     is($processor->theme(),    'pbp',       'user default theme');
     is($processor->top(),      50,          'user default top');
-    is($processor->color(),    0,           'user default color');
+    is($processor->color(),    $FALSE,      'user default color');
     is($processor->pager(),    'less',      'user default pager');
     is($processor->verbose(),  7,           'user default verbose');
     is($processor->criticism_fatal(),  1,   'user default criticism_fatal');
@@ -75,19 +77,17 @@ our $VERSION = '1.090';
 
 {
     my $processor = Perl::Critic::OptionsProcessor->new( 'colour' => 1 );
-    is($processor->color(), 1, 'user default colour true');
+    is($processor->color(), $TRUE, 'user default colour true');
 
     $processor = Perl::Critic::OptionsProcessor->new( 'colour' => 0 );
-    is($processor->color(), 0, 'user default colour false');
+    is($processor->color(), $FALSE, 'user default colour false');
 }
 
 #-----------------------------------------------------------------------------
 
 {
-    my $processor = Perl::Critic::OptionsProcessor->new(
-        pager => "foo"
-    );
-    is($processor->color(), 0, 'pager set turns off color');
+    my $processor = Perl::Critic::OptionsProcessor->new( pager => 'foo' );
+    is($processor->color(), $FALSE, 'pager set turns off color');
 }
 
 #-----------------------------------------------------------------------------

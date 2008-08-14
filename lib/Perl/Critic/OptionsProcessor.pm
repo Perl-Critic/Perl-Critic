@@ -57,7 +57,8 @@ sub _init {
     $self->{_pager}          = dor(delete $args{pager},              $EMPTY);
 
     # If we're using a pager or not outputing to a tty don't use colors.
-    my $default_color = ($self->pager or !-t *STDOUT) ? 0 : 1;
+    # Can't use IO::Interactive here because we /don't/ want to check STDIN.
+    my $default_color = ($self->pager() or not -t *STDOUT) ? $FALSE : $TRUE; ## no critic (ProhibitInteractiveTest)
     $self->{_color} = dor(delete $args{color}, dor(delete $args{colour}, $default_color));
 
     # If there's anything left, complain.

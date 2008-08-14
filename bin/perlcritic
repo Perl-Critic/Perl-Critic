@@ -42,27 +42,30 @@ Readonly::Scalar my $EXIT_HAD_FILE_PROBLEMS => 3;
 #-----------------------------------------------------------------------------
 # Begin script.  Don't run when loaded as a library
 
-my @FILES = ();
-my $CRITIC = undef;
-my $Output = \*STDOUT;
+my @files = ();
+my $critic = undef;
+my $output = \*STDOUT;
 
 # This %ENV check is to allow perlcritic to function when bundled under PAR,
 # which invokes this program not as the top stack frame. -- rjbs, 2008-08-11
-exit run() if not caller() or $ENV{PAR_0};
+exit run() if not caller or $ENV{PAR_0};
 
 #-----------------------------------------------------------------------------
 # Begin subroutines
 
-sub out {
-    print $Output @_;
+sub out {   ## no critic (Subroutines::RequireArgUnpacking)
+    print {$output} @_;
+
+    return;
 }
 
+#-----------------------------------------------------------------------------
 
 sub run {
     my %options    = get_options();
-    @FILES         = get_input(@ARGV);
+    @files         = get_input(@ARGV);
 
-    my ($violations, $had_error_in_file) = critique(\%options, @FILES);
+    my ($violations, $had_error_in_file) = critique(\%options, @files);
 
     return $EXIT_HAD_FILE_PROBLEMS  if $had_error_in_file;
     return $EXIT_NO_FILES           if not defined $violations;
@@ -228,8 +231,8 @@ sub critique {
     # why not save a few seconds if you can.
 
     require Perl::Critic;
-    $CRITIC = Perl::Critic->new( %{$opts_ref} );
-    $CRITIC->policies() || die "No policies selected.\n";
+    $critic = Perl::Critic->new( %{$opts_ref} );
+    $critic->policies() || die "No policies selected.\n";
 
     set_up_pager();
 
@@ -239,7 +242,7 @@ sub critique {
     for my $file (@files) {
 
         eval {
-            my @violations = $CRITIC->critique($file);
+            my @violations = $critic->critique($file);
             $number_of_violations += scalar @violations;
 
             if (not $opts_ref->{'-statistics-only'}) {
@@ -266,7 +269,7 @@ sub critique {
     }
 
     if ( $opts_ref->{-statistics} or $opts_ref->{'-statistics-only'} ) {
-        my $stats = $CRITIC->statistics();
+        my $stats = $critic->statistics();
         report_statistics( $opts_ref, $stats );
     }
 
@@ -295,29 +298,36 @@ sub render_report {
     }
 
     # Otherwise, format and print violations
-    my $verbosity = $CRITIC->config->verbose();
+    my $verbosity = $critic->config->verbose();
     # $verbosity can be numeric or string, so use "eq" for comparison;
     $verbosity =
-        ($verbosity eq $DEFAULT_VERBOSITY && @FILES > 1)
+        ($verbosity eq $DEFAULT_VERBOSITY && @files > 1)
             ? $DEFAULT_VERBOSITY_WITH_FILE_NAME
             : $verbosity;
     my $fmt = Perl::Critic::Utils::verbosity_to_format( $verbosity );
     if (not -f $file) { $fmt =~ s{\%[fF]}{STDIN}mx; } #HACK!
     Perl::Critic::Violation::set_format( $fmt );
 
-    my $color = $CRITIC->config->color();
+    my $color = $critic->config->color();
     out $color ? _colorize_by_severity(@violations) : @violations;
 
     return $number_of_violations;
 }
 
+#-----------------------------------------------------------------------------
 
 sub set_up_pager {
-    return unless _at_tty();
+    return if not _at_tty();
 
-    my $command = $CRITIC->config->pager;
-    open( my $pager, '|-', $command ) or die qq{Unable to pipe to pager "$command": $!};
-    $Output = $pager;
+    my $command = $critic->config()->pager();
+    return if not $command;
+
+    open my $pager, q<|->, $command  ## no critic (InputOutput::RequireBriefOpen)
+        or die qq<Unable to pipe to pager "$command": $ERRNO\n>;
+
+    $output = $pager;
+
+    return;
 }
 
 

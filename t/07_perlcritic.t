@@ -184,7 +184,7 @@ is( $options{-quiet}, 1, $message);
 
 local @ARGV = qw(-pager foo);
 %options = eval { get_options() };
-is( $options{-pager}, "foo",  "@ARGV" );
+is( $options{-pager}, 'foo',  "@ARGV" );
 
 
 #-----------------------------------------------------------------------------

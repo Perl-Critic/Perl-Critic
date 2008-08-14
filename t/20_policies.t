@@ -33,7 +33,7 @@ our $VERSION = '1.090';
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 Perl::Critic::Violation::set_format(
-    '%f: %m at line %l, column %c.  %e. (%r)\n'
+    '%f: %m at line %l, column %c.  %e. (%r)\n' ## no critic (RequireInterpolationOfMetachars)
 );
 
 my $subtests = subtests_in_tree( 't' );

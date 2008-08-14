@@ -636,10 +636,10 @@ sub _validate_and_save_pager {
     my ($self, $args_value, $errors) = @_;
 
     my $pager;
-    if( $args_value ) {
-        $pager = defined $args_value ? $args_value : '';
+    if ( $args_value ) {
+        $pager = defined $args_value ? $args_value : $EMPTY;
     }
-    elsif( $ENV{PERLCRITIC_PAGER} ) {
+    elsif ( $ENV{PERLCRITIC_PAGER} ) {
         $pager = $ENV{PERLCRITIC_PAGER};
     }
     else {
@@ -647,8 +647,10 @@ sub _validate_and_save_pager {
         $pager = $profile->options_processor()->pager();
     }
 
-    $pager = $ENV{PAGER} if $pager eq '$PAGER';
-    $pager ||= '';
+    if ($pager eq '$PAGER') {   ## no critic (RequireInterpolationOfMetachars)
+        $pager = $ENV{PAGER};
+    }
+    $pager ||= $EMPTY;
 
     $self->{_pager} = $pager;
 

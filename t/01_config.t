@@ -23,7 +23,7 @@ use Perl::Critic::TestUtils qw<
     bundled_policy_names
     names_of_policies_willing_to_work
 >;
-use Perl::Critic::Utils qw< :severities >;
+use Perl::Critic::Utils qw< :booleans :characters :severities >;
 
 use Test::More tests => 69;
 
@@ -272,7 +272,8 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
         -criticism-fatal
     );
 
-    my $color = -t *STDOUT ? 1 : 0;
+    # Can't use IO::Interactive here because we /don't/ want to check STDIN.
+    my $color = -t *STDOUT ? $TRUE : $FALSE; ## no critic (ProhibitInteractiveTest)
 
     my %undef_args = map { $_ => undef } @switches;
     my $c = Perl::Critic::Config->new( %undef_args );
@@ -294,8 +295,8 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
     is( $c->severity(),  1,       'zero -severity');
     is( $c->theme()->rule(),     q{},     'zero -theme');
     is( $c->top(),       0,       'zero -top');
-    is( $c->color(),     0,       'zero -color');
-    is( $c->pager(),     '',      'zero -pager');
+    is( $c->color(),     $FALSE,  'zero -color');
+    is( $c->pager(),     $EMPTY,  'empty -pager');
     is( $c->verbose(),   4,       'zero -verbose');
     is( $c->criticism_fatal(), 0, 'zero -criticism-fatal');
 
@@ -306,7 +307,7 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
     is( $c->severity(),  1,       'empty -severity');
     is( $c->theme->rule(),     q{},     'empty -theme');
     is( $c->top(),       0,       'empty -top');
-    is( $c->color(),     0,       'empty -color');
+    is( $c->color(),     $FALSE,  'empty -color');
     is( $c->pager(),     q{},     'empty -pager');
     is( $c->verbose(),   4,       'empty -verbose');
     is( $c->criticism_fatal(), 0, 'empty -criticism-fatal');
