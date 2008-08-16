@@ -12,6 +12,9 @@
       import arguments of a C<use> statement.  RT #24467.
     * ErrorHandling::RequireCheckingReturnValueOfEval now recognizes
       ternary left-sides as valid checks.
+    * TestingAndDebugging/ProhibitNoWarnings now supports a
+      allow_with_category_restriction option, thanks to Michael Schwern.
+      RT #38514.
 
     Bug Fixes:
     * perlcritic should now work under PAR.  RT #38380.
