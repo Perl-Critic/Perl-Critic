@@ -34,6 +34,13 @@ sub supported_parameters {
             default_string  => $EMPTY,
             parser          => \&_parse_allow,
         },
+        {
+            name           => 'allow_with_category_restriction',
+            description    =>
+                'Allow "no warnings" if it restricts the kinds of warnings that are turned off.',
+            default_string => '0',
+            behavior       => 'boolean',
+        },
     );
 }
 
@@ -52,7 +59,6 @@ sub _parse_allow {
         my $allowed = lc $config_string; #String of words
         my %allowed = hashify( $allowed =~ m/ (\w+) /gmx );
 
-        $self->{_allow_with_at_least_one} = delete $allowed{with_at_least_one} ? 1 : 0;
         $self->{_allow} = \%allowed;
     }
 
@@ -68,22 +74,22 @@ sub violates {
     return if $elem->type()   ne 'no';
     return if $elem->pragma() ne 'warnings';
 
-    #Arguments to 'no warnings' are usually a list of literals or a
-    #qw() list.  Rather than trying to parse the various PPI elements,
-    #I just use a regex to split the statement into words.  This is
-    #kinda lame, but it does the trick for now.
+    # Arguments to 'no warnings' are usually a list of literals or a
+    # qw() list.  Rather than trying to parse the various PPI elements,
+    # I just use a regex to split the statement into words.  This is
+    # kinda lame, but it does the trick for now.
 
     # TODO consider: a possible alternate implementation:
     #   my $re = join q{|}, keys %{$self->{allow}};
-    #   return if $re && $stmnt =~ m/\b(?:$re)\b/mx;
+    #   return if $re && $statement =~ m/\b(?:$re)\b/mx;
     # May need to detaint for that to work...  Not sure.
 
-    my $stmnt = $elem->statement();
-    return if !$stmnt;
-    my @words = $stmnt =~ m/ ([[:lower:]]+) /gmx;
+    my $statement = $elem->statement();
+    return if not $statement;
+    my @words = $statement =~ m/ ( [[:lower:]]+ ) /gmx;
     @words = grep { $_ ne 'qw' && $_ ne 'no' && $_ ne 'warnings' } @words;
 
-    return if $self->{_allow_with_at_least_one} and @words;
+    return if $self->{_allow_with_category_restriction} and @words;
     return if all { exists $self->{_allow}->{$_} } @words;
 
     #If we get here, then it must be a violation
@@ -132,11 +138,12 @@ of possible warning types.  An example of this customization:
     [TestingAndDebugging::ProhibitNoWarnings]
     allow = uninitialized once
 
-A special case is the "with_at_least_one" value which indicates that
-C<no warnings> must be qualified by at least one category.
+If a true value is specified for the
+C<allow_with_category_restriction>, then any C<no warnings> that
+restricts the set of warnings that are turned off will pass.
 
     [TestingAndDebugging::ProhibitNoWarnings]
-    allow = with_at_least_one
+    allow_with_category_restriction = 1
 
 =head1 SEE ALSO
 

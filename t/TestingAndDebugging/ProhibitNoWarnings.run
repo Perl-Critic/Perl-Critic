@@ -3,28 +3,27 @@
 ## cut
 
 package foo;
+
 no warnings;
 
 #-----------------------------------------------------------------------------
 
-## name selective warnings disabled
+## name selective warnings disabled, regular quotes
 ## failures 1
 ## cut
 
 package foo;
-no warnings 'uninitialized', 'deprecated';
-END_PERL
 
-$policy = 'TestingAndDebugging::ProhibitNoWarnings';
-is( pcritique($policy, \$code), 1, $policy.' selective warnings disabled');
+no warnings 'uninitialized', 'deprecated';
 
 #-----------------------------------------------------------------------------
 
-## name selective warnings disabled
+## name selective warnings disabled, qw<>
 ## failures 1
 ## cut
 
 package foo;
+
 no warnings qw(closure glob);
 
 #-----------------------------------------------------------------------------
@@ -35,6 +34,7 @@ no warnings qw(closure glob);
 ## cut
 
 package foo;
+
 no warnings qw(glob io once);
 
 #-----------------------------------------------------------------------------
@@ -46,6 +46,7 @@ no warnings qw(glob io once);
 ## cut
 
 package foo;
+
 no warnings "numeric", "pack", "portable";
 
 #-----------------------------------------------------------------------------
@@ -56,6 +57,7 @@ no warnings "numeric", "pack", "portable";
 ## cut
 
 package foo;
+
 no warnings "numeric", "pack", 'portable';
 
 #-----------------------------------------------------------------------------
@@ -66,36 +68,59 @@ no warnings "numeric", "pack", 'portable';
 ## cut
 
 package foo;
+
 no warnings qw(numeric pack portable);
 
 #-----------------------------------------------------------------------------
 
 ## name with_at_least_one, no categories
 ## failures 1
-## parms { allow => 'with_at_least_one' }
+## parms { allow_with_category_restriction => 1 }
 ## cut
 
 package foo;
+
 no warnings;
 
 #-----------------------------------------------------------------------------
 
 ## name with_at_least_one, one category
 ## failures 0
-## parms { allow => 'with_at_least_one' }
+## parms { allow_with_category_restriction => 1 }
 ## cut
 
 package foo;
+
 no warnings "uninitalized";
 
 #-----------------------------------------------------------------------------
 
-## name with_at_least_one, many categories
+## name with_at_least_one, many categories, regular quotes
 ## failures 0
-## parms { allow => 'with_at_least_one' }
+## parms { allow_with_category_restriction => 1 }
 ## cut
 
 package foo;
-no warnings "uninitialized", "glob";
 
+no warnings "uninitialized", 'glob';
 
+#-----------------------------------------------------------------------------
+
+## name with_at_least_one, many categories, qw<>
+## failures 0
+## parms { allow_with_category_restriction => 1 }
+## cut
+
+package foo;
+
+no warnings qw< uninitialized glob >;
+
+##############################################################################
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab shiftround :
