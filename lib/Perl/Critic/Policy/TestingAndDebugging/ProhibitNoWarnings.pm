@@ -139,8 +139,8 @@ of possible warning types.  An example of this customization:
     allow = uninitialized once
 
 If a true value is specified for the
-C<allow_with_category_restriction>, then any C<no warnings> that
-restricts the set of warnings that are turned off will pass.
+C<allow_with_category_restriction> option, then any C<no warnings>
+that restricts the set of warnings that are turned off will pass.
 
     [TestingAndDebugging::ProhibitNoWarnings]
     allow_with_category_restriction = 1
