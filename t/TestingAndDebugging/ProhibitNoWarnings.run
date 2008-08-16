@@ -67,3 +67,35 @@ no warnings "numeric", "pack", 'portable';
 
 package foo;
 no warnings qw(numeric pack portable);
+
+#-----------------------------------------------------------------------------
+
+## name with_at_least_one, no categories
+## failures 1
+## parms { allow => 'with_at_least_one' }
+## cut
+
+package foo;
+no warnings;
+
+#-----------------------------------------------------------------------------
+
+## name with_at_least_one, one category
+## failures 0
+## parms { allow => 'with_at_least_one' }
+## cut
+
+package foo;
+no warnings "uninitalized";
+
+#-----------------------------------------------------------------------------
+
+## name with_at_least_one, many categories
+## failures 0
+## parms { allow => 'with_at_least_one' }
+## cut
+
+package foo;
+no warnings "uninitialized", "glob";
+
+

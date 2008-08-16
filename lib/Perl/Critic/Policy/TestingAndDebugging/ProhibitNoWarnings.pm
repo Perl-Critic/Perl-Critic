@@ -51,6 +51,8 @@ sub _parse_allow {
     if( defined $config_string ) {
         my $allowed = lc $config_string; #String of words
         my %allowed = hashify( $allowed =~ m/ (\w+) /gmx );
+
+        $self->{_allow_with_at_least_one} = delete $allowed{with_at_least_one} ? 1 : 0;
         $self->{_allow} = \%allowed;
     }
 
@@ -80,6 +82,8 @@ sub violates {
     return if !$stmnt;
     my @words = $stmnt =~ m/ ([[:lower:]]+) /gmx;
     @words = grep { $_ ne 'qw' && $_ ne 'no' && $_ ne 'warnings' } @words;
+
+    return if $self->{_allow_with_at_least_one} and @words;
     return if all { exists $self->{_allow}->{$_} } @words;
 
     #If we get here, then it must be a violation
@@ -128,6 +132,11 @@ of possible warning types.  An example of this customization:
     [TestingAndDebugging::ProhibitNoWarnings]
     allow = uninitialized once
 
+A special case is the "with_at_least_one" value which indicates that
+C<no warnings> must be qualified by at least one category.
+
+    [TestingAndDebugging::ProhibitNoWarnings]
+    allow = with_at_least_one
 
 =head1 SEE ALSO
 
