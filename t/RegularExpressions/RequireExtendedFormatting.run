@@ -74,6 +74,58 @@ my $string =~ y{[A-Z]}{[a-z]};
 my $string =~ tr/[A-Z]/[a-z]/cds;
 my $string =~ y/[A-Z]/[a-z]/cds;
 
+
+#-----------------------------------------------------------------------------
+
+## name allow_short_regex, pass
+## failures 0
+## parms { allow_short_regex => 5 }
+## cut
+
+my $string =~ m/foo/;
+
+my $string =~ s/foo//;
+my $string =~ s/foo/bar/;
+my $string =~ s/foo/barbarbar/;
+my $string =~ s/12345//;
+
+
+#-----------------------------------------------------------------------------
+
+## name allow_short_regex, fail
+## failures 2
+## parms { allow_short_regex => 5 }
+## cut
+
+my $string =~ m/foofoo/;
+
+my $string =~ s/foofoo//;
+
+
+#-----------------------------------------------------------------------------
+
+## name allow_with_whitespace, pass
+## failures 0
+## parms { allow_with_whitespace => 1 }
+## cut
+
+my $string =~ m/foo bar/;
+
+my $string =~ s/foo bar//;
+
+
+#-----------------------------------------------------------------------------
+
+## name allow_with_whitespace, fail
+## failures 2
+## parms { allow_with_whitespace => 1 }
+## cut
+
+my $string =~ m/foobar/;
+
+my $string =~ s/foobar/foo bar/;
+
+
 #-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl

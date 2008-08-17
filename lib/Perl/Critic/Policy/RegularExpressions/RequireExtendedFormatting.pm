@@ -13,7 +13,7 @@ use warnings;
 use Readonly;
 
 use Perl::Critic::Utils qw{ :severities };
-use Perl::Critic::Utils::PPIRegexp qw{ &get_modifiers };
+use Perl::Critic::Utils::PPIRegexp qw{ &get_modifiers &get_match_string };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.090';
@@ -25,7 +25,25 @@ Readonly::Scalar my $EXPL => [ 236 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return ()                       }
+sub supported_parameters {
+    return (
+        {
+            name               => 'allow_short_regex',
+            description        =>
+                q[Regexes below a given length are ok.],
+            behavior           => 'integer',
+            default_string     => '0',
+            integer_minimum    => 0,
+        },
+        {
+            name               => 'allow_with_whitespace',
+            description        =>
+                q[Regexes with spaces can be harder to read with /x],
+            behavior           => 'boolean',
+        },
+    );
+}
+
 sub default_severity     { return $SEVERITY_MEDIUM         }
 sub default_themes       { return qw(core pbp maintenance) }
 sub applies_to           { return qw(PPI::Token::Regexp::Match
@@ -36,6 +54,10 @@ sub applies_to           { return qw(PPI::Token::Regexp::Match
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
+
+    my $match = get_match_string($elem);
+    return if length $match <= $self->{_allow_short_regex};
+    return if $self->{_allow_with_whitespace} and $match =~ /\s/;
 
     my %mods = get_modifiers($elem);
     if ( ! $mods{x} ) {
@@ -86,7 +108,25 @@ comments into the pattern, thus making them much more readable.
 
 =head1 CONFIGURATION
 
-This Policy is not configurable except for the standard options.
+Because using C</x> on a regex which has whitespace in it can make it harder
+to read, you have to escape all that innocent whitespace, you can add an
+exception by turning on C<allow_with_whitespace>.
+
+    [RegularExpressions::RequireExtendedFormatting]
+    allow_with_whitespace = 1
+
+    $string =~ /Basset hounds got long ears/;  # ok
+
+You might find that putting a C</x> on short regexes to be excessive.  An
+exception can be made for them by setting C<allow_short_regex> to the minimum
+match length you'll allow without a C</x>.  The length only counts the regular
+expression, not the braces or operators.
+
+    [RegularExpressions::RequireExtendedFormatting]
+    allow_short_regex = 5
+
+    $num =~ m{(\d+)};              # ok, only 5 characters
+    $num =~ m{\d\.(\d+)};          # not ok, 9 characters
 
 
 =head1 NOTES
