@@ -13,8 +13,10 @@
     * ErrorHandling::RequireCheckingReturnValueOfEval now recognizes
       ternary left-sides as valid checks.
     * RegularExpressions::RequireExtendedFormatting gains
-      minimum_regex_length_to_complain_about and strict options thanks
-      to Michael Schwern.  RT #38531.
+      minimum_regex_length_to_complain_about a option.  Also, regexes that
+      contain only word and whitespace characters are now exempt from this
+      policy, by default; you can make it complain about them by turning on
+      the new strict option.  Contributed by Michael Schwern.  RT #38531.
     * TestingAndDebugging/ProhibitNoWarnings now supports a
       allow_with_category_restriction option, thanks to Michael Schwern.
       RT #38514.
