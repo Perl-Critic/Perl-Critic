@@ -28,27 +28,32 @@ Readonly::Scalar my $EXPL => [ 236 ];
 sub supported_parameters {
     return (
         {
-            name               => 'allow_short_regex',
+            name               => 'minimum_regex_length_to_complain_about',
             description        =>
-                q[Regexes below a given length are ok.],
+                q<The number of characters that a regular expression must contain before this policy will complain.>,
             behavior           => 'integer',
             default_string     => '0',
             integer_minimum    => 0,
         },
         {
-            name               => 'allow_with_whitespace',
+            name               => 'strict',
             description        =>
-                q[Regexes with spaces can be harder to read with /x],
+                q<Should regexes that only contain whitespace and word characters be complained about?>,
             behavior           => 'boolean',
+            default_string     => '0',
         },
     );
 }
 
-sub default_severity     { return $SEVERITY_MEDIUM         }
-sub default_themes       { return qw(core pbp maintenance) }
-sub applies_to           { return qw(PPI::Token::Regexp::Match
-                                     PPI::Token::Regexp::Substitute
-                                     PPI::Token::QuoteLike::Regexp) }
+sub default_severity     { return $SEVERITY_MEDIUM           }
+sub default_themes       { return qw< core pbp maintenance > }
+sub applies_to           {
+    return qw<
+        PPI::Token::Regexp::Match
+        PPI::Token::Regexp::Substitute
+        PPI::Token::QuoteLike::Regexp
+    >;
+}
 
 #-----------------------------------------------------------------------------
 
@@ -56,14 +61,15 @@ sub violates {
     my ( $self, $elem, undef ) = @_;
 
     my $match = get_match_string($elem);
-    return if length $match <= $self->{_allow_short_regex};
-    return if $self->{_allow_with_whitespace} and $match =~ /\s/;
+    return if length $match <= $self->{_minimum_regex_length_to_complain_about};
+    return if not $self->{_strict} and $match =~ m< \A [\s\w]* \z >xms;
 
     my %mods = get_modifiers($elem);
-    if ( ! $mods{x} ) {
+    if ( not $mods{x} ) {
         return $self->violation( $DESC, $EXPL, $elem );
     }
-    return; #ok!;
+
+    return; # ok!;
 }
 
 1;
@@ -94,39 +100,47 @@ comments into the pattern, thus making them much more readable.
 
     m{'[^\\']*(?:\\.[^\\']*)*'};  #Huh?
 
-    #Same thing with extended format...
+    # Same thing with extended format...
 
-    m{ '           #an opening single quote
-       [^\\']      #any non-special chars (i.e. not backslash or single quote)
-       (?:         #then all of...
-          \\ .     #   any explicitly backslashed char
-          [^\\']*  #   followed by an non-special chars
-       )*          #...repeated zero or more times
-       '           # a closing single quote
-     }x;
+    m{
+        '           # an opening single quote
+        [^\\']      # any non-special chars (i.e. not backslash or single quote)
+        (?:         # then all of...
+            \\ .    #    any explicitly backslashed char
+            [^\\']* #    followed by an non-special chars
+        )*          # ...repeated zero or more times
+        '           # a closing single quote
+    }x;
 
 
 =head1 CONFIGURATION
 
-Because using C</x> on a regex which has whitespace in it can make it harder
-to read, you have to escape all that innocent whitespace, you can add an
-exception by turning on C<allow_with_whitespace>.
-
-    [RegularExpressions::RequireExtendedFormatting]
-    allow_with_whitespace = 1
-
-    $string =~ /Basset hounds got long ears/;  # ok
-
-You might find that putting a C</x> on short regexes to be excessive.  An
-exception can be made for them by setting C<allow_short_regex> to the minimum
-match length you'll allow without a C</x>.  The length only counts the regular
+You might find that putting a C</x> on short regular expressions to be
+excessive.  An exception can be made for them by setting
+C<minimum_regex_length_to_complain_about> to the minimum match length
+you'll allow without a C</x>.  The length only counts the regular
 expression, not the braces or operators.
 
     [RegularExpressions::RequireExtendedFormatting]
-    allow_short_regex = 5
+    minimum_regex_length_to_complain_about = 5
 
-    $num =~ m{(\d+)};              # ok, only 5 characters
-    $num =~ m{\d\.(\d+)};          # not ok, 9 characters
+    $num =~ m<(\d+)>;              # ok, only 5 characters
+    $num =~ m<\d\.(\d+)>;          # not ok, 9 characters
+
+This option defaults to 0.
+
+Because using C</x> on a regex which has whitespace in it can make it
+harder to read (you have to escape all that innocent whitespace), by
+default, you can have a regular expression that only contains
+whitespace and word characters without the modifier.  If you want to
+restrict this, turn on the C<strict> option.
+
+    [RegularExpressions::RequireExtendedFormatting]
+    strict = 1
+
+    $string =~ m/Basset hounds got long ears/;  # no longer ok
+
+This option defaults to false.
 
 
 =head1 NOTES

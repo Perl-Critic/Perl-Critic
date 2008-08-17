@@ -12,6 +12,9 @@
       import arguments of a C<use> statement.  RT #24467.
     * ErrorHandling::RequireCheckingReturnValueOfEval now recognizes
       ternary left-sides as valid checks.
+    * RegularExpressions::RequireExtendedFormatting gains
+      minimum_regex_length_to_complain_about and strict options thanks
+      to Michael Schwern.  RT #38531.
     * TestingAndDebugging/ProhibitNoWarnings now supports a
       allow_with_category_restriction option, thanks to Michael Schwern.
       RT #38514.

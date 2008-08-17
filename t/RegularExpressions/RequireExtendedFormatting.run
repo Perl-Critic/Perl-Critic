@@ -8,54 +8,66 @@
 ## name basic passes
 ## failures 0
 ## cut
-my $string =~ m{pattern}x;
-my $string =~ m{pattern}gimx;
-my $string =~ m{pattern}gixs;
-my $string =~ m{pattern}xgms;
 
-my $string =~ m/pattern/x;
-my $string =~ m/pattern/gimx;
-my $string =~ m/pattern/gixs;
-my $string =~ m/pattern/xgms;
+my $string =~ m{pattern};
+my $string =~ m{pattern}gim;
+my $string =~ m{pattern}gis;
+my $string =~ m{pattern}gms;
 
-my $string =~ /pattern/x;
-my $string =~ /pattern/gimx;
-my $string =~ /pattern/gixs;
-my $string =~ /pattern/xgms;
+my $string =~ m{pattern.}x;
+my $string =~ m{pattern.}gimx;
+my $string =~ m{pattern.}gixs;
+my $string =~ m{pattern.}xgms;
 
-my $string =~ s/pattern/foo/x;
-my $string =~ s/pattern/foo/gimx;
-my $string =~ s/pattern/foo/gixs;
-my $string =~ s/pattern/foo/xgms;
+my $string =~ m/pattern./x;
+my $string =~ m/pattern./gimx;
+my $string =~ m/pattern./gixs;
+my $string =~ m/pattern./xgms;
 
-my $re =~ qr/pattern/x;
+my $string =~ /pattern./x;
+my $string =~ /pattern./gimx;
+my $string =~ /pattern./gixs;
+my $string =~ /pattern./xgms;
+
+my $string =~ s/pattern./foo/x;
+my $string =~ s/pattern./foo/gimx;
+my $string =~ s/pattern./foo/gixs;
+my $string =~ s/pattern./foo/xgms;
+
+my $string =~ s/pattern/foo./;
+my $string =~ s/pattern/foo./gim;
+my $string =~ s/pattern/foo./gis;
+my $string =~ s/pattern/foo./gms;
+
+my $re =~ qr/pattern./x;
 
 #-----------------------------------------------------------------------------
 
 ## name basic failures
 ## failures 17
 ## cut
-my $string =~ m{pattern};
-my $string =~ m{pattern}gim;
-my $string =~ m{pattern}gis;
-my $string =~ m{pattern}gms;
 
-my $string =~ m/pattern/;
-my $string =~ m/pattern/gim;
-my $string =~ m/pattern/gis;
-my $string =~ m/pattern/gms;
+my $string =~ m{pattern.};
+my $string =~ m{pattern.}gim;
+my $string =~ m{pattern.}gis;
+my $string =~ m{pattern.}gms;
 
-my $string =~ /pattern/;
-my $string =~ /pattern/gim;
-my $string =~ /pattern/gis;
-my $string =~ /pattern/gms;
+my $string =~ m/pattern./;
+my $string =~ m/pattern./gim;
+my $string =~ m/pattern./gis;
+my $string =~ m/pattern./gms;
 
-my $string =~ s/pattern/foo/;
-my $string =~ s/pattern/foo/gim;
-my $string =~ s/pattern/foo/gis;
-my $string =~ s/pattern/foo/gms;
+my $string =~ /pattern./;
+my $string =~ /pattern./gim;
+my $string =~ /pattern./gis;
+my $string =~ /pattern./gms;
 
-my $re =~ qr/pattern/;
+my $string =~ s/pattern./foo/;
+my $string =~ s/pattern./foo/gim;
+my $string =~ s/pattern./foo/gis;
+my $string =~ s/pattern./foo/gms;
+
+my $re =~ qr/pattern./;
 
 #-----------------------------------------------------------------------------
 
@@ -77,54 +89,41 @@ my $string =~ y/[A-Z]/[a-z]/cds;
 
 #-----------------------------------------------------------------------------
 
-## name allow_short_regex, pass
+## name minimum_regex_length_to_complain_about, pass
 ## failures 0
-## parms { allow_short_regex => 5 }
+## parms { minimum_regex_length_to_complain_about => 5 }
 ## cut
 
-my $string =~ m/foo/;
+my $string =~ m/foo./;
 
-my $string =~ s/foo//;
-my $string =~ s/foo/bar/;
-my $string =~ s/foo/barbarbar/;
-my $string =~ s/12345//;
+my $string =~ s/foo.//;
+my $string =~ s/foo./bar/;
+my $string =~ s/foo./barbarbar/;
+my $string =~ s/1234.//;
 
 
 #-----------------------------------------------------------------------------
 
-## name allow_short_regex, fail
+## name minimum_regex_length_to_complain_about, fail
 ## failures 2
-## parms { allow_short_regex => 5 }
+## parms { minimum_regex_length_to_complain_about => 5 }
 ## cut
 
-my $string =~ m/foofoo/;
+my $string =~ m/fooba./;
 
-my $string =~ s/foofoo//;
+my $string =~ s/fooba.//;
 
 
 #-----------------------------------------------------------------------------
 
-## name allow_with_whitespace, pass
-## failures 0
-## parms { allow_with_whitespace => 1 }
-## cut
-
-my $string =~ m/foo bar/;
-
-my $string =~ s/foo bar//;
-
-
-#-----------------------------------------------------------------------------
-
-## name allow_with_whitespace, fail
+## name strict
 ## failures 2
-## parms { allow_with_whitespace => 1 }
+## parms { strict => 1 }
 ## cut
 
 my $string =~ m/foobar/;
 
 my $string =~ s/foobar/foo bar/;
-
 
 #-----------------------------------------------------------------------------
 # Local Variables:
