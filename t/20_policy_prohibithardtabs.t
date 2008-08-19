@@ -14,7 +14,7 @@ use warnings;
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique fcritique);
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 
 #-----------------------------------------------------------------------------
 
@@ -56,6 +56,21 @@ print "\t  \t  foobar  \t";
 END_PERL
 
 is( pcritique($policy, \$code), 1, $policy );
+
+#-----------------------------------------------------------------------------
+
+$code = <<"END_PERL";
+#This will be interpolated!
+
+my \@list = qw(
+\tfoo
+\tbar
+\tbaz
+);
+
+END_PERL
+
+is( pcritique($policy, \$code, \%config), 0, 'Tabs in qw()' );
 
 #-----------------------------------------------------------------------------
 
