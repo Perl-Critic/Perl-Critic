@@ -109,13 +109,7 @@ sub get_options {
     # arguments to most functions.  And to increase legibility,
     # I have also adopted the familiar command-line practice
     # of denoting argument names with a leading dash (-).
-    my %dashed_opts;
-    foreach my $option (keys %opts) {
-        (my $dashed_option = $option) =~ s< \A ([^-]) ><-$1>xms;
-
-        $dashed_opts{$dashed_option} = $opts{$option};
-    }
-
+    my %dashed_opts = map { ( "-$_" => $opts{$_} ) } keys %opts;
     return %dashed_opts;
 }
 
