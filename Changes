@@ -23,6 +23,9 @@
 
     Bug Fixes:
     * perlcritic should now work under PAR.  RT #38380.
+    * URL for our repository in META.yml now works for anonymous
+      checkout.  The password is "" (empty).  RT #38628. 
+    * color for high-severity violations is now magenta. RT #38511.
 
 [1.090] Released on 2008-07-22
 

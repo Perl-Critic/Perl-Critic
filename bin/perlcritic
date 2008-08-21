@@ -469,7 +469,7 @@ sub _colorize_by_severity {
 
     my %color_of = (
         $SEVERITY_HIGHEST => 'bold red',
-        $SEVERITY_HIGH    => 'yellow',
+        $SEVERITY_HIGH    => 'magenta',
     );
     return map { _colorize( "$_", $color_of{$_->severity()} ) } @violations;
 
