@@ -33,12 +33,12 @@ sub applies_to           { return 'PPI::Structure::List' }
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
-    $elem =~ m{ \n }mx || return;
+    $elem =~ m{ \n }xms || return;
 
     # Is it an assignment of some kind?
     my $sib = $elem->sprevious_sibling();
     return if !$sib;
-    $sib->isa('PPI::Token::Operator') && $sib =~ m{ = }mx || return;
+    $sib->isa('PPI::Token::Operator') && $sib =~ m{ = }xms || return;
 
     # List elements are children of an expression
     my $expr = $elem->schild(0);

@@ -35,11 +35,11 @@ sub applies_to           { return qw(PPI::Token::Quote::Double
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    my $not_escaped = qr/(?<!\\)(?:\\\\)*/mx;
-    my $hex         = qr/\\x[\dA-Fa-f]{2}/mx;
-    my $widehex     = qr/\\x[{][\dA-Fa-f]+[}]/mx;
-    my $oct         = qr/\\[01][0-7]/mx;
-    if ($elem->content =~ m/$not_escaped (?:$hex|$widehex|$oct)/mxo) {
+    my $not_escaped = qr/(?<!\\)(?:\\\\)*/xms;
+    my $hex         = qr/\\x[\dA-Fa-f]{2}/xms;
+    my $widehex     = qr/\\x[{][\dA-Fa-f]+[}]/xms;
+    my $oct         = qr/\\[01][0-7]/xms;
+    if ($elem->content =~ m/$not_escaped (?:$hex|$widehex|$oct)/xmso) {
         return $self->violation( $DESC, $EXPL, $elem );
     }
     return;    #ok!

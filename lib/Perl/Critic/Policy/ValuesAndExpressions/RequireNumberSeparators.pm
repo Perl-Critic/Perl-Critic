@@ -48,7 +48,7 @@ sub violates {
     my ( $self, $elem, undef ) = @_;
     my $min = $self->{_min_value};
 
-    return if $elem !~ m{ \d{4} }mx;
+    return if $elem !~ m{ \d{4} }xms;
     return if abs $elem->literal() < $min;
 
     return $self->violation( $DESC, $EXPL, $elem );

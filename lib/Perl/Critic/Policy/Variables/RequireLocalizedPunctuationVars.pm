@@ -19,7 +19,7 @@ our $VERSION = '1.090';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $PACKAGE_RX => qr/::/mx;
+Readonly::Scalar my $PACKAGE_RX => qr/::/xms;
 Readonly::Hash   my %EXCEPTIONS => hashify(qw(
     $_
     $ARG

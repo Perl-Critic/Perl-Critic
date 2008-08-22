@@ -50,7 +50,7 @@ sub _parse_allow {
 
     if( defined $config_string ) {
         my $allowed = lc $config_string; #String of words
-        my %allowed = hashify( $allowed =~ m/ (\w+) /gmx );
+        my %allowed = hashify( $allowed =~ m/ (\w+) /gxms );
         $self->{_allow} = \%allowed;
     }
 
@@ -77,7 +77,7 @@ sub violates {
 
     my $stmnt = $elem->statement();
     return if !$stmnt;
-    my @words = $stmnt =~ m/ ([[:lower:]]+) /gmx;
+    my @words = $stmnt =~ m/ ([[:lower:]]+) /gxms;
     @words = grep { $_ ne 'qw' && $_ ne 'no' && $_ ne 'strict' } @words;
     return if all { exists $self->{_allow}->{$_} } @words;
 

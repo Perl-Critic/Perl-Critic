@@ -59,7 +59,7 @@ sub violates {
     return if !$sib[2];
 
     # First token must be a scalar symbol or bareword;
-    return if !( ($sib[0]->isa('PPI::Token::Symbol') && $sib[0] =~ m/\A \$/mx)
+    return if !( ($sib[0]->isa('PPI::Token::Symbol') && $sib[0] =~ m/\A \$/xms)
                  || $sib[0]->isa('PPI::Token::Word') );
 
     # First token must not be a builtin function or control

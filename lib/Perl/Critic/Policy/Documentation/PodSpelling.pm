@@ -32,7 +32,7 @@ our $VERSION = '1.090';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $POD_RX => qr{\A = (?: for|begin|end ) }mx;
+Readonly::Scalar my $POD_RX => qr{\A = (?: for|begin|end ) }xms;
 Readonly::Scalar my $DESC => q{Check the spelling in your POD};
 Readonly::Scalar my $EXPL => [148];
 
@@ -184,7 +184,7 @@ sub _run_spell_command {
     my $infh = IO::String->new( $code );
 
     my $outfh = File::Temp->new()
-      or throw_generic "Unable to create tempfile: $OS_ERROR";
+        or throw_generic "Unable to create tempfile: $OS_ERROR";
 
     my $outfile = $outfh->filename();
     my @words;

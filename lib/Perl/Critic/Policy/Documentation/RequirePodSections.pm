@@ -203,13 +203,13 @@ sub supported_parameters {
     return (
         {
             name            => 'lib_sections',
-            description     => 'The sections to require for modules (separated by qr/\s* [|] \s*/xm).',
+            description     => 'The sections to require for modules (separated by qr/\s* [|] \s*/xms).',
             default_string  => $EMPTY,
             parser          => \&_parse_lib_sections,
         },
         {
             name            => 'script_sections',
-            description     => 'The sections to require for programs (separated by qr/\s* [|] \s*/xm).',
+            description     => 'The sections to require for programs (separated by qr/\s* [|] \s*/xms).',
             default_string  => $EMPTY,
             parser          => \&_parse_script_sections,
         },
@@ -239,7 +239,7 @@ sub applies_to       { return 'PPI::Document'          }
 sub _parse_sections {
     my $config_string = shift;
 
-    my @sections = split m{ \s* [|] \s* }mx, $config_string;
+    my @sections = split m{ \s* [|] \s* }xms, $config_string;
 
     return map { uc $_ } @sections;  # Normalize CaSe!
 }
@@ -325,7 +325,7 @@ sub violates {
 
     # Round up the names of all the =head1 sections
     for my $pod ( @{ $pods_ref } ) {
-        for my $found ( $pod =~ m{ ^ =head1 \s+ ( .+? ) \s* $ }gmx ) {
+        for my $found ( $pod =~ m{ ^ =head1 \s+ ( .+? ) \s* $ }gxms ) {
             #Leading/trailing whitespace is already removed
             $found_sections{ uc $found } = 1;
         }

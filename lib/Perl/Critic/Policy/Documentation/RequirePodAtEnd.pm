@@ -21,7 +21,7 @@ our $VERSION = '1.090';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $POD_RX => qr{\A = (?: for|begin|end ) }mx;
+Readonly::Scalar my $POD_RX => qr{\A = (?: for|begin|end ) }xms;
 Readonly::Scalar my $DESC => q{POD before __END__};
 Readonly::Scalar my $EXPL => [139, 140];
 

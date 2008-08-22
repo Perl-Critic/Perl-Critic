@@ -44,7 +44,7 @@ sub violates {
         return if $psib->isa('PPI::Token::Cast') && $psib eq q{\\};
     }
 
-    return if ( $elem !~ m{\A [&] }mx ); # ok
+    return if ( $elem !~ m{\A [&] }xms ); # ok
 
     my $previous = $elem->sprevious_sibling();
     return if $previous and $EXEMPTIONS{$previous};

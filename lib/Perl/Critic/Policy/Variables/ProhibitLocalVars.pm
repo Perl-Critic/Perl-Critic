@@ -19,7 +19,7 @@ our $VERSION = '1.090';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $PACKAGE_RX => qr/::/mx;
+Readonly::Scalar my $PACKAGE_RX => qr/::/xms;
 Readonly::Scalar my $DESC => q{Variable declared as "local"};
 Readonly::Scalar my $EXPL => [ 77, 78, 79 ];
 

@@ -40,7 +40,7 @@ sub violates {
     my $match = $significant[-1];
     return if !$match;
     return if ((ref $match) eq 'PPI::Statement' &&
-               $match =~  m{\A 1 \s* ; \z}mx );
+               $match =~  m{\A 1 \s* ; \z}xms );
 
     # Must be a violation...
     return $self->violation( $DESC, $EXPL, $match );

@@ -58,11 +58,11 @@ sub initialize_if_enabled {
     if ( defined $self->{_modules} ) {
         my @modules = sort keys %{ $self->{_modules} };
         foreach my $module ( @modules ) {
-            if ( $module =~ m{ \A [/] (.+) [/] \z }mx ) {
+            if ( $module =~ m{ \A [/] (.+) [/] \z }xms ) {
 
                 # These are module name patterns (e.g. /Acme/)
                 my $re = $1; # Untainting
-                my $pattern = eval { qr/$re/ };  ##no critic (RegularExpressions::.*)
+                my $pattern = eval { qr/$re/ };  ## no critic (RegularExpressions::.*)
 
                 if ( $EVAL_ERROR ) {
                     throw_policy_value

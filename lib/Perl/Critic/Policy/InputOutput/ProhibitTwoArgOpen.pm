@@ -22,7 +22,7 @@ our $VERSION = '1.090';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $STDIO_HANDLES_RX => qr/\b STD (?: IN | OUT | ERR \b)/mx;
+Readonly::Scalar my $STDIO_HANDLES_RX => qr/\b STD (?: IN | OUT | ERR \b)/xms;
 Readonly::Scalar my $DESC => q{Two-argument "open" used};
 Readonly::Scalar my $EXPL => [ 207 ];
 

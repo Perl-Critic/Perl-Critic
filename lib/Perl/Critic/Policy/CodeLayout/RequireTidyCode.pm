@@ -74,7 +74,7 @@ sub violates {
     # investigate further, but for now, this seems to do the trick.
 
     my $source = $doc->serialize();
-    $source =~ s{ \s+ \Z}{\n}mx;
+    $source =~ s{ \s+ \Z}{\n}xms;
 
     # Remove the shell fix code from the top of program, if applicable
     ## no critic(ProhibitComplexRegexes)

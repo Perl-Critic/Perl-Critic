@@ -19,7 +19,7 @@ our $VERSION = '1.090';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $PKG_RX => qr{ [[:alpha:]](?:[\w:\']*\w)? }mx;
+Readonly::Scalar my $PKG_RX => qr{ [[:alpha:]](?:[\w:\']*\w)? }xms;
 Readonly::Scalar my $DESC => q{Pod NAME does not match the package declaration};
 Readonly::Scalar my $EXPL => q{};
 

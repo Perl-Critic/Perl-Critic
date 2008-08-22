@@ -63,7 +63,7 @@ sub _parse_allow {
         @allow = words_from_string( $config_string );
         #Try to be forgiving with the configuration...
         for (@allow) {
-            m{ \A qq }mx || ($_ = 'qq' . $_)
+            m{ \A qq }xms || ($_ = 'qq' . $_)
         }  #Add 'qq'
         for (@allow) {
             (length $_ <= $MAX_SPECIFICATION_LENGTH) || chop
@@ -84,7 +84,7 @@ sub violates {
     return if _has_interpolation($elem);
 
     # Overlook allowed quote styles
-    return if any { $elem =~ m{ \A \Q$_\E }mx } @{ $self->{_allow} };
+    return if any { $elem =~ m{ \A \Q$_\E }xms } @{ $self->{_allow} };
 
     # If the flag is set, allow "I'm here".
     if ( $self->{_allow_if_string_contains_single_quote} ) {
@@ -99,8 +99,8 @@ sub violates {
 
 sub _has_interpolation {
     my $elem = shift;
-    return $elem =~ m{ (?<!\\) [\$\@] \S+ }mx     #Contains unescaped $. or @.
-        || $elem =~ m{ \\[tnrfbae0xcNLuLUEQ] }mx; #Containts escaped metachars
+    return $elem =~ m{ (?<!\\) [\$\@] \S+ }xms     #Contains unescaped $. or @.
+        || $elem =~ m{ \\[tnrfbae0xcNLuLUEQ] }xms; #Containts escaped metachars
 }
 
 1;

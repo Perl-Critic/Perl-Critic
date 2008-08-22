@@ -66,7 +66,7 @@ sub violates {
        $qr =~ s/\A [(][?][xism]+(?:-[xism]+)?: (.*) [)] \z/$1/xms;
 
        # Hack: don't count long \p{...} expressions against us so badly
-       $qr =~ s/\\[pP][{]\w+[}]/\\p{...}/gmx;
+       $qr =~ s/\\[pP][{]\w+[}]/\\p{...}/gxms;
 
        return if $self->{_max_characters} >= length $qr;
     }

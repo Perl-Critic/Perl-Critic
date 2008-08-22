@@ -42,7 +42,7 @@ sub violates {
     # 'lib/Foo/Bar.pm' -> ('lib', 'Foo', 'Bar')
     my @path = File::Spec->splitpath($filename);
     $filename = $path[2];
-    $filename =~ s/[.]\w+\z//mx;
+    $filename =~ s/[.]\w+\z//xms;
     my @path_parts = grep {$_ ne q{}} File::Spec->splitdir($path[1]), $filename;
 
     # 'Foo::Bar' -> ('Foo', 'Bar')
@@ -50,7 +50,7 @@ sub violates {
     return if !$pkg_node;
     my $pkg = $pkg_node->namespace;
     return if $pkg eq 'main';
-    my @pkg_parts = split m/(?:\'|::)/mx, $pkg;
+    my @pkg_parts = split m/(?:\'|::)/xms, $pkg;
 
     # To succeed, at least the lastmost must match
     # Beyond that, the search terminates if a dirname is an impossible package name
@@ -64,7 +64,7 @@ sub violates {
         }
 
         # if it's a path that's not a possible package (like 'Foo-Bar-1.00'), that's OK
-        last if ($path_part =~ m/\W/mx);
+        last if ($path_part =~ m/\W/xms);
 
         # Mismatched name
         return $self->violation( $DESC, $EXPL, $pkg_node );

@@ -10,6 +10,7 @@ package Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars;
 use 5.006001;
 use strict;
 use warnings;
+
 use Readonly;
 
 use Perl::Critic::Utils qw{ :severities };
@@ -20,10 +21,10 @@ our $VERSION = '1.090';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $PACKAGE_RX     => qr/ :: /mx;
-Readonly::Scalar my $UPPER_LOWER    => qr/ [[:upper:]] [[:lower:]] /xm;
-Readonly::Scalar my $LOWER_UPPER    => qr/ [[:lower:]] [[:upper:]] /xm;
-Readonly::Scalar my $MIXED_RX       => qr{ $UPPER_LOWER | $LOWER_UPPER }xmo;
+Readonly::Scalar my $PACKAGE_RX     => qr/ :: /xms;
+Readonly::Scalar my $UPPER_LOWER    => qr/ [[:upper:]] [[:lower:]] /xms;
+Readonly::Scalar my $LOWER_UPPER    => qr/ [[:lower:]] [[:upper:]] /xms;
+Readonly::Scalar my $MIXED_RX       => qr{ $UPPER_LOWER | $LOWER_UPPER }xmso;
 Readonly::Scalar my $DESC       => 'Mixed-case variable name(s)';
 Readonly::Scalar my $EXPL       => [ 44 ];
 

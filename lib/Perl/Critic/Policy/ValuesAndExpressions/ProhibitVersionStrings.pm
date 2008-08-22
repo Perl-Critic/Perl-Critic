@@ -40,13 +40,13 @@ sub violates {
         )
         and $elem->module ne 'lib'
     ) {
-        #This is a pretty crude way to verify that a version string is
-        #being used.  But there are several permutations of the syntax
-        #for C<use> and C<require>.  Also PPI doesn't parses strings
-        #like "5.6.1" as an integer that is being concatenated to a
-        #float.  I'm not sure if this should be reported as a bug.
+        # This is a pretty crude way to verify that a version string is
+        # being used.  But there are several permutations of the syntax
+        # for C<use> and C<require>.  Also PPI doesn't parses strings
+        # like "5.6.1" as an integer that is being concatenated to a
+        # float.  I'm not sure if this should be reported as a bug.
 
-        if ( $elem =~ m{ \b v? \d+ [.] \d+ [.] \d+ \b }mx ) {
+        if ( $elem =~ m{ \b v? \d+ [.] \d+ [.] \d+ \b }xms ) {
             return $self->violation( $DESC, $EXPL, $elem );
         }
     }

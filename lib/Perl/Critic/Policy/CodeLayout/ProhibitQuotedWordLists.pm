@@ -76,9 +76,9 @@ sub violates {
         return if not _is_literal($child);
 
         my $string = $child->string();
-        return if $string =~ m{ \s }mx;
+        return if $string =~ m{ \s }xms;
         return if $string eq $EMPTY;
-        return if not $self->{_strict} and $string !~ m{\A [\w-]+ \z}mx;
+        return if not $self->{_strict} and $string !~ m{\A [\w-]+ \z}xms;
         $count++;
     }
 

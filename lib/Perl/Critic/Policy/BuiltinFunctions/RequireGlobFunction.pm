@@ -19,7 +19,7 @@ our $VERSION = '1.090';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $GLOB_RX => qr{ [*?] }mx;
+Readonly::Scalar my $GLOB_RX => qr< [*?] >xms;
 Readonly::Scalar my $DESC    => q{Glob written as <...>};
 Readonly::Scalar my $EXPL    => [ 167 ];
 

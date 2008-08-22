@@ -33,7 +33,7 @@ sub applies_to           { return 'PPI::Token::Magic'      }
 
 sub violates {
     my ($self, $elem, $doc) = @_;
-    return if $elem !~ m/\A \$[1-9] \z/mx;
+    return if $elem !~ m/\A \$[1-9] \z/xms;
     return if _is_in_conditional_expression($elem);
     return if _is_in_conditional_structure($elem);
     return $self->violation( $DESC, $EXPL, $elem );

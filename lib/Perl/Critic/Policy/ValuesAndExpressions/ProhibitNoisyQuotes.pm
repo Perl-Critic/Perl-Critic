@@ -19,7 +19,7 @@ our $VERSION = '1.090';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $NOISE_RX => qr{\A ["|']  [^ \w () {} [\] <> ]{1,2}  ['|"] \z}mx;
+Readonly::Scalar my $NOISE_RX => qr{\A ["|']  [^ \w () {} [\] <> ]{1,2}  ['|"] \z}xms;
 Readonly::Scalar my $DESC     => q{Quotes used with a noisy string};
 Readonly::Scalar my $EXPL     => [ 53 ];
 

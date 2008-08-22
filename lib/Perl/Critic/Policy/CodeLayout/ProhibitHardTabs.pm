@@ -45,7 +45,7 @@ sub applies_to       { return 'PPI::Token'        }
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
-    $elem =~ m{ \t }mx || return;
+    $elem =~ m{ \t }xms || return;
 
     # The __DATA__ element is exempt
     return if $elem->parent->isa('PPI::Statement::Data');

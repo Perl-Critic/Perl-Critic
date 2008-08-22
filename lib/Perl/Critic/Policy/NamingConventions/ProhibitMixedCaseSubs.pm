@@ -20,9 +20,9 @@ our $VERSION = '1.090';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $UPPER_LOWER    => qr/ [[:upper:]] [[:lower:]] /xm;
-Readonly::Scalar my $LOWER_UPPER    => qr/ [[:lower:]] [[:upper:]] /xm;
-Readonly::Scalar my $MIXED_RX       => qr{ $UPPER_LOWER | $LOWER_UPPER }xmo;
+Readonly::Scalar my $UPPER_LOWER    => qr/ [[:upper:]] [[:lower:]] /xms;
+Readonly::Scalar my $LOWER_UPPER    => qr/ [[:lower:]] [[:upper:]] /xms;
+Readonly::Scalar my $MIXED_RX       => qr{ $UPPER_LOWER | $LOWER_UPPER }xmso;
 Readonly::Scalar my $DESC     => 'Mixed-case subroutine name';
 Readonly::Scalar my $EXPL     => [ 44 ];
 
@@ -37,7 +37,7 @@ sub applies_to           { return 'PPI::Statement::Sub'   }
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
-    (my $name = $elem->name() ) =~ s/\A.*:://mx;
+    (my $name = $elem->name() ) =~ s/\A.*:://xms;
     if ( $name =~ m/$MIXED_RX/xms ) {
         return $self->violation( $DESC, $EXPL, $elem );
     }

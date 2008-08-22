@@ -67,7 +67,7 @@ sub _is_vars_VERSION {
     my (undef, $elem) = @_;
     $elem->isa('PPI::Statement::Include') || return 0;
     $elem->pragma() eq 'vars' || return 0;
-    return $elem =~ m{ \$VERSION }mx; #Crude, but usually works
+    return $elem =~ m{ \$VERSION }xms; #Crude, but usually works
 }
 
 #-----------------------------------------------------------------------------
@@ -75,7 +75,7 @@ sub _is_vars_VERSION {
 sub _is_package_VERSION {
     my (undef, $elem) = @_;
     $elem->isa('PPI::Token::Symbol') || return 0;
-    return $elem =~ m{ \A \$ \S+ ::VERSION \z }mx;
+    return $elem =~ m{ \A \$ \S+ ::VERSION \z }xms;
     #TODO: ensure that it is in _this_ package!
 }
 
@@ -92,7 +92,7 @@ sub _is_readonly_VERSION {
 
     my (undef, $elem) = @_;
     $elem->isa('PPI::Token::Symbol') || return 0;
-    return 0 if $elem !~ m{ \A \$VERSION \z }mx;
+    return 0 if $elem !~ m{ \A \$VERSION \z }xms;
 
     my $psib = $elem->sprevious_sibling() || return 0;
     return 0 if $psib ne 'our';
@@ -135,6 +135,7 @@ have to declare it like one of these:
     our $VERSION = 1.0611;
     $MyPackage::VERSION = 1.061;
     use vars qw($VERSION);
+    use version; our $VERSION = qv(1.0611);
 
 A common practice is to use the C<$Revision$> keyword to
 automatically define the C<$VERSION> variable like this:

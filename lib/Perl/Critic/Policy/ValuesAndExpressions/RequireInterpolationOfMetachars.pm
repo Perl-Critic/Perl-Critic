@@ -77,8 +77,8 @@ sub violates {
 sub _needs_interpolation {
     my ($string) = @_;
 
-    return $string =~ m{ [\$\@] \S+ }mxo             #Contains a $ or @
-        || $string =~ m{ \\[tnrfae0xcNLuLUEQ] }mxo;  #Contains metachars
+    return $string =~ m{ [\$\@] \S+ }xmso             #Contains a $ or @
+        || $string =~ m{ \\[tnrfae0xcNLuLUEQ] }xmso;  #Contains metachars
 }
 
 #-----------------------------------------------------------------------------
@@ -86,7 +86,7 @@ sub _needs_interpolation {
 sub _looks_like_email_address {
     my ($string) = @_;
 
-    return $string =~ m{\A [^\@\s]+ \@ [\w\-.]+ \z}mxo;
+    return $string =~ m{\A [^\@\s]+ \@ [\w\-.]+ \z}xmso;
 }
 
 #-----------------------------------------------------------------------------

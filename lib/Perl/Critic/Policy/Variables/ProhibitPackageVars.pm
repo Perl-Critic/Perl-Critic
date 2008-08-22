@@ -90,7 +90,7 @@ sub _is_package_var {
     my $self = shift;
     my $elem = shift;
     return if !$elem->isa('PPI::Token::Symbol');
-    my ($package, $name) = $elem =~ m{ \A [@\$%] (.*) :: (\w+) \z }mx;
+    my ($package, $name) = $elem =~ m{ \A [@\$%] (.*) :: (\w+) \z }xms;
     return if not defined $package;
     return if _all_upcase( $name );
     return if $self->{_all_packages}->{$package};
@@ -120,7 +120,7 @@ sub _is_vars_pragma {
     # pass arguments to pragmas (e.g. "$foo" or qw($foo) ) we just use
     # a regex to match things that look like variables names.
 
-    my @varnames = $elem =~ m{ [@\$%&] (\w+) }gmx;
+    my @varnames = $elem =~ m{ [@\$%&] (\w+) }gxms;
 
     return if !@varnames;   # no valid variables specified
     return if _all_upcase( @varnames );
