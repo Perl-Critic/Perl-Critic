@@ -9,6 +9,7 @@
 	 'baz-bot');
 
 #-----------------------------------------------------------------------------
+
 ## name Non-word lists
 ## failures 0
 ## cut
@@ -20,6 +21,7 @@
 	 '#@$%');
 
 #-----------------------------------------------------------------------------
+
 ## name Basic passing
 ## failures 0
 ## cut
@@ -60,6 +62,7 @@ foreach ('foo', 'bar', 'nuts'){ do_something($_) }
 @list = ('foo', 'bar', 'baz', 'nuts');
 
 #-----------------------------------------------------------------------------
+
 ## name Failing 'use' statements
 ## failures 1
 ## cut
@@ -67,6 +70,7 @@ foreach ('foo', 'bar', 'nuts'){ do_something($_) }
 use Foo ('foo', 'bar', 'baz');
 
 #-----------------------------------------------------------------------------
+
 ## name Passing 'use' statements
 ## failures 0
 ## cut
@@ -74,6 +78,21 @@ use Foo ('foo', 'bar', 'baz');
 use Foo ();
 use Foo ('foo', 1, 'bar', '1/2');
 use Foo ('foo' => 'bar', 'baz' => 'nuts');
+
+## name Non-word lists in strict mode.
+## failures 3
+## parms { strict => 1 }
+## cut
+
+use Foo ('foo', 'bar', '1/2');
+
+@list = ('3/4', '-123', '#@$%');
+
+@list = ('3/4',
+	 '-123',
+	 '#@$%');
+
+#-----------------------------------------------------------------------------
 
 ##############################################################################
 #      $URL$

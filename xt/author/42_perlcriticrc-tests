@@ -12,14 +12,13 @@ verbose = %f: %m at line %l, column %c.  %e.  (Severity: %s, %p)\n
 
 #-----------------------------------------------------------------------------
 
-[-CodeLayout::RequireTidyCode]
-
-[Documentation::RequirePodSections]
-lib_sections    = NAME|DESCRIPTION|AUTHOR|COPYRIGHT
-script_sections = NAME|DESCRIPTION|AUTHOR|COPYRIGHT
+[CodeLayout::ProhibitQuotedWordLists]
+strict = 1
 
 [CodeLayout::ProhibitHardTabs]
 allow_leading_tabs = 0
+
+[-CodeLayout::RequireTidyCode]
 
 [ControlStructures::ProhibitPostfixControls]
 flowcontrol = warn die carp croak cluck confess goto exit plan skip
@@ -55,4 +54,3 @@ allow_all_brackets = 1
 
 # Might move this to P::C::More
 [-ValuesAndExpressions::RequireConstantOnLeftSideOfEquality]
-

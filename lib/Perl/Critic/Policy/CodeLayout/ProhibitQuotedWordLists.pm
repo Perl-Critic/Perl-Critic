@@ -10,6 +10,7 @@ package Perl::Critic::Policy::CodeLayout::ProhibitQuotedWordLists;
 use 5.006001;
 use strict;
 use warnings;
+
 use Readonly;
 
 use Perl::Critic::Utils qw{ :characters :severities :classification};
@@ -33,6 +34,12 @@ sub supported_parameters {
             behavior        => 'integer',
             integer_minimum => 1,
         },
+        {
+            name            => 'strict',
+            description     => 'Complain even if there are non-word characters in the values.',
+            default_string  => '0',
+            behavior        => 'boolean',
+        },
     );
 }
 
@@ -46,18 +53,18 @@ sub violates {
     my ( $self, $elem, undef ) = @_;
 
     # Don't worry about subroutine calls
-    my $sib = $elem->sprevious_sibling();
-    return if !$sib;
+    my $sibling = $elem->sprevious_sibling();
+    return if not $sibling;
 
-    return if $sib->isa('PPI::Token::Symbol');
-    return if $sib->isa('PPI::Token::Operator') && $sib eq '->';
-    return if $sib->isa('PPI::Token::Word') && !is_included_module_name($sib);
+    return if $sibling->isa('PPI::Token::Symbol');
+    return if $sibling->isa('PPI::Token::Operator') and $sibling eq '->';
+    return if $sibling->isa('PPI::Token::Word') and not is_included_module_name($sibling);
 
     # Get the list elements
     my $expr = $elem->schild(0);
-    return if !$expr;
+    return if not $expr;
     my @children = $expr->schildren();
-    return if !@children;
+    return if not @children;
 
     my $count = 0;
     for my $child ( @children ) {
@@ -66,10 +73,12 @@ sub violates {
         # All elements must be literal strings,
         # and must contain 1 or more word characters.
 
-        return if ! _is_literal($child);
+        return if not _is_literal($child);
 
         my $string = $child->string();
-        return if $string !~ m{\A [\w-]+ \z}mx;
+        return if $string =~ m{ \s }mx;
+        return if $string eq $EMPTY;
+        return if not $self->{_strict} and $string !~ m{\A [\w-]+ \z}mx;
         $count++;
     }
 
@@ -129,6 +138,13 @@ value for C<min_elements> in F<.perlcriticrc> like this:
 
 This would cause this policy to only complain about lists containing
 four or more words.
+
+By default, this policy won't complain if any of the values in the list
+contain non-word characters.  If you want it to, set the C<strict>
+option to a true value.
+
+    [CodeLayout::ProhibitQuotedWordLists]
+    strict = 1
 
 
 =head1 NOTES
