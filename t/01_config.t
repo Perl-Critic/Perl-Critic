@@ -224,7 +224,7 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
         -exclude    => \@exclude,
     );
     my @policies = Perl::Critic::Config->new( %pc_args )->policies();
-    my $matches = grep { my $pol = ref $_; grep { $pol !~ /$_/imx} @exclude } @policies;
+    my $matches = grep { my $pol = ref $_; grep { $pol !~ /$_/ixms} @exclude } @policies;
     is(scalar @policies, $matches, 'exclude pattern matching');
 }
 
@@ -245,13 +245,13 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
     my @policies = Perl::Critic::Config->new( %pc_args )->policies();
     my @pol_names = map {ref $_} @policies;
     is_deeply(
-        [grep {/block/imx} @pol_names],
+        [grep {/block/ixms} @pol_names],
         [],
         'include/exclude pattern match had no "block" policies',
     );
     # This odd construct arises because "any" can't be used with parens without syntax error(!)
     ok(
-        @{[any {/builtinfunc/imx} @pol_names]},
+        @{[any {/builtinfunc/ixms} @pol_names]},
         'include/exclude pattern match had "builtinfunc" policies',
     );
 }
