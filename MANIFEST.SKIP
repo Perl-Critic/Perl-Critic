@@ -68,3 +68,6 @@ RCS
 
 # Developer docs
 \bdoc\b
+
+# Avoid Eclipse files.
+\.project\b
