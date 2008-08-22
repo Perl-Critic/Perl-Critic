@@ -248,7 +248,7 @@ sub _filter_code {
 sub _filter_shebang_line {
     my ($nodes_ref, $disabled_lines, $site_policies) = @_;
 
-    my $shebang_no_critic  = qr{\A [#]! .*? [#][#] \s* no  \s+ critic}mx;
+    my $shebang_no_critic  = qr{\A [#]! .*? [#][#] \s* no  \s+ critic}xms;
 
     # Special case for the very beginning of the file: allow "##no critic" after the shebang
     if (0 < @{$nodes_ref}) {
@@ -266,8 +266,8 @@ sub _filter_shebang_line {
 sub _filter_other_lines {
     my ($nodes_ref, $disabled_lines, $site_policies) = @_;
 
-    my $no_critic  = qr{\A \s* [#][#] \s* no  \s+ critic}mx;
-    my $use_critic = qr{\A \s* [#][#] \s* use \s+ critic}mx;
+    my $no_critic  = qr{\A \s* [#][#] \s* no  \s+ critic}xms;
+    my $use_critic = qr{\A \s* [#][#] \s* use \s+ critic}xms;
 
   PRAGMA:
     for my $pragma ( grep { $_ =~ $no_critic } @{$nodes_ref} ) {
@@ -344,11 +344,11 @@ sub _parse_nocritic_import {
 
     my ($pragma, $site_policies) = @_;
 
-    my $module    = qr{ [\w:]+ }mx;
-    my $delim     = qr{ \s* [,\s] \s* }mx;
-    my $qw        = qr{ (?: qw )? }mx;
-    my $qualifier = qr{ $qw [(]? \s* ( $module (?: $delim $module)* ) \s* [)]? }mx;
-    my $no_critic = qr{ \#\# \s* no \s+ critic \s* $qualifier }mx;  ##no critic(EscapedMetacharacters)
+    my $module    = qr{ [\w:]+ }xms;
+    my $delim     = qr{ \s* [,\s] \s* }xms;
+    my $qw        = qr{ (?: qw )? }xms;
+    my $qualifier = qr{ $qw [(]? \s* ( $module (?: $delim $module)* ) \s* [)]? }xms;
+    my $no_critic = qr{ \#\# \s* no \s+ critic \s* $qualifier }xms;  ##no critic(EscapedMetacharacters)
 
     if ( my ($module_list) = $pragma =~ $no_critic ) {
         my @modules = split $delim, $module_list;
@@ -357,7 +357,7 @@ sub _parse_nocritic_import {
         # in a no-capturing group to permit "|" in the modules specification
         # (backward compatibility)
         my $re = join q{|}, map {"(?:$_)"} @modules;
-        return grep {m/$re/imx} @{$site_policies};
+        return grep {m/$re/ixms} @{$site_policies};
     }
 
     # Default to disabling ALL policies.
@@ -377,11 +377,11 @@ sub _unfix_shebang {
     my $doc         = shift;
     my $first_stmnt = $doc->schild(0) || return;
 
-    # Different versions of MakeMaker and Build use slightly differnt shebang
+    # Different versions of MakeMaker and Build use slightly different shebang
     # fixing strings.  This matches most of the ones I've found in my own Perl
     # distribution, but it may not be bullet-proof.
 
-    my $fixin_rx = qr{^eval 'exec .* \$0 \${1\+"\$@"}'\s*[\r\n]\s*if.+;}m;  ##no critic(RequireExtendedFormatting)
+    my $fixin_rx = qr{^eval 'exec .* \$0 \${1\+"\$@"}'\s*[\r\n]\s*if.+;}ms; ## no critic (RequireExtendedFormatting)
     if ( $first_stmnt =~ $fixin_rx ) {
         my $line = $first_stmnt->location()->[0];
         return ( $line => {ALL => 1}, $line + 1 => {ALL => 1} );
@@ -518,7 +518,7 @@ L<"POLICY THEMES"> section for more information about themes.
 
 
 B<-include> is a reference to a list of string C<@PATTERNS>.  Policy
-modules that match at least one C<m/$PATTERN/imx> will always be
+modules that match at least one C<m/$PATTERN/ixms> will always be
 loaded, irrespective of all other settings.  For example:
 
   my $critic = Perl::Critic->new(-include => ['layout'] -severity => 4);
@@ -531,7 +531,7 @@ C<-exclude> option.  Note that C<-exclude> takes precedence over
 C<-include> when a Policy matches both patterns.
 
 B<-exclude> is a reference to a list of string C<@PATTERNS>.  Policy
-modules that match at least one C<m/$PATTERN/imx> will not be loaded,
+modules that match at least one C<m/$PATTERN/ixms> will not be loaded,
 irrespective of all other settings.  For example:
 
   my $critic = Perl::Critic->new(-exclude => ['strict'] -severity => 1);
@@ -544,7 +544,7 @@ conjunction with the C<-include> option.  Note that C<-exclude> takes
 precedence over C<-include> when a Policy matches both patterns.
 
 B<-single-policy> is a string C<PATTERN>.  Only one policy that
-matches C<m/$PATTERN/imx> will be used.  Policies that do not match
+matches C<m/$PATTERN/ixms> will be used.  Policies that do not match
 will be excluded.  This option has precedence over the C<-severity>,
 C<-theme>, C<-include>, C<-exclude>, and C<-only> options.  You can
 set the default value for this option in your F<.perlcriticrc> file.
@@ -830,7 +830,7 @@ They are described briefly in the companion document
 L<Perl::Critic::PolicySummary|Perl::Critic::PolicySummary> and in more
 detail in the individual modules themselves.  Say C<"perlcritic -doc
 PATTERN"> to see the perldoc for all Policy modules that match the
-regex C<m/PATTERN/imx>
+regex C<m/PATTERN/ixms>
 
 There are a number of distributions of additional policies on CPAN.
 If L<Perl::Critic|Perl::Critic> doesn't contain a policy that you

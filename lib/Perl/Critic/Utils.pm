@@ -318,7 +318,7 @@ sub is_perl_global {
     my $elem = shift;
     return if !$elem;
     my $var_name = "$elem"; #Convert Token::Symbol to string
-    $var_name =~ s{\A [\$@%*] }{}mx;  #Chop off the sigil
+    $var_name =~ s{\A [\$@%*] }{}xms;  #Chop off the sigil
     return exists $GLOBALS{ $var_name };
 }
 
@@ -664,7 +664,7 @@ sub is_integer {
     my ($value) = @_;
     return 0 if not defined $value;
 
-    return $value =~ m{ \A [+-]? \d+ \z }mx;
+    return $value =~ m{ \A [+-]? \d+ \z }xms;
 }
 
 #-----------------------------------------------------------------------------
@@ -680,7 +680,7 @@ sub is_label_pointer {
     return if !$psib;
 
     return $statement->isa('PPI::Statement::Break')
-        && $psib =~ m/(?:redo|goto|next|last)/mxo;
+        && $psib =~ m/(?:redo|goto|next|last)/xmso;
 }
 
 #-----------------------------------------------------------------------------
@@ -769,7 +769,7 @@ sub _is_PL_file {
     my ($doc) = @_;
     return if not $doc->can('filename');
     my $filename = $doc->filename() || return;
-    return 1 if $filename =~ m/[.] PL \z/smx;
+    return 1 if $filename =~ m/[.] PL \z/xms;
     return 0;
 }
 
@@ -803,7 +803,7 @@ sub is_in_void_context {
 
 sub policy_long_name {
     my ( $policy_name ) = @_;
-    if ( $policy_name !~ m{ \A $POLICY_NAMESPACE }mx ) {
+    if ( $policy_name !~ m{ \A $POLICY_NAMESPACE }xms ) {
         $policy_name = $POLICY_NAMESPACE . q{::} . $policy_name;
     }
     return $policy_name;
@@ -813,7 +813,7 @@ sub policy_long_name {
 
 sub policy_short_name {
     my ( $policy_name ) = @_;
-    $policy_name =~ s{\A $POLICY_NAMESPACE ::}{}mx;
+    $policy_name =~ s{\A $POLICY_NAMESPACE ::}{}xms;
     return $policy_name;
 }
 
@@ -1017,10 +1017,10 @@ sub all_perl_files {
 
 sub _is_backup {
     my ($file) = @_;
-    return 1 if $file =~ m{ [.] swp \z}mx;
-    return 1 if $file =~ m{ [.] bak \z}mx;
-    return 1 if $file =~ m{  ~ \z}mx;
-    return 1 if $file =~ m{ \A [#] .+ [#] \z}mx;
+    return 1 if $file =~ m{ [.] swp \z}xms;
+    return 1 if $file =~ m{ [.] bak \z}xms;
+    return 1 if $file =~ m{  ~ \z}xms;
+    return 1 if $file =~ m{ \A [#] .+ [#] \z}xms;
     return;
 }
 
@@ -1033,16 +1033,16 @@ sub _is_perl {
     my ($file) = @_;
 
     #Check filename extensions
-    return 1 if $file =~ m{ [.] PL    \z}mx;
-    return 1 if $file =~ m{ [.] p[lm] \z}mx;
-    return 1 if $file =~ m{ [.] t     \z}mx;
+    return 1 if $file =~ m{ [.] PL    \z}xms;
+    return 1 if $file =~ m{ [.] p[lm] \z}xms;
+    return 1 if $file =~ m{ [.] t     \z}xms;
 
     #Check for shebang
     open my $fh, '<', $file or return;
     my $first = <$fh>;
     close $fh or throw_generic "unable to close $file: $!";
 
-    return 1 if defined $first && ( $first =~ m{ \A [#]!.*perl }mx );
+    return 1 if defined $first && ( $first =~ m{ \A [#]!.*perl }xms );
     return;
 }
 
@@ -1060,7 +1060,7 @@ sub shebang_line {
     return if $location->[0] != 1; # line number
     return if $location->[1] != 1; # column number
     my $shebang = $first_element->content;
-    return if $shebang !~ m{ \A [#]! }mx;
+    return if $shebang !~ m{ \A [#]! }xms;
     return $shebang;
 }
 

@@ -102,7 +102,7 @@ sub get_options {
 
     #Override profile, if --noprofile is specified
     if ( exists $opts{noprofile} ) {
-        $opts{profile} = q{};
+        $opts{profile} = $EMPTY;
     }
 
     # I've adopted the convention of using key-value pairs for
@@ -142,14 +142,14 @@ sub _dispatch_special_requests {
 
 sub _validate_options {
     my (%opts) = @_;
-    my $msg = q{};
+    my $msg = $EMPTY;
 
 
     if ( $opts{noprofile} && $opts{profile} ) {
         $msg .= qq{Warning: Cannot use -noprofile with -profile option.\n};
     }
 
-    if ( $opts{verbose} && $opts{verbose} !~ m{(?: \d+ | %[mfFlcedrpPs] )}mx) {
+    if ( $opts{verbose} && $opts{verbose} !~ m{(?: \d+ | %[mfFlcedrpPs] )}xms) {
         $msg .= qq<Warning: --verbose arg "$opts{verbose}" looks odd.  >;
         $msg .= qq<Perhaps you meant to say "--verbose 3 $opts{verbose}"\n>;
     }
@@ -194,10 +194,10 @@ sub get_input {
 
         # Notice if STDIN was closed (pipe error, etc)
         if ( ! defined $code_string ) {
-            $code_string = q{};
+            $code_string = $EMPTY;
         }
 
-        $code_string =~ m{ \S+ }mx || die qq{Nothing to critique.\n};
+        $code_string =~ m{ \S+ }xms || die qq{Nothing to critique.\n};
         return \$code_string;    #Convert to SCALAR ref for PPI
     }
     else {
@@ -305,7 +305,7 @@ sub render_report {
             ? $DEFAULT_VERBOSITY_WITH_FILE_NAME
             : $verbosity;
     my $fmt = Perl::Critic::Utils::verbosity_to_format( $verbosity );
-    if (not -f $file) { $fmt =~ s{\%[fF]}{STDIN}mx; } #HACK!
+    if (not -f $file) { $fmt =~ s< \%[fF] ><STDIN>xms; } #HACK!
     Perl::Critic::Violation::set_format( $fmt );
 
     my $color = $critic->config->color();
@@ -486,7 +486,7 @@ sub _colorize {
 #-----------------------------------------------------------------------------
 
 sub _this_is_windows {
-    return 1 if $OSNAME =~ m/MSWin32/mx;
+    return 1 if $OSNAME =~ m/MSWin32/xms;
     return 0;
 }
 
@@ -546,7 +546,7 @@ sub policy_docs {
 
     my %pc_params = (-profile => $EMPTY, -severity => $SEVERITY_LOWEST);
     my @policies  = Perl::Critic::Config->new( %pc_params )->policies();
-    my @matches   = grep { $_ =~ m/$pattern/imx } @policies;
+    my @matches   = grep { $_ =~ m/$pattern/ixms } @policies;
 
     for my $matching_policy ( @matches ) {
         my @perldoc_cmd = qw(perldoc -T); #-T means don't send to pager
@@ -640,7 +640,7 @@ examples to help get you started.
     # Report top 20 most severe violations (severity >= 1)
     perlcritic --top YourModule.pm
 
-    # Report additional violations of Policies that match m/variables/ix
+    # Report additional violations of Policies that match m/variables/xms
     perlcritic --include variables YourModule.pm
 
     # Use defaults from somewhere other than ~/.perlcriticrc
@@ -772,7 +772,7 @@ F<.perlcriticrc> file.
 =item C<-s PATTERN>
 
 Directs C<perlcritic> to apply just one Policy module matching the
-regex C</PATTERN/imx>, and exclude all other Policies.  This option
+regex C</PATTERN/ixms>, and exclude all other Policies.  This option
 has precedence over the C<--severity>, C<--theme>, C<--include>,
 C<--exclude>, and C<--only> options.  For example:
 
@@ -947,7 +947,7 @@ manually.
 
 Displays the perldoc for all
 L<Perl::Critic::Policy|Perl::Critic::Policy> modules that match
-C<m/PATTERN/imx>.  Since Policy modules tend to have rather long
+C<m/PATTERN/ixms>.  Since Policy modules tend to have rather long
 names, this just provides a more convenient way to say something like:
 C<"perldoc Perl::Critic::Policy::ValuesAndExpressions::RequireUpperCaseHeredocTerminator">
 at the command prompt.
@@ -1128,7 +1128,7 @@ They are described briefly in the companion document
 L<Perl::Critic::PolicySummary|Perl::Critic::PolicySummary> and in more
 detail in the individual modules themselves.  Say C<"perlcritic --doc
 PATTERN"> to see the perldoc for all Policy modules that match the
-regex C<m/PATTERN/imx>
+regex C<m/PATTERN/ixms>
 
 There are a number of distributions of additional policies on CPAN.
 If L<Perl::Critic|Perl::Critic> doesn't contain a policy that you

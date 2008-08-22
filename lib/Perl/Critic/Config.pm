@@ -258,7 +258,7 @@ sub _policy_is_included {
     my ($self, $policy) = @_;
     my $policy_long_name = ref $policy;
     my @inclusions  = $self->include();
-    return any { $policy_long_name =~ m/$_/imx } @inclusions;
+    return any { $policy_long_name =~ m/$_/ixms } @inclusions;
 }
 
 #-----------------------------------------------------------------------------
@@ -267,7 +267,7 @@ sub _policy_is_excluded {
     my ($self, $policy) = @_;
     my $policy_long_name = ref $policy;
     my @exclusions  = $self->exclude();
-    return any { $policy_long_name =~ m/$_/imx } @exclusions;
+    return any { $policy_long_name =~ m/$_/ixms } @exclusions;
 }
 
 #-----------------------------------------------------------------------------
@@ -279,7 +279,7 @@ sub _policy_is_single_policy {
     return if not @patterns;
 
     my $policy_long_name = ref $policy;
-    return any { $policy_long_name =~ m/$_/imx } @patterns;
+    return any { $policy_long_name =~ m/$_/ixms } @patterns;
 }
 
 #-----------------------------------------------------------------------------
@@ -355,7 +355,7 @@ sub _validate_and_save_regex {
 
     my $found_errors;
     foreach my $regex (@regexes) {
-        eval { my $test = qr/$regex/imx; }
+        eval { my $test = qr/$regex/ixms; }
             or do {
                 my $cleaned_error = $EVAL_ERROR || '<unknown reason>';
                 $cleaned_error =~
@@ -830,19 +830,19 @@ option is explicitly given, setting C<-theme> causes the C<-severity>
 to be set to 1.
 
 B<-include> is a reference to a list of string C<@PATTERNS>.  Policies
-that match at least one C<m/$PATTERN/imx> will be loaded into this
+that match at least one C<m/$PATTERN/ixms> will be loaded into this
 Config, irrespective of the severity settings.  You can use it in
 conjunction with the C<-exclude> option.  Note that C<-exclude> takes
 precedence over C<-include> when a Policy matches both patterns.
 
 B<-exclude> is a reference to a list of string C<@PATTERNS>.  Polices
-that match at least one C<m/$PATTERN/imx> will not be loaded into this
+that match at least one C<m/$PATTERN/ixms> will not be loaded into this
 Config, irrespective of the severity settings.  You can use it in
 conjunction with the C<-include> option.  Note that C<-exclude> takes
 precedence over C<-include> when a Policy matches both patterns.
 
 B<-single-policy> is a string C<PATTERN>.  Only the policy that
-matches C<m/$PATTERN/imx> will be used.  This value overrides the
+matches C<m/$PATTERN/ixms> will be used.  This value overrides the
 C<-severity>, C<-theme>, C<-include>, C<-exclude>, and C<-only>
 options.
 

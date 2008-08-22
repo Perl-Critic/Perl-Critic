@@ -98,7 +98,7 @@ sub policy_is_thematic {
     # 'bugs && (pbp || core)'  ...could become... '1 && (0 || 1)'
 
     my $as_code = $rule; #Making a copy, so $rule is preserved
-    $as_code =~ s/ ( [\w\d]+ ) /exists $themes{$1} || 0/gemx;
+    $as_code =~ s/ ( [\w\d]+ ) /exists $themes{$1} || 0/gexms;
     my $is_thematic = eval $as_code;  ## no critic (ProhibitStringyEval)
 
     if ($EVAL_ERROR) {
@@ -118,15 +118,15 @@ sub cook_rule {
     return if not defined $raw_rule;
 
     #Translate logical operators
-    $raw_rule =~ s{\b not \b}{!}ixmg;     # "not" -> "!"
-    $raw_rule =~ s{\b and \b}{&&}ixmg;    # "and" -> "&&"
-    $raw_rule =~ s{\b or  \b}{||}ixmg;    # "or"  -> "||"
+    $raw_rule =~ s{\b not \b}{!}ixmsg;     # "not" -> "!"
+    $raw_rule =~ s{\b and \b}{&&}ixmsg;    # "and" -> "&&"
+    $raw_rule =~ s{\b or  \b}{||}ixmsg;    # "or"  -> "||"
 
     #Translate algebra operators (for backward compatibility)
-    $raw_rule =~ s{\A [-] }{!}ixmg;     # "-" -> "!"     e.g. difference
-    $raw_rule =~ s{   [-] }{&& !}ixmg;  # "-" -> "&& !"  e.g. difference
-    $raw_rule =~ s{   [*] }{&&}ixmg;    # "*" -> "&&"    e.g. intersection
-    $raw_rule =~ s{   [+] }{||}ixmg;    # "+" -> "||"    e.g. union
+    $raw_rule =~ s{\A [-] }{!}ixmsg;     # "-" -> "!"     e.g. difference
+    $raw_rule =~ s{   [-] }{&& !}ixmsg;  # "-" -> "&& !"  e.g. difference
+    $raw_rule =~ s{   [*] }{&&}ixmsg;    # "*" -> "&&"    e.g. intersection
+    $raw_rule =~ s{   [+] }{||}ixmsg;    # "+" -> "||"    e.g. union
 
     my $cooked_rule = lc $raw_rule;  #Is now cooked!
     return $cooked_rule;

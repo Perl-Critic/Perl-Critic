@@ -55,7 +55,7 @@ sub accumulate {
     my $statements = $doc->find('PPI::Statement');
     $self->{_statements} += $statements ? scalar @{$statements} : 0;
 
-    ## no critic (RequireExtendedFormatting, RequireLineBoundaryMatching)
+    ## no critic (RequireDotMatchAnything, RequireExtendedFormatting, RequireLineBoundaryMatching)
     my @lines = split /$INPUT_RECORD_SEPARATOR/, $doc->serialize();
     ## use critic
     $self->{_lines} += scalar @lines;

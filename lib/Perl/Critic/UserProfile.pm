@@ -120,7 +120,7 @@ sub listed_policies {
     my @normalized_policy_names = ();
 
     for my $policy_name ( sort keys %{$self->{_profile}} ) {
-        $policy_name =~ s/\A - //mxo; #Chomp leading "-"
+        $policy_name =~ s/\A - //xmso; #Chomp leading "-"
         my $policy_long_name = policy_long_name( $policy_name );
         push @normalized_policy_names, $policy_long_name;
     }

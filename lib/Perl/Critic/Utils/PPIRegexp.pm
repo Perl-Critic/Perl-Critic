@@ -103,7 +103,7 @@ sub get_delimiters {
         # hack: pull them out ourselves
         # limitation: this regexp fails on s{foo}<bar>
         my $operator = defined $elem->{operator} ? $elem->{operator} : q{};
-        @delimiters = join q{}, $elem =~ m/\A $operator (.).*?(.) (?:[xmsocgie]*) \z/mx;
+        @delimiters = join q{}, $elem =~ m/\A $operator (.).*?(.) (?:[xmsocgie]*) \z/xms;
     } else {
         @delimiters = ($elem->{sections}->[0]->{type});
         if ($elem->{sections}->[1]) {
@@ -123,7 +123,7 @@ sub get_delimiters {
 
     sub _get_ppi_package {
         my ($src_class, $re_node) = @_;
-        (my $dest_class = $src_class) =~ s/\A Regexp::Parser::/Perl::Critic::PPIRegexp::/mx;
+        (my $dest_class = $src_class) =~ s/\A Regexp::Parser::/Perl::Critic::PPIRegexp::/xms;
         if (!$seen{$src_class}) {
             $seen{$src_class} = 1;
             croak 'Regexp node which is not in the Regexp::Parser namespace'

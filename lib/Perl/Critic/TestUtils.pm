@@ -139,7 +139,7 @@ sub subtests_in_tree {
 
     find( {wanted => sub {
                return if ! -f $_;
-               my ($fileroot) = m{(.+)[.]run\z}mx;
+               my ($fileroot) = m{(.+)[.]run\z}xms;
                return if !$fileroot;
                my @pathparts = File::Spec->splitdir($fileroot);
                if (@pathparts < 2) {
@@ -200,8 +200,8 @@ sub _subtests_from_file {
         my $line = $_;
 
         if ( $inheader ) {
-            $line =~ m/\A [#]/mx or throw_internal "Code before cut: $test_file";
-            my ($key,$value) = $line =~ m/\A [#][#] [ ] (\S+) (?:\s+(.+))? /mx;
+            $line =~ m/\A [#]/xms or throw_internal "Code before cut: $test_file";
+            my ($key,$value) = $line =~ m/\A [#][#] [ ] (\S+) (?:\s+(.+))? /xms;
             next if !$key;
             next if $key eq 'cut';
             if ( not $valid_keys{$key} ) {
@@ -287,8 +287,8 @@ sub _finalize_subtest {
 sub bundled_policy_names {
     require ExtUtils::Manifest;
     my $manifest = ExtUtils::Manifest::maniread();
-    my @policy_paths = map {m{\A lib/(Perl/Critic/Policy/.*).pm \z}mx} keys %{$manifest};
-    my @policies = map { join q{::}, split m{/}mx, $_} @policy_paths;
+    my @policy_paths = map {m{\A lib/(Perl/Critic/Policy/.*).pm \z}xms} keys %{$manifest};
+    my @policies = map { join q{::}, split m{/}xms, $_} @policy_paths;
     return sort @policies;
 }
 
