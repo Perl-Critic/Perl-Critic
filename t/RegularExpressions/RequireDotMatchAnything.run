@@ -1,0 +1,87 @@
+## name basic passes
+## failures 0
+## cut
+
+my $string =~ m{pattern}s;
+my $string =~ m{pattern}gisx;
+my $string =~ m{pattern}gmis;
+my $string =~ m{pattern}mgxs;
+
+my $string =~ m/pattern/s;
+my $string =~ m/pattern/gisx;
+my $string =~ m/pattern/gmis;
+my $string =~ m/pattern/mgxs;
+
+my $string =~ /pattern/s;
+my $string =~ /pattern/gisx;
+my $string =~ /pattern/gmis;
+my $string =~ /pattern/mgxs;
+
+my $string =~ s/pattern/foo/s;
+my $string =~ s/pattern/foo/gisx;
+my $string =~ s/pattern/foo/gmis;
+my $string =~ s/pattern/foo/mgxs;
+
+my $re = qr/pattern/s;
+
+#-----------------------------------------------------------------------------
+
+## name basic failures
+## failures 17
+## cut
+
+my $string =~ m{pattern};
+my $string =~ m{pattern}gix;
+my $string =~ m{pattern}gim;
+my $string =~ m{pattern}gxm;
+
+my $string =~ m/pattern/;
+my $string =~ m/pattern/gix;
+my $string =~ m/pattern/gim;
+my $string =~ m/pattern/gxm;
+
+my $string =~ /pattern/;
+my $string =~ /pattern/gix;
+my $string =~ /pattern/gim;
+my $string =~ /pattern/gxm;
+
+my $string =~ s/pattern/foo/;
+my $string =~ s/pattern/foo/gix;
+my $string =~ s/pattern/foo/gim;
+my $string =~ s/pattern/foo/gxm;
+
+my $re = qr/pattern/;
+
+#-----------------------------------------------------------------------------
+
+## name tr and y checking
+## failures 0
+## cut
+
+my $string =~ tr/[A-Z]/[a-z]/;
+my $string =~ tr|[A-Z]|[a-z]|;
+my $string =~ tr{[A-Z]}{[a-z]};
+
+my $string =~ y/[A-Z]/[a-z]/;
+my $string =~ y|[A-Z]|[a-z]|;
+my $string =~ y{[A-Z]}{[a-z]};
+
+my $string =~ tr/[A-Z]/[a-z]/cd;
+my $string =~ y/[A-Z]/[a-z]/cd;
+
+##############################################################################
+#      $URL: http://perlcritic.tigris.org/svn/perlcritic/trunk/Perl-Critic/t/RegularExpressions/RequireLineBoundaryMatching.run $
+#     $Date: 2008-03-16 17:40:45 -0500 (Sun, 16 Mar 2008) $
+#   $Author: clonezone $
+# $Revision: 2187 $
+##############################################################################
+
+#-----------------------------------------------------------------------------
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab shiftround :

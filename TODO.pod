@@ -205,8 +205,6 @@ Check for -w on the shbang line.
 
 =item * Modules::RequireThreePartVersion [405-406]
 
-=item * RegularExpressions::RequireDotMatchAnything [240-241]
-
 =back
 
 

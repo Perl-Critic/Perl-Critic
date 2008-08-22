@@ -1,6 +1,7 @@
 [1.???] Released on 2008-??-??
 
     New Policies:
+    * RegularExpressions::RequireDotMatchAnything
     * ValuesAndExpressions::RequireConstantOnLeftSideOfEquality -- In
       case you accidentally say "if ($foo = 42) {...}"
 
