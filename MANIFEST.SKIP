@@ -71,3 +71,7 @@ RCS
 
 # Avoid Eclipse files.
 \.project\b
+
+# Avoid my Ant build script
+^build\.xml$
+
