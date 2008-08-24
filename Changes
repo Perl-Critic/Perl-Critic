@@ -5,6 +5,14 @@
     * ValuesAndExpressions::RequireConstantOnLeftSideOfEquality -- In
       case you accidentally say "if ($foo = 42) {...}"
 
+    New Features:
+    * perlcritic now supports a -pager option, so you can more easily
+      send the output to your favorite pager.  You can set this option
+      on the command-line or in your .perlcriticrc file.  See the
+      perlcritic perldoc for more details.  Credit to Michael Schwern.
+    * The output from "perlcritic -doc PATTERN" will be automatically
+      sent to your pager if you have set the -pager option.
+ 
     Policy Changes:
     * CodeLayout::ProhibitQuotedWordLists no longer applies if the list
       contains any non-words, by default.  A non-word is anything that does
@@ -27,7 +35,8 @@
     * perlcritic should now work under PAR.  RT #38380.
     * URL for our repository in META.yml now works for anonymous
       checkout.  The password is "" (empty).  RT #38628. 
-    * color for high-severity violations is now magenta. RT #38511.
+    * color for high-severity violations is now magenta because 
+      it is more redable than yellow on white backgrounds.  RT #38511.
 
 [1.090] Released on 2008-07-22
 

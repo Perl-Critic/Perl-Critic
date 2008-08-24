@@ -53,10 +53,9 @@ exit run() if not caller or $ENV{PAR_0};
 #-----------------------------------------------------------------------------
 # Begin subroutines
 
-sub out {   ## no critic (Subroutines::RequireArgUnpacking)
-    print {$output} @_;
-
-    return;
+sub out {
+    my @lines = @_;
+    return print {$output} @lines;
 }
 
 #-----------------------------------------------------------------------------
@@ -86,24 +85,34 @@ sub get_options {
     # are given, the lowest one wins.  If an explicit --severity
     # option has been given, then the shortcuts are ignored. The
     # @SEVERITY_NAMES variable is exported by Perl::Critic::Utils.
-    $opts{severity} ||= first { exists $opts{$_} } @SEVERITY_NAMES;
-    $opts{severity} ||=
-        first { exists $opts{$_} } ($SEVERITY_LOWEST ..  $SEVERITY_HIGHEST);
+    $opts{-severity} ||= first { exists $opts{"-$_"} } @SEVERITY_NAMES;
+    $opts{-severity} ||= first { exists $opts{"-$_"} } ($SEVERITY_LOWEST ..  $SEVERITY_HIGHEST);
 
 
     # If --top is specified, default the severity level to 1, unless an
     # explicit severity is defined.  This provides us flexibility to
     # report top-offenders across just some or all of the severity levels.
     # We also default the --top count to twenty if none is given
-    if ( exists $opts{top} ) {
-        $opts{severity} ||= 1;
-        $opts{top} ||= $DEFAULT_VIOLATIONS_FOR_TOP;
+    if ( exists $opts{-top} ) {
+        $opts{-severity} ||= 1;
+        $opts{-top} ||= $DEFAULT_VIOLATIONS_FOR_TOP;
     }
 
     #Override profile, if --noprofile is specified
-    if ( exists $opts{noprofile} ) {
-        $opts{profile} = $EMPTY;
+    if ( exists $opts{-noprofile} ) {
+        $opts{-profile} = $EMPTY;
     }
+
+    return %opts;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _parse_command_line {
+    my %opts;
+    my @opt_specs = _get_option_specification();
+    Getopt::Long::Configure('no_ignore_case');
+    GetOptions( \%opts, @opt_specs ) || pod2usage();           #Exits
 
     # I've adopted the convention of using key-value pairs for
     # arguments to most functions.  And to increase legibility,
@@ -115,26 +124,16 @@ sub get_options {
 
 #-----------------------------------------------------------------------------
 
-sub _parse_command_line {
-    my %opts;
-    my @opt_specs = _get_option_specification();
-    Getopt::Long::Configure('no_ignore_case');
-    GetOptions( \%opts, @opt_specs ) || pod2usage();           #Exits
-    return %opts;
-}
-
-#-----------------------------------------------------------------------------
-
 sub _dispatch_special_requests {
     my (%opts) = @_;
-    if ( $opts{help}            ) { pod2usage( -verbose => 0 )  }  #Exits
-    if ( $opts{options}         ) { pod2usage( -verbose => 1 )  }  #Exits
-    if ( $opts{man}             ) { pod2usage( -verbose => 2 )  }  #Exits
-    if ( $opts{version}         ) { out "$VERSION\n"; exit 0; }  #Exits
-    if ( $opts{list}            ) { render_policy_listing();    }  #Exits
-    if ( $opts{'list-themes'}   ) { render_theme_listing();     }  #Exits
-    if ( $opts{'profile-proto'} ) { render_profile_prototype(); }  #Exits
-    if ( $opts{doc}             ) { policy_docs( $opts{doc} );  }  #Exits
+    if ( $opts{-help}            ) { pod2usage( -verbose => 0 )  }  #Exits
+    if ( $opts{-options}         ) { pod2usage( -verbose => 1 )  }  #Exits
+    if ( $opts{-man}             ) { pod2usage( -verbose => 2 )  }  #Exits
+    if ( $opts{-version}         ) { out "$VERSION\n"; exit 0; }  #Exits
+    if ( $opts{-list}            ) { render_policy_listing();    }  #Exits
+    if ( $opts{'-list-themes'}   ) { render_theme_listing();     }  #Exits
+    if ( $opts{'-profile-proto'} ) { render_profile_prototype(); }  #Exits
+    if ( $opts{-doc}             ) { policy_docs( %opts );  }  #Exits
     return 1;
 }
 
@@ -145,28 +144,28 @@ sub _validate_options {
     my $msg = $EMPTY;
 
 
-    if ( $opts{noprofile} && $opts{profile} ) {
+    if ( $opts{-noprofile} && $opts{-profile} ) {
         $msg .= qq{Warning: Cannot use -noprofile with -profile option.\n};
     }
 
-    if ( $opts{verbose} && $opts{verbose} !~ m{(?: \d+ | %[mfFlcedrpPs] )}xms) {
-        $msg .= qq<Warning: --verbose arg "$opts{verbose}" looks odd.  >;
-        $msg .= qq<Perhaps you meant to say "--verbose 3 $opts{verbose}"\n>;
+    if ( $opts{-verbose} && $opts{-verbose} !~ m{(?: \d+ | %[mfFlcedrpPs] )}xms) {
+        $msg .= qq<Warning: --verbose arg "$opts{-verbose}" looks odd.  >;
+        $msg .= qq<Perhaps you meant to say "--verbose 3 $opts{-verbose}."\n>;
     }
 
-    if ( exists $opts{top} && $opts{top} < 0 ) {
-        $msg .= qq<Warning: --top argument "$opts{top}" is negative.  >;
-        $msg .= qq<Perhaps you meant to say "$opts{top} --top".\n>;
+    if ( exists $opts{-top} && $opts{-top} < 0 ) {
+        $msg .= qq<Warning: --top argument "$opts{-top}" is negative.  >;
+        $msg .= qq<Perhaps you meant to say "$opts{-top} --top".\n>;
     }
 
     if (
-            exists $opts{severity}
+            exists $opts{-severity}
         &&  (
-                    $opts{severity} < $SEVERITY_LOWEST
-                ||  $opts{severity} > $SEVERITY_HIGHEST
+                    $opts{-severity} < $SEVERITY_LOWEST
+                ||  $opts{-severity} > $SEVERITY_HIGHEST
             )
     ) {
-        $msg .= qq<Warning: --severity arg "$opts{severity}" out of range.  >;
+        $msg .= qq<Warning: --severity arg "$opts{-severity}" out of range.  >;
         $msg .= qq<Severities range from "$SEVERITY_LOWEST" (lowest) to >;
         $msg .= qq<"$SEVERITY_HIGHEST" (highest).\n>;
     }
@@ -234,7 +233,7 @@ sub critique {
     $critic = Perl::Critic->new( %{$opts_ref} );
     $critic->policies() || die "No policies selected.\n";
 
-    set_up_pager();
+    set_up_pager($critic->config()->pager());
 
     my $number_of_violations = undef;
     my $had_error_in_file = 0;
@@ -317,19 +316,17 @@ sub render_report {
 #-----------------------------------------------------------------------------
 
 sub set_up_pager {
+    my ($pager_command) = @_;
+    return if not $pager_command;
     return if not _at_tty();
 
-    my $command = $critic->config()->pager();
-    return if not $command;
-
-    open my $pager, q<|->, $command  ## no critic (InputOutput::RequireBriefOpen)
-        or die qq<Unable to pipe to pager "$command": $ERRNO\n>;
+    open my $pager, q<|->, $pager_command  ## no critic (InputOutput::RequireBriefOpen)
+        or die qq<Unable to pipe to pager "$pager_command": $ERRNO\n>;
 
     $output = $pager;
 
     return;
 }
-
 
 #-----------------------------------------------------------------------------
 
@@ -493,7 +490,7 @@ sub _this_is_windows {
 #-----------------------------------------------------------------------------
 
 sub _at_tty {
-    return -t STDOUT; ##no critic 'InteractiveTest';
+    return -t STDOUT; ## no critic 'ProhibitInteractiveTest';
 }
 
 #-----------------------------------------------------------------------------
@@ -541,17 +538,21 @@ sub render_profile_prototype {
 
 sub policy_docs {
 
-    my $pattern = shift;
+    my (%opts) = @_;
+    my $pattern = delete $opts{-doc};
+
     require Perl::Critic;
+    $critic = Perl::Critic->new(%opts);
+    set_up_pager($critic->config()->pager());
 
-    my %pc_params = (-profile => $EMPTY, -severity => $SEVERITY_LOWEST);
-    my @policies  = Perl::Critic::Config->new( %pc_params )->policies();
-    my @matches   = grep { $_ =~ m/$pattern/ixms } @policies;
+    require Perl::Critic::PolicyFactory;
+    my @site_policies  = Perl::Critic::PolicyFactory->site_policy_names();
+    my @matching_policies  = grep { $_ =~ m/$pattern/ixms } @site_policies;
 
-    for my $matching_policy ( @matches ) {
-        my @perldoc_cmd = qw(perldoc -T); #-T means don't send to pager
-        system @perldoc_cmd, ref $matching_policy;
-    }
+    # "-T" means don't send to pager   
+    my @perldoc_output = map {`perldoc -T $_`} @matching_policies;  ## no critic ProhibitBacktick
+    out @perldoc_output;
+
     exit 0;
 }
 
@@ -581,8 +582,8 @@ C<perlcritic> - Command-line interface to critique Perl source.
              [--only | --noonly] [--profile-strictness {warn|fatal|quiet}]
              [--force | --noforce] [--statistics] [--statistics-only]
              [--count | -C] [--verbose {number | format}]
-             [--color | --nocolor] [--pager pager]
-             [--quiet] {FILE | DIRECTORY | STDIN}
+             [--color | --nocolor] [--pager pager] [--quiet]
+             {FILE | DIRECTORY | STDIN}
 
   perlcritic --profile-proto
 
@@ -936,12 +937,14 @@ the default value for this option in your F<.perlcriticrc> file.
 
 Can also be specified as C<--colour>.
 
-=item C<--pager PAGER>
+=item C<--pager PAGER_COMMAND_STRING>
 
-If set, perlcritic will pipe it's output to the given PAGER.
+If set, perlcritic will pipe it's output to the given PAGER_COMMAND_STRING.
+You can set the default value for this option in your F<.perlcriticrc> file.
 
 Setting a pager turns off color by default.  You will have to turn color on
-manually.
+explicitly.  If you want color, you'll probably also want to tell your pager
+to display raw characters.  For C<less> and C<more>, use the -R switch.
 
 =item C<--doc PATTERN>
 
