@@ -14,7 +14,7 @@ use warnings;
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique fcritique);
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 
 #-----------------------------------------------------------------------------
 
@@ -71,6 +71,20 @@ my \@list = qw(
 END_PERL
 
 is( pcritique($policy, \$code, \%config), 0, 'Tabs in qw()' );
+
+#-----------------------------------------------------------------------------
+# RT #32440
+
+$code = <<"END_PERL";
+#This will be interpolated!
+\$x =~ m/
+\tsome
+\t(really | long)
+\tpattern
+/mx;
+END_PERL
+
+is( pcritique($policy, \$code, \%config), 0, 'Tabs in regex' );
 
 #-----------------------------------------------------------------------------
 

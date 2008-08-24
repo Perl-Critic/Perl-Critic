@@ -26,6 +26,15 @@ my $DEFAULT_ALLOW_LEADING_TABS = $TRUE;
 
 #-----------------------------------------------------------------------------
 
+# The following regex should be "qr{^ [^\t]+ \t}xms"
+# but it doesn't match when I expect it to.  I 
+# haven't figured out why.  So I used [^\s]
+# as a substitue to mean "not a tab".
+
+my $NON_LEADING_TAB_REGEX = qr{^ [^\s]+ \t}xms;
+
+#-----------------------------------------------------------------------------
+
 sub supported_parameters {
     return (
         {
@@ -51,7 +60,7 @@ sub violates {
     return if $elem->parent->isa('PPI::Statement::Data');
 
     # Permit leading tabs, if allowed
-    return if $self->_allow_leading_tabs() && $elem->location->[1] == 1;
+    return if $self->_allow_leading_tabs() && $elem !~ $NON_LEADING_TAB_REGEX;
 
     # Must be a violation...
     return $self->violation( $DESC, $EXPL, $elem );
