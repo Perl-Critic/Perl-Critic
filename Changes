@@ -28,6 +28,9 @@
     * TestingAndDebugging::ProhibitNoWarnings now supports a
       allow_with_category_restriction option, thanks to Michael Schwern.
       RT #38514.
+    * CodeLayout::ProhibitHardTabs now allows leading tabs in qw() word lists 
+      and regexes with the /x modifier.  You can still configure this
+      policy to forbid all hard tabs, if you like.  RT #32440
 
     Bug Fixes:
     * perlcritic should now work under PAR.  RT #38380.
