@@ -2,8 +2,6 @@
 
     New Policies:
     * RegularExpressions::RequireDotMatchAnything
-    * ValuesAndExpressions::RequireConstantOnLeftSideOfEquality -- In
-      case you accidentally say "if ($foo = 42) {...}"
 
     New Features:
     * perlcritic now supports a -pager option, so you can more easily
