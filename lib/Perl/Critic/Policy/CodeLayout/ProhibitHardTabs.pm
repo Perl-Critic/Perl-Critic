@@ -26,12 +26,11 @@ my $DEFAULT_ALLOW_LEADING_TABS = $TRUE;
 
 #-----------------------------------------------------------------------------
 
-# The following regex should be "qr{^ [^\t]+ \t}xms"
-# but it doesn't match when I expect it to.  I 
-# haven't figured out why.  So I used [^\s]
-# as a substitue to mean "not a tab".
+# The following regex should probably be "qr{^ .* [^\t]+ \t}xms" but it doesn't 
+# match when I expect it to.  I haven't figured out why, so I used "\S" to 
+# approximately mean "not a tab", and that seemd to work.
 
-my $NON_LEADING_TAB_REGEX = qr{^ [^\s]+ \t}xms;
+my $NON_LEADING_TAB_REGEX = qr{^ .* \S+ \t }xms;
 
 #-----------------------------------------------------------------------------
 
@@ -59,10 +58,19 @@ sub violates {
     # The __DATA__ element is exempt
     return if $elem->parent->isa('PPI::Statement::Data');
 
-    # Permit leading tabs, if allowed
-    return if $self->_allow_leading_tabs() && $elem !~ $NON_LEADING_TAB_REGEX;
+    # If allowed, permit leading tabs in situations where whitespace s not significant.
+    if ( $self->_allow_leading_tabs() ) {
+        
+        return if $elem->location->[1] == 1;
+        
+        return if _is_extended_regex($elem)
+            && $elem !~ $NON_LEADING_TAB_REGEX;
 
-    # Must be a violation...
+        return if $elem->isa('PPI::Token::QuoteLike::Words')
+            && $elem !~ $NON_LEADING_TAB_REGEX;
+    }
+    
+    # If we get here, then it must be a violation...
     return $self->violation( $DESC, $EXPL, $elem );
 }
 
@@ -70,8 +78,20 @@ sub violates {
 
 sub _allow_leading_tabs {
     my ( $self ) = @_;
-
     return $self->{_allow_leading_tabs};
+}
+
+#-----------------------------------------------------------------------------
+
+sub _is_extended_regex {
+    my ($elem) = @_;
+    
+    $elem->isa('PPI::Token::Regexp') 
+        || $elem->isa('PPI::Token::QuoteLike::Regexp')
+            || return;
+        
+   # Look for the /x modifier near the end
+   return $elem =~ m{\b [gimso]* x [gimso]* $}mx;
 }
 
 1;
@@ -108,8 +128,11 @@ examined.
 
 =head1 CONFIGURATION
 
-Tabs in a leading position are allowed, but if you want to forbid all tabs
-everywhere, put this to your F<.perlcriticrc> file:
+Hard tabs in a string are always forbidden (use "\t" instead).  But 
+hard tabs in a leading position are allowed when they are used to indent
+code statements, C<qw()> word lists, and regular expressions with the C</x>
+modifier.  However, if you want to forbid all tabs everywhere, then add 
+this to your F<.perlcriticrc> file:
 
     [CodeLayout::ProhibitHardTabs]
     allow_leading_tabs = 0

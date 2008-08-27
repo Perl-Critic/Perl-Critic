@@ -14,7 +14,7 @@ use warnings;
 # common P::C testing tools
 use Perl::Critic::TestUtils qw(pcritique fcritique);
 
-use Test::More tests => 7;
+use Test::More tests => 10;
 
 #-----------------------------------------------------------------------------
 
@@ -70,7 +70,21 @@ my \@list = qw(
 
 END_PERL
 
-is( pcritique($policy, \$code, \%config), 0, 'Tabs in qw()' );
+is( pcritique($policy, \$code, \%config), 0, 'Leading tabs in qw()' );
+
+#-----------------------------------------------------------------------------
+
+$code = <<"END_PERL";
+#This will be interpolated!
+
+my \@list = qw(
+\tfoo\tbar
+\tbaz\tnuts
+);
+
+END_PERL
+
+is( pcritique($policy, \$code, \%config), 1, 'Non-leading tabs in qw()' );
 
 #-----------------------------------------------------------------------------
 # RT #32440
@@ -82,9 +96,56 @@ $code = <<"END_PERL";
 \t(really | long)
 \tpattern
 /mx;
+
+#This will be interpolated!
+\$z = qr/
+\tsome
+\t(really | long)
+\tpattern
+/mx;
+
 END_PERL
 
-is( pcritique($policy, \$code, \%config), 0, 'Tabs in regex' );
+is( pcritique($policy, \$code, \%config), 0, 'Leading tabs in extended regex' );
+
+#-----------------------------------------------------------------------------
+# RT #32440
+
+$code = <<"END_PERL";
+#This will be interpolated!
+#Note that these regex does not have /x, so tabs are significant
+
+\$x =~ m/
+\tsome
+\tugly
+\tpattern
+/m;
+
+
+\$z = qr/
+\tsome
+\tugly
+\tpattern
+/gis;
+
+END_PERL
+
+is( pcritique($policy, \$code, \%config), 2, 'Leading tabs in non-extended regex' );
+
+#-----------------------------------------------------------------------------
+# RT #32440
+
+$code = <<"END_PERL";
+#This will be interpolated!
+#Note that these regex does not have /x, so tabs are significant
+
+\$x =~ m/
+\tsome\tugly\tpattern
+/xm;
+
+END_PERL
+
+is( pcritique($policy, \$code, \%config), 1, 'Non-leading tabs in extended regex' );
 
 #-----------------------------------------------------------------------------
 
