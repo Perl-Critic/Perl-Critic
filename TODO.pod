@@ -460,6 +460,13 @@ Forbid C<exit()> in files that lack a shebang.  Inspired by
 L<http://use.perl.org/~Ovid/journal/36746> and an analgous checker in
 FindBugs.
 
+=item * Modules::ProhibitRedundantLoading
+
+Don't allow a package to "use" the same module more than once, unless
+there is a "no <module>" between them.
+
+See https://rt.cpan.org/Ticket/Display.html?id=38074.
+
 =back
 
 
@@ -531,15 +538,13 @@ that does a hash-lookup like this:
     my %logical_ops = hashify( qw( ! || && ||= &&= and or not ) );
     sub is_logical_op { return exists $logical_ops{ $_[0] }; }
 
-Why?
+Question: Why?
 
+Answer: Readability, mostly.  Performance, maybe.
 
-=item * Allow color output to work through a pipe.
+=item Refactor guts of perlcritic into a module (Perl::Critic::App ??)
 
-http://rt.cpan.org/Ticket/Display.html?id=30140
-
-F<ack> now supports this.
-
+Because it is getting unwieldy in there.
 
 =back
 
