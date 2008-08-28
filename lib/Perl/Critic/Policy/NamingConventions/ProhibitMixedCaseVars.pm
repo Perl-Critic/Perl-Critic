@@ -26,12 +26,12 @@ Readonly::Scalar my $UPPER_LOWER    => qr/ [[:upper:]] [[:lower:]] /xms;
 Readonly::Scalar my $LOWER_UPPER    => qr/ [[:lower:]] [[:upper:]] /xms;
 Readonly::Scalar my $MIXED_RX       => qr{ $UPPER_LOWER | $LOWER_UPPER }xmso;
 Readonly::Scalar my $DESC       => 'Mixed-case variable name(s)';
-Readonly::Scalar my $EXPL       => [ 45, 46 ];
+Readonly::Scalar my $EXPL       => [ 44 ];
 
 #-----------------------------------------------------------------------------
 
 sub supported_parameters { return ()                         }
-sub default_severity     { return $SEVERITY_LOWEST           }
+sub default_severity     { return $SEVERITY_LOW              }
 sub default_themes       { return qw( core pbp cosmetic )    }
 sub applies_to           { return 'PPI::Statement::Variable' }
 
