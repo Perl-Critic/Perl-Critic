@@ -30,7 +30,7 @@ use Perl::Critic::Utils::POD qw< get_module_abstract_from_file >;
 
 use Exception::Class ();  # Must be after P::C::Exception::*
 
-our $VERSION = '1.090';
+our $VERSION = '1.091';
 
 
 print "\n\nGenerating Perl::Critic::PolicySummary.\n";
