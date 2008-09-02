@@ -8,7 +8,6 @@
 
 Perl::Critic::TODO - Things for Perl::Critic developers to do
 
-
 =head1 SOURCE
 
     #######################################################################
@@ -542,7 +541,7 @@ Question: Why?
 
 Answer: Readability, mostly.  Performance, maybe.
 
-=item Refactor guts of perlcritic into a module (Perl::Critic::App ??)
+=item * Refactor guts of perlcritic into a module (Perl::Critic::App ??)
 
 Because it is getting unwieldy in there.
 
