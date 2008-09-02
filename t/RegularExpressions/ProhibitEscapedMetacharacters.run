@@ -52,6 +52,7 @@ m/ \[\] /x;
 s{\%[fF]}{STDIN}mx;
 
 ## name escaped characters in character classes
+## TODO haven't fixed these bugs yet
 ## failures 0
 ## cut
 
