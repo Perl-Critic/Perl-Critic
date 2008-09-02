@@ -1,3 +1,9 @@
+[1.092] Released on 2008-09-02
+
+    Bug Fixes:
+    * Fixed POD errors that were causing build failures.  Sorry
+      about that.
+
 [1.091] Released on 2008-09-01
 
     New Policies:
