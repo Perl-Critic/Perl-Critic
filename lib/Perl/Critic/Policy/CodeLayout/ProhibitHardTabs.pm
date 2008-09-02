@@ -15,7 +15,7 @@ use Readonly;
 use Perl::Critic::Utils qw{ :booleans :severities };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.090';
+our $VERSION = '1.091';
 
 #-----------------------------------------------------------------------------
 
@@ -26,8 +26,8 @@ my $DEFAULT_ALLOW_LEADING_TABS = $TRUE;
 
 #-----------------------------------------------------------------------------
 
-# The following regex should probably be "qr{^ .* [^\t]+ \t}xms" but it doesn't 
-# match when I expect it to.  I haven't figured out why, so I used "\S" to 
+# The following regex should probably be "qr{^ .* [^\t]+ \t}xms" but it doesn't
+# match when I expect it to.  I haven't figured out why, so I used "\S" to
 # approximately mean "not a tab", and that seemd to work.
 
 my $NON_LEADING_TAB_REGEX = qr{^ .* \S+ \t }xms;
@@ -60,16 +60,16 @@ sub violates {
 
     # If allowed, permit leading tabs in situations where whitespace s not significant.
     if ( $self->_allow_leading_tabs() ) {
-        
+
         return if $elem->location->[1] == 1;
-        
+
         return if _is_extended_regex($elem)
             && $elem !~ $NON_LEADING_TAB_REGEX;
 
         return if $elem->isa('PPI::Token::QuoteLike::Words')
             && $elem !~ $NON_LEADING_TAB_REGEX;
     }
-    
+
     # If we get here, then it must be a violation...
     return $self->violation( $DESC, $EXPL, $elem );
 }
@@ -85,13 +85,13 @@ sub _allow_leading_tabs {
 
 sub _is_extended_regex {
     my ($elem) = @_;
-    
-    $elem->isa('PPI::Token::Regexp') 
+
+    $elem->isa('PPI::Token::Regexp')
         || $elem->isa('PPI::Token::QuoteLike::Regexp')
             || return;
-        
+
    # Look for the /x modifier near the end
-   return $elem =~ m{\b [gimso]* x [gimso]* $}mx;
+   return $elem =~ m{\b [gimso]* x [gimso]* $}xms;
 }
 
 1;
