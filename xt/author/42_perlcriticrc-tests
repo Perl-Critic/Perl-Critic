@@ -52,5 +52,3 @@ allow_all_brackets = 1
 # Too endemic for me to deal with right now
 [-ValuesAndExpressions::ProhibitMagicNumbers]
 
-# Might move this to P::C::More
-[-ValuesAndExpressions::RequireConstantOnLeftSideOfEquality]

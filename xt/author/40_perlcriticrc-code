@@ -39,5 +39,3 @@ allow_all_brackets = 1
 [RegularExpressions::RequireBracesForMultiline]
 allow_all_brackets = 1
 
-# Might move this to P::C::More
-[-ValuesAndExpressions::RequireConstantOnLeftSideOfEquality]

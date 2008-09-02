@@ -33,7 +33,6 @@ my $profile = {
     '-ErrorHandling::RequireCheckingReturnValueOfEval'           => {},
     '-Miscellanea::RequireRcsKeywords'                           => {},
     '-ValuesAndExpressions::ProhibitMagicNumbers'                => {},
-    '-ValuesAndExpressions::RequireConstantOnLeftSideOfEquality' => {},
 };
 
 my $code = undef;
