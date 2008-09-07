@@ -132,7 +132,20 @@ indicate that the string should be interpolated.
 
 =head1 CONFIGURATION
 
-This Policy is not configurable except for the standard options.
+The C<rcs_keywords> option allows you to stop this policy from complaining
+about things that look like RCS variables, for example, in deriving values for
+C<$VERSION> variables.
+
+For example, if you've got code like
+
+    our ($VERSION) = (q<$Revision$> =~ m/(\d+)/mx);
+
+You can specify
+
+    [ValuesAndExpressions::RequireInterpolationOfMetachars]
+    rcs_keywords = Revision
+
+in your F<.perlcriticrc> to provide an exemption.
 
 
 =head1 NOTES
