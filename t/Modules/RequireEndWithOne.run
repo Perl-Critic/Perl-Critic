@@ -98,6 +98,15 @@ END {}
 
 #-----------------------------------------------------------------------------
 
+## name programs are exempt
+## failures 0
+## parms
+## cut
+#!/usr/bin/perl
+my $foo = 42;
+
+#-----------------------------------------------------------------------------
+
 ## name DESTROY sub hides the 1;
 ## TODO This is a PPI bug. See http://rt.cpan.org/Ticket/Display.html?id=27364
 ## failures 0
@@ -107,3 +116,20 @@ DESTROY { warn 'DEAD'; }
 
 1;
 
+#-----------------------------------------------------------------------------
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab shiftround :

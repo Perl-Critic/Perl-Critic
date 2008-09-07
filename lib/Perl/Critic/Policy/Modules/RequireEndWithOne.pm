@@ -31,9 +31,14 @@ sub applies_to           { return 'PPI::Document'     }
 
 #-----------------------------------------------------------------------------
 
+sub is_document_exempt {
+    my ( $self, $document ) = @_;
+
+    return is_script($document);   # Must be a library or module.
+}
+
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-    return if is_script($doc);   #Must be a library or module.
 
     # Last statement should be just "1;"
     my @significant = grep { _is_code($_) } $doc->schildren();

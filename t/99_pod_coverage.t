@@ -57,6 +57,7 @@ sub get_trusted_methods {
     return qw(
         new
         initialize_if_enabled
+        is_document_exempt
         violates
         applies_to
         default_themes

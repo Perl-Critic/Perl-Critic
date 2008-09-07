@@ -1,5 +1,9 @@
 [1.xxx] Released on 2008-xx-xx
 
+    New Developer Features:
+    * Perl::Critic::Policy::is_document_exempt() is checked prior to scanning
+      and thus can speed things up.
+
     Bug Fixes:
     * Miscellanea::RequireRcsKeywords couldn't find keywords after __END__
       that didn't look like part of POD.
