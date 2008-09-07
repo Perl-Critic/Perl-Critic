@@ -14,7 +14,7 @@ use Readonly;
 
 use File::Spec;
 
-use Perl::Critic::Utils qw{ :severities };
+use Perl::Critic::Utils qw{ :severities is_script };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.092';
@@ -32,6 +32,12 @@ sub default_themes       { return qw(core bugs)     }
 sub applies_to           { return 'PPI::Document'   }
 
 #-----------------------------------------------------------------------------
+
+sub is_document_exempt {
+    my ( $self, $document ) = @_;
+
+    return is_script($document);   # Must be a library or module.
+}
 
 sub violates {
     my ($self, $elem, $doc) = @_;
