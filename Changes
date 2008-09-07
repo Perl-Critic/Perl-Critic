@@ -1,4 +1,4 @@
-[1.xxx] Released on 2008-xx-xx
+[1.093_001] Released on 2008-09-07
 
     New Developer Features:
     * Perl::Critic::Policy::is_document_exempt() is checked prior to scanning
