@@ -86,24 +86,23 @@ sub violates {
             push @viols, $self->violation( $desc, $EXPL, $doc );
         }
         else {
-            my @missing_keywords = grep {
-                my $keyword_rx = qr/\$$_.*\$/xms;
-                !!none {
-                    /$keyword_rx/    ## no critic
+            my @missing_keywords =
+                grep
+                    {
+                        my $keyword_rx = qr< \$ $_ .* \$ >xms;
+                        ! ! none { m/$keyword_rx/xms } @{$nodes}
                     }
-                    @{$nodes}
-            } @{$keywordset_ref};
+                    @{$keywordset_ref};
 
             if (@missing_keywords) {
-
                 # Provisionally flag a violation. See below.
-                my $desc = 'RCS keywords '
-                    . join( ', ', map {"\$$_\$"} @missing_keywords )
-                    . ' not found';
+                my $desc =
+                    'RCS keywords '
+                        . join( ', ', map {"\$$_\$"} @missing_keywords )
+                        . ' not found';
                 push @viols, $self->violation( $desc, $EXPL, $doc );
             }
             else {
-
                 # Hey! I'm ignoring @viols for other keyword sets
                 # because this one is complete.
                 return;
@@ -116,10 +115,13 @@ sub violates {
 
 sub _wanted {
     my ( undef, $elem ) = @_;
-    return  $elem->isa('PPI::Token::Pod')
-        || $elem->isa('PPI::Token::Comment')
-        || $elem->isa('PPI::Token::Quote::Single')
-        || $elem->isa('PPI::Token::Quote::Literal');
+
+    return
+            $elem->isa('PPI::Token::Pod')
+        ||  $elem->isa('PPI::Token::Comment')
+        ||  $elem->isa('PPI::Token::Quote::Single')
+        ||  $elem->isa('PPI::Token::Quote::Literal')
+        ||  $elem->isa('PPI::Token::End');
 }
 
 1;

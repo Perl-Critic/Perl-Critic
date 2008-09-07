@@ -1,3 +1,9 @@
+[1.xxx] Released on 2008-xx-xx
+
+    Bug Fixes:
+    * Miscellanea::RequireRcsKeywords couldn't find keywords after __END__
+      that didn't look like part of POD.
+
 [1.092] Released on 2008-09-02
 
     Bug Fixes:

@@ -1,6 +1,7 @@
 ## name RCS keywords in POD
 ## failures 0
 ## cut
+
 =pod
 
   $Revision$
@@ -24,6 +25,7 @@ $baz = qq{nuts};
 ## name Keywords in comments
 ## failures 0
 ## cut
+
 # $Revision$
 # $Source$
 # $Date$
@@ -33,6 +35,7 @@ $baz = qq{nuts};
 ## name Id in comments
 ## failures 0
 ## cut
+
 # $Id$
 END_PERL
 
@@ -41,6 +44,7 @@ END_PERL
 ## name Keywords in literals
 ## failures 0
 ## cut
+
 '$Revision$'
 '$Source: foo/bar $'
 '$Date$'
@@ -50,6 +54,7 @@ END_PERL
 ## name Keywords in literals, q{}-style
 ## failures 0
 ## cut
+
 q{$Revision$}
 q{$Source: foo/bar $}
 q{$Date$}
@@ -60,6 +65,7 @@ q{$Date$}
 ## failures 0
 ## parms {keywords => 'Revision Author Id'}
 ## cut
+
 q{$Revision$}
 q{$Author$}
 q{$Id: whatever $}
@@ -70,7 +76,36 @@ q{$Id: whatever $}
 ## failures 1
 ## parms {keywords => 'Author Id'}
 ## cut
+
 #nothing here!
 $policy = 'Miscellanea::RequireRcsKeywords';
 is( pcritique($policy, \$code, \%config), 1, $policy);
 
+#-----------------------------------------------------------------------------
+
+## name Keywords after __END__
+## failures 0
+## cut
+
+__END__
+# $Revision$
+# $Source$
+# $Date$
+
+#-----------------------------------------------------------------------------
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab shiftround :
