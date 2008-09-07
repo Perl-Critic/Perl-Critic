@@ -187,15 +187,17 @@ sub _is_ppi_doc {
 #-----------------------------------------------------------------------------
 
 sub _critique {
-
     my ($policy, $doc, $is_line_disabled) = @_;
-    my @violations = ();
+
+    return if $policy->is_document_exempt($doc);
+
     my $maximum_violations = $policy->get_maximum_violations_per_document();
 
     if (defined $maximum_violations && $maximum_violations == 0) {
         return;
     }
 
+    my @violations = ();
     my $policy_name = $policy->get_long_name();
 
   TYPE:

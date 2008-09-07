@@ -122,6 +122,12 @@ sub initialize_if_enabled {
 
 #-----------------------------------------------------------------------------
 
+sub is_document_exempt {
+    return $FALSE;
+}
+
+#-----------------------------------------------------------------------------
+
 sub _validate_config_keys {
     my ( $self, $errors, $config ) = @_;
 
@@ -562,10 +568,11 @@ This constructor is always called regardless of whether the user has
 enabled this Policy or not.
 
 
-=item C<< initialize_if_enabled( { key1 => value1, key2 => value2 ... } ) >>
+=item C<< initialize_if_enabled( $config ) >>
 
-This receives the same parameters as C<new()>, but as a reference to a
-hash, and is only invoked if this Policy is enabled by the user.
+This receives an instance of
+L<Perl::Critic::PolicyConfig|Perl::Critic::PolicyConfig> as a
+parameter, and is only invoked if this Policy is enabled by the user.
 Thus, this is the preferred place for subclasses to do any
 initialization.
 
@@ -575,6 +582,12 @@ subclasses, this will always be C<$TRUE>.  Policies that depend upon
 external modules or other system facilities that may or may not be
 available should test for the availability of these dependencies and
 return C<$FALSE> if they are not.
+
+
+=item C<< is_document_exempt( $document ) >>
+
+Answers whether the argument is exempt from this Policy.  By default,
+returns C<$FALSE>.
 
 
 =item C< violates( $element, $document ) >
