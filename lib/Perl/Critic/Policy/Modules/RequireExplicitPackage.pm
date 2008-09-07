@@ -43,12 +43,14 @@ sub default_maximum_violations_per_document { return 1; }
 
 #-----------------------------------------------------------------------------
 
+sub is_document_exempt {
+    my ( $self, $document ) = @_;
+
+    return $self->{_exempt_scripts} && is_script($document);
+}
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-
-    # You can configure this policy to exclude scripts
-    return if $self->{_exempt_scripts} && is_script($doc);
 
     # Find the first 'package' statement
     my $package_stmnt = $doc->find_first( 'PPI::Statement::Package' );

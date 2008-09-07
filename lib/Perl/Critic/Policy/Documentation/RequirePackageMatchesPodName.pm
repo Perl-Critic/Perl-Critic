@@ -32,6 +32,13 @@ sub applies_to           { return 'PPI::Document'         }
 
 #-----------------------------------------------------------------------------
 
+sub is_document_exempt {
+    my ( $self, $document ) = @_;
+
+    # idea: force NAME to match the file name in scripts?
+    return is_script($document); # mismatch is normal in program entry points
+}
+
 sub violates {
     my ( $self, $elem, $doc ) = @_;
 
@@ -49,9 +56,6 @@ sub violates {
         if (!$pod_pkg) {
             return $self->violation( $DESC, q{Empty name declaration}, $elem );
         }
-
-        # idea: force NAME to match the file name in scripts?
-        return if is_script($doc); # mismatch is normal in program entry points
 
         # idea: worry about POD escapes?
         $pod_pkg =~ s{\A [CL]<(.*)>\z}{$1}gxms; # unwrap

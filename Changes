@@ -7,6 +7,8 @@
     Bug Fixes:
     * Miscellanea::RequireRcsKeywords couldn't find keywords after __END__
       that didn't look like part of POD.
+    * Modules::RequireFilenameMatchesPackage would incorrectly complain about
+      programs.  Yet more greatness contributed by Schwern.  RT #39024.
 
 [1.092] Released on 2008-09-02
 
