@@ -114,6 +114,7 @@ Perl::Critic::Policy::NamingConventions::Capitalization - Distinguish different 
 
 This Policy is part of the core L<Perl::Critic|Perl::Critic> distribution.
 
+
 =head1 DESCRIPTION
 
 Conway recommends to distinguish different program components by case.
@@ -144,6 +145,7 @@ Constants are in all-caps.
 
     Readonly::Scalar my $foo = 42;  # not ok
 
+
 =head1 CONFIGURATION
 
 This Policy is not configurable except for the standard options.
@@ -157,7 +159,24 @@ a constant, thus any variable may be made all-caps.
 
 =head1 SEE ALSO
 
-To control use of camelCase see L<Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseSubs|Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseSubs> and L<Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars|Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars>.
+To control use of camelCase see
+L<Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseSubs|Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseSubs>
+and
+L<Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars|Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars>.
+
+
+=head1 AUTHOR
+
+Michael G Schwern <schwern@pobox.com>
+
+
+=head1 COPYRIGHT
+
+Copyright (c) 2008 Michael G Schwern.  All rights reserved.
+
+This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.  The full text of this license
+can be found in the LICENSE file included with this module.
 
 =cut
 
