@@ -27,7 +27,6 @@ our $VERSION = '1.093_01';
 #-----------------------------------------------------------------------------
 
 Readonly::Scalar my $EXPL => q{Find an alternative module};
-Readonly::Scalar my $DESC => q{Prohibited module used};
 
 #-----------------------------------------------------------------------------
 
@@ -93,9 +92,10 @@ sub violates {
     return if !$module;
 
     if ( exists $self->{_evil_modules}->{ $module } ||
-         any { $module =~ $_ } @{ $self->{_evil_modules_rx} } ) {
+        any { $module =~ $_ } @{ $self->{_evil_modules_rx} } ) {
 
-        return $self->violation( $DESC, $EXPL, $elem );
+        my $description = qq<Prohibited module "$module" used>;
+        return $self->violation( $description, $EXPL, $elem );
     }
     return;    #ok!
 }
