@@ -1,4 +1,11 @@
-[1.093_001] Released on 2008-09-07
+[1.xxx] Released on 2008-xxx
+
+    Policy Changes:
+    Modules::ProhibitEvilModules now allows you to specify what the
+    description of a use of a bad module should be, to, say, suggest that
+    people use autodie instead of Fatal.
+
+[1.093_01] Released on 2008-09-07
 
     New Developer Features:
     * Perl::Critic::Policy::is_document_exempt() is checked prior to scanning

@@ -85,6 +85,8 @@ lines so that there's the bit about invoking perl if the program is attempted
 to be run by a Bourne shell, which throws the line numbers off when using
 Test::P::C on the contents of a C<blib> directory.
 
+This actually requires support from PPI.
+
 
 =item * Enhance statistics.
 
@@ -110,6 +112,9 @@ distribution.
 Something like using a "+" sign in front of the Policy name in its
 configuration block, analogous to the "-" sign used for disabling a policy,
 e.g. "C<[+Example::Policy]>".
+
+
+=item * Add support in .run files for regexes for violation descriptions.
 
 
 =back

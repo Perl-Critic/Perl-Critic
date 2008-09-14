@@ -18,7 +18,7 @@ use Super::Evil::Module;
 #-----------------------------------------------------------------------------
 
 ## name No evil modules
-## parms {modules => 'Evil::Module Super::Evil::Module'}
+## parms {modules => ' Evil::Module Super::Evil::Module'}
 ## failures 0
 ## cut
 
@@ -27,7 +27,7 @@ use Good::Module;
 #-----------------------------------------------------------------------------
 
 ## name 2 evil modules, with pattern matching
-## parms { modules => '/Evil::/ /Demonic/' }
+## parms { modules => '/Evil::/ /Demonic/ ' }
 ## failures 2
 ## cut
 
@@ -37,7 +37,7 @@ use Demonic::Module
 #-----------------------------------------------------------------------------
 
 ## name More evil modules, with mixed config
-## parms { modules => '/Evil::/ Demonic::Module /Acme/' }
+## parms { modules => ' /Evil::/ Demonic::Module /Acme/' }
 ## failures 4
 ## cut
 
@@ -49,7 +49,7 @@ use Acme::Foo;
 #-----------------------------------------------------------------------------
 
 ## name More evil modules, with more pattern matching
-## parms { modules => '/Evil::|Demonic::Module|Acme/' }
+## parms { modules => '/Evil::|Demonic::Module|Acme/ ' }
 ## failures 4
 ## cut
 
@@ -67,6 +67,33 @@ use Acme::Foo;
 ## cut
 
 print 'Hello World';
+
+#-----------------------------------------------------------------------------
+
+## name Providing the description for modules, no regular expressions.
+## parms { modules => q' Fatal{Found use of Fatal. Use autodie instead} Getopt::Std {Found use of Getopt::Std. Use Getopt::Long instead} ' }
+## failures 2
+## cut
+
+use Fatal qw< open close >;
+use Getopt::Std;
+
+#-----------------------------------------------------------------------------
+
+## name Providing the description for modules, regular expressions.
+## parms { modules => q' /Fatal/{Found use of Fatal. Use autodie instead} /Getopt::Std/ {Found use of Getopt::Std. Use Getopt::Long instead} ' }
+## failures 2
+## cut
+
+use Fatal qw< open close >;
+use Getopt::Std;
+
+#-----------------------------------------------------------------------------
+
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
 
 ##############################################################################
 # Local Variables:

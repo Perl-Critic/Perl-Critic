@@ -12,8 +12,6 @@ use warnings;
 use English qw(-no_match_vars);
 use Readonly;
 
-use List::MoreUtils qw(any);
-
 use Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue
     qw{ throw_policy_value };
 use Perl::Critic::Utils qw{
@@ -27,6 +25,39 @@ our $VERSION = '1.093_01';
 #-----------------------------------------------------------------------------
 
 Readonly::Scalar my $EXPL => q{Find an alternative module};
+
+Readonly::Scalar my $MODULE_NAME_REGEX =>
+    qr<
+        \b
+        [[:alpha:]_]
+        (?:
+            (?: \w | :: )*
+            \w
+        )?
+        \b
+    >xms;
+Readonly::Scalar my $REGULAR_EXPRESSION_REGEX => qr< [/] ( [^/]+ ) [/] >xms;
+Readonly::Scalar my $DESCRIPTION_REGEX => qr< [{] ( [^}]+ ) [}] >xms;
+
+# It's kind of unfortunate that I had to put capturing parentheses in the
+# component regexes above, because they're not visible here and so make
+# figuring out the positions of captures hard.  Too bad we can't make the
+# minimum perl version 5.10. :]
+Readonly::Scalar my $MODULES_REGEX =>
+    qr<
+        \A
+        \s*
+        (?:
+                ( $MODULE_NAME_REGEX )
+            |   $REGULAR_EXPRESSION_REGEX
+        )
+        (?: \s* $DESCRIPTION_REGEX )?
+        \s*
+    >xms;
+
+# Indexes in the arrays of regexes for the "modules" option.
+Readonly::Scalar my $INDEX_REGEX        => 0;
+Readonly::Scalar my $INDEX_DESCRIPTION  => 1;
 
 #-----------------------------------------------------------------------------
 
@@ -53,35 +84,47 @@ sub _parse_modules {
     return if not defined $config_string;
 
     my %evil_modules;
-    my @evil_modules_rx;
 
-    my @modules = words_from_string($config_string);
-    foreach my $module ( @modules ) {
-        if ( $module =~ m{ \A [/] (.+) [/] \z }xms ) {
+    # Can't use a hash due to stringification, so this is an AoA.
+    my @evil_modules_regexes;
 
+    my $module_specifications = $config_string;
+    while ( $module_specifications =~ s< $MODULES_REGEX ><>xms ) {
+        my ($module, $regex_string, $description) = ($1, $2, $3);
+
+        if ( $regex_string ) {
             # These are module name patterns (e.g. /Acme/)
-            my $re = $1; # Untainting
-            my $pattern = eval { qr/$re/ };  ## no critic (RegularExpressions::.*)
+            my $actual_regex;
 
-            if ( $EVAL_ERROR ) {
-                throw_policy_value
+            eval { $actual_regex = qr/$regex_string/; 1 }  ## no critic (RegularExpressions::.*)
+                or throw_policy_value
                     policy         => $self->get_short_name(),
                     option_name    => 'modules',
-                    option_value   => ( join q{", "}, @modules ),
+                    option_value   => $config_string,
                     message_suffix =>
-                        qq{contains an invalid regular expression: "$module"};
-            }
+                        qq{contains an invalid regular expression: "$regex_string"};
 
-            push @evil_modules_rx, $pattern;
+            push
+                @evil_modules_regexes,
+                [ $actual_regex, $description || $EMPTY ];
         }
         else {
             # These are literal module names (e.g. Acme::Foo)
-            $evil_modules{$module} = 1;
+            $evil_modules{$module} = $description || $EMPTY;
         }
     }
 
-    $self->{_evil_modules}    = \%evil_modules;
-    $self->{_evil_modules_rx} = \@evil_modules_rx;
+    if ($module_specifications) {
+        throw_policy_value
+            policy         => $self->get_short_name(),
+            option_name    => 'modules',
+            option_value   => $config_string,
+            message_suffix =>
+                qq{contains unparseable data: "$module_specifications"};
+    }
+
+    $self->{_evil_modules}          = \%evil_modules;
+    $self->{_evil_modules_regexes}  = \@evil_modules_regexes;
 
     return;
 }
@@ -90,16 +133,34 @@ sub _parse_modules {
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
+
     my $module = $elem->module();
-    return if !$module;
+    return if not $module;
 
-    if ( exists $self->{_evil_modules}->{ $module } ||
-        any { $module =~ $_ } @{ $self->{_evil_modules_rx} } ) {
+    my $evil_modules = $self->{_evil_modules};
+    my $evil_modules_regexes = $self->{_evil_modules_regexes};
+    my $description;
 
-        my $description = qq<Prohibited module "$module" used>;
+    if ( exists $evil_modules->{$module} ) {
+        $description = $evil_modules->{ $module };
+    }
+    else {
+        REGEX:
+        foreach my $regex ( @{$evil_modules_regexes} ) {
+            if ( $module =~ $regex->[$INDEX_REGEX] ) {
+                $description = $regex->[$INDEX_DESCRIPTION];
+                last REGEX;
+            }
+        }
+    }
+
+    if (defined $description) {
+        $description ||= qq<Prohibited module "$module" used>;
+
         return $self->violation( $description, $EXPL, $elem );
     }
-    return;    #ok!
+
+    return;    # ok!
 }
 
 1;
@@ -146,11 +207,15 @@ forbidden.  For example:
     [Modules::ProhibitEvilModules]
     modules = /Acme::/
 
-would cause all modules that match C<m/Acme::/> to be forbidden.  You
-can add any of the C<imxs> switches to the end of a pattern, but be
-aware that patterns cannot contain whitespace because the
-configuration file parser uses it to delimit the module names and
-patterns.
+would cause all modules that match C<m/Acme::/> to be forbidden.
+
+In addition, you can override the default message ("Prohibited module
+"I<module>" used") with your own, in order to give suggestions for
+alternative action.  To do so, put your message in curly brackets
+after the module name or regular expression.  Like this:
+
+    [Modules::ProhibitEvilModules]
+    modules = Fatal {Found use of Fatal. Use autodie instead} /Acme::/ {We don't use joke modules}
 
 By default, there are no prohibited modules (although I can think of a
 few that should be).
@@ -158,9 +223,7 @@ few that should be).
 
 =head1 NOTES
 
-Note that this policy doesn't apply to pragmas.  Future versions may
-allow you to specify an alternative for each prohibited module, which
-can be suggested by L<Perl::Critic|Perl::Critic>.
+Note that this policy doesn't apply to pragmas.
 
 
 =head1 AUTHOR
