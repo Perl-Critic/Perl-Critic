@@ -159,6 +159,9 @@ F<.perlcriticrc> file:
     [ControlStructures::ProhibitPostfixControls]
     flowcontrol = warn die carp croak cluck confess goto exit
 
+This is useful if you're using additional modules that add things like
+C<assert> or C<throw>.
+
 =head1 NOTES
 
 The C<die>, C<croak>, and C<confess> functions are frequently used as
