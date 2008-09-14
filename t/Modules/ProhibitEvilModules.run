@@ -1,4 +1,12 @@
+## name No modules configured
+## failures 0
+## cut
+
+use Evil::Module qw(bad stuff);
+use Super::Evil::Module;
+
 #-----------------------------------------------------------------------------
+
 ## name 2 evil modules
 ## parms {modules => 'Evil::Module Super::Evil::Module'}
 ## failures 2
@@ -8,6 +16,7 @@ use Evil::Module qw(bad stuff);
 use Super::Evil::Module;
 
 #-----------------------------------------------------------------------------
+
 ## name No evil modules
 ## parms {modules => 'Evil::Module Super::Evil::Module'}
 ## failures 0
@@ -16,6 +25,7 @@ use Super::Evil::Module;
 use Good::Module;
 
 #-----------------------------------------------------------------------------
+
 ## name 2 evil modules, with pattern matching
 ## parms { modules => '/Evil::/ /Demonic/' }
 ## failures 2
@@ -25,6 +35,7 @@ use Evil::Module qw(bad stuff);
 use Demonic::Module
 
 #-----------------------------------------------------------------------------
+
 ## name More evil modules, with mixed config
 ## parms { modules => '/Evil::/ Demonic::Module /Acme/' }
 ## failures 4
@@ -36,6 +47,7 @@ use Demonic::Module;
 use Acme::Foo;
 
 #-----------------------------------------------------------------------------
+
 ## name More evil modules, with more pattern matching
 ## parms { modules => '/Evil::|Demonic::Module|Acme/' }
 ## failures 4
@@ -47,6 +59,7 @@ use Demonic::Module;
 use Acme::Foo;
 
 #-----------------------------------------------------------------------------
+
 ## name Pattern matching exceptions
 ## parms { modules => '/(/' }
 ## failures 0

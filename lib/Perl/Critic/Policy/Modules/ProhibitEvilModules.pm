@@ -36,7 +36,7 @@ sub supported_parameters {
             name            => 'modules',
             description     => 'The names of or patterns for modules to forbid.',
             default_string  => $EMPTY,
-            behavior        => 'string list',
+            parser          => \&_parse_modules,
         },
     );
 }
@@ -47,41 +47,43 @@ sub applies_to        { return 'PPI::Statement::Include' }
 
 #-----------------------------------------------------------------------------
 
-sub initialize_if_enabled {
-    my ($self, $config) = @_;
+sub _parse_modules {
+    my ($self, $parameter, $config_string) = @_;
 
-    $self->{_evil_modules}    = {};  #Hash
-    $self->{_evil_modules_rx} = [];  #Array
+    return if not defined $config_string;
 
-    #Set config, if defined
-    if ( defined $self->{_modules} ) {
-        my @modules = sort keys %{ $self->{_modules} };
-        foreach my $module ( @modules ) {
-            if ( $module =~ m{ \A [/] (.+) [/] \z }xms ) {
+    my %evil_modules;
+    my @evil_modules_rx;
 
-                # These are module name patterns (e.g. /Acme/)
-                my $re = $1; # Untainting
-                my $pattern = eval { qr/$re/ };  ## no critic (RegularExpressions::.*)
+    my @modules = words_from_string($config_string);
+    foreach my $module ( @modules ) {
+        if ( $module =~ m{ \A [/] (.+) [/] \z }xms ) {
 
-                if ( $EVAL_ERROR ) {
-                    throw_policy_value
-                        policy         => $self->get_short_name(),
-                        option_name    => 'modules',
-                        option_value   => ( join q{", "}, @modules ),
-                        message_suffix =>
-                            qq{contains an invalid regular expression: "$module"};
-                }
+            # These are module name patterns (e.g. /Acme/)
+            my $re = $1; # Untainting
+            my $pattern = eval { qr/$re/ };  ## no critic (RegularExpressions::.*)
 
-                push @{ $self->{_evil_modules_rx} }, $pattern;
+            if ( $EVAL_ERROR ) {
+                throw_policy_value
+                    policy         => $self->get_short_name(),
+                    option_name    => 'modules',
+                    option_value   => ( join q{", "}, @modules ),
+                    message_suffix =>
+                        qq{contains an invalid regular expression: "$module"};
             }
-            else {
-                # These are literal module names (e.g. Acme::Foo)
-                $self->{_evil_modules}->{$module} = 1;
-            }
+
+            push @evil_modules_rx, $pattern;
+        }
+        else {
+            # These are literal module names (e.g. Acme::Foo)
+            $evil_modules{$module} = 1;
         }
     }
 
-    return $TRUE;
+    $self->{_evil_modules}    = \%evil_modules;
+    $self->{_evil_modules_rx} = \@evil_modules_rx;
+
+    return;
 }
 
 #-----------------------------------------------------------------------------
