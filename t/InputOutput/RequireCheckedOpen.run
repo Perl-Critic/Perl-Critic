@@ -130,6 +130,45 @@ open $filehandle, $filename;
 
 #-----------------------------------------------------------------------------
 
+## name autodie on via no parameters
+## failures 0
+## cut
+
+use autodie;
+open $filehandle;
+
+#-----------------------------------------------------------------------------
+
+## name autodie on via :io
+## failures 0
+## cut
+
+use autodie qw< :io >;
+open $filehandle;
+
+#-----------------------------------------------------------------------------
+
+## name autodie off
+## failures 1
+## cut
+
+use autodie qw< :system >;
+open $filehandle;
+
+#-----------------------------------------------------------------------------
+
+## name autodie on and off
+## failures 1
+## TODO need to handle autodie lexically.
+## cut
+
+use autodie;
+{
+    no autodie;
+
+    open $filehandle;
+}
+
 
 ##############################################################################
 #      $URL$

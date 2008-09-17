@@ -67,9 +67,16 @@ failure. That value should always be checked to ensure that the open
 was successful.
 
 
-  my $error = open( $filehandle, $mode, $filename );                  # ok
-  open( $filehandle, $mode, $filename ) or die "unable to open: $!";  # ok
-  open( $filehandle, $mode, $filename );                              # not ok
+    my $error = open( $filehandle, $mode, $filename );                  # ok
+    open( $filehandle, $mode, $filename ) or die "unable to open: $!";  # ok
+    open( $filehandle, $mode, $filename );                              # not ok
+
+    use autodie;
+    open $filehandle, $mode, $filename;                                 # ok
+
+You can use L<autodie>, L<Fatal>, or L<Fatal::Exception> to get around
+this.  Currently, L<autodie> is not properly treated as a pragma; its
+lexical effects aren't taken into account.
 
 
 =head1 CONFIGURATION

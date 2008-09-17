@@ -123,9 +123,17 @@ If your module uses L<Fatal|Fatal> or C<Fatal::Exception>, then any
 functions wrapped by those modules will not trigger this policy.  For
 example:
 
-   use Fatal qw(open);
-   open my $fh, $filename;  # no violation
-   close $fh;               # yes violation
+    use Fatal qw(open);
+    open my $fh, $filename;  # no violation
+    close $fh;               # yes violation
+
+    use autodie;
+    open $filehandle, $mode, $filename;   # no violation
+
+You can use L<autodie>, L<Fatal>, or L<Fatal::Exception> to get around
+this.  Currently, L<autodie> is not properly treated as a pragma; its
+lexical effects aren't taken into account.
+
 
 =head1 CONFIGURATION
 
@@ -135,19 +143,19 @@ override this to set it to a different list of functions with the
 C<functions> setting.  To do this, put entries in a F<.perlcriticrc>
 file like this:
 
-  [InputOutput::RequireCheckedSyscalls]
-  functions = open opendir read readline readdir close closedir
+    [InputOutput::RequireCheckedSyscalls]
+    functions = open opendir read readline readdir close closedir
 
 We have defined a few shortcuts for creating this list
 
-  [InputOutput::RequireCheckedSyscalls]
-  functions = :defaults opendir readdir closedir
+    [InputOutput::RequireCheckedSyscalls]
+    functions = :defaults opendir readdir closedir
 
-  [InputOutput::RequireCheckedSyscalls]
-  functions = :builtins
+    [InputOutput::RequireCheckedSyscalls]
+    functions = :builtins
 
-  [InputOutput::RequireCheckedSyscalls]
-  functions = :all
+    [InputOutput::RequireCheckedSyscalls]
+    functions = :all
 
 The C<:builtins> shortcut above represents all of the builtin
 functions that have error conditions (about 65 of them, many of them
@@ -158,6 +166,7 @@ EVERY function call, even C<return> and C<exit>.  Yes, this "feature"
 is overkill and is wasting CPU cycles on your computer by just
 existing.  Nyah nyah.  I shouldn't code after midnight.
 
+
 =head1 CREDITS
 
 Initial development of this policy was supported by a grant from the
@@ -166,9 +175,11 @@ Perl Foundation.
 This policy module is based heavily on policies written by Andrew
 Moore <amoore@mooresystems.com>.
 
+
 =head1 AUTHOR
 
 Chris Dolan <cdolan@cpan.org>
+
 
 =head1 COPYRIGHT
 

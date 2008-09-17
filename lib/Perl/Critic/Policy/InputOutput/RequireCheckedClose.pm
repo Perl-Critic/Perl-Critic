@@ -67,9 +67,16 @@ failure. That value should be checked to ensure that the close was
 successful.
 
 
-  my $error = close $filehandle;                   # ok
-  close $filehandle or die "unable to close: $!";  # ok
-  close $filehandle;                               # not ok
+    my $error = close $filehandle;                   # ok
+    close $filehandle or die "unable to close: $!";  # ok
+    close $filehandle;                               # not ok
+
+    use autodie qw< :io >;
+    close $filehandle;                               # ok
+
+You can use L<autodie>, L<Fatal>, or L<Fatal::Exception> to get around
+this.  Currently, L<autodie> is not properly treated as a pragma; its
+lexical effects aren't taken into account.
 
 
 =head1 CONFIGURATION

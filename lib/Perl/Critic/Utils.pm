@@ -1125,28 +1125,139 @@ sub is_unchecked_call {
     return 1;
 }
 
+Readonly::Hash my %AUTODIE_PARAMETER_TO_AFFECTED_BUILTINS_MAP => (
+    # Map builtins to themselves.
+    binmode    => { hashify(qw< binmode        >) },
+    close      => { hashify(qw< close          >) },
+    fcntl      => { hashify(qw< fcntl          >) },
+    fileno     => { hashify(qw< fileno         >) },
+    open       => { hashify(qw< open           >) },
+    sysopen    => { hashify(qw< sysopen        >) },
+    chdir      => { hashify(qw< chdir          >) },
+    opendir    => { hashify(qw< opendir        >) },
+    rename     => { hashify(qw< rename         >) },
+    unlink     => { hashify(qw< unlink         >) },
+    accept     => { hashify(qw< accept         >) },
+    bind       => { hashify(qw< bind           >) },
+    connect    => { hashify(qw< connect        >) },
+    getsockopt => { hashify(qw< getsockopt     >) },
+    listen     => { hashify(qw< listen         >) },
+    recv       => { hashify(qw< recv           >) },
+    send       => { hashify(qw< send           >) },
+    setsockopt => { hashify(qw< setsockopt     >) },
+    shutdown   => { hashify(qw< shutdown       >) },
+    socketpair => { hashify(qw< socketpair     >) },
+    fork       => { hashify(qw< fork           >) },
+    system     => { hashify(qw< system         >) },
+    exec       => { hashify(qw< exec           >) },
+
+    # Tags with immediate children.
+    ':file' => {
+        hashify(
+            qw<
+                binmode close fcntl fileno open sysopen
+            >
+        )
+    },
+    ':filesys' => {
+        hashify(
+            qw<
+                chdir opendir rename unlink
+            >
+        )
+    },
+    ':socket' => {
+        hashify(
+            qw<
+                accept bind connect getsockopt listen recv send setsockopt
+                shutdown socketpair
+            >
+        )
+    },
+    ':threads' => { hashify(qw< fork >) },
+    ':system'  => { hashify(qw< system exec >) },
+
+    # Tag with one level of tags below them.
+    ':io' => {
+        hashify(
+            qw<
+                binmode close fcntl fileno open sysopen chdir opendir rename
+                unlink accept bind connect getsockopt listen recv send
+                setsockopt shutdown socketpair
+            >
+        )
+    },
+
+    # Tag with two levels of tags below them.
+    ':default' => {
+        hashify(
+            qw<
+                binmode close fcntl fileno open sysopen chdir opendir rename
+                unlink accept bind connect getsockopt listen recv send
+                setsockopt shutdown socketpair fork
+            >
+        )
+    },
+
+    # The lot.
+    ':all' => {
+        hashify(
+            qw<
+                binmode close fcntl fileno open sysopen chdir opendir rename
+                unlink accept bind connect getsockopt listen recv send
+                setsockopt shutdown socketpair fork system exec
+            >
+        )
+    },
+);
+
 sub _is_fatal {
     my ($elem) = @_;
 
-    my $top = $elem->top;
-    return if !$top->isa('PPI::Document');
+    my $top = $elem->top();
+    return if not $top->isa('PPI::Document');
+
     my $includes = $top->find('PPI::Statement::Include');
-    return if !$includes;
+    return if not $includes;
+
     for my $include (@{$includes}) {
-        next if 'use' ne $include->type;
-        if ('Fatal' eq $include->module) {
+        next if 'use' ne $include->type();
+
+        if ('Fatal' eq $include->module()) {
             my @args = parse_arg_list($include->schild(1));
-            for my $arg (@args) {
-                return 1 if $arg->[0]->isa('PPI::Token::Quote') && $elem eq $arg->[0]->string;
+            foreach my $arg (@args) {
+                return $TRUE if $arg->[0]->isa('PPI::Token::Quote') && $elem eq $arg->[0]->string();
             }
-        } elsif ('Fatal::Exception' eq $include->module) {
+        }
+        elsif ('Fatal::Exception' eq $include->module()) {
             my @args = parse_arg_list($include->schild(1));
             shift @args;  # skip exception class name
-            for my $arg (@args) {
-                return 1 if $arg->[0]->isa('PPI::Token::Quote') && $elem eq $arg->[0]->string;
+            foreach my $arg (@args) {
+                return $TRUE if $arg->[0]->isa('PPI::Token::Quote') && $elem eq $arg->[0]->string();
+            }
+        }
+        elsif ('autodie' eq $include->pragma()) {
+            my @args = parse_arg_list($include->schild(1));
+
+            if (@args) {
+                foreach my $arg (@args) {
+                    my $builtins =
+                        $AUTODIE_PARAMETER_TO_AFFECTED_BUILTINS_MAP{
+                            $arg->[0]->string
+                        };
+
+                    return $TRUE if $builtins and $builtins->{$elem->content()};
+                }
+            }
+            else {
+                my $builtins =
+                    $AUTODIE_PARAMETER_TO_AFFECTED_BUILTINS_MAP{':default'};
+
+                return $TRUE if $builtins and $builtins->{$elem->content()};
             }
         }
     }
+
     return;
 }
 

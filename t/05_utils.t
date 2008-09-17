@@ -23,7 +23,7 @@ use PPI::Document::File;
 use Perl::Critic::PolicyFactory;
 use Perl::Critic::TestUtils qw(bundled_policy_names);
 
-use Test::More tests => 116;
+use Test::More tests => 124;
 
 #-----------------------------------------------------------------------------
 
@@ -451,32 +451,83 @@ sub test_find_bundled_policies {
 sub test_is_unchecked_call {
     my @trials = (
         # just an obvious failure to check the return value
-        { code => q( open( $fh, $mode, $filename ); ),
-        pass => 1 },
+        {
+            code => q[ open( $fh, $mode, $filename ); ],
+            pass => 1,
+        },
         # check the value with a trailing conditional
-        { code => q( open( $fh, $mode, $filename ) or confess 'unable to open'; ),
-        pass => 0 },
+        {
+            code => q[ open( $fh, $mode, $filename ) or confess 'unable to open'; ],
+            pass => 0,
+        },
         # assign the return value to a variable (and assume that it's checked later)
-        { code => q( my $error = open( $fh, $mode, $filename ); ),
-        pass => 0 },
+        {
+            code => q[ my $error = open( $fh, $mode, $filename ); ],
+            pass => 0,
+        },
         # the system call is in a conditional
-        { code => q( return $EMPTY if not open my $fh, '<', $file; ),
-        pass => 0 },
+        {
+            code => q[ return $EMPTY if not open my $fh, '<', $file; ],
+            pass => 0,
+        },
         # open call in list context, checked with 'not'
-        { code => q( return $EMPTY if not ( open my $fh, '<', $file ); ),
-        pass => 0 },
+        {
+            code => q[ return $EMPTY if not ( open my $fh, '<', $file ); ],
+            pass => 0,
+        },
         # just putting the system call in a list context doesn't mean the return value is checked
-        { code => q( ( open my $fh, '<', $file ); ),
-        pass => 1 },
+        {
+            code => q[ ( open my $fh, '<', $file ); ],
+            pass => 1,
+        },
+
+        # Check Fatal.
+        {
+            code => q[ use Fatal qw< open >; open( $fh, $mode, $filename ); ],
+            pass => 0,
+        },
+        {
+            code => q[ use Fatal qw< open >; ( open my $fh, '<', $file ); ],
+            pass => 0,
+        },
+
+        # Check Fatal::Exception.
+        {
+            code => q[ use Fatal::Exception 'Exception::System' => qw< open close >; open( $fh, $mode, $filename ); ],
+            pass => 0,
+        },
+        {
+            code => q[ use Fatal::Exception 'Exception::System' => qw< open close >; ( open my $fh, '<', $file ); ],
+            pass => 0,
+        },
+
+        # Check autodie.
+        {
+            code => q[ use autodie; open( $fh, $mode, $filename ); ],
+            pass => 0,
+        },
+        {
+            code => q[ use autodie qw< :io >; open( $fh, $mode, $filename ); ],
+            pass => 0,
+        },
+        {
+            code => q[ use autodie qw< :system >; ( open my $fh, '<', $file ); ],
+            pass => 1,
+        },
+        {
+            code => q[ use autodie qw< :system :file >; ( open my $fh, '<', $file ); ],
+            pass => 0,
+        },
     );
 
     foreach my $trial ( @trials ) {
-        my $doc = make_doc( $trial->{'code'} );
+        my $code = $trial->{'code'};
+        my $doc = make_doc( $code );
         my $statement = $doc->find_first( sub { $_[1] eq 'open' } );
         if ( $trial->{'pass'} ) {
-            ok( is_unchecked_call( $statement ), 'is_unchecked_call returns true' );
+            ok( is_unchecked_call( $statement ), qq<is_unchecked_call returns true for "$code".> );
         } else {
-            ok( ! is_unchecked_call( $statement ), 'is_unchecked_call returns false' );
+            ok( ! is_unchecked_call( $statement ), qq<is_unchecked_call returns false for "$code".> );
         }
     }
 
