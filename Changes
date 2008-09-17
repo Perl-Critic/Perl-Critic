@@ -6,6 +6,8 @@
       people use autodie instead of Fatal.
     * InputOutput::RequireCheckedClose, InputOutput::RequireCheckedOpen, and
       InputOutput::RequireCheckedSyscalls now all support autodie.
+      Unfortunately, autodie is currently treated like a module and not a
+      pragma, which means that the lexical scoping is not taken into account.
 
 [1.093_01] Released on 2008-09-07
 
