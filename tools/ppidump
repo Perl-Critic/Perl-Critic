@@ -12,7 +12,7 @@ my $whitespace = $ARGV[0] && $ARGV[0] eq '-w' ? shift : 0;
 my $code = $ARGV[0] ? (-f $ARGV[0] ? shift : \shift) : \join q{}, <STDIN>;
 my $doc  = PPI::Document->new( $code )
     or die 'Could not parse code: ', PPI::Document::errstr(), "\n";
-my $dump = PPI::Dumper->new( $doc, whitespace => $whitespace );
+my $dump = PPI::Dumper->new( $doc, whitespace => $whitespace, locations => 1 );
 $dump->print();
 
 __END__
