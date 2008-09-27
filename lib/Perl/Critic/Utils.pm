@@ -1125,48 +1125,52 @@ sub is_unchecked_call {
     return 1;
 }
 
+# Based upon autodie 1.994.
 Readonly::Hash my %AUTODIE_PARAMETER_TO_AFFECTED_BUILTINS_MAP => (
     # Map builtins to themselves.
-    binmode    => { hashify(qw< binmode        >) },
-    close      => { hashify(qw< close          >) },
-    fcntl      => { hashify(qw< fcntl          >) },
-    fileno     => { hashify(qw< fileno         >) },
-    open       => { hashify(qw< open           >) },
-    sysopen    => { hashify(qw< sysopen        >) },
-    chdir      => { hashify(qw< chdir          >) },
-    opendir    => { hashify(qw< opendir        >) },
-    rename     => { hashify(qw< rename         >) },
-    unlink     => { hashify(qw< unlink         >) },
-    accept     => { hashify(qw< accept         >) },
-    bind       => { hashify(qw< bind           >) },
-    connect    => { hashify(qw< connect        >) },
-    getsockopt => { hashify(qw< getsockopt     >) },
-    listen     => { hashify(qw< listen         >) },
-    recv       => { hashify(qw< recv           >) },
-    send       => { hashify(qw< send           >) },
-    setsockopt => { hashify(qw< setsockopt     >) },
-    shutdown   => { hashify(qw< shutdown       >) },
-    socketpair => { hashify(qw< socketpair     >) },
-    fork       => { hashify(qw< fork           >) },
-    system     => { hashify(qw< system         >) },
-    exec       => { hashify(qw< exec           >) },
+    (
+        map { $_ => { hashify( $_ ) } }
+            qw<
+                accept bind binmode chdir close closedir connect dbmclose
+                dbmopen exec fcntl fileno flock fork getsockopt ioctl link
+                listen mkdir msgctl msgget msgrcv msgsnd open opendir pipe
+                read readlink recv rename rmdir seek semctl semget semop send
+                setsockopt shmctl shmget shmread shutdown socketpair symlink
+                sysopen sysread sysseek system syswrite truncate umask unlink
+            >
+    ),
 
-    # Tags with immediate children.
-    ':file' => {
+    # Generate these using tools/dump-autodie-tag-contents
+    ':threads'      => { hashify( qw< fork                          > ) },
+    ':system'       => { hashify( qw< exec system                   > ) },
+    ':dbm'          => { hashify( qw< dbmclose dbmopen              > ) },
+    ':semaphore'    => { hashify( qw< semctl semget semop           > ) },
+    ':shm'          => { hashify( qw< shmctl shmget shmread         > ) },
+    ':msg'          => { hashify( qw< msgctl msgget msgrcv msgsnd   > ) },
+    ':file'     => {
         hashify(
             qw<
-                binmode close fcntl fileno open sysopen
+                binmode close fcntl fileno flock ioctl open sysopen truncate
             >
         )
     },
-    ':filesys' => {
+    ':filesys'      => {
         hashify(
             qw<
-                chdir opendir rename unlink
+                chdir closedir link mkdir opendir readlink rename rmdir
+                symlink umask unlink
             >
         )
     },
-    ':socket' => {
+    ':ipc'      => {
+        hashify(
+            qw<
+                msgctl msgget msgrcv msgsnd pipe semctl semget semop shmctl
+                shmget shmread
+            >
+        )
+    },
+    ':socket'       => {
         hashify(
             qw<
                 accept bind connect getsockopt listen recv send setsockopt
@@ -1174,38 +1178,39 @@ Readonly::Hash my %AUTODIE_PARAMETER_TO_AFFECTED_BUILTINS_MAP => (
             >
         )
     },
-    ':threads' => { hashify(qw< fork >) },
-    ':system'  => { hashify(qw< system exec >) },
-
-    # Tag with one level of tags below them.
-    ':io' => {
+    ':io'       => {
         hashify(
             qw<
-                binmode close fcntl fileno open sysopen chdir opendir rename
-                unlink accept bind connect getsockopt listen recv send
-                setsockopt shutdown socketpair
+                accept bind binmode chdir close closedir connect dbmclose
+                dbmopen fcntl fileno flock getsockopt ioctl link listen mkdir
+                msgctl msgget msgrcv msgsnd open opendir pipe read readlink
+                recv rename rmdir seek semctl semget semop send setsockopt
+                shmctl shmget shmread shutdown socketpair symlink sysopen
+                sysread sysseek syswrite truncate umask unlink
             >
         )
     },
-
-    # Tag with two levels of tags below them.
-    ':default' => {
+    ':default'      => {
         hashify(
             qw<
-                binmode close fcntl fileno open sysopen chdir opendir rename
-                unlink accept bind connect getsockopt listen recv send
-                setsockopt shutdown socketpair fork
+                accept bind binmode chdir close closedir connect dbmclose
+                dbmopen fcntl fileno flock fork getsockopt ioctl link listen
+                mkdir msgctl msgget msgrcv msgsnd open opendir pipe read
+                readlink recv rename rmdir seek semctl semget semop send
+                setsockopt shmctl shmget shmread shutdown socketpair symlink
+                sysopen sysread sysseek syswrite truncate umask unlink
             >
         )
     },
-
-    # The lot.
-    ':all' => {
+    ':all'      => {
         hashify(
             qw<
-                binmode close fcntl fileno open sysopen chdir opendir rename
-                unlink accept bind connect getsockopt listen recv send
-                setsockopt shutdown socketpair fork system exec
+                accept bind binmode chdir close closedir connect dbmclose
+                dbmopen exec fcntl fileno flock fork getsockopt ioctl link
+                listen mkdir msgctl msgget msgrcv msgsnd open opendir pipe
+                read readlink recv rename rmdir seek semctl semget semop send
+                setsockopt shmctl shmget shmread shutdown socketpair symlink
+                sysopen sysread sysseek system syswrite truncate umask unlink
             >
         )
     },
@@ -1237,25 +1242,33 @@ sub _is_fatal {
             }
         }
         elsif ('autodie' eq $include->pragma()) {
-            my @args = parse_arg_list($include->schild(1));
-
-            if (@args) {
-                foreach my $arg (@args) {
-                    my $builtins =
-                        $AUTODIE_PARAMETER_TO_AFFECTED_BUILTINS_MAP{
-                            $arg->[0]->string
-                        };
-
-                    return $TRUE if $builtins and $builtins->{$elem->content()};
-                }
-            }
-            else {
-                my $builtins =
-                    $AUTODIE_PARAMETER_TO_AFFECTED_BUILTINS_MAP{':default'};
-
-                return $TRUE if $builtins and $builtins->{$elem->content()};
-            }
+            return _is_covered_by_autodie($elem, $include);
         }
+    }
+
+    return;
+}
+
+sub _is_covered_by_autodie {
+    my ($elem, $include) = @_;
+
+    my @args = parse_arg_list($include->schild(1));
+
+    if (@args) {
+        foreach my $arg (@args) {
+            my $builtins =
+                $AUTODIE_PARAMETER_TO_AFFECTED_BUILTINS_MAP{
+                    $arg->[0]->string
+                };
+
+            return $TRUE if $builtins and $builtins->{$elem->content()};
+        }
+    }
+    else {
+        my $builtins =
+            $AUTODIE_PARAMETER_TO_AFFECTED_BUILTINS_MAP{':default'};
+
+        return $TRUE if $builtins and $builtins->{$elem->content()};
     }
 
     return;

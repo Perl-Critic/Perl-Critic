@@ -11,6 +11,8 @@ use 5.006001;
 use strict;
 use warnings;
 
+use Scalar::Util qw< blessed >;
+
 use base 'Exporter';
 
 our $VERSION = '1.093_01';
@@ -32,13 +34,13 @@ our %EXPORT_TAGS = (
 sub is_ppi_expression_or_generic_statement {
     my $element = shift;
 
-    my $element_class = ref $element;
-
-    return 0 if not $element_class;
+    return 0 if not $element;
     return 0 if not $element->isa('PPI::Statement');
-
     return 1 if $element->isa('PPI::Statement::Expression');
 
+    my $element_class = blessed($element);
+
+    return 0 if not $element_class;
     return $element_class eq 'PPI::Statement';
 }
 
@@ -47,7 +49,7 @@ sub is_ppi_expression_or_generic_statement {
 sub is_ppi_generic_statement {
     my $element = shift;
 
-    my $element_class = ref $element;
+    my $element_class = blessed($element);
 
     return 0 if not $element_class;
     return 0 if not $element->isa('PPI::Statement');
@@ -60,7 +62,7 @@ sub is_ppi_generic_statement {
 sub is_ppi_statement_subclass {
     my $element = shift;
 
-    my $element_class = ref $element;
+    my $element_class = blessed($element);
 
     return 0 if not $element_class;
     return 0 if not $element->isa('PPI::Statement');
