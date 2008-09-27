@@ -14,6 +14,7 @@ use warnings;
 use Readonly;
 
 use Perl::Critic::Utils qw{ :severities };
+use Perl::Critic::Exception::Fatal::Internal qw{ throw_internal };
 
 use base 'Perl::Critic::Policy';
 
@@ -21,22 +22,104 @@ our $VERSION = '1.093_01';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $LOWER_RX       => qr/ [[:lower:]] /xms;
-Readonly::Scalar my $UPPER_RX       => qr/ [[:upper:]] /xms;
-Readonly::Scalar my $PACKAGE_RX     => qr/ :: /xms;
-Readonly::Scalar my $DESC           => 'Capitalization';
-Readonly::Scalar my $EXPL           => [ 45 ];
+# Don't worry about leading digits-- let perl/PPI do that.
+Readonly::Scalar my $ALL_LOWER_REGEX         => qr/ \A [[:lower:]_\d]+ \z /xms;
+Readonly::Scalar my $ALL_UPPER_REGEX         => qr/ \A [[:upper:]_\d]+ \z /xms;
+Readonly::Scalar my $STARTS_WITH_LOWER_REGEX => qr/ \A [[:lower:]_]       /xms;
+Readonly::Scalar my $STARTS_WITH_UPPER_REGEX => qr/ \A [[:upper:]_]       /xms;
+Readonly::Scalar my $NO_RESTRICTION_REGEX    => qr/ .                     /xms;
+
+Readonly::Hash my %CAPITALIZATION_SCHEMES    => (
+    all_lower           => {
+        regex       => $ALL_LOWER_REGEX,
+        description => 'is not all lower case',
+    },
+    all_upper           => {
+        regex       => $ALL_UPPER_REGEX,
+        description => 'is not all upper case',
+    },
+    starts_with_lower   => {
+        regex       => $STARTS_WITH_LOWER_REGEX,
+        description => 'does not start with a lower case letter',
+    },
+    starts_with_upper   => {
+        regex       => $STARTS_WITH_UPPER_REGEX,
+        description => 'does not start with a upper case letter',
+    },
+    no_restriction      => {
+        regex       => $NO_RESTRICTION_REGEX,
+        description => 'there is a bug in Perl::Critic if you are reading this',
+    },
+);
+
+Readonly::Scalar my $PACKAGE_REGEX          => qr/ :: | ' /xms;
+
+Readonly::Scalar my $EXPL                   => [ 45 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return ()                            }
+# Can't handle named parameters yet.
+sub supported_parameters {
+    return (
+        {
+            name               => 'packages',
+            description        => 'How package names should be capitalized.',
+            default_string     => 'starts_with_upper',
+            behavior           => 'enumeration',
+            enumeration_values => [ sort keys %CAPITALIZATION_SCHEMES ],
+            enumeration_allow_multiple_values => 0,
+        },
+        {
+            name               => 'subroutines',
+            description        => 'How subroutine names should be capitalized.',
+            default_string     => 'all_lower',
+            behavior           => 'enumeration',
+            enumeration_values => [ sort keys %CAPITALIZATION_SCHEMES ],
+            enumeration_allow_multiple_values => 0,
+        },
+        {
+            name               => 'local_lexical_variables',
+            description        => 'How local lexical variables names should be capitalized.',
+            default_string     => 'all_lower',
+            behavior           => 'enumeration',
+            enumeration_values => [ sort keys %CAPITALIZATION_SCHEMES ],
+            enumeration_allow_multiple_values => 0,
+        },
+        {
+            name               => 'non_subroutine_lexical_variables',
+            description        => 'How lexical variables outside of subroutines should be capitalized.',
+            default_string     => 'all_lower',
+            behavior           => 'enumeration',
+            enumeration_values => [ sort keys %CAPITALIZATION_SCHEMES ],
+            enumeration_allow_multiple_values => 0,
+        },
+        {
+            name               => 'global_variables',
+            description        => 'How global (package) variables should be capitalized.',
+            default_string     => 'all_lower',  # Matches ProhibitMixedCase*
+            behavior           => 'enumeration',
+            enumeration_values => [ sort keys %CAPITALIZATION_SCHEMES ],
+            enumeration_allow_multiple_values => 0,
+        },
+        {
+            name               => 'constants',
+            description        => 'How constant names should be capitalized.',
+            default_string     => 'all_upper',
+            behavior           => 'enumeration',
+            enumeration_values => [ sort keys %CAPITALIZATION_SCHEMES ],
+            enumeration_allow_multiple_values => 0,
+        },
+    )
+}
+
 sub default_severity     { return $SEVERITY_LOWEST              }
 sub default_themes       { return qw( core pbp cosmetic )       }
 
 sub applies_to {
-    return 'PPI::Statement::Variable',
-           'PPI::Statement::Package',
-           'PPI::Statement::Sub';
+    return
+        'PPI::Statement::Variable',
+        'PPI::Statement::Package',
+        'PPI::Statement::Sub';
 }
 
 #-----------------------------------------------------------------------------
@@ -44,58 +127,73 @@ sub applies_to {
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    my $violates
-      = $elem->isa("PPI::Statement::Variable") ? _variable_capitalization($elem)
-      : $elem->isa("PPI::Statement::Package")  ? _package_capitalization($elem)
-      : $elem->isa("PPI::Statement::Sub")      ? _sub_capitalization($elem)
-      :                                          die "Should never reach this point"
-      ;
+    my @violations;
+    if ( $elem->isa('PPI::Statement::Variable') ) {
+        @violations = $self->_variable_capitalization($elem);
+    }
+    elsif ( $elem->isa('PPI::Statement::Package') ) {
+        @violations = $self->_package_capitalization($elem);
+    }
+    elsif ( $elem->isa('PPI::Statement::Sub') ) {
+        @violations = $self->_subroutine_capitalization($elem);
+    }
+    else {
+        throw_internal 'Should never reach this point';
+    }
 
-    return $self->violation( $DESC, $EXPL, $elem ) if $violates;
-    return;
+    return @violations;
 }
 
 sub _variable_capitalization {
-    my $elem = shift;
+    my ($self, $elem) = @_;
 
+    my @violations;
     for my $name ( $elem->variables() ) {
         # Fully qualified names are exempt because we can't be responsible for
         # other people's sybols.
-        next if $elem->type() eq 'local' && $name =~ m/$PACKAGE_RX/xms;
+        next if $elem->type() eq 'local' && $name =~ m/$PACKAGE_REGEX/xms;
 
-        # Allow CONSTANTS
-        next if $name !~ $LOWER_RX;
-
-        # Words in variable names cannot be capitalized unless
-        # camelCase is in use
-        return 1 if $name =~ m{ [^[:alpha:]] $UPPER_RX }xmso;
     }
 
-    return;
+    return @violations;
 }
 
 sub _package_capitalization {
-    my $elem = shift;
-    my @names = split /::/, $elem->namespace;
+    my ($self, $elem) = @_;
 
-    for my $name (@names) {
-        # Each word should be capitalized.
-        return 1 unless $name =~ m{ ^ $UPPER_RX }xmso;
+    my $namespace = $elem->namespace();
+    my @components = split m/::/xms, $namespace;
+
+    foreach my $component (@components) {
+        my $violation =
+            $self->_check_capitalization(
+                $component, $component, 'packages', $elem,
+            );
+        return $violation if $violation;
     }
 
     return;
 }
 
-sub _sub_capitalization {
-    my $elem = shift;
-    my $name = $elem->name;
+sub _subroutine_capitalization {
+    my ($self, $elem) = @_;
 
-    # Words in subroutine names cannot be capitalized
-    # unless camelCase is in use.
-    return 1 if $name =~ m{
-                              (?: ^ | [^[:alpha:]] )
-                              $UPPER_RX
-                          }xmso;
+    my $name = $elem->name();
+
+    return $self->_check_capitalization($name, $name, 'subroutines', $elem);
+}
+
+sub _check_capitalization {
+    my ($self, $to_match, $full_name, $name_type, $elem) = @_;
+
+    my $scheme_name = $self->{"_$name_type"};
+    my $scheme = $CAPITALIZATION_SCHEMES{$scheme_name};
+    my ($regex, $description) = @{$scheme}{ qw< regex description > };
+
+    if ($to_match !~ m/$regex/xms) {
+        return $self->violation("$full_name $description", $EXPL, $elem);
+    }
+
     return;
 }
 

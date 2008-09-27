@@ -1,5 +1,10 @@
 [1.xxx] Released on 2008-xx-xx
 
+    New Developer Features:
+    * Perl::Critic::Policy::is_document_exempt() has been renamed to
+      prepare_to_scan_document() and the sense of the return value has been
+      reversed in order to make it indicative of being more generally useful.
+
     Policy Changes:
     * Modules::ProhibitEvilModules now allows you to specify what the
       description of a use of a bad module should be, to, say, suggest that

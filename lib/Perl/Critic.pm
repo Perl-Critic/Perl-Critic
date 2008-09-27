@@ -189,7 +189,7 @@ sub _is_ppi_doc {
 sub _critique {
     my ($policy, $doc, $is_line_disabled) = @_;
 
-    return if $policy->is_document_exempt($doc);
+    return if not $policy->prepare_to_scan_document($doc);
 
     my $maximum_violations = $policy->get_maximum_violations_per_document();
 

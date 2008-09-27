@@ -32,11 +32,11 @@ sub applies_to           { return 'PPI::Document'         }
 
 #-----------------------------------------------------------------------------
 
-sub is_document_exempt {
+sub prepare_to_scan_document {
     my ( $self, $document ) = @_;
 
     # idea: force NAME to match the file name in scripts?
-    return is_script($document); # mismatch is normal in program entry points
+    return not is_script($document); # mismatch is normal in program entry points
 }
 
 sub violates {

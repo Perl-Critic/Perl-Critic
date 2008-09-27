@@ -122,8 +122,8 @@ sub initialize_if_enabled {
 
 #-----------------------------------------------------------------------------
 
-sub is_document_exempt {
-    return $FALSE;
+sub prepare_to_scan_document {
+    return $TRUE;
 }
 
 #-----------------------------------------------------------------------------
@@ -584,10 +584,13 @@ available should test for the availability of these dependencies and
 return C<$FALSE> if they are not.
 
 
-=item C<< is_document_exempt( $document ) >>
+=item C<< prepare_to_scan_document( $document ) >>
 
-Answers whether the argument is exempt from this Policy.  By default,
-returns C<$FALSE>.
+The parameter is about to be scanned by this Policy.  Whatever this
+Policy wants to do in terms of preparation should happen here.
+Returns a boolean value indicating whether the document should be
+scanned at all; if this is a false value, this Policy won't be applied
+to the document.  By default, does nothing but return C<$TRUE>.
 
 
 =item C< violates( $element, $document ) >

@@ -33,10 +33,10 @@ sub applies_to           { return 'PPI::Document'   }
 
 #-----------------------------------------------------------------------------
 
-sub is_document_exempt {
+sub prepare_to_scan_document {
     my ( $self, $document ) = @_;
 
-    return is_script($document);   # Must be a library or module.
+    return not is_script($document);   # Must be a library or module.
 }
 
 sub violates {
