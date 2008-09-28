@@ -34,6 +34,7 @@ my $profile = {
     '-Miscellanea::ProhibitUnrestrictedNoCritic'                 => {},
     '-Miscellanea::RequireRcsKeywords'                           => {},
     '-ValuesAndExpressions::ProhibitMagicNumbers'                => {},
+    '-Variables::ProhibitReusedVarNames'                         => {},
 };
 
 my $code = undef;

@@ -47,10 +47,10 @@ sub violates {
     my @violations;
     while (1) {
        my $up = $outer->sprevious_sibling;
-       if (! defined $up) {
+       if (!$up) {
           $up = $outer->parent;
        }
-       last if ! defined $up; # top of PDOM, we're done
+       last if !$up; # top of PDOM, we're done
        $outer = $up;
 
        if ($outer->isa('PPI::Statement::Variable') && 'local' ne $outer->type) {
