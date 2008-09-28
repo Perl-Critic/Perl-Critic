@@ -12,7 +12,7 @@ use warnings;
 
 use PPI::Document;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 
 #-----------------------------------------------------------------------------
 
@@ -23,7 +23,13 @@ our $VERSION = '1.093_01';
 # Things we're looking for from PPI.
 
 {
-    local $TODO = q<PPI doesn't handle anonymous subroutines.>;
+    local $TODO = q<Clean up code in P::C::Utils::PPI once this is released.>;
+
+    can_ok( qw< PPI::Statement::Include module_version > );
+}
+
+{
+    local $TODO = q<Clean up code in P::C::Utils::PPI once PPI can handle these.>;
 
     my $document = PPI::Document->new(\'sub { }');
 
