@@ -16,6 +16,7 @@
 
     New Policies:
     * Miscellanea::ProhibitUnrestrictedNoCritic
+    * Variables::ProhibitReusedNames
     
 [1.093_01] Released on 2008-09-07
 

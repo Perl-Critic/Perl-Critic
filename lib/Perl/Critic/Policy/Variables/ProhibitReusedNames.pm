@@ -5,7 +5,7 @@
 # $Revision$
 ##############################################################################
 
-package Perl::Critic::Policy::Variables::ProhibitReusedVarNames;
+package Perl::Critic::Policy::Variables::ProhibitReusedNames;
 
 use 5.006001;
 use strict;
@@ -76,7 +76,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Variables::ProhibitReusedVarNames - Do not reuse a variable name in a lexical scope
+Perl::Critic::Policy::Variables::ProhibitReusedNames - Do not reuse a variable name in a lexical scope
 
 
 =head1 AFFILIATION

@@ -1093,7 +1093,7 @@ sub is_unchecked_call {
         # the elements to this statement to see if we find 'or' or '||'.
 
         my $or_operators = sub  {
-            my (undef, $elem) = @_;  ## no critic(ReusedVarNames)
+            my (undef, $elem) = @_;  ## no critic(Variables::ProhibitReusedNames)
             return if not $elem->isa('PPI::Token::Operator');
             return if $elem ne q{or} && $elem ne q{||};
             return 1;
