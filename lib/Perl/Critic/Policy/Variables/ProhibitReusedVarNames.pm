@@ -56,7 +56,7 @@ sub violates {
        if ($outer->isa('PPI::Statement::Variable') && 'local' ne $outer->type) {
           my %vars = map {$_ => undef} $outer->variables;
           my $hits;
-          ($hits, $names) = part { exists $vars{$_} ? 0 : 1 } @$names;
+          ($hits, $names) = part { exists $vars{$_} ? 0 : 1 } @{$names};
           if ($hits) {
              push @violations, map { $self->violation( $DESC . $_, $EXPL, $elem ) } @{$hits};
              last if !$names;  # found violations for ALL variables, we're done
@@ -90,7 +90,7 @@ distribution.
 It's really hard on future maintenance programmers if you reuse a
 variable name in a lexical scope. The programmer is at risk of
 confusing which variable is which. And, worse, the programmer could
-accidentally remov the inner declaration, thus silently changing the
+accidentally remove the inner declaration, thus silently changing the
 meaning of the inner code to use the outer variable.
 
    my $x = 1;

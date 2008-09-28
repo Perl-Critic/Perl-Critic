@@ -324,10 +324,10 @@ sub _filter_other_lines {
         my $end   = $pragma;
 
       SIB:
-        while ( my $sib = $end->next_sibling() ) {
-            $end = $sib; # keep track of last sibling encountered in this scope
+        while ( my $esib = $end->next_sibling() ) {
+            $end = $esib; # keep track of last sibling encountered in this scope
             last SIB
-                if $sib->isa('PPI::Token::Comment') && $sib =~ $use_critic;
+                if $esib->isa('PPI::Token::Comment') && $esib =~ $use_critic;
         }
 
         # We either found an end or hit the end of the scope.

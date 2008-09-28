@@ -36,17 +36,17 @@ my $can_podspell =
     &&  can_run_spell_command();
 
 sub can_determine_spell_command {
-    my $policy = Perl::Critic::Policy::Documentation::PodSpelling->new();
-    $policy->initialize_if_enabled();
+    my $pol = Perl::Critic::Policy::Documentation::PodSpelling->new();
+    $pol->initialize_if_enabled();
 
-    return $policy->_get_spell_command_line();
+    return $pol->_get_spell_command_line();
 }
 
 sub can_run_spell_command {
-    my $policy = Perl::Critic::Policy::Documentation::PodSpelling->new();
-    $policy->initialize_if_enabled();
+    my $pol = Perl::Critic::Policy::Documentation::PodSpelling->new();
+    $pol->initialize_if_enabled();
 
-    return $policy->_run_spell_command( <<'END_TEST_CODE' );
+    return $pol->_run_spell_command( <<'END_TEST_CODE' );
 =pod
 
 =head1 Test The Spell Command
@@ -132,8 +132,7 @@ arglbargl
 END_PERL
 
 {
-    my %config;
-    $config{stop_words} = 'foo arglbargl bar';
+    local $config{stop_words} = 'foo arglbargl bar';
     is(
         eval { pcritique($policy, \$code, \%config) },
         can_podspell() ? 0 : undef ,

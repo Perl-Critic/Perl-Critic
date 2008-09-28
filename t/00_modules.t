@@ -129,10 +129,11 @@ can_ok('Perl::Critic::Policy', 'set_themes');
 can_ok('Perl::Critic::Policy', 'violates');
 can_ok('Perl::Critic::Policy', 'violation');
 
-
-my $policy = Perl::Critic::Policy->new();
-isa_ok($policy, 'Perl::Critic::Policy');
-is($policy->VERSION(), $version_string, 'Perl::Critic::Policy version');
+{
+    my $policy = Perl::Critic::Policy->new();
+    isa_ok($policy, 'Perl::Critic::Policy');
+    is($policy->VERSION(), $version_string, 'Perl::Critic::Policy version');
+}
 
 #-----------------------------------------------------------------------------
 # Test Perl::Critic::Violation module interface

@@ -220,8 +220,8 @@ sub get_input {
 
 sub critique {
 
-    my ( $opts_ref, @files ) = @_;
-    @files || die "No perl files were found.\n";
+    my ( $opts_ref, @files_to_critique ) = @_;
+    @files_to_critique || die "No perl files were found.\n";
 
     # Perl::Critic has lots of dependencies, so loading is delayed
     # until it is really needed.  This hack reduces startup time for
@@ -238,7 +238,7 @@ sub critique {
     my $number_of_violations = undef;
     my $had_error_in_file = 0;
 
-    for my $file (@files) {
+    for my $file (@files_to_critique) {
 
         eval {
             my @violations = $critic->critique($file);
