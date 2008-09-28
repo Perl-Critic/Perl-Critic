@@ -14,6 +14,9 @@
       Unfortunately, autodie is currently treated like a module and not a
       pragma, which means that the lexical scoping is not taken into account.
 
+    New Policies:
+    * Miscellanea::ProhibitUnrestrictedNoCritic
+    
 [1.093_01] Released on 2008-09-07
 
     New Developer Features:

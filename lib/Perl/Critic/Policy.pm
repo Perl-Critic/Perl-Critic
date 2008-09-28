@@ -128,6 +128,12 @@ sub prepare_to_scan_document {
 
 #-----------------------------------------------------------------------------
 
+sub can_be_disabled {
+    return $TRUE;
+}
+
+#-----------------------------------------------------------------------------
+
 sub _validate_config_keys {
     my ( $self, $errors, $config ) = @_;
 
@@ -427,7 +433,6 @@ sub new_parameter_value_exception {
         message_suffix  => $message_suffix
     );
 }
-
 
 #-----------------------------------------------------------------------------
 
@@ -732,6 +737,14 @@ overwritten.  Duplicate themes will be removed.
 Appends additional themes to this Policy.  Any existing themes are
 preserved.  Duplicate themes will be removed.
 
+=item C< can_be_disabled() >
+
+Returns a true value if this Policy can be disabled by a C<"## no critic">
+marker.  The default method returns true.  Most Policies should never need
+to override this.  But If you want to write a policy that cannot be disabled, 
+override this method to return false.  Note that this only affects the 
+C<"## no critic"> markers -- the Policy can still be disabled via the 
+F<.perlcriticrc> file.
 
 =item C< get_abstract() >
 

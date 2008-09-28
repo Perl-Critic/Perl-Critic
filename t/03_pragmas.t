@@ -31,6 +31,7 @@ my $profile = {
     '-CodeLayout::RequireTidyCode'                               => {},
     '-Documentation::PodSpelling'                                => {},
     '-ErrorHandling::RequireCheckingReturnValueOfEval'           => {},
+    '-Miscellanea::ProhibitUnrestrictedNoCritic'                 => {},
     '-Miscellanea::RequireRcsKeywords'                           => {},
     '-ValuesAndExpressions::ProhibitMagicNumbers'                => {},
 };

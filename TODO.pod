@@ -62,17 +62,6 @@ applies_to.
 Support Jeff Bisbee's use case (he dumps all the policies in severity order
 with full descriptions and other metadata).
 
-=item * Add --prohibit-unrestricted-no-critic option to F<perlcritic>.
-
-Requires C<## no critic> to take an argument:
-
-  ## no critic (SomePolicyPattern)     # ok
-  ## no critic                         # not ok
-
-Can't be done as a regular Policy because any line that violated it would
-disable it.
-
-
 =item * Support for C<#line 123 "filename"> directives.
 
 For code generators and template languages that allow inline Perl code.
