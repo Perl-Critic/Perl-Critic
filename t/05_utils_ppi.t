@@ -12,7 +12,7 @@ use strict;
 use warnings;
 use Readonly;
 
-use Test::More tests => 67;
+use Test::More tests => 81;
 
 #-----------------------------------------------------------------------------
 
@@ -40,6 +40,7 @@ BEGIN {
             PPI::Statement::Unknown
     };
 
+    use_ok('PPI::Document');
     use_ok('PPI::Token::Word');
     foreach my $class (@PPI_STATEMENT_CLASSES) {
         use_ok($class);
@@ -57,6 +58,8 @@ $INSTANCES{'PPI::Token::Word'} = PPI::Token::Word->new('foo');
 can_ok('main', 'is_ppi_expression_or_generic_statement');
 can_ok('main', 'is_ppi_generic_statement');
 can_ok('main', 'is_ppi_statement_subclass');
+can_ok('main', 'is_subroutine_declaration');
+can_ok('main', 'is_in_subroutine');
 
 #-----------------------------------------------------------------------------
 #  is_ppi_expression_or_generic_statement tests
@@ -265,6 +268,96 @@ can_ok('main', 'is_ppi_statement_subclass');
     ok(
         is_ppi_statement_subclass( $INSTANCES{'PPI::Statement::Unknown'} ),
         'is_ppi_statement_subclass( PPI::Statement::Unknown )',
+    );
+}
+
+#-----------------------------------------------------------------------------
+#  is_subroutine_declaration() tests
+
+{
+    my $test = sub {
+        my ($code, $result) = @_;
+
+        my $doc;
+        my $input;
+
+        $doc = PPI::Document->new(\$code, readonly => 1) if defined $code;
+        $input = $doc->first_element()                   if defined $doc;
+
+        my $name = defined $code ? $code : "<undef>";
+
+        local $Test::Builder::Level = $Test::Builder::Level + 1;
+        is(
+            ! ! is_subroutine_declaration( $input ),
+            ! ! $result,
+            "is_subroutine_declaration(): $name"
+        );
+
+        return;
+    };
+
+    $test->('sub {};'        => 1);
+    $test->('sub {}'         => 1);
+    $test->('{}'             => 0);
+    $test->(undef,              0);
+    $test->('{ sub foo {} }' => 0);
+    $test->('sub foo;'       => 1);
+}
+
+#-----------------------------------------------------------------------------
+#  is_in_subroutine() tests
+
+{
+    my $test = sub {
+        my ($code, $transform, $result) = @_;
+
+        my $doc;
+        my $input;
+
+        $doc = PPI::Document->new(\$code, readonly => 1) if defined $code;
+        $input = $transform->($doc)                      if defined $doc;
+
+        my $name = defined $code ? $code : "<undef>";
+
+        local $Test::Builder::Level = $Test::Builder::Level + 1;
+        is(
+            ! ! is_in_subroutine( $input ),
+            ! ! $result,
+            "is_in_subroutine(): $name"
+        );
+
+        return;
+    };
+
+    $test->(undef, sub {}, 0);
+
+    $test->('my $foo = 42', sub {}, 0);
+
+    $test->(
+        'sub foo { my $foo = 42 }',
+        sub {
+            my ($doc) = @_;
+            $doc->find_first("PPI::Statement::Variable");
+        },
+        1,
+    );
+
+    $test->(
+        'sub { my $foo = 42 };',
+        sub {
+            my ($doc) = @_;
+            $doc->find_first("PPI::Statement::Variable");
+        },
+        1,
+    );
+
+    $test->(
+        '{ my $foo = 42 };',
+        sub {
+            my ($doc) = @_;
+            $doc->find_first("PPI::Statement::Variable");
+        },
+        0,
     );
 }
 
