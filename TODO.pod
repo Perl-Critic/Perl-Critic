@@ -103,6 +103,13 @@ configuration block, analogous to the "-" sign used for disabling a policy,
 e.g. "C<[+Example::Policy]>".
 
 
+=item * Threading
+
+Pretty obviously, Perl::Critic is readily parallizable, just do a document per
+thread.  Although there's now C<Policy::prepare_to_scan_document()>, given
+perl's thread data sharing model, this shouldn't be an issue.
+
+
 =item * Add support in .run files for regexes for violation descriptions.
 
 
