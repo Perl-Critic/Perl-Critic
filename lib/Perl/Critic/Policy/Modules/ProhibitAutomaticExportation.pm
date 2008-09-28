@@ -21,7 +21,7 @@ our $VERSION = '1.093_01';
 #-----------------------------------------------------------------------------
 
 Readonly::Scalar my $DESC => q{Symbols are exported by default};
-Readonly::Scalar my $EXPL => q{Use '@EXPORT_OK' or '%EXPORT_TAGS' instead};  ## no critic
+Readonly::Scalar my $EXPL => q{Use '@EXPORT_OK' or '%EXPORT_TAGS' instead};  ## no critic (RequireInterpolation)
 
 #-----------------------------------------------------------------------------
 

@@ -77,7 +77,7 @@ sub violates {
     $source =~ s{ \s+ \Z}{\n}xms;
 
     # Remove the shell fix code from the top of program, if applicable
-    ## no critic(ProhibitComplexRegexes)
+    ## no critic (ProhibitComplexRegexes)
     my $shebang_re = qr< [#]! [^\015\012]+ [\015\012]+ >xms;
     my $shell_re   = qr<eval [ ] 'exec [ ] [^\015\012]* [ ] \$0 [ ] \${1[+]"\$@"}'
                         [ \t]*[\012\015]+ [ \t]* if [^\015\012]+ [\015\012]+ >xms;
@@ -91,7 +91,7 @@ sub violates {
     # another program.  Also, we need to override the
     # stdout and stderr redirects that the user may have
     # configured in their .perltidyrc file.
-    local @ARGV = qw(-nst -nse);  ## no critic
+    local @ARGV = qw(-nst -nse);
 
     # Trap Perl::Tidy errors, just in case it dies
     my $eval_worked = eval {

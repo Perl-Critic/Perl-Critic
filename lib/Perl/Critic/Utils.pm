@@ -238,7 +238,7 @@ Readonly::Hash my %PRECEDENCE_OF => (
 ## use critic
 #-----------------------------------------------------------------------------
 
-sub hashify {  ##no critic(ArgUnpacking)
+sub hashify {  ## no critic (ArgUnpacking)
     return map { $_ => 1 } @_;
 }
 
@@ -246,7 +246,7 @@ sub hashify {  ##no critic(ArgUnpacking)
 
 sub interpolate {
     my ( $literal ) = @_;
-    return eval "\"$literal\"";  ## no critic 'StringyEval';
+    return eval "\"$literal\"";  ## no critic (StringyEval);
 }
 
 #-----------------------------------------------------------------------------
