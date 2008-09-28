@@ -79,7 +79,7 @@ sub is_subroutine_declaration {
 
     return if not $element;
 
-    return 1 if $element->isa("PPI::Statement::Sub");
+    return 1 if $element->isa('PPI::Statement::Sub');
 
     if ( is_ppi_generic_statement($element) ) {
         my $first_element = $element->first_element();

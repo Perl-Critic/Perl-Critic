@@ -281,12 +281,16 @@ can_ok('main', 'is_in_subroutine');
         my $doc;
         my $input;
 
-        $doc = PPI::Document->new(\$code, readonly => 1) if defined $code;
-        $input = $doc->first_element()                   if defined $doc;
+        if (defined $code) {
+            $doc = PPI::Document->new(\$code, readonly => 1);
+        }
+        if (defined $doc) {
+            $input = $doc->first_element();
+        }
 
-        my $name = defined $code ? $code : "<undef>";
+        my $name = defined $code ? $code : '<undef>';
 
-        local $Test::Builder::Level = $Test::Builder::Level + 1;
+        local $Test::Builder::Level = $Test::Builder::Level + 1; ## no critic (Variables::ProhibitPackageVars)
         is(
             ! ! is_subroutine_declaration( $input ),
             ! ! $result,
@@ -314,12 +318,16 @@ can_ok('main', 'is_in_subroutine');
         my $doc;
         my $input;
 
-        $doc = PPI::Document->new(\$code, readonly => 1) if defined $code;
-        $input = $transform->($doc)                      if defined $doc;
+        if (defined $code) {
+            $doc = PPI::Document->new(\$code, readonly => 1);
+        }
+        if (defined $doc) {
+            $input = $transform->($doc);
+        }
 
-        my $name = defined $code ? $code : "<undef>";
+        my $name = defined $code ? $code : '<undef>';
 
-        local $Test::Builder::Level = $Test::Builder::Level + 1;
+        local $Test::Builder::Level = $Test::Builder::Level + 1; ## no critic (Variables::ProhibitPackageVars)
         is(
             ! ! is_in_subroutine( $input ),
             ! ! $result,
@@ -331,13 +339,14 @@ can_ok('main', 'is_in_subroutine');
 
     $test->(undef, sub {}, 0);
 
+    ## no critic (ValuesAndExpressions::RequireInterpolationOfMetachars)
     $test->('my $foo = 42', sub {}, 0);
 
     $test->(
         'sub foo { my $foo = 42 }',
         sub {
             my ($doc) = @_;
-            $doc->find_first("PPI::Statement::Variable");
+            $doc->find_first('PPI::Statement::Variable');
         },
         1,
     );
@@ -346,7 +355,7 @@ can_ok('main', 'is_in_subroutine');
         'sub { my $foo = 42 };',
         sub {
             my ($doc) = @_;
-            $doc->find_first("PPI::Statement::Variable");
+            $doc->find_first('PPI::Statement::Variable');
         },
         1,
     );
@@ -355,10 +364,11 @@ can_ok('main', 'is_in_subroutine');
         '{ my $foo = 42 };',
         sub {
             my ($doc) = @_;
-            $doc->find_first("PPI::Statement::Variable");
+            $doc->find_first('PPI::Statement::Variable');
         },
         0,
     );
+    ## use critic
 }
 
 #-----------------------------------------------------------------------------
