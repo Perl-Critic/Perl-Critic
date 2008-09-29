@@ -11,6 +11,8 @@ use 5.006001;
 use strict;
 use warnings;
 
+use Readonly;
+
 use Scalar::Util qw< blessed >;
 
 use base 'Exporter';
@@ -25,6 +27,7 @@ our @EXPORT_OK = qw(
     is_ppi_statement_subclass
     is_subroutine_declaration
     is_in_subroutine
+    get_constant_name_element_from_declaring_statement
 );
 
 our %EXPORT_TAGS = (
@@ -110,6 +113,50 @@ sub is_in_subroutine {
 
 #-----------------------------------------------------------------------------
 
+sub get_constant_name_element_from_declaring_statement {
+    my ($element) = @_;
+
+    return if not $element;
+    return if not $element->isa('PPI::Statement');
+
+    if ( $element->isa('PPI::Statement::Include') ) {
+        my $pragma;
+        if ( $pragma = $element->pragma() and $pragma eq 'constant' ) {
+            return _constant_name_from_constant_pragma($element);
+        }
+    }
+    elsif (
+            is_ppi_generic_statement($element)
+        and $element->schild(0)->content() =~ m< \A Readonly \b >xms
+    ) {
+        return $element->schild(2);
+    }
+
+    return;
+}
+
+# Clean this up once PPI with module_version() is released.
+sub _constant_name_from_constant_pragma {
+    my ($include) = @_;
+
+    my $name_slot = 2;
+    my $argument_or_version = $include->schild($name_slot);
+    return if not $argument_or_version;                     # "use constant"
+    return if
+        $argument_or_version->isa('PPI::Token::Structure'); # "use constant;"
+
+    return $argument_or_version
+        if not $argument_or_version->isa('PPI::Token::Number');
+
+    my $follower = $include->schild($name_slot + 1);
+    return if not $follower;                            # "use constant 123"
+    return if $follower->isa('PPI::Token::Structure');  # "use constant 123;"
+    return $argument_or_version if $follower->isa('PPI::Token::Operator');
+    return $follower;
+}
+
+#-----------------------------------------------------------------------------
+
 1;
 
 __END__
@@ -163,6 +210,23 @@ Is the parameter a subroutine declaration, named or not?
 =item C<is_in_subroutine( $element )>
 
 Is the parameter a subroutine or inside one?
+
+
+=item C<get_constant_name_element_from_declaring_statement($statement)>
+
+Given a L<PPI::Statement|PPI::Statement>, if the statement is a C<use
+constant> or L<Readonly:Readonly> declaration statement, return the name of
+the thing being defined.
+
+Given
+
+    use constant 1.16 FOO => 'bar';
+
+this will return "FOO".  Similarly, given
+
+    Readonly::Hash my %FOO => ( bar => 'baz' );
+
+this will return "%FOO".
 
 
 =back
