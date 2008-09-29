@@ -139,7 +139,7 @@ sub supported_parameters {
         {
             name               => 'global_variable_exemptions',
             description        => 'Global variable names that are exempt from capitalization rules.  The values here are regexes.',
-            default_string     => '\$VERSION @ISA @EXPORT @EXPORT_OK @EXPORT_TAGS',
+            default_string     => '\$VERSION @ISA @EXPORT(?:_OK)? %EXPORT_TAGS',
             behavior           => 'string list',
         },
         {
