@@ -79,7 +79,7 @@ sub supported_parameters {
         {
             name               => 'package_exemptions',
             description        => 'Package names that are exempt from capitalization rules.  The values here are regexes.',
-            default_string     => $EMPTY,
+            default_string     => 'main',
             behavior           => 'string list',
         },
         {
