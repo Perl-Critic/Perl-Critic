@@ -54,6 +54,14 @@ package baz::FooBar;
 
 #-----------------------------------------------------------------------------
 
+## name Special case: main
+## failures 0
+## cut
+
+package main;
+
+#-----------------------------------------------------------------------------
+
 ## name Combined passes and fails
 ## failures 2
 ## cut
