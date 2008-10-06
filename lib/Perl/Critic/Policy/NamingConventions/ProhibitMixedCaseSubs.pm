@@ -91,6 +91,8 @@ This Policy is not configurable except for the standard options.
 =head1 SEE ALSO
 
 L<Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars|Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars>
+and
+L<Perl::Critic::Policy::NamingConventions::Capitalization|Perl::Critic::Policy::NamingConventions::Capitalization>
 
 =head1 AUTHOR
 

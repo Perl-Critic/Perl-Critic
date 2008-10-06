@@ -32,13 +32,19 @@ our $VERSION = '1.093_01';
 #-----------------------------------------------------------------------------
 
 # Don't worry about leading digits-- let perl/PPI do that.
-Readonly::Scalar my $ALL_LOWER_REGEX         => qr/ \A [@%\$]? [[:lower:]_\d]+ \z /xms;
-Readonly::Scalar my $ALL_UPPER_REGEX         => qr/ \A [@%\$]? [[:upper:]_\d]+ \z /xms;
-Readonly::Scalar my $STARTS_WITH_LOWER_REGEX => qr/ \A [@%\$]? _? [[:lower:]]     /xms;
-Readonly::Scalar my $STARTS_WITH_UPPER_REGEX => qr/ \A [@%\$]? _? [[:upper:]]     /xms;
-Readonly::Scalar my $NO_RESTRICTION_REGEX    => qr/ .                            /xms;
+Readonly::Scalar my $ALL_ONE_CASE_REGEX      =>
+    qr< \A [@%\$]? (?: [[:lower:]_\d]+ | [[:upper:]_\d]+ ) \z >xms;
+Readonly::Scalar my $ALL_LOWER_REGEX         => qr< \A [@%\$]? [[:lower:]_\d]+ \z >xms;
+Readonly::Scalar my $ALL_UPPER_REGEX         => qr< \A [@%\$]? [[:upper:]_\d]+ \z >xms;
+Readonly::Scalar my $STARTS_WITH_LOWER_REGEX => qr< \A [@%\$]? _? [[:lower:]]     >xms;
+Readonly::Scalar my $STARTS_WITH_UPPER_REGEX => qr< \A [@%\$]? _? [[:upper:]]     >xms;
+Readonly::Scalar my $NO_RESTRICTION_REGEX    => qr< .                             >xms;
 
 Readonly::Hash my %CAPITALIZATION_SCHEME_TAGS    => (
+    ':single_case'          => {
+        regex               => $ALL_ONE_CASE_REGEX,
+        regex_violation     => 'is not all lower case or all upper case',
+    },
     ':all_lower'            => {
         regex               => $ALL_LOWER_REGEX,
         regex_violation     => 'is not all lower case',
@@ -72,7 +78,7 @@ sub supported_parameters {
     return (
         {
             name               => 'packages',
-            description        => 'How package names should be capitalized.  Valid values are :all_lower, :all_upper:, :starts_with_lower, :starts_with_upper, :no_restriction, or a regex.',
+            description        => 'How package name components should be capitalized.  Valid values are :single_case, :all_lower, :all_upper:, :starts_with_lower, :starts_with_upper, :no_restriction, or a regex.',
             default_string     => ':starts_with_upper',
             behavior           => 'string',
         },
@@ -84,7 +90,7 @@ sub supported_parameters {
         },
         {
             name               => 'subroutines',
-            description        => 'How subroutine names should be capitalized.  Valid values are :all_lower, :all_upper:, :starts_with_lower, :starts_with_upper, :no_restriction, or a regex.',
+            description        => 'How subroutine names should be capitalized.  Valid values are :single_case, :all_lower, :all_upper, :starts_with_lower, :starts_with_upper, :no_restriction, or a regex.',
             default_string     => ':all_lower',
             behavior           => 'string',
         },
@@ -96,7 +102,7 @@ sub supported_parameters {
         },
         {
             name               => 'local_lexical_variables',
-            description        => 'How local lexical variables names should be capitalized.  Valid values are :all_lower, :all_upper:, :starts_with_lower, :starts_with_upper, :no_restriction, or a regex.',
+            description        => 'How local lexical variables names should be capitalized.  Valid values are :single_case, :all_lower, :all_upper, :starts_with_lower, :starts_with_upper, :no_restriction, or a regex.',
             default_string     => ':all_lower',
             behavior           => 'string',
         },
@@ -108,7 +114,7 @@ sub supported_parameters {
         },
         {
             name               => 'scoped_lexical_variables',
-            description        => 'How lexical variables that are scoped to a subset of subroutines, should be capitalized.  Valid values are :all_lower, :all_upper:, :starts_with_lower, :starts_with_upper, :no_restriction, or a regex.',
+            description        => 'How lexical variables that are scoped to a subset of subroutines, should be capitalized.  Valid values are :single_case, :all_lower, :all_upper, :starts_with_lower, :starts_with_upper, :no_restriction, or a regex.',
             default_string     => ':all_lower',
             behavior           => 'string',
         },
@@ -120,7 +126,7 @@ sub supported_parameters {
         },
         {
             name               => 'file_lexical_variables',
-            description        => 'How lexical variables at the file level should be capitalized.  Valid values are :all_lower, :all_upper:, :starts_with_lower, :starts_with_upper, :no_restriction, or a regex.',
+            description        => 'How lexical variables at the file level should be capitalized.  Valid values are :single_case, :all_lower, :all_upper, :starts_with_lower, :starts_with_upper, :no_restriction, or a regex.',
             default_string     => ':all_lower',
             behavior           => 'string',
         },
@@ -132,7 +138,7 @@ sub supported_parameters {
         },
         {
             name               => 'global_variables',
-            description        => 'How global (package) variables should be capitalized.  Valid values are :all_lower, :all_upper:, :starts_with_lower, :starts_with_upper, :no_restriction, or a regex.',
+            description        => 'How global (package) variables should be capitalized.  Valid values are :single_case, :all_lower, :all_upper, :starts_with_lower, :starts_with_upper, :no_restriction, or a regex.',
             default_string     => ':all_lower',  # Matches ProhibitMixedCase*
             behavior           => 'string',
         },
@@ -144,9 +150,7 @@ sub supported_parameters {
         },
         {
             name               => 'constants',
-            description        => 'How constant names should be capitalized.
-            Valid values are :all_lower, :all_upper:, :starts_with_lower,
-            :starts_with_upper, :no_restriction, or a regex.',
+            description        => 'How constant names should be capitalized.  Valid values are :single_case, :all_lower, :all_upper, :starts_with_lower, :starts_with_upper, :no_restriction, or a regex.',
             default_string     => ':all_upper',
             behavior           => 'string',
         },
@@ -186,6 +190,10 @@ sub initialize_if_enabled {
             $self->_derive_capitalization_exemption_test_regexes(
                 $kind_of_name, $configuration_exceptions,
             );
+
+        # Keep going, despite problems, so that all problems can be reported
+        # at one go, rather than the user fixing one problem, receiving a new
+        # error, etc..
         next KIND if $configuration_exceptions->has_exceptions();
 
         $self->{"_${kind_of_name}_test"} = sub {
@@ -472,21 +480,68 @@ Constants are in all-caps.
 
 =head1 CONFIGURATION
 
-This Policy is not configurable except for the standard options.
+You can specify capitalization rules for the following things:
+C<packages>, C<subroutines>, C<local_lexical_variables>,
+C<scoped_lexical_variables>, C<file_lexical_variables>,
+C<global_variables>, and C<constants>.
+
+C<constants> are things declared via L<constant|constant> or
+L<Readonly|Readonly>.
+
+    use constant FOO => 193;
+    Readonly::Array my @BAR => qw< a b c >;
+
+C<global_variables> are anything declared using C<local> or C<our>.
+C<file_lexical_variables> are variables declared at the file scope.
+
+C<scoped_lexical_variables> are variables declared inside bare blocks that
+are outside of any subroutines or other control structures; these are
+usually created to limit scope of variables to a given subset of
+subroutines.  E.g.
+
+    sub foo { ... }
+
+    {
+        my $thingy;
+
+        sub bar { ... $thingy ... }
+        sub baz { ... $thingy ... }
+    }
+
+All other variable declarations are considered
+C<local_lexical_variables>.
+
+Each of the C<packages>, C<subroutines>, C<local_lexical_variables>,
+C<scoped_lexical_variables>, C<file_lexical_variables>,
+C<global_variables>, and C<constants> options can be specified as one
+of C<:single_case>, C<:all_lower>, C<:all_upper:>,
+C<:starts_with_lower>, C<:starts_with_upper>, or C<:no_restriction> or
+a regular expression.  The C<:single_case> tag means a name can be all
+lower case or all upper case.  If a regular expression is specified,
+it is surrounded by C<\A> and C<\z>.
+
+C<packages> defaults to C<:starts_with_upper>.  C<subroutines>,
+C<local_lexical_variables>, C<scoped_lexical_variables>,
+C<file_lexical_variables>, and C<global_variables> default to
+C<:all_lower>.  And C<constants> defaults to C<:all_upper>.
+
+There are corresponding C<package_exemptions>,
+C<subroutine_exemptions>, C<local_lexical_variable_exemptions>,
+C<scoped_lexical_variable_exemptions>,
+C<file_lexical_variable_exemptions>, C<global_variable_exemptions>,
+and C<constant_exemptions> options that are lists of regular
+expressions to exempt from the corresponding capitalization rule.
+These values also end up being surrounded by C<\A> and C<\z>.
+
+C<package_exemptions> defaults to C<main>.
+C<global_variable_exemptions> defaults to C<\$VERSION @ISA
+@EXPORT(?:_OK)? %EXPORT_TAGS>.
 
 
-=head1 BUGS
+=head1 TODO
 
-The policy cannot currently tell that a variable is being declared as
-a constant, thus any variable may be made all-caps.
-
-
-=head1 SEE ALSO
-
-To control use of camelCase see
-L<Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseSubs|Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseSubs>
-and
-L<Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars|Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars>.
+Handle C<use vars>.  Treat constant subroutines like constant
+variables.
 
 
 =head1 AUTHOR
