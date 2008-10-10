@@ -1,6 +1,7 @@
 ## name basic failure
 ## failures 5
 ## cut
+
 Other::Package::_foo();
 Other::Package->_bar();
 Other::Package::_foo;
@@ -12,9 +13,18 @@ $self->Other::Package::_baz();
 ## name basic passes
 ## failures 0
 ## cut
+
 package My::Self::_private;
 use My::Self::_private;
 require My::Self::_private;
+
+#-----------------------------------------------------------------------------
+
+## name Class methods invoked via __PACKAGE__ are always OK.
+## failures 0
+## cut
+
+__PACKAGE__->_private();
 
 #-----------------------------------------------------------------------------
 
@@ -42,11 +52,31 @@ pop->_private_sub;
 #-----------------------------------------------------------------------------
 
 ## name Difficult-to-detect pass
-# This one should be illegal, but it is too hard to distinguish from
-# the next one, which is legal
 ## failures 0
 ## cut
+
+# This one should be illegal, but it is too hard to distinguish from
+# the next one, which is legal
 $pkg->_foo();
 
 $self->_bar();
 $self->SUPER::_foo();
+
+
+#-----------------------------------------------------------------------------
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab shiftround :
