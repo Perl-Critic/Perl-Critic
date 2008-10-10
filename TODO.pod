@@ -131,6 +131,12 @@ In order to allow people to get rid of "## no critic" markers, create a mode
 that tells them which markers don't actually hide any violations.
 
 
+=item * Get end of violation description and explanation punctuation consistent.
+
+Elliot wants messages to read nicely.  So, ensure that there's a period at the
+end if the policy author hasn't provided a terminal punctuation mark.
+
+
 =back
 
 
@@ -222,6 +228,23 @@ Check for -w on the shbang line.
 =item * Modules::RequireUseVersion [405-406]
 
 =item * Modules::RequireThreePartVersion [405-406]
+
+=item * Objects::ProhibitRestrictedHashes [322-323]
+
+Look for use of the bad methods in Hash::Util.
+
+
+=item * Objects::ProhibitLValueAccessors [346-349]
+
+Look for the C<:lvalue> subroutine attribute.
+
+
+=item * Objects::ProhibitIndirectSyntax [349-351]
+
+While the general situation can't be handled, we can look for a configured set
+of names.  Especially should be able to complain about C<new Foo()> by
+default.
+
 
 =back
 
