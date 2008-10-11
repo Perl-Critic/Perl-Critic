@@ -1,6 +1,6 @@
 General development: While there is Makefile.PL/EU::MM support within the
 distribution, a lot of the authoring stuff depends upon Build.PL/M::B, in
-particular, running author tests.
+particular, running author tests.  Only do releases using M::B.
 
 Naming standard: Things that are distribution-private (as opposed to
 class/package-private) begin with double underscore.
