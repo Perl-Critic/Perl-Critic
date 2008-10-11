@@ -70,7 +70,7 @@ sub _is_other_pkg_private_method {
     # sometimes the previous sib is a keyword, as in:
     # shift->_private_method();  This is typically used as
     # shorthand for "my $self=shift; $self->_private_method()"
-    $pkg ne 'shift' || return;
+    return if $pkg eq 'shift' or $pkg eq '__PACKAGE__';
 
     return 1;
 }
