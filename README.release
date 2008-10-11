@@ -1,0 +1,15 @@
+These are recommended steps to performing a Perl::Critic release to CPAN.
+
+** TODO: this is just a rough draft with some ideas.  This needs to be
+   filled out by an expert.
+
+ * Pre-release
+   - testing
+   - author testing
+   - Build distmeta
+   - Build manifest
+ * Release tools
+   - ??? (chris uses cpan-upload)
+ * Post-release
+   - announce?
+   - set co-maint in PAUSE for any new modules

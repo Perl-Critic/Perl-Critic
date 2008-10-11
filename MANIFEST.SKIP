@@ -1,5 +1,6 @@
 ^Perl-Critic-
 ^README\.developer$
+^README\.release$
 \.PPI$
 ^lib/Perl/Critic/PolicySummary.pod$
 _without_optional_dependencies.t$

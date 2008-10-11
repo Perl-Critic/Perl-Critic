@@ -16,3 +16,4 @@ Steps for adding a new Policy:
  * tools/svnkeywords t/[category]/[name].run lib/Perl/Critic/Policy/[category]/[name].pm
 
  * Remove from TODO
+ * After release, set co-maint in PAUSE
