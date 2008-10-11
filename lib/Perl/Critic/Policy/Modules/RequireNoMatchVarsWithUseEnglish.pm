@@ -166,7 +166,7 @@ documentation for details.
     use English;                              # not ok
     use English '-no_match_vars';             # ok
     use English qw< $ERRNO -no_match_vars>;   # ok
-
+    use English qw($OS_ERROR);                # not ok
 
 
 =head1 CONFIGURATION
