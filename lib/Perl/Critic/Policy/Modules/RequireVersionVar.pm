@@ -36,7 +36,7 @@ sub applies_to           { return 'PPI::Document'          }
 sub violates {
     my ( $self, $elem, $doc ) = @_;
 
-    return if $doc->find_first( \&_is_VERSION_declaration );
+    return if $doc->find_first( \&_is_version_declaration );
 
     #If we get here, then no $VERSION was found
     return $self->violation( $DESC, $EXPL, $doc );
@@ -44,17 +44,17 @@ sub violates {
 
 #-----------------------------------------------------------------------------
 
-sub _is_VERSION_declaration {  ## no critic (ArgUnpacking)
-    return 1 if _is_our_VERSION(@_);
-    return 1 if _is_vars_VERSION(@_);
-    return 1 if _is_package_VERSION(@_);
-    return 1 if _is_readonly_VERSION(@_);
+sub _is_version_declaration {  ## no critic (ArgUnpacking)
+    return 1 if _is_our_version(@_);
+    return 1 if _is_vars_version(@_);
+    return 1 if _is_package_version(@_);
+    return 1 if _is_readonly_version(@_);
     return 0;
 }
 
 #-----------------------------------------------------------------------------
 
-sub _is_our_VERSION {
+sub _is_our_version {
     my (undef, $elem) = @_;
     $elem->isa('PPI::Statement::Variable') || return 0;
     $elem->type() eq 'our' || return 0;
@@ -63,7 +63,7 @@ sub _is_our_VERSION {
 
 #-----------------------------------------------------------------------------
 
-sub _is_vars_VERSION {
+sub _is_vars_version {
     my (undef, $elem) = @_;
     $elem->isa('PPI::Statement::Include') || return 0;
     $elem->pragma() eq 'vars' || return 0;
@@ -72,7 +72,7 @@ sub _is_vars_VERSION {
 
 #-----------------------------------------------------------------------------
 
-sub _is_package_VERSION {
+sub _is_package_version {
     my (undef, $elem) = @_;
     $elem->isa('PPI::Token::Symbol') || return 0;
     return $elem =~ m{ \A \$ \S+ ::VERSION \z }xms;
@@ -81,7 +81,7 @@ sub _is_package_VERSION {
 
 #-----------------------------------------------------------------------------
 
-sub _is_readonly_VERSION {
+sub _is_readonly_version {
 
     #---------------------------------------------------------------
     # Readonly VERSION statements usually come in one of two forms:

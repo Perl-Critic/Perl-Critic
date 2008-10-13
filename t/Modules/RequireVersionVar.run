@@ -63,12 +63,9 @@ our $Version;
 #-----------------------------------------------------------------------------
 
 ## name pass with "no critic" on
-## TODO "no critic" doesn't work at the document level
 ## failures 0
 ## cut
-
-#!anything
-## no critic (RequireVersionVar)
+#!anything              ## no critic (RequireVersionVar)
 
 #-----------------------------------------------------------------------------
 
