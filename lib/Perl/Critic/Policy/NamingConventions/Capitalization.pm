@@ -69,6 +69,16 @@ Readonly::Hash my %CAPITALIZATION_SCHEME_TAGS    => (
 
 Readonly::Scalar my $PACKAGE_REGEX          => qr/ :: | ' /xms;
 
+Readonly::Hash my %NAME_FOR_TYPE => (
+    package                 => 'Package',
+    subroutine              => 'Subroutine',
+    local_lexical_variable  => 'Local lexical variable',
+    scoped_lexical_variable => 'Scoped lexical variable',
+    file_lexical_variable   => 'File lexical variable',
+    global_variable         => 'Global variable',
+    constant                => 'Constant',
+);
+
 Readonly::Scalar my $EXPL                   => [ 45 ];
 
 #-----------------------------------------------------------------------------
@@ -97,7 +107,7 @@ sub supported_parameters {
         {
             name               => 'subroutine_exemptions',
             description        => 'Subroutine names that are exempt from capitalization rules.  The values here are regexes.',
-            default_string     => $EMPTY,
+            default_string     => 'AUTOLOAD',
             behavior           => 'string list',
         },
         {
@@ -145,7 +155,7 @@ sub supported_parameters {
         {
             name               => 'global_variable_exemptions',
             description        => 'Global variable names that are exempt from capitalization rules.  The values here are regexes.',
-            default_string     => '\$VERSION @ISA @EXPORT(?:_OK)? %EXPORT_TAGS',
+            default_string     => '\$VERSION @ISA @EXPORT(?:_OK)? %EXPORT_TAGS \$AUTOLOAD',
             behavior           => 'string list',
         },
         {
@@ -425,7 +435,11 @@ sub _check_capitalization {
 
     my $test = $self->{"_${name_type}_test"};
     if ( my $message = $test->($to_match) ) {
-        return $self->violation("$full_name $message", $EXPL, $elem);
+        return $self->violation(
+            qq<$NAME_FOR_TYPE{$name_type} "$full_name" $message>,
+            $EXPL,
+            $elem,
+        );
     }
 
     return;
