@@ -160,13 +160,17 @@ distribution.
 Due to unfortunate history, if you use the L<English|English> module
 but don't pass in a C<-no_match_vars> argument, all regular
 expressions in the entire program, not merely the module in question,
-suffer a significant performance penalty.  See the L<English|English>
-documentation for details.
+suffer a significant performance penalty, even if you only import a
+subset of the variables.
 
     use English;                              # not ok
     use English '-no_match_vars';             # ok
-    use English qw< $ERRNO -no_match_vars>;   # ok
+    use English qw< $ERRNO -no_match_vars >;  # ok
     use English qw($OS_ERROR);                # not ok
+
+In the last example above, while the match variables aren't loaded
+into your namespace, they are still created in the C<English>
+namespace and you still pay the cost.
 
 
 =head1 CONFIGURATION
