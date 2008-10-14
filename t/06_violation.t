@@ -79,11 +79,14 @@ is(        $viol->policy(),      $pkg,     'policy');
 like(      $viol->diagnostics(), qr/ \A $no_diagnostics_msg \z /xms, 'diagnostics');
 
 {
-    local $Perl::Critic::Violation::FORMAT = '%l,%c,%m,%e,%p,%d,%r';
+    my $old_format = Perl::Critic::Violation::get_format();
+    Perl::Critic::Violation::set_format('%l,%c,%m,%e,%p,%d,%r');
     my $expect = qr/\A $expected_location->[0],$expected_location->[1],Foo,Bar,$pkg,$no_diagnostics_msg,\Q$code\E \z/xms;
 
     like($viol->to_string(), $expect, 'to_string');
     like("$viol",            $expect, 'stringify');
+
+    Perl::Critic::Violation::set_format($old_format);
 }
 
 $viol = Perl::Critic::Violation->new('Foo', [28], $doc, 99);

@@ -1,5 +1,9 @@
 [1.xxx] Released on 2008-xx-xx
 
+    Incompatiblity change:
+    * The deprecated $Perl::Critic::Violation::FORMAT variable no longer
+      exists.  Use Perl::Critic::Violation::set_format() instead.
+
     New Developer Features:
     * Perl::Critic::Policy::is_document_exempt() has been renamed to
       prepare_to_scan_document() and the sense of the return value has been

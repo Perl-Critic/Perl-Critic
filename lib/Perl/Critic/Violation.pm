@@ -30,8 +30,8 @@ use Perl::Critic::Exception::Fatal::Internal qw< &throw_internal >;
 our $VERSION = '1.093_01';
 
 #Class variables...
-our $FORMAT = "%m at line %l, column %c. %e.\n"; #Default stringy format
-my %DIAGNOSTICS = ();  #Cache of diagnostic messages
+my $format = "%m at line %l, column %c. %e.\n"; # Default stringy format
+my %diagnostics = ();  # Cache of diagnostic messages
 
 #-----------------------------------------------------------------------------
 
@@ -77,8 +77,8 @@ sub new {
 
 #-----------------------------------------------------------------------------
 
-sub set_format { return $FORMAT = verbosity_to_format( $_[0] ); }  ##no critic(ArgUnpacking)
-sub get_format { return $FORMAT;         }
+sub set_format { return $format = verbosity_to_format( $_[0] ); }  ##no critic(ArgUnpacking)
+sub get_format { return $format;         }
 
 #-----------------------------------------------------------------------------
 
@@ -126,17 +126,17 @@ sub diagnostics {
     my ($self) = @_;
     my $policy = $self->policy();
 
-    if ( not $DIAGNOSTICS{$policy} ) {
+    if ( not $diagnostics{$policy} ) {
         eval {              ## no critic (RequireCheckingReturnValueOfEval)
             my $module_name = ref $policy || $policy;
-            $DIAGNOSTICS{$policy} =
+            $diagnostics{$policy} =
                 trim_pod_section(
                     get_pod_section_for_module( $module_name, 'DESCRIPTION' )
                 );
         };
-        $DIAGNOSTICS{$policy} ||= "    No diagnostics available\n";
+        $diagnostics{$policy} ||= "    No diagnostics available\n";
     }
-    return $DIAGNOSTICS{$policy};
+    return $diagnostics{$policy};
 }
 
 #-----------------------------------------------------------------------------
@@ -213,7 +213,7 @@ sub to_string {
          'P' => $long_policy,
          'p' => $short_policy,
     );
-    return stringf($FORMAT, %fspec);
+    return stringf($format, %fspec);
 }
 
 #-----------------------------------------------------------------------------
@@ -254,6 +254,7 @@ __END__
 
 Perl::Critic::Violation - A violation of a Policy found in some source code.
 
+
 =head1 SYNOPSIS
 
   use PPI;
@@ -266,6 +267,7 @@ Perl::Critic::Violation - A violation of a Policy found in some source code.
 
   my $vio  = Perl::Critic::Violation->new($desc, $expl, $node, $sev);
 
+
 =head1 DESCRIPTION
 
 Perl::Critic::Violation is the generic representation of an individual
@@ -275,9 +277,10 @@ know anything about L<PPI|PPI>.  The C<violations> method of all
 L<Perl::Critic::Policy|Perl::Critic::Policy> subclasses must return a
 list of these Perl::Critic::Violation objects.
 
+
 =head1 CONSTRUCTOR
 
-=over 8
+=over
 
 =item C<new( $description, $explanation, $element, $severity )>
 
@@ -288,7 +291,9 @@ PBP (as an ARRAY ref), a reference to the L<PPI|PPI> element that
 caused the violation, and the severity of the violation (as an
 integer).
 
+
 =back
+
 
 =head1 METHODS
 
@@ -299,11 +304,13 @@ integer).
 Returns a brief description of the specific violation.  In other
 words, this value may change on a per violation basis.
 
+
 =item C<explanation()>
 
 Returns an explanation of the policy as a string or as reference to an
 array of page numbers in PBP.  This value will generally not change
 based upon the specific code violating the policy.
+
 
 =item C<location()>
 
@@ -311,28 +318,33 @@ Returns a three-element array reference containing the line and real &
 virtual column numbers where this Violation occurred, as in
 L<PPI::Element|PPI::Element>.
 
+
 =item C<filename()>
 
 Returns the path to the file where this Violation occurred.  In some
 cases, the path may be undefined because the source code was not read
 directly from a file.
 
+
 =item C<severity()>
 
 Returns the severity of this Violation as an integer ranging from 1 to
 5, where 5 is the "most" severe.
 
+
 =item C<sort_by_severity( @violation_objects )>
 
 If you need to sort Violations by severity, use this handy routine:
 
-   @sorted = Perl::Critic::Violation::sort_by_severity(@violations);
+    @sorted = Perl::Critic::Violation::sort_by_severity(@violations);
+
 
 =item C<sort_by_location( @violation_objects )>
 
 If you need to sort Violations by location, use this handy routine:
 
-   @sorted = Perl::Critic::Violation::sort_by_location(@violations);
+    @sorted = Perl::Critic::Violation::sort_by_location(@violations);
+
 
 =item C<diagnostics()>
 
@@ -341,10 +353,12 @@ motivation for and details of the Policy module that created this
 Violation.  This information is automatically extracted from the
 C<DESCRIPTION> section of the Policy module's POD.
 
+
 =item C<policy()>
 
 Returns the name of the L<Perl::Critic::Policy|Perl::Critic::Policy>
 that created this Violation.
+
 
 =item C<source()>
 
@@ -352,46 +366,34 @@ Returns the string of source code that caused this exception.  If the
 code spans multiple lines (e.g. multi-line statements, subroutines or
 other blocks), then only the first line will be returned.
 
-=item C<set_format( $FORMAT )>
+
+=item C<set_format( $format )>
 
 Class method.  Sets the format for all Violation objects when they are
 evaluated in string context.  The default is C<'%d at line %l, column
 %c. %e'>.  See L<"OVERLOADS"> for formatting options.
+
 
 =item C<get_format()>
 
 Class method. Returns the current format for all Violation objects
 when they are evaluated in string context.
 
+
 =item C<to_string()>
 
 Returns a string representation of this violation.  The content of the
-string depends on the current value of the C<$FORMAT> package
+string depends on the current value of the C<$format> package
 variable.  See L<"OVERLOADS"> for the details.
 
-=back
-
-=head1 FIELDS
-
-=over
-
-=item C<$Perl::Critic::Violation::FORMAT>
-
-B<DEPRECATED:> Use the C<set_format> and C<get_format> methods
-instead.
-
-Sets the format for all Violation objects when they are evaluated in
-string context.  The default is C<'%d at line %l, column %c. %e'>.
-See L<"OVERLOADS"> for formatting options.  If you want to change
-C<$FORMAT>, you should probably localize it first.
 
 =back
+
 
 =head1 OVERLOADS
 
 Perl::Critic::Violation overloads the C<""> operator to produce neat
-little messages when evaluated in string context.  The format depends
-on the current value of the C<$FORMAT> package variable.
+little messages when evaluated in string context.
 
 Formats are a combination of literal and escape characters similar to
 the way C<sprintf> works.  If you want to know the specific formatting
@@ -414,25 +416,27 @@ characters are:
 
 Here are some examples:
 
-  $Perl::Critic::Violation::FORMAT = "%m at line %l, column %c.\n";
-  #looks like "Mixed case variable name at line 6, column 23."
+  Perl::Critic::Violation::set_format("%m at line %l, column %c.\n");
+  # looks like "Mixed case variable name at line 6, column 23."
 
-  $Perl::Critic::Violation::FORMAT = "%m near '%r'\n";
-  #looks like "Mixed case variable name near 'my $theGreatAnswer = 42;'"
+  Perl::Critic::Violation::set_format("%m near '%r'\n");
+  # looks like "Mixed case variable name near 'my $theGreatAnswer = 42;'"
 
-  $Perl::Critic::Violation::FORMAT = "%l:%c:%p\n";
-  #looks like "6:23:NamingConventions::ProhibitMixedCaseVars"
+  Perl::Critic::Violation::set_format("%l:%c:%p\n");
+  # looks like "6:23:NamingConventions::ProhibitMixedCaseVars"
 
-  $Perl::Critic::Violation::FORMAT = "%m at line %l. %e. \n%d\n";
-  #looks like "Mixed case variable name at line 6.  See page 44 of PBP.
+  Perl::Critic::Violation::set_format("%m at line %l. %e. \n%d\n");
+  # looks like "Mixed case variable name at line 6.  See page 44 of PBP.
     Conway's recommended naming convention is to use lower-case words
     separated by underscores.  Well-recognized acronyms can be in ALL
     CAPS, but must be separated by underscores from other parts of the
     name."
 
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+
 
 =head1 COPYRIGHT
 
