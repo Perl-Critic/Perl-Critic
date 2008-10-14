@@ -403,13 +403,24 @@ will disallow all uses of C<die> and C<warn>.
     allow_messages_ending_with_newlines = 0
 
 
+=head1 BUGS
+
+This should not complain about using C<warn> or C<die> if it's not in
+a function, or if it's in C<main::>.
+
+Also, should allow C<die> when it is obvious that the "message" is a
+reference.
+
+
 =head1 SEE ALSO
 
 L<Carp::Always|Carp::Always>
 
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+
 
 =head1 COPYRIGHT
 

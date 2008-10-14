@@ -138,6 +138,11 @@ to 1.
 This Policy is not configurable except for the standard options.
 
 
+=head1 BUGS
+
+Needs to check for -w on the shebang line.
+
+
 =head1 SEE ALSO
 
 L<Perl::Critic::Policy::TestingAndDebugging::ProhibitNoWarnings|Perl::Critic::Policy::TestingAndDebugging::ProhibitNoWarnings>

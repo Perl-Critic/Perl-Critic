@@ -102,7 +102,7 @@ punctuation variables.
 
 =head1 BUGS
 
-This doesn't find punctuation variables in strings.
+This doesn't find punctuation variables in strings.  RT #35970.
 
 
 =head1 AUTHOR

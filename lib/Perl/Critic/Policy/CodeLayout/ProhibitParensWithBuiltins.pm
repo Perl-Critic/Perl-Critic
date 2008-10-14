@@ -216,6 +216,14 @@ those cases, consider using the '## no critic' comments to silence
 Perl::Critic.
 
 
+=head1 BUGS
+
+Some builtin functions (particularly those that take a variable number
+of scalar arguments) should probably get parentheses.  This policy
+should be enhanced to allow the user to specify a list of builtins
+that are exempt from the policy.
+
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>

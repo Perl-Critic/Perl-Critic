@@ -229,9 +229,16 @@ With this option on, this statement is allowed.  Even if this option
 is off, using a fat comma C<< => >> works, but that forces
 stringification on the first value, which may not be what you want.
 
+
+=head1 BUGS
+
+Needs to check for C<scalar( something, something )>.
+
+
 =head1 AUTHOR
 
 Elliot Shank C<< <perl@galumph.com> >>
+
 
 =head1 COPYRIGHT
 

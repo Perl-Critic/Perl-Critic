@@ -142,83 +142,8 @@ end if the policy author hasn't provided a terminal punctuation mark.
 
 =head1 BUGS/LIMITATIONS
 
-=over
-
-=item * ControlStructures::ProhibitPostfixControls
-
-Look for the do {} while case and change the explanation to point to page 123
-when it is found.  RT #37905.
-
-
-=item * NamingConventions::ProhibitAmbiguousNames
-
-Don't allow compound names with forbidden words, like "last_record".
-Allow forbidden words in RHS of variable declarations
-
-Also, we should make it easeir to add (or delete) words from the
-forbbiden list.
-
-
-=item * Subroutines::ProtectPrivateSubs
-
-Doesn't forbid C<< $pkg->_foo() >> because it can't tell the
-difference between that and C<< $self->_foo() >>
-
-
-=item * ErrorHandling::RequireCarping
-
-This should not complain about using C<warn> or C<die> if it's not in a
-function, or if it's in main::.
-
-Also, should allow C<die> when it is obvious that the "message" is a
-reference.
-
-
-=item * RegularExpressions::ProhibitCaptureWithoutTest
-
-Allow this construct:
-
-    for ( ... ) {
-        next unless /(....)/;
-        if ( $1 ) {
-            ....
-        }
-    }
-
-Right now, P::C thinks that the C<$1> isn't legal to use because it's
-"outside" of the match.  The thing is, we can only get to the C<if>
-if the regex matched.
-
-    while ( $str =~ /(expression)/ )
-
-
-=item * CodeLayout::ProhibitParensWithBuiltins
-
-Some builtin functions (particularly those that take a variable number of
-scalar arguments) should probably get parentheses.  This policy should be
-enhanced to allow the user to specify a list of builtins that are expempt
-from the policy.
-
-
-=item * ValuesAndExpressions::ProhibitCommaSeparatedStatements
-
-Needs to check for C<scalar( something, something )>.
-
-
-=item * Variables::ProhibitPunctuationVars
-
-Needs to look inside strings.  RT #35970.
-
-
-=item * TestingAndDebugging::RequireUseWarnings
-
-Check for -w on the shbang line.
-
-
-=item * Change formatting in Violation to eliminate double periods.
-
-
-=back
+Document bugs for individual Policies in the Policies themselves.  Users
+should be aware of limitations.  (And, hey, we might get patches that way.)
 
 
 =head1 OTHER PBP POLICIES THAT SEEM FEASIBLE TO IMPLEMENT
@@ -288,6 +213,7 @@ Prevent C<$@> from being cleared unexpectedly by DESTROY methods.
         die "Died in eval."
     }
     print $@;   # "Died in Foo::DESTROY()", not "Died in eval.".
+
 
 See L<http://use.perl.org/~Ovid/journal/36767>.
 

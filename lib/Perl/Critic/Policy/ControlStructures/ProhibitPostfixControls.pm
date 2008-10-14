@@ -100,6 +100,7 @@ __END__
 
 Perl::Critic::Policy::ControlStructures::ProhibitPostfixControls - Write C<if($condition){ do_something() }> instead of C<do_something() if $condition>.
 
+
 =head1 AFFILIATION
 
 This Policy is part of the core L<Perl::Critic|Perl::Critic>
@@ -137,6 +138,7 @@ such as C<last>, C<next>, C<redo>, or C<continue>.
         last LOOP if $other_condition;    #also ok
     }
 
+
 =head1 CONFIGURATION
 
 A set of constructs to be ignored by this policy can specified by
@@ -159,6 +161,7 @@ F<.perlcriticrc> file:
 This is useful if you're using additional modules that add things like
 C<assert> or C<throw>.
 
+
 =head1 NOTES
 
 The C<die>, C<croak>, and C<confess> functions are frequently used as
@@ -168,9 +171,16 @@ of those functions.  It is also pretty common to use C<warn>, C<carp>,
 and C<cluck> with a postfix C<if>, so those are allowed too.
 
 
+=head1 BUGS
+
+Look for the C<do {} while> case and change the explanation to point
+to page 123 when it is found.  RT #37905.
+
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+
 
 =head1 COPYRIGHT
 

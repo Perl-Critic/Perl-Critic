@@ -110,9 +110,17 @@ This Policy is not configurable except for the standard options.
 
 This policy is inspired by a similar test in L<B::Lint|B::Lint>
 
+
+=head1 BUGS
+
+Doesn't forbid C<< $pkg->_foo() >> because it can't tell the
+difference between that and C<< $self->_foo() >>
+
+
 =head1 SEE ALSO
 
-L<Perl::Critic::Policy::Subroutines::ProtectPrivateSubs|Perl::Critic::Policy::Subroutines::ProtectPrivateSubs>
+L<Perl::Critic::Policy::Variables::ProtectPrivateVars|Perl::Critic::Policy::Variables::ProtectPrivateVars>
+
 
 =head1 AUTHOR
 
