@@ -44,10 +44,6 @@ sub applies_to       { return qw(PPI::Statement::Sub
 
 #-----------------------------------------------------------------------------
 
-sub default_forbidden_words { return words_from_string( $DEFAULT_FORBID ) }
-
-#-----------------------------------------------------------------------------
-
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
@@ -151,19 +147,6 @@ C<$HOME/.perlcriticrc>:
 
     [NamingConventions::ProhibitAmbiguousNames]
     forbid = last set left right no abstract contract record second close
-
-
-=head1 METHODS
-
-=over
-
-=item default_forbidden_words()
-
-This can be called as a class or instance method.  It returns the list
-of words that are forbidden by default.
-
-
-=back
 
 
 =head1 BUGS
