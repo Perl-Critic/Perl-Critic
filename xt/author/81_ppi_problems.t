@@ -12,7 +12,7 @@ use warnings;
 
 use PPI::Document;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 
 #-----------------------------------------------------------------------------
 
@@ -25,7 +25,13 @@ our $VERSION = '1.093_01';
 {
     local $TODO = q<Clean up code in P::C::Utils::PPI once this is released.>;
 
-    can_ok( qw< PPI::Statement::Include module_version > );
+    can_ok 'PPI::Statement::Include', 'module_version';
+}
+
+{
+    local $TODO = q<Clean up code in NamingConventions::Capitalization once this is released.>;
+
+    can_ok 'PPI::Statement::Variable', 'symbols';
 }
 
 {

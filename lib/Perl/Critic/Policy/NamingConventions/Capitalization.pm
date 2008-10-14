@@ -107,7 +107,7 @@ sub supported_parameters {
         {
             name               => 'subroutine_exemptions',
             description        => 'Subroutine names that are exempt from capitalization rules.  The values here are regexes.',
-            default_string     => 'AUTOLOAD',
+            default_string     => 'AUTOLOAD CLEAR CLOSE DELETE DESTROY EXISTS EXTEND FETCH FETCHSIZE FIRSTKEY GETC NEXTKEY POP PRINT PRINTF PUSH READ READLINE SCALAR SHIFT SPLICE STORE STORESIZE TIEARRAY TIEHANDLE TIEHASH TIESCALAR UNSHIFT UNTIE WRITE',
             behavior           => 'string list',
         },
         {
@@ -155,7 +155,7 @@ sub supported_parameters {
         {
             name               => 'global_variable_exemptions',
             description        => 'Global variable names that are exempt from capitalization rules.  The values here are regexes.',
-            default_string     => '\$VERSION @ISA @EXPORT(?:_OK)? %EXPORT_TAGS \$AUTOLOAD',
+            default_string     => '\$VERSION @ISA @EXPORT(?:_OK)? %EXPORT_TAGS \$AUTOLOAD %ENV %SIG',
             behavior           => 'string list',
         },
         {
@@ -339,7 +339,9 @@ sub _variable_capitalization {
     my @violations;
 
     NAME:
-    for my $name ( $elem->variables() ) {
+    for my $name (
+        map { $_->symbol() } _ppi_statement_variable_symbols($elem)
+    ) {
         if ($elem->type() eq 'local') {
             # Fully qualified names are exempt because we can't be responsible
             # for other people's sybols.
@@ -443,6 +445,73 @@ sub _check_capitalization {
     }
 
     return;
+}
+
+
+# This code taken from unreleased PPI.  Delete this once next version of PPI
+# is released.  "$self" is not this Policy, but a PPI::Statement::Variable.
+sub _ppi_statement_variable_symbols {
+    my $self = shift;
+
+    # Get the children we care about
+    my @schild = grep { $_->significant } $self->children;
+    shift @schild if $schild[0]->isa('PPI::Token::Label');
+
+    # If the second child is a symbol, return its name
+    if ( $schild[1]->isa('PPI::Token::Symbol') ) {
+        return $schild[1];
+    }
+
+    # If it's a list, return as a list
+    if ( $schild[1]->isa('PPI::Structure::List') ) {
+        my $expression = $schild[1]->schild(0);
+        $expression and
+        $expression->isa('PPI::Statement::Expression') or return ();
+
+        # my and our are simpler than local
+        if (
+                $self->type eq 'my'
+            or  $self->type eq 'our'
+            or  $self->type eq 'state'
+        ) {
+            return
+                grep { $_->isa('PPI::Token::Symbol') }
+                $expression->schildren;
+        }
+
+        # Local is much more icky (potentially).
+        # Not that we are actually going to deal with it now,
+        # but having this seperate is likely going to be needed
+        # for future bug reports about local() things.
+
+        # This is a slightly better way to check.
+        return
+            grep { $self->_local_variable($_)    }
+            grep { $_->isa('PPI::Token::Symbol') }
+            $expression->schildren;
+    }
+
+    # erm... this is unexpected
+    ();
+}
+
+sub _local_variable {
+    my ($self, $el) = @_;
+
+    # The last symbol should be a variable
+    my $n = $el->snext_sibling or return 1;
+    my $p = $el->sprevious_sibling;
+    if ( ! $p or $p eq ',' ) {
+        # In the middle of a list
+        return 1 if $n eq ',';
+
+        # The first half of an assignment
+        return 1 if $n eq '=';
+    }
+
+    # Lets say no for know... additional work
+    # should go here.
+    return '';
 }
 
 1;
