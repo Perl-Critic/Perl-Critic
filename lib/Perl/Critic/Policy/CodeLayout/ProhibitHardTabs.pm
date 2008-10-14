@@ -22,15 +22,13 @@ our $VERSION = '1.093_01';
 Readonly::Scalar my $DESC => q{Hard tabs used};
 Readonly::Scalar my $EXPL => [ 20 ];
 
-my $DEFAULT_ALLOW_LEADING_TABS = $TRUE;
-
 #-----------------------------------------------------------------------------
 
 # The following regex should probably be "qr{^ .* [^\t]+ \t}xms" but it doesn't
 # match when I expect it to.  I haven't figured out why, so I used "\S" to
 # approximately mean "not a tab", and that seemd to work.
 
-my $NON_LEADING_TAB_REGEX = qr{^ .* \S+ \t }xms;
+Readonly::Scalar my $NON_LEADING_TAB_REGEX => qr{^ .* \S+ \t }xms;
 
 #-----------------------------------------------------------------------------
 

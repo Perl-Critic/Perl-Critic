@@ -28,9 +28,6 @@ Readonly::Hash my %PAGES_OF => (
     while   => [ 96     ],
 );
 
-# These functions can have postfix 'if'.
-my @DEFAULT_FLOW_CONTROL = qw( warn die carp croak cluck confess goto exit );
-
 #-----------------------------------------------------------------------------
 
 sub supported_parameters {

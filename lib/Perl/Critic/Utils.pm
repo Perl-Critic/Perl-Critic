@@ -765,7 +765,7 @@ sub is_script {
 
 #-----------------------------------------------------------------------------
 
-sub _is_PL_file {
+sub _is_PL_file {  ## no critic (NamingConventions::Capitalization)
     my ($doc) = @_;
     return if not $doc->can('filename');
     my $filename = $doc->filename() || return;
@@ -980,8 +980,8 @@ sub _normalize_severity {
 
 #-----------------------------------------------------------------------------
 
-Readonly::Array my @skip_dir => qw( CVS RCS .svn _darcs {arch} .bzr _build blib );
-Readonly::Hash my %skip_dir => hashify( @skip_dir );
+Readonly::Array my @SKIP_DIR => qw( CVS RCS .svn _darcs {arch} .bzr .cdv .git .hg .pc _build blib );
+Readonly::Hash my %SKIP_DIR => hashify( @SKIP_DIR );
 
 sub all_perl_files {
 
@@ -1000,7 +1000,7 @@ sub all_perl_files {
             closedir $dh;
 
             @newfiles = File::Spec->no_upwards(@newfiles);
-            @newfiles = grep { !$skip_dir{$_} } @newfiles;
+            @newfiles = grep { not $SKIP_DIR{$_} } @newfiles;
             push @queue, map { File::Spec->catfile($file, $_) } @newfiles;
         }
 

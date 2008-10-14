@@ -100,9 +100,9 @@ sub has_exceptions {
 
 #-----------------------------------------------------------------------------
 
-my $MESSAGE_PREFIX = $EMPTY;
-my $MESSAGE_SUFFIX = "\n";
-my $MESSAGE_SEPARATOR = $MESSAGE_SUFFIX . $MESSAGE_PREFIX;
+Readonly::Scalar my $MESSAGE_PREFIX => $EMPTY;
+Readonly::Scalar my $MESSAGE_SUFFIX => "\n";
+Readonly::Scalar my $MESSAGE_SEPARATOR => $MESSAGE_SUFFIX . $MESSAGE_PREFIX;
 
 sub full_message {
     my ( $self ) = @_;

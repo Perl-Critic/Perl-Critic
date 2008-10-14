@@ -28,7 +28,7 @@ Readonly::Scalar my $M_S_PBP_0_0_3       => 'module_starter_pbp_0_0_3';
 
 Readonly::Scalar my $DEFAULT_SOURCE      => $BOOK_FIRST_EDITION;
 
-my %SOURCE_TRANSLATION  = (
+Readonly::Hash   my %SOURCE_TRANSLATION  => (
     $BOOK               => $BOOK_FIRST_EDITION,
     $BOOK_FIRST_EDITION => $BOOK_FIRST_EDITION,
     $MODULE_STARTER_PBP => $M_S_PBP_0_0_3,

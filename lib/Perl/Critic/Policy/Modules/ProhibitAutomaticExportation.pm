@@ -57,13 +57,13 @@ sub _uses_exporter {
 
 sub _has_exports {
     my ($doc) = @_;
-    my $wanted = sub {_our_EXPORT(@_) || _vars_EXPORT(@_) || _package_EXPORT(@_)};
+    my $wanted = sub {_our_export(@_) || _vars_export(@_) || _package_export(@_)};
     return $doc->find_first( $wanted );
 }
 
 #------------------
 
-sub _our_EXPORT {
+sub _our_export {
     my (undef, $elem) = @_;
     $elem->isa('PPI::Statement::Variable') || return 0;
     $elem->type() eq 'our' || return 0;
@@ -72,7 +72,7 @@ sub _our_EXPORT {
 
 #------------------
 
-sub _vars_EXPORT {
+sub _vars_export {
     my (undef, $elem) = @_;
     $elem->isa('PPI::Statement::Include') || return 0;
     $elem->pragma() eq 'vars' || return 0;
@@ -81,7 +81,7 @@ sub _vars_EXPORT {
 
 #------------------
 
-sub _package_EXPORT {
+sub _package_export {
     my (undef, $elem) = @_;
     $elem->isa('PPI::Token::Symbol') || return 0;
     return $elem =~ m{ \A \@ \S+ ::EXPORT \z }xms;
