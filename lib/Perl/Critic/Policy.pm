@@ -55,7 +55,7 @@ Readonly::Scalar my $NO_LIMIT => 'no_limit';
 
 #-----------------------------------------------------------------------------
 
-my $FORMAT = "%p\n"; #Default stringy format
+my $format = "%p\n"; #Default stringy format
 
 #-----------------------------------------------------------------------------
 
@@ -452,8 +452,8 @@ sub throw_parameter_value_exception {
 
 # Static methods.
 
-sub set_format { return $FORMAT = $_[0] }  ##no critic(ArgUnpacking)
-sub get_format { return $FORMAT         }
+sub set_format { return $format = $_[0] }  ## no critic(ArgUnpacking)
+sub get_format { return $format         }
 
 #-----------------------------------------------------------------------------
 
@@ -474,7 +474,7 @@ sub to_string {
          'V' => sub { dor( $self->default_maximum_violations_per_document(), $NO_LIMIT ) },
          'v' => sub { dor( $self->get_maximum_violations_per_document(), $NO_LIMIT ) },
     );
-    return stringf($FORMAT, %fspec);
+    return stringf(get_format(), %fspec);
 }
 
 sub _format_parameters {
@@ -782,7 +782,7 @@ L<Perl::Critic::PolicyParameter|Perl::Critic::PolicyParameter> with
 the specified name.
 
 
-=item C<set_format( $FORMAT )>
+=item C<set_format( $format )>
 
 Class method.  Sets the format for all Policy objects when they are
 evaluated in string context.  The default is C<"%p\n">.  See
@@ -798,8 +798,8 @@ they are evaluated in string context.
 =item C<to_string()>
 
 Returns a string representation of the policy.  The content of the
-string depends on the current value of the C<$FORMAT> package
-variable.  See L<"OVERLOADS"> for the details.
+string depends on the current value returned by C<get_format()>.
+See L<"OVERLOADS"> for the details.
 
 
 =back
@@ -818,8 +818,7 @@ POD for any Policy modules that you author.  Thanks.
 =head1 OVERLOADS
 
 Perl::Critic::Violation overloads the C<""> operator to produce neat
-little messages when evaluated in string context.  The format depends
-on the current value of the C<$FORMAT> package variable.
+little messages when evaluated in string context.
 
 Formats are a combination of literal and escape characters similar to
 the way C<sprintf> works.  If you want to know the specific formatting

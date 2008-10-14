@@ -1,8 +1,9 @@
 [1.xxx] Released on 2008-xx-xx
 
-    Incompatiblity change:
-    * The deprecated $Perl::Critic::Violation::FORMAT variable no longer
-      exists.  Use Perl::Critic::Violation::set_format() instead.
+    Incompatible change:
+    * The deprecated $FORMAT variables for Perl::Critic::Policy and
+      Perl::Critic::Violation no longer exist.  Use the corresponding
+      get_format() and set_format() functions instead.
 
     New Developer Features:
     * Perl::Critic::Policy::is_document_exempt() has been renamed to
