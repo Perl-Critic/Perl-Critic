@@ -140,6 +140,24 @@ has a capture in it.  Those checks are too hard.
 This Policy is not configurable except for the standard options.
 
 
+=head1 BUGS
+
+Needs to allow this construct:
+
+    for ( ... ) {
+        next unless /(....)/;
+        if ( $1 ) {
+            ....
+        }
+    }
+
+Right now, Perl::Critic thinks that the C<$1> isn't legal to use
+because it's "outside" of the match.  The thing is, we can only get to
+the C<if> if the regex matched.
+
+    while ( $str =~ /(expression)/ )
+
+
 =head1 AUTHOR
 
 Chris Dolan <cdolan@cpan.org>
