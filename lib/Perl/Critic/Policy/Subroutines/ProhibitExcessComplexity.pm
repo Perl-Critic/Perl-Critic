@@ -51,7 +51,14 @@ sub violates {
     # Is it too complex?
     return if $score <= $self->{_max_mccabe};
 
-    my $desc = qq{Subroutine with high complexity score ($score)};
+    my $desc;
+    if ( my $name = $elem->name() ) {
+        $desc = qq<Subroutine "$name" with high complexity score ($score)>;
+    }
+    else {
+        $desc = qq<Anonymous subroutine with high complexity score ($score)>;
+    }
+
     return $self->violation( $desc, $EXPL, $elem );
 }
 
