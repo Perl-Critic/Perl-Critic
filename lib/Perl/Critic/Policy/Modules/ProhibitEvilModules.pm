@@ -81,7 +81,8 @@ sub applies_to        { return 'PPI::Statement::Include' }
 sub _parse_modules {
     my ($self, $parameter, $config_string) = @_;
 
-    return if not defined $config_string;
+    return if not $config_string;
+    return if $config_string =~ m< \A \s* \z >xms;
 
     my %evil_modules;
 
@@ -96,7 +97,7 @@ sub _parse_modules {
             # These are module name patterns (e.g. /Acme/)
             my $actual_regex;
 
-            eval { $actual_regex = qr/$regex_string/; 1 }  ## no critic (RegularExpressions::.*)
+            eval { $actual_regex = qr/$regex_string/; 1 }  ## no critic (RegularExpressions)
                 or throw_policy_value
                     policy         => $self->get_short_name(),
                     option_name    => 'modules',
@@ -127,6 +128,16 @@ sub _parse_modules {
     $self->{_evil_modules_regexes}  = \@evil_modules_regexes;
 
     return;
+}
+
+#-----------------------------------------------------------------------------
+
+sub initialize_if_enabled {
+    my ($self, $config) = @_;
+
+    # Disable if no modules are specified; there's no point in running if
+    # there aren't any.
+    return exists $self->{_evil_modules};
 }
 
 #-----------------------------------------------------------------------------

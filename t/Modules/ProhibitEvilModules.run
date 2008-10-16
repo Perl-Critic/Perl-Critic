@@ -1,12 +1,3 @@
-## name No modules configured
-## failures 0
-## cut
-
-use Evil::Module qw(bad stuff);
-use Super::Evil::Module;
-
-#-----------------------------------------------------------------------------
-
 ## name 2 evil modules
 ## parms {modules => 'Evil::Module Super::Evil::Module'}
 ## failures 2

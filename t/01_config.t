@@ -345,7 +345,7 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
 # Test the -single-policy switch
 
 {
-    my %pc_config = ('-single-policy' => 'ProhibitEvilModules');
+    my %pc_config = ('-single-policy' => 'ProhibitMagicNumbers');
     my @policies = Perl::Critic::Config->new( %pc_config )->policies();
     is(scalar @policies, 1, '-single-policy switch');
 }
