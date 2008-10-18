@@ -61,6 +61,8 @@ $foo = sin( $foo ) * 2;
 $foo = uc( $foo ) . $bar;
 $foo = lc( $foo ) . $bar;
 
+$nanosecond = int ( ($value - $epoch) * $NANOSECONDS_PER_SECOND );
+
 #-----------------------------------------------------------------------------
 
 ## name RT #21713
