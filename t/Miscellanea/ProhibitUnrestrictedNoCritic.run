@@ -1,18 +1,36 @@
 ##----------------------------------------------------------------------------
 ## name standard failures
-## failures 12
+## failures 4
 ## cut
 
+##no critic
 ## no critic
 ## no critic;
 ## no critic #blah,blah
 
-$foo = $bar; ## no critic
+##----------------------------------------------------------------------------
+## name slightly more complicated failures
+## failures 6
+## cut
+
+# just some spacing variations here...
+$foo = $bar; ##  no critic
+$foo = $bar; ##no critic
+
 $foo = $bar; ## no critic ()
 $foo = $bar; ## no critic ''
 $foo = $bar; ## no critic ""
 $foo = $bar; ## no critic qw()
 
+#----------------------------------------------------------------------------
+## name unrestricted "no critic" on a sub block
+## failures 5
+## cut
+
+sub frobulate { ##no critic
+    return $frob;
+}
+    
 sub frobulate { ## no critic #blah,blah
     return $frob;
 }

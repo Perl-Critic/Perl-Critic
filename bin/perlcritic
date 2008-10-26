@@ -490,7 +490,7 @@ sub _this_is_windows {
 #-----------------------------------------------------------------------------
 
 sub _at_tty {
-    return -t STDOUT; ## no critic 'ProhibitInteractiveTest';
+    return -t STDOUT; ## no critic (ProhibitInteractiveTest);
 }
 
 #-----------------------------------------------------------------------------
@@ -550,7 +550,7 @@ sub policy_docs {
     my @matching_policies  = grep { $_ =~ m/$pattern/ixms } @site_policies;
 
     # "-T" means don't send to pager   
-    my @perldoc_output = map {`perldoc -T $_`} @matching_policies;  ## no critic ProhibitBacktick
+    my @perldoc_output = map {`perldoc -T $_`} @matching_policies;  ## no critic (ProhibitBacktick)
     out @perldoc_output;
 
     exit 0;
