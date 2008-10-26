@@ -101,7 +101,7 @@ sub _init {
           boolean_to_number(dor( $args{'-criticism-fatal'}, $options_processor->criticism_fatal() ) );
           
         $self->{_warn_about_useless_no_critic} =
-            boolean_to_number(dor( $args{'-warn-about-useless-no-critc'},
+            boolean_to_number(dor( $args{'-warn-about-useless-no-critic'},
                  $options_processor->warn_about_useless_no_critic() ) );
     }
 

@@ -54,7 +54,7 @@ sub _init {
     $self->{_top}             = dor(delete $args{top},                $FALSE);
     $self->{_verbose}         = dor(delete $args{verbose},            $DEFAULT_VERBOSITY);
     $self->{_criticism_fatal} = dor(delete $args{'criticism-fatal'},  $FALSE);
-    $self->{_warn_about_useless_no_critic} = 
+    $self->{_warn_about_useless_no_critic} =
         dor(delete $args{'warn_about_useless_no_critic'}, $FALSE);
     $self->{_pager}           = dor(delete $args{pager},              $EMPTY);
 

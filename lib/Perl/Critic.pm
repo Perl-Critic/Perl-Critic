@@ -163,7 +163,7 @@ sub _gather_violations {
         my @warnings = $doc->useless_no_critic_warnings(@violations);
         for (@warnings) { warn "$_\n"; }
     }
-    
+
     # Accumulate statistics
     $self->statistics->accumulate( $doc, \@violations );
 

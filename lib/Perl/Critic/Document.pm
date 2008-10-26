@@ -186,24 +186,23 @@ sub is_line_disabled {
 
 sub useless_no_critic_warnings {
     my ($self, @violations) = @_;
-    
-    
+
     my %violation_lines = ();
     for my $violation (@violations) {
         my $line = $violation->location()->[0];
         my $policy_name = $violation->policy();
         $violation_lines{$policy_name}->{$line} = 1;
     }
-    
-    
+
+
     my @warnings = ();
     my $file = $self->filename() || 'UNKNOWN';
-    
+
     my %disabled_lines = %{ $self->{_disabled_lines} };
     for my $line (keys %disabled_lines) {
         my %disabled_policies = %{ $disabled_lines{$line} };
         for my $policy_name (keys %disabled_policies) {
-            
+
             if ($policy_name eq 'ALL' && not exists $violation_lines{$line}) {
                 push @warnings, qq{Useless disabling of all Policies in file "$file" at line $line.};
             }
@@ -212,7 +211,7 @@ sub useless_no_critic_warnings {
             }
         }
     }
-    
+
     return @warnings;
 }
 
@@ -356,8 +355,7 @@ sub _disable_other_lines {
       SIB:
         while ( my $esib = $end->next_sibling() ) {
             $end = $esib; # keep track of last sibling encountered in this scope
-            last SIB
-                if $esib->isa('PPI::Token::Comment') && $esib =~ $use_critic;
+            last SIB if $esib->isa('PPI::Token::Comment') && $esib =~ $use_critic;
         }
 
         # We either found an end or hit the end of the scope.
