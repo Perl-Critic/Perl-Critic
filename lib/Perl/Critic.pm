@@ -28,7 +28,7 @@ use Perl::Critic::Config;
 use Perl::Critic::Violation;
 use Perl::Critic::Document;
 use Perl::Critic::Statistics;
-use Perl::Critic::Utils qw{ :characters };
+use Perl::Critic::Utils qw{ :characters hashify };
 
 #-----------------------------------------------------------------------------
 
@@ -192,6 +192,7 @@ sub _critique {
     return if not $policy->prepare_to_scan_document($doc);
 
     my $maximum_violations = $policy->get_maximum_violations_per_document();
+    my %policies_that_cannot_be_disabled = hashify(_policies_that_cannot_be_disabled());
 
     if (defined $maximum_violations && $maximum_violations == 0) {
         return;
@@ -216,9 +217,9 @@ sub _critique {
                 my $line = $violation->location()->[0];
                 if (exists $is_line_disabled->{$line}) {
                     next VIOLATION if $is_line_disabled->{$line}->{$policy_name}
-                        && $policy->can_be_disabled();
+                        && not exists $policies_that_cannot_be_disabled{$policy_name}; 
                     next VIOLATION if $is_line_disabled->{$line}->{ALL}
-                        && $policy->can_be_disabled();
+                        && not exists $policies_that_cannot_be_disabled{$policy_name};
                 }
 
                 push @violations, $violation;
@@ -397,9 +398,20 @@ sub _unfix_shebang {
 
 #-----------------------------------------------------------------------------
 
-1;
+sub _policies_that_cannot_be_disabled {
+    # This is a special list of policies that cannot
+    # be disabled by the "no critic" pseudo-pragma.
+    
+    return qw(
+        Perl::Critic::Policy::Miscellanea::ProhibitUnrestrictedNoCritic
+    );
+}
 
 #-----------------------------------------------------------------------------
+
+1;
+
+
 
 __END__
 

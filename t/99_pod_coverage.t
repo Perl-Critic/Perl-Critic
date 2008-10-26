@@ -57,7 +57,6 @@ sub get_trusted_methods {
     return qw(
         new
         initialize_if_enabled
-        can_be_disabled
         prepare_to_scan_document
         violates
         applies_to
