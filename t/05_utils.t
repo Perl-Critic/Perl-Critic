@@ -173,7 +173,7 @@ sub test_is_script {
 
 #-----------------------------------------------------------------------------
 
-sub test_is_script_with_PL_files {
+sub test_is_script_with_PL_files { ## no critic (NamingConventions::Capitalization)
 
     # Testing for .PL files (e.g. Makefile.PL, Build.PL)
     # See http://rt.cpan.org/Ticket/Display.html?id=20481

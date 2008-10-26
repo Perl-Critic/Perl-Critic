@@ -10,6 +10,7 @@
 use 5.006001;
 use strict;
 use warnings;
+
 use Readonly;
 
 use Test::More tests => 81;
@@ -20,10 +21,10 @@ our $VERSION = '1.093_01';
 
 #-----------------------------------------------------------------------------
 
-my @PPI_STATEMENT_CLASSES;
+my @ppi_statement_classes;
 
 BEGIN {
-    @PPI_STATEMENT_CLASSES = qw{
+    @ppi_statement_classes = qw{
         PPI::Statement
             PPI::Statement::Package
             PPI::Statement::Include
@@ -42,15 +43,15 @@ BEGIN {
 
     use_ok('PPI::Document');
     use_ok('PPI::Token::Word');
-    foreach my $class (@PPI_STATEMENT_CLASSES) {
+    foreach my $class (@ppi_statement_classes) {
         use_ok($class);
     }
 
     use_ok('Perl::Critic::Utils::PPI', qw{ :all } );
 }
 
-my %INSTANCES = map { $_ => $_->new() } @PPI_STATEMENT_CLASSES;
-$INSTANCES{'PPI::Token::Word'} = PPI::Token::Word->new('foo');
+my %instances = map { $_ => $_->new() } @ppi_statement_classes;
+$instances{'PPI::Token::Word'} = PPI::Token::Word->new('foo');
 
 #-----------------------------------------------------------------------------
 #  export tests
@@ -70,63 +71,63 @@ can_ok('main', 'is_in_subroutine');
         'is_ppi_expression_or_generic_statement( undef )',
     );
     ok(
-        ! is_ppi_expression_or_generic_statement( $INSTANCES{'PPI::Token::Word'} ),
+        ! is_ppi_expression_or_generic_statement( $instances{'PPI::Token::Word'} ),
         'is_ppi_expression_or_generic_statement( PPI::Token::Word )',
     );
     ok(
-        is_ppi_expression_or_generic_statement( $INSTANCES{'PPI::Statement'} ),
+        is_ppi_expression_or_generic_statement( $instances{'PPI::Statement'} ),
         'is_ppi_expression_or_generic_statement( PPI::Statement )',
     );
     ok(
-        ! is_ppi_expression_or_generic_statement( $INSTANCES{'PPI::Statement::Package'} ),
+        ! is_ppi_expression_or_generic_statement( $instances{'PPI::Statement::Package'} ),
         'is_ppi_expression_or_generic_statement( PPI::Statement::Package )',
     );
     ok(
-        ! is_ppi_expression_or_generic_statement( $INSTANCES{'PPI::Statement::Include'} ),
+        ! is_ppi_expression_or_generic_statement( $instances{'PPI::Statement::Include'} ),
         'is_ppi_expression_or_generic_statement( PPI::Statement::Include )',
     );
     ok(
-        ! is_ppi_expression_or_generic_statement( $INSTANCES{'PPI::Statement::Sub'} ),
+        ! is_ppi_expression_or_generic_statement( $instances{'PPI::Statement::Sub'} ),
         'is_ppi_expression_or_generic_statement( PPI::Statement::Sub )',
     );
     ok(
-        ! is_ppi_expression_or_generic_statement( $INSTANCES{'PPI::Statement::Scheduled'} ),
+        ! is_ppi_expression_or_generic_statement( $instances{'PPI::Statement::Scheduled'} ),
         'is_ppi_expression_or_generic_statement( PPI::Statement::Scheduled )',
     );
     ok(
-        ! is_ppi_expression_or_generic_statement( $INSTANCES{'PPI::Statement::Compound'} ),
+        ! is_ppi_expression_or_generic_statement( $instances{'PPI::Statement::Compound'} ),
         'is_ppi_expression_or_generic_statement( PPI::Statement::Compound )',
     );
     ok(
-        ! is_ppi_expression_or_generic_statement( $INSTANCES{'PPI::Statement::Break'} ),
+        ! is_ppi_expression_or_generic_statement( $instances{'PPI::Statement::Break'} ),
         'is_ppi_expression_or_generic_statement( PPI::Statement::Break )',
     );
     ok(
-        ! is_ppi_expression_or_generic_statement( $INSTANCES{'PPI::Statement::Data'} ),
+        ! is_ppi_expression_or_generic_statement( $instances{'PPI::Statement::Data'} ),
         'is_ppi_expression_or_generic_statement( PPI::Statement::Data )',
     );
     ok(
-        ! is_ppi_expression_or_generic_statement( $INSTANCES{'PPI::Statement::End'} ),
+        ! is_ppi_expression_or_generic_statement( $instances{'PPI::Statement::End'} ),
         'is_ppi_expression_or_generic_statement( PPI::Statement::End )',
     );
     ok(
-        is_ppi_expression_or_generic_statement( $INSTANCES{'PPI::Statement::Expression'} ),
+        is_ppi_expression_or_generic_statement( $instances{'PPI::Statement::Expression'} ),
         'is_ppi_expression_or_generic_statement( PPI::Statement::Expression )',
     );
     ok(
-        is_ppi_expression_or_generic_statement( $INSTANCES{'PPI::Statement::Variable'} ),
+        is_ppi_expression_or_generic_statement( $instances{'PPI::Statement::Variable'} ),
         'is_ppi_expression_or_generic_statement( PPI::Statement::Variable )',
     );
     ok(
-        ! is_ppi_expression_or_generic_statement( $INSTANCES{'PPI::Statement::Null'} ),
+        ! is_ppi_expression_or_generic_statement( $instances{'PPI::Statement::Null'} ),
         'is_ppi_expression_or_generic_statement( PPI::Statement::Null )',
     );
     ok(
-        ! is_ppi_expression_or_generic_statement( $INSTANCES{'PPI::Statement::UnmatchedBrace'} ),
+        ! is_ppi_expression_or_generic_statement( $instances{'PPI::Statement::UnmatchedBrace'} ),
         'is_ppi_expression_or_generic_statement( PPI::Statement::UnmatchedBrace )',
     );
     ok(
-        ! is_ppi_expression_or_generic_statement( $INSTANCES{'PPI::Statement::Unknown'} ),
+        ! is_ppi_expression_or_generic_statement( $instances{'PPI::Statement::Unknown'} ),
         'is_ppi_expression_or_generic_statement( PPI::Statement::Unknown )',
     );
 }
@@ -140,63 +141,63 @@ can_ok('main', 'is_in_subroutine');
         'is_ppi_generic_statement( undef )',
     );
     ok(
-        ! is_ppi_generic_statement( $INSTANCES{'PPI::Token::Word'} ),
+        ! is_ppi_generic_statement( $instances{'PPI::Token::Word'} ),
         'is_ppi_generic_statement( PPI::Token::Word )',
     );
     ok(
-        is_ppi_generic_statement( $INSTANCES{'PPI::Statement'} ),
+        is_ppi_generic_statement( $instances{'PPI::Statement'} ),
         'is_ppi_generic_statement( PPI::Statement )',
     );
     ok(
-        ! is_ppi_generic_statement( $INSTANCES{'PPI::Statement::Package'} ),
+        ! is_ppi_generic_statement( $instances{'PPI::Statement::Package'} ),
         'is_ppi_generic_statement( PPI::Statement::Package )',
     );
     ok(
-        ! is_ppi_generic_statement( $INSTANCES{'PPI::Statement::Include'} ),
+        ! is_ppi_generic_statement( $instances{'PPI::Statement::Include'} ),
         'is_ppi_generic_statement( PPI::Statement::Include )',
     );
     ok(
-        ! is_ppi_generic_statement( $INSTANCES{'PPI::Statement::Sub'} ),
+        ! is_ppi_generic_statement( $instances{'PPI::Statement::Sub'} ),
         'is_ppi_generic_statement( PPI::Statement::Sub )',
     );
     ok(
-        ! is_ppi_generic_statement( $INSTANCES{'PPI::Statement::Scheduled'} ),
+        ! is_ppi_generic_statement( $instances{'PPI::Statement::Scheduled'} ),
         'is_ppi_generic_statement( PPI::Statement::Scheduled )',
     );
     ok(
-        ! is_ppi_generic_statement( $INSTANCES{'PPI::Statement::Compound'} ),
+        ! is_ppi_generic_statement( $instances{'PPI::Statement::Compound'} ),
         'is_ppi_generic_statement( PPI::Statement::Compound )',
     );
     ok(
-        ! is_ppi_generic_statement( $INSTANCES{'PPI::Statement::Break'} ),
+        ! is_ppi_generic_statement( $instances{'PPI::Statement::Break'} ),
         'is_ppi_generic_statement( PPI::Statement::Break )',
     );
     ok(
-        ! is_ppi_generic_statement( $INSTANCES{'PPI::Statement::Data'} ),
+        ! is_ppi_generic_statement( $instances{'PPI::Statement::Data'} ),
         'is_ppi_generic_statement( PPI::Statement::Data )',
     );
     ok(
-        ! is_ppi_generic_statement( $INSTANCES{'PPI::Statement::End'} ),
+        ! is_ppi_generic_statement( $instances{'PPI::Statement::End'} ),
         'is_ppi_generic_statement( PPI::Statement::End )',
     );
     ok(
-        ! is_ppi_generic_statement( $INSTANCES{'PPI::Statement::Expression'} ),
+        ! is_ppi_generic_statement( $instances{'PPI::Statement::Expression'} ),
         'is_ppi_generic_statement( PPI::Statement::Expression )',
     );
     ok(
-        ! is_ppi_generic_statement( $INSTANCES{'PPI::Statement::Variable'} ),
+        ! is_ppi_generic_statement( $instances{'PPI::Statement::Variable'} ),
         'is_ppi_generic_statement( PPI::Statement::Variable )',
     );
     ok(
-        ! is_ppi_generic_statement( $INSTANCES{'PPI::Statement::Null'} ),
+        ! is_ppi_generic_statement( $instances{'PPI::Statement::Null'} ),
         'is_ppi_generic_statement( PPI::Statement::Null )',
     );
     ok(
-        ! is_ppi_generic_statement( $INSTANCES{'PPI::Statement::UnmatchedBrace'} ),
+        ! is_ppi_generic_statement( $instances{'PPI::Statement::UnmatchedBrace'} ),
         'is_ppi_generic_statement( PPI::Statement::UnmatchedBrace )',
     );
     ok(
-        ! is_ppi_generic_statement( $INSTANCES{'PPI::Statement::Unknown'} ),
+        ! is_ppi_generic_statement( $instances{'PPI::Statement::Unknown'} ),
         'is_ppi_generic_statement( PPI::Statement::Unknown )',
     );
 }
@@ -210,63 +211,63 @@ can_ok('main', 'is_in_subroutine');
         'is_ppi_statement_subclass( undef )',
     );
     ok(
-        ! is_ppi_statement_subclass( $INSTANCES{'PPI::Token::Word'} ),
+        ! is_ppi_statement_subclass( $instances{'PPI::Token::Word'} ),
         'is_ppi_statement_subclass( PPI::Token::Word )',
     );
     ok(
-        ! is_ppi_statement_subclass( $INSTANCES{'PPI::Statement'} ),
+        ! is_ppi_statement_subclass( $instances{'PPI::Statement'} ),
         'is_ppi_statement_subclass( PPI::Statement )',
     );
     ok(
-        is_ppi_statement_subclass( $INSTANCES{'PPI::Statement::Package'} ),
+        is_ppi_statement_subclass( $instances{'PPI::Statement::Package'} ),
         'is_ppi_statement_subclass( PPI::Statement::Package )',
     );
     ok(
-        is_ppi_statement_subclass( $INSTANCES{'PPI::Statement::Include'} ),
+        is_ppi_statement_subclass( $instances{'PPI::Statement::Include'} ),
         'is_ppi_statement_subclass( PPI::Statement::Include )',
     );
     ok(
-        is_ppi_statement_subclass( $INSTANCES{'PPI::Statement::Sub'} ),
+        is_ppi_statement_subclass( $instances{'PPI::Statement::Sub'} ),
         'is_ppi_statement_subclass( PPI::Statement::Sub )',
     );
     ok(
-        is_ppi_statement_subclass( $INSTANCES{'PPI::Statement::Scheduled'} ),
+        is_ppi_statement_subclass( $instances{'PPI::Statement::Scheduled'} ),
         'is_ppi_statement_subclass( PPI::Statement::Scheduled )',
     );
     ok(
-        is_ppi_statement_subclass( $INSTANCES{'PPI::Statement::Compound'} ),
+        is_ppi_statement_subclass( $instances{'PPI::Statement::Compound'} ),
         'is_ppi_statement_subclass( PPI::Statement::Compound )',
     );
     ok(
-        is_ppi_statement_subclass( $INSTANCES{'PPI::Statement::Break'} ),
+        is_ppi_statement_subclass( $instances{'PPI::Statement::Break'} ),
         'is_ppi_statement_subclass( PPI::Statement::Break )',
     );
     ok(
-        is_ppi_statement_subclass( $INSTANCES{'PPI::Statement::Data'} ),
+        is_ppi_statement_subclass( $instances{'PPI::Statement::Data'} ),
         'is_ppi_statement_subclass( PPI::Statement::Data )',
     );
     ok(
-        is_ppi_statement_subclass( $INSTANCES{'PPI::Statement::End'} ),
+        is_ppi_statement_subclass( $instances{'PPI::Statement::End'} ),
         'is_ppi_statement_subclass( PPI::Statement::End )',
     );
     ok(
-        is_ppi_statement_subclass( $INSTANCES{'PPI::Statement::Expression'} ),
+        is_ppi_statement_subclass( $instances{'PPI::Statement::Expression'} ),
         'is_ppi_statement_subclass( PPI::Statement::Expression )',
     );
     ok(
-        is_ppi_statement_subclass( $INSTANCES{'PPI::Statement::Variable'} ),
+        is_ppi_statement_subclass( $instances{'PPI::Statement::Variable'} ),
         'is_ppi_statement_subclass( PPI::Statement::Variable )',
     );
     ok(
-        is_ppi_statement_subclass( $INSTANCES{'PPI::Statement::Null'} ),
+        is_ppi_statement_subclass( $instances{'PPI::Statement::Null'} ),
         'is_ppi_statement_subclass( PPI::Statement::Null )',
     );
     ok(
-        is_ppi_statement_subclass( $INSTANCES{'PPI::Statement::UnmatchedBrace'} ),
+        is_ppi_statement_subclass( $instances{'PPI::Statement::UnmatchedBrace'} ),
         'is_ppi_statement_subclass( PPI::Statement::UnmatchedBrace )',
     );
     ok(
-        is_ppi_statement_subclass( $INSTANCES{'PPI::Statement::Unknown'} ),
+        is_ppi_statement_subclass( $instances{'PPI::Statement::Unknown'} ),
         'is_ppi_statement_subclass( PPI::Statement::Unknown )',
     );
 }
