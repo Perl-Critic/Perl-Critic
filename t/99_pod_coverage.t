@@ -21,7 +21,7 @@ our $VERSION = '1.093_01';
 
 #-----------------------------------------------------------------------------
 
-eval 'use Test::Pod::Coverage 1.04'; ## no critic
+eval 'use Test::Pod::Coverage 1.04'; ## no critic (StringyEval)
 plan skip_all => 'Test::Pod::Coverage 1.00 requried to test POD'
     if $EVAL_ERROR;
 

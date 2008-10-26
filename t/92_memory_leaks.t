@@ -31,7 +31,7 @@ our $VERSION = '1.093_01';
 
 Perl::Critic::TestUtils::block_perlcriticrc();
 
-eval 'use Test::Memory::Cycle'; ## no critic
+eval 'use Test::Memory::Cycle'; ## no critic (StringyEval)
 plan skip_all => 'Test::Memory::Cycle requried to test memory leaks'
     if $EVAL_ERROR;
 

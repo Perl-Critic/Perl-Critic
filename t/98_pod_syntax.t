@@ -23,7 +23,7 @@ our $VERSION = '1.093_01';
 
 #-----------------------------------------------------------------------------
 
-eval 'use Test::Pod 1.00';  ## no critic
+eval 'use Test::Pod 1.00';  ## no critic (StringyEval)
 plan skip_all => 'Test::Pod 1.00 required for testing POD' if $EVAL_ERROR;
 all_pod_files_ok( all_pod_files( starting_points_including_examples() ) );
 
