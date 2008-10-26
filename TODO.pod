@@ -443,24 +443,6 @@ See https://rt.cpan.org/Ticket/Display.html?id=38074.
 
 =item * Create constants for the PPI location array elements.
 
-
-=item * MOVE THE LINE-DISABLING INTO P::C::Document
-
-All the code that deals with finding all the '##no critic' comments and noting
-which policies are disabled at each line seems like it would be better placed
-in Perl::Critic::Document.  P::C::Document could then provide methods to
-indicate if a policy is disabled at a particular line.  So the basic algorithm
-in Perl::Critic might look something like this:
-
-  foreach $element (@PPI_ELEMENTS) {
-     foreach $policy (@POLICIES) {
-        $line = $element->location->[0];
-        next if $doc->policy_is_disabled_at_line( $policy, $line );
-        push @violations, $policy->violates( $elem, $doc );
-     }
-  }
-
-
 =item * Some means of detecting "runnaway" C<##no critic>
 
 Elliot was talking to a couple of users at ETech and one of their major

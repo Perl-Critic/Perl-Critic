@@ -23,7 +23,7 @@ our $VERSION = '1.093_01';
 #-----------------------------------------------------------------------------
 
 our $AUTOLOAD;
-sub AUTOLOAD {  ## no critic(ProhibitAutoloading,ArgUnpacking)
+sub AUTOLOAD {  ## no critic (ProhibitAutoloading,ArgUnpacking)
     my ( $function_name ) = $AUTOLOAD =~ m/ ([^:\']+) \z /xms;
     return if $function_name eq 'DESTROY';
     my $self = shift;
@@ -34,7 +34,10 @@ sub AUTOLOAD {  ## no critic(ProhibitAutoloading,ArgUnpacking)
 
 sub new {
     my ($class, $doc) = @_;
-    return bless { _doc => $doc }, $class;
+    my $self = bless {}, $class;
+    $self->{_disabled_lines} = _unfix_shebang($doc);
+    $self->{_doc} = $doc;
+    return $self;
 }
 
 #-----------------------------------------------------------------------------
@@ -155,6 +158,32 @@ sub highest_explicit_perl_version {
     return;
 }
 
+#-----------------------------------------------------------------------------
+
+sub mark_disabled_lines {
+    my ($self, @site_policies) = @_;
+    my %disabled_lines = _find_disabled_lines($self->{_doc}, @site_policies);
+
+    # Ick.  Need to merge the disabled lines hash with the shebang lines
+    # that we alread disabled during the _unfix_shebang() process.  Need
+    # to find a better way to express this.
+
+    $self->{_disabled_lines} = { %{$self->{_disabled_lines}}, %disabled_lines };
+    return $self;
+}
+
+#-----------------------------------------------------------------------------
+
+sub line_is_disabled {
+    my ($self, $line, $policy_name) = @_;
+    return 0 if not exists $self->{_disabled_lines}->{$line};
+    return 1 if $self->{_disabled_lines}->{$line}->{$policy_name};
+    return 1 if $self->{_disabled_lines}->{$line}->{ALL};
+    return 0;
+}
+
+#-----------------------------------------------------------------------------
+
 sub _is_a_version_statement {
     my (undef, $element) = @_;
 
@@ -196,6 +225,171 @@ sub _caching_finder {
 
         return 0; # 0 tells find() to keep traversing, but not to store this $element
     };
+}
+
+#-----------------------------------------------------------------------------
+
+sub _find_disabled_lines {
+
+    my ($doc, @site_policies)= @_;
+
+    my $nodes_ref  = $doc->find('PPI::Token::Comment') || return;
+    my %disabled_lines;
+
+    _disable_shebang_line($nodes_ref, \%disabled_lines, \@site_policies);
+    _disable_other_lines($nodes_ref, \%disabled_lines, \@site_policies);
+    return %disabled_lines;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _disable_shebang_line {
+    my ($nodes_ref, $disabled_lines, $site_policies) = @_;
+
+    my $shebang_no_critic  = qr{\A [#]! .*? [#][#] \s* no  \s+ critic}xms;
+
+    # Special case for the very beginning of the file: allow "##no critic" after the shebang
+    if (0 < @{$nodes_ref}) {
+        my $loc = $nodes_ref->[0]->location;
+        if (1 == $loc->[0] && 1 == $loc->[1] && $nodes_ref->[0] =~ $shebang_no_critic) {
+            my $pragma = shift @{$nodes_ref};
+            for my $policy (_parse_nocritic_import($pragma, $site_policies)) {
+                $disabled_lines->{ 1 }->{$policy} = 1;
+            }
+        }
+    }
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _disable_other_lines {
+    my ($nodes_ref, $disabled_lines, $site_policies) = @_;
+
+    my $no_critic  = qr{\A \s* [#][#] \s* no  \s+ critic}xms;
+    my $use_critic = qr{\A \s* [#][#] \s* use \s+ critic}xms;
+
+  PRAGMA:
+    for my $pragma ( grep { $_ =~ $no_critic } @{$nodes_ref} ) {
+
+        # Parse out the list of Policy names after the
+        # 'no critic' pragma.  I'm thinking of this just
+        # like a an C<import> argument for real pragmas.
+        my @no_policies = _parse_nocritic_import($pragma, $site_policies);
+
+        # Grab surrounding nodes to determine the context.
+        # This determines whether the pragma applies to
+        # the current line or the block that follows.
+        my $parent = $pragma->parent();
+        my $grandparent = $parent ? $parent->parent() : undef;
+        my $sib = $pragma->sprevious_sibling();
+
+
+        # Handle single-line usage on simple statements
+        if ( $sib && $sib->location->[0] == $pragma->location->[0] ) {
+            my $line = $pragma->location->[0];
+            for my $policy ( @no_policies ) {
+                $disabled_lines->{ $line }->{$policy} = 1;
+            }
+            next PRAGMA;
+        }
+
+
+        # Handle single-line usage on compound statements
+        if ( ref $parent eq 'PPI::Structure::Block' ) {
+            if ( ref $grandparent eq 'PPI::Statement::Compound'
+                 || ref $grandparent eq 'PPI::Statement::Sub' ) {
+                if ( $parent->location->[0] == $pragma->location->[0] ) {
+                    my $line = $grandparent->location->[0];
+                    for my $policy ( @no_policies ) {
+                        $disabled_lines->{ $line }->{$policy} = 1;
+                    }
+                    next PRAGMA;
+                }
+            }
+        }
+
+
+        # Handle multi-line usage.  This is either a "no critic" ..
+        # "use critic" region or a block where "no critic" persists
+        # until the end of the scope.  The start is the always the "no
+        # critic" which we already found.  So now we have to search
+        # for the end.
+
+        my $start = $pragma;
+        my $end   = $pragma;
+
+      SIB:
+        while ( my $esib = $end->next_sibling() ) {
+            $end = $esib; # keep track of last sibling encountered in this scope
+            last SIB
+                if $esib->isa('PPI::Token::Comment') && $esib =~ $use_critic;
+        }
+
+        # We either found an end or hit the end of the scope.
+        # Flag all intervening lines
+        for my $line ( $start->location->[0] .. $end->location->[0] ) {
+            for my $policy ( @no_policies ) {
+                $disabled_lines->{ $line }->{$policy} = 1;
+            }
+        }
+    }
+
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _parse_nocritic_import {
+
+    my ($pragma, $site_policies) = @_;
+
+    my $module    = qr{ [\w:]+ }xms;
+    my $delim     = qr{ \s* [,\s] \s* }xms;
+    my $qw        = qr{ (?: qw )? }xms;
+    my $qualifier = qr{ $qw [(]? \s* ( $module (?: $delim $module)* ) \s* [)]? }xms;
+    my $no_critic = qr{ \#\# \s* no \s+ critic \s* $qualifier }xms;  ##no critic(EscapedMetacharacters)
+
+    if ( my ($module_list) = $pragma =~ $no_critic ) {
+        my @modules = split $delim, $module_list;
+
+        # Compose the specified modules into a regex alternation.  Wrap each
+        # in a no-capturing group to permit "|" in the modules specification
+        # (backward compatibility)
+        my $re = join q{|}, map {"(?:$_)"} @modules;
+        return grep {m/$re/ixms} @{$site_policies};
+    }
+
+    # Default to disabling ALL policies.
+    return qw(ALL);
+}
+
+#-----------------------------------------------------------------------------
+
+sub _unfix_shebang {
+
+    # When you install a script using ExtUtils::MakeMaker or Module::Build, it
+    # inserts some magical code into the top of the file (just after the
+    # shebang).  This code allows people to call your script using a shell,
+    # like `sh my_script`.  Unfortunately, this code causes several Policy
+    # violations, so we just disable it as if a "## no critic" comment had
+    # been attached.
+
+    my $doc         = shift;
+    my $first_stmnt = $doc->schild(0) || return {};
+
+    # Different versions of MakeMaker and Build use slightly different shebang
+    # fixing strings.  This matches most of the ones I've found in my own Perl
+    # distribution, but it may not be bullet-proof.
+
+    my $fixin_rx = qr{^eval 'exec .* \$0 \${1\+"\$@"}'\s*[\r\n]\s*if.+;}ms; ## no critic (RequireExtendedFormatting)
+    if ( $first_stmnt =~ $fixin_rx ) {
+        my $line = $first_stmnt->location()->[0];
+        return { $line => {ALL => 1}, $line + 1 => {ALL => 1} };
+    }
+
+    #No magic shebang was found!
+    return {};
 }
 
 #-----------------------------------------------------------------------------
@@ -303,6 +497,19 @@ PPI::Document class.
 Returns a L<version|version> object for the highest Perl version
 requirement declared in the document via a C<use> or C<require>
 statement.  Returns nothing if there is no version statement.
+
+
+=item C<< mark_disabled_lines( @policy_names ) >>
+
+Scans the document for C<"## no critic"> pseudo-pragmas and builds
+an internal table of which of the listed C<@policy_names> have
+been disabled at each line.  Returns C<$self>.
+
+
+=item C<< line_is_disabled($line, $policy_name) >>
+
+Returns true if the given C<$policy_name> has been disabled for
+at C<$line> in this document.  Otherwise, returns false.
 
 
 =back
