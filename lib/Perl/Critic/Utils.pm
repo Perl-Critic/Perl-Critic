@@ -15,6 +15,8 @@ use strict;
 use warnings;
 use Readonly;
 
+use Carp qw( confess );
+use English qw(-no_match_vars);
 use File::Spec qw();
 use Scalar::Util qw( blessed );
 use B::Keywords qw();
@@ -249,7 +251,7 @@ sub hashify {  ## no critic (ArgUnpacking)
 
 sub interpolate {
     my ( $literal ) = @_;
-    return eval "\"$literal\"";  ## no critic (StringyEval);
+    return eval "\"$literal\"" or confess $EVAL_ERROR;  ## no critic (StringyEval);
 }
 
 #-----------------------------------------------------------------------------
@@ -1683,6 +1685,8 @@ function call whose return value is not checked.
 =item C<$PIPE>
 
 =item C<$EMPTY>
+
+=item C<$EQUAL>
 
 =item C<$SPACE>
 

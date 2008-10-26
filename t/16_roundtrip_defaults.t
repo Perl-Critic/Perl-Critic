@@ -26,7 +26,7 @@ our $VERSION = '1.093_01';
 
 #-----------------------------------------------------------------------------
 
-eval 'use Test::Deep'; ## no critic (
+eval 'use Test::Deep'; ## no critic (StringyEval)
 plan( skip_all => 'Test::Deep requried to test round-trip of default values')
     if $EVAL_ERROR;
 

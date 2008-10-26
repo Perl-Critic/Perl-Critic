@@ -171,7 +171,7 @@ __END__
 
 =pod
 
-=for stopwords disambiguates
+=for stopwords disambiguates builtins
 
 =head1 NAME
 
