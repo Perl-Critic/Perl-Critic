@@ -11,6 +11,12 @@ use 5.006001;
 use strict;
 use warnings;
 
+#-----------------------------------------------------------------------------
+
+our $VERSION = '1.093_01';
+
+#-----------------------------------------------------------------------------
+
 use Test::More (tests => 1);
 use Perl::Critic::PolicyFactory (test => 1);
 use Perl::Critic::Document;
