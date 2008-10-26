@@ -19,7 +19,7 @@ our $VERSION = '1.093_01';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $DESC => q{@ISA used instead of "use base"}; ##no critic; #for @ in string
+Readonly::Scalar my $DESC => q{@ISA used instead of "use base"}; ## no critic (RequireInterpolation)
 Readonly::Scalar my $EXPL => [ 360 ];
 
 #-----------------------------------------------------------------------------
@@ -34,7 +34,7 @@ sub applies_to           { return 'PPI::Token::Symbol'       }
 sub violates {
     my ($self, $elem, undef) = @_;
 
-    if( $elem eq q{@ISA} ) {  ##no critic; #for @ in string
+    if( $elem eq q{@ISA} ) {  ## no critic (RequireInterpolation)
         return $self->violation( $DESC, $EXPL, $elem );
     }
     return; #ok!
