@@ -5,6 +5,13 @@
       Perl::Critic::Violation no longer exist.  Use the corresponding
       get_format() and set_format() functions instead.
 
+    New User Features:
+    * Now you can use the --warn-about-useless-no-critic option and
+      Perl::Critic will tell you all the places that you used a
+      "## no critic" marker, but it didn't actually have any effect
+      (given your current profile).  This helps prevent your code
+      from becoming littered with too many "## no critic" annotations.
+
     New Developer Features:
     * Perl::Critic::Policy::is_document_exempt() has been renamed to
       prepare_to_scan_document() and the sense of the return value has been
