@@ -50,6 +50,7 @@ Readonly::Array our @EXPORT_OK => qw(
     $COMMA
     $DQUOTE
     $EMPTY
+    $EQUAL
     $FATCOMMA
     $PERIOD
     $PIPE
@@ -126,6 +127,7 @@ Readonly::Hash our %EXPORT_TAGS => (
             $COMMA
             $DQUOTE
             $EMPTY
+            $EQUAL
             $FATCOMMA
             $PERIOD
             $PIPE
@@ -188,6 +190,7 @@ Readonly::Scalar our $SEVERITY_LOWEST  => 1;
 #-----------------------------------------------------------------------------
 
 Readonly::Scalar our $COMMA        => q{,};
+Readonly::Scalar our $EQUAL        => q{=};
 Readonly::Scalar our $FATCOMMA     => q{=>};
 Readonly::Scalar our $COLON        => q{:};
 Readonly::Scalar our $SCOLON       => q{;};

@@ -155,7 +155,7 @@ sub supported_parameters {
         {
             name               => 'global_variable_exemptions',
             description        => 'Global variable names that are exempt from capitalization rules.  The values here are regexes.',
-            default_string     => '\$VERSION @ISA @EXPORT(?:_OK)? %EXPORT_TAGS \$AUTOLOAD %ENV %SIG',
+            default_string     => '\$VERSION @ISA @EXPORT(?:_OK)? %EXPORT_TAGS \$AUTOLOAD %ENV %SIG',  ## no critic (RequireInterpolation)
             behavior           => 'string list',
         },
         {
@@ -346,7 +346,7 @@ sub _variable_capitalization {
             # Fully qualified names are exempt because we can't be responsible
             # for other people's sybols.
             next NAME if $name =~ m/$PACKAGE_REGEX/xms;
-            next NAME if any { $_ eq $name } @B::Keywords::Symbols;
+            next NAME if any { $_ eq $name } @B::Keywords::Symbols;  ## no critic (ProhibitPackageVars)
 
             push
                 @violations,
@@ -455,7 +455,7 @@ sub _ppi_statement_variable_symbols {
 
     # Get the children we care about
     my @schild = grep { $_->significant } $self->children;
-    shift @schild if $schild[0]->isa('PPI::Token::Label');
+    if ($schild[0]->isa('PPI::Token::Label')) { shift @schild; }
 
     # If the second child is a symbol, return its name
     if ( $schild[1]->isa('PPI::Token::Symbol') ) {
@@ -492,7 +492,7 @@ sub _ppi_statement_variable_symbols {
     }
 
     # erm... this is unexpected
-    ();
+    return ();
 }
 
 sub _local_variable {
@@ -501,17 +501,17 @@ sub _local_variable {
     # The last symbol should be a variable
     my $n = $el->snext_sibling or return 1;
     my $p = $el->sprevious_sibling;
-    if ( ! $p or $p eq ',' ) {
+    if ( !$p || $p eq $COMMA ) {
         # In the middle of a list
-        return 1 if $n eq ',';
+        return 1 if $n eq $COMMA;
 
         # The first half of an assignment
-        return 1 if $n eq '=';
+        return 1 if $n eq $EQUAL;
     }
 
     # Lets say no for know... additional work
     # should go here.
-    return '';
+    return $EMPTY;
 }
 
 1;
@@ -519,6 +519,10 @@ sub _local_variable {
 __END__
 
 #-----------------------------------------------------------------------------
+
+=pod
+
+=for stopwords Schwern
 
 =head1 NAME
 
