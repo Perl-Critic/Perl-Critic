@@ -184,6 +184,40 @@ sub is_line_disabled {
 
 #-----------------------------------------------------------------------------
 
+sub useless_no_critic_warnings {
+    my ($self, @violations) = @_;
+    
+    
+    my %violation_lines = ();
+    for my $violation (@violations) {
+        my $line = $violation->location()->[0];
+        my $policy_name = $violation->policy();
+        $violation_lines{$policy_name}->{$line} = 1;
+    }
+    
+    
+    my @warnings = ();
+    my $file = $self->filename() || 'UNKNOWN';
+    
+    my %disabled_lines = %{ $self->{_disabled_lines} };
+    for my $line (keys %disabled_lines) {
+        my %disabled_policies = %{ $disabled_lines{$line} };
+        for my $policy_name (keys %disabled_policies) {
+            
+            if ($policy_name eq 'ALL' && not exists $violation_lines{$line}) {
+                push @warnings, qq{Useless disabling of all Policies in file "$file" at line $line.};
+            }
+            elsif (not $violation_lines{$line}->{$policy_name}) {
+                push @warnings, qq{Useless disabling of $policy_name in file "$file" at line $line.};
+            }
+        }
+    }
+    
+    return @warnings;
+}
+
+#-----------------------------------------------------------------------------
+
 sub _is_a_version_statement {
     my (undef, $element) = @_;
 
@@ -506,10 +540,19 @@ an internal table of which of the listed C<@policy_names> have
 been disabled at each line.  Returns C<$self>.
 
 
-=item C<< line_is_disabled($line, $policy_name) >>
+=item C<< is_line_disabled($line, $policy_name) >>
 
 Returns true if the given C<$policy_name> has been disabled for
 at C<$line> in this document.  Otherwise, returns false.
+
+=item C<< useless_no_critic_warnings(@violations) >>
+
+Given a list of violation objects that are assumed to have been found
+in this Document, returns a warning message for each line where a 
+policy was disabled using a C<"##no critic"> pseudo-pragma, but
+no violation was actually found on that line.  If multiple policies
+are disabled on a given line, then you'll get a warning message
+for each policy.
 
 
 =back

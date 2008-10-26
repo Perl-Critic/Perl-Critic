@@ -158,6 +158,12 @@ sub _gather_violations {
     my @policies = $self->config->policies();
     my @violations = map { _critique($_, $doc) } @policies;
 
+    # Warn about unecessary "## no critic" markers
+    if ( $self->config->warn_about_useless_no_critic() ) {
+        my @warnings = $doc->useless_no_critic_warnings(@violations);
+        for (@warnings) { warn "$_\n"; }
+    }
+    
     # Accumulate statistics
     $self->statistics->accumulate( $doc, \@violations );
 

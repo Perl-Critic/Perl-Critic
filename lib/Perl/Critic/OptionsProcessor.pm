@@ -44,17 +44,19 @@ sub _init {
     $self->{_include}    = [ words_from_string( $include ) ];
 
     # Single-value defaults
-    $self->{_force}          = dor(delete $args{force},              $FALSE);
-    $self->{_only}           = dor(delete $args{only},               $FALSE);
+    $self->{_force}           = dor(delete $args{force},              $FALSE);
+    $self->{_only}            = dor(delete $args{only},               $FALSE);
     $self->{_profile_strictness} =
         dor(delete $args{'profile-strictness'}, $PROFILE_STRICTNESS_DEFAULT);
-    $self->{_single_policy}  = dor(delete $args{'single-policy'},    $EMPTY);
-    $self->{_severity}       = dor(delete $args{severity},           $SEVERITY_HIGHEST);
-    $self->{_theme}          = dor(delete $args{theme},              $EMPTY);
-    $self->{_top}            = dor(delete $args{top},                $FALSE);
-    $self->{_verbose}        = dor(delete $args{verbose},            $DEFAULT_VERBOSITY);
-    $self->{_criticism_fatal} = dor(delete $args{'criticism-fatal'}, $FALSE);
-    $self->{_pager}          = dor(delete $args{pager},              $EMPTY);
+    $self->{_single_policy}   = dor(delete $args{'single-policy'},    $EMPTY);
+    $self->{_severity}        = dor(delete $args{severity},           $SEVERITY_HIGHEST);
+    $self->{_theme}           = dor(delete $args{theme},              $EMPTY);
+    $self->{_top}             = dor(delete $args{top},                $FALSE);
+    $self->{_verbose}         = dor(delete $args{verbose},            $DEFAULT_VERBOSITY);
+    $self->{_criticism_fatal} = dor(delete $args{'criticism-fatal'},  $FALSE);
+    $self->{_warn_about_useless_no_critic} = 
+        dor(delete $args{'warn_about_useless_no_critic'}, $FALSE);
+    $self->{_pager}           = dor(delete $args{pager},              $EMPTY);
 
     # If we're using a pager or not outputing to a tty don't use colors.
     # Can't use IO::Interactive here because we /don't/ want to check STDIN.
@@ -165,6 +167,13 @@ sub pager {
 sub criticism_fatal {
     my ($self) = @_;
     return $self->{_criticism_fatal};
+}
+
+#-----------------------------------------------------------------------------
+
+sub warn_about_useless_no_critic {
+    my ($self) = @_;
+    return $self->{_warn_about_useless_no_critic};
 }
 
 #-----------------------------------------------------------------------------
@@ -294,6 +303,9 @@ command string).
 
 Returns the default C<criticism-fatal> setting (Either 1 or 0).
 
+=item C< warn_about_useless_no_critic() >
+
+Returns the default C<warn-about-useless-no-critic> setting (Either 1 or 0).
 
 =back
 

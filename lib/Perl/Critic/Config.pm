@@ -99,6 +99,10 @@ sub _init {
         $self->{_color} = boolean_to_number( dor( $args{-color}, $options_processor->color() ) );
         $self->{_criticism_fatal} =
           boolean_to_number(dor( $args{'-criticism-fatal'}, $options_processor->criticism_fatal() ) );
+          
+        $self->{_warn_about_useless_no_critic} =
+            boolean_to_number(dor( $args{'-warn-about-useless-no-critc'},
+                 $options_processor->warn_about_useless_no_critic() ) );
     }
 
     $self->_validate_and_save_theme($args{-theme}, $errors);
@@ -765,6 +769,13 @@ sub criticism_fatal {
 
 #-----------------------------------------------------------------------------
 
+sub warn_about_useless_no_critic {
+    my $self = shift;
+    return $self->{_warn_about_useless_no_critic};
+}
+
+#-----------------------------------------------------------------------------
+
 sub site_policy_names {
     return Perl::Critic::PolicyFactory::site_policy_names();
 }
@@ -972,6 +983,10 @@ Returns the value of the C<-pager> attribute for this Config.
 =item C< criticism_fatal() >
 
 Returns the value of the C<-criticsm-fatal> attribute for this Config.
+
+=item C< warn_about_useless_no_critic() >
+
+Returns the value of the C<-warn-about-useless-no-critic> attribute for this Config.
 
 =back
 
