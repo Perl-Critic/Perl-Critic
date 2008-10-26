@@ -42,7 +42,7 @@ my $configuration =
         -severity => 1,
         -theme => 'core',
     );
-my @policies = $configuration->policies();
+my @policies = $configuration->all_policies_enabled_or_not();
 
 
 my $policy_summary = 'lib/Perl/Critic/PolicySummary.pod';

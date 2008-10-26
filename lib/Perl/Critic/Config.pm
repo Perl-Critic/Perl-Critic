@@ -98,8 +98,10 @@ sub _init {
         $self->{_only}  = boolean_to_number( dor( $args{-only},  $options_processor->only()  ) );
         $self->{_color} = boolean_to_number( dor( $args{-color}, $options_processor->color() ) );
         $self->{_criticism_fatal} =
-          boolean_to_number(dor( $args{'-criticism-fatal'}, $options_processor->criticism_fatal() ) );
-          
+            boolean_to_number(
+                dor( $args{'-criticism-fatal'}, $options_processor->criticism_fatal() )
+            );
+
         $self->{_warn_about_useless_no_critic} =
             boolean_to_number(dor( $args{'-warn-about-useless-no-critic'},
                  $options_processor->warn_about_useless_no_critic() ) );
@@ -118,6 +120,7 @@ sub _init {
     $self->{_factory} = $factory;
 
     # Initialize internal storage for Policies
+    $self->{_all_policies_enabled_or_not} = [];
     $self->{_policies} = [];
 
     # "NONE" means don't load any policies
@@ -172,6 +175,7 @@ sub _add_policy_if_enabled {
             q{Policy was not set up properly because it does not have }
                 . q{a value for its config attribute.};
 
+    push @{ $self->{_all_policies_enabled_or_not} }, $policy_object;
     if ( $policy_object->initialize_if_enabled( $config ) ) {
         push @{ $self->{_policies} }, $policy_object;
     }
@@ -665,112 +669,119 @@ sub _validate_and_save_pager {
 # Begin ACCESSSOR methods
 
 sub _profile {
-    my $self = shift;
+    my ($self) = @_;
     return $self->{_profile};
 }
 
 #-----------------------------------------------------------------------------
 
+sub all_policies_enabled_or_not {
+    my ($self) = @_;
+    return @{ $self->{_all_policies_enabled_or_not} };
+}
+
+#-----------------------------------------------------------------------------
+
 sub policies {
-    my $self = shift;
+    my ($self) = @_;
     return @{ $self->{_policies} };
 }
 
 #-----------------------------------------------------------------------------
 
 sub exclude {
-    my $self = shift;
+    my ($self) = @_;
     return @{ $self->{_exclude} };
 }
 
 #-----------------------------------------------------------------------------
 
 sub force {
-    my $self = shift;
+    my ($self) = @_;
     return $self->{_force};
 }
 
 #-----------------------------------------------------------------------------
 
 sub include {
-    my $self = shift;
+    my ($self) = @_;
     return @{ $self->{_include} };
 }
 
 #-----------------------------------------------------------------------------
 
 sub only {
-    my $self = shift;
+    my ($self) = @_;
     return $self->{_only};
 }
 
 #-----------------------------------------------------------------------------
 
 sub profile_strictness {
-    my $self = shift;
+    my ($self) = @_;
     return $self->{_profile_strictness};
 }
 
 #-----------------------------------------------------------------------------
 
 sub severity {
-    my $self = shift;
+    my ($self) = @_;
     return $self->{_severity};
 }
 
 #-----------------------------------------------------------------------------
 
 sub single_policy {
-    my $self = shift;
+    my ($self) = @_;
     return @{ $self->{_single_policy} };
 }
 
 #-----------------------------------------------------------------------------
 
 sub theme {
-    my $self = shift;
+    my ($self) = @_;
     return $self->{_theme};
 }
 
 #-----------------------------------------------------------------------------
 
 sub top {
-    my $self = shift;
+    my ($self) = @_;
     return $self->{_top};
 }
 
 #-----------------------------------------------------------------------------
 
 sub verbose {
-    my $self = shift;
+    my ($self) = @_;
     return $self->{_verbose};
 }
 
 #-----------------------------------------------------------------------------
 
 sub color {
-    my $self = shift;
+    my ($self) = @_;
     return $self->{_color};
 }
 
 #-----------------------------------------------------------------------------
 
 sub pager  {
-    my $self = shift;
+    my ($self) = @_;
     return $self->{_pager};
 }
 
 #-----------------------------------------------------------------------------
 
 sub criticism_fatal {
-    my $self = shift;
+    my ($self) = @_;
     return $self->{_criticism_fatal};
 }
 
 #-----------------------------------------------------------------------------
 
 sub warn_about_useless_no_critic {
-    my $self = shift;
+    my ($self) = @_;
     return $self->{_warn_about_useless_no_critic};
 }
 
@@ -794,6 +805,7 @@ __END__
 
 Perl::Critic::Config - The final derived Perl::Critic configuration, combined from any profile file and command-line parameters.
 
+
 =head1 DESCRIPTION
 
 Perl::Critic::Config takes care of finding and processing
@@ -803,9 +815,10 @@ engine and how they should be configured.  You should never really
 need to instantiate Perl::Critic::Config directly because the
 Perl::Critic constructor will do it for you.
 
+
 =head1 CONSTRUCTOR
 
-=over 8
+=over
 
 =item C<< new( [ -profile => $FILE, -severity => $N, -theme => $string, -include => \@PATTERNS, -exclude => \@PATTERNS, -single-policy => $PATTERN, -top => $N, -only => $B, -profile-strictness => $PROFILE_STRICTNESS_{WARN|FATAL|QUIET}, -force => $B, -verbose => $N, -color => $B, -criticism-fatal => $B] ) >>
 
@@ -906,7 +919,7 @@ the benefit of L<criticism|criticism>.
 
 =head1 METHODS
 
-=over 8
+=over
 
 =item C<< add_policy( -policy => $policy_name, -params => \%param_hash ) >>
 
@@ -924,78 +937,103 @@ The contents of this hash reference will be passed into to the
 constructor of the Policy module.  See the documentation in the
 relevant Policy module for a description of the arguments it supports.
 
+
+=item C< all_policies_enabled_or_not() >
+
+Returns a list containing references to all the Policy objects that
+have been seen.  Note that the state of these objects is not
+trustworthy.  In particular, it is likely that some of them are not
+prepared to examine any documents.
+
+
 =item C< policies() >
 
 Returns a list containing references to all the Policy objects that
-have been loaded into this Config.  Objects will be in the order that
-they were loaded.
+have been enabled and loaded into this Config.
+
 
 =item C< exclude() >
 
 Returns the value of the C<-exclude> attribute for this Config.
 
+
 =item C< include() >
 
 Returns the value of the C<-include> attribute for this Config.
+
 
 =item C< force() >
 
 Returns the value of the C<-force> attribute for this Config.
 
+
 =item C< only() >
 
 Returns the value of the C<-only> attribute for this Config.
+
 
 =item C< profile_strictness() >
 
 Returns the value of the C<-profile-strictness> attribute for this
 Config.
 
+
 =item C< severity() >
 
 Returns the value of the C<-severity> attribute for this Config.
 
+
 =item C< single_policy() >
 
 Returns the value of the C<-single-policy> attribute for this Config.
+
 
 =item C< theme() >
 
 Returns the L<Perl::Critic::Theme|Perl::Critic::Theme> object that was
 created for this Config.
 
+
 =item C< top() >
 
 Returns the value of the C<-top> attribute for this Config.
+
 
 =item C< verbose() >
 
 Returns the value of the C<-verbose> attribute for this Config.
 
+
 =item C< color() >
 
 Returns the value of the C<-color> attribute for this Config.
+
 
 =item C< pager() >
 
 Returns the value of the C<-pager> attribute for this Config.
 
+
 =item C< criticism_fatal() >
 
 Returns the value of the C<-criticsm-fatal> attribute for this Config.
+
 
 =item C< warn_about_useless_no_critic() >
 
 Returns the value of the C<-warn-about-useless-no-critic> attribute for this Config.
 
+
 =back
+
 
 =head1 SUBROUTINES
 
 Perl::Critic::Config has a few static subroutines that are used
 internally, but may be useful to you in some way.
 
-=over 8
+
+=over
 
 =item C<site_policy_names()>
 
@@ -1004,7 +1042,9 @@ in the Perl::Critic:Policy namespace.  These will include modules that
 are distributed with Perl::Critic plus any third-party modules that
 have been installed.
 
+
 =back
+
 
 =head1 CONFIGURATION
 
@@ -1119,12 +1159,14 @@ A simple configuration might look like this:
 For additional configuration examples, see the F<perlcriticrc> file
 that is included in this F<t/examples> directory of this distribution.
 
+
 =head1 THE POLICIES
 
 A large number of Policy modules are distributed with Perl::Critic.
 They are described briefly in the companion document
 L<Perl::Critic::PolicySummary|Perl::Critic::PolicySummary> and in more
 detail in the individual modules themselves.
+
 
 =head1 POLICY THEMES
 
@@ -1150,7 +1192,6 @@ needs.
     complexity        Policies that specificaly relate to code complexity
     security          Policies that relate to security issues
     tests             Policies that are specific to test scripts
-
 
 Say C<`perlcritic -list`> to get a listing of all available policies
 and the themes that are associated with each one.  You can also change
@@ -1195,6 +1236,7 @@ string, then it is equivalent to the set of all Policies.  A theme
 name that doesn't exist is equivalent to an empty set.  Please See
 L<http://en.wikipedia.org/wiki/Set> for a discussion on set theory.
 
+
 =head1 SEE ALSO
 
 L<Perl::Critic::OptionsProcessor|Perl::Critic::OptionsProcessor>,
@@ -1204,6 +1246,7 @@ L<Perl::Critic::UserProfile|Perl::Critic::UserProfile>
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+
 
 =head1 COPYRIGHT
 
