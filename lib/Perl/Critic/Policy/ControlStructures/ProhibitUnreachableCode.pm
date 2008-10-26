@@ -114,7 +114,7 @@ C<croak> and C<confess> from L<Carp|Carp> are also included.
 
 Code is reachable if any of the following conditions are true:
 
-=over 4
+=over
 
 =item * Flow-altering statement has a conditional attached to it
 

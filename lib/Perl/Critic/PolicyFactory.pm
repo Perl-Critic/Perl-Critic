@@ -335,7 +335,7 @@ preferred parameters. There are no user-serviceable parts here.
 
 =head1 CONSTRUCTOR
 
-=over 8
+=over
 
 =item C<< new( -profile => $profile, -errors => $config_errors ) >>
 
@@ -356,7 +356,7 @@ added to the object.
 
 =head1 METHODS
 
-=over 8
+=over
 
 =item C<< create_policy( -name => $policy_name, -params => \%param_hash ) >>
 
@@ -398,7 +398,7 @@ they may not yet be usable.
 Perl::Critic::PolicyFactory has a few static subroutines that are used
 internally, but may be useful to you in some way.
 
-=over 8
+=over
 
 =item C<site_policy_names()>
 

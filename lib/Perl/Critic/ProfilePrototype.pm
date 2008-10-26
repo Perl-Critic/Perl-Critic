@@ -204,7 +204,7 @@ There are no user-serviceable parts here.
 
 =head1 CONSTRUCTOR
 
-=over 8
+=over
 
 =item C<< new( -policies => \@POLICY_OBJECTS ) >>
 
@@ -216,7 +216,7 @@ Returns a reference to a new C<Perl::Critic::ProfilePrototype> object.
 
 =head1 METHODS
 
-=over 8
+=over
 
 =item to_string()
 

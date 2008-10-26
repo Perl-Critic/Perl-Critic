@@ -22,7 +22,7 @@ have installed Perl-Critic with the same Perl that Komodo is using.  If that
 is not the case, you'll probably have to give a full path to F<perl> instead
 of using the C<%perl> placeholder.
 
-=over 4
+=over
 
 =item * Start Komodo.
 

@@ -213,7 +213,7 @@ There are no user-serviceable parts here.
 
 =head1 CONSTRUCTOR
 
-=over 8
+=over
 
 =item C< new( %DEFAULT_PARAMS ) >
 
@@ -230,7 +230,7 @@ contains no information for individual Policies.
 
 =head1 METHODS
 
-=over 8
+=over
 
 =item C< exclude() >
 

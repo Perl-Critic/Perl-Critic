@@ -664,7 +664,7 @@ singe or double dashes, and option values can be separated from the
 option name by a space or '=' (as with L<Getopt::Long|Getopt::Long>).
 Option names are also case-sensitive.
 
-=over 8
+=over
 
 =item C<--profile FILE>
 

@@ -1300,7 +1300,7 @@ care about this package.
 
 =head1 IMPORTABLE SUBS
 
-=over 8
+=over
 
 =item C<find_keywords( $doc, $keyword )>
 
@@ -1591,7 +1591,7 @@ backup files.
 
 A Perl code file is:
 
-=over 4
+=over
 
 =item * Any file that ends in F<.PL>, F<.pl>, F<.pm>, or F<.t>
 
@@ -1664,7 +1664,7 @@ function call whose return value is not checked.
 
 =head1 IMPORTABLE VARIABLES
 
-=over 8
+=over
 
 =item C<$COMMA>
 
