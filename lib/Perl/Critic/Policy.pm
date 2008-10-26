@@ -472,22 +472,22 @@ sub to_string {
 }
 
 sub _format_parameters {
-    my ($self, $format) = @_;
+    my ($self, $parameter_format) = @_;
 
     return $EMPTY if not $self->parameter_metadata_available();
 
     my $separator;
-    if ($format) {
+    if ($parameter_format) {
         $separator = $EMPTY;
     } else {
         $separator = $SPACE;
-        $format = '%n';
+        $parameter_format = '%n';
     }
 
     return
         join
             $separator,
-            map { $_->to_formatted_string($format) } @{ $self->get_parameters() };
+            map { $_->to_formatted_string($parameter_format) } @{ $self->get_parameters() };
 }
 
 sub _format_lack_of_parameter_metadata {
