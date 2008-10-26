@@ -13,6 +13,3 @@ verbose = %f: %m at line %l, column %c.  %e.  (Severity: %s, %p)\n
 
 [Documentation::RequirePodSections]
 lib_sections = NAME|AFFILIATION|DESCRIPTION|CONFIGURATION|AUTHOR|COPYRIGHT
-
-# Policy is not done yet
-[-NamingConventions::Capitalization]

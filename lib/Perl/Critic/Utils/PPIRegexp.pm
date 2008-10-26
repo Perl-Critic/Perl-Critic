@@ -177,7 +177,7 @@ sub ppiify {
 }
 
 {
-    package   ## no critic (ProhibitMultiplePackages)  # hide from PAUSE
+    package   ## no critic (ProhibitMultiplePackages, NamingConventions::Capitalization)  # hide from PAUSE
       Perl::Critic::PPIRegexp::__object__;
     use base 'PPI::Node';
 
