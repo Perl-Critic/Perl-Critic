@@ -149,6 +149,7 @@ my $builder = $class->new(
 
     add_to_cleanup => [
         qw<
+            Debian_CPANTS.txt
             lib/Perl/Critic/PolicySummary.pod
             Makefile
             Makefile.old
