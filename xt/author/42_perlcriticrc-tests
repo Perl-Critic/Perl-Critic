@@ -52,3 +52,5 @@ allow_all_brackets = 1
 # Too endemic for me to deal with right now
 [-ValuesAndExpressions::ProhibitMagicNumbers]
 
+# Policy is not done yet
+[-NamingConventions::Capitalization]

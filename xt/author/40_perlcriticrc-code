@@ -39,3 +39,5 @@ allow_all_brackets = 1
 [RegularExpressions::RequireBracesForMultiline]
 allow_all_brackets = 1
 
+# Policy is not done yet
+[-NamingConventions::Capitalization]
