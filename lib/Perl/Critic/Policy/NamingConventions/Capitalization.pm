@@ -404,6 +404,9 @@ sub _variable_capitalization {
 sub _subroutine_capitalization {
     my ($self, $elem) = @_;
 
+    # These names are fixed and you've got no choice what to call them.
+    return if $elem->isa('PPI::Statement::Scheduled');
+
     my $name = $elem->name();
 
     return $self->_check_capitalization($name, $name, 'subroutine', $elem);
