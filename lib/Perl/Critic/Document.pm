@@ -174,7 +174,7 @@ sub mark_disabled_lines {
 
 #-----------------------------------------------------------------------------
 
-sub line_is_disabled {
+sub is_line_disabled {
     my ($self, $line, $policy_name) = @_;
     return 0 if not exists $self->{_disabled_lines}->{$line};
     return 1 if $self->{_disabled_lines}->{$line}->{$policy_name};

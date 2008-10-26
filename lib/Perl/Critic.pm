@@ -207,7 +207,7 @@ sub _critique {
           VIOLATION:
             for my $violation ( $policy->violates( $element, $doc ) ) {
                 my $line = $violation->location()->[0];
-                next VIOLATION if $doc->line_is_disabled($line, $policy_name)
+                next VIOLATION if $doc->is_line_disabled($line, $policy_name)
                     and not exists $policies_that_cannot_be_disabled{$policy_name};
 
                 push @violations, $violation;
