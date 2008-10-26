@@ -36,11 +36,11 @@ sub violates {
     my ( $self, $elem, undef ) = @_;
     $elem =~ m{\A \#\# \s* no \s+ critic \s* (.*) \z}smx
         or return;
-    
+
     if ($1 !~ m{\A (?: qw)? \s* [("'] \s* \w+ }smx ) {
         return $self->violation( $DESC, $EXPL, $elem );
-    }   
-    
+    }
+
     return; # ok!
 }
 
@@ -64,20 +64,20 @@ distribution.
 
 =head1 DESCRIPTION
 
-A bare C<## no critic> marker will disable B<all> the active Policies.
-This creates holes for other, unintended violations to appear in your code.  It is
+A bare C<## no critic> marker will disable B<all> the active Policies.  This
+creates holes for other, unintended violations to appear in your code.  It is
 better to disable B<only> the particular Policies that you need to get around.
-By putting Policy names in a comma-separated list after the C<## no critic> marker, 
-then it will only disable the named Policies.  Policy names are matched as regular 
-expressions, so you can use shortened Policy names, or patterns that match several 
-Policies. This Policy generates a violation any time that an unrestricted 
-C<## no critic> marker appears.
+By putting Policy names in a comma-separated list after the C<## no critic>
+marker, then it will only disable the named Policies.  Policy names are
+matched as regular expressions, so you can use shortened Policy names, or
+patterns that match several Policies. This Policy generates a violation any
+time that an unrestricted C<## no critic> marker appears.
 
   ## no critic                     # not ok
   ## no critic ''                  # not ok
   ## no critic ()                  # not ok
   ## no critic qw()                # not ok
-  
+
   ## no critic    Policy1, Policy2   # ok
   ## no critic   'Policy1, Policy2'  # ok
   ## no critic   (Policy1, Policy2)  # ok
@@ -101,6 +101,7 @@ can be found in the LICENSE file included with this module.
 
 =cut
 
+###############################################################################
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4
