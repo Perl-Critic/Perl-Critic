@@ -28,9 +28,9 @@ sub supported_parameters { return ()                         }
 sub default_severity     { return $SEVERITY_MEDIUM           }
 sub default_themes       { return qw( core maintenance )     }
 sub applies_to           { return 'PPI::Token::Comment'      }
-sub can_be_disabled      { return $FALSE                     }
 
 #-----------------------------------------------------------------------------
+# TODO: Consolidate these regexen with those used in Critic.pm
 
 sub violates {
     my ( $self, $elem, undef ) = @_;

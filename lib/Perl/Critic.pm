@@ -192,14 +192,11 @@ sub _critique {
     return if not $policy->prepare_to_scan_document($doc);
 
     my $maximum_violations = $policy->get_maximum_violations_per_document();
-    my %policies_that_cannot_be_disabled = hashify(_policies_that_cannot_be_disabled());
-
-    if (defined $maximum_violations && $maximum_violations == 0) {
-        return;
-    }
+    return if defined $maximum_violations && $maximum_violations == 0;
 
     my @violations = ();
     my $policy_name = $policy->get_long_name();
+    my %policies_that_cannot_be_disabled = hashify(_policies_that_cannot_be_disabled());
 
   TYPE:
     for my $type ( $policy->applies_to() ) {
