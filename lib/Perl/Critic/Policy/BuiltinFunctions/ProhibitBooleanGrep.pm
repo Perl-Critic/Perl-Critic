@@ -77,7 +77,7 @@ sub _does_parent_cause_boolean {
     my $prev = $token->sprevious_sibling;
     return if $prev;
     my $parent = $token->statement->parent;
-    for (my $node = $parent; $node; $node = $node->parent) { ##no critic 'CStyleForLoop'
+    for (my $node = $parent; $node; $node = $node->parent) { ## no critic (CStyleForLoop)
         next if $node->isa('PPI::Structure::List');
         return 1 if $node->isa('PPI::Structure::Condition');
     }

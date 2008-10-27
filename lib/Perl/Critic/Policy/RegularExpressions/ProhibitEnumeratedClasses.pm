@@ -29,7 +29,7 @@ Readonly::Scalar my $DESC => q{Use named character classes};
 Readonly::Scalar my $EXPL => [248];
 
 Readonly::Array my @PATTERNS => (  # order matters: most to least specific
-   [q{ },'\\t','\\r','\\n']      => ['\\s', '\\S'],  ##no critic (Interpolation)
+   [q{ },'\\t','\\r','\\n']      => ['\\s', '\\S'],  ## no critic (InterpolationOfMetachars)
    ['A-Z','a-z','_']             => ['\\w', '\\W'],
    ['A-Z','a-z']                 => ['[[:alpha:]]','[[:^alpha:]]'],
    ['A-Z']                       => ['[[:upper:]]','[[:^upper:]]'],
@@ -76,7 +76,7 @@ sub _get_character_class_violations {
     for my $element ($anyof->children) {
         if ($element->isa('Perl::Critic::PPIRegexp::exact')) {
             my @tokens = split m/(\\.[^\\]*)/xms, $element->content;
-            for my $token (map { split m/\A (\\[nrf])/xms, _fixup($_); } @tokens) {  ##no critic(Comma) ## TODO: FALSE POSITIVE
+            for my $token (map { split m/\A (\\[nrf])/xms, _fixup($_); } @tokens) {
                 $elements{$token} = 1;
             }
         } elsif ($element->isa('Perl::Critic::PPIRegexp::anyof_char') ||
@@ -111,9 +111,9 @@ sub _get_character_class_violations {
 }
 
 Readonly::Hash my %HEX => (  # Note: this is ASCII specific!
-   '0a' => '\\n',  ##no critic (Interpolation)
-   '0c' => '\\f',  ##no critic (Interpolation)
-   '0d' => '\\r',  ##no critic (Interpolation)
+   '0a' => '\\n',  ## no critic (InterpolationOfMetachars)
+   '0c' => '\\f',  ## no critic (InterpolationOfMetachars)
+   '0d' => '\\r',  ## no critic (InterpolationOfMetachars)
    '20' => q{ },
 );
 sub _fixup {

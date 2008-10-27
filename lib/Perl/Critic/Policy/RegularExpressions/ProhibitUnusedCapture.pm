@@ -87,7 +87,7 @@ sub violates {
     return $self->violation( $DESC, $EXPL, $elem );
 }
 
-sub _enough_assignments {  ##no critic(ExcessComplexity) # TODO
+sub _enough_assignments {
     my ($elem, $captures) = @_;
 
     # look backward for the assignment operator

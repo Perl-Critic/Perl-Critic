@@ -26,8 +26,7 @@ our $VERSION = '1.093_01';
 Readonly::Scalar my $DESC => q{Use character classes for literal metachars instead of escapes};
 Readonly::Scalar my $EXPL => [247];
 
-Readonly::Hash my %REGEXP_METACHARS =>
-    hashify split m/ /xms, '{ } ( ) . * + ? |'; ##no critic(Interpolation)
+Readonly::Hash my %REGEXP_METACHARS => hashify(split / /xms, '{ } ( ) . * + ? |');
 
 #-----------------------------------------------------------------------------
 

@@ -64,7 +64,6 @@ sub initialize_if_enabled {
     # Set configuration, if defined.
     my @keywords = keys %{ $self->{_keywords} };
     if ( @keywords ) {
-        ## no critic ProhibitEmptyQuotes
         $self->{_keyword_sets} = [ [ @keywords ] ];
     }
 

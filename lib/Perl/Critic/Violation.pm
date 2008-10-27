@@ -87,7 +87,6 @@ sub sort_by_location {  ##no critic(ArgUnpacking)
     ref $_[0] || shift;              #Can call as object or class method
     return scalar @_ if ! wantarray; #In case we are called in scalar context
 
-    ## no critic qw(RequireSimpleSort);
     ## TODO: What if $a and $b are not Violation objects?
     return
         map {$_->[0]}
@@ -103,7 +102,6 @@ sub sort_by_severity {  ##no critic(ArgUnpacking)
     ref $_[0] || shift;              #Can call as object or class method
     return scalar @_ if ! wantarray; #In case we are called in scalar context
 
-    ## no critic qw(RequireSimpleSort);
     ## TODO: What if $a and $b are not Violation objects?
     return
         map {$_->[0]}

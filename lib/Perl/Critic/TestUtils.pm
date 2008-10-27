@@ -195,7 +195,7 @@ sub _subtests_from_file {
     while ( <$fh> ) {
         ++$lineno;
         chomp;
-        my $inheader = /^## name/ .. /^## cut/; ## no critic(RegularExpression)
+        my $inheader = /^## name/ .. /^## cut/; ## no critic (ExtendedFormatting LineBoundaryMatching DotMatchAnything)
 
         my $line = $_;
 
@@ -273,7 +273,7 @@ sub _finalize_subtest {
 
     if (defined $subtest->{error}) {
         if ( $subtest->{error} =~ m{ \A / (.*) / \z }xms) {
-            $subtest->{error} = eval {qr/$1/}; ##no critic (RegularExpressions::)
+            $subtest->{error} = eval {qr/$1/}; ## no critic (ExtendedFormatting LineBoundaryMatching DotMatchAnything)
             if ($EVAL_ERROR) {
                 throw_internal
                     "$subtest->{name} 'error' has a malformed regular expression";

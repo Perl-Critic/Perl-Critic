@@ -99,7 +99,7 @@ sub _parse_modules {
             # These are module name patterns (e.g. /Acme/)
             my $actual_regex;
 
-            eval { $actual_regex = qr/$regex_string/; 1 }  ## no critic (RegularExpressions)
+            eval { $actual_regex = qr/$regex_string/; 1 }  ## no critic (ExtendedFormatting, LineBoundaryMatching, DotMatchAnything)
                 or throw_policy_value
                     policy         => $self->get_short_name(),
                     option_name    => 'modules',

@@ -131,11 +131,11 @@ sub get_delimiters {
             my $src_isa_name = $src_class . '::ISA';
             my $dest_isa_name = $dest_class . '::ISA';
             my @isa;
-            for my $isa (eval "\@$src_isa_name") { ##no critic(Eval)
+            for my $isa (eval "\@$src_isa_name") { ## no critic (StringyEval)
                 my $dest_isa = _get_ppi_package($isa, $re_node);
                 push @isa, $dest_isa;
             }
-            eval "\@$dest_isa_name = qw(@isa)"; ##no critic(Eval)
+            eval "\@$dest_isa_name = qw(@isa)"; ## no critic (Eval)
             croak $EVAL_ERROR if $EVAL_ERROR;
         }
         return $dest_class;

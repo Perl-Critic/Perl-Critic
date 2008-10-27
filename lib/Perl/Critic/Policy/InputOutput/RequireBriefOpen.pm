@@ -25,7 +25,7 @@ our $VERSION = '1.093_01';
 Readonly::Scalar my $DESC => q<Close filehandles as soon as possible after opening them>;
 Readonly::Scalar my $EXPL => [209];
 
-Readonly::Scalar my $SCALAR_SIGIL => q<$>;  ## no critic (InterpolationOfLiterals)
+Readonly::Scalar my $SCALAR_SIGIL => q<$>;
 Readonly::Scalar my $GLOB_SIGIL   => q<*>;
 
 #-----------------------------------------------------------------------------

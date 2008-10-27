@@ -73,7 +73,7 @@ sub add_exception_or_rethrow {
     my ( $self, $eval_error ) = @_;
 
     return if not $eval_error;
-    confess $eval_error if not ref $eval_error; ## no critic (RequireUseOfExceptions)
+    confess $eval_error if not ref $eval_error;
 
     if ( $eval_error->isa('Perl::Critic::Exception::Configuration') ) {
         $self->add_exception($eval_error);
@@ -84,7 +84,7 @@ sub add_exception_or_rethrow {
         $self->add_exceptions_from($eval_error);
     }
     else {
-        die $eval_error; ## no critic (RequireUseOfExceptions, RequireCarping)
+        die $eval_error; ## no critic (RequireCarping)
     }
 
     return;

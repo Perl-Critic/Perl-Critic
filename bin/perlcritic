@@ -549,7 +549,7 @@ sub policy_docs {
     my @site_policies  = Perl::Critic::PolicyFactory->site_policy_names();
     my @matching_policies  = grep { $_ =~ m/$pattern/ixms } @site_policies;
 
-    # "-T" means don't send to pager   
+    # "-T" means don't send to pager
     my @perldoc_output = map {`perldoc -T $_`} @matching_policies;  ## no critic (ProhibitBacktick)
     out @perldoc_output;
 

@@ -25,8 +25,8 @@ our $VERSION = '1.093_01';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $AT => q{@}; ##no critic(Interpolation)
-Readonly::Scalar my $AT_ARG => q{@_}; ##no critic(Interpolation)
+Readonly::Scalar my $AT => q{@};
+Readonly::Scalar my $AT_ARG => q{@_}; ## no critic (InterpolationOfMetachars)
 
 Readonly::Scalar my $DESC => qq{Always unpack $AT_ARG first};
 Readonly::Scalar my $EXPL => [178];

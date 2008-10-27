@@ -20,7 +20,7 @@ our $VERSION = '1.093_01';
 #-----------------------------------------------------------------------------
 
 Readonly::Scalar my $DESC => q{UNIVERSAL::isa should not be used as a function};
-Readonly::Scalar my $EXPL => q{Use eval{$obj->isa($pkg)} instead};  ##no critic 'RequireInterp';
+Readonly::Scalar my $EXPL => q{Use eval{$obj->isa($pkg)} instead};  ## no critic (RequireInterp);
 
 #-----------------------------------------------------------------------------
 
