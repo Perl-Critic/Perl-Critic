@@ -155,7 +155,7 @@ sub supported_parameters {
         {
             name               => 'global_variable_exemptions',
             description        => 'Global variable names that are exempt from capitalization rules.  The values here are regexes.',
-            default_string     => '\$VERSION @ISA @EXPORT(?:_OK)? %EXPORT_TAGS \$AUTOLOAD %ENV %SIG \$TODO \$SKIP',  ## no critic (RequireInterpolation)
+            default_string     => '\$VERSION @ISA @EXPORT(?:_OK)? %EXPORT_TAGS \$AUTOLOAD %ENV %SIG \$TODO',  ## no critic (RequireInterpolation)
             behavior           => 'string list',
         },
         {
@@ -625,7 +625,7 @@ These values also end up being surrounded by C<\A> and C<\z>.
 
 C<package_exemptions> defaults to C<main>.  C<global_variable_exemptions>
 defaults to
-C<\$VERSION @ISA @EXPORT(?:_OK)? %EXPORT_TAGS \$AUTOLOAD %ENV %SIG \$TODO \$SKIP>.
+C<\$VERSION @ISA @EXPORT(?:_OK)? %EXPORT_TAGS \$AUTOLOAD %ENV %SIG \$TODO>.
 
 
 =head1 TODO
