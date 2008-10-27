@@ -7,7 +7,6 @@
 # $Revision$
 ##############################################################################
 
-## no critic (ErrorHandling::RequireUseOfExceptions)
 package main;
 
 use 5.006001;

@@ -151,21 +151,20 @@ sub _gather_violations {
     # Disable exempt code lines, if desired
     if ( not $self->config->force() ) {
         my @site_policies = $self->config->site_policy_names();
-        $doc->mark_disabled_lines(@site_policies);
+        $doc->mark_disabled_regions(@site_policies);
     }
 
     # Evaluate each policy
     my @policies = $self->config->policies();
     my @violations = map { _critique($_, $doc) } @policies;
 
-    # Warn about unecessary "## no critic" markers
-    if ( $self->config->warn_about_useless_no_critic() ) {
-        my @warnings = $doc->useless_no_critic_warnings(@violations);
-        for (@warnings) { warn "$_\n"; }
-    }
-
     # Accumulate statistics
     $self->statistics->accumulate( $doc, \@violations );
+
+    # Warn about useless "no critic" markers
+    if ($self->config->warn_about_useless_no_critic() ) {
+        for ($doc->useless_no_critic_warnings()) {warn "$_\n"};
+    }
 
     # If requested, rank violations by their severity and return the top N.
     if ( @violations && (my $top = $self->config->top()) ) {
@@ -197,7 +196,6 @@ sub _critique {
 
     my @violations = ();
     my $policy_name = $policy->get_long_name();
-    my %policies_that_cannot_be_disabled = hashify(_policies_that_cannot_be_disabled());
 
   TYPE:
     for my $type ( $policy->applies_to() ) {
@@ -212,33 +210,20 @@ sub _critique {
 
           VIOLATION:
             for my $violation ( $policy->violates( $element, $doc ) ) {
+
                 my $line = $violation->location()->[0];
-                next VIOLATION if $doc->is_line_disabled($line, $policy_name)
-                    and not exists $policies_that_cannot_be_disabled{$policy_name};
+                if ( $doc->line_is_disabled($line, $policy_name) ) {
+                     $doc->mark_supressed_violation($line, $policy_name);
+                     next VIOLATION;
+                 }
 
                 push @violations, $violation;
-                if (
-                        defined $maximum_violations
-                    and @violations >= $maximum_violations
-                ) {
-                    last TYPE;
-                }
+                last TYPE if defined $maximum_violations and @violations >= $maximum_violations;
             }
         }
     }
 
     return @violations;
-}
-
-#-----------------------------------------------------------------------------
-
-sub _policies_that_cannot_be_disabled {
-    # This is a special list of policies that cannot
-    # be disabled by the "no critic" pseudo-pragma.
-
-    return qw(
-        Perl::Critic::Policy::Miscellanea::ProhibitUnrestrictedNoCritic
-    );
 }
 
 #-----------------------------------------------------------------------------
