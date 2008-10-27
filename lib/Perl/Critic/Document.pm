@@ -183,8 +183,8 @@ sub line_is_disabled {
     # hook in Policy.pm for enabling this behavior, we chose to hack
     # it here, since this isn't the kind of thing that most policies
     # should be doning.
-       
-    return 0 if $policy_name eq 
+
+    return 0 if $policy_name eq
         'Perl::Critic::Policy::Miscellanea::ProhibitUnrestrictedNoCritic';
 
     my $disabled_regions_ref = $self->{_disabled_regions}->{$policy_name}
@@ -589,7 +589,7 @@ for each policy.
 
 =head1 AUTHOR
 
-chris Dolan <cdolan@cpan.org>
+Chris Dolan <cdolan@cpan.org>
 
 
 =head1 COPYRIGHT
