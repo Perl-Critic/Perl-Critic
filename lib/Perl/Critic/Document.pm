@@ -187,11 +187,7 @@ sub line_is_disabled {
     return 0 if $policy_name eq
         'Perl::Critic::Policy::Miscellanea::ProhibitUnrestrictedNoCritic';
 
-    my $disabled_regions_ref = $self->{_disabled_regions}->{$policy_name}
-                            || $self->{_disabled_regions}->{ALL}
-                            || return 0;
-
-    for my $region ( @{ $disabled_regions_ref } ) {
+    for my $region ( $self->_disabled_regions($policy_name) ) {
         return 1 if $line >= $region->[0] and $line <= $region->[-1];
     }
 
@@ -222,12 +218,8 @@ sub useless_no_critic_warnings {
         for my $region (@regions) {
             if (none {$self->_violation_was_supressed($_, $policy)} @{$region} ) {
                 my $start = $region->[0];
-                if ($policy eq 'ALL') {
-                    push @warnings, qq{Useless disabling of all Policies in file "$file" at line $start.};
-                }
-                else {
-                    push @warnings, qq{Useless disabling of $policy in file "$file" at line $start.};
-                }
+                my $which_policy = $policy eq 'ALL' ? 'all Policies' : $policy;
+                push @warnings, qq{Useless disabling of $which_policy in "$file" at line $start.};
             }
         }
     }
@@ -277,6 +269,25 @@ sub _caching_finder {
 
         return 0; # 0 tells find() to keep traversing, but not to store this $element
     };
+}
+
+#-----------------------------------------------------------------------------
+
+sub _disabled_regions {
+    my ($self, $policy_name) = @_;
+    my @disabled_regions = ();
+
+    # Get policy-specific reigions
+    if ( my $region = $self->{_disabled_regions}->{$policy_name} ) {
+        push @disabled_regions, @{$region};
+    }
+
+    # Get regions for all policies
+    if ( my $region = $self->{_disabled_regions}->{ALL} ) {
+        push @disabled_regions, @{$region};
+    }
+
+    return @disabled_regions;
 }
 
 #-----------------------------------------------------------------------------
@@ -398,7 +409,7 @@ sub _parse_nocritic_import {
     my $delim     = qr{ \s* [,\s] \s* }xms;
     my $qw        = qr{ (?: qw )? }xms;
     my $qualifier = qr{ $qw [(]? \s* ( $module (?: $delim $module)* ) \s* [)]? }xms;
-    my $no_critic = qr{ \#\# \s* no \s+ critic \s* $qualifier }xms;  ##no critic(EscapedMetacharacters)
+    my $no_critic = qr{ \#\# \s* no \s+ critic \s* $qualifier }xms;
 
     if ( my ($module_list) = $pragma =~ $no_critic ) {
         my @modules = split $delim, $module_list;
@@ -433,7 +444,7 @@ sub _unfix_shebang {
     # fixing strings.  This matches most of the ones I've found in my own Perl
     # distribution, but it may not be bullet-proof.
 
-    my $fixin_rx = qr{^eval 'exec .* \$0 \${1\+"\$@"}'\s*[\r\n]\s*if.+;}ms; ## no critic (RequireExtendedFormatting)
+    my $fixin_rx = qr{^eval 'exec .* \$0 \${1\+"\$@"}'\s*[\r\n]\s*if.+;}ms; ## no critic (ExtendedFormatting)
     if ( $first_stmnt =~ $fixin_rx ) {
         my $line = $first_stmnt->location()->[0];
         $self->_mark_disabled_region($line, $line+1, 'ALL');
