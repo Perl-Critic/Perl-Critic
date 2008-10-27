@@ -9,6 +9,8 @@ _build/
 blib/
 cover_db
 lib/Perl/Critic/PolicySummary.pod
+nytprof
+nytprof.out
 t/*_without_optional_dependencies.t
 t/ControlStructures/ProhibitNegativeExpressionsInUnlessAndUntilConditions.run
 t/NamingConventions/Capitalization.run
