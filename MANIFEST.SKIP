@@ -5,6 +5,7 @@
 ^lib/Perl/Critic/PolicySummary.pod$
 _without_optional_dependencies.t$
 ^t/ControlStructures/ProhibitNegativeExpressionsInUnlessAndUntilConditions.run$
+^t/NamingConventions/Capitalization.run$
 ^t/Variables/RequireLocalizedPunctuationVars.run$
 
 ## Below here are generic entries that apply to any project ##

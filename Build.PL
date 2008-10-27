@@ -150,7 +150,6 @@ my $builder = $class->new(
     add_to_cleanup => [
         qw<
             Debian_CPANTS.txt
-            lib/Perl/Critic/PolicySummary.pod
             Makefile
             Makefile.old
             MANIFEST
@@ -158,9 +157,8 @@ my $builder = $class->new(
             META.yml
             pm_to_blib
             README
-            t/ControlStructures/ProhibitNegativeExpressionsInUnlessAndUntilConditions.run
-            t/Variables/RequireLocalizedPunctuationVars.run
         >,
+        values %{ get_PL_files() },
         test_wrappers_to_generate(),
     ],
 );

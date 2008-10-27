@@ -4,11 +4,11 @@ use 5.006001;
 use strict;
 use warnings;
 
-use English qw{-no_match_vars};
+use English qw< -no_match_vars >;
 use Carp qw< confess >;
 
-use Carp qw{ confess };
-use Fatal qw{ open close };
+use Carp qw< confess >;
+use Fatal qw< open close >;
 
 our $VERSION = '1.093_01';
 

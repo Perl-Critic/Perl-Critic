@@ -87,6 +87,7 @@ sub test_wrappers_to_generate {
 my @TARGET_FILES = qw<
     lib/Perl/Critic/PolicySummary.pod
     t/ControlStructures/ProhibitNegativeExpressionsInUnlessAndUntilConditions.run
+    t/NamingConventions/Capitalization.run
     t/Variables/RequireLocalizedPunctuationVars.run
 >;
 
