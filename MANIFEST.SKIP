@@ -78,3 +78,6 @@ RCS
 
 # Avoid my Ant build script
 ^build\.xml$
+
+# Some other junk
+^Debian_CPANTS\.txt$
