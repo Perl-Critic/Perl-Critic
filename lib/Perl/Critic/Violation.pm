@@ -58,6 +58,11 @@ sub new {
                 '3rd arg to Violation->new() must be a PPI::Element';
         }
     }
+    
+    # Strip punctuation.  These are controlled by the user via the
+    # formats.  He/She can use whatever makes sense to them.
+    not ref $expl and $expl =~ s/[.]+ \z//xms; # Could be an array ref
+    $desc =~ s/[.]+ \z//xms;
 
     #Create object
     my $self = bless {}, $class;
