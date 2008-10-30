@@ -1,4 +1,7 @@
-[1.xxx] Released on 2008-xx-xx
+[1.093_02] Released on 2008-10-30
+
+    Being released right now simply so that I can put out a version of
+    Perl::Critic::Moose.
 
     Incompatible change:
     * The deprecated $FORMAT variables for Perl::Critic::Policy and
