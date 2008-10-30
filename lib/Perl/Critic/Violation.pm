@@ -61,8 +61,7 @@ sub new {
     
     # Strip punctuation.  These are controlled by the user via the
     # formats.  He/She can use whatever makes sense to them.
-    not ref $expl and $expl =~ s/[.]+ \z//xms; # Could be an array ref
-    $desc =~ s/[.]+ \z//xms;
+    ($desc, $expl) = _chomp_periods($desc, $expl);
 
     #Create object
     my $self = bless {}, $class;
@@ -246,6 +245,20 @@ sub _first_line_of_source {
     return $code_string;
 }
 
+#-----------------------------------------------------------------------------
+
+sub _chomp_periods {
+    my @args = @_;
+    
+    for (@args) {
+        next if not defined or ref;
+        s{ [.]+ \z }{}xms    
+    }
+    
+    return @args;
+}
+
+#-----------------------------------------------------------------------------
 
 1;
 
