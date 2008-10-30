@@ -199,25 +199,28 @@ __END__
 
 Perl::Critic::Annotation - Represents a "## no critic" marker
 
+
 =head1 SYNOPSIS
 
   use Perl::Critic::Annotation;
   $annotation = Perl::Critic::Annotation->new( -token => $no_critic_ppi_token );
-  
+
   $bool = $annotation->disables_line( $number );
   $bool = $annotation->disables_policy( $policy_object );
   $bool = $annotation->disables_all_policies();
-  
+
   ($start, $end) = $annotation->effective_range();
   @disabled_policy_names = $annotation->disabled_policies();
-  
+
+
 =head1 DESCRIPTION
 
 L<Perl::Critic::Annotation> represents a single C<"## no critic"> marker in a
-L<PPI:Document>.  The Annotation takes care of parsing the markers and 
+L<PPI:Document>.  The Annotation takes care of parsing the markers and
 keeps track of which lines and Policies it affects. It is intended to
-encapsulate the details of the no-critic markers, and to provide a way for 
+encapsulate the details of the no-critic markers, and to provide a way for
 Policy objects to interact with the markers (via a L<Perl::Critic::Document>).
+
 
 =head1 CONSTRUCTOR
 
@@ -226,10 +229,12 @@ Policy objects to interact with the markers (via a L<Perl::Critic::Document>).
 =item C<< new( -token => $ppi_annotation_token ) >>
 
 Returns a reference to a new Annotation object.  The B<-token> argument
-is required and should be a C<PPI::Token::Comment> that conforms to the 
+is required and should be a C<PPI::Token::Comment> that conforms to the
 C<"## no critic"> syntax.
 
+
 =back
+
 
 =head1 METHODS
 
@@ -239,6 +244,7 @@ C<"## no critic"> syntax.
 
 Returns true if this Annotation disables C<$line> for any (or all) Policies.
 
+
 =item C<< disables_policy( $policy_object ) >>
 
 =item C<< disables_policy( $policy_name ) >>
@@ -246,15 +252,18 @@ Returns true if this Annotation disables C<$line> for any (or all) Policies.
 Returns true if this Annotation disables C<$polciy_object> or C<$policy_name>
 at any (or all) lines.
 
+
 =item C<< disables_all_policies() >>
 
 Returns true if this Annotation disables all Policies at any (or all) lines.
 If this method returns true, C<disabled_policies> will return an empty list.
 
+
 =item C<< effective_range() >>
 
-Returns a two-element list, reprenting the first and last line numbers where
+Returns a two-element list, representing the first and last line numbers where
 this Annotation has effect.
+
 
 =item C<< disabled_policies() >>
 
@@ -262,15 +271,19 @@ Returns a list of the names of the Policies that are affected by this Annotation
 If this list is empty, then it means that all Policies are affected by this
 Annotation, and C<disables_all_policies()> should return true.
 
+
 =item C<< token() >>
 
 Returns the L<PPI::Token::Comment> where this annotation started.
 
+
 =back
+
 
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+
 
 =head1 COPYRIGHT
 

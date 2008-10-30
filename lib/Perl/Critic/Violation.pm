@@ -58,7 +58,7 @@ sub new {
                 '3rd arg to Violation->new() must be a PPI::Element';
         }
     }
-    
+
     # Strip punctuation.  These are controlled by the user via the
     # formats.  He/She can use whatever makes sense to them.
     ($desc, $expl) = _chomp_periods($desc, $expl);
@@ -249,12 +249,12 @@ sub _first_line_of_source {
 
 sub _chomp_periods {
     my @args = @_;
-    
+
     for (@args) {
         next if not defined or ref;
-        s{ [.]+ \z }{}xms    
+        s{ [.]+ \z }{}xms
     }
-    
+
     return @args;
 }
 
