@@ -17,7 +17,7 @@ use PPI::Document;
 
 use Perl::Critic::Utils qw< :characters >;
 
-use Test::More tests => 41;
+use Test::More tests => 42;
 
 #-----------------------------------------------------------------------------
 
@@ -183,6 +183,13 @@ END_PERL
 
 #-----------------------------------------------------------------------------
 
+my @given = ( qw(foo bar. .baz.. nuts!), [], {} );
+my @want  = ( qw(foo bar  .baz   nuts!), [], {} );
+my @have  = Perl::Critic::Violation::_chomp_periods(@given);
+
+is_deeply(\@have, \@want, 'Chomping periods');
+
+#-----------------------------------------------------------------------------
 # ensure we run true if this test is loaded by
 # t/06_violation.t_without_optional_dependencies.t
 1;
