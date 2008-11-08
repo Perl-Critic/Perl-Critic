@@ -28,7 +28,13 @@ our $VERSION = '1.093_02';
 # have all the optional modules installed.  Make sure that they know that they
 # don't.  :]
 
-my %module_versions = recommended_module_versions();
+my %module_versions = (
+    recommended_module_versions(),
+    'Test::Deep'            => 0,
+    'Test::Memory::Cycle'   => 0,
+    'Test::Pod'             => 0,
+    'Test::Pod::Coverage'   => 0,
+);
 
 plan tests => scalar keys %module_versions;
 
