@@ -26,8 +26,7 @@ our $VERSION = '1.093_02';
 
 #-----------------------------------------------------------------------------
 
-eval { require Test::Perl::Critic; };
-plan skip_all => 'Test::Perl::Critic required to criticise code' if $EVAL_ERROR;
+use Test::Perl::Critic;
 
 #-----------------------------------------------------------------------------
 

@@ -34,16 +34,12 @@ our $VERSION = '1.093_02';
 
 #-----------------------------------------------------------------------------
 
-eval { require Test::Perl::Critic; };
-plan skip_all => 'Test::Perl::Critic required to criticise code' if $EVAL_ERROR;
+use Test::Perl::Critic;
 
 #-----------------------------------------------------------------------------
 
-eval { require Perl::Critic::Policy::ErrorHandling::RequireUseOfExceptions; };
-plan skip_all =>
-    'ErrorHandling::RequireUseOfExceptions policy required to criticise code.'
-        . ' This policy is part of the Perl::Critic::More distribution.'
-    if $EVAL_ERROR;
+# Fall over if P::C::More isn't installed.
+use Perl::Critic::Policy::ErrorHandling::RequireUseOfExceptions;
 
 #-----------------------------------------------------------------------------
 # Set up PPI caching for speed (used primarily during development)
@@ -64,18 +60,9 @@ if ( $ENV{PERL_CRITIC_CACHE} ) {
 #-----------------------------------------------------------------------------
 # Strict object testing -- prevent direct hash key access
 
-eval { require Devel::EnforceEncapsulation; };
-if ( !$EVAL_ERROR ) {
-    for my $pkg ( $EMPTY, '::Config', '::Policy', '::Violation' ) {
-        Devel::EnforceEncapsulation->apply_to('Perl::Critic'.$pkg);
-    }
-}
-else {
-    diag($EMPTY);
-    diag(
-        'You should install Devel::EnforceEncapsulation, but other tests '
-            . 'will still run.'
-    );
+use Devel::EnforceEncapsulation;
+foreach my $pkg ( $EMPTY, qw< ::Config ::Policy ::Violation> ) {
+    Devel::EnforceEncapsulation->apply_to('Perl::Critic'.$pkg);
 }
 
 #-----------------------------------------------------------------------------

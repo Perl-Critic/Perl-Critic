@@ -20,12 +20,7 @@ our $VERSION = '1.093_02';
 
 #-----------------------------------------------------------------------------
 
-eval {
-   require Test::Kwalitee;
-   Test::Kwalitee->import( tests => [ qw{ -no_symlinks } ] );
-   1;
-}
-    or plan skip_all => 'Test::Kwalitee not installed; skipping';
+use Test::Kwalitee tests => [ qw{ -no_symlinks } ];
 
 # Local Variables:
 #   mode: cperl

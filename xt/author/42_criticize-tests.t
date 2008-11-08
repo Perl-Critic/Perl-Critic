@@ -31,16 +31,12 @@ our $VERSION = '1.093_02';
 
 #-----------------------------------------------------------------------------
 
-eval { require Test::Perl::Critic; };
-plan skip_all => 'Test::Perl::Critic required to criticise code' if $EVAL_ERROR;
+use Test::Perl::Critic;
 
 #-----------------------------------------------------------------------------
 
-eval { require Perl::Critic::Policy::ErrorHandling::RequireUseOfExceptions; };
-plan skip_all =>
-    'ErrorHandling::RequireUseOfExceptions policy required to criticise code.'
-        . ' This policy is part of the Perl::Critic::More distribution.'
-    if $EVAL_ERROR;
+# Fall over if P::C::More isn't installed.
+use Perl::Critic::Policy::ErrorHandling::RequireUseOfExceptions;
 
 #-----------------------------------------------------------------------------
 # Set up PPI caching for speed (used primarily during development)
