@@ -54,7 +54,7 @@ sub test_wrappers_to_generate {
         t/01_policy_config.t
         t/02_policy.t
         t/03_pragmas.t
-        t/04_optionsprocessor.t
+        t/04_options_processor.t
         t/05_utils.t
         t/05_utils_ppi.t
         t/05_utils_pod.t
@@ -62,10 +62,10 @@ sub test_wrappers_to_generate {
         t/07_perlcritic.t
         t/08_document.t
         t/09_theme.t
-        t/10_userprofile.t
-        t/11_policyfactory.t
-        t/12_policylisting.t
-        t/12_themelisting.t
+        t/10_user_profile.t
+        t/11_policy_factory.t
+        t/12_policy_listing.t
+        t/12_theme_listing.t
         t/13_bundled_policies.t
         t/14_policy_parameters.t
         t/15_statistics.t
