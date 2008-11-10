@@ -18,12 +18,9 @@ use base qw(Exporter);
 
 use File::Spec;
 use Scalar::Util qw(blessed);
-
-use PPI::Document;
-use PPI::Document::File;
+use List::MoreUtils qw(firstidx);
 
 use Perl::Critic::Exception::Configuration::Generic;
-use Perl::Critic::Exception::Parse qw{ throw_parse };
 use Perl::Critic::Config;
 use Perl::Critic::Violation;
 use Perl::Critic::Document;
@@ -36,7 +33,8 @@ our $VERSION = '1.093_02';
 
 Readonly::Array our @EXPORT_OK => qw(critique);
 
-#-----------------------------------------------------------------------------
+#=============================================================================
+# PUBLIC methods
 
 sub new {
     my ( $class, %args ) = @_;
@@ -102,7 +100,8 @@ sub critique {  ## no critic (ArgUnpacking)
     $self = ref $self eq 'HASH' ? __PACKAGE__->new(%{ $self }) : $self;
     return if not defined $source_code;  # If no code, then nothing to do.
 
-    my $doc = $self->_create_perl_critic_document($source_code);
+    my $doc = blessed($source_code) && $source_code->isa('Perl::Critic::Document') ?
+        $source_code : Perl::Critic::Document->new($source_code);
 
     if ( 0 == $self->policies() ) {
         Perl::Critic::Exception::Configuration::Generic->throw(
@@ -114,57 +113,23 @@ sub critique {  ## no critic (ArgUnpacking)
 }
 
 #=============================================================================
-# PRIVATE functions
-
-sub _create_perl_critic_document {
-    my ($self, $source_code) = @_;
-
-    # $source_code can be a file name, or a reference to a
-    # PPI::Document, or a reference to a scalar containing source
-    # code.  In the last case, PPI handles the translation for us.
-
-    my $doc = _is_ppi_doc( $source_code ) ? $source_code
-              : ref $source_code ? PPI::Document->new($source_code)
-              : PPI::Document::File->new($source_code);
-
-    # Bail on error
-    if ( not defined $doc ) {
-        my $errstr   = PPI::Document::errstr();
-        my $file     = ref $source_code ? undef : $source_code;
-        throw_parse
-            message     => qq<Can't parse code: $errstr>,
-            file_name   => $file;
-    }
-
-    # Pre-index location of each node (for speed)
-    $doc->index_locations();
-
-    # Wrap the doc in a caching layer
-    return Perl::Critic::Document->new($doc);
-}
-
-#-----------------------------------------------------------------------------
+# PRIVATE methods
 
 sub _gather_violations {
     my ($self, $doc) = @_;
 
     # Disable exempt code lines, if desired
     if ( not $self->config->force() ) {
-        my @site_policies = $self->config->site_policy_names();
-        $doc->mark_disabled_regions(@site_policies);
+        $doc->process_annotations();
     }
 
     # Evaluate each policy
     my @policies = $self->config->policies();
-    my @violations = map { _critique($_, $doc) } @policies;
+    my @ordered_policies = _futz_with_policy_order(@policies);
+    my @violations = map { _critique($_, $doc) } @ordered_policies;
 
     # Accumulate statistics
     $self->statistics->accumulate( $doc, \@violations );
-
-    # Warn about useless "no critic" markers
-    if ($self->config->warn_about_useless_no_critic() ) {
-        for ($doc->useless_no_critic_warnings()) {warn "$_\n"};
-    }
 
     # If requested, rank violations by their severity and return the top N.
     if ( @violations && (my $top = $self->config->top()) ) {
@@ -177,14 +142,8 @@ sub _gather_violations {
     return Perl::Critic::Violation->sort_by_location(@violations);
 }
 
-#-----------------------------------------------------------------------------
-
-sub _is_ppi_doc {
-    my ($ref) = @_;
-    return blessed($ref) && $ref->isa('PPI::Document');
-}
-
-#-----------------------------------------------------------------------------
+#=============================================================================
+# PRIVATE functions
 
 sub _critique {
     my ($policy, $doc) = @_;
@@ -195,7 +154,6 @@ sub _critique {
     return if defined $maximum_violations && $maximum_violations == 0;
 
     my @violations = ();
-    my $policy_name = $policy->get_long_name();
 
   TYPE:
     for my $type ( $policy->applies_to() ) {
@@ -212,10 +170,10 @@ sub _critique {
             for my $violation ( $policy->violates( $element, $doc ) ) {
 
                 my $line = $violation->location()->[0];
-                if ( $doc->line_is_disabled($line, $policy_name) ) {
-                     $doc->mark_supressed_violation($line, $policy_name);
-                     next VIOLATION;
-                 }
+                if ( $doc->line_is_disabled_for_policy($line, $policy) ) {
+                    $doc->add_suppressed_violation($violation);
+                    next VIOLATION;
+                }
 
                 push @violations, $violation;
                 last TYPE if defined $maximum_violations and @violations >= $maximum_violations;
@@ -228,6 +186,22 @@ sub _critique {
 
 #-----------------------------------------------------------------------------
 
+sub _futz_with_policy_order {
+
+    # The ProhibitUselessNoCritic policy is another special policy.  It
+    # deals with the violations that *other* Policies produce.  Therefore
+    # it needs to be run *after* all the other Policies.  TODO: find
+    # a way for Policies to express an ordering preference somehow.
+
+    my @policy_objects = @_;
+    my $magical_policy_name = 'Perl::Critic::Policy::Miscellanea::ProhibitUselessNoCritic';
+    my $idx = firstidx {ref $_ eq $magical_policy_name} @policy_objects;
+    push @policy_objects, splice @policy_objects, $idx, 1;
+    return @policy_objects;
+}
+
+#-----------------------------------------------------------------------------
+
 1;
 
 
@@ -236,8 +210,7 @@ __END__
 
 =pod
 
-=for stopwords DGR INI-style API -params pbp refactored ActivePerl
-ben Jore Dolan's
+=for stopwords DGR INI-style API -params pbp refactored ActivePerl ben Jore Dolan's
 
 =head1 NAME
 

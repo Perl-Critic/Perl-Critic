@@ -453,7 +453,6 @@ sub _get_option_specification {
         theme=s
         top:i
         verbose=s
-        warn-about-useless-no-critic!
     );
 }
 

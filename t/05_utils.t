@@ -130,12 +130,10 @@ sub test_is_hash_key {
     );
     is(scalar @words, scalar @expect, 'is_hash_key count');
 
-    ## no critic (ProhibitCStyleForLoops)
     for my $i (0 .. $#expect) {
         is($words[$i], $expect[$i][0], 'is_hash_key word');
         is(is_hash_key($words[$i]), $expect[$i][1], 'is_hash_key boolean');
     }
-    ## use critic
 
     return;
 }

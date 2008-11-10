@@ -106,8 +106,9 @@ Readonly::Array our @EXPORT_OK => qw(
 );
 
 
-# Note: this is deprecated.
-Readonly::Array our @EXPORT => @EXPORT_OK;  ## no critic (ProhibitAutomaticExport)
+# Note: this is deprecated.  This should also violate ProhibitAutomaticExportation,
+# but at the moment, we aren't smart enough to deal with Readonly variables.
+Readonly::Array our @EXPORT => @EXPORT_OK;
 
 
 Readonly::Hash our %EXPORT_TAGS => (

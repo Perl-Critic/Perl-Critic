@@ -19,7 +19,7 @@ our $VERSION = '1.093_02';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $DESC => q{Unrestriced '## no critic' pseudo-pragma};
+Readonly::Scalar my $DESC => q{Unrestriced '## no critic' annotation};
 Readonly::Scalar my $EXPL => q{Only disable the Policies you really need to disable};
 
 #-----------------------------------------------------------------------------
@@ -27,23 +27,28 @@ Readonly::Scalar my $EXPL => q{Only disable the Policies you really need to disa
 sub supported_parameters { return ()                         }
 sub default_severity     { return $SEVERITY_MEDIUM           }
 sub default_themes       { return qw( core maintenance )     }
-sub applies_to           { return 'PPI::Token::Comment'      }
+sub applies_to           { return 'PPI::Document'            }
 
 #-----------------------------------------------------------------------------
-# TODO: Consolidate these regexen with those used in Critic.pm
 
 sub violates {
-    my ( $self, $elem, undef ) = @_;
-    $elem =~ m{\A \#\# \s* no \s+ critic \s* (.*) \z}smx
-        or return;
+    my ( $self, $doc, undef ) = @_;
 
-    if ($1 !~ m{\A (?: qw)? \s* [("'] \s* \w+ }smx ) {
-        return $self->violation( $DESC, $EXPL, $elem );
+    # If for some reason $doc is not a P::C::Document, then all bets are off
+    return if not $doc->isa('Perl::Critic::Document');
+
+    my @violations = ();
+    for my $annotation ($doc->annotations()) {
+        if ($annotation->disables_all_policies()) {
+            my $elem = $annotation->element();
+            push @violations, $self->violation($DESC, $EXPL, $elem);
+        }
     }
 
-    return; # ok!
+    return @violations;
 }
 
+#-----------------------------------------------------------------------------
 
 1;
 

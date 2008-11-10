@@ -22,7 +22,7 @@ our $VERSION = '1.093_02';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $DESC => q<Close filehandles as soon as possible after opening them>;
+Readonly::Scalar my $DESC => q<Close filehandles as soon as possible after opening them..>;
 Readonly::Scalar my $EXPL => [209];
 
 Readonly::Scalar my $SCALAR_SIGIL => q<$>;

@@ -33,7 +33,7 @@ my $perlcritic = File::Spec->catfile( qw(blib script perlcritic) );
 if (not -e $perlcritic) {
     $perlcritic = File::Spec->catfile( qw(bin perlcritic) )
 }
-require $perlcritic;  ## no critic (StringyEval)
+require $perlcritic;
 
 # Because bin/perlcritic does not declare a package, it has functions
 # in main, just like this test file, so we can use its functions

@@ -21,47 +21,75 @@ use Perl::Critic::Utils qw(:characters hashify);
 
 our $VERSION = '1.093_02';
 
-#-----------------------------------------------------------------------------
+#=============================================================================
+# CLASS methods
 
-sub new {
-    my ($class, %args) = @_;
-    my $self = bless {}, $class;
-    return $self->_init(%args);
+sub create_annotations {
+    my ($class, $doc) = @_;
+    
+    my @annotations = ();
+    my $comment_elements_ref  = $doc->find('PPI::Token::Comment') || return;
+    my $annotation_rx  = qr{\A (?: [#]! .*? )? \s* [#][#] \s* no  \s+ critic}xms;
+    for my $annotation_element ( grep { $_ =~ $annotation_rx } @{$comment_elements_ref} ) {
+        push @annotations, Perl::Critic::Annotation->new( -element => $annotation_element);
+    }
+    
+    return @annotations;
 }
 
 #-----------------------------------------------------------------------------
 
+sub new {
+    my ($class, @args) = @_;
+    my $self = bless {}, $class;
+    $self->_init(@args);
+    return $self;
+}
+
+#=============================================================================
+# OBJECT methods
+
 sub _init {
     my ($self, %args) = @_;
-    my $annotation_token = $args{-token} || confess '-token argument is required';
-    $self->{_token} = $annotation_token;
+    my $annotation_element = $args{-element} || confess '-element argument is required';
+    $self->{_element} = $annotation_element;
 
-    my %disabled_policies = _parse_annotation( $annotation_token );
+    my %disabled_policies = _parse_annotation( $annotation_element );
     $self->{_disables_all_policies} = %disabled_policies ? 0 : 1;
     $self->{_disabled_policies} = \%disabled_policies;
 
     # Grab surrounding nodes to determine the context.
     # This determines whether the pragma applies to
     # the current line or the block that follows.
-    my $annotation_token_line = $annotation_token->location()->[0];
-    my $parent = $annotation_token->parent();
+    my $annotation_line = $annotation_element->location()->[0];
+    my $parent = $annotation_element->parent();
     my $grandparent = $parent ? $parent->parent() : undef;
-    my $sib = $annotation_token->sprevious_sibling();
+    my $sib = $annotation_element->sprevious_sibling();
 
-
-    # Handle single-line usage on simple statements
-    if ( $sib && $sib->location->[0] == $annotation_token_line ) {
-        $self->{_effective_range} = [$annotation_token_line];
+    # Handle case when it appears on the shebang line.  In this
+    # situation, it only affects the first line, not the whole doc
+    if ( $annotation_element =~ m{\A [#]!}xms) {
+        $self->{_effective_range} = [$annotation_line, $annotation_line];
         return $self;
     }
 
-    # Handle single-line usage on compound statements
+    # Handle single-line usage on simple statements.  In this
+    # situation, it only affects the line that it appears on.
+    # TODO: Make this work for simple statements that are broken
+    # onto multiple lines.
+    if ( $sib && $sib->location->[0] == $annotation_line ) {
+        $self->{_effective_range} = [$annotation_line, $annotation_line];
+        return $self;
+    }
+
+    # Handle single-line usage on compound statements.  In this
+    # situation -- um -- I'm not sure how this works, but it does.
     if ( ref $parent eq 'PPI::Structure::Block' ) {
         if ( ref $grandparent eq 'PPI::Statement::Compound'
             || ref $grandparent eq 'PPI::Statement::Sub' ) {
-            if ( $parent->location->[0] == $annotation_token_line ) {
-                my $line = $grandparent->location->[0];
-                $self->{_effective_range} = [$line];
+            if ( $parent->location->[0] == $annotation_line ) {
+                my $grandparent_line = $grandparent->location->[0];
+                $self->{_effective_range} = [$grandparent_line, $grandparent_line];
                 return $self;
             }
         }
@@ -69,11 +97,10 @@ sub _init {
 
 
     # Handle multi-line usage.  This is either a "no critic" ..
-    # "use critic" region or a block where "no critic" persists
+    # "use critic" region or a block where "no critic" is in effect
     # until the end of the scope.  The start is the always the "no
     # critic" which we already found.  So now we have to search for the end.
-
-    my $start = my $end = $annotation_token;
+    my $end = $annotation_element;
     my $use_critic = qr{\A \s* [#][#] \s* use \s+ critic}xms;
 
   SIB:
@@ -83,16 +110,16 @@ sub _init {
     }
 
     # We either found an end or hit the end of the scope.
-    my ($starting_line, $ending_line) = ($start->location->[0], $end->location->[0]);
-    $self->{_effective_range} = [$starting_line, $ending_line];
+    my $ending_line = $end->location->[0];
+    $self->{_effective_range} = [$annotation_line, $ending_line];
     return $self;
 }
 
 #-----------------------------------------------------------------------------
 
-sub token {
+sub element {
     my ($self) = @_;
-    return $self->{_token};
+    return $self->{_element};
 }
 
 #-----------------------------------------------------------------------------
@@ -138,31 +165,29 @@ sub disables_line {
 
 sub _parse_annotation {
 
-    my ($annotation_token) = @_;
+    my ($annotation_element) = @_;
 
     #############################################################################
     # This regex captures the list of Policy name patterns that are to be
-    # disabled.  It is generally assumed that the token has already been
+    # disabled.  It is generally assumed that the element has already been
     # verified as a no-critic annotation.  So if this regex does not match,
     # then it implies that all Policies are to be disabled.
     #
     my $no_critic = qr{\#\# \s* no \s+ critic \s* (?:qw)? [("'] ([\s\w:,]+) }xms;
-    #                  ---  --------------------- ------- ----- -----------
-    #                   |             |              |      |        |
-    #     Starts with "##"            |              |      |        |
+    #                  -------------------------- ------- ----- -----------
     #                                 |              |      |        |
-    #   "no critic" with optional spaces             |      |        |
+    #   "## no critic" with optional spaces          |      |        |
     #                                                |      |        |
     #             Policy list may be prefixed with "qw"     |        |
     #                                                       |        |
-    #                  Policy list is begins with one of these       |
+    #         Optional Policy list must begin with one of these      |
     #                                                                |
-    #           Capture entire Policy list string (with delimiters) here
+    #                 Capture entire Policy list (with delimiters) here
     #
     #############################################################################
 
     my @disabled_policy_names = ();
-    if ( my ($patterns_string) = $annotation_token =~ $no_critic ) {
+    if ( my ($patterns_string) = $annotation_element =~ $no_critic ) {
 
         # Compose the specified modules into a regex alternation.  Wrap each
         # in a no-capturing group to permit "|" in the modules specification.
@@ -199,42 +224,51 @@ __END__
 
 Perl::Critic::Annotation - Represents a "## no critic" marker
 
-
 =head1 SYNOPSIS
 
   use Perl::Critic::Annotation;
-  $annotation = Perl::Critic::Annotation->new( -token => $no_critic_ppi_token );
-
+  $annotation = Perl::Critic::Annotation->new( -element => $no_critic_ppi_element );
+  
   $bool = $annotation->disables_line( $number );
   $bool = $annotation->disables_policy( $policy_object );
   $bool = $annotation->disables_all_policies();
-
+  
   ($start, $end) = $annotation->effective_range();
   @disabled_policy_names = $annotation->disabled_policies();
-
-
+  
 =head1 DESCRIPTION
 
 L<Perl::Critic::Annotation> represents a single C<"## no critic"> marker in a
-L<PPI:Document>.  The Annotation takes care of parsing the markers and
+L<PPI:Document>.  The Annotation takes care of parsing the markers and 
 keeps track of which lines and Policies it affects. It is intended to
-encapsulate the details of the no-critic markers, and to provide a way for
+encapsulate the details of the no-critic markers, and to provide a way for 
 Policy objects to interact with the markers (via a L<Perl::Critic::Document>).
 
+=head1 CLASS METHODS
+
+=over
+
+=item create_annotations( -doc => $doc )
+
+Given a L<Perl::Critic::Document>, finds all the C<"## no critic"> annotations
+and constructs a new L<Perl::Critic::Annotation> for each one and returns
+them.  The order of the returned objects is not defined.  It is generally
+expected that clients will use this interface rather than calling the
+L<Perl::Critic::Annotation> constructor directly.
+
+=back
 
 =head1 CONSTRUCTOR
 
 =over
 
-=item C<< new( -token => $ppi_annotation_token ) >>
+=item C<< new( -element => $ppi_annotation_element ) >>
 
-Returns a reference to a new Annotation object.  The B<-token> argument
-is required and should be a C<PPI::Token::Comment> that conforms to the
+Returns a reference to a new Annotation object.  The B<-element> argument
+is required and should be a C<PPI::Token::Comment> that conforms to the 
 C<"## no critic"> syntax.
 
-
 =back
-
 
 =head1 METHODS
 
@@ -244,7 +278,6 @@ C<"## no critic"> syntax.
 
 Returns true if this Annotation disables C<$line> for any (or all) Policies.
 
-
 =item C<< disables_policy( $policy_object ) >>
 
 =item C<< disables_policy( $policy_name ) >>
@@ -252,18 +285,15 @@ Returns true if this Annotation disables C<$line> for any (or all) Policies.
 Returns true if this Annotation disables C<$polciy_object> or C<$policy_name>
 at any (or all) lines.
 
-
 =item C<< disables_all_policies() >>
 
 Returns true if this Annotation disables all Policies at any (or all) lines.
 If this method returns true, C<disabled_policies> will return an empty list.
 
-
 =item C<< effective_range() >>
 
 Returns a two-element list, representing the first and last line numbers where
 this Annotation has effect.
-
 
 =item C<< disabled_policies() >>
 
@@ -271,19 +301,16 @@ Returns a list of the names of the Policies that are affected by this Annotation
 If this list is empty, then it means that all Policies are affected by this
 Annotation, and C<disables_all_policies()> should return true.
 
+=item C<< element() >>
 
-=item C<< token() >>
-
-Returns the L<PPI::Token::Comment> where this annotation started.
-
+Returns the L<PPI::Element> where this annotation started.  This is typically
+an instance of L<PPI::Token::Comment>.
 
 =back
-
 
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
-
 
 =head1 COPYRIGHT
 

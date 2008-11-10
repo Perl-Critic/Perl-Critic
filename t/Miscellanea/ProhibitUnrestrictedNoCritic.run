@@ -10,7 +10,7 @@
 
 ##----------------------------------------------------------------------------
 ## name slightly more complicated failures
-## failures 6
+## failures 4
 ## cut
 
 # just some spacing variations here...
@@ -18,8 +18,8 @@ $foo = $bar; ##  no critic
 $foo = $bar; ##no critic
 
 $foo = $bar; ## no critic ()
-$foo = $bar; ## no critic ''
-$foo = $bar; ## no critic ""
+#$foo = $bar; ## no critic ''
+#$foo = $bar; ## no critic ""
 $foo = $bar; ## no critic qw()
 
 #----------------------------------------------------------------------------

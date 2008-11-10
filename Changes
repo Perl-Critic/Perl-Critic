@@ -7,14 +7,25 @@
     * The deprecated $FORMAT variables for Perl::Critic::Policy and
       Perl::Critic::Violation no longer exist.  Use the corresponding
       get_format() and set_format() functions instead.
+    * Also, the way that "## no critic" markers was refactored.  As
+      a result, we discovered that the syntax for the markers was
+      pretty vague.  If you didn't do it just right, it would
+      disable all policies, and not just the specific ones that
+      you wanted.  So we've tightened this up a bit.  If you
+      followed the examples that have been in the docs for the
+      last couple years, then you should be fine.  But if you've
+      been using certain other variations in your "## no critic"
+      markers, then you might suddenly find yourself violating
+      the new ProhibtUnrestrictedNoCritic policy.  To fix this,
+      just make sure your Policy names appear in parentheses:
 
-    New User Features:
-    * Now you can use the --warn-about-useless-no-critic option and
-      Perl::Critic will tell you all the places that you used a
-      "## no critic" marker, but it didn't actually have any effect
-      (given your current profile).  This helps prevent your code
-      from becoming littered with too many "## no critic" annotations.
-
+        ## no critic Foo, Bar, Baz     # wrong!
+        ## no critic Foo Bar Baz       # wrong!
+        
+              
+        ## no critic (Foo, Bar, Baz)   # ok!
+        ## no critic qw(Foo Bar Baz)   # also ok!
+ 
     New Developer Features:
     * Perl::Critic::Policy::is_document_exempt() has been renamed to
       prepare_to_scan_document() and the sense of the return value has been
@@ -33,6 +44,7 @@
 
     New Policies:
     * Miscellanea::ProhibitUnrestrictedNoCritic
+    * Miscellanea::ProhibitUselessNoCritic
     * Variables::ProhibitReusedNames
 
 [1.093_01] Released on 2008-09-07
