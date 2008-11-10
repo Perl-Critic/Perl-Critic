@@ -879,7 +879,7 @@ L<Perl::Critic::Utils::Constants/"$PROFILE_STRICTNESS_QUIET"> makes
 Perl::Critic shut up about these things.
 
 B<-force> controls whether Perl::Critic observes the magical C<"## no
-critic"> pseudo-pragmas in your code.  If set to a true value,
+critic"> annotations in your code.  If set to a true value,
 Perl::Critic will analyze all code.  If set to a false value (which is
 the default) Perl::Critic will ignore code that is tagged with these
 comments.  See L<Perl::Critic/"BENDING THE RULES"> for more

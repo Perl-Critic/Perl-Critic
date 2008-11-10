@@ -220,7 +220,7 @@ sub line_is_disabled_for_policy {
     my $policy_name = ref $policy || $policy;
 
     # HACK: This Policy is special.  If it is active, it cannot be
-    # disabled by a "## no critic" marker.  Rather than create a general
+    # disabled by a "## no critic" annotation.  Rather than create a general
     # hook in Policy.pm for enabling this behavior, we chose to hack
     # it here, since this isn't the kind of thing that most policies do
 
@@ -333,7 +333,7 @@ sub _disable_shebang_fix {
     # inserts some magical code into the top of the file (just after the
     # shebang).  This code allows people to call your script using a shell,
     # like `sh my_script`.  Unfortunately, this code causes several Policy
-    # violations, so we disable them as if they had "## no critic" markers.
+    # violations, so we disable them as if they had "## no critic" annotations.
 
     my $first_stmnt = $self->schild(0) || return;
 

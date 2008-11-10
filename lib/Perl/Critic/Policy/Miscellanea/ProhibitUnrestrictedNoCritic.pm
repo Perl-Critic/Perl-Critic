@@ -69,14 +69,14 @@ distribution.
 
 =head1 DESCRIPTION
 
-A bare C<## no critic> marker will disable B<all> the active Policies.  This
+A bare C<## no critic> annotation will disable B<all> the active Policies.  This
 creates holes for other, unintended violations to appear in your code.  It is
 better to disable B<only> the particular Policies that you need to get around.
 By putting Policy names in a comma-separated list after the C<## no critic>
-marker, then it will only disable the named Policies.  Policy names are
+annotation, then it will only disable the named Policies.  Policy names are
 matched as regular expressions, so you can use shortened Policy names, or
 patterns that match several Policies. This Policy generates a violation any
-time that an unrestricted C<## no critic> marker appears.
+time that an unrestricted C<## no critic> annotation appears.
 
   ## no critic                     # not ok
   ## no critic ''                  # not ok

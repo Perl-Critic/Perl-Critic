@@ -96,7 +96,7 @@ use C<require>, but still encourages you to write '*.pm' modules.
 Sometimes, you may want to load modules at run-time, but you don't
 know at design-time exactly which module you will need to load
 (L<Perl::Critic|Perl::Critic> is an example of this).  In that case,
-just attach the C<'## no critic'> pseudo-pragma like so:
+just attach the C<'## no critic'> annotation like so:
 
     require $module_name;  ## no critic
 

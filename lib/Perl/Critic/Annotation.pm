@@ -59,7 +59,7 @@ sub _init {
     $self->{_disabled_policies} = \%disabled_policies;
 
     # Grab surrounding nodes to determine the context.
-    # This determines whether the pragma applies to
+    # This determines whether the annotation applies to
     # the current line or the block that follows.
     my $annotation_line = $annotation_element->location()->[0];
     my $parent = $annotation_element->parent();
@@ -222,7 +222,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Annotation - Represents a "## no critic" marker
+Perl::Critic::Annotation - Represents a "## no critic" annotation
 
 =head1 SYNOPSIS
 
@@ -238,11 +238,11 @@ Perl::Critic::Annotation - Represents a "## no critic" marker
   
 =head1 DESCRIPTION
 
-L<Perl::Critic::Annotation> represents a single C<"## no critic"> marker in a
-L<PPI:Document>.  The Annotation takes care of parsing the markers and 
+L<Perl::Critic::Annotation> represents a single C<"## no critic"> annotation in a
+L<PPI:Document>.  The Annotation takes care of parsing the annotation and 
 keeps track of which lines and Policies it affects. It is intended to
-encapsulate the details of the no-critic markers, and to provide a way for 
-Policy objects to interact with the markers (via a L<Perl::Critic::Document>).
+encapsulate the details of the no-critic annotations, and to provide a way for 
+Policy objects to interact with the annotations (via a L<Perl::Critic::Document>).
 
 =head1 CLASS METHODS
 

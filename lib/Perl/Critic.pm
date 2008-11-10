@@ -386,10 +386,10 @@ L<Perl::Critic::Utils::Constants/"$PROFILE_STRICTNESS_QUIET"> makes
 Perl::Critic shut up about these things.
 
 B<-force> is a boolean value that controls whether Perl::Critic
-observes the magical C<"## no critic"> pseudo-pragmas in your code.
+observes the magical C<"## no critic"> annotations in your code.
 If set to a true value, Perl::Critic will analyze all code.  If set to
 a false value (which is the default) Perl::Critic will ignore code
-that is tagged with these comments.  See L<"BENDING THE RULES"> for
+that is tagged with these annotations.  See L<"BENDING THE RULES"> for
 more information.  You can set the default value for this option in
 your F<.perlcriticrc> file.
 
@@ -702,7 +702,7 @@ cases, it is wise to show that you are knowingly violating the
 standards and that you have a Damn Good Reason (DGR) for doing so.
 
 To help with those situations, you can direct Perl::Critic to ignore
-certain lines or blocks of code by using pseudo-pragmas:
+certain lines or blocks of code by using annotations:
 
     require 'LegacyLibaray1.pl';  ## no critic
     require 'LegacyLibrary2.pl';  ## no critic
@@ -721,19 +721,19 @@ certain lines or blocks of code by using pseudo-pragmas:
         do_something($_);
     }
 
-The C<"## no critic"> comments direct Perl::Critic to ignore the
+The C<"## no critic"> annotations direct Perl::Critic to ignore the
 remaining lines of code until the end of the current block, or until a
-C<"## use critic"> comment is found (whichever comes first).  If the
-C<"## no critic"> comment is on the same line as a code statement,
-then only that line of code is overlooked.  To direct perlcritic to
-ignore the C<"## no critic"> comments, use the C<-force> option.
+C<"## use critic"> annotation is found (whichever comes first).  If the
+C<"## no critic"> annotation is on the same line as a code statement,
+then only that line of code is overlooked.  To direct this Critic to
+ignore the C<"## no critic"> annotations, use the C<-force> option.
 
-A bare C<"## no critic"> comment disables all the active Policies.  If
+A bare C<"## no critic"> annotation disables all the active Policies.  If
 you wish to disable only specific Policies, add a list of Policy names
 as arguments, just as you would for the C<"no strict"> or C<"no
 warnings"> pragmas.  For example, this would disable the
 C<ProhibitEmptyQuotes> and C<ProhibitPostfixControls> policies until
-the end of the block or until the next C<"## use critic"> comment
+the end of the block or until the next C<"## use critic"> annotation
 (whichever comes first):
 
   ## no critic (EmptyQuotes, PostfixControls)
@@ -761,9 +761,9 @@ or disable an entire family of Policies in one shot like this:
 
 The argument list must be enclosed in parentheses and must contain one
 or more comma-separated barewords (e.g. don't use quotes).  The
-C<"## no critic"> pragmas can be nested, and Policies named by an
-inner pragma will be disabled along with those already disabled an
-outer pragma.
+C<"## no critic"> annotations can be nested, and Policies named by an
+inner annotation will be disabled along with those already disabled an
+outer annotation.
 
 Some Policies like C<Subroutines::ProhibitExcessComplexity> apply to
 an entire block of code.  In those cases, C<"## no critic"> must
@@ -776,9 +776,9 @@ appear on the line where the violation is reported.  For example:
 Policies such as C<Documentation::RequirePodSections> apply to the
 entire document, in which case violations are reported at line 1.
 
-Use this feature wisely.  C<"## no critic"> should be used in the
+Use this feature wisely.  C<"## no critic"> annotations should be used in the
 smallest possible scope, or only on individual lines of code. And you
-should always be as specific as possible about which policies you want
+should always be as specific as possible about which Policies you want
 to disable (i.e. never use a bare C<"## no critic">).  If Perl::Critic
 complains about your code, try and find a compliant solution before
 resorting to this feature.

@@ -73,7 +73,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Miscellanea::ProhibitUselessNoCritic - Remove ineffective "## no critic" markers.
+Perl::Critic::Policy::Miscellanea::ProhibitUselessNoCritic - Remove ineffective "## no critic" annotations.
 
 =head1 AFFILIATION
 
