@@ -77,6 +77,7 @@ Readonly::Hash my %NAME_FOR_TYPE => (
     file_lexical_variable   => 'File lexical variable',
     global_variable         => 'Global variable',
     constant                => 'Constant',
+    label                   => 'Label',
 );
 
 Readonly::Scalar my $EXPL                   => [ 45 ];
@@ -170,12 +171,24 @@ sub supported_parameters {
             default_string     => $EMPTY,
             behavior           => 'string list',
         },
+        {
+            name               => 'labels',
+            description        => 'How labels should be capitalized.  Valid values are :single_case, :all_lower, :all_upper, :starts_with_lower, :starts_with_upper, :no_restriction, or a regex.',
+            default_string     => ':all_upper',
+            behavior           => 'string',
+        },
+        {
+            name               => 'label_exemptions',
+            description        => 'Labels that are exempt from capitalization rules.  The values here are regexes.',
+            default_string     => $EMPTY,
+            behavior           => 'string list',
+        },
     );
 }
 
-sub default_severity    { return $SEVERITY_LOWEST           }
-sub default_themes      { return qw< core pbp cosmetic >    }
-sub applies_to          { return 'PPI::Statement'           }
+sub default_severity    { return $SEVERITY_LOWEST                       }
+sub default_themes      { return qw< core pbp cosmetic >                }
+sub applies_to          { return qw< PPI::Statement PPI::Token::Label > }
 
 #-----------------------------------------------------------------------------
 
@@ -190,7 +203,7 @@ sub initialize_if_enabled {
         package                 subroutine
         local_lexical_variable  scoped_lexical_variable
         file_lexical_variable   global_variable
-        constant
+        constant                label
     > ) {
         my ($capitalization_regex, $message) =
             $self->_derive_capitalization_test_regex_and_message(
@@ -330,6 +343,10 @@ sub violates {
         return $self->_package_capitalization($elem);
     }
 
+    if ( $elem->isa('PPI::Token::Label') ) {
+        return $self->_label_capitalization($elem);
+    }
+
     return;
 }
 
@@ -433,6 +450,14 @@ sub _package_capitalization {
     }
 
     return;
+}
+
+sub _label_capitalization {
+    my ($self, $elem, $name) = @_;
+
+    ( my $label = $elem->content() ) =~ s< \s* : \z ><>xms;
+
+    return $self->_check_capitalization($label, $label, 'label', $elem);
 }
 
 sub _check_capitalization {
@@ -573,7 +598,7 @@ Constants are in all-caps.
 You can specify capitalization rules for the following things:
 C<packages>, C<subroutines>, C<local_lexical_variables>,
 C<scoped_lexical_variables>, C<file_lexical_variables>,
-C<global_variables>, and C<constants>.
+C<global_variables>, C<constants>, C<labels>.
 
 C<constants> are things declared via L<constant|constant> or
 L<Readonly|Readonly>.
@@ -603,8 +628,8 @@ C<local_lexical_variables>.
 
 Each of the C<packages>, C<subroutines>, C<local_lexical_variables>,
 C<scoped_lexical_variables>, C<file_lexical_variables>,
-C<global_variables>, and C<constants> options can be specified as one
-of C<:single_case>, C<:all_lower>, C<:all_upper:>,
+C<global_variables>, C<constants>, and C<labels> options can be
+specified as one of C<:single_case>, C<:all_lower>, C<:all_upper:>,
 C<:starts_with_lower>, C<:starts_with_upper>, or C<:no_restriction> or
 a regular expression.  The C<:single_case> tag means a name can be all
 lower case or all upper case.  If a regular expression is specified,
@@ -613,15 +638,16 @@ it is surrounded by C<\A> and C<\z>.
 C<packages> defaults to C<:starts_with_upper>.  C<subroutines>,
 C<local_lexical_variables>, C<scoped_lexical_variables>,
 C<file_lexical_variables>, and C<global_variables> default to
-C<:all_lower>.  And C<constants> defaults to C<:all_upper>.
+C<:all_lower>.  And C<constants> and C<labels> defaults to
+C<:all_upper>.
 
 There are corresponding C<package_exemptions>,
 C<subroutine_exemptions>, C<local_lexical_variable_exemptions>,
 C<scoped_lexical_variable_exemptions>,
 C<file_lexical_variable_exemptions>, C<global_variable_exemptions>,
-and C<constant_exemptions> options that are lists of regular
-expressions to exempt from the corresponding capitalization rule.
-These values also end up being surrounded by C<\A> and C<\z>.
+C<constant_exemptions>, and C<label_exemptions> options that are lists
+of regular expressions to exempt from the corresponding capitalization
+rule.  These values also end up being surrounded by C<\A> and C<\z>.
 
 C<package_exemptions> defaults to C<main>.  C<global_variable_exemptions>
 defaults to
