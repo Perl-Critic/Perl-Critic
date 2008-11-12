@@ -592,13 +592,16 @@ Constants are in all-caps.
 
     Readonly::Scalar my $foo = 42;  # not ok
 
+There are other opinions on the specifics, for example, in L<perlstyle>.  This
+policy can be configured to match almost any style that you can think of.
+
 
 =head1 CONFIGURATION
 
 You can specify capitalization rules for the following things:
 C<packages>, C<subroutines>, C<local_lexical_variables>,
 C<scoped_lexical_variables>, C<file_lexical_variables>,
-C<global_variables>, C<constants>, C<labels>.
+C<global_variables>, C<constants>, and C<labels>.
 
 C<constants> are things declared via L<constant|constant> or
 L<Readonly|Readonly>.
@@ -638,7 +641,7 @@ it is surrounded by C<\A> and C<\z>.
 C<packages> defaults to C<:starts_with_upper>.  C<subroutines>,
 C<local_lexical_variables>, C<scoped_lexical_variables>,
 C<file_lexical_variables>, and C<global_variables> default to
-C<:all_lower>.  And C<constants> and C<labels> defaults to
+C<:all_lower>.  And C<constants> and C<labels> default to
 C<:all_upper>.
 
 There are corresponding C<package_exemptions>,
