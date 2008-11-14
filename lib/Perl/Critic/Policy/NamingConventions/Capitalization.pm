@@ -14,12 +14,11 @@ use warnings;
 use English qw< -no_match_vars >;
 use Readonly;
 
-use B::Keywords qw< >;
 use List::MoreUtils qw< any >;
 
 use Perl::Critic::Exception::AggregateConfiguration;
 use Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue;
-use Perl::Critic::Utils qw< :booleans :characters :severities >;
+use Perl::Critic::Utils qw< :booleans :characters :severities is_perl_global >;
 use Perl::Critic::Utils::PPI qw<
     is_in_subroutine
     get_constant_name_element_from_declaring_statement
@@ -363,7 +362,7 @@ sub _variable_capitalization {
             # Fully qualified names are exempt because we can't be responsible
             # for other people's sybols.
             next NAME if $name =~ m/$PACKAGE_REGEX/xms;
-            next NAME if any { $_ eq $name } @B::Keywords::Symbols;  ## no critic (ProhibitPackageVars)
+            next NAME if is_perl_global($name);
 
             push
                 @violations,
