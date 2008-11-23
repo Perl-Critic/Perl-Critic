@@ -1,3 +1,8 @@
+[1.xxx] Released on 2008-xx-xx
+
+    * InputOutput::RequireCheckedSyscalls now has an exclude_functions
+      parameter.
+
 [1.093_02] Released on 2008-10-30
 
     Being released right now simply so that I can put out a version of
@@ -21,11 +26,11 @@
 
         ## no critic Foo, Bar, Baz     # wrong!
         ## no critic Foo Bar Baz       # wrong!
-        
-              
+
+
         ## no critic (Foo, Bar, Baz)   # ok!
         ## no critic qw(Foo Bar Baz)   # also ok!
- 
+
     New Developer Features:
     * Perl::Critic::Policy::is_document_exempt() has been renamed to
       prepare_to_scan_document() and the sense of the return value has been
@@ -43,6 +48,7 @@
       the name of the subroutine, thanks to Andreas Koenig, RT #40070.
 
     New Policies:
+    * NamingConventions::Capitalization
     * Miscellanea::ProhibitUnrestrictedNoCritic
     * Miscellanea::ProhibitUselessNoCritic
     * Variables::ProhibitReusedNames
@@ -77,7 +83,7 @@
       perlcritic perldoc for more details.  Credit to Michael Schwern.
     * The output from "perlcritic -doc PATTERN" will be automatically
       sent to your pager if you have set the -pager option.
- 
+
     Policy Changes:
     * CodeLayout::ProhibitQuotedWordLists no longer applies if the list
       contains any non-words, by default.  A non-word is anything that does
@@ -95,15 +101,15 @@
     * TestingAndDebugging::ProhibitNoWarnings now supports a
       allow_with_category_restriction option, thanks to Michael Schwern.
       RT #38514.
-    * CodeLayout::ProhibitHardTabs now allows leading tabs in qw() word lists 
+    * CodeLayout::ProhibitHardTabs now allows leading tabs in qw() word lists
       and regexes with the /x modifier.  You can still configure this
       policy to forbid all hard tabs, if you like.  RT #32440
 
     Bug Fixes:
     * perlcritic should now work under PAR.  RT #38380.
     * URL for our repository in META.yml now works for anonymous
-      checkout.  The password is "" (empty).  RT #38628. 
-    * color for high-severity violations is now magenta because 
+      checkout.  The password is "" (empty).  RT #38628.
+    * color for high-severity violations is now magenta because
       it is more redable than yellow on white backgrounds.  RT #38511.
 
 [1.090] Released on 2008-07-22
@@ -117,7 +123,7 @@
     * -s is now a synonym for --single-policy.
 
     Policy Changes:
-    * Subroutines::ProhibitBuiltinHomonyms now also prohibits subroutines 
+    * Subroutines::ProhibitBuiltinHomonyms now also prohibits subroutines
       with the same name as a Perl keyword (e.g. if, foreach, while).
       Inspired by RT #37632.
     * Subroutines::ProtectPrivateSubs now allows expressions like
