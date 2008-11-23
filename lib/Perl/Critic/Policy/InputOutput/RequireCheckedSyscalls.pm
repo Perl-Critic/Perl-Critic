@@ -45,8 +45,16 @@ sub supported_parameters {
     return (
         {
             name            => 'functions',
-            description     => 'The set of functions to require checking the return value of.',
+            description     =>
+                'The set of functions to require checking the return value of.',
             default_string  => join( $SPACE, @DEFAULT_FUNCTIONS ),
+            behavior        => 'string list',
+        },
+        {
+            name            => 'exclude_functions',
+            description     =>
+                'The set of functions to not require checking the return value of.',
+            default_string  => $EMPTY,
             behavior        => 'string list',
         },
     );
@@ -76,7 +84,13 @@ sub initialize_if_enabled {
         }
     }
 
-    $self->{_functions} = { hashify(@resulting_functions) };
+    my %functions = hashify(@resulting_functions);
+
+    foreach my $function ( keys %{ $self->{_exclude_functions} } ) {
+        delete $functions{$function};
+    }
+
+    $self->{_functions} = \%functions;
 
     return $TRUE;
 }
@@ -86,10 +100,17 @@ sub initialize_if_enabled {
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    return if $self->{_functions}->{':all'} ? is_perl_bareword($elem) : !$self->{_functions}->{$elem};
-    return if ! is_unchecked_call( $elem );
+    if ( $self->{_functions}->{':all'} ) {
+        return if is_perl_bareword($elem);
+        return if $self->{_exclude_functions}->{ $elem->content() };
+    }
+    elsif ( not $self->{_functions}->{ $elem->content() } ) {
+        return;
+    }
 
-    return $self->violation( $DESC . ' - ' . $elem, $EXPL, $elem );
+    return if not is_unchecked_call( $elem );
+
+    return $self->violation( "$DESC - " . $elem->content(), $EXPL, $elem );
 }
 
 
@@ -119,9 +140,9 @@ This performs identically to InputOutput::RequireCheckedOpen/Close
 except that this is configurable to apply to any function, whether
 core or user-defined.
 
-If your module uses L<Fatal|Fatal> or C<Fatal::Exception>, then any
-functions wrapped by those modules will not trigger this policy.  For
-example:
+If your module uses L<Fatal|Fatal>,
+C<Fatal::Exception|Fatal::Exception>, or L<autodie> then any functions
+wrapped by those modules will not trigger this policy.  For example:
 
     use Fatal qw(open);
     open my $fh, $filename;  # no violation
@@ -130,8 +151,7 @@ example:
     use autodie;
     open $filehandle, $mode, $filename;   # no violation
 
-You can use L<autodie>, L<Fatal>, or L<Fatal::Exception> to get around
-this.  Currently, L<autodie> is not properly treated as a pragma; its
+Currently, L<autodie|autodie> is not properly treated as a pragma; its
 lexical effects aren't taken into account.
 
 
@@ -140,8 +160,8 @@ lexical effects aren't taken into account.
 This policy watches for a configurable list of function names.  By
 default, it applies to C<open>, C<print> and C<close>.  You can
 override this to set it to a different list of functions with the
-C<functions> setting.  To do this, put entries in a F<.perlcriticrc>
-file like this:
+C<functions> and C<exclude_functions> settings.  To do this, put
+entries in a F<.perlcriticrc> file like this:
 
     [InputOutput::RequireCheckedSyscalls]
     functions = open opendir read readline readdir close closedir
@@ -160,6 +180,15 @@ We have defined a few shortcuts for creating this list
 The C<:builtins> shortcut above represents all of the builtin
 functions that have error conditions (about 65 of them, many of them
 rather obscure).
+
+You can require checking all builtins except C<print> by combining
+the C<functions> and C<exclude_functions>:
+
+    [InputOutput::RequireCheckedSyscalls]
+    functions = :builtins
+    exclude_functions = print
+
+This is a lot easier to read than the alternative.
 
 The C<:all> is the insane case: you must check the return value of
 EVERY function call, even C<return> and C<exit>.  Yes, this "feature"

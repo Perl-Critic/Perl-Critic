@@ -299,7 +299,9 @@ use autodie;
     close $filehandle;
 }
 
-## name config
+#-----------------------------------------------------------------------------
+
+## name no config
 ## failures 0
 ## cut
 
@@ -307,7 +309,7 @@ accept NEWSOCK, SOCKET;
 
 #-----------------------------------------------------------------------------
 
-## name config
+## name config with single function
 ## parms {functions => 'accept'}
 ## failures 1
 ## cut
@@ -316,7 +318,7 @@ accept NEWSOCK, SOCKET;
 
 #-----------------------------------------------------------------------------
 
-## name config
+## name config with :builtins
 ## parms {functions => ':builtins'}
 ## failures 1
 ## cut
@@ -325,7 +327,25 @@ accept NEWSOCK, SOCKET;
 
 #-----------------------------------------------------------------------------
 
-## name insane config
+## name config with :builtins except print with failure
+## parms {functions => ':builtins', exclude_functions => 'print'}
+## failures 1
+## cut
+
+accept NEWSOCK, SOCKET;
+
+#-----------------------------------------------------------------------------
+
+## name config with :builtins except print with failure
+## parms {functions => ':builtins', exclude_functions => 'print'}
+## failures 0
+## cut
+
+print 'Foo!';
+
+#-----------------------------------------------------------------------------
+
+## name insane config with failures
 ## parms {functions => ':all'}
 ## failures 2
 ## cut
@@ -337,8 +357,7 @@ foo();
 
 #-----------------------------------------------------------------------------
 
-
-## name insane config
+## name insane config without failures
 ## parms {functions => ':all'}
 ## failures 0
 ## cut
@@ -347,6 +366,15 @@ sub foo {
   return 1 or die;
 }
 foo() or die;
+
+#-----------------------------------------------------------------------------
+
+## name insane config with excluded function
+## parms {functions => ':all', exclude_functions => 'foo'}
+## failures 0
+## cut
+
+foo();
 
 #-----------------------------------------------------------------------------
 
