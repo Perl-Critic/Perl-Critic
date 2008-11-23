@@ -7,8 +7,8 @@ use warnings;
 use English qw< -no_match_vars >;
 use Carp qw< confess >;
 
-use Carp qw<  confess >;
-use Fatal qw<  open close >;
+use Carp qw< confess >;
+use Fatal qw< open close >;
 
 our $VERSION = '1.093_02';
 
@@ -35,6 +35,7 @@ print {$test_file} <<"END_HEADER";
 END_HEADER
 
 emit_simple_tests($test_file);
+emit_primary_tests($test_file);
 emit_footer($test_file);
 
 close $test_file;
@@ -154,7 +155,101 @@ END_SIMPLE_TESTS
 }
 
 
+sub emit_primary_tests {
+    my ($test_file) = @_;
+
+    emit_all_tests_for_name_and_capitalization_scheme(
+        $test_file, 'all_lower_case', ':single_case', 0,
+    );
+    emit_all_tests_for_name_and_capitalization_scheme(
+        $test_file, 'ALL_UPPER_CASE', ':single_case', 0,
+    );
+    emit_all_tests_for_name_and_capitalization_scheme(
+        $test_file, 'MixedCase', ':single_case', 1,
+    );
+
+    return;
+}
+
+
+sub emit_all_tests_for_name_and_capitalization_scheme {
+    my ($test_file, $name, $capitalization_scheme, $failures) = @_;
+
+    emit_package_test($test_file, $name, $capitalization_scheme, $failures);
+    emit_subroutine_test(
+        $test_file, $name, $capitalization_scheme, $failures,
+    );
+    emit_local_lexical_variable_in_subroutine_test(
+        $test_file, $name, $capitalization_scheme, $failures,
+    );
+
+    return;
+}
+
+
+sub emit_package_test {
+    my ($test_file, $package_name, $capitalization_scheme, $failures) = @_;
+
+    print {$test_file} <<"END_PACKAGE_TEST";
+
+#-----------------------------------------------------------------------------
+
+## name Package named "$package_name" vs the "$capitalization_scheme" capitalization scheme.
+## failures $failures
+## parms { packages => '$capitalization_scheme' }
+## cut
+
+package $package_name;
+END_PACKAGE_TEST
+
+    return;
+}
+
+
+sub emit_subroutine_test {
+    my ($test_file, $subroutine_name, $capitalization_scheme, $failures) = @_;
+
+    print {$test_file} <<"END_SUBROUTINE_TEST";
+
+#-----------------------------------------------------------------------------
+
+## name Subroutine named "$subroutine_name" vs the "$capitalization_scheme" capitalization scheme.
+## failures $failures
+## parms { subroutines => '$capitalization_scheme' }
+## cut
+
+sub $subroutine_name {
+    # Blah blah blah
+}
+END_SUBROUTINE_TEST
+
+    return;
+}
+
+
+sub emit_local_lexical_variable_in_subroutine_test {
+    my ($test_file, $variable_name, $capitalization_scheme, $failures) = @_;
+
+    print {$test_file} <<"END_LOCAL_LEXICAL_VARIABLE_TEST";
+
+#-----------------------------------------------------------------------------
+
+## name Local lexical variable in subroutine named "$variable_name" vs the "$capitalization_scheme" capitalization scheme.
+## failures $failures
+## parms { subroutines => ':all_lower', local_lexical_variables => '$capitalization_scheme' }
+## cut
+
+sub some_subroutine {
+    my $variable_name;
+}
+END_LOCAL_LEXICAL_VARIABLE_TEST
+
+    return;
+}
+
+
 sub emit_footer {
+    my ($test_file) = @_;
 
     print {$test_file} <<'END_FOOTER';
 

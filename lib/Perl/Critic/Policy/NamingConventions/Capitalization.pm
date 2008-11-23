@@ -608,12 +608,13 @@ L<Readonly|Readonly>.
     use constant FOO => 193;
     Readonly::Array my @BAR => qw< a b c >;
 
-C<global_variables> are anything declared using C<local> or C<our>.
-C<file_lexical_variables> are variables declared at the file scope.
+C<global_variables> are anything declared using C<local>, C<our>, or
+L<vars|vars>.  C<file_lexical_variables> are variables declared at the
+file scope.
 
-C<scoped_lexical_variables> are variables declared inside bare blocks that
-are outside of any subroutines or other control structures; these are
-usually created to limit scope of variables to a given subset of
+C<scoped_lexical_variables> are variables declared inside bare blocks
+that are outside of any subroutines or other control structures; these
+are usually created to limit scope of variables to a given subset of
 subroutines.  E.g.
 
     sub foo { ... }
