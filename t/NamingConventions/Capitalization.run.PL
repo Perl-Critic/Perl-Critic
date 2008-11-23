@@ -165,7 +165,105 @@ sub emit_primary_tests {
         $test_file, 'ALL_UPPER_CASE', ':single_case', 0,
     );
     emit_all_tests_for_name_and_capitalization_scheme(
-        $test_file, 'MixedCase', ':single_case', 1,
+        $test_file, 'mixedCase', ':single_case', 1,
+    );
+    emit_all_tests_for_name_and_capitalization_scheme(
+        $test_file, 'a11_lower_case_with_digits', ':single_case', 0,
+    );
+    emit_all_tests_for_name_and_capitalization_scheme(
+        $test_file, 'A11_UPPER_CASE_WITH_DIGITS', ':single_case', 0,
+    );
+
+    emit_all_tests_for_name_and_capitalization_scheme(
+        $test_file, 'all_lower_case', ':all_lower', 0,
+    );
+    emit_all_tests_for_name_and_capitalization_scheme(
+        $test_file, 'ALL_UPPER_CASE', ':all_lower', 1,
+    );
+    emit_all_tests_for_name_and_capitalization_scheme(
+        $test_file, 'mixedCase', ':all_lower', 1,
+    );
+    emit_all_tests_for_name_and_capitalization_scheme(
+        $test_file, 'a11_lower_case_with_digits', ':all_lower', 0,
+    );
+    emit_all_tests_for_name_and_capitalization_scheme(
+        $test_file, 'A11_UPPER_CASE_WITH_DIGITS', ':all_lower', 1,
+    );
+
+    emit_all_tests_for_name_and_capitalization_scheme(
+        $test_file, 'all_lower_case', ':all_upper', 1,
+    );
+    emit_all_tests_for_name_and_capitalization_scheme(
+        $test_file, 'ALL_UPPER_CASE', ':all_upper', 0,
+    );
+    emit_all_tests_for_name_and_capitalization_scheme(
+        $test_file, 'mixedCase', ':all_upper', 1,
+    );
+    emit_all_tests_for_name_and_capitalization_scheme(
+        $test_file, 'a11_lower_case_with_digits', ':all_upper', 1,
+    );
+    emit_all_tests_for_name_and_capitalization_scheme(
+        $test_file, 'A11_UPPER_CASE_WITH_DIGITS', ':all_upper', 0,
+    );
+
+    emit_all_tests_for_name_and_capitalization_scheme(
+        $test_file, 'all_lower_case', ':starts_with_lower', 0,
+    );
+    emit_all_tests_for_name_and_capitalization_scheme(
+        $test_file, 'ALL_UPPER_CASE', ':starts_with_lower', 1,
+    );
+    emit_all_tests_for_name_and_capitalization_scheme(
+        $test_file,
+        '________all_lower_case_with_leading_underscores',
+        ':starts_with_lower',
+        0,
+    );
+    emit_all_tests_for_name_and_capitalization_scheme(
+        $test_file, 'a11_lower_case_with_digits', ':starts_with_lower', 0,
+    );
+    emit_all_tests_for_name_and_capitalization_scheme(
+        $test_file, 'A11_UPPER_CASE_WITH_DIGITS', ':starts_with_lower', 1,
+    );
+
+    emit_all_tests_for_name_and_capitalization_scheme(
+        $test_file, 'all_lower_case', ':starts_with_upper', 1,
+    );
+    emit_all_tests_for_name_and_capitalization_scheme(
+        $test_file, 'ALL_UPPER_CASE', ':starts_with_upper', 0,
+    );
+    emit_all_tests_for_name_and_capitalization_scheme(
+        $test_file,
+        '________ALL_UPPER_CASE_WITH_LEADING_UNDERSCORES',
+        ':starts_with_upper',
+        0,
+    );
+    emit_all_tests_for_name_and_capitalization_scheme(
+        $test_file, 'a11_lower_case_with_digits', ':starts_with_upper', 1,
+    );
+    emit_all_tests_for_name_and_capitalization_scheme(
+        $test_file, 'A11_UPPER_CASE_WITH_DIGITS', ':starts_with_upper', 0,
+    );
+
+    emit_all_tests_for_name_and_capitalization_scheme(
+        $test_file, 'all_lower_case', ':no_restriction', 0,
+    );
+    emit_all_tests_for_name_and_capitalization_scheme(
+        $test_file, 'ALL_UPPER_CASE', ':no_restriction', 0,
+    );
+    emit_all_tests_for_name_and_capitalization_scheme(
+        $test_file, 'mixedCase', ':no_restriction', 0,
+    );
+    emit_all_tests_for_name_and_capitalization_scheme(
+        $test_file,
+        '________ALL_UPPER_CASE_WITH_LEADING_UNDERSCORES',
+        ':no_restriction',
+        0,
+    );
+    emit_all_tests_for_name_and_capitalization_scheme(
+        $test_file, 'a11_lower_case_with_digits', ':no_restriction', 0,
+    );
+    emit_all_tests_for_name_and_capitalization_scheme(
+        $test_file, 'A11_UPPER_CASE_WITH_DIGITS', ':no_restriction', 0,
     );
 
     return;
@@ -240,7 +338,7 @@ sub emit_local_lexical_variable_in_subroutine_test {
 ## cut
 
 sub some_subroutine {
-    my $variable_name;
+    my \$$variable_name;
 }
 END_LOCAL_LEXICAL_VARIABLE_TEST
 
