@@ -63,13 +63,18 @@ distribution.
 
 Conway recommends employing C<use base qw(Foo)> instead of the usual
 C<our @ISA = qw(Foo)> because the former happens at compile time and
-the latter at runtime.  The C<base> pragma also automatically loads
+the latter at runtime.  The L<base> pragma also automatically loads
 C<Foo> for you so you save a line of easily-forgotten code.
 
 
 =head1 CONFIGURATION
 
 This Policy is not configurable except for the standard options.
+
+
+=head1 NOTE
+
+Some people prefer L<parent> over L<base>.
 
 
 =head1 AUTHOR
