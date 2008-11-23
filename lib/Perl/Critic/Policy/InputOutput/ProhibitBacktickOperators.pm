@@ -84,15 +84,15 @@ find that they make a lot of noise by filling up STDERR with messages
 when they fail.  I think its better to use IPC::Open3 to trap all the
 output and let the application decide what to do with it.
 
-  use IPC::Open3 'open3';
-  $SIG{CHLD} = 'IGNORE';
+    use IPC::Open3 'open3';
+    $SIG{CHLD} = 'IGNORE';
 
-  @output = `some_command`;                      #not ok
+    @output = `some_command`;                      #not ok
 
-  my ($writer, $reader, $err);
-  open3($writer, $reader, $err, 'some_command'); #ok;
-  @output = <$reader>;  #Output here
-  @errors = <$err>;     #Errors here, instead of the console
+    my ($writer, $reader, $err);
+    open3($writer, $reader, $err, 'some_command'); #ok;
+    @output = <$reader>;  #Output here
+    @errors = <$err>;     #Errors here, instead of the console
 
 
 =head1 CONFIGURATION
@@ -101,17 +101,17 @@ Alternatively, if you do want to use backticks, you can restrict
 checks to void contexts by adding the following to your
 F<.perlcriticrc> file:
 
-  [InputOutput::ProhibitBacktickOperators]
-  only_in_void_context = 1
+    [InputOutput::ProhibitBacktickOperators]
+    only_in_void_context = 1
 
 The purpose of backticks is to capture the output of an external
 command.  Use of them in a void context is likely a bug.  If the
 output isn't actually required, C<system()> should be used.  Otherwise
 assign the result to a variable.
 
-  `some_command`;                      #not ok
-  $output = `some_command`;            #ok
-  @output = `some_command`;            #ok
+    `some_command`;                      #not ok
+    $output = `some_command`;            #ok
+    @output = `some_command`;            #ok
 
 
 =head1 NOTES
@@ -121,6 +121,11 @@ C<qx{}>.
 
 See L<perlipc|perlipc> for more discussion on using C<wait()> instead
 of C<$SIG{CHLD} = 'IGNORE'>.
+
+You might consider using the C<capture()> function from the
+L<IPC::System::Simple|IPC::System::Simple> module for a safer way of
+doing what backticks do, especially on Windows.  The module also has a
+safe wrapper around C<system()>.
 
 
 =head1 AUTHOR
