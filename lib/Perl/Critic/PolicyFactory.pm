@@ -229,7 +229,8 @@ sub create_all_policies {
 #-----------------------------------------------------------------------------
 
 sub site_policy_names {
-    return sort @site_policy_names;
+    my @sorted_policy_names = sort @site_policy_names;
+    return @sorted_policy_names;
 }
 
 #-----------------------------------------------------------------------------

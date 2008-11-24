@@ -1,8 +1,19 @@
 [1.xxx] Released on 2008-xx-xx
 
+    Policy Changes:
     * InputOutput::RequireCheckedSyscalls now has an exclude_functions
       parameter.
 
+    New Policies:
+    * Miscellanea::ProhibitUselessNoCritic
+    * Subroutines::ProhibitReturnSort
+    
+    Miscellanea:
+    Perl::Critic::Violation will automatically strip trailing periods 
+    from your Policy description and explanation strings.  This
+    ensures that the punctuation is consistent with the format
+    specified by the user via the -verbose formatting options.
+    
 [1.093_02] Released on 2008-10-30
 
     Being released right now simply so that I can put out a version of
@@ -50,7 +61,6 @@
     New Policies:
     * NamingConventions::Capitalization
     * Miscellanea::ProhibitUnrestrictedNoCritic
-    * Miscellanea::ProhibitUselessNoCritic
     * Variables::ProhibitReusedNames
 
 [1.093_01] Released on 2008-09-07

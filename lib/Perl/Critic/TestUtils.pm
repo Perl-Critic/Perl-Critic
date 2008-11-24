@@ -289,7 +289,8 @@ sub bundled_policy_names {
     my $manifest = ExtUtils::Manifest::maniread();
     my @policy_paths = map {m{\A lib/(Perl/Critic/Policy/.*).pm \z}xms} keys %{$manifest};
     my @policies = map { join q{::}, split m{/}xms, $_} @policy_paths;
-    return sort @policies;
+    my @sorted_policies = sort @policies;
+    return @sorted_policies;
 }
 
 sub names_of_policies_willing_to_work {

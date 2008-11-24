@@ -343,8 +343,9 @@ sub set_themes {
 
 sub get_themes {
     my ($self) = @_;
-    return sort @{ $self->{_themes} } if defined $self->{_themes};
-    return sort $self->default_themes();
+    my @themes = defined $self->{_themes} ? @{ $self->{_themes} } : $self->default_themes();
+    my @sorted_themes = sort @themes;
+    return @sorted_themes;
 }
 
 #-----------------------------------------------------------------------------

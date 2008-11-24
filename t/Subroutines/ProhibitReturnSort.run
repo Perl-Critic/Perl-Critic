@@ -1,0 +1,55 @@
+## name simple failure
+## failures 6
+## cut
+
+sub test_sub1 {
+	return sort @list;
+	return sort(@list);
+}
+
+sub test_sub2 {
+    return sort { $a <=> $b } @list;
+    return sort({ $a <=> $b } @list);
+}
+
+sub test_sub3 {
+    return sort @list  if $bar;
+    return sort(@list) if $bar;
+}
+
+#-----------------------------------------------------------------------------
+## name simple success
+## failures 0
+## cut
+
+sub test_sub1 {
+	@sorted = sort @list;
+	return @sorted;
+}
+
+sub test_sub2 {
+	return wantarray ? sort @list : $foo;
+}
+
+sub test_sub3 {
+	return map {func($_)} sort @list;
+}
+
+#-----------------------------------------------------------------------------
+## name when used in conjunction with wantarray()
+## TODO False positive: used when when wantarray() has been consulted.
+## failures 0
+## cut
+
+sub test_sub1 {
+    if (wantarray) {
+        return sort @list;
+    }
+}
+
+#-----------------------------------------------------------------------------
+## name "sort" used in other contexts...
+## failures 0
+## cut
+$foo{sort}; # hash key, not keyword
+sub foo {return}; # no sibling
