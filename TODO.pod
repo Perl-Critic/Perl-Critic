@@ -441,6 +441,18 @@ See https://rt.cpan.org/Ticket/Display.html?id=38074.
 
 =over
 
+=item * Refactor guts of F<perlcritic> into L<Perl::Critic::CLI>
+
+So the F<perlcritic> script would basically just say...
+
+  use Perl::Critic::CLI;
+  exit Perl::Critic::CLI->run(@ARGV);
+
+This would make the stuff that is currently inside F<perlcritic>
+easier to test.  Also would open the door for developers to
+subclass and extend F<perlcritic>, if they had some reason
+to do so.  Also, just cuz it feels like the right thing todo.
+
 =item * Create constants for the PPI location array elements.
 
 =item * Some means of detecting "runnaway" C<##no critic>
