@@ -122,7 +122,7 @@ __END__
 
 =pod
 
-=for stopwords nyah
+=for stopwords nyah autodie builtins
 
 =head1 NAME
 
