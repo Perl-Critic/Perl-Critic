@@ -83,10 +83,29 @@ time that an unrestricted C<## no critic> annotation appears.
   ## no critic ()                  # not ok
   ## no critic qw()                # not ok
 
-  ## no critic    Policy1, Policy2   # ok
-  ## no critic   'Policy1, Policy2'  # ok
   ## no critic   (Policy1, Policy2)  # ok
-  ## no critic qw(Policy1, Policy2)  # ok (the preferred style)
+  ## no critic   (Policy1 Policy2)   # ok (can use spaces to separate)
+  ## no critic qw(Policy1 Policy2)   # ok (the preferred style)
+
+=head1 NOTE
+
+Unfortunately, L<Perl::Critic|Perl::Critic> is very sloppy about
+parsing the Policy names that appear after a C<##no critic> 
+annotation.  For example, you might be using one of these 
+broken syntaxes...
+
+  ## no critic Policy1 Policy2
+  ## no critic 'Policy1, Policy2'
+  ## no critic "Policy1, Policy2"
+  ## no critic "Policy1", "Policy2"
+  
+In all of these cases, Perl::Critic will silently disable B<all> Policies,
+rather than just the ones you requested.  But if you use the 
+C<ProhibitUnrestrictedNoCritic> Policy, all of these will generate 
+violations.  That way, you can track them down and correct them to use 
+the correct syntax, as shown above in the L<"DESCRIPTION">.  If you've 
+been using the syntax that is shown througout the Perl::Critic
+documentation for the last few years, then you should be fine.
 
 =head1 CONFIGURATION
 
