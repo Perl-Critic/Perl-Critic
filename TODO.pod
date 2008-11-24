@@ -114,22 +114,6 @@ sharing model, this shouldn't be an issue.
 =item * Add support in .run files for regexes for violation descriptions.
 
 
-=item * Add an "inverse mode": complain about "## no critic" that doesn't eliminate any violations.
-
-L<Alias on P::C|http://use.perl.org/article.pl?sid=08/09/24/1957256>.
-
-I<For example, Perl::Critic helps both helps educate developers and reduce the
-time cost of bugs and weird uses of Perl, but at the expense of having to
-maintain nocritic entries permanently, which themselves have education and
-time costs.>
-
-I<And the goal of the Perl Critic team is that the education and time cost of
-using Perl::Critic is significantly less than the education and time costs of
-NOT using Perl::Critic.>
-
-In order to allow people to get rid of "## no critic" markers, create a mode
-that tells them which markers don't actually hide any violations.
-
 =back
 
 
