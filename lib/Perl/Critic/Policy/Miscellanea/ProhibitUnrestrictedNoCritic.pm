@@ -58,6 +58,8 @@ __END__
 
 =pod
 
+=for stopwords syntaxes
+
 =head1 NAME
 
 Perl::Critic::Policy::Miscellanea::ProhibitUnrestrictedNoCritic - Forbid a bare C<## no critic>
@@ -104,7 +106,7 @@ rather than just the ones you requested.  But if you use the
 C<ProhibitUnrestrictedNoCritic> Policy, all of these will generate 
 violations.  That way, you can track them down and correct them to use 
 the correct syntax, as shown above in the L<"DESCRIPTION">.  If you've 
-been using the syntax that is shown througout the Perl::Critic
+been using the syntax that is shown throughout the Perl::Critic
 documentation for the last few years, then you should be fine.
 
 =head1 CONFIGURATION
