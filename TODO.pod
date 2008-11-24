@@ -130,13 +130,6 @@ NOT using Perl::Critic.>
 In order to allow people to get rid of "## no critic" markers, create a mode
 that tells them which markers don't actually hide any violations.
 
-
-=item * Get end of violation description and explanation punctuation consistent.
-
-Elliot wants messages to read nicely.  So, ensure that there's a period at the
-end if the policy author hasn't provided a terminal punctuation mark.
-
-
 =back
 
 
