@@ -168,7 +168,8 @@ sub find_any {
 
 sub filename {
     my ($self) = @_;
-    return $self->{_doc}->can('filename') ? $self->{_doc}->filename : undef;
+    my $doc = $self->{_doc};
+    return $doc->can('filename') ? $doc->filename() : undef;
 }
 
 #-----------------------------------------------------------------------------
