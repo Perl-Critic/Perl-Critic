@@ -454,8 +454,8 @@ sub _package_capitalization {
 sub _label_capitalization {
     my ($self, $elem, $name) = @_;
 
+    return if _is_not_real_label($elem);
     ( my $label = $elem->content() ) =~ s< \s* : \z ><>xms;
-
     return $self->_check_capitalization($label, $label, 'label', $elem);
 }
 
@@ -539,6 +539,27 @@ sub _local_variable {
     # Lets say no for know... additional work
     # should go here.
     return $EMPTY;
+}
+
+sub _is_not_real_label {
+    
+    my $elem = shift;
+
+    # PPI misparses part of a ternary expression as a label
+    # when the token to the left of the ":" is a bareword.
+    # See http://rt.cpan.org/Ticket/Display.html?id=41170
+    # For example...
+    #
+    # $foo = $condition ? undef : 1;
+    #
+    # PPI thinks that "undef" is a label.  To workaround this,
+    # I'm going to check that whatever PPI thinks is the label,
+    # actually is the first token in the statement.  I believe 
+    # this should be true for all real labels.
+    
+    my $stmnt = $elem->statement() || return;
+    my $first_child = $stmnt->schild(0) || return;
+    return $first_child ne $elem;
 }
 
 1;

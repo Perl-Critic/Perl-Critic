@@ -149,6 +149,16 @@ Readonly::Scalar my $Foo = 23;
 Readonly::Scalar my $foo = 23;
 Readonly::Scalar my $fooBAR = 23;
 my $CONSTANT = 23;
+
+#-----------------------------------------------------------------------------
+
+## name PPI misparses part of ternary as a label (RT #41170)
+## failures 0
+## cut
+
+my $foo = $condition ? $objection->method : $alternative;
+my $foo = $condition ? undef : 1;
+
 END_SIMPLE_TESTS
 
     return;
