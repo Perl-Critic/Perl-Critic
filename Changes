@@ -7,13 +7,13 @@
     New Policies:
     * Miscellanea::ProhibitUselessNoCritic
     * Subroutines::ProhibitReturnSort
-    
+
     Miscellanea:
-    Perl::Critic::Violation will automatically strip trailing periods 
-    from your Policy description and explanation strings.  This
-    ensures that the punctuation is consistent with the format
-    specified by the user via the -verbose formatting options.
-    
+    * Perl::Critic::Violation will automatically strip trailing periods
+      from your Policy description and explanation strings.  This ensures that
+      the punctuation is consistent with the format specified by the user via
+      the -verbose formatting options.
+
 [1.093_02] Released on 2008-10-30
 
     Being released right now simply so that I can put out a version of
@@ -24,16 +24,15 @@
       Perl::Critic::Violation no longer exist.  Use the corresponding
       get_format() and set_format() functions instead.
     * Also, the way that "## no critic" markers was refactored.  As
-      a result, we discovered that the syntax for the markers was
-      pretty vague.  If you didn't do it just right, it would
-      disable all policies, and not just the specific ones that
-      you wanted.  So we've tightened this up a bit.  If you
-      followed the examples that have been in the docs for the
-      last couple years, then you should be fine.  But if you've
-      been using certain other variations in your "## no critic"
-      markers, then you might suddenly find yourself violating
-      the new ProhibtUnrestrictedNoCritic policy.  To fix this,
-      just make sure your Policy names appear in parentheses:
+      a result, we discovered that the syntax for the markers was pretty
+      vague.  If you didn't do it just right, it would disable all policies,
+      and not just the specific ones that you wanted.  So we've tightened this
+      up a bit.  If you followed the examples that have been in the docs for
+      the last couple years, then you should be fine.  But if you've been
+      using certain other variations in your "## no critic" markers, then you
+      might suddenly find yourself violating the new
+      ProhibtUnrestrictedNoCritic policy.  To fix this, just make sure your
+      Policy names appear in parentheses:
 
         ## no critic Foo, Bar, Baz     # wrong!
         ## no critic Foo Bar Baz       # wrong!
