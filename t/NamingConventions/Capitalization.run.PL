@@ -290,6 +290,19 @@ sub emit_all_tests_for_name_and_capitalization_scheme {
     emit_local_lexical_variable_in_subroutine_test(
         $test_file, $name, $capitalization_scheme, $failures,
     );
+    emit_local_lexical_variable_in_scheduled_subroutine_test(
+        $test_file, $name, $capitalization_scheme, $failures,
+    );
+    emit_local_lexical_variable_as_foreach_loop_variable_test(
+        $test_file, $name, $capitalization_scheme, $failures,
+    );
+    emit_local_lexical_variable_as_c_style_for_loop_variable_test(
+        $test_file, $name, $capitalization_scheme, $failures,
+    );
+    emit_local_lexical_variable_in_io_assignment_in_while_loop_test(
+        $test_file, $name, $capitalization_scheme, $failures,
+    );
+    emit_label_test($test_file, $name, $capitalization_scheme, $failures);
 
     return;
 }
@@ -351,6 +364,118 @@ sub some_subroutine {
     my \$$variable_name;
 }
 END_LOCAL_LEXICAL_VARIABLE_TEST
+
+    return;
+}
+
+
+sub emit_local_lexical_variable_in_scheduled_subroutine_test {
+    my ($test_file, $variable_name, $capitalization_scheme, $failures) = @_;
+
+    print {$test_file} <<"END_LOCAL_LEXICAL_VARIABLE_TEST";
+
+#-----------------------------------------------------------------------------
+
+## name Local lexical variable in subroutine named "$variable_name" vs the "$capitalization_scheme" capitalization scheme.
+## failures $failures
+## parms { local_lexical_variables => '$capitalization_scheme' }
+## cut
+
+CHECK {
+    my \$$variable_name;
+}
+END_LOCAL_LEXICAL_VARIABLE_TEST
+
+    return;
+}
+
+
+sub emit_local_lexical_variable_as_foreach_loop_variable_test {
+    my ($test_file, $variable_name, $capitalization_scheme, $failures) = @_;
+
+    print {$test_file} <<"END_LOCAL_LEXICAL_VARIABLE_TEST";
+
+#-----------------------------------------------------------------------------
+
+## name Local lexical variable as foreach loop variable named "$variable_name" vs the "$capitalization_scheme" capitalization scheme.
+## failures $failures
+## parms { subroutines => ':all_lower', local_lexical_variables => '$capitalization_scheme' }
+## cut
+
+sub some_subroutine {
+    foreach my \$$variable_name (@_) {
+        say \$$variable_name;
+    }
+}
+END_LOCAL_LEXICAL_VARIABLE_TEST
+
+    return;
+}
+
+
+sub emit_local_lexical_variable_as_c_style_for_loop_variable_test {
+    my ($test_file, $variable_name, $capitalization_scheme, $failures) = @_;
+
+    print {$test_file} <<"END_LOCAL_LEXICAL_VARIABLE_TEST";
+
+#-----------------------------------------------------------------------------
+
+## name Local lexical variable as C-style for loop variable named "$variable_name" vs the "$capitalization_scheme" capitalization scheme.
+## failures $failures
+## parms { subroutines => ':all_lower', local_lexical_variables => '$capitalization_scheme' }
+## cut
+
+sub some_subroutine {
+    for (my \$$variable_name = -7; \$$variable_name <= 17; \$$variable_name += 3) {
+        say \$$variable_name;
+    }
+}
+END_LOCAL_LEXICAL_VARIABLE_TEST
+
+    return;
+}
+
+
+sub emit_local_lexical_variable_in_io_assignment_in_while_loop_test {
+    my ($test_file, $variable_name, $capitalization_scheme, $failures) = @_;
+
+    print {$test_file} <<"END_LOCAL_LEXICAL_VARIABLE_TEST";
+
+#-----------------------------------------------------------------------------
+
+## name Local lexical variable, in I/O assignment in while loop, named "$variable_name" vs the "$capitalization_scheme" capitalization scheme.
+## failures $failures
+## parms { subroutines => ':all_lower', local_lexical_variables => '$capitalization_scheme' }
+## cut
+
+sub some_subroutine {
+    while (my \$$variable_name = <>) {
+        say \$$variable_name;
+    }
+}
+END_LOCAL_LEXICAL_VARIABLE_TEST
+
+    return;
+}
+
+
+sub emit_label_test {
+    my ($test_file, $label_name, $capitalization_scheme, $failures) = @_;
+
+    print {$test_file} <<"END_LABEL_TEST";
+
+#-----------------------------------------------------------------------------
+
+## name Label named "$label_name" vs the "$capitalization_scheme" capitalization scheme.
+## failures $failures
+## parms { labels => '$capitalization_scheme' }
+## cut
+
+$label_name:
+while ( foo() ) {
+    next $label_name;
+}
+END_LABEL_TEST
 
     return;
 }
