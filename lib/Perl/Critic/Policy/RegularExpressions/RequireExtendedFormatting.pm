@@ -146,7 +146,7 @@ This option defaults to false.
 =head1 NOTES
 
 For common regular expressions like e-mail addresses, phone numbers,
-dates, etc., have a look at the L<Regex::Common|Regex::Common> module.
+dates, etc., have a look at the L<Regexp::Common|Regexp::Common> module.
 Also, be cautions about slapping modifier flags onto existing regular
 expressions, as they can drastically alter their meaning.  See
 L<http://www.perlmonks.org/?node_id=484238> for an interesting
