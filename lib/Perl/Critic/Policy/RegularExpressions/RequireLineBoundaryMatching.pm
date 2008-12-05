@@ -66,8 +66,8 @@ distribution.
 =head1 DESCRIPTION
 
 Folks coming from a C<sed> or C<awk> background tend to assume that
-C<'$'> and C<'^'> match the beginning and and of the line, rather than
-then beginning and ed of the string.  Adding the '/m' flag to your
+C<'$'> and C<'^'> match the beginning and end of the line, rather than
+then beginning and end of the string.  Adding the '/m' flag to your
 regex makes it behave as most people expect it should.
 
     my $match = m{ ^ $pattern $ }x;  #not ok
