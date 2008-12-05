@@ -10,12 +10,10 @@ Perl::Critic::TODO - Things for Perl::Critic developers to do
 
 =head1 SOURCE
 
-    #######################################################################
-    #      $URL$
-    #     $Date$
-    #   $Author$
-    # $Revision$
-    #######################################################################
+         $URL$
+        $Date$
+      $Author$
+    $Revision$
 
 
 =head1 SEE ALSO
@@ -39,7 +37,7 @@ C<--single-policy>.
     gvim `perlcritic --single-policy QuotedWordLists -l`
 
 
-=item * Add a file Behavior.
+=item * Add a file Parameter::Behavior.
 
 
 =item * Allow values of (at least) string-list Parameters to be specified in a file.
@@ -112,6 +110,38 @@ sharing model, this shouldn't be an issue.
 
 
 =item * Add support in .run files for regexes for violation descriptions.
+
+=item * Add support for "## use critic (blah)".
+
+If I've got:
+
+    ## no critic (SomePolicy)
+
+    ...
+
+    ## no critic (ADifferentPolicy)
+
+    ...
+
+    ## no critic (YetAnotherPolicy)
+
+If I want to turn C<YetAnotherPolicy> back on but neither C<SomePolicy> nor
+C<ADifferentPolicy>, I've got to do this:
+
+    ## use critic
+    ## no critic (SomePolicy, ADifferentPolicy)
+
+Why can't I do this:
+
+    ## use critic (SomeOtherPolicy)
+
+
+=item * Make color work on Windows.
+
+Use L<Win32::Console::ANSI> like L<App::Ack>.
+
+
+=item * Make colors configurable.
 
 
 =back
@@ -398,11 +428,13 @@ constant.
 
 http://www.perlfoundation.org/perl5/index.cgi?the_utf8_perlio_layer
 
+
 =item * BuiltinFunctions::ProhibitExit(?:InModules)?
 
 Forbid C<exit()> in files that lack a shebang.  Inspired by
 L<http://use.perl.org/~Ovid/journal/36746> and an analgous checker in
 FindBugs.
+
 
 =item * Modules::ProhibitRedundantLoading
 
@@ -410,6 +442,17 @@ Don't allow a package to "use" the same module more than once, unless
 there is a "no <module>" between them.
 
 See https://rt.cpan.org/Ticket/Display.html?id=38074.
+
+
+=item * ErrorHandling::RequireLocalizingEVAL_ERRORInDESTROY
+
+The opposite side of ErrorHandling::RequireCheckingReturnValueOfEval.
+
+
+=item * Documentation::RequirePODLinksIncludeText
+
+The whole problem with "on the Foo manpage" being fixed by LE<lt>Foo|FooE<gt>.
+
 
 =back
 
