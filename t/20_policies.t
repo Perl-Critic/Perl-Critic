@@ -11,24 +11,24 @@ use 5.006001;
 use strict;
 use warnings;
 
-use English qw(-no_match_vars);
-use Carp qw< confess >;
-
-use Perl::Critic::Utils qw( :characters );
-use Perl::Critic::TestUtils qw(
-    pcritique_with_violations
-    fcritique_with_violations
-    subtests_in_tree
-);
-use Perl::Critic::Violation qw<>;
-
-use Test::More;
-
 #-----------------------------------------------------------------------------
 
 our $VERSION = '1.093_02';
 
 #-----------------------------------------------------------------------------
+
+use English qw< -no_match_vars >;
+use Carp qw< confess >;
+
+use Perl::Critic::Utils qw< :characters >;
+use Perl::Critic::TestUtils qw<
+    pcritique_with_violations
+    fcritique_with_violations
+    subtests_in_tree
+>;
+use Perl::Critic::Violation qw<>;
+
+use Test::More;
 
 Perl::Critic::TestUtils::block_perlcriticrc();
 
