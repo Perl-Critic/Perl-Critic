@@ -144,6 +144,91 @@ Use L<Win32::Console::ANSI> like L<App::Ack>.
 =item * Make colors configurable.
 
 
+=item * A function that splits up a PPI::Node's decendants based upon package.
+
+This is necessary to get P::C::Moose Policies correct.
+
+Say we've got the following code:
+
+    #!perl
+
+    my $x = blah();
+
+    package Foo;
+
+    my $y = blah_blah();
+
+    {
+        say 'Whee!';
+
+        package Bar;
+
+        something();
+    }
+
+    thingy();
+
+    package Baz;
+
+    da_da_da();
+
+    package Foo;
+
+    foreach ( blrfl() ) {
+        ...
+    }
+
+Calling the function on a PPI::Document for the above should return a hash of
+arrays of PPI::Nodes.  The result should look something like this, using
+multi-line string literals (RestrictLongStrings violations!) for the actual
+code parts instead of PPI trees to make this easier to read.
+
+    (
+        main    => [
+            q<
+                #!perl
+
+                my $x = blah();
+            >,
+        ],
+        Foo     => [
+            q<
+                package Foo;
+
+                my $y = blah_blah();
+
+                {
+                    say 'Whee!';
+
+                }
+
+                thingy();
+            >,
+            q<
+                package Foo;
+
+                foreach ( blrfl() ) {
+                    ...
+                }
+            >,
+        ],
+        Bar     => [
+            q<
+                package Bar;
+
+                something();
+            >,
+        ],
+        Baz     => [
+            q<
+                package Baz;
+
+                da_da_da();
+            >,
+        ],
+    )
+
+
 =back
 
 
