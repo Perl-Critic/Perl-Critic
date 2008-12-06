@@ -93,23 +93,35 @@ for my $policy ( sort keys %{$subtests} ) {
 sub run_subtest {
     my ($policy, $subtest) = @_;
 
-    my @violations = $subtest->{filename}
-        ? eval {
-            fcritique_with_violations(
-                $policy,
-                \$subtest->{code},
-                $subtest->{filename},
-                $subtest->{parms},
-            )
-        }
-        : eval {
-            pcritique_with_violations(
-                $policy,
-                \$subtest->{code},
-                $subtest->{parms},
-            )
+    my @violations;
+    my $error;
+    if ( $subtest->{filename} ) {
+        eval {
+            @violations =
+                fcritique_with_violations(
+                    $policy,
+                    \$subtest->{code},
+                    $subtest->{filename},
+                    $subtest->{parms},
+                );
+            1;
+        } or do {
+            $error = $EVAL_ERROR || 'An unknown problem occurred.';
         };
-    my $error = $EVAL_ERROR;
+    }
+    else {
+        eval {
+            @violations =
+                pcritique_with_violations(
+                    $policy,
+                    \$subtest->{code},
+                    $subtest->{parms},
+                );
+            1;
+        } or do {
+            $error = $EVAL_ERROR || 'An unknown problem occurred.';
+        };
+    }
 
     return $error, @violations;
 }
@@ -144,11 +156,11 @@ sub evaluate_test_results {
         if ($subtest->{optional_modules}) {
             MODULE:
             for my $module (split m/,\s*/xms, $subtest->{optional_modules}) {
-                eval "require $module"; ## no critic (ProhibitStringyEval)
-                if ($EVAL_ERROR) {
-                    $expected_failures = 0;
-                    last MODULE;
-                }
+                eval "require $module; 1;" ## no critic (ProhibitStringyEval)
+                    or do {
+                        $expected_failures = 0;
+                        last MODULE;
+                    };
             }
         }
 
