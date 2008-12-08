@@ -342,6 +342,12 @@ sub violates {
         return $self->_package_capitalization($elem);
     }
 
+    if (
+        $elem->isa('PPI::Statement::Compound') and $elem->type() eq 'foreach'
+    ) {
+        return $self->_foreach_variable_capitalization($elem);
+    }
+
     if ( $elem->isa('PPI::Token::Label') ) {
         return $self->_label_capitalization($elem);
     }
@@ -449,6 +455,43 @@ sub _package_capitalization {
     }
 
     return;
+}
+
+sub _foreach_variable_capitalization {
+    my ($self, $elem) = @_;
+
+    my $type;
+    my $symbol;
+    my $second_element = $elem->schild(1);
+    return if not $second_element;
+
+    if ($second_element->isa('PPI::Token::Word')) {
+        $type = $second_element->content();
+        $symbol = $second_element->snext_sibling();
+    } else {
+        $type = 'my';
+        $symbol = $second_element;
+    }
+
+    return if not $symbol;
+    return if not $symbol->isa('PPI::Token::Symbol');
+
+    my $name = $symbol->symbol();
+
+    if ($type eq 'local') {
+        # Fully qualified names are exempt because we can't be responsible
+        # for other people's sybols.
+        return if $name =~ m/$PACKAGE_REGEX/xms;
+        return if is_perl_global($name);
+
+        return $self->_check_capitalization($name, $name, 'global_variable', $elem);
+    }
+    elsif ($type eq 'our') {
+        return $self->_check_capitalization($name, $name, 'global_variable', $elem);
+    }
+
+    # Got my or state: treat as local lexical variable
+    return $self->_check_capitalization($name, $name, 'local_lexical_variable', $elem);
 }
 
 sub _label_capitalization {

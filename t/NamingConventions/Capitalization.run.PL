@@ -300,7 +300,7 @@ sub emit_all_tests_for_name_and_capitalization_scheme {
     emit_local_lexical_variable_in_scheduled_subroutine_test(
         $test_file, $name, $capitalization_scheme, $failures,
     );
-    emit_local_lexical_variable_as_foreach_loop_variable_test(
+    emit_foreach_loop_variable_tests(
         $test_file, $name, $capitalization_scheme, $failures,
     );
     emit_local_lexical_variable_as_c_style_for_loop_variable_test(
@@ -397,24 +397,82 @@ END_LOCAL_LEXICAL_VARIABLE_TEST
 }
 
 
-sub emit_local_lexical_variable_as_foreach_loop_variable_test {
+sub emit_foreach_loop_variable_tests {
     my ($test_file, $variable_name, $capitalization_scheme, $failures) = @_;
 
-    print {$test_file} <<"END_LOCAL_LEXICAL_VARIABLE_TEST";
+    print {$test_file} <<"END_FOREACH_LOOP_VARIABLE_TESTS";
 
 #-----------------------------------------------------------------------------
 
 ## name Local lexical variable as foreach loop variable named "$variable_name" vs the "$capitalization_scheme" capitalization scheme.
 ## failures $failures
-## parms { subroutines => ':all_lower', local_lexical_variables => '$capitalization_scheme' }
+## parms { local_lexical_variables => '$capitalization_scheme' }
 ## cut
 
-sub some_subroutine {
-    foreach my \$$variable_name (@_) {
-        say \$$variable_name;
-    }
+foreach my \$$variable_name (@_) {
+    say \$$variable_name;
 }
-END_LOCAL_LEXICAL_VARIABLE_TEST
+
+#-----------------------------------------------------------------------------
+
+## name State variable as foreach loop variable named "$variable_name" vs the "$capitalization_scheme" capitalization scheme.
+## failures $failures
+## TODO PPI that supports state variables isn't released yet.
+## parms { local_lexical_variables => '$capitalization_scheme' }
+## cut
+
+foreach state \$$variable_name (@_) {
+    say \$$variable_name;
+}
+
+#-----------------------------------------------------------------------------
+
+## name Implied local lexical variable as foreach loop variable named "$variable_name" vs the "$capitalization_scheme" capitalization scheme.
+## failures $failures
+## parms { local_lexical_variables => '$capitalization_scheme' }
+## cut
+
+foreach \$$variable_name (@_) {
+    say \$$variable_name;
+}
+
+#-----------------------------------------------------------------------------
+
+## name Global variable as foreach loop variable named "$variable_name" vs the "$capitalization_scheme" capitalization scheme.
+## failures $failures
+## parms { global_variables => '$capitalization_scheme' }
+## cut
+
+foreach our \$$variable_name (@_) {
+    say \$$variable_name;
+}
+
+#-----------------------------------------------------------------------------
+
+## name Localized variable as foreach loop variable named "$variable_name" vs the "$capitalization_scheme" capitalization scheme.
+## failures $failures
+## parms { global_variables => '$capitalization_scheme' }
+## cut
+
+foreach local \$$variable_name (@_) {
+    say \$$variable_name;
+}
+
+#-----------------------------------------------------------------------------
+
+## name Localized builtin variable as foreach loop variable named "$variable_name" vs the "$capitalization_scheme" capitalization scheme.
+## failures 0
+## parms { global_variables => '$capitalization_scheme' }
+## cut
+
+foreach local \$@ (@_) {
+    say \$$variable_name;
+}
+
+foreach local \$EVAL_ERROR (@_) {
+    say \$$variable_name;
+}
+END_FOREACH_LOOP_VARIABLE_TESTS
 
     return;
 }
