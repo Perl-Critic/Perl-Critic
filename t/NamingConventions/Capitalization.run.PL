@@ -148,7 +148,6 @@ Readonly::Scalar my $CONSTANT = 23;
 #-----------------------------------------------------------------------------
 
 ## name Constants must be all caps, failures
-## TODO Detect whether a scalar is constant or not
 ## failures 4
 ## cut
 
@@ -303,7 +302,7 @@ sub emit_all_tests_for_name_and_capitalization_scheme {
     emit_foreach_loop_variable_tests(
         $test_file, $name, $capitalization_scheme, $failures,
     );
-    emit_local_lexical_variable_as_c_style_for_loop_variable_test(
+    emit_c_style_for_loop_variable_tests(
         $test_file, $name, $capitalization_scheme, $failures,
     );
     emit_local_lexical_variable_in_io_assignment_in_while_loop_test(
@@ -409,7 +408,7 @@ sub emit_foreach_loop_variable_tests {
 ## parms { local_lexical_variables => '$capitalization_scheme' }
 ## cut
 
-foreach my \$$variable_name (@_) {
+foreach my \$$variable_name (\@_) {
     say \$$variable_name;
 }
 
@@ -421,7 +420,7 @@ foreach my \$$variable_name (@_) {
 ## parms { local_lexical_variables => '$capitalization_scheme' }
 ## cut
 
-foreach state \$$variable_name (@_) {
+foreach state \$$variable_name (\@_) {
     say \$$variable_name;
 }
 
@@ -432,7 +431,7 @@ foreach state \$$variable_name (@_) {
 ## parms { local_lexical_variables => '$capitalization_scheme' }
 ## cut
 
-foreach \$$variable_name (@_) {
+foreach \$$variable_name (\@_) {
     say \$$variable_name;
 }
 
@@ -443,7 +442,7 @@ foreach \$$variable_name (@_) {
 ## parms { global_variables => '$capitalization_scheme' }
 ## cut
 
-foreach our \$$variable_name (@_) {
+foreach our \$$variable_name (\@_) {
     say \$$variable_name;
 }
 
@@ -454,23 +453,34 @@ foreach our \$$variable_name (@_) {
 ## parms { global_variables => '$capitalization_scheme' }
 ## cut
 
-foreach local \$$variable_name (@_) {
+foreach local \$$variable_name (\@_) {
     say \$$variable_name;
 }
 
 #-----------------------------------------------------------------------------
 
-## name Localized builtin variable as foreach loop variable named "$variable_name" vs the "$capitalization_scheme" capitalization scheme.
+## name Localized builtin variable as foreach loop variable vs the "$capitalization_scheme" capitalization scheme.
 ## failures 0
 ## parms { global_variables => '$capitalization_scheme' }
 ## cut
 
-foreach local \$@ (@_) {
-    say \$$variable_name;
+foreach local \$@ (\@_) {
+    say \$@;
 }
 
-foreach local \$EVAL_ERROR (@_) {
-    say \$$variable_name;
+foreach local \$EVAL_ERROR (\@_) {
+    say \$EVAL_ERROR;
+}
+
+#-----------------------------------------------------------------------------
+
+## name Localized variable in another package as foreach loop variable vs the "$capitalization_scheme" capitalization scheme.
+## failures 0
+## parms { global_variables => '$capitalization_scheme' }
+## cut
+
+foreach local \$Foo::Bar (\@_) {
+    say \$Foo::Bar;
 }
 END_FOREACH_LOOP_VARIABLE_TESTS
 
@@ -478,24 +488,88 @@ END_FOREACH_LOOP_VARIABLE_TESTS
 }
 
 
-sub emit_local_lexical_variable_as_c_style_for_loop_variable_test {
+sub emit_c_style_for_loop_variable_tests {
     my ($test_file, $variable_name, $capitalization_scheme, $failures) = @_;
 
-    print {$test_file} <<"END_LOCAL_LEXICAL_VARIABLE_TEST";
+    $failures *= 2;  # We double declare our variables.
+
+    print {$test_file} <<"END_C_STYLE_FOR_LOOP_VARIABLE_TESTS";
 
 #-----------------------------------------------------------------------------
 
 ## name Local lexical variable as C-style for loop variable named "$variable_name" vs the "$capitalization_scheme" capitalization scheme.
 ## failures $failures
-## parms { subroutines => ':all_lower', local_lexical_variables => '$capitalization_scheme' }
+## parms { local_lexical_variables => '$capitalization_scheme' }
 ## cut
 
-sub some_subroutine {
-    for (my \$$variable_name = -7; \$$variable_name <= 17; \$$variable_name += 3) {
-        say \$$variable_name;
-    }
+# Declare the same variable twice in order to catch the case where the
+# variable is the second one in the loop definition.
+for (my \$$variable_name = -7, my \$$variable_name = -23; \$$variable_name <= 17; \$$variable_name += 3) {
+    say \$$variable_name;
 }
-END_LOCAL_LEXICAL_VARIABLE_TEST
+
+#-----------------------------------------------------------------------------
+
+## name State variable as C-style for loop variable named "$variable_name" vs the "$capitalization_scheme" capitalization scheme.
+## failures $failures
+## TODO PPI that supports state variables isn't released yet.
+## parms { local_lexical_variables => '$capitalization_scheme' }
+## cut
+
+# Declare the same variable twice in order to catch the case where the
+# variable is the second one in the loop definition.
+for (state \$$variable_name = -7, state \$$variable_name = -23; \$$variable_name <= 17; \$$variable_name += 3) {
+    say \$$variable_name;
+}
+
+#-----------------------------------------------------------------------------
+
+## name Global variable as C-style for loop variable named "$variable_name" vs the "$capitalization_scheme" capitalization scheme.
+## failures $failures
+## parms { global_variables => '$capitalization_scheme' }
+## cut
+
+# Declare the same variable twice in order to catch the case where the
+# variable is the second one in the loop definition.
+for (our \$$variable_name = -7, our \$$variable_name = -23; \$$variable_name <= 17; \$$variable_name += 3) {
+    say \$$variable_name;
+}
+
+#-----------------------------------------------------------------------------
+
+## name Localized variable as C-style for loop variable named "$variable_name" vs the "$capitalization_scheme" capitalization scheme.
+## failures $failures
+## parms { global_variables => '$capitalization_scheme' }
+## cut
+
+# Localize the same variable twice in order to catch the case where the
+# variable is the second one in the loop definition.
+for (local \$$variable_name = -7, local \$$variable_name = -23; \$$variable_name <= 17; \$$variable_name += 3) {
+    say \$$variable_name;
+}
+
+#-----------------------------------------------------------------------------
+
+## name Localized builtin variable as C-style for loop variable vs the "$capitalization_scheme" capitalization scheme.
+## failures 0
+## parms { global_variables => '$capitalization_scheme' }
+## cut
+
+for (local \$@ = -7, local \$EVAL_ERROR = -23; \$EVAL_ERROR <= 17; \$EVAL_ERROR += 3) {
+    say \$EVAL_ERROR;
+}
+
+#-----------------------------------------------------------------------------
+
+## name Localized variable in another package as C-style for loop variable vs the "$capitalization_scheme" capitalization scheme.
+## failures 0
+## parms { global_variables => '$capitalization_scheme' }
+## cut
+
+for (local \$Foo::Bar = -7, local \$Foo::Baz = -23; \$Foo::Baz <= 17; \$Foo::Baz += 3) {
+    say \$Foo::Baz
+}
+END_C_STYLE_FOR_LOOP_VARIABLE_TESTS
 
     return;
 }
