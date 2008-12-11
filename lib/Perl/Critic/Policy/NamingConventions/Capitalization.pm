@@ -107,7 +107,7 @@ sub supported_parameters {
         {
             name               => 'subroutine_exemptions',
             description        => 'Subroutine names that are exempt from capitalization rules.  The values here are regexes.',
-            default_string     => 'AUTOLOAD CLEAR CLOSE DELETE DESTROY EXISTS EXTEND FETCH FETCHSIZE FIRSTKEY GETC NEXTKEY POP PRINT PRINTF PUSH READ READLINE SCALAR SHIFT SPLICE STORE STORESIZE TIEARRAY TIEHANDLE TIEHASH TIESCALAR UNSHIFT UNTIE WRITE',
+            default_string     => 'AUTOLOAD BUILD BUILDARGS CLEAR CLOSE DELETE DEMOLISH DESTROY EXISTS EXTEND FETCH FETCHSIZE FIRSTKEY GETC NEXTKEY POP PRINT PRINTF PUSH READ READLINE SCALAR SHIFT SPLICE STORE STORESIZE TIEARRAY TIEHANDLE TIEHASH TIESCALAR UNSHIFT UNTIE WRITE',
             behavior           => 'string list',
         },
         {
@@ -566,11 +566,11 @@ sub _ppi_statement_variable_symbols {
 }
 
 sub _local_variable {
-    my ($self, $el) = @_;
+    my ($self, $elem) = @_;
 
     # The last symbol should be a variable
-    my $n = $el->snext_sibling or return 1;
-    my $p = $el->sprevious_sibling;
+    my $n = $elem->snext_sibling or return 1;
+    my $p = $elem->sprevious_sibling;
     if ( !$p || $p eq $COMMA ) {
         # In the middle of a list
         return 1 if $n eq $COMMA;
@@ -585,7 +585,6 @@ sub _local_variable {
 }
 
 sub _is_not_real_label {
-    
     my $elem = shift;
 
     # PPI misparses part of a ternary expression as a label
@@ -597,9 +596,9 @@ sub _is_not_real_label {
     #
     # PPI thinks that "undef" is a label.  To workaround this,
     # I'm going to check that whatever PPI thinks is the label,
-    # actually is the first token in the statement.  I believe 
+    # actually is the first token in the statement.  I believe
     # this should be true for all real labels.
-    
+
     my $stmnt = $elem->statement() || return;
     my $first_child = $stmnt->schild(0) || return;
     return $first_child ne $elem;
@@ -719,6 +718,9 @@ rule.  These values also end up being surrounded by C<\A> and C<\z>.
 C<package_exemptions> defaults to C<main>.  C<global_variable_exemptions>
 defaults to
 C<\$VERSION @ISA @EXPORT(?:_OK)? %EXPORT_TAGS \$AUTOLOAD %ENV %SIG \$TODO>.
+C<subroutine_exemptions> defaults to
+C<AUTOLOAD BUILD BUILDARGS CLEAR CLOSE DELETE DEMOLISH DESTROY EXISTS EXTEND FETCH FETCHSIZE FIRSTKEY GETC NEXTKEY POP PRINT PRINTF PUSH READ READLINE SCALAR SHIFT SPLICE STORE STORESIZE TIEARRAY TIEHANDLE TIEHASH TIESCALAR UNSHIFT UNTIE WRITE>
+which should cover all the standard Perl subroutines plus those from L<Moose>.
 
 
 =head1 TODO
