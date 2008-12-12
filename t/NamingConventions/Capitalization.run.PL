@@ -499,6 +499,7 @@ sub emit_c_style_for_loop_variable_tests {
 
 ## name Local lexical variable as C-style for loop variable named "$variable_name" vs the "$capitalization_scheme" capitalization scheme.
 ## failures $failures
+## TODO Can't handle this yet.
 ## parms { local_lexical_variables => '$capitalization_scheme' }
 ## cut
 
@@ -526,6 +527,7 @@ for (state \$$variable_name = -7, state \$$variable_name = -23; \$$variable_name
 
 ## name Global variable as C-style for loop variable named "$variable_name" vs the "$capitalization_scheme" capitalization scheme.
 ## failures $failures
+## TODO Can't handle this yet.
 ## parms { global_variables => '$capitalization_scheme' }
 ## cut
 
@@ -539,6 +541,7 @@ for (our \$$variable_name = -7, our \$$variable_name = -23; \$$variable_name <= 
 
 ## name Localized variable as C-style for loop variable named "$variable_name" vs the "$capitalization_scheme" capitalization scheme.
 ## failures $failures
+## TODO Can't handle this yet.
 ## parms { global_variables => '$capitalization_scheme' }
 ## cut
 
@@ -552,6 +555,7 @@ for (local \$$variable_name = -7, local \$$variable_name = -23; \$$variable_name
 
 ## name Localized builtin variable as C-style for loop variable vs the "$capitalization_scheme" capitalization scheme.
 ## failures 0
+## TODO Can't handle this yet.
 ## parms { global_variables => '$capitalization_scheme' }
 ## cut
 
@@ -563,6 +567,7 @@ for (local \$@ = -7, local \$EVAL_ERROR = -23; \$EVAL_ERROR <= 17; \$EVAL_ERROR 
 
 ## name Localized variable in another package as C-style for loop variable vs the "$capitalization_scheme" capitalization scheme.
 ## failures 0
+## TODO Can't handle this yet.
 ## parms { global_variables => '$capitalization_scheme' }
 ## cut
 

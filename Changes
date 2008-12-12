@@ -1,4 +1,4 @@
-[1.xxx] Released on 2008-xx-xx
+[1.093_03] Released on 2008-12-11
 
     Policy Changes:
     * InputOutput::RequireCheckedSyscalls now has an exclude_functions

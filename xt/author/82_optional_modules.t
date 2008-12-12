@@ -34,6 +34,7 @@ my %module_versions = (
     'Test::Memory::Cycle'   => 0,
     'Test::Pod'             => 0,
     'Test::Pod::Coverage'   => 0,
+    'Test::Without::Module' => 0,
 );
 
 plan tests => scalar keys %module_versions;
