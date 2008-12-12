@@ -13,7 +13,7 @@ use warnings;
 
 use Readonly;
 
-our $VERSION = '1.093_02';
+our $VERSION = '1.093_03';
 
 use Perl::Critic::Exception::AggregateConfiguration;
 use Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue;

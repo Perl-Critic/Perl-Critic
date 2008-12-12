@@ -26,7 +26,7 @@ use Perl::Critic::Utils::PPI qw<
 
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.093_02';
+our $VERSION = '1.093_03';
 
 #-----------------------------------------------------------------------------
 
