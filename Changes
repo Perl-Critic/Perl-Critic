@@ -3,6 +3,12 @@
     Policy Changes:
     * InputOutput::RequireCheckedSyscalls now has an exclude_functions
       parameter.
+    * TestingAndDebugging::RequireUseStrict and
+      TestingAndDebugging::RequireUseWarnings now have equivalent_modules
+      parameters that allow you to designate other modules as being equivalent
+      to the strict and warnings pragmata.  This one is for all you Moose fans
+      out there.  :]
+    * Further work on the Capitalization policy.  Will it never end?
 
     New Policies:
     * Miscellanea::ProhibitUselessNoCritic
