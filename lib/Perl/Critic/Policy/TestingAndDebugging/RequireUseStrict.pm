@@ -12,7 +12,7 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :severities };
+use Perl::Critic::Utils qw{ :severities $EMPTY };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.093_02';
@@ -24,7 +24,20 @@ Readonly::Scalar my $EXPL => [ 429 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return ()                  }
+sub supported_parameters {
+    return (
+        {
+            name            => 'equivalent_modules',
+            description     =>
+                q<The additional modules to treat as equivalent to "strict".>,
+            default_string  => $EMPTY,
+            behavior        => 'string list',
+            list_always_present_values =>
+                [ qw< strict Moose Moose::Role Moose::Util::TypeConstraints > ],
+        },
+    );
+}
+
 sub default_severity     { return $SEVERITY_HIGHEST   }
 sub default_themes       { return qw( core pbp bugs ) }
 sub applies_to           { return 'PPI::Document'     }
@@ -37,12 +50,12 @@ sub violates {
     my ( $self, undef, $doc ) = @_;
 
     # Find the first 'use strict' statement
-    my $strict_stmnt = $doc->find_first( \&_is_use_strict );
+    my $strict_stmnt = $doc->find_first( $self->_generate_is_use_strict() );
     my $strict_line  = $strict_stmnt ? $strict_stmnt->location()->[0] : undef;
 
     # Find all statements that aren't 'use', 'require', or 'package'
     my $stmnts_ref = $doc->find( \&_isnt_include_or_package );
-    return if !$stmnts_ref;
+    return if not $stmnts_ref;
 
     # If the 'use strict' statement is not defined, or the other
     # statement appears before the 'use strict', then it violates.
@@ -60,21 +73,24 @@ sub violates {
     return @viols;
 }
 
-sub _is_use_strict {
-    my (undef, $elem) = @_;
+sub _generate_is_use_strict {
+    my ($self) = @_;
 
-    return 0 if !$elem->isa('PPI::Statement::Include');
-    return 0 if $elem->type() ne 'use';
+    return sub {
+        my (undef, $elem) = @_;
 
-    if (
-            $elem->pragma() ne 'strict'
-        and $elem->module() ne 'Moose'
-        and $elem->module() ne 'Moose::Role'
-    ) {
+        return 0 if !$elem->isa('PPI::Statement::Include');
+        return 0 if $elem->type() ne 'use';
+
+        if ( my $pragma = $elem->pragma() ) {
+            return 1 if $self->{_equivalent_modules}{$pragma};
+        }
+        elsif ( my $module = $elem->module() ) {
+            return 1 if $self->{_equivalent_modules}{$module};
+        }
+
         return 0;
-    }
-
-    return 1;
+    };
 }
 
 sub _isnt_include_or_package {
@@ -113,9 +129,11 @@ strict'> statement must come before any other statements except
 C<package>, C<require>, and other C<use> statements.  Thus, all the
 code in the entire package will be affected.
 
-There are special exemptions for L<Moose|Moose> and
-L<Moose::Role|Moose::Role> because they enforces strictness; e.g.
-C<'use Moose'> is treated as equivalent to C<'use strict'>.
+There are special exemptions for L<Moose|Moose>,
+L<Moose::Role|Moose::Role>, and
+L<Moose::Util::TypeConstraints|Moose::Util::TypeConstraints> because
+they enforces strictness; e.g.  C<'use Moose'> is treated as
+equivalent to C<'use strict'>.
 
 The maximum number of violations per document for this policy defaults
 to 1.
@@ -123,7 +141,14 @@ to 1.
 
 =head1 CONFIGURATION
 
-This Policy is not configurable except for the standard options.
+If you take make use of things like
+L<Moose::Exporter|Moose::Exporter>, you can create your own modules
+that import the L<strict|strict> pragma into the code that is
+C<use>ing them.  There is an option to add to the default set of
+pragmata and modules in your F<.perlcriticrc>: C<equivalent_modules>.
+
+    [TestingAndDebugging::RequireUseStrict]
+    equivalent_modules = MooseX::My::Sugar
 
 
 =head1 SEE ALSO
