@@ -174,121 +174,124 @@ sub emit_primary_tests {
     my ($test_file) = @_;
 
     emit_all_tests_for_name_and_capitalization_scheme(
-        $test_file, 'all_lower_case', ':single_case', 0,
+        $test_file, 'all_lower_case', 'guaranteed_to_pass', ':single_case', 0,
     );
     emit_all_tests_for_name_and_capitalization_scheme(
-        $test_file, 'ALL_UPPER_CASE', ':single_case', 0,
+        $test_file, 'ALL_UPPER_CASE', 'guaranteed_to_pass', ':single_case', 0,
     );
     emit_all_tests_for_name_and_capitalization_scheme(
-        $test_file, 'mixedCase', ':single_case', 1,
+        $test_file, 'mixedCase', 'guaranteed_to_pass', ':single_case', 1,
     );
     emit_all_tests_for_name_and_capitalization_scheme(
-        $test_file, 'a11_lower_case_with_digits', ':single_case', 0,
+        $test_file, 'a11_lower_case_with_digits', 'guaranteed_to_pass', ':single_case', 0,
     );
     emit_all_tests_for_name_and_capitalization_scheme(
-        $test_file, 'A11_UPPER_CASE_WITH_DIGITS', ':single_case', 0,
-    );
-
-    emit_all_tests_for_name_and_capitalization_scheme(
-        $test_file, 'all_lower_case', ':all_lower', 0,
-    );
-    emit_all_tests_for_name_and_capitalization_scheme(
-        $test_file, 'ALL_UPPER_CASE', ':all_lower', 1,
-    );
-    emit_all_tests_for_name_and_capitalization_scheme(
-        $test_file, 'mixedCase', ':all_lower', 1,
-    );
-    emit_all_tests_for_name_and_capitalization_scheme(
-        $test_file, 'a11_lower_case_with_digits', ':all_lower', 0,
-    );
-    emit_all_tests_for_name_and_capitalization_scheme(
-        $test_file, 'A11_UPPER_CASE_WITH_DIGITS', ':all_lower', 1,
+        $test_file, 'A11_UPPER_CASE_WITH_DIGITS', 'guaranteed_to_pass', ':single_case', 0,
     );
 
     emit_all_tests_for_name_and_capitalization_scheme(
-        $test_file, 'all_lower_case', ':all_upper', 1,
+        $test_file, 'all_lower_case', 'guaranteed_to_pass', ':all_lower', 0,
     );
     emit_all_tests_for_name_and_capitalization_scheme(
-        $test_file, 'ALL_UPPER_CASE', ':all_upper', 0,
+        $test_file, 'ALL_UPPER_CASE', 'guaranteed_to_pass', ':all_lower', 1,
     );
     emit_all_tests_for_name_and_capitalization_scheme(
-        $test_file, 'mixedCase', ':all_upper', 1,
+        $test_file, 'mixedCase', 'guaranteed_to_pass', ':all_lower', 1,
     );
     emit_all_tests_for_name_and_capitalization_scheme(
-        $test_file, 'a11_lower_case_with_digits', ':all_upper', 1,
+        $test_file, 'a11_lower_case_with_digits', 'guaranteed_to_pass', ':all_lower', 0,
     );
     emit_all_tests_for_name_and_capitalization_scheme(
-        $test_file, 'A11_UPPER_CASE_WITH_DIGITS', ':all_upper', 0,
+        $test_file, 'A11_UPPER_CASE_WITH_DIGITS', 'guaranteed_to_pass', ':all_lower', 1,
     );
 
     emit_all_tests_for_name_and_capitalization_scheme(
-        $test_file, 'all_lower_case', ':starts_with_lower', 0,
+        $test_file, 'all_lower_case', 'GUARANTEED_TO_PASS', ':all_upper', 1,
     );
     emit_all_tests_for_name_and_capitalization_scheme(
-        $test_file, 'ALL_UPPER_CASE', ':starts_with_lower', 1,
+        $test_file, 'ALL_UPPER_CASE', 'GUARANTEED_TO_PASS', ':all_upper', 0,
+    );
+    emit_all_tests_for_name_and_capitalization_scheme(
+        $test_file, 'mixedCase', 'GUARANTEED_TO_PASS', ':all_upper', 1,
+    );
+    emit_all_tests_for_name_and_capitalization_scheme(
+        $test_file, 'a11_lower_case_with_digits', 'GUARANTEED_TO_PASS', ':all_upper', 1,
+    );
+    emit_all_tests_for_name_and_capitalization_scheme(
+        $test_file, 'A11_UPPER_CASE_WITH_DIGITS', 'GUARANTEED_TO_PASS', ':all_upper', 0,
+    );
+
+    emit_all_tests_for_name_and_capitalization_scheme(
+        $test_file, 'all_lower_case', 'guaranteed_to_pass', ':starts_with_lower', 0,
+    );
+    emit_all_tests_for_name_and_capitalization_scheme(
+        $test_file, 'ALL_UPPER_CASE', 'guaranteed_to_pass', ':starts_with_lower', 1,
     );
     emit_all_tests_for_name_and_capitalization_scheme(
         $test_file,
         '________all_lower_case_with_leading_underscores',
+        'guaranteed_to_pass',
         ':starts_with_lower',
         0,
     );
     emit_all_tests_for_name_and_capitalization_scheme(
-        $test_file, 'a11_lower_case_with_digits', ':starts_with_lower', 0,
+        $test_file, 'a11_lower_case_with_digits', 'guaranteed_to_pass', ':starts_with_lower', 0,
     );
     emit_all_tests_for_name_and_capitalization_scheme(
-        $test_file, 'A11_UPPER_CASE_WITH_DIGITS', ':starts_with_lower', 1,
+        $test_file, 'A11_UPPER_CASE_WITH_DIGITS', 'guaranteed_to_pass', ':starts_with_lower', 1,
     );
 
     emit_all_tests_for_name_and_capitalization_scheme(
-        $test_file, 'all_lower_case', ':starts_with_upper', 1,
+        $test_file, 'all_lower_case', 'GUARANTEED_TO_PASS', ':starts_with_upper', 1,
     );
     emit_all_tests_for_name_and_capitalization_scheme(
-        $test_file, 'ALL_UPPER_CASE', ':starts_with_upper', 0,
+        $test_file, 'ALL_UPPER_CASE', 'GUARANTEED_TO_PASS', ':starts_with_upper', 0,
     );
     emit_all_tests_for_name_and_capitalization_scheme(
         $test_file,
         '________ALL_UPPER_CASE_WITH_LEADING_UNDERSCORES',
+        'GUARANTEED_TO_PASS',
         ':starts_with_upper',
         0,
     );
     emit_all_tests_for_name_and_capitalization_scheme(
-        $test_file, 'a11_lower_case_with_digits', ':starts_with_upper', 1,
+        $test_file, 'a11_lower_case_with_digits', 'GUARANTEED_TO_PASS', ':starts_with_upper', 1,
     );
     emit_all_tests_for_name_and_capitalization_scheme(
-        $test_file, 'A11_UPPER_CASE_WITH_DIGITS', ':starts_with_upper', 0,
+        $test_file, 'A11_UPPER_CASE_WITH_DIGITS', 'GUARANTEED_TO_PASS', ':starts_with_upper', 0,
     );
 
     emit_all_tests_for_name_and_capitalization_scheme(
-        $test_file, 'all_lower_case', ':no_restriction', 0,
+        $test_file, 'all_lower_case', 'guaranteed_to_pass', ':no_restriction', 0,
     );
     emit_all_tests_for_name_and_capitalization_scheme(
-        $test_file, 'ALL_UPPER_CASE', ':no_restriction', 0,
+        $test_file, 'ALL_UPPER_CASE', 'guaranteed_to_pass', ':no_restriction', 0,
     );
     emit_all_tests_for_name_and_capitalization_scheme(
-        $test_file, 'mixedCase', ':no_restriction', 0,
+        $test_file, 'mixedCase', 'guaranteed_to_pass', ':no_restriction', 0,
     );
     emit_all_tests_for_name_and_capitalization_scheme(
         $test_file,
         '________ALL_UPPER_CASE_WITH_LEADING_UNDERSCORES',
+        'guaranteed_to_pass',
         ':no_restriction',
         0,
     );
     emit_all_tests_for_name_and_capitalization_scheme(
-        $test_file, 'a11_lower_case_with_digits', ':no_restriction', 0,
+        $test_file, 'a11_lower_case_with_digits', 'guaranteed_to_pass', ':no_restriction', 0,
     );
     emit_all_tests_for_name_and_capitalization_scheme(
-        $test_file, 'A11_UPPER_CASE_WITH_DIGITS', ':no_restriction', 0,
+        $test_file, 'A11_UPPER_CASE_WITH_DIGITS', 'guaranteed_to_pass', ':no_restriction', 0,
     );
 
     emit_all_tests_for_name_and_capitalization_scheme(
-        $test_file, 'foobar', 'foo.*bar', 0,
+        $test_file, 'foobar', 'foo_guaranteed_to_pass_bar', 'foo.*bar', 0,
     );
     emit_all_tests_for_name_and_capitalization_scheme(
-        $test_file, 'fooXYZZYbar', 'foo.*bar', 0,
+        $test_file, 'fooXYZZYbar', 'foo_guaranteed_to_pass_bar', 'foo.*bar', 0,
     );
     emit_all_tests_for_name_and_capitalization_scheme(
-        $test_file, 'xyzzy', 'foo.*bar', 1,
+        $test_file, 'xyzzy', 'foo_guaranteed_to_pass_bar', 'foo.*bar', 1,
     );
 
     return;
@@ -296,9 +299,16 @@ sub emit_primary_tests {
 
 
 sub emit_all_tests_for_name_and_capitalization_scheme {
-    my ($test_file, $name, $capitalization_scheme, $failures) = @_;
+    my ($test_file, $name, $guaranteed_to_pass, $capitalization_scheme, $failures)
+        = @_;
 
-    emit_package_test($test_file, $name, $capitalization_scheme, $failures);
+    emit_package_test(
+        $test_file,
+        $name,
+        $guaranteed_to_pass,
+        $capitalization_scheme,
+        $failures
+    );
     emit_subroutine_test(
         $test_file, $name, $capitalization_scheme, $failures,
     );
@@ -324,7 +334,7 @@ sub emit_all_tests_for_name_and_capitalization_scheme {
 
 
 sub emit_package_test {
-    my ($test_file, $package_name, $capitalization_scheme, $failures) = @_;
+    my ($test_file, $package_name, $good_package_component, $capitalization_scheme, $failures) = @_;
 
     print {$test_file} <<"END_PACKAGE_TEST";
 
@@ -336,6 +346,24 @@ sub emit_package_test {
 ## cut
 
 package $package_name;
+
+#-----------------------------------------------------------------------------
+
+## name Exempted package named "bLaHlAhLaH" vs the "$capitalization_scheme" capitalization scheme.
+## failures 0
+## parms { packages => '$capitalization_scheme', package_exemptions => 'bLa.*LaH' }
+## cut
+
+package bLaHlAhLaH;
+
+#-----------------------------------------------------------------------------
+
+## name Package named "${good_package_component}::$package_name" vs the "$capitalization_scheme" capitalization scheme.
+## failures $failures
+## parms { packages => '$capitalization_scheme' }
+## cut
+
+package ${good_package_component}::$package_name;
 END_PACKAGE_TEST
 
     return;
@@ -355,6 +383,17 @@ sub emit_subroutine_test {
 ## cut
 
 sub $subroutine_name {
+    # Blah blah blah
+}
+
+#-----------------------------------------------------------------------------
+
+## name Exempted subroutine named "bLaHlAhLaH" vs the "$capitalization_scheme" capitalization scheme.
+## failures 0
+## parms { subroutines => '$capitalization_scheme', subroutine_exemptions => 'bLa.*LaH' }
+## cut
+
+sub bLaHlAhLaH {
     # Blah blah blah
 }
 END_SUBROUTINE_TEST
@@ -377,6 +416,17 @@ sub emit_local_lexical_variable_in_subroutine_test {
 
 sub some_subroutine {
     my \$$variable_name;
+}
+
+#-----------------------------------------------------------------------------
+
+## name Exempted local lexical variable in subroutine named "bLaHlAhLaH" vs the "$capitalization_scheme" capitalization scheme.
+## failures 0
+## parms { subroutines => ':all_lower', local_lexical_variables => '$capitalization_scheme', local_lexical_variable_exemptions => 'bLa.*LaH' }
+## cut
+
+sub some_subroutine {
+    my \$bLaHlAhLaH;
 }
 END_LOCAL_LEXICAL_VARIABLE_TEST
 
@@ -618,6 +668,18 @@ sub emit_label_test {
 $label_name:
 while ( foo() ) {
     next $label_name;
+}
+
+#-----------------------------------------------------------------------------
+
+## name Exempted label named "bLaHlAhLaH" vs the "$capitalization_scheme" capitalization scheme.
+## failures 0
+## parms { labels => '$capitalization_scheme', label_exemptions => 'bLa.*LaH' }
+## cut
+
+bLaHlAhLaH:
+while ( foo() ) {
+    next bLaHlAhLaH;
 }
 END_LABEL_TEST
 
