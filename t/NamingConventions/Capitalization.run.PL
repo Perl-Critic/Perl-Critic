@@ -148,13 +148,12 @@ Readonly::Scalar my $CONSTANT = 23;
 #-----------------------------------------------------------------------------
 
 ## name Constants must be all caps, failures
-## failures 4
+## failures 3
 ## cut
 
 Readonly::Scalar my $Foo = 23;
 Readonly::Scalar my $foo = 23;
 Readonly::Scalar my $fooBAR = 23;
-my $CONSTANT = 23;
 
 #-----------------------------------------------------------------------------
 
@@ -280,6 +279,16 @@ sub emit_primary_tests {
     );
     emit_all_tests_for_name_and_capitalization_scheme(
         $test_file, 'A11_UPPER_CASE_WITH_DIGITS', ':no_restriction', 0,
+    );
+
+    emit_all_tests_for_name_and_capitalization_scheme(
+        $test_file, 'foobar', 'foo.*bar', 0,
+    );
+    emit_all_tests_for_name_and_capitalization_scheme(
+        $test_file, 'fooXYZZYbar', 'foo.*bar', 0,
+    );
+    emit_all_tests_for_name_and_capitalization_scheme(
+        $test_file, 'xyzzy', 'foo.*bar', 1,
     );
 
     return;
