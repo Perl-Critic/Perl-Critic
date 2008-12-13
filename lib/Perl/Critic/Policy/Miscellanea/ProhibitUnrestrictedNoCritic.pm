@@ -80,32 +80,32 @@ matched as regular expressions, so you can use shortened Policy names, or
 patterns that match several Policies. This Policy generates a violation any
 time that an unrestricted C<## no critic> annotation appears.
 
-  ## no critic                     # not ok
-  ## no critic ''                  # not ok
-  ## no critic ()                  # not ok
-  ## no critic qw()                # not ok
+    ## no critic                     # not ok
+    ## no critic ''                  # not ok
+    ## no critic ()                  # not ok
+    ## no critic qw()                # not ok
 
-  ## no critic   (Policy1, Policy2)  # ok
-  ## no critic   (Policy1 Policy2)   # ok (can use spaces to separate)
-  ## no critic qw(Policy1 Policy2)   # ok (the preferred style)
+    ## no critic   (Policy1, Policy2)  # ok
+    ## no critic   (Policy1 Policy2)   # ok (can use spaces to separate)
+    ## no critic qw(Policy1 Policy2)   # ok (the preferred style)
 
 =head1 NOTE
 
 Unfortunately, L<Perl::Critic|Perl::Critic> is very sloppy about
-parsing the Policy names that appear after a C<##no critic> 
-annotation.  For example, you might be using one of these 
+parsing the Policy names that appear after a C<##no critic>
+annotation.  For example, you might be using one of these
 broken syntaxes...
 
-  ## no critic Policy1 Policy2
-  ## no critic 'Policy1, Policy2'
-  ## no critic "Policy1, Policy2"
-  ## no critic "Policy1", "Policy2"
-  
+    ## no critic Policy1 Policy2
+    ## no critic 'Policy1, Policy2'
+    ## no critic "Policy1, Policy2"
+    ## no critic "Policy1", "Policy2"
+
 In all of these cases, Perl::Critic will silently disable B<all> Policies,
-rather than just the ones you requested.  But if you use the 
-C<ProhibitUnrestrictedNoCritic> Policy, all of these will generate 
-violations.  That way, you can track them down and correct them to use 
-the correct syntax, as shown above in the L<"DESCRIPTION">.  If you've 
+rather than just the ones you requested.  But if you use the
+C<ProhibitUnrestrictedNoCritic> Policy, all of these will generate
+violations.  That way, you can track them down and correct them to use
+the correct syntax, as shown above in the L<"DESCRIPTION">.  If you've
 been using the syntax that is shown throughout the Perl::Critic
 documentation for the last few years, then you should be fine.
 
@@ -119,7 +119,7 @@ Jeffrey Ryan Thalhammer <thaljef@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2008 Jeffrey Ryan Thalhammer.  All rights reserved.
+Copyright (c) 2008 Jeffrey Ryan Thalhammer.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
