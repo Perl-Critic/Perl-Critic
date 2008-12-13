@@ -10,6 +10,7 @@ package Perl::Critic::Policy::Miscellanea::ProhibitUselessNoCritic;
 use 5.006001;
 use strict;
 use warnings;
+
 use Readonly;
 
 use List::MoreUtils qw< none >;
@@ -75,9 +76,11 @@ __END__
 
 Perl::Critic::Policy::Miscellanea::ProhibitUselessNoCritic - Remove ineffective "## no critic" annotations.
 
+
 =head1 AFFILIATION
 
 This Policy is part of the core L<Perl::Critic|Perl::Critic> distribution.
+
 
 =head1 DESCRIPTION
 
@@ -95,6 +98,7 @@ your source code that does not actually suppress any violations given your
 current profile.  To resolve this, you should either remove the annotation
 entirely, or adjust the Policy name patterns in the annotation to match only
 the Policies that are actually being violated in your code.
+
 
 =head1 EXAMPLE
 
@@ -117,6 +121,7 @@ should be remedied like this:
 Notice how the C<RequireExtendedFormatting> pattern more precisely matches
 the name of the Policy that I'm trying to suppress.
 
+
 =head1 NOTE
 
 Changing your F<.perlcriticrc> file and disabling policies globally or running
@@ -129,9 +134,17 @@ until you have a fairly stable profile.
 
 This Policy is not configurable except for the standard options.
 
+
+=head1 ACKNOWLEDGEMENT
+
+This Policy was inspired by Adam Kennedy's article at
+L<http://use.perl.org/article.pl?sid=08/09/24/1957256>.
+
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+
 
 =head1 COPYRIGHT
 

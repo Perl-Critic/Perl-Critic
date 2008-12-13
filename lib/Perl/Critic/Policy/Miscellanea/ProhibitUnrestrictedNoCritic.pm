@@ -64,10 +64,12 @@ __END__
 
 Perl::Critic::Policy::Miscellanea::ProhibitUnrestrictedNoCritic - Forbid a bare C<## no critic>
 
+
 =head1 AFFILIATION
 
 This Policy is part of the core L<Perl::Critic|Perl::Critic>
 distribution.
+
 
 =head1 DESCRIPTION
 
@@ -89,6 +91,7 @@ time that an unrestricted C<## no critic> annotation appears.
     ## no critic   (Policy1 Policy2)   # ok (can use spaces to separate)
     ## no critic qw(Policy1 Policy2)   # ok (the preferred style)
 
+
 =head1 NOTE
 
 Unfortunately, L<Perl::Critic|Perl::Critic> is very sloppy about
@@ -109,13 +112,16 @@ the correct syntax, as shown above in the L<"DESCRIPTION">.  If you've
 been using the syntax that is shown throughout the Perl::Critic
 documentation for the last few years, then you should be fine.
 
+
 =head1 CONFIGURATION
 
 This Policy is not configurable except for the standard options.
 
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+
 
 =head1 COPYRIGHT
 
