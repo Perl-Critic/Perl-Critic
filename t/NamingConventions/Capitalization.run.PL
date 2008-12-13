@@ -491,21 +491,16 @@ END_FOREACH_LOOP_VARIABLE_TESTS
 sub emit_c_style_for_loop_variable_tests {
     my ($test_file, $variable_name, $capitalization_scheme, $failures) = @_;
 
-    $failures *= 2;  # We double declare our variables.
-
     print {$test_file} <<"END_C_STYLE_FOR_LOOP_VARIABLE_TESTS";
 
 #-----------------------------------------------------------------------------
 
 ## name Local lexical variable as C-style for loop variable named "$variable_name" vs the "$capitalization_scheme" capitalization scheme.
 ## failures $failures
-## TODO Can't handle this yet.
 ## parms { local_lexical_variables => '$capitalization_scheme' }
 ## cut
 
-# Declare the same variable twice in order to catch the case where the
-# variable is the second one in the loop definition.
-for (my \$$variable_name = -7, my \$$variable_name = -23; \$$variable_name <= 17; \$$variable_name += 3) {
+for (my \$$variable_name = -7; \$$variable_name <= 17; \$$variable_name += 3) {
     say \$$variable_name;
 }
 
@@ -519,7 +514,7 @@ for (my \$$variable_name = -7, my \$$variable_name = -23; \$$variable_name <= 17
 
 # Declare the same variable twice in order to catch the case where the
 # variable is the second one in the loop definition.
-for (state \$$variable_name = -7, state \$$variable_name = -23; \$$variable_name <= 17; \$$variable_name += 3) {
+for (state \$$variable_name = -7; \$$variable_name <= 17; \$$variable_name += 3) {
     say \$$variable_name;
 }
 
@@ -527,13 +522,12 @@ for (state \$$variable_name = -7, state \$$variable_name = -23; \$$variable_name
 
 ## name Global variable as C-style for loop variable named "$variable_name" vs the "$capitalization_scheme" capitalization scheme.
 ## failures $failures
-## TODO Can't handle this yet.
 ## parms { global_variables => '$capitalization_scheme' }
 ## cut
 
 # Declare the same variable twice in order to catch the case where the
 # variable is the second one in the loop definition.
-for (our \$$variable_name = -7, our \$$variable_name = -23; \$$variable_name <= 17; \$$variable_name += 3) {
+for (our \$$variable_name = -7; \$$variable_name <= 17; \$$variable_name += 3) {
     say \$$variable_name;
 }
 
@@ -541,13 +535,12 @@ for (our \$$variable_name = -7, our \$$variable_name = -23; \$$variable_name <= 
 
 ## name Localized variable as C-style for loop variable named "$variable_name" vs the "$capitalization_scheme" capitalization scheme.
 ## failures $failures
-## TODO Can't handle this yet.
 ## parms { global_variables => '$capitalization_scheme' }
 ## cut
 
 # Localize the same variable twice in order to catch the case where the
 # variable is the second one in the loop definition.
-for (local \$$variable_name = -7, local \$$variable_name = -23; \$$variable_name <= 17; \$$variable_name += 3) {
+for (local \$$variable_name = -7; \$$variable_name <= 17; \$$variable_name += 3) {
     say \$$variable_name;
 }
 
@@ -555,11 +548,10 @@ for (local \$$variable_name = -7, local \$$variable_name = -23; \$$variable_name
 
 ## name Localized builtin variable as C-style for loop variable vs the "$capitalization_scheme" capitalization scheme.
 ## failures 0
-## TODO Can't handle this yet.
 ## parms { global_variables => '$capitalization_scheme' }
 ## cut
 
-for (local \$@ = -7, local \$EVAL_ERROR = -23; \$EVAL_ERROR <= 17; \$EVAL_ERROR += 3) {
+for (local \$EVAL_ERROR = -23; \$EVAL_ERROR <= 17; \$EVAL_ERROR += 3) {
     say \$EVAL_ERROR;
 }
 
@@ -567,11 +559,10 @@ for (local \$@ = -7, local \$EVAL_ERROR = -23; \$EVAL_ERROR <= 17; \$EVAL_ERROR 
 
 ## name Localized variable in another package as C-style for loop variable vs the "$capitalization_scheme" capitalization scheme.
 ## failures 0
-## TODO Can't handle this yet.
 ## parms { global_variables => '$capitalization_scheme' }
 ## cut
 
-for (local \$Foo::Bar = -7, local \$Foo::Baz = -23; \$Foo::Baz <= 17; \$Foo::Baz += 3) {
+for (local \$Foo::Baz = -23; \$Foo::Baz <= 17; \$Foo::Baz += 3) {
     say \$Foo::Baz
 }
 END_C_STYLE_FOR_LOOP_VARIABLE_TESTS

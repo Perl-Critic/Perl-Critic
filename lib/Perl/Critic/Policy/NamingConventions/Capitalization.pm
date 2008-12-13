@@ -697,9 +697,10 @@ C<scoped_lexical_variables>, C<file_lexical_variables>,
 C<global_variables>, C<constants>, and C<labels> options can be
 specified as one of C<:single_case>, C<:all_lower>, C<:all_upper:>,
 C<:starts_with_lower>, C<:starts_with_upper>, or C<:no_restriction> or
-a regular expression.  The C<:single_case> tag means a name can be all
-lower case or all upper case.  If a regular expression is specified,
-it is surrounded by C<\A> and C<\z>.
+a regular expression; any value that does not start with a colon,
+C<:>, is considered to be a regular expression.  The C<:single_case>
+tag means a name can be all lower case or all upper case.  If a
+regular expression is specified, it is surrounded by C<\A> and C<\z>.
 
 C<packages> defaults to C<:starts_with_upper>.  C<subroutines>,
 C<local_lexical_variables>, C<scoped_lexical_variables>,
@@ -727,6 +728,15 @@ which should cover all the standard Perl subroutines plus those from L<Moose>.
 
 Handle C<use vars>.  Treat constant subroutines like constant
 variables.
+
+
+=head1 BUGS
+
+This policy won't catch problems with the declaration of C<$y> below:
+
+    for (my $x = 3, my $y = 5; $x < 57; $x += 3) {
+        ...
+    }
 
 
 =head1 AUTHOR
