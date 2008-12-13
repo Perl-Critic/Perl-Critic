@@ -215,7 +215,7 @@ Is the parameter a subroutine or inside one?
 =item C<get_constant_name_element_from_declaring_statement($statement)>
 
 Given a L<PPI::Statement|PPI::Statement>, if the statement is a C<use
-constant> or L<Readonly:Readonly> declaration statement, return the name of
+constant> or L<Readonly|Readonly> declaration statement, return the name of
 the thing being defined.
 
 Given
