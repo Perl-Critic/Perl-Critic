@@ -775,19 +775,10 @@ C<:>, is considered to be a regular expression.  The C<:single_case>
 tag means a name can be all lower case or all upper case.  If a
 regular expression is specified, it is surrounded by C<\A> and C<\z>.
 
-For example, if you want all global variables to start with "G_" and
-otherwise not contain underscores, but exempt any variable with a name
-that contains "THINGY", you could put the following in your
-F<.perlcriticrc>:
-
-    [NamingConventions::Capitalization]
-    global_variables = G_(?:(?!_)\w)+
-    global_variable_exemptions = .*THINGY.*
-
 C<packages> defaults to C<:starts_with_upper>.  C<subroutines>,
 C<local_lexical_variables>, C<scoped_lexical_variables>,
 C<file_lexical_variables>, and C<global_variables> default to
-C<:all_lower>.  And C<constants> and C<labels> default to
+C<:single_case>.  And C<constants> and C<labels> default to
 C<:all_upper>.
 
 There are corresponding C<package_exemptions>,
@@ -804,6 +795,16 @@ C<\$VERSION @ISA @EXPORT(?:_OK)? %EXPORT_TAGS \$AUTOLOAD %ENV %SIG \$TODO>.
 C<subroutine_exemptions> defaults to
 C<AUTOLOAD BUILD BUILDARGS CLEAR CLOSE DELETE DEMOLISH DESTROY EXISTS EXTEND FETCH FETCHSIZE FIRSTKEY GETC NEXTKEY POP PRINT PRINTF PUSH READ READLINE SCALAR SHIFT SPLICE STORE STORESIZE TIEARRAY TIEHANDLE TIEHASH TIESCALAR UNSHIFT UNTIE WRITE>
 which should cover all the standard Perl subroutines plus those from L<Moose>.
+
+For example, if you want all local variables to be in all lower-case
+and global variables to start with "G_" and otherwise not contain
+underscores, but exempt any variable with a name that contains
+"THINGY", you could put the following in your F<.perlcriticrc>:
+
+    [NamingConventions::Capitalization]
+    local_lexical_variables = :all_lower
+    global_variables = G_(?:(?!_)\w)+
+    global_variable_exemptions = .*THINGY.*
 
 
 =head1 TODO
