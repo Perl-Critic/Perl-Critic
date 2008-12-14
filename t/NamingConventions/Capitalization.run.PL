@@ -806,6 +806,18 @@ continue {
 }
 
 #-----------------------------------------------------------------------------
+
+## name Builtin variables and variables in other packages are exempt.
+## failures 0
+## parms { global_variables => ':all_lower' }
+## cut
+
+local $EVAL_ERROR
+local @ARGV;
+local %INC;
+local $Foo::Bar;
+
+#-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

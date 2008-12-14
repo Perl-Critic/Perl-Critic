@@ -800,7 +800,7 @@ which should cover all the standard Perl subroutines plus those from L<Moose>.
 =head1 TODO
 
 Handle C<use vars>.  Treat constant subroutines like constant
-variables.
+variables.  Handle bareword file handles.
 
 
 =head1 BUGS
