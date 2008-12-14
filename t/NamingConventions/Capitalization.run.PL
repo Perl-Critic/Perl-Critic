@@ -315,10 +315,10 @@ sub emit_all_tests_for_name_and_capitalization_scheme {
     emit_local_lexical_variable_in_subroutine_test(
         $test_file, $name, $capitalization_scheme, $failures,
     );
-    emit_scoped_lexical_variable_in_subroutine_test(
+    emit_local_lexical_variable_in_scheduled_subroutine_test(
         $test_file, $name, $capitalization_scheme, $failures,
     );
-    emit_local_lexical_variable_in_scheduled_subroutine_test(
+    emit_scoped_lexical_variable_test(
         $test_file, $name, $capitalization_scheme, $failures,
     );
     emit_foreach_loop_variable_tests(
@@ -437,7 +437,28 @@ END_LOCAL_LEXICAL_VARIABLE_TEST
 }
 
 
-sub emit_scoped_lexical_variable_in_subroutine_test {
+sub emit_local_lexical_variable_in_scheduled_subroutine_test {
+    my ($test_file, $variable_name, $capitalization_scheme, $failures) = @_;
+
+    print {$test_file} <<"END_LOCAL_LEXICAL_VARIABLE_TEST";
+
+#-----------------------------------------------------------------------------
+
+## name Local lexical variable in subroutine named "$variable_name" vs the "$capitalization_scheme" capitalization scheme.
+## failures $failures
+## parms { local_lexical_variables => '$capitalization_scheme' }
+## cut
+
+CHECK {
+    my \$$variable_name;
+}
+END_LOCAL_LEXICAL_VARIABLE_TEST
+
+    return;
+}
+
+
+sub emit_scoped_lexical_variable_test {
     my ($test_file, $variable_name, $capitalization_scheme, $failures) = @_;
 
     print {$test_file} <<"END_SCOPED_LEXICAL_VARIABLE_TEST";
@@ -464,27 +485,6 @@ sub emit_scoped_lexical_variable_in_subroutine_test {
     my \$bLaHlAhLaH;
 }
 END_SCOPED_LEXICAL_VARIABLE_TEST
-
-    return;
-}
-
-
-sub emit_local_lexical_variable_in_scheduled_subroutine_test {
-    my ($test_file, $variable_name, $capitalization_scheme, $failures) = @_;
-
-    print {$test_file} <<"END_LOCAL_LEXICAL_VARIABLE_TEST";
-
-#-----------------------------------------------------------------------------
-
-## name Local lexical variable in subroutine named "$variable_name" vs the "$capitalization_scheme" capitalization scheme.
-## failures $failures
-## parms { local_lexical_variables => '$capitalization_scheme' }
-## cut
-
-CHECK {
-    my \$$variable_name;
-}
-END_LOCAL_LEXICAL_VARIABLE_TEST
 
     return;
 }
@@ -726,6 +726,20 @@ sub emit_footer {
     my ($test_file) = @_;
 
     print {$test_file} <<'END_FOOTER';
+
+#-----------------------------------------------------------------------------
+
+## name Variable in continue block gets handled as a local lexical and not a scoped lexical.
+## failures 1
+## parms { local_lexical_variables => ':all_upper', scoped_lexical_variables => ':all_lower' }
+## cut
+
+while (blah) {
+    blah;
+}
+continue {
+    my $this_should_be_local_and_not_scoped;
+}
 
 #-----------------------------------------------------------------------------
 # Local Variables:
