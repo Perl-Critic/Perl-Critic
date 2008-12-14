@@ -1,3 +1,12 @@
+[1.xxx] Released on 2008-xx-xx
+
+    Removed Policies:
+    * NamingConventions::ProhibitMixedCaseSubs and
+      NamingConventions::ProhibitMixedCaseVars have been moved to a separate
+      Perl-Critic-Deprecated distribution.  The
+      NamingConventions::Capitalization policy does everything they do, plus
+      more.
+
 [1.093_03] Released on 2008-12-11
 
     Policy Changes:
