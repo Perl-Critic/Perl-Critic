@@ -315,6 +315,9 @@ sub emit_all_tests_for_name_and_capitalization_scheme {
     emit_local_lexical_variable_in_subroutine_test(
         $test_file, $name, $capitalization_scheme, $failures,
     );
+    emit_scoped_lexical_variable_in_subroutine_test(
+        $test_file, $name, $capitalization_scheme, $failures,
+    );
     emit_local_lexical_variable_in_scheduled_subroutine_test(
         $test_file, $name, $capitalization_scheme, $failures,
     );
@@ -429,6 +432,38 @@ sub some_subroutine {
     my \$bLaHlAhLaH;
 }
 END_LOCAL_LEXICAL_VARIABLE_TEST
+
+    return;
+}
+
+
+sub emit_scoped_lexical_variable_in_subroutine_test {
+    my ($test_file, $variable_name, $capitalization_scheme, $failures) = @_;
+
+    print {$test_file} <<"END_SCOPED_LEXICAL_VARIABLE_TEST";
+
+#-----------------------------------------------------------------------------
+
+## name Scoped lexical variable named "$variable_name" vs the "$capitalization_scheme" capitalization scheme.
+## failures $failures
+## parms { scoped_lexical_variables => '$capitalization_scheme' }
+## cut
+
+{
+    my \$$variable_name;
+}
+
+#-----------------------------------------------------------------------------
+
+## name Exempted scoped lexical variable named "bLaHlAhLaH" vs the "$capitalization_scheme" capitalization scheme.
+## failures 0
+## parms { scoped_lexical_variables => '$capitalization_scheme', scoped_lexical_variable_exemptions => 'bLa.*LaH' }
+## cut
+
+{
+    my \$bLaHlAhLaH;
+}
+END_SCOPED_LEXICAL_VARIABLE_TEST
 
     return;
 }

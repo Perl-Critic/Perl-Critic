@@ -418,15 +418,7 @@ sub _variable_capitalization {
                     );
             }
             else {
-                my $grand_parent;
-                if (
-                        not is_in_subroutine($elem)
-                    and $parent->isa('PPI::Structure::Block')
-                    and (
-                            not ( $grand_parent = $parent->parent() )
-                        or  $grand_parent->isa('PPI::Document')
-                    )
-                ) {
+                if ( _is_directly_in_scope_block($elem) ) {
                     push
                         @violations,
                         $self->_check_capitalization(
@@ -553,6 +545,49 @@ sub _check_capitalization {
     }
 
     return;
+}
+
+
+# { my $x } parses as
+#       PPI::Document
+#           PPI::Statement::Compound
+#               PPI::Structure::Block   { ... }
+#                   PPI::Statement::Variable
+#                       PPI::Token::Word        'my'
+#                       PPI::Token::Symbol      '$x'
+#                       PPI::Token::Structure   ';'
+#
+# Also, type() on the PPI::Statement::Compound returns "continue".  *sigh*
+#
+# The parameter is expected to be the PPI::Statement::Variable.
+sub _is_directly_in_scope_block {
+    my ($elem) = @_;
+
+
+    return if is_in_subroutine($elem);
+
+    my $parent = $elem->parent();
+    return if not $parent->isa('PPI::Structure::Block');
+
+    my $grand_parent = $parent->parent();
+    return $TRUE if not $grand_parent;
+    return $TRUE if $grand_parent->isa('PPI::Document');
+
+    return if not $grand_parent->isa('PPI::Statement::Compound');
+
+    my $type = $grand_parent->type();
+    return if not $type;
+    return if $type ne 'continue';
+
+    my $great_grand_parent = $grand_parent->parent();
+    return if
+        $great_grand_parent and not $great_grand_parent->isa('PPI::Document');
+
+    # Make sure we aren't really in a continue block.
+    my $prior_to_grand_parent = $grand_parent->sprevious_sibling();
+    return $TRUE if not $prior_to_grand_parent;
+    return $TRUE if not $prior_to_grand_parent->isa('PPI::Token::Word');
+    return $prior_to_grand_parent->content() ne 'continue';
 }
 
 
