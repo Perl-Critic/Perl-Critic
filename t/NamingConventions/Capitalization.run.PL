@@ -321,6 +321,12 @@ sub emit_all_tests_for_name_and_capitalization_scheme {
     emit_scoped_lexical_variable_test(
         $test_file, $name, $capitalization_scheme, $failures,
     );
+    emit_file_lexical_variable_test(
+        $test_file, $name, $capitalization_scheme, $failures,
+    );
+    emit_global_variable_test(
+        $test_file, $name, $capitalization_scheme, $failures,
+    );
     emit_foreach_loop_variable_tests(
         $test_file, $name, $capitalization_scheme, $failures,
     );
@@ -485,6 +491,64 @@ sub emit_scoped_lexical_variable_test {
     my \$bLaHlAhLaH;
 }
 END_SCOPED_LEXICAL_VARIABLE_TEST
+
+    return;
+}
+
+
+sub emit_file_lexical_variable_test {
+    my ($test_file, $variable_name, $capitalization_scheme, $failures) = @_;
+
+    print {$test_file} <<"END_FILE_LEXICAL_VARIABLE_TEST";
+
+#-----------------------------------------------------------------------------
+
+## name File lexical variable named "$variable_name" vs the "$capitalization_scheme" capitalization scheme.
+## failures $failures
+## parms { file_lexical_variables => '$capitalization_scheme' }
+## cut
+
+my \$$variable_name;
+
+#-----------------------------------------------------------------------------
+
+## name Exempted file lexical variable named "bLaHlAhLaH" vs the "$capitalization_scheme" capitalization scheme.
+## failures 0
+## parms { file_lexical_variables => '$capitalization_scheme', file_lexical_variable_exemptions => 'bLa.*LaH' }
+## cut
+
+my \$bLaHlAhLaH;
+END_FILE_LEXICAL_VARIABLE_TEST
+
+    return;
+}
+
+
+sub emit_global_variable_test {
+    my ($test_file, $variable_name, $capitalization_scheme, $failures) = @_;
+
+    foreach my $variable_type ( qw< our local > ) {
+        print {$test_file} <<"END_FILE_LEXICAL_VARIABLE_TEST";
+
+#-----------------------------------------------------------------------------
+
+## name "$variable_type" variable named "$variable_name" vs the "$capitalization_scheme" capitalization scheme.
+## failures $failures
+## parms { global_variables => '$capitalization_scheme' }
+## cut
+
+$variable_type \$$variable_name;
+
+#-----------------------------------------------------------------------------
+
+## name Exempted "$variable_type" variable named "bLaHlAhLaH" vs the "$capitalization_scheme" capitalization scheme.
+## failures 0
+## parms { global_variables => '$capitalization_scheme', global_variable_exemptions => 'bLa.*LaH' }
+## cut
+
+$variable_type \$bLaHlAhLaH;
+END_FILE_LEXICAL_VARIABLE_TEST
+    }
 
     return;
 }
