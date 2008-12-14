@@ -775,6 +775,15 @@ C<:>, is considered to be a regular expression.  The C<:single_case>
 tag means a name can be all lower case or all upper case.  If a
 regular expression is specified, it is surrounded by C<\A> and C<\z>.
 
+For example, if you want all global variables to start with "G_" and
+otherwise not contain underscores, but exempt any variable with a name
+that contains "THINGY", you could put the following in your
+F<.perlcriticrc>:
+
+    [NamingConventions::Capitalization]
+    global_variables = G_(?:(?!_)\w)+
+    global_variable_exemptions = .*THINGY.*
+
 C<packages> defaults to C<:starts_with_upper>.  C<subroutines>,
 C<local_lexical_variables>, C<scoped_lexical_variables>,
 C<file_lexical_variables>, and C<global_variables> default to

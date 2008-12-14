@@ -818,6 +818,29 @@ local %INC;
 local $Foo::Bar;
 
 #-----------------------------------------------------------------------------
+
+## name Test customization example in the Capitalization POD passing.
+## failures 0
+## parms { global_variables => 'G_(?:(?!_)\w)+', global_variable_exemptions => '.*THINGY.*' }
+## cut
+
+our $G_FooBar;
+our $THINGY;
+our @otherTHINGY;
+
+#-----------------------------------------------------------------------------
+
+## name Test customization example in the Capitalization POD failing.
+## failures 4
+## parms { global_variables => 'G_(?:(?!_)\w)+', global_variable_exemptions => '.*THINGY.*' }
+## cut
+
+our $FooBar;
+our $G_;
+our $G_foo_bar;
+our @THING;
+
+#-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4
