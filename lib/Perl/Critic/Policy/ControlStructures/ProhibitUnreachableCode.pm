@@ -76,6 +76,7 @@ sub violates {
         next if $stmnt->isa('PPI::Statement::Sub');
         next if $stmnt->isa('PPI::Statement::End');
         next if $stmnt->isa('PPI::Statement::Data');
+        next if $stmnt->isa('PPI::Statement::Package');
 
         next if $stmnt->isa('PPI::Statement::Include') &&
             $stmnt->type() ne 'require';

@@ -1,5 +1,9 @@
 [1.xxx] Released on 2008-xx-xx
 
+    Bug Fixes:
+    * ControlStructures::ProhibitUnreachableCode would treat package
+      statements as unreachable.  Fixed by Kevin Ryde.  RT #41734
+
     Removed Policies:
     * NamingConventions::ProhibitMixedCaseSubs and
       NamingConventions::ProhibitMixedCaseVars have been moved to a separate
