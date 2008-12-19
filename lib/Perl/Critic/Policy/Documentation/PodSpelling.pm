@@ -313,6 +313,13 @@ L<Pod::Spell|Pod::Spell> is not included with Perl::Critic, nor is a
 spell checking program.
 
 
+=head1 PREREQUISITES
+
+This policy will disable itself if any of the following are
+unavailable: L<File::Which|File::Which>, L<IO::String|IO::String>,
+L<Pod::Spell|Pod::Spell>, or L<Text::ParseWords|Text::ParseWords>.
+
+
 =head1 CREDITS
 
 Initial development of this policy was supported by a grant from the

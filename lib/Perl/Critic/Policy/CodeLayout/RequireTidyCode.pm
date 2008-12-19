@@ -166,12 +166,12 @@ Perl::Tidy's own default style.
     perltidyrc =
 
 
-=head1 NOTES
+=head1 PREREQUISITES
 
 L<Perl::Tidy|Perl::Tidy> is not included in the Perl::Critic
 distribution.  The latest version of Perl::Tidy can be downloaded from
-CPAN.  If Perl::Tidy is not installed, this policy is silently
-ignored.
+CPAN.  If Perl::Tidy is not installed, this policy will disable
+itself.
 
 
 =head1 SEE ALSO
