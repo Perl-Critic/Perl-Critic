@@ -135,7 +135,7 @@ until you have a fairly stable profile.
 This Policy is not configurable except for the standard options.
 
 
-=head1 ACKNOWLEDGEMENT
+=head1 ACKNOWLEDGMENT
 
 This Policy was inspired by Adam Kennedy's article at
 L<http://use.perl.org/article.pl?sid=08/09/24/1957256>.
