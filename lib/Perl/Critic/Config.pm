@@ -1126,8 +1126,8 @@ A simple configuration might look like this:
     #--------------------------------------------------------------
     # I do not agree with these at all, so never load them
 
-    [-NamingConventions::ProhibitMixedCaseVars]
-    [-NamingConventions::ProhibitMixedCaseSubs]
+    [-NamingConventions::Capitalization]
+    [-ValuesAndExpressions::ProhibitMagicNumbers]
 
     #--------------------------------------------------------------
     # For all other Policies, I accept the default severity, theme

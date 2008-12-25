@@ -219,11 +219,11 @@ Perl::Critic - Critique Perl source code for best-practices.
 
 =head1 SYNOPSIS
 
-  use Perl::Critic;
-  my $file = shift;
-  my $critic = Perl::Critic->new();
-  my @violations = $critic->critique($file);
-  print @violations;
+    use Perl::Critic;
+    my $file = shift;
+    my $critic = Perl::Critic->new();
+    my @violations = $critic->critique($file);
+    print @violations;
 
 
 =head1 DESCRIPTION
@@ -259,9 +259,9 @@ Perl::Critic API, but it should give you a good idea of what it does.
 You can also invoke the perlcritic web-service from the command-line
 by doing an HTTP-post, such as one of these:
 
-   $> POST http://perlcritic.com/perl/critic.pl < MyModule.pm
-   $> lwp-request -m POST http://perlcritic.com/perl/critic.pl < MyModule.pm
-   $> wget -q -O - --post-file=MyModule.pm http://perlcritic.com/perl/critic.pl
+    $> POST http://perlcritic.com/perl/critic.pl < MyModule.pm
+    $> lwp-request -m POST http://perlcritic.com/perl/critic.pl < MyModule.pm
+    $> wget -q -O - --post-file=MyModule.pm http://perlcritic.com/perl/critic.pl
 
 Please note that the perlcritic web-service is still alpha code.  The
 URL and interface to the service are subject to change.
@@ -329,7 +329,7 @@ B<-include> is a reference to a list of string C<@PATTERNS>.  Policy
 modules that match at least one C<m/$PATTERN/ixms> will always be
 loaded, irrespective of all other settings.  For example:
 
-  my $critic = Perl::Critic->new(-include => ['layout'] -severity => 4);
+    my $critic = Perl::Critic->new(-include => ['layout'] -severity => 4);
 
 This would cause Perl::Critic to apply all the C<CodeLayout::*> Policy
 modules even though they have a severity level that is less than 4.
@@ -342,7 +342,7 @@ B<-exclude> is a reference to a list of string C<@PATTERNS>.  Policy
 modules that match at least one C<m/$PATTERN/ixms> will not be loaded,
 irrespective of all other settings.  For example:
 
-  my $critic = Perl::Critic->new(-exclude => ['strict'] -severity => 1);
+    my $critic = Perl::Critic->new(-exclude => ['strict'] -severity => 1);
 
 This would cause Perl::Critic to not apply the C<RequireUseStrict> and
 C<ProhibitNoStrict> Policy modules even though they have a severity
@@ -471,16 +471,16 @@ to construct a new Perl::Critic object internally.  The keys of that
 hash should be the same as those supported by the C<Perl::Critic::new>
 method.  Here are some examples:
 
-  use Perl::Critic qw(critique);
+    use Perl::Critic qw(critique);
 
-  # Use default parameters...
-  @violations = critique( $some_file );
+    # Use default parameters...
+    @violations = critique( $some_file );
 
-  # Use custom parameters...
-  @violations = critique( {-severity => 2}, $some_file );
+    # Use custom parameters...
+    @violations = critique( {-severity => 2}, $some_file );
 
-  # As a one-liner
-  %> perl -MPerl::Critic=critique -e 'print critique(shift)' some_file.pm
+    # As a one-liner
+    %> perl -MPerl::Critic=critique -e 'print critique(shift)' some_file.pm
 
 None of the other object-methods are currently supported as static
 functions.  Sorry.
@@ -617,8 +617,8 @@ A simple configuration might look like this:
     #--------------------------------------------------------------
     # I do not agree with these at all, so never load them
 
-    [-NamingConventions::ProhibitMixedCaseVars]
-    [-NamingConventions::ProhibitMixedCaseSubs]
+    [-NamingConventions::Capitalization]
+    [-ValuesAndExpressions::ProhibitMagicNumbers]
 
     #--------------------------------------------------------------
     # For all other Policies, I accept the default severity,
@@ -683,11 +683,11 @@ that determines which Policies will be loaded.  Precedence is the same
 as regular Perl code, and you can use parentheses to enforce
 precedence as well.  Supported operators are:
 
-   Operator    Altertative    Example
-   ----------------------------------------------------------------------------
-   &&          and            'pbp && core'
-   ||          or             'pbp || (bugs && security)'
-   !           not            'pbp && ! (portability || complexity)'
+    Operator    Altertative    Example
+    -----------------------------------------------------------------
+    &&          and            'pbp && core'
+    ||          or             'pbp || (bugs && security)'
+    !           not            'pbp && ! (portability || complexity)'
 
 Theme names are case-insensitive.  If the C<-theme> is set to an empty
 string, then it evaluates as true all Policies.
@@ -736,28 +736,28 @@ C<ProhibitEmptyQuotes> and C<ProhibitPostfixControls> policies until
 the end of the block or until the next C<"## use critic"> annotation
 (whichever comes first):
 
-  ## no critic (EmptyQuotes, PostfixControls)
+    ## no critic (EmptyQuotes, PostfixControls)
 
-  # Now exempt from ValuesAndExpressions::ProhibitEmptyQuotes
-  $foo = "";
+    # Now exempt from ValuesAndExpressions::ProhibitEmptyQuotes
+    $foo = "";
 
-  # Now exempt ControlStructures::ProhibitPostfixControls
-  $barf = bar() if $foo;
+    # Now exempt ControlStructures::ProhibitPostfixControls
+    $barf = bar() if $foo;
 
-  # Still subjected to ValuesAndExpression::RequireNumberSeparators
-  $long_int = 10000000000;
+    # Still subjected to ValuesAndExpression::RequireNumberSeparators
+    $long_int = 10000000000;
 
 Since the Policy names are matched against the C<"## no critic">
 arguments as regular expressions, you can abbreviate the Policy names
 or disable an entire family of Policies in one shot like this:
 
-  ## no critic (NamingConventions)
+    ## no critic (NamingConventions)
 
-  # Now exempt from NamingConventions::ProhibitMixedCaseVars
-  my $camelHumpVar = 'foo';
+    # Now exempt from NamingConventions::Capitalization
+    my $camelHumpVar = 'foo';
 
-  # Now exempt from NamingConventions::ProhibitMixedCaseSubs
-  sub camelHumpSub {}
+    # Now exempt from NamingConventions::Capitalization
+    sub camelHumpSub {}
 
 The argument list must be enclosed in parentheses and must contain one
 or more comma-separated barewords (e.g. don't use quotes).  The
@@ -769,9 +769,9 @@ Some Policies like C<Subroutines::ProhibitExcessComplexity> apply to
 an entire block of code.  In those cases, C<"## no critic"> must
 appear on the line where the violation is reported.  For example:
 
-  sub complicated_function {  ## no critic (ProhibitExcessComplexity)
-      # Your code here...
-  }
+    sub complicated_function {  ## no critic (ProhibitExcessComplexity)
+        # Your code here...
+    }
 
 Policies such as C<Documentation::RequirePodSections> apply to the
 entire document, in which case violations are reported at line 1.

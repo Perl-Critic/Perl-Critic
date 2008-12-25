@@ -85,8 +85,7 @@ verbose = 5
 # will never be applied unless you use the "-include" option to apply
 # it explicitly.
 
-[-NamingConventions::ProhibitMixedCaseVars]
-[-NamingConventions::ProhibitMixedCaseSubs]
+[-NamingConventions::Capitalization]
 [-TestingAndDebugging::RequireUseWarnings]
 
 #-----------------------------------------------------------------------------

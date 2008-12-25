@@ -1102,8 +1102,8 @@ A simple configuration might look like this:
     #--------------------------------------------------------------
     # I do not agree with these at all, so never load them
 
-    [-NamingConventions::ProhibitMixedCaseVars]
-    [-NamingConventions::ProhibitMixedCaseSubs]
+    [-NamingConventions::Capitalization]
+    [-ValuesAndExpressions::ProhibitMagicNumbers]
 
     #--------------------------------------------------------------
     # For all other Policies, I accept the default severity,
@@ -1243,10 +1243,10 @@ or disable an entire family of Policies in one shot like this:
 
     ## no critic (NamingConventions)
 
-    # Now exempt from NamingConventions::ProhibitMixedCaseVars
+    # Now exempt from NamingConventions::Capitalization
     my $camelHumpVar = 'foo';
 
-    # Now exempt from NamingConventions::ProhibitMixedCaseSubs
+    # Now exempt from NamingConventions::Capitalization
     sub camelHumpSub {}
 
 The argument list must be enclosed in parentheses and must contain one

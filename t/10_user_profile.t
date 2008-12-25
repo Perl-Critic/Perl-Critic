@@ -27,7 +27,7 @@ our $VERSION = '1.093_03';
 
 {
     my %policy_params = (keywords => 'Revision');
-    my %profile_hash = ( '-NamingConventions::ProhibitMixedCaseVars' => {},
+    my %profile_hash = ( '-NamingConventions::Capitalization' => {},
                          'Miscellanea::RequireRcsKeywords' => \%policy_params );
 
     my $up = Perl::Critic::UserProfile->new( -profile => \%profile_hash );
@@ -39,9 +39,9 @@ our $VERSION = '1.093_03';
         'Miscellanea::RequireRcsKeywords is enabled.',
     );
     is(
-        $up->policy_is_disabled('NamingConventions::ProhibitMixedCaseVars'),
+        $up->policy_is_disabled('NamingConventions::Capitalization'),
         1,
-        'NamingConventions::ProhibitMixedCaseVars is disabled.',
+        'NamingConventions::Capitalization is disabled.',
     );
     is_deeply(
         $up->raw_policy_params('Miscellanea::RequireRcsKeywords'),
@@ -56,9 +56,9 @@ our $VERSION = '1.093_03';
         'Perl::Critic::Policy::Miscellanea::RequireRcsKeywords is enabled.',
     );
     is(
-        $up->policy_is_disabled('Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars'),
+        $up->policy_is_disabled('Perl::Critic::Policy::NamingConventions::Capitalization'),
         1,
-        'Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars is disabled.',
+        'Perl::Critic::Policy::NamingConventions::Capitalization is disabled.',
     );
     is_deeply(
         $up->raw_policy_params('Perl::Critic::Policy::Miscellanea::RequireRcsKeywords'),
@@ -89,7 +89,7 @@ our $VERSION = '1.093_03';
 
 {
     my %policy_params = (keywords => 'Revision');
-    my @profile_array = ( q{ [-NamingConventions::ProhibitMixedCaseVars] },
+    my @profile_array = ( q{ [-NamingConventions::Capitalization] },
                           q{ [Miscellanea::RequireRcsKeywords]           },
                           q{ keywords = Revision                         },
     );
@@ -104,9 +104,9 @@ our $VERSION = '1.093_03';
         'Miscellanea::RequireRcsKeywords is enabled.',
     );
     is(
-        $up->policy_is_disabled('NamingConventions::ProhibitMixedCaseVars'),
+        $up->policy_is_disabled('NamingConventions::Capitalization'),
         1,
-        'NamingConventions::ProhibitMixedCaseVars is disabled.',
+        'NamingConventions::Capitalization is disabled.',
     );
     is_deeply(
         $up->raw_policy_params('Miscellanea::RequireRcsKeywords'),
@@ -121,9 +121,9 @@ our $VERSION = '1.093_03';
         'Perl::Critic::Policy::Miscellanea::RequireRcsKeywords is enabled.',
     );
     is(
-        $up->policy_is_disabled('Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars'),
+        $up->policy_is_disabled('Perl::Critic::Policy::NamingConventions::Capitalization'),
         1,
-        'Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars is disabled.',
+        'Perl::Critic::Policy::NamingConventions::Capitalization is disabled.',
     );
     is_deeply(
         $up->raw_policy_params('Perl::Critic::Policy::Miscellanea::RequireRcsKeywords'),
@@ -155,7 +155,7 @@ our $VERSION = '1.093_03';
 {
     my %policy_params = (keywords => 'Revision');
     my $profile_string = <<'END_PROFILE';
-[-NamingConventions::ProhibitMixedCaseVars]
+[-NamingConventions::Capitalization]
 [Miscellanea::RequireRcsKeywords]
 keywords = Revision
 END_PROFILE
@@ -169,9 +169,9 @@ END_PROFILE
         'Miscellanea::RequireRcsKeywords is enabled.',
     );
     is(
-        $up->policy_is_disabled('NamingConventions::ProhibitMixedCaseVars'),
+        $up->policy_is_disabled('NamingConventions::Capitalization'),
         1,
-        'NamingConventions::ProhibitMixedCaseVars is disabled.',
+        'NamingConventions::Capitalization is disabled.',
     );
     is_deeply(
         $up->raw_policy_params('Miscellanea::RequireRcsKeywords'),
@@ -186,9 +186,9 @@ END_PROFILE
         'Perl::Critic::Policy::Miscellanea::RequireRcsKeywords is enabled.',
     );
     is(
-        $up->policy_is_disabled('Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars'),
+        $up->policy_is_disabled('Perl::Critic::Policy::NamingConventions::Capitalization'),
         1,
-        'Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars is disabled.',
+        'Perl::Critic::Policy::NamingConventions::Capitalization is disabled.',
     );
     is_deeply(
         $up->raw_policy_params('Perl::Critic::Policy::Miscellanea::RequireRcsKeywords'),
@@ -220,7 +220,7 @@ END_PROFILE
 {
     my %policy_params = (keywords => 'Revision');
     my $long_profile_string = <<'END_PROFILE';
-[-Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars]
+[-Perl::Critic::Policy::NamingConventions::Capitalization]
 [Perl::Critic::Policy::Miscellanea::RequireRcsKeywords]
 keywords = Revision
 END_PROFILE
@@ -234,9 +234,9 @@ END_PROFILE
         'Miscellanea::RequireRcsKeywords is enabled.',
     );
     is(
-        $up->policy_is_disabled('NamingConventions::ProhibitMixedCaseVars'),
+        $up->policy_is_disabled('NamingConventions::Capitalization'),
         1,
-        'NamingConventions::ProhibitMixedCaseVars is disabled.',
+        'NamingConventions::Capitalization is disabled.',
     );
     is_deeply(
         $up->raw_policy_params('Miscellanea::RequireRcsKeywords'),
@@ -251,9 +251,9 @@ END_PROFILE
         'Perl::Critic::Policy::Miscellanea::RequireRcsKeywords is enabled.',
     );
     is(
-        $up->policy_is_disabled('Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars'),
+        $up->policy_is_disabled('Perl::Critic::Policy::NamingConventions::Capitalization'),
         1,
-        'Perl::Critic::Policy::NamingConventions::ProhibitMixedCaseVars is disabled.',
+        'Perl::Critic::Policy::NamingConventions::Capitalization is disabled.',
     );
     is_deeply(
         $up->raw_policy_params('Perl::Critic::Policy::Miscellanea::RequireRcsKeywords'),

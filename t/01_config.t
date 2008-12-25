@@ -195,12 +195,11 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
     # policies.
 
     my %profile = (
-        '-NamingConventions::ProhibitMixedCaseVars' => {},
-        '-NamingConventions::ProhibitMixedCaseSubs' => {},
+        '-NamingConventions::Capitalization' => {},
         '-Miscellanea::RequireRcsKeywords' => {},
     );
 
-    my @include = qw(mixedcase RCS);
+    my @include = qw(capital RCS);
     my %pc_args = (
         -profile    => \%profile,
         -severity   => 1,
@@ -318,8 +317,7 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
 
 {
     my %profile = (
-        '-NamingConventions::ProhibitMixedCaseVars' => {},
-        'NamingConventions::ProhibitMixedCaseSubs' => {},
+        'NamingConventions::Capitalization' => {},
         'Miscellanea::RequireRcsKeywords' => {},
     );
 

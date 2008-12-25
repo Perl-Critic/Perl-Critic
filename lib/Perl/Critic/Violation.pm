@@ -432,21 +432,21 @@ characters are:
 
 Here are some examples:
 
-  Perl::Critic::Violation::set_format("%m at line %l, column %c.\n");
-  # looks like "Mixed case variable name at line 6, column 23."
+    Perl::Critic::Violation::set_format("%m at line %l, column %c.\n");
+    # looks like "Mixed case variable name at line 6, column 23."
 
-  Perl::Critic::Violation::set_format("%m near '%r'\n");
-  # looks like "Mixed case variable name near 'my $theGreatAnswer = 42;'"
+    Perl::Critic::Violation::set_format("%m near '%r'\n");
+    # looks like "Mixed case variable name near 'my $theGreatAnswer = 42;'"
 
-  Perl::Critic::Violation::set_format("%l:%c:%p\n");
-  # looks like "6:23:NamingConventions::ProhibitMixedCaseVars"
+    Perl::Critic::Violation::set_format("%l:%c:%p\n");
+    # looks like "6:23:NamingConventions::Capitalization"
 
-  Perl::Critic::Violation::set_format("%m at line %l. %e. \n%d\n");
-  # looks like "Mixed case variable name at line 6.  See page 44 of PBP.
-    Conway's recommended naming convention is to use lower-case words
-    separated by underscores.  Well-recognized acronyms can be in ALL
-    CAPS, but must be separated by underscores from other parts of the
-    name."
+    Perl::Critic::Violation::set_format("%m at line %l. %e. \n%d\n");
+    # looks like "Mixed case variable name at line 6.  See page 44 of PBP.
+      Conway's recommended naming convention is to use lower-case words
+      separated by underscores.  Well-recognized acronyms can be in ALL
+      CAPS, but must be separated by underscores from other parts of the
+      name."
 
 
 =head1 AUTHOR
