@@ -37,7 +37,8 @@ sub violates {
     return if $elem ne 'select';
     return if ! is_function_call($elem);
 
-    if( scalar parse_arg_list($elem) == 1 ) {
+    my @arguments = parse_arg_list($elem);
+    if( 1 == @arguments ) {
         return $self->violation( $DESC, $EXPL, $elem );
     }
     return; #ok!

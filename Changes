@@ -3,6 +3,8 @@
     Bug Fixes:
     * ControlStructures::ProhibitUnreachableCode would treat package
       statements as unreachable.  Fixed by Kevin Ryde.  RT #41734
+    * Fix warning from InputOutput::ProhibitOneArgSelect when select was
+      called with no arguments.  RT #41926
 
     Removed Policies:
     * NamingConventions::ProhibitMixedCaseSubs and
