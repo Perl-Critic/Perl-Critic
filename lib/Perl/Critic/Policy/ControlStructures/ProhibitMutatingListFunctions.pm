@@ -295,7 +295,7 @@ Michael Wolf <MichaelRWolf@att.net>
 
 =head1 COPYRIGHT
 
-Copyright (C) 2006 Chris Dolan.  All rights reserved.
+Copyright (c) 2006-2009 Chris Dolan.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.

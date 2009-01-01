@@ -829,7 +829,7 @@ Michael G Schwern <schwern@pobox.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2008 Michael G Schwern.  All rights reserved.
+Copyright (c) 2008-2009 Michael G Schwern.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
