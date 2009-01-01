@@ -69,7 +69,6 @@ sub test_wrappers_to_generate {
         t/13_bundled_policies.t
         t/14_policy_parameters.t
         t/15_statistics.t
-        t/20_policies.t
         t/20_policy_pod_spelling.t
         t/20_policy_require_tidy_code.t
         xt/author/80_policysummary.t
