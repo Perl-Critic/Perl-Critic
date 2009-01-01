@@ -20,7 +20,6 @@ our $VERSION = '1.093_03';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $DESC => q{Subroutine does not end with "return"};
 Readonly::Scalar my $EXPL => [ 197 ];
 
 Readonly::Hash my %CONDITIONALS => hashify( qw(if unless for foreach) );
@@ -70,7 +69,15 @@ sub violates {
     }
 
     # Must be a violation
-    return $self->violation( $DESC, $EXPL, $elem );
+    my $desc;
+    if ( my $name = $elem->name() ) {
+        $desc = qq<Subroutine "$name" does not end with "return">;
+    }
+    else {
+        $desc = q<Subroutine does not end with "return">;
+    }
+
+    return $self->violation( $desc, $EXPL, $elem );
 }
 
 #-----------------------------------------------------------------------------
