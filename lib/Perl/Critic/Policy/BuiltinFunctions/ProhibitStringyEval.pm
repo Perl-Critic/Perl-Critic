@@ -109,7 +109,9 @@ __END__
 
 =pod
 
-=head1 NAME SIGNES
+=for stopwords SIGNES
+
+=head1 NAME
 
 Perl::Critic::Policy::BuiltinFunctions::ProhibitStringyEval - Write C<eval { my $foo; bar($foo) }> instead of C<eval "my $foo; bar($foo);">.
 

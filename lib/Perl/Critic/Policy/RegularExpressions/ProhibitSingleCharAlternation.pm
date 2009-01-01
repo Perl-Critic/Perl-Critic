@@ -38,7 +38,7 @@ sub applies_to           { return qw(PPI::Token::Regexp::Match
 #-----------------------------------------------------------------------------
 
 sub initialize_if_enabled {
-    return eval { require Regexp::Parser };
+    return eval { require Regexp::Parser; 1 } ? $TRUE : $FALSE;
 }
 
 #-----------------------------------------------------------------------------
