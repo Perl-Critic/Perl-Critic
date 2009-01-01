@@ -28,6 +28,85 @@ $hash1{eval} = 1;
 
 #-----------------------------------------------------------------------------
 
+## name Eval of include statement without allow_includes set
+## failures 20
+## cut
+
+eval 'use Foo';
+eval 'require Foo';
+eval 'use Foo 1.2';
+eval 'require Foo 1.2';
+eval 'use Foo qw< blah >';
+eval 'require Foo qw< blah >';
+eval 'use Foo 1.2 qw< blah >';
+eval 'require Foo 1.2 qw< blah >';
+
+eval 'use Foo; 1;';
+eval 'require Foo; 1;';
+eval 'use Foo 1.2; 1;';
+eval 'require Foo 1.2; 1;';
+eval 'use Foo qw< blah >; 1;';
+eval 'require Foo qw< blah >; 1;';
+eval 'use Foo 1.2 qw< blah >; 1;';
+eval 'require Foo 1.2 qw< blah >; 1;';
+
+eval "use $thingy;";
+eval "require $thingy;";
+eval "use $thingy; 1;";
+eval "require $thingy; 1;";
+
+#-----------------------------------------------------------------------------
+
+## name Eval of include statement with allow_includes set
+## failures 0
+## parms { allow_includes => 1 }
+## cut
+
+eval 'use Foo';
+eval 'require Foo';
+eval 'use Foo 1.2';
+eval 'require Foo 1.2';
+eval 'use Foo qw< blah >';
+eval 'require Foo qw< blah >';
+eval 'use Foo 1.2 qw< blah >';
+eval 'require Foo 1.2 qw< blah >';
+
+eval 'use Foo; 1;';
+eval 'require Foo; 1;';
+eval 'use Foo 1.2; 1;';
+eval 'require Foo 1.2; 1;';
+eval 'use Foo qw< blah >; 1;';
+eval 'require Foo qw< blah >; 1;';
+eval 'use Foo 1.2 qw< blah >; 1;';
+eval 'require Foo 1.2 qw< blah >; 1;';
+
+eval "use $thingy;";
+eval "require $thingy;";
+eval "use $thingy; 1;";
+eval "require $thingy; 1;";
+
+#-----------------------------------------------------------------------------
+
+## name Eval of include statement with allow_includes set but extra stuff afterwards
+## failures 3
+## parms { allow_includes => 1 }
+## cut
+
+eval 'use Foo; blah;';
+eval 'require Foo; 2; 1;';
+eval 'use $thingy;';
+
+#-----------------------------------------------------------------------------
+
+## name Eval of "no" include statement with allow_includes set
+## failures 1
+## parms { allow_includes => 1 }
+## cut
+
+eval 'no Foo';
+
+#-----------------------------------------------------------------------------
+
 ##############################################################################
 #      $URL$
 #     $Date$

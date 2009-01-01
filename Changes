@@ -1,5 +1,10 @@
 [1.xxx] Released on 2008-xx-xx
 
+    Policy Changes:
+    * BuiltinFunctions::ProhibitStringyEval now has an allow_includes option
+      that makes it behave (mostly) like Ricardo SIGNES'
+      Perl::Critic::Policy::Lax::ProhibitStringyEval::ExceptForRequire.
+
     Bug Fixes:
     * ControlStructures::ProhibitUnreachableCode would treat package
       statements as unreachable.  Fixed by Kevin Ryde.  RT #41734
