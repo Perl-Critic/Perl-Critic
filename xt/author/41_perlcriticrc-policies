@@ -5,6 +5,7 @@
 # $Revision$
 ##############################################################################
 
+profile-strictness = fatal
 severity = 1
 only = 1
 verbose = %f: %m at line %l, column %c.  %e.  (Severity: %s, %p)\n

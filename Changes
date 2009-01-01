@@ -5,6 +5,10 @@
       statements as unreachable.  Fixed by Kevin Ryde.  RT #41734
     * Fix warning from InputOutput::ProhibitOneArgSelect when select was
       called with no arguments.  RT #41926
+    * If a perlcriticrc file referred to a policy that wasn't installed and
+      the profile-strictness option was set to "fatal",
+      Perl::Critic::PolicyFactory fell over instead of reporting the
+      problematic policy name.
 
     Removed Policies:
     * NamingConventions::ProhibitMixedCaseSubs and

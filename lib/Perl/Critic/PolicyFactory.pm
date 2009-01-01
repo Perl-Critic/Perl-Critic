@@ -31,6 +31,7 @@ use Perl::Critic::Exception::Fatal::Generic qw{ throw_generic };
 use Perl::Critic::Exception::Fatal::Internal qw{ throw_internal };
 use Perl::Critic::Exception::Fatal::PolicyDefinition
     qw{ throw_policy_definition };
+use Perl::Critic::Exception::Configuration::NonExistentPolicy qw< >;
 use Perl::Critic::Utils::Constants qw{ :profile_strictness };
 
 use Exception::Class;   # this must come after "use P::C::Exception::*"
@@ -300,7 +301,11 @@ sub _validate_policies_in_profile {
             my $message = qq{Policy "$policy_name" is not installed.};
 
             if ( $errors ) {
-                $errors->add_message( $message );
+                $errors->add_exception(
+                    Perl::Critic::Exception::Configuration::NonExistentPolicy->new(
+                        policy  => $policy_name,
+                    )
+                );
             }
             else {
                 warn qq{$message\n};

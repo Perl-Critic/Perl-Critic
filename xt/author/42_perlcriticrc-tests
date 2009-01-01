@@ -5,7 +5,7 @@
 # $Revision$
 ##############################################################################
 
-profile-strictness = quiet
+profile-strictness = fatal
 severity = 1
 theme = core
 verbose = %f: %m at line %l, column %c.  %e.  (Severity: %s, %p)\n
