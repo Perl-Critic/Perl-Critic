@@ -156,7 +156,7 @@ sub evaluate_test_results {
         if ($subtest->{optional_modules}) {
             MODULE:
             for my $module (split m/,\s*/xms, $subtest->{optional_modules}) {
-                eval "require $module; 1;" ## no critic (ProhibitStringyEval)
+                eval "require $module; 1;"
                     or do {
                         $expected_failures = 0;
                         last MODULE;

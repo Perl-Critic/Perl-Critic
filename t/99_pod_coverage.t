@@ -21,9 +21,8 @@ our $VERSION = '1.093_03';
 
 #-----------------------------------------------------------------------------
 
-eval 'use Test::Pod::Coverage 1.04'; ## no critic (StringyEval)
-plan skip_all => 'Test::Pod::Coverage 1.00 requried to test POD'
-    if $EVAL_ERROR;
+eval 'use Test::Pod::Coverage 1.04; 1'
+    or plan skip_all => 'Test::Pod::Coverage 1.00 requried to test POD';
 
 {
     # HACK: Perl::Critic::Violation uses Pod::Parser to extract the

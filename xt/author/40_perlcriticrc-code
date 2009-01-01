@@ -12,6 +12,9 @@ verbose = %f: %m at line %l, column %c.  %e.  (Severity: %s, %p)\n
 
 #-----------------------------------------------------------------------------
 
+[BuiltinFunctions::ProhibitStringyEval]
+allow_includes = 1
+
 [CodeLayout::ProhibitHardTabs]
 allow_leading_tabs = 0
 

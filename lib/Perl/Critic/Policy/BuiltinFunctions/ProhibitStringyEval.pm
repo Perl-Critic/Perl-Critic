@@ -15,7 +15,7 @@ use Readonly;
 
 use PPI::Document;
 
-use Perl::Critic::Utils qw{ :booleans :severities :classification :ppi };
+use Perl::Critic::Utils qw{ :booleans :severities :classification :ppi $SCOLON };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.093_03';
@@ -89,7 +89,7 @@ sub _string_eval_is_an_include {
     return $TRUE if @statements == 1;
 
     my $follow_on = $statements[1];
-    return unless $follow_on->isa('PPI::Statement');
+    return if not $follow_on->isa('PPI::Statement');
 
     my @follow_on_components = $follow_on->schildren();
 
@@ -97,7 +97,7 @@ sub _string_eval_is_an_include {
     return if not $follow_on_components[0]->isa('PPI::Token::Number');
     return $TRUE if @follow_on_components == 1;
 
-    return $follow_on_components[1]->content() eq ';';
+    return $follow_on_components[1]->content() eq $SCOLON;
 }
 
 
@@ -109,7 +109,7 @@ __END__
 
 =pod
 
-=head1 NAME
+=head1 NAME SIGNES
 
 Perl::Critic::Policy::BuiltinFunctions::ProhibitStringyEval - Write C<eval { my $foo; bar($foo) }> instead of C<eval "my $foo; bar($foo);">.
 
