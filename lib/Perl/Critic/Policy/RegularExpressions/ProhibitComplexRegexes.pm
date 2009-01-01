@@ -49,6 +49,12 @@ sub applies_to           { return qw(PPI::Token::Regexp::Match
 
 #-----------------------------------------------------------------------------
 
+sub initialize_if_enabled {
+    return eval { require Regexp::Parser };
+}
+
+#-----------------------------------------------------------------------------
+
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
@@ -166,6 +172,12 @@ F<.perlcriticrc> file like this:
 
     [RegularExpressions::ProhibitComplexRegexes]
     max_characters = 40
+
+
+=head1 PREREQUISITES
+
+This policy will disable itself if L<Regexp::Parser|Regexp::Parser> is not
+installed.
 
 
 =head1 CREDITS

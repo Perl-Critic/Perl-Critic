@@ -50,6 +50,12 @@ sub applies_to           { return qw(PPI::Token::Regexp::Match
 
 #-----------------------------------------------------------------------------
 
+sub initialize_if_enabled {
+    return eval { require Regexp::Parser };
+}
+
+#-----------------------------------------------------------------------------
+
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
@@ -188,6 +194,12 @@ B<C<[^\s]>> vs. B<C<\S>>
 =head1 CONFIGURATION
 
 This Policy is not configurable except for the standard options.
+
+
+=head1 PREREQUISITES
+
+This policy will disable itself if L<Regexp::Parser|Regexp::Parser> is not
+installed.
 
 
 =head1 CREDITS

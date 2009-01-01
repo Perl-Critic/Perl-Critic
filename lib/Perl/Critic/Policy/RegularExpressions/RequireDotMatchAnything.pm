@@ -14,7 +14,7 @@ use warnings;
 use Readonly;
 
 use Perl::Critic::Utils qw{ :severities };
-use Perl::Critic::Utils::PPIRegexp qw{ &get_modifiers };
+use Perl::Critic::Utils::PPIRegexp qw{ get_modifiers };
 
 use base 'Perl::Critic::Policy';
 

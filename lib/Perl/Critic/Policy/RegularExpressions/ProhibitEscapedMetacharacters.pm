@@ -39,6 +39,12 @@ sub applies_to           { return qw(PPI::Token::Regexp::Match
 
 #-----------------------------------------------------------------------------
 
+sub initialize_if_enabled {
+    return eval { require Regexp::Parser };
+}
+
+#-----------------------------------------------------------------------------
+
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
@@ -147,6 +153,12 @@ Neither does this:
 
     print qr/[#]$qr/x;  # yields '(?x-ism:[#]$qr
                                 )'
+
+=head1 PREREQUISITES
+
+This policy will disable itself if L<Regexp::Parser|Regexp::Parser> is not
+installed.
+
 
 =head1 CREDITS
 

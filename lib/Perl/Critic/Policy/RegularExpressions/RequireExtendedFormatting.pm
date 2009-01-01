@@ -13,7 +13,7 @@ use warnings;
 use Readonly;
 
 use Perl::Critic::Utils qw{ :severities };
-use Perl::Critic::Utils::PPIRegexp qw{ &get_modifiers &get_match_string };
+use Perl::Critic::Utils::PPIRegexp qw{ get_modifiers get_match_string };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.093_03';

@@ -38,6 +38,12 @@ sub applies_to           { return qw(PPI::Token::Regexp::Match
 
 #-----------------------------------------------------------------------------
 
+sub initialize_if_enabled {
+    return eval { require Regexp::Parser };
+}
+
+#-----------------------------------------------------------------------------
+
 Readonly::Scalar my $NUM_CAPTURES_FOR_GLOBAL => 100; # arbitrarily large number
 
 sub violates {
@@ -378,6 +384,12 @@ A human can tell that this should be a violation because there are two
 captures but only the first capture is used, not the second.  The
 policy only notices that there is one capture in the regexp and
 remains happy.
+
+
+=head1 PREREQUISITES
+
+This policy will disable itself if L<Regexp::Parser|Regexp::Parser> is not
+installed.
 
 
 =head1 CREDITS

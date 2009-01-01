@@ -37,6 +37,12 @@ sub applies_to           { return qw(PPI::Token::Regexp::Match
 
 #-----------------------------------------------------------------------------
 
+sub initialize_if_enabled {
+    return eval { require Regexp::Parser };
+}
+
+#-----------------------------------------------------------------------------
+
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
@@ -106,6 +112,12 @@ exclusively on 5.10, yo might consider ignoring this policy.
 =head1 CONFIGURATION
 
 This Policy is not configurable except for the standard options.
+
+
+=head1 PREREQUISITES
+
+This policy will disable itself if L<Regexp::Parser|Regexp::Parser> is not
+installed.
 
 
 =head1 CREDITS
