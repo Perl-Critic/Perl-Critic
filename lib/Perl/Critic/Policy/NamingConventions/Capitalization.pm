@@ -80,7 +80,7 @@ Readonly::Hash my %NAME_FOR_TYPE => (
     label                   => 'Label',
 );
 
-Readonly::Scalar my $EXPL                   => [ 45 ];
+Readonly::Scalar my $EXPL                   => [ 45, 46 ];
 
 #-----------------------------------------------------------------------------
 
