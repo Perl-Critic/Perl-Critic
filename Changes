@@ -1,59 +1,7 @@
-[1.xxx] Released on 2008-xx-xx
+[1.094] Released on 2009-01-01
 
-    Policy Changes:
-    * BuiltinFunctions::ProhibitStringyEval now has an allow_includes option
-      that makes it behave (mostly) like Ricardo SIGNES'
-      Perl::Critic::Policy::Lax::ProhibitStringyEval::ExceptForRequire.
-
-    Bug Fixes:
-    * ControlStructures::ProhibitUnreachableCode would treat package
-      statements as unreachable.  Fixed by Kevin Ryde.  RT #41734
-    * Fix warning from InputOutput::ProhibitOneArgSelect when select was
-      called with no arguments.  RT #41926
-    * If a perlcriticrc file referred to a policy that wasn't installed and
-      the profile-strictness option was set to "fatal",
-      Perl::Critic::PolicyFactory fell over instead of reporting the
-      problematic policy name.
-
-    Removed Policies:
-    * NamingConventions::ProhibitMixedCaseSubs and
-      NamingConventions::ProhibitMixedCaseVars have been moved to a separate
-      Perl-Critic-Deprecated distribution.  The
-      NamingConventions::Capitalization policy does everything they do, plus
-      more.
-
-[1.093_03] Released on 2008-12-11
-
-    Policy Changes:
-    * InputOutput::RequireCheckedSyscalls now has an exclude_functions
-      parameter.
-    * TestingAndDebugging::RequireUseStrict and
-      TestingAndDebugging::RequireUseWarnings now have equivalent_modules
-      parameters that allow you to designate other modules as being equivalent
-      to the strict and warnings pragmata.  This one is for all you Moose fans
-      out there.  :]
-    * Further work on the Capitalization policy.  Will it never end?
-
-    New Policies:
-    * Miscellanea::ProhibitUselessNoCritic
-    * Subroutines::ProhibitReturnSort
-
-    Miscellanea:
-    * Perl::Critic::Violation will automatically strip trailing periods
-      from your Policy description and explanation strings.  This ensures that
-      the punctuation is consistent with the format specified by the user via
-      the -verbose formatting options.
-
-[1.093_02] Released on 2008-10-30
-
-    Being released right now simply so that I can put out a version of
-    Perl::Critic::Moose.
-
-    Incompatible change:
-    * The deprecated $FORMAT variables for Perl::Critic::Policy and
-      Perl::Critic::Violation no longer exist.  Use the corresponding
-      get_format() and set_format() functions instead.
-    * Also, the way that "## no critic" markers was refactored.  As
+    Incompatible Changes:
+    * The way that "## no critic" markers was refactored.  As
       a result, we discovered that the syntax for the markers was pretty
       vague.  If you didn't do it just right, it would disable all policies,
       and not just the specific ones that you wanted.  So we've tightened this
@@ -71,38 +19,76 @@
         ## no critic (Foo, Bar, Baz)   # ok!
         ## no critic qw(Foo Bar Baz)   # also ok!
 
-    New Developer Features:
-    * Perl::Critic::Policy::is_document_exempt() has been renamed to
-      prepare_to_scan_document() and the sense of the return value has been
-      reversed in order to make it indicative of being more generally useful.
+    * The deprecated $FORMAT variables for Perl::Critic::Policy and
+      Perl::Critic::Violation no longer exist.  Use the corresponding
+      get_format() and set_format() functions instead.
+
+    New Policies:
+    * Miscellanea::ProhibitUnrestrictedNoCritic
+    * Miscellanea::ProhibitUselessNoCritic
+    * NamingConventions::Capitalization
+    * Subroutines::ProhibitReturnSort
+    * Variables::ProhibitReusedNames
+
+    Removed Policies:
+    * NamingConventions::ProhibitMixedCaseSubs and
+      NamingConventions::ProhibitMixedCaseVars have been moved to a separate
+      Perl-Critic-Deprecated distribution.  The
+      NamingConventions::Capitalization policy does everything they do, plus
+      more.
 
     Policy Changes:
+    * BuiltinFunctions::ProhibitStringyEval now has an allow_includes option
+      that makes it behave (mostly) like Ricardo SIGNES'
+      Perl::Critic::Policy::Lax::ProhibitStringyEval::ExceptForRequire.
     * InputOutput::RequireCheckedClose, InputOutput::RequireCheckedOpen, and
       InputOutput::RequireCheckedSyscalls now all support autodie.
       Unfortunately, autodie is currently treated like a module and not a
       pragma, which means that the lexical scoping is not taken into account.
+    * InputOutput::RequireCheckedSyscalls now has an exclude_functions
+      parameter.
     * Modules::ProhibitEvilModules now allows you to specify what the
       description of a use of a bad module should be, to, say, suggest that
       people use autodie instead of Fatal.
     * Subroutine::ProhibitExcessComplexity violation descriptions now include
       the name of the subroutine, thanks to Andreas Koenig, RT #40070.
-
-    New Policies:
-    * NamingConventions::Capitalization
-    * Miscellanea::ProhibitUnrestrictedNoCritic
-    * Variables::ProhibitReusedNames
-
-[1.093_01] Released on 2008-09-07
-
-    New Developer Features:
-    * Perl::Critic::Policy::is_document_exempt() is checked prior to scanning
-      and thus can speed things up.
+    * TestingAndDebugging::RequireUseStrict and
+      TestingAndDebugging::RequireUseWarnings now have equivalent_modules
+      parameters that allow you to designate other modules as being equivalent
+      to the strict and warnings pragmata.  This one is for all you Moose fans
+      out there.  :]
 
     Bug Fixes:
+    * ControlStructures::ProhibitUnreachableCode would treat package
+      statements as unreachable.  Fixed by Kevin Ryde.  RT #41734
+    * Fix warning from InputOutput::ProhibitOneArgSelect when select was
+      called with no arguments.  RT #41926
     * Miscellanea::RequireRcsKeywords couldn't find keywords after __END__
       that didn't look like part of POD.
     * Modules::RequireFilenameMatchesPackage would incorrectly complain about
       programs.  Yet more greatness contributed by Schwern.  RT #39024.
+    * If a perlcriticrc file referred to a policy that wasn't installed and
+      the profile-strictness option was set to "fatal",
+      Perl::Critic::PolicyFactory fell over instead of reporting the
+      problematic policy name.
+
+    Miscellanea:
+    * Perl::Critic::Violation will automatically strip trailing periods
+      from your Policy description and explanation strings.  This ensures that
+      the punctuation is consistent with the format specified by the user via
+      the -verbose formatting options.
+
+    New Developer Features:
+    * Perl::Critic::Policy::prepare_to_scan_document() is now checked and a
+      Policy can disable itself for just a single document, which can speed
+      things up.
+
+[1.093_03] Released on 2008-12-11
+[1.093_02] Released on 2008-10-30
+[1.093_01] Released on 2008-09-07
+
+    Changes summarized into 1.094 above.  For exact details, see Changes in
+    1.093_003 on BackPAN.
 
 [1.092] Released on 2008-09-02
 
