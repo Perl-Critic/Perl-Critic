@@ -26,7 +26,15 @@ policies.  It contains its own TODO.pod.
 
 =over
 
-=item * Report Safari sections in addition to book page numbers.
+=item * Report PBP and Safari sections in addition to PBP page numbers.
+
+Something like
+
+    Readonly::Scalar my $EXPL => {
+        pbp_pages       => [ 57 ],
+        pbp_section     => '5.2',
+        safari_section  => something,
+    };
 
 
 =item * Add --files-with-violations/-l and --files-without-violations/-L options to F<perlcritic>.
