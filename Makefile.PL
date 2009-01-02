@@ -85,7 +85,7 @@ WriteMakefile(
         FILES =>
             join
                 q< >,
-                values %{ get_PL_files() },
+                (map { (ref $_ eq 'ARRAY') ? @{$_} : $_ } values %{ get_PL_files() }),
                 test_wrappers_to_generate(),
     },
 );
