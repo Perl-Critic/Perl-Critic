@@ -141,6 +141,7 @@ my $builder = $class->new(
             directory   => [
                 qw<
                     doc
+                    tools
                     xt
                 >
             ],
