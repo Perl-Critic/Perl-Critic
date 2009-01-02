@@ -36,14 +36,14 @@ Perl::Critic::Violation::set_format(
     '%f: %m at line %l, column %c.  %e. (%r)\n' ## no critic (RequireInterpolationOfMetachars)
 );
 
-my $subtests = subtests_in_tree( 't' );
+my $subtests_with_extras = subtests_in_tree( 't', 'include extras' );
 
 # Check for cmdline limit on policies.  Example:
 #   perl -Ilib t/20_policies.t BuiltinFunctions::ProhibitLvalueSubstr
 # or
 #   perl -Ilib t/20_policies.t t/BuiltinFunctions/ProhibitLvalueSubstr.run
 if (@ARGV) {
-    my @policies = keys %{$subtests}; # get a list of all tests
+    my @policies = keys %{$subtests_with_extras}; # get a list of all tests
     # This is inefficient, but who cares...
     for (@ARGV) {
         next if m/::/xms;
@@ -53,23 +53,24 @@ if (@ARGV) {
     }
     for my $p (@policies) {
         if (0 == grep {$_ eq $p} @ARGV) {
-            delete $subtests->{$p};
+            delete $subtests_with_extras->{$p};
         }
     }
 }
 
 # count how many tests there will be
 my $nsubtests = 0;
-for my $subtest ( values %{$subtests} ) {
-    $nsubtests += @{$subtest}; # one [pf]critique() test per subtest
+for my $subtest_with_extras ( values %{$subtests_with_extras} ) {
+    # one [pf]critique() test per subtest
+    $nsubtests += @{ $subtest_with_extras->{subtests} };
 }
-my $npolicies = scalar keys %{$subtests}; # one can() test per policy
+my $npolicies = scalar keys %{$subtests_with_extras}; # one can() test per policy
 
 plan tests => $nsubtests + $npolicies;
 
-for my $policy ( sort keys %{$subtests} ) {
+for my $policy ( sort keys %{$subtests_with_extras} ) {
     can_ok( "Perl::Critic::Policy::$policy", 'violates' );
-    for my $subtest ( @{$subtests->{$policy}} ) {
+    for my $subtest ( @{ $subtests_with_extras->{$policy}{subtests} } ) {
         local $TODO = $subtest->{TODO}; # Is NOT a TODO if it's not set
 
         my $description =

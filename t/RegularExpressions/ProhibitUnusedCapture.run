@@ -5,6 +5,8 @@
 # $Revision$
 ##############################################################################
 
+## global prerequisites Regexp::Parser
+
 ## name non-captures
 ## failures 0
 ## cut

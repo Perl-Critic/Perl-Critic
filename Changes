@@ -1,3 +1,8 @@
+[1.094001] Released on 2009-01-01
+
+    Bug Fixes:
+    * Tests would fail on systems without Regexp::Parser installed.
+
 [1.094] Released on 2009-01-01
 
     Incompatible Changes:

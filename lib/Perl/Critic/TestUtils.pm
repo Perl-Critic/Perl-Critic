@@ -132,24 +132,53 @@ sub fcritique {  ##no critic(ArgUnpacking)
     return scalar fcritique_with_violations(@_);
 }
 
+# Note: $include_extras is not documented in the POD because I'm not
+# committing to the interface yet.
 sub subtests_in_tree {
-    my $start = shift;
+    my ($start, $include_extras) = @_;
 
     my %subtests;
 
-    find( {wanted => sub {
-               return if ! -f $_;
-               my ($fileroot) = m{(.+)[.]run\z}xms;
-               return if !$fileroot;
-               my @pathparts = File::Spec->splitdir($fileroot);
-               if (@pathparts < 2) {
-                   throw_internal 'confusing policy test filename ' . $_;
-               }
-               my $policy = join q{::}, @pathparts[-2, -1]; ## no critic (MagicNumbers)
+    find(
+        {
+            wanted => sub {
+                return if not -f $_;
 
-               my @subtests = _subtests_from_file( $_ );
-               $subtests{ $policy } = [ @subtests ];
-           }, no_chdir => 1}, $start );
+                my ($fileroot) = m{(.+)[.]run\z}xms;
+
+                return if not $fileroot;
+
+                my @pathparts = File::Spec->splitdir($fileroot);
+                if (@pathparts < 2) {
+                    throw_internal 'confusing policy test filename ' . $_;
+                }
+
+                my $policy = join q{::}, @pathparts[-2, -1]; ## no critic (MagicNumbers)
+
+                my $globals = _globals_from_file( $_ );
+                if ( my $prerequisites = $globals->{prerequisites} ) {
+                    foreach my $prerequisite ( keys %{$prerequisites} ) {
+                        eval "require $prerequisite; 1" or return;
+                    }
+                }
+
+                my @subtests = _subtests_from_file( $_ );
+
+                if ($include_extras) {
+                    $subtests{$policy} =
+                        { subtests => [ @subtests ], globals => $globals };
+                }
+                else {
+                    $subtests{$policy} = [ @subtests ];
+                }
+
+                return;
+            },
+            no_chdir => 1,
+        },
+        $start
+    );
+
     return \%subtests;
 }
 
@@ -173,10 +202,44 @@ sub starting_points_including_examples {
     return (-e 'blib' ? 'blib' : 'lib', 'examples');
 }
 
+sub _globals_from_file {
+    my $test_file = shift;
+
+    my %valid_keys = hashify qw< prerequisites >;
+
+    return if -z $test_file;  # Skip if the Policy has a regular .t file.
+
+    my %globals;
+
+    open my $handle, '<', $test_file   ## no critic (RequireBriefOpen)
+        or throw_internal "Couldn't open $test_file: $OS_ERROR";
+
+    while ( my $line = <$handle> ) {
+        chomp;
+
+        if (
+            my ($key,$value) =
+                $line =~ m<\A [#][#] [ ] global [ ] (\S+) (?:\s+(.+))? >xms
+        ) {
+            next if not $key;
+            if ( not $valid_keys{$key} ) {
+                throw_internal "Unknown global key $key in $test_file";
+            }
+
+            if ( $key eq 'prerequisites' ) {
+                $value = { hashify( words_from_string($value) ) };
+            }
+            $globals{$key} = $value;
+        }
+    }
+    close $handle or throw_generic "unable to close $test_file: $OS_ERROR";
+
+    return \%globals;
+}
+
 # The internal representation of a subtest is just a hash with some
 # named keys.  It could be an object with accessors for safety's sake,
 # but at this point I don't see why.
-
 sub _subtests_from_file {
     my $test_file = shift;
 
@@ -185,7 +248,7 @@ sub _subtests_from_file {
     return if -z $test_file;  # Skip if the Policy has a regular .t file.
 
     open my $fh, '<', $test_file   ## no critic (RequireBriefOpen)
-      or throw_internal "Couldn't open $test_file: $OS_ERROR";
+        or throw_internal "Couldn't open $test_file: $OS_ERROR";
 
     my @subtests;
 
