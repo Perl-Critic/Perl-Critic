@@ -18,7 +18,7 @@ use List::MoreUtils qw< none >;
 use Perl::Critic::Utils qw{ :severities :classification hashify };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.094';
+our $VERSION = '1.094001';
 
 #-----------------------------------------------------------------------------
 
