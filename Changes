@@ -1,3 +1,9 @@
+[1.xxx] Released on 2009-xx-xx
+
+    Bug Fixes:
+    * Fix distclean target in Makefile.PL.  Patch by Richard Soderberg,
+      RT #42088.
+
 [1.094001] Released on 2009-01-01
 
     Bug Fixes:
