@@ -27,7 +27,7 @@ our $VERSION = '1.094001';
 #-----------------------------------------------------------------------------
 
 eval 'use Test::Deep; 1'
-    or plan skip_all => 'Test::Deep requried to test round-trip of default values';
+    or plan skip_all => 'Test::Deep required to test round-trip of default values';
 
 #-----------------------------------------------------------------------------
 
