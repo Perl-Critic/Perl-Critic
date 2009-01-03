@@ -72,14 +72,14 @@ in scalar context.  So if you write a subroutine that directly
 C<return>s the result of a C<sort> operation, then you code will
 behave unpredictably if someone calls your subroutine in a scalar
 context.  This Policy emits a violation if the C<return> keyword
-is directly followed by the C<sort> function.  To safely return a 
-sorted list of values from a subroutine, you should assign the 
+is directly followed by the C<sort> function.  To safely return a
+sorted list of values from a subroutine, you should assign the
 sorted values to a temporary variable first.  For example:
 
    sub frobulate {
-       
+
        return sort @list;  # not ok!
-       
+
        @sorted_list = sort @list;
        return @sort        # ok
    }
@@ -90,7 +90,7 @@ This Policy is not sensitive to the C<wantarray> function.  So the
 following code would generate a false violation:
 
    sub frobulate {
-       
+
        if (wantarray) {
            return sort @list;
        }

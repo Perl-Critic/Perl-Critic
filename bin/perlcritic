@@ -1326,11 +1326,11 @@ complete details.
 
 EPIC is an open source Perl IDE based on the Eclipse platform.
 Features include syntax highlighting, on-the-fly syntax check,
-content assist, code completion, perldoc support, source formatting 
-with L<Perl::Tidy>, code templates, a regular expression editing tool, 
-and integration with the Perl debugger.  Recent versions of EPIC also 
+content assist, code completion, perldoc support, source formatting
+with L<Perl::Tidy>, code templates, a regular expression editing tool,
+and integration with the Perl debugger.  Recent versions of EPIC also
 have built-in support for Perl::Critic.  At least one Perl::Critic
-contributor swears by EPIC.  Go to L<http://e-p-i-c.sourceforge.net> 
+contributor swears by EPIC.  Go to L<http://e-p-i-c.sourceforge.net>
 for more information about EPIC.
 
 =head2 BBEdit

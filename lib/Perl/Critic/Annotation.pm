@@ -26,14 +26,14 @@ our $VERSION = '1.094001';
 
 sub create_annotations {
     my ($class, $doc) = @_;
-    
+
     my @annotations = ();
     my $comment_elements_ref  = $doc->find('PPI::Token::Comment') || return;
     my $annotation_rx  = qr{\A (?: [#]! .*? )? \s* [#][#] \s* no  \s+ critic}xms;
     for my $annotation_element ( grep { $_ =~ $annotation_rx } @{$comment_elements_ref} ) {
         push @annotations, Perl::Critic::Annotation->new( -element => $annotation_element);
     }
-    
+
     return @annotations;
 }
 
@@ -222,26 +222,26 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Annotation - Represents a "## no critic" annotation
+Perl::Critic::Annotation - A "## no critic" annotation in a document.
 
 =head1 SYNOPSIS
 
   use Perl::Critic::Annotation;
   $annotation = Perl::Critic::Annotation->new( -element => $no_critic_ppi_element );
-  
+
   $bool = $annotation->disables_line( $number );
   $bool = $annotation->disables_policy( $policy_object );
   $bool = $annotation->disables_all_policies();
-  
+
   ($start, $end) = $annotation->effective_range();
   @disabled_policy_names = $annotation->disabled_policies();
-  
+
 =head1 DESCRIPTION
 
 L<Perl::Critic::Annotation> represents a single C<"## no critic"> annotation in a
-L<PPI:Document>.  The Annotation takes care of parsing the annotation and 
+L<PPI:Document>.  The Annotation takes care of parsing the annotation and
 keeps track of which lines and Policies it affects. It is intended to
-encapsulate the details of the no-critic annotations, and to provide a way for 
+encapsulate the details of the no-critic annotations, and to provide a way for
 Policy objects to interact with the annotations (via a L<Perl::Critic::Document>).
 
 =head1 CLASS METHODS
@@ -265,7 +265,7 @@ L<Perl::Critic::Annotation> constructor directly.
 =item C<< new( -element => $ppi_annotation_element ) >>
 
 Returns a reference to a new Annotation object.  The B<-element> argument
-is required and should be a C<PPI::Token::Comment> that conforms to the 
+is required and should be a C<PPI::Token::Comment> that conforms to the
 C<"## no critic"> syntax.
 
 =back

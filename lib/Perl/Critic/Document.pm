@@ -407,7 +407,7 @@ better than we do here?
 
 Create a new instance referencing a PPI::Document instance.  The
 C<$source_code> can be the name of a file, a reference to a scalar
-containing actual source code, or a L<PPI::Document> or 
+containing actual source code, or a L<PPI::Document> or
 L<PPI::Document::File>.
 
 =back
@@ -461,7 +461,7 @@ policies are disabled by the C<"## no critic"> annotations.
 
 =item C<< line_is_disabled_for_policy($line, $policy_object) >>
 
-Returns true if the given C<$policy_object> or C<$policy_name> has 
+Returns true if the given C<$policy_object> or C<$policy_name> has
 been disabled for at C<$line> in this Document.  Otherwise, returns false.
 
 =item C<< add_annotation( $annotation ) >>
@@ -475,7 +475,7 @@ were found in this Document.
 
 =item C<< add_suppressed_violation($violation) >>
 
-Informs this Document that a C<$violation> was found but not reported 
+Informs this Document that a C<$violation> was found but not reported
 because it fell on a line that had been suppressed by a C<"## no critic">
 annotation. Returns C<$self>.
 

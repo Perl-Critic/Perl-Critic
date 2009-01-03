@@ -126,10 +126,10 @@ examined.
 
 =head1 CONFIGURATION
 
-Hard tabs in a string are always forbidden (use "\t" instead).  But 
+Hard tabs in a string are always forbidden (use "\t" instead).  But
 hard tabs in a leading position are allowed when they are used to indent
 code statements, C<qw()> word lists, and regular expressions with the C</x>
-modifier.  However, if you want to forbid all tabs everywhere, then add 
+modifier.  However, if you want to forbid all tabs everywhere, then add
 this to your F<.perlcriticrc> file:
 
     [CodeLayout::ProhibitHardTabs]
