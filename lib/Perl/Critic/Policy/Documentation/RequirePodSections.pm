@@ -381,15 +381,15 @@ of a perl shebang line).
                 Default Required POD Sections
 
     Perl Libraries                     Perl Programs
-    ------------------------------------------------------
+    -----------------------------      ---------------------
     NAME                               NAME
     VERSION
     SYNOPSIS                           USAGE
     DESCRIPTION                        DESCRIPTION
     SUBROUTINES/METHODS                REQUIRED ARGUMENTS
-                                        OPTIONS
+                                       OPTIONS
     DIAGNOSTICS                        DIAGNOSTICS
-                                        EXIT STATUS
+                                       EXIT STATUS
     CONFIGURATION AND ENVIRONMENT      CONFIGURATION
     DEPENDENCIES                       DEPENDENCIES
     INCOMPATIBILITIES                  INCOMPATIBILITIES
