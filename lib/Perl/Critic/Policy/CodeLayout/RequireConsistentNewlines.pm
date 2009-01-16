@@ -35,6 +35,8 @@ sub applies_to           { return 'PPI::Document' }
 
 #-----------------------------------------------------------------------------
 
+# PPI appears to convert line endings before we get a chance to walk the
+# DOM looking for inconsistencies. Instead we scan the file directly.
 sub violates {
     my ( $self, undef, $doc ) = @_;
 
@@ -58,7 +60,9 @@ sub violates {
         if ( $nl ne $newline ) {
             my $token = PPI::Token::Whitespace->new( $nl );
             $token->{_location} = [$line, $col, $col];
-            push @v, $self->violation( $DESC, $EXPL, $token );
+            my $violation = $self->violation( $DESC, $EXPL, $token );
+            $violation->{_filename} = $filename;
+            push @v, $violation;
         }
         $line++;
     }
