@@ -1,8 +1,16 @@
 [1.xxx] Released on 2009-xx-xx
 
     Bug Fixes:
+    * Fix for problem in P::C::Document in dealing with underscores in
+      expressions like "use 5.009_001".  Patch by Kevin Ryde, RT #36570 and
+      #42089.
+    * Fix in extras/perlcritic.el for a radio button.  Patch by Kevin Ryde, RT
+      #42190.
     * Fix distclean target in Makefile.PL.  Patch by Richard Soderberg,
       RT #42088.
+
+    Documentation improvements contributed by Mark Grimes in response to RT
+    #41942.
 
 [1.094001] Released on 2009-01-01
 
