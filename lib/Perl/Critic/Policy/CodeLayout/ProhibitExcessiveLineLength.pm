@@ -26,10 +26,12 @@ Readonly::Scalar my $EXPL => [ 18, 19 ];
 
 Readonly::Scalar my $LINE_END                => qr/\n$/xms;
 Readonly::Scalar my $DEFAULT_MAX_LINE_LENGTH => 78;
+Readonly::Scalar my $SEVERITY_FOR_CODE       => $SEVERITY_LOWEST;
+Readonly::Scalar my $SEVERITY_FOR_POD        => $SEVERITY_LOW;
 
-#-----------------------------------------------------------------------------
+  #-----------------------------------------------------------------------------
 
-sub supported_parameters {
+  sub supported_parameters {
     return ( {
             name            => 'max_line_length',
             description     => 'Maximum length of a line of code or POD.',
@@ -66,7 +68,7 @@ sub violates {
         # the tokens (include whitespace) within. We check each line of
         # Comment and Pod.
         for my $line ( split /\n/xms, $elem ) {
-            return $self->violation( $DESC, $EXPL, $elem )
+            return $self->violation( $DESC, $EXPL, $elem, $SEVERITY_FOR_CODE )
               if length($line) >= $max_line_length;
         }
 
@@ -74,7 +76,7 @@ sub violates {
 
         # For Code, PPI parses the tokens and will give us the new line as
         # ::Whitespace. We can just check the location.
-        return $self->violation( $DESC, $EXPL, $elem )
+        return $self->violation( $DESC, $EXPL, $elem, $SEVERITY_FOR_POD ) 
           if $elem->location->[2] > $max_line_length;
     }
 
