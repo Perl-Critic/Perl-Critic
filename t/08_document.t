@@ -101,10 +101,8 @@ can_ok('Perl::Critic::Document', 'ppi_document');
         'use 5.006; use 5.8.3; use 5.005005',
         version->new('5.8.3'),
     );
-    test_version('use 5.005_05; use 5.005_03',
-                 version->new('5.005_05'));
-    test_version('use 5.005_03; use 5.005_05',
-                 version->new('5.005_05'));
+    test_version( 'use 5.005_05; use 5.005_03', version->new('5.005_05') );
+    test_version( 'use 5.005_03; use 5.005_05', version->new('5.005_05') );
 }
 
 sub test_version {
