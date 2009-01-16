@@ -294,12 +294,12 @@ L<"CONFIGURATION"> for more information.
 
 B<-severity> is the minimum severity level.  Only Policy modules that
 have a severity greater than C<$N> will be applied.  Severity values
-are integers ranging from 1 (least severe) to 5 (most severe).  The
-default is 5.  For a given C<-profile>, decreasing the C<-severity>
-will usually reveal more Policy violations.  You can set the default
-value for this option in your F<.perlcriticrc> file.  Users can
-redefine the severity level for any Policy in their F<.perlcriticrc>
-file.  See L<"CONFIGURATION"> for more information.
+are integers ranging from 1 (least severe violations) to 5 (most
+severe violations).  The default is 5.  For a given C<-profile>,
+decreasing the C<-severity> will usually reveal more Policy violations.
+You can set the default value for this option in your F<.perlcriticrc>
+file.  Users can redefine the severity level for any Policy in their
+F<.perlcriticrc> file.  See L<"CONFIGURATION"> for more information.
 
 If it is difficult for you to remember whether severity "5" is the
 most or least restrictive level, then you can use one of these named
@@ -655,7 +655,7 @@ For example, you may wish disable a certain subset of Policies when
 analyzing test scripts.  Conversely, you may wish to enable only a
 specific subset of Policies when analyzing modules.
 
-The Policies that ship with Perl::Critic are have been broken into the
+The Policies that ship with Perl::Critic have been broken into the
 following themes.  This is just our attempt to provide some basic
 logical groupings.  You are free to invent new themes that suit your
 needs.
