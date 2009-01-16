@@ -19,7 +19,7 @@ our $VERSION = '1.094001';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $HEREDOC_RX => qr{ \A << \s* (["|']?) [[:upper:]_] [[:upper:]\d_]* \1 \z }xms;
+Readonly::Scalar my $HEREDOC_RX => qr{ \A << \s* (["']?) [[:upper:]_] [[:upper:]\d_]* \1 \z }xms;
 Readonly::Scalar my $DESC       => q{Heredoc terminator not alphanumeric and upper-case};
 Readonly::Scalar my $EXPL       => [ 64 ];
 
