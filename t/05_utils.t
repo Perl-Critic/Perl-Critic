@@ -300,7 +300,7 @@ sub test_is_perl_and_shebang_line {
         ok( ! Perl::Critic::Utils::_is_perl($_), qq{Is not perl: '$_'} );
     }
 
-    use File::Temp qw<tempfile>;
+    use File::Temp;
 
     my @perl_shebangs = (
         '#!perl',
@@ -312,12 +312,12 @@ sub test_is_perl_and_shebang_line {
     );
 
     for my $shebang (@perl_shebangs) {
-        my ($fh, $filename) = tempfile() or confess 'Could not open tempfile';
-        print {$fh} "$shebang\n";
+        my $tmp = File::Temp->new( TEMPLATE => 'Perl-Critic-05-utils-XXXXX' );
+        print {$tmp} "$shebang\n";
         # Must close to flush buffer
-        close $fh or confess "Couldn't close $filename: $OS_ERROR";
+        close $tmp or confess "Couldn't close $tmp: $OS_ERROR";
 
-        ok( Perl::Critic::Utils::_is_perl($filename), qq{Is perl: '$shebang'});
+        ok( Perl::Critic::Utils::_is_perl("$tmp"), qq{Is perl: '$shebang'});
 
         my $document = PPI::Document->new(\$shebang);
         is(
@@ -334,12 +334,12 @@ sub test_is_perl_and_shebang_line {
     );
 
     for my $shebang (@not_perl_shebangs) {
-        my ($fh, $filename) = tempfile or confess 'Could not open tempfile';
-        print {$fh} "$shebang\n";
+        my $tmp = File::Temp->new( TEMPLATE => 'Perl-Critic-05-utils-XXXXX' );
+        print {$tmp} "$shebang\n";
         # Must close to flush buffer
-        close $fh or confess "Couldn't close $filename: $OS_ERROR";
+        close $tmp or confess "Couldn't close $tmp: $OS_ERROR";
 
-        ok( ! Perl::Critic::Utils::_is_perl($filename), qq{Is not perl: '$shebang'});
+        ok( ! Perl::Critic::Utils::_is_perl("$tmp"), qq{Is not perl: '$shebang'});
 
         my $document = PPI::Document->new(\$shebang);
         is(
