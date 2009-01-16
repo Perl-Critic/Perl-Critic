@@ -1,6 +1,7 @@
 [1.xxx] Released on 2009-xx-xx
 
     Bug Fixes:
+    * Fix temp files not deleted.  Patch by Kyle Hasselbacher, RT #41443
     * Fix for problem in P::C::Document in dealing with underscores in
       expressions like "use 5.009_001".  Patch by Kevin Ryde, RT #36570 and
       #42089.
