@@ -184,13 +184,13 @@ violations.  Users can redefine the severity for any Policy in their
 
 This variable is automatically buffer-local and may be overridden on a
 per-file basis with File Variables."
-  ;; FIXME: My GNU Emacs doesn't show a radio widget or a menu here.
   :type '(radio
 	  (const :tag "Show only the most severe: 5" 5)
 	  (const :tag "4" 4)
 	  (const :tag "3" 3)
 	  (const :tag "2" 2)
-	  (const :tag "Show everything including the least severe: 1" 1))
+	  (const :tag "Show everything including the least severe: 1" 1)
+	  (const :tag "Default from .perlcriticrc" nil))
   :group 'perlcritic)
 (make-variable-buffer-local 'perlcritic-severity)
 
