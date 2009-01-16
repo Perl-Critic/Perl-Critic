@@ -16,7 +16,7 @@ use Carp qw< confess >;
 use PPI::Document;
 use PPI::Document::File;
 
-use List::Util qw< max >;
+use List::Util;
 use Scalar::Util qw< blessed weaken >;
 use version;
 
@@ -184,13 +184,25 @@ sub highest_explicit_perl_version {
         my $includes = $self->find( \&_is_a_version_statement );
 
         if ($includes) {
-            # Note: this will complain about underscores, e.g. "use
-            # 5.008_000".  However, nothing important should be depending upon
-            # alpha perl versions and marking non-alpha versions as alpha is
-            # bad in and of itself.  Note that this contradicts an example in
-            # perlfunc about "use".
+            # Note: this doesn't use List::Util::max because that func doesn't
+            # use the overloaded ">=" etc of a version object.  The reduce()
+            # style lets version.pm take care of all comparing.
+            #
+            # For reference, max() ends up looking at the string converted to
+            # an NV, or something like that.  An underscore like "5.005_04"
+            # provokes a warning and is chopped off at "5.005" thus losing the
+            # minor part from the comparison.
+            #
+            # An underscore "5.005_04" is supposed to mean an alpha release
+            # and probably shouldn't be used in a perl version.  But it's
+            # shown in perlfunc under "use" (as a number separator), and
+            # appears in several modules supplied with perl 5.10.0 (like
+            # version.pm itself!).  At any rate if version.pm can understand
+            # it then that's enough for here.
+            #
             $highest_explicit_perl_version =
-                max map { version->new( $_->version() ) } @{$includes};
+              List::Util::reduce { $a >= $b ? $a : $b }
+                  map { version->new( $_->version() ) } @{$includes};
         }
         else {
             $highest_explicit_perl_version = undef;
