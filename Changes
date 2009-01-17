@@ -1,6 +1,9 @@
 [1.xxx] Released on 2009-xx-xx
 
     Bug Fixes:
+    * Fix ProhibitTwoArgOpen so it allows '-|' or '|-' as the second
+      of two arguments.  Patches from Kyle Hasselbacher and
+      Leland Johnson, RT #42384.
     * Fix for problem in P::C::Document in dealing with underscores in
       expressions like "use 5.009_001".  Patch by Kevin Ryde, RT #36570 and
       #42089.
