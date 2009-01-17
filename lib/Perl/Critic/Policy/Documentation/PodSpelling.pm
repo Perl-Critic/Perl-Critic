@@ -183,8 +183,7 @@ sub _run_spell_command {
 
     my $infh = IO::String->new( $code );
 
-    my $outfh = File::Temp->new()
-        or throw_generic "Unable to create tempfile: $OS_ERROR";
+    my $outfh = File::Temp->new();
 
     my $outfile = $outfh->filename();
     my @words;

@@ -11,6 +11,8 @@
       #42190.
     * Fix distclean target in Makefile.PL.  Patch by Richard Soderberg,
       RT #42088.
+    * Fix temporary files not being cleaned up after tests.  Patch by Kyle
+      Hasselbacher, RT #41443.
 
     Documentation improvements contributed by Mark Grimes in response to RT
     #41942.
