@@ -24,7 +24,7 @@ strict = 1
 [-CodeLayout::RequireTidyCode]
 
 [Documentation::PodSpelling]
-stop_words = accessor accessors autoflushes AUTOLOAD backticks bareword barewords BBEdit bitwise boolean booleans builtin CGI config CPAN CVS dereference dereferencing Dolan Dominus elsif exponentials filehandle filehandle filehandles filename globals globbing Guzis hashref HEREDOC HEREDOCs IDE lvalue Maxia Mehner memoization metacharacters Metadata metadata multi-line mutators namespace namespaces PBP perl perlcritic perlcriticrc perldoc Perlish perls PolicyListing postfix PPI pragma pragmas pragmata prepend prepending programmatically readline Readonly refactor refactoring regex runtime Schwartzian sigil sigils SQL STDERR STDIN STDOUT stringification subdirectories superclass TerMarsch Thalhammer TODO typeglob UI unblessed undef unescaped unparsed vice-versa whitespace
+stop_words_file = xt/author/40_stop_words
 
 [Documentation::RequirePodSections]
 lib_sections    = NAME|DESCRIPTION|AUTHOR|COPYRIGHT

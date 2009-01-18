@@ -52,6 +52,11 @@ sub supported_parameters {
             default_string  => $EMPTY,
             behavior        => 'string list',
         },
+        {
+            name            => 'stop_words_file',
+            description     => 'A file containing words to not consider as misspelled.',
+            behavior        => 'string',
+        },
     );
 }
 
@@ -88,6 +93,8 @@ sub initialize_if_enabled {
 
 =cut
 END_TEST_CODE
+
+    $self->_load_stop_words_file();
 
     return $TRUE;
 }
@@ -178,6 +185,14 @@ sub _set_stop_words {
 
 #-----------------------------------------------------------------------------
 
+sub _get_stop_words_file {
+    my ( $self ) = @_;
+
+    return $self->{_stop_words_file};
+}
+
+#-----------------------------------------------------------------------------
+
 sub _run_spell_command {
     my ($self, $code) = @_;
 
@@ -230,6 +245,41 @@ sub _run_spell_command {
         };
 
     return [ @words ];
+}
+
+#-----------------------------------------------------------------------------
+
+sub _load_stop_words_file {
+    my ($self) = @_;
+
+    my %stop_words = %{ $self->_get_stop_words() };
+
+    my $file_name = $self->_get_stop_words_file() or return;
+
+    open my $handle, '<', $file_name
+        or do { warn qq<Could not open "$file_name": $OS_ERROR\n>; return; };
+
+    while ( my $line = <$handle> ) {
+        if ( my $word = _word_from_line($line) ) {
+            $stop_words{$word} = 1;
+        }
+    }
+
+    close $handle or warn qq<Could not close "$file_name": $OS_ERROR\n>;
+
+    $self->_set_stop_words(\%stop_words);
+
+    return;
+}
+
+sub _word_from_line {
+    my ($line) = @_;
+
+    $line =~ s< [#] .* \z ><>xms;
+    $line =~ s< \s+ \z ><>xms;
+    $line =~ s< \A \s+ ><>xms;
+
+    return $line;
 }
 
 #-----------------------------------------------------------------------------
@@ -294,6 +344,7 @@ a F<.perlcriticrc> file like this:
     [Documentation::PodSpelling]
     spell_command = aspell list
     stop_words = gibbles foobar
+    stop_words_file = some/path/with/stop/words.txt
 
 The default spell command is C<aspell list> and it is interpreted as a
 shell command.  We parse the individual arguments via
@@ -304,6 +355,20 @@ L<File::Which|File::Which> to convert it to an absolute path via the
 C<PATH> environment variable.  As described in Pod::Spell and
 Test::Spelling, the spell checker must accept text on STDIN and print
 misspelled words one per line on STDOUT.
+
+You can specify global stop words via the C<stop_words> and C<stop_words_file>
+options.  The former is simply split up on whitespace.  The latter is looked
+at line by line, with anything after an octothorp ("#") removed and then
+leading and trailing whitespace removed.  Silly example valid file contents:
+
+    # It's a comment!
+
+    foo
+    arglbargl    # Some other comment.
+    bar
+
+The values from C<stop_words> and C<stop_words_file> are merged together into
+a single list of exemptions.
 
 
 =head1 NOTES

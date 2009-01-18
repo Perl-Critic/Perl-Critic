@@ -17,7 +17,7 @@ use warnings;
 
 use Perl::Critic::TestUtils qw(pcritique);
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 #-----------------------------------------------------------------------------
 
@@ -29,7 +29,6 @@ Perl::Critic::TestUtils::block_perlcriticrc();
 
 my $code;
 my $policy = 'Documentation::PodSpelling';
-my %config;
 my $can_podspell =
         eval {require Pod::Spell}
     &&  can_determine_spell_command()
@@ -68,7 +67,7 @@ $code = <<'END_PERL';
 =cut
 END_PERL
 
-if ( eval { pcritique($policy, \$code, \%config) } ) {
+if ( eval { pcritique($policy, \$code) } ) {
    skip 'Test environment is not English', 4
 }
 
@@ -81,7 +80,7 @@ $code = <<'END_PERL';
 END_PERL
 
 is(
-    eval { pcritique($policy, \$code, \%config) },
+    eval { pcritique($policy, \$code) },
     can_podspell() ? 1 : undef,
     'Mispelled header',
 );
@@ -97,7 +96,7 @@ arglbargl
 END_PERL
 
 is(
-    eval { pcritique($policy, \$code, \%config) },
+    eval { pcritique($policy, \$code) },
     can_podspell() ? 1 : undef,
     'Mispelled body',
 );
@@ -116,7 +115,7 @@ arglbargl
 END_PERL
 
 is(
-    eval { pcritique($policy, \$code, \%config) },
+    eval { pcritique($policy, \$code) },
     can_podspell() ? 0 : undef,
     'local stopwords',
 );
@@ -132,11 +131,20 @@ arglbargl
 END_PERL
 
 {
-    my %cfg = (stop_words => 'foo arglbargl bar');
+    my %config = (stop_words => 'foo arglbargl bar');
     is(
-        eval { pcritique($policy, \$code, \%cfg) },
+        eval { pcritique($policy, \$code, \%config) },
         can_podspell() ? 0 : undef ,
         'global stopwords',
+    );
+}
+
+{
+    my %config = (stop_words_file => 't/20_policy_pod_spelling.d/stop-words.txt');
+    is(
+        eval { pcritique($policy, \$code, \%config) },
+        can_podspell() ? 0 : undef ,
+        'global stopwords from file',
     );
 }
 
@@ -145,7 +153,7 @@ END_PERL
 #-----------------------------------------------------------------------------
 
 # ensure we run true if this test is loaded by
-# t/20_policy_podspelling.t_without_optional_dependencies.t
+# t/20_policy_pod_spelling.t_without_optional_dependencies.t
 1;
 
 # Local Variables:

@@ -1,5 +1,8 @@
 [1.xxx] Released on 2009-xx-xx
 
+    Policy Changes:
+    * Documentation::PodSpelling now has a stop_words_file option.
+
     Bug Fixes:
     * Fix ProhibitTwoArgOpen so it allows '-|' or '|-' as the second
       of two arguments.  Patches from Kyle Hasselbacher and
