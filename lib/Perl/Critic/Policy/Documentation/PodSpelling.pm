@@ -55,6 +55,7 @@ sub supported_parameters {
         {
             name            => 'stop_words_file',
             description     => 'A file containing words to not consider as misspelled.',
+            default_string  => $EMPTY,
             behavior        => 'string',
         },
     );
