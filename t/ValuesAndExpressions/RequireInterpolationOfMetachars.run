@@ -20,6 +20,39 @@ print q{this is not literal\n};
 
 #-----------------------------------------------------------------------------
 
+## name OK to escape backslashes
+## failures 0
+## cut
+
+print 'it is ok to escape a backslash: \\t'
+print q{it is ok to escape a backslash: \\t}
+print 'you can do it multiple times: \\\\\\t'
+print q{you can do it multiple times: \\\\\\t}
+
+#-----------------------------------------------------------------------------
+
+## name OK to escape quotes
+## failures 0
+## cut
+
+print 'you can also escape a quote: \''
+print q{you can also escape a quote: \'}
+print 'you can escape a quote preceded by backslashes: \\\\\''
+print q{you can escape a quote preceded by backslashes: \\\\\'}
+
+#-----------------------------------------------------------------------------
+
+## name Valid escapes should not hide invalid ones
+## failures 4
+## cut
+
+print 'it is ok to escape a backslash: \\t but not a tee: \t'
+print q{it is ok to escape a backslash: \\t but not a tee: \t}
+print 'you can also escape a quote: \' but not a tee: \t'
+print q{you can also escape a quote: \' but not a tee: \t}
+
+#-----------------------------------------------------------------------------
+
 ## name Sigil characters not looking like sigils
 ## failures 0
 ## cut

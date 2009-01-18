@@ -78,7 +78,8 @@ sub _needs_interpolation {
     my ($string) = @_;
 
     return $string =~ m{ [\$\@] \S+ }xmso             #Contains a $ or @
-        || $string =~ m{ \\[tnrfae0xcNLuLUEQ] }xmso;  #Contains metachars
+        || $string =~ m{ (?:\A|[^\\])(?:\\\\)*
+            \\[tnrfae0xcNLuLUEQ] }xmso;               #Contains metachars
 }
 
 #-----------------------------------------------------------------------------
