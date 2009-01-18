@@ -170,9 +170,6 @@ sub get_pod_section_for_module {
 sub _get_pod_section_from_file {
     my ($file_name, $section_name, $parser) = @_;
 
-    # Grr... the handle is open for a whopping 1 statement.  Too painful to
-    # fix the policy right now.
-    ## no critic (RequireBriefOpen)
     open my $file_handle, '<', $file_name
         or throw_io
             message     => qq<Could not open "$file_name": $ERRNO>,
@@ -189,7 +186,6 @@ sub _get_pod_section_from_file {
             message     => qq<Could not close "$file_name": $ERRNO>,
             file_name   => $file_name,
             errno       => $ERRNO;
-    ## use critic
 
     return $content;
 }
@@ -356,9 +352,6 @@ sub get_module_abstract_for_module {
 sub _get_module_abstract_from_file {
     my ($file_name, $parser, $trimmer) = @_;
 
-    # Grr... the handle is open for a whopping 1 statement.  Too painful to
-    # fix the policy right now.
-    ## no critic (RequireBriefOpen)
     open my $file_handle, '<', $file_name
         or throw_io
             message     => qq<Could not open "$file_name": $ERRNO>,
@@ -375,7 +368,6 @@ sub _get_module_abstract_from_file {
             message     => qq<Could not close "$file_name": $ERRNO>,
             file_name   => $file_name,
             errno       => $ERRNO;
-    ## use critic
 
     return $module_abstract;
 }
