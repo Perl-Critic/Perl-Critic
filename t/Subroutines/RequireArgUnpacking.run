@@ -192,6 +192,48 @@ sub baz {
 }
 
 #-----------------------------------------------------------------------------
+
+## name exclude foreach rt#39601
+## failures 0
+## cut
+
+sub my_sub {
+
+    my @a = ( [ 1, 2 ], [ 3, 4 ] );
+    print @$_[0] foreach @a;
+
+    my @b = ( [ 1, 2 ], [ 3, 4 ] );
+    print @$_[0] for @b;
+
+}
+
+#-----------------------------------------------------------------------------
+
+## name but catch @$_[0] outside of a postfix for loop
+## failures 1
+## cut
+
+sub my_sub {
+
+    my @a = ( [ 1, 2 ], [ 3, 4 ] );
+    for (@a){
+        print @$_[0];
+    }
+}
+
+#-----------------------------------------------------------------------------
+
+## name and still catch unrolling args in a postfix for
+## failures 1
+## cut
+
+sub my_sub {
+
+    my @a = ( [ 1, 2 ], [ 3, 4 ] );
+    print $_[0] for @a;
+}
+
+#-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

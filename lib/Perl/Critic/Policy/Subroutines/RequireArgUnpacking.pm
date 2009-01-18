@@ -82,8 +82,6 @@ sub violates {
       MAGIC:
         for my $magic (@magic) {
             if ($AT eq $magic->raw_type) {  # this is '@_', not '$_[0]'
-                my $prev = $magic->sprevious_sibling;
-                my $next = $magic->snext_sibling;
 
                 # allow conditional checks on the size of @_
                 next MAGIC if _is_size_check($magic);
@@ -94,7 +92,16 @@ sub violates {
                         next MAGIC;
                     }
                 }
+
             }
+
+            # allow @$_[] construct in "... for ();"
+            # Check for "print @$_[] for ()" construct (rt39601)
+            next MAGIC
+              if _is_cast_of_array($magic)
+                  && _is_postfix_foreach($magic);
+
+            # If we make it this far, it is a violaton
             return $self->violation( $DESC, $EXPL, $elem );
         }
         if (!$saw_unpack) {
@@ -127,6 +134,30 @@ sub _is_size_check {
       (q{==} eq $next || q{!=} eq $next);
     return;
 }
+
+sub _is_postfix_foreach {
+    my ($magic) = @_;
+
+    my $sibling = $magic;
+    while ( $sibling = $sibling->snext_sibling ) {
+
+        return 1
+          if $sibling->isa('PPI::Token::Word')
+              && ( $sibling =~ /^for(?:each)?$/smx );
+    }
+    return;
+}
+
+sub _is_cast_of_array {
+    my ($magic) = @_;
+
+    my $prev = $magic->sprevious_sibling;
+    my $next = $magic->snext_sibling;
+
+    return 1 if ( $prev eq '@' ) && $prev->isa('PPI::Token::Cast');
+    return;
+}
+
 
 sub _get_arg_symbols {
     my ($statement) = @_;
