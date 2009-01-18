@@ -356,10 +356,11 @@ C<PATH> environment variable.  As described in Pod::Spell and
 Test::Spelling, the spell checker must accept text on STDIN and print
 misspelled words one per line on STDOUT.
 
-You can specify global stop words via the C<stop_words> and C<stop_words_file>
-options.  The former is simply split up on whitespace.  The latter is looked
-at line by line, with anything after an octothorp ("#") removed and then
-leading and trailing whitespace removed.  Silly example valid file contents:
+You can specify global stop words via the C<stop_words> and
+C<stop_words_file> options.  The former is simply split up on
+whitespace.  The latter is looked at line by line, with anything after
+an octothorp ("#") removed and then leading and trailing whitespace
+removed.  Silly example valid file contents:
 
     # It's a comment!
 
@@ -367,8 +368,8 @@ leading and trailing whitespace removed.  Silly example valid file contents:
     arglbargl    # Some other comment.
     bar
 
-The values from C<stop_words> and C<stop_words_file> are merged together into
-a single list of exemptions.
+The values from C<stop_words> and C<stop_words_file> are merged
+together into a single list of exemptions.
 
 
 =head1 NOTES
