@@ -1,4 +1,4 @@
-[1.xxx] Released on 2009-xx-xx
+[1.095_001] Released on 2009-01-18
 
     Policy Changes:
     * Documentation::PodSpelling now has a stop_words_file option.
