@@ -30,6 +30,10 @@ stop_words_file = xt/author/40_stop_words
 lib_sections    = NAME|DESCRIPTION|AUTHOR|COPYRIGHT
 script_sections = NAME|DESCRIPTION|AUTHOR|COPYRIGHT
 
+# Wrapping Exception constructor calls across lines runs into 9 lines too quickly.
+[InputOutput::RequireBriefOpen]
+lines = 20
+
 [InputOutput::RequireCheckedSyscalls]
 functions = open close
 

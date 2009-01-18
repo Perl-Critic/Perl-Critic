@@ -2,6 +2,7 @@
 
     Policy Changes:
     * Documentation::PodSpelling now has a stop_words_file option.
+    * Modules::ProhibitEvilModules now has a modules_file option.
 
     Bug Fixes:
     * Fix ProhibitTwoArgOpen so it allows '-|' or '|-' as the second

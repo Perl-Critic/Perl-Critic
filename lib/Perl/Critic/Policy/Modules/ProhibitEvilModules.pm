@@ -9,6 +9,7 @@ package Perl::Critic::Policy::Modules::ProhibitEvilModules;
 use 5.006001;
 use strict;
 use warnings;
+
 use English qw(-no_match_vars);
 use Readonly;
 
@@ -55,6 +56,20 @@ Readonly::Scalar my $MODULES_REGEX =>
         (?: \s* $DESCRIPTION_REGEX )?
         \s*
     >xms;
+
+Readonly::Scalar my $MODULES_FILE_LINE_REGEX =>
+    qr<
+        \A
+        \s*
+        (?:
+                ( $MODULE_NAME_REGEX )
+            |   $REGULAR_EXPRESSION_REGEX
+        )
+        \s*
+        ( \S (?: .* \S )? )?
+        \s*
+        \z
+    >xms;
 ## use critic
 
 # Indexes in the arrays of regexes for the "modules" option.
@@ -71,6 +86,12 @@ sub supported_parameters {
             default_string  => $EMPTY,
             parser          => \&_parse_modules,
         },
+        {
+            name            => 'modules_file',
+            description     => 'A file containing names of or patterns for modules to forbid.',
+            default_string  => $EMPTY,
+            parser          => \&_parse_modules_file,
+        },
     );
 }
 
@@ -86,35 +107,17 @@ sub _parse_modules {
     return if not $config_string;
     return if $config_string =~ m< \A \s* \z >xms;
 
-    my %evil_modules;
-
-    # Can't use a hash due to stringification, so this is an AoA.
-    my @evil_modules_regexes;
-
     my $module_specifications = $config_string;
     while ( $module_specifications =~ s< $MODULES_REGEX ><>xms ) {
         my ($module, $regex_string, $description) = ($1, $2, $3);
 
-        if ( $regex_string ) {
-            # These are module name patterns (e.g. /Acme/)
-            my $actual_regex;
-
-            eval { $actual_regex = qr/$regex_string/; 1 }  ## no critic (ExtendedFormatting, LineBoundaryMatching, DotMatchAnything)
-                or throw_policy_value
-                    policy         => $self->get_short_name(),
-                    option_name    => 'modules',
-                    option_value   => $config_string,
-                    message_suffix =>
-                        qq{contains an invalid regular expression: "$regex_string"};
-
-            push
-                @evil_modules_regexes,
-                [ $actual_regex, $description || $EMPTY ];
-        }
-        else {
-            # These are literal module names (e.g. Acme::Foo)
-            $evil_modules{$module} = $description || $EMPTY;
-        }
+        $self->_handle_module_specification(
+            module                  => $module,
+            regex_string            => $regex_string,
+            description             => $description,
+            option_name             => 'modules',
+            option_value            => $config_string,
+        );
     }
 
     if ($module_specifications) {
@@ -126,8 +129,91 @@ sub _parse_modules {
                 qq{contains unparseable data: "$module_specifications"};
     }
 
-    $self->{_evil_modules}          = \%evil_modules;
-    $self->{_evil_modules_regexes}  = \@evil_modules_regexes;
+    return;
+}
+
+sub _parse_modules_file {
+    my ($self, $parameter, $config_string) = @_;
+
+    return if not $config_string;
+    return if $config_string =~ m< \A \s* \z >xms;
+
+    open my $handle, '<', $config_string
+        or throw_policy_value
+            policy         => $self->get_short_name(),
+            option_name    => 'modules_file',
+            option_value   => $config_string,
+            message_suffix =>
+                qq<refers to a file that could not be opened: $OS_ERROR>;
+    while ( my $line = <$handle> ) {
+        $self->_handle_module_specification_on_line($line, $config_string);
+    }
+    close $handle or warn qq<Could not close "$config_string": $OS_ERROR\n>;
+
+    return;
+}
+
+sub _handle_module_specification_on_line {
+    my ($self, $line, $config_string) = @_;
+
+    $line =~ s< [#] .* \z ><>xms;
+    $line =~ s< \s+ \z ><>xms;
+    $line =~ s< \A \s+ ><>xms;
+
+    return if not $line;
+
+    if ( $line =~ s< $MODULES_FILE_LINE_REGEX ><>xms ) {
+        my ($module, $regex_string, $description) = ($1, $2, $3);
+
+        $self->_handle_module_specification(
+            module                  => $module,
+            regex_string            => $regex_string,
+            description             => $description,
+            option_name             => 'modules_file',
+            option_value            => $config_string,
+        );
+    }
+    else {
+        throw_policy_value
+            policy         => $self->get_short_name(),
+            option_name    => 'modules_file',
+            option_value   => $config_string,
+            message_suffix =>
+                qq{contains unparseable data: "$line"};
+    }
+
+    return;
+}
+
+sub _handle_module_specification {
+    my ($self, %arguments) = @_;
+
+    my $description = $arguments{description} || $EMPTY;
+
+    if ( my $regex_string = $arguments{regex_string} ) {
+        # These are module name patterns (e.g. /Acme/)
+        my $actual_regex;
+
+        eval { $actual_regex = qr/$regex_string/; 1 }  ## no critic (ExtendedFormatting, LineBoundaryMatching, DotMatchAnything)
+            or throw_policy_value
+                policy         => $self->get_short_name(),
+                option_name    => $arguments{option_name},
+                option_value   => $arguments{option_value},
+                message_suffix =>
+                    qq{contains an invalid regular expression: "$regex_string"};
+
+        # Can't use a hash due to stringification, so this is an AoA.
+        $self->{_evil_modules_regexes} ||= [];
+
+        push
+            @{ $self->{_evil_modules_regexes} },
+            [ $actual_regex, $description ];
+    }
+    else {
+        # These are literal module names (e.g. Acme::Foo)
+        $self->{_evil_modules} ||= {};
+        $self->{_evil_modules}{ $arguments{module} } = $description;
+    }
 
     return;
 }
@@ -139,7 +225,9 @@ sub initialize_if_enabled {
 
     # Disable if no modules are specified; there's no point in running if
     # there aren't any.
-    return exists $self->{_evil_modules};
+    return
+            exists $self->{_evil_modules}
+        ||  exists $self->{_evil_modules_regexes};
 }
 
 #-----------------------------------------------------------------------------
@@ -204,11 +292,12 @@ insecure, or just don't like.
 
 =head1 CONFIGURATION
 
-The set of prohibited modules is configurable via the C<modules>
-option.  The value of C<modules> should be a string of
-space-delimited, fully qualified module names and/or regular
-expressions.  An example of prohibiting two specific modules in a
-F<.perlcriticrc> file:
+The set of prohibited modules is configurable via the C<modules> and
+C<modules_file> options.
+
+The value of C<modules> should be a string of space-delimited, fully
+qualified module names and/or regular expressions.  An example of
+prohibiting two specific modules in a F<.perlcriticrc> file:
 
     [Modules::ProhibitEvilModules]
     modules = Getopt::Std Autoload
@@ -224,11 +313,25 @@ would cause all modules that match C<m/Acme::/> to be forbidden.
 
 In addition, you can override the default message ("Prohibited module
 "I<module>" used") with your own, in order to give suggestions for
-alternative action.  To do so, put your message in curly brackets
-after the module name or regular expression.  Like this:
+alternative action.  To do so, put your message in curly braces after
+the module name or regular expression.  Like this:
 
     [Modules::ProhibitEvilModules]
     modules = Fatal {Found use of Fatal. Use autodie instead} /Acme::/ {We don't use joke modules}
+
+Similarly, the C<modules_file> option gives the name of a file
+containing specifications for prohibited modules.  Only one module
+specification is allowed per line and comments start with an octothorp
+and run to end of line; no curly braces are necessary for delimiting
+messages:
+
+    Evil     # Prohibit the "Evil" module and use the default message.
+
+    # Prohibit the "Fatal" module and give a replacement message.
+    Fatal Found use of Fatal. Use autodie instead.
+
+    # Use a regular expression.
+    /Acme::/     We don't use joke modules.
 
 By default, there are no prohibited modules (although I can think of a
 few that should be).

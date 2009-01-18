@@ -26,13 +26,18 @@ allow_leading_tabs = 0
 [ControlStructures::ProhibitPostfixControls]
 flowcontrol = warn die carp croak cluck confess goto exit plan skip
 
-[Documentation::PodSpelling]
-stop_words =
+# None of our tests contain real POD, but POD::Spell gets confused by the code
+# in some of our test files.
+[-Documentation::PodSpelling]
 
 [-Documentation::RequirePodSections]
 
 # Too endemic for me to deal with right now
 [-ErrorHandling::RequireCheckingReturnValueOfEval]
+
+# Wrapping Exception constructor calls across lines runs into 9 lines too quickly.
+[InputOutput::RequireBriefOpen]
+lines = 20
 
 [InputOutput::RequireCheckedSyscalls]
 functions = open close

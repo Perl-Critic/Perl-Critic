@@ -1,0 +1,11 @@
+Evil     # Comment on same line as meaningful content.
+
+Fatal Found use of Fatal. Use autodie instead.
+
+# Extra leading and trailing whitespace here is intentional.
+    Getopt::Std     Found use of Getopt::Std. Use Getopt::Long instead.       
+
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$

@@ -1,0 +1,12 @@
+/\AEvil\z/     # Comment on same line as meaningful content.
+
+# Lack of whitespace between regex and message intentional.
+/Fatal/Found use of Fatal. Use autodie instead.
+
+# Extra leading and trailing whitespace here is intentional.
+    /Getopt::Std/     Found use of Getopt::Std. Use Getopt::Long instead.       
+
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$

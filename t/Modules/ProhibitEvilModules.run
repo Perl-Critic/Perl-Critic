@@ -81,6 +81,28 @@ use Getopt::Std;
 
 #-----------------------------------------------------------------------------
 
+## name Providing the description for modules, no regular expressions.
+## parms { modules_file => 't/Modules/ProhibitEvilModules.d/modules-no-regular-expressions.txt' }
+## failures 3
+## cut
+
+use Evil;
+use Fatal qw< open close >;
+use Getopt::Std;
+
+#-----------------------------------------------------------------------------
+
+## name Providing the description for modules, regular expressions.
+## parms { modules_file => 't/Modules/ProhibitEvilModules.d/modules-regular-expressions.txt' }
+## failures 3
+## cut
+
+use Evil;
+use Fatal qw< open close >;
+use Getopt::Std;
+
+#-----------------------------------------------------------------------------
+
 #      $URL$
 #     $Date$
 #   $Author$
