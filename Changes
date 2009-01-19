@@ -1,3 +1,9 @@
+[1.xxx_xxx] Released on 2009-xx-xx
+
+    Bug Fixes:
+    * Fix ProhibitAmpersandSigils so it allows defined(&x) as well
+      as defined &x.  Patch from Kevin Ryde, RT #38855.
+
 [1.095_001] Released on 2009-01-18
 
     Policy Changes:
