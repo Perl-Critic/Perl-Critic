@@ -50,6 +50,7 @@ sub violates {
     # "defined((&foo))" etc
     if (! $psib) {
         my $up = $elem;
+      PARENT:
         while (($up = $up->parent)
                && ($up->isa('PPI::Statement::Expression')
                    || $up->isa('PPI::Structure::List')
@@ -61,7 +62,7 @@ sub violates {
                 if ($word->isa('PPI::Token::Word')) {
                     $psib = $word;
                 }
-                last;
+                last PARENT;
             }
         }
     }
