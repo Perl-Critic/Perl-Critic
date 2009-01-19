@@ -306,17 +306,20 @@ camel-case, it should be possible to split symbols into words, and then look
 them up in a dictionary (see PodSpelling).  This policy should probably have
 a similar stopwords feature as well.
 
+
 =item * Documentation::RequireModuleAbstract
 
 Require a C<=head1 NAME> POD section with content that matches
 C<\A \s* [\w:]+ \s+ - \s+ \S>.  The single hyphen is the important bit.  Also,
 must be a single line.
 
+
 =item * Expressions::RequireFatCommasInHashConstructors
 
-=item * ErrorHandling::RequireLocalizingEvalErrorInDESTROY
+=item * ErrorHandling::RequireLocalizingGlobalErrorVariablesInDESTROY
 
-Prevent C<$@> from being cleared unexpectedly by DESTROY methods.
+Prevent C<$.>, C<$@>, C<$!>, C<$^E>, and C<$?> from being cleared unexpectedly
+by DESTROY methods.
 
     package Foo;
 
@@ -333,8 +336,9 @@ Prevent C<$@> from being cleared unexpectedly by DESTROY methods.
     }
     print $@;   # "Died in Foo::DESTROY()", not "Died in eval.".
 
+See L<http://use.perl.org/~Ovid/journal/36767> and
+L<http://www.xray.mpe.mpg.de/mailing-lists/perl5-porters/2008-06/msg00542.html>.
 
-See L<http://use.perl.org/~Ovid/journal/36767>.
 
 =item * Expressions::ProhibitDecimalWithBitwiseOperator
 
