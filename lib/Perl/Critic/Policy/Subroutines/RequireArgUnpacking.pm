@@ -154,7 +154,7 @@ sub _is_cast_of_array {
     my $prev = $magic->sprevious_sibling;
     my $next = $magic->snext_sibling;
 
-    return 1 if ( $prev eq '@' ) && $prev->isa('PPI::Token::Cast');
+    return 1 if ( $prev eq $AT ) && $prev->isa('PPI::Token::Cast');
     return;
 }
 
