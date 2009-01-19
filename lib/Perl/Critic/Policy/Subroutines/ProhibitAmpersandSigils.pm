@@ -46,8 +46,26 @@ sub violates {
 
     return if ( $elem !~ m{\A [&] }xms ); # ok
 
-    my $previous = $elem->sprevious_sibling();
-    return if $previous and $EXEMPTIONS{$previous};
+    # look up past parens to get say the "defined" in "defined(&foo)" or
+    # "defined((&foo))" etc
+    if (! $psib) {
+        my $up = $elem;
+        while (($up = $up->parent)
+               && ($up->isa('PPI::Statement::Expression')
+                   || $up->isa('PPI::Structure::List')
+                   || $up->isa('PPI::Statement'))) {
+            if (my $word = $up->sprevious_sibling) {
+                # For a word set $psib to have it checked against %EXEMPTIONS
+                # below.  For a non-word it's a violation, leave $psib false
+                # to get there.
+                if ($word->isa('PPI::Token::Word')) {
+                    $psib = $word;
+                }
+                last;
+            }
+        }
+    }
+    return if $psib and $EXEMPTIONS{$psib};
 
     return $self->violation( $DESC, $EXPL, $elem );
 }
