@@ -26,6 +26,15 @@ $$foo; # for Devel::Cover; skip non-backslash casts
 
 #-----------------------------------------------------------------------------
 
+## name RT #38855 passing with parens
+## failures 0
+## cut
+
+defined( &function_call );
+exists( &function_call );
+
+#-----------------------------------------------------------------------------
+
 ## name more passing
 ## failures 0
 ## cut
