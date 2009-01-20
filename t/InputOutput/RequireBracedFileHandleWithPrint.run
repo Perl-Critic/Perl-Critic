@@ -1,4 +1,4 @@
-## name basic failures
+## name basic failures (print)
 ## failures 7
 ## cut
 
@@ -14,7 +14,23 @@ print( $fh $foo, $bar );
 
 #-----------------------------------------------------------------------------
 
-## name more arcane passes
+## name basic failures (printf)
+## failures 7
+## cut
+
+#printf $fh;           #Punt on this
+#printf $fh if 1;
+printf $fh "something" . "something else";
+printf $fh generate_report();
+printf $fh "something" if $DEBUG;
+printf $fh @list;
+printf $fh $foo, $bar;
+printf( $fh @list );
+printf( $fh $foo, $bar );
+
+#-----------------------------------------------------------------------------
+
+## name more arcane passes (print)
 ## failures 0
 ## cut
 print "something" . "something else";
@@ -87,7 +103,80 @@ $foo{print}; # not a function call
 
 #-----------------------------------------------------------------------------
 
-## name more bracing arcana
+## name more arcane passes (printf)
+## failures 0
+## cut
+printf "something" . "something else";
+printf "something" . "something else"
+  or die;
+printf {FH} "something" . "something else";
+printf {FH} "something" . "something else"
+  or die;
+
+printf generate_report();
+printf generate_report()
+  or die;
+printf {FH} generate_report();
+printf {FH} generate_report()
+  or die;
+
+printf rand 10;
+printf rand 10
+  or die;
+
+printf {FH};
+printf {FH}
+  or die;
+printf {FH} @list;
+printf {FH} @list
+  or die;
+printf {FH} $foo, $bar;
+printf {FH} $foo, $bar
+  or die;
+
+printf @list;
+printf @list
+  or die;
+printf $foo, $bar;
+printf $foo, $bar
+  or die;
+printf $foo , $bar;
+printf $foo , $bar
+  or die;
+printf foo => 1;
+printf foo => 1
+  or die;
+
+printf( {FH} @list );
+printf( {FH} @list )
+  or die;
+printf( {FH} $foo, $bar );
+printf( {FH} $foo, $bar )
+  or die;
+
+printf();
+printf()
+  or die;
+printf( );
+printf( )
+  or die;
+printf( @list );
+printf( @list )
+  or die;
+printf( $foo, $bar );
+printf( $foo, $bar )
+  or die;
+
+printf if 1;
+printf or die if 1;
+
+printf 1 2; # syntax error, but not a policy violation
+$foo{printf}; # not a function call
+{printf}; # no siblings
+
+#-----------------------------------------------------------------------------
+
+## name more bracing arcana (print)
 ## failures 0
 ## cut
 
@@ -96,3 +185,15 @@ print {$fh} @list;
 print {$fh} $foo, $bar;
 print( {$fh} @list );
 print( {$fh} $foo, $bar );
+
+#-----------------------------------------------------------------------------
+
+## name more bracing arcana (printf)
+## failures 0
+## cut
+
+printf {$fh};
+printf {$fh} @list;
+printf {$fh} $foo, $bar;
+printf( {$fh} @list );
+printf( {$fh} $foo, $bar );
