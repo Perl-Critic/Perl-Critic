@@ -29,7 +29,7 @@ Readonly::Scalar my $DESC => q{Use named character classes};
 Readonly::Scalar my $EXPL => [248];
 
 Readonly::Array my @PATTERNS => (  # order matters: most to least specific
-   [q{ },'\\t','\\r','\\n']      => ['\\s', '\\S'],  ## no critic (InterpolationOfMetachars)
+   [q{ },'\\t','\\r','\\n']      => ['\\s', '\\S'],
    ['A-Z','a-z','_']             => ['\\w', '\\W'],
    ['A-Z','a-z']                 => ['[[:alpha:]]','[[:^alpha:]]'],
    ['A-Z']                       => ['[[:upper:]]','[[:^upper:]]'],
@@ -117,9 +117,9 @@ sub _get_character_class_violations {
 }
 
 Readonly::Hash my %HEX => (  # Note: this is ASCII specific!
-   '0a' => '\\n',  ## no critic (InterpolationOfMetachars)
-   '0c' => '\\f',  ## no critic (InterpolationOfMetachars)
-   '0d' => '\\r',  ## no critic (InterpolationOfMetachars)
+   '0a' => '\\n',
+   '0c' => '\\f',
+   '0d' => '\\r',
    '20' => q{ },
 );
 sub _fixup {
