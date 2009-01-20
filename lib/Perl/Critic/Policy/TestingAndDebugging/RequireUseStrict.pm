@@ -82,6 +82,10 @@ sub _generate_is_use_strict {
         return 0 if !$elem->isa('PPI::Statement::Include');
         return 0 if $elem->type() ne 'use';
 
+        # We only want file-scoped pragmas
+        my $parent = $elem->parent();
+        return 0 if !$parent->isa('PPI::Document');
+
         if ( my $pragma = $elem->pragma() ) {
             return 1 if $self->{_equivalent_modules}{$pragma};
         }

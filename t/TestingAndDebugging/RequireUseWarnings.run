@@ -198,6 +198,25 @@ $foo = $bar;
 
 #-----------------------------------------------------------------------------
 
+## name "use warnings" in lexical context (BEGIN block) RT #42310
+## failures 1
+## cut
+
+BEGIN { use warnings }  # notice this is first statement in file
+$this_is_not_covered_by_warnings;
+
+#-----------------------------------------------------------------------------
+
+## name "use warnings" in lexical context (subroutine) RT #42310
+## failures 1
+## cut
+
+sub foo { use warnings }  # notice this is first statement in file
+$this_is_not_covered_by_warnings;
+
+
+#-----------------------------------------------------------------------------
+
 ##############################################################################
 #      $URL$
 #     $Date$

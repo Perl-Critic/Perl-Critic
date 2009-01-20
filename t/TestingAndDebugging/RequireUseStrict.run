@@ -163,6 +163,20 @@ use Foo;
 $foo = $bar;
 
 #-----------------------------------------------------------------------------
+## name "use strict" in lexical context (BEGIN block) RT #42310
+## failures 1
+## cut
+
+BEGIN{ use strict }  # notice this is first statement in file
+$this_is_not_strict
+
+#-----------------------------------------------------------------------------
+## name "use strict" in lexical context (subroutine) RT #42310
+## failures 1
+## cut
+
+sub foo { use strict }  # notice this is first statement in file
+$this_is_not_strict
 
 ##############################################################################
 #      $URL$
