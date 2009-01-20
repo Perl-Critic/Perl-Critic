@@ -1,3 +1,9 @@
+[1.xxx_xxx] Released on 2009-xx-xx
+
+    Bug Fixes:
+    * ValuesAndExpressions::RequireInterpolationOfMetachars allows for escaped
+      backslashes.  Fixed by Tom Wyant, RT #38530.
+
 [1.095_001] Released on 2009-01-18
 
     Policy Changes:

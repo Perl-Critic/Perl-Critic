@@ -77,8 +77,13 @@ sub violates {
 sub _needs_interpolation {
     my ($string) = @_;
 
-    return $string =~ m{ [\$\@] \S+ }xmso             #Contains a $ or @
-        || $string =~ m{ \\[tnrfae0xcNLuLUEQ] }xmso;  #Contains metachars
+    return
+            $string =~ m< [\$\@] \S+ >xmso             # Contains a $ or @
+        ||  $string =~ m<                              # Contains metachars
+                (?: \A | [^\\] )
+                (?: \\{2} )*
+                \\ [tnrfae0xcNLuLUEQ]
+            >xmso;
 }
 
 #-----------------------------------------------------------------------------
