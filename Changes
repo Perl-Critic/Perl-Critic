@@ -3,7 +3,7 @@
     Bug Fixes:
     * ValuesAndExpressions::RequireInterpolationOfMetachars allows for escaped
       backslashes.  Fixed by Tom Wyant, RT #38530.
-    * RequireUseStrict and RequireUseWarnings are no longer fooled 
+    * RequireUseStrict and RequireUseWarnings are no longer fooled
       by a block-scoped pragma. RT #42310
 
 [1.095_001] Released on 2009-01-18
