@@ -453,20 +453,23 @@ sub _get_option_specification {
         theme=s
         top:i
         verbose=s
+        ansicolors=s
     );
 }
 
 #-----------------------------------------------------------------------------
 
 sub _colorize_by_severity {
-    my (@violations) = @_;
+    my @violations = @_;
     return @violations if _this_is_windows();
     return @violations if not eval { require Term::ANSIColor };
 
-    my %color_of = (
-        $SEVERITY_HIGHEST => 'bold red',
-        $SEVERITY_HIGH    => 'magenta',
-    );
+    my @ansicolors = $critic->config->ansicolors();
+    my $inx = $SEVERITY_HIGHEST + 1;
+    my %color_of;
+    foreach my $spec (@ansicolors) {
+        $color_of{--$inx} = $spec;
+    }
     return map { _colorize( "$_", $color_of{$_->severity()} ) } @violations;
 
 }

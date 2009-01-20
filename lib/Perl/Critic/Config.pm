@@ -85,6 +85,10 @@ sub _init {
         $options_processor->single_policy(),
         $errors,
     );
+    $self->_validate_and_save_ansicolors(
+        'ansicolors', $args{-ansicolors}, $options_processor->ansicolors(),
+        $errors
+    );
 
     $self->_validate_and_save_verbosity($args{-verbose}, $errors);
     $self->_validate_and_save_severity($args{-severity}, $errors);
@@ -656,6 +660,73 @@ sub _validate_and_save_pager {
 }
 
 #-----------------------------------------------------------------------------
+
+sub _validate_and_save_ansicolors {
+    my ($self, $option_name, $args_value, $default_value, $errors) = @_;
+
+    my $full_option_name;
+    my $source;
+    my @ansicolors;
+
+    if ($args_value) {
+        $full_option_name = "-$option_name";
+
+        if (ref $args_value) {
+            @ansicolors = @{ $args_value };
+        }
+        else {
+            local $_ = $args_value;
+            s/ \A\s+ //smox;
+            s/ \s+\z //smox;
+            @ansicolors = split qr/\s*,\s*/smox;
+        }
+    }
+
+    if (not @ansicolors) {
+        $full_option_name = $option_name;
+        $source = $self->_profile()->source();
+
+        if (ref $default_value) {
+            @ansicolors = @{ $default_value };
+        }
+        elsif ($default_value) {
+            local $_ = $default_value;
+            s/ \A\s+ //smox;
+            s/ \s+\z //smox;
+            @ansicolors = split qr/\s*,\s*/smox;
+        }
+    }
+
+    my $found_errors;
+    eval { require Term::ANSIColor } or return;
+    foreach my $spec (@ansicolors) {
+        foreach my $attr (split qr/\s+/smox, $spec) {
+            $Term::ANSIColor::attributes{$attr} ## no critic (ProhibitPackageVars)
+                or do {
+                $errors->add_exception(
+                    $self->_new_global_value_exception(
+                        option_name     => $option_name,
+                        option_value    => $attr,
+                        source          => $source,
+                        message_suffix  => 'is not valid.',
+                    )
+                );
+                $found_errors = 1;
+            };
+        }
+    }
+
+    if (not $found_errors) {
+        my $option_key = $option_name;
+        $option_key =~ s/ - /_/xmsg;
+
+        $self->{"_$option_key"} = \@ansicolors;
+    }
+
+    return;
+}
+
+#-----------------------------------------------------------------------------
 # Begin ACCESSSOR methods
 
 sub _profile {
@@ -772,6 +843,13 @@ sub criticism_fatal {
 
 sub site_policy_names {
     return Perl::Critic::PolicyFactory::site_policy_names();
+}
+
+#-----------------------------------------------------------------------------
+
+sub ansicolors {
+    my ($self) = @_;
+    return @{ $self->{_ansicolors} };
 }
 
 1;
@@ -896,6 +974,10 @@ for the benefit of L<perlcritic|perlcritic>.
 B<-criticism-fatal> is not used by Perl::Critic but is provided for
 the benefit of L<criticism|criticism>.
 
+B<-ansicolors> is a comma-delimited string or a list reference specifying the
+coloring for the various severity levels, most-severe first. It is not used by
+Perl::Critic, but is provided for the benefit of L<perlcritic|perlcritic>.
+
 
 
 =back
@@ -1002,6 +1084,11 @@ Returns the value of the C<-pager> attribute for this Config.
 Returns the value of the C<-criticsm-fatal> attribute for this Config.
 
 
+=item C< ansicolors() >
+
+Returns the value of the C<-ansicolors> attribute for this Config.
+
+
 =back
 
 
@@ -1056,6 +1143,7 @@ corresponding Perl::Critic constructor argument.
     include   = NamingConventions ClassHierarchies    #Space-delimited list
     exclude   = Variables  Modules::RequirePackage    #Space-delimited list
     color     = 1                                     #Zero or One
+    ansicolors = bold red, magenta                    #Comma-delimited list
 
 The remainder of the configuration file is a series of blocks like
 this:
