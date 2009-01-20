@@ -5,6 +5,8 @@
       backslashes.  Fixed by Tom Wyant, RT #38530.
     * RequireUseStrict and RequireUseWarnings are no longer fooled
       by a block-scoped pragma. RT #42310
+    * RequireBracedFileHandleWithPrint applies to printf as well as print.
+      Fixed by Kyle Hasselbacher, RT #42537
 
 [1.095_001] Released on 2009-01-18
 
