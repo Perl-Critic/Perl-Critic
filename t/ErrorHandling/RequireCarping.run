@@ -122,6 +122,22 @@ die "A horrible death\n"    # last statement doesn't need a terminator
 
 #-----------------------------------------------------------------------------
 
+## name Don't complain if message ends with literal "\n" (RT #25046)
+## TODO not implemented
+## failures 0
+## cut
+
+die "A horrible death
+" ;
+die 'A horrible death
+' ;
+die q{A horrible death
+} ;
+die qq{A horrible death
+} ;
+
+#-----------------------------------------------------------------------------
+
 ## name Complain if message ends with "\n" in single quotes.
 ## failures 2
 ## cut
