@@ -41,8 +41,7 @@ sub _init {
     my $exclude = dor(delete $args{exclude}, $EMPTY);
     $self->{_exclude}    = [ words_from_string( $exclude ) ];
     my $include = dor(delete $args{include}, $EMPTY);
-    # TODO make this a real constant. Perl::Critic::Utils? or
-    # Perl::Critic::Utils::Constants? -- TRW
+    # TODO make this a real constant in Perl::Critic::Utils::Constants? -- TRW
     # TODO decide what the name should really be. -- TRW
     my $ANSICOLORS_DEFAULT = 'bold red,magenta';
     $self->{_include}    = [ words_from_string( $include ) ];
@@ -312,8 +311,8 @@ Returns the default C<criticism-fatal> setting (Either 1 or 0).
 
 =item C< ansicolors() >
 
-Returns a reference to a list of the ANSI colors to be used for coloring the
-various severities, worst first.
+Returns a reference to a list of the ANSI colors to be used for
+coloring the various severities, worst first.
 
 =back
 
