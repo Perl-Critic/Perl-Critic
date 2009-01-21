@@ -1,6 +1,8 @@
 [1.xxx_xxx] Released on 2009-xx-xx
 
     Bug Fixes:
+    * ErrorHandling::RequireCarping will now allow a literal newline
+      as well as "\n".  Fixed by Kyle Hasselbacher, RT #25046
     * ValuesAndExpressions::RequireInterpolationOfMetachars allows for escaped
       backslashes.  Fixed by Tom Wyant, RT #38530.
     * RequireUseStrict and RequireUseWarnings are no longer fooled

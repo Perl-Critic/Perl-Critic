@@ -123,7 +123,6 @@ die "A horrible death\n"    # last statement doesn't need a terminator
 #-----------------------------------------------------------------------------
 
 ## name Don't complain if message ends with literal "\n" (RT #25046)
-## TODO not implemented
 ## failures 0
 ## cut
 

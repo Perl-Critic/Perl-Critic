@@ -74,14 +74,25 @@ sub _last_flattened_argument_list_element_ends_in_newline {
 
     my $last_flattened_argument
         = _find_last_flattened_argument_list_element($die_or_warn);
-    if (
-            $last_flattened_argument
-        and (
-                $last_flattened_argument->isa('PPI::Token::Quote::Double')
-            or  $last_flattened_argument->isa('PPI::Token::Quote::Interpolate')
-        )
-    ) {
-        return $TRUE if $last_flattened_argument =~ m{ [\\] n . \z }xmso;
+    if (    $last_flattened_argument
+        and $last_flattened_argument->isa('PPI::Token::Quote') )
+    {
+        my $last_flattened_argument_string
+            = $last_flattened_argument->string();
+        if (
+            $last_flattened_argument_string =~ m{ \n \z }xms
+            or (
+                (
+                    $last_flattened_argument->isa('PPI::Token::Quote::Double')
+                    or $last_flattened_argument->isa(
+                        'PPI::Token::Quote::Interpolate')
+                )
+                and $last_flattened_argument_string =~ m{ [\\] n \z }xms
+            )
+          )
+        {
+            return $TRUE;
+        }
     }
 
     return $FALSE
