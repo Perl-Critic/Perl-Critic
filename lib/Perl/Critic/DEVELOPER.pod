@@ -1048,6 +1048,11 @@ and
 
 to see the differences between the two cases.
 
+Alternatively, see
+L<ppi_dumper|http://search.cpan.org/dist/App-PPI-Dumper/script/ppi_dumper>
+and
+L<PPI::Tester|http://search.cpan.org/dist/PPI-Tester/lib/PPI/Tester.pm>.
+
 
 =head1 VERSION
 
