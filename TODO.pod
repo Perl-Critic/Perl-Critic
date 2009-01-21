@@ -38,13 +38,36 @@ Something like
 
 =item * Include PBP references and Safari sections in the documentation.
 
-Perhaps these could be injected into the POD at build time, based on the data in the
-code.  But that data is not entirely static, so I'm not sure how it would work for
-Policies that dynamically determine the PBP references.
+Perhaps these could be injected into the POD at build time, based on the data
+in the code.  But that data is not entirely static, so I'm not sure how it
+would work for Policies that dynamically determine the PBP references.
 
-Perhaps it would be good enough to just create a one-off tool that would inject 
-the PBP and/or Safari references into the POD one time, and we could manually deal
-with Policies that behave oddly.
+Perhaps it would be good enough to just create a one-off tool that would
+inject the PBP and/or Safari references into the POD one time, and we could
+manually deal with Policies that behave oddly.
+
+Much better would be to put the information in the POD in a strucutured manner
+and parse it out in the code, something along the lines of
+
+    =head1 METADATA
+
+    =over
+
+    =item Default Themes
+
+    core bugs pbp
+
+    =item Default Severity
+
+    3
+
+    =item Perl Best Practices Page Numbers
+
+    193, 195
+
+    =back
+
+and so on.
 
 
 =item * Add --files-with-violations/-l and --files-without-violations/-L options to F<perlcritic>.
