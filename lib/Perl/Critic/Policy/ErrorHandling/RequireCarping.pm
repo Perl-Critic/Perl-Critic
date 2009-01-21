@@ -72,8 +72,8 @@ sub violates {
 sub _last_flattened_argument_list_element_ends_in_newline {
     my $die_or_warn = shift;
 
-    my $last_flattened_argument =
-        _find_last_flattened_argument_list_element($die_or_warn);
+    my $last_flattened_argument
+        = _find_last_flattened_argument_list_element($die_or_warn);
     if (
             $last_flattened_argument
         and (
