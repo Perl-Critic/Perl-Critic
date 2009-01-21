@@ -26,6 +26,7 @@ use Perl::Critic::Theme qw( $RULE_INVALID_CHARACTER_REGEX cook_rule );
 use Perl::Critic::UserProfile qw();
 use Perl::Critic::Utils qw{
     :booleans :characters :severities :internal_lookup :classification
+    :data_conversion
 };
 use Perl::Critic::Utils::Constants qw{ :profile_strictness };
 use Perl::Critic::Utils::DataConversion qw{ boolean_to_number dor };
@@ -696,11 +697,13 @@ sub _validate_and_save_ansicolors {
             @ansicolors = split qr/\s*,\s*/smox;
         }
     }
+    @ansicolors = map {defined $_ && $_ eq $EMPTY ? undef : $_} @ansicolors;
 
     my $found_errors;
     eval { require Term::ANSIColor } or return;
     foreach my $spec (@ansicolors) {
-        foreach my $attr (split qr/\s+/smox, $spec) {
+        defined $spec or next;
+        foreach my $attr (words_from_string( $spec )) {
             $Term::ANSIColor::attributes{$attr} ## no critic (ProhibitPackageVars)
                 or do {
                 $errors->add_exception(
@@ -974,9 +977,10 @@ for the benefit of L<perlcritic|perlcritic>.
 B<-criticism-fatal> is not used by Perl::Critic but is provided for
 the benefit of L<criticism|criticism>.
 
-B<-ansicolors> is a comma-delimited string or a list reference specifying the
-coloring for the various severity levels, most-severe first. It is not used by
-Perl::Critic, but is provided for the benefit of L<perlcritic|perlcritic>.
+B<-ansicolors> is a comma-delimited string or a list reference
+specifying the coloring for the various severity levels, most-severe
+first. It is not used by Perl::Critic, but is provided for the benefit
+of L<perlcritic|perlcritic>.
 
 
 
