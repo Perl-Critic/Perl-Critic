@@ -1,0 +1,262 @@
+## name No failure
+## failures 0
+## cut
+
+# This is a comment in my perl
+# And another comment that is just at the maximum line length of 78...........
+sub my_sub {
+    for(1){
+        do_something(); and_something_else();            and_something_else();
+    }
+
+    # This is a comment in my code
+    do_something(); # This is another comment in code following a statement...
+    # And another comment
+}
+#-----------------------------------------------------------------------------
+
+## name Soft comment failures
+## failures 2
+## cut
+
+# This is a comment in my code, but as you can see it is just a bit too long...
+# This is a comment in my code, but as you can see it is just a bit too long...
+# And another comment
+sub my_sub {
+    do_something(); and_something_else();
+}
+
+#-----------------------------------------------------------------------------
+
+## name Soft comment after code
+## failures 1
+## cut
+
+# This is a comment in my code
+do_something(); # This comment make the line too long, it is picked up by WS...
+# And another comment
+
+#-----------------------------------------------------------------------------
+
+## name Soft statement failures
+## failures 2
+## cut
+
+# This is a comment in my code
+# And another comment
+sub my_sub {
+    do_something(); and_something_else(); and_something_else(); and_tooooooo();
+    do_something(); and_something_else(); and_something_else(); and_tooooooo();
+}
+
+#-----------------------------------------------------------------------------
+
+## name Soft Pod failures
+## failures 2
+## cut
+
+# This is a comment in my code
+# And another comment
+
+=pod
+
+=head1 Testing
+
+this is a really long line in my pod, I should break this up into smaller lines
+
+this is a really long line in my pod, I should break this up into smaller lines
+
+=cut
+
+sub my_sub {
+    do_something(); 
+}
+
+#-----------------------------------------------------------------------------
+
+## name Soft comment failures < allowed pct
+## failures 0
+## parms { percent_long_code_lines_allowed => 20 }
+## cut
+
+# This is a comment in my code, but as you can see it is just a bit too long...
+# And another comment
+sub my_sub {
+    do_something(); and_something_else();
+}
+
+#-----------------------------------------------------------------------------
+
+## name Soft statement failures < allowed pct
+## failures 0
+## parms { percent_long_code_lines_allowed => 20 }
+## cut
+
+# This is a comment in my code
+# And another comment
+sub my_sub {
+    do_something(); and_something_else(); and_something_else(); and_tooooooo();
+}
+
+#-----------------------------------------------------------------------------
+
+## name Soft pod failures < allowed pct
+## failures 0
+## parms { percent_long_pod_lines_allowed => 20 }
+## cut
+
+# This is a comment in my code
+# And another comment
+
+=pod
+
+=head1 Testing
+
+this is a really long line in my pod, I should break this up into smaller lines
+
+=cut
+
+sub my_sub {
+    do_something(); 
+}
+
+#-----------------------------------------------------------------------------
+
+## name Hard comment failure
+## failures 1
+## cut
+
+# This is a comment in my code, but as you can see it is too long by far and should always be a violation..........
+# And another comment
+sub my_sub {
+    do_something(); and_something_else();
+}
+
+#-----------------------------------------------------------------------------
+
+## name Hard statement failure
+## failures 1
+## cut
+
+# This is a comment in my code
+# And another comment
+sub my_sub {
+    do_something(); and_something_else(); and_something_else(); and_toooooooooooooooooooooooooooooooooooooooooooo();
+}
+
+#-----------------------------------------------------------------------------
+
+## name Hard pod failure
+## failures 1
+## cut
+
+# This is a comment in my code
+# And another comment
+
+=pod
+
+=head1 Testing
+
+this is a really long line in my pod, I should break this up into smaller lines....................................
+
+=cut
+
+sub my_sub {
+    do_something(); 
+}
+
+#-----------------------------------------------------------------------------
+## name Code failure max_code_line_length = 20
+## failures 2
+## parms { max_code_line_length => 20 }
+## cut
+
+# This is a comment in my code
+
+sub my_sub {
+    do_something(); 
+}
+
+#-----------------------------------------------------------------------------
+
+## name DATA
+## failures 0
+## cut
+
+# This is a comment in my code
+# And another comment
+
+=pod
+
+=head1 Testing
+
+this is pod
+
+=cut
+
+sub my_sub {
+    for(1){
+        do_something(); 
+    }
+}
+
+__DATA__
+A long line here should be just fine even if it is a very very long line with no real reason to be
+
+#-----------------------------------------------------------------------------
+
+## name Pod in END
+## failures 2
+## cut
+
+do_something(); 
+
+__END__
+
+sub my_sub {
+    do_something(); and_something_else(); and_something_else(); and_toooooooooooooooooooooooooooooooooooooooooooo();
+}
+
+=pod
+
+=head1 Testing 
+
+this is a really long line in my pod, I should break this up into smaller lines
+this is a really long line in my pod, I should break this up into smaller lines
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+## name Failures for all
+## failures 3
+## cut
+
+# this is a long comment ................................................................................................................
+do_something(); and_something_else(); and_something_else(); and_toooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo(); 
+
+=pod
+
+=head1 Testing 
+
+this is a really long line in my pod, I should break this up into smaller lines..........................................................
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab shiftround :
