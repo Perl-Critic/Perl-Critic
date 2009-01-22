@@ -46,7 +46,7 @@ Perhaps it would be good enough to just create a one-off tool that would
 inject the PBP and/or Safari references into the POD one time, and we could
 manually deal with Policies that behave oddly.
 
-Much better would be to put the information in the POD in a strucutured manner
+Much better would be to put the information in the POD in a structured manner
 and parse it out in the code, something along the lines of
 
     =head1 METADATA
@@ -145,7 +145,7 @@ e.g. "C<[+Example::Policy]>".
 =item * Threading
 
 Pretty obviously, Perl::Critic is readily parallizable, just do a document per
-thread.  ("readily" being conceptual, not necessarilly practical)  Although
+thread.  ("readily" being conceptual, not necessarily practical)  Although
 there's now C<Policy::prepare_to_scan_document()>, given perl's thread data
 sharing model, this shouldn't be an issue.
 
@@ -185,7 +185,7 @@ Use L<Win32::Console::ANSI> like L<App::Ack>.
 =item * Make colors configurable.
 
 
-=item * A function that splits up a PPI::Node's decendants based upon package.
+=item * A function that splits up a PPI::Node's descendants based upon package.
 
 This is necessary to get P::C::Moose Policies correct.
 
@@ -324,7 +324,7 @@ default.
 
 The idea behind this policy is to encourage better names for variables
 and subroutines by enforcing correct spelling and prohibiting the use of
-home-grown abbreviations.  Assumng that the author uses underscores or
+home-grown abbreviations.  Assuming that the author uses underscores or
 camel-case, it should be possible to split symbols into words, and then look
 them up in a dictionary (see PodSpelling).  This policy should probably have
 a similar stopwords feature as well.
@@ -466,7 +466,7 @@ The Synopsis section must be all indented and must be syntactically valid Perl
 =item * Documentation::ProhibitEmptySections
 
 Any C<=headN> and C<=over> sections must not be empty.  This helps catch
-boilerplate (althought Test::Pod should catch empty C<=over> blocks).
+boilerplate (although Test::Pod should catch empty C<=over> blocks).
 
 On the other hand, C<=item ...> sections can be empty, since the item label is
 content.
@@ -492,7 +492,7 @@ Ban s{foo}(bar)
 
 =item * RegularExpressions::ProhibitScalarAsRegexp
 
-Ban naked srtings as regexps, like:
+Ban naked strings as regexps, like:
 
     print 1 if $str =~ $regexp;
 
@@ -571,7 +571,7 @@ http://www.perlfoundation.org/perl5/index.cgi?the_utf8_perlio_layer
 =item * BuiltinFunctions::ProhibitExit(?:InModules)?
 
 Forbid C<exit()> in files that lack a shebang.  Inspired by
-L<http://use.perl.org/~Ovid/journal/36746> and an analgous checker in
+L<http://use.perl.org/~Ovid/journal/36746> and an analogous checker in
 FindBugs.
 
 
@@ -614,7 +614,7 @@ to do so.  Also, just cuz it feels like the right thing todo.
 
 =item * Create constants for the PPI location array elements.
 
-=item * Some means of detecting "runnaway" C<##no critic>
+=item * Some means of detecting "runaway" C<##no critic>
 
 Elliot was talking to a couple of users at ETech and one of their major
 concerns was that they were using C<##no critic> and forgetting to do a
@@ -686,7 +686,7 @@ PPI does not preserve newlines.  That makes
 CodeLayout::RequireConsistentNewlines impossible to implement under PPI.  For
 now, it's implemented by pulling the source out of the file and skipping PPI.
 
-It's unlikely that PPI will support mixde newlines anytime soon.
+It's unlikely that PPI will support mixed newlines anytime soon.
 
 
 =item Operators
@@ -706,7 +706,7 @@ would be nicer to have an official interface in PPI.
 
 =item QuoteLike::Words in the place of a ForLoop
 
-PPI mis-parses C<<for qw<blah> {}>>.
+PPI misparses C<<for qw<blah> {}>>.
 
 
 =back
