@@ -10,6 +10,9 @@
     * RequireBracedFileHandleWithPrint applies to printf as well as print.
       Fixed by Kyle Hasselbacher, RT #42537
 
+    New Policies:
+    * ValuesAndExpressions::ProhibitSpecialLiteralHeredocTerminator
+
 [1.095_001] Released on 2009-01-18
 
     Policy Changes:
