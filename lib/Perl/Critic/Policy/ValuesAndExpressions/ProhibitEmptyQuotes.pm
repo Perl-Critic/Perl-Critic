@@ -19,7 +19,7 @@ our $VERSION = '1.095_001';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $EMPTY_RX => qr{\A ["|'] \s* ['|"] \z}xms;
+Readonly::Scalar my $EMPTY_RX => qr{\A ["'] \s* ['"] \z}xms;
 Readonly::Scalar my $DESC     => q{Quotes used with an empty string};
 Readonly::Scalar my $EXPL     => [ 53 ];
 
