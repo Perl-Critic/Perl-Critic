@@ -146,7 +146,7 @@ like statements or variables or conditionals or POD.  These elements
 are specified as PPI classes such as L<PPI::Statement|PPI::Statement>,
 L<PPI::Token::Symbol|PPI::Token::Symbol>,
 L<PPI::Structure::Conditional|PPI::Structure::Conditional> or
-L<PPI::Token::Pod|PPI::Token::Pod> respectively.  The applies_to()
+L<PPI::Token::Pod|PPI::Token::Pod> respectively.  The C<applies_to()>
 method returns a list of PPI package names.  (You can get that list of
 available package names via C<perldoc PPI>.)  As Perl::Critic
 traverses the document, it will call the C<violates()> method from
@@ -176,7 +176,7 @@ by assigning to C<undef>.
     sub violates {
         my ( $self, $elem, undef ) = @_;
 
-The violates() method then often performs some tests to make sure we
+The C<violates()> method then often performs some tests to make sure we
 have the right "type" of element.  In our example, we know that the
 element will be a L<PPI::Token::Word|PPI::Token::Word> because that's
 what we declared back in the C<applies_to()> method.  However, we
