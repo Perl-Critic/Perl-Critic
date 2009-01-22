@@ -30,7 +30,19 @@ our $VERSION = '1.095_001';
 
 #-----------------------------------------------------------------------------
 
-plan tests => 13;
+my @color_severity_params;
+my $skip_color_severity = eval { require Term::ANSIColor; 1; } ? undef :
+    'Term::ANSIColor is not available';
+$skip_color_severity
+    or @color_severity_params = qw<
+        color-severity-highest
+        color-severity-high
+        color-severity-medium
+        color-severity-low
+        color-severity-lowest
+    >;
+
+plan tests => 13 + scalar @color_severity_params;
 
 Readonly::Scalar my $PROFILE => 't/01_bad_perlcriticrc';
 Readonly::Scalar my $NO_ENABLED_POLICIES_MESSAGE =>
@@ -66,16 +78,19 @@ if ( not $test_passed ) {
 
 my @exceptions = @{ $eval_result->exceptions() };
 
-my @parameters = qw<
-    exclude
-    include
-    profile-strictness
-    severity
-    single-policy
-    theme
-    top
-    verbose
->;
+my @parameters = (
+    qw<
+        exclude
+        include
+        profile-strictness
+        severity
+        single-policy
+        theme
+        top
+        verbose
+    >,
+    @color_severity_params,
+);
 
 my %expected_regexes =
     map

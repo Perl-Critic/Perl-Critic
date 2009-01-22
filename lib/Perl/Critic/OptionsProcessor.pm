@@ -18,7 +18,10 @@ use Perl::Critic::Exception::Configuration::Option::Global::ExtraParameter;
 use Perl::Critic::Utils qw<
     :booleans :characters :severities :data_conversion $DEFAULT_VERBOSITY
 >;
-use Perl::Critic::Utils::Constants qw< $PROFILE_STRICTNESS_DEFAULT >;
+use Perl::Critic::Utils::Constants qw<
+    $PROFILE_STRICTNESS_DEFAULT
+    :color_severity
+    >;
 use Perl::Critic::Utils::DataConversion qw< dor >;
 
 our $VERSION = '1.095_001';
@@ -41,14 +44,7 @@ sub _init {
     my $exclude = dor(delete $args{exclude}, $EMPTY);
     $self->{_exclude}    = [ words_from_string( $exclude ) ];
     my $include = dor(delete $args{include}, $EMPTY);
-    # TODO make this a real constant in Perl::Critic::Utils::Constants? -- TRW
-    # TODO decide what the name should really be. -- TRW
-    my $ANSICOLORS_DEFAULT = 'bold red,magenta';
     $self->{_include}    = [ words_from_string( $include ) ];
-    my $ansicolors = dor(delete $args{ansicolors}, $ANSICOLORS_DEFAULT);
-    $ansicolors =~ s/ \A\s+ //smox;
-    $ansicolors =~ s/ \s+\z //smox;
-    $self->{_ansicolors} = [ split qr/\s*,\s*/smox, $ansicolors ];
 
     # Single-value defaults
     $self->{_force}           = dor(delete $args{force},              $FALSE);
@@ -62,6 +58,16 @@ sub _init {
     $self->{_verbose}         = dor(delete $args{verbose},            $DEFAULT_VERBOSITY);
     $self->{_criticism_fatal} = dor(delete $args{'criticism-fatal'},  $FALSE);
     $self->{_pager}           = dor(delete $args{pager},              $EMPTY);
+    $self->{_color_severity_highest} = dor(
+        delete $args{'color-severity-highest'}, $PROFILE_COLOR_SEVERITY_HIGHEST_DEFAULT);
+    $self->{_color_severity_high} = dor(
+        delete $args{'color-severity-high'},    $PROFILE_COLOR_SEVERITY_HIGH_DEFAULT);
+    $self->{_color_severity_medium} = dor(
+        delete $args{'color-severity-medium'},  $PROFILE_COLOR_SEVERITY_MEDIUM_DEFAULT);
+    $self->{_color_severity_low} = dor(
+        delete $args{'color-severity-low'},     $PROFILE_COLOR_SEVERITY_LOW_DEFAULT);
+    $self->{_color_severity_lowest} = dor(
+        delete $args{'color-severity-lowest'},  $PROFILE_COLOR_SEVERITY_LOWEST_DEFAULT);
 
     # If we're using a pager or not outputing to a tty don't use colors.
     # Can't use IO::Interactive here because we /don't/ want to check STDIN.
@@ -190,9 +196,37 @@ sub top {
 
 #-----------------------------------------------------------------------------
 
-sub ansicolors {
+sub color_severity_highest {
     my ($self) = @_;
-    return $self->{_ansicolors};
+    return $self->{_color_severity_highest};
+}
+
+#-----------------------------------------------------------------------------
+
+sub color_severity_high {
+    my ($self) = @_;
+    return $self->{_color_severity_high};
+}
+
+#-----------------------------------------------------------------------------
+
+sub color_severity_medium {
+    my ($self) = @_;
+    return $self->{_color_severity_medium};
+}
+
+#-----------------------------------------------------------------------------
+
+sub color_severity_low {
+    my ($self) = @_;
+    return $self->{_color_severity_low};
+}
+
+#-----------------------------------------------------------------------------
+
+sub color_severity_lowest {
+    my ($self) = @_;
+    return $self->{_color_severity_lowest};
 }
 
 #-----------------------------------------------------------------------------
@@ -309,10 +343,25 @@ command string).
 
 Returns the default C<criticism-fatal> setting (Either 1 or 0).
 
-=item C< ansicolors() >
+=item C< color_severity_highest() >
 
-Returns a reference to a list of the ANSI colors to be used for
-coloring the various severities, worst first.
+Returns the color to be used for coloring highest severity violations.
+
+=item C< color_severity_high() >
+
+Returns the color to be used for coloring high severity violations.
+
+=item C< color_severity_medium() >
+
+Returns the color to be used for coloring medium severity violations.
+
+=item C< color_severity_low() >
+
+Returns the color to be used for coloring low severity violations.
+
+=item C< color_severity_lowest() >
+
+Returns the color to be used for coloring lowest severity violations.
 
 =back
 

@@ -86,9 +86,25 @@ sub _init {
         $options_processor->single_policy(),
         $errors,
     );
-    $self->_validate_and_save_ansicolors(
-        'ansicolors', $args{-ansicolors}, $options_processor->ansicolors(),
-        $errors
+    $self->_validate_and_save_color_severity(
+        'color_severity_highest', $args{'-color-severity-highest'},
+        $options_processor->color_severity_highest(), $errors
+    );
+    $self->_validate_and_save_color_severity(
+        'color_severity_high', $args{'-color-severity-high'},
+        $options_processor->color_severity_high(), $errors
+    );
+    $self->_validate_and_save_color_severity(
+        'color_severity_medium', $args{'-color-severity-medium'},
+        $options_processor->color_severity_medium(), $errors
+    );
+    $self->_validate_and_save_color_severity(
+        'color_severity_low', $args{'-color-severity-low'},
+        $options_processor->color_severity_low(), $errors
+    );
+    $self->_validate_and_save_color_severity(
+        'color_severity_lowest', $args{'-color-severity-lowest'},
+        $options_processor->color_severity_lowest(), $errors
     );
 
     $self->_validate_and_save_verbosity($args{-verbose}, $errors);
@@ -662,68 +678,49 @@ sub _validate_and_save_pager {
 
 #-----------------------------------------------------------------------------
 
-sub _validate_and_save_ansicolors {
+sub _validate_and_save_color_severity {
     my ($self, $option_name, $args_value, $default_value, $errors) = @_;
 
-    my $full_option_name;
     my $source;
-    my @ansicolors;
+    my $color_severity;
+    my $full_option_name;
 
-    if ($args_value) {
+    if (defined $args_value) {
         $full_option_name = "-$option_name";
-
-        if (ref $args_value) {
-            @ansicolors = @{ $args_value };
-        }
-        else {
-            local $_ = $args_value;
-            s/ \A\s+ //smox;
-            s/ \s+\z //smox;
-            @ansicolors = split qr/\s*,\s*/smox;
-        }
+        $color_severity = lc $args_value;
     }
-
-    if (not @ansicolors) {
+    else {
         $full_option_name = $option_name;
         $source = $self->_profile()->source();
-
-        if (ref $default_value) {
-            @ansicolors = @{ $default_value };
-        }
-        elsif ($default_value) {
-            local $_ = $default_value;
-            s/ \A\s+ //smox;
-            s/ \s+\z //smox;
-            @ansicolors = split qr/\s*,\s*/smox;
-        }
+        $color_severity = lc $default_value;
     }
-    @ansicolors = map {defined $_ && $_ eq $EMPTY ? undef : $_} @ansicolors;
+    $color_severity =~ s/ \s+ / /xmsg;
+    $color_severity =~ s/ \A\s+ //xms;
+    $color_severity =~ s/ \s+\z //xms;
+    $full_option_name =~ s/ _ /-/xmsg;
 
+    eval { require Term::ANSIColor; 1; } or return;
     my $found_errors;
-    eval { require Term::ANSIColor } or return;
-    foreach my $spec (@ansicolors) {
-        defined $spec or next;
-        foreach my $attr (words_from_string( $spec )) {
-            $Term::ANSIColor::attributes{$attr} ## no critic (ProhibitPackageVars)
-                or do {
-                $errors->add_exception(
-                    $self->_new_global_value_exception(
-                        option_name     => $option_name,
-                        option_value    => $attr,
-                        source          => $source,
-                        message_suffix  => 'is not valid.',
-                    )
-                );
-                $found_errors = 1;
-            };
-        }
+    foreach my $attr (words_from_string( $color_severity )) {
+        $Term::ANSIColor::attributes{$attr} ## no critic (ProhibitPackageVars)
+            or $found_errors = 1;
     }
 
-    if (not $found_errors) {
+    if ($found_errors) {
+        $errors->add_exception(
+            $self->_new_global_value_exception(
+                option_name     => $full_option_name,
+                option_value    => $color_severity,
+                source          => $source,
+                message_suffix  => 'is not valid.',
+            )
+        );
+    }
+    else {
         my $option_key = $option_name;
         $option_key =~ s/ - /_/xmsg;
 
-        $self->{"_$option_key"} = \@ansicolors;
+        $self->{"_$option_key"} = $color_severity;
     }
 
     return;
@@ -850,9 +847,37 @@ sub site_policy_names {
 
 #-----------------------------------------------------------------------------
 
-sub ansicolors {
+sub color_severity_highest {
     my ($self) = @_;
-    return @{ $self->{_ansicolors} };
+    return $self->{_color_severity_highest};
+}
+
+#-----------------------------------------------------------------------------
+
+sub color_severity_high {
+    my ($self) = @_;
+    return $self->{_color_severity_high};
+}
+
+#-----------------------------------------------------------------------------
+
+sub color_severity_medium {
+    my ($self) = @_;
+    return $self->{_color_severity_medium};
+}
+
+#-----------------------------------------------------------------------------
+
+sub color_severity_low {
+    my ($self) = @_;
+    return $self->{_color_severity_low};
+}
+
+#-----------------------------------------------------------------------------
+
+sub color_severity_lowest {
+    my ($self) = @_;
+    return $self->{_color_severity_lowest};
 }
 
 1;
@@ -977,12 +1002,30 @@ for the benefit of L<perlcritic|perlcritic>.
 B<-criticism-fatal> is not used by Perl::Critic but is provided for
 the benefit of L<criticism|criticism>.
 
-B<-ansicolors> is a comma-delimited string or a list reference
-specifying the coloring for the various severity levels, most-severe
-first. It is not used by Perl::Critic, but is provided for the benefit
-of L<perlcritic|perlcritic>.
+B<-color-severity-highest> is a string representing the highest
+severity violation color, as expected by Term::ANSIColor. It is not
+used by Perl::Critic, but is provided for the benefit of
+L<perlcritic|perlcritic>.
 
+B<-color-severity-high> is a string representing the high severity
+violation color, as expected by Term::ANSIColor. It is not used by
+Perl::Critic, but is provided for the benefit of
+L<perlcritic|perlcritic>.
 
+B<-color-severity-medium> is a string representing the medium
+severity violation color, as expected by Term::ANSIColor. It is not
+used by Perl::Critic, but is provided for the benefit of
+L<perlcritic|perlcritic>.
+
+B<-color-severity-low> is a string representing the low severity
+violation color, as expected by Term::ANSIColor. It is not used by
+Perl::Critic, but is provided for the benefit of
+L<perlcritic|perlcritic>.
+
+B<-color-severity-lowest> is a string representing the lowest
+severity violation color, as expected by Term::ANSIColor. It is not
+used by Perl::Critic, but is provided for the benefit of
+L<perlcritic|perlcritic>.
 
 =back
 
@@ -1088,9 +1131,34 @@ Returns the value of the C<-pager> attribute for this Config.
 Returns the value of the C<-criticsm-fatal> attribute for this Config.
 
 
-=item C< ansicolors() >
+=item C< color_severity_highest() >
 
-Returns the value of the C<-ansicolors> attribute for this Config.
+Returns the value of the C<-color-severity-highest> attribute for this
+Config.
+
+
+=item C< color_severity_high() >
+
+Returns the value of the C<-color-severity-high> attribute for this
+Config.
+
+
+=item C< color_severity_medium() >
+
+Returns the value of the C<-color-severity-medium> attribute for this
+Config.
+
+
+=item C< color_severity_low() >
+
+Returns the value of the C<-color-severity-low> attribute for this
+Config.
+
+
+=item C< color_severity_lowest() >
+
+Returns the value of the C<-color-severity-lowest> attribute for this
+Config.
 
 
 =back
@@ -1147,7 +1215,11 @@ corresponding Perl::Critic constructor argument.
     include   = NamingConventions ClassHierarchies    #Space-delimited list
     exclude   = Variables  Modules::RequirePackage    #Space-delimited list
     color     = 1                                     #Zero or One
-    ansicolors = bold red, magenta                    #Comma-delimited list
+    color-severity-highest = bold red                 #Term::ANSIColor
+    color-severity-high = magenta                     #Term::ANSIColor
+    color-severity-medium =                           #no coloring
+    color-severity-low =                              #no coloring
+    color-severity-lowest =                           #no coloring
 
 The remainder of the configuration file is a series of blocks like
 this:

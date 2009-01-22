@@ -70,6 +70,48 @@ top = 50
 
 verbose = 5
 
+#-----------------------------------------------------------------------------
+# color-severity-highest: sets the color used for displaying highest
+# severity violations when coloring is in effect. This should be a color
+# specification acceptable to Term::ANSIColor. See the Perl::Critic POD
+# for details. Do not put quotes around the values. The default is 'bold
+# red'.
+
+color-severity-highest = bold red underline
+
+#-----------------------------------------------------------------------------
+# color-severity-high: sets the color used for displaying high severity
+# violations when coloring is in effect. This should be a color
+# specification acceptable to Term::ANSIColor. See the Perl::Critic POD
+# for details. Do not put quotes around the values. The default is
+# 'magenta'.
+
+color-severity-high = bold magenta
+
+#-----------------------------------------------------------------------------
+# color-severity-medium: sets the color used for displaying medium
+# severity violations when coloring is in effect. This should be a color
+# specification acceptable to Term::ANSIColor. See the Perl::Critic POD
+# for details. Do not put quotes around the values. The default is ''.
+
+color-severity-medium = blue
+
+#-----------------------------------------------------------------------------
+# color-severity-low: sets the color used for displaying low severity
+# violations when coloring is in effect. This should be a color
+# specification acceptable to Term::ANSIColor. See the Perl::Critic POD
+# for details. Do not put quotes around the values. The default is ''.
+
+color-severity-low =
+
+#-----------------------------------------------------------------------------
+# color-severity-lowest: sets the color used for displaying lowest
+# severity violations when coloring is in effect. This should be a color
+# specification acceptable to Term::ANSIColor. See the Perl::Critic POD
+# for details. Do not put quotes around the values. The default is ''.
+
+color-severity-lowest =
+
 ##############################################################################
 # The rest of the file consists of several named blocks that contain
 # configuration parameters for each of the Policies.  The names of
