@@ -183,7 +183,7 @@ what we declared back in the C<applies_to()> method.  However, we
 didn't specify exactly which "word" we were looking for.  Evaluating a
 PPI element in a string context returns the literal form of the code.
 (You can also use the C<content()> method.)  So we make sure that this
-PPI::Token::Word is, in fact, "grep".  If it's not, then we don't'
+C<PPI::Token::Word> is, in fact, "grep".  If it's not, then we don't
 need to bother examining it.
 
         return if $elem ne 'grep';
@@ -216,7 +216,7 @@ C<snext_sibling> stands for "significant").
 In Perl, the parenthesis around argument lists are usually optional,
 and PPI packs the elements into a
 L<PPI::Structure::List|PPI::Structure::List> object when parentheses
-are used.  So if the sibling is a PPI::Structure::List, we pull out
+are used.  So if the sibling is a C<PPI::Structure::List>, we pull out
 the first (significant) child of that list.  This child will be the
 first argument to C<grep>.  If parentheses were not used, then the
 sibling itself is the first argument.
@@ -230,7 +230,7 @@ the C<:ppi> tag.  So we use that instead.
         my $arg = first_arg($elem);
 
 Finally, we now have a reference to the first argument to C<grep>.  If
-that argument is a block (i.e. something in curly braces), then it
+that argument is a block (i.e., something in curly braces), then it
 will be a L<PPI::Structure::Block|PPI::Structure::Block>, in which
 case our Policy is satisfied and we just return nothing.
 
