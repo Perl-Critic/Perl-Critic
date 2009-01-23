@@ -1,5 +1,8 @@
 [1.xxx_xxx] Released on 2009-xx-xx
 
+    New Policies:
+    * ValuesAndExpressions::ProhibitSpecialLiteralHeredocTerminator
+
     Bug Fixes:
     * ErrorHandling::RequireCarping will now allow a literal newline
       as well as "\n".  Fixed by Kyle Hasselbacher, RT #25046
@@ -9,9 +12,6 @@
       by a block-scoped pragma. RT #42310
     * RequireBracedFileHandleWithPrint applies to printf as well as print.
       Fixed by Kyle Hasselbacher, RT #42537
-
-    New Policies:
-    * ValuesAndExpressions::ProhibitSpecialLiteralHeredocTerminator
 
 [1.095_001] Released on 2009-01-18
 
