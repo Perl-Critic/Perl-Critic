@@ -17,7 +17,7 @@ use Perl::Critic::OptionsProcessor;
 use Perl::Critic::Utils qw< :booleans >;
 use Perl::Critic::Utils::Constants qw< :color_severity >;
 
-use Test::More tests => 37;
+use Test::More tests => 42;
 
 #-----------------------------------------------------------------------------
 
@@ -112,6 +112,24 @@ our $VERSION = '1.095_001';
 
     $processor = Perl::Critic::OptionsProcessor->new( 'colour' => 0 );
     is($processor->color(), $FALSE, 'user default colour false');
+
+    $processor = Perl::Critic::OptionsProcessor->new(
+         'colour-severity-highest'   => 'chartreuse',
+         'colour-severity-high'      => 'fuschia',
+         'colour-severity-medium'    => 'blue',
+         'colour-severity-low'       => 'gray',
+         'colour-severity-lowest'    => 'scots tartan',
+    );
+    is( $processor->color_severity_highest(),
+        'chartreuse',       'user default colour-severity-highest' );
+    is( $processor->color_severity_high(),
+        'fuschia',          'user default colour-severity-high' );
+    is( $processor->color_severity_medium(),
+        'blue',             'user default colour-severity-medium' );
+    is( $processor->color_severity_low(),
+        'gray',             'user default colour-severity-low' );
+    is( $processor->color_severity_lowest(),
+        'scots tartan',     'user default colour-severity-lowest' );
 }
 
 #-----------------------------------------------------------------------------

@@ -33,6 +33,9 @@ our $VERSION = '1.095_001';
 my @color_severity_params;
 my $skip_color_severity = eval { require Term::ANSIColor; 1; } ? undef :
     'Term::ANSIColor is not available';
+# We can not do the color-severity tests if Term::ANSIColor is not available,
+# because without Term::ANSIColor the parameters are not validated, so any
+# value will be accepted and we will not get any errors from them.
 $skip_color_severity
     or @color_severity_params = qw<
         color-severity-highest

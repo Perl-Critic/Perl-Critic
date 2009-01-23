@@ -45,8 +45,6 @@ my @names_of_policies_willing_to_work =
     );
 my @native_policy_names  = bundled_policy_names();
 my $total_policies   = scalar @names_of_policies_willing_to_work;
-my $skip_color_severity = eval { require Term::ANSIColor; 1; } ? undef :
-    'Term::ANSIColor is not available';
 
 #-----------------------------------------------------------------------------
 # Test default config.  Increasing the severity should yield
@@ -186,19 +184,16 @@ my $skip_color_severity = eval { require Term::ANSIColor; 1; } ? undef :
     is($c->top(),      50, 'user default top from file'       );
     is($c->verbose(),  5,  'user default verbose from file'   );
 
-    SKIP: {
-        $skip_color_severity and skip $skip_color_severity, 5;
-        is($c->color_severity_highest(), 'bold red underline',
-                            'user default color-severity-highest from file');
-        is($c->color_severity_high(), 'bold magenta',
-                            'user default color-severity-high from file');
-        is($c->color_severity_medium(), 'blue',
-                            'user default color-severity-medium from file');
-        is($c->color_severity_low(), $EMPTY,
-                            'user default color-severity-low from file');
-        is($c->color_severity_lowest(), $EMPTY,
-                            'user default color-severity-est from file');
-    }
+    is($c->color_severity_highest(), 'bold red underline',
+                        'user default color-severity-highest from file');
+    is($c->color_severity_high(), 'bold magenta',
+                        'user default color-severity-high from file');
+    is($c->color_severity_medium(), 'blue',
+                        'user default color-severity-medium from file');
+    is($c->color_severity_low(), $EMPTY,
+                        'user default color-severity-low from file');
+    is($c->color_severity_lowest(), $EMPTY,
+                        'user default color-severity-lowest from file');
 }
 
 #-----------------------------------------------------------------------------
@@ -308,29 +303,26 @@ my $skip_color_severity = eval { require Term::ANSIColor; 1; } ? undef :
     is( $c->pager(),     q{},   'Undefined -pager');
     is( $c->verbose(),   4,     'Undefined -verbose');
     is( $c->criticism_fatal(), 0, 'Undefined -criticism-fatal');
-    SKIP: {
-        $skip_color_severity and skip $skip_color_severity, 5;
-        is( $c->color_severity_highest(),
-            $PROFILE_COLOR_SEVERITY_HIGHEST_DEFAULT,
-            'Undefined -color-severity-highest'
-        );
-        is( $c->color_severity_high(),
-            $PROFILE_COLOR_SEVERITY_HIGH_DEFAULT,
-            'Undefined -color-severity-high'
-        );
-        is( $c->color_severity_medium(),
-            $PROFILE_COLOR_SEVERITY_MEDIUM_DEFAULT,
-            'Undefined -color-severity-medium'
-        );
-        is( $c->color_severity_low(),
-            $PROFILE_COLOR_SEVERITY_LOW_DEFAULT,
-            'Undefined -color-severity-low'
-        );
-        is( $c->color_severity_lowest(),
-            $PROFILE_COLOR_SEVERITY_LOWEST_DEFAULT,
-            'Undefined -color-severity-lowest'
-        );
-    }
+    is( $c->color_severity_highest(),
+        $PROFILE_COLOR_SEVERITY_HIGHEST_DEFAULT,
+        'Undefined -color-severity-highest'
+    );
+    is( $c->color_severity_high(),
+        $PROFILE_COLOR_SEVERITY_HIGH_DEFAULT,
+        'Undefined -color-severity-high'
+    );
+    is( $c->color_severity_medium(),
+        $PROFILE_COLOR_SEVERITY_MEDIUM_DEFAULT,
+        'Undefined -color-severity-medium'
+    );
+    is( $c->color_severity_low(),
+        $PROFILE_COLOR_SEVERITY_LOW_DEFAULT,
+        'Undefined -color-severity-low'
+    );
+    is( $c->color_severity_lowest(),
+        $PROFILE_COLOR_SEVERITY_LOWEST_DEFAULT,
+        'Undefined -color-severity-lowest'
+    );
 
     my %zero_args = map { $_ => 0 }
         # Zero is an invalid Term::ANSIColor value.
@@ -357,14 +349,11 @@ my $skip_color_severity = eval { require Term::ANSIColor; 1; } ? undef :
     is( $c->pager(),     q{},     'empty -pager');
     is( $c->verbose(),   4,       'empty -verbose');
     is( $c->criticism_fatal(), 0, 'empty -criticism-fatal');
-    SKIP: {
-        $skip_color_severity and skip $skip_color_severity, 5;
-        is( $c->color_severity_highest(), $EMPTY, 'empty -color-severity-highest');
-        is( $c->color_severity_high(),   $EMPTY, 'empty -color-severity-high');
-        is( $c->color_severity_medium(), $EMPTY, 'empty -color-severity-medium');
-        is( $c->color_severity_low(),    $EMPTY, 'empty -color-severity-low');
-        is( $c->color_severity_lowest(), $EMPTY, 'empty -color-severity-lowest');
-    }
+    is( $c->color_severity_highest(), $EMPTY, 'empty -color-severity-highest');
+    is( $c->color_severity_high(),   $EMPTY, 'empty -color-severity-high');
+    is( $c->color_severity_medium(), $EMPTY, 'empty -color-severity-medium');
+    is( $c->color_severity_low(),    $EMPTY, 'empty -color-severity-low');
+    is( $c->color_severity_lowest(), $EMPTY, 'empty -color-severity-lowest');
 }
 
 #-----------------------------------------------------------------------------

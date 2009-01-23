@@ -453,11 +453,11 @@ sub _get_option_specification {
         theme=s
         top:i
         verbose=s
-        color-severity-highest=s
-        color-severity-high=s
-        color-severity-medium=s
-        color-severity-low=s
-        color-severity-lowest=s
+        color-severity-highest|colour-severity-highest=s
+        color-severity-high|colour-severity-high=s
+        color-severity-medium|colour-severity-medium=s
+        color-severity-low|colour-severity-low=s
+        color-severity-lowest|colour-severity-lowest=s
     );
 }
 

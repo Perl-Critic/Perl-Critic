@@ -699,12 +699,16 @@ sub _validate_and_save_color_severity {
     $color_severity =~ s/ \s+\z //xms;
     $full_option_name =~ s/ _ /-/xmsg;
 
-    eval { require Term::ANSIColor; 1; } or return;
     my $found_errors;
-    foreach my $attr (words_from_string( $color_severity )) {
-        $Term::ANSIColor::attributes{$attr} ## no critic (ProhibitPackageVars)
-            or $found_errors = 1;
+    if (eval { require Term::ANSIColor; 1; }) {
+        foreach my $attr (words_from_string( $color_severity )) {
+            $Term::ANSIColor::attributes{$attr} ## no critic (ProhibitPackageVars)
+                or $found_errors = 1;
+        }
     }
+
+    # If we do not have Term::ANSIColor we can not validate, but we store the
+    # values anyway for the benefit of Perl::Critic::ProfilePrototype.
 
     if ($found_errors) {
         $errors->add_exception(

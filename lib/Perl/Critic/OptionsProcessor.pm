@@ -59,15 +59,25 @@ sub _init {
     $self->{_criticism_fatal} = dor(delete $args{'criticism-fatal'},  $FALSE);
     $self->{_pager}           = dor(delete $args{pager},              $EMPTY);
     $self->{_color_severity_highest} = dor(
-        delete $args{'color-severity-highest'}, $PROFILE_COLOR_SEVERITY_HIGHEST_DEFAULT);
+        delete $args{'color-severity-highest'},
+        dor( delete $args{'colour-severity-highest'},
+            $PROFILE_COLOR_SEVERITY_HIGHEST_DEFAULT ));
     $self->{_color_severity_high} = dor(
-        delete $args{'color-severity-high'},    $PROFILE_COLOR_SEVERITY_HIGH_DEFAULT);
+        delete $args{'color-severity-high'},
+        dor( delete $args{'colour-severity-high'},
+            $PROFILE_COLOR_SEVERITY_HIGH_DEFAULT ));
     $self->{_color_severity_medium} = dor(
-        delete $args{'color-severity-medium'},  $PROFILE_COLOR_SEVERITY_MEDIUM_DEFAULT);
+        delete $args{'color-severity-medium'},
+        dor( delete $args{'colour-severity-medium'},
+            $PROFILE_COLOR_SEVERITY_MEDIUM_DEFAULT ));
     $self->{_color_severity_low} = dor(
-        delete $args{'color-severity-low'},     $PROFILE_COLOR_SEVERITY_LOW_DEFAULT);
+        delete $args{'color-severity-low'},
+        dor( delete $args{'colour-severity-low'},
+            $PROFILE_COLOR_SEVERITY_LOW_DEFAULT ));
     $self->{_color_severity_lowest} = dor(
-        delete $args{'color-severity-lowest'},  $PROFILE_COLOR_SEVERITY_LOWEST_DEFAULT);
+        delete $args{'color-severity-lowest'},
+        dor( delete $args{'colour-severity-lowest'},
+            $PROFILE_COLOR_SEVERITY_LOWEST_DEFAULT ));
 
     # If we're using a pager or not outputing to a tty don't use colors.
     # Can't use IO::Interactive here because we /don't/ want to check STDIN.
