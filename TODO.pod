@@ -477,6 +477,12 @@ Here's a non-PPI implementation:
 L<http://search.cpan.org/src/JJORE/Carp-Clan-5.8/t/04boilerplate.t>
 
 
+=item * NamingConventions::ProhibitPackagesSubroutinesAndBarewordFileHandlesWithTheSameNames
+
+See
+L<http://www.xray.mpe.mpg.de/mailing-lists/perl5-porters/2009-01/msg00685.html>.
+
+
 =item * BuiltinFunctions::ProhibitExtraneousScalarCall
 
 Recommend that C<if (scalar @array)> be rewritten as C<if (@array)>.
