@@ -18,7 +18,10 @@ use Perl::Critic::Exception::Configuration::Option::Global::ExtraParameter;
 use Perl::Critic::Utils qw<
     :booleans :characters :severities :data_conversion $DEFAULT_VERBOSITY
 >;
-use Perl::Critic::Utils::Constants qw< $PROFILE_STRICTNESS_DEFAULT >;
+use Perl::Critic::Utils::Constants qw<
+    $PROFILE_STRICTNESS_DEFAULT
+    :color_severity
+    >;
 use Perl::Critic::Utils::DataConversion qw< dor >;
 
 our $VERSION = '1.095_001';
@@ -55,6 +58,26 @@ sub _init {
     $self->{_verbose}         = dor(delete $args{verbose},            $DEFAULT_VERBOSITY);
     $self->{_criticism_fatal} = dor(delete $args{'criticism-fatal'},  $FALSE);
     $self->{_pager}           = dor(delete $args{pager},              $EMPTY);
+    $self->{_color_severity_highest} = dor(
+        delete $args{'color-severity-highest'},
+        dor( delete $args{'colour-severity-highest'},
+            $PROFILE_COLOR_SEVERITY_HIGHEST_DEFAULT ));
+    $self->{_color_severity_high} = dor(
+        delete $args{'color-severity-high'},
+        dor( delete $args{'colour-severity-high'},
+            $PROFILE_COLOR_SEVERITY_HIGH_DEFAULT ));
+    $self->{_color_severity_medium} = dor(
+        delete $args{'color-severity-medium'},
+        dor( delete $args{'colour-severity-medium'},
+            $PROFILE_COLOR_SEVERITY_MEDIUM_DEFAULT ));
+    $self->{_color_severity_low} = dor(
+        delete $args{'color-severity-low'},
+        dor( delete $args{'colour-severity-low'},
+            $PROFILE_COLOR_SEVERITY_LOW_DEFAULT ));
+    $self->{_color_severity_lowest} = dor(
+        delete $args{'color-severity-lowest'},
+        dor( delete $args{'colour-severity-lowest'},
+            $PROFILE_COLOR_SEVERITY_LOWEST_DEFAULT ));
 
     # If we're using a pager or not outputing to a tty don't use colors.
     # Can't use IO::Interactive here because we /don't/ want to check STDIN.
@@ -183,6 +206,41 @@ sub top {
 
 #-----------------------------------------------------------------------------
 
+sub color_severity_highest {
+    my ($self) = @_;
+    return $self->{_color_severity_highest};
+}
+
+#-----------------------------------------------------------------------------
+
+sub color_severity_high {
+    my ($self) = @_;
+    return $self->{_color_severity_high};
+}
+
+#-----------------------------------------------------------------------------
+
+sub color_severity_medium {
+    my ($self) = @_;
+    return $self->{_color_severity_medium};
+}
+
+#-----------------------------------------------------------------------------
+
+sub color_severity_low {
+    my ($self) = @_;
+    return $self->{_color_severity_low};
+}
+
+#-----------------------------------------------------------------------------
+
+sub color_severity_lowest {
+    my ($self) = @_;
+    return $self->{_color_severity_lowest};
+}
+
+#-----------------------------------------------------------------------------
+
 1;
 
 __END__
@@ -294,6 +352,26 @@ command string).
 =item C< criticism_fatal() >
 
 Returns the default C<criticism-fatal> setting (Either 1 or 0).
+
+=item C< color_severity_highest() >
+
+Returns the color to be used for coloring highest severity violations.
+
+=item C< color_severity_high() >
+
+Returns the color to be used for coloring high severity violations.
+
+=item C< color_severity_medium() >
+
+Returns the color to be used for coloring medium severity violations.
+
+=item C< color_severity_low() >
+
+Returns the color to be used for coloring low severity violations.
+
+=item C< color_severity_lowest() >
+
+Returns the color to be used for coloring lowest severity violations.
 
 =back
 

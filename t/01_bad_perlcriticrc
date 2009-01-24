@@ -10,6 +10,14 @@ single-policy = *
 profile-strictness = silly
 top = -1
 verbose = 2095
+color-severity-highest  = chartreuse
+color-severity-high     = fuschia
+color-severity-medium   = aquamarine
+color-severity-low      = paisley
+color-severity-lowest   = they've gone to plaid
+
+# This profile is used by t/01_config_color_severity.t to load invalid
+# severity colors
 
 # Test non-existent parameter
 [BuiltinFunctions::RequireBlockGrep]

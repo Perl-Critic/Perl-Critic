@@ -405,6 +405,13 @@ of L<perlcritic|perlcritic>.
 B<-criticism-fatal> is not used by Perl::Critic but is provided for
 the benefit of L<criticism|criticism>.
 
+B<-color-severity-highest>, B<-color-severity-high>,
+B<-color-severity-medium>, B<-color-severity-low>, and
+B<-color-severity-lowest> are not used by Perl::Critic, but are provided for
+the benefit of L<perlcritic|perlcritic>. Each is set to the Term::ANSIColor
+color specification to be used to display violations of the corresponding
+severity.
+
 =back
 
 

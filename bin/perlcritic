@@ -453,20 +453,30 @@ sub _get_option_specification {
         theme=s
         top:i
         verbose=s
+        color-severity-highest|colour-severity-highest=s
+        color-severity-high|colour-severity-high=s
+        color-severity-medium|colour-severity-medium=s
+        color-severity-low|colour-severity-low=s
+        color-severity-lowest|colour-severity-lowest=s
     );
 }
 
 #-----------------------------------------------------------------------------
 
 sub _colorize_by_severity {
-    my (@violations) = @_;
+    my @violations = @_;
     return @violations if _this_is_windows();
-    return @violations if not eval { require Term::ANSIColor };
+    return @violations if not eval { require Term::ANSIColor; 1; };
 
+    my $config = $critic->config();
     my %color_of = (
-        $SEVERITY_HIGHEST => 'bold red',
-        $SEVERITY_HIGH    => 'magenta',
+        $SEVERITY_HIGHEST   => $config->color_severity_highest(),
+        $SEVERITY_HIGH      => $config->color_severity_high(),
+        $SEVERITY_MEDIUM    => $config->color_severity_medium(),
+        $SEVERITY_LOW       => $config->color_severity_low(),
+        $SEVERITY_LOWEST    => $config->color_severity_lowest(),
     );
+
     return map { _colorize( "$_", $color_of{$_->severity()} ) } @violations;
 
 }
@@ -476,7 +486,14 @@ sub _colorize_by_severity {
 sub _colorize {
     my ($string, $color) = @_;
     return $string if not defined $color;
-    return  Term::ANSIColor::colored( $string, $color );
+    return $string if $color eq $EMPTY;
+    # $terminator is a purely cosmetic change to make the color end at the end
+    # of the line rather than right before the next line. It is here because
+    # if you use background colors, some console windows display a little
+    # fragment of colored background before the next uncolored (or
+    # differently-colored) line.
+    my $terminator = chomp $string ? "\n" : $EMPTY;
+    return  Term::ANSIColor::colored( $string, $color ) . $terminator;
 }
 
 #-----------------------------------------------------------------------------

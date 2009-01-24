@@ -50,7 +50,7 @@ foreach my $policy (@default_policies) {
         $policy_test_count += scalar @{$policy->get_parameters()};
     }
 }
-my $test_count = 12 + $policy_test_count;
+my $test_count = 17 + $policy_test_count;
 plan tests => $test_count;
 
 #-----------------------------------------------------------------------------
@@ -161,6 +161,46 @@ cmp_deeply(
     $derived_configuration->theme(),
     $default_configuration->theme(),
     'theme',
+);
+
+#-----------------------------------------------------------------------------
+
+is(
+    $derived_configuration->color_severity_highest(),
+    $default_configuration->color_severity_highest(),
+    'color_severity_highest',
+);
+
+#-----------------------------------------------------------------------------
+
+is(
+    $derived_configuration->color_severity_high(),
+    $default_configuration->color_severity_high(),
+    'color_severity_high',
+);
+
+#-----------------------------------------------------------------------------
+
+is(
+    $derived_configuration->color_severity_medium(),
+    $default_configuration->color_severity_medium(),
+    'color_severity_medium',
+);
+
+#-----------------------------------------------------------------------------
+
+is(
+    $derived_configuration->color_severity_low(),
+    $default_configuration->color_severity_low(),
+    'color_severity_low',
+);
+
+#-----------------------------------------------------------------------------
+
+is(
+    $derived_configuration->color_severity_lowest(),
+    $default_configuration->color_severity_lowest(),
+    'color_severity_lowest',
 );
 
 #-----------------------------------------------------------------------------

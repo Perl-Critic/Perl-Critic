@@ -182,9 +182,6 @@ Why can't I do this:
 Use L<Win32::Console::ANSI> like L<App::Ack>.
 
 
-=item * Make colors configurable.
-
-
 =item * A function that splits up a PPI::Node's descendants based upon package.
 
 This is necessary to get P::C::Moose Policies correct.

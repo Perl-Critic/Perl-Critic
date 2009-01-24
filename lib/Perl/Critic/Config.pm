@@ -26,6 +26,7 @@ use Perl::Critic::Theme qw( $RULE_INVALID_CHARACTER_REGEX cook_rule );
 use Perl::Critic::UserProfile qw();
 use Perl::Critic::Utils qw{
     :booleans :characters :severities :internal_lookup :classification
+    :data_conversion
 };
 use Perl::Critic::Utils::Constants qw{ :profile_strictness };
 use Perl::Critic::Utils::DataConversion qw{ boolean_to_number dor };
@@ -84,6 +85,26 @@ sub _init {
         $args{ qq/-$SINGLE_POLICY_CONFIG_KEY/ },
         $options_processor->single_policy(),
         $errors,
+    );
+    $self->_validate_and_save_color_severity(
+        'color_severity_highest', $args{'-color-severity-highest'},
+        $options_processor->color_severity_highest(), $errors
+    );
+    $self->_validate_and_save_color_severity(
+        'color_severity_high', $args{'-color-severity-high'},
+        $options_processor->color_severity_high(), $errors
+    );
+    $self->_validate_and_save_color_severity(
+        'color_severity_medium', $args{'-color-severity-medium'},
+        $options_processor->color_severity_medium(), $errors
+    );
+    $self->_validate_and_save_color_severity(
+        'color_severity_low', $args{'-color-severity-low'},
+        $options_processor->color_severity_low(), $errors
+    );
+    $self->_validate_and_save_color_severity(
+        'color_severity_lowest', $args{'-color-severity-lowest'},
+        $options_processor->color_severity_lowest(), $errors
     );
 
     $self->_validate_and_save_verbosity($args{-verbose}, $errors);
@@ -656,6 +677,60 @@ sub _validate_and_save_pager {
 }
 
 #-----------------------------------------------------------------------------
+
+sub _validate_and_save_color_severity {
+    my ($self, $option_name, $args_value, $default_value, $errors) = @_;
+
+    my $source;
+    my $color_severity;
+    my $full_option_name;
+
+    if (defined $args_value) {
+        $full_option_name = "-$option_name";
+        $color_severity = lc $args_value;
+    }
+    else {
+        $full_option_name = $option_name;
+        $source = $self->_profile()->source();
+        $color_severity = lc $default_value;
+    }
+    $color_severity =~ s/ \s+ / /xmsg;
+    $color_severity =~ s/ \A\s+ //xms;
+    $color_severity =~ s/ \s+\z //xms;
+    $full_option_name =~ s/ _ /-/xmsg;
+
+    my $found_errors;
+    if (eval { require Term::ANSIColor; 1; }) {
+        foreach my $attr (words_from_string( $color_severity )) {
+            $Term::ANSIColor::attributes{$attr} ## no critic (ProhibitPackageVars)
+                or $found_errors = 1;
+        }
+    }
+
+    # If we do not have Term::ANSIColor we can not validate, but we store the
+    # values anyway for the benefit of Perl::Critic::ProfilePrototype.
+
+    if ($found_errors) {
+        $errors->add_exception(
+            $self->_new_global_value_exception(
+                option_name     => $full_option_name,
+                option_value    => $color_severity,
+                source          => $source,
+                message_suffix  => 'is not valid.',
+            )
+        );
+    }
+    else {
+        my $option_key = $option_name;
+        $option_key =~ s/ - /_/xmsg;
+
+        $self->{"_$option_key"} = $color_severity;
+    }
+
+    return;
+}
+
+#-----------------------------------------------------------------------------
 # Begin ACCESSSOR methods
 
 sub _profile {
@@ -772,6 +847,41 @@ sub criticism_fatal {
 
 sub site_policy_names {
     return Perl::Critic::PolicyFactory::site_policy_names();
+}
+
+#-----------------------------------------------------------------------------
+
+sub color_severity_highest {
+    my ($self) = @_;
+    return $self->{_color_severity_highest};
+}
+
+#-----------------------------------------------------------------------------
+
+sub color_severity_high {
+    my ($self) = @_;
+    return $self->{_color_severity_high};
+}
+
+#-----------------------------------------------------------------------------
+
+sub color_severity_medium {
+    my ($self) = @_;
+    return $self->{_color_severity_medium};
+}
+
+#-----------------------------------------------------------------------------
+
+sub color_severity_low {
+    my ($self) = @_;
+    return $self->{_color_severity_low};
+}
+
+#-----------------------------------------------------------------------------
+
+sub color_severity_lowest {
+    my ($self) = @_;
+    return $self->{_color_severity_lowest};
 }
 
 1;
@@ -896,7 +1006,30 @@ for the benefit of L<perlcritic|perlcritic>.
 B<-criticism-fatal> is not used by Perl::Critic but is provided for
 the benefit of L<criticism|criticism>.
 
+B<-color-severity-highest> is a string representing the highest
+severity violation color, as expected by Term::ANSIColor. It is not
+used by Perl::Critic, but is provided for the benefit of
+L<perlcritic|perlcritic>.
 
+B<-color-severity-high> is a string representing the high severity
+violation color, as expected by Term::ANSIColor. It is not used by
+Perl::Critic, but is provided for the benefit of
+L<perlcritic|perlcritic>.
+
+B<-color-severity-medium> is a string representing the medium
+severity violation color, as expected by Term::ANSIColor. It is not
+used by Perl::Critic, but is provided for the benefit of
+L<perlcritic|perlcritic>.
+
+B<-color-severity-low> is a string representing the low severity
+violation color, as expected by Term::ANSIColor. It is not used by
+Perl::Critic, but is provided for the benefit of
+L<perlcritic|perlcritic>.
+
+B<-color-severity-lowest> is a string representing the lowest
+severity violation color, as expected by Term::ANSIColor. It is not
+used by Perl::Critic, but is provided for the benefit of
+L<perlcritic|perlcritic>.
 
 =back
 
@@ -1002,6 +1135,36 @@ Returns the value of the C<-pager> attribute for this Config.
 Returns the value of the C<-criticsm-fatal> attribute for this Config.
 
 
+=item C< color_severity_highest() >
+
+Returns the value of the C<-color-severity-highest> attribute for this
+Config.
+
+
+=item C< color_severity_high() >
+
+Returns the value of the C<-color-severity-high> attribute for this
+Config.
+
+
+=item C< color_severity_medium() >
+
+Returns the value of the C<-color-severity-medium> attribute for this
+Config.
+
+
+=item C< color_severity_low() >
+
+Returns the value of the C<-color-severity-low> attribute for this
+Config.
+
+
+=item C< color_severity_lowest() >
+
+Returns the value of the C<-color-severity-lowest> attribute for this
+Config.
+
+
 =back
 
 
@@ -1056,6 +1219,11 @@ corresponding Perl::Critic constructor argument.
     include   = NamingConventions ClassHierarchies    #Space-delimited list
     exclude   = Variables  Modules::RequirePackage    #Space-delimited list
     color     = 1                                     #Zero or One
+    color-severity-highest = bold red                 #Term::ANSIColor
+    color-severity-high = magenta                     #Term::ANSIColor
+    color-severity-medium =                           #no coloring
+    color-severity-low =                              #no coloring
+    color-severity-lowest =                           #no coloring
 
 The remainder of the configuration file is a series of blocks like
 this:

@@ -12,7 +12,7 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ hashify };
+use Perl::Critic::Utils qw{ $EMPTY hashify };
 
 use base 'Exporter';
 
@@ -26,6 +26,11 @@ our @EXPORT_OK = qw{
     $PROFILE_STRICTNESS_QUIET
     $PROFILE_STRICTNESS_DEFAULT
     %PROFILE_STRICTNESSES
+    $PROFILE_COLOR_SEVERITY_HIGHEST_DEFAULT
+    $PROFILE_COLOR_SEVERITY_HIGH_DEFAULT
+    $PROFILE_COLOR_SEVERITY_MEDIUM_DEFAULT
+    $PROFILE_COLOR_SEVERITY_LOW_DEFAULT
+    $PROFILE_COLOR_SEVERITY_LOWEST_DEFAULT
 };
 
 our %EXPORT_TAGS = (
@@ -37,6 +42,15 @@ our %EXPORT_TAGS = (
             $PROFILE_STRICTNESS_QUIET
             $PROFILE_STRICTNESS_DEFAULT
             %PROFILE_STRICTNESSES
+        }
+    ],
+    color_severity  => [
+        qw{
+            $PROFILE_COLOR_SEVERITY_HIGHEST_DEFAULT
+            $PROFILE_COLOR_SEVERITY_HIGH_DEFAULT
+            $PROFILE_COLOR_SEVERITY_MEDIUM_DEFAULT
+            $PROFILE_COLOR_SEVERITY_LOW_DEFAULT
+            $PROFILE_COLOR_SEVERITY_LOWEST_DEFAULT
         }
     ],
 );
@@ -54,6 +68,12 @@ Readonly::Hash our %PROFILE_STRICTNESSES =>
         $PROFILE_STRICTNESS_FATAL,
         $PROFILE_STRICTNESS_QUIET,
     );
+
+Readonly::Scalar our $PROFILE_COLOR_SEVERITY_HIGHEST_DEFAULT    => 'bold red';
+Readonly::Scalar our $PROFILE_COLOR_SEVERITY_HIGH_DEFAULT       => 'magenta';
+Readonly::Scalar our $PROFILE_COLOR_SEVERITY_MEDIUM_DEFAULT     => $EMPTY;
+Readonly::Scalar our $PROFILE_COLOR_SEVERITY_LOW_DEFAULT        => $EMPTY;
+Readonly::Scalar our $PROFILE_COLOR_SEVERITY_LOWEST_DEFAULT     => $EMPTY;
 
 #-----------------------------------------------------------------------------
 
@@ -97,6 +117,31 @@ as warnings, are fatal, or are ignored.
 C<$PROFILE_STRICTNESS_DEFAULT> is set to C<$PROFILE_STRICTNESS_WARN>.
 Importable via the C<:profile_strictness> tag.
 
+
+=item C<$PROFILE_COLOR_SEVERITY_HIGHEST_DEFAULT>
+
+Default for the -color-severity-highest option. Importable via the
+C<:color_severity> tag.
+
+=item C<$PROFILE_COLOR_SEVERITY_HIGH_DEFAULT>
+
+Default for the -color-severity-high option. Importable via the
+C<:color_severity> tag.
+
+=item C<$PROFILE_COLOR_SEVERITY_MEDIUM_DEFAULT>
+
+Default for the -color-severity-medium option. Importable via the
+C<:color_severity> tag.
+
+=item C<$PROFILE_COLOR_SEVERITY_LOW_DEFAULT>
+
+Default for the -color-severity-low option. Importable via the
+C<:color_severity> tag.
+
+=item C<$PROFILE_COLOR_SEVERITY_LOWEST_DEFAULT>
+
+Default for the -color-severity-lowest option. Importable via the
+C<:color_severity> tag.
 
 =back
 

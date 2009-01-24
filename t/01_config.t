@@ -24,8 +24,9 @@ use Perl::Critic::TestUtils qw<
     names_of_policies_willing_to_work
 >;
 use Perl::Critic::Utils qw< :booleans :characters :severities >;
+use Perl::Critic::Utils::Constants qw< :color_severity >;
 
-use Test::More tests => 69;
+use Test::More tests => 84;
 
 #-----------------------------------------------------------------------------
 
@@ -182,6 +183,17 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
     is($c->theme()->rule(),    'danger || risky && ! pbp',  'user default theme from file');
     is($c->top(),      50, 'user default top from file'       );
     is($c->verbose(),  5,  'user default verbose from file'   );
+
+    is($c->color_severity_highest(), 'bold red underline',
+                        'user default color-severity-highest from file');
+    is($c->color_severity_high(), 'bold magenta',
+                        'user default color-severity-high from file');
+    is($c->color_severity_medium(), 'blue',
+                        'user default color-severity-medium from file');
+    is($c->color_severity_low(), $EMPTY,
+                        'user default color-severity-low from file');
+    is($c->color_severity_lowest(), $EMPTY,
+                        'user default color-severity-lowest from file');
 }
 
 #-----------------------------------------------------------------------------
@@ -269,6 +281,11 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
         -color
         -pager
         -criticism-fatal
+        -color-severity-highest
+        -color-severity-high
+        -color-severity-medium
+        -color-severity-low
+        -color-severity-lowest
     );
 
     # Can't use IO::Interactive here because we /don't/ want to check STDIN.
@@ -286,8 +303,30 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
     is( $c->pager(),     q{},   'Undefined -pager');
     is( $c->verbose(),   4,     'Undefined -verbose');
     is( $c->criticism_fatal(), 0, 'Undefined -criticism-fatal');
+    is( $c->color_severity_highest(),
+        $PROFILE_COLOR_SEVERITY_HIGHEST_DEFAULT,
+        'Undefined -color-severity-highest'
+    );
+    is( $c->color_severity_high(),
+        $PROFILE_COLOR_SEVERITY_HIGH_DEFAULT,
+        'Undefined -color-severity-high'
+    );
+    is( $c->color_severity_medium(),
+        $PROFILE_COLOR_SEVERITY_MEDIUM_DEFAULT,
+        'Undefined -color-severity-medium'
+    );
+    is( $c->color_severity_low(),
+        $PROFILE_COLOR_SEVERITY_LOW_DEFAULT,
+        'Undefined -color-severity-low'
+    );
+    is( $c->color_severity_lowest(),
+        $PROFILE_COLOR_SEVERITY_LOWEST_DEFAULT,
+        'Undefined -color-severity-lowest'
+    );
 
-    my %zero_args = map { $_ => 0 } @switches;
+    my %zero_args = map { $_ => 0 }
+        # Zero is an invalid Term::ANSIColor value.
+        grep { $_ !~ m/ \A-color-severity- /smx } @switches;
     $c = Perl::Critic::Config->new( %zero_args );
     is( $c->force(),     0,       'zero -force');
     is( $c->only(),      0,       'zero -only');
@@ -310,6 +349,11 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
     is( $c->pager(),     q{},     'empty -pager');
     is( $c->verbose(),   4,       'empty -verbose');
     is( $c->criticism_fatal(), 0, 'empty -criticism-fatal');
+    is( $c->color_severity_highest(), $EMPTY, 'empty -color-severity-highest');
+    is( $c->color_severity_high(),   $EMPTY, 'empty -color-severity-high');
+    is( $c->color_severity_medium(), $EMPTY, 'empty -color-severity-medium');
+    is( $c->color_severity_low(),    $EMPTY, 'empty -color-severity-low');
+    is( $c->color_severity_lowest(), $EMPTY, 'empty -color-severity-lowest');
 }
 
 #-----------------------------------------------------------------------------
