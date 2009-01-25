@@ -33,17 +33,17 @@
 ## failures 3
 ## cut
 
-@list = ($foo, 
-	 $bar, 
+@list = ($foo,
+	 $bar,
 	 $baz);
 
-@list = ($foo, 
-	 $bar, 
+@list = ($foo,
+	 $bar,
 	 $baz
 	);
 
-@list = ($foo, 
-	 $bar, 
+@list = ($foo,
+	 $bar,
 	 $baz
 );
 
@@ -53,17 +53,17 @@
 ## failures 0
 ## cut
 
-@list = ($foo, 
-	 $bar, 
+@list = ($foo,
+	 $bar,
 	 $baz,);
 
-@list = ($foo, 
-	 $bar, 
+@list = ($foo,
+	 $bar,
 	 $baz,
 );
 
-@list = ($foo, 
-	 $bar, 
+@list = ($foo,
+	 $bar,
 	 $baz,
 	);
 

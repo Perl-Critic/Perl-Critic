@@ -72,9 +72,9 @@ distribution.
 
 A common newbie mistake is to use the C<exit> function when they encounter some
 kind error condition in their library.  But there is no way to trap an C<exit> call
-to possibly recover from the error, which makes it difficult for others to use your 
+to possibly recover from the error, which makes it difficult for others to use your
 library.  Instead, you should be using C<die> or C<croak>, which can be trapped.  Or
-better yet, you can use a real exception mechanism, such as L<Class::Exception>.
+better yet, you can use a real exception mechanism, such as L<Exception::Class>.
 
 Usually, the only sensible place to call C<exit> is from inside a script.    So this
 Policy emits a violation any time that C<exit> is called from within a file that

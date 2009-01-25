@@ -46,7 +46,7 @@ Blah...
 #No shebang, this is a library
 #POD is inline with code too
 
-=head1 NAME  
+=head1 NAME
 
 Blah...
 
@@ -58,7 +58,7 @@ Blah...
 
 print 'Hello World';
 
-=head1  SUBROUTINES/METHODS 
+=head1  SUBROUTINES/METHODS
 
 Blah...
 

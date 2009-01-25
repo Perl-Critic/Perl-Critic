@@ -30,7 +30,7 @@ $foo = $bar; ## no critic qw()
 sub frobulate { ##no critic
     return $frob;
 }
-    
+
 sub frobulate { ## no critic #blah,blah
     return $frob;
 }

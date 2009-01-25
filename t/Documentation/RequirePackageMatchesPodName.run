@@ -55,7 +55,7 @@ Blah...
 
 =pod
 
-=head1 NAME  
+=head1 NAME
 
 Foo - A module that does stuff
 
@@ -93,7 +93,7 @@ package Foo;
 
 =pod
 
-=head1 NAME  
+=head1 NAME
 
 Foo - A module that does stuff
 
@@ -112,7 +112,7 @@ package Foo;
 
 =pod
 
-=head1 NAME  
+=head1 NAME
 
 Foo! - A module that does stuff
 
@@ -131,7 +131,7 @@ package Foo;
 
 =pod
 
-=head1 NAME  
+=head1 NAME
 
 C<Foo> - A module that does stuff
 
@@ -150,7 +150,7 @@ package Foo;
 
 =pod
 
-=head1 NAME  
+=head1 NAME
 
 L<Foo> - A module that does stuff
 
@@ -171,7 +171,7 @@ package main;
 
 =pod
 
-=head1 NAME  
+=head1 NAME
 
 Foo - A module that does stuff
 
@@ -192,7 +192,7 @@ package main;
 
 =pod
 
-=head1 NAME  
+=head1 NAME
 
 Bar - A module that does stuff
 
@@ -230,7 +230,7 @@ package Foo;
 
 =pod
 
-=head1       NAME             
+=head1       NAME
 
 
 

@@ -12,7 +12,7 @@
 
 next if ! $finished || $foo < $bar;
 if( $foo && !$bar || $baz){ do_something() }
-this() && !that() || the_other(); 
+this() && !that() || the_other();
 
 #-----------------------------------------------------------------------------
 
@@ -22,7 +22,7 @@ this() && !that() || the_other();
 
 next if not $finished or $foo < $bar;
 if( $foo and not $bar or $baz){ do_something() }
-this() and not that() or the_other(); 
+this() and not that() or the_other();
 
 #-----------------------------------------------------------------------------
 
@@ -32,7 +32,7 @@ this() and not that() or the_other();
 
 next if not $finished || $foo < $bar;
 if( $foo && not $bar or $baz){ do_something() }
-this() and ! that() or the_other(); 
+this() and ! that() or the_other();
 
 #-----------------------------------------------------------------------------
 

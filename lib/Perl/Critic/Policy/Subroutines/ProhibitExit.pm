@@ -37,15 +37,15 @@ sub violates {
     my ( $self, $elem, $doc ) = @_;
     return if $elem ne 'exit';
     return if not is_function_call($elem);
-    
+
     my $statement = $elem->statement();
     return if not $statement;
-    
+
     my $parent = $statement->parent();
     return if not $parent;
-    
+
     return if $parent->isa('PPI::Document');
-    
+
     return $self->violation($DESC, $EXPL, $elem);
 }
 
@@ -74,9 +74,9 @@ distribution.
 This Policy is a more extreme form of <Perl::Critic::Policy::Modules::ProhibitExit>,
 A common newbie mistake is to use the C<exit> function when they encounter some
 kind error condition in their subroutines.  But there is no way to trap an C<exit> call
-to possibly recover from the error, which makes it difficult for others to use your 
+to possibly recover from the error, which makes it difficult for others to use your
 subroutine.  Instead, you should be using C<die> or C<croak>, which can be trapped.  Or
-better yet, you can use a real exception mechanism, such as L<Class::Exception>.
+better yet, you can use a real exception mechanism, such as L<Exception::Class>.
 
 So this Policy emits a violation any time that C<exit> is called from within a subroutine.
 

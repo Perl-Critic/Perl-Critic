@@ -104,7 +104,7 @@ sub bar {
   print $_[3];
 }
 
-sub barr { 
+sub barr {
   print $_[1];
 }
 
@@ -136,7 +136,7 @@ sub bar {
   print $_[3];
 }
 
-sub barr { 
+sub barr {
   print $_[1];
 }
 

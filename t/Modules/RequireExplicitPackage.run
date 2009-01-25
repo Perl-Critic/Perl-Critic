@@ -14,8 +14,8 @@ is( pcritique($policy, \$code), 1, $policy.' 1 stmnt before package');
 ## failures 1
 ## cut
 BEGIN{
-    print 'Hello';        #this violation will be squelched 
-    print 'Beginning';    #this violation will be squelched 
+    print 'Hello';        #this violation will be squelched
+    print 'Beginning';    #this violation will be squelched
 }
 
 package foo;
@@ -34,7 +34,7 @@ package foo;
 ## failures 1
 ## cut
 $baz = $nuts;
-print 'whatever';      #this violation will be squelched 
+print 'whatever';      #this violation will be squelched
 package foo;
 
 #-----------------------------------------------------------------------------
@@ -86,8 +86,8 @@ package foo;
 ## cut
 #!/usr/bin/perl
 use strict;
-use warnings;          #this violation will be squelched 
-my $foo = 42;          #this violation will be squelched 
+use warnings;          #this violation will be squelched
+my $foo = 42;          #this violation will be squelched
 
 #-----------------------------------------------------------------------------
 
