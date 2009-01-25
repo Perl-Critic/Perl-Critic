@@ -1,11 +1,11 @@
 ##############################################################################
-#      $URL: http://perlcritic.tigris.org/svn/perlcritic/trunk/distributions/Perl-Critic/lib/Perl/Critic/Policy/Modules/ProhibitMultiplePackages.pm $
-#     $Date: 2009-01-18 15:32:26 -0800 (Sun, 18 Jan 2009) $
-#   $Author: clonezone $
-# $Revision: 3007 $
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
 ##############################################################################
 
-package Perl::Critic::Policy::Subroutines::ProhibitExit;
+package Perl::Critic::Policy::BuiltinFunctions::ProhibitExitInSubroutines;
 
 use 5.006001;
 use strict;
@@ -26,10 +26,10 @@ Readonly::Scalar my $EXPL   => q{Use "die" or "croak" instead};
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return ()                 }
-sub default_severity     { return $SEVERITY_MEDIUM   }
-sub default_themes       { return qw( core)          }
-sub applies_to           { return 'PPI::Token::Word' }
+sub supported_parameters { return ()                   }
+sub default_severity     { return $SEVERITY_MEDIUM     }
+sub default_themes       { return qw(core maintenance) }
+sub applies_to           { return 'PPI::Token::Word'   }
 
 #-----------------------------------------------------------------------------
 
@@ -60,7 +60,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Subroutines::ProhibitExit - Don't use exit() to throw exceptions from subroutines.
+Perl::Critic::Policy::BuiltinFunctions::ProhibitExitInSubroutines - Don't use exit() to throw exceptions from subroutines.
 
 
 =head1 AFFILIATION
@@ -71,7 +71,6 @@ distribution.
 
 =head1 DESCRIPTION
 
-This Policy is a more extreme form of <Perl::Critic::Policy::Modules::ProhibitExit>,
 A common newbie mistake is to use the C<exit> function when they encounter some
 kind error condition in their subroutines.  But there is no way to trap an C<exit> call
 to possibly recover from the error, which makes it difficult for others to use your
@@ -88,9 +87,7 @@ for this Policy.
 
 =head1 SEE ALSO
 
-L<Perl::Critic::Policy::Modules::ProhibitExit>
-
-L<Perl::Critic::Policy::ErrorHandling::RequireCarping>
+L<Perl::Critic::Policy::ErrorHandling::RequireCarping|Perl::Critic::Policy::ErrorHandling::RequireCarping>
 
 
 =head1 CONFIGURATION

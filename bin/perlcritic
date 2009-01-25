@@ -535,7 +535,7 @@ sub render_theme_listing {
     my @policies = Perl::Critic->new( %pc_params )->policies();
     my $listing = Perl::Critic::ThemeListing->new( -policies => \@policies );
     out $listing;
-    
+
     exit $EXIT_SUCCESS; ## no critic qw(ProhibitExit)
 }
 
@@ -550,7 +550,7 @@ sub render_profile_prototype {
     my @policies = Perl::Critic->new( %pc_params )->policies();
     my $prototype = Perl::Critic::ProfilePrototype->new( -policies => \@policies );
     out $prototype;
-    
+
     exit $EXIT_SUCCESS; ## no critic qw(ProhibitExit)
 }
 

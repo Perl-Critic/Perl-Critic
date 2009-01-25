@@ -1,8 +1,8 @@
 ##############################################################################
-#      $URL: http://perlcritic.tigris.org/svn/perlcritic/trunk/distributions/Perl-Critic/lib/Perl/Critic/TestUtils.pm $
-#     $Date: 2009-01-18 15:32:26 -0800 (Sun, 18 Jan 2009) $
-#   $Author: clonezone $
-# $Revision: 3007 $
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
 ##############################################################################
 
 ## name basic pass, outside of subroutine
