@@ -12,6 +12,9 @@
       by a block-scoped pragma. RT #42310
     * RequireBracedFileHandleWithPrint applies to printf as well as print.
       Fixed by Kyle Hasselbacher, RT #42537
+    * CodeLayout::ProhibitTrailingWhitespace didn't notice cases where PPI
+      would produce instances of PPI::Token::Whitespace that contained
+      multiple lines.
 
 [1.095_001] Released on 2009-01-18
 

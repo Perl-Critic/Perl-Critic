@@ -14,7 +14,7 @@ use warnings;
 use Perl::Critic::Utils qw( :characters );
 use Perl::Critic::TestUtils qw( pcritique );
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 
 #-----------------------------------------------------------------------------
 

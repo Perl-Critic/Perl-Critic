@@ -51,20 +51,20 @@ sub applies_to           { return 'PPI::Token::Whitespace' }
 sub violates {
     my ( $self, $token, undef ) = @_;
 
-    # There is at most one linefeed per Whitespace token, and it will always
-    # be the last character, if present.  If the code has two consecutive
-    # blank lines, PPI will produce two Whitespace tokens, each consisting
-    # of a single linefeed.  Thus, any Whitespace token consisting of a single
-    # character cannot contain trailing whitespace.
-    my $content = $token->content();
-    return if length($content) < 2;
-    return if qq{\n} ne chop $content;
+    if ( $token->content() =~ m< ( (?! \n) \s )+ \n >xms ) {
+        my $extra_whitespace = $1;
 
-    my $description = q{Found "};
-    $description .= join $EMPTY, map { _escape($_) } split $EMPTY, $content;
-    $description .= q{" at the end of the line};
+        my $description = q{Found "};
+        $description .=
+            join
+                $EMPTY,
+                map { _escape($_) } split $EMPTY, $extra_whitespace;
+        $description .= q{" at the end of the line};
 
-    return $self->violation( $description, $EXPL, $token );
+        return $self->violation( $description, $EXPL, $token );
+    }
+
+    return;
 }
 
 sub _escape {
