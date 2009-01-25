@@ -25,7 +25,17 @@ Readonly::Scalar my $EXPL => q{Invent unique variable names};
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return ()                         }
+sub supported_parameters {
+    return (
+        {
+            name            => 'allow',
+            description     => 'The variables to not consider as duplicates.',
+            default_string  => '$self $class',
+            behavior        => 'string list',
+        },
+    );
+}
+
 sub default_severity     { return $SEVERITY_MEDIUM           }
 sub default_themes       { return qw( core bugs )            }
 sub applies_to           { return 'PPI::Statement::Variable' }
@@ -36,7 +46,9 @@ sub violates {
     my ( $self, $elem, undef ) = @_;
     return if 'local' eq $elem->type;
 
-    my $names = [$elem->variables];
+    my $allow = $self->{_allow};
+    my @names = grep { not $allow->{$_} } $elem->variables();
+    my $names = [ @names ];
     # Assert: it is impossible for @$names to be empty in valid Perl syntax
     # But if it IS empty, this code should still work but will be inefficient
 
@@ -47,7 +59,7 @@ sub violates {
     my @violations;
     while (1) {
        my $up = $outer->sprevious_sibling;
-       if (!$up) {
+       if (not $up) {
           $up = $outer->parent;
        }
        last if !$up; # top of PDOM, we're done
@@ -59,7 +71,7 @@ sub violates {
           ($hits, $names) = part { exists $vars{$_} ? 0 : 1 } @{$names};
           if ($hits) {
              push @violations, map { $self->violation( $DESC . $_, $EXPL, $elem ) } @{$hits};
-             last if !$names;  # found violations for ALL variables, we're done
+             last if not $names;  # found violations for ALL variables, we're done
           }
        }
     }
@@ -147,7 +159,12 @@ tree walking on that single analysis.
 
 =head1 CONFIGURATION
 
-This Policy is not configurable except for the standard options.
+This policy has a single option, C<allow>, which is a list of names to never
+count as duplicates.  It defaults to containing C<$self> and C<$class>.  You
+add to this by adding something like this to your F<.perlcriticrc>:
+
+    [Variables::ProhibitReusedNames]
+    allow = $self $class @blah
 
 
 =head1 AUTHOR
