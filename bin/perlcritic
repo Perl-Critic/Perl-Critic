@@ -128,11 +128,11 @@ sub _dispatch_special_requests {
     if ( $opts{-help}            ) { pod2usage( -verbose => 0 )  }  #Exits
     if ( $opts{-options}         ) { pod2usage( -verbose => 1 )  }  #Exits
     if ( $opts{-man}             ) { pod2usage( -verbose => 2 )  }  #Exits
-    if ( $opts{-version}         ) { out "$VERSION\n"; exit 0; }  #Exits
+    if ( $opts{-version}         ) { display_version()           }  #Exits
     if ( $opts{-list}            ) { render_policy_listing();    }  #Exits
     if ( $opts{'-list-themes'}   ) { render_theme_listing();     }  #Exits
     if ( $opts{'-profile-proto'} ) { render_profile_prototype(); }  #Exits
-    if ( $opts{-doc}             ) { policy_docs( %opts );  }  #Exits
+    if ( $opts{-doc}             ) { policy_docs( %opts );       }  #Exits
     return 1;
 }
 
@@ -520,12 +520,14 @@ sub render_policy_listing {
     my @policies = Perl::Critic->new( %pc_params )->policies();
     my $listing = Perl::Critic::PolicyListing->new( -policies => \@policies );
     out $listing;
-    exit 0;
+
+    exit $EXIT_SUCCESS; ## no critic qw(ProhibitExit)
 }
 
 #-----------------------------------------------------------------------------
 
 sub render_theme_listing {
+
     require Perl::Critic::ThemeListing;
     require Perl::Critic;
 
@@ -533,7 +535,8 @@ sub render_theme_listing {
     my @policies = Perl::Critic->new( %pc_params )->policies();
     my $listing = Perl::Critic::ThemeListing->new( -policies => \@policies );
     out $listing;
-    exit 0;
+    
+    exit $EXIT_SUCCESS; ## no critic qw(ProhibitExit)
 }
 
 #-----------------------------------------------------------------------------
@@ -547,7 +550,8 @@ sub render_profile_prototype {
     my @policies = Perl::Critic->new( %pc_params )->policies();
     my $prototype = Perl::Critic::ProfilePrototype->new( -policies => \@policies );
     out $prototype;
-    exit 0;
+    
+    exit $EXIT_SUCCESS; ## no critic qw(ProhibitExit)
 }
 
 #-----------------------------------------------------------------------------
@@ -569,9 +573,17 @@ sub policy_docs {
     my @perldoc_output = map {`perldoc -T $_`} @matching_policies;  ## no critic (ProhibitBacktick)
     out @perldoc_output;
 
-    exit 0;
+    exit $EXIT_SUCCESS; ## no critic qw(ProhibitExit)
 }
 
+#-----------------------------------------------------------------------------
+
+sub display_version {
+    out "$VERSION\n";
+    exit $EXIT_SUCCESS;  ## no critic qw(ProhibitExit)
+}
+
+#-----------------------------------------------------------------------------
 1;
 
 __END__
