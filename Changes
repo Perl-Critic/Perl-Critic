@@ -11,18 +11,23 @@
     * BuiltinFunctions::ProhibitExitInSubroutines
     * ValuesAndExpressions::ProhibitSpecialLiteralHeredocTerminator
 
+    Policy Changes:
+    * Variables::ProhibitReusedNames now has an "allow" option to specify
+      names that can be reused.  It defaults to enabling $self and $class.  RT
+      #42767.
+
     Bug Fixes:
-    * ErrorHandling::RequireCarping will now allow a literal newline
-      as well as "\n".  Fixed by Kyle Hasselbacher, RT #25046
-    * ValuesAndExpressions::RequireInterpolationOfMetachars allows for escaped
-      backslashes.  Fixed by Tom Wyant, RT #38530.
-    * RequireUseStrict and RequireUseWarnings are no longer fooled
-      by a block-scoped pragma. RT #42310
-    * RequireBracedFileHandleWithPrint applies to printf as well as print.
-      Fixed by Kyle Hasselbacher, RT #42537
     * CodeLayout::ProhibitTrailingWhitespace didn't notice cases where PPI
       would produce instances of PPI::Token::Whitespace that contained
       multiple lines.
+    * ErrorHandling::RequireCarping will now allow a literal newline
+      as well as "\n".  Fixed by Kyle Hasselbacher, RT #25046
+    * RequireBracedFileHandleWithPrint applies to printf as well as print.
+      Fixed by Kyle Hasselbacher, RT #42537
+    * RequireUseStrict and RequireUseWarnings are no longer fooled
+      by a block-scoped pragma. RT #42310
+    * ValuesAndExpressions::RequireInterpolationOfMetachars allows for escaped
+      backslashes.  Fixed by Tom Wyant, RT #38530.
 
 [1.095_001] Released on 2009-01-18
 
