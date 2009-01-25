@@ -1,5 +1,12 @@
 [1.xxx_xxx] Released on 2009-xx-xx
 
+    New Features:
+    * Made violation coloring configurable via command line or profile. The
+      profile entries are color-severity-highest, -high, -medium, -low, or
+      -lowest. Numbers are accepted in lieu of named severities (e.g.
+      'color-severity-5' for 'color-severity-highest'), and 'colour' is
+      accepted in lieu of 'color'.
+
     New Policies:
     * BuiltinFunctions::ProhibitExitInSubroutines
     * ValuesAndExpressions::ProhibitSpecialLiteralHeredocTerminator
