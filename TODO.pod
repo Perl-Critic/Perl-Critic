@@ -2,7 +2,7 @@
 
 =pod
 
-=for stopwords LHS RHS REFACTORINGS FH SVN stopwords
+=for stopwords API LHS RHS REFACTORINGS FH SVN stopwords
 
 =head1 NAME
 
@@ -144,7 +144,7 @@ e.g. "C<[+Example::Policy]>".
 
 =item * Threading
 
-Pretty obviously, Perl::Critic is readily parallizable, just do a document per
+Pretty obviously, Perl::Critic is readily parallelizable, just do a document per
 thread.  ("readily" being conceptual, not necessarily practical)  Although
 there's now C<Policy::prepare_to_scan_document()>, given perl's thread data
 sharing model, this shouldn't be an issue.
@@ -613,7 +613,7 @@ So the F<perlcritic> script would basically just say...
 This would make the stuff that is currently inside F<perlcritic>
 easier to test.  Also would open the door for developers to
 subclass and extend F<perlcritic>, if they had some reason
-to do so.  Also, just cuz it feels like the right thing todo.
+to do so.  Also, just because it feels like the right thing to do.
 
 =item * Create constants for the PPI location array elements.
 
@@ -646,8 +646,8 @@ If enabled, this turns on L<PPI::Cache|PPI::Cache>:
     mkdir $cache_path, oct 700 if (! -d $cache_path);
     PPI::Cache->import(path => $cache_path);
 
-This cachedir should perhaps include the PPI version number!  At least until
-PPI incorporates its own version number in the cache.
+This cache directory should perhaps include the PPI version number!  At least
+until PPI incorporates its own version number in the cache.
 
 (see F<t/40_criticize.t> for a more robust implementation)
 
@@ -709,7 +709,7 @@ would be nicer to have an official interface in PPI.
 
 =item QuoteLike::Words in the place of a ForLoop
 
-PPI misparses C<<for qw<blah> {}>>.
+PPI incorrectly parses C<<for qw<blah> {}>>.
 
 
 =back
