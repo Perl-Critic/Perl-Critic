@@ -60,29 +60,44 @@ sub _init {
     $self->{_pager}           = dor(delete $args{pager},              $EMPTY);
     $self->{_color_severity_highest} = dor(
         delete $args{'color-severity-highest'},
-        dor( delete $args{'colour-severity-highest'},
-            $PROFILE_COLOR_SEVERITY_HIGHEST_DEFAULT ));
+        delete $args{'colour-severity-highest'},
+        delete $args{'color-severity-5'},
+        delete $args{'colour-severity-5'},
+        $PROFILE_COLOR_SEVERITY_HIGHEST_DEFAULT,
+    );
     $self->{_color_severity_high} = dor(
         delete $args{'color-severity-high'},
-        dor( delete $args{'colour-severity-high'},
-            $PROFILE_COLOR_SEVERITY_HIGH_DEFAULT ));
+        delete $args{'colour-severity-high'},
+        delete $args{'color-severity-4'},
+        delete $args{'colour-severity-4'},
+        $PROFILE_COLOR_SEVERITY_HIGH_DEFAULT,
+    );
     $self->{_color_severity_medium} = dor(
         delete $args{'color-severity-medium'},
-        dor( delete $args{'colour-severity-medium'},
-            $PROFILE_COLOR_SEVERITY_MEDIUM_DEFAULT ));
+        delete $args{'colour-severity-medium'},
+        delete $args{'color-severity-3'},
+        delete $args{'colour-severity-3'},
+        $PROFILE_COLOR_SEVERITY_MEDIUM_DEFAULT,
+    );
     $self->{_color_severity_low} = dor(
         delete $args{'color-severity-low'},
-        dor( delete $args{'colour-severity-low'},
-            $PROFILE_COLOR_SEVERITY_LOW_DEFAULT ));
+        delete $args{'colour-severity-low'},
+        delete $args{'color-severity-2'},
+        delete $args{'colour-severity-2'},
+        $PROFILE_COLOR_SEVERITY_LOW_DEFAULT,
+    );
     $self->{_color_severity_lowest} = dor(
         delete $args{'color-severity-lowest'},
-        dor( delete $args{'colour-severity-lowest'},
-            $PROFILE_COLOR_SEVERITY_LOWEST_DEFAULT ));
+        delete $args{'colour-severity-lowest'},
+        delete $args{'color-severity-1'},
+        delete $args{'colour-severity-1'},
+        $PROFILE_COLOR_SEVERITY_LOWEST_DEFAULT,
+    );
 
     # If we're using a pager or not outputing to a tty don't use colors.
     # Can't use IO::Interactive here because we /don't/ want to check STDIN.
     my $default_color = ($self->pager() or not -t *STDOUT) ? $FALSE : $TRUE; ## no critic (ProhibitInteractiveTest)
-    $self->{_color} = dor(delete $args{color}, dor(delete $args{colour}, $default_color));
+    $self->{_color} = dor(delete $args{color}, delete $args{colour}, $default_color);
 
     # If there's anything left, complain.
     _check_for_extra_options(%args);

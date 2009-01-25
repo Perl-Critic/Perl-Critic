@@ -18,7 +18,7 @@ use File::Spec;
 
 use Perl::Critic::Utils qw< :characters >;
 
-use Test::More tests => 37;
+use Test::More tests => 57;
 
 #-----------------------------------------------------------------------------
 
@@ -183,9 +183,52 @@ is( $options{-quiet}, 1, $message);
 #-----------------------------------------------------------------------------
 
 local @ARGV = qw(-pager foo);
+$message = "@ARGV";
 %options = eval { get_options() };
-is( $options{-pager}, 'foo',  "@ARGV" );
+is( $options{-pager}, 'foo', $message );
 
+
+#-----------------------------------------------------------------------------
+
+foreach my $severity ([qw{
+    -color-severity-highest
+    -colour-severity-highest
+    -color-severity-5
+    -colour-severity-5
+    }],
+    [qw{
+    -color-severity-high
+    -colour-severity-high
+    -color-severity-4
+    -colour-severity-4
+    }],
+    [qw{
+    -color-severity-medium
+    -colour-severity-medium
+    -color-severity-3
+    -colour-severity-3
+    }],
+    [qw{
+    -color-severity-low
+    -colour-severity-low
+    -color-severity-2
+    -colour-severity-2
+    }],
+    [qw{
+    -color-severity-lowest
+    -colour-severity-lowest
+    -color-severity-1
+    -colour-severity-1
+    }],
+) {
+    my $canonical = $severity->[0];
+    foreach my $opt (@{ $severity }) {
+        local @ARGV = ($opt => 'cyan');
+        $message = "@ARGV";
+        %options = eval { get_options() };
+        is( $options{$canonical}, 'cyan', $message );
+    }
+}
 
 #-----------------------------------------------------------------------------
 # Intercept pod2usage so we can test invalid options and special switches

@@ -35,7 +35,10 @@ sub boolean_to_number {  ## no critic (RequireArgUnpacking)
 #-----------------------------------------------------------------------------
 
 sub dor {  ## no critic (RequireArgUnpacking)
-    return defined $_[0] ? $_[0] : $_[1];
+    foreach (@_) {
+        defined $_ and return $_;
+    }
+    return;
 }
 
 #-----------------------------------------------------------------------------
@@ -76,6 +79,12 @@ Return 0 or 1 based upon the value of parameter in a boolean context.
 
 Return either the value or the default based upon whether the value is
 defined or not.
+
+=item C<dor_n( $value0, $value1, ... )>
+
+Returns the first defined value among its arguments. If none is defined,
+simply returns.
+
 
 
 =item C<defined_or_empty( $value )>

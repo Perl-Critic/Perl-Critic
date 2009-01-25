@@ -17,7 +17,7 @@ use Perl::Critic::OptionsProcessor;
 use Perl::Critic::Utils qw< :booleans >;
 use Perl::Critic::Utils::Constants qw< :color_severity >;
 
-use Test::More tests => 42;
+use Test::More tests => 52;
 
 #-----------------------------------------------------------------------------
 
@@ -130,6 +130,42 @@ our $VERSION = '1.095_001';
         'gray',             'user default colour-severity-low' );
     is( $processor->color_severity_lowest(),
         'scots tartan',     'user default colour-severity-lowest' );
+
+    $processor = Perl::Critic::OptionsProcessor->new(
+         'color-severity-5'    => 'chartreuse',
+         'color-severity-4'    => 'fuschia',
+         'color-severity-3'    => 'blue',
+         'color-severity-2'    => 'gray',
+         'color-severity-1'    => 'scots tartan',
+    );
+    is( $processor->color_severity_highest(),
+        'chartreuse',       'user default color-severity-5' );
+    is( $processor->color_severity_high(),
+        'fuschia',          'user default color-severity-4' );
+    is( $processor->color_severity_medium(),
+        'blue',             'user default color-severity-3' );
+    is( $processor->color_severity_low(),
+        'gray',             'user default color-severity-2' );
+    is( $processor->color_severity_lowest(),
+        'scots tartan',     'user default color-severity-1' );
+
+    $processor = Perl::Critic::OptionsProcessor->new(
+         'colour-severity-5'    => 'chartreuse',
+         'colour-severity-4'    => 'fuschia',
+         'colour-severity-3'    => 'blue',
+         'colour-severity-2'    => 'gray',
+         'colour-severity-1'    => 'scots tartan',
+    );
+    is( $processor->color_severity_highest(),
+        'chartreuse',       'user default colour-severity-5' );
+    is( $processor->color_severity_high(),
+        'fuschia',          'user default colour-severity-4' );
+    is( $processor->color_severity_medium(),
+        'blue',             'user default colour-severity-3' );
+    is( $processor->color_severity_low(),
+        'gray',             'user default colour-severity-2' );
+    is( $processor->color_severity_lowest(),
+        'scots tartan',     'user default colour-severity-1' );
 }
 
 #-----------------------------------------------------------------------------

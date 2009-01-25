@@ -1009,27 +1009,37 @@ the benefit of L<criticism|criticism>.
 B<-color-severity-highest> is a string representing the highest
 severity violation color, as expected by Term::ANSIColor. It is not
 used by Perl::Critic, but is provided for the benefit of
-L<perlcritic|perlcritic>.
+L<perlcritic|perlcritic>. It can also be specified as
+B<-colour-severity-highest>, B<-color-severity-5>, or
+B<-colour-severity-5>.
 
 B<-color-severity-high> is a string representing the high severity
 violation color, as expected by Term::ANSIColor. It is not used by
 Perl::Critic, but is provided for the benefit of
-L<perlcritic|perlcritic>.
+L<perlcritic|perlcritic>. It can also be specified as
+B<-colour-severity-high>, B<-color-severity-4>, or
+B<-colour-severity-4>.
 
 B<-color-severity-medium> is a string representing the medium
 severity violation color, as expected by Term::ANSIColor. It is not
 used by Perl::Critic, but is provided for the benefit of
-L<perlcritic|perlcritic>.
+L<perlcritic|perlcritic>. It can also be specified as
+B<-colour-severity-medium>, B<-color-severity-3>, or
+B<-colour-severity-3>.
 
 B<-color-severity-low> is a string representing the low severity
 violation color, as expected by Term::ANSIColor. It is not used by
 Perl::Critic, but is provided for the benefit of
-L<perlcritic|perlcritic>.
+L<perlcritic|perlcritic>. It can also be specified as
+B<-colour-severity-low>, B<-color-severity-2>, or
+B<-colour-severity-2>.
 
 B<-color-severity-lowest> is a string representing the lowest
 severity violation color, as expected by Term::ANSIColor. It is not
 used by Perl::Critic, but is provided for the benefit of
-L<perlcritic|perlcritic>.
+L<perlcritic|perlcritic>. It can also be specified as
+B<-colour-severity-lowest>, B<-color-severity-1>, or
+B<-colour-severity-1>.
 
 =back
 

@@ -453,11 +453,11 @@ sub _get_option_specification {
         theme=s
         top:i
         verbose=s
-        color-severity-highest|colour-severity-highest=s
-        color-severity-high|colour-severity-high=s
-        color-severity-medium|colour-severity-medium=s
-        color-severity-low|colour-severity-low=s
-        color-severity-lowest|colour-severity-lowest=s
+        color-severity-highest|colour-severity-highest|color-severity-5|colour-severity-5=s
+        color-severity-high|colour-severity-high|color-severity-4|colour-severity-4=s
+        color-severity-medium|colour-severity-medium|color-severity-3|colour-severity-3=s
+        color-severity-low|colour-severity-low|color-severity-2|colour-severity-2=s
+        color-severity-lowest|colour-severity-lowest|color-severity-1|colour-severity-1=s
     );
 }
 
@@ -611,6 +611,11 @@ C<perlcritic> - Command-line interface to critique Perl source.
              [--force | --noforce] [--statistics] [--statistics-only]
              [--count | -C] [--verbose {number | format}]
              [--color | --nocolor] [--pager pager] [--quiet]
+             [--color-severity-highest color_specification]
+             [--color-severity-high color_specification]
+             [--color-severity-medium color_specification]
+             [--color-severity-low color_specification]
+             [--color-severity-lowest color_specification]
              {FILE | DIRECTORY | STDIN}
 
   perlcritic --profile-proto
@@ -973,6 +978,41 @@ You can set the default value for this option in your F<.perlcriticrc> file.
 Setting a pager turns off color by default.  You will have to turn color on
 explicitly.  If you want color, you'll probably also want to tell your pager
 to display raw characters.  For C<less> and C<more>, use the -R switch.
+
+=item C<--color-severity-highest COLOR_SPECIFICATION>
+
+Specifies the color to be used for highest severity violations, as a
+Term::ANSIColor color specification. Can also be specified as
+C<--colour-severity-highest>, C<--color-severity-5>, or
+C<--colour-severity-5>.
+
+=item C<--color-severity-high COLOR_SPECIFICATION>
+
+Specifies the color to be used for high severity violations, as a
+Term::ANSIColor color specification. Can also be specified as
+C<--colour-severity-high>, C<--color-severity-4>, or
+C<--colour-severity-4>.
+
+=item C<--color-severity-medium COLOR_SPECIFICATION>
+
+Specifies the color to be used for medium severity violations, as a
+Term::ANSIColor color specification. Can also be specified as
+C<--colour-severity-medium>, C<--color-severity-3>, or
+C<--colour-severity-3>.
+
+=item C<--color-severity-low COLOR_SPECIFICATION>
+
+Specifies the color to be used for low severity violations, as a
+Term::ANSIColor color specification. Can also be specified as
+C<--colour-severity-low>, C<--color-severity-2>, or
+C<--colour-severity-2>.
+
+=item C<--color-severity-lowest COLOR_SPECIFICATION>
+
+Specifies the color to be used for lowest severity violations, as a
+Term::ANSIColor color specification. Can also be specified as
+C<--colour-severity-lowest>, C<--color-severity-1>, or
+C<--colour-severity-1>.
 
 =item C<--doc PATTERN>
 
