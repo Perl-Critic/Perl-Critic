@@ -155,9 +155,10 @@ tree walking on that single analysis.
 
 =head1 CONFIGURATION
 
-This policy has a single option, C<allow>, which is a list of names to never
-count as duplicates.  It defaults to containing C<$self> and C<$class>.  You
-add to this by adding something like this to your F<.perlcriticrc>:
+This policy has a single option, C<allow>, which is a list of names to
+never count as duplicates.  It defaults to containing C<$self> and
+C<$class>.  You add to this by adding something like this to your
+F<.perlcriticrc>:
 
     [Variables::ProhibitReusedNames]
     allow = $self $class @blah
