@@ -42,7 +42,7 @@ chomp;\t${SPACE}${SPACE}
 chomp;${SPACE}${SPACE}\t
 END_PERL
 
-is ( pcritique($policy, \$code), 5, $policy );
+is( pcritique($policy, \$code), 5, 'Basic failure' );
 
 #-----------------------------------------------------------------------------
 
@@ -55,7 +55,20 @@ ${SPACE}${SPACE}${SPACE}${SPACE}frobnicate();
 
 END_PERL
 
-is( pcritique($policy, \$code), 0, $policy );
+is( pcritique($policy, \$code), 0, 'Basic passing' );
+
+#-----------------------------------------------------------------------------
+
+$code = <<"END_PERL";
+${SPACE}
+${SPACE}\$x
+END_PERL
+
+is(
+    pcritique($policy, \$code),
+    1,
+    'Multiple lines in a single PPI::Token::Whitespace',
+);
 
 #-----------------------------------------------------------------------------
 
