@@ -85,6 +85,36 @@ $sql = "\'";
 
 #-----------------------------------------------------------------------------
 
+## name allow double quotes if called for.
+## failures 0
+## cut
+
+$text = "Able was $I ere $I saw Elba";
+$text = "$I think, therefore ...";
+$text = "Anyone @home?";
+$text = "Here we have\ta tab";
+$text = "Able was \\$I ere \\$I saw Elba";
+$text = "\\$I think, therefore ...";
+$text = "Anyone \\@home?";
+$text = "Here we have\\\ta tab";
+
+#-----------------------------------------------------------------------------
+
+## name prohibit double quotes if not called for
+## failures 8
+## cut
+
+$text = "Able was \$I ere \$I saw Elba";
+$text = "\$I think, therefore ...";
+$text = "Anyone \@home?";
+$text = "Here we do not have\\ta tab";
+$text = "Able was \\\$I ere \\\$I saw Elba";
+$text = "\\\$I think, therefore ...";
+$text = "Anyone \\\@home?";
+$text = "Here we do not have\\\\ta tab";
+
+#-----------------------------------------------------------------------------
+
 ##############################################################################
 #      $URL$
 #     $Date$

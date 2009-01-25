@@ -99,8 +99,11 @@ sub violates {
 
 sub _has_interpolation {
     my $elem = shift;
-    return $elem =~ m{ (?<!\\) [\$\@] \S+ }xms     #Contains unescaped $. or @.
-        || $elem =~ m{ \\[tnrfbae0xcNLuLUEQ] }xms; #Containts escaped metachars
+    return $elem =~ m<
+        (?: \A | [^\\] )
+        (?: \\{2} )*
+        (?: [\$\@] \S+ | \\[tnrfbae0xcNLuLUEQ] )
+    >xmso;
 }
 
 1;
