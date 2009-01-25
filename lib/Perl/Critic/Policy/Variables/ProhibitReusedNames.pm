@@ -58,23 +58,23 @@ sub violates {
     my $outer = $elem;
     my @violations;
     while (1) {
-       my $up = $outer->sprevious_sibling;
-       if (not $up) {
-          $up = $outer->parent;
-       }
-       last if !$up; # top of PDOM, we're done
-       $outer = $up;
+        my $up = $outer->sprevious_sibling;
+        if (not $up) {
+            $up = $outer->parent;
+        }
+        last if !$up; # top of PDOM, we're done
+        $outer = $up;
 
-       if ($outer->isa('PPI::Statement::Variable') && 'local' ne $outer->type) {
-          my %vars = map {$_ => undef} $outer->variables;
-          my $hits;
-          ($hits, $names) = part { exists $vars{$_} ? 0 : 1 } @{$names};
-          if ($hits) {
-             push @violations, map { $self->violation( $DESC . $_, $EXPL, $elem ) } @{$hits};
-             last if not $names;  # found violations for ALL variables, we're done
-          }
-       }
-    }
+        if ($outer->isa('PPI::Statement::Variable') && 'local' ne $outer->type) {
+            my %vars = map {$_ => undef} $outer->variables;
+            my $hits;
+            ($hits, $names) = part { exists $vars{$_} ? 0 : 1 } @{$names};
+            if ($hits) {
+                push @violations, map { $self->violation( $DESC . $_, $EXPL, $elem ) } @{$hits};
+                last if not $names;  # found violations for ALL variables, we're done
+            }
+        }
+        }
     return @violations;
 }
 
@@ -105,10 +105,10 @@ confusing which variable is which. And, worse, the programmer could
 accidentally remove the inner declaration, thus silently changing the
 meaning of the inner code to use the outer variable.
 
-   my $x = 1;
-   for my $i (0 .. 10) {
-      my $x = $i+1;  # not OK, "$x" reused
-   }
+    my $x = 1;
+    for my $i (0 .. 10) {
+        my $x = $i+1;  # not OK, "$x" reused
+    }
 
 With C<use warnings> in effect, Perl will warn you if you reuse a
 variable name at the same scope level but not within nested scopes.  Like so:
@@ -138,15 +138,11 @@ This is intentional, though, because it catches bugs like this:
 
     my $debug_mode = 0;
     sub set_debug {
-       my $debug_mode = 1;  # accidental redeclaration
+        my $debug_mode = 1;  # accidental redeclaration
     }
 
 I've done this myself several times -- it's a strong habit to put that
 "my" in front of variables at the start of subroutines.
-
-If you have opinions on this caveat/feature please post to the
-L<Perl::Critic> mailing list.  Perhaps we'll add some specific
-exemptions?
 
 
 =head2 Performance
