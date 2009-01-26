@@ -122,6 +122,34 @@ if ( ($VERSION) = q<$Revision$> =~ m/(\d+)/mx ) {}
 
 #-----------------------------------------------------------------------------
 
+## name Don't complain about use overload dereferences.
+## failures 0
+## cut
+
+use overload '${}' => \&scalar_deref;
+use overload '@{}' => \&array_deref;
+use overload '%{}' => \&hash_deref;
+use overload '&{}' => \&code_deref;
+use overload '*{}' => \&glob_deref;
+use overload ('${}' => \&scalar_deref);
+use overload ('@{}' => \&array_deref);
+use overload ('%{}' => \&hash_deref);
+use overload ('&{}' => \&code_deref);
+use overload ('*{}' => \&glob_deref);
+use overload 1.0 ('${}' => \&scalar_deref);
+use overload 1.0 ('@{}' => \&array_deref);
+
+#-----------------------------------------------------------------------------
+
+## name Do complain about overload dereference-ish strings elsewhere
+## failures 2
+## cut
+
+use overlord '${}' => \&scalar_deref;
+use overlord '@{}' => \&array_deref;
+
+#-----------------------------------------------------------------------------
+
 ##############################################################################
 #      $URL$
 #     $Date$
