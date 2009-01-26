@@ -29,6 +29,9 @@
     * ValuesAndExpressions::RequireInterpolationOfMetachars allows for escaped
       backslashes.  Fixed by Tom Wyant, RT #38530.
 
+    Documentation improvements contributed by Kyle Hasselbacher in response
+    to RT #35118.
+
 [1.095_001] Released on 2009-01-18
 
     Policy Changes:

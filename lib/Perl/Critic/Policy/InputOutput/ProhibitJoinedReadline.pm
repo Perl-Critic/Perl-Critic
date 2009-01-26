@@ -79,6 +79,14 @@ like so:
 
 or use L<File::Slurp|File::Slurp>, which is even faster.
 
+B<Note> that if the C<ProhibitPunctuationVars> policy is also in effect,
+it will complain about the use of C<$/> in the line above.  In that
+case, write this instead:
+
+  use English '-no_match_vars';
+
+  do { local $INPUT_RECORD_SEPARATOR = undef; <$fh> };
+
 
 =head1 CONFIGURATION
 
