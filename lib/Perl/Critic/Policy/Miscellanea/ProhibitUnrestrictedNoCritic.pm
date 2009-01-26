@@ -19,7 +19,7 @@ our $VERSION = '1.095_001';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $DESC => q{Unrestriced '## no critic' annotation};
+Readonly::Scalar my $DESC => q{Unrestricted '## no critic' annotation};
 Readonly::Scalar my $EXPL => q{Only disable the Policies you really need to disable};
 
 #-----------------------------------------------------------------------------
