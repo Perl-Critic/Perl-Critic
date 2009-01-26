@@ -30,7 +30,7 @@ sub supported_parameters {
         {
             name            => 'allow',
             description     => 'The variables to not consider as duplicates.',
-            default_string  => '$self $class',
+            default_string  => '$self $class',    ## no critic (RequireInterpolationOfMetachars)
             behavior        => 'string list',
         },
     );
