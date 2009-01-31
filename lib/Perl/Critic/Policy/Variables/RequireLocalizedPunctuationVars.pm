@@ -12,7 +12,7 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :severities :classification hashify};
+use Perl::Critic::Utils qw{ :severities :classification $EMPTY hashify};
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.095_001';
@@ -25,12 +25,25 @@ Readonly::Hash   my %EXCEPTIONS => hashify(qw(
     $ARG
     @_
 ));
-Readonly::Scalar my $DESC => q{Magic variables should be assigned as "local"};
+Readonly::Scalar my $DESC => q{Magic variable "%s" should be assigned as "local"};
 Readonly::Scalar my $EXPL => [ 81, 82 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return ()                         }
+sub supported_parameters {
+    return (
+        {
+            name            => 'exceptions',
+            description     =>
+                q<Global variables to exclude from this policy.>,
+            default_string  => $EMPTY,
+            behavior        => 'string list',
+            list_always_present_values =>
+                [ qw< $_ $ARG @_ > ],
+        },
+    );
+}
+
 sub default_severity     { return $SEVERITY_HIGH             }
 sub default_themes       { return qw(core pbp bugs)          }
 sub applies_to           { return 'PPI::Token::Operator'     }
@@ -44,15 +57,19 @@ sub violates {
 
     my $destination = $elem->sprevious_sibling;
     return if !$destination;  # huh? assignment in void context??
+    while ($destination->isa('PPI::Structure::Subscript')) {
+        $destination = $destination->sprevious_sibling()
+            or return;
+    }
 
-    if (_is_non_local_magic_dest($destination)) {
-       return $self->violation( $DESC, $EXPL, $elem );
+    if (my $var = $self->_is_non_local_magic_dest($destination)) {
+       return $self->violation( sprintf( $DESC, $var ), $EXPL, $elem );
     }
     return;  # OK
 }
 
 sub _is_non_local_magic_dest {
-    my $elem = shift;
+    my ($self, $elem) = @_;
 
     #print "Test dest $elem, @{[ref $elem]}\n";
 
@@ -68,10 +85,11 @@ sub _is_non_local_magic_dest {
     # unfortunately, because we need English too
 
     if ($elem->isa('PPI::Token::Symbol')) {
-        return _is_magic_var($elem);
+        return $self->_is_magic_var($elem) ? $elem : undef;
     } elsif ($elem->isa('PPI::Structure::List') || $elem->isa('PPI::Statement::Expression')) {
         for my $child ($elem->schildren) {
-            return 1 if _is_non_local_magic_dest($child);
+            my $var = $self->_is_non_local_magic_dest($child);
+            return $var if $var;
         }
     }
 
@@ -81,10 +99,10 @@ sub _is_non_local_magic_dest {
 #-----------------------------------------------------------------------------
 
 sub _is_magic_var {
-    my ($elem) = @_;
+    my ($self, $elem) = @_;
 
     my $variable_name = "$elem";
-    return if $EXCEPTIONS{$variable_name};
+    return if $self->{_exceptions}{$variable_name};
     return 1 if $elem->isa('PPI::Token::Magic'); # optimization(?), and helps with PPI 1.118 carat bug
     return if ! is_perl_global( $elem );
 
@@ -142,11 +160,23 @@ names declared by L<English|English>, etc.  This is not a good coding
 practice, however it is not the concern of this specific policy to
 complain about that.
 
+There are exceptions for C<$_> and C<@_>, and the English equivalent
+C<$ARG>.
+
 
 =head1 CONFIGURATION
 
-This Policy is not configurable except for the standard options.
+You can configure your own exceptions using the C<exceptions> option:
 
+    [Variables::RequireLocalizedPunctuationVars]
+    exceptions = @ARGV $ARGV
+
+These are added to the default exceptions.
+
+Note that this exception mechanism does not distinguish between a scalar
+and an array or hash element. C<$ARGV[0]> is allowed under the above
+example by the presence of C<$ARGV> in the exceptions list, not by the
+presence of C<@ARGV>.
 
 =head1 CAVEATS
 

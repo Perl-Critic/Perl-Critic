@@ -50,7 +50,10 @@ open my $test_file, '>', $test_file_name    ## no critic (RequireBriefOpen)
 
 print_header($test_file);
 print_pass_local($test_file, \@globals);
+print_pass_local_deref($test_file, \@globals);
+print_pass_non_local_exception($test_file, \@globals);
 print_fail_non_local($test_file, \@globals, $numvars, $numcarats);
+print_fail_non_local_deref($test_file, \@globals);
 print_footer($test_file);
 
 close $test_file
@@ -72,15 +75,6 @@ local $SIG{__DIE__} = sub { print "AAAAAAARRRRRGGGGHHHHH....\n"; };
 $_ = 1;
 $ARG = 1;
 @_ = (1, 2, 3);
-
-#-----------------------------------------------------------------------------
-
-## name Named magic variables, special case failures
-## failures 1
-## TODO we are not handling dereferences yet...
-## cut
-
-$SIG{__DIE__} = sub { print "AAAAAAARRRRRGGGGHHHHH....\n"; };
 
 #-----------------------------------------------------------------------------
 
@@ -146,6 +140,58 @@ END_CODE
     }
 
     return;
+}
+
+
+sub print_pass_local_deref {
+    my ($test_file, $globals) = @_;
+
+    my %subscript = (
+        '%' => '{foo}',
+        '@' => '[0]',
+    );
+
+    my @derefs = grep { $subscript{substr $_, 0, 1} } @{ $globals };
+
+    print {$test_file} <<"END_CODE";
+
+#-----------------------------------------------------------------------------
+
+## name Named magic variables, pass local dereferenced
+## failures 0
+## cut
+
+END_CODE
+
+    foreach my $varname ( @derefs ) {
+        my ($sigil, $barename) = $varname =~ m/ (.)(.*) /smx;
+        print {$test_file} 'local $', $barename,
+            $subscript{$sigil}, " = 'bar';\n";
+    }
+
+}
+
+
+sub print_pass_non_local_exception {
+    my ($test_file, $globals) = @_;
+
+    (my $except = "@$globals") =~ s< ([\\']) ><\\$1>gmsx;
+    print {$test_file} <<"END_CODE";
+
+#-----------------------------------------------------------------------------
+
+## name Named magic variables, pass non-local but in exception list
+## parms { exceptions => '$except' }
+## failures 0
+## cut
+
+END_CODE
+
+    foreach my $varname (@{$globals}) {
+        next if $exceptions{$varname};
+        print {$test_file} "$varname = ();\n";
+    }
+
 }
 
 
@@ -231,6 +277,37 @@ END_CODE
     }
 
     return;
+}
+
+
+sub print_fail_non_local_deref {
+    my ($test_file, $globals) = @_;
+
+    my %subscript = (
+        '%' => '{foo}',
+        '@' => '[0]',
+    );
+
+    my @derefs = grep { $subscript{substr $_, 0, 1} && !$exceptions{$_} }
+        @{ $globals };
+    my $numvars = scalar @derefs;
+
+    print {$test_file} <<"END_CODE";
+
+#-----------------------------------------------------------------------------
+
+## name Named magic variables, fail non-local dereferenced
+## failures $numvars
+## cut
+
+END_CODE
+
+    foreach my $varname ( @derefs ) {
+        my ($sigil, $barename) = $varname =~ m/ (.)(.*) /smx;
+        print {$test_file} '$', $barename,
+            $subscript{$sigil}, " = 'bar';\n";
+    }
+
 }
 
 

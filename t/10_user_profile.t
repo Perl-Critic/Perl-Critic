@@ -320,7 +320,7 @@ END_PROFILE
 # Test profile finding
 
 {
-    my $expected = $ENV{PERLCRITIC} = 'foo';
+    my $expected = local $ENV{PERLCRITIC} = 'foo';
     my $got = Perl::Critic::UserProfile::_find_profile_path();
     is( $got, $expected, 'PERLCRITIC environment variable');
 }
