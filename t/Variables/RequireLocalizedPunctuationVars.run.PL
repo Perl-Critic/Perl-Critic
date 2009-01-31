@@ -33,7 +33,7 @@ my @globals = (
     @B::Keywords::Scalars,
 );
 push @globals, uniq apply { s/ \A ([^*]) /*$1/xms } @B::Keywords::Filehandles;
-my %exceptions = map {$_ => 1} qw(
+my %exemptions = map {$_ => 1} qw(
     $_
     $ARG
     @_
@@ -41,8 +41,8 @@ my %exceptions = map {$_ => 1} qw(
 
 my $carat_re = qr/\A [\$%]\^\w+ /xms;
 
-my $numvars = @globals - keys %exceptions;
-my $numcarats = grep {!$exceptions{$_} && m/ $carat_re /xms} @globals;
+my $numvars = @globals - keys %exemptions;
+my $numcarats = grep {!$exemptions{$_} && m/ $carat_re /xms} @globals;
 
 
 open my $test_file, '>', $test_file_name    ## no critic (RequireBriefOpen)
@@ -181,14 +181,14 @@ sub print_pass_non_local_exception {
 #-----------------------------------------------------------------------------
 
 ## name Named magic variables, pass non-local but in exception list
-## parms { exceptions => '$except' }
+## parms { allow => '$except' }
 ## failures 0
 ## cut
 
 END_CODE
 
     foreach my $varname (@{$globals}) {
-        next if $exceptions{$varname};
+        next if $exemptions{$varname};
         print {$test_file} "$varname = ();\n";
     }
 
@@ -209,7 +209,7 @@ sub print_fail_non_local {
 END_CODE
 
     for my $varname (@{$globals}) {
-        next if $exceptions{$varname};
+        next if $exemptions{$varname};
         next if $varname =~ m/ $carat_re /xms;
         print {$test_file} "$varname = ();\n";
     }
@@ -225,7 +225,7 @@ END_CODE
 END_CODE
 
     for my $varname (@{$globals}) {
-        next if $exceptions{$varname};
+        next if $exemptions{$varname};
         next if $varname !~ m/ $carat_re /xms;
         print {$test_file} "$varname = ();\n";
     }
@@ -241,7 +241,7 @@ END_CODE
 END_CODE
 
     for my $varname (@{$globals}) {
-        next if $exceptions{$varname};
+        next if $exemptions{$varname};
         next if $varname !~ m/ $carat_re /xms;
         print {$test_file} "$varname= ();\n";
     }
@@ -257,7 +257,7 @@ END_CODE
 END_CODE
 
     for my $varname (@{$globals}) {
-        next if $exceptions{$varname};
+        next if $exemptions{$varname};
         print {$test_file} "\@foo = ($varname) = ();\n";
     }
 
@@ -272,7 +272,7 @@ END_CODE
 END_CODE
 
     for my $varname (@{$globals}) {
-        next if $exceptions{$varname};
+        next if $exemptions{$varname};
         print {$test_file} "($varname) = ();\n";
     }
 
@@ -288,7 +288,7 @@ sub print_fail_non_local_deref {
         '@' => '[0]',
     );
 
-    my @derefs = grep { $subscript{substr $_, 0, 1} && !$exceptions{$_} }
+    my @derefs = grep { $subscript{substr $_, 0, 1} && !$exemptions{$_} }
         @{ $globals };
     my $numvars = scalar @derefs;
 

@@ -33,13 +33,12 @@ Readonly::Scalar my $EXPL => [ 81, 82 ];
 sub supported_parameters {
     return (
         {
-            name            => 'exceptions',
+            name            => 'allow',
             description     =>
                 q<Global variables to exclude from this policy.>,
             default_string  => $EMPTY,
             behavior        => 'string list',
-            list_always_present_values =>
-                [ qw< $_ $ARG @_ > ],
+            list_always_present_values => [ qw< $_ $ARG @_ > ],
         },
     );
 }
@@ -86,7 +85,11 @@ sub _is_non_local_magic_dest {
 
     if ($elem->isa('PPI::Token::Symbol')) {
         return $self->_is_magic_var($elem) ? $elem : undef;
-    } elsif ($elem->isa('PPI::Structure::List') || $elem->isa('PPI::Statement::Expression')) {
+    }
+    elsif (
+            $elem->isa('PPI::Structure::List')
+        or  $elem->isa('PPI::Statement::Expression')
+    ) {
         for my $child ($elem->schildren) {
             my $var = $self->_is_non_local_magic_dest($child);
             return $var if $var;
@@ -102,9 +105,9 @@ sub _is_magic_var {
     my ($self, $elem) = @_;
 
     my $variable_name = "$elem";
-    return if $self->{_exceptions}{$variable_name};
+    return if $self->{_allow}{$variable_name};
     return 1 if $elem->isa('PPI::Token::Magic'); # optimization(?), and helps with PPI 1.118 carat bug
-    return if ! is_perl_global( $elem );
+    return if not is_perl_global( $elem );
 
     return 1;
 }
@@ -160,22 +163,22 @@ names declared by L<English|English>, etc.  This is not a good coding
 practice, however it is not the concern of this specific policy to
 complain about that.
 
-There are exceptions for C<$_> and C<@_>, and the English equivalent
+There are exemptions for C<$_> and C<@_>, and the English equivalent
 C<$ARG>.
 
 
 =head1 CONFIGURATION
 
-You can configure your own exceptions using the C<exceptions> option:
+You can configure your own exemptions using the C<allow> option:
 
     [Variables::RequireLocalizedPunctuationVars]
-    exceptions = @ARGV $ARGV
+    allow = @ARGV $ARGV
 
-These are added to the default exceptions.
+These are added to the default exemptions.
 
 Note that this exception mechanism does not distinguish between a scalar
 and an array or hash element. C<$ARGV[0]> is allowed under the above
-example by the presence of C<$ARGV> in the exceptions list, not by the
+example by the presence of C<$ARGV> in the exemptions list, not by the
 presence of C<@ARGV>.
 
 =head1 CAVEATS
