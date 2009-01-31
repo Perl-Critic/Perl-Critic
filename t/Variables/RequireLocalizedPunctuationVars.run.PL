@@ -181,8 +181,8 @@ sub print_pass_non_local_exception {
 #-----------------------------------------------------------------------------
 
 ## name Named magic variables, pass non-local but in exception list
-## parms { allow => '$except' }
 ## failures 0
+## parms { allow => '$except' }
 ## cut
 
 END_CODE
@@ -191,7 +191,6 @@ END_CODE
         next if $exemptions{$varname};
         print {$test_file} "$varname = ();\n";
     }
-
 }
 
 
@@ -315,6 +314,15 @@ sub print_footer {
     my ($test_file) = @_;
 
     print {$test_file} <<'END_CODE';
+
+#-----------------------------------------------------------------------------
+
+## name Allowing a variable with a particular sigil doesn't allow other variables with the same name but different sigils
+## failures 1
+## parms { allow => '$ARGV' }
+## cut
+
+@ARGV = (1, 2, 3);
 
 #-----------------------------------------------------------------------------
 

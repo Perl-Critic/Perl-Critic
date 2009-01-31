@@ -70,8 +70,6 @@ sub violates {
 sub _is_non_local_magic_dest {
     my ($self, $elem) = @_;
 
-    #print "Test dest $elem, @{[ref $elem]}\n";
-
     # Quick exit if in good form
     my $modifier = $elem->sprevious_sibling;
     return
@@ -104,7 +102,7 @@ sub _is_non_local_magic_dest {
 sub _is_magic_var {
     my ($self, $elem) = @_;
 
-    my $variable_name = "$elem";
+    my $variable_name = $elem->symbol();
     return if $self->{_allow}{$variable_name};
     return 1 if $elem->isa('PPI::Token::Magic'); # optimization(?), and helps with PPI 1.118 carat bug
     return if not is_perl_global( $elem );
@@ -176,10 +174,6 @@ You can configure your own exemptions using the C<allow> option:
 
 These are added to the default exemptions.
 
-Note that this exception mechanism does not distinguish between a scalar
-and an array or hash element. C<$ARGV[0]> is allowed under the above
-example by the presence of C<$ARGV> in the exemptions list, not by the
-presence of C<@ARGV>.
 
 =head1 CAVEATS
 
