@@ -892,7 +892,7 @@ __END__
 
 =pod
 
-=for stopwords -params INI-style
+=for stopwords colour INI-style -params
 
 =head1 NAME
 
