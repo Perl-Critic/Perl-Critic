@@ -210,7 +210,8 @@ __END__
 
 =pod
 
-=for stopwords DGR INI-style API -params pbp refactored ActivePerl ben Jore Dolan's
+=for stopwords DGR INI-style API -params pbp refactored ActivePerl ben Jore
+Dolan's Twitter
 
 =head1 NAME
 
@@ -898,6 +899,8 @@ You can also contact the author at C<< <thaljef@cpan.org> >>.
 
 At least one member of the development team has started hanging around
 in L<irc://irc.perl.org/#perlcritic>.
+
+Follow L<Perl::Critic|https://twitter.com/perlcritic> on Twitter.
 
 
 =head1 SEE ALSO
