@@ -1,7 +1,7 @@
 [1.xxx_xxx] Released on 2009-xx-xx
 
     New Features:
-    * Made violation coloring configurable via command line or profile. The
+    * Violation coloring is now configurable via command line or profile. The
       profile entries are color-severity-highest, -high, -medium, -low, or
       -lowest. Numbers are accepted in lieu of named severities (e.g.
       'color-severity-5' for 'color-severity-highest'), and 'colour' is
@@ -15,6 +15,8 @@
     * Variables::ProhibitReusedNames now has an "allow" option to specify
       names that can be reused.  It defaults to enabling $self and $class.  RT
       #42767.
+    * Variables::RequireLocalizedPunctuationVars has a customizable set of
+      exemptions via the "allow" option.
 
     Bug Fixes:
     * CodeLayout::ProhibitTrailingWhitespace didn't notice cases where PPI
@@ -28,6 +30,8 @@
       by a block-scoped pragma. RT #42310
     * ValuesAndExpressions::RequireInterpolationOfMetachars allows for escaped
       backslashes.  Fixed by Tom Wyant, RT #38530.
+    * Variables::RequireLocalizedPunctuationVars now applies to subscripted
+      names.  RT #29384.
 
     Documentation improvements contributed by Kyle Hasselbacher in response
     to RT #35118.
