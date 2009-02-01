@@ -76,18 +76,8 @@ Enjoy!!
     </target>
 
 
-    <target name="testunit" depends="init" description="Build testunit">
-        <module.build action="testunit" />
-    </target>
-
-
-    <target name="testfunctional" depends="init" description="Build testfunctional">
-        <module.build action="testfunctional" />
-    </target>
-
-
-    <target name="testauthor" depends="init" description="Build testauthor">
-        <module.build action="testauthor" />
+    <target name="authortest" depends="init" description="Build authortest">
+        <module.build action="authortest" />
     </target>
 
 
