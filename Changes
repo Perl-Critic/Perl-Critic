@@ -1,4 +1,4 @@
-[1.xxx_xxx] Released on 2009-xx-xx
+[1.096] Released on 2009-02-01
 
     New Features:
     * Violation coloring is now configurable via command line or profile. The
@@ -32,6 +32,7 @@
       backslashes.  Fixed by Tom Wyant, RT #38530.
     * Variables::RequireLocalizedPunctuationVars now applies to subscripted
       names.  RT #29384.
+    * Deal with changes in Pod::Parser v1.36 in test in t/05_utils_pod.t.
 
     Documentation improvements contributed by Kyle Hasselbacher in response
     to RT #35118.
