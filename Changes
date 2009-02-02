@@ -12,6 +12,7 @@
       by a block-scoped pragma. RT #42310
     * RequireBracedFileHandleWithPrint applies to printf as well as print.
       Fixed by Kyle Hasselbacher, RT #42537
+    * Deal with changes in Pod::Parser v1.36 in test in t/05_utils_pod.t.
 
 [1.095_001] Released on 2009-01-18
 

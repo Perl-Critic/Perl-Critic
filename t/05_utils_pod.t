@@ -252,14 +252,21 @@ END_EXPECTED
 
     $pod = get_pod_section_from_string( $code, 'FOO' );
 
-    $expected = <<'END_EXPECTED';
-FOO
-    Some plain text.
+    # Pod::Parser v1.36 changed what it did with trailing whitespace, so we
+    # use a regex with an ending \s* so that we can deal with whatever version
+    # of Pod::Parser the user has installed.  This until we can figure out
+    # what to replace Pod::Select with.
+    $expected = qr<
+        \A
+        FOO \n
+        [ ]{4} Some [ ] plain [ ] text.\n
+        \n
+        [ ]{2} BAR\n
+        \s*
+        \z
+    >xms;
 
-  BAR
-
-END_EXPECTED
-    is(
+    like(
         $pod,
         $expected,
         q<get_pod_section_from_string('=head1 FOO ... =head2 BAR', 'FOO')>,
