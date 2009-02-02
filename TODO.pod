@@ -317,6 +317,15 @@ default.
 
 =over
 
+=item * Subroutines::RequireArgumentValidation
+
+Enforce the use of Params::Validate or Params::Util or some other
+argument validation mechanism.  This could be one Policy that
+can be configured for different validation mechanisms, or we could
+have a separate Policy for each mechanism, and let the user choose
+which one they want to use (I think I prefer the later).
+
+
 =item * NamingConventions::ProhibitMisspelledSymbolNames
 
 The idea behind this policy is to encourage better names for variables
