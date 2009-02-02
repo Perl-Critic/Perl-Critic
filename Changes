@@ -3,27 +3,23 @@
     New Policies:
     * ValuesAndExpressions::ProhibitSpecialLiteralHeredocTerminator
 
-    Bug Fixes:
-    * ErrorHandling::RequireCarping will now allow a literal newline
-      as well as "\n".  Fixed by Kyle Hasselbacher, RT #25046
-    * ValuesAndExpressions::RequireInterpolationOfMetachars allows for escaped
-      backslashes.  Fixed by Tom Wyant, RT #38530.
-    * RequireUseStrict and RequireUseWarnings are no longer fooled
-      by a block-scoped pragma. RT #42310
-    * RequireBracedFileHandleWithPrint applies to printf as well as print.
-      Fixed by Kyle Hasselbacher, RT #42537
-    * Deal with changes in Pod::Parser v1.36 in test in t/05_utils_pod.t.
-
-[1.095_001] Released on 2009-01-18
-
     Policy Changes:
     * Documentation::PodSpelling now has a stop_words_file option.
     * Modules::ProhibitEvilModules now has a modules_file option.
 
     Bug Fixes:
-    * Fix ProhibitTwoArgOpen so it allows '-|' or '|-' as the second
-      of two arguments.  Patches from Kyle Hasselbacher and
-      Leland Johnson, RT #42384.
+    * ErrorHandling::RequireCarping will now allow a literal newline
+      as well as "\n".  Fixed by Kyle Hasselbacher, RT #25046
+    * Fix InputOutput::ProhibitTwoArgOpen so it allows '-|' or '|-' as the
+      second of two arguments.  Patches from Kyle Hasselbacher and Leland
+      Johnson, RT #42384.
+    * InputOutput::RequireBracedFileHandleWithPrint applies to printf as well
+      as print.  Fixed by Kyle Hasselbacher, RT #42537.
+    * TestingAndDebugging::RequireUseStrict and
+      TestingAndDebugging::RequireUseWarnings are no longer fooled by a
+      block-scoped pragma.  RT #42310.
+    * ValuesAndExpressions::RequireInterpolationOfMetachars allows for escaped
+      backslashes.  Fixed by Tom Wyant, RT #38530.
     * Fix for problem in P::C::Document in dealing with underscores in
       expressions like "use 5.009_001".  Patch by Kevin Ryde, RT #36570 and
       #42089.
@@ -33,9 +29,15 @@
       RT #42088.
     * Fix temporary files not being cleaned up after tests.  Patch by Kyle
       Hasselbacher, RT #41443.
+    * Deal with changes in Pod::Parser v1.36 in test in t/05_utils_pod.t.
 
     Documentation improvements contributed by Mark Grimes in response to RT
     #41942.
+
+[1.095_001] Released on 2009-01-18
+
+    Changes summarized into 1.096 above.  For exact details, see Changes on
+    BackPAN.
 
 [1.094001] Released on 2009-01-01
 
