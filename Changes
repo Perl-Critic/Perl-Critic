@@ -6,6 +6,9 @@
       -lowest. Numbers are accepted in lieu of named severities (e.g.
       'color-severity-5' for 'color-severity-highest'), and 'colour' is
       accepted in lieu of 'color'.
+    * Handling of unrecognized policy configuration items is now controlled by
+      the profile_strictness. The default is to warn about them. The previous
+      behavior was that they were fatal.
 
     New Policies:
     * BuiltinFunctions::ProhibitExitInSubroutines

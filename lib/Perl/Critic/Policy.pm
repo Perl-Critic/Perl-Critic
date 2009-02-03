@@ -104,7 +104,7 @@ sub new {
     }
 
     if ($parameter_metadata_available) {
-        $self->_validate_config_keys($errors, $config_object);
+        $config_object->handle_extra_parameters( $self, $errors );
     }
 
     if ( $errors->has_exceptions() ) {
@@ -124,24 +124,6 @@ sub initialize_if_enabled {
 
 sub prepare_to_scan_document {
     return $TRUE;
-}
-
-#-----------------------------------------------------------------------------
-
-sub _validate_config_keys {
-    my ( $self, $errors, $config ) = @_;
-
-    for my $offered_param ( $config->get_parameter_names() ) {
-        $errors->add_exception(
-            Perl::Critic::Exception::Configuration::Option::Policy::ExtraParameter->new(
-                policy          => $self->get_short_name(),
-                option_name     => $offered_param,
-                source          => undef,
-            )
-        );
-    }
-
-    return;
 }
 
 #-----------------------------------------------------------------------------

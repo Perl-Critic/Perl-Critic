@@ -21,7 +21,8 @@ color-severity-lowest   = they've gone to plaid
 
 # Test non-existent parameter
 [BuiltinFunctions::RequireBlockGrep]
-no_such_parameter = foo
+# No test, since this is now a warning.
+# no_such_parameter = foo
 
 # Test invalid parameter value
 [Documentation::RequirePodSections]

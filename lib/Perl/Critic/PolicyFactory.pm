@@ -135,6 +135,7 @@ sub _init {
     my $incoming_errors = $args{-errors};
     my $profile_strictness = $args{'-profile-strictness'};
     $profile_strictness ||= $PROFILE_STRICTNESS_DEFAULT;
+    $self->{_profile_strictness} = $profile_strictness;
 
     if ( $profile_strictness ne $PROFILE_STRICTNESS_QUIET ) {
         my $errors;
@@ -195,7 +196,7 @@ sub create_policy {
     }
 
     # Pull out base parameters.
-    return _instantiate_policy( $policy_name, $policy_config );
+    return $self->_instantiate_policy( $policy_name, $policy_config );
 }
 
 #-----------------------------------------------------------------------------
@@ -247,7 +248,9 @@ sub _profile {
 # This two-phase initialization is caused by the historical lack of a
 # requirement for Policies to invoke their super-constructor.
 sub _instantiate_policy {
-    my ($policy_name, $policy_config) = @_;
+    my ($self, $policy_name, $policy_config) = @_;
+
+    $policy_config->set_profile_strictness( $self->{_profile_strictness} );
 
     my $policy = eval { $policy_name->new( %{$policy_config} ) };
     _handle_policy_instantiation_exception(

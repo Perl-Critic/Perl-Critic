@@ -95,7 +95,8 @@ sub test_invalid_parameters {
     my $policy = shift;
     my $bogus_params  = { bogus => 'shizzle' };
     my $profile = Perl::Critic::UserProfile->new( -profile => 'NONE' );
-    my $factory = Perl::Critic::PolicyFactory->new( -profile => $profile );
+    my $factory = Perl::Critic::PolicyFactory->new(
+        -profile => $profile, '-profile-strictness' => 'fatal' );
 
     my $policy_name = policy_short_name($policy);
     my $label = qq{Created $policy_name with bogus parameters};

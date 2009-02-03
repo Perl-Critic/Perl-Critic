@@ -100,7 +100,7 @@ my %expected_regexes =
         { $_ => generate_global_message_regex( $_, $PROFILE ) }
         @parameters;
 
-my $expected_exceptions = 2 + scalar @parameters;
+my $expected_exceptions = 1 + scalar @parameters;
 is(
     scalar @exceptions,
     $expected_exceptions,
@@ -122,8 +122,8 @@ while (my ($parameter, $regex) = each %expected_regexes) {
 
 is(
     ( scalar grep { $INVALID_PARAMETER_MESSAGE eq $_ } @exceptions ),
-    1,
-    'should have received an extra-parameter exception',
+    0,
+    'should not have received an extra-parameter exception',
 );
 
 # Test that we get an exception for bad individual policy configuration.
