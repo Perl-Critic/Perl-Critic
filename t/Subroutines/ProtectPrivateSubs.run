@@ -62,6 +62,65 @@ $pkg->_foo();
 $self->_bar();
 $self->SUPER::_foo();
 
+#-----------------------------------------------------------------------------
+
+## name Exceptions from the POSIX module.
+## failures 0
+## cut
+
+POSIX::_PC_CHOWN_RESTRICTED();
+POSIX::_PC_LINK_MAX();
+POSIX::_PC_MAX_CANON();
+POSIX::_PC_MAX_INPUT();
+POSIX::_PC_NAME_MAX();
+POSIX::_PC_NO_TRUNC();
+POSIX::_PC_PATH_MAX();
+POSIX::_PC_PIPE_BUF();
+POSIX::_PC_VDISABLE();
+POSIX::_POSIX_ARG_MAX();
+POSIX::_POSIX_CHILD_MAX();
+POSIX::_POSIX_CHOWN_RESTRICTED();
+POSIX::_POSIX_JOB_CONTROL();
+POSIX::_POSIX_LINK_MAX();
+POSIX::_POSIX_MAX_CANON();
+POSIX::_POSIX_MAX_INPUT();
+POSIX::_POSIX_NAME_MAX();
+POSIX::_POSIX_NGROUPS_MAX();
+POSIX::_POSIX_NO_TRUNC();
+POSIX::_POSIX_OPEN_MAX();
+POSIX::_POSIX_PATH_MAX();
+POSIX::_POSIX_PIPE_BUF();
+POSIX::_POSIX_SAVED_IDS();
+POSIX::_POSIX_SSIZE_MAX();
+POSIX::_POSIX_STREAM_MAX();
+POSIX::_POSIX_TZNAME_MAX();
+POSIX::_POSIX_VDISABLE();
+POSIX::_POSIX_VERSION();
+POSIX::_SC_ARG_MAX();
+POSIX::_SC_CHILD_MAX();
+POSIX::_SC_CLK_TCK();
+POSIX::_SC_JOB_CONTROL();
+POSIX::_SC_NGROUPS_MAX();
+POSIX::_SC_OPEN_MAX();
+POSIX::_SC_PAGESIZE();
+POSIX::_SC_SAVED_IDS();
+POSIX::_SC_STREAM_MAX();
+POSIX::_SC_TZNAME_MAX();
+POSIX::_SC_VERSION();
+POSIX::_exit();
+
+#-----------------------------------------------------------------------------
+
+## name User-configured exceptions.
+## parms { allow => 'Other::Package::_foo Other::Package::_bar Other::Package::_baz' }
+## failures 0
+## cut
+
+Other::Package::_foo();
+Other::Package->_bar();
+Other::Package::_foo;
+Other::Package->_bar;
+$self->Other::Package::_baz();
 
 #-----------------------------------------------------------------------------
 
