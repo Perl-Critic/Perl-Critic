@@ -164,7 +164,7 @@ The subroutines in the POSIX package which begin with an underscore
 =head1 CONFIGURATION
 
 The user can configure additional subroutines to accept by specifying
-them in a space-delimited list to the C<accept> option:
+them in a space-delimited list to the C<allow> option:
 
     [Subroutines::ProtectPrivateSubs]
     allow = FOO::_bar FOO::_baz
