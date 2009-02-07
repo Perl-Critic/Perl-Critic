@@ -109,6 +109,11 @@ sub _is_unpack {
 
     my $prev = $magic->sprevious_sibling;
     my $next = $magic->snext_sibling;
+    # If we have a subscript, we're dealing with an array slice on @_,
+    # See RT #34009.
+    if ($next && $next->isa('PPI::Structure::Subscript')) {
+        $next = $next->snext_sibling;
+    }
 
     return 1 if ($prev && $prev->isa('PPI::Token::Operator') && q{=} eq $prev &&
                  (!$next || ($next->isa('PPI::Token::Structure') && q{;} eq $next)));
