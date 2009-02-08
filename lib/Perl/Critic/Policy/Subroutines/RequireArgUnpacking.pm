@@ -46,7 +46,7 @@ sub supported_parameters {
         {
             name            => 'allow_subscripts',
             description     =>
-                'True to allow unpacking from array slices and elements.',
+                'Should unpacking from array slices and elements be allowed?',
             default_string  => $FALSE,
             behavior        => 'boolean',
         },
