@@ -18,7 +18,7 @@ use List::MoreUtils qw(uniq any);
 use English qw(-no_match_vars);
 use Carp;
 
-use Perl::Critic::Utils qw{ :severities words_from_string };
+use Perl::Critic::Utils qw{ :severities words_from_string $FALSE };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.096';
@@ -42,6 +42,13 @@ sub supported_parameters {
             default_string  => '0',
             behavior        => 'integer',
             integer_minimum => 0,
+        },
+        {
+            name            => 'allow_subscripts',
+            description     =>
+                'True to allow unpacking from array slices and elements.',
+            default_string  => $FALSE,
+            behavior        => 'boolean',
         },
     );
 }
@@ -81,20 +88,18 @@ sub violates {
         my $saw_unpack = 0;
       MAGIC:
         for my $magic (@magic) {
-            if ($AT eq $magic->raw_type) {  # this is '@_', not '$_[0]'
-                my $prev = $magic->sprevious_sibling;
-                my $next = $magic->snext_sibling;
+            my $sigil = $magic->raw_type;
 
-                # allow conditional checks on the size of @_
-                next MAGIC if _is_size_check($magic);
+            # allow conditional checks on the size of @_
+            next MAGIC if _is_size_check($magic);
 
-                if ('unpacking' eq $state) {
-                    if (_is_unpack($magic)) {
-                        $saw_unpack = 1;
-                        next MAGIC;
-                    }
+            if ('unpacking' eq $state) {
+                if ($self->_is_unpack($magic)) {
+                    $saw_unpack = 1;
+                    next MAGIC;
                 }
             }
+
             return $self->violation( $DESC, $EXPL, $elem );
         }
         if (!$saw_unpack) {
@@ -105,13 +110,14 @@ sub violates {
 }
 
 sub _is_unpack {
-    my ($magic) = @_;
+    my ($self, $magic) = @_;
 
     my $prev = $magic->sprevious_sibling;
     my $next = $magic->snext_sibling;
-    # If we have a subscript, we're dealing with an array slice on @_,
-    # See RT #34009.
+    # If we have a subscript, we're dealing with an array slice on @_
+    # or an array element of @_. See RT #34009.
     if ($next && $next->isa('PPI::Structure::Subscript')) {
+        $self->{_allow_subscripts} or return;
         $next = $next->snext_sibling;
     }
 
@@ -122,6 +128,9 @@ sub _is_unpack {
 
 sub _is_size_check {
     my ($magic) = @_;
+
+    # No size check on $_[0]. RT #34009.
+    $AT eq $magic->raw_type or return;
 
     my $prev = $magic->sprevious_sibling;
     my $next = $magic->snext_sibling;
@@ -212,6 +221,15 @@ put entries in a F<.perlcriticrc> file like this:
 
   [Subroutines::RequireArgUnpacking]
   short_subroutine_statements = 2
+
+By default this policy does not allow you to specify array subscripts
+when you unpack arguments (i.e. by an array slice or by referencing
+individual elements).  Should you wish to permit this, you can do so
+using the C<allow_subscripts> setting. This defaults to false.  You can
+set it true like this:
+
+  [Subroutines::RequireArgUnpacking]
+  allow_subscripts = 1
 
 =head1 CAVEATS
 

@@ -193,12 +193,30 @@ sub baz {
 
 #-----------------------------------------------------------------------------
 
-## name array slice (POE convention)
+## name array slice (POE convention), default behavior
+## failures 1
+## cut
+
+sub foo {
+    my ( $kernel, $heap, $input ) = @_[ KERNEL, HEAP, ARG0 ];
+}
+
+
+#-----------------------------------------------------------------------------
+
+## name array slice (POE convention) with indices allowed
+## parms { allow_subscripts => '1' }
 ## failures 0
 ## cut
 
 sub foo {
     my ( $kernel, $heap, $input ) = @_[ KERNEL, HEAP, ARG0 ];
+}
+
+sub bar {
+    my $kernel = $_[ KERNEL ];
+    my $heap   = $_[ HEAP   ];
+    my $input  = $_[ ARG0   ];
 }
 
 #-----------------------------------------------------------------------------
