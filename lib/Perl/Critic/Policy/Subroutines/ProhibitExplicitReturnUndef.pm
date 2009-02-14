@@ -125,6 +125,13 @@ C<die> or C<croak> with C<eval>, or the L<Error|Error> module for a
 much more robust exception-handling model.  Conway has a real nice
 discussion on error handling in chapter 13 of PBP.
 
+
+=head1 SEE ALSO
+
+There's a discussion of the appropriateness of this policy at
+L<http://perlmonks.org/index.pl?node_id=741847>.
+
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
