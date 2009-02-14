@@ -810,7 +810,9 @@ underscores, but exempt any variable with a name that contains
 =head1 TODO
 
 Handle C<use vars>.  Treat constant subroutines like constant
-variables.  Handle bareword file handles.
+variables.  Handle bareword file handles.  There needs to be "schemes"
+or ways of specifying "perlstyle" or "pbp".  Differentiate lexical
+L<Readonly> constants in scopes.
 
 
 =head1 BUGS

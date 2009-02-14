@@ -161,6 +161,18 @@ This policy has one option: C<max_chain_length> which controls how far
 the code is allowed to navigate.  The default value is 3.
 
 
+=head1 TO DO
+
+Add a C<class_method_exemptions> option to allow for things like
+
+    File::Find::Rule
+        ->name('*.blah')
+        ->not_name('thingy')
+        ->readable()
+        ->directory()
+        ->in(@roots);
+
+
 =head1 AUTHOR
 
 Elliot Shank C<< <perl@galumph.com> >>

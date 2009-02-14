@@ -577,6 +577,11 @@ floating point values because an exponential is a subclass of
 floating-point in L<PPI|PPI>.
 
 
+=head1 TO DO
+
+An exemption for hash values.
+
+
 =head1 BUGS
 
 There is currently no way to permit version numbers in regular code,

@@ -113,7 +113,8 @@ lines so that there's the bit about invoking perl if the program is attempted
 to be run by a Bourne shell, which throws the line numbers off when using
 Test::P::C on the contents of a C<blib> directory.
 
-This actually requires support from PPI.
+This has been implemented in PPI, but hasn't been released yet.  When it does
+come out, we need to change the line and file reported by Violations.
 
 
 =item * Enhance statistics.
@@ -293,6 +294,13 @@ should be aware of limitations.  (And, hey, we might get patches that way.)
 
 =item * Modules::RequireThreePartVersion [405-406]
 
+
+=item * NamingConventions::RequireArrayAndHashReferenceVariablesEndWith_Ref [41-42]
+
+Check for C<$variable = [...]>, C<$variable = {...}>, C<< $variable->[...] >>, and
+C<< $variable->{...} >>.
+
+
 =item * Objects::ProhibitRestrictedHashes [322-323]
 
 Look for use of the bad methods in Hash::Util.
@@ -379,7 +387,10 @@ L<http://www.xray.mpe.mpg.de/mailing-lists/perl5-porters/2008-06/msg00542.html>.
 Steal the idea from L<B::Lint|B::Lint>.
 
 
-=item * TBD::AllProgramsNeedShebangs
+=item * NamingConventions::RequireArrayAndHashReferenceVariablesEndWith_Ref
+
+
+=item * Programs::RequireShebang
 
 Anything that is a program should have a shebang line.  This includes .t
 files.
@@ -404,6 +415,12 @@ Make the obnoxious pattern configurable
 Require the use of "not" instead of "!", except when this would contradict
 ProhibitMixedBooleanOperators.  This may be better suited for
 Perl::Critic::More.
+
+
+=item * ValuesAndExpressions::ProhibitUnusedReadonlyConstants
+
+We'll only be able to look at lexicals.  For similar reasons, we can't do
+anything about L<constant>.
 
 
 =item * Modules::RequireExplicitImporting

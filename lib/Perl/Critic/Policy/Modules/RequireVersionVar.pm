@@ -156,6 +156,19 @@ C<$VERSION> be defined somehow.  I may try to extend this in the
 future.
 
 
+=head1 TO DO
+
+Add check that C<$VERSION> is independently evaluatable.  In
+particular, prohibit this:
+
+    our $VERSION = $Other::Module::VERSION;
+
+This doesn't work because PAUSE and other tools literally copy your
+version declaration out of your module and evaluates it in isolation,
+at which point there's nothing in C<Other::Module>, and so the
+C<$VERSION> is undefined.
+
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>

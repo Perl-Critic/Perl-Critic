@@ -154,6 +154,12 @@ discussion on the effects of blindly modifying regular expression
 flags.
 
 
+=head1 TO DO
+
+Add an exemption for regular expressions that contain C<\Q> at the
+front and don't use C<\E> until the very end, if at all.
+
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer  <thaljef@cpan.org>

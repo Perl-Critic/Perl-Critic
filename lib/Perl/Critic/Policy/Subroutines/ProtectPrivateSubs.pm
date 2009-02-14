@@ -144,6 +144,7 @@ __END__
 
 Perl::Critic::Policy::Subroutines::ProtectPrivateSubs - Prevent access to private subs in other packages.
 
+
 =head1 AFFILIATION
 
 This Policy is part of the core L<Perl::Critic|Perl::Critic>
@@ -173,6 +174,13 @@ These are added to the default list of exemptions from this policy.
 Allowing a subroutine also allows the corresponding method call. So
 C<< FOO::_bar >> in the above example allows both C<< FOO::_bar() >> and
 C<< FOO->_bar() >>.
+
+
+=head1 TO DO
+
+Add an option for specifying a regular expression for what a private
+subroutine looks like.
+
 
 =head1 HISTORY
 

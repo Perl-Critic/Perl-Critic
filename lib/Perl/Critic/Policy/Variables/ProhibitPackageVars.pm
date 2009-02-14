@@ -160,13 +160,13 @@ variable declarations are not package variables by default.  Thus, it
 complains you declare a variable with C<our> or C<use vars>, or if you
 make reference to variable with a fully-qualified package name.
 
-    $Some::Package::foo = 1;    #not ok
-    our $foo            = 1;    #not ok
-    use vars '$foo';            #not ok
-    $foo = 1;                   #not allowed by 'strict'
-    local $foo = 1;             #bad taste, but technically ok.
-    use vars '$FOO';            #ok, because it's ALL CAPS
-    my $foo = 1;                #ok
+    $Some::Package::foo = 1;    # not ok
+    our $foo            = 1;    # not ok
+    use vars '$foo';            # not ok
+    $foo = 1;                   # not allowed by 'strict'
+    local $foo = 1;             # bad taste, but technically ok.
+    use vars '$FOO';            # ok, because it's ALL CAPS
+    my $foo = 1;                # ok
 
 In practice though, its not really practical to prohibit all package
 variables.  Common variables like C<$VERSION> and C<@EXPORT> need to
