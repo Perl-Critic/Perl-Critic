@@ -229,6 +229,7 @@ __END__
 
 Perl::Critic::Policy::ControlStructures::ProhibitMutatingListFunctions - Don't modify C<$_> in list functions.
 
+
 =head1 AFFILIATION
 
 This Policy is part of the core L<Perl::Critic|Perl::Critic>
@@ -287,11 +288,19 @@ This policy looks only for modifications of C<$_>.  Other naughtiness
 could include modifying C<$a> and C<$b> in C<sort> and the like.
 That's beyond the scope of this policy.
 
+
+=head1 SEE ALSO
+
+There is discussion of this policy at
+L<http://perlmonks.org/index.pl?node_id=743445>.
+
+
 =head1 AUTHOR
 
 Chris Dolan <cdolan@cpan.org>
 
 Michael Wolf <MichaelRWolf@att.net>
+
 
 =head1 COPYRIGHT
 
