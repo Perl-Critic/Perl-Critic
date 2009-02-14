@@ -35,7 +35,7 @@ sub supported_parameters {
         {
             name            => 'packages',
             description     => 'The base set of packages to allow variables for.',
-            default_string  => 'File::Find Data::Dumper',
+            default_string  => 'Data::Dumper File::Find FindBin',
             behavior        => 'string list',
         },
         {
@@ -52,9 +52,6 @@ sub default_themes   { return qw(core pbp maintenance)    }
 sub applies_to       { return qw(PPI::Token::Symbol
                                  PPI::Statement::Variable
                                  PPI::Statement::Include) }
-
-Readonly::Array our @DEFAULT_PACKAGE_EXCEPTIONS =>
-    qw( File::Find Data::Dumper );
 
 #-----------------------------------------------------------------------------
 
@@ -188,7 +185,7 @@ These module can be specified from your F<.perlcriticrc> file, and the
 policy will ignore them.
 
     [Variables::ProhibitPackageVars]
-    packages = File::Find Data::Dumper
+    packages = Data::Dumper File::Find FindBin
 
 This is the default setting.  Using C<packages =>  will override these
 defaults.

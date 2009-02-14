@@ -91,6 +91,10 @@ print $File::Find::dir;
 use Data::Dumper;
 $Data::Dumper::Indent = 1;
 
+
+use File::Spec::Functions qw< catdir >;
+use lib catdir( $FindBin::Bin, qw< .. lib perl5 > );
+
 #-----------------------------------------------------------------------------
 
 ## name Add to default exceptions

@@ -25,6 +25,8 @@
       exemptions via the "allow" option.
 
     Bug Fixes:
+    * Variables::ProhibitPackageVars has had FindBin added to the default
+      exemptions.
     * CodeLayout::ProhibitTrailingWhitespace didn't notice cases where PPI
       would produce instances of PPI::Token::Whitespace that contained
       multiple lines.
