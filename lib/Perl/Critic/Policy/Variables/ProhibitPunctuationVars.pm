@@ -14,6 +14,7 @@ use Readonly;
 
 use Perl::Critic::Utils
     qw{ :characters :severities :data_conversion :booleans };
+
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.096';
@@ -72,6 +73,8 @@ sub initialize_if_enabled {
 
     my %_magic_vars;
 
+    ## no critic (RequireInterpolationOfMetachars, ProhibitNoisyQuotes )
+
     # Magic variables taken from perlvar.
     # Several things added separately to avoid warnings.
     # adapted from ADAMK's PPI::Token::Magic.pm
@@ -104,7 +107,7 @@ sub initialize_if_enabled {
     # The following magic vars will be ignored in interpolated strings.
     # See BUGS in the pod.
     @_ignore_for_interpolation = ( q{$'}, q{$$}, q{$#} );
-    
+
     return $TRUE;
 }
 
@@ -236,7 +239,7 @@ module to give them clear names.
   local $OUTPUT_AUTOFLUSH = undef;        #ok
 
 
-=head1 CONFIGURATION
+=head1 CONFIGURATION AND ENVIRONMENT
 
 The scratch variables C<$_> and C<@_> are very common and are pretty
 well understood, so they are exempt from this policy.  The same goes
@@ -253,9 +256,9 @@ The C<allow> property should be a whitespace-delimited list of
 punctuation variables.
 
 
-=head1 BUGS
+=head1 BUGS AND LIMITATIONS
 
-Other exceptions: the variables $$, $', and $# are ignored in
+Special exceptions: the variables $$, $', and $# are ignored in
 interpolated strings due to difficulties in avoiding false positives.
 This will be corrected in a future release.
 
@@ -270,7 +273,7 @@ Jeffrey Ryan Thalhammer <thaljef@cpan.org>
 Edgar Whipple <perlmonk at misterwhipple dot com>
 
 
-=head1 COPYRIGHT
+=head1 LICENSE AND COPYRIGHT
 
 Copyright (c) 2005-2009 Jeffrey Ryan Thalhammer.  All rights reserved.
 

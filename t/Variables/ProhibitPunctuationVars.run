@@ -205,7 +205,7 @@ SINGLE_QUOTE
 ## name Quoted String Interpolation - ignored magic vars
 ## failures 0
 ## cut
-print "$#";    # 3 of 59
+print "$#";    # 3 of 59  Exception made for $#
 print "$$";    # 6 of 59  Exception made for $$
 print "$'";    # 9 of 59  Exception made for $'
 
