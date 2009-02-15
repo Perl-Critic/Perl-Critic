@@ -201,7 +201,6 @@ sub foo {
     my ( $kernel, $heap, $input ) = @_[ KERNEL, HEAP, ARG0 ];
 }
 
-
 #-----------------------------------------------------------------------------
 
 ## name array slice (POE convention) with indices allowed
@@ -217,6 +216,24 @@ sub bar {
     my $kernel = $_[ KERNEL ];
     my $heap   = $_[ HEAP   ];
     my $input  = $_[ ARG0   ];
+}
+
+
+#-----------------------------------------------------------------------------
+
+## name Allow the usual delegation idioms.
+## failures 0
+## TODO RequireArgUnpacking does not know about these yet.
+## cut
+
+sub foo {
+    my $self = shift;
+    $self->SUPER::foo(@_);
+}
+
+sub bar {
+    my $self = shift;
+    $self->NEXT::bar(@_);
 }
 
 #-----------------------------------------------------------------------------
