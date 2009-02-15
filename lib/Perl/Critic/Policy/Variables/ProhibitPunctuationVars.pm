@@ -56,6 +56,7 @@ sub applies_to {
 
 # package state
 my $_magic_regexp;
+my @_ignore_for_interpolation;
 
 # private functions
 my $_violates_magic;
@@ -92,7 +93,7 @@ sub initialize_if_enabled {
     {
         $_magic_vars{$_} = $_;
         $_magic_vars{$_}
-            =~ s{ ( [[:punct:]] ) }{\\$1}gox;   # add \ before all punctuation
+            =~ s{ ( [[:punct:]] ) }{\\$1}goxms; # add \ before all punctuation
     }
 
     delete @_magic_vars{ @{ supported_parameters()
@@ -100,6 +101,10 @@ sub initialize_if_enabled {
 
     $_magic_regexp = join q(|), values %_magic_vars;
 
+    # The following magic vars will be ignored in interpolated strings.
+    # See CONFIGURATION in the pod.
+    @_ignore_for_interpolation = ( q{$'}, q{$$}, q{$#} );
+    
     return $TRUE;
 }
 
@@ -107,18 +112,23 @@ sub violates {
     my ( $self, $elem, undef ) = @_;
 
     if ( $elem->isa('PPI::Token::Magic') ) {
-        return $_violates_magic->(@_);
+        return $_violates_magic->( $self, $elem );
     }
     elsif ( $elem->isa('PPI::Token::HereDoc') ) {
-        return $_violates_heredoc->(@_);
+        return $_violates_heredoc->( $self, $elem );
     }
     else {
 
         #the remaining applies_to() classes are all interpolated strings
-        return $_violates_string->(@_);
+        return $_violates_string->( $self, $elem );
     }
 
+    ## no critic (RequireCarping)
+
     die 'Impossible! fall-through error in method violates()';
+
+    ## use critic (RequireCarping)
+
 }
 
 #-----------------------------------------------------------------------------
@@ -171,16 +181,22 @@ $_strings_helper = sub {
     my ( $target_string, $allow_ref, undef ) = @_;
 
     my @raw_matches = (
-        $target_string =~ m/
+        $target_string =~ m{
             (?: \A | [^\\] )   # beginning-of-string or any non-backslash 
             (?: \\\\ )*        # zero or more double-backslashes
             ( $_magic_regexp ) # any magic punctuation variable
-        /goxs
+        }goxsm
     );
 
     my %matches;
     @matches{@raw_matches} = 1;
     delete @matches{ keys %{$allow_ref} };
+
+    #
+    #    warn join q{, }, @_ignore_for_interpolation
+    #        if (@_ignore_for_interpolation);
+
+    delete @matches{@_ignore_for_interpolation};
 
     return %matches
         if (%matches);
@@ -236,6 +252,10 @@ perlcriticrc file, add a block like this:
 The C<allow> property should be a whitespace-delimited list of
 punctuation variables.
 
+Other exceptions: the variables $$, $', and $# are ignore in
+interpolated strings due to difficulties in avoiding false positives.
+This will be corrected in a future release.
+
 
 =head1 BUGS
 
@@ -253,7 +273,9 @@ Edgar Whipple <perlmonk at misterwhipple dot com>
 =head1 COPYRIGHT
 
 Copyright (c) 2005-2009 Jeffrey Ryan Thalhammer.  All rights reserved.
-Additions for interpolated strings (c) 2009 Edgar Whipple. All rights reserved.
+
+Additions for interpolated strings (c) 2009 Edgar Whipple. All rights
+reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

@@ -159,7 +159,7 @@ bambam
 DEFAULT
 
 print <<"DOUBLE_QUOTE";    # explicit "" context
-$$
+$+
 DOUBLE_QUOTE
 
 print <<"DQ_VERYVERYVERY_LONG_HEREDOC_EOT_IDENTIFIER";   # explicit "" context
@@ -202,20 +202,31 @@ SINGLE_QUOTE
 
 #-----------------------------------------------------------------------------
 
+## name Quoted String Interpolation - ignored magic vars
+## failures 0
+## cut
+print "$#";    # 3 of 59
+print "$$";    # 6 of 59  Exception made for $$
+print "$'";    # 9 of 59  Exception made for $'
+
+#-----------------------------------------------------------------------------
+
 ## name Quoted String Interpolation - exhaustive tests
-## failures 57
+## failures 54
 ## cut
 
 print "$!";    # 1 of 59
 
 #print "$"";      # 2 of 59  BROKEN, copied to TODO
-print "$#";      # 3 of 59
-print "$#+";     # 4 of 59
-print "$#-";     # 5 of 59
-print "$$";      # 6 of 59
-print "$%";      # 7 of 59
-print "$&";      # 8 of 59
-print "$'";      # 9 of 59
+#print "$#";      # 3 of 59  Exception made for $#
+print "$#+";    # 4 of 59
+print "$#-";    # 5 of 59
+
+#print "$$";      # 6 of 59  Exception made for $$
+print "$%";     # 7 of 59
+print "$&";     # 8 of 59
+
+#print "$'";      # 9 of 59  Exception made for $'
 print "$(";      # 10 of 59
 print "$)";      # 11 of 59
 print "$*";      # 12 of 59
