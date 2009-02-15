@@ -12,7 +12,7 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :characters :severities :data_conversion };
+use Perl::Critic::Utils qw{ :characters :severities :data_conversion :booleans };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.096';
@@ -39,17 +39,152 @@ sub supported_parameters {
 
 sub default_severity { return $SEVERITY_LOW         }
 sub default_themes   { return qw(core pbp cosmetic) }
-sub applies_to       { return 'PPI::Token::Magic'   }
+
+sub applies_to {
+    return qw( PPI::Token::Magic
+        PPI::Token::Quote::Double
+        PPI::Token::Quote::Interpolate
+        PPI::Token::QuoteLike::Command
+        PPI::Token::QuoteLike::Backtick
+        PPI::Token::QuoteLike::Regexp
+        PPI::Token::QuoteLike::Readline
+        PPI::Token::HereDoc
+    );        
+}
 
 #-----------------------------------------------------------------------------
 
+# package state
+my $_magic_regexp;
+
+# private functions
+my $_violates_magic;
+my $_violates_string;
+my $_violates_heredoc;
+my $_strings_helper;
+
+#-----------------------------------------------------------------------------
+
+sub initialize_if_enabled{
+    # my $config = shift; # policy $config not needed at present
+    
+    my %_magic_vars;
+
+    # Magic variables taken from perlvar.
+    # Several things added separately to avoid warnings.
+    # adapted from ADAMK's PPI::Token::Magic.pm
+    foreach (
+        qw{
+            $1 $2 $3 $4 $5 $6 $7 $8 $9
+            $_ $& $` $' $+ @+ %+ $* $. $/ $|
+            $\\ $" $; $% $= $- @- %- $)
+            $~ $^ $: $? $! %! $@ $$ $< $>
+            $( $0 $[ $] @_ @*
+    
+            $^L $^A $^E $^C $^D $^F $^H
+            $^I $^M $^N $^O $^P $^R $^S
+            $^T $^V $^W $^X %^H
+    
+            $::|
+        }, '$}', '$,', '$#', '$#+', '$#-'
+    ) {
+        $_magic_vars{$_} = $_;
+        $_magic_vars{$_} =~ 
+            s{ ( [[:punct:]] ) }{\\$1}gox; # add \ before all punctuation
+    }
+
+    delete @_magic_vars{ @{supported_parameters()->{list_always_present_values}} };
+
+    $_magic_regexp = join q(|), values %_magic_vars;
+    
+    return $TRUE;
+}
+
 sub violates {
     my ( $self, $elem, undef ) = @_;
+
+    if ( $elem->isa('PPI::Token::Magic') ) {
+        return $_violates_magic->(@_);
+    }
+    elsif ( $elem->isa('PPI::Token::HereDoc') ){
+        return $_violates_heredoc->(@_);
+    }
+    else { 
+        #the remaining applies_to() classes are all interpolated strings
+        return $_violates_string->(@_);
+    }
+
+    die 'Impossible! fall-through error in method violates()';
+}
+
+#-----------------------------------------------------------------------------
+
+$_violates_magic = sub { 
+    my ( $self, $elem, undef ) = @_;
+    
     if ( !exists $self->{_allow}->{$elem} ) {
+
         return $self->violation( $DESC, $EXPL, $elem );
     }
-    return;  #ok!
-}
+        
+    return;        
+};
+
+$_violates_string = sub {
+    my ( $self, $elem, undef ) = @_;
+
+    my %matches = $_strings_helper->($elem->content(), $self->{_allow} );
+    
+    if (%matches) {
+        my $DESC = qq{$DESC in interpolated string};
+        
+        return $self->violation( $DESC, $EXPL, $elem );
+    }
+    
+    return;
+    
+};
+
+$_violates_heredoc = sub{
+    my ($self, $elem, undef) = @_;
+
+    if ($elem->{_mode} eq 'interpolate' or $elem->{_mode} eq 'command'){
+        
+        my $heredoc_string = join qq{\n}, $elem->heredoc() ; 
+        my %matches = $_strings_helper->($heredoc_string, $self->{_allow});
+    
+        if (%matches) {
+            my $DESC = qq{$DESC in interpolated here-document};  
+    
+            return $self->violation( $DESC, $EXPL, $elem );
+        }
+    }
+    
+    return;
+};
+
+$_strings_helper = sub{
+    my ($target_string, $allow_ref, undef) = @_;
+
+    my @raw_matches = (
+        $target_string =~ 
+        m/
+            (?: \A | [^\\] )   # beginning-of-string or any non-backslash 
+            (?: \\\\ )*        # zero or more double-backslashes
+            ( $_magic_regexp ) # any magic punctuation variable
+        /goxs
+    );
+
+    my %matches;
+    @matches{@raw_matches} = 1;
+    delete @matches{ keys %{$allow_ref} };
+
+    return %matches
+        if (%matches);
+        
+    return; #no matches
+};
+
 
 1;
 
@@ -102,17 +237,21 @@ punctuation variables.
 
 =head1 BUGS
 
-This doesn't find punctuation variables in strings.  RT #35970.
+Punctuation variables that confuse PPI's document parsing may not be
+detected correctly or at all, and may prevent detection of subsequent
+ones.
 
 
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+Edgar Whipple <perlmonk at misterwhipple dot com>
 
 
 =head1 COPYRIGHT
 
 Copyright (c) 2005-2009 Jeffrey Ryan Thalhammer.  All rights reserved.
+Additions for interpolated strings (c) 2009 Edgar Whipple. All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
