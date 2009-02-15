@@ -239,7 +239,7 @@ module to give them clear names.
   local $OUTPUT_AUTOFLUSH = undef;        #ok
 
 
-=head1 CONFIGURATION AND ENVIRONMENT
+=head1 CONFIGURATION
 
 The scratch variables C<$_> and C<@_> are very common and are pretty
 well understood, so they are exempt from this policy.  The same goes
@@ -273,7 +273,7 @@ Jeffrey Ryan Thalhammer <thaljef@cpan.org>
 Edgar Whipple <perlmonk at misterwhipple dot com>
 
 
-=head1 LICENSE AND COPYRIGHT
+=head1 COPYRIGHT
 
 Copyright (c) 2005-2009 Jeffrey Ryan Thalhammer.  All rights reserved.
 
