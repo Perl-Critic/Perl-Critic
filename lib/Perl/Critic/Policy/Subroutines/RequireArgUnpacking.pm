@@ -10,15 +10,18 @@ package Perl::Critic::Policy::Subroutines::RequireArgUnpacking;
 use 5.006001;
 use strict;
 use warnings;
+
+use Carp;
+use English qw(-no_match_vars);
 use Readonly;
 
 use File::Spec;
 use List::Util qw(first);
 use List::MoreUtils qw(uniq any);
-use English qw(-no_match_vars);
-use Carp;
 
-use Perl::Critic::Utils qw{ :severities words_from_string $FALSE };
+use Perl::Critic::Utils qw<
+    :booleans :characters :severities words_from_string
+>;
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.096';
@@ -63,12 +66,12 @@ sub violates {
     my ( $self, $elem, undef ) = @_;
 
     # forward declaration?
-    return if !$elem->block;
+    return if not $elem->block;
 
     my @statements = $elem->block->schildren;
 
     # empty sub?
-    return if !@statements;
+    return if not @statements;
 
     # Don't apply policy to short subroutines
 
@@ -85,24 +88,29 @@ sub violates {
 
         my @magic = _get_arg_symbols($statement);
 
-        my $saw_unpack = 0;
-      MAGIC:
-        for my $magic (@magic) {
-            my $sigil = $magic->raw_type;
+        my $saw_unpack = $FALSE;
 
+        MAGIC:
+        for my $magic (@magic) {
             # allow conditional checks on the size of @_
             next MAGIC if _is_size_check($magic);
 
             if ('unpacking' eq $state) {
                 if ($self->_is_unpack($magic)) {
-                    $saw_unpack = 1;
+                    $saw_unpack = $TRUE;
                     next MAGIC;
                 }
             }
 
+            # allow @$_[] construct in "... for ();"
+            # Check for "print @$_[] for ()" construct (rt39601)
+            next MAGIC
+                if _is_cast_of_array($magic) and _is_postfix_foreach($magic);
+
+            # If we make it this far, it is a violaton
             return $self->violation( $DESC, $EXPL, $elem );
         }
-        if (!$saw_unpack) {
+        if (not $saw_unpack) {
             $state = 'post_unpacking';
         }
     }
@@ -112,17 +120,24 @@ sub violates {
 sub _is_unpack {
     my ($self, $magic) = @_;
 
-    my $prev = $magic->sprevious_sibling;
-    my $next = $magic->snext_sibling;
+    my $prev = $magic->sprevious_sibling();
+    my $next = $magic->snext_sibling();
+
     # If we have a subscript, we're dealing with an array slice on @_
     # or an array element of @_. See RT #34009.
-    if ($next && $next->isa('PPI::Structure::Subscript')) {
+    if ( $next and $next->isa('PPI::Structure::Subscript') ) {
         $self->{_allow_subscripts} or return;
         $next = $next->snext_sibling;
     }
 
-    return 1 if ($prev && $prev->isa('PPI::Token::Operator') && q{=} eq $prev &&
-                 (!$next || ($next->isa('PPI::Token::Structure') && q{;} eq $next)));
+    return $TRUE if
+            $prev
+        and $prev->isa('PPI::Token::Operator')
+        and q{=} eq $prev
+        and (
+                not $next
+            or  $next->isa('PPI::Token::Structure') && $SCOLON eq $next
+    );
     return;
 }
 
@@ -135,12 +150,46 @@ sub _is_size_check {
     my $prev = $magic->sprevious_sibling;
     my $next = $magic->snext_sibling;
 
-    return 1 if !$next && $prev && $prev->isa('PPI::Token::Operator') &&
-      (q{==} eq $prev || q{!=} eq $prev);
-    return 1 if !$prev && $next && $next->isa('PPI::Token::Operator') &&
-      (q{==} eq $next || q{!=} eq $next);
+    return $TRUE
+        if
+                not $next
+            and $prev
+            and $prev->isa('PPI::Token::Operator')
+            and (q<==> eq $prev or q<!=> eq $prev);
+
+    return $TRUE
+        if
+                not $prev
+            and $next
+            and $next->isa('PPI::Token::Operator')
+            and (q<==> eq $next or q<!=> eq $next);
+
     return;
 }
+
+sub _is_postfix_foreach {
+    my ($magic) = @_;
+
+    my $sibling = $magic;
+    while ( $sibling = $sibling->snext_sibling ) {
+        return $TRUE
+            if
+                    $sibling->isa('PPI::Token::Word')
+                and $sibling =~ m< \A for (?:each)? \z >xms;
+    }
+    return;
+}
+
+sub _is_cast_of_array {
+    my ($magic) = @_;
+
+    my $prev = $magic->sprevious_sibling;
+    my $next = $magic->snext_sibling;
+
+    return $TRUE if ( $prev eq $AT ) && $prev->isa('PPI::Token::Cast');
+    return;
+}
+
 
 sub _get_arg_symbols {
     my ($statement) = @_;
@@ -151,7 +200,7 @@ sub _get_arg_symbols {
 sub _magic_finder {
     # Find all @_ and $_[\d+] not inside of nested subs
     my (undef, $elem) = @_;
-    return 1 if $elem->isa('PPI::Token::Magic'); # match
+    return $TRUE if $elem->isa('PPI::Token::Magic'); # match
 
     if ($elem->isa('PPI::Structure::Block')) {
         # don't descend into a nested named sub
@@ -162,7 +211,7 @@ sub _magic_finder {
         return if $prev && $prev->isa('PPI::Token::Word') && 'sub' eq $prev;
     }
 
-    return 0; # no match, descend
+    return $FALSE; # no match, descend
 }
 
 
