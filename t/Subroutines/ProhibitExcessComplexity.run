@@ -2,6 +2,7 @@
 ## failures 0
 ## parms { max_mccabe => 100 }
 ## cut
+
 sub test_sub {
     if ( $foo && $bar || $baz ) {
         open my $fh, '<', $file or die $!;
@@ -24,6 +25,7 @@ sub test_sub {
 ## failures 1
 ## parms { max_mccabe => 1 }
 ## cut
+
 sub test_sub {
     if ( $foo && $bar || $baz ) {
         open my $fh, '<', $file or die $!;
@@ -44,3 +46,21 @@ sub test_sub {
 ## cut
 sub test_sub {
 }
+
+#-----------------------------------------------------------------------------
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab shiftround :

@@ -93,3 +93,21 @@ if (m/(\d+)/xms) {
 $str =~ m/(.)/xms ? foo($1) : die;
 $str =~ m/(.)/xms ? [$1] : die;
 $str =~ m/(.)/xms ? { match => $1 } : die;
+
+#-----------------------------------------------------------------------------
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab shiftround :

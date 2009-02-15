@@ -1,6 +1,7 @@
 ## name 1 arg; variable w/parens
 ## failures 1
 ## cut
+
 select( $fh );
 
 #-----------------------------------------------------------------------------
@@ -8,6 +9,7 @@ select( $fh );
 ## name 1 arg; variable, as built-in
 ## failures 1
 ## cut
+
 select $fh;
 
 #-----------------------------------------------------------------------------
@@ -15,6 +17,7 @@ select $fh;
 ## name 1 arg; fh, w/parens
 ## failures 1
 ## cut
+
 select( STDERR );
 
 #-----------------------------------------------------------------------------
@@ -22,6 +25,7 @@ select( STDERR );
 ## name 1 arg; fh, as built-in
 ## failures 1
 ## cut
+
 select STDERR;
 
 #-----------------------------------------------------------------------------
@@ -29,6 +33,7 @@ select STDERR;
 ## name 4 args
 ## failures 0
 ## cut
+
 select( undef, undef, undef, 0.25 );
 
 #-----------------------------------------------------------------------------
@@ -36,4 +41,23 @@ select( undef, undef, undef, 0.25 );
 ## name RT Bug #15653
 ## failures 0
 ## cut
+
 sub select { }
+
+#-----------------------------------------------------------------------------
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab shiftround :
