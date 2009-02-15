@@ -634,7 +634,7 @@ The values will be derived by splitting the input string on blanks.
 (See L<Perl::Critic::Utils/"words_from_string">.) The parameter will
 be stored as a reference to a hash, with the values being the keys.
 
-This takes one optional option, C<always_present_values>, of a
+This takes one optional option, C<list_always_present_values>, of a
 reference to an array of strings that will always be included in the
 parameter value, e.g. if the value of this option is C<[ qw{ a b c }
 ]> and the user specifies a value of C<'c d e'>, then the value of the
@@ -649,7 +649,7 @@ parameter will contain C<'a'>, C<'b'>, C<'c'>, C<'d'>, and C<'e'>.
                 description           => 'An example list.',
                 default_string        => 'red pink blue',
                 behavior              => 'string list',
-                always_present_values => [ qw{ green purple} ],
+                list_always_present_values => [ qw{ green purple} ],
             },
         );
     }
