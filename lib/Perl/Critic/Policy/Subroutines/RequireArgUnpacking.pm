@@ -136,7 +136,7 @@ sub _is_unpack {
         and q{=} eq $prev
         and (
                 not $next
-            or  $next->isa('PPI::Token::Structure') && $SCOLON eq $next
+            or  $next->isa('PPI::Token::Structure') and $SCOLON eq $next
     );
     return;
 }
@@ -186,7 +186,7 @@ sub _is_cast_of_array {
     my $prev = $magic->sprevious_sibling;
     my $next = $magic->snext_sibling;
 
-    return $TRUE if ( $prev eq $AT ) && $prev->isa('PPI::Token::Cast');
+    return $TRUE if ( $prev eq $AT ) and $prev->isa('PPI::Token::Cast');
     return;
 }
 
@@ -208,7 +208,7 @@ sub _magic_finder {
 
         my $prev = $elem->sprevious_sibling;
         # don't descend into a nested anon sub block
-        return if $prev && $prev->isa('PPI::Token::Word') && 'sub' eq $prev;
+        return if $prev and $prev->isa('PPI::Token::Word') and 'sub' eq $prev;
     }
 
     return $FALSE; # no match, descend
