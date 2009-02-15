@@ -137,6 +137,20 @@ die qq{A horrible death
 
 #-----------------------------------------------------------------------------
 
+## name Don't complain if message is a heredoc, which must end in "\n"
+## failures 0
+## cut
+
+die <<'eod' ;
+A horrible death
+eod
+
+die <<'eod'    # last statement doesn't need a terminator
+A horrible death
+eod
+
+#-----------------------------------------------------------------------------
+
 ## name Complain if message ends with "\n" in single quotes.
 ## failures 2
 ## cut

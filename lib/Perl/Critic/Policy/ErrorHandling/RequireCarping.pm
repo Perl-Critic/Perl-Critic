@@ -73,9 +73,9 @@ sub _last_flattened_argument_list_element_ends_in_newline {
     my $die_or_warn = shift;
 
     my $last_flattened_argument
-        = _find_last_flattened_argument_list_element($die_or_warn);
-    if (    $last_flattened_argument
-        and $last_flattened_argument->isa('PPI::Token::Quote') )
+        = _find_last_flattened_argument_list_element($die_or_warn)
+        or return $FALSE;
+    if ( $last_flattened_argument->isa('PPI::Token::Quote') )
     {
         my $last_flattened_argument_string
             = $last_flattened_argument->string();
@@ -93,6 +93,10 @@ sub _last_flattened_argument_list_element_ends_in_newline {
         {
             return $TRUE;
         }
+    }
+    elsif ( $last_flattened_argument->isa('PPI::Token::HereDoc') )
+    {
+        return $TRUE;
     }
 
     return $FALSE
@@ -308,6 +312,7 @@ Readonly::Array my @SIMPLE_LIST_ELEMENT_TOKEN_CLASSES =>
         PPI::Token::DashedWord
         PPI::Token::Symbol
         PPI::Token::Quote
+        PPI::Token::HereDoc
     };
 
 sub _is_simple_list_element_token {
@@ -332,7 +337,6 @@ Readonly::Array my @COMPLEX_EXPRESSION_TOKEN_CLASSES =>
         PPI::Token::ArrayIndex
         PPI::Token::QuoteLike
         PPI::Token::Regexp
-        PPI::Token::HereDoc
         PPI::Token::Cast
         PPI::Token::Label
         PPI::Token::Separator
