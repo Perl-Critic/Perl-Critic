@@ -12,9 +12,9 @@ $> = 3;
 ## failures 0
 ## cut
 
-$RS = undef;
+$RS                     = undef;
 $INPUT_RECORD_SEPARATOR = "\n";
-$OUTPUT_AUTOFLUSH = 1;
+$OUTPUT_AUTOFLUSH       = 1;
 print $foo, $baz;
 
 #-----------------------------------------------------------------------------
@@ -25,7 +25,7 @@ print $foo, $baz;
 
 $string =~ /((foo)bar)/;
 $foobar = $1;
-$foo = $2;
+$foo    = $2;
 $3;
 $stat = stat(_);
 @list = @_;
@@ -43,22 +43,22 @@ print $!;
 
 #-----------------------------------------------------------------------------
 
-## name Quoted String Interpolation - basic functional tests
+## name PPI::Token::Quote::Double Interpolation: violations
 ## parms { allow => '$@ $!' }
-## failures 12
+## failures 5
 ## cut
 
-# Commented numbers in parens indicate expected violations in that section
-# The module under test doesn't use them, they're just for reader's convenience
-
-# PPI::Token::Quote::Double (5)
 print "$+";
 print "This is my $+. is it not nifty?";
 print "This is my $+. is it not $@?";
 print "this \n should $+\n violate";
 print "as \n$+ should this";
 
-    # should pass (0)
+## name PPI::Token::Quote::Double Interpolation: non-violations
+## parms { allow => '$@ $!' }
+## failures 0
+## cut
+
 print "\$+";
 print "$@";
 print "$!";
@@ -66,85 +66,129 @@ print "no magic here";
 print "This is my $@; is it not nifty?";
 print "but not \n\$+ this";
 
-# PPI::Token::Quote::Interpolate (3)
-print qq<$+>;     #should violate
-print qq<\$+>;    #should pass
-print qq<\\$+>;   #should violate
-print qq<\\\$+>;  #should pass
-print qq<\\\\$+>; #should violate
+## name PPI::Token::Quote::Interpolate Interpolation: violations
+## failures 3
+## cut
 
-# PPI::Token::QuoteLike::Command (1)
-print qx<$+>;     #should violate
-print qx<\$+>;      #should pass
+print qq<$+>;
+print qq<\\$+>;
+print qq<\\\\$+>;
 
-# PPI::Token::QuoteLike::Backtick (1)
-print `$+`;       #should violate
-print `\$+`;      #should pass
+## name PPI::Token::Quote::Interpolate Interpolation: non-violations
+## failures 0
+## cut
 
-# PPI::Token::QuoteLike::Regexp (1)
-print qr<$+>;     #should violate
-print qr<\$+>;    #should pass
+print qq<\$+>;
+print qq<\\\$+>;
 
-# PPI::Token::QuoteLike::Readline (1)
-while (<$+>) { 1; }    #should violate
-while (<\$+>) { 1; }   #should pass
+## name PPI::Token::QuoteLike::Command: violations
+## failures 1
+## cut
+
+print qx<$+>;
+
+## name PPI::Token::QuoteLike::Command: non-violations
+## failures 0
+## cut
+
+print qx<\$+>;
+
+## name PPI::Token::QuoteLike::Backtick: violations
+## failures 1
+## cut
+
+print `$+`;
+
+## name PPI::Token::QuoteLike::Backtick: non-violations
+## failures 0
+## cut
+
+print `\$+`;
+
+## name PPI::Token::QuoteLike::Regexp: violations
+## failures 1
+## cut
+
+print qr<$+>;
+
+## name PPI::Token::QuoteLike::Regexp: non-violations
+## failures 0
+## cut
+
+print qr<\$+>;
+
+## name PPI::Token::QuoteLike::Readline: violations
+## failures 1
+## cut
+
+while (<$+>) { 1; }
+
+## name PPI::Token::QuoteLike::Readline: non-violations
+## failures 0
+## cut
+
+while (<\$+>) { 1; }
 
 #-----------------------------------------------------------------------------
 
-## name Heredoc Interpolation
+## name Heredoc Interpolation: violations
 ## parms { allow => '$@ $!' }
 ## failures 8
 ## cut
 
-print <<DEFAULT; # default, implied "" context; should violate
+print <<DEFAULT;    # default, implied "" context
 $+
 DEFAULT
 
-print <<DEFAULT; # default, implied "" context; should violate
+print <<DEFAULT;    # default, implied "" context
 $+
 fred
 wilma
 DEFAULT
 
-print <<DEFAULT; # default, implied "" context; should violate
+print <<DEFAULT;    # default, implied "" context
 barney
 $+
 betty
 DEFAULT
 
-print <<DEFAULT; # default, implied "" context; should violate
+print <<DEFAULT;    # default, implied "" context
 $+
 pebbles
 bambam
 DEFAULT
 
-print <<"DOUBLE_QUOTE"; # explicit "" context; should violate
+print <<"DOUBLE_QUOTE";    # explicit "" context
 $$
 DOUBLE_QUOTE
 
-print <<"DQ_VERYVERYVERY_LONG_HEREDOC_EOT_IDENTIFIER"; # explicit "" context; should violate
+print <<"DQ_VERYVERYVERY_LONG_HEREDOC_EOT_IDENTIFIER";   # explicit "" context
 $+
 DQ_VERYVERYVERY_LONG_HEREDOC_EOT_IDENTIFIER
 
-
-print <<"MULTI_MATCHES"; # explicit "" context; should violate
+print <<"MULTI_MATCHES";                                 # explicit "" context
 $$
 $+
 $\
 $^A
 MULTI_MATCHES
 
-print <<DEFAULT_ALLOWED; # default, implied "" but allowed var; should pass
+print <<`BACKTICK`;                                      # backtick context
+$+
+BACKTICK
+
+## name Heredoc Interpolation: non-violations
+## parms { allow => '$@ $!' }
+## failures 0
+## cut
+
+print <<DEFAULT_ALLOWED;    # default, implied "" but allowed var; should pass
 $@
 DEFAULT_ALLOWED
 
-print <<'SINGLE_QUOTE'; # '' context; should pass
+print <<'SINGLE_QUOTE';     # '' context; should pass
 $@
 SINGLE_QUOTE
-
-print <<`BACKTICK`; # backtick context; should violate
-$+
-BACKTICK
 
 #-----------------------------------------------------------------------------
 
@@ -154,7 +198,7 @@ BACKTICK
 ## cut
 
 #print "$"";      # 2 of 59
-#print "$\";      # 28 of 59 
+#print "$\";      # 28 of 59
 
 #-----------------------------------------------------------------------------
 
@@ -162,66 +206,67 @@ BACKTICK
 ## failures 57
 ## cut
 
-print "$!";      # 1 of 59 
-#print "$"";      # 2 of 59  BROKEN, copied to TODO
-print "$#";      # 3 of 59  
-print "$#+";     # 4 of 59 
-print "$#-";     # 5 of 59 
-print "$$";      # 6 of 59 
-print "$%";      # 7 of 59 
-print "$&";      # 8 of 59 
-print "$'";      # 9 of 59 
-print "$(";      # 10 of 59 
-print "$)";      # 11 of 59 
-print "$*";      # 12 of 59  
-print "$+";      # 13 of 59 
-print "$,";      # 14 of 59 
-print "$-";      # 15 of 59 
-print "$.";      # 16 of 59 
-print "$/";      # 17 of 59 
-print "$0";      # 18 of 59 
-print "$:";      # 19 of 59 
-print "$::|";    # 20 of 59 
-print "$;";      # 21 of 59 
-print "$<";      # 22 of 59 
-print "$=";      # 23 of 59 
-print "$>";      # 24 of 59 
-print "$?";      # 25 of 59 
-print "$@";      # 26 of 59 
-print "$[";      # 27 of 59 
-#print "$\";      # 28 of 59  BROKEN, copied to TODO
-print "$]";      # 29 of 59 
-print "$^";      # 30 of 59 
-print "$^A";     # 31 of 59 
-print "$^C";     # 32 of 59 
-print "$^D";     # 33 of 59 
-print "$^E";     # 34 of 59 
-print "$^F";     # 35 of 59 
-print "$^H";     # 36 of 59 
-print "$^I";     # 37 of 59 
-print "$^L";     # 38 of 59 
-print "$^M";     # 39 of 59 
-print "$^N";     # 40 of 59 
-print "$^O";     # 41 of 59 
-print "$^P";     # 42 of 59 
-print "$^R";     # 43 of 59 
-print "$^S";     # 44 of 59 
-print "$^T";     # 45 of 59 
-print "$^V";     # 46 of 59 
-print "$^W";     # 47 of 59 
-print "$^X";     # 48 of 59 
-print "$`";      # 49 of 59 
-print "$|";      # 50 of 59 
-print "$}";      # 51 of 59 
-print "$~";      # 52 of 59 
-print "%!";      # 53 of 59 
-print "%+";      # 54 of 59 
-print "%-";      # 55 of 59 
-print "%^H";     # 56 of 59 
-print "@*";      # 57 of 59 
-print "@+";      # 58 of 59 
-print "@-";      # 59 of 59 
+print "$!";    # 1 of 59
 
+#print "$"";      # 2 of 59  BROKEN, copied to TODO
+print "$#";      # 3 of 59
+print "$#+";     # 4 of 59
+print "$#-";     # 5 of 59
+print "$$";      # 6 of 59
+print "$%";      # 7 of 59
+print "$&";      # 8 of 59
+print "$'";      # 9 of 59
+print "$(";      # 10 of 59
+print "$)";      # 11 of 59
+print "$*";      # 12 of 59
+print "$+";      # 13 of 59
+print "$,";      # 14 of 59
+print "$-";      # 15 of 59
+print "$.";      # 16 of 59
+print "$/";      # 17 of 59
+print "$0";      # 18 of 59
+print "$:";      # 19 of 59
+print "$::|";    # 20 of 59
+print "$;";      # 21 of 59
+print "$<";      # 22 of 59
+print "$=";      # 23 of 59
+print "$>";      # 24 of 59
+print "$?";      # 25 of 59
+print "$@";      # 26 of 59
+print "$[";      # 27 of 59
+
+#print "$\";      # 28 of 59  BROKEN, copied to TODO
+print "$]";      # 29 of 59
+print "$^";      # 30 of 59
+print "$^A";     # 31 of 59
+print "$^C";     # 32 of 59
+print "$^D";     # 33 of 59
+print "$^E";     # 34 of 59
+print "$^F";     # 35 of 59
+print "$^H";     # 36 of 59
+print "$^I";     # 37 of 59
+print "$^L";     # 38 of 59
+print "$^M";     # 39 of 59
+print "$^N";     # 40 of 59
+print "$^O";     # 41 of 59
+print "$^P";     # 42 of 59
+print "$^R";     # 43 of 59
+print "$^S";     # 44 of 59
+print "$^T";     # 45 of 59
+print "$^V";     # 46 of 59
+print "$^W";     # 47 of 59
+print "$^X";     # 48 of 59
+print "$`";      # 49 of 59
+print "$|";      # 50 of 59
+print "$}";      # 51 of 59
+print "$~";      # 52 of 59
+print "%!";      # 53 of 59
+print "%+";      # 54 of 59
+print "%-";      # 55 of 59
+print "%^H";     # 56 of 59
+print "@*";      # 57 of 59
+print "@+";      # 58 of 59
+print "@-";      # 59 of 59
 
 #-----------------------------------------------------------------------------
 
