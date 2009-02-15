@@ -12,7 +12,8 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :characters :severities :data_conversion :booleans };
+use Perl::Critic::Utils
+    qw{ :characters :severities :data_conversion :booleans };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.096';
@@ -20,24 +21,23 @@ our $VERSION = '1.096';
 #-----------------------------------------------------------------------------
 
 Readonly::Scalar my $DESC => q{Magic punctuation variable used};
-Readonly::Scalar my $EXPL => [ 79 ];
+Readonly::Scalar my $EXPL => [79];
 
 #-----------------------------------------------------------------------------
 
 sub supported_parameters {
     return (
-        {
-            name            => 'allow',
-            description     => 'The additional variables to allow.',
-            default_string  => $EMPTY,
-            behavior        => 'string list',
+        {   name           => 'allow',
+            description    => 'The additional variables to allow.',
+            default_string => $EMPTY,
+            behavior       => 'string list',
             list_always_present_values =>
-                                 [ qw( $_ @_ $1 $2 $3 $4 $5 $6 $7 $8 $9 _ ) ],
+                [qw( $_ @_ $1 $2 $3 $4 $5 $6 $7 $8 $9 _ )],
         },
     );
 }
 
-sub default_severity { return $SEVERITY_LOW         }
+sub default_severity { return $SEVERITY_LOW }
 sub default_themes   { return qw(core pbp cosmetic) }
 
 sub applies_to {
@@ -49,7 +49,7 @@ sub applies_to {
         PPI::Token::QuoteLike::Regexp
         PPI::Token::QuoteLike::Readline
         PPI::Token::HereDoc
-    );        
+    );
 }
 
 #-----------------------------------------------------------------------------
@@ -65,9 +65,10 @@ my $_strings_helper;
 
 #-----------------------------------------------------------------------------
 
-sub initialize_if_enabled{
+sub initialize_if_enabled {
+
     # my $config = shift; # policy $config not needed at present
-    
+
     my %_magic_vars;
 
     # Magic variables taken from perlvar.
@@ -75,28 +76,30 @@ sub initialize_if_enabled{
     # adapted from ADAMK's PPI::Token::Magic.pm
     foreach (
         qw{
-            $1 $2 $3 $4 $5 $6 $7 $8 $9
-            $_ $& $` $' $+ @+ %+ $* $. $/ $|
-            $\\ $" $; $% $= $- @- %- $)
-            $~ $^ $: $? $! %! $@ $$ $< $>
-            $( $0 $[ $] @_ @*
-    
-            $^L $^A $^E $^C $^D $^F $^H
-            $^I $^M $^N $^O $^P $^R $^S
-            $^T $^V $^W $^X %^H
-    
-            $::|
+        $1 $2 $3 $4 $5 $6 $7 $8 $9
+        $_ $& $` $' $+ @+ %+ $* $. $/ $|
+        $\\ $" $; $% $= $- @- %- $)
+        $~ $^ $: $? $! %! $@ $$ $< $>
+        $( $0 $[ $] @_ @*
+
+        $^L $^A $^E $^C $^D $^F $^H
+        $^I $^M $^N $^O $^P $^R $^S
+        $^T $^V $^W $^X %^H
+
+        $::|
         }, '$}', '$,', '$#', '$#+', '$#-'
-    ) {
+        )
+    {
         $_magic_vars{$_} = $_;
-        $_magic_vars{$_} =~ 
-            s{ ( [[:punct:]] ) }{\\$1}gox; # add \ before all punctuation
+        $_magic_vars{$_}
+            =~ s{ ( [[:punct:]] ) }{\\$1}gox;   # add \ before all punctuation
     }
 
-    delete @_magic_vars{ @{supported_parameters()->{list_always_present_values}} };
+    delete @_magic_vars{ @{ supported_parameters()
+                ->{list_always_present_values} } };
 
     $_magic_regexp = join q(|), values %_magic_vars;
-    
+
     return $TRUE;
 }
 
@@ -106,10 +109,11 @@ sub violates {
     if ( $elem->isa('PPI::Token::Magic') ) {
         return $_violates_magic->(@_);
     }
-    elsif ( $elem->isa('PPI::Token::HereDoc') ){
+    elsif ( $elem->isa('PPI::Token::HereDoc') ) {
         return $_violates_heredoc->(@_);
     }
-    else { 
+    else {
+
         #the remaining applies_to() classes are all interpolated strings
         return $_violates_string->(@_);
     }
@@ -119,56 +123,55 @@ sub violates {
 
 #-----------------------------------------------------------------------------
 
-$_violates_magic = sub { 
+$_violates_magic = sub {
     my ( $self, $elem, undef ) = @_;
-    
+
     if ( !exists $self->{_allow}->{$elem} ) {
 
         return $self->violation( $DESC, $EXPL, $elem );
     }
-        
-    return;        
+
+    return;
 };
 
 $_violates_string = sub {
     my ( $self, $elem, undef ) = @_;
 
-    my %matches = $_strings_helper->($elem->content(), $self->{_allow} );
-    
+    my %matches = $_strings_helper->( $elem->content(), $self->{_allow} );
+
     if (%matches) {
         my $DESC = qq{$DESC in interpolated string};
-        
+
         return $self->violation( $DESC, $EXPL, $elem );
     }
-    
+
     return;
-    
+
 };
 
-$_violates_heredoc = sub{
-    my ($self, $elem, undef) = @_;
+$_violates_heredoc = sub {
+    my ( $self, $elem, undef ) = @_;
 
-    if ($elem->{_mode} eq 'interpolate' or $elem->{_mode} eq 'command'){
-        
-        my $heredoc_string = join qq{\n}, $elem->heredoc() ; 
-        my %matches = $_strings_helper->($heredoc_string, $self->{_allow});
-    
+    if ( $elem->{_mode} eq 'interpolate' or $elem->{_mode} eq 'command' ) {
+
+        my $heredoc_string = join qq{\n}, $elem->heredoc();
+        my %matches = $_strings_helper->( $heredoc_string, $self->{_allow} );
+
         if (%matches) {
-            my $DESC = qq{$DESC in interpolated here-document};  
-    
+            my $DESC = qq{$DESC in interpolated here-document};
+
             return $self->violation( $DESC, $EXPL, $elem );
         }
     }
-    
+
     return;
 };
 
-$_strings_helper = sub{
-    my ($target_string, $allow_ref, undef) = @_;
+$_strings_helper = sub {
+    my ( $target_string, $allow_ref, undef ) = @_;
 
     my @raw_matches = (
-        $target_string =~ 
-        m/
+        $target_string =~ m/
             (?: \A | [^\\] )   # beginning-of-string or any non-backslash 
             (?: \\\\ )*        # zero or more double-backslashes
             ( $_magic_regexp ) # any magic punctuation variable
@@ -181,10 +184,9 @@ $_strings_helper = sub{
 
     return %matches
         if (%matches);
-        
-    return; #no matches
-};
 
+    return;    #no matches
+};
 
 1;
 
