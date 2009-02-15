@@ -21,6 +21,7 @@ dereferencing
 Dolan
 Dominus
 elsif
+evaluatable
 exponentials
 filehandle
 filehandles
@@ -53,6 +54,7 @@ perldoc
 Perlish
 perls
 PolicyListing
+POSIX
 postfix
 PPI
 pragma

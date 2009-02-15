@@ -685,7 +685,7 @@ __END__
 
 =pod
 
-=for stopwords Schwern
+=for stopwords pbp perlstyle Schwern
 
 =head1 NAME
 
