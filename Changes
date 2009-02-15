@@ -29,13 +29,15 @@
       exemptions via the "allow" option.
 
     Bug Fixes:
-    * Variables::ProhibitPackageVars has had FindBin added to the default
-      exemptions.
     * CodeLayout::ProhibitTrailingWhitespace didn't notice cases where PPI
       would produce instances of PPI::Token::Whitespace that contained
       multiple lines.
     * Subroutines::ProtectPrivateSubs no longer regards the exportable POSIX
       subroutines whose names begin with underscore as private.  RT #38678.
+    * Subroutines::RequireArgUnpacking mishandled a complicated sitation with
+      $_ being an array reference.  RT #39601.
+    * Variables::ProhibitPackageVars has had FindBin added to the default
+      exemptions.
     * Variables::RequireLocalizedPunctuationVars now applies to subscripted
       names.  RT #29384.
 
