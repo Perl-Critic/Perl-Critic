@@ -72,30 +72,27 @@ sub violates {
 sub _last_flattened_argument_list_element_ends_in_newline {
     my $die_or_warn = shift;
 
-    my $last_flattened_argument
-        = _find_last_flattened_argument_list_element($die_or_warn)
+    my $last_flattened_argument =
+        _find_last_flattened_argument_list_element($die_or_warn)
         or return $FALSE;
-    if ( $last_flattened_argument->isa('PPI::Token::Quote') )
-    {
-        my $last_flattened_argument_string
-            = $last_flattened_argument->string();
+
+    if ( $last_flattened_argument->isa('PPI::Token::Quote') ) {
+        my $last_flattened_argument_string =
+            $last_flattened_argument->string();
         if (
-            $last_flattened_argument_string =~ m{ \n \z }xms
+                $last_flattened_argument_string =~ m{ \n \z }xms
             or (
-                (
-                    $last_flattened_argument->isa('PPI::Token::Quote::Double')
-                    or $last_flattened_argument->isa(
-                        'PPI::Token::Quote::Interpolate')
-                )
+                    (
+                            $last_flattened_argument->isa('PPI::Token::Quote::Double')
+                        or $last_flattened_argument->isa('PPI::Token::Quote::Interpolate')
+                    )
                 and $last_flattened_argument_string =~ m{ [\\] n \z }xms
             )
-          )
-        {
+        ) {
             return $TRUE;
         }
     }
-    elsif ( $last_flattened_argument->isa('PPI::Token::HereDoc') )
-    {
+    elsif ( $last_flattened_argument->isa('PPI::Token::HereDoc') ) {
         return $TRUE;
     }
 
