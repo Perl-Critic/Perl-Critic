@@ -16,8 +16,6 @@ use English qw< -no_match_vars >;
 
 use File::Spec qw<>;
 
-use Perl::Critic::PolicyFactory ( '-test' => 1 );
-
 use Test::More;
 
 #-----------------------------------------------------------------------------
