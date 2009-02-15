@@ -52,9 +52,9 @@ Test::Perl::Critic->import( -profile => $rcfile );
 {
     # About to commit evil, but it's against ourselves.
     no warnings qw< redefine >;
-    local *Perl::Critic::Utils::_is_perl = sub { 1 };
+    local *Perl::Critic::Utils::_is_perl = sub { 1 }; ## no critic (Variables::ProtectPrivateVars)
 
-    all_critic_ok( glob ('t/*/*.run') );
+    all_critic_ok( glob 't/*/*.run' );
 }
 
 #-----------------------------------------------------------------------------
