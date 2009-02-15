@@ -102,7 +102,7 @@ sub initialize_if_enabled {
     $_magic_regexp = join q(|), values %_magic_vars;
 
     # The following magic vars will be ignored in interpolated strings.
-    # See CONFIGURATION in the pod.
+    # See BUGS in the pod.
     @_ignore_for_interpolation = ( q{$'}, q{$$}, q{$#} );
     
     return $TRUE;
@@ -252,12 +252,12 @@ perlcriticrc file, add a block like this:
 The C<allow> property should be a whitespace-delimited list of
 punctuation variables.
 
-Other exceptions: the variables $$, $', and $# are ignore in
-interpolated strings due to difficulties in avoiding false positives.
-This will be corrected in a future release.
-
 
 =head1 BUGS
+
+Other exceptions: the variables $$, $', and $# are ignored in
+interpolated strings due to difficulties in avoiding false positives.
+This will be corrected in a future release.
 
 Punctuation variables that confuse PPI's document parsing may not be
 detected correctly or at all, and may prevent detection of subsequent
