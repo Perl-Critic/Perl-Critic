@@ -346,7 +346,7 @@ parameters generate a warning.
 If profile_strictness is $PROFILE_STRICTNESS_FATAL, extra policy
 parameters generate a fatal error.
 
-If no profile_strictness was set, the behaviour is that specified by
+If no profile_strictness was set, the behavior is that specified by
 $PROFILE_STRICTNESS_DEFAULT.
 
 
