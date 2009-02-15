@@ -1,0 +1,23 @@
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+profile-strictness = fatal
+severity = 1
+only = 1
+verbose = %f: %m at line %l, column %c.  %e.  (Severity: %s, %p)\n
+
+#-----------------------------------------------------------------------------
+
+[CodeLayout::ProhibitHardTabs]
+allow_leading_tabs = 0
+
+[CodeLayout::ProhibitTrailingWhitespace]
+
+[Editor::RequireEmacsFileVariables]
+
+[Miscellanea::RequireRcsKeywords]
+keywords = URL Date Author Revision
