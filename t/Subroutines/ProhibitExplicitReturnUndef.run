@@ -3,16 +3,16 @@
 ## cut
 
 sub test_sub1 {
-	$foo = shift;
-	return undef;
+    $foo = shift;
+    return undef;
 }
 
 sub test_sub2 {
-	shift || return undef;
+    shift || return undef;
 }
 
 sub test_sub3 {
-	return undef if $bar;
+    return undef if $bar;
 }
 
 #-----------------------------------------------------------------------------
@@ -22,17 +22,35 @@ sub test_sub3 {
 ## cut
 
 sub test_sub1 {
-	$foo = shift;
-	return;
+    $foo = shift;
+    return;
 }
 
 sub test_sub2 {
-	shift || return;
+    shift || return;
 }
 
 sub test_sub3 {
-	return if $bar;
+    return if $bar;
 }
 
 $foo{return}; # hash key, not keyword
 sub foo {return}; # no sibling
+
+#-----------------------------------------------------------------------------
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab shiftround :

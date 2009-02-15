@@ -18,7 +18,7 @@
 );
 
 @list = ($baz
-	);
+        );
 
 # not a straight assignment
 @list = ((1,2,3),(
@@ -34,17 +34,17 @@
 ## cut
 
 @list = ($foo,
-	 $bar,
-	 $baz);
+         $bar,
+         $baz);
 
 @list = ($foo,
-	 $bar,
-	 $baz
-	);
+         $bar,
+         $baz
+        );
 
 @list = ($foo,
-	 $bar,
-	 $baz
+         $bar,
+         $baz
 );
 
 #-----------------------------------------------------------------------------
@@ -54,18 +54,18 @@
 ## cut
 
 @list = ($foo,
-	 $bar,
-	 $baz,);
+         $bar,
+         $baz,);
 
 @list = ($foo,
-	 $bar,
-	 $baz,
+         $bar,
+         $baz,
 );
 
 @list = ($foo,
-	 $bar,
-	 $baz,
-	);
+         $bar,
+         $baz,
+        );
 
 #-----------------------------------------------------------------------------
 

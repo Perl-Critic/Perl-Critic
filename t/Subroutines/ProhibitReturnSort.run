@@ -3,8 +3,8 @@
 ## cut
 
 sub test_sub1 {
-	return sort @list;
-	return sort(@list);
+    return sort @list;
+    return sort(@list);
 }
 
 sub test_sub2 {
@@ -23,16 +23,16 @@ sub test_sub3 {
 ## cut
 
 sub test_sub1 {
-	@sorted = sort @list;
-	return @sorted;
+    @sorted = sort @list;
+    return @sorted;
 }
 
 sub test_sub2 {
-	return wantarray ? sort @list : $foo;
+    return wantarray ? sort @list : $foo;
 }
 
 sub test_sub3 {
-	return map {func($_)} sort @list;
+    return map {func($_)} sort @list;
 }
 
 #-----------------------------------------------------------------------------
@@ -53,3 +53,21 @@ sub test_sub1 {
 ## cut
 $foo{sort}; # hash key, not keyword
 sub foo {return}; # no sibling
+
+#-----------------------------------------------------------------------------
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab shiftround :
