@@ -110,7 +110,7 @@ sub fcritique_with_violations {
     my $file = File::Spec->catfile($dir, @fileparts);
     if (open my $fh, '>', $file) {
         print {$fh} ${$code_ref};
-        close $fh or throw_generic "unable to close $file: $!";
+        close $fh or throw_generic "unable to close $file: $OS_ERROR";
     }
 
     # Use eval so we can clean up before throwing an exception in case of
@@ -294,7 +294,7 @@ sub _subtests_from_file {
             throw_internal "Got some code but I'm not in a subtest: $test_file";
         }
     }
-    close $fh or throw_generic "unable to close $test_file: $!";
+    close $fh or throw_generic "unable to close $test_file: $OS_ERROR";
     if ( $subtest ) {
         if ( $incode ) {
             push @subtests, _finalize_subtest( $subtest );

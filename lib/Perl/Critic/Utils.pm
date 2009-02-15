@@ -1119,7 +1119,7 @@ sub _is_perl {
     #Check for shebang
     open my $fh, '<', $file or return;
     my $first = <$fh>;
-    close $fh or throw_generic "unable to close $file: $!";
+    close $fh or throw_generic "unable to close $file: $OS_ERROR";
 
     return 1 if defined $first && ( $first =~ m{ \A [#]!.*perl }xms );
     return;
