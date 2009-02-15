@@ -14,6 +14,8 @@
     * BuiltinFunctions::ProhibitExitInSubroutines
 
     Policy Changes:
+    * Fix Subroutines::ProhibitAmpersandSigils so it allows "defined(&x)" as
+      well as "defined &x".  Patch from Kevin Ryde, RT #38855.
     * Subroutines::ProtectPrivateSubs now has an "allow" option to specify
       subroutines which are exempt from this policy.  RT #38678.
     * Subroutines::RequireArgUnpacking now has an "allow_subscripts" option
