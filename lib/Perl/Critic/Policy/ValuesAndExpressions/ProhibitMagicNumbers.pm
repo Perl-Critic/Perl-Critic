@@ -611,11 +611,6 @@ Currently, this only means I<directly> to the right of the fat comma.  By
 default, this value is I<true>.
 
 
-=head1 TO DO
-
-
-
-
 =head1 BUGS
 
 There is currently no way to permit version numbers in regular code,
