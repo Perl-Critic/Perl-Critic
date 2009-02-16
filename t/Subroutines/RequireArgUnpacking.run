@@ -258,17 +258,51 @@ sub my_sub {
 
 ## name Allow the usual delegation idioms.
 ## failures 0
-## TODO RequireArgUnpacking does not know about these yet.
 ## cut
 
 sub foo {
     my $self = shift;
-    $self->SUPER::foo(@_);
+    return $self->SUPER::foo(@_);
 }
 
 sub bar {
     my $self = shift;
-    $self->NEXT::bar(@_);
+    return $self->NEXT::bar(@_);
+}
+
+#-----------------------------------------------------------------------------
+
+## name Don't allow delegation to unknown places.
+## failures 2
+## cut
+
+sub foo {
+    my $self = shift;
+    # No, Class::C3 doesn't really work this way.
+    return $self->Class::C3::foo(@_);
+}
+
+sub bar {
+    my $self = shift;
+    return $self->_unpacker(@_);
+}
+
+#-----------------------------------------------------------------------------
+
+## name Allow delegation to places we have been told about.
+## failures 0
+## parms { allow_delegation_to => 'Class::C3:: _unpacker' }
+## cut
+
+sub foo {
+    my $self = shift;
+    # No, Class::C3 doesn't really work this way.
+    return $self->Class::C3::foo(@_);
+}
+
+sub bar {
+    my $self = shift;
+    return $self->_unpacker(@_);
 }
 
 #-----------------------------------------------------------------------------

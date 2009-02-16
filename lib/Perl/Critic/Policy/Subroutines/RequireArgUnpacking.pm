@@ -53,6 +53,13 @@ sub supported_parameters {
             default_string  => $FALSE,
             behavior        => 'boolean',
         },
+        {
+            name            => 'allow_delegation_to',
+            description     =>
+                'Allow the usual delegation idiom to these namespaces/subroutines',
+            behavior        => 'string list',
+            list_always_present_values => [ qw< SUPER:: NEXT:: > ],
+        }
     );
 }
 
@@ -106,6 +113,10 @@ sub violates {
             # Check for "print @$_[] for ()" construct (rt39601)
             next MAGIC
                 if _is_cast_of_array($magic) and _is_postfix_foreach($magic);
+
+            # allow delegation of the form "$self->SUPER::foo( @_ );"
+            next MAGIC
+                if $self->_is_delegation( $magic );
 
             # If we make it this far, it is a violaton
             return $self->violation( $DESC, $EXPL, $elem );
@@ -190,6 +201,37 @@ sub _is_cast_of_array {
     return;
 }
 
+# A literal @_ is allowed as the argument for a delegation.
+# An example of the idiom we are looking for is $self->SUPER::foo(@_).
+# The argument list of (@_) is required; no other use of @_ is allowed.
+
+sub _is_delegation {
+    my ($self, $magic) = @_;
+
+    $AT_ARG eq $magic or return;            # Not a literal '@_'.
+    my $parent = $magic->parent()           # Don't know what to do with
+        or return;                          #   orphans.
+    $parent->isa( 'PPI::Statement::Expression' )
+        or return;                          # Parent must be expression.
+    1 == $parent->schildren()               # '@_' must stand alone in
+        or return;                          #   its expression.
+    $parent = $parent->parent()             # Still don't know what to do
+        or return;                          #   with orphans.
+    $parent->isa ( 'PPI::Structure::List' )
+        or return;                          # Parent must be a list.
+    1 == $parent->schildren()               # '@_' must stand alone in
+        or return;                          #   the argument list.
+    my $subroutine_name = $parent->sprevious_sibling()
+        or return;                          # Missing sub name.
+    $subroutine_name->isa( 'PPI::Token::Word' )
+        or return;
+    $self->{_allow_delegation_to}{$subroutine_name}
+        and return 1;
+    my ($subroutine_namespace) = $subroutine_name =~ m/ \A ( .* ::) \w+ \z /smx
+        or return;
+    return $self->{_allow_delegation_to}{$subroutine_namespace};
+}
+
 
 sub _get_arg_symbols {
     my ($statement) = @_;
@@ -259,6 +301,11 @@ variable outside of your subroutine.  For example:
 This is spooky action-at-a-distance and is very hard to debug if it's
 not intentional and well-documented (like C<chop> or C<chomp>).
 
+An exception is made for the usual delegation idiom C<<
+$object->SUPER::something( @_ ) >>. Only C<SUPER::> and C<NEXT::> are
+recognized (though this is configurable) and the argument list for the
+delegate must consist only of C<< ( @_ ) >>.
+
 =head1 CONFIGURATION
 
 This policy is lenient for subroutines which have C<N> or fewer
@@ -279,6 +326,18 @@ set it true like this:
 
   [Subroutines::RequireArgUnpacking]
   allow_subscripts = 1
+
+The delegation logic can be configured to allow delegation other than to
+C<SUPER::> or C<NEXT::>. The configuration item is
+C<allow_delegation_to>, and it takes a space-delimited list of allowed
+delegates. If a given delegate ends in a double colon, anything in the
+given namespace is allowed. If it does not, only that subroutine is
+allowed. For example, to allow C<next::method> from C<Class::C3> and
+_delegate from the current namespace in addition to SUPER and NEXT, the
+following configuration could be used:
+
+  [Subroutines::RequireArgUnpacking]
+  allow_delegation_to = next::method _delegate
 
 =head1 CAVEATS
 
