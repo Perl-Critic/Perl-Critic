@@ -110,8 +110,17 @@ use Readonly;
 
 Readonly::Scalar $frobnication_factor => 57;
 
-## name The Readonly::Scalar1 subroutine does not work.
+## name The Readonly::Scalar1 subroutine does work if allow_to_the_right_of_a_fat_comma is set.
+## failures 0
+## cut
+
+use Readonly;
+
+Readonly::Scalar1 $frobnication_factor => 57;
+
+## name The Readonly::Scalar1 subroutine does not work if allow_to_the_right_of_a_fat_comma is not set.
 ## failures 1
+## parms { allow_to_the_right_of_a_fat_comma => 0 }
 ## cut
 
 use Readonly;
@@ -142,13 +151,22 @@ use Readonly;
 
 Readonly::Hash %frobnication_factors => ( 57 => 290 );
 
-## name The Readonly::Hash1 subroutine does not work.
-## failures 2
+## name The Readonly::Hash1 subroutine does work if allow_to_the_right_of_a_fat_comma is set.
+## failures 0
 ## cut
 
 use Readonly;
 
-Readonly::Hash1 %frobnication_factors => ( 57 => 290 );
+Readonly::Hash1 %frobnication_factors => ( quhh => 290 );
+
+## name The Readonly::Hash1 subroutine does not work if allow_to_the_right_of_a_fat_comma is not set.
+## failures 1
+## parms { allow_to_the_right_of_a_fat_comma => 0 }
+## cut
+
+use Readonly;
+
+Readonly::Hash1 %frobnication_factors => ( quhh => 290 );
 
 ## name Constant subroutines containing just a number are allowed.
 ## failures 0
@@ -319,27 +337,37 @@ $titanothere = [ 1, 0, 1, 0 ];
 
 ## name Any numbers allowed in hash references in use statement.
 ## failures 0
+## parms { allow_to_the_right_of_a_fat_comma => 0 }
 ## cut
 
-use Some::Module { 1 => 2, 3 => 4 };
+use Some::Module { a => 6, b => 4 };
 
 ## name Any numbers allowed in hash references in require statement.
 ## failures 0
+## parms { allow_to_the_right_of_a_fat_comma => 0 }
 ## cut
 
-require Some::Other::Module { 1 => 2, 3 => 4 };
+require Some::Other::Module { a => 6, b => 4 };
 
 ## name Any numbers allowed in hash references in readonly statement.
 ## failures 0
+## parms { allow_to_the_right_of_a_fat_comma => 0 }
 ## cut
 
-Readonly $Vlad_the_Impaler => { 1 => 2, 3 => 4 };
+Readonly $Vlad_the_Impaler => { a => 6, b => 4 };
 
-## name Magic numbers not allowed in hash references in regular statement.
+## name Magic numbers allowed in hash references in regular statement if allow_to_the_right_of_a_fat_comma is set.
+## failures 0
+## cut
+
+$gnome_lord = { a => 6, b => 4 };
+
+## name Magic numbers not allowed in hash references in regular statement if allow_to_the_right_of_a_fat_comma is not set.
 ## failures 2
+## parms { allow_to_the_right_of_a_fat_comma => 0 }
 ## cut
 
-$gnome_lord = { 1 => 2, 3 => 4 };
+$gnome_lord = { a => 6, b => 4 };
 
 ## name Hash references containing only good numbers are allowed (by this policy).
 ## failures 0
@@ -389,14 +417,22 @@ Readonly @elf_mummy => ( 1, 2, 3, 4 );
 
 @green_slime = ( 1, [ 2, 3, 4 ] );
 
-## name Magic numbers not allowed in nested hash references in regular statement.
+## name Magic numbers allowed in nested hash references in regular statement if allow_to_the_right_of_a_fat_comma is set.
+## failures 0
+## cut
+
+@fire_elemental = ( 1, { 2 => 4 } );
+
+## name Magic numbers not allowed in nested hash references in regular statement if allow_to_the_right_of_a_fat_comma is not set.
 ## failures 1
+## parms { allow_to_the_right_of_a_fat_comma => 0 }
 ## cut
 
 @fire_elemental = ( 1, { 2 => 4 } );
 
 ## name Good numbers allowed in nested hash references anywhere.
 ## failures 0
+## parms { allow_to_the_right_of_a_fat_comma => 0 }
 ## cut
 
 @Y2K_bug = ( 1, { 0 => 1 } );

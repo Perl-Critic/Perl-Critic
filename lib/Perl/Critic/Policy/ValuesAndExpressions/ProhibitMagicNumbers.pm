@@ -77,6 +77,13 @@ sub supported_parameters {
             enumeration_values => [ qw{ Binary Exp Float Hex Octal } ],
             enumeration_allow_multiple_values => 1,
         },
+        {
+            name           => 'allow_to_the_right_of_a_fat_comma',
+            description    =>
+                q[Should anything to the right of a "=>" be allowed?],
+            default_string => '1',
+            behavior           => 'boolean',
+        },
     );
 }
 
@@ -211,6 +218,10 @@ sub _determine_checked_types {
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
+    if ( $self->{_allow_to_the_right_of_a_fat_comma} ) {
+        return if _element_is_to_the_right_of_a_fat_comma($elem);
+    }
+
     return if _element_is_in_an_include_readonly_or_version_statement($elem);
     return if _element_is_in_a_plan_statement($elem);
     return if _element_is_in_a_constant_subroutine($elem);
@@ -253,6 +264,16 @@ sub violates {
     }
 
     return;
+}
+
+sub _element_is_to_the_right_of_a_fat_comma {
+    my ($elem) = @_;
+
+    my $previous = $elem->sprevious_sibling() or return;
+
+    $previous->isa('PPI::Token::Operator') or return;
+
+    return $previous->content() eq q[=>];
 }
 
 sub _element_is_sole_component_of_a_subscript {
@@ -487,7 +508,8 @@ array, i.e. C<$x[-1]>.
 
 =head1 CONFIGURATION
 
-This policy has two options: C<allowed_values> and C<allowed_types>.
+This policy has three options: C<allowed_values>, C<allowed_types>, and
+C<allow_to_the_right_of_a_fat_comma>.
 
 
 =head2 C<allowed_values>
@@ -577,9 +599,21 @@ floating point values because an exponential is a subclass of
 floating-point in L<PPI|PPI>.
 
 
+=head2 C<allow_to_the_right_of_a_fat_comma>
+
+If this is set, you can put any number to the right of a fat comma.
+
+    my %hash =     ( a => 4512, b => 293 );         # ok
+    my $hash_ref = { a => 4512, b => 293 };         # ok
+    some_subroutine( a => 4512, b => 293 );         # ok
+
+Currently, this only means I<directly> to the right of the fat comma.  By
+default, this value is I<true>.
+
+
 =head1 TO DO
 
-An exemption for hash values.
+
 
 
 =head1 BUGS
