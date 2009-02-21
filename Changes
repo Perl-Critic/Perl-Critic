@@ -25,6 +25,8 @@
     * Subroutines::RequireArgUnpacking now has an "allow_delegation_to" option
       to allow the usual delegation idiom. Delegation to 'SUPER::' and
       'NEXT::' are allowed by default.  RT #33839.
+    * Subroutines::RequireArgUnpacking no longer generates a false positive
+      for '$$_[]', which is an obfuscated way of saying '$_->[]'.  RT #37713.
     * ValuesAndExpressions::ProhibitMagicNumbers now has an
       allow_to_the_right_of_a_fat_comma option, which defaults to true.  Note
       that it currently only works /directly/ to the right of a fat comma.

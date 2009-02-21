@@ -30,6 +30,8 @@ our $VERSION = '1.096';
 
 Readonly::Scalar my $AT => q{@};
 Readonly::Scalar my $AT_ARG => q{@_}; ## no critic (InterpolationOfMetachars)
+Readonly::Scalar my $DOLLAR => q{$};
+Readonly::Scalar my $DOLLAR_ARG => q{$_};   ## no critic (InterpolationOfMetaChars)
 
 Readonly::Scalar my $DESC => qq{Always unpack $AT_ARG first};
 Readonly::Scalar my $EXPL => [178];
@@ -113,6 +115,11 @@ sub violates {
             # Check for "print @$_[] for ()" construct (rt39601)
             next MAGIC
                 if _is_cast_of_array($magic) and _is_postfix_foreach($magic);
+
+            # allow $$_[], which is equivalent to $_->[] and not a use
+            # of @_ at all.
+            next MAGIC
+                if _is_cast_of_scalar( $magic );
 
             # allow delegation of the form "$self->SUPER::foo( @_ );"
             next MAGIC
@@ -199,6 +206,20 @@ sub _is_cast_of_array {
 
     return $TRUE if ( $prev eq $AT ) and $prev->isa('PPI::Token::Cast');
     return;
+}
+
+# This subroutine recognizes (e.g.) $$_[0]. This is a use of $_ (equivalent to
+# $_->[0]), not @_.
+
+sub _is_cast_of_scalar {
+    my ($magic) = @_;
+
+    my $prev = $magic->sprevious_sibling;
+    my $next = $magic->snext_sibling;
+
+    return $DOLLAR_ARG eq $magic &&
+        $prev && $prev->isa('PPI::Token::Cast') && $DOLLAR eq $prev &&
+        $next && $next->isa('PPI::Structure::Subscript');
 }
 
 # A literal @_ is allowed as the argument for a delegation.
