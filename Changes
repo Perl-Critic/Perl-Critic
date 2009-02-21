@@ -30,6 +30,8 @@
     * ValuesAndExpressions::ProhibitMagicNumbers now has an
       allow_to_the_right_of_a_fat_comma option, which defaults to true.  Note
       that it currently only works /directly/ to the right of a fat comma.
+    * Variables::ProhibitPackageVars has had FindBin and Log::Log4perl added
+      to the default exemptions.
     * Variables::ProhibitReusedNames now has an "allow" option to specify
       names that can be reused.  It defaults to enabling $self and $class.  RT
       #42767.
@@ -44,8 +46,6 @@
       subroutines whose names begin with underscore as private.  RT #38678.
     * Subroutines::RequireArgUnpacking mishandled a complicated sitation with
       $_ being an array reference.  RT #39601.
-    * Variables::ProhibitPackageVars has had FindBin added to the default
-      exemptions.
     * Variables::RequireLocalizedPunctuationVars now applies to subscripted
       names.  RT #29384.
 

@@ -35,7 +35,7 @@ sub supported_parameters {
         {
             name            => 'packages',
             description     => 'The base set of packages to allow variables for.',
-            default_string  => 'Data::Dumper File::Find FindBin',
+            default_string  => 'Data::Dumper File::Find FindBin Log::Log4perl',
             behavior        => 'string list',
         },
         {
@@ -185,7 +185,7 @@ These module can be specified from your F<.perlcriticrc> file, and the
 policy will ignore them.
 
     [Variables::ProhibitPackageVars]
-    packages = Data::Dumper File::Find FindBin
+    packages = Data::Dumper File::Find FindBin Log::Log4perl
 
 This is the default setting.  Using C<packages =>  will override these
 defaults.
