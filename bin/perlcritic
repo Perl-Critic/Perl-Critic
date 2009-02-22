@@ -17,7 +17,7 @@ use English qw< -no_match_vars >;
 use Readonly;
 
 use Getopt::Long qw< GetOptions >;
-use List::Util qw< first >;
+use List::Util qw< first max >;
 use Pod::Usage qw< pod2usage >;
 
 use Perl::Critic::Exception::Parse ();
@@ -342,10 +342,16 @@ sub report_statistics {
         out "\n"; # There's prior output that we want to separate from.
     }
 
-    out _commaify($statistics->modules()), " files.\n";
-    out _commaify($statistics->subs()), " subroutines/methods.\n";
-    out _commaify($statistics->statements_other_than_subs()), " statements.\n";
-    out _commaify($statistics->lines()), " lines.\n";
+    my $files = _commaify($statistics->modules());
+    my $subroutines = _commaify($statistics->subs());
+    my $statements = _commaify($statistics->statements_other_than_subs());
+    my $lines = _commaify($statistics->lines());
+    my $width = max map { length } $files, $subroutines, $statements, $lines;
+
+    out sprintf "%*s %s.\n", $width, $files, 'files';
+    out sprintf "%*s %s.\n", $width, $subroutines, 'subroutines/methods';
+    out sprintf "%*s %s.\n", $width, $statements, 'statements';
+    out sprintf "%*s %s.\n", $width, $lines, 'lines';
 
     my $average_sub_mccabe = $statistics->average_sub_mccabe();
     if (defined $average_sub_mccabe) {
@@ -381,21 +387,35 @@ sub report_statistics {
         out "\n";
 
         my %severity_violations = %{ $statistics->violations_by_severity() };
-        foreach my $severity ( reverse sort keys %severity_violations ) {
+        my @severities = reverse sort keys %severity_violations;
+        $width =
+            max
+                map { length _commaify( $severity_violations{$_} ) }
+                    @severities;
+        foreach my $severity (@severities) {
             out
-                _commaify($severity_violations{$severity}),
-                " severity $severity violations.\n";
+                sprintf
+                    "%*s severity %d violations.\n",
+                    $width,
+                    _commaify( $severity_violations{$severity} ),
+                    $severity;
         }
 
         out "\n";
 
         my %policy_violations = %{ $statistics->violations_by_policy() };
-        foreach my $policy ( sort keys %policy_violations ) {
+        my @policies = sort keys %policy_violations;
+        $width =
+            max
+                map { length _commaify( $policy_violations{$_} ) }
+                    @policies;
+        foreach my $policy (@policies) {
             out
-                _commaify($policy_violations{$policy}),
-                ' violations of ',
-                policy_short_name($policy),
-                ".\n";
+                sprintf
+                    "%*s violations of %s.\n",
+                    $width,
+                    _commaify($policy_violations{$policy}),
+                    policy_short_name($policy);
         }
     }
 
