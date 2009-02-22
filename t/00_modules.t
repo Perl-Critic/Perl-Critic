@@ -44,7 +44,7 @@ my @concrete_exceptions = qw{
 };
 
 plan tests =>
-        118
+        120
     +   (  9 * scalar @concrete_exceptions  )
     +   ( 14 * scalar @bundled_policy_names );
 
@@ -231,6 +231,12 @@ can_ok('Perl::Critic::ProfilePrototype', 'to_string');
 my $prototype = Perl::Critic::ProfilePrototype->new();
 isa_ok($prototype, 'Perl::Critic::ProfilePrototype');
 is($prototype->VERSION(), $version_string, 'Perl::Critic::ProfilePrototype version');
+
+#-----------------------------------------------------------------------------
+# Test Perl::Critic::Command module interface
+
+use_ok('Perl::Critic::Command') or BAIL_OUT(q<Can't continue.>);
+can_ok('Perl::Critic::Command', 'run');
 
 #-----------------------------------------------------------------------------
 # Test module interface for exceptions

@@ -8,7 +8,7 @@
       accepted in lieu of 'color'.
     * Handling of unrecognized policy configuration items is now controlled by
       the profile_strictness. The default is to warn about them. The previous
-      behavior was that they were fatal.
+      default was that they were fatal.
     * -p is now a synonym for --profile.
 
     New Policies:
@@ -38,6 +38,12 @@
       #42767.
     * Variables::RequireLocalizedPunctuationVars has a customizable set of
       exemptions via the "allow" option.
+
+    New Developer Features:
+    * The guts of perlcritic have been moved to Perl::Critic::Command.  You
+      can invoke Perl::Critic::Command::run() to get the equivalent of running
+      the command.  (Note, however, this interface WILL change, so don't count
+      on the current one.)
 
     Bug Fixes:
     * CodeLayout::ProhibitTrailingWhitespace didn't notice cases where PPI
