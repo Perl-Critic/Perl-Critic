@@ -9,6 +9,7 @@
     * Handling of unrecognized policy configuration items is now controlled by
       the profile_strictness. The default is to warn about them. The previous
       behavior was that they were fatal.
+    * -p is now a synonym for --profile.
 
     New Policies:
     * BuiltinFunctions::ProhibitExitInSubroutines

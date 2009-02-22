@@ -461,7 +461,7 @@ sub _get_option_specification {
         only!
         options
         pager=s
-        profile=s
+        profile|p=s
         profile-proto
         quiet
         severity=i
@@ -625,7 +625,7 @@ C<perlcritic> - Command-line interface to critique Perl source.
 =head1 SYNOPSIS
 
   perlcritic [-12345 | --brutal | --cruel | --harsh | --stern | --gentle]
-             [--severity number | name] [--profile file | --noprofile]
+             [--severity number | name] [{-p | --profile} file | --noprofile]
              [--top [ number ]] [--theme expression] [--include pattern]
              [--exclude pattern] [{-s | --single-policy} pattern]
              [--only | --noonly] [--profile-strictness {warn|fatal|quiet}]
@@ -719,7 +719,7 @@ Option names are also case-sensitive.
 
 =over
 
-=item C<--profile FILE>
+=item C<--profile FILE> or C<-p FILE>
 
 Directs C<perlcritic> to use a profile named by FILE rather than
 looking for the default F<.perlcriticrc> file in the current directory
@@ -822,9 +822,7 @@ C<--exclude> takes precedence over C<--include> when a Policy matches
 both patterns.  You can set the default value for this option in your
 F<.perlcriticrc> file.
 
-=item C<--single-policy PATTERN>
-
-=item C<-s PATTERN>
+=item C<--single-policy PATTERN> or C<-s PATTERN>
 
 Directs C<perlcritic> to apply just one Policy module matching the
 regex C</PATTERN/ixms>, and exclude all other Policies.  This option
