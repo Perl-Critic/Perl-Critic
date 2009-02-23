@@ -203,30 +203,30 @@ SINGLE_QUOTE
 #-----------------------------------------------------------------------------
 
 ## name Quoted String Interpolation - ignored magic vars
+## parms { string_mode => 'simple' }
 ## failures 0
 ## cut
 print "$#";    # 3 of 59  Exception made for $#
 print "$$";    # 6 of 59  Exception made for $$
 print "$'";    # 9 of 59  Exception made for $'
+print "$:";    # 19 of 59  Exception made for $:
 
 #-----------------------------------------------------------------------------
 
 ## name Quoted String Interpolation - exhaustive tests
-## failures 54
+## failures 58
 ## cut
 
 print "$!";    # 1 of 59
 
 #print "$"";      # 2 of 59  BROKEN, copied to TODO
-#print "$#";      # 3 of 59  Exception made for $#
-print "$#+";    # 4 of 59
-print "$#-";    # 5 of 59
-
-#print "$$";      # 6 of 59  Exception made for $$
-print "$%";     # 7 of 59
-print "$&";     # 8 of 59
-
-#print "$'";      # 9 of 59  Exception made for $'
+print "$#";      # 3 of 59
+print "$#+";     # 4 of 59
+print "$#-";     # 5 of 59
+print "$$";      # 6 of 59
+print "$%";      # 7 of 59
+print "$&";      # 8 of 59
+print "$'";      # 9 of 59
 print "$(";      # 10 of 59
 print "$)";      # 11 of 59
 print "$*";      # 12 of 59
@@ -246,7 +246,7 @@ print "$?";      # 25 of 59
 print "$@";      # 26 of 59
 print "$[";      # 27 of 59
 
-#print "$\";      # 28 of 59  BROKEN, copied to TODO
+print "$\\";      # 28 of 59  BROKEN, copied to TODO
 print "$]";      # 29 of 59
 print "$^";      # 30 of 59
 print "$^A";     # 31 of 59
@@ -278,6 +278,99 @@ print "%^H";     # 56 of 59
 print "@*";      # 57 of 59
 print "@+";      # 58 of 59
 print "@-";      # 59 of 59
+
+#-----------------------------------------------------------------------------
+
+## name String Interpolation - 'disable' mode
+## failures 0
+## parms { string_mode => 'disable' }
+## cut
+
+print "$!";
+
+## name String Interpolation - explicit 'simple' mode
+## parms { string_mode => 'simple' }
+## failures 5
+## cut
+
+print "$+";
+print "This is my $+. is it not nifty?";
+print "This is my $+. is it not $@?";
+print "this \n should $+\n violate";
+print "as \n$+ should this";
+
+#-----------------------------------------------------------------------------
+
+## name String Interpolation - thorough-mode violations
+## failures 3
+## parms { string_mode => 'thorough' }
+## cut
+
+print "$!";
+print "this \n should $+\n violate";
+print <<"DOUBLE_QUOTE";    # explicit "" context
+$+with stuff
+$!more stuff
+$/thingy
+$$ $; $= $/
+DOUBLE_QUOTE
+
+## name String Interpolation - thorough-mode special case violations
+## failures 16
+## parms { string_mode => 'thorough' }
+## cut
+
+# related to $', $:, and $_
+print "$' ralph";
+print "$'3";
+print "$:";
+print "$: ";
+print "$:fred";
+print "$: something else";
+
+# related to $#
+print "$#";
+print "$# foovar";
+
+# related to $$
+print "$$";
+print "$$ foovar";
+print "$$(foovar";
+
+# related to $^
+print "$^";
+print "$^M";    # violates $^M
+print "$^G";    # violates $^ (there is no $^G)
+print "$^ foovar";
+print "$^(foovar";
+
+## name String Interpolation - thorough-mode special case non-violations
+## failures 0
+## parms { string_mode => 'thorough' }
+## cut
+
+# related to $', $:, and $_
+print "$'global_symbol";
+print "$::global_symbol";
+print "$::";
+print "$:: ";
+print "$:: something else";
+
+#print "$_";
+#print "$_ ";
+#print "$_ something else";
+#print "$_varname";
+
+# related to $#
+print "$#foovar";
+print "$#$";
+print "$#{";
+
+# related to $$
+print "$$foovar";
+
+# related to $^
+#print "$^WIDE_SYSTEM_CALLS;
 
 #-----------------------------------------------------------------------------
 
