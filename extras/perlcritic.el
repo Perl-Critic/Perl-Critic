@@ -319,73 +319,79 @@ per-file basis with File Variables."
 
 ;; These patterns are defined in Perl::Critic::Utils
 
-(defvar perlcritic-compilation-error-regexp-alist
-  '(;; Verbose level 1
-    ;;  "%f:%l:%c:%m\n"
-    ("^\\([^\n]+\\):\\([0-9]+\\):\\([0-9]+\\)" 1 2 3)
-
-    ;; Verbose level 2
-    ;;  "%f: (%l:%c) %m\n"
-    ("^\\([^\n]+\\): (\\([0-9]+\\):\\([0-9]+\\))" 1 2 3)
-
-    ;; Verbose level 3
-    ;;   "%m at %f line %l\n"
-    ("^[^\n]+ at \\([^\n]+\\) line \\([0-9]+\\)" 1 2)
-    ;;   "%m at line %l, column %c.  %e.  (Severity: %s)\n"
-    ("^[^\n]+ at line\\( \\)\\([0-9]+\\), column \\([0-9]+\\)." 1 2 3)
-
-    ;; Verbose level 4
-    ;;   "%m at line %l, column %c.  %e.  (Severity: %s)\n"
-    ("^[^\n]+ at line\\( \\)\\([0-9]+\\), column \\([0-9]+\\)." 1 2 3)
-    ;;   "%f: %m at line %l, column %c.  %e.  (Severity: %s)\n"
-    ("^\\([^\n]+\\): [^\n]+ at line \\([0-9]+\\), column \\([0-9]+\\)" 1 2 3)
-
-    ;; Verbose level 5
-    ;;    "%m at line %l, near '%r'.  (Severity: %s)\n"
-    ("^[^\n]+ at line\\( \\)\\([0-9]+\\)," 1 2)
-    ;;    "%f: %m at line %l, column %c.  %e.  (Severity: %s)\n"
-    ("^\\([^\n]+\\): [^\n]+ at line \\([0-9]+\\), column \\([0-9]+\\)" 1 2 3)
-    
-    ;; Verbose level 6
-    ;;    "%m at line %l, near '%r'.  (Severity: %s)\\n"
-    ("^[^\n]+ at line\\( \\)\\([0-9]+\\)" 1 2)
-    ;;    "%f: %m at line %l near '%r'.  (Severity: %s)\n"
-    ("^\\([^\n]+\\): [^\n]+ at line \\([0-9]+\\)" 1 2)
-
-    ;; Verbose level 7
-    ;;    "%f: %m at line %l near '%r'.  (Severity: %s)\n"
-    ("^\\([^\n]+\\): [^\n]+ at line \\([0-9]+\\)" 1 2)
-    ;;    "[%p] %m at line %l, column %c.  (Severity: %s)\n"
-    ("^\\[[^\n]+\\] [^\n]+ at line\\( \\)\\([0-9]+\\), column \\([0-9]+\\)" 1 2 3)
-
-    ;; Verbose level 8
-    ;;    "[%p] %m at line %l, column %c.  (Severity: %s)\n"
-    ("^\\[[^\n]+\\] [^\n]+ at line\\( \\)\\([0-9]+\\), column \\([0-9]+\\)" 1 2 3)
-    ;;    "[%p] %m at line %l, near '%r'.  (Severity: %s)\n"
-    ("^\\[[^\n]+\\] [^\n]+ at line\\( \\)\\([0-9]+\\)" 1 2)
-    
-    ;; Verbose level 9
-    ;;    "%m at line %l, column %c.\n  %p (Severity: %s)\n%d\n"
-    ("^[^\n]+ at line\\( \\)\\([0-9]+\\), column \\([0-9]+\\)" 1 2 3)
-    ;;    "[%p] %m at line %l, near '%r'.  (Severity: %s)\n"
-    ("^\\[[^\n]+\\] [^\n]+ at line\\( \\)\\([0-9]+\\)" 1 2)
-    
-    ;; Verbose level 10
-    ;;    "%m at line %l, near '%r'.\n  %p (Severity: %s)\n%d\n"
-    ("^[^\n]+ at line\\( \\)\\([0-9]+\\)" 1 2)
-    ;;    "%m at line %l, column %c.\n  %p (Severity: %s)\n%d\n"
-    ("^[^\n]+ at line\\( \\)\\([0-9]+\\), column \\([0-9]+\\)" 1 2 3)
-    
-    ;; Verbose level 11
-    ;;    "%m at line %l, near '%r'.\n  %p (Severity: %s)\n%d\n"
-    ("^[^\n]+ at line\\( \\)\\([0-9]+\\)" 1 2)
-    )
+(defvar perlcritic-error-error-regexp-alist nil
   "Alist that specified how to match errors in perlcritic output.")
+(setq perlcritic-error-error-regexp-alist
+      '(;; Verbose level 1
+        ;;  "%f:%l:%c:%m\n"
+        ("^\\([^\n]+\\):\\([0-9]+\\):\\([0-9]+\\)" 1 2 3 1)
+
+        ;; Verbose level 2
+        ;;  "%f: (%l:%c) %m\n"
+        ("^\\([^\n]+\\): (\\([0-9]+\\):\\([0-9]+\\))" 1 2 3 1)
+        
+        ;; Verbose level 3
+        ;;   "%m at %f line %l\n"
+        ("^[^\n]+ at \\([^\n]+\\) line \\([0-9]+\\)" 1 2 nil 1)
+        ;;   "%m at line %l, column %c.  %e.  (Severity: %s)\n"
+        ("^[^\n]+ at line\\( \\)\\([0-9]+\\), column \\([0-9]+\\)." nil 2 3 1)
+        
+        ;; Verbose level 4
+        ;;   "%m at line %l, column %c.  %e.  (Severity: %s)\n"
+        ("^[^\n]+\\( \\)at line \\([0-9]+\\), column \\([0-9]+\\)" nil 2 3)
+        ;;   "%f: %m at line %l, column %c.  %e.  (Severity: %s)\n"
+        ("^\\([^\n]+\\): [^\n]+ at line \\([0-9]+\\), column \\([0-9]+\\)" 1 2 3)
+        
+        ;; Verbose level 5
+        ;;    "%m at line %l, near '%r'.  (Severity: %s)\n"
+        ("^[^\n]+ at line\\( \\)\\([0-9]+\\)," nil 2)
+        ;;    "%f: %m at line %l, column %c.  %e.  (Severity: %s)\n"
+        ("^\\([^\n]+\\): [^\n]+ at line \\([0-9]+\\), column \\([0-9]+\\)" 1 2 3)
+        
+        ;; Verbose level 6
+        ;;    "%m at line %l, near '%r'.  (Severity: %s)\\n"
+        ("^[^\n]+ at line\\( \\)\\([0-9]+\\)" nil 2)
+        ;;    "%f: %m at line %l near '%r'.  (Severity: %s)\n"
+        ("^\\([^\n]+\\): [^\n]+ at line \\([0-9]+\\)" 1 2)
+        
+        ;; Verbose level 7
+        ;;    "%f: %m at line %l near '%r'.  (Severity: %s)\n"
+        ("^\\([^\n]+\\): [^\n]+ at line \\([0-9]+\\)" 1 2)
+        ;;    "[%p] %m at line %l, column %c.  (Severity: %s)\n"
+        ("^\\[[^\n]+\\] [^\n]+ at line\\( \\)\\([0-9]+\\), column \\([0-9]+\\)" nil 2 3)
+        
+        ;; Verbose level 8
+        ;;    "[%p] %m at line %l, column %c.  (Severity: %s)\n"
+        ("^\\[[^\n]+\\] [^\n]+ at line\\( \\)\\([0-9]+\\), column \\([0-9]+\\)" nil 2 3)
+        ;;    "[%p] %m at line %l, near '%r'.  (Severity: %s)\n"
+        ("^\\[[^\n]+\\] [^\n]+ at line\\( \\)\\([0-9]+\\)" nil 2)
+        
+        ;; Verbose level 9
+        ;;    "%m at line %l, column %c.\n  %p (Severity: %s)\n%d\n"
+        ("^[^\n]+ at line\\( \\)\\([0-9]+\\), column \\([0-9]+\\)" nil 2 3)
+        ;;    "[%p] %m at line %l, near '%r'.  (Severity: %s)\n"
+        ("^\\[[^\n]+\\] [^\n]+ at line\\( \\)\\([0-9]+\\)" nil 2)
+        
+        ;; Verbose level 10
+        ;;    "%m at line %l, near '%r'.\n  %p (Severity: %s)\n%d\n"
+        ("^[^\n]+ at line\\( \\)\\([0-9]+\\)" nil 2)
+        ;;    "%m at line %l, column %c.\n  %p (Severity: %s)\n%d\n"
+        ("^[^\n]+ at line\\( \\)\\([0-9]+\\), column \\([0-9]+\\)" nil 2 3)
+        
+        ;; Verbose level 11
+        ;;    "%m at line %l, near '%r'.\n  %p (Severity: %s)\n%d\n"
+        ("^[^\n]+ at line\\( \\)\\([0-9]+\\)" nil 2)
+        ))
 
 
 
 ;; The Emacs Lisp manual says to do this with the cl library.
 (eval-when-compile (require 'cl))
+
+(define-compilation-mode perlcritic-error-mode "perlcritic-error" 
+  "..."
+  (set (make-local-variable 'perlcritic-buffer) src-buf)
+  (ad-activate #'compilation-find-file))
 
 ;;;###autoload
 (defun perlcritic ()
@@ -490,12 +496,8 @@ warnings those are displayed in a separate buffer."
 	      
 	      ;; just an fyi. compilation-mode will delete my local
 	      ;; variables so be sure to call it *first*.
-              (compilation-mode "perlcritic")
-              (set (make-local-variable 'perlcritic-buffer) src-buf)
-              (set (make-local-variable 'compilation-error-regexp-alist)
-		   perlcritic-compilation-error-regexp-alist)
-              (ad-activate #'compilation-find-file)
-                                        ; (ad-deactivate #'compilation-find-file)
+              (perlcritic-error-mode)
+              ;; (ad-deactivate #'compilation-find-file)
               (display-buffer err-buf))
 	    
 	    ;; Return our success or failure.
