@@ -1580,7 +1580,7 @@ declarations.
 Given a L<PPI::Token::Word|PPI::Token::Word> returns true if the
 element appears to be call to a static function.  Specifically, this
 function returns true if C<is_hash_key>, C<is_method_call>,
-C<is_subroutine_name>, C<is_included_module_anme>,
+C<is_subroutine_name>, C<is_included_module_name>,
 C<is_package_declaration>, C<is_perl_bareword>, C<is_perl_filehandle>,
 C<is_label_pointer> and C<is_subroutine_name> all return false for the
 given element.
