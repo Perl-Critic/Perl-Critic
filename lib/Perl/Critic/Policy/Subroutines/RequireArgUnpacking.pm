@@ -151,10 +151,11 @@ sub _is_unpack {
     return $TRUE if
             $prev
         and $prev->isa('PPI::Token::Operator')
-        and q{=} eq $prev
+        and q{=} eq $prev->content()
         and (
                 not $next
-            or  $next->isa('PPI::Token::Structure') and $SCOLON eq $next
+            or  $next->isa('PPI::Token::Structure')
+            and $SCOLON eq $next->content()
     );
     return;
 }
@@ -173,14 +174,14 @@ sub _is_size_check {
                 not $next
             and $prev
             and $prev->isa('PPI::Token::Operator')
-            and (q<==> eq $prev or q<!=> eq $prev);
+            and (q<==> eq $prev->content() or q<!=> eq $prev->content());
 
     return $TRUE
         if
                 not $prev
             and $next
             and $next->isa('PPI::Token::Operator')
-            and (q<==> eq $next or q<!=> eq $next);
+            and (q<==> eq $next->content() or q<!=> eq $next->content());
 
     return;
 }
@@ -204,7 +205,9 @@ sub _is_cast_of_array {
     my $prev = $magic->sprevious_sibling;
     my $next = $magic->snext_sibling;
 
-    return $TRUE if ( $prev eq $AT ) and $prev->isa('PPI::Token::Cast');
+    return $TRUE
+        if ( $prev && $prev->content() eq $AT )
+            and $prev->isa('PPI::Token::Cast');
     return;
 }
 
@@ -217,8 +220,9 @@ sub _is_cast_of_scalar {
     my $prev = $magic->sprevious_sibling;
     my $next = $magic->snext_sibling;
 
-    return $DOLLAR_ARG eq $magic &&
-        $prev && $prev->isa('PPI::Token::Cast') && $DOLLAR eq $prev &&
+    return $DOLLAR_ARG eq $magic->content() &&
+        $prev && $prev->isa('PPI::Token::Cast') &&
+            $DOLLAR eq $prev->content() &&
         $next && $next->isa('PPI::Structure::Subscript');
 }
 
@@ -229,7 +233,7 @@ sub _is_cast_of_scalar {
 sub _is_delegation {
     my ($self, $magic) = @_;
 
-    $AT_ARG eq $magic or return;            # Not a literal '@_'.
+    $AT_ARG eq $magic->content() or return; # Not a literal '@_'.
     my $parent = $magic->parent()           # Don't know what to do with
         or return;                          #   orphans.
     $parent->isa( 'PPI::Statement::Expression' )
@@ -271,7 +275,9 @@ sub _magic_finder {
 
         my $prev = $elem->sprevious_sibling;
         # don't descend into a nested anon sub block
-        return if $prev and $prev->isa('PPI::Token::Word') and 'sub' eq $prev;
+        return if $prev
+            and $prev->isa('PPI::Token::Word')
+            and 'sub' eq $prev->content();
     }
 
     return $FALSE; # no match, descend
