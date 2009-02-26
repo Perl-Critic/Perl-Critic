@@ -15,6 +15,9 @@
     * BuiltinFunctions::ProhibitExitInSubroutines
 
     Policy Changes:
+    * ControlStructures::ProhibitNegativeExpressionsInUnlessAndUntilConditions
+      didn't include "pbp" in its default themes even though it is derived
+      from the book.  Now it does.  :]
     * ErrorHandling::RequireCarping now allows a here document as the last
       element if allow_messages_ending_with_newlines is true.
     * Fix Subroutines::ProhibitAmpersandSigils so it allows "defined(&x)" as

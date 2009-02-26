@@ -25,10 +25,10 @@ Readonly::Scalar my $EXPL => [99];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return qw< >                    }
-sub default_severity     { return $SEVERITY_MEDIUM         }
-sub default_themes       { return qw( core maintenance )   }
-sub applies_to           { return 'PPI::Token::Word'       }
+sub supported_parameters { return qw< >                      }
+sub default_severity     { return $SEVERITY_MEDIUM           }
+sub default_themes       { return qw( core maintenance pbp ) }
+sub applies_to           { return 'PPI::Token::Word'         }
 
 #-----------------------------------------------------------------------------
 
