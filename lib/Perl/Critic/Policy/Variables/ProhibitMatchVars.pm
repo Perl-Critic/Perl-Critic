@@ -27,9 +27,9 @@ Readonly::Hash my %FORBIDDEN => hashify( @FORBIDDEN );
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return ()                  }
-sub default_severity     { return $SEVERITY_HIGH      }
-sub default_themes       { return qw( core bugs pbp ) }
+sub supported_parameters { return ()                         }
+sub default_severity     { return $SEVERITY_HIGH             }
+sub default_themes       { return qw( core performance pbp ) }
 sub applies_to           { return qw( PPI::Token::Symbol
                                       PPI::Statement::Include ) }
 

@@ -31,6 +31,10 @@
     * ValuesAndExpressions::ProhibitMagicNumbers now has an
       allow_to_the_right_of_a_fat_comma option, which defaults to true.  Note
       that it currently only works /directly/ to the right of a fat comma.
+    * Variables::ProhibitMatchVars had its default themes changed to "core
+      performance pbp", instead of "core bugs pbp" because, while the match
+      variables make regular expressions slow, it doesn't cause them to not
+      work correctly.
     * Variables::ProhibitPackageVars has had FindBin and Log::Log4perl added
       to the default exemptions.
     * Variables::ProhibitReusedNames now has an "allow" option to specify
