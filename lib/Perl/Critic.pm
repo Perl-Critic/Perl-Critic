@@ -157,9 +157,16 @@ sub _critique {
 
   TYPE:
     for my $type ( $policy->applies_to() ) {
+        my @elements;
+        if ($type eq 'PPI::Document') {
+            @elements = ($doc);
+        }
+        else {
+            @elements = @{ $doc->find($type) || [] };
+        }
 
       ELEMENT:
-        for my $element ( @{ $doc->find($type) || [] } ) {
+        for my $element (@elements) {
 
             # Evaluate the policy on this $element.  A policy may
             # return zero or more violations.  We only want the
