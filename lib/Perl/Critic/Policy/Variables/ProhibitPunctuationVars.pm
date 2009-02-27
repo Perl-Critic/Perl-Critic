@@ -74,9 +74,8 @@ my ( $_magic_regexp, @_ignore_for_interpolation, );
 # named regexps
 my ($_possible_dollar_exception, $_possible_scalar_symbol_1,
     $_possible_scalar_symbol_2,  $_digit_following_magic,
-    $_scalar_dereference,        $_index_dereferencing_cast,
-    $_array_index_thingy,        $_possible_escaped_char_magic,
-    $_long_magic_variable,       $_dollar_crunch_cast,
+    $_scalar_dereference, $_array_index_thingy, $_possible_escaped_char_magic,
+    $_dollar_crunch_cast,
 );
 
 #-----------------------------------------------------------------------------
@@ -86,7 +85,8 @@ my ($_possible_dollar_exception, $_possible_scalar_symbol_1,
 sub initialize_if_enabled {
     my $config = shift;
     my %_magic_vars;
-    @_magic_vars{ keys %PPI::Token::Magic::magic } = 1;
+    @_magic_vars{ keys %PPI::Token::Magic::magic } ## no critic (ProhibitPackageVars)
+        = 1;
 
     # Set up the regexp alternation for matching magic variables.
     # We can't process $config->{_allow} here because of a quirk in the
@@ -97,7 +97,7 @@ sub initialize_if_enabled {
         . (
         join q(|),
         map      { quotemeta $_ }
-            sort { length($b) <=> length($a) }
+            sort { -( length $a <=> length $b ) }
             keys %_magic_vars
         ) . ')';
 
@@ -109,20 +109,23 @@ sub initialize_if_enabled {
 
     # The following magic vars will be ignored in interpolated strings
     # in simple mode. See CONFIGURATION in the pod.
-    @_ignore_for_interpolation = ( q{$'}, q{$$}, q{$#}, q{$:}, )
-        ;    ## no critic ( RequireInterpolationOfMetachars )
+    @_ignore_for_interpolation = ( q{$'}, q{$$}, q{$#}, q{$:}, );    ## no critic ( RequireInterpolationOfMetachars )
 
     #initialize named regexps
-    $_possible_dollar_exception
-        = qr{ (?: ^  \$  .*  [  \w  :  \$  \{  ]  $ ) }xms;
-    $_possible_scalar_symbol_1    = qr{ (?: ^(\$(?:\_[\w:]|::)) ) }xms;
-    $_possible_scalar_symbol_2    = qr{ (?: ^\$\'[\w] ) }xms;
-    $_digit_following_magic       = qr{ (?: ^\$\'\d$ ) }xms;
-    $_scalar_dereference          = qr{ (?: ^\$\$\w ) }xms;
-    $_array_index_thingy          = qr{ (?: ^(\$\#)\w ) }xms;
-    $_possible_escaped_char_magic = qr{ (?: ^\$\^\w{2}$ ) }xms
-        ;    # uses a slightly different test than PPI
-    $_dollar_crunch_cast = qr{ (?: ^\$\#\{ ) }xms;
+    {
+        ## no critic (RequireInterpolationOfMetachars,ProhibitEscapedMetacharacters)
+
+        $_possible_dollar_exception
+            = qr{ (?: ^  \$  .*  [  \w  :  \$  \{  ]  $ ) }xms;
+        $_possible_scalar_symbol_1    = qr{ (?: ^(\$(?:\_[\w:]|::)) ) }xms;
+        $_possible_scalar_symbol_2    = qr{ (?: ^\$\'[\w] ) }xms;
+        $_digit_following_magic       = qr{ (?: ^\$\'\d$ ) }xms;
+        $_scalar_dereference          = qr{ (?: ^\$\$\w ) }xms;
+        $_array_index_thingy          = qr{ (?: ^(\$\#)\w ) }xms;
+        $_possible_escaped_char_magic = qr{ (?: ^\$\^\w{2}$ ) }xms
+            ;    # uses a slightly different test than PPI
+        $_dollar_crunch_cast = qr{ (?: ^\$\#\{ ) }xms;
+    }
 
     return $TRUE;
 }
@@ -143,14 +146,14 @@ sub violates {
 
 #-----------------------------------------------------------------------------
 
-# Definitions of private functions
+# Helper functions for the three types of violations: code, quotes, heredoc
 
 sub _violates_magic {
     my ( $self, $elem, undef ) = @_;
     if ( !exists $self->{_allow}->{$elem} ) {
         return $self->violation( $DESC, $EXPL, $elem );
     }
-    return; # no violation
+    return;    # no violation
 }
 
 sub _violates_string {
@@ -161,7 +164,7 @@ sub _violates_string {
 
         return $self->violation( $DESC, $EXPL, $elem );
     }
-    return; # no violation
+    return;    # no violation
 }
 
 sub _violates_heredoc {
@@ -175,8 +178,12 @@ sub _violates_heredoc {
             return $self->violation( $DESC, $EXPL, $elem );
         }
     }
-    return; # no violation
+    return;    # no violation
 }
+
+#-----------------------------------------------------------------------------
+
+# Helper functions specific to interpolated strings
 
 sub _strings_helper {
     my ( $self, $target_string, undef ) = @_;
@@ -200,31 +207,36 @@ sub _strings_helper {
 sub _strings_thorough {
     my ( $self, $target_string, undef ) = @_;
     my %matches;
+
+MATCH:
     while ( my ($match) = $target_string =~ m/$_magic_regexp/gcxms ) {
-        my $nextchar = substr( $target_string, $LAST_MATCH_END[0], 1 );
+        my $nextchar = substr $target_string, $LAST_MATCH_END[0], 1;
         my $c = $match . $nextchar;
 
         # These tests closely parallel those in PPI::Token::Magic, q.v.
         # $c is so named by analogy to that module.
 
         if ( $c =~ m/$_possible_dollar_exception/xms ) {
+            ## no critic (RequireInterpolationOfMetachars)
 
             if (   $c =~ m/$_possible_scalar_symbol_1/xms
                 or $c =~ m/$_possible_scalar_symbol_2/xms )
             {
-                next if $c !~ m/$_digit_following_magic/xms;
+                next MATCH if $c !~ m/$_digit_following_magic/xms;
             }
 
-            next if $c =~ m/$_scalar_dereference/xms;
-            next if $c eq '$#$' or $c eq '$#{';    # index dereferencing cast
-            next if $c =~ m/$_array_index_thingy/xms;
+            next MATCH if $c =~ m/$_scalar_dereference/xms;
+            next MATCH
+                if $c eq '$#$'
+                    or $c eq '$#{';    # index dereferencing cast
+            next MATCH if $c =~ m/$_array_index_thingy/xms;
 
             if ( $c =~ m/$_possible_escaped_char_magic/xms ) {
 
                 # Not yet implemented. May not ever be necessary.
             }
 
-            next if $c =~ m/$_dollar_crunch_cast/xms;
+            next MATCH if $c =~ m/$_dollar_crunch_cast/xms;
         }
 
         # The additional checking that PPI::Token::Magic does at this point
