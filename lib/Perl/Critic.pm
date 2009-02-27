@@ -274,6 +274,10 @@ by doing an HTTP-post, such as one of these:
 Please note that the perlcritic web-service is still alpha code.  The
 URL and interface to the service are subject to change.
 
+Also, the Perl Development Kit (PDK 8.0) from ActiveState includes a very
+slick graphical interface to Perl-Critic.  For details, go to
+L<http://www.activestate.com/perl_dev_kit>
+
 
 =head1 CONSTRUCTOR
 

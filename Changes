@@ -1,5 +1,12 @@
 [1.xxx_xxx] Released on 2009-xx-xx
 
+    Some Exciting News:
+    The Perl Development Kit (PDK 8.0) from ActiveState now includes a
+    very slick graphical interface to Perl-Critic.  I highly recommend
+    that you check it out.  Here's a link to screenshots and docs:
+
+    http://docs.activestate.com/pdk/8.0/PerlCritic_gui.html
+
     New Features:
     * Violation coloring is now configurable via command line or profile. The
       profile entries are color-severity-highest, -high, -medium, -low, or

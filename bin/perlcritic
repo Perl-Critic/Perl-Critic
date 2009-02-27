@@ -950,6 +950,9 @@ Perl::Critic related modules known to the development team:
 L<Bundle::Perl::Critic|Bundle::Perl::Critic>
 L<Task::Perl::Critic|Task::Perl::Critic>
 
+Also, the Perl Development Kit (PDK 8.0) from ActiveState includes
+a very slick graphical interface to Perl-Critic.  For details,
+go to L<http://www.activestate.com/perl_dev_kit>
 
 =head1 BUGS
 
