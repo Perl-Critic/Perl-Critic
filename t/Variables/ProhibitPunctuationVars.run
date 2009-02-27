@@ -159,7 +159,7 @@ bambam
 DEFAULT
 
 print <<"DOUBLE_QUOTE";    # explicit "" context
-$+
+$$
 DOUBLE_QUOTE
 
 print <<"DQ_VERYVERYVERY_LONG_HEREDOC_EOT_IDENTIFIER";   # explicit "" context
@@ -330,7 +330,7 @@ print "$: something else";
 
 # related to $#
 print "$#";
-print "$# foovar";
+
 
 # related to $$
 print "$$";
@@ -343,6 +343,18 @@ print "$^M";    # violates $^M
 print "$^G";    # violates $^ (there is no $^G)
 print "$^ foovar";
 print "$^(foovar";
+
+# sneakier combos
+print "$::foo then $' followed by $'3"; # violates for $' 
+
+
+## name String Interpolation - thorough-mode mixed multiple violations
+## failures 1
+## parms { string_mode => 'thorough' }
+## cut
+
+print "$::foo then $' followed by $'3 and $+ and $]";
+
 
 ## name String Interpolation - thorough-mode special case non-violations
 ## failures 0

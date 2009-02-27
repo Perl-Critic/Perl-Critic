@@ -40,7 +40,7 @@ sub supported_parameters {
         },
         {   name => 'string_mode',
             description =>
-                'Whether and how to check interpolated strings for punctuation variables.',
+                'Controls checking interpolated strings for punctuation variables.',
             default_string     => 'thorough',
             behavior           => 'enumeration',
             enumeration_values => [qw{ simple disable thorough }],
@@ -69,12 +69,7 @@ sub applies_to {
 # Private entities
 
 # package state
-my ( %_magic_vars, $_magic_regexp, @_ignore_for_interpolation, );
-
-# private functions
-my ($_violates_magic, $_violates_string, $_violates_heredoc,
-    $_strings_helper, $_strings_thorough,
-);
+my ( $_magic_regexp, @_ignore_for_interpolation, );
 
 # named regexps
 my ($_possible_dollar_exception, $_possible_scalar_symbol_1,
@@ -90,7 +85,7 @@ my ($_possible_dollar_exception, $_possible_scalar_symbol_1,
 
 sub initialize_if_enabled {
     my $config = shift;
-
+    my %_magic_vars;
     @_magic_vars{ keys %PPI::Token::Magic::magic } = 1;
 
     # Set up the regexp alternation for matching magic variables.
@@ -107,7 +102,7 @@ sub initialize_if_enabled {
         ) . ')';
 
     $_magic_regexp = qr{
-            (?: ^ | [^\\] )        # beginning-of-line or any non-backslash 
+            (?: ^ | [^\\] )        # beginning-of-line or any non-backslash
             (?: \\\\ )*            # zero or more double-backslashes
             ( $magic_alternation ) # any magic punctuation variable
         }xsm;
@@ -117,21 +112,17 @@ sub initialize_if_enabled {
     @_ignore_for_interpolation = ( q{$'}, q{$$}, q{$#}, q{$:}, )
         ;    ## no critic ( RequireInterpolationOfMetachars )
 
-    # Perform setup that is specific to thorough mode.
-    if ( $config->{_string_mode} eq 'thorough' ) {
-
-        #initialize private named regexps
-        $_possible_dollar_exception
-            = qr{ (?: ^  \$  .*  [  \w  :  \$  \{  ]  $ ) }xms;
-        $_possible_scalar_symbol_1    = qr{ (?: ^(\$(?:\_[\w:]|::)) ) }xms;
-        $_possible_scalar_symbol_2    = qr{ (?: ^\$\'[\w] ) }xms;
-        $_digit_following_magic       = qr{ (?: ^\$\'\d$ ) }xms;
-        $_scalar_dereference          = qr{ (?: ^\$\$\w ) }xms;
-        $_array_index_thingy          = qr{ (?: ^(\$\#)\w ) }xms;
-        $_possible_escaped_char_magic = qr{ (?: ^\$\^\w{2}$ ) }xms
-            ;    # uses a slightly different test than PPI
-        $_dollar_crunch_cast = qr{ (?: ^\$\#\{ ) }xms;
-    }
+    #initialize named regexps
+    $_possible_dollar_exception
+        = qr{ (?: ^  \$  .*  [  \w  :  \$  \{  ]  $ ) }xms;
+    $_possible_scalar_symbol_1    = qr{ (?: ^(\$(?:\_[\w:]|::)) ) }xms;
+    $_possible_scalar_symbol_2    = qr{ (?: ^\$\'[\w] ) }xms;
+    $_digit_following_magic       = qr{ (?: ^\$\'\d$ ) }xms;
+    $_scalar_dereference          = qr{ (?: ^\$\$\w ) }xms;
+    $_array_index_thingy          = qr{ (?: ^(\$\#)\w ) }xms;
+    $_possible_escaped_char_magic = qr{ (?: ^\$\^\w{2}$ ) }xms
+        ;    # uses a slightly different test than PPI
+    $_dollar_crunch_cast = qr{ (?: ^\$\#\{ ) }xms;
 
     return $TRUE;
 }
@@ -140,72 +131,60 @@ sub violates {
     my ( $self, $elem, undef ) = @_;
 
     if ( $elem->isa('PPI::Token::Magic') ) {
-        return $_violates_magic->( $self, $elem );
+        return _violates_magic( $self, $elem );
     }
     elsif ( $elem->isa('PPI::Token::HereDoc') ) {
-        return $_violates_heredoc->( $self, $elem );
+        return _violates_heredoc( $self, $elem );
     }
 
     #the remaining applies_to() classes are all interpolated strings
-    return $_violates_string->( $self, $elem );
+    return _violates_string( $self, $elem );
 }
 
 #-----------------------------------------------------------------------------
 
 # Definitions of private functions
 
-$_violates_magic = sub {
+sub _violates_magic {
     my ( $self, $elem, undef ) = @_;
-
     if ( !exists $self->{_allow}->{$elem} ) {
-
         return $self->violation( $DESC, $EXPL, $elem );
     }
+    return; # no violation
+}
 
-    return;
-};
-
-$_violates_string = sub {
+sub _violates_string {
     my ( $self, $elem, undef ) = @_;
-
-    my %matches = $_strings_helper->( $self, $elem->content() );
-
+    my %matches = _strings_helper( $self, $elem->content() );
     if (%matches) {
         my $DESC = qq{$DESC in interpolated string};
 
         return $self->violation( $DESC, $EXPL, $elem );
     }
+    return; # no violation
+}
 
-    return;
-
-};
-
-$_violates_heredoc = sub {
+sub _violates_heredoc {
     my ( $self, $elem, undef ) = @_;
-
     if ( $elem->{_mode} eq 'interpolate' or $elem->{_mode} eq 'command' ) {
-
         my $heredoc_string = join qq{\n}, $elem->heredoc();
-        my %matches = $_strings_helper->( $self, $heredoc_string );
-
+        my %matches = _strings_helper( $self, $heredoc_string );
         if (%matches) {
             my $DESC = qq{$DESC in interpolated here-document};
 
             return $self->violation( $DESC, $EXPL, $elem );
         }
     }
+    return; # no violation
+}
 
-    return;
-};
-
-$_strings_helper = sub {
+sub _strings_helper {
     my ( $self, $target_string, undef ) = @_;
 
     return if ( $self->{_string_mode} eq 'disable' );
-
-    return $_strings_thorough->( $self, $target_string )
+    return _strings_thorough( $self, $target_string )
         if $self->{_string_mode} eq 'thorough';
-    
+
     # we are in string_mode = simple
 
     my @raw_matches = $target_string =~ m/$_magic_regexp/goxms;
@@ -214,17 +193,13 @@ $_strings_helper = sub {
     my %matches;
     @matches{@raw_matches} = 1;
     delete @matches{ keys %{ $self->{_allow} } };
-
     delete @matches{@_ignore_for_interpolation};
-
     return %matches;
-};
+}
 
-$_strings_thorough = sub {
+sub _strings_thorough {
     my ( $self, $target_string, undef ) = @_;
-
     my %matches;
-
     while ( my ($match) = $target_string =~ m/$_magic_regexp/gcxms ) {
         my $nextchar = substr( $target_string, $LAST_MATCH_END[0], 1 );
         my $c = $match . $nextchar;
@@ -256,13 +231,10 @@ $_strings_thorough = sub {
         # is not necessary here.
 
         $matches{$match} = 1;
-
     }
     delete @matches{ keys %{ $self->{_allow} } };
-
     return %matches;
-
-};
+}
 
 1;
 
@@ -293,8 +265,7 @@ module to give them clear names.
   $| = undef;                      #not ok
 
   use English qw(-no_match_vars);
-  local $OUTPUT_AUTOFLUSH = undef;        #ok
-
+  local $OUTPUT_AUTOFLUSH = undef; #ok
 
 =head1 CONFIGURATION
 
@@ -309,39 +280,51 @@ perlcriticrc file, add a block like this:
   [Variables::ProhibitPunctuationVars]
   allow = $@ $!
 
-The C<allow> property should be a whitespace-delimited list of
+The C<allow> property  should  be  a  whitespace-delimited  list  of
 punctuation variables.
 
-Other configuration options control the parsing of interpolated
-strings in the search for forbidden variables. They have no effect
-on detecting punctuation variables outside of interpolated strings.
+Other configuration options  control  the  parsing  of  interpolated
+strings in the search for forbidden variables. They have  no  effect
+on detecting punctuation variables outside of interpolated  strings.
 
-  [Variables::ProhibitPunctuationVars]
-  string_mode = thorough
+ [Variables::ProhibitPunctuationVars]
+ string_mode = thorough
 
-The option "string_mode" controls whether and how interpolated strings 
-are searched for punctuation variables. Setting string_mode = thorough, 
-the default, checks for special cases that may look like punctuation
-variables but aren't, for example $#foo, an array index count; $$bar, 
-a scalar dereference; or $::baz, a global symbol.  
+The option C<string_mode>  controls  whether  and  how  interpolated
+strings are searched for punctuation variables. Setting
+C<string_mode = thorough>, the default,  checks  for  special  cases
+that may look like punctuation variables  but  aren't,  for  example
+C<$#foo>, an array index count; C<$$bar>, a scalar  dereference;  or
+C<$::baz>, a global symbol.
 
-Setting string_mode = disable causes all interpolated strings to be 
-ignored entirely. 
+Setting C<string_mode = disable> causes all interpolated strings  to
+be ignored entirely.
 
-Setting string_mode = simple, uses a simple regular expression to find
-matches. In this mode, the magic variables $$, $', $# and $: are ignored 
-within interpolated strings due to the high risk of false positives. 
-Simple mode is retained from an earlier draft of the interpolated-
-strings code. Its use is only recommended as a workaround if bugs 
-appear in thorough mode.   
+Setting C<string_mode = simple> uses a simple regular expression  to
+find matches. In this mode, the magic variables C<$$>, C<$'>,  C<$#>
+and C<$:> are ignored within interpolated strings due  to  the  high
+risk of false positives. Simple mode is  retained  from  an  earlier
+draft of the interpolated- strings code. Its use is only recommended
+as a workaround if bugs appear in thorough mode.
+
+The  C<string_mode>  option  will  go  away  when  the  parsing   of
+interpolated strings is implemented in PPI. See  L</CAVEATS>  below.
 
 
 =head1 BUGS
 
 Punctuation variables that confuse PPI's document parsing may not be
-detected correctly or at all, and may prevent detection of subsequent
-ones. In particular, $" is known to cause difficulties in
-interpolated strings.
+detected  correctly  or  at  all,  and  may  prevent  detection   of
+subsequent ones. In particular, C<$"> is known to cause difficulties
+in interpolated strings.
+
+=head1 CAVEATS
+
+ProhibitPunctuationVars  relies   exclusively   on   PPI   to   find
+punctuation variables in code, but does all the parsing  itself  for
+interpolated strings. When, at some  point,  this  functionality  is
+transferred to PPI, ProhibitPunctuationVars  will  cease  doing  the
+interpolating  and  the  C<string_mode>   option   will   go   away.
 
 
 =head1 AUTHOR
