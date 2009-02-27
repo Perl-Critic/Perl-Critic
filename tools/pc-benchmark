@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Perl::Critic qw(critique);
+use Perl::Critic;
 use Benchmark ':hireswallclock';
 
 #---------------------------------------------------------------
@@ -12,11 +12,16 @@ our $VERSION = '0.01';
 
 #---------------------------------------------------------------
 
-my $iters = 100;
-my $pc_opts = {-profile => '', -theme => 'core', -severity => 1};
+
+my %pc_opts = (-profile => '', -theme => 'core', -severity => 1);
+my $pc = Perl::Critic->new( %pc_opts );
+
 my $test_file = shift @ARGV || die "Must specify a test file.\n";
-my $code_ref = sub {critique( $pc_opts, $test_file )};
-timethis( $iters, $code_ref, 'critique()' );
+my $iters = shift @ARGV || 10;
+
+my $code_ref = sub { $pc->critique($test_file) for 1 .. $iters };
+my $t = timeit( 1, $code_ref, "Critqiue of $test_file");
+print "$iters iterations took: ",timestr($t),"\n";
 exit;
 
 #---------------------------------------------------------------
