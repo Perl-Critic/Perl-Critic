@@ -549,7 +549,7 @@ sub _render_policy_listing {
     my $listing = Perl::Critic::PolicyListing->new( -policies => \@policies );
     _out $listing;
 
-    exit $EXIT_SUCCESS; ## no critic qw(ProhibitExit)
+    exit $EXIT_SUCCESS;
 }
 
 #-----------------------------------------------------------------------------
@@ -564,7 +564,7 @@ sub _render_theme_listing {
     my $listing = Perl::Critic::ThemeListing->new( -policies => \@policies );
     _out $listing;
 
-    exit $EXIT_SUCCESS; ## no critic qw(ProhibitExit)
+    exit $EXIT_SUCCESS;
 }
 
 #-----------------------------------------------------------------------------
@@ -579,7 +579,7 @@ sub _render_profile_prototype {
     my $prototype = Perl::Critic::ProfilePrototype->new( -policies => \@policies );
     _out $prototype;
 
-    exit $EXIT_SUCCESS; ## no critic qw(ProhibitExit)
+    exit $EXIT_SUCCESS;
 }
 
 #-----------------------------------------------------------------------------
@@ -601,14 +601,14 @@ sub _policy_docs {
     my @perldoc_output = map {`perldoc -T $_`} @matching_policies;  ## no critic (ProhibitBacktick)
     _out @perldoc_output;
 
-    exit $EXIT_SUCCESS; ## no critic qw(ProhibitExit)
+    exit $EXIT_SUCCESS;
 }
 
 #-----------------------------------------------------------------------------
 
 sub _display_version {
     _out "$VERSION\n";
-    exit $EXIT_SUCCESS;  ## no critic qw(ProhibitExit)
+    exit $EXIT_SUCCESS;
 }
 
 #-----------------------------------------------------------------------------
