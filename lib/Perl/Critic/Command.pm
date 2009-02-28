@@ -248,7 +248,7 @@ sub _critique {
             $number_of_violations += scalar @violations;
 
             if (not $opts_ref->{'-statistics-only'}) {
-                _render_report( $file, $opts_ref, @violations )
+                render_report( $file, $opts_ref, @violations )
             }
             1;
         }
@@ -272,7 +272,7 @@ sub _critique {
 
     if ( $opts_ref->{-statistics} or $opts_ref->{'-statistics-only'} ) {
         my $stats = $critic->statistics();
-        _report_statistics( $opts_ref, $stats );
+        report_statistics( $opts_ref, $stats );
     }
 
     return $number_of_violations, $had_error_in_file;
@@ -333,7 +333,7 @@ sub _set_up_pager {
 
 #-----------------------------------------------------------------------------
 
-sub _report_statistics {
+sub report_statistics {
     my ($opts_ref, $statistics) = @_;
 
     if (
