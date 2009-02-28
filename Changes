@@ -18,9 +18,6 @@
       default was that they were fatal.
     * -p is now a synonym for --profile.
 
-    New Policies:
-    * BuiltinFunctions::ProhibitExitInSubroutines
-
     Policy Changes:
     * ControlStructures::ProhibitNegativeExpressionsInUnlessAndUntilConditions
       didn't include "pbp" in its default themes even though it is derived
