@@ -13,7 +13,8 @@ our $VERSION = '0.01';
 #---------------------------------------------------------------
 
 
-my %pc_opts = (-profile => '', -theme => 'core', -severity => 1);
+my @exclude = qw(TidyCode PodSpelling);  # We can't really optimize these
+my %pc_opts = (-profile => '', -theme => 'core', -severity => 1, -exclude => \@exclude);
 my $pc = Perl::Critic->new( %pc_opts );
 
 my $test_file = shift @ARGV || die "Must specify a test file.\n";
