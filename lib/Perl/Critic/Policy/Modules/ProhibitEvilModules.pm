@@ -21,7 +21,7 @@ use Perl::Critic::Utils qw{
 
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.096';
+our $VERSION = '1.097_01';
 
 #-----------------------------------------------------------------------------
 

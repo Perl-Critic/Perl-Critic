@@ -16,7 +16,7 @@ use Perl::Critic::Utils qw{ $EMPTY hashify };
 
 use base 'Exporter';
 
-our $VERSION = '1.096';
+our $VERSION = '1.097_01';
 
 #-----------------------------------------------------------------------------
 
