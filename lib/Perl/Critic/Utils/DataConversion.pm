@@ -66,6 +66,12 @@ Perl::Critic::Utils::DataConversion - Utilities for converting from one type of 
 Provides data conversion functions.
 
 
+=head1 INTERFACE SUPPORT
+
+This is considered to be a public module.  Any changes to its
+interface will go through a deprecation cycle.
+
+
 =head1 IMPORTABLE SUBS
 
 =over

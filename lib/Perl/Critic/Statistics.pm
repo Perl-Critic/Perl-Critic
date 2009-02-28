@@ -206,6 +206,12 @@ This class accumulates statistics on Perl::Critic violations across one or
 more files.  NOTE: This class is experimental and subject to change.
 
 
+=head1 INTERFACE SUPPORT
+
+This is considered to be a non-public class.  Its interface is subject
+to change without notice.
+
+
 =head1 METHODS
 
 =over

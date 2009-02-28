@@ -63,6 +63,12 @@ This is a helper class that formats a set of Policy objects for
 pretty-printing.  There are no user-serviceable parts here.
 
 
+=head1 INTERFACE SUPPORT
+
+This is considered to be a non-public class.  Its interface is subject
+to change without notice.
+
+
 =head1 CONSTRUCTOR
 
 =over

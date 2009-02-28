@@ -532,6 +532,12 @@ L<Perl::Critic::DEVELOPER|Perl::Critic::DEVELOPER> document included
 in this distribution.
 
 
+=head1 INTERFACE SUPPORT
+
+This is considered to be a public class.  Any changes to its interface
+will go through a deprecation cycle.
+
+
 =head1 METHODS
 
 =over

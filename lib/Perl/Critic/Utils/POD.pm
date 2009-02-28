@@ -513,6 +513,12 @@ Perl::Critic::Utils::POD - Utility functions for dealing with POD.
 Provides means of accessing chunks of POD.
 
 
+=head1 INTERFACE SUPPORT
+
+This is considered to be a public module.  Any changes to its
+interface will go through a deprecation cycle.
+
+
 =head1 IMPORTABLE SUBROUTINES
 
 =over

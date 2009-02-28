@@ -411,6 +411,12 @@ Perhaps there is a CPAN module out there which implements a facade
 better than we do here?
 
 
+=head1 INTERFACE SUPPORT
+
+This is considered to be a public class.  Any changes to its interface
+will go through a deprecation cycle.
+
+
 =head1 CONSTRUCTOR
 
 =over

@@ -55,6 +55,11 @@
       can invoke Perl::Critic::Command::run() to get the equivalent of running
       the command.  (Note, however, this interface WILL change, so don't count
       on the current one.)
+    * Modules have had a "INTERFACE SUPPORT" section added which states
+      whether the Perl::Critic developers consider the particular module is
+      public or not.  Any removal of functionality from a public module will
+      go through a deprecation cycle.  Non-public modules may have their
+      interfaces changed without notice.
 
     Bug Fixes:
     * CodeLayout::ProhibitTrailingWhitespace didn't notice cases where PPI
@@ -66,6 +71,11 @@
       $_ being an array reference.  RT #39601.
     * Variables::RequireLocalizedPunctuationVars now applies to subscripted
       names.  RT #29384.
+
+    Internals:
+    * The guts of Build.PL and Makefile.PL have been rearranged.
+      Theoretically, none of the changes should affect installation, but until
+      this change hits the CPAN, we can't know for sure.
 
 [1.096] Released on 2009-02-01
 

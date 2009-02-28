@@ -262,9 +262,16 @@ __END__
 Perl::Critic::PolicyConfig - Configuration data for a Policy.
 
 
+
 =head1 DESCRIPTION
 
 A container for the configuration of a Policy.
+
+
+=head1 INTERFACE SUPPORT
+
+This is considered to be a non-public class.  Its interface is subject
+to change without notice.
 
 
 =head1 METHODS

@@ -175,6 +175,12 @@ Perl::Critic::Utils::PPI - Utility functions for dealing with PPI objects.
 Provides classification of L<PPI::Elements|PPI::Elements>.
 
 
+=head1 INTERFACE SUPPORT
+
+This is considered to be a public module.  Any changes to its
+interface will go through a deprecation cycle.
+
+
 =head1 IMPORTABLE SUBS
 
 =over

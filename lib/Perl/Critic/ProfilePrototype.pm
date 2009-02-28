@@ -216,6 +216,12 @@ L<Perl::Critic|Perl::Critic> profile (e.g. a F<.perlcriticrc> file.
 There are no user-serviceable parts here.
 
 
+=head1 INTERFACE SUPPORT
+
+This is considered to be a non-public class.  Its interface is subject
+to change without notice.
+
+
 =head1 CONSTRUCTOR
 
 =over

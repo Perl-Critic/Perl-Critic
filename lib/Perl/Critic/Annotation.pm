@@ -224,6 +224,7 @@ __END__
 
 Perl::Critic::Annotation - A "## no critic" annotation in a document.
 
+
 =head1 SYNOPSIS
 
   use Perl::Critic::Annotation;
@@ -236,13 +237,22 @@ Perl::Critic::Annotation - A "## no critic" annotation in a document.
   ($start, $end) = $annotation->effective_range();
   @disabled_policy_names = $annotation->disabled_policies();
 
+
 =head1 DESCRIPTION
 
-L<Perl::Critic::Annotation> represents a single C<"## no critic"> annotation in a
-L<PPI:Document>.  The Annotation takes care of parsing the annotation and
-keeps track of which lines and Policies it affects. It is intended to
-encapsulate the details of the no-critic annotations, and to provide a way for
-Policy objects to interact with the annotations (via a L<Perl::Critic::Document>).
+L<Perl::Critic::Annotation> represents a single C<"## no critic">
+annotation in a L<PPI:Document>.  The Annotation takes care of parsing
+the annotation and keeps track of which lines and Policies it affects.
+It is intended to encapsulate the details of the no-critic
+annotations, and to provide a way for Policy objects to interact with
+the annotations (via a L<Perl::Critic::Document>).
+
+
+=head1 INTERFACE SUPPORT
+
+This is considered to be a non-public class.  Its interface is subject
+to change without notice.
+
 
 =head1 CLASS METHODS
 
@@ -250,13 +260,16 @@ Policy objects to interact with the annotations (via a L<Perl::Critic::Document>
 
 =item create_annotations( -doc => $doc )
 
-Given a L<Perl::Critic::Document>, finds all the C<"## no critic"> annotations
-and constructs a new L<Perl::Critic::Annotation> for each one and returns
-them.  The order of the returned objects is not defined.  It is generally
-expected that clients will use this interface rather than calling the
-L<Perl::Critic::Annotation> constructor directly.
+Given a L<Perl::Critic::Document>, finds all the C<"## no critic">
+annotations and constructs a new L<Perl::Critic::Annotation> for each
+one and returns them.  The order of the returned objects is not
+defined.  It is generally expected that clients will use this
+interface rather than calling the L<Perl::Critic::Annotation>
+constructor directly.
+
 
 =back
+
 
 =head1 CONSTRUCTOR
 
@@ -264,11 +277,13 @@ L<Perl::Critic::Annotation> constructor directly.
 
 =item C<< new( -element => $ppi_annotation_element ) >>
 
-Returns a reference to a new Annotation object.  The B<-element> argument
-is required and should be a C<PPI::Token::Comment> that conforms to the
-C<"## no critic"> syntax.
+Returns a reference to a new Annotation object.  The B<-element>
+argument is required and should be a C<PPI::Token::Comment> that
+conforms to the C<"## no critic"> syntax.
+
 
 =back
+
 
 =head1 METHODS
 
@@ -276,41 +291,52 @@ C<"## no critic"> syntax.
 
 =item C<< disables_line( $line ) >>
 
-Returns true if this Annotation disables C<$line> for any (or all) Policies.
+Returns true if this Annotation disables C<$line> for any (or all)
+Policies.
+
 
 =item C<< disables_policy( $policy_object ) >>
 
 =item C<< disables_policy( $policy_name ) >>
 
-Returns true if this Annotation disables C<$polciy_object> or C<$policy_name>
-at any (or all) lines.
+Returns true if this Annotation disables C<$polciy_object> or
+C<$policy_name> at any (or all) lines.
+
 
 =item C<< disables_all_policies() >>
 
-Returns true if this Annotation disables all Policies at any (or all) lines.
-If this method returns true, C<disabled_policies> will return an empty list.
+Returns true if this Annotation disables all Policies at any (or all)
+lines.  If this method returns true, C<disabled_policies> will return
+an empty list.
+
 
 =item C<< effective_range() >>
 
-Returns a two-element list, representing the first and last line numbers where
-this Annotation has effect.
+Returns a two-element list, representing the first and last line
+numbers where this Annotation has effect.
+
 
 =item C<< disabled_policies() >>
 
-Returns a list of the names of the Policies that are affected by this Annotation.
-If this list is empty, then it means that all Policies are affected by this
-Annotation, and C<disables_all_policies()> should return true.
+Returns a list of the names of the Policies that are affected by this
+Annotation.  If this list is empty, then it means that all Policies
+are affected by this Annotation, and C<disables_all_policies()> should
+return true.
+
 
 =item C<< element() >>
 
-Returns the L<PPI::Element> where this annotation started.  This is typically
-an instance of L<PPI::Token::Comment>.
+Returns the L<PPI::Element> where this annotation started.  This is
+typically an instance of L<PPI::Token::Comment>.
+
 
 =back
+
 
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+
 
 =head1 COPYRIGHT
 

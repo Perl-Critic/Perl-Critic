@@ -279,6 +279,12 @@ slick graphical interface to Perl-Critic.  For details, go to
 L<http://www.activestate.com/perl_dev_kit>
 
 
+=head1 INTERFACE SUPPORT
+
+This is considered to be a public class.  Any changes to its interface
+will go through a deprecation cycle.
+
+
 =head1 CONSTRUCTOR
 
 =over

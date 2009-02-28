@@ -63,6 +63,12 @@ This handles various issues with Perl, the language, that aren't necessarily
 L<PPI> related.
 
 
+=head1 INTERFACE SUPPORT
+
+This is considered to be a public module.  Any changes to its
+interface will go through a deprecation cycle.
+
+
 =head1 IMPORTABLE SUBROUTINES
 
 =over

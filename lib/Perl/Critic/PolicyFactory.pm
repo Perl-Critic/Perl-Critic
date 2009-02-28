@@ -342,6 +342,12 @@ L<Perl::Critic::Policy|Perl::Critic::Policy> objects with the user's
 preferred parameters. There are no user-serviceable parts here.
 
 
+=head1 INTERFACE SUPPORT
+
+This is considered to be a non-public class.  Its interface is subject
+to change without notice.
+
+
 =head1 CONSTRUCTOR
 
 =over

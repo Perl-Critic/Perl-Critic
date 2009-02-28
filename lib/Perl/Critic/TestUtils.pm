@@ -382,6 +382,12 @@ __END__
 Perl::Critic::TestUtils - Utility functions for testing new Policies.
 
 
+=head1 INTERFACE SUPPORT
+
+This is considered to be a public module.  Any changes to its
+interface will go through a deprecation cycle.
+
+
 =head1 SYNOPSIS
 
     use Perl::Critic::TestUtils qw(critique pcritique fcritique);

@@ -638,8 +638,14 @@ Perl::Critic::Command - Guts of L<perlcritic>.
 
 =head1 DESCRIPTION
 
-This is the implementation of the L<perlcritic> command.  You can use this to
-run the command without going through a command interpreter.
+This is the implementation of the L<perlcritic> command.  You can use
+this to run the command without going through a command interpreter.
+
+
+=head1 INTERFACE SUPPORT
+
+This is considered to be a public class.  However, its interface is
+experimental, and will likely change.
 
 
 =head1 IMPORTABLE SUBROUTINES
@@ -648,9 +654,10 @@ run the command without going through a command interpreter.
 
 =item C<run()>
 
-Does the equivalent of the L<perlcritic> command.  Unfortunately, at present,
-this doesn't take any parameters but uses C<@ARGV> to get its input instead.
-Count on this changing; don't count on the current interface.
+Does the equivalent of the L<perlcritic> command.  Unfortunately, at
+present, this doesn't take any parameters but uses C<@ARGV> to get its
+input instead.  Count on this changing; don't count on the current
+interface.
 
 
 =back
@@ -658,8 +665,8 @@ Count on this changing; don't count on the current interface.
 
 =head1 TO DO
 
-Make C<run()> take parameters.  The equivalent of C<@ARGV> should be passed as
-a reference.
+Make C<run()> take parameters.  The equivalent of C<@ARGV> should be
+passed as a reference.
 
 Turn this into an object.
 

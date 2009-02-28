@@ -294,6 +294,12 @@ L<Perl::Critic::Policy|Perl::Critic::Policy> subclasses must return a
 list of these Perl::Critic::Violation objects.
 
 
+=head1 INTERFACE SUPPORT
+
+This is considered to be a public class.  Any changes to its interface
+will go through a deprecation cycle.
+
+
 =head1 CONSTRUCTOR
 
 =over

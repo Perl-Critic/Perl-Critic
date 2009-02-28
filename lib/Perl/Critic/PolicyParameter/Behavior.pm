@@ -68,6 +68,12 @@ All subclasses have singleton instances held onto by
 L<Perl::Critic::PolicyParameter|Perl::Critic::PolicyParameter>.
 
 
+=head1 INTERFACE SUPPORT
+
+This is considered to be a non-public class.  Its interface is subject
+to change without notice.
+
+
 =head1 METHODS
 
 =over

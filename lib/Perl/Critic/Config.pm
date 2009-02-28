@@ -909,6 +909,12 @@ need to instantiate Perl::Critic::Config directly because the
 Perl::Critic constructor will do it for you.
 
 
+=head1 INTERFACE SUPPORT
+
+This is considered to be a non-public class.  Its interface is subject
+to change without notice.
+
+
 =head1 CONSTRUCTOR
 
 =over

@@ -239,6 +239,12 @@ that excess intimacy.  If future versions of PPI gain better
 accessors, this package will start using those.
 
 
+=head1 INTERFACE SUPPORT
+
+This is considered to be a public module.  Any changes to its
+interface will go through a deprecation cycle.
+
+
 =head1 IMPORTABLE SUBS
 
 =over
