@@ -1,5 +1,6 @@
 accessor
 accessors
+ActiveState
 autoflushes
 AUTOLOAD
 backticks
@@ -41,6 +42,7 @@ memoization
 metacharacters
 Metadata
 metadata
+misterwhipple
 multi-line
 mutators
 namespace
@@ -52,17 +54,21 @@ perlcritic
 perlcriticrc
 perldoc
 Perlish
+perlmonk
 perls
+PDK
 PolicyListing
 POSIX
 postfix
 PPI
+PPI's
 pragma
 pragmas
 pragmata
 prepend
 prepending
 programmatically
+ProhibitPunctuationVars
 readline
 Readonly
 refactor
