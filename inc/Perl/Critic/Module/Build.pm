@@ -26,14 +26,17 @@ sub ACTION_test {
 sub ACTION_authortest {
     my ($self) = @_;
 
-    $self->depends_on('build');
-    $self->depends_on('manifest');
-    $self->depends_on('distmeta');
-
-    $self->test_files( qw< t xt/author > );
-    $self->recursive_test_files(1);
-
+    $self->_authortest_dependencies();
     $self->depends_on('test');
+
+    return;
+}
+
+sub ACTION_authortestcover {
+    my ($self) = @_;
+
+    $self->_authortest_dependencies();
+    $self->depends_on('testcover');
 
     return;
 }
@@ -44,6 +47,19 @@ sub ACTION_distdir {
     $self->depends_on('authortest');
 
     return $self->SUPER::ACTION_distdir();
+}
+
+
+sub _authortest_dependencies {
+    my ($self) = @_;
+
+    $self->depends_on('build');
+    $self->depends_on('distmeta');
+
+    $self->test_files( qw< t xt/author > );
+    $self->recursive_test_files(1);
+
+    return;
 }
 
 
@@ -90,6 +106,12 @@ other purposes or who had done a checkout of the code repository would
 run those tests, which would fail, and we'd get bug reports for
 something not expected to run elsewhere.  Now, you've got to
 explicitly ask for the author tests to be run.
+
+
+=item C<ACTION_authortestcover()>
+
+As C<authortest> is to the standard C<test> action, C<authortestcover>
+is to the standard C<testcover> action.
 
 
 =item C<ACTION_distdir()>
