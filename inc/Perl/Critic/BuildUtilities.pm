@@ -18,6 +18,8 @@ our $VERSION = '1.097_01';
 use base qw{ Exporter };
 
 our @EXPORT_OK = qw<
+    required_module_versions
+    build_required_module_versions
     recommended_module_versions
     test_wrappers_to_generate
     get_PL_files
@@ -27,6 +29,59 @@ our @EXPORT_OK = qw<
 
 
 use Devel::CheckOS qw< os_is >;
+
+
+sub required_module_versions {
+    return (
+        'B::Keywords'               => 1.05,
+        'Carp'                      => 0,
+        'Config::Tiny'              => 2,
+        'English'                   => 0,
+        'Exception::Class'          => 1.23,
+        'Exporter'                  => 0,
+        'File::Basename'            => 0,
+        'File::Find'                => 0,
+        'File::Path'                => 0,
+        'File::Spec'                => 0,
+        'File::Spec::Unix'          => 0,
+        'File::Temp'                => 0,
+        'Getopt::Long'              => 0,
+        'IO::String'                => 0,
+        'List::MoreUtils'           => 0,
+        'List::Util'                => 0,
+        'Module::Pluggable'         => 3.1,
+        'PPI'                       => 1.203,
+        'PPI::Document'             => 1.203,
+        'PPI::Document::File'       => 1.203,
+        'PPI::Node'                 => 1.203,
+        'PPI::Token::Quote::Single' => 1.203,
+        'PPI::Token::Whitespace'    => 1.203,
+        'Pod::PlainText'            => 0,
+        'Pod::Select'               => 0,
+        'Pod::Usage'                => 0,
+        'Readonly'                  => 1.03,
+        'Scalar::Util'              => 0,
+        'String::Format'            => 1.13,
+        'base'                      => 0,
+        'charnames'                 => 0,
+        'overload'                  => 0,
+        'strict'                    => 0,
+        'version'                   => 0,
+        'warnings'                  => 0,
+        'overload'                  => 0,
+        'strict'                    => 0,
+        'version'                   => 0,
+        'warnings'                  => 0,
+    );
+}
+
+
+sub build_required_module_versions {
+    return (
+        'lib'           => 0,
+        'Test::More'    => 0,
+    );
+}
 
 
 sub recommended_module_versions {
