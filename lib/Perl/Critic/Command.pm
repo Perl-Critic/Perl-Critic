@@ -133,10 +133,10 @@ sub _dispatch_special_requests {
     if ( $opts{-options}         ) { pod2usage( -verbose => 1 )  }  #Exits
     if ( $opts{-man}             ) { pod2usage( -verbose => 2 )  }  #Exits
     if ( $opts{-version}         ) { display_version()           }  #Exits
-    if ( $opts{-list}            ) { render_policy_listing();    }  #Exits
-    if ( $opts{'-list-themes'}   ) { render_theme_listing();     }  #Exits
-    if ( $opts{'-profile-proto'} ) { render_profile_prototype(); }  #Exits
-    if ( $opts{-doc}             ) { policy_docs( %opts );       }  #Exits
+    if ( $opts{-list}            ) { render_policy_listing()     }  #Exits
+    if ( $opts{'-list-themes'}   ) { render_theme_listing()      }  #Exits
+    if ( $opts{'-profile-proto'} ) { render_profile_prototype()  }  #Exits
+    if ( $opts{-doc}             ) { render_policy_docs( %opts ) }  #Exits
     return 1;
 }
 
@@ -280,7 +280,7 @@ sub _critique {
 
 #------------------------------------------------------------------------------
 
-sub _render_report {
+sub render_report {
 
     my ( $file, $opts_ref, @violations ) = @_;
 
@@ -539,7 +539,7 @@ sub _at_tty {
 
 #-----------------------------------------------------------------------------
 
-sub _render_policy_listing {
+sub render_policy_listing {
 
     require Perl::Critic::PolicyListing;
     require Perl::Critic;
@@ -554,7 +554,7 @@ sub _render_policy_listing {
 
 #-----------------------------------------------------------------------------
 
-sub _render_theme_listing {
+sub render_theme_listing {
 
     require Perl::Critic::ThemeListing;
     require Perl::Critic;
@@ -569,7 +569,7 @@ sub _render_theme_listing {
 
 #-----------------------------------------------------------------------------
 
-sub _render_profile_prototype {
+sub render_profile_prototype {
 
     require Perl::Critic::ProfilePrototype;
     require Perl::Critic;
@@ -584,7 +584,7 @@ sub _render_profile_prototype {
 
 #-----------------------------------------------------------------------------
 
-sub _policy_docs {
+sub render_policy_docs {
 
     my (%opts) = @_;
     my $pattern = delete $opts{-doc};
@@ -606,7 +606,7 @@ sub _policy_docs {
 
 #-----------------------------------------------------------------------------
 
-sub _display_version {
+sub display_version {
     _out "$VERSION\n";
     exit $EXIT_SUCCESS;
 }
