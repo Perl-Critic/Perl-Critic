@@ -13,7 +13,7 @@ use warnings;
 use Readonly;
 use English qw( -no_match_vars );
 
-use PPI::Token::Magic qw( %magic );
+use PPI::Token::Magic;
 
 use Perl::Critic::Utils
     qw{ :characters :severities :data_conversion :booleans };
