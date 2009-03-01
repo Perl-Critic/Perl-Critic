@@ -160,16 +160,17 @@ sub _caching_finder {
 #----------------------------------------------------------------------------
 # These also replace commonly used methods on PPI::Element with versions
 # that cache the results.  I'm not really sure how much of win these are.
+# TODO: Need to weaken these references, or else we get memory leaks.
 
-#use PPI::Element;
+use PPI::Element;
 
-#my $orig_sprev  = *PPI::Element::sprevious_sibling{CODE};
-#*{PPI::Element::sprevious_sibling} = \&caching_sprev;
-#sub caching_sprev { return $_[0]->{_sprev} ||= &$orig_sprev; };
+my $orig_sprev  = *PPI::Element::sprevious_sibling{CODE};
+*{PPI::Element::sprevious_sibling} = \&caching_sprev;
+sub caching_sprev { return $_[0]->{_sprev} ||= &$orig_sprev; };
 
-#my $orig_snext = *PPI::Element::snext_sibling{CODE};
-#*{PPI::Element::snext_sibling} = \&caching_snext;
-#sub caching_snext { return $_[0]->{_snext} ||= &$orig_snext; };
+my $orig_snext = *PPI::Element::snext_sibling{CODE};
+*{PPI::Element::snext_sibling} = \&caching_snext;
+sub caching_snext { return $_[0]->{_snext} ||= &$orig_snext; };
 
 
 #----------------------------------------------------------------------------
