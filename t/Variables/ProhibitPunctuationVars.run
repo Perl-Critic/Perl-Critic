@@ -45,7 +45,7 @@ print $!;
 
 ## name PPI::Token::Quote::Double Interpolation: violations
 ## parms { allow => '$@ $!' }
-## failures 5
+## failures 7
 ## cut
 
 print "$+";
@@ -53,6 +53,8 @@ print "This is my $+. is it not nifty?";
 print "This is my $+. is it not $@?";
 print "this \n should $+\n violate";
 print "as \n$+ should this";
+print "${\($$)}";
+print "${[$$]}";
 
 ## name PPI::Token::Quote::Double Interpolation: non-violations
 ## parms { allow => '$@ $!' }
@@ -214,7 +216,7 @@ print "$:";    # 19 of 59  Exception made for $:
 #-----------------------------------------------------------------------------
 
 ## name Quoted String Interpolation - exhaustive tests
-## failures 58
+## failures 57
 ## cut
 
 print "$!";    # 1 of 59
@@ -246,7 +248,7 @@ print "$?";      # 25 of 59
 print "$@";      # 26 of 59
 print "$[";      # 27 of 59
 
-print "$\\";      # 28 of 59  BROKEN, copied to TODO
+#print "$\\";      # 28 of 59  BROKEN, copied to TODO
 print "$]";      # 29 of 59
 print "$^";      # 30 of 59
 print "$^A";     # 31 of 59
@@ -302,7 +304,7 @@ print "as \n$+ should this";
 #-----------------------------------------------------------------------------
 
 ## name String Interpolation - thorough-mode violations
-## failures 3
+## failures 4
 ## parms { string_mode => 'thorough' }
 ## cut
 
@@ -314,6 +316,8 @@ $!more stuff
 $/thingy
 $$ $; $= $/
 DOUBLE_QUOTE
+print "blahblah ${\($$))}" # sneaky scalar dereference syntax
+
 
 ## name String Interpolation - thorough-mode special case violations
 ## failures 16
@@ -368,10 +372,7 @@ print "$::";
 print "$:: ";
 print "$:: something else";
 
-#print "$_";
-#print "$_ ";
-#print "$_ something else";
-#print "$_varname";
+print "$_varname";
 
 # related to $#
 print "$#foovar";

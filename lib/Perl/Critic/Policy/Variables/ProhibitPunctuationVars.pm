@@ -102,7 +102,7 @@ sub initialize_if_enabled {
         ) . ')';
 
     $_magic_regexp = qr{
-            (?: ^ | [^\\] )        # beginning-of-line or any non-backslash
+            (?: \A | [^\\] )        # beginning-of-string or any non-backslash
             (?: \\\\ )*            # zero or more double-backslashes
             ( $magic_alternation ) # any magic punctuation variable
         }xsm;
@@ -227,20 +227,19 @@ MATCH:
 
             next MATCH if $c =~ m/$_scalar_dereference/xms;
             next MATCH
-                if $c eq '$#$'
-                    or $c eq '$#{';    # index dereferencing cast
+                if $c eq '$#$' or $c eq '$#{';    # index dereferencing cast
             next MATCH if $c =~ m/$_array_index_thingy/xms;
 
-            if ( $c =~ m/$_possible_escaped_char_magic/xms ) {
-
-                # Not yet implemented. May not ever be necessary.
-            }
+            # PPI's checks for long escaped vars like $^WIDE_SYSTEM_CALLS
+            # appear to be erroneous.
+            # if ( $c =~ m/$_possible_escaped_char_magic/xms ) {
+            # }
 
             next MATCH if $c =~ m/$_dollar_crunch_cast/xms;
         }
 
         # The additional checking that PPI::Token::Magic does at this point
-        # is not necessary here.
+        # is not necessary here, in an interpolated string context.
 
         $matches{$match} = 1;
     }
@@ -299,8 +298,8 @@ Other configuration options  control  the  parsing  of  interpolated
 strings in the search for forbidden variables. They have  no  effect
 on detecting punctuation variables outside of interpolated  strings.
 
- [Variables::ProhibitPunctuationVars]
- string_mode = thorough
+  [Variables::ProhibitPunctuationVars]
+  string_mode = thorough
 
 The option C<string_mode>  controls  whether  and  how  interpolated
 strings are searched for punctuation variables. Setting
@@ -329,6 +328,7 @@ Punctuation variables that confuse PPI's document parsing may not be
 detected  correctly  or  at  all,  and  may  prevent  detection   of
 subsequent ones. In particular, C<$"> is known to cause difficulties
 in interpolated strings.
+
 
 =head1 CAVEATS
 
