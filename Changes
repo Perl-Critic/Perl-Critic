@@ -44,11 +44,6 @@
       work correctly.
     * Variables::ProhibitPackageVars has had FindBin and Log::Log4perl added
       to the default exemptions.
-    * Variables::ProhibitPunctuationVars gained the ability to look inside
-      interpolated strings.  Doing this correctly is challenging and things
-      may not work out right; how the policy does this can be controlled via
-      the new "string_mode" option.  Contributed by Edgar Whipple
-      <perlmonk at misterwhipple dot com>.
     * Variables::ProhibitReusedNames now has an "allow" option to specify
       names that can be reused.  It defaults to enabling $self and $class.  RT
       #42767.
