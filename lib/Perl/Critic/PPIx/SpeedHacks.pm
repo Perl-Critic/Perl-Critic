@@ -66,17 +66,33 @@ sub caching_find {
 
     # Build the class cache if it doesn't exist.  This happens at most
     # once per Perl::Critic::Node instance.  %elements_of will be
-    # populated as a side-effect of calling the $finder_sub coderef
-    # that is produced by the caching_finder() closure.
+    # populated with arrays of elements, keyed by the type of element
+    
     if ( !$self->{_elements_of} ) {
 
         my $cache = {};
+        
+        # For a PPI::Document node, the cache actually contains a reference 
+        # to the node itself.  This is to enable Perl::Critic::Document
+        # to search itself.  We may be able to tweak P::C::D so that this
+        # anomaly isn't necesssary.
+        
+        if ($type eq 'PPI::Document') {
+            $cache->{$type} = [ $self ];
+            weaken($cache->{$type}->[0]);
+        }
+
+        # _caching_finder() returns a reference to a function that populates
+        # the cache that you specify.  We then call PPI's find() method,
+        # using that function as the callback.  Thus, our cache is populated
+        # as a side effect of the find().
+        
         my $finder_coderef = _caching_finder( $cache );
         &$orig_find( $self, $finder_coderef );
         $self->{_elements_of} = $cache;
     }
 
-    # find() must return false-but-defined on fail
+    # find() must return false-but-defined on failure.
     return $self->{_elements_of}->{$wanted} || q{};
 }
 
