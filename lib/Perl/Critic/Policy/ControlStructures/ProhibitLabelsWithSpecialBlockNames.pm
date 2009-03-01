@@ -16,7 +16,7 @@ use Readonly;
 use Perl::Critic::Utils qw{ :severities hashify };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.097_001';
+our $VERSION = '1.097_002';
 
 Readonly::Hash my %SPECIAL_BLOCK_NAMES =>
     hashify( qw< BEGIN END INIT CHECK UNITCHECK > );
