@@ -54,6 +54,7 @@ sub _authortest_dependencies {
     my ($self) = @_;
 
     $self->depends_on('build');
+    $self->depends_on('manifest');
     $self->depends_on('distmeta');
 
     $self->test_files( qw< t xt/author > );
