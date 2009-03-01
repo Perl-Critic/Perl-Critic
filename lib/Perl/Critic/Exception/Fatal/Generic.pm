@@ -51,6 +51,12 @@ Perl::Critic::Exception::Fatal::Generic - A problem for which there is no specia
 A general problem, e.g. I/O errors and problems that may or not be bugs.
 
 
+=head1 INTERFACE SUPPORT
+
+This is considered to be a public class.  Any changes to its interface
+will go through a deprecation cycle.
+
+
 =head1 METHODS
 
 Only inherited ones.

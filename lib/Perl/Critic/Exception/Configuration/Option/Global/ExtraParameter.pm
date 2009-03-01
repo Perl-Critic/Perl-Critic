@@ -69,6 +69,12 @@ for an option that L<Perl::Critic|Perl::Critic> doesn't have, whether
 from a F<.perlcriticrc>, another profile file, or command line.
 
 
+=head1 INTERFACE SUPPORT
+
+This is considered to be a public class.  Any changes to its interface
+will go through a deprecation cycle.
+
+
 =head1 CLASS METHODS
 
 =over

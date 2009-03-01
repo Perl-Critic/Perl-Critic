@@ -52,6 +52,12 @@ A bug in a policy was found, e.g. it didn't implement a method that it should
 have.
 
 
+=head1 INTERFACE SUPPORT
+
+This is considered to be a public class.  Any changes to its interface
+will go through a deprecation cycle.
+
+
 =head1 METHODS
 
 Only inherited ones.

@@ -55,6 +55,12 @@ Perl::Critic::Exception::IO - A problem with input or output.
 The outside world can do nasty things to your poor, innocent code.
 
 
+=head1 INTERFACE SUPPORT
+
+This is considered to be a public class.  Any changes to its interface
+will go through a deprecation cycle.
+
+
 =head1 METHODS
 
 =over

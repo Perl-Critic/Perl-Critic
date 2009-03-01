@@ -55,6 +55,12 @@ Perl::Critic::Exception::Parse - The code doesn't look like code.
 There was a problem with PPI parsing source code.
 
 
+=head1 INTERFACE SUPPORT
+
+This is considered to be a public class.  Any changes to its interface
+will go through a deprecation cycle.
+
+
 =head1 METHODS
 
 =over

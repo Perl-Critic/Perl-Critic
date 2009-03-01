@@ -135,6 +135,12 @@ an object for collecting all the problems found so that the user can
 see them in one run.
 
 
+=head1 INTERFACE SUPPORT
+
+This is considered to be a public class.  Any changes to its interface
+will go through a deprecation cycle.
+
+
 =head1 METHODS
 
 =over

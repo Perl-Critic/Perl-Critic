@@ -52,6 +52,12 @@ A representation of a bug found in the code of
 L<Perl::Critic|Perl::Critic>.
 
 
+=head1 INTERFACE SUPPORT
+
+This is considered to be a public class.  Any changes to its interface
+will go through a deprecation cycle.
+
+
 =head1 METHODS
 
 Only inherited ones.

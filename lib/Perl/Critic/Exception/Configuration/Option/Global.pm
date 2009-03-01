@@ -47,6 +47,12 @@ profile file, or command line.
 This is an abstract class.  It should never be instantiated.
 
 
+=head1 INTERFACE SUPPORT
+
+This is considered to be a public class.  Any changes to its interface
+will go through a deprecation cycle.
+
+
 =head1 AUTHOR
 
 Elliot Shank <perl@galumph.com>
