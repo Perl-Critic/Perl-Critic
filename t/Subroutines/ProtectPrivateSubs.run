@@ -124,6 +124,33 @@ $self->Other::Package::_baz();
 
 #-----------------------------------------------------------------------------
 
+## name private_name_regex passing
+## failures 0
+## parms { private_name_regex => '_(?!_)\w+' }
+## cut
+
+Other::Package::__foo();
+Other::Package->__bar();
+Other::Package::__foo;
+Other::Package->__bar;
+$self->Other::Package::__baz();
+
+#-----------------------------------------------------------------------------
+
+## name private_name_regex failure
+## failures 5
+## parms { private_name_regex => '_(?!_)\w+' }
+## cut
+
+Other::Package::_foo();
+Other::Package->_bar();
+Other::Package::_foo;
+Other::Package->_bar;
+$self->Other::Package::_baz();
+
+#-----------------------------------------------------------------------------
+
+
 ##############################################################################
 #      $URL$
 #     $Date$

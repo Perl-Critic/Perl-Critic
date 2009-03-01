@@ -342,7 +342,6 @@ interpolating  and  the  C<string_mode>   option   will   go   away.
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
-Edgar Whipple <perlmonk at misterwhipple dot com>
 
 
 =head1 COPYRIGHT

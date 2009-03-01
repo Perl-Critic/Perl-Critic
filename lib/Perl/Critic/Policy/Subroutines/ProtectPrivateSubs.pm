@@ -8,8 +8,11 @@
 package Perl::Critic::Policy::Subroutines::ProtectPrivateSubs;
 
 use 5.006001;
+
 use strict;
 use warnings;
+
+use English qw< $EVAL_ERROR -no_match_vars >;
 use Readonly;
 
 use Perl::Critic::Utils qw{ :severities $EMPTY };
@@ -27,9 +30,15 @@ Readonly::Scalar my $EXPL => q{Use published APIs};
 sub supported_parameters {
     return (
         {
+            name            => 'private_name_regex',
+            description     => 'Pattern that determines what a private subroutine is.',
+            default_string  => '\b_\w+\b',
+            behavior        => 'string',
+        },
+        {
             name            => 'allow',
             description     =>
-                q<Subroutines beginning with '_' to allow under this policy.>,
+                q<Subroutines matching the private name regex to allow under this policy.>,
             default_string  => $EMPTY,
             behavior        => 'string list',
             list_always_present_values => [ qw<
@@ -84,19 +93,39 @@ sub applies_to           { return 'PPI::Token::Word'     }
 
 #-----------------------------------------------------------------------------
 
+sub _parse_private_name_regex {
+    my ($self, $parameter, $config_string) = @_;
+
+    my $regex;
+    eval { $regex = qr/$config_string/; 1 }
+        or $self->throw_parameter_value_exception(
+            'private_name_regex',
+            $config_string,
+            undef,
+            "is not a valid regular expression: $EVAL_ERROR",
+        );
+
+    $self->__set_parameter_value($parameter, $regex);
+
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    if (my $psib = $elem->sprevious_sibling()) {
-        my $psib_name = $psib->content();
-        return if $psib_name eq 'package';
-        return if $psib_name eq 'require';
-        return if $psib_name eq 'use';
+    if ( my $prior = $elem->sprevious_sibling() ) {
+        my $prior_name = $prior->content();
+        return if $prior_name eq 'package';
+        return if $prior_name eq 'require';
+        return if $prior_name eq 'use';
     }
 
-    if ( $self->_is_other_pkg_private_function($elem)
-         || $self->_is_other_pkg_private_method($elem) )
-    {
+    if (
+            $self->_is_other_pkg_private_function($elem)
+        or  $self->_is_other_pkg_private_method($elem)
+    ) {
         return $self->violation( $DESC, $EXPL, $elem );
     }
 
@@ -105,29 +134,36 @@ sub violates {
 
 sub _is_other_pkg_private_function {
     my ( $self, $elem ) = @_;
-    return $elem =~ m{ (\w+)::_\w+ \z }xms
-        && $elem !~ m{ \A SUPER::_\w+ \z }xms
-        && !$self->{_allow}{$elem};
+
+    my $private_name_regex = $self->{_private_name_regex};
+    my $content = $elem->content();
+    return
+            $content =~ m< \w+::$private_name_regex \z >xms
+        &&  $content !~ m< \A SUPER::$private_name_regex \z >xms
+        &&  ! $self->{_allow}{$content};
 }
 
 sub _is_other_pkg_private_method {
     my ( $self, $elem ) = @_;
 
-    # look for structures like "Some::Package->_foo()"
-    $elem =~ m{ \A _\w+ \z }xms || return;
-    my $op = $elem->sprevious_sibling() || return;
-    $op eq q{->} || return;
+    my $private_name_regex = $self->{_private_name_regex};
+    my $content = $elem->content();
 
-    my $pkg = $op->sprevious_sibling() || return;
-    $pkg->isa('PPI::Token::Word') || return;
+    # look for structures like "Some::Package->_foo()"
+    return if $content !~ m< \A $private_name_regex \z >xms;
+    my $operator = $elem->sprevious_sibling() or return;
+    return if $operator->content() ne q[->];
+
+    my $package = $operator->sprevious_sibling() or return;
+    return if not $package->isa('PPI::Token::Word');
 
     # sometimes the previous sib is a keyword, as in:
     # shift->_private_method();  This is typically used as
     # shorthand for "my $self=shift; $self->_private_method()"
-    return if $pkg eq 'shift' or $pkg eq '__PACKAGE__';
+    return if $package eq 'shift' or $package eq '__PACKAGE__';
 
     # Maybe the user wanted to exempt this explicitly.
-    return if $self->{_allow}{"${pkg}::$elem"};
+    return if $self->{_allow}{"${package}::$content"};
 
     return 1;
 }
@@ -158,39 +194,48 @@ indicate private methods and variables by inserting a leading
 underscore before the identifier.  This policy catches attempts to
 access private variables from outside the package itself.
 
-The subroutines in the POSIX package which begin with an underscore
-(e.g. POSIX::_POSIX_ARG_MAX) are not flagged as errors by this policy.
+The subroutines in the L<POSIX> package which begin with an underscore
+(e.g. C<POSIX::_POSIX_ARG_MAX>) are not flagged as errors by this
+policy.
 
 
 =head1 CONFIGURATION
 
-The user can configure additional subroutines to accept by specifying
-them in a space-delimited list to the C<allow> option:
+You can define what a private subroutine name looks like by specifying
+a regular expresion for the C<private_name_regex> option in your
+F<.perlcriticrc>:
+
+    [Subroutines::ProtectPrivateSubs]
+    private_name_regex = _(?!_)\w+
+
+The above example is a way of saying that subroutines that start with
+a double underscore are not considered to be private.  (Perl::Critic,
+in its implementation, uses leading double underscores to indicate a
+distribution-private subroutine-- one that is allowed to be invoked by
+other Perl::Critic modules, but not by anything outside of
+Perl::Critic.)
+
+You can configure additional subroutines to accept by specifying them
+in a space-delimited list to the C<allow> option:
 
     [Subroutines::ProtectPrivateSubs]
     allow = FOO::_bar FOO::_baz
 
 These are added to the default list of exemptions from this policy.
 Allowing a subroutine also allows the corresponding method call. So
-C<< FOO::_bar >> in the above example allows both C<< FOO::_bar() >> and
-C<< FOO->_bar() >>.
-
-
-=head1 TO DO
-
-Add an option for specifying a regular expression for what a private
-subroutine looks like.
+C<< FOO::_bar >> in the above example allows both C<< FOO::_bar() >>
+and C<< FOO->_bar() >>.
 
 
 =head1 HISTORY
 
-This policy is inspired by a similar test in L<B::Lint|B::Lint>
+This policy is inspired by a similar test in L<B::Lint|B::Lint>.
 
 
 =head1 BUGS
 
 Doesn't forbid C<< $pkg->_foo() >> because it can't tell the
-difference between that and C<< $self->_foo() >>
+difference between that and C<< $self->_foo() >>.
 
 
 =head1 SEE ALSO
