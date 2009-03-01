@@ -34,7 +34,10 @@ sub applies_to           { return 'PPI::Statement::Compound' }
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    if ( $elem->first_element() eq 'unless' ) {
+    my $first_elem = $elem->first_element();
+    return if not $first_elem;
+    
+    if ( $first_elem->content() eq 'unless' ) {
         return $self->violation( $DESC, $EXPL, $elem );
     }
     return;    #ok!

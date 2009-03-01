@@ -34,7 +34,7 @@ sub applies_to           { return 'PPI::Token::Word'  }
 sub violates {
     my ($self, $elem, undef) = @_;
 
-    return if $elem ne 'select';
+    return if $elem->content() ne 'select';
     return if ! is_function_call($elem);
 
     my @arguments = parse_arg_list($elem);

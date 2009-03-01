@@ -47,10 +47,10 @@ sub violates {
     my ( $self, $elem, undef ) = @_;
 
     my $alternative;
-    if ( $elem eq 'warn' ) {
+    if ( $elem->content() eq 'warn' ) {
         $alternative = 'carp';
     }
-    elsif ( $elem eq 'die' ) {
+    elsif ( $elem->content() eq 'die' ) {
         $alternative = 'croak';
     }
     else {

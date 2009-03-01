@@ -44,7 +44,7 @@ sub violates {
     return if !$second_child;
     return if $second_child->isa('PPI::Structure::ForLoop');
 
-    return if $second_child eq 'my';
+    return if $second_child->content() eq 'my';
 
     return $self->violation( $DESC, $EXPL, $elem );
 }

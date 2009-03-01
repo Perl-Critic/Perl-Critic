@@ -46,7 +46,7 @@ sub applies_to           { return 'PPI::Token::Word'  }
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    return if $elem ne 'eval';
+    return if $elem->content() ne 'eval';
     return if not is_function_call($elem);
 
     my $argument = first_arg($elem);

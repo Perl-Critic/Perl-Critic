@@ -34,12 +34,12 @@ sub applies_to           { return 'PPI::Token::Word'         }
 sub violates {
     my ($self, $elem, undef) = @_;
 
-    return if $elem ne 'substr';
+    return if $elem->content() ne 'substr';
     return if ! is_function_call($elem);
 
     my $sib = $elem;
     while ($sib = $sib->snext_sibling()) {
-        if ( $sib->isa( 'PPI::Token::Operator') && $sib eq q{=} ) {
+        if ( $sib->isa( 'PPI::Token::Operator') && $sib->content() eq q{=} ) {
             return $self->violation( $DESC, $EXPL, $sib );
         }
     }

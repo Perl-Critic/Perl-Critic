@@ -34,7 +34,7 @@ sub applies_to           { return 'PPI::Token::Word'     }
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    return if $elem ne 'close';
+    return if $elem->content() ne 'close';
     return if ! is_unchecked_call( $elem );
 
     return $self->violation( $DESC, $EXPL, $elem );

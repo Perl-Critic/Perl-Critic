@@ -116,7 +116,7 @@ sub _is_other_pkg_private_method {
     # look for structures like "Some::Package->_foo()"
     $elem =~ m{ \A _\w+ \z }xms || return;
     my $op = $elem->sprevious_sibling() || return;
-    $op eq q{->} || return;
+    $op->content() eq q{->} || return;
 
     my $pkg = $op->sprevious_sibling() || return;
     $pkg->isa('PPI::Token::Word') || return;
@@ -124,7 +124,7 @@ sub _is_other_pkg_private_method {
     # sometimes the previous sib is a keyword, as in:
     # shift->_private_method();  This is typically used as
     # shorthand for "my $self=shift; $self->_private_method()"
-    return if $pkg eq 'shift' or $pkg eq '__PACKAGE__';
+    return if $pkg->content() eq 'shift' or $pkg->content() eq '__PACKAGE__';
 
     # Maybe the user wanted to exempt this explicitly.
     return if $self->{_allow}{"${pkg}::$elem"};

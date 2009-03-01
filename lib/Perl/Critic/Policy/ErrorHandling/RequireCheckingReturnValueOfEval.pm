@@ -59,7 +59,7 @@ sub violates {
 
     if ( $following and $following->isa('PPI::Token::Operator') ) {
         return if $BOOLEAN_OPERATORS{ $following->content() };
-        return if q{?} eq $following->content;
+        return if q{?} eq $following->content();
     }
 
     return $self->violation($DESC, $EXPL, $elem);

@@ -84,7 +84,7 @@ sub _count_args {
     my $statement = shift @statements;
     my @elements = $statement->schildren();
     my $operand = pop @elements;
-    while ($operand && $operand->isa('PPI::Token::Structure') && q{;} eq $operand) {
+    while ($operand && $operand->isa('PPI::Token::Structure') && q{;} eq $operand->content()) {
        $operand = pop @elements;
     }
     return 0 if !$operand;
@@ -95,9 +95,9 @@ sub _count_args {
     return 0 if !$operator->isa('PPI::Token::Operator');
     return 0 if q{=} ne $operator;
 
-    if ($operand->isa('PPI::Token::Magic') && $AT_ARG eq $operand) {
+    if ($operand->isa('PPI::Token::Magic') && $AT_ARG eq $operand->content()) {
        return _count_list_elements(@elements);
-    } elsif ($operand->isa('PPI::Token::Word') && 'shift' eq $operand) {
+    } elsif ($operand->isa('PPI::Token::Word') && 'shift' eq $operand->content()) {
        return 1 + _count_args(@statements);
     }
 

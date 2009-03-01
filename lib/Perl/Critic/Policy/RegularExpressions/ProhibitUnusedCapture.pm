@@ -102,8 +102,8 @@ sub _enough_assignments {
     while (1) {
         return if !$psib;
         if ($psib->isa('PPI::Token::Operator')) {
-            last SIBLING if q{=} eq $psib;
-            return if q{!~} eq $psib;
+            last SIBLING if q{=} eq $psib->content();
+            return if q{!~} eq $psib->content();
         }
         $psib = $psib->sprevious_sibling;
     }
@@ -168,13 +168,13 @@ sub _symbol_is_slurpy {
 sub _has_array_sigil {
     my ($elem) = @_;  # Works on PPI::Token::Symbol and ::Cast
 
-    return q{@} eq substr $elem->content, 0, 1;
+    return q{@} eq substr $elem->content(), 0, 1;
 }
 
 sub _has_hash_sigil {
     my ($elem) = @_;  # Works on PPI::Token::Symbol and ::Cast
 
-    return q{%} eq substr $elem->content, 0, 1;
+    return q{%} eq substr $elem->content(), 0, 1;
 }
 
 sub _block_is_slurpy {
@@ -186,14 +186,14 @@ sub _block_is_slurpy {
 
 sub _is_preceded_by_array_or_hash_cast {
     my ($elem) = @_;
-    my $psib = $elem->sprevious_sibling;
+    my $psib = $elem->sprevious_sibling();
     my $cast;
     while ($psib && $psib->isa('PPI::Token::Cast')) {
         $cast = $psib;
-        $psib = $psib->sprevious_sibling;
+        $psib = $psib->sprevious_sibling();
     }
     return if !$cast;
-    my $sigil = substr $cast->content, 0, 1;
+    my $sigil = substr $cast->content(), 0, 1;
     return q{@} eq $sigil || q{%} eq $sigil;
 }
 
@@ -205,16 +205,16 @@ sub _is_in_slurpy_array_context {
 
     # look backward for explict regex operator
     my $psib = $elem->sprevious_sibling;
-    if ($psib && $psib eq q{=~}) {
+    if ($psib && $psib->content() eq q{=~}) {
         # Track back through value
         $psib = _skip_lhs($psib);
     }
 
     if (!$psib) {
-        my $parent = $elem->parent;
+        my $parent = $elem->parent();
         return if !$parent;
         if ($parent->isa('PPI::Statement')) {
-            $parent = $parent->parent;
+            $parent = $parent->parent();
             return if !$parent;
         }
         return 1 if $parent->isa('PPI::Structure::List');
@@ -226,7 +226,7 @@ sub _is_in_slurpy_array_context {
     }
     if ($psib->isa('PPI::Token::Operator')) {
         # most operators kill slurpiness (except assignment, which is handled elsewhere)
-        return 1 if q{,} eq $psib;
+        return 1 if q{,} eq $psib->content();
         return;
     }
     return 1;

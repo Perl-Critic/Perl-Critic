@@ -76,7 +76,7 @@ sub violates {
     return if $stmnt->isa('PPI::Statement::Compound');
 
     # Handle special cases
-    if ( $elem eq 'if' ) {
+    if ( $elem->content() eq 'if' ) {
         # Postfix 'if' allowed with loop breaks, or other
         # flow-controls like 'die', 'warn', and 'croak'
         return if $stmnt->isa('PPI::Statement::Break');
