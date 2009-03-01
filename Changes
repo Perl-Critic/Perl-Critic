@@ -7,6 +7,10 @@
       the new "string_mode" option.  Contributed by Edgar Whipple
       <perlmonk at misterwhipple dot com>.
 
+    * Grr.  There was access of a non-public variable in Term::ANSIColor that
+      changed in v2, so anyone with Term::ANSIColor v1 installed couldn't
+      install Perl::Critic (nor would it work if they got installed anyway).
+
 [1.097_001] Released on 2009-03-01
 
     Some Exciting News:

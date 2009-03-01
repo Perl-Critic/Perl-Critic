@@ -39,6 +39,39 @@ our $VERSION = '1.097_001';
 
 Readonly::Scalar my $SINGLE_POLICY_CONFIG_KEY => 'single-policy';
 
+Readonly::Hash my %TERM_ANSICOLOR_OPTIONS => hashify(
+    qw<
+        clear
+        reset
+        bold
+        dark
+        faint
+        underline
+        underscore
+        blink
+        reverse
+        concealed
+
+        black
+        red
+        green
+        yellow
+        blue
+        magenta
+        cyan
+        white
+
+        on_black
+        on_red
+        on_green
+        on_yellow
+        on_blue
+        on_magenta
+        on_cyan
+        on_white
+    >
+);
+
 #-----------------------------------------------------------------------------
 # Constructor
 
@@ -699,11 +732,13 @@ sub _validate_and_save_color_severity {
     $color_severity =~ s/ \s+\z //xms;
     $full_option_name =~ s/ _ /-/xmsg;
 
+    # Should we really be validating this?
     my $found_errors;
-    if (eval { require Term::ANSIColor; 1; }) {
-        foreach my $attr (words_from_string( $color_severity )) {
-            $Term::ANSIColor::attributes{$attr} ## no critic (ProhibitPackageVars)
-                or $found_errors = 1;
+    if ( eval { require Term::ANSIColor; 1; } ) {
+        foreach my $attribute ( words_from_string($color_severity) ) {
+            if ( not $TERM_ANSICOLOR_OPTIONS{$attribute} ) {
+                $found_errors = 1;
+            }
         }
     }
 
