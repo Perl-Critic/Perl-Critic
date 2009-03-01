@@ -29,7 +29,7 @@ use Perl::Critic::Utils qw{ :characters hashify };
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '1.097_01';
+our $VERSION = '1.097_001';
 
 Readonly::Array our @EXPORT_OK => qw(critique);
 

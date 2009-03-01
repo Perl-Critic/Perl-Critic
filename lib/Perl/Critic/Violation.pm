@@ -27,7 +27,7 @@ use Perl::Critic::Utils::POD qw<
 >;
 use Perl::Critic::Exception::Fatal::Internal qw< &throw_internal >;
 
-our $VERSION = '1.097_01';
+our $VERSION = '1.097_001';
 
 #Class variables...
 my $format = "%m at line %l, column %c. %e.\n"; # Default stringy format
