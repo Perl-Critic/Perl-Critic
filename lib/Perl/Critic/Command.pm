@@ -129,14 +129,14 @@ sub _parse_command_line {
 
 sub _dispatch_special_requests {
     my (%opts) = @_;
-    if ( $opts{-help}            ) { pod2usage( -verbose => 0 )  }  #Exits
-    if ( $opts{-options}         ) { pod2usage( -verbose => 1 )  }  #Exits
-    if ( $opts{-man}             ) { pod2usage( -verbose => 2 )  }  #Exits
-    if ( $opts{-version}         ) { display_version()           }  #Exits
-    if ( $opts{-list}            ) { render_policy_listing()     }  #Exits
-    if ( $opts{'-list-themes'}   ) { render_theme_listing()      }  #Exits
-    if ( $opts{'-profile-proto'} ) { render_profile_prototype()  }  #Exits
-    if ( $opts{-doc}             ) { render_policy_docs( %opts ) }  #Exits
+    if ( $opts{-help}            ) { pod2usage( -verbose => 0 )   }  #Exits
+    if ( $opts{-options}         ) { pod2usage( -verbose => 1 )   }  #Exits
+    if ( $opts{-man}             ) { pod2usage( -verbose => 2 )   }  #Exits
+    if ( $opts{-version}         ) { _display_version()           }  #Exits
+    if ( $opts{-list}            ) { _render_policy_listing()     }  #Exits
+    if ( $opts{'-list-themes'}   ) { _render_theme_listing()      }  #Exits
+    if ( $opts{'-profile-proto'} ) { _render_profile_prototype()  }  #Exits
+    if ( $opts{-doc}             ) { _render_policy_docs( %opts ) }  #Exits
     return 1;
 }
 
@@ -248,7 +248,7 @@ sub _critique {
             $number_of_violations += scalar @violations;
 
             if (not $opts_ref->{'-statistics-only'}) {
-                render_report( $file, $opts_ref, @violations )
+                _render_report( $file, $opts_ref, @violations )
             }
             1;
         }
@@ -272,7 +272,7 @@ sub _critique {
 
     if ( $opts_ref->{-statistics} or $opts_ref->{'-statistics-only'} ) {
         my $stats = $critic->statistics();
-        report_statistics( $opts_ref, $stats );
+        _report_statistics( $opts_ref, $stats );
     }
 
     return $number_of_violations, $had_error_in_file;
@@ -280,8 +280,7 @@ sub _critique {
 
 #------------------------------------------------------------------------------
 
-sub render_report {
-
+sub _render_report {
     my ( $file, $opts_ref, @violations ) = @_;
 
     # Only report the number of violations, if asked.
@@ -333,7 +332,7 @@ sub _set_up_pager {
 
 #-----------------------------------------------------------------------------
 
-sub report_statistics {
+sub _report_statistics {
     my ($opts_ref, $statistics) = @_;
 
     if (
@@ -539,7 +538,7 @@ sub _at_tty {
 
 #-----------------------------------------------------------------------------
 
-sub render_policy_listing {
+sub _render_policy_listing {
 
     require Perl::Critic::PolicyListing;
     require Perl::Critic;
@@ -554,7 +553,7 @@ sub render_policy_listing {
 
 #-----------------------------------------------------------------------------
 
-sub render_theme_listing {
+sub _render_theme_listing {
 
     require Perl::Critic::ThemeListing;
     require Perl::Critic;
@@ -569,7 +568,7 @@ sub render_theme_listing {
 
 #-----------------------------------------------------------------------------
 
-sub render_profile_prototype {
+sub _render_profile_prototype {
 
     require Perl::Critic::ProfilePrototype;
     require Perl::Critic;
@@ -584,14 +583,14 @@ sub render_profile_prototype {
 
 #-----------------------------------------------------------------------------
 
-sub render_policy_docs {
+sub _render_policy_docs {
 
     my (%opts) = @_;
     my $pattern = delete $opts{-doc};
 
     require Perl::Critic;
     $critic = Perl::Critic->new(%opts);
-    set_up_pager($critic->config()->pager());
+    _set_up_pager($critic->config()->pager());
 
     require Perl::Critic::PolicyFactory;
     my @site_policies  = Perl::Critic::PolicyFactory->site_policy_names();
@@ -606,7 +605,7 @@ sub render_policy_docs {
 
 #-----------------------------------------------------------------------------
 
-sub display_version {
+sub _display_version {
     _out "$VERSION\n";
     exit $EXIT_SUCCESS;
 }
