@@ -97,7 +97,7 @@ sub _parse_private_name_regex {
     my ($self, $parameter, $config_string) = @_;
 
     my $regex;
-    eval { $regex = qr/$config_string/; 1 }
+    eval { $regex = qr/$config_string/; 1 } ## no critic (RegularExpressions)
         or $self->throw_parameter_value_exception(
             'private_name_regex',
             $config_string,
@@ -202,7 +202,7 @@ policy.
 =head1 CONFIGURATION
 
 You can define what a private subroutine name looks like by specifying
-a regular expresion for the C<private_name_regex> option in your
+a regular expression for the C<private_name_regex> option in your
 F<.perlcriticrc>:
 
     [Subroutines::ProtectPrivateSubs]
