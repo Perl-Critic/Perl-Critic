@@ -22,6 +22,7 @@ use version;
 
 use Perl::Critic::Annotation;
 use Perl::Critic::Exception::Parse qw{ throw_parse };
+use Perl::Critic::PPIx::SpeedHacks;
 
 #-----------------------------------------------------------------------------
 
