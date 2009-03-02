@@ -271,6 +271,7 @@ can_ok('Perl::Critic::Command', 'run');
         can_ok($mod, 'default_themes');
         can_ok($mod, 'get_severity');
         can_ok($mod, 'get_themes');
+        can_ok($mod, 'is_enabled');
         can_ok($mod, 'new');
         can_ok($mod, 'set_severity');
         can_ok($mod, 'set_themes');

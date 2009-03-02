@@ -26,7 +26,7 @@ use Perl::Critic::TestUtils qw<
 use Perl::Critic::Utils qw< :booleans :characters :severities >;
 use Perl::Critic::Utils::Constants qw< :color_severity >;
 
-use Test::More tests => 84;
+use Test::More;
 
 #-----------------------------------------------------------------------------
 
@@ -45,6 +45,21 @@ my @names_of_policies_willing_to_work =
     );
 my @native_policy_names  = bundled_policy_names();
 my $total_policies   = scalar @names_of_policies_willing_to_work;
+
+#-----------------------------------------------------------------------------
+
+{
+    my $all_policy_count =
+        scalar
+            Perl::Critic::Config
+                ->new(
+                    -severity   => $SEVERITY_LOWEST,
+                    -theme      => 'core',
+                )
+                ->all_policies_enabled_or_not();
+
+    plan tests => 84 + $all_policy_count;
+}
 
 #-----------------------------------------------------------------------------
 # Test default config.  Increasing the severity should yield
@@ -86,6 +101,36 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
         $last_policy_count = $policy_count;
     }
 }
+
+#-----------------------------------------------------------------------------
+
+{
+    my $configuration =
+        Perl::Critic::Config->new(
+            -severity   => $SEVERITY_LOWEST,
+            -theme      => 'core',
+        );
+    my %policies_by_name =
+        map { $_->get_short_name() => $_ } $configuration->policies();
+
+    foreach my $policy ( $configuration->all_policies_enabled_or_not() ) {
+        my $enabled = $policy->is_enabled();
+        if ( delete $policies_by_name{ $policy->get_short_name() } ) {
+            ok(
+                $enabled,
+                $policy->get_short_name() . ' is enabled.',
+            );
+        }
+        else {
+            ok(
+                ! $enabled && defined $enabled,
+                $policy->get_short_name() . ' is not enabled.',
+            );
+        }
+    }
+
+}
+
 
 #-----------------------------------------------------------------------------
 # Test all-off config w/ various severity levels.  In this case, the

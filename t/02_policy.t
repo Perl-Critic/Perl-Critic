@@ -13,7 +13,7 @@ use warnings;
 
 use English qw<-no_match_vars>;
 
-use Test::More tests => 26;
+use Test::More tests => 28;
 
 
 #-----------------------------------------------------------------------------
@@ -45,6 +45,13 @@ isa_ok($p, 'PolicyTest');
 
 eval { $p->violates(); };
 ok($EVAL_ERROR, 'abstract violates() throws exception');
+
+
+is(
+    $p->is_enabled(),
+    undef,
+    'is_enabled() initially returns undef',
+);
 
 
 # Test default application...
@@ -81,6 +88,12 @@ is(
 
 my $overridden_default = PolicyTestOverriddenDefaultMaximumViolations->new();
 isa_ok($overridden_default, 'PolicyTestOverriddenDefaultMaximumViolations');
+
+is(
+    $overridden_default->is_enabled(),
+    undef,
+    'is_enabled() initially returns undef',
+);
 
 # Test default maximum violations per document...
 is(

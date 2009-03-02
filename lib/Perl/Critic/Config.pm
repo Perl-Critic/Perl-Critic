@@ -221,7 +221,11 @@ sub _add_policy_if_enabled {
 
     push @{ $self->{_all_policies_enabled_or_not} }, $policy_object;
     if ( $policy_object->initialize_if_enabled( $config ) ) {
+        $policy_object->__set_enabled($TRUE);
         push @{ $self->{_policies} }, $policy_object;
+    }
+    else {
+        $policy_object->__set_enabled($FALSE);
     }
 
     return;

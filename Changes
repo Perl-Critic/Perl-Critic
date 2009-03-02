@@ -7,6 +7,9 @@
       the new "string_mode" option.  Contributed by Edgar Whipple
       <perlmonk at misterwhipple dot com>.
 
+    New Developer Features:
+    * P::C::Policy now has an is_enabled() method.
+
 [1.097_002] Released on 2009-03-01
 
     Bug Fix:

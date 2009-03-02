@@ -260,6 +260,24 @@ sub get_short_name {
 
 #-----------------------------------------------------------------------------
 
+sub is_enabled {
+    my ($self) = @_;
+
+    return $self->{_enabled};
+}
+
+#-----------------------------------------------------------------------------
+
+sub __set_enabled {
+    my ($self, $new_value) = @_;
+
+    $self->{_enabled} = $new_value;
+
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
 sub applies_to {
     return qw(PPI::Element);
 }
@@ -632,6 +650,13 @@ Return the full package name of this policy.
 
 Return the name of this policy without the "Perl::Critic::Policy::"
 prefix.
+
+
+=item C< is_enabled() >
+
+Answer whether this policy is really active or not.  Returns a true
+value if it is, a false, yet defined, value if it isn't, and an
+undefined value if it hasn't yet been decided whether it will be.
 
 
 =item C< applies_to() >
