@@ -25,8 +25,7 @@ no warnings qw(ambiguous);    # but not sure how to avoid this.
 use PPI::Document;
 
 my $orig_serialize = *PPI::Document::serialize{CODE};
-*{PPI::Document::serialize} = \&caching_serialize;
-sub caching_serialize { return $_[0]->{_serlialize} ||= &$orig_serialize(@_); }
+*{PPI::Document::serialize} = sub { return $_[0]->{_serialize} ||= $orig_serialize->(@_); };
 
 
 #----------------------------------------------------------------------------
@@ -37,8 +36,7 @@ sub caching_serialize { return $_[0]->{_serlialize} ||= &$orig_serialize(@_); }
 use PPI::Node;
 
 my $orig_content  = *PPI::Node::content{CODE};
-*{PPI::Node::content} = \&caching_content;
-sub caching_content { return $_[0]->{_content} ||= &$orig_content(@_); }
+*{PPI::Node::content} = sub { return $_[0]->{_content} ||= $orig_content->(@_); };
 
 
 #----------------------------------------------------------------------------
@@ -52,16 +50,15 @@ sub caching_content { return $_[0]->{_content} ||= &$orig_content(@_); }
 # of PPI::Node, it will automatically inherit this caching behavior.
 
 my $orig_find  = *PPI::Node::find{CODE};
-*{PPI::Node::find} = \&caching_find;
+*{PPI::Node::find} = sub {
 
-sub caching_find {
     my ($self, $wanted, @more_args) = @_;
     my $type = ref $self;
 
     # This method can only find elements by their class names.  For
     # other types of searches, delegate to the PPI::Node
     if ( ( ref $wanted ) || !$wanted || $wanted !~ m/ \A PPI:: /xms ) {
-        return &$orig_find(@_);
+        return $orig_find->(@_);
     }
 
     # Build the class cache if it doesn't exist.  This happens at most
@@ -88,51 +85,49 @@ sub caching_find {
         # as a side effect of the find().
         
         my $finder_coderef = _caching_finder( $cache );
-        &$orig_find( $self, $finder_coderef );
+        $orig_find->( $self, $finder_coderef );
         $self->{_elements_of} = $cache;
     }
 
     # find() must return false-but-defined on failure.
     return $self->{_elements_of}->{$wanted} || q{};
-}
+};
 
 
 #-----------------------------------------------------------------------------
 
 my $orig_find_first  = *PPI::Node::find_first{CODE};
-*{PPI::Node::find_first} = \&caching_find_first;
-
-sub caching_find_first {
+*{PPI::Node::find_first} = sub {
+    
     my ($self, $wanted, @more_args) = @_;
 
     # This method can only find elements by their class names.  For
     # other types of searches, delegate to the PPI::Document
     if ( ( ref $wanted ) || !$wanted || $wanted !~ m/ \A PPI:: /xms ) {
-        return &$orig_find_first(@_);
+        return $orig_find_first->(@_);
     }
 
-    my $result = caching_find(@_);
+    my $result = $self->find($wanted, @more_args);
     return $result ? $result->[0] : $result;
-}
+};
 
 
 #-----------------------------------------------------------------------------
 
 my $orig_find_any  = *PPI::Node::find_any{CODE};
-*{PPI::Node::find_any} = \&caching_find_any;
-
-sub caching_find_any {
+*{PPI::Node::find_any} = sub {
+    
     my ($self, $wanted, @more_args) = @_;
 
     # This method can only find elements by their class names.  For
     # other types of searches, delegate to the PPI::Document
     if ( ( ref $wanted ) || !$wanted || $wanted !~ m/ \A PPI:: /xms ) {
-        return &$orig_find_any(@_);
+        return $orig_find_any->(@_);
     }
 
-    my $result = caching_find(@_);
+    my $result = $self->find($wanted, @more_args);
     return $result ? 1 : $result;
-}
+};
 
 
 #----------------------------------------------------------------------------
@@ -180,37 +175,35 @@ sub _caching_finder {
 use PPI::Element;
 
 my $orig_sprev  = *PPI::Element::sprevious_sibling{CODE};
-*{PPI::Element::sprevious_sibling} = \&caching_sprev;
+*{PPI::Element::sprevious_sibling} = sub {
 
-sub caching_sprev {
     my ($self) = @_; 
 
     if (not exists $self->{_sprev} ) {
-        my $sprev = &$orig_sprev(@_);
+        my $sprev = $orig_sprev->(@_);
         $self->{_sprev} = $sprev;
         $sprev && weaken($self->{_sprev});
     }
 
     return $self->{_sprev};
-}
+};
 
 
 #----------------------------------------------------------
 
 my $orig_snext = *PPI::Element::snext_sibling{CODE};
-*{PPI::Element::snext_sibling} = \&caching_snext;
-
-sub caching_snext { 
+*{PPI::Element::snext_sibling} = sub {
+ 
     my ($self) = @_;
 
     if (not exists $self->{_snext} ) {
-        my $snext = &$orig_snext(@_);
+        my $snext = $orig_snext->(@_);
         $self->{_snext} = $snext;
         $snext && weaken($self->{_snext});
     }
 
     return $self->{_snext};
-}
+};
 
 
 #----------------------------------------------------------------------------
@@ -219,9 +212,9 @@ sub caching_snext {
 # builtin isa().
 
 #sub PPI::Element::isa {
-#  return UNIVERSAL::isa(@_) if not ref $_[0];
-#  return $_[0]->{_isa}->{$_[1]} if exists $_[0]->{_isa}->{$_[1]};
-#  return $_[0]->{_isa}->{$_[1]} = UNIVERSAL::isa(@_);
+#    return UNIVERSAL::isa(@_) if not ref $_[0];
+#    return $_[0]->{_isa}->{$_[1]} if exists $_[0]->{_isa}->{$_[1]};
+#    return $_[0]->{_isa}->{$_[1]} = UNIVERSAL::isa(@_);
 #}
 
 #----------------------------------------------------------------------------
