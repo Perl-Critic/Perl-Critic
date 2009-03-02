@@ -22,7 +22,15 @@ use version;
 
 use Perl::Critic::Annotation;
 use Perl::Critic::Exception::Parse qw{ throw_parse };
-use Perl::Critic::PPIx::SpeedHacks;
+
+
+#-----------------------------------------------------------------------------
+# Load our optimization hacks, but only if we're using a version of PPI 
+# that we know is compatible.  TODO: Should we do this at compile time?
+
+if ($PPI::Document::VERSION eq '1.203') {
+    require Perl::Critic::PPIx::SpeedHacks;
+}
 
 #-----------------------------------------------------------------------------
 
