@@ -1,9 +1,19 @@
+[1.xxx] Released on 2009-xx-xx
+
+    Policy Changes:
+    * Variables::ProhibitPunctuationVars gained the ability to look inside
+      interpolated strings.  Doing this correctly is challenging and things
+      may not work out right; how the policy does this can be controlled via
+      the new "string_mode" option.  Contributed by Edgar Whipple
+      <perlmonk at misterwhipple dot com>.
+
 [1.097_002] Released on 2009-03-01
 
-    * Grr.  There was access of a non-public variable in Term::ANSIColor that
-      changed in v2, so anyone with Term::ANSIColor v2 installed couldn't
-      install Perl::Critic (nor would it work if they got it installed
-      anyway).
+    Bug Fix:
+     * Grr.  There was access of a non-public variable in Term::ANSIColor that
+       changed in v2, so anyone with Term::ANSIColor v2 installed couldn't
+       install Perl::Critic (nor would it work if they got it installed
+       anyway).
 
 [1.097_001] Released on 2009-03-01
 
