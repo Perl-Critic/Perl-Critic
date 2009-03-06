@@ -76,7 +76,7 @@ is_deeply( $viol->location(),      $expected_location, 'location');
 is(        $viol->severity(),      99,                 'severity');
 is(        $viol->source(),        $code,              'source');
 is(        $viol->policy(),        $pkg,               'policy');
-is(        $viol->element_class(), 'PPI::Document',    'policy');
+is(        $viol->_element_class(),'PPI::Document',    'policy');
 like(      $viol->diagnostics(),   qr/ \A $no_diagnostics_msg \z /xms, 'diagnostics');
 
 {
