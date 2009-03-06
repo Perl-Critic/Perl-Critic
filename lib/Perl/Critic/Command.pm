@@ -151,7 +151,7 @@ sub _validate_options {
         $msg .= qq{Warning: Cannot use -noprofile with -profile option.\n};
     }
 
-    if ( $opts{-verbose} && $opts{-verbose} !~ m{(?: \d+ | %[mfFlcedrpPs] )}xms) {
+    if ( $opts{-verbose} && $opts{-verbose} !~ m{(?: \d+ | %[mfFlcCedrpPs] )}xms) {
         $msg .= qq<Warning: --verbose arg "$opts{-verbose}" looks odd.  >;
         $msg .= qq<Perhaps you meant to say "--verbose 3 $opts{-verbose}."\n>;
     }

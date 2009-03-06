@@ -1,5 +1,9 @@
 [1.xxx] Released on 2009-xx-xx
 
+    New Features:
+    * The --verbose option for perlcritic now supports a %C format that will
+      displays the class of PPI::Element that caused the violation.
+
     Policy Changes:
     * Variables::ProhibitPunctuationVars gained the ability to look inside
       interpolated strings.  Doing this correctly is challenging and things

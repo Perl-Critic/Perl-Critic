@@ -10,13 +10,15 @@ package Perl::Critic::Violation;
 use 5.006001;
 use strict;
 use warnings;
-use English qw(-no_match_vars);
+
+use English qw< -no_match_vars >;
 use Readonly;
 
-use File::Basename qw(basename);
-use IO::String qw();
-use Pod::PlainText qw();
-use String::Format qw(stringf);
+use File::Basename qw< basename >;
+use IO::String qw< >;
+use Pod::PlainText qw< >;
+use Scalar::Util qw< blessed >;
+use String::Format qw< stringf >;
 
 use overload ( q{""} => 'to_string', cmp => '_compare' );
 
@@ -25,11 +27,11 @@ use Perl::Critic::Utils::POD qw<
     get_pod_section_for_module
     trim_pod_section
 >;
-use Perl::Critic::Exception::Fatal::Internal qw< &throw_internal >;
+use Perl::Critic::Exception::Fatal::Internal qw< throw_internal >;
 
 our $VERSION = '1.097_002';
 
-#Class variables...
+# Class variables...
 my $format = "%m at line %l, column %c. %e.\n"; # Default stringy format
 my %diagnostics = ();  # Cache of diagnostic messages
 
@@ -47,16 +49,13 @@ sub new {
         throw_internal 'Wrong number of args to Violation->new()';
     }
 
-    if ( ! eval { $elem->isa( 'PPI::Element' ) } ) {
+    if ( eval { $elem->isa( 'Perl::Critic::Document' ) } ) {
+        # break the facade, return the real PPI::Document
+        $elem = $elem->ppi_document();
+    }
 
-        if ( eval { $elem->isa( 'Perl::Critic::Document' ) } ) {
-            # break the facade, return the real PPI::Document
-            $elem = $elem->{_doc};
-        }
-        else {
-            throw_internal
-                '3rd arg to Violation->new() must be a PPI::Element';
-        }
+    if ( ! eval { $elem->isa( 'PPI::Element' ) } ) {
+        throw_internal '3rd arg to Violation->new() must be a PPI::Element';
     }
 
     # Strip punctuation.  These are controlled by the user via the
@@ -187,10 +186,17 @@ sub filename {
 
 #-----------------------------------------------------------------------------
 
-
 sub source {
     my $self = shift;
     return $self->{_source};
+}
+
+#-----------------------------------------------------------------------------
+
+sub element_class {
+    my ($self) = @_;
+
+    return blessed $self->{_elem};
 }
 
 #-----------------------------------------------------------------------------
@@ -203,15 +209,16 @@ sub to_string {
 
     # Wrap the more expensive ones in sub{} to postpone evaluation
     my %fspec = (
-         'f' => sub { $self->filename() },
-         'F' => sub { basename( $self->filename()) },
-         'l' => sub { $self->location->[0] },
-         'c' => sub { $self->location->[1] },
+         'f' => sub { $self->filename()             },
+         'F' => sub { basename( $self->filename() ) },
+         'l' => sub { $self->location->[0]          },
+         'c' => sub { $self->location->[1]          },
+         'C' => sub { $self->element_class()        },
          'm' => $self->description(),
          'e' => $self->explanation(),
          's' => $self->severity(),
-         'd' => sub { $self->diagnostics() },
-         'r' => sub { $self->source() },
+         'd' => sub { $self->diagnostics()          },
+         'r' => sub { $self->source()               },
          'P' => $long_policy,
          'p' => $short_policy,
     );
@@ -434,6 +441,7 @@ characters are:
     %P        Full name of the Policy module that created the violation
     %p        Name of the Policy without the Perl::Critic::Policy:: prefix
     %r        The string of source code that caused the violation
+    %C        The class of the PPI::Element that caused the violation
     %s        The severity level of the violation
 
 Here are some examples:

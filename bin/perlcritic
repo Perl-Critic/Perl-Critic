@@ -342,6 +342,7 @@ characters are:
     %P        Full name of the Policy module that created the violation
     %p        Name of the Policy without the Perl::Critic::Policy:: prefix
     %r        The string of source code that caused the violation
+    %C        The class of the PPI::Element that caused the violation
     %s        The severity level of the violation
 
 The purpose of these formats is to provide some compatibility with
