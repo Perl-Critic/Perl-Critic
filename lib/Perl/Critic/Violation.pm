@@ -193,7 +193,7 @@ sub source {
 
 #-----------------------------------------------------------------------------
 
-sub _element_class {
+sub element_class {
     my ($self) = @_;
 
     return blessed $self->{_elem};
