@@ -396,6 +396,12 @@ code spans multiple lines (e.g. multi-line statements, subroutines or
 other blocks), then only the first line will be returned.
 
 
+=item C<element_class()>
+
+Returns the L<PPI::Element> subclass of the code that caused this
+exception.
+
+
 =item C<set_format( $format )>
 
 Class method.  Sets the format for all Violation objects when they are
