@@ -1,4 +1,4 @@
-[1.xxx] Released on 2009-xx-xx
+[1.098] Released on 2009-03-07
 
     New Features:
     * The --verbose option for perlcritic now supports a %C format that will
@@ -13,6 +13,7 @@
 
     New Developer Features:
     * P::C::Policy now has an is_enabled() method.
+    * P::C::Violation now has an element_class() method.
 
 [1.097_002] Released on 2009-03-01
 
