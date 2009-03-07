@@ -16,15 +16,15 @@ use base 'Module::Build';
 
 
 sub ACTION_test {
-    my ($self) = @_;
+    my $self = shift;
 
     $self->depends_on('manifest');
 
-    return $self->SUPER::ACTION_test();
+    return $self->SUPER::ACTION_test(@_);
 }
 
 sub ACTION_authortest {
-    my ($self) = @_;
+    my $self = shift;
 
     $self->_authortest_dependencies();
     $self->depends_on('test');
@@ -33,7 +33,7 @@ sub ACTION_authortest {
 }
 
 sub ACTION_authortestcover {
-    my ($self) = @_;
+    my $self = shift;
 
     $self->_authortest_dependencies();
     $self->depends_on('testcover');
@@ -42,16 +42,16 @@ sub ACTION_authortestcover {
 }
 
 sub ACTION_distdir {
-    my ($self) = @_;
+    my $self = shift;
 
     $self->depends_on('authortest');
 
-    return $self->SUPER::ACTION_distdir();
+    return $self->SUPER::ACTION_distdir(@_);
 }
 
 
 sub _authortest_dependencies {
-    my ($self) = @_;
+    my $self = shift;
 
     $self->depends_on('build');
     $self->depends_on('manifest');
