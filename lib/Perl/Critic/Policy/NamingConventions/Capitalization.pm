@@ -824,6 +824,11 @@ This policy won't catch problems with the declaration of C<$y> below:
     }
 
 
+=head1 AUTHOR
+
+Multiple people
+
+
 =head1 COPYRIGHT
 
 Copyright (c) 2008-2009 Michael G Schwern.  All rights reserved.
