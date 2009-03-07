@@ -11,13 +11,8 @@ use 5.006001;
 use strict;
 use warnings;
 use Readonly;
-use English qw( -no_match_vars );
 
-use PPI::Token::Magic;
-
-use Perl::Critic::Utils
-    qw{ :characters :severities :data_conversion :booleans };
-
+use Perl::Critic::Utils qw{ :characters :severities :data_conversion };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.098';
@@ -25,226 +20,35 @@ our $VERSION = '1.098';
 #-----------------------------------------------------------------------------
 
 Readonly::Scalar my $DESC => q{Magic punctuation variable used};
-Readonly::Scalar my $EXPL => [79];
+Readonly::Scalar my $EXPL => [ 79 ];
 
 #-----------------------------------------------------------------------------
 
 sub supported_parameters {
     return (
-        {   name           => 'allow',
-            description    => 'The additional variables to allow.',
-            default_string => $EMPTY,
-            behavior       => 'string list',
+        {
+            name            => 'allow',
+            description     => 'The additional variables to allow.',
+            default_string  => $EMPTY,
+            behavior        => 'string list',
             list_always_present_values =>
-                [qw( $_ @_ $1 $2 $3 $4 $5 $6 $7 $8 $9 _ )],
-        },
-        {   name => 'string_mode',
-            description =>
-                'Controls checking interpolated strings for punctuation variables.',
-            default_string     => 'thorough',
-            behavior           => 'enumeration',
-            enumeration_values => [qw{ simple disable thorough }],
-            enumeration_allow_multiple_values => 0,
+                                 [ qw( $_ @_ $1 $2 $3 $4 $5 $6 $7 $8 $9 _ ) ],
         },
     );
 }
 
-sub default_severity { return $SEVERITY_LOW }
+sub default_severity { return $SEVERITY_LOW         }
 sub default_themes   { return qw(core pbp cosmetic) }
-
-sub applies_to {
-    return qw( PPI::Token::Magic
-        PPI::Token::Quote::Double
-        PPI::Token::Quote::Interpolate
-        PPI::Token::QuoteLike::Command
-        PPI::Token::QuoteLike::Backtick
-        PPI::Token::QuoteLike::Regexp
-        PPI::Token::QuoteLike::Readline
-        PPI::Token::HereDoc
-    );
-}
+sub applies_to       { return 'PPI::Token::Magic'   }
 
 #-----------------------------------------------------------------------------
-
-# Private entities
-
-# package state
-my ( $_magic_regexp, @_ignore_for_interpolation, );
-
-# named regexps
-my ($_possible_dollar_exception, $_possible_scalar_symbol_1,
-    $_possible_scalar_symbol_2,  $_digit_following_magic,
-    $_scalar_dereference, $_array_index_thingy, $_possible_escaped_char_magic,
-    $_dollar_crunch_cast,
-);
-
-#-----------------------------------------------------------------------------
-
-# Public methods and functions
-
-sub initialize_if_enabled {
-    my $config = shift;
-    my %_magic_vars;
-    @_magic_vars{ keys %PPI::Token::Magic::magic } ## no critic (ProhibitPackageVars)
-        = 1;
-
-    # Set up the regexp alternation for matching magic variables.
-    # We can't process $config->{_allow} here because of a quirk in the
-    # way Perl::Critic handles testing.
-    #
-    # The sort is needed so that, e.g., $^ doesn't mask out $^M
-    my $magic_alternation = '(?:'
-        . (
-        join q(|),
-        map      { quotemeta $_ }
-            sort { -( length $a <=> length $b ) }
-            keys %_magic_vars
-        ) . ')';
-
-    $_magic_regexp = qr{
-            (?: \A | [^\\] )        # beginning-of-string or any non-backslash
-            (?: \\\\ )*            # zero or more double-backslashes
-            ( $magic_alternation ) # any magic punctuation variable
-        }xsm;
-
-    # The following magic vars will be ignored in interpolated strings
-    # in simple mode. See CONFIGURATION in the pod.
-    @_ignore_for_interpolation = ( q{$'}, q{$$}, q{$#}, q{$:}, );    ## no critic ( RequireInterpolationOfMetachars )
-
-    #initialize named regexps
-    {
-        ## no critic (RequireInterpolationOfMetachars,ProhibitEscapedMetacharacters)
-
-        $_possible_dollar_exception
-            = qr{ (?: ^  \$  .*  [  \w  :  \$  \{  ]  $ ) }xms;
-        $_possible_scalar_symbol_1    = qr{ (?: ^(\$(?:\_[\w:]|::)) ) }xms;
-        $_possible_scalar_symbol_2    = qr{ (?: ^\$\'[\w] ) }xms;
-        $_digit_following_magic       = qr{ (?: ^\$\'\d$ ) }xms;
-        $_scalar_dereference          = qr{ (?: ^\$\$\w ) }xms;
-        $_array_index_thingy          = qr{ (?: ^(\$\#)\w ) }xms;
-        $_possible_escaped_char_magic = qr{ (?: ^\$\^\w{2}$ ) }xms
-            ;    # uses a slightly different test than PPI
-        $_dollar_crunch_cast = qr{ (?: ^\$\#\{ ) }xms;
-    }
-
-    return $TRUE;
-}
 
 sub violates {
-    my ( $self, $elem, undef ) = @_;
-
-    if ( $elem->isa('PPI::Token::Magic') ) {
-        return _violates_magic( $self, $elem );
-    }
-    elsif ( $elem->isa('PPI::Token::HereDoc') ) {
-        return _violates_heredoc( $self, $elem );
-    }
-
-    #the remaining applies_to() classes are all interpolated strings
-    return _violates_string( $self, $elem );
-}
-
-#-----------------------------------------------------------------------------
-
-# Helper functions for the three types of violations: code, quotes, heredoc
-
-sub _violates_magic {
     my ( $self, $elem, undef ) = @_;
     if ( !exists $self->{_allow}->{$elem} ) {
         return $self->violation( $DESC, $EXPL, $elem );
     }
-    return;    # no violation
-}
-
-sub _violates_string {
-    my ( $self, $elem, undef ) = @_;
-    my %matches = _strings_helper( $self, $elem->content() );
-    if (%matches) {
-        my $DESC = qq{$DESC in interpolated string};
-
-        return $self->violation( $DESC, $EXPL, $elem );
-    }
-    return;    # no violation
-}
-
-sub _violates_heredoc {
-    my ( $self, $elem, undef ) = @_;
-    if ( $elem->{_mode} eq 'interpolate' or $elem->{_mode} eq 'command' ) {
-        my $heredoc_string = join qq{\n}, $elem->heredoc();
-        my %matches = _strings_helper( $self, $heredoc_string );
-        if (%matches) {
-            my $DESC = qq{$DESC in interpolated here-document};
-
-            return $self->violation( $DESC, $EXPL, $elem );
-        }
-    }
-    return;    # no violation
-}
-
-#-----------------------------------------------------------------------------
-
-# Helper functions specific to interpolated strings
-
-sub _strings_helper {
-    my ( $self, $target_string, undef ) = @_;
-
-    return if ( $self->{_string_mode} eq 'disable' );
-    return _strings_thorough( $self, $target_string )
-        if $self->{_string_mode} eq 'thorough';
-
-    # we are in string_mode = simple
-
-    my @raw_matches = $target_string =~ m/$_magic_regexp/goxms;
-    return if ( !@raw_matches );
-
-    my %matches;
-    @matches{@raw_matches} = 1;
-    delete @matches{ keys %{ $self->{_allow} } };
-    delete @matches{@_ignore_for_interpolation};
-    return %matches;
-}
-
-sub _strings_thorough {
-    my ( $self, $target_string, undef ) = @_;
-    my %matches;
-
-MATCH:
-    while ( my ($match) = $target_string =~ m/$_magic_regexp/gcxms ) {
-        my $nextchar = substr $target_string, $LAST_MATCH_END[0], 1;
-        my $c = $match . $nextchar;
-
-        # These tests closely parallel those in PPI::Token::Magic, q.v.
-        # $c is so named by analogy to that module.
-
-        if ( $c =~ m/$_possible_dollar_exception/xms ) {
-            ## no critic (RequireInterpolationOfMetachars)
-
-            if (   $c =~ m/$_possible_scalar_symbol_1/xms
-                or $c =~ m/$_possible_scalar_symbol_2/xms )
-            {
-                next MATCH if $c !~ m/$_digit_following_magic/xms;
-            }
-
-            next MATCH if $c =~ m/$_scalar_dereference/xms;
-            next MATCH
-                if $c eq '$#$' or $c eq '$#{';    # index dereferencing cast
-            next MATCH if $c =~ m/$_array_index_thingy/xms;
-
-            # PPI's checks for long escaped vars like $^WIDE_SYSTEM_CALLS
-            # appear to be erroneous.
-            # if ( $c =~ m/$_possible_escaped_char_magic/xms ) {
-            # }
-
-            next MATCH if $c =~ m/$_dollar_crunch_cast/xms;
-        }
-
-        # The additional checking that PPI::Token::Magic does at this point
-        # is not necessary here, in an interpolated string context.
-
-        $matches{$match} = 1;
-    }
-    delete @matches{ keys %{ $self->{_allow} } };
-    return %matches;
+    return;  #ok!
 }
 
 1;
@@ -276,7 +80,8 @@ module to give them clear names.
   $| = undef;                      #not ok
 
   use English qw(-no_match_vars);
-  local $OUTPUT_AUTOFLUSH = undef; #ok
+  local $OUTPUT_AUTOFLUSH = undef;        #ok
+
 
 =head1 CONFIGURATION
 
@@ -291,52 +96,13 @@ perlcriticrc file, add a block like this:
   [Variables::ProhibitPunctuationVars]
   allow = $@ $!
 
-The C<allow> property  should  be  a  whitespace-delimited  list  of
+The C<allow> property should be a whitespace-delimited list of
 punctuation variables.
-
-Other configuration options  control  the  parsing  of  interpolated
-strings in the search for forbidden variables. They have  no  effect
-on detecting punctuation variables outside of interpolated  strings.
-
-  [Variables::ProhibitPunctuationVars]
-  string_mode = thorough
-
-The option C<string_mode>  controls  whether  and  how  interpolated
-strings are searched for punctuation variables. Setting
-C<string_mode = thorough>, the default,  checks  for  special  cases
-that may look like punctuation variables  but  aren't,  for  example
-C<$#foo>, an array index count; C<$$bar>, a scalar  dereference;  or
-C<$::baz>, a global symbol.
-
-Setting C<string_mode = disable> causes all interpolated strings  to
-be ignored entirely.
-
-Setting C<string_mode = simple> uses a simple regular expression  to
-find matches. In this mode, the magic variables C<$$>, C<$'>,  C<$#>
-and C<$:> are ignored within interpolated strings due  to  the  high
-risk of false positives. Simple mode is  retained  from  an  earlier
-draft of the interpolated- strings code. Its use is only recommended
-as a workaround if bugs appear in thorough mode.
-
-The  C<string_mode>  option  will  go  away  when  the  parsing   of
-interpolated strings is implemented in PPI. See  L</CAVEATS>  below.
 
 
 =head1 BUGS
 
-Punctuation variables that confuse PPI's document parsing may not be
-detected  correctly  or  at  all,  and  may  prevent  detection   of
-subsequent ones. In particular, C<$"> is known to cause difficulties
-in interpolated strings.
-
-
-=head1 CAVEATS
-
-ProhibitPunctuationVars  relies   exclusively   on   PPI   to   find
-punctuation variables in code, but does all the parsing  itself  for
-interpolated strings. When, at some  point,  this  functionality  is
-transferred to PPI, ProhibitPunctuationVars  will  cease  doing  the
-interpolating  and  the  C<string_mode>   option   will   go   away.
+This doesn't find punctuation variables in strings.  RT #35970.
 
 
 =head1 AUTHOR

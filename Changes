@@ -4,24 +4,16 @@
     * The --verbose option for perlcritic now supports a %C format that will
       displays the class of PPI::Element that caused the violation.
 
-    Policy Changes:
-    * Variables::ProhibitPunctuationVars gained the ability to look inside
-      interpolated strings.  Doing this correctly is challenging and things
-      may not work out right; how the policy does this can be controlled via
-      the new "string_mode" option.  Contributed by Edgar Whipple
-      <perlmonk at misterwhipple dot com>.
-
     New Developer Features:
     * P::C::Policy now has an is_enabled() method.
     * P::C::Violation now has an element_class() method.
 
 [1.097_002] Released on 2009-03-01
 
-    Bug Fix:
-     * Grr.  There was access of a non-public variable in Term::ANSIColor that
-       changed in v2, so anyone with Term::ANSIColor v2 installed couldn't
-       install Perl::Critic (nor would it work if they got it installed
-       anyway).
+    * Grr.  There was access of a non-public variable in Term::ANSIColor that
+      changed in v2, so anyone with Term::ANSIColor v2 installed couldn't
+      install Perl::Critic (nor would it work if they got it installed
+      anyway).
 
 [1.097_001] Released on 2009-03-01
 
