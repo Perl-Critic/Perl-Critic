@@ -1,22 +1,5 @@
 [1.098] Released on 2009-03-07
 
-    New Features:
-    * The --verbose option for perlcritic now supports a %C format that will
-      displays the class of PPI::Element that caused the violation.
-
-    New Developer Features:
-    * P::C::Policy now has an is_enabled() method.
-    * P::C::Violation now has an element_class() method.
-
-[1.097_002] Released on 2009-03-01
-
-    * Grr.  There was access of a non-public variable in Term::ANSIColor that
-      changed in v2, so anyone with Term::ANSIColor v2 installed couldn't
-      install Perl::Critic (nor would it work if they got it installed
-      anyway).
-
-[1.097_001] Released on 2009-03-01
-
     Some Exciting News:
     The Perl Development Kit (PDK 8.0) from ActiveState now includes a
     very slick graphical interface to Perl-Critic.  I highly recommend
@@ -34,6 +17,8 @@
       the profile_strictness. The default is to warn about them. The previous
       default was that they were fatal.
     * -p is now a synonym for --profile.
+    * The --verbose option for perlcritic now supports a %C format that will
+      displays the class of PPI::Element that caused the violation.
 
     Policy Changes:
     * ControlStructures::ProhibitNegativeExpressionsInUnlessAndUntilConditions
@@ -79,6 +64,8 @@
       public or not.  Any removal of functionality from a public module will
       go through a deprecation cycle.  Non-public modules may have their
       interfaces changed without notice.
+    * P::C::Policy now has an is_enabled() method.
+    * P::C::Violation now has an element_class() method.
 
     Bug Fixes:
     * CodeLayout::ProhibitTrailingWhitespace didn't notice cases where PPI
@@ -93,8 +80,12 @@
 
     Internals:
     * The guts of Build.PL and Makefile.PL have been rearranged.
-      Theoretically, none of the changes should affect installation, but until
-      this change hits the CPAN, we can't know for sure.
+
+[1.097_002] Released on 2009-03-01
+[1.097_001] Released on 2009-03-01
+
+    Changes summarized into 1.098 above.  For exact details, see Changes on
+    BackPAN.
 
 [1.096] Released on 2009-02-01
 
