@@ -6,7 +6,7 @@ use warnings;
 use PPI::Document;
 use PPI::Dumper;
 
-our $VERSION = '1.097_002';
+our $VERSION = '1.098';
 
 my $whitespace = $ARGV[0] && $ARGV[0] eq '-w' ? shift : 0;
 my $code = $ARGV[0] ? (-f $ARGV[0] ? shift : \shift) : \join q{}, <STDIN>;
