@@ -1,8 +1,8 @@
 ##############################################################################
-#      $URL: http://perlcritic.tigris.org/svn/perlcritic/trunk/Perl-Critic/lib/Perl/Critic/Policy/Miscellanea/ProhibitFormats.pm $
-#     $Date: 2008-09-07 03:33:32 -0700 (Sun, 07 Sep 2008) $
-#   $Author: clonezone $
-# $Revision: 2730 $
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
 ##############################################################################
 
 package Perl::Critic::Policy::Miscellanea::ProhibitUselessNoCritic;

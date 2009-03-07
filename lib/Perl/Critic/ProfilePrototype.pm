@@ -1,8 +1,8 @@
 ##############################################################################
-#      $URL: http://perlcritic.tigris.org/svn/perlcritic/branches/Perl-Critic-With-Param-Validation/lib/Perl/Critic/PolicyListing.pm $
-#     $Date: 2006-12-13 21:35:21 -0800 (Wed, 13 Dec 2006) $
-#   $Author: thaljef $
-# $Revision: 1089 $
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
 ##############################################################################
 
 package Perl::Critic::ProfilePrototype;

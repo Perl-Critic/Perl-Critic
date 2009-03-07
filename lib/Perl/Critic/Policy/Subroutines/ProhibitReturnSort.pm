@@ -1,8 +1,8 @@
 ##############################################################################
-#      $URL: http://perlcritic.tigris.org/svn/perlcritic/trunk/Perl-Critic/lib/Perl/Critic/Policy/Subroutines/ProhibitExplicitReturnUndef.pm $
-#     $Date: 2008-10-30 09:20:47 -0700 (Thu, 30 Oct 2008) $
-#   $Author: clonezone $
-# $Revision: 2850 $
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
 ##############################################################################
 
 package Perl::Critic::Policy::Subroutines::ProhibitReturnSort;

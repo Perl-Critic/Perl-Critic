@@ -1,8 +1,8 @@
 ##############################################################################
-#      $URL: http://perlcritic.tigris.org/svn/perlcritic/trunk/Perl-Critic/lib/Perl/Critic/Utils/DataConversion.pm $
-#     $Date: 2007-09-02 21:31:09 -0500 (Sun, 02 Sep 2007) $
-#   $Author: clonezone $
-# $Revision: 1859 $
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
 ##############################################################################
 
 package Perl::Critic::Utils::DataConversion;
