@@ -90,6 +90,48 @@ L<Perl::Critic::Policy::BuiltinFunctions::ProhibitStringyEval|Perl::Critic::Poli
 
 L<Perl::Critic::Policy::BuiltinFunctions::RequireBlockMap|Perl::Critic::Policy::BuiltinFunctions::RequireBlockMap>
 
+
+=head1 METADATA
+
+=head2 Explanation
+
+=head3 First Edition of Perl Best Practices
+
+=over
+
+=item Pages
+
+169
+
+
+=item Chapter/Section
+
+8/13
+
+
+=back
+
+
+=head2 Description
+
+Expression form of "grep"
+
+
+=head2 Default Severity
+
+High
+
+
+=head2 Default Themes
+
+core bugs pbp
+
+
+=head2 Applies To
+
+L<PPI::Token::Word>
+
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
