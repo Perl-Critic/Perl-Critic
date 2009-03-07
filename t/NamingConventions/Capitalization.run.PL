@@ -632,6 +632,23 @@ foreach local \$EVAL_ERROR (\@_) {
 
 #-----------------------------------------------------------------------------
 
+## name Localized builtin variable
+## failures 0
+## cut
+
+local \$\@;
+
+#-----------------------------------------------------------------------------
+
+## name Localized \$\\
+## failures 0
+## cut
+
+# \$\\ was missing from the built in global exceptions
+local \$\\;
+
+#-----------------------------------------------------------------------------
+
 ## name Localized variable in another package as foreach loop variable vs the "$capitalization_scheme" capitalization scheme.
 ## failures 0
 ## parms { global_variables => '$capitalization_scheme' }

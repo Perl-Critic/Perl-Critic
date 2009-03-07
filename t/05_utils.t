@@ -24,7 +24,7 @@ use PPI::Document::File qw< >;
 use Perl::Critic::PolicyFactory;
 use Perl::Critic::TestUtils qw(bundled_policy_names);
 
-use Test::More tests => 124;
+use Test::More tests => 125;
 
 #-----------------------------------------------------------------------------
 
@@ -230,6 +230,11 @@ sub test_is_perl_global {
     $doc  = make_doc($code);
     $var  = $doc->find_first('Token::Symbol');
     isnt( is_perl_global($var), 1, '%FOOBAR is not a perl global var (PPI)' );
+
+    $code = q[$\\];
+    $doc  = make_doc($code);
+    $var  = $doc->find_first('Token::Symbol');
+    ok( is_perl_global($var), "$code is a perl global var (PPI)" );
 
     return;
 }

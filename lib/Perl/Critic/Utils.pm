@@ -376,9 +376,11 @@ sub is_perl_bareword {
 #-----------------------------------------------------------------------------
 
 sub _build_globals_without_sigils {
+    # B::Keywords as of 1.08 forgot $\
     my @globals = map { substr $_, 1 }  @B::Keywords::Arrays,
                                         @B::Keywords::Hashes,
-                                        @B::Keywords::Scalars;
+                                        @B::Keywords::Scalars,
+                                        '$\\';
 
     # Not all of these have sigils
     foreach my $filehandle (@B::Keywords::Filehandles) {
