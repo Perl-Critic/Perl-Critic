@@ -1,3 +1,12 @@
+[1.xxx] Released on 2009-xx-xx
+
+    Policy Changes:
+    * Variables::ProhibitPunctuationVars gained the ability to look inside
+      interpolated strings.  Doing this correctly is challenging and things
+      may not work out right; how the policy does this can be controlled via
+      the new "string_mode" option.  Contributed by Edgar Whipple
+      <perlmonk at misterwhipple dot com>.
+
 [1.098] Released on 2009-03-07
 
     Some Exciting News:
