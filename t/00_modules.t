@@ -46,7 +46,7 @@ my @concrete_exceptions = qw{
 plan tests =>
         120
     +   (  9 * scalar @concrete_exceptions  )
-    +   ( 14 * scalar @bundled_policy_names );
+    +   ( 15 * scalar @bundled_policy_names );
 
 # pre-compute for version comparisons
 my $version_string = __PACKAGE__->VERSION;
