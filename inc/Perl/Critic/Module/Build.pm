@@ -12,6 +12,8 @@ use 5.006001;
 use strict;
 use warnings;
 
+use English qw< $OS_ERROR -no_match_vars >;
+
 use base 'Module::Build';
 
 
@@ -47,6 +49,16 @@ sub ACTION_distdir {
     $self->depends_on('authortest');
 
     return $self->SUPER::ACTION_distdir(@arguments);
+}
+
+sub ACTION_manifest {
+    my ($self, @arguments) = @_;
+
+    if (-f 'MANIFEST') {
+        unlink 'MANIFEST' or die "Can't unlink MANIFEST: $OS_ERROR";
+    }
+
+    return $self->SUPER::ACTION_manifest(@arguments);
 }
 
 
