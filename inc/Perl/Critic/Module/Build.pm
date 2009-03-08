@@ -54,7 +54,7 @@ sub ACTION_distdir {
 sub ACTION_manifest {
     my ($self, @arguments) = @_;
 
-    if (-f 'MANIFEST') {
+    if (-e 'MANIFEST') {
         unlink 'MANIFEST' or die "Can't unlink MANIFEST: $OS_ERROR";
     }
 
