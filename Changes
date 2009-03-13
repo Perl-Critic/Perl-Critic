@@ -1,5 +1,11 @@
 [1.xxx] Released on 2009-xx-xx
 
+    New Features:
+    * Perlcritic will list the names of files with violations if given the
+      --files-with-violations option, or the names of files without
+      violations if given the --files-without-violations options. These
+      have synonyms -l and -L respectively.
+
     Policy Changes:
     * Variables::ProhibitPunctuationVars gained the ability to look inside
       interpolated strings.  Doing this correctly is challenging and things

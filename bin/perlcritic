@@ -60,6 +60,8 @@ C<perlcritic> - Command-line interface to critique Perl source.
              [--color-severity-medium color_specification]
              [--color-severity-low color_specification]
              [--color-severity-lowest color_specification]
+             [--files-with-violations | -l]
+             [--files-without-violations | -L]
              {FILE | DIRECTORY | STDIN}
 
   perlcritic --profile-proto
@@ -456,6 +458,18 @@ Specifies the color to be used for lowest severity violations, as a
 Term::ANSIColor color specification. Can also be specified as
 C<--colour-severity-lowest>, C<--color-severity-1>, or
 C<--colour-severity-1>.
+
+=item C<--files-with-violations>
+
+Display only the names of files with violations.  Use this feature
+with --single-policy to find files that contain violations of a given
+policy. Can also be specified as C<--l>.
+
+=item C<--files-without-violations>
+
+Display only the names of files without violations.  Use this feature
+with --single-policy to find files that do not contain violations of a
+given policy. Can also be specified as C<--L>.
 
 =item C<--doc PATTERN>
 

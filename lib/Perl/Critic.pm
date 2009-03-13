@@ -430,6 +430,10 @@ the benefit of L<perlcritic|perlcritic>. Each is set to the Term::ANSIColor
 color specification to be used to display violations of the corresponding
 severity.
 
+B<-files-with-violations> and B<-files-without-violations> are not used by
+Perl::Critic, but are provided for the benefit of L<perlcritic|perlcritic>, to
+cause only the relevant filenames to be displayed.
+
 =back
 
 
