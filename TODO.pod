@@ -119,6 +119,8 @@ come out, we need to change the line and file reported by Violations.
 
 - Data section count
 
+Proposed implementation commited 15-Mar-2007 by wyant, about revision 3240.
+
 
 =item * Detect 5.10 source and enable stuff for that.
 
