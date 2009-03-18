@@ -5,6 +5,10 @@
       --files-with-violations option, or the names of files without
       violations if given the --files-without-violations options. These
       have synonyms -l and -L respectively.
+    * Objects::ProhibitIndirectSyntax will complain if a configured set of
+      methods is called using indirect object syntax. The 'new' method is
+      forbidden by default, but the 'forbid' configuration option allows
+      others to be configured.
 
     Policy Changes:
     * Variables::ProhibitPunctuationVars gained the ability to look inside

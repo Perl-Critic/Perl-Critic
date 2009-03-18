@@ -311,6 +311,8 @@ While the general situation can't be handled, we can look for a configured set
 of names.  Especially should be able to complain about C<new Foo()> by
 default.
 
+Proposed implementation commited 18-Mar-2007 by wyant, about revision 3241.
+
 
 =back
 
