@@ -66,69 +66,22 @@ sub applies_to {
 
 #-----------------------------------------------------------------------------
 
-# Private entities
-
-# package state
-my ( $_magic_regexp, @_ignore_for_interpolation, );
-
-# named regexps
-my ($_possible_dollar_exception, $_possible_scalar_symbol_1,
-    $_possible_scalar_symbol_2,  $_digit_following_magic,
-    $_scalar_dereference, $_array_index_thingy, $_possible_escaped_char_magic,
-    $_dollar_crunch_cast,
-);
+# sub initialize_if_enabled{} is not used
 
 #-----------------------------------------------------------------------------
 
-# Public methods and functions
+# Private entities
 
-sub initialize_if_enabled {
-    my $config = shift;
-    my %_magic_vars;
-    @_magic_vars{ keys %PPI::Token::Magic::magic } ## no critic (ProhibitPackageVars)
-        = 1;
+# The main regular expression for detecting magic variables
+# Will be initialized in initialize_if_enabled()
+Readonly::Scalar my $_MAGIC_REGEXP => _create_magic_detector();
 
-    # Set up the regexp alternation for matching magic variables.
-    # We can't process $config->{_allow} here because of a quirk in the
-    # way Perl::Critic handles testing.
-    #
-    # The sort is needed so that, e.g., $^ doesn't mask out $^M
-    my $magic_alternation = '(?:'
-        . (
-        join q(|),
-        map      { quotemeta $_ }
-            sort { -( length $a <=> length $b ) }
-            keys %_magic_vars
-        ) . ')';
+# The magic vars in this array will be ignored in interpolated strings
+# in simple mode. See CONFIGURATION in the pod.
+Readonly::Array my @IGNORE_FOR_INTERPOLATION =>
+    ( q{$'}, q{$$}, q{$#}, q{$:}, );    ## no critic ( RequireInterpolationOfMetachars )
 
-    $_magic_regexp = qr{
-            (?: \A | [^\\] )        # beginning-of-string or any non-backslash
-            (?: \\\\ )*            # zero or more double-backslashes
-            ( $magic_alternation ) # any magic punctuation variable
-        }xsm;
-
-    # The following magic vars will be ignored in interpolated strings
-    # in simple mode. See CONFIGURATION in the pod.
-    @_ignore_for_interpolation = ( q{$'}, q{$$}, q{$#}, q{$:}, );    ## no critic ( RequireInterpolationOfMetachars )
-
-    #initialize named regexps
-    {
-        ## no critic (RequireInterpolationOfMetachars,ProhibitEscapedMetacharacters)
-
-        $_possible_dollar_exception
-            = qr{ (?: ^  \$  .*  [  \w  :  \$  \{  ]  $ ) }xms;
-        $_possible_scalar_symbol_1    = qr{ (?: ^(\$(?:\_[\w:]|::)) ) }xms;
-        $_possible_scalar_symbol_2    = qr{ (?: ^\$\'[\w] ) }xms;
-        $_digit_following_magic       = qr{ (?: ^\$\'\d$ ) }xms;
-        $_scalar_dereference          = qr{ (?: ^\$\$\w ) }xms;
-        $_array_index_thingy          = qr{ (?: ^(\$\#)\w ) }xms;
-        $_possible_escaped_char_magic = qr{ (?: ^\$\^\w{2}$ ) }xms
-            ;    # uses a slightly different test than PPI
-        $_dollar_crunch_cast = qr{ (?: ^\$\#\{ ) }xms;
-    }
-
-    return $TRUE;
-}
+#-----------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
@@ -161,7 +114,6 @@ sub _violates_string {
     my %matches = _strings_helper( $self, $elem->content() );
     if (%matches) {
         my $DESC = qq{$DESC in interpolated string};
-
         return $self->violation( $DESC, $EXPL, $elem );
     }
     return;    # no violation
@@ -174,7 +126,6 @@ sub _violates_heredoc {
         my %matches = _strings_helper( $self, $heredoc_string );
         if (%matches) {
             my $DESC = qq{$DESC in interpolated here-document};
-
             return $self->violation( $DESC, $EXPL, $elem );
         }
     }
@@ -194,13 +145,13 @@ sub _strings_helper {
 
     # we are in string_mode = simple
 
-    my @raw_matches = $target_string =~ m/$_magic_regexp/goxms;
+    my @raw_matches = $target_string =~ m/$_MAGIC_REGEXP/goxms;
     return if ( !@raw_matches );
 
     my %matches;
     @matches{@raw_matches} = 1;
     delete @matches{ keys %{ $self->{_allow} } };
-    delete @matches{@_ignore_for_interpolation};
+    delete @matches{@IGNORE_FOR_INTERPOLATION};
     return %matches;
 }
 
@@ -209,33 +160,44 @@ sub _strings_thorough {
     my %matches;
 
 MATCH:
-    while ( my ($match) = $target_string =~ m/$_magic_regexp/gcxms ) {
+    while ( my ($match) = $target_string =~ m/$_MAGIC_REGEXP/gcxms ) {
         my $nextchar = substr $target_string, $LAST_MATCH_END[0], 1;
         my $c = $match . $nextchar;
 
-        # These tests closely parallel those in PPI::Token::Magic, q.v.
+        # These tests closely parallel those in PPI::Token::Magic,
+        # from which the regular expressions were taken.
+        # A degree of simplicity is sacrificed to maintain the parallel.
         # $c is so named by analogy to that module.
 
-        if ( $c =~ m/$_possible_dollar_exception/xms ) {
+        if ( $c =~ m/ ^  \$  .*  [  \w  :  \$  \{  ]  $ /xms
+            )    # possibly *not* a magic variable
+        {
             ## no critic (RequireInterpolationOfMetachars)
 
-            if (   $c =~ m/$_possible_scalar_symbol_1/xms
-                or $c =~ m/$_possible_scalar_symbol_2/xms )
+            if (   $c =~ m/ ^(\$(?:\_[\w:]|::)) /xms
+                or $c =~ m/ ^\$\'[\w] /xms )
             {
-                next MATCH if $c !~ m/$_digit_following_magic/xms;
+                next MATCH
+                    if $c !~ m/ ^\$\'\d$ /xms;    
+                    # It not $' followed by a digit.
+                    # So it's magic var with something immediately after.
             }
 
-            next MATCH if $c =~ m/$_scalar_dereference/xms;
+            next MATCH 
+                if $c =~ m/ ^\$\$\w /xms; # It's a scalar dereference
             next MATCH
-                if $c eq '$#$' or $c eq '$#{';    # index dereferencing cast
-            next MATCH if $c =~ m/$_array_index_thingy/xms;
+                if $c eq '$#$'
+                    or $c eq '$#{';       # It's an index dereferencing cast
+            next MATCH
+                if $c =~ m/ ^(\$\#)\w /xms
+            ;    # It's an array index thingy, e.g. $#array_name
 
             # PPI's checks for long escaped vars like $^WIDE_SYSTEM_CALLS
-            # appear to be erroneous.
-            # if ( $c =~ m/$_possible_escaped_char_magic/xms ) {
+            # appear to be erroneous, and are omitted here.
+            # if ( $c =~ m/^\$\^\w{2}$/xms ) {
             # }
 
-            next MATCH if $c =~ m/$_dollar_crunch_cast/xms;
+            next MATCH if $c =~ m/ ^\$\#\{ /xms;    # It's a $#{...} cast
         }
 
         # The additional checking that PPI::Token::Magic does at this point
@@ -245,6 +207,35 @@ MATCH:
     }
     delete @matches{ keys %{ $self->{_allow} } };
     return %matches;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _create_magic_detector{
+    my $config = shift;
+    my %_magic_vars;
+    @_magic_vars{
+        keys %PPI::Token::Magic::magic }    ## no critic (ProhibitPackageVars)
+        = 1;
+
+    # Set up the regexp alternation for matching magic variables.
+    # We can't process $config->{_allow} here because of a quirk in the
+    # way Perl::Critic handles testing.
+    #
+    # The sort is needed so that, e.g., $^ doesn't mask out $^M
+    my $magic_alternation = '(?:'
+        . (
+        join q(|),
+        map      { quotemeta $_ }
+            sort { -( length $a <=> length $b ) }
+            keys %_magic_vars
+        ) . ')';
+
+    return qr{
+            (?: \A | [^\\] )        # beginning-of-string or any non-backslash
+            (?: \\\\ )*            # zero or more double-backslashes
+            ( $magic_alternation ) # any magic punctuation variable
+        }xsm;
 }
 
 1;
