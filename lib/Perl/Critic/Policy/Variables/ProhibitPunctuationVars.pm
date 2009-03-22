@@ -73,7 +73,6 @@ sub applies_to {
 # Private entities
 
 # The main regular expression for detecting magic variables
-# Will be initialized in initialize_if_enabled()
 Readonly::Scalar my $_MAGIC_REGEXP => _create_magic_detector();
 
 # The magic vars in this array will be ignored in interpolated strings
@@ -178,12 +177,12 @@ MATCH:
                 or $c =~ m/ ^\$\'[\w] /xms )
             {
                 next MATCH
-                    if $c !~ m/ ^\$\'\d$ /xms;    
+                    if $c !~ m/ ^\$\'\d$ /xms;
                     # It not $' followed by a digit.
                     # So it's magic var with something immediately after.
             }
 
-            next MATCH 
+            next MATCH
                 if $c =~ m/ ^\$\$\w /xms; # It's a scalar dereference
             next MATCH
                 if $c eq '$#$'
