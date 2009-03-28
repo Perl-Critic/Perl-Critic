@@ -13,12 +13,12 @@ use warnings;
 
 use Carp;
 use English qw(-no_match_vars);
+use Perl::Critic::Utils qw{ :booleans :characters :severities };
 use Perl::Critic::Utils::PPI qw{
     get_next_element_in_same_simple_statement
     get_previous_module_used_on_same_line
     is_ppi_simple_statement
 };
-use Perl::Critic::Utils qw{ :booleans :characters :severities };
 use Readonly;
 use Scalar::Util qw{ blessed };
 
@@ -71,38 +71,16 @@ sub violates {
         and $EQUAL eq $operator
         or return;
 
-    # Find the package(s) in this file.
-    my %local_package = map { $_->schild( 1 ) => 1 } @{
-        $doc->find( 'PPI::Statement::Package' ) || [] };
-    $local_package{main} = 1;   # For completeness.
-
-    # Find the simple statement we are in.
-    my $statement = $elem;
-    while ( not is_ppi_simple_statement( $statement ) ) {
-        $statement = $statement->parent() or return;
-    }
+    # Find the simple statement we are in. If we can not find it, abandon the
+    # attempt to analyze the code.
+    my $statement = $self->_get_simple_statement( $elem )
+        or return;
 
     # Check all symbols in the statement for violation.
-    foreach my $symbol ( @{ $statement->find( 'PPI::Token::Symbol' ) || [] } ) {
-        if ( $symbol->canonical() =~ m/ \A [\@\$\%] ([\w:]*) :: /smx ) {
-            $local_package{ $1 }
-                or return $self->violation( $DESC, $EXPL, $elem );
-        }
-    }
-
-    # Check all interpolatable strings in the statement for violation.
-    foreach my $string ( @{ $statement->find( sub {
-                    return $_[1]->isa( 'PPI::Token::Quote::Double' )
-                    || $_[1]->isa( 'PPI::Token::Quote::Interpolate' )
-                    ;
-                } ) || [] } ) {
-        local $_ = $string->string();
-        # Believe the following is a false positive.
-        while ( m/ (?: \A | [^\\] ) (?: \\\\)* [\@\$] ([\w:]*) :: /gsmx ) { ## no critic (ProhibitUnusedCapture)
-            $local_package{ $1 } and next;
-            return $self->violation( $DESC, $EXPL, $elem );
-        }
-    }
+    my $exception;
+    $exception = $self->_validate_fully_qualified_symbols(
+        $elem, $statement, $doc )
+        and return $exception;
 
     # At this point we have found no data that is explicitly from outside the
     # file.  If the author wants to use a $VERSION from another module, _and_
@@ -120,6 +98,76 @@ sub violates {
     # We assume nefarious intent if we have any other module used on the same
     # line as the $VERSION assignment.
     return $self->violation( $DESC, $EXPL, $elem );
+}
+
+#-----------------------------------------------------------------------------
+
+# Return the simple statement that contains our element. The classification
+# done by is_ppi_simple_statement is not quite good enough in this case -- if
+# our parent is a PPI::Structure::List, we want to keep looking.
+
+sub _get_simple_statement {
+    my ( $self, $elem ) = @_;
+
+    my $statement = $elem;
+
+    while ( $statement) {
+        my $parent;
+        if ( is_ppi_simple_statement( $statement ) ) {
+            $parent = $statement->parent()
+                and $parent->isa( 'PPI::Structure::List' )
+                or return $statement;
+            $statement = $parent;
+        } else {
+            $statement = $statement->parent();
+        }
+    }
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _validate_fully_qualified_symbols {
+    my ( $self, $elem, $statement, $doc ) = @_;
+
+    # Find the package(s) in this file.
+    my %local_package = map { $_->schild( 1 ) => 1 } @{
+        $doc->find( 'PPI::Statement::Package' ) || [] };
+    $local_package{main} = 1;   # For completeness.
+
+    # Check all symbols in the statement for violation.
+    foreach my $symbol ( @{ $statement->find( 'PPI::Token::Symbol' ) || [] } ) {
+        if ( $symbol->canonical() =~ m/ \A [@\$%&] ([\w:]*) :: /smx ) {
+            $local_package{ $1 }
+                or return $self->violation( $DESC, $EXPL, $elem );
+        }
+    }
+
+    # Check all interpolatable strings in the statement for violation.
+    # TODO this does not correctly handle "@{[some_expression()]}".
+    foreach my $string ( @{ $statement->find( sub {
+                    return $_[1]->isa( 'PPI::Token::Quote::Double' )
+                    || $_[1]->isa( 'PPI::Token::Quote::Interpolate' )
+                    ;
+                } ) || [] } ) {
+        local $_ = $string->string();
+        # Believe the following is a false positive.
+        while ( m/ (?: \A | [^\\] ) (?: \\\\)* [@\$] [{]? ([\w:]*) :: /gsmx ) { ## no critic (ProhibitUnusedCapture)
+            $local_package{ $1 } and next;
+            return $self->violation( $DESC, $EXPL, $elem );
+        }
+    }
+
+    # Check all words in the statement for violation.
+    foreach my $symbol ( @{ $statement->find( 'PPI::Token::Word' ) || [] } ) {
+        if ( $symbol->content() =~ m/ \A ([\w:]*) :: /smx ) {
+            $local_package{ $1 }
+                or return $self->violation( $DESC, $EXPL, $elem );
+        }
+    }
+
+    return;
+
 }
 
 1;
