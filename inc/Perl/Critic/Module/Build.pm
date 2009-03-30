@@ -12,7 +12,7 @@ use 5.006001;
 use strict;
 use warnings;
 use Carp;
-use English qw< $OS_ERROR -no_match_vars >;
+use English qw< $OS_ERROR $EXECUTABLE_NAME -no_match_vars >;
 
 use base 'Module::Build';
 
