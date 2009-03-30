@@ -13,7 +13,8 @@ use warnings;
 
 use Carp;
 use English qw(-no_match_vars);
-use Perl::Critic::Utils qw{ :booleans :characters :severities };
+use Perl::Critic::Utils qw{ :booleans :characters :data_conversion
+    :language :severities };
 use Perl::Critic::Utils::PPI qw{
     is_ppi_constant_element
     get_next_element_in_same_simple_statement
@@ -27,6 +28,7 @@ our $VERSION = '1.098';
 
 #-----------------------------------------------------------------------------
 
+Readonly::Scalar my $BIND_REGEX => q<=~>;
 Readonly::Scalar my $DOLLAR => q<$>;
 # All uses of the $DOLLAR variable below are to prevent false failures in
 # xt/author/93_version.t.
@@ -35,20 +37,11 @@ Readonly::Scalar my $VERSION_MODULE => q<version>;
 Readonly::Scalar my $VERSION_VARIABLE => $DOLLAR . q<VERSION>;
 
 Readonly::Scalar my $DESC => $DOLLAR . q<VERSION value must be a constant>;
-Readonly::Scalar my $DESC_V => q<v-strings are deprecated>;
 Readonly::Scalar my $EXPL => qq<Computed ${DOLLAR}VERSION may tie the code to a single repository, or cause spooky action from a distance>;
-Readonly::Scalar my $EXPL_V => q<While v-strings are constants, they have been deprecated since Perl 5.8.1.>;
 
 #-----------------------------------------------------------------------------
 
 sub supported_parameters { return (
-        {
-            name    => 'allow_v_string',
-            description =>
-                q<V-strings are deprecated since Perl 5.8.1, but are also constants.>,
-            default_string => $FALSE,
-            behavior => 'boolean',
-        },
         {
             name    => 'allow_version_without_use_on_same_line',
             description =>
@@ -71,13 +64,22 @@ sub violates {
     $elem or return;
     $VERSION_VARIABLE eq $elem->content() or return;
 
-    # We are only interested in assignments to $VERSION, but it might be a
-    # list assignment, so if we do not find an assignment, we move up the
-    # parse tree. If we hit a statement (or no parent at all) we do not
-    # understand the code to be an assignment statement, and we simply return.
+    # Get the next thing (presumably an operator) after $VERSION. The $VERSION
+    # might be in a list, so if we get nothing we move upwards until we hit a
+    # simple statement. If we have nothing at this point, we do not understand
+    # the code, and so we return.
     my $operator;
-    $operator = get_next_element_in_same_simple_statement( $elem )
-        and $EQUAL eq $operator
+    $operator = get_next_element_in_same_simple_statement( $elem ) or return;
+
+    # If the next operator is a regex binding, and its other operand is a
+    # substitution operator, it is an attempt to modify $VERSION, so we
+    # return an error to that effect.
+    $self->_validate_operator_bind_regex( $operator, $elem )
+        and return $self->violation( $DESC, $EXPL, $elem );
+
+    # If the presumptive operator is not an assignment operator of some sort,
+    # we are not modifying $VERSION at all, and so we just return.
+    $operator = _check_for_assignment_operator( $operator )
         or return;
 
     # If there is no operand to the right of the assignment, we do not
@@ -95,12 +97,6 @@ sub violates {
     $value = $self->_validate_word_token( $elem, $value );
     $value->isa( 'Perl::Critic::Exception' ) and return $value;
 
-    # Unless v-strings are explicitly allowed, we check to see if we have one,
-    # and if so return a deprecation message.
-    $self->{_allow_v_string}
-        or not $value->isa( 'PPI::Token::Number::Version' )
-        or return $self->violation( $DESC_V, $EXPL_V, $elem );
-
     # If the value is anything but a constant, we cry foul.
     is_ppi_constant_element( $value )
         or return $self->violation( $DESC, $EXPL, $elem );
@@ -114,6 +110,59 @@ sub violates {
 
     # If there is anything else after the value, we cry foul.
     return $self->violation( $DESC, $EXPL, $elem );
+}
+
+#-----------------------------------------------------------------------------
+
+# Check for an assignment operator. This is made more complicated by the fact
+# that PPI parses things like '||=' as two PPI::Token::Operators: '||' and
+# '='. So we take the first presumptive operator as an argument. If it is not
+# a PPI::Token::Operator, we return. If it's '=', we return it. If it is any
+# other operator, we see if the next significant token is '=', and if so
+# return that.
+
+sub _check_for_assignment_operator {
+    my ( $operator ) = @_;
+
+    $operator->isa( 'PPI::Token::Operator' ) or return;
+    $EQUAL eq $operator->content() and return $operator;
+
+    my $next = $operator->snext_sibling() or return;
+    $next->isa( 'PPI::Token::Operator' ) or return;
+    $EQUAL eq $next->content() and return $next;
+
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
+# Validate a bind_regex ('=~') operator appearing after $VERSION. We return
+# true if the operator is in fact '=~', and its next sibling isa
+# PPI::Token::Regexp::Substitute. Otherwise we return false.
+
+sub _validate_operator_bind_regex {
+    my ( $self, $operator, $elem ) = @_;
+
+    # We are not interested in anything but '=~ s/../../'.
+    $BIND_REGEX eq $operator->content() or return;
+    my $operand = $operator->snext_sibling() or return;
+    $operand->isa( 'PPI::Token::Regexp::Substitute' ) or return;
+
+    # The substitution is OK if it is of the form
+    # '($var = $VERSION) =~ s/../../'.
+    my $thing;
+    not $elem->snext_sibling()
+        and $thing = $elem->sprevious_sibling()
+        and $thing->isa( 'PPI::Token::Operator' )
+        and $EQUAL eq $thing
+        and $thing = $elem->parent()
+        and $thing->isa( 'PPI::Statement' )
+        and $thing = $thing->parent()
+        and $thing->isa( 'PPI::Structure::List' )
+        and return;
+
+    # Anything left is presumed a violation.
+    return $TRUE;
 }
 
 #-----------------------------------------------------------------------------
@@ -166,13 +215,11 @@ sub _validate_word_vstring {
     my ( $self, $elem, $value ) = @_;
 
     # Check for the second part of the mis-parsed v-string, flunking if it is
-    # not found, or if v-strings are not allowed.
+    # not found.
     my $next;
     $next = $value->snext_sibling()
         and $next->isa( 'PPI::Token::Number' )
         or return $self->violation( $DESC, $EXPL, $elem );
-    $self->{_allow_v_string}
-        or return $self->violation( $DESC_V, $EXPL_V, $elem );
 
     # Return the second part of the v-string for further analysis.
     return $next;
@@ -279,19 +326,12 @@ The problem here is that the version is tied to a single repository. The code
 can not be moved to another repository (even of the same type) without
 changing its version, possibly in the wrong direction.
 
-This policy will also flag v-strings (C<v1.2.3> or just plain C<1.2.3>) as
-deprecated, unless configured otherwise.
+This policy accepts v-strings (C<v1.2.3> or just plain C<1.2.3>), since these
+are already flagged by
+L<Perl::Critic::Policy::ValuesAndExpressions::ProhibitVersionStrings|Perl::Critic::Policy::ValuesAndExpressions::ProhibitVersionStrings>.
 
 
 =head1 CONFIGURATION
-
-V-strings (C<v1.2.3> or just plain C<1.2.3>) are technically constants. But
-they have been deprecated since Perl 5.8.1, and this policy identifies them as
-such by default.  You can cause this policy to accept them by adding the
-following to your perlcriticrc file:
-
- [ValuesAndExpressions::RequireConstantVersion]
- allow_v_string = 1
 
 The proper way to set a module's $VERSION to a C<version> object is to
 C<use version;> on the same line of code that assigns the value of $VERSION.
