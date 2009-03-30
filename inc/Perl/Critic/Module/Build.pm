@@ -103,14 +103,16 @@ sub _run_nytprof {
 
     my $this_perl = $EXECUTABLE_NAME;
     my @perl_args = qw(-Iblib/lib -d:NYTProf blib/script/perlcritic);
-    my @perlcritic_args = qw(-noprofile -severity 1 -theme core blib/script);
+    my @perlcritic_args = qw(-noprofile -severity=1 -theme=core blib);
     warn join q{ }, 'Running:', $this_perl, @perl_args, @perlcritic_args, "\n";
 
     my $status_perlcritic = system $this_perl, @perl_args, @perlcritic_args;
-    croak "perlcritic failed with status $status_perlcritic" if $status_perlcritic == 1;
+    croak "perlcritic failed with status $status_perlcritic."
+      if $status_perlcritic == 1;
 
     my $status_nytprofhtml = system $nytprofhtml;
-    croak "nytprofhtml failed with status $status_nytprofhtml" if $status_nytprofhtml;
+    croak "nytprofhtml failed with status $status_nytprofhtml."
+      if $status_nytprofhtml;
 
     return;
 }
