@@ -27,6 +27,7 @@ exponentials
 filehandle
 filehandles
 filename
+filenames
 globals
 globbing
 Guzis
@@ -49,6 +50,7 @@ namespace
 namespaces
 octothorp
 PBP
+pbp
 perl
 perlcritic
 perlcriticrc
@@ -69,6 +71,7 @@ prepend
 prepending
 programmatically
 ProhibitPunctuationVars
+quotish
 readline
 Readonly
 refactor
@@ -76,6 +79,7 @@ refactoring
 regex
 runtime
 Schwartzian
+severities
 sigil
 sigils
 SQL
@@ -96,6 +100,7 @@ unescaped
 unparsed
 vice-versa
 whitespace
+Wyant
 
 #      $URL$
 #     $Date$
