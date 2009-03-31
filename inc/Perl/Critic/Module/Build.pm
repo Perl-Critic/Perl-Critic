@@ -114,7 +114,7 @@ sub _run_nytprof {
 
     my $this_perl = $EXECUTABLE_NAME;
     my @perl_args = qw(-Iblib/lib -d:NYTProf blib/script/perlcritic);
-    my @perlcritic_args = qw(-noprofile -severity=1 -theme=core -exclude=TidyCode blib);
+    my @perlcritic_args = qw(-noprofile -severity=1 -theme=core -exclude=TidyCode -exclude=PodSpelling blib);
     warn join q{ }, 'Running:', $this_perl, @perl_args, @perlcritic_args, "\n";
 
     my $status_perlcritic = system $this_perl, @perl_args, @perlcritic_args;
