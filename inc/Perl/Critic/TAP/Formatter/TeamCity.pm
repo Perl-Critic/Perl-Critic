@@ -46,8 +46,9 @@ sub open_test {
 sub _emit_teamcity_build_messages {
     my ($self, $result) = @_;
 
-    my $test_name = $result->description() || 'No test name given';
     my $expl = $result->explanation() || 'No explanation given';
+    my $test_name = $result->description() || 'No test name given';
+    $test_name =~ s{\A \s* - \s+}{}mx;
 
     teamcity_emit_build_message('testStarted', name => $test_name);
 
