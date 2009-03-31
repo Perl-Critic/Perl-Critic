@@ -460,12 +460,14 @@ Good: C<< Foo::Bar->new >>, Bad: C<< new Foo::Bar >>
 Require C<split> instead of C<m/\s*\w*\s*\w*\s*/>.  From MJD's Red Flags.
 
 
-=item * VariablesAndExpressions::RequireConstantVersion (low severity)
+=item * ValuesAndExpressions::RequireConstantVersion (low severity)
 
 
-=item * VariablesAndExpressions::ProhibitComplexVersion (medium severity)
+=item * ValuesAndExpressions::ProhibitComplexVersion (medium severity)
 
 L<http://rt.cpan.org/Ticket/Display.html?id=20439>
+
+Both the above committed as revision 3247 et seq.
 
 
 =item * Documentation::RequireSynopsis
