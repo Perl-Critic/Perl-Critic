@@ -319,6 +319,17 @@ print $_;
 
 #-----------------------------------------------------------------------------
 
+## name while loop with /g
+## failures 0
+## optional_modules Regexp::Parser
+## cut
+
+while (m/(\d+)/g) {
+    print $1, "\n";
+}
+
+#-----------------------------------------------------------------------------
+
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4
