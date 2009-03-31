@@ -65,7 +65,7 @@ sub _emit_teamcity_build_messages {
         teamcity_emit_build_message('testFailed', name => $test_name,  message => $expl);
     }
 
-    teamcity_emit_build_message('testFinsihed', name => $test_name);
+    teamcity_emit_build_message('testFinished', name => $test_name);
 
     return;
 }
