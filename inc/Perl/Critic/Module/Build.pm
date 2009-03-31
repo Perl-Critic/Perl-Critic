@@ -74,6 +74,17 @@ sub ACTION_manifest {
 }
 
 
+sub tap_harness_args {
+    my ($self) = @_;
+    return  $self->_tap_harness_args() if $ENV{RUNNING_UNDER_TEAMCITY};
+    return;
+}
+
+sub _tap_harness_args {
+    return {formatter_class => 'Perl::Critic::TAP::Formatter::TeamCity'};
+}
+
+
 sub _authortest_dependencies {
     my ($self) = @_;
 
