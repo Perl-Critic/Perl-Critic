@@ -15,14 +15,6 @@ use base qw(TAP::Formatter::Console);
 
 #-----------------------------------------------------------------------------
 
-sub prepare {}
-
-#-----------------------------------------------------------------------------
-
-sub summary {}
-
-#-----------------------------------------------------------------------------
-
 sub open_test {
     my ($self, $test, $parser) = @_;
 
@@ -31,9 +23,9 @@ sub open_test {
     my $session = $self->SUPER::open_test($test, $parser);
 
     while ( defined( my $result = $parser->next() ) ) {
-        next if not $result->is_test();
-        $self->_emit_teamcity_build_messages($result);
-        exit 1 if $result->is_bailout;
+        $self->_emit_teamcity_build_messages($result) if $result->is_test();
+        $session->result($result);
+        exit 1 if $result->is_bailout();
     }
 
     teamcity_emit_build_message('testSuiteFinished', name => $test);
