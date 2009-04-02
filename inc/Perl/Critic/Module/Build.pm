@@ -80,8 +80,9 @@ sub tap_harness_args {
     return;
 }
 
+
 sub _tap_harness_args {
-    return {formatter_class => 'Perl::Critic::TAP::Formatter::TeamCity'};
+    return {formatter_class => 'TAP::Formatter::TeamCity'};
 }
 
 
