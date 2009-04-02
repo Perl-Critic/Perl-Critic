@@ -23,7 +23,7 @@ sub open_test {
     my $session = $self->SUPER::open_test($test, $parser);
 
     while ( defined( my $result = $parser->next() ) ) {
-        $self->_emit_teamcity_build_messages($result) if $result->is_test();
+        $self->_emit_teamcity_messages($result) if $result->is_test();
         $session->result($result);
         exit 1 if $result->is_bailout();
     }
@@ -35,7 +35,7 @@ sub open_test {
 
 #-----------------------------------------------------------------------------
 
-sub _emit_teamcity_build_messages {
+sub _emit_teamcity_messages {
     my ($self, $result) = @_;
 
     my $expl = $result->explanation() || 'No explanation given';
@@ -43,7 +43,17 @@ sub _emit_teamcity_build_messages {
     $test_name =~ s{\A \s* - \s+}{}mx;
 
     teamcity_emit_build_message('testStarted', name => $test_name);
+    $self->_emit_teamcity_test_results($test_name, $expl, $result);
+    teamcity_emit_build_message('testFinished', name => $test_name);
 
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _emit_teamcity_test_results {
+    my ($self, $test_name, $expl, $result) = @_;
+    
     if ( $result->has_todo() ) {
         teamcity_emit_build_message('testIgnored', name => $test_name,  message => $expl);
     }
@@ -56,9 +66,7 @@ sub _emit_teamcity_build_messages {
     elsif ( not $result->is_ok() ) {
         teamcity_emit_build_message('testFailed', name => $test_name,  message => $expl);
     }
-
-    teamcity_emit_build_message('testFinished', name => $test_name);
-
+    
     return;
 }
 
@@ -66,6 +74,26 @@ sub _emit_teamcity_build_messages {
 1;
 
 =pod
+
+=head1 NAME
+
+TAP::Formatter::TeamCity
+
+=head1 SYNOPSIS
+
+   # When using prove(1):
+   prove -formatter TAP::Formatter::TeamCity my_test.t
+
+   # From within a Module::Build subclass:
+   sub tap_harness_args { return {formatter_class => 'TAP::Formatter::TeamCity'} }
+
+=head1 DESCRIPTION
+
+=head1 AUTHOR
+
+Jeffrey Thalhammer <thaljef@cpan.org>
+
+=head1 COPYRIGHT   
 
 =cut
 
