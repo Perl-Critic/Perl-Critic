@@ -38,12 +38,11 @@ sub open_test {
 sub _emit_teamcity_messages {
     my ($self, $result) = @_;
 
-    my $expl = $result->explanation() || 'No explanation given';
     my $test_name = $result->description() || 'No test name given';
     $test_name =~ s{\A \s* - \s+}{}mx;
 
     teamcity_emit_build_message('testStarted', name => $test_name);
-    $self->_emit_teamcity_test_results($test_name, $expl, $result);
+    $self->_emit_teamcity_test_results($test_name, $result);
     teamcity_emit_build_message('testFinished', name => $test_name);
 
     return;
@@ -52,8 +51,10 @@ sub _emit_teamcity_messages {
 #-----------------------------------------------------------------------------
 
 sub _emit_teamcity_test_results {
-    my ($self, $test_name, $expl, $result) = @_;
+    my ($self, $test_name, $result) = @_;
     
+    my $expl = $result->explanation() || 'No explanation given';
+        
     if ( $result->has_todo() ) {
         teamcity_emit_build_message('testIgnored', name => $test_name,  message => $expl);
     }
