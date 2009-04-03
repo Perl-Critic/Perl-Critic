@@ -116,6 +116,68 @@
 
 #-----------------------------------------------------------------------------
 
+## name Accept non-mutating tr/// function. RT 44515
+## failures 0
+## cut
+
+@bar = map {$_ =~ tr/f//} @foo;
+@bar = map {$_ =~ tr/f//c} @foo;
+@bar = map {$_ =~ tr/f/f/} @foo;
+@bar = map {$_ =~ tr/f/f/d} @foo;
+@bar = map {$_ =~ y/f//} @foo;
+@bar = map {$_ =~ y/f//c} @foo;
+@bar = map {$_ =~ y/f/f/} @foo;
+@bar = map {$_ =~ y/f/f/d} @foo;
+@bar = map {tr/f//} @foo;
+@bar = map {tr/f//c} @foo;
+@bar = map {tr/f/f/} @foo;
+@bar = map {tr/f/f/d} @foo;
+@bar = map {y/f//} @foo;
+@bar = map {y/f//c} @foo;
+@bar = map {y/f/f/} @foo;
+@bar = map {y/f/f/d} @foo;
+@bar = map {my $c = tr/f//; $c} @foo;
+@bar = map {my $c = tr/f//c; $c} @foo;
+@bar = map {my $c = tr/f/f/; $c} @foo;
+@bar = map {my $c = tr/f/f/d; $c} @foo;
+@bar = map {my $c = y/f//; $c} @foo;
+@bar = map {my $c = y/f//c; $c} @foo;
+@bar = map {my $c = y/f/f/; $c} @foo;
+@bar = map {my $c = y/f/f/d; $c} @foo;
+
+#-----------------------------------------------------------------------------
+
+## name Recognize mutating tr/// function. RT 44515
+## failures 24
+## cut
+
+@bar = map {$_ =~ tr/f//d} @foo;
+@bar = map {$_ =~ tr/f/f/c} @foo;
+@bar = map {$_ =~ tr/f//s} @foo;
+@bar = map {$_ =~ tr/f/f/s} @foo;
+@bar = map {$_ =~ y/f//d} @foo;
+@bar = map {$_ =~ y/f/f/c} @foo;
+@bar = map {$_ =~ y/f//s} @foo;
+@bar = map {$_ =~ y/f/f/s} @foo;
+@bar = map {tr/f//d} @foo;
+@bar = map {tr/f/f/c} @foo;
+@bar = map {tr/f//s} @foo;
+@bar = map {tr/f/f/s} @foo;
+@bar = map {y/f//d} @foo;
+@bar = map {y/f/f/c} @foo;
+@bar = map {y/f//s} @foo;
+@bar = map {y/f/f/s} @foo;
+@bar = map {my $c = tr/f//d; $c} @foo;
+@bar = map {my $c = tr/f/f/c; $c} @foo;
+@bar = map {my $c = tr/f//s; $c} @foo;
+@bar = map {my $c = tr/f/f/s; $c} @foo;
+@bar = map {my $c = y/f//d; $c} @foo;
+@bar = map {my $c = y/f/f/c; $c} @foo;
+@bar = map {my $c = y/f//s; $c} @foo;
+@bar = map {my $c = y/f/f/s; $c} @foo;
+
+#-----------------------------------------------------------------------------
+
 ##############################################################################
 #      $URL$
 #     $Date$

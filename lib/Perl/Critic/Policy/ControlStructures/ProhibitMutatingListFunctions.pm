@@ -17,6 +17,9 @@ use List::MoreUtils qw( none any );
 use Perl::Critic::Utils qw{
     :booleans :characters :severities :data_conversion :classification :ppi
 };
+use Perl::Critic::Utils::PPIRegexp qw{
+    get_match_string get_substitute_string get_modifiers
+};
 
 use base 'Perl::Critic::Policy';
 
@@ -152,6 +155,21 @@ sub _is_topic_mutating_regex {
     my $elem = shift;
     return if ! ( $elem->isa('PPI::Token::Regexp::Substitute')
                   || $elem->isa('PPI::Token::Regexp::Transliterate') );
+
+    # Exempt PPI::Token::Regexp::Transliterate objects IF the replacement
+    # string is empty AND neither the /d or /s flags are specified, OR the
+    # replacement string equals the match string AND neither the /c or /s
+    # flags are specified. RT 44515.
+    if ( $elem->isa( 'PPI::Token::Regexp::Transliterate') ) {
+        my $subs = get_substitute_string( $elem );
+        if ( $EMPTY eq $subs ) {
+            my %mods = get_modifiers( $elem );
+            $mods{d} or $mods{s} or return;
+        } elsif ( get_match_string( $elem ) eq $subs ) {
+            my %mods = get_modifiers( $elem );
+            $mods{c} or $mods{s} or return;
+        }
+    }
 
     # If the previous sibling does not exist, then
     # the regex implicitly binds to $_
