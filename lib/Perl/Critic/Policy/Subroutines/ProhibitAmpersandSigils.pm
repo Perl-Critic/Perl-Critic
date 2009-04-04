@@ -41,7 +41,7 @@ sub violates {
     my $psib = $elem->sprevious_sibling();
     if ( $psib ) {
         #Sigil is allowed if taking a reference, e.g. "\&my_sub"
-        return if $psib->isa('PPI::Token::Cast') && $psib eq q{\\};
+        return if $psib->isa('PPI::Token::Cast') && $psib->content() eq q{\\};
     }
 
     return if ( $elem !~ m{\A [&] }xms ); # ok

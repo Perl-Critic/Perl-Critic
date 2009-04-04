@@ -43,7 +43,7 @@ sub violates {
 
 sub _is_initialized {
     my $elem = shift;
-    my $wanted = sub { $_[1]->isa('PPI::Token::Operator') && $_[1] eq q{=} };
+    my $wanted = sub { $_[1]->isa('PPI::Token::Operator') && $_[1]->content() eq q{=} };
     return $elem->find( $wanted ) ? 1 : 0;
 }
 

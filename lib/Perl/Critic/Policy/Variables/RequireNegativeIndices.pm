@@ -95,8 +95,8 @@ sub _cast {
     # return (varname, isref=0|1, isindex=0|1) if this could be a violation
     my ( $expr ) = @_;
     my $cast = shift @{$expr};
-    if ( $cast eq q{$#} || $cast eq q{@} ) { ## no critic(RequireInterpolationOfMetachars)
-        my $isindex = $cast eq q{$#} ? 1 : 0;  ## no critic(RequireInterpolationOfMetachars)
+    if ( $cast->content() eq q{$#} || $cast->content() eq q{@} ) { ## no critic(RequireInterpolationOfMetachars)
+        my $isindex = $cast->content() eq q{$#} ? 1 : 0;  ## no critic(RequireInterpolationOfMetachars)
         my $arrvar = shift @{$expr};
         if ($arrvar->isa('PPI::Structure::Block')) {
             # look for [$#{$arr} ...] or [@{$arr} ...]
@@ -174,7 +174,7 @@ sub _is_dereferencer { # must return 0 or 1, not undef
     my $elem = shift;
 
     return 0 if !$elem;
-    return 1 if $elem->isa('PPI::Token::Operator') && $elem eq '->';
+    return 1 if $elem->isa('PPI::Token::Operator') && $elem->content() eq '->';
     return 1 if $elem->isa('PPI::Token::Cast');
     return 0;
 }

@@ -48,11 +48,11 @@ sub violates {
     # This means list element, not PPI element.
     my @children = $expr->schildren();
     return if 1 >= grep {    $_->isa('PPI::Token::Operator')
-                          && $_ eq $COMMA } @children;
+                          && $_->content() eq $COMMA } @children;
 
     # Is the final element a comma?
     my $final = $children[-1];
-    if ( ! ($final->isa('PPI::Token::Operator') && $final eq $COMMA) ) {
+    if ( ! ($final->isa('PPI::Token::Operator') && $final->content() eq $COMMA) ) {
         return $self->violation( $DESC, $EXPL, $elem );
     }
 

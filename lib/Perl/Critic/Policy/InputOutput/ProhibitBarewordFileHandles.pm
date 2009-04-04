@@ -34,7 +34,7 @@ sub applies_to           { return 'PPI::Token::Word'  }
 sub violates {
     my ($self, $elem, undef) = @_;
 
-    return if $elem ne 'open';
+    return if $elem->content() ne 'open';
     return if ! is_function_call($elem);
 
     my $first_arg = ( parse_arg_list($elem) )[0];

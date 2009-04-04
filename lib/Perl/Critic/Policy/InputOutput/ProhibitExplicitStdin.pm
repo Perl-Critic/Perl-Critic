@@ -35,7 +35,7 @@ sub applies_to           { return 'PPI::Token::QuoteLike::Readline' }
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    return if $elem ne '<STDIN>';
+    return if $elem->content() ne '<STDIN>';
     return $self->violation( $DESC, $EXPL, $elem );
 }
 

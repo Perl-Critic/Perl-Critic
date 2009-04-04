@@ -50,7 +50,7 @@ sub _is_topic {
     my $elem = shift;
     return defined $elem
         && $elem->isa('PPI::Token::Magic')
-            && $elem eq q{$_}; ##no critic (InterpolationOfMetachars)
+            && $elem->content() eq q{$_}; ##no critic (InterpolationOfMetachars)
 }
 
 
@@ -192,7 +192,7 @@ sub _is_topic_mutating_func {
     my $elem = shift;
     return if not $elem->isa('PPI::Token::Word');
     my @mutator_funcs = qw(chop chomp undef);
-    return if not any { $elem eq $_ } @mutator_funcs;
+    return if not any { $elem->content() eq $_ } @mutator_funcs;
     return if not is_function_call( $elem );
 
     # If these functions have no argument,
@@ -200,7 +200,7 @@ sub _is_topic_mutating_func {
     my $first_arg = first_arg( $elem );
     if (not defined $first_arg) {
         # undef does not default to $_, unlike the others
-        return if $elem eq 'undef';
+        return if $elem->content() eq 'undef';
         return 1;
     }
     return _is_topic( $first_arg );
@@ -212,7 +212,7 @@ Readonly::Scalar my $MUTATING_SUBSTR_ARG_COUNT => 4;
 
 sub _is_topic_mutating_substr {
     my $elem = shift;
-    return if $elem ne 'substr';
+    return if $elem->content() ne 'substr';
     return if not is_function_call( $elem );
 
     # check and see if the first arg is $_

@@ -117,7 +117,8 @@ sub _is_direct_part_of_map_or_grep_block {
     return if not $block_prior_sibling;
     return if not $block_prior_sibling->isa('PPI::Token::Word');
 
-    return $block_prior_sibling eq 'map' || $block_prior_sibling eq 'grep';
+    return $block_prior_sibling->content() eq 'map'
+        || $block_prior_sibling->content() eq 'grep';
 }
 
 sub _is_last_statement_in_a_block {

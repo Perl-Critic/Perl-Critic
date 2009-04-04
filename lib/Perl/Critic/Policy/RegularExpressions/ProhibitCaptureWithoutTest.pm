@@ -46,7 +46,7 @@ sub _is_in_conditional_expression {
     my $psib = $elem->sprevious_sibling;
     while ($psib) {
         if ($psib->isa('PPI::Token::Operator')) {
-            my $op = $psib->content;
+            my $op = $psib->content();
             if ($op eq q{&&} || $op eq q{||} || $op eq q{?}) {
                 $psib = $psib->sprevious_sibling;
                 while ($psib) {

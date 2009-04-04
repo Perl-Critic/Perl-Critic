@@ -33,7 +33,9 @@ sub applies_to           { return 'PPI::Statement'      }
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
-    if ( $elem->first_element() eq 'until' ) {
+
+    my $first_elem = $elem->first_element();
+    if ( $first_elem->content() eq 'until' ) {
         return $self->violation( $DESC, $EXPL, $elem );
     }
     return;    #ok!

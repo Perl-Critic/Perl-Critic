@@ -34,7 +34,7 @@ sub applies_to           { return 'PPI::Token::Symbol'       }
 sub violates {
     my ($self, $elem, undef) = @_;
 
-    if( $elem eq q{@ISA} ) {  ## no critic (RequireInterpolation)
+    if( $elem->content() eq q{@ISA} ) {  ## no critic (RequireInterpolation)
         return $self->violation( $DESC, $EXPL, $elem );
     }
     return; #ok!

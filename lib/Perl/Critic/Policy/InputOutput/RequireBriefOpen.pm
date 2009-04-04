@@ -52,7 +52,7 @@ sub violates {
     my ( $self, $elem, undef ) = @_;
 
     # Is it a call to open?
-    return if $elem ne 'open';
+    return if $elem->content() ne 'open';
     return if ! is_function_call($elem);
     my @open_args = parse_arg_list($elem);
     return if 2 > @open_args; # not a valid call to open()
@@ -113,7 +113,7 @@ sub _find_close_invocations_or_return {
         return 0 if $candidate_loc->[0] == $open_loc->[0] && $candidate_loc->[1] <= $open_loc->[1];
         return undef if defined $end_line && $candidate_loc->[0] > $end_line;
         return 0 if !$candidate->isa('PPI::Token::Word');
-        return 1 if $candidate eq 'close' || $candidate eq 'return';
+        return 1 if $candidate->content() eq 'close' || $candidate->content() eq 'return';
         return 0;
     });
     return @{$closes || []};
@@ -135,7 +135,7 @@ sub _get_opened_fh {
     my $fh;
 
     if ( 2 == @{$tokens} ) {
-        if ('my' eq $tokens->[0] &&
+        if ('my' eq $tokens->[0]->content() &&
             $tokens->[1]->isa('PPI::Token::Symbol') &&
             $SCALAR_SIGIL eq $tokens->[1]->raw_type) {
 

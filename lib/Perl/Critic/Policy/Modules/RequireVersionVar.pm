@@ -98,7 +98,9 @@ sub _is_readonly_version {
     return 0 if $psib ne 'our';
 
     my $ppsib = $psib->sprevious_sibling() || return 0;
-    return $ppsib eq 'Readonly' || $ppsib eq 'Readonly::Scalar';
+
+    return $ppsib->content() eq 'Readonly'
+        || $ppsib->content() eq 'Readonly::Scalar';
 }
 
 1;

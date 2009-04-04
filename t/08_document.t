@@ -17,7 +17,7 @@ use version;
 
 use Perl::Critic::Utils::DataConversion qw< dor >;
 
-use Test::More tests => 27;
+use Test::More tests => 24;
 
 #-----------------------------------------------------------------------------
 
@@ -28,9 +28,6 @@ our $VERSION = '1.098';
 use_ok('Perl::Critic::Document');
 can_ok('Perl::Critic::Document', 'new');
 can_ok('Perl::Critic::Document', 'filename');
-can_ok('Perl::Critic::Document', 'find');
-can_ok('Perl::Critic::Document', 'find_first');
-can_ok('Perl::Critic::Document', 'find_any');
 can_ok('Perl::Critic::Document', 'highest_explicit_perl_version');
 can_ok('Perl::Critic::Document', 'ppi_document');
 

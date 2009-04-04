@@ -137,7 +137,7 @@ sub _is_equals_exemption {
     my ($sibling) = @_;
 
     if ( my $first_op = $sibling->find_first('PPI::Token::Operator') ){
-        return $TRUE if $first_op eq q{=};
+        return $TRUE if $first_op->content() eq q{=};
     }
 
     return $FALSE;
@@ -149,7 +149,7 @@ sub _is_equals_exemption {
 sub _is_sort_exemption {
     my ($elem, $sibling) = @_;
 
-    if ( $elem eq 'sort' ) {
+    if ( $elem->content() eq 'sort' ) {
         my $first_arg = $sibling->schild(0);
         if ( $first_arg && $first_arg->isa('PPI::Statement::Expression') ) {
             $first_arg = $first_arg->schild(0);

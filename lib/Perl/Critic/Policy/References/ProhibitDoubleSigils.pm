@@ -33,7 +33,7 @@ sub applies_to           { return 'PPI::Token::Cast'    }
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
-    return if $elem eq q{\\};
+    return if $elem->content() eq q{\\};
 
     my $sib = $elem->snext_sibling;
     return if !$sib;

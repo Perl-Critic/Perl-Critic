@@ -57,7 +57,7 @@ sub violates {
     return if not $sibling;
 
     return if $sibling->isa('PPI::Token::Symbol');
-    return if $sibling->isa('PPI::Token::Operator') and $sibling eq '->';
+    return if $sibling->isa('PPI::Token::Operator') and $sibling->content() eq '->';
     return if $sibling->isa('PPI::Token::Word') and not is_included_module_name($sibling);
 
     # Get the list elements
@@ -68,7 +68,7 @@ sub violates {
 
     my $count = 0;
     for my $child ( @children ) {
-        next if $child->isa('PPI::Token::Operator')  && $child eq $COMMA;
+        next if $child->isa('PPI::Token::Operator')  && $child->content() eq $COMMA;
 
         # All elements must be literal strings,
         # and must contain 1 or more word characters.
