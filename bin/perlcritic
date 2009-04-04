@@ -871,11 +871,13 @@ rejoice!
 
 =head2 Komodo
 
-Komodo is a proprietary IDE for Perl and several other dynamic
-languages.  Free trial copies of Komodo can be obtained from the
-ActiveState website at L<http://www.activestate.com>. For instructions
-on integrating F<perlcritic> with Komodo, see
-F<extras/KomodoIntegration.pod> in this distribution.
+Komodo is a proprietary IDE for Perl and several other dynamic languages.
+Starting in version 5.1.1, Komodo has built-in support for Perl-Critic, if you
+have the L<Perl::Critic> and L<criticism> modules installed.  Free trial
+copies of Komodo can be obtained from the ActiveState website at
+L<http://www.activestate.com>. For instructions on integrating F<perlcritic>
+with older versions of Komodo, see F<extras/KomodoIntegration.pod> in this
+distribution.
 
 
 =head1 EXIT STATUS

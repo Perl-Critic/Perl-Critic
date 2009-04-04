@@ -24,6 +24,12 @@
       you'll notice a bigger speedup if you use a lot of Policies and
       your source files are really large.
 
+    Other News: 
+    * Komodo version 5.1.1 now has built-in support for Perl-Critic, 
+      if you have the Perl::Critic and criticism modules installed.
+      Both should be available through the ActiveState Perl Package
+      Manager ppm(1).
+
 [1.098] Released on 2009-03-07
 
     Some Exciting News:
