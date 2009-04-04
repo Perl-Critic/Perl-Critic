@@ -316,6 +316,12 @@ subroutines without those nasty typeglobs.  But I couldn't find one that would
 also give me a handle to the original subroutine.  I'm open to suggestions if
 you know of a solution here.
 
+=head1 TODO
+
+I don't want this kind of module to become a habit.  We should talk to Adam
+Kennedy about possibly extending PPI with a proper PPI::Document::Immutable
+subclass that has these sorts of caching methods built into it.
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <thaljef@cpan.org>
