@@ -96,6 +96,64 @@ $str =~ m/(.)/xms ? { match => $1 } : die;
 
 #-----------------------------------------------------------------------------
 
+## name Failure to match throws exception - RT 36081.
+## failures 0
+## cut
+
+m/(foo)/ or die;
+print $1, "\n";
+m/(foo)/ or croak;
+print $1, "\n";
+m/(foo)/ or confess;
+print $1, "\n";
+m/(foo)/ || die;
+print $1, "\n";
+m/(foo)/ || croak;
+print $1, "\n";
+m/(foo)/ || confess;
+print $1, "\n";
+
+#-----------------------------------------------------------------------------
+
+## name Failure to match throws exception (regex in outer block) - RT 36081.
+## failures 0
+## cut
+
+m/(foo)/ or die;
+{
+    print $1, "\n";
+}
+
+#-----------------------------------------------------------------------------
+
+## name Failure to match throws exception (regex in inner block) - RT 36081.
+## failures 1
+## cut
+
+{
+    m/(foo)/ or die;
+}
+print $1, "\n";
+
+#-----------------------------------------------------------------------------
+
+## name Boolean 'or' without known exception source is an error - RT 36081
+## failures 1
+## cut
+
+m/(foo)/ or my_exception_source( 'bar' );
+print $1, "\n";
+
+#-----------------------------------------------------------------------------
+
+## name Recognize alternate exception sources if told about them - RT 36081
+## parms { exception_source => 'my_exception_source' }
+## failures 0
+## cut
+
+m/(foo)/ or my_exception_source( 'bar' );
+print $1, "\n";
+
 ##############################################################################
 #      $URL$
 #     $Date$
