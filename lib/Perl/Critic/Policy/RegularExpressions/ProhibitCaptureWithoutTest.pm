@@ -43,10 +43,10 @@ sub applies_to           { return 'PPI::Token::Magic'      }
 
 sub violates {
     my ($self, $elem, $doc) = @_;
+    # TODO named capture variables
     return if $elem !~ m/\A \$[1-9] \z/xms;
     return if _is_in_conditional_expression($elem);
     return if $self->_is_in_conditional_structure($elem);
-##  return if $self->_is_protected_by_exception( $elem );
     return $self->violation( $DESC, $EXPL, $elem );
 }
 
@@ -205,6 +205,7 @@ the C<if> if the regex matched.
 
     while ( $str =~ /(expression)/ )
 
+This policy does not recognize named capture variables. Yet.
 
 =head1 AUTHOR
 
