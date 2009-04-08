@@ -25,6 +25,8 @@ our $VERSION = '1.098';
 
 #-----------------------------------------------------------------------------
 
+Readonly::Scalar my $WHILE => q{while};
+
 Readonly::Scalar my $DESC => q{Only use a capturing group if you plan to use the captured value};
 Readonly::Scalar my $EXPL => [252];
 
@@ -282,10 +284,10 @@ sub _check_if_in_while_condition {
     $parent = $parent->parent() or return;
     $parent->isa( 'PPI::Structure::Condition' ) or return;
 
-    my $prev = $parent->sprevious_sibling( $parent ) or return;
+    my $prev = $parent->sprevious_sibling() or return;
     $prev->isa( 'PPI::Token::Word' ) or return;
 
-    return $prev->content() eq q<while>;
+    return $WHILE eq $prev->content();
 }
 
 # false if we hit another regexp
