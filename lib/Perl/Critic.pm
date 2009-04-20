@@ -109,10 +109,7 @@ sub critique {  ## no critic (ArgUnpacking)
         )
     }
 
-    my @violations = $self->_gather_violations($doc);
-    Perl::Critic::Utils::_flush_caches();
-
-    return @violations;
+    return $self->_gather_violations($doc);
 }
 
 #=============================================================================

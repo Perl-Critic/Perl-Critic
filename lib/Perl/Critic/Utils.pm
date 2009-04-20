@@ -14,12 +14,11 @@ use 5.006001;
 use strict;
 use warnings;
 use Readonly;
-use Memoize;
 
 use Carp qw( confess );
 use English qw(-no_match_vars);
 use File::Spec qw();
-use Scalar::Util qw( blessed refaddr );
+use Scalar::Util qw( blessed );
 use B::Keywords qw();
 use PPI::Token::Quote::Single;
 
@@ -1364,43 +1363,6 @@ sub _is_covered_by_autodie {
 
     return;
 }
-
-#----------------------------------------------------------------------------
-
-Readonly::Array my @MEMOIZABLE_FUNCTIONS => qw(
-  is_function_call
-  is_hash_key
-  is_class_name
-  is_method_call
-  is_subroutine_name
-  is_included_module_name
-  is_package_declaration
-  is_label_pointer
-  is_perl_bareword
-  is_perl_filehandle
-);
-
-for my $function_name (@MEMOIZABLE_FUNCTIONS) {
-    Memoize::memoize($function_name, NORMALIZER => \&_normalizer);
-}
-
-sub _normalizer {
-    my $arg = shift;
-    return blessed $arg ? refaddr $arg : $arg;
-}
-
-#----------------------------------------------------------------------------
-
-sub _flush_caches {
-
-    for my $function_name (@MEMOIZABLE_FUNCTIONS) {
-        Memoize::flush_cache($function_name);
-    }
-
-    return;
-}
-
-#----------------------------------------------------------------------------
 
 1;
 
