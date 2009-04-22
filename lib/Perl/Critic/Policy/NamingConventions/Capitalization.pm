@@ -18,7 +18,10 @@ use List::MoreUtils qw< any >;
 
 use Perl::Critic::Exception::AggregateConfiguration;
 use Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue;
-use Perl::Critic::Utils qw< :booleans :characters :severities is_perl_global >;
+use Perl::Critic::Utils qw<
+    :booleans :characters :severities
+    hashify is_perl_global
+>;
 use Perl::Critic::Utils::Perl qw< symbol_without_sigil >;
 use Perl::Critic::Utils::PPI qw<
     is_in_subroutine
@@ -79,6 +82,8 @@ Readonly::Hash my %NAME_FOR_TYPE => (
     constant                => 'Constant',
     label                   => 'Label',
 );
+
+Readonly::Hash my %IS_COMMA => hashify( $COMMA, $FATCOMMA );
 
 Readonly::Scalar my $EXPL                   => [ 45, 46 ];
 
@@ -350,7 +355,9 @@ sub violates {
     if (
         my $name = get_constant_name_element_from_declaring_statement($elem)
     ) {
-        return $self->_constant_capitalization($elem, $name);
+        return ( grep { $_ }
+            map { $self->_constant_capitalization( $elem, $_ ) }
+            _get_all_constant_element_names_from_declaration( $name ) );
     }
 
     if ( $elem->isa('PPI::Statement::Package') ) {
@@ -368,6 +375,32 @@ sub violates {
     }
 
     return;
+}
+
+sub _get_all_constant_element_names_from_declaration {
+    my ( $elem ) = @_;
+
+    if ( $elem->isa( 'PPI::Structure::Constructor' )
+            or $elem->isa( 'PPI::Structure::Block' ) ) {
+
+        my $statement = $elem->schild( 0 ) or return;
+        $statement->isa( 'PPI::Statement' ) or return;
+
+        my @elements;
+        my $inx = 0;
+        foreach my $child ( $statement->schildren() ) {
+            $inx % 2
+                or push @{ $elements[ $inx ] ||= [] }, $child;
+            $IS_COMMA{ $child->content() }
+                and $inx++;
+        }
+        return ( map { ( $_ && @{ $_ } == 2 &&
+                    $FATCOMMA eq $_->[1]->content() &&
+                    $_->[0]->isa( 'PPI::Token::Word' ) ) ? $_->[0] : () }
+            @elements );
+    } else {
+        return $elem;
+    }
 }
 
 sub _variable_capitalization {
