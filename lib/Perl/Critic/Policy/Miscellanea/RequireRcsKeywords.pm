@@ -115,6 +115,9 @@ sub violates {
 sub _wanted {
     my ( undef, $elem ) = @_;
 
+    # Check this first, so we don't bother checking all the subtypes if we don't have to.
+    return 0 if not $elem->isa('PPI::Token');
+
     return
             $elem->isa('PPI::Token::Pod')
         ||  $elem->isa('PPI::Token::Comment')
