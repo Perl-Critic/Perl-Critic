@@ -31,6 +31,7 @@ __install_ppi_node_find_first();
 __install_ppi_node_find_any();
 __install_ppi_element_sprevious_sibling();
 __install_ppi_element_snext_sibling();
+__install_ppi_element_isa();
 
 #-----------------------------------------------------------------------------
 # Our Document is immutable, so the serialized version will always be
@@ -256,14 +257,21 @@ sub __install_ppi_element_snext_sibling {
 
 #----------------------------------------------------------------------------
 # This injects a PPI::Element::isa() function that caches the results.
-# So far, I'm not convinced that this is actually any faster than the
-# builtin isa().
 
-#sub PPI::Element::isa {
-#    return UNIVERSAL::isa(@_) if not ref $_[0];
-#    return $_[0]->{_isa}->{$_[1]} if exists $_[0]->{_isa}->{$_[1]};
-#    return $_[0]->{_isa}->{$_[1]} = UNIVERSAL::isa(@_);
-#}
+sub __install_ppi_element_isa {
+
+    require PPI::Element;
+    my %ISA_CACHE;
+
+    *{'PPI::Element::isa'} = sub {
+
+        my $type = ref $_[0];
+        return $ISA_CACHE{$type}->{$_[1]} if defined $ISA_CACHE{$type}->{$_[1]};
+        return $ISA_CACHE{$type}->{$_[1]} = $_[0]->SUPER::isa($_[1]);
+    };
+
+    return;
+}
 
 #----------------------------------------------------------------------------
 1;
