@@ -133,8 +133,8 @@ sub _dispatch_special_requests {
     if ( $opts{-options}         ) { pod2usage( -verbose => 1 )    }  #Exits
     if ( $opts{-man}             ) { pod2usage( -verbose => 2 )    }  #Exits
     if ( $opts{-version}         ) { _display_version()            }  #Exits
-    if ( $opts{-list}            ) { _render_policy_listing(%opts) }  #Exits
-    if ( $opts{'-list-all'}      ) { _render_all_policy_listing()  }  #Exits
+    if ( $opts{-list}            ) { _render_all_policy_listing()  }  #Exits
+    if ( $opts{'-list-used'}     ) { _render_policy_listing(%opts) }  #Exits
     if ( $opts{'-list-themes'}   ) { _render_theme_listing()       }  #Exits
     if ( $opts{'-profile-proto'} ) { _render_profile_prototype()   }  #Exits
     if ( $opts{-doc}             ) { _render_policy_docs( %opts )  }  #Exits
@@ -482,7 +482,7 @@ sub _get_option_specification {
         help|?|H
         include=s@
         list
-        list-all
+        list-used
         list-themes
         man
         color|colour!
@@ -565,7 +565,7 @@ sub _at_tty {
 sub _render_all_policy_listing {
     # Force P-C parameters, to catch all Policies on this site
     my %pc_params = (-profile => $EMPTY, -severity => $SEVERITY_LOWEST);
-    _render_policy_listing( %pc_params );
+    return _render_policy_listing( %pc_params );
 }
 
 #-----------------------------------------------------------------------------
