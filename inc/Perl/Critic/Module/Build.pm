@@ -82,7 +82,7 @@ sub tap_harness_args {
 
 
 sub _tap_harness_args {
-    return {formatter_class => 'TAP::Formatter::TeamCity'};
+    return {formatter_class => 'TAP::Formatter::TeamCity', merge => 1};
 }
 
 
