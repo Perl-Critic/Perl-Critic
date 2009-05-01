@@ -76,7 +76,7 @@ sub violates {
     my ( $self, $elem, $doc ) = @_;
     my @viols = ();
 
-    my $nodes = $doc->find( \&_wanted );
+    my $nodes = $self->_find_wanted_nodes($doc);
     for my $keywordset_ref ( @{ $self->{_keyword_sets} } ) {
         if ( not $nodes ) {
             my $desc = 'RCS keywords '
@@ -112,18 +112,13 @@ sub violates {
     return @viols;
 }
 
-sub _wanted {
-    my ( undef, $elem ) = @_;
+#-----------------------------------------------------------------------------
 
-    # Check this first, so we don't bother checking all the subtypes if we don't have to.
-    return 0 if not $elem->isa('PPI::Token');
-
-    return
-            $elem->isa('PPI::Token::Pod')
-        ||  $elem->isa('PPI::Token::Comment')
-        ||  $elem->isa('PPI::Token::Quote::Single')
-        ||  $elem->isa('PPI::Token::Quote::Literal')
-        ||  $elem->isa('PPI::Token::End');
+sub _find_wanted_nodes {
+    my ( $self, $doc ) = @_;
+    my @wanted_types = qw(Pod Comment Quote::Single Quote::Literal End);
+    my @found =  map { @{ $doc->find("PPI::Token::$_") || [] } } @wanted_types;
+    return \@found;
 }
 
 1;
