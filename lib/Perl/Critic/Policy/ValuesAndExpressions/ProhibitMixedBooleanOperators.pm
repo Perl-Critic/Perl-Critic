@@ -88,7 +88,7 @@ sub _high_boolean {
     my (undef, $elem) = @_;
     return if $elem->isa('PPI::Statement');
     return 0 if not exists $HIGH_BOOLEANS{$elem};
-    $elem->isa('PPI::Token::Operator') || return 0;
+    return $elem->isa('PPI::Token::Operator');
 }
 
 1;
