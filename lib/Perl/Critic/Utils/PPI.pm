@@ -32,6 +32,8 @@ our @EXPORT_OK = qw(
     get_constant_name_element_from_declaring_statement
     get_next_element_in_same_simple_statement
     get_previous_module_used_on_same_line
+    superclasses
+    descendants
 );
 
 our %EXPORT_TAGS = (
@@ -238,6 +240,27 @@ sub get_previous_module_used_on_same_line {
 
 #-----------------------------------------------------------------------------
 
+sub descendants {
+    return
+      map { $_ => ($_->{children} ? descendants($_) : ()) }
+        @{ $_[0]->{children} };
+}
+
+#-----------------------------------------------------------------------------
+
+sub superclasses {
+    my ($class) = @_;
+    require $class;
+    my $superclasses = [ $class ];
+    for ( my $i = 0; $i < @{$superclasses}; $i++ ) {    ## no critic(ProhibitCStyleForLoops)
+        no strict 'refs';                               ## no critic(ProhibitNoStrict)
+        push @{$superclasses}, @{"$superclasses->[$i]::ISA"};
+    }
+    return $superclasses;
+}
+
+#-----------------------------------------------------------------------------
+
 1;
 
 __END__
@@ -384,6 +407,19 @@ C<require> on the same line as the $element. If none is found, simply returns.
 If the given element is in a C<use> or <require>, the return is from the
 previous C<use> or C<require> on the line, if any.
 
+
+=item C<descendants( $node )>
+
+Given a L<PPI::Node|PPI::Node> returns a list containing references to every
+Node and Element that is contained within this C<$node>.  The results should
+be the same as what you would get by calling C<< $node->find() >> without any
+arguments, but this method is a bit faster.
+
+=item C<superclasses( $class )>
+
+Given then name of a L<PPI::Element|PPI::Element> subclass, returns a
+reference to an array containing the names of all the superclasses of
+C<$class>.  The returned list is in no particular order.
 
 =back
 

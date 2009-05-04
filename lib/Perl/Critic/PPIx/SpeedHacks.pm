@@ -10,6 +10,7 @@ package Perl::Critic::PPIx::SpeedHacks;
 use strict;
 use warnings;
 use Scalar::Util qw(weaken);
+use Perl::Critic::Utils::PPI qw(descendants superclasses);
 
 #-----------------------------------------------------------------------------
 
@@ -29,7 +30,6 @@ __install_ppi_node_content();
 __install_ppi_node_find();
 __install_ppi_node_find_first();
 __install_ppi_node_find_any();
-__install_ppi_node_descendants();
 __install_ppi_element_sprevious_sibling();
 __install_ppi_element_snext_sibling();
 
@@ -169,10 +169,10 @@ sub _build_cache {
     my $node = shift;
     my %token_cache = ();
 
-    for my $descendant ( $node->descendants() ) {
+    for my $descendant ( descendants( $node ) ) {
 
         my $this_class = ref $descendant;
-        my $parent_classes = $ISA_CACHE{$this_class} ||= _get_isas($this_class);
+        my $parent_classes = $ISA_CACHE{$this_class} ||= superclasses($this_class);
 
         for my $class ( @{$parent_classes} ) {
             $token_cache{$class} ||= [];
@@ -227,22 +227,6 @@ sub __install_ppi_element_snext_sibling {
         }
 
         return $self->{_snext};
-    };
-
-    return;
-}
-
-#----------------------------------------------------------------------------
-
-sub __install_ppi_node_descendants {
-
-    require PPI::Node;
-
-    *{'PPI::Node::descendants'} = sub {
-
-        return
-          map { ( $_ =>  ($_->{children} ? $_->descendants() : ()) ) }
-            @{ $_[0]->{children} };
     };
 
     return;
