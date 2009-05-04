@@ -31,7 +31,6 @@ __install_ppi_node_find_first();
 __install_ppi_node_find_any();
 __install_ppi_element_sprevious_sibling();
 __install_ppi_element_snext_sibling();
-__install_ppi_element_isa();
 
 #-----------------------------------------------------------------------------
 # Our Document is immutable, so the serialized version will always be
@@ -89,30 +88,7 @@ sub __install_ppi_node_find {
         # Build the class cache if it doesn't exist.  This happens at most
         # once per Perl::Critic::Node instance.  %elements_of will be
         # populated with arrays of elements, keyed by the type of element
-
-        if ( !$self->{_elements_of} ) {
-
-            my $cache = {};
-
-            # For a PPI::Document node, the cache actually contains a reference
-            # to the node itself.  This is to enable Perl::Critic::Document
-            # to search itself.  We may be able to tweak P::C::D so that this
-            # anomaly isn't necesssary.
-
-            if ( $type eq 'PPI::Document' ) {
-                $cache->{$type} = [$self];
-                weaken( $cache->{$type}->[0] );
-            }
-
-            # _caching_finder() returns a reference to a function that populates
-            # the cache that you specify.  We then call PPI's find() method,
-            # using that function as the callback.  Thus, our cache is populated
-            # as a side effect of the find().
-
-            my $finder_coderef = _caching_finder($cache);
-            $original_method->( $self, $finder_coderef );
-            $self->{_elements_of} = $cache;
-        }
+        $self->{_elements_of} ||= _build_cache($self);
 
         # find() must return false-but-defined on failure.
         return $self->{_elements_of}->{$wanted} || q{};
@@ -170,42 +146,43 @@ sub __install_ppi_node_find_any {
 }
 
 #----------------------------------------------------------------------------
-# This sub generates the "wanted" callback function that is used to
-# populate the cache for the various "find*" functions above.
 
-sub _caching_finder {
-
-    my $cache_ref = shift;    # These vars will persist for the life
-    my %isa_cache = ();       # of the code ref that this sub returns
-
-    # Gather up all the PPI elements and sort by @ISA.  Note: if any
-    # instances used multiple inheritance, this implementation would
-    # lead to multiple copies of $element in the $elements_of lists.
-    # However, PPI::* doesn't do multiple inheritance, so we are safe
-
-    return sub {
-        my ( undef, $element ) = @_;
-        my $classes = $isa_cache{ ref $element };
-        if ( !$classes ) {
-            $classes = [ ref $element ];
-
-            # Use a C-style loop because we append to the classes array inside
-            for ( my $i = 0; $i < @{$classes}; $i++ ) {    ## no critic(ProhibitCStyleForLoops)
-                no strict 'refs';                          ## no critic(ProhibitNoStrict)
-                push @{$classes}, @{"$classes->[$i]::ISA"};
-                $cache_ref->{ $classes->[$i] } ||= [];
-            }
-            $isa_cache{ $classes->[0] } = $classes;
-        }
-
-        for my $class ( @{$classes} ) {
-            push @{ $cache_ref->{$class} }, $element;
-        }
-
-        return 0;                                          # 0 tells find() to keep traversing,
-                                                           # but not to store this $element
-    };
+sub _get_isas {
+    my $class = shift;
+    my $classes = [ $class ];
+    for ( my $i = 0; $i < @{$classes}; $i++ ) {    ## no critic(ProhibitCStyleForLoops)
+        no strict 'refs';                          ## no critic(ProhibitNoStrict)
+        push @{$classes}, @{"$classes->[$i]::ISA"};
+    }
+    return $classes;
 }
+
+#----------------------------------------------------------------------------
+
+my %ISA_CACHE;
+
+#----------------------------------------------------------------------------
+
+sub _build_cache {
+
+    use strict;
+    my $node = shift;
+    my %token_cache = ();
+
+    for my $descendant ( $node->descendants() ) {
+
+        my $this_class = ref $descendant;
+        my $parent_classes = $ISA_CACHE{$this_class} ||= _get_isas($this_class);
+
+        for my $class ( @{$parent_classes} ) {
+            $token_cache{$class} ||= [];
+            push @{ $token_cache{$class} }, $descendant;
+        }
+    }
+
+    return \%token_cache;
+}
+
 
 #----------------------------------------------------------------------------
 # These also replace commonly used methods on PPI::Element with versions
@@ -256,24 +233,17 @@ sub __install_ppi_element_snext_sibling {
 }
 
 #----------------------------------------------------------------------------
-# This injects a PPI::Element::isa() function that caches the results.
 
-sub __install_ppi_element_isa {
+package PPI::Node;
 
-    require PPI::Element;
-    my %ISA_CACHE;
-
-    *{'PPI::Element::isa'} = sub {
-
-        my $type = ref $_[0];
-        return $ISA_CACHE{$type}->{$_[1]} if defined $ISA_CACHE{$type}->{$_[1]};
-        return $ISA_CACHE{$type}->{$_[1]} = $_[0]->SUPER::isa($_[1]);
-    };
-
-    return;
+sub descendants {
+    return
+      map { ( $_ =>  ($_->{children} ? $_->descendants() : ()) ) }
+        @{ $_[0]->{children} };
 }
 
 #----------------------------------------------------------------------------
+
 1;
 
 __END__
