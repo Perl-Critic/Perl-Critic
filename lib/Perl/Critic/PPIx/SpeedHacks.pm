@@ -29,6 +29,7 @@ __install_ppi_node_content();
 __install_ppi_node_find();
 __install_ppi_node_find_first();
 __install_ppi_node_find_any();
+__install_ppi_node_descendants();
 __install_ppi_element_sprevious_sibling();
 __install_ppi_element_snext_sibling();
 
@@ -77,7 +78,6 @@ sub __install_ppi_node_find {
     *{'PPI::Node::find'} = sub {
 
         my ( $self, $wanted, @more_args ) = @_;
-        my $type = ref $self;
 
         # This method can only find elements by their class names.  For
         # other types of searches, delegate to the PPI::Node
@@ -86,7 +86,7 @@ sub __install_ppi_node_find {
         }
 
         # Build the class cache if it doesn't exist.  This happens at most
-        # once per Perl::Critic::Node instance.  %elements_of will be
+        # once per Perl::Critic::Node instance.  The cache will be
         # populated with arrays of elements, keyed by the type of element
         $self->{_elements_of} ||= _build_cache($self);
 
@@ -234,12 +234,18 @@ sub __install_ppi_element_snext_sibling {
 
 #----------------------------------------------------------------------------
 
-package PPI::Node;
+sub __install_ppi_node_descendants {
 
-sub descendants {
-    return
-      map { ( $_ =>  ($_->{children} ? $_->descendants() : ()) ) }
-        @{ $_[0]->{children} };
+    require PPI::Node;
+
+    *{'PPI::Node::descendants'} = sub {
+
+        return
+          map { ( $_ =>  ($_->{children} ? $_->descendants() : ()) ) }
+            @{ $_[0]->{children} };
+    };
+
+    return;
 }
 
 #----------------------------------------------------------------------------
