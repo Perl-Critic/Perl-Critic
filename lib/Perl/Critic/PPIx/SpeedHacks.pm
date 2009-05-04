@@ -85,8 +85,8 @@ sub __install_ppi_node_find {
             return $original_method->(@_);
         }
 
-        # Build the class cache if it doesn't exist.  This happens at most
-        # once per Perl::Critic::Node instance.  The cache will be
+        # Build the cache of descendants if it doesn't exist.  This happens at
+        # most once per Perl::Critic::Node instance.  The cache will be
         # populated with arrays of elements, keyed by the type of element
         $self->{_elements_of} ||= _build_cache($self);
 
