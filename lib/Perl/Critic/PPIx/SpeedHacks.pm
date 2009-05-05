@@ -10,7 +10,7 @@ package Perl::Critic::PPIx::SpeedHacks;
 use strict;
 use warnings;
 use Scalar::Util qw(weaken);
-use Perl::Critic::Utils::PPI qw(descendants superclasses);
+use Perl::Critic::Utils::PPI qw(class_ancestry);
 
 #-----------------------------------------------------------------------------
 
@@ -147,18 +147,6 @@ sub __install_ppi_node_find_any {
 
 #----------------------------------------------------------------------------
 
-sub _get_isas {
-    my $class = shift;
-    my $classes = [ $class ];
-    for ( my $i = 0; $i < @{$classes}; $i++ ) {    ## no critic(ProhibitCStyleForLoops)
-        no strict 'refs';                          ## no critic(ProhibitNoStrict)
-        push @{$classes}, @{"$classes->[$i]::ISA"};
-    }
-    return $classes;
-}
-
-#----------------------------------------------------------------------------
-
 my %ISA_CACHE;
 
 #----------------------------------------------------------------------------
@@ -169,10 +157,10 @@ sub _build_cache {
     my $node = shift;
     my %token_cache = ();
 
-    for my $descendant ( descendants( $node ) ) {
+    for my $descendant ( $node->descendants() ) {
 
         my $this_class = ref $descendant;
-        my $parent_classes = $ISA_CACHE{$this_class} ||= superclasses($this_class);
+        my $parent_classes = $ISA_CACHE{$this_class} ||= class_ancestry($this_class);
 
         for my $class ( @{$parent_classes} ) {
             $token_cache{$class} ||= [];
@@ -229,6 +217,29 @@ sub __install_ppi_element_snext_sibling {
         return $self->{_snext};
     };
 
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
+sub PPI::Node::descendants {
+    my ($node) = @_;
+    return map { ( $_ => $_->descendants() ) } @{ $node->{children} };
+}
+
+sub PPI::Structure::descendants {
+    my ($structure) = @_;
+    return (
+
+            ( $structure->finish() || () ),
+
+            ( map { ( $_ => $_->descendants() ) } @{ $structure->{children} } ),
+
+            ( $structure->start() || () ),
+    );
+}
+
+sub PPI::Element::descendants {
     return;
 }
 
