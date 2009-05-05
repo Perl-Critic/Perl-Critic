@@ -243,9 +243,9 @@ sub get_previous_module_used_on_same_line {
 sub class_ancestry {
     my ($class) = @_;
     my $classes = [ $class ];
-    eval "require $class" or confess $EVAL_ERROR;    ## no critic (ProhibitStringyEval)
+    eval "require $class" or confess $EVAL_ERROR;
     for ( my $i = 0; $i < @{$classes}; $i++ ) {      ## no critic (ProhibitCStyleForLoops)
-        no strict 'refs';                            ## no critic(ProhibitNoStrict)
+        no strict 'refs';                            ## no critic (ProhibitNoStrict)
         push @{$classes}, @{"$classes->[$i]::ISA"};
     }
     return $classes;

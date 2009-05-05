@@ -378,6 +378,9 @@ can_ok('main', 'class_ancestry');
 # test class_ancestry
 
 {
+
+    no warnings qw(once redefine);  ## no critic (ProhibitNoWarnings);
+
     local @FOO::ISA = qw(BASE);
     local @FOO::BAR::ISA = qw(FOO);
     local *CORE::GLOBAL::require = sub { return 1 };
