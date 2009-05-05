@@ -409,6 +409,16 @@ sub $subroutine_name {
 sub bLaHlAhLaH {
     # Blah blah blah
 }
+
+#-----------------------------------------------------------------------------
+
+## name Subroutine named "Foo::Bar::$subroutine_name" vs the "$capitalization_scheme" capitalization scheme.
+## parms { subroutines => '$capitalization_scheme' }
+## failures $failures
+## cut
+
+sub Foo::Bar::$subroutine_name;
+
 END_SUBROUTINE_TEST
 
     return;
