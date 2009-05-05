@@ -18,7 +18,7 @@ our $VERSION = '1.098';
 
 #-----------------------------------------------------------------------------
 
-plan( skip_all => 'Need PPI version 1.203 to test optimizations')
+plan( skip_all => 'Need PPI version 1.203 to test optimizations.')
   if $PPI::Document::VERSION ne '1.203';
 
 #-----------------------------------------------------------------------------
@@ -34,7 +34,7 @@ is_deeply($found_elems, \@descendant_elems, 'find() and descdendants() return th
 #-----------------------------------------------------------------------------
 
 # ensure we run true if this test is loaded by
-# t/05_utils_ppi.t_without_optional_dependencies.t
+# t/17_optimizations.t_without_optional_dependencies.t
 1;
 
 # Local Variables:

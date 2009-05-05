@@ -404,7 +404,9 @@ previous C<use> or C<require> on the line, if any.
 
 Given then name of a L<PPI::Element|PPI::Element> subclass, returns a
 reference to an array containing C<$class> and all the superclasses of
-C<$class>.  The returned list is in no particular order.
+C<$class>.  The returned list is in no particular order.  Be advised that
+C<$class> and all of its superclasses will be C<require>d as a side effect of
+calling this.
 
 =back
 
