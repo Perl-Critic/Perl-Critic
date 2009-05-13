@@ -27,7 +27,7 @@ plan( skip_all => "Optimizations only work with PPI version $need_ppi_version.")
 #-----------------------------------------------------------------------------
 
 plan( tests => 2 );
-use_ok('Perl::Critic::PPIx::SpeedHacks');
+use_ok('Perl::Critic::PPIx::Optimized');
 my $code = q{print "Hello World" && wave( $hand );};  ## no critic (RequireInterpolation)
 my $doc = PPI::Document->new(\$code);
 my $found_elems = PPI::Node::find($doc, 'PPI::Element');
