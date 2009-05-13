@@ -21,8 +21,10 @@ use Scalar::Util qw< blessed weaken >;
 use version;
 
 use Perl::Critic::Annotation;
-use Perl::Critic::Exception::Parse qw{ throw_parse };
+use Perl::Critic::Exception::Parse qw< throw_parse >;
+use Perl::Critic::Utils qw < :characters >;
 use Perl::Critic::PPIx::Optimized;
+
 
 #-----------------------------------------------------------------------------
 
@@ -31,11 +33,16 @@ our $VERSION = '1.098';
 #-----------------------------------------------------------------------------
 
 our $AUTOLOAD;
-sub AUTOLOAD {  ## no critic (ProhibitAutoloading,ArgUnpacking)
+sub AUTOLOAD {  ## no critic (ProhibitAutoloading, ArgUnpacking)
     my ( $function_name ) = $AUTOLOAD =~ m/ ([^:\']+) \z /xms;
-    return if $function_name eq 'DESTROY';
-    my $self = shift;
-    return $self->{_doc}->$function_name(@_);
+    return shift->{_doc}->$function_name(@_);
+}
+
+#-----------------------------------------------------------------------------
+
+sub DESTROY {
+    Perl::Critic::PPIx::Optimized::Caches::flush_all();
+    return;
 }
 
 #-----------------------------------------------------------------------------
@@ -118,7 +125,7 @@ sub highest_explicit_perl_version {
         $self->{_highest_explicit_perl_version};
 
     if ( not exists $self->{_highest_explicit_perl_version} ) {
-        my $includes = $self->find( \&_is_a_version_statement );
+        my $includes = $self->_find_perl_version_includes();
 
         if ($includes) {
             # Note: this doesn't use List::Util::max() because that function
@@ -231,12 +238,14 @@ sub suppressed_violations {
 #-----------------------------------------------------------------------------
 # PRIVATE functions & methods
 
-sub _is_a_version_statement {
-    my (undef, $element) = @_;
+sub _find_perl_version_includes {
+    my ($self) = @_;
 
-    return 0 if not $element->isa('PPI::Statement::Include');
-    return 1 if $element->version();
-    return 0;
+    # This takes advantage of our find() method, which is
+    # optimized to search for elements based on their class.
+    my $includes = $self->find('PPI::Statement::Include') || [];
+    my @version_includes = grep { $_->version() } @{$includes};
+    return @version_includes ? \@version_includes : $EMPTY;
 }
 
 #-----------------------------------------------------------------------------

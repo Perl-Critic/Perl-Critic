@@ -3,23 +3,23 @@ package Perl::Critic::PPIx::Optimized::Caches;
 use strict;
 use warnings;
 
-use Scalar::Util qw(refaddr);
+use Scalar::Util qw(refaddr weaken);
 use base qw(Exporter);
 
 #------------------------------------------------------------------------------
 
-use vars qw(%SPREVIOUS_SIBLING %SNEXT_SIBLING %SERIALIZE %CONTENT);
-our @EXPORT_OK = qw(%SPREVIOUS_SIBLING %SNEXT_SIBLING %SERIALIZE %CONTENT);
+use vars qw(%SPREVIOUS_SIBLING %SNEXT_SIBLING %SERIALIZE %CONTENT %FINDER);
+our @EXPORT_OK = qw(%SPREVIOUS_SIBLING %SNEXT_SIBLING %SERIALIZE %CONTENT %FINDER);
 
 #------------------------------------------------------------------------------
 
-sub flush_element {
-    my ($elem) = @_;
-    my $refaddr = refaddr $elem;
-    delete $SPREVIOUS_SIBLING{$refaddr};
-    delete $SNEXT_SIBLING{$refaddr};
-    delete $SERIALIZE{$refaddr};
-    delete $CONTENT{$refaddr};
+sub flush_all {
+    %SPREVIOUS_SIBLING = ();
+    %SNEXT_SIBLING     = ();
+    %SERIALIZE         = ();
+    %CONTENT           = ();
+    %FINDER            = ();
+    return;
 }
 
 #------------------------------------------------------------------------------

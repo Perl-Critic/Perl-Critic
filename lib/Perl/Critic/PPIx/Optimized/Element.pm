@@ -12,6 +12,7 @@ use warnings;
 
 use PPI::Element;
 use Perl::Critic::PPIx::Optimized::Caches qw(%SPREVIOUS_SIBLING %SNEXT_SIBLING);
+#use Scalar::Util qw(weaken);
 
 #-----------------------------------------------------------------------------
 
@@ -21,7 +22,6 @@ our $VERSION = '1.098';
 
 __install_sprevious_sibling();
 __install_snext_sibling();
-__install_DESTROY();
 
 #-----------------------------------------------------------------------------
 
@@ -57,24 +57,6 @@ sub __install_snext_sibling {
 
     return;
 }
-
-#-----------------------------------------------------------------------------
-
-sub __install_DESTROY {
-
-    no strict 'refs';
-    no warnings qw(once redefine);
-    my $original_method = *PPI::Element::DESTROY{CODE};
-    *{'PPI::Element::DESTROY'} = sub {
-
-        my ($self) = @_;
-	Perl::Critic::PPIx::Optimized::Caches::flush_element($self);
-	return $original_method->(@_);
-    };
-
-    return;
-}
-
 
 #-----------------------------------------------------------------------------
 

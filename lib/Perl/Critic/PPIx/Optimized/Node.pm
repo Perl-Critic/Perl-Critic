@@ -12,7 +12,7 @@ use warnings;
 
 use PPI::Node;
 use Perl::Critic::Utils::PPI qw(class_ancestry);
-use Perl::Critic::PPIx::Optimized::Caches qw(%CONTENT);
+use Perl::Critic::PPIx::Optimized::Caches qw(%CONTENT %FINDER);
 
 #-----------------------------------------------------------------------------
 
@@ -24,7 +24,6 @@ __install_content();
 __install_find_first();
 __install_find_any();
 __install_find();
-__install_DESTROY();
 
 #-----------------------------------------------------------------------------
 
@@ -53,6 +52,7 @@ sub __install_find {
     *{'PPI::Node::find'} = sub {
 
         my ( $self, $wanted, @more_args ) = @_;
+        my $refaddr = refaddr $self;
 
         # This method can only find elements by their class names.  For
         # other types of searches, delegate to the PPI::Node
@@ -63,10 +63,10 @@ sub __install_find {
         # Build the cache of descendants if it doesn't exist.  This happens at
         # most once per Perl::Critic::Node instance.  The cache will be
         # populated with arrays of elements, keyed by the type of element
-        $self->{_elements_of} ||= __build_cache($self);
+        $FINDER{$refaddr} ||= __build_finder_cache($self);
 
         # find() must return false-but-defined on failure.
-        return $self->{_elements_of}->{$wanted} || q{};
+        return $FINDER{$refaddr}->{$wanted} || q{};
     };
 
     return;
@@ -126,7 +126,7 @@ my %ISA_CACHE;
 
 #----------------------------------------------------------------------------
 
-sub __build_cache {
+sub __build_finder_cache {
 
     my $node = shift;
     my %token_cache = ();
@@ -143,23 +143,6 @@ sub __build_cache {
     }
 
     return \%token_cache;
-}
-
-#-----------------------------------------------------------------------------
-
-sub __install_DESTROY {
-
-    no strict 'refs';
-    no warnings qw(once redefine);
-    my $original_method = *PPI::Node::DESTROY{CODE};
-    *{'PPI::Node::DESTROY'} = sub {
-
-        my ($self) = @_;
-	Perl::Critic::PPIx::Optimized::Caches::flush_element($self);
-	$original_method->(@_);
-    };
-
-    return;
 }
 
 #-----------------------------------------------------------------------------
