@@ -41,7 +41,7 @@ sub AUTOLOAD {  ## no critic (ProhibitAutoloading, ArgUnpacking)
 #-----------------------------------------------------------------------------
 
 sub DESTROY {
-    Perl::Critic::PPIx::Optimized::Caches::flush_all();
+    Perl::Critic::PPIx::Optimized::flush_caches();
     return;
 }
 

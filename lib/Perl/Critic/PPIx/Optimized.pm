@@ -10,23 +10,40 @@ package Perl::Critic::PPIx::Optimized;
 use strict;
 use warnings;
 
-use PPI;
-
 #-----------------------------------------------------------------------------
 
 our $VERSION = '1.098';
-our $OPTIMIZATIONS_WERE_LOADED = 0;
+
+#-----------------------------------------------------------------------------
+
+use vars qw($OPTIMIZATIONS_WERE_LOADED);
 
 #-----------------------------------------------------------------------------
 
 
 BEGIN {
+
+    require PPI;
     return if $PPI::VERSION ne '1.203';
+
+    require Perl::Critic::PPIx::Optimized::Caches;
     require Perl::Critic::PPIx::Optimized::Document;
     require Perl::Critic::PPIx::Optimized::Structure;
     require Perl::Critic::PPIx::Optimized::Element;
     require Perl::Critic::PPIx::Optimized::Node;
+
     $OPTIMIZATIONS_WERE_LOADED = 1;
+}
+
+#-----------------------------------------------------------------------------
+
+sub flush_caches {
+
+    if ( $OPTIMIZATIONS_WERE_LOADED ) {
+        Perl::Critic::PPIx::Optimized::Caches::flush_all();
+    }
+
+    return;
 }
 
 #----------------------------------------------------------------------------
