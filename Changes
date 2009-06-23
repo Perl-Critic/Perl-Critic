@@ -32,7 +32,8 @@
       adding caching to some methods in PPI.  Your actual performance
       gains may differ, depending on your configuration.  In general,
       you'll notice a bigger speedup if you use a lot of Policies and
-      your source files are really large.
+      your source files are really large.  This code is highly experimental
+      and may be abandoned in the next production release.
 
     Other News: 
     * Komodo version 5.1.1 now has built-in support for Perl-Critic, 
