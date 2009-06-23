@@ -86,6 +86,16 @@ active (the more Policies you use, the more performance benefit you'll see).
 Also, certain Policies like C<RequireTidyCode> and C<PodSpelling> are very slow
 and rely on external code, so they tend to skew performance measurements.
 
+=head1 METHODS
+
+=over
+
+=item flush_caches()
+
+Completely flushes all caches.
+
+=back
+
 =head1 IMPLEMENTATION NOTES
 
 I first attempted to use L<memoize> as the caching mechanism.  But it caused
