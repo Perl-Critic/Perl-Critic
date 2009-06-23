@@ -52,17 +52,18 @@ Perl::Critic::PPIx::Optimized::Caches - Caches used to optimize Perl::Critic
 =head1 DESCRIPTION
 
 This module provides access to various hashes that are used to optimize the
-performance of L<PPI|PPI>.  There are no user-servicable parts in here.
+performance of L<PPI|PPI>.  There are no user-serviceable parts in here.
 
-All hashes are keyed by the refaddr of the L<PPI::Node> or <PPI::Element>.
-The hash values are the same as those returned by the PPI methods with the
-same name as the cache variable.  Available caches are:
+All hashes are keyed by the memory address of the L<PPI::Node> or
+<PPI::Element> reference.  The hash values are the same as those returned by
+the PPI methods with the same name as the cache variable.  Available caches
+are:
 
 =over
 
 =item %SPREVIOUS_SIBLING
 
-Points to the previous signifigant sibling of the node or element.
+Points to the previous significant sibling of the node or element.
 
 =item %SNEXT_SIBLING
 
@@ -70,17 +71,17 @@ Points to the next significant sibling of the node or element.
 
 =item %SERIALIZE
 
-Points to the fully strigified representation of the node or element.
-This usually only applies to a L<PPI::Document>.
+Points to the string representation of the node.  This usually only applies
+to a L<PPI::Document>.
 
 =item %CONTENT
 
-Points to the textual representation of the node or element.  This
-applies to a L<PPI::Node> or L<PPI::Element>.
+Points to the string representation of the node or element.  This applies to
+a L<PPI::Node> or L<PPI::Element>.
 
 =item %FINDER
 
-This one is a differnt, the keys are the PPI class names of all the children
+This one is a different: the keys are the PPI class names of all the children
 of a node, and the values are array of references to all the children of
 a particular class.  This is used to expedite searching for elements by type,
 which is the most common type of search that we do.
@@ -93,7 +94,7 @@ which is the most common type of search that we do.
 
 =item flush_all()
 
-Cleares all caches.  This method is not exported.
+Clears all caches.  This method is not exported.
 
 =back
 

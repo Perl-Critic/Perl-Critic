@@ -27,14 +27,14 @@ __install_snext_sibling();
 
 sub __install_sprevious_sibling {
 
-    no strict 'refs';
-    no warnings qw(once redefine);
+    no strict 'refs';                ## no critic (ProhibitNoStrict Prolonged);
+    no warnings qw(once redefine);   ## no critic (ProhibitNoWarnings);
     my $original_method = *PPI::Element::sprevious_sibling{CODE};
     *{'PPI::Element::sprevious_sibling'} = sub {
 
         my ($self) = @_;
-	my $refaddr = refaddr $self;
-	return $SPREVIOUS_SIBLING{$refaddr} ||= $original_method->(@_);
+        my $refaddr = refaddr $self;
+        return $SPREVIOUS_SIBLING{$refaddr} ||= $original_method->(@_);
     };
 
     return;
@@ -45,14 +45,14 @@ sub __install_sprevious_sibling {
 sub __install_snext_sibling {
 
 
-    no strict 'refs';
-    no warnings qw(once redefine);
+    no strict 'refs';                ## no critic (ProhibitNoStrict Prolonged);
+    no warnings qw(once redefine);   ## no critic (ProhibitNoWarnings);
     my $original_method = *PPI::Element::snext_sibling{CODE};
     *{'PPI::Element::snext_sibling'} = sub {
 
         my ($self) = @_;
         my $refaddr = refaddr $self;
-	return $SNEXT_SIBLING{$refaddr} ||= $original_method->(@_);
+        return $SNEXT_SIBLING{$refaddr} ||= $original_method->(@_);
     };
 
     return;
@@ -81,7 +81,7 @@ Perl::Critic::PPIx::Optimized::Element - Optimizations for PPI::Elements
 =head1 DESCRIPTION
 
 This module replaces methods in L<PPI::Element> with custom versions
-that use caching to improve performance.  There are no user-servicable
+that use caching to improve performance.  There are no user-serviceable
 parts in here.
 
 =head1 AUTHOR

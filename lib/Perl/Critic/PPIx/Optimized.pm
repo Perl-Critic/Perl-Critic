@@ -56,7 +56,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::PPIx::SpeedHacks
+Perl::Critic::PPIx::Optimized
 
 =head1 SYNOPSIS
 

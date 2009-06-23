@@ -29,14 +29,14 @@ __install_find();
 
 sub __install_content {
 
-    no strict 'refs';
-    no warnings qw(once redefine);
+    no strict 'refs';                 ## no critic (ProhibitNoStrict Prolonged);
+    no warnings qw(once redefine);    ## no critic (ProhibitNoWarnings);
     my $original_method = *PPI::Node::content{CODE};
     *{'PPI::Node::content'} = sub {
 
         my ($self) = @_;
-	my $refaddr = refaddr $self;
-	return $CONTENT{$refaddr} ||= $original_method->(@_);
+        my $refaddr = refaddr $self;
+        return $CONTENT{$refaddr} ||= $original_method->(@_);
     };
 
     return;
@@ -46,8 +46,8 @@ sub __install_content {
 
 sub __install_find {
 
-    no strict 'refs';
-    no warnings qw(once redefine);
+    no strict 'refs';                ## no critic (ProhibitNoStrict Prolonged);
+    no warnings qw(once redefine);   ## no critic (ProhibitNoWarnings);
     my $original_method = *PPI::Node::find{CODE};
     *{'PPI::Node::find'} = sub {
 
@@ -76,8 +76,8 @@ sub __install_find {
 
 sub __install_find_first {
 
-    no strict 'refs';
-    no warnings qw(once redefine);
+    no strict 'refs';                ## no critic (ProhibitNoStrict Prolonged);
+    no warnings qw(once redefine);   ## no critic (ProhibitNoWarnings);
     my $original_method = *PPI::Node::find_first{CODE};
     *{'PPI::Node::find_first'} = sub {
 
@@ -100,8 +100,8 @@ sub __install_find_first {
 
 sub __install_find_any {
 
-    no strict 'refs';
-    no warnings qw(once redefine);
+    no strict 'refs';                ## no critic (ProhibitNoStrict Prolonged);
+    no warnings qw(once redefine);   ## no critic (ProhibitNoWarnings);
     my $original_method = *PPI::Node::find_any{CODE};
     *{'PPI::Node::find_any'} = sub {
 
@@ -171,7 +171,7 @@ Perl::Critic::PPIx::Optimized::Node - Optimizations for PPI::Nodes
 =head1 DESCRIPTION
 
 This module replaces methods in L<PPI::Node> with custom versions
-that use caching to improve performance.  There are no user-servicable
+that use caching to improve performance.  There are no user-serviceable
 parts in here.
 
 =head1 AUTHOR

@@ -25,13 +25,13 @@ __install_serialize();
 
 sub __install_serialize {
 
-    no strict 'refs';
-    no warnings qw(once redefine);
+    no strict 'refs';                ## no critic (ProhibitNoStrict Prolonged);
+    no warnings qw(once redefine);   ## no critic (ProhibitNoWarnings);
     my $original_method = *PPI::Document::serialize{CODE};
     *{'PPI::Document::serialize'} = sub {
 
         my ($self) = @_;
-	my $refaddr = refaddr $self;
+        my $refaddr = refaddr $self;
         return $SERIALIZE{$refaddr} ||= $original_method->(@_);
     };
 
@@ -57,7 +57,7 @@ Perl::Critic::PPIx::Optimized::Document - Optimizations for PPI::Documents
 =head1 DESCRIPTION
 
 This module replaces methods in L<PPI::Document> with custom versions
-that use caching to improve performance.  There are no user-servicable
+that use caching to improve performance.  There are no user-serviceable
 parts in here.
 
 =head1 AUTHOR

@@ -51,7 +51,7 @@ Perl::Critic::PPIx::Optimized::Structure - Optimizations for PPI::Structures
 =head1 DESCRIPTION
 
 This module replaces methods in L<PPI::Structure> with custom versions
-that use caching to improve performance.  There are no user-servicable
+that use caching to improve performance.  There are no user-serviceable
 parts in here.
 
 =head1 AUTHOR
