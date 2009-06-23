@@ -12,6 +12,10 @@ use warnings;
 
 use base qw(Exporter);
 
+#-----------------------------------------------------------------------------
+
+our $VERSION = '1.098';
+
 #------------------------------------------------------------------------------
 
 use vars qw(%SPREVIOUS_SIBLING %SNEXT_SIBLING %SERIALIZE %CONTENT %FINDER);
