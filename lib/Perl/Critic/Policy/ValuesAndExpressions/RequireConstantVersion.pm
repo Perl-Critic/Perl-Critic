@@ -62,52 +62,53 @@ sub violates {
     my ( $self, $elem, $doc ) = @_;
 
     # Any variable other than $VERSION is ignored.
-    $elem or return;
-    $VERSION_VARIABLE eq $elem->content() or return;
+    return if $VERSION_VARIABLE ne $elem->content();
 
     # Get the next thing (presumably an operator) after $VERSION. The $VERSION
     # might be in a list, so if we get nothing we move upwards until we hit a
     # simple statement. If we have nothing at this point, we do not understand
     # the code, and so we return.
     my $operator;
-    $operator = get_next_element_in_same_simple_statement( $elem ) or return;
+    return if
+        not $operator = get_next_element_in_same_simple_statement( $elem );
 
     # If the next operator is a regex binding, and its other operand is a
     # substitution operator, it is an attempt to modify $VERSION, so we
     # return an error to that effect.
-    $self->_validate_operator_bind_regex( $operator, $elem )
-        and return $self->violation( $DESC, $EXPL, $elem );
+    return $self->violation( $DESC, $EXPL, $elem )
+        if $self->_validate_operator_bind_regex( $operator, $elem );
 
     # If the presumptive operator is not an assignment operator of some sort,
     # we are not modifying $VERSION at all, and so we just return.
-    $operator = _check_for_assignment_operator( $operator )
-        or return;
+    return if not $operator = _check_for_assignment_operator( $operator );
 
     # If there is no operand to the right of the assignment, we do not
     # understand the code; simply return.
-    my $value = $operator->snext_sibling() or return;
+    my $value;
+    return if not $value = $operator->snext_sibling();
 
     # If the value is symbol '$VERSION', just return as we will see it again
     # later.
-    $value->isa( 'PPI::Token::Symbol' )
-        and $value->content() eq $VERSION_VARIABLE
-        and return;
+    return if
+            $value->isa( 'PPI::Token::Symbol' )
+        and $value->content() eq $VERSION_VARIABLE;
 
     # If the value is a word, there are a number of acceptable things it could
     # be. Check for these. If there was a problem, return it.
     $value = $self->_validate_word_token( $elem, $value );
-    $value->isa( 'Perl::Critic::Exception' ) and return $value;
+    return $value if $value->isa( 'Perl::Critic::Exception' );
 
     # If the value is anything but a constant, we cry foul.
-    is_ppi_constant_element( $value )
-        or return $self->violation( $DESC, $EXPL, $elem );
+    return $self->violation( $DESC, $EXPL, $elem )
+        if not is_ppi_constant_element( $value );
 
     # If we have nothing after the value, it is OK.
-    my $structure = get_next_element_in_same_simple_statement( $value )
-        or return;
+    my $structure;
+    return if
+        not $structure = get_next_element_in_same_simple_statement( $value );
 
     # If we have a semicolon after the value, it is OK.
-    $SCOLON eq $structure->content() and return;
+    return if $SCOLON eq $structure->content();
 
     # If there is anything else after the value, we cry foul.
     return $self->violation( $DESC, $EXPL, $elem );
@@ -125,12 +126,13 @@ sub violates {
 sub _check_for_assignment_operator {
     my ( $operator ) = @_;
 
-    $operator->isa( 'PPI::Token::Operator' ) or return;
-    $EQUAL eq $operator->content() and return $operator;
+    return           if not $operator->isa( 'PPI::Token::Operator' );
+    return $operator if $EQUAL eq $operator->content();
 
-    my $next = $operator->snext_sibling() or return;
-    $next->isa( 'PPI::Token::Operator' ) or return;
-    $EQUAL eq $next->content() and return $next;
+    my $next;
+    return       if not $next = $operator->snext_sibling();
+    return       if not $next->isa( 'PPI::Token::Operator' );
+    return $next if $EQUAL eq $next->content();
 
     return;
 }
@@ -145,14 +147,16 @@ sub _validate_operator_bind_regex {
     my ( $self, $operator, $elem ) = @_;
 
     # We are not interested in anything but '=~ s/../../'.
-    $BIND_REGEX eq $operator->content() or return;
-    my $operand = $operator->snext_sibling() or return;
-    $operand->isa( 'PPI::Token::Regexp::Substitute' ) or return;
+    return if $BIND_REGEX ne $operator->content();
+    my $operand;
+    return if not $operand = $operator->snext_sibling();
+    return if not $operand->isa( 'PPI::Token::Regexp::Substitute' );
 
     # The substitution is OK if it is of the form
     # '($var = $VERSION) =~ s/../../'.
     my $thing;
-    not $elem->snext_sibling()
+    if (
+            not $elem->snext_sibling()
         and $thing = $elem->sprevious_sibling()
         and $thing->isa( 'PPI::Token::Operator' )
         and $EQUAL eq $thing
@@ -160,7 +164,9 @@ sub _validate_operator_bind_regex {
         and $thing->isa( 'PPI::Statement' )
         and $thing = $thing->parent()
         and $thing->isa( 'PPI::Structure::List' )
-        and return;
+    ) {
+        return;
+    }
 
     # Anything left is presumed a violation.
     return $TRUE;
@@ -186,17 +192,18 @@ sub _validate_word_token {
         # error.
         if ( $content =~ m/ \A v \d+ \z /smx ) {
             $value = $self->_validate_word_vstring( $elem, $value );
+        }
+        elsif ( $QV eq $content ) {
+            # If the word is 'qv' we suspect use of the version module. If
+            # 'use version' appears on the same line, _and_ the remainder of
+            # the expression is of the form '(value)', we extract the value
+            # for further analysis.
 
-        # If the word is 'qv' we suspect use of the version module. If 'use
-        # version' appears on the same line, _and_ the remainder of the
-        # expression is of the form '(value)', we extract the value for
-        # further analysis.
-        } elsif ( $QV eq $content ) {
             $value = $self->_validate_word_qv( $elem, $value );
-
-        # If the word is 'version' we suspect use of the version module. Check
-        # to see if it is properly used.
-        } elsif ( $VERSION_MODULE eq $content ) {
+        }
+        elsif ( $VERSION_MODULE eq $content ) {
+            # If the word is 'version' we suspect use of the version module.
+            # Check to see if it is properly used.
             $value = $self->_validate_word_version( $elem, $value );
         }
     }
@@ -218,9 +225,10 @@ sub _validate_word_vstring {
     # Check for the second part of the mis-parsed v-string, flunking if it is
     # not found.
     my $next;
-    $next = $value->snext_sibling()
-        and $next->isa( 'PPI::Token::Number' )
-        or return $self->violation( $DESC, $EXPL, $elem );
+    return $self->violation( $DESC, $EXPL, $elem )
+        if
+                not $next = $value->snext_sibling()
+            or  not $next->isa( 'PPI::Token::Number' );
 
     # Return the second part of the v-string for further analysis.
     return $next;
@@ -236,21 +244,26 @@ sub _validate_word_qv {
     # Unless we are specifically allowing this construction without the
     # 'use version;' on the same line, check for it and flunk if we do not
     # find it.
-    $self->{_allow_version_without_use_on_same_line} or do {
-        my $module = get_previous_module_used_on_same_line( $value )
-            or return $self->violation( $DESC, $EXPL, $elem );
-        $VERSION_MODULE eq $module->content()
-            or return $self->violation( $DESC, $EXPL, $elem );
-    };
+    $self->{_allow_version_without_use_on_same_line}
+        or do {
+            my $module;
+            return $self->violation( $DESC, $EXPL, $elem )
+                if not
+                    $module = get_previous_module_used_on_same_line($value);
+            return $self->violation( $DESC, $EXPL, $elem )
+                if $VERSION_MODULE ne $module->content();
+        };
 
     # Dig out the first argument of 'qv()', flunking if we can not find it.
     my $next;
-    $next = $value->snext_sibling()
-        and $next->isa( 'PPI::Structure::List' )
-        and $next = $next->schild( 0 )
-        and $next->isa( 'PPI::Statement::Expression' )
-        and $next = $next->schild( 0 )
-        or return $self->violation( $DESC, $EXPL, $elem );
+    return $self->violation( $DESC, $EXPL, $elem )
+        if not (
+                $next = $value->snext_sibling()
+            and $next->isa( 'PPI::Structure::List' )
+            and $next = $next->schild( 0 )
+            and $next->isa( 'PPI::Statement::Expression' )
+            and $next = $next->schild( 0 )
+        );
 
     # Return the qv() argument for further analysis.
     return $next;
@@ -260,22 +273,27 @@ sub _validate_word_qv {
 
 # Validate $VERSION = version->new();
 
+# TODO: Fix this EVIL dual-purpose return value.  This is ugggggleeeee.
 sub _validate_word_version {
     my ( $self, $elem, $value ) = @_;
 
     # Unless we are specifically allowing this construction without the
     # 'use version;' on the same line, check for it and flunk if we do not
     # find it.
-    $self->{_allow_version_without_use_on_same_line} or do {
-        my $module = get_previous_module_used_on_same_line( $value )
-            or return $self->violation( $DESC, $EXPL, $elem );
-        $VERSION_MODULE eq $module->content()
-            or return $self->violation( $DESC, $EXPL, $elem );
-    };
+    $self->{_allow_version_without_use_on_same_line}
+        or do {
+            my $module;
+            return $self->violation( $DESC, $EXPL, $elem )
+                if not
+                    $module = get_previous_module_used_on_same_line($value);
+            return $self->violation( $DESC, $EXPL, $elem )
+                if $VERSION_MODULE ne $module->content();
+        };
 
     # Dig out the first argument of '->new()', flunking if we can not find it.
     my $next;
-    $next = $value->snext_sibling()
+    return $next if
+            $next = $value->snext_sibling()
         and $next->isa( 'PPI::Token::Operator' )
         and q{->} eq $next->content()
         and $next = $next->snext_sibling()
@@ -285,11 +303,9 @@ sub _validate_word_version {
         and $next->isa( 'PPI::Structure::List' )
         and $next = $next->schild( 0 )
         and $next->isa( 'PPI::Statement::Expression' )
-        and $next = $next->schild( 0 )
-        or return $self->violation( $DESC, $EXPL, $elem );
+        and $next = $next->schild( 0 );
 
-    # Return the version->new() argument for further analysis.
-    return $next;
+    return $self->violation( $DESC, $EXPL, $elem );
 }
 
 1;
@@ -303,6 +319,7 @@ __END__
 =head1 NAME
 
 Perl::Critic::Policy::ValuesAndExpressions::RequireConstantVersion - Require $VERSION to be a constant rather than a computed value.
+
 
 =head1 AFFILIATION
 
@@ -321,7 +338,7 @@ Computing the version has problems of various severities.
 The most benign violation is computing the version from (e.g.) a Subversion
 revision number:
 
- our ($VERSION) = q$REVISION: 42$ =~ /(\d+)/;
+    our ($VERSION) = q$REVISION: 42$ =~ /(\d+)/;
 
 The problem here is that the version is tied to a single repository. The code
 can not be moved to another repository (even of the same type) without
@@ -344,8 +361,8 @@ done.
 Should you wish to allow version objects without loading the version module on
 the same line, add the following to your configuration file:
 
- [ValuesAndExpressions::RequireConstantVersion]
- allow_version_without_use_on_same_line = 1
+    [ValuesAndExpressions::RequireConstantVersion]
+    allow_version_without_use_on_same_line = 1
 
 
 =head1 CAVEATS
@@ -365,8 +382,8 @@ the present module lacked the knowledge/expertise/gumption to put it in place.
 
 Currently the idiom
 
- our $VERSION = '1.005_05';
- $VERSION = eval $VERSION;
+    our $VERSION = '1.005_05';
+    $VERSION = eval $VERSION;
 
 will produce a violation on the second line of the example.
 
@@ -375,9 +392,10 @@ will produce a violation on the second line of the example.
 
 Thomas R. Wyant, III F<wyant at cpan dot org>
 
+
 =head1 COPYRIGHT
 
-Copyright 2009 Tom Wyant.
+Copyright (c) 2009 Tom Wyant.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
@@ -393,4 +411,3 @@ can be found in the LICENSE file included with this module
 #   c-indentation-style: bsd
 # End:
 # ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab shiftround :
-
