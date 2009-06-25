@@ -15,7 +15,7 @@ use Readonly;
 use Perl::Critic::Utils qw{ :severities $EMPTY };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.098';
+our $VERSION = '1.099_001';
 
 #-----------------------------------------------------------------------------
 

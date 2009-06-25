@@ -18,7 +18,7 @@ use Perl::Critic::Utils::PPIRegexp qw{ get_modifiers };
 
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.098';
+our $VERSION = '1.099_001';
 
 #-----------------------------------------------------------------------------
 
