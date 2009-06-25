@@ -13,8 +13,9 @@ use warnings;
 
 use Carp;
 use English qw(-no_match_vars);
-use Perl::Critic::Utils qw{ :booleans :characters :data_conversion
-    :language :severities };
+use Perl::Critic::Utils qw<
+    :booleans :characters :data_conversion :language :severities
+>;
 use Perl::Critic::Utils::PPI qw{
     is_ppi_constant_element
     get_next_element_in_same_simple_statement
