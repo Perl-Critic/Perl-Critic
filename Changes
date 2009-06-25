@@ -1,5 +1,10 @@
 [1.xxx] Released on 2009-xx-xx
 
+    New Policies:
+      Objects::ProhibitIndirectSyntax
+      ValuesAndExpressions::ProhibitComplexVersion
+      ValuesAndExpressions::RequireConstantVersion
+
     New Features:
     * Perlcritic will list the names of files with violations if given the
       --files-with-violations option, or the names of files without
