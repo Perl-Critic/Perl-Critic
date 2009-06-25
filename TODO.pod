@@ -305,15 +305,6 @@ Look for use of the bad methods in Hash::Util.
 Look for the C<:lvalue> subroutine attribute.
 
 
-=item * Objects::ProhibitIndirectSyntax [349-351]
-
-While the general situation can't be handled, we can look for a configured set
-of names.  Especially should be able to complain about C<new Foo()> by
-default.
-
-Proposed implementation commited 18-Mar-2007 by wyant, about revision 3241.
-
-
 =back
 
 
@@ -458,16 +449,6 @@ Good: C<< Foo::Bar->new >>, Bad: C<< new Foo::Bar >>
 =item * RegularExpressions::ProhibitSWSWSW
 
 Require C<split> instead of C<m/\s*\w*\s*\w*\s*/>.  From MJD's Red Flags.
-
-
-=item * ValuesAndExpressions::RequireConstantVersion (low severity)
-
-
-=item * ValuesAndExpressions::ProhibitComplexVersion (medium severity)
-
-L<http://rt.cpan.org/Ticket/Display.html?id=20439>
-
-Both the above committed as revision 3247 et seq.
 
 
 =item * Documentation::RequireSynopsis
