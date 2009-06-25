@@ -29,6 +29,7 @@ Readonly::Scalar my $EXPL => [79];
 
 #-----------------------------------------------------------------------------
 
+# There is no English.pm equivalent for $].
 sub supported_parameters {
     return (
         {   name           => 'allow',
@@ -36,7 +37,7 @@ sub supported_parameters {
             default_string => $EMPTY,
             behavior       => 'string list',
             list_always_present_values =>
-                [qw( $_ @_ $1 $2 $3 $4 $5 $6 $7 $8 $9 _ )],
+                [qw( $_ @_ $1 $2 $3 $4 $5 $6 $7 $8 $9 _ $] )],
         },
         {   name => 'string_mode',
             description =>
@@ -274,6 +275,8 @@ The scratch variables C<$_> and C<@_> are very common and are pretty
 well understood, so they are exempt from this policy.  The same goes
 for the less-frequently-used default filehandle C<_> used by stat().
 All the regexp capture variables (C<$1>, C<$2>, ...) are exempt too.
+C<$]> is exempt because there is no L<English|English> equivalent and
+L<Module::CoreList|Module::CoreList> is based upon it.
 
 You can add more exceptions to your configuration.  In your
 perlcriticrc file, add a block like this:
