@@ -16,10 +16,6 @@
       .perlcriticrc file and you want to see which Policies *would*
       be used with the current configuration, if you were actually going
       to critque a file with it.
-    * Objects::ProhibitIndirectSyntax will complain if a configured set of
-      methods is called using indirect object syntax. The 'new' method is
-      forbidden by default, but the 'forbid' configuration option allows
-      others to be configured.
 
     Policy Changes:
     * Variables::ProhibitPunctuationVars gained the ability to look inside
