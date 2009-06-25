@@ -627,6 +627,14 @@ The whole problem with "on the Foo manpage" being fixed by LE<lt>Foo|FooE<gt>.
 
 =over
 
+=item * Reformat all the POD to use 78 columns instead of 70.
+
+This thing of having different widths for the documentation and the code is
+rediculous.  Don't do this until after the next non-dev release.  Elliot is
+considering doing a special release only including this change so that the
+search.cpan.org diff tool doesn't entirely break.
+
+
 =item * Refactor guts of F<perlcritic> into L<Perl::Critic::CLI>
 
 So the F<perlcritic> script would basically just say...
