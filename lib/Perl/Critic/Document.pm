@@ -23,6 +23,7 @@ use version;
 use Perl::Critic::Annotation;
 use Perl::Critic::Exception::Parse qw< throw_parse >;
 use Perl::Critic::Utils qw < :characters >;
+use Perl::Critic::PPIx::Optimized;
 
 
 #-----------------------------------------------------------------------------
@@ -35,6 +36,13 @@ our $AUTOLOAD;
 sub AUTOLOAD {  ## no critic (ProhibitAutoloading, ArgUnpacking)
     my ( $function_name ) = $AUTOLOAD =~ m/ ([^:\']+) \z /xms;
     return shift->{_doc}->$function_name(@_);
+}
+
+#-----------------------------------------------------------------------------
+
+sub DESTROY {
+    Perl::Critic::PPIx::Optimized::flush_caches();
+    return;
 }
 
 #-----------------------------------------------------------------------------
