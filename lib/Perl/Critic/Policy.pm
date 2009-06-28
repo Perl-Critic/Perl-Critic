@@ -47,7 +47,7 @@ use Perl::Critic::Violation qw<>;
 
 use Exception::Class;   # this must come after "use P::C::Exception::*"
 
-our $VERSION = '1.099_001';
+our $VERSION = '1.099_002';
 
 #-----------------------------------------------------------------------------
 
