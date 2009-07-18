@@ -224,6 +224,10 @@ sub _is_in_slurpy_array_context {
         }
 
         # Return true if we have a list that isn't part of a foreach loop.
+        # TECHNICAL DEBT: This code is basically shared with
+        # RequireCheckingReturnValueOfEval.  I don't want to put this code
+        # into Perl::Critic::Utils::*, but I don't have time to sort out
+        # PPIx::Utilities::Structure::List yet.
         if ( $parent->isa('PPI::Structure::List') ) {
             my $parent_statement = $parent->statement() or return $TRUE;
             return $TRUE if not
