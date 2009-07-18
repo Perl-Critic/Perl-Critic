@@ -201,8 +201,8 @@ sub highest_explicit_perl_version {
             # that's enough for here.
             $highest_explicit_perl_version =
                 reduce { $a >= $b ? $a : $b }
-                map { version->new( $_->version() ) }
-                @{$includes};
+                map    { version->new( $_->version() ) }
+                       @{$includes};
         }
         else {
             $highest_explicit_perl_version = undef;
