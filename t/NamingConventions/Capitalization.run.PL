@@ -606,32 +606,6 @@ foreach our \$$variable_name (\@_) {
 
 #-----------------------------------------------------------------------------
 
-## name Localized variable as foreach loop variable named "$variable_name" vs the "$capitalization_scheme" capitalization scheme.
-## failures $failures
-## parms { global_variables => '$capitalization_scheme' }
-## cut
-
-foreach local \$$variable_name (\@_) {
-    say \$$variable_name;
-}
-
-#-----------------------------------------------------------------------------
-
-## name Localized builtin variable as foreach loop variable vs the "$capitalization_scheme" capitalization scheme.
-## failures 0
-## parms { global_variables => '$capitalization_scheme' }
-## cut
-
-foreach local \$@ (\@_) {
-    say \$@;
-}
-
-foreach local \$EVAL_ERROR (\@_) {
-    say \$EVAL_ERROR;
-}
-
-#-----------------------------------------------------------------------------
-
 ## name Localized builtin variable
 ## failures 0
 ## cut
@@ -646,17 +620,6 @@ local \$\@;
 
 # \$\\ was missing from the built in global exceptions
 local \$\\;
-
-#-----------------------------------------------------------------------------
-
-## name Localized variable in another package as foreach loop variable vs the "$capitalization_scheme" capitalization scheme.
-## failures 0
-## parms { global_variables => '$capitalization_scheme' }
-## cut
-
-foreach local \$Foo::Bar (\@_) {
-    say \$Foo::Bar;
-}
 END_FOREACH_LOOP_VARIABLE_TESTS
 
     return;
