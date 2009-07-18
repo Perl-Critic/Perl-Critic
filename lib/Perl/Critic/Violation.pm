@@ -62,7 +62,7 @@ sub new {
     # formats.  He/She can use whatever makes sense to them.
     ($desc, $expl) = _chomp_periods($desc, $expl);
 
-    #Create object
+    # Create object
     my $self = bless {}, $class;
     $self->{_description} = $desc;
     $self->{_explanation} = $expl;
@@ -118,7 +118,40 @@ sub sort_by_severity {  ##no critic(ArgUnpacking)
 sub location {
     my $self = shift;
 
-    return $self->{_location} ||= $self->{_elem}->location() || [0,0,0];
+    return $self->{_location} ||=
+        $self->{_elem}->location() || [ 0, 0, 0, 0, $self->filename() ];
+}
+
+#-----------------------------------------------------------------------------
+
+sub line_number {
+    my ($self) = @_;
+
+    return $self->{_elem}->line_number();
+}
+
+#-----------------------------------------------------------------------------
+
+sub logical_line_number {
+    my ($self) = @_;
+
+    return $self->{_elem}->logical_line_number();
+}
+
+#-----------------------------------------------------------------------------
+
+sub column_number {
+    my ($self) = @_;
+
+    return $self->{_elem}->column_number();
+}
+
+#-----------------------------------------------------------------------------
+
+sub visual_column_number {
+    my ($self) = @_;
+
+    return $self->{_elem}->visual_column_number();
 }
 
 #-----------------------------------------------------------------------------
@@ -186,6 +219,14 @@ sub filename {
 
 #-----------------------------------------------------------------------------
 
+sub logical_filename {
+    my ($self) = @_;
+
+    return $self->{_elem}->logical_filename();
+}
+
+#-----------------------------------------------------------------------------
+
 sub source {
     my $self = shift;
     return $self->{_source};
@@ -211,8 +252,8 @@ sub to_string {
     my %fspec = (
          'f' => sub { $self->filename()             },
          'F' => sub { basename( $self->filename() ) },
-         'l' => sub { $self->location->[0]          },
-         'c' => sub { $self->location->[1]          },
+         'l' => sub { $self->line_number()          },
+         'c' => sub { $self->visual_column_number() },
          'C' => sub { $self->element_class()        },
          'm' => $self->description(),
          'e' => $self->explanation(),
@@ -343,9 +384,38 @@ based upon the specific code violating the policy.
 
 =item C<location()>
 
-Returns a three-element array reference containing the line and real &
-virtual column numbers where this Violation occurred, as in
-L<PPI::Element|PPI::Element>.
+Don't use this method.  Use the C<line_number()>,
+C<logical_line_number()>, C<column_number()>,
+C<visual_column_number()>, and C<logical_filename()> methods instead.
+
+Returns a five-element array reference containing the line and real &
+virtual column and logical numbers and logical file name where this
+Violation occurred, as in L<PPI::Element|PPI::Element>.
+
+
+=item C<line_number()>
+
+Returns the physical line number that the violation was found on.
+
+
+=item C<logical_line_number()>
+
+Returns the logical line number that the violation was found on.  This
+can differ from the physical line number when there were C<#line>
+directives in the code.
+
+
+=item C<column_number()>
+
+Returns the physical column that the violation was found at.  This
+means that hard tab characters count as a single character.
+
+
+=item C<visual_column_number()>
+
+Returns the column that the violation was found at, as it would appear
+if hard tab characters were expanded, based upon the value of
+L<PPI::Document/"tab_width [ $width ]">.
 
 
 =item C<filename()>
@@ -353,6 +423,13 @@ L<PPI::Element|PPI::Element>.
 Returns the path to the file where this Violation occurred.  In some
 cases, the path may be undefined because the source code was not read
 directly from a file.
+
+
+=item C<logical_filename()>
+
+Returns the logical path to the file where the Violation occurred.
+This can differ from C<filename()> when there was a C<#line> directive
+in the code.
 
 
 =item C<severity()>

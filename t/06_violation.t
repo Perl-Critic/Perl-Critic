@@ -17,7 +17,7 @@ use PPI::Document;
 
 use Perl::Critic::Utils qw< :characters >;
 
-use Test::More tests => 43;
+use Test::More tests => 46;
 
 #-----------------------------------------------------------------------------
 
@@ -68,21 +68,22 @@ my $doc = PPI::Document->new(\$code);
 my $no_diagnostics_msg = qr/ \s* No [ ] diagnostics [ ] available \s* /xms;
 my $viol = Perl::Critic::Violation->new( 'Foo', 'Bar', $doc, 99, );
 
-my $expected_location = [1,1,1];
-
-is(        $viol->description(),   'Foo',              'description');
-is(        $viol->explanation(),   'Bar',              'explanation');
-is_deeply( $viol->location(),      $expected_location, 'location');
-is(        $viol->severity(),      99,                 'severity');
-is(        $viol->source(),        $code,              'source');
-is(        $viol->policy(),        $pkg,               'policy');
-is(        $viol->element_class(), 'PPI::Document',    'policy');
-like(      $viol->diagnostics(),   qr/ \A $no_diagnostics_msg \z /xms, 'diagnostics');
+is(   $viol->description(),          'Foo',           'description');
+is(   $viol->explanation(),          'Bar',           'explanation');
+is(   $viol->line_number(),          1,               'line_number');
+is(   $viol->logical_line_number(),  1,               'logical_line_number');
+is(   $viol->column_number(),        1,               'column_number');
+is(   $viol->visual_column_number(), 1,               'visual_column_number');
+is(   $viol->severity(),             99,              'severity');
+is(   $viol->source(),               $code,           'source');
+is(   $viol->policy(),               $pkg,            'policy');
+is(   $viol->element_class(),        'PPI::Document', 'policy');
+like( $viol->diagnostics(), qr/ \A $no_diagnostics_msg \z /xms, 'diagnostics');
 
 {
     my $old_format = Perl::Critic::Violation::get_format();
     Perl::Critic::Violation::set_format('%l,%c,%m,%e,%p,%d,%r');
-    my $expect = qr/\A $expected_location->[0],$expected_location->[1],Foo,Bar,$pkg,$no_diagnostics_msg,\Q$code\E \z/xms;
+    my $expect = qr/\A 1,1,Foo,Bar,$pkg,$no_diagnostics_msg,\Q$code\E \z/xms;
 
     like($viol->to_string(), $expect, 'to_string');
     like("$viol",            $expect, 'stringify');
