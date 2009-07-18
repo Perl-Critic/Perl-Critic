@@ -574,7 +574,6 @@ foreach my \$$variable_name (\@_) {
 
 ## name State variable as foreach loop variable named "$variable_name" vs the "$capitalization_scheme" capitalization scheme.
 ## failures $failures
-## TODO PPI that supports state variables isn't released yet.
 ## parms { local_lexical_variables => '$capitalization_scheme' }
 ## cut
 
@@ -646,7 +645,6 @@ for (my \$$variable_name = -7; \$$variable_name <= 17; \$$variable_name += 3) {
 
 ## name State variable as C-style for loop variable named "$variable_name" vs the "$capitalization_scheme" capitalization scheme.
 ## failures $failures
-## TODO PPI that supports state variables isn't released yet.
 ## parms { local_lexical_variables => '$capitalization_scheme' }
 ## cut
 
