@@ -15,7 +15,7 @@ use Perl::Critic::Utils qw{ :characters };
 
 use base qw{ Perl::Critic::PolicyParameter::Behavior };
 
-our $VERSION = '1.098';
+our $VERSION = '1.100';
 
 #-----------------------------------------------------------------------------
 

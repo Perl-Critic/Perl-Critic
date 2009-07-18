@@ -19,7 +19,7 @@ use PPI::Token::Symbol;
 use Perl::Critic::Utils qw< :characters :severities >;
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.098';
+our $VERSION = '1.100';
 
 #-----------------------------------------------------------------------------
 

@@ -20,7 +20,7 @@ use Perl::Critic::Utils qw{ :booleans :characters :severities };
 use Perl::Critic::Utils::PPIRegexp qw{ ppiify parse_regexp };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.098';
+our $VERSION = '1.100';
 
 #-----------------------------------------------------------------------------
 

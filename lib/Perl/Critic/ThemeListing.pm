@@ -17,7 +17,7 @@ use Perl::Critic::Utils qw< hashify >;
 
 use overload ( q<""> => 'to_string' );
 
-our $VERSION = '1.098';
+our $VERSION = '1.100';
 
 #-----------------------------------------------------------------------------
 
