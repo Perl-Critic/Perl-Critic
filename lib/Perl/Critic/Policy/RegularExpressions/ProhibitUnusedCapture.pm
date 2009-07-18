@@ -10,15 +10,18 @@ package Perl::Critic::Policy::RegularExpressions::ProhibitUnusedCapture;
 use 5.006001;
 use strict;
 use warnings;
-use Readonly;
+
 use List::MoreUtils qw(none);
 use Scalar::Util qw(refaddr);
 
 use English qw(-no_match_vars);
 use Carp;
+use Readonly;
 
 use Perl::Critic::Utils qw{ :booleans :severities split_nodes_on_comma };
-use Perl::Critic::Utils::PPIRegexp qw{ parse_regexp get_match_string get_substitute_string get_modifiers };
+use Perl::Critic::Utils::PPIRegexp qw<
+    parse_regexp get_match_string get_substitute_string get_modifiers
+>;
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.100';
@@ -33,8 +36,9 @@ Readonly::Scalar my $EXPL => [252];
 sub supported_parameters { return qw()                       }
 sub default_severity     { return $SEVERITY_MEDIUM           }
 sub default_themes       { return qw( core pbp maintenance ) }
-sub applies_to           { return qw(PPI::Token::Regexp::Match
-                                     PPI::Token::Regexp::Substitute) }
+sub applies_to           {
+    return qw< PPI::Token::Regexp::Match PPI::Token::Regexp::Substitute >
+}
 
 #-----------------------------------------------------------------------------
 
@@ -50,11 +54,11 @@ sub violates {
     my ( $self, $elem, undef ) = @_;
 
     # optimization: don't bother parsing the regexp if there are no parens
-    return if $elem !~ m/[(]/xms;
+    return if 0 > index $elem->content(), '(';
 
     my $re = parse_regexp($elem);
-    return if ! $re;
-    my $ncaptures = @{$re->captures};
+    return if not $re;
+    my $ncaptures = @{ $re->captures() };
     return if 0 == $ncaptures;
 
     my @captures;  # List of expected captures
@@ -74,11 +78,11 @@ sub violates {
         # TODO: This is a quick hack.  Really, we should parse the string.  It could
         # be false positive (s///e) or false negative (s/(.)/\$1/)
 
-        for my $num ($subst =~ m/\$(\d+)/xmsg) {
-            $captures[$num-1] = 1;
+        for my $num ($subst =~ m< \$ (\d+) >xmsg) {
+            $captures[$num - 1] = 1;
         }
     }
-    return if none {! defined $_} @captures;
+    return if none {not defined $_} @captures;
 
     my %modifiers = get_modifiers($elem);
     if ($modifiers{g}) {
@@ -116,12 +120,12 @@ sub _enough_assignments {
         # @$foo = m/(foo)/
         # %foo = m/(foo)/
         # %$foo = m/(foo)/
-        return 1 if _symbol_is_slurpy($psib);
+        return $TRUE if _symbol_is_slurpy($psib);
 
     } elsif ($psib->isa('PPI::Structure::Block')) {
         # @{$foo} = m/(foo)/
         # %{$foo} = m/(foo)/
-        return 1 if _block_is_slurpy($psib);
+        return $TRUE if _block_is_slurpy($psib);
 
     } elsif ($psib->isa('PPI::Structure::List')) {
         # () = m/(foo)/
@@ -133,9 +137,10 @@ sub _enough_assignments {
         # ($foo,@{$foo}) = m/(foo)(bar)/
 
         my @args = $psib->schildren;
-        return 1 if !@args;   # empty list (perhaps the "goatse" operator) is slurpy
+        return $TRUE if not @args;   # empty list (perhaps the "goatse" operator) is slurpy
 
-        # Forward looking: PPI might change in v1.200 so schild(0) is a PPI::Statement::Expression
+        # Forward looking: PPI might change in v1.200 so schild(0) is a
+        # PPI::Statement::Expression.
         if ( 1 == @args && $args[0]->isa('PPI::Statement::Expression') ) {
             @args = $args[0]->schildren;
         }
@@ -146,22 +151,22 @@ sub _enough_assignments {
             if (1 == @{$parts[$i]}) {
                 my $var = $parts[$i]->[0];
                 if ($var->isa('PPI::Token::Symbol') || $var->isa('PPI::Token::Cast')) {
-                    return 1 if _has_array_sigil($var);
+                    return $TRUE if _has_array_sigil($var);
                 }
             }
             $captures->[$i] = 1;  # ith evariable captures
         }
     }
 
-    return none {! defined $_} @{$captures};
+    return none {not defined $_} @{$captures};
 }
 
 sub _symbol_is_slurpy {
     my ($symbol) = @_;
 
-    return 1 if _has_array_sigil($symbol);
-    return 1 if _has_hash_sigil($symbol);
-    return 1 if _is_preceded_by_array_or_hash_cast($symbol);
+    return $TRUE if _has_array_sigil($symbol);
+    return $TRUE if _has_hash_sigil($symbol);
+    return $TRUE if _is_preceded_by_array_or_hash_cast($symbol);
     return;
 }
 
@@ -180,7 +185,7 @@ sub _has_hash_sigil {
 sub _block_is_slurpy {
     my ($block) = @_;
 
-    return 1 if _is_preceded_by_array_or_hash_cast($block);
+    return $TRUE if _is_preceded_by_array_or_hash_cast($block);
     return;
 }
 
@@ -217,26 +222,37 @@ sub _is_in_slurpy_array_context {
             $parent = $parent->parent;
             return if !$parent;
         }
-        return 1 if $parent->isa('PPI::Structure::List');
-        return 1 if $parent->isa('PPI::Structure::Constructor');
+
+        # Return true if we have a list that isn't part of a foreach loop.
+        if ( $parent->isa('PPI::Structure::List') ) {
+            my $parent_statement = $parent->statement() or return $TRUE;
+            return $TRUE if not
+                $parent_statement->isa('PPI::Statement::Compound');
+            return $TRUE if $parent_statement->type() ne 'foreach';
+        }
+
+        return $TRUE if $parent->isa('PPI::Structure::Constructor');
         if ($parent->isa('PPI::Structure::Block')) {
-            return 1 if refaddr($elem->statement) eq refaddr([$parent->schildren]->[-1]);
+            return $TRUE
+                if
+                        refaddr($elem->statement)
+                    eq  refaddr([$parent->schildren]->[-1]);
         }
         return;
     }
     if ($psib->isa('PPI::Token::Operator')) {
         # most operators kill slurpiness (except assignment, which is handled elsewhere)
-        return 1 if q{,} eq $psib;
+        return $TRUE if q{,} eq $psib;
         return;
     }
-    return 1;
+    return $TRUE;
 }
 
 sub _skip_lhs {
     my ($elem) = @_;
 
     # TODO: better implementation to handle casts, expressions, subcalls, etc.
-    $elem = $elem->sprevious_sibling;
+    $elem = $elem->sprevious_sibling();
 
     return $elem;
 }
@@ -246,7 +262,7 @@ sub _enough_magic {
 
     _check_for_magic($elem, $captures);
 
-    return none {! defined $_} @{$captures};
+    return none {not defined $_} @{$captures};
 }
 
 # void return
@@ -262,10 +278,10 @@ sub _check_for_magic {
 
     return if ! _check_rest_of_statement($elem, $captures);
 
-    my $parent = $elem->parent;
+    my $parent = $elem->parent();
     while ($parent && ! $parent->isa('PPI::Statement::Sub')) {
         return if ! _check_rest_of_statement($parent, $captures);
-        $parent = $parent->parent;
+        $parent = $parent->parent();
     }
 
     return;
@@ -285,7 +301,7 @@ sub _check_rest_of_statement {
         }
         $nsib = $nsib->snext_sibling;
     }
-    return 1;
+    return $TRUE;
 }
 
 # false if we hit another regexp
@@ -302,7 +318,7 @@ sub _check_node_children {
             _mark_magic($child, $captures);
         }
     }
-    return 1;
+    return $TRUE;
 }
 
 sub _mark_magic {
