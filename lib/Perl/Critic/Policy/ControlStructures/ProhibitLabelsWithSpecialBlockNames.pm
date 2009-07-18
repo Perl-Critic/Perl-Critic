@@ -92,8 +92,8 @@ This Policy is not configurable except for the standard options.
 
 =head1 SEE ALSO
 
-L<Perl Buzz article|http://perlbuzz.com/2008/05/colons-invalidate-your-begin-and-end-blocks.html>
-on this issue.
+The Perl Buzz article on this issue at
+L<http://perlbuzz.com/2008/05/colons-invalidate-your-begin-and-end-blocks.html>.
 
 
 =head1 ACKNOWLEDGMENT

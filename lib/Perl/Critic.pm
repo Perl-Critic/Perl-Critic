@@ -837,7 +837,7 @@ If you develop any new Policy modules, feel free to send them to C<<
 Perl::Critic distribution.  Or if you would like to work on the
 Perl::Critic project directly, check out our repository at
 L<http://perlcritic.tigris.org>.  To subscribe to our mailing list,
-send a message to C<< <dev-subscribe@perlcritic.tigris.org> >>.
+send a message to L<mailto:dev-subscribe@perlcritic.tigris.org>.
 
 The Perl::Critic team is also available for hire.  If your
 organization has its own coding standards, we can create custom
@@ -910,14 +910,15 @@ L<Text::ParseWords|Text::ParseWords>
 =head1 CONTACTING THE DEVELOPMENT TEAM
 
 You are encouraged to subscribe to the mailing list; send a message to
-C<< <users-subscribe@perlcritic.tigris.org> >>.  See also
-L<the archives|http://perlcritic.tigris.org/servlets/SummarizeList?listName=users>.
+L<mailto:users-subscribe@perlcritic.tigris.org>.  See also the archives at
+L<http://perlcritic.tigris.org/servlets/SummarizeList?listName=users>.
 You can also contact the author at C<< <thaljef@cpan.org> >>.
 
 At least one member of the development team has started hanging around
 in L<irc://irc.perl.org/#perlcritic>.
 
-Follow L<Perl::Critic|https://twitter.com/perlcritic> on Twitter.
+You can also follow Perl::Critic on Twitter, at
+L<https://twitter.com/perlcritic>.
 
 
 =head1 SEE ALSO
@@ -943,17 +944,12 @@ L<Test::Perl::Critic|Test::Perl::Critic>
 
 L<Test::Perl::Critic::Progressive|Test::Perl::Critic::Progressive>
 
-There are also a couple of distributions that will install all the
-Perl::Critic related modules known to the development team:
-
-L<Bundle::Perl::Critic|Bundle::Perl::Critic>
+There is also a distribution that will install all the Perl::Critic related
+modules known to the development team:
 
 L<Task::Perl::Critic|Task::Perl::Critic>
 
-If you want to make sure you have absolutely everything, you can use
-these:
-
-L<Bundle::Perl::Critic::IncludingOptionalDependencies|Bundle::Perl::Critic::IncludingOptionalDependencies>
+If you want to make sure you have absolutely everything, you can use this:
 
 L<Task::Perl::Critic::IncludingOptionalDependencies|Task::Perl::Critic::IncludingOptionalDependencies>
 
