@@ -37,12 +37,15 @@ sub violates {
     # First child will be 'for' or 'foreach' keyword
     return if $elem->type() ne 'foreach';
 
-    # The second child could be the iteration list
-    my $second_child = $elem->schild(1);
-    return if not $second_child;
-    return if $second_child->isa('PPI::Structure::List');
+    my $first_child = $elem->schild(0);
+    return if not $first_child;
+    my $start = $first_child->isa('PPI::Token::Label') ? 1 : 0;
 
-    return if $second_child eq 'my';
+    my $potential_scope = $elem->schild($start + 1);
+    return if not $potential_scope;
+    return if $potential_scope->isa('PPI::Structure::List');
+
+    return if $potential_scope eq 'my';
 
     return $self->violation( $DESC, $EXPL, $elem );
 }

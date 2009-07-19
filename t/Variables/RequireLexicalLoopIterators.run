@@ -16,6 +16,15 @@ foreach my $foo ( @list ) {}
 
 #-----------------------------------------------------------------------------
 
+## name Lexicals on loops with labels.
+## failures 0
+## cut
+
+LABEL: for my $foo ( @list ) {}
+ANOTHER_LABEL: foreach my $foo ( @list ) {}
+
+#-----------------------------------------------------------------------------
+
 ## name Implicit $_ passes
 ## failures 0
 ## cut
