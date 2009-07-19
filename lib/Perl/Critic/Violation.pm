@@ -31,6 +31,14 @@ use Perl::Critic::Exception::Fatal::Internal qw< throw_internal >;
 
 our $VERSION = '1.100';
 
+
+Readonly::Scalar my $LOCATION_LINE_NUMBER               => 0;
+Readonly::Scalar my $LOCATION_COLUMN_NUMBER             => 1;
+Readonly::Scalar my $LOCATION_VISUAL_COLUMN_NUMBER      => 2;
+Readonly::Scalar my $LOCATION_LOGICAL_LINE_NUMBER       => 3;
+Readonly::Scalar my $LOCATION_LOGICAL_FILENAME          => 4;
+
+
 # Class variables...
 my $format = "%m at line %l, column %c. %e.\n"; # Default stringy format
 my %diagnostics = ();  # Cache of diagnostic messages
@@ -42,8 +50,8 @@ Readonly::Scalar my $CONSTRUCTOR_ARG_COUNT => 5;
 sub new {
     my ( $class, $desc, $expl, $elem, $sev ) = @_;
 
-    #Check arguments to help out developers who might
-    #be creating new Perl::Critic::Policy modules.
+    # Check arguments to help out developers who might
+    # be creating new Perl::Critic::Policy modules.
 
     if ( @_ != $CONSTRUCTOR_ARG_COUNT ) {
         throw_internal 'Wrong number of args to Violation->new()';
@@ -54,7 +62,7 @@ sub new {
         $elem = $elem->ppi_document();
     }
 
-    if ( ! eval { $elem->isa( 'PPI::Element' ) } ) {
+    if ( not eval { $elem->isa( 'PPI::Element' ) } ) {
         throw_internal '3rd arg to Violation->new() must be a PPI::Element';
     }
 
@@ -74,21 +82,23 @@ sub new {
     my $top = $elem->top();
     $self->{_filename} = $top->can('filename') ? $top->filename() : undef;
     $self->{_source}   = _first_line_of_source( $elem );
+    $self->{_location} =
+        $elem->location() || [ 0, 0, 0, 0, $self->filename() ];
 
     return $self;
 }
 
 #-----------------------------------------------------------------------------
 
-sub set_format { return $format = verbosity_to_format( $_[0] ); }  ##no critic(ArgUnpacking)
+sub set_format { return $format = verbosity_to_format( $_[0] ); }  ## no critic(ArgUnpacking)
 sub get_format { return $format;         }
 
 #-----------------------------------------------------------------------------
 
-sub sort_by_location {  ##no critic(ArgUnpacking)
+sub sort_by_location {  ## no critic(ArgUnpacking)
 
-    ref $_[0] || shift;              #Can call as object or class method
-    return scalar @_ if ! wantarray; #In case we are called in scalar context
+    ref $_[0] || shift;              # Can call as object or class method
+    return scalar @_ if ! wantarray; # In case we are called in scalar context
 
     ## TODO: What if $a and $b are not Violation objects?
     return
@@ -100,10 +110,10 @@ sub sort_by_location {  ##no critic(ArgUnpacking)
 
 #-----------------------------------------------------------------------------
 
-sub sort_by_severity {  ##no critic(ArgUnpacking)
+sub sort_by_severity {  ## no critic(ArgUnpacking)
 
-    ref $_[0] || shift;              #Can call as object or class method
-    return scalar @_ if ! wantarray; #In case we are called in scalar context
+    ref $_[0] || shift;              # Can call as object or class method
+    return scalar @_ if ! wantarray; # In case we are called in scalar context
 
     ## TODO: What if $a and $b are not Violation objects?
     return
@@ -118,8 +128,7 @@ sub sort_by_severity {  ##no critic(ArgUnpacking)
 sub location {
     my $self = shift;
 
-    return $self->{_location} ||=
-        $self->{_elem}->location() || [ 0, 0, 0, 0, $self->filename() ];
+    return $self->{_location};
 }
 
 #-----------------------------------------------------------------------------
@@ -127,7 +136,7 @@ sub location {
 sub line_number {
     my ($self) = @_;
 
-    return $self->{_elem}->line_number();
+    return $self->location()->[$LOCATION_LINE_NUMBER];
 }
 
 #-----------------------------------------------------------------------------
@@ -135,7 +144,7 @@ sub line_number {
 sub logical_line_number {
     my ($self) = @_;
 
-    return $self->{_elem}->logical_line_number();
+    return $self->location()->[$LOCATION_LOGICAL_LINE_NUMBER];
 }
 
 #-----------------------------------------------------------------------------
@@ -143,7 +152,7 @@ sub logical_line_number {
 sub column_number {
     my ($self) = @_;
 
-    return $self->{_elem}->column_number();
+    return $self->location()->[$LOCATION_COLUMN_NUMBER];
 }
 
 #-----------------------------------------------------------------------------
@@ -151,7 +160,7 @@ sub column_number {
 sub visual_column_number {
     my ($self) = @_;
 
-    return $self->{_elem}->visual_column_number();
+    return $self->location()->[$LOCATION_VISUAL_COLUMN_NUMBER];
 }
 
 #-----------------------------------------------------------------------------
@@ -222,7 +231,7 @@ sub filename {
 sub logical_filename {
     my ($self) = @_;
 
-    return $self->{_elem}->logical_filename();
+    return $self->location()->[$LOCATION_LOGICAL_FILENAME];
 }
 
 #-----------------------------------------------------------------------------
@@ -288,7 +297,7 @@ sub _first_line_of_source {
     my $stmnt = $elem->statement() || $elem;
     my $code_string = $stmnt->content() || $EMPTY;
 
-    #Chop everything but the first line (without newline);
+    # Chop everything but the first line (without newline);
     $code_string =~ s{ \n.* }{}smx;
     return $code_string;
 }
@@ -324,10 +333,10 @@ Perl::Critic::Violation - A violation of a Policy found in some source code.
   use PPI;
   use Perl::Critic::Violation;
 
-  my $elem = $doc->child(0);      #$doc is a PPI::Document object
-  my $desc = 'Offending code';    #Describe the violation
-  my $expl = [1,45,67];           #Page numbers from PBP
-  my $sev  = 5;                   #Severity level of this violation
+  my $elem = $doc->child(0);      # $doc is a PPI::Document object
+  my $desc = 'Offending code';    # Describe the violation
+  my $expl = [1,45,67];           # Page numbers from PBP
+  my $sev  = 5;                   # Severity level of this violation
 
   my $vio  = Perl::Critic::Violation->new($desc, $expl, $node, $sev);
 

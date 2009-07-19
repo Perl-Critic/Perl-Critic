@@ -17,7 +17,7 @@ use PPI::Document;
 
 use Perl::Critic::Utils qw< :characters >;
 
-use Test::More tests => 46;
+use Test::More tests => 57;
 
 #-----------------------------------------------------------------------------
 
@@ -38,84 +38,128 @@ use Perl::Critic::Policy::Test;    # this is to test violation formatting
 #-----------------------------------------------------------------------------
 #  method tests
 
-can_ok('Perl::Critic::Violation', 'sort_by_location');
-can_ok('Perl::Critic::Violation', 'sort_by_severity');
-can_ok('Perl::Critic::Violation', 'new');
-can_ok('Perl::Critic::Violation', 'location');
-can_ok('Perl::Critic::Violation', 'diagnostics');
-can_ok('Perl::Critic::Violation', 'description');
-can_ok('Perl::Critic::Violation', 'explanation');
-can_ok('Perl::Critic::Violation', 'filename');
-can_ok('Perl::Critic::Violation', 'source');
-can_ok('Perl::Critic::Violation', 'policy');
-can_ok('Perl::Critic::Violation', 'get_format');
-can_ok('Perl::Critic::Violation', 'set_format');
-can_ok('Perl::Critic::Violation', 'to_string');
+{
+    can_ok('Perl::Critic::Violation', 'sort_by_location');
+    can_ok('Perl::Critic::Violation', 'sort_by_severity');
+    can_ok('Perl::Critic::Violation', 'new');
+    can_ok('Perl::Critic::Violation', 'location');
+    can_ok('Perl::Critic::Violation', 'diagnostics');
+    can_ok('Perl::Critic::Violation', 'description');
+    can_ok('Perl::Critic::Violation', 'explanation');
+    can_ok('Perl::Critic::Violation', 'filename');
+    can_ok('Perl::Critic::Violation', 'source');
+    can_ok('Perl::Critic::Violation', 'policy');
+    can_ok('Perl::Critic::Violation', 'get_format');
+    can_ok('Perl::Critic::Violation', 'set_format');
+    can_ok('Perl::Critic::Violation', 'to_string');
+} # end scope block
 
 #-----------------------------------------------------------------------------
 # Constructor Failures:
-eval { Perl::Critic::Violation->new('desc', 'expl'); };
-ok($EVAL_ERROR, 'new, wrong number of args');
-eval { Perl::Critic::Violation->new('desc', 'expl', {}, 'severity'); };
-ok($EVAL_ERROR, 'new, bad arg');
+{
+    eval { Perl::Critic::Violation->new('desc', 'expl'); };
+    ok($EVAL_ERROR, 'new, wrong number of args');
+    eval { Perl::Critic::Violation->new('desc', 'expl', {}, 'severity'); };
+    ok($EVAL_ERROR, 'new, bad arg');
+} # end scope block
 
 #-----------------------------------------------------------------------------
 # Accessor tests
 
-my $pkg  = __PACKAGE__;
-my $code = 'Hello World;';
-my $doc = PPI::Document->new(\$code);
-my $no_diagnostics_msg = qr/ \s* No [ ] diagnostics [ ] available \s* /xms;
-my $viol = Perl::Critic::Violation->new( 'Foo', 'Bar', $doc, 99, );
+{
+    my $pkg  = __PACKAGE__;
+    my $code = 'Hello World;';
+    my $doc = PPI::Document->new(\$code);
+    my $no_diagnostics_msg = qr/ \s* No [ ] diagnostics [ ] available \s* /xms;
+    my $viol = Perl::Critic::Violation->new( 'Foo', 'Bar', $doc, 99, );
 
-is(   $viol->description(),          'Foo',           'description');
-is(   $viol->explanation(),          'Bar',           'explanation');
-is(   $viol->line_number(),          1,               'line_number');
-is(   $viol->logical_line_number(),  1,               'logical_line_number');
-is(   $viol->column_number(),        1,               'column_number');
-is(   $viol->visual_column_number(), 1,               'visual_column_number');
-is(   $viol->severity(),             99,              'severity');
-is(   $viol->source(),               $code,           'source');
-is(   $viol->policy(),               $pkg,            'policy');
-is(   $viol->element_class(),        'PPI::Document', 'policy');
-like( $viol->diagnostics(), qr/ \A $no_diagnostics_msg \z /xms, 'diagnostics');
+    is(   $viol->description(),          'Foo',           'description');
+    is(   $viol->explanation(),          'Bar',           'explanation');
+    is(   $viol->line_number(),          1,               'line_number');
+    is(   $viol->logical_line_number(),  1,               'logical_line_number');
+    is(   $viol->column_number(),        1,               'column_number');
+    is(   $viol->visual_column_number(), 1,               'visual_column_number');
+    is(   $viol->severity(),             99,              'severity');
+    is(   $viol->source(),               $code,           'source');
+    is(   $viol->policy(),               $pkg,            'policy');
+    is(   $viol->element_class(),        'PPI::Document', 'element class');
+    like( $viol->diagnostics(), qr/ \A $no_diagnostics_msg \z /xms, 'diagnostics');
+
+    {
+        my $old_format = Perl::Critic::Violation::get_format();
+        Perl::Critic::Violation::set_format('%l,%c,%m,%e,%p,%d,%r');
+        my $expect = qr/\A 1,1,Foo,Bar,$pkg,$no_diagnostics_msg,\Q$code\E \z/xms;
+
+        like($viol->to_string(), $expect, 'to_string');
+        like("$viol",            $expect, 'stringify');
+
+        Perl::Critic::Violation::set_format($old_format);
+    }
+
+    $viol = Perl::Critic::Violation->new('Foo', [28], $doc, 99);
+    is($viol->explanation(), 'See page 28 of PBP', 'explanation');
+
+    $viol = Perl::Critic::Violation->new('Foo', [28,30], $doc, 99);
+    is($viol->explanation(), 'See pages 28,30 of PBP', 'explanation');
+} # end scope block
 
 {
-    my $old_format = Perl::Critic::Violation::get_format();
-    Perl::Critic::Violation::set_format('%l,%c,%m,%e,%p,%d,%r');
-    my $expect = qr/\A 1,1,Foo,Bar,$pkg,$no_diagnostics_msg,\Q$code\E \z/xms;
+    my $pkg  = __PACKAGE__;
+    my $code = 'Say goodbye to the document;';
+    my $doc = PPI::Document->new(\$code);
 
-    like($viol->to_string(), $expect, 'to_string');
-    like("$viol",            $expect, 'stringify');
+    my $words = $doc->find('PPI::Token::Word');
+    my $word = $words->[0];
 
-    Perl::Critic::Violation::set_format($old_format);
-}
+    my $no_diagnostics_msg = qr/ \s* No [ ] diagnostics [ ] available \s* /xms;
+    my $viol = Perl::Critic::Violation->new( 'Foo', 'Bar', $word, 99, );
 
-$viol = Perl::Critic::Violation->new('Foo', [28], $doc, 99);
-is($viol->explanation(), 'See page 28 of PBP', 'explanation');
+    # Make bye-bye with the document.  This will end up stripping the guts out
+    # of the PPI::Token::Word instance, so it is useless to us after the
+    # document is gone.  We need to make sure that we've copied the data out
+    # that we'll need.
+    undef $doc;
+    undef $words;
+    undef $word;
 
-$viol = Perl::Critic::Violation->new('Foo', [28,30], $doc, 99);
-is($viol->explanation(), 'See pages 28,30 of PBP', 'explanation');
+    is( $viol->description(),          'Foo',              'description after dropping document');
+    is( $viol->explanation(),          'Bar',              'explanation after dropping document');
+    is( $viol->line_number(),          1,                  'line_number after dropping document');
+    is( $viol->logical_line_number(),  1,                  'logical_line_number after dropping document');
+    is( $viol->column_number(),        1,                  'column_number after dropping document');
+    is( $viol->visual_column_number(), 1,                  'visual_column_number after dropping document');
+    is( $viol->severity(),             99,                 'severity after dropping document');
+    is( $viol->source(),               $code,              'source after dropping document');
+    is( $viol->policy(),               $pkg,               'policy after dropping document');
+    is( $viol->element_class(),        'PPI::Token::Word', 'element class after dropping document');
+    like(
+        $viol->diagnostics(),
+        qr/ \A $no_diagnostics_msg \z /xms,
+        'diagnostics after dropping document',
+    );
+} # end scope block
 
 
 #-----------------------------------------------------------------------------
 # Import tests
-like(
-    ViolationTest->get_violation()->diagnostics(),
-    qr/ \A \s* This [ ] is [ ] a [ ] test [ ] diagnostic [.] \s*\z /xms,
-    'import diagnostics',
-);
+{
+    like(
+        ViolationTest->get_violation()->diagnostics(),
+        qr/ \A \s* This [ ] is [ ] a [ ] test [ ] diagnostic [.] \s*\z /xms,
+        'import diagnostics',
+    );
+} # end scope block
 
 #-----------------------------------------------------------------------------
 # Violation sorting
 
 SKIP: {
-    $code = <<'END_PERL';
+    my $code = <<'END_PERL';
 my $foo = 1; my $bar = 2;
 my $baz = 3;
 END_PERL
 
-    $doc = PPI::Document->new(\$code);
+    my $doc = PPI::Document->new(\$code);
     my @children   = $doc->schildren();
     my @violations =
         map { Perl::Critic::Violation->new($EMPTY, $EMPTY, $_, 0) }
@@ -147,8 +191,8 @@ END_PERL
 
     Perl::Critic::Violation::set_format($format);
     is(Perl::Critic::Violation::get_format(), $format, 'set/get_format');
-    $code = "print;\n";
-    $doc = PPI::Document->new(\$code);
+    my $code = "print;\n";
+    my $doc = PPI::Document->new(\$code);
     $doc->index_locations();
     my $p = Perl::Critic::Policy::Test->new();
     my @t = $doc->tokens();
@@ -185,11 +229,13 @@ END_PERL
 
 #-----------------------------------------------------------------------------
 
-my @given = ( qw(foo bar. .baz.. nuts!), [], {} );
-my @want  = ( qw(foo bar  .baz   nuts!), [], {} );
-my @have  = Perl::Critic::Violation::_chomp_periods(@given);
+{
+    my @given = ( qw(foo bar. .baz.. nuts!), [], {} );
+    my @want  = ( qw(foo bar  .baz   nuts!), [], {} );
+    my @have  = Perl::Critic::Violation::_chomp_periods(@given);
 
-is_deeply(\@have, \@want, 'Chomping periods');
+    is_deeply(\@have, \@want, 'Chomping periods');
+} # end scope block
 
 #-----------------------------------------------------------------------------
 # ensure we run true if this test is loaded by
