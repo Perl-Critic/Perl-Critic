@@ -18,7 +18,7 @@ use Perl::Critic::Utils::PPI qw{ is_ppi_statement_subclass };
 
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.101_01';
+our $VERSION = '1.101_001';
 
 #-----------------------------------------------------------------------------
 
