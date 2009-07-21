@@ -16,12 +16,24 @@ foreach my $foo ( @list ) {}
 
 #-----------------------------------------------------------------------------
 
-## name Lexicals on loops with labels.
+## name Passing lexicals on loops with labels.
 ## failures 0
 ## cut
 
 LABEL: for my $foo ( @list ) {}
 ANOTHER_LABEL: foreach my $foo ( @list ) {}
+
+BING: for ( @list ) {}
+BANG: foreach ( @list ) {}
+
+#-----------------------------------------------------------------------------
+
+## name Failing lexicals on loops with labels.
+## failures 2
+## cut
+
+LABEL: for $foo ( @list ) {}
+ANOTHER_LABEL: foreach $foo ( @list ) {}
 
 #-----------------------------------------------------------------------------
 
