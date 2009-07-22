@@ -143,7 +143,7 @@ sub _is_in_correct_position_in_a_condition_or_foreach_loop_collection {
                 and $parent_statement->type() eq 'foreach';
         }
 
-        if ( $parent->isa('PPI::Structure::ForLoop') ) {
+        if ( $parent->isa('PPI::Structure::For') ) {
             my @for_loop_components = $parent->schildren();
 
             my $condition =

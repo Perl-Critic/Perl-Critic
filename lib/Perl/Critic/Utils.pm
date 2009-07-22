@@ -867,7 +867,7 @@ sub is_in_void_context {
     my $parent = $token->statement()->parent();
     if ($parent) {
         return if $parent->isa('PPI::Structure::List');
-        return if $parent->isa('PPI::Structure::ForLoop');
+        return if $parent->isa('PPI::Structure::For');
         return if $parent->isa('PPI::Structure::Condition');
         return if $parent->isa('PPI::Structure::Constructor');
 

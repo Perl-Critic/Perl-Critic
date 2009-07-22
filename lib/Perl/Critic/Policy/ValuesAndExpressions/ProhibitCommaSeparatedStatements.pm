@@ -101,7 +101,7 @@ sub _is_parent_a_for_loop {
 
     return if not $parent;
 
-    return if not $parent->isa('PPI::Structure::ForLoop');
+    return if not $parent->isa('PPI::Structure::For');
 
     return 1 == scalar $parent->schildren(); # Multiple means C-style loop.
 }
