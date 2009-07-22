@@ -1,3 +1,9 @@
+[1.101_002] Released on 2009-07-21
+
+    Bug fixes:
+    * Works with PPI 1.204_06.  Adam renamed PPI::Structure::ForLoop to
+    * PPI::Structure::For.
+
 [1.101_001] Released on 2009-07-21
 
     Bug fixes:
