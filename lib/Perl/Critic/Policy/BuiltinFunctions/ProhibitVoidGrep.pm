@@ -15,7 +15,7 @@ use Readonly;
 use Perl::Critic::Utils qw{ :severities :classification is_in_void_context };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.101_001';
+our $VERSION = '1.101_002';
 
 #-----------------------------------------------------------------------------
 
