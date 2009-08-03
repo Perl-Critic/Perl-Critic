@@ -1,21 +1,16 @@
-[1.101_003] Released on 2009-07-22
-
-    * Fix for upload issue with 1.101_002: For some reason, my hosting service
-      was redirecting requests for the 1.101_002 tarball to the 1.101_001
-      tarball.
-
-[1.101_002] Released on 2009-07-21
+[1.102] Released on 2009-08-03
 
     Bug fixes:
-    * Works with PPI 1.204_06.  Adam renamed PPI::Structure::ForLoop to
-      PPI::Structure::For.
-
-[1.101_001] Released on 2009-07-21
-
-    Bug fixes:
-    * Works with PPI 1.204_05.  Yay for 5.10 support!
+    * Works with PPI 1.205.  Yay for 5.10 support!
     * Variables::RequireLexicalLoopIterators didn't work correctly on foreach
       loops with labels.
+
+[1.101_003] Released on 2009-07-22
+[1.101_002] Released on 2009-07-21
+[1.101_001] Released on 2009-07-21
+
+    Changes summarized into 1.102 above.  For exact details, see Changes on
+    BackPAN.
 
 [1.100] Released on 2009-07-17
 
