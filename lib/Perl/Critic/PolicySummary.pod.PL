@@ -30,7 +30,7 @@ use Perl::Critic::Utils::POD qw< get_module_abstract_from_file >;
 
 use Exception::Class ();  # Must be after P::C::Exception::*
 
-our $VERSION = '1.101_003';
+our $VERSION = '1.102';
 
 
 print "\n\nGenerating Perl::Critic::PolicySummary.\n";
@@ -118,7 +118,7 @@ print {$pod_file} <<'END_FOOTER';
 
 =head1 VERSION
 
-This is part of L<Perl::Critic|Perl::Critic> version 1.101_003.
+This is part of L<Perl::Critic|Perl::Critic> version 1.102.
 
 
 =head1 AUTHOR

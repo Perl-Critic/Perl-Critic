@@ -24,7 +24,7 @@ use Perl::Critic::Utils::Constants qw<
     >;
 use Perl::Critic::Utils::DataConversion qw< dor >;
 
-our $VERSION = '1.101_003';
+our $VERSION = '1.102';
 
 #-----------------------------------------------------------------------------
 

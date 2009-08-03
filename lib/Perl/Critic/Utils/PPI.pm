@@ -17,7 +17,7 @@ use Scalar::Util qw< blessed >;
 
 use base 'Exporter';
 
-our $VERSION = '1.101_003';
+our $VERSION = '1.102';
 
 #-----------------------------------------------------------------------------
 
