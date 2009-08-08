@@ -1,0 +1,51 @@
+## name basic passes
+## failures 0
+## cut
+
+our $VERSION = 2.718;
+$VERSION = '3.14159';
+$VERSION = "3.14159";
+$VERSION = "foo\$bar";
+our $VERSION = q{1.618};
+our $VERSION = qq{1.618};
+use version; $VERSION = qv('1.2.3');
+use version; $VERSION = qv("1.2.3");
+
+#-----------------------------------------------------------------------------
+
+## name basic failures
+## failures 6
+## cut
+
+our $VERSION = "$foo";
+our $VERSION = qq{foo\\$bar};
+our ( $VERSION ) = q$REVISION: 42$ =~ m/(\d+)/;
+( $VERSION = '$REVISION: 42$' ) =~ s/.*\s+(\d+).*/$1/;
+use Foo; $VERSION = $Foo::VERSION;
+use version; $VERSION = qv("1.$foo.3");
+
+#-----------------------------------------------------------------------------
+
+## name require 'use version' before qv()
+## failures 1
+## cut
+
+$VERSION = qv('1.2.3');
+
+#-----------------------------------------------------------------------------
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab shiftround :
