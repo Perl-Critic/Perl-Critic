@@ -172,4 +172,8 @@ Enjoy!!
         <module.build action="clean" />
     </target>
 
+    <target name="nytprof" depends="init" description="Build nytprof">
+        <module.build action="nytprof" />
+    </target>
+
 </project>
