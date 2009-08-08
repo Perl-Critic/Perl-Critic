@@ -283,8 +283,18 @@ sub _critique {
 sub _render_report {
     my ( $file, $opts_ref, @violations ) = @_;
 
-    # Only report the number of violations, if asked.
+    # Only report the files, if asked.
     my $number_of_violations = scalar @violations;
+    if ( $opts_ref->{'-files-with-violations'} ||
+        $opts_ref->{'-files-without-violations'} ) {
+        not ref $file
+            and $opts_ref->{$number_of_violations ? '-files-with-violations' :
+            '-files-without-violations'}
+            and _out "$file\n";
+        return $number_of_violations;
+    }
+
+    # Only report the number of violations, if asked.
     if( $opts_ref->{-count} ){
         ref $file || _out "$file: ";
         _out "$number_of_violations\n";
@@ -485,6 +495,8 @@ sub _get_option_specification {
         color-severity-medium|colour-severity-medium|color-severity-3|colour-severity-3=s
         color-severity-low|colour-severity-low|color-severity-2|colour-severity-2=s
         color-severity-lowest|colour-severity-lowest|color-severity-1|colour-severity-1=s
+        files-with-violations|l
+        files-without-violations|L
     );
 }
 

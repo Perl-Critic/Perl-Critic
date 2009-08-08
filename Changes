@@ -1,3 +1,9 @@
+    New Features:
+    * Perlcritic will list the names of files with violations if given the
+      --files-with-violations option, or the names of files without
+      violations if given the --files-without-violations options. These
+      have synonyms -l and -L respectively.
+
     Other News:
     * Komodo version 5.1.1 now has built-in support for Perl-Critic,
       if you have the Perl::Critic and criticism modules installed.
@@ -6,7 +12,7 @@
 
 [1.103] Released on 2009-08-03
 
-    Fix configure_require prerequisite on Module::Build 0.34_02.
+    Fix configure_requires prerequisite on Module::Build 0.34_02.
 
 [1.102] Released on 2009-08-03
 
