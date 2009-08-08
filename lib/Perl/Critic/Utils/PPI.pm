@@ -112,6 +112,7 @@ sub is_ppi_constant_element {
     return $element->isa( 'PPI::Token::Number' )
         || $element->isa( 'PPI::Token::Quote::Literal' )
         || $element->isa( 'PPI::Token::Quote::Single' )
+        || $element->isa( 'PPI::Token::QuoteLike::Words' )
         || ( $element->isa( 'PPI::Token::Quote::Double' )
             || $element->isa( 'PPI::Token::Quote::Interpolate' ) )
             && $element->string() !~ m/ (?: \A | [^\\] ) (?: \\\\)* [\$\@] /smx
@@ -203,7 +204,10 @@ sub _constant_name_from_constant_pragma {
 sub get_next_element_in_same_simple_statement {
     my $element = shift or return;
 
-    while ( $element and not is_ppi_simple_statement( $element ) ) {
+    while ( $element and (
+            not is_ppi_simple_statement( $element )
+            or $element->parent()
+            and $element->parent()->isa( 'PPI::Structure::List' ) ) ) {
         my $next;
         $next = $element->snext_sibling() and return $next;
         $element = $element->parent();
@@ -300,8 +304,9 @@ L<PPI::Statement::Variable|PPI::Statement::Variable>.
 
 Answers whether the parameter represents a constant value, i.e. whether the
 parameter is a L<PPI::Token::Number|PPI::Token::Number>,
-L<PPI::Token::Quote::Literal|PPI::Token::Quote::Literal>, or
-L<PPI::Token::Quote::Single|PPI::Token::Quote::Single>, or is a
+L<PPI::Token::Quote::Literal|PPI::Token::Quote::Literal>,
+L<PPI::Token::Quote::Single|PPI::Token::Quote::Single>, or
+L<PPI::Token::QuoteLike::Words|PPI::Token::QuoteLike::Words>, or is a
 L<PPI::Token::Quote::Double|PPI::Token::Quote::Double> or
 L<PPI::Token::Quote::Interpolate|PPI::Token::Quote::Interpolate> which does
 not in fact contain any interpolated variables.
@@ -350,11 +355,15 @@ Given a C<PPI::Element|PPI::Element>, this subroutine returns the next element
 in the same simple statement as defined by is_ppi_simple_statement(). If no
 next element can be found, this subroutine simply returns.
 
-If the $element is undefined, unblessed, or satisfies
-C<is_ppi_simple_statement()>, we simply return. If the $element is the last
-significant element in its L<PPI::Node|PPI::Node>, we replace it with its
-parent and iterate again. Otherwise, we return C<< $element->snext_sibling()
->>.
+If the $element is undefined or unblessed, we simply return.
+
+If the $element satisfies C<is_ppi_simple_statement()>, we return, B<unless>
+it has a parent which is a L<PPI::Structure::List|PPI::Structure::List>.
+
+If the $element is the last significant element in its L<PPI::Node|PPI::Node>,
+we replace it with its parent and iterate again.
+
+Otherwise, we return C<< $element->snext_sibling() >>.
 
 
 =item C<get_previous_module_used_on_same_line( $element )>
