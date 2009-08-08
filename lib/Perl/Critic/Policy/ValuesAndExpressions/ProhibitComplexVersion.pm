@@ -49,7 +49,7 @@ sub supported_parameters { return (
         },
     );
 }
-sub default_severity     { return $SEVERITY_HIGHEST          }
+sub default_severity     { return $SEVERITY_MEDIUM           }
 sub default_themes       { return qw( core maintenance )     }
 sub applies_to           { return 'PPI::Token::Symbol'       }
 
@@ -151,8 +151,7 @@ sub _validate_fully_qualified_symbols {
                     ;
                 } ) || [] } ) {
         local $_ = $string->string();
-        # Believe the following is a false positive.
-        while ( m/ (?: \A | [^\\] ) (?: \\\\)* [@\$] [{]? ([\w:]*) :: /gsmx ) { ## no critic (ProhibitUnusedCapture)
+        while ( m/ (?: \A | [^\\] ) (?: \\\\)* [@\$] [{]? ([\w:]*) :: /gsmx ) {
             $local_package{ $1 } and next;
             return $self->violation( $DESC, $EXPL, $elem );
         }
