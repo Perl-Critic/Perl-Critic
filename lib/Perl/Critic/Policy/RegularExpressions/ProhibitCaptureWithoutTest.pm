@@ -12,19 +12,29 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :severities };
+use Perl::Critic::Utils qw{ :data_conversion :severities };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.103';
 
 #-----------------------------------------------------------------------------
 
+Readonly::Hash my %CONDITIONAL_OPERATOR => hashify( qw{ && || ? and or xor } );
+
 Readonly::Scalar my $DESC => q{Capture variable used outside conditional};
 Readonly::Scalar my $EXPL => [ 253 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return ()                       }
+sub supported_parameters { return (
+        {
+            name        => 'exception_source',
+            description => 'Names of ways to generate exceptions',
+            behavior    => 'string list',
+            list_always_present_values => [ qw{ die croak confess } ],
+        }
+    );
+}
 sub default_severity     { return $SEVERITY_MEDIUM         }
 sub default_themes       { return qw(core pbp maintenance) }
 sub applies_to           { return 'PPI::Token::Magic'      }
@@ -35,19 +45,21 @@ sub violates {
     my ($self, $elem, $doc) = @_;
     return if $elem !~ m/\A \$[1-9] \z/xms;
     return if _is_in_conditional_expression($elem);
-    return if _is_in_conditional_structure($elem);
+    return if $self->_is_in_conditional_structure($elem);
+##  return if $self->_is_protected_by_exception( $elem );
     return $self->violation( $DESC, $EXPL, $elem );
 }
 
 sub _is_in_conditional_expression {
     my $elem = shift;
 
-    # simplistic check: is there one of qw(&& || ?) between a match and the capture var?
+    # simplistic check: is there a conditional operator between a match and
+    # the capture var?
     my $psib = $elem->sprevious_sibling;
     while ($psib) {
         if ($psib->isa('PPI::Token::Operator')) {
             my $op = $psib->content;
-            if ($op eq q{&&} || $op eq q{||} || $op eq q{?}) {
+            if ( $CONDITIONAL_OPERATOR{ $op } ) {
                 $psib = $psib->sprevious_sibling;
                 while ($psib) {
                     return 1 if ($psib->isa('PPI::Token::Regexp::Match'));
@@ -64,7 +76,7 @@ sub _is_in_conditional_expression {
 }
 
 sub _is_in_conditional_structure {
-    my $elem = shift;
+    my ( $self, $elem ) = @_;
 
     my $stmt = $elem->statement();
     while ($stmt && $elem->isa('PPI::Statement::Expression')) {
@@ -76,9 +88,17 @@ sub _is_in_conditional_structure {
     # Check if any previous statements in the same scope have regexp matches
     my $psib = $stmt->sprevious_sibling;
     while ($psib) {
-        if ($psib->isa('PPI::Node')) {  # skip tokens
-            return if $psib->find_any('PPI::Token::Regexp::Match'); # fail
-            return if $psib->find_any('PPI::Token::Regexp::Substitute'); # fail
+        if ( $psib->isa( 'PPI::Node' ) and
+            my $match = _find_exposed_match_or_substitute( $psib ) ) {
+            # If a regexp match is found, we succeed if a match failure
+            # appears to throw an exception, and fail otherwise. RT 36081
+            my $oper = $match->snext_sibling() or return;   # fail
+            my $oper_content = $oper->content();
+            q{or} eq $oper_content
+                or q{||} eq $oper_content
+                or return;                                  # fail
+            my $next = $oper->snext_sibling() or return;    # fail
+            return $self->{_exception_source}{ $next->content() };
         }
         $psib = $psib->sprevious_sibling;
     }
@@ -91,7 +111,7 @@ sub _is_in_conditional_structure {
         }
         elsif ($parent->isa('PPI::Structure')) {
            return 1 if _is_in_conditional_expression($parent);
-           return 1 if _is_in_conditional_structure($parent);
+           return 1 if $self->_is_in_conditional_structure($parent);
            $parent = $parent->parent;
         }
         else {
@@ -100,6 +120,29 @@ sub _is_in_conditional_structure {
     }
 
     return; # fail
+}
+
+# Given a PPI::Node, find the last regexp match or substitution that is
+# in-scope to the node's next sibling.
+sub _find_exposed_match_or_substitute { # RT 36081
+    my $elem = shift;
+FIND_REGEXP_NOT_IN_BLOCK:
+    foreach my $regexp ( reverse @{ $elem->find(
+            sub {
+                return $_[1]->isa( 'PPI::Token::Regexp::Substitute' )
+                    || $_[1]->isa( 'PPI::Token::Regexp::Match' );
+            }
+        ) || [] } ) {
+        my $parent = $regexp->parent();
+        while ( $parent != $elem ) {
+            $parent->isa( 'PPI::Structure::Block' )
+                and next FIND_REGEXP_NOT_IN_BLOCK;
+            $parent = $parent->parent()
+                or next FIND_REGEXP_NOT_IN_BLOCK;
+        }
+        return $regexp;
+    }
+    return;
 }
 
 1;
@@ -127,8 +170,8 @@ If a regexp match fails, then any capture variables (C<$1>, C<$2>,
 ...) will be undefined.  Therefore it's important to check the return
 value of a match before using those variables.
 
-This policy checks that capture variables are inside a conditional and
-do not follow an regexps.
+This policy checks that the previous regexp for which the capture variable is
+in-scope is either in a conditional or causes an exception if the match fails.
 
 This policy does not check whether that conditional is actually
 testing a regexp result, nor does it check whether a regexp actually
@@ -137,8 +180,13 @@ has a capture in it.  Those checks are too hard.
 
 =head1 CONFIGURATION
 
-This Policy is not configurable except for the standard options.
+By default, this policy considers C<die>, C<croak>, and C<confess> to
+throw exceptions. If you have additional routines that may be used in
+lieu of one of these, you can configure them in your perlcriticrc as
+follows:
 
+ [RegularExpressions::ProhibitCaptureWithoutTest]
+ exception_source = my_exception_generator
 
 =head1 BUGS
 
