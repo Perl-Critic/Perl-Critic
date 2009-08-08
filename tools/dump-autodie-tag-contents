@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-our $VERSION = '1.102';
+our $VERSION = '1.103';
 
 
 use autodie qw< :all >; # Just to be sure that we're using the correct version of Fatal.
