@@ -85,7 +85,7 @@ sub violates {
     return if none {not defined $_} @captures;
 
     my %modifiers = get_modifiers($elem);
-    if ($modifiers{g}) {
+    if ($modifiers{g} and not _check_if_in_while_condition( $elem ) ) {
         $ncaptures = $NUM_CAPTURES_FOR_GLOBAL;
         $#captures = $ncaptures - 1;
     }
@@ -289,6 +289,23 @@ sub _check_for_magic {
     }
 
     return;
+}
+
+# Check if we are in the condition of a 'while'
+sub _check_if_in_while_condition {
+    my ( $elem ) = @_;
+    $elem or return;
+
+    my $parent = $elem->parent() or return;
+    $parent->isa( 'PPI::Statement' ) or return;
+
+    $parent = $parent->parent() or return;
+    $parent->isa( 'PPI::Structure::Condition' ) or return;
+
+    my $prev = $parent->sprevious_sibling( $parent ) or return;
+    $prev->isa( 'PPI::Token::Word' ) or return;
+
+    return $prev->content() eq q<while>;
 }
 
 # false if we hit another regexp
