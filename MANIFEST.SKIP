@@ -16,6 +16,7 @@ CVS
 RCS
 ,v$
 \.svn
+\.git
 
 # Distribution files
 \.zip$
