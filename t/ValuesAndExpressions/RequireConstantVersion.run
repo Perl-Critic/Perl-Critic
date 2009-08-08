@@ -11,6 +11,8 @@ our $VERSION = q{1.618};
 our $VERSION = qq{1.618};
 use version; $VERSION = qv('1.2.3');
 use version; $VERSION = qv("1.2.3");
+# The following from ExtUtils::MakeMaker
+(our $Revision = $VERSION) =~ s{_}{};
 
 #-----------------------------------------------------------------------------
 
@@ -33,6 +35,36 @@ use version; $VERSION = qv("1.$foo.3");
 ## cut
 
 $VERSION = qv('1.2.3');
+
+#-----------------------------------------------------------------------------
+
+## name require 'use version' before version->new()
+## failures 1
+## cut
+
+$VERSION = version->new('1.2.3');
+
+#-----------------------------------------------------------------------------
+
+## name passes involving other assignment operators
+## failures 0
+## cut
+
+our $VERSION ||= 1.23;
+our $VERSION ||= '1.23';
+our $VERSION ||= "1.23";
+use version; our $VERSION = version->new('1.2.3');
+
+#-----------------------------------------------------------------------------
+
+## name failures involving other assignment operators
+## failures 4
+## cut
+
+our $VERSION ||= qw{$Revision 42 $}[1];
+our $VERSION ||= $Foo::VERSION;
+our $VERSION ||= "$Foo::VERSION";
+our $VERSION ||= version->new('1.2.3');
 
 #-----------------------------------------------------------------------------
 
@@ -80,16 +112,22 @@ our $VERSION = qw(1.2.3);
 # our $VERSION = version->new(qw$Revision$);
 our ($VERSION) = "1.23";
 our ($VERSION) = '1.23';
+our ($VERSION) = 1.23;
 use version; our $VERSION = 1.23;
 use version; our $VERSION = qv("1.2.3");
 use version; our $VERSION = qv('1.2.3');
 use version; our $VERSION = qv('1.23');
 use version; our $VERSION = version->new('1.23');
+# V-strings are deprecated, but ...
+our $VERSION = 1.2.3;
+our $VERSION = v1.2.3.0;
+our $VERSION = v1.2.3;
+our $VERSION = v1.23;
 
 #-----------------------------------------------------------------------------
 
 ## name failures from the ProhibitMagicNumbers.run treasury
-## failures 112
+## failures 109
 ## cut
 
 (our $VERSION = q$Revision$) =~ s/Revision //;
@@ -108,7 +146,6 @@ our $VERSION = '$Revision$' =~ /\$Revision:\s+([^\s]+)/;
 our $VERSION = '1.' . qw $Revision$[1];
 our $VERSION = '1.' . sprintf "%d", (qw($Revision$))[1];
 our $VERSION = '1.' . sprintf("%d", (qw($Revision$))[1]);
-our $VERSION = 1.2.3;
 # In practice the following is a constant, but if someone goes this far out of
 # their way to obfuscate a constant, I for one am not going to dissapoint
 # them.
@@ -186,10 +223,6 @@ our $VERSION = substr(q$Revision$, 10);
 # Initially at least this is a violation simply because of the hoops that need
 # to be jumped through to make it work.
 our ($PACKAGE, $VERSION) = ('') x 2;
-# V-strings are deprecated, but ...
-our $VERSION = v1.2.3.0;
-our $VERSION = v1.2.3;
-our $VERSION = v1.23;
 # Should the following be allowed? I am not sure I really know what
 # version->new() means without the leading 'use version;'.
 our $VERSION = version->new('1.2.3');
@@ -210,7 +243,6 @@ our ($VERSION) = ('$Revision$' =~ /(\d+\.\d+)/);
 our ($VERSION) = ('$Revision$' =~ m/([\.\d]+)/) ;
 our ($VERSION) = (q$Revision$ =~ /([\d\.]+)/);
 our ($VERSION) = (qq$Revision$ =~ /(\d+)/)[0];
-our ($VERSION) = 1.23;
 our ($VERSION) = q$Revision$ =~ /Revision:\s+(\S+)/ or $VERSION = "1.23";
 our ($VERSION) = q$Revision$ =~ /Revision:\s+(\S+)/ or $VERSION = '1.23';
 our ($VERSION) = q$Revision$ =~ /[\d.]+/g;
@@ -220,18 +252,6 @@ use SomeOtherModule; our $VERSION = $SomeOtherModule::VERSION;
 use SomeOtherModule; our $VERSION = SomeOtherModule::VERSION;
 use base 'SomeOtherModule'; our $VERSION = $SomeOtherModule::VERSION;
 use version; our $VERSION = qv((qw$Revision$)[1] / 1000);
-
-#-----------------------------------------------------------------------------
-
-## name v-strings are OK if explicitly allowed
-## failures 0
-## parms { allow_v_string => '1' }
-## cut
-
-our $VERSION = 1.2.3;
-our $VERSION = v1.2.3.0;
-our $VERSION = v1.2.3;
-our $VERSION = v1.23;
 
 #-----------------------------------------------------------------------------
 
