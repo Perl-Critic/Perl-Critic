@@ -119,9 +119,9 @@ and let the caller choose exactly which symbols to export.
     package Foo;
 
     use base qw(Exporter);
-    our @EXPORT      = qw(&foo &bar);                  # not ok
-    our @EXPORT_OK   = qw(&foo &bar);                  # ok
-    our %EXPORT_TAGS = ( all => [ qw(&foo &bar) ] );   # ok
+    our @EXPORT      = qw(foo $bar @baz);                  # not ok
+    our @EXPORT_OK   = qw(foo $bar @baz);                  # ok
+    our %EXPORT_TAGS = ( all => [ qw(foo $bar @baz) ] );   # ok
 
 
 =head1 CONFIGURATION
