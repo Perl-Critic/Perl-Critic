@@ -15,6 +15,11 @@ This document describes the steps for integrating F<perlcritic> with Komodo 4.0
 from ActiveState.  More information about Komodo can be found at
 L<http://www.activestate.com>
 
+B<UPDATE:> As of version 5.1.1, Komodo has built-in support for
+L<Perl::Critic>.  All you need to do is install L<Perl::Critic> and
+L<criticism>.  For more information, have a look at
+L<http://trentm.com/blog/archives/2009/04/02/komodo511/>
+
 These instructions assume that F<perlcritic> has been installed somewhere in
 your C<$PATH>.  If it is not in your C<$PATH>, you must give the full path to
 F<perlcritic> instead of using the C<-S> switch.  Also, I'm assuming that you
