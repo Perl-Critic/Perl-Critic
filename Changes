@@ -1,3 +1,7 @@
+[1.103] Released on 2009-08-03
+
+    Fix configure_require prerequisite on Module::Build 0.34_02.
+
 [1.102] Released on 2009-08-03
 
     Bug fixes:
