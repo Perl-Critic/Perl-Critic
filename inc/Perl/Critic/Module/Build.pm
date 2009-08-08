@@ -16,11 +16,11 @@ use base 'Module::Build';
 
 
 sub ACTION_test {
-    my ($self) = @_;
+    my ($self, @arguments) = @_;
 
     $self->depends_on('manifest');
 
-    return $self->SUPER::ACTION_test();
+    return $self->SUPER::ACTION_test(@arguments);
 }
 
 sub ACTION_authortest {
@@ -42,11 +42,11 @@ sub ACTION_authortestcover {
 }
 
 sub ACTION_distdir {
-    my ($self) = @_;
+    my ($self, @arguments) = @_;
 
     $self->depends_on('authortest');
 
-    return $self->SUPER::ACTION_distdir();
+    return $self->SUPER::ACTION_distdir(@arguments);
 }
 
 
