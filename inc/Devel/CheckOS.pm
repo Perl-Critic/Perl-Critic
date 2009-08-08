@@ -1,19 +1,20 @@
-# $Id: CheckOS.pm,v 1.13 2007/10/04 20:15:05 drhyde Exp $
+# $Id: CheckOS.pm,v 1.32 2008/11/11 23:49:49 drhyde Exp $
 
-package Devel::CheckOS;
+package #
+Devel::CheckOS;
 
 use strict;
 use Exporter;
 
 use vars qw($VERSION @ISA @EXPORT_OK %EXPORT_TAGS);
 
-$VERSION = '1.2';
+$VERSION = '1.61';
 
 # localising prevents the warningness leaking out of this module
 local $^W = 1;    # use warnings is a 5.6-ism
 
 @ISA = qw(Exporter);
-@EXPORT_OK = qw(os_is os_isnt die_if_os_is die_if_os_isnt die_unsupported list_platforms);
+@EXPORT_OK = qw(os_is os_isnt die_if_os_is die_if_os_isnt die_unsupported list_platforms list_family_members);
 %EXPORT_TAGS = (
     all      => \@EXPORT_OK,
     booleans => [qw(os_is os_isnt die_unsupported)],
@@ -26,14 +27,30 @@ Devel::CheckOS - check what OS we're running on
 
 =head1 DESCRIPTION
 
+A learned sage once wrote on IRC:
+
+   $^O is stupid and ugly, it wears its pants as a hat
+
 Devel::CheckOS provides a more friendly interface to $^O, and also lets
 you check for various OS "families" such as "Unix", which includes things
 like Linux, Solaris, AIX etc.
 
+It spares perl the embarrassment of wearing its pants on its head by
+covering them with a splendid Fedora.
+
 =head1 SYNOPSIS
 
-    use Devel::CheckOS;
+    use Devel::CheckOS qw(os_is);
     print "Hey, I know this, it's a Unix system\n" if(os_is('Unix'));
+
+    print "You've got Linux 2.6\n" if(os_is('Linux::v2_6'));
+
+=head1 USING IT IN Makefile.PL or Build.PL
+
+If you want to use this from Makefile.PL or Build.PL, do
+not simply copy the module into your distribution as this may cause
+problems when PAUSE and search.cpan.org index the distro.  Instead, use
+the use-devel-assertos script.
 
 =head1 FUNCTIONS
 
@@ -63,16 +80,17 @@ of OSes and OS families, eg ...
 
 sub os_is {
     my @targets = @_;
+    my $rval = 0;
     foreach my $target (@targets) {
         die("Devel::CheckOS: $target isn't a legal OS name\n")
-            unless($target =~ /^\w+$/);
+            unless($target =~ /^\w+(::\w+)*$/);
         eval "use Devel::AssertOS::$target";
         if(!$@) {
             no strict 'refs';
-            return 1 if(&{"Devel::AssertOS::${target}::os_is"}());
+            $rval = 1 if(&{"Devel::AssertOS::${target}::os_is"}());
         }
     }
-    return 0;
+    return $rval;
 }
 
 =head3 os_isnt
@@ -84,10 +102,11 @@ otherwise it returns true.
 
 sub os_isnt {
     my @targets = @_;
+    my $rval = 1;
     foreach my $target (@targets) {
-        return 0 if(os_is($target));
+        $rval = 0 if(os_is($target));
     }
-    return 1;
+    return $rval;
 }
 
 =head2 Fatal functions
@@ -128,10 +147,19 @@ sub die_unsupported { die("OS unsupported\n"); }
 
 =head3 list_platforms
 
-Return a list of all the platforms for which the corresponding
+When called in list context,
+return a list of all the platforms for which the corresponding
 Devel::AssertOS::* module is available.  This includes both OSes and OS
 families, and both those bundled with this module and any third-party
 add-ons you have installed.
+
+In scalar context, returns a hashref keyed by platform with the filename
+of the most recent version of the supporting module that is available to you.
+This is to make sure that the use-devel-assertos script Does The Right Thing
+in the case where you have installed the module in one version of perl, then
+upgraded perl, and installed it again in the new version.  Sometimes the old
+version of perl and all its modules will still be hanging around and perl
+"helpfully" includes the old perl's search path in its own.
 
 Unfortunately, on some platforms this list may have file case
 broken.  eg, some platforms might return 'freebsd' instead of 'FreeBSD'.
@@ -140,6 +168,8 @@ should Just Work anyway.
 
 =cut
 
+my ($re_Devel, $re_AssertOS);
+
 sub list_platforms {
     eval " # only load these if needed
         use File::Find::Rule;
@@ -147,15 +177,68 @@ sub list_platforms {
     ";
     
     die($@) if($@);
-    return sort { $a cmp $b } map {
-        s/^.*\///g;
-        s/\.pm$//gi;
-        $_;
+    if (!$re_Devel) {
+        my $case_flag = File::Spec->case_tolerant ? '(?i)' : '';
+        $re_Devel    = qr/$case_flag ^Devel$/x;
+        $re_AssertOS = qr/$case_flag ^AssertOS$/x;
+    }
+
+    # sort by mtime, so oldest last
+    my @modules = sort {
+        (stat($a->{file}))[9] <=> (stat($b->{file}))[9]
+    } map {
+        my (undef, $dir_part, $file_part) = File::Spec->splitpath($_);
+        $file_part =~ s/\.pm$//;
+        my (@dirs) = grep {+length} File::Spec->splitdir($dir_part);
+        foreach my $i (reverse 1..$#dirs) {
+            next unless $dirs[$i] =~ $re_AssertOS
+                && $dirs[$i - 1] =~ $re_Devel;
+            splice @dirs, 0, $i + 1;
+            last;
+        }
+        {
+            module => join('::', @dirs, $file_part),
+            file   => File::Spec->canonpath($_)
+        }
     } File::Find::Rule->file()->name('*.pm')->in(
         grep { -d }
         map { File::Spec->catdir($_, qw(Devel AssertOS)) }
         @INC
     );
+
+    my %modules = map {
+        $_->{module} => $_->{file}
+    } @modules;
+
+    if(wantarray()) {
+        return sort keys %modules;
+    } else {
+        return \%modules;
+    }
+}
+
+=head3 list_family_members
+
+Takes the name of an OS 'family' and returns a list of all its members.
+In list context, you get a list, in scalar context you get an arrayref.
+
+If called on something that isn't a family, you get an empty list (or
+a ref to an empty array).
+
+=cut
+
+sub list_family_members {
+    my $family = shift() ||
+        die(__PACKAGE__."::list_family_members needs a parameter\n");
+
+    # this will die if it's the wrong OS, but the module is loaded ...
+    eval qq{use Devel::AssertOS::$family};
+    # ... so we can now query it
+    my @members = eval qq{
+        no strict 'refs';
+	&{"Devel::AssertOS::${family}::matches"}()
+    };
+    return wantarray() ? @members : \@members;
 }
 
 =head1 PLATFORMS SUPPORTED
@@ -173,15 +256,8 @@ Sorry.
 
 Also be aware that not all of them have been properly tested.  I don't
 have access to most of them and have had to work from information
-gleaned from L<perlport> and a few other places.
-
-The following OS 'families' are supported 'out of the box':
-
-    Apple (Mac OS, both classic and OS X)
-    DEC
-    MicrosoftWindows (this matches either MSWin32 or Cygwin)
-    Sun
-    Unix
+gleaned from L<perlport> and a few other places.  For a complete list of
+OS families, see L<Devel::CheckOS::Families>.
 
 If you want to add your own OSes or families, see L<Devel::AssertOS::Extending>
 and please feel free to upload the results to the CPAN.
@@ -209,6 +285,12 @@ L<Devel::AssertOS>
 
 L<Devel::AssertOS::Extending>
 
+L<Probe::Perl>
+
+The use-devel-assertos script
+
+L<Module::Install::AssertOS>
+
 =head1 AUTHOR
 
 David Cantrell E<lt>F<david@cantrell.org.uk>E<gt>
@@ -222,12 +304,24 @@ information about what should be in the Unix family.
 
 Thanks to Billy Abbott for finding some bugs for me on VMS.
 
+Thanks to Matt Kraai for information about QNX.
+
+Thanks to Kenichi Ishigaki and Gabor Szabo for reporting a bug on Windows,
+and to the former for providing a patch.
+
+=head1 CVS
+
+L<http://drhyde.cvs.sourceforge.net/drhyde/perlmodules/Devel-CheckOS/>
+
 =head1 COPYRIGHT and LICENCE
 
 Copyright 2007 David Cantrell
 
-This module is free-as-in-speech software, and may be used, distributed,
-and modified under the same conditions as perl itself.
+This software is free-as-in-speech software, and may be used, distributed, and modified under the terms of either the GNU General Public Licence version 2 or the Artistic Licence. It's up to you which one you use. The full text of the licences can be found in the files GPL2.txt and ARTISTIC.txt, respectively.
+
+=head1 HATS
+
+I recommend buying a Fedora from L<http://hatsdirect.com/>.
 
 =head1 CONSPIRACY
 
@@ -235,4 +329,4 @@ This module is also free-as-in-mason software.
 
 =cut
 
-$^O;
+1;

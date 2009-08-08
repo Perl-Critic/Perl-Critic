@@ -1,14 +1,15 @@
-# $Id: AssertOS.pm,v 1.2 2007/09/28 16:30:11 drhyde Exp $
+# $Id: AssertOS.pm,v 1.5 2008/10/27 20:31:21 drhyde Exp $
 
-package Devel::AssertOS;
+package #
+Devel::AssertOS;
 
-use Devel::CheckOS qw(die_if_os_isnt);
+use Devel::CheckOS;
 
 use strict;
 
 use vars qw($VERSION);
 
-$VERSION = '1.0';
+$VERSION = '1.1';
 
 # localising prevents the warningness leaking out of this module
 local $^W = 1;    # use warnings is a 5.6-ism
@@ -33,7 +34,7 @@ or Cygwin.
 sub import {
     shift;
     die("Devel::AssertOS needs at least one parameter\n") unless(@_);
-    die_if_os_isnt(@_);
+    Devel::CheckOS::die_if_os_isnt(@_);
 }
 
 =head1 BUGS and FEEDBACK
@@ -59,6 +60,10 @@ L<Devel::CheckOS>
 
 L<Devel::AssertOS::Extending>
 
+The use-devel-assertos script
+
+L<Module::Install::AssertOS>
+
 =head1 AUTHOR
 
 David Cantrell E<lt>F<david@cantrell.org.uk>E<gt>
@@ -69,8 +74,7 @@ Thanks to David Golden for suggesting that I add this utility module.
 
 Copyright 2007 David Cantrell
 
-This module is free-as-in-speech software, and may be used, distributed,
-and modified under the same conditions as perl itself.
+This software is free-as-in-speech software, and may be used, distributed, and modified under the terms of either the GNU General Public Licence version 2 or the Artistic Licence. It's up to you which one you use. The full text of the licences can be found in the files GPL2.txt and ARTISTIC.txt, respectively.
 
 =head1 CONSPIRACY
 
