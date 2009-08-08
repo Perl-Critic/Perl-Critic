@@ -315,6 +315,10 @@ Readonly::Hash my %PRECEDENCE_OF => (
 );
 
 ## use critic
+
+Readonly::Scalar my $MIN_PRECEDENCE_TO_TERMINATE_PARENLESS_ARG_LIST =>
+    precedence_of( 'not' );
+
 #-----------------------------------------------------------------------------
 
 sub hashify {  ## no critic (ArgUnpacking)
@@ -954,6 +958,9 @@ sub parse_arg_list {
 
         while ($iter = $iter->snext_sibling() ) {
             last if $iter->isa('PPI::Token::Structure') and $iter eq $SCOLON;
+            last if $iter->isa('PPI::Token::Operator')
+                and $MIN_PRECEDENCE_TO_TERMINATE_PARENLESS_ARG_LIST <=
+                    precedence_of( $iter );
             push @arg_list, $iter;
         }
         return split_nodes_on_comma( @arg_list );
