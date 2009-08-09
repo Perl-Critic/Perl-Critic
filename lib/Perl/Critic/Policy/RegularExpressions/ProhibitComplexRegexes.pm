@@ -31,15 +31,20 @@ Readonly::Scalar my $RECOGNIZE_SIGIL =>
 Readonly::Scalar my $RECOGNIZE_PUNCTUATION_VARIABLE =>
                 qr{ [&`'+.\/|,\\";%=\-~:?!\$<>()[\]] }smx;
 Readonly::Scalar my $RECOGNIZE_ESCAPE_VARIABLE => qr{ \^ \w }smx;
-Readonly::Scalar my $RECOGNIZE_EXTENDED_ESCAPE_VARIABLE =>
-                qr{ (?: [{] \^ \w+ [}] ) }smx;
 Readonly::Scalar my $RECOGNIZE_NORMAL_VARIABLE =>
-                qr{ \w+ (?: :: \w+ )* }smx;
-Readonly::Scalar my $RECOGNIZE_VARIABLE => qr{
-    $RECOGNIZE_PUNCTUATION_VARIABLE |
-    $RECOGNIZE_ESCAPE_VARIABLE |
-    $RECOGNIZE_EXTENDED_ESCAPE_VARIABLE |
-    $RECOGNIZE_NORMAL_VARIABLE
+                qr{ (?: \w+ :: )* \w+ }smx;
+Readonly::Scalar my $RECOGNIZE_BRACKETED_VARIABLE =>
+                qr{ [{] (?:
+                    $RECOGNIZE_PUNCTUATION_VARIABLE |
+                    $RECOGNIZE_ESCAPE_VARIABLE |
+                    (?: (?: \w+ :: )* \^? \w+ )
+                ) [}] }smx;
+Readonly::Scalar my $RECOGNIZE_VARIABLE => qr{ [#]? (?:
+        $RECOGNIZE_PUNCTUATION_VARIABLE |
+        $RECOGNIZE_ESCAPE_VARIABLE |
+        $RECOGNIZE_BRACKETED_VARIABLE |
+        $RECOGNIZE_NORMAL_VARIABLE
+    )
 }smx;
 
 #-----------------------------------------------------------------------------
