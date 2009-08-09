@@ -25,6 +25,11 @@
     * ValuesAndExpressions::RequireInterpolationOfMetachars now properly
       ignores email addesses, if you have Email::Address installed.  Inspired
       by the Kevin Ryde contribution in RT #47318.
+    * Variables::ProhibitPunctuationVars gained the ability to look inside
+      interpolated strings.  Doing this correctly is challenging and things
+      may not work out right; how the policy does this can be controlled via
+      the new "string_mode" option.  Contributed by Edgar Whipple
+      <perlmonk at misterwhipple dot com>.
 
     Other News:
     * Komodo version 5.1.1 now has built-in support for Perl-Critic,
