@@ -11,13 +11,17 @@ use 5.006001;
 use strict;
 use warnings;
 
-use English qw(-no_match_vars);
+use English qw< -no_match_vars >;
 
-use PPI::Document;
+use File::Basename qw< basename >;
+use File::Spec::Functions qw< catdir catfile >;
+use PPI::Document q< >;
+use PPI::Document::File q< >;
 
 use Perl::Critic::Utils qw< :characters >;
+use Perl::Critic::Violation q< >;
 
-use Test::More tests => 57;
+use Test::More tests => 69;
 
 #-----------------------------------------------------------------------------
 
@@ -25,12 +29,8 @@ our $VERSION = '1.103';
 
 #-----------------------------------------------------------------------------
 
-BEGIN {
-    # Needs to be in BEGIN for global vars
-    use_ok('Perl::Critic::Violation');
-}
+use lib catdir( qw< t 06_violation.d lib > );
 
-use lib qw< t/06_violation.t.lib >;
 use ViolationTest;   # this is solely to test the import() method; has diagnostics
 use ViolationTest2;  # this is solely to test the import() method; no diagnostics
 use Perl::Critic::Policy::Test;    # this is to test violation formatting
@@ -69,9 +69,9 @@ use Perl::Critic::Policy::Test;    # this is to test violation formatting
 {
     my $pkg  = __PACKAGE__;
     my $code = 'Hello World;';
-    my $doc = PPI::Document->new(\$code);
+    my $document = PPI::Document->new(\$code);
     my $no_diagnostics_msg = qr/ \s* No [ ] diagnostics [ ] available \s* /xms;
-    my $viol = Perl::Critic::Violation->new( 'Foo', 'Bar', $doc, 99, );
+    my $viol = Perl::Critic::Violation->new( 'Foo', 'Bar', $document, 99, );
 
     is(   $viol->description(),          'Foo',           'description');
     is(   $viol->explanation(),          'Bar',           'explanation');
@@ -96,19 +96,19 @@ use Perl::Critic::Policy::Test;    # this is to test violation formatting
         Perl::Critic::Violation::set_format($old_format);
     }
 
-    $viol = Perl::Critic::Violation->new('Foo', [28], $doc, 99);
+    $viol = Perl::Critic::Violation->new('Foo', [28], $document, 99);
     is($viol->explanation(), 'See page 28 of PBP', 'explanation');
 
-    $viol = Perl::Critic::Violation->new('Foo', [28,30], $doc, 99);
+    $viol = Perl::Critic::Violation->new('Foo', [28,30], $document, 99);
     is($viol->explanation(), 'See pages 28,30 of PBP', 'explanation');
 } # end scope block
 
 {
     my $pkg  = __PACKAGE__;
     my $code = 'Say goodbye to the document;';
-    my $doc = PPI::Document->new(\$code);
+    my $document = PPI::Document->new(\$code);
 
-    my $words = $doc->find('PPI::Token::Word');
+    my $words = $document->find('PPI::Token::Word');
     my $word = $words->[0];
 
     my $no_diagnostics_msg = qr/ \s* No [ ] diagnostics [ ] available \s* /xms;
@@ -118,7 +118,7 @@ use Perl::Critic::Policy::Test;    # this is to test violation formatting
     # of the PPI::Token::Word instance, so it is useless to us after the
     # document is gone.  We need to make sure that we've copied the data out
     # that we'll need.
-    undef $doc;
+    undef $document;
     undef $words;
     undef $word;
 
@@ -159,17 +159,17 @@ my $foo = 1; my $bar = 2;
 my $baz = 3;
 END_PERL
 
-    my $doc = PPI::Document->new(\$code);
-    my @children   = $doc->schildren();
+    my $document = PPI::Document->new(\$code);
+    my @children   = $document->schildren();
     my @violations =
         map { Perl::Critic::Violation->new($EMPTY, $EMPTY, $_, 0) }
-            $doc, @children;
+            $document, @children;
     my @sorted = Perl::Critic::Violation->sort_by_location( reverse @violations);
     is_deeply(\@sorted, \@violations, 'sort_by_location');
 
     my @severities = (5, 3, 4, 0, 2, 1);
     @violations =
-        map { Perl::Critic::Violation->new($EMPTY, $EMPTY, $doc, $_) }
+        map { Perl::Critic::Violation->new($EMPTY, $EMPTY, $document, $_) }
         @severities;
     @sorted = Perl::Critic::Violation->sort_by_severity( @violations );
     is_deeply( [map {$_->severity()} @sorted], [sort @severities], 'sort_by_severity');
@@ -192,10 +192,10 @@ END_PERL
     Perl::Critic::Violation::set_format($format);
     is(Perl::Critic::Violation::get_format(), $format, 'set/get_format');
     my $code = "print;\n";
-    my $doc = PPI::Document->new(\$code);
-    $doc->index_locations();
+    my $document = PPI::Document->new(\$code);
+    $document->index_locations();
     my $p = Perl::Critic::Policy::Test->new();
-    my @t = $doc->tokens();
+    my @t = $document->tokens();
     my $v = $p->violates($t[0]);
     ok($v, 'got a violation');
 
@@ -238,8 +238,60 @@ END_PERL
 } # end scope block
 
 #-----------------------------------------------------------------------------
+
+{
+    my $filename = catfile( qw< t 06_violation.d source Line.pm > );
+    my $document = PPI::Document::File->new($filename);
+
+    my @words = @{ $document->find('PPI::Token::Word') };
+
+    is(
+        (scalar @words),
+        2,
+        'Got the expected number of words in the line directive example document.',
+    );
+
+
+    my %expected = (
+        '%F' => basename($filename),
+        '%f' => $filename,
+        '%G' => basename($filename),
+        '%g' => $filename,
+        '%l' => '1',
+        '%L' => '1',
+    );
+
+    _test_file_and_line_formats($words[0], \%expected);
+
+
+    @expected{ qw< %F %f > } = ('Thingy.pm') x 2;
+    $expected{'%l'} = 57;
+    $expected{'%L'} = 3;
+
+    _test_file_and_line_formats($words[1], \%expected);
+}
+
+sub _test_file_and_line_formats {
+    my ($word, $expected) = @_;
+
+    my $violation = Perl::Critic::Violation->new($EMPTY, $EMPTY, $word, 0);
+
+    foreach my $format ( sort keys %{$expected} ) {
+        Perl::Critic::Violation::set_format($format);
+        is(
+            $violation->to_string(),
+            $expected->{$format},
+            "Got expected value for $format for " . $word->content(),
+        );
+    }
+
+    return;
+}
+
+#-----------------------------------------------------------------------------
 # ensure we run true if this test is loaded by
 # t/06_violation.t_without_optional_dependencies.t
+
 1;
 
 # Local Variables:

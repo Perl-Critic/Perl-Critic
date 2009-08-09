@@ -1,3 +1,10 @@
+Next release, whenever it is:
+
+    New Features:
+    * Perl::Critic::Violation now takes #line directives into account in the
+      %F, %f, and %l formats.  You can get the old values via the new %G, %g,
+      and %L formats.
+
     New Policies:
       Objects::ProhibitIndirectSyntax
       ValuesAndExpressions::ProhibitComplexVersion
