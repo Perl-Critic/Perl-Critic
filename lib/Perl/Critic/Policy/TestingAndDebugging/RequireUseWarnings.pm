@@ -52,7 +52,7 @@ sub default_maximum_violations_per_document { return 1; }
 #-----------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, $document ) = @_;
+    my ( $self, undef, $document ) = @_;
 
     my $version = $document->highest_explicit_perl_version();
     return if $version and $version < $MINIMUM_VERSION;
@@ -62,7 +62,7 @@ sub violates {
     my $warn_line  = $warn_stmnt ? $warn_stmnt->location()->[0] : undef;
 
     # Find all statements that aren't 'use', 'require', or 'package'
-    my $stmnts_ref = $document->find( \&_isnt_include_or_package );
+    my $stmnts_ref =  $self->_find_isnt_include_or_package($document);
     return if !$stmnts_ref;
 
     # If the 'use warnings' statement is not defined, or the other
@@ -80,6 +80,8 @@ sub violates {
     }
     return @viols;
 }
+
+#-----------------------------------------------------------------------------
 
 sub _generate_is_use_warnings {
     my ($self) = @_;
@@ -105,10 +107,22 @@ sub _generate_is_use_warnings {
     };
 }
 
-sub _isnt_include_or_package {
-    my (undef, $elem) = @_;
+#-----------------------------------------------------------------------------
+# Here, we're using the fact that Perl::Critic::Document::find() is optimized
+# to search for elements based on their type.  This is faster than using the
+# native PPI::Node::find() method with a custom callback function.
 
-    return 0 if ! $elem->isa('PPI::Statement');
+sub _find_isnt_include_or_package {
+    my ($self, $doc) = @_;
+    my $all_statements = $doc->find('PPI::Statement') or return;
+    my @wanted_statements = grep { _statement_isnt_include_or_package($_) } @{$all_statements};
+    return @wanted_statements ? \@wanted_statements : ();
+}
+
+#-----------------------------------------------------------------------------
+
+sub _statement_isnt_include_or_package {
+    my ($elem) = @_;
     return 0 if $elem->isa('PPI::Statement::Package');
     return 0 if $elem->isa('PPI::Statement::Include');
     return 1;
