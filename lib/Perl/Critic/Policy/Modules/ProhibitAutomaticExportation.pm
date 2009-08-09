@@ -47,9 +47,11 @@ sub violates {
 
 sub _uses_exporter {
     my ($doc) = @_;
+
     my $includes_ref = $doc->find('PPI::Statement::Include');
-    return if !$includes_ref;
-    #This covers both C<use Exporter;> and C<use base 'Exporter';>
+    return if not $includes_ref;
+
+    # This covers both C<use Exporter;> and C<use base 'Exporter';>
     return scalar grep { m/ \b Exporter \b/xms }  @{ $includes_ref };
 }
 
@@ -57,7 +59,10 @@ sub _uses_exporter {
 
 sub _has_exports {
     my ($doc) = @_;
-    my $wanted = sub {_our_export(@_) || _vars_export(@_) || _package_export(@_)};
+
+    my $wanted =
+        sub { _our_export(@_) or _vars_export(@_) or _package_export(@_) };
+
     return $doc->find_first( $wanted );
 }
 
@@ -65,8 +70,10 @@ sub _has_exports {
 
 sub _our_export {
     my (undef, $elem) = @_;
-    $elem->isa('PPI::Statement::Variable') || return 0;
-    $elem->type() eq 'our' || return 0;
+
+    $elem->isa('PPI::Statement::Variable') or return 0;
+    $elem->type() eq 'our' or return 0;
+
     return any { $_ eq '@EXPORT' } $elem->variables(); ## no critic(RequireInterpolationOfMetachars)
 }
 
@@ -74,8 +81,10 @@ sub _our_export {
 
 sub _vars_export {
     my (undef, $elem) = @_;
-    $elem->isa('PPI::Statement::Include') || return 0;
-    $elem->pragma() eq 'vars' || return 0;
+
+    $elem->isa('PPI::Statement::Include') or return 0;
+    $elem->pragma() eq 'vars' or return 0;
+
     return $elem =~ m{ \@EXPORT \b }xms; #Crude, but usually works
 }
 
@@ -83,7 +92,9 @@ sub _vars_export {
 
 sub _package_export {
     my (undef, $elem) = @_;
-    $elem->isa('PPI::Token::Symbol') || return 0;
+
+    $elem->isa('PPI::Token::Symbol') or return 0;
+
     return $elem =~ m{ \A \@ \S+ ::EXPORT \z }xms;
     #TODO: ensure that it is in _this_ package!
 }
