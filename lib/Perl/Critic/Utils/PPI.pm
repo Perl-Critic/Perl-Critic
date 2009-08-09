@@ -90,7 +90,7 @@ Readonly::Hash my %SIMPLE_STATEMENT_CLASS => map { $_ => 1 } qw<
     PPI::Statement::Null
     PPI::Statement::Package
     PPI::Statement::Variable
-    >;
+>;
 
 sub is_ppi_simple_statement {
     my $element = shift or return;
@@ -380,6 +380,13 @@ Otherwise, we return C<< $element->snext_sibling() >>.
 Given a L<PPI::Element|PPI::Element>, returns the L<PPI::Element|PPI::Element>
 representing the name of the module included by the previous C<use> or
 C<require> on the same line as the $element. If none is found, simply returns.
+
+For example, with the line
+
+    use version; our $VERSION = ...;
+
+given the L<PPI::Token::Symbol> instance for C<$VERSION>, this will return
+"version".
 
 If the given element is in a C<use> or <require>, the return is from the
 previous C<use> or C<require> on the line, if any.
