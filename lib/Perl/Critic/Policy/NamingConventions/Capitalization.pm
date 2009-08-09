@@ -485,6 +485,7 @@ sub _subroutine_capitalization {
     return if $elem->isa('PPI::Statement::Scheduled');
 
     my $name = $elem->name();
+    $name =~ s{ .* :: }{}smx;  # Allow for "sub Some::Package::foo {}"
 
     return $self->_check_capitalization($name, $name, 'subroutine', $elem);
 }
