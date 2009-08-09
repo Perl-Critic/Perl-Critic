@@ -26,6 +26,22 @@ our $VERSION = '1.103';
 Readonly::Scalar my $DESC => q{Split long regexps into smaller qr// chunks};
 Readonly::Scalar my $EXPL => [261];
 
+Readonly::Scalar my $RECOGNIZE_SIGIL =>
+                qr{ (?: \A | [^\\] ) (?: \\\\ )* [\@\$] }smx;
+Readonly::Scalar my $RECOGNIZE_PUNCTUATION_VARIABLE =>
+                qr{ [&`'+.\/|,\\";%=\-~:?!\$<>()[\]] }smx;
+Readonly::Scalar my $RECOGNIZE_ESCAPE_VARIABLE => qr{ \^ \w }smx;
+Readonly::Scalar my $RECOGNIZE_EXTENDED_ESCAPE_VARIABLE =>
+                qr{ (?: [{] \^ \w+ [}] ) }smx;
+Readonly::Scalar my $RECOGNIZE_NORMAL_VARIABLE =>
+                qr{ \w+ (?: :: \w+ )* }smx;
+Readonly::Scalar my $RECOGNIZE_VARIABLE => qr{
+    $RECOGNIZE_PUNCTUATION_VARIABLE |
+    $RECOGNIZE_ESCAPE_VARIABLE |
+    $RECOGNIZE_EXTENDED_ESCAPE_VARIABLE |
+    $RECOGNIZE_NORMAL_VARIABLE
+}smx;
+
 #-----------------------------------------------------------------------------
 
 sub supported_parameters {
@@ -61,12 +77,16 @@ sub violates {
     # Optimization: if its short enough now, parsing won't make it longer
     return if $self->{_max_characters} >= length get_match_string($elem);
 
+    my $re = parse_regexp($elem)
+        or return;  # Abort on syntax error.
+    my $qr = $re->visual();
+
+    # Hack: don't penalize long variable names
+    $qr =~ s/ ( $RECOGNIZE_SIGIL ) $RECOGNIZE_VARIABLE /${1}foo/gxms;
+
     # If it has an "x" flag, it might be shorter after comment and whitespace removal
     my %modifiers = get_modifiers($elem);
     if ($modifiers{x}) {
-       my $re = parse_regexp($elem);
-       return if !$re; # syntax error, abort
-       my $qr = $re->visual;
 
        # HACK: Remove any (?xism:...) wrapper we may have added in the parse process...
        $qr =~ s/\A [(][?][xism]+(?:-[xism]+)?: (.*) [)] \z/$1/xms;
@@ -74,8 +94,9 @@ sub violates {
        # Hack: don't count long \p{...} expressions against us so badly
        $qr =~ s/\\[pP][{]\w+[}]/\\p{...}/gxms;
 
-       return if $self->{_max_characters} >= length $qr;
     }
+
+    return if $self->{_max_characters} >= length $qr;
 
     return $self->violation( $DESC, $EXPL, $elem );
 }
@@ -109,6 +130,11 @@ together.  This policy flags any regexp that is longer than C<N>
 characters, where C<N> is a configurable value that defaults to 60.
 If the regexp uses the C<x> flag, then the length is computed after
 parsing out any comments or whitespace.
+
+Unfortunately the use of descriptive (and therefore longish) variable
+names can cause regexps to be in violation of this policy, so
+interpolated variables are counted as 4 characters no matter how long
+their names actually are.
 
 
 =head1 CASE STUDY

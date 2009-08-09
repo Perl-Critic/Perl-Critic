@@ -67,6 +67,15 @@ m/ foo /;
 m/foofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoo(/x;
 
 #-----------------------------------------------------------------------------
+
+## name forgive long (and presumably descriptive) variable names
+## failures 0
+## parms {max_characters => 20}
+## cut
+
+m/ $now_is_the_time_for_all_good_men_to_come_to /;
+
+#-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

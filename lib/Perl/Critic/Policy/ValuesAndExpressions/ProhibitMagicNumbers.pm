@@ -35,8 +35,6 @@ Readonly::Scalar my $UNSIGNED_NUMBER =>
     }xms;
 Readonly::Scalar my $SIGNED_NUMBER => qr/ [-+]? $UNSIGNED_NUMBER /xms;
 
-# The regex is already simplified.  There's just a lot of variable use.
-## no critic (ProhibitComplexRegexes)
 Readonly::Scalar my $RANGE =>
     qr{
         \A
@@ -50,7 +48,6 @@ Readonly::Scalar my $RANGE =>
         )?
         \z
     }xms;
-## use critic
 
 Readonly::Scalar my $SPECIAL_ARRAY_SUBSCRIPT_EXEMPTION => -1;
 
