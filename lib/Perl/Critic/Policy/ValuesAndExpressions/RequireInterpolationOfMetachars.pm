@@ -58,6 +58,7 @@ sub initialize_if_enabled {
     }
 
     if ( not eval { require Email::Address; 1 } ) {
+        no warnings 'redefine';
         *_looks_like_email_address = sub {};
     }
 

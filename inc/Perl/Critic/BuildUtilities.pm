@@ -128,6 +128,11 @@ sub test_wrappers_to_generate {
         t/15_statistics.t
         t/20_policies.t
         t/20_policy_pod_spelling.t
+        t/20_policy_prohibit_evil_modules.t
+        t/20_policy_prohibit_hard_tabs.t
+        t/20_policy_prohibit_trailing_whitespace.t
+        t/20_policy_require_consistent_newlines.t
+        t/20_policy_require_interpolation_of_metachars.t
         t/20_policy_require_tidy_code.t
         xt/author/80_policysummary.t
         t/92_memory_leaks.t

@@ -79,26 +79,6 @@ $sigil_as_delimiter = q    @blah@;
 
 #-----------------------------------------------------------------------------
 
-## name Things that look like email addresses are exempt.
-## failures 0
-## cut
-
-$simple  = 'me@foo.bar';
-$complex = q{don-quixote@man-from.lamancha.org};
-
-#-----------------------------------------------------------------------------
-
-## name Email address is part of larger string.
-## failures 0
-## optional_modules Email::Address
-## cut
-
-$simple  = 'Email: me@foo.bar';
-$complex = q{"don-quixote@man-from.lamancha.org" is my address};
-send_email_to ('foo@bar.com', ...);
-
-#-----------------------------------------------------------------------------
-
 ## name Do complain about RCS variables, if not turned on.
 ## failures 7
 ## cut
