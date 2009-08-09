@@ -348,6 +348,15 @@ this will return "FOO".  Similarly, given
 
 this will return "%FOO".
 
+B<Caveat:> in the case where multiple constants are declared using the same
+C<use constant> statement (e.g. C<< use constant { FOO => 1, BAR => 2 }; >>,
+this subroutine will return the declaring
+L<PPI::Structure::Constructor|PPI::Structure::Constructor>. In the case of
+C<< use constant 1.16 { FOO => 1, BAR => 2 }; >> it may return a
+L<PPI::Structure::Block|PPI::Structure::Block> instead of a
+L<PPI::Structure::Constructor|PPI::Structure::Constructor>, due to a parse
+error in L<PPI|PPI>.
+
 
 =item C<get_next_element_in_same_simple_statement( $element )>
 
