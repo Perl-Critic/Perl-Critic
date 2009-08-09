@@ -109,13 +109,15 @@ sub is_ppi_constant_element {
 
     # TODO implement here documents once PPI::Token::HereDoc grows the
     # necessary PPI::Token::Quote interface.
-    return $element->isa( 'PPI::Token::Number' )
-        || $element->isa( 'PPI::Token::Quote::Literal' )
-        || $element->isa( 'PPI::Token::Quote::Single' )
-        || $element->isa( 'PPI::Token::QuoteLike::Words' )
-        || ( $element->isa( 'PPI::Token::Quote::Double' )
-            || $element->isa( 'PPI::Token::Quote::Interpolate' ) )
-            && $element->string() !~ m/ (?: \A | [^\\] ) (?: \\\\)* [\$\@] /smx
+    return
+            $element->isa( 'PPI::Token::Number' )
+        ||  $element->isa( 'PPI::Token::Quote::Literal' )
+        ||  $element->isa( 'PPI::Token::Quote::Single' )
+        ||  $element->isa( 'PPI::Token::QuoteLike::Words' )
+        ||  (
+                $element->isa( 'PPI::Token::Quote::Double' )
+            ||  $element->isa( 'PPI::Token::Quote::Interpolate' ) )
+            &&  $element->string() !~ m< (?: \A | [^\\] ) (?: \\\\)* [\$\@] >smx
         ;
 }
 
@@ -179,23 +181,14 @@ sub get_constant_name_element_from_declaring_statement {
     return;
 }
 
-# Clean this up once PPI with module_version() is released.
 sub _constant_name_from_constant_pragma {
     my ($include) = @_;
 
-    my $name_slot = 2;
-    my $argument_or_version = $include->schild($name_slot);
-    return if not $argument_or_version;                     # "use constant"
-    return if
-        $argument_or_version->isa('PPI::Token::Structure'); # "use constant;"
+    my @arguments = $include->arguments() or return;
 
-    return $argument_or_version
-        if not $argument_or_version->isa('PPI::Token::Number');
+    my $follower = $arguments[0];
+    return if not defined $follower;
 
-    my $follower = $include->schild($name_slot + 1);
-    return if not $follower;                            # "use constant 123"
-    return if $follower->isa('PPI::Token::Structure');  # "use constant 123;"
-    return $argument_or_version if $follower->isa('PPI::Token::Operator');
     return $follower;
 }
 
