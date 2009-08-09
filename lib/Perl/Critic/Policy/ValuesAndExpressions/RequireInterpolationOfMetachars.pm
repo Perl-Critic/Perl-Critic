@@ -86,18 +86,20 @@ sub _needs_interpolation {
     my ($string) = @_;
 
     return
-            $string =~ m< [\$\@] \S+ >xmso             # Contains a $ or @
+            $string =~ m< [\$\@] \S+ >xms              # Contains a $ or @
         ||  $string =~ m<                              # Contains metachars
                 (?: \A | [^\\] )
                 (?: \\{2} )*
                 \\ [tnrfae0xcNLuLUEQ]
-            >xmso;
+            >xms;
 }
 
 #-----------------------------------------------------------------------------
 
 sub _looks_like_email_address {
     my ($string) = @_;
+
+    return if $string =~ m< \W \@ >xms;
 
     return $string =~ $Email::Address::addr_spec;
 }

@@ -1,4 +1,4 @@
-## name Basic passing
+## name Basic passing.
 ## failures 0
 ## cut
 
@@ -9,18 +9,27 @@ print qq{this is not literal\n};
 
 #-----------------------------------------------------------------------------
 
-## name Basic failure
-## failures 4
+## name Basic failure.
+## failures 5
 ## cut
 
 print 'this is not $literal';
 print q{this is not $literal};
 print 'this is not literal\n';
 print q{this is not literal\n};
+print 'this is not @literal';
 
 #-----------------------------------------------------------------------------
 
-## name OK to escape backslashes
+## name Readonly constant from Modules::ProhibitAutomaticExportation.
+## failures 1
+## cut
+
+Readonly::Scalar my $EXPL => q{Use '@EXPORT_OK' or '%EXPORT_TAGS' instead};
+
+#-----------------------------------------------------------------------------
+
+## name OK to escape backslashes.
 ## failures 0
 ## cut
 
@@ -31,7 +40,7 @@ print q{you can do it multiple times: \\\\\\t}
 
 #-----------------------------------------------------------------------------
 
-## name OK to escape quotes
+## name OK to escape quotes.
 ## failures 0
 ## cut
 
@@ -42,7 +51,7 @@ print q{you can escape a quote preceded by backslashes: \\\\\'}
 
 #-----------------------------------------------------------------------------
 
-## name Valid escapes should not hide invalid ones
+## name Valid escapes should not hide invalid ones.
 ## failures 4
 ## cut
 
@@ -53,7 +62,7 @@ print q{you can also escape a quote: \' but not a tee: \t}
 
 #-----------------------------------------------------------------------------
 
-## name Sigil characters not looking like sigils
+## name Sigil characters not looking like sigils.
 ## failures 0
 ## cut
 
@@ -70,7 +79,7 @@ $sigil_as_delimiter = q    @blah@;
 
 #-----------------------------------------------------------------------------
 
-## name Things that look like email addresses are exempt
+## name Things that look like email addresses are exempt.
 ## failures 0
 ## cut
 
@@ -79,7 +88,7 @@ $complex = q{don-quixote@man-from.lamancha.org};
 
 #-----------------------------------------------------------------------------
 
-## name Email address is part of larger string
+## name Email address is part of larger string.
 ## failures 0
 ## optional_modules Email::Address
 ## cut
@@ -142,7 +151,7 @@ use overload 1.0 ('@{}' => \&array_deref);
 
 #-----------------------------------------------------------------------------
 
-## name Do complain about overload dereference-ish strings elsewhere
+## name Do complain about overload dereference-ish strings elsewhere.
 ## failures 2
 ## cut
 
@@ -151,7 +160,7 @@ use overlord '@{}' => \&array_deref;
 
 #-----------------------------------------------------------------------------
 
-## name use vars arguments
+## name use vars arguments.
 ## failures 0
 ## cut
 
@@ -168,7 +177,7 @@ use vars qw< $FOO @BAR >, '$BAZ';
 
 #-----------------------------------------------------------------------------
 
-## name Include statement failure
+## name Include statement failure.
 ## failures 1
 ## cut
 
