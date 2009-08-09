@@ -373,14 +373,14 @@ sub _element_is_in_a_constant_subroutine {
     my $following = $elem->snext_sibling();
     if ($following) {
         return 0 if not $following->isa('PPI::Token::Structure');
-        return 0 if not $following->content() eq $SCOLON;
+        return 0 if $following->content() ne $SCOLON;
         return 0 if $following->snext_sibling();
     }
 
     my $preceding = $elem->sprevious_sibling();
     if ($preceding) {
         return 0 if not $preceding->isa('PPI::Token::Word');
-        return 0 if not $preceding->content() eq 'return';
+        return 0 if $preceding->content() ne 'return';
         return 0 if $preceding->sprevious_sibling();
     }
 
