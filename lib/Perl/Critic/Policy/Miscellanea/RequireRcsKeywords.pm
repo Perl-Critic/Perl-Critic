@@ -118,6 +118,8 @@ sub _find_wanted_nodes {
     my ( $self, $doc ) = @_;
     my @wanted_types = qw(Pod Comment Quote::Single Quote::Literal End);
     my @found =  map { @{ $doc->find("PPI::Token::$_") || [] } } @wanted_types;
+    push @found, grep { $_->content() =~ m/ \A qw\$ [^\$]* \$ \z /smx } @{
+        $doc->find('PPI::Token::QuoteLike::Words') || [] };
     return @found ? \@found : $EMPTY;  # Behave like PPI::Node::find()
 }
 

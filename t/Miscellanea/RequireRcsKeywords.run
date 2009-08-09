@@ -94,6 +94,30 @@ __END__
 
 #-----------------------------------------------------------------------------
 
+## name Keywords in qw$ ... $ (RT 45196)
+## failures 0
+## parms {keywords => 'Revision'}
+## cut
+
+use version; our $VERSION = qv( '1.0.' . qw$Revision$ );
+
+#-----------------------------------------------------------------------------
+
+## name Keywords in qw{$ ... $} are invalid (RT 45196)
+## failures 1
+## parms {keywords => 'Revision'}
+## cut
+
+use version; our $VERSION = qv( '1.0.' . qw{ $Revision$ } );
+
+#-----------------------------------------------------------------------------
+
+## cut
+
+# The above '## cut' prevents the following lines from being included in the
+# last test's document and producing false negatives (or positives, as the
+# case may be).
+
 ##############################################################################
 #      $URL$
 #     $Date$
