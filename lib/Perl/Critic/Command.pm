@@ -129,14 +129,15 @@ sub _parse_command_line {
 
 sub _dispatch_special_requests {
     my (%opts) = @_;
-    if ( $opts{-help}            ) { pod2usage( -verbose => 0 )   }  #Exits
-    if ( $opts{-options}         ) { pod2usage( -verbose => 1 )   }  #Exits
-    if ( $opts{-man}             ) { pod2usage( -verbose => 2 )   }  #Exits
-    if ( $opts{-version}         ) { _display_version()           }  #Exits
-    if ( $opts{-list}            ) { _render_policy_listing()     }  #Exits
-    if ( $opts{'-list-themes'}   ) { _render_theme_listing()      }  #Exits
-    if ( $opts{'-profile-proto'} ) { _render_profile_prototype()  }  #Exits
-    if ( $opts{-doc}             ) { _render_policy_docs( %opts ) }  #Exits
+    if ( $opts{-help}            ) { pod2usage( -verbose => 0 )    }  #Exits
+    if ( $opts{-options}         ) { pod2usage( -verbose => 1 )    }  #Exits
+    if ( $opts{-man}             ) { pod2usage( -verbose => 2 )    }  #Exits
+    if ( $opts{-version}         ) { _display_version()            }  #Exits
+    if ( $opts{-list}            ) { _render_all_policy_listing()  }  #Exits
+    if ( $opts{'-list-used'}     ) { _render_policy_listing(%opts) }  #Exits
+    if ( $opts{'-list-themes'}   ) { _render_theme_listing()       }  #Exits
+    if ( $opts{'-profile-proto'} ) { _render_profile_prototype()   }  #Exits
+    if ( $opts{-doc}             ) { _render_policy_docs( %opts )  }  #Exits
     return 1;
 }
 
@@ -481,6 +482,7 @@ sub _get_option_specification {
         help|?|H
         include=s@
         list
+        list-used
         list-themes
         man
         color|colour!
@@ -560,12 +562,20 @@ sub _at_tty {
 
 #-----------------------------------------------------------------------------
 
+sub _render_all_policy_listing {
+    # Force P-C parameters, to catch all Policies on this site
+    my %pc_params = (-profile => $EMPTY, -severity => $SEVERITY_LOWEST);
+    return _render_policy_listing( %pc_params );
+}
+
+#-----------------------------------------------------------------------------
+
 sub _render_policy_listing {
+    my %pc_params = @_;
 
     require Perl::Critic::PolicyListing;
     require Perl::Critic;
 
-    my %pc_params = (-profile => $EMPTY, -severity => $SEVERITY_LOWEST);
     my @policies = Perl::Critic->new( %pc_params )->policies();
     my $listing = Perl::Critic::PolicyListing->new( -policies => \@policies );
     _out $listing;
