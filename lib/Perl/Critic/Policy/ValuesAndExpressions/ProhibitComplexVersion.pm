@@ -155,10 +155,10 @@ sub _validate_fully_qualified_symbols {
                         return
                                 $_[1]->isa('PPI::Token::Quote::Double')
                             ||  $_[1]->isa('PPI::Token::Quote::Interpolate');
-                    } 
+                    }
                 )
             or  []
-        } 
+        }
     ) {
         my $unquoted = $string->string();
         while (
