@@ -3,10 +3,22 @@
       --files-with-violations option, or the names of files without
       violations if given the --files-without-violations options. These
       have synonyms -l and -L respectively.
+    * Perlcritic has a new --list-used option, which lists the Policies
+      that will be enforced, given the current configuration.  This is
+      useful if you've written a complex command-line or modified your
+      .perlcriticrc file and you want to see which Policies *would*
+      be used with the current configuration, if you were actually going
+      to critque a file with it.
     * Objects::ProhibitIndirectSyntax will complain if a configured set of
       methods is called using indirect object syntax. The 'new' method is
       forbidden by default, but the 'forbid' configuration option allows
       others to be configured.
+
+    Policy Changes:
+    * NamingConventions::Capitalization now allows fully qualified subroutine
+      declarations ( e.g. "sub Foo::Bar::baz {...}" ).  However, the
+      non-package part of the subroutine name must still conform to whatever
+      capitalization rule you have chosen.
 
     Other News:
     * Komodo version 5.1.1 now has built-in support for Perl-Critic,
