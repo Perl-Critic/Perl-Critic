@@ -379,7 +379,7 @@ __END__
 
 =pod
 
-=for stopwords subtest subtests
+=for stopwords RCS subtest subtests
 
 =head1 NAME
 
