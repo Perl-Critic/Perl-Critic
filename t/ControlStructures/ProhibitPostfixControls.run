@@ -146,6 +146,16 @@ my %hash = (
 
 #-----------------------------------------------------------------------------
 
+## name RT #48422: Allow flow control method calls
+## TODO exemption for method calls not implimented yet
+## failures 0
+## cut
+
+Exception::Class->throw('an expression') if $error;
+Exception::Class->throw($arg1, $arg2) unless not $error;
+
+#-----------------------------------------------------------------------------
+
 ##############################################################################
 #      $URL$
 #     $Date$
