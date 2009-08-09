@@ -150,6 +150,31 @@ use overlord '@{}' => \&array_deref;
 
 #-----------------------------------------------------------------------------
 
+## name use vars arguments
+## failures 0
+## cut
+
+use vars '$FOO';
+use vars '$FOO', '@BAR';
+use vars ('$FOO');
+use vars ('$FOO', '@BAR');
+use vars (('$FOO'));
+use vars (('$FOO', '@BAR'));
+use vars ((('$FOO')));
+use vars ((('$FOO', '@BAR')));
+use vars qw< $FOO @BAR >;
+use vars qw< $FOO @BAR >, '$BAZ';
+
+#-----------------------------------------------------------------------------
+
+## name Include statement failure
+## failures 1
+## cut
+
+use Generic::Module '$FOO';
+
+#-----------------------------------------------------------------------------
+
 ##############################################################################
 #      $URL$
 #     $Date$

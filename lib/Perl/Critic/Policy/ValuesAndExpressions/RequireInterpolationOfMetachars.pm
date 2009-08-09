@@ -63,9 +63,10 @@ sub violates {
 
     # The string() method strips off the quotes
     my $string = $elem->string();
-    return if _looks_like_use_overload( $elem );
     return if not _needs_interpolation($string);
     return if _looks_like_email_address($string);
+    return if _looks_like_use_overload($elem);
+    return if _looks_like_use_vars($elem);
 
     my $rcs_regexes = $self->{_rcs_regexes};
     return if $rcs_regexes and _contains_rcs_variable($string, $rcs_regexes);
@@ -101,7 +102,7 @@ sub _contains_rcs_variable {
     my ($string, $rcs_regexes) = @_;
 
     foreach my $regex ( @{$rcs_regexes} ) {
-        return 1 if $string =~ m/$regex/xms;
+        return $TRUE if $string =~ m/$regex/xms;
     }
 
     return;
@@ -110,7 +111,7 @@ sub _contains_rcs_variable {
 #-----------------------------------------------------------------------------
 
 sub _looks_like_use_overload {
-    my ( $elem ) = @_;
+    my ($elem) = @_;
 
     my $string = $elem->string();
 
@@ -118,12 +119,29 @@ sub _looks_like_use_overload {
         or $string eq q<${}>    ## no critic (RequireInterpolationOfMetachars)
         or return;
 
-    my $stmt = $elem;
-    while (not $stmt->isa('PPI::Statement::Include')) {
-        $stmt = $stmt->parent() or return;
+    my $statement = $elem;
+    while ( not $statement->isa('PPI::Statement::Include') ) {
+        $statement = $statement->parent() or return;
     }
 
-    return $stmt->type() eq q<use> && $stmt->module() eq q<overload>;
+    return if $statement->type() ne q<use>;
+    return $statement->module() eq q<overload>;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _looks_like_use_vars {
+    my ($elem) = @_;
+
+    my $string = $elem->string();
+
+    my $statement = $elem;
+    while ( not $statement->isa('PPI::Statement::Include') ) {
+        $statement = $statement->parent() or return;
+    }
+
+    return if $statement->type() ne q<use>;
+    return $statement->module() eq q<vars>;
 }
 
 1;
@@ -157,6 +175,28 @@ educated guess by looking for metacharacters and sigils which usually
 indicate that the string should be interpolated.
 
 
+=head2 Exceptions
+
+=over
+
+=item *
+
+C<${}> and C<@{}> in a C<use overload>,
+
+    use overload '${}' => \&deref,     # ok
+                 '@{}' => \&arrayize;  # ok
+
+=item *
+
+Variable names to C<use vars>.
+
+    use vars '$x';          # ok
+    use vars ('$y', '$z');  # ok
+    use vars qw< $a $b >;   # ok
+
+=back
+
+
 =head1 CONFIGURATION
 
 The C<rcs_keywords> option allows you to stop this policy from complaining
@@ -178,6 +218,11 @@ in your F<.perlcriticrc> to provide an exemption.
 =head1 NOTES
 
 Perl's own C<warnings> pragma also warns you about this.
+
+
+=head1 TODO
+
+Handle email addresses.
 
 
 =head1 SEE ALSO
