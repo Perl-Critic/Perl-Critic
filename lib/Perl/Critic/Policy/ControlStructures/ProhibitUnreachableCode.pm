@@ -18,13 +18,13 @@ use base 'Perl::Critic::Policy';
 our $VERSION = '1.103';
 
 Readonly::Array my @TERMINALS => qw( die exit croak confess );
-Readonly::Hash my %TERMINALS => hashify( @TERMINALS );
+Readonly::Hash  my %TERMINALS => hashify( @TERMINALS );
 
 Readonly::Array my @CONDITIONALS => qw( if unless foreach while until for );
-Readonly::Hash my %CONDITIONALS => hashify( @CONDITIONALS );
+Readonly::Hash  my %CONDITIONALS => hashify( @CONDITIONALS );
 
 Readonly::Array my @OPERATORS => qw( && || // and or err ? );
-Readonly::Hash my %OPERATORS => hashify( @OPERATORS );
+Readonly::Hash  my %OPERATORS => hashify( @OPERATORS );
 
 #-----------------------------------------------------------------------------
 
@@ -42,12 +42,18 @@ sub applies_to           { return 'PPI::Token::Word' }
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
-    return if ! is_function_call($elem);
 
     my $statement = $elem->statement();
-    return if !$statement;
+    return if not $statement;
+
+    # We check to see if this is an interesting token before calling
+    # is_function_call().  This weeds out most candidate tokens and
+    # prevents us from having to make an expensive function call.
+
     return if ( !exists $TERMINALS{$elem} ) &&
         ( !$statement->isa('PPI::Statement::Break') );
+
+    return if not is_function_call($elem);
 
     # Scan the enclosing statement for conditional keywords or logical
     # operators.  If any are found, then this the folowing statements
