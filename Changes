@@ -22,6 +22,9 @@
       capitalization rule you have chosen.
     * ValuesAndExpressions::RequireInterpolationOfMetachars now allows sigils
       in the arguments to "use vars".  Contributed by Kevin Ryde, RT #47318.
+    * ValuesAndExpressions::RequireInterpolationOfMetachars now properly
+      ignores email addesses, if you have Email::Address installed.  Inspired
+      by the Kevin Ryde contribution in RT #47318.
 
     Other News:
     * Komodo version 5.1.1 now has built-in support for Perl-Critic,

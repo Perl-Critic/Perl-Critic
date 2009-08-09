@@ -48,3 +48,6 @@ allow_all_brackets = 1
 
 [Subroutines::ProtectPrivateSubs]
 private_name_regex = _(?!_)\w+
+
+[Variables::ProhibitPackageVars]
+add_packages = Email::Address

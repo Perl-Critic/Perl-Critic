@@ -86,6 +86,7 @@ sub build_required_module_versions {
 
 sub recommended_module_versions {
     return (
+        'Email::Address'        => '1.889',
         'File::HomeDir'         => 0,
         'Perl::Tidy'            => 0,
         'Readonly::XS'          => 0,

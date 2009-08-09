@@ -21,7 +21,7 @@ our $VERSION = '1.103';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $DESC => q{String *may* require interpolation};
+Readonly::Scalar my $DESC => q<String *may* require interpolation>;
 Readonly::Scalar my $EXPL => [ 51 ];
 
 #-----------------------------------------------------------------------------
@@ -39,8 +39,10 @@ sub supported_parameters {
 
 sub default_severity     { return $SEVERITY_LOWEST      }
 sub default_themes       { return qw(core pbp cosmetic) }
-sub applies_to           { return qw(PPI::Token::Quote::Single
-                                     PPI::Token::Quote::Literal) }
+
+sub applies_to           {
+    return qw< PPI::Token::Quote::Single PPI::Token::Quote::Literal >;
+}
 
 #-----------------------------------------------------------------------------
 
@@ -53,6 +55,10 @@ sub initialize_if_enabled {
     if (@rcs_keywords) {
         my $rcs_regexes = [ map { qr/ \$ $_ [^\n\$]* \$ /xms } @rcs_keywords ];
         $self->{_rcs_regexes} = $rcs_regexes;
+    }
+
+    if ( not eval { require Email::Address; 1 } ) {
+        *_looks_like_email_address = sub {};
     }
 
     return $TRUE;
@@ -93,7 +99,7 @@ sub _needs_interpolation {
 sub _looks_like_email_address {
     my ($string) = @_;
 
-    return $string =~ m{\A [^\@\s]+ \@ [\w\-.]+ \z}xmso;
+    return $string =~ $Email::Address::addr_spec;
 }
 
 #-----------------------------------------------------------------------------
@@ -193,6 +199,12 @@ Variable names to C<use vars>.
     use vars '$x';          # ok
     use vars ('$y', '$z');  # ok
     use vars qw< $a $b >;   # ok
+
+
+=item *
+
+Email addresses, if you have L<Email::Address> installed.
+
 
 =back
 
