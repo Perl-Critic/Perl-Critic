@@ -118,7 +118,7 @@ sub _find_wanted_nodes {
     my ( $self, $doc ) = @_;
     my @wanted_types = qw(Pod Comment Quote::Single Quote::Literal End);
     my @found =  map { @{ $doc->find("PPI::Token::$_") || [] } } @wanted_types;
-    return \@found;
+    return @found ? \@found : '';
 }
 
 1;
