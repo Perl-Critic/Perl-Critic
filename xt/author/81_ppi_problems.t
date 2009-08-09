@@ -12,7 +12,7 @@ use warnings;
 
 use PPI::Document;
 
-use Test::More tests => 5;
+use Test::More tests => 3;
 
 #-----------------------------------------------------------------------------
 
@@ -21,12 +21,6 @@ our $VERSION = '1.103';
 #-----------------------------------------------------------------------------
 
 # Things we're looking for from PPI.
-
-{
-    local $TODO = q<Clean up code in P::C::Utils::PPI once this is released.>;
-
-    can_ok 'PPI::Statement::Include', 'module_version';
-}
 
 {
     local $TODO = q<Clean up code in Modules::ProhibitUnusedImports once this is released.>;
@@ -38,12 +32,6 @@ our $VERSION = '1.103';
     local $TODO = q<Clean up code in Modules::ProhibitUnusedImports once this is released.>;
 
     can_ok 'PPI::Token::QuoteLike::Words', 'literal';
-}
-
-{
-    local $TODO = q<Clean up code in NamingConventions::Capitalization once this is released.>;
-
-    can_ok 'PPI::Statement::Variable', 'symbols';
 }
 
 {

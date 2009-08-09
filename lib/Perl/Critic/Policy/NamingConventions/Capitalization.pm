@@ -409,9 +409,7 @@ sub _variable_capitalization {
     my @violations;
 
     NAME:
-    for my $name (
-        map { $_->symbol() } _ppi_statement_variable_symbols($elem)
-    ) {
+    for my $name ( map { $_->symbol() } $elem->symbols() ) {
         if ($elem->type() eq 'local') {
             # Fully qualified names are exempt because we can't be responsible
             # for other people's sybols.
@@ -624,60 +622,12 @@ sub _is_directly_in_scope_block {
     return $prior_to_grand_parent->content() ne 'continue';
 }
 
-
-# This code taken from unreleased PPI.  Delete this once next version of PPI
-# is released.  "$self" is not this Policy, but a PPI::Statement::Variable.
-sub _ppi_statement_variable_symbols {
-    my $self = shift;
-
-    # Get the children we care about
-    my @schild = grep { $_->significant } $self->children;
-    if ($schild[0]->isa('PPI::Token::Label')) { shift @schild; }
-
-    # If the second child is a symbol, return its name
-    if ( $schild[1]->isa('PPI::Token::Symbol') ) {
-        return $schild[1];
-    }
-
-    # If it's a list, return as a list
-    if ( $schild[1]->isa('PPI::Structure::List') ) {
-        my $expression = $schild[1]->schild(0);
-        $expression and
-        $expression->isa('PPI::Statement::Expression') or return ();
-
-        # my and our are simpler than local
-        if (
-                $self->type eq 'my'
-            or  $self->type eq 'our'
-            or  $self->type eq 'state'
-        ) {
-            return
-                grep { $_->isa('PPI::Token::Symbol') }
-                $expression->schildren;
-        }
-
-        # Local is much more icky (potentially).
-        # Not that we are actually going to deal with it now,
-        # but having this seperate is likely going to be needed
-        # for future bug reports about local() things.
-
-        # This is a slightly better way to check.
-        return
-            grep { $self->_local_variable($_)    }
-            grep { $_->isa('PPI::Token::Symbol') }
-            $expression->schildren;
-    }
-
-    # erm... this is unexpected
-    return ();
-}
-
 sub _local_variable {
     my ($self, $elem) = @_;
 
     # The last symbol should be a variable
-    my $n = $elem->snext_sibling or return 1;
-    my $p = $elem->sprevious_sibling;
+    my $n = $elem->snext_sibling() or return 1;
+    my $p = $elem->sprevious_sibling();
     if ( !$p || $p eq $COMMA ) {
         # In the middle of a list
         return 1 if $n eq $COMMA;
