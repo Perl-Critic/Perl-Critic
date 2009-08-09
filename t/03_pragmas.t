@@ -60,7 +60,7 @@ is(
         {-profile => $profile, -severity => 1, -theme => 'core'}
     ),
     0,
-    'inline no-critic'
+    'inline no-critic disables violations'
 );
 
 #-----------------------------------------------------------------------------
@@ -290,7 +290,7 @@ is(
         {-profile => $profile, -severity => 1, -theme => 'core'},
     ),
     5,
-    'inline no-critic',
+    q<inline no-critic doesn't block later violations>,
 );
 
 #-----------------------------------------------------------------------------
