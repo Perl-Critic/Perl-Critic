@@ -45,9 +45,8 @@ is( pcritique($policy, \$code), 0, $policy);
 
 #-----------------------------------------------------------------------------
 
-## name Parentheses with unary operators
+## name Unary operators with parens, followed by a high-precedence operator
 ## failures 0
-## TODO Don't exactly know how to attack that last line.
 ## cut
 
 $foo = int( 0.5 ) + 1.5;
@@ -112,6 +111,16 @@ chown( $file1, $file2 ) || die q{Couldn't chown};
 
 grep( { do_something($_) }, $foo, $bar) and do_something();
 chown( $file1, $file2 ) or die q{Couldn't chown};
+
+#-----------------------------------------------------------------------------
+
+## name Named unary op with operator inside parenthesis (RT #46862)
+## failures 0
+## cut
+
+length( $foo // $bar );
+stat( $foo || $bar );
+uc( $this & $that );
 
 #-----------------------------------------------------------------------------
 
