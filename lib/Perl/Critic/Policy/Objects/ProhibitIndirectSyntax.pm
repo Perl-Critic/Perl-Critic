@@ -51,13 +51,15 @@ sub applies_to           { return 'PPI::Token::Word'         }
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
-
-    # We are only interested in function calls.
     $elem or return;
-    is_function_call( $elem ) or return;
 
     # We are only interested in the functions we have been told to check.
-    $self->{_forbid}{$elem->content()} or return;
+    # Do this before calling is_function_call() because we want to weed
+    # out as many candidate tokens as possible before calling it.
+    $self->{_forbid}->{$elem->content()} or return;
+
+    # Make sure it really is a function call.
+    is_function_call( $elem ) or return;
 
     # Per perlobj, it is only an indirect object call if the next sibling
     # is a word, a scalar symbol, or a block.
