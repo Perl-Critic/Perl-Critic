@@ -62,6 +62,8 @@ sub violates {
     return;    #ok!
 }
 
+# TODO: Remove this when a released PPI properly supports version numbers (the
+# current dev releases do support it).
 sub _is_version_string {
     my ( $elem ) = @_;
 
