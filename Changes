@@ -37,6 +37,9 @@ Next release, whenever it is:
       may not work out right; how the policy does this can be controlled via
       the new "string_mode" option.  Contributed by Edgar Whipple
       <perlmonk at misterwhipple dot com>.
+    * Modules::RequireFilenameMatchesPackage now respects logical filenames
+      defined by the "#line" directives.  This allows the Policy to work
+      properly with IDEs and code generators.
 
     Other News:
     * Komodo version 5.1.1 now has built-in support for Perl-Critic,

@@ -14,7 +14,7 @@ use Readonly;
 
 use File::Spec;
 
-use Perl::Critic::Utils qw{ :severities is_script };
+use Perl::Critic::Utils qw{ :characters :severities is_script };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.103';
@@ -35,28 +35,32 @@ sub applies_to           { return 'PPI::Document'   }
 
 sub prepare_to_scan_document {
     my ( $self, $document ) = @_;
-
     return not is_script($document);   # Must be a library or module.
 }
+
+#-----------------------------------------------------------------------------
 
 sub violates {
     my ($self, $elem, $doc) = @_;
 
-    my $filename = $doc->filename;
-    return if !$filename;
-
-    # 'lib/Foo/Bar.pm' -> ('lib', 'Foo', 'Bar')
-    my @path = File::Spec->splitpath($filename);
-    $filename = $path[2];
-    $filename =~ s/[.]\w+\z//xms;
-    my @path_parts = grep {$_ ne q{}} File::Spec->splitdir($path[1]), $filename;
-
     # 'Foo::Bar' -> ('Foo', 'Bar')
     my $pkg_node = $doc->find_first('PPI::Statement::Package');
-    return if !$pkg_node;
-    my $pkg = $pkg_node->namespace;
+    return if not $pkg_node;
+    my $pkg = $pkg_node->namespace();
     return if $pkg eq 'main';
     my @pkg_parts = split m/(?:\'|::)/xms, $pkg;
+
+
+    # 'lib/Foo/Bar.pm' -> ('lib', 'Foo', 'Bar')
+    my $filename = $pkg_node->logical_filename() || $doc->filename();
+    return if not $filename;
+
+    my @path = File::Spec->splitpath($filename);
+    $filename = $path[2];
+    $filename =~ s/ [.] \w+ \z //xms;
+    my @path_parts =
+        grep {$_ ne $EMPTY} File::Spec->splitdir($path[1]), $filename;
+
 
     # To succeed, at least the lastmost must match
     # Beyond that, the search terminates if a dirname is an impossible package name
@@ -101,10 +105,32 @@ distribution.
 
 =head1 DESCRIPTION
 
-The package declaration should always match the name of the file that
-contains it.  For example, C<package Foo::Bar;> should be in a file
-called C<Bar.pm>.
+The package declaration should always match the name of the file that contains
+it.  For example, C<package Foo::Bar;> should be in a file called C<Bar.pm>.
+This makes it easier for developers to figure out which file a symbol comes
+from when they see it in your code.  For instance, when you see C<<
+Foo::Bar->new() >>, you should be able to find the class definition for a
+C<Foo::Bar> in a file called F<Bar.pm>
 
+Therefore, this Policy requires the last component of the first package name
+declared in the file to match the physical filename.  Or if C<#line>
+directives are used, then it must match the logical filename defined by the
+prevailing C<#line> directive at the point of the package declaration.  Here
+are some examples:
+
+  # Any of the following in file "Foo/Bar/Baz.pm":
+  package Foo::Bar::Baz;     # ok
+  package Baz;               # ok
+  package Nuts;              # not ok (doesn't match physical filename)
+
+  # using #line directives in file "Foo/Bar/Baz.pm":
+  #line 1 Nuts.pm
+  package Nuts;             # ok
+  package Baz;              # not ok (contradicts #line directive)
+
+If the file is not deemed to be a module, then this Policy does not apply.
+Also, if the first package namespace found in the file is "main" then this
+Policy does not apply.
 
 =head1 CONFIGURATION
 
@@ -125,6 +151,7 @@ it under the same terms as Perl itself.
 
 =cut
 
+##############################################################################
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4
