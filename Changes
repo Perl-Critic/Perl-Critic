@@ -41,6 +41,11 @@ Next release, whenever it is:
       defined by the "#line" directives.  This allows the Policy to work
       properly with IDEs and code generators.
 
+    Build Fixes:
+    * There wasn't a specific version given for the List::MoreUtils dependency
+      and we're using features that weren't avialable until 0.19.  So, we now
+      require version 0.19.  Noticed by ohn J. Trammell.  RT #48917.
+
     Other News:
     * Komodo version 5.1.1 now has built-in support for Perl-Critic,
       if you have the Perl::Critic and criticism modules installed.

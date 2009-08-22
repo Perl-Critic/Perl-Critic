@@ -47,7 +47,7 @@ sub required_module_versions {
         'File::Temp'                => 0,
         'Getopt::Long'              => 0,
         'IO::String'                => 0,
-        'List::MoreUtils'           => 0,
+        'List::MoreUtils'           => 0.19,
         'List::Util'                => 0,
         'Module::Pluggable'         => 3.1,
         'PPI'                       => '1.205',
