@@ -32,15 +32,21 @@ sub applies_to           { return 'PPI::Statement::Include' }
 #-----------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, undef ) = @_;
+    my ($self, $elem, undef) = @_;
 
-    my $module = $elem->module() or return;
-    return if $module eq 'lib';
+    my $module = $elem->module() || $elem->pragma();
+    if ($module) {
+        return if $module eq 'lib';
 
-    my $version = $elem->module_version() or return;
-    return if not $version->isa('PPI::Token::Number::Version');
+        my $version = $elem->module_version() or return;
+        return if not $version->isa('PPI::Token::Number::Version');
+    }
+    else {
+        my $version = $elem->schild(1) or return;
+        return if not $version->isa('PPI::Token::Number::Version');
+    }
 
-    return $self->violation( $DESC, $EXPL, $elem );
+    return $self->violation($DESC, $EXPL, $elem);
 }
 
 1;
