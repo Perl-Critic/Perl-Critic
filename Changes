@@ -41,6 +41,10 @@ Next release, whenever it is:
       defined by the "#line" directives.  This allows the Policy to work
       properly with IDEs and code generators.
 
+    Minor documentation fixes:
+    * ValuesAndExpressions::ProhibitInterpolationOfLiterals.  Reported by
+      Debian in http://bugs.debian.org/542814.  RT #48936
+
     Build Fixes:
     * There wasn't a specific version given for the List::MoreUtils dependency
       and we're using features that weren't avialable until 0.19.  So, we now
