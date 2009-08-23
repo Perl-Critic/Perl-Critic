@@ -1,14 +1,14 @@
 Next release, whenever it is:
 
-    New Features:
-    * Perl::Critic::Violation now takes #line directives into account in the
-      %F, %f, and %l formats.  You can get the old values via the new %G, %g,
-      and %L formats.
-
     New Policies:
       Objects::ProhibitIndirectSyntax
       ValuesAndExpressions::ProhibitComplexVersion
       ValuesAndExpressions::RequireConstantVersion
+
+    New Optional Requirement:
+    * Email::Address, if you want
+      ValuesAndExpressions::ProhibitInterpolationOfLiterals to properly ignore
+      emaila addresses.
 
     New Features:
     * Perlcritic will list the names of files with violations if given the
@@ -21,12 +21,40 @@ Next release, whenever it is:
       .perlcriticrc file and you want to see which Policies *would*
       be used with the current configuration, if you were actually going
       to critque a file with it.
+    * Perl::Critic::Violation now takes #line directives into account in the
+      %F, %f, and %l formats.  You can get the old values via the new %G, %g,
+      and %L formats.
 
     Policy Changes:
+    * CodeLayout::ProhibitParensWithBuiltins was complaining in certain cases
+      where parentheses are required due to operator precedence.  RT #46862.
+    * ControlStructures::ProhibitMutatingListFunctions no longer complains
+      about uses of tr/// that don't modify the operand.  Reported by EDAVIS,
+      RT #44515.
+    * Miscellanea::RequireRcsKeywords now accepts "qw$Keyword: ...$".  RT
+      #45196.
+    * Modules::RequireFilenameMatchesPackage now respects logical filenames
+      defined by the "#line" directives.  This allows the Policy to work
+      properly with IDEs and code generators.
     * NamingConventions::Capitalization now allows fully qualified subroutine
       declarations ( e.g. "sub Foo::Bar::baz {...}" ).  However, the
       non-package part of the subroutine name must still conform to whatever
       capitalization rule you have chosen.
+    * NamingConventions::Capitalization got confused when a single "use
+      constant" declared multiple constants.  Reported by Kevin Ryde,
+      RT #44987.
+    * RegularExpressions::ProhibitCaptureWithoutTest no longer complains if
+      the regex is followed by an "or die" or similar.  Reported by EDAVIS,
+      RT #36081.
+    * RegularExpressions::ProhibitComplexRegexes no longer counts variable
+      substitutions in the length.   Reported by EDAVIS, RT #36098.
+    * RegularExpressions::ProhibitUnusedCapture now considers the body of
+      while loops and not just their condition.  Reported by EDAVIS, RT
+      #38942.
+    * ValuesAndExpressions::ProhibitInterpolationOfLiterals can now properly
+      ignore email addresses if you have Email::Address installed.
+    * ValuesAndExpressions::ProhibitVersionStrings was getting confused by
+      comments.  Reported by Kevin Ryde,  RT #44986.
     * ValuesAndExpressions::RequireInterpolationOfMetachars now allows sigils
       in the arguments to "use vars".  Contributed by Kevin Ryde, RT #47318.
     * ValuesAndExpressions::RequireInterpolationOfMetachars now properly
@@ -37,18 +65,29 @@ Next release, whenever it is:
       may not work out right; how the policy does this can be controlled via
       the new "string_mode" option.  Contributed by Edgar Whipple
       <perlmonk at misterwhipple dot com>.
-    * Modules::RequireFilenameMatchesPackage now respects logical filenames
-      defined by the "#line" directives.  This allows the Policy to work
-      properly with IDEs and code generators.
+    * Variables::ProhibitPunctuationVars now ignores $] by default since there
+      is no English.pm equivalent.
 
-    Minor documentation fixes:
+    Other Bug Fixes:
+    * Perl::Critic::Utils::parse_arg_list() was slurping up the "or die ..."
+      portion of "open my $foo, 'somefile' or die ...", causing
+      InputOutput::ProhibitTwoArgOpen to not complain about this example.
+      Reported by Alexandr Ciornii,  RT #44554.
+
+    Minor Changes
+    * The line count emitted by the --statistics option is further broken down
+      by line content.
+
+    Minor Documentation Fixes:
     * ValuesAndExpressions::ProhibitInterpolationOfLiterals.  Reported by
-      Debian in http://bugs.debian.org/542814.  RT #48936
+      Debian in http://bugs.debian.org/542814,  RT #48936
 
     Build Fixes:
     * There wasn't a specific version given for the List::MoreUtils dependency
       and we're using features that weren't avialable until 0.19.  So, we now
-      require version 0.19.  Noticed by John J. Trammell.  RT #48917.
+      require version 0.19.  Noticed by John J. Trammell,  RT #48917.
+    * Some tests were tied to the specific "true" and "false" values that some
+      functions were returning.  Reported by Michael Schwern,  RT #43910.
 
     Other News:
     * Komodo version 5.1.1 now has built-in support for Perl-Critic,
