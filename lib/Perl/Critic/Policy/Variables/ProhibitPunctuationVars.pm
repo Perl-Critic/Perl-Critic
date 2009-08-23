@@ -11,12 +11,13 @@ use 5.006001;
 use strict;
 use warnings;
 use Readonly;
-use English qw( -no_match_vars );
+use English qw< -no_match_vars >;
 
 use PPI::Token::Magic;
 
-use Perl::Critic::Utils
-    qw{ :characters :severities :data_conversion :booleans };
+use Perl::Critic::Utils qw<
+    :characters :severities :data_conversion :booleans
+>;
 
 use base 'Perl::Critic::Policy';
 
@@ -24,7 +25,7 @@ our $VERSION = '1.103';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $DESC => q{Magic punctuation variable used};
+Readonly::Scalar my $DESC => q<Magic punctuation variable used>;
 Readonly::Scalar my $EXPL => [79];
 
 #-----------------------------------------------------------------------------
@@ -32,29 +33,32 @@ Readonly::Scalar my $EXPL => [79];
 # There is no English.pm equivalent for $].
 sub supported_parameters {
     return (
-        {   name           => 'allow',
+        {
+            name           => 'allow',
             description    => 'The additional variables to allow.',
             default_string => $EMPTY,
             behavior       => 'string list',
             list_always_present_values =>
-                [qw( $_ @_ $1 $2 $3 $4 $5 $6 $7 $8 $9 _ $] )],
+                [ qw< $_ @_ $1 $2 $3 $4 $5 $6 $7 $8 $9 _ $] > ],
         },
-        {   name => 'string_mode',
-            description =>
+        {
+            name               => 'string_mode',
+            description        =>
                 'Controls checking interpolated strings for punctuation variables.',
             default_string     => 'thorough',
             behavior           => 'enumeration',
-            enumeration_values => [qw{ simple disable thorough }],
+            enumeration_values => [ qw< simple disable thorough > ],
             enumeration_allow_multiple_values => 0,
         },
     );
 }
 
 sub default_severity { return $SEVERITY_LOW }
-sub default_themes   { return qw(core pbp cosmetic) }
+sub default_themes   { return qw< core pbp cosmetic > }
 
 sub applies_to {
-    return qw( PPI::Token::Magic
+    return qw<
+        PPI::Token::Magic
         PPI::Token::Quote::Double
         PPI::Token::Quote::Interpolate
         PPI::Token::QuoteLike::Command
@@ -62,19 +66,35 @@ sub applies_to {
         PPI::Token::QuoteLike::Regexp
         PPI::Token::QuoteLike::Readline
         PPI::Token::HereDoc
-    );
+    >;
 }
 
 #-----------------------------------------------------------------------------
 
-# sub initialize_if_enabled{} is not used
 
-#-----------------------------------------------------------------------------
+# This list matches the initialization of %PPI::Token::Magic::magic.
+Readonly::Array my @MAGIC_VARIABLES =>
+    qw{
+        $1 $2 $3 $4 $5 $6 $7 $8 $9
+        $_ $& $` $' $+ @+ %+ $* $. $/ $|
+        $\\ $" $; $% $= $- @- %- $)
+        $~ $^ $: $? $! %! $@ $$ $< $>
+        $( $0 $[ $] @_ @*
 
-# Private entities
+        $^L $^A $^E $^C $^D $^F $^H
+        $^I $^M $^N $^O $^P $^R $^S
+        $^T $^V $^W $^X %^H
 
-# The main regular expression for detecting magic variables
-Readonly::Scalar my $_MAGIC_REGEXP => _create_magic_detector();
+        $::|
+    },
+    '$}',
+    '$,',
+    '$#',
+    '$#+',
+    '$#-';
+
+# The main regular expression for detecting magic variables.
+Readonly::Scalar my $MAGIC_REGEX => _create_magic_detector();
 
 # The magic vars in this array will be ignored in interpolated strings
 # in simple mode. See CONFIGURATION in the pod.
@@ -145,13 +165,14 @@ sub _strings_helper {
 
     # we are in string_mode = simple
 
-    my @raw_matches = $target_string =~ m/$_MAGIC_REGEXP/goxms;
+    my @raw_matches = $target_string =~ m/$MAGIC_REGEX/goxms;
     return if ( !@raw_matches );
 
-    my %matches;
-    @matches{@raw_matches} = 1;
+    my %matches = hashify(@raw_matches);
+
     delete @matches{ keys %{ $self->{_allow} } };
     delete @matches{@IGNORE_FOR_INTERPOLATION};
+
     return %matches;
 }
 
@@ -159,8 +180,8 @@ sub _strings_thorough {
     my ( $self, $target_string, undef ) = @_;
     my %matches;
 
-MATCH:
-    while ( my ($match) = $target_string =~ m/$_MAGIC_REGEXP/gcxms ) {
+    MATCH:
+    while ( my ($match) = $target_string =~ m/$MAGIC_REGEX/gcxms ) {
         my $nextchar = substr $target_string, $LAST_MATCH_END[0], 1;
         my $c = $match . $nextchar;
 
@@ -169,13 +190,13 @@ MATCH:
         # A degree of simplicity is sacrificed to maintain the parallel.
         # $c is so named by analogy to that module.
 
-        if ( $c =~ m/ ^  \$  .*  [  \w  :  \$  \{  ]  $ /xms
-            )    # possibly *not* a magic variable
-        {
+        # possibly *not* a magic variable
+        if ($c =~ m/ ^  \$  .*  [  \w  :  \$  \{  ]  $ /xms) {
             ## no critic (RequireInterpolationOfMetachars)
 
-            if (   $c =~ m/ ^(\$(?:\_[\w:]|::)) /xms
-                or $c =~ m/ ^\$\'[\w] /xms )
+            if (
+                    $c =~ m/ ^(\$(?:\_[\w:]|::)) /xms
+                or  $c =~ m/ ^\$\'[\w] /xms )
             {
                 next MATCH
                     if $c !~ m/ ^\$\'\d$ /xms;
@@ -205,37 +226,38 @@ MATCH:
 
         $matches{$match} = 1;
     }
+
     delete @matches{ keys %{ $self->{_allow} } };
+
     return %matches;
 }
 
 #-----------------------------------------------------------------------------
 
-sub _create_magic_detector{
-    my $config = shift;
-    my %_magic_vars;
-    @_magic_vars{
-        keys %PPI::Token::Magic::magic }    ## no critic (ProhibitPackageVars)
-        = 1;
+sub _create_magic_detector {
+    my ($config) = @_;
 
     # Set up the regexp alternation for matching magic variables.
     # We can't process $config->{_allow} here because of a quirk in the
     # way Perl::Critic handles testing.
     #
     # The sort is needed so that, e.g., $^ doesn't mask out $^M
-    my $magic_alternation = '(?:'
-        . (
-        join q(|),
-        map      { quotemeta $_ }
-            sort { -( length $a <=> length $b ) }
-            keys %_magic_vars
-        ) . ')';
+    my $magic_alternation =
+            '(?:'
+        .   (
+            join
+                q<|>,
+                map          { quotemeta $_ }
+                reverse sort { length $a <=> length $b }
+                @MAGIC_VARIABLES
+        )
+        .   ')';
 
-    return qr{
-            (?: \A | [^\\] )        # beginning-of-string or any non-backslash
-            (?: \\\\ )*            # zero or more double-backslashes
-            ( $magic_alternation ) # any magic punctuation variable
-        }xsm;
+    return qr<
+        (?: \A | [^\\] )       # beginning-of-string or any non-backslash
+        (?: \\{2} )*           # zero or more double-backslashes
+        ( $magic_alternation ) # any magic punctuation variable
+    >xsm;
 }
 
 1;
