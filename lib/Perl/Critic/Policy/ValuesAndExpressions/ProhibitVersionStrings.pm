@@ -34,20 +34,13 @@ sub applies_to           { return 'PPI::Statement::Include' }
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    if (
-            (
-                    $elem->type() eq 'use'
-                or  $elem->type() eq 'require'
-            )
-        and $elem->module() ne 'lib'
-    ) {
-        my $version = $elem->module_version() or return;
-        return if not $version->isa('PPI::Token::Number::Version');
+    my $module = $elem->module() or return;
+    return if $module eq 'lib';
 
-        return $self->violation( $DESC, $EXPL, $elem );
-    }
+    my $version = $elem->module_version() or return;
+    return if not $version->isa('PPI::Token::Number::Version');
 
-    return;    #ok!
+    return $self->violation( $DESC, $EXPL, $elem );
 }
 
 1;
