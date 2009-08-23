@@ -301,7 +301,7 @@ ok( !critique(undef, undef), 'Functional style, undef args');
 
 #-----------------------------------------------------------------------------
 
-# ensure we run true if this test is loaded by
+# ensure we return true if this test is loaded by
 # t/00_modules.t_without_optional_dependencies.t
 1;
 

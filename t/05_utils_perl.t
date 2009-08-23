@@ -46,7 +46,7 @@ can_ok('main', 'symbol_without_sigil');
 
 #-----------------------------------------------------------------------------
 
-# ensure we run true if this test is loaded by
+# ensure we return true if this test is loaded by
 # t/05_utils_ppi.t_without_optional_dependencies.t
 1;
 

@@ -35,7 +35,7 @@ is_deeply( \@found_policies, [bundled_policy_names()], $test_label );
 
 #-----------------------------------------------------------------------------
 
-# ensure we run true if this test is loaded by
+# ensure we return true if this test is loaded by
 # t/13_bundled_policies.t_without_optional_dependencies.t
 1;
 

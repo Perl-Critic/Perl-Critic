@@ -161,7 +161,7 @@ sub is_require_pod_sections_source_exception {
 
 #-----------------------------------------------------------------------------
 
-# ensure we run true if this test is loaded by
+# ensure we return true if this test is loaded by
 # t/01_config_bad_perlcriticrc.t_without_optional_dependencies.t
 1;
 

@@ -289,7 +289,7 @@ sub _test_file_and_line_formats {
 }
 
 #-----------------------------------------------------------------------------
-# ensure we run true if this test is loaded by
+# ensure we return true if this test is loaded by
 # t/06_violation.t_without_optional_dependencies.t
 
 1;

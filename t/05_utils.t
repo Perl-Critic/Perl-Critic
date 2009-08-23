@@ -542,7 +542,7 @@ sub test_is_unchecked_call {
 
 #-----------------------------------------------------------------------------
 
-# ensure we run true if this test is loaded by
+# ensure we return true if this test is loaded by
 # t/05_utils.t_without_optional_dependencies.t
 1;
 

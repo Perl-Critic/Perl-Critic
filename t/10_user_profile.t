@@ -327,7 +327,7 @@ END_PROFILE
 
 #-----------------------------------------------------------------------------
 
-# ensure we run true if this test is loaded by
+# ensure we return true if this test is loaded by
 # t/10_userprofile.t_without_optional_dependencies.t
 1;
 

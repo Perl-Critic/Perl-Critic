@@ -176,7 +176,7 @@ is( "$p", $expected_string, 'Stringification by overloading');
 
 #-----------------------------------------------------------------------------
 
-# ensure we run true if this test is loaded by
+# ensure we return true if this test is loaded by
 # t/02_policy.t_without_optional_dependencies.t
 1;
 

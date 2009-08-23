@@ -135,7 +135,7 @@ is(
 
 #-----------------------------------------------------------------------------
 
-# ensure we run true if this test is loaded by
+# ensure we return true if this test is loaded by
 # t/20_policy_requiretidycode.t_without_optional_dependencies.t
 1;
 

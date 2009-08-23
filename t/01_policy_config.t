@@ -174,7 +174,7 @@ sub test_standard_parameters_undef_via_get {
 
 #-----------------------------------------------------------------------------
 
-# ensure we run true if this test is loaded by
+# ensure we return true if this test is loaded by
 # t/01_policy_config.t_without_optional_dependencies.t
 1;
 

@@ -95,7 +95,7 @@ else {
 
 #-----------------------------------------------------------------------------
 
-# ensure we run true if this test is loaded by
+# ensure we return true if this test is loaded by
 # t/80_policysummary.t.without_optional_dependencies.t
 1;
 
