@@ -129,15 +129,15 @@ sub _parse_command_line {
 
 sub _dispatch_special_requests {
     my (%opts) = @_;
-    if ( $opts{-help}            ) { pod2usage( -verbose => 0 )    }  #Exits
-    if ( $opts{-options}         ) { pod2usage( -verbose => 1 )    }  #Exits
-    if ( $opts{-man}             ) { pod2usage( -verbose => 2 )    }  #Exits
-    if ( $opts{-version}         ) { _display_version()            }  #Exits
-    if ( $opts{-list}            ) { _render_all_policy_listing()  }  #Exits
-    if ( $opts{'-list-used'}     ) { _render_policy_listing(%opts) }  #Exits
-    if ( $opts{'-list-themes'}   ) { _render_theme_listing()       }  #Exits
-    if ( $opts{'-profile-proto'} ) { _render_profile_prototype()   }  #Exits
-    if ( $opts{-doc}             ) { _render_policy_docs( %opts )  }  #Exits
+    if ( $opts{-help}            ) { pod2usage( -verbose => 0 )    }  # Exits
+    if ( $opts{-options}         ) { pod2usage( -verbose => 1 )    }  # Exits
+    if ( $opts{-man}             ) { pod2usage( -verbose => 2 )    }  # Exits
+    if ( $opts{-version}         ) { _display_version()            }  # Exits
+    if ( $opts{-list}            ) { _render_all_policy_listing()  }  # Exits
+    if ( $opts{'-list-enabled'}  ) { _render_policy_listing(%opts) }  # Exits
+    if ( $opts{'-list-themes'}   ) { _render_theme_listing()       }  # Exits
+    if ( $opts{'-profile-proto'} ) { _render_profile_prototype()   }  # Exits
+    if ( $opts{-doc}             ) { _render_policy_docs( %opts )  }  # Exits
     return 1;
 }
 
@@ -473,7 +473,7 @@ sub _commaify {
 
 sub _get_option_specification {
 
-    return qw(
+    return qw<
         5 4 3 2 1
         Safari
         version
@@ -488,7 +488,7 @@ sub _get_option_specification {
         help|?|H
         include=s@
         list
-        list-used
+        list-enabled
         list-themes
         man
         color|colour!
@@ -515,7 +515,7 @@ sub _get_option_specification {
         color-severity-lowest|colour-severity-lowest|color-severity-1|colour-severity-1=s
         files-with-violations|l
         files-without-violations|L
-    );
+    >;
 }
 
 #-----------------------------------------------------------------------------

@@ -66,7 +66,7 @@ C<perlcritic> - Command-line interface to critique Perl source.
 
   perlcritic --profile-proto
 
-  perlcritic { --list | --list-used | --list-themes | --doc pattern [...] }
+  perlcritic { --list | --list-enabled | --list-themes | --doc pattern [...] }
 
   perlcritic { --help | --options | --man | --version }
 
@@ -359,7 +359,7 @@ machine.  This option lists I<all> Policies, regardless of your
 F<.perlcriticrc> or command line options.  For each Policy, the name, default
 severity and default themes are shown.
 
-=item C<--list-used>
+=item C<--list-enabled>
 
 Displays a condensed listing of all the
 L<Perl::Critic::Policy|Perl::Critic::Policy> modules that I<would> be
