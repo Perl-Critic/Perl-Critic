@@ -40,9 +40,6 @@ Next release, whenever it is:
       declarations ( e.g. "sub Foo::Bar::baz {...}" ).  However, the
       non-package part of the subroutine name must still conform to whatever
       capitalization rule you have chosen.
-    * NamingConventions::Capitalization got confused when a single "use
-      constant" declared multiple constants.  Reported by Kevin Ryde,
-      RT #44987.
     * RegularExpressions::ProhibitCaptureWithoutTest no longer complains if
       the regex is followed by an "or die" or similar.  Reported by EDAVIS,
       RT #36081.
@@ -121,6 +118,11 @@ Next release, whenever it is:
     1.203.  PPI's parsing of for(each)? loops is changing in its next release
     in an incompatible manner and there will be a release in the near future
     to make Perl::Critic compatible with that change.
+
+[1.099_002] Released on 2009-06-27
+[1.099_001] Released on 2009-06-25
+
+    Experimental releases.  For exact details, see Changes on BackPAN.
 
 [1.098] Released on 2009-03-07
 
