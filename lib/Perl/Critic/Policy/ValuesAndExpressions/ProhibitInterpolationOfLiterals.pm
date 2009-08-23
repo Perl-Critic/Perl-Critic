@@ -173,7 +173,7 @@ character.  It defaults to off; to turn it on put the following in
 your F<.perlcriticrc> file:
 
     [ValuesAndExpressions::ProhibitInterpolationOfLiterals]
-    allow_double_quote_if_string_contains_single = 1
+    allow_if_string_contains_single_quote = 1
 
 
 =head1 SEE ALSO
