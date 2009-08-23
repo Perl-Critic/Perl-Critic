@@ -165,7 +165,6 @@ sub baz  { quit }
 
 ## name ForLoop is a QuoteLike::Words
 ## failures 0
-## TODO PPI misparses the for loop.
 ## cut
 
 sub foo {
