@@ -83,6 +83,8 @@ for my $nl (
     is( pcritique($policy, \$code), 0, $policy.' - no filename' );
 }
 
+1;
+
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4
