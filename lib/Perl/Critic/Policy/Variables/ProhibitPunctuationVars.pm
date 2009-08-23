@@ -73,6 +73,7 @@ sub applies_to {
 
 
 # This list matches the initialization of %PPI::Token::Magic::magic.
+## no critic (ValuesAndExpressions::RequireInterpolationOfMetachars)
 Readonly::Array my @MAGIC_VARIABLES =>
     qw{
         $1 $2 $3 $4 $5 $6 $7 $8 $9
@@ -87,11 +88,12 @@ Readonly::Array my @MAGIC_VARIABLES =>
 
         $::|
     },
-    '$}',
-    '$,',
-    '$#',
-    '$#+',
-    '$#-';
+    q<$}>,
+    q<$,>,
+    q<$#>,
+    q<$#+>,
+    q<$#->;
+## use critic
 
 # The main regular expression for detecting magic variables.
 Readonly::Scalar my $MAGIC_REGEX => _create_magic_detector();
