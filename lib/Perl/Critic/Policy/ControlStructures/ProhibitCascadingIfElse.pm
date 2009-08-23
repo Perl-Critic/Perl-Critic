@@ -84,7 +84,8 @@ distribution.
 
 Long C<if-elsif> chains are hard to digest, especially if they are
 longer than a single page or screen.  If testing for equality, use a
-hash lookup instead.  See L<Switch|Switch> for another approach.
+hash lookup instead.  If you're using perl 5.10 or later, use
+C<given>/C<when>.
 
     if ($condition1) {         #ok
         $foo = 1;
