@@ -18,7 +18,7 @@ use Scalar::Util qw< refaddr >;
 use Perl::Critic::Utils qw< :booleans :characters :severities hashify >;
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.103';
+our $VERSION = '1.104';
 
 #-----------------------------------------------------------------------------
 

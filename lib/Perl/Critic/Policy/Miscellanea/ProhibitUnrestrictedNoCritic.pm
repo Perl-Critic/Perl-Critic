@@ -15,7 +15,7 @@ use Readonly;
 use Perl::Critic::Utils qw<:severities :booleans>;
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.103';
+our $VERSION = '1.104';
 
 #-----------------------------------------------------------------------------
 

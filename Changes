@@ -1,4 +1,9 @@
-Next release, whenever it is:
+[1.104] Released 2009-08-23
+
+    This release is dedicated to Tom Wyant in appreciation of the amount of
+    effort he put into the enhancements and bug fixes in this release, for
+    having the patience to wait for the amount of time that it took to get
+    them out, and for overall awesomeness.  Thank you, Tom.
 
     New Policies:
       Objects::ProhibitIndirectSyntax
