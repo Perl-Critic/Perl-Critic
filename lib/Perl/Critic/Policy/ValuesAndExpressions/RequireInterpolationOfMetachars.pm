@@ -57,7 +57,7 @@ sub initialize_if_enabled {
         $self->{_rcs_regexes} = $rcs_regexes;
     }
 
-    if ( not eval { require Email::Address; 1 } ) {
+    if ( not eval 'use Email::Address 1.889; 1' ) {
         no warnings 'redefine'; ## no critic (TestingAndDebugging::ProhibitNoWarnings)
         *_looks_like_email_address = sub {};
     }
