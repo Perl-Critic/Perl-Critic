@@ -1,10 +1,19 @@
-## name basic
+## name Basic failure
 ## failures 3
 ## cut
 
 $/ = undef;
 $| = 1;
 $> = 3;
+
+#-----------------------------------------------------------------------------
+
+## name Basic failure (needs to be merged into prior test once PPI knows how to parse '%-'
+## failures 1
+## TODO PPI doesn't know how to parse '%-'.
+## cut
+
+%- = (foo => 1);
 
 #-----------------------------------------------------------------------------
 
@@ -218,69 +227,65 @@ print "$:";    # 19 of 59  Exception made for $:
 #-----------------------------------------------------------------------------
 
 ## name Quoted String Interpolation - exhaustive tests
-## failures 56
+## failures 52
 ## cut
 
-print "$!";    # 1 of 59
+print "$!";    # 1 of 54
 
-#print "$"";      # 2 of 59  BROKEN, copied to TODO
-print "$#";      # 3 of 59
-print "$#+";     # 4 of 59
-print "$#-";     # 5 of 59
-print "$$";      # 6 of 59
-print "$%";      # 7 of 59
-print "$&";      # 8 of 59
-print "$'";      # 9 of 59
-print "$(";      # 10 of 59
-print "$)";      # 11 of 59
-print "$*";      # 12 of 59
-print "$+";      # 13 of 59
-print "$,";      # 14 of 59
-print "$-";      # 15 of 59
-print "$.";      # 16 of 59
-print "$/";      # 17 of 59
-print "$0";      # 18 of 59
-print "$:";      # 19 of 59
-print "$::|";    # 20 of 59
-print "$;";      # 21 of 59
-print "$<";      # 22 of 59
-print "$=";      # 23 of 59
-print "$>";      # 24 of 59
-print "$?";      # 25 of 59
-print "$@";      # 26 of 59
-print "$[";      # 27 of 59
+#print "$"";      # 2 of 54  BROKEN, copied to TODO
+print "$#";      # 3 of 54
+print "$#+";     # 4 of 54
+print "$#-";     # 5 of 54
+print "$$";      # 6 of 54
+print "$%";      # 7 of 54
+print "$&";      # 8 of 54
+print "$'";      # 9 of 54
+print "$(";      # 10 of 54
+print "$)";      # 11 of 54
+print "$*";      # 12 of 54
+print "$+";      # 13 of 54
+print "$,";      # 14 of 54
+print "$-";      # 15 of 54
+print "$.";      # 16 of 54
+print "$/";      # 17 of 54
+print "$0";      # 18 of 54
+print "$:";      # 19 of 54
+print "$::|";    # 20 of 54
+print "$;";      # 21 of 54
+print "$<";      # 22 of 54
+print "$=";      # 23 of 54
+print "$>";      # 24 of 54
+print "$?";      # 25 of 54
+print "$@";      # 26 of 54
+print "$[";      # 27 of 54
 
-#print "$\\";      # 28 of 59  BROKEN, copied to TODO
-print "$^";      # 29 of 59
-print "$^A";     # 30 of 59
-print "$^C";     # 31 of 59
-print "$^D";     # 32 of 59
-print "$^E";     # 33 of 59
-print "$^F";     # 34 of 59
-print "$^H";     # 35 of 59
-print "$^I";     # 36 of 59
-print "$^L";     # 37 of 59
-print "$^M";     # 38 of 59
-print "$^N";     # 39 of 59
-print "$^O";     # 40 of 59
-print "$^P";     # 41 of 59
-print "$^R";     # 42 of 59
-print "$^S";     # 43 of 59
-print "$^T";     # 44 of 59
-print "$^V";     # 45 of 59
-print "$^W";     # 46 of 59
-print "$^X";     # 47 of 59
-print "$`";      # 48 of 59
-print "$|";      # 49 of 59
-print "$}";      # 50 of 59
-print "$~";      # 51 of 59
-print "%!";      # 52 of 59
-print "%+";      # 53 of 59
-print "%-";      # 54 of 59
-print "%^H";     # 55 of 59
-print "@*";      # 56 of 59
-print "@+";      # 57 of 59
-print "@-";      # 58 of 59
+#print "$\\";      # 28 of 54  BROKEN, copied to TODO
+print "$^";      # 29 of 54
+print "$^A";     # 30 of 54
+print "$^C";     # 31 of 54
+print "$^D";     # 32 of 54
+print "$^E";     # 33 of 54
+print "$^F";     # 34 of 54
+print "$^H";     # 35 of 54
+print "$^I";     # 36 of 54
+print "$^L";     # 37 of 54
+print "$^M";     # 38 of 54
+print "$^N";     # 39 of 54
+print "$^O";     # 40 of 54
+print "$^P";     # 41 of 54
+print "$^R";     # 42 of 54
+print "$^S";     # 43 of 54
+print "$^T";     # 44 of 54
+print "$^V";     # 45 of 54
+print "$^W";     # 46 of 54
+print "$^X";     # 47 of 54
+print "$`";      # 48 of 54
+print "$|";      # 49 of 54
+print "$}";      # 50 of 54
+print "$~";      # 51 of 54
+print "@*";      # 52 of 54
+print "@+";      # 53 of 54
+print "@-";      # 54 of 54
 
 #-----------------------------------------------------------------------------
 
@@ -389,6 +394,14 @@ print "$$foovar";
 
 # related to $^
 #print "$^WIDE_SYSTEM_CALLS;
+
+#-----------------------------------------------------------------------------
+
+## name sprintf formats - RT #49016
+## failures 0
+## cut
+
+sprintf "%-03f\n", $foo;
 
 #-----------------------------------------------------------------------------
 

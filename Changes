@@ -1,3 +1,9 @@
+[1.105] Released on 2009-09-07
+
+    Bug Fixes:
+    * Variables::ProhibitPunctuationVars would complain about "%-" appearing
+      anywhere in a string.  RT #49016
+
 [1.104] Released on 2009-08-23
 
     This release is dedicated to Tom Wyant in appreciation of the amount of
