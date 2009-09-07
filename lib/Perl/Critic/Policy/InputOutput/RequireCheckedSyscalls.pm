@@ -25,14 +25,14 @@ Readonly::Scalar my $DESC => q{Return value of flagged function ignored};
 Readonly::Scalar my $EXPL => [208, 278];
 
 Readonly::Array my @DEFAULT_FUNCTIONS => qw(
-    open close print
+    open close print say
 );
 # I created this list by searching for "return" in perlfunc
 Readonly::Array my @BUILTIN_FUNCTIONS => qw(
     accept bind binmode chdir chmod chown close closedir connect
     dbmclose dbmopen exec fcntl flock fork ioctl kill link listen
     mkdir msgctl msgget msgrcv msgsnd open opendir pipe print read
-    readdir readline readlink readpipe recv rename rmdir seek seekdir
+    readdir readline readlink readpipe recv rename rmdir say seek seekdir
     semctl semget semop send setpgrp setpriority setsockopt shmctl
     shmget shmread shutdown sleep socket socketpair symlink syscall
     sysopen sysread sysseek system syswrite tell telldir truncate
@@ -158,7 +158,7 @@ lexical effects aren't taken into account.
 =head1 CONFIGURATION
 
 This policy watches for a configurable list of function names.  By
-default, it applies to C<open>, C<print> and C<close>.  You can
+default, it applies to C<open>, C<print>, C<say> and C<close>.  You can
 override this to set it to a different list of functions with the
 C<functions> and C<exclude_functions> settings.  To do this, put
 entries in a F<.perlcriticrc> file like this:

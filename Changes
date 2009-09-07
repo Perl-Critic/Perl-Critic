@@ -4,6 +4,10 @@
     * Variables::ProhibitPunctuationVars would complain about "%-" appearing
       anywhere in a string.  RT #49016
 
+    Policy Changes:
+    * InputOutput::RequireCheckedSyscalls now complains about unchecked "say"
+      by default.  RT #37487
+
 [1.104] Released on 2009-08-23
 
     This release is dedicated to Tom Wyant in appreciation of the amount of
