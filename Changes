@@ -13,7 +13,7 @@
     New Optional Requirement:
     * Email::Address, if you want
       ValuesAndExpressions::ProhibitInterpolationOfLiterals to properly ignore
-      emaila addresses.
+      email addresses.
 
     New Features:
     * Perlcritic will list the names of files with violations if given the
