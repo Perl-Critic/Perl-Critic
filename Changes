@@ -53,8 +53,6 @@
     * RegularExpressions::ProhibitUnusedCapture now considers the body of
       while loops and not just their condition.  Reported by EDAVIS, RT
       #38942.
-    * ValuesAndExpressions::ProhibitInterpolationOfLiterals can now properly
-      ignore email addresses if you have Email::Address installed.
     * ValuesAndExpressions::ProhibitVersionStrings was getting confused by
       comments.  Reported by Kevin Ryde,  RT #44986.
     * ValuesAndExpressions::RequireInterpolationOfMetachars now allows sigils
