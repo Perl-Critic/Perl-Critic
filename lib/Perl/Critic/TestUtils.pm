@@ -29,7 +29,7 @@ use Perl::Critic::Exception::Fatal::Internal qw{ &throw_internal };
 use Perl::Critic::Utils qw{ :severities :data_conversion policy_long_name };
 use Perl::Critic::PolicyFactory (-test => 1);
 
-our $VERSION = '1.104';
+our $VERSION = '1.105';
 
 Readonly::Array our @EXPORT_OK => qw(
     pcritique pcritique_with_violations
