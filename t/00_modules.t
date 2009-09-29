@@ -44,7 +44,7 @@ my @concrete_exceptions = qw{
 };
 
 plan tests =>
-        120
+        123
     +   (  9 * scalar @concrete_exceptions  )
     +   ( 15 * scalar @bundled_policy_names );
 
@@ -91,6 +91,8 @@ can_ok('Perl::Critic::Config', 'color_severity_high');
 can_ok('Perl::Critic::Config', 'color_severity_medium');
 can_ok('Perl::Critic::Config', 'color_severity_low');
 can_ok('Perl::Critic::Config', 'color_severity_lowest');
+can_ok('Perl::Critic::Config', 'script_extensions');
+can_ok('Perl::Critic::Config', 'script_extensions_as_regexes');
 
 #Set -profile to avoid messing with .perlcriticrc
 my $config = Perl::Critic::Config->new( -profile => 'NONE');
@@ -119,6 +121,7 @@ can_ok('Perl::Critic::OptionsProcessor', 'color_severity_high');
 can_ok('Perl::Critic::OptionsProcessor', 'color_severity_medium');
 can_ok('Perl::Critic::OptionsProcessor', 'color_severity_low');
 can_ok('Perl::Critic::OptionsProcessor', 'color_severity_lowest');
+can_ok('Perl::Critic::OptionsProcessor', 'script_extensions');
 
 my $processor = Perl::Critic::OptionsProcessor->new();
 isa_ok($processor, 'Perl::Critic::OptionsProcessor');

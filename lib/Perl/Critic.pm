@@ -25,7 +25,7 @@ use Perl::Critic::Config;
 use Perl::Critic::Violation;
 use Perl::Critic::Document;
 use Perl::Critic::Statistics;
-use Perl::Critic::Utils qw{ :characters hashify };
+use Perl::Critic::Utils qw{ :characters hashify shebang_line };
 
 #-----------------------------------------------------------------------------
 
@@ -100,8 +100,13 @@ sub critique {  ## no critic (ArgUnpacking)
     $self = ref $self eq 'HASH' ? __PACKAGE__->new(%{ $self }) : $self;
     return if not defined $source_code;  # If no code, then nothing to do.
 
+    my $config = $self->config();
     my $doc = blessed($source_code) && $source_code->isa('Perl::Critic::Document') ?
-        $source_code : Perl::Critic::Document->new($source_code);
+        $source_code :
+        Perl::Critic::Document->new(
+            '-source' => $source_code,
+            '-script-extensions' => [$config->script_extensions_as_regexes()],
+        );
 
     if ( 0 == $self->policies() ) {
         Perl::Critic::Exception::Configuration::Generic->throw(

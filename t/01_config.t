@@ -58,7 +58,7 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
                 )
                 ->all_policies_enabled_or_not();
 
-    plan tests => 84 + $all_policy_count;
+    plan tests => 86 + $all_policy_count;
 }
 
 #-----------------------------------------------------------------------------
@@ -239,6 +239,11 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
                         'user default color-severity-low from file');
     is($c->color_severity_lowest(), $EMPTY,
                         'user default color-severity-lowest from file');
+
+    is_deeply([$c->script_extensions], [],
+        'user default script-extensions from file');
+    is_deeply([$c->script_extensions_as_regexes], [qr{ [.] PL \z }smx ],
+        'user default script-extensions from file, as regexes');
 }
 
 #-----------------------------------------------------------------------------

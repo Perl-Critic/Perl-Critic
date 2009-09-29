@@ -36,7 +36,7 @@ sub prepare_to_scan_document {
     my ( $self, $document ) = @_;
 
     # idea: force NAME to match the file name in scripts?
-    return not is_script($document); # mismatch is normal in program entry points
+    return $document->is_module(); # mismatch is normal in program entry points
 }
 
 sub violates {

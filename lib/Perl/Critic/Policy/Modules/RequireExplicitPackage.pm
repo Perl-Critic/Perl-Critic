@@ -46,7 +46,7 @@ sub default_maximum_violations_per_document { return 1; }
 sub prepare_to_scan_document {
     my ( $self, $document ) = @_;
 
-    return ! $self->{_exempt_scripts} || ! is_script($document);
+    return ! $self->{_exempt_scripts} || $document->is_module();
 }
 
 sub violates {

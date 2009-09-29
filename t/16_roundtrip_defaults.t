@@ -50,7 +50,7 @@ foreach my $policy (@default_policies) {
         $policy_test_count += scalar @{$policy->get_parameters()};
     }
 }
-my $test_count = 17 + $policy_test_count;
+my $test_count = 18 + $policy_test_count;
 plan tests => $test_count;
 
 #-----------------------------------------------------------------------------
@@ -201,6 +201,16 @@ is(
     $derived_configuration->color_severity_lowest(),
     $default_configuration->color_severity_lowest(),
     'color_severity_lowest',
+);
+
+#-----------------------------------------------------------------------------
+
+my @derived_script_extensions = $derived_configuration->script_extensions();
+my @default_script_extensions = $default_configuration->script_extensions();
+cmp_deeply(
+    \@derived_script_extensions,
+    \@default_script_extensions,
+    'script_extensions',
 );
 
 #-----------------------------------------------------------------------------

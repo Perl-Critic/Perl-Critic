@@ -62,6 +62,7 @@ C<perlcritic> - Command-line interface to critique Perl source.
              [--color-severity-lowest color_specification]
              [--files-with-violations | -l]
              [--files-without-violations | -L]
+             [--script-extensions file_name_extension]
              {FILE | DIRECTORY | STDIN}
 
   perlcritic --profile-proto
@@ -481,6 +482,25 @@ policy. Can also be specified as C<--l>.
 Display only the names of files without violations.  Use this feature
 with --single-policy to find files that do not contain violations of a
 given policy. Can also be specified as C<--L>.
+
+=item C<--script-extensions file_name_extension>
+
+Tell C<perlcritic> to treat files whose names end in the given file name
+extension as scripts, not as modules. If a leading '.' is desired it must be
+explicitly specified, e.g.
+
+ --script-extensions .pl
+
+The matching is case-sensitive, and the option may be specified as many times
+as desired, e.g.
+
+ --script-extensions .pl --script-extensions .cgi
+
+The above can also be done by quoting the file name extensions:
+
+ --script-extensions '.pl .cgi'
+
+Files whose name ends in '.PL' will always be considered scripts.
 
 =item C<--doc PATTERN>
 

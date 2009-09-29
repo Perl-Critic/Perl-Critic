@@ -216,6 +216,7 @@ foreach my $severity ([qw{
     }
 }
 
+
 #-----------------------------------------------------------------------------
 # Intercept pod2usage so we can test invalid options and special switches
 

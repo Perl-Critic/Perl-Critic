@@ -846,6 +846,13 @@ sub is_function_call {
 sub is_script {
     my $doc = shift;
 
+    warnings::warnif(
+        'deprecated',
+        'Perl::Critic::Utils::is_script($doc) deprecated, use $doc->is_script() instead.',  ## no critic (ValuesAndExpressions::RequireInterpolationOfMetachars)
+    );
+
+    return $doc->is_script()
+        if blessed($doc) && $doc->isa('Perl::Critic::Document');
     return 1 if shebang_line($doc);
     return 1 if _is_PL_file($doc);
     return 0;
@@ -1654,6 +1661,9 @@ document is a L<PPI::Document::File|PPI::Document::File>.  If it
 isn't, then the filename is not available and it has no bearing on
 how the document is judged.
 See C<shebang_line()>.
+
+B<This subroutine is deprecated.> You should use the
+L<Perl::Critic::Document/"is_script()"> method instead.
 
 
 =item C<is_in_void_context( $token )>

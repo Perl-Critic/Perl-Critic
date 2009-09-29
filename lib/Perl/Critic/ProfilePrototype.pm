@@ -157,6 +157,10 @@ sub to_string {
         $prototype .= "\n";
     }
 
+    $prototype .= $prefix;
+    $prototype .= q{script-extensions = };
+    $prototype .= join $SPACE, $configuration->script_extensions();
+
     Perl::Critic::Policy::set_format( $self->_proto_format() );
 
     return $prototype . "\n" . join q{}, map { "$_" } @{ $self->_get_policies() };

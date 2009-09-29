@@ -17,7 +17,7 @@ use version;
 
 use Perl::Critic::Utils::DataConversion qw< dor >;
 
-use Test::More tests => 27;
+use Test::More tests => 33;
 
 #-----------------------------------------------------------------------------
 
@@ -33,11 +33,14 @@ can_ok('Perl::Critic::Document', 'find_first');
 can_ok('Perl::Critic::Document', 'find_any');
 can_ok('Perl::Critic::Document', 'highest_explicit_perl_version');
 can_ok('Perl::Critic::Document', 'ppi_document');
+can_ok('Perl::Critic::Document', 'document_type');
+can_ok('Perl::Critic::Document', 'is_script');
+can_ok('Perl::Critic::Document', 'is_module');
 
 {
     my $code = q{'print 'Hello World';};  #Has 6 PPI::Element
     my $ppi_doc = PPI::Document->new( \$code );
-    my $pc_doc  = Perl::Critic::Document->new( $ppi_doc );
+    my $pc_doc  = Perl::Critic::Document->new( '-source' => $ppi_doc );
     isa_ok($pc_doc, 'Perl::Critic::Document');
 
 
@@ -89,6 +92,14 @@ can_ok('Perl::Critic::Document', 'ppi_document');
         is( $found, undef, 'find_any by empty class name');
 
     }
+
+    #-------------------------------------------------------------------------
+
+    is( $pc_doc->document_type(), 'module',
+                                q{default document_type is 'module'});
+    ok( $pc_doc->is_module(), q{document type 'module' is a module});
+    ok( ! $pc_doc->is_script(), q{document type 'module' is not a script});
+
 }
 
 #-----------------------------------------------------------------------------
@@ -112,7 +123,7 @@ sub test_version {
 
     my $document =
         Perl::Critic::Document->new(
-            PPI::Document->new( \$code )
+            '-source' => PPI::Document->new( \$code )
         );
 
     is(
