@@ -22,8 +22,7 @@ use version;
 
 use Perl::Critic::Annotation;
 use Perl::Critic::Exception::Parse qw< throw_parse >;
-use Perl::Critic::Utils qw < :characters shebang_line >;
-use Perl::Critic::Utils::Constants qw< :document_type >;
+use Perl::Critic::Utils qw< :booleans :characters shebang_line >;
 
 #-----------------------------------------------------------------------------
 
@@ -87,7 +86,7 @@ sub _init { ## no critic (Subroutines::RequireArgUnpacking)
     $self->{_disabled_line_map} = {};
     $self->index_locations();
     $self->_disable_shebang_fix();
-    $self->{_document_type} = $self->_compute_document_type(\%args);
+    $self->{_is_module} = $self->_determine_is_module(\%args);
 
     return $self;
 }
@@ -307,23 +306,18 @@ sub suppressed_violations {
 
 #-----------------------------------------------------------------------------
 
-sub document_type {
-    my ($self) = @_;
-    return $self->{_document_type};
-}
-
-#-----------------------------------------------------------------------------
-
 sub is_program {
     my ($self) = @_;
-    return $self->{_document_type} eq $DOCUMENT_TYPE_PROGRAM;
+
+    return not $self->is_module();
 }
 
 #-----------------------------------------------------------------------------
 
 sub is_module {
     my ($self) = @_;
-    return $self->{_document_type} eq $DOCUMENT_TYPE_MODULE;
+
+    return $self->{_is_module};
 }
 
 #-----------------------------------------------------------------------------
@@ -401,7 +395,7 @@ sub _disable_shebang_fix {
 
 #-----------------------------------------------------------------------------
 
-sub _compute_document_type {
+sub _determine_is_module {
     my ($self, $args) = @_;
 
     my $file_name = $self->filename();
@@ -415,16 +409,14 @@ sub _compute_document_type {
                     ? $ext
                     : qr< @{ [ quotemeta $ext ] } \z >xms;
 
-            return $DOCUMENT_TYPE_PROGRAM if $file_name =~ m/$regex/smx;
+            return $FALSE if $file_name =~ m/$regex/smx;
         }
     }
 
-    return $DOCUMENT_TYPE_PROGRAM if shebang_line($self);
+    return $FALSE if shebang_line($self);
+    return $FALSE if defined $file_name && $file_name =~ m/ [.] PL \z /smx;
 
-    return $DOCUMENT_TYPE_PROGRAM
-        if defined $file_name && $file_name =~ m/ [.] PL \z /smx;
-
-    return $DOCUMENT_TYPE_MODULE;
+    return $TRUE;
 }
 
 #-----------------------------------------------------------------------------
@@ -491,19 +483,14 @@ C<$source_code> can be the name of a file, a reference to a scalar
 containing actual source code, or a L<PPI::Document> or
 L<PPI::Document::File>.
 
-The '-program-extensions' argument is optional, and is a reference to a list of
-strings and/or regexps. The strings will be made into regexps matching the end
-of a file name, and any document whose file name matches one of the regexps
-will be considered a program.
+The '-program-extensions' argument is optional, and is a reference to a list
+of strings and/or regular expressions. The strings will be made into regular
+expressions matching the end of a file name, and any document whose file name
+matches one of the regular expressions will be considered a program.
 
 If -program-extensions is not specified, or if it does not determine the
-document type, the document type will be 'program' if the source has a shebang
-line or its file name (if any) matches C<< m/ [.] PL \z /smx >>, or 'module'
-otherwise.
-
-Be aware that the document type influences not only the value returned by the
-C<document_type()> method, but also the value returned by the C<is_program()>
-and C<is_module()> methods.
+document type, the document will be considered to be a program if the source
+has a shebang line or its file name (if any) matches C<< m/ [.] PL \z /smx >>.
 
 =back
 
@@ -579,15 +566,6 @@ annotation. Returns C<$self>.
 Returns a list of references to all the L<Perl::Critic::Violation>s
 that were found in this Document but were suppressed.
 
-=item C<< document_type() >>
-
-Returns the current value of the C<document_type> attribute. When the
-C<Perl::Critic::Document> object is instantiated, it will be set based on the
-value '-program-extensions' argument (if any) and/or the contents of the file
-to L<Perl::Critic::Utils::Constants/"$DOCUMENT_TYPE_PROGRAM"> or
-L<Perl::Critic::Utils::Constants/"$DOCUMENT_TYPE_MODULE">. See the C<new()>
-documentation for the details.  This attribute exists to support
-L<Perl::Critic|Perl::Critic>.
 
 =item C<< is_program() >>
 
