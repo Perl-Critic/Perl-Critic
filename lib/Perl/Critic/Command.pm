@@ -515,7 +515,7 @@ sub _get_option_specification {
         color-severity-lowest|colour-severity-lowest|color-severity-1|colour-severity-1=s
         files-with-violations|l
         files-without-violations|L
-        script-extensions=s@
+        program-extensions=s@
     >;
 }
 

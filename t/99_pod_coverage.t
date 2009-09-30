@@ -32,7 +32,7 @@ eval 'use Test::Pod::Coverage 1.04; 1'
     # POD and compare it with the subroutines that are in the symbol
     # table for that module.  For reasons I cannot yet explain, using
     # Pod::Parser twice this way causes the symbol table to get very
-    # wacky and this test script dies with "Can't call method 'OPEN'
+    # wacky and this test program dies with "Can't call method 'OPEN'
     # on IO::String at line 1239 of Pod/Parser.pm".
 
     # For now, my workaround is to temporarily redefine the import()

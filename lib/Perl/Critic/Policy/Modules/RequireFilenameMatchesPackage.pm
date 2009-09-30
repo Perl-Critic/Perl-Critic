@@ -14,7 +14,7 @@ use Readonly;
 
 use File::Spec;
 
-use Perl::Critic::Utils qw{ :characters :severities is_script };
+use Perl::Critic::Utils qw{ :characters :severities };
 
 use base 'Perl::Critic::Policy';
 

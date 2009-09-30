@@ -45,7 +45,7 @@ pc-benchmark - Measure performance of Perl::Critic
 
 =head1 DESCRIPTION
 
-This is a simple script that uses the L<Benchmark> module to measure
+This is a simple program that uses the L<Benchmark> module to measure
 the general speed of L<Perl::Critic>.  For the specified F<FILE>, the
 C<Perl::Critic::critique()> function is called 100 times, with all the
 'core' Policies enabled with their default configuration.  The total
@@ -65,7 +65,7 @@ for both runs.
 =head1 CAVEATS
 
 This is the first time I've used L<Benchmark>, so I don't know if this
-script is "correct" or even useful.  It just seemed like an interesting
+program is "correct" or even useful.  It just seemed like an interesting
 thing to do.
 
 

@@ -158,8 +158,8 @@ sub to_string {
     }
 
     $prototype .= $prefix;
-    $prototype .= q{script-extensions = };
-    $prototype .= join $SPACE, $configuration->script_extensions();
+    $prototype .= q{program-extensions = };
+    $prototype .= join $SPACE, $configuration->program_extensions();
 
     Perl::Critic::Policy::set_format( $self->_proto_format() );
 

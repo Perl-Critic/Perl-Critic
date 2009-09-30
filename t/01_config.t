@@ -240,10 +240,10 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
     is($c->color_severity_lowest(), $EMPTY,
                         'user default color-severity-lowest from file');
 
-    is_deeply([$c->script_extensions], [],
-        'user default script-extensions from file');
-    is_deeply([$c->script_extensions_as_regexes], [qr{ [.] PL \z }smx ],
-        'user default script-extensions from file, as regexes');
+    is_deeply([$c->program_extensions], [],
+        'user default program-extensions from file');
+    is_deeply([$c->program_extensions_as_regexes], [qr{ [.] PL \z }smx ],
+        'user default program-extensions from file, as regexes');
 }
 
 #-----------------------------------------------------------------------------

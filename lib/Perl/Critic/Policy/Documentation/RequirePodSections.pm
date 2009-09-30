@@ -317,8 +317,10 @@ sub violates {
     my %found_sections = ();
     my @violations = ();
 
-    my @required_sections = $doc->is_script() ? @{ $self->{_script_sections} }
-                                            : @{ $self->{_lib_sections} };
+    my @required_sections =
+        $doc->is_program()
+            ? @{ $self->{_script_sections} }
+            : @{ $self->{_lib_sections} };
 
     my $pods_ref = $doc->find('PPI::Token::Pod');
     return if not $pods_ref;

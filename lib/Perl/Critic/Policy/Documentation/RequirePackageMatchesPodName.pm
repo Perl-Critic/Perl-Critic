@@ -35,7 +35,7 @@ sub applies_to           { return 'PPI::Document'         }
 sub prepare_to_scan_document {
     my ( $self, $document ) = @_;
 
-    # idea: force NAME to match the file name in scripts?
+    # idea: force NAME to match the file name in programs?
     return $document->is_module(); # mismatch is normal in program entry points
 }
 

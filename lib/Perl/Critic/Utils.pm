@@ -848,11 +848,12 @@ sub is_script {
 
     warnings::warnif(
         'deprecated',
-        'Perl::Critic::Utils::is_script($doc) deprecated, use $doc->is_script() instead.',  ## no critic (ValuesAndExpressions::RequireInterpolationOfMetachars)
+        'Perl::Critic::Utils::is_script($doc) deprecated, use $doc->is_program() instead.',  ## no critic (ValuesAndExpressions::RequireInterpolationOfMetachars)
     );
 
-    return $doc->is_script()
+    return $doc->is_program()
         if blessed($doc) && $doc->isa('Perl::Critic::Document');
+
     return 1 if shebang_line($doc);
     return 1 if _is_PL_file($doc);
     return 0;
@@ -1653,17 +1654,8 @@ passed the nodes that represent the interior of a list, like:
 
 =item C<is_script( $document )>
 
-Given a L<PPI::Document|PPI::Document>, test if it starts with
-C</#!.*/>.  If so, it is judged to be a script instead of a module.
-Also, if the filename of the document ends in ".PL" then it is
-also judged to be a script.  However, this only works if the
-document is a L<PPI::Document::File|PPI::Document::File>.  If it
-isn't, then the filename is not available and it has no bearing on
-how the document is judged.
-See C<shebang_line()>.
-
-B<This subroutine is deprecated.> You should use the
-L<Perl::Critic::Document/"is_script()"> method instead.
+B<This subroutine is deprecated and will be removed in a future release.> You
+should use the L<Perl::Critic::Document/"is_program()"> method instead.
 
 
 =item C<is_in_void_context( $token )>

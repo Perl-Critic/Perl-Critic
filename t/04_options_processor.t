@@ -56,8 +56,8 @@ our $VERSION = '1.105';
     is($processor->color_severity_lowest(),
                                $PROFILE_COLOR_SEVERITY_LOWEST_DEFAULT,
                                'native default color-severity-lowest');
-    is_deeply($processor->script_extensions(), [],
-                               'native default script extensions');
+    is_deeply($processor->program_extensions(), [],
+                               'native default program extensions');
 }
 
 #-----------------------------------------------------------------------------
@@ -80,7 +80,7 @@ our $VERSION = '1.105';
          'color-severity-medium'    => 'blue',
          'color-severity-low'       => 'gray',
          'color-severity-lowest'    => 'scots tartan',
-         'script-extensions'  => '.PL .pl .t',
+         'program-extensions'  => '.PL .pl .t',
     );
 
     my $processor = Perl::Critic::OptionsProcessor->new( %user_defaults );
@@ -105,8 +105,8 @@ our $VERSION = '1.105';
                                 'gray',     'user default color_severity_low');
     is($processor->color_severity_lowest(),
                                 'scots tartan', 'user default color_severity_lowest');
-    is_deeply($processor->script_extensions(), [ qw(.PL .pl .t) ],
-                                            'user default script-extensions');
+    is_deeply($processor->program_extensions(), [ qw(.PL .pl .t) ],
+                                            'user default program-extensions');
 }
 
 #-----------------------------------------------------------------------------

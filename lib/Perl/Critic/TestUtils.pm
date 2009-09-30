@@ -420,7 +420,7 @@ interface will go through a deprecation cycle.
 
 This module is used by L<Perl::Critic|Perl::Critic> only for
 self-testing. It provides a few handy subroutines for testing new
-Perl::Critic::Policy modules.  Look at the test scripts that ship with
+Perl::Critic::Policy modules.  Look at the test programs that ship with
 Perl::Critic for more examples of how to use these subroutines.
 
 

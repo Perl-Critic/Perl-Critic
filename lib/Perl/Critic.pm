@@ -101,12 +101,13 @@ sub critique {  ## no critic (ArgUnpacking)
     return if not defined $source_code;  # If no code, then nothing to do.
 
     my $config = $self->config();
-    my $doc = blessed($source_code) && $source_code->isa('Perl::Critic::Document') ?
-        $source_code :
-        Perl::Critic::Document->new(
-            '-source' => $source_code,
-            '-script-extensions' => [$config->script_extensions_as_regexes()],
-        );
+    my $doc =
+        blessed($source_code) && $source_code->isa('Perl::Critic::Document')
+            ? $source_code
+            : Perl::Critic::Document->new(
+                '-source' => $source_code,
+                '-program-extensions' => [$config->program_extensions_as_regexes()],
+            );
 
     if ( 0 == $self->policies() ) {
         Perl::Critic::Exception::Configuration::Generic->throw(
@@ -255,7 +256,7 @@ Policy modules that suit your own tastes.
 For a command-line interface to Perl::Critic, see the documentation
 for L<perlcritic|perlcritic>.  If you want to integrate Perl::Critic
 with your build process, L<Test::Perl::Critic|Test::Perl::Critic>
-provides an interface that is suitable for test scripts.  Also,
+provides an interface that is suitable for test programs.  Also,
 L<Test::Perl::Critic::Progressive|Test::Perl::Critic::Progressive> is
 useful for gradually applying coding standards to legacy code.  For
 the ultimate convenience (at the expense of some flexibility) see the
@@ -686,7 +687,7 @@ Each Policy is defined with one or more "themes".  Themes can be used
 to create arbitrary groups of Policies.  They are intended to provide
 an alternative mechanism for selecting your preferred set of Policies.
 For example, you may wish disable a certain subset of Policies when
-analyzing test scripts.  Conversely, you may wish to enable only a
+analyzing test programs.  Conversely, you may wish to enable only a
 specific subset of Policies when analyzing modules.
 
 The Policies that ship with Perl::Critic have been broken into the
@@ -703,7 +704,7 @@ needs.
     cosmetic          Policies that only have a superficial effect
     complexity        Policies that specificaly relate to code complexity
     security          Policies that relate to security issues
-    tests             Policies that are specific to test scripts
+    tests             Policies that are specific to test programs
 
 
 Any Policy may fit into multiple themes.  Say C<"perlcritic -list"> to

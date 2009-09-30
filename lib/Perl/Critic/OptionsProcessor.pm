@@ -43,10 +43,12 @@ sub _init {
     # Multi-value defaults
     my $exclude = dor(delete $args{exclude}, $EMPTY);
     $self->{_exclude}    = [ words_from_string( $exclude ) ];
+
     my $include = dor(delete $args{include}, $EMPTY);
     $self->{_include}    = [ words_from_string( $include ) ];
-    my $script_extensions = dor(delete $args{'script-extensions'}, $EMPTY);
-    $self->{_script_extensions} = [ words_from_string( $script_extensions) ];
+
+    my $program_extensions = dor(delete $args{'program-extensions'}, $EMPTY);
+    $self->{_program_extensions} = [ words_from_string( $program_extensions) ];
 
     # Single-value defaults
     $self->{_force}           = dor(delete $args{force},              $FALSE);
@@ -258,9 +260,9 @@ sub color_severity_lowest {
 
 #-----------------------------------------------------------------------------
 
-sub script_extensions {
+sub program_extensions {
     my ($self) = @_;
-    return $self->{_script_extensions};
+    return $self->{_program_extensions};
 }
 
 #-----------------------------------------------------------------------------
@@ -403,10 +405,10 @@ Returns the color to be used for coloring low severity violations.
 
 Returns the color to be used for coloring lowest severity violations.
 
-=item C< script_extensions() >
+=item C< program_extensions() >
 
 Returns a reference to the array of file name extensions to be interpreted as
-representing Perl scripts.
+representing Perl programs.
 
 =back
 

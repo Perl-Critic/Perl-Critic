@@ -20,7 +20,7 @@ use Perl::Critic::Command qw< run >;
 our $VERSION = '1.105';
 
 #-----------------------------------------------------------------------------
-# Begin script.  Don't run when loaded as a library
+# Begin program.  Don't run when loaded as a library
 
 # This %ENV check is to allow perlcritic to function when bundled under PAR,
 # which invokes this program not as the top stack frame. -- rjbs, 2008-08-11
@@ -62,7 +62,7 @@ C<perlcritic> - Command-line interface to critique Perl source.
              [--color-severity-lowest color_specification]
              [--files-with-violations | -l]
              [--files-without-violations | -L]
-             [--script-extensions file_name_extension]
+             [--program-extensions file_name_extension]
              {FILE | DIRECTORY | STDIN}
 
   perlcritic --profile-proto
@@ -483,24 +483,24 @@ Display only the names of files without violations.  Use this feature
 with --single-policy to find files that do not contain violations of a
 given policy. Can also be specified as C<--L>.
 
-=item C<--script-extensions file_name_extension>
+=item C<--program-extensions file_name_extension>
 
 Tell C<perlcritic> to treat files whose names end in the given file name
-extension as scripts, not as modules. If a leading '.' is desired it must be
+extension as programs, not as modules. If a leading '.' is desired it must be
 explicitly specified, e.g.
 
- --script-extensions .pl
+    --program-extensions .pl
 
 The matching is case-sensitive, and the option may be specified as many times
 as desired, e.g.
 
- --script-extensions .pl --script-extensions .cgi
+    --program-extensions .pl --program-extensions .cgi
 
 The above can also be done by quoting the file name extensions:
 
- --script-extensions '.pl .cgi'
+    --program-extensions '.pl .cgi'
 
-Files whose name ends in '.PL' will always be considered scripts.
+Files whose name ends in '.PL' will always be considered programs.
 
 =item C<--doc PATTERN>
 
@@ -701,7 +701,7 @@ Each Policy is defined with one or more "themes".  Themes can be used
 to create arbitrary groups of Policies.  They are intended to provide
 an alternative mechanism for selecting your preferred set of Policies.
 For example, you may wish disable a certain set of Policies when
-analyzing test scripts.  Conversely, you may wish to enable only a
+analyzing test programs.  Conversely, you may wish to enable only a
 specific subset of Policies when analyzing modules.
 
 The Policies that ship with Perl::Critic are have been divided into
@@ -718,7 +718,7 @@ needs.
     cosmetic          Policies that only have a superficial effect
     complexity        Policies that specificaly relate to code complexity
     security          Policies that relate to security issues
-    tests             Policies that are specific to test scripts
+    tests             Policies that are specific to test programs
 
 Say C<"perlcritic --list"> to get a listing of all available policies
 and the themes that are associated with each one.  You can also change

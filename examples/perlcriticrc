@@ -113,16 +113,16 @@ color-severity-low =
 color-severity-lowest =
 
 #-----------------------------------------------------------------------------
-# script-extensions: specifies the file name endings for files that should
-# be interpreted as scripts rather than modules. This should be a space-
+# program-extensions: specifies the file name endings for files that should
+# be interpreted as programs rather than modules. This should be a space-
 # delimited list of the name endings, with leading '.' if that is desired.
 # These are case-sensitive. See the Perl::Critic POD for details, but in
 # general any file beginning with a shebang line, any file whose name ends
 # '.PL', and any file whose name ends in one of the values specified here
-# will be considered a script; any other file will be considered a module.
+# will be considered a program; any other file will be considered a module.
 # Do not put quotes around the values. The default is ''.
 
-script-extensions =
+program-extensions =
 
 ##############################################################################
 # The rest of the file consists of several named blocks that contain

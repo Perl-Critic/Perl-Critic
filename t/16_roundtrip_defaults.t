@@ -205,12 +205,12 @@ is(
 
 #-----------------------------------------------------------------------------
 
-my @derived_script_extensions = $derived_configuration->script_extensions();
-my @default_script_extensions = $default_configuration->script_extensions();
+my @derived_program_extensions = $derived_configuration->program_extensions();
+my @default_program_extensions = $default_configuration->program_extensions();
 cmp_deeply(
-    \@derived_script_extensions,
-    \@default_script_extensions,
-    'script_extensions',
+    \@derived_program_extensions,
+    \@default_program_extensions,
+    'program_extensions',
 );
 
 #-----------------------------------------------------------------------------

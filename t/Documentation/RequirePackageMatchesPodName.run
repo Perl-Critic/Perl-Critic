@@ -5,7 +5,7 @@ print 'Hello World';
 
 #-----------------------------------------------------------------------------
 
-## name Script
+## name Program
 ## failures 0
 ## cut
 #!/usr/bin/perl

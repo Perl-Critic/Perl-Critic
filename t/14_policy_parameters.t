@@ -30,11 +30,11 @@ use Test::More; #plan set below!
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 #-----------------------------------------------------------------------------
-# This script proves that each policy that ships with Perl::Critic overrides
+# This program proves that each policy that ships with Perl::Critic overrides
 # the supported_parameters() method and, assuming that the policy is
 # configurable, that each parameter can parse its own default_string.
 #
-# This script also verifies that Perl::Critic::PolicyFactory throws an
+# This program also verifies that Perl::Critic::PolicyFactory throws an
 # exception when we try to create a policy with bogus parameters.  However, it
 # is your responsibility to verify that valid parameters actually work as
 # expected.  You can do this by using the #parms directive in the *.run files.
