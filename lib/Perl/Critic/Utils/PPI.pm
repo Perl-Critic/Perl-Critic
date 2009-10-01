@@ -162,6 +162,11 @@ sub is_in_subroutine {
 sub get_constant_name_element_from_declaring_statement {
     my ($element) = @_;
 
+    warnings::warnif(
+        'deprecated',
+        'Perl::Critic::Utils::PPI::get_constant_name_element_from_declaring_statement() is deprecated. Use Perl::Critic::PPIx::Utilities::Statement::get_constant_name_elements_from_declaring_statement() instead.',
+    );
+
     return if not $element;
     return if not $element->isa('PPI::Statement');
 
@@ -326,6 +331,10 @@ Is the parameter a subroutine or inside one?
 
 
 =item C<get_constant_name_element_from_declaring_statement($statement)>
+
+B<This subroutine is deprecated.> You should use
+L<Perl::Critic::PPIx::Utilities::Statement/get_constant_name_elements_from_declaring_statement()>
+instead.
 
 Given a L<PPI::Statement|PPI::Statement>, if the statement is a C<use
 constant> or L<Readonly|Readonly> declaration statement, return the name of

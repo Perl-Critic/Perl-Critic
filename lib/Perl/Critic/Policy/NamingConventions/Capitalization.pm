@@ -25,7 +25,9 @@ use Perl::Critic::Utils qw<
 use Perl::Critic::Utils::Perl qw< symbol_without_sigil >;
 use Perl::Critic::Utils::PPI qw<
     is_in_subroutine
-    get_constant_name_element_from_declaring_statement
+>;
+use Perl::Critic::PPIx::Utilities::Statement qw<
+    get_constant_name_elements_from_declaring_statement
 >;
 
 use base 'Perl::Critic::Policy';
@@ -353,11 +355,10 @@ sub violates {
     }
 
     if (
-        my $name = get_constant_name_element_from_declaring_statement($elem)
+        my @names = get_constant_name_elements_from_declaring_statement($elem)
     ) {
         return ( grep { $_ }
-            map { $self->_constant_capitalization( $elem, $_ ) }
-            _get_all_constant_element_names_from_declaration( $name ) );
+            map { $self->_constant_capitalization( $elem, $_ ) } @names )
     }
 
     if ( $elem->isa('PPI::Statement::Package') ) {
@@ -375,32 +376,6 @@ sub violates {
     }
 
     return;
-}
-
-sub _get_all_constant_element_names_from_declaration {
-    my ( $elem ) = @_;
-
-    if ( $elem->isa( 'PPI::Structure::Constructor' )
-            or $elem->isa( 'PPI::Structure::Block' ) ) {
-
-        my $statement = $elem->schild( 0 ) or return;
-        $statement->isa( 'PPI::Statement' ) or return;
-
-        my @elements;
-        my $inx = 0;
-        foreach my $child ( $statement->schildren() ) {
-            $inx % 2
-                or push @{ $elements[ $inx ] ||= [] }, $child;
-            $IS_COMMA{ $child->content() }
-                and $inx++;
-        }
-        return ( map { ( $_ && @{ $_ } == 2 &&
-                    $FATCOMMA eq $_->[1]->content() &&
-                    $_->[0]->isa( 'PPI::Token::Word' ) ) ? $_->[0] : () }
-            @elements );
-    } else {
-        return $elem;
-    }
 }
 
 sub _variable_capitalization {
