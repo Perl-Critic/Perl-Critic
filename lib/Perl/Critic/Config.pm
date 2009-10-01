@@ -28,11 +28,11 @@ use Perl::Critic::Utils qw{
     :booleans :characters :severities :internal_lookup :classification
     :data_conversion
 };
-use Perl::Critic::Utils::Constants qw{
+use Perl::Critic::Utils::Constants qw<
     :profile_strictness
-    $MODULE_VERSION_TERM_ANSICOLOR
-};
-use Perl::Critic::Utils::DataConversion qw{ boolean_to_number dor };
+    $_MODULE_VERSION_TERM_ANSICOLOR
+>;
+use Perl::Critic::Utils::DataConversion qw< boolean_to_number dor >;
 
 #-----------------------------------------------------------------------------
 
@@ -710,13 +710,15 @@ sub _validate_and_save_color_severity {
 
     # Should we really be validating this?
     my $found_errors;
-    if ( eval {
-        require Term::ANSIColor;
-        Term::ANSIColor->VERSION( $MODULE_VERSION_TERM_ANSICOLOR );
-        1;
-    } ) {
-        $found_errors = ! Term::ANSIColor::colorvalid(
-            words_from_string( $color_severity ));
+    if (
+        eval {
+            require Term::ANSIColor;
+            Term::ANSIColor->VERSION( $_MODULE_VERSION_TERM_ANSICOLOR );
+            1;
+        }
+    ) {
+        $found_errors =
+            not Term::ANSIColor::colorvalid( words_from_string($color_severity) );
     }
 
     # If we do not have Term::ANSIColor we can not validate, but we store the

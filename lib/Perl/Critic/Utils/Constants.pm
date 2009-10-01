@@ -31,7 +31,7 @@ our @EXPORT_OK = qw{
     $PROFILE_COLOR_SEVERITY_MEDIUM_DEFAULT
     $PROFILE_COLOR_SEVERITY_LOW_DEFAULT
     $PROFILE_COLOR_SEVERITY_LOWEST_DEFAULT
-    $MODULE_VERSION_TERM_ANSICOLOR
+    $_MODULE_VERSION_TERM_ANSICOLOR
 };
 
 our %EXPORT_TAGS = (
@@ -78,7 +78,7 @@ Readonly::Scalar our $PROFILE_COLOR_SEVERITY_LOWEST_DEFAULT     => $EMPTY;
 
 # If the following changes, the corresponding change needs to be made in
 # inc/Perl/Critic/BuildUtilities.pm, sub recommended_module_versions().
-Readonly::Scalar our $MODULE_VERSION_TERM_ANSICOLOR => 2.02;
+Readonly::Scalar our $_MODULE_VERSION_TERM_ANSICOLOR => 2.02;
 
 #-----------------------------------------------------------------------------
 
@@ -153,10 +153,6 @@ C<:color_severity> tag.
 
 Default for the -color-severity-lowest option. Importable via the
 C<:color_severity> tag.
-
-=item C<$MODULE_VERSION_TERM_ANSICOLOR>
-
-The minimum required version of the optional Term::ANSIColor module.
 
 =back
 

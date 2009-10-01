@@ -23,7 +23,7 @@ use Perl::Critic::Utils qw<
     :characters :severities policy_short_name
     $DEFAULT_VERBOSITY $DEFAULT_VERBOSITY_WITH_FILE_NAME
 >;
-use Perl::Critic::Utils::Constants qw< $MODULE_VERSION_TERM_ANSICOLOR >;
+use Perl::Critic::Utils::Constants qw< $_MODULE_VERSION_TERM_ANSICOLOR >;
 use Perl::Critic::Violation qw<>;
 
 #-----------------------------------------------------------------------------
@@ -527,7 +527,7 @@ sub _colorize_by_severity {
     return @violations if _this_is_windows();
     return @violations if not eval {
         require Term::ANSIColor;
-        Term::ANSIColor->VERSION( $MODULE_VERSION_TERM_ANSICOLOR );
+        Term::ANSIColor->VERSION( $_MODULE_VERSION_TERM_ANSICOLOR );
         1;
     };
 

@@ -93,7 +93,7 @@ sub recommended_module_versions {
         'Regexp::Parser'        => '0.20',
 
         # If the following changes, the corresponding change needs to be made
-        # in Perl::Critic::Utils::Constants $MODULE_VERSION_TERM_ANSICOLOR.
+        # in $Perl::Critic::Utils::Constants::_MODULE_VERSION_TERM_ANSICOLOR.
         'Term::ANSIColor'       => '2.02',
 
         # All of these are for Documentation::PodSpelling
