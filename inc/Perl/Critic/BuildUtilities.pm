@@ -91,7 +91,10 @@ sub recommended_module_versions {
         'Perl::Tidy'            => 0,
         'Readonly::XS'          => 0,
         'Regexp::Parser'        => '0.20',
-        'Term::ANSIColor'       => 0,
+
+        # If the following changes, the corresponding change needs to be made
+        # in Perl::Critic::Utils::Constants $MODULE_VERSION_TERM_ANSICOLOR.
+        'Term::ANSIColor'       => '2.02',
 
         # All of these are for Documentation::PodSpelling
         'File::Which'           => 0,

@@ -28,7 +28,10 @@ use Perl::Critic::Utils qw{
     :booleans :characters :severities :internal_lookup :classification
     :data_conversion
 };
-use Perl::Critic::Utils::Constants qw{ :profile_strictness };
+use Perl::Critic::Utils::Constants qw{
+    :profile_strictness
+    $MODULE_VERSION_TERM_ANSICOLOR
+};
 use Perl::Critic::Utils::DataConversion qw{ boolean_to_number dor };
 
 #-----------------------------------------------------------------------------
@@ -38,39 +41,6 @@ our $VERSION = '1.105';
 #-----------------------------------------------------------------------------
 
 Readonly::Scalar my $SINGLE_POLICY_CONFIG_KEY => 'single-policy';
-
-Readonly::Hash my %TERM_ANSICOLOR_OPTIONS => hashify(
-    qw<
-        clear
-        reset
-        bold
-        dark
-        faint
-        underline
-        underscore
-        blink
-        reverse
-        concealed
-
-        black
-        red
-        green
-        yellow
-        blue
-        magenta
-        cyan
-        white
-
-        on_black
-        on_red
-        on_green
-        on_yellow
-        on_blue
-        on_magenta
-        on_cyan
-        on_white
-    >
-);
 
 #-----------------------------------------------------------------------------
 # Constructor
@@ -740,12 +710,13 @@ sub _validate_and_save_color_severity {
 
     # Should we really be validating this?
     my $found_errors;
-    if ( eval { require Term::ANSIColor; 1; } ) {
-        foreach my $attribute ( words_from_string($color_severity) ) {
-            if ( not $TERM_ANSICOLOR_OPTIONS{$attribute} ) {
-                $found_errors = 1;
-            }
-        }
+    if ( eval {
+        require Term::ANSIColor;
+        Term::ANSIColor->VERSION( $MODULE_VERSION_TERM_ANSICOLOR );
+        1;
+    } ) {
+        $found_errors = ! Term::ANSIColor::colorvalid(
+            words_from_string( $color_severity ));
     }
 
     # If we do not have Term::ANSIColor we can not validate, but we store the
