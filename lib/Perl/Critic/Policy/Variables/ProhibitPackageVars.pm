@@ -208,7 +208,7 @@ L<Perl::Critic::Policy::Variables::ProhibitLocalVars|Perl::Critic::Policy::Varia
 
 =head1 AUTHOR
 
-Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 
 =head1 COPYRIGHT

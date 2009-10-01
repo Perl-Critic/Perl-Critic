@@ -83,7 +83,7 @@ L<Perl::Critic::Policy::ControlStructures::ProhibitPostfixControls|Perl::Critic:
 
 =head1 AUTHOR
 
-Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 =head1 COPYRIGHT
 

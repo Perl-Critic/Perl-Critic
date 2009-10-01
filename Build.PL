@@ -29,7 +29,7 @@ emit_tar_warning_if_necessary();
 
 my $builder = Perl::Critic::Module::Build->new(
     module_name         => 'Perl::Critic',
-    dist_author         => 'Jeffrey Thalhammer <thaljef@cpan.org>',
+    dist_author         => 'Jeffrey Thalhammer <jeff@imaginative-software.com>',
     dist_abstract       => 'Critique Perl source code for best-practices.',
     license             => 'perl',
     dynamic_config      => 1,

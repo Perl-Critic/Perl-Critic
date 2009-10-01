@@ -87,7 +87,7 @@ L<Perl::Critic::Policy::ValuesAndExpressions::RequireQuotedHeredocTerminator|Per
 
 =head1 AUTHOR
 
-Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 
 =head1 COPYRIGHT

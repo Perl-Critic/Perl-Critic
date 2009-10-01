@@ -109,7 +109,7 @@ This Policy was suggested by Ulrich Wisser and the L<http://iis.se> team.
 
 =head1 AUTHOR
 
-Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 =head1 COPYRIGHT
 

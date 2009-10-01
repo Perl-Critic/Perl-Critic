@@ -94,7 +94,7 @@ This Policy is not configurable except for the standard options.
 
 =head1 AUTHOR
 
-Jeffrey R. Thalhammer <thaljef@cpan.org>
+Jeffrey R. Thalhammer <jeff@imaginative-software.com>
 
 
 =head1 COPYRIGHT

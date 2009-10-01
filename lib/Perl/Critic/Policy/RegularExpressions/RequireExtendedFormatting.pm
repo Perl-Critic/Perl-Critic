@@ -162,7 +162,7 @@ front and don't use C<\E> until the very end, if at all.
 
 =head1 AUTHOR
 
-Jeffrey Ryan Thalhammer  <thaljef@cpan.org>
+Jeffrey Ryan Thalhammer  <jeff@imaginative-software.com>
 
 
 =head1 COPYRIGHT

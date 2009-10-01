@@ -167,7 +167,7 @@ L<Perl::Critic::Policy::ControlStrucutres::RequireBlockMap|Perl::Critic::Policy:
 
 =head1 AUTHOR
 
-Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 
 =head1 COPYRIGHT

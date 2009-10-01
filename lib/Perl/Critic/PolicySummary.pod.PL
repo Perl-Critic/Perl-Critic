@@ -123,7 +123,7 @@ This is part of L<Perl::Critic|Perl::Critic> version 1.105.
 
 =head1 AUTHOR
 
-Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 
 =head1 COPYRIGHT

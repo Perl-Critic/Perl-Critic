@@ -34,7 +34,7 @@ emit_tar_warning_if_necessary();
 
 WriteMakefile(
     NAME           => 'Perl::Critic',
-    AUTHOR         => 'Jeffrey Thalhammer <thaljef@cpan.org>',
+    AUTHOR         => 'Jeffrey Thalhammer <jeff@imaginative-software.com>',
     ABSTRACT_FROM  => 'lib/Perl/Critic.pm',
     VERSION_FROM   => 'lib/Perl/Critic.pm',
     EXE_FILES      => ['bin/perlcritic'],

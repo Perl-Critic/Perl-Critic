@@ -235,7 +235,7 @@ matched expression that is not valid in a rule.
 
 =head1 AUTHOR
 
-Jeffrey Thalhammer  <thaljef@cpan.org>
+Jeffrey Ryan Thalhammer  <jeff@imaginative-software.com>
 
 
 =head1 COPYRIGHT

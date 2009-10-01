@@ -948,7 +948,7 @@ this distribution for a step-by-step demonstration of how to create
 new Policy modules.
 
 If you develop any new Policy modules, feel free to send them to C<<
-<thaljef@cpan.org> >> and I'll be happy to put them into the
+<jeff@imaginative-software.com> >> and I'll be happy to put them into the
 Perl::Critic distribution.  Or if you would like to work on the
 Perl::Critic project directly, check out our repository at
 L<http://perlcritic.tigris.org>.  To subscribe to our mailing list,
@@ -960,7 +960,7 @@ Policies to enforce your local guidelines.  Or if your code base is
 prone to a particular defect pattern, we can design Policies that will
 help you catch those costly defects B<before> they go into production.
 To discuss your needs with the Perl::Critic team, just contact C<<
-<thaljef@cpan.org> >>.
+<jeff@imaginative-software.com> >>.
 
 
 =head1 CONTACTING THE DEVELOPMENT TEAM
@@ -968,7 +968,7 @@ To discuss your needs with the Perl::Critic team, just contact C<<
 You are encouraged to subscribe to the mailing list; send a message to
 L<mailto:users-subscribe@perlcritic.tigris.org>.  See also the archives at
 L<http://perlcritic.tigris.org/servlets/SummarizeList?listName=users>.
-You can also contact the author at C<< <thaljef@cpan.org> >>.
+You can also contact the author at C<< <jeff@imaginative-software.com> >>.
 
 At least one member of the development team has started hanging around
 in L<irc://irc.perl.org/#perlcritic>.
@@ -1033,7 +1033,7 @@ and Sharon, my wife - For putting up with my all-night code sessions.
 
 =head1 AUTHOR
 
-Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 
 =head1 COPYRIGHT

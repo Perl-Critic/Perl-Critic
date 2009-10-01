@@ -111,7 +111,7 @@ L<Perl::Critic::Policy::Variables::ProhibitPunctuationVars|Perl::Critic::Policy:
 
 =head1 AUTHOR
 
-Jeffrey Ryan Thalhammer <thaljef@cpan.org>
+Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 =head1 COPYRIGHT
 
