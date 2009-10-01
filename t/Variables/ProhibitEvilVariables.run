@@ -1,0 +1,174 @@
+## name 2 evil variables
+## parms {variables => '$[ $SIG{__DIE__}'}
+## failures 2
+## cut
+
+print 'First subscript is ', $[, "\n";
+local $SIG{__DIE__} = sub {warn "I cannot die!"};
+
+#-----------------------------------------------------------------------------
+
+## name evil variables with brackets
+## parms { variables => '${^WIN32_SLOPPY_STAT} %{^_Fubar}' }
+## TODO this will not work until PPI recognizes ${^_Fubar} as a PPI::Token
+## failures 2
+## cut
+
+${^WIN32_SLOPPY_STAT} and print "We are being sloppy\n";
+our %{^_Fubar};
+
+#-----------------------------------------------------------------------------
+
+## name subscripted evil variables with brackets
+## parms { variables => '%{^_Fubar}' }
+## TODO this will not work until PPI recognizes ${^_Fubar} as a PPI::Token
+## failures 1
+## cut
+
+print "The value of \${^_Fubar}{baz} is ", ${^_Fubar}{baz}, "\n";
+
+#-----------------------------------------------------------------------------
+
+## name No evil variables
+## parms {variables => '$[ $SIG{__DIE__}'}
+## failures 0
+## cut
+
+print 'Perl version is ', $], "\n";
+local $SIG{__WARN__} = sub {print {STDERR} "Danger Will Robinson!\n"};
+
+#-----------------------------------------------------------------------------
+
+## name 2 evil variables, with pattern matching
+## parms { variables => '/\[/ /\bSIG\b/ ' }
+## failures 2
+## cut
+
+print 'First subscript is ', $[, "\n";
+local $SIG{__DIE__} = sub {warn "I cannot die!"};
+
+#-----------------------------------------------------------------------------
+
+## name More evil variables, with mixed config
+## parms { variables => ' $[ /\bSIG\b/ $^S' }
+## failures 5
+## cut
+
+print 'First subscript is ', $[, "\n";
+local $SIG{__DIE__} = sub {warn "I cannot die!"};
+print $^S ? 'Executing eval' : defined $^S ? 'Otherwise' : 'Parsing';
+local $SIG{__WARN__} = sub {print {STDERR} "Danger, Will Robinson!\n";
+
+#-----------------------------------------------------------------------------
+
+## name Recognize use of elements of evil arrays and hashes
+## parms { variables => '%SIG @INC' }
+## failures 2
+## cut
+
+local $SIG{__DIE__} = sub {warn "I cannot die!"};
+print '$INC[0] is ', $INC[0], "\n";
+
+#-----------------------------------------------------------------------------
+
+## name Regexes with flags
+## parms { variables => ' / \b SIG \b /x /\binc\b/i / acme /ix ' }
+## failures 4
+## cut
+
+local $SIG{__DIE__} = sub {warn "I cannot die!"};
+print '$INC[0] is ', $INC[0], "\n";
+print '$inc[0] is ', $inc[0], "\n";
+my $Acme = 'For the discerning coyote';
+
+#-----------------------------------------------------------------------------
+
+## name More evil variables, with more pattern matching
+## parms { variables => '/foo|bar|baz/ ' }
+## failures 4
+## cut
+
+my $foo;
+my $bar;
+my $baz;
+my $foonly;
+
+#-----------------------------------------------------------------------------
+
+## name Pattern matching exceptions
+## parms { variables => '/(/' }
+## failures 0
+## error /invalid regular expression/
+## cut
+
+print 'Hello World';
+
+#-----------------------------------------------------------------------------
+
+## name Providing the description for variables, no regular expressions.
+## parms { variables => q'$[ {Found use of $[. Code for first index = 0 instead} $SIG{__DIE__} <Found use of $SIG{__DIE__}. Use END{} or override CORE::GLOBAL::die instead>' }
+## failures 2
+## cut
+
+print 'First subscript is ', $[, "\n";
+local $SIG{__DIE__} = sub {warn "I cannot die!"};
+
+#-----------------------------------------------------------------------------
+
+## name Providing the description for variables, regular expressions.
+## parms { variables => q' /\bSIG\b/ {Found use of SIG. Do not use signals} /\bINC\b/ {Found use of INC. Do not manipulate @INC directly} ' }
+## failures 2
+## cut
+
+local $SIG{__DIE__} = sub {warn "I cannot die!"};
+print '$INC[0] is ', $INC[0], "\n";
+
+#-----------------------------------------------------------------------------
+
+## name Providing the description for variables, regular expressions with flags.
+## parms { variables => ' / \b SIG \b /x{We do not like signals.} /\binc\b/i[Do not fiddle with INC, no mater how it is capitalized] ' }
+## failures 3
+## cut
+
+local $SIG{__DIE__} = sub {warn "I cannot die!"};
+print '$INC[0] is ', $INC[0], "\n";
+print '$inc[0] is ', $inc[0], "\n";
+
+#-----------------------------------------------------------------------------
+
+## name Providing the description for variables from file, no regular expressions.
+## parms { variables_file => 't/Variables/ProhibitEvilVariables.d/variables-no-regular-expressions.txt' }
+## failures 4
+## cut
+
+print 'First subscript is ', $[, "\n";
+local $SIG{__DIE__} = sub {warn "I cannot die!"};
+print $^S ? 'Executing eval' : defined $^S ? 'Otherwise' : 'Parsing';
+
+#-----------------------------------------------------------------------------
+
+## name Providing the description for variables from file, regular expressions.
+## parms { variables_file => 't/Variables/ProhibitEvilVariables.d/variables-regular-expressions.txt' }
+## failures 4
+## cut
+
+print 'First subscript is ', $[, "\n";
+local $SIG{__DIE__} = sub {warn "I cannot die!"};
+print $^S ? 'Executing eval' : defined $^S ? 'Otherwise' : 'Parsing';
+
+#-----------------------------------------------------------------------------
+
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+
+##############################################################################
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab shiftround :

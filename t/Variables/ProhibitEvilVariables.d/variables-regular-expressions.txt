@@ -1,0 +1,12 @@
+/\$\[/         # Comment on same line as meaningful content.
+
+# Lack of whitespace between regex and message intentional.
+/\$SIG\{__DIE__\}/Do not use $SIG{__DIE__}. Use END{} or override CORE::GLOBAL::die() instead.
+
+# Extra leading and trailing whitespace here is intentional.
+    /\$\^S/	Found use of $^S. You should seriously consider what your code is trying to do.
+
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
