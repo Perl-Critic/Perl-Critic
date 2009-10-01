@@ -12,7 +12,7 @@ use warnings;
 
 use PPI::Document;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 #-----------------------------------------------------------------------------
 
@@ -69,6 +69,39 @@ our $VERSION = '1.105';
     else {
         pass(q<PPI might be parsing anonymous subroutines.>);
     }
+}
+
+{
+
+    # PPI 1.206 correctly parses 'use constant { ONE => 1, TWO => 2 }' as a
+    # PPI::Statement::Include consisting of two words followed by a
+    # constructor. But it incorrectly parses 'use constant 1.16 { ONE => 1,
+    # TWO => 2} as two words and a float followed by a block. We can remove
+    # the test for 'PPI::Structure::Block' from
+    # _constant_names_from_constant_pragma() in
+    # Perl::Critic::PPIx::Utilities::Statement once this is fixed.
+
+    my $code = 'use constant 1.16 { ONE => 1, TWO => 2 }';
+    local $TODO = q<Clean up code in P::C::PPIx::Utilities::Statement::_constant_names_from_constant_pragma() once this test passes.>;
+
+    my $doc = PPI::Document->new(\$code);
+
+    my $stmt = $doc->schild(0);
+    _test_class($stmt, 'PPI::Statement::Include') or last;
+
+    my @kids = $stmt->schildren();
+    _test_class($kids[-1], 'PPI::Structure::Constructor') or last;
+
+    pass( qq<PPI returned a PPI::Structure::Constructor from '$code'> );
+
+}
+
+sub _test_class {
+    my ($elem, $want) = @_;
+    $elem->isa($want) and return 1;
+    my $class = ref $elem;
+    fail( qq<PPI returned a $class, not a $want> );
+    return;
 }
 
 

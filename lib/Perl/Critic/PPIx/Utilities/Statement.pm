@@ -46,7 +46,7 @@ sub get_constant_name_elements_from_declaring_statement {
     if ( $element->isa('PPI::Statement::Include') ) {
         my $pragma;
         if ( $pragma = $element->pragma() and $pragma eq 'constant' ) {
-            return _constant_name_from_constant_pragma($element);
+            return _constant_names_from_constant_pragma($element);
         }
     }
     elsif (
@@ -59,7 +59,7 @@ sub get_constant_name_elements_from_declaring_statement {
     return;
 }
 
-sub _constant_name_from_constant_pragma {
+sub _constant_names_from_constant_pragma {
     my ($include) = @_;
 
     my @arguments = $include->arguments() or return;
@@ -67,6 +67,11 @@ sub _constant_name_from_constant_pragma {
     my $follower = $arguments[0];
     return if not defined $follower;
 
+    # We test for a 'PPI::Structure::Block' in the following because some
+    # versions of PPI parse the last element of 'use constant { ONE => 1, TWO
+    # => 2 }' as a block rather than a constructor. As of PPI 1.206, PPI
+    # handles the above correctly, but still blows it on 'use constant 1.16 {
+    # ONE => 1, TWO => 2 }'.
     if ( $follower->isa( 'PPI::Structure::Constructor' )
             or $follower->isa( 'PPI::Structure::Block' ) ) {
 
@@ -104,8 +109,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::PPIx::Utilities::Statement - Utility functions for dealing with
-PPI statement objects.
+Perl::Critic::PPIx::Utilities::Statement - Utility functions for dealing with PPI statement objects.
 
 
 =head1 DESCRIPTION
@@ -151,12 +155,12 @@ this will return ("%FOO").
 
 =head1 AUTHOR
 
-Elliot Shank <perl@galumph.com>
+Thomas R. Wyant, III F<wyant at cpan dot org>
 
 
 =head1 COPYRIGHT
 
-Copyright (c) 2009 Elliot Shank.  All rights reserved.
+Copyright (c) 2009 Thomas R. Wyant, III.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
