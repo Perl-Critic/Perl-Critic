@@ -240,7 +240,7 @@ Jeffrey Thalhammer  <thaljef@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2006-2009 Jeffrey Thalhammer
+Copyright (c) 2006-2009 Imaginative Software Systems
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
