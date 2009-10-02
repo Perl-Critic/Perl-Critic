@@ -56,6 +56,11 @@ sub violates {
                    || $up->isa('PPI::Structure::List')
                    || $up->isa('PPI::Statement'))) {
             if (my $word = $up->sprevious_sibling) {
+                # Since backslashes distribute over lists (per perlref), if
+                # we have a list and the previous is a backslash, we're cool.
+                return if $up->isa( 'PPI::Structure::List' ) &&
+                        $word->isa( 'PPI::Token::Cast' ) &&
+                        $word->content() eq q{\\};
                 # For a word set $psib to have it checked against %EXEMPTIONS
                 # below.  For a non-word it's a violation, leave $psib false
                 # to get there.

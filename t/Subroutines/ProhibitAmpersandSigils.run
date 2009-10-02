@@ -35,6 +35,14 @@ exists( &function_call );
 
 #-----------------------------------------------------------------------------
 
+## name RT #49609 recognize reference-taking distributes over parens
+## failures 0
+## cut
+
+\( &function_call );
+
+#-----------------------------------------------------------------------------
+
 ## name more passing
 ## failures 0
 ## cut
