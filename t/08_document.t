@@ -17,7 +17,7 @@ use version;
 
 use Perl::Critic::Utils::DataConversion qw< dor >;
 
-use Test::More tests => 31;
+use Test::More tests => 34;
 
 #-----------------------------------------------------------------------------
 
@@ -41,6 +41,9 @@ can_ok('Perl::Critic::Document', 'is_module');
     my $ppi_doc = PPI::Document->new( \$code );
     my $pc_doc  = Perl::Critic::Document->new( '-source' => $ppi_doc );
     isa_ok($pc_doc, 'Perl::Critic::Document');
+    isa_ok($pc_doc, 'PPI::Document');
+    isa_ok($pc_doc, 'PPI::Node');
+    isa_ok($pc_doc, 'PPI::Element');
 
 
     my $nodes_ref = $pc_doc->find('PPI::Element');
