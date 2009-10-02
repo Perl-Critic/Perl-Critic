@@ -11,7 +11,7 @@ use 5.006001;
 use strict;
 use warnings;
 
-use Test::More (tests => 29);
+use Test::More (tests => 32);
 use Perl::Critic::PolicyFactory (-test => 1);
 
 # common P::C testing tools
@@ -883,7 +883,90 @@ is(
         {-profile  => $profile, -severity => 1, -theme => 'core'},
     ),
     1,
-    'no critic on shebang line'
+    'no-critic on shebang line'
+);
+
+#-----------------------------------------------------------------------------
+
+$code = <<'END_PERL';
+#line 1
+## no critic;
+
+=pod
+
+=head1 SOME POD HERE
+
+This code has several POD-related violations at line 1.  The "## no critic"
+marker is on the second physical line.  However, the "#line" directive should
+cause it to treat it as if it actually were on the first physical line.  Thus,
+the violations should be supressed.
+
+=cut
+
+END_PERL
+
+is(
+    critique(
+        \$code,
+        {-profile  => $profile, -severity => 1, -theme => 'core'},
+    ),
+    0,
+    'no-critic where logical line == 1, but physical line != 1'
+);
+
+#-----------------------------------------------------------------------------
+
+$code = <<'END_PERL';
+#line 7
+## no critic;
+
+=pod
+
+=head1 SOME POD HERE
+
+This code has several POD-related violations at line 1.  The "## no critic"
+marker is on the second physical line, and the "#line" directive should cause
+it to treat it as if it actually were on the 7th physical line.  Thus, the
+violations should NOT be supressed.
+
+=cut
+
+END_PERL
+
+is(
+    critique(
+        \$code,
+        {-profile  => $profile, -severity => 1, -theme => 'core'},
+    ),
+    2,
+    'no-critic at logical line != 1, and physical line != 1'
+);
+
+#-----------------------------------------------------------------------------
+
+$code = <<'END_PERL';
+#line 1
+#!perl ### no critic;
+
+package Foo;
+use strict;
+use warnings;
+our $VERSION = 1;
+
+# In this case, the "## no critic" marker is on the first logical line, which
+# is also the shebang line.
+
+1;
+
+END_PERL
+
+is(
+    critique(
+        \$code,
+        {-profile  => $profile, -severity => 1, -theme => 'core'},
+    ),
+    0,
+    'no-critic on shebang line, where physical line != 1, but logical line == 1'
 );
 
 #-----------------------------------------------------------------------------

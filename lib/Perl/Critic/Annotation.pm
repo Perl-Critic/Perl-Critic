@@ -61,7 +61,7 @@ sub _init {
     # Grab surrounding nodes to determine the context.
     # This determines whether the annotation applies to
     # the current line or the block that follows.
-    my $annotation_line = $annotation_element->location()->[0];
+    my $annotation_line = $annotation_element->logical_line_number();
     my $parent = $annotation_element->parent();
     my $grandparent = $parent ? $parent->parent() : undef;
     my $sib = $annotation_element->sprevious_sibling();
@@ -77,7 +77,7 @@ sub _init {
     # situation, it only affects the line that it appears on.
     # TODO: Make this work for simple statements that are broken
     # onto multiple lines.
-    if ( $sib && $sib->location->[0] == $annotation_line ) {
+    if ( $sib && $sib->logical_line_number() == $annotation_line ) {
         $self->{_effective_range} = [$annotation_line, $annotation_line];
         return $self;
     }
@@ -87,8 +87,8 @@ sub _init {
     if ( ref $parent eq 'PPI::Structure::Block' ) {
         if ( ref $grandparent eq 'PPI::Statement::Compound'
             || ref $grandparent eq 'PPI::Statement::Sub' ) {
-            if ( $parent->location->[0] == $annotation_line ) {
-                my $grandparent_line = $grandparent->location->[0];
+            if ( $parent->logical_line_number() == $annotation_line ) {
+                my $grandparent_line = $grandparent->logical_line_number();
                 $self->{_effective_range} = [$grandparent_line, $grandparent_line];
                 return $self;
             }
@@ -110,7 +110,7 @@ sub _init {
     }
 
     # We either found an end or hit the end of the scope.
-    my $ending_line = $end->location->[0];
+    my $ending_line = $end->logical_line_number();
     $self->{_effective_range} = [$annotation_line, $ending_line];
     return $self;
 }

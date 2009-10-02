@@ -12,6 +12,9 @@ Next release, whenever it is:
       a convenient module that you can use to test your own Policies.  See
       Test::Perl::Critic::Policy for details.
 
+    Bug Fixes:
+    * The "## no critic" annotations now respect the #line directives.
+
     Other Changes:
     * The PolicySummary.pod file is now generated when the distribution
       is created, rather than when you install it.  This ensures the file
