@@ -1,13 +1,16 @@
 Next release, whenever it is:
 
-   New Features:
-   * There is a new global configuration item, 'program-extensions', which
-     configures Perl::Critic's idea of which file name extensions represent
-     programs. The desired extensions are specified as a space-separated list,
-     with leading '.' on each if that is desired. Files whose names end in
-     '.PL' will always be considered programs. This can be overridden by
-     command option --programs-extensions, which can be specified multiple
-     times.
+    New Features:
+    * There is a new global configuration item, 'program-extensions', which
+      configures Perl::Critic's idea of which file name extensions represent
+      programs. The desired extensions are specified as a space-separated list,
+      with leading '.' on each if that is desired. Files whose names end in
+      '.PL' will always be considered programs. This can be overridden by
+      command option --programs-extensions, which can be specified multiple
+      times.
+    * The framework that we use to test Perl::Critic has been packaged into
+      a convenient module that you can use to test your own Policies.  See
+      Test::Perl::Critic::Policy for details.
 
 [1.105] Released on 2009-09-07
 

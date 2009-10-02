@@ -1031,6 +1031,10 @@ only to say:
 
     This Policy is not configurable except for the standard options.
 
+=head1 TESTING YOUR POLICY
+
+The L<Perl::Critic> distribution also contains a framework for testing your
+Policy.  See L<Test::Perl::Critic::Policy> for the details.
 
 =head1 HINT
 

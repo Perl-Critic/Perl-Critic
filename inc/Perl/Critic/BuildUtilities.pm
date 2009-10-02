@@ -62,6 +62,7 @@ sub required_module_versions {
         'Readonly'                  => 1.03,
         'Scalar::Util'              => 0,
         'String::Format'            => 1.13,
+        'Test::Builder'             => 0.92,
         'base'                      => 0,
         'charnames'                 => 0,
         'overload'                  => 0,
