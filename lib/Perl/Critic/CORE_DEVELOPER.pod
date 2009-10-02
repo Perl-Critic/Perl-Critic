@@ -1,0 +1,355 @@
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+=pod
+
+=head1 NAME
+
+Perl::Critic::CORE_DEVELOPER - Hints for working on the Perl::Critic core.
+
+
+=head1 DESCRIPTION
+
+This document is a grab-bag of notes for those who are working on the
+underpinnings of Perl::Critic. They are intended to be informative,
+but unfortunately can not really be considered authoritative. It is in
+the nature of the task being described that the user of this document
+will end up working out the details for him- or herself based on the
+actual work being performed. B<Caveat lector.>
+
+
+=head1 BECOMING A CORE DEVELOPER
+
+Here are my thoughts on how to get started. Note that the steps are
+not numbered because I'm not sure there is a clear order to them. The
+items with two stars in front of them are from the mailing list; the
+ones with one star are my opinion. Although sometimes I have felt it
+helpful to comment on the two-star items, just to make things
+thoroughly unclear.
+
+* If you're unsure of yourself, install Perl::Critic, then download
+the source and rummage around in it.
+
+** Subscribe to the developers' mailing list. There are instructions
+in L<Perl::Critic/EXTENDING THE CRITIC>. The F<commits> mailing list
+is another good one.
+
+** You will need to be registered as a developer before you can
+actually change code. L<http://perlcritic.tigris.org/> only lets you
+register as an observer. I got promoted on registration, but if that
+doesn't happen, a note to the developers' mailing list might help.
+
+** If you are working on an RT ticket, you should update the ticket to
+say that you are, to keep other people from duplicating your effort.
+
+* I personally would update RT at the point I was reasonably confident
+I could hack it, just to prevent myself from having to update RT
+again in a week or so saying "oops, bit off more than I could chew."
+But that's me talking.
+
+* Subversion (also known as svn, which is the command name) is a
+version control system. It provides a repository for the code being
+worked on. Developers check out the code into a local directory,
+work on that, and and then commit changes back to the repository.
+Any previous version of the code is available from the repository -
+a bad change can be backed out, though the longer the bad change
+hangs around the harder it may be to deal with.
+
+* Install Subversion if you don't already have it. You can get it from
+L<http://subversion.tigris.org/>. The current version is Subversion
+1.5, but as of mid-2009, the 1.4.4 client seems to be adequate. The
+O'Reilly book, "Version Control with Subversion", is available online
+at L<http://svnbook.red-bean.com/>. The English version of the 1.4
+documentation may be still available at
+L<http://svnbook.red-bean.com/en/1.4/index.html>.
+
+* Branching is essentially pulling off your own managed copy of the
+code to develop on. It is creating a "sandbox", if you will. You can
+commit changes back to the repository without affecting the main
+line of development (the "trunk"). The entire branch can be
+abandoned without affecting the trunk. The down side of branches is
+that it is a bit of a pain to merge them back into the trunk.
+
+Consult the developers' mailing list on whether you should branch or
+work directly against the trunk.
+
+** The Perl Critic subversion repository on Tigris contains a bunch of
+stuff other than Perl::Critic. You probably do not need it all. But if
+you execute the 'svn checkout' command given on Tigris you get it all.
+This is not recommended.
+
+* Here is my "branch and checkout" cookbook:
+
+  Name the branch after the ticket you are working on (e.g. rt25046).
+  Issue the following commands (we assume '$ ' is your system prompt):
+
+  $ svn copy
+    http://perlcritic.tigris.org/svn/perlcritic/trunk/distributions/Perl-Critic
+    http://perlcritic.tigris.org/svn/perlcritic/branches/rt25046
+    -m "Put your comment here" --username your_username
+
+  $ svn checkout http://perlcritic.tigris.org/svn/perlcritic/branches/rt25046
+    --username your_username
+
+The 'svn copy' command is the one that does the branch. Each 'svn'
+command is one line, though sometimes (e.g. the 'branch') it's a huge
+one. The C<svn> commands above have been wrapped. A checkout from the
+trunk is also done with the C<svn checkout> command, but specifying
+the trunk's URL. You can also specify, as a second argument to
+C<svn checkout>, the directory you want the code to go into.
+
+** You should do development using Module::Build rather than
+ExtUtils::MakeMaker. In other words,
+
+  $ perl Build.PL
+  $ ./Build
+  $ ./Build test
+
+** There is a suite of author tests available using
+
+  $ ./Build authortest
+
+(but not 'make authortest', which is one of the reasons you should
+start with F<Build.PL> rather than F<Makefile.PL>) These should run
+cleanly before you declare your work done. My advice, though, is not
+to worry about them until your code is functionally correct. The
+authortest suite requires a BUNCH of extra modules. Just run it, see
+what breaks, and install what it seems to need. Eventually it will
+work.
+
+** The L<Regexp::Parser|Regexp::Parser> module is needed by
+authortest, and used if available by some of the policies. This module
+was last touched in 2005, and has some problems. Some of these
+problems make it rather noisy under Perl 5.10. You will probably want
+to download and apply one of the patches attached to RT ticket 42096
+(L<http://rt.cpan.org/Public/Bug/Display.html?id=42096>).
+
+
+=head1 ADDING A GLOBAL CONFIGURATION ITEM
+
+Perlcritic handles global configuration items and command line options
+in very similar ways. These notes will cover adding both a global
+configuration item and a corresponding, same-named command option.
+These notes can not, of course, cover implementing the functionality
+of the new item, just the mechanics of getting the item into
+Perl::Critic.
+
+
+=head2 Naming Conventions
+
+All names are lower-case, except for the names of constants (if any),
+which are upper-case. When a name contains multiple words, dashes
+will be used to separate the words in the configuration item name and
+the command line option, and underscores will be used in the accessor
+and attribute value names, and constant names if any.
+
+For example, if "new item" is being added, the configuration item is
+"new-item", the command option is "--new-item", the accessors are
+C<new_item()>, and the value of the attribute will be stored in
+C<< $self->{_new_item} >>. If there are constants involved, their
+names will start with C<NEW_ITEM_>. These names will be used in the
+following discussion.
+
+
+=head2 Implementation
+
+There are several files that must be modified to get your new
+configuation item and/or command line option.
+
+
+=head3 lib/Perl/Critic/Utils/Constants.pm
+
+If there are manifest constants connected with your implementation
+they go here. You may well at least have a
+
+ $NEW_ITEM_DEFAULT
+
+to define. All the constants for your new item must be exported, and
+should be exported not only individually but all together with export
+tag
+
+ new_item
+
+
+=head3 lib/Perl/Critic/Command.pm
+
+If your new item is a command option, its L<Getopt::Long|Getopt::Long>
+specification must be defined in C<_get_option_specification()>. If
+your new configuration item does not have a corresponding command
+option, you do not need to make any changes to this file.
+
+
+=head3 lib/Perl/Critic/OptionsProcessor.pm
+
+If your new item is a global configuration item, you need to add the
+code to handle it here. Specifically:
+
+You must add code to the C<_init()> method to store the value of your
+item as an attribute value, defaulting it if necessary. Using our
+naming convention, a single-valued item would be stored like this:
+
+ $self->{_new_item} = dor(delete $args{'new-item'},
+     $NEW_ITEM_DEFAULT);
+
+If the item has synonyms (e.g. both 'color' and 'colour' meaning the
+same thing), the C<dor()> call must check for all of them. If the
+item took a list of values, they would be parsed apart and stored as
+an array reference.
+
+You must also add and document an accessor for your new item. This
+would look something like this:
+
+ sub new_item {
+     my ($self) = @_;
+     return $self->{_new_item};
+ }
+
+In the case of multi-valued items, the accessor must return the array
+reference, so the above specimen code works in that case also.
+
+Note that no validation is done here -- this class is simply a bridge
+between the physical F<.perlcriticrc> file and
+L<Perl::Critic::Config|Perl::Critic::Config>, which is where the
+action is.
+
+If your new item is a command option without a corresponding global
+configuration item, you do not need to modify this file.
+
+
+=head3 lib/Perl/Critic/Config.pm
+
+You must write a C<_validate_and_store_new_item()> method to validate
+and store the value of the new item. The signature of this method
+depends on the details of your new item, but it must include at least
+the value of the item, B<even if> there is no corresponding global
+configuration item. If it is possible to get validation failures, it
+will also need an errors object to add the validation exception to.
+Because the details vary, the best way to proceed is probably to find
+a method similar to the one you want to write, and implement from
+there. The C<_validate_and_store_top()> method is a reasonable
+starting point for an item having a single value. The validated value
+needs to be stored in C<< $self->{_new_item} >>.
+
+You must call C<_validate_and_store_new_item()> in the C<_init()>
+method.
+
+You must write and document an accessor method for the value of the
+new item. The typical accessor method for a single-valued item is
+
+ sub new_item {
+     my ($self) = @_;
+     return $self->{_new_item};
+ }
+
+but the accessor for a multi-valued item must return a list:
+
+ sub new_item {
+     my ($self) = @_;
+     return @{ $self->{_new_item} };
+ }
+
+Last, you must document the item iteself.
+
+
+=head3 lib/Perl/Critic/ProfilePrototype.pm
+
+If your new item has a corresponding global configuration item, you
+must update the C<to_string()> method to include the item in the
+string. Your implementation of the item must be such that the
+generated string is the same as the input string for the item, except
+for whitespace.
+
+If your new item has no corresponding global configuration item, you
+do not need to change this file.
+
+
+=head3 bin/perlcriticrc
+
+If your new item has a corresponding command option, you must document
+it here. If it does not, you do not need to change this file.
+
+
+=head3 examples/perlcritic
+
+If your new item has a corresponding global configuration item, you
+must add it here. If it does not, you do not need to change this file.
+
+
+=head2 Testing
+
+The following test files must be considered for modification:
+
+ t/00_modules.t
+ t/01_config.t
+ t/01_config_bad_perlcritic.t
+ t/04_options_processor.t
+ t/07_command.t
+ t/10_user_profile.t
+ t/16_roundtrip_defaults.t
+
+Depending on your new item, you may not need to change all of these,
+but you should at least review them. Depending on what your new item
+actually does, other test files may need to be modified as well.
+
+
+=head1 DEPRECATING AND REMOVING A PUBLIC SUBROUTINE OR METHOD
+
+This is something to be done cautiously. The code in question may only
+exist to serve Perl::Critic, but if it is documented as public it may
+well be in use "in the wild", either in add-ons to Perl::Critic or by
+users of Perl::Critic.
+
+Before deprecating public code, the potential deprecator must discuss
+the issues on the Perl::Critic developers' mailing list. There are
+instructions on how to subscribe to this list in
+L<Perl::Critic/EXTENDING THE CRITIC>.
+
+Once agreement is reached, the technical details of the deprecation
+are fairly simple.
+
+You must insert something like the following in the code to be
+deprecated:
+
+ warnings::warnif(
+     'deprecated',
+     'Perl::Critic::Utils::foo() deprecated, use blah::foo() instead.',
+ );
+
+You should have the deprecated subroutine delegate its functionality
+to the new subroutine, if that is practical (it may not be).
+
+You must update the documentation to say that the old code is
+deprecated, and what the replacement is.
+
+After the old code has been deprecated for a couple production
+releases, it can be removed.
+
+
+=head1 AUTHOR
+
+Thomas R. Wyant, III F<wyant at cpan dot org>
+
+
+=head1 COPYRIGHT
+
+Copyright 2009 Thomas R. Wyant, III
+
+This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.  The full text of this license
+can be found in the LICENSE file included with this module.
+
+=cut
+
+##############################################################################
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=70 ft=pod expandtab shiftround :
