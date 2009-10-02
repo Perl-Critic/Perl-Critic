@@ -61,7 +61,7 @@ hangs around the harder it may be to deal with.
 
 * Install Subversion if you don't already have it. You can get it from
 L<http://subversion.tigris.org/>. The current version is Subversion
-1.5, but as of mid-2009, the 1.4.4 client seems to be adequate. The
+1.6, but as of mid-2009, the 1.4.4 client seems to be adequate. The
 O'Reilly book, "Version Control with Subversion", is available online
 at L<http://svnbook.red-bean.com/>. The English version of the 1.4
 documentation may be still available at
@@ -84,16 +84,16 @@ This is not recommended.
 
 * Here is my "branch and checkout" cookbook:
 
-  Name the branch after the ticket you are working on (e.g. rt25046).
-  Issue the following commands (we assume '$ ' is your system prompt):
+    Name the branch after the ticket you are working on (e.g. rt25046).
+    Issue the following commands (we assume '$ ' is your system prompt):
 
-  $ svn copy
-    http://perlcritic.tigris.org/svn/perlcritic/trunk/distributions/Perl-Critic
-    http://perlcritic.tigris.org/svn/perlcritic/branches/rt25046
-    -m "Put your comment here" --username your_username
+    $ svn copy
+        http://perlcritic.tigris.org/svn/perlcritic/trunk/distributions/Perl-Critic
+        http://perlcritic.tigris.org/svn/perlcritic/branches/rt25046
+        -m "Put your comment here" --username your_username
 
-  $ svn checkout http://perlcritic.tigris.org/svn/perlcritic/branches/rt25046
-    --username your_username
+    $ svn checkout http://perlcritic.tigris.org/svn/perlcritic/branches/rt25046
+        --username your_username
 
 The 'svn copy' command is the one that does the branch. Each 'svn'
 command is one line, though sometimes (e.g. the 'branch') it's a huge
@@ -105,13 +105,13 @@ C<svn checkout>, the directory you want the code to go into.
 ** You should do development using Module::Build rather than
 ExtUtils::MakeMaker. In other words,
 
-  $ perl Build.PL
-  $ ./Build
-  $ ./Build test
+    $ perl Build.PL
+    $ ./Build
+    $ ./Build test
 
 ** There is a suite of author tests available using
 
-  $ ./Build authortest
+    $ ./Build authortest
 
 (but not 'make authortest', which is one of the reasons you should
 start with F<Build.PL> rather than F<Makefile.PL>) These should run
@@ -166,13 +166,13 @@ configuation item and/or command line option.
 If there are manifest constants connected with your implementation
 they go here. You may well at least have a
 
- $NEW_ITEM_DEFAULT
+    $NEW_ITEM_DEFAULT
 
 to define. All the constants for your new item must be exported, and
 should be exported not only individually but all together with export
 tag
 
- new_item
+    new_item
 
 
 =head3 lib/Perl/Critic/Command.pm
@@ -192,8 +192,8 @@ You must add code to the C<_init()> method to store the value of your
 item as an attribute value, defaulting it if necessary. Using our
 naming convention, a single-valued item would be stored like this:
 
- $self->{_new_item} = dor(delete $args{'new-item'},
-     $NEW_ITEM_DEFAULT);
+    $self->{_new_item} = dor(delete $args{'new-item'},
+        $NEW_ITEM_DEFAULT);
 
 If the item has synonyms (e.g. both 'color' and 'colour' meaning the
 same thing), the C<dor()> call must check for all of them. If the
@@ -203,10 +203,10 @@ an array reference.
 You must also add and document an accessor for your new item. This
 would look something like this:
 
- sub new_item {
-     my ($self) = @_;
-     return $self->{_new_item};
- }
+    sub new_item {
+        my ($self) = @_;
+        return $self->{_new_item};
+    }
 
 In the case of multi-valued items, the accessor must return the array
 reference, so the above specimen code works in that case also.
@@ -240,17 +240,17 @@ method.
 You must write and document an accessor method for the value of the
 new item. The typical accessor method for a single-valued item is
 
- sub new_item {
-     my ($self) = @_;
-     return $self->{_new_item};
- }
+    sub new_item {
+        my ($self) = @_;
+        return $self->{_new_item};
+    }
 
 but the accessor for a multi-valued item must return a list:
 
- sub new_item {
-     my ($self) = @_;
-     return @{ $self->{_new_item} };
- }
+    sub new_item {
+        my ($self) = @_;
+        return @{ $self->{_new_item} };
+    }
 
 Last, you must document the item iteself.
 
@@ -283,13 +283,13 @@ must add it here. If it does not, you do not need to change this file.
 
 The following test files must be considered for modification:
 
- t/00_modules.t
- t/01_config.t
- t/01_config_bad_perlcritic.t
- t/04_options_processor.t
- t/07_command.t
- t/10_user_profile.t
- t/16_roundtrip_defaults.t
+    t/00_modules.t
+    t/01_config.t
+    t/01_config_bad_perlcritic.t
+    t/04_options_processor.t
+    t/07_command.t
+    t/10_user_profile.t
+    t/16_roundtrip_defaults.t
 
 Depending on your new item, you may not need to change all of these,
 but you should at least review them. Depending on what your new item
@@ -314,10 +314,10 @@ are fairly simple.
 You must insert something like the following in the code to be
 deprecated:
 
- warnings::warnif(
-     'deprecated',
-     'Perl::Critic::Utils::foo() deprecated, use blah::foo() instead.',
- );
+    warnings::warnif(
+        'deprecated',
+        'Perl::Critic::Utils::foo() deprecated, use blah::foo() instead.',
+    );
 
 You should have the deprecated subroutine delegate its functionality
 to the new subroutine, if that is practical (it may not be).
