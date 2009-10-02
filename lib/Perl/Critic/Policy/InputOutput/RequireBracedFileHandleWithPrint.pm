@@ -21,7 +21,7 @@ our $VERSION = '1.105';
 
 Readonly::Array my @POSTFIX_WORDS => qw( if unless for );
 Readonly::Hash my %POSTFIX_WORDS => hashify( @POSTFIX_WORDS );
-Readonly::Scalar my $PRINT_RX  => qr/ \A print f? \z /xms;
+Readonly::Scalar my $PRINT_RX  => qr/ \A (?: print f? | say ) \z /xms;
 
 Readonly::Scalar my $DESC => q{File handle for "print" or "printf" is not braced};
 Readonly::Scalar my $EXPL => [ 217 ];

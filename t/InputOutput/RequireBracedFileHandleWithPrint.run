@@ -200,6 +200,34 @@ printf( {$fh} $foo, $bar );
 
 #-----------------------------------------------------------------------------
 
+## name RT #49500: say violations
+## failures 6
+## cut
+
+say FH "foo";
+# say $fh;              #Punt on this
+say $fh "foo";
+say $fh @list;
+say $fh print_report();
+say $fh "foo" or die;
+say( $fh "foo" );
+
+#-----------------------------------------------------------------------------
+
+## name RT #49500: say compliances
+## failures 0
+## cut
+
+say { FH } "foo";
+say { $fh };
+say { $fh } "foo";
+say { $fh } @list;
+say { $fh } print_report();
+say { $fh } "foo" or die;
+say( { $fh } "foo" );
+
+#-----------------------------------------------------------------------------
+
 ##############################################################################
 #      $URL$
 #     $Date$
