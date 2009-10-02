@@ -71,8 +71,8 @@ print '$INC[0] is ', $INC[0], "\n";
 
 #-----------------------------------------------------------------------------
 
-## name Regexes with flags
-## parms { variables => ' / \b SIG \b /x /\binc\b/i / acme /ix ' }
+## name Regexes with modifiers
+## parms { variables => ' /(?x: \b SIG \b )/ /(?i:\binc\b)/ /(?ix: acme )/ ' }
 ## failures 4
 ## cut
 
@@ -125,8 +125,8 @@ print '$INC[0] is ', $INC[0], "\n";
 
 #-----------------------------------------------------------------------------
 
-## name Providing the description for variables, regular expressions with flags.
-## parms { variables => ' / \b SIG \b /x{We do not like signals.} /\binc\b/i[Do not fiddle with INC, no mater how it is capitalized] ' }
+## name Providing the description for variables, regular expressions with modifiers.
+## parms { variables => ' /(?x: \b SIG \b )/{We do not like signals.} /(?i:\binc\b)/[Do not fiddle with INC, no mater how it is capitalized] ' }
 ## failures 3
 ## cut
 

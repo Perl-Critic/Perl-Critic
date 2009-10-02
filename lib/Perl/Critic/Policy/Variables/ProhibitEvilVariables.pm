@@ -32,7 +32,7 @@ Readonly::Hash my %SUBSCRIPTED_TYPE => hashify(qw{@ %});
 
 Readonly::Scalar my $VARIABLE_NAME_REGEX => qr< [\$\@%] \S+ >xms;
 Readonly::Scalar my $REGULAR_EXPRESSION_REGEX =>
-    qr< [/] ( [^/]+ ) [/] ([ix]*) >xms;
+    qr< [/] ( [^/]+ ) [/] >xms;
 Readonly::Array my @DESCRIPTION_REGEXES =>
     qr< [{] ( [^}]+ ) [}] >xms,
     qr{  <  ( [^>]+ )  >  }xms,
@@ -76,18 +76,6 @@ Readonly::Scalar my $VARIABLES_FILE_LINE_REGEX =>
 Readonly::Scalar my $INDEX_REGEX        => 0;
 Readonly::Scalar my $INDEX_DESCRIPTION  => 1;
 
-# Manufacture regexes based on the desired flags, without using stringy eval.
-# When more than one flag is used, they must appear in the same order that
-# they are assembled in _handle_variable_specification().
-Readonly::Hash my %REGEX_FACTORY =>
-    $EMPTY => sub {return qr/$_[0]/sm},     ## no critic (ExtendedFormatting)
-    'i' => sub {return qr/$_[0]/smi},       ## no critic (ExtendedFormatting)
-    'x' => sub {return qr/$_[0]/smx},
-    # Yes, 'x' comes after 'i' in every character set _I_ ever heard of, but
-    # just in case some strange EBCDIC variant says differently ...
-    join( $EMPTY, sort qw{i x} ) => sub {return qr/$_[0]/smxi},
-;
-
 #-----------------------------------------------------------------------------
 
 sub supported_parameters {
@@ -121,7 +109,7 @@ sub _parse_variables {
 
     my $variable_specifications = $config_string;
 
-    while ( my ($variable, $regex_string, $regex_flags, @descrs) =
+    while ( my ($variable, $regex_string, @descrs) =
         $variable_specifications =~ m< $VARIABLES_REGEX >xms) {
 
         substr $variable_specifications, 0, $LAST_MATCH_END[0], $EMPTY;
@@ -130,7 +118,6 @@ sub _parse_variables {
         $self->_handle_variable_specification(
             variable                => $variable,
             regex_string            => $regex_string,
-            regex_flags             => $regex_flags,
             description             => $description,
             option_name             => 'variables',
             option_value            => $config_string,
@@ -179,13 +166,12 @@ sub _handle_variable_specification_on_line {
 
     return if not $line;
 
-    if ( my ($variable, $regex_string, $regex_flags, $description) =
+    if ( my ($variable, $regex_string, $description) =
         $line =~ m< $VARIABLES_FILE_LINE_REGEX >xms) {
 
         $self->_handle_variable_specification(
             variable                => $variable,
             regex_string            => $regex_string,
-            regex_flags             => $regex_flags,
             description             => $description,
             option_name             => 'variables_file',
             option_value            => $config_string,
@@ -212,13 +198,7 @@ sub _handle_variable_specification {
         # These are variable name patterns (e.g. /acme/)
         my $actual_regex;
 
-        # We hand-assemble the flags to guarantee the order.
-        my $regex_flags = do {
-            my %chars = hashify split qr{}smx, $arguments{regex_flags};
-            join $EMPTY, sort keys %chars;
-        };
-
-        eval { $actual_regex = $REGEX_FACTORY{$regex_flags}->($regex_string);
+        eval { $actual_regex = qr/$regex_string/sm; ## no critic (ExtendedFormatting)
             1 }
             or throw_policy_value
                 policy         => $self->get_short_name(),
@@ -385,11 +365,11 @@ forbidden.  For example:
     [Variables::ProhibitEvilVariables]
     variables = /acme/
 
-would cause all variables that match C<m/acme/> to be forbidden.  You can
-specify the 'i' or 'x' options (or both) on your regexes.  For example
+would cause all variables that match C<m/acme/> to be forbidden.  If
+you want a case-blind check, you can use (?i: ... ).  For example
 
     [Variables::ProhibitEvilVariables]
-    variables = /acme/i
+    variables = /(?i:acme)/
 
 forbids variables that match C<m/acme/smi>.
 
