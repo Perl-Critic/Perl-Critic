@@ -153,6 +153,150 @@ print $1, "\n";
 
 m/(foo)/ or my_exception_source( 'bar' );
 print $1, "\n";
+m/(foo)/ or $self->my_exception_source( 'bar' );
+print $1, "\n";
+
+#-----------------------------------------------------------------------------
+
+## name Failure to match causes transfer of control - RT 36081.
+## failures 0
+## cut
+
+m/(foo)/ or next;
+print $1, "\n";
+m/(foo)/ or last;
+print $1, "\n";
+m/(foo)/ or redo;
+print $1, "\n";
+m/(foo)/ or goto FOO;
+print $1, "\n";
+m/(foo)/ or return;
+print $1, "\n";
+m/(foo)/ || next;
+print $1, "\n";
+m/(foo)/ || last;
+print $1, "\n";
+m/(foo)/ || redo;
+print $1, "\n";
+m/(foo)/ || goto FOO;
+print $1, "\n";
+m/(foo)/ || return;
+print $1, "\n";
+
+#-----------------------------------------------------------------------------
+
+## name Failure to match causes transfer of control (regex in outer block) - RT 36081.
+## failures 0
+## cut
+
+m/(foo)/ or return;
+{
+    print $1, "\n";
+}
+
+#-----------------------------------------------------------------------------
+
+## name Failure to match causes transfer of control (regex in inner block) - RT 36081.
+## failures 1
+## cut
+
+{
+    m/(foo)/ or return;
+}
+print $1, "\n";
+
+#-----------------------------------------------------------------------------
+
+## name Failure to match does not cause transfer of control (regex in inner block) - RT 36081.
+## failures 1
+## cut
+
+{
+    m/(foo)/;
+}
+print $1, "\n";
+
+#-----------------------------------------------------------------------------
+
+## name goto that transfers around capture - RT 36081.
+## failures 0
+## cut
+
+{
+    m/(foo)/ or goto BAR;
+    print $1, "\n";
+    BAR:
+    print "Baz\n";
+}
+
+{
+BAR: m/(foo)/ or goto BAR;
+    print $1, "\n";
+}
+
+{
+    m/(foo)/ or goto &bar;
+    print $1, "\n";
+}
+
+#-----------------------------------------------------------------------------
+
+## name goto that does not transfer around capture - RT 36081.
+## failures 1
+## cut
+
+{
+    m/(foo)/ or goto BAR;
+BAR : print $1, "\n";
+}
+
+#-----------------------------------------------------------------------------
+
+## name goto that can not be disambiguated - RT 36081.
+## failures 1
+## cut
+
+{
+FOO: m/(foo)/ or goto (qw{FOO BAR BAZ})[$i];
+BAR: print $1, "\n";
+BAZ:
+}
+
+#-----------------------------------------------------------------------------
+
+## name regex in suffix control
+## failures 0
+## cut
+
+die unless m/(foo)/;
+print $1, "\n";
+last unless m/(foo)/;
+print $1, "\n";
+die "Arrrgh" unless m/(foo)/;
+print $1, "\n";
+
+#-----------------------------------------------------------------------------
+
+## name regex in loop with capture in nested if
+## failures 0
+## cut
+
+foreach (qw{foo bar baz}) {
+    next unless m/(foo)/;
+    if ($1) {
+        print "Foo!\n";
+    }
+}
+
+#-----------------------------------------------------------------------------
+
+## name regex in while, capture in loop
+## failures 0
+## cut
+
+while (m/(foo)/) {
+    print $1, "\n";
+}
 
 ##############################################################################
 #      $URL$
