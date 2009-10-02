@@ -150,7 +150,6 @@ sub test_wrappers_to_generate {
 }
 
 my @TARGET_FILES = qw<
-    lib/Perl/Critic/PolicySummary.pod
     t/ControlStructures/ProhibitNegativeExpressionsInUnlessAndUntilConditions.run
     t/NamingConventions/Capitalization.run
     t/Variables/RequireLocalizedPunctuationVars.run
@@ -210,6 +209,9 @@ extracted the Perl::Critic tarball using GNU tar.
 END_OF_TAR_WARNING
     }
 }
+
+
+
 
 1;
 

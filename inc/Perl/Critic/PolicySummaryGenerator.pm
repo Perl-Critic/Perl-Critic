@@ -1,4 +1,3 @@
-#!perl  ## no critic (PodSpelling)
 ##############################################################################
 #      $URL$
 #     $Date$
@@ -6,21 +5,17 @@
 # $Revision$
 ##############################################################################
 
-# TODO: The "no critic" above is due to PodSpelling not being able to tell
-# that there is no POD in this program.
+package Perl::Critic::PolicySummaryGenerator;
 
-
-use 5.006;
 use 5.006001;
 use strict;
 use warnings;
 
-use English qw< -no_match_vars >;
-use Carp qw< confess >;
+use base qw< Exporter >;
 
-# We need both because the blib directory may or may not be in @INC at the
-# time this is run.
 use lib qw< blib lib >;
+use Carp qw< confess >;
+use English qw< -no_match_vars >;
 
 use Perl::Critic::Config;
 use Perl::Critic::Exception::IO ();
@@ -30,28 +25,33 @@ use Perl::Critic::Utils::POD qw< get_module_abstract_from_file >;
 
 use Exception::Class ();  # Must be after P::C::Exception::*
 
+#-----------------------------------------------------------------------------
+
 our $VERSION = '1.105';
 
+#-----------------------------------------------------------------------------
 
-print "\n\nGenerating Perl::Critic::PolicySummary.\n";
+our @EXPORT_OK = qw< generate_policy_summary >;
 
+#-----------------------------------------------------------------------------
 
-my $configuration =
-    Perl::Critic::Config->new(
-        -profile => $EMPTY,
-        -severity => 1,
-        -theme => 'core',
-    );
-my @policies = $configuration->all_policies_enabled_or_not();
+sub generate_policy_summary {
+
+    print "\n\nGenerating Perl::Critic::PolicySummary.\n";
 
 
-my $policy_summary = 'lib/Perl/Critic/PolicySummary.pod';
+    my $configuration =
+      Perl::Critic::Config->new(-profile => $EMPTY, -severity => 1, -theme => 'core');
 
-## no critic (RequireBriefOpen)
-open my $pod_file, '>', $policy_summary
-    or confess "Could not open $policy_summary: $ERRNO";
+    my @policies = $configuration->all_policies_enabled_or_not();
+    my $policy_summary = 'lib/Perl/Critic/PolicySummary.pod';
 
-print {$pod_file} <<'END_HEADER';
+    ## no critic (RequireBriefOpen)
+    open my $pod_file, '>', $policy_summary
+      or confess "Could not open $policy_summary: $ERRNO";
+
+    print {$pod_file} <<'END_HEADER';
+
 =head1 NAME
 
 Perl::Critic::PolicySummary - Descriptions of the Policy modules included with L<Perl::Critic|Perl::Critic> itself.
@@ -138,11 +138,72 @@ can be found in the LICENSE file included with this module.
 END_FOOTER
 
 
-close $pod_file or confess "Could not close $policy_summary: $ERRNO";
+    close $pod_file or confess "Could not close $policy_summary: $ERRNO";
+
+    print "Done.\n\n";
+
+    return $policy_summary;
+
+}
 
 
-print "Done.\n\n";
+1;
 
+__END__
+
+#-----------------------------------------------------------------------------
+
+=pod
+
+=for stopwords
+
+=head1 NAME
+
+Perl::Critic::PolicySummaryGenerator - Create F<PolicySummary.pod> file.
+
+
+=head1 DESCRIPTION
+
+This module contains subroutines for generating the
+L<Perl::Critic::PolicySummary> POD file.  This file contains a brief
+summary of all the Policies that ship with L<Perl::Critic>.  These
+summaries are extracted from the C<NAME> section of the POD for each
+Policy module.
+
+This library should be used at author-time to generate the
+F<PolicySummary.pod> file B<before> releasing a new distribution.  See
+also the C<policysummary> action in L<Perl::Critic::Module::Build>.
+
+
+=head1 IMPORTABLE SUBROUTINES
+
+=over
+
+=item C<generate_policy_summary()>
+
+Generates the F<PolicySummary.pod> file which contains a brief summary of all
+the Policies in this distro.  Returns the relative path this file.  Unlike
+most of the other subroutines here, this subroutine should be used when
+creating a distribution, not when building or installing an existing
+distribution.
+
+=back
+
+
+=head1 AUTHOR
+
+Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
+
+
+=head1 COPYRIGHT
+
+Copyright (c) 2009 Imaginative Software Systems.  All rights reserved.
+
+This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.  The full text of this license
+can be found in the LICENSE file included with this module.
+
+=cut
 
 ##############################################################################
 # Local Variables:

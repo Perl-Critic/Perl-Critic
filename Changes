@@ -12,6 +12,12 @@ Next release, whenever it is:
       a convenient module that you can use to test your own Policies.  See
       Test::Perl::Critic::Policy for details.
 
+    Other Changes:
+    * The PolicySummary.pod file is now generated when the distribution
+      is created, rather than when you install it.  This ensures the file
+      will be available on http://search.cpan.org.  Thanks to Bear Longyear
+      for brigning this to our attention.
+
 [1.105] Released on 2009-09-07
 
     Bug Fixes:
