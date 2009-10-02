@@ -30,6 +30,7 @@ our @EXPORT_OK = qw(
     get_modifiers
     get_delimiters
     ppiify
+    regexp_interpolates
 );
 
 our %EXPORT_TAGS = (
@@ -203,6 +204,14 @@ sub ppiify {
     }
 }
 
+#-----------------------------------------------------------------------------
+
+sub regexp_interpolates {
+    my ( $elem ) = @_;
+    my @delim = get_delimiters( $elem ) or return;
+    return q{'} ne substr $delim[0], 0, 1;
+}
+
 1;
 
 __END__
@@ -319,6 +328,16 @@ is not a regular expression token.  For example:
     s{foo}/bar/; # yields ('{}', '//')   valid, but yuck!
     qr/foo/;     # yields ('//')
 
+=item C<regexp_interpolates( $token )>
+
+Returns true if the given regexp interpolates, false if it does not, or undef
+if the status can not be determined. The determining factor is whether or not
+the first delimiting character (as returned by C<get_delimiters>) is a single
+quote. For example:
+
+    m/foo/;     # yields true
+    qr{foo};    # yields true
+    m'foo';     # yields false
 
 =back
 

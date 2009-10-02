@@ -16,7 +16,12 @@ use English qw(-no_match_vars);
 use Carp;
 
 use Perl::Critic::Utils qw{ :booleans :severities };
-use Perl::Critic::Utils::PPIRegexp qw{ parse_regexp get_match_string get_modifiers };
+use Perl::Critic::Utils::PPIRegexp qw{
+    get_match_string
+    get_modifiers
+    parse_regexp
+    regexp_interpolates
+};
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.105';
@@ -87,7 +92,8 @@ sub violates {
     my $qr = $re->visual();
 
     # Hack: don't penalize long variable names
-    $qr =~ s/ ( $RECOGNIZE_SIGIL ) $RECOGNIZE_VARIABLE /${1}foo/gxms;
+    regexp_interpolates( $elem )
+        and $qr =~ s/ ( $RECOGNIZE_SIGIL ) $RECOGNIZE_VARIABLE /${1}foo/gxms;
 
     # If it has an "x" flag, it might be shorter after comment and whitespace removal
     my %modifiers = get_modifiers($elem);
