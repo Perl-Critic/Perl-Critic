@@ -11,6 +11,10 @@ Next release, whenever it is:
     * The framework that we use to test Perl::Critic has been packaged into
       a convenient module that you can use to test your own Policies.  See
       Test::Perl::Critic::Policy for details.
+    * Added the --unsafe switch.  Without this switch, Perl::Critic will
+      silently refuse to load any Policy that is marked unsafe.  Unsafe
+      Policies are usually ones that may compile or execute untrusted
+      code (see Perl::Critic::DynamicPolicy for an example).
 
     Bug Fixes:
     * The "## no critic" annotations now respect the #line directives.

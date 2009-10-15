@@ -295,7 +295,7 @@ will go through a deprecation cycle.
 
 =over
 
-=item C<< new( [ -profile => $FILE, -severity => $N, -theme => $string, -include => \@PATTERNS, -exclude => \@PATTERNS, -top => $N, -only => $B, -profile-strictness => $PROFILE_STRICTNESS_{WARN|FATAL|QUIET}, -force => $B, -verbose => $N ], -color => $B, -pager => $string, -criticism-fatal => $B) >>
+=item C<< new( [ -profile => $FILE, -severity => $N, -theme => $string, -include => \@PATTERNS, -exclude => \@PATTERNS, -top => $N, -only => $B, -profile-strictness => $PROFILE_STRICTNESS_{WARN|FATAL|QUIET}, -force => $B, -verbose => $N ], -color => $B, -pager => $string, -unsafe => $B, -criticism-fatal => $B) >>
 
 =item C<< new() >>
 
@@ -422,6 +422,10 @@ format specification.  See
 L<Perl::Critic::Violation|Perl::Critic::Violation> for an explanation
 of format specifications.  You can set the default value for this
 option in your F<.perlcriticrc> file.
+
+B<-unsafe> directs Perl::Critic to allow the use of Policies that are marked
+as "unsafe" by the author.  Such policies may compile untrusted code or do
+other nefarious things.
 
 B<-color> and B<-pager> are not used by Perl::Critic but is provided for the benefit
 of L<perlcritic|perlcritic>.
@@ -554,6 +558,7 @@ corresponding constructor argument.
     exclude   = Variables  Modules::RequirePackage    #Space-delimited list
     criticism-fatal = 1                               #Zero or One
     color     = 1                                     #Zero or One
+    unsafe    = 1                                     #Zero or One
     pager     = less                                  #pager to pipe output to
 
 The remainder of the configuration file is a series of blocks like

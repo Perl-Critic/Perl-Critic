@@ -116,6 +116,12 @@ sub new {
 
 #-----------------------------------------------------------------------------
 
+sub is_safe {
+    return $TRUE;
+}
+
+#-----------------------------------------------------------------------------
+
 sub initialize_if_enabled {
     return $TRUE;
 }
@@ -794,6 +800,14 @@ Returns a string representation of the policy.  The content of the
 string depends on the current value returned by C<get_format()>.
 See L<"OVERLOADS"> for the details.
 
+
+=item C<is_safe()>
+
+Returns true if this Policy can be used to analyze untrusted code.  In other
+words, the Policy is purely static and does not compile or execute any of the
+code that it analyzes.  By default, this method returns true.  But if you are
+writing a Policy that does dynamic analysis and/or performs other unsafe
+operations, then you should override this method to return false.
 
 =back
 

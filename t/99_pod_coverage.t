@@ -59,6 +59,7 @@ sub get_trusted_methods {
         prepare_to_scan_document
         violates
         applies_to
+        is_safe
         default_themes
         default_maximum_violations_per_document
         default_severity

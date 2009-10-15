@@ -508,6 +508,7 @@ sub _get_option_specification {
         profile-strictness=s
         theme=s
         top:i
+        unsafe
         verbose=s
         color-severity-highest|colour-severity-highest|color-severity-5|colour-severity-5=s
         color-severity-high|colour-severity-high|color-severity-4|colour-severity-4=s

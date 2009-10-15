@@ -919,6 +919,17 @@ and
 L<Perl::Critic::Policy::TestingAndDebugging::RequireUseWarnings|Perl::Critic::Policy::TestingAndDebugging::RequireUseWarnings>
 for examples.
 
+=head2 C<is_safe()>
+
+Most L<Perl::Critic> Policies are purely I<static>.  In other words, they
+never compile or execute any of the source code that they analyze.  However it
+is possible to write I<dynamic> Policies that do compile or execute code,
+which may result in unsafe operations (see L<Perl::Critic::Dynamic> for an
+example).  So the C<is_safe()> method is used to indicate whether a Policy can
+be trusted to not cause mischief.  By default, C<is_safe()> returns true.  But
+if you are writing a Policy that will compile or execute any of the source
+code that it analyzes, then you should override the C<is_safe()> method to
+return false.
 
 =head1 DISTRIBUTING YOUR POLICIES
 
