@@ -58,7 +58,7 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
                 )
                 ->all_policies_enabled_or_not();
 
-    plan tests => 92 + $all_policy_count;
+    plan tests => 93 + $all_policy_count;
 }
 
 #-----------------------------------------------------------------------------
