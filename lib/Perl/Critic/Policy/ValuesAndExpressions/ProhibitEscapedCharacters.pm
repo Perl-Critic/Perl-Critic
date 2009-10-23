@@ -20,7 +20,7 @@ our $VERSION = '1.105';
 #-----------------------------------------------------------------------------
 
 Readonly::Scalar my $DESC     => q{Numeric escapes in interpolated string};
-Readonly::Scalar my $EXPL     => [ 56 ];
+Readonly::Scalar my $EXPL     => [ 54..55 ];
 
 #-----------------------------------------------------------------------------
 
@@ -77,9 +77,6 @@ values.  The syntax is less compact, but dramatically more readable.
 =head1 CONFIGURATION
 
 This Policy is not configurable except for the standard options.
-
-
-=head1 SEE ALSO
 
 
 =head1 AUTHOR
