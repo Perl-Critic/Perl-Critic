@@ -34,6 +34,7 @@ sub supported_parameters {
             description     => 'Pattern that determines what a private subroutine is.',
             default_string  => '\b_\w+\b',
             behavior        => 'string',
+            parser          => \& _parse_private_name_regex,
         },
         {
             name            => 'allow',
@@ -95,6 +96,8 @@ sub applies_to           { return 'PPI::Token::Word'     }
 
 sub _parse_private_name_regex {
     my ($self, $parameter, $config_string) = @_;
+    defined $config_string
+        or $config_string = $parameter->get_default_string();
 
     my $regex;
     eval { $regex = qr/$config_string/; 1 } ## no critic (RegularExpressions)
