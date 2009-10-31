@@ -185,10 +185,10 @@ sub _Foo::_foo {}
 
 
 ##############################################################################
-#      $URL: http://perlcritic.tigris.org/svn/perlcritic/trunk/distributions/Perl-Critic/t/Subroutines/ProtectPrivateSubs.run $
-#     $Date: 2009-03-01 13:21:29 -0500 (Sun, 01 Mar 2009) $
-#   $Author: clonezone $
-# $Revision: 3194 $
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
 ##############################################################################
 
 # Local Variables:
