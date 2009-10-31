@@ -47,7 +47,7 @@ allow_all_brackets = 1
 allow_all_brackets = 1
 
 [Subroutines::ProhibitUnusedPrivateSubroutines]
-private_name_regex = _(?!_|parse_)\w+
+private_name_regex = _(?!_)\w+
 allow = _get_behavior_values _get_description_with_trailing_period
 
 [Subroutines::ProtectPrivateSubs]
