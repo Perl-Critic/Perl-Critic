@@ -507,16 +507,6 @@ sub _format_lack_of_parameter_metadata {
         'Cannot programmatically discover what parameters this policy takes.';
 }
 
-sub _get_source_file {
-    my ($self) = @_;
-
-    my $relative_path =
-        File::Spec->catfile( split m/::/xms, ref $self ) . '.pm';
-
-    return $INC{$relative_path};
-}
-
-
 #-----------------------------------------------------------------------------
 # Apparently, some perls do not implicitly stringify overloading
 # objects before doing a comparison.  This causes a couple of our

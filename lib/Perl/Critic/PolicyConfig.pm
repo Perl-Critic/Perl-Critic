@@ -55,54 +55,6 @@ sub new {
 
 #-----------------------------------------------------------------------------
 
-sub _validate_maximum_violations_per_document {
-    my ($self, $errors) = @_;
-
-    my $user_maximum_violations =
-        $self->get_maximum_violations_per_document();
-
-    if ( defined $user_maximum_violations ) {
-        if (
-                $user_maximum_violations =~ m/$NO_LIMIT/xmsio
-            or  $user_maximum_violations eq $EMPTY
-        ) {
-            $user_maximum_violations = undef;
-        }
-        elsif ( not is_integer($user_maximum_violations) ) {
-            $errors->add_exception(
-                new_parameter_value_exception(
-                    'maximum_violations_per_document',
-                    $user_maximum_violations,
-                    undef,
-                    "does not look like an integer.\n"
-                )
-            );
-
-            return;
-        }
-        elsif ( $user_maximum_violations < 0 ) {
-            $errors->add_exception(
-                new_parameter_value_exception(
-                    'maximum_violations_per_document',
-                    $user_maximum_violations,
-                    undef,
-                    "is not greater than or equal to zero.\n"
-                )
-            );
-
-            return;
-        }
-
-        $self->set_maximum_violations_per_document(
-            $user_maximum_violations
-        );
-    }
-
-    return;
-}
-
-#-----------------------------------------------------------------------------
-
 sub _get_non_public_data {
     my $self = shift;
 

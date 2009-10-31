@@ -597,25 +597,6 @@ sub _is_directly_in_scope_block {
     return $prior_to_grand_parent->content() ne 'continue';
 }
 
-sub _local_variable {
-    my ($self, $elem) = @_;
-
-    # The last symbol should be a variable
-    my $n = $elem->snext_sibling() or return 1;
-    my $p = $elem->sprevious_sibling();
-    if ( !$p || $p eq $COMMA ) {
-        # In the middle of a list
-        return 1 if $n eq $COMMA;
-
-        # The first half of an assignment
-        return 1 if $n eq $EQUAL;
-    }
-
-    # Lets say no for know... additional work
-    # should go here.
-    return $EMPTY;
-}
-
 sub _is_not_real_label {
     my $elem = shift;
 

@@ -1,0 +1,201 @@
+## name basic failure
+## failures 1
+## cut
+
+sub _foo {};
+
+#-----------------------------------------------------------------------------
+
+## name basic pass
+## failures 0
+## cut
+
+sub _foo {};
+_foo;
+
+#-----------------------------------------------------------------------------
+
+## name Method call is OK
+## failures 0
+## cut
+
+sub _foo {};
+$self->_foo();
+
+#-----------------------------------------------------------------------------
+
+## name Method call where invocant is "shift"
+## failures 0
+## cut
+
+sub _foo {};
+shift->_foo;
+
+#-----------------------------------------------------------------------------
+
+## name other builtin-function followed by private method call
+## failures 0
+## cut
+
+sub _foo {};
+pop->_foo();
+
+#-----------------------------------------------------------------------------
+
+## name Maybe non-obvious failure
+## failures 1
+## cut
+
+sub _foo {};
+
+$self->SUPER::_foo();
+
+#-----------------------------------------------------------------------------
+
+## name Forward references do not count
+## failures 0
+## cut
+
+sub _foo;
+
+#-----------------------------------------------------------------------------
+
+## name User-configured exceptions.
+## parms { allow => '_foo _bar _baz' }
+## failures 0
+## cut
+
+sub _foo {};
+sub _bar ($) {};
+sub _baz : method {};
+
+#-----------------------------------------------------------------------------
+
+## name private_name_regex passing
+## failures 0
+## parms { private_name_regex => '_(?!_|parse_)\w+' }
+## cut
+
+sub __foo {};
+sub __bar ($) {};
+sub __baz : method {};
+sub _parse_my_argument {};
+
+#-----------------------------------------------------------------------------
+
+## name private_name_regex failure
+## failures 3
+## parms { private_name_regex => '_(?!_)\w+' }
+## cut
+
+sub _foo {};
+sub _bar ($) {};
+sub _baz : method {};
+
+#-----------------------------------------------------------------------------
+
+## name reference to private subroutine
+## failures 0
+## cut
+
+sub _foo {};
+my $bar = \&_foo;
+
+#-----------------------------------------------------------------------------
+
+## name goto to private subroutine
+## failures 0
+## cut
+
+sub _foo {};
+sub bar {
+    goto &_foo;
+}
+
+#-----------------------------------------------------------------------------
+
+## name private subroutine used in overload
+## failures 0
+## cut
+
+use overload ( cmp => '_compare' );
+sub _compare {};
+
+#-----------------------------------------------------------------------------
+
+## name private subroutine used in overload, the bad way
+## failures 0
+## cut
+
+use overload ( cmp => _compare => foo => 'bar' );
+sub _compare {};
+
+#-----------------------------------------------------------------------------
+
+## name private subroutine used in overload, by reference
+## failures 0
+## cut
+
+use overload ( cmp => \&_compare );
+sub _compare {};
+
+#-----------------------------------------------------------------------------
+
+## name recursive but otherwise unused subroutine
+## failures 2
+## cut
+
+sub _foo {
+    my ( $arg ) = @_;
+    return $arg <= 1 ? $arg : $arg * _foo( $arg - 1 );
+}
+
+sub _bar {
+    --$_[0] > 0 and goto &_bar;
+    return $_[0];
+}
+
+#-----------------------------------------------------------------------------
+
+## name recursive subroutine called outside itself
+## failures 0
+## cut
+
+_foo( 3 );
+sub _foo {
+    my ( $arg ) = @_;
+    return $arg <= 1 ? $arg : $arg * _foo( $arg - 1 );
+}
+
+_bar( 1.3 );
+sub _bar {
+    --$_[0] > 0 and goto &_bar;
+    return $_[0];
+}
+
+#-----------------------------------------------------------------------------
+
+## name subroutine declared in someone else's name space
+## failures 0
+## cut
+
+sub _Foo::_foo {}
+
+#-----------------------------------------------------------------------------
+
+
+##############################################################################
+#      $URL: http://perlcritic.tigris.org/svn/perlcritic/trunk/distributions/Perl-Critic/t/Subroutines/ProtectPrivateSubs.run $
+#     $Date: 2009-03-01 13:21:29 -0500 (Sun, 01 Mar 2009) $
+#   $Author: clonezone $
+# $Revision: 3194 $
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab shiftround :

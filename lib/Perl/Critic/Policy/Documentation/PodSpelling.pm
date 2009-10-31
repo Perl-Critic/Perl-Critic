@@ -144,14 +144,6 @@ sub _get_spell_command {
     return $self->{_spell_command};
 }
 
-sub _set_spell_command {
-    my ( $self, $spell_command ) = @_;
-
-    $self->{_spell_command} = $spell_command;
-
-    return;
-}
-
 #-----------------------------------------------------------------------------
 
 sub _get_spell_command_line {

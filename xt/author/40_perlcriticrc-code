@@ -46,6 +46,10 @@ allow_all_brackets = 1
 [RegularExpressions::RequireBracesForMultiline]
 allow_all_brackets = 1
 
+[Subroutines::ProhibitUnusedPrivateSubroutines]
+private_name_regex = _(?!_|parse_)\w+
+allow = _get_behavior_values _get_description_with_trailing_period
+
 [Subroutines::ProtectPrivateSubs]
 private_name_regex = _(?!_)\w+
 

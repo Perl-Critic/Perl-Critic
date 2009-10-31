@@ -321,21 +321,6 @@ have a separate Policy for each mechanism, and let the user choose
 which one they want to use (I think I prefer the later).
 
 
-=item * Subroutines::ProhibitUnusedPrivateSubroutines
-
-If a file declares
-
-    sub _foo { }
-
-but there's no reference to "_foo" anywhere else in the same file (other than
-a recursive one), this should complain.
-
-For those of us like me who use leading double underscores as a "distribution
-private" indicator, "private" needs to be configurable, like in
-ProtectPrivateSubs.  Maybe we should start thinking about making some of these
-common policy settings global.
-
-
 =item * NamingConventions::ProhibitMisspelledSymbolNames
 
 The idea behind this policy is to encourage better names for variables
