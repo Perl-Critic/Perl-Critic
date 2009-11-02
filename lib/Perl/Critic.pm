@@ -224,7 +224,7 @@ __END__
 =pod
 
 =for stopwords DGR INI-style API -params pbp refactored ActivePerl ben Jore
-Dolan's Twitter
+Dolan's Twitter Alexandr Ciornii
 
 =head1 NAME
 
@@ -262,8 +262,9 @@ useful for gradually applying coding standards to legacy code.  For
 the ultimate convenience (at the expense of some flexibility) see the
 L<criticism|criticism> pragma.
 
-Win32 and ActivePerl users can find PPM distributions of Perl::Critic
-at L<http://theoryx5.uwinnipeg.ca/ppms/>.
+Win32 and ActivePerl users can find PPM distributions of Perl::Critic at
+L<http://theoryx5.uwinnipeg.ca/ppms/> and Alexandr Ciornii's downloadable
+executable at L<http://chorny.net/perl/perlcritic.html>.
 
 If you'd like to try L<Perl::Critic|Perl::Critic> without installing
 anything, there is a web-service available at
