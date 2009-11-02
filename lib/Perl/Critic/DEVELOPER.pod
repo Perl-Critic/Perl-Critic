@@ -1074,6 +1074,12 @@ L<http://search.cpan.org/dist/PPI-Tester/lib/PPI/Tester.pm>.
 This is part of L<Perl::Critic|Perl::Critic> version 1.105.
 
 
+=head1 SEE ALSO
+
+Chas. Owens has a blog post about developing in-house policies at
+L<http://svok.blogspot.com/2009/09/adding-house-policies-to-perlcritic.html>.
+
+
 =head1 AUTHOR
 
 Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
