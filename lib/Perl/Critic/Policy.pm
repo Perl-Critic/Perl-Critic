@@ -413,7 +413,7 @@ sub violates {
 
 #-----------------------------------------------------------------------------
 
-sub violation {  ##no critic(ArgUnpacking)
+sub violation {  ## no critic (ArgUnpacking)
     my ( $self, $desc, $expl, $elem ) = @_;
     # HACK!! Use goto instead of an explicit call because P::C::V::new() uses caller()
     my $sev = $self->get_severity();
@@ -764,13 +764,6 @@ circumstance and the one where this policy does not take any
 parameters, it is necessary to call C<parameter_metadata_available()>.
 
 
-=item C< get_parameter( $parameter_name ) >
-
-Returns the
-L<Perl::Critic::PolicyParameter|Perl::Critic::PolicyParameter> with
-the specified name.
-
-
 =item C<set_format( $format )>
 
 Class method.  Sets the format for all Policy objects when they are
@@ -793,11 +786,19 @@ See L<"OVERLOADS"> for the details.
 
 =item C<is_safe()>
 
-Returns true if this Policy can be used to analyze untrusted code.  In other
-words, the Policy is purely static and does not compile or execute any of the
-code that it analyzes.  By default, this method returns true.  But if you are
-writing a Policy that does dynamic analysis and/or performs other unsafe
-operations, then you should override this method to return false.
+Answer whether this Policy can be used to analyze untrusted code, i.e. the
+Policy doesn't have any potential side effects.
+
+This method returns a true value by default.
+
+An "unsafe" policy might attempt to compile the code, which, if you have
+C<BEGIN> or C<CHECK> blocks that affect files or connect to databases, is not
+a safe thing to do.  If you are writing a such a Policy, then you should
+override this method to return false.
+
+By default L<Perl::Critic|Perl::Critic> will not run unsafe policies.
+
+
 
 =back
 

@@ -13,7 +13,7 @@ use warnings;
 
 use English qw<-no_match_vars>;
 
-use Test::More tests => 28;
+use Test::More tests => 29;
 
 
 #-----------------------------------------------------------------------------
@@ -43,7 +43,8 @@ my $p = PolicyTest->new();
 isa_ok($p, 'PolicyTest');
 
 
-eval { $p->violates(); };
+local $EVAL_ERROR = undef;
+eval { $p->violates(); 1 };
 ok($EVAL_ERROR, 'abstract violates() throws exception');
 
 
@@ -52,6 +53,9 @@ is(
     undef,
     'is_enabled() initially returns undef',
 );
+
+
+ok( !! $p->is_safe(), 'is_safe() returns a true value by default.' );
 
 
 # Test default application...

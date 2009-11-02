@@ -44,7 +44,7 @@ my @concrete_exceptions = qw{
 };
 
 plan tests =>
-        126
+        144
     +   (  9 * scalar @concrete_exceptions  )
     +   ( 17 * scalar @bundled_policy_names );
 
@@ -135,13 +135,31 @@ is($processor->VERSION(), $version_string, 'Perl::Critic::OptionsProcessor versi
 use_ok('Perl::Critic::Policy') or BAIL_OUT(q<Can't continue.>);
 can_ok('Perl::Critic::Policy', 'add_themes');
 can_ok('Perl::Critic::Policy', 'applies_to');
+can_ok('Perl::Critic::Policy', 'default_maximum_violations_per_document');
 can_ok('Perl::Critic::Policy', 'default_severity');
 can_ok('Perl::Critic::Policy', 'default_themes');
+can_ok('Perl::Critic::Policy', 'get_abstract');
+can_ok('Perl::Critic::Policy', 'get_format');
+can_ok('Perl::Critic::Policy', 'get_long_name');
+can_ok('Perl::Critic::Policy', 'get_maximum_violations_per_document');
+can_ok('Perl::Critic::Policy', 'get_parameters');
+can_ok('Perl::Critic::Policy', 'get_raw_abstract');
 can_ok('Perl::Critic::Policy', 'get_severity');
+can_ok('Perl::Critic::Policy', 'get_short_name');
 can_ok('Perl::Critic::Policy', 'get_themes');
+can_ok('Perl::Critic::Policy', 'initialize_if_enabled');
+can_ok('Perl::Critic::Policy', 'is_enabled');
+can_ok('Perl::Critic::Policy', 'is_safe');
 can_ok('Perl::Critic::Policy', 'new');
+can_ok('Perl::Critic::Policy', 'new_parameter_value_exception');
+can_ok('Perl::Critic::Policy', 'parameter_metadata_available');
+can_ok('Perl::Critic::Policy', 'prepare_to_scan_document');
+can_ok('Perl::Critic::Policy', 'set_format');
+can_ok('Perl::Critic::Policy', 'set_maximum_violations_per_document');
 can_ok('Perl::Critic::Policy', 'set_severity');
 can_ok('Perl::Critic::Policy', 'set_themes');
+can_ok('Perl::Critic::Policy', 'throw_parameter_value_exception');
+can_ok('Perl::Critic::Policy', 'to_string');
 can_ok('Perl::Critic::Policy', 'violates');
 can_ok('Perl::Critic::Policy', 'violation');
 can_ok('Perl::Critic::Policy', 'is_safe');
