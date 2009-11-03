@@ -383,7 +383,7 @@ sub _disable_shebang_fix {
     # fixing strings.  This matches most of the ones I've found in my own Perl
     # distribution, but it may not be bullet-proof.
 
-    my $fixin_rx = qr<^eval 'exec .* \$0 \${1\+"\$@"}'\s*[\r\n]\s*if.+;>ms; ## no critic (ExtendedFormatting)
+    my $fixin_rx = qr<^eval 'exec .* \$0 \${1[+]"\$@"}'\s*[\r\n]\s*if.+;>ms; ## no critic (ExtendedFormatting)
     if ( $first_stmnt =~ $fixin_rx ) {
         my $line = $first_stmnt->location->[0];
         $self->{_disabled_line_map}->{$line}->{ALL} = 1;

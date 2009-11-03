@@ -121,6 +121,11 @@ sub critique {  ## no critic (ArgUnpacking)
 #=============================================================================
 # PRIVATE methods
 
+my $regexp_cleanup = eval {
+    require PPIx::Regexp;
+    sub { PPIx::Regexp->flush_cache() };
+} || sub {};
+
 sub _gather_violations {
     my ($self, $doc) = @_;
 
@@ -133,6 +138,9 @@ sub _gather_violations {
     my @policies = $self->config->policies();
     my @ordered_policies = _futz_with_policy_order(@policies);
     my @violations = map { _critique($_, $doc) } @ordered_policies;
+
+    # Flush PPIx::Regexp cache.
+    $regexp_cleanup->();
 
     # Accumulate statistics
     $self->statistics->accumulate( $doc, \@violations );

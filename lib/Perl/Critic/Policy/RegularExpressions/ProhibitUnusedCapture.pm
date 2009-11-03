@@ -19,9 +19,6 @@ use Carp;
 use Readonly;
 
 use Perl::Critic::Utils qw{ :booleans :severities split_nodes_on_comma };
-use Perl::Critic::Utils::PPIRegexp qw<
-    parse_regexp get_match_string get_substitute_string get_modifiers
->;
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.105';
@@ -45,7 +42,7 @@ sub applies_to           {
 #-----------------------------------------------------------------------------
 
 sub initialize_if_enabled {
-    return eval { require Regexp::Parser; 1 } ? $TRUE : $FALSE;
+    return eval { require PPIx::Regexp; 1 } ? $TRUE : $FALSE;
 }
 
 #-----------------------------------------------------------------------------
@@ -58,36 +55,33 @@ sub violates {
     # optimization: don't bother parsing the regexp if there are no parens
     return if 0 > index $elem->content(), '(';
 
-    my $re = parse_regexp($elem);
-    return if not $re;
-    my $ncaptures = @{ $re->captures() };
-    return if 0 == $ncaptures;
+    my $re = PPIx::Regexp->new_from_cache( $elem ) or return;
+    $re->failures() and return;
+
+    my $ncaptures = $re->max_capture_number() or return;
 
     my @captures;  # List of expected captures
     $#captures = $ncaptures - 1;
 
     # Look for references to the capture in the regex itself
-    my $iter = $re->walker;
-    while (my $token = $iter->()) {
-        if ($token->isa('Regexp::Parser::ref')) {
-            my ($num) = $token->raw =~ m/ (\d+) /xms;
-            $captures[$num-1] = 1;
-        }
+    foreach my $token ( @{ $re->find( 'PPIx::Regexp::Token::Reference' )
+            || [] } ) {
+        $token->is_named() and next;    # TODO named captures
+        $captures[ $token->absolute() - 1 ] = 1;
     }
-    my $subst = get_substitute_string($elem);
-    if ($subst) {
 
-        # TODO: This is a quick hack.  Really, we should parse the string.  It could
-        # be false positive (s///e) or false negative (s/(.)/\$1/)
-
-        for my $num ($subst =~ m< \$ (\d+) >xmsg) {
-            $captures[$num - 1] = 1;
+    if ( my $subst = $re->replacement() ) {
+        # TODO check for /e
+        foreach my $token ( @{ $subst->find(
+                    'PPIx::Regexp::Token::Interpolation' ) || [] } ) {
+            $token->content() =~ m/ \A \$ ( \d+ ) \z /xms or next;
+            $captures[ $1 - 1 ] = 1;
         }
     }
     return if none {not defined $_} @captures;
 
-    my %modifiers = get_modifiers($elem);
-    if ($modifiers{g}
+    my $mod = $re->modifier();
+    if ($mod and $mod->asserts( 'g' )
             and not _check_if_in_while_condition_or_block( $elem ) ) {
         $ncaptures = $NUM_CAPTURES_FOR_GLOBAL;
         $#captures = $ncaptures - 1;
@@ -407,9 +401,9 @@ This Policy is not configurable except for the standard options.
 
 =head1 CAVEATS
 
-=head2 Regexp::Parser
+=head2 PPIx::Regexp
 
-We use L<Regexp::Parser|Regexp::Parser> to analyze the regular
+We use L<PPIx::Regexp|PPIx::Regexp> to analyze the regular
 expression syntax.  This is an optional module for Perl::Critic, so it
 will not be automatically installed by CPAN for you.  If you wish to
 use this policy, you must install that module first.
@@ -431,7 +425,7 @@ remains happy.
 
 =head1 PREREQUISITES
 
-This policy will disable itself if L<Regexp::Parser|Regexp::Parser> is not
+This policy will disable itself if L<PPIx::Regexp|PPIx::Regexp> is not
 installed.
 
 

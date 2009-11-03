@@ -17,7 +17,6 @@ use List::MoreUtils qw(all);
 use Carp qw(carp);
 
 use Perl::Critic::Utils qw{ :booleans :severities hashify };
-use Perl::Critic::Utils::PPIRegexp qw{ ppiify parse_regexp get_modifiers };
 
 use base 'Perl::Critic::Policy';
 
@@ -51,7 +50,7 @@ sub applies_to           { return qw(PPI::Token::Regexp::Match
 #-----------------------------------------------------------------------------
 
 sub initialize_if_enabled {
-    return eval { require Regexp::Parser; 1 } ? $TRUE : $FALSE;
+    return eval { require PPIx::Regexp; 1 } ? $TRUE : $FALSE;
 }
 
 #-----------------------------------------------------------------------------
@@ -62,16 +61,17 @@ sub violates {
     # optimization: don't bother parsing the regexp if there are no character classes
     return if $elem !~ m/\[/xms;
 
-    my $re = ppiify(parse_regexp($elem));
-    return if !$re;
+    my $re = PPIx::Regexp->new_from_cache( $elem ) or return;
+    $re->failures() and return;
 
-    # Must pass a sub to find() because our node classes don't start with PPI::
-    my $anyofs = $re->find(sub {$_[1]->isa('Perl::Critic::PPIRegexp::anyof')});
-    return if !$anyofs;
-    for my $anyof (@{$anyofs}) {
-        my $violation = $self->_get_character_class_violations($elem, $anyof);
-        return $violation if $violation;
+    my $anyofs = $re->find( 'PPIx::Regexp::Structure::CharClass' )
+        or return;
+    foreach my $anyof ( @{ $anyofs } ) {
+        my $violation;
+        $violation = $self->_get_character_class_violations( $elem, $anyof )
+            and return $violation;
     }
+
     return;  # OK
 }
 
@@ -79,26 +79,13 @@ sub _get_character_class_violations {
     my ($self, $elem, $anyof) = @_;
 
     my %elements;
-    for my $element ($anyof->children) {
-        if ($element->isa('Perl::Critic::PPIRegexp::exact')) {
-            my @tokens = split m/(\\.[^\\]*)/xms, $element->content;
-            for my $token (map { split m/\A (\\[nrf])/xms, _fixup($_); } @tokens) {
-                $elements{$token} = 1;
-            }
-        } elsif ($element->isa('Perl::Critic::PPIRegexp::anyof_char') ||
-                 $element->isa('Perl::Critic::PPIRegexp::anyof_range') ||
-                 $element->isa('Perl::Critic::PPIRegexp::anyof_class')) {
-            for my $token (split m/\A (\\[nrf])/xms, _fixup($element->content)) {
-                $elements{$token} = 1;
-            }
-        } else {
-            # no known way to get to this branch; just for forward compatibility
-            carp 'Unexpected type inside a character class: ' . (ref $element) . " '$element'";
-        }
+    foreach my $element ( $anyof->children() ) {
+        $elements{ _fixup( $element ) } = 1;
     }
+
     for (my $i = 0; $i < @PATTERNS; $i += 2) {  ##no critic (CStyleForLoop)
         if (all { exists $elements{$_} } @{$PATTERNS[$i]}) {
-            my $neg = $anyof->re->neg;
+            my $neg = $anyof->negated();
             my $improvement = $PATTERNS[$i + 1]->[$neg ? 1 : 0];
             next if !defined $improvement;
 
@@ -116,28 +103,24 @@ sub _get_character_class_violations {
     return;  # OK
 }
 
-Readonly::Hash my %HEX => (  # Note: this is ASCII specific!
-   '0a' => '\\n',
-   '0c' => '\\f',
-   '0d' => '\\r',
-   '20' => q{ },
+Readonly::Hash my %ORDINALS => (
+    ord "\n"    => '\\n',
+    ord "\f"    => '\\f',
+    ord "\r"    => '\\r',
+    ord q< >    => q< >,
 );
+
 sub _fixup {
-   my ($chars) = @_;
-
-   # \x0a -> \x{0a}
-   $chars =~ s/\A \\x([\da-fA-F]{2})/\\x{$1}/gxms;
-
-   # '\ ' -> q{ }
-   $chars =~ s/\A \\[ ]/ /gxms;
-
-   # \012 -> \x{0a}
-   $chars =~ s/\A \\0([0-7]{2})/'\\x{'.(sprintf "%02x", oct $1).'}'/egxms;
-
-   # \x{0a} -> \n
-   $chars =~ s/\A (\\x [{] ([\da-fA-F]+) [}] ) /exists $HEX{$2} ? $HEX{$2} : $1/egxms;
-
-   return $chars;
+    my ( $element ) = @_;
+    if ( $element->isa( 'PPIx::Regexp::Token::Literal' ) ) {
+        my $ord = $element->ordinal();
+        exists $ORDINALS{$ord} and return $ORDINALS{$ord};
+        return $element->content();
+    } elsif ( $element->isa( 'PPIx::Regexp::Node' ) ) {
+        return join q{}, map{ _fixup( $_ ) } $element->elements();
+    } else {
+        return $element->content();
+    }
 }
 
 1;
@@ -198,7 +181,7 @@ This Policy is not configurable except for the standard options.
 
 =head1 PREREQUISITES
 
-This policy will disable itself if L<Regexp::Parser|Regexp::Parser> is not
+This policy will disable itself if L<PPIx::Regexp|PPIx::Regexp> is not
 installed.
 
 

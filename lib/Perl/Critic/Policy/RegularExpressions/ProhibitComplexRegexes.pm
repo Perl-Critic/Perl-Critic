@@ -14,13 +14,11 @@ use Readonly;
 
 use English qw(-no_match_vars);
 use Carp;
+use List::Util qw{ min };
 
 use Perl::Critic::Utils qw{ :booleans :severities };
 use Perl::Critic::Utils::PPIRegexp qw{
     get_match_string
-    get_modifiers
-    parse_regexp
-    regexp_interpolates
 };
 use base 'Perl::Critic::Policy';
 
@@ -31,26 +29,8 @@ our $VERSION = '1.105';
 Readonly::Scalar my $DESC => q{Split long regexps into smaller qr// chunks};
 Readonly::Scalar my $EXPL => [261];
 
-Readonly::Scalar my $RECOGNIZE_SIGIL =>
-                qr{ (?: \A | [^\\] ) (?: \\\\ )* [\@\$] }smx;
-Readonly::Scalar my $RECOGNIZE_PUNCTUATION_VARIABLE =>
-                qr{ [&`'+.\/|,\\";%=\-~:?!\$<>()[\]] }smx;
-Readonly::Scalar my $RECOGNIZE_ESCAPE_VARIABLE => qr{ \^ \w }smx;
-Readonly::Scalar my $RECOGNIZE_NORMAL_VARIABLE =>
-                qr{ (?: \w+ :: )* \w+ }smx;
-Readonly::Scalar my $RECOGNIZE_BRACKETED_VARIABLE =>
-                qr{ [{] (?:
-                    $RECOGNIZE_PUNCTUATION_VARIABLE |
-                    $RECOGNIZE_ESCAPE_VARIABLE |
-                    (?: (?: \w+ :: )* \^? \w+ )
-                ) [}] }smx;
-Readonly::Scalar my $RECOGNIZE_VARIABLE => qr{ [#]? (?:
-        $RECOGNIZE_PUNCTUATION_VARIABLE |
-        $RECOGNIZE_ESCAPE_VARIABLE |
-        $RECOGNIZE_BRACKETED_VARIABLE |
-        $RECOGNIZE_NORMAL_VARIABLE
-    )
-}smx;
+Readonly::Scalar my $MAX_LITERAL_LENGTH => 7;
+Readonly::Scalar my $MAX_VARIABLE_LENGTH => 4;
 
 #-----------------------------------------------------------------------------
 
@@ -76,7 +56,7 @@ sub applies_to           { return qw(PPI::Token::Regexp::Match
 #-----------------------------------------------------------------------------
 
 sub initialize_if_enabled {
-    return eval { require Regexp::Parser; 1 } ? $TRUE : $FALSE;
+    return eval { require PPIx::Regexp; 1 } ? $TRUE : $FALSE;
 }
 
 #-----------------------------------------------------------------------------
@@ -87,27 +67,41 @@ sub violates {
     # Optimization: if its short enough now, parsing won't make it longer
     return if $self->{_max_characters} >= length get_match_string($elem);
 
-    my $re = parse_regexp($elem)
+    my $re = PPIx::Regexp->new( $elem )
         or return;  # Abort on syntax error.
-    my $qr = $re->visual();
+    $re->failures()
+        and return; # Abort if parse errors found.
+    my $qr = $re->regular_expression()
+        or return;  # Abort if no regular expression.
 
-    # Hack: don't penalize long variable names
-    regexp_interpolates( $elem )
-        and $qr =~ s/ ( $RECOGNIZE_SIGIL ) $RECOGNIZE_VARIABLE /${1}foo/gxms;
+    my $length = 0;
+    # We use map { $_->tokens() } qr->children() rather than just
+    # $qr->tokens() because we are not interested in the delimiters.
+    foreach my $token ( map { $_->tokens() } $qr->children() ) {
 
-    # If it has an "x" flag, it might be shorter after comment and whitespace removal
-    my %modifiers = get_modifiers($elem);
-    if ($modifiers{x}) {
+        # Do not count whitespace or comments
+        $token->significant() or next;
 
-       # HACK: Remove any (?xism:...) wrapper we may have added in the parse process...
-       $qr =~ s/\A [(][?][xism]+(?:-[xism]+)?: (.*) [)] \z/$1/xms;
+        if ( $token->isa( 'PPIx::Regexp::Token::Interpolation' ) ) {
 
-       # Hack: don't count long \p{...} expressions against us so badly
-       $qr =~ s/\\[pP][{]\w+[}]/\\p{...}/gxms;
+            # Do not penalize long variable names
+            $length += min( $MAX_VARIABLE_LENGTH, length $token->content() );
+
+        } elsif ( $token->isa( 'PPIx::Regexp::Token::Literal' ) ) {
+
+            # Do not penalize long literals like \p{...}
+            $length += min( $MAX_LITERAL_LENGTH, length $token->content() );
+
+        } else {
+
+            # Take everything else at face value
+            $length += length $token->content();
+
+        }
 
     }
 
-    return if $self->{_max_characters} >= length $qr;
+    return if $self->{_max_characters} >= $length;
 
     return $self->violation( $DESC, $EXPL, $elem );
 }
@@ -213,7 +207,7 @@ F<.perlcriticrc> file like this:
 
 =head1 PREREQUISITES
 
-This policy will disable itself if L<Regexp::Parser|Regexp::Parser> is not
+This policy will disable itself if L<PPIx::Regexp|PPIx::Regexp> is not
 installed.
 
 

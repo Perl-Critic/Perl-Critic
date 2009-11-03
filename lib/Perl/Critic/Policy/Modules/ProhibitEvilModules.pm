@@ -27,7 +27,6 @@ our $VERSION = '1.105';
 
 Readonly::Scalar my $EXPL => q{Find an alternative module};
 
-## no critic (ProhibitComplexRegexes)
 Readonly::Scalar my $MODULE_NAME_REGEX =>
     qr<
         \b
@@ -70,7 +69,6 @@ Readonly::Scalar my $MODULES_FILE_LINE_REGEX =>
         \s*
         \z
     >xms;
-## use critic
 
 # Indexes in the arrays of regexes for the "modules" option.
 Readonly::Scalar my $INDEX_REGEX        => 0;

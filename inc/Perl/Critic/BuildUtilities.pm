@@ -91,7 +91,10 @@ sub recommended_module_versions {
         'File::HomeDir'         => 0,
         'Perl::Tidy'            => 0,
         'Readonly::XS'          => 0,
-        'Regexp::Parser'        => '0.20',
+        'Regexp::Parser'        => '0.20',  # Needed until
+                                            # Perl::Critic::Utils::PPIRegexp
+                                            # goes away
+        'PPIx::Regexp'          => 0,
 
         # If the following changes, the corresponding change needs to be made
         # in $Perl::Critic::Utils::Constants::_MODULE_VERSION_TERM_ANSICOLOR.
