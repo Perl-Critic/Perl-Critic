@@ -601,11 +601,6 @@ See https://rt.cpan.org/Ticket/Display.html?id=38074.
 The opposite side of ErrorHandling::RequireCheckingReturnValueOfEval.
 
 
-=item * Documentation::RequirePODLinksIncludeText
-
-The whole problem with "on the Foo manpage" being fixed by LE<lt>Foo|FooE<gt>.
-
-
 =back
 
 

@@ -1,0 +1,145 @@
+## name No links
+## failures 0
+## cut
+
+=head1 DOGGEREL
+
+ The boy stood on the burning deck,
+ His feet were full of blisters.
+ A flame licked up and burned off his pants,
+ And now he wears his sister's.
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+## name Complying links
+## failures 0
+## cut
+
+=pod
+
+The L<Perl::Critic|Perl::Critic> source may be found at
+L<http://perlcritic.tigris.org/>.
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+## name Non-complying links
+## failures 1
+## cut
+
+=pod
+
+The L<Perl::Critic> configuration file is F<~/.perlcriticrc>
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+## name Multiple brackets
+## failures 0
+## cut
+
+=pod
+
+The L<< Perl::Critic->new()|Perl::Critic/new >> method creates an
+instance of the L<< Perl::Critic|Perl::Critic >> class.
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+## name If it is inside another formatter it is not really a link
+## failures 0
+## cut
+
+=pod
+
+Constructions like C<< L<Foo> >> should be avoided, since you never know
+what the POD translator is going to turn them into. You should use something
+like C<< L<Foo|Foo> >> instead, to be sure of getting C<Foo> in your output.
+
+Formatters of all sorts are recognized even if they cross line boundaries. C<<
+L<Foo> >> is still not seen as a link.
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+## name External sections allowed
+## failures 0
+## parms { allow_external_sections => '1' }
+## cut
+
+=pod
+
+L<Perl::Critic/critique> critiques a file, returning any violations found.
+
+L<< $critic->critique()|Perl::Critic/critique >> critiques a file, returning
+any violations found.
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+## name External sections not allowed
+## failures 1
+## parms { allow_external_sections => '0' }
+## cut
+
+=pod
+
+L<Perl::Critic/critique> critiques a file, returning any violations found.
+
+L<< $critic->critique()|Perl::Critic/critique >> critiques a file, returning
+any violations found.
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+## name Internal sections allowed
+## failures 0
+## parms { allow_internal_sections => '1' }
+## cut
+
+=pod
+
+L</critique> critiques a file, returning any violations found.
+
+L<critique()/critique> critiques a file, returning any violations found.
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+## name Internal sections not allowed
+## failures 1
+## parms { allow_internal_sections => '0' }
+## cut
+
+=pod
+
+L</critique> critiques a file, returning any violations found.
+
+L<critique()/critique> critiques a file, returning any violations found.
+
+=cut
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab shiftround :
