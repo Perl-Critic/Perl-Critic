@@ -387,7 +387,7 @@ For example, with the line
 
     use version; our $VERSION = ...;
 
-given the L<PPI::Token::Symbol> instance for C<$VERSION>, this will return
+given the L<PPI::Token::Symbol|PPI::Token::Symbol> instance for C<$VERSION>, this will return
 "version".
 
 If the given element is in a C<use> or <require>, the return is from the

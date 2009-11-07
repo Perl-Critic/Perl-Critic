@@ -141,7 +141,7 @@ except that this is configurable to apply to any function, whether
 core or user-defined.
 
 If your module uses L<Fatal|Fatal>,
-L<Fatal::Exception|Fatal::Exception>, or L<autodie> then any functions
+L<Fatal::Exception|Fatal::Exception>, or L<autodie|autodie> then any functions
 wrapped by those modules will not trigger this policy.  For example:
 
     use Fatal qw(open);

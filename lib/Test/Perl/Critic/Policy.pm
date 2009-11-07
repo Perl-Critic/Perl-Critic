@@ -287,13 +287,13 @@ all_policies_ok( -policies => ['Some::Policy', 'Another::Policy'] );
 =head1 DESCRIPTION
 
 This module provides a framework for function-testing your custom
-L<Perl::Critic::Policy> modules.  Policy testing usually involves feeding it
+L<Perl::Critic::Policy|Perl::Critic::Policy> modules.  Policy testing usually involves feeding it
 a string of Perl code and checking its behavior.  In the old days, those
 strings of Perl code were mixed directly in the test script.  That sucked.
 
 B<NOTE:> This module is alpha code -- interfaces and implementation are
 subject to major changes.  This module is an integral part of building and
-testing L<Perl::Critic> itself, but you should not write any code against this
+testing L<Perl::Critic|Perl::Critic> itself, but you should not write any code against this
 module until it has stabilized.
 
 =head1 EXPORTED SUBROUTINES
@@ -405,7 +405,7 @@ Can users mark this entire test as TODO or SKIP, using the normal mechanisms?
 Allow us to specify the nature of the failures, and which one.  If there are
 15 lines of code, and six of them fail, how do we know they're the right six?
 
-Consolidate code from L<Perl::Critic::TestUtils> and possibly deprecate some
+Consolidate code from L<Perl::Critic::TestUtils|Perl::Critic::TestUtils> and possibly deprecate some
 functions there.
 
 Write unit tests for this module.

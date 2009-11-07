@@ -206,7 +206,7 @@ Variable names to C<use vars>.
 
 =item *
 
-Email addresses, if you have L<Email::Address> installed.
+Email addresses, if you have L<Email::Address|Email::Address> installed.
 
 
 =back

@@ -669,7 +669,7 @@ Twitter
 
 =head1 NAME
 
-Perl::Critic::Command - Guts of L<perlcritic>.
+Perl::Critic::Command - Guts of L<perlcritic|perlcritic>.
 
 
 =head1 SYNOPSIS
@@ -682,7 +682,7 @@ Perl::Critic::Command - Guts of L<perlcritic>.
 
 =head1 DESCRIPTION
 
-This is the implementation of the L<perlcritic> command.  You can use
+This is the implementation of the L<perlcritic|perlcritic> command.  You can use
 this to run the command without going through a command interpreter.
 
 
@@ -698,7 +698,7 @@ experimental, and will likely change.
 
 =item C<run()>
 
-Does the equivalent of the L<perlcritic> command.  Unfortunately, at
+Does the equivalent of the L<perlcritic|perlcritic> command.  Unfortunately, at
 present, this doesn't take any parameters but uses C<@ARGV> to get its
 input instead.  Count on this changing; don't count on the current
 interface.

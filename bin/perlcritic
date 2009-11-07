@@ -516,8 +516,8 @@ at the command prompt.
 This option directs C<perlcritic> to allow the use of Policies that have been
 marked as "unsafe".  Unsafe Policies may result in risky operations by
 compiling and executing the code they analyze.  All the Policies that ship in
-the core L<Perl::Critic> distribution are safe.  However, third-party
-Policies, such as those in the L<Perl::Critic::Dynamic> distribution are not
+the core L<Perl::Critic|Perl::Critic> distribution are safe.  However, third-party
+Policies, such as those in the L<Perl::Critic::Dynamic|Perl::Critic::Dynamic> distribution are not
 safe.  Note that "safety" is honorary -- if a Policy author marks a Policy as
 safe, it is not a guarantee that it won't do nasty things.  B<If you don't
 trust your Policies and the code you are analyzing, then do not use this
@@ -896,7 +896,7 @@ complete details.
 EPIC is an open source Perl IDE based on the Eclipse platform.
 Features include syntax highlighting, on-the-fly syntax check,
 content assist, code completion, perldoc support, source formatting
-with L<Perl::Tidy>, code templates, a regular expression editing tool,
+with L<Perl::Tidy|Perl::Tidy>, code templates, a regular expression editing tool,
 and integration with the Perl debugger.  Recent versions of EPIC also
 have built-in support for Perl::Critic.  At least one Perl::Critic
 contributor swears by EPIC.  Go to L<http://e-p-i-c.sourceforge.net>
@@ -916,7 +916,7 @@ rejoice!
 
 Komodo is a proprietary IDE for Perl and several other dynamic languages.
 Starting in version 5.1.1, Komodo has built-in support for Perl-Critic, if you
-have the L<Perl::Critic> and L<criticism> modules installed.  Free trial
+have the L<Perl::Critic|Perl::Critic> and L<criticism|criticism> modules installed.  Free trial
 copies of Komodo can be obtained from the ActiveState website at
 L<http://www.activestate.com>. For instructions on integrating F<perlcritic>
 with older versions of Komodo, see F<extras/KomodoIntegration.pod> in this

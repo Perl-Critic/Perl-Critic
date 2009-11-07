@@ -74,8 +74,9 @@ was successful.
     use autodie;
     open $filehandle, $mode, $filename;                                 # ok
 
-You can use L<autodie>, L<Fatal>, or L<Fatal::Exception> to get around
-this.  Currently, L<autodie> is not properly treated as a pragma; its
+You can use L<autodie|autodie>, L<Fatal|Fatal>, or
+L<Fatal::Exception|Fatal::Exception> to get around
+this.  Currently, L<autodie|autodie> is not properly treated as a pragma; its
 lexical effects aren't taken into account.
 
 

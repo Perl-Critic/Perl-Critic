@@ -667,7 +667,8 @@ Constants are in all-caps.
 
     Readonly::Scalar my $foo = 42;  # not ok
 
-There are other opinions on the specifics, for example, in L<perlstyle>.  This
+There are other opinions on the specifics, for example, in
+L<perlstyle|perlstyle>.  This
 policy can be configured to match almost any style that you can think of.
 
 
@@ -734,7 +735,8 @@ defaults to
 C<\$VERSION @ISA @EXPORT(?:_OK)? %EXPORT_TAGS \$AUTOLOAD %ENV %SIG \$TODO>.
 C<subroutine_exemptions> defaults to
 C<AUTOLOAD BUILD BUILDARGS CLEAR CLOSE DELETE DEMOLISH DESTROY EXISTS EXTEND FETCH FETCHSIZE FIRSTKEY GETC NEXTKEY POP PRINT PRINTF PUSH READ READLINE SCALAR SHIFT SPLICE STORE STORESIZE TIEARRAY TIEHANDLE TIEHASH TIESCALAR UNSHIFT UNTIE WRITE>
-which should cover all the standard Perl subroutines plus those from L<Moose>.
+which should cover all the standard Perl subroutines plus those from
+L<Moose|Moose>.
 
 For example, if you want all local variables to be in all lower-case
 and global variables to start with "G_" and otherwise not contain
@@ -752,7 +754,7 @@ underscores, but exempt any variable with a name that contains
 Handle C<use vars>.  Treat constant subroutines like constant
 variables.  Handle bareword file handles.  There needs to be "schemes"
 or ways of specifying "perlstyle" or "pbp".  Differentiate lexical
-L<Readonly> constants in scopes.
+L<Readonly|Readonly> constants in scopes.
 
 
 =head1 BUGS

@@ -197,7 +197,7 @@ indicate private methods and variables by inserting a leading
 underscore before the identifier.  This policy catches attempts to
 access private variables from outside the package itself.
 
-The subroutines in the L<POSIX> package which begin with an underscore
+The subroutines in the L<POSIX|POSIX> package which begin with an underscore
 (e.g. C<POSIX::_POSIX_ARG_MAX>) are not flagged as errors by this
 policy.
 

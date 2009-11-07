@@ -140,8 +140,9 @@ The general situation can not be handled via static analysis.
 
 =head1 SEE ALSO
 
-L<Perl::Critic::Policy::Dynamic::NoIndirect> and L<indirect> both do a better
-job with this, but they require that you compile/execute your code.
+L<Perl::Critic::Policy::Dynamic::NoIndirect|Perl::Critic::Policy::Dynamic::NoIndirect>
+and L<indirect|indirect> both do a better job with this, but they require that you
+compile/execute your code.
 
 
 =head1 AUTHOR

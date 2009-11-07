@@ -250,9 +250,9 @@ following to your perlcriticrc file:
 
 This code assumes that the hallmark of a violation is a 'use' on the same line
 as the C<$VERSION> assignment, because that is the way to have it seen by
-L<ExtUtils::MakeMaker>->parse_version(). Other ways to get a version value
-from outside the module can be imagined, and this policy is currently
-oblivious to them.
+L<ExtUtils::MakeMaker|ExtUtils::MakeMaker>->parse_version(). Other ways to get
+a version value from outside the module can be imagined, and this policy is
+currently oblivious to them.
 
 
 =head1 AUTHOR

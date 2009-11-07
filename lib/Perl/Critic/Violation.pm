@@ -487,7 +487,7 @@ other blocks), then only the first line will be returned.
 
 =item C<element_class()>
 
-Returns the L<PPI::Element> subclass of the code that caused this
+Returns the L<PPI::Element|PPI::Element> subclass of the code that caused this
 exception.
 
 

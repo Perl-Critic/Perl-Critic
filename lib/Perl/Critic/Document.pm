@@ -480,8 +480,8 @@ will go through a deprecation cycle.
 
 Create a new instance referencing a PPI::Document instance.  The
 C<$source_code> can be the name of a file, a reference to a scalar
-containing actual source code, or a L<PPI::Document> or
-L<PPI::Document::File>.
+containing actual source code, or a L<PPI::Document|PPI::Document> or
+L<PPI::Document::File|PPI::Document::File>.
 
 The '-program-extensions' argument is optional, and is a reference to a list
 of strings and/or regular expressions. The strings will be made into regular
@@ -552,7 +552,8 @@ Adds an C<$annotation> object to this Document.
 
 =item C<< annotations() >>
 
-Returns a list containing all the L<Perl::Critic::Annotation> that
+Returns a list containing all the
+L<Perl::Critic::Annotation|Perl::Critic::Annotation>s that
 were found in this Document.
 
 =item C<< add_suppressed_violation($violation) >>
@@ -563,7 +564,8 @@ annotation. Returns C<$self>.
 
 =item C<< suppressed_violations() >>
 
-Returns a list of references to all the L<Perl::Critic::Violation>s
+Returns a list of references to all the
+L<Perl::Critic::Violation|Perl::Critic::Violation>s
 that were found in this Document but were suppressed.
 
 

@@ -60,7 +60,7 @@ Perl::Critic::Utils::Perl - Utility functions for dealing with Perl language iss
 =head1 DESCRIPTION
 
 This handles various issues with Perl, the language, that aren't necessarily
-L<PPI> related.
+L<PPI|PPI> related.
 
 
 =head1 INTERFACE SUPPORT
@@ -76,7 +76,7 @@ interface will go through a deprecation cycle.
 =item C<symbol_without_sigil( $symbol )>
 
 Returns the name of the specified symbol with any sigil at the front.
-The parameter can be a vanilla Perl string or a L<PPI::Element>.
+The parameter can be a vanilla Perl string or a L<PPI::Element|PPI::Element>.
 
 
 =back

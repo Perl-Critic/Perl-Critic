@@ -85,7 +85,7 @@ This Policy is part of the core L<Perl::Critic|Perl::Critic> distribution.
 =head1 DESCRIPTION
 
 Sometimes, you may need to use a C<"## no critic"> annotation to work around
-a false-positive bug in L<Perl::Critic>.  But eventually, that bug might get
+a false-positive bug in L<Perl::Critic|Perl::Critic>.  But eventually, that bug might get
 fixed, leaving your code with extra C<"## no critic"> annotations lying about.
 Or you may use them to locally disable a Policy, but then later decide to
 permanently remove that Policy entirely from your profile, making some of

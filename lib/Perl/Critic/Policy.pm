@@ -667,8 +667,8 @@ override this.
 
 Returns the maximum number of violations this policy will report for a
 single document.  If this is not defined, then there is no limit.  If
-L<set_maximum_violations_per_document()> has not been invoked, then
-L<default_maximum_violations_per_document()> is returned.
+L</set_maximum_violations_per_document()> has not been invoked, then
+L</default_maximum_violations_per_document()> is returned.
 
 
 =item C< set_maximum_violations_per_document() >

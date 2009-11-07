@@ -240,12 +240,12 @@ Perl::Critic::Annotation - A "## no critic" annotation in a document.
 
 =head1 DESCRIPTION
 
-L<Perl::Critic::Annotation> represents a single C<"## no critic">
+C<Perl::Critic::Annotation> represents a single C<"## no critic">
 annotation in a L<PPI:Document>.  The Annotation takes care of parsing
 the annotation and keeps track of which lines and Policies it affects.
 It is intended to encapsulate the details of the no-critic
 annotations, and to provide a way for Policy objects to interact with
-the annotations (via a L<Perl::Critic::Document>).
+the annotations (via a L<Perl::Critic::Document|Perl::Critic::Document>).
 
 
 =head1 INTERFACE SUPPORT
@@ -260,11 +260,11 @@ to change without notice.
 
 =item create_annotations( -doc => $doc )
 
-Given a L<Perl::Critic::Document>, finds all the C<"## no critic">
-annotations and constructs a new L<Perl::Critic::Annotation> for each
+Given a L<Perl::Critic::Document|Perl::Critic::Document>, finds all the C<"## no critic">
+annotations and constructs a new C<Perl::Critic::Annotation> for each
 one and returns them.  The order of the returned objects is not
 defined.  It is generally expected that clients will use this
-interface rather than calling the L<Perl::Critic::Annotation>
+interface rather than calling the C<Perl::Critic::Annotation>
 constructor directly.
 
 
@@ -326,8 +326,8 @@ return true.
 
 =item C<< element() >>
 
-Returns the L<PPI::Element> where this annotation started.  This is
-typically an instance of L<PPI::Token::Comment>.
+Returns the L<PPI::Element|PPI::Element> where this annotation started.  This is
+typically an instance of L<PPI::Token::Comment|PPI::Token::Comment>.
 
 
 =back
