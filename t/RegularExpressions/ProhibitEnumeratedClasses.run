@@ -5,7 +5,7 @@
 # $Revision$
 ##############################################################################
 
-## global prerequisites Regexp::Parser
+## global prerequisites PPIx::Regexp
 
 ## name basic passes
 ## failures 0
@@ -28,7 +28,7 @@ m/[\x{ffef}]/; # for code coverage
 
 ## name basic failures
 ## failures 8
-## optional_modules Regexp::Parser
+## optional_modules PPIx::Regexp
 ## cut
 
 m/[A-Z]/;      # \p{Uppercase}
@@ -44,7 +44,7 @@ m/[\ \t\r\n]/; # \s
 
 ## name alterate representations of line endings
 ## failures 3
-## optional_modules Regexp::Parser
+## optional_modules PPIx::Regexp
 ## cut
 
 m/[\ \t\012\015]/; # \s
@@ -55,7 +55,7 @@ m/[\ \t\x{0a}\x{0d}]/; # \s
 
 ## name negative failures
 ## failures 8
-## optional_modules Regexp::Parser
+## optional_modules PPIx::Regexp
 ## cut
 
 m/[^\w]/;       # \W

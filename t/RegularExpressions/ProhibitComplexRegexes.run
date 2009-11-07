@@ -5,7 +5,7 @@
 # $Revision$
 ##############################################################################
 
-## global prerequisites Regexp::Parser
+## global prerequisites PPIx::Regexp
 
 ## name basic passes
 ## failures 0
@@ -40,7 +40,7 @@ m/ foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo foo f
 
 ## name basic failures, m//x
 ## failures 1
-## optional_modules Regexp::Parser
+## optional_modules PPIx::Regexp
 ## cut
 
 m/foo # this is a foo

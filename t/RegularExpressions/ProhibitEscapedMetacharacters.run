@@ -5,7 +5,7 @@
 # $Revision$
 ##############################################################################
 
-## global prerequisites Regexp::Parser
+## global prerequisites PPIx::Regexp
 
 ## name basic passes
 ## failures 0
@@ -18,7 +18,7 @@ $name =~ m{ harry [ ] s [ ] truman
 
 ## name basic failures
 ## failures 2
-## optional_modules Regexp::Parser
+## optional_modules PPIx::Regexp
 ## cut
 
 m/ \{ . \. \d{2} \} /xms;

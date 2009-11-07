@@ -5,7 +5,7 @@
 # $Revision$
 ##############################################################################
 
-## global prerequisites Regexp::Parser
+## global prerequisites PPIx::Regexp
 
 ## name basic passes
 ## failures 0
@@ -20,7 +20,7 @@ m/\A (?: [a] ) \z/xms; # bad form, but not a violation of this policy
 
 ## name warnings reported by users (App::Ack)
 ## failures 1
-## optional_modules Regexp::Parser
+## optional_modules PPIx::Regexp
 ## cut
 
 return ('shell',TEXT)  if $header =~ /\b(?:ba|c|k|z)?sh\b/;
@@ -40,7 +40,7 @@ return 1 if $file =~ m/ [.] (?: p (?: l x? | m ) | t | PL ) \z /xms;
 
 ## name basic failures
 ## failures 2
-## optional_modules Regexp::Parser
+## optional_modules PPIx::Regexp
 ## cut
 
 m/\A (?: a | d | i | q | r | w | x ) \z/xms;
