@@ -5,16 +5,19 @@
 # $Revision$
 ##############################################################################
 
-package Perl::Critic::Policy::Documentation::RequirePODLinksIncludeText;
+package Perl::Critic::Policy::Documentation::RequirePodLinksIncludeText;
 
 use 5.006001;
+
 use strict;
 use warnings;
-use Readonly;
 
+use Readonly;
 use English qw{ -no_match_vars };
 use Perl::Critic::Utils qw{ :booleans :severities };
 use base 'Perl::Critic::Policy';
+
+#-----------------------------------------------------------------------------
 
 our $VERSION = '1.105';
 
@@ -130,7 +133,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::Documentation::RequirePODLinksIncludeText - Provide text to display with your pod links.
+Perl::Critic::Policy::Documentation::RequirePodLinksIncludeText - Provide text to display with your pod links.
 
 
 =head1 AFFILIATION
