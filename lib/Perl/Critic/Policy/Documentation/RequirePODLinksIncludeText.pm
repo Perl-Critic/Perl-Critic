@@ -144,10 +144,10 @@ distribution.
 This Policy requires your POD links to contain text to override your POD
 translator's default link text, where this is possible.  Failure to provide
 your own text leaves you at the mercy of the POD translator, which may
-display something like C<< L<Foo> >> as C<the Foo manpage>.
+display something like C<< LE<lt>Foo> >> as C<the Foo manpage>.
 
 By default, links that specify a documentation section (for example, C<<
-L<Foo/bar> >>, or C<< L</bar> >>) are exempt from this Policy.
+LE<lt>Foo/bar> >>, or C<< LE<lt>/bar> >>) are exempt from this Policy.
 
 
 =head1 CONFIGURATION
@@ -156,23 +156,23 @@ This Policy has two boolean options to configure the handling of links that
 specify a documentation section.
 
 The C<allow_external_sections> option configures the handling of links of the
-form C<< L<Foo/bar >>.  If true, such links are accepted even without a text
+form C<< LE<lt>Foo/bar> >>.  If true, such links are accepted even without a text
 specification.  Such links tend to be turned into something like C<bar in
 Foo>.
 
 By default, this option is asserted.  If you want to prohibit things like
-C<< L<Foo/bar> >> (while allowing things like C<<< L<< Foo->bar()|Foo/bar >>
+C<< LE<lt>Foo/bar> >> (while allowing things like C<<< LE<lt>E<lt> Foo->bar()|Foo/bar >>
 >>>), put something like this in your F<.perlcriticrc>:
 
  [Documentation::RequirePODLinksIncludeText]
  allow_external_sections = 0
 
 The C<allow_internal_sections> option configures the handling of links of the
-form C<< L</bar >>.  If true, such links are accepted even without a text
+form C<< LE<lt>/bar> >>.  If true, such links are accepted even without a text
 specification.  Such links tend to be turned into something like C<bar>.
 
 By default, this option is asserted.  If you want to prohibit things like C<<
-L</bar> >> (while allowing things like C<<< L<< bar()|/bar >> >>>), put
+LE<lt>/bar> >> (while allowing things like C<< LE<lt> bar()|/bar > >>), put
 something like this in your F<.perlcriticrc>:
 
  [Documentation::RequirePODLinksIncludeText]
