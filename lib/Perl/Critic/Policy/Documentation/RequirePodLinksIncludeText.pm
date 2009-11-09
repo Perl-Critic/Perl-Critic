@@ -167,18 +167,18 @@ By default, this option is asserted.  If you want to prohibit things like
 C<< LE<lt>Foo/bar> >> (while allowing things like C<<< LE<lt>E<lt> Foo->bar()|Foo/bar >>
 >>>), put something like this in your F<.perlcriticrc>:
 
- [Documentation::RequirePODLinksIncludeText]
+ [Documentation::RequirePodLinksIncludeText]
  allow_external_sections = 0
 
 The C<allow_internal_sections> option configures the handling of links of the
 form C<< LE<lt>/bar> >>.  If true, such links are accepted even without a text
 specification.  Such links tend to be turned into something like C<bar>.
 
-By default, this option is asserted.  If you want to prohibit things like C<<
-LE<lt>/bar> >> (while allowing things like C<< LE<lt> bar()|/bar > >>), put
+By default, this option is asserted.  If you want to prohibit things like
+C<< LE<lt>/bar> >> (while allowing things like C<< LE<lt>bar()|/bar> >>), put
 something like this in your F<.perlcriticrc>:
 
- [Documentation::RequirePODLinksIncludeText]
+ [Documentation::RequirePodLinksIncludeText]
  allow_internal_sections = 0
 
 
