@@ -77,9 +77,9 @@ END_HEADER
 
 
 my $format = <<'END_POLICY';
-=head2 L<%s>
+=head2 L<%1$s|%1$s>
 
-%s [Severity %d]
+%2$s [Severity %3$d]
 
 END_POLICY
 
