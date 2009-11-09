@@ -35,7 +35,7 @@ if (open my ($fh), '<', $summary_file) {
     close $fh or confess "Couldn't close $summary_file: $OS_ERROR";
 
     my @policy_names = bundled_policy_names();
-    my @summaries    = $content =~ m/^=head2 [ ]+ L<([\w:]+)>/gxms;
+    my @summaries    = $content =~ m/^=head2 [ ]+ L<[\w:]+[|]([\w:]+)>/gxms;
     plan( tests => 2 + 2 * @policy_names );
 
     my %num_summaries;
@@ -53,7 +53,7 @@ if (open my ($fh), '<', $summary_file) {
     my $factory = Perl::Critic::PolicyFactory->new( -profile => $profile );
     my %found_policies = map { ref $_ => $_ } $factory->create_all_policies();
 
-    my %descriptions = $content =~ m/^=head2 [ ]+ L<([\w:]+)>\n\n([^\n]+)/gxms;
+    my %descriptions = $content =~ m/^=head2 [ ]+ L<[\w:]+[|]([\w:]+)>\n\n([^\n]+)/gxms;
     for my $policy_name (keys %descriptions) {
         my $severity;
         if (

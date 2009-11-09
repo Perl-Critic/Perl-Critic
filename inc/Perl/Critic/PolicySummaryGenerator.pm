@@ -77,9 +77,9 @@ END_HEADER
 
 
 my $format = <<'END_POLICY';
-=head2 L<%1$s|%1$s>
+=head2 L<%s|%s>
 
-%2$s [Severity %3$d]
+%s [Severity %d]
 
 END_POLICY
 
@@ -87,10 +87,13 @@ eval {
     foreach my $policy (@policies) {
         my $module_abstract = $policy->get_raw_abstract();
 
+        my $long_name = $policy->get_long_name();
+
         printf
             {$pod_file}
             $format,
-            $policy->get_long_name(),
+            $long_name,
+            $long_name,
             $module_abstract,
             $policy->default_severity();
     }
