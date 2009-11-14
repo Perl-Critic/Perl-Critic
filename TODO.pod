@@ -383,7 +383,7 @@ Anything that is a program should have a shebang line.  This includes .t
 files.
 
 
-=item * Modules::RequirePackageDeclaration
+=item * Modules::RequirePackageDeclarationAsFirstStatementInModule
 
 See L<http://blog.woobling.org/2009/11/scoping-of-current-package.html>.
 Ouch.
