@@ -18,7 +18,7 @@ use English qw(-no_match_vars);
 use Carp;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :booleans :severities split_nodes_on_comma };
+use Perl::Critic::Utils qw{ :booleans :severities hashify split_nodes_on_comma };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.105';
@@ -26,6 +26,8 @@ our $VERSION = '1.105';
 #-----------------------------------------------------------------------------
 
 Readonly::Scalar my $WHILE => q{while};
+
+Readonly::Hash my %NAMED_CAPTURE_REFERENCE => hashify( qw{ $+ $- } );
 
 Readonly::Scalar my $DESC => q{Only use a capturing group if you plan to use the captured value};
 Readonly::Scalar my $EXPL => [252];
@@ -63,19 +65,38 @@ sub violates {
     my @captures;  # List of expected captures
     $#captures = $ncaptures - 1;
 
+    my %named_captures; # List of expected named captures.
+                        # Unlike the numbered capture logic, %named_captures
+                        # entries are made undefined when a use of the name is
+                        # found. Otherwise two hashes would be needed, one to
+                        # become defined when a use is found, and one to hold
+                        # the mapping of name to number.
+    foreach my $struct ( @{ $re->find( 'PPIx::Regexp::Structure::NamedCapture'
+                ) || [] } ) {
+        $named_captures{ $struct->name() } = $struct->number();
+    }
+
     # Look for references to the capture in the regex itself
     foreach my $token ( @{ $re->find( 'PPIx::Regexp::Token::Reference' )
             || [] } ) {
-        $token->is_named() and next;    # TODO named captures
-        $captures[ $token->absolute() - 1 ] = 1;
+        if ( $token->is_named() ) {
+            _record_named_capture( $token->name(), \@captures,
+                \%named_captures );
+        } else {
+            $captures[ $token->absolute() - 1 ] = 1;
+        }
     }
 
     if ( my $subst = $re->replacement() ) {
         # TODO check for /e
         foreach my $token ( @{ $subst->find(
                     'PPIx::Regexp::Token::Interpolation' ) || [] } ) {
-            $token->content() =~ m/ \A \$ ( \d+ ) \z /xms or next;
-            $captures[ $1 - 1 ] = 1;
+            my $content = $token->content();
+            if ( $content =~ m/ \A \$ ( \d+ ) \z /xms ) {
+                $captures[ $1 - 1 ] = 1;
+            } elsif ( $content =~ m/ \A \$ [+-] [{] ( .*? ) [}] /smx ) {
+                _record_named_capture( $1, \@captures, \%named_captures );
+            }
         }
     }
     return if none {not defined $_} @captures;
@@ -87,9 +108,9 @@ sub violates {
         $#captures = $ncaptures - 1;
     }
 
-    return if _enough_assignments($elem, \@captures);
-    return if _is_in_slurpy_array_context($elem);
-    return if _enough_magic($elem, \@captures);
+    return if _enough_assignments($elem, \@captures) && !%named_captures;
+    return if _is_in_slurpy_array_context($elem) && !%named_captures;
+    return if _enough_magic($elem, \@captures, \%named_captures);
 
     return $self->violation( $DESC, $EXPL, $elem );
 }
@@ -259,16 +280,18 @@ sub _skip_lhs {
 }
 
 sub _enough_magic {
-    my ($elem, $captures) = @_;
+    my ($elem, $captures, $named_captures) = @_;
 
-    _check_for_magic($elem, $captures);
+    _check_for_magic($elem, $captures, $named_captures);
 
-    return none {not defined $_} @{$captures};
+    return ( none {not defined $_} @{$captures} )
+        && ( !%{$named_captures} ||
+            none {defined $_} values %{$named_captures} );
 }
 
 # void return
 sub _check_for_magic {
-    my ($elem, $captures) = @_;
+    my ($elem, $captures, $named_captures) = @_;
 
     # Search for $1..$9 in :
     #  * the rest of this statement
@@ -277,11 +300,12 @@ sub _check_for_magic {
     #  * if this is in a while/for condition, the loop body
     # But NO intervening regexps!
 
-    return if ! _check_rest_of_statement($elem, $captures);
+    return if ! _check_rest_of_statement($elem, $captures, $named_captures);
 
     my $parent = $elem->parent();
     while ($parent && ! $parent->isa('PPI::Statement::Sub')) {
-        return if ! _check_rest_of_statement($parent, $captures);
+        return if ! _check_rest_of_statement($parent, $captures,
+            $named_captures);
         $parent = $parent->parent();
     }
 
@@ -310,15 +334,15 @@ sub _check_if_in_while_condition_or_block {
 
 # false if we hit another regexp
 sub _check_rest_of_statement {
-    my ($elem, $captures) = @_;
+    my ($elem, $captures, $named_captures) = @_;
 
     my $nsib = $elem->snext_sibling;
     while ($nsib) {
         return if $nsib->isa('PPI::Token::Regexp');
         if ($nsib->isa('PPI::Node')) {
-            return if ! _check_node_children($nsib, $captures);
+            return if ! _check_node_children($nsib, $captures, $named_captures);
         } else {
-            _mark_magic($nsib, $captures);
+            _mark_magic($nsib, $captures, $named_captures);
         }
         $nsib = $nsib->snext_sibling;
     }
@@ -327,27 +351,33 @@ sub _check_rest_of_statement {
 
 # false if we hit another regexp
 sub _check_node_children {
-    my ($elem, $captures) = @_;
+    my ($elem, $captures, $named_captures) = @_;
 
     # caveat: this will descend into subroutine definitions...
 
     for my $child ($elem->schildren) {
         return if $child->isa('PPI::Token::Regexp');
         if ($child->isa('PPI::Node')) {
-            return if ! _check_node_children($child, $captures);
+            return if ! _check_node_children($child, $captures,
+                $named_captures);
         } else {
-            _mark_magic($child, $captures);
+            _mark_magic($child, $captures, $named_captures);
         }
     }
     return $TRUE;
 }
 
 sub _mark_magic {
-    my ($elem, $captures) = @_;
+    my ($elem, $captures, $named_captures) = @_;
 
-    # Record if we see $1, $2, $3, ...
+    # Only interested in magic.
+    $elem->isa( 'PPI::Token::Magic' ) or return;
 
-    if ($elem->isa('PPI::Token::Magic') && $elem =~ m/\A \$ (\d+) /xms) {
+    my $content = $elem->content();
+
+    if ( $content =~ m/ \A \$ ( \d+ ) /xms ) {
+
+        # Record if we see $1, $2, $3, ...
         my $num = $1;
         if (0 < $num) { # don't mark $0
             # Only mark the captures we really need -- don't mark superfluous magic vars
@@ -355,7 +385,26 @@ sub _mark_magic {
                 $captures->[$num-1] = 1;
             }
         }
+    } elsif ( $NAMED_CAPTURE_REFERENCE{$content} ) {
+
+        # Record if we see $+{foo} or $-{foo}.
+        my $subscr = $elem->snext_sibling() or return;
+        $subscr->isa( 'PPI::Structure::Subscript' ) or return;
+        my $subval = $subscr->content();
+        $subval =~ m/ \A [{] (.*?) [}] \z /xms or return;
+        _record_named_capture( $1, $captures, $named_captures );
+
     }
+    return;
+}
+
+# Because a named capture is also a numbered capture, the recording of the use
+# of a named capture seemed complex enough to wrap in a subroutine.
+sub _record_named_capture {
+    my ( $name, $captures, $named_captures ) = @_;
+    defined ( my $number = $named_captures->{$name} ) or return;
+    $captures->[ $number - 1 ] = 1;
+    $named_captures->{$name} = undef;
     return;
 }
 

@@ -186,6 +186,7 @@ map {print} $str =~ m/(foo)/g;
 
 m/(foo)\1/;
 s/(foo)/$1/;
+s/(foo)/\1/;
 s<\A t[\\/] (\w+) [\\/] (\w+) [.]run \z><$1\::$2>xms
 
 #-----------------------------------------------------------------------------
@@ -326,6 +327,45 @@ print $_;
 while (m/(\d+)/g) {
     print $1, "\n";
 }
+
+#-----------------------------------------------------------------------------
+
+## name conditional named captures
+## failures 0
+## optional_modules PPIx::Regexp
+## cut
+
+if ( m/(?<foo>bar)/ ) {
+    print $+{foo}, "\n";
+}
+
+while ( m/(?'foo'\d+)/g ) {
+    print $-{foo}[0], "\n";
+}
+
+m/(?P<foo>\S+)/ and print $+{foo}, "\n";
+
+#-----------------------------------------------------------------------------
+
+## name named capture in array context is unused
+## failures 2
+## optional_modules PPIx::Regexp
+## cut
+
+my @foo = m/(?<foo>\w+)/;
+sub foo {
+    return m/(?<foo>\W+)/;
+}
+
+#-----------------------------------------------------------------------------
+
+## name named capture in array context with siblings is OK
+## failures 0
+## optional_modules PPIx::Regexp
+## cut
+
+my @foo = m/(?<foo>\w+)/;
+print $+{foo}, "\n";
 
 #-----------------------------------------------------------------------------
 
