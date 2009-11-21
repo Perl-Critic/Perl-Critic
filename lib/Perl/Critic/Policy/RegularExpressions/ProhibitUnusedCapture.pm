@@ -73,7 +73,11 @@ sub violates {
                         # the mapping of name to number.
     foreach my $struct ( @{ $re->find( 'PPIx::Regexp::Structure::NamedCapture'
                 ) || [] } ) {
-        $named_captures{ $struct->name() } = $struct->number();
+        # There can be more than one capture with the same name, so we need to
+        # record all of them. There will be duplications if the 'branch reset'
+        # "(?| ... )" pattern is used, but this is benign given how numbered
+        # captures are recorded.
+        push @{ $named_captures{ $struct->name() } ||= [] }, $struct->number();
     }
 
     # Look for references to the capture in the regex itself
@@ -398,12 +402,14 @@ sub _mark_magic {
     return;
 }
 
-# Because a named capture is also a numbered capture, the recording of the use
-# of a named capture seemed complex enough to wrap in a subroutine.
+# Because a named capture is also one or more numbered captures, the recording
+# of the use of a named capture seemed complex enough to wrap in a subroutine.
 sub _record_named_capture {
     my ( $name, $captures, $named_captures ) = @_;
-    defined ( my $number = $named_captures->{$name} ) or return;
-    $captures->[ $number - 1 ] = 1;
+    defined ( my $numbers = $named_captures->{$name} ) or return;
+    foreach my $capnum ( @{ $numbers } ) {
+        $captures->[ $capnum - 1 ] = 1;
+    }
     $named_captures->{$name} = undef;
     return;
 }
