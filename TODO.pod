@@ -126,6 +126,23 @@ Proposed implementation commited 15-Mar-2007 by wyant, about revision 3240.
 
 For example, treat C<say> as equivalent to C<print>.
 
+=item * Detect 5.12 source and enable stuff for that.
+
+Yes, this is long-term, and is really a list of stuff from 5.011 to enable if
+it makes it into 5.12, gleaned from the perl511xdelta files:
+
+'use 5.011;' implies 'use strict;' and 'use feature qw{ :5.11 };' per
+perl5110delta.
+
+'sub foo { ... }' (yes, with the subroutine body being an elipsis a.k.a. the
+'yada yada' operator) compiles but fails at runtime per perl5110delta. PPI
+seems to parse this sanely as of 1.206.
+
+'package Foo 1.23;' is equivalent to 'package Foo; our $VERSION = 1.23;' per
+perl5111delta. PPI seems to parse this sanely as of 1.206.
+
+Nothing additional found in perl5112delta, which is the most recent as of the
+addition of this item.
 
 =item * Support a means of failing if a Policy isn't installed.
 
