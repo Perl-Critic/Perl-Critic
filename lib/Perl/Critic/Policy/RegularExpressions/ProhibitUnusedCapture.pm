@@ -81,29 +81,7 @@ sub violates {
     }
 
     # Look for references to the capture in the regex itself
-    foreach my $token ( @{ $re->find( 'PPIx::Regexp::Token::Reference' )
-            || [] } ) {
-        if ( $token->is_named() ) {
-            _record_named_capture( $token->name(), \@captures,
-                \%named_captures );
-        } else {
-            $captures[ $token->absolute() - 1 ] = 1;
-        }
-    }
-
-    if ( my $subst = $re->replacement() ) {
-        # TODO check for /e
-        foreach my $token ( @{ $subst->find(
-                    'PPIx::Regexp::Token::Interpolation' ) || [] } ) {
-            my $content = $token->content();
-            if ( $content =~ m/ \A \$ ( \d+ ) \z /xms ) {
-                $captures[ $1 - 1 ] = 1;
-            } elsif ( $content =~ m/ \A \$ [+-] [{] ( .*? ) [}] /smx ) {
-                _record_named_capture( $1, \@captures, \%named_captures );
-            }
-        }
-    }
-    return if none {not defined $_} @captures;
+    return if _enough_uses_in_regexp( $re, \@captures, \%named_captures );
 
     my $mod = $re->modifier();
     if ($mod and $mod->asserts( 'g' )
@@ -117,6 +95,40 @@ sub violates {
     return if _enough_magic($elem, \@captures, \%named_captures);
 
     return $self->violation( $DESC, $EXPL, $elem );
+}
+
+# Find uses of both numbered and named capture variables in the regexp itself.
+# Return true if all are used.
+sub _enough_uses_in_regexp {
+    my ( $re, $captures, $named_captures ) = @_;
+
+    # Look for references to the capture in the regex itself. Note that this
+    # will also find backreferences in the replacement string of s///.
+    foreach my $token ( @{ $re->find( 'PPIx::Regexp::Token::Reference' )
+            || [] } ) {
+        if ( $token->is_named() ) {
+            _record_named_capture( $token->name(), $captures, $named_captures );
+        } else {
+            $captures->[ $token->absolute() - 1 ] = 1;
+        }
+    }
+
+    if ( my $subst = $re->replacement() ) {
+        # TODO check for /e
+        foreach my $token ( @{ $subst->find(
+                    'PPIx::Regexp::Token::Interpolation' ) || [] } ) {
+            my $content = $token->content();
+            if ( $content =~ m/ \A \$ ( \d+ ) \z /xms ) {
+                $captures->[ $1 - 1 ] = 1;
+            } elsif ( $content =~ m/ \A \$ [+-] [{] ( .*? ) [}] /smx ) {
+                _record_named_capture( $1, $captures, $named_captures );
+            }
+        }
+    }
+
+    return ( none {not defined $_} @{$captures} )
+        && ( !%{$named_captures} ||
+            none {defined $_} values %{$named_captures} );
 }
 
 sub _enough_assignments {

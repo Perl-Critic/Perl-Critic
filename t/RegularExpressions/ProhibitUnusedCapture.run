@@ -369,6 +369,24 @@ print $+{foo}, "\n";
 
 #-----------------------------------------------------------------------------
 
+## name named capture not used in replacement
+## failures 1
+## optional_modules PPIx::Regexp
+## cut
+
+s/(?<foo>\w+)/foo$1/g;
+
+#-----------------------------------------------------------------------------
+
+## name named capture used in replacement
+## failures 0
+## optional_modules PPIx::Regexp
+## cut
+
+s/(?<foo>\w+)/foo$+{foo}/g;
+
+#-----------------------------------------------------------------------------
+
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4
