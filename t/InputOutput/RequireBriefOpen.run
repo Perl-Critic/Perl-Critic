@@ -335,6 +335,44 @@ open my @bar, '<', $filename; # nonsense
 
 #-----------------------------------------------------------------------------
 
+## name CORE::close() - RT #52391
+## failures 0
+## cut
+
+open( my $fh, '<', $filename );
+my $value = <$fh>;
+CORE::close($fh);
+
+#-----------------------------------------------------------------------------
+
+## name CORE::GLOBAL::close()
+## failures 0
+## cut
+
+open my $fh, '<', $filename;
+my $value = <$fh>;
+CORE::GLOBAL::close($fh);
+
+#-----------------------------------------------------------------------------
+
+## name CORE::open()
+## failures 1
+## cut
+
+CORE::open my $fh, '<', $filename;
+
+#-----------------------------------------------------------------------------
+
+# Local Variables:
+
+## name CORE::GLOBAL::open()
+## failures 1
+## cut
+
+CORE::GLOBAL::open(my $fh, '<', $filename);
+
+#-----------------------------------------------------------------------------
+
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4
