@@ -101,7 +101,11 @@ Readonly::Scalar my $MAGIC_REGEX => _create_magic_detector();
 # The magic vars in this array will be ignored in interpolated strings
 # in simple mode. See CONFIGURATION in the pod.
 Readonly::Array my @IGNORE_FOR_INTERPOLATION =>
-    ( q{$'}, q{$$}, q{$#}, q{$:}, );    ## no critic ( RequireInterpolationOfMetachars )
+    ( q{$'}, q{$$}, q{$#}, q{$:}, )     ## no critic ( RequireInterpolationOfMetachars, ProhibitQuotedWordLists )
+    ;   # Annotation must come before semicolon if a simple statement is
+        # broken across multiple lines, otherwise Perl::Critic takes it as a
+        # block annotation. See TODO.pod item 'Run-on single line
+        # annotations'.
 
 #-----------------------------------------------------------------------------
 
@@ -199,7 +203,7 @@ sub _strings_thorough {
         # $c is so named by analogy to that module.
 
         # possibly *not* a magic variable
-        if ($c =~ m/ ^  \$  .*  [  \w  :  \$  \{  ]  $ /xms) {
+        if ($c =~ m/ ^  \$  .*  [  \w  :  \$  {  ]  $ /xms) {
             ## no critic (RequireInterpolationOfMetachars)
 
             if (
@@ -226,7 +230,7 @@ sub _strings_thorough {
             # if ( $c =~ m/^\$\^\w{2}$/xms ) {
             # }
 
-            next MATCH if $c =~ m/ ^\$\#\{ /xms;    # It's a $#{...} cast
+            next MATCH if $c =~ m/ ^ \$ \# [{] /xms;    # It's a $#{...} cast
         }
 
         # The additional checking that PPI::Token::Magic does at this point
@@ -257,7 +261,7 @@ sub _create_magic_detector {
                 q<|>,
                 map          { quotemeta $_ }
                 reverse sort { length $a <=> length $b }
-                grep         { '%' ne substr $_, 0, 1 }
+                grep         { q<%> ne substr $_, 0, 1 }
                 @MAGIC_VARIABLES
         )
         .   ')';
