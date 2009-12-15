@@ -279,14 +279,14 @@ code parts instead of PPI trees to make this easier to read.
     )
 
 
-=item * Use L<version> to declare C<$VERSION> numbers throughout P::C
+=item * Use L<version|version> to declare C<$VERSION> numbers throughout P::C
 
-PBP recommends using the L<version> module.  I chose not to follow that
-recommendation because L<version> didn't work with the Perl v5.6.1 that I had
+PBP recommends using the L<version|version> module.  I chose not to follow that
+recommendation because L<version|version> didn't work with the Perl v5.6.1 that I had
 at $work at that time (and I really wanted to use Perl::Critic at work).
-But now the L<version> has been updated and those bugs may have been fixed,
+But now the L<version|version> has been updated and those bugs may have been fixed,
 or perhaps we just don't care about running on Perl v5.6.1 any more.  So
-maybe now we can go ahead and use L<version>.
+maybe now we can go ahead and use L<version|version>.
 
 =back
 
@@ -295,6 +295,31 @@ maybe now we can go ahead and use L<version>.
 
 Document bugs for individual Policies in the Policies themselves.  Users
 should be aware of limitations.  (And, hey, we might get patches that way.)
+
+=over
+
+=item * Run-on single line annotations
+
+The problem here is that for something like:
+
+  my $foo =
+    '$bar'; ## no critic (RequireInterpolationOfMetachars) 
+
+The logic that detects single line annotations for simple statements does so
+by finding the previous significant sibling to the comment, and seeing if that
+sibling is on the same line. But this logic fails for the above sample,
+because the PPI document makes the comment a sibling to the entire statement,
+which starts on the previous line.
+
+There is a less fulsome TODO on this in F<lib/Perl/Critic/Annotation.pm> at
+the point where the fix needs to be applied.
+
+When this gets fixed the comment at or about line 105 in
+F<lib/Perl/Critic/Policy/Variables/ProhibitPunctuationVars.pm> needs to be
+removed, and the semicolon it comments put in the natural place, before the
+annotation.
+
+=back
 
 
 =head1 OTHER PBP POLICIES THAT SEEM FEASIBLE TO IMPLEMENT
