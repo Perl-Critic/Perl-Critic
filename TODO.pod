@@ -194,89 +194,9 @@ Why can't I do this:
 Use L<Win32::Console::ANSI> like L<App::Ack>.
 
 
-=item * A function that splits up a PPI::Node's descendants based upon package.
+=item * Create P::C::Node and make P::C::Document a subclass and make use of PPIx::Utilities::Node::split_ppi_node_by_namespace() to provide per-namespace caching of lookups that are now on P::C::Document.
 
 This is necessary to get P::C::Moose Policies correct.
-
-Say we've got the following code:
-
-    #!perl
-
-    my $x = blah();
-
-    package Foo;
-
-    my $y = blah_blah();
-
-    {
-        say 'Whee!';
-
-        package Bar;
-
-        something();
-    }
-
-    thingy();
-
-    package Baz;
-
-    da_da_da();
-
-    package Foo;
-
-    foreach ( blrfl() ) {
-        ...
-    }
-
-Calling the function on a PPI::Document for the above should return a hash of
-arrays of PPI::Nodes.  The result should look something like this, using
-multi-line string literals (RestrictLongStrings violations!) for the actual
-code parts instead of PPI trees to make this easier to read.
-
-    (
-        main    => [
-            q<
-                #!perl
-
-                my $x = blah();
-            >,
-        ],
-        Foo     => [
-            q<
-                package Foo;
-
-                my $y = blah_blah();
-
-                {
-                    say 'Whee!';
-
-                }
-
-                thingy();
-            >,
-            q<
-                package Foo;
-
-                foreach ( blrfl() ) {
-                    ...
-                }
-            >,
-        ],
-        Bar     => [
-            q<
-                package Bar;
-
-                something();
-            >,
-        ],
-        Baz     => [
-            q<
-                package Baz;
-
-                da_da_da();
-            >,
-        ],
-    )
 
 
 =item * Use L<version|version> to declare C<$VERSION> numbers throughout P::C
