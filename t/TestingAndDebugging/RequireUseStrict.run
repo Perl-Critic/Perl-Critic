@@ -178,6 +178,32 @@ $this_is_not_strict
 sub foo { use strict }  # notice this is first statement in file
 $this_is_not_strict
 
+#-----------------------------------------------------------------------------
+## name "use perl-version" equivalent to strict as of 5.011
+## failures 0
+## TODO Not implemented yet.
+## cut
+
+use 5.011;
+$foo = $bar;
+
+#-----------------------------------------------------------------------------
+## name "use perl-version" equivalent to strict as of 5.11.0
+## failures 0
+## TODO Not implemented yet.
+## cut
+
+use 5.11.0;
+$foo = $bar;
+
+#-----------------------------------------------------------------------------
+## name "use perl-version" in lexical context
+## failures 1
+## cut
+
+sub foo { use 5.011 };
+$this_is_not_strict
+
 ##############################################################################
 #      $URL$
 #     $Date$
