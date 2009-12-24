@@ -20,6 +20,16 @@ require My::Self::_private;
 
 #-----------------------------------------------------------------------------
 
+## name Public methods called on non-public classes ok:
+## failures 0
+## cut
+
+# Used for distibution-private classes.
+
+Foo::_Bar->baz();
+
+#-----------------------------------------------------------------------------
+
 ## name Class methods invoked via __PACKAGE__ are always OK.
 ## failures 0
 ## cut

@@ -15,15 +15,17 @@ use warnings;
 use English qw< $EVAL_ERROR -no_match_vars >;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :severities $EMPTY };
+use Perl::Critic::Utils qw<
+    :severities $EMPTY is_function_call is_method_call
+>;
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.105';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $DESC => q{Private subroutine/method used};
-Readonly::Scalar my $EXPL => q{Use published APIs};
+Readonly::Scalar my $DESC => q<Private subroutine/method used>;
+Readonly::Scalar my $EXPL => q<Use published APIs>;
 
 #-----------------------------------------------------------------------------
 
@@ -96,6 +98,7 @@ sub applies_to           { return 'PPI::Token::Word'     }
 
 sub _parse_private_name_regex {
     my ($self, $parameter, $config_string) = @_;
+
     defined $config_string
         or $config_string = $parameter->get_default_string();
 
@@ -137,6 +140,8 @@ sub violates {
 
 sub _is_other_pkg_private_function {
     my ( $self, $elem ) = @_;
+
+    return if ! is_function_call($elem) && ! is_method_call($elem);
 
     my $private_name_regex = $self->{_private_name_regex};
     my $content = $elem->content();
