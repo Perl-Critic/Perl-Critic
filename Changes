@@ -16,12 +16,29 @@ Next release, whenever it is:
       Policies are usually ones that may compile or execute untrusted
       code (see Perl::Critic::DynamicPolicy for an example).
 
+    New Policies:
+    * Subroutines::ProhibitUnusedPrivateSubroutines
+    * Documentation::RequirePodLinksIncludeText
+
     Policy Changes:
     * Subroutines::ProhibitNestedSubs no longer complains about scheduled
       blocks (BEGIN, etc.) inside subroutines and vice versa.
+    * The RegularExpressions:: policies have been converted from using
+      Regexp::Parser to using PPIx::Regexp to do their heavy lifting.
+      Regexp::Parser is still an optional module due to the need to put
+      Perl::Critic::Utils::PPIRegexp's parse_regexp() and ppiify() through a
+      deprecation cycle.
+    * RegularExpressions::ProhibitUnusedCapture now checks for unused named
+      captures.
 
     Bug Fixes:
     * The "## no critic" annotations now respect the #line directives.
+    * All instances of L<Foo> in the POD have been changed to L<Foo|Foo>.
+      L</bar> and L<Foo/bar> were allowed to stand.  RT #37485
+    * InputOutput::RequireBriefOpen now recognizes CORE::open, CORE::close,
+      CORE::GLOBAL::open, and CORE::GLOBAL::close.  RT #52391
+    * Spaces are now allowed immediately inside the enclosing parentheses in
+      "## no critic ( Foo )".  RT #52038
 
     Other Changes:
     * The PolicySummary.pod file is now generated when the distribution
