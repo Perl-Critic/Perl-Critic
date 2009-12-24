@@ -20,7 +20,7 @@ require My::Self::_private;
 
 #-----------------------------------------------------------------------------
 
-## name Public methods called on non-public classes ok:
+## name Public methods called on non-public classes ok.
 ## failures 0
 ## cut
 
