@@ -376,7 +376,10 @@ In this situation F<aspell> will often only emit part of the word that it
 thinks is misspelled.  For example, if you ask F<aspell> to check
 "foobie-bletch", the output only complains about "foobie".  Unfortunately,
 you'll have to look through your POD to figure out what the real word that
-F<aspell> is complaining about is.
+F<aspell> is complaining about is.  One thing to try is looking at the output
+of C<< perl -MPod::Spell -e 'print
+Pod::Spell->new()->parse_from_file("lib/Your/Module.pm")' >> to see what is
+actually being checked for spelling.
 
 
 =head1 PREREQUISITES
