@@ -898,6 +898,8 @@ L<PPI|PPI>
 
 L<Pod::PlainText|Pod::PlainText>
 
+L<Pod::Select|Pod::Select>
+
 L<Pod::Usage|Pod::Usage>
 
 L<Readonly|Readonly>
@@ -906,11 +908,15 @@ L<Scalar::Util|Scalar::Util>
 
 L<String::Format|String::Format>
 
+L<Test::Builder|Test::Builder>
+
 L<version|version>
 
 
 The following modules are optional, but recommended for complete
 testing:
+
+L<Email::Address|Email::Address>
 
 L<File::HomeDir|File::HomeDir>
 
