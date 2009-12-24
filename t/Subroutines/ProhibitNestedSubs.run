@@ -16,6 +16,46 @@ sub foo { if (1) { do { sub bar { 1 } } } }
 
 #-----------------------------------------------------------------------------
 
+## name Subroutine declarations inside scheduled blocks used for lexical scope restriction.
+## failures 0
+## cut
+
+CHECK {
+    my $foo = 1;
+
+    sub bar { return $foo }
+}
+
+#-----------------------------------------------------------------------------
+
+## name Scheduled blocks inside subroutine declarations.
+## failures 0
+## cut
+
+sub quack {
+    state $foo;
+
+    UNITCHECK {
+        $foo = 1;
+    }
+}
+
+#-----------------------------------------------------------------------------
+
+## name Subroutine declarations inside scheduled blocks inside subroutine declarations.
+## failures 1
+## cut
+
+sub quack {
+    INIT {
+        my $foo = 1;
+
+        sub bar { return $foo }
+    }
+}
+
+#-----------------------------------------------------------------------------
+
 ##############################################################################
 #      $URL$
 #     $Date$

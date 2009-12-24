@@ -16,6 +16,10 @@ Next release, whenever it is:
       Policies are usually ones that may compile or execute untrusted
       code (see Perl::Critic::DynamicPolicy for an example).
 
+    Policy Changes:
+    * Subroutines::ProhibitNestedSubs no longer complains about scheduled
+      blocks (BEGIN, etc.) inside subroutines and vice versa.
+
     Bug Fixes:
     * The "## no critic" annotations now respect the #line directives.
 
