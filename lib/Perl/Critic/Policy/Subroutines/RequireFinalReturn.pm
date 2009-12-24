@@ -240,12 +240,14 @@ F<.perlcriticrc>:
     [Subroutines::RequireFinalReturns]
     terminal_funcs = quit abort bailout
 
-=head1 LIMITATIONS
+=head1 BUGS
 
 We do not look for returns inside ternary operators.  That
 construction is too complicated to analyze right now.  Besides, a
 better form is the return outside of the ternary like this: C<return
 foo ? 1 : bar ? 2 : 3>
+
+This does not handle the perl 5.10 C<given>/C<when>/C<default> constructs.
 
 =head1 AUTHOR
 
