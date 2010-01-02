@@ -101,11 +101,7 @@ Readonly::Scalar my $MAGIC_REGEX => _create_magic_detector();
 # The magic vars in this array will be ignored in interpolated strings
 # in simple mode. See CONFIGURATION in the pod.
 Readonly::Array my @IGNORE_FOR_INTERPOLATION =>
-    ( q{$'}, q{$$}, q{$#}, q{$:}, )     ## no critic ( RequireInterpolationOfMetachars, ProhibitQuotedWordLists )
-    ;   # Annotation must come before semicolon if a simple statement is
-        # broken across multiple lines, otherwise Perl::Critic takes it as a
-        # block annotation. See TODO.pod item 'Run-on single line
-        # annotations'.
+    ( q{$'}, q{$$}, q{$#}, q{$:}, );    ## no critic ( RequireInterpolationOfMetachars, ProhibitQuotedWordLists )
 
 #-----------------------------------------------------------------------------
 

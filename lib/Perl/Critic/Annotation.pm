@@ -16,10 +16,13 @@ use English qw(-no_match_vars);
 
 use Perl::Critic::PolicyFactory;
 use Perl::Critic::Utils qw(:characters hashify);
+use Readonly;
 
 #-----------------------------------------------------------------------------
 
 our $VERSION = '1.105';
+
+Readonly::Scalar my $LAST_ELEMENT => -1;
 
 #=============================================================================
 # CLASS methods
@@ -64,7 +67,6 @@ sub _init {
     my $annotation_line = $annotation_element->logical_line_number();
     my $parent = $annotation_element->parent();
     my $grandparent = $parent ? $parent->parent() : undef;
-    my $sib = $annotation_element->sprevious_sibling();
 
     # Handle case when it appears on the shebang line.  In this
     # situation, it only affects the first line, not the whole doc
@@ -75,9 +77,8 @@ sub _init {
 
     # Handle single-line usage on simple statements.  In this
     # situation, it only affects the line that it appears on.
-    # TODO: Make this work for simple statements that are broken
-    # onto multiple lines.
-    if ( $sib && $sib->logical_line_number() == $annotation_line ) {
+    if ( _is_single_line_annotation_on_simple_statement( $annotation_element )
+    ) {
         $self->{_effective_range} = [$annotation_line, $annotation_line];
         return $self;
     }
@@ -157,7 +158,50 @@ sub disables_all_policies {
 sub disables_line {
     my ($self, $line_number) = @_;
     my $effective_range = $self->{_effective_range};
-    return 1 if $line_number >= $effective_range->[0] and $line_number <= $effective_range->[-1];
+    return 1 if $line_number >= $effective_range->[0]
+        and $line_number <= $effective_range->[$LAST_ELEMENT];
+    return 0;
+}
+
+#-----------------------------------------------------------------------------
+
+# Recognize a single-line annotation on a simple statement.
+sub _is_single_line_annotation_on_simple_statement {
+    my ( $annotation_element ) = @_;
+    my $annotation_line = $annotation_element->logical_line_number();
+
+    # If there is no sibling, we are clearly not a single-line annotation of
+    # any sort.
+    my $sib = $annotation_element->sprevious_sibling()
+        or return 0;
+
+    # The easy case: the sibling (whatever it is) is on the same line as the
+    # annotation.
+    $sib->logical_line_number() == $annotation_line
+        and return 1;
+
+    # If the sibling is a node, we may have an annotation on one line of a
+    # statement that was split over multiple lines. So we descend through the
+    # children, keeping the last significant child of each, until we bottom
+    # out. If the ultimate significant descendant is on the same line as the
+    # annotation, we accept the annotation as a single-line annotation.
+    if ( $sib->isa( 'PPI::Node' ) &&
+        $sib->logical_line_number() < $annotation_line
+    ) {
+        my $neighbor = $sib;
+        while ( $neighbor->isa( 'PPI::Node' )
+                and my $kid = $neighbor->schild( $LAST_ELEMENT ) ) {
+            $neighbor = $kid;
+        }
+        if ( $neighbor &&
+            $neighbor->logical_line_number() == $annotation_line
+        ) {
+            return 1;
+        }
+    }
+
+    # We do not understand any other sort of single-line annotation. Accepting
+    # the annotation as such (if it is) is Someone Else's Problem.
     return 0;
 }
 

@@ -33,6 +33,10 @@ Next release, whenever it is:
 
     Bug Fixes:
     * The "## no critic" annotations now respect the #line directives.
+    * Annotations on statements spanning more than one line (e.g.
+      my $foo =
+        '$bar'; ## no critic (RequireInterpolationOfMetachars)
+      ) are now handled as single-line annotations, not block annotations.
     * All instances of L<Foo> in the POD have been changed to L<Foo|Foo>.
       L</bar> and L<Foo/bar> were allowed to stand.  RT #37485
     * InputOutput::RequireBriefOpen now recognizes CORE::open, CORE::close,
