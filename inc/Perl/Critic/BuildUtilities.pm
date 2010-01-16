@@ -282,7 +282,7 @@ Elliot Shank  C<< <perl@galumph.com> >>
 
 =head1 LICENCE AND COPYRIGHT
 
-Copyright (c) 2007-2009, Elliot Shank C<< <perl@galumph.com> >>. All
+Copyright (c) 2007-2010, Elliot Shank C<< <perl@galumph.com> >>. All
 rights reserved.
 
 This program is free software; you can redistribute it and/or modify

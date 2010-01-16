@@ -633,7 +633,7 @@ and the rest of the L<Perl::Critic|Perl::Critic> team.
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2009 Chris Dolan.
+Copyright (c) 2005-2010 Chris Dolan.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
