@@ -1,5 +1,7 @@
 [1.105_001] Released on 2010-01-16
 
+    !! THIS IS A DEVELOPER RELEASE !!
+
     New Features:
     * There is a new global configuration item, 'program-extensions', which
       configures Perl::Critic's idea of which file name extensions represent
