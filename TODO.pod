@@ -625,6 +625,13 @@ Answer: Readability, mostly.  Performance, maybe.
 
 Because it is getting unwieldy in there.
 
+=item * Incorporate PPI 1.208 regexp goodies
+
+Replace C<Perl::Critic::Utils::PPIRegexp> subroutines C<get_match_string>,
+C<get_substitute_string>, C<get_modifiers> and C<get_delimiters> with the
+corresponding C<PPI::Token::Regexp> and C<PPI::Token::QuoteLike::Regexp>
+methods.
+
 =back
 
 =head1 PPI BUGS
