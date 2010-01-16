@@ -19,7 +19,7 @@ use Perl::Critic::Utils::PPI qw< is_ppi_generic_statement >;
 
 use base 'Exporter';
 
-our $VERSION = '1.105';
+our $VERSION = '1.105_01';
 
 #-----------------------------------------------------------------------------
 

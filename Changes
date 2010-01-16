@@ -1,4 +1,4 @@
-Next release, whenever it is:
+[1.105_001] Released on 2010-01-16
 
     New Features:
     * There is a new global configuration item, 'program-extensions', which
@@ -50,7 +50,7 @@ Next release, whenever it is:
       will be available on http://search.cpan.org.  Thanks to Bear Longyear
       for brigning this to our attention.
 
-[1.105] Released on 2009-09-07
+[1.105_01] Released on 2009-09-07
 
     Bug Fixes:
     * Variables::ProhibitPunctuationVars would complain about "%-" appearing
