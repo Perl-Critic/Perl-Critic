@@ -16,7 +16,7 @@ use English qw(-no_match_vars);
 use Carp;
 
 use Perl::Critic::Utils qw{ :booleans :severities hashify };
-use Perl::Critic::Utils::PPIRegexp qw{ get_delimiters };
+
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.105_01';
@@ -68,7 +68,7 @@ sub violates {
     my ( $self, $elem, undef ) = @_;
 
     my $allowed_delimiters = $self->{_allowed_delimiters};
-    foreach my $delimiter (get_delimiters($elem)) {
+    foreach my $delimiter ($elem->get_delimiters()) {
         next if $allowed_delimiters->{$delimiter};
         return $self->violation( $DESC, $EXPL, $elem );
     }

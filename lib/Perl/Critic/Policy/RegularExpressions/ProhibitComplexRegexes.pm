@@ -17,9 +17,7 @@ use Carp;
 use List::Util qw{ min };
 
 use Perl::Critic::Utils qw{ :booleans :severities };
-use Perl::Critic::Utils::PPIRegexp qw{
-    get_match_string
-};
+
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.105_01';
@@ -65,7 +63,7 @@ sub violates {
     my ( $self, $elem, undef ) = @_;
 
     # Optimization: if its short enough now, parsing won't make it longer
-    return if $self->{_max_characters} >= length get_match_string($elem);
+    return if $self->{_max_characters} >= length $elem->get_match_string();
 
     my $re = PPIx::Regexp->new( $elem )
         or return;  # Abort on syntax error.

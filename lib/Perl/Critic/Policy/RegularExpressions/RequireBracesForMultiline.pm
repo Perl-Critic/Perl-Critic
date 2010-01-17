@@ -16,7 +16,7 @@ use English qw(-no_match_vars);
 use Carp;
 
 use Perl::Critic::Utils qw{ :booleans :severities };
-use Perl::Critic::Utils::PPIRegexp qw{ get_match_string get_delimiters };
+
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.105_01';
@@ -67,10 +67,10 @@ sub initialize_if_enabled {
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    my $re = get_match_string($elem);
+    my $re = $elem->get_match_string();
     return if $re !~ m/\n/xms;
 
-    my ($match_delim) = get_delimiters($elem);
+    my ($match_delim) = $elem->get_delimiters();
     return if $self->{_allowed_delimiters}{$match_delim};
 
     return $self->violation( $DESC, $EXPL, $elem );

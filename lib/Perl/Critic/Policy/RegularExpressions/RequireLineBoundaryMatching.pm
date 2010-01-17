@@ -13,7 +13,7 @@ use warnings;
 use Readonly;
 
 use Perl::Critic::Utils qw{ :severities };
-use Perl::Critic::Utils::PPIRegexp qw{ get_modifiers };
+
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.105_01';
@@ -37,7 +37,7 @@ sub applies_to           { return qw(PPI::Token::Regexp::Match
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    my %mods = get_modifiers($elem);
+    my %mods = $elem->get_modifiers();
     if ( ! $mods{m} ) {
         return $self->violation( $DESC, $EXPL, $elem );
     }

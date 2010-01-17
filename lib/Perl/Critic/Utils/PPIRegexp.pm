@@ -69,28 +69,24 @@ sub parse_regexp {
 
 sub get_match_string {
     my ($elem) = @_;
-    return if !$elem->{sections};
-    my $section = $elem->{sections}->[0];
-    return if !$section;
-    return substr $elem->content, $section->{position}, $section->{size};
+    $elem->can( 'get_match_string' ) or return;
+    return $elem->get_match_string();
 }
 
 #-----------------------------------------------------------------------------
 
 sub get_substitute_string {
     my ($elem) = @_;
-    return if !$elem->{sections};
-    my $section = $elem->{sections}->[1];
-    return if !$section;
-    return substr $elem->content, $section->{position}, $section->{size};
+    $elem->can( 'get_substitute_string' ) or return;
+    return $elem->get_substitute_string();
 }
 
 #-----------------------------------------------------------------------------
 
 sub get_modifiers {
     my ($elem) = @_;
-    return if !$elem->{modifiers};
-    return %{ $elem->{modifiers} };
+    $elem->can( 'get_modifiers' ) or return;
+    return $elem->get_modifiers();
 }
 
 #-----------------------------------------------------------------------------

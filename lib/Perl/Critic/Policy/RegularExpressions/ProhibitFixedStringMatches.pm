@@ -16,7 +16,7 @@ use English qw(-no_match_vars);
 use Carp;
 
 use Perl::Critic::Utils qw{ :booleans :severities };
-use Perl::Critic::Utils::PPIRegexp qw{ get_match_string get_modifiers };
+
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.105_01';
@@ -42,7 +42,7 @@ sub applies_to           { return qw(PPI::Token::Regexp::Match
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    my $re = get_match_string($elem);
+    my $re = $elem->get_match_string();
 
     # only flag regexps that are anchored front and back
     if ($re =~ m{\A \s*
@@ -55,7 +55,7 @@ sub violates {
 
         # If it's a multiline match, then end-of-line anchors don't represent the whole string
         if ($front_anchor eq q{^} || $end_anchor eq q{$}) {
-            my %mods = get_modifiers($elem);
+            my %mods = $elem->get_modifiers();
             return if $mods{m};
         }
 
