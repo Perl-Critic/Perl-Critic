@@ -50,7 +50,7 @@
     * The PolicySummary.pod file is now generated when the distribution
       is created, rather than when you install it.  This ensures the file
       will be available on http://search.cpan.org.  Thanks to Bear Longyear
-      for brigning this to our attention.
+      for bringing this to our attention.
 
 [1.105_01] Released on 2009-09-07
 
