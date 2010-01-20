@@ -1,5 +1,8 @@
 Next release (whatever and whenever it is)
 
+    Bug Fixes:
+    * 'state( $foo )' is now allowed.  RT #52029.
+
     Other Changes:
     * Removed all uses of Perl::Critic::Utils::PPIRegep. Since the
       PPIx::Regexp update, Perl::Critic only used get_match_string() and
