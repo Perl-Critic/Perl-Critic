@@ -23,7 +23,7 @@ our $VERSION = '1.105_01';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Array my @ALLOW => qw( my our local return );
+Readonly::Array my @ALLOW => qw( my our local return state );
 Readonly::Hash my %ALLOW => hashify( @ALLOW );
 
 Readonly::Scalar my $DESC  => q{Builtin function called with parentheses};
