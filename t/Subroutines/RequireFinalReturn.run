@@ -173,6 +173,18 @@ sub foo {
     return;
 }
 
+#-----------------------------------------------------------------------------
+
+## name RT 43309 - given/when followed by return
+## failures 0
+## cut
+
+sub foo {
+    given ($bar) {}
+    return;
+}
+
+
 ##############################################################################
 # Local Variables:
 #   mode: cperl
