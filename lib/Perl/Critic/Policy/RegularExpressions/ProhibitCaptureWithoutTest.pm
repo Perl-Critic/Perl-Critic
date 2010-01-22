@@ -98,10 +98,12 @@ sub _is_in_conditional_structure {
         $psib = $psib->sprevious_sibling;
     }
 
-    # Check for an enclosing 'if', 'unless', 'endif', or 'else'
+    # Check for an enclosing 'if', 'unless', 'elsif', 'else', or 'when'
     my $parent = $stmt->parent;
     while ($parent) { # never false as long as we're inside a PPI::Document
-        if ($parent->isa('PPI::Statement::Compound')) {
+        if ($parent->isa('PPI::Statement::Compound') ||
+            $parent->isa('PPI::Statement::When' )
+        ) {
             return 1;
         }
         elsif ($parent->isa('PPI::Structure')) {

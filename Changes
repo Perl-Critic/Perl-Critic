@@ -2,6 +2,8 @@ Next release (whatever and whenever it is)
 
     Bug Fixes:
     * 'state( $foo )' is now allowed.  RT #52029.
+    * Capture variables inside when(){} are now allowed by
+      RegularExpressions::ProhibitCaptureWithoutTest.  RT #36081.
 
     Other Changes:
     * Removed all uses of Perl::Critic::Utils::PPIRegep. Since the
