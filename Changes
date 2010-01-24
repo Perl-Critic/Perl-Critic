@@ -9,6 +9,7 @@ Next release (whatever and whenever it is)
     * Removed all uses of Perl::Critic::Utils::PPIRegep. Since the
       PPIx::Regexp update, Perl::Critic only used get_match_string() and
       friends, which were superseded by the corresponding PPI methods.
+      Now depends on PPI-1.208 or newer.
 
 [1.105_001] Released on 2010-01-16
 

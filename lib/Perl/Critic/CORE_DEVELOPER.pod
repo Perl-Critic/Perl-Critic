@@ -121,13 +121,6 @@ authortest suite requires a BUNCH of extra modules. Just run it, see
 what breaks, and install what it seems to need. Eventually it will
 work.
 
-** The L<Regexp::Parser|Regexp::Parser> module is needed by
-authortest, and used if available by some of the policies. This module
-was last touched in 2005, and has some problems. Some of these
-problems make it rather noisy under Perl 5.10. You will probably want
-to download and apply one of the patches attached to RT ticket 42096
-(L<http://rt.cpan.org/Public/Bug/Display.html?id=42096>).
-
 
 =head1 ADDING A GLOBAL CONFIGURATION ITEM
 
