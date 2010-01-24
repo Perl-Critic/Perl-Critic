@@ -21,7 +21,7 @@ use Readonly;
 use Perl::Critic::Utils qw{ :booleans :severities hashify split_nodes_on_comma };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.105_01';
+our $VERSION = '1.105_02';
 
 #-----------------------------------------------------------------------------
 

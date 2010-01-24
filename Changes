@@ -1,4 +1,4 @@
-Next release (whatever and whenever it is)
+[1.105_02] Released on 2010-01-23
 
     Bug Fixes:
     * 'state( $foo )' is now allowed.  RT #52029.
@@ -14,7 +14,7 @@ Next release (whatever and whenever it is)
       friends, which were superseded by the corresponding PPI methods.
       Now depends on PPI-1.208 or newer.
 
-[1.105_001] Released on 2010-01-16
+[1.105_01] Released on 2010-01-16
 
     !! THIS IS A DEVELOPER RELEASE !!
 
