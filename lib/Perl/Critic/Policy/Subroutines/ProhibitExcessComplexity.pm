@@ -93,7 +93,7 @@ possible paths through a subroutine.  This Policy approximates the
 McCabe score by summing the number of conditional statements and
 operators within a subroutine.  Research has shown that a McCabe score
 higher than 20 is a sign of high-risk, potentially untestable code.
-See L<http://www.sei.cmu.edu/str/descriptions/cyclomatic_body.html>
+See L<http://en.wikipedia.org/wiki/Cyclomatic_complexity>
 for some discussion about the McCabe number and other complexity
 metrics.
 

@@ -6,6 +6,7 @@ Next release (whatever and whenever it is)
       RegularExpressions::ProhibitCaptureWithoutTest.  RT #36081.
     * t/20_policy_pod_spelling.t now works (or at least no longer fails)
       in non-English locales.  RT #43291 and RT #48986.
+    * RT #53219 perldoc has broken link for McCabe score definition
 
     Other Changes:
     * Removed all uses of Perl::Critic::Utils::PPIRegep. Since the
