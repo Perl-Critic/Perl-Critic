@@ -156,7 +156,7 @@ Provides approximations of McCabe scores.  The McCabe score of a set
 of code describes the number of possible paths through it.  The
 functions here approximate the McCabe score by summing the number of
 conditional statements and operators within a set of code.  See
-L<http://www.sei.cmu.edu/str/descriptions/cyclomatic_body.html> for
+L<http://en.wikipedia.org/wiki/Cyclomatic_complexity> for
 some discussion about the McCabe number and other complexity metrics.
 
 
