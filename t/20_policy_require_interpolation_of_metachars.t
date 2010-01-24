@@ -21,19 +21,19 @@ our $VERSION = '1.105_01';
 
 #-----------------------------------------------------------------------------
 
-eval 'use Email::Address 1.889; 1'
-    or plan skip_all => 'Email::Address 1.889 required for ValuesAndExpressions::RequireInterpolationOfMetachars to ignore email addresses.';
-
 plan tests => 2;
 
 #-----------------------------------------------------------------------------
 
 Perl::Critic::TestUtils::block_perlcriticrc();
 
+#-----------------------------------------------------------------------------
+
 # This is in addition to the regular .run file.
-
 my $policy = 'ValuesAndExpressions::RequireInterpolationOfMetachars';
+my $has_email_address = eval {require Email::Address};
 
+#-----------------------------------------------------------------------------
 
 my $code = <<'END_PERL';
 
@@ -45,7 +45,7 @@ END_PERL
 my $result = pcritique($policy, \$code);
 is(
     $result,
-    0,
+    $has_email_address ? 0 : 2,
     "$policy exempts things that look like email addresses if Email::Address is installed.",
 );
 
@@ -61,7 +61,7 @@ END_PERL
 $result = pcritique($policy, \$code);
 is(
     $result,
-    0,
+    $has_email_address ? 0 : 3,
     "$policy exempts things email addresses in the middle of larger strings if Email::Address is installed.",
 );
 
