@@ -16,8 +16,12 @@ use strict;
 use warnings;
 
 use Perl::Critic::TestUtils qw(pcritique);
+use Readonly;
 
-use Test::More tests => 5;
+use Test::More;
+
+Readonly::Scalar my $NUMBER_OF_TESTS => 5;
+plan( tests => $NUMBER_OF_TESTS );
 
 #-----------------------------------------------------------------------------
 
@@ -67,8 +71,13 @@ $code = <<'END_PERL';
 =cut
 END_PERL
 
-if ( eval { pcritique($policy, \$code) } ) {
-   skip 'Test environment is not English', 4
+# Sorry about the double negative. The idea is that if aspell fails (say,
+# because it can not find the right dictionary) or pcritique returns a
+# non-zero number we want to skip. We have to negate the eval to catch the
+# aspell failure, and then negate pcritique because we negated the eval.
+# Clearer code welcome.
+if ( ! eval { ! pcritique($policy, \$code) } ) {
+   skip 'Test environment is not English', $NUMBER_OF_TESTS;
 }
 
 #-----------------------------------------------------------------------------
