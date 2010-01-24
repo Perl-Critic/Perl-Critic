@@ -1,5 +1,7 @@
 [1.105_02] Released on 2010-01-23
 
+    !! THIS IS A DEVELOPER RELEASE !!
+
     Bug Fixes:
     * 'state( $foo )' is now allowed.  RT #52029.
     * Capture variables inside when(){} are now allowed by
