@@ -21,16 +21,6 @@ use Perl::Critic::PolicySummaryGenerator qw< generate_policy_summary >;
 use base 'Module::Build';
 
 
-sub ACTION_test {
-    my ($self, @arguments) = @_;
-
-    $self->depends_on('policysummary');
-    $self->depends_on('manifest');
-
-    return $self->SUPER::ACTION_test(@arguments);
-}
-
-
 sub ACTION_authortest {
     my ($self) = @_;
 
