@@ -63,6 +63,8 @@
       CORE::GLOBAL::open, and CORE::GLOBAL::close.  RT #52391
     * Spaces are now allowed immediately inside the enclosing parentheses in
       "## no critic ( Foo )".  RT #52038
+    * With the introduction of PPIx::Regexp, Perl::Critic no longer dies
+      when it encounters a Perl 5.010 regexp.  RT #49442.
 
     Other Changes:
     * The PolicySummary.pod file is now generated when the distribution
