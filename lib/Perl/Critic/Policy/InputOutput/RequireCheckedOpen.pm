@@ -50,6 +50,8 @@ __END__
 
 =pod
 
+=for stopwords autodie
+
 =head1 NAME
 
 Perl::Critic::Policy::InputOutput::RequireCheckedOpen - Write C<< my $error = open $fh, $mode, $filename; >> instead of C<< open $fh, $mode, $filename; >>.

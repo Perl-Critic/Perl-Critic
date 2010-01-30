@@ -232,7 +232,7 @@ __END__
 =pod
 
 =for stopwords DGR INI-style API -params pbp refactored ActivePerl ben Jore
-Dolan's Twitter Alexandr Ciornii
+Dolan's Twitter Alexandr Ciornii Ciornii's downloadable
 
 =head1 NAME
 

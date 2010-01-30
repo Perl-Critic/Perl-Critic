@@ -105,7 +105,7 @@ __END__
 
 =pod
 
-=for stopwords
+=for stopwords BAZ
 
 =head1 NAME
 

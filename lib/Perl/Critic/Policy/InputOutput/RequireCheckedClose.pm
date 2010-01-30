@@ -50,6 +50,8 @@ __END__
 
 =pod
 
+=for stopwords autodie
+
 =head1 NAME
 
 Perl::Critic::Policy::InputOutput::RequireCheckedClose - Write C<< my $error = close $fh; >> instead of C<< close $fh; >>.

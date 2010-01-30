@@ -625,7 +625,7 @@ __END__
 
 =pod
 
-=for stopwords pbp perlstyle Schwern
+=for stopwords pbp perlstyle Schwern THINGY
 
 =head1 NAME
 
