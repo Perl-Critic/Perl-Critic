@@ -11,7 +11,7 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :severities };
+use Perl::Critic::Utils qw{ :booleans :severities };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.105_02';
@@ -74,6 +74,10 @@ sub violates {
     return if ( !defined $prev_compat || $prev_compat->[$op_type] )
         && ( !defined $next_compat || $next_compat->[$op_type] );
 
+    return if $op_type && defined $prev_compat &&
+        !  $prev_compat->[$op_type] &&
+        $self->_have_stringy_x( $prev_elem ); # RT 54524
+
     return $self->violation( $DESC, $EXPL, $elem );
 }
 
@@ -87,6 +91,21 @@ sub _get_token_compat {
         return $TOKEN_COMPAT{$class} if $elem->isa($class);
     }
     return;
+}
+
+#-----------------------------------------------------------------------------
+
+# see if we follow a stringy 'x'.
+
+sub _have_stringy_x {
+    my ( $self, $elem ) = @_;
+    $elem or return;
+    my $prev_oper = $elem->sprevious_sibling() or return;
+    $prev_oper->isa( 'PPI::Token::Operator' )
+        and 'x' eq $prev_oper->content()
+        or return;
+    my $prev_elem = $prev_oper->sprevious_sibling() or return;
+    return $TRUE;
 }
 
 1;
