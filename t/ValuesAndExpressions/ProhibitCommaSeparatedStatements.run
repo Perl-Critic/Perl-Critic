@@ -266,8 +266,7 @@ $self->DoSomething
 
 #-----------------------------------------------------------------------------
 
-## name RT #33935
-## TODO PPI sees the hash slice as a block
+## name RT #33935 and 49679
 ## failures 0
 ## cut
 
