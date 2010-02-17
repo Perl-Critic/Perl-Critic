@@ -904,12 +904,9 @@ for more information about EPIC.
 
 =head2 BBEdit
 
-Josh Clark has produced an excellent Perl-Critic plugin for BBEdit. A
-copy is included in this distribution at
-F<extras/perl_critic_for_bbedit-1_0.zip>. See
-L<http://beta.bigmedium.com/projects/bbedit-perl-critic/index.shtml>
-for screenshots and additional installation info.  Apple users
-rejoice!
+Josh Clark has produced an excellent Perl-Critic plugin for BBEdit. See
+L<http://globalmoxie.com/projects/bbedit-perl-critic/index.shtml> for
+download, installation, and usage instructions.  Apple users rejoice!
 
 
 =head2 Komodo
