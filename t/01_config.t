@@ -242,7 +242,8 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
 
     is_deeply([$c->program_extensions], [],
         'user default program-extensions from file');
-    is_deeply([$c->program_extensions_as_regexes], [qr{ [.] PL \z }smx ],
+    is_deeply([$c->program_extensions_as_regexes],
+        [qr< @{[ quotemeta '.PL' ]} \z >smx ],
         'user default program-extensions from file, as regexes');
 }
 
