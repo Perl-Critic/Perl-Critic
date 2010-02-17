@@ -916,11 +916,17 @@ rejoice!
 
 Komodo is a proprietary IDE for Perl and several other dynamic languages.
 Starting in version 5.1.1, Komodo has built-in support for Perl-Critic, if you
-have the L<Perl::Critic|Perl::Critic> and L<criticism|criticism> modules installed.  Free trial
-copies of Komodo can be obtained from the ActiveState website at
-L<http://www.activestate.com>. For instructions on integrating F<perlcritic>
-with older versions of Komodo, see F<extras/KomodoIntegration.pod> in this
-distribution.
+have the L<Perl::Critic|Perl::Critic> and L<criticism|criticism> modules
+installed.  Free trial copies of Komodo can be obtained from the ActiveState
+website at L<http://www.activestate.com>.
+
+
+=head2 PDK
+
+ActiveState also makes a Perl Development Kit (PDK).  Starting with version 8,
+the PDK includes a very slick graphical interface for configuring and running
+Perl-Critic.   Free trial copies of the PDK can be obtained from the ActiveState
+website at L<http://www.activestate.com>.
 
 
 =head1 EXIT STATUS
