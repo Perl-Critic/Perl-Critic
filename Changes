@@ -15,7 +15,9 @@
     * Removed all uses of Perl::Critic::Utils::PPIRegep. Since the
       PPIx::Regexp update, Perl::Critic only used get_match_string() and
       friends, which were superseded by the corresponding PPI methods.
-      Now depends on PPI-1.208 or newer.
+      Perl::Critic now depends on PPI-1.208 or newer.
+    * Moved Perl::Critic::Utils::PPIRegep to the Perl-Critic-Deprecated
+      distribution.
 
 [1.105_01] Released on 2010-01-16
 
