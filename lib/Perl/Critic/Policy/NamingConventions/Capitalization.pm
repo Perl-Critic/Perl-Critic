@@ -41,8 +41,8 @@ Readonly::Scalar my $ALL_ONE_CASE_REGEX      =>
     qr< \A [@%\$]? (?: [[:lower:]_\d]+ | [[:upper:]_\d]+ ) \z >xms;
 Readonly::Scalar my $ALL_LOWER_REGEX         => qr< \A [[:lower:]_\d]+ \z >xms;
 Readonly::Scalar my $ALL_UPPER_REGEX         => qr< \A [[:upper:]_\d]+ \z >xms;
-Readonly::Scalar my $STARTS_WITH_LOWER_REGEX => qr< \A _* [[:lower:]]     >xms;
-Readonly::Scalar my $STARTS_WITH_UPPER_REGEX => qr< \A _* [[:upper:]]     >xms;
+Readonly::Scalar my $STARTS_WITH_LOWER_REGEX => qr< \A _* [[:lower:]\d]   >xms;
+Readonly::Scalar my $STARTS_WITH_UPPER_REGEX => qr< \A _* [[:upper:]\d]   >xms;
 Readonly::Scalar my $NO_RESTRICTION_REGEX    => qr< .                     >xms;
 
 Readonly::Hash my %CAPITALIZATION_SCHEME_TAGS    => (
