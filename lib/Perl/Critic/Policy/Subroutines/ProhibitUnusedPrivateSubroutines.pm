@@ -277,8 +277,8 @@ which are not used in the file which declares them.
 This module defines a 'use' of a subroutine as a subroutine or method call to
 it (other than from inside the subroutine itself), a reference to it (i.e.
 C<< my $foo = \&_foo >>), a C<goto> to it outside the subroutine itself (i.e.
-goto &_foo), or the use of the subroutine's name as an even-numbered argument
-to C<< use overload >>.
+C<goto &_foo>), or the use of the subroutine's name as an even-numbered
+argument to C<< use overload >>.
 
 
 =head1 CONFIGURATION
