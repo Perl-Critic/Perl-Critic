@@ -136,7 +136,28 @@ sub _violates_magic {
 sub _violates_string {
     my ( $self, $elem, undef ) = @_;
 
-    my %matches = _strings_helper( $self, $elem->content() );
+    # RT #55604: Variables::ProhibitPunctuationVars gives false-positive on
+    # qr// regexp's ending in '$'
+    # We want to analyze the content of the string in the dictionary sense of
+    # the word 'content'. We can not simply use the PPI content() method to
+    # get this, because content() includes the delimiters.
+    my $string;
+    if ( $elem->can( 'string' ) ) {
+        # If we have a string() method (currently only the PPI::Token::Quote
+        # classes) use it to extract the content of the string.
+        $string = $elem->string();
+    } else {
+        # Lacking string(), we fake it under the assumption that the content
+        # of our element represents one of the 'normal' Perl strings, with a
+        # single-character delimiter, possibly preceded by an operator like
+        # 'qx' or 'qr'. If there is a leading operator, spaces may appear
+        # after it.
+        $string = $elem->content();
+        $string =~ s/ \A \w* \s* . //smx;
+        chop $string;
+    }
+
+    my %matches = _strings_helper( $self, $string );
     if (%matches) {
         my $DESC = qq<$DESC in interpolated string>;
         return $self->violation( $DESC, $EXPL, $elem );
