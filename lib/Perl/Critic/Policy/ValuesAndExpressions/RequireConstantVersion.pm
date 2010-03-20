@@ -14,7 +14,8 @@ use warnings;
 use Carp;
 use English qw(-no_match_vars);
 use Perl::Critic::Utils qw<
-    :booleans :characters :data_conversion :language :severities
+    :booleans :characters :classification :data_conversion :language
+    :severities
 >;
 use Perl::Critic::Utils::PPI qw{
     is_ppi_constant_element
@@ -36,6 +37,13 @@ Readonly::Scalar my $DOLLAR => q<$>;
 Readonly::Scalar my $QV => q<qv>;
 Readonly::Scalar my $VERSION_MODULE => q<version>;
 Readonly::Scalar my $VERSION_VARIABLE => $DOLLAR . q<VERSION>;
+
+# Operators which would make a new value our of our $VERSION, and therefore
+# not modify it. I'm sure this list is not exhaustive. The logical operators
+# generally do not qualify for this list. At least, I think not.
+Readonly::Hash my %OPERATOR_WHICH_MAKES_NEW_VALUE => hashify( qw{
+    = . + - * ** / % ^ ~ & | > < == != >= <= eq ne gt lt ge le
+    } );
 
 Readonly::Scalar my $DESC => $DOLLAR . q<VERSION value must be a constant>;
 Readonly::Scalar my $EXPL => qq<Computed ${DOLLAR}VERSION may tie the code to a single repository, or cause spooky action from a distance>;
@@ -154,18 +162,50 @@ sub _validate_operator_bind_regex {
 
     # The substitution is OK if it is of the form
     # '($var = $VERSION) =~ s/../../'.
-    my $thing;
-    if (
-            not $elem->snext_sibling()
-        and $thing = $elem->sprevious_sibling()
-        and $thing->isa( 'PPI::Token::Operator' )
-        and $EQUAL eq $thing
-        and $thing = $elem->parent()
-        and $thing->isa( 'PPI::Statement' )
-        and $thing = $thing->parent()
-        and $thing->isa( 'PPI::Structure::List' )
-    ) {
-        return;
+
+    # We can't look like the desired form if we have a next sig. sib.
+    return $TRUE if $elem->snext_sibling();
+
+    # We can't look like the desired form if we are not in a list.
+    my $containing_list;
+    $containing_list = $elem->parent()
+        and $containing_list->isa( 'PPI::Statement' )
+        and $containing_list = $containing_list->parent()
+        and $containing_list->isa( 'PPI::Structure::List' )
+        or return $TRUE;
+
+    # If we have no prior element, we're ( $VERSION ) =~ s/../../,
+    # which flunks.
+    my $prior = $elem->sprevious_sibling() or return $TRUE;
+
+    # If the prior element is an operator which makes a new value, we pass.
+    return if $prior->isa( 'PPI::Token::Operator' )
+        && $OPERATOR_WHICH_MAKES_NEW_VALUE{ $prior->content() };
+
+    # Now things get complicated, as RT #55600 shows. We need to grub through
+    # the entire list, looking for something that looks like a subroutine
+    # call, but without parens around the argument list. This catches the
+    # ticket's case, which was
+    # ( $foo = sprintf '%s/%s', __PACKAGE__, $VERSION ) =~ s/../../.
+    my $current = $prior;
+    while( $prior = $current->sprevious_sibling() ) {
+        $prior->isa( 'PPI::Token::Word' ) or next;
+        is_function_call( $prior) or next;
+        # If this function has its own argument list, we need to keep looking;
+        # otherwise we have found a function with no parens, and we can
+        # return.
+        $current->isa( 'PPI::Structure::List' )
+            or return;
+    } continue {
+        $current = $prior;
+    }
+
+    # Maybe the whole list was arguments for a subroutine or method call.
+    $prior = $containing_list->sprevious_sibling()
+        or return $TRUE;
+    if ( $prior->isa( 'PPI::Token::Word' ) ) {
+        return if is_method_call( $prior );
+        return if is_function_call( $prior );
     }
 
     # Anything left is presumed a violation.
