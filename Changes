@@ -1,3 +1,22 @@
+[1.105_03] Released on 2010-03-21
+
+    !! THIS IS A DEVELOPER RELEASE !!
+
+    Bug Fixes:
+    * Fixed regex test that caused test failures on every Perl 5.11
+      (credit Tom Wyant).
+    * RT #54524: False Positive: ValuesAndExpressions::ProhibitMismatchedOperators 
+      with 'foo' x 15 . 'bar'
+    * RT #55604: Variables::ProhibitPunctuationVars gives false-positive 
+      on qr// regexp's ending in '$'
+    * RT #33935 and #49679 were fixed by upgrading to PPI 1.208
+
+    Other Changes:
+    * Email::Address was optional, but is now required.  So everyone
+      gets the optimal behavior from RequireInterpolationOfMetachars.
+    * Some infrastructure has been extracted to the new PPIx-Utilities
+      distro.  It is also a required dependency here.
+
 [1.105_02] Released on 2010-01-23
 
     !! THIS IS A DEVELOPER RELEASE !!

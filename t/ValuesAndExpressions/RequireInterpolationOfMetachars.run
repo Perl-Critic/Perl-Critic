@@ -165,6 +165,33 @@ use Generic::Module '$FOO';
 
 #-----------------------------------------------------------------------------
 
+## name Things that look like email addresses.
+## failures 0
+## cut
+
+$simple  = 'me@foo.bar';
+$complex = q{don-quixote@man-from.lamancha.org};
+
+#-----------------------------------------------------------------------------
+## name More things that look like email addresses.
+## failures 0
+## cut
+
+$simple  = 'Email: me@foo.bar';
+$complex = q{"don-quixote@man-from.lamancha.org" is my address};
+send_email_to ('foo@bar.com', ...);
+
+#-----------------------------------------------------------------------------
+## name Email addresses with emedded violations.
+## TODO Policy is not smart enough to handle this yet.
+## failures 2
+## cut
+
+$simple  = 'Email: $name@$company.$domain';
+send_email_to('$some_var: foo@bar.com', ...);
+
+
+
 ##############################################################################
 #      $URL$
 #     $Date$
