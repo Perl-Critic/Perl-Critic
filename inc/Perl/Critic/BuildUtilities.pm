@@ -137,7 +137,6 @@ sub test_wrappers_to_generate {
         t/20_policy_prohibit_hard_tabs.t
         t/20_policy_prohibit_trailing_whitespace.t
         t/20_policy_require_consistent_newlines.t
-        t/20_policy_require_interpolation_of_metachars.t
         t/20_policy_require_tidy_code.t
         xt/author/80_policysummary.t
         t/92_memory_leaks.t
