@@ -70,7 +70,6 @@ sub required_module_versions {
         'overload'                      => 0,
         'strict'                        => 0,
         'version'                       => 0,
-        'warnings'                      => 0,
         'overload'                      => 0,
         'strict'                        => 0,
         'version'                       => 0,
