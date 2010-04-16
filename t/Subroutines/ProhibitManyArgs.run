@@ -95,6 +95,16 @@ sub foo_ok($$$) {
 }
 
 #-----------------------------------------------------------------------------
+
+## name RT56627: prototype interpretation
+## failures 0
+## parms {max_arguments => 3}
+## cut
+
+sub foo ($;$) { return 1 }
+sub bar ( $ ; $ ) { return 1 }
+
+#-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

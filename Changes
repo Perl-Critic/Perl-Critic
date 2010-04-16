@@ -1,3 +1,10 @@
+Next release (whatever it is)
+
+    Bug Fixes:
+    * RT #56627: Too many arguments (sub prototype, false positive)
+      Counted only characters in the prototype that represented
+      arguments. 
+
 [1.105_03] Released on 2010-03-21
 
     !! THIS IS A DEVELOPER RELEASE !!
