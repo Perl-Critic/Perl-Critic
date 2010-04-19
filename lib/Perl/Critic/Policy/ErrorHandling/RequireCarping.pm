@@ -63,6 +63,9 @@ sub violates {
         return if _last_flattened_argument_list_element_ends_in_newline($elem);
     }
 
+    return if !$self->_is_element_contained_in_subroutine( $elem )
+        && $self->_is_element_in_namespace_main( $elem );    # RT #56619
+
     my $desc = qq{"$elem" used instead of "$alternative"};
     return $self->violation( $desc, $EXPL, $elem );
 }
@@ -356,6 +359,47 @@ sub _is_complex_expression_token {
     return $FALSE;
 }
 
+#-----------------------------------------------------------------------------
+# Check whether the given element is contained in a subroutine.
+
+sub _is_element_contained_in_subroutine {
+    my ( $self, $elem ) = @_;
+
+    my $parent = $elem;
+    while ( $parent = $parent->parent() ) {
+        $parent->isa( 'PPI::Statement::Sub' ) and return $TRUE;
+        $parent->isa( 'PPI::Structure::Block' ) or next;
+        my $prior_elem = $parent->sprevious_sibling() or next;
+        $prior_elem->isa( 'PPI::Token::Word' )
+            and 'sub' eq $prior_elem->content()
+            and return $TRUE;
+    }
+
+    return $FALSE;
+}
+
+#-----------------------------------------------------------------------------
+# Check whether the given element is in main::
+
+sub _is_element_in_namespace_main {
+    my ( $self, $elem ) = @_;
+    my $current_elem = $elem;
+    my $prior_elem;
+
+    while ( $current_elem ) {
+        while ( $prior_elem = $current_elem->sprevious_sibling() ) {
+            if ( $prior_elem->isa( 'PPI::Statement::Package' ) ) {
+                return 'main' eq $prior_elem->namespace();
+            }
+        } continue {
+            $current_elem = $prior_elem;
+        }
+        $current_elem = $current_elem->parent();
+    }
+
+    return $TRUE;
+}
+
 1;
 
 __END__
@@ -417,11 +461,7 @@ will disallow all uses of C<die> and C<warn>.
 
 =head1 BUGS
 
-This should not complain about using C<warn> or C<die> if it's not in
-a function, or if it's in C<main::>.
-
-Also, should allow C<die> when it is obvious that the "message" is a
-reference.
+Should allow C<die> when it is obvious that the "message" is a reference.
 
 
 =head1 SEE ALSO

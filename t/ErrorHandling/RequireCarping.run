@@ -2,6 +2,8 @@
 ## failures 3
 ## cut
 
+package Foo;
+
 die 'A horrible death' if $condtion;
 
 if ($condition) {
@@ -16,6 +18,8 @@ open my $fh, '<', $path or
 ## name Unspectacular warn
 ## failures 3
 ## cut
+
+package Foo;
 
 warn 'A horrible warning' if $condtion;
 
@@ -47,6 +51,8 @@ open my $fh, '<', $path or
 ## failures 1
 ## cut
 
+package Foo;
+
 die 'A horrible death';
 
 #-----------------------------------------------------------------------------
@@ -54,6 +60,8 @@ die 'A horrible death';
 ## name Complain about cases without arguments.
 ## failures 2
 ## cut
+
+package Foo;
 
 die;
 die
@@ -64,6 +72,8 @@ die
 ## failures 2
 ## cut
 
+package Foo;
+
 die ( );
 die ( )
 
@@ -72,6 +82,8 @@ die ( )
 ## name Complain about cases with non-string arguments.
 ## failures 7
 ## cut
+
+package Foo;
 
 die $error;
 die @errors;
@@ -155,6 +167,8 @@ eod
 ## failures 2
 ## cut
 
+package Foo;
+
 die 'A horrible death\n' ;
 die 'A horrible death\n'    # last statement doesn't need a terminator
 
@@ -173,6 +187,8 @@ die qq/A horrible death\n/  # last statement doesn't need a terminator
 ## name Complain if message ends with "\n" in non-interpolated quotelike operator.
 ## failures 3
 ## cut
+
+package Foo;
 
 die q{A horrible death\n} ;
 die q#A horrible death\n# ;
@@ -235,6 +251,8 @@ die ( ( q{Don't } , ( $die , ( " a horrible death\n" , ) , ) , ) , ) ,
 ## failures 10
 ## cut
 
+package Foo;
+
 # all these tests are necessary: make sure that the policy knows when to
 # stop looking.
 
@@ -273,6 +291,8 @@ die ( q{Don't } . $die . " a horrible death\n" ) ;
 ## name Complain if message has a last element that ends with "\n" but has an operation in front
 ## failures 2
 ## cut
+
+package Foo;
 
 die   q{Don't } . $die . length " a horrible death\n"   ;
 die ( q{Don't } . $die . length " a horrible death\n" ) ;
@@ -317,6 +337,8 @@ die ( 'A horrible ' . "death\n" ) foreach @{ $songs_sung_off_key };
 ## failures 24
 ## cut
 
+package Foo;
+
 die "A horrible death" if "Matagami\n";
 die "A horrible death" unless "Enniscorthy\n";
 die "A horrible death" while "Htargcm\n";
@@ -352,7 +374,47 @@ die ( 'A horrible ' . "death" ) foreach "Uist\n";
 ## parms { allow_messages_ending_with_newlines => 0 }
 ## cut
 
+package Foo;
+
 die "A horrible death\n" ;
+
+#-----------------------------------------------------------------------------
+
+## name Don't complain if in main:: and not in subroutine (RT #56619)
+## failures 0
+## cut
+
+package main;
+
+die "A horrible death";
+
+#-----------------------------------------------------------------------------
+
+## name Don't complain if implicitly in main:: and not in subroutine (RT #56619)
+## failures 0
+## cut
+
+die "A horrible death";
+
+#-----------------------------------------------------------------------------
+
+## name Complain if in main:: but in subroutine (RT #56619)
+## failures 1
+## cut
+
+sub foo {
+    die "Goodbye, cruel world!";
+}
+
+#-----------------------------------------------------------------------------
+
+## name Complain if in main:: but in anonymous subroutine (RT #56619)
+## failures 1
+## cut
+
+my $foo = sub {
+    die "Goodbye, cruel world!";
+};
 
 #-----------------------------------------------------------------------------
 
