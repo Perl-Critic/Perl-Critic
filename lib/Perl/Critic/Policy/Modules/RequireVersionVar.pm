@@ -21,7 +21,7 @@ our $VERSION = '1.105_03';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $DESC => q{No "$VERSION" variable found}; ## no critic (RequireInterpolation)
+Readonly::Scalar my $DESC => q{No package-scoped "$VERSION" variable found}; ## no critic (RequireInterpolation)
 Readonly::Scalar my $EXPL => [ 404 ];
 
 #-----------------------------------------------------------------------------
@@ -123,8 +123,8 @@ distribution.
 =head1 DESCRIPTION
 
 Every Perl file (modules, libraries, and programs) should have a
-C<$VERSION> variable.  The C<$VERSION> allows clients to insist on a
-particular revision of your file like this:
+package-scoped C<$VERSION> variable.  The C<$VERSION> allows clients to
+insist on a particular revision of your file like this:
 
     use SomeModule 2.4;  #Only loads version 2.4
 
@@ -136,6 +136,12 @@ have to declare it like one of these:
     $MyPackage::VERSION = 1.061;
     use vars qw($VERSION);
     use version; our $VERSION = qv(1.0611);
+
+Perl's version system does not recognize lexical variables such as
+
+    my $VERSION = 1.0611;
+
+so they are not accepted by this policy.
 
 A common practice is to use the C<$Revision$> keyword to
 automatically define the C<$VERSION> variable like this:
