@@ -6,11 +6,11 @@ Next release (whatever it is)
       ErrorHandling::RequireCarping, to allow "die" in namespace 'main',
       if not in  a subroutine.
     * RT #56627: Too many arguments (sub prototype, false positive)
-      Counted only characters in the prototype that represented
-      arguments.
+      Revise Subroutines::ProhibitManyArgs to count only characters in the
+      prototype that represent arguments.
     * RT #56667: No "$VERSION" variable found (false positive)
-      Wordsmithed the $DESC and the POD to make explicit that lexical
-      variables are not acceptable.
+      Wordsmithed the $DESC and the POD in Modules::RequireVersionVar to make
+      explicit that lexical variables are not acceptable.
 
 [1.105_03] Released on 2010-03-21
 
