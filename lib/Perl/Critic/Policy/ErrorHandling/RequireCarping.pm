@@ -34,6 +34,12 @@ sub supported_parameters {
             default_string => '1',
             behavior       => 'boolean',
         },
+        {
+            name           => 'allow_in_main_unless_in_subroutine',
+            description    => q{Don't complain about die or warn in main::, unless in a subroutine.},
+            default_string => '0',
+            behavior       => 'boolean',
+        },
     );
 }
 
@@ -63,7 +69,8 @@ sub violates {
         return if _last_flattened_argument_list_element_ends_in_newline($elem);
     }
 
-    return if !$self->_is_element_contained_in_subroutine( $elem )
+    return if $self->{_allow_in_main_unless_in_subroutine}
+        && !$self->_is_element_contained_in_subroutine( $elem )
         && $self->_is_element_in_namespace_main( $elem );    # RT #56619
 
     my $desc = qq{"$elem" used instead of "$alternative"};
@@ -451,13 +458,21 @@ none of the L<Carp|Carp> functions are necessary.
 
 =head1 CONFIGURATION
 
-If you give this policy an C<allow_messages_ending_with_newlines>
-option in your F<.perlcriticrc> with a false value, then this policy
-will disallow all uses of C<die> and C<warn>.
+By default, this policy allows uses of C<die> and C<warn> ending in an
+explicit newline. If you give this policy an
+C<allow_messages_ending_with_newlines> option in your F<.perlcriticrc>
+with a false value, then this policy will prohibit such uses.
 
     [ErrorHandling::RequireCarping]
     allow_messages_ending_with_newlines = 0
 
+If you give this policy an C<allow_in_main_unless_in_subroutine> option
+in your F<.perlcriticrc> with a true value, then this policy will allow
+C<die> and C<warn> in name space main:: unless they appear in a
+subroutine, even if they do not end in an explicit newline.
+
+    [ErrorHandling::RequireCarping]
+    allow_in_main_unless_in_subroutine = 1
 
 =head1 BUGS
 
