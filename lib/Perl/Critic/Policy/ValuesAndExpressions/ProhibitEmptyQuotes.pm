@@ -20,7 +20,7 @@ our $VERSION = '1.105_03';
 #-----------------------------------------------------------------------------
 
 Readonly::Scalar my $EMPTY_RX => qr{\A ["'] \s* ['"] \z}xms;
-Readonly::Scalar my $DESC     => q{Quotes used with an empty string};
+Readonly::Scalar my $DESC     => q<Quotes used with a string containing no non-whitespace characters>;
 Readonly::Scalar my $EXPL     => [ 53 ];
 
 #-----------------------------------------------------------------------------
