@@ -1224,18 +1224,19 @@ sub is_unchecked_call {
     return 1;
 }
 
-# Based upon autodie 1.994.
+# Based upon autodie 2.10.
 Readonly::Hash my %AUTODIE_PARAMETER_TO_AFFECTED_BUILTINS_MAP => (
     # Map builtins to themselves.
     (
         map { $_ => { hashify( $_ ) } }
             qw<
-                accept bind binmode chdir close closedir connect dbmclose
-                dbmopen exec fcntl fileno flock fork getsockopt ioctl link
-                listen mkdir msgctl msgget msgrcv msgsnd open opendir pipe
-                read readlink recv rename rmdir seek semctl semget semop send
-                setsockopt shmctl shmget shmread shutdown socketpair symlink
-                sysopen sysread sysseek system syswrite truncate umask unlink
+                accept bind binmode chdir chmod close closedir connect
+                dbmclose dbmopen exec fcntl fileno flock fork getsockopt ioctl
+                link listen mkdir msgctl msgget msgrcv msgsnd open opendir
+                pipe read readlink recv rename rmdir seek semctl semget semop
+                send setsockopt shmctl shmget shmread shutdown socketpair
+                symlink sysopen sysread sysseek system syswrite truncate umask
+                unlink
             >
     ),
 
@@ -1249,7 +1250,8 @@ Readonly::Hash my %AUTODIE_PARAMETER_TO_AFFECTED_BUILTINS_MAP => (
     ':file'     => {
         hashify(
             qw<
-                binmode close fcntl fileno flock ioctl open sysopen truncate
+                binmode chmod close fcntl fileno flock ioctl open sysopen
+                truncate
             >
         )
     },
@@ -1280,22 +1282,22 @@ Readonly::Hash my %AUTODIE_PARAMETER_TO_AFFECTED_BUILTINS_MAP => (
     ':io'       => {
         hashify(
             qw<
-                accept bind binmode chdir close closedir connect dbmclose
-                dbmopen fcntl fileno flock getsockopt ioctl link listen mkdir
-                msgctl msgget msgrcv msgsnd open opendir pipe read readlink
-                recv rename rmdir seek semctl semget semop send setsockopt
-                shmctl shmget shmread shutdown socketpair symlink sysopen
-                sysread sysseek syswrite truncate umask unlink
+                accept bind binmode chdir chmod close closedir connect
+                dbmclose dbmopen fcntl fileno flock getsockopt ioctl link
+                listen mkdir msgctl msgget msgrcv msgsnd open opendir pipe
+                read readlink recv rename rmdir seek semctl semget semop send
+                setsockopt shmctl shmget shmread shutdown socketpair symlink
+                sysopen sysread sysseek syswrite truncate umask unlink
             >
         )
     },
     ':default'      => {
         hashify(
             qw<
-                accept bind binmode chdir close closedir connect dbmclose
-                dbmopen fcntl fileno flock fork getsockopt ioctl link listen
-                mkdir msgctl msgget msgrcv msgsnd open opendir pipe read
-                readlink recv rename rmdir seek semctl semget semop send
+                accept bind binmode chdir chmod close closedir connect
+                dbmclose dbmopen fcntl fileno flock fork getsockopt ioctl link
+                listen mkdir msgctl msgget msgrcv msgsnd open opendir pipe
+                read readlink recv rename rmdir seek semctl semget semop send
                 setsockopt shmctl shmget shmread shutdown socketpair symlink
                 sysopen sysread sysseek syswrite truncate umask unlink
             >
@@ -1304,12 +1306,13 @@ Readonly::Hash my %AUTODIE_PARAMETER_TO_AFFECTED_BUILTINS_MAP => (
     ':all'      => {
         hashify(
             qw<
-                accept bind binmode chdir close closedir connect dbmclose
-                dbmopen exec fcntl fileno flock fork getsockopt ioctl link
-                listen mkdir msgctl msgget msgrcv msgsnd open opendir pipe
-                read readlink recv rename rmdir seek semctl semget semop send
-                setsockopt shmctl shmget shmread shutdown socketpair symlink
-                sysopen sysread sysseek system syswrite truncate umask unlink
+                accept bind binmode chdir chmod close closedir connect
+                dbmclose dbmopen exec fcntl fileno flock fork getsockopt ioctl
+                link listen mkdir msgctl msgget msgrcv msgsnd open opendir
+                pipe read readlink recv rename rmdir seek semctl semget semop
+                send setsockopt shmctl shmget shmread shutdown socketpair
+                symlink sysopen sysread sysseek system syswrite truncate umask
+                unlink
             >
         )
     },

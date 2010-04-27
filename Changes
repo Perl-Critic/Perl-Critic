@@ -12,6 +12,11 @@ Next release (whatever it is)
       Wordsmithed the $DESC and the POD in Modules::RequireVersionVar to make
       explicit that lexical variables are not acceptable.
 
+    Other Changes:
+    * Perl::Critic::Utils::is_unchecked_call() updated to include chmod in the
+      set of things covered by autodie (this happened in autodie v2.08).  The
+      primary effect of this is on InputOutput::RequireCheckedSyscalls.
+
 [1.105_03] Released on 2010-03-21
 
     !! THIS IS A DEVELOPER RELEASE !!
