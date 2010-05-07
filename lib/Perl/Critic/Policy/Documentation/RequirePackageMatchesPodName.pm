@@ -61,12 +61,12 @@ sub violates {
         $pod_pkg =~ s{\A [CL]<(.*)>\z}{$1}gxms; # unwrap
         $pod_pkg =~ s{\'}{::}gxms;              # perl4 -> perl5
 
-        my $pkgs = $doc->find('PPI::Statement::Package');
-        # no package statement means no possible match
-        my $pkg = $pkgs ? $pkgs->[0]->namespace : q{};
-        $pkg =~ s{\'}{::}gxms;
+        foreach my $stmt ( @{ $doc->find('PPI::Statement::Package') || [] } ) {
+            my $pkg = $stmt->namespace();
+            $pkg =~ s{\'}{::}gxms;
+            return if $pkg eq $pod_pkg;
+        }
 
-        return if $pkg eq $pod_pkg;
         return $self->violation( $DESC, $EXPL, $pod );
     }
 

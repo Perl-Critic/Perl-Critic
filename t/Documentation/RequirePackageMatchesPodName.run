@@ -183,8 +183,8 @@ Blah...
 
 #-----------------------------------------------------------------------------
 
-## name Multiple packages and bad
-## failures 1
+## name Multiple packages and not first (RT #49501)
+## failures 0
 ## cut
 package Foo;
 package Bar;
