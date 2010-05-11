@@ -103,7 +103,7 @@ to appear before the C<__END__> statement.
 
     frobulate()
     Accepts:  A list of things to frobulate
-    Returns:  True if succesful
+    Returns:  True if successful
 
     =end comments
 

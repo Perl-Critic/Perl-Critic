@@ -1,6 +1,7 @@
 Next release (whatever it is)
 
     Bug Fixes:
+    * RT #57375: Spelling errors in documentation.
     * RT #56619: "die" used instead of "croak"
       Add option allow_in_main_if_not_in_subroutine to
       ErrorHandling::RequireCarping, to allow "die" in namespace 'main',
