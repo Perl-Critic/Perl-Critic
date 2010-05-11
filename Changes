@@ -1,3 +1,8 @@
+[1.106] Released on 2010-05-10
+
+    Bug Fixes:
+    * NamingConventions::Capitalization fix for PPI 1.212.  RT #57348
+
 [1.105] Released on 2009-09-07
 
     Bug Fixes:
