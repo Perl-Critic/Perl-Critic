@@ -17,6 +17,11 @@ Next release (whatever it is)
       set of things covered by autodie (this happened in autodie v2.08).  The
       primary effect of this is on InputOutput::RequireCheckedSyscalls.
 
+[1.106] Released on 2010-05-10
+
+    Bug Fixes:
+    * NamingConventions::Capitalization fix for PPI 1.212.  RT #57348
+
 [1.105_03] Released on 2010-03-21
 
     !! THIS IS A DEVELOPER RELEASE !!
@@ -113,7 +118,7 @@ Next release (whatever it is)
       will be available on http://search.cpan.org.  Thanks to Bear Longyear
       for bringing this to our attention.
 
-[1.105_01] Released on 2009-09-07
+[1.105] Released on 2009-09-07
 
     Bug Fixes:
     * Variables::ProhibitPunctuationVars would complain about "%-" appearing
