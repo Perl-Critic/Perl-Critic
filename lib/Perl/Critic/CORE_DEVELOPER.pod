@@ -116,11 +116,38 @@ ExtUtils::MakeMaker. In other words,
 (but not 'make authortest', which is one of the reasons you should
 start with F<Build.PL> rather than F<Makefile.PL>) These should run
 cleanly before you declare your work done. My advice, though, is not
-to worry about them until your code is functionally correct. The
-authortest suite requires a BUNCH of extra modules. Just run it, see
-what breaks, and install what it seems to need. Eventually it will
-work.
+to worry about them until your code is functionally correct.
 
+
+=head2 Modules required for authortest
+
+The authortest requires a B<bunch> of modules above and beyond those
+required to run C<Perl::Critic>. The list probably depends on which
+C<Perl::Critic> you are testing, so the following should not be
+considered definitive. For the Subversion root as of
+revision 3812, you need the following in addition to B<all> optional
+modules for Perl::Critic itself.
+
+    Devel::EnforceEncapsulation
+    Perl::Critic::More
+    Test::Kwalitee
+    Test::Memory::Cycle
+    Test::Without::Module
+
+In the absence of C<Test::Memory::Cycle> and C<Test::Without::Module>,
+the relevant tests are simply skipped. In the absence of the other
+modules, the tests die horribly. Of course, either way they do not get
+run, so the difference is mainly one of aesthetics.
+
+Under Perl 5.12 and above, L<Devel::Cycle|Devel::Cycle> 1.11 needs to
+be patched to handle a C<Regexp> as a first-class Perl object. See
+L<https://rt.cpan.org/Public/Bug/Display.html?id=56681> for the
+details.
+
+In addition to the above, C<Perl::Critic> revision 3812 requires
+L<PPIx::Utilities|PPIx::Utilities> to be installed before C<Build.PL>
+can be executed. It is anticipated that this behavior will go away in
+any production release.
 
 =head1 ADDING A GLOBAL CONFIGURATION ITEM
 
