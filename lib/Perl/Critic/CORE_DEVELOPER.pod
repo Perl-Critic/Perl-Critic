@@ -125,13 +125,19 @@ The authortest requires a B<bunch> of modules above and beyond those
 required to run C<Perl::Critic>. The list probably depends on which
 C<Perl::Critic> you are testing, so the following should not be
 considered definitive. For the Subversion root as of
-revision 3812, you need the following in addition to B<all> optional
+revision 3813, you need the following in addition to B<all> optional
 modules for Perl::Critic itself.
 
     Devel::EnforceEncapsulation
+    File::HomeDir
+    File::Which
     Perl::Critic::More
+    Perl::Tidy
+    Pod::Spell
+    Readonly::XS
     Test::Kwalitee
     Test::Memory::Cycle
+    Test::Perl::Critic
     Test::Without::Module
 
 In the absence of C<Test::Memory::Cycle> and C<Test::Without::Module>,
