@@ -181,7 +181,6 @@ $this_is_not_strict
 #-----------------------------------------------------------------------------
 ## name "use perl-version" equivalent to strict as of 5.011
 ## failures 0
-## TODO Not implemented yet.
 ## cut
 
 use 5.011;
@@ -190,7 +189,6 @@ $foo = $bar;
 #-----------------------------------------------------------------------------
 ## name "use perl-version" equivalent to strict as of 5.11.0
 ## failures 0
-## TODO Not implemented yet.
 ## cut
 
 use 5.11.0;

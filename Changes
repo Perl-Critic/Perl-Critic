@@ -1,6 +1,8 @@
 Next release (whatever it is)
 
     Bug Fixes:
+    * Policy TestingAndDebugging::RequireUseStrict now accepts 'use 5.011'
+      or greater as equivalent to 'use strict'.
     * RT #57375: Spelling errors in documentation.
     * RT #56619: "die" used instead of "croak"
       Add option allow_in_main_if_not_in_subroutine to

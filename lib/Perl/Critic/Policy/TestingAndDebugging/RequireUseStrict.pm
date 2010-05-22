@@ -10,7 +10,9 @@ package Perl::Critic::Policy::TestingAndDebugging::RequireUseStrict;
 use 5.006001;
 use strict;
 use warnings;
+use version 0.77;
 use Readonly;
+use Scalar::Util qw{ blessed };
 
 use Perl::Critic::Utils qw{ :severities $EMPTY };
 use base 'Perl::Critic::Policy';
@@ -21,6 +23,8 @@ our $VERSION = '1.105_03';
 
 Readonly::Scalar my $DESC => q{Code before strictures are enabled};
 Readonly::Scalar my $EXPL => [ 429 ];
+
+Readonly::Scalar my $PERL_VERSION_WHICH_IMPLIES_STRICTURE => qv('v5.11.0');
 
 #-----------------------------------------------------------------------------
 
@@ -93,6 +97,18 @@ sub _generate_is_use_strict {
         }
         elsif ( my $module = $elem->module() ) {
             return 1 if $self->{_equivalent_modules}{$module};
+        }
+        elsif ( my $version = $elem->version() ) {
+            # Currently Adam returns a string here. He has said he may return
+            # a version object in the future, so best be prepared.
+            if ( not blessed( $version ) or not $version->isa( 'version' ) ) {
+                if ( 'v' ne substr $version, 0, 1
+                    and ( $version =~ tr/././ ) > 1 ) {
+                    $version = 'v' . $version;
+                }
+                $version = version->parse( $version );
+            }
+            return 1 if $PERL_VERSION_WHICH_IMPLIES_STRICTURE <= $version;
         }
 
         return 0;
