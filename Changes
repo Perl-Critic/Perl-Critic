@@ -1,6 +1,9 @@
 Next release (whatever it is)
 
     Bug Fixes:
+    * Policy BuiltInFunctions::ProhibitLvalueSubstr no longer complains
+      when there is a low-precedence operator between the substr() and
+      the assignment operator.
     * Policy TestingAndDebugging::RequireUseStrict now accepts 'use 5.011'
       or greater as equivalent to 'use strict'.
     * RT #57375: Spelling errors in documentation.
