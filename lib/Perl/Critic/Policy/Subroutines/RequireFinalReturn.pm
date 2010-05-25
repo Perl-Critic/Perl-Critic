@@ -237,7 +237,7 @@ or C<exit>, then you can configure Perl::Critic to recognize those
 functions as well.  Just put something like this in your
 F<.perlcriticrc>:
 
-    [Subroutines::RequireFinalReturns]
+    [Subroutines::RequireFinalReturn]
     terminal_funcs = quit abort bailout
 
 =head1 BUGS
