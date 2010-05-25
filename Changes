@@ -1,6 +1,8 @@
 Next release (whatever it is)
 
     Bug Fixes:
+    * RT #57818: DEVELOPER.pod typo in link to
+      ValuesAndExpressions::ProhibitConstantPragma policy
     * Policy BuiltInFunctions::ProhibitLvalueSubstr no longer complains
       when there is a low-precedence operator between the substr() and
       the assignment operator.
