@@ -95,6 +95,7 @@ sub _block_has_return {
     my $final = $blockparts[-1]; # always defined because we call _block_is_empty first
     return if !$final;
     return $self->_is_explicit_return($final)
+        || $self->_is_given_when_return($final)
         || $self->_is_compound_return($final);
 }
 
@@ -143,6 +144,62 @@ sub _is_compound_return {
 
 #-----------------------------------------------------------------------------
 
+sub _is_given_when_return {
+    my ( $self, $final ) = @_;
+
+    if ( ! $final->isa( 'PPI::Statement::Given' ) ) {
+        return; #fail
+    }
+
+    my $begin = $final->schild(0);
+    return if !$begin; #fail
+    if ( ! ( $begin->isa( 'PPI::Token::Word' ) &&
+            $begin->content() eq 'given' ) ) {
+        return; #fail
+    }
+
+    my @blocks = grep {!$_->isa( 'PPI::Structure::Given' ) &&
+                       !$_->isa( 'PPI::Token' )} $final->schildren();
+    # Sanity check:
+    if (scalar grep {!$_->isa('PPI::Structure::Block')} @blocks) {
+        throw_internal
+            'Expected only givens, blocks and tokens in the given statement';
+    }
+    if (@blocks > 1) {
+       # sanity check
+       throw_internal 'Given statement should have no more than one block';
+    }
+    @blocks or return;  #fail
+
+    my $have_default;   # We have to fail unless a default block is present
+
+    foreach my $stmnt ( $blocks[0]->schildren() ) {
+
+        if ( $stmnt->isa( 'PPI::Statement::When' ) ) {
+
+            # Check for the default block.
+            my $first_token;
+            $first_token = $stmnt->schild( 0 )
+                and 'default' eq $first_token->content()
+                and $have_default = 1;
+
+            $self->_is_when_stmnt_with_return( $stmnt )
+                or return;  #fail
+
+        } else {
+
+            $self->_is_suffix_when_with_return( $stmnt )
+                or return;  #fail
+
+        }
+
+    }
+
+    return $have_default;
+}
+
+#-----------------------------------------------------------------------------
+
 sub _is_return_or_goto_stmnt {
     my ( $self, $stmnt ) = @_;
     return if not $stmnt->isa('PPI::Statement::Break');
@@ -167,6 +224,44 @@ sub _is_conditional_stmnt {
     for my $elem ( $stmnt->schildren() ) {
         return 1 if $elem->isa('PPI::Token::Word')
             && exists $CONDITIONALS{$elem};
+    }
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _is_when_stmnt_with_return {
+    my ( $self, $stmnt ) = @_;
+
+    my @inner = grep { ! $_->isa( 'PPI::Token' ) &&
+                    ! $_->isa( 'PPI::Structure::When' ) }
+                $stmnt->schildren();
+    if ( scalar grep { ! $_->isa( 'PPI::Structure::Block' ) } @inner ) {
+        throw_internal 'When statement should contain only tokens, conditions, and blocks';
+    }
+    @inner > 1
+        and throw_internal 'When statement should have no more than one block';
+    @inner or return;   #fail
+
+    foreach my $block ( @inner ) {
+        if ( ! $self->_block_has_return( $block ) ) {
+            return; #fail
+        }
+    }
+
+    return 1;   #succeed
+}
+
+#-----------------------------------------------------------------------------
+
+sub _is_suffix_when_with_return {
+    my ( $self, $stmnt ) = @_;
+    return if not $stmnt->isa('PPI::Statement');
+    foreach my $elem ( $stmnt->schildren() ) {
+        return ( $self->_is_return_or_goto_stmnt( $stmnt ) ||
+                $self->_is_terminal_stmnt( $stmnt ) )
+            if $elem->isa( 'PPI::Token::Word' )
+                && 'when' eq $elem->content();
     }
     return;
 }
@@ -246,8 +341,6 @@ We do not look for returns inside ternary operators.  That
 construction is too complicated to analyze right now.  Besides, a
 better form is the return outside of the ternary like this: C<return
 foo ? 1 : bar ? 2 : 3>
-
-This does not handle the perl 5.10 C<given>/C<when>/C<default> constructs.
 
 =head1 AUTHOR
 

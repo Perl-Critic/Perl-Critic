@@ -21,6 +21,9 @@ Next release (whatever it is)
       explicit that lexical variables are not acceptable.
 
     Other Changes:
+    * Perl::Critic::Policy::Subroutines::RequireFinalReturn should now
+      understand a final given/when statement, and declare an error if
+      there is no 'default' block or if any branch does not return.
     * Perl::Critic::Utils::is_unchecked_call() updated to include chmod in the
       set of things covered by autodie (this happened in autodie v2.08).  The
       primary effect of this is on InputOutput::RequireCheckedSyscalls.
