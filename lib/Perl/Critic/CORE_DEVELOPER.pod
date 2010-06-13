@@ -102,14 +102,14 @@ trunk is also done with the C<svn checkout> command, but specifying
 the trunk's URL. You can also specify, as a second argument to
 C<svn checkout>, the directory you want the code to go into.
 
-** You should do development using Module::Build rather than
-ExtUtils::MakeMaker. In other words,
+** Development requires using Module::Build rather than
+ExtUtils::MakeMaker.  In other words,
 
     $ perl Build.PL
     $ ./Build
     $ ./Build test
 
-** There is a suite of author tests available using
+** You need to run the suite of author tests by running
 
     $ ./Build authortest
 
@@ -125,24 +125,26 @@ The authortest requires a B<bunch> of modules above and beyond those
 required to run C<Perl::Critic>. The list probably depends on which
 C<Perl::Critic> you are testing, so the following should not be
 considered definitive. For the Subversion root as of
-revision 3813, you need the following in addition to B<all> optional
+revision 3822, you need the following in addition to B<all> optional
 modules for Perl::Critic itself.
 
     Devel::EnforceEncapsulation
-    File::HomeDir
-    File::Which
     Perl::Critic::More
-    Perl::Tidy
-    Pod::Spell
-    Readonly::XS
+    Test::Deep
     Test::Kwalitee
     Test::Memory::Cycle
     Test::Perl::Critic
+    Test::Pod
+    Test::Pod::Coverage
     Test::Without::Module
 
-In the absence of C<Test::Memory::Cycle> and C<Test::Without::Module>,
-the relevant tests are simply skipped. In the absence of the other
-modules, the tests die horribly. Of course, either way they do not get
+You can find out what the optional modules are by looking at
+C<recommended_module_versions()> in
+F<inc/Perl/Critic/BuildUtilities.pm>.
+
+In the absence of C<Test::Deep> and C<Test::Memory::Cycle>, the
+relevant tests are simply skipped.  In the absence of the other
+modules, the tests die horribly.  Of course, either way they do not get
 run, so the difference is mainly one of aesthetics.
 
 Under Perl 5.12 and above, L<Devel::Cycle|Devel::Cycle> 1.11 needs to
@@ -154,6 +156,7 @@ In addition to the above, C<Perl::Critic> revision 3812 requires
 L<PPIx::Utilities|PPIx::Utilities> to be installed before C<Build.PL>
 can be executed. It is anticipated that this behavior will go away in
 any production release.
+
 
 =head1 ADDING A GLOBAL CONFIGURATION ITEM
 
@@ -187,7 +190,7 @@ There are several files that must be modified to get your new
 configuation item and/or command line option.
 
 
-=head3 lib/Perl/Critic/Utils/Constants.pm
+=head3 F<lib/Perl/Critic/Utils/Constants.pm>
 
 If there are manifest constants connected with your implementation
 they go here. You may well at least have a
@@ -201,7 +204,7 @@ tag
     new_item
 
 
-=head3 lib/Perl/Critic/Command.pm
+=head3 F<lib/Perl/Critic/Command.pm>
 
 If your new item is a command option, its L<Getopt::Long|Getopt::Long>
 specification must be defined in C<_get_option_specification()>. If
@@ -209,7 +212,7 @@ your new configuration item does not have a corresponding command
 option, you do not need to make any changes to this file.
 
 
-=head3 lib/Perl/Critic/OptionsProcessor.pm
+=head3 F<lib/Perl/Critic/OptionsProcessor.pm>
 
 If your new item is a global configuration item, you need to add the
 code to handle it here. Specifically:
@@ -246,7 +249,7 @@ If your new item is a command option without a corresponding global
 configuration item, you do not need to modify this file.
 
 
-=head3 lib/Perl/Critic/Config.pm
+=head3 F<lib/Perl/Critic/Config.pm>
 
 You must write a C<_validate_and_store_new_item()> method to validate
 and store the value of the new item. The signature of this method
@@ -281,7 +284,7 @@ but the accessor for a multi-valued item must return a list:
 Last, you must document the item iteself.
 
 
-=head3 lib/Perl/Critic/ProfilePrototype.pm
+=head3 F<lib/Perl/Critic/ProfilePrototype.pm>
 
 If your new item has a corresponding global configuration item, you
 must update the C<to_string()> method to include the item in the
@@ -293,13 +296,13 @@ If your new item has no corresponding global configuration item, you
 do not need to change this file.
 
 
-=head3 bin/perlcriticrc
+=head3 F<bin/perlcriticrc>
 
 If your new item has a corresponding command option, you must document
 it here. If it does not, you do not need to change this file.
 
 
-=head3 examples/perlcritic
+=head3 F<examples/perlcriticrc>
 
 If your new item has a corresponding global configuration item, you
 must add it here. If it does not, you do not need to change this file.
