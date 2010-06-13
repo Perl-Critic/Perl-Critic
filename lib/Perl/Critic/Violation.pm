@@ -29,7 +29,7 @@ use Perl::Critic::Utils::POD qw<
 >;
 use Perl::Critic::Exception::Fatal::Internal qw< throw_internal >;
 
-our $VERSION = '1.105_03';
+our $VERSION = '1.107_001';
 
 
 Readonly::Scalar my $LOCATION_LINE_NUMBER               => 0;

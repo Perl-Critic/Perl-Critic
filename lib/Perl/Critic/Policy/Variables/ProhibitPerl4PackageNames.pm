@@ -15,7 +15,7 @@ use Readonly;
 use Perl::Critic::Utils qw{ :characters :severities :classification };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.105_03';
+our $VERSION = '1.107_001';
 
 #-----------------------------------------------------------------------------
 

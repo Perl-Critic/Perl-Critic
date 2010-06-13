@@ -24,7 +24,7 @@ use Scalar::Util qw{ blessed };
 
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.105_03';
+our $VERSION = '1.107_001';
 
 #-----------------------------------------------------------------------------
 
