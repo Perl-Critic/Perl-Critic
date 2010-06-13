@@ -32,8 +32,6 @@ my %module_versions = (
     recommended_module_versions(),
     'Test::Deep'            => 0,
     'Test::Memory::Cycle'   => 0,
-    'Test::Pod'             => 0,
-    'Test::Pod::Coverage'   => 0,
     'Test::Without::Module' => 0,
 );
 

@@ -76,20 +76,9 @@ our \$VERSION = $VERSION;
 
 #-----------------------------------------------------------------------------
 
-my \$module_loaded = eval <<'END_HIDE_MODULES';
-use Test::Without::Module qw{
+use Test::Without::Module qw<
     $modules_to_hide
-};
-1;
-END_HIDE_MODULES
-
-if ( not \$module_loaded ) {
-    print
-        '1..0 # Skip ',
-        'Test::Without::Module required to test with the ',
-        "absence of optional modules\\n";
-    exit 0;
-}
+>;
 
 
 require '$wrapped_test_name';
@@ -106,7 +95,7 @@ __END__
 
 =pod
 
-=for stopwords 
+=for stopwords
 
 =head1 NAME
 

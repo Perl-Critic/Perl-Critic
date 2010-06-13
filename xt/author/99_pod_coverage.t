@@ -21,8 +21,7 @@ our $VERSION = '1.105_03';
 
 #-----------------------------------------------------------------------------
 
-eval 'use Test::Pod::Coverage 1.04; 1'
-    or plan skip_all => 'Test::Pod::Coverage 1.00 requried to test POD';
+use Test::Pod::Coverage 1.04;
 
 {
     # HACK: Perl::Critic::Violation uses Pod::Parser to extract the
