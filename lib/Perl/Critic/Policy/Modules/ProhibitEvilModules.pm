@@ -70,6 +70,12 @@ Readonly::Scalar my $MODULES_FILE_LINE_REGEX =>
         \z
     >xms;
 
+Readonly::Scalar my $DEFAULT_MODULES =>
+    join
+        $SPACE,
+        map { "$_ {Found use of $_. This module is deprecated by the Perl 5 Porters.}" }
+            qw< Class::ISA Pod::Plainer Shell Switch >;
+
 # Indexes in the arrays of regexes for the "modules" option.
 Readonly::Scalar my $INDEX_REGEX        => 0;
 Readonly::Scalar my $INDEX_DESCRIPTION  => 1;
@@ -81,7 +87,7 @@ sub supported_parameters {
         {
             name            => 'modules',
             description     => 'The names of or patterns for modules to forbid.',
-            default_string  => $EMPTY,
+            default_string  => $DEFAULT_MODULES,
             parser          => \&_parse_modules,
         },
         {
@@ -102,10 +108,14 @@ sub applies_to        { return 'PPI::Statement::Include' }
 sub _parse_modules {
     my ($self, $parameter, $config_string) = @_;
 
-    return if not $config_string;
-    return if $config_string =~ m< \A \s* \z >xms;
+    my $module_specifications =
+        defined $config_string
+            ? $config_string
+            : $parameter->get_default_string();
 
-    my $module_specifications = $config_string;
+    return if not $module_specifications;
+    return if $module_specifications =~ m< \A \s* \z >xms;
+
     while ( $module_specifications =~ s< $MODULES_REGEX ><>xms ) {
         my ($module, $regex_string, $description) = ($1, $2, $3);
 
@@ -331,8 +341,10 @@ messages:
     # Use a regular expression.
     /Acme::/     We don't use joke modules.
 
-By default, there are no prohibited modules (although I can think of a
-few that should be).
+By default, the modules that have been deprecated by the Perl 5 Porters are
+reported; at the time of writing these are L<Class::ISA>, L<Pod::Plainer>,
+L<Shell>, and L<Switch>.  Specifying a value for the C<modules> option will
+override this.
 
 
 =head1 NOTES

@@ -1,3 +1,35 @@
+## name Deprecated Class::ISA
+## failures 1
+## cut
+
+use Class::ISA;
+
+#-----------------------------------------------------------------------------
+
+## name Deprecated Pod::Plainer
+## failures 1
+## cut
+
+use Pod::Plainer;
+
+#-----------------------------------------------------------------------------
+
+## name Deprecated Shell
+## failures 1
+## cut
+
+use Shell;
+
+#-----------------------------------------------------------------------------
+
+## name Deprecated Switch
+## failures 1
+## cut
+
+use Switch;
+
+#-----------------------------------------------------------------------------
+
 ## name 2 evil modules
 ## parms {modules => 'Evil::Module Super::Evil::Module'}
 ## failures 2

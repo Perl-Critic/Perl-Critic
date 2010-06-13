@@ -12,7 +12,7 @@ Next release (whatever it is)
     * RT #56619: "die" used instead of "croak"
       Add option allow_in_main_if_not_in_subroutine to
       ErrorHandling::RequireCarping, to allow "die" in namespace 'main',
-      if not in  a subroutine.
+      if not in a subroutine.
     * RT #56627: Too many arguments (sub prototype, false positive)
       Revise Subroutines::ProhibitManyArgs to count only characters in the
       prototype that represent arguments.
@@ -20,10 +20,14 @@ Next release (whatever it is)
       Wordsmithed the $DESC and the POD in Modules::RequireVersionVar to make
       explicit that lexical variables are not acceptable.
 
+    Policy Changes
+    * Modules::ProhibitEvilModules now complains about the modules deprecated
+      by the Perl 5 Porters in 5.12.
+    * Subroutines::RequireFinalReturn should now understand a final given/when
+      statement, and declare an error if there is no 'default' block or if any
+      branch does not return.
+
     Other Changes:
-    * Perl::Critic::Policy::Subroutines::RequireFinalReturn should now
-      understand a final given/when statement, and declare an error if
-      there is no 'default' block or if any branch does not return.
     * Perl::Critic::Utils::is_unchecked_call() updated to include chmod in the
       set of things covered by autodie (this happened in autodie v2.08).  The
       primary effect of this is on InputOutput::RequireCheckedSyscalls.
