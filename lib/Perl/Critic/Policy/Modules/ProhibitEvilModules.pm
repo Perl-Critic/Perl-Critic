@@ -342,9 +342,9 @@ messages:
     /Acme::/     We don't use joke modules.
 
 By default, the modules that have been deprecated by the Perl 5 Porters are
-reported; at the time of writing these are L<Class::ISA>, L<Pod::Plainer>,
-L<Shell>, and L<Switch>.  Specifying a value for the C<modules> option will
-override this.
+reported; at the time of writing these are L<Class::ISA|Class::ISA>,
+L<Pod::Plainer|Pod::Plainer>, L<Shell|Shell>, and L<Switch|Switch>.
+Specifying a value for the C<modules> option will override this.
 
 
 =head1 NOTES
