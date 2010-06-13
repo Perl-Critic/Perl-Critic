@@ -780,12 +780,11 @@ certain lines or blocks of code by using annotations:
       do_something($_);
   }
 
-The C<"## no critic"> annotations direct Perl::Critic to ignore the
-remaining lines of code until the end of the current block, or until a
-C<"## use critic"> annotation is found (whichever comes first).  If the
-C<"## no critic"> annotation is on the same line as a code statement,
-then only that line of code is overlooked.  To direct perlcritic to
-ignore the C<"## no critic"> annotations, use the C<--force> option.
+The C<"## no critic"> annotations direct Perl::Critic to ignore the remaining
+lines of code until a C<"## use critic"> annotation is found. If the C<"## no
+critic"> annotation is on the same line as a code statement, then only that
+line of code is overlooked.  To direct perlcritic to ignore the C<"## no
+critic"> annotations, use the C<--force> option.
 
 A bare C<"## no critic"> annotation disables all the active Policies.  If
 you wish to disable only specific Policies, add a list of Policy names
