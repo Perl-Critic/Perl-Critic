@@ -559,17 +559,17 @@ considering doing a special release only including this change so that the
 search.cpan.org diff tool doesn't entirely break.
 
 
-=item * Refactor guts of F<perlcritic> into L<Perl::Critic::CLI>
+=item * Eliminate use of IO::String
 
-So the F<perlcritic> script would basically just say...
+I'm pretty sure that opening references to scalars is in 5.6, so IO::String
+isn't necessary.
 
-  use Perl::Critic::CLI;
-  exit Perl::Critic::CLI->run(@ARGV);
 
-This would make the stuff that is currently inside F<perlcritic>
-easier to test.  Also would open the door for developers to
-subclass and extend F<perlcritic>, if they had some reason
-to do so.  Also, just because it feels like the right thing to do.
+=item * Give L<Perl::Critic::Command> a proper API.
+
+Now that we've got the guts of L<perlcritic> in there, we should make the
+it available to users.
+
 
 =item * Create constants for the PPI location array elements.
 
@@ -621,9 +621,6 @@ Question: Why?
 
 Answer: Readability, mostly.  Performance, maybe.
 
-=item * Refactor guts of perlcritic into a module (Perl::Critic::App ??)
-
-Because it is getting unwieldy in there.
 
 =back
 
@@ -638,6 +635,7 @@ We're waiting on the following bugs to get fixed in a CPAN release of PPI:
 
 Exists in svn.  Replace _descendant_of() in RequireCheckingReturnValueOfEval
 with that, once it is released, because it's faster and native.
+
 
 =item Newlines
 
