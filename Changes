@@ -31,6 +31,8 @@
     * Perl::Critic::Utils::is_unchecked_call() updated to include chmod in the
       set of things covered by autodie (this happened in autodie v2.08).  The
       primary effect of this is on InputOutput::RequireCheckedSyscalls.
+    * Now depends upon Task::Weaken to ensure that we only install with perls
+      where Scalar::Util::weaken() works.
 
 [1.106] Released on 2010-05-10
 

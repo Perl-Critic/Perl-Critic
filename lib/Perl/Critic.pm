@@ -909,6 +909,8 @@ L<Scalar::Util|Scalar::Util>
 
 L<String::Format|String::Format>
 
+L<Task::Weaken|Task::Weaken>
+
 L<Test::Builder|Test::Builder>
 
 L<version|version>
