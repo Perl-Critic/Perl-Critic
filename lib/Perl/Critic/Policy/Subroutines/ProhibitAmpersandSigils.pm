@@ -38,40 +38,47 @@ sub applies_to           { return 'PPI::Token::Symbol'     }
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    my $psib = $elem->sprevious_sibling();
-    if ( $psib ) {
+    my $previous = $elem->sprevious_sibling();
+    if ( $previous ) {
         #Sigil is allowed if taking a reference, e.g. "\&my_sub"
-        return if $psib->isa('PPI::Token::Cast') && $psib eq q{\\};
+        return if $previous->isa('PPI::Token::Cast') && $previous eq q{\\};
     }
 
     return if ( $elem !~ m{\A [&] }xms ); # ok
 
     # look up past parens to get say the "defined" in "defined(&foo)" or
     # "defined((&foo))" etc
-    if (! $psib) {
+    if (not $previous) {
         my $up = $elem;
-      PARENT:
-        while (($up = $up->parent)
-               && ($up->isa('PPI::Statement::Expression')
-                   || $up->isa('PPI::Structure::List')
-                   || $up->isa('PPI::Statement'))) {
+
+        PARENT:
+        while (
+                ($up = $up->parent)
+            and (
+                    $up->isa('PPI::Statement::Expression')
+                or  $up->isa('PPI::Structure::List')
+                or  $up->isa('PPI::Statement')
+            )
+        ) {
             if (my $word = $up->sprevious_sibling) {
                 # Since backslashes distribute over lists (per perlref), if
                 # we have a list and the previous is a backslash, we're cool.
-                return if $up->isa( 'PPI::Structure::List' ) &&
-                        $word->isa( 'PPI::Token::Cast' ) &&
-                        $word->content() eq q{\\};
-                # For a word set $psib to have it checked against %EXEMPTIONS
-                # below.  For a non-word it's a violation, leave $psib false
+                return if
+                        $up->isa('PPI::Structure::List')
+                    &&  $word->isa('PPI::Token::Cast')
+                    &&  $word->content() eq q{\\};
+
+                # For a word set $previous to have it checked against %EXEMPTIONS
+                # below.  For a non-word it's a violation, leave $previous false
                 # to get there.
                 if ($word->isa('PPI::Token::Word')) {
-                    $psib = $word;
+                    $previous = $word;
                 }
                 last PARENT;
             }
         }
     }
-    return if $psib and $EXEMPTIONS{$psib};
+    return if $previous and $EXEMPTIONS{$previous};
 
     return $self->violation( $DESC, $EXPL, $elem );
 }
@@ -97,11 +104,11 @@ distribution.
 =head1 DESCRIPTION
 
 Since Perl 5, the ampersand sigil is completely optional when invoking
-subroutines.  And it's easily confused with the bitwise 'and'
-operator.
+subroutines.  It also turns off checking of subroutine prototypes.
+It's easily confused with the bitwise 'and' operator.
 
-  @result = &some_function(); #Not ok
-  @result = some_function();  #ok
+  @result = &some_function(); # not ok
+  @result = some_function();  # ok
 
 
 =head1 CONFIGURATION
