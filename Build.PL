@@ -62,12 +62,12 @@ my $builder = Perl::Critic::Module::Build->new(
             file        => [
                 qw<
                     TODO.pod
-                    lib/Perl/Critic/PolicySummary.pod.PL
                 >
             ],
             directory   => [
                 qw<
                     doc
+                    inc
                     tools
                     xt
                 >
