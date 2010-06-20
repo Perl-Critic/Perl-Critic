@@ -99,6 +99,11 @@ sub to_string {
     $prototype .= "\n";
 
     $prototype .= $prefix;
+    $prototype .= q{allow-unsafe = };
+    $prototype .= $configuration->unsafe_allowed();
+    $prototype .= "\n";
+
+    $prototype .= $prefix;
     $prototype .= q{profile-strictness = };
     $prototype .= $configuration->profile_strictness();
     $prototype .= "\n";
@@ -163,7 +168,7 @@ sub to_string {
 
     Perl::Critic::Policy::set_format( $self->_proto_format() );
 
-    return $prototype . "\n" . join q{}, map { "$_" } @{ $self->_get_policies() };
+    return $prototype . "\n\n" . join q{}, map { "$_" } @{ $self->_get_policies() };
 }
 
 #-----------------------------------------------------------------------------
