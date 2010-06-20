@@ -15,6 +15,7 @@ use English qw(-no_match_vars);
 
 use PPI::Document;
 
+use Perl::Critic::Annotation;
 use Perl::Critic::TestUtils qw(bundled_policy_names);
 
 use Test::More;
@@ -29,12 +30,11 @@ Perl::Critic::TestUtils::block_perlcriticrc();
 
 my @bundled_policy_names = bundled_policy_names();
 
-plan( tests => 83 );
+plan( tests => 82 );
 
 #-----------------------------------------------------------------------------
 # Test Perl::Critic::Annotation module interface
 
-use_ok('Perl::Critic::Annotation') or BAIL_OUT(q<Can't continue.>);
 can_ok('Perl::Critic::Annotation', 'new');
 can_ok('Perl::Critic::Annotation', 'create_annotations');
 can_ok('Perl::Critic::Annotation', 'element');

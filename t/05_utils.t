@@ -23,19 +23,13 @@ use PPI::Document::File qw< >;
 
 use Perl::Critic::PolicyFactory;
 use Perl::Critic::TestUtils qw(bundled_policy_names);
+use Perl::Critic::Utils;
 
-use Test::More tests => 125;
+use Test::More tests => 124;
 
 #-----------------------------------------------------------------------------
 
 our $VERSION = '1.107_001';
-
-#-----------------------------------------------------------------------------
-
-BEGIN {
-    # Needs to be in BEGIN for global vars
-    use_ok('Perl::Critic::Utils', qw{ :all } ) or confess;
-}
 
 #-----------------------------------------------------------------------------
 

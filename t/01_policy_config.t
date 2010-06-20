@@ -13,17 +13,15 @@ use warnings;
 
 use Carp qw< confess >;
 
-use Test::More tests => 29;
+use Perl::Critic::PolicyConfig;
+
+use Test::More tests => 28;
 
 #-----------------------------------------------------------------------------
 
 our $VERSION = '1.107_001';
 
 #-----------------------------------------------------------------------------
-
-BEGIN {
-    use_ok('Perl::Critic::PolicyConfig') or confess 'No point in continuing.';
-}
 
 
 {

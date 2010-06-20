@@ -15,9 +15,12 @@ use Carp qw< carp >;
 
 use version;
 
+
+use Perl::Critic::Document;
 use Perl::Critic::Utils::DataConversion qw< dor >;
 
-use Test::More tests => 34;
+
+use Test::More tests => 33;
 
 #-----------------------------------------------------------------------------
 
@@ -25,7 +28,6 @@ our $VERSION = '1.107_001';
 
 #-----------------------------------------------------------------------------
 
-use_ok('Perl::Critic::Document');
 can_ok('Perl::Critic::Document', 'new');
 can_ok('Perl::Critic::Document', 'filename');
 can_ok('Perl::Critic::Document', 'find');
