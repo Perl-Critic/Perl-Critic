@@ -879,6 +879,8 @@ L<B::Keywords|B::Keywords>
 
 L<Config::Tiny|Config::Tiny>
 
+L<Email::Address|Email::Address>
+
 L<Exception::Class|Exception::Class>
 
 L<File::Spec|File::Spec>
@@ -913,9 +915,7 @@ L<version|version>
 
 
 The following modules are optional, but recommended for complete
-testing:
-
-L<Email::Address|Email::Address>
+functionality:
 
 L<File::HomeDir|File::HomeDir>
 
