@@ -123,8 +123,14 @@ sub _init {
     $self->{_force} = boolean_to_number( dor( $args{-force}, $options_processor->force() ) );
     $self->{_only}  = boolean_to_number( dor( $args{-only},  $options_processor->only()  ) );
     $self->{_color} = boolean_to_number( dor( $args{-color}, $options_processor->color() ) );
-    $self->{_unsafe} = boolean_to_number( dor( $args{-unsafe}, $options_processor->unsafe() ) );
-    $self->{_criticism_fatal} = boolean_to_number( dor( $args{'-criticism-fatal'}, $options_processor->criticism_fatal() ) );
+    $self->{_unsafe_allowed} =
+        boolean_to_number(
+            dor( $args{'-allow-unsafe'}, $options_processor->allow_unsafe()
+        ) );
+    $self->{_criticism_fatal} =
+        boolean_to_number(
+            dor( $args{'-criticism-fatal'}, $options_processor->criticism_fatal() )
+        );
 
 
     # Construct a Factory with the Profile
@@ -225,7 +231,7 @@ sub _load_policies {
         }
 
         # Always exclude unsafe policies, unless instructed not to
-        next if not ( $policy->is_safe() or $self->unsafe() );
+        next if not ( $policy->is_safe() or $self->unsafe_allowed() );
 
         # To load, or not to load -- that is the question.
         my $load_me = $self->only() ? $FALSE : $TRUE;
@@ -875,9 +881,9 @@ sub pager  {
 
 #-----------------------------------------------------------------------------
 
-sub unsafe {
+sub unsafe_allowed {
     my ($self) = @_;
-    return $self->{_unsafe};
+    return $self->{_unsafe_allowed};
 }
 
 #-----------------------------------------------------------------------------
@@ -1091,9 +1097,9 @@ Returns the value of the C<-color> attribute for this Config.
 Returns the value of the C<-pager> attribute for this Config.
 
 
-=item C< unsafe() >
+=item C< unsafe_allowed() >
 
-Returns the value of the C<-unsafe> attribute for this Config.
+Returns the value of the C<-allow-unsafe> attribute for this Config.
 
 
 =item C< criticism_fatal() >
@@ -1195,7 +1201,7 @@ corresponding Perl::Critic constructor argument.
     include   = NamingConventions ClassHierarchies    #Space-delimited list
     exclude   = Variables  Modules::RequirePackage    #Space-delimited list
     color     = 1                                     #Zero or One
-    unsafe    = 1                                     #Zero or One
+    allow_unsafe = 1                                  #Zero or One
     color-severity-highest = bold red                 #Term::ANSIColor
     color-severity-high = magenta                     #Term::ANSIColor
     color-severity-medium =                           #no coloring

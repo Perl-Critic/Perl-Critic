@@ -53,7 +53,7 @@ C<perlcritic> - Command-line interface to critique Perl source.
              [--exclude pattern] [{-s | --single-policy} pattern]
              [--only | --noonly] [--profile-strictness {warn|fatal|quiet}]
              [--force | --noforce] [--statistics] [--statistics-only]
-             [--count | -C] [--verbose {number | format}] [--unsafe]
+             [--count | -C] [--verbose {number | format}] [--allow-unsafe]
              [--color | --nocolor] [--pager pager] [--quiet]
              [--color-severity-highest color_specification]
              [--color-severity-high color_specification]
@@ -511,17 +511,17 @@ names, this just provides a more convenient way to say something like:
 C<"perldoc Perl::Critic::Policy::ValuesAndExpressions::RequireUpperCaseHeredocTerminator">
 at the command prompt.
 
-=item C<--unsafe>
+=item C<--allow-unsafe>
 
 This option directs C<perlcritic> to allow the use of Policies that have been
 marked as "unsafe".  Unsafe Policies may result in risky operations by
 compiling and executing the code they analyze.  All the Policies that ship in
-the core L<Perl::Critic|Perl::Critic> distribution are safe.  However, third-party
-Policies, such as those in the L<Perl::Critic::Dynamic|Perl::Critic::Dynamic> distribution are not
-safe.  Note that "safety" is honorary -- if a Policy author marks a Policy as
-safe, it is not a guarantee that it won't do nasty things.  B<If you don't
-trust your Policies and the code you are analyzing, then do not use this
-switch>.
+the core L<Perl::Critic|Perl::Critic> distribution are safe.  However,
+third-party Policies, such as those in the
+L<Perl::Critic::Dynamic|Perl::Critic::Dynamic> distribution are not safe.
+Note that "safety" is honorary -- if a Policy author marks a Policy as safe,
+it is not a guarantee that it won't do nasty things.  B<If you don't trust
+your Policies and the code you are analyzing, then do not use this switch>.
 
 =item C<--quiet>
 

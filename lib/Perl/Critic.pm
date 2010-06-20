@@ -304,7 +304,7 @@ will go through a deprecation cycle.
 
 =over
 
-=item C<< new( [ -profile => $FILE, -severity => $N, -theme => $string, -include => \@PATTERNS, -exclude => \@PATTERNS, -top => $N, -only => $B, -profile-strictness => $PROFILE_STRICTNESS_{WARN|FATAL|QUIET}, -force => $B, -verbose => $N ], -color => $B, -pager => $string, -unsafe => $B, -criticism-fatal => $B) >>
+=item C<< new( [ -profile => $FILE, -severity => $N, -theme => $string, -include => \@PATTERNS, -exclude => \@PATTERNS, -top => $N, -only => $B, -profile-strictness => $PROFILE_STRICTNESS_{WARN|FATAL|QUIET}, -force => $B, -verbose => $N ], -color => $B, -pager => $string, -allow-unsafe => $B, -criticism-fatal => $B) >>
 
 =item C<< new() >>
 
@@ -567,7 +567,7 @@ corresponding constructor argument.
     exclude   = Variables  Modules::RequirePackage    #Space-delimited list
     criticism-fatal = 1                               #Zero or One
     color     = 1                                     #Zero or One
-    unsafe    = 1                                     #Zero or One
+    allow-unsafe = 1                                  #Zero or One
     pager     = less                                  #pager to pipe output to
 
 The remainder of the configuration file is a series of blocks like

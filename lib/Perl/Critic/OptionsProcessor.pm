@@ -62,7 +62,7 @@ sub _init {
     $self->{_verbose}         = dor(delete $args{verbose},            $DEFAULT_VERBOSITY);
     $self->{_criticism_fatal} = dor(delete $args{'criticism-fatal'},  $FALSE);
     $self->{_pager}           = dor(delete $args{pager},              $EMPTY);
-    $self->{_unsafe}          = dor(delete $args{unsafe},             $FALSE);
+    $self->{_allow_unsafe}    = dor(delete $args{'allow-unsafe'},     $FALSE);
 
     $self->{_color_severity_highest} = dor(
         delete $args{'color-severity-highest'},
@@ -206,9 +206,9 @@ sub pager {
 
 #-----------------------------------------------------------------------------
 
-sub unsafe {
+sub allow_unsafe {
     my ($self) = @_;
-    return $self->{_unsafe};
+    return $self->{_allow_unsafe};
 }
 
 #-----------------------------------------------------------------------------
@@ -390,9 +390,9 @@ Returns the default C<pager> setting. (Either empty string or the pager
 command string).
 
 
-=item C< unsafe() >
+=item C< allow_unsafe() >
 
-Returns the default C<unsafe> setting. (Either 1 or 0).
+Returns the default C<allow-unsafe> setting. (Either 1 or 0).
 
 
 =item C< criticism_fatal() >

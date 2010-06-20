@@ -331,7 +331,7 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
         -force
         -color
         -pager
-        -unsafe
+        -allow-unsafe
         -criticism-fatal
         -color-severity-highest
         -color-severity-high
@@ -346,16 +346,16 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
     my %undef_args = map { $_ => undef } @switches;
     my $c = Perl::Critic::Config->new( %undef_args );
     $c = Perl::Critic::Config->new( %undef_args );
-    is( $c->force(),     0,       'Undefined -force');
-    is( $c->only(),      0,       'Undefined -only');
-    is( $c->severity(),  5,       'Undefined -severity');
-    is( $c->theme()->rule(),   q{},   'Undefined -theme');
-    is( $c->top(),       0,       'Undefined -top');
-    is( $c->color(),     $color,  'Undefined -color');
-    is( $c->pager(),     q{},     'Undefined -pager');
-    is( $c->unsafe(),    0,       'Undefined -unsafe');
-    is( $c->verbose(),   4,       'Undefined -verbose');
-    is( $c->criticism_fatal(), 0, 'Undefined -criticism-fatal');
+    is( $c->force(),            0,      'Undefined -force');
+    is( $c->only(),             0,      'Undefined -only');
+    is( $c->severity(),         5,      'Undefined -severity');
+    is( $c->theme()->rule(),    q{},    'Undefined -theme');
+    is( $c->top(),              0,      'Undefined -top');
+    is( $c->color(),            $color, 'Undefined -color');
+    is( $c->pager(),            q{},    'Undefined -pager');
+    is( $c->unsafe_allowed(),   0,      'Undefined -allow-unsafe');
+    is( $c->verbose(),          4,      'Undefined -verbose');
+    is( $c->criticism_fatal(),  0,      'Undefined -criticism-fatal');
     is( $c->color_severity_highest(),
         $PROFILE_COLOR_SEVERITY_HIGHEST_DEFAULT,
         'Undefined -color-severity-highest'
@@ -388,7 +388,7 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
     is( $c->top(),       0,       'zero -top');
     is( $c->color(),     $FALSE,  'zero -color');
     is( $c->pager(),     $EMPTY,  'zero -pager');
-    is( $c->unsafe(),    0,       'zero -unsafe');
+    is( $c->unsafe_allowed(),    0,       'zero -allow-unsafe');
     is( $c->verbose(),   4,       'zero -verbose');
     is( $c->criticism_fatal(), 0, 'zero -criticism-fatal');
 
@@ -401,7 +401,7 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
     is( $c->top(),       0,       'empty -top');
     is( $c->color(),     $FALSE,  'empty -color');
     is( $c->pager(),     q{},     'empty -pager');
-    is( $c->unsafe(),    0,       'empty -unsafe');
+    is( $c->unsafe_allowed(),    0,       'empty -allow-unsafe');
     is( $c->verbose(),   4,       'empty -verbose');
     is( $c->criticism_fatal(), 0, 'empty -criticism-fatal');
     is( $c->color_severity_highest(), $EMPTY, 'empty -color-severity-highest');
@@ -451,15 +451,23 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
 # Test interaction between switches and defaults
 
 {
-    my %true_defaults = ( force => 1, only  => 1, top => 10, unsafe => 1);
+    my %true_defaults = (
+        force => 1, only  => 1, top => 10, 'allow-unsafe' => 1,
+    );
     my %profile  = ( '__defaults__' => \%true_defaults );
 
-    my %pc_config = (-force => 0, -only => 0, -top => 0, -unsafe => 0, -profile => \%profile);
+    my %pc_config = (
+        -force          => 0,
+        -only           => 0,
+        -top            => 0,
+        '-allow-unsafe' => 0,
+        -profile        => \%profile,
+    );
     my $config = Perl::Critic::Config->new( %pc_config );
     is( $config->force, 0, '-force: default is true, arg is false');
     is( $config->only,  0, '-only: default is true, arg is false');
     is( $config->top,   0, '-top: default is true, arg is false');
-    is( $config->unsafe,   0, '-unsafe: default is true, arg is false');
+    is( $config->unsafe_allowed, 0, '-allow-unsafe: default is true, arg is false');
 }
 
 #-----------------------------------------------------------------------------
@@ -522,7 +530,7 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
 }
 
 #-----------------------------------------------------------------------------
-# Test the -unsafe switch
+# Test the -allow-unsafe switch
 {
     my %profile = (
         'NamingConventions::Capitalization' => {},
@@ -537,9 +545,9 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
     my @p = Perl::Critic::Config->new( %safe_pc_config )->policies();
     is(scalar @p, 1, 'Only loaded safe policies without -unsafe switch');
 
-    my %unsafe_pc_config = (%safe_pc_config, -unsafe => 1);
+    my %unsafe_pc_config = (%safe_pc_config, '-allow-unsafe' => 1);
     @p = Perl::Critic::Config->new( %unsafe_pc_config )->policies();
-    is(scalar @p, 2, 'Also loaded unsafe policies with -unsafe switch');
+    is(scalar @p, 2, 'Also loaded unsafe policies with -allow-unsafe switch');
 
     my %singular_pc_config = ('-single-policy' => 'RequireRcsKeywords');
     @p = Perl::Critic::Config->new( %singular_pc_config )->policies();
