@@ -376,6 +376,9 @@ This Policy is not configurable except for the standard options.
 See thread on perl5-porters starting here:
 L<http://www.xray.mpe.mpg.de/mailing-lists/perl5-porters/2008-06/msg00537.html>.
 
+For a nice, easy, non-magical way of properly handling exceptions, see
+L<Try::Tiny|Try::Tiny>.
+
 
 =head1 AUTHOR
 
