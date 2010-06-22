@@ -124,9 +124,8 @@ to worry about them until your code is functionally correct.
 The authortest requires a B<bunch> of modules above and beyond those
 required to run C<Perl::Critic>. The list probably depends on which
 C<Perl::Critic> you are testing, so the following should not be
-considered definitive. For the Subversion root as of
-revision 3822, you need the following in addition to B<all> optional
-modules for Perl::Critic itself.
+considered definitive.  You need the following in addition to B<all>
+optional modules for Perl::Critic itself.
 
     Devel::EnforceEncapsulation
     Perl::Critic::More
@@ -151,11 +150,6 @@ Under Perl 5.12 and above, L<Devel::Cycle|Devel::Cycle> 1.11 needs to
 be patched to handle a C<Regexp> as a first-class Perl object. See
 L<https://rt.cpan.org/Public/Bug/Display.html?id=56681> for the
 details.
-
-In addition to the above, C<Perl::Critic> revision 3812 requires
-L<PPIx::Utilities|PPIx::Utilities> to be installed before C<Build.PL>
-can be executed. It is anticipated that this behavior will go away in
-any production release.
 
 
 =head1 ADDING A GLOBAL CONFIGURATION ITEM
