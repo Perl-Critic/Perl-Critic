@@ -87,13 +87,11 @@ eval {
     foreach my $policy (@policies) {
         my $module_abstract = $policy->get_raw_abstract();
 
-        my $long_name = $policy->get_long_name();
-
         printf
             {$pod_file}
             $format,
-            $long_name,
-            $long_name,
+            $policy->get_short_name(),
+            $policy->get_long_name(),
             $module_abstract,
             $policy->default_severity();
     }
