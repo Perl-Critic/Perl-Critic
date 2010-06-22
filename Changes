@@ -1,5 +1,8 @@
 [1.108] Released on 2010-06-22
 
+    This is the "Give Shawn Moore what we promised him a year ago and hurry up
+    and get this out before Brad Oaks gives his YAPC::NA talk" release.
+
     New Policies:
     * Documentation::RequirePodLinksIncludeText
     * Subroutines::ProhibitUnusedPrivateSubroutines
