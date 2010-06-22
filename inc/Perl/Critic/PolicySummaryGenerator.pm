@@ -27,7 +27,7 @@ use Exception::Class ();  # Must be after P::C::Exception::*
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '1.107_001';
+our $VERSION = '1.108';
 
 #-----------------------------------------------------------------------------
 
@@ -121,7 +121,7 @@ print {$pod_file} <<'END_FOOTER';
 
 =head1 VERSION
 
-This is part of L<Perl::Critic|Perl::Critic> version 1.107_001.
+This is part of L<Perl::Critic|Perl::Critic> version 1.108.
 
 
 =head1 AUTHOR
