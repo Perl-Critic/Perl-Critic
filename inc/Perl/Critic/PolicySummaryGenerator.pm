@@ -59,16 +59,16 @@ Perl::Critic::PolicySummary - Descriptions of the Policy modules included with L
 
 =head1 DESCRIPTION
 
-The following Policy modules are distributed with Perl::Critic.
-(There are additional Policies that can be found in add-on
-distributions.)  The Policy modules have been categorized according to
-the table of contents in Damian Conway's book B<Perl Best Practices>.
-Since most coding standards take the form "do this..." or "don't do
-that...", I have adopted the convention of naming each module
-C<RequireSomething> or C<ProhibitSomething>.  Each Policy is listed
-here with its default severity.  If you don't agree with the default
-severity, you can change it in your F<.perlcriticrc> file.  See the
-documentation of each module for its specific details.
+The following Policy modules are distributed with Perl::Critic. (There are
+additional Policies that can be found in add-on distributions.)  The Policy
+modules have been categorized according to the table of contents in Damian
+Conway's book B<Perl Best Practices>. Since most coding standards take the
+form "do this..." or "don't do that...", I have adopted the convention of
+naming each module C<RequireSomething> or C<ProhibitSomething>.  Each Policy
+is listed here with its default severity.  If you don't agree with the default
+severity, you can change it in your F<.perlcriticrc> file (try C<perlcritic
+--profile-proto> for a starting version).  See the documentation of each
+module for its specific details.
 
 
 =head1 POLICIES
@@ -79,7 +79,7 @@ END_HEADER
 my $format = <<'END_POLICY';
 =head2 L<%s|%s>
 
-%s [Severity %d]
+%s [Default severity %d]
 
 END_POLICY
 
