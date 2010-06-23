@@ -988,12 +988,12 @@ A typical implementation will look like:
 
     =item L<Perl::Critic::Policy::Documentation::Example|Perl::Critic::Policy::Documentation::Example>
 
-    Complains about some example documentation issues.  [Severity: 3]
+    Complains about some example documentation issues.  [Default severity: 3]
 
 
     =item L<Perl::Critic::Policy::Variables::Example|Perl::Critic::Policy::Variables::Example>
 
-    All modules must have at least one variable.  [Severity: 3]
+    All modules must have at least one variable.  [Default severity: 3]
 
 
     =back
