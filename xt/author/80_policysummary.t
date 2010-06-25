@@ -57,7 +57,7 @@ if (open my ($fh), '<', $summary_file) {
     for my $policy_name (keys %descriptions) {
         my $severity;
         if (
-            $descriptions{$policy_name} =~ s/ [ ] \[ Severity [ ] (\d+) \] //xms
+            $descriptions{$policy_name} =~ s/ [ ] \[ Default [ ] severity [ ] (\d+) \] //xms
         ) {
             $severity = $1;
         }
