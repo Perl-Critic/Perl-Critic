@@ -1,3 +1,9 @@
+Next release whenever it is
+
+    Policy Changes:
+    * ControlStructures::ProhibitMutatingListFunctions allows s///r,
+      which was introduced in 5.13.2.
+
 [1.108] Released on 2010-06-22
 
     This is the "Give Shawn Moore what we promised him a year ago and hurry up

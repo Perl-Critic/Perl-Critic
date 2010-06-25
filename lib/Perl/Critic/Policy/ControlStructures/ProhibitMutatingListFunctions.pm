@@ -168,6 +168,16 @@ sub _is_topic_mutating_regex {
         }
     }
 
+    # As of 5.13.2, the substitute built-in supports the /r modifier, which
+    # causes the operation to return the modified string and leave the
+    # original unmodified. This does not parse under earlier Perls, so there
+    # is no version check.
+
+    if ( $elem->isa( 'PPI::Token::Regexp::Substitute' ) ) {
+        my %mods = $elem->get_modifiers();
+        $mods{r} and return;
+    }
+
     # If the previous sibling does not exist, then
     # the regex implicitly binds to $_
     my $prevsib = $elem->sprevious_sibling;
