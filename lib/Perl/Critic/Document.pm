@@ -222,13 +222,10 @@ sub namespaces {
 
 #-----------------------------------------------------------------------------
 
-use 5.010;
 sub subdocuments_for_namespace {
     my ($self, $namespace) = @_;
 
     my $subdocuments = $self->_nodes_by_namespace()->{$namespace};
-use Data::Dumper::Names;
-say Dumper($self->_nodes_by_namespace());
 
     return $subdocuments ? @{$subdocuments} : ();
 }
@@ -508,7 +505,6 @@ sub _nodes_by_namespace {
         ];
     }
 
-say Dumper(\%wrapped_nodes);
     return $self->{_nodes_by_namespace} = \%wrapped_nodes;
 }
 
