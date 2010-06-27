@@ -35,7 +35,7 @@ our $VERSION = '1.108';
 
 use base 'Exporter';
 
-Readonly::Array our @EXPORT_OK      => @EXPORT;
+Readonly::Array our @EXPORT_OK      => qw< all_policies_ok >;
 Readonly::Hash  our %EXPORT_TAGS    => (all => \@EXPORT_OK);
 
 #-----------------------------------------------------------------------------
