@@ -520,6 +520,9 @@ sub _modules_used {
     return $mapping if $mapping;
 
     my $includes = $self->find('PPI::Statement::Include');
+    if (not $includes) {
+        return $self->{_modules_used} = {};
+    }
 
     my %mapping;
     for my $module (

@@ -17,11 +17,12 @@ use version;
 
 
 use Perl::Critic::Document qw< >;
+use Perl::Critic::Utils qw< $EMPTY >;
 use Perl::Critic::Utils::DataConversion qw< dor >;
 
 
 use Test::Deep;
-use Test::More tests => 40;
+use Test::More tests => 41;
 
 #-----------------------------------------------------------------------------
 
@@ -137,6 +138,15 @@ can_ok('Perl::Critic::Document', 'is_module');
 
     ok(!! $critic_document->uses_module('Moose'),       'Moose is used.');
     ok( ! $critic_document->uses_module('Moose::Role'), 'Moose::Role is not used.');
+
+    $ppi_document = PPI::Document->new(\$EMPTY);
+    $critic_document =
+        Perl::Critic::Document->new(-source => $ppi_document);
+
+    ok(
+        ! $critic_document->uses_module('Blah'),
+        q<uses_module() doesn't barf when there are no include statements.>,
+    );
 }
 
 #-----------------------------------------------------------------------------
