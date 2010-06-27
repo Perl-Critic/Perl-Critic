@@ -7,6 +7,8 @@ Next release whenever it is
     Policy Changes:
     * ControlStructures::ProhibitMutatingListFunctions allows s///r,
       which was introduced in 5.13.2.
+    * ValuesAndExpressions::ProhibitMismatchedOperators didn't handle file
+      test operators properly.  Patch by H.Merijn Brand.  RT #58751
 
     Other Changes
     * Build phase now requires Test::Deep.
