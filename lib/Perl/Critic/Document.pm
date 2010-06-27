@@ -13,12 +13,13 @@ use warnings;
 
 use Carp qw< confess >;
 
-use PPI::Document;
-use PPI::Document::File;
-
 use List::Util qw< reduce >;
 use Scalar::Util qw< blessed weaken >;
 use version;
+
+use PPI::Document;
+use PPI::Document::File;
+use PPIx::Utilities::Node qw< split_ppi_node_by_namespace >;
 
 use Perl::Critic::Annotation;
 use Perl::Critic::Exception::Parse qw< throw_parse >;
@@ -42,16 +43,49 @@ sub AUTOLOAD {  ## no critic (ProhibitAutoloading,ArgUnpacking)
 
 sub new {
     my ($class, @args) = @_;
+
     my $self = bless {}, $class;
-    return $self->_init(@args);
+
+    $self->_init_common();
+    $self->_init_from_external_source(@args);
+
+    return $self;
 }
 
 #-----------------------------------------------------------------------------
 
-sub _init { ## no critic (Subroutines::RequireArgUnpacking)
+sub _new_for_parent_document {
+    my ($class, $ppi_document, $parent_document) = @_;
 
+    my $self = bless {}, $class;
+
+    $self->_init_common();
+
+    $self->{_doc}       = $ppi_document;
+    $self->{_is_module} = $parent_document->is_module();
+
+    return $self;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _init_common {
+    my ($self) = @_;
+    my %args;
+
+    $self->{_annotations} = [];
+    $self->{_suppressed_violations} = [];
+    $self->{_disabled_line_map} = {};
+
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _init_from_external_source { ## no critic (Subroutines::RequireArgUnpacking)
     my $self = shift;
     my %args;
+
     if (@_ == 1) {
         warnings::warnif(
             'deprecated',
@@ -61,18 +95,22 @@ sub _init { ## no critic (Subroutines::RequireArgUnpacking)
     } else {
         %args = @_;
     }
+
     my $source_code = $args{'-source'};
 
     # $source_code can be a file name, or a reference to a
     # PPI::Document, or a reference to a scalar containing source
     # code.  In the last case, PPI handles the translation for us.
 
-    my $doc = _is_ppi_doc( $source_code ) ? $source_code
-              : ref $source_code ? PPI::Document->new($source_code)
-              : PPI::Document::File->new($source_code);
+    my $ppi_document =
+        _is_ppi_doc($source_code)
+            ? $source_code
+            : ref $source_code
+                ? PPI::Document->new($source_code)
+                : PPI::Document::File->new($source_code);
 
     # Bail on error
-    if ( not defined $doc ) {
+    if (not defined $ppi_document) {
         my $errstr   = PPI::Document::errstr();
         my $file     = ref $source_code ? undef : $source_code;
         throw_parse
@@ -80,15 +118,12 @@ sub _init { ## no critic (Subroutines::RequireArgUnpacking)
             file_name   => $file;
     }
 
-    $self->{_doc} = $doc;
-    $self->{_annotations} = [];
-    $self->{_suppressed_violations} = [];
-    $self->{_disabled_line_map} = {};
+    $self->{_doc} = $ppi_document;
     $self->index_locations();
     $self->_disable_shebang_fix();
     $self->{_is_module} = $self->_determine_is_module(\%args);
 
-    return $self;
+    return;
 }
 
 #-----------------------------------------------------------------------------
@@ -179,9 +214,29 @@ sub find_any {
 
 #-----------------------------------------------------------------------------
 
+sub namespaces {
+    my ($self) = @_;
+
+    return keys %{ $self->_nodes_by_namespace() };
+}
+
+#-----------------------------------------------------------------------------
+
+sub subdocuments_for_namespace {
+    my ($self, $namespace) = @_;
+
+    my $subdocuments = $self->_nodes_by_namespace()->{$namespace};
+
+    return $subdocuments ? @{$subdocuments} : ();
+}
+
+#-----------------------------------------------------------------------------
+
 sub filename {
     my ($self) = @_;
+
     my $doc = $self->{_doc};
+
     return $doc->can('filename') ? $doc->filename() : undef;
 }
 
@@ -334,7 +389,6 @@ sub _is_a_version_statement {
 #-----------------------------------------------------------------------------
 
 sub _caching_finder {
-
     my $cache_ref = shift;  # These vars will persist for the life
     my %isa_cache = ();     # of the code ref that this sub returns
 
@@ -417,6 +471,32 @@ sub _determine_is_module {
     return $FALSE if defined $file_name && $file_name =~ m/ [.] PL \z /smx;
 
     return $TRUE;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _nodes_by_namespace {
+    my ($self) = @_;
+
+    my $nodes = $self->{_nodes_by_namespace};
+
+    return $nodes if $nodes;
+
+    my $ppi_document = $self->ppi_document();
+    if (not $ppi_document) {
+        return $self->{_nodes_by_namespace} = {};
+    }
+
+    my $raw_nodes_map = split_ppi_node_by_namespace($ppi_document);
+
+    my %wrapped_nodes;
+    while ( my ($namespace, $raw_nodes) = each %{$raw_nodes_map} ) {
+        $wrapped_nodes{$namespace} =
+            map { __PACKAGE__->_new_for_parent_document($_, $self) }
+                @{$raw_nodes};
+    }
+
+    return $self->{_nodes_by_namespace} = \%wrapped_nodes;
 }
 
 #-----------------------------------------------------------------------------
@@ -517,6 +597,26 @@ Otherwise we forward the call to the corresponding method of the
 C<PPI::Document> instance.
 
 
+=item C<< namespaces() >>
+
+Returns a list of the namespaces (package names) in the document.
+
+
+=item C<< subdocuments_for_namespace($namespace) >>
+
+Returns a list of sub-documents containing the elements in the given
+namespace.  For example, given that the current document is for the source
+
+    foo();
+    package Foo;
+    package Bar;
+    package Foo;
+
+this method will return two L<Perl::Critic::Document|Perl::Critic::Document>s
+for a parameter of C<"Foo">.  For more, see
+L<PPIx::Utilities::Node/split_ppi_node_by_namespace>.
+
+
 =item C<< filename() >>
 
 Returns the filename for the source code if applicable
@@ -536,19 +636,23 @@ Returns a L<version|version> object for the highest Perl version
 requirement declared in the document via a C<use> or C<require>
 statement.  Returns nothing if there is no version statement.
 
+
 =item C<< process_annotations() >>
 
 Causes this Document to scan itself and mark which lines &
 policies are disabled by the C<"## no critic"> annotations.
+
 
 =item C<< line_is_disabled_for_policy($line, $policy_object) >>
 
 Returns true if the given C<$policy_object> or C<$policy_name> has
 been disabled for at C<$line> in this Document.  Otherwise, returns false.
 
+
 =item C<< add_annotation( $annotation ) >>
 
 Adds an C<$annotation> object to this Document.
+
 
 =item C<< annotations() >>
 
@@ -556,11 +660,13 @@ Returns a list containing all the
 L<Perl::Critic::Annotation|Perl::Critic::Annotation>s that
 were found in this Document.
 
+
 =item C<< add_suppressed_violation($violation) >>
 
 Informs this Document that a C<$violation> was found but not reported
 because it fell on a line that had been suppressed by a C<"## no critic">
 annotation. Returns C<$self>.
+
 
 =item C<< suppressed_violations() >>
 

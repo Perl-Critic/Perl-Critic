@@ -76,9 +76,12 @@ sub new {
     $self->{_explanation} = $expl;
     $self->{_severity}    = $sev;
     $self->{_policy}      = caller;
-    $self->{_elem}        = $elem;
 
-    # Do these now before the weakened $doc gets garbage collected
+    # PPI eviscerates the Elements in a Document when the Document gets
+    # DESTROY()ed, and thus they aren't useful after it is gone.  So we have
+    # to preemptively grab everything we could possibly want.
+    $self->{_element_class} = blessed $elem;
+
     my $top = $elem->top();
     $self->{_filename} = $top->can('filename') ? $top->filename() : undef;
     $self->{_source}   = _first_line_of_source( $elem );
@@ -246,7 +249,7 @@ sub source {
 sub element_class {
     my ($self) = @_;
 
-    return blessed $self->{_elem};
+    return $self->{_element_class};
 }
 
 #-----------------------------------------------------------------------------

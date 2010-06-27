@@ -208,7 +208,6 @@ sub _critique {
 #-----------------------------------------------------------------------------
 
 sub _futz_with_policy_order {
-
     # The ProhibitUselessNoCritic policy is another special policy.  It
     # deals with the violations that *other* Policies produce.  Therefore
     # it needs to be run *after* all the other Policies.  TODO: find

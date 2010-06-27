@@ -1,5 +1,9 @@
 Next release whenever it is
 
+    New Features:
+    * namespaces(), and subdocuments_for_namespace() methods on
+      Perl::Critic::Document.
+
     Policy Changes:
     * ControlStructures::ProhibitMutatingListFunctions allows s///r,
       which was introduced in 5.13.2.

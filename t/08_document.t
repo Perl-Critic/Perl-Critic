@@ -16,11 +16,12 @@ use Carp qw< carp >;
 use version;
 
 
-use Perl::Critic::Document;
+use Perl::Critic::Document qw< >;
 use Perl::Critic::Utils::DataConversion qw< dor >;
 
 
-use Test::More tests => 33;
+use Test::Deep;
+use Test::More tests => 37;
 
 #-----------------------------------------------------------------------------
 
@@ -33,6 +34,8 @@ can_ok('Perl::Critic::Document', 'filename');
 can_ok('Perl::Critic::Document', 'find');
 can_ok('Perl::Critic::Document', 'find_first');
 can_ok('Perl::Critic::Document', 'find_any');
+can_ok('Perl::Critic::Document', 'namespaces');
+can_ok('Perl::Critic::Document', 'subdocuments_for_namespace');
 can_ok('Perl::Critic::Document', 'highest_explicit_perl_version');
 can_ok('Perl::Critic::Document', 'ppi_document');
 can_ok('Perl::Critic::Document', 'is_program');
@@ -99,12 +102,33 @@ can_ok('Perl::Critic::Document', 'is_module');
 
     #-------------------------------------------------------------------------
 
+    cmp_deeply(
+        [ $pc_doc->namespaces() ],
+        ['main'],
+        q<everything is in the "main" namespace>,
+    );
+
     ok( $pc_doc->is_module(), q{document type 'module' is a module});
     ok( ! $pc_doc->is_program(), q{document type 'module' is not a program});
 
 }
 
 #-----------------------------------------------------------------------------
+
+{
+    my $ppi_document = PPI::Document->new(\'foo(); package Foo; package Bar');
+    my $critic_document =
+        Perl::Critic::Document->new(-source => $ppi_document);
+
+    cmp_deeply(
+        [ $critic_document->namespaces() ],
+        bag( qw< main Foo Bar > ),
+        'Got expected namespaces',
+    );
+}
+
+#-----------------------------------------------------------------------------
+
 
 {
     test_version( 'sub { 1 }', undef );
