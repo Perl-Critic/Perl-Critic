@@ -17,16 +17,26 @@ use warnings;
 use Carp qw< croak confess >;
 use English qw< -no_match_vars >;
 use List::MoreUtils qw< all none >;
+use Readonly;
 
 use Test::Builder qw<>;
 use Test::More;
 
 use Perl::Critic::Violation;
-use Perl::Critic::TestUtils qw<pcritique_with_violations fcritique_with_violations subtests_in_tree>;
+use Perl::Critic::TestUtils qw<
+    pcritique_with_violations fcritique_with_violations subtests_in_tree
+>;
 
 #-----------------------------------------------------------------------------
 
 our $VERSION = '1.108';
+
+#-----------------------------------------------------------------------------
+
+use base 'Exporter';
+
+Readonly::Array our @EXPORT_OK      => @EXPORT;
+Readonly::Hash  our %EXPORT_TAGS    => (all => \@EXPORT_OK);
 
 #-----------------------------------------------------------------------------
 
@@ -39,22 +49,7 @@ my $TEST = Test::Builder->new();
 
 #-----------------------------------------------------------------------------
 
-sub import {
-
-    my ( $class, %args ) = @_;
-    my $caller = caller;
-
-    no strict 'refs';  ## no critic (ProhibitNoStrict)
-    *{ $caller . '::all_policies_ok' } = \&all_policies_ok;
-    $TEST->exported_to($caller);
-
-    return 1;
-}
-
-#-----------------------------------------------------------------------------
-
 sub all_policies_ok {
-
     my (%args) = @_;
     my $wanted_policies = $args{-policies};
     my $test_dir        = $args{'-test-directory'} || 't';
@@ -273,44 +268,55 @@ Test::Perl::Critic::Policy - A framework for testing your custom Policies
 
 =head1 SYNOPSIS
 
-use Test::Perl::Critic::Policy;
+    use Test::Perl::Critic::Policy qw< all_policies_ok >;
 
-# Assuming .run files are inside 't' directory...
-all_policies_ok()
+    # Assuming .run files are inside 't' directory...
+    all_policies_ok()
 
-# Or if your .run files are in a different directory...
-all_policies_ok( '-test-directory' => 'run' );
+    # Or if your .run files are in a different directory...
+    all_policies_ok( '-test-directory' => 'run' );
 
-# And if you just want to run tests for some polices...
-all_policies_ok( -policies => ['Some::Policy', 'Another::Policy'] );
+    # And if you just want to run tests for some polices...
+    all_policies_ok( -policies => ['Some::Policy', 'Another::Policy'] );
+
+    # If you want your test program to accept short Policy names as
+    # command-line parameters...
+    #
+    # You can then test a single policy by running
+    # "perl -Ilib t/policy-test.t My::Policy".
+    my %args = @ARGV ? ( -policies => [ @ARGV ] ) : ();
+    all_policies_ok(%args);
+
 
 =head1 DESCRIPTION
 
 This module provides a framework for function-testing your custom
-L<Perl::Critic::Policy|Perl::Critic::Policy> modules.  Policy testing usually involves feeding it
-a string of Perl code and checking its behavior.  In the old days, those
-strings of Perl code were mixed directly in the test script.  That sucked.
+L<Perl::Critic::Policy|Perl::Critic::Policy> modules.  Policy testing usually
+involves feeding it a string of Perl code and checking its behavior.  In the
+old days, those strings of Perl code were mixed directly in the test script.
+That sucked.
 
 B<NOTE:> This module is alpha code -- interfaces and implementation are
 subject to major changes.  This module is an integral part of building and
-testing L<Perl::Critic|Perl::Critic> itself, but you should not write any code against this
-module until it has stabilized.
+testing L<Perl::Critic|Perl::Critic> itself, but you should not write any code
+against this module until it has stabilized.
 
-=head1 EXPORTED SUBROUTINES
+
+=head1 IMPORTABLE SUBROUTINES
 
 =over
 
-=item all_policies_ok()
+=item all_policies_ok('-test-directory' => $path, -policies => \@policy_names)
 
-=item all_policies_ok( [ '-test-directory' => $DIR, -policies => \@POLICY_NAMES ] )
-
-Loads all the F<*.run> files beneath the C<-test-directory> $DIR and runs the
-tests.  If C<-test-directory> is not specified, it defaults to f<t/>.
+Loads all the F<*.run> files beneath the C<-test-directory> and runs the
+tests.  If C<-test-directory> is not specified, it defaults to F<t/>.
 C<-policies> is an optional reference to an array of shortened Policy names.
 If C<-policies> specified, only the tests for Policies that match one of the
 C<m/$POLICY_NAME/imx> will be run.
 
+
 =back
+
 
 =head1 CREATING THE *.run FILES
 

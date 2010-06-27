@@ -10,7 +10,8 @@ Next release whenever it is
     * ValuesAndExpressions::ProhibitMismatchedOperators didn't handle file
       test operators properly.  Patch by H.Merijn Brand.  RT #58751
 
-    Other Changes
+    Other Changes:
+    * Test::Perl::Critic::Policy no longer exports by default.
     * Build phase now requires Test::Deep.
 
 [1.108] Released on 2010-06-22

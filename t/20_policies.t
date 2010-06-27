@@ -12,7 +12,7 @@ use 5.006001;
 use strict;
 use warnings;
 
-use Test::Perl::Critic::Policy;
+use Test::Perl::Critic::Policy qw< all_policies_ok >;
 
 #-----------------------------------------------------------------------------
 
