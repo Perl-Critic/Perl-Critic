@@ -1,7 +1,7 @@
 Next release whenever it is
 
     New Features:
-    * namespaces(), and subdocuments_for_namespace() methods on
+    * uses_module(), namespaces(), and subdocuments_for_namespace() methods on
       Perl::Critic::Document.
 
     Policy Changes:

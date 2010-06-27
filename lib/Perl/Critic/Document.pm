@@ -286,6 +286,14 @@ sub highest_explicit_perl_version {
 
 #-----------------------------------------------------------------------------
 
+sub uses_module {
+    my ($self, $module_name) = @_;
+
+    return exists $self->_modules_used()->{$module_name};
+}
+
+#-----------------------------------------------------------------------------
+
 sub process_annotations {
     my ($self) = @_;
 
@@ -501,6 +509,30 @@ sub _nodes_by_namespace {
 
 #-----------------------------------------------------------------------------
 
+# Note: must use exists on return value to determine membership because all
+# the values are false, unlike the result of hashify().
+sub _modules_used {
+    my ($self) = @_;
+
+    my $mapping = $self->{_modules_used};
+
+    return $mapping if $mapping;
+
+    my $includes = $self->find('PPI::Statement::Include');
+
+    my %mapping;
+    for my $module (
+        grep { $_ } map  { $_->module() || $_->pragma() } @{$includes}
+    ) {
+        # Significanly ess memory than $h{$k} => 1.  Thanks Mr. Lembark.
+        $mapping{$module} = ();
+    }
+
+    return $self->{_modules_used} = \%mapping;
+}
+
+#-----------------------------------------------------------------------------
+
 1;
 
 __END__
@@ -592,9 +624,9 @@ date.
 
 =item C<< find_any($wanted) >>
 
-If C<$wanted> is a simple PPI class name, then the cache is employed.
-Otherwise we forward the call to the corresponding method of the
-C<PPI::Document> instance.
+Caching wrappers around the PPI methods.  If C<$wanted> is a simple PPI class
+name, then the cache is employed. Otherwise we forward the call to the
+corresponding method of the C<PPI::Document> instance.
 
 
 =item C<< namespaces() >>
@@ -635,6 +667,13 @@ PPI::Document class.
 Returns a L<version|version> object for the highest Perl version
 requirement declared in the document via a C<use> or C<require>
 statement.  Returns nothing if there is no version statement.
+
+
+=item C<< uses_module($module_or_pragma_name) >>
+
+Answers whether there is a C<use>, C<require>, or C<no> of the given name in
+this document.  Note that there is no differentiation of modules vs. pragmata
+here.
 
 
 =item C<< process_annotations() >>
