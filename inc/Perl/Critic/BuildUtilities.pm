@@ -57,6 +57,7 @@ sub required_module_versions {
         'PPI::Node'                     => '1.208',
         'PPI::Token::Quote::Single'     => '1.208',
         'PPI::Token::Whitespace'        => '1.208',
+        'PPIx::Utilities::Node'         => '1.000',
         'PPIx::Utilities::Statement'    => '1.000',
         'Pod::PlainText'                => 0,
         'Pod::Select'                   => 0,
