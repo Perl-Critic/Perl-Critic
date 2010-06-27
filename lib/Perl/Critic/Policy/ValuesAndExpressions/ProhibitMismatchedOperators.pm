@@ -38,6 +38,10 @@ Readonly::Hash my %TOKEN_COMPAT => (
     'PPI::Token::Quote'  => [ 0, 1 ],
 );
 
+# file operators
+
+Readonly::Hash my %FILE_OPS => (map { ("-$_") => [ 1, 0 ] } qw( r w x o R W X O e z s f d l p S b c t u g k T B M A ));
+
 #-----------------------------------------------------------------------------
 
 sub supported_parameters { return ()                     }
@@ -54,7 +58,7 @@ sub violates {
 
     return if !exists $OP_TYPES{$elem_text};
 
-    my $prev_elem = $elem->sprevious_sibling();
+    my $prev_elem = $self->_get_prev_elem($elem);
     return if not $prev_elem;
 
     my $next_elem = $elem->snext_sibling();
@@ -87,6 +91,7 @@ sub violates {
 
 sub _get_token_compat {
     my ( $self, $elem ) = @_;
+    return $FILE_OPS{$elem->content()} if $self->_is_file_op( $elem );
     for my $class ( keys %TOKEN_COMPAT ) {
         return $TOKEN_COMPAT{$class} if $elem->isa($class);
     }
@@ -105,6 +110,35 @@ sub _have_stringy_x {
         and 'x' eq $prev_oper->content()
         or return;
     my $prev_elem = $prev_oper->sprevious_sibling() or return;
+    return $TRUE;
+}
+
+#-----------------------------------------------------------------------------
+
+# get previous element
+
+sub _get_prev_elem {
+    my ($self, $elem) = @_;
+    my $prev_elem = $elem->sprevious_sibling() or return;
+    if ( $self->_get_token_compat( $prev_elem ) ) {
+        my $prev_sibling = $prev_elem->sprevious_sibling();
+        if ( $prev_sibling && $self->_is_file_op( $prev_sibling ) ) {
+            $prev_elem = $prev_sibling
+        }
+    }
+    return $prev_elem;
+}
+
+#-----------------------------------------------------------------------------
+
+# is file operator
+
+sub _is_file_op {
+    my ($self, $elem ) = @_;
+    $elem or return;
+    $elem->isa('PPI::Token::Operator')
+        and $FILE_OPS{$elem->content()}
+        or return;
     return $TRUE;
 }
 
@@ -149,7 +183,7 @@ This Policy is not configurable except for the standard options.
 If L<warnings|warnings> are enabled, the Perl interpreter usually
 warns you about using mismatched operators at run-time.  This Policy
 does essentially the same thing, but at author-time.  That way, you
-can find our about them sooner.
+can find out about them sooner.
 
 
 =head1 AUTHOR

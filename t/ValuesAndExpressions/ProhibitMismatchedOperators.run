@@ -55,6 +55,67 @@ $a .= 1;
 
 #-----------------------------------------------------------------------------
 
+## name File operators passing
+## failures 0
+## cut
+
+-M 'file' > 0;
+-r 'file' < 1;
+-w 'file' != 1;
+-x 'file' == 0;
+-o 'file' == 1234;
+-R 'file' != 3210;
+-W 'file' == 4321;
+-X 'file' != 5678;
+-O 'file' == 9876l;
+-e 'file' == 1 && -z 'file';
+-s 'file' / 1024;
+-f 'file' == 1 && -d 'file' != 1;
+-l 'file' && !-p 'file';
+-S 'file' == 1 && -b 'file' != 1;
+-c 'file' + 1;
+-t 'file' > 1;
+-u 'file' * 123;
+-g 'file' != 1;
+-k 'file' - -T 'file';
+-B 'file' < 1;
+-M 'file' + -A 'file';
+(-M 'file') > 0 || -M 'file' > 0;
+
+#-----------------------------------------------------------------------------
+
+## name File operators failure
+## failures 25
+## cut
+
+-M 'file' gt "0";
+-r 'file' lt "1";
+-w 'file' ne "1";
+-x 'file' eq "0";
+-o 'file' eq "1234";
+-R 'file' ne "3210";
+-W 'file' eq "4321";
+-X 'file' ne "5678";
+-O 'file' eq "9876l";
+-e 'file' eq "1";
+-z 'file' ne "1";
+-s 'file' eq "1024";
+-f 'file' eq "1";
+-d 'file' ne "1";
+-l 'file' eq "1";
+-S 'file' eq "1";
+-b 'file' ne "1";
+-c 'file' eq "1";
+-t 'file' gt "1";
+-u 'file' eq "123";
+-g 'file' ne "1";
+-k 'file' eq "1";
+-T 'file' ne "1";
+-B 'file' lt "1";
+-A 'file' eq "1";
+
+#-----------------------------------------------------------------------------
+
 ##############################################################################
 #      $URL$
 #     $Date$
