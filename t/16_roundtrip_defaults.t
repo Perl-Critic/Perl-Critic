@@ -18,16 +18,12 @@ use Perl::Critic::Config;
 use Perl::Critic::ProfilePrototype;
 use Perl::Critic::Utils qw{ :characters :severities };
 
+use Test::Deep;
 use Test::More;
 
 #-----------------------------------------------------------------------------
 
 our $VERSION = '1.108';
-
-#-----------------------------------------------------------------------------
-
-eval 'use Test::Deep; 1'
-    or plan skip_all => 'Test::Deep required to test round-trip of default values';
 
 #-----------------------------------------------------------------------------
 

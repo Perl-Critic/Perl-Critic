@@ -129,7 +129,6 @@ optional modules for Perl::Critic itself.
 
     Devel::EnforceEncapsulation
     Perl::Critic::More
-    Test::Deep
     Test::Kwalitee
     Test::Memory::Cycle
     Test::Perl::Critic
@@ -141,10 +140,10 @@ You can find out what the optional modules are by looking at
 C<recommended_module_versions()> in
 F<inc/Perl/Critic/BuildUtilities.pm>.
 
-In the absence of C<Test::Deep> and C<Test::Memory::Cycle>, the
-relevant tests are simply skipped.  In the absence of the other
-modules, the tests die horribly.  Of course, either way they do not get
-run, so the difference is mainly one of aesthetics.
+In the absence of C<Test::Memory::Cycle>, the relevant tests are
+simply skipped.  In the absence of the other modules, the tests die
+horribly.  Of course, either way they do not get run, so the
+difference is mainly one of aesthetics.
 
 Under Perl 5.12 and above, L<Devel::Cycle|Devel::Cycle> 1.11 needs to
 be patched to handle a C<Regexp> as a first-class Perl object. See

@@ -30,7 +30,6 @@ our $VERSION = '1.108';
 
 my %module_versions = (
     recommended_module_versions(),
-    'Test::Deep'            => 0,
     'Test::Memory::Cycle'   => 0,
     'Test::Without::Module' => 0,
 );
