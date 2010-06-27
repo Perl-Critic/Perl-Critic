@@ -222,10 +222,13 @@ sub namespaces {
 
 #-----------------------------------------------------------------------------
 
+use 5.010;
 sub subdocuments_for_namespace {
     my ($self, $namespace) = @_;
 
     my $subdocuments = $self->_nodes_by_namespace()->{$namespace};
+use Data::Dumper::Names;
+say Dumper($self->_nodes_by_namespace());
 
     return $subdocuments ? @{$subdocuments} : ();
 }
@@ -499,11 +502,13 @@ sub _nodes_by_namespace {
 
     my %wrapped_nodes;
     while ( my ($namespace, $raw_nodes) = each %{$raw_nodes_map} ) {
-        $wrapped_nodes{$namespace} =
+        $wrapped_nodes{$namespace} = [
             map { __PACKAGE__->_new_for_parent_document($_, $self) }
-                @{$raw_nodes};
+                @{$raw_nodes}
+        ];
     }
 
+say Dumper(\%wrapped_nodes);
     return $self->{_nodes_by_namespace} = \%wrapped_nodes;
 }
 
