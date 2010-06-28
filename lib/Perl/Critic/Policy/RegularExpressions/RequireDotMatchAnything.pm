@@ -82,7 +82,7 @@ This Policy is not configurable except for the standard options.
 
 =head1 NOTES
 
-Be cautions about slapping modifier flags onto existing regular
+Be cautious about slapping modifier flags onto existing regular
 expressions, as they can drastically alter their meaning.  See
 L<http://www.perlmonks.org/?node_id=484238> for an interesting
 discussion on the effects of blindly modifying regular expression
