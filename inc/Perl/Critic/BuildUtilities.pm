@@ -71,10 +71,7 @@ sub required_module_versions {
         'charnames'                     => 0,
         'overload'                      => 0,
         'strict'                        => 0,
-        'version'                       => 0,
-        'overload'                      => 0,
-        'strict'                        => 0,
-        'version'                       => 0,
+        'version'                       => 0.77,
         'warnings'                      => 0,
     );
 }

@@ -14,6 +14,10 @@ Next release whenever it is
     * Test::Perl::Critic::Policy no longer exports by default.
     * Build phase now requires Test::Deep.
 
+    Bug Fixes:
+    * Build.PL/Makefile.PL didn't specify a minimum version of version.pm, but
+      TestingAndDebugging::RequireUseStrict did.  RT #58952
+
 [1.108] Released on 2010-06-22
 
     This is the "Give Shawn Moore what we promised him a year ago and hurry up

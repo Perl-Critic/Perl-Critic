@@ -10,6 +10,7 @@ package Perl::Critic::Policy::TestingAndDebugging::RequireUseStrict;
 use 5.006001;
 use strict;
 use warnings;
+
 use version 0.77;
 use Readonly;
 use Scalar::Util qw{ blessed };
