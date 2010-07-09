@@ -110,6 +110,19 @@ sub _init {
         last SIB if $esib->isa('PPI::Token::Comment') && $esib =~ $use_critic;
     }
 
+    # PPI parses __END__ as a PPI::Statement::End, and everything following is
+    # a child of that statement. That means if we encounter an __END__, we
+    # need to descend into it and continue the analysis.
+    if ( $end->isa( 'PPI::Statement::End' ) and my $kid = $end->child( 0 ) ) {
+        $end = $kid;
+      SIB:
+        while ( my $esib = $end->next_sibling() ) {
+            $end = $esib;
+            last SIB if $esib->isa( 'PPI::Token::Comment' ) &&
+                $esib->content() =~ $use_critic;
+        }
+    }
+
     # We either found an end or hit the end of the scope.
     my $ending_line = $end->logical_line_number();
     $self->{_effective_range} = [$annotation_line, $ending_line];

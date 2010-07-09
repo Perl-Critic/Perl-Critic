@@ -17,6 +17,9 @@ Next release whenever it is
     Bug Fixes:
     * Build.PL/Makefile.PL didn't specify a minimum version of version.pm, but
       TestingAndDebugging::RequireUseStrict did.  RT #58952
+    * Perl::Critic::Annotation needs to look inside the __END__ statement to
+      find the true end of the document, otherwise POD policies may give false
+      positives.  RT #59176
 
 [1.108] Released on 2010-06-22
 
