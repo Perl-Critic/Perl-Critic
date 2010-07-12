@@ -326,8 +326,11 @@ sub violates {
     return if not $pods_ref;
 
     # Round up the names of all the =head1 sections
+    my $pod_of_record;
     for my $pod ( @{ $pods_ref } ) {
         for my $found ( $pod =~ m{ ^ =head1 \s+ ( .+? ) \s* $ }gxms ) {
+            # Use first matching POD as POD of record (RT #59268)
+            $pod_of_record ||= $pod;
             #Leading/trailing whitespace is already removed
             $found_sections{ uc $found } = 1;
         }
@@ -337,7 +340,9 @@ sub violates {
     for my $required ( @required_sections ) {
         if ( not exists $found_sections{$required} ) {
             my $desc = qq{Missing "$required" section in POD};
-            push @violations, $self->violation( $desc, $EXPL, $doc );
+            # Report any violations against POD of record rather than whole
+            # document (the point of RT #59268)
+            push @violations, $self->violation( $desc, $EXPL, $pod_of_record );
         }
     }
 
@@ -460,6 +465,12 @@ in a F<.perlcriticrc> file:
 Currently, this Policy does not look for the required POD sections
 below the C<=head1> level.  Also, it does not require the sections to
 appear in any particular order.
+
+This Policy applies to the entire document, but can be disabled for a
+particular document by a C<## no critic (RequirePodSections)> annotation
+anywhere between the beginning of the document and the first POD section
+containing a C<=head1>, the C<__END__> (if any), or the C<__DATA__> (if any),
+whichever comes first.
 
 
 =head1 AUTHOR

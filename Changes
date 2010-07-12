@@ -9,6 +9,9 @@ Next release whenever it is
       which was introduced in 5.13.2.
     * ValuesAndExpressions::ProhibitMismatchedOperators didn't handle file
       test operators properly.  Patch by H.Merijn Brand.  RT #58751
+    * Documentation::RequirePodSections now honors '## no critic'
+      annotation anywhere before the '__END__', '__DATA__', or first
+      '=head1', whichever comes first.  RT #59268.
 
     Other Changes:
     * Test::Perl::Critic::Policy no longer exports by default.

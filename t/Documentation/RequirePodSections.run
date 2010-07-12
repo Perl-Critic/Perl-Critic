@@ -113,6 +113,49 @@ Blah...
 
 =cut
 
+#-----------------------------------------------------------------------------
+
+## name Disable with annotation, for a library (RT #59268)
+## failures 0
+## cut
+
+print 'Hello World';
+
+## no critic (RequirePodSections)
+
+__END__
+
+=head1 MI NOMBRE
+
+Blah...
+
+=head1 EL DESCRIPCION
+
+Blah...
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+## name Disable with annotation, for a program (RT #59268)
+## failures 0
+## cut
+#!/usr/bin/perl
+
+## no critic (RequirePodSections)
+
+__END__
+
+=head1 MI NOMBRE
+
+Blah...
+
+=head1 EL DESCRIPCION
+
+Blah...
+
+=cut
+
 ##############################################################################
 #      $URL$
 #     $Date$
