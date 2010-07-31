@@ -3,6 +3,10 @@ Next release whenever it is
     New Features:
     * uses_module(), namespaces(), and subdocuments_for_namespace() methods on
       Perl::Critic::Document.
+    * New policy InputOutput::RequireEncodingWithUTF8Layer to recommend
+      ':encoding(utf8)' over ':utf8' in open() and binmode(). It is
+      severity 5 because of the bad things that can happen if invalid
+      UTF8 gets loose in your code.
 
     Policy Changes:
     * ControlStructures::ProhibitMutatingListFunctions allows s///r,
