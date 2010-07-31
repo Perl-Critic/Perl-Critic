@@ -16,6 +16,9 @@ Next release whenever it is
     Other Changes:
     * Test::Perl::Critic::Policy no longer exports by default.
     * Build phase now requires Test::Deep.
+    * Added example using Try::Tiny to documentation of
+      ErrorHandling::RequireCheckingReturnValueOfEval. Suggested by Andy
+      Lester on the mailing list.
 
     Bug Fixes:
     * Build.PL/Makefile.PL didn't specify a minimum version of version.pm, but

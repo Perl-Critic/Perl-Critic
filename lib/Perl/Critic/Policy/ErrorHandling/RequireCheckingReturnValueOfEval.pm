@@ -360,6 +360,17 @@ true value and to test that value:
 Unfortunately, you can't use the C<defined> function to test the
 result; C<eval> returns an empty string on failure.
 
+Various modules have been written to take some of the pain out of
+properly localizing and checking C<$@>/C<$EVAL_ERROR>. For example:
+
+    use Try::Tiny;
+    try {
+        ...
+    } catch {
+        # Error handling here;
+        # The exception is in $_/$ARG, not $@/$EVAL_ERROR.
+    };  # Note semicolon.
+
 "But we don't use DESTROY() anywhere in our code!" you say.  That may
 be the case, but do any of the third-party modules you use have them?
 What about any you may use in the future or updated versions of the
