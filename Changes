@@ -31,7 +31,7 @@ Next release whenever it is
       find the true end of the document, otherwise POD policies may give false
       positives.  RT #59176
     * RegularExpressions::ProhibitUnusedCapture now takes account of the
-      %LAST_PAREN_MATCH as well as %+ if English has been loaded.
+      %LAST_PAREN_MATCH as well as %+ if English has been loaded.  RT #60002
 
 [1.108] Released on 2010-06-22
 
