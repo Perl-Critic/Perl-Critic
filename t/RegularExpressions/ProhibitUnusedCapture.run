@@ -387,6 +387,47 @@ s/(?<foo>\w+)/foo$+{foo}/g;
 
 #-----------------------------------------------------------------------------
 
+## name named capture English name in replacement RT #60002
+## failures 1
+## optional_modules PPIx::Regexp
+## cut
+
+s/(?<foo>\w+)/foo$LAST_PAREN_MATCH{foo}/g;
+
+#-----------------------------------------------------------------------------
+
+## name named capture English name in code RT #60002
+## failures 1
+## optional_modules PPIx::Regexp
+## cut
+
+
+m/(?P<foo>\w+)|(?<foo>\W+)/ and print $LAST_PAREN_MATCH{foo}, "\n";
+
+#-----------------------------------------------------------------------------
+
+## name named capture English name in replacement RT #60002
+## failures 0
+## optional_modules PPIx::Regexp
+## cut
+
+use English;
+
+s/(?<foo>\w+)/foo$LAST_PAREN_MATCH{foo}/g;
+
+#-----------------------------------------------------------------------------
+
+## name named capture English name in code RT #60002
+## failures 0
+## optional_modules PPIx::Regexp
+## cut
+
+use English;
+
+m/(?P<foo>\w+)|(?<foo>\W+)/ and print $LAST_PAREN_MATCH{foo}, "\n";
+
+#-----------------------------------------------------------------------------
+
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

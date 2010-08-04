@@ -28,6 +28,12 @@ our $VERSION = '1.108';
 Readonly::Scalar my $WHILE => q{while};
 
 Readonly::Hash my %NAMED_CAPTURE_REFERENCE => hashify( qw{ $+ $- } );
+Readonly::Hash my %NAMED_CAPTURE_REFERENCE_ENGLISH => hashify( qw{
+    $LAST_PAREN_MATCH } );
+Readonly::Scalar my $NAMED_CAPTURE_REGEX => qr< @{[ join ' | ', map {
+    quotemeta $_ } sort keys %NAMED_CAPTURE_REFERENCE ]} >smx;
+Readonly::Scalar my $NAMED_CAPTURE_REGEX_ENGLISH => qr< @{[ join ' | ',
+    map { quotemeta $_ } sort keys %NAMED_CAPTURE_REFERENCE_ENGLISH ]} >smx;
 
 Readonly::Scalar my $DESC => q{Only use a capturing group if you plan to use the captured value};
 Readonly::Scalar my $EXPL => [252];
@@ -52,7 +58,7 @@ sub initialize_if_enabled {
 Readonly::Scalar my $NUM_CAPTURES_FOR_GLOBAL => 100; # arbitrarily large number
 
 sub violates {
-    my ( $self, $elem, undef ) = @_;
+    my ( $self, $elem, $doc ) = @_;
 
     # optimization: don't bother parsing the regexp if there are no parens
     return if 0 > index $elem->content(), '(';
@@ -81,7 +87,7 @@ sub violates {
     }
 
     # Look for references to the capture in the regex itself
-    return if _enough_uses_in_regexp( $re, \@captures, \%named_captures );
+    return if _enough_uses_in_regexp( $re, \@captures, \%named_captures, $doc );
 
     my $mod = $re->modifier();
     if ($mod and $mod->asserts( 'g' )
@@ -92,7 +98,7 @@ sub violates {
 
     return if _enough_assignments($elem, \@captures) && !%named_captures;
     return if _is_in_slurpy_array_context($elem) && !%named_captures;
-    return if _enough_magic($elem, \@captures, \%named_captures);
+    return if _enough_magic($elem, \@captures, \%named_captures, $doc);
 
     return $self->violation( $DESC, $EXPL, $elem );
 }
@@ -100,7 +106,7 @@ sub violates {
 # Find uses of both numbered and named capture variables in the regexp itself.
 # Return true if all are used.
 sub _enough_uses_in_regexp {
-    my ( $re, $captures, $named_captures ) = @_;
+    my ( $re, $captures, $named_captures, $doc ) = @_;
 
     # Look for references to the capture in the regex itself. Note that this
     # will also find backreferences in the replacement string of s///.
@@ -120,7 +126,13 @@ sub _enough_uses_in_regexp {
             my $content = $token->content();
             if ( $content =~ m/ \A \$ ( \d+ ) \z /xms ) {
                 $captures->[ $1 - 1 ] = 1;
-            } elsif ( $content =~ m/ \A \$ [+-] [{] ( .*? ) [}] /smx ) {
+            } elsif ( $content =~ m< \A $NAMED_CAPTURE_REGEX
+                [{] ( .*? ) [}] >smxo
+            ) {
+                _record_named_capture( $1, $captures, $named_captures );
+            } elsif ( $doc->uses_module( 'English' ) && $content =~
+                m< \A $NAMED_CAPTURE_REGEX_ENGLISH [{] ( .*? ) [}] >smxo
+            ) {
                 _record_named_capture( $1, $captures, $named_captures );
             }
         }
@@ -296,9 +308,9 @@ sub _skip_lhs {
 }
 
 sub _enough_magic {
-    my ($elem, $captures, $named_captures) = @_;
+    my ($elem, $captures, $named_captures, $doc) = @_;
 
-    _check_for_magic($elem, $captures, $named_captures);
+    _check_for_magic($elem, $captures, $named_captures, $doc);
 
     return ( none {not defined $_} @{$captures} )
         && ( !%{$named_captures} ||
@@ -307,7 +319,7 @@ sub _enough_magic {
 
 # void return
 sub _check_for_magic {
-    my ($elem, $captures, $named_captures) = @_;
+    my ($elem, $captures, $named_captures, $doc) = @_;
 
     # Search for $1..$9 in :
     #  * the rest of this statement
@@ -316,12 +328,13 @@ sub _check_for_magic {
     #  * if this is in a while/for condition, the loop body
     # But NO intervening regexps!
 
-    return if ! _check_rest_of_statement($elem, $captures, $named_captures);
+    return if ! _check_rest_of_statement(
+        $elem, $captures, $named_captures, $doc);
 
     my $parent = $elem->parent();
     while ($parent && ! $parent->isa('PPI::Statement::Sub')) {
         return if ! _check_rest_of_statement($parent, $captures,
-            $named_captures);
+            $named_captures, $doc);
         $parent = $parent->parent();
     }
 
@@ -350,15 +363,16 @@ sub _check_if_in_while_condition_or_block {
 
 # false if we hit another regexp
 sub _check_rest_of_statement {
-    my ($elem, $captures, $named_captures) = @_;
+    my ($elem, $captures, $named_captures, $doc) = @_;
 
     my $nsib = $elem->snext_sibling;
     while ($nsib) {
         return if $nsib->isa('PPI::Token::Regexp');
         if ($nsib->isa('PPI::Node')) {
-            return if ! _check_node_children($nsib, $captures, $named_captures);
+            return if ! _check_node_children(
+                $nsib, $captures, $named_captures, $doc);
         } else {
-            _mark_magic($nsib, $captures, $named_captures);
+            _mark_magic($nsib, $captures, $named_captures, $doc);
         }
         $nsib = $nsib->snext_sibling;
     }
@@ -367,7 +381,7 @@ sub _check_rest_of_statement {
 
 # false if we hit another regexp
 sub _check_node_children {
-    my ($elem, $captures, $named_captures) = @_;
+    my ($elem, $captures, $named_captures, $doc) = @_;
 
     # caveat: this will descend into subroutine definitions...
 
@@ -375,21 +389,23 @@ sub _check_node_children {
         return if $child->isa('PPI::Token::Regexp');
         if ($child->isa('PPI::Node')) {
             return if ! _check_node_children($child, $captures,
-                $named_captures);
+                $named_captures, $doc);
         } else {
-            _mark_magic($child, $captures, $named_captures);
+            _mark_magic($child, $captures, $named_captures, $doc);
         }
     }
     return $TRUE;
 }
 
 sub _mark_magic {
-    my ($elem, $captures, $named_captures) = @_;
+    my ($elem, $captures, $named_captures, $doc) = @_;
 
-    # Only interested in magic.
-    $elem->isa( 'PPI::Token::Magic' ) or return;
-
+    # Only interested in magic, or known English equivalent.
     my $content = $elem->content();
+    $elem->isa( 'PPI::Token::Magic' )
+        or $doc->uses_module( 'English' )
+            and $NAMED_CAPTURE_REFERENCE_ENGLISH{$content}
+        or return;
 
     if ( $content =~ m/ \A \$ ( \d+ ) /xms ) {
 
@@ -401,7 +417,9 @@ sub _mark_magic {
                 $captures->[$num-1] = 1;
             }
         }
-    } elsif ( $NAMED_CAPTURE_REFERENCE{$content} ) {
+    } elsif ( $NAMED_CAPTURE_REFERENCE{$content}
+        || $doc->uses_module( 'English' )
+        && $NAMED_CAPTURE_REFERENCE_ENGLISH{$content} ) {
 
         # Record if we see $+{foo} or $-{foo}.
         my $subscr = $elem->snext_sibling() or return;
@@ -500,6 +518,20 @@ installed.
 
 Initial development of this policy was supported by a grant from the
 Perl Foundation.
+
+
+=head1 BUGS
+
+Does not look for uses of capture variables in the replacement portion
+of C<s/.../.../e>.
+
+Does not recognize C<$^N> (or $LAST_SUBMATCH_RESULT if C<use English> is
+in effect.)
+
+Does not recognize C<@-> or C<@+> (or C<$LAST_MATCH_START> or
+C<$LAST_MATCH_END> if C<use English> is in effect) with constant
+subscripts.  Variable subscripts are beyond the scope of any static
+analysis.
 
 
 =head1 AUTHOR
