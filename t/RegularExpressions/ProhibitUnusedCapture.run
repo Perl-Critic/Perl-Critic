@@ -387,6 +387,20 @@ s/(?<foo>\w+)/foo$+{foo}/g;
 
 #-----------------------------------------------------------------------------
 
+## name subscripted capture
+## failures 0
+## optional_modules PPIx::Regexp
+## cut
+
+s/(foo)/$+[ 1 ]/;
+s/(foo)/$-[ 1 ]/;
+s/(foo)/$+[ -1 ]/;
+s/(foo)/$-[ -1 ]/;
+m/(\w+)/ and print substr( $_, $-[ 1 ], $+[ 1 ] - $-[ 1 ] );
+m/(\w+)/ and print substr( $_, $-[ -1 ], $+[ -1 ] - $-[ -1 ] );
+
+#-----------------------------------------------------------------------------
+
 ## name named capture English name in replacement RT #60002
 ## failures 1
 ## optional_modules PPIx::Regexp
@@ -425,6 +439,42 @@ s/(?<foo>\w+)/foo$LAST_PAREN_MATCH{foo}/g;
 use English;
 
 m/(?P<foo>\w+)|(?<foo>\W+)/ and print $LAST_PAREN_MATCH{foo}, "\n";
+
+#-----------------------------------------------------------------------------
+
+## name English subscripted capture without use English
+## failures 6
+## optional_modules PPIx::Regexp
+## cut
+
+s/(foo)/$LAST_MATCH_END[ 1 ]/;
+s/(foo)/$LAST_MATCH_START[ 1 ]/;
+s/(foo)/$LAST_MATCH_END[ -1 ]/;
+s/(foo)/$LAST_MATCH_START[ -1 ]/;
+m/(\w+)/ and print substr(
+    $_, $LAST_MATCH_START[ 1 ], $LAST_MATCH_END[ 1 ] - $LAST_MATCH_START[ 1 ] );
+m/(\w+)/ and print substr(
+    $_, $LAST_MATCH_START[ -1 ],
+    $LAST_MATCH_END[ -1 ] - $LAST_MATCH_START[ -1 ] );
+
+#-----------------------------------------------------------------------------
+
+## name English subscripted capture with use English
+## failures 0
+## optional_modules PPIx::Regexp
+## cut
+
+use English;
+
+s/(foo)/$LAST_MATCH_END[ 1 ]/;
+s/(foo)/$LAST_MATCH_START[ 1 ]/;
+s/(foo)/$LAST_MATCH_END[ -1 ]/;
+s/(foo)/$LAST_MATCH_START[ -1 ]/;
+m/(\w+)/ and print substr(
+    $_, $LAST_MATCH_START[ 1 ], $LAST_MATCH_END[ 1 ] - $LAST_MATCH_START[ 1 ] );
+m/(\w+)/ and print substr(
+    $_, $LAST_MATCH_START[ -1 ],
+    $LAST_MATCH_END[ -1 ] - $LAST_MATCH_START[ -1 ] );
 
 #-----------------------------------------------------------------------------
 

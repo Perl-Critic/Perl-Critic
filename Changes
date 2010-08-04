@@ -16,6 +16,9 @@ Next release whenever it is
     * Documentation::RequirePodSections now honors '## no critic'
       annotation anywhere before the '__END__', '__DATA__', or first
       '=head1', whichever comes first.  RT #59268.
+    * RegularExpressions::ProhibitUnusedCapture now takes account of the
+      use of $- and $+ (and their English equivalents under 'use
+      English') provided the subscripts are literal integers.
 
     Other Changes:
     * Test::Perl::Critic::Policy no longer exports by default.
