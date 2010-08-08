@@ -35,6 +35,8 @@ Next release whenever it is
       positives.  RT #59176
     * RegularExpressions::ProhibitUnusedCapture now takes account of the
       %LAST_PAREN_MATCH as well as %+ if English has been loaded.  RT #60002
+    * BuiltinFunctions::ProhibitStringyEval no longer dies on eval
+      "#...".  RT #60179
 
 [1.108] Released on 2010-06-22
 

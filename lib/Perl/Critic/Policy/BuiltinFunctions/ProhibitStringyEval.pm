@@ -73,6 +73,7 @@ sub _string_eval_is_an_include {
 
     return if @statements > 2;
     my $include = $statements[0];
+    return if not defined $include; # RT 60179
     return if not $include->isa('PPI::Statement::Include');
     return if $include->type() eq 'no';
 
