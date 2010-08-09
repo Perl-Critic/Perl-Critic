@@ -124,8 +124,6 @@ sub _enough_uses_in_regexp {
 
     if ( my $subst = $re->replacement() ) {
 
-        # TODO check for /e
-
         my ( $capture_regex, $capture_ref ) =
             $doc->uses_module( 'English' ) ?
             ( $CAPTURE_REFERENCE_REGEX_ENGLISH,
@@ -143,6 +141,15 @@ sub _enough_uses_in_regexp {
                     $name, $suffix, $re, $captures, $named_captures );
             }
         }
+
+        foreach my $token ( @{ $subst->find(
+            'PPIx::Regexp::Token::Code' ) || [] } ) {
+            my $ppi = $token->ppi() or next;
+            my $start = $ppi->schild( 0 ) or next;
+            $start = $start->schild( 0 ) or next;
+            _enough_magic( $start, $re, $captures, $named_captures, $doc );
+        }
+
     }
 
     return ( none {not defined $_} @{$captures} )
@@ -595,12 +602,6 @@ installed.
 
 Initial development of this policy was supported by a grant from the
 Perl Foundation.
-
-
-=head1 BUGS
-
-Does not look for uses of capture variables in the replacement portion
-of C<s/.../.../e>.
 
 
 =head1 AUTHOR

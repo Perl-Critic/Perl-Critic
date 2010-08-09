@@ -478,6 +478,14 @@ m/(\w+)/ and print substr(
 
 #-----------------------------------------------------------------------------
 
+## name Capture used in substitution portion of s/.../.../e
+## failures 0
+## cut
+
+s/(\w+)/$replace{$1} || "<$1>"/ge;
+
+#-----------------------------------------------------------------------------
+
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

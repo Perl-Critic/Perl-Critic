@@ -19,6 +19,9 @@ Next release whenever it is
     * RegularExpressions::ProhibitUnusedCapture now takes account of the
       use of $- and $+ (and their English equivalents under 'use
       English') provided the subscripts are literal integers.
+    * RegularExpressions::ProhibitUnusedCapture now takes account of the
+      use of capture variables in the replacement portion of
+      s/.../.../e.
 
     Other Changes:
     * Test::Perl::Critic::Policy no longer exports by default.
