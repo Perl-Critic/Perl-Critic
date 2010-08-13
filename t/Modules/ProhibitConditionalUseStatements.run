@@ -1,0 +1,913 @@
+## name pass, simple use
+## failures 0
+## cut
+
+use Foo::Bar;
+
+#-----------------------------------------------------------------------------
+
+## name pass, enclosing bare block
+## failures 0
+## cut
+
+{
+use Foo::Bar;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, enclosing labeled bare block
+## failures 0
+## cut
+
+FOO: {
+use Foo::Bar;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, enclosing subroutine
+## failures 0
+## cut
+
+sub foo {
+use Foo::Bar;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, enclosing begin block
+## failures 0
+## cut
+
+BEGIN {
+use Foo::Bar;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, enclosing do block
+## failures 0
+## cut
+
+do {
+use Foo::Bar;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, enclosing string eval block
+## failures 0
+## cut
+
+eval "use Foo::Bar";
+
+#-----------------------------------------------------------------------------
+
+## name pass, enclosing if statement in string eval
+## failures 0
+## cut
+
+eval "if ($a == 1) { use Foo::Bar; }";
+
+#-----------------------------------------------------------------------------
+
+## name pass, enclosing string eval in if statement
+## failures 0
+## cut
+
+if ($a == 1) {
+eval "use Foo::Bar;";
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, simple require
+## failures 0
+## cut
+
+require Foo::Bar;
+
+#-----------------------------------------------------------------------------
+
+## name pass, require in enclosing bare block
+## failures 0
+## cut
+
+{
+require Foo::Bar;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, require in enclosing labeled bare block
+## failures 0
+## cut
+
+FOO: {
+require Foo::Bar;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, require in enclosing subroutine
+## failures 0
+## cut
+
+sub foo {
+require Foo::Bar;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, require in enclosing begin block
+## failures 0
+## cut
+
+BEGIN {
+require Foo::Bar;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, require in enclosing do block
+## failures 0
+## cut
+
+do {
+require Foo::Bar;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, require in enclosing do following logical or
+## failures 0
+## cut
+
+$a == 1 || do {
+require Foo::Bar;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, require in enclosing do following logical and
+## failures 0
+## cut
+
+$a && 1 || do {
+require Foo::Bar;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, require in enclosing do following binary or
+## failures 0
+## cut
+
+$a == 1 or do {
+require Foo::Bar;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, require in enclosing do following binary and
+## failures 0
+## cut
+
+$a == 1 and do {
+require Foo::Bar;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, require enclosing string eval block
+## failures 0
+## cut
+
+eval "require Foo::Bar";
+
+#-----------------------------------------------------------------------------
+
+## name pass, require in enclosing if statement in string eval
+## failures 0
+## cut
+
+eval "if ($a == 1) { require Foo::Bar; }";
+
+#-----------------------------------------------------------------------------
+
+## name pass, require in enclosing string eval in if statement
+## failures 0
+## cut
+
+if ($a == 1) {
+eval "require Foo::Bar;";
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, require in enclosing else statement
+## failures 0
+## cut
+
+if ($a == 1) {
+print 1;
+} else {
+require Foo::Bar;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, require in enclosing elsif statement
+## failures 0
+## cut
+
+if ($a == 1) {
+print 1;
+} elsif ($a == 2) {
+require Foo::Bar;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, require in enclosing while statement
+## failures 0
+## cut
+
+while ($a == 1) {
+require Foo::Bar;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, require in enclosing continue statement
+## failures 0
+## cut
+
+while ($a == 1) {
+print 1;
+} continue {
+require Foo::Bar;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, require in enclosing unless statement
+## failures 0
+## cut
+
+unless ($a == 1) {
+require Foo::Bar;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, require in enclosing until statement
+## failures 0
+## cut
+
+until ($a == 1) {
+require Foo::Bar;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, require in enclosing c-style for statement
+## failures 0
+## cut
+
+for ($a = 1; $a < $b; $a++) {
+require Foo::Bar;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, require in enclosing for statement
+## failures 0
+## cut
+
+for $a (1..$b) {
+require Foo::Bar;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, require in enclosing foreach statement
+## failures 0
+## cut
+
+foreach $a (@b) {
+require Foo::Bar;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, require in enclosing if statement in begin block
+## failures 0
+## cut
+
+BEGIN {
+if ($a == 1) {
+require Foo::Bar;
+}
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, require in enclosing do-while block
+## failures 0
+## cut
+
+do {
+require Foo::Bar;
+} while ($a == 1);
+
+#-----------------------------------------------------------------------------
+
+## name pass, require in enclosing do-until block
+## failures 0
+## cut
+
+do {
+require Foo::Bar;
+} until ($a == 1);
+
+#-----------------------------------------------------------------------------
+
+## name pass, require in enclosing do-unless block
+## failures 0
+## cut
+
+do {
+require Foo::Bar;
+} unless ($a == 1);
+
+#-----------------------------------------------------------------------------
+
+## name pass, require in enclosing do-for block
+## failures 0
+## cut
+
+do {
+require Foo::Bar;
+} for (1..2);
+
+#-----------------------------------------------------------------------------
+
+## name pass, require in enclosing do-foreach block
+## failures 0
+## cut
+
+do {
+require Foo::Bar;
+} foreach (@a);
+
+#-----------------------------------------------------------------------------
+
+## name pass, require in enclosing do-if block
+## failures 0
+## cut
+
+do {
+require Foo::Bar;
+} if ($a == 1);
+
+#-----------------------------------------------------------------------------
+
+## name pass, simple pragma
+## failures 0
+## cut
+
+use strict;
+
+#-----------------------------------------------------------------------------
+
+## name pass, pragma in enclosing bare block
+## failures 0
+## cut
+
+{
+use strict;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, pragma in enclosing labeled bare block
+## failures 0
+## cut
+
+FOO: {
+use strict;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, pragma in enclosing subroutine
+## failures 0
+## cut
+
+sub foo {
+use strict;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, pragma in enclosing begin block
+## failures 0
+## cut
+
+BEGIN {
+use strict;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, pragma in enclosing do block
+## failures 0
+## cut
+
+do {
+use strict;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, pragma in enclosing do following logical or
+## failures 0
+## cut
+
+$a == 1 || do {
+use strict;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, pragma in enclosing do following logical and
+## failures 0
+## cut
+
+$a && 1 || do {
+use strict;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, pragma in enclosing do following binary or
+## failures 0
+## cut
+
+$a == 1 or do {
+use strict;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, pragma in enclosing do following binary and
+## failures 0
+## cut
+
+$a == 1 and do {
+use strict;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, pragma enclosing string eval block
+## failures 0
+## cut
+
+eval "use strict";
+
+#-----------------------------------------------------------------------------
+
+## name pass, pragma in enclosing if statement in string eval
+## failures 0
+## cut
+
+eval "if ($a == 1) { use strict; }";
+
+#-----------------------------------------------------------------------------
+
+## name pass, pragma in enclosing string eval in if statement
+## failures 0
+## cut
+
+if ($a == 1) {
+eval "use strict;";
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, pragma in enclosing else statement
+## failures 0
+## cut
+
+if ($a == 1) {
+print 1;
+} else {
+use strict;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, pragma in enclosing elsif statement
+## failures 0
+## cut
+
+if ($a == 1) {
+print 1;
+} elsif ($a == 2) {
+use strict;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, pragma in enclosing while statement
+## failures 0
+## cut
+
+while ($a == 1) {
+use strict;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, pragma in enclosing continue statement
+## failures 0
+## cut
+
+while ($a == 1) {
+print 1;
+} continue {
+use strict;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, pragma in enclosing unless statement
+## failures 0
+## cut
+
+unless ($a == 1) {
+use strict;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, pragma in enclosing until statement
+## failures 0
+## cut
+
+until ($a == 1) {
+use strict;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, pragma in enclosing c-style for statement
+## failures 0
+## cut
+
+for ($a = 1; $a < $b; $a++) {
+use strict;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, pragma in enclosing for statement
+## failures 0
+## cut
+
+for $a (1..$b) {
+use strict;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, pragma in enclosing foreach statement
+## failures 0
+## cut
+
+foreach $a (@b) {
+use strict;
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, pragma in enclosing if statement in begin block
+## failures 0
+## cut
+
+BEGIN {
+if ($a == 1) {
+use strict;
+}
+}
+
+#-----------------------------------------------------------------------------
+
+## name pass, pragma in enclosing do-while block
+## failures 0
+## cut
+
+do {
+use strict;
+} while ($a == 1);
+
+#-----------------------------------------------------------------------------
+
+## name pass, pragma in enclosing do-until block
+## failures 0
+## cut
+
+do {
+use strict;
+} until ($a == 1);
+
+#-----------------------------------------------------------------------------
+
+## name pass, pragma in enclosing do-unless block
+## failures 0
+## cut
+
+do {
+use strict;
+} unless ($a == 1);
+
+#-----------------------------------------------------------------------------
+
+## name pass, pragma in enclosing do-for block
+## failures 0
+## cut
+
+do {
+use strict;
+} for (1..2);
+
+#-----------------------------------------------------------------------------
+
+## name pass, pragma in enclosing do-foreach block
+## failures 0
+## cut
+
+do {
+use strict;
+} foreach (@a);
+
+#-----------------------------------------------------------------------------
+
+## name pass, pragma in enclosing do-if block
+## failures 0
+## cut
+
+do {
+use strict;
+} if ($a == 1);
+
+#-----------------------------------------------------------------------------
+
+## name failure, enclosing else statement
+## failures 1
+## cut
+
+if ($a == 1) {
+print 1;
+} else {
+use Foo::Bar;
+}
+
+#-----------------------------------------------------------------------------
+
+## name failure, enclosing elsif statement
+## failures 1
+## cut
+
+if ($a == 1) {
+print 1;
+} elsif ($a == 2) {
+use Foo::Bar;
+}
+
+#-----------------------------------------------------------------------------
+
+## name failure, enclosing while statement
+## failures 1
+## cut
+
+while ($a == 1) {
+use Foo::Bar;
+}
+
+#-----------------------------------------------------------------------------
+
+## name failure, enclosing continue statement
+## failures 1
+## cut
+
+while ($a == 1) {
+print 1;
+} continue {
+use Foo::Bar;
+}
+
+#-----------------------------------------------------------------------------
+
+## name failure, enclosing unless statement
+## failures 1
+## cut
+
+unless ($a == 1) {
+use Foo::Bar;
+}
+
+#-----------------------------------------------------------------------------
+
+## name failure, enclosing until statement
+## failures 1
+## cut
+
+until ($a == 1) {
+use Foo::Bar;
+}
+
+#-----------------------------------------------------------------------------
+
+## name failure, enclosing c-style for statement
+## failures 1
+## cut
+
+for ($a = 1; $a < $b; $a++) {
+use Foo::Bar;
+}
+
+#-----------------------------------------------------------------------------
+
+## name failure, enclosing for statement
+## failures 1
+## cut
+
+for $a (1..$b) {
+use Foo::Bar;
+}
+
+#-----------------------------------------------------------------------------
+
+## name failure, enclosing foreach statement
+## failures 1
+## cut
+
+foreach $a (@b) {
+use Foo::Bar;
+}
+
+#-----------------------------------------------------------------------------
+
+## name failure, enclosing if statement in begin block
+## failures 1
+## cut
+
+BEGIN {
+if ($a == 1) {
+use Foo::Bar;
+}
+}
+
+#-----------------------------------------------------------------------------
+
+## name failure, enclosing eval statement
+## failures 1
+## cut
+
+eval {
+use Foo::Bar;
+};
+
+#-----------------------------------------------------------------------------
+
+## name failure, enclosing if statement in eval
+## failures 1
+## cut
+
+eval {
+if ($a == 1) {
+use Foo::Bar;
+}
+};
+
+#-----------------------------------------------------------------------------
+
+## name failure, enclosing do following logical or
+## failures 1
+## cut
+
+$a == 1 || do {
+use Foo::Bar;
+}
+
+#-----------------------------------------------------------------------------
+
+## name failure, enclosing do following logical and
+## failures 1
+## cut
+
+$a && 1 || do {
+use Foo::Bar;
+}
+
+#-----------------------------------------------------------------------------
+
+## name failure, enclosing do following binary or
+## failures 1
+## cut
+
+$a == 1 or do {
+use Foo::Bar;
+}
+
+#-----------------------------------------------------------------------------
+
+## name failure, enclosing do following binary and
+## failures 1
+## cut
+
+$a == 1 and do {
+use Foo::Bar;
+}
+
+#-----------------------------------------------------------------------------
+
+## name failure, enclosing do-while block
+## failures 1
+## cut
+
+do {
+use Foo::Bar;
+} while ($a == 1);
+
+#-----------------------------------------------------------------------------
+
+## name failure, enclosing do-until block
+## failures 1
+## cut
+
+do {
+use Foo::Bar;
+} until ($a == 1);
+
+#-----------------------------------------------------------------------------
+
+## name failure, enclosing do-unless block
+## failures 1
+## cut
+
+do {
+use Foo::Bar;
+} unless ($a == 1);
+
+#-----------------------------------------------------------------------------
+
+## name failure, enclosing do-for block
+## failures 1
+## cut
+
+do {
+use Foo::Bar;
+} for (1..2);
+
+#-----------------------------------------------------------------------------
+
+## name failure, enclosing do-foreach block
+## failures 1
+## cut
+
+do {
+use Foo::Bar;
+} foreach (@a);
+
+#-----------------------------------------------------------------------------
+
+## name failure, enclosing do-if block
+## failures 1
+## cut
+
+do {
+use Foo::Bar;
+} if ($a == 1);
+
+#-----------------------------------------------------------------------------
+
+##############################################################################
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab shiftround :

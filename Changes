@@ -7,6 +7,10 @@ Next release whenever it is
       ':encoding(utf8)' over ':utf8' in open() and binmode(). It is
       severity 5 because of the bad things that can happen if invalid
       UTF8 gets loose in your code.
+    * New policy Modules::ProhibitConditionalUseStatements to prohibit
+      'use module' inside a conditional, since the statement is executed
+      unconditionally at compile time.  Thanks to Peter Guzis for
+      submitting the policy and tests in RT #59065.
 
     Policy Changes:
     * ControlStructures::ProhibitMutatingListFunctions allows s///r,
