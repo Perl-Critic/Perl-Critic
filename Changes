@@ -19,7 +19,8 @@ Next release whenever it is
       test operators properly.  Patch by H.Merijn Brand.  RT #58751
     * Documentation::RequirePodSections now honors '## no critic'
       annotation anywhere before the '__END__', '__DATA__', or first
-      '=head1', whichever comes first.  RT #59268.
+      '=head1', whichever comes first.  The line number of the offending
+      '=head1 NAME' was added to the violation description.  RT #59268.
     * RegularExpressions::ProhibitUnusedCapture now takes account of the
       use of $- and $+ (and their English equivalents under 'use
       English') provided the subscripts are literal integers.

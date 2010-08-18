@@ -8,10 +8,12 @@
 package Perl::Critic::Policy::Documentation::RequirePackageMatchesPodName;
 
 use 5.006001;
+
 use strict;
 use warnings;
-use Readonly;
 
+use Readonly;
+use English qw{ -no_match_vars };
 use Perl::Critic::Utils qw{ :severities :classification };
 use base 'Perl::Critic::Policy';
 
@@ -20,7 +22,8 @@ our $VERSION = '1.108';
 #-----------------------------------------------------------------------------
 
 Readonly::Scalar my $PKG_RX => qr{ [[:alpha:]](?:[\w:\']*\w)? }xms;
-Readonly::Scalar my $DESC => q{Pod NAME does not match the package declaration};
+Readonly::Scalar my $DESC =>
+    q{Pod NAME on line %d does not match the package declaration};
 Readonly::Scalar my $EXPL => q{};
 
 #-----------------------------------------------------------------------------
@@ -51,10 +54,14 @@ sub violates {
 
         next if $content !~ m{^=head1 [ \t]+ NAME [ \t]*$ \s*}cgxms;
 
+        my $line_number = $pod->line_number() + (
+            substr( $content, 0, $LAST_MATCH_START[0] + 1 ) =~ tr/\n/\n/ );
+
         my ($pod_pkg) = $content =~ m{\G (\S+) }cgxms;
 
         if (!$pod_pkg) {
-            return $self->violation( $DESC, q{Empty name declaration}, $elem );
+            return $self->violation( sprintf( $DESC, $line_number ),
+                q{Empty name declaration}, $pod );
         }
 
         # idea: worry about POD escapes?
@@ -67,7 +74,8 @@ sub violates {
             return if $pkg eq $pod_pkg;
         }
 
-        return $self->violation( $DESC, $EXPL, $pod );
+        return $self->violation( sprintf( $DESC, $line_number ),
+            $EXPL, $pod );
     }
 
     return;  # no NAME section found
