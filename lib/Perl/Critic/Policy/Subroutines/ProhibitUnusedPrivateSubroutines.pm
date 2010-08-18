@@ -31,6 +31,8 @@ Readonly::Scalar my $EXPL => q{Eliminate dead code};
 
 Readonly::Hash my %IS_COMMA => hashify( $COMMA, $FATCOMMA );
 
+Readonly::Scalar my $HAVE_PPIX_REGEXP => eval { require PPIx::Regexp; 1 } || 0;
+
 #-----------------------------------------------------------------------------
 
 sub supported_parameters {
@@ -142,6 +144,54 @@ sub _find_sub_call_in_document {
             _compare_token_locations( $finish_token, $usage ) < 0
                 and return $TRUE;
         }
+    }
+
+    foreach my $regexp ( _find_regular_expressions( $document ) ) {
+
+        _compare_token_locations( $regexp, $start_token ) >= 0
+            and _compare_token_locations( $finish_token, $regexp ) >= 0
+            and next;
+        _find_sub_usage_in_regexp( $name, $regexp )
+            and return $TRUE;
+
+    }
+
+    return;
+}
+
+# Find analyzable regular expressions in the given document. This means
+# matches, substitutions, and the qr{} operator.
+sub _find_regular_expressions {
+    my ( $document ) = @_;
+
+    $HAVE_PPIX_REGEXP or return;
+
+    return ( map { @{ $document->find( $_ ) || [] } } qw{
+        PPI::Token::Regexp::Match
+        PPI::Token::Regexp::Substitute
+        PPI::Token::QuoteLike::Regexp
+    } );
+}
+
+# Find out if the subroutine named in $name is called in the given $regexp.
+# This could happen either by an explicit s/.../.../e, or by interpolation
+# (i.e. @{[...]} ).
+sub _find_sub_usage_in_regexp {
+    my ( $name, $regexp ) = @_;
+
+    my $ppix = PPIx::Regexp->new_from_cache( $regexp ) or return;
+
+    foreach my $code ( @{ $ppix->find( 'PPIx::Regexp::Token::Code' ) || [] } ) {
+        my $doc = $code->ppi() or next;
+
+        foreach my $word ( @{ $doc->find( 'PPI::Token::Word' ) || [] } ) {
+            $name eq $word->content() or next;
+            is_function_call( $word )
+                or is_method_call( $word )
+                or next;
+            return $TRUE;
+        }
+
     }
 
     return;
