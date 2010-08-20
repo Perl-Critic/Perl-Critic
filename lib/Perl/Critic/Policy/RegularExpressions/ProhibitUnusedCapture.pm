@@ -33,11 +33,6 @@ Readonly::Hash my %CAPTURE_REFERENCE_ENGLISH => (
     hashify( qw{ $LAST_PAREN_MATCH $LAST_MATCH_START $LAST_MATCH_END } ),
     %CAPTURE_REFERENCE );
 
-Readonly::Scalar my $CAPTURE_REFERENCE_REGEX =>
-    _make_regex_from_capture_hash_keys( \%CAPTURE_REFERENCE );
-Readonly::Scalar my $CAPTURE_REFERENCE_REGEX_ENGLISH =>
-    _make_regex_from_capture_hash_keys( \%CAPTURE_REFERENCE_ENGLISH );
-
 Readonly::Scalar my $DESC => q{Only use a capturing group if you plan to use the captured value};
 Readonly::Scalar my $EXPL => [252];
 
@@ -122,34 +117,13 @@ sub _enough_uses_in_regexp {
         }
     }
 
-    if ( my $subst = $re->replacement() ) {
-
-        my ( $capture_regex, $capture_ref ) =
-            $doc->uses_module( 'English' ) ?
-            ( $CAPTURE_REFERENCE_REGEX_ENGLISH,
-                \%CAPTURE_REFERENCE_ENGLISH ) :
-            ( $CAPTURE_REFERENCE_REGEX, \%CAPTURE_REFERENCE );
-
-        foreach my $token ( @{ $subst->find(
-                    'PPIx::Regexp::Token::Interpolation' ) || [] } ) {
-            my $content = $token->content();
-            if ( $content =~ m/ \A \$ ( \d+ ) \z /xms ) {
-                _record_numbered_capture( $1, $captures );
-            } elsif ( $content =~ m/ \A ( $capture_regex ) ( .* ) /smx ) {
-                my ( $name, $suffix ) = ( $1, $2 );
-                _record_subscripted_capture(
-                    $name, $suffix, $re, $captures, $named_captures );
-            }
-        }
-
-        foreach my $token ( @{ $subst->find(
-            'PPIx::Regexp::Token::Code' ) || [] } ) {
-            my $ppi = $token->ppi() or next;
-            my $start = $ppi->schild( 0 ) or next;
-            $start = $start->schild( 0 ) or next;
-            _enough_magic( $start, $re, $captures, $named_captures, $doc );
-        }
-
+    foreach my $token ( @{ $re->find(
+        'PPIx::Regexp::Token::Code' ) || [] } ) {
+        my $ppi = $token->ppi() or next;
+        my $start = $ppi->schild( 0 ) or next;
+        $start = $start->schild( 0 ) or next;
+        _mark_magic( $start, $re, $captures, $named_captures, $doc );
+        _enough_magic( $start, $re, $captures, $named_captures, $doc );
     }
 
     return ( none {not defined $_} @{$captures} )
@@ -454,27 +428,6 @@ sub _mark_magic_subscripted_code {
     _record_subscripted_capture(
         $elem->content(), $subval, $re, $captures, $named_captures );
     return;
-}
-
-# Make a regular expression to match the keys of the given hash. The
-# keys must all begin with '$' or an exception will be thrown.
-sub _make_regex_from_capture_hash_keys {
-    my ( $hash ) = @_;
-    my ( @parts, $single );
-    foreach my $key ( sort keys %{ $hash } ) {
-        ( my $symbol = $key ) =~ s/ \A \$ //smx
-            or throw_internal( "Key '$key' does not begin with \$" );
-        if ( $symbol =~ m/ \A \W \z /smx ) {
-            $single .= quotemeta $symbol;
-        } else {
-            push @parts, quotemeta $symbol;
-            $symbol =~ m/ \w \z /smx
-                and $parts[-1] .= '\b'
-        }
-    }
-    defined $single
-        and unshift @parts, "[$single]";
-    return qr< \A \$ (?: @{[ join ' | ', @parts ]} ) >smx;
 }
 
 # Record a subscripted capture, either hash dereference or array
