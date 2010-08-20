@@ -26,6 +26,8 @@ our $VERSION = '1.108';
 Readonly::Scalar my $EXPL =>
     q<Unused variables clutter code and make it harder to read>;
 
+Readonly::Scalar my $HAVE_PPIX_REGEXP => eval { require PPIx::Regexp; 1 } || 0;
+
 #-----------------------------------------------------------------------------
 
 sub supported_parameters { return ()                     }
@@ -38,7 +40,9 @@ sub applies_to           { return qw< PPI::Document >    }
 sub violates {
     my ( $self, $elem, $document ) = @_;
 
-    my %symbol_usage = _get_symbol_usage($document);
+    my %symbol_usage;
+    _get_symbol_usage( \%symbol_usage, $document );
+    _get_regexp_symbol_usage( \%symbol_usage, $document );
     return if not %symbol_usage;
 
     my $declarations = $document->find('PPI::Statement::Variable');
@@ -73,17 +77,44 @@ sub violates {
 }
 
 sub _get_symbol_usage {
-    my ($document) = @_;
+    my ( $symbol_usage, $document ) = @_;
 
     my $symbols = $document->find('PPI::Token::Symbol');
     return if not $symbols;
 
-    my %symbol_usage;
     foreach my $symbol ( @{$symbols} ) {
-        $symbol_usage{ $symbol->symbol() }++;
+        $symbol_usage->{ $symbol->symbol() }++;
     }
 
-    return %symbol_usage;
+    return;
+}
+
+sub _get_regexp_symbol_usage {
+    my ( $symbol_usage, $document ) = @_;
+
+    $HAVE_PPIX_REGEXP or return;
+
+    foreach my $class ( qw{
+        PPI::Token::Regexp::Match
+        PPI::Token::Regexp::Substitute
+        PPI::Token::QuoteLike::Regexp
+        } ) {
+
+        foreach my $regex ( @{ $document->find( $class ) || [] } ) {
+
+            my $ppix = PPIx::Regexp->new_from_cache( $regex ) or next;
+
+            foreach my $code ( @{
+                $ppix->find( 'PPIx::Regexp::Token::Code' ) || [] } ) {
+                my $subdoc = $code->ppi() or next;
+                _get_symbol_usage( $symbol_usage, $subdoc );
+            }
+
+        }
+
+    }
+
+    return;
 }
 
 #-----------------------------------------------------------------------------

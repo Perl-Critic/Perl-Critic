@@ -19,6 +19,8 @@ Next release whenever it is
       regular expressions if PPIx::Regexp can be loaded.
     * ValuesAndExpressions::ProhibitMismatchedOperators didn't handle file
       test operators properly.  Patch by H.Merijn Brand.  RT #58751
+    * Variables::ProhibitUnusedVariables now looks inside regular
+      expressions if PPIx::Regexp can be loaded.
     * Documentation::RequirePodSections now honors '## no critic'
       annotation anywhere before the '__END__', '__DATA__', or first
       '=head1', whichever comes first.  The line number of the offending
