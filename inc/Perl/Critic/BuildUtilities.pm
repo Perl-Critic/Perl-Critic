@@ -48,6 +48,7 @@ sub required_module_versions {
         'File::Temp'                    => 0,
         'Getopt::Long'                  => 0,
         'IO::String'                    => 0,
+        'IPC::Open2'                    => 1,
         'List::MoreUtils'               => 0.19,
         'List::Util'                    => 0,
         'Module::Pluggable'             => 3.1,
@@ -99,7 +100,6 @@ sub recommended_module_versions {
 
         # All of these are for Documentation::PodSpelling
         'File::Which'           => 0,
-        'IPC::Open2'            => 1,
         'Pod::Spell'            => 1,
         'Text::ParseWords'      => 3,
     );
