@@ -183,6 +183,44 @@ sub _Foo::_foo {}
 
 #-----------------------------------------------------------------------------
 
+## name Subroutine called in replacement portion of s/.../.../e
+## failures 0
+## cut
+
+s/ ( foo ) / _bar( $1 ) /smxe;
+
+sub _bar {
+    my ( $foo ) = @_;
+    return $foo x 3;
+}
+
+#-----------------------------------------------------------------------------
+
+## name Subroutine called in regexp interpolation
+## failures 0
+## cut
+
+s/ ( foo ) /@{[ _bar( $1 ) ]}/smx;
+
+sub _bar {
+    my ( $foo ) = @_;
+    return $foo x 3;
+}
+
+#-----------------------------------------------------------------------------
+
+## name Subroutine called in regexp embedded code
+## failures 0
+## cut
+
+m/ (?{ _foo() }) /smx;
+
+sub _foo {
+    return 'bar';
+}
+
+#-----------------------------------------------------------------------------
+
 
 ##############################################################################
 #      $URL$

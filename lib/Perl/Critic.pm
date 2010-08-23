@@ -18,7 +18,7 @@ use base qw(Exporter);
 
 use File::Spec;
 use List::MoreUtils qw< firstidx >;
-use PPIx::Regexp qw< >;
+use PPIx::Regexp 0.010 qw< >;
 use Scalar::Util qw< blessed >;
 
 use Perl::Critic::Exception::Configuration::Generic;
