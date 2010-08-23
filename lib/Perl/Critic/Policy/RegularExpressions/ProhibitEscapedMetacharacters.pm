@@ -10,10 +10,12 @@ package Perl::Critic::Policy::RegularExpressions::ProhibitEscapedMetacharacters;
 use 5.006001;
 use strict;
 use warnings;
-use Readonly;
 
 use English qw(-no_match_vars);
 use List::MoreUtils qw(any);
+use Readonly;
+
+use PPIx::Regexp 0.010 qw< >;
 
 use Perl::Critic::Utils qw{ :booleans :severities hashify };
 use base 'Perl::Critic::Policy';
@@ -35,12 +37,6 @@ sub default_themes       { return qw( core pbp cosmetic ) }
 sub applies_to           { return qw(PPI::Token::Regexp::Match
                                      PPI::Token::Regexp::Substitute
                                      PPI::Token::QuoteLike::Regexp) }
-
-#-----------------------------------------------------------------------------
-
-sub initialize_if_enabled {
-    return eval { require PPIx::Regexp; 1 } ? $TRUE : $FALSE;
-}
 
 #-----------------------------------------------------------------------------
 
@@ -151,12 +147,6 @@ Neither does this:
 
     print qr/[#]$qr/x;  # yields '(?x-ism:[#]$qr
                                 )'
-
-=head1 PREREQUISITES
-
-This policy will disable itself if L<PPIx::Regexp|PPIx::Regexp> is not
-installed.
-
 
 =head1 CREDITS
 

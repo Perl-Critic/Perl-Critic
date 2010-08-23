@@ -121,11 +121,6 @@ sub critique {  ## no critic (ArgUnpacking)
 #=============================================================================
 # PRIVATE methods
 
-my $regexp_cleanup = eval {
-    require PPIx::Regexp;
-    sub { PPIx::Regexp->flush_cache() };
-} || sub {};
-
 sub _gather_violations {
     my ($self, $doc) = @_;
 
@@ -139,8 +134,7 @@ sub _gather_violations {
     my @ordered_policies = _futz_with_policy_order(@policies);
     my @violations = map { _critique($_, $doc) } @ordered_policies;
 
-    # Flush PPIx::Regexp cache.
-    $regexp_cleanup->();
+    PPIx::Regexp->flush_cache();
 
     # Accumulate statistics
     $self->statistics->accumulate( $doc, \@violations );
@@ -894,6 +888,10 @@ L<List::Util|List::Util>
 
 L<Module::Pluggable|Module::Pluggable>
 
+L<Perl::Tidy|Perl::Tidy>
+
+L<Pod::Spell|Pod::Spell>
+
 L<PPI|PPI>
 
 L<Pod::PlainText|Pod::PlainText>
@@ -910,7 +908,7 @@ L<String::Format|String::Format>
 
 L<Task::Weaken|Task::Weaken>
 
-L<Test::Builder|Test::Builder>
+L<Text::ParseWords|Text::ParseWords>
 
 L<version|version>
 
@@ -921,20 +919,6 @@ functionality:
 L<File::HomeDir|File::HomeDir>
 
 L<File::Which|File::Which>
-
-L<IO::String|IO::String>
-
-L<IPC::Open2|IPC::Open2>
-
-L<Perl::Tidy|Perl::Tidy>
-
-L<Pod::Spell|Pod::Spell>
-
-L<Test::Pod|Test::Pod>
-
-L<Test::Pod::Coverage|Test::Pod::Coverage>
-
-L<Text::ParseWords|Text::ParseWords>
 
 
 =head1 CONTACTING THE DEVELOPMENT TEAM

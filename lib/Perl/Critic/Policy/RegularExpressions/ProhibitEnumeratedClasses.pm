@@ -10,11 +10,13 @@ package Perl::Critic::Policy::RegularExpressions::ProhibitEnumeratedClasses;
 use 5.006001;
 use strict;
 use warnings;
-use Readonly;
 
+use Carp qw(carp);
 use English qw(-no_match_vars);
 use List::MoreUtils qw(all);
-use Carp qw(carp);
+use Readonly;
+
+use PPIx::Regexp 0.010 qw< >;
 
 use Perl::Critic::Utils qw{ :booleans :severities hashify };
 
@@ -49,11 +51,6 @@ sub applies_to           { return qw(PPI::Token::Regexp::Match
 
 #-----------------------------------------------------------------------------
 
-sub initialize_if_enabled {
-    return eval { require PPIx::Regexp; 1 } ? $TRUE : $FALSE;
-}
-
-#-----------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
@@ -177,12 +174,6 @@ B<C<[^\s]>> vs. B<C<\S>>
 =head1 CONFIGURATION
 
 This Policy is not configurable except for the standard options.
-
-
-=head1 PREREQUISITES
-
-This policy will disable itself if L<PPIx::Regexp|PPIx::Regexp> is not
-installed.
 
 
 =head1 CREDITS

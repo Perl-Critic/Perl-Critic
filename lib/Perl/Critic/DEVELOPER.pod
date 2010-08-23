@@ -315,7 +315,9 @@ returns a boolean stating whether the Policy should continue to be
 enabled.  Generally, the only reason to return C<$FALSE> is when some
 external requirement is missing.  For example,
 L<Perl::Critic::Policy::CodeLayout::RequireTidyCode|Perl::Critic::Policy::CodeLayout::RequireTidyCode>
-disables itself if L<Perl::Tidy|Perl::Tidy> is not installed.
+used to disable itself if L<Perl::Tidy|Perl::Tidy> was not installed
+(that is until we made it no longer optional for the Perl-Critic
+distribution).
 
 A basic, do-nothing implementation of C<initialize_if_enabled()> would
 be:

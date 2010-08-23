@@ -13,23 +13,11 @@ use warnings;
 
 use Perl::Critic::TestUtils qw< pcritique >;
 
-use Test::More;
+use Test::More tests => 3;
 
 #-----------------------------------------------------------------------------
 
 our $VERSION = '1.105';
-
-#-----------------------------------------------------------------------------
-
-eval {
-    require PPIx::Regexp;
-    PPIx::Regexp->VERSION( 0.010 );
-    1;
-} or plan( skip_all =>
-    'PPIx::Regexp 0.010 or better required for Subroutines::ProhibitUnusedPrivateSubroutines to look inside regular expressions.'
-);
-
-plan tests => 3;
 
 #-----------------------------------------------------------------------------
 

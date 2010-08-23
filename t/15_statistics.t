@@ -63,7 +63,7 @@ END_PERL
 
 #-----------------------------------------------------------------------------
 
-# User may not have Perl::Tidy installed...
+# Just don't get involved with Perl::Tidy.
 my $profile = { '-CodeLayout::RequireTidyCode' => {} };
 my $critic =
     Perl::Critic->new(

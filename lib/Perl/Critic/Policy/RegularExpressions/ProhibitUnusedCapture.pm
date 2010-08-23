@@ -11,12 +11,13 @@ use 5.006001;
 use strict;
 use warnings;
 
+use Carp;
+use English qw(-no_match_vars);
 use List::MoreUtils qw(none);
+use Readonly;
 use Scalar::Util qw(refaddr);
 
-use English qw(-no_match_vars);
-use Carp;
-use Readonly;
+use PPIx::Regexp 0.010 qw< >;
 
 use Perl::Critic::Exception::Fatal::Internal qw{ throw_internal };
 use Perl::Critic::Utils qw{ :booleans :severities hashify split_nodes_on_comma };
@@ -43,12 +44,6 @@ sub default_severity     { return $SEVERITY_MEDIUM           }
 sub default_themes       { return qw( core pbp maintenance ) }
 sub applies_to           {
     return qw< PPI::Token::Regexp::Match PPI::Token::Regexp::Substitute >
-}
-
-#-----------------------------------------------------------------------------
-
-sub initialize_if_enabled {
-    return eval { require PPIx::Regexp; 1 } ? $TRUE : $FALSE;
 }
 
 #-----------------------------------------------------------------------------
@@ -508,14 +503,6 @@ This Policy is not configurable except for the standard options.
 
 =head1 CAVEATS
 
-=head2 PPIx::Regexp
-
-We use L<PPIx::Regexp|PPIx::Regexp> to analyze the regular
-expression syntax.  This is an optional module for Perl::Critic, so it
-will not be automatically installed by CPAN for you.  If you wish to
-use this policy, you must install that module first.
-
-
 =head2 C<qr//> interpolation
 
 This policy can be confused by interpolation of C<qr//> elements, but
@@ -544,11 +531,6 @@ determine which capture group is referred to.  For example,
 
 makes use of the first capture group if it matches, or the second
 capture group if the first does not match but the second does.
-
-=head1 PREREQUISITES
-
-This policy will disable itself if L<PPIx::Regexp|PPIx::Regexp> is not
-installed.
 
 
 =head1 CREDITS

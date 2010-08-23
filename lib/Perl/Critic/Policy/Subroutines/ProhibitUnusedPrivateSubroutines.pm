@@ -15,6 +15,8 @@ use warnings;
 use English qw< $EVAL_ERROR -no_match_vars >;
 use Readonly;
 
+use PPIx::Regexp 0.010 qw< >;
+
 use Perl::Critic::Utils qw{
     :characters hashify is_function_call is_method_call :severities
     $EMPTY $TRUE
@@ -30,8 +32,6 @@ Readonly::Scalar my $DESC =>
 Readonly::Scalar my $EXPL => q{Eliminate dead code};
 
 Readonly::Hash my %IS_COMMA => hashify( $COMMA, $FATCOMMA );
-
-Readonly::Scalar my $HAVE_PPIX_REGEXP => eval { require PPIx::Regexp; 1 } || 0;
 
 #-----------------------------------------------------------------------------
 
@@ -163,8 +163,6 @@ sub _find_sub_call_in_document {
 # matches, substitutions, and the qr{} operator.
 sub _find_regular_expressions {
     my ( $document ) = @_;
-
-    $HAVE_PPIX_REGEXP or return;
 
     return ( map { @{ $document->find( $_ ) || [] } } qw{
         PPI::Token::Regexp::Match

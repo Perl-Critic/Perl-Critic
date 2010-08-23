@@ -11,10 +11,12 @@ use 5.006001;
 use strict;
 use warnings;
 
-use English qw(-no_match_vars);
-use Readonly;
 use Carp;
+use English qw(-no_match_vars);
 use List::MoreUtils qw(all);
+use Readonly;
+
+use PPIx::Regexp 0.010 qw< >;
 
 use Perl::Critic::Utils qw{ :booleans :characters :severities };
 use base 'Perl::Critic::Policy';
@@ -33,12 +35,6 @@ sub default_themes       { return qw( core pbp performance ) }
 sub applies_to           { return qw(PPI::Token::Regexp::Match
                                      PPI::Token::Regexp::Substitute
                                      PPI::Token::QuoteLike::Regexp) }
-
-#-----------------------------------------------------------------------------
-
-sub initialize_if_enabled {
-    return eval { require PPIx::Regexp; 1 } ? $TRUE : $FALSE;
-}
 
 #-----------------------------------------------------------------------------
 
@@ -124,12 +120,6 @@ exclusively on 5.10, yo might consider ignoring this policy.
 =head1 CONFIGURATION
 
 This Policy is not configurable except for the standard options.
-
-
-=head1 PREREQUISITES
-
-This policy will disable itself if L<PPIx::Regexp|PPIx::Regexp> is not
-installed.
 
 
 =head1 CREDITS

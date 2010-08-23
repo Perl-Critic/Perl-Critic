@@ -16,11 +16,11 @@ Next release whenever it is
     * ControlStructures::ProhibitMutatingListFunctions allows s///r,
       which was introduced in 5.13.2.
     * Subroutines::ProhibitUnusedPrivateSubroutines now looks inside
-      regular expressions if PPIx::Regexp can be loaded.
+      regular expressions.
     * ValuesAndExpressions::ProhibitMismatchedOperators didn't handle file
       test operators properly.  Patch by H.Merijn Brand.  RT #58751
     * Variables::ProhibitUnusedVariables now looks inside regular
-      expressions if PPIx::Regexp can be loaded.
+      expressions.
     * Documentation::RequirePodSections now honors '## no critic'
       annotation anywhere before the '__END__', '__DATA__', or first
       '=head1', whichever comes first.  The line number of the offending
@@ -38,6 +38,10 @@ Next release whenever it is
     * Added example using Try::Tiny to documentation of
       ErrorHandling::RequireCheckingReturnValueOfEval. Suggested by Andy
       Lester on the mailing list.
+    * In order to get more consistent behavior across all installations of
+      Perl::Critic, IPC::Open2 (which actually is part of core), PPIx::Regexp,
+      Perl::Tidy, Pod::Spell, and Text::ParseWords are no longer optional
+      prerequisites.
 
     Bug Fixes:
     * Build.PL/Makefile.PL didn't specify a minimum version of version.pm, but

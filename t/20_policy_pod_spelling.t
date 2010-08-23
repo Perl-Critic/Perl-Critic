@@ -33,10 +33,7 @@ Perl::Critic::TestUtils::block_perlcriticrc();
 
 my $code;
 my $policy = 'Documentation::PodSpelling';
-my $can_podspell =
-        eval {require Pod::Spell}
-    &&  can_determine_spell_command()
-    &&  can_run_spell_command();
+my $can_podspell = can_determine_spell_command() && can_run_spell_command();
 
 sub can_determine_spell_command {
     my $pol = Perl::Critic::Policy::Documentation::PodSpelling->new();

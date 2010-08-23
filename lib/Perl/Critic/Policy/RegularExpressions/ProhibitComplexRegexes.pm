@@ -10,11 +10,13 @@ package Perl::Critic::Policy::RegularExpressions::ProhibitComplexRegexes;
 use 5.006001;
 use strict;
 use warnings;
+
+use Carp;
+use English qw(-no_match_vars);
+use List::Util qw{ min };
 use Readonly;
 
-use English qw(-no_match_vars);
-use Carp;
-use List::Util qw{ min };
+use PPIx::Regexp 0.010 qw< >;
 
 use Perl::Critic::Utils qw{ :booleans :severities };
 
@@ -50,12 +52,6 @@ sub default_themes       { return qw( core pbp maintenance ) }
 sub applies_to           { return qw(PPI::Token::Regexp::Match
                                      PPI::Token::Regexp::Substitute
                                      PPI::Token::QuoteLike::Regexp) }
-
-#-----------------------------------------------------------------------------
-
-sub initialize_if_enabled {
-    return eval { require PPIx::Regexp; 1 } ? $TRUE : $FALSE;
-}
 
 #-----------------------------------------------------------------------------
 
@@ -201,12 +197,6 @@ F<.perlcriticrc> file like this:
 
     [RegularExpressions::ProhibitComplexRegexes]
     max_characters = 40
-
-
-=head1 PREREQUISITES
-
-This policy will disable itself if L<PPIx::Regexp|PPIx::Regexp> is not
-installed.
 
 
 =head1 CREDITS

@@ -12,9 +12,10 @@ use strict;
 use warnings;
 
 use Readonly;
-
 use List::MoreUtils qw< any >;
+
 use PPI::Token::Symbol;
+use PPIx::Regexp 0.010 qw< >;
 
 use Perl::Critic::Utils qw< :characters :severities >;
 use base 'Perl::Critic::Policy';
@@ -25,8 +26,6 @@ our $VERSION = '1.108';
 
 Readonly::Scalar my $EXPL =>
     q<Unused variables clutter code and make it harder to read>;
-
-Readonly::Scalar my $HAVE_PPIX_REGEXP => eval { require PPIx::Regexp; 1 } || 0;
 
 #-----------------------------------------------------------------------------
 
@@ -91,8 +90,6 @@ sub _get_symbol_usage {
 
 sub _get_regexp_symbol_usage {
     my ( $symbol_usage, $document ) = @_;
-
-    $HAVE_PPIX_REGEXP or return;
 
     foreach my $class ( qw{
         PPI::Token::Regexp::Match

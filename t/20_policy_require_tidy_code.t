@@ -35,11 +35,10 @@ $bar   =56;
 $baz   =   67;
 END_PERL
 
-my $has_perltidy = eval {require Perl::Tidy};
 %config = (perltidyrc => q{});
 is(
-    eval { pcritique($policy, \$code, \%config) },
-    $has_perltidy ? 1 : undef,
+    pcritique($policy, \$code, \%config),
+    1,
     'Untidy code',
 );
 
@@ -53,8 +52,8 @@ END_PERL
 
 %config = (perltidyrc => q{});
 is(
-    eval { pcritique($policy, \$code, \%config) },
-    $has_perltidy ? 0 : undef,
+    pcritique($policy, \$code, \%config),
+    0,
     'Tidy with one trailing newline',
 );
 
@@ -69,8 +68,8 @@ END_PERL
 
 %config = (perltidyrc => q{});
 is(
-    eval { pcritique($policy, \$code, \%config) },
-    $has_perltidy ? 0 : undef,
+    pcritique($policy, \$code, \%config),
+    0,
     'Tidy with two trailing newlines',
 );
 
@@ -92,8 +91,8 @@ END_PERL
 
 %config = (perltidyrc => q{});
 is(
-    eval { pcritique($policy, \$code, \%config) },
-    $has_perltidy ? 0 : undef,
+    pcritique($policy, \$code, \%config),
+    0,
     'Tidy with several trailing newlines',
 );
 
@@ -110,8 +109,8 @@ END_PERL
 
 %config = (perltidyrc => q{});
 is(
-    eval { pcritique($policy, \$code, \%config) },
-    $has_perltidy ? 0 : undef,
+    pcritique($policy, \$code, \%config),
+    0,
     'Tidy with heredoc',
 );
 
@@ -128,8 +127,8 @@ END_PERL
 
 %config = (perltidyrc => q{});
 is(
-    eval { pcritique($policy, \$code, \%config) },
-    $has_perltidy ? 0 : undef,
+    pcritique($policy, \$code, \%config),
+    0,
     'Tidy with shell escape',
 );
 
