@@ -17,15 +17,16 @@ use Readonly;
 use base qw(Exporter);
 
 use File::Spec;
-use Scalar::Util qw(blessed);
-use List::MoreUtils qw(firstidx);
+use List::MoreUtils qw< firstidx >;
+use PPIx::Regexp qw< >;
+use Scalar::Util qw< blessed >;
 
 use Perl::Critic::Exception::Configuration::Generic;
 use Perl::Critic::Config;
 use Perl::Critic::Violation;
 use Perl::Critic::Document;
 use Perl::Critic::Statistics;
-use Perl::Critic::Utils qw{ :characters hashify shebang_line };
+use Perl::Critic::Utils qw< :characters hashify shebang_line >;
 
 #-----------------------------------------------------------------------------
 
