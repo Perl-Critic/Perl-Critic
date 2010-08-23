@@ -49,10 +49,12 @@ Next release whenever it is
     * Perl::Critic::Annotation needs to look inside the __END__ statement to
       find the true end of the document, otherwise POD policies may give false
       positives.  RT #59176
-    * RegularExpressions::ProhibitUnusedCapture now takes account of the
-      %LAST_PAREN_MATCH as well as %+ if English has been loaded.  RT #60002
     * BuiltinFunctions::ProhibitStringyEval no longer dies on eval
       "#...".  RT #60179
+    * RegularExpressions::ProhibitUnusedCapture now takes account of the
+      %LAST_PAREN_MATCH as well as %+ if English has been loaded.  RT #60002
+    * ValuesAndExpressions::RequireInterpolationOfMetachars fixed with respect
+      to changes in Email::Address 1.890.
 
 [1.108] Released on 2010-06-22
 
