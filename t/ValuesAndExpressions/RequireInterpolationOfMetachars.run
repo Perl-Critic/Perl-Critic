@@ -21,6 +21,17 @@ print 'this is not @literal';
 
 #-----------------------------------------------------------------------------
 
+## name Failure of common punctuation variables.
+## failures 4
+## cut
+
+print '$_';
+print '@_';
+print '$@';
+print '$!';
+
+#-----------------------------------------------------------------------------
+
 ## name Readonly constant from Modules::ProhibitAutomaticExportation.
 ## failures 1
 ## cut

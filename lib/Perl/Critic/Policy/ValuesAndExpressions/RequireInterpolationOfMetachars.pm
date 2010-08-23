@@ -98,7 +98,7 @@ sub _needs_interpolation {
 sub _looks_like_email_address {
     my ($string) = @_;
 
-    return if index ($string, '@') < 0;
+    return if index ($string, q<@>) < 0;
     return if $string =~ m< \W \@ >xms;
 
     return $string =~ $Email::Address::addr_spec;
