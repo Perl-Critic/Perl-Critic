@@ -131,15 +131,6 @@ use overload 1.0 ('@{}' => \&array_deref);
 
 #-----------------------------------------------------------------------------
 
-## name Do complain about overload dereference-ish strings elsewhere.
-## failures 2
-## cut
-
-use overlord '${}' => \&scalar_deref;
-use overlord '@{}' => \&array_deref;
-
-#-----------------------------------------------------------------------------
-
 ## name use vars arguments.
 ## failures 0
 ## cut

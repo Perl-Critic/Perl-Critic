@@ -10,9 +10,11 @@ package Perl::Critic::Policy::ValuesAndExpressions::RequireInterpolationOfMetach
 use 5.006001;
 use strict;
 use warnings;
+
 use Readonly;
 
 use Email::Address;
+
 use Perl::Critic::Utils qw< :booleans :characters :severities >;
 use base 'Perl::Critic::Policy';
 
@@ -96,6 +98,7 @@ sub _needs_interpolation {
 sub _looks_like_email_address {
     my ($string) = @_;
 
+    return if index ($string, '@') < 0;
     return if $string =~ m< \W \@ >xms;
 
     return $string =~ $Email::Address::addr_spec;
