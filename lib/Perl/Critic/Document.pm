@@ -14,7 +14,7 @@ use warnings;
 use Carp qw< confess >;
 
 use List::Util qw< reduce >;
-use Scalar::Util qw< blessed weaken >;
+use Scalar::Util qw< blessed refaddr weaken >;
 use version;
 
 use PPI::Document;
@@ -24,6 +24,8 @@ use PPIx::Utilities::Node qw< split_ppi_node_by_namespace >;
 use Perl::Critic::Annotation;
 use Perl::Critic::Exception::Parse qw< throw_parse >;
 use Perl::Critic::Utils qw< :booleans :characters shebang_line >;
+
+use PPIx::Regexp 0.010 qw< >;
 
 #-----------------------------------------------------------------------------
 
@@ -228,6 +230,22 @@ sub subdocuments_for_namespace {
     my $subdocuments = $self->_nodes_by_namespace()->{$namespace};
 
     return $subdocuments ? @{$subdocuments} : ();
+}
+
+#-----------------------------------------------------------------------------
+
+sub ppix_regexp_from_element {
+    my ( $self, $element ) = @_;
+
+    if ( blessed( $element ) && $element->isa( 'PPI::Element' ) ) {
+        my $addr = refaddr( $element );
+        return $self->{_ppix_regexp_from_element}{$addr}
+            if exists $self->{_ppix_regexp_from_element}{$addr};
+        return ( $self->{_ppix_regexp_from_element}{$addr} =
+            PPIx::Regexp->new( $element ) );
+    } else {
+        return PPIx::Regexp->new( $element );
+    }
 }
 
 #-----------------------------------------------------------------------------
@@ -651,6 +669,15 @@ namespace.  For example, given that the current document is for the source
 this method will return two L<Perl::Critic::Document|Perl::Critic::Document>s
 for a parameter of C<"Foo">.  For more, see
 L<PPIx::Utilities::Node/split_ppi_node_by_namespace>.
+
+
+=item C<< ppix_regexp_from_element($element) >>
+
+Caching wrapper around C<< PPIx::Regexp->new($element) >>.  If
+C<$element> is a C<PPI::Element> the cache is employed, otherwise it
+just returns the results of C<< PPIx::Regexp->new() >>.  In either case,
+it returns C<undef> unless the argument is something that
+L<PPIx::Regexp|PPIx::Regexp> actually understands.
 
 
 =item C<< filename() >>

@@ -15,8 +15,6 @@ use warnings;
 use English qw< $EVAL_ERROR -no_match_vars >;
 use Readonly;
 
-use PPIx::Regexp 0.010 qw< >;
-
 use Perl::Critic::Utils qw{
     :characters hashify is_function_call is_method_call :severities
     $EMPTY $TRUE
@@ -151,7 +149,7 @@ sub _find_sub_call_in_document {
         _compare_token_locations( $regexp, $start_token ) >= 0
             and _compare_token_locations( $finish_token, $regexp ) >= 0
             and next;
-        _find_sub_usage_in_regexp( $name, $regexp )
+        _find_sub_usage_in_regexp( $name, $regexp, $document )
             and return $TRUE;
 
     }
@@ -175,9 +173,10 @@ sub _find_regular_expressions {
 # This could happen either by an explicit s/.../.../e, or by interpolation
 # (i.e. @{[...]} ).
 sub _find_sub_usage_in_regexp {
-    my ( $name, $regexp ) = @_;
+    my ( $name, $regexp, $document ) = @_;
 
-    my $ppix = PPIx::Regexp->new_from_cache( $regexp ) or return;
+    my $ppix = $document->ppix_regexp_from_element( $regexp ) or return;
+    $ppix->failures() and return;
 
     foreach my $code ( @{ $ppix->find( 'PPIx::Regexp::Token::Code' ) || [] } ) {
         my $doc = $code->ppi() or next;

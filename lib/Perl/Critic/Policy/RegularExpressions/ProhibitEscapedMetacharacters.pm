@@ -15,8 +15,6 @@ use English qw(-no_match_vars);
 use List::MoreUtils qw(any);
 use Readonly;
 
-use PPIx::Regexp 0.010 qw< >;
-
 use Perl::Critic::Utils qw{ :booleans :severities hashify };
 use base 'Perl::Critic::Policy';
 
@@ -41,12 +39,12 @@ sub applies_to           { return qw(PPI::Token::Regexp::Match
 #-----------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, undef ) = @_;
+    my ( $self, $elem, $document ) = @_;
 
     # optimization: don't bother parsing the regexp if there are no escapes
     return if $elem !~ m/\\/xms;
 
-    my $re = PPIx::Regexp->new_from_cache( $elem ) or return;
+    my $re = $document->ppix_regexp_from_element( $elem ) or return;
     $re->failures() and return;
     my $qr = $re->regular_expression() or return;
 

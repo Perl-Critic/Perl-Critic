@@ -16,8 +16,6 @@ use English qw(-no_match_vars);
 use List::Util qw{ min };
 use Readonly;
 
-use PPIx::Regexp 0.010 qw< >;
-
 use Perl::Critic::Utils qw{ :booleans :severities };
 
 use base 'Perl::Critic::Policy';
@@ -56,12 +54,12 @@ sub applies_to           { return qw(PPI::Token::Regexp::Match
 #-----------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, undef ) = @_;
+    my ( $self, $elem, $document ) = @_;
 
     # Optimization: if its short enough now, parsing won't make it longer
     return if $self->{_max_characters} >= length $elem->get_match_string();
 
-    my $re = PPIx::Regexp->new( $elem )
+    my $re = $document->ppix_regexp_from_element( $elem )
         or return;  # Abort on syntax error.
     $re->failures()
         and return; # Abort if parse errors found.

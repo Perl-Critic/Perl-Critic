@@ -17,8 +17,6 @@ use List::MoreUtils qw(none);
 use Readonly;
 use Scalar::Util qw(refaddr);
 
-use PPIx::Regexp 0.010 qw< >;
-
 use Perl::Critic::Exception::Fatal::Internal qw{ throw_internal };
 use Perl::Critic::Utils qw{ :booleans :severities hashify split_nodes_on_comma };
 use base 'Perl::Critic::Policy';
@@ -56,7 +54,7 @@ sub violates {
     # optimization: don't bother parsing the regexp if there are no parens
     return if 0 > index $elem->content(), '(';
 
-    my $re = PPIx::Regexp->new_from_cache( $elem ) or return;
+    my $re = $doc->ppix_regexp_from_element( $elem ) or return;
     $re->failures() and return;
 
     my $ncaptures = $re->max_capture_number() or return;

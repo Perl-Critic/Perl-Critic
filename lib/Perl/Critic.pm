@@ -18,7 +18,6 @@ use base qw(Exporter);
 
 use File::Spec;
 use List::MoreUtils qw< firstidx >;
-use PPIx::Regexp 0.010 qw< >;
 use Scalar::Util qw< blessed >;
 
 use Perl::Critic::Exception::Configuration::Generic;
@@ -134,8 +133,6 @@ sub _gather_violations {
     my @policies = $self->config->policies();
     my @ordered_policies = _futz_with_policy_order(@policies);
     my @violations = map { _critique($_, $doc) } @ordered_policies;
-
-    PPIx::Regexp->flush_cache();
 
     # Accumulate statistics
     $self->statistics->accumulate( $doc, \@violations );

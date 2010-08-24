@@ -15,7 +15,6 @@ use Readonly;
 use List::MoreUtils qw< any >;
 
 use PPI::Token::Symbol;
-use PPIx::Regexp 0.010 qw< >;
 
 use Perl::Critic::Utils qw< :characters :severities >;
 use base 'Perl::Critic::Policy';
@@ -99,7 +98,8 @@ sub _get_regexp_symbol_usage {
 
         foreach my $regex ( @{ $document->find( $class ) || [] } ) {
 
-            my $ppix = PPIx::Regexp->new_from_cache( $regex ) or next;
+            my $ppix = $document->ppix_regexp_from_element( $regex ) or next;
+            $ppix->failures() and next;
 
             foreach my $code ( @{
                 $ppix->find( 'PPIx::Regexp::Token::Code' ) || [] } ) {
