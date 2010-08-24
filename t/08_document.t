@@ -139,7 +139,7 @@ can_ok('Perl::Critic::Document', 'is_module');
     ok(!! $critic_document->uses_module('Moose'),       'Moose is used.');
     ok( ! $critic_document->uses_module('Moose::Role'), 'Moose::Role is not used.');
 
-    $ppi_document = PPI::Document->new(\$EMPTY);
+    $ppi_document = PPI::Document->new( \q{ } );
     $critic_document =
         Perl::Critic::Document->new(-source => $ppi_document);
 
