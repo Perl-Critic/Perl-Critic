@@ -10,9 +10,11 @@ package Perl::Critic::Policy::ValuesAndExpressions::RequireInterpolationOfMetach
 use 5.006001;
 use strict;
 use warnings;
+
 use Readonly;
 
 use Email::Address;
+
 use Perl::Critic::Utils qw< :booleans :characters :severities >;
 use base 'Perl::Critic::Policy';
 
@@ -68,7 +70,6 @@ sub violates {
     my $string = $elem->string();
     return if not _needs_interpolation($string);
     return if _looks_like_email_address($string);
-    return if _looks_like_use_overload($elem);
     return if _looks_like_use_vars($elem);
 
     my $rcs_regexes = $self->{_rcs_regexes};
@@ -83,8 +84,10 @@ sub _needs_interpolation {
     my ($string) = @_;
 
     return
-            $string =~ m< [\$\@] \S+ >xms              # Contains a $ or @
-        ||  $string =~ m<                              # Contains metachars
+            # Contains a $ or @ not followed by "{}".
+            $string =~ m< [\$\@] (?! [{] [}] ) \S+ >xms
+            # Contains metachars
+        ||  $string =~ m<
                 (?: \A | [^\\] )
                 (?: \\{2} )*
                 \\ [tnrfae0xcNLuLUEQ]
@@ -96,7 +99,9 @@ sub _needs_interpolation {
 sub _looks_like_email_address {
     my ($string) = @_;
 
+    return if index ($string, q<@>) < 0;
     return if $string =~ m< \W \@ >xms;
+    return if $string =~ m< \A \@ \w+ \b >xms;
 
     return $string =~ $Email::Address::addr_spec;
 }
@@ -111,26 +116,6 @@ sub _contains_rcs_variable {
     }
 
     return;
-}
-
-#-----------------------------------------------------------------------------
-
-sub _looks_like_use_overload {
-    my ($elem) = @_;
-
-    my $string = $elem->string();
-
-    $string eq q<@{}>           ## no critic (RequireInterpolationOfMetachars)
-        or $string eq q<${}>    ## no critic (RequireInterpolationOfMetachars)
-        or return;
-
-    my $statement = $elem;
-    while ( not $statement->isa('PPI::Statement::Include') ) {
-        $statement = $statement->parent() or return;
-    }
-
-    return if $statement->type() ne q<use>;
-    return $statement->module() eq q<overload>;
 }
 
 #-----------------------------------------------------------------------------
@@ -183,13 +168,6 @@ indicate that the string should be interpolated.
 =head2 Exceptions
 
 =over
-
-=item *
-
-C<${}> and C<@{}> in a C<use overload>:
-
-    use overload '${}' => \&deref,     # ok
-                 '@{}' => \&arrayize;  # ok
 
 =item *
 
