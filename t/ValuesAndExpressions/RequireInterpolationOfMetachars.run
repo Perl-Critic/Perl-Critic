@@ -158,22 +158,22 @@ if ( ($VERSION) = q<$Revision$> =~ m/(\d+)/mx ) {}
 
 #-----------------------------------------------------------------------------
 
-## name Don't complain about use overload dereferences.
+## name Don't complain about '${}' and '@{}' because they're invalid syntax. See RT #38528/commit r3077 for original problem/solution.
 ## failures 0
 ## cut
 
-use overload '${}' => \&scalar_deref;
-use overload '@{}' => \&array_deref;
-use overload '%{}' => \&hash_deref;
-use overload '&{}' => \&code_deref;
-use overload '*{}' => \&glob_deref;
-use overload ('${}' => \&scalar_deref);
-use overload ('@{}' => \&array_deref);
-use overload ('%{}' => \&hash_deref);
-use overload ('&{}' => \&code_deref);
-use overload ('*{}' => \&glob_deref);
-use overload 1.0 ('${}' => \&scalar_deref);
-use overload 1.0 ('@{}' => \&array_deref);
+use Blah '${}' => \&scalar_deref;
+use Blah '@{}' => \&array_deref;
+use Blah '%{}' => \&hash_deref;
+use Blah '&{}' => \&code_deref;
+use Blah '*{}' => \&glob_deref;
+use Blah ('${}' => \&scalar_deref);
+use Blah ('@{}' => \&array_deref);
+use Blah ('%{}' => \&hash_deref);
+use Blah ('&{}' => \&code_deref);
+use Blah ('*{}' => \&glob_deref);
+use Blah 1.0 ('${}' => \&scalar_deref);
+use Blah 1.0 ('@{}' => \&array_deref);
 
 #-----------------------------------------------------------------------------
 
