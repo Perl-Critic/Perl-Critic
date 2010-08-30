@@ -68,19 +68,19 @@ sub violates {
     return if is_package_declaration($elem);
 
     # Skip controls that are allowed
-    return if exists $self->{_allow}->{$elem};
+    return if exists $self->{_allow}->{ $elem->content() };
 
     # Skip Compound variety (these are good)
     my $stmnt = $elem->statement();
-    return if !$stmnt;
+    return if not $stmnt;
     return if $stmnt->isa('PPI::Statement::Compound');
 
     # Handle special cases
-    if ( $elem eq 'if' ) {
+    if ( $elem->content() eq 'if' ) {
         # Postfix 'if' allowed with loop breaks, or other
         # flow-controls like 'die', 'warn', and 'croak'
         return if $stmnt->isa('PPI::Statement::Break');
-        return if defined $self->{_flowcontrol}{ $stmnt->schild(0) };
+        return if defined $self->{_flowcontrol}{ $stmnt->schild(0)->content() };
     }
 
     # If we get here, it must be postfix.
