@@ -1,3 +1,10 @@
+[1.109] Released on 2010-08-29
+
+    Bug Fixes:
+    * ValuesAndExpressions::RequireInterpolationOfMetachars fix due to changes
+      in Email::Address 1.890.  Note that this may find problems in code that
+      it didn't before, e.g. q<'@foo'>.
+
 [1.108] Released on 2010-06-22
 
     This is the "Give Shawn Moore what we promised him a year ago and hurry up
