@@ -100,6 +100,7 @@ sub _looks_like_email_address {
 
     return if index ($string, q<@>) < 0;
     return if $string =~ m< \W \@ >xms;
+    return if $string =~ m< \A \@ \w+ \b >xms;
 
     return $string =~ $Email::Address::addr_spec;
 }

@@ -21,6 +21,22 @@ print 'this is not @literal';
 
 #-----------------------------------------------------------------------------
 
+## name Failure of simple scalar variables.
+## failures 1
+## cut
+
+print '$blah';
+
+#-----------------------------------------------------------------------------
+
+## name Failure of simple array variables.
+## failures 1
+## cut
+
+print '@blah';
+
+#-----------------------------------------------------------------------------
+
 ## name Failure of common punctuation variables.
 ## failures 4
 ## cut
@@ -29,6 +45,25 @@ print '$_';
 print '@_';
 print '$@';
 print '$!';
+
+#-----------------------------------------------------------------------------
+
+## name Failure of @+ & @-.
+## failures 2
+## TODO Actually, should probably throw all the "unusual" punctuation variables in here.  Probably want to use B::Keywords, but should ignore variable type since the magic really affects the typeglob, not just a single slot.
+## cut
+
+print '@+';
+print '@-';
+
+#-----------------------------------------------------------------------------
+
+## name Failure of @^H.
+## failures 1
+## TODO Really, this is about all the caret variables.  Probably want to use B::Keywords, but should ignore variable type since the magic really affects the typeglob, not just a single slot.
+## cut
+
+print '@^H';
 
 #-----------------------------------------------------------------------------
 
