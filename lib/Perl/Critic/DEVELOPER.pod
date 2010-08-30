@@ -1074,7 +1074,7 @@ L<http://search.cpan.org/dist/PPI-Tester/lib/PPI/Tester.pm>.
 
 =head1 VERSION
 
-This is part of L<Perl::Critic|Perl::Critic> version 1.108.
+This is part of L<Perl::Critic|Perl::Critic> version 1.109.
 
 
 =head1 SEE ALSO
