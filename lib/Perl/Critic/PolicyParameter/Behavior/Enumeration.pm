@@ -17,7 +17,7 @@ use Perl::Critic::Utils qw{ :characters &words_from_string &hashify };
 
 use base qw{ Perl::Critic::PolicyParameter::Behavior };
 
-our $VERSION = '1.108';
+our $VERSION = '1.110';
 
 #-----------------------------------------------------------------------------
 

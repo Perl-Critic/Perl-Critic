@@ -26,7 +26,7 @@ use Readonly;
 
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.108';
+our $VERSION = '1.110';
 
 #-----------------------------------------------------------------------------
 
