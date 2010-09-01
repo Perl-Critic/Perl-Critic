@@ -53,6 +53,8 @@ Next release whenever it is
       "#...".  RT #60179
     * RegularExpressions::ProhibitUnusedCapture now takes account of the
       %LAST_PAREN_MATCH as well as %+ if English has been loaded.  RT #60002
+    * Subroutines::ProhibitManyArgs now interprets prototype groups (e.g.
+      \[$@%]) as representing a single argument.
 
 [1.109] Released on 2010-08-29
 
