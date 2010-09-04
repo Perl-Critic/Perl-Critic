@@ -1,5 +1,5 @@
 ## name Basic failure
-## failures 6
+## failures 7
 ## cut
 
 do_something() if $condition;
@@ -8,12 +8,13 @@ do_something() until $condition;
 do_something() unless $condition;
 do_something() for @list;
 do_something() foreach @list;
+do_something() when @list;
 
 #-----------------------------------------------------------------------------
 
 ## name Configured to allow all
 ## failures 0
-## parms {allow => 'if while until unless for foreach'}
+## parms {allow => 'if while until unless for foreach when'}
 ## cut
 
 do_something() if $condition;
@@ -22,18 +23,20 @@ do_something() until $condition;
 do_something() unless $condition;
 do_something() for @list;
 do_something() foreach @list;
+do_something() when @list;
 
 #-----------------------------------------------------------------------------
 
 ## name Configured to allow all, all regular control structures
 ## failures 0
-## parms {allow => 'if unless until while'}
+## parms {allow => 'if unless until while when'}
 ## cut
 
 if($condition){ do_something() }
 while($condition){ do_something() }
 until($condition){ do_something() }
 unless($condition){ do_something() }
+when($smart_match){ do_something() }
 
 #-----------------------------------------------------------------------------
 
@@ -41,7 +44,7 @@ unless($condition){ do_something() }
 ## failures 0
 ## cut
 
-#PPI versions < 1.03 had problems with this
+# PPI versions < 1.03 had problems with this
 for my $element (@list){ do_something() }
 for (@list){ do_something_else() }
 foreach my $element (@list){ do_something() }
@@ -49,7 +52,7 @@ foreach (@list){ do_something_else() }
 
 #-----------------------------------------------------------------------------
 
-## name Legal postfix usage
+## name Legal postfix if usage
 ## failures 0
 ## cut
 
@@ -84,6 +87,44 @@ confess if $condition;
 
 exit 0 if $condition;
 exit if $condition;
+
+#-----------------------------------------------------------------------------
+
+## name Legal postfix when usage
+## failures 0
+## cut
+
+use Carp;
+
+while ($condition) {
+    next when $smart_match;
+    last when $smart_match;
+    redo when $smart_match;
+    return when $smart_match;
+    goto HELL when $smart_match;
+    exit when $smart_match;
+}
+
+die 'message' when $smart_match;
+die when $smart_match;
+
+warn 'message' when $smart_match;
+warn when $smart_match;
+
+carp 'message' when $smart_match;
+carp when $smart_match;
+
+croak 'message' when $smart_match;
+croak when $smart_match;
+
+cluck 'message' when $smart_match;
+cluck when $smart_match;
+
+confess 'message' when $smart_match;
+confess when $smart_match;
+
+exit 0 when $smart_match;
+exit when $smart_match;
 
 #-----------------------------------------------------------------------------
 
@@ -128,6 +169,7 @@ $hash{until} = 1;
 $hash{while} = 1;
 $hash{for} = 1;
 $hash{foreach} = 1;
+$hash{when} = 1;
 
 #-----------------------------------------------------------------------------
 
@@ -136,12 +178,13 @@ $hash{foreach} = 1;
 ## cut
 
 my %hash = (
-    if => 1,
-    unless => 1,
-    until => 1,
-    while => 1,
-    for => 1,
+    if      => 1,
+    unless  => 1,
+    until   => 1,
+    while   => 1,
+    for     => 1,
     foreach => 1,
+    when    => 1,
 );
 
 #-----------------------------------------------------------------------------

@@ -15,6 +15,8 @@ Next release whenever it is
     Policy Changes:
     * ControlStructures::ProhibitMutatingListFunctions allows s///r,
       which was introduced in 5.13.2.
+    * ControlStructures::ProhibitPostfixControls now looks for "when".  It is
+      treated in the same way as "if".
     * Subroutines::ProhibitUnusedPrivateSubroutines now looks inside
       regular expressions.
     * ValuesAndExpressions::ProhibitMismatchedOperators didn't handle file
@@ -37,7 +39,7 @@ Next release whenever it is
     * Build phase now requires Test::Deep.
     * Added example using Try::Tiny to documentation of
       ErrorHandling::RequireCheckingReturnValueOfEval. Suggested by Andy
-      Lester on the mailing list.
+      Lester on the developers mailing list.
     * In order to get more consistent behavior across all installations of
       Perl::Critic, IPC::Open2 (which actually is part of core), PPIx::Regexp,
       Perl::Tidy, Pod::Spell, and Text::ParseWords are no longer optional

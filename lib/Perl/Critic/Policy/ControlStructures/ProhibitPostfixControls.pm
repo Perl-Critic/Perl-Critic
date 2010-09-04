@@ -26,6 +26,7 @@ Readonly::Hash my %PAGES_OF => (
     for     => [ 96     ],
     foreach => [ 96     ],
     while   => [ 96     ],
+    when    => q<Similar to "if", postfix "when" should only be used with flow-control>,
 );
 
 #-----------------------------------------------------------------------------
@@ -76,7 +77,8 @@ sub violates {
     return if $stmnt->isa('PPI::Statement::Compound');
 
     # Handle special cases
-    if ( $elem->content() eq 'if' ) {
+    my $content = $elem->content();
+    if ($content eq 'if' or $content eq 'when') {
         # Postfix 'if' allowed with loop breaks, or other
         # flow-controls like 'die', 'warn', and 'croak'
         return if $stmnt->isa('PPI::Statement::Break');
@@ -84,8 +86,8 @@ sub violates {
     }
 
     # If we get here, it must be postfix.
-    my $desc = qq{Postfix control "$elem" used};
-    return $self->violation( $desc, $expl, $elem );
+    my $desc = qq{Postfix control "$content" used};
+    return $self->violation($desc, $expl, $elem);
 }
 
 1;
@@ -110,32 +112,34 @@ distribution.
 =head1 DESCRIPTION
 
 Conway discourages using postfix control structures (C<if>, C<for>,
-C<unless>, C<until>, C<while>) because they hide control flow.  The
-C<unless> and C<until> controls are particularly evil because they
-lead to double-negatives that are hard to comprehend.  The only
-tolerable usage of a postfix C<if> is when it follows a loop break
-such as C<last>, C<next>, C<redo>, or C<continue>.
+C<unless>, C<until>, C<when>, C<while>) because they hide control
+flow.  The C<unless> and C<until> controls are particularly evil
+because they lead to double-negatives that are hard to comprehend.
+The only tolerable usage of a postfix C<if>/C<when> is when it follows
+a loop break such as C<last>, C<next>, C<redo>, or C<continue>.
 
-    do_something() if $condition;         #not ok
-    if($condition){ do_something() }      #ok
+    do_something() if $condition;           # not ok
+    if ($condition) { do_something() }      # ok
 
-    do_something() while $condition;      #not ok
-    while($condition){ do_something() }   #ok
+    do_something() while $condition;        # not ok
+    while ($condition) { do_something() }   # ok
 
-    do_something() unless $condition;     #not ok
-    do_something() unless ! $condition;   #really bad
-    if(! $condition){ do_something() }    #ok
+    do_something() unless $condition;       # not ok
+    do_something() unless ! $condition;     # really bad
+    if (! $condition) { do_something() }    # ok
 
-    do_something() until $condition;      #not ok
-    do_something() until ! $condition;    #really bad
-    while(! $condition){ do_something() } #ok
+    do_something() until $condition;        # not ok
+    do_something() until ! $condition;      # really bad
+    while (! $condition) { do_something() } # ok
 
-    do_something($_) for @list;           #not ok
+    do_something($_) for @list;             # not ok
 
     LOOP:
-    for my $n (0..100){
-        next if $condition;               #ok
-        last LOOP if $other_condition;    #also ok
+    for my $n (0..100) {
+        next if $condition;                 # ok
+        last LOOP if $other_condition;      # also ok
+
+        next when m< 0 \z >xms;             # fine too
     }
 
 
@@ -143,8 +147,9 @@ such as C<last>, C<next>, C<redo>, or C<continue>.
 
 A set of constructs to be ignored by this policy can specified by
 giving a value for 'allow' of a string of space-delimited keywords:
-C<if>, C<for>, C<unless>, C<until>, and/or C<while>.  An example of
-specifying allowed flow-control structures in a F<.perlcriticrc> file:
+C<if>, C<for>, C<unless>, C<until>, C<when>, and/or C<while>.  An
+example of specifying allowed flow-control structures in a
+F<.perlcriticrc> file:
 
     [ControlStructures::ProhibitPostfixControls]
     allow = for if until
@@ -169,6 +174,12 @@ flow-controls just like C<next> or C<last>.  So this Policy does
 permit you to use a postfix C<if> when the statement begins with one
 of those functions.  It is also pretty common to use C<warn>, C<carp>,
 and C<cluck> with a postfix C<if>, so those are allowed too.
+
+The C<when> keyword was added to the language after Perl Best
+Practices was written.  This policy treats C<when> the same way it
+does C<if>, i.e. it's allowed after flow-control constructs.  Thanks
+to brian d foy for the
+L<inspiration|http://www.effectiveperlprogramming.com/blog/543>.
 
 
 =head1 BUGS
