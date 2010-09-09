@@ -44,6 +44,8 @@ Next release whenever it is
       Perl::Critic, IPC::Open2 (which actually is part of core), PPIx::Regexp,
       Perl::Tidy, Pod::Spell, and Text::ParseWords are no longer optional
       prerequisites.
+    * Require Exporter version 5.63 (versus version 0) to get sane handling of
+      export tags.
 
     Bug Fixes:
     * Build.PL/Makefile.PL didn't specify a minimum version of version.pm, but

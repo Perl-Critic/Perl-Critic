@@ -39,7 +39,7 @@ sub required_module_versions {
         'Email::Address'                => 1.889,
         'English'                       => 0,
         'Exception::Class'              => 1.23,
-        'Exporter'                      => 0,
+        'Exporter'                      => 5.63,
         'File::Basename'                => 0,
         'File::Find'                    => 0,
         'File::Path'                    => 0,
