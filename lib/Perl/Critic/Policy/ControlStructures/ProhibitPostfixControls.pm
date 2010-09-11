@@ -96,7 +96,7 @@ __END__
 
 =pod
 
-=for stopwords flowcontrol
+=for stopwords flowcontrol brian foy
 
 =head1 NAME
 
