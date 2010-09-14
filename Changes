@@ -59,6 +59,8 @@ Next release whenever it is
       \[$@%]) as representing a single argument.
     * Require Exporter version 5.63 (versus version 0) to get sane handling of
       export tags.  RT# 61071
+    * Prevent Subroutines::ProhibitUnusedPrivateSubroutines from failing
+    * on &_subroutine().  RT #61311
 
 [1.109] Released on 2010-08-29
 

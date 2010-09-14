@@ -240,13 +240,13 @@ sub _find_sub_reference_in_document {
             $symbol eq $usage->content() or next;
 
             my $prior = $usage->sprevious_sibling();
-            defined $prior
+            $prior
                 and $prior->isa( 'PPI::Token::Cast' )
                 and q<\\> eq $prior->content()
                 and return $TRUE;
 
             is_function_call( $usage )
-                or defined $prior
+                or $prior
                     and $prior->isa( 'PPI::Token::Word' )
                     and 'goto' eq $prior->content()
                 or next;
