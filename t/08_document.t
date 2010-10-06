@@ -22,7 +22,7 @@ use Perl::Critic::Utils::DataConversion qw< dor >;
 
 
 use Test::Deep;
-use Test::More tests => 41;
+use Test::More tests => 43;
 
 #-----------------------------------------------------------------------------
 
@@ -182,6 +182,15 @@ sub test_version {
 
     return;
 }
+
+#-----------------------------------------------------------------------------
+
+my $nameless_code = 'use strict';
+my $nameless_doc = Perl::Critic::Document->new( -source => \$nameless_code,
+                                                '-forced-filename' => 'Build.PL' );
+
+is($nameless_doc->filename(), 'Build.PL', 'Got forced filename');
+is($nameless_doc->is_module(), 0, 'Forced name affects module determination');
 
 #-----------------------------------------------------------------------------
 
