@@ -219,7 +219,7 @@ $complex = q{"don-quixote@man-from.lamancha.org" is my address};
 send_email_to ('foo@bar.com', ...);
 
 #-----------------------------------------------------------------------------
-## name Email addresses with emedded violations.
+## name Email addresses with embedded violations.
 ## TODO Policy is not smart enough to handle this yet.
 ## failures 2
 ## cut
@@ -227,6 +227,86 @@ send_email_to ('foo@bar.com', ...);
 $simple  = 'Email: $name@$company.$domain';
 send_email_to('$some_var: foo@bar.com', ...);
 
+#-----------------------------------------------------------------------------
+## name Confirm we flag all defined backslashed interpolations. RT #61970
+## failures 26
+## cut
+
+'\t';          # tab             (HT, TAB)
+'\n';          # newline         (NL)
+'\r';          # return          (CR)
+'\f';          # form feed       (FF)
+'\b';          # backspace       (BS)
+'\a';          # alarm (bell)    (BEL)
+'\e';          # escape          (ESC)
+'\033';        # octal char      (example: ESC)
+'\x1b';        # hex char        (example: ESC)
+'\x{263a}';    # wide hex char   (example: SMILEY)
+'\c[';         # control char    (example: ESC)
+'\N{name}';    # named Unicode character
+'\N{U+263D}';  # Unicode character (example: FIRST QUARTER MOON)
+'\l';          # lowercase next char
+'\u';          # uppercase next char
+'\L';          # lowercase till \E
+'\U';          # uppercase till \E
+'\E';          # end case modification
+'\Q';          # quote non-word characters till \E
+'\1';          # See note 1, below
+'\2';          # See note 1, below
+'\3';          # See note 1, below
+'\4';          # See note 1, below
+'\5';          # See note 1, below
+'\6';          # See note 1, below
+'\7';          # See note 1, below
+
+# Note 1: These are not documented in perop that I can find, but the code in
+#         toke.c makes them equivalent to \0 for interpolated strings (though
+#         not, of course, for regular expressions or the substitution portion
+#         of s///).
+
+#-----------------------------------------------------------------------------
+## name Confirm we ignore all non-special backslashed word characters. RT #61970
+## failures 0
+## cut
+
+'\8';
+'\9';
+'\A';
+'\B';
+'\C';
+'\D';
+'\F';
+'\G';
+'\H';
+'\I';
+'\J';
+'\K';
+'\M';
+'\O';
+'\P';
+'\R';
+'\S';
+'\T';
+'\V';
+'\W';
+'\X';
+'\Y';
+'\Z';
+'\d';
+'\g';
+'\h';
+'\i';
+'\j';
+'\k';
+'\m';
+'\o';
+'\p';
+'\q';
+'\s';
+'\v';
+'\w';
+'\y';
+'\z';
 
 
 ##############################################################################

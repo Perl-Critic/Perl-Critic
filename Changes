@@ -36,6 +36,10 @@ Next release whenever it is
     * RegularExpressions::ProhibitUnusedCapture now takes account of the
       use of capture variables in the replacement portion of
       s/.../.../e.
+    * ValuesAndExpressions::RequireInterpolationOfMetachars now detects
+      and complains about "\b" and "\l" as documented in perlop, and
+      "\1" through "\7", which are not documented there, but were found
+      in toke.c.
 
     Other Changes:
     * Test::Perl::Critic::Policy no longer exports by default.

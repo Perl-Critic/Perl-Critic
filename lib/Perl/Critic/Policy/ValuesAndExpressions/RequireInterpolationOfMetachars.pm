@@ -87,10 +87,14 @@ sub _needs_interpolation {
             # Contains a $ or @ not followed by "{}".
             $string =~ m< [\$\@] (?! [{] [}] ) \S+ >xms
             # Contains metachars
+            # Note that \1 ... are not documented (that I can find), but are
+            # treated the same way as \0 by S_scan_const in toke.c, at least
+            # for regular double-quotish strings. Not, obviously, where
+            # regexes are involved.
         ||  $string =~ m<
                 (?: \A | [^\\] )
                 (?: \\{2} )*
-                \\ [tnrfae0xcNLuLUEQ]
+                \\ [tnrfbae01234567xcNluLUEQ]
             >xms;
 }
 
