@@ -26,6 +26,9 @@ Readonly::Scalar my $EXPL  => [ 175 ];
 Readonly::Hash my %EXEMPTIONS =>
     hashify( qw< defined exists goto sort > );
 
+Readonly::Hash my %IS_COMMA =>
+    hashify( q{,}, q{=>} );
+
 #-----------------------------------------------------------------------------
 
 sub supported_parameters { return ()                       }
@@ -48,7 +51,9 @@ sub violates {
 
     # look up past parens to get say the "defined" in "defined(&foo)" or
     # "defined((&foo))" etc
-    if (not $previous) {
+    if (not $previous or
+            $previous->isa( 'PPI::Token::Operator' ) and
+            $IS_COMMA{ $previous->content() } ) {
         my $up = $elem;
 
         PARENT:

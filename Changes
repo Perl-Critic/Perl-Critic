@@ -67,7 +67,9 @@ Next release whenever it is
     * Require Exporter version 5.63 (versus version 0) to get sane handling of
       export tags.  RT# 61071
     * Prevent Subroutines::ProhibitUnusedPrivateSubroutines from failing
-    * on &_subroutine().  RT #61311
+      on &_subroutine().  RT #61311
+    * Subroutines::ProhibitAmpersandSigils now allows references of the
+    * form \( &sub1, &sub2 ).  RT #49609
 
 [1.109] Released on 2010-08-29
 

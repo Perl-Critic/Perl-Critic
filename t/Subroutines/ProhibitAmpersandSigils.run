@@ -40,6 +40,7 @@ exists( &function_call );
 ## cut
 
 \( &function_call );
+\( &function_call, &another_function );
 
 #-----------------------------------------------------------------------------
 
