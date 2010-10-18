@@ -433,7 +433,7 @@ sub _record_subscripted_capture {
         ( my $name = $1 ) =~ s/ \A ( ["'] ) ( .*? ) \1 \z /$2/smx;
         _record_named_capture( $name, $captures, $named_captures );
     } elsif ( $suffix =~ m/ \A [[] \s* ( [-+]? \d+ ) \s* []] /smx ) {
-        _record_numbered_capture( $1, $captures, $re );
+        _record_numbered_capture( $1 . q{}, $captures, $re );
     }
     return;
 }
