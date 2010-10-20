@@ -66,8 +66,7 @@ sub violates {
                 $count--;
                 if ($count < 0) {
                     # Found too many C<$b>s too early
-                    my $sev = $self->get_severity();
-                    return $self->violation( $DESC, $EXPL, $elem, $sev );
+                    return $self->violation( $DESC, $EXPL, $elem );
                 }
             }
         }
