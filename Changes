@@ -69,7 +69,7 @@ Next release whenever it is
     * Prevent Subroutines::ProhibitUnusedPrivateSubroutines from failing
       on &_subroutine().  RT #61311
     * Subroutines::ProhibitAmpersandSigils now allows references of the
-    * form \( &sub1, &sub2 ).  RT #49609
+      form \( &sub1, &sub2 ).  RT #49609
 
 [1.109] Released on 2010-08-29
 
