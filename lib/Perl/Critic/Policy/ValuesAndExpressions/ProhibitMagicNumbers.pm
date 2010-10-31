@@ -51,11 +51,6 @@ Readonly::Scalar my $RANGE =>
 
 Readonly::Scalar my $SPECIAL_ARRAY_SUBSCRIPT_EXEMPTION => -1;
 
-Readonly::Hash my %READONLY_SUBROUTINES =>
-    hashify(
-        qw{ Readonly Readonly::Scalar Readonly::Array Readonly::Hash }
-    );
-
 #----------------------------------------------------------------------------
 
 sub supported_parameters {
@@ -80,6 +75,14 @@ sub supported_parameters {
                 q[Should anything to the right of a "=>" be allowed?],
             default_string => '1',
             behavior           => 'boolean',
+        },
+        {
+            name            => 'constant_creator_subroutines',
+            description     => q{Names of subroutines that create constants},
+            behavior        => 'string list',
+            list_always_present_values => [ qw{
+                    Readonly Readonly::Scalar Readonly::Array Readonly::Hash
+                } ],
         },
     );
 }
@@ -219,7 +222,8 @@ sub violates {
         return if _element_is_to_the_right_of_a_fat_comma($elem);
     }
 
-    return if _element_is_in_an_include_readonly_or_version_statement($elem);
+    return if _element_is_in_an_include_readonly_or_version_statement(
+        $self, $elem );
     return if _element_is_in_a_plan_statement($elem);
     return if _element_is_in_a_constant_subroutine($elem);
 
@@ -295,7 +299,7 @@ sub _element_is_sole_component_of_a_subscript {
 }
 
 sub _element_is_in_an_include_readonly_or_version_statement {
-    my ($elem) = @_;
+    my ($self, $elem) = @_;
 
     my $parent = $elem->parent();
     while ($parent) {
@@ -318,7 +322,8 @@ sub _element_is_in_an_include_readonly_or_version_statement {
 
             my $first_token = $parent->first_token();
             if ( $first_token->isa('PPI::Token::Word') ) {
-                if ( exists $READONLY_SUBROUTINES{$first_token} ) {
+                if ( $self->{_constant_creator_subroutines}{
+                        $first_token->content() } ) {
                     return 1;
                 }
             } elsif ($parent->isa('PPI::Structure::Block')) {
@@ -606,6 +611,26 @@ If this is set, you can put any number to the right of a fat comma.
 
 Currently, this only means I<directly> to the right of the fat comma.  By
 default, this value is I<true>.
+
+
+=head2 C<constant_creator_subroutines>
+
+This parameter allows you to specify the names of subroutines that create
+constants, in addition to C<Readonly> and friends. For example, if you use
+C<Const::Fast> to create constants, you could add something like the following
+to your F<.perlcriticrc>:
+
+    [ValuesAndExpressions::ProhibitMagicNumbers]
+    constant_creator_subroutines = const
+
+If you have more than one name to add, separate them by whitespace.
+
+The subroutine name should appear exactly as it is in your code. For example,
+if your code uses C<Const::Fast>, but sometimes does not import the C<const>
+subroutine, you would need to configure this policy as
+
+    [ValuesAndExpressions::ProhibitMagicNumbers]
+    constant_creator_subroutines = const Const::Fast::const
 
 
 =head1 BUGS

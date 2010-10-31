@@ -952,6 +952,14 @@ use version; our $VERSION = qv('1.23');
 use version; our $VERSION = qv((qw$Revision$)[1] / 1000);
 use version; our $VERSION = version->new('1.23');
 
+## name user-defined constant creators. RT #62562
+## parms { allow_to_the_right_of_a_fat_comma => 0, constant_creator_subroutines => 'const' }
+## failures 0
+## cut
+
+use Const::Fast;
+const my $answer => 42;
+
 #-----------------------------------------------------------------------------
 
 ##############################################################################
