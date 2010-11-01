@@ -186,11 +186,16 @@ sub test_version {
 #-----------------------------------------------------------------------------
 
 my $nameless_code = 'use strict';
-my $nameless_doc = Perl::Critic::Document->new( -source => \$nameless_code,
-                                                '-forced-filename' => 'Build.PL' );
+my $nameless_doc = Perl::Critic::Document->new(
+    '-source'               => \$nameless_code,
+    '-filename-override'    => 'Build.PL'
+);
 
-is($nameless_doc->filename(), 'Build.PL', 'Got forced filename');
-is($nameless_doc->is_module(), 0, 'Forced name affects module determination');
+is($nameless_doc->filename(), 'Build.PL', 'Got filename override.');
+ok(
+    ! $nameless_doc->is_module(),
+    'Overridden file name affects module determination.'
+);
 
 #-----------------------------------------------------------------------------
 

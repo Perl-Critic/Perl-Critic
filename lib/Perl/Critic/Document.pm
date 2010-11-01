@@ -123,7 +123,7 @@ sub _init_from_external_source { ## no critic (Subroutines::RequireArgUnpacking)
     $self->{_doc} = $ppi_document;
     $self->index_locations();
     $self->_disable_shebang_fix();
-    $self->{_forced_filename} = $args{'-forced-filename'};
+    $self->{_filename_override} = $args{'-filename-override'};
     $self->{_is_module} = $self->_determine_is_module(\%args);
 
     return;
@@ -254,8 +254,8 @@ sub ppix_regexp_from_element {
 sub filename {
     my ($self) = @_;
 
-    if ($self->{_forced_filename}) {
-        return $self->{_forced_filename};
+    if (defined $self->{_filename_override}) {
+        return $self->{_filename_override};
     }
     else {
         my $doc = $self->{_doc};
@@ -615,21 +615,22 @@ will go through a deprecation cycle.
 
 =over
 
-=item C<< new(-source => $source_code, '-forced-filename' => $filename, '-program-extensions' => [program_extensions]) >>
+=item C<< new(-source => $source_code, '-filename-override' => $filename, '-program-extensions' => [program_extensions]) >>
 
 Create a new instance referencing a PPI::Document instance.  The
 C<$source_code> can be the name of a file, a reference to a scalar
 containing actual source code, or a L<PPI::Document|PPI::Document> or
 L<PPI::Document::File|PPI::Document::File>.
 
-In the event that C<$source_code> is a reference to a scalar containing
-actual source code or a L<PPI::Document|PPI::Document>, the resulting
+In the event that C<$source_code> is a reference to a scalar containing actual
+source code or a L<PPI::Document|PPI::Document>, the resulting
 L<Perl::Critic::Document|Perl::Critic::Document> will not have a filename.
 This may cause L<Perl::Critic::Document|Perl::Critic::Document> to incorrectly
 classify the source code as a module or script.  To avoid this problem, you
-can optionally set the C<-forced-filename> to force the L<Perl::Critic::Document|Perl::Critic::Document>
-to have a particular C<$filename>.  Do not use this option if C<$source_code>
-is already the name of a file, or is a reference to a L<PPI::Document::File|PPI::Document::File>.
+can optionally set the C<-filename-override> to force the
+L<Perl::Critic::Document|Perl::Critic::Document> to have a particular
+C<$filename>.  Do not use this option if C<$source_code> is already the name
+of a file, or is a reference to a L<PPI::Document::File|PPI::Document::File>.
 
 The '-program-extensions' argument is optional, and is a reference to a list
 of strings and/or regular expressions. The strings will be made into regular
