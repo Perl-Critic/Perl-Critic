@@ -10,7 +10,6 @@ $> = 3;
 
 ## name Basic failure (needs to be merged into prior test once PPI knows how to parse '%-'
 ## failures 1
-## TODO PPI doesn't know how to parse '%-'.
 ## cut
 
 %- = (foo => 1);

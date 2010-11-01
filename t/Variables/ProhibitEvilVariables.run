@@ -10,7 +10,6 @@ local $SIG{__DIE__} = sub {warn "I cannot die!"};
 
 ## name evil variables with brackets
 ## parms { variables => '${^WIN32_SLOPPY_STAT} %{^_Fubar}' }
-## TODO this will not work until PPI recognizes ${^_Fubar} as a PPI::Token
 ## failures 2
 ## cut
 
@@ -21,7 +20,6 @@ our %{^_Fubar};
 
 ## name subscripted evil variables with brackets
 ## parms { variables => '%{^_Fubar}' }
-## TODO this will not work until PPI recognizes ${^_Fubar} as a PPI::Token
 ## failures 1
 ## cut
 
