@@ -122,7 +122,7 @@ our($Bar, $foo);
 
 #-----------------------------------------------------------------------------
 
-## name Variables from other packages should pass 
+## name Variables from other packages should pass
 ## failures 0
 ## cut
 
