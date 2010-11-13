@@ -54,6 +54,7 @@ Next release whenever it is
       Perl::Critic, IPC::Open2 (which actually is part of core), PPIx::Regexp,
       Perl::Tidy, Pod::Spell, and Text::ParseWords are no longer optional
       prerequisites.
+    * Now depends upon PPIx::Utilities v1.1.0.
 
     Bug Fixes:
     * Build.PL/Makefile.PL didn't specify a minimum version of version.pm, but
