@@ -20,12 +20,6 @@ Next release whenever it is
       which was introduced in 5.13.2.
     * ControlStructures::ProhibitPostfixControls now looks for "when".  It is
       treated in the same way as "if".
-    * Subroutines::ProhibitUnusedPrivateSubroutines now looks inside
-      regular expressions.
-    * ValuesAndExpressions::ProhibitMismatchedOperators didn't handle file
-      test operators properly.  Patch by H.Merijn Brand.  RT #58751
-    * Variables::ProhibitUnusedVariables now looks inside regular
-      expressions.
     * Documentation::RequirePodSections now honors '## no critic'
       annotation anywhere before the '__END__', '__DATA__', or first
       '=head1', whichever comes first.  The line number of the offending
@@ -36,9 +30,16 @@ Next release whenever it is
     * RegularExpressions::ProhibitUnusedCapture now takes account of the
       use of capture variables in the replacement portion of
       s/.../.../e.
+    * Subroutines::ProhibitUnusedPrivateSubroutines now looks inside
+      regular expressions.
+    * ValuesAndExpressions::ProhibitMagicNumbers now supports Const::Fast.
     * ValuesAndExpressions::ProhibitMagicNumbers now has a
       constant_creator_subroutines parameter to allow the user to
       configure the names of subroutines that create constants. RT #62562.
+    * ValuesAndExpressions::ProhibitMismatchedOperators didn't handle file
+      test operators properly.  Patch by H.Merijn Brand.  RT #58751
+    * Variables::ProhibitUnusedVariables now looks inside regular
+      expressions.
     * ValuesAndExpressions::RequireInterpolationOfMetachars now detects
       and complains about "\b" and "\l" as documented in perlop, and
       "\1" through "\7", which are not documented there, but were found

@@ -168,6 +168,15 @@ use Readonly;
 
 Readonly::Hash1 %frobnication_factors => ( quhh => 290 );
 
+## name Const::Fast works even if allow_to_the_right_of_a_fat_comma is not set.
+## failures 0
+## parms { allow_to_the_right_of_a_fat_comma => 0 }
+## cut
+
+use Const::Fast;
+
+const my $frobnication_factor => 57;
+
 ## name Constant subroutines containing just a number are allowed.
 ## failures 0
 ## cut
