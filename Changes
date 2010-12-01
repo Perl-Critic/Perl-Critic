@@ -1,4 +1,4 @@
-Next release whenever it is
+[1.110_001] Released on 2010-11-30
 
     New Features:
     * uses_module(), namespaces(), and subdocuments_for_namespace() methods on
