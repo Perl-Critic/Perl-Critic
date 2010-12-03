@@ -52,6 +52,18 @@ foreach (@list){ do_something_else() }
 
 #-----------------------------------------------------------------------------
 
+## name Regular given/when
+## failures 0
+## cut
+
+given ($foo) {
+    when ($bar) {
+        $thingy = $blah;
+    }
+}
+
+#-----------------------------------------------------------------------------
+
 ## name Legal postfix if usage
 ## failures 0
 ## cut

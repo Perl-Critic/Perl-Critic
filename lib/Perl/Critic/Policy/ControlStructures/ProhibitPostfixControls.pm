@@ -75,6 +75,7 @@ sub violates {
     my $stmnt = $elem->statement();
     return if not $stmnt;
     return if $stmnt->isa('PPI::Statement::Compound');
+    return if $stmnt->isa('PPI::Statement::When');
 
     # Handle special cases
     my $content = $elem->content();
