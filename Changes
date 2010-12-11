@@ -1,3 +1,10 @@
+Next release, whenever it is
+
+    Bug Fixes:
+    * TestingAndDebugging::ProhibitNoStrict and ProhibitNoWarnings no longer
+      rely on the behavior of all() when the list is empty.  RT #63816
+
+
 [1.110_001] Released on 2010-11-30
 
     New Features:

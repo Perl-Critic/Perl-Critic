@@ -79,7 +79,7 @@ sub violates {
     return if !$stmnt;
     my @words = $stmnt =~ m/ ([[:lower:]]+) /gxms;
     @words = grep { $_ ne 'qw' && $_ ne 'no' && $_ ne 'strict' } @words;
-    return if all { exists $self->{_allow}->{$_} } @words;
+    return if @words && all { exists $self->{_allow}->{$_} } @words;
 
     #If we get here, then it must be a violation
     return $self->violation( $DESC, $EXPL, $elem );
