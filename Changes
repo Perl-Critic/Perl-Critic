@@ -1,9 +1,17 @@
-Next release, whenever it is
+[1.112_001] Released on 2010-12-14
+
+    Same as 1.110_001, but with:
+
+    Bug Fixes:
+    * The fix in 1.111.
+    * A fix to ProhibitPostfixControls to handle standard when statements.
+
+[1.111] Released on 2010-12-14
 
     Bug Fixes:
     * TestingAndDebugging::ProhibitNoStrict and ProhibitNoWarnings no longer
-      rely on the behavior of all() when the list is empty.  RT #63816
-
+      rely on the behavior of all() when the list is empty due to change in
+      List::MoreUtils 0.28.  RT #63816
 
 [1.110_001] Released on 2010-11-30
 
