@@ -26,7 +26,7 @@ use Perl::Critic::TestUtils qw<pcritique_with_violations fcritique_with_violatio
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '1.109';
+our $VERSION = '1.111';
 
 #-----------------------------------------------------------------------------
 
