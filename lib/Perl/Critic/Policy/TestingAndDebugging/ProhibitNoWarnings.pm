@@ -90,7 +90,7 @@ sub violates {
     @words = grep { $_ ne 'qw' && $_ ne 'no' && $_ ne 'warnings' } @words;
 
     return if $self->{_allow_with_category_restriction} and @words;
-    return if all { exists $self->{_allow}->{$_} } @words;
+    return if @words && all { exists $self->{_allow}->{$_} } @words;
 
     #If we get here, then it must be a violation
     return $self->violation( $DESC, $EXPL, $elem );
