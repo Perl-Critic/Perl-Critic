@@ -1,3 +1,13 @@
+[1.111] Released on 2010-12-14
+
+    Bug Fixes:
+    * Work around change in List::MoreUtils 0.28 that broke ProhibitNoStrict
+      and ProhibitNoWarnings.  RT #63816
+
+[1.110_001] Released on 2010-11-30
+
+    Development release.
+
 [1.109] Released on 2010-08-29
 
     Bug Fixes:
