@@ -306,7 +306,7 @@ per-file basis with File Variables."
 ;; TODO: Enable strings in perlcritic-verbose.
 ;; (defcustom perlcritic-verbose-regexp nil
 ;;   "An optional  regexp to match the warning output.
-;; 
+;;
 ;; This is used when `perlcritic-verbose' has a regexp instead of one of
 ;; the standard verbose levels.")
 ;; (make-local-variable 'perlcritic-verbose-regexp)
@@ -329,55 +329,55 @@ per-file basis with File Variables."
         ;; Verbose level 2
         ;;  "%f: (%l:%c) %m\n"
         ("^\\([^\n]+\\): (\\([0-9]+\\):\\([0-9]+\\))" 1 2 3 1)
-        
+
         ;; Verbose level 3
         ;;   "%m at %f line %l\n"
         ("^[^\n]+ at \\([^\n]+\\) line \\([0-9]+\\)" 1 2 nil 1)
         ;;   "%m at line %l, column %c.  %e.  (Severity: %s)\n"
         ("^[^\n]+ at line\\( \\)\\([0-9]+\\), column \\([0-9]+\\)." nil 2 3 1)
-        
+
         ;; Verbose level 4
         ;;   "%m at line %l, column %c.  %e.  (Severity: %s)\n"
         ("^[^\n]+\\( \\)at line \\([0-9]+\\), column \\([0-9]+\\)" nil 2 3)
         ;;   "%f: %m at line %l, column %c.  %e.  (Severity: %s)\n"
         ("^\\([^\n]+\\): [^\n]+ at line \\([0-9]+\\), column \\([0-9]+\\)" 1 2 3)
-        
+
         ;; Verbose level 5
         ;;    "%m at line %l, near '%r'.  (Severity: %s)\n"
         ("^[^\n]+ at line\\( \\)\\([0-9]+\\)," nil 2)
         ;;    "%f: %m at line %l, column %c.  %e.  (Severity: %s)\n"
         ("^\\([^\n]+\\): [^\n]+ at line \\([0-9]+\\), column \\([0-9]+\\)" 1 2 3)
-        
+
         ;; Verbose level 6
         ;;    "%m at line %l, near '%r'.  (Severity: %s)\\n"
         ("^[^\n]+ at line\\( \\)\\([0-9]+\\)" nil 2)
         ;;    "%f: %m at line %l near '%r'.  (Severity: %s)\n"
         ("^\\([^\n]+\\): [^\n]+ at line \\([0-9]+\\)" 1 2)
-        
+
         ;; Verbose level 7
         ;;    "%f: %m at line %l near '%r'.  (Severity: %s)\n"
         ("^\\([^\n]+\\): [^\n]+ at line \\([0-9]+\\)" 1 2)
         ;;    "[%p] %m at line %l, column %c.  (Severity: %s)\n"
         ("^\\[[^\n]+\\] [^\n]+ at line\\( \\)\\([0-9]+\\), column \\([0-9]+\\)" nil 2 3)
-        
+
         ;; Verbose level 8
         ;;    "[%p] %m at line %l, column %c.  (Severity: %s)\n"
         ("^\\[[^\n]+\\] [^\n]+ at line\\( \\)\\([0-9]+\\), column \\([0-9]+\\)" nil 2 3)
         ;;    "[%p] %m at line %l, near '%r'.  (Severity: %s)\n"
         ("^\\[[^\n]+\\] [^\n]+ at line\\( \\)\\([0-9]+\\)" nil 2)
-        
+
         ;; Verbose level 9
         ;;    "%m at line %l, column %c.\n  %p (Severity: %s)\n%d\n"
         ("^[^\n]+ at line\\( \\)\\([0-9]+\\), column \\([0-9]+\\)" nil 2 3)
         ;;    "[%p] %m at line %l, near '%r'.  (Severity: %s)\n"
         ("^\\[[^\n]+\\] [^\n]+ at line\\( \\)\\([0-9]+\\)" nil 2)
-        
+
         ;; Verbose level 10
         ;;    "%m at line %l, near '%r'.\n  %p (Severity: %s)\n%d\n"
         ("^[^\n]+ at line\\( \\)\\([0-9]+\\)" nil 2)
         ;;    "%m at line %l, column %c.\n  %p (Severity: %s)\n%d\n"
         ("^[^\n]+ at line\\( \\)\\([0-9]+\\), column \\([0-9]+\\)" nil 2 3)
-        
+
         ;; Verbose level 11
         ;;    "%m at line %l, near '%r'.\n  %p (Severity: %s)\n%d\n"
         ("^[^\n]+ at line\\( \\)\\([0-9]+\\)" nil 2)
@@ -388,7 +388,7 @@ per-file basis with File Variables."
 ;; The Emacs Lisp manual says to do this with the cl library.
 (eval-when-compile (require 'cl))
 
-(define-compilation-mode perlcritic-error-mode "perlcritic-error" 
+(define-compilation-mode perlcritic-error-mode "perlcritic-error"
   "..."
   (set (make-local-variable 'perlcritic-buffer) src-buf)
   (ad-activate #'compilation-find-file))
@@ -410,11 +410,11 @@ whether the region passes perlcritic's check. If there are any
 warnings those are displayed in a separate buffer."
 
   (interactive "r")
-  
+
   ;; Kill the perlcritic buffer so I can make a new one.
   (if (get-buffer "*perlcritic*")
       (kill-buffer "*perlcritic*"))
-  
+
   ;; In the following lines I'll be switching between buffers
   ;; freely. This upper save-excursion will keep things sane.
   (save-excursion
@@ -441,12 +441,12 @@ warnings those are displayed in a separate buffer."
         ;; CALL-PROCESS-REGION with variadic arguments? This blows!
         ;; (apply FUNCTION (append STATIC-PART DYNAMIC-PART))
         (let ((rc (apply 'call-process-region
-                         (nconc (list start end 
+                         (nconc (list start end
                                       perlcritic-bin nil
                                       (list err-buf t)
                                       nil)
                                 perlcritic-args))))
-          
+
           ;; Figure out whether we're ok or not. perlcritic has to
           ;; return zero and the output buffer has to be empty except
           ;; for that "... source OK" line. Different versions of the
@@ -493,13 +493,13 @@ warnings those are displayed in a separate buffer."
 		      "\n")
               (goto-char (point-min))
 	      ;; TODO: get `recompile' to work.
-	      
+
 	      ;; just an fyi. compilation-mode will delete my local
 	      ;; variables so be sure to call it *first*.
               (perlcritic-error-mode)
               ;; (ad-deactivate #'compilation-find-file)
               (display-buffer err-buf))
-	    
+
 	    ;; Return our success or failure.
             perlcritic-ok))))))
 
@@ -650,14 +650,14 @@ require that the perl document exist in a file anywhere."
 (defun perlcritic-mode (&optional arg)
   "Perl::Critic checking minor mode."
   (interactive "P")
-  
+
   ;; Enable/disable perlcritic-mode
   (setq perlcritic-mode (if (null arg)
 			    ;; Nothing! Just toggle it.
 			    (not perlcritic-mode)
 			  ;; Set it.
 			  (> (prefix-numeric-value arg) 0)))
-  
+
   (make-local-hook 'write-file-hooks)
   (if perlcritic-mode
       (add-hook 'write-file-hooks 'perlcritic-write-hook)

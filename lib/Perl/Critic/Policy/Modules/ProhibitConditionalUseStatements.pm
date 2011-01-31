@@ -139,32 +139,32 @@ This policy will catch the following forms of conditional "use" statements:
     if ($a == 1) { use Module; }
     if ($a == 1) { } elsif ($a == 2) { use Module; }
     if ($a == 1) { } else { use Module; }
-    
+
     # for/foreach
     for (1..$a) { use Module; }
     foreach (@a) { use Module; }
-    
+
     # while
     while ($a == 1) { use Module; }
-    
+
     # unless
     unless ($a == 1) { use Module; }
-    
+
     # until
     until ($a == 1) { use Module; }
-    
+
     # do-condition
     do { use Module; } if $a == 1;
     do { use Module; } while $a == 1;
     do { use Module; } unless $a == 1;
     do { use Module; } until $a == 1;
-    
+
     # operator-do
     $a == 1 || do { use Module; };
     $a == 1 && do { use Module; };
     $a == 1 or do { use Module; };
     $a == 1 and do { use Module; };
-    
+
     # non-string eval
     eval { use Module; };
 
@@ -173,10 +173,10 @@ string evals is allowed.
 
     # bare block
     { use Module; }
-    
+
     # do
     do { use Module; }
-    
+
     # string eval
     eval "use Module";
 

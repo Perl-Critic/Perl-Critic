@@ -356,7 +356,7 @@ print "$^ foovar";
 print "$^(foovar";
 
 # sneakier combos
-print "$::foo then $' followed by $'3"; # violates for $' 
+print "$::foo then $' followed by $'3"; # violates for $'
 
 #-----------------------------------------------------------------------------
 
