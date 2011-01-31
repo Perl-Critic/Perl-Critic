@@ -117,7 +117,7 @@ Kyle Hasselbacher <kyle@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2009-2010 Kyle Hasselbacher.
+Copyright (c) 2009-2011 Kyle Hasselbacher.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

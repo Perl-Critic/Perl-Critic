@@ -152,7 +152,7 @@ Thomas R. Wyant, III F<wyant at cpan dot org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2009-2010 Tom Wyant.
+Copyright (c) 2009-2011 Tom Wyant.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

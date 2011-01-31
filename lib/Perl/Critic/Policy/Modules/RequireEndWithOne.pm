@@ -101,7 +101,7 @@ L<Perl::Critic::Policy::Modules::RequireExplicitPackage|Perl::Critic::Policy::Mo
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2010 Chris Dolan and Imaginative Software Systems.  All
+Copyright (c) 2005-2011 Chris Dolan and Imaginative Software Systems.  All
 rights reserved.
 
 This program is free software; you can redistribute it and/or modify

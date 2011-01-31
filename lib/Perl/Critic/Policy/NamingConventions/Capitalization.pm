@@ -773,7 +773,7 @@ Multiple people
 
 =head1 COPYRIGHT
 
-Copyright (c) 2008-2010 Michael G Schwern.  All rights reserved.
+Copyright (c) 2008-2011 Michael G Schwern.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
