@@ -230,20 +230,6 @@ sub my_sub {
 
 #-----------------------------------------------------------------------------
 
-## name but catch @$_[0] outside of a postfix for loop
-## failures 1
-## cut
-
-sub my_sub {
-
-    my @a = ( [ 1, 2 ], [ 3, 4 ] );
-    for (@a){
-        print @$_[0];
-    }
-}
-
-#-----------------------------------------------------------------------------
-
 ## name and still catch unrolling args in a postfix for
 ## failures 1
 ## cut
