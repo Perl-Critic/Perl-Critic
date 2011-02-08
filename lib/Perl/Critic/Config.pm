@@ -393,7 +393,7 @@ sub _validate_and_save_regex {
 
     my $found_errors;
     foreach my $regex (@regexes) {
-        eval { my $test = qr/$regex/ixms; }
+        eval { qr/$regex/ixms }
             or do {
                 my $cleaned_error = $EVAL_ERROR || '<unknown reason>';
                 $cleaned_error =~

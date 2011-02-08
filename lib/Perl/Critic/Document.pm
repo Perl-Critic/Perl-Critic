@@ -73,7 +73,6 @@ sub _new_for_parent_document {
 
 sub _init_common {
     my ($self) = @_;
-    my %args;
 
     $self->{_annotations} = [];
     $self->{_suppressed_violations} = [];

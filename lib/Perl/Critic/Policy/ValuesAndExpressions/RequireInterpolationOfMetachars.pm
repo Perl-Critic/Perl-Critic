@@ -127,8 +127,6 @@ sub _contains_rcs_variable {
 sub _looks_like_use_vars {
     my ($elem) = @_;
 
-    my $string = $elem->string();
-
     my $statement = $elem;
     while ( not $statement->isa('PPI::Statement::Include') ) {
         $statement = $statement->parent() or return;

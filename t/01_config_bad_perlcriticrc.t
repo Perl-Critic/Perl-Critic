@@ -64,7 +64,7 @@ Readonly::Scalar my $REQUIRE_POD_SECTIONS_SOURCE_MESSAGE_PREFIX =>
     q<The value for the Documentation::RequirePodSections "source" option ("Zen_and_the_Art_of_Motorcycle_Maintenance") is not one of the allowed values: >;
 
 eval {
-    my $critic = Perl::Critic->new( '-profile' => $PROFILE );
+    Perl::Critic->new( '-profile' => $PROFILE );
 };
 
 my $test_passed;

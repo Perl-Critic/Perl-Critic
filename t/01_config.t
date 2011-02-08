@@ -172,7 +172,6 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
 
 {
     my %profile = ();
-    my $last_policy_count = 0;
     my $severity = $SEVERITY_HIGHEST;
     for my $index ( 0 .. $#names_of_policies_willing_to_work ) {
         if ($index and $index % 10 == 0) {

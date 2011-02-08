@@ -55,7 +55,6 @@ sub all_policies_ok {
     my $test_dir        = $args{'-test-directory'} || 't';
 
     my $subtests_with_extras =  subtests_in_tree( $test_dir, 'include extras' );
-    my @all_testable_policies = %{ $subtests_with_extras };
 
     if ($wanted_policies) {
         _validate_wanted_policy_names($wanted_policies, $subtests_with_extras);

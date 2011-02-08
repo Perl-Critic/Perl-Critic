@@ -203,7 +203,6 @@ sub _is_cast_of_array {
     my ($magic) = @_;
 
     my $prev = $magic->sprevious_sibling;
-    my $next = $magic->snext_sibling;
 
     return $TRUE
         if ( $prev && $prev->content() eq $AT )
