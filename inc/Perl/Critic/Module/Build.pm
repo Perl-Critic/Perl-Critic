@@ -12,7 +12,7 @@ use 5.006001;
 use strict;
 use warnings;
 
-our $VERSION = '1.112_001';
+our $VERSION = '1.112_002';
 
 use Carp;
 use English qw< $OS_ERROR $EXECUTABLE_NAME -no_match_vars >;
