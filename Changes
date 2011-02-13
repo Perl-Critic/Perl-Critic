@@ -1,3 +1,9 @@
+Whatever is next
+
+    Bug fixes:
+    * CodeLayout::RequireConsistentNewlines produces multiple undefined
+      value errors when a violation is found. RT #65663
+
 [1.112_002] Released on 2011-02-09
 
     Minor code cleanups.

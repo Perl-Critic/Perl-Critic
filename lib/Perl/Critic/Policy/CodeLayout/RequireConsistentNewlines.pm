@@ -57,7 +57,10 @@ sub violates {
         $newline ||= $nl;
         if ( $nl ne $newline ) {
             my $token = PPI::Token::Whitespace->new( $nl );
-            $token->{_location} = [$line, $col, $col];
+            # TODO this is a terrible violation of encapsulation, but absent a
+            # mechanism to override the line numbers in the violation, I do
+            # not know what to do about it.
+            $token->{_location} = [$line, $col, $col, $line, $filename];
             push @v, $self->violation( $DESC, $EXPL, $token );
         }
         $line++;
