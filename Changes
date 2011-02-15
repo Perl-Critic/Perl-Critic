@@ -1,46 +1,18 @@
-Whatever is next
+[1.113] Released on 2011-02-14
 
-    Bug fixes:
-    * CodeLayout::RequireConsistentNewlines produces multiple undefined
-      value errors when a violation is found. RT #65663
-
-[1.112_002] Released on 2011-02-09
-
-    Minor code cleanups.
-
-[1.112_001] Released on 2010-12-14
-
-    Same as 1.110_001, but with:
-
-    Bug Fixes:
-    * The fix in 1.111.
-    * A fix to ProhibitPostfixControls to handle standard when statements.
-
-[1.111] Released on 2010-12-14
-
-    Bug Fixes:
-    * TestingAndDebugging::ProhibitNoStrict and ProhibitNoWarnings no longer
-      rely on the behavior of all() when the list is empty due to change in
-      List::MoreUtils 0.28.  RT #63816
-
-[1.110_001] Released on 2010-11-30
-
-    New Features:
-    * uses_module(), namespaces(), and subdocuments_for_namespace() methods on
-      Perl::Critic::Document.
-    * Perl::Critic::Document->new() now accepts a -filename-override argument
-      for setting the filename when the source code comes from something
-      other than an actual file.
-    * New policy InputOutput::RequireEncodingWithUTF8Layer to recommend
-      ':encoding(utf8)' over ':utf8' in open() and binmode(). It is
-      severity 5 because of the bad things that can happen if invalid
-      UTF8 gets loose in your code.
-    * New policy Modules::ProhibitConditionalUseStatements to prohibit
+    New Policies:
+    * InputOutput::RequireEncodingWithUTF8Layer recommends
+      ':encoding(utf8)' over ':utf8' in open() and binmode(). It is severity 5
+      because of the bad things that can happen if invalid UTF8 gets loose in
+      your code.
+    * Modules::ProhibitConditionalUseStatements prohibits
       'use module' inside a conditional, since the statement is executed
-      unconditionally at compile time.  Thanks to Peter Guzis for
-      submitting the policy and tests in RT #59065.
+      unconditionally at compile time.  Thanks to Peter Guzis for submitting
+      the policy and tests in RT #59065.
 
     Policy Changes:
+    * CodeLayout::RequireConsistentNewlines produces multiple undefined
+      value errors when a violation is found. RT #65663
     * ControlStructures::ProhibitMutatingListFunctions allows s///r,
       which was introduced in 5.13.2.
     * ControlStructures::ProhibitPostfixControls now looks for "when".  It is
@@ -69,6 +41,13 @@ Whatever is next
       and complains about "\b" and "\l" as documented in perlop, and
       "\1" through "\7", which are not documented there, but were found
       in toke.c.
+
+    New Developer Features:
+    * uses_module(), namespaces(), and subdocuments_for_namespace() methods on
+      Perl::Critic::Document.
+    * Perl::Critic::Document->new() now accepts a -filename-override argument
+      for setting the filename when the source code comes from something
+      other than an actual file.
 
     Other Changes:
     * Test::Perl::Critic::Policy no longer exports by default.
@@ -100,6 +79,24 @@ Whatever is next
       on &_subroutine().  RT #61311
     * Subroutines::ProhibitAmpersandSigils now allows references of the
       form \( &sub1, &sub2 ).  RT #49609
+
+[1.112_002] Released on 2011-02-09
+[1.112_001] Released on 2010-12-14
+
+    Changes summarized into 1.113 above.  For exact details, see Changes on
+    BackPAN.
+
+[1.111] Released on 2010-12-14
+
+    Bug Fixes:
+    * TestingAndDebugging::ProhibitNoStrict and ProhibitNoWarnings no longer
+      rely on the behavior of all() when the list is empty due to change in
+      List::MoreUtils 0.28.  RT #63816
+
+[1.110_001] Released on 2010-11-30
+
+    Changes summarized into 1.113 above.  For exact details, see Changes on
+    BackPAN.  (Yes, all of this stuff was not in 1.111.)
 
 [1.109] Released on 2010-08-29
 
