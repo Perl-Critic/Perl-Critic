@@ -62,6 +62,7 @@ sub required_module_versions {
         'PPIx::Utilities::Node'         => '1.001',
         'PPIx::Utilities::Statement'    => '1.001',
         'Perl::Tidy'                    => 0,
+        'Pod::Parser'                   => 0,
         'Pod::PlainText'                => 0,
         'Pod::Select'                   => 0,
         'Pod::Spell'                    => 1,

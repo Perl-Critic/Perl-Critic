@@ -1,3 +1,9 @@
+A future release
+
+    Policy Changes:
+    * Documentation::RequirePodLinksIncludeText now handles nested POD
+      formatting. RT #65569
+
 [1.113] Released on 2011-02-14
 
     New Policies:

@@ -14,8 +14,10 @@ use warnings;
 
 use Readonly;
 use English qw{ -no_match_vars };
-use Perl::Critic::Utils qw{ :booleans :severities };
+use Perl::Critic::Utils qw{ :booleans :characters :severities };
 use base 'Perl::Critic::Policy';
+
+use Perl::Critic::Utils::POD::ParseInteriorSequence;
 
 #-----------------------------------------------------------------------------
 
@@ -49,11 +51,20 @@ sub applies_to       { return 'PPI::Token::Pod'        }
 
 #-----------------------------------------------------------------------------
 
+Readonly::Scalar my $INCREMENT_NESTING => 1;
+Readonly::Scalar my $DECREMENT_NESTING => -1;
+Readonly::Hash my %ESCAPE_NESTING => (
+    '<' => $INCREMENT_NESTING,
+    '>' => $DECREMENT_NESTING,
+);
+
 sub violates {
     my ( $self, $elem, $doc ) = @_;
 
-    my @finish_re;
     my @violations;
+
+=begin comment
+
     my $pod = $elem->content();
 
     # We look for _any_ POD escape, not just L<>. This way we can avoid false
@@ -61,6 +72,7 @@ sub violates {
     # upward compatible (and at a slight (I hope!) risk of false negatives),
     # we accept any upper case letter as beginning a formatting sequence, not
     # just [IBCLEFSXZ].
+    SCAN_POD:
     while ( $pod =~ m/ ( [[:upper:]] ) ( <+ )   /smxg ) {
 
         # Collect the results of the match.
@@ -69,17 +81,31 @@ sub violates {
         my $content_start = $LAST_MATCH_END[0];
         my $num_brkt = length $2;
 
-        # Find the end, now that we know how many brackets we are looking for.
-        my $finish = $finish_re[$num_brkt] ||= qr/ >{$num_brkt} /smx;
-        $pod =~ m/ $finish /smxg or last;
+        # The only way to handle arbitrarily-nested brackets before Perl
+        # 5.10 is the (??{}) construction, which is _still_ marked
+        # 'experimental' as of 5.12.3 and 5.13.9. Taking them at their
+        # word, I'm going to find the end of the POD escape the hard
+        # way.
+        my $link_end = $link_start + 1;
+        my $nest = 0;
+        while ( 1 ) {
+            $nest += $ESCAPE_NESTING{ substr $pod, $link_end++, 1 } || 0;
+            $nest or last;
+            $link_end < length $pod
+                or last SCAN_POD;
+        }
+
+        # Manually advance past the end of the link so the regular
+        # expression does not find any possible nested formatting.
+        pos $pod = $link_end;
 
         # If it's not an 'L' formatter, we are not interested.
         'L' eq $formatter or next;
 
         # Save both the link itself and its contents for further analysis.
-        my $link = substr $pod, $link_start, $LAST_MATCH_END[0] - $link_start;
+        my $link = substr $pod, $link_start, $link_end - $link_start;
         my $content = substr $pod, $content_start,
-            $LAST_MATCH_START[0] - $content_start;
+            $link_end - $num_brkt - $content_start;
 
         # If the link is allowed, pass on to the next one.
         $self->_allowed_link( $content ) and next;
@@ -93,11 +119,52 @@ sub violates {
 
     }
 
+=enc comment
+
+=cut
+
+    my $parser = Perl::Critic::Utils::POD::ParseInteriorSequence->new();
+    $parser->errorsub( sub { return 1 } );  # Suppress error messages.
+
+    foreach my $seq ( $parser->get_interior_sequences( $elem->content() ) ) {
+
+        # Not interested in nested thing like C<< L<Foo> >>. I think.
+        $seq->nested() and next;
+
+        # Not interested in anything but L<...>.
+        'L' eq $seq->cmd_name() or next;
+
+        # If the link is allowed, pass on to the next one.
+        $self->_allowed_link( $seq ) and next;
+
+        # A-Hah! Gotcha!
+        my $line_number = $elem->line_number() + ( $seq->file_line() )[1] - 1;
+        push @violations, $self->violation(
+            join( $SPACE, 'Link', $seq->raw_text(),
+                "on line $line_number does not specify text" ),
+            $EXPL, $elem );
+    }
+
     return @violations;
 }
 
 sub _allowed_link {
+
+=begin comment
+
     my ( $self, $content ) = @_;
+
+=end comment
+
+=cut
+
+    my ( $self, $pod_seq ) = @_;
+
+    # Extract the content of the sequence.
+    my $content = $pod_seq->raw_text();
+    $content = substr $content, 0, - length $pod_seq->right_delimiter();
+    $content = substr $content, length( $pod_seq->cmd_name() ) + length(
+        $pod_seq->left_delimiter() );
 
     # Not interested in hyperlinks.
     $content =~ m{ \A \w+ : (?! : ) }smx

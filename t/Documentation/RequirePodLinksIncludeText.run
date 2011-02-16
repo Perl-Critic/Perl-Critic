@@ -128,6 +128,20 @@ L<critique()/critique> critiques a file, returning any violations found.
 
 =cut
 
+#-----------------------------------------------------------------------------
+
+## name Handle nested format codes RT 65569.
+## failures 0
+## cut
+
+=pod
+
+See L<C<perldiag>|perldiag> for the gory details.
+
+=cut
+
+#-----------------------------------------------------------------------------
+
 ##############################################################################
 #      $URL$
 #     $Date$
