@@ -337,6 +337,10 @@ values:
     -severity => 'cruel'                      -severity => 2
     -severity => 'brutal'                     -severity => 1
 
+The names reflect how severely the code is criticized: a C<gentle>
+criticism reports only the most severe violations, and so on down to a
+C<brutal> criticism which reports even the most minor violations.
+
 B<-theme> is special expression that determines which Policies to
 apply based on their respective themes.  For example, the following
 would load only Policies that have a 'bugs' AND 'pbp' theme:
@@ -594,6 +598,10 @@ names:
     harsh                                              3
     cruel                                              2
     brutal                                             1
+
+The names reflect how severely the code is criticized: a C<gentle>
+criticism reports only the most severe violations, and so on down to a
+C<brutal> criticism which reports even the most minor violations.
 
 C<set_themes> sets the theme for the Policy and overrides its default
 theme.  The argument is a string of one or more whitespace-delimited

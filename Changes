@@ -3,6 +3,8 @@ A future release
     Policy Changes:
     * Documentation::RequirePodLinksIncludeText now handles nested POD
       formatting. RT #65569
+    * Clarified relation of severity numbers to names in Perl::Critic
+      POD. RT #66017
 
 [1.113] Released on 2011-02-14
 
