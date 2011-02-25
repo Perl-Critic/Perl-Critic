@@ -99,8 +99,8 @@ close $fh1;
 
 #-----------------------------------------------------------------------------
 
-## name glob scope failure
-## failures 1
+## name glob scope failure; no longer fails w/ RT #64437 applied.
+## failures 0
 ## cut
 
 {
@@ -363,13 +363,30 @@ CORE::open my $fh, '<', $filename;
 
 #-----------------------------------------------------------------------------
 
-# Local Variables:
-
 ## name CORE::GLOBAL::open()
 ## failures 1
 ## cut
 
 CORE::GLOBAL::open(my $fh, '<', $filename);
+
+#-----------------------------------------------------------------------------
+
+## name Handle declared in outer scope RT #64437
+## failures 0
+## cut
+
+#!/usr/bin/perl
+
+my $file = 'fubar';
+my ($fh, @lines);
+
+if (! open $fh, '<', $file) {
+    croak "Error opening $file for reading: $!";
+}
+@lines = <$fh>;
+if (! close $fh) {
+    croak "Error closing $file after reading: $!";
+}
 
 #-----------------------------------------------------------------------------
 

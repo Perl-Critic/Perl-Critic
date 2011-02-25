@@ -7,6 +7,9 @@ A future release
       POD. RT #66017
     * Removed caveats from Variables::RequireLocalizedPunctuationVars,
       no longer necessary with PPI 1.208. RT #65514
+    * Have InputOutput::RequireBriefOpen attempt to expand scope as
+      necessary to deal with the case where the open() and the
+      corresponding close() are not in the same scope. RT #64437
 
 [1.113] Released on 2011-02-14
 

@@ -44,6 +44,13 @@ Readonly::Hash my %OPEN_BUILTIN => hashify( qw{
     CORE::GLOBAL::open
 } );
 
+# Possible values for $is_lexical
+Readonly::Scalar my $NOT_LEXICAL => 0;  # Guaranteed only false value
+Readonly::Scalar my $LOCAL_LEXICAL => 1;
+Readonly::Scalar my $NON_LOCAL_LEXICAL => 2;
+
+Readonly::Scalar my $LAST_ELEMENT => -1;
+
 #-----------------------------------------------------------------------------
 
 sub supported_parameters {
@@ -77,7 +84,8 @@ sub violates {
     return if not $fh;
     return if $fh =~ m< \A [*]? STD (?: IN|OUT|ERR ) \z >xms;
 
-    for my $close_token ($self->_find_close_invocations_or_return($elem)) {
+    for my $close_token ( $self->_find_close_invocations_or_return(
+            $elem, $is_lexical ) ) {
         # The $close_token might be a close() or a return()
         #  It doesn't matter which -- both satisfy this policy
         if (is_function_call($close_token)) {
@@ -110,9 +118,9 @@ sub violates {
 }
 
 sub _find_close_invocations_or_return {
-    my ($self, $elem) = @_;
+    my ($self, $elem, $is_lexical) = @_;
 
-    my $parent = _get_scope($elem);
+    my $parent = $self->_get_scope( $elem, $is_lexical );
     return if !$parent; # I can't think of a scenario where this would happen
 
     my $open_loc = $elem->location;
@@ -135,12 +143,41 @@ sub _find_close_invocations_or_return {
 }
 
 sub _get_scope {
-    my ($elem) = @_;
+    my ( $self, $elem, $is_lexical ) = @_;
 
-    while ($elem = $elem->parent) {
-        return $elem if $elem->scope;
+    my $open_loc = $elem->location;
+    my $end_line = ( $self->{_lines} && defined $open_loc->[0] ) ?
+        $open_loc->[0] + $self->{_lines} :
+        undef;
+
+    while ( my $dad = $elem->parent) {
+        $elem = $dad;
+        next if not $elem->scope;
+
+        # If we are analyzing something like 'open my $fh ...', the
+        # most-local scope suffices. RT #64437
+        return $elem if $LOCAL_LEXICAL == $is_lexical;
+        next if not defined $end_line;  # Presume search everywhere
+
+        # If we are analyzing something like 'open $fh ...', 'open FH
+        # ...', or 'open *FH ...' we need to use a scope that includes
+        # the end of the legal range. We just give up and return the
+        # current scope if we can not determine any of the locations
+        # involved. RT #64437
+        return $elem if not $open_loc;
+        my $elem_loc = $elem->location
+            or return $elem;
+        my $last_kid = $elem->child( $LAST_ELEMENT )
+            or return $elem;    # What? no children?
+        my $last_kid_loc = $last_kid->location
+            or return $elem;
+        # At this point, the scope we have, even if it is not the
+        # correct scope for the file handle, is big enough that if the
+        # corresponding close() is outside it, it must be a violation.
+        # RT #64437
+        return $elem if $last_kid_loc->[0] > $end_line;
     }
-    return;  # should never happen if we are in a PPI::Document
+    return $elem;   # Whatever the top-level PPI::Node was.
 }
 
 sub _get_opened_fh {
@@ -154,7 +191,7 @@ sub _get_opened_fh {
             $tokens->[1]->isa('PPI::Token::Symbol') &&
             $SCALAR_SIGIL eq $tokens->[1]->raw_type) {
 
-            $is_lexical = 1;
+            $is_lexical = $LOCAL_LEXICAL;
             $fh = $tokens->[1];
         }
     }
@@ -163,16 +200,19 @@ sub _get_opened_fh {
         if ( $argument->isa('PPI::Token::Symbol') ) {
             my $sigil = $argument->raw_type();
             if ($SCALAR_SIGIL eq $sigil) {
-                $is_lexical = 1;
+                $is_lexical = $NON_LOCAL_LEXICAL;   # We need to
+                                            # distinguish between
+                                            # 'open my $fh ...' and
+                                            # 'open $fh ...'. RT #64437
                 $fh = $argument;
             }
             elsif ($GLOB_SIGIL eq $sigil) {
-                $is_lexical = 0;
+                $is_lexical = $NOT_LEXICAL;
                 $fh = $argument;
             }
         }
         elsif ($argument->isa('PPI::Token::Word') && $argument eq uc $argument) {
-            $is_lexical = 0;
+            $is_lexical = $NOT_LEXICAL;
             $fh = $argument;
         }
     }
