@@ -464,6 +464,32 @@ s/(\w+)/$replace{$1} || "<$1>"/ge;
 
 #-----------------------------------------------------------------------------
 
+## name Capture used in double-quotish string. RT #38942 redux
+## failures 0
+## cut
+
+m/(\w+)(\W+)/;
+print "$+[2] $1";
+
+m/(?<foo>(\w+)/;
+print "$+{foo}";
+
+m/(\d+)/;
+print "${1}234";
+
+#-----------------------------------------------------------------------------
+
+## name Capture used in a here document. RT #38942 redux
+## failures 0
+## cut
+
+m/(\w+)(\W+)/;
+print <<EOD
+$+[2] $1
+EOD
+
+#-----------------------------------------------------------------------------
+
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

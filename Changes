@@ -10,6 +10,8 @@ A future release
     * Have InputOutput::RequireBriefOpen attempt to expand scope as
       necessary to deal with the case where the open() and the
       corresponding close() are not in the same scope. RT #64437
+    * RegularExpressions::ProhibitUnusedCapture now looks inside
+      double-quotish things. RT #38942.
 
 [1.113] Released on 2011-02-14
 

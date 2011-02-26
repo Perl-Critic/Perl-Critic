@@ -382,6 +382,22 @@ sub _check_node_children {
 sub _mark_magic {
     my ($elem, $re, $captures, $named_captures, $doc) = @_;
 
+    # If we're a double-quotish element, we need to grub through its
+    # content. RT #38942
+    if ( _is_double_quotish_element( $elem ) ) {
+        _mark_magic_in_content(
+            $elem->content(), $re, $captures, $named_captures, $doc );
+        return;
+    }
+
+    # Ditto a here document, though the logic is different. RT #38942
+    if ( $elem->isa( 'PPI::Token::HereDoc' ) ) {
+        $elem->content() =~ m/ \A << \s* ' /sxm
+            or _mark_magic_in_content(
+            $elem->heredoc(), $re, $captures, $named_captures, $doc );
+        return;
+    }
+
     # Only interested in magic, or known English equivalent.
     my $content = $elem->content();
     my $capture_ref = $doc->uses_module( 'English' ) ?
@@ -421,6 +437,70 @@ sub _mark_magic_subscripted_code {
     _record_subscripted_capture(
         $elem->content(), $subval, $re, $captures, $named_captures );
     return;
+}
+
+# Find capture variables in the content of a double-quotish thing, and
+# record their use. RT #38942. The arguments are:
+#    $content - The content() ( or heredoc() in the case of a here
+#                document) to be analyzed;
+#    $re - The PPIx::Regexp object;
+#    $captures - A reference to the numbered capture array;
+#    $named_captures - A reference to the named capture hash.
+sub _mark_magic_in_content {
+    my ( $content, $re, $captures, $named_captures, $doc ) = @_;
+
+    my $capture_ref = $doc->uses_module( 'English' ) ?
+        \%CAPTURE_REFERENCE_ENGLISH :
+        \%CAPTURE_REFERENCE;
+
+    while ( $content =~ m< ( \$ (?:
+        [{] (?: \w+ | . ) [}] | \w+ | . ) ) >sxmg ) {
+        my $name = $1;
+        $name =~ s/ \A \$ [{] /\$/sxm;
+        $name =~ s/ [}] \z //sxm;
+
+        if ( $name =~ m/ \A \$ ( \d+ ) \z /sxm ) {
+
+            my $num = $1;
+            0 < $num
+                and $num <= @{ $captures }
+                and _record_numbered_capture( $num, $captures );
+
+        } elsif ( $capture_ref->{$name} &&
+            $content =~ m/ \G ( [{] [^}]+ [}] | [[] [^]] []] ) /smxgc )
+        {
+            _record_subscripted_capture(
+                $name, $1, $re, $captures, $named_captures );
+
+        }
+    }
+    return;
+}
+
+# Return true if the given element is double-quotish. Always returns
+# false for a PPI::Token::HereDoc, since they're a different beast.
+# RT #38942.
+sub _is_double_quotish_element {
+    my ( $elem ) = @_;
+
+    $elem or return;
+
+    my $content = $elem->content();
+
+    if ( $elem->isa( 'PPI::Token::QuoteLike::Command' ) ) {
+        return $content !~ m/ \A qx \s* ' /sxm;
+    }
+
+    foreach my $class ( qw{
+            PPI::Token::Quote::Double
+            PPI::Token::Quote::Interpolate
+            PPI::Token::QuoteLike::Backtick
+            PPI::Token::QuoteLike::Readline
+        } ) {
+        $elem->isa( $class ) and return $TRUE;
+    }
+
+    return $FALSE;
 }
 
 # Record a subscripted capture, either hash dereference or array
