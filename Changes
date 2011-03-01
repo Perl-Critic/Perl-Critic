@@ -12,6 +12,9 @@ A future release
       corresponding close() are not in the same scope. RT #64437
     * RegularExpressions::ProhibitUnusedCapture now looks inside
       double-quotish things. RT #38942.
+    * ValuesAndExpressions::ProhibitCommaSeparatedStatements now
+      recognizes 'return { foo => 1, bar => 2 }' as containing a hash
+      constructor, not a block. This was fixed by PPI 1.215. RT #61301.
 
 [1.113] Released on 2011-02-14
 
