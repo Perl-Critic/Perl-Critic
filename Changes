@@ -15,6 +15,9 @@ A future release
     * ValuesAndExpressions::ProhibitCommaSeparatedStatements now
       recognizes 'return { foo => 1, bar => 2 }' as containing a hash
       constructor, not a block. This was fixed by PPI 1.215. RT #61301.
+    * ValuesAndExpressions::ProhibitCommaSeparatedStatements now
+      recognizes 'bless { foo => 1, bar => 2 }' as containing a hash
+      constructor, not a block. This was fixed by PPI 1.215. RT #64132.
 
 [1.113] Released on 2011-02-14
 
