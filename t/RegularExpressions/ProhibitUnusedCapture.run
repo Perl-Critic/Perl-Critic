@@ -490,6 +490,52 @@ EOD
 
 #-----------------------------------------------------------------------------
 
+## name Alternation. RT #38942 redux
+## failures 0
+## cut
+
+if ( /(a)/ || /(b)/ ) {
+    say $1;
+}
+
+# Yes, this is incorrect code, but that's ProhibitCaptureWithoutTest's
+# problem.
+if ( /(a)/ // /(b)/ ) {
+    say $1;
+}
+
+# Contrived, but worse things happen at sea.
+if ( ( /(a)/ || undef ) // /(b)/ ) {
+    say $1;
+}
+
+if ( /(a)/ or /(b)/ ) {
+    say $1;
+}
+
+#-----------------------------------------------------------------------------
+
+## name Alternation with conjunction. RT #38942 redux
+## failures 4
+## cut
+
+# 1 failure here: the /(b)/
+if ( /(a)/ || /(b)/ && /(c)/ ) {
+    say $1;
+}
+
+# 1 failure here: the /(b)/
+if ( /(a)/ or /(b)/ and /(c)/ ) {
+    say $1;
+}
+
+# 2 failures here: the /(a)/ and the /(b)/
+if ( /(a)/ || /(b)/ and /(c)/ ) {
+    say $1;
+}
+
+#-----------------------------------------------------------------------------
+
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

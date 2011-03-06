@@ -18,7 +18,9 @@ use Readonly;
 use Scalar::Util qw(refaddr);
 
 use Perl::Critic::Exception::Fatal::Internal qw{ throw_internal };
-use Perl::Critic::Utils qw{ :booleans :severities hashify split_nodes_on_comma };
+use Perl::Critic::Utils qw{
+    :booleans :severities hashify precedence_of split_nodes_on_comma
+};
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.113';
@@ -343,16 +345,114 @@ sub _check_if_in_while_condition_or_block {
     return $WHILE eq $item->content();
 }
 
+{
+    # Shortcut operators '||', '//', and 'or' can cause everything after
+    # them to be skipped. 'and' trumps '||' and '//', and causes things
+    # to be evaluated again. The value is true to skip, false to cancel
+    # skipping.
+    Readonly::Hash my %SHORTCUT_OPERATOR => (
+        q<||>   => $FALSE,
+        q<//>   => $FALSE,
+        and     => $TRUE,
+        or      => $FALSE,
+    );
+
+    # RT #38942
+    # The issue in the ticket is that in something like
+    #   if ( /(a)/ || /(b) ) {
+    #       say $1
+    #   }
+    # the capture variable can come from either /(a)/ or /(b)/. If we
+    # don't take into account the short-cutting nature of the '||' we
+    # erroneously conclude that the capture in /(a)/ is not used. So we
+    # need to skip every regular expression after an alternation.
+    #
+    # The trick is that we want to still mark magic variables, because
+    # of code like
+    #   my $foo = $1 || $2;
+    # so we can't just ignore everything after an alternation.
+    #
+    # To do all this correctly, we have to track precedence, and start
+    # paying attention again if an 'and' is found after a '||'.
+
+    # Subroutine _make_regexp_tracker() manufactures a snippet of code
+    # which is used to track regular expressions. It takes one optional
+    # argument, which is the snippet used to track the parent object's
+    # regular expressions.
+    #
+    # The snippet is passed each token encountered, and returns true if
+    # the scan for capture variables is to be stopped. This will happen
+    # if the token is a regular expression which is _not_ to the right
+    # of an alternation operator ('||', '//', or 'or'), or it _is_ to
+    # the right of an 'and', without an intervening alternation
+    # operator.
+    #
+    # If _make_regexp_tracker() was passed a snippet which
+    # returns false on encountering a regular expression, the returned
+    # snippet always returns false, for the benefit of code like
+    #   /(a)/ || ( /(b)/ || /(c)/ ).
+
+    sub _make_regexp_checker {
+        my ( $parent ) = @_;
+
+        $parent
+            and not $parent->()
+            and return sub { return $FALSE };
+
+        my $check = $TRUE;
+        my $precedence = 0;
+
+        return sub {
+            my ( $elem ) = @_;
+
+            $elem or return $check;
+
+            $elem->isa( 'PPI::Token::Regexp' )
+                and return $check;
+
+            if ( $elem->isa( 'PPI::Token::Structure' )
+                && q<;> eq $elem->content() ) {
+                $check       = $TRUE;
+                $precedence  = 0;
+                return $FALSE;
+            }
+
+            $elem->isa( 'PPI::Token::Operator' )
+                or return $FALSE;
+
+            my $content = $elem->content();
+            defined( my $oper_check = $SHORTCUT_OPERATOR{$content} )
+                or return $FALSE;
+
+            my $oper_precedence = precedence_of( $content );
+            $oper_precedence >= $precedence
+                or return $FALSE;
+
+            $precedence = $oper_precedence;
+            $check = $oper_check;
+
+            return $FALSE;
+        };
+    }
+}
+
 # false if we hit another regexp
 sub _check_rest_of_statement {
     my ($elem, $re, $captures, $named_captures, $doc) = @_;
 
+    my $checker = _make_regexp_checker();
     my $nsib = $elem->snext_sibling;
     while ($nsib) {
-        return if $nsib->isa('PPI::Token::Regexp');
+        return if $checker->($nsib);
         if ($nsib->isa('PPI::Node')) {
-            return if ! _check_node_children(
-                $nsib, $re, $captures, $named_captures, $doc);
+            return if ! _check_node_children($nsib, {
+                    regexp              => $re,
+                    numbered_captures   => $captures,
+                    named_captures      => $named_captures,
+                    document            => $doc,
+                },
+                $checker,
+            );
         } else {
             _mark_magic($nsib, $re, $captures, $named_captures, $doc);
         }
@@ -362,18 +462,39 @@ sub _check_rest_of_statement {
 }
 
 # false if we hit another regexp
+# The arguments are:
+#   $elem - The PPI::Node whose children are to be checked;
+#   $arg  - A hash reference containing the following keys:
+#       regexp => the relevant PPIx::Regexp object;
+#       numbered_captures => a reference to the array used to track the
+#           use of numbered captures;
+#       named_captures => a reference to the hash used to track the
+#       use of named captures;
+#       document => a reference to the Perl::Critic::Document;
+#   $parent_checker - The parent's regexp checking code snippet,
+#       manufactured by _make_regexp_checker(). This argument is not in
+#       the $arg hash because that hash is shared among levels of the
+#       parse tree, whereas the regexp checker is not.
+# TODO the things in the $arg hash are widely shared among the various
+# pieces/parts of this policy; maybe more subroutines should use this
+# hash rather than passing all this stuff around as individual
+# arguments. This particular subroutine got the hash-reference treatment
+# because Subroutines::ProhibitManyArgs started complaining when the
+# checker argument was added.
 sub _check_node_children {
-    my ($elem, $re, $captures, $named_captures, $doc) = @_;
+    my ($elem, $arg, $parent_checker) = @_;
 
     # caveat: this will descend into subroutine definitions...
 
+    my $checker = _make_regexp_checker($parent_checker);
     for my $child ($elem->schildren) {
-        return if $child->isa('PPI::Token::Regexp');
+        return if $checker->($child);
         if ($child->isa('PPI::Node')) {
-            return if ! _check_node_children($child, $re, $captures,
-                $named_captures, $doc);
+            return if ! _check_node_children($child, $arg, $checker);
         } else {
-            _mark_magic($child, $re, $captures, $named_captures, $doc);
+            _mark_magic($child, $arg->{regexp},
+                $arg->{numbered_captures}, $arg->{named_captures},
+                $arg->{document});
         }
     }
     return $TRUE;
