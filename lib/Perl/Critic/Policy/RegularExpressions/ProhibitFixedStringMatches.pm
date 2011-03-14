@@ -127,6 +127,8 @@ For larger numbers of strings, a hash is superior:
     );
     my $is_perl_keyword = $PERL_KEYWORD{$token};
 
+Conway also suggests using C<lc()> instead of a case-insensitive match.
+
 
 =head2 VARIANTS
 
