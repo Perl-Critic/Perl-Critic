@@ -1,4 +1,4 @@
-A future release
+[1.114] Released on 2011-03-26
 
     Policy Changes:
     * Documentation::RequirePodLinksIncludeText now handles nested POD
@@ -14,9 +14,9 @@ A future release
       double-quotish things. RT #38942.
     * RegularExpressions::ProhibitUnusedCapture now takes logical
       alternation into account, so that (e.g.)
-      if ( /(a)/ || /(b)/ ) {
-          say $1;
-      }
+          if ( /(a)/ || /(b)/ ) {
+              say $1;
+          }
       is not a violation. RT #38942.
     * ValuesAndExpressions::ProhibitCommaSeparatedStatements now
       recognizes 'return { foo => 1, bar => 2 }' as containing a hash

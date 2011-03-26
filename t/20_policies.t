@@ -16,7 +16,7 @@ use Test::Perl::Critic::Policy qw< all_policies_ok >;
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '1.113';
+our $VERSION = '1.114';
 
 #-----------------------------------------------------------------------------
 # Notice that you can pass arguments to this test, which limit the testing to

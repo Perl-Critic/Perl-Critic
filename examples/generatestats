@@ -11,7 +11,7 @@ use 5.008001;
 use strict;
 use warnings;
 
-use version; our $VERSION = qv('1.113');
+use version; our $VERSION = qv('1.114');
 
 use Carp qw{ croak };
 use English qw{ -no_match_vars };

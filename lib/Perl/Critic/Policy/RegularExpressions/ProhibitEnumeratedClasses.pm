@@ -20,7 +20,7 @@ use Perl::Critic::Utils qw{ :booleans :severities hashify };
 
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.113';
+our $VERSION = '1.114';
 
 #-----------------------------------------------------------------------------
 
