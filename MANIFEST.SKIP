@@ -82,3 +82,4 @@ RCS
 # Some other junk
 ^Debian_CPANTS\.txt$
 ^MYMETA.yml$
+^MYMETA\.json$

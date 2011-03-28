@@ -2,7 +2,9 @@ Build
 Debian_CPANTS.txt
 MANIFEST
 MANIFEST.bak
+META.json
 META.yml
+MYMETA.json
 MYMETA.yml
 Makefile
 README
