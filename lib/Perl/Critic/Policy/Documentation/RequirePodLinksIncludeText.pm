@@ -119,7 +119,7 @@ sub violates {
 
     }
 
-=enc comment
+=end comment
 
 =cut
 

@@ -1,3 +1,9 @@
+[1.xxx] Released on 2011-xx-xx
+
+    Minor bits:
+    * Internal POD error in Documentation::RequirePodLinksIncludeText.  Patch
+      by Salvatore Bonaccorso.  RT #67012
+
 [1.114] Released on 2011-03-26
 
     Policy Changes:
