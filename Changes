@@ -1,4 +1,4 @@
-[1.xxx] Released on 2011-xx-xx
+[1.115] Released on 2011-03-31
 
     Minor bits:
     * Fatal error in RegularExpressions::ProhibitUnusedCapture here
