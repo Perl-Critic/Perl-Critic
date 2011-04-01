@@ -82,6 +82,7 @@ my $builder = Perl::Critic::Module::Build->new(
             Makefile.old
             MANIFEST
             MANIFEST.bak
+            META.json
             META.yml
             pm_to_blib
             README
