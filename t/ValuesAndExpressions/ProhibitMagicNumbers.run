@@ -968,6 +968,19 @@ use version; our $VERSION = version->new('1.23');
 
 blahlahlah my $answer => 42;
 
+## name allow version as second argument of package. RT #67159
+## failures 0
+## cut
+
+package Maggot 0.01;
+
+## name do not allow numbers elsewhere in package statement. RT #67159
+## failures 2
+## cut
+
+package 42; # Illegal, but check anyway.
+package Maggot 0.01 42;
+
 #-----------------------------------------------------------------------------
 
 ##############################################################################

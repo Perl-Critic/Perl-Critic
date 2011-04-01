@@ -49,6 +49,7 @@ sub _is_version_declaration {  ## no critic (ArgUnpacking)
     return 1 if _is_vars_version(@_);
     return 1 if _is_package_version(@_);
     return 1 if _is_readonly_version(@_);
+    return 1 if _is_package_argument_version(@_);
     return 0;
 }
 
@@ -99,6 +100,19 @@ sub _is_readonly_version {
 
     my $ppsib = $psib->sprevious_sibling() || return 0;
     return $ppsib eq 'Readonly' || $ppsib eq 'Readonly::Scalar';
+}
+
+#-----------------------------------------------------------------------------
+
+sub _is_package_argument_version {
+    my (undef, $elem) = @_;
+    $elem->isa( 'PPI::Statement::Package' ) or return 0;
+    # Perldoc for 5.12.3 documents the statement as
+    # package NAMESPACE VERSION
+    # with no comma, and the compiler in fact does not accept one.
+    my $ver = $elem->schild( 2 )
+        or return 0;
+    return $ver->isa( 'PPI::Token::Number' );
 }
 
 1;

@@ -91,6 +91,22 @@ Readonly::Scalar our $VERSION = 1.0;
 
 Readonly::Scalar my $VERSION = 1.0;  #Note this is lexical
 
+#-----------------------------------------------------------------------------
+
+## name Version as argument to package. RT #67159
+## failures 0
+## cut
+
+package Foo 0.001;
+
+#-----------------------------------------------------------------------------
+
+## name Package without version should still be violation. RT #67159
+## failures 1
+## cut
+
+package Foo;
+
 ##############################################################################
 # Local Variables:
 #   mode: cperl

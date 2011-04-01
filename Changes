@@ -1,3 +1,11 @@
+Whenever the next release is
+
+    Policy Changes:
+    * ValuesAndExpressions::ProhibitMagicNumbers and
+      Module::RequireVersionVar now treat versions passed as the second
+      argument of a 'package' statement the same as versions declared as
+      'our $VERSION ...'.  RT #67159
+
 [1.115] Released on 2011-03-31
 
     Minor bits:

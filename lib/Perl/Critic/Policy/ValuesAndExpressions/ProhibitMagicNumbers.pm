@@ -230,6 +230,7 @@ sub violates {
     );
     return if _element_is_in_a_plan_statement($elem);
     return if _element_is_in_a_constant_subroutine($elem);
+    return if _element_is_a_package_statement_version_number($elem);
 
     my $literal = $elem->literal();
     if (
@@ -403,6 +404,21 @@ sub _element_is_in_a_constant_subroutine {
     return 0 if not $greatgrandparent->isa('PPI::Statement::Sub');
 
     return 1;
+}
+
+sub _element_is_a_package_statement_version_number {
+    my ($elem) = @_;
+
+    my $parent = $elem->statement()
+        or return 0;
+
+    $parent->isa( 'PPI::Statement::Package' )
+        or return 0;
+
+    my $version = $parent->schild( 2 )
+        or return 0;
+
+    return $version == $elem;
 }
 
 1;
