@@ -156,6 +156,21 @@ Blah...
 
 =cut
 
+#-----------------------------------------------------------------------------
+
+## name Don't die if we don't have a head1 to report against. RT #67231
+## failures 1
+## parms { lib_sections => 'NAME' }
+## cut
+
+warn "Trouble ahead";   # Needed because we ignore files without code
+
+=pod
+
+Fubar
+
+=cut
+
 ##############################################################################
 #      $URL$
 #     $Date$

@@ -342,7 +342,10 @@ sub violates {
             my $desc = qq{Missing "$required" section in POD};
             # Report any violations against POD of record rather than whole
             # document (the point of RT #59268)
-            push @violations, $self->violation( $desc, $EXPL, $pod_of_record );
+            # But if there are no =head1 records at all, rat out the
+            # first pod found, as being better than blowing up. RT #67231
+            push @violations, $self->violation( $desc, $EXPL,
+                $pod_of_record || $pods_ref->[0] );
         }
     }
 
