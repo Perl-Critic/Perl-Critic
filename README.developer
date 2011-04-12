@@ -17,3 +17,7 @@ Steps for adding a new Policy:
 
  * Remove from TODO
  * After release, set co-maint in PAUSE
+
+Command for generating POD for perlcritic.com site:
+
+pods2html --css=/styles/pod.css --base=http://perlcritic.com/pod/ --hr=1 lib  ../../perlcritic.com/htdocs/pod
