@@ -1,6 +1,8 @@
 Whenever the next release is
 
     Policy Changes:
+    * RegularExpressions::ProhibitUnusedCapture should more reliably
+      find things like s/(a)/${1}2/.  RT #67273.
     * Documentation::RequirePodSections no longer blows up on code
       having POD but no =head1. This problem was introduced with RT
       #59268. RT #67231
