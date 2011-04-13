@@ -20,4 +20,4 @@ Steps for adding a new Policy:
 
 Command for generating POD for perlcritic.com site:
 
-pods2html --css=/styles/pod.css --base=http://perlcritic.com/pod/ --hr=1 lib  ../../perlcritic.com/htdocs/pod
+perl -MPod::Simple::HTMLBatch -e 'Pod::Simple::HTMLBatch::go' lib ../../perlcritic.com/htdocs/pod/
