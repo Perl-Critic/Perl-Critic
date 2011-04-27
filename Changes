@@ -1,9 +1,12 @@
 Whenever the next release is
 
     Policy Changes:
+    * BuiltInFunctions::ProhibitLvalueSubstr does not report violations
+      if the document contains an explicit 'use n.nnn;' where the
+      version is before 5.005.  RT #59112
     * Variables::RequireLexicalLoopIterators does not report violations
       if the document contains an explicit 'use n.nnn;' where the
-      version is before 5.004.  RT # 67760
+      version is before 5.004.  RT #67760
     * RegularExpressions::ProhibitUnusedCapture should more reliably
       find things like s/(a)/${1}2/.  RT #67273.
     * Documentation::RequirePodSections no longer blows up on code
