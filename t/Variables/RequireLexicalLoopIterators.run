@@ -60,7 +60,7 @@ until ( $condition ) {}
 ## failures 0
 ## cut
 
-use 5.003;
+require 5.003;
 
 foreach $foo ( @list ) {
     bar( $foo );

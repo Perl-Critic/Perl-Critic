@@ -136,7 +136,7 @@ one it was.
 
 Lexical loop variables were introduced in Perl 5.004. This policy does
 not report violations on code which explicitly specifies an earlier
-version of Perl (e.g. C<use 5.002;>).
+version of Perl (e.g. C<require 5.002;>).
 
 
 =head1 CONFIGURATION
