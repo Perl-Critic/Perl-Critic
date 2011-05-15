@@ -70,7 +70,7 @@ __END__
 
 =pod
 
-=for stopwords perlfunc substr
+=for stopwords perlfunc substr 4th
 
 =head1 NAME
 
