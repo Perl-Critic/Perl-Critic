@@ -1,21 +1,21 @@
-Whenever the next release is
+[1.116] Released on 2011-05-15
 
     Policy Changes:
     * BuiltInFunctions::ProhibitLvalueSubstr does not report violations
       if the document contains an explicit 'use n.nnn;' where the
       version is before 5.005.  RT #59112
-    * Variables::RequireLexicalLoopIterators does not report violations
-      if the document contains an explicit 'use n.nnn;' where the
-      version is before 5.004.  RT #67760
-    * RegularExpressions::ProhibitUnusedCapture should more reliably
-      find things like s/(a)/${1}2/.  RT #67273.
     * Documentation::RequirePodSections no longer blows up on code
       having POD but no =head1. This problem was introduced with RT
       #59268. RT #67231
+    * RegularExpressions::ProhibitUnusedCapture should more reliably
+      find things like s/(a)/${1}2/.  RT #67273.
     * ValuesAndExpressions::ProhibitMagicNumbers and
       Module::RequireVersionVar now treat versions passed as the second
       argument of a 'package' statement the same as versions declared as
       'our $VERSION ...'.  RT #67159
+    * Variables::RequireLexicalLoopIterators does not report violations
+      if the document contains an explicit 'use n.nnn;' where the
+      version is before 5.004.  RT #67760
 
 [1.115] Released on 2011-03-31
 
