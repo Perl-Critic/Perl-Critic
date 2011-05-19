@@ -13,7 +13,7 @@ use warnings;
 
 use Perl::Critic::TestUtils qw{ starting_points_including_examples };
 
-use Test::More;
+use Test::More;# 1.41;  # Need 1.41 or newer for correct support of L<text|scheme:...> links.
 
 #-----------------------------------------------------------------------------
 
