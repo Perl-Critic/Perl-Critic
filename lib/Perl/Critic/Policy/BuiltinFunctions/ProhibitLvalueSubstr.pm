@@ -11,6 +11,7 @@ use 5.006001;
 use strict;
 use warnings;
 use Readonly;
+use version 0.77 ();
 
 use Perl::Critic::Utils qw{ :severities :classification :language };
 use base 'Perl::Critic::Policy';
