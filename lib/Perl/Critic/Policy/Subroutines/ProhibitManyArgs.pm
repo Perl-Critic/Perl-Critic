@@ -62,7 +62,7 @@ sub violates {
     if ($elem->prototype) {
         my $prototype = $elem->prototype();
         $prototype =~ s/ \\ [[] .*? []] /*/smxg;    # Allow for grouping
-        $num_args = $prototype =~ tr/$@%&*_/$@%&*_/;    # RT 56627
+        $num_args = $prototype =~ tr/$@%&*_+/$@%&*_+/;    # RT 56627
     } else {
        $num_args = _count_args($elem->block->schildren);
     }

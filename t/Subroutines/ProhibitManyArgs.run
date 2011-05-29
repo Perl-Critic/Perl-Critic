@@ -115,6 +115,24 @@ sub foo (\[$@%]@) { return 1 }
 sub bar ( \[$@%] $ \[$@%] ) { return 1 }
 
 #-----------------------------------------------------------------------------
+
+## name single term prototype (Perl 5.14)
+## failures 0
+## parms {max_arguments => 2}
+## cut
+
+sub foo ($+) { return 1 }
+
+#-----------------------------------------------------------------------------
+
+## name single term prototype (Perl 5.14)
+## failures 1
+## parms {max_arguments => 2}
+## cut
+
+sub foo ($$+) { return 1 }
+
+#-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

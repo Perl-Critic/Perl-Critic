@@ -3,6 +3,9 @@ Next release, whenever it is:
     Policy Changes:
     * BuiltinFunctions::ProhibitLvalueSubstr: Add explicit 'use version'.
       RT #68498.
+    * Subroutines::ProhibitManyArgs now recognizes '+' as a prototype
+      character.
+
 [1.116] Released on 2011-05-15
 
     Policy Changes:

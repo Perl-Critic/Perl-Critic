@@ -153,9 +153,6 @@ their operands.
 be required (e.g. C<push $stack, 'foo'> where C<$stack> is an array
 ref). Not sure what policies are affected, but it appears this implies
 
-A new prototype character '+' which acts like C<(\[@%])> if the actual
-argument is a scalar (C<Subroutines::ProhibitManyArgs>). 5.13.7.
-
 Lexical regular expression modifier defaults via (e.g.)
 C<use re '/smx'>). This also interacts with
 C<use feature 'unicode_strings'>. 5.13.7.
