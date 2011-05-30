@@ -146,12 +146,9 @@ addition of this item.
 
 =item * Detect 5.14 source and enable stuff for that.
 
-The s///r and tr///r operators return a new string rather than modifying
-their operands.
-
 5.13.7 allows references in many places where arrays or hashes used to
 be required (e.g. C<push $stack, 'foo'> where C<$stack> is an array
-ref). Not sure what policies are affected, but it appears this implies
+ref). Not sure what policies are affected.
 
 Lexical regular expression modifier defaults via (e.g.)
 C<use re '/smx'>). This also interacts with

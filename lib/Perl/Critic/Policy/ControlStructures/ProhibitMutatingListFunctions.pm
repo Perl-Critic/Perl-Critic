@@ -159,11 +159,11 @@ sub _is_topic_mutating_regex {
     # flags are specified. RT 44515.
     if ( $elem->isa( 'PPI::Token::Regexp::Transliterate') ) {
         my $subs = $elem->get_substitute_string();
+        my %mods = $elem->get_modifiers();
+        $mods{r} and return;    # Introduced in Perl 5.13.7
         if ( $EMPTY eq $subs ) {
-            my %mods = $elem->get_modifiers();
             $mods{d} or $mods{s} or return;
         } elsif ( $elem->get_match_string() eq $subs ) {
-            my %mods = $elem->get_modifiers();
             $mods{c} or $mods{s} or return;
         }
     }
