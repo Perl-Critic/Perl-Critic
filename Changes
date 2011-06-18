@@ -7,6 +7,8 @@ Next release, whenever it is:
       tr///r (introduced in 5.13.7) does not change its operand.
     * Subroutines::ProhibitManyArgs now recognizes '+' as a prototype
       character.
+    Other Changes:
+    * Corrected POD in Perl::Critic::PPI::Utils. RT #68898.
 
 [1.116] Released on 2011-05-15
 

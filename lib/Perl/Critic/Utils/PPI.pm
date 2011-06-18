@@ -362,7 +362,7 @@ error in L<PPI|PPI>.
 
 =item C<get_next_element_in_same_simple_statement( $element )>
 
-Given a C<PPI::Element|PPI::Element>, this subroutine returns the next element
+Given a L<PPI::Element|PPI::Element>, this subroutine returns the next element
 in the same simple statement as defined by is_ppi_simple_statement(). If no
 next element can be found, this subroutine simply returns.
 
