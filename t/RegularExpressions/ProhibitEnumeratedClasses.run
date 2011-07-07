@@ -31,8 +31,8 @@ m/[\x{ffef}]/; # for code coverage
 m/[A-Z]/;      # \p{Uppercase}
 m/[a-z]/;      # \p{Lowercase}
 m/[0-9]/;      # \d
-m/[A-Za-z_]/;  # \w
-m/[a-z_A-Z]/;  # \w
+m/[A-Za-z0-9_]/;  # \w
+m/[0-9a-z_A-Z]/;  # \w
 m/[a-zA-Z]/;   # \p{Alphabetic}
 m/[ \t\r\n\f]/;# \s
 m/[\ \t\r\n]/; # \s
@@ -56,8 +56,8 @@ m/[\ \t\x{0a}\x{0d}]/; # \s
 m/[^\w]/;       # \W
 m/[^\s]/;       # \S
 m/[^0-9]/;      # \D
-m/[^A-Za-z_]/;  # \W
-m/[^a-z_A-Z]/;  # \W
+m/[^A-Za-z0-9_]/;  # \W
+m/[^0-9a-z_A-Z]/;  # \W
 m/[^a-zA-Z]/;   # \P{Alphabetic}
 m/[^ \t\r\n\f]/;# \S
 m/[^\ \t\r\n]/; # \S

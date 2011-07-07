@@ -29,7 +29,7 @@ Readonly::Scalar my $EXPL => [248];
 
 Readonly::Array my @PATTERNS => (  # order matters: most to least specific
    [q{ },'\\t','\\r','\\n']      => ['\\s', '\\S'],
-   ['A-Z','a-z','_']             => ['\\w', '\\W'],
+   ['A-Z','a-z','0-9','_']       => ['\\w', '\\W'], # RT 69322
    ['A-Z','a-z']                 => ['[[:alpha:]]','[[:^alpha:]]'],
    ['A-Z']                       => ['[[:upper:]]','[[:^upper:]]'],
    ['a-z']                       => ['[[:lower:]]','[[:^lower:]]'],
@@ -154,7 +154,7 @@ B<C<[\t\r\n\f\ ]>> vs. B<C<\s>>
 
 B<C<[\t\r\n\ ]>> vs. B<C<\s>>   (because many people forget C<\f>)
 
-B<C<[A-Za-z_]>> vs. B<C<\w>>
+B<C<[A-Za-z0-9_]>> vs. B<C<\w>>
 
 B<C<[A-Za-z]>> vs. B<C<\p{IsAlphabetic}>>
 
