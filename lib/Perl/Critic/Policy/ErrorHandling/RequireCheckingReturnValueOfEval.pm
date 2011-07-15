@@ -15,7 +15,8 @@ use Readonly;
 
 use Scalar::Util qw< refaddr >;
 
-use Perl::Critic::Utils qw< :booleans :characters :severities hashify >;
+use Perl::Critic::Utils qw< :booleans :characters :severities hashify
+    precedence_of >;
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.116';
@@ -31,6 +32,8 @@ Readonly::Scalar my $EXPL =>
 Readonly::Hash my %BOOLEAN_OPERATORS => hashify qw< || && // or and >;
 Readonly::Hash my %POSTFIX_OPERATORS =>
     hashify qw< for foreach if unless while until >;
+
+Readonly::Scalar my $PRECEDENCE_OF_EQUALS => precedence_of( q{=} );
 
 #-----------------------------------------------------------------------------
 
@@ -56,6 +59,8 @@ sub violates {
             $elem,
             $following,
         );
+
+    return if _scan_backwards_for_grep( $elem );    # RT 69489
 
     if ( $following and $following->isa('PPI::Token::Operator') ) {
         return if $BOOLEAN_OPERATORS{ $following->content() };
@@ -249,6 +254,31 @@ sub _is_in_postfix_expression {
     }
 
     return;
+}
+
+#-----------------------------------------------------------------------------
+
+sub _scan_backwards_for_grep {
+    my ( $elem ) = @_;
+
+    while ( $elem ) {
+
+        my $parent = $elem->parent();
+
+        while ( $elem = $elem->sprevious_sibling() ) {
+            $elem->isa( 'PPI::Token::Word' )
+                and 'grep' eq $elem->content()
+                and return $TRUE;
+            $elem->isa( 'PPI::Token::Operator' )
+                and precedence_of( $elem ) >= $PRECEDENCE_OF_EQUALS
+                and return $FALSE;
+        }
+
+        $elem = $parent;
+    }
+
+    return $FALSE;
+
 }
 
 #-----------------------------------------------------------------------------

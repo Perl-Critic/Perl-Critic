@@ -385,6 +385,20 @@ eval "something_else" && die;
 
 #-----------------------------------------------------------------------------
 
+## name A grep is a check -- RT #69489
+## failures 0
+## cut
+
+foreach ( grep { eval $_ } @bar ) { say }
+foreach ( grep { ! eval $_ } @bar ) { say }
+foreach ( grep eval $_, @bar ) { say }
+foreach ( grep ! eval $_, @bar ) { say }
+
+# grep $_, map eval $_, @foo;   # Should this be accepted?
+grep { $_ } map { eval $_ } @foo;   # Should this be rejected?
+
+#-----------------------------------------------------------------------------
+
 ##############################################################################
 #      $URL$
 #     $Date$

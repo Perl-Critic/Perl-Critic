@@ -5,6 +5,8 @@ Next release, whenever it is:
       RT #68498.
     * ControlStructures::ProhibitMutatingListFunctions now understands that
       tr///r (introduced in 5.13.7) does not change its operand.
+    * ErrorHandling::RequireCheckingReturnValueOfEval now allows things
+      like grep { eval $_ }. RT #69489.
     * RegularExpressions::ProhibitEnumeratedClasses no longer thinks
       that [A-Za-z_] matches \w. RT #69322.
     * Subroutines::ProhibitManyArgs now recognizes '+' as a prototype
