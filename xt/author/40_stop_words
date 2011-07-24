@@ -15,7 +15,9 @@ CGI
 colour
 colours
 config
+Conway's
 CPAN
+customizable
 CVS
 dereference
 dereferencing
@@ -28,6 +30,7 @@ filehandle
 filehandles
 filename
 filenames
+Fowler's
 globals
 globbing
 Guzis
@@ -37,9 +40,12 @@ HEREDOC
 HEREDOCs
 IDE
 lvalue
+maintainer's
+matcher
 Maxia
 Mehner
 memoization
+merchantability
 metacharacters
 Metadata
 metadata
@@ -49,6 +55,7 @@ mutators
 namespace
 namespaces
 octothorp
+optimizations
 PBP
 pbp
 perl
@@ -88,6 +95,7 @@ STDERR
 STDIN
 STDOUT
 stringification
+subclasses
 subdirectories
 subscripted
 superclass
@@ -101,6 +109,9 @@ unblessed
 undef
 unescaped
 unparsed
+untestable
+untrusted
+unvalidated
 vice-versa
 whitespace
 Wyant
