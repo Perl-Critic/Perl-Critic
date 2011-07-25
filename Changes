@@ -13,6 +13,9 @@ Next release, whenever it is:
       character.
     Other Changes:
     * Corrected POD in Perl::Critic::PPI::Utils. RT #68898.
+    * Perl::Critic::Violation source() method now returns the line
+      containing the violation (not the first line) when the statement
+      containing the violation spans multiple lines.
 
 [1.116] Released on 2011-05-15
 
