@@ -549,6 +549,18 @@ X
 
 #-----------------------------------------------------------------------------
 
+## name RT #69867 - Incorrect check of if() statement if regexp negated
+## failures 0
+## cut
+
+if ( $ip !~ /^(.*?)::(.*)\z/sx ) {
+    @fields = split /:/x, $ip;
+} else {
+    my ( $before, $after ) = ( $1, $2 );
+}
+
+#-----------------------------------------------------------------------------
+
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

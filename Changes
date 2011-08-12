@@ -9,6 +9,9 @@ Next release, whenever it is:
       like grep { eval $_ }. RT #69489.
     * RegularExpressions::ProhibitEnumeratedClasses no longer thinks
       that [A-Za-z_] matches \w. RT #69322.
+    * RegularExpressions::ProhibitUnusedCaptures now skips the first
+      block of an 'if' or 'elsif' if the regular expression is bound to
+      its operand with the '!~' operator. RT #69867.
     * Subroutines::ProhibitManyArgs now recognizes '+' as a prototype
       character.
     Other Changes:

@@ -313,13 +313,26 @@ sub _check_for_magic {
     #  * if this is in a while/for condition, the loop body
     # But NO intervening regexps!
 
-    return if ! _check_rest_of_statement(
-        $elem, $re, $captures, $named_captures, $doc);
+    # Package up the usual arguments for _check_rest_of_statement().
+    my $arg = {
+        regexp              => $re,
+        numbered_captures   => $captures,
+        named_captures      => $named_captures,
+        document            => $doc,
+    };
+
+    # Capture whether or not the regular expression is negated -- that
+    # is, whether it is preceded by the '!~' binding operator.
+    if ( my $prior_token = $elem->sprevious_sibling() ) {
+        $arg->{negated} = $prior_token->isa( 'PPI::Token::Operator' ) &&
+            q<!~> eq $prior_token->content();
+    }
+
+    return if ! _check_rest_of_statement( $elem, $arg );
 
     my $parent = $elem->parent();
     while ($parent && ! $parent->isa('PPI::Statement::Sub')) {
-        return if ! _check_rest_of_statement($parent, $re, $captures,
-            $named_captures, $doc);
+        return if ! _check_rest_of_statement( $parent, $arg );
         $parent = $parent->parent();
     }
 
@@ -376,7 +389,7 @@ sub _check_if_in_while_condition_or_block {
     # To do all this correctly, we have to track precedence, and start
     # paying attention again if an 'and' is found after a '||'.
 
-    # Subroutine _make_regexp_tracker() manufactures a snippet of code
+    # Subroutine _make_regexp_checker() manufactures a snippet of code
     # which is used to track regular expressions. It takes one optional
     # argument, which is the snippet used to track the parent object's
     # regular expressions.
@@ -388,7 +401,7 @@ sub _check_if_in_while_condition_or_block {
     # the right of an 'and', without an intervening alternation
     # operator.
     #
-    # If _make_regexp_tracker() was passed a snippet which
+    # If _make_regexp_checker() was passed a snippet which
     # returns false on encountering a regular expression, the returned
     # snippet always returns false, for the benefit of code like
     #   /(a)/ || ( /(b)/ || /(c)/ ).
@@ -438,28 +451,66 @@ sub _check_if_in_while_condition_or_block {
 }
 
 # false if we hit another regexp
+# The arguments are:
+#   $elem - The PPI::Element whose siblings are to be checked;
+#   $arg  - A hash reference containing the following keys:
+#       regexp => the relevant PPIx::Regexp object;
+#       numbered_captures => a reference to the array used to track the
+#           use of numbered captures;
+#       named_captures => a reference to the hash used to track the
+#           use of named captures;
+#       negated => true if the regexp was bound to its target with the
+#           '!~' operator;
+#       document => a reference to the Perl::Critic::Document;
+# Converted to passing the arguments everyone gets in a hash because of
+# the need to add the 'negated' argument, which would put us at six
+# arguments.
 sub _check_rest_of_statement {
-    my ($elem, $re, $captures, $named_captures, $doc) = @_;
+    my ( $elem, $arg ) = @_;
 
     my $checker = _make_regexp_checker();
     my $nsib = $elem->snext_sibling;
+
+    # If we are an if (or elsif) and the result of the regexp is
+    # negated, we skip the first block found. RT #69867
+    if ( $arg->{negated} && _is_condition_of_if_statement( $elem ) ) {
+        while ( $nsib && ! $nsib->isa( 'PPI::Structure::Block' ) ) {
+            $nsib = $nsib->snext_sibling();
+        }
+        $nsib and $nsib = $nsib->snext_sibling();
+    }
+
     while ($nsib) {
         return if $checker->($nsib);
         if ($nsib->isa('PPI::Node')) {
-            return if ! _check_node_children($nsib, {
-                    regexp              => $re,
-                    numbered_captures   => $captures,
-                    named_captures      => $named_captures,
-                    document            => $doc,
-                },
-                $checker,
-            );
+            return if ! _check_node_children($nsib, $arg, $checker );
         } else {
-            _mark_magic($nsib, $re, $captures, $named_captures, $doc);
+            _mark_magic( $nsib, $arg->{regexp}, $arg->{numbered_captures},
+                $arg->{named_captures}, $arg->{document} );
         }
         $nsib = $nsib->snext_sibling;
     }
     return $TRUE;
+}
+
+{
+
+    Readonly::Hash my %IS_IF_STATEMENT => hashify( qw{ if elsif } );
+
+    # Return true if the argument is the condition of an if or elsif
+    # statement, otherwise return false.
+    sub _is_condition_of_if_statement {
+        my ( $elem ) = @_;
+        $elem
+            and $elem->isa( 'PPI::Structure::Condition' )
+            or return $FALSE;
+        my $psib = $elem->sprevious_sibling()
+            or return $FALSE;
+        $psib->isa( 'PPI::Token::Word' )
+            or return $FALSE;
+        return $IS_IF_STATEMENT{ $psib->content() };
+
+    }
 }
 
 # false if we hit another regexp
