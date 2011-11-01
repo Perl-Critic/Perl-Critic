@@ -116,10 +116,12 @@ sub _enough_uses_in_regexp {
     foreach my $token ( @{ $re->find(
         'PPIx::Regexp::Token::Code' ) || [] } ) {
         my $ppi = $token->ppi() or next;
-        my $start = $ppi->schild( 0 ) or next;
-        $start = $start->schild( 0 ) or next;
-        _mark_magic( $start, $re, $captures, $named_captures, $doc );
-        _enough_magic( $start, $re, $captures, $named_captures, $doc );
+        _check_node_children( $ppi, {
+                regexp              => $re,
+                numbered_captures   => $captures,
+                named_captures      => $named_captures,
+                document            => $doc,
+            }, _make_regexp_checker() );
     }
 
     return ( none {not defined $_} @{$captures} )

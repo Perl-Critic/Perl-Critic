@@ -12,6 +12,9 @@ Next release, whenever it is:
     * RegularExpressions::ProhibitUnusedCaptures now skips the first
       block of an 'if' or 'elsif' if the regular expression is bound to
       its operand with the '!~' operator. RT #69867.
+    * RegularExpressions::ProhibitUnusedCaptures now looks into lists
+      and blocks in the replacement portion of the regular expression if
+      /e is asserted. RT #72086.
     * Subroutines::ProhibitManyArgs now recognizes '+' as a prototype
       character.
     Other Changes:
