@@ -3,6 +3,8 @@ Next release, whenever it is:
     Policy Changes:
     * BuiltinFunctions::ProhibitLvalueSubstr: Add explicit 'use version'.
       RT #68498.
+    * CodeLayout::ProhibitHardTabs: Add 'pbp' to the default_themes list.
+      RT #71093.
     * ControlStructures::ProhibitMutatingListFunctions now understands that
       tr///r (introduced in 5.13.7) does not change its operand.
     * ErrorHandling::RequireCheckingReturnValueOfEval now allows things
