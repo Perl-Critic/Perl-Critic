@@ -242,10 +242,91 @@ sub ppix_regexp_from_element {
         return $self->{_ppix_regexp_from_element}{$addr}
             if exists $self->{_ppix_regexp_from_element}{$addr};
         return ( $self->{_ppix_regexp_from_element}{$addr} =
-            PPIx::Regexp->new( $element ) );
+            PPIx::Regexp->new( $element,
+                default_modifiers =>
+                $self->_find_use_re_modifiers_in_scope_from_element(
+                    $element ),
+            ) );
     } else {
         return PPIx::Regexp->new( $element );
     }
+}
+
+sub _find_use_re_modifiers_in_scope_from_element {
+    my ( $self, $elem ) = @_;
+    my @found;
+    foreach my $use_re ( @{ $self->find( 'PPI::Statement::Include' ) || [] } )
+    {
+        're' eq $use_re->module()
+            or next;
+        $self->element_is_in_lexical_scope_after_statement_containing(
+            $elem, $use_re )
+            or next;
+        my $prefix = 'no' eq $use_re->type() ? q{-} : $EMPTY;
+        push @found,
+            map { "$prefix$_" }
+            grep { m{ \A / }smx }
+            map {
+                $_->isa( 'PPI::Token::Quote' ) ? $_->string() :
+                $_->isa( 'PPI::Token::QuoteLike::Words' ) ?  $_->literal() :
+                $_->content() }
+            $use_re->schildren();
+    }
+    return \@found;
+}
+
+#-----------------------------------------------------------------------------
+
+# This got hung on the Perl::Critic::Document, rather than living in
+# Perl::Critic::Utils::PPI, because of the possibility that caching of scope
+# objects would turn out to be desirable.
+
+sub element_is_in_lexical_scope_after_statement_containing {
+    my ( $self, $inner_elem, $outer_elem ) = @_;
+
+    # If the outer element defines a scope, we're true if and only if
+    # the outer element contains the inner element.
+    $outer_elem->scope()
+        and return $inner_elem->descendant_of( $outer_elem );
+
+    # In the more general case:
+
+    # The last element of the statement containing the outer element
+    # must be before the inner element. If not, we know we're false,
+    # without walking the parse tree.
+
+    my $stmt = $outer_elem->statement()
+        or return;
+    my $last_elem = $stmt->last_element()
+        or return;
+
+    my $stmt_loc = $last_elem->location()
+        or return;
+
+    my $inner_loc = $inner_elem->location()
+        or return;
+
+    $stmt_loc->[0] > $inner_loc->[0]
+        and return;
+    $stmt_loc->[0] == $inner_loc->[0]
+        and $stmt_loc->[1] > $inner_loc->[1]
+        and return;
+
+    # Since we know the inner element is after the outer element, find
+    # the element that defines the scope of the statement that contains
+    # the outer element.
+
+    my $parent = $stmt;
+    while ( ! $parent->scope() ) {
+        $parent = $stmt->parent()
+            or return;
+    }
+
+    # We're true if and only if the scope of the outer element contains
+    # the inner element.
+
+    return $inner_elem->descendant_of( $parent );
+
 }
 
 #-----------------------------------------------------------------------------
@@ -692,6 +773,19 @@ C<$element> is a C<PPI::Element> the cache is employed, otherwise it
 just returns the results of C<< PPIx::Regexp->new() >>.  In either case,
 it returns C<undef> unless the argument is something that
 L<PPIx::Regexp|PPIx::Regexp> actually understands.
+
+=item C<< element_is_in_lexical_scope_after_statement_containing( $inner, $outer ) >>
+
+Is the C<$inner> element in lexical scope after the statement containing
+the C<$outer> element?
+
+In the case where C<$outer> is itself a scope-defining element, returns true
+if C<$outer> contains C<$inner>. In any other case, C<$inner> must be
+after the last element of the statement containing C<$outer>, and the
+innermost scope for C<$outer> also contains C<$inner>.
+
+This is not the same as asking whether C<$inner> is visible from
+C<$outer>.
 
 
 =item C<< filename() >>

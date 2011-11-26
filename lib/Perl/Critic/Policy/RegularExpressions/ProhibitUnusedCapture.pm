@@ -83,8 +83,7 @@ sub violates {
     # Look for references to the capture in the regex itself
     return if _enough_uses_in_regexp( $re, \@captures, \%named_captures, $doc );
 
-    my $mod = $re->modifier();
-    if ($mod and $mod->asserts( 'g' )
+    if ( $re->modifier_asserted( 'g' )
             and not _check_if_in_while_condition_or_block( $elem ) ) {
         $ncaptures = $NUM_CAPTURES_FOR_GLOBAL;
         $#captures = $ncaptures - 1;

@@ -35,12 +35,13 @@ sub applies_to           { return qw(PPI::Token::Regexp::Match
 #-----------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, undef ) = @_;
+    my ( $self, $elem, $doc ) = @_;
 
-    my %mods = $elem->get_modifiers();
-    if ( ! $mods{m} ) {
-        return $self->violation( $DESC, $EXPL, $elem );
-    }
+    my $re = $doc->ppix_regexp_from_element( $elem )
+        or return;
+    $re->modifier_asserted( 'm' )
+        or return $self->violation( $DESC, $EXPL, $elem );
+
     return; #ok!;
 }
 

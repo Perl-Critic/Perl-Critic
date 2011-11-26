@@ -74,6 +74,47 @@ my $string =~ tr/[A-Z]/[a-z]/cds;
 my $string =~ y/[A-Z]/[a-z]/cds;
 
 #-----------------------------------------------------------------------------
+
+## name use re '/m' - RT #72151
+## failures 0
+## cut
+
+use re '/m';
+my $string =~ m{pattern.};
+
+#-----------------------------------------------------------------------------
+
+## name use re qw{ /m } - RT #72151
+## failures 0
+## cut
+
+use re qw{ /m };
+my $string =~ m{pattern.};
+
+#-----------------------------------------------------------------------------
+
+## name use re qw{ /m } not in scope - RT #72151
+## failures 1
+## cut
+
+{
+    use re qw{ /m };
+}
+my $string =~ m{pattern.};
+
+#-----------------------------------------------------------------------------
+
+## name no re qw{ /m } - RT #72151
+## failures 1
+## cut
+
+use re qw{ /smx };
+{
+    no re qw{ /m };
+    my $string =~ m{pattern.};
+}
+
+#-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

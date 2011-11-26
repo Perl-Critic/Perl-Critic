@@ -17,6 +17,10 @@ Next release, whenever it is:
     * RegularExpressions::ProhibitUnusedCaptures now looks into lists
       and blocks in the replacement portion of the regular expression if
       /e is asserted. RT #72086.
+    * RegularExpressions::RequireDotMatchAnything,
+      RegularExpressions::RequireExtendedFormatting and
+      RegularExpressions::RequireLineBoundaryMatching now honor defaults
+      set with 'use re "/modifiers"'. RT #72151.
     * Subroutines::ProhibitManyArgs now recognizes '+' as a prototype
       character.
     Other Changes:

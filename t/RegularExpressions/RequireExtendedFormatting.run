@@ -126,6 +126,47 @@ my $string =~ m/foobar/;
 my $string =~ s/foobar/foo bar/;
 
 #-----------------------------------------------------------------------------
+
+## name use re '/x' - RT #72151
+## failures 0
+## cut
+
+use re '/x';
+my $string =~ m{pattern.};
+
+#-----------------------------------------------------------------------------
+
+## name use re qw{ /x } - RT #72151
+## failures 0
+## cut
+
+use re qw{ /x };
+my $string =~ m{pattern.};
+
+#-----------------------------------------------------------------------------
+
+## name use re qw{ /x } not in scope - RT #72151
+## failures 1
+## cut
+
+{
+    use re qw{ /x };
+}
+my $string =~ m{pattern.};
+
+#-----------------------------------------------------------------------------
+
+## name no re qw{ /x } - RT #72151
+## failures 1
+## cut
+
+use re qw{ /smx };
+{
+    no re qw{ /x };
+    my $string =~ m{pattern.};
+}
+
+#-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

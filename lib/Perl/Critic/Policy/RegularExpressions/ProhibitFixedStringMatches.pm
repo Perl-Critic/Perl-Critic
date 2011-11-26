@@ -40,7 +40,7 @@ sub applies_to           { return qw(PPI::Token::Regexp::Match
 #-----------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, undef ) = @_;
+    my ( $self, $elem, $doc ) = @_;
 
     my $re = $elem->get_match_string();
 
@@ -55,8 +55,9 @@ sub violates {
 
         # If it's a multiline match, then end-of-line anchors don't represent the whole string
         if ($front_anchor eq q{^} || $end_anchor eq q{$}) {
-            my %mods = $elem->get_modifiers();
-            return if $mods{m};
+            my $regexp = $doc->ppix_regexp_from_element( $elem )
+                or return;
+            return if $regexp->modifier_asserted( 'm' );
         }
 
         # check for grouping and optional alternation.  Grouping may or may not capture
