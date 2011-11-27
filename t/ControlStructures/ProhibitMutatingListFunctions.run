@@ -1,10 +1,13 @@
 ## name Assignment and op-assignment
-## failures 3
+## failures 4
 ## cut
 
+# TODO: PPI as of 1.215 doesn't parse all of the augmented assignment
+# operators, so we can't do exhaustive testing. 
 @bar = map {$_ = 1} @foo;
 @bar = map {$_ *= 2} @foo;
 @bar = map {$_++} @foo;
+@bar = map {$_--} @foo;
 
 #-----------------------------------------------------------------------------
 

@@ -7,6 +7,8 @@ Next release, whenever it is:
       RT #71093.
     * ControlStructures::ProhibitMutatingListFunctions now understands that
       tr///r (introduced in 5.13.7) does not change its operand.
+    * ControlStructures::ProhibitMutatingListFunctions now understands that
+      '//=', '<<=', and '>>=' are assignment operators. RT #70901.
     * ErrorHandling::RequireCheckingReturnValueOfEval now allows things
       like grep { eval $_ }. RT #69489.
     * RegularExpressions::ProhibitEnumeratedClasses no longer thinks

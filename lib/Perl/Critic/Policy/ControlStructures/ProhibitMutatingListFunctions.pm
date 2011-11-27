@@ -239,7 +239,9 @@ sub _is_topic_mutating_substr {
 {
     ##no critic(ArgUnpacking)
 
-    my %assignment_ops = hashify qw( = *= /= += -= %= **= x= .= &= |= ^=  &&= ||= ++ -- );
+    my %assignment_ops = hashify qw(
+        = *= /= += -= %= **= x= .= &= |= ^=  &&= ||= <<= >>= //= ++ --
+    );
     sub _is_assignment_operator { return exists $assignment_ops{$_[0]} }
 
     my %increment_ops = hashify qw( ++ -- );
