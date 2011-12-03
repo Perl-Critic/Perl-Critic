@@ -25,7 +25,7 @@ our $VERSION = '1.116';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $DESC => q<Magic punctuation variable used>;
+Readonly::Scalar my $DESC => q<Magic punctuation variable %s used>;
 Readonly::Scalar my $EXPL => [79];
 
 #-----------------------------------------------------------------------------
@@ -127,7 +127,7 @@ sub _violates_magic {
     my ( $self, $elem, undef ) = @_;
 
     if ( !exists $self->{_allow}->{$elem} ) {
-        return $self->violation( $DESC, $EXPL, $elem );
+        return $self->_make_violation( $DESC, $EXPL, $elem );
     }
 
     return;    # no violation
@@ -160,7 +160,7 @@ sub _violates_string {
     my %matches = _strings_helper( $self, $string );
     if (%matches) {
         my $DESC = qq<$DESC in interpolated string>;
-        return $self->violation( $DESC, $EXPL, $elem );
+        return $self->_make_violation( $DESC, $EXPL, $elem, \%matches );
     }
 
     return;    # no violation
@@ -174,7 +174,7 @@ sub _violates_heredoc {
         my %matches = _strings_helper( $self, $heredoc_string );
         if (%matches) {
             my $DESC = qq<$DESC in interpolated here-document>;
-            return $self->violation( $DESC, $EXPL, $elem );
+            return $self->_make_violation( $DESC, $EXPL, $elem, \%matches );
         }
     }
 
@@ -194,7 +194,8 @@ sub _strings_helper {
 
     # we are in string_mode = simple
 
-    my @raw_matches = $target_string =~ m/$MAGIC_REGEX/goxms;
+    my @raw_matches = map { _unbracket_variable_name( $_ ) }
+        $target_string =~ m/$MAGIC_REGEX/goxms;
     return if not @raw_matches;
 
     my %matches = hashify(@raw_matches);
@@ -212,7 +213,8 @@ sub _strings_thorough {
     MATCH:
     while ( my ($match) = $target_string =~ m/$MAGIC_REGEX/gcxms ) {
         my $nextchar = substr $target_string, $LAST_MATCH_END[0], 1;
-        my $c = $match . $nextchar;
+        my $vname = _unbracket_variable_name( $match );
+        my $c = $vname . $nextchar;
 
         # These tests closely parallel those in PPI::Token::Magic,
         # from which the regular expressions were taken.
@@ -253,12 +255,35 @@ sub _strings_thorough {
         # The additional checking that PPI::Token::Magic does at this point
         # is not necessary here, in an interpolated string context.
 
-        $matches{$match} = 1;
+        $matches{$vname} = 1;
     }
 
     delete @matches{ keys %{ $self->{_allow} } };
 
     return %matches;
+}
+
+# RT #72910: A magic variable may appear in bracketed form; e.g. "$$" as
+# "${$}".  Generate the bracketed form from the unbracketed form, and
+# return both.
+sub _bracketed_form_of_variable_name {
+    my ( $name ) = @_;
+    length $name > 1
+        or return ( $name );
+    my $brktd = $name;
+    substr $brktd, 1, 0, '{';
+    $brktd .= '}';
+    return( $name, $brktd );
+}
+
+# RT #72910: Since we loaded both bracketed and unbracketed forms of the
+# punctuation variables into our detecting regex, we need to detect and
+# strip the brackets if they are present to recover the canonical name.
+sub _unbracket_variable_name {
+    my ( $name ) = @_;
+    $name =~ m/ \A ( . ) [{] ( .+ ) [}] \z /smx
+        and return "$1$2";
+    return $name;
 }
 
 #-----------------------------------------------------------------------------
@@ -278,6 +303,7 @@ sub _create_magic_detector {
                 q<|>,
                 map          { quotemeta $_ }
                 reverse sort { length $a <=> length $b }
+                map          { _bracketed_form_of_variable_name( $_ ) }
                 grep         { q<%> ne substr $_, 0, 1 }
                 @MAGIC_VARIABLES
         )
@@ -288,6 +314,15 @@ sub _create_magic_detector {
         (?: \\{2} )*           # zero or more double-backslashes
         ( $magic_alternation ) # any magic punctuation variable
     >xsm;
+}
+
+sub _make_violation {
+    my ( $self, $desc, $expl, $elem, $vars ) = @_;
+
+    my $vname = 'HASH' eq ref $vars ?
+        join ', ', sort keys %{ $vars } :
+        $elem->content();
+    return $self->violation( sprintf( $desc, $vname ), $expl, $elem );
 }
 
 1;

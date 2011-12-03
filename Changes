@@ -25,6 +25,10 @@ Next release, whenever it is:
       set with 'use re "/modifiers"'. RT #72151.
     * Subroutines::ProhibitManyArgs now recognizes '+' as a prototype
       character.
+    * Variables::ProhibitPunctuationVars now recognizes bracketed
+      variables embedded in interpolated strings (e.g. "${$}"). For the
+      purpose of the 'allow' configuration, these are considered
+      equivalent to the unbracketed form. RT #72910.
     Other Changes:
     * Corrected POD in Perl::Critic::PPI::Utils. RT #68898.
     * Perl::Critic::Violation source() method now returns the line
