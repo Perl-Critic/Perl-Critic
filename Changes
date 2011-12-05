@@ -11,6 +11,9 @@ Next release, whenever it is:
       '//=', '<<=', and '>>=' are assignment operators. RT #70901.
     * ErrorHandling::RequireCheckingReturnValueOfEval now allows things
       like grep { eval $_ }. RT #69489.
+    * Modules::RequireExplicitPackage now has configuraion option
+      allow_import_of, to allow the import of specified modules before
+      the package statement. RT #72660.
     * RegularExpressions::ProhibitEnumeratedClasses no longer thinks
       that [A-Za-z_] matches \w. RT #69322.
     * RegularExpressions::ProhibitUnusedCaptures now skips the first

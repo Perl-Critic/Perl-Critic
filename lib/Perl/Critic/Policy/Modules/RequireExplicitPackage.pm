@@ -12,7 +12,7 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :severities :classification };
+use Perl::Critic::Utils qw{ :booleans :severities :classification };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.116';
@@ -31,6 +31,11 @@ sub supported_parameters {
             description    => q{Don't require programs to contain a package statement.},
             default_string => '1',
             behavior       => 'boolean',
+        },
+        {
+            name           => 'allow_import_of',
+            description    => q{Allow the specified modules to be imported outside a package},
+            behavior       => 'string list',
         },
     );
 }
@@ -59,7 +64,9 @@ sub violates {
     # Find all statements that aren't 'package' statements
     my $stmnts_ref = $doc->find( 'PPI::Statement' );
     return if !$stmnts_ref;
-    my @non_packages = grep { !$_->isa('PPI::Statement::Package') } @{$stmnts_ref};
+    my @non_packages = grep {
+        $self->_is_statement_of_interest( $_ )
+    } @{$stmnts_ref};
     return if !@non_packages;
 
     # If the 'package' statement is not defined, or the other
@@ -74,6 +81,25 @@ sub violates {
     }
 
     return @viols;
+}
+
+sub _is_statement_of_interest {
+    my ( $self, $elem ) = @_;
+
+    $elem
+        or return $FALSE;
+
+    $elem->isa( 'PPI::Statement::Package' )
+        and return $FALSE;
+
+    if ( $elem->isa( 'PPI::Statement::Include' ) ) {
+        if ( defined( my $module = $elem->module() ) ) {
+            $self->{_allow_import_of}{$module}
+                and return $FALSE;
+        }
+    }
+
+    return $TRUE;
 }
 
 1;
@@ -122,6 +148,19 @@ F<.perlcriticrc> file
 
     [Modules::RequireExplicitPackage]
     exempt_scripts = 0
+
+Some users may find it desirable to exempt the load of specific modules
+from this policy. For example, Perl does not support Unicode module
+names because of portability problems. Users who are not concerned about
+this and intend to use C<UTF-8> module names will need to specify
+C<use utf8;> before the package declaration. To do this, add the
+following to your F<.perlcriticrc> file
+
+    [Modules::RequireExplicitPackage]
+    allow_import_of = utf8
+
+The C<allow_import_of> configuration option takes multiple module names,
+separated by spaces.
 
 
 =head1 IMPORTANT CHANGES
