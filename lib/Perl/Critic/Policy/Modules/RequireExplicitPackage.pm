@@ -93,7 +93,7 @@ sub _is_statement_of_interest {
         and return $FALSE;
 
     if ( $elem->isa( 'PPI::Statement::Include' ) ) {
-        if ( defined( my $module = $elem->module() ) ) {
+        if ( my $module = $elem->module() ) {
             $self->{_allow_import_of}{$module}
                 and return $FALSE;
         }
