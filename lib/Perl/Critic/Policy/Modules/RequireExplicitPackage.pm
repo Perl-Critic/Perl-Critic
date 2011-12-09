@@ -37,6 +37,12 @@ sub supported_parameters {
             description    => q{Allow the specified modules to be imported outside a package},
             behavior       => 'string list',
         },
+        {
+            name           => 'allow_perl_version',
+            description    => q{Allow the specification of a Perl version outside a package},
+            default_string => '0',
+            behavior       => 'boolean',
+        },
     );
 }
 
@@ -95,6 +101,9 @@ sub _is_statement_of_interest {
     if ( $elem->isa( 'PPI::Statement::Include' ) ) {
         if ( my $module = $elem->module() ) {
             $self->{_allow_import_of}{$module}
+                and return $FALSE;
+        } elsif ( $elem->version() ) {
+            $self->{_allow_perl_version}
                 and return $FALSE;
         }
     }
@@ -161,6 +170,13 @@ following to your F<.perlcriticrc> file
 
 The C<allow_import_of> configuration option takes multiple module names,
 separated by spaces.
+
+It may also be desirable to allow a version of Perl to be specified
+before the package declaration, e.g. C<use 5.010;>. To allow this, add
+the following to your F<.perlcriticrc> file
+
+    [Modules::RequireExplicitPackage]
+    allow_perl_version = 1
 
 
 =head1 IMPORTANT CHANGES
