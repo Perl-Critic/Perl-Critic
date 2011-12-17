@@ -14,9 +14,6 @@ Next release, whenever it is:
     * Modules::RequireExplicitPackage now has configuraion option
       allow_import_of, to allow the import of specified modules before
       the package statement. RT #72660.
-    * Modules::RequireExplicitPackage now has configuraion option
-      allow_perl_version, to allow the specification of a Perl version
-      before the package statement.
     * RegularExpressions::ProhibitEnumeratedClasses no longer thinks
       that [A-Za-z_] matches \w. RT #69322.
     * RegularExpressions::ProhibitUnusedCaptures now skips the first
