@@ -3,7 +3,7 @@ package Perl::Critic::Policy::Variables::ProhibitAugmentedAssignmentInDeclaratio
 use 5.006001;
 use strict;
 use warnings;
-use List::MoreUtils qw( firstval );
+use List::MoreUtils qw{ firstval };
 use Readonly;
 
 use Perl::Critic::Utils qw{ :severities :data_conversion };
@@ -35,7 +35,7 @@ sub violates {
     # Other operators in the statement, e.g. the ',' in "my ( $a, $b ) = ();",
     # as assumed to never be immediate children.
 
-    my $found = List::MoreUtils::firstval { $_->isa('PPI::Token::Operator') } $elem->children();
+    my $found = firstval { $_->isa('PPI::Token::Operator') } $elem->children();
     if ( $found ) {
         my $op = $found->content();
         if ( !exists $augmented_assignments{ $op } ) {
