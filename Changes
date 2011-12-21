@@ -1,5 +1,9 @@
 Next release, whenever it is:
 
+    New Policies:
+    * Variables::ProhibitAugmentedAssignmentInDeclaration reports
+      constructs like 'my $x += 1'. Contributed by Mike O'Regan
+
     Policy Changes:
     * BuiltinFunctions::ProhibitLvalueSubstr: Add explicit 'use version'.
       RT #68498.

@@ -1,0 +1,136 @@
+## name Normal assigment ok
+## failures 0
+## cut
+
+my $foo = 0;
+my @bar = ( 'x', 'y', 'z' );
+
+#-----------------------------------------------------------------------------
+
+## name Normal assigment with operators ok
+## failures 0
+## cut
+
+my $foo = 0+0;
+my @bar = ( 'x', 'y', 'z' );
+my $baz = { my $x = 1; $x += 1; $x /= 1; }
+my ( $a, $b ) = ( 0, 0 );
+
+#-----------------------------------------------------------------------------
+
+## name Real-life regression tests
+## failures 0
+## cut
+
+my $exception_class = ($exception_class_for{$class} ||= $class->exception_class);
+my $exception_class = $exception_class_for{$class} ||= $class->exception_class;
+my $feature = ${*$ftp}{net_ftp_feature} ||= do { my @feat; @feat = map { /^\s+(.*\S)/ } $ftp->message if $ftp->_FEAT; \@feat; };
+my $tests = $self->{tests} ||= {};
+my $attr = $_[0]->{A}->{$attrName} ||= new XML::XQL::DirAttr (Parent => $self, Name => $attrName);
+
+
+#-----------------------------------------------------------------------------
+
+## name Scalar augmented assignment
+## failures 64
+## cut
+
+my $foo **=  0;
+my $foo  +=  0;
+my $foo  -=  0;
+my $foo  .=  0;
+my $foo  *=  0;
+my $foo  /=  0;
+my $foo  %=  0;
+my $foo  x=  0;
+my $foo  &=  0;
+my $foo  |=  0;
+my $foo  ^=  0;
+my $foo  <<= 0;
+my $foo  >>= 0;
+my $foo  &&= 0;
+my $foo  ||= 0;
+my $foo  //= 0;
+
+local $foo **=  0;
+local $foo  +=  0;
+local $foo  -=  0;
+local $foo  .=  0;
+local $foo  *=  0;
+local $foo  /=  0;
+local $foo  %=  0;
+local $foo  x=  0;
+local $foo  &=  0;
+local $foo  |=  0;
+local $foo  ^=  0;
+local $foo  <<= 0;
+local $foo  >>= 0;
+local $foo  &&= 0;
+local $foo  ||= 0;
+local $foo  //= 0;
+
+our $foo **=  0;
+our $foo  +=  0;
+our $foo  -=  0;
+our $foo  .=  0;
+our $foo  *=  0;
+our $foo  /=  0;
+our $foo  %=  0;
+our $foo  x=  0;
+our $foo  &=  0;
+our $foo  |=  0;
+our $foo  ^=  0;
+our $foo  <<= 0;
+our $foo  >>= 0;
+our $foo  &&= 0;
+our $foo  ||= 0;
+our $foo  //= 0;
+
+state $foo **=  0;
+state $foo  +=  0;
+state $foo  -=  0;
+state $foo  .=  0;
+state $foo  *=  0;
+state $foo  /=  0;
+state $foo  %=  0;
+state $foo  x=  0;
+state $foo  &=  0;
+state $foo  |=  0;
+state $foo  ^=  0;
+state $foo  <<= 0;
+state $foo  >>= 0;
+state $foo  &&= 0;
+state $foo  ||= 0;
+state $foo  //= 0;
+
+#-----------------------------------------------------------------------------
+
+## name Real-life examples
+## failures 8
+## cut
+
+local $Carp::CarpLevel += $level;
+local $Carp::CarpLevel += ($lvl + 1);
+*$func = sub {  local $Carp::CarpLevel += 2 if grep { $_ eq $func } @EXPORT_OK;
+my $name .= $param->value('Name') ;
+my $curr += ord( lc($char) ) - ord('a') + 1;
+my $port ||= $port_memoized || $ENV{APACHE_TEST_PORT} || $self->{vars}{port} || DEFAULT_PORT;
+my $output .= '<?' . $_[0]->getNodeName;
+my $data .= &stripzerobytes(inet_aton($self->address()));
+
+
+##############################################################################
+#      $URL: http://guest@perlcritic.tigris.org/svn/perlcritic/trunk/distributions/Perl-Critic/t/Variables/ProhibitConditionalDeclarations.run $
+#     $Date: 2009-01-24 19:44:43 -0600 (Sat, 24 Jan 2009) $
+#   $Author: clonezone $
+# $Revision: 3059 $
+##############################################################################
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab shiftround :
