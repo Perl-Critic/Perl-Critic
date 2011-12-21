@@ -120,10 +120,10 @@ my $data .= &stripzerobytes(inet_aton($self->address()));
 
 
 ##############################################################################
-#      $URL: http://guest@perlcritic.tigris.org/svn/perlcritic/trunk/distributions/Perl-Critic/t/Variables/ProhibitConditionalDeclarations.run $
-#     $Date: 2009-01-24 19:44:43 -0600 (Sat, 24 Jan 2009) $
-#   $Author: clonezone $
-# $Revision: 3059 $
+#      $URL$
+#     $Date$
+#   $Author$
+# $Revision$
 ##############################################################################
 
 # Local Variables:
