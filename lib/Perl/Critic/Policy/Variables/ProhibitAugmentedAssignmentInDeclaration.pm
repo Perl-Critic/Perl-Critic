@@ -21,7 +21,7 @@ our $VERSION = '1.117';
 #-----------------------------------------------------------------------------
 
 Readonly::Scalar my $DESC => q{Augmented assignment operator '%s' used in declaration};
-Readonly::Scalar my $EXPL => q{Use simple assignment when intializing variables};
+Readonly::Scalar my $EXPL => q{Use simple assignment when initializing variables};
 
 #-----------------------------------------------------------------------------
 
