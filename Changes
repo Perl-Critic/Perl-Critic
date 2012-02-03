@@ -1,3 +1,10 @@
+Next version, whenever
+
+    Policy Changes:
+    * TestingAndDebugging::ProhibitNoWarnings: Correct the parse of the
+      'no warnings' statement, so that 'no warnings "qw"' is recognized
+      as supressing just 'qw' warnings. RT #74647.
+
 [1.117] Released on 2011-12-21
 
     HAPPY HOLIDAYS!

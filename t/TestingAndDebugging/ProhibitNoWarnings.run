@@ -117,6 +117,16 @@ no warnings qw< uninitialized glob >;
 
 #-----------------------------------------------------------------------------
 
+## name allow_with_category_restriction, category qw. RT #74647,
+## failures 0
+## parms { allow_with_category_restriction => 1 }
+## cut
+
+no warnings 'qw';   # Yes, 'qw' is an actual warnings category.
+no warnings ( foo => "bar" );
+
+#-----------------------------------------------------------------------------
+
 ##############################################################################
 #      $URL$
 #     $Date$
