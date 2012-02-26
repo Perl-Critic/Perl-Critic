@@ -80,7 +80,6 @@ my $builder = Perl::Critic::Module::Build->new(
             Debian_CPANTS.txt
             Makefile
             Makefile.old
-            MANIFEST
             MANIFEST.bak
             META.json
             META.yml
