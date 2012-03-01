@@ -23,7 +23,7 @@ our $VERSION = '1.117';
 
 Readonly::Array my @ALLOW => qw( import AUTOLOAD DESTROY );
 Readonly::Hash my %ALLOW => hashify( @ALLOW );
-Readonly::Scalar my $DESC  => q{Subroutine name is a homonym for builtin %s};
+Readonly::Scalar my $DESC  => q{Subroutine name is a homonym for builtin %s %s};
 Readonly::Scalar my $EXPL  => [177];
 
 #-----------------------------------------------------------------------------
@@ -51,7 +51,7 @@ sub violates {
         return;    #ok!
     }
 
-    my $desc = sprintf $DESC, $homonym_type;
+    my $desc = sprintf $DESC, $homonym_type, $elem->name();
     return $self->violation($desc, $EXPL, $elem);
 }
 
