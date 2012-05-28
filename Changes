@@ -5,6 +5,11 @@ Next version, whenever
       'no warnings' statement, so that 'no warnings "qw"' is recognized
       as supressing just 'qw' warnings. RT #74647.
 
+    Other Changes:
+    * Make all unescaped literal "{" characters in regexps into
+      character classes. These are deprecated, and became noisy with
+      Perl 5.17.0.  RT #77510.
+
 [1.117] Released on 2011-12-21
 
     HAPPY HOLIDAYS!
