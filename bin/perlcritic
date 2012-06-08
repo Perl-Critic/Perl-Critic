@@ -917,12 +917,12 @@ installed.  Free trial copies of Komodo can be obtained from the ActiveState
 website at L<http://www.activestate.com>.
 
 
-=head2 PDK
+=head2 ActivePerl
 
-ActiveState also makes a Perl Development Kit (PDK).  Starting with version 8,
-the PDK includes a very slick graphical interface for configuring and running
-Perl-Critic.   Free trial copies of the PDK can be obtained from the ActiveState
-website at L<http://www.activestate.com>.
+ActivePerl includes a very slick graphical interface for configuring and
+running Perl-Critic called C<perlcritic-gui>.  A free community edition of
+ActivePerl can be obtained from the ActiveState website at
+L<http://www.activestate.com>.
 
 
 =head1 EXIT STATUS
@@ -1012,9 +1012,9 @@ modules known to the development team:
 
 L<Task::Perl::Critic|Task::Perl::Critic>
 
-Also, the Perl Development Kit (PDK 8.0) from ActiveState includes
-a very slick graphical interface to Perl-Critic.  For details,
-go to L<http://www.activestate.com/perl_dev_kit>
+Also, ActivePerl includes a very slick graphical interface to Perl-Critic
+called C<perlcritic-gui>.  You can get a free community edition of ActivePerl
+from L<http://www.activestate.com>.
 
 =head1 BUGS
 
