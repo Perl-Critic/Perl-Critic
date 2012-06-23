@@ -1,6 +1,8 @@
 Next version, whenever
 
     Policy Changes:
+    * CodeLayout::RequireTidyCode: Revise to work with incompatible
+      changes in Perl::Tidy 20120619. RT #77977.
     * TestingAndDebugging::ProhibitNoWarnings: Correct the parse of the
       'no warnings' statement, so that 'no warnings "qw"' is recognized
       as supressing just 'qw' warnings. RT #74647.

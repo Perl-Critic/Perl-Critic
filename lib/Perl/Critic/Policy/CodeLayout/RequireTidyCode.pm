@@ -12,6 +12,7 @@ use strict;
 use warnings;
 
 use English qw(-no_match_vars);
+use IO::String qw< >;
 use Readonly;
 
 use Perl::Tidy qw< >;
@@ -49,7 +50,8 @@ sub initialize_if_enabled {
 
     # Set configuration if defined
     if (defined $self->{_perltidyrc} && $self->{_perltidyrc} eq $EMPTY) {
-        $self->{_perltidyrc} = \$EMPTY;
+        my $rc = $EMPTY;
+        $self->{_perltidyrc} = \$rc;
     }
 
     return $TRUE;
@@ -92,10 +94,16 @@ sub violates {
 
     # Trap Perl::Tidy errors, just in case it dies
     my $eval_worked = eval {
+        # Perl::Tidy 20120619 no longer accepts a scalar reference for stdio.
+        my $handle = IO::String->new( $stderr );
+        # Since Perl::Tidy 20120619 modifies $source, we make a copy so
+        # we can get a good comparison. Doing an s/// on $source after the
+        # fact appears not to work with the previous Perl::Tidy.
+        my $source_copy = $source;
         Perl::Tidy::perltidy(
-            source      => \$source,
+            source      => \$source_copy,
             destination => \$dest,
-            stderr      => \$stderr,
+            stderr      => $handle,
             defined $self->{_perltidyrc} ? (perltidyrc => $self->{_perltidyrc}) : (),
        );
        1;
