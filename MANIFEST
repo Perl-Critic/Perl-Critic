@@ -193,6 +193,7 @@ lib/Perl/Critic/PolicyParameter/Behavior/Enumeration.pm
 lib/Perl/Critic/PolicyParameter/Behavior/Integer.pm
 lib/Perl/Critic/PolicyParameter/Behavior/String.pm
 lib/Perl/Critic/PolicyParameter/Behavior/StringList.pm
+lib/Perl/Critic/PolicySummary.pod
 lib/Perl/Critic/ProfilePrototype.pm
 lib/Perl/Critic/Statistics.pm
 lib/Perl/Critic/TestUtils.pm
@@ -212,6 +213,9 @@ lib/Test/Perl/Critic/Policy.pm
 LICENSE
 Makefile.PL
 MANIFEST			This list of files
+META.json
+META.yml
+README
 t/00_modules.t
 t/01_bad_perlcriticrc
 t/01_config.t

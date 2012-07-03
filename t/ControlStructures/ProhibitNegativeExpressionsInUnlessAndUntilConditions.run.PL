@@ -10,7 +10,7 @@ use Carp qw< confess >;
 use Carp qw< confess >;
 use Fatal qw< open close >;
 
-our $VERSION = '1.117';
+our $VERSION = '1.118';
 
 
 

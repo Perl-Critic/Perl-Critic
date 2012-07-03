@@ -17,7 +17,7 @@ use English qw{ -no_match_vars };
 use Perl::Critic::Utils qw{ :severities :classification };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.117';
+our $VERSION = '1.118';
 
 #-----------------------------------------------------------------------------
 

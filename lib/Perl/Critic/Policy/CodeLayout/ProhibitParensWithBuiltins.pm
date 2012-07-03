@@ -19,7 +19,7 @@ use Perl::Critic::Utils qw{
 };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.117';
+our $VERSION = '1.118';
 
 #-----------------------------------------------------------------------------
 
