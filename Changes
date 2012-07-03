@@ -6,6 +6,8 @@
     * TestingAndDebugging::ProhibitNoWarnings: Correct the parse of the
       'no warnings' statement, so that 'no warnings "qw"' is recognized
       as supressing just 'qw' warnings. RT #74647.
+    * Miscellanea::RequireRcsKeywords has been moved to the Perl-Critic-More
+      distribution,  RT #69546
 
     Other Changes:
     * Make all unescaped literal "{" characters in regexps into
