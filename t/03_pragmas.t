@@ -33,7 +33,6 @@ my $profile = {
     '-ErrorHandling::RequireCheckingReturnValueOfEval'           => {},
     '-Miscellanea::ProhibitUnrestrictedNoCritic'                 => {},
     '-Miscellanea::ProhibitUselessNoCritic'                      => {},
-    '-Miscellanea::RequireRcsKeywords'                           => {},
     '-ValuesAndExpressions::ProhibitMagicNumbers'                => {},
     '-Variables::ProhibitReusedNames'                            => {},
 };
