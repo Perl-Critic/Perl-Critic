@@ -26,17 +26,17 @@ our $VERSION = '1.118';
 # Create profile from hash
 
 {
-    my %policy_params = (keywords => 'Revision');
+    my %policy_params = (max_length => '40');
     my %profile_hash = ( '-NamingConventions::Capitalization' => {},
-                         'Miscellanea::RequireRcsKeywords' => \%policy_params );
+                         'ValuesAndExpressions::RestrictLongStrings' => \%policy_params );
 
     my $up = Perl::Critic::UserProfile->new( -profile => \%profile_hash );
 
     # Using short policy names
     is(
-        $up->policy_is_enabled('Miscellanea::RequireRcsKeywords'),
+        $up->policy_is_enabled('ValuesAndExpressions::RestrictLongStrings'),
         1,
-        'Miscellanea::RequireRcsKeywords is enabled.',
+        'ValuesAndExpressions::RestrictLongStrings is enabled.',
     );
     is(
         $up->policy_is_disabled('NamingConventions::Capitalization'),
@@ -44,16 +44,16 @@ our $VERSION = '1.118';
         'NamingConventions::Capitalization is disabled.',
     );
     is_deeply(
-        $up->raw_policy_params('Miscellanea::RequireRcsKeywords'),
+        $up->raw_policy_params('ValuesAndExpressions::RestrictLongStrings'),
         \%policy_params,
-        'Miscellanea::RequireRcsKeywords got the correct configuration.',
+        'ValuesAndExpressions::RestrictLongStrings got the correct configuration.',
     );
 
     # Now using long policy names
     is(
-        $up->policy_is_enabled('Perl::Critic::Policy::Miscellanea::RequireRcsKeywords'),
+        $up->policy_is_enabled('Perl::Critic::Policy::ValuesAndExpressions::RestrictLongStrings'),
         1,
-        'Perl::Critic::Policy::Miscellanea::RequireRcsKeywords is enabled.',
+        'Perl::Critic::Policy::ValuesAndExpressions::RestrictLongStrings is enabled.',
     );
     is(
         $up->policy_is_disabled('Perl::Critic::Policy::NamingConventions::Capitalization'),
@@ -61,9 +61,9 @@ our $VERSION = '1.118';
         'Perl::Critic::Policy::NamingConventions::Capitalization is disabled.',
     );
     is_deeply(
-        $up->raw_policy_params('Perl::Critic::Policy::Miscellanea::RequireRcsKeywords'),
+        $up->raw_policy_params('Perl::Critic::Policy::ValuesAndExpressions::RestrictLongStrings'),
         \%policy_params,
-        'Perl::Critic::Policy::Miscellanea::RequireRcsKeywords got the correct configuration.',
+        'Perl::Critic::Policy::ValuesAndExpressions::RestrictLongStrings got the correct configuration.',
     );
 
     # Using bogus policy names
@@ -88,10 +88,10 @@ our $VERSION = '1.118';
 # Create profile from array
 
 {
-    my %policy_params = (keywords => 'Revision');
+    my %policy_params = (max_length => 40);
     my @profile_array = ( q{ [-NamingConventions::Capitalization] },
-                          q{ [Miscellanea::RequireRcsKeywords]           },
-                          q{ keywords = Revision                         },
+                          q{ [ValuesAndExpressions::RestrictLongStrings]           },
+                          q{ max_length = 40                         },
     );
 
 
@@ -99,9 +99,9 @@ our $VERSION = '1.118';
 
     # Now using long policy names
     is(
-        $up->policy_is_enabled('Miscellanea::RequireRcsKeywords'),
+        $up->policy_is_enabled('ValuesAndExpressions::RestrictLongStrings'),
         1,
-        'Miscellanea::RequireRcsKeywords is enabled.',
+        'ValuesAndExpressions::RestrictLongStrings is enabled.',
     );
     is(
         $up->policy_is_disabled('NamingConventions::Capitalization'),
@@ -109,16 +109,16 @@ our $VERSION = '1.118';
         'NamingConventions::Capitalization is disabled.',
     );
     is_deeply(
-        $up->raw_policy_params('Miscellanea::RequireRcsKeywords'),
+        $up->raw_policy_params('ValuesAndExpressions::RestrictLongStrings'),
         \%policy_params,
-        'Miscellanea::RequireRcsKeywords got the correct configuration.',
+        'ValuesAndExpressions::RestrictLongStrings got the correct configuration.',
     );
 
     # Now using long policy names
     is(
-        $up->policy_is_enabled('Perl::Critic::Policy::Miscellanea::RequireRcsKeywords'),
+        $up->policy_is_enabled('Perl::Critic::Policy::ValuesAndExpressions::RestrictLongStrings'),
         1,
-        'Perl::Critic::Policy::Miscellanea::RequireRcsKeywords is enabled.',
+        'Perl::Critic::Policy::ValuesAndExpressions::RestrictLongStrings is enabled.',
     );
     is(
         $up->policy_is_disabled('Perl::Critic::Policy::NamingConventions::Capitalization'),
@@ -126,9 +126,9 @@ our $VERSION = '1.118';
         'Perl::Critic::Policy::NamingConventions::Capitalization is disabled.',
     );
     is_deeply(
-        $up->raw_policy_params('Perl::Critic::Policy::Miscellanea::RequireRcsKeywords'),
+        $up->raw_policy_params('Perl::Critic::Policy::ValuesAndExpressions::RestrictLongStrings'),
         \%policy_params,
-        'Perl::Critic::Policy::Miscellanea::RequireRcsKeywords got the correct configuration.',
+        'Perl::Critic::Policy::ValuesAndExpressions::RestrictLongStrings got the correct configuration.',
     );
 
     # Using bogus policy names
@@ -153,20 +153,20 @@ our $VERSION = '1.118';
 # Create profile from string
 
 {
-    my %policy_params = (keywords => 'Revision');
+    my %policy_params = (max_length => 40);
     my $profile_string = <<'END_PROFILE';
 [-NamingConventions::Capitalization]
-[Miscellanea::RequireRcsKeywords]
-keywords = Revision
+[ValuesAndExpressions::RestrictLongStrings]
+max_length = 40
 END_PROFILE
 
     my $up = Perl::Critic::UserProfile->new( -profile => \$profile_string );
 
     # Now using long policy names
     is(
-        $up->policy_is_enabled('Miscellanea::RequireRcsKeywords'),
+        $up->policy_is_enabled('ValuesAndExpressions::RestrictLongStrings'),
         1,
-        'Miscellanea::RequireRcsKeywords is enabled.',
+        'ValuesAndExpressions::RestrictLongStrings is enabled.',
     );
     is(
         $up->policy_is_disabled('NamingConventions::Capitalization'),
@@ -174,16 +174,16 @@ END_PROFILE
         'NamingConventions::Capitalization is disabled.',
     );
     is_deeply(
-        $up->raw_policy_params('Miscellanea::RequireRcsKeywords'),
+        $up->raw_policy_params('ValuesAndExpressions::RestrictLongStrings'),
         \%policy_params,
-        'Miscellanea::RequireRcsKeywords got the correct configuration.',
+        'ValuesAndExpressions::RestrictLongStrings got the correct configuration.',
     );
 
     # Now using long policy names
     is(
-        $up->policy_is_enabled('Perl::Critic::Policy::Miscellanea::RequireRcsKeywords'),
+        $up->policy_is_enabled('Perl::Critic::Policy::ValuesAndExpressions::RestrictLongStrings'),
         1,
-        'Perl::Critic::Policy::Miscellanea::RequireRcsKeywords is enabled.',
+        'Perl::Critic::Policy::ValuesAndExpressions::RestrictLongStrings is enabled.',
     );
     is(
         $up->policy_is_disabled('Perl::Critic::Policy::NamingConventions::Capitalization'),
@@ -191,9 +191,9 @@ END_PROFILE
         'Perl::Critic::Policy::NamingConventions::Capitalization is disabled.',
     );
     is_deeply(
-        $up->raw_policy_params('Perl::Critic::Policy::Miscellanea::RequireRcsKeywords'),
+        $up->raw_policy_params('Perl::Critic::Policy::ValuesAndExpressions::RestrictLongStrings'),
         \%policy_params,
-        'Perl::Critic::Policy::Miscellanea::RequireRcsKeywords got the correct configuration.',
+        'Perl::Critic::Policy::ValuesAndExpressions::RestrictLongStrings got the correct configuration.',
     );
 
     # Using bogus policy names
@@ -218,20 +218,20 @@ END_PROFILE
 # Test long policy names
 
 {
-    my %policy_params = (keywords => 'Revision');
+    my %policy_params = (max_length => 40);
     my $long_profile_string = <<'END_PROFILE';
 [-Perl::Critic::Policy::NamingConventions::Capitalization]
-[Perl::Critic::Policy::Miscellanea::RequireRcsKeywords]
-keywords = Revision
+[Perl::Critic::Policy::ValuesAndExpressions::RestrictLongStrings]
+max_length = 40
 END_PROFILE
 
     my $up = Perl::Critic::UserProfile->new( -profile => \$long_profile_string );
 
     # Now using long policy names
     is(
-        $up->policy_is_enabled('Miscellanea::RequireRcsKeywords'),
+        $up->policy_is_enabled('ValuesAndExpressions::RestrictLongStrings'),
         1,
-        'Miscellanea::RequireRcsKeywords is enabled.',
+        'ValuesAndExpressions::RestrictLongStrings is enabled.',
     );
     is(
         $up->policy_is_disabled('NamingConventions::Capitalization'),
@@ -239,16 +239,16 @@ END_PROFILE
         'NamingConventions::Capitalization is disabled.',
     );
     is_deeply(
-        $up->raw_policy_params('Miscellanea::RequireRcsKeywords'),
+        $up->raw_policy_params('ValuesAndExpressions::RestrictLongStrings'),
         \%policy_params,
-        'Miscellanea::RequireRcsKeywords got the correct configuration.',
+        'ValuesAndExpressions::RestrictLongStrings got the correct configuration.',
     );
 
     # Now using long policy names
     is(
-        $up->policy_is_enabled('Perl::Critic::Policy::Miscellanea::RequireRcsKeywords'),
+        $up->policy_is_enabled('Perl::Critic::Policy::ValuesAndExpressions::RestrictLongStrings'),
         1,
-        'Perl::Critic::Policy::Miscellanea::RequireRcsKeywords is enabled.',
+        'Perl::Critic::Policy::ValuesAndExpressions::RestrictLongStrings is enabled.',
     );
     is(
         $up->policy_is_disabled('Perl::Critic::Policy::NamingConventions::Capitalization'),
@@ -256,9 +256,9 @@ END_PROFILE
         'Perl::Critic::Policy::NamingConventions::Capitalization is disabled.',
     );
     is_deeply(
-        $up->raw_policy_params('Perl::Critic::Policy::Miscellanea::RequireRcsKeywords'),
+        $up->raw_policy_params('Perl::Critic::Policy::ValuesAndExpressions::RestrictLongStrings'),
         \%policy_params,
-        'Perl::Critic::Policy::Miscellanea::RequireRcsKeywords got the correct configuration.',
+        'Perl::Critic::Policy::ValuesAndExpressions::RestrictLongStrings got the correct configuration.',
     );
 
     # Using bogus policy names

@@ -258,7 +258,7 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
 
     my %profile = (
         '-NamingConventions::Capitalization' => {},
-        '-Miscellanea::RequireRcsKeywords' => {},
+        '-ValuesAndExpressions::RestrictLongStrings' => {},
     );
 
     my @include = qw(capital RCS);
@@ -416,7 +416,7 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
 {
     my %profile = (
         'NamingConventions::Capitalization' => {},
-        'Miscellanea::RequireRcsKeywords' => {},
+        'ValuesAndExpressions::RestrictLongStrings' => {},
     );
 
     my %pc_config = (-severity => 1, -only => 1, -profile => \%profile);
@@ -533,12 +533,12 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
 {
     my %profile = (
         'NamingConventions::Capitalization' => {},
-        'Miscellanea::RequireRcsKeywords' => {},
+        'ValuesAndExpressions::RestrictLongStrings' => {},
     );
 
-    # Pretend that RequireRcsKeywords is actually unsafe
+    # Pretend that RestrictLongStrings is actually unsafe
     no warnings qw(redefine once);  ## no critic qw(ProhibitNoWarnings)
-    local *Perl::Critic::Policy::Miscellanea::RequireRcsKeywords::is_safe = sub {return 0};
+    local *Perl::Critic::Policy::ValuesAndExpressions::RestrictLongStrings::is_safe = sub {return 0};
 
     my %safe_pc_config = (-severity => 1, -only => 1, -profile => \%profile);
     my @p = Perl::Critic::Config->new( %safe_pc_config )->policies();
@@ -548,7 +548,7 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
     @p = Perl::Critic::Config->new( %unsafe_pc_config )->policies();
     is(scalar @p, 2, 'Also loaded unsafe policies with -allow-unsafe switch');
 
-    my %singular_pc_config = ('-single-policy' => 'RequireRcsKeywords');
+    my %singular_pc_config = ('-single-policy' => 'RestrictLongStrings');
     @p = Perl::Critic::Config->new( %singular_pc_config )->policies();
     is(scalar @p, 1, '-single-policy always loads Policy, even if unsafe');
 }
