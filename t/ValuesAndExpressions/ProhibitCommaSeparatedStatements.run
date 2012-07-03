@@ -225,7 +225,6 @@ my @arr1;
 
 ## name RT #27654 - NKH example 1
 ## failures 0
-## TODO PPI parses this code as a block and not a hash constructor.
 ## cut
 
 return
