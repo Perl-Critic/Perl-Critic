@@ -258,10 +258,10 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
 
     my %profile = (
         '-NamingConventions::Capitalization' => {},
-        '-ValuesAndExpressions::RestrictLongStrings' => {},
+        '-CodeLayout::ProhibitQuotedWordLists' => {},
     );
 
-    my @include = qw(capital RCS);
+    my @include = qw(capital quoted);
     my %pc_args = (
         -profile    => \%profile,
         -severity   => 1,
@@ -416,7 +416,7 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
 {
     my %profile = (
         'NamingConventions::Capitalization' => {},
-        'ValuesAndExpressions::RestrictLongStrings' => {},
+        'CodeLayout::ProhibitQuotedWordLists' => {},
     );
 
     my %pc_config = (-severity => 1, -only => 1, -profile => \%profile);
@@ -533,12 +533,12 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
 {
     my %profile = (
         'NamingConventions::Capitalization' => {},
-        'ValuesAndExpressions::RestrictLongStrings' => {},
+        'CodeLayout::ProhibitQuotedWordLists' => {},
     );
 
-    # Pretend that RestrictLongStrings is actually unsafe
+    # Pretend that ProhibitQuotedWordLists is actually unsafe
     no warnings qw(redefine once);  ## no critic qw(ProhibitNoWarnings)
-    local *Perl::Critic::Policy::ValuesAndExpressions::RestrictLongStrings::is_safe = sub {return 0};
+    local *Perl::Critic::Policy::CodeLayout::ProhibitQuotedWordLists::is_safe = sub {return 0};
 
     my %safe_pc_config = (-severity => 1, -only => 1, -profile => \%profile);
     my @p = Perl::Critic::Config->new( %safe_pc_config )->policies();
@@ -548,7 +548,7 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
     @p = Perl::Critic::Config->new( %unsafe_pc_config )->policies();
     is(scalar @p, 2, 'Also loaded unsafe policies with -allow-unsafe switch');
 
-    my %singular_pc_config = ('-single-policy' => 'RestrictLongStrings');
+    my %singular_pc_config = ('-single-policy' => 'QuotedWordLists');
     @p = Perl::Critic::Config->new( %singular_pc_config )->policies();
     is(scalar @p, 1, '-single-policy always loads Policy, even if unsafe');
 }
