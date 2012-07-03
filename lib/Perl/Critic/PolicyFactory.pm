@@ -78,7 +78,12 @@ sub import {
         }
     }
 
-    # In test mode, only load native policies, not third-party ones
+    # In test mode, only load native policies, not third-party ones.  So this
+    # filters out any policy that was loaded from within a directory called
+    # "blib".  During the ususal "./Build test" process this works fine,
+    # but it doesn't work if you are using prove to test against the code
+    # directly in the lib/ directory.
+
     if ( $test_mode && any {m/\b blib \b/xms} @INC ) {
         @site_policy_names = _modules_from_blib( @site_policy_names );
 
