@@ -7,7 +7,9 @@
 # $Revision$
 ##############################################################################
 
-# Extra self-compliance tests for Policies.
+# Extra self-compliance tests for Policy classes.  This just checks for
+# additional POD sections that we want in every Policy module.  See the
+# 41_perlcriticrc-policies file for the precise configuration.
 
 use strict;
 use warnings;
