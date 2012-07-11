@@ -101,7 +101,6 @@ lib/Perl/Critic/Policy/Miscellanea/ProhibitFormats.pm
 lib/Perl/Critic/Policy/Miscellanea/ProhibitTies.pm
 lib/Perl/Critic/Policy/Miscellanea/ProhibitUnrestrictedNoCritic.pm
 lib/Perl/Critic/Policy/Miscellanea/ProhibitUselessNoCritic.pm
-lib/Perl/Critic/Policy/Miscellanea/RequireRcsKeywords.pm
 lib/Perl/Critic/Policy/Modules/ProhibitAutomaticExportation.pm
 lib/Perl/Critic/Policy/Modules/ProhibitConditionalUseStatements.pm
 lib/Perl/Critic/Policy/Modules/ProhibitEvilModules.pm
@@ -314,7 +313,6 @@ t/InputOutput/RequireEncodingWithUTF8Layer.run
 t/Miscellanea/ProhibitFormats.run
 t/Miscellanea/ProhibitTies.run
 t/Miscellanea/ProhibitUnrestrictedNoCritic.run
-t/Miscellanea/RequireRcsKeywords.run
 t/Modules/ProhibitAutomaticExportation.run
 t/Modules/ProhibitConditionalUseStatements.run
 t/Modules/ProhibitEvilModules.d/modules-no-regular-expressions.txt
