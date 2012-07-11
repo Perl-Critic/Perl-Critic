@@ -23,7 +23,8 @@ use Perl::Critic::TestUtils qw{ starting_points_including_examples };
 # -extra-test-policies option to work.
 use Perl::Critic::PolicyFactory (
     '-test' => 1,
-    '-extra-test-policies' => [ qw{ ErrorHandling::RequireUseOfExceptions } ],
+    '-extra-test-policies' => [ qw{ ErrorHandling::RequireUseOfExceptions
+                                    Miscellanea::RequireRcsKeywords } ],
 );
 
 use Test::More;
