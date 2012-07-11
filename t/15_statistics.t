@@ -83,10 +83,10 @@ my %expected_stats = (
     statements                    => 6,
     statements_other_than_subs    => 5,
     subs                          => 1,
-    total_violations              => 10,
-    violations_per_file           => 10,
-    violations_per_line_of_code   => 2,
-    violations_per_statement      => 2,
+    total_violations              => 7,
+    violations_per_file           => 7,
+    violations_per_line_of_code   => 1.4, # 7 violations / 5 lines
+    violations_per_statement      => 1.4, # 7 violations / 5 lines
 );
 
 my $stats = $critic->statistics();
