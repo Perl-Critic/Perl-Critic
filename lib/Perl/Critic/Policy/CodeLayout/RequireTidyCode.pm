@@ -94,12 +94,23 @@ sub violates {
 
     # Trap Perl::Tidy errors, just in case it dies
     my $eval_worked = eval {
+
         # Perl::Tidy 20120619 no longer accepts a scalar reference for stdio.
         my $handle = IO::String->new( $stderr );
-        # Since Perl::Tidy 20120619 modifies $source, we make a copy so
-        # we can get a good comparison. Doing an s/// on $source after the
-        # fact appears not to work with the previous Perl::Tidy.
+
+        # Begining with version 20120619, Perl::Tidy modifies $source. So we
+        # make a copy so we can get a good comparison after tidying. Doing an
+        # s/// on $source after the fact appears not to work with previous
+        # versions of Perl::Tidy.
         my $source_copy = $source;
+
+        # In version 20120619 (and possibly eariler), Perl::Tidy assigns the
+        # stderr parameter directly to *STDERR.  So when our $stderr goes out
+        # of scope, the handle gets closed.  Subsequent calls to warn() will
+        # then cause a fatal exception.  See RT #78182 for more details.  In
+        # the meantime, we workaround it by localizing STDERR first.
+        local *STDERR = \*STDERR;
+
         Perl::Tidy::perltidy(
             source      => \$source_copy,
             destination => \$dest,
