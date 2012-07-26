@@ -15,7 +15,7 @@ use English q<-no_match_vars>;
 
 our $VERSION = '1.116';
 
-use base qw{ Exporter };
+use Exporter 'import';
 
 our @EXPORT_OK = qw<
     required_module_versions

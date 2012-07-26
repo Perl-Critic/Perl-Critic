@@ -11,7 +11,7 @@ use 5.006001;
 use strict;
 use warnings;
 
-use base 'Exporter';
+use Exporter 'import';
 
 our $VERSION = '1.118';
 

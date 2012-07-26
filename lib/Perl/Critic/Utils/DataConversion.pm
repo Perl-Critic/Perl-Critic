@@ -14,7 +14,7 @@ use Readonly;
 
 use Perl::Critic::Utils qw{ :characters :booleans };
 
-use base 'Exporter';
+use Exporter 'import';
 
 our $VERSION = '1.118';
 

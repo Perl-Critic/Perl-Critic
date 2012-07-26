@@ -13,7 +13,7 @@ use warnings;
 use English qw(-no_match_vars);
 use Readonly;
 
-use base qw{ Exporter };
+use Exporter 'import';
 
 use List::MoreUtils qw(any);
 

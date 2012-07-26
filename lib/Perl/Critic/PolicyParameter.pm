@@ -12,7 +12,7 @@ use strict;
 use warnings;
 use Readonly;
 
-use base 'Exporter';
+use Exporter 'import';
 
 Readonly::Array our @EXPORT_OK => qw{ $NO_DESCRIPTION_AVAILABLE };
 

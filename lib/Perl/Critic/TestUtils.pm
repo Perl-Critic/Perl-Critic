@@ -14,7 +14,7 @@ use warnings;
 use English qw(-no_match_vars);
 use Readonly;
 
-use base 'Exporter';
+use Exporter 'import';
 
 use File::Path ();
 use File::Spec ();

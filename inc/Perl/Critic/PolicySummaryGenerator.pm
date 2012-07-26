@@ -11,7 +11,7 @@ use 5.006001;
 use strict;
 use warnings;
 
-use base qw< Exporter >;
+use Exporter 'import';
 
 use lib qw< blib lib >;
 use Carp qw< confess >;

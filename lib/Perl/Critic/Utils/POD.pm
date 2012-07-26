@@ -22,7 +22,7 @@ use Perl::Critic::Exception::Fatal::Generic qw< throw_generic >;
 use Perl::Critic::Exception::IO qw< throw_io >;
 use Perl::Critic::Utils qw< :characters >;
 
-use base 'Exporter';
+use Exporter 'import';
 
 our $VERSION = '1.118';
 

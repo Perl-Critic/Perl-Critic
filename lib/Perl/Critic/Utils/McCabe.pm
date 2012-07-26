@@ -15,7 +15,7 @@ use Readonly;
 
 use Perl::Critic::Utils qw{ :data_conversion :classification };
 
-use base 'Exporter';
+use Exporter 'import';
 
 #-----------------------------------------------------------------------------
 

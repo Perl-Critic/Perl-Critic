@@ -22,7 +22,7 @@ use Exception::Class (
     },
 );
 
-use base 'Exporter';
+use Exporter 'import';
 
 #-----------------------------------------------------------------------------
 
