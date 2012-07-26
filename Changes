@@ -1,3 +1,9 @@
+[X.XXX] Released on XXXX-XX-XX
+
+     Other Changes:
+     * Modernized our usage of Exporter.  See RT #75300.  
+       Thanks to Olivier Mengué for the patch.
+
 [1.118] Released on 2012-07-10
 
     Policy Changes:
