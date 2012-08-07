@@ -318,7 +318,7 @@ sub element_is_in_lexical_scope_after_statement_containing {
 
     my $parent = $stmt;
     while ( ! $parent->scope() ) {
-        $parent = $stmt->parent()
+        $parent = $parent->parent()
             or return;
     }
 
