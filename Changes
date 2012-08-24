@@ -1,5 +1,8 @@
 [X.XXX] Released on XXXX-XX-XX
 
+     Policy Changes:
+     * Subroutines::RequireArgUnpacking: Most tests of the size of @_
+       are now allowed.  RT #79138
      Other Changes:
      * Modernized our usage of Exporter.  See RT #75300.  
        Thanks to Olivier Mengué for the patch.

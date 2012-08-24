@@ -306,6 +306,123 @@ sub foo {
 
 #-----------------------------------------------------------------------------
 
+## name Allow tests (rt #79138)
+## failures 0
+## cut
+
+sub foo {
+    my ( $self, $arg ) = @_;
+
+    if ( @_ ) {
+        say 'Some arguments';
+    }
+    unless ( ! @_ ) {
+        say 'Some arguments';
+    }
+    unless ( not @_ ) {
+        say 'Some arguments';
+    }
+    say 'Some arguments'
+        if @_;
+    say 'Some arguments'
+        if ( @_ );
+    say 'Some arguments'
+        unless ! @_;
+    say 'Some arguments'
+        unless ( ! @_ );
+    say 'Some arguments'
+        unless not @_;
+    say 'Some arguments'
+        unless ( not @_ );
+    @_
+        and say 'Some arguments';
+    ! @_
+        or say 'Some arguments';
+    not @_
+        or say 'Some arguments';
+
+    unless ( @_ ) {
+        say 'No arguments';
+    }
+    if ( ! @_ ) {
+        say 'No arguments';
+    }
+    if ( not @_ ) {
+        say 'No arguments';
+    }
+    say 'No arguments'
+        unless @_;
+    say 'No arguments'
+        unless ( @_ );
+    say 'No arguments'
+        if ! @_;
+    say 'No arguments'
+        if ( ! @_ );
+    say 'No arguments'
+        if not @_;
+    say 'No arguments'
+        if ( not @_ );
+    @_
+        or say 'No arguments';
+    ! @_
+        and say 'No arguments';
+    not @_
+        and say 'No arguments';
+
+    if ( @_ == 2 ) {
+        say 'Two arguments';
+    }
+    if ( 2 == @_ ) {
+        say 'Two arguments';
+    }
+    @_ == 2
+        and say 'Two arguments';
+    2 == @_
+        and say 'Two arguments';
+    say 'Two arguments'
+        if @_ == 2;
+    say 'Two arguments'
+        if ( @_ == 2 );
+    unless ( @_ != 2 ) {
+        say 'Two arguments';
+    }
+    unless ( 2 != @_ ) {
+        say 'Two arguments';
+    }
+    say 'Two arguments'
+        unless @_ != 2;
+    say 'Two arguments'
+        unless ( @_ != 2 );
+
+    if ( @_ != 2 ) {
+        say 'Not two arguments';
+    }
+    if ( 2 != @_ ) {
+        say 'Not two arguments';
+    }
+    @_ != 2
+        and say 'Not two arguments';
+    2 != @_
+        and say 'Not two arguments';
+    say 'Not two arguments'
+        if @_ != 2;
+    say 'Not two arguments'
+        if ( @_ != 2 );
+    unless ( @_ == 2 ) {
+        say 'Not two arguments';
+    }
+    unless ( 2 == @_ ) {
+        say 'Not two arguments';
+    }
+    say 'Not two arguments'
+        unless @_ == 2;
+    say 'Not two arguments'
+        unless ( @_ == 2 );
+
+}
+
+#-----------------------------------------------------------------------------
+
 ##############################################################################
 #      $URL$
 #     $Date$
