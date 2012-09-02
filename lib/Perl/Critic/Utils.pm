@@ -884,6 +884,7 @@ sub is_in_void_context {
         return if $parent->isa('PPI::Structure::For');
         return if $parent->isa('PPI::Structure::Condition');
         return if $parent->isa('PPI::Structure::Constructor');
+        return if $parent->isa('PPI::Structure::Subscript');
 
         my $grand_parent = $parent->parent();
         if ($grand_parent) {

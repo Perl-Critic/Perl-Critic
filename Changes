@@ -1,6 +1,10 @@
 [X.XXX] Released on XXXX-XX-XX
 
      Policy Changes:
+     * BuiltinFunctions::ProhibitVoidGrep and ::ProhibitVoidMap: grep
+       and map called as functions are now allowed in slice operations.
+       RT #79289
+       Thanks to Wade at Anomaly dot org for the patch.
      * Subroutines::RequireArgUnpacking: Most tests of the size of @_
        are now allowed.  RT #79138
      Other Changes:

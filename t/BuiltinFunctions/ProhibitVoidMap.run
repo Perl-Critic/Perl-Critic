@@ -47,6 +47,19 @@ $self->map('Pennsylvania Ave, Washington, DC');
 
 #-----------------------------------------------------------------------------
 
+## name Subscript map (derived from RT #79289)
+## failures 0
+## cut
+
+my %hash;
+
+delete @hash{ map { uc $_ } keys %hash };
+delete @hash{ map uc( $_ ), keys %hash };
+# This is the form analogous to what failed under RT #79289.
+delete @hash{ map ( uc( $_ ), keys %hash ) };
+
+#-----------------------------------------------------------------------------
+
 ##############################################################################
 #      $URL$
 #     $Date$

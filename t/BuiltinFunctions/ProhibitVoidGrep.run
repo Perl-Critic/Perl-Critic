@@ -48,6 +48,19 @@ grep { spam($_) }
 
 #-----------------------------------------------------------------------------
 
+## name Subscript grep (RT #79289)
+## failures 0
+## cut
+
+my %hash;
+
+delete @hash{ grep { m/ foo /smx } keys %hash };
+delete @hash{ grep m/ foo /smx, keys %hash };
+# The following is the form that was actually failing.
+delete @hash{ grep ( m/ foo /smx, keys %hash ) };
+
+#-----------------------------------------------------------------------------
+
 ##############################################################################
 #      $URL$
 #     $Date$

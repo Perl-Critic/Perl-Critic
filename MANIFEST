@@ -212,6 +212,9 @@ lib/Test/Perl/Critic/Policy.pm
 LICENSE
 Makefile.PL
 MANIFEST			This list of files
+META.json
+META.yml
+README
 t/00_modules.t
 t/01_bad_perlcriticrc
 t/01_config.t
@@ -253,6 +256,7 @@ t/20_policy_pod_spelling.t
 t/20_policy_prohibit_evil_modules.t
 t/20_policy_prohibit_hard_tabs.t
 t/20_policy_prohibit_trailing_whitespace.t
+t/20_policy_prohibit_useless_no_critic.t
 t/20_policy_require_consistent_newlines.t
 t/20_policy_require_tidy_code.t
 t/92_memory_leaks.t
@@ -418,6 +422,3 @@ xt/author/95_kwalitee.t
 xt/author/98_pod_syntax.t
 xt/author/99_pod_coverage.t
 xt/author/generate_without_optional_dependencies_wrappers.PL
-README
-META.yml
-META.json
