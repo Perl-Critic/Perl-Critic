@@ -33,7 +33,7 @@ Readonly::Scalar my $MINIMUM_VERSION => version->new(5.006);
 
 sub supported_parameters { return ()                         }
 sub default_severity     { return $SEVERITY_HIGHEST          }
-sub default_themes       { return qw(core pbp bugs security) }
+sub default_themes       { return qw(core pbp bugs security certrule) }
 sub applies_to           { return 'PPI::Token::Word'         }
 
 #-----------------------------------------------------------------------------

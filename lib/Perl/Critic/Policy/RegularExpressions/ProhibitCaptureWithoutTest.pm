@@ -38,7 +38,7 @@ sub supported_parameters { return (
     );
 }
 sub default_severity     { return $SEVERITY_MEDIUM         }
-sub default_themes       { return qw(core pbp maintenance) }
+sub default_themes       { return qw(core pbp maintenance certrule ) }
 sub applies_to           { return 'PPI::Token::Magic'      }
 
 #-----------------------------------------------------------------------------

@@ -26,7 +26,7 @@ Readonly::Scalar my $EXPL => [ 218 ];
 
 sub supported_parameters { return ()                     }
 sub default_severity     { return $SEVERITY_HIGHEST      }
-sub default_themes       { return qw( core pbp bugs )    }
+sub default_themes       { return qw( core pbp bugs certrule )    }
 sub applies_to           { return 'PPI::Token::Operator' }
 
 #-----------------------------------------------------------------------------
