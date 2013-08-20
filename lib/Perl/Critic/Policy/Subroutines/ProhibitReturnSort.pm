@@ -26,7 +26,7 @@ Readonly::Scalar my $EXPL => q{Behavior is undefined if called in scalar context
 
 sub supported_parameters { return ()                 }
 sub default_severity     { return $SEVERITY_HIGHEST  }
-sub default_themes       { return qw(core bugs)      }
+sub default_themes       { return qw(core bugs certrule )      }
 sub applies_to           { return 'PPI::Token::Word' }
 
 #-----------------------------------------------------------------------------
