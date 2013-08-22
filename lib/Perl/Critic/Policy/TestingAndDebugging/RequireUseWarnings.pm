@@ -44,7 +44,7 @@ sub supported_parameters {
 }
 
 sub default_severity     { return $SEVERITY_HIGH      }
-sub default_themes       { return qw( core pbp bugs ) }
+sub default_themes       { return qw( core pbp bugs certrule ) }
 sub applies_to           { return 'PPI::Document'     }
 
 sub default_maximum_violations_per_document { return 1; }
