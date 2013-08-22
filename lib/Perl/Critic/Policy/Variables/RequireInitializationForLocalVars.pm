@@ -26,7 +26,7 @@ Readonly::Scalar my $EXPL => [ 78 ];
 
 sub supported_parameters { return ()                         }
 sub default_severity     { return $SEVERITY_MEDIUM           }
-sub default_themes       { return qw(core pbp bugs)          }
+sub default_themes       { return qw(core pbp bugs certrec )          }
 sub applies_to           { return 'PPI::Statement::Variable' }
 
 #-----------------------------------------------------------------------------

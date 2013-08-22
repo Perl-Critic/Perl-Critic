@@ -29,7 +29,7 @@ Readonly::Hash my %BOOLEAN_OPERATORS => hashify( qw(&& || ! not or and));
 
 sub supported_parameters { return ()                     }
 sub default_severity     { return $SEVERITY_LOW          }
-sub default_themes       { return qw( core pbp performance ) }
+sub default_themes       { return qw( core pbp performance certrec ) }
 sub applies_to           { return 'PPI::Token::Word'     }
 
 #-----------------------------------------------------------------------------

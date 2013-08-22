@@ -76,7 +76,7 @@ sub supported_parameters {
 }
 
 sub default_severity { return $SEVERITY_HIGHEST  }
-sub default_themes   { return qw(core bugs pbp)  }
+sub default_themes   { return qw(core bugs pbp certrule )  }
 sub applies_to       { return 'PPI::Token::Word' }
 
 #-----------------------------------------------------------------------------

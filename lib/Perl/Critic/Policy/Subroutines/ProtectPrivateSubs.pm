@@ -91,7 +91,7 @@ sub supported_parameters {
 }
 
 sub default_severity     { return $SEVERITY_MEDIUM       }
-sub default_themes       { return qw( core maintenance ) }
+sub default_themes       { return qw( core maintenance certrule ) }
 sub applies_to           { return 'PPI::Token::Word'     }
 
 #-----------------------------------------------------------------------------
