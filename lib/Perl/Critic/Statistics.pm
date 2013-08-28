@@ -360,7 +360,7 @@ reference to a hash keyed by full policy name.
 
 =item C<total_violations()>
 
-The the total number of violations found by this Critic.
+The total number of violations found by this Critic.
 
 
 =item C<statements_other_than_subs()>
