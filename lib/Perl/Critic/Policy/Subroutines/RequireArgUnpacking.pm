@@ -125,7 +125,7 @@ sub violates {
             next MAGIC
                 if $self->_is_delegation( $magic );
 
-            # If we make it this far, it is a violaton
+            # If we make it this far, it is a violation
             return $self->violation( $DESC, $EXPL, $elem );
         }
         if (not $saw_unpack) {
