@@ -50,6 +50,11 @@ WriteMakefile(
                 (map { (ref $_ eq 'ARRAY') ? @{$_} : $_ } values %{ get_PL_files() }),
                 test_wrappers_to_generate(),
     },
+    META_MERGE     => {
+        resources => {
+            repository => 'https://github.com/Perl-Critic/Perl-Critic',
+        },
+    },
 );
 
 sub MY::postamble {
