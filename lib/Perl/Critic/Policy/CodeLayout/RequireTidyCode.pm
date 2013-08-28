@@ -104,7 +104,7 @@ sub violates {
         # versions of Perl::Tidy.
         my $source_copy = $source;
 
-        # In version 20120619 (and possibly eariler), Perl::Tidy assigns the
+        # In version 20120619 (and possibly earlier), Perl::Tidy assigns the
         # stderr parameter directly to *STDERR.  So when our $stderr goes out
         # of scope, the handle gets closed.  Subsequent calls to warn() will
         # then cause a fatal exception.  See RT #78182 for more details.  In
