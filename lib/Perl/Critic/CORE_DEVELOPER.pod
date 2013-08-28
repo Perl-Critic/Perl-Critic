@@ -54,7 +54,7 @@ But that's me talking.
 * Subversion (also known as svn, which is the command name) is a
 version control system. It provides a repository for the code being
 worked on. Developers check out the code into a local directory,
-work on that, and and then commit changes back to the repository.
+work on that, and then commit changes back to the repository.
 Any previous version of the code is available from the repository -
 a bad change can be backed out, though the longer the bad change
 hangs around the harder it may be to deal with.
@@ -180,7 +180,7 @@ following discussion.
 =head2 Implementation
 
 There are several files that must be modified to get your new
-configuation item and/or command line option.
+configuration item and/or command line option.
 
 
 =head3 F<lib/Perl/Critic/Utils/Constants.pm>
@@ -274,7 +274,7 @@ but the accessor for a multi-valued item must return a list:
         return @{ $self->{_new_item} };
     }
 
-Last, you must document the item iteself.
+Last, you must document the item itself.
 
 
 =head3 F<lib/Perl/Critic/ProfilePrototype.pm>
