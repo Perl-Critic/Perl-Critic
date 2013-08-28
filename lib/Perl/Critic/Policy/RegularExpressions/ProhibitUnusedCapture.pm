@@ -240,7 +240,7 @@ sub _is_in_slurpy_array_context {
     # return true is the result of the regexp is passed to a subroutine.
     # doesn't check for array context due to assignment.
 
-    # look backward for explict regex operator
+    # look backward for explicit regex operator
     my $psib = $elem->sprevious_sibling;
     if ($psib && $psib eq q{=~}) {
         # Track back through value

@@ -56,7 +56,7 @@ sub violates {
     return if not is_function_call($elem);
 
     # Scan the enclosing statement for conditional keywords or logical
-    # operators.  If any are found, then this the folowing statements
+    # operators.  If any are found, then this the following statements
     # could _potentially_ be executed, so this policy is satisfied.
 
     # NOTE: When the first operand in an boolean expression is
