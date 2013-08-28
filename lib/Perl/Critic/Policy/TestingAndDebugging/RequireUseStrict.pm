@@ -176,7 +176,7 @@ to 1.
 
 =head1 CONFIGURATION
 
-If you take make use of things like
+If you make use of things like
 L<Moose::Exporter|Moose::Exporter>, you can create your own modules
 that import the L<strict|strict> pragma into the code that is
 C<use>ing them.  There is an option to add to the default set of
