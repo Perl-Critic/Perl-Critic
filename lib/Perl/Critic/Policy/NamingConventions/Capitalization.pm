@@ -387,7 +387,7 @@ sub _variable_capitalization {
     for my $name ( map { $_->symbol() } $elem->symbols() ) {
         if ($elem->type() eq 'local') {
             # Fully qualified names are exempt because we can't be responsible
-            # for other people's sybols.
+            # for other people's symbols.
             next NAME if $name =~ m/$PACKAGE_REGEX/xms;
             next NAME if is_perl_global($name);
 
@@ -511,7 +511,7 @@ sub _foreach_variable_capitalization {
 
     if ($type eq 'local') {
         # Fully qualified names are exempt because we can't be responsible
-        # for other people's sybols.
+        # for other people's symbols.
         return if $name =~ m/$PACKAGE_REGEX/xms;
         return if is_perl_global($name);
 
