@@ -80,7 +80,7 @@ sub _has_test_more {
     # TODO: This method gets called every time violates() is invoked,
     # but it only needs to happen once per document.  Perhaps this
     # policy should just apply to PPI::Document, and then do its own
-    # search for for method calls.  Since Perl::Critic::Document is
+    # search for method calls.  Since Perl::Critic::Document is
     # optimized, this should be pretty fast.
 
     my $includes = $doc->find('PPI::Statement::Include');
