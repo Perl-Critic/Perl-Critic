@@ -85,39 +85,6 @@ sub get_PL_files {
     return \%PL_files;
 }
 
-sub dump_unlisted_or_optional_module_versions {
-    print
-        "\nVersions of optional/unlisted/indirect dependencies:\n\n";
-
-    my @unlisted_modules = (
-        qw<
-        >,
-        keys %{ { recommended_module_versions() } },
-    );
-
-    foreach my $module (sort @unlisted_modules) {
-        my $version;
-
-        if ($module eq 'Readonly::XS') {
-            eval 'use Readonly; use Readonly::XS; $version = $Readonly::XS::VERSION;';
-        }
-        else {
-            eval "use $module; \$version = \$${module}::VERSION;";
-        }
-        if ($EVAL_ERROR) {
-            $version = 'not installed';
-        } elsif (not defined $version) {
-            $version = 'undef';
-        }
-
-        print "    $module = $version\n";
-    }
-
-    print "\n";
-
-    return;
-}
-
 sub emit_tar_warning_if_necessary {
     if ( os_is( qw<Solaris> ) ) {
         print <<'END_OF_TAR_WARNING';
@@ -153,11 +120,6 @@ Various utilities used in assembling Perl::Critic, primary for use by
 
 =over
 
-=item C<recommended_module_versions()>
-
-Returns a hash mapping between recommended (but not required) modules
-for Perl::Critic and the minimum version required of each module,
-
 
 =item C<test_wrappers_to_generate()>
 
@@ -173,14 +135,6 @@ use by L<Module::Build::API/"PL_files"> or
 L<ExtUtils::MakeMaker/"PL_FILES">.  May print to C<STDOUT> messages
 about what it is doing.
 
-
-=item C<dump_unlisted_or_optional_module_versions()>
-
-Prints to C<STDOUT> a list of all the unlisted (e.g. things in core
-like L<Exporter|Exporter>), optional (e.g.
-L<File::Which|File::Which>), or potentially indirect (e.g.
-L<Readonly::XS|Readonly::XS>) dependencies, plus their versions, if
-they're installed.
 
 
 =item C<emit_tar_warning_if_necessary()>
