@@ -43,14 +43,6 @@ my @concrete_exceptions = qw{
     IO
 };
 
-plan tests =>
-        144
-    +   (  9 * scalar @concrete_exceptions  )
-    +   ( 17 * scalar @bundled_policy_names );
-
-# pre-compute for version comparisons
-my $version_string = __PACKAGE__->VERSION;
-
 #-----------------------------------------------------------------------------
 # Test Perl::Critic module interface
 
@@ -64,7 +56,6 @@ can_ok('Perl::Critic', 'policies');
 #Set -profile to avoid messing with .perlcriticrc
 my $critic = Perl::Critic->new( -profile => 'NONE' );
 isa_ok($critic, 'Perl::Critic');
-is($critic->VERSION(), $version_string, 'Perl::Critic version');
 
 #-----------------------------------------------------------------------------
 # Test Perl::Critic::Config module interface
@@ -98,7 +89,6 @@ can_ok('Perl::Critic::Config', 'program_extensions_as_regexes');
 #Set -profile to avoid messing with .perlcriticrc
 my $config = Perl::Critic::Config->new( -profile => 'NONE');
 isa_ok($config, 'Perl::Critic::Config');
-is($config->VERSION(), $version_string, 'Perl::Critic::Config version');
 
 #-----------------------------------------------------------------------------
 # Test Perl::Critic::Config::OptionsProcessor module interface
@@ -127,7 +117,6 @@ can_ok('Perl::Critic::OptionsProcessor', 'program_extensions');
 
 my $processor = Perl::Critic::OptionsProcessor->new();
 isa_ok($processor, 'Perl::Critic::OptionsProcessor');
-is($processor->VERSION(), $version_string, 'Perl::Critic::OptionsProcessor version');
 
 #-----------------------------------------------------------------------------
 # Test Perl::Critic::Policy module interface
@@ -167,7 +156,6 @@ can_ok('Perl::Critic::Policy', 'is_safe');
 {
     my $policy = Perl::Critic::Policy->new();
     isa_ok($policy, 'Perl::Critic::Policy');
-    is($policy->VERSION(), $version_string, 'Perl::Critic::Policy version');
 }
 
 #-----------------------------------------------------------------------------
@@ -192,7 +180,6 @@ my $code = q{print 'Hello World';};
 my $doc = PPI::Document->new(\$code);
 my $viol = Perl::Critic::Violation->new(undef, undef, $doc, undef);
 isa_ok($viol, 'Perl::Critic::Violation');
-is($viol->VERSION(), $version_string, 'Perl::Critic::Violation version');
 
 #-----------------------------------------------------------------------------
 # Test Perl::Critic::UserProfile module interface
@@ -205,7 +192,6 @@ can_ok('Perl::Critic::UserProfile', 'policy_is_enabled');
 
 my $up = Perl::Critic::UserProfile->new();
 isa_ok($up, 'Perl::Critic::UserProfile');
-is($up->VERSION(), $version_string, 'Perl::Critic::UserProfile version');
 
 #-----------------------------------------------------------------------------
 # Test Perl::Critic::PolicyFactory module interface
@@ -219,7 +205,6 @@ can_ok('Perl::Critic::PolicyFactory', 'site_policy_names');
 my $profile = Perl::Critic::UserProfile->new();
 my $factory = Perl::Critic::PolicyFactory->new( -profile => $profile );
 isa_ok($factory, 'Perl::Critic::PolicyFactory');
-is($factory->VERSION(), $version_string, 'Perl::Critic::PolicyFactory version');
 
 #-----------------------------------------------------------------------------
 # Test Perl::Critic::Theme module interface
@@ -232,7 +217,6 @@ can_ok('Perl::Critic::Theme', 'policy_is_thematic');
 
 my $theme = Perl::Critic::Theme->new( -rule => 'foo' );
 isa_ok($theme, 'Perl::Critic::Theme');
-is($theme->VERSION(), $version_string, 'Perl::Critic::Theme version');
 
 #-----------------------------------------------------------------------------
 # Test Perl::Critic::PolicyListing module interface
@@ -243,7 +227,6 @@ can_ok('Perl::Critic::PolicyListing', 'to_string');
 
 my $listing = Perl::Critic::PolicyListing->new();
 isa_ok($listing, 'Perl::Critic::PolicyListing');
-is($listing->VERSION(), $version_string, 'Perl::Critic::PolicyListing version');
 
 #-----------------------------------------------------------------------------
 # Test Perl::Critic::ProfilePrototype module interface
@@ -254,7 +237,6 @@ can_ok('Perl::Critic::ProfilePrototype', 'to_string');
 
 my $prototype = Perl::Critic::ProfilePrototype->new();
 isa_ok($prototype, 'Perl::Critic::ProfilePrototype');
-is($prototype->VERSION(), $version_string, 'Perl::Critic::ProfilePrototype version');
 
 #-----------------------------------------------------------------------------
 # Test Perl::Critic::Command module interface
@@ -279,7 +261,6 @@ can_ok('Perl::Critic::Command', 'run');
 
         my $exception = $class->new();
         isa_ok($exception, $class);
-        is($exception->VERSION(), $version_string, "$class version");
     }
 }
 
@@ -306,7 +287,6 @@ can_ok('Perl::Critic::Command', 'run');
 
         my $policy = $mod->new();
         isa_ok($policy, 'Perl::Critic::Policy');
-        is($policy->VERSION(), $version_string, "Version of $mod");
         ok($policy->is_safe(), "CORE policy $mod is marked safe");
     }
 }
@@ -326,7 +306,9 @@ ok( !critique(), 'Functional style, no args at all');
 ok( !critique(undef, undef), 'Functional style, undef args');
 
 #-----------------------------------------------------------------------------
+done_testing;
 
+#-----------------------------------------------------------------------------
 # ensure we return true if this test is loaded by
 # t/00_modules.t_without_optional_dependencies.t
 1;
