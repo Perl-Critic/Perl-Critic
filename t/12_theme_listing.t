@@ -33,6 +33,8 @@ my $listing = Perl::Critic::ThemeListing->new( -policies => \@policies );
 
 my $expected = <<'END_EXPECTED';
 bugs
+certrec
+certrule
 complexity
 core
 cosmetic

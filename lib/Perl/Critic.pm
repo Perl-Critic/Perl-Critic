@@ -711,7 +711,9 @@ needs.
     --------------------------------------------------------------------------
     core              All policies that ship with Perl::Critic
     pbp               Policies that come directly from "Perl Best Practices"
-    bugs              Policies that prevent or reveal bugs
+    bugs              Policies that that prevent or reveal bugs
+    certrec           Policies that CERT recommends
+    certrule          Policies that CERT considers rules
     maintenance       Policies that affect the long-term health of the code
     cosmetic          Policies that only have a superficial effect
     complexity        Policies that specificaly relate to code complexity

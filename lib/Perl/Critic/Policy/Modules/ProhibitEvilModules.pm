@@ -100,7 +100,7 @@ sub supported_parameters {
 }
 
 sub default_severity  { return $SEVERITY_HIGHEST         }
-sub default_themes    { return qw( core bugs )           }
+sub default_themes    { return qw( core bugs certrule )           }
 sub applies_to        { return 'PPI::Statement::Include' }
 
 #-----------------------------------------------------------------------------

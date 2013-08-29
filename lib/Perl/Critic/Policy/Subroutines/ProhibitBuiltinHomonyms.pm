@@ -30,7 +30,7 @@ Readonly::Scalar my $EXPL  => [177];
 
 sub supported_parameters { return ()                    }
 sub default_severity     { return $SEVERITY_HIGH        }
-sub default_themes       { return qw( core bugs pbp )   }
+sub default_themes       { return qw( core bugs pbp certrule )   }
 sub applies_to           { return 'PPI::Statement::Sub' }
 
 #-----------------------------------------------------------------------------
