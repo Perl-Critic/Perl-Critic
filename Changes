@@ -1,4 +1,4 @@
-[X.XXX] Released on XXXX-XX-XX
+{{$NEXT}}
 
      Policy Changes:
      * BuiltinFunctions::ProhibitVoidGrep and ::ProhibitVoidMap: grep
