@@ -651,7 +651,7 @@ sub _render_policy_docs {
 #-----------------------------------------------------------------------------
 
 sub _display_version {
-    _out "$VERSION\n";
+    _out((__PACKAGE__->VERSION || 'UNKNOWN') . "\n");
     exit $EXIT_SUCCESS;
 }
 
