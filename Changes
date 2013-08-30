@@ -1,15 +1,32 @@
 {{$NEXT}}
 
-     Policy Changes:
-     * BuiltinFunctions::ProhibitVoidGrep and ::ProhibitVoidMap: grep
-       and map called as functions are now allowed in slice operations.
-       RT #79289
-       Thanks to Wade at Anomaly dot org for the patch.
-     * Subroutines::RequireArgUnpacking: Most tests of the size of @_
-       are now allowed.  RT #79138
-     Other Changes:
-     * Modernized our usage of Exporter.  See RT #75300.  
-       Thanks to Olivier Mengué for the patch.
+     [Headlines]
+     
+     - The source code repository for Perl-Critic has been moved to GitHub.
+     The new repository address is https://github.com/Perl-Critic/Perl-Critic
+     We will be migrating all the RT tickets shortly.
+
+     - We have adopted Dist::Zilla.  Some (but not all) of the custom build
+     tools we created have been either eliminated or substituted with the
+     corresponding DZ plugin.
+
+     - All recommended modules are now required.  To simplify the build and
+     ensure the best user experience, all the recommended modules are now
+     required.
+
+     [Policy Changes]
+     
+     - BuiltinFunctions::ProhibitVoidGrep and ::ProhibitVoidMap: grep and map 
+     called as functions are now allowed in slice operations. Fixes RT #79289.  
+     Thanks to Wade at Anomaly dot org for the patch.
+     
+     - Subroutines::RequireArgUnpacking: Most tests of the size of @_ are now 
+     allowed.  Fixes RT #79138.
+
+     [Other Changes]
+
+     - Modernized our usage of Exporter.  Fixes RT #75300.  Thanks to Olivier 
+     Mengué for the patch.
 
 [1.118] Released on 2012-07-10
 
