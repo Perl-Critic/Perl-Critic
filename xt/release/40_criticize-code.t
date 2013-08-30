@@ -69,7 +69,7 @@ foreach my $pkg ( $EMPTY, qw< ::Config ::Policy ::Violation> ) {
 #-----------------------------------------------------------------------------
 # Run critic against all of our own files
 
-my $rcfile = File::Spec->catfile( 'xt', 'author', '40_perlcriticrc-code' );
+my $rcfile = File::Spec->catfile( 'xt', 'release', '40_perlcriticrc-code' );
 Test::Perl::Critic->import( -profile => $rcfile );
 
 all_critic_ok( starting_points_including_examples() );

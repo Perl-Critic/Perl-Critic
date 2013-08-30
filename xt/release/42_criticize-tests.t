@@ -61,7 +61,7 @@ if ( $ENV{PERL_CRITIC_CACHE} ) {
 #-----------------------------------------------------------------------------
 # Run critic against all of our own files
 
-my $rcfile = File::Spec->catfile( 'xt', 'author', '42_perlcriticrc-tests' );
+my $rcfile = File::Spec->catfile( 'xt', 'release', '42_perlcriticrc-tests' );
 Test::Perl::Critic->import( -profile => $rcfile );
 
 all_critic_ok(
