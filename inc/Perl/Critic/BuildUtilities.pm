@@ -79,9 +79,6 @@ my @TARGET_FILES = qw<
 sub get_PL_files {
     my %PL_files = map { ( "$_.PL" => $_ ) } @TARGET_FILES;
 
-    $PL_files{'xt/author/generate_without_optional_dependencies_wrappers.PL'} =
-        [ test_wrappers_to_generate() ];
-
     return \%PL_files;
 }
 

@@ -1,25 +1,33 @@
-#######################################################################
-#      $URL: http://perlcritic.tigris.org/svn/perlcritic/trunk/distributions/common/inc/Perl/Critic/Module/Build/Standard.pm $
-#     $Date: 2011-01-30 14:13:17 -0800 (Sun, 30 Jan 2011) $
-#   $Author: clonezone $
-# $Revision: 4016 $
-########################################################################
-
 package Perl::Critic::Module::Build::Standard;
 
 use 5.006001;
-
 use strict;
 use warnings;
-
-our $VERSION = '1.112_001';
+use base 'Module::Build';
 
 use Carp;
 use English qw< $OS_ERROR -no_match_vars >;
+use Perl::Critic::BuildUtilities qw< get_PL_files test_wrappers_to_generate >;
 
+#-----------------------------------------------------------------------------
 
-use base 'Module::Build';
+sub new {
 
+    my $PL_files = get_PL_files;
+    my @generated_tests = test_wrappers_to_generate;
+
+    # FIXME!
+
+    my %defaults = (
+        dynamic_config      => 1,
+        PL_files            => $PL_files,
+        add_to_cleanup      => [ values %{ $PL_files }, @generated_tests ],
+    );
+
+    return shift->SUPER::new(%defaults, @_);
+}
+
+#-----------------------------------------------------------------------------
 
 sub ACTION_authortest {
     my ($self) = @_;
@@ -30,6 +38,7 @@ sub ACTION_authortest {
     return;
 }
 
+#-----------------------------------------------------------------------------
 
 sub ACTION_authortestcover {
     my ($self) = @_;
@@ -40,6 +49,7 @@ sub ACTION_authortestcover {
     return;
 }
 
+#-----------------------------------------------------------------------------
 
 sub ACTION_distdir {
     my ($self, @arguments) = @_;
@@ -49,6 +59,7 @@ sub ACTION_distdir {
     return $self->SUPER::ACTION_distdir(@arguments);
 }
 
+#-----------------------------------------------------------------------------
 
 sub ACTION_manifest {
     my ($self, @arguments) = @_;
@@ -61,19 +72,7 @@ sub ACTION_manifest {
     return $self->SUPER::ACTION_manifest(@arguments);
 }
 
-
-sub tap_harness_args {
-    my ($self) = @_;
-
-    return $self->_tap_harness_args() if $ENV{RUNNING_UNDER_TEAMCITY};
-    return;
-}
-
-
-sub _tap_harness_args {
-    return {formatter_class => 'TAP::Formatter::TeamCity', merge => 1};
-}
-
+#-----------------------------------------------------------------------------
 
 sub authortest_dependencies {
     my ($self) = @_;
@@ -88,13 +87,10 @@ sub authortest_dependencies {
     return;
 }
 
-
+#-----------------------------------------------------------------------------
 1;
 
-
 __END__
-
-#-----------------------------------------------------------------------------
 
 =pod
 
