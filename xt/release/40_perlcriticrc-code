@@ -24,7 +24,7 @@ strict = 1
 [-CodeLayout::RequireTidyCode]
 
 [Documentation::PodSpelling]
-stop_words_file = xt/author/40_stop_words
+stop_words_file = xt/release/40_stop_words
 
 [Documentation::RequirePodSections]
 lib_sections    = NAME|DESCRIPTION|AUTHOR|COPYRIGHT
