@@ -1,7 +1,7 @@
 {{$NEXT}}
 
      [Headlines]
-     
+
      - The source code repository for Perl-Critic has been moved to GitHub.
      The new repository address is https://github.com/Perl-Critic/Perl-Critic
      We will be migrating all the RT tickets shortly.
@@ -13,6 +13,12 @@
      - All recommended modules are now required.  To simplify the build and
      ensure the best user experience, all the recommended modules are now
      required.
+
+     [New Features]
+
+     - New themes "certrec" and "certrule" have been created which match the CERT
+     guidelines for secure coding.  See https://www.cert.org for details. Thanks 
+     to Kirk Kimmel for implementing.
 
      [Policy Changes]
      
