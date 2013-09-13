@@ -294,7 +294,7 @@ END_PROFILE
     eval { Perl::Critic::UserProfile->new( -profile => 'bogus' ) };
     like(
         $EVAL_ERROR,
-        qr/File [ ] 'bogus' [ ] does [ ] not [ ] exist/xms,
+        qr/Failed [ ] to [ ] open [ ] file [ ] 'bogus' [ ] for [ ] reading: [ ]/xms,
         'Invalid profile path',
     );
 
