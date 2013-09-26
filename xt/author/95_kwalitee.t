@@ -20,7 +20,7 @@ our $VERSION = '1.116';
 
 #-----------------------------------------------------------------------------
 
-use Test::Kwalitee tests => [ qw{ -no_symlinks } ];
+use Test::Kwalitee 1.15 tests => [ qw{ -no_symlinks } ];
 
 # Local Variables:
 #   mode: cperl
