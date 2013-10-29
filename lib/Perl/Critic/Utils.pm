@@ -27,7 +27,7 @@ use Perl::Critic::Utils::PPI qw< is_ppi_expression_or_generic_statement >;
 
 use Exporter 'import';
 
-our $VERSION = '1.118';
+our $VERSION = '1.120';
 
 #-----------------------------------------------------------------------------
 # Exportable symbols here.
@@ -331,7 +331,7 @@ sub hashify {  ## no critic (ArgUnpacking)
 
 sub interpolate {
     my ( $literal ) = @_;
-    return eval "\"$literal\"" or confess $EVAL_ERROR;  ## no critic (StringyEval);
+    return eval "\"$literal\"" || confess $EVAL_ERROR;  ## no critic (StringyEval);
 }
 
 #-----------------------------------------------------------------------------

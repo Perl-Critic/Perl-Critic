@@ -1,4 +1,10 @@
-[X.XXX] Released on XXXX-XX-XX
+[1.119] Released on 2013-09-25
+
+     Bug Fixes:
+     * Tests were failing with Config::Tiny 2.17 or later, due to a
+       change in the error messages produced by that module. 
+       This fixes #16 on Github,  #88679 & #88889 on RT.
+
 
      Policy Changes:
      * BuiltinFunctions::ProhibitVoidGrep and ::ProhibitVoidMap: grep
@@ -7,6 +13,7 @@
        Thanks to Wade at Anomaly dot org for the patch.
      * Subroutines::RequireArgUnpacking: Most tests of the size of @_
        are now allowed.  RT #79138
+
      Other Changes:
      * Modernized our usage of Exporter.  See RT #75300.  
        Thanks to Olivier Mengué for the patch.
@@ -2075,10 +2082,10 @@
     Initial version.
 
 ##############################################################################
-#      $URL$
-#     $Date$
-#   $Author$
-# $Revision$
+#      $URL: http://perlcritic.tigris.org/svn/perlcritic/trunk/distributions/Perl-Critic/Changes $
+#     $Date: 2013-09-25 21:18:04 -0700 (Wed, 25 Sep 2013) $
+#   $Author: thaljef $
+# $Revision: 4169 $
 ##############################################################################
 
 # ex: set ts=8 sts=4 sw=4 tw=78 ft= expandtab shiftround :
