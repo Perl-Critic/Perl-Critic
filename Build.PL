@@ -54,8 +54,8 @@ my $builder = Perl::Critic::Module::Build->new(
     meta_merge          => {
         resources   => {
             homepage    => 'http://perlcritic.com',
-            license     => 'http://dev.perl.org/licenses/',
-            repository  => 'http://guest@perlcritic.tigris.org/svn/perlcritic/trunk/distributions/Perl-Critic/',
+            license     => 'http://dev.perl.org/licenses',
+            repository  => 'http://github.com/Perl-Critic/Perl-Critic',
             MailingList => 'http://perlcritic.tigris.org/servlets/SummarizeList?listName=users',
         },
         no_index        => {
