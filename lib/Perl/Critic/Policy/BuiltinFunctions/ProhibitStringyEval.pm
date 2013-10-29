@@ -18,7 +18,7 @@ use PPI::Document;
 use Perl::Critic::Utils qw{ :booleans :severities :classification :ppi $SCOLON };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.118';
+our $VERSION = '1.120_01';
 
 #-----------------------------------------------------------------------------
 

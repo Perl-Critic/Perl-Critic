@@ -19,7 +19,7 @@ use Readonly;
 use Perl::Critic::Utils qw{ :booleans :characters :severities };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.118';
+our $VERSION = '1.120_01';
 
 #-----------------------------------------------------------------------------
 
