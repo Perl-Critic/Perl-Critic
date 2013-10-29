@@ -52,11 +52,18 @@ my $builder = Perl::Critic::Module::Build->new(
     script_files        => ['bin/perlcritic'],
 
     meta_merge          => {
-        resources   => {
+        resources => {
+            bugtracker  => {
+                web        => 'https://github.com/Perl-Critic/Perl-Critic/issues',
+            },
             homepage    => 'http://perlcritic.com',
             license     => 'http://dev.perl.org/licenses',
-            repository  => 'http://github.com/Perl-Critic/Perl-Critic',
             MailingList => 'http://perlcritic.tigris.org/servlets/SummarizeList?listName=users',
+            repository  => {
+                type       => 'git',
+                url        => 'git://github.com/Perl-Critic/Perl-Critic.git',
+                web        => 'https://github.com/Perl-Critic/Perl-Critic'
+            },
         },
         no_index        => {
             file        => [
