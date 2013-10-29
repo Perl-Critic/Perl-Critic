@@ -212,9 +212,6 @@ lib/Test/Perl/Critic/Policy.pm
 LICENSE
 Makefile.PL
 MANIFEST			This list of files
-META.json
-META.yml
-README
 t/00_modules.t
 t/01_bad_perlcriticrc
 t/01_config.t
@@ -256,7 +253,6 @@ t/20_policy_pod_spelling.t
 t/20_policy_prohibit_evil_modules.t
 t/20_policy_prohibit_hard_tabs.t
 t/20_policy_prohibit_trailing_whitespace.t
-t/20_policy_prohibit_useless_no_critic.t
 t/20_policy_require_consistent_newlines.t
 t/20_policy_require_tidy_code.t
 t/92_memory_leaks.t
@@ -422,3 +418,23 @@ xt/author/95_kwalitee.t
 xt/author/98_pod_syntax.t
 xt/author/99_pod_coverage.t
 xt/author/generate_without_optional_dependencies_wrappers.PL
+xt/release/40_criticize-code.t
+xt/release/40_perlcriticrc-code
+xt/release/40_stop_words
+xt/release/41_criticize-policies.t
+xt/release/41_perlcriticrc-policies
+xt/release/42_criticize-tests.t
+xt/release/42_perlcriticrc-tests
+xt/release/43_criticize-run-files.t
+xt/release/43_perlcriticrc-run-files
+xt/release/80_policysummary.t
+xt/release/81_ppi_problems.t
+xt/release/92_memory_leaks.t
+xt/release/93_version.t
+xt/release/94_includes.t
+xt/release/95_kwalitee.t
+xt/release/98_pod_syntax.t
+xt/release/99_pod_coverage.t
+README
+META.yml
+META.json
