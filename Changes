@@ -1,36 +1,53 @@
 Revision history for Perl module Perl::Critic
 
+1.121 2013-11-02
+
+    [New Features]
+    * Added new themes based on CERT guidelines. Thanks Kirk Kimmel.
+
+    [Administrative Changes]
+    * The source code repository for Perl-Critic has been moved to GitHub
+      at http://github.com/Perl-Critc/Perl-Critic.  All ticekts from the
+      RT queue have also been moved there.  Please use GitHub for submitting
+      any new bugs or corresponding about existing ones.  Huge thanks to
+      Tim Bunce, Andreas Marienborg, fREW Schmidt, and Graham Knop for
+      making this happen. 
+
+    [Miscellanea]
+    * This change log was reformatted to comply with CPAN::Changes::Spec,
+      courtesy of Neil Bowers as part of a quest on http://questhub.io.
+      Does your change log comply?
+
+
 1.120_01 2013-10-29 *DEVELOPER RELEASE*
 
-      * Added new themes based on CERT guidelines. Thanks Kirk Kimmel.
-      * First release from the new GitHub repository.
+    * Changes summarized above
 
 
 1.120 2013-10-25
 
-     [Bug Fixes]
-     * Corrected "Possible precedence issue with control flow operator" 
-       warning.  This fixes RT #88866
+    [Bug Fixes]
+    * Corrected "Possible precedence issue with control flow operator" 
+      warning.  This fixes RT #88866
 
 
 1.119 2013-09-25
 
-     [Bug Fixes]
-     * Tests were failing with Config::Tiny 2.17 or later, due to a
-       change in the error messages produced by that module. 
-       This fixes #16 on Github,  #88679 & #88889 on RT.
+    [Bug Fixes]
+    * Tests were failing with Config::Tiny 2.17 or later, due to a
+      change in the error messages produced by that module. 
+      This fixes #16 on Github,  #88679 & #88889 on RT.
 
-     [Policy Changes]
-     * BuiltinFunctions::ProhibitVoidGrep and ::ProhibitVoidMap: grep
-       and map called as functions are now allowed in slice operations.
-       RT #79289
-       Thanks to Wade at Anomaly dot org for the patch.
-     * Subroutines::RequireArgUnpacking: Most tests of the size of @_
-       are now allowed.  RT #79138
+    [Policy Changes]
+    * BuiltinFunctions::ProhibitVoidGrep and ::ProhibitVoidMap: grep
+      and map called as functions are now allowed in slice operations.
+      RT #79289.  Thanks to Wade at Anomaly dot org for the patch.
+    * Subroutines::RequireArgUnpacking: Most tests of the size of @_
+      are now allowed.  RT #79138
 
-     [Other Changes]
-     * Modernized our usage of Exporter.  See RT #75300.  
-       Thanks to Olivier Mengué for the patch.
+    [Other Changes]
+    * Modernized our usage of Exporter.  See RT #75300.  Thanks 
+      to Olivier Mengué for the patch.
 
 
 1.118 2012-07-10
