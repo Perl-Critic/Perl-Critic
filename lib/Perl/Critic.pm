@@ -980,7 +980,7 @@ L<Task::Perl::Critic::IncludingOptionalDependencies|Task::Perl::Critic::Includin
 Scrutinizing Perl code is hard for humans, let alone machines.  If you
 find any bugs, particularly false-positives or false-negatives from a
 Perl::Critic::Policy, please submit them to
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Perl-Critic>.  Thanks.
+L<https://github.com/Perl-Critic/Perl-Critic/issues>.  Thanks.
 
 Most policies will produce false-negatives if they cannot understand a
 particular block of code.
