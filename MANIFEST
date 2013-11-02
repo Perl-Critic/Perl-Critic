@@ -192,6 +192,7 @@ lib/Perl/Critic/PolicyParameter/Behavior/Enumeration.pm
 lib/Perl/Critic/PolicyParameter/Behavior/Integer.pm
 lib/Perl/Critic/PolicyParameter/Behavior/String.pm
 lib/Perl/Critic/PolicyParameter/Behavior/StringList.pm
+lib/Perl/Critic/PolicySummary.pod
 lib/Perl/Critic/ProfilePrototype.pm
 lib/Perl/Critic/Statistics.pm
 lib/Perl/Critic/TestUtils.pm
@@ -417,3 +418,6 @@ xt/author/95_kwalitee.t
 xt/author/98_pod_syntax.t
 xt/author/99_pod_coverage.t
 xt/author/generate_without_optional_dependencies_wrappers.PL
+README
+META.yml
+META.json

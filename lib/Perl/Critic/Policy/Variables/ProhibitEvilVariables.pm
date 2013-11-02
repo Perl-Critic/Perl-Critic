@@ -22,7 +22,7 @@ use Perl::Critic::Utils::DataConversion qw{ dor };
 
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.120_01';
+our $VERSION = '1.121';
 
 #-----------------------------------------------------------------------------
 

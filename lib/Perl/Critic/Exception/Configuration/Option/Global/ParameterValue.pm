@@ -15,7 +15,7 @@ use Readonly;
 
 use Perl::Critic::Utils qw{ :characters };
 
-our $VERSION = '1.120_01';
+our $VERSION = '1.121';
 
 #-----------------------------------------------------------------------------
 
