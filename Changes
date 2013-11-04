@@ -7,7 +7,7 @@ Revision history for Perl module Perl::Critic
 
     [Administrative Changes]
     * The source code repository for Perl-Critic has been moved to GitHub
-      at http://github.com/Perl-Critic/Perl-Critic.  All ticekts from the
+      at http://github.com/Perl-Critic/Perl-Critic.  All tickets from the
       RT queue have also been moved there.  Please use GitHub for submitting
       any new bugs or corresponding about existing ones.  Huge thanks to
       Tim Bunce, Andreas Marienborg, fREW Schmidt, and Graham Knop for
@@ -71,7 +71,7 @@ Revision history for Perl module Perl::Critic
 
     [New Policies]
     * Variables::ProhibitAugmentedAssignmentInDeclaration reports
-      constructs like 'my $x += 1'. Contributed by Mike O'Regan
+      constructs like 'my $x += 1'. Contributed by Mike O'Regan.
 
     [Policy Changes]
     * BuiltinFunctions::ProhibitLvalueSubstr: Add explicit 'use version'.
