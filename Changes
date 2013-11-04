@@ -7,11 +7,11 @@ Revision history for Perl module Perl::Critic
 
     [Administrative Changes]
     * The source code repository for Perl-Critic has been moved to GitHub
-      at http://github.com/Perl-Critc/Perl-Critic.  All ticekts from the
+      at http://github.com/Perl-Critic/Perl-Critic.  All ticekts from the
       RT queue have also been moved there.  Please use GitHub for submitting
       any new bugs or corresponding about existing ones.  Huge thanks to
       Tim Bunce, Andreas Marienborg, fREW Schmidt, and Graham Knop for
-      making this happen. 
+      making this happen.
 
     [Miscellanea]
     * This change log was reformatted to comply with CPAN::Changes::Spec,
@@ -27,7 +27,7 @@ Revision history for Perl module Perl::Critic
 1.120 2013-10-25
 
     [Bug Fixes]
-    * Corrected "Possible precedence issue with control flow operator" 
+    * Corrected "Possible precedence issue with control flow operator"
       warning.  This fixes RT #88866
 
 
@@ -35,7 +35,7 @@ Revision history for Perl module Perl::Critic
 
     [Bug Fixes]
     * Tests were failing with Config::Tiny 2.17 or later, due to a
-      change in the error messages produced by that module. 
+      change in the error messages produced by that module.
       This fixes #16 on Github,  #88679 & #88889 on RT.
 
     [Policy Changes]
@@ -46,7 +46,7 @@ Revision history for Perl module Perl::Critic
       are now allowed.  RT #79138
 
     [Other Changes]
-    * Modernized our usage of Exporter.  See RT #75300.  Thanks 
+    * Modernized our usage of Exporter.  See RT #75300.  Thanks
       to Olivier Mengué for the patch.
 
 
@@ -84,7 +84,7 @@ Revision history for Perl module Perl::Critic
       '//=', '<<=', and '>>=' are assignment operators. RT #70901.
     * ErrorHandling::RequireCheckingReturnValueOfEval now allows things
       like grep { eval $_ }. RT #69489.
-    * Modules::RequireExplicitPackage now has configuraion option
+    * Modules::RequireExplicitPackage now has configuration option
       allow_import_of, to allow the import of specified modules before
       the package statement. RT #72660.
     * RegularExpressions::ProhibitEnumeratedClasses no longer thinks
@@ -367,7 +367,7 @@ Revision history for Perl module Perl::Critic
       (credit Tom Wyant).
     * t/20_policy_pod_spelling.t now works (or at least no longer fails)
       in non-English locales (again).  RT #43291 and RT #48986.
-    * Perldoc hae broken link for McCabe score definition.  RT #53219
+    * Perldoc has broken link for McCabe score definition.  RT #53219
     * RT #33935 and #49679 were fixed by upgrading to PPI 1.208
 
     [Other Changes]
@@ -456,7 +456,7 @@ Revision history for Perl module Perl::Critic
       useful if you've written a complex command-line or modified your
       .perlcriticrc file and you want to see which Policies *would*
       be used with the current configuration, if you were actually going
-      to critque a file with it.
+      to critique a file with it.
     * Perl::Critic::Violation now takes #line directives into account in the
       %F, %f, and %l formats.  You can get the old values via the new %G, %g,
       and %L formats.
@@ -489,7 +489,7 @@ Revision history for Perl module Perl::Critic
     * ValuesAndExpressions::RequireInterpolationOfMetachars now allows sigils
       in the arguments to "use vars".  Contributed by Kevin Ryde, RT #47318.
     * ValuesAndExpressions::RequireInterpolationOfMetachars now properly
-      ignores email addesses, if you have Email::Address installed.  Inspired
+      ignores email addresses, if you have Email::Address installed.  Inspired
       by the Kevin Ryde contribution in RT #47318.
     * Variables::ProhibitPunctuationVars gained the ability to look inside
       interpolated strings.  Doing this correctly is challenging and things
@@ -515,7 +515,7 @@ Revision history for Perl module Perl::Critic
 
     [Build Fixes]
     * There wasn't a specific version given for the List::MoreUtils dependency
-      and we're using features that weren't avialable until 0.19.  So, we now
+      and we're using features that weren't available until 0.19.  So, we now
       require version 0.19.  Noticed by John J. Trammell,  RT #48917.
     * Some tests were tied to the specific "true" and "false" values that some
       functions were returning.  Reported by Michael Schwern,  RT #43910.
@@ -638,7 +638,7 @@ Revision history for Perl module Perl::Critic
       multiple lines.
     * Subroutines::ProtectPrivateSubs no longer regards the exportable POSIX
       subroutines whose names begin with underscore as private.  RT #38678.
-    * Subroutines::RequireArgUnpacking mishandled a complicated sitation with
+    * Subroutines::RequireArgUnpacking mishandled a complicated situation with
       $_ being an array reference.  RT #39601.
     * Variables::RequireLocalizedPunctuationVars now applies to subscripted
       names.  RT #29384.
@@ -1896,7 +1896,7 @@ Revision history for Perl module Perl::Critic
       I also suggest removing your current Perl::Critic installation
       before installing this one.
     * Improved error message when Perl::Critic dies because PPI can't
-      parsee the input code.
+      parse the input code.
     * Changed output of -help to be more terse.
     * Added -Policy option to perlcritic.  The idea is to provide a
       compact interface for selecting Policy modules at the command-line.
