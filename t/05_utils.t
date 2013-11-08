@@ -14,7 +14,7 @@ use 5.006001;
 use strict;
 use warnings;
 
-use Test::More tests => 132;
+use Test::More tests => 153;
 
 use English qw< -no_match_vars >;
 use Carp qw< confess >;
@@ -52,6 +52,7 @@ test_is_function_call();
 test_find_bundled_policies();
 test_is_unchecked_call();
 test_is_in_void_context();
+test_is_in_scalar_context();
 
 #-----------------------------------------------------------------------------
 
@@ -549,9 +550,11 @@ sub test_is_in_void_context {
             code  => '$rc = open( $x );',
             voids => { 'open' => 0, '$x' => 0, '$rc' => 1 },
         },
+        # is_in_void_context() suggests that void context only exists for the
+        # leftmost part of an expression.
         {
             code  => 'my $rc = open( $x );',
-            voids => { 'open' => 0, '$x' => 0, '$rc' => 1 },
+            voids => { 'open' => 0, '$x' => 0, '$rc' => 0, 'my' => 1 },
         },
         {
             code  => 'open( $x );',
@@ -568,12 +571,100 @@ sub test_is_in_void_context {
 
         my $doc = make_doc( $code );
         while ( my ($word,$is_void) = each %{$case->{voids}} ) {
-            my $statement = $doc->find_first( sub { $_[1] eq $word } ) or die "Can't find $word in $code";
+            my $statement = $doc->find_first( sub { $_[1] eq $word } ) or die "can't find $word in $code";
 
             if ( $is_void ) {
-                ok( is_in_void_context( $statement ), qq{Case $caseno: is_in_void_context returns true "$word" in "$code".} );
+                ok( is_in_void_context( $statement ), qq{case $caseno: is_in_void_context( $word ) is true in "$code".} );
             } else {
-                ok( ! is_in_void_context( $statement ), qq{Case $caseno: is_in_void_context returns false for "$word" in "$code".} );
+                ok( ! is_in_void_context( $statement ), qq{case $caseno: is_in_void_context( $word ) is false in "$code".} );
+            }
+        }
+    }
+
+    return;
+}
+
+
+#-----------------------------------------------------------------------------
+sub test_is_in_scalar_context {
+    my @cases = (
+        {
+            code  => '$n = @array;',
+            scalars => { '@array' => 1 },
+        },
+        {
+            code  => '$n = scalar @array;',
+            scalars => { '@array' => 1 },
+        },
+        {
+            code  => '$n = 21 + 12',
+            scalars => { '21' => 1, '12' => 1 },
+        },
+        {
+            code  => 'somefunc( $x );',
+            scalars => { '$x' => 0 },
+        },
+        {
+            code => '$foo = func()',
+            scalars => { 'func' => 1 },
+        },
+        {
+            code => 'scalar func()',
+            scalars => { 'func' => 1 },
+        },
+        {
+            code => 'func() || foo()',
+            scalars => { 'func' => 1, 'foo' => 1 },
+        },
+        {
+            code => '$foo || func()',
+            scalars => { 'func' => 1 },
+        },
+        {
+            code => 'my @foo = ($x, $y, $z)',
+            scalars => { '$x' => 0, '$y' => 0, '$z' => 0 },
+        },
+        {
+            code => 'my @foo = 14',
+            scalars => { '@foo' => 0, '14' => 0 },
+        },
+        {
+            code => 'map { /x/ } $x',
+            scalars => { '$x' => 0 },
+        },
+        {
+            code => 'grep { /x/ } $x',
+            scalars => { '$x' => 0 },
+        },
+        {
+            code => 'print $x',
+            scalars => { '$x' => 0 },
+        },
+        {
+            code => 'push @array, $x',
+            scalars => { '$x' => 0 },
+        },
+        {
+            code => '$x = pop @array',
+            scalars => { '$x' => 0 },
+        },
+    );
+
+    my $caseno;
+    for my $case ( @cases ) {
+        my $code  = $case->{code};
+        my $word  = $case->{word};
+        my $scalars = $case->{scalars};
+        ++$caseno;
+
+        my $doc = make_doc( $code );
+        while ( my ($word,$is_scalar) = each %{$case->{scalars}} ) {
+            my $statement = $doc->find_first( sub { $_[1] eq $word } ) or die "can't find $word in $code";
+
+            if ( $is_scalar ) {
+                ok( is_in_scalar_context( $statement ), qq{case $caseno: is_in_scalar_context( $word ) is true in "$code".} );
+            } else {
+                ok( ! is_in_scalar_context( $statement ), qq{case $caseno: is_in_scalar_context( $word ) is false in "$code".} );
             }
         }
     }

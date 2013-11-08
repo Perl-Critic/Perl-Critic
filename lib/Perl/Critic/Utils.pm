@@ -876,6 +876,11 @@ sub _is_PL_file {  ## no critic (NamingConventions::Capitalization)
 sub is_in_scalar_context {
     my ($token) = @_;
 
+    my $parent = $token->statement()->parent();
+    if ($parent) {
+        return if $parent->isa('PPI::Structure::List');
+    }
+
     return $TRUE;
 }
 
@@ -1677,6 +1682,10 @@ should use the L<Perl::Critic::Document/"is_program()"> method instead.
 Given a L<PPI::Token|PPI::Token>, answer whether it appears to be in a
 void context.
 
+=item C<is_in_scalar_context( $token )>
+
+Given a L<PPI::Token|PPI::Token>, answer whether it appears to be in a
+scalar context.
 
 =item C<policy_long_name( $policy_name )>
 
