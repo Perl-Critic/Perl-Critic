@@ -73,6 +73,7 @@ Readonly::Array our @EXPORT_OK => qw(
     is_class_name
     is_function_call
     is_hash_key
+    is_in_scalar_context
     is_in_void_context
     is_included_module_name
     is_integer
@@ -868,6 +869,14 @@ sub _is_PL_file {  ## no critic (NamingConventions::Capitalization)
     my $filename = $doc->filename() || return;
     return 1 if $filename =~ m/[.] PL \z/xms;
     return 0;
+}
+
+#-----------------------------------------------------------------------------
+
+sub is_in_scalar_context {
+    my ($token) = @_;
+
+    return $TRUE;
 }
 
 #-----------------------------------------------------------------------------

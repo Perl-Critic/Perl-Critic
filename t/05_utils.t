@@ -51,6 +51,7 @@ test_parse_arg_list();
 test_is_function_call();
 test_find_bundled_policies();
 test_is_unchecked_call();
+test_is_in_void_context();
 
 #-----------------------------------------------------------------------------
 
@@ -540,6 +541,42 @@ sub test_is_unchecked_call {
 
     return;
 }
+
+#-----------------------------------------------------------------------------
+sub test_is_in_void_context {
+    my @cases = (
+        {
+            code  => '$rc = open( $x );',
+            voids => { 'open' => 0, '$x' => 0, '$rc' => 1 },
+        },
+        {
+            code  => 'open( $x );',
+            voids => { 'open' => 1, '$x' => 0 },
+        },
+    );
+
+    my $caseno;
+    for my $case ( @cases ) {
+        my $code  = $case->{code};
+        my $word  = $case->{word};
+        my $voids = $case->{voids};
+        ++$caseno;
+
+        my $doc = make_doc( $code );
+        while ( my ($word,$is_void) = each %{$case->{voids}} ) {
+            my $statement = $doc->find_first( sub { $_[1] eq $word } ) or die "Can't find $word in $code";
+
+            if ( $is_void ) {
+                ok( is_in_void_context( $statement ), qq{Case $caseno: is_in_void_context returns true "$word" in "$code".} );
+            } else {
+                ok( ! is_in_void_context( $statement ), qq{Case $caseno: is_in_void_context returns false for "$word" in "$code".} );
+            }
+        }
+    }
+
+    return;
+}
+
 
 #-----------------------------------------------------------------------------
 
