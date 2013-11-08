@@ -21,3 +21,18 @@ Steps for adding a new Policy:
 Command for generating POD for perlcritic.com site:
 
 perl -MPod::Simple::HTMLBatch -e 'Pod::Simple::HTMLBatch::go' lib ../../perlcritic.com/htdocs/pod/
+
+
+## Branching
+
+Development is *not* done on master.  We use a dev branch named
+`dev`, and from there topic branches named for a specific topic.
+
+   master -> dev -> docs
+                \-> speedups
+                \-> issue473
+
+The only time we merge `dev` down to `master` is when doing a
+release.  `master` is always the latest released code, and `dev`
+is where work pending release is accumulated.  There are no branches
+off of `master` other than `dev`.
