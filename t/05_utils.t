@@ -14,6 +14,8 @@ use 5.006001;
 use strict;
 use warnings;
 
+use Test::More tests => 132;
+
 use English qw< -no_match_vars >;
 use Carp qw< confess >;
 
@@ -24,8 +26,6 @@ use PPI::Document::File qw< >;
 use Perl::Critic::PolicyFactory;
 use Perl::Critic::TestUtils qw(bundled_policy_names);
 use Perl::Critic::Utils;
-
-use Test::More tests => 129;
 
 #-----------------------------------------------------------------------------
 
@@ -547,6 +547,10 @@ sub test_is_in_void_context {
     my @cases = (
         {
             code  => '$rc = open( $x );',
+            voids => { 'open' => 0, '$x' => 0, '$rc' => 1 },
+        },
+        {
+            code  => 'my $rc = open( $x );',
             voids => { 'open' => 0, '$x' => 0, '$rc' => 1 },
         },
         {
