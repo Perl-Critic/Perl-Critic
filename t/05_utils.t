@@ -629,12 +629,12 @@ sub test_is_in_scalar_context {
             scalars => { '@foo' => 0, '14' => 0 },
         },
         {
-            code => 'map { /x/ } $x',
-            scalars => { '$x' => 0 },
+            code => 'map { $x } $y',
+            scalars => { '$x' => 0, '$y' => 0 },
         },
         {
-            code => 'grep { /x/ } $x',
-            scalars => { '$x' => 0 },
+            code => 'grep { $x } $y',
+            scalars => { '$x' => 1, '$y' => 0 },
         },
         {
             code => 'print $x',
