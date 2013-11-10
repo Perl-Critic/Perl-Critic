@@ -637,6 +637,10 @@ sub test_is_in_scalar_context {
             scalars => { '$x' => 1, '$y' => 0 },
         },
         {
+            code => 'print $foo[ $x ]',
+            scalars => { '$x' => 1 },
+        },
+        {
             code => 'print $x',
             scalars => { '$x' => 0 },
         },
