@@ -36,14 +36,6 @@ print <<  'END_QUOTE';
 The only thing we have to fear is fear itself...
 END_QUOTE
 
-
-##############################################################################
-#      $URL$
-#     $Date$
-#   $Author$
-# $Revision$
-##############################################################################
-
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

@@ -1,10 +1,3 @@
-##############################################################################
-#      $URL$
-#     $Date$
-#   $Author$
-# $Revision$
-##############################################################################
-
 package Perl::Critic::Policy::ValuesAndExpressions::ProhibitCommaSeparatedStatements;
 
 use 5.006001;

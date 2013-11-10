@@ -9,6 +9,8 @@ Makefile
 README
 _build/
 blib/
+pm_to_blib
+tags
 cover_db
 lib/Perl/Critic/PolicySummary.pod
 nytprof*

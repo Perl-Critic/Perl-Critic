@@ -3,8 +3,3 @@
 foo
 arglbargl    # Some other comment.
 bar
-
-#      $URL$
-#     $Date$
-#   $Author$
-# $Revision$

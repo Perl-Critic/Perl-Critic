@@ -1,5 +1,11 @@
 Revision history for Perl module Perl::Critic
 
+NEXT
+
+    [Miscellanea]
+    * Removed all the internal RCS keyword boilerplate blocks that were never
+      getting expanded.
+
 1.121 2013-11-02
 
     [New Features]
