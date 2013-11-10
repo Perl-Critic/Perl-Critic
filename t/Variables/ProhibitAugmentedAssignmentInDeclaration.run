@@ -118,14 +118,6 @@ my $port ||= $port_memoized || $ENV{APACHE_TEST_PORT} || $self->{vars}{port} || 
 my $output .= '<?' . $_[0]->getNodeName;
 my $data .= &stripzerobytes(inet_aton($self->address()));
 
-
-##############################################################################
-#      $URL$
-#     $Date$
-#   $Author$
-# $Revision$
-##############################################################################
-
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

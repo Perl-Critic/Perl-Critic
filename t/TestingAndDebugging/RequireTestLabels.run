@@ -94,14 +94,6 @@ is_deeply( { foo => 1 }, { foo => 1 }, 'Boldly criticize where nobody has critic
 is_deeply( { get_empty_array() }, {}, 'Wrap sub-call in hash constructor' );
 
 #-----------------------------------------------------------------------------
-
-##############################################################################
-#      $URL$
-#     $Date$
-#   $Author$
-# $Revision$
-##############################################################################
-
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

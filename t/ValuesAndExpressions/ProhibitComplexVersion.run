@@ -206,13 +206,6 @@ use SomeOtherModule; our $VERSION = $SomeOtherModule::VERSION;
 use SomeOtherModule; our $VERSION = SomeOtherModule::VERSION;
 use base 'SomeOtherModule'; our $VERSION = $SomeOtherModule::VERSION;
 
-##############################################################################
-#      $URL$
-#     $Date$
-#   $Author$
-# $Revision$
-##############################################################################
-
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

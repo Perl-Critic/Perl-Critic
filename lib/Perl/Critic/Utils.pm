@@ -1,10 +1,3 @@
-##############################################################################
-#      $URL$
-#     $Date$
-#   $Author$
-# $Revision$
-##############################################################################
-
 # NOTE: This module is way too large.  Please think about adding new
 # functionality into a P::C::Utils::* module instead.
 

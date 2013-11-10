@@ -1,10 +1,3 @@
-##############################################################################
-#      $URL$
-#     $Date$
-#   $Author$
-# $Revision$
-##############################################################################
-
 package Perl::Critic::Policy::ValuesAndExpressions::ProhibitMixedBooleanOperators;
 
 use 5.006001;

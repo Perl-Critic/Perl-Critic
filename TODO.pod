@@ -8,19 +8,10 @@
 
 Perl::Critic::TODO - Things for Perl::Critic developers to do
 
-=head1 SOURCE
-
-         $URL$
-        $Date$
-      $Author$
-    $Revision$
-
-
 =head1 SEE ALSO
 
 Perl-Critic-More is a separate distribution for less-widely-accepted
 policies.  It contains its own TODO.pod.
-
 
 =head1 NEW FEATURES
 

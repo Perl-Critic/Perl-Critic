@@ -1,10 +1,3 @@
-##############################################################################
-#      $URL$
-#     $Date$
-#   $Author$
-# $Revision$
-##############################################################################
-
 package Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep;
 
 # DEVELOPER NOTE: this module is used as an example in DEVELOPER.pod.

@@ -134,13 +134,6 @@ use Fatal qw< open close >;
 use Getopt::Std;
 
 #-----------------------------------------------------------------------------
-
-#      $URL$
-#     $Date$
-#   $Author$
-# $Revision$
-
-##############################################################################
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

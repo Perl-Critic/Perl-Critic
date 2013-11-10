@@ -1,10 +1,3 @@
-##############################################################################
-#      $URL$
-#     $Date$
-#   $Author$
-# $Revision$
-##############################################################################
-
 package Perl::Critic::Policy::Variables::RequireInitializationForLocalVars;
 
 use 5.006001;
