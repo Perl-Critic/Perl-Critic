@@ -14,7 +14,7 @@ use 5.006001;
 use strict;
 use warnings;
 
-use Test::More tests => 153;
+use Test::More tests => 156;
 
 use English qw< -no_match_vars >;
 use Carp qw< confess >;
@@ -647,6 +647,10 @@ sub test_is_in_scalar_context {
         {
             code => '$x = pop @array',
             scalars => { '$x' => 0 },
+        },
+        {
+            code => '$x =~ s/foo/bar/',
+            scalars => { '$x' => 1 },
         },
     );
 
