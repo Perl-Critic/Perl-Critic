@@ -146,11 +146,6 @@ functionality of a C<Behavior>, but override the parts that they want.
 
 =cut
 
-#      $URL$
-#     $Date$
-#   $Author$
-# $Revision$
-
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

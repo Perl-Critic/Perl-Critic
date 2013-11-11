@@ -155,13 +155,6 @@ local $SIG{__DIE__} = sub {warn "I cannot die!"};
 print $^S ? 'Executing eval' : defined $^S ? 'Otherwise' : 'Parsing';
 
 #-----------------------------------------------------------------------------
-
-#      $URL$
-#     $Date$
-#   $Author$
-# $Revision$
-
-##############################################################################
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

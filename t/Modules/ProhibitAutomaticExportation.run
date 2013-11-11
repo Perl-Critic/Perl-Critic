@@ -80,13 +80,6 @@ use vars qw(%EXPORT_TAGS);
 
 print 123; # no exporting at all; for test coverage
 
-##############################################################################
-#      $URL$
-#     $Date$
-#   $Author$
-# $Revision$
-##############################################################################
-
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

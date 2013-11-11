@@ -1,10 +1,3 @@
-##############################################################################
-#      $URL$
-#     $Date$
-#   $Author$
-# $Revision$
-##############################################################################
-
 package Perl::Critic::Policy::RegularExpressions::ProhibitEnumeratedClasses;
 
 use 5.006001;

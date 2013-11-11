@@ -1,12 +1,5 @@
 #!perl
 
-##############################################################################
-#      $URL$
-#     $Date$
-#   $Author$
-# $Revision$
-##############################################################################
-
 ## There's too much use of source code in strings.
 ## no critic (RequireInterpolationOfMetachars)
 

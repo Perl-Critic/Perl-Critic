@@ -72,14 +72,6 @@ $blargh = $x->[1]->{z}->[3]->{u};
 $c->response->content_type( 'text/html; charset=utf-8' )
     unless $c->response->content_type;
 
-
-##############################################################################
-#      $URL$
-#     $Date$
-#   $Author$
-# $Revision$
-##############################################################################
-
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

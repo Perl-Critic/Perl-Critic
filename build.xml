@@ -2,13 +2,6 @@
 
 <!--
 
-##############################################################################
-#      $URL$
-#     $Date$
-#   $Author$
-# $Revision$
-##############################################################################
-
 The following is an Ant build script for building Perl distributions
 based on Module::Build.  It has been written so that tools like
 Eclipse that are well-suited for running Ant scripts (for Java

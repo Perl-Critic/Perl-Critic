@@ -89,13 +89,6 @@ local ($foo) = $bar until $baz;
 local ($foo, $bar) = 1 foreach @baz;
 local ($foo, $bar) = 1 for @baz;
 
-##############################################################################
-#      $URL$
-#     $Date$
-#   $Author$
-# $Revision$
-##############################################################################
-
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

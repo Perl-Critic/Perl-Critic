@@ -5,8 +5,3 @@
 
 # Extra leading and trailing whitespace here is intentional.
     /Getopt::Std/     Found use of Getopt::Std. Use Getopt::Long instead.       
-
-#      $URL$
-#     $Date$
-#   $Author$
-# $Revision$

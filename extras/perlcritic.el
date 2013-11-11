@@ -1,13 +1,5 @@
 ;;; perlcritic.el --- minor mode for Perl::Critic integration
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;      $URL$
-;;;     $Date$
-;;;   $Author$
-;;; $Revision$
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-
 ;;; Readme
 ;;
 ;; This is a minor mode for emacs intended to allow you to
