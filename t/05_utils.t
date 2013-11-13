@@ -573,6 +573,10 @@ sub test_is_in_void_context {
             code  => '$x += return 3;',
             voids => { 'return' => 0, '$x' => 1 },
         },
+        {
+            code  => 'sub foo { return 3 }',
+            voids => { 'return' => 1 },
+        },
     );
 
     my $caseno;
