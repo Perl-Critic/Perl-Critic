@@ -78,11 +78,12 @@ This looks confusing, and may be a bug.  Consider this example:
 What was supposed to be a semicolon at the end of the C<$x> assignment
 is a period, and the value of C<$x> gets an unexepcted concatenation.
 
-The one exception to the void context rule is when the C<return>
-follows a logical AND, C<&&>, as in:
+The exceptions to the void context rule is when the C<return>
+follows a logical AND or OR: C<and>, C<&&>, C<or> or C<||>, as in:
 
     sub foo {
         /bar/ && return 'Found bar';
+        /foo/ or return 'Cannot find foo';
     }
 
 =head1 CONFIGURATION

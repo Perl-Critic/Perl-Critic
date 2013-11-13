@@ -21,14 +21,26 @@ sub foo {
 }
 
 #-----------------------------------------------------------------------------
-## name logical AND exception
+## name logical AND exceptions
 ## failures 0
 ## cut
 
 sub foo {
-    /bar/ && return 'found bar';
+    /foo/ &&  return 'found foo';
+    /bar/ and return 'found bar';
 }
 
+#-----------------------------------------------------------------------------
+## name logical OR exceptions
+## failures 0
+## cut
+
+sub foo {
+    /foo/ || return 'cannot find foo';
+    /bar/ or return 'cannot find bar';
+}
+
+#-----------------------------------------------------------------------------
 ## name Other operators are not exceptions
 ## failures 3
 ## cut
@@ -39,10 +51,6 @@ sub foo {
 
 sub foo {
     /bar/ | return 'Cannot be a bitwise OR';
-}
-
-sub foo {
-    /bar/ || return 'Cannot be a logical OR';
 }
 
 #-----------------------------------------------------------------------------
