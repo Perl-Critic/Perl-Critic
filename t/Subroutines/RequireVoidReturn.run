@@ -46,6 +46,19 @@ sub foo {
 }
 
 #-----------------------------------------------------------------------------
+## name More non-failures
+## failures 0
+## cut
+
+return;
+return 1;
+return foo();
+# $x += return 5;
+sub foo { return }
+
+$x = $hash{return};
+
+#-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4
