@@ -1,0 +1,56 @@
+## name simple failure
+## failures 1
+## cut
+
+sub foo {
+    $x += return 3;
+}
+
+
+#-----------------------------------------------------------------------------
+## name more complex failure
+## failures 1
+## cut
+
+sub foo {
+    if ( bar() ) {
+        $x = 'blah blah' .
+        return 1;
+    }
+    return;
+}
+
+#-----------------------------------------------------------------------------
+## name logical AND exception
+## failures 0
+## cut
+
+sub foo {
+    /bar/ && return 'found bar';
+}
+
+## name Other operators are not exceptions
+## failures 3
+## cut
+
+sub foo {
+    /bar/ & return 'Cannot be a bitwise AND';
+}
+
+sub foo {
+    /bar/ | return 'Cannot be a bitwise OR';
+}
+
+sub foo {
+    /bar/ || return 'Cannot be a logical OR';
+}
+
+#-----------------------------------------------------------------------------
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab shiftround :

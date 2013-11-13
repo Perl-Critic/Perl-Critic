@@ -140,6 +140,7 @@ lib/Perl/Critic/Policy/Subroutines/ProhibitUnusedPrivateSubroutines.pm
 lib/Perl/Critic/Policy/Subroutines/ProtectPrivateSubs.pm
 lib/Perl/Critic/Policy/Subroutines/RequireArgUnpacking.pm
 lib/Perl/Critic/Policy/Subroutines/RequireFinalReturn.pm
+lib/Perl/Critic/Policy/Subroutines/RequireVoidReturn.pm
 lib/Perl/Critic/Policy/TestingAndDebugging/ProhibitNoStrict.pm
 lib/Perl/Critic/Policy/TestingAndDebugging/ProhibitNoWarnings.pm
 lib/Perl/Critic/Policy/TestingAndDebugging/ProhibitProlongedStrictureOverride.pm
@@ -351,6 +352,7 @@ t/Subroutines/ProhibitUnusedPrivateSubroutines.run
 t/Subroutines/ProtectPrivateSubs.run
 t/Subroutines/RequireArgUnpacking.run
 t/Subroutines/RequireFinalReturn.run
+t/Subroutines/RequireVoidReturn.run
 t/TestingAndDebugging/ProhibitNoStrict.run
 t/TestingAndDebugging/ProhibitNoWarnings.run
 t/TestingAndDebugging/ProhibitProlongedStrictureOverride.run
