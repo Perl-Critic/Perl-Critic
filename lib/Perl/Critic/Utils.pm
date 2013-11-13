@@ -142,6 +142,7 @@ Readonly::Hash our %EXPORT_TAGS => (
             is_class_name
             is_function_call
             is_hash_key
+            is_in_void_context
             is_included_module_name
             is_integer
             is_label_pointer
