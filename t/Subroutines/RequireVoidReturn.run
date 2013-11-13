@@ -42,7 +42,7 @@ sub foo {
 
 #-----------------------------------------------------------------------------
 ## name Other operators are not exceptions
-## failures 3
+## failures 2
 ## cut
 
 sub foo {
