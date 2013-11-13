@@ -553,6 +553,26 @@ sub test_is_in_void_context {
             code  => 'open( $x );',
             voids => { 'open' => 1, '$x' => 0 },
         },
+        {
+            code  => 'return;',
+            voids => { 'return' => 1 },
+        },
+        {
+            code  => 'return 3;',
+            voids => { 'return' => 1 },
+        },
+        {
+            code  => 'return foo();',
+            voids => { 'return' => 1 },
+        },
+        {
+            code  => 'foo(); return;',
+            voids => { 'return' => 1 },
+        },
+        {
+            code  => '$x += return 3;',
+            voids => { 'return' => 0, '$x' => 1 },
+        },
     );
 
     my $caseno;
