@@ -418,6 +418,6 @@ xt/author/95_kwalitee.t
 xt/author/98_pod_syntax.t
 xt/author/99_pod_coverage.t
 xt/author/generate_without_optional_dependencies_wrappers.PL
-README.md
+README
 META.yml
 META.json
