@@ -6,7 +6,6 @@ META.yml
 MYMETA.json
 MYMETA.yml
 Makefile
-README
 _build/
 blib/
 pm_to_blib
