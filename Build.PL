@@ -3,6 +3,10 @@ use 5.006001;
 use strict;
 use warnings;
 
+use Module::Build 0.4200;
+# meta_merge->resources->license now takes an arrayref of URLs in 0.4200 (or
+# thereabouts, but I can't tell for sure from the Changes file).
+
 use lib 'inc';
 
 use Perl::Critic::BuildUtilities qw<
