@@ -48,7 +48,7 @@ my $builder = Perl::Critic::Module::Build->new(
         resources => {
             bugtracker  => 'https://github.com/Perl-Critic/Perl-Critic/issues',
             homepage    => 'http://perlcritic.com',
-            license     => 'http://dev.perl.org/licenses',
+            license     => [ 'http://dev.perl.org/licenses' ],
             MailingList => 'http://perlcritic.tigris.org/servlets/SummarizeList?listName=users',
             repository  => 'git://github.com/Perl-Critic/Perl-Critic.git',
         },
