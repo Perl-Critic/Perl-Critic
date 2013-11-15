@@ -1,0 +1,100 @@
+## name Non-topic explicitness
+## failures 0
+## cut
+
+my $foo = 'Whatever';
+
+$foo =~ /foo/;
+$foo =~ m/foo/;
+$foo =~ s/foo/bar/;
+$foo =~ tr/a-mn-z/n-za-m/;
+
+#-----------------------------------------------------------------------------
+
+## name Topical exclusion
+## failures 0
+## cut
+
+/foo/;
+m/foo/;
+s/foo/bar/;
+tr/a-mn-z/n-za-m/;
+
+#-----------------------------------------------------------------------------
+
+## name Useless topic
+## failures 5
+## cut
+
+$_ =~ /foo/;
+$_ =~ m/foo/;
+$_ =~ s/foo/bar/;
+$_ =~ tr/a-mn-z/n-za-m/;
+$_ =~ y/a-mn-z/n-za-m/;
+
+#-----------------------------------------------------------------------------
+
+## name Useless topic in a negative match
+## failures 5
+## cut
+
+$_ !~ /foo/;
+$_ !~ m/foo/;
+$_ !~ s/foo/bar/;
+$_ !~ tr/a-mn-z/n-za-m/;
+$_ !~ y/a-mn-z/n-za-m/;
+
+#-----------------------------------------------------------------------------
+
+## name Match against variables
+## failures 2
+## cut
+
+$_ =~ $pat;
+$_ =~ qr/bar/;
+
+#-----------------------------------------------------------------------------
+
+## name More complex constructions
+## failures 11
+## cut
+
+$x = 3 if $_ !~ s/foo/bar/;
+
+$_ =~ s/\s+$// foreach ($name, $zip, $phone);
+
+my $x = scalar( grep { $_ =~ m/^INFO: .*$/ } @foo );
+
+our @paths = grep { $_ =~ /./ } <DATA>; # get non-blank lines from the end
+
+next if $_ =~ m/^\s*#/;
+
+$condition_count += ($_ =~ tr/,/,/) foreach values %requirements;
+
+my ( $v ) = grep { $_ =~ /^\s*our\s+\$VERSION\s*=\s*['"]\d/ } <$fh>;
+
+assert( ! grep { $_ =~ m/\|/ } @$suggestions, 'no suggestion contains a pipe character (reserved for future field separator)' );
+
+ok( ( grep { $_ =~ $regwarn } ( $title->warnings() ) ), 'expected warning text reported' );
+
+my ( $line, $dummy ) = grep { $_ =~ $stat->{regex} } @contents;
+
+if ($_ !~ $pat) { foo(); }
+
+#-----------------------------------------------------------------------------
+
+## name Potential false positives, but none should fail.
+## failures 0
+## cut
+
+$x =~ /foo/;
+$_ += /foo/;
+print s/x/y/;
+foo(tr/x/y/);
++tr/x/y/;
+=head1 $_ =~ /foo/
+# $_ =~ /foo/
+'foo' =~ $_;
+
+#-----------------------------------------------------------------------------
+# ex: set ft=perl:

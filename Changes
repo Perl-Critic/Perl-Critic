@@ -2,6 +2,10 @@ Revision history for Perl module Perl::Critic
 
 NEXT
 
+    [New Policies]
+    * Added two new policies: BuiltinFunctions::ProhibitUselessTopic and
+    RegularExpressions::ProhibitUselessTopic.
+
     [Miscellanea]
     * Removed all the internal RCS keyword boilerplate blocks that were never
       getting expanded.

@@ -51,13 +51,12 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep - Write C<grep { $_ =~ /$pattern/ } @list> instead of C<grep /$pattern/, @list>.
+Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep - Write C<grep { /$pattern/ } @list> instead of C<grep /$pattern/, @list>.
 
 =head1 AFFILIATION
 
 This Policy is part of the core L<Perl::Critic|Perl::Critic>
 distribution.
-
 
 =head1 DESCRIPTION
 
@@ -70,12 +69,9 @@ read.  Use the block forms instead.
     @mapped = map  transform($_),    @list;      #not ok
     @mapped = map { transform($_) }  @list;      #ok
 
-
-
 =head1 CONFIGURATION
 
 This Policy is not configurable except for the standard options.
-
 
 =head1 SEE ALSO
 
@@ -89,7 +85,7 @@ Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2011 Imaginative Software Systems.  All rights reserved.
+Copyright (c) 2005-2013 Imaginative Software Systems.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
