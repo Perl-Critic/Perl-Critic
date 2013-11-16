@@ -29,7 +29,7 @@ sub supported_parameters {
             description     => 'Pattern that determines what a private subroutine is.',
             default_string  => '\b_\w+\b',  ## no critic (RequireInterpolationOfMetachars)
             behavior        => 'string',
-            parser          => \& _parse_private_name_regex,
+            parser          => \&_parse_private_name_regex,
         },
         {
             name            => 'allow',
