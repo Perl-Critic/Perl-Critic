@@ -157,7 +157,7 @@ sub _is_array_name {  # return true if name and isref matches
     return if $sib !~ m/\A \$ \Q$name\E \z/xms;
 
     my $cousin = $sib->sprevious_sibling;
-    return if $isref ^ _is_dereferencer( $cousin );
+    return if $isref ^ _is_dereferencer( $cousin ); ## no critic ( ProhibitBitwiseOperators )
     return if $isref && _is_dereferencer( $cousin->sprevious_sibling );
 
     return $elem;
