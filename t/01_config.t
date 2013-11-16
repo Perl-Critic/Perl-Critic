@@ -371,7 +371,7 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
 
     my %zero_args = map { $_ => 0 }
         # Zero is an invalid Term::ANSIColor value.
-        grep { $_ !~ m/ \A-color-severity- /smx } @switches;
+        grep { ! / \A-color-severity- /smx } @switches;
     $c = Perl::Critic::Config->new( %zero_args );
     is( $c->force(),     0,       'zero -force');
     is( $c->only(),      0,       'zero -only');

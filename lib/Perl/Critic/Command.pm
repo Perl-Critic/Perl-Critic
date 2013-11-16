@@ -632,7 +632,7 @@ sub _render_policy_docs {
 
     require Perl::Critic::PolicyFactory;
     my @site_policies  = Perl::Critic::PolicyFactory->site_policy_names();
-    my @matching_policies  = grep { $_ =~ m/$pattern/ixms } @site_policies;
+    my @matching_policies  = grep { /$pattern/ixms } @site_policies;
 
     # "-T" means don't send to pager
     my @perldoc_output = map {`perldoc -T $_`} @matching_policies;  ## no critic (ProhibitBacktick)
