@@ -294,7 +294,7 @@ sub _create_magic_detector {
         .   (
             join
                 q<|>,
-                map          { quotemeta $_ }
+                map          { quotemeta }
                 reverse sort { length $a <=> length $b }
                 map          { _bracketed_form_of_variable_name( $_ ) }
                 grep         { q<%> ne substr $_, 0, 1 }
