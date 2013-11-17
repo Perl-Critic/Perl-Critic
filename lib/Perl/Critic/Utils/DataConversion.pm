@@ -29,7 +29,7 @@ sub boolean_to_number {  ## no critic (RequireArgUnpacking)
 
 sub dor {  ## no critic (RequireArgUnpacking)
     foreach (@_) {
-        defined $_ and return $_;
+        return $_ if defined;
     }
     return;
 }

@@ -278,7 +278,7 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
         -exclude    => \@exclude,
     );
     my @policies = Perl::Critic::Config->new( %pc_args )->policies();
-    my $matches = grep { my $pol = ref $_; grep { $pol !~ /$_/ixms} @exclude } @policies;
+    my $matches = grep { my $pol = ref; grep { $pol !~ /$_/ixms} @exclude } @policies;
     is(scalar @policies, $matches, 'exclude pattern matching');
 }
 
@@ -297,7 +297,7 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
         -exclude    => \@exclude,
     );
     my @policies = Perl::Critic::Config->new( %pc_args )->policies();
-    my @pol_names = map {ref $_} @policies;
+    my @pol_names = map {ref} @policies;
     is_deeply(
         [grep {/block/ixms} @pol_names],
         [],

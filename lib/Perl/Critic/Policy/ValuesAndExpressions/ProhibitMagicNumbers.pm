@@ -163,7 +163,7 @@ sub _determine_allowed_values {
         }
 
         if ($all_integers_allowed) {
-            @allowed_values = grep { $_ != int $_ } @potential_allowed_values;
+            @allowed_values = grep { $_ != int $_ } @potential_allowed_values; ## no critic ( BuiltinFunctions::ProhibitUselessTopic )
         } else {
             @allowed_values = @potential_allowed_values;
         }

@@ -234,7 +234,7 @@ sub _parse_sections {
 
     my @sections = split m{ \s* [|] \s* }xms, $config_string;
 
-    return map { uc $_ } @sections;  # Normalize CaSe!
+    return map { uc } @sections;  # Normalize CaSe!
 }
 
 sub _parse_lib_sections {

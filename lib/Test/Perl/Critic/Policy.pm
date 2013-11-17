@@ -87,7 +87,7 @@ sub _validate_wanted_policy_names {
     my @wanted_policies = @{ $wanted_policies };
 
 
-    my @invalid = grep {my $p = $_; none {$_ =~ $p} @all_testable_policies}  @wanted_policies;
+    my @invalid = grep {my $p = $_; none { /$p/ } @all_testable_policies}  @wanted_policies;
     croak( q{No tests found for policies matching: } . join q{, }, @invalid ) if @invalid;
     return 1;
 }

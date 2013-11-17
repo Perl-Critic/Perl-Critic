@@ -201,7 +201,7 @@ sub _get_input {
 
         # Test to make sure all the specified files or directories
         # actually exist.  If any one of them is bogus, then die.
-        if ( my $nonexistent = first { ! -e $_ } @args ) {
+        if ( my $nonexistent = first { ! -e } @args ) {
             my $msg = qq{No such file or directory: '$nonexistent'};
             pod2usage( -exitstatus => 1, -message => $msg, -verbose => 0);
         }
