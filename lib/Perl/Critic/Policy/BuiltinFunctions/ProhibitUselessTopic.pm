@@ -17,8 +17,8 @@ Readonly::Scalar my $EXPL_FUNCTION       => q{$_ should be omitted when calling 
 Readonly::Scalar my $EXPL_FUNCTION_SPLIT => q{$_ should be omitted when calling "split" with two arguments};
 
 sub supported_parameters { return () }
-sub default_severity     { return $SEVERITY_MEDIUM }
-sub default_themes       { return qw( complexity ) }
+sub default_severity     { return $SEVERITY_LOW }
+sub default_themes       { return qw( core ) }
 sub applies_to           { return 'PPI::Token::Operator', 'PPI::Token::Word' }
 
 my @filetest_operators = qw( -r -w -x -o -R -W -X -O -e -z -s -f -d -l -p -S -b -c -u -g -k -T -B -M -A -C );
@@ -93,6 +93,9 @@ sub violates {
 1;
 
 __END__
+
+=pod
+
 =head1 NAME
 
 Perl::Critic::Policy::BuiltinFunctions::ProhibitUselessTopic - Don't pass $_ to built-in functions that assume it, or to most filetests.

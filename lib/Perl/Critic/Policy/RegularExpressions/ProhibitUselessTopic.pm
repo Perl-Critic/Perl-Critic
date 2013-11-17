@@ -15,8 +15,8 @@ Readonly::Scalar my $DESC => q{Useless use of $_};
 Readonly::Scalar my $EXPL => q{$_ should be omitted when matching a regular expression};
 
 sub supported_parameters { return () }
-sub default_severity     { return $SEVERITY_MEDIUM }
-sub default_themes       { return qw( complexity ) }
+sub default_severity     { return $SEVERITY_LOW }
+sub default_themes       { return qw( core ) }
 sub applies_to           { return 'PPI::Token::Magic' }
 
 sub violates {
@@ -41,6 +41,9 @@ sub violates {
 1;
 
 __END__
+
+=pod
+
 =head1 NAME
 
 Perl::Critic::Policy::RegularExpressions::ProhibitUselessTopic - Don't use $_ to match against regexes.
