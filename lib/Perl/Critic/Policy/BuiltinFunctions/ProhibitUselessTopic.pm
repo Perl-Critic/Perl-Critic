@@ -96,9 +96,13 @@ __END__
 
 =pod
 
+=for stopwords
+
+filetest
+
 =head1 NAME
 
-Perl::Critic::Policy::BuiltinFunctions::ProhibitUselessTopic - Don't pass $_ to built-in functions that assume it, or to most filetests.
+Perl::Critic::Policy::BuiltinFunctions::ProhibitUselessTopic - Don't pass $_ to built-in functions that assume it, or to most filetest operators.
 
 =head1 AFFILIATION
 
