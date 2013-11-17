@@ -118,7 +118,7 @@ sub _is_vars_pragma {
 }
 
 sub _all_upcase {  ##no critic(ArgUnpacking)
-    return all { $_ eq uc $_ } @_;
+    return all { $_ eq uc $_ } @_; ## no critic ( BuiltinFunctions::ProhibitUselessTopic )
 }
 
 1;
