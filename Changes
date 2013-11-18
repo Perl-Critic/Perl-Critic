@@ -1,6 +1,6 @@
 Revision history for Perl module Perl::Critic
 
-NEXT
+1.121_01 2013-11-17
 
     [New Policies]
     * Added two new policies: BuiltinFunctions::ProhibitUselessTopic and
