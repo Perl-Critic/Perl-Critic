@@ -210,7 +210,7 @@ sub _get_input {
         # then we process it as-is (even though it may not actually
         # be Perl code).  If argument is a directory, recursively
         # search the directory for files that look like Perl code.
-        return map { -d $_ ? Perl::Critic::Utils::all_perl_files($_) : $_ } @args;
+        return map { (-d) ? Perl::Critic::Utils::all_perl_files($_) : $_ } @args;
     }
 }
 
