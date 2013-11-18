@@ -30,7 +30,10 @@ sub violates {
             # If the op is a regex match, then we have an unnecessary $_ .
             my $op = $op_node->content;
             if ( $op eq q{=~} || $op eq q{!~} ) {
-                return $self->violation( $DESC, $EXPL, $elem );
+                my $target_node = $op_node->snext_sibling;
+                if ( $target_node && ($target_node->isa('PPI::Token::Regexp') || $target_node->isa('PPI::Token::QuoteLike::Regexp')) ) {
+                    return $self->violation( $DESC, $EXPL, $elem );
+                }
             }
         }
     }
