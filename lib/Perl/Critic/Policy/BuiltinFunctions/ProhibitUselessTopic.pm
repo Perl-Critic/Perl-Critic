@@ -152,9 +152,8 @@ is better written as:
     for ( @list ) {
         my $backwards = reverse;
 
-However, it is difficult for Perl::Critic to determine scalar vs.
-list context, so I have decided to leave C<reverse> unchecked rather
-than giving false positives.
+However, the distinction for scalar vs. list context on C<reverse>
+is not yet working.  See L<KNOWN BUGS> below.
 
 =head2 Topic unnecessary for most filetest operators
 
