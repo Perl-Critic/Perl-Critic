@@ -50,6 +50,7 @@ lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitStringyEval.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitStringySplit.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitUniversalCan.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitUniversalIsa.pm
+lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitUselessTopic.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitVoidGrep.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitVoidMap.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/RequireBlockGrep.pm
@@ -124,6 +125,7 @@ lib/Perl/Critic/Policy/RegularExpressions/ProhibitFixedStringMatches.pm
 lib/Perl/Critic/Policy/RegularExpressions/ProhibitSingleCharAlternation.pm
 lib/Perl/Critic/Policy/RegularExpressions/ProhibitUnusedCapture.pm
 lib/Perl/Critic/Policy/RegularExpressions/ProhibitUnusualDelimiters.pm
+lib/Perl/Critic/Policy/RegularExpressions/ProhibitUselessTopic.pm
 lib/Perl/Critic/Policy/RegularExpressions/RequireBracesForMultiline.pm
 lib/Perl/Critic/Policy/RegularExpressions/RequireDotMatchAnything.pm
 lib/Perl/Critic/Policy/RegularExpressions/RequireExtendedFormatting.pm
@@ -212,6 +214,10 @@ lib/Test/Perl/Critic/Policy.pm
 LICENSE
 Makefile.PL
 MANIFEST			This list of files
+META.json
+META.yml
+README
+README.md
 t/00_modules.t
 t/01_bad_perlcriticrc
 t/01_config.t
@@ -265,6 +271,7 @@ t/BuiltinFunctions/ProhibitStringyEval.run
 t/BuiltinFunctions/ProhibitStringySplit.run
 t/BuiltinFunctions/ProhibitUniversalCan.run
 t/BuiltinFunctions/ProhibitUniversalIsa.run
+t/BuiltinFunctions/ProhibitUselessTopic.run
 t/BuiltinFunctions/ProhibitVoidGrep.run
 t/BuiltinFunctions/ProhibitVoidMap.run
 t/BuiltinFunctions/RequireBlockGrep.run
@@ -335,6 +342,7 @@ t/RegularExpressions/ProhibitFixedStringMatches.run
 t/RegularExpressions/ProhibitSingleCharAlternation.run
 t/RegularExpressions/ProhibitUnusedCapture.run
 t/RegularExpressions/ProhibitUnusualDelimiters.run
+t/RegularExpressions/ProhibitUselessTopic.run
 t/RegularExpressions/RequireBracesForMultiline.run
 t/RegularExpressions/RequireDotMatchAnything.run
 t/RegularExpressions/RequireExtendedFormatting.run
@@ -418,6 +426,3 @@ xt/author/95_kwalitee.t
 xt/author/98_pod_syntax.t
 xt/author/99_pod_coverage.t
 xt/author/generate_without_optional_dependencies_wrappers.PL
-README
-META.yml
-META.json

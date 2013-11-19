@@ -13,7 +13,7 @@ use Perl::Critic::Utils qw<
 >;
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.121';
+our $VERSION = '1.121_01';
 
 #-----------------------------------------------------------------------------
 
@@ -29,7 +29,7 @@ sub supported_parameters {
             description     => 'Pattern that determines what a private subroutine is.',
             default_string  => '\b_\w+\b',  ## no critic (RequireInterpolationOfMetachars)
             behavior        => 'string',
-            parser          => \& _parse_private_name_regex,
+            parser          => \&_parse_private_name_regex,
         },
         {
             name            => 'allow',

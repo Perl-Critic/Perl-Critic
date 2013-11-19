@@ -17,7 +17,7 @@ use Perl::Critic::Utils qw{
 };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.121';
+our $VERSION = '1.121_01';
 
 #-----------------------------------------------------------------------------
 
@@ -116,9 +116,9 @@ sub _enough_uses_in_regexp {
             }, _make_regexp_checker() );
     }
 
-    return ( none {not defined $_} @{$captures} )
+    return ( none {not defined} @{$captures} )
         && ( !%{$named_captures} ||
-            none {defined $_} values %{$named_captures} );
+            none {defined} values %{$named_captures} );
 }
 
 sub _enough_assignments {
@@ -183,7 +183,7 @@ sub _enough_assignments {
         }
     }
 
-    return none {not defined $_} @{$captures};
+    return none {not defined} @{$captures};
 }
 
 sub _symbol_is_slurpy {
@@ -291,9 +291,9 @@ sub _enough_magic {
 
     _check_for_magic($elem, $re, $captures, $named_captures, $doc);
 
-    return ( none {not defined $_} @{$captures} )
+    return ( none {not defined} @{$captures} )
         && ( !%{$named_captures} ||
-            none {defined $_} values %{$named_captures} );
+            none {defined} values %{$named_captures} );
 }
 
 # void return

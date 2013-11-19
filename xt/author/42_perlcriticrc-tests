@@ -35,8 +35,7 @@ lines = 20
 [InputOutput::RequireCheckedSyscalls]
 functions = open close
 
-[Miscellanea::RequireRcsKeywords]
-keywords = URL Date Author Revision
+[-Miscellanea::RequireRcsKeywords]
 
 # Character length is not a proper measure of complexity.
 [-RegularExpressions::ProhibitComplexRegexes]
