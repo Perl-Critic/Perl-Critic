@@ -820,18 +820,17 @@ sub is_subroutine_name {
 #-----------------------------------------------------------------------------
 
 sub is_function_call {
-    my $elem  = shift;
-    return if !$elem;
+    my $elem = shift or return;
 
-    return if is_hash_key($elem);
+    return if is_perl_bareword($elem);
+    return if is_perl_filehandle($elem);
+    return if is_package_declaration($elem);
+    return if is_included_module_name($elem);
     return if is_method_call($elem);
     return if is_class_name($elem);
     return if is_subroutine_name($elem);
-    return if is_included_module_name($elem);
-    return if is_package_declaration($elem);
-    return if is_perl_bareword($elem);
-    return if is_perl_filehandle($elem);
     return if is_label_pointer($elem);
+    return if is_hash_key($elem);
 
     return 1;
 }
