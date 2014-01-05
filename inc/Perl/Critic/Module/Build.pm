@@ -70,6 +70,7 @@ sub _run_nytprof {
             --theme=core
             --exclude=TidyCode
             --exclude=PodSpelling
+            --exclude=RcsKeywords
             blib
         >;
     warn "Running: $this_perl @perl_args @perlcritic_args\n";
