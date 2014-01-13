@@ -41,7 +41,7 @@ my $builder = Perl::Critic::Module::Build->new(
     # Don't require a developer version of Module::Build, even if the
     # distribution tarball was created with one.  (Oops.)
     configure_requires  => {
-        'Module::Build' => '0.34',
+        'Module::Build' => '0.4024',
     },
 
     PL_files            => get_PL_files(),
@@ -71,6 +71,7 @@ my $builder = Perl::Critic::Module::Build->new(
                 >
             ],
         },
+        x_authority => 'cpan:CRITICRE',
     },
 
     add_to_cleanup      => [
