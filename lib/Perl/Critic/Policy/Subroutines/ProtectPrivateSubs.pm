@@ -13,7 +13,7 @@ use Perl::Critic::Utils qw<
 >;
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.121';
+our $VERSION = '1.121_01';
 
 #-----------------------------------------------------------------------------
 
@@ -29,7 +29,7 @@ sub supported_parameters {
             description     => 'Pattern that determines what a private subroutine is.',
             default_string  => '\b_\w+\b',  ## no critic (RequireInterpolationOfMetachars)
             behavior        => 'string',
-            parser          => \& _parse_private_name_regex,
+            parser          => \&_parse_private_name_regex,
         },
         {
             name            => 'allow',
@@ -134,7 +134,7 @@ sub violates {
 sub _is_other_pkg_private_function {
     my ( $self, $elem ) = @_;
 
-    return if ! is_function_call($elem) && ! is_method_call($elem);
+    return if ! is_method_call($elem) && ! is_function_call($elem);
 
     my $private_name_regex = $self->{_private_name_regex};
     my $content = $elem->content();

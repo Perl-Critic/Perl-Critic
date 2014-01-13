@@ -12,5 +12,4 @@ allow_leading_tabs = 0
 
 [Editor::RequireEmacsFileVariables]
 
-[Miscellanea::RequireRcsKeywords]
-keywords = URL Date Author Revision
+[-Miscellanea::RequireRcsKeywords]

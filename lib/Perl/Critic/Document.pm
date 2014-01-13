@@ -22,7 +22,7 @@ use PPIx::Regexp 0.010 qw< >;
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '1.121';
+our $VERSION = '1.121_01';
 
 #-----------------------------------------------------------------------------
 
@@ -672,7 +672,7 @@ This facade does not implement the overloaded operators from
 L<PPI::Document|PPI::Document> (that is, the C<use overload ...>
 work). Therefore, users of this facade must not rely on that syntactic
 sugar.  So, for example, instead of C<my $source = "$doc";> you should
-write C<my $source = $doc->content();>
+write C<< my $source = $doc->content(); >>
 
 Perhaps there is a CPAN module out there which implements a facade
 better than we do here?

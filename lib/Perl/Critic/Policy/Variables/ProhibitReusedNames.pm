@@ -9,7 +9,7 @@ use Readonly;
 use Perl::Critic::Utils qw{ :severities :classification :data_conversion };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.121';
+our $VERSION = '1.121_01';
 
 #-----------------------------------------------------------------------------
 
@@ -40,22 +40,21 @@ sub violates {
     return if 'local' eq $elem->type;
 
     my $allow = $self->{_allow};
-    my @names = grep { not $allow->{$_} } $elem->variables();
-    my $names = [ @names ];
+    my $names = [ grep { not $allow->{$_} } $elem->variables() ];
     # Assert: it is impossible for @$names to be empty in valid Perl syntax
     # But if it IS empty, this code should still work but will be inefficient
 
-    # walk up the PDOM looking for declared variables in the same
-    # scope or outer scopes quit when we hit the root or when we find
-    # violations for all vars (the latter is a shortcut)
+    # Walk up the PDOM looking for declared variables in the same
+    # scope or outer scopes.  Quit when we hit the root or when we find
+    # violations for all vars (the latter is a shortcut).
     my $outer = $elem;
     my @violations;
     while (1) {
         my $up = $outer->sprevious_sibling;
         if (not $up) {
             $up = $outer->parent;
+            last if !$up; # top of PDOM, we're done
         }
-        last if !$up; # top of PDOM, we're done
         $outer = $up;
 
         if ($outer->isa('PPI::Statement::Variable') && 'local' ne $outer->type) {
@@ -67,7 +66,7 @@ sub violates {
                 last if not $names;  # found violations for ALL variables, we're done
             }
         }
-        }
+    }
     return @violations;
 }
 
@@ -168,7 +167,7 @@ a nice feature.
 
 =head1 COPYRIGHT
 
-Copyright (c) 2008-2011 Chris Dolan
+Copyright (c) 2008-2013 Chris Dolan
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

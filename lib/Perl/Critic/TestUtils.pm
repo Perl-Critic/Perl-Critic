@@ -22,7 +22,7 @@ use Perl::Critic::Exception::Fatal::Internal qw{ &throw_internal };
 use Perl::Critic::Utils qw{ :severities :data_conversion policy_long_name };
 use Perl::Critic::PolicyFactory (-test => 1);
 
-our $VERSION = '1.121';
+our $VERSION = '1.121_01';
 
 Readonly::Array our @EXPORT_OK => qw(
     pcritique pcritique_with_violations
@@ -135,7 +135,7 @@ sub subtests_in_tree {
     find(
         {
             wanted => sub {
-                return if not -f $_;
+                return if not -f;
 
                 my ($fileroot) = m{(.+)[.]run\z}xms;
 
@@ -348,7 +348,7 @@ sub bundled_policy_names {
     require ExtUtils::Manifest;
     my $manifest = ExtUtils::Manifest::maniread();
     my @policy_paths = map {m{\A lib/(Perl/Critic/Policy/.*).pm \z}xms} keys %{$manifest};
-    my @policies = map { join q{::}, split m{/}xms, $_} @policy_paths;
+    my @policies = map { join q{::}, split m{/}xms } @policy_paths;
     my @sorted_policies = sort @policies;
     return @sorted_policies;
 }
@@ -361,7 +361,7 @@ sub names_of_policies_willing_to_work {
             ->new( %configuration )
             ->policies();
 
-    return map { ref $_ } @policies_willing_to_work;
+    return map { ref } @policies_willing_to_work;
 }
 
 1;

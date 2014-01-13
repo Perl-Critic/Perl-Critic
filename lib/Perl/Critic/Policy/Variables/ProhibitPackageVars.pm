@@ -14,7 +14,7 @@ use Perl::Critic::Utils qw{
 };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.121';
+our $VERSION = '1.121_01';
 
 #-----------------------------------------------------------------------------
 
@@ -118,7 +118,7 @@ sub _is_vars_pragma {
 }
 
 sub _all_upcase {  ##no critic(ArgUnpacking)
-    return all { $_ eq uc $_ } @_;
+    return all { $_ eq uc $_ } @_; ## no critic ( BuiltinFunctions::ProhibitUselessTopic )
 }
 
 1;
