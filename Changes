@@ -1,5 +1,9 @@
 Revision history for Perl module Perl::Critic
 
+    [Miscellanea]
+    - Updated the perlcritic.el script to use modern Emacs hooks.
+    Thanks to @intrigeri and the Debian team for the patch.  Fixes GH #556.
+
 1.121_01 2013-11-17
 
     [New Policies]
