@@ -161,7 +161,9 @@ sub to_string {
 
     Perl::Critic::Policy::set_format( $self->_proto_format() );
 
-    return $prototype . "\n\n" . join q{}, map { "$_" } @{ $self->_get_policies() };
+    my $policy_prototypes = join qq{\n}, map { "$_" } @{ $self->_get_policies() };
+    $policy_prototypes =~ s/\s+ \z//xms; # Trim trailing whitespace
+    return $prototype . "\n\n" . $policy_prototypes . "\n";
 }
 
 #-----------------------------------------------------------------------------
@@ -191,7 +193,6 @@ ${prefix}add_themes                         =
 ${prefix}severity                           = %s
 ${prefix}maximum_violations_per_document    = %v
 %{\\n%\\x7b# \\x7df\\n${prefix}%n = %D\\n}O%{${prefix}Cannot programmatically discover what parameters this policy takes.\\n}U
-
 END_OF_FORMAT
 
 }
