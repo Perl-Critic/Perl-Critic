@@ -144,7 +144,7 @@ sub _is_unpack {
     return $TRUE if
             $prev
         and $prev->isa('PPI::Token::Operator')
-        and q{=} eq $prev->content()
+        and $prev->content() =~ m/= \Z/xms
         and (
                 not $next
             or  $next->isa('PPI::Token::Structure')
