@@ -38,16 +38,6 @@ sub violates {
     my $found = firstval { $_->isa('PPI::Token::Operator') } $elem->children();
     if ( $found ) {
         my $op = $found->content();
-        if ( !exists $augmented_assignments{ $op } ) {
-            # PPI doesn't parse all augmented assignment operators.  Detect
-            # the unsupported ones by concatenating two immediately adjacent
-            # operators and trying again.
-            my $immediately_adjacent = $found->next_sibling();  # not snext_sibling()
-            if ( $immediately_adjacent && $immediately_adjacent->isa('PPI::Token::Operator') ) {
-                $op .= $immediately_adjacent->content();
-            }
-        }
-
         if ( exists $augmented_assignments{ $op } ) {
             return $self->violation( sprintf( $DESC, $op ), $EXPL, $found );
         }
