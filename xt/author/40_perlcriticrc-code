@@ -30,8 +30,6 @@ lines = 20
 [InputOutput::RequireCheckedSyscalls]
 functions = open close
 
-[-Miscellanea::RequireRcsKeywords]
-
 [RegularExpressions::ProhibitUnusualDelimiters]
 allow_all_brackets = 1
 
