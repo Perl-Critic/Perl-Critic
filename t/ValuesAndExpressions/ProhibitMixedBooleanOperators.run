@@ -57,6 +57,15 @@ eval {
     }
 };
 
+#-----------------------------------------------------------------------------
+
+## name Mixed booleans with ||= and &&= operators (https://github.com/adamkennedy/PPI/issues/74)
+## failures 2
+## cut
+
+$foo ||= $this or $that;
+$foo &&= $this or $that;
+
 ##############################################################################
 # Local Variables:
 #   mode: cperl

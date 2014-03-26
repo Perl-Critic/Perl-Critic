@@ -422,6 +422,17 @@ sub foo {
 }
 
 #-----------------------------------------------------------------------------
+
+## name MOOSE idiom (https://github.com/adamkennedy/PPI/issues/74)
+## failures 0
+## cut
+
+sub BUILD {
+    my ($class, $options_ref) = @_;
+    $options_ref ||= @_;
+}
+
+#-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4
