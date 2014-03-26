@@ -35,8 +35,6 @@ lines = 20
 [InputOutput::RequireCheckedSyscalls]
 functions = open close
 
-[-Miscellanea::RequireRcsKeywords]
-
 # Character length is not a proper measure of complexity.
 [-RegularExpressions::ProhibitComplexRegexes]
 
