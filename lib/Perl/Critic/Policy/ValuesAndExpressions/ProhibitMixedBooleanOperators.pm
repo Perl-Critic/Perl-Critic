@@ -15,7 +15,7 @@ our $VERSION = '1.121_01';
 #-----------------------------------------------------------------------------
 
 Readonly::Hash my %LOW_BOOLEANS  => hashify( qw( not or and ) );
-Readonly::Hash my %HIGH_BOOLEANS => hashify( qw( ! || && ||= &&= ) );
+Readonly::Hash my %HIGH_BOOLEANS => hashify( qw( ! || && ||= &&= //=) );
 
 Readonly::Hash my %EXEMPT_TYPES => hashify(
     qw(
