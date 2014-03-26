@@ -13,7 +13,7 @@ use List::Util qw(first);
 use List::MoreUtils qw(uniq any);
 
 use Perl::Critic::Utils qw<
-    :booleans :characters hashify :severities words_from_string
+    :booleans :characters :classification hashify :severities words_from_string
 >;
 use base 'Perl::Critic::Policy';
 
@@ -144,7 +144,7 @@ sub _is_unpack {
     return $TRUE if
             $prev
         and $prev->isa('PPI::Token::Operator')
-        and $prev->content() =~ m/= \Z/xms
+        and is_assignment_operator($prev->content())
         and (
                 not $next
             or  $next->isa('PPI::Token::Structure')

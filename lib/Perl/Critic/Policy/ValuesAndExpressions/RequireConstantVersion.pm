@@ -123,9 +123,8 @@ sub _check_for_assignment_operator {
     my ( $operator ) = @_;
 
     return if not $operator->isa( 'PPI::Token::Operator' );
-
-    # This should match = ||= &&= += etc. but not =~
-    return $operator->content() =~ m/$EQUAL \Z/xms ? $operator : ();
+    return $operator if is_assignment_operator($operator->content());
+    return;
 }
 
 #-----------------------------------------------------------------------------
