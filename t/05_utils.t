@@ -18,7 +18,7 @@ use Perl::Critic::PolicyFactory;
 use Perl::Critic::TestUtils qw(bundled_policy_names);
 use Perl::Critic::Utils;
 
-use Test::More tests => 141;
+use Test::More tests => 153;
 
 #-----------------------------------------------------------------------------
 
@@ -110,15 +110,11 @@ sub test_find_keywords {
 #-----------------------------------------------------------------------------
 
 sub test_is_assignment_operator {
+    is( is_assignment_operator($_), 1, "$_ is an assignment operator" )
+        for qw( = **= += -= .= *= /= %= x= &= |= ^= <<= >>= &&= ||= //= );
 
-    for ( qw(||= &&= //= += *= -= >>= <<=) ) {
-        is( is_assignment_operator($_), 1, "$_ is an assignment operator" )
-    }
-
-
-    for ( qw(== =~ >= <= + - * / %) ) {
-        is( !!is_assignment_operator($_), q{}, "$_ is not an assignment operator" )
-    }
+    is( !!is_assignment_operator($_), q{}, "$_ is not an assignment operator" )
+        for qw( == != =~ >= <= + - * / % x bogus= );
 
     return;
 }
