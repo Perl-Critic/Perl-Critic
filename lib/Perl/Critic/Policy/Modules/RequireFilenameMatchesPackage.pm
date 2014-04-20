@@ -71,7 +71,8 @@ sub violates {
         last if ($path_part =~ m/\W/xms);
 
         # Mismatched name
-        return $self->violation( $DESC, $EXPL, $pkg_node );
+        return $self->violation( $DESC, $EXPL, $pkg_node )
+          unless $matched_any;
     }
 
     return if $matched_any;
