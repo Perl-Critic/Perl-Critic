@@ -135,7 +135,7 @@ magic variable in a non-trivial program, do it in a local scope.
 
 For example, to slurp a filehandle into a scalar, it's common to set
 the record separator to undef instead of a newline.  If you choose to
-do this (instead of using L<File::Slurp|File::Slurp>!) then be sure to
+do this (instead of using L<Path::Tiny|Path::Tiny>!) then be sure to
 localize the global and change it for as short a time as possible.
 
     # BAD:
