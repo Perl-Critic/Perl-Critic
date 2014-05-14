@@ -760,7 +760,7 @@ parsed value for later use by the C<violates()> method.
 An example parser (without enough error handling) for the above
 example declaration:
 
-    use File::Slurp qw< slurp >;
+    use Path::Tiny;
 
     use Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue
         qw{ throw_policy_value };
@@ -779,7 +779,7 @@ example declaration:
                     message_suffix => 'is not readable.';
             }
 
-            @thingies = slurp $config_string;
+            @thingies = path($config_string)->slurp;
         }
 
         $self->{_thingies} = \@thingies;
