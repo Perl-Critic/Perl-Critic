@@ -129,6 +129,7 @@ sub _check_for_assignment_operator {
 
     return           if not $operator->isa( 'PPI::Token::Operator' );
     return $operator if $EQUAL eq $operator->content();
+    return $operator if $operator->content() =~ /=$/;
 
     my $next;
     return       if not $next = $operator->snext_sibling();
