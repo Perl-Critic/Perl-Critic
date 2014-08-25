@@ -7,6 +7,10 @@ Revision history for Perl module Perl::Critic
       Also now requires Readonly-2.00, which obviates the need for Readonly::XS
       to get fast constants.
 
+    * File::HomeDir, File::Which, and Term::ANSIColor are all required now
+      instead of being optional or recommended. This simplifies our test code
+      and ensures consistent optimal behavior for all users.
+
     [New Policies]
     * Added two new policies: BuiltinFunctions::ProhibitUselessTopic and
       RegularExpressions::ProhibitUselessTopic.

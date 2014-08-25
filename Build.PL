@@ -12,11 +12,8 @@ use lib 'inc';
 use Perl::Critic::BuildUtilities qw<
     required_module_versions
     build_required_module_versions
-    recommended_module_versions
-    test_wrappers_to_generate
-    get_PL_files
-    dump_unlisted_or_optional_module_versions
     emit_tar_warning_if_necessary
+    get_PL_files
 >;
 use Perl::Critic::Module::Build;
 
@@ -36,7 +33,6 @@ my $builder = Perl::Critic::Module::Build->new(
 
     requires            => { required_module_versions() },
     build_requires      => { build_required_module_versions() },
-    recommends          => { recommended_module_versions() },
 
     # Don't require a developer version of Module::Build, even if the
     # distribution tarball was created with one.  (Oops.)
@@ -86,13 +82,10 @@ my $builder = Perl::Critic::Module::Build->new(
             README
         >,
         values %{ get_PL_files() },
-        test_wrappers_to_generate(),
     ],
 );
 
 $builder->create_build_script();
-
-dump_unlisted_or_optional_module_versions();
 
 
 ##############################################################################

@@ -876,9 +876,13 @@ L<Email::Address|Email::Address>
 
 L<Exception::Class|Exception::Class>
 
+L<File::HomeDir|File::HomeDir>
+
 L<File::Spec|File::Spec>
 
 L<File::Spec::Unix|File::Spec::Unix>
+
+L<File::Which|File::Which>
 
 L<IO::String|IO::String>
 
@@ -908,17 +912,11 @@ L<String::Format|String::Format>
 
 L<Task::Weaken|Task::Weaken>
 
+L<Term::ANSIColor|Term::ANSIColor>
+
 L<Text::ParseWords|Text::ParseWords>
 
 L<version|version>
-
-
-The following modules are optional, but recommended for complete
-functionality:
-
-L<File::HomeDir|File::HomeDir>
-
-L<File::Which|File::Which>
 
 
 =head1 CONTACTING THE DEVELOPMENT TEAM
