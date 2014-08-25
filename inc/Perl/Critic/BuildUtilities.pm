@@ -60,7 +60,7 @@ sub required_module_versions {
         'Pod::Select'                   => 0,
         'Pod::Spell'                    => 1,
         'Pod::Usage'                    => 0,
-        'Readonly'                      => 1.03,
+        'Readonly'                      => 2.00,
         'Scalar::Util'                  => 0,
         'String::Format'                => 1.13,
         'Task::Weaken'                  => 0,
@@ -88,7 +88,6 @@ sub build_required_module_versions {
 sub recommended_module_versions {
     return (
         'File::HomeDir'         => 0,
-        'Readonly::XS'          => 0,
 
         # If the following changes, the corresponding change needs to be made
         # in $Perl::Critic::Utils::Constants::_MODULE_VERSION_TERM_ANSICOLOR.
@@ -170,12 +169,8 @@ sub dump_unlisted_or_optional_module_versions {
     foreach my $module (sort @unlisted_modules) {
         my $version;
 
-        if ($module eq 'Readonly::XS') {
-            eval 'use Readonly; use Readonly::XS; $version = $Readonly::XS::VERSION;';
-        }
-        else {
-            eval "use $module; \$version = \$${module}::VERSION;";
-        }
+        eval "use $module; \$version = \$${module}::VERSION;";
+
         if ($EVAL_ERROR) {
             $version = 'not installed';
         } elsif (not defined $version) {
