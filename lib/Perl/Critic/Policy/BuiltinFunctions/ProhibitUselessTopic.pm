@@ -96,9 +96,7 @@ __END__
 
 =pod
 
-=for stopwords
-
-filetest
+=for stopwords filetest
 
 =head1 NAME
 
@@ -153,7 +151,7 @@ is better written as:
         my $backwards = reverse;
 
 However, the distinction for scalar vs. list context on C<reverse>
-is not yet working.  See L<KNOWN BUGS> below.
+is not yet working.  See L<KNOWN BUGS|KNOWN BUGS> below.
 
 =head2 Topic unnecessary for most filetest operators
 
