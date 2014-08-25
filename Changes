@@ -1,18 +1,26 @@
 Revision history for Perl module Perl::Critic
 
-    [Miscellanea]
-    - Updated the perlcritic.el script to use modern Emacs hooks.
-    Thanks to @intrigeri and the Debian team for the patch.  Fixes GH #556.
+1.122 2014-08-25
 
-1.121_01 2013-11-17
+    [Dependencies]
+    * Now requires PPI-1.218 which has numerous enahncements and bug fixes.
+      Also now requires Readonly-2.00, which obviates the need for Readonly::XS
+      to get fast constants.
 
     [New Policies]
     * Added two new policies: BuiltinFunctions::ProhibitUselessTopic and
-    RegularExpressions::ProhibitUselessTopic.
+      RegularExpressions::ProhibitUselessTopic.
 
     [Miscellanea]
+    * Updated the perlcritic.el script to use modern Emacs hooks.
+      Thanks to @intrigeri and the Debian team for the patch.  Fixes GH #556.
+
     * Removed all the internal RCS keyword boilerplate blocks that were never
       getting expanded.
+
+1.121_01 2013-11-17
+
+    * Changes summarized above under 1.122
 
 1.121 2013-11-02
 
