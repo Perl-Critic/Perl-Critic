@@ -116,6 +116,8 @@ sub test_is_assignment_operator {
 
     is( !!is_assignment_operator($_), q{}, "$_ is not an assignment operator" )
         for qw(== =~ >= <= + - * / %);
+
+    return;
 }
 
 #-----------------------------------------------------------------------------
