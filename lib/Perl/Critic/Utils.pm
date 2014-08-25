@@ -1427,7 +1427,7 @@ will not match variables, subroutine names, literal strings, numbers,
 or symbols.  If the document doesn't contain any matches, returns
 undef.
 
-=item C<is_assignment_operator( $element )
+=item C<is_assignment_operator( $element )>
 
 Given a L<PPI::Token::Operator|PPI::Token::Operator> or a string,
 returns true if that token represents one of the assignment operators
