@@ -11,5 +11,3 @@ allow_leading_tabs = 0
 [CodeLayout::ProhibitTrailingWhitespace]
 
 [Editor::RequireEmacsFileVariables]
-
-[-Miscellanea::RequireRcsKeywords]
