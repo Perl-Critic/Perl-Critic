@@ -4,7 +4,6 @@ use 5.006001;
 use strict;
 use warnings;
 
-use Readonly; # So we don't barf when we hit Readonly::XS below.
 
 use lib 'inc';
 use Perl::Critic::BuildUtilities qw< recommended_module_versions >;
