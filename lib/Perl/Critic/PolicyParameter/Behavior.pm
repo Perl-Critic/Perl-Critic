@@ -6,7 +6,7 @@ use warnings;
 
 use Perl::Critic::Utils qw{ :characters };
 
-our $VERSION = '1.121_01';
+our $VERSION = '1.122';
 
 #-----------------------------------------------------------------------------
 

@@ -11,7 +11,7 @@ use version;
 use Perl::Critic::Utils qw{ :severities :classification :ppi };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.121_01';
+our $VERSION = '1.122';
 
 #-----------------------------------------------------------------------------
 

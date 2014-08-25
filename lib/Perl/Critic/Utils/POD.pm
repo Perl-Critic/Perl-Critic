@@ -17,7 +17,7 @@ use Perl::Critic::Utils qw< :characters >;
 
 use Exporter 'import';
 
-our $VERSION = '1.121_01';
+our $VERSION = '1.122';
 
 #-----------------------------------------------------------------------------
 

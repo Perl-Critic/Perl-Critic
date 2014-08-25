@@ -10,7 +10,7 @@ use PPI::Token::Whitespace;
 use English qw(-no_match_vars);
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.121_01';
+our $VERSION = '1.122';
 
 Readonly::Scalar my $LINE_END => qr/\015{1,2}\012|[\012\015]/mxs;
 
