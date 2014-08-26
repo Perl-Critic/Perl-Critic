@@ -11,9 +11,7 @@ use ExtUtils::MakeMaker;
 use Perl::Critic::BuildUtilities qw<
     required_module_versions
     build_required_module_versions
-    test_wrappers_to_generate
     get_PL_files
-    dump_unlisted_or_optional_module_versions
     emit_tar_warning_if_necessary
 >;
 
@@ -41,7 +39,6 @@ WriteMakefile(
             join
                 q< >,
                 (map { (ref $_ eq 'ARRAY') ? @{$_} : $_ } values %{ get_PL_files() }),
-                test_wrappers_to_generate(),
     },
     META_MERGE     => {
         resources => {
@@ -68,8 +65,6 @@ tags:
 \t\t--langmap=Perl:+.t
 MAKE_FRAG
 }
-
-dump_unlisted_or_optional_module_versions();
 
 ##############################################################################
 # Local Variables:
