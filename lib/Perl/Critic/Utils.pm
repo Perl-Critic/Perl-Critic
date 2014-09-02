@@ -1169,12 +1169,12 @@ sub words_from_string {
 
 #-----------------------------------------------------------------------------
 
+Readonly::Hash my %ASSIGNMENT_OPERATORS => hashify( qw( = **= += -= .= *= /= %= x= &= |= ^= <<= >>= &&= ||= //= ) );
+
 sub is_assignment_operator {
     my $elem = shift;
 
-    return if $elem !~ m/= \Z/xms;
-    return if $elem =~ m/\A [=<>] = \Z/xms;  # Exclude == >= <=
-    return 1;
+    return $ASSIGNMENT_OPERATORS{ $elem };
 }
 
 #-----------------------------------------------------------------------------
