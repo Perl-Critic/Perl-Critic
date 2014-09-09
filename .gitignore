@@ -1,3 +1,4 @@
+*.sw*
 /Build
 Debian_CPANTS.txt
 MANIFEST.bak
