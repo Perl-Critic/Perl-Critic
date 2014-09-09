@@ -172,7 +172,7 @@ C<use>ing them.  There is an option to add to the default set of
 pragmata and modules in your F<.perlcriticrc>: C<equivalent_modules>.
 
     [TestingAndDebugging::RequireUseWarnings]
-    equivalent_modules = MooseX::My::Sugar
+    equivalent_modules = MooseX::My::Sugar Dancer
 
 
 =head1 BUGS
