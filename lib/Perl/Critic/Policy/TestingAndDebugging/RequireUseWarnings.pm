@@ -31,7 +31,7 @@ sub supported_parameters {
             default_string  => $EMPTY,
             behavior        => 'string list',
             list_always_present_values =>
-                [ qw< warnings Moose Moose::Role Moose::Util::TypeConstraints > ],
+                [ qw< warnings Moo Moose Moose::Role Moose::Util::TypeConstraints > ],
         },
     );
 }
@@ -172,7 +172,7 @@ C<use>ing them.  There is an option to add to the default set of
 pragmata and modules in your F<.perlcriticrc>: C<equivalent_modules>.
 
     [TestingAndDebugging::RequireUseWarnings]
-    equivalent_modules = MooseX::My::Sugar
+    equivalent_modules = MooseX::My::Sugar Dancer
 
 
 =head1 BUGS
