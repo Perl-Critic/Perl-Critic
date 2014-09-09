@@ -31,7 +31,7 @@ sub supported_parameters {
             default_string  => $EMPTY,
             behavior        => 'string list',
             list_always_present_values =>
-                [ qw< warnings Moose Moose::Role Moose::Util::TypeConstraints > ],
+                [ qw< warnings Moo Moose Moose::Role Moose::Util::TypeConstraints > ],
         },
     );
 }
