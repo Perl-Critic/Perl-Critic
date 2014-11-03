@@ -108,7 +108,7 @@ sub barr {
 ## TODO PPI v1.118 doesn't recognize anonymous subroutines
 ## cut
 
-my $x = bar {
+my $x = sub {
   print $_[0];
   print $_[1];
   print $_[2];
