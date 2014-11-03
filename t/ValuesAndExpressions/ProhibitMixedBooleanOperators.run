@@ -66,6 +66,14 @@ eval {
 $foo ||= $this or $that;
 $foo &&= $this or $that;
 
+#-----------------------------------------------------------------------------
+
+## name With a postfix control (GH #496)
+## failures 0
+## cut
+
+$value ||= 1 if 1 and 1;
+
 ##############################################################################
 # Local Variables:
 #   mode: cperl
