@@ -241,6 +241,16 @@ sub foo {
     }
 }
 
+#-----------------------------------------------------------------------------
+
+## name return without trailing whitespace (GH #451)
+## failures 0
+## cut
+
+sub f {
+    return'ProposedOverdue.png';
+}
+
 ##############################################################################
 # Local Variables:
 #   mode: cperl
