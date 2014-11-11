@@ -404,10 +404,7 @@ t/Variables/RequireLexicalLoopIterators.run
 t/Variables/RequireLocalizedPunctuationVars.run.PL
 t/Variables/RequireNegativeIndices.run
 TODO.pod
-tools/dump-autodie-tag-contents
-tools/pc-benchmark
 tools/ppidump
-tools/svnkeywords
 xt/author/40_criticize-code.t
 xt/author/40_perlcriticrc-code
 xt/author/40_stop_words
