@@ -1,1 +1,0 @@
-svn propset svn:keywords 'URL Date Author Revision' "$@"
