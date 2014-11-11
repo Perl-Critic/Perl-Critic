@@ -69,6 +69,7 @@ $foo &&= $this or $that;
 #-----------------------------------------------------------------------------
 
 ## name With a postfix control (GH #496)
+## TODO need to treat left and right sides separately
 ## failures 0
 ## cut
 
