@@ -1,6 +1,12 @@
 Revision history for Perl module Perl::Critic
 
-NEXT
+1.123 2014-11-11
+
+    [Dependencies]
+    * Now requires PPI-1.220 which has numerous bug fixes. This may 
+      eliminate the need for some "## no critic" markers you inserted to
+      work around those bugs. The "ProhibitUselessNoCritic" policy should
+      help you find them.
 
     [Miscellanea]
     * Fixed a typo in the Variables::ProhibitPerl4PackageNames message.
