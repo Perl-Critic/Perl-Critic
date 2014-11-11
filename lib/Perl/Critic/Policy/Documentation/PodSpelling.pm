@@ -24,7 +24,7 @@ use Perl::Critic::Exception::Fatal::Generic qw{ throw_generic };
 
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.122';
+our $VERSION = '1.123';
 
 #-----------------------------------------------------------------------------
 

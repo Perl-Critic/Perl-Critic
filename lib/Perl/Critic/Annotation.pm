@@ -13,7 +13,7 @@ use Readonly;
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '1.122';
+our $VERSION = '1.123';
 
 Readonly::Scalar my $LAST_ELEMENT => -1;
 

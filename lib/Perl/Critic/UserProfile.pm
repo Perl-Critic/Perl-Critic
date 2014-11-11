@@ -16,7 +16,7 @@ use Perl::Critic::Exception::Fatal::Internal qw{ throw_internal };
 use Perl::Critic::Exception::Configuration::Generic qw{ throw_generic };
 use Perl::Critic::PolicyConfig;
 
-our $VERSION = '1.122';
+our $VERSION = '1.123';
 
 #-----------------------------------------------------------------------------
 
