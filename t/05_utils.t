@@ -110,11 +110,13 @@ sub test_find_keywords {
 #-----------------------------------------------------------------------------
 
 sub test_is_assignment_operator {
-    is( is_assignment_operator($_), 1, "$_ is an assignment operator" )
-        for qw( = **= += -= .= *= /= %= x= &= |= ^= <<= >>= &&= ||= //= );
+    for ( qw( = **= += -= .= *= /= %= x= &= |= ^= <<= >>= &&= ||= //= ) ) {
+        is( is_assignment_operator($_), 1, "$_ is an assignment operator" );
+    }
 
-    is( !!is_assignment_operator($_), q{}, "$_ is not an assignment operator" )
-        for qw( == != =~ >= <= + - * / % x bogus= );
+    for ( qw( == != =~ >= <= + - * / % x bogus= ) ) {
+        is( !!is_assignment_operator($_), q{}, "$_ is not an assignment operator" );
+    }
 
     return;
 }
