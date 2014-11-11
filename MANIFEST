@@ -1,3 +1,4 @@
+.travis.yml
 bin/perlcritic
 Build.PL
 Changes
@@ -212,7 +213,6 @@ lib/Perl/Critic/Utils/PPI.pm
 lib/Perl/Critic/Violation.pm
 lib/Test/Perl/Critic/Policy.pm
 LICENSE
-Makefile.PL
 MANIFEST			This list of files
 META.json
 META.yml

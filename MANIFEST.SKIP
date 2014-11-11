@@ -80,3 +80,6 @@ RCS
 ^Debian_CPANTS\.txt$
 ^MYMETA.yml$
 ^MYMETA\.json$
+
+# Symlink to lib/Perl/Critic/Policy
+^Policy
