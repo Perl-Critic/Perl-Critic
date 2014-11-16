@@ -27,7 +27,7 @@ sub supported_parameters {
             default_string  => $EMPTY,
             behavior        => 'string list',
             list_always_present_values =>
-                [ qw< croak confess die exec exit throw Carp::confess Carp::croak > ],
+                [ qw< croak confess die exec exit throw Carp::confess Carp::croak ...> ],
         },
     );
 }
