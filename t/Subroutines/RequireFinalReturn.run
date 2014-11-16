@@ -251,6 +251,17 @@ sub f {
     return'ProposedOverdue.png';
 }
 
+#-----------------------------------------------------------------------------
+
+## name yada-yada operator is essentially terminal (GH #574)
+## failures 0
+## cut
+
+sub f {
+    some_code();
+    ...
+}
+
 ##############################################################################
 # Local Variables:
 #   mode: cperl
