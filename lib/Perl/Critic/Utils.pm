@@ -1360,7 +1360,13 @@ sub _is_fatal {
 sub _is_covered_by_autodie {
     my ($elem, $include) = @_;
 
-    my @args = parse_arg_list($include->schild(1));
+    my $autodie = $include->schild(1);
+    my @args = parse_arg_list($autodie);
+    my $first_arg = first_arg($autodie);
+
+    # The first argument to any `use` pragma could be a version number.
+    # If so, then we just discard it. We only want the arguments after it.
+    if ($first_arg and $first_arg->isa('PPI::Token::Number')){ shift @args };
 
     if (@args) {
         foreach my $arg (@args) {
