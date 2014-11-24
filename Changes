@@ -1,5 +1,11 @@
 Revision history for Perl module Perl::Critic
 
+NEXT
+
+    [Bug Fixes]
+    * The RequireChecked* family of policies has been fixed to accommodate
+      version numbers when use-ing the autodie pragma. GH #612. Thanks citrin.
+
 1.123 2014-11-11
 
     [Dependencies]
