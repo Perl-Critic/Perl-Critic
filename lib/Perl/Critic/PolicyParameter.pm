@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Readonly;
 
-use Exporter 'import';
+use Exporter 5.57 'import';
 
 Readonly::Array our @EXPORT_OK => qw{ $NO_DESCRIPTION_AVAILABLE };
 

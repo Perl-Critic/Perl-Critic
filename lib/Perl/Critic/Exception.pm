@@ -15,7 +15,7 @@ use Exception::Class (
     },
 );
 
-use Exporter 'import';
+use Exporter 5.57 'import';
 
 #-----------------------------------------------------------------------------
 

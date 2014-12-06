@@ -7,7 +7,7 @@ use Readonly;
 
 use Perl::Critic::Utils qw{ $EMPTY hashify };
 
-use Exporter 'import';
+use Exporter 5.57 'import';
 
 our $VERSION = '1.123';
 

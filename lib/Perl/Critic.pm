@@ -7,7 +7,7 @@ use warnings;
 use English qw(-no_match_vars);
 use Readonly;
 
-use Exporter 'import';
+use Exporter 5.57 'import';
 
 use File::Spec;
 use List::MoreUtils qw< firstidx >;

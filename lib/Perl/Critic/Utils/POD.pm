@@ -15,7 +15,7 @@ use Perl::Critic::Exception::Fatal::Generic qw< throw_generic >;
 use Perl::Critic::Exception::IO qw< throw_io >;
 use Perl::Critic::Utils qw< :characters >;
 
-use Exporter 'import';
+use Exporter 5.57 'import';
 
 our $VERSION = '1.123';
 
