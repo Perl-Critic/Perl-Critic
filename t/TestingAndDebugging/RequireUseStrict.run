@@ -145,7 +145,7 @@ $foo = $bar;
 
 #-----------------------------------------------------------------------------
 
-## name Moose::Util::TypeConstraints support
+## name Built-in equivalent modules
 ## failures 0
 ## cut
 
@@ -154,7 +154,7 @@ $foo = $bar;
 
 #-----------------------------------------------------------------------------
 
-## name equivalent_modules
+## name Custom configured equivalent modules
 ## failures 0
 ## parms { equivalent_modules => 'Foo' }
 ## cut
