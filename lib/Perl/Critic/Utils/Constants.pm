@@ -82,6 +82,8 @@ Readonly::Scalar our $PROFILE_COLOR_SEVERITY_LOWEST_DEFAULT     => $EMPTY;
 Readonly::Scalar our $_MODULE_VERSION_TERM_ANSICOLOR => 2.02;
 
 Readonly::Array our @STRICT_EQUIVALENT_MODULES => qw(
+    Mo
+
     Moo
     Moo::Role
 
@@ -94,10 +96,16 @@ Readonly::Array our @STRICT_EQUIVALENT_MODULES => qw(
     MooseX::Singleton
     MooseX::Role::Parameterized
 
+    Mouse
+    Mouse::Role
+    Mouse::Exporter
+    Mouse::Util::TypeConstraints
+
     Modern::Perl
 
     Dancer
     Dancer2
+
     Mojolicious::Lite
     Mojo::Base
 );
