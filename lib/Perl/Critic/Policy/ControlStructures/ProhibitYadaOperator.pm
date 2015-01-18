@@ -37,8 +37,11 @@ sub _is_yada {
     my ( $elem ) = @_;
 
     return if $elem ne '...';
-    return if not defined $elem->statement;
-    return if ref($elem->snext_sibling) eq 'PPI::Token::Number' and ref($elem->sprevious_sibling) eq 'PPI::Token::Number';
+    #return if not defined $elem->statement;
+
+    # if there is something significant on both sides of the element it's
+    # probably the three dot range operator
+    return if ($elem->snext_sibling and $elem->sprevious_sibling);
 
     return 1;
 }

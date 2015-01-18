@@ -6,6 +6,10 @@ for (1 ... 3) {
     do_something();
 }
 
+for ('a' ... 'b') {
+    do_something();
+}
+
 #-----------------------------------------------------------------------------
 
 ## name Basic failure
@@ -14,6 +18,21 @@ for (1 ... 3) {
 
 do_something();
 
+...
+
+do_something();
+
+#-----------------------------------------------------------------------------
+
+## name Excessive yadaing
+## failures 1
+## cut
+
+do_something();
+
+...
+...
+...
 ...
 
 do_something();
