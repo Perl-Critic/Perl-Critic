@@ -36,8 +36,8 @@ sub violates {
 sub _is_yada {
     my ( $elem ) = @_;
 
-    return unless $elem eq '...';
-    return unless $elem->statement;
+    return if $elem ne '...';
+    return if not defined $elem->statement;
     return if ref($elem->snext_sibling) eq 'PPI::Token::Number' and ref($elem->sprevious_sibling) eq 'PPI::Token::Number';
 
     return 1;
