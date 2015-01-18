@@ -3,7 +3,8 @@ Revision history for Perl module Perl::Critic
 NEXT
 
     [New Policies]
-    * Added a policy: ControlStructures::ProhibitYadaOperator.
+    * Added a policy: ControlStructures::ProhibitYadaOperator - Never use ...
+      in production code.
 
 1.123 2014-11-11
 
