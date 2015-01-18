@@ -12,8 +12,8 @@ our $VERSION = '1.123';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $DESC => q{yadda operator (...) used};
-Readonly::Scalar my $EXPL => [ 100 ];
+Readonly::Scalar my $DESC => q{yada operator (...) used};
+Readonly::Scalar my $EXPL => q{The yada operator is a placeholder for code you have not yet written.};
 
 #-----------------------------------------------------------------------------
 
