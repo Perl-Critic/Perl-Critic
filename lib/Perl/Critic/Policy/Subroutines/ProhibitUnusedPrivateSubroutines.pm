@@ -42,12 +42,19 @@ sub supported_parameters {
             default_string  => $EMPTY,
             behavior        => 'string list',
         },
+        {
+            name            => 'skip_when_using',
+            description     =>
+                q<Classes that, if used within a package, will cause the policy to be disabled for this package>,
+            default_string  => $EMPTY,
+            behavior        => 'string list',
+        },
     );
 }
 
 sub default_severity     { return $SEVERITY_MEDIUM       }
 sub default_themes       { return qw( core maintenance certrec ) }
-sub applies_to           { return 'PPI::Statement::Sub'  }
+sub applies_to           { return ('PPI::Statement::Include','PPI::Statement::Sub') }
 
 #-----------------------------------------------------------------------------
 
@@ -74,6 +81,18 @@ sub _parse_private_name_regex {
 
 sub violates {
     my ( $self, $elem, $document ) = @_;
+
+    # if we're skipping, return right away
+    $self->{skipping} and return;
+
+    # A "use" not a sub declaration?
+    if ($elem->isa('PPI::Statement::Include')) {
+        # see if we're using something that indicates we shoud skip from now on
+        if ($self->{_skip_when_using}{ $elem->module }) {
+            $self->{skipping} = 1;
+        }
+        return;
+    }
 
     # Not interested in forward declarations, only the real thing.
     $elem->forward() and return;
@@ -346,6 +365,13 @@ in a space-delimited list to the C<allow> option:
 These are added to the default list of exemptions from this policy. So the
 above allows C<< sub _bar {} >> and C<< sub _baz {} >>, even if they are not
 referred to in the module that defines them.
+
+You can configure this policy not to check private subroutines declared in a
+file that uses one or more particular named classes.  This allows you to, for
+example, exclude unused private subroutine checking in classes that are roles.
+
+    [Subroutines::ProhibitUnusedPrivateSubroutines]
+    skip_when_using = Moose::Role Moo::Role Role::Tiny
 
 
 =head1 HISTORY
