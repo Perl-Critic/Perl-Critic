@@ -46,7 +46,7 @@ sub supported_parameters {
         {
             name            => 'skip_when_using',
             description     =>
-                q<Classes that, if used within a package, will cause the policy to be disabled for this package>,
+                q<Modules that, if used within a package, will cause the policy to be disabled for this package>,
             default_string  => $EMPTY,
             behavior        => 'string list',
         },
@@ -359,7 +359,7 @@ above allows C<< sub _bar {} >> and C<< sub _baz {} >>, even if they are not
 referred to in the module that defines them.
 
 You can configure this policy not to check private subroutines declared in a
-file that uses one or more particular named classes.  This allows you to, for
+file that uses one or more particular named modules.  This allows you to, for
 example, exclude unused private subroutine checking in classes that are roles.
 
     [Subroutines::ProhibitUnusedPrivateSubroutines]
