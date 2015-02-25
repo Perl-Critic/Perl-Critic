@@ -7,6 +7,7 @@ use warnings;
 
 use English qw< $EVAL_ERROR -no_match_vars >;
 use Readonly;
+use List::Util qw(any);
 
 use Perl::Critic::Utils qw{
     :characters hashify is_function_call is_method_call :severities
@@ -54,7 +55,7 @@ sub supported_parameters {
 
 sub default_severity     { return $SEVERITY_MEDIUM       }
 sub default_themes       { return qw( core maintenance certrec ) }
-sub applies_to           { return ('PPI::Statement::Include','PPI::Statement::Sub') }
+sub applies_to           { return 'PPI::Statement::Sub'  }
 
 #-----------------------------------------------------------------------------
 
@@ -82,17 +83,8 @@ sub _parse_private_name_regex {
 sub violates {
     my ( $self, $elem, $document ) = @_;
 
-    # if we're skipping, return right away
-    $self->{skipping} and return;
-
-    # A "use" not a sub declaration?
-    if ($elem->isa('PPI::Statement::Include')) {
-        # see if we're using something that indicates we shoud skip from now on
-        if ($self->{_skip_when_using}{ $elem->module }) {
-            $self->{skipping} = 1;
-        }
-        return;
-    }
+    my @skip_modules = keys %{ $self->{_skip_when_using} }; 
+    return if any { $document->uses_module($_) } @skip_modules;
 
     # Not interested in forward declarations, only the real thing.
     $elem->forward() and return;
