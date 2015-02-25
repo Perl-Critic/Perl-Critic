@@ -7,6 +7,7 @@ use warnings;
 
 use English qw< $EVAL_ERROR -no_match_vars >;
 use Readonly;
+use List::Util qw(any);
 
 use Perl::Critic::Utils qw{
     :characters hashify is_function_call is_method_call :severities
@@ -42,6 +43,13 @@ sub supported_parameters {
             default_string  => $EMPTY,
             behavior        => 'string list',
         },
+        {
+            name            => 'skip_when_using',
+            description     =>
+                q<Modules that, if used within a package, will cause the policy to be disabled for this package>,
+            default_string  => $EMPTY,
+            behavior        => 'string list',
+        },
     );
 }
 
@@ -74,6 +82,9 @@ sub _parse_private_name_regex {
 
 sub violates {
     my ( $self, $elem, $document ) = @_;
+
+    my @skip_modules = keys %{ $self->{_skip_when_using} }; 
+    return if any { $document->uses_module($_) } @skip_modules;
 
     # Not interested in forward declarations, only the real thing.
     $elem->forward() and return;
@@ -347,6 +358,13 @@ These are added to the default list of exemptions from this policy. So the
 above allows C<< sub _bar {} >> and C<< sub _baz {} >>, even if they are not
 referred to in the module that defines them.
 
+You can configure this policy not to check private subroutines declared in a
+file that uses one or more particular named modules.  This allows you to, for
+example, exclude unused private subroutine checking in classes that are roles.
+
+    [Subroutines::ProhibitUnusedPrivateSubroutines]
+    skip_when_using = Moose::Role Moo::Role Role::Tiny
+
 
 =head1 HISTORY
 
@@ -359,6 +377,19 @@ which looks at the other side of the problem.
 
 Does not forbid C<< sub Foo::_foo{} >> because it does not know (and can not
 assume) what is in the C<Foo> package.
+
+Does not respect the scope caused by multiple packages in the same file.  For
+example a file:
+
+    package Foo;
+    sub _is_private { print "A private sub!"; }
+
+    package Bar;
+    _is_private();
+
+Will not trigger a violation even though C<Foo::_is_private> is not called.
+Similarly, C<skip_when_using> currently works on a I<file> level, not on a
+I<package scope> level.
 
 
 =head1 SEE ALSO

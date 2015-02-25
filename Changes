@@ -2,6 +2,11 @@ Revision history for Perl module Perl::Critic
 
 NEXT
 
+    [Policy Changes]
+    * Subroutines::ProhibitUnusedPrivateSubroutines can now ignore files that
+      use particular modules with 'skip_when_using' option allows of, for
+      example, skipping the policy for roles.  Thanks to Mark Fowler.
+
     [Bug Fixes]
     * The RequireChecked* family of policies has been fixed to accommodate
       version numbers when use-ing the autodie pragma. GH #612. Thanks citrin.
