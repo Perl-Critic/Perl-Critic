@@ -378,6 +378,19 @@ which looks at the other side of the problem.
 Does not forbid C<< sub Foo::_foo{} >> because it does not know (and can not
 assume) what is in the C<Foo> package.
 
+Does not respect the scope caused by multiple packages in the same file.  For
+example a file:
+
+    package Foo;
+    sub _is_private { print "A private sub!"; }
+
+    package Bar;
+    _is_private();
+
+Will not trigger a violation even though C<Foo::_is_private> is not called.
+Similarly, C<skip_when_using> currently works on a I<file> level, not on a
+I<package scope> level.
+
 
 =head1 SEE ALSO
 
