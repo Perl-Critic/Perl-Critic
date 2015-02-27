@@ -15,7 +15,7 @@ use Perl::Critic::Utils qw{
 };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.123';
+our $VERSION = '1.124';
 
 #-----------------------------------------------------------------------------
 
@@ -83,7 +83,7 @@ sub _parse_private_name_regex {
 sub violates {
     my ( $self, $elem, $document ) = @_;
 
-    my @skip_modules = keys %{ $self->{_skip_when_using} }; 
+    my @skip_modules = keys %{ $self->{_skip_when_using} };
     return if any { $document->uses_module($_) } @skip_modules;
 
     # Not interested in forward declarations, only the real thing.

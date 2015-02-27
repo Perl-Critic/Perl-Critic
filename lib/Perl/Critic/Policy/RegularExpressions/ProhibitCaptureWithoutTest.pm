@@ -8,7 +8,7 @@ use Readonly;
 use Perl::Critic::Utils qw{ :booleans :data_conversion :severities };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.123';
+our $VERSION = '1.124';
 
 #-----------------------------------------------------------------------------
 
