@@ -1,11 +1,15 @@
 Revision history for Perl module Perl::Critic
 
-NEXT
+1.124 2015-02-27
 
     [Policy Changes]
-    * Subroutines::ProhibitUnusedPrivateSubroutines can now ignore files that
+    * The ProhibitUnusedPrivateSubroutines policy can now ignore files that
       use particular modules with 'skip_when_using' option allows of, for
       example, skipping the policy for roles.  Thanks to Mark Fowler.
+
+    * The RequireUseStrict and RequireUseWarnings policies now regard Moose,
+      Moo, Mouse, Dancer, Mojolicious, and several other modules as equivalent
+      to the strict and warnings pragma.
 
     [Bug Fixes]
     * The RequireChecked* family of policies has been fixed to accommodate

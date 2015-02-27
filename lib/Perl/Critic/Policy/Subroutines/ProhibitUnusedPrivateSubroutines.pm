@@ -46,7 +46,7 @@ sub supported_parameters {
         {
             name            => 'skip_when_using',
             description     =>
-                q<Modules that, if used within a package, will cause the policy to be disabled for this package>,
+                q<Modules that, if used within a file, will cause the policy to be disabled for this file>,
             default_string  => $EMPTY,
             behavior        => 'string list',
         },

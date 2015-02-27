@@ -9,6 +9,7 @@ use List::Util qw(first);
 use version ();
 
 use Perl::Critic::Utils qw{ :severities $EMPTY };
+use Perl::Critic::Utils::Constants qw{ :equivalent_modules };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.123';
@@ -30,8 +31,7 @@ sub supported_parameters {
                 q<The additional modules to treat as equivalent to "warnings".>,
             default_string  => $EMPTY,
             behavior        => 'string list',
-            list_always_present_values =>
-                [ qw< warnings Moose Moose::Role Moose::Util::TypeConstraints > ],
+            list_always_present_values => ['warnings', @WARNINGS_EQUIVALENT_MODULES],
         },
     );
 }
