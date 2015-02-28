@@ -6,8 +6,8 @@ use strict;
 use warnings;
 
 use English qw< $EVAL_ERROR -no_match_vars >;
+use List::MoreUtils qw(any);
 use Readonly;
-use List::Util qw(any);
 
 use Perl::Critic::Utils qw{
     :characters hashify is_function_call is_method_call :severities
