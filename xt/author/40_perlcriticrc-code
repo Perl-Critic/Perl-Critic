@@ -15,6 +15,7 @@ allow_leading_tabs = 0
 strict = 1
 
 [-CodeLayout::RequireTidyCode]
+[-Documentation::RequirePodLinksIncludeText]
 
 [Documentation::PodSpelling]
 stop_words_file = xt/author/40_stop_words
