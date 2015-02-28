@@ -258,15 +258,6 @@ If you'd like to try L<Perl::Critic|Perl::Critic> without installing anything,
 there is a web-service available at L<http://perlcritic.com>.  The web-service
 does not yet support all the configuration features that are available in the
 native Perl::Critic API, but it should give you a good idea of what it does.
-You can also invoke the perlcritic web-service from the command-line by doing
-an HTTP-post, such as one of these:
-
-    $> lwp-request -m POST http://perlcritic.com/perl/critic.pl < MyModule.pm
-    $> wget -q -O - --post-file=MyModule.pm http://perlcritic.com/perl/critic.pl
-    $> curl --data @MyModule.pm http://perlcritic.com/perl/critic.pl
-
-Please note that the perlcritic web-service is still alpha code.  The
-URL and interface to the service are subject to change.
 
 Also, ActivePerl includes a very slick graphical interface to Perl-Critic
 called C<perlcritic-gui>.  You can get a free community edition of ActivePerl
