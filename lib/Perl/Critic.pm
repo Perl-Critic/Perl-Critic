@@ -237,26 +237,24 @@ Perl::Critic - Critique Perl source code for best-practices.
 Perl::Critic is an extensible framework for creating and applying coding
 standards to Perl source code.  Essentially, it is a static source code
 analysis engine.  Perl::Critic is distributed with a number of
-L<Perl::Critic::Policy|Perl::Critic::Policy> modules that attempt to enforce
-various coding guidelines.  Most Policy modules are based on Damian Conway's
-book B<Perl Best Practices>.  However, Perl::Critic is B<not> limited to PBP
-and will even support Policies that contradict Conway.  You can enable,
-disable, and customize those Polices through the Perl::Critic interface.  You
-can also create new Policy modules that suit your own tastes.
+L<Perl::Critic::Policy> modules that attempt to enforce various coding
+guidelines.  Most Policy modules are based on Damian Conway's book B<Perl Best
+Practices>.  However, Perl::Critic is B<not> limited to PBP and will even
+support Policies that contradict Conway.  You can enable, disable, and
+customize those Polices through the Perl::Critic interface.  You can also
+create new Policy modules that suit your own tastes.
 
 For a command-line interface to Perl::Critic, see the documentation for
-L<perlcritic|perlcritic>.  If you want to integrate Perl::Critic with your
-build process, L<Test::Perl::Critic|Test::Perl::Critic> provides an interface
-that is suitable for test programs.  Also,
-L<Test::Perl::Critic::Progressive|Test::Perl::Critic::Progressive> is useful
-for gradually applying coding standards to legacy code.  For the ultimate
-convenience (at the expense of some flexibility) see the
-L<criticism|criticism> pragma.
+L<perlcritic>.  If you want to integrate Perl::Critic with your build process,
+L<Test::Perl::Critic> provides an interface that is suitable for test
+programs.  Also, L<Test::Perl::Critic::Progressive> is useful for gradually
+applying coding standards to legacy code.  For the ultimate convenience (at
+the expense of some flexibility) see the L<criticism> pragma.
 
-If you'd like to try L<Perl::Critic|Perl::Critic> without installing anything,
-there is a web-service available at L<http://perlcritic.com>.  The web-service
-does not yet support all the configuration features that are available in the
-native Perl::Critic API, but it should give you a good idea of what it does.
+If you'd like to try L<Perl::Critic> without installing anything, there is a
+web-service available at L<http://perlcritic.com>.  The web-service does not
+yet support all the configuration features that are available in the native
+Perl::Critic API, but it should give you a good idea of what it does.
 
 Also, ActivePerl includes a very slick graphical interface to Perl-Critic
 called C<perlcritic-gui>.  You can get a free community edition of ActivePerl
@@ -265,8 +263,8 @@ from L<http://www.activestate.com>.
 
 =head1 INTERFACE SUPPORT
 
-This is considered to be a public class.  Any changes to its interface
-will go through a deprecation cycle.
+This is considered to be a public class.  Any changes to its interface will go
+through a deprecation cycle.
 
 
 =head1 CONSTRUCTOR
@@ -278,10 +276,10 @@ will go through a deprecation cycle.
 =item C<< new() >>
 
 Returns a reference to a new Perl::Critic object.  Most arguments are just
-passed directly into L<Perl::Critic::Config|Perl::Critic::Config>, but I have
-described them here as well.  The default value for all arguments can be
-defined in your F<.perlcriticrc> file.  See the L<"CONFIGURATION"> section for
-more information about that.  All arguments are optional key-value pairs as
+passed directly into L<Perl::Critic::Config>, but I have described them here
+as well.  The default value for all arguments can be defined in your
+F<.perlcriticrc> file.  See the L<"CONFIGURATION"> section for more
+information about that.  All arguments are optional key-value pairs as
 follows:
 
 B<-profile> is a path to a configuration file. If C<$FILE> is not defined,
@@ -428,13 +426,12 @@ cause only the relevant filenames to be displayed.
 Runs the C<$source_code> through the Perl::Critic engine using all the
 Policies that have been loaded into this engine.  If C<$source_code> is a
 scalar reference, then it is treated as a string of actual Perl code.  If
-C<$source_code> is a reference to an instance of
-L<PPI::Document|PPI::Document>, then that instance is used directly.
-Otherwise, it is treated as a path to a local file containing Perl code.  This
-method returns a list of L<Perl::Critic::Violation|Perl::Critic::Violation>
-objects for each violation of the loaded Policies.  The list is sorted in the
-order that the Violations appear in the code.  If there are no violations,
-this method returns an empty list.
+C<$source_code> is a reference to an instance of L<PPI::Document>, then that
+instance is used directly. Otherwise, it is treated as a path to a local file
+containing Perl code.  This method returns a list of
+L<Perl::Critic::Violation> objects for each violation of the loaded Policies.
+The list is sorted in the order that the Violations appear in the code.  If
+there are no violations, this method returns an empty list.
 
 =item C<< add_policy( -policy => $policy_name, -params => \%param_hash ) >>
 
@@ -442,9 +439,9 @@ Creates a Policy object and loads it into this Critic.  If the object cannot
 be instantiated, it will throw a fatal exception.  Otherwise, it returns a
 reference to this Critic.
 
-B<-policy> is the name of a L<Perl::Critic::Policy|Perl::Critic::Policy>
-subclass module.  The C<'Perl::Critic::Policy'> portion of the name can be
-omitted for brevity.  This argument is required.
+B<-policy> is the name of a L<Perl::Critic::Policy> subclass module.  The
+C<'Perl::Critic::Policy'> portion of the name can be omitted for brevity.
+This argument is required.
 
 B<-params> is an optional reference to a hash of Policy parameters. The
 contents of this hash reference will be passed into to the constructor of the
@@ -458,14 +455,14 @@ loaded into this engine.  Objects will be in the order that they were loaded.
 
 =item C< config() >
 
-Returns the L<Perl::Critic::Config|Perl::Critic::Config> object that was
-created for or given to this Critic.
+Returns the L<Perl::Critic::Config> object that was created for or given to
+this Critic.
 
 =item C< statistics() >
 
-Returns the L<Perl::Critic::Statistics|Perl::Critic::Statistics> object that
-was created for this Critic.  The Statistics object accumulates data for all
-files that are analyzed by this Critic.
+Returns the L<Perl::Critic::Statistics> object that was created for this
+Critic.  The Statistics object accumulates data for all files that are
+analyzed by this Critic.
 
 =back
 
@@ -476,7 +473,7 @@ For those folks who prefer to have a functional interface, The C<critique>
 method can be exported on request and called as a static function.  If the
 first argument is a hashref, its contents are used to construct a new
 Perl::Critic object internally.  The keys of that hash should be the same as
-those supported by the C<Perl::Critic::new> method.  Here are some examples:
+those supported by the C<Perl::Critic::new()> method.  Here are some examples:
 
     use Perl::Critic qw(critique);
 
@@ -639,15 +636,15 @@ distribution as F<examples/perlcriticrc-conway>.
 =head1 THE POLICIES
 
 A large number of Policy modules are distributed with Perl::Critic. They are
-described briefly in the companion document
-L<Perl::Critic::PolicySummary|Perl::Critic::PolicySummary> and in more detail
-in the individual modules themselves.  Say C<"perlcritic -doc PATTERN"> to see
-the perldoc for all Policy modules that match the regex C<m/PATTERN/ixms>
+described briefly in the companion document L<Perl::Critic::PolicySummary> and
+in more detail in the individual modules themselves.  Say C<"perlcritic -doc
+PATTERN"> to see the perldoc for all Policy modules that match the regex
+C<m/PATTERN/ixms>
 
 There are a number of distributions of additional policies on CPAN. If
-L<Perl::Critic|Perl::Critic> doesn't contain a policy that you want, some one
-may have already written it.  See the L</"SEE ALSO"> section below for a list
-of some of these distributions.
+L<Perl::Critic> doesn't contain a policy that you want, some one may have
+already written it.  See the L</"SEE ALSO"> section below for a list of some
+of these distributions.
 
 
 =head1 POLICY THEMES
@@ -687,7 +684,7 @@ determines which Policies will be loaded.  Precedence is the same as regular
 Perl code, and you can use parentheses to enforce precedence as well.
 Supported operators are:
 
-    Operator    Altertative    Example
+    Operator    Alternative    Example
     -----------------------------------------------------------------
     &&          and            'pbp && core'
     ||          or             'pbp || (bugs && security)'
@@ -767,8 +764,8 @@ annotations can be nested, and Policies named by an inner annotation will be
 disabled along with those already disabled an outer annotation.
 
 Some Policies like C<Subroutines::ProhibitExcessComplexity> apply to an entire
-block of code.  In those cases, C<"## no critic"> must appear on the line
-where the violation is reported.  For example:
+block of code.  In those cases, the C<"## no critic"> annotation must appear
+on the line where the violation is reported.  For example:
 
     sub complicated_function {  ## no critic (ProhibitExcessComplexity)
         # Your code here...
@@ -784,7 +781,7 @@ always be as specific as possible about which Policies you want to disable
 your code, try and find a compliant solution before resorting to this feature.
 
 
-=head1 THE L<Perl::Critic|Perl::Critic> PHILOSOPHY
+=head1 THE L<Perl::Critic> PHILOSOPHY
 
 Coding standards are deeply personal and highly subjective.  The goal of
 Perl::Critic is to help you write code that conforms with a set of best
@@ -799,78 +796,77 @@ private set of policies into Perl::Critic.
 =head1 EXTENDING THE CRITIC
 
 The modular design of Perl::Critic is intended to facilitate the addition of
-new Policies.  You'll need to have some understanding of L<PPI|PPI>, but most
+new Policies.  You'll need to have some understanding of L<PPI>, but most
 Policy modules are pretty straightforward and only require about 20 lines of
-code.  Please see the L<Perl::Critic::DEVELOPER|Perl::Critic::DEVELOPER> file
-included in this distribution for a step-by-step demonstration of how to
-create new Policy modules.
+code.  Please see the L<Perl::Critic::DEVELOPER> file included in this
+distribution for a step-by-step demonstration of how to create new Policy
+modules.
 
-If you develop any new Policy modules, feel free to send them to C<< <jeff
-@imaginative-software.com> >> and I'll be happy to put them into the
+If you develop any new Policy modules, feel free to send them to C<<
+<team@perlcritic.com> >> and I'll be happy to consider puting them into the
 Perl::Critic distribution.  Or if you would like to work on the Perl::Critic
-project directly, check out our repository at L<http://perlcritic.tigris.org>.
-To subscribe to our mailing list, send a message to L<mailto:dev-
-subscribe@perlcritic.tigris.org>.
+project directly, you can fork our repository at L<http://github.com/Perl-
+Critic/Perl- Critic.git>.
 
 The Perl::Critic team is also available for hire.  If your organization has
 its own coding standards, we can create custom Policies to enforce your local
 guidelines.  Or if your code base is prone to a particular defect pattern, we
 can design Policies that will help you catch those costly defects B<before>
 they go into production. To discuss your needs with the Perl::Critic team,
-just contact C<< <jeff@imaginative-software.com> >>.
+just contact C<< <team@perlcritic.com> >>.
 
 
 =head1 PREREQUISITES
 
 Perl::Critic requires the following modules:
 
-L<B::Keywords|B::Keywords>
+L<B::Keywords>
 
-L<Config::Tiny|Config::Tiny>
+L<Config::Tiny>
 
-L<Email::Address|Email::Address>
+L<Email::Address>
 
-L<Exception::Class|Exception::Class>
+L<Exception::Class>
 
-L<File::HomeDir|File::HomeDir>
+L<File::HomeDir>
 
-L<File::Spec|File::Spec>
+L<File::Spec>
 
-L<File::Spec::Unix|File::Spec::Unix>
+L<File::Spec::Unix>
 
-L<File::Which|File::Which>
+L<File::Which>
 
-L<IO::String|IO::String>
+L<IO::String>
 
-L<List::MoreUtils|List::MoreUtils>
+L<List::MoreUtils>
 
-L<List::Util|List::Util>
+L<List::Util>
 
-L<Module::Pluggable|Module::Pluggable>
+L<Module::Pluggable>
 
-L<Perl::Tidy|Perl::Tidy>
+L<Perl::Tidy>
 
-L<Pod::Spell|Pod::Spell>
+L<Pod::Spell>
 
 L<PPI|PPI>
 
-L<Pod::PlainText|Pod::PlainText>
+L<Pod::PlainText>
 
-L<Pod::Select|Pod::Select>
+L<Pod::Select>
 
-L<Pod::Usage|Pod::Usage>
+L<Pod::Usage>
 
-L<Readonly|Readonly>
+L<Readonly>
 
-L<Scalar::Util|Scalar::Util>
+L<Scalar::Util>
 
-L<String::Format|String::Format>
+L<String::Format>
 
-L<Task::Weaken|Task::Weaken>
+L<Task::Weaken>
 
-L<Term::ANSIColor|Term::ANSIColor>
+L<Term::ANSIColor>
 
-L<Text::ParseWords|Text::ParseWords>
+L<Text::ParseWords>
 
 L<version|version>
 
@@ -878,15 +874,13 @@ L<version|version>
 =head1 CONTACTING THE DEVELOPMENT TEAM
 
 You are encouraged to subscribe to the mailing list; send a message to
-L<mailto:users-subscribe@perlcritic.tigris.org>.  See also the archives at
-L<http://perlcritic.tigris.org/servlets/SummarizeList?listName=users>. You can
-also contact the author at C<< <jeff@imaginative-software.com> >>.
-
-At least one member of the development team has started hanging around in
-L<irc://irc.perl.org/#perlcritic>.
-
-You can also follow Perl::Critic on Twitter, at
-L<https://twitter.com/perlcritic>.
+L<mailto:users-subscribe@perlcritic.tigris.org>.  To prevent spam, you may be
+required to regisgter for a user account with Tigris.org before being allowed
+to post messages to the mailing list. See also the mailing list archives at
+L<http://perlcritic.tigris.org/servlets/SummarizeList?listName=users>. At
+least one member of the development team is usually hanging around in
+L<irc://irc.perl.org/#perlcritic> and you can follow Perl::Critic on Twitter,
+at L<https://twitter.com/perlcritic>.
 
 
 =head1 SEE ALSO
@@ -894,49 +888,40 @@ L<https://twitter.com/perlcritic>.
 There are a number of distributions of additional Policies available. A few
 are listed here:
 
-L<Perl::Critic::More|Perl::Critic::More>
+L<Perl::Critic::More>
 
-L<Perl::Critic::Bangs|Perl::Critic::Bangs>
+L<Perl::Critic::Bangs>
 
-L<Perl::Critic::Lax|Perl::Critic::Lax>
+L<Perl::Critic::Lax>
 
-L<Perl::Critic::StricterSubs|Perl::Critic::StricterSubs>
+L<Perl::Critic::StricterSubs>
 
-L<Perl::Critic::Swift|Perl::Critic::Swift>
+L<Perl::Critic::Swift>
 
-L<Perl::Critic::Tics|Perl::Critic::Tics>
+L<Perl::Critic::Tics>
 
 These distributions enable you to use Perl::Critic in your unit tests:
 
-L<Test::Perl::Critic|Test::Perl::Critic>
+L<Test::Perl::Critic>
 
-L<Test::Perl::Critic::Progressive|Test::Perl::Critic::Progressive>
+L<Test::Perl::Critic::Progressive>
 
 There is also a distribution that will install all the Perl::Critic related
 modules known to the development team:
 
-L<Task::Perl::Critic|Task::Perl::Critic>
-
-If you want to make sure you have absolutely everything, you can use this:
-
-L<Task::Perl::Critic::IncludingOptionalDependencies|Task::Perl::Critic::IncludingOptionalDependencies>
+L<Task::Perl::Critic>
 
 
 =head1 BUGS
 
 Scrutinizing Perl code is hard for humans, let alone machines.  If you find
 any bugs, particularly false-positives or false-negatives from a
-Perl::Critic::Policy, please submit them to L<https://github.com/Perl-Critic
+Perl::Critic::Policy, please submit them at L<https://github.com/Perl-Critic
 /Perl-Critic/issues>.  Thanks.
-
-Most policies will produce false-negatives if they cannot understand a
-particular block of code.
-
 
 =head1 CREDITS
 
-Adam Kennedy - For creating L<PPI|PPI>, the heart and soul of
-L<Perl::Critic|Perl::Critic>.
+Adam Kennedy - For creating L<PPI>, the heart and soul of L<Perl::Critic>.
 
 Damian Conway - For writing B<Perl Best Practices>, finally :)
 
