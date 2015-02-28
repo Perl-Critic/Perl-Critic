@@ -76,9 +76,8 @@ rules that contradict Conway.  All rules can easily be configured or disabled
 to your liking.
 
 This documentation only covers how to drive this command.  For all other
-information, including how to persistently configure this command so that you
-don't have to say so much on the command-line, see the documentation for
-L<Perl::Critic> itself.
+information, such as API reference and alternative interfaces, please see the
+documentation for L<Perl::Critic> itself.
 
 
 =head1 USAGE EXAMPLES
