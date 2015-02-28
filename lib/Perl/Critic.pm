@@ -254,10 +254,6 @@ useful for gradually applying coding standards to legacy code.  For
 the ultimate convenience (at the expense of some flexibility) see the
 L<criticism|criticism> pragma.
 
-Win32 and ActivePerl users can find PPM distributions of Perl::Critic at
-L<http://theoryx5.uwinnipeg.ca/ppms/> and Alexandr Ciornii's downloadable
-executable at L<http://chorny.net/perl/perlcritic.html>.
-
 If you'd like to try L<Perl::Critic|Perl::Critic> without installing anything,
 there is a web-service available at L<http://perlcritic.com>.  The web-service
 does not yet support all the configuration features that are available in the

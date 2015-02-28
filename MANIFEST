@@ -214,9 +214,6 @@ lib/Perl/Critic/Violation.pm
 lib/Test/Perl/Critic/Policy.pm
 LICENSE
 MANIFEST			This list of files
-META.json
-META.yml
-README
 README.md
 t/00_modules.t
 t/01_bad_perlcriticrc
@@ -421,3 +418,6 @@ xt/author/94_includes.t
 xt/author/95_kwalitee.t
 xt/author/98_pod_syntax.t
 xt/author/99_pod_coverage.t
+README
+META.yml
+META.json
