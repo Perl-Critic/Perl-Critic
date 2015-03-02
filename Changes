@@ -1,5 +1,13 @@
 Revision history for Perl module Perl::Critic
 
+1.125 2015-03-02
+
+    [Bug Fixes]
+    * Corrected dependency on List::Util::any() to List::MoreUtils::any()
+
+    [Miscellanea]
+    * Revised and updated documentation.
+
 1.124 2015-02-27
 
     [Policy Changes]
