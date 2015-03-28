@@ -758,10 +758,11 @@ family of Policies in one shot like this:
     # Now exempt from NamingConventions::Capitalization
     sub camelHumpSub {}
 
-The argument list must be enclosed in parentheses and must contain one or more
-comma-separated barewords (e.g. don't use quotes).  The C<"## no critic">
-annotations can be nested, and Policies named by an inner annotation will be
-disabled along with those already disabled an outer annotation.
+The argument list must be enclosed in parentheses or brackets and must contain
+one or more comma-separated barewords (e.g. don't use quotes).
+The C<"## no critic"> annotations can be nested, and Policies named by an inner
+annotation will be disabled along with those already disabled an outer
+annotation.
 
 Some Policies like C<Subroutines::ProhibitExcessComplexity> apply to an entire
 block of code.  In those cases, the C<"## no critic"> annotation must appear
