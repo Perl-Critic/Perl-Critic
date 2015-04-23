@@ -1,3 +1,8 @@
+[![Build Status](https://travis-ci.org/Perl-Critic/Perl-Critic.svg?branch=master)](https://travis-ci.org/Perl-Critic/Perl-Critic)
+[![Coverage Status](https://coveralls.io/repos/Perl-Critic/Perl-Critic/badge.png?branch=master)](https://coveralls.io/r/Perl-Critic/Perl-Critic?branch=master)
+![Kwalitee status](http://cpants.cpanauthors.org/dist/Perl-Critic.png)
+[![GitHub issues](https://img.shields.io/github/issues/Perl-Critic/Perl-Critic.svg)](https://github.com/Perl-Critic/Perl-Critic/issues)
+
 # NAME
 
 Perl::Critic - Critique Perl source code for best-practices.
