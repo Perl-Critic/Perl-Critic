@@ -13,5 +13,15 @@ install:
    - dzil authordeps | cpanm --mirror http://cpan.stratopan.com --quiet --notest --skip-satisfied
    - dzil listdeps   | cpanm --mirror http://cpan.stratopan.com --quiet --notest
 
+   - export RELEASE_TESTING=1 AUTOMATED_TESTING=1 AUTHOR_TESTING=1 HARNESS_OPTIONS=c HARNESS_TIMER=1
+   - cpanm --quiet --notest Devel::Cover::Report::Coveralls
+   - cpanm --quiet --notest --installdeps .
+   
 script:
    - dzil smoke --release --author
+   - PERL5OPT=-MDevel::Cover=-coverage,statement,branch,condition,path,subroutine prove -lrsv t
+   - cover -ignore_re '[.]t$|prove'
+
+after_success:
+    - cover -report coveralls
+   
