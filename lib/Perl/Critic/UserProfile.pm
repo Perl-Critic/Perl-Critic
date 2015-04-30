@@ -11,7 +11,7 @@ use Config::Tiny qw();
 use File::Spec qw();
 
 use Perl::Critic::OptionsProcessor qw();
-use Perl::Critic::Utils qw{ :characters policy_long_name policy_short_name };
+use Perl::Critic::Utils qw{ $EMPTY policy_long_name policy_short_name };
 use Perl::Critic::Exception::Fatal::Internal qw{ throw_internal };
 use Perl::Critic::Exception::Configuration::Generic qw{ throw_generic };
 use Perl::Critic::PolicyConfig;
