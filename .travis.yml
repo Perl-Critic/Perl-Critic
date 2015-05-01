@@ -10,7 +10,11 @@ perl:
    - "5.10"
    - "5.8"
 
+install:
+   - cpanm Perl::Critic::More Devel::EnforceEncapsulation
+   - sudo apt-get install -qq aspell
+
 script:
    - export HARNESS_OPTIONS='j:c'
    - perl Build.PL
-   - ./Build test
+   - ./Build authortest
