@@ -99,7 +99,10 @@ Readonly::Array our @STRICT_EQUIVALENT_MODULES => qw(
     Mouse
     Mouse::Role
     Mouse::Exporter
+    Mouse::Util
     Mouse::Util::TypeConstraints
+
+    Any::Moose
 
     Modern::Perl
 
@@ -108,6 +111,8 @@ Readonly::Array our @STRICT_EQUIVALENT_MODULES => qw(
 
     Mojolicious::Lite
     Mojo::Base
+
+    strictures
 );
 
 # Such modules tend to inflict both strictures and warnings, so for
