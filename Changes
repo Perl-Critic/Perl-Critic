@@ -1,5 +1,8 @@
 Revision history for Perl module Perl::Critic
 
+    [Miscellanea]
+    * Add more strict/warnings importer modules.
+
 1.125 2015-03-02
 
     [Bug Fixes]
