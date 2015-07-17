@@ -49,7 +49,7 @@ sub default_maximum_violations_per_document { return 1; }
 sub prepare_to_scan_document {
     my ( $self, $document ) = @_;
 
-    return 0 if $document->filename =~ /$self->{_exempt_files}/;
+    return 0 if exists $self->{_exempt_files} && $self->{_exempt_files} ne '' && $document->filename =~ /^$self->{_exempt_files}$/;
     return ! $self->{_exempt_scripts} || $document->is_module();
 }
 
