@@ -26,6 +26,11 @@ sub supported_parameters {
             behavior       => 'boolean',
         },
         {
+            name           => 'exempt_files',
+            description    => q{Ignore files matching this pattern.},
+            behavior       => 'string',
+        },
+        {
             name           => 'allow_import_of',
             description    => q{Allow the specified modules to be imported outside a package},
             behavior       => 'string list',
@@ -44,6 +49,7 @@ sub default_maximum_violations_per_document { return 1; }
 sub prepare_to_scan_document {
     my ( $self, $document ) = @_;
 
+    return 0 if $document->filename =~ /$self->{_exempt_files}/;
     return ! $self->{_exempt_scripts} || $document->is_module();
 }
 
