@@ -31,7 +31,7 @@ sub applies_to           { return 'PPI::Token::Word'  }
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    return if $elem ne 'grep';
+    return if $elem->content() ne 'grep';
     return if ! is_function_call($elem);
 
     my $arg = first_arg($elem);

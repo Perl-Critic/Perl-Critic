@@ -50,7 +50,7 @@ sub violates {
 sub _count_elsifs {
     my $elem = shift;
     return
-      grep { $_->isa('PPI::Token::Word') && $_ eq 'elsif' } $elem->schildren();
+      grep { $_->isa('PPI::Token::Word') && $_->content() eq 'elsif' } $elem->schildren();
 }
 
 1;

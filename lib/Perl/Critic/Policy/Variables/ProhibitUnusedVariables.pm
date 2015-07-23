@@ -46,7 +46,7 @@ sub violates {
         next DECLARATION if 'my' ne $declaration->type();
 
         my @children = $declaration->schildren();
-        next DECLARATION if any { $_ eq q<=> } @children;
+        next DECLARATION if any { $_->content() eq q<=> } @children;
 
         VARIABLE:
         foreach my $variable ( $declaration->variables() ) {
