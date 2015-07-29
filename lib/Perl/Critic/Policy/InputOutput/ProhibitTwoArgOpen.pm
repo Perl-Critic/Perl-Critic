@@ -15,7 +15,6 @@ our $VERSION = '1.125';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $STDIO_HANDLES_RX => qr/\b STD (?: IN | OUT | ERR \b)/xms;
 Readonly::Scalar my $FORK_HANDLES_RX => qr/\A (?: -[|] | [|]- ) \z/xms;
 Readonly::Scalar my $DESC => q{Two-argument "open" used};
 Readonly::Scalar my $EXPL => [ 207 ];
@@ -43,9 +42,6 @@ sub violates {
     my @args = parse_arg_list($elem);
 
     if ( scalar @args == 2 ) {
-        # When opening STDIN, STDOUT, or STDERR, the
-        # two-arg form is the only option you have.
-        return if $args[1]->[0] =~ $STDIO_HANDLES_RX;
         return if $args[1]->[0]->isa( 'PPI::Token::Quote' )
                && $args[1]->[0]->string() =~ $FORK_HANDLES_RX;
         return $self->violation( $DESC, $EXPL, $elem );
@@ -106,9 +102,8 @@ This Policy is not configurable except for the standard options.
 
 =head1 NOTES
 
-There are two cases in which you are forced to use the two-argument form of
-open. When re-opening STDIN, STDOUT, or STDERR, and when doing a safe pipe
-open, as described in L<perlipc|perlipc>.
+There is one case in which you are forced to use the two-argument form of
+open: when doing a safe pipe open, as described in L<perlipc|perlipc>.
 
 =head1 SEE ALSO
 
