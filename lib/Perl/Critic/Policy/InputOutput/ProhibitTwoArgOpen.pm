@@ -42,11 +42,11 @@ sub violates {
 
     my @args = parse_arg_list($elem);
 
-    if ( scalar @args == 2 ) {
+    if ( scalar @args <= 2 ) {
         # When opening STDIN, STDOUT, or STDERR, the
         # two-arg form is the only option you have.
-        return if $args[1]->[0] =~ $STDIO_HANDLES_RX;
-        return if $args[1]->[0]->isa( 'PPI::Token::Quote' )
+        return if @args == 2 && $args[1]->[0] =~ $STDIO_HANDLES_RX;
+        return if @args == 2 && $args[1]->[0]->isa( 'PPI::Token::Quote' )
                && $args[1]->[0]->string() =~ $FORK_HANDLES_RX;
         return $self->violation( $DESC, $EXPL, $elem );
     }
@@ -93,6 +93,13 @@ as in the difference between these two:
 
   open( $fh, 'foo.txt' );       # BAD: Reader must think what default mode is
   open( $fh, '<', 'foo.txt' );  # GOOD: Reader can see open mode
+
+There is also a one-argument form of C<open> which retrieves the expression to
+open from the global variable with the same name as the handle, but this has
+the same problems as the two-argument form, and adds in more ambiguity.
+
+  our $FH = '<foo.txt';
+  open( FH ); # not ok
 
 This policy will not complain if the file explicitly states that it is
 compatible with a version of perl prior to 5.6 via an include
