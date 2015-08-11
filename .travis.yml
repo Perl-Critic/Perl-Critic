@@ -12,17 +12,15 @@ perl:
 
 notifications:
    on_success: change
-   #on_success: always
    on_failure: always
    irc:
       channels:
          - "irc.perl.org#perlcritic"
       template:
          - "%{branch}: %{message} %{build_url}"
-   #email: false
 
 install:
-   - cpanm Perl::Critic::More Devel::EnforceEncapsulation
+   - cpanm Perl::Critic::More Test::Perl::Critic Devel::EnforceEncapsulation
    - sudo apt-get install -qq aspell
 
 script:
