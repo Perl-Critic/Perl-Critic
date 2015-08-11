@@ -12,7 +12,7 @@ use Perl::Critic::Utils qw<
 
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.125';
+our $VERSION = '1.126';
 
 #-----------------------------------------------------------------------------
 
@@ -34,65 +34,34 @@ sub supported_parameters {
 
 sub default_severity     { return $SEVERITY_MEDIUM           }
 sub default_themes       { return qw( core bugs )            }
-sub applies_to           { return 'PPI::Statement::Variable' }
+sub applies_to           { return 'PPI::Document' }
 
 #-----------------------------------------------------------------------------
-my %DocumentTree;
-
-sub prepare_to_scan_document {
-    my ($self, $document) = @_;
-
-    %DocumentTree = ();
-
-    return $TRUE;
-}
 
 sub violates {
-    my ( $self, $elem, undef ) = @_;
-    return if 'local' eq $elem->type;
+    my ( $self, $elem, $doc ) = @_;
 
-    my @names = grep { !$self->{_allow}{$_}; } $elem->variables();
-
-    my $outer = $elem->sprevious_sibling || $elem->parent;
-    return unless ($outer); # top of PDOM, we're done
-
-    my $outerlexicalvars = $self->_get_and_cache_lexical_names($outer);
-
-    my @collisions = grep {$outerlexicalvars->{$_};} @names;
-
-    return my @violations = map { $self->violation( $DESC . $_, $EXPL, $elem ) } @collisions;
+    return $self->_get_violations_below_element_given_seen_vars($doc, {});
 }
 
-# returns hashref - not tying for performance, but shared, so don't modify it
-sub _get_and_cache_lexical_names {
-    my ($self, $elem) = @_;
+# modifies $seen_vars
+sub _get_violations_below_element_given_seen_vars { 
+	my ( $self, $elem, $seen_vars ) = @_;   
 
-    no warnings 'recursion';
+	return unless ($elem->isa('PPI::Node'));
 
-    my $elemkey = Scalar::Util::refaddr($elem);
+	my @violations;
 
-    if ($DocumentTree{$elemkey}) {
-        return $DocumentTree{$elemkey};
-    }
+	foreach my $child_elem ($elem->schildren) {
+	        if ($child_elem->isa('PPI::Statement::Variable') && $child_elem->type ne 'local') {
+                    foreach my $var ($child_elem->variables) {
+                            push @violations, $self->violation( $DESC . $var, $EXPL, $child_elem ) if ($seen_vars->{$var}++); # impact shared variable
+                    }
+                }
+                push @violations, $self->_get_violations_below_element_given_seen_vars($child_elem, {%{$seen_vars}});
+	}
 
-    # walk up the PDOM looking for declared variables in the same
-    # scope or outer scopes quit when we hit the root or when we find
-    # violations for all vars (the latter is a shortcut)
-    my $up = $elem->sprevious_sibling || $elem->parent;
-
-    my %lexicalnames;
-    if ($up) {
-        my $original = $self->_get_and_cache_lexical_names($up);
-        %lexicalnames = %$original;
-    }
-
-    if ($elem->isa('PPI::Statement::Variable') && 'local' ne $elem->type) {
-        my @elemvariables = $elem->variables;
-        @lexicalnames{@elemvariables} = 1 x (@elemvariables);
-    }
-
-    $DocumentTree{$elemkey} = \%lexicalnames;
-    return \%lexicalnames;
+	return @violations;
 }
 
 1;
