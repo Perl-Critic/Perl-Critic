@@ -48,7 +48,7 @@ Readonly::Scalar my $NO_LIMIT => 'no_limit';
 
 #-----------------------------------------------------------------------------
 
-my $format = "%p"; #Default stringy format
+my $format = '%p'; #Default stringy format
 
 #-----------------------------------------------------------------------------
 
