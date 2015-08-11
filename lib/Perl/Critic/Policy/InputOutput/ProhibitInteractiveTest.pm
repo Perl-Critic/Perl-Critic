@@ -26,7 +26,7 @@ sub applies_to           { return 'PPI::Token::Operator' }
 
 sub violates {
     my ($self, $elem, $doc) = @_;
-    return if $elem ne '-t';
+    return if $elem->content() ne '-t';
     return $self->violation( $DESC, $EXPL, $elem );
 }
 
