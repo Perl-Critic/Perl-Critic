@@ -54,6 +54,8 @@ __END__
 
 =pod
 
+=for stopwords yada Berndt
+
 =head1 NAME
 
 Perl::Critic::Policy::ControlStructures::ProhibitYadaOperator - Never use C<...> in production code.
