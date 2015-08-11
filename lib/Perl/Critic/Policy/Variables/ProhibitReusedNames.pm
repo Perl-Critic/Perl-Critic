@@ -3,12 +3,9 @@ package Perl::Critic::Policy::Variables::ProhibitReusedNames;
 use 5.006001;
 use strict;
 use warnings;
-use List::MoreUtils qw(part);
 use Readonly;
 
-use Perl::Critic::Utils qw<
-    :severities :classification :data_conversion :booleans
->;
+use Perl::Critic::Utils qw{ :severities :classification :data_conversion };
 
 use base 'Perl::Critic::Policy';
 
@@ -57,8 +54,8 @@ sub _get_violations_below_element_given_seen_vars {
                     foreach my $var ($child_elem->variables) {
                             push @violations, $self->violation( $DESC . $var, $EXPL, $child_elem ) if ($seen_vars->{$var}++); # impact shared variable
                     }
-                }
-                push @violations, $self->_get_violations_below_element_given_seen_vars($child_elem, {%{$seen_vars}});
+            }
+            push @violations, $self->_get_violations_below_element_given_seen_vars($child_elem, {%{$seen_vars}});
 	}
 
 	return @violations;
