@@ -20,7 +20,7 @@ notifications:
          - "%{branch}: %{message} %{build_url}"
 
 install:
-   - cpanm Perl::Critic::More Test::Perl::Critic Devel::EnforceEncapsulation
+   - cpanm Perl::Critic::More Test::Perl::Critic Test::Kwalitee Test::Memory::Cycle Devel::EnforceEncapsulation
    - sudo apt-get install -qq aspell
 
 script:
