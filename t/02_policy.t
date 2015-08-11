@@ -160,7 +160,7 @@ is_deeply(
 
 
 # Test format getter/setters
-is( Perl::Critic::Policy::get_format, "%p", 'Default policy format');
+is( Perl::Critic::Policy::get_format, '%p', 'Default policy format');
 
 my $new_format = '%p %s [%t]';
 Perl::Critic::Policy::set_format( $new_format ); # Set format
