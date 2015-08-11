@@ -102,6 +102,10 @@ Readonly::Array our @STRICT_EQUIVALENT_MODULES => qw(
     Mouse::Util
     Mouse::Util::TypeConstraints
 
+    Moos
+
+    Mousse
+
     Any::Moose
 
     Modern::Perl
@@ -112,6 +116,8 @@ Readonly::Array our @STRICT_EQUIVALENT_MODULES => qw(
     Mojolicious::Lite
     Mojo::Base
 
+    sane
+    shit
     strictures
 );
 
