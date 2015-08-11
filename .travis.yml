@@ -25,6 +25,7 @@ addons:
   apt:
     packages:
     - aspell
+    - aspell-en
 
 install:
    - cpanm Perl::Critic::More Test::Perl::Critic Devel::EnforceEncapsulation
