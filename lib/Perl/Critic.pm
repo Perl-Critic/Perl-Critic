@@ -22,7 +22,7 @@ use Perl::Critic::Utils qw< :characters hashify shebang_line >;
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '1.125';
+our $VERSION = '1.126';
 
 Readonly::Array our @EXPORT_OK => qw(critique);
 

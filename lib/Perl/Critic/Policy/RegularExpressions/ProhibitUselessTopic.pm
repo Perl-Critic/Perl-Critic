@@ -7,7 +7,7 @@ use Readonly;
 use Perl::Critic::Utils qw{ :severities :classification :ppi };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.125';
+our $VERSION = '1.126';
 
 ## no critic ( ValuesAndExpressions::RequireInterpolationOfMetachars )
 ## The numerous $_ variables make false positives.

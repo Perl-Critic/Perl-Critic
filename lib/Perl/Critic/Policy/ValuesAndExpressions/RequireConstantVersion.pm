@@ -19,7 +19,7 @@ use Readonly;
 
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.125';
+our $VERSION = '1.126';
 
 #-----------------------------------------------------------------------------
 

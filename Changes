@@ -1,5 +1,7 @@
 Revision history for Perl module Perl::Critic
 
+1.126 2015-08-10
+
     [New Policies]
     * Added a policy: ControlStructures::ProhibitYadaOperator - Never use ...
       in production code.
