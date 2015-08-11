@@ -21,9 +21,13 @@ notifications:
       template:
          - "%{branch}: %{message} %{build_url}"
 
+addons:
+  apt:
+    packages:
+    - aspell
+
 install:
    - cpanm Perl::Critic::More Test::Perl::Critic Devel::EnforceEncapsulation
-   - sudo apt-get install -qq aspell
 
 script:
    - export HARNESS_OPTIONS='j:c'
