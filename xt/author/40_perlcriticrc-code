@@ -18,6 +18,7 @@ strict = 1
 [-Documentation::RequirePodLinksIncludeText]
 
 [Documentation::PodSpelling]
+spell_command = aspell list -l en_US
 stop_words_file = xt/author/40_stop_words
 
 [Documentation::RequirePodSections]
