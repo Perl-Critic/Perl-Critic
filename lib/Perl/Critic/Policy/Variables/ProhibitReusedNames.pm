@@ -44,9 +44,9 @@ sub violates {
 
 # modifies $seen_vars
 sub _get_violations_below_element_given_seen_vars {
-	my ( $self, $elem, $seen_vars ) = @_;
-	if (!$elem->isa('PPI::Node')) { return; }
-	my @violations;
+        my ( $self, $elem, $seen_vars ) = @_;
+        if (!$elem->isa('PPI::Node')) { return; }
+        my @violations;
 
         foreach my $child_elem ($elem->schildren) {
                 if ($child_elem->isa('PPI::Statement::Variable') && $child_elem->type ne 'local') {
