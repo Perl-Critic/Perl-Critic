@@ -37,29 +37,29 @@ sub applies_to           { return 'PPI::Document' }
 #-----------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, $doc ) = @_;
+        my ( $self, $elem, $doc ) = @_;
 
-    return $self->_get_violations_below_element_given_seen_vars($doc, {});
+        return $self->_get_violations_below_element_given_seen_vars($doc, {});
 }
 
 # modifies $seen_vars
-sub _get_violations_below_element_given_seen_vars { 
-	my ( $self, $elem, $seen_vars ) = @_;   
+sub _get_violations_below_element_given_seen_vars {
+my ( $self, $elem, $seen_vars ) = @_;
 
-	return unless ($elem->isa('PPI::Node'));
+        return unless ($elem->isa('PPI::Node'));
 
 	my @violations;
 
-	foreach my $child_elem ($elem->schildren) {
-	        if ($child_elem->isa('PPI::Statement::Variable') && $child_elem->type ne 'local') {
-                    foreach my $var ($child_elem->variables) {
-                        if (!$self->{_allow}{$var} && $seen_vars->{$var}++) {
-                            push @violations, $self->violation( $DESC . $var, $EXPL, $child_elem );
+        foreach my $child_elem ($elem->schildren) {
+                if ($child_elem->isa('PPI::Statement::Variable') && $child_elem->type ne 'local') {
+                        foreach my $var ($child_elem->variables) {
+                                if (!$self->{_allow}{$var} && $seen_vars->{$var}++) {
+                                        push @violations, $self->violation( $DESC . $var, $EXPL, $child_elem );
+                                }
                         }
-                    }
                 }
                 push @violations, $self->_get_violations_below_element_given_seen_vars($child_elem, {%{$seen_vars}});
-	}
+        }
 
 	return @violations;
 }
@@ -169,4 +169,3 @@ can be found in the LICENSE file included with this module.
 #   c-indentation-style: bsd
 # End:
 # ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab shiftround :
-
