@@ -46,7 +46,7 @@ sub violates {
 sub _get_violations_below_element_given_seen_vars {
 my ( $self, $elem, $seen_vars ) = @_;
 
-        return unless ($elem->isa('PPI::Node'));
+	unless ($elem->isa('PPI::Node')) { return; }
 
 	my @violations;
 
@@ -61,7 +61,7 @@ my ( $self, $elem, $seen_vars ) = @_;
                 push @violations, $self->_get_violations_below_element_given_seen_vars($child_elem, {%{$seen_vars}});
         }
 
-	return @violations;
+        return @violations;
 }
 
 1;
