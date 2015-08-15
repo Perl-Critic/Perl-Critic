@@ -44,7 +44,13 @@ my @topical_funcs = qw(
 );
 my %topical_funcs = map { ($_ => 1) } @topical_funcs;
 
-sub violates {
+my %applies_to;
+@applies_to{ @filetest_operators, @topical_funcs } = ();
+
+sub violates {  ## no critic (ArgUnpacking)
+    # Exit early if the element can't possibly be one we care about.
+    return if not exists $applies_to{ $_[1]->content };
+
     my ( $self, $elem, undef ) = @_;
 
     my $content = $elem->content;
