@@ -391,6 +391,7 @@ L<http://safari.oreilly.com> instead of page numbers from the actual book.
 NOTE: This feature is not implemented yet.
 
 =item C<--color>
+
 =item C<--colour>
 
 This option is on when outputting to a tty.  When set, Severity 5 and 4 are
