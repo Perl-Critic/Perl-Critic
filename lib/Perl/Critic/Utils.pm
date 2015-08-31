@@ -783,6 +783,7 @@ sub is_class_name {
     return if !$elem;
 
     return _is_dereference_operator( $elem->snext_sibling() )
+        && !eval{$elem->snext_sibling->snext_sibling->isa('PPI::Structure::Subscript')}
         && !_is_dereference_operator( $elem->sprevious_sibling() );
 }
 
