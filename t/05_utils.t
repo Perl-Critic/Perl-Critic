@@ -36,6 +36,7 @@ test_is_perl_builtin();
 test_is_perl_global();
 test_precedence_of();
 test_is_subroutine_name();
+test_is_class_name();
 test_policy_long_name_and_policy_short_name();
 test_interpolate();
 test_is_perl_and_shebang_line();
@@ -278,6 +279,34 @@ sub test_is_subroutine_name {
     $doc  = make_doc( $code );
     $word = $doc->find_first( sub { $_[1] eq 'foo' } );
     ok( !is_subroutine_name( $word ), 'Is not a subroutine name');
+
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
+sub test_is_class_name {
+    my $code = q/
+        package World::Geography;
+
+        use constant CAPITALS => +{
+            England     => 'London',
+            France      => 'Paris',
+        };
+
+        sub GetCapital {
+            my ($class, $country) = @_;
+            return World::Geography::CAPITALS->{$country};
+        }
+
+        my $paris = World::Geography->GetCapital('France');
+    /;
+    my $doc  = make_doc( $code );
+    my $class_word = $doc->find_first( sub { $_[1] eq 'World::Geography' && !is_package_declaration($_[1]) } );
+    my $non_class_word = $doc->find_first( sub { $_[1] eq 'World::Geography::CAPITALS' } );
+
+    ok( is_class_name( $class_word ), 'Is a class name');
+    ok( !is_class_name( $non_class_word ), 'Is not a class name');
 
     return;
 }
