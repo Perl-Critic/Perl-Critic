@@ -116,6 +116,10 @@ Readonly::Array our @STRICT_EQUIVALENT_MODULES => qw(
     Mojolicious::Lite
     Mojo::Base
 
+    Object::Simple
+
+    Role::Tiny
+
     sane
     shit
     strictures
