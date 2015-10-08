@@ -300,7 +300,7 @@ sub test_is_class_name {
         }
 
         my $paris = World::Geography->GetCapital('France');
-    EOF
+EOF
     
     my $doc  = make_doc( $code );
     my $class_word = $doc->find_first( sub { $_[1] eq 'World::Geography' && !is_package_declaration($_[1]) } );
