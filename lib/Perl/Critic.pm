@@ -117,8 +117,12 @@ sub critique {  ## no critic (ArgUnpacking)
 sub _gather_violations {
     my ($self, $doc) = @_;
 
-    # Disable exempt code lines, if desired
-    if ( not $self->config->force() ) {
+    if ( $self->config->force() ) {
+        # Disable processing of the Perl version statements
+        $doc->suppress_version_statements();
+    }
+    else {
+        # Exempt annotated code
         $doc->process_annotations();
     }
 
@@ -383,11 +387,13 @@ L<Perl::Critic::Utils::Constants/"$PROFILE_STRICTNESS_QUIET"> makes
 Perl::Critic shut up about these things.
 
 B<-force> is a boolean value that controls whether Perl::Critic observes the
-magical C<"## no critic"> annotations in your code. If set to a true value,
-Perl::Critic will analyze all code.  If set to a false value (which is the
-default) Perl::Critic will ignore code that is tagged with these annotations.
-See L<"BENDING THE RULES"> for more information.  You can set the default
-value for this option in your F<.perlcriticrc> file.
+magical C<"## no critic"> annotations and Perl version specifications in your
+code. If set to a true value, Perl::Critic will analyze all code.  If set to
+a false value (which is the default) Perl::Critic will ignore code that is
+tagged with C<"## no critic"> annotations and some violations that are
+unavoidable in older versions of Perl. See L<"BENDING THE RULES"> for more
+information.  You can set the default value for this option in your
+F<.perlcriticrc> file.
 
 B<-verbose> can be a positive integer (from 1 to 11), or a literal format
 specification.  See L<Perl::Critic::Violation|Perl::Critic::Violation> for an
