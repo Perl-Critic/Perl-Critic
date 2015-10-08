@@ -18,7 +18,7 @@ use Perl::Critic::PolicyFactory;
 use Perl::Critic::TestUtils qw(bundled_policy_names);
 use Perl::Critic::Utils;
 
-use Test::More tests => 153;
+use Test::More tests => 155;
 
 #-----------------------------------------------------------------------------
 
