@@ -286,7 +286,7 @@ sub test_is_subroutine_name {
 #-----------------------------------------------------------------------------
 
 sub test_is_class_name {
-    my $code = q/
+    my $code = <<'EOF';
         package World::Geography;
 
         use constant CAPITALS => +{
@@ -300,7 +300,8 @@ sub test_is_class_name {
         }
 
         my $paris = World::Geography->GetCapital('France');
-    /;
+    EOF
+    
     my $doc  = make_doc( $code );
     my $class_word = $doc->find_first( sub { $_[1] eq 'World::Geography' && !is_package_declaration($_[1]) } );
     my $non_class_word = $doc->find_first( sub { $_[1] eq 'World::Geography::CAPITALS' } );
