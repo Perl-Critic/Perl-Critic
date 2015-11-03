@@ -1,5 +1,3 @@
-sudo: false
-
 language: perl
 
 perl:
@@ -11,6 +9,9 @@ perl:
    - "5.12"
    - "5.10"
    - "5.8"
+
+# Use the container-base Travis infrastructure
+sudo: false
 
 notifications:
    on_success: change
