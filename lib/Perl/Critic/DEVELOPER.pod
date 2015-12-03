@@ -1043,7 +1043,7 @@ only to say:
 =head1 TESTING YOUR POLICY
 
 The L<Perl::Critic> distribution also contains a framework for testing your
-Policy.  See L<Test::Perl::Critic::Policy> for the details.
+Policy.  See L<Perl::Critic::TestUtils> for the details.
 
 =head1 HINT
 
