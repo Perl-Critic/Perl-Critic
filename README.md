@@ -517,10 +517,11 @@ family of Policies in one shot like this:
     # Now exempt from NamingConventions::Capitalization
     sub camelHumpSub {}
 
-The argument list must be enclosed in parentheses and must contain one or more
-comma-separated barewords (e.g. don't use quotes).  The `"## no critic"`
-annotations can be nested, and Policies named by an inner annotation will be
-disabled along with those already disabled an outer annotation.
+The argument list must be enclosed in parentheses or brackets and must contain
+one or more comma-separated barewords (e.g. don't use quotes).
+The `"## no critic"` annotations can be nested, and Policies named by an inner
+annotation will be disabled along with those already disabled an outer
+annotation.
 
 Some Policies like `Subroutines::ProhibitExcessComplexity` apply to an entire
 block of code.  In those cases, the `"## no critic"` annotation must appear
@@ -559,7 +560,7 @@ code.  Please see the [Perl::Critic::DEVELOPER](https://metacpan.org/pod/Perl::C
 distribution for a step-by-step demonstration of how to create new Policy
 modules.
 
-If you develop any new Policy modules, feel free to send them to `<team@perlcritic.com>` and I'll be happy to consider puting them into the
+If you develop any new Policy modules, feel free to send them to `<team@perlcritic.com>` and I'll be happy to consider putting them into the
 Perl::Critic distribution.  Or if you would like to work on the Perl::Critic
 project directly, you can fork our repository at ["/github.com/Perl-
 Critic/Perl- Critic.git" in http:](https://metacpan.org/pod/http:#github.com-Perl--Critic-Perl--Critic.git).
@@ -629,7 +630,7 @@ Perl::Critic requires the following modules:
 
 You are encouraged to subscribe to the mailing list; send a message to
 [mailto:users-subscribe@perlcritic.tigris.org](mailto:users-subscribe@perlcritic.tigris.org).  To prevent spam, you may be
-required to regisgter for a user account with Tigris.org before being allowed
+required to register for a user account with Tigris.org before being allowed
 to post messages to the mailing list. See also the mailing list archives at
 [http://perlcritic.tigris.org/servlets/SummarizeList?listName=users](http://perlcritic.tigris.org/servlets/SummarizeList?listName=users). At
 least one member of the development team is usually hanging around in
@@ -668,8 +669,8 @@ modules known to the development team:
 
 Scrutinizing Perl code is hard for humans, let alone machines.  If you find
 any bugs, particularly false-positives or false-negatives from a
-Perl::Critic::Policy, please submit them at ["/github.com/Perl-Critic
-/Perl-Critic/issues" in https:](https://metacpan.org/pod/https:#github.com-Perl-Critic-Perl-Critic-issues).  Thanks.
+Perl::Critic::Policy, please submit them at
+[https://github.com/Perl-Critic/Perl-Critic/issues](https://github.com/Perl-Critic/Perl-Critic/issues).  Thanks.
 
 # CREDITS
 
@@ -693,7 +694,7 @@ Dolan's project to implement twenty PBP policies.
 
 # AUTHOR
 
-Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
+Jeffrey Ryan Thalhammer &lt;jeff@imaginative-software.com>
 
 # COPYRIGHT
 
