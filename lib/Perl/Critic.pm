@@ -917,8 +917,8 @@ L<Task::Perl::Critic>
 
 Scrutinizing Perl code is hard for humans, let alone machines.  If you find
 any bugs, particularly false-positives or false-negatives from a
-Perl::Critic::Policy, please submit them at L<https://github.com/Perl-Critic
-/Perl-Critic/issues>.  Thanks.
+Perl::Critic::Policy, please submit them at
+L<https://github.com/Perl-Critic/Perl-Critic/issues>.  Thanks.
 
 =head1 CREDITS
 
