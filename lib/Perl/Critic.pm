@@ -330,7 +330,7 @@ B<-include> is a reference to a list of string C<@PATTERNS>.  Policy modules
 that match at least one C<m/$PATTERN/ixms> will always be loaded, irrespective
 of all other settings.  For example:
 
-    my $critic = Perl::Critic->new(-include => ['layout'] -severity => 4);
+    my $critic = Perl::Critic->new(-include => ['layout'], -severity => 4);
 
 This would cause Perl::Critic to apply all the C<CodeLayout::*> Policy modules
 even though they have a severity level that is less than 4. You can set the
@@ -342,7 +342,7 @@ B<-exclude> is a reference to a list of string C<@PATTERNS>.  Policy modules
 that match at least one C<m/$PATTERN/ixms> will not be loaded, irrespective of
 all other settings.  For example:
 
-    my $critic = Perl::Critic->new(-exclude => ['strict'] -severity => 1);
+    my $critic = Perl::Critic->new(-exclude => ['strict'], -severity => 1);
 
 This would cause Perl::Critic to not apply the C<RequireUseStrict> and
 C<ProhibitNoStrict> Policy modules even though they have a severity level that
