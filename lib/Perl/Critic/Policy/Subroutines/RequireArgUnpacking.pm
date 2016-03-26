@@ -320,14 +320,58 @@ sub _magic_finder {
         # don't descend into a nested named sub
         return if $elem->statement->isa('PPI::Statement::Sub');
 
-        my $prev = $elem->sprevious_sibling;
-        # don't descend into a nested anon sub block
-        return if $prev
-            and $prev->isa('PPI::Token::Word')
-            and 'sub' eq $prev->content();
+        # don't descend into a nested anon sub, either.
+        return if _is_anon_sub( $elem );
+
     }
 
     return $FALSE; # no match, descend
+}
+
+# Detecting anonymous subs is hard, partly because PPI's parse of them, at
+# least as of 1.220, appears to be a bit dodgy.
+sub _is_anon_sub {
+    my ( $elem ) = @_;
+
+    # If we have no previous element, we can not be an anonymous sub.
+    my $prev = $elem->sprevious_sibling()
+        or return $FALSE;
+
+    # The simple case.
+    return $TRUE if $prev->isa( 'PPI::Token::Word' )
+        and 'sub' eq $prev->content();
+
+    # Skip possible subroutine attributes. These appear as words (the names)
+    # or lists (the arguments, if any), or actual attributes (depending on how
+    # PPI handles them). A colon is required before the first, and is optional
+    # in between.
+    while ( $prev->isa( 'PPI::Token::Word' )
+            or $prev->isa( 'PPI::Structure::List' )
+            or $prev->isa( 'PPI::Token::Attribute' )
+            or $prev->isa( 'PPI::Token::Operator' )
+                and q<:> eq $prev->content() ) {
+
+        # Grab the previous significant sib. If there is none, we can not
+        # be an anonymous sub with attributes.
+        return $FALSE if not $prev = $prev->sprevious_sibling();
+    }
+
+    # PPI 1.220 may parse the 'sub :' erroneously as a label. If we find that,
+    # it means our block is the body of an anonymous subroutine.
+    return $TRUE if $prev->isa( 'PPI::Token::Label' )
+        and $prev->content() =~ m/ \A sub \s* : \z /smx;
+
+    # At this point we may have a prototype. Skip that too, but there needs to
+    # be something before it.
+    return $FALSE if $prev->isa( 'PPI::Token::Prototype' )
+        and not $prev = $prev->sprevious_sibling();
+
+    # Finally, we can find out if we're a sub
+    return $TRUE if $prev->isa( 'PPI::Token::Word' )
+        and 'sub' eq $prev->content();
+
+    # We are out of options. At this point we can not possibly be an anon sub.
+    return $FALSE;
 }
 
 
