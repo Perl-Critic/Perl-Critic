@@ -28,6 +28,9 @@ sub applies_to           { return 'PPI::Statement::Include' }
 
 sub violates {
     my ( $self, $elem, $doc ) = @_;
+    
+    # pointless policy if Perl version >= 5.20
+    return if $^V ge v5.20.0;
 
     # "require"ing English is kind of useless.
     return if $elem->type() ne 'use';
