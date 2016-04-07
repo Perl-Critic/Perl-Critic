@@ -3,7 +3,7 @@ package Perl::Critic::Policy::Modules::RequireNoMatchVarsWithUseEnglish;
 use 5.006001;
 use strict;
 use warnings;
-
+use English -no_match_vars;
 use Readonly;
 
 use Perl::Critic::Utils qw< :characters :severities >;
@@ -16,7 +16,7 @@ our $VERSION = '1.126';
 Readonly::Scalar my $EXPL =>
     q{"use English" without the '-no_match_vars' argument degrades performance.'};
 Readonly::Scalar my $DESC => q{"use English" without '-no_match_vars' argument};
-
+Readonly::Scalar my $LOWEST_PERL_VERSION_TO_IGNORE => q{v5.20.0};
 #-----------------------------------------------------------------------------
 
 sub supported_parameters { return ()                        }
@@ -30,7 +30,7 @@ sub violates {
     my ( $self, $elem, $doc ) = @_;
 
     # pointless policy if Perl version >= 5.20
-    return if $^V ge v5.20.0;
+    return if $PERL_VERSION ge $LOWEST_PERL_VERSION_TO_IGNORE;
 
     # "require"ing English is kind of useless.
     return if $elem->type() ne 'use';
