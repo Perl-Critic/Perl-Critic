@@ -111,13 +111,15 @@ Perl::Critic::TestUtils::block_perlcriticrc();
     );
     $last_warning = q{};
 
+    # When a policy is set to be disabled, the policy factory should not
+    # throw a warning that it is not installed
     $profile = { '-Perl::Critic::Shizzle' => {} };
     $userprof = Perl::Critic::UserProfile->new( -profile => $profile );
     $pf = Perl::Critic::PolicyFactory->new( -profile  => $userprof );
-    like(
+    is(
         $last_warning,
-        qr/^Policy [ ] ".*Shizzle" [ ] is [ ] not [ ] installed/xms,
-        'Got expected warning for negative configuration of Policy.',
+        '',
+        'Got unexpected warning for negative configuration of Policy.',
     );
     $last_warning = q{};
 }
