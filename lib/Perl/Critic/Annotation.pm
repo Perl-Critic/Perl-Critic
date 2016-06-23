@@ -81,7 +81,17 @@ sub _init {
     if ( ref $parent eq 'PPI::Structure::Block' ) {
         if ( ref $grandparent eq 'PPI::Statement::Compound'
             || ref $grandparent eq 'PPI::Statement::Sub' ) {
-            if ( $parent->logical_line_number() == $annotation_line ) {
+            # If the first sibling of parent is a label, then use the line number
+            # of the next significant sibling after the label as the annotation line
+            # NOTE: There isn't a method for getting the first sibling of an element,
+            # which is why we are instead getting the first child of the grandparent
+            if ( ref $grandparent->{children}[0] eq 'PPI::Token::Label' ) {
+                my $next_significant_sibling = $grandparent->{children}[0]->snext_sibling();
+                my $line = $next_significant_sibling->logical_line_number();
+                $self->{_effective_range} = [$line, $line];
+                return $self;
+            }
+            elsif ( $parent->logical_line_number() == $annotation_line ) {
                 my $grandparent_line = $grandparent->logical_line_number();
                 $self->{_effective_range} = [$grandparent_line, $grandparent_line];
                 return $self;
