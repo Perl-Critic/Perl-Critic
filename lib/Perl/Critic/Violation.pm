@@ -297,7 +297,7 @@ sub _line_containing_violation {
     my $code_string = $stmnt->content() || $EMPTY;
 
     # Split into individual lines
-    my @lines = split qr{ \n\s* }xms, $code_string;
+    my @lines = split qr{ \n }xms, $code_string, -1;
 
     # Take the line containing the element that is in violation
     my $inx = ( $elem->line_number() || 0 ) -
