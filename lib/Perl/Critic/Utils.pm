@@ -1904,13 +1904,18 @@ C<$RIGHT_PAREN>
 =item C<:classification>
 
 Includes:
+C<is_assignment_operator>,
+C<is_class_name>,
 C<is_function_call>,
 C<is_hash_key>,
 C<is_included_module_name>,
 C<is_integer>,
+C<is_label_pointer>,
 C<is_method_call>,
 C<is_package_declaration>,
+C<is_perl_bareword>,
 C<is_perl_builtin>,
+C<is_perl_filehandle>,
 C<is_perl_global>,
 C<is_perl_builtin_with_list_context>
 C<is_perl_builtin_with_multiple_arguments>
@@ -1918,6 +1923,7 @@ C<is_perl_builtin_with_no_arguments>
 C<is_perl_builtin_with_one_argument>
 C<is_perl_builtin_with_optional_argument>
 C<is_perl_builtin_with_zero_and_or_one_arguments>
+C<is_qualified_name>,
 C<is_script>,
 C<is_subroutine_name>,
 C<is_unchecked_call>
