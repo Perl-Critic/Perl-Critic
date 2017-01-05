@@ -55,7 +55,7 @@ distribution.
 
 =head1 DESCRIPTION
 
-Conway discourages the use of the C< <..> > construct for globbing, as
+Conway discourages the use of the C<< <..> >> construct for globbing, as
 it is easily confused with the angle bracket file input operator.
 Instead, he recommends the use of the C<glob()> function as it makes
 it much more obvious what you're attempting to do.
