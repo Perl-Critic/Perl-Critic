@@ -116,7 +116,7 @@ examples to help get you started.
     perlcritic --include variables YourModule.pm
 
     # Use defaults from somewhere other than ~/.perlcriticrc
-    perlcriticrc --profile project/specific/perlcriticrc YourModule.pm
+    perlcritic --profile project/specific/perlcriticrc YourModule.pm
 
 
 =head1 ARGUMENTS
