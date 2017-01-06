@@ -1,36 +1,49 @@
-package Perl::Critic::Policy::ControlStructures::ProhibitUnlessBlocks;
+package Perl::Critic::Policy::ControlStructures::ProhibitYadaOperator;
 
 use 5.006001;
 use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :severities };
+use Perl::Critic::Utils qw{ :characters :severities };
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.126';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $DESC => q{"unless" block used};
-Readonly::Scalar my $EXPL => [ 97 ];
+Readonly::Scalar my $DESC => q{yada operator (...) used};
+Readonly::Scalar my $EXPL => q{The yada operator is a placeholder for code you have not yet written.};
 
 #-----------------------------------------------------------------------------
 
 sub supported_parameters { return ()                         }
-sub default_severity     { return $SEVERITY_LOW              }
-sub default_themes       { return qw(core pbp cosmetic)      }
-sub applies_to           { return 'PPI::Statement::Compound' }
+sub default_severity     { return $SEVERITY_HIGH             }
+sub default_themes       { return qw( core pbp maintenance ) }
+sub applies_to           { return 'PPI::Token::Operator' }
 
 #-----------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    if ( $elem->first_element() eq 'unless' ) {
+    if ( _is_yada( $elem ) ) {
         return $self->violation( $DESC, $EXPL, $elem );
     }
     return;    #ok!
+}
+
+sub _is_yada {
+    my ( $elem ) = @_;
+
+    return if $elem ne '...';
+    #return if not defined $elem->statement;
+
+    # if there is something significant on both sides of the element it's
+    # probably the three dot range operator
+    return if ($elem->snext_sibling and $elem->sprevious_sibling);
+
+    return 1;
 }
 
 1;
@@ -41,9 +54,11 @@ __END__
 
 =pod
 
+=for stopwords yada Berndt
+
 =head1 NAME
 
-Perl::Critic::Policy::ControlStructures::ProhibitUnlessBlocks - Write C<if(! $condition)> instead of C<unless($condition)>.
+Perl::Critic::Policy::ControlStructures::ProhibitYadaOperator - Never use C<...> in production code.
 
 =head1 AFFILIATION
 
@@ -53,34 +68,21 @@ distribution.
 
 =head1 DESCRIPTION
 
-Conway discourages using C<unless> because it leads to
-double-negatives that are hard to understand.  Instead, reverse the
-logic and use C<if>.
-
-    unless($condition) { do_something() } #not ok
-    unless(! $no_flag) { do_something() } #really bad
-    if( ! $condition)  { do_something() } #ok
-
-This Policy only covers the block-form of C<unless>.  For the postfix
-variety, see C<ProhibitPostfixControls>.
-
+The yada operator C<...> is not something you'd want in production code but
+it is perfectly useful less critical environments.
 
 =head1 CONFIGURATION
 
 This Policy is not configurable except for the standard options.
 
 
-=head1 SEE ALSO
-
-L<Perl::Critic::Policy::ControlStructures::ProhibitPostfixControls|Perl::Critic::Policy::ControlStructures::ProhibitPostfixControls>
-
 =head1 AUTHOR
 
-Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
+Alan Berndt <alan@eatabrick.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2011 Imaginative Software Systems.  All rights reserved.
+Copyright (c) 2015 Alan Berndt.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

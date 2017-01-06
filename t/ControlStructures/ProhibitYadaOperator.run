@@ -1,0 +1,49 @@
+## name Basic passing
+## failures 0
+## cut
+
+for (1 ... 3) {
+    do_something();
+}
+
+for ('a' ... 'b') {
+    do_something();
+}
+
+#-----------------------------------------------------------------------------
+
+## name Basic failure
+## failures 1
+## cut
+
+do_something();
+
+...
+
+do_something();
+
+#-----------------------------------------------------------------------------
+
+## name Excessive yadaing
+## failures 1
+## cut
+
+do_something();
+
+...
+...
+...
+...
+
+do_something();
+
+#-----------------------------------------------------------------------------
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab shiftround :

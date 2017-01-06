@@ -9,7 +9,7 @@ use Perl::Critic::Utils qw{ $EMPTY hashify };
 
 use Exporter 'import';
 
-our $VERSION = '1.121_01';
+our $VERSION = '1.126';
 
 #-----------------------------------------------------------------------------
 
@@ -25,6 +25,8 @@ our @EXPORT_OK = qw{
     $PROFILE_COLOR_SEVERITY_LOW_DEFAULT
     $PROFILE_COLOR_SEVERITY_LOWEST_DEFAULT
     $_MODULE_VERSION_TERM_ANSICOLOR
+    @STRICT_EQUIVALENT_MODULES
+    @WARNINGS_EQUIVALENT_MODULES
 };
 
 our %EXPORT_TAGS = (
@@ -45,6 +47,12 @@ our %EXPORT_TAGS = (
             $PROFILE_COLOR_SEVERITY_MEDIUM_DEFAULT
             $PROFILE_COLOR_SEVERITY_LOW_DEFAULT
             $PROFILE_COLOR_SEVERITY_LOWEST_DEFAULT
+        }
+    ],
+    equivalent_modules => [
+        qw{
+           @STRICT_EQUIVALENT_MODULES
+           @WARNINGS_EQUIVALENT_MODULES
         }
     ],
 );
@@ -73,6 +81,55 @@ Readonly::Scalar our $PROFILE_COLOR_SEVERITY_LOWEST_DEFAULT     => $EMPTY;
 # inc/Perl/Critic/BuildUtilities.pm, sub recommended_module_versions().
 Readonly::Scalar our $_MODULE_VERSION_TERM_ANSICOLOR => 2.02;
 
+Readonly::Array our @STRICT_EQUIVALENT_MODULES => qw(
+    Mo
+
+    Moo
+    Moo::Role
+
+    Moose
+    Moose::Role
+    Moose::Exporter
+    Moose::Util::TypeConstraints
+
+    MooseX::NonMoose
+    MooseX::Singleton
+    MooseX::Role::Parameterized
+
+    Mouse
+    Mouse::Role
+    Mouse::Exporter
+    Mouse::Util
+    Mouse::Util::TypeConstraints
+
+    Moos
+
+    Mousse
+
+    Any::Moose
+
+    Modern::Perl
+
+    Dancer
+    Dancer2
+
+    Mojolicious::Lite
+    Mojo::Base
+
+    Object::Simple
+
+    Role::Tiny
+
+    sane
+    shit
+    strictures
+);
+
+# Such modules tend to inflict both strictures and warnings, so for
+# the moment these equivalent module lists are exactly the same.
+Readonly::Array our @WARNINGS_EQUIVALENT_MODULES
+    => @STRICT_EQUIVALENT_MODULES;
+
 #-----------------------------------------------------------------------------
 
 1;
@@ -88,7 +145,6 @@ __END__
 =head1 NAME
 
 Perl::Critic::Utils::Constants - Global constants.
-
 
 =head1 DESCRIPTION
 
@@ -146,6 +202,16 @@ C<:color_severity> tag.
 
 Default for the -color-severity-lowest option. Importable via the
 C<:color_severity> tag.
+
+=item C<@STRICT_EQUIVALENT_MODULES>
+
+=item C<@WARNINGS_EQUIVALENT_MODULES>
+
+As the names suggest, these are lists of modules that are equivalent to
+applying the L<strict|strict> or L<warnings|warnings> pragma when loaded. At
+the moment, both lists are exactly the same. B<Note:> These lists are not
+exhaustive; they only include the most commonly used modules. Policies that
+use these lists should permit configuration of additional modules.
 
 =back
 

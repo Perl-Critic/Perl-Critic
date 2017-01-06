@@ -12,7 +12,7 @@ use Perl::Critic::Utils qw< :booleans :characters :severities hashify
     precedence_of >;
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.121_01';
+our $VERSION = '1.126';
 
 #-----------------------------------------------------------------------------
 
@@ -81,7 +81,7 @@ sub _is_in_right_hand_side_of_assignment {
         EQUALS_SCAN:
         while ($previous) {
             if ( $previous->isa('PPI::Token::Operator') ) {
-                return $TRUE if $previous->content() eq q<=>;
+                return $TRUE if $previous->content() =~ m/= \Z/xms;
                 last EQUALS_SCAN if _is_effectively_a_comma($previous);
             }
             $previous = $previous->sprevious_sibling();

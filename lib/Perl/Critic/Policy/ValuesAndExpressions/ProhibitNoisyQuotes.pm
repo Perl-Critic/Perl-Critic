@@ -8,7 +8,7 @@ use Readonly;
 use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.121_01';
+our $VERSION = '1.126';
 
 #-----------------------------------------------------------------------------
 
@@ -61,7 +61,7 @@ distribution.
 Don't use quotes for one or two-character strings of non-alphanumeric
 characters (i.e. noise).  These tend to be hard to read.  For
 legibility, use C<q{}> or a named value.  However, braces,
-parentheses, and brackets tend do to look better in quotes, so those
+parentheses and brackets tend to look better in quotes, so those
 are allowed.
 
     $str = join ',', @list;     #not ok

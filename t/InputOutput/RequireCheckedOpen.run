@@ -139,6 +139,24 @@ open $filehandle;
 
 #-----------------------------------------------------------------------------
 
+## name autodie on via pragma with numeric version number (GH #612)
+## failures 0
+## cut
+
+use autodie 2.14;
+open $filehandle;
+
+#-----------------------------------------------------------------------------
+
+## name autodie on via pragma with vstring version (GH #612)
+## failures 0
+## cut
+
+use autodie v2.14.8;
+open $filehandle;
+
+#-----------------------------------------------------------------------------
+
 ## name autodie on via :io
 ## failures 0
 ## cut

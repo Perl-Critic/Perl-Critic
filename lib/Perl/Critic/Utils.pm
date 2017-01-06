@@ -20,7 +20,7 @@ use Perl::Critic::Utils::PPI qw< is_ppi_expression_or_generic_statement >;
 
 use Exporter 'import';
 
-our $VERSION = '1.121_01';
+our $VERSION = '1.126';
 
 #-----------------------------------------------------------------------------
 # Exportable symbols here.
@@ -63,6 +63,7 @@ Readonly::Array our @EXPORT_OK => qw(
     first_arg
     hashify
     interpolate
+    is_assignment_operator
     is_class_name
     is_function_call
     is_hash_key
@@ -140,6 +141,7 @@ Readonly::Hash our %EXPORT_TAGS => (
     ],
     classification  => [
         qw{
+            is_assignment_operator
             is_class_name
             is_function_call
             is_hash_key
@@ -1181,6 +1183,16 @@ sub words_from_string {
 
 #-----------------------------------------------------------------------------
 
+Readonly::Hash my %ASSIGNMENT_OPERATORS => hashify( qw( = **= += -= .= *= /= %= x= &= |= ^= <<= >>= &&= ||= //= ) );
+
+sub is_assignment_operator {
+    my $elem = shift;
+
+    return $ASSIGNMENT_OPERATORS{ $elem };
+}
+
+#-----------------------------------------------------------------------------
+
 sub is_unchecked_call {
     my $elem = shift;
 
@@ -1362,7 +1374,13 @@ sub _is_fatal {
 sub _is_covered_by_autodie {
     my ($elem, $include) = @_;
 
-    my @args = parse_arg_list($include->schild(1));
+    my $autodie = $include->schild(1);
+    my @args = parse_arg_list($autodie);
+    my $first_arg = first_arg($autodie);
+
+    # The first argument to any `use` pragma could be a version number.
+    # If so, then we just discard it. We only want the arguments after it.
+    if ($first_arg and $first_arg->isa('PPI::Token::Number')){ shift @args };
 
     if (@args) {
         foreach my $arg (@args) {
@@ -1429,6 +1447,11 @@ will not match variables, subroutine names, literal strings, numbers,
 or symbols.  If the document doesn't contain any matches, returns
 undef.
 
+=item C<is_assignment_operator( $element )>
+
+Given a L<PPI::Token::Operator|PPI::Token::Operator> or a string,
+returns true if that token represents one of the assignment operators
+(e.g. C<= &&= ||= //= += -=> etc.).
 
 =item C<is_perl_global( $element )>
 
@@ -1899,13 +1922,18 @@ C<$RIGHT_PAREN>
 =item C<:classification>
 
 Includes:
+C<is_assignment_operator>,
+C<is_class_name>,
 C<is_function_call>,
 C<is_hash_key>,
 C<is_included_module_name>,
 C<is_integer>,
+C<is_label_pointer>,
 C<is_method_call>,
 C<is_package_declaration>,
+C<is_perl_bareword>,
 C<is_perl_builtin>,
+C<is_perl_filehandle>,
 C<is_perl_global>,
 C<is_perl_builtin_with_list_context>
 C<is_perl_builtin_with_multiple_arguments>
@@ -1913,6 +1941,7 @@ C<is_perl_builtin_with_no_arguments>
 C<is_perl_builtin_with_one_argument>
 C<is_perl_builtin_with_optional_argument>
 C<is_perl_builtin_with_zero_and_or_one_arguments>
+C<is_qualified_name>,
 C<is_script>,
 C<is_subroutine_name>,
 C<is_unchecked_call>

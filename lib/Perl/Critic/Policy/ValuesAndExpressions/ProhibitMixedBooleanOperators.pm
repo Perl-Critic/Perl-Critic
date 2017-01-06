@@ -11,11 +11,11 @@ use base 'Perl::Critic::Policy';
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '1.121_01';
+our $VERSION = '1.126';
 #-----------------------------------------------------------------------------
 
 Readonly::Hash my %LOW_BOOLEANS  => hashify( qw( not or and ) );
-Readonly::Hash my %HIGH_BOOLEANS => hashify( qw( ! || && ) );
+Readonly::Hash my %HIGH_BOOLEANS => hashify( qw( ! || && ||= &&= //=) );
 
 Readonly::Hash my %EXEMPT_TYPES => hashify(
     qw(

@@ -8,7 +8,7 @@ use Readonly;
 use Perl::Critic::Utils qw{ :characters :severities :classification };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.121_01';
+our $VERSION = '1.126';
 
 #-----------------------------------------------------------------------------
 
@@ -43,7 +43,7 @@ sub violates {
 
     return
         $self->violation(
-            qq{"$content" uses the obsolete single quote package separator."},
+            qq{"$content" uses the obsolete single quote package separator.},
             $EXPL,
             $elem
         );
@@ -102,7 +102,7 @@ Elliot Shank C<< <perl@galumph.com> >>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2007-2011 Elliot Shank.
+Copyright (c) 2007-2014 Elliot Shank.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

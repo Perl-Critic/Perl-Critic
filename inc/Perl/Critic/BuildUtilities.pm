@@ -6,18 +6,15 @@ use warnings;
 
 use English q<-no_match_vars>;
 
-our $VERSION = '1.116';
+our $VERSION = '1.126';
 
 use Exporter 'import';
 
 our @EXPORT_OK = qw<
     required_module_versions
     build_required_module_versions
-    recommended_module_versions
-    test_wrappers_to_generate
-    get_PL_files
-    dump_unlisted_or_optional_module_versions
     emit_tar_warning_if_necessary
+    get_PL_files
 >;
 
 
@@ -35,22 +32,24 @@ sub required_module_versions {
         'Exporter'                      => 5.63,
         'File::Basename'                => 0,
         'File::Find'                    => 0,
+        'File::HomeDir'                 => 0,
         'File::Path'                    => 0,
         'File::Spec'                    => 0,
         'File::Spec::Unix'              => 0,
         'File::Temp'                    => 0,
+        'File::Which'                   => 0,
         'Getopt::Long'                  => 0,
         'IO::String'                    => 0,
         'IPC::Open2'                    => 1,
         'List::MoreUtils'               => 0.19,
         'List::Util'                    => 0,
         'Module::Pluggable'             => 3.1,
-        'PPI'                           => '1.215', # RT 61301
-        'PPI::Document'                 => '1.215',
-        'PPI::Document::File'           => '1.215',
-        'PPI::Node'                     => '1.215',
-        'PPI::Token::Quote::Single'     => '1.215',
-        'PPI::Token::Whitespace'        => '1.215',
+        'PPI'                           => '1.220', # https://github.com/adamkennedy/PPI/issues/92
+        'PPI::Document'                 => '1.220',
+        'PPI::Document::File'           => '1.220',
+        'PPI::Node'                     => '1.220',
+        'PPI::Token::Quote::Single'     => '1.220',
+        'PPI::Token::Whitespace'        => '1.220',
         'PPIx::Regexp'                  => '0.027', # Literal { deprecated in re
         'PPIx::Utilities::Node'         => '1.001',
         'PPIx::Utilities::Statement'    => '1.001',
@@ -60,10 +59,11 @@ sub required_module_versions {
         'Pod::Select'                   => 0,
         'Pod::Spell'                    => 1,
         'Pod::Usage'                    => 0,
-        'Readonly'                      => 1.03,
+        'Readonly'                      => 2.00,
         'Scalar::Util'                  => 0,
         'String::Format'                => 1.13,
         'Task::Weaken'                  => 0,
+        'Term::ANSIColor'               => '2.02',
         'Test::Builder'                 => 0.92,
         'Text::ParseWords'              => 3,
         'base'                          => 0,
@@ -85,63 +85,6 @@ sub build_required_module_versions {
 }
 
 
-sub recommended_module_versions {
-    return (
-        'File::HomeDir'         => 0,
-        'Readonly::XS'          => 0,
-
-        # If the following changes, the corresponding change needs to be made
-        # in $Perl::Critic::Utils::Constants::_MODULE_VERSION_TERM_ANSICOLOR.
-        'Term::ANSIColor'       => '2.02',
-
-        # All of these are for Documentation::PodSpelling
-        'File::Which'           => 0,
-    );
-}
-
-
-sub test_wrappers_to_generate {
-    my @tests_to_be_wrapped = qw<
-        t/00_modules.t
-        t/01_config.t
-        t/01_config_bad_perlcriticrc.t
-        t/01_policy_config.t
-        t/02_policy.t
-        t/03_pragmas.t
-        t/04_options_processor.t
-        t/05_utils.t
-        t/05_utils_ppi.t
-        t/05_utils_pod.t
-        t/06_violation.t
-        t/07_command.t
-        t/07_perlcritic.t
-        t/08_document.t
-        t/09_theme.t
-        t/10_user_profile.t
-        t/11_policy_factory.t
-        t/12_policy_listing.t
-        t/12_theme_listing.t
-        t/13_bundled_policies.t
-        t/14_policy_parameters.t
-        t/15_statistics.t
-        t/20_policies.t
-        t/20_policy_pod_spelling.t
-        t/20_policy_prohibit_evil_modules.t
-        t/20_policy_prohibit_hard_tabs.t
-        t/20_policy_prohibit_trailing_whitespace.t
-        t/20_policy_require_consistent_newlines.t
-        t/20_policy_require_tidy_code.t
-        xt/author/80_policysummary.t
-        t/92_memory_leaks.t
-        xt/author/94_includes.t
-    >;
-
-    return
-        map
-            { "xt/author/generated/${_}_without_optional_dependencies.t" }
-            @tests_to_be_wrapped;
-}
-
 my @TARGET_FILES = qw<
     t/ControlStructures/ProhibitNegativeExpressionsInUnlessAndUntilConditions.run
     t/NamingConventions/Capitalization.run
@@ -151,43 +94,7 @@ my @TARGET_FILES = qw<
 sub get_PL_files {
     my %PL_files = map { ( "$_.PL" => $_ ) } @TARGET_FILES;
 
-    $PL_files{'xt/author/generate_without_optional_dependencies_wrappers.PL'} =
-        [ test_wrappers_to_generate() ];
-
     return \%PL_files;
-}
-
-sub dump_unlisted_or_optional_module_versions {
-    print
-        "\nVersions of optional/unlisted/indirect dependencies:\n\n";
-
-    my @unlisted_modules = (
-        qw<
-        >,
-        keys %{ { recommended_module_versions() } },
-    );
-
-    foreach my $module (sort @unlisted_modules) {
-        my $version;
-
-        if ($module eq 'Readonly::XS') {
-            eval 'use Readonly; use Readonly::XS; $version = $Readonly::XS::VERSION;';
-        }
-        else {
-            eval "use $module; \$version = \$${module}::VERSION;";
-        }
-        if ($EVAL_ERROR) {
-            $version = 'not installed';
-        } elsif (not defined $version) {
-            $version = 'undef';
-        }
-
-        print "    $module = $version\n";
-    }
-
-    print "\n";
-
-    return;
 }
 
 sub emit_tar_warning_if_necessary {
@@ -224,18 +131,6 @@ Various utilities used in assembling Perl::Critic, primary for use by
 =head1 IMPORTABLE SUBROUTINES
 
 =over
-
-=item C<recommended_module_versions()>
-
-Returns a hash mapping between recommended (but not required) modules
-for Perl::Critic and the minimum version required of each module,
-
-
-=item C<test_wrappers_to_generate()>
-
-Returns a list of test wrappers to be generated by
-F<xt/author/generate_without_optional_dependencies_wrappers.PL>.
-
 
 =item C<get_PL_files()>
 

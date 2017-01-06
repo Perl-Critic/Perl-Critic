@@ -650,9 +650,8 @@ require that the perl document exist in a file anywhere."
 			  ;; Set it.
 			  (> (prefix-numeric-value arg) 0)))
 
-  (make-local-hook 'write-file-hooks)
   (if perlcritic-mode
-      (add-hook 'write-file-hooks 'perlcritic-write-hook)
+      (add-hook 'write-file-hooks 'perlcritic-write-hook nil "local")
     (remove-hook 'write-file-hooks 'perlcritic-write-hook)))
 
 ;; Make a nice name for perl critic mode. This string will appear at

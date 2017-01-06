@@ -7,7 +7,7 @@ use Readonly;
 use Perl::Critic::Utils qw{ :severities :classification :ppi };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.121_01';
+our $VERSION = '1.126';
 
 ## no critic ( ValuesAndExpressions::RequireInterpolationOfMetachars )
 ## The numerous $_ variables make false positives.
@@ -29,6 +29,7 @@ my @topical_funcs = qw(
     chomp chop chr chroot cos
     defined
     eval exp
+    fc
     glob
     hex
     int
@@ -38,7 +39,7 @@ my @topical_funcs = qw(
     pos print
     quotemeta
     readlink readpipe ref require reverse rmdir
-    sin split sqrt stat study
+    say sin split sqrt stat study
     uc ucfirst unlink unpack
 );
 my %topical_funcs = map { ($_ => 1) } @topical_funcs;
@@ -96,9 +97,7 @@ __END__
 
 =pod
 
-=for stopwords
-
-filetest
+=for stopwords filetest
 
 =head1 NAME
 
@@ -153,7 +152,7 @@ is better written as:
         my $backwards = reverse;
 
 However, the distinction for scalar vs. list context on C<reverse>
-is not yet working.  See L<KNOWN BUGS> below.
+is not yet working.  See L<KNOWN BUGS|KNOWN BUGS> below.
 
 =head2 Topic unnecessary for most filetest operators
 

@@ -1,24 +1,20 @@
-General development: While there is Makefile.PL/EU::MM support within the
-distribution, a lot of the authoring stuff depends upon Build.PL/M::B, in
-particular, running author tests.  Only do releases using M::B.
 
-Naming standard: Things that are distribution-private (as opposed to
-class/package-private) begin with double underscore.
+## Naming Standard
 
-Steps for adding a new Policy:
+Things that are distribution-private (as opposed to class/package-private)
+begin with double underscore.
+
+## Steps for adding a new Policy:
 
  * Create tests in t/[category]/[name].run
  * Create the .pm in lib/Perl/Critic/Policy/[category]/[name].pm
- * If it applies_to() PPI::Document, perhaps add an exception in
-   t/03_pragmas.t
+ * If it applies_to() PPI::Document, perhaps add an exception in t/03_pragmas.t
  * Mention it in Changes
- * svn add t/[category]/[name].run lib/Perl/Critic/Policy/[category]/[name].pm
- * tools/svnkeywords t/[category]/[name].run lib/Perl/Critic/Policy/[category]/[name].pm
 
  * Remove from TODO
  * After release, set co-maint in PAUSE
 
-Command for generating POD for perlcritic.com site:
+## Command for generating POD for perlcritic.com site:
 
 perl -MPod::Simple::HTMLBatch -e 'Pod::Simple::HTMLBatch::go' lib ../../perlcritic.com/htdocs/pod/
 
