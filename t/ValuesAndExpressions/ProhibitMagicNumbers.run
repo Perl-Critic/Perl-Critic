@@ -981,6 +981,12 @@ package Maggot 0.01;
 package 42; # Illegal, but check anyway.
 package Maggot 0.01 42;
 
+## name Confusion with numbered regex capture variables (GH #455)
+## failures 0
+## cut
+
+my $x = $13;
+
 #-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl

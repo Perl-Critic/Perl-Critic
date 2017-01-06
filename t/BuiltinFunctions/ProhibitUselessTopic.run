@@ -51,9 +51,26 @@ my @y = split /\t/, $_, 3;
 unlink $_ . '.txt';
 my $z = sin( $_ * 4 );
 my $a = tan $_ + 5;
-# The following two should NOT be flagged as errors.  See KNOWN BUGS in the module.
-#my @backwards = reverse $_;
-#my @backwards = reverse($_);
+
+#-----------------------------------------------------------------------------
+
+## The following two should NOT be flagged as errors.
+## TODO see KNOWN BUGS in the policy documentation
+## failures 0
+## cut
+
+my @backwards = reverse $_;
+my @backwards = reverse($_);
+
+#-----------------------------------------------------------------------------
+
+## name GH #600
+## TODO User reported false positives
+## failures 0
+## cut
+
+$self->zilla->log($_)
+foo(lc, $_)
 
 #-----------------------------------------------------------------------------
 # Local Variables:

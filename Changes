@@ -1,14 +1,86 @@
 Revision history for Perl module Perl::Critic
 
-1.121_01 2013-11-17
+1.126 2015-08-10
+
+    [New Policies]
+    * Added a policy: ControlStructures::ProhibitYadaOperator - Never use ...
+      in production code.
+
+    [Bug Fixes]
+    * Fixed problems arising from having -b in your .perltidyrc file. Thanks
+      @hjkatz.
+    * Removed extra newline from policy names returned by P::C::Config->policies.
+      Thanks @ratsbane.
+    * `fc` and `say` are now covered by ProhibitUselessTopic. Thanks @JRaspass.
+
+    [Miscellanea]
+    * Add more strict/warnings importer modules. Thanks @oalders.
+    * Path::Tiny is now recommended over File::Slurp
+    * Micro-optimize by calling ->content() directly instead of going
+      through the overloads. Thanks @JRaspass.
+    * Square brackets are now allowed around your `## no critic` policy
+      list. Thanks @zdm.
+
+
+1.125 2015-03-02
+
+    [Bug Fixes]
+    * Corrected dependency on List::Util::any() to List::MoreUtils::any()
+
+    [Miscellanea]
+    * Revised and updated documentation.
+
+1.124 2015-02-27
+
+    [Policy Changes]
+    * The ProhibitUnusedPrivateSubroutines policy can now ignore files that
+      use particular modules with 'skip_when_using' option allows of, for
+      example, skipping the policy for roles.  Thanks to Mark Fowler.
+
+    * The RequireUseStrict and RequireUseWarnings policies now regard Moose,
+      Moo, Mouse, Dancer, Mojolicious, and several other modules as equivalent
+      to the strict and warnings pragma.
+
+    [Bug Fixes]
+    * The RequireChecked* family of policies has been fixed to accommodate
+      version numbers when use-ing the autodie pragma. GH #612. Thanks citrin.
+
+1.123 2014-11-11
+
+    [Dependencies]
+    * Now requires PPI-1.220 which has numerous bug fixes. This may 
+      eliminate the need for some "## no critic" markers you inserted to
+      work around those bugs. The "ProhibitUselessNoCritic" policy should
+      help you find them.
+
+    [Miscellanea]
+    * Fixed a typo in the Variables::ProhibitPerl4PackageNames message.
+
+1.122 2014-08-25
+
+    [Dependencies]
+    * Now requires PPI-1.218 which has numerous enahncements and bug fixes.
+      Also now requires Readonly-2.00, which obviates the need for Readonly::XS
+      to get fast constants.
+
+    * File::HomeDir, File::Which, and Term::ANSIColor are all required now
+      instead of being optional or recommended. This simplifies our test code
+      and ensures consistent optimal behavior for all users.
 
     [New Policies]
     * Added two new policies: BuiltinFunctions::ProhibitUselessTopic and
-    RegularExpressions::ProhibitUselessTopic.
+      RegularExpressions::ProhibitUselessTopic.
 
     [Miscellanea]
+    * Updated the perlcritic.el script to use modern Emacs hooks.
+      Thanks to @intrigeri and the Debian team for the patch.  Fixes GH #556.
+
     * Removed all the internal RCS keyword boilerplate blocks that were never
       getting expanded.
+
+1.121_01 2013-11-17
+
+    * Changes summarized above under 1.122
 
 1.121 2013-11-02
 

@@ -8,7 +8,7 @@ use Readonly;
 use Perl::Critic::Utils qw{ :booleans :data_conversion :severities };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.121_01';
+our $VERSION = '1.126';
 
 #-----------------------------------------------------------------------------
 
@@ -348,7 +348,7 @@ regexp results, for pretty much the same reason.  Simple things like
 
 will be handled, but something like
 
- m/(foo) or do {
+ m/(foo)/ or do {
    ... lots of complicated calculations here ...
    die "No foo!";
  };

@@ -8,7 +8,7 @@ use Readonly;
 use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.121_01';
+our $VERSION = '1.126';
 
 #-----------------------------------------------------------------------------
 
@@ -55,7 +55,7 @@ distribution.
 
 =head1 DESCRIPTION
 
-Conway discourages the use of the C< <..> > construct for globbing, as
+Conway discourages the use of the C<< <..> >> construct for globbing, as
 it is easily confused with the angle bracket file input operator.
 Instead, he recommends the use of the C<glob()> function as it makes
 it much more obvious what you're attempting to do.

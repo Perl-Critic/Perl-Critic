@@ -146,14 +146,6 @@ binmode FH, ':encoding(utf8)' or die;
 $foo{open}; # not a function call
 
 #-----------------------------------------------------------------------------
-
-##############################################################################
-#      $URL: http://perlcritic.tigris.org/svn/perlcritic/trunk/distributions/Perl-Critic/t/InputOutput/ProhibitTwoArgOpen.run $
-#     $Date: 2009-08-08 19:35:01 -0400 (Sat, 08 Aug 2009) $
-#   $Author: clonezone $
-# $Revision: 3504 $
-##############################################################################
-
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

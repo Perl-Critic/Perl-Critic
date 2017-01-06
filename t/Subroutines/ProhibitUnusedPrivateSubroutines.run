@@ -234,6 +234,19 @@ sub _second {
 }
 
 #-----------------------------------------------------------------------------
+
+## name skip_when_using
+## failures 0
+## parms { skip_when_using => 'Moose::Role' }
+## cut
+
+use Moose::Role;
+
+sub _private {
+    print "A private sub\n";
+}
+
+#-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

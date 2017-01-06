@@ -1,10 +1,3 @@
-##############################################################################
-#      $URL: http://perlcritic.tigris.org/svn/perlcritic/trunk/distributions/Perl-Critic/lib/Perl/Critic/Policy/InputOutput/RequireEncodingWithUTF8Layer.pm $
-#     $Date: 2010-06-22 16:14:07 -0400 (Tue, 22 Jun 2010) $
-#   $Author: clonezone $
-# $Revision: 3843 $
-##############################################################################
-
 package Perl::Critic::Policy::InputOutput::RequireEncodingWithUTF8Layer;
 
 use 5.006001;
@@ -18,7 +11,7 @@ use version;
 use Perl::Critic::Utils qw{ :severities :ppi };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.121_01';
+our $VERSION = '1.126';
 
 #-----------------------------------------------------------------------------
 
@@ -110,7 +103,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::InputOutput::RequireEncodingWithUTF8Layer - Write C<< open $fh, q{<:encoding(UTF-8)}, $filename; >> instead of C<< open $fh, q{{<:utf8}, $filename; >>.
+Perl::Critic::Policy::InputOutput::RequireEncodingWithUTF8Layer - Write C<< open $fh, q{<:encoding(UTF-8)}, $filename; >> instead of C<< open $fh, q{<:utf8}, $filename; >>.
 
 =head1 AFFILIATION
 
@@ -141,8 +134,8 @@ C<UTF8> and C<UTF-8>. The short version is that C<UTF-8> implements the
 Unicode standard, and C<UTF8> is liberalized.
 
 For consistency's sake, this policy checks files opened for output as
-well as input, For complete coverage it also checks C<binmode()> calls,
-where the direction the operation can not be determined.
+well as input. For complete coverage it also checks C<binmode()> calls,
+where the direction of operation can not be determined.
 
 
 =head1 CONFIGURATION

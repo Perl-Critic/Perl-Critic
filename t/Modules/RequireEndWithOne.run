@@ -107,8 +107,7 @@ my $foo = 42;
 
 #-----------------------------------------------------------------------------
 
-## name DESTROY sub hides the 1;
-## TODO This is a PPI bug. See http://rt.cpan.org/Ticket/Display.html?id=27364
+## name DESTROY sub hides the 1; (RT #27364)
 ## failures 0
 ## cut
 

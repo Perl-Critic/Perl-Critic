@@ -399,6 +399,15 @@ grep { $_ } map { eval $_ } @foo;   # Should this be rejected?
 
 #-----------------------------------------------------------------------------
 
+## name ||= eval{} (https://github.com/adamkennedy/PPI/issues/74)
+## failures 0
+## cut
+
+$foo ||= eval { something };
+$foo &&= eval { something };
+
+#-----------------------------------------------------------------------------
+
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4
