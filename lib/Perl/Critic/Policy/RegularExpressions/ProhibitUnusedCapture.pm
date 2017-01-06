@@ -17,7 +17,7 @@ use Perl::Critic::Utils qw{
 };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.125';
+our $VERSION = '1.126';
 
 #-----------------------------------------------------------------------------
 
@@ -130,8 +130,8 @@ sub _enough_assignments {
     while (1) {
         return if !$psib;
         if ($psib->isa('PPI::Token::Operator')) {
-            last SIBLING if q{=} eq $psib;
-            return if q{!~} eq $psib;
+            last SIBLING if q{=} eq $psib->content;
+            return if q{!~} eq $psib->content;
         }
         $psib = $psib->sprevious_sibling;
     }
@@ -235,7 +235,7 @@ sub _is_in_slurpy_array_context {
 
     # look backward for explicit regex operator
     my $psib = $elem->sprevious_sibling;
-    if ($psib && $psib eq q{=~}) {
+    if ($psib && $psib->content eq q{=~}) {
         # Track back through value
         $psib = _skip_lhs($psib);
     }
@@ -271,7 +271,7 @@ sub _is_in_slurpy_array_context {
     }
     if ($psib->isa('PPI::Token::Operator')) {
         # most operators kill slurpiness (except assignment, which is handled elsewhere)
-        return $TRUE if q{,} eq $psib;
+        return $TRUE if q{,} eq $psib->content;
         return;
     }
     return $TRUE;

@@ -78,6 +78,7 @@ lib/Perl/Critic/Policy/ControlStructures/ProhibitPostfixControls.pm
 lib/Perl/Critic/Policy/ControlStructures/ProhibitUnlessBlocks.pm
 lib/Perl/Critic/Policy/ControlStructures/ProhibitUnreachableCode.pm
 lib/Perl/Critic/Policy/ControlStructures/ProhibitUntilBlocks.pm
+lib/Perl/Critic/Policy/ControlStructures/ProhibitYadaOperator.pm
 lib/Perl/Critic/Policy/Documentation/PodSpelling.pm
 lib/Perl/Critic/Policy/Documentation/RequirePackageMatchesPodName.pm
 lib/Perl/Critic/Policy/Documentation/RequirePodAtEnd.pm
@@ -291,6 +292,7 @@ t/ControlStructures/ProhibitPostfixControls.run
 t/ControlStructures/ProhibitUnlessBlocks.run
 t/ControlStructures/ProhibitUnreachableCode.run
 t/ControlStructures/ProhibitUntilBlocks.run
+t/ControlStructures/ProhibitYadaOperator.run
 t/Documentation/RequirePackageMatchesPodName.run
 t/Documentation/RequirePodAtEnd.run
 t/Documentation/RequirePodLinksIncludeText.run

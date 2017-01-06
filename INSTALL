@@ -3,8 +3,8 @@ INSTALLATION
     To install Perl::Critic give the following commands 
     to your favorite shell:
 
-        tar -zxf Perl-Critic-1.123.tar.gz
-        cd Perl-Critic-1.123
+        tar -zxf Perl-Critic-1.126.tar.gz
+        cd Perl-Critic-1.126
         perl Build.pl
         ./Build
         ./Build test

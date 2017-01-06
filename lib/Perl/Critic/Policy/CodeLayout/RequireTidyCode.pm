@@ -13,7 +13,7 @@ use Perl::Tidy qw< >;
 use Perl::Critic::Utils qw{ :booleans :characters :severities };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.125';
+our $VERSION = '1.126';
 
 #-----------------------------------------------------------------------------
 
@@ -83,7 +83,8 @@ sub violates {
     # another program.  Also, we need to override the
     # stdout and stderr redirects that the user may have
     # configured in their .perltidyrc file.
-    local @ARGV = qw(-nst -nse);
+    # Also override -b because we are using dest and source.
+    local @ARGV = qw(-nst -nse -nb);
 
     # Trap Perl::Tidy errors, just in case it dies
     my $eval_worked = eval {

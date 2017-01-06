@@ -13,7 +13,7 @@ use Readonly;
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '1.125';
+our $VERSION = '1.126';
 
 Readonly::Scalar my $LAST_ELEMENT => -1;
 
@@ -223,7 +223,7 @@ sub _parse_annotation {
     # verified as a no-critic annotation.  So if this regex does not match,
     # then it implies that all Policies are to be disabled.
     #
-    my $no_critic = qr{\#\# \s* no \s+ critic \s* (?:qw)? [("'] ([\s\w:,]+) }xms;
+    my $no_critic = qr{\#\# \s* no \s+ critic \s* (?:qw)? [(["'] ([\s\w:,]+) }xms;
     #                  -------------------------- ------- ----- -----------
     #                                 |              |      |        |
     #   "## no critic" with optional spaces          |      |        |

@@ -11,7 +11,7 @@ use Perl::Critic::Utils qw{
 use Perl::Critic::Utils::PPI qw{ is_ppi_expression_or_generic_statement };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.125';
+our $VERSION = '1.126';
 
 #-----------------------------------------------------------------------------
 

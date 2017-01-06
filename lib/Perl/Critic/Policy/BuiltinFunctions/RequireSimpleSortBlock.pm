@@ -8,7 +8,7 @@ use Readonly;
 use Perl::Critic::Utils qw{ :severities :classification };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.125';
+our $VERSION = '1.126';
 
 #-----------------------------------------------------------------------------
 
@@ -27,7 +27,7 @@ sub applies_to           { return 'PPI::Token::Word'                   }
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    return if $elem ne 'sort';
+    return if $elem->content() ne 'sort';
     return if ! is_function_call($elem);
 
     my $sib = $elem->snext_sibling();

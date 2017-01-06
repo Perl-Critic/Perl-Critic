@@ -1,5 +1,27 @@
 Revision history for Perl module Perl::Critic
 
+1.126 2015-08-10
+
+    [New Policies]
+    * Added a policy: ControlStructures::ProhibitYadaOperator - Never use ...
+      in production code.
+
+    [Bug Fixes]
+    * Fixed problems arising from having -b in your .perltidyrc file. Thanks
+      @hjkatz.
+    * Removed extra newline from policy names returned by P::C::Config->policies.
+      Thanks @ratsbane.
+    * `fc` and `say` are now covered by ProhibitUselessTopic. Thanks @JRaspass.
+
+    [Miscellanea]
+    * Add more strict/warnings importer modules. Thanks @oalders.
+    * Path::Tiny is now recommended over File::Slurp
+    * Micro-optimize by calling ->content() directly instead of going
+      through the overloads. Thanks @JRaspass.
+    * Square brackets are now allowed around your `## no critic` policy
+      list. Thanks @zdm.
+
+
 1.125 2015-03-02
 
     [Bug Fixes]

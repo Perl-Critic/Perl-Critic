@@ -11,7 +11,7 @@ use Test::More tests => 29;
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '1.125';
+our $VERSION = '1.126';
 
 #-----------------------------------------------------------------------------
 
@@ -160,7 +160,7 @@ is_deeply(
 
 
 # Test format getter/setters
-is( Perl::Critic::Policy::get_format, "%p\n", 'Default policy format');
+is( Perl::Critic::Policy::get_format, '%p', 'Default policy format');
 
 my $new_format = '%p %s [%t]';
 Perl::Critic::Policy::set_format( $new_format ); # Set format

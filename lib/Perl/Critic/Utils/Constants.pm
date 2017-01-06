@@ -9,7 +9,7 @@ use Perl::Critic::Utils qw{ $EMPTY hashify };
 
 use Exporter 'import';
 
-our $VERSION = '1.125';
+our $VERSION = '1.126';
 
 #-----------------------------------------------------------------------------
 
@@ -99,7 +99,14 @@ Readonly::Array our @STRICT_EQUIVALENT_MODULES => qw(
     Mouse
     Mouse::Role
     Mouse::Exporter
+    Mouse::Util
     Mouse::Util::TypeConstraints
+
+    Moos
+
+    Mousse
+
+    Any::Moose
 
     Modern::Perl
 
@@ -108,6 +115,14 @@ Readonly::Array our @STRICT_EQUIVALENT_MODULES => qw(
 
     Mojolicious::Lite
     Mojo::Base
+
+    Object::Simple
+
+    Role::Tiny
+
+    sane
+    shit
+    strictures
 );
 
 # Such modules tend to inflict both strictures and warnings, so for

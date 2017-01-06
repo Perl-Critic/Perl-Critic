@@ -40,7 +40,7 @@ use Perl::Critic::Violation qw<>;
 
 use Exception::Class;   # this must come after "use P::C::Exception::*"
 
-our $VERSION = '1.125';
+our $VERSION = '1.126';
 
 #-----------------------------------------------------------------------------
 
@@ -48,7 +48,7 @@ Readonly::Scalar my $NO_LIMIT => 'no_limit';
 
 #-----------------------------------------------------------------------------
 
-my $format = "%p\n"; #Default stringy format
+my $format = '%p'; #Default stringy format
 
 #-----------------------------------------------------------------------------
 

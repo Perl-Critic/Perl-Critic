@@ -8,7 +8,7 @@ use Readonly;
 use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.125';
+our $VERSION = '1.126';
 
 #-----------------------------------------------------------------------------
 
@@ -26,7 +26,7 @@ sub applies_to           { return 'PPI::Token::Operator' }
 
 sub violates {
     my ($self, $elem, $doc) = @_;
-    return if $elem ne '-t';
+    return if $elem->content() ne '-t';
     return $self->violation( $DESC, $EXPL, $elem );
 }
 

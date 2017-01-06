@@ -6,7 +6,7 @@ use warnings;
 
 use English q<-no_match_vars>;
 
-our $VERSION = '1.122';
+our $VERSION = '1.126';
 
 use Exporter 'import';
 

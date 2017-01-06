@@ -9,7 +9,7 @@ use Perl::Critic::Exception::Fatal::Internal qw{ throw_internal };
 use Perl::Critic::Utils qw{ :characters :severities :data_conversion };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.125';
+our $VERSION = '1.126';
 
 #-----------------------------------------------------------------------------
 
@@ -114,7 +114,7 @@ sub _is_compound_return {
     my $begin = $final->schild(0);
     return if !$begin; #fail
     if (!($begin->isa('PPI::Token::Word') &&
-          ($begin eq 'if' || $begin eq 'unless'))) {
+          ($begin->content() eq 'if' || $begin->content() eq 'unless'))) {
         return; #fail
     }
 
@@ -197,7 +197,8 @@ sub _is_return_or_goto_stmnt {
     my ( $self, $stmnt ) = @_;
     return if not $stmnt->isa('PPI::Statement::Break');
     my $first_token = $stmnt->schild(0) || return;
-    return $first_token eq 'return' || $first_token eq 'goto';
+    return $first_token->content() eq 'return'
+        || $first_token->content() eq 'goto';
 }
 
 #-----------------------------------------------------------------------------

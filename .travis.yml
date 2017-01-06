@@ -10,20 +10,26 @@ perl:
    - "5.10"
    - "5.8"
 
+# Use the container-base Travis infrastructure
+sudo: false
+
 notifications:
    on_success: change
-   #on_success: always
    on_failure: always
    irc:
       channels:
          - "irc.perl.org#perlcritic"
       template:
          - "%{branch}: %{message} %{build_url}"
-   #email: false
+
+addons:
+  apt:
+    packages:
+    - aspell
+    - aspell-en
 
 install:
-   - cpanm Perl::Critic::More Devel::EnforceEncapsulation
-   - sudo apt-get install -qq aspell
+   - cpanm Perl::Critic::More Test::Perl::Critic Devel::EnforceEncapsulation
 
 script:
    - export HARNESS_OPTIONS='j:c'

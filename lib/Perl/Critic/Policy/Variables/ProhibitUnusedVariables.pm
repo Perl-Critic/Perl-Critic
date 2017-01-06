@@ -12,7 +12,7 @@ use PPI::Token::Symbol;
 use Perl::Critic::Utils qw< :characters :severities >;
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.125';
+our $VERSION = '1.126';
 
 #-----------------------------------------------------------------------------
 
@@ -46,7 +46,7 @@ sub violates {
         next DECLARATION if 'my' ne $declaration->type();
 
         my @children = $declaration->schildren();
-        next DECLARATION if any { $_ eq q<=> } @children;
+        next DECLARATION if any { $_->content() eq q<=> } @children;
 
         VARIABLE:
         foreach my $variable ( $declaration->variables() ) {

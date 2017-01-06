@@ -9,11 +9,13 @@ use Test::More;
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '1.125';
+our $VERSION = '1.126';
 
 #-----------------------------------------------------------------------------
 
-use Test::Kwalitee 1.15 tests => [ qw{ -no_symlinks } ];
+eval 'use Test::Kwalitee 1.15 tests => [ qw{ -no_symlinks } ]; 1'
+    or plan skip_all => 'Test::Kwalitee requried to test kwalitee';
+
 
 # Local Variables:
 #   mode: cperl

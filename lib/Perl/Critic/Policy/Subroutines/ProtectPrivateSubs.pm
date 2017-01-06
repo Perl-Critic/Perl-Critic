@@ -13,7 +13,7 @@ use Perl::Critic::Utils qw<
 >;
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.125';
+our $VERSION = '1.126';
 
 #-----------------------------------------------------------------------------
 
@@ -161,7 +161,8 @@ sub _is_other_pkg_private_method {
     # sometimes the previous sib is a keyword, as in:
     # shift->_private_method();  This is typically used as
     # shorthand for "my $self=shift; $self->_private_method()"
-    return if $package eq 'shift' or $package eq '__PACKAGE__';
+    return if $package->content() eq 'shift'
+        or $package->content() eq '__PACKAGE__';
 
     # Maybe the user wanted to exempt this explicitly.
     return if $self->{_allow}{"${package}::$content"};

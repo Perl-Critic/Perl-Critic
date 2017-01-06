@@ -9,7 +9,7 @@ use version 0.77 ();
 use Perl::Critic::Utils qw{ :severities :classification :language };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.125';
+our $VERSION = '1.126';
 
 #-----------------------------------------------------------------------------
 
@@ -41,7 +41,7 @@ sub prepare_to_scan_document {
 sub violates {
     my ($self, $elem, undef) = @_;
 
-    return if $elem ne 'substr';
+    return if $elem->content() ne 'substr';
     return if ! is_function_call($elem);
 
     my $sib = $elem;

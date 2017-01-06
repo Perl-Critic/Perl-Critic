@@ -8,7 +8,7 @@ use Readonly;
 use Perl::Critic::Utils qw{ :severities :classification is_in_void_context };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.125';
+our $VERSION = '1.126';
 
 #-----------------------------------------------------------------------------
 
@@ -27,7 +27,7 @@ sub applies_to           { return 'PPI::Token::Word'     }
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    return if $elem ne 'grep';
+    return if $elem->content() ne 'grep';
     return if not is_function_call($elem);
     return if not is_in_void_context($elem);
 

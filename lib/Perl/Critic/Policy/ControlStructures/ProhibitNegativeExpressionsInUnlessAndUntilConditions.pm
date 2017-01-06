@@ -10,7 +10,7 @@ use Perl::Critic::Utils qw< :characters :severities :classification hashify >;
 
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.125';
+our $VERSION = '1.126';
 
 #-----------------------------------------------------------------------------
 
@@ -28,7 +28,7 @@ sub applies_to           { return 'PPI::Token::Word'         }
 sub violates {
     my ( $self, $token, undef ) = @_;
 
-    return if $token ne 'until' && $token ne 'unless';
+    return if $token->content() ne 'until' && $token->content() ne 'unless';
 
     return if is_hash_key($token);
     return if is_subroutine_name($token);
@@ -85,7 +85,7 @@ sub _get_condition_elements {
     my $element = $token;
     while (
             $element = $element->snext_sibling()
-        and $element ne $SCOLON
+        and $element->content() ne $SCOLON
     ) {
         push @condition_elements, $element;
     }

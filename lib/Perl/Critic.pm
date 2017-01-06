@@ -22,7 +22,7 @@ use Perl::Critic::Utils qw< :characters hashify shebang_line >;
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '1.125';
+our $VERSION = '1.126';
 
 Readonly::Array our @EXPORT_OK => qw(critique);
 
@@ -330,7 +330,7 @@ B<-include> is a reference to a list of string C<@PATTERNS>.  Policy modules
 that match at least one C<m/$PATTERN/ixms> will always be loaded, irrespective
 of all other settings.  For example:
 
-    my $critic = Perl::Critic->new(-include => ['layout'] -severity => 4);
+    my $critic = Perl::Critic->new(-include => ['layout'], -severity => 4);
 
 This would cause Perl::Critic to apply all the C<CodeLayout::*> Policy modules
 even though they have a severity level that is less than 4. You can set the
@@ -342,7 +342,7 @@ B<-exclude> is a reference to a list of string C<@PATTERNS>.  Policy modules
 that match at least one C<m/$PATTERN/ixms> will not be loaded, irrespective of
 all other settings.  For example:
 
-    my $critic = Perl::Critic->new(-exclude => ['strict'] -severity => 1);
+    my $critic = Perl::Critic->new(-exclude => ['strict'], -severity => 1);
 
 This would cause Perl::Critic to not apply the C<RequireUseStrict> and
 C<ProhibitNoStrict> Policy modules even though they have a severity level that
@@ -758,10 +758,11 @@ family of Policies in one shot like this:
     # Now exempt from NamingConventions::Capitalization
     sub camelHumpSub {}
 
-The argument list must be enclosed in parentheses and must contain one or more
-comma-separated barewords (e.g. don't use quotes).  The C<"## no critic">
-annotations can be nested, and Policies named by an inner annotation will be
-disabled along with those already disabled an outer annotation.
+The argument list must be enclosed in parentheses or brackets and must contain
+one or more comma-separated barewords (e.g. don't use quotes).
+The C<"## no critic"> annotations can be nested, and Policies named by an inner
+annotation will be disabled along with those already disabled an outer
+annotation.
 
 Some Policies like C<Subroutines::ProhibitExcessComplexity> apply to an entire
 block of code.  In those cases, the C<"## no critic"> annotation must appear
@@ -916,8 +917,8 @@ L<Task::Perl::Critic>
 
 Scrutinizing Perl code is hard for humans, let alone machines.  If you find
 any bugs, particularly false-positives or false-negatives from a
-Perl::Critic::Policy, please submit them at L<https://github.com/Perl-Critic
-/Perl-Critic/issues>.  Thanks.
+Perl::Critic::Policy, please submit them at
+L<https://github.com/Perl-Critic/Perl-Critic/issues>.  Thanks.
 
 =head1 CREDITS
 

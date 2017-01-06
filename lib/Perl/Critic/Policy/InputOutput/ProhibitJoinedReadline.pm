@@ -9,11 +9,11 @@ use List::MoreUtils qw(any);
 use Perl::Critic::Utils qw{ :severities :classification parse_arg_list };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.125';
+our $VERSION = '1.126';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $DESC => q{Use "local $/ = undef" or File::Slurp instead of joined readline}; ## no critic qw(InterpolationOfMetachars)
+Readonly::Scalar my $DESC => q{Use "local $/ = undef" or Path::Tiny instead of joined readline}; ## no critic qw(InterpolationOfMetachars)
 Readonly::Scalar my $EXPL => [213];
 
 #-----------------------------------------------------------------------------
@@ -28,7 +28,7 @@ sub applies_to           { return 'PPI::Token::Word'     }
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    return if $elem ne 'join';
+    return if $elem->content() ne 'join';
     return if ! is_function_call($elem);
     my @args = parse_arg_list($elem);
     shift @args; # ignore separator string
@@ -51,7 +51,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::InputOutput::ProhibitJoinedReadline - Use C<local $/ = undef> or L<File::Slurp|File::Slurp> instead of joined readline.
+Perl::Critic::Policy::InputOutput::ProhibitJoinedReadline - Use C<local $/ = undef> or L<Path::Tiny|Path::Tiny> instead of joined readline.
 
 =head1 AFFILIATION
 
@@ -70,7 +70,7 @@ like so:
 
   do { local $/ = undef; <$fh> }
 
-or use L<File::Slurp|File::Slurp>, which is even faster.
+or use L<Path::Tiny|Path::Tiny>, which is even faster.
 
 B<Note> that if the C<ProhibitPunctuationVars> policy is also in effect,
 it will complain about the use of C<$/> in the line above.  In that

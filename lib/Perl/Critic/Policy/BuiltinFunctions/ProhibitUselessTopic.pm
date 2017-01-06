@@ -7,7 +7,7 @@ use Readonly;
 use Perl::Critic::Utils qw{ :severities :classification :ppi };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.125';
+our $VERSION = '1.126';
 
 ## no critic ( ValuesAndExpressions::RequireInterpolationOfMetachars )
 ## The numerous $_ variables make false positives.
@@ -29,6 +29,7 @@ my @topical_funcs = qw(
     chomp chop chr chroot cos
     defined
     eval exp
+    fc
     glob
     hex
     int
@@ -38,7 +39,7 @@ my @topical_funcs = qw(
     pos print
     quotemeta
     readlink readpipe ref require reverse rmdir
-    sin split sqrt stat study
+    say sin split sqrt stat study
     uc ucfirst unlink unpack
 );
 my %topical_funcs = map { ($_ => 1) } @topical_funcs;
