@@ -19,3 +19,4 @@ nytprof*
 t/ControlStructures/ProhibitNegativeExpressionsInUnlessAndUntilConditions.run
 t/NamingConventions/Capitalization.run
 t/Variables/RequireLocalizedPunctuationVars.run
+.sonar/

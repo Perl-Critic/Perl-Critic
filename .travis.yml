@@ -1,4 +1,11 @@
 language: perl
+addons:
+  sonarqube:
+    token:
+      secure: "ieDvN/2zbIDwEH6CY7PEYeMwb2bhx6WYpTJuzjZTMiFCeHl6V8813PmgqHNBOyRekg18H3z8PZQFv1MZ5hkWIRgluwAZ3lQnuwJKkGwn2ezEnJDBoZ+Bas58G5TOuIiDgSumg1myFakSNUKOLUPpYgLJBjifyvUIF4EBdCeUYgM="
+  apt:
+    packages:
+      - oracle-java8-set-default
 
 perl:
    - "5.21"
@@ -35,3 +42,6 @@ script:
    - export HARNESS_OPTIONS='j:c'
    - perl Build.PL
    - ./Build authortest
+
+after_success:
+  - 'if [ "$PERLBREW_PERL" == "5.20" ] ; then JAVA_HOME=$JAVA_HOME tools/sonar-report.sh ; fi' # pick any recent perl to run once
