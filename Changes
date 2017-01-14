@@ -1,5 +1,11 @@
 Revision history for Perl module Perl::Critic
 
+NEXT
+
+    [Internals]
+    Perl::Critic is now checked via Sonar.  Thanks, Oliver Trosien.
+
+
 1.126 2015-08-10
 
     [New Policies]
