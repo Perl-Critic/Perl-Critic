@@ -3,7 +3,7 @@
 set -e # Exit with nonzero exit code if anything fails
 
 # make sure Devel::Cover::Report::Clover and Perl::Critic are installed locally.
-cpanm --notest Devel::Cover::Report::Clover Perl::Critic
+cpanm --notest Devel::Cover::Report::Clover TAP::Harness::Archive Perl::Critic
 
 # run tests and generate coverage and TAP report
 HARNESS_OPTIONS="j:c:a_build/testReport.tgz" HARNESS_PERL_SWITCHES="-MDevel::Cover" ./Build test
