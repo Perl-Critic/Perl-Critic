@@ -1,11 +1,4 @@
 language: perl
-addons:
-  sonarqube:
-    token:
-      secure: "ieDvN/2zbIDwEH6CY7PEYeMwb2bhx6WYpTJuzjZTMiFCeHl6V8813PmgqHNBOyRekg18H3z8PZQFv1MZ5hkWIRgluwAZ3lQnuwJKkGwn2ezEnJDBoZ+Bas58G5TOuIiDgSumg1myFakSNUKOLUPpYgLJBjifyvUIF4EBdCeUYgM="
-  apt:
-    packages:
-      - oracle-java8-set-default
 
 perl:
    - "5.24"
@@ -18,7 +11,6 @@ perl:
    - "5.10"
    - "5.8"
 
-# Use the container-base Travis infrastructure
 sudo: false
 
 notifications:
@@ -35,9 +27,19 @@ addons:
     packages:
     - aspell
     - aspell-en
+    - oracle-java8-installer
+
+  sonarqube:
+    token:
+      secure: "ieDvN/2zbIDwEH6CY7PEYeMwb2bhx6WYpTJuzjZTMiFCeHl6V8813PmgqHNBOyRekg18H3z8PZQFv1MZ5hkWIRgluwAZ3lQnuwJKkGwn2ezEnJDBoZ+Bas58G5TOuIiDgSumg1myFakSNUKOLUPpYgLJBjifyvUIF4EBdCeUYgM="
+
 
 install:
    - cpanm Perl::Critic::More Test::Perl::Critic Devel::EnforceEncapsulation
+
+env:
+  global:
+    - JAVA_HOME=/usr/lib/jvm/java-8-oracle
 
 script:
    - export HARNESS_OPTIONS='j:c'
