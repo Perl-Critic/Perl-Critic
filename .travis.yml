@@ -32,6 +32,8 @@ addons:
   sonarqube:
     token:
       secure: "ieDvN/2zbIDwEH6CY7PEYeMwb2bhx6WYpTJuzjZTMiFCeHl6V8813PmgqHNBOyRekg18H3z8PZQFv1MZ5hkWIRgluwAZ3lQnuwJKkGwn2ezEnJDBoZ+Bas58G5TOuIiDgSumg1myFakSNUKOLUPpYgLJBjifyvUIF4EBdCeUYgM="
+    branches:
+    - dev
 
 
 install:
