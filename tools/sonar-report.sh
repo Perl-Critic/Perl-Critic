@@ -15,7 +15,7 @@ cover -report clover
 sed -i 's#blib/lib#lib#' cover_db/clover.xml
 
 # self-critique with "core" theme
-perlcritic --gentle --theme core --quiet --verbose "%f~|~%s~|~%l~|~%c~|~%m~|~%e~|~%p~||~%n" lib t > _build/perlcritic_report.txt || true
+perlcritic --gentle --theme core --quiet --verbose "%f~|~%s~|~%l~|~%c~|~%m~|~%e~|~%p~||~%n" lib t | grep -v t/06_violation.d/ > _build/perlcritic_report.txt || true
 
 # upload to sonarqube
 sonar-scanner -Dsonar.host.url=http://sonarqube.racodond.com/ -Dsonar.login=$SONAR_TOKEN
