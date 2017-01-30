@@ -27,7 +27,7 @@ sub applies_to           { return 'PPI::Token::Word'  }
 sub violates {
     my ($self, $elem, undef) = @_;
 
-    return if $elem->content() ne 'open';
+    return unless $elem->content() =~ /open|opendir|sysopen/;
     return if ! is_function_call($elem);
 
     my $first_arg = ( parse_arg_list($elem) )[0];
