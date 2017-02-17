@@ -23,6 +23,7 @@ our $VERSION = '1.126';
 
 Readonly::Scalar my $AT => q{@};
 Readonly::Scalar my $AT_ARG => q{@_}; ## no critic (InterpolationOfMetachars)
+Readonly::Scalar my $DEREFERENCE => q{->};
 Readonly::Scalar my $DOLLAR => q{$};
 Readonly::Scalar my $DOLLAR_ARG => q{$_};   ## no critic (InterpolationOfMetaChars)
 
@@ -54,7 +55,13 @@ sub supported_parameters {
                 'Allow the usual delegation idiom to these namespaces/subroutines',
             behavior        => 'string list',
             list_always_present_values => [ qw< SUPER:: NEXT:: > ],
-        }
+        },
+        {
+            name            => 'allow_closures',
+            description     => 'Allow unpacking by a closure',
+            default_string  => $FALSE,
+            behavior        => 'boolean',
+        },
     );
 }
 
@@ -295,13 +302,34 @@ sub _is_delegation {
         or return;                          #   the argument list.
     my $subroutine_name = $parent->sprevious_sibling()
         or return;                          # Missing sub name.
-    $subroutine_name->isa( 'PPI::Token::Word' )
+    if ( $subroutine_name->isa( 'PPI::Token::Word' ) ) {
+        $self->{_allow_delegation_to}{$subroutine_name}
+            and return 1;
+        my ($subroutine_namespace) = $subroutine_name =~ m/ \A ( .* ::) \w+ \z /smx
+            or return;
+        return $self->{_allow_delegation_to}{$subroutine_namespace};
+    } elsif ( $self->{_allow_closures} &&
+        _is_dereference_operator( $subroutine_name ) ) {
+        my $prev_sib = $subroutine_name;
+        {   # Single-iteration loop
+            $prev_sib = $prev_sib->sprevious_sibling()
+                or return;
+            ( $prev_sib->isa( 'PPI::Structure::Subscript' ||
+                    _is_dereference_operator( $prev_sib ) ) )
+                and redo;
+        }
+        return $prev_sib->isa( 'PPI::Token::Symbol' );
+    }
+    return;
+}
+
+sub _is_dereference_operator {
+    my ( $elem ) = @_;
+    $elem
         or return;
-    $self->{_allow_delegation_to}{$subroutine_name}
-        and return 1;
-    my ($subroutine_namespace) = $subroutine_name =~ m/ \A ( .* ::) \w+ \z /smx
+    $elem->isa( 'PPI::Token::Operator' )
         or return;
-    return $self->{_allow_delegation_to}{$subroutine_namespace};
+    return $DEREFERENCE eq $elem->content();
 }
 
 
@@ -338,6 +366,8 @@ __END__
 #-----------------------------------------------------------------------------
 
 =pod
+
+=for stopwords Specio
 
 =head1 NAME
 
@@ -412,6 +442,14 @@ following configuration could be used:
 
   [Subroutines::RequireArgUnpacking]
   allow_delegation_to = next::method _delegate
+
+Argument validation tools such as L<Specio|Specio> generate a closure which is
+used to unpack and validate the arguments of a subroutine. In order to
+recognize closures as a valid way to unpack arguments you must enable them
+explicitly:
+
+  [Subroutines::RequireArgUnpacking]
+  allow_closures = 1
 
 =head1 CAVEATS
 
