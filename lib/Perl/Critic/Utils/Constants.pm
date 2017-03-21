@@ -123,6 +123,8 @@ Readonly::Array our @STRICT_EQUIVALENT_MODULES => qw(
     sane
     shit
     strictures
+
+    Test2::Bundle::Extended
 );
 
 # Such modules tend to inflict both strictures and warnings, so for
