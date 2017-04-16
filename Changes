@@ -44,6 +44,7 @@ Revision history for Perl module Perl::Critic
     [Bug Fixes]
     * The RequireChecked* family of policies has been fixed to accommodate
       version numbers when use-ing the autodie pragma. GH #612. Thanks citrin.
+    * Importing the import() from Exporter requires Exporter 5.57+
 
 1.123 2014-11-11
 

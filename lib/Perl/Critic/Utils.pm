@@ -18,7 +18,7 @@ use PPI::Token::Quote::Single;
 use Perl::Critic::Exception::Fatal::Generic qw{ throw_generic };
 use Perl::Critic::Utils::PPI qw< is_ppi_expression_or_generic_statement >;
 
-use Exporter 'import';
+use Exporter 5.57 'import';
 
 our $VERSION = '1.126';
 

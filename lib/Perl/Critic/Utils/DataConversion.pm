@@ -7,7 +7,7 @@ use Readonly;
 
 use Perl::Critic::Utils qw{ :characters :booleans };
 
-use Exporter 'import';
+use Exporter 5.57 'import';
 
 our $VERSION = '1.126';
 

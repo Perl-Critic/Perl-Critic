@@ -8,7 +8,7 @@ use Readonly;
 
 use Scalar::Util qw< blessed readonly >;
 
-use Exporter 'import';
+use Exporter 5.57 'import';
 
 our $VERSION = '1.126';
 

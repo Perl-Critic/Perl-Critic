@@ -25,7 +25,7 @@ our $VERSION = '1.126';
 
 #-----------------------------------------------------------------------------
 
-use Exporter 'import';
+use Exporter 5.57 'import';
 
 Readonly::Array our @EXPORT_OK => qw< run >;
 
