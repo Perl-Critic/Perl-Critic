@@ -1097,7 +1097,7 @@ Returns the value of the C<-allow-unsafe> attribute for this Config.
 
 =item C< criticism_fatal() >
 
-Returns the value of the C<-criticsm-fatal> attribute for this Config.
+Returns the value of the C<-criticism-fatal> attribute for this Config.
 
 
 =item C< color_severity_highest() >
