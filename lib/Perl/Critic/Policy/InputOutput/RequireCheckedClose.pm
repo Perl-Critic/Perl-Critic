@@ -17,7 +17,17 @@ Readonly::Scalar my $EXPL => q{Check the return value of "close" for success};
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return ()                     }
+sub supported_parameters {
+    return (
+        {
+            name            => 'autodie_modules',
+            description     => 'Modules which export autodie.',
+            default_string  => 'autodie',
+            behavior        => 'string list',
+        },
+    );
+}
+
 sub default_severity     { return $SEVERITY_LOW          }
 sub default_themes       { return qw( core maintenance certrule ) }
 sub applies_to           { return 'PPI::Token::Word'     }
@@ -28,7 +38,7 @@ sub violates {
     my ( $self, $elem, undef ) = @_;
 
     return if $elem->content() ne 'close';
-    return if ! is_unchecked_call( $elem );
+    return if ! is_unchecked_call( $elem, [ keys %{ $self->{_autodie_modules} } ] );
 
     return $self->violation( $DESC, $EXPL, $elem );
 
@@ -77,7 +87,11 @@ lexical effects aren't taken into account.
 
 =head1 CONFIGURATION
 
-This Policy is not configurable except for the standard options.
+If you create a module that exports C<autodie> you can tell this policy about
+it with the C<autodie_modules> setting:
+
+    [InputOutput::RequireCheckedSyscalls]
+    autodie_modules = My::Thing
 
 
 =head1 AUTHOR
