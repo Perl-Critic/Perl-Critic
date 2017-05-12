@@ -14,12 +14,11 @@ is( pcritique($policy, \$code), 0, $policy);
 #-----------------------------------------------------------------------------
 
 ## name basic failures
-## failures 6
+## failures 5
 ## cut
 require 'Exporter';
 require 'My/Module.pl';
 use 'SomeModule';
-use q{OtherModule.pm};
 no "Module";
 no "Module.pm";
 
