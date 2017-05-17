@@ -25,12 +25,12 @@ use Perl::Critic::Exception::Fatal::Internal qw< throw_internal >;
 our $VERSION = '1.126';
 
 
+Readonly::Scalar my $NO_EXCEPTION_NO_SPLIT_LIMIT        => -1;
 Readonly::Scalar my $LOCATION_LINE_NUMBER               => 0;
 Readonly::Scalar my $LOCATION_COLUMN_NUMBER             => 1;
 Readonly::Scalar my $LOCATION_VISUAL_COLUMN_NUMBER      => 2;
 Readonly::Scalar my $LOCATION_LOGICAL_LINE_NUMBER       => 3;
 Readonly::Scalar my $LOCATION_LOGICAL_FILENAME          => 4;
-
 
 # Class variables...
 my $format = "%m at line %l, column %c. %e.\n"; # Default stringy format
@@ -297,7 +297,13 @@ sub _line_containing_violation {
     my $code_string = $stmnt->content() || $EMPTY;
 
     # Split into individual lines
-    my @lines = split qr{ \n }xms, $code_string, -1;
+    # From `perldoc -f split`:
+    # If LIMIT is negative, it is treated as if it were instead
+    # arbitrarily large; as many fields as possible are produced.
+    #
+    # If it's omitted, it's the same except trailing empty fields, so we need
+    # without a limit for the split and without an exception
+    my @lines = split qr{ \n }xms, $code_string, $NO_EXCEPTION_NO_SPLIT_LIMIT;
 
     # Take the line containing the element that is in violation
     my $inx = ( $elem->line_number() || 0 ) -
