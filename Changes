@@ -24,6 +24,7 @@ NEXT
     * Fixed incorrect links. Thanks, Glenn Fowler.
     * Fixed incorrect example for returning a sorted list.  Thanks, @daviding58.
     * Fixed invalid POD.  Thanks, Jakub Wilk. (GH #735)
+    * Updated docs on ProhibitYadaOperator.  Thanks, Stuart A Johnston. (GH #662)
 
 1.126 2015-08-10
 
