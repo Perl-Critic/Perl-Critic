@@ -68,8 +68,10 @@ distribution.
 
 =head1 DESCRIPTION
 
-The yada operator C<...> is not something you'd want in production code but
-it is perfectly useful less critical environments.
+The yada operator C<...> is not something you'd want in production code
+because it will throw an exception when executed.  However, it is perfectly
+useful in less critical environments as a placeholder for code not yet
+implemented.
 
 =head1 CONFIGURATION
 
