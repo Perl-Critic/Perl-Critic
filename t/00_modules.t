@@ -41,6 +41,8 @@ plan tests =>
     +   (  9 * scalar @concrete_exceptions  )
     +   ( 17 * scalar @bundled_policy_names );
 
+diag( "Testing Perl::Critic $Perl::Critic::VERSION with PPI $PPI::VERSION under Perl $], $^X" );
+
 # pre-compute for version comparisons
 my $version_string = __PACKAGE__->VERSION;
 
