@@ -11,6 +11,7 @@ NEXT
 
     [Documentation]
     * Fixed incorrect links. Thanks, Glenn Fowler.
+    * Fixed incorrect example for returning a sorted list.  Thanks, @daviding58.
 
 1.126 2015-08-10
 
