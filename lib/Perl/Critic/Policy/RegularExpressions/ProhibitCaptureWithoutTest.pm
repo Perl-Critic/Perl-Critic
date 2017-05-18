@@ -329,7 +329,8 @@ before using those variables.
     print $1;    # Prints 2, because $1 has not changed.
 
 Note that because the values of C<$1> etc will be unaffected, you cannot
-check them for definedness to see if a test passed.
+determine if a match succeeded by checking to see if the capture variables
+have values.
 
     # WRONG
     $str =~ /foo(.+)/;
