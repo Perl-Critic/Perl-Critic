@@ -83,7 +83,3 @@ RCS
 
 # Symlink to lib/Perl/Critic/Policy
 ^Policy
-
-# sonar-scanner script
-tools/sonar-report.sh$
-.sonar/$
