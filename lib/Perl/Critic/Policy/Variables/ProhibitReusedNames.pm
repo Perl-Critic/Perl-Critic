@@ -7,6 +7,7 @@ use List::MoreUtils qw(part);
 use Readonly;
 
 use Perl::Critic::Utils qw{ :severities :classification :data_conversion };
+
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.126';
@@ -31,43 +32,34 @@ sub supported_parameters {
 
 sub default_severity     { return $SEVERITY_MEDIUM           }
 sub default_themes       { return qw( core bugs )            }
-sub applies_to           { return 'PPI::Statement::Variable' }
+sub applies_to           { return 'PPI::Document' }
 
 #-----------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, undef ) = @_;
-    return if 'local' eq $elem->type;
+        my ( $self, $elem, $doc ) = @_;
 
-    my $allow = $self->{_allow};
-    my $names = [ grep { not $allow->{$_} } $elem->variables() ];
-    # Assert: it is impossible for @$names to be empty in valid Perl syntax
-    # But if it IS empty, this code should still work but will be inefficient
+        return $self->_get_violations_below_element_given_seen_vars($doc, {});
+}
 
-    # Walk up the PDOM looking for declared variables in the same
-    # scope or outer scopes.  Quit when we hit the root or when we find
-    # violations for all vars (the latter is a shortcut).
-    my $outer = $elem;
-    my @violations;
-    while (1) {
-        my $up = $outer->sprevious_sibling;
-        if (not $up) {
-            $up = $outer->parent;
-            last if !$up; # top of PDOM, we're done
+# modifies $seen_vars
+sub _get_violations_below_element_given_seen_vars {
+        my ( $self, $elem, $seen_vars ) = @_;
+        if (!$elem->isa('PPI::Node')) { return; }
+        my @violations;
+
+        foreach my $child_elem ($elem->schildren) {
+                if ($child_elem->isa('PPI::Statement::Variable') && $child_elem->type ne 'local') {
+                        foreach my $var ($child_elem->variables) {
+                                if (!$self->{_allow}{$var} && $seen_vars->{$var}++) {
+                                        push @violations, $self->violation( $DESC . $var, $EXPL, $child_elem );
+                                }
+                        }
+                }
+                push @violations, $self->_get_violations_below_element_given_seen_vars($child_elem, {%{$seen_vars}});
         }
-        $outer = $up;
 
-        if ($outer->isa('PPI::Statement::Variable') && 'local' ne $outer->type) {
-            my %vars = map {$_ => undef} $outer->variables;
-            my $hits;
-            ($hits, $names) = part { exists $vars{$_} ? 0 : 1 } @{$names};
-            if ($hits) {
-                push @violations, map { $self->violation( $DESC . $_, $EXPL, $elem ) } @{$hits};
-                last if not $names;  # found violations for ALL variables, we're done
-            }
-        }
-    }
-    return @violations;
+        return @violations;
 }
 
 1;
@@ -135,14 +127,6 @@ This is intentional, though, because it catches bugs like this:
 
 I've done this myself several times -- it's a strong habit to put that
 "my" in front of variables at the start of subroutines.
-
-
-=head2 Performance
-
-The current implementation walks the tree over and over.  For a big
-file, this can be a huge time sink.  I'm considering rewriting to
-search the document just once for variable declarations and cache the
-tree walking on that single analysis.
 
 
 =head1 CONFIGURATION
