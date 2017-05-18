@@ -2,12 +2,19 @@ Revision history for Perl module Perl::Critic
 
 NEXT
 
+    Perl::Critic now requires PPI 1.224.  PPI is the underlying Perl parser
+    on which Perl::Critic is built, and 1.224 introduces many parsing fixes
+    such as:
+    * Fixes for dot-in-@INC.
+    * Parse left side of => as bareword even if it looks like a keyword or op.
+    * $::x now works.
+    * Higher accuracy when deciding whether certain characters are operators or
+      variable type casts (*&% etc.).
+    * Subroutine attributes parsed correctly.
+
     [Bug Fixes]
     * A test would fail under the upcoming Perl 5.26 that omits the current
       directory from @INC.  Thanks, Kent Fredric.
-
-    [Internals]
-    * Perl::Critic now requires PPI 1.224.
 
     [Documentation]
     * Fixed incorrect explanation of capture variables in
