@@ -10,6 +10,8 @@ NEXT
     * Perl::Critic now requires PPI 1.224.
 
     [Documentation]
+    * Fixed incorrect explanation of capture variables in
+      ProhibitCaptureWithoutTest.  Thanks, Felipe Gasper.
     * Fixed incorrect links. Thanks, Glenn Fowler.
     * Fixed incorrect example for returning a sorted list.  Thanks, @daviding58.
 
