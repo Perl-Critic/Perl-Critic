@@ -839,8 +839,8 @@ L<http://www.vim.org/scripts/script.php?script_id=1731>.
 Fritz Mehner recently added support for C<perlcritic> to his fantastic gVIM
 plugin.  In addition to providing a very Perlish IDE, Fritz's plugin enables
 one-click access to C<perlcritic> and many other very useful utilities.  And
-all is seamlessly integrated into the editor. See L<http://lug.fh-swf.de/vim
-/vim-perl/screenshots-en.html> for complete details.
+all is seamlessly integrated into the editor. See
+L<http://lug.fh-swf.de/vim/vim-perl/screenshots-en.html> for complete details.
 
 
 =head2 EPIC
@@ -913,8 +913,8 @@ modules.
 If you develop any new Policy modules, feel free to send them to C<<
 <team@perlcritic.com> >> and I'll be happy to consider putting them into the
 Perl::Critic distribution.  Or if you would like to work on the Perl::Critic
-project directly, you can fork our repository at L<http://github.com/Perl-
-Critic/Perl- Critic.git>.
+project directly, you can fork our repository at
+L<http://github.com/Perl-Critic/Perl-Critic.git>.
 
 The Perl::Critic team is also available for hire.  If your organization has
 its own coding standards, we can create custom Policies to enforce your local
@@ -969,8 +969,8 @@ L<Task::Perl::Critic>
 
 Scrutinizing Perl code is hard for humans, let alone machines.  If you find
 any bugs, particularly false-positives or false-negatives from a
-Perl::Critic::Policy, please submit them at L<https://github.com/Perl-Critic
-/Perl-Critic/issues>.  Thanks.
+Perl::Critic::Policy, please submit them at
+L<https://github.com/Perl-Critic/Perl-Critic/issues>.  Thanks.
 
 =head1 CREDITS
 
