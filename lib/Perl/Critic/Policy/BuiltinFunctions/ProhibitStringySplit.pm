@@ -83,9 +83,9 @@ This Policy is not configurable except for the standard options.
 
 =head1 SEE ALSO
 
-L<Perl::Critic::Policy::ControlStrucutres::RequireBlockGrep|Perl::Critic::Policy::ControlStrucutres::RequireBlockGrep>
+L<Perl::Critic::Policy::BuiltInFunctions::RequireBlockGrep|Perl::Critic::Policy::BuiltInFunctions::RequireBlockGrep>
 
-L<Perl::Critic::Policy::ControlStrucutres::RequireBlockMap|Perl::Critic::Policy::ControlStrucutres::RequireBlockMap>
+L<Perl::Critic::Policy::BuiltInFunctions::RequireBlockMap|Perl::Critic::Policy::BuiltInFunctions::RequireBlockMap>
 
 
 =head1 AUTHOR

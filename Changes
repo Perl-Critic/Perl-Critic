@@ -4,11 +4,13 @@ NEXT
 
     [Bug Fixes]
     * A test would fail under the upcoming Perl 5.26 that omits the current
-      directory from @INC.
+      directory from @INC.  Thanks, Kent Fredric.
 
     [Internals]
     * Perl::Critic now requires PPI 1.224.
 
+    [Documentation]
+    * Fixed incorrect links. Thanks, Glenn Fowler.
 
 1.126 2015-08-10
 
