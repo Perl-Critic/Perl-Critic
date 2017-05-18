@@ -2,8 +2,12 @@ Revision history for Perl module Perl::Critic
 
 NEXT
 
+    [Bug Fixes]
+    * A test would fail under the upcoming Perl 5.26 that omits the current
+      directory from @INC.
+
     [Internals]
-    Perl::Critic is now checked via Sonar.  Thanks, Oliver Trosien.
+    * Perl::Critic now requires PPI 1.224.
 
 
 1.126 2015-08-10
