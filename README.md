@@ -6,7 +6,6 @@ Perl::Critic - Critique Perl source code for best-practices.
 
 * [![Travis Status](https://travis-ci.org/Perl-Critic/Perl-Critic.svg?branch=dev)](https://travis-ci.org/Perl-Critic/Perl-Critic)
 * [CPAN Testers](http://cpantesters.org/distro/P/Perl-Critic.html)
-* [Sonar status](http://sonarqube.racodond.com/dashboard?id=Perl-Critic)
 
 # SYNOPSIS
 
