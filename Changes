@@ -27,6 +27,8 @@ NEXT
     * Fixed incorrect example for returning a sorted list.  Thanks, @daviding58.
     * Fixed invalid POD.  Thanks, Jakub Wilk. (GH #735)
     * Updated docs on ProhibitYadaOperator.  Thanks, Stuart A Johnston. (GH #662)
+    * Removed all the references to the old mailing list and code repository
+      at tigris.org.  (GH #757)
 
 1.126 2015-08-10
 

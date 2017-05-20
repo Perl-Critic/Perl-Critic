@@ -874,14 +874,11 @@ L<version|version>
 
 =head1 CONTACTING THE DEVELOPMENT TEAM
 
-You are encouraged to subscribe to the mailing list; send a message to
-L<mailto:users-subscribe@perlcritic.tigris.org>.  To prevent spam, you may be
-required to register for a user account with Tigris.org before being allowed
-to post messages to the mailing list. See also the mailing list archives at
-L<http://perlcritic.tigris.org/servlets/SummarizeList?listName=users>. At
-least one member of the development team is usually hanging around in
-L<irc://irc.perl.org/#perlcritic> and you can follow Perl::Critic on Twitter,
-at L<https://twitter.com/perlcritic>.
+You are encouraged to subscribe to the public mailing list at
+L<https://groups.google.com/d/forum/perl-critic>.
+At least one member of the development team is usually hanging around
+in L<irc://irc.perl.org/#perlcritic> and you can follow Perl::Critic on
+Twitter, at L<https://twitter.com/perlcritic>.
 
 
 =head1 SEE ALSO

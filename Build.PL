@@ -49,7 +49,7 @@ my $builder = Perl::Critic::Module::Build->new(
             bugtracker  => 'https://github.com/Perl-Critic/Perl-Critic/issues',
             homepage    => 'http://perlcritic.com',
             license     => [ 'http://dev.perl.org/licenses' ],
-            MailingList => 'http://perlcritic.tigris.org/servlets/SummarizeList?listName=users',
+            MailingList => 'https://groups.google.com/d/forum/perl-critic',
             repository  => 'git://github.com/Perl-Critic/Perl-Critic.git',
         },
         no_index        => {

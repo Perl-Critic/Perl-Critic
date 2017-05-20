@@ -634,14 +634,11 @@ Perl::Critic requires the following modules:
 
 # CONTACTING THE DEVELOPMENT TEAM
 
-You are encouraged to subscribe to the mailing list; send a message to
-[mailto:users-subscribe@perlcritic.tigris.org](mailto:users-subscribe@perlcritic.tigris.org).  To prevent spam, you may be
-required to register for a user account with Tigris.org before being allowed
-to post messages to the mailing list. See also the mailing list archives at
-[http://perlcritic.tigris.org/servlets/SummarizeList?listName=users](http://perlcritic.tigris.org/servlets/SummarizeList?listName=users). At
-least one member of the development team is usually hanging around in
-[irc://irc.perl.org/#perlcritic](irc://irc.perl.org/#perlcritic) and you can follow Perl::Critic on Twitter,
-at [https://twitter.com/perlcritic](https://twitter.com/perlcritic).
+You are encouraged to subscribe to the public mailing list at
+[https://groups.google.com/d/forum/perl-critic](https://groups.google.com/d/forum/perl-critic).
+At least one member of the development team is usually hanging around
+in [irc://irc.perl.org/#perlcritic](irc://irc.perl.org/#perlcritic) and you can follow Perl::Critic on
+Twitter, at [https://twitter.com/perlcritic](https://twitter.com/perlcritic).
 
 # SEE ALSO
 
