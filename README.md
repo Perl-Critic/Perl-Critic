@@ -1,11 +1,12 @@
-# NAME
-
-Perl::Critic - Critique Perl source code for best-practices.
-
 # BUILD STATUS
 
 * [![Travis Status](https://travis-ci.org/Perl-Critic/Perl-Critic.svg?branch=dev)](https://travis-ci.org/Perl-Critic/Perl-Critic)
 * [CPAN Testers](http://cpantesters.org/distro/P/Perl-Critic.html)
+
+
+# NAME
+
+Perl::Critic - Critique Perl source code for best-practices.
 
 # SYNOPSIS
 
@@ -567,8 +568,8 @@ modules.
 
 If you develop any new Policy modules, feel free to send them to `<team@perlcritic.com>` and I'll be happy to consider putting them into the
 Perl::Critic distribution.  Or if you would like to work on the Perl::Critic
-project directly, you can fork our repository at ["/github.com/Perl-
-Critic/Perl- Critic.git" in http:](https://metacpan.org/pod/http:#github.com-Perl--Critic-Perl--Critic.git).
+project directly, you can fork our repository at
+[http://github.com/Perl-Critic/Perl-Critic.git](http://github.com/Perl-Critic/Perl-Critic.git).
 
 The Perl::Critic team is also available for hire.  If your organization has
 its own coding standards, we can create custom Policies to enforce your local
@@ -699,7 +700,7 @@ Dolan's project to implement twenty PBP policies.
 
 # AUTHOR
 
-Jeffrey Ryan Thalhammer &lt;jeff@imaginative-software.com>
+Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 # COPYRIGHT
 
