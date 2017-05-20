@@ -215,7 +215,6 @@ lib/Perl/Critic/Violation.pm
 lib/Test/Perl/Critic/Policy.pm
 LICENSE
 MANIFEST			This list of files
-README-prologue.md
 README.md
 t/00_modules.t
 t/01_bad_perlcriticrc
