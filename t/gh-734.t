@@ -8,7 +8,7 @@ use Readonly;
 
 use Test::More;
 
-Readonly::Scalar my $NUMBER_OF_TESTS => 5;
+Readonly::Scalar my $NUMBER_OF_TESTS => 6;
 
 plan( tests => $NUMBER_OF_TESTS );
 
@@ -60,11 +60,12 @@ my @violations_re = (
 );
 
 my @violations;
-eval { @violations = pcritique_with_violations( $policy, \$code ); 1; };
+my $rc = eval { @violations = pcritique_with_violations( $policy, \$code ); 2112; };
+is( $rc, 2112, 'Eval ran OK' );
 is( scalar @violations, 4, 'Found 4 violations' );
 
 foreach my $violation (@violations) {
-    my $violation_re = shift @violations_re || qr{^NOPE$}xms;
+    my $violation_re = shift @violations_re || qr/^NOPE$/xms;
     like( $violation->source, $violation_re, 'Correct line for violation' );
 }
 
