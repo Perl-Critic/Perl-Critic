@@ -17,6 +17,8 @@ NEXT
       directory from @INC.  Thanks, Kent Fredric.
     * Fixed an invalid test in the RequireBarewordsIncludes test.  Thanks,
       Christian Walde. (GH #751)
+    * If an element contained blank lines then the source "%r" displayed
+      for a violation was wrong. Thanks, Sawyer X. (GH #702, #734)
 
     [Documentation]
     * Fixed incorrect explanation of capture variables in

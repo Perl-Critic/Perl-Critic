@@ -299,6 +299,7 @@ t/Documentation/RequirePodLinksIncludeText.run
 t/Documentation/RequirePodSections.run
 t/ErrorHandling/RequireCarping.run
 t/ErrorHandling/RequireCheckingReturnValueOfEval.run
+t/gh-734.t
 t/InputOutput/ProhibitBacktickOperators.run
 t/InputOutput/ProhibitBarewordFileHandles.run
 t/InputOutput/ProhibitExplicitStdin.run
