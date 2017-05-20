@@ -83,3 +83,9 @@ RCS
 
 # Symlink to lib/Perl/Critic/Policy
 ^Policy
+
+# Appveyor
+.appveyor.yml
+
+# Building README
+README-prologue.md
