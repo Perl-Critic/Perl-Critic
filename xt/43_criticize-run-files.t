@@ -1,8 +1,6 @@
 #!perl
 
-# Extra self-compliance tests for Policy classes.  This just checks for
-# additional POD sections that we want in every Policy module.  See the
-# 41_perlcriticrc-policies file for the precise configuration.
+# Simple self-compliance tests for .run files.
 
 use strict;
 use warnings;
@@ -10,8 +8,6 @@ use warnings;
 use English qw< -no_match_vars >;
 
 use File::Spec qw<>;
-
-use Perl::Critic::PolicyFactory ( '-test' => 1 );
 
 use Test::More;
 
@@ -43,15 +39,16 @@ if ( $ENV{PERL_CRITIC_CACHE} ) {
 #-----------------------------------------------------------------------------
 # Run critic against all of our own files
 
-my $rcfile = File::Spec->catfile( qw< xt author 41_perlcriticrc-policies > );
+my $rcfile = File::Spec->catfile( qw< xt 43_perlcriticrc-run-files > );
 Test::Perl::Critic->import( -profile => $rcfile );
 
-my $path =
-    File::Spec->catfile(
-        -e 'blib' ? 'blib/lib' : 'lib',
-        qw< Perl Critic Policy >,
-    );
-all_critic_ok( $path );
+{
+    # About to commit evil, but it's against ourselves.
+    no warnings qw< redefine >;
+    local *Perl::Critic::Utils::_is_perl = sub { 1 }; ## no critic (Variables::ProtectPrivateVars)
+
+    all_critic_ok( glob 't/*/*.run' );
+}
 
 #-----------------------------------------------------------------------------
 

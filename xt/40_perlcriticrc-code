@@ -19,7 +19,7 @@ strict = 1
 
 [Documentation::PodSpelling]
 spell_command = aspell list -l en_US
-stop_words_file = xt/author/40_stop_words
+stop_words_file = xt/40_stop_words
 
 [Documentation::RequirePodSections]
 lib_sections    = NAME|DESCRIPTION|AUTHOR|COPYRIGHT

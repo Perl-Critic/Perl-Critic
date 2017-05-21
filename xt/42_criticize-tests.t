@@ -51,20 +51,16 @@ if ( $ENV{PERL_CRITIC_CACHE} ) {
 }
 
 #-----------------------------------------------------------------------------
-# Strict object testing -- prevent direct hash key access
-
-use Devel::EnforceEncapsulation;
-foreach my $pkg ( $EMPTY, qw< ::Config ::Policy ::Violation> ) {
-    Devel::EnforceEncapsulation->apply_to('Perl::Critic'.$pkg);
-}
-
-#-----------------------------------------------------------------------------
 # Run critic against all of our own files
 
-my $rcfile = File::Spec->catfile( 'xt', 'author', '40_perlcriticrc-code' );
+my $rcfile = File::Spec->catfile( 'xt', '42_perlcriticrc-tests' );
 Test::Perl::Critic->import( -profile => $rcfile );
 
-all_critic_ok( starting_points_including_examples() );
+all_critic_ok(
+    glob ('t/*.t'),
+    glob ('xt/*.t'),
+    'generate_without_optional_dependencies_wrappers.PL',
+);
 
 #-----------------------------------------------------------------------------
 
