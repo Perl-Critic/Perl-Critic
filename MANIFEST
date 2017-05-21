@@ -220,6 +220,7 @@ META.yml
 README
 README.md
 t/00_modules.t
+t/00_versions.t
 t/01_bad_perlcriticrc
 t/01_config.t
 t/01_config_bad_perlcriticrc.t
@@ -419,7 +420,6 @@ xt/43_criticize-run-files.t
 xt/43_perlcriticrc-run-files
 xt/80_policysummary.t
 xt/81_ppi_problems.t
-xt/93_version.t
 xt/94_includes.t
 xt/95_kwalitee.t
 xt/98_pod_syntax.t
