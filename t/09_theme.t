@@ -307,12 +307,6 @@ sub has_theme {
     return any { $_ eq $theme } $policy->get_themes();
 }
 
-#-----------------------------------------------------------------------------
-
-# ensure we return true if this test is loaded by
-# t/09_theme.t_without_optional_dependencies.t
-1;
-
 ##############################################################################
 # Local Variables:
 #   mode: cperl

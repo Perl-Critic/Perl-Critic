@@ -957,12 +957,6 @@ is(
     'no-critic on shebang line, where physical line != 1, but logical line == 1'
 );
 
-#-----------------------------------------------------------------------------
-
-# ensure we return true if this test is loaded by
-# t/03_pragmas.t_without_optional_dependencies.t
-1;
-
 ##############################################################################
 # Local Variables:
 #   mode: cperl

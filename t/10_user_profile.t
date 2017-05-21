@@ -317,12 +317,6 @@ END_PROFILE
     is( $got, $expected, 'PERLCRITIC environment variable');
 }
 
-#-----------------------------------------------------------------------------
-
-# ensure we return true if this test is loaded by
-# t/10_userprofile.t_without_optional_dependencies.t
-1;
-
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

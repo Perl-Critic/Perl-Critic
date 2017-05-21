@@ -85,12 +85,6 @@ else {
     fail qq<Cannot open "$summary_file": $ERRNO>;
 }
 
-#-----------------------------------------------------------------------------
-
-# ensure we return true if this test is loaded by
-# t/80_policysummary.t.without_optional_dependencies.t
-1;
-
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

@@ -543,12 +543,6 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
     is(scalar @p, 1, '-single-policy always loads Policy, even if unsafe');
 }
 
-#-----------------------------------------------------------------------------
-
-# ensure we return true if this test is loaded by
-# t/01_config.t_without_optional_dependencies.t
-1;
-
 ##############################################################################
 # Local Variables:
 #   mode: cperl

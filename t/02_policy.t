@@ -169,13 +169,6 @@ is( $p->to_string(), $expected_string, 'Stringification by to_string()');
 is( "$p", $expected_string, 'Stringification by overloading');
 
 
-#-----------------------------------------------------------------------------
-
-# ensure we return true if this test is loaded by
-# t/02_policy.t_without_optional_dependencies.t
-1;
-
-
 ##############################################################################
 # Local Variables:
 #   mode: cperl

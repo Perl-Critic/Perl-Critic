@@ -43,13 +43,6 @@ END_EXPECTED
 my $listing_as_string = "$listing";
 is( $listing_as_string, $expected, 'Theme list matched.' );
 
-#-----------------------------------------------------------------------------
-
-# ensure we return true if this test is loaded by
-# t/12_themelisting.t_without_optional_dependencies.t
-1;
-
-#-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

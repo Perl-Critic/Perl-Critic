@@ -119,12 +119,6 @@ Perl::Critic::TestUtils::block_perlcriticrc();
     $last_warning = q{};
 }
 
-#-----------------------------------------------------------------------------
-
-# ensure we return true if this test is loaded by
-# t/11_policyfactory.t_without_optional_dependencies.t
-1;
-
 ##############################################################################
 # Local Variables:
 #   mode: cperl

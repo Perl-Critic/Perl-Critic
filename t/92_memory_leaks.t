@@ -56,11 +56,6 @@ eval 'use Test::Memory::Cycle; 1'
     }
 }
 
-#-----------------------------------------------------------------------------
-
-# ensure we return true if this test is loaded by
-# t/92_memory_leaks.t.without_optional_dependencies.t
-1;
 
 ###############################################################################
 # Local Variables:

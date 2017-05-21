@@ -85,12 +85,6 @@ while ( my($method, $expected) = each %expected_stats) {
     is( $stats->$method, $expected, "Statistics: $method");
 }
 
-#-----------------------------------------------------------------------------
-
-# ensure we return true if this test is loaded by
-# t/15_statistics.t_without_optional_dependencies.t
-1;
-
 ###############################################################################
 # Local Variables:
 #   mode: cperl

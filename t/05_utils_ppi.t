@@ -372,12 +372,6 @@ can_ok('main', 'is_in_subroutine');
     ## use critic
 }
 
-#-----------------------------------------------------------------------------
-
-# ensure we return true if this test is loaded by
-# t/05_utils_ppi.t_without_optional_dependencies.t
-1;
-
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

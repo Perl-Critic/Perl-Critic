@@ -156,12 +156,6 @@ sub is_require_pod_sections_source_exception {
     return $prefix eq $REQUIRE_POD_SECTIONS_SOURCE_MESSAGE_PREFIX;
 }
 
-#-----------------------------------------------------------------------------
-
-# ensure we return true if this test is loaded by
-# t/01_config_bad_perlcriticrc.t_without_optional_dependencies.t
-1;
-
 
 ##############################################################################
 # Local Variables:
