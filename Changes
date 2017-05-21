@@ -2,6 +2,7 @@ Revision history for Perl module Perl::Critic
 
 NEXT
 
+    [Dependencies]
     Perl::Critic now requires PPI 1.224.  PPI is the underlying Perl parser
     on which Perl::Critic is built, and 1.224 introduces many parsing fixes
     such as:
@@ -11,6 +12,10 @@ NEXT
     * Higher accuracy when deciding whether certain characters are operators or
       variable type casts (*&% etc.).
     * Subroutine attributes parsed correctly.
+
+    [Performance Enhancements]
+    * Sped up BuiltinFunctions::ProhibitUselessTopic ~7%.  Thanks, James
+      Raspass. (GH #656)
 
     [Bug Fixes]
     * A test would fail under the upcoming Perl 5.26 that omits the current
