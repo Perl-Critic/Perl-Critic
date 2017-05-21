@@ -9,5 +9,3 @@ verbose = %f: %m at line %l, column %c.  %e.  (Severity: %s, %p)\n
 allow_leading_tabs = 0
 
 [CodeLayout::ProhibitTrailingWhitespace]
-
-[Editor::RequireEmacsFileVariables]

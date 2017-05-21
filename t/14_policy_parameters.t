@@ -12,14 +12,11 @@ use Perl::Critic::PolicyParameter qw{ $NO_DESCRIPTION_AVAILABLE };
 use Perl::Critic::Utils qw( policy_short_name );
 use Perl::Critic::TestUtils qw(bundled_policy_names);
 
-#-----------------------------------------------------------------------------
-
-our $VERSION = '1.126';
-
-#-----------------------------------------------------------------------------
-
 use Test::More; #plan set below!
 
+our $VERSION = '1.127_01';
+
+Perl::Critic::TestUtils::assert_version( $VERSION );
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 #-----------------------------------------------------------------------------

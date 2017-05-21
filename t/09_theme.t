@@ -15,11 +15,10 @@ use Perl::Critic::Theme;
 
 use Test::More tests => 66;
 
-#-----------------------------------------------------------------------------
+our $VERSION = '1.127_01';
 
-our $VERSION = '1.126';
-
-#-----------------------------------------------------------------------------
+use Perl::Critic::TestUtils;
+Perl::Critic::TestUtils::assert_version( $VERSION );
 
 ILLEGAL_RULES: {
 

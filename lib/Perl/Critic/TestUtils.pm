@@ -22,7 +22,7 @@ use Perl::Critic::Exception::Fatal::Internal qw{ &throw_internal };
 use Perl::Critic::Utils qw{ :severities :data_conversion policy_long_name };
 use Perl::Critic::PolicyFactory (-test => 1);
 
-our $VERSION = '1.126';
+our $VERSION = '1.127_01';
 
 Readonly::Array our @EXPORT_OK => qw(
     pcritique pcritique_with_violations
@@ -35,6 +35,17 @@ Readonly::Array our @EXPORT_OK => qw(
     bundled_policy_names
     names_of_policies_willing_to_work
 );
+
+sub assert_version {
+    my $expected_version = shift;
+
+    if ( $expected_version ne $Perl::Critic::VERSION ) {
+        require Carp;
+        Carp::confess( "Expected Perl::Critic $expected_version but it is actually $Perl::Critic::VERSION" );
+    }
+
+    return;
+}
 
 #-----------------------------------------------------------------------------
 # If the user already has an existing perlcriticrc file, it will get
@@ -420,6 +431,11 @@ Perl::Critic for more examples of how to use these subroutines.
 =head1 EXPORTS
 
 =over
+
+=item assert_version( $version )
+
+Asserts that the C<$version> passed matches the version of Perl::Critic.
+
 
 =item block_perlcriticrc()
 

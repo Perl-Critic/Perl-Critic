@@ -7,11 +7,11 @@ use warnings;
 
 use Test::Perl::Critic::Policy qw< all_policies_ok >;
 
-#-----------------------------------------------------------------------------
+our $VERSION = '1.127_01';
 
-our $VERSION = '1.126';
+use Perl::Critic::TestUtils;
+Perl::Critic::TestUtils::assert_version( $VERSION );
 
-#-----------------------------------------------------------------------------
 # Notice that you can pass arguments to this test, which limit the testing to
 # specific policies.  The arguments must be shortened policy names. When using
 # prove(1), any arguments that follow '::' will be passed to the test script.

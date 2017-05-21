@@ -8,11 +8,10 @@ use File::Spec;
 
 use Test::More tests => 1;
 
-#-----------------------------------------------------------------------------
+our $VERSION = '1.127_01';
 
-our $VERSION = '1.126';
-
-#-----------------------------------------------------------------------------
+use Perl::Critic::TestUtils;
+Perl::Critic::TestUtils::assert_version( $VERSION );
 
 my $perlcritic = File::Spec->rel2abs( File::Spec->catfile( qw( blib script perlcritic ) ) );
 if (not -e $perlcritic) {

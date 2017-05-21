@@ -12,12 +12,8 @@ use Perl::Critic::TestUtils qw(bundled_policy_names);
 
 use Test::More;
 
-#-----------------------------------------------------------------------------
-
-our $VERSION = '1.126';
-
-#-----------------------------------------------------------------------------
-
+our $VERSION = '1.127_01';
+Perl::Critic::TestUtils::assert_version( $VERSION );
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 my @bundled_policy_names = bundled_policy_names();

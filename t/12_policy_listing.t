@@ -12,11 +12,10 @@ use Perl::Critic::PolicyListing;
 
 use Test::More;
 
-#-----------------------------------------------------------------------------
+our $VERSION = '1.127_01';
 
-our $VERSION = '1.126';
-
-#-----------------------------------------------------------------------------
+use Perl::Critic::TestUtils;
+Perl::Critic::TestUtils::assert_version( $VERSION );
 
 my $profile = Perl::Critic::UserProfile->new( -profile => 'NONE' );
 my @policy_names = Perl::Critic::PolicyFactory::site_policy_names();

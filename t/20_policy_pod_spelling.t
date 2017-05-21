@@ -16,12 +16,9 @@ use Test::More;
 Readonly::Scalar my $NUMBER_OF_TESTS => 5;
 plan( tests => $NUMBER_OF_TESTS );
 
-#-----------------------------------------------------------------------------
+our $VERSION = '1.127_01';
 
-our $VERSION = '1.126';
-
-#-----------------------------------------------------------------------------
-
+Perl::Critic::TestUtils::assert_version( $VERSION );
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 my $code;

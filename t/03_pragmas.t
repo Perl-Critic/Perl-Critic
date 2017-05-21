@@ -7,15 +7,11 @@ use warnings;
 use Test::More (tests => 32);
 use Perl::Critic::PolicyFactory (-test => 1);
 
-# common P::C testing tools
 use Perl::Critic::TestUtils qw(critique);
 
-#-----------------------------------------------------------------------------
+our $VERSION = '1.127_01';
 
-our $VERSION = '1.126';
-
-#-----------------------------------------------------------------------------
-
+Perl::Critic::TestUtils::assert_version( $VERSION );
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 # Configure Critic not to load certain policies.  This

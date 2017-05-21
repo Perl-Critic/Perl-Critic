@@ -8,11 +8,9 @@ use Perl::Critic::TestUtils qw{ starting_points_including_examples };
 
 use Test::More;# 1.41;  # Need 1.41 or newer for correct support of L<text|scheme:...> links.
 
-#-----------------------------------------------------------------------------
-
-our $VERSION = '1.126';
-
-#-----------------------------------------------------------------------------
+our $VERSION = '1.127_01';
+use Perl::Critic::TestUtils;
+Perl::Critic::TestUtils::assert_version( $VERSION );
 
 use Test::Pod 1.00;
 

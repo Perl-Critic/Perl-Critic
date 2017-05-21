@@ -14,11 +14,10 @@ use Perl::Critic::Utils::POD qw< :all >;
 
 use Test::More tests => 61;
 
-#-----------------------------------------------------------------------------
+our $VERSION = '1.127_01';
 
-our $VERSION = '1.126';
-
-#-----------------------------------------------------------------------------
+use Perl::Critic::TestUtils;
+Perl::Critic::TestUtils::assert_version( $VERSION );
 
 Readonly::Scalar my $EXCEPTION_MESSAGE_REGEX =>
     qr<malformed [ ] name [ ] section>xmsi;

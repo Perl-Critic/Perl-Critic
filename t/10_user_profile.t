@@ -10,11 +10,10 @@ use Perl::Critic::UserProfile;
 
 use Test::More tests => 41;
 
-#-----------------------------------------------------------------------------
+our $VERSION = '1.127_01';
 
-our $VERSION = '1.126';
-
-#-----------------------------------------------------------------------------
+use Perl::Critic::TestUtils;
+Perl::Critic::TestUtils::assert_version( $VERSION );
 
 # Create profile from hash
 

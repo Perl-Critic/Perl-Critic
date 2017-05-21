@@ -12,11 +12,9 @@ use Perl::Critic::Utils::Constants qw< :color_severity >;
 
 use Test::More tests => 54;
 
-#-----------------------------------------------------------------------------
-
-our $VERSION = '1.126';
-
-#-----------------------------------------------------------------------------
+our $VERSION = '1.127_01';
+use Perl::Critic::TestUtils;
+Perl::Critic::TestUtils::assert_version( $VERSION );
 
 {
     # Can't use IO::Interactive here because we /don't/ want to check STDIN.
