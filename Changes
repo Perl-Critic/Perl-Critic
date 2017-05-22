@@ -1,6 +1,8 @@
 Revision history for Perl module Perl::Critic
 
-NEXT
+1.127_01 Sun May 21 21:57:16 CDT 2017
+
+Developer release leading up to 1.28.
 
     [Dependencies]
     Perl::Critic now requires PPI 1.224.  PPI is the underlying Perl parser
