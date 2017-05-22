@@ -49,8 +49,8 @@ eval 'use Test::Memory::Cycle; 1'
     # One test for each violation, plus one each for Critic and Document.
     plan( tests => scalar @violations + 2 );
 
-    memory_cycle_ok( $pc_doc );
-    memory_cycle_ok( $critic );
+    memory_cycle_ok( $pc_doc, 'Document' );
+    memory_cycle_ok( $critic, 'Critic' );
     foreach my $violation (@violations) {
         memory_cycle_ok($_);
     }
