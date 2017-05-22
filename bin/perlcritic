@@ -384,12 +384,6 @@ this option in your F<.perlcriticrc> file.
 Display only the number of violations for each file.  Use this feature to get
 a quick handle on where a large pile of code might need the most attention.
 
-=item C<--Safari>
-
-Report "Perl Best Practice" citations as section numbers from
-L<http://safari.oreilly.com> instead of page numbers from the actual book.
-NOTE: This feature is not implemented yet.
-
 =item C<--color>
 
 =item C<--colour>
