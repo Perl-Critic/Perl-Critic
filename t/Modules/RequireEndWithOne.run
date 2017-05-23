@@ -116,6 +116,18 @@ DESTROY { warn 'DEAD'; }
 1;
 
 #-----------------------------------------------------------------------------
+
+## name PPI parsing problem saw this as not ending with 1 (GH #696)
+## failures 0
+## cut
+
+package  UQ::Net::AddressSpace;
+use  warnings;
+use  strict;
+sub  v4_block {  my ($self, $id) = @_;  return $self->_sub_hash(['id', $id, 'v4-block']);  }
+1;
+
+#-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

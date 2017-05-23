@@ -1,5 +1,11 @@
 Revision history for Perl module Perl::Critic
 
+NEXT
+
+    [Bug Fixes]
+    * PPI misparsing a module caused an incorrect "Must end with a
+      recognizable true value." (GH #696)
+
 1.127_01 Sun May 21 21:57:16 CDT 2017
 
 Developer release leading up to 1.28.
