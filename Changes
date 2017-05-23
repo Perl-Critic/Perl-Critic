@@ -4,7 +4,7 @@ NEXT
 
     [Bug Fixes]
     * PPI misparsing a module caused an incorrect "Must end with a
-      recognizable true value." (GH #696)
+      recognizable true value." (GH #696, GH #607)
 
 1.127_01 Sun May 21 21:57:16 CDT 2017
 
