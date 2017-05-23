@@ -14,7 +14,7 @@ use Perl::Critic::Utils qw< :characters >;
 
 use Test::More tests => 57;
 
-our $VERSION = '1.127_01';
+our $VERSION = '1.127_02';
 
 use Perl::Critic::TestUtils;
 Perl::Critic::TestUtils::assert_version( $VERSION );
