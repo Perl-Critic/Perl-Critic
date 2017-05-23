@@ -7,7 +7,6 @@ examples/loadanalysisdb
 examples/perlcriticrc
 examples/perlcriticrc-conway
 extras/perlcritic.el
-foo.pl
 inc/Devel/AssertOS.pm
 inc/Devel/AssertOS/Solaris.pm
 inc/Devel/CheckOS.pm
