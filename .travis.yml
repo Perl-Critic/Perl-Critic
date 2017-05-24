@@ -40,4 +40,5 @@ env:
 script:
    - export HARNESS_OPTIONS='j:c'
    - perl Build.PL
+   - ./Build installdeps
    - ./Build authortest
