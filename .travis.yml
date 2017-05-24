@@ -31,7 +31,7 @@ addons:
 
 
 install:
-   - cpanm Perl::Critic::More Test::Perl::Critic Devel::EnforceEncapsulation
+   - cpanm Perl::Critic::More Test::Perl::Critic Devel::EnforceEncapsulation PPI
 
 env:
   global:
@@ -40,5 +40,4 @@ env:
 script:
    - export HARNESS_OPTIONS='j:c'
    - perl Build.PL
-   - ./Build installdeps
    - ./Build authortest
