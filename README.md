@@ -569,7 +569,7 @@ modules.
 If you develop any new Policy modules, feel free to send them to `<team@perlcritic.com>` and I'll be happy to consider putting them into the
 Perl::Critic distribution.  Or if you would like to work on the Perl::Critic
 project directly, you can fork our repository at
-[http://github.com/Perl-Critic/Perl-Critic.git](http://github.com/Perl-Critic/Perl-Critic.git).
+[https://github.com/Perl-Critic/Perl-Critic.git](https://github.com/Perl-Critic/Perl-Critic.git).
 
 The Perl::Critic team is also available for hire.  If your organization has
 its own coding standards, we can create custom Policies to enforce your local
