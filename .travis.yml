@@ -32,7 +32,7 @@ addons:
 
 
 install:
-    - cpanm Module::Build Perl::Critic::More Test::Perl::Critic Devel::EnforceEncapsulation PPI
+    - "cpanm LEONT/Module-Build-0.4200.tar.gz && cpanm Perl::Critic::More Test::Perl::Critic Devel::EnforceEncapsulation PPI"
 
 env:
   global:
