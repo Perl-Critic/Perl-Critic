@@ -32,7 +32,7 @@ addons:
 
 
 install:
-   - cpanm Perl::Critic::More Test::Perl::Critic Devel::EnforceEncapsulation PPI
+    - cpanm Module::Build Perl::Critic::More Test::Perl::Critic Devel::EnforceEncapsulation PPI
 
 env:
   global:
