@@ -22,21 +22,20 @@ notifications:
          - "irc.perl.org#perlcritic"
       template:
          - "%{branch}: %{message} %{build_url}"
+    recipients:
+      - andy@petdance.com
+    on_success: change
+    on_failure: always
 
 addons:
   apt:
     packages:
     - aspell
     - aspell-en
-    - oracle-java8-installer
 
 
 install:
-    - "cpanm LEONT/Module-Build-0.4200.tar.gz && cpanm Perl::Critic::More Test::Perl::Critic Devel::EnforceEncapsulation PPI"
-
-env:
-  global:
-    - JAVA_HOME=/usr/lib/jvm/java-8-oracle
+    - "cpanm Module::Build && cpanm Perl::Critic::More Test::Perl::Critic Devel::EnforceEncapsulation PPI"
 
 script:
    - export HARNESS_OPTIONS='j:c'
