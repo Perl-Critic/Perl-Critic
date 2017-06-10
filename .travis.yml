@@ -15,17 +15,16 @@ perl:
 sudo: false
 
 notifications:
-   on_success: change
-   on_failure: always
-   irc:
-      channels:
-         - "irc.perl.org#perlcritic"
-      template:
-         - "%{branch}: %{message} %{build_url}"
-    recipients:
-      - andy@petdance.com
-    on_success: change
-    on_failure: always
+    email:
+        recipients:
+            - andy@petdance.com
+        on_success: change
+        on_failure: always
+    irc:
+        channels:
+            - "irc.perl.org#perlcritic"
+        template:
+            - "%{branch}: %{message} %{build_url}"
 
 addons:
   apt:
