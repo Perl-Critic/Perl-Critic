@@ -1,5 +1,9 @@
 Revision history for Perl module Perl::Critic
 
+1.128    Sat Jun 10 22:31:28 CDT 2017
+
+    Official release.  No changes since 1.127_02.
+
 1.127_02 Tue May 23 18:31:59 CDT 2017
 
 Developer release leading up to 1.128.

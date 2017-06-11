@@ -20,7 +20,7 @@ use Perl::Critic::Utils;
 
 use Test::More tests => 153;
 
-our $VERSION = '1.127_02';
+our $VERSION = '1.128';
 
 use Perl::Critic::TestUtils;
 Perl::Critic::TestUtils::assert_version( $VERSION );
