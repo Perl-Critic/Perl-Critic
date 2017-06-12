@@ -25,8 +25,10 @@ Readonly::Scalar my $WHILE => q{while};
 
 Readonly::Hash my %ZERO_BASED_CAPTURE_REFERENCE =>
     hashify( qw< ${^CAPTURE} > );
+# TODO: additional logic to prevent ${^CAPTURE_ALL}[n] from being recognized
+# as a use of capture variable n.
 Readonly::Hash my %CAPTURE_REFERENCE => (
-    hashify( qw< $+ $- > ),
+    hashify( qw< $+ $- ${^CAPTURE_ALL} > ),
     %ZERO_BASED_CAPTURE_REFERENCE );
 Readonly::Hash my %CAPTURE_REFERENCE_ENGLISH => (
     hashify( qw{ $LAST_PAREN_MATCH $LAST_MATCH_START $LAST_MATCH_END } ),

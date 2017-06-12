@@ -584,6 +584,27 @@ if ( m/(quoted CAPTURE array element)/ ) {
 
 #-----------------------------------------------------------------------------
 
+## name %{^CAPTURE_ALL} added in 5.25.7
+## failures 0
+## cut
+
+if ( m/(?<x>CAPTURE_ALL)/ ) {
+    print ${^CAPTURE_ALL}{x};
+}
+
+#-----------------------------------------------------------------------------
+
+## name ${^CAPTURE_ALL}[1] has nothing to do with captures
+## failures 1
+## TODO ${^CAPTURE_ALL}[1] has nothing to do with captures
+## cut
+
+if ( m/(CAPTURE_ALL)/ ) {
+    print ${^CAPTURE_ALL}[1];
+}
+
+#-----------------------------------------------------------------------------
+
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4
