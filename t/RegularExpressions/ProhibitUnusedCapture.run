@@ -563,6 +563,27 @@ s/(.)/ { $1 } /e;
 
 #-----------------------------------------------------------------------------
 
+## name @{^CAPTURE} added in 5.25.7 (GitHub #778)
+## failures 0
+## cut
+
+if ( m/(CAPTURE array)/ ) {
+    print @{^CAPTURE};
+}
+
+if ( m/(quoted CAPTURE array)/ ) {
+    print "@{^CAPTURE}\n";
+
+if ( m/(CAPTURE array element)/ ) {
+    print ${^CAPTURE}[0];
+}
+
+if ( m/(quoted CAPTURE array element)/ ) {
+    print "${^CAPTURE}[0]\n";
+}
+
+#-----------------------------------------------------------------------------
+
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

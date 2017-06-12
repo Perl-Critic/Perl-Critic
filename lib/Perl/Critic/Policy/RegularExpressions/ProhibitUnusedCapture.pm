@@ -23,10 +23,18 @@ our $VERSION = '1.128';
 
 Readonly::Scalar my $WHILE => q{while};
 
-Readonly::Hash my %CAPTURE_REFERENCE => hashify( qw{ $+ $- } );
+Readonly::Hash my %ZERO_BASED_CAPTURE_REFERENCE =>
+    hashify( qw< ${^CAPTURE} > );
+Readonly::Hash my %CAPTURE_REFERENCE => (
+    hashify( qw< $+ $- > ),
+    %ZERO_BASED_CAPTURE_REFERENCE );
 Readonly::Hash my %CAPTURE_REFERENCE_ENGLISH => (
     hashify( qw{ $LAST_PAREN_MATCH $LAST_MATCH_START $LAST_MATCH_END } ),
     %CAPTURE_REFERENCE );
+Readonly::Hash my %CAPTURE_ARRAY => hashify( qw< @- @+ @{^CAPTURE} > );
+Readonly::Hash my %CAPTURE_ARRAY_ENGLISH => (
+    hashify( qw< @LAST_MATCH_START @LAST_MATCH_END > ),
+    %CAPTURE_ARRAY );
 
 Readonly::Scalar my $DESC => q{Only use a capturing group if you plan to use the captured value};
 Readonly::Scalar my $EXPL => [252];
@@ -55,8 +63,7 @@ sub violates {
 
     my $ncaptures = $re->max_capture_number() or return;
 
-    my @captures;  # List of expected captures
-    $#captures = $ncaptures - 1;
+    my @captures = ( undef ) x $ncaptures;  # List of expected captures
 
     my %named_captures; # List of expected named captures.
                         # Unlike the numbered capture logic, %named_captures
@@ -568,9 +575,9 @@ sub _mark_magic {
 
     # Only interested in magic, or known English equivalent.
     my $content = $elem->content();
-    my $capture_ref = $doc->uses_module( 'English' ) ?
-        \%CAPTURE_REFERENCE_ENGLISH :
-        \%CAPTURE_REFERENCE;
+    my ( $capture_ref, $capture_array ) = $doc->uses_module( 'English' ) ?
+        ( \%CAPTURE_REFERENCE_ENGLISH, \%CAPTURE_ARRAY_ENGLISH ) :
+        ( \%CAPTURE_REFERENCE, \%CAPTURE_ARRAY );
     $elem->isa( 'PPI::Token::Magic' )
         or $capture_ref->{$content}
         or return;
@@ -584,6 +591,10 @@ sub _mark_magic {
             if ($num <= @{$captures}) {
                 _record_numbered_capture( $num, $captures );
             }
+        }
+    } elsif ( $capture_array->{$content} ) {    # GitHub #778
+        foreach my $num ( 1 .. @{$captures} ) {
+            _record_numbered_capture( $num, $captures );
         }
     } elsif ( $capture_ref->{$content} ) {
         _mark_magic_subscripted_code( $elem, $re, $captures, $named_captures );
@@ -617,15 +628,15 @@ sub _mark_magic_subscripted_code {
 sub _mark_magic_in_content {
     my ( $content, $re, $captures, $named_captures, $doc ) = @_;
 
-    my $capture_ref = $doc->uses_module( 'English' ) ?
-        \%CAPTURE_REFERENCE_ENGLISH :
-        \%CAPTURE_REFERENCE;
+    my ( $capture_ref, $capture_array ) = $doc->uses_module( 'English' ) ?
+        ( \%CAPTURE_REFERENCE_ENGLISH, \%CAPTURE_ARRAY_ENGLISH ) :
+        ( \%CAPTURE_REFERENCE, \%CAPTURE_ARRAY );
 
-    while ( $content =~ m< ( \$ (?:
-        [{] (?: \w+ | . ) [}] | \w+ | . ) ) >sxmg ) {
+    while ( $content =~ m< ( [\$\@] (?:
+        [{] \^? (?: \w+ | . ) [}] | \w+ | . ) ) >sxmg ) {
         my $name = $1;
-        $name =~ s/ \A \$ [{] /\$/sxm;
-        $name =~ s/ [}] \z //sxm;
+        $name =~ s/ \A ( [\$\@] ) [{] (?! \^ ) /$1/sxm
+            and $name =~ s/ [}] \z //sxm;
 
         if ( $name =~ m/ \A \$ ( \d+ ) \z /sxm ) {
 
@@ -633,6 +644,11 @@ sub _mark_magic_in_content {
             0 < $num
                 and $num <= @{ $captures }
                 and _record_numbered_capture( $num, $captures );
+
+        } elsif ( $capture_array->{$name} ) {    # GitHub #778
+            foreach my $num ( 1 .. @{$captures} ) {
+                _record_numbered_capture( $num, $captures );
+            }
 
         } elsif ( $capture_ref->{$name} &&
             $content =~ m/ \G ( [{] [^}]+ [}] | [[] [^]] []] ) /smxgc )
@@ -681,7 +697,15 @@ sub _record_subscripted_capture {
         ( my $name = $1 ) =~ s/ \A ( ["'] ) ( .*? ) \1 \z /$2/smx;
         _record_named_capture( $name, $captures, $named_captures );
     } elsif ( $suffix =~ m/ \A [[] \s* ( [-+]? \d+ ) \s* []] /smx ) {
-        _record_numbered_capture( $1 . q{}, $captures, $re );
+        # GitHub #778
+        # Mostly capture numbers encountered here are 1-based (e.g. @+, @-).
+        # But @{^CAPTURE} is zero-based, so we need to tweak the subscript
+        # before we record the capture number.
+        my $num = $1 + 0;
+        $num >= 0
+            and $ZERO_BASED_CAPTURE_REFERENCE{$variable_name}
+            and $num++;
+        _record_numbered_capture( $num, $captures, $re );
     }
     return;
 }
