@@ -7,8 +7,6 @@
 use strict;
 use warnings;
 
-use English qw< -no_match_vars >;
-
 use File::Spec qw<>;
 
 use Perl::Critic::PolicyFactory ( '-test' => 1 );
