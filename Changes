@@ -1,6 +1,7 @@
 Revision history for Perl module Perl::Critic
 
-    [Miscellanea]
+NEXT
+    [New Features]
     * Policies which ensure that system calls are checked such as
       RequireCheckedSystemCalls now have an "autodie_modules" setting which
       allows you to tell the policy about other modules which export
