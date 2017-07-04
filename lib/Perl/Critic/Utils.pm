@@ -14,6 +14,7 @@ use File::Spec qw();
 use Scalar::Util qw( blessed );
 use B::Keywords qw();
 use PPI::Token::Quote::Single;
+use List::MoreUtils qw(any);
 
 use Perl::Critic::Exception::Fatal::Generic qw{ throw_generic };
 use Perl::Critic::Utils::PPI qw< is_ppi_expression_or_generic_statement >;
@@ -1180,7 +1181,7 @@ sub is_assignment_operator {
 #-----------------------------------------------------------------------------
 
 sub is_unchecked_call {
-    my $elem = shift;
+    my ( $elem, $autodie_modules ) = @_;
 
     return if not is_function_call( $elem );
 
@@ -1224,7 +1225,7 @@ sub is_unchecked_call {
         }
     }
 
-    return if _is_fatal($elem);
+    return if _is_fatal($elem, $autodie_modules);
 
     # Otherwise, return. this system call is unchecked.
     return 1;
@@ -1325,7 +1326,7 @@ Readonly::Hash my %AUTODIE_PARAMETER_TO_AFFECTED_BUILTINS_MAP => (
 );
 
 sub _is_fatal {
-    my ($elem) = @_;
+    my ( $elem, $autodie_modules ) = @_;
 
     my $top = $elem->top();
     return if not $top->isa('PPI::Document');
@@ -1349,7 +1350,7 @@ sub _is_fatal {
                 return $TRUE if $arg->[0]->isa('PPI::Token::Quote') && $elem eq $arg->[0]->string();
             }
         }
-        elsif ('autodie' eq $include->pragma()) {
+        elsif ($include->pragma eq 'autodie' || any {$_ eq $include->module()} @{$autodie_modules || []}) {
             return _is_covered_by_autodie($elem, $include);
         }
     }
@@ -1767,10 +1768,12 @@ Given config string I<$str>, return all the words from the string.
 This is safer than splitting on whitespace.
 
 
-=item C<is_unchecked_call( $element )>
+=item C<is_unchecked_call( $element, $autodie_modules )>
 
 Given a L<PPI::Element|PPI::Element>, test to see if it contains a
-function call whose return value is not checked.
+function call whose return value is not checked. The second argument
+is an array reference of module names which export C<autodie>. The
+C<autodie> module is always included in this list by default.
 
 
 =back

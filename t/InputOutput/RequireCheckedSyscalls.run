@@ -385,6 +385,16 @@ foo();
 say 'The sun is a mass of incandessent gas';
 
 #-----------------------------------------------------------------------------
+
+## name allow alternative autodie modules
+## parms {autodie_modules => 'custom::autodier'}
+## failures 0
+## cut
+
+use custom::autodier;
+open my $fh, '>', 'foo';
+
+#-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4
