@@ -12,7 +12,7 @@ Readonly::Scalar my $NUMBER_OF_TESTS => 7;
 
 plan( tests => $NUMBER_OF_TESTS );
 
-our $VERSION = '1.128';
+our $VERSION = '1.130';
 
 Perl::Critic::TestUtils::assert_version( $VERSION );
 Perl::Critic::TestUtils::block_perlcriticrc();
