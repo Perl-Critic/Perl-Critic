@@ -80,6 +80,8 @@ __END__
 
 =pod
 
+=for stopwords regexp
+
 =head1 NAME
 
 Perl::Critic::Policy::RegularExpressions::ProhibitSingleCharAlternation - Use C<[abc]> instead of C<a|b|c>.

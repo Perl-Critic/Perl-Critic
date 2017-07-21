@@ -61,6 +61,8 @@ __END__
 
 =pod
 
+=for stopwords Perl7
+
 =head1 NAME
 
 Perl::Critic::Policy::InputOutput::ProhibitBarewordDirHandles - Write C<opendir my $dh, $dirname;> instead of C<opendir DH, $dirname;>.

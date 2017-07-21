@@ -58,10 +58,10 @@ $code = <<'END_PERL';
 =cut
 END_PERL
 
-# Sorry about the double negative. The idea is that if aspell fails (say,
+# Sorry about the double negative. The idea is that if hunspell fails (say,
 # because it can not find the right dictionary) or pcritique returns a
 # non-zero number we want to skip. We have to negate the eval to catch the
-# aspell failure, and then negate pcritique because we negated the eval.
+# hunspell failure, and then negate pcritique because we negated the eval.
 # Clearer code welcome.
 if ( ! eval { ! pcritique($policy, \$code) } ) {
    skip 'Test environment is not English', $NUMBER_OF_TESTS;

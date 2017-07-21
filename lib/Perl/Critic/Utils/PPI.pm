@@ -235,7 +235,7 @@ __END__
 
 =pod
 
-=for stopwords
+=for stopwords FOO
 
 =head1 NAME
 

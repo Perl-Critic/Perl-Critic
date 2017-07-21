@@ -74,6 +74,8 @@ __END__
 
 =pod
 
+=for stopwords regexp
+
 =head1 NAME
 
 Perl::Critic::Policy::RegularExpressions::ProhibitUnusualDelimiters - Use only C<//> or C<{}> to delimit regexps.

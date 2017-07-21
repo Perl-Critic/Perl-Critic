@@ -64,7 +64,7 @@ __END__
 
 =pod
 
-=for stopwords perlfunc substr 4th
+=for stopwords perl5005delta perlfunc substr 4th
 
 =head1 NAME
 

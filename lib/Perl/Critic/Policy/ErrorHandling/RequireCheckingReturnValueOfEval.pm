@@ -317,7 +317,7 @@ __END__
 
 =pod
 
-=for stopwords destructors
+=for stopwords destructors perl5
 
 =head1 NAME
 

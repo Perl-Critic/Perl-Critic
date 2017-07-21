@@ -86,6 +86,8 @@ __END__
 
 =pod
 
+=for stopwords grep
+
 =head1 NAME
 
 Perl::Critic::Policy::BuiltinFunctions::ProhibitBooleanGrep - Use C<any> from C<List::Util>, C<List::SomeUtils>, or C<List::MoreUtils> instead of C<grep> in boolean context.

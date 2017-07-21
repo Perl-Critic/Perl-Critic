@@ -307,6 +307,8 @@ __END__
 
 =pod
 
+=for stopwords regexp
+
 =head1 NAME
 
 Perl::Critic::Policy::RegularExpressions::ProhibitCaptureWithoutTest - Capture variable used outside conditional.

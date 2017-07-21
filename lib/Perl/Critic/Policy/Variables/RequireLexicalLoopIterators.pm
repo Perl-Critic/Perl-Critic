@@ -66,7 +66,7 @@ __END__
 
 =pod
 
-=for stopwords foreach perlsyn
+=for stopwords foreach perl5004delta perlsyn
 
 =head1 NAME
 
