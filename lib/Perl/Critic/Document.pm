@@ -278,9 +278,12 @@ sub element_is_in_lexical_scope_after_statement_containing {
     my ( $self, $inner_elem, $outer_elem ) = @_;
 
     # If the outer element defines a scope, we're true if and only if
-    # the outer element contains the inner element.
-    $outer_elem->scope()
-        and return $inner_elem->descendant_of( $outer_elem );
+    # the outer element contains the inner element, and the inner
+    # element is not somewhere that is hidden from the scope.
+    if ( $outer_elem->scope() ) {
+        return _inner_element_is_in_outer_scope_really(
+            $inner_elem, $outer_elem );
+    }
 
     # In the more general case:
 
@@ -324,6 +327,35 @@ sub element_is_in_lexical_scope_after_statement_containing {
 
     return $inner_elem->descendant_of( $parent );
 
+}
+
+# Helper for element_is_in_lexical_scope_after_statement_containing().
+# Given that the outer element defines a scope, there are still things
+# that are lexically inside it but outside the scope. We return true if
+# and only if the inner element is inside the outer element, but not
+# inside one of the excluded elements. The cases handled so far:
+#   for ----- the list is not part of the scope
+#   foreach - the list is not part of the scope
+
+sub _inner_element_is_in_outer_scope_really {
+    my ( $inner_elem, $outer_elem ) = @_;
+    $outer_elem->scope()
+        or return;
+    $inner_elem->descendant_of( $outer_elem )
+        or return;
+    if ( $outer_elem->isa( 'PPI::Statement::Compound' ) ) {
+        my $first = $outer_elem->schild( 0 )
+            or return;
+        if ( { for => 1, foreach => 1 }->{ $first->content() } ) {
+            my $next = $first;
+            while ( $next = $next->snext_sibling() ) {
+                $next->isa( 'PPI::Structure::List' )
+                    or next;
+                return ! $inner_elem->descendant_of( $next );
+            }
+        }
+    }
+    return $TRUE;
 }
 
 #-----------------------------------------------------------------------------
