@@ -290,8 +290,12 @@ sub element_is_in_lexical_scope_after_statement_containing {
 
     my $stmt = $outer_elem->statement()
         or return;
-    my $last_elem = $stmt->last_element()
-        or return;
+
+    my $last_elem = $stmt;
+    while ( $last_elem->isa( 'PPI::Node' ) ) {
+        $last_elem = $last_elem->last_element()
+            or return;
+    }
 
     my $stmt_loc = $last_elem->location()
         or return;
@@ -302,7 +306,7 @@ sub element_is_in_lexical_scope_after_statement_containing {
     $stmt_loc->[0] > $inner_loc->[0]
         and return;
     $stmt_loc->[0] == $inner_loc->[0]
-        and $stmt_loc->[1] > $inner_loc->[1]
+        and $stmt_loc->[1] >= $inner_loc->[1]
         and return;
 
     # Since we know the inner element is after the outer element, find
