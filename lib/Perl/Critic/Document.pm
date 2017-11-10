@@ -16,7 +16,7 @@ use PPIx::Utilities::Node qw< split_ppi_node_by_namespace >;
 
 use Perl::Critic::Annotation;
 use Perl::Critic::Exception::Parse qw< throw_parse >;
-use Perl::Critic::Utils qw< :booleans :characters shebang_line >;
+use Perl::Critic::Utils qw< :booleans :characters hashify shebang_line >;
 
 use PPIx::Regexp 0.010 qw< >;
 
@@ -318,6 +318,16 @@ sub element_is_in_lexical_scope_after_statement_containing {
 
     my $parent = $stmt;
     while ( ! $parent->scope() ) {
+        # Things appearing in the right-hand side of a
+        # PPI::Statement::Variable are not in-scope to its left-hand
+        # side. RESTRICTION -- this code does not handle truly
+        # pathological stuff like
+        # my ( $c, $d ) = qw{ e f };
+        # my ( $a, $b ) = my ( $c, $d ) = ( $c, $d );
+        _inner_is_defined_by_outer( $inner_elem, $parent )
+            and _location_is_in_right_hand_side_of_assignment(
+                $parent, $inner_elem )
+            and return;
         $parent = $parent->parent()
             or return;
     }
@@ -327,6 +337,19 @@ sub element_is_in_lexical_scope_after_statement_containing {
 
     return $inner_elem->descendant_of( $parent );
 
+}
+
+# Helper for element_is_in_lexical_scope_after_statement_containing().
+# Return true if and only if $outer_elem is a statement that defines
+# variables and $inner_elem is actually a variable defined in that
+# statement.
+sub _inner_is_defined_by_outer {
+    my ( $inner_elem, $outer_elem ) = @_;
+    $outer_elem->isa( 'PPI::Statement::Variable' )
+        and $inner_elem->isa( 'PPI::Token::Symbol' )
+        or return;
+    my %defines = hashify( $outer_elem->variables() );
+    return $defines{$inner_elem->symbol()};
 }
 
 # Helper for element_is_in_lexical_scope_after_statement_containing().
@@ -356,6 +379,33 @@ sub _inner_element_is_in_outer_scope_really {
         }
     }
     return $TRUE;
+}
+
+# Helper for element_is_in_lexical_scope_after_statement_containing().
+# Given and element that represents an assignment or assignment-ish
+# statement, and a location, return true if the location is to the right
+# of the equals sign, and false otherwise (including the case where
+# there is no equals sign). Only the leftmost equals is considered. This
+# is a restriction.
+sub _location_is_in_right_hand_side_of_assignment {
+    my ( $elem, $inner_elem ) = @_;
+    my $inner_loc = $inner_elem->location();
+    my $kid = $elem->schild( 0 );
+    while ( $kid ) {
+        $kid->isa( 'PPI::Token::Operator' )
+            and q{=} eq $kid->content()
+            or next;
+        my $l = $kid->location();
+        $l->[0] > $inner_loc->[0]
+            and return;
+        $l->[0] == $inner_loc->[0]
+            and $l->[1] >= $inner_loc->[1]
+            and return;
+        return $inner_elem->descendant_of( $elem );
+    } continue {
+        $kid = $kid->snext_sibling();
+    }
+    return;
 }
 
 #-----------------------------------------------------------------------------
