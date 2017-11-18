@@ -10,6 +10,7 @@ use Readonly;
 
 use Carp qw( confess );
 use English qw(-no_match_vars);
+use File::Find qw();
 use File::Spec qw();
 use Scalar::Util qw( blessed );
 use B::Keywords qw();
@@ -1080,31 +1081,31 @@ Readonly::Array my @SKIP_DIR => qw( CVS RCS .svn _darcs {arch} .bzr .cdv .git .h
 Readonly::Hash my %SKIP_DIR => hashify( @SKIP_DIR );
 
 sub all_perl_files {
+    my @arg = @_;
+    my @code_files;
 
-    # Recursively searches a list of directories and returns the paths
-    # to files that seem to be Perl source code.  This subroutine was
-    # poached from Test::Perl::Critic.
+    # The old code did a breadth-first search (documentation to the
+    # contrary notwithstanding,) whereas File::Find does depth-first. So
+    # there appears to be no way to use File::Find without changing the
+    # order in which the files are returned.
+    File::Find::find( {
+            wanted        => sub {
+                if ( -d && $SKIP_DIR{$_} ) {
+                    $File::Find::prune = 1;
+                } elsif ( -f && ! _is_backup( $_ ) && _is_perl( $_ ) ) {
+                    push @code_files, $File::Find::name;
+                }
+                return;
+            },
+        },
+        @arg,
+    );
 
-    my @queue      = @_;
-    my @code_files = ();
-
-    while (@queue) {
-        my $file = shift @queue;
-        if ( -d $file ) {
-            opendir my ($dh), $file or next;
-            my @newfiles = sort readdir $dh;
-            closedir $dh;
-
-            @newfiles = File::Spec->no_upwards(@newfiles);
-            @newfiles = grep { not $SKIP_DIR{$_} } @newfiles;
-            push @queue, map { File::Spec->catfile($file, $_) } @newfiles;
-        }
-
-        if ( (-f $file) && ! _is_backup($file) && _is_perl($file) ) {
-            push @code_files, $file;
-        }
-    }
-    return @code_files;
+    # Use File::Spec->abs2rel()  to get rid of leading './' or other OS
+    # equivalent on relative filenames.
+    # Use map {} to get rid of leading './', or other OS equivalent
+    return ( map { File::Spec->file_name_is_absolute( $_ ) ?
+        $_ : File::Spec->abs2rel( $_ ) } @code_files );
 }
 
 
