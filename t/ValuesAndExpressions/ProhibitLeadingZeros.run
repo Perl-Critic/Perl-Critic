@@ -149,6 +149,29 @@ umask ( 002 );
 umask 002;
 umask ( 002 );
 
+## name mkfifo
+## failures 0
+## cut
+
+use POSIX qw(mkfifo);
+POSIX::mkfifo $fifo, 0700;
+POSIX::mkfifo ( $fifo, 0700 );
+mkfifo $fifo, 0700;
+mkfifo ( $fifo, 0700 );
+
+#-----------------------------------------------------------------------------
+
+## name mkdir with strict option
+## failures 4
+## parms { strict => 1 }
+## cut
+
+use POSIX qw(mkfifo);
+POSIX::mkfifo $fifo, 0700;
+POSIX::mkfifo ( $fifo, 0700 );
+mkfifo $fifo, 0700;
+mkfifo ( $fifo, 0700 );
+
 #-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl

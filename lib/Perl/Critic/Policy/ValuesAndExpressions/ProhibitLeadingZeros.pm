@@ -43,6 +43,7 @@ sub violates {
     return $self->_create_violation($elem) if $self->{_strict};
     return if $self->_is_first_argument_of_chmod_or_umask($elem);
     return if $self->_is_second_argument_of_mkdir($elem);
+    return if $self->_is_second_argument_of_mkfifo($elem);
     return if $self->_is_third_argument_of_dbmopen($elem);
     return if $self->_is_fourth_argument_of_sysopen($elem);
     return $self->_create_violation($elem);
@@ -86,6 +87,27 @@ sub _is_second_argument_of_mkdir {
     return if not $previous_token;
 
     return $previous_token->content() eq 'mkdir';
+}
+
+sub _is_second_argument_of_mkfifo {
+    my ($self, $elem) = @_;
+
+    # Preceding comma.
+    my $previous_token = _previous_token_that_isnt_a_parenthesis($elem);
+    return if not $previous_token;
+    return if $previous_token->content() ne $COMMA;  # Don't know what it is.
+
+    # FIFO name.
+    $previous_token =
+        _previous_token_that_isnt_a_parenthesis($previous_token);
+    return if not $previous_token;
+
+    $previous_token =
+        _previous_token_that_isnt_a_parenthesis($previous_token);
+    return if not $previous_token;
+
+    return $previous_token->content() eq 'mkfifo'
+        || $previous_token->content() eq 'POSIX::mkfifo';
 }
 
 sub _is_third_argument_of_dbmopen {
@@ -210,6 +232,10 @@ you really want, its better to use C<oct> and make it obvious.
     mkdir $directory, 0755;                         # ok by default
     sysopen $filehandle, $filename, O_RDWR, 0666;   # ok by default
     umask 0002;                                     # ok by default
+
+    use POSIX 'mkfifo';
+    mkfifo $fifo, 0600;                             # ok by default
+    POSIX::mkfifo $fifo, 0600;                      # ok by default
 
 =head1 CONFIGURATION
 
