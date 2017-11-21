@@ -1,5 +1,11 @@
 Revision history for Perl module Perl::Critic
 
+NEXT
+    [Bug Fixes]
+    Recode Perl::Critic::Utils::all_perl_files() to use File::Find instead
+    of opendir/readdir.  This solves endless directory traversals if
+    the directories contain circular symbolic references.  Thanks, Tom Wyant.
+
 1.130   Thu Jul 20 23:16:34 CDT 2017
     [New Features]
     * Policies which ensure that system calls are checked such as
