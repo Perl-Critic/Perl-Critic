@@ -8,7 +8,7 @@ use Readonly;
 
 use Perl::Critic::Utils qw{ :characters };
 
-our $VERSION = '1.130';
+our $VERSION = '1.131_01';
 
 #-----------------------------------------------------------------------------
 

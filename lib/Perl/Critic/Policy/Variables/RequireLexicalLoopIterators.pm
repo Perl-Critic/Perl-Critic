@@ -9,7 +9,7 @@ use version ();
 use Perl::Critic::Utils qw{ :booleans :severities };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.130';
+our $VERSION = '1.131_01';
 
 #-----------------------------------------------------------------------------
 
