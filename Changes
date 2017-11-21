@@ -1,6 +1,6 @@
 Revision history for Perl module Perl::Critic
 
-1.31_01
+1.31_01 Tue Nov 21 17:28:06 CST 2017
     [New Features]
     In the ProhibitLeadingZeros policy, added an exception for mkfifo.
     Thanks, Evan Zacks. (GH#786)

@@ -2,6 +2,7 @@
 bin/perlcritic
 Build.PL
 Changes
+CONTRIBUTING.md
 examples/generatestats
 examples/loadanalysisdb
 examples/perlcriticrc
