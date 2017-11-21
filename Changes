@@ -5,6 +5,8 @@ NEXT
     In the ProhibitLeadingZeros policy, added an exception for mkfifo.
     Thanks, Evan Zacks. (GH#786)
 
+    Add color support for Windows platforms.  Thanks, Roy Ivy III. (GH#700)
+
     [Bug Fixes]
     Recode Perl::Critic::Utils::all_perl_files() to use File::Find instead
     of opendir/readdir.  This solves endless directory traversals if

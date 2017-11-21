@@ -190,11 +190,6 @@ Why can't I do this:
     ## use critic (SomeOtherPolicy)
 
 
-=item * Make color work on Windows.
-
-Use L<Win32::Console::ANSI> like L<App::Ack>.
-
-
 =item * Create P::C::Node and make P::C::Document a subclass and make use of PPIx::Utilities::Node::split_ppi_node_by_namespace() to provide per-namespace caching of lookups that are now on P::C::Document.
 
 This is necessary to get P::C::Moose Policies correct.
