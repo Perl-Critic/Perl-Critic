@@ -1,6 +1,10 @@
 Revision history for Perl module Perl::Critic
 
 NEXT
+    [New Features]
+    In the ProhibitLeadingZeros policy, added an exception for mkfifo.
+    Thanks, Evan Zacks.
+
     [Bug Fixes]
     Recode Perl::Critic::Utils::all_perl_files() to use File::Find instead
     of opendir/readdir.  This solves endless directory traversals if
