@@ -390,8 +390,7 @@ a quick handle on where a large pile of code might need the most attention.
 
 This option is on when outputting to a tty.  When set, Severity 5 and 4 are
 colored red and yellow, respectively.  Colorization only happens if
-L<Term::ANSIColor> is installed. For Windows environments,
-L<Win32::Console::ANSI> must also be installed.
+L<Term::ANSIColor> is installed and it only works on non-Windows environments.
 Negate this switch to disable color.  You can set the default value for this
 option in your F<.perlcriticrc> file.
 
