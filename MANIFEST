@@ -246,6 +246,7 @@ t/09_theme.t
 t/10_user_profile.t
 t/11_policy_factory.t
 t/12_policy_listing.t
+t/12_policy_without_new.t
 t/12_theme_listing.t
 t/13_bundled_policies.t
 t/14_policy_parameter_behavior_boolean.t
@@ -265,6 +266,7 @@ t/20_policy_prohibit_trailing_whitespace.t
 t/20_policy_require_consistent_newlines.t
 t/20_policy_require_tidy_code.t
 t/92_memory_leaks.t
+t/bad_module/Perl/Critic/Policy/BogusPolicyNoNew.pm
 t/BuiltinFunctions/ProhibitBooleanGrep.run
 t/BuiltinFunctions/ProhibitComplexMappings.run
 t/BuiltinFunctions/ProhibitLvalueSubstr.run
