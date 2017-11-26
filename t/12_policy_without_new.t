@@ -9,13 +9,6 @@ use Test::More;
 our $VERSION = '1.131_01';
 use lib 't/bad_module';
 
-BEGIN: {
-    package Perl::Critic::Policy::BogusPolicyNotNew;
-    our $VERSION = '0.1';
-    sub g { return "GOOD"; }
-    1;
-}
-
 use Perl::Critic::TestUtils;
 Perl::Critic::TestUtils::assert_version( $VERSION );
 
@@ -25,8 +18,8 @@ use Perl::Critic::PolicyFactory (-test => 1);
 
 my @policy_names = Perl::Critic::PolicyFactory::site_policy_names();
 
-my $badpolicy = grep { m/^Perl::Critic::Policy::BogusPolicyNoNew$/s } @policy_names;
-is($badpolicy, 0, "site_policy_names excludes modules without new() function");
+my $badpolicy = grep { $_ eq 'Perl::Critic::Policy::BogusPolicyNoNew' } @policy_names;
+is($badpolicy, 0, 'site_policy_names excludes modules without new() function');
 
 
 #-----------------------------------------------------------------------------
