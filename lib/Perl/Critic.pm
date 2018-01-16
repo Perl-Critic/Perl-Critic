@@ -102,6 +102,8 @@ sub critique {  ## no critic (ArgUnpacking)
                 '-program-extensions' => [$config->program_extensions_as_regexes()],
             );
 
+    return if $doc->elements() == 0; # Not critiquing empty documents
+
     if ( 0 == $self->policies() ) {
         Perl::Critic::Exception::Configuration::Generic->throw(
             message => 'There are no enabled policies.',
