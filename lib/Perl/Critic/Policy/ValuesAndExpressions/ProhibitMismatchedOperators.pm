@@ -215,6 +215,12 @@ warns you about using mismatched operators at run-time.  This Policy
 does essentially the same thing, but at author-time.  That way, you
 can find out about them sooner.
 
+Perl handles the strings 'NaN' and 'inf' as special numbers and creates an NV struct when compared with a numeric operator.
+Although not necessary it is allowed to write code such as:
+    my $i = 'inf'+0;
+This pattern helps others understand that the variable is indeed the Infinite or NaN numbers as Perl interpets them.
+Only these two special string numbers are allowed to have the '+' operator which would otherwise be allowed only for strings.
+
 
 =head1 AUTHOR
 
