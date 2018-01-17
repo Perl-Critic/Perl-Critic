@@ -115,6 +115,25 @@ $a .= 1;
 -A 'file' eq "1";
 
 #-----------------------------------------------------------------------------
+
+## name Allow concatenating numbers when parameter is set
+## failures 0
+## parms { allow_number_concatenating => 1 }
+## cut
+
+my $s = 1 . 2;
+my $s = 1 . "s";
+
+#-----------------------------------------------------------------------------
+
+## name Do not allow concatenating numbers when parameter is not set
+## failures 2
+## cut
+
+my $s = 1 . 2;
+my $s = 1 . "s";
+
+#-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4
