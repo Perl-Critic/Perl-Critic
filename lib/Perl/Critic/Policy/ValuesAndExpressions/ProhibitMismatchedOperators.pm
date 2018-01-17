@@ -39,6 +39,12 @@ Readonly::Hash my %OPERATOR_TYPES => (
         qw< eq ne lt gt le ge . .= >,
 );
 
+Readonly::Scalar my $TOKEN_COMPATIBILITY_SPECIAL_STRING_OPERATOR => '+';
+Readonly::Hash my %SPECIAL_STRING_VALUES => (
+    map { $_ => 1}
+        qw('nan' 'inf' '-inf' '+inf')
+);
+
 #-----------------------------------------------------------------------------
 
 sub supported_parameters { return ()                     }
@@ -87,6 +93,8 @@ sub violates {
         &&  defined $leading_operator_compatibility
         &&  ! $leading_operator_compatibility->[$operator_type]
         &&  $self->_have_stringy_x($leading_operator); # RT 54524
+
+    return if $self->_is_special_string_number_addion($elem_text, $leading_operator, $next_elem);
 
     return $self->violation($DESC, $EXPL, $elem);
 }
@@ -148,6 +156,20 @@ sub _is_file_operator {
     return if not $elem;
     return if not $elem->isa('PPI::Token::Operator');
     return !! $FILE_OPERATOR_COMPATIBILITY{ $elem->content() }
+}
+
+#-----------------------------------------------------------------------------
+
+sub _is_special_string_number_addion {
+    my ($self, $elem_operator, $element_1, $element_2, $check_recursive) = @_;
+
+    return 1 if $elem_operator
+        &&  $elem_operator eq $TOKEN_COMPATIBILITY_SPECIAL_STRING_OPERATOR
+        &&  $SPECIAL_STRING_VALUES{lc($element_1->content()//'')}
+        &&  $element_2->isa('PPI::Token::Number')
+        &&  $element_2->content() == 0;
+    return 1 if !$check_recursive && $self->_is_special_string_number_addion($elem_operator, $element_2, $element_1, 1);
+
 }
 
 1;
