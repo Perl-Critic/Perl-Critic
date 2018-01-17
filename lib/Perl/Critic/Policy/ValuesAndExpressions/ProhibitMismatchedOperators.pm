@@ -16,19 +16,20 @@ Readonly::Scalar my $EXPL => q<Numeric/string operators and operands should matc
 
 # token compatibility [ numeric, string ]
 Readonly::Hash my %TOKEN_COMPATIBILITY => (
-    'PPI::Token::Number' => [$TRUE,  $FALSE],
-    'PPI::Token::Symbol' => [$TRUE,  $TRUE ],
-    'PPI::Token::Quote'  => [$FALSE, $TRUE ],
+    'PPI::Token::Number' => [$TRUE,  $FALSE, $TRUE],
+    'PPI::Token::Symbol' => [$TRUE,  $TRUE , $TRUE],
+    'PPI::Token::Quote'  => [$FALSE, $TRUE , $TRUE],
 );
 
 Readonly::Hash my %FILE_OPERATOR_COMPATIBILITY =>
-    map {; "-$_" => [$TRUE, $FALSE] }
+    map {; "-$_" => [$TRUE, $FALSE, $FALSE] }
         qw< r w x o R W X O e z s f d l p S b c t u g k T B M A >;
 
 Readonly::Scalar my $TOKEN_COMPATIBILITY_INDEX_NUMERIC => 0;
 Readonly::Scalar my $TOKEN_COMPATIBILITY_INDEX_STRING  => 1;
+Readonly::Scalar my $TOKEN_COMPATIBILITY_INDEX_BOTH    => 2;
 
-Readonly::Hash my %OPERATOR_TYPES => (
+Readonly::Hash my %OPERATOR_TYPES_DEFAULT => (
     # numeric
     (
         map { $_ => $TOKEN_COMPATIBILITY_INDEX_NUMERIC }
@@ -39,9 +40,36 @@ Readonly::Hash my %OPERATOR_TYPES => (
         qw< eq ne lt gt le ge . .= >,
 );
 
+Readonly::Hash my %OPERATOR_TYPES_ALLOW_NUMBER_CONCATINATION => (
+    # numeric
+    (
+        map { $_ => $TOKEN_COMPATIBILITY_INDEX_NUMERIC }
+            qw[ == != > >= < <= + - * / += -= *= /= ]
+    ),
+    # string
+    (
+        map { $_ => $TOKEN_COMPATIBILITY_INDEX_STRING }
+            qw< eq ne lt gt le ge .= >
+    ),
+    # both
+    (
+        map { $_ => $TOKEN_COMPATIBILITY_INDEX_BOTH }
+            qw< . >
+    ),
+);
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return ()                     }
+sub supported_parameters {
+    return (
+        {
+            name           => 'allow_number_concatenating',
+            description    => 'Allow to concatenate numeric elements',
+            default_string => '',
+        },
+
+    );
+}
+
 sub default_severity     { return $SEVERITY_MEDIUM       }
 sub default_themes       { return qw< core bugs certrule >        }
 sub applies_to           { return 'PPI::Token::Operator' }
@@ -50,6 +78,10 @@ sub applies_to           { return 'PPI::Token::Operator' }
 
 sub violates {
     my ($self, $elem) = @_;
+
+    my %OPERATOR_TYPES = $self->{_allow_number_concatenating}
+        ? %OPERATOR_TYPES_ALLOW_NUMBER_CONCATINATION
+        : %OPERATOR_TYPES_DEFAULT;
 
     my $elem_text = $elem->content();
 
