@@ -170,6 +170,7 @@ sub _is_special_string_number_addion {
         &&  $element_2->content() == 0;
     return 1 if !$check_recursive && $self->_is_special_string_number_addion($elem_operator, $element_2, $element_1, 1);
 
+    return;
 }
 
 1;
