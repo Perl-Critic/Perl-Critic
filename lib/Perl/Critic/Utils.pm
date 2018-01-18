@@ -1132,6 +1132,7 @@ sub _is_perl {
     #Check filename extensions
     return 1 if $file =~ m{ [.] PL    \z}xms;
     return 1 if $file =~ m{ [.] p[lm] \z}xms;
+    return 1 if $file =~ m{ [.] psgi  \z}xms;
     return 1 if $file =~ m{ [.] t     \z}xms;
 
     #Check for shebang

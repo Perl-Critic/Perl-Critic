@@ -18,7 +18,7 @@ use Perl::Critic::PolicyFactory;
 use Perl::Critic::TestUtils qw(bundled_policy_names);
 use Perl::Critic::Utils;
 
-use Test::More tests => 153;
+use Test::More tests => 155;
 
 our $VERSION = '1.131_01';
 
@@ -306,11 +306,11 @@ sub test_interpolate {
 #-----------------------------------------------------------------------------
 
 sub test_is_perl_and_shebang_line {
-    for ( qw(foo.t foo.pm foo.pl foo.PL) ) {
+    for ( qw(foo.t foo.pm foo.pl foo.PL foo.psgi) ) {
         ok( Perl::Critic::Utils::_is_perl($_), qq{Is perl: '$_'} );
     }
 
-    for ( qw(foo.doc foo.txt foo.conf foo) ) {
+    for ( qw(foo.doc foo.txt foo.conf foo foo.pl.exe) ) {
         ok( ! Perl::Critic::Utils::_is_perl($_), qq{Is not perl: '$_'} );
     }
 
