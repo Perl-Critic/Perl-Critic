@@ -39,7 +39,7 @@ Readonly::Hash my %OPERATOR_TYPES => (
         qw< eq ne lt gt le ge . .= >,
 );
 
-Readonly::Scalar my $TOKEN_COMPATIBILITY_SPECIAL_STRING_OPERATOR => '+';
+Readonly::Scalar my $TOKEN_COMPATIBILITY_SPECIAL_STRING_OPERATOR => qw{+};
 Readonly::Hash my %SPECIAL_STRING_VALUES => (
     map { $_ => 1}
         qw('nan' 'inf' '-inf' '+inf')
@@ -165,7 +165,7 @@ sub _is_special_string_number_addion {
 
     return 1 if $elem_operator
         &&  $elem_operator eq $TOKEN_COMPATIBILITY_SPECIAL_STRING_OPERATOR
-        &&  $SPECIAL_STRING_VALUES{lc($element_1->content()//'')}
+        &&  $SPECIAL_STRING_VALUES{lc($element_1->content()//0)}
         &&  $element_2->isa('PPI::Token::Number')
         &&  $element_2->content() == 0;
     return 1 if !$check_recursive && $self->_is_special_string_number_addion($elem_operator, $element_2, $element_1, 1);
