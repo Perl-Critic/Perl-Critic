@@ -1710,7 +1710,7 @@ A Perl code file is:
 
 =over
 
-=item * Any file that ends in F<.PL>, F<.pl>, F<.pm>, or F<.t>
+=item * Any file that ends in F<.PL>, F<.pl>, F<.pm>, F<.psgi>, or F<.t>
 
 =item * Any file that has a first line with a shebang containing 'perl'
 
