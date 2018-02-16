@@ -91,6 +91,7 @@ Readonly::Array our @STRICT_EQUIVALENT_MODULES => qw(
     Moose::Role
     Moose::Exporter
     Moose::Util::TypeConstraints
+    Test::Class::Moose
 
     MooseX::NonMoose
     MooseX::Singleton
