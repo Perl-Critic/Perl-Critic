@@ -4,11 +4,7 @@ use 5.006001;
 use strict;
 use warnings;
 
-use Readonly;
-
-
 use Perl::Critic::Utils::Perl qw< :all >;
-
 
 use Test::More tests => 7;
 
