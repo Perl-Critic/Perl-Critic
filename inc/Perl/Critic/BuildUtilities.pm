@@ -30,6 +30,7 @@ sub required_module_versions {
         'English'                       => 0,
         'Exception::Class'              => 1.23,
         'Exporter'                      => 5.63,
+        'Fatal'                         => 0,
         'File::Basename'                => 0,
         'File::Find'                    => 0,
         'File::HomeDir'                 => 0,
