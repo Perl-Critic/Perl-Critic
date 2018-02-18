@@ -5,7 +5,6 @@ use strict;
 use warnings;
 
 use Readonly;
-use Carp qw( carp );
 
 use List::MoreUtils qw(all);
 

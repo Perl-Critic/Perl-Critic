@@ -4,7 +4,6 @@ use 5.006001;
 use strict;
 use warnings;
 
-use Carp qw(carp);
 use English qw(-no_match_vars);
 use List::MoreUtils qw(all);
 use Readonly;
