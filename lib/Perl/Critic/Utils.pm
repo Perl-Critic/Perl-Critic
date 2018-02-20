@@ -1132,6 +1132,7 @@ sub _is_perl {
     #Check filename extensions
     return 1 if $file =~ m{ [.] PL    \z}xms;
     return 1 if $file =~ m{ [.] p[lm] \z}xms;
+    return 1 if $file =~ m{ [.] psgi  \z}xms;
     return 1 if $file =~ m{ [.] t     \z}xms;
 
     #Check for shebang
@@ -1709,7 +1710,7 @@ A Perl code file is:
 
 =over
 
-=item * Any file that ends in F<.PL>, F<.pl>, F<.pm>, or F<.t>
+=item * Any file that ends in F<.PL>, F<.pl>, F<.pm>, F<.psgi>, or F<.t>
 
 =item * Any file that has a first line with a shebang containing 'perl'
 
