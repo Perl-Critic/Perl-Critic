@@ -161,6 +161,24 @@ my %foo;
 m/ (?{ $foo{bar} }) /smx;
 
 #-----------------------------------------------------------------------------
+
+## name open a file handle and us in a readline operator
+## failures 0
+## cut
+
+open(my $foo, '<', '/etc/motd') or die;
+my $line = <$foo>;
+
+#-----------------------------------------------------------------------------
+
+## name Interpulating a variable is detected as a usage
+## failures 0
+## cut
+
+my $foo;
+print "Interpulating variable: $foo";
+
+#-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4
