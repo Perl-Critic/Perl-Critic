@@ -22,7 +22,7 @@ use Perl::Critic::Utils::POD qw<
 >;
 use Perl::Critic::Exception::Fatal::Internal qw< throw_internal >;
 
-our $VERSION = '1.131_01';
+our $VERSION = '1.131_02';
 
 
 Readonly::Scalar my $NO_EXCEPTION_NO_SPLIT_LIMIT        => -1;

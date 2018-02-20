@@ -1,9 +1,6 @@
 Revision history for Perl module Perl::Critic
 
-NEXT
-    [Bug Fixes]
-    Added missing requirement for Fatal.pm.
-
+1.131_02 Tue Feb 20 17:18:03 CST 2018
     [New Features]
     Perl::Critic now assumes that .psgi files are Perl, too.  Thanks, Tom
     Hukins. (GH#805)
@@ -11,7 +8,11 @@ NEXT
     Variables::ProhibitUnusedVariables no longer gives a false positive for
     variables used in interpolation.  Thanks, Omer Gazit. (GH#801)
 
-1.31_01 Tue Nov 21 17:28:06 CST 2017
+    [Bug Fixes]
+    Added missing requirement for Fatal.pm.
+
+
+1.131_01 Tue Nov 21 17:28:06 CST 2017
     [New Features]
     In the ProhibitLeadingZeros policy, added an exception for mkfifo.
     Thanks, Evan Zacks. (GH#786)

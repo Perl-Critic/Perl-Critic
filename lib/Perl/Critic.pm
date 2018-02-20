@@ -22,7 +22,7 @@ use Perl::Critic::Utils qw< :characters hashify shebang_line >;
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '1.131_01';
+our $VERSION = '1.131_02';
 
 Readonly::Array our @EXPORT_OK => qw(critique);
 
@@ -945,7 +945,7 @@ Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2013 Imaginative Software Systems.  All rights reserved.
+Copyright (c) 2005-2018 Imaginative Software Systems.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify it under
 the same terms as Perl itself.  The full text of this license can be found in

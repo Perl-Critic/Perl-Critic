@@ -9,7 +9,7 @@ use Readonly;
 use Perl::Critic::Utils qw{ :severities };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.131_01';
+our $VERSION = '1.131_02';
 
 #-----------------------------------------------------------------------------
 
