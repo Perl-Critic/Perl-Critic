@@ -51,6 +51,7 @@ sub required_module_versions {
         'PPI::Node'                     => '1.224',
         'PPI::Token::Quote::Single'     => '1.224',
         'PPI::Token::Whitespace'        => '1.224',
+        'PPIx::QuoteLike'               => 0,
         'PPIx::Regexp'                  => '0.027', # Literal { deprecated in re
         'PPIx::Utilities::Node'         => '1.001',
         'PPIx::Utilities::Statement'    => '1.001',

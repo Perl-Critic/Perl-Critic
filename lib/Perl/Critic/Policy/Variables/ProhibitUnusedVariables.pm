@@ -8,6 +8,7 @@ use Readonly;
 use List::MoreUtils qw< any >;
 
 use PPI::Token::Symbol;
+use PPIx::QuoteLike;
 
 use Perl::Critic::Utils qw< :characters :severities >;
 use base 'Perl::Critic::Policy';
@@ -75,6 +76,25 @@ sub _get_symbol_usage {
 
     foreach my $symbol ( @{$symbols} ) {
         $symbol_usage->{ $symbol->symbol() }++;
+    }
+
+    foreach my $class ( qw{
+        PPI::Token::Quote::Double
+        PPI::Token::Quote::Interpolate
+        PPI::Token::QuoteLike::Backtick
+        PPI::Token::QuoteLike::Command
+        PPI::Token::QuoteLike::Readline
+        PPI::Token::HereDoc
+        } ) {
+        foreach my $double_quotish (
+            @{ $document->find( $class ) || [] }
+        ) {
+            my $str = PPIx::QuoteLike->new( $double_quotish )
+                or next;
+            foreach my $var ( $str->variables() ) {
+                $symbol_usage->{ $var }++;
+            }
+        }
     }
 
     return;

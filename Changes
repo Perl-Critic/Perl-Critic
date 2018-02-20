@@ -8,6 +8,9 @@ NEXT
     Perl::Critic now assumes that .psgi files are Perl, too.  Thanks, Tom
     Hukins. (GH#805)
 
+    Variables::ProhibitUnusedVariables no longer gives a false positive for
+    variables used in interpolation.  Thanks, Omer Gazit. (GH#801)
+
 1.31_01 Tue Nov 21 17:28:06 CST 2017
     [New Features]
     In the ProhibitLeadingZeros policy, added an exception for mkfifo.

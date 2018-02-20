@@ -161,6 +161,24 @@ my %foo;
 m/ (?{ $foo{bar} }) /smx;
 
 #-----------------------------------------------------------------------------
+
+## name Open a file handle and use in a readline operator.
+## failures 0
+## cut
+
+open(my $foo, '<', '/tmp/foo') or die;
+my $line = <$foo>;
+
+#-----------------------------------------------------------------------------
+
+## name Interpolating a variable is detected as a usage.
+## failures 0
+## cut
+
+my $foo;
+print "Interpolating variable: $foo";
+
+#-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4
