@@ -77,13 +77,15 @@ sub initialize_if_enabled {
 
     return $FALSE if not $self->_derive_spell_command_line();
 
-    return $FALSE if not $self->_run_spell_command( <<'END_TEST_CODE' );
-=pod
+    my $test_code = <<'END_TEST_CODE';
+;pod
 
-=head1 Test The Spell Command
+;head1 Test The Spell Command
 
-=cut
+;cut
 END_TEST_CODE
+    $test_code =~ s/^;/=/msx;
+    return $FALSE if not $self->_run_spell_command($test_code);
 
     $self->_load_stop_words_file();
 
