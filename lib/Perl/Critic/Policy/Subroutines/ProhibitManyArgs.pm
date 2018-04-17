@@ -18,8 +18,10 @@ our $VERSION = '1.131_02';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $AT => q{@};
-Readonly::Scalar my $AT_ARG => q{@_}; ## no critic (InterpolationOfMetachars)
+Readonly::Scalar my $AT     => q{@};
+Readonly::Scalar my $AT_ARG => q{@_};     ## no critic (InterpolationOfMetachars)
+Readonly::Scalar my $CLASS  => q{$class}; ## no critic (InterpolationOfMetachars)
+Readonly::Scalar my $SELF   => q{$self};  ## no critic (InterpolationOfMetachars)
 
 Readonly::Scalar my $DESC => q{Too many arguments};
 Readonly::Scalar my $EXPL => [182];
@@ -38,7 +40,7 @@ sub supported_parameters {
         },
         {
             name            => 'skip_object',
-            description     => q[Don't count $self or $class first argument],
+            description     => q[Don't count $self or $class first argument], ## no critic (InterpolationOfMetachars)
             default_string  => '0',
             behavior        => 'boolean',
         },
@@ -128,7 +130,7 @@ sub _is_object_arg {
    my ($symbol) = @_;
    return if !$symbol;
    return if !$symbol->isa('PPI::Token::Symbol');
-   return '$self' eq $symbol->content() || '$class' eq $symbol->content();
+   return $SELF eq $symbol->content() || $CLASS eq $symbol->content();
 }
 
 1;
