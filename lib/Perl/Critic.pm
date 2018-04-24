@@ -669,7 +669,7 @@ You are free to invent new themes that suit your needs.
     certrule          Policies that CERT considers rules
     maintenance       Policies that affect the long-term health of the code
     cosmetic          Policies that only have a superficial effect
-    complexity        Policies that specificaly relate to code complexity
+    complexity        Policies that specifically relate to code complexity
     security          Policies that relate to security issues
     tests             Policies that are specific to test programs
 
