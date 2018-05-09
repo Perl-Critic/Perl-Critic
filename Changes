@@ -1,5 +1,14 @@
 Revision history for Perl module Perl::Critic
 
+
+NEXT
+    [New Features]
+    Added the ability to specify a regex to tell what unused private
+    subroutines are OK in Subroutines::ProhibitUnusedPrivateSubroutines.
+    This is handy for Moose classes where there could be many false
+    positives on _build_xxxx() subroutines.
+    Thanks, Dave Cross.  (GH #811, #812)
+
 1.131_02 Tue Feb 20 17:18:03 CST 2018
     [New Features]
     Perl::Critic now assumes that .psgi files are Perl, too.  Thanks, Tom
