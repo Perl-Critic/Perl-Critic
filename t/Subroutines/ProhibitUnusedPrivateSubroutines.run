@@ -246,6 +246,15 @@ sub _private {
     print "A private sub\n";
 }
 
+## name allow_using_regex
+## failures 0
+## parms { allow_name_regex => '_build_\w+' }
+## cut
+
+sub _build_foo {
+  return 'This is foo';
+}
+
 #-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl
