@@ -4,12 +4,9 @@ use 5.006001;
 use strict;
 use warnings;
 
-use English qw< -no_match_vars >;
 use Readonly;
 
 use File::Basename qw< basename >;
-use IO::String qw< >;
-use Pod::PlainText qw< >;
 use Scalar::Util qw< blessed >;
 use String::Format qw< stringf >;
 
