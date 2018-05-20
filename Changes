@@ -9,6 +9,9 @@ NEXT
     positives on _build_xxxx() subroutines.
     Thanks, Dave Cross.  (GH #811, #812)
 
+    [Dependencies]
+    Perl::Critic now no longer relies on the deprecated Email::Address.
+
 1.131_02 Tue Feb 20 17:18:03 CST 2018
     [New Features]
     Perl::Critic now assumes that .psgi files are Perl, too.  Thanks, Tom

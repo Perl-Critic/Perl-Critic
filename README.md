@@ -435,7 +435,7 @@ You are free to invent new themes that suit your needs.
     certrule          Policies that CERT considers rules
     maintenance       Policies that affect the long-term health of the code
     cosmetic          Policies that only have a superficial effect
-    complexity        Policies that specificaly relate to code complexity
+    complexity        Policies that specifically relate to code complexity
     security          Policies that relate to security issues
     tests             Policies that are specific to test programs
 
@@ -585,8 +585,6 @@ Perl::Critic requires the following modules:
 
 [Config::Tiny](https://metacpan.org/pod/Config::Tiny)
 
-[Email::Address](https://metacpan.org/pod/Email::Address)
-
 [Exception::Class](https://metacpan.org/pod/Exception::Class)
 
 [File::HomeDir](https://metacpan.org/pod/File::HomeDir)
@@ -700,7 +698,7 @@ Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 # COPYRIGHT
 
-Copyright (c) 2005-2013 Imaginative Software Systems.  All rights reserved.
+Copyright (c) 2005-2018 Imaginative Software Systems.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify it under
 the same terms as Perl itself.  The full text of this license can be found in

@@ -825,8 +825,6 @@ L<B::Keywords>
 
 L<Config::Tiny>
 
-L<Email::Address>
-
 L<Exception::Class>
 
 L<File::HomeDir>
