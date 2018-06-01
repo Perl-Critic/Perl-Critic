@@ -8,7 +8,7 @@ use English qw<-no_match_vars>;
 
 use Test::More tests => 29;
 
-our $VERSION = '1.131_02';
+our $VERSION = '1.132';
 
 use Perl::Critic::TestUtils;
 Perl::Critic::TestUtils::assert_version( $VERSION );

@@ -14,7 +14,7 @@ use Perl::Critic::Utils::POD qw< :all >;
 
 use Test::More tests => 61;
 
-our $VERSION = '1.131_02';
+our $VERSION = '1.132';
 
 use Perl::Critic::TestUtils;
 Perl::Critic::TestUtils::assert_version( $VERSION );

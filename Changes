@@ -1,7 +1,7 @@
 Revision history for Perl module Perl::Critic
 
 
-NEXT
+1.32    Thu May 31 21:48:48 CDT 2018
     [New Features]
     Added the ability to specify a regex to tell what unused private
     subroutines are OK in Subroutines::ProhibitUnusedPrivateSubroutines.
@@ -11,6 +11,7 @@ NEXT
 
     [Dependencies]
     Perl::Critic now no longer relies on the deprecated Email::Address.
+    (GH #816)
 
 1.131_02 Tue Feb 20 17:18:03 CST 2018
     [New Features]
