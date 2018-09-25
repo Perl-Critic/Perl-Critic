@@ -51,7 +51,7 @@ sub _parse_allow {
 
     if( defined $config_string ) {
         my $allowed = lc $config_string; #String of words
-        my %allowed = hashify( $allowed =~ m/ (\w+) /gxms );
+        my %allowed = hashify( $allowed =~ m/ (\w+(?:::\w+)?) /gxms );
 
         $self->{_allow} = \%allowed;
     }
