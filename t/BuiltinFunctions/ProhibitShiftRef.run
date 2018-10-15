@@ -1,0 +1,58 @@
+## name Basic passing
+## failures 0
+## cut
+
+my $a = shift;
+my ($b, $c) = (shift, shift);
+my $d = shift();
+my $e = shift @ARGV;
+my $f = shift(@ARGV);
+my $g = shift @_;
+my @h = (shift @_);
+shift;
+{ shift() }
+
+#-----------------------------------------------------------------------------
+
+## name Basic failure
+## failures 4
+## cut
+
+my $a = \shift;
+my $b = \ shift;
+my ($c1, $c2) = (shift, \shift);
+my ($d1, @d2) = (\shift, @_);
+
+#-----------------------------------------------------------------------------
+
+## name Named array failure
+## failures 4
+## cut
+
+my $a = \shift @ARGV;
+my $b = \shift(@ARGV);
+my $c = \shift @_;
+my $d = (\shift @_);
+
+#-----------------------------------------------------------------------------
+
+## name Structure failure
+## failures 2
+## cut
+
+my $a = \{ shift() };
+my $b = \{shift};
+
+#-----------------------------------------------------------------------------
+
+## name Tricksy, but passing
+## failures 0
+## cut
+
+my $a = \(shift);
+my $b = \(shift());
+my $c = \(shift @ARGV);
+my $d = \(shift(@_));
+my $e = \(0, shift);
+
+#-----------------------------------------------------------------------------

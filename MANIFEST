@@ -47,6 +47,7 @@ lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitBooleanGrep.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitComplexMappings.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitLvalueSubstr.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitReverseSortBlock.pm
+lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitShiftRef.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitSleepViaSelect.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitStringyEval.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitStringySplit.pm
@@ -268,6 +269,7 @@ t/92_memory_leaks.t
 t/BuiltinFunctions/ProhibitBooleanGrep.run
 t/BuiltinFunctions/ProhibitComplexMappings.run
 t/BuiltinFunctions/ProhibitLvalueSubstr.run
+t/BuiltinFunctions/ProhibitShiftRef.run
 t/BuiltinFunctions/ProhibitReverseSortBlock.run
 t/BuiltinFunctions/ProhibitSleepViaSelect.run
 t/BuiltinFunctions/ProhibitStringyEval.run
