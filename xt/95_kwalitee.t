@@ -10,7 +10,7 @@ use Perl::Critic::TestUtils;
 Perl::Critic::TestUtils::assert_version( $VERSION );
 
 eval 'use Test::Kwalitee 1.15 tests => [ qw{ -no_symlinks } ]; 1'
-    or plan skip_all => 'Test::Kwalitee requried to test kwalitee';
+    or plan skip_all => 'Test::Kwalitee required to test kwalitee';
 
 
 # Local Variables:
