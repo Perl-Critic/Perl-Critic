@@ -2,6 +2,14 @@ Revision history for Perl module Perl::Critic
 
 
 NEXT
+    [New Features]
+    Added new policy BuiltinFunctions::ProhibitShiftRef.  This policy
+    disallows this construct that causes a memory leak:
+
+        my $ref = \shift;
+
+    The documentation for the policy contains details.
+
     [Policy Changes]
     The policy Documentation::RequirePodLinksIncludeText is obsolete
     and has been removed.
