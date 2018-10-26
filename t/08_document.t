@@ -17,7 +17,7 @@ use Perl::Critic::Utils::DataConversion qw< dor >;
 use Test::Deep;
 use Test::More tests => 43;
 
-our $VERSION = '1.132';
+our $VERSION = '1.133_01';
 
 use Perl::Critic::TestUtils;
 Perl::Critic::TestUtils::assert_version( $VERSION );

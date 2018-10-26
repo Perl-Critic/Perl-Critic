@@ -216,9 +216,6 @@ lib/Perl/Critic/Violation.pm
 lib/Test/Perl/Critic/Policy.pm
 LICENSE
 MANIFEST			This list of files
-META.json
-META.yml
-README
 README.md
 t/00_modules.t
 t/00_versions.t
@@ -268,8 +265,8 @@ t/92_memory_leaks.t
 t/BuiltinFunctions/ProhibitBooleanGrep.run
 t/BuiltinFunctions/ProhibitComplexMappings.run
 t/BuiltinFunctions/ProhibitLvalueSubstr.run
-t/BuiltinFunctions/ProhibitShiftRef.run
 t/BuiltinFunctions/ProhibitReverseSortBlock.run
+t/BuiltinFunctions/ProhibitShiftRef.run
 t/BuiltinFunctions/ProhibitSleepViaSelect.run
 t/BuiltinFunctions/ProhibitStringyEval.run
 t/BuiltinFunctions/ProhibitStringySplit.run
@@ -425,3 +422,6 @@ xt/94_includes.t
 xt/95_kwalitee.t
 xt/98_pod_syntax.t
 xt/99_pod_coverage.t
+README
+META.yml
+META.json
