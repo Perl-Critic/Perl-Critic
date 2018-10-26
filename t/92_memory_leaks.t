@@ -21,7 +21,7 @@ Perl::Critic::TestUtils::assert_version( $VERSION );
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 eval 'use Test::Memory::Cycle; 1'
-    or plan skip_all => 'Test::Memory::Cycle requried to test memory leaks';
+    or plan skip_all => 'Test::Memory::Cycle required to test memory leaks';
 
 #-----------------------------------------------------------------------------
 {
