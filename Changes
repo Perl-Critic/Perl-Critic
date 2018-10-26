@@ -9,11 +9,11 @@ Revision history for Perl module Perl::Critic
         my $ref = \shift;
 
     The documentation for the policy contains details on when this can
-    happen. (GH#837)
+    happen. Thanks, Todd Rinaldo. (GH#837)
 
     [Policy Changes]
-    The policy Documentation::RequirePodLinksIncludeText is obsolete
-    and has been removed. (GH#494)
+    The policy Documentation::RequirePodLinksIncludeText is obsolete and
+    has been removed. Thanks, Salvatore Bonaccorso. (GH#494)
 
 
 1.132    Thu May 31 21:48:48 CDT 2018
@@ -26,7 +26,7 @@ Revision history for Perl module Perl::Critic
 
     [Dependencies]
     Perl::Critic now no longer relies on the deprecated Email::Address.
-    (GH #816)
+    Thanks, Giovanni Mariani.  (GH #816)
 
 1.131_02 Tue Feb 20 17:18:03 CST 2018
     [New Features]
