@@ -1,6 +1,12 @@
 Revision history for Perl module Perl::Critic
 
 
+NEXT
+    [Policy Changes]
+    The policy Documentation::RequirePodLinksIncludeText is obsolete
+    and has been removed.
+
+
 1.32    Thu May 31 21:48:48 CDT 2018
     [New Features]
     Added the ability to specify a regex to tell what unused private
