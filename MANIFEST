@@ -83,7 +83,6 @@ lib/Perl/Critic/Policy/ControlStructures/ProhibitYadaOperator.pm
 lib/Perl/Critic/Policy/Documentation/PodSpelling.pm
 lib/Perl/Critic/Policy/Documentation/RequirePackageMatchesPodName.pm
 lib/Perl/Critic/Policy/Documentation/RequirePodAtEnd.pm
-lib/Perl/Critic/Policy/Documentation/RequirePodLinksIncludeText.pm
 lib/Perl/Critic/Policy/Documentation/RequirePodSections.pm
 lib/Perl/Critic/Policy/ErrorHandling/RequireCarping.pm
 lib/Perl/Critic/Policy/ErrorHandling/RequireCheckingReturnValueOfEval.pm
@@ -300,7 +299,6 @@ t/ControlStructures/ProhibitUntilBlocks.run
 t/ControlStructures/ProhibitYadaOperator.run
 t/Documentation/RequirePackageMatchesPodName.run
 t/Documentation/RequirePodAtEnd.run
-t/Documentation/RequirePodLinksIncludeText.run
 t/Documentation/RequirePodSections.run
 t/ErrorHandling/RequireCarping.run
 t/ErrorHandling/RequireCheckingReturnValueOfEval.run
