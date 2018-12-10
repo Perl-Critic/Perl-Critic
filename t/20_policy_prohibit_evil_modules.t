@@ -9,12 +9,8 @@ use Perl::Critic::Utils     qw< $EMPTY >;
 
 use Test::More tests => 1;
 
-#-----------------------------------------------------------------------------
-
-our $VERSION = '1.126';
-
-#-----------------------------------------------------------------------------
-
+our $VERSION = '1.133_01';
+Perl::Critic::TestUtils::assert_version( $VERSION );
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 # This is in addition to the regular .run file.

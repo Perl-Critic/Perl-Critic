@@ -75,7 +75,7 @@ sub authortest_dependencies {
     $self->depends_on('manifest');
     $self->depends_on('distmeta');
 
-    $self->test_files( qw< t xt/author > );
+    $self->test_files( qw< t xt > );
     $self->recursive_test_files(1);
 
     return;
@@ -112,7 +112,7 @@ or redefined:
 
 =item authortest
 
-Runs the regular tests plus the author tests (those in F<xt/author>).
+Runs the regular tests plus the author tests (those in F<xt>).
 It used to be the case that author tests were run if an environment
 variable was set or if a F<.svn> directory existed.  What ended up
 happening was that people that had that environment variable set for
@@ -146,7 +146,7 @@ In addition to the above actions:
 =head2 C<authortest_dependencies()>
 
 Sets up dependencies upon the C<build>, C<manifest>, and C<distmeta> actions,
-adds F<xt/author> to the set of test directories, and turns on the recursive
+adds F<xt> to the set of test directories, and turns on the recursive
 search for tests.
 
 

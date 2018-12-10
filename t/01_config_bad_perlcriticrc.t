@@ -16,11 +16,9 @@ use Perl::Critic::PolicyFactory (-test => 1);
 use Perl::Critic;
 use Perl::Critic::Utils::Constants qw< $_MODULE_VERSION_TERM_ANSICOLOR >;
 
-#-----------------------------------------------------------------------------
-
-our $VERSION = '1.126';
-
-#-----------------------------------------------------------------------------
+our $VERSION = '1.133_01';
+use Perl::Critic::TestUtils;
+Perl::Critic::TestUtils::assert_version( $VERSION );
 
 my @color_severity_params;
 my $skip_color_severity =
@@ -157,12 +155,6 @@ sub is_require_pod_sections_source_exception {
 
     return $prefix eq $REQUIRE_POD_SECTIONS_SOURCE_MESSAGE_PREFIX;
 }
-
-#-----------------------------------------------------------------------------
-
-# ensure we return true if this test is loaded by
-# t/01_config_bad_perlcriticrc.t_without_optional_dependencies.t
-1;
 
 
 ##############################################################################

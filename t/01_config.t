@@ -21,12 +21,9 @@ use Perl::Critic::Utils::Constants qw< :color_severity >;
 
 use Test::More;
 
-#-----------------------------------------------------------------------------
+our $VERSION = '1.133_01';
 
-our $VERSION = '1.126';
-
-#-----------------------------------------------------------------------------
-
+Perl::Critic::TestUtils::assert_version( $VERSION );
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 #-----------------------------------------------------------------------------
@@ -545,12 +542,6 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
     @p = Perl::Critic::Config->new( %singular_pc_config )->policies();
     is(scalar @p, 1, '-single-policy always loads Policy, even if unsafe');
 }
-
-#-----------------------------------------------------------------------------
-
-# ensure we return true if this test is loaded by
-# t/01_config.t_without_optional_dependencies.t
-1;
 
 ##############################################################################
 # Local Variables:

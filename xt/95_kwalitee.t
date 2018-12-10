@@ -3,18 +3,14 @@
 use strict;
 use warnings;
 
-use English qw< -no_match_vars >;
-
 use Test::More;
 
-#-----------------------------------------------------------------------------
-
-our $VERSION = '1.126';
-
-#-----------------------------------------------------------------------------
+our $VERSION = '1.133_01';
+use Perl::Critic::TestUtils;
+Perl::Critic::TestUtils::assert_version( $VERSION );
 
 eval 'use Test::Kwalitee 1.15 tests => [ qw{ -no_symlinks } ]; 1'
-    or plan skip_all => 'Test::Kwalitee requried to test kwalitee';
+    or plan skip_all => 'Test::Kwalitee required to test kwalitee';
 
 
 # Local Variables:

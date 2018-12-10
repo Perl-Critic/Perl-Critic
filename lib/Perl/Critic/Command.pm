@@ -21,7 +21,7 @@ use Perl::Critic::Violation qw<>;
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '1.126';
+our $VERSION = '1.133_01';
 
 #-----------------------------------------------------------------------------
 
@@ -469,7 +469,6 @@ sub _get_option_specification {
 
     return qw<
         5 4 3 2 1
-        Safari
         version
         brutal
         count|C
@@ -518,7 +517,7 @@ sub _get_option_specification {
 
 sub _colorize_by_severity {
     my @violations = @_;
-    return @violations if _this_is_windows();
+    return @violations if _this_is_windows() && !eval 'require Win32::Console::ANSI; 1';
     return @violations if not eval {
         require Term::ANSIColor;
         Term::ANSIColor->VERSION( $_MODULE_VERSION_TERM_ANSICOLOR );

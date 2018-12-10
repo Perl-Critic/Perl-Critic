@@ -5,8 +5,6 @@
 use strict;
 use warnings;
 
-use English qw( -no_match_vars );
-
 use File::Spec qw();
 
 use Perl::Critic::Utils qw{ :characters };
@@ -21,9 +19,9 @@ use Perl::Critic::PolicyFactory (
 
 use Test::More;
 
-#-----------------------------------------------------------------------------
-
-our $VERSION = '1.126';
+our $VERSION = '1.133_01';
+use Perl::Critic::TestUtils;
+Perl::Critic::TestUtils::assert_version( $VERSION );
 
 #-----------------------------------------------------------------------------
 
@@ -61,7 +59,7 @@ foreach my $pkg ( $EMPTY, qw< ::Config ::Policy ::Violation> ) {
 #-----------------------------------------------------------------------------
 # Run critic against all of our own files
 
-my $rcfile = File::Spec->catfile( 'xt', 'author', '40_perlcriticrc-code' );
+my $rcfile = File::Spec->catfile( 'xt', '40_perlcriticrc-code' );
 Test::Perl::Critic->import( -profile => $rcfile );
 
 all_critic_ok( starting_points_including_examples() );

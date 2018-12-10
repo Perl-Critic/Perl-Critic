@@ -13,7 +13,7 @@ use Perl::Tidy qw< >;
 use Perl::Critic::Utils qw{ :booleans :characters :severities };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.126';
+our $VERSION = '1.133_01';
 
 #-----------------------------------------------------------------------------
 
@@ -92,7 +92,7 @@ sub violates {
         # Perl::Tidy 20120619 no longer accepts a scalar reference for stdio.
         my $handle = IO::String->new( $stderr );
 
-        # Begining with version 20120619, Perl::Tidy modifies $source. So we
+        # Beginning with version 20120619, Perl::Tidy modifies $source. So we
         # make a copy so we can get a good comparison after tidying. Doing an
         # s/// on $source after the fact appears not to work with previous
         # versions of Perl::Tidy.

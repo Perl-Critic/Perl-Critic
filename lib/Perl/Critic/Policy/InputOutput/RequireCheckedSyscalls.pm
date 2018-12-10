@@ -10,7 +10,7 @@ use Perl::Critic::Utils qw{ :booleans :characters :severities :classification
 
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.126';
+our $VERSION = '1.133_01';
 
 #-----------------------------------------------------------------------------
 
@@ -48,6 +48,12 @@ sub supported_parameters {
             description     =>
                 'The set of functions to not require checking the return value of.',
             default_string  => $EMPTY,
+            behavior        => 'string list',
+        },
+        {
+            name            => 'autodie_modules',
+            description     => 'Modules which export autodie.',
+            default_string  => 'autodie',
             behavior        => 'string list',
         },
     );
@@ -101,7 +107,7 @@ sub violates {
         return;
     }
 
-    return if not is_unchecked_call( $elem );
+    return if ! is_unchecked_call( $elem, [ keys %{ $self->{_autodie_modules} } ] );
 
     return $self->violation( "$DESC - " . $elem->content(), $EXPL, $elem );
 }
@@ -188,6 +194,11 @@ EVERY function call, even C<return> and C<exit>.  Yes, this "feature"
 is overkill and is wasting CPU cycles on your computer by just
 existing.  Nyah nyah.  I shouldn't code after midnight.
 
+If you create a module that exports C<autodie> you can tell this policy about
+it with the C<autodie_modules> setting:
+
+    [InputOutput::RequireCheckedSyscalls]
+    autodie_modules = My::Thing
 
 =head1 CREDITS
 

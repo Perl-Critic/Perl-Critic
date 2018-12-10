@@ -4,7 +4,6 @@ use 5.006001;
 use strict;
 use warnings;
 
-use Carp qw(carp);
 use English qw(-no_match_vars);
 use List::MoreUtils qw(all);
 use Readonly;
@@ -13,7 +12,7 @@ use Perl::Critic::Utils qw{ :booleans :severities hashify };
 
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.126';
+our $VERSION = '1.133_01';
 
 #-----------------------------------------------------------------------------
 

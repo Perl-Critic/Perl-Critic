@@ -12,11 +12,9 @@ use Perl::Critic::Utils::Constants qw< :color_severity >;
 
 use Test::More tests => 54;
 
-#-----------------------------------------------------------------------------
-
-our $VERSION = '1.126';
-
-#-----------------------------------------------------------------------------
+our $VERSION = '1.133_01';
+use Perl::Critic::TestUtils;
+Perl::Critic::TestUtils::assert_version( $VERSION );
 
 {
     # Can't use IO::Interactive here because we /don't/ want to check STDIN.
@@ -196,11 +194,6 @@ our $VERSION = '1.126';
 
 }
 
-#-----------------------------------------------------------------------------
-
-# ensure we return true if this test is loaded by
-# t/04_defaults.t_without_optional_dependencies.t
-1;
 
 ##############################################################################
 # Local Variables:

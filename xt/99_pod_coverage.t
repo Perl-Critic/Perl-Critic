@@ -4,15 +4,11 @@ use 5.006001;
 use strict;
 use warnings;
 
-use English qw< -no_match_vars >;
-
 use Test::More;
 
-#-----------------------------------------------------------------------------
-
-our $VERSION = '1.126';
-
-#-----------------------------------------------------------------------------
+our $VERSION = '1.133_01';
+use Perl::Critic::TestUtils;
+Perl::Critic::TestUtils::assert_version( $VERSION );
 
 use Test::Pod::Coverage 1.04;
 

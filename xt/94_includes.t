@@ -10,11 +10,9 @@ use PPI::Document;
 
 use Test::More;
 
-#-----------------------------------------------------------------------------
-
-our $VERSION = '1.126';
-
-#-----------------------------------------------------------------------------
+our $VERSION = '1.133_01';
+use Perl::Critic::TestUtils;
+Perl::Critic::TestUtils::assert_version( $VERSION );
 
 my %implied = (
     # Universal
@@ -93,12 +91,6 @@ sub match {
     return 1 if '1' eq $pkg;
     return match($pkg, $deps, $thispkg);
 }
-
-#-----------------------------------------------------------------------------
-
-# ensure we return true if this test is loaded by
-# t/94_includes.t.t.without_optional_dependencies.t
-1;
 
 # Local Variables:
 #   mode: cperl

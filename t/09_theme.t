@@ -15,11 +15,10 @@ use Perl::Critic::Theme;
 
 use Test::More tests => 66;
 
-#-----------------------------------------------------------------------------
+our $VERSION = '1.133_01';
 
-our $VERSION = '1.126';
-
-#-----------------------------------------------------------------------------
+use Perl::Critic::TestUtils;
+Perl::Critic::TestUtils::assert_version( $VERSION );
 
 ILLEGAL_RULES: {
 
@@ -307,12 +306,6 @@ sub has_theme {
     my ($policy, $theme) = @_;
     return any { $_ eq $theme } $policy->get_themes();
 }
-
-#-----------------------------------------------------------------------------
-
-# ensure we return true if this test is loaded by
-# t/09_theme.t_without_optional_dependencies.t
-1;
 
 ##############################################################################
 # Local Variables:

@@ -8,7 +8,7 @@ use Readonly;
 use Perl::Critic::Utils qw{ :characters :severities };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.126';
+our $VERSION = '1.133_01';
 
 #-----------------------------------------------------------------------------
 
@@ -68,13 +68,14 @@ distribution.
 
 =head1 DESCRIPTION
 
-The yada operator C<...> is not something you'd want in production code but
-it is perfectly useful less critical environments.
+The yada operator C<...> is not something you'd want in production
+code because it will throw an exception when executed.  However, it is
+perfectly useful in less critical environments as a placeholder for code
+not yet implemented.
 
 =head1 CONFIGURATION
 
 This Policy is not configurable except for the standard options.
-
 
 =head1 AUTHOR
 
@@ -82,7 +83,7 @@ Alan Berndt <alan@eatabrick.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2015 Alan Berndt.  All rights reserved.
+Copyright (c) 2015-2017 Alan Berndt.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

@@ -10,10 +10,6 @@ use Carp qw< confess >;
 use Carp qw< confess >;
 use Fatal qw< open close >;
 
-our $VERSION = '1.121';
-
-
-
 my $this_program = __FILE__;
 (my $test_file_name = $this_program) =~ s/ [.] PL \z //xms;
 if ($this_program eq $test_file_name) {

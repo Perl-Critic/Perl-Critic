@@ -16,11 +16,10 @@ use Perl::Critic::Violation q< >;
 
 use Test::More tests => 69;
 
-#-----------------------------------------------------------------------------
+our $VERSION = '1.133_01';
 
-our $VERSION = '1.126';
-
-#-----------------------------------------------------------------------------
+use Perl::Critic::TestUtils;
+Perl::Critic::TestUtils::assert_version( $VERSION );
 
 use lib catdir( qw< t 06_violation.d lib > );
 
@@ -280,12 +279,6 @@ sub _test_file_and_line_formats {
 
     return;
 }
-
-#-----------------------------------------------------------------------------
-# ensure we return true if this test is loaded by
-# t/06_violation.t_without_optional_dependencies.t
-
-1;
 
 # Local Variables:
 #   mode: cperl

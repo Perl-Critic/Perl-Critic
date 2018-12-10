@@ -5,15 +5,13 @@
 use strict;
 use warnings;
 
-use English qw< -no_match_vars >;
-
 use File::Spec qw<>;
 
 use Test::More;
 
-#-----------------------------------------------------------------------------
-
-our $VERSION = '1.126';
+our $VERSION = '1.133_01';
+use Perl::Critic::TestUtils;
+Perl::Critic::TestUtils::assert_version( $VERSION );
 
 #-----------------------------------------------------------------------------
 
@@ -39,7 +37,7 @@ if ( $ENV{PERL_CRITIC_CACHE} ) {
 #-----------------------------------------------------------------------------
 # Run critic against all of our own files
 
-my $rcfile = File::Spec->catfile( qw< xt author 43_perlcriticrc-run-files > );
+my $rcfile = File::Spec->catfile( qw< xt 43_perlcriticrc-run-files > );
 Test::Perl::Critic->import( -profile => $rcfile );
 
 {

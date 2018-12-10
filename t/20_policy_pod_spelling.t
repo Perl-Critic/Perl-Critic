@@ -16,12 +16,9 @@ use Test::More;
 Readonly::Scalar my $NUMBER_OF_TESTS => 5;
 plan( tests => $NUMBER_OF_TESTS );
 
-#-----------------------------------------------------------------------------
+our $VERSION = '1.133_01';
 
-our $VERSION = '1.126';
-
-#-----------------------------------------------------------------------------
-
+Perl::Critic::TestUtils::assert_version( $VERSION );
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 my $code;
@@ -148,12 +145,6 @@ END_PERL
 }
 
 } # end skip
-
-#-----------------------------------------------------------------------------
-
-# ensure we return true if this test is loaded by
-# t/20_policy_pod_spelling.t_without_optional_dependencies.t
-1;
 
 # Local Variables:
 #   mode: cperl

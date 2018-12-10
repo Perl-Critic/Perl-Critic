@@ -14,11 +14,10 @@ use Perl::Critic::Utils::POD qw< :all >;
 
 use Test::More tests => 61;
 
-#-----------------------------------------------------------------------------
+our $VERSION = '1.133_01';
 
-our $VERSION = '1.126';
-
-#-----------------------------------------------------------------------------
+use Perl::Critic::TestUtils;
+Perl::Critic::TestUtils::assert_version( $VERSION );
 
 Readonly::Scalar my $EXCEPTION_MESSAGE_REGEX =>
     qr<malformed [ ] name [ ] section>xmsi;
@@ -680,12 +679,6 @@ sub _test_exception_from_get_module_abstract_from_string {
 
     return;
 }
-
-#-----------------------------------------------------------------------------
-
-# ensure we return true if this test is loaded by
-# t/05_utils_pod.t_without_optional_dependencies.t
-1;
 
 # Local Variables:
 #   mode: cperl

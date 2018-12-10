@@ -10,12 +10,9 @@ use Perl::Critic::TestUtils qw(pcritique fcritique);
 
 use Test::More tests => 29;
 
-#-----------------------------------------------------------------------------
+our $VERSION = '1.133_01';
 
-our $VERSION = '1.126';
-
-#-----------------------------------------------------------------------------
-
+Perl::Critic::TestUtils::assert_version( $VERSION );
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 my $code;
@@ -75,10 +72,6 @@ for my $nl (
     ($code = $base_code) =~ s/ \n /$nl/xms;
     is( pcritique($policy, \$code), 0, $policy.' - no filename' );
 }
-
-# ensure we return true if this test is loaded by
-# 20_policy_require_consistent_newlines.t_without_optional_dependencies.t
-1;
 
 # Local Variables:
 #   mode: cperl

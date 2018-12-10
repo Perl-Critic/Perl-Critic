@@ -24,7 +24,7 @@ use Perl::Critic::Exception::Fatal::Generic qw{ throw_generic };
 
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.126';
+our $VERSION = '1.133_01';
 
 #-----------------------------------------------------------------------------
 
@@ -310,7 +310,7 @@ If anything else goes wrong -- we can't locate the spell checking program or
 To add exceptions on a module-by-module basis, add "stopwords" as
 described in L<Pod::Spell|Pod::Spell>.  For example:
 
-    =for stopword gibbles
+    =for stopwords gibbles
 
     =head1 Gibble::Manip -- manipulate your gibbles
 

@@ -1,7 +1,10 @@
 language: perl
 
 perl:
-   - "5.21"
+    #   - "dev"  Commenting out until we switch away from Module::Build
+   - "5.26"
+   - "5.24"
+   - "5.22"
    - "5.20"
    - "5.18"
    - "5.16"
@@ -10,17 +13,19 @@ perl:
    - "5.10"
    - "5.8"
 
-# Use the container-base Travis infrastructure
 sudo: false
 
 notifications:
-   on_success: change
-   on_failure: always
-   irc:
-      channels:
-         - "irc.perl.org#perlcritic"
-      template:
-         - "%{branch}: %{message} %{build_url}"
+    email:
+        recipients:
+            - andy@petdance.com
+        on_success: change
+        on_failure: always
+    irc:
+        channels:
+            - "irc.perl.org#perlcritic"
+        template:
+            - "%{branch}: %{message} %{build_url}"
 
 addons:
   apt:
@@ -28,8 +33,9 @@ addons:
     - aspell
     - aspell-en
 
+
 install:
-   - cpanm Perl::Critic::More Test::Perl::Critic Devel::EnforceEncapsulation
+    - "cpanm Module::Build && cpanm Perl::Critic::More Test::Perl::Critic Devel::EnforceEncapsulation PPI Test::Memory::Cycle PPIx::QuoteLike"
 
 script:
    - export HARNESS_OPTIONS='j:c'

@@ -17,11 +17,10 @@ use Perl::Critic::Utils::DataConversion qw< dor >;
 use Test::Deep;
 use Test::More tests => 43;
 
-#-----------------------------------------------------------------------------
+our $VERSION = '1.133_01';
 
-our $VERSION = '1.126';
-
-#-----------------------------------------------------------------------------
+use Perl::Critic::TestUtils;
+Perl::Critic::TestUtils::assert_version( $VERSION );
 
 can_ok('Perl::Critic::Document', 'new');
 can_ok('Perl::Critic::Document', 'filename');
@@ -189,12 +188,6 @@ ok(
     ! $nameless_doc->is_module(),
     'Overridden file name affects module determination.'
 );
-
-#-----------------------------------------------------------------------------
-
-# ensure we return true if this test is loaded by
-# t/08_document.t_without_optional_dependencies.t
-1;
 
 # Local Variables:
 #   mode: cperl

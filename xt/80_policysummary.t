@@ -14,9 +14,8 @@ use Perl::Critic::TestUtils qw{ bundled_policy_names };
 
 use Test::More;
 
-#-----------------------------------------------------------------------------
-
-our $VERSION = '1.126';
+our $VERSION = '1.133_01';
+Perl::Critic::TestUtils::assert_version( $VERSION );
 
 #-----------------------------------------------------------------------------
 
@@ -85,12 +84,6 @@ else {
     plan 'no_plan';
     fail qq<Cannot open "$summary_file": $ERRNO>;
 }
-
-#-----------------------------------------------------------------------------
-
-# ensure we return true if this test is loaded by
-# t/80_policysummary.t.without_optional_dependencies.t
-1;
 
 # Local Variables:
 #   mode: cperl

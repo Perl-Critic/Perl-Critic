@@ -12,12 +12,9 @@ use Perl::Critic::TestUtils qw();
 
 use Test::More tests => 10;
 
-#-----------------------------------------------------------------------------
+our $VERSION = '1.133_01';
 
-our $VERSION = '1.126';
-
-#-----------------------------------------------------------------------------
-
+Perl::Critic::TestUtils::assert_version( $VERSION );
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 #-----------------------------------------------------------------------------
@@ -121,12 +118,6 @@ Perl::Critic::TestUtils::block_perlcriticrc();
     );
     $last_warning = q{};
 }
-
-#-----------------------------------------------------------------------------
-
-# ensure we return true if this test is loaded by
-# t/11_policyfactory.t_without_optional_dependencies.t
-1;
 
 ##############################################################################
 # Local Variables:

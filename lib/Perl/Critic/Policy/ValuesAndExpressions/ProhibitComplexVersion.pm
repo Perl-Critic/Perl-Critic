@@ -17,13 +17,13 @@ use Scalar::Util qw{ blessed };
 
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.126';
+our $VERSION = '1.133_01';
 
 #-----------------------------------------------------------------------------
 
 Readonly::Scalar my $DOLLAR => q<$>;
 # All uses of the $DOLLAR variable below are to prevent false failures in
-# xt/author/93_version.t.
+# xt/93_version.t.
 Readonly::Scalar my $VERSION_MODULE => q<version>;
 Readonly::Scalar my $VERSION_VARIABLE => $DOLLAR . q<VERSION>;
 

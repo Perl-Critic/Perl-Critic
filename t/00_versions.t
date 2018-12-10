@@ -10,33 +10,20 @@ use File::Find;
 
 use Test::More;
 
-#-----------------------------------------------------------------------------
-
-our $VERSION = '1.126';
-
-#-----------------------------------------------------------------------------
-
 plan 'no_plan';
 
-my $last_version = undef;
+our $VERSION = '1.133_01';
+use Perl::Critic::TestUtils;
+Perl::Critic::TestUtils::assert_version( $VERSION );
+
 find({wanted => \&check_version, no_chdir => 1}, 'blib');
-if (! defined $last_version) {
-    fail('Failed to find any files with $VERSION'); ## no critic (RequireInterpolationOfMetachars)
-}
 
 sub check_version {
     return if (! m< blib/script/ >xms && ! m< [.] pm \z >xms);
 
-    local $INPUT_RECORD_SEPARATOR = undef;
-    my $fh;
-    open $fh, '<', $_ or confess "$OS_ERROR";
-    my $content = <$fh>;
-    close $fh or confess "$OS_ERROR";
+    my $content = read_content($_);
 
-    # Skip POD
-    $content =~ s/^__END__.*//xms;
-
-    # only look at perl programs, not sh scripts
+    # Only look at Perl programs, not sh scripts.
     return if (m{blib/script/}xms && $content !~ m/\A \#![^\r\n]+?perl/xms);
 
     my @version_lines = $content =~ m/ ( [^\n]* \$VERSION\b [^\n]* ) /gxms;
@@ -46,18 +33,42 @@ sub check_version {
     if (@version_lines == 0) {
         fail($_);
     }
+    my $expected = qq{our \$VERSION = '$VERSION';};
     for my $line (@version_lines) {
-        if (!defined $last_version) {
-            $last_version = shift @version_lines;
-            pass($_);
-        }
-        else {
-            is($line, $last_version, $_);
-        }
+        is($line, $expected, $_);
     }
 
     return;
 }
+
+
+
+find({wanted => \&check_asserts, no_chdir => 1}, 't', 'xt');
+
+sub check_asserts {
+    return if !/ [.]t \z /xms;
+
+    my $content = read_content( $_ );
+    ok( $content =~ m/Perl::Critic::TestUtils::assert_version/xms, "Found assert_version in $_" );
+
+    return;
+}
+
+
+sub read_content {
+    my $filename = shift;
+
+    local $INPUT_RECORD_SEPARATOR = undef;
+    open my $fh, '<', $filename or confess "$OS_ERROR";
+    my $content = <$fh>;
+    close $fh or confess "$OS_ERROR";
+
+    # Skip POD
+    $content =~ s/^__END__.*//xms;
+
+    return $content;
+}
+
 
 # Local Variables:
 #   mode: cperl

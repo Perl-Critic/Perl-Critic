@@ -4,7 +4,6 @@ use 5.006001;
 use strict;
 use warnings;
 
-use English qw< -no_match_vars >;
 use Carp qw< confess >;
 
 use PPI::Document;
@@ -16,16 +15,13 @@ use Perl::Critic::TestUtils qw();
 
 use Test::More; #plan set below
 
-#-----------------------------------------------------------------------------
+our $VERSION = '1.133_01';
 
-our $VERSION = '1.126';
-
-#-----------------------------------------------------------------------------
-
+Perl::Critic::TestUtils::assert_version( $VERSION );
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 eval 'use Test::Memory::Cycle; 1'
-    or plan skip_all => 'Test::Memory::Cycle requried to test memory leaks';
+    or plan skip_all => 'Test::Memory::Cycle required to test memory leaks';
 
 #-----------------------------------------------------------------------------
 {
@@ -52,18 +48,13 @@ eval 'use Test::Memory::Cycle; 1'
     # One test for each violation, plus one each for Critic and Document.
     plan( tests => scalar @violations + 2 );
 
-    memory_cycle_ok( $pc_doc );
-    memory_cycle_ok( $critic );
+    memory_cycle_ok( $pc_doc, 'Document' );
+    memory_cycle_ok( $critic, 'Critic' );
     foreach my $violation (@violations) {
         memory_cycle_ok($_);
     }
 }
 
-#-----------------------------------------------------------------------------
-
-# ensure we return true if this test is loaded by
-# t/92_memory_leaks.t.without_optional_dependencies.t
-1;
 
 ###############################################################################
 # Local Variables:

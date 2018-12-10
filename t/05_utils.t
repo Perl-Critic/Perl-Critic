@@ -18,13 +18,12 @@ use Perl::Critic::PolicyFactory;
 use Perl::Critic::TestUtils qw(bundled_policy_names);
 use Perl::Critic::Utils;
 
-use Test::More tests => 153;
+use Test::More tests => 156;
 
-#-----------------------------------------------------------------------------
+our $VERSION = '1.133_01';
 
-our $VERSION = '1.126';
-
-#-----------------------------------------------------------------------------
+use Perl::Critic::TestUtils;
+Perl::Critic::TestUtils::assert_version( $VERSION );
 
 test_export();
 test_find_keywords();
@@ -307,11 +306,11 @@ sub test_interpolate {
 #-----------------------------------------------------------------------------
 
 sub test_is_perl_and_shebang_line {
-    for ( qw(foo.t foo.pm foo.pl foo.PL) ) {
+    for ( qw(foo.t foo.pm foo.pl foo.PL foo.psgi) ) {
         ok( Perl::Critic::Utils::_is_perl($_), qq{Is perl: '$_'} );
     }
 
-    for ( qw(foo.doc foo.txt foo.conf foo) ) {
+    for ( qw(foo.doc foo.txt foo.conf foo foo.pl.exe foo_pl) ) {
         ok( ! Perl::Critic::Utils::_is_perl($_), qq{Is not perl: '$_'} );
     }
 
@@ -548,12 +547,6 @@ sub test_is_unchecked_call {
 
     return;
 }
-
-#-----------------------------------------------------------------------------
-
-# ensure we return true if this test is loaded by
-# t/05_utils.t_without_optional_dependencies.t
-1;
 
 # Local Variables:
 #   mode: cperl

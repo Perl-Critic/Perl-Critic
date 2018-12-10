@@ -1,5 +1,119 @@
 Revision history for Perl module Perl::Critic
 
+NEXT
+    [Dependencies]
+    Removed use of File::HomeDir. Thanks, Karen Etheridge.
+
+1.133_01 Thu Oct 25 23:21:31 CDT 2018
+    [New Features]
+    Added new policy BuiltinFunctions::ProhibitShiftRef.  It disallows
+    this construct that causes a memory leak in Perl 5.21.4 and above:
+
+        my $ref = \shift;
+
+    The documentation for the policy contains details on when this can
+    happen. Thanks, Todd Rinaldo. (GH#837)
+
+    [Policy Changes]
+    The policy Documentation::RequirePodLinksIncludeText is obsolete and
+    has been removed. Thanks, Salvatore Bonaccorso. (GH#494)
+
+
+1.132    Thu May 31 21:48:48 CDT 2018
+    [New Features]
+    Added the ability to specify a regex to tell what unused private
+    subroutines are OK in Subroutines::ProhibitUnusedPrivateSubroutines.
+    This is handy for Moose classes where there could be many false
+    positives on _build_xxxx() subroutines.
+    Thanks, Dave Cross.  (GH #811, #812)
+
+    [Dependencies]
+    Perl::Critic now no longer relies on the deprecated Email::Address.
+    Thanks, Giovanni Mariani.  (GH #816)
+
+1.131_02 Tue Feb 20 17:18:03 CST 2018
+    [New Features]
+    Perl::Critic now assumes that .psgi files are Perl, too.  Thanks, Tom
+    Hukins. (GH#805)
+
+    Variables::ProhibitUnusedVariables no longer gives a false positive for
+    variables used in interpolation.  Thanks, Omer Gazit. (GH#801)
+
+    [Bug Fixes]
+    Added missing requirement for Fatal.pm.
+
+
+1.131_01 Tue Nov 21 17:28:06 CST 2017
+    [New Features]
+    In the ProhibitLeadingZeros policy, added an exception for mkfifo.
+    Thanks, Evan Zacks. (GH#786)
+
+    Add color support for Windows platforms.  Thanks, Roy Ivy III. (GH#700)
+
+    [Bug Fixes]
+    Recode Perl::Critic::Utils::all_perl_files() to use File::Find instead
+    of opendir/readdir.  This solves endless directory traversals if
+    the directories contain circular symbolic references.  Thanks, Tom Wyant.
+
+    [Documentation]
+    Added CONTRIBUTING.md.  Thanks, Jonas B. Nielsen.
+
+1.130   Thu Jul 20 23:16:34 CDT 2017
+    [New Features]
+    * Policies which ensure that system calls are checked such as
+      RequireCheckedSystemCalls now have an "autodie_modules" setting which
+      allows you to tell the policy about other modules which export
+      autodie. Fixes #699. PR #747. Thanks to Dave Rolsky.
+
+1.128    Sat Jun 10 22:31:28 CDT 2017
+
+    Official release.  No changes since 1.127_02.
+
+1.127_02 Tue May 23 18:31:59 CDT 2017
+
+Developer release leading up to 1.128.
+
+    [Bug Fixes]
+    * PPI misparsing a module caused an incorrect "Must end with a
+      recognizable true value."  This is fixed by upgrading to PPI
+      1.224. (GH #696, GH #607)
+    * A test would fail under the upcoming Perl 5.26 that omits the current
+      directory from @INC.  Thanks, Kent Fredric.
+    * Fixed an invalid test in the RequireBarewordsIncludes test.  Thanks,
+      Christian Walde. (GH #751)
+    * If an element contained blank lines then the source "%r" displayed
+      for a violation was wrong. Thanks, Sawyer X. (GH #702, #734)
+
+    [Dependencies]
+    Perl::Critic now requires PPI 1.224.  PPI is the underlying Perl parser
+    on which Perl::Critic is built, and 1.224 introduces many parsing fixes
+    such as:
+    * Fixes for dot-in-@INC.
+    * Parse left side of => as bareword even if it looks like a keyword or op.
+    * $::x now works.
+    * Higher accuracy when deciding whether certain characters are operators or
+      variable type casts (*&% etc.).
+    * Subroutine attributes parsed correctly.
+
+    [Performance Enhancements]
+    * Sped up BuiltinFunctions::ProhibitUselessTopic ~7%.  Thanks, James
+      Raspass. (GH #656)
+
+    [Documentation]
+    * Fixed incorrect explanation of capture variables in
+      ProhibitCaptureWithoutTest.  Thanks, Felipe Gasper.
+    * Fixed incorrect links. Thanks, Glenn Fowler.
+    * Fixed incorrect example for returning a sorted list.  Thanks, @daviding58.
+    * Fixed invalid POD.  Thanks, Jakub Wilk. (GH #735)
+    * Updated docs on ProhibitYadaOperator.  Thanks, Stuart A Johnston. (GH #662)
+    * Removed all the references to the old mailing list and code repository
+      at tigris.org.  (GH #757)
+
+
+1.127_01 Sun May 21 21:57:16 CDT 2017
+
+    Removed from CPAN because it did not get indexed correctly.
+
 1.126 2015-08-10
 
     [New Policies]
@@ -48,7 +162,7 @@ Revision history for Perl module Perl::Critic
 1.123 2014-11-11
 
     [Dependencies]
-    * Now requires PPI-1.220 which has numerous bug fixes. This may 
+    * Now requires PPI-1.220 which has numerous bug fixes. This may
       eliminate the need for some "## no critic" markers you inserted to
       work around those bugs. The "ProhibitUselessNoCritic" policy should
       help you find them.

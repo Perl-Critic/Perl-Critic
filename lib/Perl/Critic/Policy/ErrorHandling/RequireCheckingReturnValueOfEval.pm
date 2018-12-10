@@ -12,7 +12,7 @@ use Perl::Critic::Utils qw< :booleans :characters :severities hashify
     precedence_of >;
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.126';
+our $VERSION = '1.133_01';
 
 #-----------------------------------------------------------------------------
 
@@ -366,7 +366,7 @@ true value and to test that value:
     # Constructors are no problem.
     my $object = eval { Class->new() };
 
-    # To cover the possiblity that an operation may correctly return a
+    # To cover the possibility that an operation may correctly return a
     # false value, end the block with "1":
     if ( eval { something(); 1 } ) {
         ...

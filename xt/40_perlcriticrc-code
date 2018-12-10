@@ -15,11 +15,10 @@ allow_leading_tabs = 0
 strict = 1
 
 [-CodeLayout::RequireTidyCode]
-[-Documentation::RequirePodLinksIncludeText]
 
 [Documentation::PodSpelling]
 spell_command = aspell list -l en_US
-stop_words_file = xt/author/40_stop_words
+stop_words_file = xt/40_stop_words
 
 [Documentation::RequirePodSections]
 lib_sections    = NAME|DESCRIPTION|AUTHOR|COPYRIGHT
@@ -44,6 +43,3 @@ allow = _get_behavior_values _get_description_with_trailing_period
 
 [Subroutines::ProtectPrivateSubs]
 private_name_regex = _(?!_)\w+
-
-[Variables::ProhibitPackageVars]
-add_packages = Email::Address

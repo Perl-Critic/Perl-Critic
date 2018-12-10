@@ -8,12 +8,9 @@ use Perl::Critic::TestUtils qw(pcritique);
 
 use Test::More tests => 6;
 
-#-----------------------------------------------------------------------------
+our $VERSION = '1.133_01';
 
-our $VERSION = '1.126';
-
-#-----------------------------------------------------------------------------
-
+Perl::Critic::TestUtils::assert_version( $VERSION );
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 my $code;
@@ -124,12 +121,6 @@ is(
     0,
     'Tidy with shell escape',
 );
-
-#-----------------------------------------------------------------------------
-
-# ensure we return true if this test is loaded by
-# t/20_policy_requiretidycode.t_without_optional_dependencies.t
-1;
 
 # Local Variables:
 #   mode: cperl

@@ -15,7 +15,7 @@ use Perl::Critic::Utils qw{
 };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.126';
+our $VERSION = '1.133_01';
 
 #-----------------------------------------------------------------------------
 
@@ -34,7 +34,7 @@ sub supported_parameters {
             description     => 'Pattern that determines what a private subroutine is.',
             default_string  => '\b_\w+\b',  ## no critic (RequireInterpolationOfMetachars)
             behavior        => 'string',
-            parser          => \&_parse_private_name_regex,
+            parser          => \&_parse_regex_parameter,
         },
         {
             name            => 'allow',
@@ -50,6 +50,14 @@ sub supported_parameters {
             default_string  => $EMPTY,
             behavior        => 'string list',
         },
+        {
+            name            => 'allow_name_regex',
+            description     =>
+                q<Pattern defining private subroutine names that are always allowed>,
+            default_string  => $EMPTY,
+            behavior        => 'string',
+            parser          => \&_parse_regex_parameter,
+        },
     );
 }
 
@@ -59,7 +67,7 @@ sub applies_to           { return 'PPI::Statement::Sub'  }
 
 #-----------------------------------------------------------------------------
 
-sub _parse_private_name_regex {
+sub _parse_regex_parameter {
     my ($self, $parameter, $config_string) = @_;
     defined $config_string
         or $config_string = $parameter->get_default_string();
@@ -67,7 +75,7 @@ sub _parse_private_name_regex {
     my $regex;
     eval { $regex = qr/$config_string/; 1 } ## no critic (RegularExpressions)
         or $self->throw_parameter_value_exception(
-            'private_name_regex',
+            $parameter,
             $config_string,
             undef,
             "is not a valid regular expression: $EVAL_ERROR",
@@ -97,6 +105,11 @@ sub violates {
 
     # If the name is explicitly allowed, we just return (OK).
     $self->{_allow}{$name} and return;
+
+    # Allow names that match the 'allow_name_regex' pattern.
+    if ($self->{_allow_name_regex}) {
+        $name =~ m/ \A $self->{_allow_name_regex} \z /smx and return;
+    }
 
     # If the name is not an anonymous subroutine according to our definition,
     # we just return (OK).
@@ -357,6 +370,12 @@ in a space-delimited list to the C<allow> option:
 These are added to the default list of exemptions from this policy. So the
 above allows C<< sub _bar {} >> and C<< sub _baz {} >>, even if they are not
 referred to in the module that defines them.
+
+You can allow a whole class or subroutine names by defining a a regular
+expression that matches allowed names.
+
+    [Subroutines::ProhibitUnusedPrivateSubroutines]
+    allow_name_regex = _build_\w+
 
 You can configure this policy not to check private subroutines declared in a
 file that uses one or more particular named modules.  This allows you to, for

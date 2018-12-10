@@ -12,14 +12,11 @@ use Perl::Critic::PolicyParameter qw{ $NO_DESCRIPTION_AVAILABLE };
 use Perl::Critic::Utils qw( policy_short_name );
 use Perl::Critic::TestUtils qw(bundled_policy_names);
 
-#-----------------------------------------------------------------------------
-
-our $VERSION = '1.126';
-
-#-----------------------------------------------------------------------------
-
 use Test::More; #plan set below!
 
+our $VERSION = '1.133_01';
+
+Perl::Critic::TestUtils::assert_version( $VERSION );
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 #-----------------------------------------------------------------------------
@@ -114,12 +111,6 @@ sub test_has_declared_parameters {
     }
     return;
 }
-
-#-----------------------------------------------------------------------------
-
-# ensure we return true if this test is loaded by
-# t/14_policy_parameters.t_without_optional_dependencies.t
-1;
 
 ###############################################################################
 # Local Variables:

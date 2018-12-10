@@ -7,7 +7,7 @@ use Readonly;
 use Perl::Critic::Utils qw{ :severities :classification :ppi };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.126';
+our $VERSION = '1.133_01';
 
 ## no critic ( ValuesAndExpressions::RequireInterpolationOfMetachars )
 ## The numerous $_ variables make false positives.
@@ -44,8 +44,12 @@ my @topical_funcs = qw(
 );
 my %topical_funcs = map { ($_ => 1) } @topical_funcs;
 
+my %applies_to = ( %topical_funcs, %filetest_operators );
+
 sub violates {
     my ( $self, $elem, undef ) = @_;
+
+    return if not exists $applies_to{ $elem->content };
 
     my $content = $elem->content;
 

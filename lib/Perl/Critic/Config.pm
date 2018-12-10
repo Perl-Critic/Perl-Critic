@@ -29,7 +29,7 @@ use Perl::Critic::Utils::DataConversion qw< boolean_to_number dor >;
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '1.126';
+our $VERSION = '1.133_01';
 
 #-----------------------------------------------------------------------------
 
@@ -1097,7 +1097,7 @@ Returns the value of the C<-allow-unsafe> attribute for this Config.
 
 =item C< criticism_fatal() >
 
-Returns the value of the C<-criticsm-fatal> attribute for this Config.
+Returns the value of the C<-criticism-fatal> attribute for this Config.
 
 
 =item C< color_severity_highest() >

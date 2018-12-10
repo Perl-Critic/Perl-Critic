@@ -8,7 +8,7 @@ use Readonly;
 use Perl::Critic::Utils qw{ :booleans :data_conversion :severities };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.126';
+our $VERSION = '1.133_01';
 
 #-----------------------------------------------------------------------------
 
@@ -311,18 +311,32 @@ __END__
 
 Perl::Critic::Policy::RegularExpressions::ProhibitCaptureWithoutTest - Capture variable used outside conditional.
 
-
 =head1 AFFILIATION
 
 This Policy is part of the core L<Perl::Critic|Perl::Critic>
 distribution.
 
-
 =head1 DESCRIPTION
 
 If a regexp match fails, then any capture variables (C<$1>, C<$2>,
-...) will be undefined.  Therefore it's important to check the return
-value of a match before using those variables.
+...) will be unaffected.  They will retain whatever old values they may
+have had.  Therefore it's important to check the return value of a match
+before using those variables.
+
+    '12312123' =~ /(2)/;
+    print $1;    # Prints 2
+    '123123123' =~ /(X)/;
+    print $1;    # Prints 2, because $1 has not changed.
+
+Note that because the values of C<$1> etc will be unaffected, you cannot
+determine if a match succeeded by checking to see if the capture variables
+have values.
+
+    # WRONG
+    $str =~ /foo(.+)/;
+    if ( $1 ) {
+        print "I found $1 after 'foo'";
+    }
 
 This policy checks that the previous regexp for which the capture
 variable is in-scope is either in a conditional or causes an exception
@@ -374,10 +388,9 @@ This policy does not recognize named capture variables. Yet.
 
 Chris Dolan <cdolan@cpan.org>
 
-
 =head1 COPYRIGHT
 
-Copyright (c) 2006-2011 Chris Dolan.
+Copyright (c) 2006-2017 Chris Dolan.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.

@@ -2,7 +2,6 @@
 ^README\.developer$
 ^README\.release$
 \.PPI$
-_without_optional_dependencies.t$
 ^t/ControlStructures/ProhibitNegativeExpressionsInUnlessAndUntilConditions.run$
 ^t/NamingConventions/Capitalization.run$
 ^t/Variables/RequireLocalizedPunctuationVars.run$
@@ -83,3 +82,9 @@ RCS
 
 # Symlink to lib/Perl/Critic/Policy
 ^Policy
+
+# Appveyor
+.appveyor.yml
+
+# Building README
+README-prologue.md

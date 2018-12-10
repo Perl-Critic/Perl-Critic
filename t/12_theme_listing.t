@@ -4,19 +4,16 @@ use 5.006001;
 use strict;
 use warnings;
 
-use English qw<-no_match_vars>;
-
 use Perl::Critic::UserProfile;
 use Perl::Critic::PolicyFactory (-test => 1);
 use Perl::Critic::ThemeListing;
 
 use Test::More tests => 1;
 
-#-----------------------------------------------------------------------------
+our $VERSION = '1.133_01';
 
-our $VERSION = '1.126';
-
-#-----------------------------------------------------------------------------
+use Perl::Critic::TestUtils;
+Perl::Critic::TestUtils::assert_version( $VERSION );
 
 my $profile = Perl::Critic::UserProfile->new( -profile => 'NONE' );
 my @policy_names = Perl::Critic::PolicyFactory::site_policy_names();
@@ -44,13 +41,6 @@ END_EXPECTED
 my $listing_as_string = "$listing";
 is( $listing_as_string, $expected, 'Theme list matched.' );
 
-#-----------------------------------------------------------------------------
-
-# ensure we return true if this test is loaded by
-# t/12_themelisting.t_without_optional_dependencies.t
-1;
-
-#-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

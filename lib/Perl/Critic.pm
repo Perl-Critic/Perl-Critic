@@ -22,7 +22,7 @@ use Perl::Critic::Utils qw< :characters hashify shebang_line >;
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '1.126';
+our $VERSION = '1.133_01';
 
 Readonly::Array our @EXPORT_OK => qw(critique);
 
@@ -669,7 +669,7 @@ You are free to invent new themes that suit your needs.
     certrule          Policies that CERT considers rules
     maintenance       Policies that affect the long-term health of the code
     cosmetic          Policies that only have a superficial effect
-    complexity        Policies that specificaly relate to code complexity
+    complexity        Policies that specifically relate to code complexity
     security          Policies that relate to security issues
     tests             Policies that are specific to test programs
 
@@ -806,8 +806,8 @@ modules.
 If you develop any new Policy modules, feel free to send them to C<<
 <team@perlcritic.com> >> and I'll be happy to consider putting them into the
 Perl::Critic distribution.  Or if you would like to work on the Perl::Critic
-project directly, you can fork our repository at L<http://github.com/Perl-
-Critic/Perl- Critic.git>.
+project directly, you can fork our repository at
+L<https://github.com/Perl-Critic/Perl-Critic.git>.
 
 The Perl::Critic team is also available for hire.  If your organization has
 its own coding standards, we can create custom Policies to enforce your local
@@ -825,11 +825,7 @@ L<B::Keywords>
 
 L<Config::Tiny>
 
-L<Email::Address>
-
 L<Exception::Class>
-
-L<File::HomeDir>
 
 L<File::Spec>
 
@@ -874,14 +870,11 @@ L<version|version>
 
 =head1 CONTACTING THE DEVELOPMENT TEAM
 
-You are encouraged to subscribe to the mailing list; send a message to
-L<mailto:users-subscribe@perlcritic.tigris.org>.  To prevent spam, you may be
-required to register for a user account with Tigris.org before being allowed
-to post messages to the mailing list. See also the mailing list archives at
-L<http://perlcritic.tigris.org/servlets/SummarizeList?listName=users>. At
-least one member of the development team is usually hanging around in
-L<irc://irc.perl.org/#perlcritic> and you can follow Perl::Critic on Twitter,
-at L<https://twitter.com/perlcritic>.
+You are encouraged to subscribe to the public mailing list at
+L<https://groups.google.com/d/forum/perl-critic>.
+At least one member of the development team is usually hanging around
+in L<irc://irc.perl.org/#perlcritic> and you can follow Perl::Critic on
+Twitter, at L<https://twitter.com/perlcritic>.
 
 
 =head1 SEE ALSO
@@ -948,7 +941,7 @@ Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2013 Imaginative Software Systems.  All rights reserved.
+Copyright (c) 2005-2018 Imaginative Software Systems.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify it under
 the same terms as Perl itself.  The full text of this license can be found in

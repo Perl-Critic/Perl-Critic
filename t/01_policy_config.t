@@ -10,11 +10,9 @@ use Perl::Critic::PolicyConfig;
 
 use Test::More tests => 28;
 
-#-----------------------------------------------------------------------------
-
-our $VERSION = '1.126';
-
-#-----------------------------------------------------------------------------
+our $VERSION = '1.133_01';
+use Perl::Critic::TestUtils;
+Perl::Critic::TestUtils::assert_version( $VERSION );
 
 
 {
@@ -162,12 +160,6 @@ sub test_standard_parameters_undef_via_get {
 
     return;
 }
-
-#-----------------------------------------------------------------------------
-
-# ensure we return true if this test is loaded by
-# t/01_policy_config.t_without_optional_dependencies.t
-1;
 
 # Local Variables:
 #   mode: cperl

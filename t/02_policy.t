@@ -8,12 +8,10 @@ use English qw<-no_match_vars>;
 
 use Test::More tests => 29;
 
+our $VERSION = '1.133_01';
 
-#-----------------------------------------------------------------------------
-
-our $VERSION = '1.126';
-
-#-----------------------------------------------------------------------------
+use Perl::Critic::TestUtils;
+Perl::Critic::TestUtils::assert_version( $VERSION );
 
 # Perl::Critic::Policy is an abstract class, so it can't be instantiated
 # directly.  So we test it by declaring test classes that inherit from it.
@@ -169,13 +167,6 @@ is( Perl::Critic::Policy::get_format, $new_format, 'Changed policy format');
 my $expected_string = 'PolicyTest 3 [a b c d e f]';
 is( $p->to_string(), $expected_string, 'Stringification by to_string()');
 is( "$p", $expected_string, 'Stringification by overloading');
-
-
-#-----------------------------------------------------------------------------
-
-# ensure we return true if this test is loaded by
-# t/02_policy.t_without_optional_dependencies.t
-1;
 
 
 ##############################################################################

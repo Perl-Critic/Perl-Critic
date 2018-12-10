@@ -16,7 +16,7 @@ use Perl::Critic::Exception::Fatal::Internal qw{ throw_internal };
 use Perl::Critic::Exception::Configuration::Generic qw{ throw_generic };
 use Perl::Critic::PolicyConfig;
 
-our $VERSION = '1.126';
+our $VERSION = '1.133_01';
 
 #-----------------------------------------------------------------------------
 
@@ -263,20 +263,11 @@ sub _find_profile_path {
 #-----------------------------------------------------------------------------
 
 sub _find_home_dir {
-
-    # Try using File::HomeDir
-    if ( eval { require File::HomeDir } ) {
-        return File::HomeDir->my_home();
-    }
-
-    # Check usual environment vars
-    for my $key (qw(HOME USERPROFILE HOMESHARE)) {
-        next if not defined $ENV{$key};
-        return $ENV{$key} if -d $ENV{$key};
-    }
-
-    # No home directory defined
-    return;
+    # This logic is taken from File::HomeDir::Tiny.
+    return
+        ($^O eq 'Win32') && ("$]" < 5.016)  ## no critic ( Variables::ProhibitPunctuationVars ValuesAndExpressions::ProhibitMagicNumbers ValuesAndExpressions::ProhibitMismatchedOperators )
+            ? ($ENV{HOME} || $ENV{USERPROFILE})
+            : (<~>)[0];
 }
 
 #-----------------------------------------------------------------------------

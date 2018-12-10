@@ -14,11 +14,10 @@ use Perl::Critic::Utils qw< :characters >;
 
 use Test::More tests => 57;
 
-#-----------------------------------------------------------------------------
+our $VERSION = '1.133_01';
 
-our $VERSION = '1.126';
-
-#-----------------------------------------------------------------------------
+use Perl::Critic::TestUtils;
+Perl::Critic::TestUtils::assert_version( $VERSION );
 
 local @ARGV = ();
 my $message;
@@ -270,12 +269,6 @@ foreach my $severity ([qw{
         '-severity too large',
     );
 }
-
-#-----------------------------------------------------------------------------
-
-# ensure we return true if this test is loaded by
-# t/07_command.t_without_optional_dependencies.t
-1;
 
 # Local Variables:
 #   mode: cperl

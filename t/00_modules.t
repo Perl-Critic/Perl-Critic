@@ -4,20 +4,14 @@ use 5.006001;
 use strict;
 use warnings;
 
-use English qw(-no_match_vars);
-
 use PPI::Document;
 
 use Perl::Critic::TestUtils qw(bundled_policy_names);
 
 use Test::More;
 
-#-----------------------------------------------------------------------------
-
-our $VERSION = '1.126';
-
-#-----------------------------------------------------------------------------
-
+our $VERSION = '1.133_01';
+Perl::Critic::TestUtils::assert_version( $VERSION );
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 my @bundled_policy_names = bundled_policy_names();
@@ -40,6 +34,8 @@ plan tests =>
         144
     +   (  9 * scalar @concrete_exceptions  )
     +   ( 17 * scalar @bundled_policy_names );
+
+diag( "Testing Perl::Critic $Perl::Critic::VERSION with PPI $PPI::VERSION under Perl $], $^X" );
 
 # pre-compute for version comparisons
 my $version_string = __PACKAGE__->VERSION;
@@ -318,11 +314,6 @@ ok( critique( {severity => 1}, \$code ), 'Functional style, with config');
 ok( !critique(), 'Functional style, no args at all');
 ok( !critique(undef, undef), 'Functional style, undef args');
 
-#-----------------------------------------------------------------------------
-
-# ensure we return true if this test is loaded by
-# t/00_modules.t_without_optional_dependencies.t
-1;
 
 # Local Variables:
 #   mode: cperl

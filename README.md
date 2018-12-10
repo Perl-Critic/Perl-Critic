@@ -1,3 +1,8 @@
+# BUILD STATUS
+
+* Linux [![Travis Status](https://travis-ci.org/Perl-Critic/Perl-Critic.svg?branch=dev)](https://travis-ci.org/Perl-Critic/Perl-Critic)
+* Windows [![Build Status](https://ci.appveyor.com/api/projects/status/github/Perl-Critic/Perl-Critic?branch=dev)](https://ci.appveyor.com/project/petdance/perl-critic/branch/dev)
+* [CPAN Testers](http://cpantesters.org/distro/P/Perl-Critic.html)
 # NAME
 
 Perl::Critic - Critique Perl source code for best-practices.
@@ -430,7 +435,7 @@ You are free to invent new themes that suit your needs.
     certrule          Policies that CERT considers rules
     maintenance       Policies that affect the long-term health of the code
     cosmetic          Policies that only have a superficial effect
-    complexity        Policies that specificaly relate to code complexity
+    complexity        Policies that specifically relate to code complexity
     security          Policies that relate to security issues
     tests             Policies that are specific to test programs
 
@@ -562,8 +567,8 @@ modules.
 
 If you develop any new Policy modules, feel free to send them to `<team@perlcritic.com>` and I'll be happy to consider putting them into the
 Perl::Critic distribution.  Or if you would like to work on the Perl::Critic
-project directly, you can fork our repository at ["/github.com/Perl-
-Critic/Perl- Critic.git" in http:](https://metacpan.org/pod/http:#github.com-Perl--Critic-Perl--Critic.git).
+project directly, you can fork our repository at
+[https://github.com/Perl-Critic/Perl-Critic.git](https://github.com/Perl-Critic/Perl-Critic.git).
 
 The Perl::Critic team is also available for hire.  If your organization has
 its own coding standards, we can create custom Policies to enforce your local
@@ -580,11 +585,7 @@ Perl::Critic requires the following modules:
 
 [Config::Tiny](https://metacpan.org/pod/Config::Tiny)
 
-[Email::Address](https://metacpan.org/pod/Email::Address)
-
 [Exception::Class](https://metacpan.org/pod/Exception::Class)
-
-[File::HomeDir](https://metacpan.org/pod/File::HomeDir)
 
 [File::Spec](https://metacpan.org/pod/File::Spec)
 
@@ -628,14 +629,11 @@ Perl::Critic requires the following modules:
 
 # CONTACTING THE DEVELOPMENT TEAM
 
-You are encouraged to subscribe to the mailing list; send a message to
-[mailto:users-subscribe@perlcritic.tigris.org](mailto:users-subscribe@perlcritic.tigris.org).  To prevent spam, you may be
-required to register for a user account with Tigris.org before being allowed
-to post messages to the mailing list. See also the mailing list archives at
-[http://perlcritic.tigris.org/servlets/SummarizeList?listName=users](http://perlcritic.tigris.org/servlets/SummarizeList?listName=users). At
-least one member of the development team is usually hanging around in
-[irc://irc.perl.org/#perlcritic](irc://irc.perl.org/#perlcritic) and you can follow Perl::Critic on Twitter,
-at [https://twitter.com/perlcritic](https://twitter.com/perlcritic).
+You are encouraged to subscribe to the public mailing list at
+[https://groups.google.com/d/forum/perl-critic](https://groups.google.com/d/forum/perl-critic).
+At least one member of the development team is usually hanging around
+in [irc://irc.perl.org/#perlcritic](irc://irc.perl.org/#perlcritic) and you can follow Perl::Critic on
+Twitter, at [https://twitter.com/perlcritic](https://twitter.com/perlcritic).
 
 # SEE ALSO
 
@@ -694,11 +692,11 @@ Dolan's project to implement twenty PBP policies.
 
 # AUTHOR
 
-Jeffrey Ryan Thalhammer &lt;jeff@imaginative-software.com>
+Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 # COPYRIGHT
 
-Copyright (c) 2005-2013 Imaginative Software Systems.  All rights reserved.
+Copyright (c) 2005-2018 Imaginative Software Systems.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify it under
 the same terms as Perl itself.  The full text of this license can be found in
