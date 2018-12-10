@@ -587,8 +587,6 @@ Perl::Critic requires the following modules:
 
 [Exception::Class](https://metacpan.org/pod/Exception::Class)
 
-[File::HomeDir](https://metacpan.org/pod/File::HomeDir)
-
 [File::Spec](https://metacpan.org/pod/File::Spec)
 
 [File::Spec::Unix](https://metacpan.org/pod/File::Spec::Unix)

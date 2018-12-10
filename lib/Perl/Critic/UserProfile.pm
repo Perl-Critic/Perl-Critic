@@ -263,20 +263,9 @@ sub _find_profile_path {
 #-----------------------------------------------------------------------------
 
 sub _find_home_dir {
-
-    # Try using File::HomeDir
-    if ( eval { require File::HomeDir } ) {
-        return File::HomeDir->my_home();
-    }
-
-    # Check usual environment vars
-    for my $key (qw(HOME USERPROFILE HOMESHARE)) {
-        next if not defined $ENV{$key};
-        return $ENV{$key} if -d $ENV{$key};
-    }
-
-    # No home directory defined
-    return;
+    $^O eq 'Win32' && "$]" < 5.016
+        ? $ENV{HOME} || $ENV{USERPROFILE}
+        : (<~>)[0];
 }
 
 #-----------------------------------------------------------------------------

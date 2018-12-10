@@ -827,8 +827,6 @@ L<Config::Tiny>
 
 L<Exception::Class>
 
-L<File::HomeDir>
-
 L<File::Spec>
 
 L<File::Spec::Unix>
