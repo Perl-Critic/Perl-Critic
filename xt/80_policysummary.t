@@ -7,7 +7,6 @@ use English qw< -no_match_vars >;
 use Carp qw< confess >;
 
 use File::Spec;
-use List::MoreUtils qw(any);
 
 use Perl::Critic::PolicyFactory ( -test => 1 );
 use Perl::Critic::TestUtils qw{ bundled_policy_names };

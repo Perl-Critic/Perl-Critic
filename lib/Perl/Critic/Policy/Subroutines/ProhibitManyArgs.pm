@@ -6,8 +6,6 @@ use warnings;
 use Readonly;
 
 use File::Spec;
-use List::Util qw(first);
-use List::MoreUtils qw(uniq any);
 use English qw(-no_match_vars);
 use Carp;
 

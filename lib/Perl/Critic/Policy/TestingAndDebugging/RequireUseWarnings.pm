@@ -5,7 +5,6 @@ use strict;
 use warnings;
 use Readonly;
 
-use List::Util qw(first);
 use version ();
 
 use Perl::Critic::Utils qw{ :severities $EMPTY };
