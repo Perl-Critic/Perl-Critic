@@ -265,7 +265,7 @@ sub _find_profile_path {
 sub _find_home_dir {
     # This logic is taken from File::HomeDir::Tiny.
     return
-        ($^O eq 'Win32') && ("$]" < 5.016)  ## no critic ( Variables::ProhibitPunctuationVars ValuesAndExpressions::ProhibitMagicNumbers ValuesAndExpressions::ProhibitMismatchedOperators )
+        ($^O eq 'MSWin32') && ("$]" < 5.016)  ## no critic ( Variables::ProhibitPunctuationVars ValuesAndExpressions::ProhibitMagicNumbers ValuesAndExpressions::ProhibitMismatchedOperators )
             ? ($ENV{HOME} || $ENV{USERPROFILE})
             : (<~>)[0];
 }
