@@ -42,6 +42,7 @@ sub required_module_versions {
         'IPC::Open2'                    => 1,
         'List::MoreUtils'               => 0.19,
         'List::Util'                    => 0,
+        'Module::Build'                 => 0.4204,
         'Module::Pluggable'             => 3.1,
         'PPI'                           => '1.224',
         'PPI::Document'                 => '1.224',
