@@ -130,6 +130,7 @@ lib/Perl/Critic/Policy/RegularExpressions/ProhibitUnusedCapture.pm
 lib/Perl/Critic/Policy/RegularExpressions/ProhibitUnusualDelimiters.pm
 lib/Perl/Critic/Policy/RegularExpressions/ProhibitUselessTopic.pm
 lib/Perl/Critic/Policy/RegularExpressions/RequireBracesForMultiline.pm
+lib/Perl/Critic/Policy/RegularExpressions/RequireDefault.pm
 lib/Perl/Critic/Policy/RegularExpressions/RequireDotMatchAnything.pm
 lib/Perl/Critic/Policy/RegularExpressions/RequireExtendedFormatting.pm
 lib/Perl/Critic/Policy/RegularExpressions/RequireLineBoundaryMatching.pm
@@ -197,7 +198,6 @@ lib/Perl/Critic/PolicyParameter/Behavior/Enumeration.pm
 lib/Perl/Critic/PolicyParameter/Behavior/Integer.pm
 lib/Perl/Critic/PolicyParameter/Behavior/String.pm
 lib/Perl/Critic/PolicyParameter/Behavior/StringList.pm
-lib/Perl/Critic/PolicySummary.pod
 lib/Perl/Critic/ProfilePrototype.pm
 lib/Perl/Critic/Statistics.pm
 lib/Perl/Critic/TestUtils.pm
@@ -346,6 +346,7 @@ t/RegularExpressions/ProhibitUnusedCapture.run
 t/RegularExpressions/ProhibitUnusualDelimiters.run
 t/RegularExpressions/ProhibitUselessTopic.run
 t/RegularExpressions/RequireBracesForMultiline.run
+t/RegularExpressions/RequireDefault.run
 t/RegularExpressions/RequireDotMatchAnything.run
 t/RegularExpressions/RequireExtendedFormatting.run
 t/RegularExpressions/RequireLineBoundaryMatching.run
@@ -422,6 +423,3 @@ xt/94_includes.t
 xt/95_kwalitee.t
 xt/98_pod_syntax.t
 xt/99_pod_coverage.t
-README
-META.yml
-META.json

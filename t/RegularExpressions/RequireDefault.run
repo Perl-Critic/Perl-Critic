@@ -1,0 +1,110 @@
+## basic default not used for match
+## failures 1
+## cut
+
+my $digits = 1234;
+if ($digits =~ m/\d/) {
+    print "We have digits\n";
+}
+
+#-----------------------------------------------------------------------------
+
+## basic default used for match
+## failures 0
+## cut
+
+my $digits = 1234;
+if ($digits =~ m/\d/a) {
+    print "We have digits\n";
+}
+
+#-----------------------------------------------------------------------------
+
+## basic strict default used for match
+## failures 0
+## cut
+
+my $digits = 1234;
+if ($digits =~ m/\d/aa) {
+    print "We have digits\n";
+}
+
+#-----------------------------------------------------------------------------
+
+## default regular expression pragma enabled for match
+## failures 0
+## cut
+
+use re '/a';
+my $digits = 1234;
+if ($digits =~ m/\d/) {
+    print "We have digits\n";
+}
+
+#-----------------------------------------------------------------------------
+
+## default strict regular expression pragma enabled for match
+## failures 0
+## cut
+
+use re '/aa';
+my $digits = 1234;
+if ($digits =~ m/\d/) {
+    print "We have digits\n";
+}
+
+#-----------------------------------------------------------------------------
+
+## basic default not used for substitution
+## failures 1
+## cut
+
+my $greeting = 'hello world';
+$greeting =~ s/hello/goodmorning/aa;
+
+#-----------------------------------------------------------------------------
+
+## basic default used for substitution
+## failures 0
+## cut
+
+my $greeting = 'hello world';
+$greeting =~ s/hello/goodmorning/a;
+
+#-----------------------------------------------------------------------------
+
+## basic strict default used for substitution
+## failures 0
+## cut
+
+my $greeting = 'hello world';
+$greeting =~ s/hello/goodmorning/aa;
+
+#-----------------------------------------------------------------------------
+
+## default regular expression pragma enabled for substitution
+## failures 0
+## cut
+
+use re '/a';
+my $greeting = 'hello world';
+$greeting =~ s/hello/goodmorning/;
+
+#-----------------------------------------------------------------------------
+
+## default strict regular expression pragma enabled for substitution
+## failures 0
+## cut
+
+use re '/aa';
+my $greeting = 'hello world';
+$greeting =~ s/hello/goodmorning/;
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab shiftround :

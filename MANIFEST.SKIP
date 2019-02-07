@@ -88,3 +88,7 @@ RCS
 
 # Building README
 README-prologue.md
+
+# VScode
+.vscode/settings.json
+.vstags
