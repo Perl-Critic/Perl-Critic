@@ -177,7 +177,7 @@ Which mean it will not evaluate the regular expressions any further:
     use re 'a';
     my $letters =~ m/[A-Za-z0-9_]*/;   # ok
 
-Do note that the C</a> and C</aa> modifiers require Perl 5.14, so by using the recommended modifiers you indirectly introduct a requirement for Perl 5.14.
+Do note that the C</a> and C</aa> modifiers require Perl 5.14, so by using the recommended modifiers you indirectly introduce a requirement for Perl 5.14.
 
 This policy is inspired by L<Perl::Critic::Policy::RegularExpressions::RequireExtendedFormatting|https://metacpan.org/pod/Perl::Critic::Policy::RegularExpressions::RequireExtendedFormatting> and many implementation details was lifted from this particular distribution.
 
@@ -256,7 +256,7 @@ The motivation for this Perl::Critic policy came from a L<tweet|https://twitter.
 
 =back
 
-=head1 LICENSE AND COPYRIGHT
+=head1 COPYRIGHT
 
 Perl::Critic::Policy::RegularExpressions::RequireDefault is (C) by jonasbn 2018-2019
 
