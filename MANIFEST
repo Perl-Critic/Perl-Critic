@@ -198,6 +198,7 @@ lib/Perl/Critic/PolicyParameter/Behavior/Enumeration.pm
 lib/Perl/Critic/PolicyParameter/Behavior/Integer.pm
 lib/Perl/Critic/PolicyParameter/Behavior/String.pm
 lib/Perl/Critic/PolicyParameter/Behavior/StringList.pm
+lib/Perl/Critic/PolicySummary.pod
 lib/Perl/Critic/ProfilePrototype.pm
 lib/Perl/Critic/Statistics.pm
 lib/Perl/Critic/TestUtils.pm
@@ -216,6 +217,9 @@ lib/Perl/Critic/Violation.pm
 lib/Test/Perl/Critic/Policy.pm
 LICENSE
 MANIFEST			This list of files
+META.json
+META.yml
+README
 README.md
 t/00_modules.t
 t/00_versions.t
