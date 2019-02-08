@@ -181,7 +181,7 @@ Do note that the C</a> and C</aa> modifiers require Perl 5.14, so by using the r
 
 This policy is inspired by L<Perl::Critic::Policy::RegularExpressions::RequireExtendedFormatting|https://metacpan.org/pod/Perl::Critic::Policy::RegularExpressions::RequireExtendedFormatting> and many implementation details was lifted from this particular distribution.
 
-=head1 CONFIGURATION AND ENVIRONMENT
+=head1 CONFIGURATION
 
 The policy has a single configuration parameter: C<strict>. The default is disabled (C<0>).
 
