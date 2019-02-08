@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :severities };
+use Perl::Critic::Utils qw{ :booleans :severities };
 
 use base 'Perl::Critic::Policy';
 
@@ -15,8 +15,6 @@ our $VERSION = '1.133_01';
 
 Readonly::Scalar my $DESC => q{Regular expression without "/a" or "/aa" flag};
 Readonly::Scalar my $EXPL => q{Use regular expression "/a" or "/aa" flag};
-Readonly::Scalar my $TRUE => 1;
-Readonly::Scalar my $FALSE => 0;
 
 #-----------------------------------------------------------------------------
 
