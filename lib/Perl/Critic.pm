@@ -261,10 +261,16 @@ called C<perlcritic-gui>.  You can get a free community edition of ActivePerl
 from L<http://www.activestate.com>.
 
 
+=head1 PREREQUISITES
+
+Perl::Critic runs on Perl back to Perl 5.6.1. It relies on the L<PPI>
+module to do the heavy work of parsing Perl.
+
+
 =head1 INTERFACE SUPPORT
 
-This is considered to be a public class.  Any changes to its interface will go
-through a deprecation cycle.
+The C<Perl::Critic> module is considered to be a public class. Any
+changes to its interface will go through a deprecation cycle.
 
 
 =head1 CONSTRUCTOR

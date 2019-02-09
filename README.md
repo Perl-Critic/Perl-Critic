@@ -43,10 +43,15 @@ Also, ActivePerl includes a very slick graphical interface to Perl-Critic
 called `perlcritic-gui`.  You can get a free community edition of ActivePerl
 from [http://www.activestate.com](http://www.activestate.com).
 
+# PREREQUISITES
+
+Perl::Critic runs on Perl back to Perl 5.6.1. It relies on the [PPI](https://metacpan.org/pod/PPI)
+module to do the heavy work of parsing Perl.
+
 # INTERFACE SUPPORT
 
-This is considered to be a public class.  Any changes to its interface will go
-through a deprecation cycle.
+The `Perl::Critic` module is considered to be a public class. Any
+changes to its interface will go through a deprecation cycle.
 
 # CONSTRUCTOR
 
