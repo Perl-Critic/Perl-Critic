@@ -2,6 +2,7 @@
 
 use strict;
 use warnings;
+use re '/a';
 
 use Carp qw< confess >;
 

@@ -3,6 +3,7 @@ package Perl::Critic::Policy::RegularExpressions::ProhibitUnusedCapture;
 use 5.006001;
 use strict;
 use warnings;
+use re '/a';
 
 use Carp;
 use English qw(-no_match_vars);

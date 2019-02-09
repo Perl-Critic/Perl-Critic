@@ -3,6 +3,7 @@ package Perl::Critic::Policy::InputOutput::RequireEncodingWithUTF8Layer;
 use 5.006001;
 use strict;
 use warnings;
+use re '/a';
 
 use Readonly;
 

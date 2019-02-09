@@ -4,6 +4,7 @@ use 5.006001;
 
 use strict;
 use warnings;
+use re '/a';
 
 use Readonly;
 use English qw{ -no_match_vars };

@@ -6,6 +6,7 @@ package Perl::Critic::Utils;
 use 5.006001;
 use strict;
 use warnings;
+use re '/a';
 use Readonly;
 
 use Carp qw( confess );

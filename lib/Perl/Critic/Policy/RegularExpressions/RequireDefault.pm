@@ -29,7 +29,7 @@ sub supported_parameters {
 }
 
 sub default_severity { return $SEVERITY_MEDIUM }
-sub default_themes   { return qw< security > }
+sub default_themes   { return qw< core security > }
 
 sub applies_to {
     return qw<

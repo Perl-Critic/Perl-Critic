@@ -3,6 +3,7 @@
 use 5.006001;
 use strict;
 use warnings;
+use re '/a';
 
 use English qw< -no_match_vars >;
 
@@ -232,7 +233,7 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
     is_deeply([$c->program_extensions], [],
         'user default program-extensions from file');
     is_deeply([$c->program_extensions_as_regexes],
-        [qr< @{[ quotemeta '.PL' ]} \z >smx ],
+        [qr< @{[ quotemeta '.PL' ]} \z >asmx ],
         'user default program-extensions from file, as regexes');
 }
 

@@ -2,6 +2,7 @@
 
 use strict;
 use warnings;
+use re '/a';
 
 use English qw< -no_match_vars >;
 use Carp qw< confess >;

@@ -2,6 +2,7 @@
 
 use strict;
 use warnings;
+use re '/a';
 
 use Perl::Critic::TestUtils qw(pcritique_with_violations);
 use Readonly;

@@ -3,6 +3,7 @@ package Perl::Critic::Policy::InputOutput::RequireBracedFileHandleWithPrint;
 use 5.006001;
 use strict;
 use warnings;
+use re '/a';
 use Readonly;
 
 use Perl::Critic::Utils qw{ :severities :classification :data_conversion };

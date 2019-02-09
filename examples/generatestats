@@ -3,6 +3,7 @@
 use 5.008001;
 use strict;
 use warnings;
+use re '/a';
 
 use version; our $VERSION = qv('1.116');
 

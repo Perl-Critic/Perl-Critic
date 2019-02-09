@@ -3,6 +3,7 @@ package Perl::Critic::PolicyParameter::Behavior::Integer;
 use 5.006001;
 use strict;
 use warnings;
+use re '/a';
 
 use Perl::Critic::Utils qw{ :characters };
 

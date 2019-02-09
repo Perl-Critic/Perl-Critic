@@ -3,6 +3,7 @@
 use 5.006001;
 use strict;
 use warnings;
+use re '/a';
 
 use charnames ':full';
 
