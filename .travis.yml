@@ -2,6 +2,7 @@ language: perl
 
 perl:
     #   - "dev"  Commenting out until we switch away from Module::Build
+   - "5.28"
    - "5.26"
    - "5.24"
    - "5.22"
