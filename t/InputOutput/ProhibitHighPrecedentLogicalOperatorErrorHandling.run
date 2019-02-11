@@ -1,0 +1,42 @@
+## Anti-pattern, potentially leading to bug
+## failures 1
+## cut
+
+open my $fh, '<', $file
+    || die "Unable to open '$file': $!";
+
+#-----------------------------------------------------------------------------
+
+## Parentheses enforces correct handling
+## failures 0
+## cut
+
+open(my $fh, '<', $file)
+    || die "Unable to open '$file': $!";
+
+#-----------------------------------------------------------------------------
+
+## Low-precedence logic operator enforces correct handling
+## failures 0
+## cut
+
+open my $fh, '<', $file
+    or die "Unable to open '$file': $!";
+
+#-----------------------------------------------------------------------------
+
+## Low-precedence logic operator and parentheses enforces correct handling
+## failures 0
+## cut
+
+open(my $fh, '<', $file)
+    or die "Unable to open '$file': $!";
+
+#-----------------------------------------------------------------------------
+
+## Parentheses and extra space is okay
+## failures 0
+## cut
+
+open ( my $fh, '<', $file )
+    || die "Unable to open '$file': $!";
