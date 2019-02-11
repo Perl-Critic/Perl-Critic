@@ -70,6 +70,8 @@ __END__
 
 =pod
 
+=for stopwords autodie jonasbn ACKNOWLEDGEMENTS DAVECROSS
+
 =head1 NAME
 
 Perl::Critic::Policy::InputOutput::ProhibitHighPrecedentLogicalOperatorErrorHandling - prohibits logical error handling in open statements
@@ -111,7 +113,7 @@ This distribution requires:
 
 =over
 
-=item * Perl 5.6.0 syntactially for the actual implementation
+=item * Perl 5.6.0 syntactically for the actual implementation
 
 =item * L<Carp|https://metacpan.org/pod/Carp>, in core since Perl 5.
 
