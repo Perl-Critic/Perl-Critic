@@ -84,9 +84,9 @@ This Policy is part of the core L<Perl::Critic|Perl::Critic> distribution.
 
 =head1 DESCRIPTION
 
-This policy addresses an anti-pattern and possible bug. If you use 3-argument C<open> combinted with the high precedence logical or operator C<||> for error handling.
+This policy addresses an anti-pattern and possible bug. If you use 3-argument C<open> combined with the high precedence logical or operator C<||> for error handling.
 
-If the file parameter is pointing to a non-existant file, the use of a high precedence logical operator C<||>, does not short-cut as expected. This implies that the bug only is present if the file does not exist. If the file exist, but cannot be opened the error handling is not working as expected.
+If the file parameter is pointing to a non-existent file, the use of a high precedence logical operator C<||>, does not short-cut as expected. This implies that the bug only is present if the file does not exist. If the file exist, but cannot be opened the error handling is not working as expected.
 
     open my $fh, '<', $file
             || die "Can't open '$file': $!"; # not okay
@@ -97,7 +97,7 @@ If the file parameter is pointing to a non-existant file, the use of a high prec
     open my $fh, '<', $file
         or die "Can't open '$file': $!"; # okay
 
-The remedy is to use parentheses for C<open> or the lower precendedence logical operator C<or>.
+The remedy is to use parentheses for C<open> or the lower precedence logical operator C<or>.
 
 Alternatively L<autodie|https://metacpan.org/pod/autodie> can be used,
 
