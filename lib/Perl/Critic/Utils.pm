@@ -1114,9 +1114,7 @@ sub all_perl_files {
 
 sub _is_backup {
     my ($file) = @_;
-    return 1 if $file =~ m{ [.] swp \z}xms;
-    return 1 if $file =~ m{ [.] bak \z}xms;
-    return 1 if $file =~ m{  ~ \z}xms;
+    return 1 if $file =~ m{ (?: [.] swp | [.] bak | ~ ) \z}xms;
     return 1 if $file =~ m{ \A [#] .+ [#] \z}xms;
     return;
 }
@@ -1130,10 +1128,7 @@ sub _is_perl {
     my ($file) = @_;
 
     #Check filename extensions
-    return 1 if $file =~ m{ [.] PL    \z}xms;
-    return 1 if $file =~ m{ [.] p[lm] \z}xms;
-    return 1 if $file =~ m{ [.] psgi  \z}xms;
-    return 1 if $file =~ m{ [.] t     \z}xms;
+    return 1 if $file =~ m{ [.] (?: PL | p[lm] | psgi | t ) \z}xms;
 
     #Check for shebang
     open my $fh, '<', $file or return;
