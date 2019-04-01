@@ -10,9 +10,6 @@ use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.133_01';
 
-Readonly::Array my @TERMINALS => qw( die exit croak confess );
-Readonly::Hash  my %TERMINALS => hashify( @TERMINALS );
-
 Readonly::Array my @CONDITIONALS => qw( if unless foreach while until for );
 Readonly::Hash  my %CONDITIONALS => hashify( @CONDITIONALS );
 
@@ -26,7 +23,19 @@ Readonly::Scalar my $EXPL => q{Consider removing it};
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return ()                 }
+sub supported_parameters {
+    return(
+        {
+            name           => 'terminals',
+            description    => 'Additional functions to consider terminal',
+            behavior       => 'string list',
+            default_string => '',
+            list_always_present_values =>
+                [qw( die exit croak confess )],
+        },
+    );
+}
+
 sub default_severity     { return $SEVERITY_HIGH     }
 sub default_themes       { return qw( core bugs certrec )    }
 sub applies_to           { return 'PPI::Token::Word' }
@@ -43,7 +52,7 @@ sub violates {
     # is_function_call().  This weeds out most candidate tokens and
     # prevents us from having to make an expensive function call.
 
-    return if ( !exists $TERMINALS{$elem} ) &&
+    return if ( !exists $self->{_terminals}->{$elem} ) &&
         ( !$statement->isa('PPI::Statement::Break') );
 
     return if not is_function_call($elem);
@@ -198,8 +207,13 @@ Code is reachable if any of the following conditions are true:
 
 =head1 CONFIGURATION
 
-This Policy is not configurable except for the standard options.
+=head2 terminals
 
+Additional terminal functions may be declared with the C<terminals>
+parameter.  In your C<.perlcriticrc> this would look like:
+
+    [ControlStructures::ProhibitUnreachableCode]
+    terminals = done_testing
 
 =head1 SEE ALSO
 
