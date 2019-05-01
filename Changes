@@ -3,7 +3,7 @@ Revision history for Perl module Perl::Critic
 NEXT
     [Dependencies]
     Removed use of File::HomeDir. Thanks, Karen Etheridge.
-    Upgrade to PPI 1.252.  By Will Braswell.  (GH#860)
+    Upgrade to PPI 1.264.  By Will Braswell.  (GH#860)
 
 
 1.133_01 Thu Oct 25 23:21:31 CDT 2018
