@@ -32,7 +32,7 @@ sub violates {
 
     # remove << and (optional) quotes from around terminator
     ( my $heredoc_terminator = $elem ) =~
-        s{ \A << \s* (["']?) (.*) \1 \z }{$2}xms;
+        s{ \A << ~? \s* (["']?) (.*) \1 \z }{$2}xms;
 
     if ( $SPECIAL_LITERAL{ $heredoc_terminator } ) {
         my $expl = qq{Used "$heredoc_terminator" as heredoc terminator};

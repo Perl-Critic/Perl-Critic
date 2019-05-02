@@ -46,6 +46,34 @@ print <<  'END_QUOTE';
 The only thing we have to fear is fear itself...
 END_QUOTE
 
+## name Basic indented failure
+## failures 1
+## cut
+
+print <<~END_QUOTE;
+    Four score and seven years ago...
+    END_QUOTE
+
+#-----------------------------------------------------------------------------
+
+## name Indented single quote passing
+## failures 0
+## cut
+
+print <<~'END_QUOTE';
+    Four score and seven years ago...
+    END_QUOTE
+
+#-----------------------------------------------------------------------------
+
+## name Indented double quote passing
+## failures 0
+## cut
+
+print <<~"END_QUOTE";
+    Four score and seven years ago...
+    END_QUOTE
+
 #-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl
