@@ -215,6 +215,8 @@ __END__
 
 =pod
 
+=encoding utf8
+
 =for stopwords DGR INI-style API -params pbp refactored ActivePerl ben Jore
 Dolan's Twitter Alexandr Ciornii Ciornii's downloadable
 
@@ -938,6 +940,51 @@ and Sharon, my wife - For putting up with my all-night code sessions.
 Thanks also to the Perl Foundation for providing a grant to support Chris
 Dolan's project to implement twenty PBP policies.
 L<http://www.perlfoundation.org/april_1_2007_new_grant_awards>
+
+Thanks also to this incomplete laundry list of folks who have contributed
+to Perl::Critic in some way:
+Mike O'Regan,
+Tom Hukins,
+Omer Gazit,
+Evan Zacks,
+Paul Howarth,
+Sawyer X,
+Christian Walde,
+Dave Rolsky,
+Jakub Wilk,
+Roy Ivy III,
+Oliver Trosien,
+Glenn Fowler,
+Matt Creenan,
+Alex Balhatchet,
+Sebastian Paaske Tørholm,
+Stuart A Johnston,
+Dan Book,
+Steven Humphrey,
+James Raspass,
+Nick Tonkin,
+Harrison Katz,
+Douglas Sims,
+Mark Fowler,
+Alan Berndt,
+Neil Bowers,
+Sergey Romanov,
+Gabor Szabo,
+Graham Knop,
+Mike Eldridge,
+David Steinbrunner,
+Kirk Kimmel,
+Guillaume Aubert,
+Dave Cross,
+Anirvan Chatterjee,
+Todd Rinaldo,
+Graham Ollis,
+Karen Etheridge,
+Jonas Brømsø,
+Olaf Alders,
+Jim Keenan,
+Slaven Rezić,
+Szymon Nieznański.
 
 
 =head1 AUTHOR
