@@ -291,12 +291,12 @@ Perl::Critic::Annotation - A "## no critic" annotation in a document.
 
 =head1 DESCRIPTION
 
-C<Perl::Critic::Annotation> represents a single C<"## no critic">
-annotation in a L<PPI::Document>.  The Annotation takes care of parsing
-the annotation and keeps track of which lines and Policies it affects.
-It is intended to encapsulate the details of the no-critic
-annotations, and to provide a way for Policy objects to interact with
-the annotations (via a L<Perl::Critic::Document|Perl::Critic::Document>).
+C<Perl::Critic::Annotation> represents a single C<"## no critic"> annotation
+in a L<PPI::Document|PPI::Document>.  The Annotation takes care of parsing the
+annotation and keeps track of which lines and Policies it affects.  It is
+intended to encapsulate the details of the no-critic annotations, and to
+provide a way for Policy objects to interact with the annotations (via a
+L<Perl::Critic::Document|Perl::Critic::Document>).
 
 
 =head1 INTERFACE SUPPORT
