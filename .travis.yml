@@ -38,5 +38,5 @@ install:
 
 script:
   - export HARNESS_OPTIONS='j:c'
-  - perl Build.PL
+  - perl Build.PL verbose=1
   - ./Build authortest
