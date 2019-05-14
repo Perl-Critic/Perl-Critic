@@ -187,7 +187,7 @@ sub _get_input {
 
         # Reading code from STDIN.  All the code is slurped into
         # a string.  PPI will barf if the string is just whitespace.
-        my $code_string = do { local $RS = undef; <STDIN> };
+        my $code_string = do { local $RS = undef; <> };
 
         # Notice if STDIN was closed (pipe error, etc)
         if ( ! defined $code_string ) {
