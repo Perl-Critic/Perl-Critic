@@ -15,8 +15,6 @@ perl:
   - "5.10"
   - "5.8"
 
-sudo: false
-
 notifications:
   email:
     recipients:
