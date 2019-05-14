@@ -1,6 +1,10 @@
 ---
 language: perl
 
+cache:
+  directories:
+    - '~/perl5'
+
 perl:
   #   - "dev"  Commenting out until we switch away from Module::Build
   - "5.28"
