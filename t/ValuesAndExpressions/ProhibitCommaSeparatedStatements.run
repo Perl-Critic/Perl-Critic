@@ -254,7 +254,6 @@ return
 
 ## name RT #27654 - NKH example 3
 ## failures 0
-## TODO PPI parses this code as blocks and not hash constructors.
 ## cut
 
 $self->DoSomething

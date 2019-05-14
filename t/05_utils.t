@@ -418,7 +418,7 @@ sub test_parse_arg_list {
         [
                 q/foo( { bar() }, {}, 'blah' )/
             =>  [
-                    ' { bar() }',
+                    [ '{ bar() }' ],
                     [ qw< {} > ],
                     [ q<'blah'> ],
                 ],
