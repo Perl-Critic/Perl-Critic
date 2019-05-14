@@ -1,44 +1,44 @@
+---
 language: perl
 
 perl:
-    #   - "dev"  Commenting out until we switch away from Module::Build
-   - "5.28"
-   - "5.26"
-   - "5.24"
-   - "5.22"
-   - "5.20"
-   - "5.18"
-   - "5.16"
-   - "5.14"
-   - "5.12"
-   - "5.10"
-   - "5.8"
+  #   - "dev"  Commenting out until we switch away from Module::Build
+  - "5.28"
+  - "5.26"
+  - "5.24"
+  - "5.22"
+  - "5.20"
+  - "5.18"
+  - "5.16"
+  - "5.14"
+  - "5.12"
+  - "5.10"
+  - "5.8"
 
 sudo: false
 
 notifications:
-    email:
-        recipients:
-            - andy@petdance.com
-        on_success: change
-        on_failure: always
-    irc:
-        channels:
-            - "irc.perl.org#perlcritic"
-        template:
-            - "%{branch}: %{message} %{build_url}"
+  email:
+    recipients:
+      - andy@petdance.com
+    on_success: change
+    on_failure: always
+  irc:
+    channels:
+      - "irc.perl.org#perlcritic"
+    template:
+      - "%{branch}: %{message} %{build_url}"
 
 addons:
   apt:
     packages:
-    - aspell
-    - aspell-en
-
+      - aspell
+      - aspell-en
 
 install:
-    - "cpanm -v Module::Build && cpanm -v Perl::Critic::More Test::Perl::Critic Devel::EnforceEncapsulation PPI Test::Memory::Cycle PPIx::QuoteLike"
+  - "cpanm -v Module::Build && cpanm -v Perl::Critic::More Test::Perl::Critic Devel::EnforceEncapsulation PPI Test::Memory::Cycle PPIx::QuoteLike"
 
 script:
-   - export HARNESS_OPTIONS='j:c'
-   - perl Build.PL
-   - ./Build authortest
+  - export HARNESS_OPTIONS='j:c'
+  - perl Build.PL
+  - ./Build authortest
