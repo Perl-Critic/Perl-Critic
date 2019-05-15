@@ -218,7 +218,7 @@ __END__
 =encoding utf8
 
 =for stopwords DGR INI-style API -params pbp refactored ActivePerl ben Jore
-Dolan's Twitter Alexandr Ciornii Ciornii's downloadable
+Dolan's Twitter Alexandr Ciornii Ciornii's downloadable O'Regan Hukins Omer Gazit Zacks Howarth Walde Rolsky Jakub Wilk Trosien Creenan Balhatchet Paaske Tørholm Raspass Tonkin Katz Berndt Sergey Gabor Szabo Knop Eldridge Steinbrunner Kimmel Guillaume Aubert Anirvan Chatterjee Rinaldo Ollis Etheridge Brømsø Slaven Rezić Szymon Nieznański
 
 =head1 NAME
 
