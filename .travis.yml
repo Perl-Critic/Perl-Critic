@@ -38,7 +38,7 @@ addons:
       - aspell-en
 
 install:
-  - "cpanm -v Module::Build && cpanm -v Perl::Critic::More Test::Perl::Critic Devel::EnforceEncapsulation PPI Test::Memory::Cycle PPIx::QuoteLike || 1"
+  - "cpanm -v Module::Build && cpanm -v Perl::Critic::More Test::Perl::Critic Devel::EnforceEncapsulation PPI Test::Memory::Cycle PPIx::QuoteLike || (tail -n 500 -f ~/.cpanm/build.log; true)"
 
 script:
   - export HARNESS_OPTIONS='j:c'
