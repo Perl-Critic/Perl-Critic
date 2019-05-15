@@ -697,6 +697,7 @@ Dolan's project to implement twenty PBP policies.
 
 Thanks also to this incomplete laundry list of folks who have contributed
 to Perl::Critic in some way:
+Gregory Oschwald,
 Mike O'Regan,
 Tom Hukins,
 Omer Gazit,
