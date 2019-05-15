@@ -1,8 +1,14 @@
 ---
+addons:
+  apt:
+    packages:
+      - aspell
+      - aspell-en
 language: perl
-
 perl:
-  #   - "dev"  Commenting out until we switch away from Module::Build
+  # blead and dev don't play nicely with Module::Build
+  #- blead
+  #- dev
   - "5.28"
   - "5.26"
   - "5.24"
@@ -14,29 +20,55 @@ perl:
   - "5.12"
   - "5.10"
   - "5.8"
-
+cache:
+  directories:
+    - $HOME/perl5
+matrix:
+  allow_failures:
+    - perl: blead
+    - perl: dev
+    - env: COVERAGE=1 HARNESS_OPTIONS=j1
+      perl: "5.28"
+  fast_finish: 1
+  include:
+    - env: COVERAGE=1 HARNESS_OPTIONS=j1
+      perl: "5.28"
+env:
+  global:
+    - AUTHOR_TESTING=1
+    - CPAN_MIRROR=https://cpan.metacpan.org/
+    - HARNESS_OPTIONS='j:c'
+    - RELEASE_TESTING=1
+    - CPAN_META_JSON_BACKEND=Cpanel::JSON::XS
+script:
+  - ./Build authortest
+before_install:
+  - eval $(curl https://travis-perl.github.io/init) --perl --always-upgrade-modules
+  - cpanm --notest App::cpm
+  - cpm install --global CPAN::Meta Cpanel::JSON::XS
+  - perl Build.PL
+install:
+  - cpm install --global --notest --workers 2 Perl::Critic::More Test::Perl::Critic Devel::EnforceEncapsulation PPI Test::Memory::Cycle PPIx::QuoteLike Test::Kwalitee
+  - cpan-install --deps # installs prereqs, including recommends
+  - cpan-install --coverage # installs coverage prereqs, if enabled
+before_script:
+  - coverage-setup
+after_success:
+  - coverage-report
 notifications:
   email:
+    on_failure: always
+    on_success: change
     recipients:
       - andy@petdance.com
-    on_success: change
-    on_failure: always
   irc:
     channels:
-      - "irc.perl.org#perlcritic"
+      - irc.perl.org#perlcritic
     template:
       - "%{branch}: %{message} %{build_url}"
+### __app_cisetup__
+# ---
+# force_threaded_perls: 0
+# perl_caching: 1
 
-addons:
-  apt:
-    packages:
-      - aspell
-      - aspell-en
-
-install:
-  - "cpanm -v Module::Build && cpanm -v Perl::Critic::More Test::Perl::Critic Devel::EnforceEncapsulation PPI Test::Memory::Cycle PPIx::QuoteLike || 1"
-
-script:
-  - export HARNESS_OPTIONS='j:c'
-  - perl Build.PL
-  - ./Build authortest
+### __app_cisetup__
