@@ -126,6 +126,93 @@ sub foo ($+) { return 1 }
 sub foo ($$+) { return 1 }
 
 #-----------------------------------------------------------------------------
+
+## name ignore $self and $class
+## failures 0
+## parms {skip_object => 1}
+## cut
+
+sub self_foo {
+   my ($self, $bar1, $bar2, $bar3, $bar4, $bar5) = @_;
+}
+
+sub self_fu {
+   my $self = shift;
+   my $bar1 = shift;
+   my $bar2 = shift;
+   my $bar3 = shift;
+   my $bar4 = shift;
+   my $bar5 = shift;
+}
+
+sub self_bar {
+    my $self = shift;
+    my ($bar1, $bar2, $bar3, $bar4, $bar5) = @_;
+}
+
+sub class_foo {
+   my ($class, $bar1, $bar2, $bar3, $bar4, $bar5) = @_;
+}
+
+sub class_fu {
+   my $class = shift;
+   my $bar1 = shift;
+   my $bar2 = shift;
+   my $bar3 = shift;
+   my $bar4 = shift;
+   my $bar5 = shift;
+}
+
+sub class_bar {
+    my $class = shift;
+    my ($bar1, $bar2, $bar3, $bar4, $bar5) = @_;
+}
+
+#-----------------------------------------------------------------------------
+
+## name ignore $self and $class with configured max_arguments
+## failures 0
+## parms {skip_object => 1, max_arguments => 2}
+## cut
+
+sub self_foo {
+   my ($self, $bar1, $bar2) = @_;
+}
+
+sub class_foo {
+   my ($class, $bar1, $bar2) = @_;
+}
+
+#-----------------------------------------------------------------------------
+
+## name too many arguments despite ignoring $self and $class
+## failures 5
+## parms {skip_object => 1, max_arguments => 2}
+## cut
+
+sub self_foo {
+   my ($self, $bar1, $bar2, $bar3) = @_;
+}
+
+sub self_fu {
+   my $self = shift;
+   my ($bar1, $bar2, $bar3) = @_;
+}
+
+sub class_foo {
+   my ($class, $bar1, $bar2, $bar3) = @_;
+}
+
+sub class_fu {
+   my $class = shift;
+   my ($bar1, $bar2, $bar3) = @_;
+}
+
+sub classy_self {
+    my ($self, $class, $class, $self) = @_;
+}
+
+#-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

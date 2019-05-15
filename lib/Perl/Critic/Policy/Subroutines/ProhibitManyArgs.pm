@@ -16,8 +16,10 @@ our $VERSION = '1.133_01';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $AT => q{@};
-Readonly::Scalar my $AT_ARG => q{@_}; ## no critic (InterpolationOfMetachars)
+Readonly::Scalar my $AT     => q{@};
+Readonly::Scalar my $AT_ARG => q{@_};     ## no critic (InterpolationOfMetachars)
+Readonly::Scalar my $CLASS  => q{$class}; ## no critic (InterpolationOfMetachars)
+Readonly::Scalar my $SELF   => q{$self};  ## no critic (InterpolationOfMetachars)
 
 Readonly::Scalar my $DESC => q{Too many arguments};
 Readonly::Scalar my $EXPL => [182];
@@ -33,6 +35,12 @@ sub supported_parameters {
             default_string  => '5',
             behavior        => 'integer',
             integer_minimum => 1,
+        },
+        {
+            name            => 'skip_object',
+            description     => q[Don't count $self or $class first argument], ## no critic (InterpolationOfMetachars)
+            default_string  => '0',
+            behavior        => 'boolean',
         },
     );
 }
@@ -55,7 +63,7 @@ sub violates {
         $prototype =~ s/ \\ [[] .*? []] /*/smxg;    # Allow for grouping
         $num_args = $prototype =~ tr/$@%&*_+/$@%&*_+/;    # RT 56627
     } else {
-       $num_args = _count_args($elem->block->schildren);
+        $num_args = _count_args($self->{_skip_object}, $elem->block->schildren);
     }
 
     if ($self->{_max_arguments} < $num_args) {
@@ -65,7 +73,7 @@ sub violates {
 }
 
 sub _count_args {
-    my @statements = @_;
+    my ($skip_object, @statements) = @_;
 
     # look for these patterns:
     #    " ... = @_;"    => then examine previous variable list
@@ -88,16 +96,17 @@ sub _count_args {
     return 0 if q{=} ne $operator->content();
 
     if ($operand->isa('PPI::Token::Magic') && $AT_ARG eq $operand->content()) {
-       return _count_list_elements(@elements);
+        return _count_list_elements($skip_object, @elements);
     } elsif ($operand->isa('PPI::Token::Word') && 'shift' eq $operand->content()) {
-       return 1 + _count_args(@statements);
+        my $count_first = $skip_object ? !_is_object_arg(pop @elements) : 1;
+        return $count_first + _count_args(0, @statements);  # only check for object on first argument
     }
 
     return 0;
 }
 
 sub _count_list_elements {
-   my @elements = @_;
+   my ($skip_object, @elements) = @_;
 
    my $list = pop @elements;
    return 0 if !$list;
@@ -106,7 +115,20 @@ sub _count_list_elements {
    if (1 == @inner && $inner[0]->isa('PPI::Statement::Expression')) {
       @inner = $inner[0]->schildren;
    }
-   return scalar split_nodes_on_comma(@inner);
+   my @args = split_nodes_on_comma(@inner);
+   return scalar @args if !$skip_object || !@args;;
+
+   # Check if first argument is $self/$class
+   my $first_ref = $args[0];
+   return scalar @args if scalar @{ $first_ref } != 1;  # more complex than simple scalar
+   return scalar @args - !!_is_object_arg($first_ref->[0]);
+}
+
+sub _is_object_arg {
+    my ($symbol) = @_;
+    return 0 if !$symbol;
+    return 0 if !$symbol->isa('PPI::Token::Symbol');
+    return $SELF eq $symbol->content() || $CLASS eq $symbol->content();
 }
 
 1;
@@ -148,6 +170,12 @@ this:
   [Subroutines::ProhibitManyArgs]
   max_arguments = 6
 
+To ignore C<$self> or C<$class in your argument count, as long as they're
+the first argument, use:
+
+  [Subroutines::ProhibitManyArgs]
+  skip_object = 1
+
 
 =head1 CAVEATS
 
@@ -156,11 +184,6 @@ those.  This should just work when PPI gains that feature.
 
 We don't check for C<@ARG>, the alias for C<@_> from English.pm.
 That's deprecated anyway.
-
-
-=head1 TO DO
-
-Don't include C<$self> and C<$class> in the count.
 
 
 =head1 CREDITS
@@ -176,7 +199,7 @@ Chris Dolan <cdolan@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2007-2011 Chris Dolan.  Many rights reserved.
+Copyright (c) 2007-2019 Chris Dolan.  Many rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

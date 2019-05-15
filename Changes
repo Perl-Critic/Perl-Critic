@@ -4,6 +4,10 @@ NEXT
     [New Features]
     Support indented heredocs.  Thanks, Gregory Oschwald. (GH#861)
 
+    In Subroutines::ProhibitManyArgs, you can now omit the object
+    variable (C<$self> or C<$class>) from the argument count.  Thanks,
+    Szymon Nieznański. (GH#815)
+
     [Dependencies]
     Removed use of File::HomeDir. Thanks, Karen Etheridge.
     Upgrade to PPI 1.265.  By Will Braswell.  (GH#860)
