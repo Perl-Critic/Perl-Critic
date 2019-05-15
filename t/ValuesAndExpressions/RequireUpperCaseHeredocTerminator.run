@@ -6,6 +6,14 @@ print <<"QUOTE_1";
 Four score and seven years ago...
 QUOTE_1
 
+## name Basic passing with indented heredoc
+## failures 0
+## cut
+
+print <<~"QUOTE_1";
+    Four score and seven years ago...
+    QUOTE_1
+
 #-----------------------------------------------------------------------------
 
 ## name Quoted failure
@@ -15,6 +23,16 @@ QUOTE_1
 print <<"endquote";
 Four score and seven years ago...
 endquote
+
+#-----------------------------------------------------------------------------
+
+## name Quoted failure with indented heredoc
+## failures 1
+## cut
+
+print <<~"endquote";
+    Four score and seven years ago...
+    endquote
 
 #-----------------------------------------------------------------------------
 
@@ -28,6 +46,16 @@ endquote
 
 #-----------------------------------------------------------------------------
 
+## name Bareword failure with indented heredoc
+## failures 1
+## cut
+
+print <<~endquote;
+    Four score and seven years ago...
+    endquote
+
+#-----------------------------------------------------------------------------
+
 ## name RT #27073: Spaces before HEREDOC token
 ## failures 0
 ## cut
@@ -35,6 +63,16 @@ endquote
 print <<  'END_QUOTE';
 The only thing we have to fear is fear itself...
 END_QUOTE
+
+#-----------------------------------------------------------------------------
+
+## name RT #27073: Spaces before HEREDOC token with indented heredoc
+## failures 0
+## cut
+
+print <<  ~'END_QUOTE';
+    The only thing we have to fear is fear itself...
+    END_QUOTE
 
 # Local Variables:
 #   mode: cperl

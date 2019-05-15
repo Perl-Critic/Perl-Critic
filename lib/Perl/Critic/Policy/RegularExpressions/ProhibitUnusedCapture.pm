@@ -559,7 +559,7 @@ sub _mark_magic {
 
     # Ditto a here document, though the logic is different. RT #38942
     if ( $elem->isa( 'PPI::Token::HereDoc' ) ) {
-        $elem->content() =~ m/ \A << \s* ' /sxm
+        $elem->content() =~ m/ \A << ~? \s* ' /sxm
             or _mark_magic_in_content(
             join( $EMPTY, $elem->heredoc() ), $re, $captures,
             $named_captures, $doc );

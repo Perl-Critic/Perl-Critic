@@ -1,6 +1,9 @@
 Revision history for Perl module Perl::Critic
 
 NEXT
+    [New Features]
+    Support indented heredocs.  Thanks, Gregory Oschwald. (GH#861)
+
     [Dependencies]
     Removed use of File::HomeDir. Thanks, Karen Etheridge.
     Upgrade to PPI 1.265.  By Will Braswell.  (GH#860)

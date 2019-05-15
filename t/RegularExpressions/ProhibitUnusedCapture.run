@@ -481,6 +481,15 @@ print <<EOD
 $+[2] $1
 EOD
 
+## name Capture used in an indented here document.
+## failures 0
+## cut
+
+m/(\w+)(\W+)/;
+print <<~EOD
+  $+[2] $1
+  EOD
+
 #-----------------------------------------------------------------------------
 
 ## name Alternation. RT #38942 redux
