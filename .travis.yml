@@ -42,7 +42,10 @@ env:
 script:
   - ./Build authortest
 before_install:
-  - eval $(curl https://travis-perl.github.io/init) --perl --always-upgrade-modules
+  - git clone git://github.com/travis-perl/helpers ~/travis-perl-helpers
+  - source ~/travis-perl-helpers/init
+  - build-perl
+  - perl -V
   - cpanm --notest App::cpm
   - cpm install --global CPAN::Meta
   - perl Build.PL
