@@ -39,13 +39,12 @@ env:
     - CPAN_MIRROR=https://cpan.metacpan.org/
     - HARNESS_OPTIONS='j:c'
     - RELEASE_TESTING=1
-    - CPAN_META_JSON_BACKEND=Cpanel::JSON::XS
 script:
   - ./Build authortest
 before_install:
   - eval $(curl https://travis-perl.github.io/init) --perl --always-upgrade-modules
   - cpanm --notest App::cpm
-  - cpm install --global CPAN::Meta Cpanel::JSON::XS
+  - cpm install --global CPAN::Meta
   - perl Build.PL
 install:
   - cpm install --global --notest --workers 2 Perl::Critic::More Test::Perl::Critic Devel::EnforceEncapsulation PPI Test::Memory::Cycle PPIx::QuoteLike Test::Kwalitee
