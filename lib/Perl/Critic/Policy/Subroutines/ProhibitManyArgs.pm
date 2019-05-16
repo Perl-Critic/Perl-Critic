@@ -170,7 +170,7 @@ this:
   [Subroutines::ProhibitManyArgs]
   max_arguments = 6
 
-To ignore C<$self> or C<$class in your argument count, as long as they're
+To ignore C<$self> or C<$class> in your argument count, as long as they're
 the first argument, use:
 
   [Subroutines::ProhibitManyArgs]
