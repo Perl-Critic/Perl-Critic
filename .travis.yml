@@ -47,10 +47,10 @@ before_install:
   - build-perl
   - perl -V
   - cpanm --notest App::cpm
-  - cpm install --global CPAN::Meta
+  - cpm install --global CPAN::Meta Module::Build
   - perl Build.PL
 install:
-  - cpm install --global --notest --workers 2 Perl::Critic::More Test::Perl::Critic Devel::EnforceEncapsulation PPI Test::Memory::Cycle PPIx::QuoteLike Test::Kwalitee
+  - cpm install --global --notest --workers 2 Perl::Critic::More Test::Perl::Critic Devel::EnforceEncapsulation PPI Test::Memory::Cycle PPIx::QuoteLike Test::Kwalitee Test::Pod Test::Pod::Coverage
   - cpan-install --deps # installs prereqs, including recommends
   - cpan-install --coverage # installs coverage prereqs, if enabled
 before_script:
