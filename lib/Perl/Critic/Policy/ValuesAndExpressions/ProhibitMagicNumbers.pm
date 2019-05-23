@@ -10,7 +10,7 @@ use Perl::Critic::Utils qw{ :booleans :characters :severities :data_conversion }
 
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.133_02';
+our $VERSION = '1.134';
 
 #----------------------------------------------------------------------------
 

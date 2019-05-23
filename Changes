@@ -1,5 +1,9 @@
 Revision history for Perl module Perl::Critic
 
+1.134 Wed May 22 21:17:21 CDT 2019
+    Stable release.  No changes since 1.133_02.
+
+
 1.133_02 Mon May 20 10:48:16 CDT 2019
     [New Features]
     Support indented heredocs.  Thanks, Gregory Oschwald. (GH#861)
