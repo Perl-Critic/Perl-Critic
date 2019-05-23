@@ -5,7 +5,7 @@ use warnings;
 
 use PPI::Document;
 
-use Test::More tests => 4;
+use Test::More tests => 2;
 
 our $VERSION = '1.134';
 use Perl::Critic::TestUtils;
@@ -14,18 +14,6 @@ Perl::Critic::TestUtils::assert_version( $VERSION );
 #-----------------------------------------------------------------------------
 
 # Things we're looking for from PPI.
-
-{
-    local $TODO = q<Clean up code in Modules::ProhibitUnusedImports once this is released.>;
-
-    can_ok 'PPI::Statement::Include', 'arguments';
-}
-
-{
-    local $TODO = q<Clean up code in Modules::ProhibitUnusedImports once this is released.>;
-
-    can_ok 'PPI::Token::QuoteLike::Words', 'literal';
-}
 
 {
     local $TODO = q<Clean up code in P::C::Utils::PPI once PPI can handle these.>;
