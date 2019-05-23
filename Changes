@@ -20,7 +20,7 @@ Revision history for Perl module Perl::Critic
     (GH #858)
 
     [Internals]
-    Updated the Appveyor convig.  Thanks, Roy Ivy III. (GH#851)
+    Updated the Appveyor config.  Thanks, Roy Ivy III. (GH#851)
 
 
 1.133_01 Thu Oct 25 23:21:31 CDT 2018
