@@ -218,7 +218,12 @@ __END__
 =encoding utf8
 
 =for stopwords DGR INI-style API -params pbp refactored ActivePerl ben Jore
-Dolan's Twitter Alexandr Ciornii Ciornii's downloadable O'Regan Hukins Omer Gazit Zacks Howarth Walde Rolsky Jakub Wilk Trosien Creenan Balhatchet Paaske Tørholm Raspass Tonkin Katz Berndt Sergey Gabor Szabo Knop Eldridge Steinbrunner Kimmel Guillaume Aubert Anirvan Chatterjee Rinaldo Ollis Etheridge Brømsø Slaven Rezić Szymon Nieznański Oschwald
+Dolan's Twitter Alexandr Ciornii Ciornii's downloadable O'Regan
+Hukins Omer Gazit Zacks Howarth Walde Rolsky Jakub Wilk Trosien Creenan
+Balhatchet Paaske Tørholm Raspass Tonkin Katz Berndt Sergey Gabor Szabo
+Knop Eldridge Steinbrunner Kimmel Guillaume Aubert Anirvan Chatterjee
+Rinaldo Ollis Etheridge Brømsø Slaven Rezić Szymon Nieznański
+Oschwald Mita
 
 =head1 NAME
 
@@ -996,7 +1001,7 @@ Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2018 Imaginative Software Systems.  All rights reserved.
+Copyright (c) 2005-2019 Imaginative Software Systems.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify it under
 the same terms as Perl itself.  The full text of this license can be found in
