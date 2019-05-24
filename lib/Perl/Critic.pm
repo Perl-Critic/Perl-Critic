@@ -943,6 +943,7 @@ L<http://www.perlfoundation.org/april_1_2007_new_grant_awards>
 
 Thanks also to this incomplete laundry list of folks who have contributed
 to Perl::Critic in some way:
+Daniel Mita,
 Gregory Oschwald,
 Mike O'Regan,
 Tom Hukins,
