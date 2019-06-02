@@ -4,9 +4,11 @@ use 5.006001;
 use strict;
 use warnings;
 
+use File::Temp qw();
+use IO::Handle qw/autoflush/;
 use Perl::Critic::TestUtils qw(pcritique);
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 
 our $VERSION = '1.134';
 
@@ -121,6 +123,29 @@ is(
     0,
     'Tidy with shell escape',
 );
+
+#-----------------------------------------------------------------------------
+
+$code = <<'END_PERL';
+sub test {
+
+    # юникод
+    # многострочный комментарий не длиннее 80 символов с юникод символами
+    my $c = 10;
+}
+END_PERL
+
+my ($handle, $path) = File::Temp::tempfile();
+autoflush $handle => 1;
+print {$handle} '-utf8';
+
+%config = (perltidyrc => $path);
+is(
+    pcritique($policy, \$code, \%config),
+    0,
+    'Tidy with unicode comments',
+);
+undef $handle;
 
 # Local Variables:
 #   mode: cperl
