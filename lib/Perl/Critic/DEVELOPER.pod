@@ -900,8 +900,8 @@ Certain problems that a Policy detects can be endemic to a particular
 file; if there's one violation, there's likely to be many.  A good
 example of this is
 L<Perl::Critic::Policy::TestingAndDebugging::RequireUseStrict|Perl::Critic::Policy::TestingAndDebugging::RequireUseStrict>;
-if there's one line before L<use strict>, there's a good chance that
-the entire file is missing L<use strict>.  In such cases, it's not
+if there's one line before C<use strict>, there's a good chance that
+the entire file is missing C<use strict>.  In such cases, it's not
 much help to the user to report every single violation.  If you've got
 such a policy, you should override
 L<default_maximum_violations_per_document()|Perl::Critic::Policy/"default_maximum_violations_per_document()">
