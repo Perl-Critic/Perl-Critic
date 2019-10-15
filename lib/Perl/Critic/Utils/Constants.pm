@@ -96,6 +96,7 @@ Readonly::Array our @STRICT_EQUIVALENT_MODULES => qw(
     MooseX::NonMoose
     MooseX::Singleton
     MooseX::Role::Parameterized
+    MooseX::MethodAttributes::Role
 
     Mouse
     Mouse::Role
