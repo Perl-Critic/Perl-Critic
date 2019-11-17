@@ -62,7 +62,7 @@ sub required_module_versions {
         'Pod::Usage'                    => 0,
         'Readonly'                      => 2.00,
         'Scalar::Util'                  => 0,
-        'String::Format'                => 1.13,
+        'String::Format'                => '1.18',
         'Task::Weaken'                  => 0,
         'Term::ANSIColor'               => '2.02',
         'Test::Builder'                 => 0.92,
