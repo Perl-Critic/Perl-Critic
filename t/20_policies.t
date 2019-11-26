@@ -7,7 +7,7 @@ use warnings;
 
 use Test::Perl::Critic::Policy qw< all_policies_ok >;
 
-our $VERSION = '1.134';
+our $VERSION = '1.135_01';
 
 use Perl::Critic::TestUtils;
 Perl::Critic::TestUtils::assert_version( $VERSION );

@@ -1,13 +1,17 @@
 Revision history for Perl module Perl::Critic
 
-NEXT
+
+1.135_01 Tue Nov 26 14:50:11 CST 2019
+    [New Features]
+    The ProhibitNoWarnings pollicy now handles warnings in the experimental::
+    group.  Thanks, Renée Bäcker. (GH #892)
 
     [Documentation]
     Prevented some example code from showing up in `perldoc`.  Thanks, Tom
     Hukins.  (GH #799)
 
 
-1.134 Wed May 22 21:17:21 CDT 2019
+1.135_01 Wed May 22 21:17:21 CDT 2019
 
     Stable release.  No changes since 1.133_02.
 

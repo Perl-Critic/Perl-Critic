@@ -14,7 +14,7 @@ use Perl::Critic::TestUtils qw(bundled_policy_names);
 
 use Test::More; #plan set below!
 
-our $VERSION = '1.134';
+our $VERSION = '1.135_01';
 
 Perl::Critic::TestUtils::assert_version( $VERSION );
 Perl::Critic::TestUtils::block_perlcriticrc();
