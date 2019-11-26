@@ -1,6 +1,5 @@
 Revision history for Perl module Perl::Critic
 
-
 1.135_01 Tue Nov 26 14:50:11 CST 2019
     [New Features]
     The ProhibitNoWarnings pollicy now handles warnings in the experimental::
@@ -11,7 +10,7 @@ Revision history for Perl module Perl::Critic
     Hukins.  (GH #799)
 
 
-1.135_01 Wed May 22 21:17:21 CDT 2019
+1.134 Wed May 22 21:17:21 CDT 2019
 
     Stable release.  No changes since 1.133_02.
 
