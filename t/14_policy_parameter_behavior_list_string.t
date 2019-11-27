@@ -9,7 +9,7 @@ use Perl::Critic::PolicyParameter;
 
 use Test::More tests => 28;
 
-our $VERSION = '1.135_01';
+our $VERSION = '1.136';
 
 use Perl::Critic::TestUtils;
 Perl::Critic::TestUtils::assert_version( $VERSION );

@@ -8,7 +8,7 @@ use Readonly;
 use Perl::Critic::Utils qw{ :severities :classification &parse_arg_list };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.135_01';
+our $VERSION = '1.136';
 
 #-----------------------------------------------------------------------------
 
