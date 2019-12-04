@@ -9,6 +9,7 @@ perl:
   # blead and dev don't play nicely with Module::Build
   #- blead
   #- dev
+  - "5.30"
   - "5.28"
   - "5.26"
   - "5.24"
@@ -28,11 +29,11 @@ matrix:
     - perl: blead
     - perl: dev
     - env: COVERAGE=1 HARNESS_OPTIONS=j1
-      perl: "5.28"
+      perl: "5.30"
   fast_finish: 1
   include:
     - env: COVERAGE=1 HARNESS_OPTIONS=j1
-      perl: "5.28"
+      perl: "5.30"
 env:
   global:
     - AUTHOR_TESTING=1
