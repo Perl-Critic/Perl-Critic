@@ -27,10 +27,12 @@ sub applies_to           { return 'PPI::Token::Cast'    }
 sub violates {
     my ( $self, $elem, undef ) = @_;
     return if $elem eq q{\\};
+    return if $elem =~ /[@ $ % * &] [*]/xms;
+    return if $elem eq q{$#*}; ## no critic (RequireInterpolationOfMetachars)
 
     my $sib = $elem->snext_sibling;
     return if !$sib;
-    if ( ! $sib->isa('PPI::Structure::Block') ) {
+    if ( ! $sib->isa('PPI::Structure::Block') && ! $sib->isa('PPI::Structure::Subscript') ) {
         return $self->violation( $DESC, $EXPL, $elem );
     }
     return; #ok!
