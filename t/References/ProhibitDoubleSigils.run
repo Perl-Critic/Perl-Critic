@@ -11,6 +11,15 @@ $some_ref = \@array;
 $some_ref = \$scalar;
 $some_ref = \&code;
 
+%hash   = $some_ref->%*;
+@array  = $some_ref->@*;
+$scalar = $some_ref->$*;
+$glob   = $some_ref->**;
+$sub    = $some_ref->&*;
+$arr_i  = $some_ref->$#*;
+@array  = $some_ref->@[0 .. 2];
+%hash   = $some_ref->%{qw/key1 key2/};
+
 #-----------------------------------------------------------------------------
 
 ## name Basic failures
