@@ -45,6 +45,7 @@ sub violates {
     my $evaluated = $elem->snext_sibling() or return; # Nothing to eval!
     my $following = $evaluated->snext_sibling();
 
+    return if _is_returned( $elem );    # GitHub #324
     return if _is_in_right_hand_side_of_assignment($elem);
     return if _is_in_postfix_expression($elem);
     return if
@@ -287,6 +288,23 @@ sub _is_effectively_a_comma {
                 $elem->content() eq $COMMA
             ||  $elem->content() eq $FATCOMMA
         );
+}
+
+#-----------------------------------------------------------------------------
+# GitHub #324 (https://github.com/Perl-Critic/Perl-Critic/issues/324)
+{
+    Readonly::Scalar my $RETURN => 'return';
+
+    sub _is_returned {
+        my ( $elem ) = @_;
+        my $prev = $elem->sprevious_sibling();
+        return
+                $prev
+            &&
+                $prev->isa( 'PPI::Token::Word' )
+            &&
+                $RETURN eq $prev->content();
+    }
 }
 
 #-----------------------------------------------------------------------------
