@@ -408,6 +408,16 @@ $foo &&= eval { something };
 
 #-----------------------------------------------------------------------------
 
+## name return eval{} (https://github.com/Perl-Critic/Perl-Critic/issues/324)
+## failures 0
+## cut
+
+return eval { something };
+return eval "something";
+# TODO return ( eval { something } )
+
+#-----------------------------------------------------------------------------
+
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4
