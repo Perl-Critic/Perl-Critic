@@ -1,6 +1,15 @@
 Revision history for Perl module Perl::Critic
 
 
+NEXT
+
+    [Fixes]
+    RequireCheckingReturnValueOfEval didn't count returning the result of an
+    eval as checking it.  Now it does.  However, it's only if you "return eval
+    { ... }".  It still doesn't handle the case of "return ( eval {} )".
+    Thanks, Tom Wyant. (GH #324)
+
+
 1.136 Wed Nov 27 09:51:09 CST 2019
 
     Stable release.  No changes since 1.135_01.
