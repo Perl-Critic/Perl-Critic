@@ -13,8 +13,8 @@ use Perl::Critic::Utils qw<
 >;
 
 use PPIx::Regexp;
-use PPIx::Regexp::Util qw<
-    __is_ppi_regexp_element
+use PPIx::Regexp::Util 0.068 qw<
+    is_ppi_regexp_element
 >;
 
 use base 'Perl::Critic::Policy';
@@ -112,7 +112,7 @@ sub violates {
     elsif ( $elem->isa('PPI::Token::HereDoc') ) {
         return _violates_heredoc( $self, $elem );
     }
-    elsif ( __is_ppi_regexp_element( $elem ) ) {    # GitHub #843
+    elsif ( is_ppi_regexp_element( $elem ) ) {    # GitHub #843
         return _violates_regexp( $self, $elem, $doc );
     }
 
