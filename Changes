@@ -9,6 +9,9 @@ NEXT
     { ... }".  It still doesn't handle the case of "return ( eval {} )".
     Thanks, Tom Wyant. (GH #324)
 
+    ProhibitPunctuationVars would get confused and think that the expression
+    qr/SOME$/ was using the $/ special variable.  Thanks, Tom Wyan. (GH #843)
+
 
 1.136 Wed Nov 27 09:51:09 CST 2019
 
