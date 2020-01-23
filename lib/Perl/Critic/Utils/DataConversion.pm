@@ -9,7 +9,7 @@ use Perl::Critic::Utils qw{ :characters :booleans };
 
 use Exporter 'import';
 
-our $VERSION = '1.136';
+our $VERSION = '1.137_01';
 
 #-----------------------------------------------------------------------------
 

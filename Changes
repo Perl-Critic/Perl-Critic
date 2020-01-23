@@ -1,7 +1,7 @@
 Revision history for Perl module Perl::Critic
 
 
-NEXT
+1.137_01 Thu Jan 23 16:44:57 CST 2020
 
     [Fixes]
     RequireCheckingReturnValueOfEval didn't count returning the result of an
