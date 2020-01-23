@@ -12,6 +12,11 @@ use Perl::Critic::Utils qw<
     :characters :severities :data_conversion :booleans
 >;
 
+use PPIx::Regexp;
+use PPIx::Regexp::Util 0.068 qw<
+    is_ppi_regexp_element
+>;
+
 use base 'Perl::Critic::Policy';
 
 our $VERSION = '1.136';
@@ -99,13 +104,16 @@ Readonly::Array my @IGNORE_FOR_INTERPOLATION =>
 #-----------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, undef ) = @_;
+    my ( $self, $elem, $doc ) = @_;
 
     if ( $elem->isa('PPI::Token::Magic') ) {
         return _violates_magic( $self, $elem );
     }
     elsif ( $elem->isa('PPI::Token::HereDoc') ) {
         return _violates_heredoc( $self, $elem );
+    }
+    elsif ( is_ppi_regexp_element( $elem ) ) {    # GitHub #843
+        return _violates_regexp( $self, $elem, $doc );
     }
 
     #the remaining applies_to() classes are all interpolated strings
@@ -114,7 +122,8 @@ sub violates {
 
 #-----------------------------------------------------------------------------
 
-# Helper functions for the three types of violations: code, quotes, heredoc
+# Helper functions for the four types of violations: code, quotes, heredoc,
+# regexp
 
 sub _violates_magic {
     my ( $self, $elem, undef ) = @_;
@@ -172,6 +181,38 @@ sub _violates_heredoc {
     }
 
     return;    # no violation
+}
+
+sub _violates_regexp {  # GitHub #843 (https://github.com/Perl-Critic/Perl-Critic/issues/843)
+    my ( $self, $elem, $doc ) = @_;
+
+    return if ( $self->{_string_mode} eq 'disable' );
+
+    my $pre = $doc->ppix_regexp_from_element( $elem )
+        or return;
+    $pre->failures()
+        and return;
+
+    my @raw_matches;
+    foreach my $code ( @{ $pre->find( 'PPIx::Regexp::Token::Code' ) || [] } ) {
+        my $code_doc = $code->ppi()
+            or next;
+        push @raw_matches, map { $_->symbol() } @{
+            $code_doc->find(  'PPI::Token::Magic' ) || [] };
+    }
+
+    my %matches = hashify( @raw_matches );
+    delete @matches{ keys %{ $self->{_allow} } };
+    if ( $self->{_string_mode} eq 'simple' ) {
+        delete @matches{@IGNORE_FOR_INTERPOLATION};
+    }
+
+    if ( keys %matches ) {
+        my $DESC = qq<$DESC in interpolated Regexp>;
+        return $self->_make_violation( $DESC, $EXPL, $elem, \%matches );
+    }
+
+    return;
 }
 
 #-----------------------------------------------------------------------------

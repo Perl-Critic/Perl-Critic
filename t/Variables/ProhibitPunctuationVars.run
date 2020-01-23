@@ -128,6 +128,7 @@ print qr<$+>;
 ## cut
 
 print qr<\$+>;
+print qr/TEST$/xsm; # GitHub #843
 
 ## name PPI::Token::QuoteLike::Readline: violations
 ## failures 1
