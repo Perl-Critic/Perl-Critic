@@ -12,7 +12,7 @@ use Perl::Critic::TestUtils qw();
 
 use Test::More tests => 10;
 
-our $VERSION = '1.136';
+our $VERSION = '1.137_01';
 
 Perl::Critic::TestUtils::assert_version( $VERSION );
 Perl::Critic::TestUtils::block_perlcriticrc();
