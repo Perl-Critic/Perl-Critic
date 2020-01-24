@@ -1,6 +1,11 @@
 Revision history for Perl module Perl::Critic
 
 
+1.138 Fri Jan 24 15:50:34 CST 2020
+
+    Stable release.  No changes since 1.137_01.
+
+
 1.137_01 Thu Jan 23 16:44:57 CST 2020
 
     [Fixes]
