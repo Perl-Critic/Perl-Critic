@@ -13,7 +13,7 @@ use Perl::Critic::PolicyFactory ( '-test' => 1 );
 
 use Test::More;
 
-our $VERSION = '1.137_01';
+our $VERSION = '1.138';
 use Perl::Critic::TestUtils;
 Perl::Critic::TestUtils::assert_version( $VERSION );
 
