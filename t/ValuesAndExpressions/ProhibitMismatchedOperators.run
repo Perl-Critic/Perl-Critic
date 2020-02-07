@@ -115,6 +115,28 @@ $a .= 1;
 -A 'file' eq "1";
 
 #-----------------------------------------------------------------------------
+
+## name Allow adding zero to special string numbers ('inf' and 'NaN')
+## failures 0
+## cut
+
+my $i = 'NaN'+0;
+$i = 0+'Nan';
+$i = 'inf'+0;
+$i = 0+'inf';
+$i = '-inf'+0;
+$i = '+inf'+0;
+
+#-----------------------------------------------------------------------------
+
+## name Does not allow adding non-zero to special string numbers ('inf' and 'NaN')
+## failures 2
+## cut
+
+my $i = 'NaN'+1;
+$i = 'inf'+2;
+
+#-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4
