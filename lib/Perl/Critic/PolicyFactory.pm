@@ -51,7 +51,7 @@ sub import {
             require Module::Pluggable;
             Module::Pluggable->import(search_path => $POLICY_NAMESPACE,
                                       require => 1, inner => 0);
-            @site_policy_names = plugins(); #Exported by Module::Pluggable
+            @site_policy_names = grep { $_->can('new') } plugins(); #Exported by Module::Pluggable
             1;
         };
 
