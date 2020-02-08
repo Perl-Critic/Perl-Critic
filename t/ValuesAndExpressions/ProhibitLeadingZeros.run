@@ -132,6 +132,14 @@ sysopen ( $filehandle, $filename, (O_WRONLY | O_CREAT | O_EXCL), 0666 );
 
 #-----------------------------------------------------------------------------
 
+## name sysopen GitHub #789
+## failures 0
+## cut
+
+sysopen my $filehandle, $filename, O_RDWR, 0666;
+
+#-----------------------------------------------------------------------------
+
 ## name umask
 ## failures 0
 ## cut
