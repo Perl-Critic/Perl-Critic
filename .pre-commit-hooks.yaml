@@ -3,6 +3,6 @@
   description: Run the perlcritic static analyzer on Perl source files
   minimum_pre_commit_version: 2.1.0
   entry: perlcritic
-  args: [--quiet]
+  args: [--quiet, --verbose, "5"]
   language: perl
   types: [perl]
