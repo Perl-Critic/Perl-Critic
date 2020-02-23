@@ -39,6 +39,9 @@ sub applies_to        { return 'PPI::Token::Number'    }
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
+
+    return if $elem->isa( 'PPI::Token::Number::Version' );  # GitHub #856
+
     my $min = $self->{_min_value};
 
     return if $elem !~ m{ \d{4} }xms;
