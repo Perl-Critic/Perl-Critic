@@ -10,11 +10,12 @@ $href = { grep "$foo", @list };
 
 if( grep { foo($_) } @list ) {}
 for( grep { foo($_) } @list ) {}
+sub { grep { foo($_) } @list }
 
 #-----------------------------------------------------------------------------
 
 ## name Basic failure
-## failures 7
+## failures 8
 ## cut
 
 grep "$foo", @list;
@@ -25,6 +26,7 @@ grep({ foo($_) } @list);
 if( $condition ){ grep { foo($_) } @list }
 while( $condition ){ grep { foo($_) } @list }
 for( @list ){ grep { foo($_) } @list }
+sub { grep { foo($_) } @list; return }
 
 #-----------------------------------------------------------------------------
 

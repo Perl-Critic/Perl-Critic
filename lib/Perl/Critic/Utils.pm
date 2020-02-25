@@ -882,6 +882,11 @@ sub is_in_void_context {
         return if $parent->isa('PPI::Structure::Constructor');
         return if $parent->isa('PPI::Structure::Subscript');
 
+        # If it's in a block and not the last statement then it's in void.
+        return 1 if
+                $parent->isa('PPI::Structure::Block')
+            and $token->statement()->snext_sibling();
+
         my $grand_parent = $parent->parent();
         if ($grand_parent) {
             return if
