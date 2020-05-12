@@ -3,7 +3,7 @@ package Perl::Critic::Policy::Variables::ProhibitAugmentedAssignmentInDeclaratio
 use 5.006001;
 use strict;
 use warnings;
-use List::MoreUtils qw{ firstval };
+use List::SomeUtils qw{ firstval };
 use Readonly;
 
 use Perl::Critic::Utils qw{ :severities :data_conversion };

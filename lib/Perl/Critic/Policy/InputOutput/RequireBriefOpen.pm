@@ -6,7 +6,7 @@ use warnings;
 
 use Readonly;
 
-use List::MoreUtils qw(any);
+use List::SomeUtils qw(any);
 
 use Perl::Critic::Utils qw{ :severities :classification :booleans
     hashify parse_arg_list

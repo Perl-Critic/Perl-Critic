@@ -10,7 +10,7 @@ use Readonly;
 use Exporter 'import';
 
 use File::Spec;
-use List::MoreUtils qw< firstidx >;
+use List::SomeUtils qw< firstidx >;
 use Scalar::Util qw< blessed >;
 
 use Perl::Critic::Exception::Configuration::Generic;
@@ -848,7 +848,7 @@ L<File::Which>
 
 L<IO::String>
 
-L<List::MoreUtils>
+L<List::SomeUtils>
 
 L<List::Util>
 

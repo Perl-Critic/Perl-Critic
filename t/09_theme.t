@@ -6,7 +6,7 @@ use warnings;
 
 use English qw(-no_match_vars);
 
-use List::MoreUtils qw(any all none);
+use List::SomeUtils qw(any all none);
 
 use Perl::Critic::TestUtils;
 use Perl::Critic::PolicyFactory;

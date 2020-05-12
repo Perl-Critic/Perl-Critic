@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 use Readonly;
-use List::MoreUtils qw< any >;
+use List::SomeUtils qw< any >;
 
 use PPI::Token::Symbol;
 use PPIx::QuoteLike;

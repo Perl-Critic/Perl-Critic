@@ -6,7 +6,7 @@ use warnings;
 
 use Carp;
 use English qw(-no_match_vars);
-use List::MoreUtils qw(none);
+use List::SomeUtils qw(none);
 use Readonly;
 use Scalar::Util qw(refaddr);
 

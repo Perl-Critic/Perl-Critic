@@ -600,7 +600,7 @@ Perl::Critic requires the following modules:
 
 [IO::String](https://metacpan.org/pod/IO::String)
 
-[List::MoreUtils](https://metacpan.org/pod/List::MoreUtils)
+[List::SomeUtils](https://metacpan.org/pod/List::SomeUtils)
 
 [List::Util](https://metacpan.org/pod/List::Util)
 

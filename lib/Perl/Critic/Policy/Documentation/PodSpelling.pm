@@ -10,7 +10,7 @@ use Readonly;
 use File::Spec;
 use File::Temp;
 use IO::String qw< >;
-use List::MoreUtils qw(uniq);
+use List::SomeUtils qw(uniq);
 use Pod::Spell qw< >;
 use Text::ParseWords qw< >;
 

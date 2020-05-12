@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Readonly;
 
-use List::MoreUtils qw(all);
+use List::SomeUtils qw(all);
 
 use Perl::Critic::Utils qw{ :characters :severities :data_conversion };
 use base 'Perl::Critic::Policy';

@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Readonly;
 
-use List::MoreUtils qw( none any );
+use List::SomeUtils qw( none any );
 
 use Perl::Critic::Utils qw{
     :booleans :characters :severities :data_conversion :classification :ppi

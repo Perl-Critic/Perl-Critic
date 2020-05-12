@@ -3,7 +3,7 @@ package Perl::Critic::Policy::Variables::ProhibitReusedNames;
 use 5.006001;
 use strict;
 use warnings;
-use List::MoreUtils qw(part);
+use List::SomeUtils qw(part);
 use Readonly;
 
 use Perl::Critic::Utils qw{ :severities :classification :data_conversion };
