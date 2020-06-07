@@ -94,7 +94,7 @@ modules.
 =head2 Background
 
 Often, C<\shift> is used to create references that act much like an alias.  By
-creating an ‘alias’ that is named, the code becomes more readable.  For example,
+creating an "alias" that is named, the code becomes more readable.  For example,
 
     sub routine {
         my $longstring = \shift;
