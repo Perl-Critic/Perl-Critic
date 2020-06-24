@@ -6,7 +6,7 @@ use warnings;
 
 use Readonly;
 
-use List::MoreUtils qw< none >;
+use List::SomeUtils qw< none >;
 
 use Perl::Critic::Utils qw{ :severities :classification hashify };
 use base 'Perl::Critic::Policy';

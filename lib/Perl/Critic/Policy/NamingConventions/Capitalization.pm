@@ -7,7 +7,7 @@ use warnings;
 use English qw< -no_match_vars >;
 use Readonly;
 
-use List::MoreUtils qw< any >;
+use List::SomeUtils qw< any >;
 
 use Perl::Critic::Exception::AggregateConfiguration;
 use Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue;

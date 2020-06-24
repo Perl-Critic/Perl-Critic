@@ -6,7 +6,7 @@ use warnings;
 
 use Readonly;
 
-use List::MoreUtils qw(all);
+use List::SomeUtils qw(all);
 
 use Perl::Critic::Utils qw{
     :booleans :characters :severities :data_conversion

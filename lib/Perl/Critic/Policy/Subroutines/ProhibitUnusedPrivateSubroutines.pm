@@ -6,7 +6,7 @@ use strict;
 use warnings;
 
 use English qw< $EVAL_ERROR -no_match_vars >;
-use List::MoreUtils qw(any);
+use List::SomeUtils qw(any);
 use Readonly;
 
 use Perl::Critic::Utils qw{

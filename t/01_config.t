@@ -7,7 +7,7 @@ use warnings;
 use English qw< -no_match_vars >;
 
 use File::Spec;
-use List::MoreUtils qw(all any);
+use List::SomeUtils qw(all any);
 
 use Perl::Critic::Exception::AggregateConfiguration;
 use Perl::Critic::Config qw<>;

@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 use English qw(-no_match_vars);
-use List::MoreUtils qw(all);
+use List::SomeUtils qw(all);
 use Readonly;
 
 use Perl::Critic::Utils qw{ :booleans :severities hashify };

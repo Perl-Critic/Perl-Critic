@@ -40,7 +40,7 @@ sub required_module_versions {
         'Getopt::Long'                  => 0,
         'IO::String'                    => 0,
         'IPC::Open2'                    => 1,
-        'List::MoreUtils'               => 0.19,
+        'List::SomeUtils'               => 0.19,
         'List::Util'                    => 0,
         'Module::Build'                 => 0.4204,
         'Module::Pluggable'             => 3.1,

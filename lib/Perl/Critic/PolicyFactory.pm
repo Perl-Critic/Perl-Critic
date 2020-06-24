@@ -7,7 +7,7 @@ use warnings;
 use English qw(-no_match_vars);
 
 use File::Spec::Unix qw();
-use List::MoreUtils qw(any);
+use List::SomeUtils qw(any);
 
 use Perl::Critic::Utils qw{
     :characters

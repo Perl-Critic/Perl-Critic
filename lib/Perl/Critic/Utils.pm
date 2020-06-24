@@ -15,7 +15,7 @@ use File::Spec qw();
 use Scalar::Util qw( blessed );
 use B::Keywords qw();
 use PPI::Token::Quote::Single;
-use List::MoreUtils qw(any);
+use List::SomeUtils qw(any);
 
 use Perl::Critic::Exception::Fatal::Generic qw{ throw_generic };
 use Perl::Critic::Utils::PPI qw< is_ppi_expression_or_generic_statement >;
