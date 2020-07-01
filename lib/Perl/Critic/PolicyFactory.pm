@@ -298,7 +298,8 @@ sub _validate_policies_in_profile {
     my %known_policies = hashify( $self->site_policy_names() );
 
     for my $policy_name ( $profile->listed_policies() ) {
-        if ( not exists $known_policies{$policy_name} ) {
+        if (     not exists $known_policies{$policy_name}
+             and $profile->policy_is_enabled($policy_name)) {
             my $message = qq{Policy "$policy_name" is not installed.};
 
             if ( $errors ) {
