@@ -88,6 +88,7 @@ lib/Perl/Critic/Policy/Documentation/RequirePodSections.pm
 lib/Perl/Critic/Policy/ErrorHandling/RequireCarping.pm
 lib/Perl/Critic/Policy/ErrorHandling/RequireCheckingReturnValueOfEval.pm
 lib/Perl/Critic/Policy/InputOutput/ProhibitBacktickOperators.pm
+lib/Perl/Critic/Policy/InputOutput/ProhibitBarewordDirHandles.pm
 lib/Perl/Critic/Policy/InputOutput/ProhibitBarewordFileHandles.pm
 lib/Perl/Critic/Policy/InputOutput/ProhibitExplicitStdin.pm
 lib/Perl/Critic/Policy/InputOutput/ProhibitInteractiveTest.pm
@@ -306,6 +307,7 @@ t/ErrorHandling/RequireCarping.run
 t/ErrorHandling/RequireCheckingReturnValueOfEval.run
 t/gh-734.t
 t/InputOutput/ProhibitBacktickOperators.run
+t/InputOutput/ProhibitBarewordDirHandles.run
 t/InputOutput/ProhibitBarewordFileHandles.run
 t/InputOutput/ProhibitExplicitStdin.run
 t/InputOutput/ProhibitInteractiveTest.run
