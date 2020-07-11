@@ -47,7 +47,7 @@ sub violates {
     if ( $token->isa('PPI::Token::Symbol') ) {
         return $self->violation($DESC, $EXPL, $elem) if $token =~ m/^[*]/xms;
     } elsif ( $token->isa('PPI::Token::Word') ) {
-        return $self->violation($DESC, $EXPL, $elem) unless $token =~ m/^(?:my|our)$/xms;
+        return $self->violation($DESC, $EXPL, $elem) if $token !~ m/^(?:my|our)$/xms;
     }
 
     return; #ok!
@@ -78,7 +78,7 @@ because they are global, and you have no idea if that symbol already
 points to some other file or directory handle.  You can mitigate some of that risk
 by C<local>izing the symbol first, but that's pretty ugly.  Since Perl
 5.6, you can use an undefined scalar variable as a lexical reference
-to an anonymous filehandle or dirhandle.  Alternatively, see the
+to an anonymous file handle or directory handle.  Alternatively, see the
 L<IO::Handle|IO::Handle> or L<IO::Dir|IO::Dir>
 modules for an object-oriented approach.
 
