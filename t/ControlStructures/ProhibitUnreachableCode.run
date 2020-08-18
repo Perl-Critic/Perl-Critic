@@ -72,6 +72,28 @@ for (1..2) {
 
 #-----------------------------------------------------------------------------
 
+## name die using heredoc
+## failures 0
+## cut
+
+die <<EOS
+error message
+EOS
+
+#-----------------------------------------------------------------------------
+
+## name die using twisted heredoc
+## failures 0
+## cut
+
+{
+  die <<~"EOS";
+  error message
+  EOS
+}
+
+#-----------------------------------------------------------------------------
+
 ## name Basic failure
 ## failures 12
 ## cut
