@@ -95,7 +95,6 @@ sub _needs_interpolation {
 # the original code at all, we are less stringent in being Critic-compliant.
 
 ## no critic ( RegularExpressions::RequireDotMatchAnything )
-## no critic ( RegularExpressions::RequireExtendedFormatting )
 ## no critic ( RegularExpressions::RequireLineBoundaryMatching )
 ## no critic ( RegularExpressions::ProhibitEscapedMetacharacters )
 
