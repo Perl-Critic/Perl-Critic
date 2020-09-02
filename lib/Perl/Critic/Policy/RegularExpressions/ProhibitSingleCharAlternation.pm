@@ -6,7 +6,6 @@ use warnings;
 
 use Carp;
 use English qw(-no_match_vars);
-use List::MoreUtils qw(all);
 use Readonly;
 
 use Perl::Critic::Utils qw{ :booleans :characters :severities };
