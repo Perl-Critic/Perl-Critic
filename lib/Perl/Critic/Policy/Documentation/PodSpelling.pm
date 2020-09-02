@@ -209,9 +209,7 @@ sub _run_spell_command {
         close $aspell_out_fh
             or throw_generic "Failed to close handle to spelling program: $OS_ERROR";
 
-        for (@words) {
-            chomp;
-        }
+        chomp @words;
 
         # Why is this extra step needed???
         @words = grep { not exists $Pod::Wordlist::Wordlist{$_} } @words;  ## no critic (ProhibitPackageVars)
