@@ -14,7 +14,6 @@ use Perl::Critic::TestUtils qw{ starting_points_including_examples };
 # -extra-test-policies option to work.
 use Perl::Critic::PolicyFactory (
     '-test' => 1,
-    '-extra-test-policies' => [ qw{ ErrorHandling::RequireUseOfExceptions } ],
 );
 
 use Test::More;
@@ -26,11 +25,6 @@ Perl::Critic::TestUtils::assert_version( $VERSION );
 #-----------------------------------------------------------------------------
 
 use Test::Perl::Critic;
-
-#-----------------------------------------------------------------------------
-
-# Fall over if P::C::More isn't installed.
-use Perl::Critic::Policy::ErrorHandling::RequireUseOfExceptions;
 
 #-----------------------------------------------------------------------------
 # Set up PPI caching for speed (used primarily during development)
