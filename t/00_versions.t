@@ -12,7 +12,7 @@ use Test::More;
 
 plan 'no_plan';
 
-our $VERSION = '1.138';
+our $VERSION = '1.139_01';
 use Perl::Critic::TestUtils;
 Perl::Critic::TestUtils::assert_version( $VERSION );
 

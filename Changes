@@ -1,7 +1,7 @@
 Revision history for Perl module Perl::Critic
 
 
-1.139_01 Tue Sep  1 23:10:39 CDT 2020
+1.139_01 Tue Sep  1 23:52:18 CDT 2020
 
     [Fixes]
     Removed an extra /x in RequireInterpolationOfMetachars.pm that caused
