@@ -11,7 +11,7 @@ use base 'Perl::Critic::Policy';
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '1.138';
+our $VERSION = '1.139_01';
 
 #-----------------------------------------------------------------------------
 
@@ -95,7 +95,6 @@ sub _needs_interpolation {
 # the original code at all, we are less stringent in being Critic-compliant.
 
 ## no critic ( RegularExpressions::RequireDotMatchAnything )
-## no critic ( RegularExpressions::RequireExtendedFormatting )
 ## no critic ( RegularExpressions::RequireLineBoundaryMatching )
 ## no critic ( RegularExpressions::ProhibitEscapedMetacharacters )
 
@@ -107,7 +106,7 @@ my $quoted_pair    = qr/\\$text/x;
 my $ctext          = qr/(?>[^()\\]+)/x;
 my $ccontent       = qr/$ctext|$quoted_pair/x;
 my $comment        = qr/\s*\((?:\s*$ccontent)*\s*\)\s*/x;
-my $cfws           = qr/$comment|\s+/xx;
+my $cfws           = qr/$comment|\s+/x;
 my $atext          = qq/[^$CTL$special\\s]/;
 my $atom           = qr/$cfws*$atext+$cfws*/x;
 my $dot_atom_text  = qr/$atext+(?:\.$atext+)*/x;

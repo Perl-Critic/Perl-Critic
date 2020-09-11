@@ -1,6 +1,17 @@
 Revision history for Perl module Perl::Critic
 
 
+1.139_01 Tue Sep  1 23:52:18 CDT 2020
+
+    [Fixes]
+    Removed an extra /x in RequireInterpolationOfMetachars.pm that caused
+    deprecation warnings in Perl 5.22 and higher.  (GH #822)
+
+    Documentation::RequirePackageMatchesPodName now recognizes the package
+    name if it's in C<< I<> >> or C<< B<> >> markup.  Thanks, Renée Bäcker.
+    (GH #913)
+
+
 1.138 Fri Jan 24 15:50:34 CST 2020
 
     Stable release.  No changes since 1.137_01.

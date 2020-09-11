@@ -9,7 +9,7 @@ use Perl::Critic::Utils qw{ $EMPTY hashify };
 
 use Exporter 'import';
 
-our $VERSION = '1.138';
+our $VERSION = '1.139_01';
 
 #-----------------------------------------------------------------------------
 

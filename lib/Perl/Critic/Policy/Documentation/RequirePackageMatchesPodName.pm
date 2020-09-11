@@ -10,7 +10,7 @@ use English qw{ -no_match_vars };
 use Perl::Critic::Utils qw{ :severities :classification };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.138';
+our $VERSION = '1.139_01';
 
 #-----------------------------------------------------------------------------
 
@@ -58,8 +58,8 @@ sub violates {
         }
 
         # idea: worry about POD escapes?
-        $pod_pkg =~ s{\A [CL]<(.*)>\z}{$1}gxms; # unwrap
-        $pod_pkg =~ s{\'}{::}gxms;              # perl4 -> perl5
+        $pod_pkg =~ s{\A [BCIL]<(.*)>\z}{$1}gxms; # unwrap
+        $pod_pkg =~ s{\'}{::}gxms;                # perl4 -> perl5
 
         foreach my $stmt ( @{ $doc->find('PPI::Statement::Package') || [] } ) {
             my $pkg = $stmt->namespace();

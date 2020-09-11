@@ -162,6 +162,46 @@ Blah...
 
 #-----------------------------------------------------------------------------
 
+## name A good match with B<>
+## failures 0
+## cut
+package Foo;
+
+=pod
+
+=head1 NAME
+
+B<Foo> - A module that does stuff
+
+=head1 DESCRIPTION
+
+Blah...
+
+=cut
+
+
+#-----------------------------------------------------------------------------
+
+## name A good match with I<>
+## failures 0
+## cut
+package Foo;
+
+=pod
+
+=head1 NAME
+
+I<Foo> - A module that does stuff
+
+=head1 DESCRIPTION
+
+Blah...
+
+=cut
+
+
+#-----------------------------------------------------------------------------
+
 ## name Multiple packages
 ## failures 0
 ## cut

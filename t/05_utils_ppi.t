@@ -25,7 +25,7 @@ use Perl::Critic::Utils::PPI qw< :all >;
 
 use Test::More tests => 64;
 
-our $VERSION = '1.138';
+our $VERSION = '1.139_01';
 
 use Perl::Critic::TestUtils;
 Perl::Critic::TestUtils::assert_version( $VERSION );
