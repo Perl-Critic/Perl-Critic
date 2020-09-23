@@ -6,10 +6,13 @@ use warnings;
 use List::MoreUtils qw(part);
 use Readonly;
 
-use Perl::Critic::Utils qw{ :severities :classification :data_conversion };
+use Perl::Critic::Utils qw<
+    :severities :classification :data_conversion :booleans
+>;
+
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.126';
+our $VERSION = '1.139_01';
 
 #-----------------------------------------------------------------------------
 
@@ -34,40 +37,62 @@ sub default_themes       { return qw( core bugs )            }
 sub applies_to           { return 'PPI::Statement::Variable' }
 
 #-----------------------------------------------------------------------------
+my %DocumentTree;
+
+sub prepare_to_scan_document {
+    my ($self, $document) = @_;
+
+    %DocumentTree = ();
+
+    return $TRUE;
+}
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
     return if 'local' eq $elem->type;
 
-    my $allow = $self->{_allow};
-    my $names = [ grep { not $allow->{$_} } $elem->variables() ];
-    # Assert: it is impossible for @$names to be empty in valid Perl syntax
-    # But if it IS empty, this code should still work but will be inefficient
+    my @names = grep { !$self->{_allow}{$_}; } $elem->variables();
 
-    # Walk up the PDOM looking for declared variables in the same
-    # scope or outer scopes.  Quit when we hit the root or when we find
-    # violations for all vars (the latter is a shortcut).
-    my $outer = $elem;
-    my @violations;
-    while (1) {
-        my $up = $outer->sprevious_sibling;
-        if (not $up) {
-            $up = $outer->parent;
-            last if !$up; # top of PDOM, we're done
-        }
-        $outer = $up;
+    my $outer = $elem->sprevious_sibling || $elem->parent;
+    return unless ($outer); # top of PDOM, we're done
 
-        if ($outer->isa('PPI::Statement::Variable') && 'local' ne $outer->type) {
-            my %vars = map {$_ => undef} $outer->variables;
-            my $hits;
-            ($hits, $names) = part { exists $vars{$_} ? 0 : 1 } @{$names};
-            if ($hits) {
-                push @violations, map { $self->violation( $DESC . $_, $EXPL, $elem ) } @{$hits};
-                last if not $names;  # found violations for ALL variables, we're done
-            }
-        }
+    my $outerlexicalvars = $self->_get_and_cache_lexical_names($outer);
+
+    my @collisions = grep {$outerlexicalvars->{$_};} @names;
+
+    return my @violations = map { $self->violation( $DESC . $_, $EXPL, $elem ) } @collisions;
+}
+
+# returns hashref - not tying for performance, but shared, so don't modify it
+sub _get_and_cache_lexical_names {
+    my ($self, $elem) = @_;
+
+    no warnings 'recursion';
+
+    my $elemkey = Scalar::Util::refaddr($elem);
+
+    if ($DocumentTree{$elemkey}) {
+        return $DocumentTree{$elemkey};
     }
-    return @violations;
+
+    # walk up the PDOM looking for declared variables in the same
+    # scope or outer scopes quit when we hit the root or when we find
+    # violations for all vars (the latter is a shortcut)
+    my $up = $elem->sprevious_sibling || $elem->parent;
+
+    my %lexicalnames;
+    if ($up) {
+        my $original = $self->_get_and_cache_lexical_names($up);
+        %lexicalnames = %$original;
+    }
+
+    if ($elem->isa('PPI::Statement::Variable') && 'local' ne $elem->type) {
+        my @elemvariables = $elem->variables;
+        @lexicalnames{@elemvariables} = 1 x (@elemvariables);
+    }
+
+    $DocumentTree{$elemkey} = \%lexicalnames;
+    return \%lexicalnames;
 }
 
 1;
@@ -135,14 +160,6 @@ This is intentional, though, because it catches bugs like this:
 
 I've done this myself several times -- it's a strong habit to put that
 "my" in front of variables at the start of subroutines.
-
-
-=head2 Performance
-
-The current implementation walks the tree over and over.  For a big
-file, this can be a huge time sink.  I'm considering rewriting to
-search the document just once for variable declarations and cache the
-tree walking on that single analysis.
 
 
 =head1 CONFIGURATION
