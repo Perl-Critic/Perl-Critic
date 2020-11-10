@@ -61,7 +61,7 @@ distribution.
 
 The behavior of the builtin C<sort> function is not defined if called
 in scalar context.  So if you write a subroutine that directly
-C<return>s the result of a C<sort> operation, then you code will
+C<return>s the result of a C<sort> operation, then your code will
 behave unpredictably if someone calls your subroutine in a scalar
 context.  This Policy emits a violation if the C<return> keyword
 is directly followed by the C<sort> function.  To safely return a
