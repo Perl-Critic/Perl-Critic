@@ -9,7 +9,7 @@ open(STDERR, '>', '/dev/null') or die;
 #-----------------------------------------------------------------------------
 
 ## name basic failures
-## failures 5
+## failures 17
 ## cut
 
 open FH, '>', $some_file;
@@ -17,6 +17,132 @@ open FH, '>', $some_file or die;
 open(FH, '>', $some_file);
 open(FH, '>', $some_file) or die;
 open(STDERROR, '>', '/dev/null') or die;
+
+open \*FH, '>', $some_file;
+open \*FH, '>', $some_file or die;
+open(\*FH, '>', $some_file);
+open(\*FH, '>', $some_file) or die;
+
+open *FH, '>', $some_file;
+open *FH, '>', $some_file or die;
+open(*FH, '>', $some_file);
+open(*FH, '>', $some_file) or die;
+
+open local *FH, '>', $some_file;
+open local *FH, '>', $some_file or die;
+open(local *FH, '>', $some_file);
+open(local *FH, '>', $some_file) or die;
+
+open FH, ">$some_file";
+open FH, ">$some_file" or die;
+open(FH, ">$some_file");
+open(FH, ">$some_file") or die;
+
+open \*FH, ">$some_file";
+open \*FH, ">$some_file" or die;
+open(\*FH, ">$some_file");
+open(\*FH, ">$some_file") or die;
+
+open *FH, ">$some_file";
+open *FH, ">$some_file" or die;
+open(*FH, ">$some_file");
+open(*FH, ">$some_file") or die;
+
+open local *FH, ">$some_file";
+open local *FH, ">$some_file" or die;
+open(local *FH, ">$some_file");
+open(local *FH, ">$some_file") or die;
+
+#-----------------------------------------------------------------------------
+
+## name basic passes
+## failures 0
+## cut
+
+open $fh, '>', $some_file;
+open $fh, '>', $some_file or die;
+open($fh, '>', $some_file);
+open($fh, '>', $some_file) or die;
+
+open my $fh, '>', $some_file;
+open my $fh, '>', $some_file or die;
+open(my $fh, '>', $some_file);
+open(my $fh, '>', $some_file) or die;
+
+open our $fh, '>', $some_file;
+open our $fh, '>', $some_file or die;
+open(our $fh, '>', $some_file);
+open(our $fh, '>', $some_file) or die;
+
+$foo{open}; # not a function call
+
+#-----------------------------------------------------------------------------
+
+## name exceptions for STDIN, STDOUT, STDERR
+## failures 0
+## cut
+
+open *STDIN, '>', $some_file;
+open *STDIN, '>', $some_file or die;
+open(*STDIN, '>', $some_file);
+open(*STDIN, '>', $some_file) or die;
+
+open local *STDIN, '>', $some_file;
+open local *STDIN, '>', $some_file or die;
+open(local *STDIN, '>', $some_file);
+open(local *STDIN, '>', $some_file) or die;
+
+open *STDIN, ">$some_file";
+open *STDIN, ">$some_file" or die;
+open(*STDIN, ">$some_file");
+open(*STDIN, ">$some_file") or die;
+
+open local *STDIN, ">$some_file";
+open local *STDIN, ">$some_file" or die;
+open(local *STDIN, ">$some_file");
+open(local *STDIN, ">$some_file") or die;
+
+
+open *STDOUT, '>', $some_file;
+open *STDOUT, '>', $some_file or die;
+open(*STDOUT, '>', $some_file);
+open(*STDOUT, '>', $some_file) or die;
+
+open local *STDOUT, '>', $some_file;
+open local *STDOUT, '>', $some_file or die;
+open(local *STDOUT, '>', $some_file);
+open(local *STDOUT, '>', $some_file) or die;
+
+open *STDOUT, ">$some_file";
+open *STDOUT, ">$some_file" or die;
+open(*STDOUT, ">$some_file");
+open(*STDOUT, ">$some_file") or die;
+
+open local *STDOUT, ">$some_file";
+open local *STDOUT, ">$some_file" or die;
+open(local *STDOUT, ">$some_file");
+open(local *STDOUT, ">$some_file") or die;
+
+
+open *STDERR, '>', $some_file;
+open *STDERR, '>', $some_file or die;
+open(*STDERR, '>', $some_file);
+open(*STDERR, '>', $some_file) or die;
+
+open local *STDERR, '>', $some_file;
+open local *STDERR, '>', $some_file or die;
+open(local *STDERR, '>', $some_file);
+open(local *STDERR, '>', $some_file) or die;
+
+open *STDERR, ">$some_file";
+open *STDERR, ">$some_file" or die;
+open(*STDERR, ">$some_file");
+open(*STDERR, ">$some_file") or die;
+
+open local *STDERR, ">$some_file";
+open local *STDERR, ">$some_file" or die;
+open(local *STDERR, ">$some_file");
+open(local *STDERR, ">$some_file") or die;
 
 #-----------------------------------------------------------------------------
 
@@ -32,6 +158,11 @@ open my $fh, '>', $some_file;
 open my $fh, '>', $some_file or die;
 open(my $fh, '>', $some_file);
 open(my $fh, '>', $some_file) or die;
+
+open our $fh, '>', $some_file;
+open our $fh, '>', $some_file or die;
+open(our $fh, '>', $some_file);
+open(our $fh, '>', $some_file) or die;
 
 $foo{open}; # not a function call
 {open}; # zero args, for Devel::Cover

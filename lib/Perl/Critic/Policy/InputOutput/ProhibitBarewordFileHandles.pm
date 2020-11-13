@@ -30,16 +30,30 @@ sub violates {
     return if $elem->content() ne 'open';
     return if ! is_function_call($elem);
 
-    my $first_arg = ( parse_arg_list($elem) )[0];
-    return if !$first_arg;
-    my $first_token = $first_arg->[0];
-    return if !$first_token;
+    my @args = parse_arg_list($elem);
 
-    if ( $first_token->isa('PPI::Token::Word') ) {
-        if ( ($first_token ne 'my') && ($first_token !~ m/^STD(?:IN|OUT|ERR)$/xms ) ) {
-            return $self->violation( $DESC, $EXPL, $elem );
+    while ( @args ) {
+        my $arg = shift @args;
+        return if !$arg;
+        my $token = $arg->[0];
+        return if !$token;
+
+        next if $token->isa('PPI::Token::Word') && $token eq 'local';  # handle local STDERR
+        next if $token->isa('PPI::Token::Cast') && $token eq q{\\};    # handle \*STDERR
+
+        if ( $token->isa('PPI::Token::Symbol') ) {
+            return if $token !~ m/^[*]/xms;                   # ignore non-glob symbols
+            return if $token =~ m/^[*]STD(?:IN|OUT|ERR)$/xms;
+        } elsif ( $token->isa('PPI::Token::Word') ) {
+            return if $token =~ m/^(?:my|our)$/xms;           # ignore declaration of new variables
+            return if $token =~ m/^STD(?:IN|OUT|ERR)$/xms;
+        } else {
+            return;
         }
+
+        return $self->violation($DESC, $EXPL, $elem);
     }
+
     return; #ok!
 }
 
