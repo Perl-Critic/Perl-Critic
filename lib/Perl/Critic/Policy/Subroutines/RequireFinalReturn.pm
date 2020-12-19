@@ -29,6 +29,14 @@ sub supported_parameters {
             list_always_present_values =>
                 [ qw< croak confess die exec exit throw Carp::confess Carp::croak ...> ],
         },
+        {
+            name            => 'terminal_meths',
+            description     => 'The additional methods to treat as terminal.',
+            default_string  => $EMPTY,
+            behavior        => 'string list',
+            list_always_present_values =>
+                [ qw< logconfess > ],
+        },
     );
 }
 
@@ -207,7 +215,12 @@ sub _is_terminal_stmnt {
     my ( $self, $stmnt ) = @_;
     return if not $stmnt->isa('PPI::Statement');
     my $first_token = $stmnt->schild(0) || return;
-    return exists $self->{_terminal_funcs}->{$first_token};
+    if ( exists $self->{_terminal_funcs}->{$first_token} ){ return !0;}
+    my $second_token = $stmnt->schild(1) || return;
+    $second_token->isa('PPI::Token::Operator') || return;
+    $second_token eq q{->} || return;
+    my $third_token = $stmnt->schild(2) || return;
+    return exists $self->{_terminal_meths}->{$third_token};
 }
 
 #-----------------------------------------------------------------------------
@@ -328,6 +341,16 @@ F<.perlcriticrc>:
 
     [Subroutines::RequireFinalReturn]
     terminal_funcs = quit abort bailout
+
+If you've created your own terminal methods, then you can configure
+Perl::Critic to recognize those methods as well, but the class won't
+be considered.  For example if you define throw_exception as terminal,
+then any method of that name will be terminal, regardless of class.
+Just put something like this in your
+F<.perlcriticrc>:
+
+    [Subroutines::RequireFinalReturn]
+    terminal_meths = throw_exception
 
 =head1 BUGS
 
