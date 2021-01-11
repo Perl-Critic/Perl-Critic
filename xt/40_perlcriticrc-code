@@ -31,6 +31,10 @@ lines = 20
 [InputOutput::RequireCheckedSyscalls]
 functions = open close
 
+[-Miscellanea::ProhibitUselessNoCritic]
+# With Perl 5.32, isa() becomes a reserved word. This means we need to Subroutines::ProhibitBuiltinHomonyms for it.
+# However, for all other Perls, that causes a Miscellanea::ProhibitUselessNoCritic to fire.
+
 [RegularExpressions::ProhibitUnusualDelimiters]
 allow_all_brackets = 1
 

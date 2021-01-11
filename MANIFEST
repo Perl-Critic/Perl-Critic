@@ -3,6 +3,7 @@ bin/perlcritic
 Build.PL
 Changes
 CONTRIBUTING.md
+cpanfile
 examples/generatestats
 examples/loadanalysisdb
 examples/perlcriticrc
@@ -216,9 +217,6 @@ lib/Perl/Critic/Violation.pm
 lib/Test/Perl/Critic/Policy.pm
 LICENSE
 MANIFEST			This list of files
-META.json
-META.yml
-README
 README.md
 t/00_modules.t
 t/00_versions.t
@@ -425,3 +423,6 @@ xt/94_includes.t
 xt/95_kwalitee.t
 xt/98_pod_syntax.t
 xt/99_pod_coverage.t
+README
+META.yml
+META.json
