@@ -219,7 +219,7 @@ sub _is_terminal_stmnt {
     return 1 if exists $self->{_terminal_funcs}->{$first_token};
 
     my $second_token = $stmnt->schild(1) || return;
-    return unless $second_token->isa('PPI::Token::Operator') && ($second_token eq q{->});
+    return if not ( $second_token->isa('PPI::Token::Operator') && ($second_token eq q{->}) );
 
     my $third_token = $stmnt->schild(2) || return;
     return exists $self->{_terminal_methods}->{$third_token};
