@@ -143,13 +143,34 @@ sub foo {
 
 #-----------------------------------------------------------------------------
 
-## name Custom terminals
+## name Custom terminal functions
 ## parms { terminal_funcs => 'bailout abort quit' };
 ## failures 0
 ## cut
 sub foo  { if ($condition) { return 1; }else{ abort } }
 sub bar  { if ($condition) { bailout }else{ return 1 } }
 sub baz  { quit }
+
+
+#-----------------------------------------------------------------------------
+
+## name Custom terminal methods
+## parms { terminal_methods => 'bailoutmeth abortmeth quitmeth' };
+## failures 0
+## cut
+sub foo  { if ($condition) { return 1; }else{ ONE->bailoutmeth } }
+sub bar  { if ($condition) { $two->abortmeth }else{ return 1 } }
+sub baz  { $three->quitmeth }
+
+#-----------------------------------------------------------------------------
+
+## name Custom terminal methods failing
+## parms { };
+## failures 3
+## cut
+sub foo  { if ($condition) { return 1; }else{ ONE->bailoutmeth } }
+sub bar  { if ($condition) { $two->abortmeth }else{ return 1 } }
+sub baz  { $three->quitmeth }
 
 #-----------------------------------------------------------------------------
 

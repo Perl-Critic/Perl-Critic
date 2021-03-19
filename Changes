@@ -1,6 +1,15 @@
 Revision history for Perl module Perl::Critic
 
 
+NEXT
+
+    [New Features]
+    Subroutines::RequireFinalReturn now lets you specify a
+    terminal_methods parameter to specify methods that should been as
+    terminal.  This is like the terminal_funcs parameter, but for methods.
+    Thanks, Robin Smidsrød and Mike Bruins. (GH #920)
+
+
 1.139_01 Tue Sep  1 23:52:18 CDT 2020
 
     [Fixes]
