@@ -1,7 +1,7 @@
 Revision history for Perl module Perl::Critic
 
 
-NEXT
+1.140 Fri Mar 19 00:11:19 CDT 2021
 
     [New Features]
     Subroutines::RequireFinalReturn now lets you specify a
