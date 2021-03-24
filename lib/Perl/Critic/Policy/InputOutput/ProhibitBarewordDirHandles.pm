@@ -8,7 +8,7 @@ use Readonly;
 use Perl::Critic::Utils qw{ :severities :classification :ppi };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.138';
+our $VERSION = '1.140';
 
 #-----------------------------------------------------------------------------
 
@@ -98,7 +98,6 @@ And Perl7 will probably drop support for bareword filehandles.
 
 This Policy is not configurable except for the standard options.
 
-
 =head1 SEE ALSO
 
 L<Perl::Critic::Policy::InputOutput::ProhibitBarewordFileHandles::Perl::Critic::Policy::InputOutput::ProhibitBarewordFileHandles>
@@ -114,7 +113,7 @@ C<github.com/pali>, C<github.com/raforg>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2011, 2020 Imaginative Software Systems.  All rights reserved.
+Copyright (c) 2005-2011, 2021 Imaginative Software Systems.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
