@@ -2,6 +2,9 @@ Revision history for Perl module Perl::Critic
 
 NEXT
     [New Features]
+    Add new policy InputOutput::ProhibitBarewordDirHandles, comparable to
+    ProhibitBarewordFilehanles.  Thanks, raf. (GH #912)
+
     References::ProhibitDoubleSigils policy now allows for Perl's
     postfix dereference syntax and does not report a policy violation.
     Thanks to Ilya Rassadin (GH #578)
