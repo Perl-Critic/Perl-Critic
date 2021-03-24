@@ -82,6 +82,8 @@ __END__
 
 =pod
 
+=for stopwords regexp
+
 =head1 NAME
 
 Perl::Critic::Policy::RegularExpressions::ProhibitFixedStringMatches - Use C<eq> or hash instead of fixed-pattern regexps.

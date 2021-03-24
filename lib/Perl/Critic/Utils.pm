@@ -1397,6 +1397,8 @@ __END__
 
 =pod
 
+=for stopwords foo
+
 =head1 NAME
 
 Perl::Critic::Utils - General utility subroutines and constants for Perl::Critic and derivative distributions.

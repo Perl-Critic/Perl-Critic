@@ -99,7 +99,7 @@ __END__
 
 =pod
 
-=for stopwords BNF Tatsuhiko Miyagawa
+=for stopwords BNF regexp RFC822 Tatsuhiko Miyagawa
 
 =head1 NAME
 

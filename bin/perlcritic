@@ -30,7 +30,7 @@ __END__
 
 =for stopwords DGR INI-style vim-fu minibuffer -noprofile API
 -profileproto -profile-proto ben Jore formatter Peshak pbp Komodo
-screenshots tty emacs gVIM plugin Perlish templating ActivePerl
+screenshots tty emacs grep gVIM plugin Perlish templating ActivePerl
 ActiveState Twitter
 
 =head1 NAME

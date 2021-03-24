@@ -17,7 +17,7 @@ strict = 1
 [-CodeLayout::RequireTidyCode]
 
 [Documentation::PodSpelling]
-spell_command = aspell list -l en_US
+spell_command = hunspell -l -d en_US
 stop_words_file = xt/40_stop_words
 
 [Documentation::RequirePodSections]

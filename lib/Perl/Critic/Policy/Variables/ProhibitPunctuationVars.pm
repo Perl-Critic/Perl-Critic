@@ -367,6 +367,8 @@ __END__
 
 =pod
 
+=for stopwords regexp
+
 =head1 NAME
 
 Perl::Critic::Policy::Variables::ProhibitPunctuationVars - Write C<$EVAL_ERROR> instead of C<$@>.

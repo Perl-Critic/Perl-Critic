@@ -39,7 +39,7 @@ sub supported_parameters {
         {
             name            => 'spell_command',
             description     => 'The command to invoke to check spelling.',
-            default_string  => 'aspell list',
+            default_string  => 'hunspell -l',
             behavior        => 'string',
         },
         {
@@ -202,11 +202,11 @@ sub _run_spell_command {
         # run spell command and fetch output
         local $SIG{PIPE} = sub { $got_sigpipe = 1; };
         my $command_line = join $SPACE, @{$self->_get_spell_command_line()};
-        open my $aspell_out_fh, q{-|}, "$command_line < $outfile"  ## Is this portable??
+        open my $speller_out_fh, q{-|}, "$command_line < $outfile"  ## Is this portable??
             or throw_generic "Failed to open handle to spelling program: $OS_ERROR";
 
-        @words = uniq( <$aspell_out_fh> );
-        close $aspell_out_fh
+        @words = uniq( <$speller_out_fh> );
+        close $speller_out_fh
             or throw_generic "Failed to close handle to spelling program: $OS_ERROR";
 
         chomp @words;
@@ -324,11 +324,11 @@ set a global list of spelling exceptions.  To do this, put entries in
 a F<.perlcriticrc> file like this:
 
     [Documentation::PodSpelling]
-    spell_command = aspell list
+    spell_command = hunspell -l
     stop_words = gibbles foobar
     stop_words_file = some/path/with/stop/words.txt
 
-The default spell command is C<aspell list> and it is interpreted as a
+The default spell command is C<hunspell -l> and it is interpreted as a
 shell command.  We parse the individual arguments via
 L<Text::ParseWords|Text::ParseWords> so feel free to use quotes around
 your arguments.  If the executable path is an absolute file name, it
@@ -358,13 +358,13 @@ together into a single list of exemptions.
 
 A spell checking program is not included with Perl::Critic.
 
-The results of failures for this policy can be confusing when F<aspell>
+The results of failures for this policy can be confusing when F<hunspell>
 complains about words containing punctuation such as hyphens and apostrophes.
-In this situation F<aspell> will often only emit part of the word that it
-thinks is misspelled.  For example, if you ask F<aspell> to check
+In this situation F<hunspell> will often only emit part of the word that it
+thinks is misspelled.  For example, if you ask F<hunspell> to check
 "foobie-bletch", the output only complains about "foobie".  Unfortunately,
 you'll have to look through your POD to figure out what the real word that
-F<aspell> is complaining about is.  One thing to try is looking at the output
+F<hunspell> is complaining about is.  One thing to try is looking at the output
 of C<< perl -MPod::Spell -e 'print
 Pod::Spell->new()->parse_from_file("lib/Your/Module.pm")' >> to see what is
 actually being checked for spelling.

@@ -715,7 +715,7 @@ __END__
 
 =pod
 
-=for stopwords refactored
+=for stopwords refactored regexp
 
 =head1 NAME
 
