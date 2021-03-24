@@ -1,5 +1,11 @@
 Revision history for Perl module Perl::Critic
 
+NEXT
+    [New Features]
+    References::ProhibitDoubleSigils policy now allows for Perl's
+    postfix dereference syntax and does not report a policy violation.
+    Thanks to Ilya Rassadin (GH #578)
+
 
 1.140 Tue Mar 23 21:42:19 CDT 2021
 
