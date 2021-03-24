@@ -105,13 +105,23 @@ sub violates {
         # the meantime, we workaround it by localizing STDERR first.
         local *STDERR = \*STDERR;
 
+        my %perltidy_opts;
+        Perl::Tidy::perltidy(
+            defined $self->{_perltidyrc} ? (perltidyrc => $self->{_perltidyrc}) : (),
+            dump_options => \%perltidy_opts,
+        );
+        if (($perltidy_opts{'character-encoding'} || $EMPTY)  eq  'utf8') {
+            require Encode;
+            $source = Encode::decode('UTF-8', $source);
+        }
+
         Perl::Tidy::perltidy(
             source      => \$source_copy,
             destination => \$dest,
             stderr      => $handle,
             defined $self->{_perltidyrc} ? (perltidyrc => $self->{_perltidyrc}) : (),
-       );
-       1;
+        );
+        1;
     };
 
     if ($stderr or not $eval_worked) {
