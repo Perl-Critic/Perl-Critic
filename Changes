@@ -9,6 +9,10 @@ NEXT
     postfix dereference syntax and does not report a policy violation.
     Thanks to Ilya Rassadin (GH #578)
 
+    [Fixes]
+    ProhibitLeadingZeros would not handle sysopen and lexical variables
+    correctly. This has been fixed. Thanks, Tom Wyant. (GH #789)
+
 
 1.140 Tue Mar 23 21:42:19 CDT 2021
 
