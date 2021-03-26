@@ -35,6 +35,18 @@ CHECK { do_something(); }
 END   { do_something(); }
 
 #-----------------------------------------------------------------------------
+
+## name Allowed homonyms with 'allow' parameter
+## failures 1
+## parms { allow => 'default delete index' }
+## cut
+
+sub default { do_someting(); }
+sub delete  { do_someting(); }
+sub index   { do_someting(); }
+sub open    { do_something(); } # not allowed
+
+#-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4
