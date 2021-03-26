@@ -404,13 +404,15 @@ sub line_is_disabled_for_policy {
     my ($self, $line, $policy) = @_;
     my $policy_name = ref $policy || $policy;
 
-    # HACK: This Policy is special.  If it is active, it cannot be
+    # HACK: These two policies are special. If they are active, they cannot be
     # disabled by a "## no critic" annotation.  Rather than create a general
     # hook in Policy.pm for enabling this behavior, we chose to hack
-    # it here, since this isn't the kind of thing that most policies do
+    # it here, since this isn't the kind of thing that most policies do.
 
     return 0 if $policy_name eq
         'Perl::Critic::Policy::Miscellanea::ProhibitUnrestrictedNoCritic';
+    return 0 if $policy_name eq
+        'Perl::Critic::Policy::Miscellanea::ProhibitUselessNoCritic';
 
     return 1 if $self->{_disabled_line_map}->{$line}->{$policy_name};
     return 1 if $self->{_disabled_line_map}->{$line}->{ALL};
