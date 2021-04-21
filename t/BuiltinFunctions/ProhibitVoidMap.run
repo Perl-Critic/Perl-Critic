@@ -11,11 +11,12 @@ $href = { map $foo, @list };
 
 if( map { foo($_) } @list ) {}
 for( map { foo($_) } @list ) {}
+sub { map { foo($_) } @list }
 
 #-----------------------------------------------------------------------------
 
 ## name Basic failure
-## failures 7
+## failures 8
 ## cut
 
 map "$foo", @list;
@@ -26,6 +27,7 @@ map({ foo($_) } @list);
 if( $condition ){ map { foo($_) } @list }
 while( $condition ){ map { foo($_) } @list }
 for( @list ){ map { foo($_) } @list }
+sub { map { foo($_) } @list; return }
 
 #-----------------------------------------------------------------------------
 
