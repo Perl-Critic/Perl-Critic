@@ -35,7 +35,6 @@ requires 'PPIx::Regexp::Util'         => '0.068'; # is_ppi_regexp_element()
 requires 'PPIx::Utilities::Node'      => '1.001';
 requires 'PPIx::Utilities::Statement' => '1.001';
 requires 'Perl::Tidy'                 => 0;
-requires 'Pod::Parser'                => 0;
 requires 'Pod::PlainText'             => 0;
 requires 'Pod::Select'                => 0;
 requires 'Pod::Spell'                 => 1;

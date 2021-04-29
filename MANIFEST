@@ -211,7 +211,6 @@ lib/Perl/Critic/Utils/DataConversion.pm
 lib/Perl/Critic/Utils/McCabe.pm
 lib/Perl/Critic/Utils/Perl.pm
 lib/Perl/Critic/Utils/POD.pm
-lib/Perl/Critic/Utils/POD/ParseInteriorSequence.pm
 lib/Perl/Critic/Utils/PPI.pm
 lib/Perl/Critic/Violation.pm
 lib/Test/Perl/Critic/Policy.pm
