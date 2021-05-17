@@ -4,12 +4,12 @@ use strict;
 use warnings;
 
 use English qw< -no_match_vars >;
-use Carp qw< confess >;
+use Carp qw( confess );
 
-use File::Spec;
+use File::Spec ();
 
 use Perl::Critic::PolicyFactory ( -test => 1 );
-use Perl::Critic::TestUtils qw{ bundled_policy_names };
+use Perl::Critic::TestUtils qw( bundled_policy_names );
 
 use Test::More;
 

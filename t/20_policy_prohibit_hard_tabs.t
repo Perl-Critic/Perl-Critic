@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 # common P::C testing tools
-use Perl::Critic::TestUtils qw(pcritique fcritique);
+use Perl::Critic::TestUtils qw( pcritique );
 
 use Test::More tests => 10;
 

@@ -7,7 +7,7 @@ use warnings;
 use PPI::Document;
 
 use Perl::Critic::Annotation;
-use Perl::Critic::TestUtils qw(bundled_policy_names);
+use Perl::Critic::TestUtils qw( bundled_policy_names );
 
 use Test::More;
 

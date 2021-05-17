@@ -6,7 +6,7 @@ use warnings;
 
 use Perl::Critic::PolicyFactory (-test => 1);
 use Perl::Critic::Statistics;
-use Perl::Critic::TestUtils;
+use Perl::Critic::TestUtils ();
 
 use Test::More tests => 24;
 

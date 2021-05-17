@@ -5,13 +5,13 @@ use strict;
 use warnings;
 
 use Perl::Critic::Policy;
-use Perl::Critic::PolicyParameter;
+use Perl::Critic::PolicyParameter ();
 
 use Test::More tests => 4;
 
 our $VERSION = '1.140';
 
-use Perl::Critic::TestUtils;
+use Perl::Critic::TestUtils ();
 Perl::Critic::TestUtils::assert_version( $VERSION );
 
 my $specification;

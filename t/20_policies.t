@@ -5,11 +5,11 @@ use 5.006001;
 use strict;
 use warnings;
 
-use Test::Perl::Critic::Policy qw< all_policies_ok >;
+use Test::Perl::Critic::Policy qw( all_policies_ok );
 
 our $VERSION = '1.140';
 
-use Perl::Critic::TestUtils;
+use Perl::Critic::TestUtils ();
 Perl::Critic::TestUtils::assert_version( $VERSION );
 
 # Notice that you can pass arguments to this test, which limit the testing to

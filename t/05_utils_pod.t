@@ -5,8 +5,7 @@ use strict;
 use warnings;
 
 use English qw< -no_match_vars >;
-use Readonly;
-use Carp qw< confess >;
+use Readonly ();
 
 
 use Perl::Critic::Utils::POD qw< :all >;
@@ -16,7 +15,7 @@ use Test::More tests => 61;
 
 our $VERSION = '1.140';
 
-use Perl::Critic::TestUtils;
+use Perl::Critic::TestUtils ();
 Perl::Critic::TestUtils::assert_version( $VERSION );
 
 Readonly::Scalar my $EXCEPTION_MESSAGE_REGEX =>

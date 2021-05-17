@@ -4,14 +4,14 @@ use 5.006001;
 use strict;
 use warnings;
 
-use Carp qw< confess >;
+use Carp qw( confess );
 
 use PPI::Document;
 
 use Perl::Critic::PolicyFactory -test => 1;
 use Perl::Critic::Document;
-use Perl::Critic;
-use Perl::Critic::TestUtils qw();
+use Perl::Critic ();
+use Perl::Critic::TestUtils ();
 
 use Test::More; #plan set below
 

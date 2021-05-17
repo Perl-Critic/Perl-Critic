@@ -4,8 +4,8 @@ use 5.006001;
 use strict;
 use warnings;
 
-use Perl::Critic::TestUtils qw< pcritique >;
-use Perl::Critic::Utils     qw< $EMPTY >;
+use Perl::Critic::TestUtils qw( pcritique );
+use Perl::Critic::Utils qw( $EMPTY );
 
 use Test::More tests => 1;
 

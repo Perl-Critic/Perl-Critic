@@ -6,7 +6,7 @@ use warnings;
 
 use charnames ':full';
 
-use Perl::Critic::TestUtils qw(pcritique fcritique);
+use Perl::Critic::TestUtils qw( fcritique pcritique );
 
 use Test::More tests => 29;
 

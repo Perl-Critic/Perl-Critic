@@ -7,7 +7,7 @@
 use strict;
 use warnings;
 
-use File::Spec qw<>;
+use File::Spec ();
 
 use Perl::Critic::PolicyFactory ( '-test' => 1 );
 
@@ -15,12 +15,12 @@ use Test::More;
 
 our $VERSION = '1.140';
 
-use Perl::Critic::TestUtils;
+use Perl::Critic::TestUtils ();
 Perl::Critic::TestUtils::assert_version( $VERSION );
 
 #-----------------------------------------------------------------------------
 
-use Test::Perl::Critic;
+use Test::Perl::Critic qw( all_critic_ok );
 
 #-----------------------------------------------------------------------------
 

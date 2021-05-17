@@ -5,10 +5,10 @@
 use strict;
 use warnings;
 
-use File::Spec qw();
+use File::Spec ();
 
 use Perl::Critic::Utils qw{ :characters };
-use Perl::Critic::TestUtils qw{ starting_points_including_examples };
+use Perl::Critic::TestUtils ();
 
 # Note: "use PolicyFactory" *must* appear after "use TestUtils" for the
 # -extra-test-policies option to work.
@@ -20,12 +20,11 @@ use Test::More;
 
 our $VERSION = '1.140';
 
-use Perl::Critic::TestUtils;
 Perl::Critic::TestUtils::assert_version( $VERSION );
 
 #-----------------------------------------------------------------------------
 
-use Test::Perl::Critic;
+use Test::Perl::Critic qw( all_critic_ok );
 
 #-----------------------------------------------------------------------------
 # Set up PPI caching for speed (used primarily during development)

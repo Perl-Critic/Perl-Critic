@@ -6,7 +6,7 @@ use warnings;
 
 use PPI::Document;
 
-use Perl::Critic::TestUtils qw(bundled_policy_names);
+use Perl::Critic::TestUtils qw( bundled_policy_names critique );
 
 use Test::More;
 

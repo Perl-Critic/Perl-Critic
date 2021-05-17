@@ -7,7 +7,7 @@ use warnings;
 use Test::More (tests => 32);
 use Perl::Critic::PolicyFactory (-test => 1);
 
-use Perl::Critic::TestUtils qw(critique);
+use Perl::Critic::TestUtils qw( critique );
 
 our $VERSION = '1.140';
 

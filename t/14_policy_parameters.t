@@ -8,9 +8,9 @@ use English qw(-no_match_vars);
 
 use Perl::Critic::UserProfile qw();
 use Perl::Critic::PolicyFactory (-test => 1);
-use Perl::Critic::PolicyParameter qw{ $NO_DESCRIPTION_AVAILABLE };
+use Perl::Critic::PolicyParameter qw( $NO_DESCRIPTION_AVAILABLE );
 use Perl::Critic::Utils qw( policy_short_name );
-use Perl::Critic::TestUtils qw(bundled_policy_names);
+use Perl::Critic::TestUtils qw( bundled_policy_names );
 
 use Test::More; #plan set below!
 

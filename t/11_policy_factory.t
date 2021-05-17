@@ -8,7 +8,7 @@ use English qw(-no_match_vars);
 
 use Perl::Critic::UserProfile;
 use Perl::Critic::PolicyFactory (-test => 1);
-use Perl::Critic::TestUtils qw();
+use Perl::Critic::TestUtils ();
 
 use Test::More tests => 10;
 

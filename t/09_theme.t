@@ -6,18 +6,17 @@ use warnings;
 
 use English qw(-no_match_vars);
 
-use List::MoreUtils qw(any all none);
+use List::MoreUtils qw( all any none );
 
-use Perl::Critic::TestUtils;
+use Perl::Critic::TestUtils ();
 use Perl::Critic::PolicyFactory;
 use Perl::Critic::UserProfile;
-use Perl::Critic::Theme;
+use Perl::Critic::Theme ();
 
 use Test::More tests => 66;
 
 our $VERSION = '1.140';
 
-use Perl::Critic::TestUtils;
 Perl::Critic::TestUtils::assert_version( $VERSION );
 
 ILLEGAL_RULES: {

@@ -3,8 +3,8 @@
 use strict;
 use warnings;
 
-use Perl::Critic::TestUtils qw(pcritique_with_violations);
-use Readonly;
+use Perl::Critic::TestUtils qw( pcritique_with_violations );
+use Readonly ();
 
 use Test::More;
 

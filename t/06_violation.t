@@ -6,8 +6,8 @@ use warnings;
 
 use English qw< -no_match_vars >;
 
-use File::Basename qw< basename >;
-use File::Spec::Functions qw< catdir catfile >;
+use File::Basename qw( basename );
+use File::Spec::Functions qw( catdir catfile );
 use PPI::Document q< >;
 use PPI::Document::File q< >;
 
@@ -18,7 +18,7 @@ use Test::More tests => 69;
 
 our $VERSION = '1.140';
 
-use Perl::Critic::TestUtils;
+use Perl::Critic::TestUtils ();
 Perl::Critic::TestUtils::assert_version( $VERSION );
 
 use lib catdir( qw< t 06_violation.d lib > );

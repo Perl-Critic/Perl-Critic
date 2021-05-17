@@ -4,13 +4,13 @@ use 5.006001;
 use strict;
 use warnings;
 
-use File::Spec;
+use File::Spec ();
 
 use Test::More tests => 1;
 
 our $VERSION = '1.140';
 
-use Perl::Critic::TestUtils;
+use Perl::Critic::TestUtils ();
 Perl::Critic::TestUtils::assert_version( $VERSION );
 
 my $perlcritic = File::Spec->rel2abs( File::Spec->catfile( qw( blib script perlcritic ) ) );

@@ -5,18 +5,17 @@ use strict;
 use warnings;
 
 use English qw(-no_match_vars);
-use Carp qw< confess >;
+use Carp qw( confess );
 
-use File::Spec;
 
-use Perl::Critic::Command qw< run >;
+use Perl::Critic::Command ();
 use Perl::Critic::Utils qw< :characters >;
 
 use Test::More tests => 57;
 
 our $VERSION = '1.140';
 
-use Perl::Critic::TestUtils;
+use Perl::Critic::TestUtils ();
 Perl::Critic::TestUtils::assert_version( $VERSION );
 
 local @ARGV = ();

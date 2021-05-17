@@ -4,22 +4,22 @@ use 5.006001;
 use strict;
 use warnings;
 
-use Carp qw< carp >;
+use Carp qw( carp );
 
 use version;
 
 
 use Perl::Critic::Document qw< >;
-use Perl::Critic::Utils qw< $EMPTY >;
-use Perl::Critic::Utils::DataConversion qw< dor >;
+use Perl::Critic::Utils ();
+use Perl::Critic::Utils::DataConversion qw( dor );
 
 
-use Test::Deep;
+use Test::Deep qw( bag cmp_deeply );
 use Test::More tests => 43;
 
 our $VERSION = '1.140';
 
-use Perl::Critic::TestUtils;
+use Perl::Critic::TestUtils ();
 Perl::Critic::TestUtils::assert_version( $VERSION );
 
 can_ok('Perl::Critic::Document', 'new');

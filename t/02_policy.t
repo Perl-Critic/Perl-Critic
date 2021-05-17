@@ -10,7 +10,7 @@ use Test::More tests => 29;
 
 our $VERSION = '1.140';
 
-use Perl::Critic::TestUtils;
+use Perl::Critic::TestUtils ();
 Perl::Critic::TestUtils::assert_version( $VERSION );
 
 # Perl::Critic::Policy is an abstract class, so it can't be instantiated

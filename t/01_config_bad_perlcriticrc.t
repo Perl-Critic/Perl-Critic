@@ -8,17 +8,17 @@ use strict;
 use warnings;
 
 use English qw< -no_match_vars >;
-use Readonly;
+use Readonly ();
 
 use Test::More;
 
 use Perl::Critic::PolicyFactory (-test => 1);
-use Perl::Critic;
-use Perl::Critic::Utils::Constants qw< $_MODULE_VERSION_TERM_ANSICOLOR >;
+use Perl::Critic ();
+use Perl::Critic::Utils::Constants qw( $_MODULE_VERSION_TERM_ANSICOLOR );
 
 our $VERSION = '1.140';
 
-use Perl::Critic::TestUtils;
+use Perl::Critic::TestUtils ();
 Perl::Critic::TestUtils::assert_version( $VERSION );
 
 my @color_severity_params;

@@ -7,7 +7,7 @@ use Test::More;
 
 our $VERSION = '1.140';
 
-use Perl::Critic::TestUtils;
+use Perl::Critic::TestUtils ();
 Perl::Critic::TestUtils::assert_version( $VERSION );
 
 eval 'use Test::Kwalitee 1.15 tests => [ qw{ -no_symlinks } ]; 1'

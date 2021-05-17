@@ -4,9 +4,9 @@ use strict;
 use warnings;
 
 use English qw< -no_match_vars >;
-use Carp qw< confess >;
+use Carp qw( confess );
 
-use File::Find;
+use File::Find qw( find );
 
 use Test::More;
 
@@ -14,7 +14,7 @@ plan 'no_plan';
 
 our $VERSION = '1.140';
 
-use Perl::Critic::TestUtils;
+use Perl::Critic::TestUtils ();
 Perl::Critic::TestUtils::assert_version( $VERSION );
 
 find({wanted => \&check_version, no_chdir => 1}, 'blib');
