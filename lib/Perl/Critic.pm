@@ -794,6 +794,45 @@ always be as specific as possible about which Policies you want to disable
 (i.e. never use a bare C<"## no critic">).  If Perl::Critic complains about
 your code, try and find a compliant solution before resorting to this feature.
 
+=head1 EDITOR SUPPORT
+
+=head2 Visual Studio Code
+
+Visual Studio Code is a lightweight but powerful source code editor which runs on your desktop and is available for Windows, macOS and Linux.
+
+=head3 perlcritic extension
+
+The perlcritic extension can be found here:
+    
+L<https://marketplace.visualstudio.com/items?itemName=sfodje.perlcritic>    
+
+The steps to install the perlcritic extension:
+
+=over
+
+=item 1. Menu: View->Command Palette
+
+=item 2. Type in "Extensions"
+
+=item 3. Select "Extensions: Install Extension"
+
+=item 4. In the search box type "perlcritic" and the extensions pane will open.
+
+=item 5. perlcritic should be the first entry
+
+=item 6. Select the "install" button
+
+=item 7. Once installed go to Preferences->Settings
+
+=item 8. Type in "perlcritic" in the search box
+
+=item 9. The settings options for perlcritic will show and you configure the extension here.
+
+=item 9a. If you want perlcritic to run automatically when the file is saved, select "only critique on save". 
+
+=back
+
+Open a Perl file. Save it and perlcritic should fire. There is a triangle with an exclamation point on the status bar. Click it and it will open the issues that Perl-Critic has found.
 
 =head1 THE L<Perl::Critic> PHILOSOPHY
 
