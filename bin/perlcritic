@@ -271,9 +271,10 @@ to report.
 
 =item C<--force>
 
-Directs C<perlcritic> to ignore the magical C<"## no critic"> annotations in
-the source code. See L<"BENDING THE RULES"> for more information.  You can set
-the default value for this option in your F<.perlcriticrc> file.
+Directs C<perlcritic> to ignore the magical C<"## no critic"> annotations and
+Perl version specifications in the source code. See L<"BENDING THE RULES"> for
+more information.  You can set the default value for this option in your
+F<.perlcriticrc> file.
 
 =item C<--statistics>
 

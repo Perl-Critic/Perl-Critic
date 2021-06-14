@@ -382,6 +382,14 @@ sub highest_explicit_perl_version {
 
 #-----------------------------------------------------------------------------
 
+sub suppress_version_statements {
+    my ($self) = @_;
+    $self->{_highest_explicit_perl_version} = undef;
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
 sub uses_module {
     my ($self, $module_name) = @_;
 
@@ -800,6 +808,12 @@ Returns a L<version|version> object for the highest Perl version
 requirement declared in the document via a C<use> or C<require>
 statement.  Returns nothing if there is no version statement.
 
+
+=item C<< suppress_version_statements() >>
+
+Causes C<highest_explicit_perl_version> to indicate that no version
+was specified by the document, regardless of the actual Perl version
+requirements that were declared.
 
 =item C<< uses_module($module_or_pragma_name) >>
 
