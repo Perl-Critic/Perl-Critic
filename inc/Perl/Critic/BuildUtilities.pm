@@ -12,7 +12,8 @@ use Exporter 'import';
 
 our @EXPORT_OK = qw<
     required_module_versions
-    build_required_module_versions
+    test_required_module_versions
+    configure_required_module_versions
     emit_tar_warning_if_necessary
     get_PL_files
 >;
@@ -42,7 +43,6 @@ sub required_module_versions {
         'IPC::Open2'                    => 1,
         'List::SomeUtils'               => '0.55',
         'List::Util'                    => 0,
-        'Module::Build'                 => 0.4204,
         'Module::Pluggable'             => 3.1,
         'PPI'                           => '1.265',
         'PPI::Document'                 => '1.265',
@@ -79,11 +79,23 @@ sub required_module_versions {
 }
 
 
-sub build_required_module_versions {
+sub test_required_module_versions {
     return (
-        'lib'           => 0,
         'Test::Deep'    => 0,
         'Test::More'    => 0,
+        'lib'           => 0,
+    );
+}
+
+
+sub configure_required_module_versions {
+    return (
+        'Carp'          => 0,
+        'English'       => 0,
+        'Exporter'      => '5.63',
+        'Module::Build' => '0.4204',
+        'base'          => 0,
+        'lib'           => 0,
     );
 }
 
