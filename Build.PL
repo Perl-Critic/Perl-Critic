@@ -11,7 +11,8 @@ use lib 'inc';
 
 use Perl::Critic::BuildUtilities qw<
     required_module_versions
-    build_required_module_versions
+    test_required_module_versions
+    configure_required_module_versions
     emit_tar_warning_if_necessary
     get_PL_files
 >;
@@ -32,13 +33,11 @@ my $builder = Perl::Critic::Module::Build->new(
     sign                => 0,
 
     requires            => { required_module_versions() },
-    build_requires      => { build_required_module_versions() },
+    test_requires       => { test_required_module_versions() },
 
     # Don't require a developer version of Module::Build, even if the
     # distribution tarball was created with one.  (Oops.)
-    configure_requires  => {
-        'Module::Build' => '0.4204',
-    },
+    configure_requires  => { configure_required_module_versions() },
 
     PL_files            => get_PL_files(),
 
