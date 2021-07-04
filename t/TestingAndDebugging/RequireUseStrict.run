@@ -154,6 +154,14 @@ $foo = $bar;
 
 #-----------------------------------------------------------------------------
 
+## name Test::Class::Moose support
+## failures 0 
+## cut
+
+use Test::Class::Moose;
+$foo = $bar;
+
+#-----------------------------------------------------------------------------
 ## name Custom configured equivalent modules
 ## failures 0
 ## parms { equivalent_modules => 'Foo' }
