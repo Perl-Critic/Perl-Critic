@@ -77,6 +77,17 @@ open( \*STDOUT, '+<&STDERR' );
 
 #-----------------------------------------------------------------------------
 
+## name one-arg failures
+## failures 4
+## cut
+
+open FH;
+open(FH);
+open(FH) or die;
+open FH or die;
+
+#-----------------------------------------------------------------------------
+
 ## name pass with "use 5.005"
 ## failures 0
 ## cut
