@@ -20,6 +20,12 @@ Readonly::Scalar my $EXPL => [ 161 ];
 
 #-----------------------------------------------------------------------------
 
+# The maximum number of statements that may appear in an import-only eval
+# string:
+Readonly::Scalar my $MAX_STATEMENTS => 3;
+
+#-----------------------------------------------------------------------------
+
 sub supported_parameters {
     return (
         {
@@ -64,25 +70,68 @@ sub _string_eval_is_an_include {
 
     my @statements = $document->schildren;
 
-    return if @statements > 2;
-    my $include = $statements[0];
+    return if @statements > $MAX_STATEMENTS;
+
+    my $structure = join q{,}, map { $_->class } @statements;
+
+    my $package_class   = qr{PPI::Statement::Package}xms;
+    my $include_class   = qr{PPI::Statement::Include}xms;
+    my $statement_class = qr{PPI::Statement}xms;
+
+    return if $structure !~ m{
+        ^
+        (?:$package_class,)?    # Optional "package"
+        $include_class
+        (?:,$statement_class)?  # Optional follow-on number
+        $
+    }xms;
+
+    my $is_q =     $eval_argument->isa('PPI::Token::Quote::Single')
+               or  $eval_argument->isa('PPI::Token::Quote::Literal');
+
+    for my $statement (@statements) {
+        if ( $statement->isa('PPI::Statement::Package') ) {
+            _string_eval_accept_package($statement) or return;
+        } elsif ( $statement->isa('PPI::Statement::Include') ) {
+            _string_eval_accept_include( $statement, $is_q ) or return;
+        } else {
+            _string_eval_accept_follow_on($statement) or return;
+        }
+    }
+
+    return $TRUE;
+}
+
+sub _string_eval_accept_package {
+    my ($package) = @_;
+
+    return if not defined $package; # RT 60179
+    return if not $package->isa('PPI::Statement::Package');
+    return if not $package->file_scoped;
+
+    return $TRUE;
+}
+
+sub _string_eval_accept_include {
+    my ( $include, $is_single_quoted ) = @_;
+
     return if not defined $include; # RT 60179
     return if not $include->isa('PPI::Statement::Include');
     return if $include->type() eq 'no';
 
-    if (
-            $eval_argument->isa('PPI::Token::Quote::Single')
-        or  $eval_argument->isa('PPI::Token::Quote::Literal')
-    ) {
+    if ($is_single_quoted) {
         # Don't allow funky inclusion of arbitrary code (note we do allow
         # interpolated values in interpolating strings because they can't
         # entirely screw with the syntax).
         return if $include->find('PPI::Token::Symbol');
     }
 
-    return $TRUE if @statements == 1;
+    return $TRUE;
+}
 
-    my $follow_on = $statements[1];
+sub _string_eval_accept_follow_on {
+    my ($follow_on) = @_;
+
     return if not $follow_on->isa('PPI::Statement');
 
     my @follow_on_components = $follow_on->schildren();
@@ -93,7 +142,6 @@ sub _string_eval_is_an_include {
 
     return $follow_on_components[1]->content() eq $SCOLON;
 }
-
 
 1;
 
@@ -129,21 +177,28 @@ doesn't give compile-time warnings.
 =head1 CONFIGURATION
 
 There is an C<allow_includes> boolean option for this Policy.  If set, then
-strings that look like they only include a single "use" or "require" statement
-(with the possible following statement that consists of a single number) are
-allowed.  With this option set, the following are flagged as indicated:
+strings that look like they only include an optional "package" statement
+followed by a single "use" or "require" statement (with the possible following
+statement that consists of a single number) are allowed.  With this option
+set, the following are flagged as indicated:
 
-    eval 'use Foo';             # ok
-    eval 'require Foo';         # ok
-    eval "use $thingy;";        # ok
-    eval "require $thingy;";    # ok
-    eval "use $thingy; 1;";     # ok
-    eval "require $thingy; 1;"; # ok
+    eval 'use Foo';                           # ok
+    eval 'require Foo';                       # ok
+    eval "use $thingy;";                      # ok
+    eval "require $thingy;";                  # ok
+    eval 'package Pkg; use Foo';              # ok
+    eval 'package Pkg; require Foo';          # ok
+    eval "package $pkg; use $thingy;";        # ok
+    eval "package $pkg; require $thingy;";    # ok
+    eval "use $thingy; 1;";                   # ok
+    eval "require $thingy; 1;";               # ok
+    eval "package $pkg; use $thingy; 1;";     # ok
+    eval "package $pkg; require $thingy; 1;"; # ok
 
-    eval 'use Foo; blah;';      # still not ok
-    eval 'require Foo; 2; 1;';  # still not ok
-    eval 'use $thingy;';        # still not ok
-    eval 'no Foo';              # still not ok
+    eval 'use Foo; blah;';                    # still not ok
+    eval 'require Foo; 2; 1;';                # still not ok
+    eval 'use $thingy;';                      # still not ok
+    eval 'no Foo';                            # still not ok
 
 If you don't understand why the number is allowed, see
 L<Perl::Critic::Policy::ErrorHandling::RequireCheckingReturnValueOfEval|Perl::Critic::Policy::ErrorHandling::RequireCheckingReturnValueOfEval>.

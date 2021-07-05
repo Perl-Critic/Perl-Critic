@@ -29,7 +29,7 @@ $hash1{eval} = 1;
 #-----------------------------------------------------------------------------
 
 ## name Eval of include statement without allow_includes set
-## failures 20
+## failures 40
 ## cut
 
 eval 'use Foo';
@@ -41,6 +41,15 @@ eval 'require Foo qw< blah >';
 eval 'use Foo 1.2 qw< blah >';
 eval 'require Foo 1.2 qw< blah >';
 
+eval 'package Pkg; use Foo';
+eval 'package Pkg; require Foo';
+eval 'package Pkg; use Foo 1.2';
+eval 'package Pkg; require Foo 1.2';
+eval 'package Pkg; use Foo qw< blah >';
+eval 'package Pkg; require Foo qw< blah >';
+eval 'package Pkg; use Foo 1.2 qw< blah >';
+eval 'package Pkg; require Foo 1.2 qw< blah >';
+
 eval 'use Foo; 1;';
 eval 'require Foo; 1;';
 eval 'use Foo 1.2; 1;';
@@ -50,10 +59,24 @@ eval 'require Foo qw< blah >; 1;';
 eval 'use Foo 1.2 qw< blah >; 1;';
 eval 'require Foo 1.2 qw< blah >; 1;';
 
+eval 'package Pkg; use Foo; 1;';
+eval 'package Pkg; require Foo; 1;';
+eval 'package Pkg; use Foo 1.2; 1;';
+eval 'package Pkg; require Foo 1.2; 1;';
+eval 'package Pkg; use Foo qw< blah >; 1;';
+eval 'package Pkg; require Foo qw< blah >; 1;';
+eval 'package Pkg; use Foo 1.2 qw< blah >; 1;';
+eval 'package Pkg; require Foo 1.2 qw< blah >; 1;';
+
 eval "use $thingy;";
 eval "require $thingy;";
 eval "use $thingy; 1;";
 eval "require $thingy; 1;";
+
+eval "package $pkg; use $thingy;";
+eval "package $pkg; require $thingy;";
+eval "package $pkg; use $thingy; 1;";
+eval "package $pkg; require $thingy; 1;";
 
 #-----------------------------------------------------------------------------
 
@@ -71,6 +94,15 @@ eval 'require Foo qw< blah >';
 eval 'use Foo 1.2 qw< blah >';
 eval 'require Foo 1.2 qw< blah >';
 
+eval 'package Pkg; use Foo';
+eval 'package Pkg; require Foo';
+eval 'package Pkg; use Foo 1.2';
+eval 'package Pkg; require Foo 1.2';
+eval 'package Pkg; use Foo qw< blah >';
+eval 'package Pkg; require Foo qw< blah >';
+eval 'package Pkg; use Foo 1.2 qw< blah >';
+eval 'package Pkg; require Foo 1.2 qw< blah >';
+
 eval 'use Foo; 1;';
 eval 'require Foo; 1;';
 eval 'use Foo 1.2; 1;';
@@ -80,21 +112,39 @@ eval 'require Foo qw< blah >; 1;';
 eval 'use Foo 1.2 qw< blah >; 1;';
 eval 'require Foo 1.2 qw< blah >; 1;';
 
+eval 'package Pkg; use Foo; 1;';
+eval 'package Pkg; require Foo; 1;';
+eval 'package Pkg; use Foo 1.2; 1;';
+eval 'package Pkg; require Foo 1.2; 1;';
+eval 'package Pkg; use Foo qw< blah >; 1;';
+eval 'package Pkg; require Foo qw< blah >; 1;';
+eval 'package Pkg; use Foo 1.2 qw< blah >; 1;';
+eval 'package Pkg; require Foo 1.2 qw< blah >; 1;';
+
 eval "use $thingy;";
 eval "require $thingy;";
 eval "use $thingy; 1;";
 eval "require $thingy; 1;";
 
+eval "package $pkg; use $thingy;";
+eval "package $pkg; require $thingy;";
+eval "package $pkg; use $thingy; 1;";
+eval "package $pkg; require $thingy; 1;";
+
 #-----------------------------------------------------------------------------
 
 ## name Eval of include statement with allow_includes set but extra stuff afterwards
-## failures 3
+## failures 6
 ## parms { allow_includes => 1 }
 ## cut
 
 eval 'use Foo; blah;';
 eval 'require Foo; 2; 1;';
 eval 'use $thingy;';
+
+eval 'package Pkg; use Foo; blah;';
+eval 'package Pkg; require Foo; 2; 1;';
+eval 'package Pkg; use $thingy;';
 
 #-----------------------------------------------------------------------------
 
