@@ -38,6 +38,14 @@ $foo{open}; # not a function call
 
 #-----------------------------------------------------------------------------
 
+## name PPI mis-identifies opan( CHECK, ... ) as scheduled block https://github.com/Perl-Critic/Perl-Critic/issues/878
+## failures 1
+## cut
+
+open( CHECK, '<foo' );
+
+#-----------------------------------------------------------------------------
+
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

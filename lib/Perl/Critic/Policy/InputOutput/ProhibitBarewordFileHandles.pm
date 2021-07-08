@@ -24,6 +24,8 @@ sub applies_to           { return 'PPI::Token::Word'  }
 
 #-----------------------------------------------------------------------------
 
+Readonly::Scalar my $ARRAY_REF  => ref [];
+
 sub violates {
     my ($self, $elem, undef) = @_;
 
@@ -32,7 +34,21 @@ sub violates {
 
     my $first_arg = ( parse_arg_list($elem) )[0];
     return if !$first_arg;
-    my $first_token = $first_arg->[0];
+    my $first_token;
+    # PPI can mis-parse something like open( CHECK, ... ) as a scheduled
+    # block. So ...
+    if ( 'PPI::Statement::Scheduled' eq ref $first_arg ) {
+        # If PPI PR #247 is accepted, the following should be unnecessary.
+        # We get here because when parse_arg_list() gets confused it
+        # just returns the statement object.
+        $first_token = $first_arg->schild( 0 );
+    } elsif ( $ARRAY_REF eq ref $first_arg ) {
+        # This is the normal path through the code.
+        $first_token = $first_arg->[0];
+    } else {
+        # This is purely defensive.
+        return;
+    }
     return if !$first_token;
 
     if ( $first_token->isa('PPI::Token::Word') ) {
