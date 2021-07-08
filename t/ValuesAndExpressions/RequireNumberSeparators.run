@@ -77,6 +77,19 @@ $var = -1000_000.01;
 $var = -10000_000.01;
 
 #-----------------------------------------------------------------------------
+
+## name PPI::Token::Number::Version is exempted (GitHub #856)
+## failures 0
+## cut
+
+# Note that this test will succeed even without the exemption. What
+# the exemption accomplishes is the suppression of an "Argument isn't
+# numeric" error from the policy at the point where its value is
+# compared to $min.
+
+$var = v2000;
+
+#-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4
