@@ -50,8 +50,37 @@ sub violates {
     return if $version and $version < $MINIMUM_VERSION;
 
     # Find the first 'use warnings' statement
-    my $warn_stmnt = $document->find_first( $self->_generate_is_use_warnings() );
-    my $warn_line  = $warn_stmnt ? $warn_stmnt->location()->[0] : undef;
+    my $warnings_stmnts = $document->find( $self->_generate_is_use_warnings() );
+    my @warnings_start_and_ends;
+    foreach my $warnings_statement ( @{$warnings_stmnts||[]} ) {
+        my $start_of_warnings = $warnings_statement->location->[0];
+        my $parent            = $warnings_statement->parent;
+        my $end_of_warnings;
+        if ( !$parent ) {
+            # Strange.  Assume the warnings applies until the end of the file
+            $end_of_warnings = '+inf';
+        }
+        elsif ( $parent->isa('PPI::Document') ) {
+            # Parent of this use warnings is the file itself:
+            #   package Foo;
+            #   use warnings;
+            # So the end of the warnings is the end of the file itself.
+            $end_of_warnings = '+inf';
+        }
+        else {
+            # package Foo { use warnings; }
+            #   or
+            # sub foo { use warnings; ... }
+            #   or
+            # package Foo;
+            # {
+            #   use warnings;
+            # }
+            my $after_parent    = $parent->finish;
+            $end_of_warnings   = $after_parent ? $after_parent->location->[0] : '+inf';
+        }
+        push @warnings_start_and_ends, [$start_of_warnings, $end_of_warnings];
+    }
 
     # Find all statements that aren't 'use', 'require', or 'package'
     my $stmnts_ref =  $self->_find_isnt_include_or_package($document);
@@ -66,7 +95,21 @@ sub violates {
         last if $stmnt->isa('PPI::Statement::Data');
 
         my $stmnt_line = $stmnt->location()->[0];
-        if ( (! defined $warn_line) || ($stmnt_line < $warn_line) ) {
+        if ( (! @warnings_start_and_ends ) ) {
+            push @viols, $self->violation( $DESC, $EXPL, $stmnt );
+            next;
+        }
+        my $line_covered_by_use_warnings = 0;
+        foreach my $tuple ( @warnings_start_and_ends ) {
+            my $warnings_start = $tuple->[0];
+            my $warnings_end   = $tuple->[1];
+            if ( $stmnt_line >= $warnings_start && $stmnt_line <= $warnings_end ) {
+                $line_covered_by_use_warnings = 1;
+                last;
+            }
+        }
+
+        if ( !$line_covered_by_use_warnings ) {
             push @viols, $self->violation( $DESC, $EXPL, $stmnt );
         }
     }
@@ -83,10 +126,6 @@ sub _generate_is_use_warnings {
 
         return 0 if !$elem->isa('PPI::Statement::Include');
         return 0 if $elem->type() ne 'use';
-
-        # We only want file-scoped pragmas
-        my $parent = $elem->parent();
-        return 0 if !$parent->isa('PPI::Document');
 
         if ( my $pragma = $elem->pragma() ) {
             return 1 if $self->{_equivalent_modules}{$pragma};
