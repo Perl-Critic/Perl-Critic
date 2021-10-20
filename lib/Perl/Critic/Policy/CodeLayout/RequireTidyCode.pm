@@ -153,7 +153,7 @@ Conway does make specific recommendations for whitespace and
 curly-braces in your code, but the most important thing is to adopt a
 consistent layout, regardless of the specifics.  And the easiest way
 to do that is to use L<Perl::Tidy|Perl::Tidy>.  This policy will
-complain if you're code hasn't been run through Perl::Tidy.
+complain if your code hasn't been run through Perl::Tidy.
 
 
 =head1 CONFIGURATION
