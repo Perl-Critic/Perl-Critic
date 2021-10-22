@@ -508,8 +508,6 @@ Displays the complete C<perlcritic> manual and exits.
 
 =item C<--version>
 
-=item C<-V>
-
 Displays the version number of C<perlcritic> and exits.
 
 =back
