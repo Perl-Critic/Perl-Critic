@@ -465,6 +465,35 @@ sub foo {
 }
 
 #-----------------------------------------------------------------------------
+
+## name Specio idiom
+## failures 0
+## parms { allow_closures => 1 }
+## cut
+
+sub foo {
+    my @args = $validate->( @_ );
+}
+
+sub bar {
+    my @args = $validate{bar}->( @_ );
+}
+
+#-----------------------------------------------------------------------------
+
+## name Specio idiom must be explicitly enabled
+## failures 2
+## cut
+
+sub foo {
+    my @args = $validate->( @_ );
+}
+
+sub bar {
+    my @args = $validate{bar}->( @_ );
+}
+
+#-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4
