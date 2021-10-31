@@ -3,7 +3,7 @@ package Perl::Critic::Policy::Variables::ProhibitReusedNames;
 use 5.006001;
 use strict;
 use warnings;
-use List::MoreUtils qw(part);
+use List::SomeUtils qw(part);
 use Readonly;
 
 use Perl::Critic::Utils qw{ :severities :classification :data_conversion };
@@ -167,7 +167,7 @@ a nice feature.
 
 =head1 COPYRIGHT
 
-Copyright (c) 2008-2013 Chris Dolan
+Copyright (c) 2008-2021 Chris Dolan
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

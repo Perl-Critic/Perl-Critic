@@ -40,7 +40,7 @@ sub required_module_versions {
         'Getopt::Long'                  => 0,
         'IO::String'                    => 0,
         'IPC::Open2'                    => 1,
-        'List::MoreUtils'               => 0.19,
+        'List::SomeUtils'               => '0.55',
         'List::Util'                    => 0,
         'Module::Build'                 => 0.4204,
         'Module::Pluggable'             => 3.1,
@@ -170,7 +170,7 @@ Elliot Shank  C<< <perl@galumph.com> >>
 
 =head1 LICENCE AND COPYRIGHT
 
-Copyright (c) 2007-2011, Elliot Shank.
+Copyright (c) 2007-2021, Elliot Shank.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

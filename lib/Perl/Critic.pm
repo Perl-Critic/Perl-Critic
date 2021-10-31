@@ -10,7 +10,7 @@ use Readonly;
 use Exporter 'import';
 
 use File::Spec;
-use List::MoreUtils qw< firstidx >;
+use List::SomeUtils qw( firstidx );
 use Scalar::Util qw< blessed >;
 
 use Perl::Critic::Exception::Configuration::Generic;
@@ -848,7 +848,7 @@ L<File::Which>
 
 L<IO::String>
 
-L<List::MoreUtils>
+L<List::SomeUtils>
 
 L<List::Util>
 
@@ -1001,7 +1001,7 @@ Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2019 Imaginative Software Systems.  All rights reserved.
+Copyright (c) 2005-2021 Imaginative Software Systems.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify it under
 the same terms as Perl itself.  The full text of this license can be found in

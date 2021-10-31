@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 use Readonly;
-use List::MoreUtils qw< any >;
+use List::SomeUtils qw( any );
 
 use PPI::Token::Symbol;
 use PPIx::QuoteLike;
@@ -184,7 +184,7 @@ Elliot Shank C<< <perl@galumph.com> >>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2008-2011 Elliot Shank.
+Copyright (c) 2008-2021 Elliot Shank.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
