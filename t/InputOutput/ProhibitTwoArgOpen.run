@@ -102,6 +102,18 @@ open FH, q{-|};
 open FH, qq{-|};
 open FH, "-|";
 
+
+#-----------------------------------------------------------------------------
+
+## name one-arg failures
+## failures 4
+## cut
+
+open FH;
+open(FH);
+open(FH) or die;
+open FH or die;
+
 #-----------------------------------------------------------------------------
 
 ## name pass with "use 5.005"

@@ -41,8 +41,9 @@ sub violates {
 
     my @args = parse_arg_list($elem);
 
-    if ( scalar @args == 2 ) {
-        return if $args[1]->[0]->isa( 'PPI::Token::Quote' )
+    if ( scalar @args <= 2 ) {
+        return if @args == 2
+               && $args[1]->[0]->isa( 'PPI::Token::Quote' )
                && $args[1]->[0]->string() =~ $FORK_HANDLES_RX;
         return $self->violation( $DESC, $EXPL, $elem );
     }
@@ -90,6 +91,13 @@ as in the difference between these two:
   open( $fh, 'foo.txt' );       # BAD: Reader must think what default mode is
   open( $fh, '<', 'foo.txt' );  # GOOD: Reader can see open mode
 
+There is also a one-argument form of C<open> which retrieves the expression to
+open from the global variable with the same name as the handle, but this has
+the same problems as the two-argument form, and adds in more ambiguity.
+
+  our $FH = '<foo.txt';
+  open( FH ); # not ok
+
 This policy will not complain if the file explicitly states that it is
 compatible with a version of perl prior to 5.6 via an include
 statement, e.g. by having C<require 5.005> in it.
@@ -117,7 +125,7 @@ Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2011 Imaginative Software Systems.  All rights reserved.
+Copyright (c) 2005-2021 Imaginative Software Systems.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.

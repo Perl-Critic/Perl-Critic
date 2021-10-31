@@ -22,10 +22,13 @@ NEXT
 
     Thanks, James Raspass. (GH #905)
 
-
     RequireArgUnpacking now allows a closure to be recognized as a way that
     subroutine arguments can be unpacked.  This is specified with an optional
     allow_closures configuration option.  Thanks, Tom Wyant. (GH #737)
+
+    ProhibitTwoArgOpen now disallows one-arg opens as well. Also, it
+    no longer allows two-arg opening of STDIN/STDOUT/STDERR.  Thanks,
+    Dan Book. (GH #652, #653)
 
     [Fixes]
     ProhibitLeadingZeros would not handle sysopen and lexical variables
