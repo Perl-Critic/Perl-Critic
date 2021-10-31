@@ -433,38 +433,6 @@ sub BUILD {
 }
 
 #-----------------------------------------------------------------------------
-
-## name Anonymous subroutine with attributes and/or prototypes
-## failures 0
-## cut
-
-sub foo {
-    my ( $foo ) = @_;
-
-    my $bar;
-
-    # attribute
-    my $baz = sub : lvalue {
-        my ( $b ) = @_;
-        return $b;
-    };
-
-    # prototype
-    my $burfle = sub (@) {};
-
-    # both
-    my $buzz = sub ($) : lvalue {
-        my ( $b ) = @_;
-        return $b;
-    };
-
-    # signature, which PPI 1.220 parses as prototype
-    my $boo = sub ($left, $right) {
-        return $left * $right;
-    }
-}
-
-#-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4
