@@ -9,8 +9,8 @@ NEXT
     postfix dereference syntax and does not report a policy violation.
     Thanks to Ilya Rassadin (GH #578)
 
-    Added Test::Class::Moose to the list of modules that are equivalent to
-    "use strict".  (GH #808)
+    Added Test::Class::Moose and MooseX::MethodAttributes::Role to the
+    list of modules that are equivalent to "use strict".  (GH #808, GH #886)
 
     [Fixes]
     ProhibitLeadingZeros would not handle sysopen and lexical variables
