@@ -12,6 +12,9 @@ NEXT
     Added Test::Class::Moose and MooseX::MethodAttributes::Role to the
     list of modules that are equivalent to "use strict".  (GH #808, GH #886)
 
+    Subroutines::RequireArgUnpacking now detects anonymous subroutines with
+    attributes, prototypes or signatures.  Thanks, Tom Wyant. (GH #684)
+
     [Fixes]
     ProhibitLeadingZeros would not handle sysopen and lexical variables
     correctly. This has been fixed. Thanks, Tom Wyant. (GH #789)
