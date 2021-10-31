@@ -6,7 +6,7 @@ use strict;
 use warnings;
 
 use English qw< $EVAL_ERROR -no_match_vars >;
-use List::MoreUtils qw(any);
+use List::SomeUtils qw(any);
 use Readonly;
 
 use Perl::Critic::Utils qw{
@@ -422,7 +422,7 @@ Chris Dolan <cdolan@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2009-2011 Thomas R. Wyant, III.
+Copyright (c) 2009-2021 Thomas R. Wyant, III.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

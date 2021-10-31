@@ -3,7 +3,7 @@ package Perl::Critic::Policy::Variables::ProhibitAugmentedAssignmentInDeclaratio
 use 5.006001;
 use strict;
 use warnings;
-use List::MoreUtils qw{ firstval };
+use List::SomeUtils qw( firstval );
 use Readonly;
 
 use Perl::Critic::Utils qw{ :severities :data_conversion };
@@ -95,7 +95,7 @@ Mike O'Regan
 
 =head1 COPYRIGHT
 
-Copyright (c) 2011 Mike O'Regan.  All rights reserved.
+Copyright (c) 2011-2021 Mike O'Regan.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

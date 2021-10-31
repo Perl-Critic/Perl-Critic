@@ -7,7 +7,7 @@ use warnings;
 
 use Carp qw< croak confess >;
 use English qw< -no_match_vars >;
-use List::MoreUtils qw< all none >;
+use List::SomeUtils qw( all none );
 use Readonly;
 
 use Test::Builder qw<>;
