@@ -22,6 +22,11 @@ NEXT
 
     Thanks, James Raspass. (GH #905)
 
+
+    RequireArgUnpacking now allows a closure to be recognized as a way that
+    subroutine arguments can be unpacked.  This is specified with an optional
+    allow_closures configuration option.  Thanks, Tom Wyant. (GH #737)
+
     [Fixes]
     ProhibitLeadingZeros would not handle sysopen and lexical variables
     correctly. This has been fixed. Thanks, Tom Wyant. (GH #789)
