@@ -15,6 +15,13 @@ NEXT
     Subroutines::RequireArgUnpacking now detects anonymous subroutines with
     attributes, prototypes or signatures.  Thanks, Tom Wyant. (GH #684)
 
+    ProhibitVoidMap and ProhibitVoidGrep now detect void context inside subs,
+    such as:
+
+        sub { map { foo($_) } @list; return }
+
+    Thanks, James Raspass. (GH #905)
+
     [Fixes]
     ProhibitLeadingZeros would not handle sysopen and lexical variables
     correctly. This has been fixed. Thanks, Tom Wyant. (GH #789)
