@@ -48,8 +48,8 @@ $foo{open}; # not a function call
 
 #-----------------------------------------------------------------------------
 
-## name io handle failures
-## failures 11
+## name no three-arg equivalent passes
+## failures 0
 ## cut
 
 open( STDOUT, '>&STDOUT' );
@@ -60,40 +60,6 @@ open( \*STDOUT, '>&STDERR' );
 open( *STDOUT, '>&STDERR' );
 open( STDOUT, '>&STDERR' );
 
-# Other file modes.
-open( \*STDOUT, '>>&STDERR' );
-open( \*STDOUT, '<&STDERR' );
-open( \*STDOUT, '+>&STDERR' );
-open( \*STDOUT, '+>>&STDERR' );
-open( \*STDOUT, '+<&STDERR' );
-
-#-----------------------------------------------------------------------------
-
-## name io handle passes
-## failures 0
-## cut
-
-open( STDOUT, '>&', \*STDOUT );
-open( STDIN, '>&', \*STDIN );
-open( STDERR, '>&', \*STDERR );
-
-open( \*STDOUT, '>&', \*STDERR );
-open( *STDOUT, '>&', \*STDERR );
-open( STDOUT, '>&', \*STDERR );
-
-# Other file modes.
-open( \*STDOUT, '>>&', \*STDERR );
-open( \*STDOUT, '<&', \*STDERR );
-open( \*STDOUT, '+>&', \*STDERR );
-open( \*STDOUT, '+>>&', \*STDERR );
-open( \*STDOUT, '+<&', \*STDERR );
-
-#-----------------------------------------------------------------------------
-
-## name no three-arg equivalent passes
-## failures 0
-## cut
-
 # These are actually forks
 open FH, '-|';
 open FH, '|-';
@@ -101,6 +67,13 @@ open FH, '|-';
 open FH, q{-|};
 open FH, qq{-|};
 open FH, "-|";
+
+# Other file modes.
+open( \*STDOUT, '>>&STDERR' );
+open( \*STDOUT, '<&STDERR' );
+open( \*STDOUT, '+>&STDERR' );
+open( \*STDOUT, '+>>&STDERR' );
+open( \*STDOUT, '+<&STDERR' );
 
 #-----------------------------------------------------------------------------
 
