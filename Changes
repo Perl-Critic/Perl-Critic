@@ -38,6 +38,9 @@ NEXT
     We note that the any() function is available in both List::MoreUtils and
     List::SomeUtils.
 
+    Added instructions to perlcritic on how to integrate with Visual Studio
+    Code.  Thanks, sigzero.
+
     [Internals]
     Switch to using List::SomeUtils instead of List::MoreUtils.
 
