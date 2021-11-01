@@ -409,7 +409,7 @@ __END__
 
 =pod
 
-=for stopwords Specio
+=for stopwords Params::Validate
 
 =head1 NAME
 
@@ -485,7 +485,7 @@ following configuration could be used:
   [Subroutines::RequireArgUnpacking]
   allow_delegation_to = next::method _delegate
 
-Argument validation tools such as L<Specio|Specio> generate a closure which is
+Argument validation tools such as L<Params::Validate|Params::Validate> generate a closure which is
 used to unpack and validate the arguments of a subroutine. In order to
 recognize closures as a valid way to unpack arguments you must enable them
 explicitly:

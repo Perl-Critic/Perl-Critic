@@ -466,7 +466,7 @@ sub foo {
 
 #-----------------------------------------------------------------------------
 
-## name Specio idiom
+## name Params::Validate idiom
 ## failures 0
 ## parms { allow_closures => 1 }
 ## cut
@@ -481,7 +481,7 @@ sub bar {
 
 #-----------------------------------------------------------------------------
 
-## name Specio idiom must be explicitly enabled
+## name Params::Validate idiom must be explicitly enabled
 ## failures 2
 ## cut
 
