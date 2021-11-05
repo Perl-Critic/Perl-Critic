@@ -45,6 +45,23 @@ $arr_i  = $some_ref->$#*;
 $value = $one*$two;
 
 #-----------------------------------------------------------------------------
+
+## name Multiplication, modulus, bit-and not cast
+# old PPI bug (fixed as of PPI v1.222): operators classified as casts.
+# See https://github.com/Perl-Critic/Perl-Critic/issues/604
+## failures 0
+## cut
+
+$var = $hash{v}*$v;
+$var = $hash{v} *$v;
+
+$var = $hash{v}%$v;
+$var = $hash{v} %$v;
+
+$var = $hash{v}&$v;
+$var = $hash{v} &$v;
+
+#-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4
