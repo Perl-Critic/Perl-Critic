@@ -35,7 +35,8 @@ sub violates {
         sub {
             return
                     $_[1]->isa('PPI::Statement::Sub')
-                &&  ! $_[1]->isa('PPI::Statement::Scheduled');
+                &&  ! $_[1]->isa('PPI::Statement::Scheduled')
+                &&  ! defined $_[1]->type;
         }
     );
     return if not $inner;

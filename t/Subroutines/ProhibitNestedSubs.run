@@ -55,6 +55,26 @@ sub quack {
 }
 
 #-----------------------------------------------------------------------------
+
+## name Lexical subroutine declarations inside subroutine declarations.
+## failures 0
+## cut
+
+sub foo {
+    my sub bar { 1 }
+}
+
+#-----------------------------------------------------------------------------
+
+## name Subroutine declarations inside lexical subroutine declarations.
+## failures 1
+## cut
+
+my sub foo {
+    sub bar { 1 }
+}
+
+#-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4
