@@ -62,6 +62,19 @@ sub quack {
 
 sub foo {
     my sub bar { 1 }
+    my sub baz { 1 }
+}
+
+#-----------------------------------------------------------------------------
+
+## name Lexical subroutine declarations inside lexical subroutine declarations inside subroutine declarations.
+## failures 0
+## cut
+
+sub foo {
+    my sub bar {
+        my sub baz { 1 }
+    }
 }
 
 #-----------------------------------------------------------------------------
