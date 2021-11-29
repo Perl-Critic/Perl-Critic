@@ -29,20 +29,17 @@ sub applies_to           { return 'PPI::Statement::Sub' }
 sub violates {
     my ($self, $elem, $doc) = @_;
 
-    return if $elem->isa('PPI::Statement::Scheduled');
+    return if $elem->isa('PPI::Statement::Scheduled') || defined $elem->type;
 
-    my $inner = $elem->find_first(
-        sub {
-            return
-                    $_[1]->isa('PPI::Statement::Sub')
-                &&  ! $_[1]->isa('PPI::Statement::Scheduled')
-                &&  ! defined $_[1]->type;
-        }
-    );
-    return if not $inner;
+    my $outer = $elem;
+    while ($outer = $outer->parent) {
+        last if $outer->isa('PPI::Statement::Sub')
+            &&  ! $outer->isa('PPI::Statement::Scheduled');
+    }
+    return if not $outer;
 
     # Must be a violation...
-    return $self->violation($DESC, $EXPL, $inner);
+    return $self->violation($DESC, $EXPL, $elem);
 }
 
 1;
