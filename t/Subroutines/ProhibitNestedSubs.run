@@ -62,7 +62,62 @@ sub quack {
 
 sub foo {
     my sub bar { 1 }
-    my sub baz { 1 }
+}
+
+#-----------------------------------------------------------------------------
+
+## name Subroutine declarations inside lexical subroutine declarations.
+## failures 1
+## cut
+
+my sub foo {
+    sub bar { 1 }
+}
+
+#-----------------------------------------------------------------------------
+
+## name Lexical subroutine declarations inside lexical subroutine declarations.
+## failures 0
+## cut
+
+my sub foo {
+    my sub bar { 1 }
+}
+
+#-----------------------------------------------------------------------------
+
+## name Subroutine declarations inside subroutine declarations inside subroutine declarations.
+## failures 2
+## cut
+
+sub foo {
+    sub bar {
+        sub baz { 1 }
+    }
+}
+
+#-----------------------------------------------------------------------------
+
+## name Lexical subroutine declarations inside subroutine declarations inside subroutine declarations.
+## failures 1
+## cut
+
+sub foo {
+    sub bar {
+        my sub baz { 1 }
+    }
+}
+
+#-----------------------------------------------------------------------------
+
+## name Subroutine declarations inside lexical subroutine declarations inside subroutine declarations.
+## failures 1
+## cut
+
+sub foo {
+    my sub bar {
+        sub baz { 1 }
+    }
 }
 
 #-----------------------------------------------------------------------------
@@ -79,12 +134,138 @@ sub foo {
 
 #-----------------------------------------------------------------------------
 
-## name Subroutine declarations inside lexical subroutine declarations.
+## name Subroutine declarations inside subroutine declarations inside lexical subroutine declarations.
+## failures 2
+## cut
+
+my sub foo {
+    sub bar {
+        sub baz { 1 }
+    }
+}
+
+#-----------------------------------------------------------------------------
+
+## name Lexical subroutine declarations inside subroutine declarations inside lexical subroutine declarations.
+## failures 1
+## cut
+
+my sub foo {
+    sub bar {
+        my sub baz { 1 }
+    }
+}
+
+#-----------------------------------------------------------------------------
+
+## name Subroutine declarations inside lexical subroutine declarations inside lexical subroutine declarations.
+## failures 1
+## cut
+
+my sub foo {
+    my sub bar {
+        sub baz { 1 }
+    }
+}
+
+#-----------------------------------------------------------------------------
+
+## name Lexical subroutine declarations inside lexical subroutine declarations inside lexical subroutine declarations.
+## failures 0
+## cut
+
+my sub foo {
+    my sub bar {
+        my sub baz { 1 }
+    }
+}
+
+#-----------------------------------------------------------------------------
+
+## name Multiple subroutine declarations inside subroutine declarations.
+## failures 2
+## cut
+
+sub foo {
+    sub bar { 1 }
+    sub baz { 1 }
+}
+
+#-----------------------------------------------------------------------------
+
+## name Subroutine declarations and lexical subroutine declarations inside subroutine declarations.
+## failures 1
+## cut
+
+sub foo {
+    sub bar { 1 }
+    my sub baz { 1 }
+}
+
+#-----------------------------------------------------------------------------
+
+## name Lexical subroutine declarations and subroutine declarations inside subroutine declarations.
+## failures 1
+## cut
+
+sub foo {
+    my sub bar { 1 }
+    sub baz { 1 }
+}
+
+#-----------------------------------------------------------------------------
+
+## name Multiple lexical subroutine declarations inside subroutine declarations.
+## failures 0
+## cut
+
+sub foo {
+    my sub bar { 1 }
+    my sub baz { 1 }
+}
+
+#-----------------------------------------------------------------------------
+
+## name Multiple subroutine declarations inside lexical subroutine declarations.
+## failures 2
+## cut
+
+my sub foo {
+    sub bar { 1 }
+    sub baz { 1 }
+}
+
+#-----------------------------------------------------------------------------
+
+## name Subroutine declarations and lexical subroutine declarations inside lexical subroutine declarations.
 ## failures 1
 ## cut
 
 my sub foo {
     sub bar { 1 }
+    my sub baz { 1 }
+}
+
+#-----------------------------------------------------------------------------
+
+## name Lexical subroutine declarations and subroutine declarations inside lexical subroutine declarations.
+## failures 1
+## cut
+
+my sub foo {
+    my sub bar { 1 }
+    sub baz { 1 }
+}
+
+#-----------------------------------------------------------------------------
+
+## name Multiple lexical subroutine declarations inside lexical subroutine declarations.
+## failures 0
+## cut
+
+my sub foo {
+    my sub bar { 1 }
+    my sub baz { 1 }
 }
 
 #-----------------------------------------------------------------------------
