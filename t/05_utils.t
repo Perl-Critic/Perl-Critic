@@ -18,7 +18,7 @@ use Perl::Critic::PolicyFactory;
 use Perl::Critic::TestUtils qw(bundled_policy_names);
 use Perl::Critic::Utils;
 
-use Test::More tests => 156;
+use Test::More tests => 158;
 
 our $VERSION = '1.140';
 
@@ -213,6 +213,16 @@ sub test_is_perl_builtin {
     $doc = make_doc( $code );
     $sub = $doc->find_first('Statement::Sub');
     ok( !is_perl_builtin($sub), 'Is not perl builtin function (PPI)' );
+
+    $code = 'my sub print {}';
+    $doc = make_doc( $code );
+    $sub = $doc->find_first('Statement::Sub');
+    ok( is_perl_builtin($sub), 'Is perl builtin function (PPI, lexial subroutines)' );
+
+    $code = 'my sub foobar {}';
+    $doc = make_doc( $code );
+    $sub = $doc->find_first('Statement::Sub');
+    ok( !is_perl_builtin($sub), 'Is not perl builtin function (PPI, lexial subroutines)' );
 
     return;
 }
