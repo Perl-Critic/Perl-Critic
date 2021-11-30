@@ -14,7 +14,7 @@ our $VERSION = '1.140';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Array my @ALLOW => qw( import AUTOLOAD DESTROY );
+Readonly::Array my @ALLOW => qw( import unimport AUTOLOAD DESTROY );
 Readonly::Hash my %ALLOW => hashify( @ALLOW );
 Readonly::Scalar my $DESC  => q{Subroutine name is a homonym for builtin %s %s};
 Readonly::Scalar my $EXPL  => [177];

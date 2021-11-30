@@ -27,6 +27,7 @@ sub eval2 {}
 ## cut
 
 sub import   { do_something(); }
+sub unimport { do_something(); }
 sub AUTOLOAD { do_something(); }
 sub DESTROY  { do_something(); }
 BEGIN { do_something(); }
@@ -61,10 +62,11 @@ my sub eval2 {}
 #-----------------------------------------------------------------------------
 
 ## name Lexical subroutines with special names
-## failures 7
+## failures 8
 ## cut
 
 my sub import   { do_something(); }
+my sub unimport { do_something(); }
 my sub AUTOLOAD { do_something(); }
 my sub DESTROY  { do_something(); }
 my sub BEGIN    { do_something(); }
