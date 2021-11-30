@@ -2,7 +2,7 @@
 # https://metacpan.org/release/Module-CPANfile
 # https://metacpan.org/pod/distribution/Module-CPANfile/lib/cpanfile.pod
 
-requires 'B::Keywords'                => '1.05';
+requires 'B::Keywords'                => '1.23';
 requires 'Carp'                       => 0;
 requires 'Config::Tiny'               => 2;
 requires 'English'                    => 0;

@@ -24,7 +24,7 @@ use Devel::CheckOS qw< os_is >;
 
 sub required_module_versions {
     return (
-        'B::Keywords'                   => 1.05,
+        'B::Keywords'                   => 1.23,
         'Carp'                          => 0,
         'Config::Tiny'                  => 2,
         'English'                       => 0,
