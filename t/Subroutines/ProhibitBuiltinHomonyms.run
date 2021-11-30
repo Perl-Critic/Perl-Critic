@@ -35,6 +35,44 @@ CHECK { do_something(); }
 END   { do_something(); }
 
 #-----------------------------------------------------------------------------
+
+## name Lexical subroutines with builtin names
+## failures 7
+## cut
+
+my sub open {}
+my sub map {}
+my sub eval {}
+my sub if {}
+my sub sub {}
+my sub foreach {}
+my sub while {}
+
+#-----------------------------------------------------------------------------
+
+## name Lexical subroutines with custom names
+## failures 0
+## cut
+
+my sub my_open {}
+my sub my_map {}
+my sub eval2 {}
+
+#-----------------------------------------------------------------------------
+
+## name Lexical subroutines with special names
+## failures 7
+## cut
+
+my sub import   { do_something(); }
+my sub AUTOLOAD { do_something(); }
+my sub DESTROY  { do_something(); }
+my sub BEGIN    { do_something(); }
+my sub INIT     { do_something(); }
+my sub CHECK    { do_something(); }
+my sub END      { do_something(); }
+
+#-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4
