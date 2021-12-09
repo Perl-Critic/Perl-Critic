@@ -39,8 +39,9 @@ sub violates {
     # https://github.com/Perl-Critic/PPI/issues/260 is resolved.
     if ( $name eq 'sub' and defined $elem->type() ) {
         my $token = $elem->schild(2);
-        $name = $token->content()
-            if defined $token and $token->isa('PPI::Token::Word');
+        if ( defined $token and $token->isa('PPI::Token::Word') ) {
+            $name = $token->content();
+        }
     }
     return if exists $ALLOW{ $name } and not defined $elem->type();
 
