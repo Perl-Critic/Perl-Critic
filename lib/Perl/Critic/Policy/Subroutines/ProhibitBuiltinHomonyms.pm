@@ -31,19 +31,7 @@ sub applies_to           { return 'PPI::Statement::Sub' }
 sub violates {
     my ( $self, $elem, undef ) = @_;
     return if $elem->isa('PPI::Statement::Scheduled'); #e.g. BEGIN, INIT, END
-
-    my $name = $elem->name();
-
-    # PPI 1.270 returns wrong name for lexical subroutines.
-    # We can remove this workaround when
-    # https://github.com/Perl-Critic/PPI/issues/260 is resolved.
-    if ( $name eq 'sub' and defined $elem->type() ) {
-        my $token = $elem->schild(2);
-        if ( defined $token and $token->isa('PPI::Token::Word') ) {
-            $name = $token->content();
-        }
-    }
-    return if exists $ALLOW{ $name } and not defined $elem->type();
+    return if exists $ALLOW{ $elem->name() } and not defined $elem->type();
 
     my $homonym_type = $EMPTY;
     if ( is_perl_builtin( $elem ) ) {
@@ -56,7 +44,7 @@ sub violates {
         return;    #ok!
     }
 
-    my $desc = sprintf $DESC, $homonym_type, $name;
+    my $desc = sprintf $DESC, $homonym_type, $elem->name();
     return $self->violation($desc, $EXPL, $elem);
 }
 

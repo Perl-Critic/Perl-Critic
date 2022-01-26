@@ -347,18 +347,7 @@ sub _name_for_sub_or_stringified_element {
     my $elem = shift;
 
     if ( blessed $elem and $elem->isa('PPI::Statement::Sub') ) {
-        my $name = $elem->name();
-
-        # PPI 1.270 returns wrong name for lexical subroutines.
-        # We can remove this workaround when
-        # https://github.com/Perl-Critic/PPI/issues/260 is resolved.
-        if ( $name eq 'sub' and defined $elem->type() ) {
-            my $token = $elem->schild(2);
-            if ( defined $token and $token->isa('PPI::Token::Word') ) {
-                $name = $token->content();
-            }
-        }
-        return $name;
+        return $elem->name();
     }
 
     return "$elem";
