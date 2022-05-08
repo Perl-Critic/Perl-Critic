@@ -1102,6 +1102,7 @@ sub all_perl_files {
                 }
                 return;
             },
+            untaint => 1,
         },
         @arg,
     );
