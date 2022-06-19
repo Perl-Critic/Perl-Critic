@@ -95,6 +95,15 @@ use warnings;
 
 $foo = $bar;
 
+#-----------------------------------------------------------------------------
+
+## name use warnings implied by "use v5.36"
+## failures 0
+## cut
+
+$foo = $bar;
+use v5.36;
+
 #Should not find the rest of these
 
 __END__
