@@ -19,6 +19,7 @@ Readonly::Scalar my $DESC => q{Code before warnings are enabled};
 Readonly::Scalar my $EXPL => [431];
 
 Readonly::Scalar my $MINIMUM_VERSION => version->new(5.006);
+Readonly::Scalar my $PERL_VERSION_WHICH_IMPLIES_WARNINGS => version->new(5.036);
 
 #-----------------------------------------------------------------------------
 
@@ -47,7 +48,7 @@ sub violates {
     my ( $self, undef, $document ) = @_;
 
     my $version = $document->highest_explicit_perl_version();
-    return if $version and $version < $MINIMUM_VERSION;
+    return if $version and ($version < $MINIMUM_VERSION or $version >= $PERL_VERSION_WHICH_IMPLIES_WARNINGS);
 
     # Find the first 'use warnings' statement
     my $warn_stmnt = $document->find_first( $self->_generate_is_use_warnings() );
