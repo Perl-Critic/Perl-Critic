@@ -241,11 +241,11 @@ sub _load_profile_from_hash {
 
 sub _find_profile_path {
 
-    #Define default filename
-    my $rc_file = '.perlcriticrc';
-
     #Check explicit environment setting
     return $ENV{PERLCRITIC} if exists $ENV{PERLCRITIC};
+
+    #Define default filename
+    my $rc_file = '.perlcriticrc';
 
     #Check current directory
     return $rc_file if -f $rc_file;
