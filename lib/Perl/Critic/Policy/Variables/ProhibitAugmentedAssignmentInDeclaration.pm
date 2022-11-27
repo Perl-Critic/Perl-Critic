@@ -18,7 +18,17 @@ Readonly::Scalar my $EXPL => q{Use simple assignment when initializing variables
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return ()                         }
+sub supported_parameters {
+    return (
+        {
+            name            => 'allow_our',
+            description     =>
+                q<Allow augmented assignment for our variables.>,
+            default_string => '0',
+            behavior       => 'boolean',
+        },
+    );
+}
 sub default_severity     { return $SEVERITY_HIGH             }
 sub default_themes       { return qw( core bugs )            }
 sub applies_to           { return 'PPI::Statement::Variable' }
@@ -34,6 +44,9 @@ sub violates {
     # element is assumed to be the first immediate child of that element.
     # Other operators in the statement, e.g. the ',' in "my ( $a, $b ) = ();",
     # as assumed to never be immediate children.
+    #
+    return
+        if $self->{_allow_our} and $elem->type eq 'our';
 
     my $found = firstval { $_->isa('PPI::Token::Operator') } $elem->children();
     if ( $found ) {
@@ -85,8 +98,21 @@ bugs. Some produce warnings.
 
 =head1 CONFIGURATION
 
-This Policy is not configurable except for the standard options.
+There is an C<allow_our> boolean option for this Policy. If set, augmented
+assignments are allowed when declaring C<our> variables. Since C<our>
+variables are globally accessible, some modules will want to allow users to
+initialize the variable prior to the module using the variable. Modules may
+also wish to use the same our variable in different scopes without declaring
+it at the outer scope.
 
+With this option set, the following are flagged as indicated:
+
+    our $DEBUG //= 1;           # ok
+
+This can be enabled in your F<.perlcriticrc>:
+
+    [Perl::Critic::Policy::Variables::ProhibitAugmentedAssignmentInDeclaration]
+    allow_our = 1
 
 =head1 AUTHOR
 
