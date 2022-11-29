@@ -1,6 +1,9 @@
 Revision history for Perl module Perl::Critic
 
 NEXT
+    This is the last version of Perl::Critic that will run on Perl 5.6.1.  The
+    next release will require Perl 5.10.1.
+
     [New Features]
     Add new policy InputOutput::ProhibitBarewordDirHandles, comparable to
     ProhibitBarewordFilehanles.  Thanks, raf. (GH #912)
