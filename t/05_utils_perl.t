@@ -8,7 +8,7 @@ use Perl::Critic::Utils::Perl qw< :all >;
 
 use Test::More tests => 7;
 
-our $VERSION = '1.140';
+our $VERSION = '1.142';
 
 use Perl::Critic::TestUtils;
 Perl::Critic::TestUtils::assert_version( $VERSION );

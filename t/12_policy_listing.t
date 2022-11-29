@@ -10,7 +10,7 @@ use Perl::Critic::PolicyListing;
 
 use Test::More;
 
-our $VERSION = '1.140';
+our $VERSION = '1.142';
 
 use Perl::Critic::TestUtils;
 Perl::Critic::TestUtils::assert_version( $VERSION );

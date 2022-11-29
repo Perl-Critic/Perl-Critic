@@ -10,7 +10,7 @@ use Perl::Critic::Utils qw< :characters :severities :classification hashify >;
 
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.140';
+our $VERSION = '1.142';
 
 #-----------------------------------------------------------------------------
 
