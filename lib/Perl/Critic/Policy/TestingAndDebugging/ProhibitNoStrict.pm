@@ -10,7 +10,7 @@ use List::SomeUtils qw(all);
 use Perl::Critic::Utils qw{ :characters :severities :data_conversion };
 use base 'Perl::Critic::Policy';
 
-our $VERSION = '1.140';
+our $VERSION = '1.142';
 
 #-----------------------------------------------------------------------------
 
