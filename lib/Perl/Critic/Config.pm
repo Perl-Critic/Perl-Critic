@@ -112,7 +112,6 @@ sub _init {
         $args{'-program-extensions'}, $errors);
 
     # If given, these options can be true or false (but defined)
-    # We normalize these to numeric values by multiplying them by 1;
     $self->{_force} = boolean_to_number( dor( $args{-force}, $options_processor->force() ) );
     $self->{_only}  = boolean_to_number( dor( $args{-only},  $options_processor->only()  ) );
     $self->{_color} = boolean_to_number( dor( $args{-color}, $options_processor->color() ) );
