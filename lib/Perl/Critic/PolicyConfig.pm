@@ -154,9 +154,8 @@ sub get_parameter_names {
 sub handle_extra_parameters {
     my ($self, $policy, $errors) = @_;
 
-    my $profile_strictness = $self->{$NON_PUBLIC_DATA}{_profile_strictness};
-    defined $profile_strictness
-        or $profile_strictness = $PROFILE_STRICTNESS_DEFAULT;
+    my $profile_strictness = $self->{$NON_PUBLIC_DATA}{_profile_strictness}
+        // $PROFILE_STRICTNESS_DEFAULT;
 
     return if $profile_strictness eq $PROFILE_STRICTNESS_QUIET;
 

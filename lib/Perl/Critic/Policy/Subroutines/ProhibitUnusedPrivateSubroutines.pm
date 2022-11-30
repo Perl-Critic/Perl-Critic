@@ -69,8 +69,7 @@ sub applies_to           { return 'PPI::Statement::Sub'  }
 
 sub _parse_regex_parameter {
     my ($self, $parameter, $config_string) = @_;
-    defined $config_string
-        or $config_string = $parameter->get_default_string();
+    $config_string //= $parameter->get_default_string();
 
     my $regex;
     eval { $regex = qr/$config_string/; 1 } ## no critic (RegularExpressions)

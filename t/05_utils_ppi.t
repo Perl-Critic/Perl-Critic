@@ -286,7 +286,7 @@ can_ok('main', 'is_in_subroutine');
             $input = $doc->first_element();
         }
 
-        my $name = defined $code ? $code : '<undef>';
+        my $name = $code // '<undef>';
 
         local $Test::Builder::Level = $Test::Builder::Level + 1; ## no critic (Variables::ProhibitPackageVars)
         is(
@@ -323,7 +323,7 @@ can_ok('main', 'is_in_subroutine');
             $input = $transform->($doc);
         }
 
-        my $name = defined $code ? $code : '<undef>';
+        my $name = $code // '<undef>';
 
         local $Test::Builder::Level = $Test::Builder::Level + 1; ## no critic (Variables::ProhibitPackageVars)
         is(

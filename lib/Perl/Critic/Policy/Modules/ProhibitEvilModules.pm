@@ -103,9 +103,7 @@ sub _parse_modules {
     my ($self, $parameter, $config_string) = @_;
 
     my $module_specifications =
-        defined $config_string
-            ? $config_string
-            : $parameter->get_default_string();
+        $config_string // $parameter->get_default_string();
 
     return if not $module_specifications;
     return if $module_specifications =~ m< \A \s* \z >xms;

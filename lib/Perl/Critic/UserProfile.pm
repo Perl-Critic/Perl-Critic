@@ -34,7 +34,7 @@ sub _init {
 
     my ( $self, %args ) = @_;
     # The profile can be defined, undefined, or an empty string.
-    my $profile = defined $args{-profile} ? $args{-profile} : _find_profile_path();
+    my $profile = $args{-profile} // _find_profile_path();
     $self->_load_profile( $profile );
     $self->_set_options_processor();
     return $self;

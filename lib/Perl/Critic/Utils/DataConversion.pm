@@ -37,7 +37,7 @@ sub dor {  ## no critic (RequireArgUnpacking)
 #-----------------------------------------------------------------------------
 
 sub defined_or_empty {  ## no critic (RequireArgUnpacking)
-    return defined $_[0] ? $_[0] : $EMPTY;
+    return $_[0] // $EMPTY;
 }
 
 1;
