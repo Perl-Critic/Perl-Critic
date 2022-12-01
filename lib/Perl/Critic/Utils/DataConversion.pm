@@ -14,15 +14,8 @@ our $VERSION = '1.142';
 #-----------------------------------------------------------------------------
 
 Readonly::Array our @EXPORT_OK => qw(
-    boolean_to_number
     dor
 );
-
-#-----------------------------------------------------------------------------
-
-sub boolean_to_number {  ## no critic (RequireArgUnpacking)
-    return $_[0] ? $TRUE : $FALSE;
-}
 
 #-----------------------------------------------------------------------------
 
@@ -61,11 +54,6 @@ interface will go through a deprecation cycle.
 =head1 IMPORTABLE SUBS
 
 =over
-
-=item C<boolean_to_number( $value )>
-
-Return 0 or 1 based upon the value of parameter in a boolean context.
-
 
 =item C<dor( $value, $default )>
 
