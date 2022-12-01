@@ -53,11 +53,7 @@ sub initialize_parameter {
                 my ($policy, $parameter, $config_string) = @_;  ## no critic(Variables::ProhibitReusedNames)
 
                 my @potential_values;
-                my $value_string = $parameter->get_default_string();
-
-                if (defined $config_string) {
-                    $value_string = $config_string;
-                }
+                my $value_string = $config_string // $parameter->get_default_string();
 
                 if ( defined $value_string ) {
                     @potential_values = words_from_string($value_string);
@@ -93,11 +89,7 @@ sub initialize_parameter {
                 # order to remain consistent with the parser function interface.
                 my ($policy, $parameter, $config_string) = @_;  ## no critic(Variables::ProhibitReusedNames)
 
-                my $value_string = $parameter->get_default_string();
-
-                if (defined $config_string) {
-                    $value_string = $config_string;
-                }
+                my $value_string = $config_string // $parameter->get_default_string();
 
                 if (
                         defined $value_string

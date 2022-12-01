@@ -14,20 +14,9 @@ our $VERSION = '1.142';
 sub _parse {
     my ($policy, $parameter, $config_string) = @_;
 
-    my $value;
-    my $value_string = $parameter->get_default_string();
+    my $value_string = $config_string // $parameter->get_default_string();
 
-    if (defined $config_string) {
-        $value_string = $config_string;
-    }
-
-    if ( $value_string ) {
-        $value = $TRUE;
-    } else {
-        $value = $FALSE;
-    }
-
-    $policy->__set_parameter_value($parameter, $value);
+    $policy->__set_parameter_value($parameter, $value_string ? $TRUE : $FALSE);
 
     return;
 }

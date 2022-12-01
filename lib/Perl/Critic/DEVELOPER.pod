@@ -370,8 +370,7 @@ have something like this:
         $self->{_foo} = $config->get{foo};
         $self->{_factor} = $config->get{factor};
 
-        my $selections = $config->get{selections};
-        $selections = defined $selections ? $selections : $EMPTY_STRING;
+        my $selections = $config->get{selections} // $EMPTY_STRING;
         $self->{_selections} = [ words_from_string($selections) ];
 
         return $TRUE;
