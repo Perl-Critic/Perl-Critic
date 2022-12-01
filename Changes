@@ -3,6 +3,11 @@ Revision history for Perl module Perl::Critic
 NEXT
     Perl::Critic now requires Perl 5.10.1.
 
+    [New features]
+    The ProhibitAugmentedAssignmentInDeclaration policy now allows augmented
+    assignments to "our" variables, if the allow_our option is enabled.
+    Thanks, Graham Knop.
+
     [Internals]
     Updated to using Perl 5.10.1. Starting migrating to Perl 5.10-isms like
     defined-or. Thanks, James Raspass.
