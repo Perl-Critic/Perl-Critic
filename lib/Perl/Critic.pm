@@ -1,6 +1,6 @@
 package Perl::Critic;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
@@ -270,7 +270,7 @@ from L<http://www.activestate.com>.
 
 =head1 PREREQUISITES
 
-Perl::Critic runs on Perl back to Perl 5.6.1. It relies on the L<PPI>
+Perl::Critic runs on Perl back to Perl 5.10.1. It relies on the L<PPI>
 module to do the heavy work of parsing Perl.
 
 

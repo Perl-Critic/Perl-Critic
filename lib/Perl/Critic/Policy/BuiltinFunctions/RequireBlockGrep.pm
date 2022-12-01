@@ -4,7 +4,7 @@ package Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep;
 # If you make changes in here, please reflect those changes in the
 # examples.
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 use Readonly;

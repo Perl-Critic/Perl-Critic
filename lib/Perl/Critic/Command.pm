@@ -1,6 +1,6 @@
 package Perl::Critic::Command;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
@@ -190,9 +190,7 @@ sub _get_input {
         my $code_string = do { local $RS = undef; <> };
 
         # Notice if STDIN was closed (pipe error, etc)
-        if ( ! defined $code_string ) {
-            $code_string = $EMPTY;
-        }
+        $code_string //= $EMPTY;
 
         $code_string =~ m{ \S+ }xms || die qq{Nothing to critique.\n};
         return \$code_string;    #Convert to SCALAR ref for PPI

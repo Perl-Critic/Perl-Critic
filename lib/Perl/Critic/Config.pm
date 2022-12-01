@@ -1,6 +1,6 @@
 package Perl::Critic::Config;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
@@ -667,7 +667,7 @@ sub _validate_and_save_pager {
 
     my $pager;
     if ( $args_value ) {
-        $pager = defined $args_value ? $args_value : $EMPTY;
+        $pager = $args_value;
     }
     elsif ( $ENV{PERLCRITIC_PAGER} ) {
         $pager = $ENV{PERLCRITIC_PAGER};

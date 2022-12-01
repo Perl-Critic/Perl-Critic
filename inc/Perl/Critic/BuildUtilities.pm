@@ -1,6 +1,6 @@
 package Perl::Critic::BuildUtilities;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
@@ -71,7 +71,7 @@ sub required_module_versions {
         'base'                          => 0,
         'charnames'                     => 0,
         'overload'                      => 0,
-        'perl'                          => 5.006001,
+        'perl'                          => 5.010001,
         'strict'                        => 0,
         'version'                       => 0.77,
         'warnings'                      => 0,

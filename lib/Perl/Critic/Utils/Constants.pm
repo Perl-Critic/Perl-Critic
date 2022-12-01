@@ -1,6 +1,6 @@
 package Perl::Critic::Utils::Constants;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 use Readonly;

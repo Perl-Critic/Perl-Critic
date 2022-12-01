@@ -1,5 +1,13 @@
 Revision history for Perl module Perl::Critic
 
+NEXT
+    Perl::Critic now requires Perl 5.10.1.
+
+    [Internals]
+    Updated to using Perl 5.10.1. Starting migrating to Perl 5.10-isms like
+    defined-or. Thanks, James Raspass.
+
+
 1.142 Mon Nov 28 08:12:14 PM CST 2022
 
     This is the last version of Perl::Critic that will run on Perl 5.6.1.  The

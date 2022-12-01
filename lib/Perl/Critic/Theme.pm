@@ -1,6 +1,6 @@
 package Perl::Critic::Theme;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 use English qw(-no_match_vars);

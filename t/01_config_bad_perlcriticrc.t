@@ -3,7 +3,7 @@
 # Test that all the problems in an rc file get reported and not just the first
 # one that is found.
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 

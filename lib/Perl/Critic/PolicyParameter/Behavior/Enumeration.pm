@@ -1,6 +1,6 @@
 package Perl::Critic::PolicyParameter::Behavior::Enumeration;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 

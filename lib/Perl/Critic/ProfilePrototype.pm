@@ -1,6 +1,6 @@
 package Perl::Critic::ProfilePrototype;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
@@ -22,11 +22,7 @@ sub new {
     my $policies = $args{-policies} || [];
     $self->{_policies} = [ sort _by_type @{ $policies } ];
 
-    my $comment_out_parameters = $args{'-comment-out-parameters'};
-    if (not defined $comment_out_parameters) {
-        $comment_out_parameters = 1;
-    }
-    $self->{_comment_out_parameters} = $comment_out_parameters;
+    $self->{_comment_out_parameters} = $args{'-comment-out-parameters'} // 1;
 
     my $configuration = $args{'-config'};
     if (not $configuration) {

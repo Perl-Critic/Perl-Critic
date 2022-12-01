@@ -45,7 +45,7 @@ from [http://www.activestate.com](http://www.activestate.com).
 
 # PREREQUISITES
 
-Perl::Critic runs on Perl back to Perl 5.6.1. It relies on the [PPI](https://metacpan.org/pod/PPI)
+Perl::Critic runs on Perl back to Perl 5.10.1. It relies on the [PPI](https://metacpan.org/pod/PPI)
 module to do the heavy work of parsing Perl.
 
 # INTERFACE SUPPORT
