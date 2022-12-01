@@ -25,7 +25,6 @@ use Perl::Critic::Utils::Constants qw<
     :profile_strictness
     $_MODULE_VERSION_TERM_ANSICOLOR
 >;
-use Perl::Critic::Utils::DataConversion qw< dor >;
 
 #-----------------------------------------------------------------------------
 
@@ -112,16 +111,14 @@ sub _init {
         $args{'-program-extensions'}, $errors);
 
     # If given, these options can be true or false (but defined)
-    $self->{_force} = _boolean_to_number( dor( $args{-force}, $options_processor->force() ) );
-    $self->{_only}  = _boolean_to_number( dor( $args{-only},  $options_processor->only()  ) );
-    $self->{_color} = _boolean_to_number( dor( $args{-color}, $options_processor->color() ) );
+    $self->{_force} = _boolean_to_number( $args{-force} // $options_processor->force() );
+    $self->{_only}  = _boolean_to_number( $args{-only}  // $options_processor->only()  );
+    $self->{_color} = _boolean_to_number( $args{-color} // $options_processor->color() );
     $self->{_unsafe_allowed} =
-        _boolean_to_number(
-            dor( $args{'-allow-unsafe'}, $options_processor->allow_unsafe()
-        ) );
+        _boolean_to_number( $args{'-allow-unsafe'} // $options_processor->allow_unsafe() );
     $self->{_criticism_fatal} =
         _boolean_to_number(
-            dor( $args{'-criticism-fatal'}, $options_processor->criticism_fatal() )
+            $args{'-criticism-fatal'} // $options_processor->criticism_fatal()
         );
 
 
