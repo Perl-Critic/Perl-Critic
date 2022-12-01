@@ -15,6 +15,10 @@ NEXT
     Updated to using Perl 5.10.1. Starting migrating to Perl 5.10-isms like
     defined-or. Thanks, James Raspass.
 
+    [Documentation]
+    Updated some outdated docs in Perl::Critic::Utils. Thanks, Slaven Rezić.
+    (GH #951)
+
 
 1.142 Mon Nov 28 08:12:14 PM CST 2022
 
