@@ -18,10 +18,10 @@ Perl::Critic::TestUtils::assert_version( $VERSION );
 
 ## no critic (ProhibitMultiplePackages, RequireFilenameMatchesPackage)
 package PolicyTest;
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
 package PolicyTestOverriddenDefaultMaximumViolations;
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
 sub default_maximum_violations_per_document { return 31; }
 

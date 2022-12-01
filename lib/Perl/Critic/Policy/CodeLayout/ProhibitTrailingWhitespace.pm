@@ -11,7 +11,7 @@ use charnames qw{};
 use PPI::Token::Whitespace;
 use Perl::Critic::Utils qw{ :characters :severities };
 
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
 our $VERSION = '1.142';
 

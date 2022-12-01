@@ -8,7 +8,7 @@ use Readonly;
 use Perl::Critic::Utils qw{ :severities };
 use Perl::Critic::Utils::McCabe qw{ calculate_mccabe_of_main };
 
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
 #-----------------------------------------------------------------------------
 

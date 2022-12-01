@@ -6,7 +6,7 @@ use warnings;
 
 use Perl::Critic::Utils qw{ :characters };
 
-use base qw{ Perl::Critic::PolicyParameter::Behavior };
+use parent qw{ Perl::Critic::PolicyParameter::Behavior };
 
 our $VERSION = '1.142';
 

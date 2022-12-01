@@ -17,7 +17,7 @@ use PPIx::Regexp::Util 0.068 qw<
     is_ppi_regexp_element
 >;
 
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
 our $VERSION = '1.142';
 

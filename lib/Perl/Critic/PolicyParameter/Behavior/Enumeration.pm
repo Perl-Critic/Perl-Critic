@@ -8,7 +8,7 @@ use Perl::Critic::Exception::Fatal::PolicyDefinition
     qw{ &throw_policy_definition };
 use Perl::Critic::Utils qw{ :characters &words_from_string &hashify };
 
-use base qw{ Perl::Critic::PolicyParameter::Behavior };
+use parent qw{ Perl::Critic::PolicyParameter::Behavior };
 
 our $VERSION = '1.142';
 

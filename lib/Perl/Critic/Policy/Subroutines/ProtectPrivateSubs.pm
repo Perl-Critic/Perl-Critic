@@ -11,7 +11,7 @@ use Readonly;
 use Perl::Critic::Utils qw<
     :severities $EMPTY is_function_call is_method_call
 >;
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
 our $VERSION = '1.142';
 

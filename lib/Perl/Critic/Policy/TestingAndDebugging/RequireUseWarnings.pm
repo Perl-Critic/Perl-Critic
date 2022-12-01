@@ -9,7 +9,7 @@ use version ();
 
 use Perl::Critic::Utils qw{ :severities $EMPTY };
 use Perl::Critic::Utils::Constants qw{ :equivalent_modules };
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
 our $VERSION = '1.142';
 

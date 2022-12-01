@@ -8,7 +8,7 @@ use Readonly;
 use List::SomeUtils qw(any);
 
 use Perl::Critic::Utils qw{ :severities };
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
 our $VERSION = '1.142';
 

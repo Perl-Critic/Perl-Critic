@@ -21,7 +21,7 @@ use vars '@EXPORT';
 ## failures 1
 ## cut
 
-use base 'Exporter';
+use parent 'Exporter';
 @Foo::EXPORT = qw(foo bar);
 
 #-----------------------------------------------------------------------------
@@ -49,7 +49,7 @@ use vars '%EXPORT_TAGS';
 ## failures 0
 ## cut
 
-use base 'Exporter';
+use parent 'Exporter';
 @Foo::EXPORT_OK = qw(foo bar);
 
 #-----------------------------------------------------------------------------
@@ -58,7 +58,7 @@ use base 'Exporter';
 ## failures 0
 ## cut
 
-use base 'Exporter';
+use parent 'Exporter';
 use vars qw(@EXPORT_OK);
 @EXPORT_OK = qw(foo bar);
 
@@ -68,7 +68,7 @@ use vars qw(@EXPORT_OK);
 ## failures 0
 ## cut
 
-use base 'Exporter';
+use parent 'Exporter';
 use vars qw(%EXPORT_TAGS);
 %EXPORT_TAGS = ( foo => [ qw(baz bar) ] );
 

@@ -10,7 +10,7 @@ use List::SomeUtils qw(all);
 use Readonly;
 
 use Perl::Critic::Utils qw{ :booleans :characters :severities };
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
 our $VERSION = '1.142';
 

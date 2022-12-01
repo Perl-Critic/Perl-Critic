@@ -23,7 +23,7 @@ use PPIx::Utilities::Statement qw<
     get_constant_name_elements_from_declaring_statement
 >;
 
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
 our $VERSION = '1.142';
 

@@ -6,7 +6,10 @@ NEXT
     [New features]
     The ProhibitAugmentedAssignmentInDeclaration policy now allows augmented
     assignments to "our" variables, if the allow_our option is enabled.
-    Thanks, Graham Knop.
+    Thanks, Graham Knop. (GH #993)
+
+    ProhibitExplicitISA now recommendes "use parent" instead of "use base".
+    (GH #987)
 
     [Internals]
     Updated to using Perl 5.10.1. Starting migrating to Perl 5.10-isms like

@@ -204,7 +204,7 @@ our ($VERSION) = $SomeOtherModule::VERSION;
 require SomeOtherModule; our $VERSION = $SomeOtherModule::VERSION;
 use SomeOtherModule; our $VERSION = $SomeOtherModule::VERSION;
 use SomeOtherModule; our $VERSION = SomeOtherModule::VERSION;
-use base 'SomeOtherModule'; our $VERSION = $SomeOtherModule::VERSION;
+use parent 'SomeOtherModule'; our $VERSION = $SomeOtherModule::VERSION;
 
 # Local Variables:
 #   mode: cperl

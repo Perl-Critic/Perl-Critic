@@ -7,7 +7,7 @@ use Readonly;
 
 use Perl::Critic::Utils qw{ :severities };
 use List::SomeUtils qw(any);
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
 our $VERSION = '1.142';
 
@@ -44,7 +44,7 @@ sub _uses_exporter {
     my $includes_ref = $doc->find('PPI::Statement::Include');
     return if not $includes_ref;
 
-    # This covers both C<use Exporter;> and C<use base 'Exporter';>
+    # This covers both C<use Exporter;> and C<use parent 'Exporter';>
     return scalar grep { m/ \b Exporter \b/xms }  @{ $includes_ref };
 }
 

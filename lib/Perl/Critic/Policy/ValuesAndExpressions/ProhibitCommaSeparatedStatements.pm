@@ -9,7 +9,7 @@ use Readonly;
 use Perl::Critic::Utils qw{ :booleans :characters :severities :classification };
 use Perl::Critic::Utils::PPI qw{ is_ppi_statement_subclass };
 
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
 our $VERSION = '1.142';
 

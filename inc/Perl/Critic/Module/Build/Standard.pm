@@ -11,7 +11,7 @@ use Carp;
 use English qw< $OS_ERROR -no_match_vars >;
 
 
-use base 'Module::Build';
+use parent 'Module::Build';
 
 
 sub ACTION_authortest {

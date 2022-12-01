@@ -6,13 +6,13 @@ use warnings;
 use Readonly;
 
 use Perl::Critic::Utils qw{ :severities };
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
 our $VERSION = '1.142';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $DESC => q{@ISA used instead of "use base"}; ## no critic (RequireInterpolation)
+Readonly::Scalar my $DESC => q{@ISA used instead of "use parent"}; ## no critic (RequireInterpolation)
 Readonly::Scalar my $EXPL => [ 360 ];
 
 #-----------------------------------------------------------------------------
@@ -43,7 +43,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::ClassHierarchies::ProhibitExplicitISA - Employ C<use base> instead of C<@ISA>.
+Perl::Critic::Policy::ClassHierarchies::ProhibitExplicitISA - Employ C<use parent> instead of C<@ISA>.
 
 
 =head1 AFFILIATION
@@ -54,20 +54,17 @@ distribution.
 
 =head1 DESCRIPTION
 
-Conway recommends employing C<use base qw(Foo)> instead of the usual
+Conway recommends employing C<use parent qw(Foo)> instead of the usual
 C<our @ISA = qw(Foo)> because the former happens at compile time and
-the latter at runtime.  The L<base|base> pragma also automatically loads
+the latter at runtime.  The L<parent|parent> pragma also automatically loads
 C<Foo> for you so you save a line of easily-forgotten code.
 
+The original version of this policy recommended L<base|base> instead of
+L<parent|parent>, which is now obsolete.
 
 =head1 CONFIGURATION
 
 This Policy is not configurable except for the standard options.
-
-
-=head1 NOTE
-
-Some people prefer L<parent|parent> over L<base|base>.
 
 
 =head1 AUTHOR
@@ -77,7 +74,7 @@ Chris Dolan <cdolan@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2006-2011 Chris Dolan.
+Copyright (c) 2006-2022 Chris Dolan.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.

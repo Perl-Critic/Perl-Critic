@@ -9,7 +9,7 @@ use Readonly;
 use PPI::Document;
 
 use Perl::Critic::Utils qw{ :booleans :severities :classification :ppi $SCOLON };
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
 our $VERSION = '1.142';
 

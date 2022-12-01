@@ -15,7 +15,7 @@ use Perl::Critic::Utils qw{
     :booleans :characters :severities hashify precedence_of
     split_nodes_on_comma
 };
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
 our $VERSION = '1.142';
 

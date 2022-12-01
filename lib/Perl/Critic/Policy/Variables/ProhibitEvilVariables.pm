@@ -14,7 +14,7 @@ use Perl::Critic::Utils qw{
 };
 use Perl::Critic::Utils::DataConversion qw{ dor };
 
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
 our $VERSION = '1.142';
 

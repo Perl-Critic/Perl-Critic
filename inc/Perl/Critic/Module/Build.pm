@@ -11,7 +11,7 @@ use Carp;
 use English qw< $OS_ERROR $EXECUTABLE_NAME -no_match_vars >;
 
 
-use base 'Perl::Critic::Module::Build::Standard';
+use parent 'Perl::Critic::Module::Build::Standard';
 
 
 sub ACTION_policysummary {

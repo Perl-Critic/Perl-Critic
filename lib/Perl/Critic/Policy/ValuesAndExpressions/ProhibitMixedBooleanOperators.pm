@@ -6,7 +6,7 @@ use warnings;
 use Readonly;
 
 use Perl::Critic::Utils qw{ :severities :data_conversion };
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
 
 #-----------------------------------------------------------------------------

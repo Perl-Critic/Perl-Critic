@@ -15,7 +15,7 @@ use Perl::Critic::Utils::PPI qw{
 use Readonly;
 use Scalar::Util qw{ blessed };
 
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
 our $VERSION = '1.142';
 

@@ -8,7 +8,7 @@ use Readonly;
 use Perl::Critic::Utils qw{ :severities };
 use PPI::Token::Whitespace;
 use English qw(-no_match_vars);
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
 our $VERSION = '1.142';
 

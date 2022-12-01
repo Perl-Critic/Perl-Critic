@@ -5,7 +5,7 @@ use strict;
 use warnings;
 
 use Perl::Critic::Utils qw{ :severities };
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
 sub default_severity { return $SEVERITY_LOWEST }
 sub applies_to { return 'PPI::Token::Word' }
