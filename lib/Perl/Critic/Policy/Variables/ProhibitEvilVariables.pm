@@ -5,6 +5,7 @@ use strict;
 use warnings;
 
 use English qw(-no_match_vars);
+use List::SomeUtils qw(firstval);
 use Readonly;
 
 use Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue
@@ -12,7 +13,6 @@ use Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue
 use Perl::Critic::Utils qw{
     :characters :severities :data_conversion
 };
-use Perl::Critic::Utils::DataConversion qw{ dor };
 
 use parent 'Perl::Critic::Policy';
 
@@ -107,7 +107,7 @@ sub _parse_variables {
         $variable_specifications =~ m< $VARIABLES_REGEX >xms) {
 
         substr $variable_specifications, 0, $LAST_MATCH_END[0], $EMPTY;
-        my $description = dor(@descrs);
+        my $description = firstval { defined } @descrs;
 
         $self->_handle_variable_specification(
             variable                => $variable,
