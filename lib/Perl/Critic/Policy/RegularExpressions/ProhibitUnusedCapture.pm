@@ -149,7 +149,7 @@ sub _enough_assignments {
     } elsif ($psib->isa('PPI::Structure::Block')) {
         # @{$foo} = m/(foo)/
         # %{$foo} = m/(foo)/
-        return $TRUE if _block_is_slurpy($psib);
+        return $TRUE if _is_preceded_by_array_or_hash_cast($psib);
 
     } elsif ($psib->isa('PPI::Structure::List')) {
         # () = m/(foo)/
@@ -205,13 +205,6 @@ sub _has_hash_sigil {
     my ($elem) = @_;  # Works on PPI::Token::Symbol and ::Cast
 
     return q{%} eq substr $elem->content, 0, 1;
-}
-
-sub _block_is_slurpy {
-    my ($block) = @_;
-
-    return $TRUE if _is_preceded_by_array_or_hash_cast($block);
-    return;
 }
 
 sub _is_preceded_by_array_or_hash_cast {
