@@ -11,6 +11,9 @@ NEXT
     ProhibitExplicitISA now recommendes "use parent" instead of "use base".
     (GH #987)
 
+    RequireUseWarnings now recognizes that "use v5.36" implies warnings.
+    Thanks, Andrew Grechkin. (GH #984)
+
     [Internals]
     Updated to using Perl 5.10.1. Starting migrating to Perl 5.10-isms like
     defined-or. Thanks, James Raspass.
