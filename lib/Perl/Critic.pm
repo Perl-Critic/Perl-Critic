@@ -223,7 +223,7 @@ Hukins Omer Gazit Zacks Howarth Walde Rolsky Jakub Wilk Trosien Creenan
 Balhatchet Paaske Tørholm Raspass Tonkin Katz Berndt Sergey Gabor Szabo
 Knop Eldridge Steinbrunner Kimmel Guillaume Aubert Anirvan Chatterjee
 Rinaldo Ollis Etheridge Brømsø Slaven Rezić Szymon Nieznański
-Oschwald Mita
+Oschwald Mita Amory Meltzer Grechkin
 
 =head1 NAME
 
