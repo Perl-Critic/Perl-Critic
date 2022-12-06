@@ -18,6 +18,11 @@ NEXT
     now be inside of other subroutines. Thanks, TOYAMA Nao. (GH #946,
     #971, #972)
 
+    [Fixes]
+    Miscellanea::ProhibitUselessNoCritic no longer filters out errors about
+    itself, just as Miscellanea::ProhibitUnrestrictedNoCritic cannot. Thanks,
+    Bernhard Schmalhofer. (GH #939)
+
     [Internals]
     Updated to using Perl 5.10.1. Starting migrating to Perl 5.10-isms like
     defined-or. Thanks, James Raspass.
