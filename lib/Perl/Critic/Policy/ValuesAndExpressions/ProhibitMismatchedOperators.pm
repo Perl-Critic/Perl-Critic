@@ -208,6 +208,7 @@ string equality operator with a numeric value, or vice-versa.
 
 This Policy is not configurable except for the standard options.
 
+=for stopwords NaN struct
 
 =head1 NOTES
 
@@ -219,7 +220,7 @@ can find out about them sooner.
 Perl handles the strings 'NaN' and 'inf' as special numbers and creates an NV struct when compared with a numeric operator.
 Although not necessary it is allowed to write code such as:
     my $i = 'inf'+0;
-This pattern helps others understand that the variable is indeed the Infinite or NaN numbers as Perl interpets them.
+This pattern helps others understand that the variable is indeed the Infinite or NaN numbers as Perl interrpets them.
 Only these two special string numbers are allowed to have the '+' operator which would otherwise be allowed only for strings.
 
 
@@ -230,7 +231,7 @@ Peter Guzis <pguzis@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2006-2011 Peter Guzis.  All rights reserved.
+Copyright (c) 2006-2022 Peter Guzis.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
