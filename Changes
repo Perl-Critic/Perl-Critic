@@ -14,6 +14,10 @@ NEXT
     RequireUseWarnings now recognizes that "use v5.36" implies warnings.
     Thanks, Andrew Grechkin. (GH #984)
 
+    Subroutines::ProhibitNestedSubs now allows lexical subroutines can
+    now be inside of other subroutines. Thanks, TOYAMA Nao. (GH #946,
+    #971, #972)
+
     [Internals]
     Updated to using Perl 5.10.1. Starting migrating to Perl 5.10-isms like
     defined-or. Thanks, James Raspass.
