@@ -23,6 +23,9 @@ NEXT
     ProhibitUnusedCapture now understands @{^CAPTURE} and %{^CAPTURE_ALL} that
     were added in Perl 5.26.0. Thanks, Tom Wyant. (GH #778)
 
+    Allow numeric operators on special number strings 'NaN' and 'inf'. Thanks,
+    Omer Gazit. (GH #803)
+
     [Fixes]
     Miscellanea::ProhibitUselessNoCritic no longer filters out errors about
     itself, just as Miscellanea::ProhibitUnrestrictedNoCritic cannot. Thanks,
