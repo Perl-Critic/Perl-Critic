@@ -28,6 +28,9 @@ NEXT
     itself, just as Miscellanea::ProhibitUnrestrictedNoCritic cannot. Thanks,
     Bernhard Schmalhofer. (GH #939)
 
+    Fixed GH #878: bareword filehandle dies on `open(CHECK, '/foo');`. Thanks,
+    Tom Wyant.
+
     [Internals]
     Updated to using Perl 5.10.1. Starting migrating to Perl 5.10-isms like
     defined-or. Thanks, James Raspass.
