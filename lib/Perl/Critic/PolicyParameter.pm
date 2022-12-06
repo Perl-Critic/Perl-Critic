@@ -22,7 +22,7 @@ use Perl::Critic::PolicyParameter::Behavior::StringList;
 
 use Perl::Critic::Utils qw{ :characters &interpolate };
 
-our $VERSION = '1.142';
+our $VERSION = '1.144';
 
 Readonly::Scalar our $NO_DESCRIPTION_AVAILABLE => 'No description available.';
 

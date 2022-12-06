@@ -16,7 +16,7 @@ use Perl::Critic::Violation q< >;
 
 use Test::More tests => 69;
 
-our $VERSION = '1.142';
+our $VERSION = '1.144';
 
 use Perl::Critic::TestUtils;
 Perl::Critic::TestUtils::assert_version( $VERSION );

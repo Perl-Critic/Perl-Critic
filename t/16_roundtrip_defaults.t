@@ -12,7 +12,7 @@ use Perl::Critic::Utils qw{ :characters :severities };
 use Test::Deep;
 use Test::More;
 
-our $VERSION = '1.142';
+our $VERSION = '1.144';
 
 use Perl::Critic::TestUtils;
 Perl::Critic::TestUtils::assert_version( $VERSION );

@@ -11,7 +11,7 @@ use List::SomeUtils qw( none );
 use Perl::Critic::Utils qw{ :severities :classification hashify };
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.142';
+our $VERSION = '1.144';
 
 #-----------------------------------------------------------------------------
 
