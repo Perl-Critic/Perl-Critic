@@ -122,8 +122,9 @@ Readonly::Array our @STRICT_EQUIVALENT_MODULES => qw(
 
     Role::Tiny
 
+    Test::Spec
+
     sane
-    shit
     strictures
 );
 

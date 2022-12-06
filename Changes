@@ -18,6 +18,8 @@ NEXT
     now be inside of other subroutines. Thanks, TOYAMA Nao. (GH #946,
     #971, #972)
 
+    RequireUseStrict now knows that Test::Spec enables it. (GH #906)
+
     [Fixes]
     Miscellanea::ProhibitUselessNoCritic no longer filters out errors about
     itself, just as Miscellanea::ProhibitUnrestrictedNoCritic cannot. Thanks,
