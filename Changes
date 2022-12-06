@@ -20,6 +20,9 @@ NEXT
 
     RequireUseStrict now knows that Test::Spec enables it. (GH #906)
 
+    ProhibitUnusedCapture now understands @{^CAPTURE} and %{^CAPTURE_ALL} that
+    were added in Perl 5.26.0. Thanks, Tom Wyant. (GH #778)
+
     [Fixes]
     Miscellanea::ProhibitUselessNoCritic no longer filters out errors about
     itself, just as Miscellanea::ProhibitUnrestrictedNoCritic cannot. Thanks,
