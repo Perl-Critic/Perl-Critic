@@ -109,6 +109,9 @@ severity   = 3
 [Perl::Critic::Policy::InputOutput::ProhibitBarewordFileHandles]
 severity   = 5
 
+[Perl::Critic::Policy::InputOutput::ProhibitBarewordDirHandles]
+severity   = 5
+
 [Perl::Critic::Policy::InputOutput::ProhibitInteractiveTest]
 severity   = 4
 

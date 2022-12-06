@@ -1,11 +1,11 @@
 package Perl::Critic::Policy::Test;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
 use Perl::Critic::Utils qw{ :severities };
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
 sub default_severity { return $SEVERITY_LOWEST }
 sub applies_to { return 'PPI::Token::Word' }

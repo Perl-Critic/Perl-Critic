@@ -1,6 +1,6 @@
 package Perl::Critic::Policy::Subroutines::ProhibitBuiltinHomonyms;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 use Readonly;
@@ -8,9 +8,9 @@ use Readonly;
 use Perl::Critic::Utils qw{ :severities :data_conversion
                             :classification :characters };
 
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 #-----------------------------------------------------------------------------
 

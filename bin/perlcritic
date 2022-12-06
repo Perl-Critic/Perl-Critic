@@ -2,7 +2,7 @@
 
 package main;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
@@ -10,7 +10,7 @@ use Perl::Critic::Command qw< run >;
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 #-----------------------------------------------------------------------------
 # Begin program.  Don't run when loaded as a library
@@ -31,7 +31,7 @@ __END__
 =for stopwords DGR INI-style vim-fu minibuffer -noprofile API
 -profileproto -profile-proto ben Jore formatter Peshak pbp Komodo
 screenshots tty emacs gVIM plugin Perlish templating ActivePerl
-ActiveState Twitter
+ActiveState Twitter macOS
 
 =head1 NAME
 
@@ -390,7 +390,8 @@ a quick handle on where a large pile of code might need the most attention.
 
 This option is on when outputting to a tty.  When set, Severity 5 and 4 are
 colored red and yellow, respectively.  Colorization only happens if
-L<Term::ANSIColor> is installed and it only works on non-Windows environments.
+L<Term::ANSIColor> is installed. For Windows environments,
+L<Win32::Console::ANSI> must also be installed.
 Negate this switch to disable color.  You can set the default value for this
 option in your F<.perlcriticrc> file.
 
@@ -506,8 +507,6 @@ long, it it nowhere near the length of the output of C<--man>.
 Displays the complete C<perlcritic> manual and exits.
 
 =item C<--version>
-
-=item C<-V>
 
 Displays the version number of C<perlcritic> and exits.
 
@@ -871,6 +870,45 @@ ActivePerl can be obtained from the ActiveState website at
 L<http://www.activestate.com>.
 
 
+=head2 Visual Studio Code
+
+Visual Studio Code is a lightweight but powerful source code editor which
+runs on your desktop and is available for Windows, macOS and Linux.
+
+The perlcritic extension can be found here:
+L<https://marketplace.visualstudio.com/items?itemName=sfodje.perlcritic>
+
+The steps to install the perlcritic extension:
+
+=over
+
+=item 1. Menu: View->Command Palette
+
+=item 2. Type in "Extensions"
+
+=item 3. Select "Extensions: Install Extension"
+
+=item 4. In the search box type "perlcritic" and the extensions pane will open.
+
+=item 5. perlcritic should be the first entry
+
+=item 6. Select the "install" button
+
+=item 7. Once installed go to Preferences->Settings
+
+=item 8. Type in "perlcritic" in the search box
+
+=item 9. The settings options for perlcritic will show and you configure the extension here.
+
+=item 9a. If you want perlcritic to run automatically when the file is saved, select "only critique on save".
+
+=back
+
+Open a Perl file. Save it and perlcritic should fire. There is a triangle
+with an exclamation point on the status bar. Click it and it will open the
+issues that perlcritic has found.
+
+
 =head1 EXIT STATUS
 
 If C<perlcritic> has any errors itself, exits with status == 1.  If there are
@@ -991,7 +1029,7 @@ Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2011 Imaginative Software Systems.  All rights reserved.
+Copyright (c) 2005-2021 Imaginative Software Systems.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

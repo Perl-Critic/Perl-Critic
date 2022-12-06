@@ -196,6 +196,7 @@ severity   = 4
 [ValuesAndExpressions::ProhibitInterpolationOfLiterals]
 [ValuesAndExpressions::ProhibitLeadingZeros]
 [InputOutput::ProhibitBarewordFileHandles]
+[InputOutput::ProhibitBarewordDirHandles]
 [Miscellanea::ProhibitTies]
 
 

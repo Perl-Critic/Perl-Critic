@@ -1,17 +1,16 @@
 package Perl::Critic::Policy::RegularExpressions::ProhibitEscapedMetacharacters;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
 use English qw(-no_match_vars);
-use List::MoreUtils qw(any);
 use Readonly;
 
 use Perl::Critic::Utils qw{ :booleans :severities hashify };
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 #-----------------------------------------------------------------------------
 

@@ -1,6 +1,6 @@
 #!perl
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
@@ -15,13 +15,13 @@ use Perl::Critic::TestUtils qw();
 
 use Test::More; #plan set below
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 Perl::Critic::TestUtils::assert_version( $VERSION );
 Perl::Critic::TestUtils::block_perlcriticrc();
 
 eval 'use Test::Memory::Cycle; 1'
-    or plan skip_all => 'Test::Memory::Cycle requried to test memory leaks';
+    or plan skip_all => 'Test::Memory::Cycle required to test memory leaks';
 
 #-----------------------------------------------------------------------------
 {

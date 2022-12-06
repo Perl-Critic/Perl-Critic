@@ -7,14 +7,14 @@ use English qw< -no_match_vars >;
 use Carp qw< confess >;
 
 use File::Spec;
-use List::MoreUtils qw(any);
 
 use Perl::Critic::PolicyFactory ( -test => 1 );
 use Perl::Critic::TestUtils qw{ bundled_policy_names };
 
 use Test::More;
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
+
 Perl::Critic::TestUtils::assert_version( $VERSION );
 
 #-----------------------------------------------------------------------------

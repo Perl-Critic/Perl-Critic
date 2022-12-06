@@ -1,6 +1,6 @@
 package Perl::Critic::Policy::Modules::ProhibitEvilModules;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
@@ -13,9 +13,9 @@ use Perl::Critic::Utils qw{
     :booleans :characters :severities :data_conversion
 };
 
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 #-----------------------------------------------------------------------------
 
@@ -102,10 +102,7 @@ sub applies_to        { return 'PPI::Statement::Include' }
 sub _parse_modules {
     my ($self, $parameter, $config_string) = @_;
 
-    my $module_specifications =
-        defined $config_string
-            ? $config_string
-            : $parameter->get_default_string();
+    my $module_specifications = $config_string // $parameter->get_default_string();
 
     return if not $module_specifications;
     return if $module_specifications =~ m< \A \s* \z >xms;

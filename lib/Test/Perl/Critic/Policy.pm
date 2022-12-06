@@ -1,13 +1,13 @@
 package Test::Perl::Critic::Policy;
 
-use 5.006001;
+use 5.010001;
 
 use strict;
 use warnings;
 
 use Carp qw< croak confess >;
 use English qw< -no_match_vars >;
-use List::MoreUtils qw< all none >;
+use List::SomeUtils qw( all none );
 use Readonly;
 
 use Test::Builder qw<>;
@@ -20,7 +20,7 @@ use Perl::Critic::TestUtils qw<
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 #-----------------------------------------------------------------------------
 
@@ -286,12 +286,6 @@ involves feeding it a string of Perl code and checking its behavior.  In the
 old days, those strings of Perl code were mixed directly in the test script.
 That sucked.
 
-B<NOTE:> This module is alpha code -- interfaces and implementation are
-subject to major changes.  This module is an integral part of building and
-testing L<Perl::Critic|Perl::Critic> itself, but you should not write any code
-against this module until it has stabilized.
-
-
 =head1 IMPORTABLE SUBROUTINES
 
 =over
@@ -414,7 +408,7 @@ Andy Lester, Jeffrey Ryan Thalhammer <thaljef@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2009-2011 Andy Lester.  All rights reserved.
+Copyright (c) 2009-2021 Andy Lester
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

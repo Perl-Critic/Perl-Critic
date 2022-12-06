@@ -1,6 +1,6 @@
 package Perl::Critic::Policy::Documentation::RequirePackageMatchesPodName;
 
-use 5.006001;
+use 5.010001;
 
 use strict;
 use warnings;
@@ -8,9 +8,9 @@ use warnings;
 use Readonly;
 use English qw{ -no_match_vars };
 use Perl::Critic::Utils qw{ :severities :classification };
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 #-----------------------------------------------------------------------------
 
@@ -58,8 +58,8 @@ sub violates {
         }
 
         # idea: worry about POD escapes?
-        $pod_pkg =~ s{\A [CL]<(.*)>\z}{$1}gxms; # unwrap
-        $pod_pkg =~ s{\'}{::}gxms;              # perl4 -> perl5
+        $pod_pkg =~ s{\A [BCIL]<(.*)>\z}{$1}gxms; # unwrap
+        $pod_pkg =~ s{\'}{::}gxms;                # perl4 -> perl5
 
         foreach my $stmt ( @{ $doc->find('PPI::Statement::Package') || [] } ) {
             my $pkg = $stmt->namespace();

@@ -1,6 +1,6 @@
 package Perl::Critic;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
@@ -10,7 +10,7 @@ use Readonly;
 use Exporter 'import';
 
 use File::Spec;
-use List::MoreUtils qw< firstidx >;
+use List::SomeUtils qw( firstidx );
 use Scalar::Util qw< blessed >;
 
 use Perl::Critic::Exception::Configuration::Generic;
@@ -22,7 +22,7 @@ use Perl::Critic::Utils qw< :characters hashify shebang_line >;
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 Readonly::Array our @EXPORT_OK => qw(critique);
 
@@ -215,8 +215,15 @@ __END__
 
 =pod
 
+=encoding utf8
+
 =for stopwords DGR INI-style API -params pbp refactored ActivePerl ben Jore
-Dolan's Twitter Alexandr Ciornii Ciornii's downloadable
+Dolan's Twitter Alexandr Ciornii Ciornii's downloadable O'Regan
+Hukins Omer Gazit Zacks Howarth Walde Rolsky Jakub Wilk Trosien Creenan
+Balhatchet Paaske Tørholm Raspass Tonkin Katz Berndt Sergey Gabor Szabo
+Knop Eldridge Steinbrunner Kimmel Guillaume Aubert Anirvan Chatterjee
+Rinaldo Ollis Etheridge Brømsø Slaven Rezić Szymon Nieznański
+Oschwald Mita Amory Meltzer Grechkin Bernhard Schmalhofer TOYAMA Nao Wyant
 
 =head1 NAME
 
@@ -261,10 +268,16 @@ called C<perlcritic-gui>.  You can get a free community edition of ActivePerl
 from L<http://www.activestate.com>.
 
 
+=head1 PREREQUISITES
+
+Perl::Critic runs on Perl back to Perl 5.10.1. It relies on the L<PPI>
+module to do the heavy work of parsing Perl.
+
+
 =head1 INTERFACE SUPPORT
 
-This is considered to be a public class.  Any changes to its interface will go
-through a deprecation cycle.
+The C<Perl::Critic> module is considered to be a public class. Any
+changes to its interface will go through a deprecation cycle.
 
 
 =head1 CONSTRUCTOR
@@ -669,7 +682,7 @@ You are free to invent new themes that suit your needs.
     certrule          Policies that CERT considers rules
     maintenance       Policies that affect the long-term health of the code
     cosmetic          Policies that only have a superficial effect
-    complexity        Policies that specificaly relate to code complexity
+    complexity        Policies that specifically relate to code complexity
     security          Policies that relate to security issues
     tests             Policies that are specific to test programs
 
@@ -825,11 +838,7 @@ L<B::Keywords>
 
 L<Config::Tiny>
 
-L<Email::Address>
-
 L<Exception::Class>
-
-L<File::HomeDir>
 
 L<File::Spec>
 
@@ -839,7 +848,7 @@ L<File::Which>
 
 L<IO::String>
 
-L<List::MoreUtils>
+L<List::SomeUtils>
 
 L<List::Util>
 
@@ -937,6 +946,58 @@ Thanks also to the Perl Foundation for providing a grant to support Chris
 Dolan's project to implement twenty PBP policies.
 L<http://www.perlfoundation.org/april_1_2007_new_grant_awards>
 
+Thanks also to this incomplete laundry list of folks who have contributed
+to Perl::Critic in some way:
+Tom Wyant,
+TOYAMA Nao,
+Bernhard Schmalhofer,
+Amory Meltzer,
+Andrew Grechkin,
+Daniel Mita,
+Gregory Oschwald,
+Mike O'Regan,
+Tom Hukins,
+Omer Gazit,
+Evan Zacks,
+Paul Howarth,
+Sawyer X,
+Christian Walde,
+Dave Rolsky,
+Jakub Wilk,
+Roy Ivy III,
+Oliver Trosien,
+Glenn Fowler,
+Matt Creenan,
+Alex Balhatchet,
+Sebastian Paaske Tørholm,
+Stuart A Johnston,
+Dan Book,
+Steven Humphrey,
+James Raspass,
+Nick Tonkin,
+Harrison Katz,
+Douglas Sims,
+Mark Fowler,
+Alan Berndt,
+Neil Bowers,
+Sergey Romanov,
+Gabor Szabo,
+Graham Knop,
+Mike Eldridge,
+David Steinbrunner,
+Kirk Kimmel,
+Guillaume Aubert,
+Dave Cross,
+Anirvan Chatterjee,
+Todd Rinaldo,
+Graham Ollis,
+Karen Etheridge,
+Jonas Brømsø,
+Olaf Alders,
+Jim Keenan,
+Slaven Rezić,
+Szymon Nieznański.
+
 
 =head1 AUTHOR
 
@@ -945,7 +1006,7 @@ Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2013 Imaginative Software Systems.  All rights reserved.
+Copyright (c) 2005-2022 Imaginative Software Systems.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify it under
 the same terms as Perl itself.  The full text of this license can be found in

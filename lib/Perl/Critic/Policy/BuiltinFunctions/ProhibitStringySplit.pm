@@ -1,14 +1,14 @@
 package Perl::Critic::Policy::BuiltinFunctions::ProhibitStringySplit;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 use Readonly;
 
 use Perl::Critic::Utils qw{ :characters :severities :classification :ppi };
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 #-----------------------------------------------------------------------------
 
@@ -83,9 +83,9 @@ This Policy is not configurable except for the standard options.
 
 =head1 SEE ALSO
 
-L<Perl::Critic::Policy::BuiltInFunctions::RequireBlockGrep|Perl::Critic::Policy::BuiltInFunctions::RequireBlockGrep>
+L<Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep|Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep>
 
-L<Perl::Critic::Policy::BuiltInFunctions::RequireBlockMap|Perl::Critic::Policy::BuiltInFunctions::RequireBlockMap>
+L<Perl::Critic::Policy::BuiltinFunctions::RequireBlockMap|Perl::Critic::Policy::BuiltinFunctions::RequireBlockMap>
 
 
 =head1 AUTHOR

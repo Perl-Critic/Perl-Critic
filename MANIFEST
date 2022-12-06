@@ -1,7 +1,8 @@
-.travis.yml
 bin/perlcritic
 Build.PL
 Changes
+CONTRIBUTING.md
+cpanfile
 examples/generatestats
 examples/loadanalysisdb
 examples/perlcriticrc
@@ -46,6 +47,7 @@ lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitBooleanGrep.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitComplexMappings.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitLvalueSubstr.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitReverseSortBlock.pm
+lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitShiftRef.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitSleepViaSelect.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitStringyEval.pm
 lib/Perl/Critic/Policy/BuiltinFunctions/ProhibitStringySplit.pm
@@ -82,11 +84,11 @@ lib/Perl/Critic/Policy/ControlStructures/ProhibitYadaOperator.pm
 lib/Perl/Critic/Policy/Documentation/PodSpelling.pm
 lib/Perl/Critic/Policy/Documentation/RequirePackageMatchesPodName.pm
 lib/Perl/Critic/Policy/Documentation/RequirePodAtEnd.pm
-lib/Perl/Critic/Policy/Documentation/RequirePodLinksIncludeText.pm
 lib/Perl/Critic/Policy/Documentation/RequirePodSections.pm
 lib/Perl/Critic/Policy/ErrorHandling/RequireCarping.pm
 lib/Perl/Critic/Policy/ErrorHandling/RequireCheckingReturnValueOfEval.pm
 lib/Perl/Critic/Policy/InputOutput/ProhibitBacktickOperators.pm
+lib/Perl/Critic/Policy/InputOutput/ProhibitBarewordDirHandles.pm
 lib/Perl/Critic/Policy/InputOutput/ProhibitBarewordFileHandles.pm
 lib/Perl/Critic/Policy/InputOutput/ProhibitExplicitStdin.pm
 lib/Perl/Critic/Policy/InputOutput/ProhibitInteractiveTest.pm
@@ -209,15 +211,11 @@ lib/Perl/Critic/Utils/DataConversion.pm
 lib/Perl/Critic/Utils/McCabe.pm
 lib/Perl/Critic/Utils/Perl.pm
 lib/Perl/Critic/Utils/POD.pm
-lib/Perl/Critic/Utils/POD/ParseInteriorSequence.pm
 lib/Perl/Critic/Utils/PPI.pm
 lib/Perl/Critic/Violation.pm
 lib/Test/Perl/Critic/Policy.pm
 LICENSE
 MANIFEST			This list of files
-META.json
-META.yml
-README
 README.md
 t/00_modules.t
 t/00_versions.t
@@ -268,6 +266,7 @@ t/BuiltinFunctions/ProhibitBooleanGrep.run
 t/BuiltinFunctions/ProhibitComplexMappings.run
 t/BuiltinFunctions/ProhibitLvalueSubstr.run
 t/BuiltinFunctions/ProhibitReverseSortBlock.run
+t/BuiltinFunctions/ProhibitShiftRef.run
 t/BuiltinFunctions/ProhibitSleepViaSelect.run
 t/BuiltinFunctions/ProhibitStringyEval.run
 t/BuiltinFunctions/ProhibitStringySplit.run
@@ -299,12 +298,12 @@ t/ControlStructures/ProhibitUntilBlocks.run
 t/ControlStructures/ProhibitYadaOperator.run
 t/Documentation/RequirePackageMatchesPodName.run
 t/Documentation/RequirePodAtEnd.run
-t/Documentation/RequirePodLinksIncludeText.run
 t/Documentation/RequirePodSections.run
 t/ErrorHandling/RequireCarping.run
 t/ErrorHandling/RequireCheckingReturnValueOfEval.run
 t/gh-734.t
 t/InputOutput/ProhibitBacktickOperators.run
+t/InputOutput/ProhibitBarewordDirHandles.run
 t/InputOutput/ProhibitBarewordFileHandles.run
 t/InputOutput/ProhibitExplicitStdin.run
 t/InputOutput/ProhibitInteractiveTest.run
@@ -424,3 +423,6 @@ xt/94_includes.t
 xt/95_kwalitee.t
 xt/98_pod_syntax.t
 xt/99_pod_coverage.t
+README
+META.yml
+META.json

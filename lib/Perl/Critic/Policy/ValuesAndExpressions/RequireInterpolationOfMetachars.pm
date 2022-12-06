@@ -1,19 +1,17 @@
 package Perl::Critic::Policy::ValuesAndExpressions::RequireInterpolationOfMetachars;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
 use Readonly;
 
-use Email::Address;
-
 use Perl::Critic::Utils qw< :booleans :characters :severities >;
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 #-----------------------------------------------------------------------------
 
@@ -93,6 +91,36 @@ sub _needs_interpolation {
 
 #-----------------------------------------------------------------------------
 
+# Stolen from Email::Address, which is deprecated.  Since we are not modifying
+# the original code at all, we are less stringent in being Critic-compliant.
+
+## no critic ( RegularExpressions::RequireDotMatchAnything )
+## no critic ( RegularExpressions::RequireLineBoundaryMatching )
+## no critic ( RegularExpressions::ProhibitEscapedMetacharacters )
+
+my $CTL            = q{\x00-\x1F\x7F};          ## no critic ( ValuesAndExpressions::RequireInterpolationOfMetachars )
+my $special        = q{()<>\\[\\]:;@\\\\,."};   ## no critic ( ValuesAndExpressions::RequireInterpolationOfMetachars )
+
+my $text           = qr/[^\x0A\x0D]/x;
+my $quoted_pair    = qr/\\$text/x;
+my $ctext          = qr/(?>[^()\\]+)/x;
+my $ccontent       = qr/$ctext|$quoted_pair/x;
+my $comment        = qr/\s*\((?:\s*$ccontent)*\s*\)\s*/x;
+my $cfws           = qr/$comment|\s+/x;
+my $atext          = qq/[^$CTL$special\\s]/;
+my $atom           = qr/$cfws*$atext+$cfws*/x;
+my $dot_atom_text  = qr/$atext+(?:\.$atext+)*/x;
+my $dot_atom       = qr/$cfws*$dot_atom_text$cfws*/x;
+my $qtext          = qr/[^\\"]/x;
+my $qcontent       = qr/$qtext|$quoted_pair/x;
+my $quoted_string  = qr/$cfws*"$qcontent*"$cfws*/x;
+my $local_part     = qr/$dot_atom|$quoted_string/x;
+my $dtext          = qr/[^\[\]\\]/x;
+my $dcontent       = qr/$dtext|$quoted_pair/x;
+my $domain_literal = qr/$cfws*\[(?:\s*$dcontent)*\s*\]$cfws*/x;
+my $domain         = qr/$dot_atom|$domain_literal/x;
+my $addr_spec      = qr/$local_part\@$domain/x;
+
 sub _looks_like_email_address {
     my ($string) = @_;
 
@@ -100,7 +128,7 @@ sub _looks_like_email_address {
     return if $string =~ m< \W \@ >xms;
     return if $string =~ m< \A \@ \w+ \b >xms;
 
-    return $string =~ $Email::Address::addr_spec;
+    return $string =~ $addr_spec;
 }
 
 #-----------------------------------------------------------------------------

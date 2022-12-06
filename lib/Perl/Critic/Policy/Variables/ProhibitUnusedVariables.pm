@@ -1,18 +1,19 @@
 package Perl::Critic::Policy::Variables::ProhibitUnusedVariables;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
 use Readonly;
-use List::MoreUtils qw< any >;
+use List::SomeUtils qw( any );
 
 use PPI::Token::Symbol;
+use PPIx::QuoteLike;
 
 use Perl::Critic::Utils qw< :characters :severities >;
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 #-----------------------------------------------------------------------------
 
@@ -75,6 +76,25 @@ sub _get_symbol_usage {
 
     foreach my $symbol ( @{$symbols} ) {
         $symbol_usage->{ $symbol->symbol() }++;
+    }
+
+    foreach my $class ( qw{
+        PPI::Token::Quote::Double
+        PPI::Token::Quote::Interpolate
+        PPI::Token::QuoteLike::Backtick
+        PPI::Token::QuoteLike::Command
+        PPI::Token::QuoteLike::Readline
+        PPI::Token::HereDoc
+        } ) {
+        foreach my $double_quotish (
+            @{ $document->find( $class ) || [] }
+        ) {
+            my $str = PPIx::QuoteLike->new( $double_quotish )
+                or next;
+            foreach my $var ( $str->variables() ) {
+                $symbol_usage->{ $var }++;
+            }
+        }
     }
 
     return;
@@ -164,7 +184,7 @@ Elliot Shank C<< <perl@galumph.com> >>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2008-2011 Elliot Shank.
+Copyright (c) 2008-2021 Elliot Shank.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

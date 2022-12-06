@@ -1,14 +1,14 @@
 package Perl::Critic::PolicyParameter::Behavior::StringList;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
 use Perl::Critic::Utils qw{ :characters &words_from_string &hashify };
 
-use base qw{ Perl::Critic::PolicyParameter::Behavior };
+use parent qw{ Perl::Critic::PolicyParameter::Behavior };
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 #-----------------------------------------------------------------------------
 
@@ -35,11 +35,7 @@ sub initialize_parameter {
             my ($policy, $parameter, $config_string) = @_;  ## no critic(Variables::ProhibitReusedNames)
 
             my @values = @{$always_present_values};
-            my $value_string = $parameter->get_default_string();
-
-            if (defined $config_string) {
-                $value_string = $config_string;
-            }
+            my $value_string = $config_string // $parameter->get_default_string();
 
             if ( defined $value_string ) {
                 push @values, words_from_string($value_string);

@@ -126,6 +126,17 @@ no warnings 'qw';   # Yes, 'qw' is an actual warnings category.
 no warnings ( foo => "bar" );
 
 #-----------------------------------------------------------------------------
+
+## allow experimental::signatures
+## failures 0
+## parms { allow => 'experimental::signatures' }
+## cut
+
+package foo;
+
+no warnings qw(experimental::signatures);
+
+#-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

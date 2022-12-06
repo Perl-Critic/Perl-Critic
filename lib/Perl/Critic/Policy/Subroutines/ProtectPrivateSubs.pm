@@ -1,6 +1,6 @@
 package Perl::Critic::Policy::Subroutines::ProtectPrivateSubs;
 
-use 5.006001;
+use 5.010001;
 
 use strict;
 use warnings;
@@ -11,9 +11,9 @@ use Readonly;
 use Perl::Critic::Utils qw<
     :severities $EMPTY is_function_call is_method_call
 >;
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 #-----------------------------------------------------------------------------
 
@@ -92,8 +92,7 @@ sub applies_to           { return 'PPI::Token::Word'     }
 sub _parse_private_name_regex {
     my ($self, $parameter, $config_string) = @_;
 
-    defined $config_string
-        or $config_string = $parameter->get_default_string();
+    $config_string //= $parameter->get_default_string();
 
     my $regex;
     eval { $regex = qr/$config_string/; 1 } ## no critic (RegularExpressions)

@@ -1,13 +1,13 @@
 package Perl::Critic::Policy::NamingConventions::Capitalization;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
 use English qw< -no_match_vars >;
 use Readonly;
 
-use List::MoreUtils qw< any >;
+use List::SomeUtils qw( any );
 
 use Perl::Critic::Exception::AggregateConfiguration;
 use Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue;
@@ -23,9 +23,9 @@ use PPIx::Utilities::Statement qw<
     get_constant_name_elements_from_declaring_statement
 >;
 
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 #-----------------------------------------------------------------------------
 
@@ -766,7 +766,7 @@ Multiple people
 
 =head1 COPYRIGHT
 
-Copyright (c) 2008-2011 Michael G Schwern.  All rights reserved.
+Copyright (c) 2008-2021 Michael G Schwern.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

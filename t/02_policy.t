@@ -1,6 +1,6 @@
 #!perl
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
@@ -8,7 +8,7 @@ use English qw<-no_match_vars>;
 
 use Test::More tests => 29;
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 use Perl::Critic::TestUtils;
 Perl::Critic::TestUtils::assert_version( $VERSION );
@@ -18,10 +18,10 @@ Perl::Critic::TestUtils::assert_version( $VERSION );
 
 ## no critic (ProhibitMultiplePackages, RequireFilenameMatchesPackage)
 package PolicyTest;
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
 package PolicyTestOverriddenDefaultMaximumViolations;
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
 sub default_maximum_violations_per_document { return 31; }
 

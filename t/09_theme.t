@@ -1,12 +1,12 @@
 #!perl
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
 use English qw(-no_match_vars);
 
-use List::MoreUtils qw(any all none);
+use List::SomeUtils qw(any all none);
 
 use Perl::Critic::TestUtils;
 use Perl::Critic::PolicyFactory;
@@ -15,7 +15,7 @@ use Perl::Critic::Theme;
 
 use Test::More tests => 66;
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 use Perl::Critic::TestUtils;
 Perl::Critic::TestUtils::assert_version( $VERSION );

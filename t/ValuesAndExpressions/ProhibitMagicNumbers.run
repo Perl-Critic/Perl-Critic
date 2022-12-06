@@ -953,7 +953,7 @@ our ($VERSION) = q$Revision$ =~ /^Revision:\s+(\S+)/ or $VERSION = "1.23";
 require SomeOtherModule; our $VERSION = $SomeOtherModule::VERSION;
 use SomeOtherModule; our $VERSION = $SomeOtherModule::VERSION;
 use SomeOtherModule; our $VERSION = SomeOtherModule::VERSION;
-use base 'SomeOtherModule'; our $VERSION = $SomeOtherModule::VERSION;
+use parent 'SomeOtherModule'; our $VERSION = $SomeOtherModule::VERSION;
 use version; our $VERSION = 1.23;
 use version; our $VERSION = qv("1.2.3");
 use version; our $VERSION = qv('1.2.3');

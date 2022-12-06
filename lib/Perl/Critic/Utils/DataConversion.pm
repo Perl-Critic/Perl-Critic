@@ -1,6 +1,6 @@
 package Perl::Critic::Utils::DataConversion;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 use Readonly;
@@ -9,21 +9,13 @@ use Perl::Critic::Utils qw{ :characters :booleans };
 
 use Exporter 'import';
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 #-----------------------------------------------------------------------------
 
 Readonly::Array our @EXPORT_OK => qw(
-    boolean_to_number
     dor
-    defined_or_empty
 );
-
-#-----------------------------------------------------------------------------
-
-sub boolean_to_number {  ## no critic (RequireArgUnpacking)
-    return $_[0] ? $TRUE : $FALSE;
-}
 
 #-----------------------------------------------------------------------------
 
@@ -32,12 +24,6 @@ sub dor {  ## no critic (RequireArgUnpacking)
         return $_ if defined;
     }
     return;
-}
-
-#-----------------------------------------------------------------------------
-
-sub defined_or_empty {  ## no critic (RequireArgUnpacking)
-    return defined $_[0] ? $_[0] : $EMPTY;
 }
 
 1;
@@ -69,27 +55,10 @@ interface will go through a deprecation cycle.
 
 =over
 
-=item C<boolean_to_number( $value )>
-
-Return 0 or 1 based upon the value of parameter in a boolean context.
-
-
 =item C<dor( $value, $default )>
 
 Return either the value or the default based upon whether the value is
 defined or not.
-
-=item C<dor_n( $value0, $value1, ... )>
-
-Returns the first defined value among its arguments. If none is defined,
-simply returns.
-
-
-
-=item C<defined_or_empty( $value )>
-
-Return either the parameter or an empty string based upon whether the
-parameter is defined or not.
 
 
 =back
@@ -101,7 +70,7 @@ Elliot Shank <perl@galumph.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2007-2011 Elliot Shank.
+Copyright (c) 2007-2022 Elliot Shank.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

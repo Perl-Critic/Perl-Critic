@@ -1,18 +1,18 @@
 package Perl::Critic::Policy::ValuesAndExpressions::RequireUpperCaseHeredocTerminator;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 use Readonly;
 
 use Perl::Critic::Utils qw{ :severities };
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $HEREDOC_RX => qr{ \A << \s* (["']?) [[:upper:]_] [[:upper:]\d_]* \1 \z }xms;
+Readonly::Scalar my $HEREDOC_RX => qr{ \A << ~? \s* (["']?) [[:upper:]_] [[:upper:]\d_]* \1 \z }xms;
 Readonly::Scalar my $DESC       => q{Heredoc terminator not alphanumeric and upper-case};
 Readonly::Scalar my $EXPL       => [ 64 ];
 

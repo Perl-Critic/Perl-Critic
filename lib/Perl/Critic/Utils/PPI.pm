@@ -1,6 +1,6 @@
 package Perl::Critic::Utils::PPI;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
@@ -10,7 +10,7 @@ use Scalar::Util qw< blessed readonly >;
 
 use Exporter 'import';
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 #-----------------------------------------------------------------------------
 

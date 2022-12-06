@@ -1,19 +1,19 @@
 package Perl::Critic::Policy::ControlStructures::ProhibitMutatingListFunctions;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 use Readonly;
 
-use List::MoreUtils qw( none any );
+use List::SomeUtils qw( any none );
 
 use Perl::Critic::Utils qw{
     :booleans :characters :severities :data_conversion :classification :ppi
 };
 
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 #-----------------------------------------------------------------------------
 
@@ -24,7 +24,7 @@ Readonly::Array my @CPAN_LIST_FUNCS    => _get_cpan_list_funcs();
 
 sub _get_cpan_list_funcs {
     return  qw( List::Util::first ),
-        map { 'List::MoreUtils::'.$_ } _get_list_moreutils_funcs();
+        map { ('List::MoreUtils::'.$_, 'List::SomeUtils::'.$_) } _get_list_moreutils_funcs();
 }
 
 #-----------------------------------------------------------------------------
@@ -274,7 +274,7 @@ source array.  This IS technically allowed, but those side effects can
 be quite surprising, especially when the array being passed is C<@_>
 or perhaps C<values(%ENV)>!  Instead authors should restrict in-place
 array modification to C<for(@array) { ... }> constructs instead, or
-use C<List::MoreUtils::apply()>.
+use C<List::SomeUtiles:apply()> or C<List::MoreUtils::apply()>.
 
 =head1 CONFIGURATION
 
@@ -283,6 +283,9 @@ By default, this policy applies to the following list functions:
     map grep
     List::Util qw(first)
     List::MoreUtils qw(any all none notall true false firstidx
+                       first_index lastidx last_index insert_after
+                       insert_after_string)
+    List::SomeUtils qw(any all none notall true false firstidx
                        first_index lastidx last_index insert_after
                        insert_after_string)
 
@@ -299,16 +302,20 @@ Or, one can just append to the list like so:
 =head1 LIMITATIONS
 
 This policy deliberately does not apply to C<for (@array) { ... }> or
-C<List::MoreUtils::apply()>.
+C<List::MoreUtils::apply()> C<List::SomeUtils::apply()>.
 
 Currently, the policy only detects explicit external module usage like
 this:
 
     my @out = List::MoreUtils::any {s/^foo//} @in;
+    my @out = List::SomeUtils::any {s/^foo//} @in;
 
 and not like this:
 
     use List::MoreUtils qw(any);
+    my @out = any {s/^foo//} @in;
+
+    use List::SomeUtils qw(any);
     my @out = any {s/^foo//} @in;
 
 This policy looks only for modifications of C<$_>.  Other naughtiness
@@ -331,7 +338,7 @@ Michael Wolf <MichaelRWolf@att.net>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2006-2011 Chris Dolan.
+Copyright (c) 2006-2021 Chris Dolan.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.

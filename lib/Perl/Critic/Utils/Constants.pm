@@ -1,6 +1,6 @@
 package Perl::Critic::Utils::Constants;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 use Readonly;
@@ -9,7 +9,7 @@ use Perl::Critic::Utils qw{ $EMPTY hashify };
 
 use Exporter 'import';
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 #-----------------------------------------------------------------------------
 
@@ -91,10 +91,12 @@ Readonly::Array our @STRICT_EQUIVALENT_MODULES => qw(
     Moose::Role
     Moose::Exporter
     Moose::Util::TypeConstraints
+    Test::Class::Moose
 
     MooseX::NonMoose
     MooseX::Singleton
     MooseX::Role::Parameterized
+    MooseX::MethodAttributes::Role
 
     Mouse
     Mouse::Role
@@ -120,8 +122,9 @@ Readonly::Array our @STRICT_EQUIVALENT_MODULES => qw(
 
     Role::Tiny
 
+    Test::Spec
+
     sane
-    shit
     strictures
 );
 

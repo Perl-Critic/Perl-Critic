@@ -1,19 +1,18 @@
 package Perl::Critic::Policy::RegularExpressions::ProhibitEnumeratedClasses;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
-use Carp qw(carp);
 use English qw(-no_match_vars);
-use List::MoreUtils qw(all);
+use List::SomeUtils qw(all);
 use Readonly;
 
 use Perl::Critic::Utils qw{ :booleans :severities hashify };
 
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 #-----------------------------------------------------------------------------
 
@@ -180,7 +179,7 @@ Chris Dolan <cdolan@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2007-2011 Chris Dolan.  Many rights reserved.
+Copyright (c) 2007-2021 Chris Dolan.  Many rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

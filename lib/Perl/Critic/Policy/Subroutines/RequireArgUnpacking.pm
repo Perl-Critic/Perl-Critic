@@ -1,6 +1,6 @@
 package Perl::Critic::Policy::Subroutines::RequireArgUnpacking;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
@@ -9,20 +9,19 @@ use English qw(-no_match_vars);
 use Readonly;
 
 use File::Spec;
-use List::Util qw(first);
-use List::MoreUtils qw(uniq any);
 
 use Perl::Critic::Utils qw<
     :booleans :characters :classification hashify :severities words_from_string
 >;
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 #-----------------------------------------------------------------------------
 
 Readonly::Scalar my $AT => q{@};
 Readonly::Scalar my $AT_ARG => q{@_}; ## no critic (InterpolationOfMetachars)
+Readonly::Scalar my $DEREFERENCE => q{->};
 Readonly::Scalar my $DOLLAR => q{$};
 Readonly::Scalar my $DOLLAR_ARG => q{$_};   ## no critic (InterpolationOfMetaChars)
 
@@ -54,7 +53,13 @@ sub supported_parameters {
                 'Allow the usual delegation idiom to these namespaces/subroutines',
             behavior        => 'string list',
             list_always_present_values => [ qw< SUPER:: NEXT:: > ],
-        }
+        },
+        {
+            name            => 'allow_closures',
+            description     => 'Allow unpacking by a closure',
+            default_string  => $FALSE,
+            behavior        => 'boolean',
+        },
     );
 }
 
@@ -295,13 +300,34 @@ sub _is_delegation {
         or return;                          #   the argument list.
     my $subroutine_name = $parent->sprevious_sibling()
         or return;                          # Missing sub name.
-    $subroutine_name->isa( 'PPI::Token::Word' )
+    if ( $subroutine_name->isa( 'PPI::Token::Word' ) ) {
+        $self->{_allow_delegation_to}{$subroutine_name}
+            and return 1;
+        my ($subroutine_namespace) = $subroutine_name =~ m/ \A ( .* ::) \w+ \z /smx
+            or return;
+        return $self->{_allow_delegation_to}{$subroutine_namespace};
+    } elsif ( $self->{_allow_closures} &&
+        _is_dereference_operator( $subroutine_name ) ) {
+        my $prev_sib = $subroutine_name;
+        {   # Single-iteration loop
+            $prev_sib = $prev_sib->sprevious_sibling()
+                or return;
+            ( $prev_sib->isa( 'PPI::Structure::Subscript' ||
+                    _is_dereference_operator( $prev_sib ) ) )
+                and redo;
+        }
+        return $prev_sib->isa( 'PPI::Token::Symbol' );
+    }
+    return;
+}
+
+sub _is_dereference_operator {
+    my ( $elem ) = @_;
+    $elem
         or return;
-    $self->{_allow_delegation_to}{$subroutine_name}
-        and return 1;
-    my ($subroutine_namespace) = $subroutine_name =~ m/ \A ( .* ::) \w+ \z /smx
+    $elem->isa( 'PPI::Token::Operator' )
         or return;
-    return $self->{_allow_delegation_to}{$subroutine_namespace};
+    return $DEREFERENCE eq $elem->content();
 }
 
 
@@ -320,14 +346,58 @@ sub _magic_finder {
         # don't descend into a nested named sub
         return if $elem->statement->isa('PPI::Statement::Sub');
 
-        my $prev = $elem->sprevious_sibling;
-        # don't descend into a nested anon sub block
-        return if $prev
-            and $prev->isa('PPI::Token::Word')
-            and 'sub' eq $prev->content();
+        # don't descend into a nested anon sub, either.
+        return if _is_anon_sub( $elem );
+
     }
 
     return $FALSE; # no match, descend
+}
+
+# Detecting anonymous subs is hard, partly because PPI's parse of them, at
+# least as of 1.220, appears to be a bit dodgy.
+sub _is_anon_sub {
+    my ( $elem ) = @_;
+
+    # If we have no previous element, we can not be an anonymous sub.
+    my $prev = $elem->sprevious_sibling()
+        or return $FALSE;
+
+    # The simple case.
+    return $TRUE if $prev->isa( 'PPI::Token::Word' )
+        and 'sub' eq $prev->content();
+
+    # Skip possible subroutine attributes. These appear as words (the names)
+    # or lists (the arguments, if any), or actual attributes (depending on how
+    # PPI handles them). A colon is required before the first, and is optional
+    # in between.
+    while ( $prev->isa( 'PPI::Token::Word' )
+            or $prev->isa( 'PPI::Structure::List' )
+            or $prev->isa( 'PPI::Token::Attribute' )
+            or $prev->isa( 'PPI::Token::Operator' )
+                and q<:> eq $prev->content() ) {
+
+        # Grab the previous significant sib. If there is none, we can not
+        # be an anonymous sub with attributes.
+        return $FALSE if not $prev = $prev->sprevious_sibling();
+    }
+
+    # PPI 1.220 may parse the 'sub :' erroneously as a label. If we find that,
+    # it means our block is the body of an anonymous subroutine.
+    return $TRUE if $prev->isa( 'PPI::Token::Label' )
+        and $prev->content() =~ m/ \A sub \s* : \z /smx;
+
+    # At this point we may have a prototype. Skip that too, but there needs to
+    # be something before it.
+    return $FALSE if $prev->isa( 'PPI::Token::Prototype' )
+        and not $prev = $prev->sprevious_sibling();
+
+    # Finally, we can find out if we're a sub
+    return $TRUE if $prev->isa( 'PPI::Token::Word' )
+        and 'sub' eq $prev->content();
+
+    # We are out of options. At this point we can not possibly be an anon sub.
+    return $FALSE;
 }
 
 
@@ -338,6 +408,8 @@ __END__
 #-----------------------------------------------------------------------------
 
 =pod
+
+=for stopwords Params::Validate
 
 =head1 NAME
 
@@ -412,6 +484,14 @@ following configuration could be used:
 
   [Subroutines::RequireArgUnpacking]
   allow_delegation_to = next::method _delegate
+
+Argument validation tools such as L<Params::Validate|Params::Validate> generate a closure which is
+used to unpack and validate the arguments of a subroutine. In order to
+recognize closures as a valid way to unpack arguments you must enable them
+explicitly:
+
+  [Subroutines::RequireArgUnpacking]
+  allow_closures = 1
 
 =head1 CAVEATS
 

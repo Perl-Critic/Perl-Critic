@@ -3,7 +3,7 @@
 ## There's too much use of source code in strings.
 ## no critic (RequireInterpolationOfMetachars)
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
@@ -18,9 +18,9 @@ use Perl::Critic::PolicyFactory;
 use Perl::Critic::TestUtils qw(bundled_policy_names);
 use Perl::Critic::Utils;
 
-use Test::More tests => 153;
+use Test::More tests => 156;
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 use Perl::Critic::TestUtils;
 Perl::Critic::TestUtils::assert_version( $VERSION );
@@ -306,11 +306,11 @@ sub test_interpolate {
 #-----------------------------------------------------------------------------
 
 sub test_is_perl_and_shebang_line {
-    for ( qw(foo.t foo.pm foo.pl foo.PL) ) {
+    for ( qw(foo.t foo.pm foo.pl foo.PL foo.psgi) ) {
         ok( Perl::Critic::Utils::_is_perl($_), qq{Is perl: '$_'} );
     }
 
-    for ( qw(foo.doc foo.txt foo.conf foo) ) {
+    for ( qw(foo.doc foo.txt foo.conf foo foo.pl.exe foo_pl) ) {
         ok( ! Perl::Critic::Utils::_is_perl($_), qq{Is not perl: '$_'} );
     }
 
@@ -418,7 +418,7 @@ sub test_parse_arg_list {
         [
                 q/foo( { bar() }, {}, 'blah' )/
             =>  [
-                    ' { bar() }',
+                    [ '{ bar() }' ],
                     [ qw< {} > ],
                     [ q<'blah'> ],
                 ],

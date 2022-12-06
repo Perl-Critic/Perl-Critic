@@ -1,15 +1,15 @@
 package Perl::Critic::Policy::ValuesAndExpressions::ProhibitSpecialLiteralHeredocTerminator;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
 use Readonly;
 
 use Perl::Critic::Utils qw{ :severities };
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 #-----------------------------------------------------------------------------
 
@@ -32,7 +32,7 @@ sub violates {
 
     # remove << and (optional) quotes from around terminator
     ( my $heredoc_terminator = $elem ) =~
-        s{ \A << \s* (["']?) (.*) \1 \z }{$2}xms;
+        s{ \A << ~? \s* (["']?) (.*) \1 \z }{$2}xms;
 
     if ( $SPECIAL_LITERAL{ $heredoc_terminator } ) {
         my $expl = qq{Used "$heredoc_terminator" as heredoc terminator};

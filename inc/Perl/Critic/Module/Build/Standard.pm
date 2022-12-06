@@ -1,6 +1,6 @@
 package Perl::Critic::Module::Build::Standard;
 
-use 5.006001;
+use 5.010001;
 
 use strict;
 use warnings;
@@ -11,7 +11,7 @@ use Carp;
 use English qw< $OS_ERROR -no_match_vars >;
 
 
-use base 'Module::Build';
+use parent 'Module::Build';
 
 
 sub ACTION_authortest {

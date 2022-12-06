@@ -1,6 +1,6 @@
 package Perl::Critic::Policy::TestingAndDebugging::RequireUseStrict;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
@@ -10,9 +10,9 @@ use Scalar::Util qw{ blessed };
 
 use Perl::Critic::Utils qw{ :severities $EMPTY };
 use Perl::Critic::Utils::Constants qw{ :equivalent_modules };
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 #-----------------------------------------------------------------------------
 

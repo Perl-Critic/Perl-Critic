@@ -1,6 +1,6 @@
 package Perl::Critic::OptionsProcessor;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
@@ -17,7 +17,7 @@ use Perl::Critic::Utils::Constants qw<
     >;
 use Perl::Critic::Utils::DataConversion qw< dor >;
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 #-----------------------------------------------------------------------------
 

@@ -1,13 +1,13 @@
 #!perl
 
-use 5.006001;
+use 5.010001;
 
 use strict;
 use warnings;
 
 use Test::Perl::Critic::Policy qw< all_policies_ok >;
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 use Perl::Critic::TestUtils;
 Perl::Critic::TestUtils::assert_version( $VERSION );

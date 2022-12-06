@@ -1,12 +1,12 @@
 package Perl::Critic::PolicyConfig;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
 use Readonly;
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 use Perl::Critic::Exception::AggregateConfiguration;
 use Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue;
@@ -154,9 +154,8 @@ sub get_parameter_names {
 sub handle_extra_parameters {
     my ($self, $policy, $errors) = @_;
 
-    my $profile_strictness = $self->{$NON_PUBLIC_DATA}{_profile_strictness};
-    defined $profile_strictness
-        or $profile_strictness = $PROFILE_STRICTNESS_DEFAULT;
+    my $profile_strictness = $self->{$NON_PUBLIC_DATA}{_profile_strictness}
+        // $PROFILE_STRICTNESS_DEFAULT;
 
     return if $profile_strictness eq $PROFILE_STRICTNESS_QUIET;
 

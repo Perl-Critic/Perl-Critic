@@ -1,14 +1,14 @@
 package Perl::Critic::PolicyParameter::Behavior::String;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
 use Perl::Critic::Utils;
 
-use base qw{ Perl::Critic::PolicyParameter::Behavior };
+use parent qw{ Perl::Critic::PolicyParameter::Behavior };
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 #-----------------------------------------------------------------------------
 

@@ -1,6 +1,6 @@
 #!perl
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
@@ -11,13 +11,12 @@ use version;
 
 use Perl::Critic::Document qw< >;
 use Perl::Critic::Utils qw< $EMPTY >;
-use Perl::Critic::Utils::DataConversion qw< dor >;
 
 
 use Test::Deep;
 use Test::More tests => 43;
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 use Perl::Critic::TestUtils;
 Perl::Critic::TestUtils::assert_version( $VERSION );
@@ -159,7 +158,7 @@ can_ok('Perl::Critic::Document', 'is_module');
 sub test_version {
     my ($code, $expected_version) = @_;
 
-    my $description_version = dor( $expected_version, '<undef>' );
+    my $description_version = $expected_version // '<undef>';
 
     my $document =
         Perl::Critic::Document->new(

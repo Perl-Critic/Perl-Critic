@@ -3,7 +3,7 @@
 # Test that all the problems in an rc file get reported and not just the first
 # one that is found.
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
@@ -16,7 +16,8 @@ use Perl::Critic::PolicyFactory (-test => 1);
 use Perl::Critic;
 use Perl::Critic::Utils::Constants qw< $_MODULE_VERSION_TERM_ANSICOLOR >;
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
+
 use Perl::Critic::TestUtils;
 Perl::Critic::TestUtils::assert_version( $VERSION );
 

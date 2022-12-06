@@ -1,6 +1,6 @@
 #!perl
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
@@ -14,7 +14,7 @@ use Perl::Critic::Utils qw< :characters >;
 
 use Test::More tests => 57;
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 use Perl::Critic::TestUtils;
 Perl::Critic::TestUtils::assert_version( $VERSION );

@@ -1,6 +1,6 @@
 package Perl::Critic::Annotation;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
@@ -13,7 +13,7 @@ use Readonly;
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 Readonly::Scalar my $LAST_ELEMENT => -1;
 
@@ -292,7 +292,7 @@ Perl::Critic::Annotation - A "## no critic" annotation in a document.
 =head1 DESCRIPTION
 
 C<Perl::Critic::Annotation> represents a single C<"## no critic">
-annotation in a L<PPI:Document>.  The Annotation takes care of parsing
+annotation in a L<PPI::Document>.  The Annotation takes care of parsing
 the annotation and keeps track of which lines and Policies it affects.
 It is intended to encapsulate the details of the no-critic
 annotations, and to provide a way for Policy objects to interact with

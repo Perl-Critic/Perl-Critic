@@ -1,9 +1,9 @@
-use 5.006001;
+use 5.010001;
 
 use strict;
 use warnings;
 
-use Module::Build 0.4200;
+use Module::Build;
 # meta_merge->resources->license now takes an arrayref of URLs in 0.4200 (or
 # thereabouts, but I can't tell for sure from the Changes file).
 
@@ -11,7 +11,8 @@ use lib 'inc';
 
 use Perl::Critic::BuildUtilities qw<
     required_module_versions
-    build_required_module_versions
+    test_required_module_versions
+    configure_required_module_versions
     emit_tar_warning_if_necessary
     get_PL_files
 >;
@@ -32,13 +33,11 @@ my $builder = Perl::Critic::Module::Build->new(
     sign                => 0,
 
     requires            => { required_module_versions() },
-    build_requires      => { build_required_module_versions() },
+    test_requires       => { test_required_module_versions() },
 
     # Don't require a developer version of Module::Build, even if the
     # distribution tarball was created with one.  (Oops.)
-    configure_requires  => {
-        'Module::Build' => '0.4024',
-    },
+    configure_requires  => { configure_required_module_versions() },
 
     PL_files            => get_PL_files(),
 

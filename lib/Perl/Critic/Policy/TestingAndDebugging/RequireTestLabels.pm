@@ -1,17 +1,17 @@
 package Perl::Critic::Policy::TestingAndDebugging::RequireTestLabels;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 use Readonly;
 
-use List::MoreUtils qw(any);
+use List::SomeUtils qw(any);
 use Perl::Critic::Utils qw{
     :characters :severities :data_conversion :classification :ppi
 };
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 Readonly::Hash my %LABEL_ARG_POS => (
    ok        => 1,
@@ -139,7 +139,7 @@ Chris Dolan <cdolan@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2006-2011 Chris Dolan.
+Copyright (c) 2006-2021 Chris Dolan.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.

@@ -1,6 +1,6 @@
 package Perl::Critic::Policy;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
@@ -23,7 +23,6 @@ use Perl::Critic::Utils qw<
     policy_short_name
     severity_to_number
 >;
-use Perl::Critic::Utils::DataConversion qw< dor >;
 use Perl::Critic::Utils::POD qw<
     get_module_abstract_for_module
     get_raw_module_abstract_for_module
@@ -40,7 +39,7 @@ use Perl::Critic::Violation qw<>;
 
 use Exception::Class;   # this must come after "use P::C::Exception::*"
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 #-----------------------------------------------------------------------------
 
@@ -458,15 +457,15 @@ sub to_string {
     my %fspec = (
          'P' => sub { $self->get_long_name() },
          'p' => sub { $self->get_short_name() },
-         'a' => sub { dor($self->get_abstract(), $EMPTY) },
+         'a' => sub { $self->get_abstract() // $EMPTY },
          'O' => sub { $self->_format_parameters(@_) },
          'U' => sub { $self->_format_lack_of_parameter_metadata(@_) },
          'S' => sub { $self->default_severity() },
          's' => sub { $self->get_severity() },
          'T' => sub { join $SPACE, $self->default_themes() },
          't' => sub { join $SPACE, $self->get_themes() },
-         'V' => sub { dor( $self->default_maximum_violations_per_document(), $NO_LIMIT ) },
-         'v' => sub { dor( $self->get_maximum_violations_per_document(), $NO_LIMIT ) },
+         'V' => sub { $self->default_maximum_violations_per_document() // $NO_LIMIT },
+         'v' => sub { $self->get_maximum_violations_per_document() // $NO_LIMIT },
     );
     return stringf(get_format(), %fspec);
 }

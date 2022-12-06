@@ -1,10 +1,10 @@
 package Perl::Critic::Exception::Configuration;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 #-----------------------------------------------------------------------------
 

@@ -1,6 +1,6 @@
 package Perl::Critic::UserProfile;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
@@ -16,7 +16,7 @@ use Perl::Critic::Exception::Fatal::Internal qw{ throw_internal };
 use Perl::Critic::Exception::Configuration::Generic qw{ throw_generic };
 use Perl::Critic::PolicyConfig;
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 #-----------------------------------------------------------------------------
 
@@ -34,7 +34,7 @@ sub _init {
 
     my ( $self, %args ) = @_;
     # The profile can be defined, undefined, or an empty string.
-    my $profile = defined $args{-profile} ? $args{-profile} : _find_profile_path();
+    my $profile = $args{-profile} // _find_profile_path();
     $self->_load_profile( $profile );
     $self->_set_options_processor();
     return $self;
@@ -241,11 +241,11 @@ sub _load_profile_from_hash {
 
 sub _find_profile_path {
 
-    #Define default filename
-    my $rc_file = '.perlcriticrc';
-
     #Check explicit environment setting
     return $ENV{PERLCRITIC} if exists $ENV{PERLCRITIC};
+
+    #Define default filename
+    my $rc_file = '.perlcriticrc';
 
     #Check current directory
     return $rc_file if -f $rc_file;
@@ -263,20 +263,11 @@ sub _find_profile_path {
 #-----------------------------------------------------------------------------
 
 sub _find_home_dir {
-
-    # Try using File::HomeDir
-    if ( eval { require File::HomeDir } ) {
-        return File::HomeDir->my_home();
-    }
-
-    # Check usual environment vars
-    for my $key (qw(HOME USERPROFILE HOMESHARE)) {
-        next if not defined $ENV{$key};
-        return $ENV{$key} if -d $ENV{$key};
-    }
-
-    # No home directory defined
-    return;
+    # This logic is taken from File::HomeDir::Tiny.
+    return
+        ($^O eq 'MSWin32') && ("$]" < 5.016)  ## no critic ( Variables::ProhibitPunctuationVars ValuesAndExpressions::ProhibitMagicNumbers ValuesAndExpressions::ProhibitMismatchedOperators )
+            ? ($ENV{HOME} || $ENV{USERPROFILE})
+            : (<~>)[0];
 }
 
 #-----------------------------------------------------------------------------

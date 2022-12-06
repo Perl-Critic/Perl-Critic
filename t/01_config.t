@@ -1,13 +1,13 @@
 #!perl
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
 use English qw< -no_match_vars >;
 
 use File::Spec;
-use List::MoreUtils qw(all any);
+use List::SomeUtils qw(any);
 
 use Perl::Critic::Exception::AggregateConfiguration;
 use Perl::Critic::Config qw<>;
@@ -21,7 +21,7 @@ use Perl::Critic::Utils::Constants qw< :color_severity >;
 
 use Test::More;
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 Perl::Critic::TestUtils::assert_version( $VERSION );
 Perl::Critic::TestUtils::block_perlcriticrc();

@@ -190,11 +190,6 @@ Why can't I do this:
     ## use critic (SomeOtherPolicy)
 
 
-=item * Make color work on Windows.
-
-Use L<Win32::Console::ANSI> like L<App::Ack>.
-
-
 =item * Create P::C::Node and make P::C::Document a subclass and make use of PPIx::Utilities::Node::split_ppi_node_by_namespace() to provide per-namespace caching of lookups that are now on P::C::Document.
 
 This is necessary to get P::C::Moose Policies correct.
@@ -327,10 +322,10 @@ See L<http://blog.woobling.org/2009/11/scoping-of-current-package.html>.
 Ouch.
 
 
-=item * BuiltInFunctions::RequireConstantSprintfFormat
+=item * BuiltinFunctions::RequireConstantSprintfFormat
 
 
-=item * BuiltInFunctions::RequireConstantUnpackFormat
+=item * BuiltinFunctions::RequireConstantUnpackFormat
 
 L<http://diotalevi.isa-geek.net/~josh/yapc-lint/slides/slide5.html>
 
@@ -470,7 +465,7 @@ which is better written as
 
 for performance gains and compile-time syntax checking.
 
-Question: This is very similar to BuiltInFunctions::ProhibitStringyEval. What
+Question: This is very similar to BuiltinFunctions::ProhibitStringyEval. What
 does the new policy buy us? Could we get the same thing with an option on the
 latter to forbid un-interpolated includes even if C<allow_includes> is turned
 on?

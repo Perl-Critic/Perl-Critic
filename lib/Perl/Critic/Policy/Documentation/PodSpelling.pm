@@ -1,6 +1,6 @@
 package Perl::Critic::Policy::Documentation::PodSpelling;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
@@ -10,7 +10,7 @@ use Readonly;
 use File::Spec;
 use File::Temp;
 use IO::String qw< >;
-use List::MoreUtils qw(uniq);
+use List::SomeUtils qw(uniq);
 use Pod::Spell qw< >;
 use Text::ParseWords qw< >;
 
@@ -22,9 +22,9 @@ use Perl::Critic::Utils qw{
 };
 use Perl::Critic::Exception::Fatal::Generic qw{ throw_generic };
 
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 #-----------------------------------------------------------------------------
 
@@ -77,13 +77,15 @@ sub initialize_if_enabled {
 
     return $FALSE if not $self->_derive_spell_command_line();
 
-    return $FALSE if not $self->_run_spell_command( <<'END_TEST_CODE' );
-=pod
+    my $test_code = <<'END_TEST_CODE';
+;pod
 
-=head1 Test The Spell Command
+;head1 Test The Spell Command
 
-=cut
+;cut
 END_TEST_CODE
+    $test_code =~ s/^;/=/msx;
+    return $FALSE if not $self->_run_spell_command($test_code);
 
     $self->_load_stop_words_file();
 
@@ -207,9 +209,7 @@ sub _run_spell_command {
         close $aspell_out_fh
             or throw_generic "Failed to close handle to spelling program: $OS_ERROR";
 
-        for (@words) {
-            chomp;
-        }
+        chomp @words;
 
         # Why is this extra step needed???
         @words = grep { not exists $Pod::Wordlist::Wordlist{$_} } @words;  ## no critic (ProhibitPackageVars)
@@ -310,7 +310,7 @@ If anything else goes wrong -- we can't locate the spell checking program or
 To add exceptions on a module-by-module basis, add "stopwords" as
 described in L<Pod::Spell|Pod::Spell>.  For example:
 
-    =for stopword gibbles
+    =for stopwords gibbles
 
     =head1 Gibble::Manip -- manipulate your gibbles
 
@@ -389,7 +389,7 @@ Chris Dolan <cdolan@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2007-2011 Chris Dolan.  Many rights reserved.
+Copyright (c) 2007-2021 Chris Dolan.  Many rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

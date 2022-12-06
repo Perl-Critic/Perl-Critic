@@ -1,6 +1,6 @@
 package Perl::Critic::PolicyParameter;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 use Readonly;
@@ -21,9 +21,8 @@ use Perl::Critic::PolicyParameter::Behavior::String;
 use Perl::Critic::PolicyParameter::Behavior::StringList;
 
 use Perl::Critic::Utils qw{ :characters &interpolate };
-use Perl::Critic::Utils::DataConversion qw{ &defined_or_empty };
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 Readonly::Scalar our $NO_DESCRIPTION_AVAILABLE => 'No description available.';
 
@@ -261,8 +260,8 @@ sub to_formatted_string {
 
     my %specification = (
         n => sub { $self->get_name() },
-        d => sub { defined_or_empty( $self->get_description() ) },
-        D => sub { defined_or_empty( $self->get_default_string() ) },
+        d => sub { $self->get_description() // $EMPTY },
+        D => sub { $self->get_default_string() // $EMPTY },
         f => sub { $self->_generate_full_description(@_) },
     );
 

@@ -1,6 +1,6 @@
 package Perl::Critic::TestUtils;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
@@ -22,7 +22,7 @@ use Perl::Critic::Exception::Fatal::Internal qw{ &throw_internal };
 use Perl::Critic::Utils qw{ :severities :data_conversion policy_long_name };
 use Perl::Critic::PolicyFactory (-test => 1);
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 Readonly::Array our @EXPORT_OK => qw(
     pcritique pcritique_with_violations

@@ -1,6 +1,6 @@
 package Perl::Critic::BuildUtilities;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
@@ -12,7 +12,8 @@ use Exporter 'import';
 
 our @EXPORT_OK = qw<
     required_module_versions
-    build_required_module_versions
+    test_required_module_versions
+    configure_required_module_versions
     emit_tar_warning_if_necessary
     get_PL_files
 >;
@@ -26,13 +27,12 @@ sub required_module_versions {
         'B::Keywords'                   => 1.05,
         'Carp'                          => 0,
         'Config::Tiny'                  => 2,
-        'Email::Address'                => 1.889,
         'English'                       => 0,
         'Exception::Class'              => 1.23,
         'Exporter'                      => 5.63,
+        'Fatal'                         => 0,
         'File::Basename'                => 0,
         'File::Find'                    => 0,
-        'File::HomeDir'                 => 0,
         'File::Path'                    => 0,
         'File::Spec'                    => 0,
         'File::Spec::Unix'              => 0,
@@ -41,15 +41,16 @@ sub required_module_versions {
         'Getopt::Long'                  => 0,
         'IO::String'                    => 0,
         'IPC::Open2'                    => 1,
-        'List::MoreUtils'               => 0.19,
+        'List::SomeUtils'               => '0.55',
         'List::Util'                    => 0,
         'Module::Pluggable'             => 3.1,
-        'PPI'                           => '1.224',
-        'PPI::Document'                 => '1.224',
-        'PPI::Document::File'           => '1.224',
-        'PPI::Node'                     => '1.224',
-        'PPI::Token::Quote::Single'     => '1.224',
-        'PPI::Token::Whitespace'        => '1.224',
+        'PPI'                           => '1.265',
+        'PPI::Document'                 => '1.265',
+        'PPI::Document::File'           => '1.265',
+        'PPI::Node'                     => '1.265',
+        'PPI::Token::Quote::Single'     => '1.265',
+        'PPI::Token::Whitespace'        => '1.265',
+        'PPIx::QuoteLike'               => 0,
         'PPIx::Regexp'                  => '0.027', # Literal { deprecated in re
         'PPIx::Regexp::Util'            => '0.068', # is_ppi_regexp_element()
         'PPIx::Utilities::Node'         => '1.001',
@@ -62,7 +63,7 @@ sub required_module_versions {
         'Pod::Usage'                    => 0,
         'Readonly'                      => 2.00,
         'Scalar::Util'                  => 0,
-        'String::Format'                => 1.13,
+        'String::Format'                => '1.18',
         'Task::Weaken'                  => 0,
         'Term::ANSIColor'               => '2.02',
         'Test::Builder'                 => 0.92,
@@ -70,7 +71,7 @@ sub required_module_versions {
         'base'                          => 0,
         'charnames'                     => 0,
         'overload'                      => 0,
-        'perl'                          => 5.006001,
+        'perl'                          => 5.010001,
         'strict'                        => 0,
         'version'                       => 0.77,
         'warnings'                      => 0,
@@ -78,11 +79,23 @@ sub required_module_versions {
 }
 
 
-sub build_required_module_versions {
+sub test_required_module_versions {
     return (
-        'lib'           => 0,
         'Test::Deep'    => 0,
         'Test::More'    => 0,
+        'lib'           => 0,
+    );
+}
+
+
+sub configure_required_module_versions {
+    return (
+        'Carp'          => 0,
+        'English'       => 0,
+        'Exporter'      => '5.63',
+        'Module::Build' => '0.4204',
+        'base'          => 0,
+        'lib'           => 0,
     );
 }
 
@@ -169,7 +182,7 @@ Elliot Shank  C<< <perl@galumph.com> >>
 
 =head1 LICENCE AND COPYRIGHT
 
-Copyright (c) 2007-2011, Elliot Shank.
+Copyright (c) 2007-2021, Elliot Shank.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

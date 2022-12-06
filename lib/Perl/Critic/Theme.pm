@@ -1,14 +1,12 @@
 package Perl::Critic::Theme;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 use English qw(-no_match_vars);
 use Readonly;
 
 use Exporter 'import';
-
-use List::MoreUtils qw(any);
 
 use Perl::Critic::Utils qw{ :characters :data_conversion };
 use Perl::Critic::Exception::Fatal::Internal qw{ &throw_internal };
@@ -17,7 +15,7 @@ use Perl::Critic::Exception::Configuration::Option::Global::ParameterValue
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 #-----------------------------------------------------------------------------
 

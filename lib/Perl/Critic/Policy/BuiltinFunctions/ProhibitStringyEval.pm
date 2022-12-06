@@ -1,6 +1,6 @@
 package Perl::Critic::Policy::BuiltinFunctions::ProhibitStringyEval;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
@@ -9,9 +9,9 @@ use Readonly;
 use PPI::Document;
 
 use Perl::Critic::Utils qw{ :booleans :severities :classification :ppi $SCOLON };
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 #-----------------------------------------------------------------------------
 
@@ -154,9 +154,9 @@ L<Perl::Critic::Policy::Lax::ProhibitStringyEval::ExceptForRequire|Perl::Critic:
 
 =head1 SEE ALSO
 
-L<Perl::Critic::Policy::BuiltInFunctions::RequireBlockGrep|Perl::Critic::Policy::BuiltInFunctions::RequireBlockGrep>
+L<Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep|Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep>
 
-L<Perl::Critic::Policy::BuiltInFunctions::RequireBlockMap|Perl::Critic::Policy::BuiltInFunctions::RequireBlockMap>
+L<Perl::Critic::Policy::BuiltinFunctions::RequireBlockMap|Perl::Critic::Policy::BuiltinFunctions::RequireBlockMap>
 
 
 =head1 AUTHOR

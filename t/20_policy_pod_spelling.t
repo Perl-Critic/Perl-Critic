@@ -4,7 +4,7 @@
 
 =cut
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
@@ -16,7 +16,7 @@ use Test::More;
 Readonly::Scalar my $NUMBER_OF_TESTS => 5;
 plan( tests => $NUMBER_OF_TESTS );
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 Perl::Critic::TestUtils::assert_version( $VERSION );
 Perl::Critic::TestUtils::block_perlcriticrc();

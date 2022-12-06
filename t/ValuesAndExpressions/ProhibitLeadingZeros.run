@@ -132,6 +132,14 @@ sysopen ( $filehandle, $filename, (O_WRONLY | O_CREAT | O_EXCL), 0666 );
 
 #-----------------------------------------------------------------------------
 
+## name sysopen GitHub #789
+## failures 0
+## cut
+
+sysopen my $filehandle, $filename, O_RDWR, 0666;
+
+#-----------------------------------------------------------------------------
+
 ## name umask
 ## failures 0
 ## cut
@@ -148,6 +156,29 @@ umask ( 002 );
 
 umask 002;
 umask ( 002 );
+
+## name mkfifo
+## failures 0
+## cut
+
+use POSIX qw(mkfifo);
+POSIX::mkfifo $fifo, 0700;
+POSIX::mkfifo ( $fifo, 0700 );
+mkfifo $fifo, 0700;
+mkfifo ( $fifo, 0700 );
+
+#-----------------------------------------------------------------------------
+
+## name mkdir with strict option
+## failures 4
+## parms { strict => 1 }
+## cut
+
+use POSIX qw(mkfifo);
+POSIX::mkfifo $fifo, 0700;
+POSIX::mkfifo ( $fifo, 0700 );
+mkfifo $fifo, 0700;
+mkfifo ( $fifo, 0700 );
 
 #-----------------------------------------------------------------------------
 # Local Variables:

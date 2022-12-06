@@ -1,6 +1,6 @@
 package Perl::Critic::ThemeListing;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
@@ -10,7 +10,7 @@ use Perl::Critic::Utils qw< hashify >;
 
 use overload ( q<""> => 'to_string' );
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 #-----------------------------------------------------------------------------
 

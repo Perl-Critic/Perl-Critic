@@ -1,10 +1,11 @@
 package Perl::Critic::Policy::Variables::ProhibitEvilVariables;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
 use English qw(-no_match_vars);
+use List::SomeUtils qw(firstval);
 use Readonly;
 
 use Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue
@@ -12,11 +13,10 @@ use Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue
 use Perl::Critic::Utils qw{
     :characters :severities :data_conversion
 };
-use Perl::Critic::Utils::DataConversion qw{ dor };
 
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 #-----------------------------------------------------------------------------
 
@@ -107,7 +107,7 @@ sub _parse_variables {
         $variable_specifications =~ m< $VARIABLES_REGEX >xms) {
 
         substr $variable_specifications, 0, $LAST_MATCH_END[0], $EMPTY;
-        my $description = dor(@descrs);
+        my $description = firstval { defined } @descrs;
 
         $self->_handle_variable_specification(
             variable                => $variable,

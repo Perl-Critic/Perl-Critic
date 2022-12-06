@@ -1,6 +1,6 @@
 package Perl::Critic::Command;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
@@ -21,7 +21,7 @@ use Perl::Critic::Violation qw<>;
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 #-----------------------------------------------------------------------------
 
@@ -187,12 +187,10 @@ sub _get_input {
 
         # Reading code from STDIN.  All the code is slurped into
         # a string.  PPI will barf if the string is just whitespace.
-        my $code_string = do { local $RS = undef; <STDIN> };
+        my $code_string = do { local $RS = undef; <> };
 
         # Notice if STDIN was closed (pipe error, etc)
-        if ( ! defined $code_string ) {
-            $code_string = $EMPTY;
-        }
+        $code_string //= $EMPTY;
 
         $code_string =~ m{ \S+ }xms || die qq{Nothing to critique.\n};
         return \$code_string;    #Convert to SCALAR ref for PPI
@@ -517,7 +515,7 @@ sub _get_option_specification {
 
 sub _colorize_by_severity {
     my @violations = @_;
-    return @violations if _this_is_windows();
+    return @violations if _this_is_windows() && !eval 'require Win32::Console::ANSI; 1';
     return @violations if not eval {
         require Term::ANSIColor;
         Term::ANSIColor->VERSION( $_MODULE_VERSION_TERM_ANSICOLOR );

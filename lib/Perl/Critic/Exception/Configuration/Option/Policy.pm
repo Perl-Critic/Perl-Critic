@@ -1,12 +1,12 @@
 package Perl::Critic::Exception::Configuration::Option::Policy;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
 use Perl::Critic::Utils qw{ &policy_short_name };
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 #-----------------------------------------------------------------------------
 

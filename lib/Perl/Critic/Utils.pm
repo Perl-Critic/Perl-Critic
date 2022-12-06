@@ -3,25 +3,26 @@
 
 package Perl::Critic::Utils;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 use Readonly;
 
 use Carp qw( confess );
 use English qw(-no_match_vars);
+use File::Find qw();
 use File::Spec qw();
 use Scalar::Util qw( blessed );
 use B::Keywords qw();
 use PPI::Token::Quote::Single;
-use List::MoreUtils qw(any);
+use List::SomeUtils qw(any);
 
 use Perl::Critic::Exception::Fatal::Generic qw{ throw_generic };
 use Perl::Critic::Utils::PPI qw< is_ppi_expression_or_generic_statement >;
 
 use Exporter 'import';
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 #-----------------------------------------------------------------------------
 # Exportable symbols here.
@@ -881,6 +882,11 @@ sub is_in_void_context {
         return if $parent->isa('PPI::Structure::Constructor');
         return if $parent->isa('PPI::Structure::Subscript');
 
+        # If it's in a block and not the last statement then it's in void.
+        return 1 if
+                $parent->isa('PPI::Structure::Block')
+            and $token->statement()->snext_sibling();
+
         my $grand_parent = $parent->parent();
         if ($grand_parent) {
             return if
@@ -1080,31 +1086,32 @@ Readonly::Array my @SKIP_DIR => qw( CVS RCS .svn _darcs {arch} .bzr .cdv .git .h
 Readonly::Hash my %SKIP_DIR => hashify( @SKIP_DIR );
 
 sub all_perl_files {
+    my @arg = @_;
+    my @code_files;
 
-    # Recursively searches a list of directories and returns the paths
-    # to files that seem to be Perl source code.  This subroutine was
-    # poached from Test::Perl::Critic.
+    # The old code did a breadth-first search (documentation to the
+    # contrary notwithstanding,) whereas File::Find does depth-first. So
+    # there appears to be no way to use File::Find without changing the
+    # order in which the files are returned.
+    File::Find::find( {
+            wanted        => sub {
+                if ( -d && $SKIP_DIR{$_} ) {
+                    $File::Find::prune = 1;
+                } elsif ( -f && ! _is_backup( $_ ) && _is_perl( $_ ) ) {
+                    push @code_files, $File::Find::name;
+                }
+                return;
+            },
+            untaint => 1,
+        },
+        @arg,
+    );
 
-    my @queue      = @_;
-    my @code_files = ();
-
-    while (@queue) {
-        my $file = shift @queue;
-        if ( -d $file ) {
-            opendir my ($dh), $file or next;
-            my @newfiles = sort readdir $dh;
-            closedir $dh;
-
-            @newfiles = File::Spec->no_upwards(@newfiles);
-            @newfiles = grep { not $SKIP_DIR{$_} } @newfiles;
-            push @queue, map { File::Spec->catfile($file, $_) } @newfiles;
-        }
-
-        if ( (-f $file) && ! _is_backup($file) && _is_perl($file) ) {
-            push @code_files, $file;
-        }
-    }
-    return @code_files;
+    # Use File::Spec->abs2rel()  to get rid of leading './' or other OS
+    # equivalent on relative filenames.
+    # Use map {} to get rid of leading './', or other OS equivalent
+    return ( map { File::Spec->file_name_is_absolute( $_ ) ?
+        $_ : File::Spec->abs2rel( $_ ) } @code_files );
 }
 
 
@@ -1131,6 +1138,7 @@ sub _is_perl {
     #Check filename extensions
     return 1 if $file =~ m{ [.] PL    \z}xms;
     return 1 if $file =~ m{ [.] p[lm] \z}xms;
+    return 1 if $file =~ m{ [.] psgi  \z}xms;
     return 1 if $file =~ m{ [.] t     \z}xms;
 
     #Check for shebang
@@ -1453,23 +1461,21 @@ ignored, so things like C<$ARGV> or C<$ENV> will still return true.
 
 Given a L<PPI::Token::Word|PPI::Token::Word>,
 L<PPI::Statement::Sub|PPI::Statement::Sub>, or string, returns true if
-that token represents a call to any of the builtin functions defined
-in Perl 5.8.8.
+that token represents a call to any of the builtin functions.
 
 
 =item C<is_perl_bareword( $element )>
 
 Given a L<PPI::Token::Word|PPI::Token::Word>,
 L<PPI::Statement::Sub|PPI::Statement::Sub>, or string, returns true if
-that token represents a bareword (e.g. "if", "else", "sub", "package")
-defined in Perl 5.8.8.
+that token represents a bareword (e.g. "if", "else", "sub", "package").
 
 
 =item C<is_perl_filehandle( $element )>
 
 Given a L<PPI::Token::Word|PPI::Token::Word>, or string, returns true
 if that token represents one of the global filehandles (e.g. C<STDIN>,
-C<STDERR>, C<STDOUT>, C<ARGV>) that are defined in Perl 5.8.8.  Note
+C<STDERR>, C<STDOUT>, C<ARGV>).  Note
 that this function will return false if given a filehandle that is
 represented as a typeglob (e.g. C<*STDIN>)
 
@@ -1478,40 +1484,40 @@ represented as a typeglob (e.g. C<*STDIN>)
 
 Given a L<PPI::Token::Word|PPI::Token::Word>,
 L<PPI::Statement::Sub|PPI::Statement::Sub>, or string, returns true if
-that token represents a call to any of the builtin functions defined
-in Perl 5.8.8 that provide a list context to the following tokens.
+that token represents a call to any of the builtin functions
+that provide a list context to the following tokens.
 
 
 =item C<is_perl_builtin_with_multiple_arguments( $element )>
 
 Given a L<PPI::Token::Word|PPI::Token::Word>,
 L<PPI::Statement::Sub|PPI::Statement::Sub>, or string, returns true if
-that token represents a call to any of the builtin functions defined
-in Perl 5.8.8 that B<can> take multiple arguments.
+that token represents a call to any of the builtin functions that B<can>
+take multiple arguments.
 
 
 =item C<is_perl_builtin_with_no_arguments( $element )>
 
 Given a L<PPI::Token::Word|PPI::Token::Word>,
 L<PPI::Statement::Sub|PPI::Statement::Sub>, or string, returns true if
-that token represents a call to any of the builtin functions defined
-in Perl 5.8.8 that B<cannot> take any arguments.
+that token represents a call to any of the builtin functions that
+B<cannot> take any arguments.
 
 
 =item C<is_perl_builtin_with_one_argument( $element )>
 
 Given a L<PPI::Token::Word|PPI::Token::Word>,
 L<PPI::Statement::Sub|PPI::Statement::Sub>, or string, returns true if
-that token represents a call to any of the builtin functions defined
-in Perl 5.8.8 that takes B<one and only one> argument.
+that token represents a call to any of the builtin functions that takes
+B<one and only one> argument.
 
 
 =item C<is_perl_builtin_with_optional_argument( $element )>
 
 Given a L<PPI::Token::Word|PPI::Token::Word>,
 L<PPI::Statement::Sub|PPI::Statement::Sub>, or string, returns true if
-that token represents a call to any of the builtin functions defined
-in Perl 5.8.8 that takes B<no more than one> argument.
+that token represents a call to any of the builtin functions that takes
+B<no more than one> argument.
 
 The sets of values for which
 C<is_perl_builtin_with_multiple_arguments()>,
@@ -1526,8 +1532,8 @@ C<is_perl_builtin()> will return true for.
 
 Given a L<PPI::Token::Word|PPI::Token::Word>,
 L<PPI::Statement::Sub|PPI::Statement::Sub>, or string, returns true if
-that token represents a call to any of the builtin functions defined
-in Perl 5.8.8 that takes no and/or one argument.
+that token represents a call to any of the builtin functions that takes
+no and/or one argument.
 
 Returns true if any of C<is_perl_builtin_with_no_arguments()>,
 C<is_perl_builtin_with_one_argument()>, and
@@ -1708,7 +1714,7 @@ A Perl code file is:
 
 =over
 
-=item * Any file that ends in F<.PL>, F<.pl>, F<.pm>, or F<.t>
+=item * Any file that ends in F<.PL>, F<.pl>, F<.pm>, F<.psgi>, or F<.t>
 
 =item * Any file that has a first line with a shebang containing 'perl'
 
@@ -2001,7 +2007,7 @@ Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2011 Imaginative Software Systems.  All rights reserved.
+Copyright (c) 2005-2021 Imaginative Software Systems
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

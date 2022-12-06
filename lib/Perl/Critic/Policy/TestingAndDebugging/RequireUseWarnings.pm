@@ -1,18 +1,17 @@
 package Perl::Critic::Policy::TestingAndDebugging::RequireUseWarnings;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 use Readonly;
 
-use List::Util qw(first);
 use version ();
 
 use Perl::Critic::Utils qw{ :severities $EMPTY };
 use Perl::Critic::Utils::Constants qw{ :equivalent_modules };
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 #-----------------------------------------------------------------------------
 
@@ -20,6 +19,7 @@ Readonly::Scalar my $DESC => q{Code before warnings are enabled};
 Readonly::Scalar my $EXPL => [431];
 
 Readonly::Scalar my $MINIMUM_VERSION => version->new(5.006);
+Readonly::Scalar my $PERL_VERSION_WHICH_IMPLIES_WARNINGS => version->new(5.036);
 
 #-----------------------------------------------------------------------------
 
@@ -48,7 +48,7 @@ sub violates {
     my ( $self, undef, $document ) = @_;
 
     my $version = $document->highest_explicit_perl_version();
-    return if $version and $version < $MINIMUM_VERSION;
+    return if $version and ($version < $MINIMUM_VERSION or $version >= $PERL_VERSION_WHICH_IMPLIES_WARNINGS);
 
     # Find the first 'use warnings' statement
     my $warn_stmnt = $document->find_first( $self->_generate_is_use_warnings() );

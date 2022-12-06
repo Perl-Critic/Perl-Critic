@@ -1,0 +1,101 @@
+## name basic failures
+## failures 4
+## cut
+
+opendir DH, $some_dir;
+opendir DH, $some_dir or die;
+opendir(DH, $some_dir);
+opendir(DH, $some_dir) or die;
+
+#-----------------------------------------------------------------------------
+
+## name typeglob failures
+## failures 4
+## cut
+
+opendir *DH, $some_dir;
+opendir *DH, $some_dir or die;
+opendir(*DH, $some_dir);
+opendir(*DH, $some_dir) or die;
+
+#-----------------------------------------------------------------------------
+
+## name typeglob ref failures
+## failures 4
+## cut
+
+opendir \*DH, $some_dir;
+opendir \*DH, $some_dir or die;
+opendir(\*DH, $some_dir);
+opendir(\*DH, $some_dir) or die;
+
+#-----------------------------------------------------------------------------
+
+## name local typeglob failures
+## failures 4
+## cut
+
+opendir local *DH, $some_dir;
+opendir local *DH, $some_dir or die;
+opendir(local *DH, $some_dir);
+opendir(local *DH, $some_dir) or die;
+
+#-----------------------------------------------------------------------------
+
+## name basic passes
+## failures 0
+## cut
+
+opendir $dh, $some_dir;
+opendir $dh, $some_dir or die;
+opendir($dh, $some_dir);
+opendir($dh, $some_dir) or die;
+
+#-----------------------------------------------------------------------------
+
+## name my scalar passes
+## failures 0
+## cut
+
+opendir my $dh, $some_dir;
+opendir my $dh, $some_dir or die;
+opendir(my $dh, $some_dir);
+opendir(my $dh, $some_dir) or die;
+
+#-----------------------------------------------------------------------------
+
+## name our scalar passes
+## failures 0
+## cut
+
+opendir our $dh, $some_dir;
+opendir our $dh, $some_dir or die;
+opendir(our $dh, $some_dir);
+opendir(our $dh, $some_dir) or die;
+
+#-----------------------------------------------------------------------------
+
+## name local scalar passes
+## failures 0
+## cut
+
+opendir local $dh, $some_dir;
+opendir local $dh, $some_dir or die;
+opendir(local $dh, $some_dir);
+opendir(local $dh, $some_dir) or die;
+
+#-----------------------------------------------------------------------------
+
+$foo{opendir}; # not a function call
+{opendir}; # zero args, for Devel::Cover
+
+#-----------------------------------------------------------------------------
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab shiftround :

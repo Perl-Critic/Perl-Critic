@@ -1,6 +1,6 @@
 package Perl::Critic::Policy::CodeLayout::RequireTidyCode;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
@@ -11,9 +11,9 @@ use Readonly;
 use Perl::Tidy qw< >;
 
 use Perl::Critic::Utils qw{ :booleans :characters :severities };
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 #-----------------------------------------------------------------------------
 
@@ -92,7 +92,7 @@ sub violates {
         # Perl::Tidy 20120619 no longer accepts a scalar reference for stdio.
         my $handle = IO::String->new( $stderr );
 
-        # Begining with version 20120619, Perl::Tidy modifies $source. So we
+        # Beginning with version 20120619, Perl::Tidy modifies $source. So we
         # make a copy so we can get a good comparison after tidying. Doing an
         # s/// on $source after the fact appears not to work with previous
         # versions of Perl::Tidy.
@@ -153,7 +153,7 @@ Conway does make specific recommendations for whitespace and
 curly-braces in your code, but the most important thing is to adopt a
 consistent layout, regardless of the specifics.  And the easiest way
 to do that is to use L<Perl::Tidy|Perl::Tidy>.  This policy will
-complain if you're code hasn't been run through Perl::Tidy.
+complain if your code hasn't been run through Perl::Tidy.
 
 
 =head1 CONFIGURATION

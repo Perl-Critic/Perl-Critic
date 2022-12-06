@@ -15,7 +15,6 @@ allow_leading_tabs = 0
 strict = 1
 
 [-CodeLayout::RequireTidyCode]
-[-Documentation::RequirePodLinksIncludeText]
 
 [Documentation::PodSpelling]
 spell_command = aspell list -l en_US
@@ -32,6 +31,10 @@ lines = 20
 [InputOutput::RequireCheckedSyscalls]
 functions = open close
 
+[-Miscellanea::ProhibitUselessNoCritic]
+# With Perl 5.32, isa() becomes a reserved word. This means we need to Subroutines::ProhibitBuiltinHomonyms for it.
+# However, for all other Perls, that causes a Miscellanea::ProhibitUselessNoCritic to fire.
+
 [RegularExpressions::ProhibitUnusualDelimiters]
 allow_all_brackets = 1
 
@@ -44,6 +47,3 @@ allow = _get_behavior_values _get_description_with_trailing_period
 
 [Subroutines::ProtectPrivateSubs]
 private_name_regex = _(?!_)\w+
-
-[Variables::ProhibitPackageVars]
-add_packages = Email::Address

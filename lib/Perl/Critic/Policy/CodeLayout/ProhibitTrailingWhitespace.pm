@@ -1,6 +1,6 @@
 package Perl::Critic::Policy::CodeLayout::ProhibitTrailingWhitespace;
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 use English qw(-no_match_vars);
@@ -11,9 +11,9 @@ use charnames qw{};
 use PPI::Token::Whitespace;
 use Perl::Critic::Utils qw{ :characters :severities };
 
-use base 'Perl::Critic::Policy';
+use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 #-----------------------------------------------------------------------------
 

@@ -1,6 +1,6 @@
 #!perl
 
-use 5.006001;
+use 5.010001;
 use strict;
 use warnings;
 
@@ -9,7 +9,7 @@ use Perl::Critic::PolicyFactory (-test => 1);
 
 use Perl::Critic::TestUtils qw(critique);
 
-our $VERSION = '1.130';
+our $VERSION = '1.142';
 
 Perl::Critic::TestUtils::assert_version( $VERSION );
 Perl::Critic::TestUtils::block_perlcriticrc();
@@ -887,7 +887,7 @@ $code = <<'END_PERL';
 This code has several POD-related violations at line 1.  The "## no critic"
 marker is on the second physical line.  However, the "#line" directive should
 cause it to treat it as if it actually were on the first physical line.  Thus,
-the violations should be supressed.
+the violations should be suppressed.
 
 =cut
 
@@ -915,7 +915,7 @@ $code = <<'END_PERL';
 This code has several POD-related violations at line 1.  The "## no critic"
 marker is on the second physical line, and the "#line" directive should cause
 it to treat it as if it actually were on the 7th physical line.  Thus, the
-violations should NOT be supressed.
+violations should NOT be suppressed.
 
 =cut
 
