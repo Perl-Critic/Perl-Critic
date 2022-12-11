@@ -9,7 +9,6 @@ use Readonly;
 
 use File::Spec;
 use File::Temp;
-use IO::String qw< >;
 use List::SomeUtils qw(uniq);
 use Pod::Spell qw< >;
 use Text::ParseWords qw< >;
@@ -181,8 +180,6 @@ sub _get_stop_words_file {
 sub _run_spell_command {
     my ($self, $code) = @_;
 
-    my $infh = IO::String->new( $code );
-
     my $outfh = File::Temp->new();
 
     my $outfile = $outfh->filename();
@@ -195,7 +192,11 @@ sub _run_spell_command {
         local %Pod::Wordlist::Wordlist =    ## no critic (ProhibitPackageVars)
             %{ $self->_get_stop_words() };
 
+        open my $infh, '<', \$code
+            or throw_generic "error opening scalar: $OS_ERROR";
+
         Pod::Spell->new()->parse_from_filehandle($infh, $outfh);
+        close $infh or throw_generic "Failed to close in memory file: $OS_ERROR";
         close $outfh or throw_generic "Failed to close pod temp file: $OS_ERROR";
         return if not -s $outfile; # Bail out if no words to spellcheck
 

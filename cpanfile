@@ -17,7 +17,6 @@ requires 'File::Spec::Unix'           => 0;
 requires 'File::Temp'                 => 0;
 requires 'File::Which'                => 0;
 requires 'Getopt::Long'               => 0;
-requires 'IO::String'                 => 0;
 requires 'IPC::Open2'                 => 1;
 requires 'List::SomeUtils'            => '0.55';
 requires 'List::Util'                 => 0;
