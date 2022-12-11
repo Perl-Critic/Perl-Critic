@@ -18,7 +18,7 @@ use Perl::Critic::Config;
 use Perl::Critic::Violation;
 use Perl::Critic::Document;
 use Perl::Critic::Statistics;
-use Perl::Critic::Utils qw< :characters hashify shebang_line >;
+#use Perl::Critic::Utils qw< :characters >;
 
 #-----------------------------------------------------------------------------
 
