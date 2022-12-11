@@ -9,7 +9,7 @@ use English qw< $EVAL_ERROR -no_match_vars >;
 use Readonly;
 
 use Perl::Critic::Utils qw<
-    :severities $EMPTY is_function_call is_method_call hashify
+    :severities $EMPTY is_function_call is_method_call
 >;
 use parent 'Perl::Critic::Policy';
 
@@ -157,11 +157,11 @@ sub _is_other_pkg_private_method {
     my $package = $operator->sprevious_sibling() or return;
     return if not $package->isa('PPI::Token::Word');
 
-    # Sometimes the previous sib is a keyword, as in:
+    # sometimes the previous sib is a keyword, as in:
     # shift->_private_method();  This is typically used as
     # shorthand for "my $self=shift; $self->_private_method()"
-    state $keywords = { hashify( qw( shift __PACKAGE__ ) ) };
-    return if $keywords{$package->content()};
+    return if $package->content() eq 'shift'
+        or $package->content() eq '__PACKAGE__';
 
     # Maybe the user wanted to exempt this explicitly.
     return if $self->{_allow}{"${package}::$content"};
