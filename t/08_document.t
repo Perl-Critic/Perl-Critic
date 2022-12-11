@@ -14,7 +14,7 @@ use Perl::Critic::Utils qw< $EMPTY >;
 
 
 use Test::Deep;
-use Test::More tests => 43;
+use Test::More tests => 50;
 
 our $VERSION = '1.144';
 
@@ -29,6 +29,7 @@ can_ok('Perl::Critic::Document', 'find_any');
 can_ok('Perl::Critic::Document', 'namespaces');
 can_ok('Perl::Critic::Document', 'subdocuments_for_namespace');
 can_ok('Perl::Critic::Document', 'highest_explicit_perl_version');
+can_ok('Perl::Critic::Document', 'suppress_version_statements');
 can_ok('Perl::Critic::Document', 'uses_module');
 can_ok('Perl::Critic::Document', 'ppi_document');
 can_ok('Perl::Critic::Document', 'is_program');
@@ -169,6 +170,13 @@ sub test_version {
         $document->highest_explicit_perl_version(),
         $expected_version,
         qq<Get "$description_version" for "$code".>,
+    );
+
+    $document->suppress_version_statements();
+    is(
+        $document->highest_explicit_perl_version(),
+        undef,
+        qq<Get "undef for "$code" when suppressed.>,
     );
 
     return;
