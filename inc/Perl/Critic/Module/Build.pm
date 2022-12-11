@@ -39,6 +39,14 @@ sub ACTION_nytprof {
 }
 
 
+sub ACTION_tags {
+    my ($self) = @_;
+
+    $self->depends_on('build');
+    $self->_run_tags();
+}
+
+
 sub authortest_dependencies {
     my ($self) = @_;
 
@@ -82,6 +90,31 @@ sub _run_nytprof {
     my $status_nytprofhtml = system $nytprofhtml;
     croak "nytprofhtml failed with status $status_nytprofhtml"
         if $status_nytprofhtml;
+
+    return;
+}
+
+
+sub _run_tags {
+    my ($self) = @_;
+
+    my $ctags = 'ctags';
+    my @ctags_args =
+        qw(
+            -f tags
+            --recurse
+            --totals
+            --exclude=blib
+            --exclude=.git
+            --exclude='*~'
+            --languages=Perl
+            --langmap=Perl:+.t
+        );
+    warn "Running: $ctags @ctags_args\n";
+
+    my $status_ctags = system $ctags, @ctags_args;
+    croak "ctags failed with status $status_ctags"
+        if $status_ctags == 1;
 
     return;
 }
