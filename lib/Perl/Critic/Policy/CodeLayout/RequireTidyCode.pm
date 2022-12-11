@@ -5,11 +5,12 @@ use strict;
 use warnings;
 
 use English qw(-no_match_vars);
-use IO::String qw< >;
+use IO::Handle ();
 use Readonly;
 
 use Perl::Tidy qw< >;
 
+use Perl::Critic::Exception::Fatal::Generic qw{ throw_generic };
 use Perl::Critic::Utils qw{ :booleans :characters :severities };
 use parent 'Perl::Critic::Policy';
 
@@ -89,9 +90,6 @@ sub violates {
     # Trap Perl::Tidy errors, just in case it dies
     my $eval_worked = eval {
 
-        # Perl::Tidy 20120619 no longer accepts a scalar reference for stdio.
-        my $handle = IO::String->new( $stderr );
-
         # Beginning with version 20120619, Perl::Tidy modifies $source. So we
         # make a copy so we can get a good comparison after tidying. Doing an
         # s/// on $source after the fact appears not to work with previous
@@ -105,13 +103,22 @@ sub violates {
         # the meantime, we workaround it by localizing STDERR first.
         local *STDERR = \*STDERR;
 
+        # Perl::Tidy 20120619 doesn't accept a scalar ref or a glob ref
+        open my $handle, '>', \$stderr
+            or throw_generic "error opening scalar: $OS_ERROR";
+        $handle = *{$handle}{IO};
+
+
         Perl::Tidy::perltidy(
             source      => \$source_copy,
             destination => \$dest,
             stderr      => $handle,
             defined $self->{_perltidyrc} ? (perltidyrc => $self->{_perltidyrc}) : (),
-       );
-       1;
+        );
+
+        close $handle or throw_generic "Failed to close in memory file: $OS_ERROR";
+
+        1;
     };
 
     if ($stderr or not $eval_worked) {

@@ -555,12 +555,6 @@ considering doing a special release only including this change so that the
 search.cpan.org diff tool doesn't entirely break.
 
 
-=item * Eliminate use of IO::String
-
-I'm pretty sure that opening references to scalars is in 5.6, so IO::String
-isn't necessary.
-
-
 =item * Give L<Perl::Critic::Command> a proper API.
 
 Now that we've got the guts of L<perlcritic> in there, we should make the

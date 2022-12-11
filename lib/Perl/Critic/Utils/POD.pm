@@ -6,7 +6,6 @@ use warnings;
 
 use English qw< -no_match_vars >;
 
-use IO::String ();
 use Pod::PlainText ();
 use Pod::Select ();
 
@@ -191,9 +190,12 @@ sub _get_pod_section_from_filehandle {
     $parser->select($section_name);
 
     my $content = $EMPTY;
-    my $content_handle = IO::String->new( \$content );
+    open my $content_handle, '>', \$content
+        or throw_generic "error opening scalar: $OS_ERROR";
 
     $parser->parse_from_filehandle( $file_handle, $content_handle );
+
+    close $content_handle or throw_generic "Failed to close in memory file: $OS_ERROR";
 
     return if $content eq $EMPTY;
     return $content;
@@ -204,12 +206,16 @@ sub _get_pod_section_from_filehandle {
 sub _get_pod_section_from_string {
     my ($source, $section_name, $parser) = @_;
 
-    my $source_handle = IO::String->new( \$source );
+    open my $source_handle, '<', \$source
+        or throw_generic "error opening scalar: $OS_ERROR";
 
-    return
-        _get_pod_section_from_filehandle(
+    my $content = _get_pod_section_from_filehandle(
             $source_handle, $section_name, $parser,
         );
+
+    close $source_handle or throw_generic "Failed to close in memory file: $OS_ERROR";
+
+    return $content;
 }
 
 #-----------------------------------------------------------------------------
@@ -454,12 +460,16 @@ sub _get_module_abstract_from_filehandle { ## no critic (RequireFinalReturn)
 sub _get_module_abstract_from_string {
     my ($source, $parser, $trimmer) = @_;
 
-    my $source_handle = IO::String->new( \$source );
+    open my $source_handle, '<', \$source
+        or throw_generic "error opening scalar: $OS_ERROR";
 
-    return
-        _get_module_abstract_from_filehandle(
+    my $module_abstract = _get_module_abstract_from_filehandle(
             $source_handle, $parser, $trimmer,
         );
+
+    close $source_handle or throw_generic "Failed to close in memory file: $OS_ERROR";
+
+    return $module_abstract;
 }
 
 #-----------------------------------------------------------------------------

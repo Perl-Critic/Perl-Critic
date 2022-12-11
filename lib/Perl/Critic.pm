@@ -847,8 +847,6 @@ L<File::Spec::Unix>
 
 L<File::Which>
 
-L<IO::String>
-
 L<List::SomeUtils>
 
 L<List::Util>

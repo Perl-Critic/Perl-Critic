@@ -598,8 +598,6 @@ Perl::Critic requires the following modules:
 
 [File::Which](https://metacpan.org/pod/File::Which)
 
-[IO::String](https://metacpan.org/pod/IO::String)
-
 [List::SomeUtils](https://metacpan.org/pod/List::SomeUtils)
 
 [List::Util](https://metacpan.org/pod/List::Util)

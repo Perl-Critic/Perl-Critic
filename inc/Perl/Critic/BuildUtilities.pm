@@ -39,7 +39,6 @@ sub required_module_versions {
         'File::Temp'                    => 0,
         'File::Which'                   => 0,
         'Getopt::Long'                  => 0,
-        'IO::String'                    => 0,
         'IPC::Open2'                    => 1,
         'List::SomeUtils'               => '0.55',
         'List::Util'                    => 0,
