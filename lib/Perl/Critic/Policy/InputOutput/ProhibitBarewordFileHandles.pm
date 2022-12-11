@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :severities :classification :ppi };
+use Perl::Critic::Utils qw{ :severities :classification :ppi hashify };
 use parent 'Perl::Critic::Policy';
 
 our $VERSION = '1.144';
@@ -25,12 +25,12 @@ sub applies_to           { return 'PPI::Token::Word'  }
 #-----------------------------------------------------------------------------
 
 Readonly::Scalar my $ARRAY_REF  => ref [];
+Readonly::Hash my %OPEN_FUNCS => hashify( qw( open sysopen ) );
 
 sub violates {
     my ($self, $elem, undef) = @_;
 
-    my $fn = $elem->content();
-    return if $fn ne 'open' && $fn ne 'sysopen';
+    return if ! $OPEN_FUNCS{$elem->content()};
     return if ! is_function_call($elem);
 
     my $first_arg = ( parse_arg_list($elem) )[0];
