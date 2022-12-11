@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :severities :classification :ppi };
+use Perl::Critic::Utils qw{ :severities :classification :ppi hashify };
 use parent 'Perl::Critic::Policy';
 
 our $VERSION = '1.144';
@@ -21,10 +21,10 @@ sub default_severity     { return $SEVERITY_LOW }
 sub default_themes       { return qw( core ) }
 sub applies_to           { return 'PPI::Token::Operator', 'PPI::Token::Word' }
 
-my @filetest_operators = qw( -r -w -x -o -R -W -X -O -e -z -s -f -d -l -p -S -b -c -u -g -k -T -B -M -A -C );
-my %filetest_operators = map { ($_ => 1) } @filetest_operators;
+Readonly::Array my @filetest_operators => qw( -r -w -x -o -R -W -X -O -e -z -s -f -d -l -p -S -b -c -u -g -k -T -B -M -A -C );
+Readonly::Hash my %filetest_operators => hashify( @filetest_operators );
 
-my @topical_funcs = qw(
+Readonly::Array my @topical_funcs => qw(
     abs alarm
     chomp chop chr chroot cos
     defined
@@ -42,9 +42,9 @@ my @topical_funcs = qw(
     say sin split sqrt stat study
     uc ucfirst unlink unpack
 );
-my %topical_funcs = map { ($_ => 1) } @topical_funcs;
+Readonly::Hash my %topical_funcs => hashify( @topical_funcs );
 
-my %applies_to = ( %topical_funcs, %filetest_operators );
+Readonly::Hash my %applies_to => ( %topical_funcs, %filetest_operators );
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
@@ -195,7 +195,7 @@ Andy Lester <andy@petdance.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2013 Andy Lester <andy@petdance.com>
+Copyright (c) 2013-2022 Andy Lester <andy@petdance.com>
 
 This library is free software; you can redistribute it and/or modify it
 under the terms of the Artistic License 2.0.

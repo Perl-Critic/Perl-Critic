@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :booleans :severities };
+use Perl::Critic::Utils qw{ :booleans :severities hashify };
 use parent 'Perl::Critic::Policy';
 
 our $VERSION = '1.144';
@@ -40,10 +40,8 @@ Readonly::Hash my %OPERATOR_TYPES => (
 );
 
 Readonly::Scalar my $TOKEN_COMPATIBILITY_SPECIAL_STRING_OPERATOR => qw{+};
-Readonly::Hash my %SPECIAL_STRING_VALUES => (
-    map { $_ => 1}
-        qw('nan' 'inf' '-inf' '+inf')
-);
+Readonly::Hash my %SPECIAL_STRING_VALUES =>
+    hashify( qw('nan' 'inf' '-inf' '+inf') );
 
 #-----------------------------------------------------------------------------
 

@@ -5,7 +5,7 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :booleans :severities };
+use Perl::Critic::Utils qw{ :booleans :severities hashify };
 use parent 'Perl::Critic::Policy';
 
 our $VERSION = '1.144';
@@ -17,7 +17,7 @@ Readonly::Scalar my $EXPL => q{Use "require" to conditionally include a module.}
 
 # operators
 
-Readonly::Hash my %OPS => map { $_ => 1 } qw( || && or and );
+Readonly::Hash my %OPS => hashify( qw( || && or and ) );
 
 #-----------------------------------------------------------------------------
 
