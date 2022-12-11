@@ -6,6 +6,9 @@ NEXT
     ProhibitBarewordDirHandles now checks for sysopen as well as open. Thanks,
     Tadeusz Sośnierz. (GH #732)
 
+    Added a Dockerfile in the extras/ directory for those who want to run P::C
+    in a container. Thanks, Isaac Gittins. (GH #832)
+
     [Bug Fixes]
     Fixed some problems with how Perl::Critic determined scope. Thanks, Tom
     Wyant. (GH #793)
