@@ -6,6 +6,10 @@ NEXT
     ProhibitBarewordDirHandles now checks for sysopen as well as open. Thanks,
     Tadeusz Sośnierz. (GH #732)
 
+    [Internals]
+    We no longer use or need IO::String. Thanks, Graham Knop. (GH #997)
+
+
 1.144 Mon Dec  5 09:44:04 PM CST 2022
 
     Perl::Critic now requires Perl 5.10.1.
