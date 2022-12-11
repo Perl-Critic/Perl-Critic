@@ -1,5 +1,11 @@
 Revision history for Perl module Perl::Critic
 
+NEXT
+
+    [New features]
+    ProhibitBarewordDirHandles now checks for sysopen as well as open. Thanks,
+    Tadeusz Sośnierz. (GH #732)
+
 1.144 Mon Dec  5 09:44:04 PM CST 2022
 
     Perl::Critic now requires Perl 5.10.1.

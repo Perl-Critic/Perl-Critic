@@ -8,8 +8,8 @@ open(STDERR, '>', '/dev/null') or die;
 
 #-----------------------------------------------------------------------------
 
-## name basic failures
-## failures 5
+## name Basic failures
+## failures 10
 ## cut
 
 open FH, '>', $some_file;
@@ -18,9 +18,15 @@ open(FH, '>', $some_file);
 open(FH, '>', $some_file) or die;
 open(STDERROR, '>', '/dev/null') or die;
 
+sysopen FH, $some_file, O_RDWR, 0666;
+sysopen FH, $some_file, O_RDWR, 0666 or die;
+sysopen(FH, $some_file, O_RDWR, 0666);
+sysopen(FH, $some_file, O_RDWR, 0666) or die;
+sysopen(STDERROR, $some_file, O_RDWR, 0666) or die;
+
 #-----------------------------------------------------------------------------
 
-## name basic passes
+## name Basic passes
 ## failures 0
 ## cut
 open $fh, '>', $some_file;
@@ -32,6 +38,12 @@ open my $fh, '>', $some_file;
 open my $fh, '>', $some_file or die;
 open(my $fh, '>', $some_file);
 open(my $fh, '>', $some_file) or die;
+
+sysopen my $fh, $some_file, O_RDWR, 0666;
+sysopen my $fh, $some_file, O_RDWR, 0666 or die;
+sysopen(my $fh, $some_file, O_RDWR, 0666);
+sysopen(my $fh, $some_file, O_RDWR, 0666) or die;
+
 
 $foo{open}; # not a function call
 {open}; # zero args, for Devel::Cover

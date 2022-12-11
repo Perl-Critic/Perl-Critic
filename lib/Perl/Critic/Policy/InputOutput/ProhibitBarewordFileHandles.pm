@@ -29,7 +29,8 @@ Readonly::Scalar my $ARRAY_REF  => ref [];
 sub violates {
     my ($self, $elem, undef) = @_;
 
-    return if $elem->content() ne 'open';
+    my $fn = $elem->content();
+    return if $fn ne 'open' && $fn ne 'sysopen';
     return if ! is_function_call($elem);
 
     my $first_arg = ( parse_arg_list($elem) )[0];
@@ -95,6 +96,8 @@ L<FileHandle|FileHandle> modules for an object-oriented approach.
 There are three exceptions: STDIN, STDOUT and STDERR.  These three
 standard filehandles are always package variables.
 
+This policy also applies to the C<sysopen> function as well.
+
 
 =head1 CONFIGURATION
 
@@ -113,7 +116,7 @@ Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2011 Imaginative Software Systems.  All rights reserved.
+Copyright (c) 2005-2022 Imaginative Software Systems.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.

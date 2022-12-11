@@ -224,6 +224,7 @@ Balhatchet Paaske Tørholm Raspass Tonkin Katz Berndt Sergey Gabor Szabo
 Knop Eldridge Steinbrunner Kimmel Guillaume Aubert Anirvan Chatterjee
 Rinaldo Ollis Etheridge Brømsø Slaven Rezić Szymon Nieznański
 Oschwald Mita Amory Meltzer Grechkin Bernhard Schmalhofer TOYAMA Nao Wyant
+Tadeusz Sośnierz
 
 =head1 NAME
 
@@ -948,6 +949,7 @@ L<http://www.perlfoundation.org/april_1_2007_new_grant_awards>
 
 Thanks also to this incomplete laundry list of folks who have contributed
 to Perl::Critic in some way:
+Tadeusz Sośnierz,
 Tom Wyant,
 TOYAMA Nao,
 Bernhard Schmalhofer,
