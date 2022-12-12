@@ -18,7 +18,7 @@ use Perl::Critic::PolicyFactory;
 use Perl::Critic::TestUtils qw(bundled_policy_names);
 use Perl::Critic::Utils;
 
-use Test::More tests => 156;
+use Test::More tests => 168;
 
 our $VERSION = '1.144';
 
@@ -32,6 +32,7 @@ test_is_hash_key();
 test_is_script();
 test_is_script_with_PL_files();
 test_is_perl_builtin();
+test_is_perl_bareword();
 test_is_perl_global();
 test_precedence_of();
 test_is_subroutine_name();
@@ -54,6 +55,7 @@ sub test_export {
     can_ok('main', 'is_hash_key');
     can_ok('main', 'is_method_call');
     can_ok('main', 'is_perl_builtin');
+    can_ok('main', 'is_perl_bareword');
     can_ok('main', 'is_perl_global');
     can_ok('main', 'is_script');
     can_ok('main', 'is_subroutine_name');
@@ -213,6 +215,56 @@ sub test_is_perl_builtin {
     $doc = make_doc( $code );
     $sub = $doc->find_first('Statement::Sub');
     ok( !is_perl_builtin($sub), 'Is not perl builtin function (PPI)' );
+
+    $code = 'my sub print {}';
+    $doc = make_doc( $code );
+    $sub = $doc->find_first('Statement::Sub');
+    ok( is_perl_builtin($sub), 'Is perl builtin function (PPI, lexial subroutines)' );
+
+    $code = 'my sub foobar {}';
+    $doc = make_doc( $code );
+    $sub = $doc->find_first('Statement::Sub');
+    ok( !is_perl_builtin($sub), 'Is not perl builtin function (PPI, lexial subroutines)' );
+
+    return;
+}
+
+#-----------------------------------------------------------------------------
+
+sub test_is_perl_bareword {
+    ok(  is_perl_bareword('if'),     'Is perl bareword'       );
+    ok(  is_perl_bareword('import'), 'Is perl extra bareword' );
+    ok( !is_perl_bareword('foobar'), 'Is not perl bareword'   );
+
+    my $code = 'sub if {}';
+    my $doc = make_doc( $code );
+    my $sub = $doc->find_first('Statement::Sub');
+    ok( is_perl_bareword($sub), 'Is perl bareword (PPI)' );
+
+    $code = 'sub import {}';
+    $doc = make_doc( $code );
+    $sub = $doc->find_first('Statement::Sub');
+    ok( is_perl_bareword($sub), 'Is perl extra bareword (PPI)' );
+
+    $code = 'sub foobar {}';
+    $doc = make_doc( $code );
+    $sub = $doc->find_first('Statement::Sub');
+    ok( !is_perl_bareword($sub), 'Is not perl bareword (PPI)' );
+
+    $code = 'my sub if {}';
+    $doc = make_doc( $code );
+    $sub = $doc->find_first('Statement::Sub');
+    ok( is_perl_bareword($sub), 'Is perl bareword (PPI, lexial subroutines)' );
+
+    $code = 'my sub import {}';
+    $doc = make_doc( $code );
+    $sub = $doc->find_first('Statement::Sub');
+    ok( is_perl_bareword($sub), 'Is perl extra bareword (PPI, lexial subroutines)' );
+
+    $code = 'my sub foobar {}';
+    $doc = make_doc( $code );
+    $sub = $doc->find_first('Statement::Sub');
+    ok( !is_perl_bareword($sub), 'Is not perl bareword (PPI, lexial subroutines)' );
 
     return;
 }

@@ -14,7 +14,7 @@ our $VERSION = '1.144';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Array my @ALLOW => qw( import AUTOLOAD DESTROY );
+Readonly::Array my @ALLOW => qw( import unimport AUTOLOAD DESTROY );
 Readonly::Hash my %ALLOW => hashify( @ALLOW );
 Readonly::Scalar my $DESC  => q{Subroutine name is a homonym for builtin %s %s};
 Readonly::Scalar my $EXPL  => [177];
@@ -31,7 +31,7 @@ sub applies_to           { return 'PPI::Statement::Sub' }
 sub violates {
     my ( $self, $elem, undef ) = @_;
     return if $elem->isa('PPI::Statement::Scheduled'); #e.g. BEGIN, INIT, END
-    return if exists $ALLOW{ $elem->name() };
+    return if exists $ALLOW{ $elem->name() } and not defined $elem->type();
 
     my $homonym_type = $EMPTY;
     if ( is_perl_builtin( $elem ) ) {

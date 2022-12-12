@@ -2,7 +2,7 @@
 # https://metacpan.org/release/Module-CPANfile
 # https://metacpan.org/pod/distribution/Module-CPANfile/lib/cpanfile.pod
 
-requires 'B::Keywords'                => '1.05';
+requires 'B::Keywords'                => '1.23';
 requires 'Carp'                       => 0;
 requires 'Config::Tiny'               => 2;
 requires 'English'                    => 0;
@@ -22,12 +22,12 @@ requires 'List::SomeUtils'            => '0.55';
 requires 'List::Util'                 => 0;
 requires 'Module::Build'              => '0.4204';
 requires 'Module::Pluggable'          => '3.1';
-requires 'PPI'                        => '1.265';
-requires 'PPI::Document'              => '1.265';
-requires 'PPI::Document::File'        => '1.265';
-requires 'PPI::Node'                  => '1.265';
-requires 'PPI::Token::Quote::Single'  => '1.265';
-requires 'PPI::Token::Whitespace'     => '1.265';
+requires 'PPI'                        => '1.271';
+requires 'PPI::Document'              => '1.271';
+requires 'PPI::Document::File'        => '1.271';
+requires 'PPI::Node'                  => '1.271';
+requires 'PPI::Token::Quote::Single'  => '1.271';
+requires 'PPI::Token::Whitespace'     => '1.271';
 requires 'PPIx::QuoteLike'            => 0;
 requires 'PPIx::Regexp'               => '0.027'; # Literal { deprecated in re
 requires 'PPIx::Regexp::Util'         => '0.068'; # is_ppi_regexp_element()

@@ -367,7 +367,10 @@ sub is_perl_builtin {
 
 #-----------------------------------------------------------------------------
 
-Readonly::Hash my %BAREWORDS => hashify( @B::Keywords::Barewords );
+Readonly::Hash my %BAREWORDS => hashify(
+    @B::Keywords::Barewords,
+    @B::Keywords::BarewordsExtra,
+);
 
 sub is_perl_bareword {
     my $elem = shift;

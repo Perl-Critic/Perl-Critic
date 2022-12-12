@@ -24,7 +24,7 @@ use Devel::CheckOS qw< os_is >;
 
 sub required_module_versions {
     return (
-        'B::Keywords'                   => 1.05,
+        'B::Keywords'                   => 1.23,
         'Carp'                          => 0,
         'Config::Tiny'                  => 2,
         'English'                       => 0,
@@ -43,12 +43,12 @@ sub required_module_versions {
         'List::SomeUtils'               => '0.55',
         'List::Util'                    => 0,
         'Module::Pluggable'             => 3.1,
-        'PPI'                           => '1.265',
-        'PPI::Document'                 => '1.265',
-        'PPI::Document::File'           => '1.265',
-        'PPI::Node'                     => '1.265',
-        'PPI::Token::Quote::Single'     => '1.265',
-        'PPI::Token::Whitespace'        => '1.265',
+        'PPI'                           => '1.271',
+        'PPI::Document'                 => '1.271',
+        'PPI::Document::File'           => '1.271',
+        'PPI::Node'                     => '1.271',
+        'PPI::Token::Quote::Single'     => '1.271',
+        'PPI::Token::Whitespace'        => '1.271',
         'PPIx::QuoteLike'               => 0,
         'PPIx::Regexp'                  => '0.027', # Literal { deprecated in re
         'PPIx::Regexp::Util'            => '0.068', # is_ppi_regexp_element()
