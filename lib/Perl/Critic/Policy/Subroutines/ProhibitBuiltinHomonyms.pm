@@ -6,7 +6,7 @@ use warnings;
 use Readonly;
 
 use Perl::Critic::Utils qw{ :severities :data_conversion
-                            :classification :characters };
+                            :classification :characters $EMPTY };
 
 use parent 'Perl::Critic::Policy';
 
@@ -21,7 +21,16 @@ Readonly::Scalar my $EXPL  => [177];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return ()                    }
+sub supported_parameters {
+    return (
+        {
+            name           => 'allow',
+            description    => q<Subroutines matching the name regex to allow under this policy.>,
+            default_string => $EMPTY,
+            behavior       => 'string list',
+        },
+    );
+}
 sub default_severity     { return $SEVERITY_HIGH        }
 sub default_themes       { return qw( core bugs pbp certrule )   }
 sub applies_to           { return 'PPI::Statement::Sub' }
@@ -32,6 +41,7 @@ sub violates {
     my ( $self, $elem, undef ) = @_;
     return if $elem->isa('PPI::Statement::Scheduled'); #e.g. BEGIN, INIT, END
     return if exists $ALLOW{ $elem->name() } and not defined $elem->type();
+    return if exists $self->{_allow}{ $elem->name() };
 
     my $homonym_type = $EMPTY;
     if ( is_perl_builtin( $elem ) ) {
@@ -89,7 +99,14 @@ as well as C<AUTOLOAD>, C<DESTROY>, and C<import> subroutines.
 
 =head1 CONFIGURATION
 
-This Policy is not configurable except for the standard options.
+You can configure additional builtin homonyms to accept by specifying them
+in a space-delimited list to the C<allow> option:
+
+    [Subroutines::ProhibitUnusedPrivateSubroutines]
+    allow = default index
+
+These are added to the default list of exemptions from this policy. So the
+above allows C<< sub default {} >> and C<< sub index {} >>.
 
 
 =head1 CAVEATS
@@ -105,7 +122,7 @@ Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2011 Imaginative Software Systems.  All rights reserved.
+Copyright (c) 2005-2022 Imaginative Software Systems.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

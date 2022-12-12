@@ -9,6 +9,10 @@ NEXT
     Added a Dockerfile in the extras/ directory for those who want to run P::C
     in a container. Thanks, Isaac Gittins. (GH #832)
 
+    Subroutines::ProhibitBuiltinHomonyms now can take an "allows" parameter to
+    specify subroutines that won't violate the policy. Thanks, UTAGAWA Kiki.
+    (GH #14, #932)
+
     [Bug Fixes]
     Fixed some problems with how Perl::Critic determined scope. Thanks, Tom
     Wyant. (GH #793)
