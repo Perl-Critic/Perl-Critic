@@ -13,6 +13,10 @@ NEXT
     Fixed some problems with how Perl::Critic determined scope. Thanks, Tom
     Wyant. (GH #793)
 
+    Fixed improper violation for lexical subroutines in
+    Subroutines::ProhibitBuiltinHomonyms. Thanks, TOYAMA Nao. (GH #973, #955,
+    #546)
+
     [Internals]
     We no longer use or need IO::String. Thanks, Graham Knop. (GH #997)
 
