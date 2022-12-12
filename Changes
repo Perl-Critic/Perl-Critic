@@ -25,6 +25,9 @@ NEXT
     version numbers do not have number separators in them. Thanks, Tom Wyant.
     (GH #856, #904)
 
+    Fixed a false positive with split() in ProhibitUnusedCapture. Thanks, Tom
+    Wyant. (GH #888)
+
     [Internals]
     We no longer use or need IO::String. Thanks, Graham Knop. (GH #997)
 

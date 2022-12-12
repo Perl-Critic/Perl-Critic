@@ -21,6 +21,7 @@ our $VERSION = '1.144';
 
 #-----------------------------------------------------------------------------
 
+Readonly::Scalar my $SPLIT => q{split};
 Readonly::Scalar my $WHILE => q{while};
 
 Readonly::Hash my %ZERO_BASED_CAPTURE_REFERENCE =>
@@ -369,7 +370,7 @@ sub _check_if_in_while_condition_or_block {
 
     # RT #38942
     # The issue in the ticket is that in something like
-    #   if ( /(a)/ || /(b) ) {
+    #   if ( /(a)/ || /(b)/ ) {
     #       say $1
     #   }
     # the capture variable can come from either /(a)/ or /(b)/. If we
@@ -417,8 +418,9 @@ sub _check_if_in_while_condition_or_block {
 
             $elem or return $check;
 
-            $elem->isa( 'PPI::Token::Regexp' )
-                and return $check;
+            if ( $elem->isa( 'PPI::Token::Regexp' ) ) {
+                return _regexp_is_in_split( $elem ) ? $FALSE : $check;
+            }
 
             if ( $elem->isa( 'PPI::Token::Structure' )
                 && q<;> eq $elem->content() ) {
@@ -445,6 +447,25 @@ sub _check_if_in_while_condition_or_block {
         };
     }
 }
+
+# Argument is regexp.
+# True if it is the regexp in a split()
+sub _regexp_is_in_split {
+    my ( $elem ) = @_;
+
+    my $prev;
+    if ( ! ( $prev = $elem->sprevious_sibling() ) ) {
+        # Maybe we have split( /.../, ... )
+        my $stmt = $elem->statement()
+            or return $FALSE;
+        my $list = $stmt->parent()
+            or return $FALSE;
+        $prev = $elem->sprevious_sibling()
+            or return $FALSE;
+    }
+    return $prev->isa( 'PPI::Token::Word' ) && $SPLIT eq $prev->content();
+}
+
 
 # false if we hit another regexp
 # The arguments are:
@@ -796,6 +817,24 @@ determine which capture group is referred to.  For example,
 
 makes use of the first capture group if it matches, or the second
 capture group if the first does not match but the second does.
+
+=head2 split()
+
+Normally, this policy thinks that if a capture is used at all it must be
+used before the next regular expression in the same scope. The regular
+expression in a C<split()> needs to be exempted because it does not
+affect the caller's capture variables.
+
+At present, this policy recognizes and exempts the regular expressions
+in
+
+    split /.../, ...
+
+and
+
+    split( /.../, ... )
+
+but more exotic syntax may produce false positives.
 
 
 =head1 CREDITS

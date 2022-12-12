@@ -612,6 +612,14 @@ if ( m/(CAPTURE_ALL)/ ) {
     print ${^CAPTURE_ALL}[1];
 }
 
+## name GitHub #888 - False positive with split
+## failures 0
+## cut
+
+/(.+)/;
+my @a = split /x/, $1;
+my @b = split( /x/, $1;
+
 #-----------------------------------------------------------------------------
 
 # Local Variables:
