@@ -13,6 +13,10 @@ NEXT
     specify subroutines that won't violate the policy. Thanks, UTAGAWA Kiki.
     (GH #14, #932)
 
+    ProhibitStringyEval now allows package declarations in evals when
+    allow_includes = true. This is a common way packages are declared.
+    Thanks, Chris Novakovic. (GH #908)
+
     [Bug Fixes]
     Fixed some problems with how Perl::Critic determined scope. Thanks, Tom
     Wyant. (GH #793)
