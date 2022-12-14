@@ -871,8 +871,6 @@ L<Scalar::Util>
 
 L<String::Format>
 
-L<Task::Weaken>
-
 L<Term::ANSIColor>
 
 L<Text::ParseWords>

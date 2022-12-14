@@ -9,7 +9,6 @@ RUN apk --no-cache update && \
     rm -rf /var/cache/apk/*
 
 RUN cpanm B::Keywords && \
-    cpanm IO::String && \
     cpanm Test::Object && \
     cpanm Hook::LexWrap && \
     cpanm Test::SubCalls && \

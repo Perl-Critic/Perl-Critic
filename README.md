@@ -622,8 +622,6 @@ Perl::Critic requires the following modules:
 
 [String::Format](https://metacpan.org/pod/String::Format)
 
-[Task::Weaken](https://metacpan.org/pod/Task::Weaken)
-
 [Term::ANSIColor](https://metacpan.org/pod/Term::ANSIColor)
 
 [Text::ParseWords](https://metacpan.org/pod/Text::ParseWords)

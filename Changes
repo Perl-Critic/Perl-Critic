@@ -35,6 +35,13 @@ NEXT
     [Internals]
     We no longer use or need IO::String. Thanks, Graham Knop. (GH #997)
 
+    Removed requirements and mentions of modules no longer used:
+    * Fatal
+    * IO::String
+    * IPC::Open2
+    * Pod::Parser
+    * Task::Weaken
+
 
 1.144 Mon Dec  5 09:44:04 PM CST 2022
 
