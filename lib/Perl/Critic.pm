@@ -22,7 +22,7 @@ use Perl::Critic::Statistics;
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '1.144';
+our $VERSION = '1.146';
 
 Readonly::Array our @EXPORT_OK => qw(critique);
 

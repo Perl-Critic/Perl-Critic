@@ -17,7 +17,7 @@ use Scalar::Util qw{ blessed };
 
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.144';
+our $VERSION = '1.146';
 
 #-----------------------------------------------------------------------------
 

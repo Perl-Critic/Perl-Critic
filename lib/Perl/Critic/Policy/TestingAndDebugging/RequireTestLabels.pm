@@ -11,7 +11,7 @@ use Perl::Critic::Utils qw{
 };
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.144';
+our $VERSION = '1.146';
 
 Readonly::Hash my %LABEL_ARG_POS => (
    ok        => 1,

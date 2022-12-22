@@ -12,7 +12,7 @@ use Perl::Critic::Utils qw{ :booleans };
 
 use Test::More tests => 9;
 
-our $VERSION = '1.144';
+our $VERSION = '1.146';
 
 use Perl::Critic::TestUtils;
 Perl::Critic::TestUtils::assert_version( $VERSION );

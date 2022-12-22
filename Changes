@@ -1,6 +1,6 @@
 Revision history for Perl module Perl::Critic
 
-NEXT
+1.146 Wed Dec 21 21:05:20 CST 2022
 
     [New features]
     ProhibitBarewordDirHandles now checks for sysopen as well as open. Thanks,

@@ -7,7 +7,7 @@ use Perl::Critic::Utils;
 
 use parent qw{ Perl::Critic::PolicyParameter::Behavior };
 
-our $VERSION = '1.144';
+our $VERSION = '1.146';
 
 #-----------------------------------------------------------------------------
 

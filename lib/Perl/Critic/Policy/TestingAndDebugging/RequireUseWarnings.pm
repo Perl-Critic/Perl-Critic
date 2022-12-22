@@ -11,7 +11,7 @@ use Perl::Critic::Utils qw{ :severities $EMPTY };
 use Perl::Critic::Utils::Constants qw{ :equivalent_modules };
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.144';
+our $VERSION = '1.146';
 
 #-----------------------------------------------------------------------------
 
