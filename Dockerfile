@@ -1,26 +1,45 @@
 FROM alpine:latest
 
-RUN apk --no-cache update && \
-    apk --no-cache add wget make perl perl-app-cpanminus \
-      perl-readonly perl-dev perl-params-util perl-file-remove perl-clone \
-      perl-class-inspector perl-test-deep perl-task-weaken perl-list-moreutils \
-      perl-exception-class perl-module-pluggable perl-module-build \
-      perl-file-sharedir perl-path-tiny perl-class-tiny perl-config-tiny && \
-    rm -rf /var/cache/apk/*
+RUN \
+    apk --no-cache update \
+    && apk --no-cache add \
+        make \
+        wget \
+        perl \
+        perl-app-cpanminus \
+        perl-class-inspector \
+        perl-class-tiny \
+        perl-clone \
+        perl-config-tiny \
+        perl-dev \
+        perl-exception-class \
+        perl-file-remove \
+        perl-file-sharedir \
+        perl-list-moreutils \
+        perl-module-build \
+        perl-module-pluggable \
+        perl-params-util \
+        perl-path-tiny \
+        perl-readonly \
+        perl-task-weaken \
+        perl-test-deep \
+    && rm -rf /var/cache/apk/*
 
-RUN cpanm B::Keywords && \
-    cpanm Test::Object && \
-    cpanm Hook::LexWrap && \
-    cpanm Test::SubCalls && \
-    cpanm PPI::Token::Quote::Single && \
-    cpanm PPIx::QuoteLike && \
-    cpanm PPIx::Utilities::Statement && \
-    cpanm PPIx::Regexp && \
-    cpanm String::Format && \
-    cpanm Perl::Tidy && \
-    cpanm Lingua::EN::Inflect && \
-    cpanm Pod::Spell && \
-    rm -rf /root/.cpanm
+RUN \
+    cpanm \
+        B::Keywords \
+        Hook::LexWrap \
+        Lingua::EN::Inflect \
+        Perl::Tidy \
+        Pod::Spell \
+        PPI::Token::Quote::Single \
+        PPIx::QuoteLike \
+        PPIx::Regexp \
+        PPIx::Utilities::Statement \
+        String::Format \
+        Test::Object \
+        Test::SubCalls \
+    && rm -rf /root/.cpanm
 
 COPY lib /usr/local/lib/perl5/site_perl
 
