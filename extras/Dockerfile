@@ -6,7 +6,7 @@ RUN apk --no-cache update && \
       perl-class-inspector perl-test-deep perl-task-weaken perl-list-moreutils \
       perl-exception-class perl-module-pluggable perl-module-build \
       perl-file-sharedir perl-file-sharedir-install perl-path-tiny \
-      perl-class-tiny perl-config-tiny && \
+      perl-class-tiny perl-config-tiny perl-list-someutils && \
     rm -rf /var/cache/apk/*
 
 RUN cpanm B::Keywords && \
