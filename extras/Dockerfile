@@ -10,17 +10,12 @@ RUN apk --no-cache update && \
     rm -rf /var/cache/apk/*
 
 RUN cpanm B::Keywords && \
-    cpanm Test::Object && \
-    cpanm Hook::LexWrap && \
-    cpanm Test::SubCalls && \
     cpanm PPI::Token::Quote::Single && \
     cpanm PPIx::QuoteLike && \
     cpanm PPIx::Utilities::Statement && \
     cpanm PPIx::Regexp && \
     cpanm String::Format && \
     cpanm Perl::Tidy && \
-    cpanm Lingua::EN::Inflect && \
-    cpanm Pod::Spell && \
     rm -rf /root/.cpanm
 
 COPY lib /usr/local/lib/perl5/site_perl
