@@ -15,6 +15,7 @@ RUN \
         perl-exception-class \
         perl-file-remove \
         perl-file-sharedir \
+        perl-file-sharedir-install \
         perl-list-moreutils \
         perl-module-build \
         perl-module-pluggable \
