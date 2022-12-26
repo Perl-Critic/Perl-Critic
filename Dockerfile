@@ -28,7 +28,7 @@ RUN \
     && rm -rf /var/cache/apk/*
 
 RUN \
-    cpanm \
+    cpanm --notest \
         B::Keywords \
         Perl::Tidy \
         PPI::Token::Quote::Single \
