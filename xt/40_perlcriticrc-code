@@ -35,6 +35,10 @@ functions = open close
 # With Perl 5.32, isa() becomes a reserved word. This means we need to Subroutines::ProhibitBuiltinHomonyms for it.
 # However, for all other Perls, that causes a Miscellanea::ProhibitUselessNoCritic to fire.
 
+[Modules::ProhibitEvilModules]
+# List::MoreUtils isn't evil. We just have standardized on List::SomeUtils for Perl::Critic itself.
+modules = List::MoreUtils
+
 [RegularExpressions::ProhibitUnusualDelimiters]
 allow_all_brackets = 1
 
