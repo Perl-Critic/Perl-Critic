@@ -274,7 +274,7 @@ source array.  This IS technically allowed, but those side effects can
 be quite surprising, especially when the array being passed is C<@_>
 or perhaps C<values(%ENV)>!  Instead authors should restrict in-place
 array modification to C<for(@array) { ... }> constructs instead, or
-use C<List::SomeUtiles:apply()> or C<List::MoreUtils::apply()>.
+use C<List::SomeUtils:apply()> or C<List::MoreUtils::apply()>.
 
 =head1 CONFIGURATION
 
