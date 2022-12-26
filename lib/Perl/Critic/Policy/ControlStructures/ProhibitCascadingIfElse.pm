@@ -77,8 +77,7 @@ distribution.
 
 Long C<if-elsif> chains are hard to digest, especially if they are
 longer than a single page or screen.  If testing for equality, use a
-hash lookup instead.  If you're using perl 5.10 or later, use
-C<given>/C<when>.
+hash lookup instead.
 
     if ($condition1) {         #ok
         $foo = 1;
@@ -111,7 +110,7 @@ Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2011 Imaginative Software Systems.  All rights reserved.
+Copyright (c) 2005-2022 Imaginative Software Systems.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
