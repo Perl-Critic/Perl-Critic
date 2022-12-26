@@ -17,6 +17,7 @@ RUN \
         perl-file-sharedir \
         perl-file-sharedir-install \
         perl-list-moreutils \
+        perl-list-someutils \
         perl-module-build \
         perl-module-pluggable \
         perl-params-util \
