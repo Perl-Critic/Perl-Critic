@@ -29,17 +29,12 @@ RUN \
 RUN \
     cpanm \
         B::Keywords \
-        Hook::LexWrap \
-        Lingua::EN::Inflect \
         Perl::Tidy \
-        Pod::Spell \
         PPI::Token::Quote::Single \
         PPIx::QuoteLike \
         PPIx::Regexp \
         PPIx::Utilities::Statement \
         String::Format \
-        Test::Object \
-        Test::SubCalls \
     && rm -rf /root/.cpanm
 
 COPY lib /usr/local/lib/perl5/site_perl
