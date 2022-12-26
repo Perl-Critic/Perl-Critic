@@ -338,7 +338,6 @@ sub _name_is_exempt {
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    # Want given.  Want 5.10.  Gimme gimme gimme.  :]
     if ( $elem->isa('PPI::Statement::Variable') ) {
         return $self->_variable_capitalization($elem);
     }
