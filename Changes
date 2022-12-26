@@ -1,5 +1,11 @@
 Revision history for Perl module Perl::Critic
 
+NEXT
+
+    [Documentation]
+    ProhibitCascadingIfElse no longer suggests using given/when.
+
+
 1.146 Wed Dec 21 21:05:20 CST 2022
 
     [New features]
