@@ -101,12 +101,6 @@ character alternations (like C<(?:a|b|c)>).  This policy complains if
 you have more than one instance of a single character in an
 alternation.  So C<(?:a|the)> is allowed, but C<(?:a|e|i|o|u)> is not.
 
-NOTE: Perl 5.10 (not released as of this writing) has major regexp
-optimizations which may mitigate the performance penalty of
-alternations, which will be rewritten behind the scenes as something
-like character classes.  Consequently, if you are deploying
-exclusively on 5.10, yo might consider ignoring this policy.
-
 
 =head1 CONFIGURATION
 
@@ -126,7 +120,7 @@ Chris Dolan <cdolan@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2007-2021 Chris Dolan.  Many rights reserved.
+Copyright (c) 2007-2022 Chris Dolan.  Many rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
