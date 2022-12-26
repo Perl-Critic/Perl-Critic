@@ -1,0 +1,2 @@
+# So we can --norun when acking and not get hits in the .run files in t/
+--type-add=run:ext:run
