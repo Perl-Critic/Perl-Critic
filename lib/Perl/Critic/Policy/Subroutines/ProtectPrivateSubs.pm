@@ -9,7 +9,7 @@ use English qw< $EVAL_ERROR -no_match_vars >;
 use Readonly;
 
 use Perl::Critic::Utils qw<
-    :severities $EMPTY is_function_call is_method_call
+    :severities $EMPTY is_function_call is_method_call hashify
 >;
 use parent 'Perl::Critic::Policy';
 
@@ -114,10 +114,8 @@ sub violates {
     my ( $self, $elem, undef ) = @_;
 
     if ( my $prior = $elem->sprevious_sibling() ) {
-        my $prior_name = $prior->content();
-        return if $prior_name eq 'package';
-        return if $prior_name eq 'require';
-        return if $prior_name eq 'use';
+        state $exceptions = { hashify( qw( package require use ) ) };
+        return if exists $exceptions->{ $prior->content() };
     }
 
     if (
