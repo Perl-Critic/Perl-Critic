@@ -13,7 +13,6 @@ use Perl::Critic::Utils::PPI qw{
     is_ppi_simple_statement
 };
 use Readonly;
-use Scalar::Util qw{ blessed };
 
 use parent 'Perl::Critic::Policy';
 
