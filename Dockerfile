@@ -28,6 +28,10 @@ RUN \
         PPIx::Regexp \
         PPIx::Utilities::Statement \
         String::Format \
+    && apk del --purge --rdepends \
+        make \
+        wget \
+        perl-app-cpanminus \
     && rm -rf /root/.cpanm
 
 COPY lib /usr/local/lib/perl5/site_perl
