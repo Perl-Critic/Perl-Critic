@@ -425,9 +425,6 @@ This Policy is not configurable except for the standard options.
 
 =head1 SEE ALSO
 
-See thread on perl5-porters starting here:
-L<http://www.xray.mpe.mpg.de/mailing-lists/perl5-porters/2008-06/msg00537.html>.
-
 For a nice, easy, non-magical way of properly handling exceptions, see
 L<Try::Tiny|Try::Tiny>.
 
@@ -438,7 +435,7 @@ Elliot Shank C<< <perl@galumph.com> >>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2008-2011 Elliot Shank.
+Copyright (c) 2008-2022 Elliot Shank.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
