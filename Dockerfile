@@ -39,5 +39,7 @@ COPY lib /usr/local/lib/perl5/site_perl
 COPY bin /usr/local/bin
 RUN chmod +x /usr/local/bin/perlcritic
 
+USER nobody
+
 ENTRYPOINT [ "/usr/local/bin/perlcritic" ]
 CMD [ "--help" ]
