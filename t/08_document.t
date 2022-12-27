@@ -10,7 +10,6 @@ use version;
 
 
 use Perl::Critic::Document qw< >;
-use Perl::Critic::Utils qw< $EMPTY >;
 
 
 use Test::Deep;
