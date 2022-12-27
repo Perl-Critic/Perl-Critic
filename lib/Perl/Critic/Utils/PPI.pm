@@ -6,7 +6,7 @@ use warnings;
 
 use Readonly;
 
-use Scalar::Util qw< blessed readonly >;
+use Scalar::Util qw< blessed >;
 
 use Exporter 'import';
 
