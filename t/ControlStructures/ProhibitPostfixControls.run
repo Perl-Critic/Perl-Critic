@@ -202,7 +202,7 @@ my %hash = (
 #-----------------------------------------------------------------------------
 
 ## name RT #48422: Allow flow control method calls
-## TODO exemption for method calls not implimented yet
+## TODO exemption for method calls not implemented yet
 ## failures 0
 ## cut
 

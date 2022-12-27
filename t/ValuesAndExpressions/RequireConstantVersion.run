@@ -147,7 +147,7 @@ our $VERSION = '1.' . qw $Revision$[1];
 our $VERSION = '1.' . sprintf "%d", (qw($Revision$))[1];
 our $VERSION = '1.' . sprintf("%d", (qw($Revision$))[1]);
 # In practice the following is a constant, but if someone goes this far out of
-# their way to obfuscate a constant, I for one am not going to dissapoint
+# their way to obfuscate a constant, I for one am not going to disappoint
 # them.
 our $VERSION = '1.23' || do { q $Revision$ =~ /(\d+)/; sprintf "%4.2f", $1 / 100 };
 our $VERSION = ('$Revision$' =~ /(\d+.\d+)/)[ 0];

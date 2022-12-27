@@ -387,7 +387,7 @@ per-file basis with File Variables."
 
 ;;;###autoload
 (defun perlcritic ()
-  "\\[perlcritic]] returns a either nil or t depending on whether the
+  "\\[perlcritic]] returns either nil or t depending on whether the
 current buffer passes perlcritic's check. If there are any warnings
 those are displayed in a separate buffer."
   (interactive)
@@ -397,7 +397,7 @@ those are displayed in a separate buffer."
 
 ;;;###autoload
 (defun perlcritic-region (start end)
-  "\\[perlcritic-region] returns a either nil or t depending on
+  "\\[perlcritic-region] returns either nil or t depending on
 whether the region passes perlcritic's check. If there are any
 warnings those are displayed in a separate buffer."
 

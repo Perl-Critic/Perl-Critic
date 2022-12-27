@@ -161,7 +161,7 @@ sub _last_flattened_argument_list_element_ends_in_newline {
 # through the components of the List; again, the goal is to find the last
 # value in the flattened list.
 #
-# Before decending into the List, we check that it isn't a subroutine call by
+# Before descending into the List, we check that it isn't a subroutine call by
 # looking at its prior sibling.  In this case, the prior sibling is a comma
 # operator, so it's fine.
 #

@@ -45,7 +45,7 @@ map {my $a = $foo{$_};$a} @list;
 
 #-----------------------------------------------------------------------------
 
-## name Vary config parameters: failue
+## name Vary config parameters: failure
 ## failures 1
 ## parms {max_statements => 2}
 ## cut

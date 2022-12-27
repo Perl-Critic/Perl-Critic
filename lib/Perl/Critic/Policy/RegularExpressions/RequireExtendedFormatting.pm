@@ -100,7 +100,7 @@ comments into the pattern, thus making them much more readable.
         [^\\']      # any non-special chars (i.e. not backslash or single quote)
         (?:         # then all of...
             \\ .    #    any explicitly backslashed char
-            [^\\']* #    followed by an non-special chars
+            [^\\']* #    followed by a non-special char
         )*          # ...repeated zero or more times
         '           # a closing single quote
     }x;

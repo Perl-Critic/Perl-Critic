@@ -91,7 +91,7 @@ no warnings;
 
 package foo;
 
-no warnings "uninitalized";
+no warnings "uninitialized";
 
 #-----------------------------------------------------------------------------
 

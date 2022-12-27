@@ -241,7 +241,7 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
 
 
 {
-    # In this test, we'll use a cusotm profile to deactivate some
+    # In this test, we'll use a custom profile to deactivate some
     # policies, and then use the -include option to re-activate them.  So
     # the net result is that we should still end up with the all the
     # policies.
@@ -284,7 +284,7 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
 {
     # In this test, we set -include and -exclude patterns to both match
     # some of the same policies.  The -exclude option should have
-    # precendece.
+    # precedence.
 
     my @include = qw(builtinfunc); #Include BuiltinFunctions::*
     my @exclude = qw(block);       #Exclude RequireBlockGrep, RequireBlockMap

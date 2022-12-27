@@ -468,7 +468,7 @@ Developer release leading up to 1.128.
       changes in Perl::Tidy 20120619. RT #77977.
     * TestingAndDebugging::ProhibitNoWarnings: Correct the parse of the
       'no warnings' statement, so that 'no warnings "qw"' is recognized
-      as supressing just 'qw' warnings. RT #74647.
+      as suppressing just 'qw' warnings. RT #74647.
     * Miscellanea::RequireRcsKeywords has been moved to the Perl-Critic-More
       distribution,  RT #69546
 
@@ -1035,7 +1035,7 @@ Developer release leading up to 1.128.
       can invoke Perl::Critic::Command::run() to get the equivalent of running
       the command.  (Note, however, this interface WILL change, so don't count
       on the current one.)
-    * Modules have had a "INTERFACE SUPPORT" section added which states
+    * Modules have had an "INTERFACE SUPPORT" section added which states
       whether the Perl::Critic developers consider the particular module is
       public or not.  Any removal of functionality from a public module will
       go through a deprecation cycle.  Non-public modules may have their
@@ -1126,7 +1126,7 @@ Developer release leading up to 1.128.
       the last couple years, then you should be fine.  But if you've been
       using certain other variations in your "## no critic" markers, then you
       might suddenly find yourself violating the new
-      ProhibtUnrestrictedNoCritic policy.  To fix this, just make sure your
+      ProhibitUnrestrictedNoCritic policy.  To fix this, just make sure your
       Policy names appear in parentheses:
 
         ## no critic Foo, Bar, Baz     # wrong!
@@ -1255,7 +1255,7 @@ Developer release leading up to 1.128.
     * URL for our repository in META.yml now works for anonymous
       checkout.  The password is "" (empty).  RT #38628.
     * color for high-severity violations is now magenta because
-      it is more redable than yellow on white backgrounds.  RT #38511.
+      it is more readable than yellow on white backgrounds.  RT #38511.
 
 
 1.090 2008-07-22
@@ -1498,7 +1498,7 @@ Developer release leading up to 1.128.
     [Bug Fixes]
     * RT #31281 perlcritic doesn't recognize "#!/bin/env perl" shebang
     * Replace usage of Unicode property escapes with POSIX character classes
-      order to restore 5.6 compatability.
+      order to restore 5.6 compatibility.
     * RT #30388 ValuesAndExpressions::ProhibitVersionStrings complained
       about numbered directories in "use lib".
     * Fixed handling of badly behaved spelling programs in PodSpelling.
@@ -1821,7 +1821,7 @@ Developer release leading up to 1.128.
       this is deprecated.  In the future, you must request your exports.
 
     [Policy Changes]
-    * Duplicate violations of RequireExcplicitPackage are now squelched,
+    * Duplicate violations of RequireExplicitPackage are now squelched,
       in the same way as RequireUseStrict and RequireUseWarnings.
 
 
@@ -1882,7 +1882,7 @@ Developer release leading up to 1.128.
       Perl::Critic::Utils.  Use the is_perl_global() and is_perl_builtin()
       functions instead.
     * Perl::Critic::Policy::policy_parameters() has bee renamed to
-      Perl::Critic::Policy::supported_paramters().  This was an
+      Perl::Critic::Policy::supported_parameters().  This was an
       undocumented feature anyway, so it shouldn't affect anyone.
 
     [Other Internal Changes]
@@ -2146,7 +2146,7 @@ Developer release leading up to 1.128.
       the candidate element lives.  This is because some policies
       may report violations that are nowhere near the element that
       is being evaluated.
-    * RequireUseStrict, RequireUseWarnings, and RequireExplcitPackage
+    * RequireUseStrict, RequireUseWarnings, and RequireExplicitPackage
       all emit violations for _every_ statement that violates the
       Policy.  This closes a loophole that allowed you to circumvent
       the Policy by using '## no critic' on just the first statement
@@ -2181,7 +2181,7 @@ Developer release leading up to 1.128.
     * BuiltinFunctions::ProhibitUniversalIsa (by Chris Dolan)
 
     [Miscellanea]
-    * All spurrious options for `perlcritic` are now fatal.
+    * All spurious options for `perlcritic` are now fatal.
     * Changed several of the -verbose formats to be more readable.
     * Explicit -severity option now overrides -[12345] shortcuts instead
       of being the other way around.
@@ -2231,10 +2231,10 @@ Developer release leading up to 1.128.
     * Variables::ProtectPrivateVars
 
     [Bug Fixes]
-    * 15295: "## no critic" pragmas too aggresive on compound statements.
+    * 15295: "## no critic" pragmas too aggressive on compound statements.
     * t/01_config.t failed in the presence of third-party policies
     * Implemented workaround for failing pod_coverage tests.
-    * 16906:  tr/// created false-postives with RegularExpression polices.
+    * 16906:  tr/// created false-positives with RegularExpression polices.
 
 
 0.13_04 2005-12-31
@@ -2371,7 +2371,7 @@ Developer release leading up to 1.128.
       See the POD in Perl::Critic::Policy for details.
     * Redesigned the 'verbose' feature.  Now the output format
       can be user-defined using a sprintf-like specification.
-      perlciritc also has a predefined output format that is
+      perlcritic also has a predefined output format that is
       compatible with grep mode in editors like vim and emacs.
     * 'return' is now exempt from ProhibitParensWithBuiltins.  I may
       extend this exemption to all unary functions.
