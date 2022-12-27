@@ -8,7 +8,7 @@ use Readonly;
 
 use List::SomeUtils qw( none );
 
-use Perl::Critic::Utils qw{ :severities :classification hashify };
+use Perl::Critic::Utils qw{ :severities :classification };
 use parent 'Perl::Critic::Policy';
 
 our $VERSION = '1.146';

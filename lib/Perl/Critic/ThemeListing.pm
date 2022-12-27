@@ -6,8 +6,6 @@ use warnings;
 
 use English qw<-no_match_vars>;
 
-use Perl::Critic::Utils qw< hashify >;
-
 use overload ( q<""> => 'to_string' );
 
 our $VERSION = '1.146';
