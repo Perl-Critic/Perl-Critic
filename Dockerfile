@@ -32,6 +32,7 @@ RUN \
         make \
         wget \
         perl-app-cpanminus \
+        perl-dev \
     && rm -rf /root/.cpanm
 
 COPY lib /usr/local/lib/perl5/site_perl
