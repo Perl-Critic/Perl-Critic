@@ -7,23 +7,16 @@ RUN \
         wget \
         perl \
         perl-app-cpanminus \
-        perl-class-inspector \
-        perl-class-tiny \
         perl-clone \
         perl-config-tiny \
         perl-dev \
         perl-exception-class \
-        perl-file-remove \
-        perl-file-sharedir \
-        perl-file-sharedir-install \
         perl-list-someutils \
         perl-module-build \
         perl-module-pluggable \
         perl-params-util \
-        perl-path-tiny \
         perl-readonly \
         perl-task-weaken \
-        perl-test-deep \
     && rm -rf /var/cache/apk/*
 
 RUN \
