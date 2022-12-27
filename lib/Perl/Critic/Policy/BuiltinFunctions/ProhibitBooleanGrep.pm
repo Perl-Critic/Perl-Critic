@@ -88,7 +88,7 @@ __END__
 
 =head1 NAME
 
-Perl::Critic::Policy::BuiltinFunctions::ProhibitBooleanGrep - Use C<any> from C<List::SomeUtils> or C<List::MoreUtils> instead of C<grep> in boolean context.
+Perl::Critic::Policy::BuiltinFunctions::ProhibitBooleanGrep - Use C<any> from C<List::Util>, C<List::SomeUtils>, or C<List::MoreUtils> instead of C<grep> in boolean context.
 
 
 =head1 AFFILIATION
@@ -108,7 +108,7 @@ match.
 But consider the case of a long array where the first element is a
 match.  Boolean C<grep> still checks all of the rest of the elements
 needlessly.  Instead, a better solution is to use the C<any> function
-from either L<List::SomeUtils|List::SomeUtils> or
+from either L<List::Util|List::Util>, L<List::SomeUtils|List::SomeUtils>, or
 L<List::MoreUtils|List::MoreUtils>. The C<any> function will return as soon
 as a successful match is found, rather than processing the entire list.
 This saves time.
