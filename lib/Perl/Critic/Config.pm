@@ -769,7 +769,7 @@ sub _validate_and_save_program_extensions {
 }
 
 #-----------------------------------------------------------------------------
-# Begin ACCESSSOR methods
+# Begin ACCESSOR methods
 
 sub _profile {
     my ($self) = @_;
@@ -1267,7 +1267,7 @@ A simple configuration might look like this:
     [Modules::RequireFilenameMatchesPackage]
     add_themes = larry
 
-    [TestingAndDebugging::RequireTestLables]
+    [TestingAndDebugging::RequireTestLabels]
     add_themes = curly moe
 
     #--------------------------------------------------------------
@@ -1314,7 +1314,7 @@ needs.
     bugs              Policies that prevent or reveal bugs
     maintenance       Policies that affect the long-term health of the code
     cosmetic          Policies that only have a superficial effect
-    complexity        Policies that specificaly relate to code complexity
+    complexity        Policies that specifically relate to code complexity
     security          Policies that relate to security issues
     tests             Policies that are specific to test programs
 

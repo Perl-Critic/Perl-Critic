@@ -57,7 +57,7 @@ Readonly::Hash my %CAPITALIZATION_SCHEME_TAGS    => (
     },
     ':starts_with_upper'    => {
         regex               => $STARTS_WITH_UPPER_REGEX,
-        regex_violation     => 'does not start with a upper case letter',
+        regex_violation     => 'does not start with an upper case letter',
     },
     ':no_restriction'       => {
         regex               => $NO_RESTRICTION_REGEX,

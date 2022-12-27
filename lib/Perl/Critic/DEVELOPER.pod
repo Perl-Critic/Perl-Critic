@@ -415,7 +415,7 @@ C<supported_parameters()> in order to tell the rest of C<Perl::Critic>
 what configuration values the Policy looks for, even if it is only to
 say that the Policy is not configurable.  In the simple form, this
 function returns a list of the names of the parameters the Policy
-supports.  So, for an non-configurable Policy, as in the
+supports.  So, for a non-configurable Policy, as in the
 C<RequireBlockGrep> example above, this looked like
 
     sub supported_parameters { return ()                  }
@@ -580,7 +580,7 @@ Implemented in
 L<Perl::Critic::PolicyParameter::Behavior::Integer|Perl::Critic::PolicyParameter::Behavior::Integer>.
 
 The value is validated against C<m/ \A [-+]? [1-9] [\d_]* \z /xms>
-(with an special check for "0").  Notice that this means that
+(with a special check for "0").  Notice that this means that
 underscores are allowed in input values as with Perl numeric literals.
 
 This takes two options, C<integer_minimum> and C<integer_maximum>,

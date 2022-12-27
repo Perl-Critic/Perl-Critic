@@ -24,7 +24,7 @@ require My::Self::_private;
 ## failures 0
 ## cut
 
-# Used for distibution-private classes.
+# Used for distribution-private classes.
 
 Foo::_Bar->baz();
 

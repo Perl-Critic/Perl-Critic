@@ -219,12 +219,12 @@ sub test_is_perl_builtin {
     $code = 'my sub print {}';
     $doc = make_doc( $code );
     $sub = $doc->find_first('Statement::Sub');
-    ok( is_perl_builtin($sub), 'Is perl builtin function (PPI, lexial subroutines)' );
+    ok( is_perl_builtin($sub), 'Is perl builtin function (PPI, lexical subroutines)' );
 
     $code = 'my sub foobar {}';
     $doc = make_doc( $code );
     $sub = $doc->find_first('Statement::Sub');
-    ok( !is_perl_builtin($sub), 'Is not perl builtin function (PPI, lexial subroutines)' );
+    ok( !is_perl_builtin($sub), 'Is not perl builtin function (PPI, lexical subroutines)' );
 
     return;
 }
@@ -254,17 +254,17 @@ sub test_is_perl_bareword {
     $code = 'my sub if {}';
     $doc = make_doc( $code );
     $sub = $doc->find_first('Statement::Sub');
-    ok( is_perl_bareword($sub), 'Is perl bareword (PPI, lexial subroutines)' );
+    ok( is_perl_bareword($sub), 'Is perl bareword (PPI, lexical subroutines)' );
 
     $code = 'my sub import {}';
     $doc = make_doc( $code );
     $sub = $doc->find_first('Statement::Sub');
-    ok( is_perl_bareword($sub), 'Is perl extra bareword (PPI, lexial subroutines)' );
+    ok( is_perl_bareword($sub), 'Is perl extra bareword (PPI, lexical subroutines)' );
 
     $code = 'my sub foobar {}';
     $doc = make_doc( $code );
     $sub = $doc->find_first('Statement::Sub');
-    ok( !is_perl_bareword($sub), 'Is not perl bareword (PPI, lexial subroutines)' );
+    ok( !is_perl_bareword($sub), 'Is not perl bareword (PPI, lexical subroutines)' );
 
     return;
 }

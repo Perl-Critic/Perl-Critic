@@ -491,7 +491,7 @@ L<perlreref|perlreref>.
 
 Can someone expand this entry, please?
 
-=item * ControlStructures::ProhibitAssigmentInConditional
+=item * ControlStructures::ProhibitAssignmentInConditional
 
 =item * ValuesAndExpressions::RequireConstantBeforeEquals
 
@@ -503,7 +503,7 @@ Just about everyone has been bitten by C<if ($x = 10) { ... }> when they meant
 to use C<==>.  A safer style is C<10 == $x> because omitting the second C<=>
 yields a noisy compile-time failure instead of silent runtime error.
 
-ProhibitAssigmentInConditional complains if the condition of a while, until,
+ProhibitAssignmentInConditional complains if the condition of a while, until,
 if or unless is solely an assignment.  If it's anything more complex (like
 C<if (($x=10)){}> or C<while ($x=$y=$z){}>), there is no warning.
 
@@ -550,7 +550,7 @@ The opposite side of ErrorHandling::RequireCheckingReturnValueOfEval.
 =item * Reformat all the POD to use 78 columns instead of 70.
 
 This thing of having different widths for the documentation and the code is
-rediculous.  Don't do this until after the next non-dev release.  Elliot is
+ridiculous.  Don't do this until after the next non-dev release.  Elliot is
 considering doing a special release only including this change so that the
 search.cpan.org diff tool doesn't entirely break.
 
