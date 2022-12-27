@@ -386,7 +386,7 @@ A simple configuration might look like this:
     [Modules::RequireFilenameMatchesPackage]
     add_themes = larry
 
-    [TestingAndDebugging::RequireTestLables]
+    [TestingAndDebugging::RequireTestLabels]
     add_themes = larry curly moe
 
     #--------------------------------------------------------------

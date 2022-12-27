@@ -712,7 +712,7 @@ sub _modules_used {
     for my $module (
         grep { $_ } map  { $_->module() || $_->pragma() } @{$includes}
     ) {
-        # Significanly ess memory than $h{$k} => 1.  Thanks Mr. Lembark.
+        # Significantly less memory than $h{$k} => 1.  Thanks Mr. Lembark.
         $mapping{$module} = ();
     }
 

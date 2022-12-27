@@ -2,7 +2,7 @@
 ## failures 3
 ## cut
 
-die 'A horrible death' if $condtion;
+die 'A horrible death' if $condition;
 
 if ($condition) {
    die 'A horrible death';
@@ -17,7 +17,7 @@ open my $fh, '<', $path or
 ## failures 3
 ## cut
 
-warn 'A horrible warning' if $condtion;
+warn 'A horrible warning' if $condition;
 
 if ($condition) {
    warn 'A horrible warning';
@@ -32,7 +32,7 @@ open my $fh, '<', $path or
 ## failures 0
 ## cut
 
-carp 'A horrible death' if $condtion;
+carp 'A horrible death' if $condition;
 
 if ($condition) {
    carp 'A horrible death';

@@ -52,7 +52,7 @@ sub violates {
     # operators.  If any are found, then this the following statements
     # could _potentially_ be executed, so this policy is satisfied.
 
-    # NOTE: When the first operand in an boolean expression is
+    # NOTE: When the first operand in a boolean expression is
     # C<croak> or C<die>, etc., the second operand is technically
     # unreachable.  But this policy doesn't catch that situation.
 

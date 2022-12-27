@@ -275,7 +275,7 @@ m/(foo)(/;
 
 #-----------------------------------------------------------------------------
 
-## name lvalue sub assigment pass
+## name lvalue sub assignment pass
 ## failures 0
 ## cut
 
@@ -283,7 +283,7 @@ m/(foo)(/;
 
 #-----------------------------------------------------------------------------
 
-## name lvalue sub assigment failure
+## name lvalue sub assignment failure
 ## failures 1
 ## TODO lvalue subs are too complex to support
 ## cut

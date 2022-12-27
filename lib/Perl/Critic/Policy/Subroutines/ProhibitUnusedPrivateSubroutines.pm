@@ -371,7 +371,7 @@ These are added to the default list of exemptions from this policy. So the
 above allows C<< sub _bar {} >> and C<< sub _baz {} >>, even if they are not
 referred to in the module that defines them.
 
-You can allow a whole class or subroutine names by defining a a regular
+You can allow a whole class or subroutine names by defining a regular
 expression that matches allowed names.
 
     [Subroutines::ProhibitUnusedPrivateSubroutines]

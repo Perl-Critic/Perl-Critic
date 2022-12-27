@@ -187,7 +187,7 @@ sub _is_topic_mutating_regex {
     # should be a binding operator.
     return 1 if not _is_binding_operator( $prevsib );
 
-    # Check if the sibling before the biding operator
+    # Check if the sibling before the binding operator
     # is explicitly set to $_
     my $bound_to = $prevsib->sprevious_sibling;
     return _is_topic( $bound_to );

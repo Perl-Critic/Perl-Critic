@@ -1,4 +1,4 @@
-## name Normal assigment ok
+## name Normal assignment ok
 ## failures 0
 ## cut
 
@@ -7,7 +7,7 @@ my @bar = ( 'x', 'y', 'z' );
 
 #-----------------------------------------------------------------------------
 
-## name Normal assigment with operators ok
+## name Normal assignment with operators ok
 ## failures 0
 ## cut
 

@@ -29,7 +29,7 @@ sub initialize_parameter {
 
     $parameter->_set_parser(
         sub {
-            # Normally bad thing, obscuring a variable in a outer scope
+            # Normally bad thing, obscuring a variable in an outer scope
             # with a variable with the same name is being done here in
             # order to remain consistent with the parser function interface.
             my ($policy, $parameter, $config_string) = @_;  ## no critic(Variables::ProhibitReusedNames)

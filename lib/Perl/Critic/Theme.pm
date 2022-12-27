@@ -204,7 +204,7 @@ customizing the themes for each Policy.
 
 =item C<cook_rule( $rule )>
 
-Standardize a rule into a almost executable Perl code.  The "almost"
+Standardize a rule into almost executable Perl code.  The "almost"
 comes from the fact that theme names are left as is.
 
 
