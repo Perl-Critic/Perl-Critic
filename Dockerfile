@@ -7,10 +7,13 @@ RUN \
         wget \
         perl \
         perl-app-cpanminus \
+        perl-class-tiny \
         perl-clone \
         perl-config-tiny \
         perl-dev \
         perl-exception-class \
+        perl-file-sharedir \
+        perl-file-sharedir-install \
         perl-list-someutils \
         perl-module-build \
         perl-module-pluggable \
@@ -23,6 +26,7 @@ RUN \
     cpanm --notest \
         B::Keywords \
         Perl::Tidy \
+        Pod::Spell \
         PPI::Token::Quote::Single \
         PPIx::QuoteLike \
         PPIx::Regexp \
