@@ -288,20 +288,13 @@ sub _determine_if_list_is_a_plain_list_and_get_last_child {
 
 
 #-----------------------------------------------------------------------------
-Readonly::Hash my %POSTFIX_OPERATORS =>
-    hashify qw{ if unless while until for foreach };
 
 sub _is_postfix_operator {
     my $element = shift;
 
-    if (
-            $element->isa('PPI::Token::Word')
-        and $POSTFIX_OPERATORS{$element}
-    ) {
-        return $TRUE;
-    }
+    state $postfix_operators = { hashify qw( if unless while until for foreach ) };
 
-    return $FALSE;
+    return $element->isa('PPI::Token::Word') && $postfix_operators->{$element};
 }
 
 
@@ -484,7 +477,7 @@ Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2011 Imaginative Software Systems.  All rights reserved.
+Copyright (c) 2005-2023 Imaginative Software Systems.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
