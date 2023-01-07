@@ -12,6 +12,8 @@ NEXT
     [Internals]
     We no longer require Test::Deep for testing.
 
+    Test::Kwalitee is now only recommended, not required.
+
 
 1.146 Wed Dec 21 21:05:20 CST 2022
 

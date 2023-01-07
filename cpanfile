@@ -54,11 +54,13 @@ on 'test' => sub {
 
     # For author testing
     requires 'Devel::EnforceEncapsulation' => 0;
-    requires 'Test::Kwalitee'              => 0;
     requires 'Test::Memory::Cycle'         => 0;
     requires 'Test::Perl::Critic'          => 0;
     requires 'Test::Pod'                   => 0;
     requires 'Test::Pod::Coverage'         => 0;
+
+    # Doesn't install under Perl 5.10.
+    recommends 'Test::Kwalitee'            => 0;
 };
 
 
