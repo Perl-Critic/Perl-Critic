@@ -5,6 +5,7 @@ use strict;
 use warnings;
 use Readonly;
 
+use List::SomeUtils qw(any);
 use Perl::Critic::Utils qw{
     :booleans :characters :severities :classification :data_conversion
 };
@@ -345,11 +346,7 @@ sub _is_complex_expression_token {
 
     return $FALSE if not $element->isa('PPI::Token');
 
-    foreach my $class (@COMPLEX_EXPRESSION_TOKEN_CLASSES) {
-        return $TRUE if $element->isa($class);
-    }
-
-    return $FALSE;
+    return any { $element->isa($_) } @COMPLEX_EXPRESSION_TOKEN_CLASSES;
 }
 
 #-----------------------------------------------------------------------------
