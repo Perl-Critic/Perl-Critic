@@ -200,7 +200,7 @@ sub _is_topic_mutating_func {
     return if not $elem->isa('PPI::Token::Word');
 
     state $mutator_funcs = { hashify qw( chop chomp undef ) };
-    return unless $mutator_funcs->{$elem->content()};
+    return if !$mutator_funcs->{$elem->content()};
 
     return if not is_function_call( $elem );
 
@@ -230,17 +230,17 @@ sub _is_topic_mutating_substr {
 
 #-----------------------------------------------------------------------------
 
-sub _is_assignment_operator {
+sub _is_assignment_operator {   ## no critic (RequireArgUnpacking)
     state $assignment_ops = { hashify qw( = *= /= += -= %= **= x= .= &= |= ^=  &&= ||= <<= >>= //= ++ --) };
     return exists $assignment_ops->{$_[0]};
 }
 
-sub _is_increment_operator {
+sub _is_increment_operator {    ## no critic (RequireArgUnpacking)
     state $increment_ops = { hashify qw( ++ -- ) };
     return exists $increment_ops->{$_[0]};
 }
 
-sub _is_binding_operator {
+sub _is_binding_operator {  ## no critic (RequireArgUnpacking)
     state $binding_ops = { hashify qw( =~ !~ ) };
     return exists $binding_ops->{$_[0]};
 }
