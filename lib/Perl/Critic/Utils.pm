@@ -1335,16 +1335,12 @@ sub _is_fatal {
 
         if ('Fatal' eq $include->module()) {
             my @args = parse_arg_list($include->schild(1));
-            foreach my $arg (@args) {
-                return $TRUE if $arg->[0]->isa('PPI::Token::Quote') && $elem eq $arg->[0]->string();
-            }
+            return $TRUE if any { $_->[0]->isa('PPI::Token::Quote') && $elem eq $_->[0]->string() } @args;
         }
         elsif ('Fatal::Exception' eq $include->module()) {
             my @args = parse_arg_list($include->schild(1));
             shift @args;  # skip exception class name
-            foreach my $arg (@args) {
-                return $TRUE if $arg->[0]->isa('PPI::Token::Quote') && $elem eq $arg->[0]->string();
-            }
+            return $TRUE if any { $_->[0]->isa('PPI::Token::Quote') && $elem eq $_->[0]->string() } @args;
         }
         elsif ($include->pragma eq 'autodie' || any {$_ eq $include->module()} @{$autodie_modules || []}) {
             return _is_covered_by_autodie($elem, $include);
@@ -1995,7 +1991,7 @@ Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2021 Imaginative Software Systems
+Copyright (c) 2005-2023 Imaginative Software Systems
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
