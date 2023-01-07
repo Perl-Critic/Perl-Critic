@@ -8,7 +8,7 @@ use Readonly;
 use Perl::Critic::Utils qw{ :severities :data_conversion };
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.146';
+our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

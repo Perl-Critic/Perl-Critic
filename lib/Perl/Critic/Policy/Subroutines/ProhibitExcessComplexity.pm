@@ -10,7 +10,7 @@ use Perl::Critic::Utils::McCabe qw{ calculate_mccabe_of_sub };
 
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.146';
+our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

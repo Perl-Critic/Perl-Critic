@@ -1,6 +1,6 @@
 Revision history for Perl module Perl::Critic
 
-NEXT
+1.148 Sat Jan  7 15:20:07 CST 2023
 
     [Possible breakage]
     Removed Perl::Critic::Utils::DataConversion. Any add-on policies that used
@@ -13,6 +13,9 @@ NEXT
     We no longer require Test::Deep for testing.
 
     Test::Kwalitee is now only recommended, not required.
+
+    Random microoptimizations, like using hashes for array contents checking,
+    and using any() instead of calling grep as a boolean.
 
 
 1.146 Wed Dec 21 21:05:20 CST 2022

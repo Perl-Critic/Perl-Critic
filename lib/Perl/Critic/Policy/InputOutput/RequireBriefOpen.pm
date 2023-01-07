@@ -13,7 +13,7 @@ use Perl::Critic::Utils qw{ :severities :classification :booleans
 };
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.146';
+our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

@@ -18,7 +18,7 @@ use Perl::Critic::PolicyFactory (
 
 use Test::More;
 
-our $VERSION = '1.146';
+our $VERSION = '1.148';
 
 use Perl::Critic::TestUtils;
 Perl::Critic::TestUtils::assert_version( $VERSION );

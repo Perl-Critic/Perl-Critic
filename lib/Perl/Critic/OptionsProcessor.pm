@@ -17,7 +17,7 @@ use Perl::Critic::Utils::Constants qw<
     :color_severity
     >;
 
-our $VERSION = '1.146';
+our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 
