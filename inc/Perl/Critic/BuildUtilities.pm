@@ -76,7 +76,6 @@ sub required_module_versions {
 
 sub test_required_module_versions {
     return (
-        'Test::Deep'    => 0,
         'Test::More'    => 0,
         'lib'           => 0,
     );
@@ -177,7 +176,7 @@ Elliot Shank  C<< <perl@galumph.com> >>
 
 =head1 LICENCE AND COPYRIGHT
 
-Copyright (c) 2007-2022, Elliot Shank.
+Copyright (c) 2007-2023, Elliot Shank.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

@@ -11,8 +11,6 @@ use version;
 
 use Perl::Critic::Document qw< >;
 
-
-use Test::Deep;
 use Test::More tests => 43;
 
 our $VERSION = '1.146';
@@ -94,7 +92,7 @@ can_ok('Perl::Critic::Document', 'is_module');
 
     #-------------------------------------------------------------------------
 
-    cmp_deeply(
+    is_deeply(
         [ $pc_doc->namespaces() ],
         ['main'],
         q<everything is in the "main" namespace>,
@@ -112,9 +110,10 @@ can_ok('Perl::Critic::Document', 'is_module');
     my $critic_document =
         Perl::Critic::Document->new(-source => $ppi_document);
 
-    cmp_deeply(
-        [ $critic_document->namespaces() ],
-        bag( qw< main Foo Bar > ),
+    # We don't care about order.
+    is_deeply(
+        [ sort $critic_document->namespaces() ],
+        [ sort qw< main Foo Bar > ],
         'Got expected namespaces',
     );
 }

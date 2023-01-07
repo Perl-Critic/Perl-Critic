@@ -9,7 +9,6 @@ use Perl::Critic::Config;
 use Perl::Critic::ProfilePrototype;
 use Perl::Critic::Utils qw{ :characters :severities };
 
-use Test::Deep;
 use Test::More;
 
 our $VERSION = '1.146';
@@ -56,7 +55,7 @@ my $derived_configuration =
 
 my @derived_include = $derived_configuration->include();
 my @default_include = $default_configuration->include();
-cmp_deeply(
+is_deeply(
     \@derived_include,
     \@default_include,
     'include',
@@ -66,7 +65,7 @@ cmp_deeply(
 
 my @derived_exclude = $derived_configuration->exclude();
 my @default_exclude = $default_configuration->exclude();
-cmp_deeply(
+is_deeply(
     \@derived_exclude,
     \@default_exclude,
     'exclude',
@@ -76,7 +75,7 @@ cmp_deeply(
 
 my @derived_single_policy = $derived_configuration->single_policy();
 my @default_single_policy = $default_configuration->single_policy();
-cmp_deeply(
+is_deeply(
     \@derived_single_policy,
     \@default_single_policy,
     'single_policy',
@@ -143,7 +142,7 @@ cmp_ok(
 
 #-----------------------------------------------------------------------------
 
-cmp_deeply(
+is_deeply(
     $derived_configuration->theme(),
     $default_configuration->theme(),
     'theme',
@@ -193,7 +192,7 @@ is(
 
 my @derived_program_extensions = $derived_configuration->program_extensions();
 my @default_program_extensions = $default_configuration->program_extensions();
-cmp_deeply(
+is_deeply(
     \@derived_program_extensions,
     \@default_program_extensions,
     'program_extensions',
@@ -250,7 +249,7 @@ SKIP: {
                 my $parameter_name =
                     $default_policy->__get_parameter_name( $parameter );
 
-                cmp_deeply(
+                is_deeply(
                     $derived_policy->{$parameter_name},
                     $default_policy->{$parameter_name},
                     $default_policy->get_short_name()
