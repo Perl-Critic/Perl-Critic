@@ -22,7 +22,7 @@ use Perl::Critic::Utils::PPI qw< is_ppi_expression_or_generic_statement >;
 
 use Exporter 'import';
 
-our $VERSION = '1.146';
+our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 # Exportable symbols here.

@@ -9,7 +9,7 @@ use List::SomeUtils qw(any);
 use Perl::Critic::Utils qw{ :severities :classification parse_arg_list };
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.146';
+our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

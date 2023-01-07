@@ -23,7 +23,7 @@ use Perl::Critic::Exception::Fatal::Generic qw{ throw_generic };
 
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.146';
+our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

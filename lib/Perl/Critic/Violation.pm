@@ -19,7 +19,7 @@ use Perl::Critic::Utils::POD qw<
 >;
 use Perl::Critic::Exception::Fatal::Internal qw< throw_internal >;
 
-our $VERSION = '1.146';
+our $VERSION = '1.148';
 
 Readonly::Scalar my $NO_EXCEPTION_NO_SPLIT_LIMIT        => -1;
 Readonly::Scalar my $LOCATION_LINE_NUMBER               => 0;
