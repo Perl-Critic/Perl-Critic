@@ -1,3 +1,4 @@
+.ackrc
 bin/perlcritic
 Build.PL
 Changes
@@ -208,7 +209,6 @@ lib/Perl/Critic/ThemeListing.pm
 lib/Perl/Critic/UserProfile.pm
 lib/Perl/Critic/Utils.pm
 lib/Perl/Critic/Utils/Constants.pm
-lib/Perl/Critic/Utils/DataConversion.pm
 lib/Perl/Critic/Utils/McCabe.pm
 lib/Perl/Critic/Utils/Perl.pm
 lib/Perl/Critic/Utils/POD.pm
@@ -217,6 +217,8 @@ lib/Perl/Critic/Violation.pm
 lib/Test/Perl/Critic/Policy.pm
 LICENSE
 MANIFEST			This list of files
+META.json
+META.yml
 README
 README.md
 t/00_modules.t
@@ -425,5 +427,3 @@ xt/94_includes.t
 xt/95_kwalitee.t
 xt/98_pod_syntax.t
 xt/99_pod_coverage.t
-META.yml
-META.json

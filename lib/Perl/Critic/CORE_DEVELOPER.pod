@@ -151,11 +151,11 @@ You must add code to the C<_init()> method to store the value of your
 item as an attribute value, defaulting it if necessary. Using our
 naming convention, a single-valued item would be stored like this:
 
-    $self->{_new_item} = dor(delete $args{'new-item'},
-        $NEW_ITEM_DEFAULT);
+    $self->{_new_item} = delete $args{'new-item'} //
+        $NEW_ITEM_DEFAULT;
 
 If the item has synonyms (e.g. both 'color' and 'colour' meaning the
-same thing), the C<dor()> call must check for all of them. If the
+same thing), you must check for all of them. If the
 item took a list of values, they would be parsed apart and stored as
 an array reference.
 

@@ -5,6 +5,7 @@ use strict;
 use warnings;
 
 use English qw(-no_match_vars);
+use List::SomeUtils qw(firstval);
 
 use Perl::Critic::Exception::AggregateConfiguration;
 use Perl::Critic::Exception::Configuration::Option::Global::ExtraParameter;
@@ -15,7 +16,6 @@ use Perl::Critic::Utils::Constants qw<
     $PROFILE_STRICTNESS_DEFAULT
     :color_severity
     >;
-use Perl::Critic::Utils::DataConversion qw< dor >;
 
 our $VERSION = '1.146';
 
@@ -34,58 +34,58 @@ sub _init {
     my ( $self, %args ) = @_;
 
     # Multi-value defaults
-    my $exclude = dor(delete $args{exclude}, $EMPTY);
+    my $exclude = delete $args{exclude} // $EMPTY;
     $self->{_exclude}    = [ words_from_string( $exclude ) ];
 
-    my $include = dor(delete $args{include}, $EMPTY);
+    my $include = delete $args{include} // $EMPTY;
     $self->{_include}    = [ words_from_string( $include ) ];
 
-    my $program_extensions = dor(delete $args{'program-extensions'}, $EMPTY);
+    my $program_extensions = delete $args{'program-extensions'} // $EMPTY;
     $self->{_program_extensions} = [ words_from_string( $program_extensions) ];
 
     # Single-value defaults
-    $self->{_force}           = dor(delete $args{force},              $FALSE);
-    $self->{_only}            = dor(delete $args{only},               $FALSE);
+    $self->{_force}           = delete $args{force} //              $FALSE;
+    $self->{_only}            = delete $args{only} //               $FALSE;
     $self->{_profile_strictness} =
-        dor(delete $args{'profile-strictness'}, $PROFILE_STRICTNESS_DEFAULT);
-    $self->{_single_policy}   = dor(delete $args{'single-policy'},    $EMPTY);
-    $self->{_severity}        = dor(delete $args{severity},           $SEVERITY_HIGHEST);
-    $self->{_theme}           = dor(delete $args{theme},              $EMPTY);
-    $self->{_top}             = dor(delete $args{top},                $FALSE);
-    $self->{_verbose}         = dor(delete $args{verbose},            $DEFAULT_VERBOSITY);
-    $self->{_criticism_fatal} = dor(delete $args{'criticism-fatal'},  $FALSE);
-    $self->{_pager}           = dor(delete $args{pager},              $EMPTY);
-    $self->{_allow_unsafe}    = dor(delete $args{'allow-unsafe'},     $FALSE);
+        delete $args{'profile-strictness'} // $PROFILE_STRICTNESS_DEFAULT;
+    $self->{_single_policy}   = delete $args{'single-policy'} //    $EMPTY;
+    $self->{_severity}        = delete $args{severity} //           $SEVERITY_HIGHEST;
+    $self->{_theme}           = delete $args{theme} //              $EMPTY;
+    $self->{_top}             = delete $args{top} //                $FALSE;
+    $self->{_verbose}         = delete $args{verbose} //            $DEFAULT_VERBOSITY;
+    $self->{_criticism_fatal} = delete $args{'criticism-fatal'} //  $FALSE;
+    $self->{_pager}           = delete $args{pager} //              $EMPTY;
+    $self->{_allow_unsafe}    = delete $args{'allow-unsafe'} //     $FALSE;
 
-    $self->{_color_severity_highest} = dor(
+    $self->{_color_severity_highest} = firstval { defined } (
         delete $args{'color-severity-highest'},
         delete $args{'colour-severity-highest'},
         delete $args{'color-severity-5'},
         delete $args{'colour-severity-5'},
         $PROFILE_COLOR_SEVERITY_HIGHEST_DEFAULT,
     );
-    $self->{_color_severity_high} = dor(
+    $self->{_color_severity_high} = firstval { defined } (
         delete $args{'color-severity-high'},
         delete $args{'colour-severity-high'},
         delete $args{'color-severity-4'},
         delete $args{'colour-severity-4'},
         $PROFILE_COLOR_SEVERITY_HIGH_DEFAULT,
     );
-    $self->{_color_severity_medium} = dor(
+    $self->{_color_severity_medium} = firstval { defined } (
         delete $args{'color-severity-medium'},
         delete $args{'colour-severity-medium'},
         delete $args{'color-severity-3'},
         delete $args{'colour-severity-3'},
         $PROFILE_COLOR_SEVERITY_MEDIUM_DEFAULT,
     );
-    $self->{_color_severity_low} = dor(
+    $self->{_color_severity_low} = firstval { defined } (
         delete $args{'color-severity-low'},
         delete $args{'colour-severity-low'},
         delete $args{'color-severity-2'},
         delete $args{'colour-severity-2'},
         $PROFILE_COLOR_SEVERITY_LOW_DEFAULT,
     );
-    $self->{_color_severity_lowest} = dor(
+    $self->{_color_severity_lowest} = firstval { defined } (
         delete $args{'color-severity-lowest'},
         delete $args{'colour-severity-lowest'},
         delete $args{'color-severity-1'},
@@ -96,7 +96,11 @@ sub _init {
     # If we're using a pager or not outputting to a tty don't use colors.
     # Can't use IO::Interactive here because we /don't/ want to check STDIN.
     my $default_color = ($self->pager() or not -t *STDOUT) ? $FALSE : $TRUE; ## no critic (ProhibitInteractiveTest)
-    $self->{_color} = dor(delete $args{color}, delete $args{colour}, $default_color);
+    $self->{_color} = firstval { defined } (
+        delete $args{color},
+        delete $args{colour},
+        $default_color
+    );
 
     # If there's anything left, complain.
     _check_for_extra_options(%args);
