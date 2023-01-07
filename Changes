@@ -2,6 +2,10 @@ Revision history for Perl module Perl::Critic
 
 NEXT
 
+    [Possible breakage]
+    Removed Perl::Critic::Utils::DataConversion. Any add-on policies that used
+    it will need to copy the functions from there into their own code.
+
     [Documentation]
     ProhibitCascadingIfElse no longer suggests using given/when.
 

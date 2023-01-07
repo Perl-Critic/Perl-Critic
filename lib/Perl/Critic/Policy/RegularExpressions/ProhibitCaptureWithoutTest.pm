@@ -146,7 +146,7 @@ sub _is_control_transfer_to_right {
     # appears to throw an exception, and fail otherwise. RT 36081
     my $oper = $match->snext_sibling() or return;   # fail
     my $oper_content = $oper->content();
-    # We do not check 'dor' or '//' because a match failure does not
+    # We do not check '//' because a match failure does not
     # return an undefined value.
     q{or} eq $oper_content
         or q{||} eq $oper_content
