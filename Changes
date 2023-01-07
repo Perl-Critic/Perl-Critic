@@ -9,6 +9,9 @@ NEXT
     [Documentation]
     ProhibitCascadingIfElse no longer suggests using given/when.
 
+    [Internals]
+    We no longer require Test::Deep for testing.
+
 
 1.146 Wed Dec 21 21:05:20 CST 2022
 

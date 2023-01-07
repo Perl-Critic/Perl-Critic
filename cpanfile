@@ -50,7 +50,6 @@ requires 'version'                    => '0.77';
 requires 'warnings'                   => 0;
 
 on 'test' => sub {
-    requires 'Test::Deep' => 0;
     requires 'Test::More' => 0;
 
     # For author testing
