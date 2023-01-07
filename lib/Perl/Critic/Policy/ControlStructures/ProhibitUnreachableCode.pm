@@ -57,8 +57,8 @@ sub violates {
     # unreachable.  But this policy doesn't catch that situation.
 
     for my $child ( $statement->schildren() ) {
-        return if $child->isa('PPI::Token::Operator') && exists $OPERATORS{$child};
-        return if $child->isa('PPI::Token::Word') && exists $CONDITIONALS{$child};
+        return if exists $OPERATORS{$child}    && $child->isa('PPI::Token::Operator');
+        return if exists $CONDITIONALS{$child} && $child->isa('PPI::Token::Word');
     }
 
     return $self->_gather_violations($statement);
