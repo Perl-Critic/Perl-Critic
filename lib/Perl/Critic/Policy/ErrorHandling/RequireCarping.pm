@@ -314,11 +314,7 @@ sub _is_simple_list_element_token {
 
     return $FALSE if not $element->isa('PPI::Token');
 
-    foreach my $class (@SIMPLE_LIST_ELEMENT_TOKEN_CLASSES) {
-        return $TRUE if $element->isa($class);
-    }
-
-    return $FALSE;
+    return any { $element->isa($_) } @SIMPLE_LIST_ELEMENT_TOKEN_CLASSES;
 }
 
 
