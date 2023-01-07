@@ -753,12 +753,13 @@ sub is_label_pointer {
 
     my $statement = $elem->statement();
     return if !$statement;
+    return if !$statement->isa('PPI::Statement::Break');
 
     my $psib = $elem->sprevious_sibling();
     return if !$psib;
 
-    return $statement->isa('PPI::Statement::Break')
-        && $psib =~ m/(?:redo|goto|next|last)/xmso;
+    state $redirectors = { hashify( qw( redo goto next last ) ) };
+    return exists $redirectors->{$psib};
 }
 
 #-----------------------------------------------------------------------------
