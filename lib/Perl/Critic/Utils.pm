@@ -1362,13 +1362,14 @@ sub _is_covered_by_autodie {
     if ($first_arg and $first_arg->isa('PPI::Token::Number')){ shift @args };
 
     if (@args) {
+        my $elem_content = $elem->content();
         foreach my $arg (@args) {
             my $builtins =
                 $AUTODIE_PARAMETER_TO_AFFECTED_BUILTINS_MAP{
                     $arg->[0]->string
                 };
 
-            return $TRUE if $builtins and $builtins->{$elem->content()};
+            return $TRUE if $builtins and $builtins->{$elem_content};
         }
     }
     else {
