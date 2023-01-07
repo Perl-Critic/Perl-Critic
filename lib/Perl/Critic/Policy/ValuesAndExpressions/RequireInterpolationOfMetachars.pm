@@ -6,6 +6,7 @@ use warnings;
 
 use Readonly;
 
+use List::SomeUtils qw(any);
 use Perl::Critic::Utils qw< :booleans :characters :severities >;
 use parent 'Perl::Critic::Policy';
 
@@ -64,7 +65,7 @@ sub violates {
     return if _looks_like_use_vars($elem);
 
     my $rcs_regexes = $self->{_rcs_regexes};
-    return if $rcs_regexes and _contains_rcs_variable($string, $rcs_regexes);
+    return if $rcs_regexes && any { $string =~ m/$_/xms } @{$rcs_regexes};
 
     return $self->violation( $DESC, $EXPL, $elem );
 }
@@ -129,18 +130,6 @@ sub _looks_like_email_address {
     return if $string =~ m< \A \@ \w+ \b >xms;
 
     return $string =~ $addr_spec;
-}
-
-#-----------------------------------------------------------------------------
-
-sub _contains_rcs_variable {
-    my ($string, $rcs_regexes) = @_;
-
-    foreach my $regex ( @{$rcs_regexes} ) {
-        return $TRUE if $string =~ m/$regex/xms;
-    }
-
-    return;
 }
 
 #-----------------------------------------------------------------------------
@@ -246,7 +235,7 @@ Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2011 Imaginative Software Systems.  All rights reserved.
+Copyright (c) 2005-2023 Imaginative Software Systems.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
