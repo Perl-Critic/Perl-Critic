@@ -5,6 +5,7 @@ use strict;
 use warnings;
 use Readonly;
 
+use List::SomeUtils qw(any);
 use Perl::Critic::Exception::Fatal::Internal qw{ throw_internal };
 use Perl::Critic::Utils qw{ :characters :severities :data_conversion };
 use parent 'Perl::Critic::Policy';
@@ -128,7 +129,7 @@ sub _is_compound_return {
     my @blocks = grep {!$_->isa('PPI::Structure::Condition') &&
                        !$_->isa('PPI::Token')} $final->schildren();
     # Sanity check:
-    if (scalar grep {!$_->isa('PPI::Structure::Block')} @blocks) {
+    if (any { !$_->isa('PPI::Structure::Block') } @blocks) {
         throw_internal
             'Expected only conditions, blocks and tokens in the if statement';
     }
@@ -161,7 +162,7 @@ sub _is_given_when_return {
     my @blocks = grep {!$_->isa( 'PPI::Structure::Given' ) &&
                        !$_->isa( 'PPI::Token' )} $final->schildren();
     # Sanity check:
-    if (scalar grep {!$_->isa('PPI::Structure::Block')} @blocks) {
+    if (any { !$_->isa('PPI::Structure::Block') } @blocks) {
         throw_internal
             'Expected only givens, blocks and tokens in the given statement';
     }
@@ -245,7 +246,7 @@ sub _is_when_stmnt_with_return {
     my @inner = grep { ! $_->isa( 'PPI::Token' ) &&
                     ! $_->isa( 'PPI::Structure::When' ) }
                 $stmnt->schildren();
-    if ( scalar grep { ! $_->isa( 'PPI::Structure::Block' ) } @inner ) {
+    if ( any { ! $_->isa( 'PPI::Structure::Block' ) } @inner ) {
         throw_internal 'When statement should contain only tokens, conditions, and blocks';
     }
     @inner > 1
@@ -367,7 +368,7 @@ Chris Dolan <cdolan@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2011 Chris Dolan.
+Copyright (c) 2005-2023 Chris Dolan.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
