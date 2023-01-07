@@ -9,6 +9,7 @@ use warnings;
 
 use English qw< -no_match_vars >;
 use Carp qw< confess >;
+use List::SomeUtils qw(any);
 
 use File::Temp qw< >;
 use PPI::Document qw< >;
@@ -495,7 +496,7 @@ sub test_is_function_call {
     my $doc = PPI::Document->new( \$code );
     my $words = $doc->find('PPI::Token::Word');
     is(scalar @{$words}, 2, 'count PPI::Token::Words');
-    is((scalar grep {is_function_call($_)} @{$words}), 0, 'is_function_call');
+    ok(!(any {is_function_call($_)} @{$words}), 'is_function_call');
 
     return;
 }
