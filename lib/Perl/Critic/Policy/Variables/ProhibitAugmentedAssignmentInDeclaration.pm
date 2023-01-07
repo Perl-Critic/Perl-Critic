@@ -35,10 +35,10 @@ sub applies_to           { return 'PPI::Statement::Variable' }
 
 #-----------------------------------------------------------------------------
 
-my %augmented_assignments = hashify( qw( **= += -= .= *= /= %= x= &= |= ^= <<= >>= &&= ||= //= ) );
-
 sub violates {
     my ( $self, $elem, undef ) = @_;
+
+    state $augmented_assignments = { hashify( qw( **= += -= .= *= /= %= x= &= |= ^= <<= >>= &&= ||= //= ) ) };
 
     # The assignment operator associated with a PPI::Statement::Variable
     # element is assumed to be the first immediate child of that element.
@@ -51,7 +51,7 @@ sub violates {
     my $found = firstval { $_->isa('PPI::Token::Operator') } $elem->children();
     if ( $found ) {
         my $op = $found->content();
-        if ( exists $augmented_assignments{ $op } ) {
+        if ( exists $augmented_assignments->{ $op } ) {
             return $self->violation( sprintf( $DESC, $op ), $EXPL, $found );
         }
     }
@@ -121,7 +121,7 @@ Mike O'Regan
 
 =head1 COPYRIGHT
 
-Copyright (c) 2011-2021 Mike O'Regan.  All rights reserved.
+Copyright (c) 2011-2023 Mike O'Regan
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
