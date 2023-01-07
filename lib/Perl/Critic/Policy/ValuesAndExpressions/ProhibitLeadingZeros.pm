@@ -6,7 +6,7 @@ use warnings;
 
 use Readonly;
 
-use Perl::Critic::Utils qw{ :characters :severities };
+use Perl::Critic::Utils qw{ :characters :severities hashify };
 use parent 'Perl::Critic::Policy';
 
 our $VERSION = '1.146';
@@ -106,8 +106,8 @@ sub _is_second_argument_of_mkfifo {
         _previous_token_that_isnt_a_parenthesis($previous_token);
     return if not $previous_token;
 
-    return $previous_token->content() eq 'mkfifo'
-        || $previous_token->content() eq 'POSIX::mkfifo';
+    state $is_mkfifo = { hashify( 'mkfifo', 'POSIX::mkfifo' ) };
+    return $is_mkfifo->{$previous_token->content()};
 }
 
 sub _is_third_argument_of_dbmopen {
@@ -192,13 +192,14 @@ sub _is_fourth_argument_of_sysopen {
 sub _previous_token_that_isnt_a_parenthesis {
     my ($elem) = @_;
 
+    state $is_paren = { hashify( $LEFT_PAREN, $RIGHT_PAREN ) };
+
     my $previous_token = $elem->previous_token();
     while (
             $previous_token
         and (
                 not $previous_token->significant()
-            or  $previous_token->content() eq $LEFT_PAREN
-            or  $previous_token->content() eq $RIGHT_PAREN
+            or  $is_paren->{$previous_token->content()}
         )
     ) {
         $previous_token = $previous_token->previous_token();
@@ -259,7 +260,7 @@ Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2011 Imaginative Software Systems.  All rights reserved.
+Copyright (c) 2005-2023 Imaginative Software Systems.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
