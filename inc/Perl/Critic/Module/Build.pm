@@ -80,6 +80,8 @@ sub _run_nytprof {
             --exclude=PodSpelling
             --exclude=RcsKeywords
             blib
+            t
+            xt
         >;
     warn "Running: $this_perl @perl_args @perlcritic_args\n";
 
