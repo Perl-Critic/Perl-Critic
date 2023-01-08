@@ -161,8 +161,7 @@ sub _violates_string {
 
     my %matches = _strings_helper( $self, $string );
     if (%matches) {
-        my $DESC = qq<$DESC in interpolated string>;
-        return $self->_make_violation( $DESC, $EXPL, $elem, \%matches );
+        return $self->_make_violation( $DESC . ' in interpolated string', $EXPL, $elem, \%matches );
     }
 
     return;    # no violation
@@ -175,8 +174,7 @@ sub _violates_heredoc {
         my $heredoc_string = join "\n", $elem->heredoc();
         my %matches = _strings_helper( $self, $heredoc_string );
         if (%matches) {
-            my $DESC = qq<$DESC in interpolated here-document>;
-            return $self->_make_violation( $DESC, $EXPL, $elem, \%matches );
+            return $self->_make_violation( $DESC . ' in interpolated here-document', $EXPL, $elem, \%matches );
         }
     }
 
@@ -208,8 +206,7 @@ sub _violates_regexp {  # GitHub #843 (https://github.com/Perl-Critic/Perl-Criti
     }
 
     if ( keys %matches ) {
-        my $DESC = qq<$DESC in interpolated Regexp>;
-        return $self->_make_violation( $DESC, $EXPL, $elem, \%matches );
+        return $self->_make_violation( $DESC . ' in interpolated Regexp', $EXPL, $elem, \%matches );
     }
 
     return;
