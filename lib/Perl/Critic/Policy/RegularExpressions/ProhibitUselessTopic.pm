@@ -1,10 +1,11 @@
 package Perl::Critic::Policy::RegularExpressions::ProhibitUselessTopic;
 
+use 5.010;
 use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :severities :classification :ppi };
+use Perl::Critic::Utils qw{ :severities :classification :ppi hashify };
 use parent 'Perl::Critic::Policy';
 
 our $VERSION = '1.148';
@@ -22,14 +23,13 @@ sub applies_to           { return 'PPI::Token::Magic' }
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    my $content = $elem->content;
-    if ( $content eq q{$_} ) {
+    if ( $elem->content eq q{$_} ) {
         # Is there an op following the $_ ?
         my $op_node = $elem->snext_sibling;
         if ( $op_node && $op_node->isa('PPI::Token::Operator') ) {
             # If the op is a regex match, then we have an unnecessary $_ .
-            my $op = $op_node->content;
-            if ( $op eq q{=~} || $op eq q{!~} ) {
+            state $is_regex_op = { hashify( qw( =~ !~ ) ) };
+            if ( $is_regex_op->{$op_node->content} ) {
                 my $target_node = $op_node->snext_sibling;
                 if ( $target_node && ($target_node->isa('PPI::Token::Regexp') || $target_node->isa('PPI::Token::QuoteLike::Regexp')) ) {
                     return $self->violation( $DESC, $EXPL, $elem );
@@ -99,7 +99,7 @@ Andy Lester <andy@petdance.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2013 Andy Lester <andy@petdance.com>
+Copyright (c) 2013-2023 Andy Lester <andy@petdance.com>
 
 This library is free software; you can redistribute it and/or modify it
 under the terms of the Artistic License 2.0.
