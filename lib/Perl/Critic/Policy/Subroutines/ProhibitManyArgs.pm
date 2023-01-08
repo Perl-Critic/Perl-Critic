@@ -6,7 +6,6 @@ use warnings;
 use Readonly;
 
 use File::Spec;
-use English qw(-no_match_vars);
 use Carp;
 
 use Perl::Critic::Utils qw{ :booleans :severities split_nodes_on_comma hashify };
