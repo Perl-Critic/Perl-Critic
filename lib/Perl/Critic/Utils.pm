@@ -806,11 +806,14 @@ sub is_package_declaration {
 sub is_subroutine_name {
     my $elem  = shift;
     return if !$elem;
+
     my $sib   = $elem->sprevious_sibling();
     return if !$sib;
+    return if $sib ne 'sub';
+
     my $stmnt = $elem->statement();
     return if !$stmnt;
-    return $stmnt->isa('PPI::Statement::Sub') && $sib eq 'sub';
+    return $stmnt->isa('PPI::Statement::Sub');
 }
 
 #-----------------------------------------------------------------------------
