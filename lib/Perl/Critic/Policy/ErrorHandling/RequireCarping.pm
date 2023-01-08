@@ -18,6 +18,11 @@ our $VERSION = '1.148';
 
 Readonly::Scalar my $EXPL => [ 283 ];
 
+Readonly::Hash my %ALTERNATIVES => (
+    warn => 'carp',
+    die  => 'croak',
+);
+
 #-----------------------------------------------------------------------------
 
 sub supported_parameters {
@@ -46,16 +51,7 @@ sub applies_to        { return 'PPI::Token::Word'                        }
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    my $alternative;
-    if ( $elem eq 'warn' ) {
-        $alternative = 'carp';
-    }
-    elsif ( $elem eq 'die' ) {
-        $alternative = 'croak';
-    }
-    else {
-        return;
-    }
+    my $alternative = $ALTERNATIVES{$elem} or return;
 
     return if ! is_function_call($elem);
 
