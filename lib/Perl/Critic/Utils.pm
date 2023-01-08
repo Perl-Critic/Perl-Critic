@@ -983,9 +983,10 @@ sub split_nodes_on_comma {
     my $i = 0;
     my @node_stacks;
     for my $node (@nodes) {
+        my $node_content = $node->content;
         if (
                 $node->isa('PPI::Token::Operator')
-            and ($node eq $COMMA or $node eq $FATCOMMA)
+            and ($node_content eq $COMMA or $node_content eq $FATCOMMA)
         ) {
             if (@node_stacks) {
                 $i++; #Move forward to next 'node stack'
@@ -993,7 +994,7 @@ sub split_nodes_on_comma {
             next;
         } elsif ( $node->isa('PPI::Token::QuoteLike::Words' )) {
             my $section = $node->{sections}->[0];
-            my @words = words_from_string(substr $node->content, $section->{position}, $section->{size});
+            my @words = words_from_string(substr $node_content, $section->{position}, $section->{size});
             my $loc = $node->location;
             for my $word (@words) {
                 my $token = PPI::Token::Quote::Single->new(q{'} . $word . q{'});
