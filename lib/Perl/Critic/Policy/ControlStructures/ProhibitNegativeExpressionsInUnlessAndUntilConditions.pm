@@ -27,7 +27,8 @@ sub applies_to           { return 'PPI::Token::Word'         }
 sub violates {
     my ( $self, $token, undef ) = @_;
 
-    return if $token->content() ne 'until' && $token->content() ne 'unless';
+    state $until_or_unless = { hashify( qw( until unless ) ) };
+    return if !exists $until_or_unless->{$token->content};
 
     return if is_hash_key($token);
     return if is_subroutine_name($token);

@@ -1197,15 +1197,13 @@ sub is_unchecked_call {
         # unknown number of arguments to the system call. Instead, check all of
         # the elements to this statement to see if we find 'or' or '||'.
 
+        state $or_or_or = { hashify( qw( or || ) ) };
         my $or_operators = sub  {
             my (undef, $elem) = @_;  ## no critic(Variables::ProhibitReusedNames)
-            return if not $elem->isa('PPI::Token::Operator');
-            return if $elem ne q{or} && $elem ne q{||};
-            return 1;
+            return $elem->isa('PPI::Token::Operator') && exists $or_or_or->{$elem->content};
         };
 
         return if $statement->find( $or_operators );
-
 
         if( my $parent = $elem->statement()->parent() ){
 
