@@ -1,7 +1,7 @@
 # NOTE: This module is way too large.  Please think about adding new
 # functionality into a P::C::Utils::* module instead.
 
-package Perl::Critic::Utils;
+package Perl::Critic::Utils 1.150;
 
 use 5.010001;
 use strict;
@@ -21,8 +21,6 @@ use Perl::Critic::Exception::Fatal::Generic qw{ throw_generic };
 use Perl::Critic::Utils::PPI qw< is_ppi_expression_or_generic_statement >;
 
 use Exporter 'import';
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 # Exportable symbols here.

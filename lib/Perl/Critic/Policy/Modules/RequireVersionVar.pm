@@ -1,4 +1,4 @@
-package Perl::Critic::Policy::Modules::RequireVersionVar;
+package Perl::Critic::Policy::Modules::RequireVersionVar 1.150;
 
 use 5.010001;
 use strict;
@@ -9,8 +9,6 @@ use List::SomeUtils qw(any);
 
 use Perl::Critic::Utils qw{ :severities };
 use parent 'Perl::Critic::Policy';
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

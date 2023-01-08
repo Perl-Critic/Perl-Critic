@@ -1,12 +1,10 @@
-package Perl::Critic::Utils::Perl;
+package Perl::Critic::Utils::Perl 1.150;
 
 use 5.010001;
 use strict;
 use warnings;
 
 use Exporter 'import';
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

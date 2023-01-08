@@ -1,4 +1,4 @@
-package Perl::Critic::Policy::Subroutines::ProhibitBuiltinHomonyms;
+package Perl::Critic::Policy::Subroutines::ProhibitBuiltinHomonyms 1.150;
 
 use 5.010001;
 use strict;
@@ -9,8 +9,6 @@ use Perl::Critic::Utils qw{ :severities :data_conversion
                             :classification :characters $EMPTY };
 
 use parent 'Perl::Critic::Policy';
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

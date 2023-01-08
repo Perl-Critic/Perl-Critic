@@ -1,4 +1,4 @@
-package Perl::Critic::Policy::ValuesAndExpressions::ProhibitMixedBooleanOperators;
+package Perl::Critic::Policy::ValuesAndExpressions::ProhibitMixedBooleanOperators 1.150;
 
 use 5.010001;
 use strict;
@@ -8,10 +8,6 @@ use Readonly;
 use Perl::Critic::Utils qw{ :severities :data_conversion };
 use parent 'Perl::Critic::Policy';
 
-
-#-----------------------------------------------------------------------------
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

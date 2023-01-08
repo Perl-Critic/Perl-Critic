@@ -1,4 +1,4 @@
-package Perl::Critic::Policy::InputOutput::RequireCheckedSyscalls;
+package Perl::Critic::Policy::InputOutput::RequireCheckedSyscalls 1.150;
 
 use 5.010001;
 use strict;
@@ -9,8 +9,6 @@ use Perl::Critic::Utils qw{ :booleans :characters :severities :classification
                             hashify is_perl_bareword };
 
 use parent 'Perl::Critic::Policy';
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

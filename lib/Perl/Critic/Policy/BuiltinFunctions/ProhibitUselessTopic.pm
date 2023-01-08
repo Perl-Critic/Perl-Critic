@@ -1,4 +1,4 @@
-package Perl::Critic::Policy::BuiltinFunctions::ProhibitUselessTopic;
+package Perl::Critic::Policy::BuiltinFunctions::ProhibitUselessTopic 1.150;
 
 use strict;
 use warnings;
@@ -6,8 +6,6 @@ use Readonly;
 
 use Perl::Critic::Utils qw{ :severities :classification :ppi hashify };
 use parent 'Perl::Critic::Policy';
-
-our $VERSION = '1.148';
 
 ## no critic ( ValuesAndExpressions::RequireInterpolationOfMetachars )
 ## The numerous $_ variables make false positives.

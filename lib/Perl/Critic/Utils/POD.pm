@@ -1,4 +1,4 @@
-package Perl::Critic::Utils::POD;
+package Perl::Critic::Utils::POD 1.150;
 
 use 5.010001;
 use strict;
@@ -15,8 +15,6 @@ use Perl::Critic::Exception::IO qw< throw_io >;
 use Perl::Critic::Utils qw< :characters >;
 
 use Exporter 'import';
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

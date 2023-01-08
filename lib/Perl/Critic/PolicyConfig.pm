@@ -1,12 +1,10 @@
-package Perl::Critic::PolicyConfig;
+package Perl::Critic::PolicyConfig 1.150;
 
 use 5.010001;
 use strict;
 use warnings;
 
 use Readonly;
-
-our $VERSION = '1.148';
 
 use Perl::Critic::Exception::AggregateConfiguration;
 use Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue;

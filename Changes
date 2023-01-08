@@ -1,5 +1,10 @@
 Revision history for Perl module Perl::Critic
 
+1.150 TBA
+
+    This version of Perl::Critic now requires Perl 5.12.
+
+
 1.148 Sat Jan  7 15:20:07 CST 2023
 
     [Possible breakage]

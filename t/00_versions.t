@@ -12,7 +12,7 @@ use Test::More;
 
 plan 'no_plan';
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 use Perl::Critic::TestUtils;
 Perl::Critic::TestUtils::assert_version( $VERSION );
@@ -32,7 +32,10 @@ sub check_version {
     @version_lines = grep {! m/(?:[\\\"\'v]|C<)\$VERSION/xms} @version_lines;
     @version_lines = grep {! m/^\s*\#/xms} @version_lines;
     if (@version_lines == 0) {
-        fail($_);
+        if ( $content !~ /^package [A-Za-z0-9:]+ \d\.\d+;$/sm ) {
+            fail($_);
+            diag substr($content, 0, 100);
+        }
     }
     my $expected = qq{our \$VERSION = '$VERSION';};
     for my $line (@version_lines) {

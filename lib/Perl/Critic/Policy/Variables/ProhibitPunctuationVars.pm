@@ -1,4 +1,4 @@
-package Perl::Critic::Policy::Variables::ProhibitPunctuationVars;
+package Perl::Critic::Policy::Variables::ProhibitPunctuationVars 1.150;
 
 use 5.010001;
 use strict;
@@ -18,8 +18,6 @@ use PPIx::Regexp::Util 0.068 qw<
 >;
 
 use parent 'Perl::Critic::Policy';
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

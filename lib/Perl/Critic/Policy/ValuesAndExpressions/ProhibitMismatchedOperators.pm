@@ -1,4 +1,4 @@
-package Perl::Critic::Policy::ValuesAndExpressions::ProhibitMismatchedOperators;
+package Perl::Critic::Policy::ValuesAndExpressions::ProhibitMismatchedOperators 1.150;
 use 5.010001;
 use strict;
 use warnings;
@@ -6,8 +6,6 @@ use Readonly;
 
 use Perl::Critic::Utils qw{ :booleans :severities hashify };
 use parent 'Perl::Critic::Policy';
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

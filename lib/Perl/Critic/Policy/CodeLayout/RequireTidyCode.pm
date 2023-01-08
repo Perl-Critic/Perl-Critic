@@ -1,4 +1,4 @@
-package Perl::Critic::Policy::CodeLayout::RequireTidyCode;
+package Perl::Critic::Policy::CodeLayout::RequireTidyCode 1.150;
 
 use 5.010001;
 use strict;
@@ -13,8 +13,6 @@ use Perl::Tidy qw< >;
 use Perl::Critic::Exception::Fatal::Generic qw{ throw_generic };
 use Perl::Critic::Utils qw{ :booleans :characters :severities };
 use parent 'Perl::Critic::Policy';
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

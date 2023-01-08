@@ -1,4 +1,4 @@
-package Perl::Critic::Policy::Subroutines::RequireArgUnpacking;
+package Perl::Critic::Policy::Subroutines::RequireArgUnpacking 1.150;
 
 use 5.010001;
 use strict;
@@ -14,8 +14,6 @@ use Perl::Critic::Utils qw<
     :booleans :characters :classification hashify :severities words_from_string
 >;
 use parent 'Perl::Critic::Policy';
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

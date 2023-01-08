@@ -1,4 +1,4 @@
-package Perl::Critic::Policy::InputOutput::ProhibitBacktickOperators;
+package Perl::Critic::Policy::InputOutput::ProhibitBacktickOperators 1.150;
 
 use 5.010001;
 use strict;
@@ -8,8 +8,6 @@ use Readonly;
 use Perl::Critic::Utils qw{ :severities is_in_void_context };
 
 use parent 'Perl::Critic::Policy';
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

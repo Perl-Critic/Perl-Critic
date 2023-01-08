@@ -1,4 +1,4 @@
-package Perl::Critic::Policy::BuiltinFunctions::ProhibitStringyEval;
+package Perl::Critic::Policy::BuiltinFunctions::ProhibitStringyEval 1.150;
 
 use 5.010001;
 use strict;
@@ -10,8 +10,6 @@ use PPI::Document;
 
 use Perl::Critic::Utils qw{ :booleans :severities :classification :ppi $SCOLON };
 use parent 'Perl::Critic::Policy';
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

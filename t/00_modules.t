@@ -10,7 +10,7 @@ use Perl::Critic::TestUtils qw(bundled_policy_names);
 
 use Test::More;
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 Perl::Critic::TestUtils::assert_version( $VERSION );
 Perl::Critic::TestUtils::block_perlcriticrc();
@@ -269,7 +269,7 @@ can_ok('Perl::Critic::Command', 'run');
 
         my $exception = $class->new();
         isa_ok($exception, $class);
-        is($exception->VERSION(), $version_string, "$class version");
+        is($exception->VERSION, $version_string, "$class version");
     }
 }
 

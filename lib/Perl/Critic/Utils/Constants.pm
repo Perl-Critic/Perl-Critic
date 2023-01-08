@@ -1,4 +1,4 @@
-package Perl::Critic::Utils::Constants;
+package Perl::Critic::Utils::Constants 1.150;
 
 use 5.010001;
 use strict;
@@ -8,8 +8,6 @@ use Readonly;
 use Perl::Critic::Utils qw{ $EMPTY hashify };
 
 use Exporter 'import';
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

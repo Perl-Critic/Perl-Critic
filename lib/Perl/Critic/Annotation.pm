@@ -1,4 +1,4 @@
-package Perl::Critic::Annotation;
+package Perl::Critic::Annotation 1.150;
 
 use 5.010001;
 use strict;
@@ -12,8 +12,6 @@ use Perl::Critic::Utils qw(:characters hashify);
 use Readonly;
 
 #-----------------------------------------------------------------------------
-
-our $VERSION = '1.148';
 
 Readonly::Scalar my $LAST_ELEMENT => -1;
 

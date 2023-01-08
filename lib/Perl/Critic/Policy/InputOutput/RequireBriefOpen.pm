@@ -1,4 +1,4 @@
-package Perl::Critic::Policy::InputOutput::RequireBriefOpen;
+package Perl::Critic::Policy::InputOutput::RequireBriefOpen 1.150;
 
 use 5.010001;
 use strict;
@@ -12,8 +12,6 @@ use Perl::Critic::Utils qw{ :severities :classification :booleans
     hashify parse_arg_list
 };
 use parent 'Perl::Critic::Policy';
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

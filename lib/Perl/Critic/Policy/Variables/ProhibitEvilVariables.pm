@@ -1,4 +1,4 @@
-package Perl::Critic::Policy::Variables::ProhibitEvilVariables;
+package Perl::Critic::Policy::Variables::ProhibitEvilVariables 1.150;
 
 use 5.010001;
 use strict;
@@ -15,8 +15,6 @@ use Perl::Critic::Utils qw{
 };
 
 use parent 'Perl::Critic::Policy';
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

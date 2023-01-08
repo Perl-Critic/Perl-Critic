@@ -1,4 +1,4 @@
-package Perl::Critic::Policy::CodeLayout::RequireConsistentNewlines;
+package Perl::Critic::Policy::CodeLayout::RequireConsistentNewlines 1.150;
 
 use 5.010001;
 use strict;
@@ -9,8 +9,6 @@ use Perl::Critic::Utils qw{ :severities };
 use PPI::Token::Whitespace;
 use English qw(-no_match_vars);
 use parent 'Perl::Critic::Policy';
-
-our $VERSION = '1.148';
 
 Readonly::Scalar my $LINE_END => qr/\015{1,2}\012|[\012\015]/mxs;
 

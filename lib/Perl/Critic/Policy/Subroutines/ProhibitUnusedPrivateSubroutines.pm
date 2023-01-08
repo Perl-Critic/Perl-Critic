@@ -1,4 +1,4 @@
-package Perl::Critic::Policy::Subroutines::ProhibitUnusedPrivateSubroutines;
+package Perl::Critic::Policy::Subroutines::ProhibitUnusedPrivateSubroutines 1.150;
 
 use 5.010001;
 
@@ -14,8 +14,6 @@ use Perl::Critic::Utils qw{
     $EMPTY $TRUE
 };
 use parent 'Perl::Critic::Policy';
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

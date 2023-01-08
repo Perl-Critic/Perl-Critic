@@ -1,4 +1,4 @@
-package Perl::Critic::Policy::RegularExpressions::ProhibitUnusualDelimiters;
+package Perl::Critic::Policy::RegularExpressions::ProhibitUnusualDelimiters 1.150;
 
 use 5.010001;
 use strict;
@@ -11,8 +11,6 @@ use Carp;
 use Perl::Critic::Utils qw{ :booleans :severities hashify };
 
 use parent 'Perl::Critic::Policy';
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

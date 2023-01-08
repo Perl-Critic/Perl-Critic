@@ -1,4 +1,4 @@
-package Perl::Critic::Policy::Modules::ProhibitExcessMainComplexity;
+package Perl::Critic::Policy::Modules::ProhibitExcessMainComplexity 1.150;
 
 use 5.010001;
 use strict;
@@ -9,10 +9,6 @@ use Perl::Critic::Utils qw{ :severities };
 use Perl::Critic::Utils::McCabe qw{ calculate_mccabe_of_main };
 
 use parent 'Perl::Critic::Policy';
-
-#-----------------------------------------------------------------------------
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

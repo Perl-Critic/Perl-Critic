@@ -1,4 +1,4 @@
-package Perl::Critic::Config;
+package Perl::Critic::Config 1.150;
 
 use 5.010001;
 use strict;
@@ -25,10 +25,6 @@ use Perl::Critic::Utils::Constants qw<
     :profile_strictness
     $_MODULE_VERSION_TERM_ANSICOLOR
 >;
-
-#-----------------------------------------------------------------------------
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

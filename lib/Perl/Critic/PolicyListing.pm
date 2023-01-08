@@ -1,4 +1,4 @@
-package Perl::Critic::PolicyListing;
+package Perl::Critic::PolicyListing 1.150;
 
 use 5.010001;
 use strict;
@@ -9,8 +9,6 @@ use English qw(-no_match_vars);
 use Perl::Critic::Policy qw();
 
 use overload ( q<""> => 'to_string' );
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

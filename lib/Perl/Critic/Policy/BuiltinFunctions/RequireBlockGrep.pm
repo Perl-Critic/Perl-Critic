@@ -1,4 +1,4 @@
-package Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep;
+package Perl::Critic::Policy::BuiltinFunctions::RequireBlockGrep 1.150;
 
 # DEVELOPER NOTE: this module is used as an example in DEVELOPER.pod.
 # If you make changes in here, please reflect those changes in the
@@ -11,8 +11,6 @@ use Readonly;
 
 use Perl::Critic::Utils qw{ :severities :classification :ppi };
 use parent 'Perl::Critic::Policy';
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

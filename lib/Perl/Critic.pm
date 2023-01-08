@@ -1,4 +1,4 @@
-package Perl::Critic;
+package Perl::Critic 1.150;
 
 use 5.010001;
 use strict;
@@ -20,8 +20,6 @@ use Perl::Critic::Document;
 use Perl::Critic::Statistics;
 
 #-----------------------------------------------------------------------------
-
-our $VERSION = '1.148';
 
 Readonly::Array our @EXPORT_OK => qw(critique);
 

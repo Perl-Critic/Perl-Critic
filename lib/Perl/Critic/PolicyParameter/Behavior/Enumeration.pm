@@ -1,4 +1,4 @@
-package Perl::Critic::PolicyParameter::Behavior::Enumeration;
+package Perl::Critic::PolicyParameter::Behavior::Enumeration 1.150;
 
 use 5.010001;
 use strict;
@@ -9,8 +9,6 @@ use Perl::Critic::Exception::Fatal::PolicyDefinition
 use Perl::Critic::Utils qw{ :characters &words_from_string &hashify };
 
 use parent qw{ Perl::Critic::PolicyParameter::Behavior };
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

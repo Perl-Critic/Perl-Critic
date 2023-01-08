@@ -1,4 +1,4 @@
-package Perl::Critic::OptionsProcessor;
+package Perl::Critic::OptionsProcessor 1.150;
 
 use 5.010001;
 use strict;
@@ -16,8 +16,6 @@ use Perl::Critic::Utils::Constants qw<
     $PROFILE_STRICTNESS_DEFAULT
     :color_severity
     >;
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

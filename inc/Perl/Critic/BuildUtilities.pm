@@ -1,12 +1,10 @@
-package Perl::Critic::BuildUtilities;
+package Perl::Critic::BuildUtilities 1.150;
 
 use 5.010001;
 use strict;
 use warnings;
 
 use English q<-no_match_vars>;
-
-our $VERSION = '1.126';
 
 use Exporter 'import';
 

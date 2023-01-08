@@ -1,4 +1,4 @@
-package Perl::Critic::ThemeListing;
+package Perl::Critic::ThemeListing 1.150;
 
 use 5.010001;
 use strict;
@@ -7,8 +7,6 @@ use warnings;
 use English qw<-no_match_vars>;
 
 use overload ( q<""> => 'to_string' );
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

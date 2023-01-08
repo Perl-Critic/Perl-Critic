@@ -1,4 +1,4 @@
-package Perl::Critic::Policy::Documentation::RequirePackageMatchesPodName;
+package Perl::Critic::Policy::Documentation::RequirePackageMatchesPodName 1.150;
 
 use 5.010001;
 
@@ -9,8 +9,6 @@ use Readonly;
 use English qw{ -no_match_vars };
 use Perl::Critic::Utils qw{ :severities :classification };
 use parent 'Perl::Critic::Policy';
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

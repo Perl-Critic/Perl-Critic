@@ -1,4 +1,4 @@
-package Perl::Critic::PolicyParameter::Behavior::Integer;
+package Perl::Critic::PolicyParameter::Behavior::Integer 1.150;
 
 use 5.010001;
 use strict;
@@ -7,8 +7,6 @@ use warnings;
 use Perl::Critic::Utils qw{ :characters };
 
 use parent qw{ Perl::Critic::PolicyParameter::Behavior };
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

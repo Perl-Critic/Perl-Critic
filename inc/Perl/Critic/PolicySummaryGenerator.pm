@@ -1,4 +1,4 @@
-package Perl::Critic::PolicySummaryGenerator;
+package Perl::Critic::PolicySummaryGenerator 1.150;
 
 use 5.010001;
 use strict;
@@ -17,10 +17,6 @@ use Perl::Critic::Utils qw< :characters >;
 use Perl::Critic::Utils::POD qw< get_module_abstract_from_file >;
 
 use Exception::Class ();  # Must be after P::C::Exception::*
-
-#-----------------------------------------------------------------------------
-
-our $VERSION = '1.126';
 
 #-----------------------------------------------------------------------------
 

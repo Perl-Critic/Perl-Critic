@@ -1,4 +1,4 @@
-package Perl::Critic::Command;
+package Perl::Critic::Command 1.150;
 
 use 5.010001;
 use strict;
@@ -18,10 +18,6 @@ use Perl::Critic::Utils qw<
 >;
 use Perl::Critic::Utils::Constants qw< $_MODULE_VERSION_TERM_ANSICOLOR >;
 use Perl::Critic::Violation qw<>;
-
-#-----------------------------------------------------------------------------
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 
@@ -641,7 +637,7 @@ sub _render_policy_docs {
 #-----------------------------------------------------------------------------
 
 sub _display_version {
-    _out "$VERSION\n";
+    #_out "$VERSION\n";
     exit $EXIT_SUCCESS;
 }
 

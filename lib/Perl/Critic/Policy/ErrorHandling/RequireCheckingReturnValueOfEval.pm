@@ -1,4 +1,4 @@
-package Perl::Critic::Policy::ErrorHandling::RequireCheckingReturnValueOfEval;
+package Perl::Critic::Policy::ErrorHandling::RequireCheckingReturnValueOfEval 1.150;
 
 use 5.010001;
 use strict;
@@ -11,8 +11,6 @@ use Scalar::Util qw< refaddr >;
 use Perl::Critic::Utils qw< :booleans :characters :severities hashify
     precedence_of >;
 use parent 'Perl::Critic::Policy';
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

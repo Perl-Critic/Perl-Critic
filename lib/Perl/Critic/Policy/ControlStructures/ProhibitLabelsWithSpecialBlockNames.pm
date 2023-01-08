@@ -1,4 +1,4 @@
-package Perl::Critic::Policy::ControlStructures::ProhibitLabelsWithSpecialBlockNames;
+package Perl::Critic::Policy::ControlStructures::ProhibitLabelsWithSpecialBlockNames 1.150;
 
 use 5.010001;
 use strict;
@@ -8,8 +8,6 @@ use Readonly;
 
 use Perl::Critic::Utils qw{ :severities hashify };
 use parent 'Perl::Critic::Policy';
-
-our $VERSION = '1.148';
 
 Readonly::Hash my %SPECIAL_BLOCK_NAMES =>
     hashify( qw< BEGIN END INIT CHECK UNITCHECK > );

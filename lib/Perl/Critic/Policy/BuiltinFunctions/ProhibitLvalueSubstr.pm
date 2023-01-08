@@ -1,4 +1,4 @@
-package Perl::Critic::Policy::BuiltinFunctions::ProhibitLvalueSubstr;
+package Perl::Critic::Policy::BuiltinFunctions::ProhibitLvalueSubstr 1.150;
 
 use 5.010001;
 use strict;
@@ -8,8 +8,6 @@ use version 0.77 ();
 
 use Perl::Critic::Utils qw{ :severities :classification :language };
 use parent 'Perl::Critic::Policy';
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

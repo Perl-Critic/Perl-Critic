@@ -1,4 +1,4 @@
-package Perl::Critic::Policy;
+package Perl::Critic::Policy 1.150;
 
 use 5.010001;
 use strict;
@@ -38,8 +38,6 @@ use Perl::Critic::PolicyParameter qw<>;
 use Perl::Critic::Violation qw<>;
 
 use Exception::Class;   # this must come after "use P::C::Exception::*"
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

@@ -1,4 +1,4 @@
-package Perl::Critic::Policy::TestingAndDebugging::RequireUseStrict;
+package Perl::Critic::Policy::TestingAndDebugging::RequireUseStrict 1.150;
 
 use 5.010001;
 use strict;
@@ -11,8 +11,6 @@ use Scalar::Util qw{ blessed };
 use Perl::Critic::Utils qw{ :severities $EMPTY };
 use Perl::Critic::Utils::Constants qw{ :equivalent_modules };
 use parent 'Perl::Critic::Policy';
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

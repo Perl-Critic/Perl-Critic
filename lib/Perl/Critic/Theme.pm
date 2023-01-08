@@ -1,4 +1,4 @@
-package Perl::Critic::Theme;
+package Perl::Critic::Theme 1.150;
 
 use 5.010001;
 use strict;
@@ -12,10 +12,6 @@ use Perl::Critic::Utils qw{ :characters :data_conversion };
 use Perl::Critic::Exception::Fatal::Internal qw{ &throw_internal };
 use Perl::Critic::Exception::Configuration::Option::Global::ParameterValue
     qw{ &throw_global_value };
-
-#-----------------------------------------------------------------------------
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

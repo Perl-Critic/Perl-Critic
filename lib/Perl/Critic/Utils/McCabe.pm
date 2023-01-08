@@ -1,4 +1,4 @@
-package Perl::Critic::Utils::McCabe;
+package Perl::Critic::Utils::McCabe 1.150;
 
 use 5.010001;
 use strict;
@@ -9,10 +9,6 @@ use Readonly;
 use Perl::Critic::Utils qw{ :data_conversion :classification };
 
 use Exporter 'import';
-
-#-----------------------------------------------------------------------------
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

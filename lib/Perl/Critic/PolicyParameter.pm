@@ -1,4 +1,4 @@
-package Perl::Critic::PolicyParameter;
+package Perl::Critic::PolicyParameter 1.150;
 
 use 5.010001;
 use strict;
@@ -21,8 +21,6 @@ use Perl::Critic::PolicyParameter::Behavior::String;
 use Perl::Critic::PolicyParameter::Behavior::StringList;
 
 use Perl::Critic::Utils qw{ :characters &interpolate };
-
-our $VERSION = '1.148';
 
 Readonly::Scalar our $NO_DESCRIPTION_AVAILABLE => 'No description available.';
 

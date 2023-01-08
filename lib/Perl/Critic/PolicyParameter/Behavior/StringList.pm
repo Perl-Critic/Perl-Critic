@@ -1,4 +1,4 @@
-package Perl::Critic::PolicyParameter::Behavior::StringList;
+package Perl::Critic::PolicyParameter::Behavior::StringList 1.150;
 
 use 5.010001;
 use strict;
@@ -7,8 +7,6 @@ use warnings;
 use Perl::Critic::Utils qw{ :characters &words_from_string &hashify };
 
 use parent qw{ Perl::Critic::PolicyParameter::Behavior };
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

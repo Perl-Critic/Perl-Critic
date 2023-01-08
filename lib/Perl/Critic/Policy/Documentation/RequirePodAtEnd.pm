@@ -1,4 +1,4 @@
-package Perl::Critic::Policy::Documentation::RequirePodAtEnd;
+package Perl::Critic::Policy::Documentation::RequirePodAtEnd 1.150;
 
 use 5.010001;
 use strict;
@@ -9,8 +9,6 @@ use List::Util qw(first);
 
 use Perl::Critic::Utils qw{ :severities };
 use parent 'Perl::Critic::Policy';
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

@@ -7,7 +7,7 @@ use PPI::Document;
 
 use Test::More tests => 1;
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 use Perl::Critic::TestUtils;
 Perl::Critic::TestUtils::assert_version( $VERSION );

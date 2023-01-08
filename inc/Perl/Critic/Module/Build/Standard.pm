@@ -1,11 +1,9 @@
-package Perl::Critic::Module::Build::Standard;
+package Perl::Critic::Module::Build::Standard 1.150;
 
 use 5.010001;
 
 use strict;
 use warnings;
-
-our $VERSION = '1.126';
 
 use Carp;
 use English qw< $OS_ERROR -no_match_vars >;

@@ -1,4 +1,4 @@
-package Perl::Critic::Violation;
+package Perl::Critic::Violation 1.150;
 
 use 5.010001;
 use strict;
@@ -18,8 +18,6 @@ use Perl::Critic::Utils::POD qw<
     trim_pod_section
 >;
 use Perl::Critic::Exception::Fatal::Internal qw< throw_internal >;
-
-our $VERSION = '1.148';
 
 Readonly::Scalar my $NO_EXCEPTION_NO_SPLIT_LIMIT        => -1;
 Readonly::Scalar my $LOCATION_LINE_NUMBER               => 0;

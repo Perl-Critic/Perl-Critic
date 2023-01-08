@@ -1,4 +1,4 @@
-package Perl::Critic::Policy::Variables::ProhibitUnusedVariables;
+package Perl::Critic::Policy::Variables::ProhibitUnusedVariables 1.150;
 
 use 5.010001;
 use strict;
@@ -12,8 +12,6 @@ use PPIx::QuoteLike;
 
 use Perl::Critic::Utils qw< :characters :severities >;
 use parent 'Perl::Critic::Policy';
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

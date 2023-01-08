@@ -1,4 +1,4 @@
-package Perl::Critic::Document;
+package Perl::Critic::Document 1.150;
 
 use 5.010001;
 use strict;
@@ -19,10 +19,6 @@ use Perl::Critic::Exception::Parse qw< throw_parse >;
 use Perl::Critic::Utils qw< :booleans :characters hashify shebang_line >;
 
 use PPIx::Regexp 0.010 qw< >;
-
-#-----------------------------------------------------------------------------
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

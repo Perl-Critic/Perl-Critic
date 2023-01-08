@@ -1,4 +1,4 @@
-package Test::Perl::Critic::Policy;
+package Test::Perl::Critic::Policy 1.150;
 
 use 5.010001;
 
@@ -17,10 +17,6 @@ use Perl::Critic::Violation;
 use Perl::Critic::TestUtils qw<
     pcritique_with_violations fcritique_with_violations subtests_in_tree
 >;
-
-#-----------------------------------------------------------------------------
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

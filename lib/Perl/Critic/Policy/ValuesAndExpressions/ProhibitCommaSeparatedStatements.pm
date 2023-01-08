@@ -1,4 +1,4 @@
-package Perl::Critic::Policy::ValuesAndExpressions::ProhibitCommaSeparatedStatements;
+package Perl::Critic::Policy::ValuesAndExpressions::ProhibitCommaSeparatedStatements 1.150;
 
 use 5.010001;
 use strict;
@@ -10,8 +10,6 @@ use Perl::Critic::Utils qw{ :booleans :characters :severities :classification };
 use Perl::Critic::Utils::PPI qw{ is_ppi_statement_subclass };
 
 use parent 'Perl::Critic::Policy';
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 

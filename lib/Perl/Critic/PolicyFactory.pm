@@ -1,4 +1,4 @@
-package Perl::Critic::PolicyFactory;
+package Perl::Critic::PolicyFactory 1.150;
 
 use 5.010001;
 use strict;
@@ -28,8 +28,6 @@ use Perl::Critic::Exception::Configuration::NonExistentPolicy qw< >;
 use Perl::Critic::Utils::Constants qw{ :profile_strictness };
 
 use Exception::Class;   # this must come after "use P::C::Exception::*"
-
-our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 
