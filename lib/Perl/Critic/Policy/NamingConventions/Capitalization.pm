@@ -19,7 +19,7 @@ use Perl::Critic::Utils::Perl qw< symbol_without_sigil >;
 use Perl::Critic::Utils::PPI qw<
     is_in_subroutine
 >;
-use PPIx::Utilities::Statement qw<
+use PPIx::Utils::Traversal qw<
     get_constant_name_elements_from_declaring_statement
 >;
 

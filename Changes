@@ -1,5 +1,12 @@
 Revision history for Perl module Perl::Critic
 
+NEXT
+
+    [Internals]
+    We now use PPIx::Utils instead of PPIx::Utilities, which is more recently
+    maintained.
+
+
 1.148 Sat Jan  7 15:20:07 CST 2023
 
     [Possible breakage]

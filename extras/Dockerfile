@@ -14,7 +14,7 @@ RUN cpanm B::Keywords && \
     cpanm Test::SubCalls && \
     cpanm PPI::Token::Quote::Single && \
     cpanm PPIx::QuoteLike && \
-    cpanm PPIx::Utilities::Statement && \
+    cpanm PPIx::Utils::Traversal && \
     cpanm PPIx::Regexp && \
     cpanm String::Format && \
     cpanm Perl::Tidy && \

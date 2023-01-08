@@ -5,10 +5,14 @@ use 5.010001;
 use strict;
 use warnings;
 
-use Test::Perl::Critic::Policy qw< all_policies_ok >;
+use Test::More;
+
+eval 'use Test::Perl::Critic; 1;'
+    or plan skip_all => 'Test::Perl::Critic required to test Perl::Critic itself';
 
 our $VERSION = '1.148';
 
+use Test::Perl::Critic::Policy qw( all_policies_ok );
 use Perl::Critic::TestUtils;
 Perl::Critic::TestUtils::assert_version( $VERSION );
 

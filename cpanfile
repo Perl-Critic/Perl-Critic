@@ -29,8 +29,7 @@ requires 'PPI::Token::Whitespace'     => '1.271';
 requires 'PPIx::QuoteLike'            => 0;
 requires 'PPIx::Regexp'               => '0.027'; # Literal { deprecated in re
 requires 'PPIx::Regexp::Util'         => '0.068'; # is_ppi_regexp_element()
-requires 'PPIx::Utilities::Node'      => '1.001';
-requires 'PPIx::Utilities::Statement' => '1.001';
+requires 'PPIx::Utils::Traversal'     => '0.003';
 requires 'Perl::Tidy'                 => 0;
 requires 'Pod::PlainText'             => 0;
 requires 'Pod::Select'                => 0;
@@ -55,9 +54,11 @@ on 'test' => sub {
     # For author testing
     requires 'Devel::EnforceEncapsulation' => 0;
     requires 'Test::Memory::Cycle'         => 0;
-    requires 'Test::Perl::Critic'          => 0;
     requires 'Test::Pod'                   => 0;
     requires 'Test::Pod::Coverage'         => 0;
+
+    # May cause problems if there is version breakage in the current version available on CPAN.
+    recommends 'Test::Perl::Critic'        => 0;
 
     # Doesn't install under Perl 5.10.
     recommends 'Test::Kwalitee'            => 0;
