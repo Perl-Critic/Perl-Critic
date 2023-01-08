@@ -32,9 +32,9 @@ sub check_version {
     @version_lines = grep {! m/(?:[\\\"\'v]|C<)\$VERSION/xms} @version_lines;
     @version_lines = grep {! m/^\s*\#/xms} @version_lines;
     if (@version_lines == 0) {
-        if ( $content !~ /^package [A-Za-z0-9:]+ \d\.\d+;$/sm ) {
+        # Check to see if we declare it in the package statement.
+        if ( $content !~ /^package[ ][[:alpha:]\d:]+[ ]\d[.]\d+;$/smx ) {
             fail($_);
-            diag substr($content, 0, 100);
         }
     }
     my $expected = qq{our \$VERSION = '$VERSION';};
