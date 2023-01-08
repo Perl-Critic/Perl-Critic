@@ -4,7 +4,6 @@ use 5.010001;
 use strict;
 use warnings;
 
-use Carp;
 use Perl::Critic::Utils qw<
     :booleans :characters :classification :data_conversion :language
     :severities

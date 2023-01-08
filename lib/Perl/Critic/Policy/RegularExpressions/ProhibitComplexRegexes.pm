@@ -4,7 +4,6 @@ use 5.010001;
 use strict;
 use warnings;
 
-use Carp;
 use List::Util qw{ min };
 use Readonly;
 

@@ -4,7 +4,6 @@ use 5.010001;
 use strict;
 use warnings;
 
-use Carp;
 use Perl::Critic::Utils qw{ :booleans :characters :severities };
 use Perl::Critic::Utils::PPI qw{
     get_next_element_in_same_simple_statement

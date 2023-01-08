@@ -5,8 +5,6 @@ use strict;
 use warnings;
 use Readonly;
 
-use Carp;
-
 use Perl::Critic::Utils qw{ :booleans :severities hashify };
 
 use parent 'Perl::Critic::Policy';
