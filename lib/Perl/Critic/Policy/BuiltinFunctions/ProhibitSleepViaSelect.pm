@@ -5,6 +5,7 @@ use strict;
 use warnings;
 use Readonly;
 
+use List::SomeUtils qw(any);
 use Perl::Critic::Utils qw{ :severities :classification :ppi };
 use parent 'Perl::Critic::Policy';
 
@@ -34,9 +35,7 @@ sub violates {
     my @arguments = parse_arg_list($elem);
     return if $SELECT_ARGUMENT_COUNT != @arguments;
 
-    foreach my $argument ( @arguments[0..2] ) {
-        return if $argument->[0] ne 'undef';
-    }
+    return if any { $_->[0] ne 'undef' } @arguments[0..2];
 
     if ( $arguments[-1]->[0] ne 'undef' ) {
         return $self->violation( $DESC, $EXPL, $elem );
