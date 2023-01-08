@@ -121,8 +121,9 @@ sub _is_compound_return {
 
     my $begin = $final->schild(0);
     return if !$begin; #fail
-    if (!($begin->isa('PPI::Token::Word') &&
-          ($begin->content() eq 'if' || $begin->content() eq 'unless'))) {
+
+    state $is_if_or_unless = { hashify( qw( if unless ) ) };
+    if (!($begin->isa('PPI::Token::Word') && $is_if_or_unless->{$begin->content()})) {
         return; #fail
     }
 
