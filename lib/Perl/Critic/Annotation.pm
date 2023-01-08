@@ -26,7 +26,7 @@ sub create_annotations {
     my @annotations = ();
     my $comment_elements_ref  = $doc->find('PPI::Token::Comment') || return;
     my $annotation_rx  = qr{\A (?: [#]! .*? )? \s* [#][#] \s* no  \s+ critic}xms;
-    for my $annotation_element ( grep { m/$annotation_rx/ } @{$comment_elements_ref} ) {
+    for my $annotation_element ( grep { m/$annotation_rx/smx } @{$comment_elements_ref} ) {
         push @annotations, Perl::Critic::Annotation->new( -element => $annotation_element);
     }
 
