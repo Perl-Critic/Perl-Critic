@@ -50,8 +50,7 @@ sub required_module_versions {
         'PPIx::QuoteLike'               => 0,
         'PPIx::Regexp'                  => '0.027', # Literal { deprecated in re
         'PPIx::Regexp::Util'            => '0.068', # is_ppi_regexp_element()
-        'PPIx::Utilities::Node'         => '1.001',
-        'PPIx::Utilities::Statement'    => '1.001',
+        'PPIx::Utils::Traversal'        => '0.003',
         'Perl::Tidy'                    => 0, # Only for RequireTidyCode
         'Pod::PlainText'                => 0,
         'Pod::Select'                   => 0,

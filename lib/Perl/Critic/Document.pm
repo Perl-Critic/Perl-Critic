@@ -12,7 +12,7 @@ use version;
 
 use PPI::Document;
 use PPI::Document::File;
-use PPIx::Utilities::Node qw< split_ppi_node_by_namespace >;
+use PPIx::Utils::Traversal qw< split_ppi_node_by_namespace >;
 
 use Perl::Critic::Annotation;
 use Perl::Critic::Exception::Parse qw< throw_parse >;
@@ -844,7 +844,7 @@ namespace.  For example, given that the current document is for the source
 
 this method will return two L<Perl::Critic::Document|Perl::Critic::Document>s
 for a parameter of C<"Foo">.  For more, see
-L<PPIx::Utilities::Node/split_ppi_node_by_namespace>.
+L<PPIx::Utils::Traversal/split_ppi_node_by_namespace>.
 
 
 =item C<< ppix_regexp_from_element($element) >>

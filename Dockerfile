@@ -30,7 +30,7 @@ RUN \
         PPI::Token::Quote::Single \
         PPIx::QuoteLike \
         PPIx::Regexp \
-        PPIx::Utilities::Statement \
+        PPIx::Utils::Traversal \
         String::Format \
     && apk del --purge --rdepends \
         make \

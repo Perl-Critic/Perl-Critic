@@ -134,11 +134,7 @@ sub _is_compound_return {
             'Expected only conditions, blocks and tokens in the if statement';
     }
 
-    for my $block (@blocks) {
-        if (! $self->_block_has_return($block)) {
-            return; #fail
-        }
-    }
+    return if any { ! $self->_block_has_return($_) } @blocks;
 
     return 1;
 }
@@ -231,11 +227,8 @@ sub _is_terminal_stmnt {
 sub _is_conditional_stmnt {
     my ( $self, $stmnt ) = @_;
     return if not $stmnt->isa('PPI::Statement');
-    for my $elem ( $stmnt->schildren() ) {
-        return 1 if $elem->isa('PPI::Token::Word')
-            && exists $CONDITIONALS{$elem};
-    }
-    return;
+
+    return any { exists $CONDITIONALS{$_} && $_->isa('PPI::Token::Word') } $stmnt->schildren();
 }
 
 #-----------------------------------------------------------------------------
@@ -253,11 +246,7 @@ sub _is_when_stmnt_with_return {
         and throw_internal 'When statement should have no more than one block';
     @inner or return;   #fail
 
-    foreach my $block ( @inner ) {
-        if ( ! $self->_block_has_return( $block ) ) {
-            return; #fail
-        }
-    }
+    return if any { ! $self->_block_has_return( $_ ) } @inner;
 
     return 1;   #succeed
 }

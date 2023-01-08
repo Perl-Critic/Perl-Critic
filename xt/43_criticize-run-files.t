@@ -16,7 +16,8 @@ Perl::Critic::TestUtils::assert_version( $VERSION );
 
 #-----------------------------------------------------------------------------
 
-use Test::Perl::Critic;
+eval 'use Test::Perl::Critic; 1;'
+    or plan skip_all => 'Test::Perl::Critic required to test Perl::Critic itself';
 
 #-----------------------------------------------------------------------------
 
