@@ -71,8 +71,10 @@ sub violates {
 sub _low_boolean {
     my (undef, $elem) = @_;
     return if $elem->isa('PPI::Statement');
-    $elem->isa('PPI::Token::Operator') || return 0;
-    return exists $LOW_BOOLEANS{$elem};
+
+    return
+        $elem->isa('PPI::Token::Operator')
+        && exists $LOW_BOOLEANS{$elem};
 }
 
 #-----------------------------------------------------------------------------
@@ -80,8 +82,10 @@ sub _low_boolean {
 sub _high_boolean {
     my (undef, $elem) = @_;
     return if $elem->isa('PPI::Statement');
-    $elem->isa('PPI::Token::Operator') || return 0;
-    return exists $HIGH_BOOLEANS{$elem};
+
+    return
+        $elem->isa('PPI::Token::Operator')
+        && exists $HIGH_BOOLEANS{$elem};
 }
 
 1;
@@ -127,7 +131,7 @@ Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2011 Imaginative Software Systems.  All rights reserved.
+Copyright (c) 2005-2023 Imaginative Software Systems
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
