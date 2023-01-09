@@ -360,9 +360,8 @@ Readonly::Hash my %BUILTINS => hashify( @B::Keywords::Functions );
 
 sub is_perl_builtin {
     my $elem = shift;
-    return if !$elem;
 
-    return exists $BUILTINS{ _name_for_sub_or_stringified_element($elem) };
+    return $elem && exists $BUILTINS{ _name_for_sub_or_stringified_element($elem) };
 }
 
 #-----------------------------------------------------------------------------
@@ -374,9 +373,8 @@ Readonly::Hash my %BAREWORDS => hashify(
 
 sub is_perl_bareword {
     my $elem = shift;
-    return if !$elem;
 
-    return exists $BAREWORDS{ _name_for_sub_or_stringified_element($elem) };
+    return $elem && exists $BAREWORDS{ _name_for_sub_or_stringified_element($elem) };
 }
 
 #-----------------------------------------------------------------------------
@@ -417,9 +415,8 @@ Readonly::Hash my %FILEHANDLES => hashify( @B::Keywords::Filehandles );
 
 sub is_perl_filehandle {
     my $elem = shift;
-    return if !$elem;
 
-    return exists $FILEHANDLES{ _name_for_sub_or_stringified_element($elem) };
+    return $elem && exists $FILEHANDLES{ _name_for_sub_or_stringified_element($elem) };
 }
 
 ## use critic
@@ -688,17 +685,15 @@ sub is_perl_builtin_with_zero_and_or_one_arguments {
 sub is_qualified_name {
     my $name = shift;
 
-    return if not $name;
-
-    return index ( $name, q{::} ) >= 0;
+    return $name && (index($name, q{::}) >= 0);
 }
 
 #-----------------------------------------------------------------------------
 
 sub precedence_of {
     my $elem = shift;
-    return if !$elem;
-    return $PRECEDENCE_OF{ ref $elem ? "$elem" : $elem };
+
+    return $elem && $PRECEDENCE_OF{ ref $elem ? "$elem" : $elem };
 }
 
 #-----------------------------------------------------------------------------
@@ -718,11 +713,12 @@ sub is_hash_key {
     return if !$grandparent;
     return 1 if $grandparent->isa('PPI::Structure::Subscript');
 
-
     #Check declarative style: %hash = (foo => bar);
-    return 1 if $sib && $sib->isa('PPI::Token::Operator') && $sib eq '=>';
-
-    return;
+    return
+        $sib
+        && $sib->isa('PPI::Token::Operator')
+        && $sib eq '=>'
+    ;
 }
 
 #-----------------------------------------------------------------------------
@@ -756,38 +752,40 @@ sub is_label_pointer {
     return if !$statement->isa('PPI::Statement::Break');
 
     my $psib = $elem->sprevious_sibling();
-    return if !$psib;
-
     state $redirectors = { hashify( qw( redo goto next last ) ) };
-    return exists $redirectors->{$psib};
+    return $psib && exists $redirectors->{$psib};
 }
 
 #-----------------------------------------------------------------------------
 
 sub is_method_call {
     my $elem = shift;
-    return if !$elem;
 
-    return _is_dereference_operator( $elem->sprevious_sibling() );
+    return $elem && _is_dereference_operator( $elem->sprevious_sibling() );
 }
 
 #-----------------------------------------------------------------------------
 
 sub is_class_name {
     my $elem = shift;
-    return if !$elem;
 
-    return _is_dereference_operator( $elem->snext_sibling() )
-        && !_is_dereference_operator( $elem->sprevious_sibling() );
+    return
+        $elem
+        && _is_dereference_operator( $elem->snext_sibling() )
+        && !_is_dereference_operator( $elem->sprevious_sibling() )
+    ;
 }
 
 #-----------------------------------------------------------------------------
 
 sub _is_dereference_operator {
     my $elem = shift;
-    return if !$elem;
 
-    return $elem->isa('PPI::Token::Operator') && $elem eq q{->};
+    return
+        $elem
+        && $elem->isa('PPI::Token::Operator')
+        && $elem eq q{->}
+    ;
 }
 
 #-----------------------------------------------------------------------------
@@ -1185,11 +1183,8 @@ sub is_unchecked_call {
 
     return if not is_function_call( $elem );
 
-    # check to see if there's an '=' or 'unless' or something before this.
-    if( my $sib = $elem->sprevious_sibling() ){
-        return if $sib;
-    }
-
+    # Check to see if there's an '=' or 'unless' or something before this.
+    return if $elem->sprevious_sibling();
 
     if( my $statement = $elem->statement() ){
 
