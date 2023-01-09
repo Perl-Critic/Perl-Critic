@@ -6,8 +6,6 @@ use warnings;
 
 use Readonly;
 
-use version;
-
 use Perl::Critic::Utils qw{ :severities :ppi };
 use parent 'Perl::Critic::Policy';
 
