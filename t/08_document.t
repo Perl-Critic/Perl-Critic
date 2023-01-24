@@ -6,9 +6,6 @@ use warnings;
 
 use Carp qw< carp >;
 
-use version;
-
-
 use Perl::Critic::Document qw< >;
 
 use Test::More tests => 43;
