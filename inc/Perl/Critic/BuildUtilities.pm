@@ -83,12 +83,14 @@ sub test_required_module_versions {
 
 sub configure_required_module_versions {
     return (
-        'Carp'          => 0,
-        'English'       => 0,
-        'Exporter'      => '5.63',
-        'Module::Build' => '0.4204',
-        'base'          => 0,
-        'lib'           => 0,
+        'B::Keywords'     => 1.23,
+        'Carp'            => 0,
+        'English'         => 0,
+        'Exporter'        => '5.63',
+        'List::SomeUtils' => '0.55',
+        'Module::Build'   => '0.4204',
+        'base'            => 0,
+        'lib'             => 0,
     );
 }
 
