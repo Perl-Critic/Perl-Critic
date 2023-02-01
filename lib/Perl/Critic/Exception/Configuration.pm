@@ -61,7 +61,7 @@ Where the configuration information came from, if it could be determined.
 
 =head1 SEE ALSO
 
-L<Perl::Critic::Exception::Configuration::Generic|Perl::Critic::Exception::Configuration::Generic>
+L<Perl::Critic::Exception::Configuration::Generic|Perl::Critic::Exception::Configuration::Generic>,
 L<Perl::Critic::Exception::Configuration::Option|Perl::Critic::Exception::Configuration::Option>
 
 

@@ -113,7 +113,7 @@ implement it.
 
 =head1 SEE ALSO
 
-L<Perl::Critic::Exception::Configuration::Option::Global|Perl::Critic::Exception::Configuration::Option::Global>
+L<Perl::Critic::Exception::Configuration::Option::Global|Perl::Critic::Exception::Configuration::Option::Global>,
 L<Perl::Critic::Exception::Configuration::Option::Policy|Perl::Critic::Exception::Configuration::Option::Policy>
 
 
