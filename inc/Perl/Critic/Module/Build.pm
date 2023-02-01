@@ -13,8 +13,6 @@ use English qw< $OS_ERROR $EXECUTABLE_NAME -no_match_vars >;
 
 use parent 'Perl::Critic::Module::Build::Standard';
 
-use Perl::Critic::Utils;
-
 
 sub ACTION_policysummary {
     my ($self) = @_;
@@ -150,9 +148,23 @@ sub _run_critic {
     shift @files;
 
     if ( !@files ) {
-        push @files, Perl::Critic::Utils::all_perl_files( qw( lib/ bin/ ) );
         # There are many bad Perl files in t/ and xt/, so we only want *.t.
-        push @files, glob('t/*.t'), glob('xt/*.t');
+        @files = (
+            'bin/perlcritic',
+        );
+        File::Find::find( {
+                wanted => sub {
+                    if ( -d && /\.git/ ) {
+                        $File::Find::prune = 1;
+                    }
+                    elsif ( -f && /\.pm$/ ) {
+                        push @files, $File::Find::name;
+                    }
+                    return;
+                },
+            },
+            'lib'
+        );
     }
 
     my $status = system $perl, @args, @files;
