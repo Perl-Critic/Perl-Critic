@@ -1,0 +1,45 @@
+# This is the perlcriticrc for criticizing Perl::Critic itself when doing development.
+# This is not the same as the perlcriticrc that is used in the xt/ tests.
+# It's used by "./Build perlcritic"
+
+verbose = %f:%l:%c %m (%p)\n    %r\n\n
+
+[-Bangs::ProhibitCommentedOutCode]
+# Lots of commented-out code in docs.
+
+[-Bangs::ProhibitFlagComments]
+
+[CodeLayout::ProhibitHardTabs]
+allow_leading_tabs = 0
+
+[-CodeLayout::RequireTidyCode]
+[-CodeLayout::RequireTrailingCommaAtNewline]
+
+[-Compatibility::PodMinimumVersion]
+
+[-Documentation::PodSpelling]
+[-Documentation::ProhibitBadAproposMarkup]
+[-Documentation::ProhibitLinkToSelf]
+[-Documentation::RequirePodSections]
+
+[InputOutput::RequireCheckedSyscalls]
+functions = open opendir read readline readdir
+
+[-RegularExpressions::ProhibitUnusualDelimiters]
+[-RegularExpressions::RequireBracesForMultiline]
+# All sorts of policies use qr<>, including multiline.
+
+[-Subroutines::ProhibitCallsToUndeclaredSubs]
+# We pull stuff out of Perl::Critic::Utils all over.
+
+[-Subroutines::ProhibitCallsToUnexportedSubs]
+# Fails extensively on Readonly -> Readonly::Scalar etc
+
+[-ValuesAndExpressions::ProhibitFiletest_f]
+
+[Variables::ProhibitReusedNames]
+severity = 5
+
+[Variables::ProhibitUnusedVarsStricter]
+allow_unused_subroutine_arguments = 1
+

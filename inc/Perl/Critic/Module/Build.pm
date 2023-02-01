@@ -13,6 +13,8 @@ use English qw< $OS_ERROR $EXECUTABLE_NAME -no_match_vars >;
 
 use parent 'Perl::Critic::Module::Build::Standard';
 
+use Perl::Critic::Utils;
+
 
 sub ACTION_policysummary {
     my ($self) = @_;
@@ -44,6 +46,14 @@ sub ACTION_tags {
 
     $self->depends_on('build');
     $self->_run_tags();
+}
+
+
+sub ACTION_critic {
+    my ($self) = @_;
+
+    $self->depends_on('build');
+    $self->_run_critic();
 }
 
 
@@ -122,6 +132,36 @@ sub _run_tags {
 }
 
 
+sub _run_critic {
+    my ($self) = @_;
+
+
+    my $perl = $^X;
+    my @args =
+        qw(
+            bin/perlcritic
+            -1
+            -q
+            -profile ./perlcriticrc
+        );
+    warn "Running: $perl @args\n";
+
+    my @files = @ARGV;
+    shift @files;
+
+    if ( !@files ) {
+        push @files, Perl::Critic::Utils::all_perl_files( qw( lib/ bin/ ) );
+        # There are many bad Perl files in t/ and xt/, so we only want *.t.
+        push @files, glob('t/*.t'), glob('xt/*.t');
+    }
+
+    my $status = system $perl, @args, @files;
+    croak "perlcritic failed with status $status" if $status;
+
+    return;
+}
+
+
 1;
 
 
@@ -173,7 +213,7 @@ Elliot Shank <perl@galumph.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2007-2011 Elliot Shank.
+Copyright (c) 2007-2023 Elliot Shank.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
