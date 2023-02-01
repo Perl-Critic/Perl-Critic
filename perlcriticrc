@@ -8,6 +8,8 @@ verbose = %f:%l:%c %m (%p)\n    %r\n\n
 # Lots of commented-out code in docs.
 
 [-Bangs::ProhibitFlagComments]
+[-Bangs::ProhibitRefProtoOrProto]
+[-Bangs::ProhibitVagueNames]
 
 [CodeLayout::ProhibitHardTabs]
 allow_leading_tabs = 0
@@ -22,6 +24,7 @@ allow_leading_tabs = 0
 [-Documentation::ProhibitLinkToSelf]
 [-Documentation::RequirePodSections]
 
+[-InputOutput::RequireBriefOpen]
 [InputOutput::RequireCheckedSyscalls]
 functions = open opendir read readline readdir
 
@@ -35,11 +38,14 @@ functions = open opendir read readline readdir
 [-Subroutines::ProhibitCallsToUnexportedSubs]
 # Fails extensively on Readonly -> Readonly::Scalar etc
 
+[-Subroutines::ProhibitUnusedPrivateSubroutines]
+
+[-TooMuchCode::ProhibitDuplicateLiteral]
+
 [-ValuesAndExpressions::ProhibitFiletest_f]
 
 [Variables::ProhibitReusedNames]
 severity = 5
 
 [Variables::ProhibitUnusedVarsStricter]
-allow_unused_subroutine_arguments = 1
-
+allow_unused_subroutine_arguments = 0
