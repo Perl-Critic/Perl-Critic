@@ -344,7 +344,7 @@ this will return "FOO".  Similarly, given
 this will return "%FOO".
 
 B<Caveat:> in the case where multiple constants are declared using the same
-C<use constant> statement (e.g. C<< use constant { FOO => 1, BAR => 2 }; >>,
+C<use constant> statement (e.g. C<< use constant { FOO => 1, BAR => 2 }; >>),
 this subroutine will return the declaring
 L<PPI::Structure::Constructor|PPI::Structure::Constructor>. In the case of
 C<< use constant 1.16 { FOO => 1, BAR => 2 }; >> it may return a

@@ -769,7 +769,7 @@ distribution.
 
 Perl regular expressions have multiple types of grouping syntax.  The
 basic parentheses (e.g. C<m/(foo)/>) captures into the magic variable
-C<$1>.  Non-capturing groups (e.g. C<m/(?:foo)/> are useful because
+C<$1>.  Non-capturing groups (e.g. C<m/(?:foo)/>) are useful because
 they have better runtime performance and do not copy strings to the
 magic global capture variables.
 
