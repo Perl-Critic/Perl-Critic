@@ -11,6 +11,7 @@ use File::Spec;
 use File::Temp;
 use List::SomeUtils qw(uniq);
 use Pod::Spell qw< >;
+use Pod::Wordlist;
 use Text::ParseWords qw< >;
 
 use Perl::Critic::Utils qw{
