@@ -8,7 +8,6 @@ use List::SomeUtils qw(none);
 use Readonly;
 use Scalar::Util qw(refaddr);
 
-use Perl::Critic::Exception::Fatal::Internal qw{ throw_internal };
 use Perl::Critic::Utils qw{
     :booleans :characters :severities hashify precedence_of
     split_nodes_on_comma

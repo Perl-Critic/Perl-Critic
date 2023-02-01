@@ -5,8 +5,6 @@ use strict;
 use warnings;
 use Readonly;
 
-use File::Spec;
-
 use Perl::Critic::Utils qw{ :booleans :severities split_nodes_on_comma hashify };
 use parent 'Perl::Critic::Policy';
 

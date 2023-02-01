@@ -17,9 +17,9 @@ use File::Find qw( find );
 
 use Perl::Critic;
 use Perl::Critic::Config;
-use Perl::Critic::Exception::Fatal::Generic qw{ &throw_generic };
-use Perl::Critic::Exception::Fatal::Internal qw{ &throw_internal };
-use Perl::Critic::Utils qw{ :severities :data_conversion policy_long_name };
+use Perl::Critic::Exception::Fatal::Generic qw( throw_generic );
+use Perl::Critic::Exception::Fatal::Internal qw( throw_internal );
+use Perl::Critic::Utils qw( :data_conversion );
 use Perl::Critic::PolicyFactory (-test => 1);
 
 our $VERSION = '1.148';
@@ -642,7 +642,7 @@ and the rest of the L<Perl::Critic|Perl::Critic> team.
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2011 Chris Dolan.
+Copyright (c) 2005-2023 Chris Dolan.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

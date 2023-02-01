@@ -11,10 +11,7 @@ use List::SomeUtils qw( any );
 
 use Perl::Critic::Exception::AggregateConfiguration;
 use Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue;
-use Perl::Critic::Utils qw<
-    :booleans :characters :severities
-    hashify is_perl_global
->;
+use Perl::Critic::Utils qw( :booleans :characters :severities is_perl_global );
 use Perl::Critic::Utils::Perl qw< symbol_without_sigil >;
 use Perl::Critic::Utils::PPI qw<
     is_in_subroutine

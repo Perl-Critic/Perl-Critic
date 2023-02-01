@@ -8,10 +8,10 @@ use Readonly;
 
 use Exporter 'import';
 
-use Perl::Critic::Utils qw{ :characters :data_conversion };
-use Perl::Critic::Exception::Fatal::Internal qw{ &throw_internal };
+use Perl::Critic::Utils qw( :characters :data_conversion );
+use Perl::Critic::Exception::Fatal::Internal qw( throw_internal );
 use Perl::Critic::Exception::Configuration::Option::Global::ParameterValue
-    qw{ &throw_global_value };
+    qw( throw_global_value );
 
 #-----------------------------------------------------------------------------
 
@@ -231,7 +231,7 @@ Jeffrey Ryan Thalhammer  <jeff@imaginative-software.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2006-2011 Imaginative Software Systems
+Copyright (c) 2006-2023 Imaginative Software Systems
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

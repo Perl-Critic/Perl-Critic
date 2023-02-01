@@ -7,7 +7,7 @@ use warnings;
 use English qw(-no_match_vars);
 use Readonly;
 
-use List::SomeUtils qw(any none apply);
+use List::SomeUtils qw( any apply );
 use Scalar::Util qw(blessed);
 
 use Perl::Critic::Exception::AggregateConfiguration;
@@ -1375,7 +1375,7 @@ Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2021 Imaginative Software Systems.  All rights reserved.
+Copyright (c) 2005-2023 Imaginative Software Systems
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

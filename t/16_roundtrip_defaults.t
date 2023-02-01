@@ -7,7 +7,7 @@ use warnings;
 use Perl::Critic::PolicyFactory (-test => 1);
 use Perl::Critic::Config;
 use Perl::Critic::ProfilePrototype;
-use Perl::Critic::Utils qw{ :characters :severities };
+use Perl::Critic::Utils qw( :characters );
 
 use Test::More;
 

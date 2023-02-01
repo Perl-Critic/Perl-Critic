@@ -8,7 +8,6 @@ use Readonly;
 
 use Exporter 'import';
 
-use File::Spec;
 use List::SomeUtils qw( firstidx );
 use Scalar::Util qw< blessed >;
 

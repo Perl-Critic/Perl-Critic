@@ -11,7 +11,7 @@ our $VERSION = '1.148';
 use Perl::Critic::Exception::AggregateConfiguration;
 use Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue;
 use Perl::Critic::Exception::Configuration::Option::Policy::ExtraParameter;
-use Perl::Critic::Utils qw< :booleans :characters severity_to_number >;
+use Perl::Critic::Utils qw( :booleans :characters );
 use Perl::Critic::Utils::Constants qw< :profile_strictness >;
 
 #-----------------------------------------------------------------------------
@@ -316,7 +316,7 @@ Elliot Shank <perl@galumph.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2008-2011 Elliot Shank.
+Copyright (c) 2008-2023 Elliot Shank.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

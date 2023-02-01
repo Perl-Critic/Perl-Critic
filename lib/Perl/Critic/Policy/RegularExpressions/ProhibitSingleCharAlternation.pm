@@ -4,10 +4,9 @@ use 5.010001;
 use strict;
 use warnings;
 
-use List::SomeUtils qw(all);
 use Readonly;
 
-use Perl::Critic::Utils qw{ :booleans :characters :severities };
+use Perl::Critic::Utils qw( :characters :severities );
 use parent 'Perl::Critic::Policy';
 
 our $VERSION = '1.148';

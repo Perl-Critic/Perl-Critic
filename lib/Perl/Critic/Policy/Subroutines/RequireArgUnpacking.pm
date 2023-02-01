@@ -6,11 +6,9 @@ use warnings;
 
 use Readonly;
 
-use File::Spec;
-
-use Perl::Critic::Utils qw<
-    :booleans :characters :classification hashify :severities words_from_string
->;
+use Perl::Critic::Utils qw(
+    :booleans :characters :classification hashify :severities
+);
 use parent 'Perl::Critic::Policy';
 
 our $VERSION = '1.148';

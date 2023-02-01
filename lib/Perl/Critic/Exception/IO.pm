@@ -4,7 +4,6 @@ use 5.010001;
 use strict;
 use warnings;
 
-use Carp qw{ confess };
 use Readonly;
 
 use Perl::Critic::Utils qw{ :characters };

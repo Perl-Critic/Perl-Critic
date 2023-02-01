@@ -14,12 +14,11 @@ use Pod::Spell qw< >;
 use Pod::Wordlist;
 use Text::ParseWords qw< >;
 
-use Perl::Critic::Utils qw{
+use Perl::Critic::Utils qw(
     :characters
     :booleans
     :severities
-    words_from_string
-};
+);
 use Perl::Critic::Exception::Fatal::Generic qw{ throw_generic };
 
 use parent 'Perl::Critic::Policy';
