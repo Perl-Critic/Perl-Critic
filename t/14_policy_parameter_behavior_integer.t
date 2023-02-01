@@ -8,7 +8,6 @@ use English qw(-no_match_vars);
 
 use Perl::Critic::Policy;
 use Perl::Critic::PolicyParameter;
-use Perl::Critic::Utils qw{ :booleans };
 
 use Test::More tests => 22;
 

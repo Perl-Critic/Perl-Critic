@@ -8,9 +8,9 @@ use Readonly;
 
 use List::SomeUtils qw(any);
 
-use Perl::Critic::Utils qw{ :severities :classification :booleans
+use Perl::Critic::Utils qw( :severities :classification
     hashify parse_arg_list
-};
+);
 use parent 'Perl::Critic::Policy';
 
 our $VERSION = '1.148';
@@ -346,7 +346,7 @@ Chris Dolan <cdolan@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2007-2021 Chris Dolan.  Many rights reserved.
+Copyright (c) 2007-2023 Chris Dolan
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

@@ -7,7 +7,7 @@ use warnings;
 use List::SomeUtils qw(all);
 use Readonly;
 
-use Perl::Critic::Utils qw{ :booleans :severities };
+use Perl::Critic::Utils qw( :severities );
 
 use parent 'Perl::Critic::Policy';
 

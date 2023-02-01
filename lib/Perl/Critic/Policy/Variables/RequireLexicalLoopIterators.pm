@@ -6,7 +6,7 @@ use warnings;
 use Readonly;
 use version ();
 
-use Perl::Critic::Utils qw{ :booleans :severities };
+use Perl::Critic::Utils qw( :severities );
 use parent 'Perl::Critic::Policy';
 
 our $VERSION = '1.148';
@@ -151,7 +151,7 @@ Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2011 Imaginative Software Systems.  All rights reserved.
+Copyright (c) 2005-2023 Imaginative Software Systems
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

@@ -6,7 +6,7 @@ use warnings;
 
 use Readonly;
 
-use Perl::Critic::Utils qw{ :booleans :severities hashify };
+use Perl::Critic::Utils qw( :severities hashify );
 use parent 'Perl::Critic::Policy';
 
 our $VERSION = '1.148';
