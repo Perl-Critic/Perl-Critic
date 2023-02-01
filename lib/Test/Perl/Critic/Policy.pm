@@ -169,7 +169,7 @@ sub _evaluate_violation_case {
     my ($ok, @diagnostics);
 
     my @violations = @{$violations};
-    my $have = scalar @violations;
+    my $have = @violations;
     my $want = _compute_wanted_violation_count($subtest);
     if ( not $ok = $have == $want ) {
         my $msg = qq(Expected $want violations, got $have. );

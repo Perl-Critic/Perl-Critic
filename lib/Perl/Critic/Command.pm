@@ -277,7 +277,7 @@ sub _render_report {
     my ( $file, $opts_ref, @violations ) = @_;
 
     # Only report the files, if asked.
-    my $number_of_violations = scalar @violations;
+    my $number_of_violations = @violations;
     if ( $opts_ref->{'-files-with-violations'} ||
         $opts_ref->{'-files-without-violations'} ) {
         not ref $file
