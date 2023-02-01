@@ -78,8 +78,6 @@ Readonly::Hash my %NAME_FOR_TYPE => (
     label                   => 'Label',
 );
 
-Readonly::Hash my %IS_COMMA => hashify( $COMMA, $FATCOMMA );
-
 Readonly::Scalar my $EXPL                   => [ 45, 46 ];
 
 #-----------------------------------------------------------------------------

@@ -14,7 +14,6 @@ our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $AT     => q{@};
 Readonly::Scalar my $AT_ARG => q{@_};     ## no critic (InterpolationOfMetachars)
 Readonly::Scalar my $CLASS  => q{$class}; ## no critic (InterpolationOfMetachars)
 Readonly::Scalar my $SELF   => q{$self};  ## no critic (InterpolationOfMetachars)

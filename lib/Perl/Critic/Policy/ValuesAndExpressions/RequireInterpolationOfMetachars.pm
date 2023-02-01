@@ -109,7 +109,6 @@ my $ccontent       = qr/$ctext|$quoted_pair/x;
 my $comment        = qr/\s*\((?:\s*$ccontent)*\s*\)\s*/x;
 my $cfws           = qr/$comment|\s+/x;
 my $atext          = qq/[^$CTL$special\\s]/;
-my $atom           = qr/$cfws*$atext+$cfws*/x;
 my $dot_atom_text  = qr/$atext+(?:\.$atext+)*/x;
 my $dot_atom       = qr/$cfws*$dot_atom_text$cfws*/x;
 my $qtext          = qr/[^\\"]/x;
