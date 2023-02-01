@@ -103,7 +103,7 @@ sub critique {  ## no critic (ArgUnpacking)
     if ( 0 == $self->policies() ) {
         Perl::Critic::Exception::Configuration::Generic->throw(
             message => 'There are no enabled policies.',
-        )
+        );
     }
 
     return $self->_gather_violations($doc);

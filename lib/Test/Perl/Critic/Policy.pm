@@ -178,7 +178,7 @@ sub _evaluate_violation_case {
         push @diagnostics, map { qq(Found violation: $_) } @violations;
     }
 
-    return ($ok, @diagnostics)
+    return ($ok, @diagnostics);
 }
 
 #-----------------------------------------------------------------------------
@@ -408,7 +408,7 @@ Andy Lester, Jeffrey Ryan Thalhammer <thaljef@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2009-2021 Andy Lester
+Copyright (c) 2009-2023 Andy Lester
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

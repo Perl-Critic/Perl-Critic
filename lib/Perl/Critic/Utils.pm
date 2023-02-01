@@ -1356,7 +1356,9 @@ sub _is_covered_by_autodie {
 
     # The first argument to any `use` pragma could be a version number.
     # If so, then we just discard it. We only want the arguments after it.
-    if ($first_arg and $first_arg->isa('PPI::Token::Number')){ shift @args };
+    if ($first_arg and $first_arg->isa('PPI::Token::Number')) {
+        shift @args;
+    }
 
     if (@args) {
         my $elem_content = $elem->content();

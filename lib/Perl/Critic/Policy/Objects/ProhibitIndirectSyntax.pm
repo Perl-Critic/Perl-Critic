@@ -32,7 +32,7 @@ sub supported_parameters {
             behavior                   => 'string list',
             list_always_present_values => [ qw{ new } ],
         }
-    )
+    );
 }
 
 sub default_severity     { return $SEVERITY_HIGH             }

@@ -114,7 +114,7 @@ sub _count_list_elements {
       @inner = $inner[0]->schildren;
    }
    my @args = split_nodes_on_comma(@inner);
-   return scalar @args if !$skip_object || !@args;;
+   return scalar @args if !$skip_object || !@args;
 
    # Check if first argument is $self/$class
    my $first_ref = $args[0];

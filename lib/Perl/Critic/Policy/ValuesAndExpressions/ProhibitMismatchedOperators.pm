@@ -153,7 +153,7 @@ sub _is_file_operator {
 
     return if not $elem;
     return if not $elem->isa('PPI::Token::Operator');
-    return !! $FILE_OPERATOR_COMPATIBILITY{ $elem->content() }
+    return !! $FILE_OPERATOR_COMPATIBILITY{ $elem->content() };
 }
 
 #-----------------------------------------------------------------------------
@@ -229,7 +229,7 @@ Peter Guzis <pguzis@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2006-2022 Peter Guzis.  All rights reserved.
+Copyright (c) 2006-2023 Peter Guzis.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

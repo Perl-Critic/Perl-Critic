@@ -96,7 +96,7 @@ sub _last_flattened_argument_list_element_ends_in_newline {
         return $TRUE;
     }
 
-    return $FALSE
+    return $FALSE;
 }
 
 #-----------------------------------------------------------------------------
@@ -217,7 +217,7 @@ sub _find_last_flattened_argument_list_element {
                 return;
             }
         } elsif ( $penultimate_element != $die_or_warn ) {
-            return
+            return;
         }
     }
 
@@ -260,7 +260,7 @@ sub _determine_if_list_is_a_plain_list_and_get_last_child {
                 return;
             }
         } elsif ( $prior_sibling != $die_or_warn ) {
-            return
+            return;
         }
     }
 

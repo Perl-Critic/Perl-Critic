@@ -209,7 +209,7 @@ Perl::Critic::ProfilePrototype - Generate an initial Perl::Critic profile.
 =head1 DESCRIPTION
 
 This is a helper class that generates a prototype of a
-L<Perl::Critic|Perl::Critic> profile (e.g. a F<.perlcriticrc> file.
+L<Perl::Critic|Perl::Critic> profile (e.g. a F<.perlcriticrc> file).
 There are no user-serviceable parts here.
 
 

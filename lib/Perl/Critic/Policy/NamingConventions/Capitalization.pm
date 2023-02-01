@@ -239,7 +239,7 @@ sub initialize_if_enabled {
             return if any { $name =~ m/$_/xms } @{$exemption_regexes};
             return $message if $name !~ m/$capitalization_regex/xms;
             return;
-        }
+        };
     }
 
     if ( $configuration_exceptions->has_exceptions() ) {
@@ -339,7 +339,7 @@ sub violates {
         my @names = get_constant_name_elements_from_declaring_statement($elem)
     ) {
         return ( grep { $_ }
-            map { $self->_constant_capitalization( $elem, $_ ) } @names )
+            map { $self->_constant_capitalization( $elem, $_ ) } @names );
     }
 
     if ( $elem->isa('PPI::Statement::Package') ) {
