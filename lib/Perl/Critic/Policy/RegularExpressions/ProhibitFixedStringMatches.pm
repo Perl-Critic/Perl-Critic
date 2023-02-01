@@ -16,8 +16,6 @@ our $VERSION = '1.148';
 Readonly::Scalar my $DESC => q{Use 'eq' or hash instead of fixed-pattern regexps};
 Readonly::Scalar my $EXPL => [271,272];
 
-Readonly::Scalar my $RE_METACHAR => qr/[\\#\$()*+.?\@\[\]^{|}]/xms;
-
 #-----------------------------------------------------------------------------
 
 sub supported_parameters { return qw()                       }
@@ -62,7 +60,8 @@ sub violates {
         }
 
         # Regexps that contain metachars are not fixed strings
-        return if $words =~ m/$RE_METACHAR/oxms;
+        return if $words =~ m/[\\#\$()*+.?\@\[\]^{|}]/xms;
+
 
         return $self->violation( $DESC, $EXPL, $elem );
 
