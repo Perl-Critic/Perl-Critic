@@ -193,7 +193,7 @@ sub subtests_in_tree {
 # If you change this here, make sure to change it there.
 
 sub should_skip_author_tests {
-    return not $ENV{TEST_AUTHOR_PERL_CRITIC}
+    return not $ENV{TEST_AUTHOR_PERL_CRITIC};
 }
 
 sub get_author_test_skip_message {
