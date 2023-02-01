@@ -44,8 +44,8 @@ Readonly::Scalar my $EXIT_HAD_FILE_PROBLEMS => 3;
 
 #-----------------------------------------------------------------------------
 
-my @files = ();
-my $critic = undef;
+my @files;
+my $critic;
 my $output = \*STDOUT;
 
 #-----------------------------------------------------------------------------
@@ -231,7 +231,7 @@ sub _critique {
 
     _set_up_pager($critic->config()->pager());
 
-    my $number_of_violations = undef;
+    my $number_of_violations;
     my $had_error_in_file = 0;
 
     for my $file (@files_to_critique) {

@@ -307,8 +307,8 @@ sub violates {
     # whatever headings you want.
     return if ! $doc->schild(0);
 
-    my %found_sections = ();
-    my @violations = ();
+    my %found_sections;
+    my @violations;
 
     my @required_sections =
         $doc->is_program()

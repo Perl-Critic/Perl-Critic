@@ -61,7 +61,7 @@ sub violates {
     # If the 'use warnings' statement is not defined, or the other
     # statement appears before the 'use warnings', then it violates.
 
-    my @viols = ();
+    my @viols;
     for my $stmnt ( @{ $stmnts_ref } ) {
         last if $stmnt->isa('PPI::Statement::End');
         last if $stmnt->isa('PPI::Statement::Data');

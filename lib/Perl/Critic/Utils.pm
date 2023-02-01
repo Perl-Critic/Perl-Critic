@@ -958,9 +958,9 @@ sub parse_arg_list {
     }
     else {
 
-        #Gather up remaining nodes in the statement
+        # Gather up remaining nodes in the statement.
         my $iter     = $elem;
-        my @arg_list = ();
+        my @arg_list;
 
         while ($iter = $iter->snext_sibling() ) {
             last if $iter->isa('PPI::Token::Structure') and $iter eq $SCOLON;

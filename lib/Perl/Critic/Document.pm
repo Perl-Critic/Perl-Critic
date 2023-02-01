@@ -581,9 +581,10 @@ sub _is_a_version_statement {
 #-----------------------------------------------------------------------------
 
 sub _caching_finder {
-    my $cache_ref = shift;  # These vars will persist for the life
-    my %isa_cache = ();     # of the code ref that this sub returns
+    my $cache_ref = shift;
 
+    # These vars will persist for the life of the code ref that this sub returns.
+    my %isa_cache;
 
     # Gather up all the PPI elements and sort by @ISA.  Note: if any
     # instances used multiple inheritance, this implementation would

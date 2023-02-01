@@ -150,7 +150,7 @@ sub _critique {
     my $maximum_violations = $policy->get_maximum_violations_per_document();
     return if defined $maximum_violations && $maximum_violations == 0;
 
-    my @violations = ();
+    my @violations;
 
   TYPE:
     for my $type ( $policy->applies_to() ) {

@@ -30,7 +30,7 @@ Readonly::Scalar my $LOCATION_LOGICAL_FILENAME          => 4;
 
 # Class variables...
 my $format = "%m at line %l, column %c. %e.\n"; # Default stringy format
-my %diagnostics = ();  # Cache of diagnostic messages
+my %diagnostics;
 
 #-----------------------------------------------------------------------------
 

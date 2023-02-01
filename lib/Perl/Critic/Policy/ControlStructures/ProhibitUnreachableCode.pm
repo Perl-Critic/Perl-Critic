@@ -74,7 +74,7 @@ sub _gather_violations {
     # declarations are also exempt for the same reason.  "use" and
     # "our" statements are exempt because they happen at compile time.
 
-    my @violations = ();
+    my @violations;
     while ( $statement = $statement->snext_sibling() ) {
         my @children = $statement->schildren();
         last if @children && $children[0]->isa('PPI::Token::Label');

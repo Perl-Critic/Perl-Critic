@@ -30,7 +30,7 @@ sub violates {
     # If for some reason $doc is not a P::C::Document, then all bets are off
     return if not $doc->isa('Perl::Critic::Document');
 
-    my @violations = ();
+    my @violations;
     for my $annotation ($doc->annotations()) {
         if ($annotation->disables_all_policies()) {
             my $elem = $annotation->element();

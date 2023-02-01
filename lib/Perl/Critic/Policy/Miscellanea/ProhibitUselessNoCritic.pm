@@ -33,7 +33,7 @@ sub violates {
     # If for some reason $doc is not a P::C::Document, then all bets are off
     return if not $doc->isa('Perl::Critic::Document');
 
-    my @violations = ();
+    my @violations;
     my @suppressed_viols = $doc->suppressed_violations();
 
     for my $ann ( $doc->annotations() ) {

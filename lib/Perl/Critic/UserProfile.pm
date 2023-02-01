@@ -109,7 +109,7 @@ sub policy_is_enabled {
 sub listed_policies {
 
     my ( $self, $policy ) = @_;
-    my @normalized_policy_names = ();
+    my @normalized_policy_names;
 
     for my $policy_name ( sort keys %{$self->{_profile}} ) {
         $policy_name =~ s/\A - //xmso; #Chomp leading "-"
