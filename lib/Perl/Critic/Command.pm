@@ -246,7 +246,7 @@ sub _critique {
             1;
         }
         or do {
-            if ( my $exception = Perl::Critic::Exception::Parse->caught() ) {
+            if ( Perl::Critic::Exception::Parse->caught() ) {
                 $had_error_in_file = 1;
                 warn qq<Problem while critiquing "$file": $EVAL_ERROR\n>;
             }
