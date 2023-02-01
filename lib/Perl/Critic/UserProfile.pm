@@ -316,7 +316,7 @@ to change without notice.
 
 =over
 
-=item C< new( -profile => $p ) >
+=item C<< new( -profile => $p ) >>
 
 B<-profile> is the path to the user's profile.  If -profile is not
 defined, then it looks for the profile at F<./.perlcriticrc> and then
