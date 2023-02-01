@@ -94,7 +94,7 @@ sub violates {
     # Only the block form of list functions can be analyzed.
     return if not my $first_arg = first_arg( $elem );
     return if not $first_arg->isa('PPI::Structure::Block');
-    return if not $self->_has_topic_side_effect( $first_arg, $doc );
+    return if not _has_topic_side_effect( $first_arg, $doc );
 
     # Must be a violation
     return $self->violation( $DESC, $EXPL, $elem );
@@ -103,7 +103,7 @@ sub violates {
 #-----------------------------------------------------------------------------
 
 sub _has_topic_side_effect {
-    my ( $self, $node, $doc ) = @_;
+    my ( $node, $doc ) = @_;
 
     # Search through all significant elements in the block,
     # testing each element to see if it mutates the topic.
@@ -111,7 +111,7 @@ sub _has_topic_side_effect {
     for my $elem ( @{ $tokens } ) {
         next if not $elem->significant();
         return 1 if _is_assignment_to_topic( $elem );
-        return 1 if $self->_is_topic_mutating_regex( $elem, $doc );
+        return 1 if _is_topic_mutating_regex( $elem, $doc );
         return 1 if _is_topic_mutating_func( $elem );
         return 1 if _is_topic_mutating_substr( $elem );
     }
@@ -140,7 +140,7 @@ sub _is_assignment_to_topic {
 #-----------------------------------------------------------------------------
 
 sub _is_topic_mutating_regex {
-    my ( $self, $elem, $doc ) = @_;
+    my ( $elem, $doc ) = @_;
     return if ! ( $elem->isa('PPI::Token::Regexp::Substitute')
                   || $elem->isa('PPI::Token::Regexp::Transliterate') );
 
