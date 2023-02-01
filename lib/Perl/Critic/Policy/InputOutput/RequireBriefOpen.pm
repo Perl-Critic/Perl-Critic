@@ -158,7 +158,7 @@ sub _get_scope {
         # current scope if we can not determine any of the locations
         # involved. RT #64437
         return $elem if not $open_loc;
-        my $elem_loc = $elem->location
+        $elem->location
             or return $elem;
         my $last_kid = $elem->child( $LAST_ELEMENT )
             or return $elem;    # What? no children?

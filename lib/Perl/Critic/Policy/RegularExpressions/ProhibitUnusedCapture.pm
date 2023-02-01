@@ -454,7 +454,7 @@ sub _regexp_is_in_split {
         # Maybe we have split( /.../, ... )
         my $stmt = $elem->statement()
             or return $FALSE;
-        my $list = $stmt->parent()
+        $stmt->parent()
             or return $FALSE;
         $prev = $elem->sprevious_sibling()
             or return $FALSE;
