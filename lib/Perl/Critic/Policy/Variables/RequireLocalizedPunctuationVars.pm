@@ -12,12 +12,6 @@ our $VERSION = '1.148';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $PACKAGE_RX => qr/::/xms;
-Readonly::Hash   my %EXCEPTIONS => hashify(qw(
-    $_
-    $ARG
-    @_
-));
 Readonly::Scalar my $DESC => q{Magic variable "%s" should be assigned as "local"};
 Readonly::Scalar my $EXPL => [ 81, 82 ];
 
