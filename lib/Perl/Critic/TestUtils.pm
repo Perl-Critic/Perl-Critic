@@ -19,6 +19,7 @@ use Perl::Critic;
 use Perl::Critic::Config;
 use Perl::Critic::Exception::Fatal::Generic qw( throw_generic );
 use Perl::Critic::Exception::Fatal::Internal qw( throw_internal );
+use Perl::Critic::UserProfile;
 use Perl::Critic::Utils qw( :data_conversion );
 use Perl::Critic::PolicyFactory (-test => 1);
 
