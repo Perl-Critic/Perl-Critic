@@ -27,7 +27,7 @@ sub supported_parameters {
         {
             name            => 'packages',
             description     => 'The base set of packages to allow variables for.',
-            default_string  => 'Data::Dumper File::Find FindBin Log::Log4perl',
+            default_string  => 'Data::Dumper File::Find FindBin Log::Log4perl Text::Wrap',
             behavior        => 'string list',
         },
         {
