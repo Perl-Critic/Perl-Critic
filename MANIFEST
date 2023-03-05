@@ -219,6 +219,7 @@ LICENSE
 MANIFEST			This list of files
 META.json
 META.yml
+perlcriticrc
 README
 README.md
 t/00_modules.t

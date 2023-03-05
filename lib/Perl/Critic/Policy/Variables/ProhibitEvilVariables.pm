@@ -16,7 +16,7 @@ use Perl::Critic::Utils qw{
 
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 #-----------------------------------------------------------------------------
 
