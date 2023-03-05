@@ -8,7 +8,7 @@ use Readonly;
 use Perl::Critic::Utils qw{ :booleans :severities :classification };
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 #-----------------------------------------------------------------------------
 
@@ -65,7 +65,7 @@ sub violates {
     # If the 'package' statement is not defined, or the other
     # statements appear before the 'package', then it violates.
 
-    my @viols = ();
+    my @viols;
     for my $stmnt ( @non_packages ) {
         my $stmnt_line = $stmnt->location()->[0];
         if ( (! defined $package_line) || ($stmnt_line < $package_line) ) {

@@ -5,12 +5,12 @@ use strict;
 use warnings;
 
 use Perl::Critic::Exception::Fatal::PolicyDefinition
-    qw{ &throw_policy_definition };
-use Perl::Critic::Utils qw{ :characters &words_from_string &hashify };
+    qw( throw_policy_definition );
+use Perl::Critic::Utils qw( :characters words_from_string hashify );
 
 use parent qw{ Perl::Critic::PolicyParameter::Behavior };
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 #-----------------------------------------------------------------------------
 
@@ -215,7 +215,7 @@ Elliot Shank <perl@galumph.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2006-2011 Elliot Shank.
+Copyright (c) 2006-2023 Elliot Shank.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

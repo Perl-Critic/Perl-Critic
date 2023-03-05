@@ -8,7 +8,7 @@ use Readonly;
 use Perl::Critic::Utils qw{ :severities :data_conversion :classification };
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 Readonly::Array my @TERMINALS => qw( die exit croak confess );
 Readonly::Hash  my %TERMINALS => hashify( @TERMINALS );
@@ -74,7 +74,7 @@ sub _gather_violations {
     # declarations are also exempt for the same reason.  "use" and
     # "our" statements are exempt because they happen at compile time.
 
-    my @violations = ();
+    my @violations;
     while ( $statement = $statement->snext_sibling() ) {
         my @children = $statement->schildren();
         last if @children && $children[0]->isa('PPI::Token::Label');

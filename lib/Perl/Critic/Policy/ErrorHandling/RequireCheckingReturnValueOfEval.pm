@@ -12,7 +12,7 @@ use Perl::Critic::Utils qw< :booleans :characters :severities hashify
     precedence_of >;
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 #-----------------------------------------------------------------------------
 
@@ -227,7 +227,7 @@ sub _is_in_postfix_expression {
                     $previous->isa('PPI::Token::Word')
                 and $POSTFIX_OPERATORS{ $previous->content() }
             ) {
-                return $TRUE
+                return $TRUE;
             }
             $previous = $previous->sprevious_sibling();
         } # end while
@@ -435,7 +435,7 @@ Elliot Shank C<< <perl@galumph.com> >>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2008-2022 Elliot Shank.
+Copyright (c) 2008-2023 Elliot Shank.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

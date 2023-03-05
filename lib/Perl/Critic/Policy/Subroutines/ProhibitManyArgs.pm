@@ -5,18 +5,13 @@ use strict;
 use warnings;
 use Readonly;
 
-use File::Spec;
-use English qw(-no_match_vars);
-use Carp;
-
-use Perl::Critic::Utils qw{ :booleans :severities split_nodes_on_comma };
+use Perl::Critic::Utils qw( :severities split_nodes_on_comma hashify );
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $AT     => q{@};
 Readonly::Scalar my $AT_ARG => q{@_};     ## no critic (InterpolationOfMetachars)
 Readonly::Scalar my $CLASS  => q{$class}; ## no critic (InterpolationOfMetachars)
 Readonly::Scalar my $SELF   => q{$self};  ## no critic (InterpolationOfMetachars)
@@ -116,7 +111,7 @@ sub _count_list_elements {
       @inner = $inner[0]->schildren;
    }
    my @args = split_nodes_on_comma(@inner);
-   return scalar @args if !$skip_object || !@args;;
+   return scalar @args if !$skip_object || !@args;
 
    # Check if first argument is $self/$class
    my $first_ref = $args[0];
@@ -128,7 +123,9 @@ sub _is_object_arg {
     my ($symbol) = @_;
     return 0 if !$symbol;
     return 0 if !$symbol->isa('PPI::Token::Symbol');
-    return $SELF eq $symbol->content() || $CLASS eq $symbol->content();
+
+    state $is_self_or_class = { hashify( $SELF, $CLASS ) };
+    return $is_self_or_class->{$symbol->content()};
 }
 
 1;
@@ -199,7 +196,7 @@ Chris Dolan <cdolan@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2007-2019 Chris Dolan.  Many rights reserved.
+Copyright (c) 2007-2023 Chris Dolan.  Many rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

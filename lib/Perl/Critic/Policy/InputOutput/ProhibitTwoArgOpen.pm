@@ -11,7 +11,7 @@ use version;
 use Perl::Critic::Utils qw{ :severities :classification :ppi };
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 #-----------------------------------------------------------------------------
 

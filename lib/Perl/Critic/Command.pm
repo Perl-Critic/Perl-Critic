@@ -21,7 +21,7 @@ use Perl::Critic::Violation qw<>;
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 #-----------------------------------------------------------------------------
 
@@ -44,8 +44,8 @@ Readonly::Scalar my $EXIT_HAD_FILE_PROBLEMS => 3;
 
 #-----------------------------------------------------------------------------
 
-my @files = ();
-my $critic = undef;
+my @files;
+my $critic;
 my $output = \*STDOUT;
 
 #-----------------------------------------------------------------------------
@@ -231,7 +231,7 @@ sub _critique {
 
     _set_up_pager($critic->config()->pager());
 
-    my $number_of_violations = undef;
+    my $number_of_violations;
     my $had_error_in_file = 0;
 
     for my $file (@files_to_critique) {
@@ -241,12 +241,12 @@ sub _critique {
             $number_of_violations += scalar @violations;
 
             if (not $opts_ref->{'-statistics-only'}) {
-                _render_report( $file, $opts_ref, @violations )
+                _render_report( $file, $opts_ref, @violations );
             }
             1;
         }
         or do {
-            if ( my $exception = Perl::Critic::Exception::Parse->caught() ) {
+            if ( Perl::Critic::Exception::Parse->caught() ) {
                 $had_error_in_file = 1;
                 warn qq<Problem while critiquing "$file": $EVAL_ERROR\n>;
             }
@@ -277,7 +277,7 @@ sub _render_report {
     my ( $file, $opts_ref, @violations ) = @_;
 
     # Only report the files, if asked.
-    my $number_of_violations = scalar @violations;
+    my $number_of_violations = @violations;
     if ( $opts_ref->{'-files-with-violations'} ||
         $opts_ref->{'-files-without-violations'} ) {
         not ref $file
@@ -712,7 +712,7 @@ Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2011 Imaginative Software Systems.  All rights reserved.
+Copyright (c) 2005-2023 Imaginative Software Systems.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

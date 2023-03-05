@@ -11,10 +11,7 @@ use List::SomeUtils qw( any );
 
 use Perl::Critic::Exception::AggregateConfiguration;
 use Perl::Critic::Exception::Configuration::Option::Policy::ParameterValue;
-use Perl::Critic::Utils qw<
-    :booleans :characters :severities
-    hashify is_perl_global
->;
+use Perl::Critic::Utils qw( :booleans :characters :severities is_perl_global );
 use Perl::Critic::Utils::Perl qw< symbol_without_sigil >;
 use Perl::Critic::Utils::PPI qw<
     is_in_subroutine
@@ -25,7 +22,7 @@ use PPIx::Utils::Traversal qw<
 
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 #-----------------------------------------------------------------------------
 
@@ -77,8 +74,6 @@ Readonly::Hash my %NAME_FOR_TYPE => (
     constant                => 'Constant',
     label                   => 'Label',
 );
-
-Readonly::Hash my %IS_COMMA => hashify( $COMMA, $FATCOMMA );
 
 Readonly::Scalar my $EXPL                   => [ 45, 46 ];
 
@@ -239,7 +234,7 @@ sub initialize_if_enabled {
             return if any { $name =~ m/$_/xms } @{$exemption_regexes};
             return $message if $name !~ m/$capitalization_regex/xms;
             return;
-        }
+        };
     }
 
     if ( $configuration_exceptions->has_exceptions() ) {
@@ -339,7 +334,7 @@ sub violates {
         my @names = get_constant_name_elements_from_declaring_statement($elem)
     ) {
         return ( grep { $_ }
-            map { $self->_constant_capitalization( $elem, $_ ) } @names )
+            map { $self->_constant_capitalization( $elem, $_ ) } @names );
     }
 
     if ( $elem->isa('PPI::Statement::Package') ) {

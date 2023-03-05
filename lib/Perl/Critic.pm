@@ -4,12 +4,10 @@ use 5.010001;
 use strict;
 use warnings;
 
-use English qw(-no_match_vars);
 use Readonly;
 
 use Exporter 'import';
 
-use File::Spec;
 use List::SomeUtils qw( firstidx );
 use Scalar::Util qw< blessed >;
 
@@ -21,7 +19,7 @@ use Perl::Critic::Statistics;
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 Readonly::Array our @EXPORT_OK => qw(critique);
 
@@ -104,7 +102,7 @@ sub critique {  ## no critic (ArgUnpacking)
     if ( 0 == $self->policies() ) {
         Perl::Critic::Exception::Configuration::Generic->throw(
             message => 'There are no enabled policies.',
-        )
+        );
     }
 
     return $self->_gather_violations($doc);
@@ -151,7 +149,7 @@ sub _critique {
     my $maximum_violations = $policy->get_maximum_violations_per_document();
     return if defined $maximum_violations && $maximum_violations == 0;
 
-    my @violations = ();
+    my @violations;
 
   TYPE:
     for my $type ( $policy->applies_to() ) {
@@ -1005,7 +1003,7 @@ Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2022 Imaginative Software Systems.  All rights reserved.
+Copyright (c) 2005-2023 Imaginative Software Systems
 
 This program is free software; you can redistribute it and/or modify it under
 the same terms as Perl itself.  The full text of this license can be found in

@@ -8,7 +8,7 @@ use Readonly;
 use Perl::Critic::Utils qw{ :booleans :characters :severities :classification };
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 #-----------------------------------------------------------------------------
 
@@ -307,8 +307,8 @@ sub violates {
     # whatever headings you want.
     return if ! $doc->schild(0);
 
-    my %found_sections = ();
-    my @violations = ();
+    my %found_sections;
+    my @violations;
 
     my @required_sections =
         $doc->is_program()

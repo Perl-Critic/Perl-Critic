@@ -5,10 +5,10 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw<:severities :booleans>;
+use Perl::Critic::Utils qw( :severities );
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 #-----------------------------------------------------------------------------
 
@@ -30,7 +30,7 @@ sub violates {
     # If for some reason $doc is not a P::C::Document, then all bets are off
     return if not $doc->isa('Perl::Critic::Document');
 
-    my @violations = ();
+    my @violations;
     for my $annotation ($doc->annotations()) {
         if ($annotation->disables_all_policies()) {
             my $elem = $annotation->element();
@@ -118,7 +118,7 @@ Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2008-2011 Imaginative Software Systems.  All rights reserved.
+Copyright (c) 2008-2023 Imaginative Software Systems
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

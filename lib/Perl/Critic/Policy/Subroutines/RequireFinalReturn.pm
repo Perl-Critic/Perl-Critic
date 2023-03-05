@@ -10,7 +10,7 @@ use Perl::Critic::Exception::Fatal::Internal qw{ throw_internal };
 use Perl::Critic::Utils qw{ :characters :severities :data_conversion };
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 #-----------------------------------------------------------------------------
 
@@ -121,8 +121,9 @@ sub _is_compound_return {
 
     my $begin = $final->schild(0);
     return if !$begin; #fail
-    if (!($begin->isa('PPI::Token::Word') &&
-          ($begin->content() eq 'if' || $begin->content() eq 'unless'))) {
+
+    state $is_if_or_unless = { hashify( qw( if unless ) ) };
+    if (!($begin->isa('PPI::Token::Word') && $is_if_or_unless->{$begin->content()})) {
         return; #fail
     }
 

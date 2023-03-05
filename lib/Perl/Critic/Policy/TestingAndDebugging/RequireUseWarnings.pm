@@ -11,7 +11,7 @@ use Perl::Critic::Utils qw{ :severities $EMPTY };
 use Perl::Critic::Utils::Constants qw{ :equivalent_modules };
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 #-----------------------------------------------------------------------------
 
@@ -61,7 +61,7 @@ sub violates {
     # If the 'use warnings' statement is not defined, or the other
     # statement appears before the 'use warnings', then it violates.
 
-    my @viols = ();
+    my @viols;
     for my $stmnt ( @{ $stmnts_ref } ) {
         last if $stmnt->isa('PPI::Statement::End');
         last if $stmnt->isa('PPI::Statement::Data');

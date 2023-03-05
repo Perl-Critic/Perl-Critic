@@ -8,9 +8,7 @@ use English qw< -no_match_vars >;
 
 use PPI::Token::Magic;
 
-use Perl::Critic::Utils qw<
-    :characters :severities :data_conversion :booleans
->;
+use Perl::Critic::Utils qw( :characters :severities :data_conversion );
 
 use PPIx::Regexp;
 use PPIx::Regexp::Util 0.068 qw<
@@ -19,7 +17,7 @@ use PPIx::Regexp::Util 0.068 qw<
 
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 #-----------------------------------------------------------------------------
 
@@ -161,8 +159,7 @@ sub _violates_string {
 
     my %matches = _strings_helper( $self, $string );
     if (%matches) {
-        my $DESC = qq<$DESC in interpolated string>;
-        return $self->_make_violation( $DESC, $EXPL, $elem, \%matches );
+        return $self->_make_violation( $DESC . ' in interpolated string', $EXPL, $elem, \%matches );
     }
 
     return;    # no violation
@@ -175,8 +172,7 @@ sub _violates_heredoc {
         my $heredoc_string = join "\n", $elem->heredoc();
         my %matches = _strings_helper( $self, $heredoc_string );
         if (%matches) {
-            my $DESC = qq<$DESC in interpolated here-document>;
-            return $self->_make_violation( $DESC, $EXPL, $elem, \%matches );
+            return $self->_make_violation( $DESC . ' in interpolated here-document', $EXPL, $elem, \%matches );
         }
     }
 
@@ -208,8 +204,7 @@ sub _violates_regexp {  # GitHub #843 (https://github.com/Perl-Critic/Perl-Criti
     }
 
     if ( keys %matches ) {
-        my $DESC = qq<$DESC in interpolated Regexp>;
-        return $self->_make_violation( $DESC, $EXPL, $elem, \%matches );
+        return $self->_make_violation( $DESC . ' in interpolated Regexp', $EXPL, $elem, \%matches );
     }
 
     return;
@@ -460,7 +455,7 @@ Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2011 Imaginative Software Systems.  All rights reserved.
+Copyright (c) 2005-2023 Imaginative Software Systems
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

@@ -4,7 +4,6 @@ use 5.010001;
 use strict;
 use warnings;
 
-use English qw(-no_match_vars);
 use Readonly;
 
 use Config::Tiny qw();
@@ -16,7 +15,7 @@ use Perl::Critic::Exception::Fatal::Internal qw{ throw_internal };
 use Perl::Critic::Exception::Configuration::Generic qw{ throw_generic };
 use Perl::Critic::PolicyConfig;
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 #-----------------------------------------------------------------------------
 
@@ -110,7 +109,7 @@ sub policy_is_enabled {
 sub listed_policies {
 
     my ( $self, $policy ) = @_;
-    my @normalized_policy_names = ();
+    my @normalized_policy_names;
 
     for my $policy_name ( sort keys %{$self->{_profile}} ) {
         $policy_name =~ s/\A - //xmso; #Chomp leading "-"
@@ -317,7 +316,7 @@ to change without notice.
 
 =over
 
-=item C< new( -profile => $p ) >
+=item C<< new( -profile => $p ) >>
 
 B<-profile> is the path to the user's profile.  If -profile is not
 defined, then it looks for the profile at F<./.perlcriticrc> and then
@@ -400,7 +399,7 @@ Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2011 Imaginative Software Systems.  All rights reserved.
+Copyright (c) 2005-2023 Imaginative Software Systems.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

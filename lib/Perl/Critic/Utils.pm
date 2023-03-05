@@ -22,7 +22,7 @@ use Perl::Critic::Utils::PPI qw< is_ppi_expression_or_generic_statement >;
 
 use Exporter 'import';
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 #-----------------------------------------------------------------------------
 # Exportable symbols here.
@@ -360,9 +360,8 @@ Readonly::Hash my %BUILTINS => hashify( @B::Keywords::Functions );
 
 sub is_perl_builtin {
     my $elem = shift;
-    return if !$elem;
 
-    return exists $BUILTINS{ _name_for_sub_or_stringified_element($elem) };
+    return $elem && exists $BUILTINS{ _name_for_sub_or_stringified_element($elem) };
 }
 
 #-----------------------------------------------------------------------------
@@ -374,9 +373,8 @@ Readonly::Hash my %BAREWORDS => hashify(
 
 sub is_perl_bareword {
     my $elem = shift;
-    return if !$elem;
 
-    return exists $BAREWORDS{ _name_for_sub_or_stringified_element($elem) };
+    return $elem && exists $BAREWORDS{ _name_for_sub_or_stringified_element($elem) };
 }
 
 #-----------------------------------------------------------------------------
@@ -417,9 +415,8 @@ Readonly::Hash my %FILEHANDLES => hashify( @B::Keywords::Filehandles );
 
 sub is_perl_filehandle {
     my $elem = shift;
-    return if !$elem;
 
-    return exists $FILEHANDLES{ _name_for_sub_or_stringified_element($elem) };
+    return $elem && exists $FILEHANDLES{ _name_for_sub_or_stringified_element($elem) };
 }
 
 ## use critic
@@ -688,17 +685,15 @@ sub is_perl_builtin_with_zero_and_or_one_arguments {
 sub is_qualified_name {
     my $name = shift;
 
-    return if not $name;
-
-    return index ( $name, q{::} ) >= 0;
+    return $name && (index($name, q{::}) >= 0);
 }
 
 #-----------------------------------------------------------------------------
 
 sub precedence_of {
     my $elem = shift;
-    return if !$elem;
-    return $PRECEDENCE_OF{ ref $elem ? "$elem" : $elem };
+
+    return $elem && $PRECEDENCE_OF{ ref $elem ? "$elem" : $elem };
 }
 
 #-----------------------------------------------------------------------------
@@ -718,11 +713,12 @@ sub is_hash_key {
     return if !$grandparent;
     return 1 if $grandparent->isa('PPI::Structure::Subscript');
 
-
     #Check declarative style: %hash = (foo => bar);
-    return 1 if $sib && $sib->isa('PPI::Token::Operator') && $sib eq '=>';
-
-    return;
+    return
+        $sib
+        && $sib->isa('PPI::Token::Operator')
+        && $sib eq '=>'
+    ;
 }
 
 #-----------------------------------------------------------------------------
@@ -756,38 +752,40 @@ sub is_label_pointer {
     return if !$statement->isa('PPI::Statement::Break');
 
     my $psib = $elem->sprevious_sibling();
-    return if !$psib;
-
     state $redirectors = { hashify( qw( redo goto next last ) ) };
-    return exists $redirectors->{$psib};
+    return $psib && exists $redirectors->{$psib};
 }
 
 #-----------------------------------------------------------------------------
 
 sub is_method_call {
     my $elem = shift;
-    return if !$elem;
 
-    return _is_dereference_operator( $elem->sprevious_sibling() );
+    return $elem && _is_dereference_operator( $elem->sprevious_sibling() );
 }
 
 #-----------------------------------------------------------------------------
 
 sub is_class_name {
     my $elem = shift;
-    return if !$elem;
 
-    return _is_dereference_operator( $elem->snext_sibling() )
-        && !_is_dereference_operator( $elem->sprevious_sibling() );
+    return
+        $elem
+        && _is_dereference_operator( $elem->snext_sibling() )
+        && !_is_dereference_operator( $elem->sprevious_sibling() )
+    ;
 }
 
 #-----------------------------------------------------------------------------
 
 sub _is_dereference_operator {
     my $elem = shift;
-    return if !$elem;
 
-    return $elem->isa('PPI::Token::Operator') && $elem eq q{->};
+    return
+        $elem
+        && $elem->isa('PPI::Token::Operator')
+        && $elem eq q{->}
+    ;
 }
 
 #-----------------------------------------------------------------------------
@@ -806,11 +804,14 @@ sub is_package_declaration {
 sub is_subroutine_name {
     my $elem  = shift;
     return if !$elem;
+
     my $sib   = $elem->sprevious_sibling();
     return if !$sib;
+    return if $sib ne 'sub';
+
     my $stmnt = $elem->statement();
     return if !$stmnt;
-    return $stmnt->isa('PPI::Statement::Sub') && $sib eq 'sub';
+    return $stmnt->isa('PPI::Statement::Sub');
 }
 
 #-----------------------------------------------------------------------------
@@ -957,9 +958,9 @@ sub parse_arg_list {
     }
     else {
 
-        #Gather up remaining nodes in the statement
+        # Gather up remaining nodes in the statement.
         my $iter     = $elem;
-        my @arg_list = ();
+        my @arg_list;
 
         while ($iter = $iter->snext_sibling() ) {
             last if $iter->isa('PPI::Token::Structure') and $iter eq $SCOLON;
@@ -980,9 +981,10 @@ sub split_nodes_on_comma {
     my $i = 0;
     my @node_stacks;
     for my $node (@nodes) {
+        my $node_content = $node->content;
         if (
                 $node->isa('PPI::Token::Operator')
-            and ($node eq $COMMA or $node eq $FATCOMMA)
+            and ($node_content eq $COMMA or $node_content eq $FATCOMMA)
         ) {
             if (@node_stacks) {
                 $i++; #Move forward to next 'node stack'
@@ -990,7 +992,7 @@ sub split_nodes_on_comma {
             next;
         } elsif ( $node->isa('PPI::Token::QuoteLike::Words' )) {
             my $section = $node->{sections}->[0];
-            my @words = words_from_string(substr $node->content, $section->{position}, $section->{size});
+            my @words = words_from_string(substr $node_content, $section->{position}, $section->{size});
             my $loc = $node->location;
             for my $word (@words) {
                 my $token = PPI::Token::Quote::Single->new(q{'} . $word . q{'});
@@ -1181,11 +1183,8 @@ sub is_unchecked_call {
 
     return if not is_function_call( $elem );
 
-    # check to see if there's an '=' or 'unless' or something before this.
-    if( my $sib = $elem->sprevious_sibling() ){
-        return if $sib;
-    }
-
+    # Check to see if there's an '=' or 'unless' or something before this.
+    return if $elem->sprevious_sibling();
 
     if( my $statement = $elem->statement() ){
 
@@ -1194,15 +1193,13 @@ sub is_unchecked_call {
         # unknown number of arguments to the system call. Instead, check all of
         # the elements to this statement to see if we find 'or' or '||'.
 
+        state $or_or_or = { hashify( qw( or || ) ) };
         my $or_operators = sub  {
             my (undef, $elem) = @_;  ## no critic(Variables::ProhibitReusedNames)
-            return if not $elem->isa('PPI::Token::Operator');
-            return if $elem ne q{or} && $elem ne q{||};
-            return 1;
+            return $elem->isa('PPI::Token::Operator') && exists $or_or_or->{$elem->content};
         };
 
         return if $statement->find( $or_operators );
-
 
         if( my $parent = $elem->statement()->parent() ){
 
@@ -1359,7 +1356,9 @@ sub _is_covered_by_autodie {
 
     # The first argument to any `use` pragma could be a version number.
     # If so, then we just discard it. We only want the arguments after it.
-    if ($first_arg and $first_arg->isa('PPI::Token::Number')){ shift @args };
+    if ($first_arg and $first_arg->isa('PPI::Token::Number')) {
+        shift @args;
+    }
 
     if (@args) {
         my $elem_content = $elem->content();

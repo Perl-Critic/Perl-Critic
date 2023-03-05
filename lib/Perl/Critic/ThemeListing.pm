@@ -4,11 +4,9 @@ use 5.010001;
 use strict;
 use warnings;
 
-use English qw<-no_match_vars>;
-
 use overload ( q<""> => 'to_string' );
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 #-----------------------------------------------------------------------------
 
@@ -104,7 +102,7 @@ Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2011 Imaginative Software Systems.  All rights reserved.
+Copyright (c) 2005-2023 Imaginative Software Systems
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

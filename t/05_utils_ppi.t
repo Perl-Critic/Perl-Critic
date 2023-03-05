@@ -25,7 +25,7 @@ use Perl::Critic::Utils::PPI qw< :all >;
 
 use Test::More tests => 64;
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 use Perl::Critic::TestUtils;
 Perl::Critic::TestUtils::assert_version( $VERSION );
@@ -288,7 +288,7 @@ can_ok('main', 'is_in_subroutine');
 
         my $name = $code // '<undef>';
 
-        local $Test::Builder::Level = $Test::Builder::Level + 1; ## no critic (Variables::ProhibitPackageVars)
+        local $Test::Builder::Level = $Test::Builder::Level + 1;
         is(
             ! ! is_subroutine_declaration( $input ),
             ! ! $result,
@@ -325,7 +325,7 @@ can_ok('main', 'is_in_subroutine');
 
         my $name = $code // '<undef>';
 
-        local $Test::Builder::Level = $Test::Builder::Level + 1; ## no critic (Variables::ProhibitPackageVars)
+        local $Test::Builder::Level = $Test::Builder::Level + 1;
         is(
             ! ! is_in_subroutine( $input ),
             ! ! $result,

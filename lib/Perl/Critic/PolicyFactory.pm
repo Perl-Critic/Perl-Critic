@@ -29,12 +29,12 @@ use Perl::Critic::Utils::Constants qw{ :profile_strictness };
 
 use Exception::Class;   # this must come after "use P::C::Exception::*"
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 #-----------------------------------------------------------------------------
 
 # Globals.  Ick!
-my @site_policy_names = ();
+my @site_policy_names;
 
 #-----------------------------------------------------------------------------
 

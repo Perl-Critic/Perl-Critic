@@ -5,10 +5,10 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :severities :classification };
+use Perl::Critic::Utils qw{ :severities :classification hashify };
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 #-----------------------------------------------------------------------------
 
@@ -26,7 +26,9 @@ sub applies_to           { return 'PPI::Token::Word'     }
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
-    return if !($elem eq 'isa' || $elem eq 'UNIVERSAL::isa');
+
+    state $isa_isa = { hashify( qw( isa UNIVERSAL::isa ) ) };
+    return if !$isa_isa->{$elem};
     return if ! is_function_call($elem); # this also permits 'use UNIVERSAL::isa;'
 
     return $self->violation( $DESC, $EXPL, $elem );
@@ -87,7 +89,7 @@ Chris Dolan <cdolan@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2006-2011 Chris Dolan.
+Copyright (c) 2006-2023 Chris Dolan.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

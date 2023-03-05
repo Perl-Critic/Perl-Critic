@@ -8,12 +8,12 @@ use Readonly;
 
 use List::SomeUtils qw(any);
 
-use Perl::Critic::Utils qw{ :severities :classification :booleans
+use Perl::Critic::Utils qw( :severities :classification
     hashify parse_arg_list
-};
+);
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 #-----------------------------------------------------------------------------
 
@@ -158,7 +158,7 @@ sub _get_scope {
         # current scope if we can not determine any of the locations
         # involved. RT #64437
         return $elem if not $open_loc;
-        my $elem_loc = $elem->location
+        $elem->location
             or return $elem;
         my $last_kid = $elem->child( $LAST_ELEMENT )
             or return $elem;    # What? no children?
@@ -346,7 +346,7 @@ Chris Dolan <cdolan@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2007-2021 Chris Dolan.  Many rights reserved.
+Copyright (c) 2007-2023 Chris Dolan
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

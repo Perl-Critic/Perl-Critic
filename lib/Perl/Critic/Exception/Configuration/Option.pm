@@ -4,7 +4,7 @@ use 5.010001;
 use strict;
 use warnings;
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 #-----------------------------------------------------------------------------
 
@@ -113,7 +113,7 @@ implement it.
 
 =head1 SEE ALSO
 
-L<Perl::Critic::Exception::Configuration::Option::Global|Perl::Critic::Exception::Configuration::Option::Global>
+L<Perl::Critic::Exception::Configuration::Option::Global|Perl::Critic::Exception::Configuration::Option::Global>,
 L<Perl::Critic::Exception::Configuration::Option::Policy|Perl::Critic::Exception::Configuration::Option::Policy>
 
 

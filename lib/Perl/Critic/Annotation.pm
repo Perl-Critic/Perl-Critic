@@ -5,7 +5,6 @@ use strict;
 use warnings;
 
 use Carp qw(confess);
-use English qw(-no_match_vars);
 
 use Perl::Critic::PolicyFactory;
 use Perl::Critic::Utils qw(:characters hashify);
@@ -13,7 +12,7 @@ use Readonly;
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 Readonly::Scalar my $LAST_ELEMENT => -1;
 
@@ -23,10 +22,10 @@ Readonly::Scalar my $LAST_ELEMENT => -1;
 sub create_annotations {
     my ($class, $doc) = @_;
 
-    my @annotations = ();
+    my @annotations;
     my $comment_elements_ref  = $doc->find('PPI::Token::Comment') || return;
     my $annotation_rx  = qr{\A (?: [#]! .*? )? \s* [#][#] \s* no  \s+ critic}xms;
-    for my $annotation_element ( grep { $_ =~ $annotation_rx } @{$comment_elements_ref} ) {
+    for my $annotation_element ( grep { m/$annotation_rx/smx } @{$comment_elements_ref} ) {
         push @annotations, Perl::Critic::Annotation->new( -element => $annotation_element);
     }
 
@@ -236,7 +235,7 @@ sub _parse_annotation {
     #
     #############################################################################
 
-    my @disabled_policy_names = ();
+    my @disabled_policy_names;
     if ( my ($patterns_string) = $annotation_element =~ $no_critic ) {
 
         # Compose the specified modules into a regex alternation.  Wrap each
@@ -391,7 +390,7 @@ Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2011 Imaginative Software Systems.  All rights reserved.
+Copyright (c) 2005-2023 Imaginative Software Systems
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

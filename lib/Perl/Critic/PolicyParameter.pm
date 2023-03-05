@@ -20,9 +20,9 @@ use Perl::Critic::PolicyParameter::Behavior::Integer;
 use Perl::Critic::PolicyParameter::Behavior::String;
 use Perl::Critic::PolicyParameter::Behavior::StringList;
 
-use Perl::Critic::Utils qw{ :characters &interpolate };
+use Perl::Critic::Utils qw( :characters interpolate );
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 Readonly::Scalar our $NO_DESCRIPTION_AVAILABLE => 'No description available.';
 
@@ -382,7 +382,7 @@ Elliot Shank <perl@galumph.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2006-2011 Elliot Shank.
+Copyright (c) 2006-2023 Elliot Shank.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

@@ -10,7 +10,7 @@ use Perl::Critic::TestUtils qw(bundled_policy_names);
 
 use Test::More;
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 Perl::Critic::TestUtils::assert_version( $VERSION );
 Perl::Critic::TestUtils::block_perlcriticrc();

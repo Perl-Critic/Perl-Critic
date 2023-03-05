@@ -4,7 +4,7 @@ use 5.010001;
 use strict;
 use warnings;
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 #-----------------------------------------------------------------------------
 
@@ -61,7 +61,7 @@ Where the configuration information came from, if it could be determined.
 
 =head1 SEE ALSO
 
-L<Perl::Critic::Exception::Configuration::Generic|Perl::Critic::Exception::Configuration::Generic>
+L<Perl::Critic::Exception::Configuration::Generic|Perl::Critic::Exception::Configuration::Generic>,
 L<Perl::Critic::Exception::Configuration::Option|Perl::Critic::Exception::Configuration::Option>
 
 

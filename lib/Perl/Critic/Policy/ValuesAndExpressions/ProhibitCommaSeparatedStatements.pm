@@ -6,12 +6,12 @@ use warnings;
 use Readonly;
 
 
-use Perl::Critic::Utils qw{ :booleans :characters :severities :classification };
+use Perl::Critic::Utils qw{ :booleans :characters :severities :classification hashify };
 use Perl::Critic::Utils::PPI qw{ is_ppi_statement_subclass };
 
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 #-----------------------------------------------------------------------------
 
@@ -110,7 +110,8 @@ sub _is_direct_part_of_map_or_grep_block {
     return if not $block_prior_sibling;
     return if not $block_prior_sibling->isa('PPI::Token::Word');
 
-    return $block_prior_sibling eq 'map' || $block_prior_sibling eq 'grep';
+    state $is_map_or_grep = { hashify( qw( map grep ) ) };
+    return $is_map_or_grep->{$block_prior_sibling};
 }
 
 sub _is_last_statement_in_a_block {
@@ -235,7 +236,7 @@ Elliot Shank C<< <perl@galumph.com> >>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2007-2011 Elliot Shank.
+Copyright (c) 2007-2023 Elliot Shank.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

@@ -47,6 +47,14 @@ sub ACTION_tags {
 }
 
 
+sub ACTION_critic {
+    my ($self) = @_;
+
+    $self->depends_on('build');
+    $self->_run_critic();
+}
+
+
 sub authortest_dependencies {
     my ($self) = @_;
 
@@ -80,6 +88,8 @@ sub _run_nytprof {
             --exclude=PodSpelling
             --exclude=RcsKeywords
             blib
+            t
+            xt
         >;
     warn "Running: $this_perl @perl_args @perlcritic_args\n";
 
@@ -115,6 +125,50 @@ sub _run_tags {
     my $status_ctags = system $ctags, @ctags_args;
     croak "ctags failed with status $status_ctags"
         if $status_ctags == 1;
+
+    return;
+}
+
+
+sub _run_critic {
+    my ($self) = @_;
+
+
+    my $perl = $^X;
+    my @args =
+        qw(
+            bin/perlcritic
+            -1
+            -q
+            -profile ./perlcriticrc
+        );
+    warn "Running: $perl @args\n";
+
+    my @files = @ARGV;
+    shift @files;
+
+    if ( !@files ) {
+        # There are many bad Perl files in t/ and xt/, so we only want *.t.
+        @files = (
+            'bin/perlcritic',
+        );
+        File::Find::find( {
+                wanted => sub {
+                    if ( -d && /\.git/ ) {
+                        $File::Find::prune = 1;
+                    }
+                    elsif ( -f && /\.pm$/ ) {
+                        push @files, $File::Find::name;
+                    }
+                    return;
+                },
+            },
+            'lib'
+        );
+    }
+
+    my $status = system $perl, @args, @files;
+    croak "perlcritic failed with status $status" if $status;
 
     return;
 }
@@ -171,7 +225,7 @@ Elliot Shank <perl@galumph.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2007-2011 Elliot Shank.
+Copyright (c) 2007-2023 Elliot Shank.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

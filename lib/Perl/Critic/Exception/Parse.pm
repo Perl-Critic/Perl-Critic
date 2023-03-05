@@ -4,13 +4,11 @@ use 5.010001;
 use strict;
 use warnings;
 
-use English qw< -no_match_vars >;
-use Carp qw< confess >;
 use Readonly;
 
 use Perl::Critic::Utils qw< :characters >;
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 #-----------------------------------------------------------------------------
 
@@ -72,7 +70,7 @@ Elliot Shank <perl@galumph.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2008-2011 Elliot Shank.
+Copyright (c) 2008-2023 Elliot Shank.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

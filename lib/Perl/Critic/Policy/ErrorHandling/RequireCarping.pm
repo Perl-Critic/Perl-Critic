@@ -12,11 +12,16 @@ use Perl::Critic::Utils qw{
 use Perl::Critic::Utils::PPI qw{ is_ppi_expression_or_generic_statement };
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 #-----------------------------------------------------------------------------
 
 Readonly::Scalar my $EXPL => [ 283 ];
+
+Readonly::Hash my %ALTERNATIVES => (
+    warn => 'carp',
+    die  => 'croak',
+);
 
 #-----------------------------------------------------------------------------
 
@@ -46,16 +51,7 @@ sub applies_to        { return 'PPI::Token::Word'                        }
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    my $alternative;
-    if ( $elem eq 'warn' ) {
-        $alternative = 'carp';
-    }
-    elsif ( $elem eq 'die' ) {
-        $alternative = 'croak';
-    }
-    else {
-        return;
-    }
+    my $alternative = $ALTERNATIVES{$elem} or return;
 
     return if ! is_function_call($elem);
 
@@ -100,7 +96,7 @@ sub _last_flattened_argument_list_element_ends_in_newline {
         return $TRUE;
     }
 
-    return $FALSE
+    return $FALSE;
 }
 
 #-----------------------------------------------------------------------------
@@ -221,7 +217,7 @@ sub _find_last_flattened_argument_list_element {
                 return;
             }
         } elsif ( $penultimate_element != $die_or_warn ) {
-            return
+            return;
         }
     }
 
@@ -264,7 +260,7 @@ sub _determine_if_list_is_a_plain_list_and_get_last_child {
                 return;
             }
         } elsif ( $prior_sibling != $die_or_warn ) {
-            return
+            return;
         }
     }
 

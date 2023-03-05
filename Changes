@@ -1,6 +1,10 @@
 Revision history for Perl module Perl::Critic
 
-NEXT
+1.150 Sat Mar  4 21:17:45 CST 2023
+
+    [Enhancements]
+    Added Test::Builder and Text::Wrap to the list of default exceptions in
+    Variables::ProhibitPackageVars. Thanks, Graham Knop. (GH #1025)
 
     [Internals]
     We now use PPIx::Utils instead of PPIx::Utilities, which is more recently

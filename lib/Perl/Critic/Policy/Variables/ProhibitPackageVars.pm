@@ -13,7 +13,7 @@ use Perl::Critic::Utils qw{
 };
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 #-----------------------------------------------------------------------------
 
@@ -27,7 +27,7 @@ sub supported_parameters {
         {
             name            => 'packages',
             description     => 'The base set of packages to allow variables for.',
-            default_string  => 'Data::Dumper File::Find FindBin Log::Log4perl',
+            default_string  => 'Data::Dumper File::Find FindBin Log::Log4perl Test::Builder Text::Wrap',
             behavior        => 'string list',
         },
         {
@@ -117,7 +117,7 @@ sub _is_vars_pragma {
 }
 
 sub _all_upcase {  ##no critic(ArgUnpacking)
-    return all { $_ eq uc $_ } @_; ## no critic ( BuiltinFunctions::ProhibitUselessTopic )
+    return all { $_ eq uc } @_;
 }
 
 1;
@@ -205,7 +205,7 @@ Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2021 Imaginative Software Systems.  All rights reserved.
+Copyright (c) 2005-2023 Imaginative Software Systems.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

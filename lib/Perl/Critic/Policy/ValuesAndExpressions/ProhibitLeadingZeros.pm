@@ -9,7 +9,7 @@ use Readonly;
 use Perl::Critic::Utils qw{ :characters :severities hashify };
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 #-----------------------------------------------------------------------------
 
@@ -65,8 +65,8 @@ sub _is_first_argument_of_chmod_or_umask {
     my $previous_token = _previous_token_that_isnt_a_parenthesis($elem);
     return if not $previous_token;
 
-    my $content = $previous_token->content();
-    return $content eq 'chmod' || $content eq 'umask';
+    state $is_chmod_or_umask = { hashify( qw( chmod umask ) ) };
+    return $is_chmod_or_umask->{$previous_token->content()};
 }
 
 sub _is_second_argument_of_mkdir {

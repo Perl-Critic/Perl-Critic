@@ -10,11 +10,10 @@ use English qw{ -no_match_vars };
 use Perl::Critic::Utils qw{ :severities :classification };
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $PKG_RX => qr{ [[:alpha:]](?:[\w:\']*\w)? }xms;
 Readonly::Scalar my $DESC =>
     q{Pod NAME on line %d does not match the package declaration};
 Readonly::Scalar my $EXPL => q{};
@@ -107,7 +106,7 @@ Chris Dolan <cdolan@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2008-2011 Chris Dolan
+Copyright (c) 2008-2023 Chris Dolan
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

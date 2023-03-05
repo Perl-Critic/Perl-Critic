@@ -4,14 +4,12 @@ use 5.010001;
 use strict;
 use warnings;
 
-use Carp;
-use English qw(-no_match_vars);
 use Perl::Critic::Utils qw{ :severities :classification };
 use Readonly;
 
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 #-----------------------------------------------------------------------------
 
@@ -34,7 +32,7 @@ sub supported_parameters {
             behavior                   => 'string list',
             list_always_present_values => [ qw{ new } ],
         }
-    )
+    );
 }
 
 sub default_severity     { return $SEVERITY_HIGH             }
@@ -145,7 +143,7 @@ Thomas R. Wyant, III F<wyant at cpan dot org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2009-2011 Tom Wyant.
+Copyright (c) 2009-2023 Tom Wyant
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

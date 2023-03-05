@@ -4,8 +4,6 @@ use 5.010001;
 use strict;
 use warnings;
 
-use Carp qw< confess >;
-
 use List::Util qw< reduce >;
 use Scalar::Util qw< blessed refaddr weaken >;
 use version;
@@ -22,7 +20,7 @@ use PPIx::Regexp 0.010 qw< >;
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 #-----------------------------------------------------------------------------
 
@@ -581,9 +579,10 @@ sub _is_a_version_statement {
 #-----------------------------------------------------------------------------
 
 sub _caching_finder {
-    my $cache_ref = shift;  # These vars will persist for the life
-    my %isa_cache = ();     # of the code ref that this sub returns
+    my $cache_ref = shift;
 
+    # These vars will persist for the life of the code ref that this sub returns.
+    my %isa_cache;
 
     # Gather up all the PPI elements and sort by @ISA.  Note: if any
     # instances used multiple inheritance, this implementation would
@@ -951,7 +950,7 @@ Chris Dolan <cdolan@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2006-2011 Chris Dolan.
+Copyright (c) 2006-2023 Chris Dolan.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

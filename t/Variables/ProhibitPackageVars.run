@@ -79,6 +79,29 @@ my $var1 = 'foo';
 my %var2 = 'foo';
 my ($foo, $bar) = ();
 
+#-----------------------------------------------------------------------------
+
+## name Package vars from other packages fail, even if the package is all caps.
+## failures 2
+## cut
+
+use Fin::Fang::Foom;
+print $Fin::Fang::Foom::message;
+
+use ABC;
+print $ABC::status;
+
+#-----------------------------------------------------------------------------
+
+## name Package vars from other packages fail, unless the var is all caps
+## failures 0
+## cut
+
+use Fin::Fang::Foom;
+print $Fin::Fang::Foom::MESSAGE;
+
+use ABC;
+print $ABC::DEF;
 
 #-----------------------------------------------------------------------------
 
@@ -96,6 +119,12 @@ use File::Spec::Functions qw< catdir >;
 use lib catdir( $FindBin::Bin, qw< .. lib perl5 > );
 
 local $Log::Log4perl::caller_depth = $Log::Log4perl::caller_depth + 1;
+
+use Test::Builder;
+sub sometest {
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
+    pass();
+}
 
 #-----------------------------------------------------------------------------
 

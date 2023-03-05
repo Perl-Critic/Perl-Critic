@@ -4,20 +4,17 @@ use 5.010001;
 use strict;
 use warnings;
 
-use Carp;
-use English qw(-no_match_vars);
 use List::SomeUtils qw(none);
 use Readonly;
 use Scalar::Util qw(refaddr);
 
-use Perl::Critic::Exception::Fatal::Internal qw{ throw_internal };
 use Perl::Critic::Utils qw{
     :booleans :characters :severities hashify precedence_of
     split_nodes_on_comma
 };
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 #-----------------------------------------------------------------------------
 
@@ -48,7 +45,7 @@ sub supported_parameters { return qw()                       }
 sub default_severity     { return $SEVERITY_MEDIUM           }
 sub default_themes       { return qw( core pbp maintenance ) }
 sub applies_to           {
-    return qw< PPI::Token::Regexp::Match PPI::Token::Regexp::Substitute >
+    return qw< PPI::Token::Regexp::Match PPI::Token::Regexp::Substitute >;
 }
 
 #-----------------------------------------------------------------------------
@@ -457,7 +454,7 @@ sub _regexp_is_in_split {
         # Maybe we have split( /.../, ... )
         my $stmt = $elem->statement()
             or return $FALSE;
-        my $list = $stmt->parent()
+        $stmt->parent()
             or return $FALSE;
         $prev = $elem->sprevious_sibling()
             or return $FALSE;
@@ -771,7 +768,7 @@ distribution.
 
 Perl regular expressions have multiple types of grouping syntax.  The
 basic parentheses (e.g. C<m/(foo)/>) captures into the magic variable
-C<$1>.  Non-capturing groups (e.g. C<m/(?:foo)/> are useful because
+C<$1>.  Non-capturing groups (e.g. C<m/(?:foo)/>) are useful because
 they have better runtime performance and do not copy strings to the
 magic global capture variables.
 

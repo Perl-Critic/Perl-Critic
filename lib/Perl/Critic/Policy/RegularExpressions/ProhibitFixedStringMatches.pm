@@ -5,21 +5,16 @@ use strict;
 use warnings;
 use Readonly;
 
-use English qw(-no_match_vars);
-use Carp;
-
-use Perl::Critic::Utils qw{ :booleans :severities };
+use Perl::Critic::Utils qw( :severities );
 
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 #-----------------------------------------------------------------------------
 
 Readonly::Scalar my $DESC => q{Use 'eq' or hash instead of fixed-pattern regexps};
 Readonly::Scalar my $EXPL => [271,272];
-
-Readonly::Scalar my $RE_METACHAR => qr/[\\#\$()*+.?\@\[\]^{|}]/xms;
 
 #-----------------------------------------------------------------------------
 
@@ -65,7 +60,8 @@ sub violates {
         }
 
         # Regexps that contain metachars are not fixed strings
-        return if $words =~ m/$RE_METACHAR/oxms;
+        return if $words =~ m/[\\#\$()*+.?\@\[\]^{|}]/xms;
+
 
         return $self->violation( $DESC, $EXPL, $elem );
 
@@ -162,7 +158,7 @@ Chris Dolan <cdolan@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2007-2011 Chris Dolan.  Many rights reserved.
+Copyright (c) 2007-2023 Chris Dolan
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

@@ -19,7 +19,7 @@ use Perl::Critic::Utils::POD qw<
 >;
 use Perl::Critic::Exception::Fatal::Internal qw< throw_internal >;
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 Readonly::Scalar my $NO_EXCEPTION_NO_SPLIT_LIMIT        => -1;
 Readonly::Scalar my $LOCATION_LINE_NUMBER               => 0;
@@ -30,7 +30,7 @@ Readonly::Scalar my $LOCATION_LOGICAL_FILENAME          => 4;
 
 # Class variables...
 my $format = "%m at line %l, column %c. %e.\n"; # Default stringy format
-my %diagnostics = ();  # Cache of diagnostic messages
+my %diagnostics;
 
 #-----------------------------------------------------------------------------
 
@@ -315,7 +315,7 @@ sub _chomp_periods {
 
     for (@args) {
         next if not defined or ref;
-        s{ [.]+ \z }{}xms
+        s{ [.]+ \z }{}xms;
     }
 
     return @args;
@@ -581,7 +581,7 @@ Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2011 Imaginative Software Systems.  All rights reserved.
+Copyright (c) 2005-2023 Imaginative Software Systems.  All rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

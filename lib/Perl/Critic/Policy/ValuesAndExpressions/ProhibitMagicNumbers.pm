@@ -10,7 +10,7 @@ use Perl::Critic::Utils qw{ :booleans :characters :severities :data_conversion }
 
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 #----------------------------------------------------------------------------
 
@@ -459,7 +459,7 @@ to 10.
 =head2 Ways in which this module applies this rule.
 
 By default, this rule is relaxed in that C<2> is permitted to allow
-for common things like alternation, the STDERR file handle, etc..
+for common things like alternation, the STDERR file handle, etc.
 
 Numeric literals are allowed in C<use> and C<require> statements to
 allow for things like Perl version restrictions and

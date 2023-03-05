@@ -11,23 +11,22 @@ use File::Spec;
 use File::Temp;
 use List::SomeUtils qw(uniq);
 use Pod::Spell qw< >;
+use Pod::Wordlist;
 use Text::ParseWords qw< >;
 
-use Perl::Critic::Utils qw{
+use Perl::Critic::Utils qw(
     :characters
     :booleans
     :severities
-    words_from_string
-};
+);
 use Perl::Critic::Exception::Fatal::Generic qw{ throw_generic };
 
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $POD_RX => qr{\A = (?: for|begin|end ) }xms;
 Readonly::Scalar my $DESC => q{Check the spelling in your POD};
 Readonly::Scalar my $EXPL => [148];
 
@@ -390,7 +389,7 @@ Chris Dolan <cdolan@cpan.org>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2007-2021 Chris Dolan.  Many rights reserved.
+Copyright (c) 2007-2023 Chris Dolan.  Many rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license

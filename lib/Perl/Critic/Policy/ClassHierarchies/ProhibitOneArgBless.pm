@@ -5,10 +5,10 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw{ :booleans :severities :classification :ppi };
+use Perl::Critic::Utils qw( :severities :classification :ppi );
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 #-----------------------------------------------------------------------------
 
@@ -79,7 +79,7 @@ Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2011 Imaginative Software Systems.  All rights reserved.
+Copyright (c) 2005-2023 Imaginative Software Systems
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.

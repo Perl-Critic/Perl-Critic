@@ -8,16 +8,10 @@ use Readonly;
 use Perl::Critic::Utils qw{ :severities :classification $EMPTY hashify};
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $PACKAGE_RX => qr/::/xms;
-Readonly::Hash   my %EXCEPTIONS => hashify(qw(
-    $_
-    $ARG
-    @_
-));
 Readonly::Scalar my $DESC => q{Magic variable "%s" should be assigned as "local"};
 Readonly::Scalar my $EXPL => [ 81, 82 ];
 

@@ -4,14 +4,12 @@ use 5.010001;
 use strict;
 use warnings;
 
-use English qw(-no_match_vars);
-
 use Perl::Critic::Config qw{};
 use Perl::Critic::Policy qw{};
 use Perl::Critic::Utils qw{ :characters };
 use overload ( q{""} => 'to_string' );
 
-our $VERSION = '1.148';
+our $VERSION = '1.150';
 
 #-----------------------------------------------------------------------------
 
@@ -211,7 +209,7 @@ Perl::Critic::ProfilePrototype - Generate an initial Perl::Critic profile.
 =head1 DESCRIPTION
 
 This is a helper class that generates a prototype of a
-L<Perl::Critic|Perl::Critic> profile (e.g. a F<.perlcriticrc> file.
+L<Perl::Critic|Perl::Critic> profile (e.g. a F<.perlcriticrc> file).
 There are no user-serviceable parts here.
 
 
@@ -266,7 +264,7 @@ Jeffrey Ryan Thalhammer <jeff@imaginative-software.com>
 
 =head1 COPYRIGHT
 
-Copyright (c) 2005-2011 Imaginative Software Systems.  All rights reserved.
+Copyright (c) 2005-2023 Imaginative Software Systems
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.  The full text of this license
