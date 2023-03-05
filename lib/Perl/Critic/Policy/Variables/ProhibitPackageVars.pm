@@ -27,7 +27,7 @@ sub supported_parameters {
         {
             name            => 'packages',
             description     => 'The base set of packages to allow variables for.',
-            default_string  => 'Data::Dumper File::Find FindBin Log::Log4perl',
+            default_string  => 'Data::Dumper File::Find FindBin Log::Log4perl Test::Builder Text::Wrap',
             behavior        => 'string list',
         },
         {
@@ -117,7 +117,7 @@ sub _is_vars_pragma {
 }
 
 sub _all_upcase {  ##no critic(ArgUnpacking)
-    return all { $_ eq uc $_ } @_; ## no critic ( BuiltinFunctions::ProhibitUselessTopic )
+    return all { $_ eq uc } @_;
 }
 
 1;

@@ -120,6 +120,12 @@ use lib catdir( $FindBin::Bin, qw< .. lib perl5 > );
 
 local $Log::Log4perl::caller_depth = $Log::Log4perl::caller_depth + 1;
 
+use Test::Builder;
+sub sometest {
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
+    pass();
+}
+
 #-----------------------------------------------------------------------------
 
 ## name Add to default exceptions
