@@ -8,11 +8,11 @@ use English qw< -no_match_vars >;
 
 use File::Basename qw< basename >;
 use File::Spec::Functions qw< catdir catfile >;
-use PPI::Document q< >;
-use PPI::Document::File q< >;
+use PPI::Document;
+use PPI::Document::File;
 
 use Perl::Critic::Utils qw< :characters >;
-use Perl::Critic::Violation q< >;
+use Perl::Critic::Violation;
 
 use Test::More tests => 69;
 
