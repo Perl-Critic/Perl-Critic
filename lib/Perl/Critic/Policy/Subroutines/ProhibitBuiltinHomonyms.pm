@@ -102,7 +102,7 @@ as well as C<AUTOLOAD>, C<DESTROY>, and C<import> subroutines.
 You can configure additional builtin homonyms to accept by specifying them
 in a space-delimited list to the C<allow> option:
 
-    [Subroutines::ProhibitUnusedPrivateSubroutines]
+    [Subroutines::ProhibitBuiltinHomonyms]
     allow = default index
 
 These are added to the default list of exemptions from this policy. So the
