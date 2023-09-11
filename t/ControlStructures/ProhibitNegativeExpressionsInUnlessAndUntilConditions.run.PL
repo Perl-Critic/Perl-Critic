@@ -228,7 +228,7 @@ sub emit_comparator_code {
 
     if ($custom)
     {
-        $parms = <<"END_CUSTOM_PARMS";
+        chomp($parms = <<"END_CUSTOM_PARMS");
 
 ## parms {add_operators => ' $operator '}
 END_CUSTOM_PARMS
