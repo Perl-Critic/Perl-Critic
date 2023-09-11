@@ -38,7 +38,7 @@ foreach my $operator ( qw/ ne != < > <= >= <=> lt gt le ge cmp / ) {
     emit_comparator_code($test_file, $operator);
 }
 
-foreach my $operator ( qw/ and or / ) {
+foreach my $operator ( qw/ and or && || / ) {
     emit_comparator_code($test_file, $operator, 1);
 }
 
