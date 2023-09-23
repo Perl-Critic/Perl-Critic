@@ -367,9 +367,7 @@ sub _is_anon_sub {
     # or lists (the arguments, if any), or actual attributes (depending on how
     # PPI handles them). A colon is required before the first, and is optional
     # in between.
-    while ( $prev->isa( 'PPI::Token::Word' )
-            or $prev->isa( 'PPI::Structure::List' )
-            or $prev->isa( 'PPI::Token::Attribute' )
+    while ( $prev->isa( 'PPI::Token::Attribute' )
             or $prev->isa( 'PPI::Token::Operator' )
                 and q<:> eq $prev->content() ) {
 
@@ -377,11 +375,6 @@ sub _is_anon_sub {
         # be an anonymous sub with attributes.
         return $FALSE if not $prev = $prev->sprevious_sibling();
     }
-
-    # PPI 1.220 may parse the 'sub :' erroneously as a label. If we find that,
-    # it means our block is the body of an anonymous subroutine.
-    return $TRUE if $prev->isa( 'PPI::Token::Label' )
-        and $prev->content() =~ m/ \A sub \s* : \z /smx;
 
     # At this point we may have a prototype. Skip that too, but there needs to
     # be something before it.

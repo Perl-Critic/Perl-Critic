@@ -104,8 +104,7 @@ sub barr {
 #-----------------------------------------------------------------------------
 
 ## name failure in an anonymous sub
-## failures 1
-## TODO PPI v1.118 doesn't recognize anonymous subroutines
+## failures 0
 ## cut
 
 my $x = sub {
