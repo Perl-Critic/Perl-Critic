@@ -8,6 +8,8 @@ NEXT
     Fix a test failure for Subroutines::RequireArgUnpacking. Thanks, Christian
     Walde. (GH #1048)
 
+    Fixed a test failure in t/06_violation.t on Perl 5.39.1 or above. Thanks,
+    Yves Orton. (GH #1037)
 
 1.150 Sat Mar  4 21:17:45 CST 2023
 
