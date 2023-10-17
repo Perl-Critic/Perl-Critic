@@ -12,7 +12,7 @@ use Perl::Critic::Utils qw{
 use Perl::Critic::Utils::PPI qw{ is_ppi_expression_or_generic_statement };
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.150';
+our $VERSION = '1.152';
 
 #-----------------------------------------------------------------------------
 

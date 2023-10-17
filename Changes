@@ -1,6 +1,6 @@
 Revision history for Perl module Perl::Critic
 
-NEXT
+1.52 Mon Oct 16 10:32:04 PM CDT 2023
 
     Now requires PPI 1.177.
 
