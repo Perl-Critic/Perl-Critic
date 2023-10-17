@@ -19,7 +19,7 @@ use Perl::Critic::Statistics;
 
 #-----------------------------------------------------------------------------
 
-our $VERSION = '1.150';
+our $VERSION = '1.152';
 
 Readonly::Array our @EXPORT_OK => qw(critique);
 

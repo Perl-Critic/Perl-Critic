@@ -23,7 +23,7 @@ use Perl::Critic::UserProfile;
 use Perl::Critic::Utils qw( :data_conversion );
 use Perl::Critic::PolicyFactory (-test => 1);
 
-our $VERSION = '1.150';
+our $VERSION = '1.152';
 
 Readonly::Array our @EXPORT_OK => qw(
     pcritique pcritique_with_violations

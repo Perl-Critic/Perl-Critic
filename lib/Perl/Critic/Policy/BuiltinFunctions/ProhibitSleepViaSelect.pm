@@ -9,7 +9,7 @@ use List::SomeUtils qw(any);
 use Perl::Critic::Utils qw{ :severities :classification :ppi };
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.150';
+our $VERSION = '1.152';
 
 #-----------------------------------------------------------------------------
 
