@@ -2,7 +2,7 @@ Revision history for Perl module Perl::Critic
 
 1.152 Mon Oct 16 10:32:04 PM CDT 2023
 
-    Now requires PPI 1.177.
+    Now requires PPI 1.277.
 
     [Fixes]
     Fix a test failure for Subroutines::RequireArgUnpacking. Thanks, Christian
