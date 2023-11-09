@@ -11,6 +11,8 @@ use Getopt::Long qw< GetOptions >;
 use List::Util qw< first max >;
 use Pod::Usage qw< pod2usage >;
 
+use JSON;
+
 use Perl::Critic::Exception::Parse ();
 use Perl::Critic::Utils qw<
     :characters :severities policy_short_name
@@ -234,6 +236,12 @@ sub _critique {
     my $number_of_violations;
     my $had_error_in_file = 0;
 
+    my $sarif_report = {};
+
+    if ( $opts_ref->{'-sarif'} ) {
+        $sarif_report = _initialize_sarif_report();
+    }
+
     for my $file (@files_to_critique) {
 
         eval {
@@ -241,8 +249,12 @@ sub _critique {
             $number_of_violations += scalar @violations;
 
             if (not $opts_ref->{'-statistics-only'}) {
-                _render_report( $file, $opts_ref, @violations );
-            }
+                if ($opts_ref->{'-sarif'}) {
+                    _append_sarif_report( $sarif_report, $file, $opts_ref, @violations );
+                }
+                else {
+                    _render_report( $file, $opts_ref, @violations );
+                }            }
             1;
         }
         or do {
@@ -263,12 +275,108 @@ sub _critique {
         }
     }
 
-    if ( $opts_ref->{-statistics} or $opts_ref->{'-statistics-only'} ) {
-        my $stats = $critic->statistics();
-        _report_statistics( $opts_ref, $stats );
+    if ( $opts_ref->{'-sarif'} ) {
+        _render_sarif_report( $sarif_report, $opts_ref );
+    } else {
+        if ( $opts_ref->{-statistics} or $opts_ref->{'-statistics-only'} ) {
+            my $stats = $critic->statistics();
+            _report_statistics( $opts_ref, $stats );
+        }
     }
 
     return $number_of_violations, $had_error_in_file;
+}
+
+#------------------------------------------------------------------------------
+
+sub _render_sarif_report {
+    # output SARIF report as JSON
+    my ( $sarif, $opts_ref ) = @_;
+
+    my $json = JSON->new();
+    $json->canonical(1);
+    $json->pretty(1);
+
+    _out $json->encode($sarif);
+}
+
+#------------------------------------------------------------------------------
+
+our $severity_map = {
+    $SEVERITY_HIGHEST => "error",
+    $SEVERITY_HIGH    => "error",
+    $SEVERITY_MEDIUM  => "warning",
+    $SEVERITY_LOW     => "warning",
+    $SEVERITY_LOWEST  => "note",
+};
+
+sub _initialize_sarif_report {
+    # set up the SARIF report, adding the active policies as rules
+    my $sarif = {
+        '$schema' => 'https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json',
+        version => '2.1.0',
+        runs => [
+            {
+                tool => {
+                    driver => {
+                        name => 'Perl::Critic',
+                        informationUri => 'https://metacpan.org/pod/Perl::Critic',
+                        rules => [
+                            map {
+                                {
+                                    id => ref($_),
+                                    name => $_->get_short_name(),
+                                    shortDescription => $_->get_abstract(),
+                                    defaultConfiguration => {
+                                        level => exists $severity_map->{ $_->get_severity() } ? $severity_map->{ $_->get_severity() } : 'note',
+                                    },
+                                }
+                            } $critic->policies()
+                        ],
+                    },
+                },
+                results => []
+            }
+        ]
+    };
+
+    return $sarif;
+}
+
+#------------------------------------------------------------------------------
+
+sub _append_sarif_report {
+    # add the violations from this file to the SARIF report
+    my ( $sarif, $file, $opts_ref, @violations ) = @_;
+
+    my @_violations = grep { ref($_) eq 'Perl::Critic::Violation' } @violations;
+
+    for my $violation (@_violations) {
+        my $result = {
+            ruleId => $violation->policy(),
+            message => {
+                text => $violation->description(),
+            },
+            locations => [
+                {
+                    physicalLocation => {
+                        artifactLocation => {
+                            uri => $file,
+                        },
+                        region => {
+                            startLine => $violation->line_number(),
+                            startColumn => $violation->column_number(),
+                            snippet => {
+                                text => $violation->source(),
+                            },
+                        },
+                    },
+                },
+            ],
+        };
+
+        push( @{ $sarif->{runs}->[0]->{results} }, $result);
+    }
 }
 
 #------------------------------------------------------------------------------
@@ -490,6 +598,7 @@ sub _get_option_specification {
         profile|p=s
         profile-proto
         quiet
+        sarif
         severity=i
         single-policy|s=s
         stern

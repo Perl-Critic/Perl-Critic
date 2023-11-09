@@ -16,6 +16,7 @@ requires 'File::Spec::Unix'           => 0;
 requires 'File::Temp'                 => 0;
 requires 'File::Which'                => 0;
 requires 'Getopt::Long'               => 0;
+requires 'JSON'                       => '4.10';
 requires 'List::SomeUtils'            => '0.55';
 requires 'List::Util'                 => 0;
 requires 'Module::Build'              => '0.4204';
