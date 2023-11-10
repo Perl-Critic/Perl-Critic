@@ -11,13 +11,15 @@ File an issue if you think you've found a bug. Please describe
 3. What actually occurred
 4. What version of the involved component
 
-## Patches
+## New features and improvements
 
-Patches for fixes, features, and improvements are accepted via pull requests.
+To propose a new feature to add to Perl::Critic, open a GitHub issue so it can be discussed.
+Let us know what the feature is and why a Perl::Criitc user would want to use it.
 
-Pull requests should be based on the **dev branch**, unless you want to contribute to an active branch for a specific topic.
+## Patches for fixes
 
-All contributions are welcome and most will be accepted.
+Patches for fixes are accepted via pull requests. Pull requests should be based on the **dev branch**, unless you want
+to contribute to an active branch for a specific topic.
 
 Please see the [developer guidelines](https://github.com/Perl-Critic/Perl-Critic/blob/dev/README.developer) and the complete [developer documentation](https://metacpan.org/pod/Perl::Critic::DEVELOPER).
 
