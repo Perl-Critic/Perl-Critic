@@ -56,6 +56,10 @@ sub violates {
     if ($elem->prototype) {
         my $prototype = $elem->prototype();
         if ($prototype =~ /[a-z]/i) {  # signature (probably)
+            state $c = qr/\Q$CLASS/;
+            state $s = qr/\Q$SELF/;
+            state $invocant = qr/^(?:$c|$s),?/;
+            $prototype =~ s/$invocant// if $self->{_skip_object};
             $num_args = $prototype =~ tr/$@%/$@%/;
         } else {  # prototype
             $prototype =~ s/ \\ [[] .*? []] /*/smxg;    # Allow for grouping
