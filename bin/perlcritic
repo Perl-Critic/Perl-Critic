@@ -469,9 +469,9 @@ Files whose name ends in '.PL' will always be considered programs.
 
 Displays the perldoc for all L<Perl::Critic::Policy> modules that match
 C<m/PATTERN/ixms>.  Since Policy modules tend to have rather long names, this
-just provides a more convenient way to say something like: C<"perldoc
-Perl::Critic::Policy::ValuesAndExpressions::RequireUpperCaseH
-eredocTerminator"> at the command prompt.
+just provides a more convenient way to say something like:
+C<"perldoc Perl::Critic::Policy::ValuesAndExpressions::RequireUpperCaseHeredocTerminator">
+at the command prompt.
 
 =item C<--allow-unsafe>
 
