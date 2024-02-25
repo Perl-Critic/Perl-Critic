@@ -1,5 +1,10 @@
 Revision history for Perl module Perl::Critic
 
+NEXT
+
+    [Documentation]
+    Clarify C<package_exemptions> rules.  Thanks, Felix Ostmann. (GH #1043)
+
 1.152 Mon Oct 16 10:32:04 PM CDT 2023
 
     Now requires PPI 1.277.
