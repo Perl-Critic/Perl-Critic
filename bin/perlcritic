@@ -478,9 +478,9 @@ at the command prompt.
 This option directs C<perlcritic> to allow the use of Policies that have been
 marked as "unsafe".  Unsafe Policies may result in risky operations by
 compiling and executing the code they analyze.  All the Policies that ship in
-the core L<Perl::Critic> distribution are safe.  However, third- party
-Policies, such as those in the L<Perl::Critic::Dynamic> distribution are not
-safe. Note that "safety" is honorary -- if a Policy author marks a Policy as
+the core L<Perl::Critic> distribution are safe.  However, third party
+Policies, such as those in the L<Perl::Critic::Dynamic> distribution, may not
+be.  Note that "safety" is honorary -- if a Policy author marks a Policy as
 safe, it is not a guarantee that it won't do nasty things.  B<If you don't
 trust your Policies and the code you are analyzing, then do not use this
 switch>.
