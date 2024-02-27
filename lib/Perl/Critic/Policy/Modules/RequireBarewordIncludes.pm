@@ -46,6 +46,8 @@ __END__
 
 =pod
 
+=for stopwords Perl4
+
 =head1 NAME
 
 Perl::Critic::Policy::Modules::RequireBarewordIncludes - Write C<require Module> instead of C<require 'Module.pm'>.

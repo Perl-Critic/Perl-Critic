@@ -74,6 +74,8 @@ __END__
 
 =pod
 
+=for stopwords regexp
+
 =head1 NAME
 
 Perl::Critic::Policy::RegularExpressions::RequireBracesForMultiline - Use C<{> and C<}> to delimit multi-line regexps.
