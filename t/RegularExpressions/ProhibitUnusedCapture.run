@@ -653,6 +653,46 @@ my @b = split( /x/, $1 );
 
 #-----------------------------------------------------------------------------
 
+## name %- %+ %{^CAPTURE} capture all named captures
+## failures 0
+## cut
+
+if ( m/(?<%>-)/ ) {
+    print %-;
+}
+
+if ( m/(?<%>+)/ ) {
+    print %+;
+}
+
+if ( m/(?<%>^CAPTURE))/ ) {
+    print %{^CAPTURE};
+}
+
+#-----------------------------------------------------------------------------
+
+## name %LAST_PAREN_MATCH captures all named captures
+## failures 0
+## cut
+
+use English;
+
+if ( m/(?<x>LAST_PAREN_MATCH)/ ) {
+    print %LAST_PAREN_MATCH;
+}
+
+#-----------------------------------------------------------------------------
+
+## name %+ doesn't capture unnamed captures
+## failures 1
+## cut
+
+if ( m/(foo)(?<bar>bar)/ ) {
+    print %+;
+}
+
+#-----------------------------------------------------------------------------
+
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4
