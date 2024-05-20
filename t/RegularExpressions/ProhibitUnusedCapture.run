@@ -572,6 +572,36 @@ s/(.)/ { $1 } /e;
 
 #-----------------------------------------------------------------------------
 
+## name @- and @+
+## failures 0
+## cut
+
+if ( m/(at-minus array)/ ) {
+    print @-;
+}
+
+if ( m/(at-plus array)/ ) {
+    print @+;
+}
+
+#-----------------------------------------------------------------------------
+
+## name english @LAST_MATCH_START and @LAST_MATCH_END
+## failures 0
+## cut
+
+use English
+
+if ( m/(LAST_MATCH_START array)/ ) {
+    print @LAST_MATCH_START;
+}
+
+if ( m/(LAST_MATCH_END array)/ ) {
+    print @LAST_MATCH_END;
+}
+
+#-----------------------------------------------------------------------------
+
 ## name @{^CAPTURE} added in 5.25.7 (GitHub #778)
 ## failures 0
 ## cut
@@ -582,6 +612,7 @@ if ( m/(CAPTURE array)/ ) {
 
 if ( m/(quoted CAPTURE array)/ ) {
     print "@{^CAPTURE}\n";
+}
 
 if ( m/(CAPTURE array element)/ ) {
     print ${^CAPTURE}[0];
@@ -618,7 +649,7 @@ if ( m/(CAPTURE_ALL)/ ) {
 
 /(.+)/;
 my @a = split /x/, $1;
-my @b = split( /x/, $1;
+my @b = split( /x/, $1 );
 
 #-----------------------------------------------------------------------------
 
