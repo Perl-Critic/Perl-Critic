@@ -592,6 +592,7 @@ sub _mark_magic {
         ( \%CAPTURE_REFERENCE, \%CAPTURE_ARRAY );
     $elem->isa( 'PPI::Token::Magic' )
         or $capture_ref->{$content}
+        or $capture_array->{$content}
         or return;
 
     if ( $content =~ m/ \A \$ ( \d+ ) /xms ) {
