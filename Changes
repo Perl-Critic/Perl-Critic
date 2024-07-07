@@ -2,6 +2,10 @@ Revision history for Perl module Perl::Critic
 
 NEXT
 
+    [Enhancements]
+    ProhibitedUnusedCapture now recognizes %+, %-, %{^CAPTURE} and
+    %LAST_PAREN_MATCH.  Thanks, Dagfinn Ilmari Mannsåker. (GH #1065)
+
     [Documentation]
     Clarify C<package_exemptions> rules.  Thanks, Felix Ostmann. (GH #1043)
 
