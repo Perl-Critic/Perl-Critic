@@ -6,6 +6,9 @@ NEXT
     ProhibitedUnusedCapture now recognizes %+, %-, %{^CAPTURE} and
     %LAST_PAREN_MATCH.  Thanks, Dagfinn Ilmari Mannsåker. (GH #1065)
 
+    Fixed a deprecation warning in the extras/perlcritic.el Emacs script.
+    Thanks, Rolf Stöckli. (GH #1067)
+
     [Documentation]
     Clarify C<package_exemptions> rules.  Thanks, Felix Ostmann. (GH #1043)
 
