@@ -75,6 +75,8 @@
 
 
 ;;; Change Log:
+;; 0.11
+;;   * Package cl replaced with cl-lib.
 ;; 0.10
 ;;   * Synched up regexp alist with Perl::Critic::Utils and accounted for all
 ;;     past patterns too.
@@ -377,8 +379,8 @@ per-file basis with File Variables."
 
 
 
-;; The Emacs Lisp manual says to do this with the cl library.
-(eval-when-compile (require 'cl))
+;; The Emacs Lisp manual says to do this with the cl-lib library.
+(eval-when-compile (require 'cl-lib))
 
 (define-compilation-mode perlcritic-error-mode "perlcritic-error"
   "..."
@@ -414,19 +416,19 @@ warnings those are displayed in a separate buffer."
           (err-buf (get-buffer-create "*perlcritic*")))
 
       (set-buffer src-buf)
-      (let ((perlcritic-args (loop for p in (list
-                                             ;; Add new bin/perlcritic
-                                             ;; parameters here!
-					     (perlcritic--param-profile)
-					     (perlcritic--param-noprofile)
-                                             (perlcritic--param-severity)
-                                             (perlcritic--param-top)
-					     (perlcritic--param-include)
-					     (perlcritic--param-exclude)
-					     (perlcritic--param-force)
-                                             (perlcritic--param-verbose))
-                                   unless (null p)
-                                   append p)))
+      (let ((perlcritic-args (cl-loop for p in (list
+                                                ;; Add new bin/perlcritic
+                                                ;; parameters here!
+					        (perlcritic--param-profile)
+					        (perlcritic--param-noprofile)
+                                                (perlcritic--param-severity)
+                                                (perlcritic--param-top)
+					        (perlcritic--param-include)
+					        (perlcritic--param-exclude)
+					        (perlcritic--param-force)
+                                                (perlcritic--param-verbose))
+                                      unless (null p)
+                                      append p)))
                                         ;
         (message "Perl critic...running")
         ;; Seriously. Is this the nicest way to call
@@ -476,9 +478,9 @@ warnings those are displayed in a separate buffer."
 	      ;; put the buffer's directory here somewhere too.
               (set-buffer err-buf)
               (goto-char (point-min))
-              (insert (reduce (lambda (a b) (concat a " " b))
-                              (nconc (list perlcritic-bin)
-                                     perlcritic-args))
+              (insert (cl-reduce (lambda (a b) (concat a " " b))
+                                 (nconc (list perlcritic-bin)
+                                        perlcritic-args))
                       "\n"
 		      ;; TODO: instead of a blank line, print the
 		      ;; buffer's directory+file.

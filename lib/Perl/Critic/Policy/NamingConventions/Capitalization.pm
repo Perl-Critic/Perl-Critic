@@ -647,7 +647,6 @@ There are other opinions on the specifics, for example, in
 L<perlstyle|perlstyle>.  This
 policy can be configured to match almost any style that you can think of.
 
-
 =head1 CONFIGURATION
 
 You can specify capitalization rules for the following things:
@@ -713,6 +712,9 @@ C<subroutine_exemptions> defaults to
 C<AUTOLOAD BUILD BUILDARGS CLEAR CLOSE DELETE DEMOLISH DESTROY EXISTS EXTEND FETCH FETCHSIZE FIRSTKEY GETC NEXTKEY POP PRINT PRINTF PUSH READ READLINE SCALAR SHIFT SPLICE STORE STORESIZE TIEARRAY TIEHANDLE TIEHASH TIESCALAR UNSHIFT UNTIE WRITE>
 which should cover all the standard Perl subroutines plus those from
 L<Moose|Moose>.
+
+Note that that C<package_exemptions> does not check complete package names.
+For C<Foo::Bar::baz>, it will check C<Foo>, C<Bar> and C<baz> sequentially.
 
 For example, if you want all local variables to be in all lower-case
 and global variables to start with "G_" and otherwise not contain

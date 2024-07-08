@@ -1,5 +1,17 @@
 Revision history for Perl module Perl::Critic
 
+NEXT
+
+    [Enhancements]
+    ProhibitedUnusedCapture now recognizes %+, %-, %{^CAPTURE} and
+    %LAST_PAREN_MATCH.  Thanks, Dagfinn Ilmari Mannsåker. (GH #1065)
+
+    Fixed a deprecation warning in the extras/perlcritic.el Emacs script.
+    Thanks, Rolf Stöckli. (GH #1067)
+
+    [Documentation]
+    Clarify C<package_exemptions> rules.  Thanks, Felix Ostmann. (GH #1043)
+
 1.152 Mon Oct 16 10:32:04 PM CDT 2023
 
     Now requires PPI 1.277.

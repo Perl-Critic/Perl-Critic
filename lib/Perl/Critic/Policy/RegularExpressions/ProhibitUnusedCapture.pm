@@ -35,6 +35,11 @@ Readonly::Hash my %CAPTURE_ARRAY => hashify( qw< @- @+ @{^CAPTURE} > );
 Readonly::Hash my %CAPTURE_ARRAY_ENGLISH => (
     hashify( qw< @LAST_MATCH_START @LAST_MATCH_END > ),
     %CAPTURE_ARRAY );
+Readonly::Hash my %CAPTURE_HASH => hashify( qw< %- %+ %{^CAPTURE} >);
+Readonly::Hash my %CAPTURE_HASH_ENGLISH => (
+    hashify( qw< %LAST_PAREN_MATCH > ),
+    %CAPTURE_HASH );
+
 
 Readonly::Scalar my $DESC => q{Only use a capturing group if you plan to use the captured value};
 Readonly::Scalar my $EXPL => [252];
@@ -587,11 +592,13 @@ sub _mark_magic {
 
     # Only interested in magic, or known English equivalent.
     my $content = $elem->content();
-    my ( $capture_ref, $capture_array ) = $doc->uses_module( 'English' ) ?
-        ( \%CAPTURE_REFERENCE_ENGLISH, \%CAPTURE_ARRAY_ENGLISH ) :
-        ( \%CAPTURE_REFERENCE, \%CAPTURE_ARRAY );
+    my ( $capture_ref, $capture_array, $capture_hash ) = $doc->uses_module( 'English' ) ?
+        ( \%CAPTURE_REFERENCE_ENGLISH, \%CAPTURE_ARRAY_ENGLISH, \%CAPTURE_HASH_ENGLISH ) :
+        ( \%CAPTURE_REFERENCE, \%CAPTURE_ARRAY, \%CAPTURE_HASH );
     $elem->isa( 'PPI::Token::Magic' )
         or $capture_ref->{$content}
+        or $capture_array->{$content}
+        or $capture_hash->{$content}
         or return;
 
     if ( $content =~ m/ \A \$ ( \d+ ) /xms ) {
@@ -607,6 +614,10 @@ sub _mark_magic {
     } elsif ( $capture_array->{$content} ) {    # GitHub #778
         foreach my $num ( 1 .. @{$captures} ) {
             _record_numbered_capture( $num, $captures );
+        }
+    } elsif ( $capture_hash->{$content} ) {
+        foreach my $name ( keys %{$named_captures} ) {
+            _record_named_capture( $name, $captures, $named_captures );
         }
     } elsif ( $capture_ref->{$content} ) {
         _mark_magic_subscripted_code( $elem, $re, $captures, $named_captures );
