@@ -90,6 +90,9 @@ sub _is_statement_of_interest {
             $self->{_allow_import_of}{$module}
                 and return $FALSE;
         }
+        elsif ( $elem->version ) {
+            return $FALSE;
+        }
     }
 
     return $TRUE;
