@@ -717,7 +717,7 @@ sub is_hash_key {
     return
         $sib
         && $sib->isa('PPI::Token::Operator')
-        && $sib eq '=>'
+        && $sib eq $FATCOMMA
     ;
 }
 
