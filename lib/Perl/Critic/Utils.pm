@@ -711,7 +711,13 @@ sub is_hash_key {
     return if !$parent;
     my $grandparent = $parent->parent();
     return if !$grandparent;
-    return 1 if $grandparent->isa('PPI::Structure::Subscript');
+    if ( $grandparent->isa('PPI::Structure::Subscript') ) {
+        #If followed by a non-(fat)comma, then it's not a hash slice,
+        #so a function call without parentheses.
+        return if $sib && !($sib->isa('PPI::Token::Operator')
+                            && ($sib eq $COMMA || $sib eq $FATCOMMA));
+        return 1;
+    }
 
     #Check declarative style: %hash = (foo => bar);
     return
