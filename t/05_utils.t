@@ -126,7 +126,8 @@ sub test_is_assignment_operator {
 #-----------------------------------------------------------------------------
 
 sub test_is_hash_key {
-    my $code = 'sub foo { return $h1{bar}, $h2->{baz}, $h3->{ nuts() } }';
+    my $code = 'sub foo { return $h1{bar}, $h2->{baz}, $h3->{ nuts() }, @h4{a, b(), c}, $h5{ my_fun @args } }
+my %h6 = ( d => e, f, g )';
     my $doc = PPI::Document->new(\$code);
     my @words = @{$doc->find('PPI::Token::Word')};
     my @expect = (
@@ -136,12 +137,21 @@ sub test_is_hash_key {
         ['bar', 1],
         ['baz', 1],
         ['nuts', undef],
+        ['a', 1],
+        ['b', undef],
+        ['c', 1],
+        ['my_fun', undef],
+        ['my', undef],
+        ['d', 1],
+        ['e', undef],
+        ['f', undef],
+        ['g', undef],
     );
     is(scalar @words, scalar @expect, 'is_hash_key count');
 
     for my $i (0 .. $#expect) {
         is($words[$i], $expect[$i][0], 'is_hash_key word');
-        is( !!is_hash_key($words[$i]), !!$expect[$i][1], 'is_hash_key boolean' );
+        is( !!is_hash_key($words[$i]), !!$expect[$i][1], 'is_hash_key boolean: ' . $words[$i] );
     }
 
     return;
