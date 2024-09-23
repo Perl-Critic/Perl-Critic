@@ -12,13 +12,26 @@ our $VERSION = '1.152';
 
 #-----------------------------------------------------------------------------
 
-Readonly::Scalar my $EMPTY_RX => qr{\A ["'] \s* ['"] \z}xms;
+Readonly::Scalar my $EMPTY_RX => qr{\A ["'] (\s*) ['"] \z}xms;
 Readonly::Scalar my $DESC     => q<Quotes used with a string containing no non-whitespace characters>;
 Readonly::Scalar my $EXPL     => [ 53 ];
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return ()                    }
+Readonly::Scalar my $LENGTH_FOR_NO_STRING_AT_ALL => -1;
+
+sub supported_parameters {
+    return (
+        {
+            name            => 'max_allowed_quoted_string_length',
+            description     => 'The maximum allowed length for a string of whitespace to pass this policy.',
+            default_string  => "${LENGTH_FOR_NO_STRING_AT_ALL}",
+            behavior        => 'integer',
+            integer_minimum => $LENGTH_FOR_NO_STRING_AT_ALL,
+        },
+    );
+}
+
 sub default_severity     { return $SEVERITY_LOW         }
 sub default_themes       { return qw(core pbp cosmetic) }
 sub applies_to           { return 'PPI::Token::Quote'   }
@@ -27,7 +40,8 @@ sub applies_to           { return 'PPI::Token::Quote'   }
 
 sub violates {
     my ( $self, $elem, undef ) = @_;
-    if ( $elem =~ $EMPTY_RX ) {
+    my $max_allowed_length = $self->{_max_allowed_quoted_string_length};
+    if ( $elem =~ $EMPTY_RX && length($1) > $max_allowed_length) {
         return $self->violation( $DESC, $EXPL, $elem );
     }
     return;    #ok!
@@ -74,8 +88,13 @@ characters.
 
 =head1 CONFIGURATION
 
-This Policy is not configurable except for the standard options.
+The maximum length of a string made only of whitespace that can still use quotes
+can be configured via the C<max_allowed_quoted_string_length> option. The
+default is -1, disallowing all such strings. You can use the following, for
+example, to allow empty strings to be quoted:
 
+    [ValuesAndExpressions::ProhibitEmptyQuotes]
+    max_allowed_quoted_string_length = 0
 
 =head1 SEE ALSO
 
