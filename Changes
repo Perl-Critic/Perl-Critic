@@ -9,6 +9,9 @@ NEXT
     Fixed a deprecation warning in the extras/perlcritic.el Emacs script.
     Thanks, Rolf Stöckli. (GH #1067)
 
+    RequireExplicitPackage now accepts a use VERSION as the first line.
+    Thanks, Philippe Bruhat. (GH #1070)
+
     [Documentation]
     Clarify C<package_exemptions> rules.  Thanks, Felix Ostmann. (GH #1043)
 
