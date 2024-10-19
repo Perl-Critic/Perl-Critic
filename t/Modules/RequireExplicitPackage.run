@@ -119,6 +119,28 @@ use utf8;
 package Foo::Bar;
 
 #-----------------------------------------------------------------------------
+
+## name Allow line 1 version semantics
+## failures 0
+## cut
+
+use v5.36;
+
+package Foo::Bar;
+
+#-----------------------------------------------------------------------------
+
+## name Allow line 1 version semantics and specific modules
+## failures 0
+## parms { allow_import_of => 'utf8' }
+## cut
+
+use v5.36;
+use utf8;
+
+package Foo::Bar;
+
+#-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4
