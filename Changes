@@ -12,6 +12,10 @@ NEXT
     RequireExplicitPackage now accepts a use VERSION as the first line.
     Thanks, Philippe Bruhat. (GH #1070)
 
+    [Fixes]
+    Fix some false positives for function calls as a hash index. Thanks,
+    Jaap Eldering. (GH #1071)
+
     [Documentation]
     Clarify C<package_exemptions> rules.  Thanks, Felix Ostmann. (GH #1043)
 
