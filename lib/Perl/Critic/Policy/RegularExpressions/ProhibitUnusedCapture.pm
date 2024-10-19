@@ -94,8 +94,10 @@ sub violates {
         $#captures = $ncaptures - 1;
     }
 
-    return if _enough_assignments($elem, \@captures) && !%named_captures;
-    return if _is_in_slurpy_array_context($elem) && !%named_captures;
+    if ( !%named_captures ) {
+        return if _enough_assignments($elem, \@captures);
+        return if _is_in_slurpy_array_context($elem);
+    }
     return if _enough_magic($elem, $re, \@captures, \%named_captures, $doc);
 
     return $self->violation( $DESC, $EXPL, $elem );
