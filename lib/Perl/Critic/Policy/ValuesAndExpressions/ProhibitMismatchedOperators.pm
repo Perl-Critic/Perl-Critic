@@ -59,7 +59,7 @@ sub violates {
 
     return if not exists $OPERATOR_TYPES{$elem_text};
 
-    my $leading_operator = $self->_get_potential_leading_operator($elem)
+    my $leading_operator = _get_potential_leading_operator($elem)
         or return;
 
     my $next_elem = $elem->snext_sibling() or return;
@@ -72,9 +72,8 @@ sub violates {
     return if not exists $OPERATOR_TYPES{$elem_text};
     my $operator_type = $OPERATOR_TYPES{$elem_text};
 
-    my $leading_operator_compatibility =
-        $self->_get_token_compatibility($leading_operator);
-    my $next_compatibility = $self->_get_token_compatibility($next_elem);
+    my $leading_operator_compatibility = _get_token_compatibility($leading_operator);
+    my $next_compatibility = _get_token_compatibility($next_elem);
 
     return if
             (
@@ -90,7 +89,7 @@ sub violates {
             $operator_type
         &&  defined $leading_operator_compatibility
         &&  ! $leading_operator_compatibility->[$operator_type]
-        &&  $self->_have_stringy_x($leading_operator); # RT 54524
+        &&  _have_stringy_x($leading_operator); # RT 54524
 
     return if $self->_is_special_string_number_addion($elem_text, $leading_operator, $next_elem);
 
@@ -100,10 +99,10 @@ sub violates {
 #-----------------------------------------------------------------------------
 
 sub _get_token_compatibility {
-    my ($self, $elem) = @_;
+    my ($elem) = @_;
 
     return $FILE_OPERATOR_COMPATIBILITY{ $elem->content() }
-        if $self->_is_file_operator($elem);
+        if _is_file_operator($elem);
 
     for my $class (keys %TOKEN_COMPATIBILITY) {
         return $TOKEN_COMPATIBILITY{$class} if $elem->isa($class);
@@ -115,7 +114,7 @@ sub _get_token_compatibility {
 #-----------------------------------------------------------------------------
 
 sub _have_stringy_x {
-    my ($self, $elem) = @_;
+    my ($elem) = @_;
 
     return if not $elem;
 
@@ -130,14 +129,14 @@ sub _have_stringy_x {
 #-----------------------------------------------------------------------------
 
 sub _get_potential_leading_operator {
-    my ($self, $elem) = @_;
+    my ($elem) = @_;
 
     my $previous_element = $elem->sprevious_sibling() or return;
 
-    if ( $self->_get_token_compatibility($previous_element) ) {
+    if ( _get_token_compatibility($previous_element) ) {
         my $previous_sibling = $previous_element->sprevious_sibling();
         if (
-            $previous_sibling and $self->_is_file_operator($previous_sibling)
+            $previous_sibling and _is_file_operator($previous_sibling)
         ) {
             $previous_element = $previous_sibling;
         }
@@ -149,7 +148,7 @@ sub _get_potential_leading_operator {
 #-----------------------------------------------------------------------------
 
 sub _is_file_operator {
-    my ($self, $elem) = @_;
+    my ($elem) = @_;
 
     return if not $elem;
     return if not $elem->isa('PPI::Token::Operator');

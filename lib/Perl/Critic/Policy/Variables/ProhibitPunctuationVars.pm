@@ -318,8 +318,6 @@ sub _unbracket_variable_name {
 #-----------------------------------------------------------------------------
 
 sub _create_magic_detector {
-    my ($config) = @_;
-
     # Set up the regexp alternation for matching magic variables.
     # We can't process $config->{_allow} here because of a quirk in the
     # way Perl::Critic handles testing.

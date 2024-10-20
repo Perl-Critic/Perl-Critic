@@ -48,7 +48,7 @@ sub applies_to       { return qw(PPI::Token::Symbol
 #-----------------------------------------------------------------------------
 
 sub initialize_if_enabled {
-    my ($self, $config) = @_;
+    my ($self, undef) = @_;
 
     $self->{_all_packages} = {
         hashify keys %{ $self->{_packages} }, keys %{ $self->{_add_packages} }

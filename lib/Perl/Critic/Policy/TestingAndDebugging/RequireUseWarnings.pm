@@ -55,7 +55,7 @@ sub violates {
     my $warn_line  = $warn_stmnt ? $warn_stmnt->location()->[0] : undef;
 
     # Find all statements that aren't 'use', 'require', or 'package'
-    my $stmnts_ref =  $self->_find_isnt_include_or_package($document);
+    my $stmnts_ref = _find_isnt_include_or_package($document);
     return if !$stmnts_ref;
 
     # If the 'use warnings' statement is not defined, or the other
@@ -106,7 +106,7 @@ sub _generate_is_use_warnings {
 # native PPI::Node::find() method with a custom callback function.
 
 sub _find_isnt_include_or_package {
-    my ($self, $doc) = @_;
+    my ($doc) = @_;
     my $all_statements = $doc->find('PPI::Statement') or return;
     my @wanted_statements = grep { _statement_isnt_include_or_package($_) } @{$all_statements};
     return @wanted_statements ? \@wanted_statements : ();

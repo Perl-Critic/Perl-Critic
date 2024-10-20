@@ -25,13 +25,13 @@ sub applies_to           { return 'PPI::Document'     }
 #-----------------------------------------------------------------------------
 
 sub prepare_to_scan_document {
-    my ( $self, $document ) = @_;
+    my ( undef, $document ) = @_;
 
     return $document->is_module();   # Must be a library or module.
 }
 
 sub violates {
-    my ( $self, $elem, $doc ) = @_;
+    my ( $self, undef, $doc ) = @_;
 
     # Last statement should be just "1;"
     my @significant = grep { _is_code($_) } $doc->schildren();

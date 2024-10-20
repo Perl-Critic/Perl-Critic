@@ -238,7 +238,7 @@ sub _parse_sections {
 }
 
 sub _parse_lib_sections {
-    my ($self, $parameter, $config_string) = @_;
+    my ($self, undef, $config_string) = @_;
 
     if ( defined $config_string ) {
         $self->{_lib_sections} = [ _parse_sections( $config_string ) ];
@@ -248,7 +248,7 @@ sub _parse_lib_sections {
 }
 
 sub _parse_script_sections {
-    my ($self, $parameter, $config_string) = @_;
+    my ($self, undef, $config_string) = @_;
 
     if ( defined $config_string ) {
         $self->{_script_sections} = [ _parse_sections( $config_string ) ];
@@ -260,7 +260,7 @@ sub _parse_script_sections {
 #-----------------------------------------------------------------------------
 
 sub initialize_if_enabled {
-    my ($self, $config) = @_;
+    my ($self, undef) = @_;
 
     my $source = $self->{_source};
     if ( not defined $source or not defined $DEFAULT_LIB_SECTIONS{$source} ) {
@@ -299,7 +299,7 @@ sub _sections_specified {
 #-----------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, $doc ) = @_;
+    my ( $self, undef, $doc ) = @_;
 
     # This policy does not apply unless there is some real code in the
     # file.  For example, if this file is just pure POD, then

@@ -116,13 +116,13 @@ sub violates {
     $name =~ m/ \A $self->{_private_name_regex} \z /smx or return;
 
     # If the subroutine is called in the document, just return (OK).
-    $self->_find_sub_call_in_document( $elem, $document ) and return;
+    return if _find_sub_call_in_document( $elem, $document );
 
     # If the subroutine is referred to in the document, just return (OK).
-    $self->_find_sub_reference_in_document( $elem, $document ) and return;
+    return if _find_sub_reference_in_document( $elem, $document );
 
     # If the subroutine is used in an overload, just return (OK).
-    $self->_find_sub_overload_in_document( $elem, $document ) and return;
+    return if _find_sub_overload_in_document( $elem, $document );
 
     # No uses of subroutine found. Return a violation.
     return $self->violation( sprintf( $DESC, $name ), $EXPL, $elem );
@@ -142,7 +142,7 @@ sub _compare_token_locations {
 # Find out if the subroutine defined in $elem is called in $document. Calls
 # inside the subroutine itself do not count.
 sub _find_sub_call_in_document {
-    my ( $self, $elem, $document ) = @_;
+    my ( $elem, $document ) = @_;
 
     my $start_token = $elem->first_token();
     my $finish_token = $elem->last_token();
@@ -217,7 +217,7 @@ sub _find_sub_usage_in_regexp {
 # the '\&_foo' construction, since _find_sub_reference_in_document() should
 # find this.
 sub _find_sub_overload_in_document {
-    my ( $self, $elem, $document ) = @_;
+    my ( $elem, $document ) = @_;
 
     my $name = $elem->name();
 
@@ -246,7 +246,7 @@ sub _find_sub_overload_in_document {
 # '\&foo'), calls using the sigil, and gotos. The latter two do not count if
 # inside the subroutine itself.
 sub _find_sub_reference_in_document {
-    my ( $self, $elem, $document ) = @_;
+    my ( $elem, $document ) = @_;
 
     my $start_token = $elem->first_token();
     my $finish_token = $elem->last_token();

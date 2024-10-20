@@ -45,7 +45,7 @@ sub applies_to       { return 'PPI::Statement::Include' }
 #-----------------------------------------------------------------------------
 
 sub _parse_allow {
-    my ($self, $parameter, $config_string) = @_;
+    my ($self, undef, $config_string) = @_;
 
     $self->{_allow} = {};
 

@@ -42,7 +42,7 @@ sub applies_to           {
 #-----------------------------------------------------------------------------
 
 sub initialize_if_enabled {
-    my ($self, $config) = @_;
+    my ($self, undef) = @_;
 
     my $rcs_keywords = $self->{_rcs_keywords};
     my @rcs_keywords = keys %{$rcs_keywords};

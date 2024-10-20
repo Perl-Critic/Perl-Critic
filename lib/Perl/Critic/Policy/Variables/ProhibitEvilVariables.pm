@@ -96,7 +96,7 @@ sub applies_to        { return qw{PPI::Token::Symbol}    }
 #-----------------------------------------------------------------------------
 
 sub _parse_variables {
-    my ($self, $parameter, $config_string) = @_;
+    my ($self, undef, $config_string) = @_;
 
     return if not $config_string;
     return if $config_string =~ m< \A \s* \z >xms;
@@ -131,7 +131,7 @@ sub _parse_variables {
 }
 
 sub _parse_variables_file {
-    my ($self, $parameter, $config_string) = @_;
+    my ($self, undef, $config_string) = @_;
 
     return if not $config_string;
     return if $config_string =~ m< \A \s* \z >xms;
@@ -219,7 +219,7 @@ sub _handle_variable_specification {
 #-----------------------------------------------------------------------------
 
 sub initialize_if_enabled {
-    my ($self, $config) = @_;
+    my ($self, undef) = @_;
 
     # Disable if no variables are specified; there's no point in running if
     # there aren't any.
@@ -234,7 +234,7 @@ sub violates {
     my ( $self, $elem, undef ) = @_;
     return if not $elem;
 
-    my @names = $self->_compute_symbol_names( $elem )
+    my @names = _compute_symbol_names( $elem )
         or return;
 
     my $evil_variables = $self->{_evil_variables};
@@ -269,7 +269,7 @@ sub violates {
 # symbol is subscripted, we are interested in the subscripted form as well.
 
 sub _compute_symbol_names {
-    my ($self, $elem) = @_;
+    my ($elem) = @_;
 
     my @names;
 

@@ -28,7 +28,7 @@ sub applies_to           { return 'PPI::Token::Word' }
 #-----------------------------------------------------------------------------
 
 sub prepare_to_scan_document {
-    my ( $self, $document ) = @_;
+    my ( undef, $document ) = @_;
 
     # The earliest version tested was 5.8.8
     my $version = $document->highest_explicit_perl_version();

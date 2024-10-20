@@ -25,7 +25,7 @@ sub applies_to           { return 'PPI::Structure::Subscript' }
 #-----------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, $doc ) = @_;
+    my ( $self, $elem, undef ) = @_;
 
     return if $elem->braces ne '[]';
     my ($name, $isref) = _is_bad_index( $elem );

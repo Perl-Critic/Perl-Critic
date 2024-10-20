@@ -66,7 +66,7 @@ sub applies_to           { return 'PPI::Token::Word'     }
 #-----------------------------------------------------------------------------
 
 sub initialize_if_enabled {
-    my ($self, $config) = @_;
+    my ($self, undef) = @_;
 
     my @specified_functions = keys %{ $self->{_functions} };
     my @resulting_functions;

@@ -58,7 +58,7 @@ sub applies_to           { return 'PPI::Token::Symbol'       }
 #-----------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, $doc ) = @_;
+    my ( $self, $elem, undef ) = @_;
 
     # Any variable other than $VERSION is ignored.
     return if $VERSION_VARIABLE ne $elem->content();
@@ -75,7 +75,7 @@ sub violates {
     # substitution operator, it is an attempt to modify $VERSION, so we
     # return an error to that effect.
     return $self->violation( $DESC, $EXPL, $elem )
-        if $self->_validate_operator_bind_regex( $operator, $elem );
+        if _validate_operator_bind_regex( $operator, $elem );
 
     # If the presumptive operator is not an assignment operator of some sort,
     # we are not modifying $VERSION at all, and so we just return.
@@ -115,7 +115,7 @@ sub violates {
 
 #-----------------------------------------------------------------------------
 
-# Check if the element is an assignment operator. 
+# Check if the element is an assignment operator.
 
 sub _check_for_assignment_operator {
     my ( $operator ) = @_;
@@ -132,7 +132,7 @@ sub _check_for_assignment_operator {
 # PPI::Token::Regexp::Substitute. Otherwise we return false.
 
 sub _validate_operator_bind_regex {
-    my ( $self, $operator, $elem ) = @_;
+    my ( $operator, $elem ) = @_;
 
     # We are not interested in anything but '=~ s/../../'.
     return if $BIND_REGEX ne $operator->content();

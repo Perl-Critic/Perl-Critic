@@ -27,7 +27,7 @@ sub applies_to           { return 'PPI::Statement::Sub' }
 #-----------------------------------------------------------------------------
 
 sub violates {
-    my ($self, $elem, $doc) = @_;
+    my ($self, $elem, undef) = @_;
 
     return if $elem->isa('PPI::Statement::Scheduled') || defined $elem->type;
 

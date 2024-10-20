@@ -48,7 +48,7 @@ sub prepare_to_scan_document {
 }
 
 sub violates {
-    my ( $self, $elem, $doc ) = @_;
+    my ( $self, undef, $doc ) = @_;
 
     # Find the first 'package' statement
     my $package_stmnt = $doc->find_first( 'PPI::Statement::Package' );

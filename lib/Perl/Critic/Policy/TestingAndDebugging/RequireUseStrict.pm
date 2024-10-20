@@ -52,7 +52,7 @@ sub violates {
     my $strict_line  = $strict_stmnt ? $strict_stmnt->location()->[0] : undef;
 
     # Find all statements that aren't 'use', 'require', or 'package'
-    my $stmnts_ref = $self->_find_isnt_include_or_package($doc);
+    my $stmnts_ref = _find_isnt_include_or_package($doc);
     return if not $stmnts_ref;
 
     # If the 'use strict' statement is not defined, or the other
@@ -115,7 +115,7 @@ sub _generate_is_use_strict {
 # native PPI::Node::find() method with a custom callback function.
 
 sub _find_isnt_include_or_package {
-    my ($self, $doc) = @_;
+    my ($doc) = @_;
     my $all_statements = $doc->find('PPI::Statement') or return;
     my @wanted_statements = grep { _statement_isnt_include_or_package($_) } @{$all_statements};
     return @wanted_statements ? \@wanted_statements : ();

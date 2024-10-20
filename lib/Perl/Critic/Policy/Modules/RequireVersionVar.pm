@@ -27,7 +27,7 @@ sub applies_to           { return 'PPI::Document'          }
 #-----------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, $doc ) = @_;
+    my ( $self, undef, $doc ) = @_;
 
     return if $doc->find_first( \&_is_version_declaration );
 

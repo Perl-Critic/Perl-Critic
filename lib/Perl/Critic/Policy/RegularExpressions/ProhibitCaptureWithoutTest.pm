@@ -37,7 +37,7 @@ sub applies_to           { return 'PPI::Token::Magic'      }
 #-----------------------------------------------------------------------------
 
 sub violates {
-    my ($self, $elem, $doc) = @_;
+    my ($self, $elem, undef) = @_;
     # TODO named capture variables
     return if $elem !~ m/\A \$[1-9] \z/xms;
     return if _is_in_conditional_expression($elem);

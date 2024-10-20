@@ -25,7 +25,7 @@ sub applies_to           { return 'PPI::Token::Word'    }
 #-----------------------------------------------------------------------------
 
 sub violates {
-    my ($self, $elem, $doc) = @_;
+    my ($self, $elem, undef) = @_;
 
     return if $elem->content() ne 'sort';
     return if ! is_function_call($elem);

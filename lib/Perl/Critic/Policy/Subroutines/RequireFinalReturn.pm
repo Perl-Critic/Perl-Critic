@@ -65,7 +65,7 @@ sub violates {
 
 
     my ($block) = @blocks;
-    if ($self->_block_is_empty($block) || $self->_block_has_return($block)) {
+    if (_block_is_empty($block) || $self->_block_has_return($block)) {
         return; # OK
     }
 
@@ -84,7 +84,7 @@ sub violates {
 #-----------------------------------------------------------------------------
 
 sub _block_is_empty {
-    my ( $self, $block ) = @_;
+    my ( $block ) = @_;
     return $block->schildren() == 0;
 }
 
@@ -105,8 +105,8 @@ sub _block_has_return {
 sub _is_explicit_return {
     my ( $self, $final ) = @_;
 
-    return if $self->_is_conditional_stmnt( $final );
-    return $self->_is_return_or_goto_stmnt( $final )
+    return if _is_conditional_stmnt( $final );
+    return _is_return_or_goto_stmnt( $final )
         || $self->_is_terminal_stmnt( $final );
 }
 
@@ -199,7 +199,7 @@ sub _is_given_when_return {
 #-----------------------------------------------------------------------------
 
 sub _is_return_or_goto_stmnt {
-    my ( $self, $stmnt ) = @_;
+    my ( $stmnt ) = @_;
     return if not $stmnt->isa('PPI::Statement::Break');
     my $first_token = $stmnt->schild(0) || return;
     return $first_token->content() eq 'return'
@@ -226,7 +226,7 @@ sub _is_terminal_stmnt {
 #-----------------------------------------------------------------------------
 
 sub _is_conditional_stmnt {
-    my ( $self, $stmnt ) = @_;
+    my ( $stmnt ) = @_;
     return if not $stmnt->isa('PPI::Statement');
 
     return any { exists $CONDITIONALS{$_} && $_->isa('PPI::Token::Word') } $stmnt->schildren();
@@ -258,7 +258,7 @@ sub _is_suffix_when_with_return {
     my ( $self, $stmnt ) = @_;
     return if not $stmnt->isa('PPI::Statement');
     foreach my $elem ( $stmnt->schildren() ) {
-        return ( $self->_is_return_or_goto_stmnt( $stmnt ) ||
+        return ( _is_return_or_goto_stmnt( $stmnt ) ||
                 $self->_is_terminal_stmnt( $stmnt ) )
             if $elem->isa( 'PPI::Token::Word' )
                 && 'when' eq $elem->content();

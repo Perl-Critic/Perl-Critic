@@ -36,7 +36,7 @@ sub applies_to       { return 'PPI::Statement::Include' }
 #-----------------------------------------------------------------------------
 
 sub violates {
-    my ($self, $elem, $doc) = @_;
+    my ($self, $elem, undef) = @_;
 
     return if $elem->type ne 'no';
     return if $elem->module ne 'strict';

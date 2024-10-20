@@ -60,8 +60,8 @@ sub violates {
     }
 
     return if $self->{_allow_in_main_unless_in_subroutine}
-        && !$self->_is_element_contained_in_subroutine( $elem )
-        && $self->_is_element_in_namespace_main( $elem );    # RT #56619
+        && !_is_element_contained_in_subroutine( $elem )
+        && _is_element_in_namespace_main( $elem );    # RT #56619
 
     my $desc = qq{"$elem" used instead of "$alternative"};
     return $self->violation( $desc, $EXPL, $elem );
@@ -345,7 +345,7 @@ sub _is_complex_expression_token {
 # Check whether the given element is contained in a subroutine.
 
 sub _is_element_contained_in_subroutine {
-    my ( $self, $elem ) = @_;
+    my ( $elem ) = @_;
 
     my $parent = $elem;
     while ( $parent = $parent->parent() ) {
@@ -364,7 +364,7 @@ sub _is_element_contained_in_subroutine {
 # Check whether the given element is in main::
 
 sub _is_element_in_namespace_main {
-    my ( $self, $elem ) = @_;
+    my ( $elem ) = @_;
     my $current_elem = $elem;
     my $prior_elem;
 

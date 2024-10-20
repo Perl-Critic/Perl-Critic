@@ -30,7 +30,7 @@ sub applies_to           { return qw< PPI::Document >    }
 #-----------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, $document ) = @_;
+    my ( $self, undef, $document ) = @_;
 
     my %symbol_usage;
     _get_symbol_usage( \%symbol_usage, $document );

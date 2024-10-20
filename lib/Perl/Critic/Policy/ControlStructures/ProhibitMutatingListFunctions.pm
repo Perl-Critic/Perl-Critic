@@ -73,7 +73,7 @@ sub applies_to       { return 'PPI::Token::Word' }
 #-----------------------------------------------------------------------------
 
 sub initialize_if_enabled {
-    my ($self, $config) = @_;
+    my ($self, undef) = @_;
 
     $self->{_all_list_funcs} = {
         hashify keys %{ $self->{_list_funcs} }, keys %{ $self->{_add_list_funcs} }

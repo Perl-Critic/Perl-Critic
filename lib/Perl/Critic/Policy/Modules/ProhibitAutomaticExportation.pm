@@ -26,7 +26,7 @@ sub applies_to           { return 'PPI::Document' }
 #-----------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, $doc ) = @_;
+    my ( $self, undef, $doc ) = @_;
 
     if ( _uses_exporter($doc) ) {
         if ( my $exp = _has_exports($doc) ) {

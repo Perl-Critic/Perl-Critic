@@ -28,7 +28,7 @@ sub applies_to           { return 'PPI::Statement::Compound' }
 #-----------------------------------------------------------------------------
 
 sub prepare_to_scan_document {
-    my ( $self, $document ) = @_;
+    my ( undef, $document ) = @_;
     # perl5004delta says that is when lexical iterators were introduced,
     # so ... (RT 67760)
     my $version = $document->highest_explicit_perl_version();

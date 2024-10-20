@@ -69,7 +69,7 @@ sub got_sigpipe {
 #-----------------------------------------------------------------------------
 
 sub initialize_if_enabled {
-    my ( $self, $config ) = @_;
+    my ( $self, undef ) = @_;
 
     eval { require File::Which; 1 } or return $FALSE;
 
@@ -93,7 +93,7 @@ END_TEST_CODE
 #-----------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, $doc ) = @_;
+    my ( $self, undef, $doc ) = @_;
 
     my $code = $doc->serialize();
 

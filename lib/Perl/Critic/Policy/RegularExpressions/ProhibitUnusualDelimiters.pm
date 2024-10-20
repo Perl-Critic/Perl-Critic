@@ -40,7 +40,7 @@ sub applies_to           { return qw(PPI::Token::Regexp::Match
 #-----------------------------------------------------------------------------
 
 sub initialize_if_enabled {
-    my ( $self, $config ) = @_;
+    my ( $self, undef ) = @_;
 
     my %delimiters = hashify( qw< // {} > );
     if ( $self->{_allow_all_brackets} ) {

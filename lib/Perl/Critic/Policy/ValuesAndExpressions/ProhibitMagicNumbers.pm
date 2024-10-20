@@ -92,7 +92,7 @@ sub default_maximum_violations_per_document { return 10; }
 #----------------------------------------------------------------------------
 
 sub initialize_if_enabled {
-    my ($self, $config) = @_;
+    my ($self, undef) = @_;
 
     $self->_determine_checked_types();
 
@@ -100,7 +100,7 @@ sub initialize_if_enabled {
 }
 
 sub _parse_allowed_values {
-    my ($self, $parameter, $config_string) = @_;
+    my ($self, undef, $config_string) = @_;
 
     my ( $all_integers_allowed, $allowed_values )
         = _determine_allowed_values($config_string);

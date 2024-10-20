@@ -28,14 +28,14 @@ sub applies_to           { return 'PPI::Document'         }
 #-----------------------------------------------------------------------------
 
 sub prepare_to_scan_document {
-    my ( $self, $document ) = @_;
+    my ( undef, $document ) = @_;
 
     # idea: force NAME to match the file name in programs?
     return $document->is_module(); # mismatch is normal in program entry points
 }
 
 sub violates {
-    my ( $self, $elem, $doc ) = @_;
+    my ( $self, undef, $doc ) = @_;
 
     # No POD means no violation
     my $pods_ref = $doc->find('PPI::Token::Pod');

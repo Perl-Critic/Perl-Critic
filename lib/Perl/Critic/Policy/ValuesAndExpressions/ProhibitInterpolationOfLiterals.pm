@@ -48,7 +48,7 @@ sub applies_to       { return qw(PPI::Token::Quote::Double
 Readonly::Scalar my $MAX_SPECIFICATION_LENGTH => 3;
 
 sub _parse_allow {
-    my ($self, $parameter, $config_string) = @_;
+    my ($self, undef, $config_string) = @_;
 
     my @allow;
 

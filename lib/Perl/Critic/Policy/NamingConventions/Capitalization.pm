@@ -202,7 +202,7 @@ sub applies_to          { return qw< PPI::Statement PPI::Token::Label > }
 #-----------------------------------------------------------------------------
 
 sub initialize_if_enabled {
-    my ($self, $config) = @_;
+    my ($self, undef) = @_;
 
     my $configuration_exceptions =
         Perl::Critic::Exception::AggregateConfiguration->new();
@@ -508,7 +508,7 @@ sub _foreach_variable_capitalization {
 }
 
 sub _label_capitalization {
-    my ($self, $elem, $name) = @_;
+    my ($self, $elem) = @_;
 
     return if _is_not_real_label($elem);
     ( my $label = $elem->content() ) =~ s< \s* : \z ><>xms;

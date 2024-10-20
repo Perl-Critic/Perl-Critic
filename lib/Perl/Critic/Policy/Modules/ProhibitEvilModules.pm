@@ -130,7 +130,7 @@ sub _parse_modules {
 }
 
 sub _parse_modules_file {
-    my ($self, $parameter, $config_string) = @_;
+    my ($self, undef, $config_string) = @_;
 
     return if not $config_string;
     return if $config_string =~ m< \A \s* \z >xms;
@@ -218,7 +218,7 @@ sub _handle_module_specification {
 #-----------------------------------------------------------------------------
 
 sub initialize_if_enabled {
-    my ($self, $config) = @_;
+    my ($self, undef) = @_;
 
     # Disable if no modules are specified; there's no point in running if
     # there aren't any.

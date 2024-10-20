@@ -29,11 +29,11 @@ sub applies_to           { return 'PPI::Statement::Include' }
 #-----------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, $doc ) = @_;
+    my ( $self, $elem, undef ) = @_;
     return $self->violation( $DESC, $EXPL, $elem ) if $elem->type() eq 'use'
         && !$elem->pragma()
         && $elem->module()
-        && $self->_is_in_conditional_logic($elem);
+        && _is_in_conditional_logic($elem);
     return;
 }
 
@@ -42,7 +42,7 @@ sub violates {
 # is this a non-string eval statement
 
 sub _is_eval {
-    my ( $self, $elem ) = @_;
+    my ( $elem ) = @_;
     $elem->isa('PPI::Statement') or return;
     my $first_elem = $elem->first_element();
     return $TRUE if $first_elem->isa('PPI::Token::Word')
@@ -55,7 +55,7 @@ sub _is_eval {
 # is this in a conditional do block
 
 sub _is_in_do_conditional_block {
-    my ( $self, $elem ) = @_;
+    my ( $elem ) = @_;
     return if !$elem->isa('PPI::Structure::Block');
     my $prev_sibling = $elem->sprevious_sibling() or return;
     if ($prev_sibling->isa('PPI::Token::Word') && $prev_sibling eq 'do') {
@@ -74,7 +74,7 @@ sub _is_in_do_conditional_block {
 # is this a compound statement
 
 sub _is_compound_statement {
-    my ( $self, $elem ) = @_;
+    my ( $elem ) = @_;
     return if !$elem->isa('PPI::Statement::Compound');
     return $TRUE if $elem->type() ne 'continue'; # exclude bare blocks
     return;
@@ -85,12 +85,12 @@ sub _is_compound_statement {
 # is this contained in conditional logic
 
 sub _is_in_conditional_logic {
-    my ( $self, $elem ) = @_;
+    my ( $elem ) = @_;
     while ($elem = $elem->parent()) {
         last if $elem->isa('PPI::Document');
-        return $TRUE if $self->_is_compound_statement($elem)
-            || $self->_is_eval($elem)
-            || $self->_is_in_do_conditional_block($elem);
+        return $TRUE if _is_compound_statement($elem)
+            || _is_eval($elem)
+            || _is_in_do_conditional_block($elem);
     }
     return;
 }

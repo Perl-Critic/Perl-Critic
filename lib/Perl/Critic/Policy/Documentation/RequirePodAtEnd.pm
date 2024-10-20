@@ -28,7 +28,7 @@ sub applies_to           { return 'PPI::Document'         }
 #-----------------------------------------------------------------------------
 
 sub violates {
-    my ( $self, $elem, $doc ) = @_;
+    my ( $self, undef, $doc ) = @_;
 
     # No POD means no violation
     my $pods_ref = $doc->find('PPI::Token::Pod');

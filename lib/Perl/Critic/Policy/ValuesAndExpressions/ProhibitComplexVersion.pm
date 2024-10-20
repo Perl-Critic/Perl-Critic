@@ -64,7 +64,7 @@ sub violates {
 
     # Find the simple statement we are in. If we can not find it, abandon the
     # attempt to analyze the code.
-    my $statement = $self->_get_simple_statement( $elem )
+    my $statement = _get_simple_statement( $elem )
         or return;
 
     # Check all symbols in the statement for violation.
@@ -96,7 +96,7 @@ sub violates {
 # our parent is a PPI::Structure::List, we want to keep looking.
 
 sub _get_simple_statement {
-    my ( $self, $elem ) = @_;
+    my ( $elem ) = @_;
 
     my $statement = $elem;
 
