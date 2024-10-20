@@ -26,7 +26,7 @@ my $profile = {
     '-Variables::ProhibitReusedNames'                            => {},
 };
 
-my $code = undef;
+my $code;
 
 #-----------------------------------------------------------------------------
 
