@@ -16,6 +16,8 @@ strict = 1
 
 [-CodeLayout::RequireTidyCode]
 
+[-ControlStructures::ProhibitCascadingIfElse]
+
 [Documentation::PodSpelling]
 spell_command = aspell list -l en_US
 stop_words_file = xt/40_stop_words
