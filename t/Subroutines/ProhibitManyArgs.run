@@ -213,6 +213,74 @@ sub classy_self {
 }
 
 #-----------------------------------------------------------------------------
+
+# Ideally these signature tests would be protected by a test for whether the
+# perl being used supports signatures, and would ensure signatures is turned
+# on.
+
+## name signature without $self or $class - success
+## failures 0
+## parms {max_arguments => 2}
+## cut
+
+sub foo {
+}
+
+sub bar ($bar1) {
+}
+
+sub baz ($baz1, $baz2) {
+}
+
+sub qux ($qux_1, $qux_2) {
+}
+
+#-----------------------------------------------------------------------------
+
+## name signature without $self or $class -- failure
+## failures 1
+## parms {max_arguments => 2}
+## cut
+
+sub foo ($foo1, $foo2, $foo3) {
+}
+
+#-----------------------------------------------------------------------------
+
+## name signature with $self or $class -- success
+## failures 0
+## parms {skip_object => 1, max_arguments => 2}
+## cut
+
+sub foo ($class) {
+}
+
+sub bar ($self, $bar1) {
+}
+
+sub baz ($class, $baz1, $baz2) {
+}
+
+sub qux ($self, $qux_1, $qux_2) {
+}
+
+sub quux (   $self , $quux_1, $quux_2) {
+}
+
+#-----------------------------------------------------------------------------
+
+## name signature with $self or $class -- failure
+## failures 2
+## parms {skip_object => 1, max_arguments => 2}
+## cut
+
+sub foo ($self, $foo1, $foo3, $foo3) {
+}
+
+sub bar ($class, $bar_1, $bar_2, $bar_3) {
+}
+
+#-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4

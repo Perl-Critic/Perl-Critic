@@ -55,8 +55,16 @@ sub violates {
     my $num_args;
     if ($elem->prototype) {
         my $prototype = $elem->prototype();
-        $prototype =~ s/ \\ [[] .*? []] /*/smxg;    # Allow for grouping
-        $num_args = $prototype =~ tr/$@%&*_+/$@%&*_+/;    # RT 56627
+        if ($prototype =~ /[a-z]/i) {  # signature (probably)
+            state $c = qr/\Q$CLASS/;
+            state $s = qr/\Q$SELF/;
+            state $invocant = qr/^(?:$c|$s),?/;
+            $prototype =~ s/$invocant// if $self->{_skip_object};
+            $num_args = $prototype =~ tr/$@%/$@%/;
+        } else {  # prototype
+            $prototype =~ s/ \\ [[] .*? []] /*/smxg;    # Allow for grouping
+            $num_args = $prototype =~ tr/$@%&*_+/$@%&*_+/;    # RT 56627
+        }
     } else {
         $num_args = _count_args($self->{_skip_object}, $elem->block->schildren);
     }
