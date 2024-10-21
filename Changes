@@ -1,5 +1,12 @@
 Revision history for Perl module Perl::Critic
 
+NEXT
+
+    [Fixes]
+    Subroutines::ProhibitManyArgs no longer gets confused by underscores in
+    variable names. Thanks, Paul Johnson. (GH #1027)
+
+
 1.154 Sun Oct 20 22:41:15 CDT 2024
 
     [Enhancements]
