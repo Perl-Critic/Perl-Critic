@@ -13,7 +13,7 @@ use Perl::Critic::TestUtils qw{ bundled_policy_names };
 
 use Test::More;
 
-our $VERSION = '1.152';
+our $VERSION = '1.154';
 
 Perl::Critic::TestUtils::assert_version( $VERSION );
 

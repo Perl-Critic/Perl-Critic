@@ -21,7 +21,7 @@ use Perl::Critic::Utils;
 
 use Test::More tests => 186;
 
-our $VERSION = '1.152';
+our $VERSION = '1.154';
 
 use Perl::Critic::TestUtils;
 Perl::Critic::TestUtils::assert_version( $VERSION );

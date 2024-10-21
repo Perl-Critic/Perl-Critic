@@ -10,7 +10,7 @@ use List::Util qw(first);
 use Perl::Critic::Utils qw{ :severities };
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.152';
+our $VERSION = '1.154';
 
 #-----------------------------------------------------------------------------
 

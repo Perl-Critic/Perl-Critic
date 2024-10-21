@@ -9,7 +9,7 @@ use Readonly;
 use Perl::Critic::Utils qw( :severities hashify );
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.152';
+our $VERSION = '1.154';
 
 #-----------------------------------------------------------------------------
 

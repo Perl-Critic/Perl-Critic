@@ -9,7 +9,7 @@ use Perl::Critic::Utils     qw< $EMPTY >;
 
 use Test::More tests => 1;
 
-our $VERSION = '1.152';
+our $VERSION = '1.154';
 
 Perl::Critic::TestUtils::assert_version( $VERSION );
 Perl::Critic::TestUtils::block_perlcriticrc();

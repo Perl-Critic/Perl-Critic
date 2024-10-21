@@ -1,6 +1,6 @@
 Revision history for Perl module Perl::Critic
 
-NEXT
+1.154 Sun Oct 20 22:41:15 CDT 2024
 
     [Enhancements]
     ProhibitedUnusedCapture now recognizes %+, %-, %{^CAPTURE} and
