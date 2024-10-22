@@ -9,6 +9,7 @@ our $VERSION = '1.126';
 
 use Carp;
 use English qw< $OS_ERROR $EXECUTABLE_NAME -no_match_vars >;
+use File::Find;
 
 
 use parent 'Perl::Critic::Module::Build::Standard';
@@ -44,6 +45,8 @@ sub ACTION_tags {
 
     $self->depends_on('build');
     $self->_run_tags();
+
+    return;
 }
 
 
@@ -52,6 +55,8 @@ sub ACTION_critic {
 
     $self->depends_on('build');
     $self->_run_critic();
+
+    return;
 }
 
 
