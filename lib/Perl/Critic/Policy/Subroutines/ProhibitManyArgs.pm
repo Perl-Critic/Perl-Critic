@@ -55,11 +55,13 @@ sub violates {
     my $num_args;
     if ($elem->prototype) {
         my $prototype = $elem->prototype();
-        if ($prototype =~ /[a-zA-Z]/) {  # signature (probably)
-            state $c = qr/\Q$CLASS/;
-            state $s = qr/\Q$SELF/;
-            state $invocant = qr/^(?:$c|$s),?/;
-            $prototype =~ s/$invocant// if $self->{_skip_object};
+        if ($prototype =~ /[a-zA-Z]/smx) {  # signature (probably)
+            if ( $self->{_skip_object} ) {
+                state $c = qr/\Q$CLASS/smx;
+                state $s = qr/\Q$SELF/smx;
+                state $invocant = qr/^(?:$c|$s),?/smx;
+                $prototype =~ s/$invocant//smx;
+            }
             $num_args = $prototype =~ tr/$@%/$@%/;
         } else {  # prototype
             $prototype =~ s/ \\ [[] .*? []] /*/smxg;    # Allow for grouping
