@@ -42,7 +42,7 @@ my @site_policy_names;
 # called "test" mode.
 sub import {
 
-    my ( $class, %args ) = @_;
+    my ( undef, %args ) = @_;
     my $test_mode = $args{-test};
     my $extra_test_policies = $args{'-extra-test-policies'};
 

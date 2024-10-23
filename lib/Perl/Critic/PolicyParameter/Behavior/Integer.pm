@@ -13,7 +13,7 @@ our $VERSION = '1.154';
 #-----------------------------------------------------------------------------
 
 sub initialize_parameter {
-    my ($self, $parameter, $specification) = @_;
+    my (undef, $parameter, $specification) = @_;
 
     my $minimum = $specification->{integer_minimum};
     my $maximum = $specification->{integer_maximum};
@@ -77,7 +77,7 @@ sub initialize_parameter {
 #-----------------------------------------------------------------------------
 
 sub generate_parameter_description {
-    my ($self, $parameter) = @_;
+    my (undef, $parameter) = @_;
 
     my $minimum = $parameter->_get_behavior_values()->{minimum};
     my $maximum = $parameter->_get_behavior_values()->{maximum};

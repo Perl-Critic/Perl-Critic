@@ -15,7 +15,7 @@ our $VERSION = '1.154';
 #-----------------------------------------------------------------------------
 
 sub initialize_parameter {
-    my ($self, $parameter, $specification) = @_;
+    my (undef, $parameter, $specification) = @_;
 
     my $valid_values = $specification->{enumeration_values}
         or throw_policy_definition
@@ -119,7 +119,7 @@ sub initialize_parameter {
 #-----------------------------------------------------------------------------
 
 sub generate_parameter_description {
-    my ($self, $parameter) = @_;
+    my (undef, $parameter) = @_;
 
     my $description = $parameter->_get_description_with_trailing_period();
     if ( $description ) {

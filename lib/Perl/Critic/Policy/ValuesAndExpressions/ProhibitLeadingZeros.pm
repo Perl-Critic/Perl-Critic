@@ -41,11 +41,11 @@ sub violates {
 
     return if $elem !~ $LEADING_RX;
     return $self->_create_violation($elem) if $self->{_strict};
-    return if $self->_is_first_argument_of_chmod_or_umask($elem);
-    return if $self->_is_second_argument_of_mkdir($elem);
-    return if $self->_is_second_argument_of_mkfifo($elem);
-    return if $self->_is_third_argument_of_dbmopen($elem);
-    return if $self->_is_fourth_argument_of_sysopen($elem);
+    return if _is_first_argument_of_chmod_or_umask($elem);
+    return if _is_second_argument_of_mkdir($elem);
+    return if _is_second_argument_of_mkfifo($elem);
+    return if _is_third_argument_of_dbmopen($elem);
+    return if _is_fourth_argument_of_sysopen($elem);
     return $self->_create_violation($elem);
 }
 
@@ -60,7 +60,7 @@ sub _create_violation {
 }
 
 sub _is_first_argument_of_chmod_or_umask {
-    my ($self, $elem) = @_;
+    my ($elem) = @_;
 
     my $previous_token = _previous_token_that_isnt_a_parenthesis($elem);
     return if not $previous_token;
@@ -70,7 +70,7 @@ sub _is_first_argument_of_chmod_or_umask {
 }
 
 sub _is_second_argument_of_mkdir {
-    my ($self, $elem) = @_;
+    my ($elem) = @_;
 
     # Preceding comma.
     my $previous_token = _previous_token_that_isnt_a_parenthesis($elem);
@@ -90,7 +90,7 @@ sub _is_second_argument_of_mkdir {
 }
 
 sub _is_second_argument_of_mkfifo {
-    my ($self, $elem) = @_;
+    my ($elem) = @_;
 
     # Preceding comma.
     my $previous_token = _previous_token_that_isnt_a_parenthesis($elem);
@@ -111,7 +111,7 @@ sub _is_second_argument_of_mkfifo {
 }
 
 sub _is_third_argument_of_dbmopen {
-    my ($self, $elem) = @_;
+    my ($elem) = @_;
 
     # Preceding comma.
     my $previous_token = _previous_token_that_isnt_a_parenthesis($elem);
@@ -142,7 +142,7 @@ sub _is_third_argument_of_dbmopen {
 }
 
 sub _is_fourth_argument_of_sysopen {
-    my ($self, $elem) = @_;
+    my ($elem) = @_;
 
     # Preceding comma.
     my $previous_token = _previous_token_that_isnt_a_parenthesis($elem);

@@ -19,15 +19,13 @@ sub new {
 #-----------------------------------------------------------------------------
 
 sub initialize_parameter {
-    my ($self, $parameter, $specification) = @_;
-
     return;
 }
 
 #-----------------------------------------------------------------------------
 
 sub generate_parameter_description {
-    my ($self, $parameter) = @_;
+    my (undef, $parameter) = @_;
 
     return $parameter->_get_description_with_trailing_period();
 }

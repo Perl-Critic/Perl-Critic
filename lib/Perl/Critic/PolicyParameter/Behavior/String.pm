@@ -29,7 +29,7 @@ sub _parse {
 #-----------------------------------------------------------------------------
 
 sub initialize_parameter {
-    my ($self, $parameter, $specification) = @_;
+    my (undef, $parameter, undef) = @_;
 
     $parameter->_set_parser(\&_parse);
 

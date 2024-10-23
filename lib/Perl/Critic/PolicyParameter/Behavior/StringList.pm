@@ -13,7 +13,7 @@ our $VERSION = '1.154';
 #-----------------------------------------------------------------------------
 
 sub initialize_parameter {
-    my ($self, $parameter, $specification) = @_;
+    my (undef, $parameter, $specification) = @_;
 
     # Unfortunately, this has to be kept as a reference, rather than a regular
     # array, due to a problem in Devel::Cycle
@@ -55,7 +55,7 @@ sub initialize_parameter {
 #-----------------------------------------------------------------------------
 
 sub generate_parameter_description {
-    my ($self, $parameter) = @_;
+    my (undef, $parameter) = @_;
 
     my $always_present_values =
         $parameter->_get_behavior_values()->{always_present_values};
