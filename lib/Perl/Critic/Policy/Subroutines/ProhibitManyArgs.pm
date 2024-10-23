@@ -55,7 +55,7 @@ sub violates {
     my $num_args;
     if ($elem->prototype) {
         my $prototype = $elem->prototype();
-        if ($prototype =~ /[a-zA-Z]/smx) {  # signature (probably)
+        if ($prototype =~ /[[:alpha:]]/smx) {  # signature (probably)
             if ( $self->{_skip_object} ) {
                 state $c = qr/\Q$CLASS/smx;
                 state $s = qr/\Q$SELF/smx;
