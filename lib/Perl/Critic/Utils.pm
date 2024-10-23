@@ -882,11 +882,11 @@ sub is_in_void_context {
                 $parent->isa('PPI::Structure::Block')
             and $token->statement()->snext_sibling();
 
-        my $grand_parent = $parent->parent();
-        if ($grand_parent) {
+        my $grandparent = $parent->parent();
+        if ($grandparent) {
             return if
                     $parent->isa('PPI::Structure::Block')
-                and not $grand_parent->isa('PPI::Statement::Compound');
+                and not $grandparent->isa('PPI::Statement::Compound');
         }
     }
 
