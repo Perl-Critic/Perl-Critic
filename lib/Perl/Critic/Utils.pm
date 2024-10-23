@@ -208,11 +208,6 @@ Readonly::Scalar our $EMPTY        => q{};
 Readonly::Scalar our $TRUE         => 1;
 Readonly::Scalar our $FALSE        => 0;
 
-#-----------------------------------------------------------------------------
-
-#TODO: Should this include punctuations vars?
-
-
 
 #-----------------------------------------------------------------------------
 ## no critic (ProhibitNoisyQuotes);
