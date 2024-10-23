@@ -22,7 +22,7 @@ use PPIx::Utils::Traversal qw<
 
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.154';
+our $VERSION = '1.156';
 
 #-----------------------------------------------------------------------------
 

@@ -21,7 +21,7 @@ use Perl::Critic::Utils::Constants qw< :color_severity >;
 
 use Test::More;
 
-our $VERSION = '1.154';
+our $VERSION = '1.156';
 
 Perl::Critic::TestUtils::assert_version( $VERSION );
 Perl::Critic::TestUtils::block_perlcriticrc();

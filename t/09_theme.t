@@ -15,7 +15,7 @@ use Perl::Critic::Theme;
 
 use Test::More tests => 66;
 
-our $VERSION = '1.154';
+our $VERSION = '1.156';
 
 use Perl::Critic::TestUtils;
 Perl::Critic::TestUtils::assert_version( $VERSION );

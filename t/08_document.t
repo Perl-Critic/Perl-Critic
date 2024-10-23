@@ -10,7 +10,7 @@ use Perl::Critic::Document qw< >;
 
 use Test::More tests => 43;
 
-our $VERSION = '1.154';
+our $VERSION = '1.156';
 
 use Perl::Critic::TestUtils;
 Perl::Critic::TestUtils::assert_version( $VERSION );

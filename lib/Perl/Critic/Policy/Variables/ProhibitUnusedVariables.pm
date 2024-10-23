@@ -13,7 +13,7 @@ use PPIx::QuoteLike;
 use Perl::Critic::Utils qw< :characters :severities >;
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.154';
+our $VERSION = '1.156';
 
 #-----------------------------------------------------------------------------
 

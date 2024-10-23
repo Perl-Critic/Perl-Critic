@@ -9,7 +9,7 @@ use Perl::Critic::Utils qw{ :severities is_in_void_context };
 
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.154';
+our $VERSION = '1.156';
 
 #-----------------------------------------------------------------------------
 

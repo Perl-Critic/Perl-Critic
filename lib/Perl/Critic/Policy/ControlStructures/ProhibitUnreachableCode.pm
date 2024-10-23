@@ -8,7 +8,7 @@ use Readonly;
 use Perl::Critic::Utils qw{ :severities :data_conversion :classification };
 use parent 'Perl::Critic::Policy';
 
-our $VERSION = '1.154';
+our $VERSION = '1.156';
 
 Readonly::Array my @TERMINALS => qw( die exit croak confess );
 Readonly::Hash  my %TERMINALS => hashify( @TERMINALS );

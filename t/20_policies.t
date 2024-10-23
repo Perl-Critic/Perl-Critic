@@ -10,7 +10,7 @@ use Test::More;
 eval 'use Test::Perl::Critic; 1;'
     or plan skip_all => 'Test::Perl::Critic required to test Perl::Critic itself';
 
-our $VERSION = '1.154';
+our $VERSION = '1.156';
 
 use Test::Perl::Critic::Policy qw( all_policies_ok );
 use Perl::Critic::TestUtils;

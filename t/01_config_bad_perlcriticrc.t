@@ -16,7 +16,7 @@ use Perl::Critic::PolicyFactory (-test => 1);
 use Perl::Critic;
 use Perl::Critic::Utils::Constants qw< $_MODULE_VERSION_TERM_ANSICOLOR >;
 
-our $VERSION = '1.154';
+our $VERSION = '1.156';
 
 use Perl::Critic::TestUtils;
 Perl::Critic::TestUtils::assert_version( $VERSION );
