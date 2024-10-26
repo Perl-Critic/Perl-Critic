@@ -33,6 +33,13 @@ sub supported_parameters {
             behavior        => 'string list',
             list_always_present_values => ['warnings', @WARNINGS_EQUIVALENT_MODULES],
         },
+        {
+            name            => 'ignored_statements',
+            description     =>
+                q<Regexes of statements that are ignored when searching for violations.>,
+            default_string  => $EMPTY,
+            behavior        => 'string list'
+        },
     );
 }
 
@@ -65,6 +72,7 @@ sub violates {
     for my $stmnt ( @{ $stmnts_ref } ) {
         last if $stmnt->isa('PPI::Statement::End');
         last if $stmnt->isa('PPI::Statement::Data');
+        next if $self->_statement_is_ignored($stmnt);
 
         my $stmnt_line = $stmnt->location()->[0];
         if ( (! defined $warn_line) || ($stmnt_line < $warn_line) ) {
@@ -121,6 +129,16 @@ sub _statement_isnt_include_or_package {
     return 1;
 }
 
+#-----------------------------------------------------------------------------
+
+sub _statement_is_ignored {
+    my ($self, $elem) = @_;
+    for my $ignored_stmnt ( keys %{ $self->{_ignored_statements} } ) {
+        return 1 if $elem =~ /$ignored_stmnt/;
+    }
+    return 0;
+}
+
 1;
 
 __END__
@@ -173,6 +191,13 @@ pragmata and modules in your F<.perlcriticrc>: C<equivalent_modules>.
 
     [TestingAndDebugging::RequireUseWarnings]
     equivalent_modules = MooseX::My::Sugar
+
+You may want to use certain statements before warnings are enabled.
+There is an option to specify ignored statements as regexes in your
+F<.perlcriticrc>: C<ignored_statements>.
+
+    [TestingAndDebugging::RequireUseWarnings]
+    ignored_statements = ^env\s*=>.+$
 
 
 =head1 BUGS
