@@ -38,6 +38,10 @@ foreach my $operator ( qw/ ne != < > <= >= <=> lt gt le ge cmp / ) {
     emit_comparator_code($test_file, $operator);
 }
 
+foreach my $operator ( qw/ and or && || / ) {
+    emit_comparator_code($test_file, $operator, 1);
+}
+
 
 print {$test_file} <<'END_FOOTER';
 
@@ -218,11 +222,21 @@ END_NOT_MATCH_CODE
 #-----------------------------------------------------------------------------
 
 sub emit_comparator_code {
-    my ($test_file, $operator) = @_;
+    my ($test_file, $operator, $custom) = @_;
+
+    my $parms = '';
+
+    if ($custom)
+    {
+        chomp($parms = <<"END_CUSTOM_PARMS");
+
+## parms {add_operators => ' $operator '}
+END_CUSTOM_PARMS
+    }
 
     print {$test_file} <<"END_COMPARATOR_CODE";
 
-## name "$operator" within positive control structures
+## name "$operator" within positive control structures$parms
 ## failures 0
 ## cut
 
@@ -254,7 +268,7 @@ for (my \$bar = 0; \$bar $operator \$baz; \$bar++) {
 
 #-----------------------------------------------------------------------------
 
-## name "$operator" within positive postfix statement modifiers
+## name "$operator" within positive postfix statement modifiers$parms
 ## failures 0
 ## cut
 
@@ -266,7 +280,7 @@ blah(\$_) for grep { \$_ $operator \$bar } \@foo;
 
 #-----------------------------------------------------------------------------
 
-## name "$operator" within negative control structures
+## name "$operator" within negative control structures$parms
 ## failures 2
 ## cut
 
@@ -280,7 +294,7 @@ until (\$foo $operator \$bar) {
 
 #-----------------------------------------------------------------------------
 
-## name "$operator" within negative postfix statement modifiers
+## name "$operator" within negative postfix statement modifiers$parms
 ## failures 2
 ## cut
 
