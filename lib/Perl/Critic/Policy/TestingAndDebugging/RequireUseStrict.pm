@@ -48,12 +48,42 @@ sub violates {
     my ( $self, undef, $doc ) = @_;
 
     # Find the first 'use strict' statement
-    my $strict_stmnt = $doc->find_first( $self->_generate_is_use_strict() );
-    my $strict_line  = $strict_stmnt ? $strict_stmnt->location()->[0] : undef;
+    my $strict_stmnts = $doc->find( $self->_generate_is_use_strict() );
 
     # Find all statements that aren't 'use', 'require', or 'package'
     my $stmnts_ref = _find_isnt_include_or_package($doc);
     return if not $stmnts_ref;
+
+    my @strict_start_and_ends;
+    foreach my $strict_statement ( @{$strict_stmnts||[]} ) {
+        my $start_of_strict = $strict_statement->location->[0];
+        my $parent          = $strict_statement->parent;
+        my $end_of_strict;
+        if ( !$parent ) {
+            # Strange.  Assume the strict applies until the end of the file
+            $end_of_strict = '+inf';
+        }
+        elsif ( $parent->isa('PPI::Document') ) {
+            # Parent of this use strict is the file itself:
+            #   package Foo;
+            #   use strict;
+            # So the end of the strict is the end of the file itself.
+            $end_of_strict = '+inf';
+        }
+        else {
+            # package Foo { use strict; }
+            #   or
+            # sub foo { use strict; ... }
+            #   or
+            # package Foo;
+            # {
+            #   use strict;
+            # }
+            my $after_parent    = $parent->finish;
+            $end_of_strict   = $after_parent ? $after_parent->location->[0] : '+inf';
+        }
+        push @strict_start_and_ends, [$start_of_strict, $end_of_strict];
+    }
 
     # If the 'use strict' statement is not defined, or the other
     # statement appears before the 'use strict', then it violates.
@@ -64,7 +94,22 @@ sub violates {
         last if $stmnt->isa('PPI::Statement::Data');
 
         my $stmnt_line = $stmnt->location()->[0];
-        if ( (! defined $strict_line) || ($stmnt_line < $strict_line) ) {
+        if ( ! @strict_start_and_ends ) {
+            push @viols, $self->violation( $DESC, $EXPL, $stmnt );
+            next;
+        }
+
+        my $line_covered_by_use_strict = 0;
+        foreach my $tuple ( @strict_start_and_ends ) {
+            my $strict_start = $tuple->[0];
+            my $strict_end   = $tuple->[1];
+            if ( $stmnt_line >= $strict_start && $stmnt_line <= $strict_end ) {
+                $line_covered_by_use_strict = 1;
+                last;
+            }
+        }
+
+        if ( !$line_covered_by_use_strict ) {
             push @viols, $self->violation( $DESC, $EXPL, $stmnt );
         }
     }
@@ -82,9 +127,16 @@ sub _generate_is_use_strict {
         return 0 if !$elem->isa('PPI::Statement::Include');
         return 0 if $elem->type() ne 'use';
 
-        # We only want file-scoped pragmas
-        my $parent = $elem->parent();
-        return 0 if !$parent->isa('PPI::Document');
+        # Prior to Perl 5.12, package statements were exclusively done like this:
+        #   package Foo;
+        #       use strict;
+        #       use warnings;
+        # After Perl 5.12, there is this alternatives:
+        #   package Foo {
+        #       use strict;
+        #       use warnings;
+        #   }
+        # So 'use strict;' may happen on something that isn't package scoped.
 
         if ( my $pragma = $elem->pragma() ) {
             return 1 if $self->{_equivalent_modules}{$pragma};
