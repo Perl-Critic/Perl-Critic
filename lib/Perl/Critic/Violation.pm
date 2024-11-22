@@ -6,6 +6,7 @@ use warnings;
 
 use Readonly;
 
+use JSON qw< encode_json >;
 use File::Basename qw< basename >;
 use Scalar::Util qw< blessed >;
 use String::Format qw< stringf >;
@@ -266,6 +267,35 @@ sub to_string {
          'r' => sub { $self->source()                       },
          'P' => $long_policy,
          'p' => $short_policy,
+         'J' => sub {
+             my @severities = qw(info minor major critical blocker);
+             encode_json({
+                 'type' => 'issue',
+                 'check_name' => $long_policy,
+                 'description' => $self->description(),
+
+                 # This is supposed to be formatted as Markdown.  We need a
+                 # new method, say md_diagnostics, which uses Pod::Markdown
+                 # instead of Pod::PlainText.
+                 'content' => $self->diagnostics(),
+
+                 ## We would need to categorise every policy in order to
+                 ## populate this correctly.
+                 # 'categories' => [],
+
+                 'location' => {
+                     'path' => $self->logical_filename(),
+                     'positions' => {
+                         'begin' => {
+                             'line' => $self->logical_line_number(),
+                             'column' => $self->column_number(),
+                         },
+                     },
+                 },
+                 'severity' => $severities[$self->severity() - 1],
+                 'fingerprint' => $long_policy. ':'. $self->source(),
+             });
+         },
     );
     return stringf($format, %fspec);
 }
