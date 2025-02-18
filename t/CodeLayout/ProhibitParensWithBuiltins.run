@@ -143,6 +143,20 @@ state ( $foo );
 
 #-----------------------------------------------------------------------------
 
+## name Explicit allow list
+## failures 2
+## parms { allow => 'lc' }
+## cut
+
+lc $foo;
+my $foo = SomeClass->new();
+my ($foo, $bar);
+my ($foo, $bar) = SomeClass->new();
+my ($foo) = SomeClass->new();
+uc( $foo );
+
+#-----------------------------------------------------------------------------
+
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4
