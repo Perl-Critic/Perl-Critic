@@ -15,11 +15,12 @@ our $VERSION = '1.156';
 #-----------------------------------------------------------------------------
 
 Readonly::Array my @ALLOW => qw( my our local return state );
-Readonly::Hash my %ALLOW => hashify( @ALLOW );
 
 Readonly::Scalar my $DESC  => q{Builtin function called with parentheses};
 Readonly::Scalar my $EXPL  => [ 13 ];
 
+Readonly::Array  my @GREEDY              => qw( grep map sort );
+Readonly::Hash   my %GREEDY              => hashify( @GREEDY );
 Readonly::Scalar my $PRECEDENCE_OF_LIST  => precedence_of(q{>>}) + 1;
 Readonly::Scalar my $PRECEDENCE_OF_COMMA => precedence_of(q{,});
 
@@ -50,7 +51,16 @@ Readonly::Hash my %NAMED_UNARY_OPS => hashify( @NAMED_UNARY_OPS );
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return ()                      }
+sub supported_parameters {
+    return (
+        {
+            name            => 'allow',
+            description     => 'A list of words that should permit parentheses.',
+            default_string  => join (q{ }, @ALLOW),
+            behavior        => 'string list',
+        },
+    );
+}
 sub default_severity     { return $SEVERITY_LOWEST        }
 sub default_themes       { return qw( core pbp cosmetic ) }
 sub applies_to           { return 'PPI::Token::Word'      }
@@ -60,7 +70,7 @@ sub applies_to           { return 'PPI::Token::Word'      }
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    return if exists $ALLOW{$elem};
+    return if exists $self->{_allow}->{$elem};
     return if not is_perl_builtin($elem);
     return if not is_function_call($elem);
 
@@ -71,7 +81,8 @@ sub violates {
 
         return if _is_named_unary_with_operator_inside_parens_exemption($elem, $sibling);
         return if _is_named_unary_with_operator_following_parens_exemption($elem, $elem_after_parens);
-        return if _is_precedence_exemption($elem_after_parens);
+        return if  exists $GREEDY{$elem} && _is_precedence_exemption($elem_after_parens);
+        return if !exists $GREEDY{$elem} && _is_precedence_exemption($elem_after_parens, $sibling);
         return if _is_equals_exemption($sibling);
         return if _is_sort_exemption($elem, $sibling);
 
@@ -107,18 +118,28 @@ sub _is_named_unary {
 #-----------------------------------------------------------------------------
 # EXCEPTION 2, If there is an operator immediately after the
 # parentheses, and that operator has precedence greater than
-# or equal to a comma.
+# or equal to a comma, and there is a comma inside the
+# parentheses.
 # Example: join($delim, @list) . "\n";
 
 sub _is_precedence_exemption {
-    my ($elem_after_parens) = @_;
+    my ($elem_after_parens, $parens) = @_;
 
     if ( $elem_after_parens ){
         # Smaller numbers mean higher precedence
         my $precedence = precedence_of( $elem_after_parens );
-        return $TRUE if defined $precedence && $precedence <= $PRECEDENCE_OF_COMMA;
+        my $contains_commas = !defined $parens || _contains_commas($parens);
+        return $TRUE if defined $precedence && $precedence <= $PRECEDENCE_OF_COMMA && $contains_commas;
     }
 
+    return $FALSE;
+}
+
+sub _contains_commas {
+    my ($parens) = @_;
+    return $TRUE if $parens->find_first(sub {
+        return $_[1]->isa('PPI::Token::Operator') && $_[1]->content eq ',';
+    });
     return $FALSE;
 }
 
@@ -211,7 +232,10 @@ called with multiple arguments.
 
 =head1 CONFIGURATION
 
-This Policy is not configurable except for the standard options.
+This policy has a single option, C<allow>, which is a list of names that should permit parentheses.  It defaults to C<my our local return state>, and these values must be included in C<allow> if it is overridden.
+
+    [CodeLayout::ProhibitParensWithBuiltins]
+    allow = my our local return state lc uc
 
 
 =head1 NOTES
