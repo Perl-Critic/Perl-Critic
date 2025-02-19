@@ -16,7 +16,8 @@ our $VERSION = '1.156';
 
 Readonly::Array my @ALLOW => qw( my our local return state );
 
-Readonly::Scalar my $DESC  => q{Builtin function called with parentheses};
+Readonly::Scalar my $DESC_OMIT => q{Builtin function called with parentheses};
+Readonly::Scalar my $DESC_REQD => q{Builtin function called without parentheses};
 Readonly::Scalar my $EXPL  => [ 13 ];
 
 Readonly::Array  my @GREEDY              => qw( grep map sort );
@@ -59,6 +60,12 @@ sub supported_parameters {
             default_string  => join (q{ }, @ALLOW),
             behavior        => 'string list',
         },
+        {
+            name            => 'require',
+            description     => 'A list of words that always require parentheses.',
+            default_string  => '',
+            behavior        => 'string list',
+        },
     );
 }
 sub default_severity     { return $SEVERITY_LOWEST        }
@@ -70,12 +77,17 @@ sub applies_to           { return 'PPI::Token::Word'      }
 sub violates {
     my ( $self, $elem, undef ) = @_;
 
-    return if exists $self->{_allow}->{$elem};
     return if not is_perl_builtin($elem);
     return if not is_function_call($elem);
 
     my $sibling = $elem->snext_sibling();
-    return if not $sibling;
+
+    if ( exists $self->{_require}->{$elem} ) {
+        return if $sibling && $sibling->isa('PPI::Structure::List');
+        return $self->violation( $DESC_REQD, $EXPL, $elem );
+    }
+
+    return if !$sibling || exists $self->{_allow}->{$elem};
     if ( $sibling->isa('PPI::Structure::List') ) {
         my $elem_after_parens = $sibling->snext_sibling();
 
@@ -87,7 +99,7 @@ sub violates {
         return if _is_sort_exemption($elem, $sibling);
 
         # If we get here, it must be a violation
-        return $self->violation( $DESC, $EXPL, $elem );
+        return $self->violation( $DESC_OMIT, $EXPL, $elem );
     }
     return;    #ok!
 }
@@ -232,10 +244,19 @@ called with multiple arguments.
 
 =head1 CONFIGURATION
 
-This policy has a single option, C<allow>, which is a list of names that should permit parentheses.  It defaults to C<my our local return state>, and these values must be included in C<allow> if it is overridden.
+Two configuration options, C<allow> and C<require>, provide control on a per-function basis.  By default, the policy follows the historical behavior and permits parentheses only on C<(my our local return state)>, with the exception in the notes below.
+
+If C<require> is provided, the specified names must be called with parentheses.  For example:
 
     [CodeLayout::ProhibitParensWithBuiltins]
-    allow = my our local return state lc uc
+    require = lc uc
+
+If C<allow> is provided, the specified names permit calling with parentheses, but are not required.  As this overrides the default, the values of C<(my our local return state)> must be explicitly included if C<allow> is overridden:
+
+    [CodeLayout::ProhibitParensWithBuiltins]
+    allow = my our local return state exit
+
+Since C<require> is a stronger mandate than C<allow>, placing a function in both lists has the same effect as placing it only in C<require>.
 
 
 =head1 NOTES

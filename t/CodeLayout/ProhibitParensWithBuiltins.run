@@ -157,6 +157,71 @@ uc( $foo );
 
 #-----------------------------------------------------------------------------
 
+## name Require, basic pass
+## failures 0
+## parms { require => 'lc uc' }
+## cut
+
+lc($foo);
+uc($foo);
+my $foo;
+my($foo);
+
+# These ones deliberately omit the semi-colon
+sub {uc()}
+sub {reverse}
+
+#-----------------------------------------------------------------------------
+
+## name Require, basic failure
+## failures 3
+## parms { require => 'lc uc' }
+## cut
+
+lc $foo;
+uc $foo;
+my $foo;
+my($foo);
+
+# These ones deliberately omit the semi-colon
+sub {uc}
+sub {reverse}
+
+#-----------------------------------------------------------------------------
+
+## name Require, greedy functions
+## failures 0
+## parms { require => 'join reverse map' }
+## cut
+
+substr join( $delim, @list), $offset, $length;
+print reverse( $foo, $bar, $baz), $nuts;
+sort map( {some_func($_)} @list1 ), @list2;
+
+#-----------------------------------------------------------------------------
+
+## name Require, low-precedence after parentheses
+## failures 2
+## parms { require => 'lc uc' }
+## cut
+
+grep( { do_something($_) }, $foo, $bar) and do_something();
+chown( $file1, $file2 ) or die q{Couldn't chown};
+
+#-----------------------------------------------------------------------------
+
+## name Require and Allow
+## failures 1
+## parms { require => 'lc uc', allow => 'lc uc my' }
+## cut
+
+lc($foo);
+uc($foo);
+my $foo;
+our( $foo );
+
+#-----------------------------------------------------------------------------
+
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4
