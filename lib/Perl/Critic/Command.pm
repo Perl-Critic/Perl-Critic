@@ -233,8 +233,9 @@ sub _critique {
 
     my $number_of_violations;
     my $had_error_in_file = 0;
+    my $skip = $critic->config()->skip_files();
 
-    for my $file (@files_to_critique) {
+    for my $file (grep {!$skip || !/$skip/} @files_to_critique) {
 
         eval {
             my @violations = $critic->critique($file);
@@ -508,6 +509,7 @@ sub _get_option_specification {
         files-with-violations|l
         files-without-violations|L
         program-extensions=s@
+        skip-files=s
     >;
 }
 

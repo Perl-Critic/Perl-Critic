@@ -109,6 +109,7 @@ sub _init {
     $self->_validate_and_save_pager($args{-pager}, $errors);
     $self->_validate_and_save_program_extensions(
         $args{'-program-extensions'}, $errors);
+    $self->_validate_and_save_skip_files($args{'-skip-files'}, $errors);
 
     # If given, these options can be true or false (but defined)
     $self->{_force} = _boolean_to_number( $args{-force} // $options_processor->force() );
@@ -769,6 +770,26 @@ sub _validate_and_save_program_extensions {
 }
 
 #-----------------------------------------------------------------------------
+
+sub _validate_and_save_skip_files {
+    my ($self, $args_value, $errors) = @_;
+
+    my $skip;
+    if ( $args_value ) {
+        $skip = $args_value;
+    }
+    else {
+        my $profile = $self->_profile();
+        $skip = $profile->options_processor()->skip_files();
+    }
+
+    $self->{_skip_files} = $skip;
+
+    return;
+}
+
+
+#-----------------------------------------------------------------------------
 # Begin ACCESSOR methods
 
 sub _profile {
@@ -951,6 +972,13 @@ sub program_extensions_as_regexes {
             map { qr< @{[quotemeta $_]} \z >smx } sort keys %program_extensions
         ]
     };
+}
+
+#-----------------------------------------------------------------------------
+
+sub skip_files  {
+    my ($self) = @_;
+    return $self->{_skip_files};
 }
 
 1;

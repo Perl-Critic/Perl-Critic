@@ -35,7 +35,7 @@ foreach my $policy (@default_policies) {
         $policy_test_count += scalar @{$policy->get_parameters()};
     }
 }
-my $test_count = 18 + $policy_test_count;
+my $test_count = 19 + $policy_test_count;
 plan tests => $test_count;
 
 #-----------------------------------------------------------------------------
@@ -105,6 +105,7 @@ my @str_methods = qw(
     force
     profile_strictness
     only
+    skip_files
     color
     color_severity_highest
     color_severity_high

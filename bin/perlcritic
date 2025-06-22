@@ -56,6 +56,7 @@ C<perlcritic> - Command-line interface to critique Perl source.
              [--files-with-violations | -l]
              [--files-without-violations | -L]
              [--program-extensions file_name_extension]
+             [--skip-files pattern]
              {FILE | DIRECTORY | STDIN}
 
   perlcritic --profile-proto
@@ -464,6 +465,14 @@ The above can also be done by quoting the file name extensions:
     --program-extensions '.pl .cgi'
 
 Files whose name ends in '.PL' will always be considered programs.
+
+=item C<--skip-files pattern>
+
+Tell C<perlcritic> to skip checks for any file matching the pattern anywhere
+in the relative pathname.  Matching C<'dir/'> will skip any directory named
+'dir' found anywhere in the tree, but top-level directories can be skipped via
+C<'^dir/'>.  You can specify multiple matches using alternation:
+C<'dirA/|dirB/'>.
 
 =item C<--doc PATTERN>
 

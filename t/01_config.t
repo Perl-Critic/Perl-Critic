@@ -48,7 +48,7 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
                 )
                 ->all_policies_enabled_or_not();
 
-    plan tests => 93 + $all_policy_count;
+    plan tests => 94 + $all_policy_count;
 }
 
 #-----------------------------------------------------------------------------
@@ -217,6 +217,7 @@ my $total_policies   = scalar @names_of_policies_willing_to_work;
     is($c->theme()->rule(),    'danger || risky && ! pbp',  'user default theme from file');
     is($c->top(),      50, 'user default top from file'       );
     is($c->verbose(),  5,  'user default verbose from file'   );
+    is($c->skip_files(), '', 'user default skip-files from from file'   );
 
     is($c->color_severity_highest(), 'bold red underline',
                         'user default color-severity-highest from file');
