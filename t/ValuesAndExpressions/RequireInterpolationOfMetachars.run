@@ -227,7 +227,7 @@ send_email_to('$some_var: foo@bar.com', ...);
 
 #-----------------------------------------------------------------------------
 ## name Confirm we flag all defined backslashed interpolations. RT #61970
-## failures 26
+## failures 27
 ## cut
 
 '\t';          # tab             (HT, TAB)
@@ -247,6 +247,7 @@ send_email_to('$some_var: foo@bar.com', ...);
 '\u';          # uppercase next char
 '\L';          # lowercase till \E
 '\U';          # uppercase till \E
+'\F';          # fold till \E
 '\E';          # end case modification
 '\Q';          # quote non-word characters till \E
 '\1';          # See note 1, below
@@ -273,7 +274,6 @@ send_email_to('$some_var: foo@bar.com', ...);
 '\B';
 '\C';
 '\D';
-'\F';
 '\G';
 '\H';
 '\I';
