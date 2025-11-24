@@ -66,9 +66,9 @@ Conway recommends the use of C<IO::Handle> instead.
   select((select($fh), $|=1)[0]);     # not ok
   select $fh;                         # not ok
 
-   use IO::Handle;
-   $fh->autoflush();                   # ok
-   *STDOUT->autoflush();               # ok
+  use IO::Handle;                     # required if using Perl < 5.14
+  $fh->autoflush(1);                  # ok
+  *STDOUT->autoflush(1);              # ok
 
 
 =head1 CONFIGURATION
