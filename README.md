@@ -664,6 +664,11 @@ modules known to the development team:
 
 [Task::Perl::Critic](https://metacpan.org/pod/Task::Perl::Critic)
 
+If you want to run Perl::Critic alongside linters for other languages in
+your CI jobs, it comes preinstalled in [MegaLinter](https://megalinter.io/),
+an open-source linters aggregator. See
+[https://megalinter.io/latest/descriptors/perl\_perlcritic/](https://megalinter.io/latest/descriptors/perl_perlcritic/) for details.
+
 # BUGS
 
 Scrutinizing Perl code is hard for humans, let alone machines.  If you find
