@@ -10,6 +10,8 @@ our $VERSION = '1.156';
 use Perl::Critic::TestUtils;
 Perl::Critic::TestUtils::assert_version( $VERSION );
 
+$ENV{AUTHOR_TESTING} = 1;
+
 eval 'use Test::Kwalitee 1.15 tests => [ qw{ -no_symlinks } ]; 1'
     or plan skip_all => 'Test::Kwalitee required to test kwalitee';
 
