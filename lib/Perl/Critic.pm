@@ -909,6 +909,11 @@ modules known to the development team:
 
 L<Task::Perl::Critic>
 
+If you want to run Perl::Critic alongside linters for other languages in
+your CI jobs, it comes preinstalled in L<MegaLinter|https://megalinter.io/>,
+an open-source linters aggregator. See
+L<https://megalinter.io/latest/descriptors/perl_perlcritic/> for details.
+
 
 =head1 BUGS
 
