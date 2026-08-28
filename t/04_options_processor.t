@@ -10,7 +10,7 @@ use Perl::Critic::OptionsProcessor;
 use Perl::Critic::Utils qw< :booleans >;
 use Perl::Critic::Utils::Constants qw< :color_severity >;
 
-use Test::More tests => 54;
+use Test::More tests => 56;
 
 our $VERSION = '1.156';
 
@@ -30,6 +30,7 @@ Perl::Critic::TestUtils::assert_version( $VERSION );
     is($processor->color(),    $color,      'native default color');
     is($processor->pager(),    q{},         'native default pager');
     is($processor->verbose(),  4,           'native default verbose');
+    is($processor->skip_files, '',          'native default skip-files');
     is($processor->criticism_fatal,   0,    'native default criticism-fatal');
     is_deeply($processor->include(), [],    'native default include');
     is_deeply($processor->exclude(), [],    'native default exclude');
@@ -72,7 +73,8 @@ Perl::Critic::TestUtils::assert_version( $VERSION );
          'color-severity-medium'    => 'blue',
          'color-severity-low'       => 'gray',
          'color-severity-lowest'    => 'scots tartan',
-         'program-extensions'  => '.PL .pl .t',
+         'program-extensions'       => '.PL .pl .t',
+         'skip-files'               => '^foo/|bar/',
     );
 
     my $processor = Perl::Critic::OptionsProcessor->new( %user_defaults );
@@ -84,6 +86,7 @@ Perl::Critic::TestUtils::assert_version( $VERSION );
     is($processor->color(),    $FALSE,      'user default color');
     is($processor->pager(),    'less',      'user default pager');
     is($processor->verbose(),  7,           'user default verbose');
+    is($processor->skip_files, '^foo/|bar/','user default skip-files');
     is($processor->criticism_fatal(),  1,   'user default criticism_fatal');
     is_deeply($processor->include(), [ qw(foo bar) ], 'user default include');
     is_deeply($processor->exclude(), [ qw(baz nuts)], 'user default exclude');

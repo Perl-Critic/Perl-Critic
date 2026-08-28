@@ -124,6 +124,17 @@ color-severity-lowest =
 
 program-extensions =
 
+#-----------------------------------------------------------------------------
+
+# skip-files: specifies a regular expression of any file that should be
+# skipped instead of critiqued, matched against the entire relative path
+# name of the file. This should be a single, regular expression, possibly
+# containing alternation for multiple matches. Directories can be matched
+# with a trailing '/', and top-level directories can be matched with a
+# leading '^'.  Do not put quotes around the values. The default is ''.
+
+skip-files =
+
 ##############################################################################
 # The rest of the file consists of several named blocks that contain
 # configuration parameters for each of the Policies.  The names of

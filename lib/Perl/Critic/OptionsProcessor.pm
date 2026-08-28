@@ -55,6 +55,7 @@ sub _init {
     $self->{_criticism_fatal} = delete $args{'criticism-fatal'} //  $FALSE;
     $self->{_pager}           = delete $args{pager} //              $EMPTY;
     $self->{_allow_unsafe}    = delete $args{'allow-unsafe'} //     $FALSE;
+    $self->{_skip_files}      = delete $args{'skip-files'} //       $EMPTY;
 
     $self->{_color_severity_highest} = firstval { defined } (
         delete $args{'color-severity-highest'},
@@ -268,6 +269,13 @@ sub color_severity_lowest {
 sub program_extensions {
     my ($self) = @_;
     return $self->{_program_extensions};
+}
+
+#-----------------------------------------------------------------------------
+
+sub skip_files {
+    my ($self) = @_;
+    return $self->{_skip_files};
 }
 
 #-----------------------------------------------------------------------------
