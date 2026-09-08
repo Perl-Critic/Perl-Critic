@@ -99,6 +99,16 @@ package Foo 0.001;
 
 package Foo;
 
+## name programs are exempt
+## failures 0
+## parms
+## cut
+#!/usr/bin/perl
+my $foo = 42;
+
+#-----------------------------------------------------------------------------
+
+
 ##############################################################################
 # Local Variables:
 #   mode: cperl
