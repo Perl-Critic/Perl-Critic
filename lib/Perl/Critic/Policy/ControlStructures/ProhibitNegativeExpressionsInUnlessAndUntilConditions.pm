@@ -5,7 +5,8 @@ use strict;
 use warnings;
 use Readonly;
 
-use Perl::Critic::Utils qw< :characters :severities :classification hashify >;
+use Perl::Critic::Utils
+  qw< :booleans :characters :severities :classification hashify >;
 
 use parent 'Perl::Critic::Policy';
 
@@ -14,21 +15,49 @@ our $VERSION = '1.156';
 #-----------------------------------------------------------------------------
 
 Readonly::Scalar my $EXPL => [99];
+Readonly::Array my @BASE_NEGATIVE_OPERATORS => qw/
+  ! not
+  !~ ne !=
+  <   >   <=  >=  <=>
+  lt  gt  le  ge  cmp
+  /;
 
 #-----------------------------------------------------------------------------
 
-sub supported_parameters { return qw< >                      }
-sub default_severity     { return $SEVERITY_MEDIUM           }
-sub default_themes       { return qw( core maintenance pbp ) }
-sub applies_to           { return 'PPI::Token::Word'         }
+sub supported_parameters {
+    return (
+        {
+            name        => 'add_operators',
+            description => 'The set of operators to check, in addition to the defaults.',
+            default_string => $EMPTY,
+            behavior       => 'string list'
+        }
+    );
+}
+
+sub default_severity { return $SEVERITY_MEDIUM }
+sub default_themes   { return qw( core maintenance pbp ) }
+sub applies_to       { return 'PPI::Token::Word' }
+
+#-----------------------------------------------------------------------------
+
+sub initialize_if_enabled {
+    my ( $self, $config ) = @_;
+
+    $self->{_all_negative_operators} = {
+        hashify @BASE_NEGATIVE_OPERATORS, keys %{ $self->{_add_operators} }
+    };
+
+    return $TRUE;
+}
 
 #-----------------------------------------------------------------------------
 
 sub violates {
     my ( $self, $token, undef ) = @_;
 
-    state $until_or_unless = { hashify( qw( until unless ) ) };
-    return if !exists $until_or_unless->{$token->content};
+    state $until_or_unless = { hashify(qw( until unless )) };
+    return if !exists $until_or_unless->{ $token->content };
 
     return if is_hash_key($token);
     return if is_subroutine_name($token);
@@ -36,26 +65,26 @@ sub violates {
     return if is_included_module_name($token);
 
     return
-        map
-            { $self->_violation_for_operator( $_, $token ) }
-            _get_negative_operators( $token );
+      map { $self->_violation_for_operator( $_, $token ) }
+      $self->_get_negative_operators($token);
 }
 
 #-----------------------------------------------------------------------------
 
 sub _get_negative_operators {
-    my ($token) = @_;
+    my ( $self, $token ) = @_;
 
     my @operators;
     foreach my $element ( _get_condition_elements($token) ) {
         if ( $element->isa('PPI::Node') ) {
-            my $operators = $element->find( \&_is_negative_operator );
+            my $operators =
+              $element->find( sub { $self->_is_negative_operator( $_[1] ) } );
             if ($operators) {
                 push @operators, @{$operators};
             }
         }
         else {
-            if ( _is_negative_operator( undef, $element ) ) {
+            if ( $self->_is_negative_operator($element) ) {
                 push @operators, $element;
             }
         }
@@ -72,57 +101,41 @@ sub _get_condition_elements {
     my $statement = $token->statement();
     return if not $statement;
 
-    if ($statement->isa('PPI::Statement::Compound')) {
+    if ( $statement->isa('PPI::Statement::Compound') ) {
         my $condition = $token->snext_sibling();
 
         return if not $condition;
         return if not $condition->isa('PPI::Structure::Condition');
 
-        return ( $condition );
+        return ($condition);
     }
 
     my @condition_elements;
     my $element = $token;
-    while (
-            $element = $element->snext_sibling()
-        and $element->content() ne $SCOLON
-    ) {
+    while ( $element = $element->snext_sibling()
+        and $element->content() ne $SCOLON )
+    {
         push @condition_elements, $element;
     }
 
     return @condition_elements;
 }
 
-#-----------------------------------------------------------------------------
-
-Readonly::Hash my %NEGATIVE_OPERATORS => hashify(
-    qw/
-        ! not
-        !~ ne !=
-        <   >   <=  >=  <=>
-        lt  gt  le  ge  cmp
-    /
-);
-
 sub _is_negative_operator {
-    my (undef, $element) = @_;
+    my ( $self, $element ) = @_;
 
-    return
-            $element->isa('PPI::Token::Operator')
-        &&  $NEGATIVE_OPERATORS{$element};
+    return $element->isa('PPI::Token::Operator')
+      && $self->{_all_negative_operators}{$element};
 }
 
 #-----------------------------------------------------------------------------
 
 sub _violation_for_operator {
-    my ($self, $operator, $control_structure) = @_;
+    my ( $self, $operator, $control_structure ) = @_;
 
-    return
-        $self->violation(
-            qq<Found "$operator" in condition for an "$control_structure">,
-            $EXPL,
-            $control_structure,
-        );
+    return $self->violation(
+        qq<Found "$operator" in condition for an "$control_structure">,
+        $EXPL, $control_structure, );
 }
 
 1;
