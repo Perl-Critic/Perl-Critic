@@ -34,6 +34,50 @@ $var = 'the';
 $var = "other";
 
 #-----------------------------------------------------------------------------
+
+## name Allow empty quotes succeeds
+## failures 0
+## parms {max_allowed_quoted_string_length => 0}
+## cut
+
+$var = q{};
+$var = "";
+$var = '';
+
+#-----------------------------------------------------------------------------
+
+## name Allow empty quotes failure
+## failures 3
+## parms {max_allowed_quoted_string_length => 0}
+## cut
+
+$var = q{ };
+$var = " ";
+$var = ' ';
+
+#-----------------------------------------------------------------------------
+
+## name Allow non-empty quotes succeeds
+## failures 0
+## parms {max_allowed_quoted_string_length => 2}
+## cut
+
+$var = q{};
+$var = " ";
+$var = '  ';
+
+#-----------------------------------------------------------------------------
+
+## name Allow non-empty quotes failure
+## failures 3
+## parms {max_allowed_quoted_string_length => 2}
+## cut
+
+$var = q{   };
+$var = "   ";
+$var = '   ';
+
+#-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4
