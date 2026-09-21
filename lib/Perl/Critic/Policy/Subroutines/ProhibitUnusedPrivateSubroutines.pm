@@ -51,6 +51,13 @@ sub supported_parameters {
             behavior        => 'string list',
         },
         {
+            name            => 'skip_when_isa',
+            description     =>
+                q<Modules that, if inherited from via 'use parent' or 'use base', will cause the policy to be disabled for this file>,
+            default_string  => $EMPTY,
+            behavior        => 'string list',
+        },
+        {
             name            => 'allow_name_regex',
             description     =>
                 q<Pattern defining private subroutine names that are always allowed>,
@@ -93,6 +100,9 @@ sub violates {
 
     my @skip_modules = keys %{ $self->{_skip_when_using} };
     return if any { $document->uses_module($_) } @skip_modules;
+
+    my @skip_isa_modules = keys %{ $self->{_skip_when_isa} };
+    return if @skip_isa_modules && _is_inheriting_from_modules($document, \@skip_isa_modules);
 
     # Not interested in forward declarations, only the real thing.
     $elem->forward() and return;
@@ -312,6 +322,42 @@ sub _get_include_arguments {
     return @elements;
 }
 
+# Check if the document is inheriting from any of the specified modules
+# via 'use parent' or 'use base', but not @ISA (because of Policy::ClassHierarchies::ProhibitExplicitISA)
+sub _is_inheriting_from_modules {
+    my ( $document, $modules ) = @_;
+
+    if ( my $includes = $document->find('PPI::Statement::Include') ) {
+        foreach my $include ( @{$includes} ) {
+            my $module = $include->module() or next;
+            my @parent_modules;
+
+            if ( $module eq 'parent' || $module eq 'base' ) {
+                my @args = _get_include_arguments($include);
+
+                foreach my $arg (@args) {
+                    my $token = $arg->[0] or next;
+                    if ( $token->isa('PPI::Token::Quote') ) {
+                        push @parent_modules, $token->string();
+                    }
+                    elsif ( $token->isa('PPI::Token::QuoteLike::Words') ) {    # qw()
+                        my $content = $token->content();
+                        $content =~ s/^qw[^\(]*\(//;
+                        $content =~ s/\)$//;
+                        push @parent_modules, split /\s+/, $content;
+                    }
+                }
+
+                foreach my $parent (@parent_modules) {
+                    return 1 if any { $_ eq $parent } @{$modules};
+                }
+            }
+        }
+    }
+
+    return 0;
+}
+
 1;
 
 __END__
@@ -384,6 +430,13 @@ example, exclude unused private subroutine checking in classes that are roles.
     [Subroutines::ProhibitUnusedPrivateSubroutines]
     skip_when_using = Moose::Role Moo::Role Role::Tiny
 
+You can also configure this policy to skip checking when a module inherits from
+specific parent classes using 'use parent' or 'use base'. It does not check @ISA,
+as directly using it is not recommended (see L<Perl::Critic::Policy::ClassHierarchies::ProhibitExplicitISA>).
+
+    [Subroutines::ProhibitUnusedPrivateSubroutines]
+    skip_when_isa = One::ParentClass Another::ParentClass
+
 
 =head1 HISTORY
 
@@ -407,8 +460,8 @@ example a file:
     _is_private();
 
 Will not trigger a violation even though C<Foo::_is_private> is not called.
-Similarly, C<skip_when_using> currently works on a I<file> level, not on a
-I<package scope> level.
+Similarly, C<skip_when_using> and C<skip_when_isa> currently work on a I<file>
+level, not on a I<package scope> level.
 
 
 =head1 SEE ALSO

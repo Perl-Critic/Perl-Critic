@@ -235,6 +235,32 @@ sub _second {
 
 #-----------------------------------------------------------------------------
 
+## name skip_when_isa with use base
+## failures 0
+## parms { skip_when_isa => 'My::BaseClass' }
+## cut
+
+use base 'My::BaseClass';
+
+sub _private {
+    print "A private sub\n";
+}
+
+#-----------------------------------------------------------------------------
+
+## name skip_when_isa with multiple parent classes
+## failures 0
+## parms { skip_when_isa => 'First::ParentClass Other::ParentClass' }
+## cut
+
+use parent qw( Other::ParentClass Some::Class );
+
+sub _private {
+    print "A private sub\n";
+}
+
+#-----------------------------------------------------------------------------
+
 ## name skip_when_using
 ## failures 0
 ## parms { skip_when_using => 'Moose::Role' }
