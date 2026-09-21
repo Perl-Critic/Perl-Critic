@@ -1179,30 +1179,46 @@ configuration.
 
 The format of the configuration file is a series of INI-style blocks
 that contain key-value pairs separated by '='. Comments should start
-with '#' and can be placed on a separate line or after the name-value
-pairs if you desire.
+with '#' and must be placed on a separate line.  They cannot be placed
+after a name-value pair.
 
 Default settings for Perl::Critic itself can be set B<before the first
 named block.>  For example, putting any or all of these at the top of
 your configuration file will set the default value for the
 corresponding Perl::Critic constructor argument.
 
-    severity  = 3                                     #Integer from 1 to 5
-    only      = 1                                     #Zero or One
-    force     = 0                                     #Zero or One
-    verbose   = 4                                     #Integer or format spec
-    top       = 50                                    #A positive integer
-    theme     = risky + (pbp * security) - cosmetic   #A theme expression
-    include   = NamingConventions ClassHierarchies    #Space-delimited list
-    exclude   = Variables  Modules::RequirePackage    #Space-delimited list
-    color     = 1                                     #Zero or One
-    allow_unsafe = 1                                  #Zero or One
-    color-severity-highest = bold red                 #Term::ANSIColor
-    color-severity-high = magenta                     #Term::ANSIColor
-    color-severity-medium =                           #no coloring
-    color-severity-low =                              #no coloring
-    color-severity-lowest =                           #no coloring
-    program-extensions =                              #Space-delimited list
+    # Value is an integer from 1 to 5
+    severity  = 3
+    # Value is Zero or One
+    only      = 1
+    # Value is Zero or One
+    force     = 0
+    # Value is an integer or format spec
+    verbose   = 4
+    # Value is a positive integer
+    top       = 50
+    # Value is a theme expression
+    theme     = risky + (pbp * security) - cosmetic
+    # Value is a space-delimited list
+    include   = NamingConventions ClassHierarchies
+    # Value is a space-delimited list
+    exclude   = Variables  Modules::RequirePackage
+    # Value is Zero or One
+    color     = 1
+    # Value is Zero or One
+    allow_unsafe = 1
+    # Term::ANSIColor
+    color-severity-highest = bold red
+    # Term::ANSIColor
+    color-severity-high = magenta
+    # no coloring
+    color-severity-medium =
+    # no coloring
+    color-severity-low =
+    # no coloring
+    color-severity-lowest =
+    # Value is a space-delimited list
+    program-extensions =
 
 The remainder of the configuration file is a series of blocks like
 this:
@@ -1257,7 +1273,7 @@ A simple configuration might look like this:
     severity = 2
 
     [ControlStructures::ProhibitPostfixControls]
-    allow = if unless  #My custom configuration
+    allow = if unless
     severity = 2
 
     #--------------------------------------------------------------
