@@ -86,7 +86,7 @@ sub _needs_interpolation {
         ||  $string =~ m<
                 (?: \A | [^\\] )
                 (?: \\{2} )*
-                \\ [tnrfbae01234567xcNluLUEQ]
+                \\ [tnrfbae01234567xcNluLUEFQ]
             >xms;
 }
 

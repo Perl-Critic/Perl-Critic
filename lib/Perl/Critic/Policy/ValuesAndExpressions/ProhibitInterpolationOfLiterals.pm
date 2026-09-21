@@ -95,7 +95,7 @@ sub _has_interpolation {
     return $elem =~ m<
         (?: \A | [^\\] )
         (?: \\{2} )*
-        (?: [\$\@] \S+ | \\[tnrfbae0xcNLuLUEQ] )
+        (?: [\$\@] \S+ | \\[tnrfbae0xcNluLUFEQ] )
     >xmso;
 }
 

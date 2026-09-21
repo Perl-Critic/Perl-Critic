@@ -114,6 +114,19 @@ $text = "Anyone \\\@home?";
 $text = "Here we do not have\\\\ta tab";
 
 #-----------------------------------------------------------------------------
+
+## name allow escape sequences
+## failures 0
+## cut
+
+$text = "\l:lowercase next character";
+$text = "\u:titlecase next character";
+$text = "\L:lowercase all characters";
+$text = "\U:uppercase all characters";
+$text = "\F:foldcase all characters";
+$text = "\Q:quote (disable) pattern metacharacters";
+
+#-----------------------------------------------------------------------------
 # Local Variables:
 #   mode: cperl
 #   cperl-indent-level: 4
