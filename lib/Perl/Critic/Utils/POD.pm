@@ -6,8 +6,8 @@ use warnings;
 
 use English qw< -no_match_vars >;
 
-use Pod::PlainText ();
-use Pod::Select ();
+use Perl::Critic::Utils::POD::PodFilter;
+use Perl::Critic::Utils::POD::Text;
 
 # TODO: non-fatal generic?
 use Perl::Critic::Exception::Fatal::Generic qw< throw_generic >;
@@ -71,7 +71,7 @@ sub get_raw_pod_section_from_file {
     return _get_pod_section_from_file(
         $file_name,
         $section_name,
-        Pod::Select->new(),
+        Perl::Critic::Utils::POD::PodFilter->new(),
     );
 }
 
@@ -83,7 +83,7 @@ sub get_raw_pod_section_from_filehandle {
     return _get_pod_section_from_filehandle(
         $file_handle,
         $section_name,
-        Pod::Select->new(),
+        Perl::Critic::Utils::POD::PodFilter->new(),
     );
 }
 
@@ -95,7 +95,7 @@ sub get_raw_pod_section_from_string {
     return _get_pod_section_from_string(
         $source,
         $section_name,
-        Pod::Select->new(),
+        Perl::Critic::Utils::POD::PodFilter->new(),
     );
 }
 
@@ -118,7 +118,7 @@ sub get_pod_section_from_file {
     return _get_pod_section_from_file(
         $file_name,
         $section_name,
-        Pod::PlainText->new(),
+        Perl::Critic::Utils::POD::Text->new(),
     );
 }
 
@@ -130,7 +130,7 @@ sub get_pod_section_from_filehandle {
     return _get_pod_section_from_filehandle(
         $file_handle,
         $section_name,
-        Pod::PlainText->new(),
+        Perl::Critic::Utils::POD::Text->new(),
     );
 }
 
@@ -142,7 +142,7 @@ sub get_pod_section_from_string {
     return _get_pod_section_from_string(
         $source,
         $section_name,
-        Pod::PlainText->new(),
+        Perl::Critic::Utils::POD::Text->new(),
     );
 }
 
@@ -187,15 +187,14 @@ sub _get_pod_section_from_file {
 sub _get_pod_section_from_filehandle {
     my ($file_handle, $section_name, $parser) = @_;
 
-    $parser->select($section_name);
+    $parser->set_heading_select($section_name);
 
     my $content = $EMPTY;
-    open my $content_handle, '>', \$content
-        or throw_generic "error opening scalar: $OS_ERROR";
 
-    $parser->parse_from_filehandle( $file_handle, $content_handle );
+    $parser->output_string(\$content);
+    $parser->parse_file( $file_handle );
 
-    close $content_handle or throw_generic "Failed to close in memory file: $OS_ERROR";
+    utf8::encode($content);
 
     return if $content eq $EMPTY;
     return $content;
@@ -254,7 +253,7 @@ sub get_raw_module_abstract_from_file {
     return
         _get_module_abstract_from_file(
             $file_name,
-            Pod::Select->new(),
+            Perl::Critic::Utils::POD::PodFilter->new(),
             \&trim_raw_pod_section,
         );
 }
@@ -267,7 +266,7 @@ sub get_raw_module_abstract_from_filehandle {
     return
         _get_module_abstract_from_filehandle(
             $file_handle,
-            Pod::Select->new(),
+            Perl::Critic::Utils::POD::PodFilter->new(),
             \&trim_raw_pod_section,
         );
 }
@@ -280,7 +279,7 @@ sub get_raw_module_abstract_from_string {
     return
         _get_module_abstract_from_string(
             $source,
-            Pod::Select->new(),
+            Perl::Critic::Utils::POD::PodFilter->new(),
             \&trim_raw_pod_section,
         );
 }
@@ -304,7 +303,7 @@ sub get_module_abstract_from_file {
     return
         _get_module_abstract_from_file(
             $file_name,
-            Pod::PlainText->new(),
+            Perl::Critic::Utils::POD::Text->new(),
             \&trim_pod_section,
         );
 }
@@ -317,7 +316,7 @@ sub get_module_abstract_from_filehandle {
     return
         _get_module_abstract_from_filehandle(
             $file_handle,
-            Pod::PlainText->new(),
+            Perl::Critic::Utils::POD::Text->new(),
             \&trim_pod_section,
         );
 }
@@ -330,7 +329,7 @@ sub get_module_abstract_from_string {
     return
         _get_module_abstract_from_string(
             $source,
-            Pod::PlainText->new(),
+            Perl::Critic::Utils::POD::Text->new(),
             \&trim_pod_section,
         );
 }
@@ -383,40 +382,10 @@ sub _get_module_abstract_from_filehandle { ## no critic (RequireFinalReturn)
     $name_section = $trimmer->($name_section);
     return if not $name_section;
 
-    # Testing for parser class, blech.  But it's a lot simpler and it's all
-    # hidden in the implementation.
-    if ('Pod::Select' eq ref $parser) {
-        if ( $name_section =~ m< \n >xms ) {
-            throw_generic
-                qq<Malformed NAME section in "$name_section". >
-                . q<It must be on a single line>;
-        }
-    }
-    else {
-        $name_section =~ s< \s+ >< >xmsg;
-
-        # Ugh.  Pod::PlainText splits up module names.
-        if (
-            $name_section =~ m<
-                \A
-                \s*
-                (
-                    \w [ \w:]+ \w
-                )
-                (
-                    \s*
-                    -
-                    .*
-                )?
-                \z
-            >xms
-        ) {
-            my ($module_name, $rest) = ($1, $2);
-
-            $module_name =~ s/ [ ] //xms;
-
-            $name_section = $module_name . ( $rest ? $rest : $EMPTY );
-        }
+    if ( $name_section =~ m< \n >xms ) {
+        throw_generic
+            qq<Malformed NAME section in "$name_section". >
+            . q<It must be on a single line>;
     }
 
     if (

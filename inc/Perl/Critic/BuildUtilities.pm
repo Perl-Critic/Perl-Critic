@@ -52,9 +52,10 @@ sub required_module_versions {
         'PPIx::Regexp::Util'            => '0.068', # is_ppi_regexp_element()
         'PPIx::Utils::Traversal'        => '0.003',
         'Perl::Tidy'                    => 0, # Only for RequireTidyCode
-        'Pod::PlainText'                => 0,
-        'Pod::Select'                   => 0,
+        'Pod::Simple::JustPod'          => 0,
+        'Pod::Simple'                   => 3.47,
         'Pod::Spell'                    => 1, # Only for PodSpelling
+        'Pod::Text'                     => 0,
         'Pod::Usage'                    => 0,
         'Readonly'                      => 2.00,
         'Scalar::Util'                  => 0,

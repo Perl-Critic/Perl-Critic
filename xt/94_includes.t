@@ -18,6 +18,7 @@ Perl::Critic::TestUtils::assert_version( $VERSION );
 my %implied = (
     # Universal
     SUPER => 1,
+    utf8 => 1,
 
     'Readonly::Scalar' => 'Readonly',
     'Readonly::Array' => 'Readonly',
