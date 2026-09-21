@@ -19,7 +19,8 @@ requires 'Getopt::Long'               => 0;
 requires 'List::SomeUtils'            => '0.55';
 requires 'List::Util'                 => 0;
 requires 'Module::Build'              => '0.4204';
-requires 'Module::Pluggable'          => '3.1';
+# force upgrade to silence deprecation warnings when installing with cpm
+requires 'Module::Pluggable'          => '4.8';
 requires 'PPI'                        => '1.277';
 requires 'PPI::Document'              => '1.277';
 requires 'PPI::Document::File'        => '1.277';
