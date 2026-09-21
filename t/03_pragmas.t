@@ -20,6 +20,7 @@ my $profile = {
     '-CodeLayout::RequireTidyCode'                               => {},
     '-Documentation::PodSpelling'                                => {},
     '-ErrorHandling::RequireCheckingReturnValueOfEval'           => {},
+    '-InputOutput::RequireUseUTF8'                               => {},
     '-Miscellanea::ProhibitUnrestrictedNoCritic'                 => {},
     '-Miscellanea::ProhibitUselessNoCritic'                      => {},
     '-ValuesAndExpressions::ProhibitMagicNumbers'                => {},

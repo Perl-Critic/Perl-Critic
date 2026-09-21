@@ -1,0 +1,208 @@
+## name one statement before utf8
+## failures 1
+## cut
+
+$foo = $bar;
+use utf8;
+
+#-----------------------------------------------------------------------------
+
+## name several statements before utf8
+## failures 1
+## cut
+
+$foo = $bar;   ## This one violates.
+$baz = $nuts;  ## no critic;  This one is exempted
+$blamo;        ## This one should be squelched
+use utf8;
+
+#-----------------------------------------------------------------------------
+
+## name several statements before utf8 with maximum violations changed
+## failures 2
+## parms { maximum_violations_per_document => 2 }
+## cut
+
+$foo = $bar;   ## This one violates.
+$baz = $nuts;  ## This one violates.
+$blamo;        ## This one should be squelched
+use utf8;
+
+#-----------------------------------------------------------------------------
+
+## name no utf8 at all
+## failures 1
+## cut
+
+$foo = $bar;
+
+#-----------------------------------------------------------------------------
+
+## name require utf8
+## failures 1
+## cut
+
+require utf8;
+1;
+
+#-----------------------------------------------------------------------------
+
+## name utf8 used, but no code
+## failures 0
+## cut
+
+use utf8;
+
+#-----------------------------------------------------------------------------
+
+## name no utf8 at all, w/END
+## failures 1
+## cut
+
+$foo = $bar;
+
+#Should not find the rest of these
+
+__END__
+
+=head1 NAME
+
+Foo - A Foo factory class
+
+=cut
+
+#-----------------------------------------------------------------------------
+
+## name no utf8 at all, w/DATA
+## failures 1
+## cut
+
+$foo = $bar;
+
+#Should not find the rest of these
+
+__DATA__
+
+Fred
+Barney
+Wilma
+
+
+#-----------------------------------------------------------------------------
+
+## name utf8 used OK
+## failures 0
+## cut
+
+use utf8;
+$foo = $bar;
+
+#-----------------------------------------------------------------------------
+
+## name other module included before utf8
+## failures 0
+## cut
+
+use Module;
+use utf8;
+$foo = $bar;
+
+#-----------------------------------------------------------------------------
+
+## name package statement before utf8
+## failures 0
+## cut
+
+package FOO;
+use utf8;
+$foo = $bar;
+
+#-----------------------------------------------------------------------------
+
+## name Work around a PPI bug that doesn't return a location for C<({})>.
+## failures 1
+## cut
+
+({})
+
+#-----------------------------------------------------------------------------
+
+## name Mojolicious::Lite support
+## failures 0
+## cut
+
+use Mojolicious::Lite;
+$foo = $bar;
+
+#-----------------------------------------------------------------------------
+
+## name Dancer2 support
+## failures 0
+## cut
+
+use Dancer2;
+$foo = $bar;
+
+#-----------------------------------------------------------------------------
+
+## name source::encoding 'utf8' support (Perl 5.41+)
+## failures 0
+## cut
+
+use source::encoding 'utf8';
+$foo = $bar;
+
+#-----------------------------------------------------------------------------
+
+## name source::encoding "utf8" with double quotes
+## failures 0
+## cut
+
+use source::encoding "utf8";
+$foo = $bar;
+
+#-----------------------------------------------------------------------------
+
+## name source::encoding with ascii (not utf8)
+## failures 1
+## cut
+
+use source::encoding 'ascii';
+$foo = $bar;
+
+#-----------------------------------------------------------------------------
+
+## name Custom configured equivalent modules
+## failures 0
+## parms { equivalent_modules => 'Foo' }
+## cut
+
+use Foo;
+$foo = $bar;
+
+#-----------------------------------------------------------------------------
+
+## name "use utf8" in lexical context (BEGIN block)
+## failures 1
+## cut
+
+BEGIN{ use utf8 }  # notice this is first statement in file
+$this_is_not_utf8
+
+#-----------------------------------------------------------------------------
+
+## name "use utf8" in lexical context (subroutine)
+## failures 1
+## cut
+
+sub foo { use utf8 }  # notice this is first statement in file
+$this_is_not_utf8
+
+# Local Variables:
+#   mode: cperl
+#   cperl-indent-level: 4
+#   fill-column: 78
+#   indent-tabs-mode: nil
+#   c-indentation-style: bsd
+# End:
+# ex: set ts=8 sts=4 sw=4 tw=78 ft=perl expandtab shiftround :

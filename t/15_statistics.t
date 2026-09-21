@@ -52,7 +52,10 @@ END_PERL
 #-----------------------------------------------------------------------------
 
 # Just don't get involved with Perl::Tidy.
-my $profile = { '-CodeLayout::RequireTidyCode' => {} };
+my $profile = {
+    '-CodeLayout::RequireTidyCode' => {},
+    '-InputOutput::RequireUseUTF8' => {},
+};
 my $critic =
     Perl::Critic->new(
         -severity => 1,

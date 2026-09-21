@@ -104,6 +104,7 @@ lib/Perl/Critic/Policy/InputOutput/RequireCheckedClose.pm
 lib/Perl/Critic/Policy/InputOutput/RequireCheckedOpen.pm
 lib/Perl/Critic/Policy/InputOutput/RequireCheckedSyscalls.pm
 lib/Perl/Critic/Policy/InputOutput/RequireEncodingWithUTF8Layer.pm
+lib/Perl/Critic/Policy/InputOutput/RequireUseUTF8.pm
 lib/Perl/Critic/Policy/Miscellanea/ProhibitFormats.pm
 lib/Perl/Critic/Policy/Miscellanea/ProhibitTies.pm
 lib/Perl/Critic/Policy/Miscellanea/ProhibitUnrestrictedNoCritic.pm
@@ -322,6 +323,7 @@ t/InputOutput/RequireCheckedClose.run
 t/InputOutput/RequireCheckedOpen.run
 t/InputOutput/RequireCheckedSyscalls.run
 t/InputOutput/RequireEncodingWithUTF8Layer.run
+t/InputOutput/RequireUseUTF8.run
 t/Miscellanea/ProhibitFormats.run
 t/Miscellanea/ProhibitTies.run
 t/Miscellanea/ProhibitUnrestrictedNoCritic.run

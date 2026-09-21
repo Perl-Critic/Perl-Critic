@@ -27,6 +27,7 @@ our @EXPORT_OK = qw{
     $_MODULE_VERSION_TERM_ANSICOLOR
     @STRICT_EQUIVALENT_MODULES
     @WARNINGS_EQUIVALENT_MODULES
+    @UTF8_EQUIVALENT_MODULES
 };
 
 our %EXPORT_TAGS = (
@@ -53,6 +54,7 @@ our %EXPORT_TAGS = (
         qw{
            @STRICT_EQUIVALENT_MODULES
            @WARNINGS_EQUIVALENT_MODULES
+           @UTF8_EQUIVALENT_MODULES
         }
     ],
 );
@@ -132,6 +134,16 @@ Readonly::Array our @STRICT_EQUIVALENT_MODULES => qw(
 # the moment these equivalent module lists are exactly the same.
 Readonly::Array our @WARNINGS_EQUIVALENT_MODULES
     => @STRICT_EQUIVALENT_MODULES;
+
+# Modules that enable the utf8 pragma automatically.
+# Note that not all modules that enable strict/warnings also enable utf8.
+Readonly::Array our @UTF8_EQUIVALENT_MODULES => qw(
+    Dancer
+    Dancer2
+
+    Mojolicious::Lite
+    Mojo::Base
+);
 
 #-----------------------------------------------------------------------------
 
@@ -215,6 +227,13 @@ applying the L<strict|strict> or L<warnings|warnings> pragma when loaded. At
 the moment, both lists are exactly the same. B<Note:> These lists are not
 exhaustive; they only include the most commonly used modules. Policies that
 use these lists should permit configuration of additional modules.
+
+=item C<@UTF8_EQUIVALENT_MODULES>
+
+A list of modules that enable the L<utf8|utf8> pragma automatically when loaded.
+B<Note:> This list is not exhaustive; it only includes the most commonly used
+modules. Policies that use this list should permit configuration of additional
+modules.
 
 =back
 
